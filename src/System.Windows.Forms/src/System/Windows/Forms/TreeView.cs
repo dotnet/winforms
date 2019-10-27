@@ -331,7 +331,7 @@ namespace System.Windows.Forms
                 if (IsHandleCreated)
                 {
                     int currentStyle = unchecked((int)((long)UnsafeNativeMethods.GetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_STYLE)));
-                    cp.Style |= (currentStyle & (NativeMethods.WS_HSCROLL | NativeMethods.WS_VSCROLL));
+                    cp.Style |= currentStyle & (int)(User32.WS.HSCROLL | User32.WS.VSCROLL);
                 }
                 switch (borderStyle)
                 {
@@ -339,7 +339,7 @@ namespace System.Windows.Forms
                         cp.ExStyle |= (int)User32.WS_EX.CLIENTEDGE;
                         break;
                     case BorderStyle.FixedSingle:
-                        cp.Style |= NativeMethods.WS_BORDER;
+                        cp.Style |= (int)User32.WS.BORDER;
                         break;
                 }
 
@@ -411,7 +411,7 @@ namespace System.Windows.Forms
                         //We want to turn on mirroring for TreeView explicitly.
                         cp.ExStyle |= (int)User32.WS_EX.LAYOUTRTL;
                         //Don't need these styles when mirroring is turned on.
-                        cp.ExStyle &= ~((int)User32.WS_EX.RTLREADING | (int)User32.WS_EX.RIGHT | (int)User32.WS_EX.LEFTSCROLLBAR);
+                        cp.ExStyle &= ~(int)(User32.WS_EX.RTLREADING | User32.WS_EX.RIGHT | User32.WS_EX.LEFTSCROLLBAR);
                     }
                     else
                     {

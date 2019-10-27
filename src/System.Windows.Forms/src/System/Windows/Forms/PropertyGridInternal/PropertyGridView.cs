@@ -6352,8 +6352,8 @@ namespace System.Windows.Forms.PropertyGridInternal
                 get
                 {
                     CreateParams cp = base.CreateParams;
+                    cp.Style |= unchecked((int)(User32.WS.POPUP | User32.WS.BORDER));
                     cp.ExStyle |= (int)User32.WS_EX.TOOLWINDOW;
-                    cp.Style |= NativeMethods.WS_POPUP | NativeMethods.WS_BORDER;
                     if (OSFeature.IsPresent(SystemParameter.DropShadow))
                     {
                         cp.ClassStyle |= (int)User32.CS.DROPSHADOW;
@@ -7044,7 +7044,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 get
                 {
                     CreateParams cp = base.CreateParams;
-                    cp.Style &= ~NativeMethods.WS_BORDER;
+                    cp.Style &= ~(int)User32.WS.BORDER;
                     cp.ExStyle &= ~(int)User32.WS_EX.CLIENTEDGE;
                     return cp;
                 }

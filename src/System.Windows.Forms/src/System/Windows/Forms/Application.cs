@@ -1073,7 +1073,7 @@ namespace System.Windows.Forms
         internal static void ParkHandle(HandleRef handle, DpiAwarenessContext dpiAwarenessContext = DpiAwarenessContext.DPI_AWARENESS_CONTEXT_UNSPECIFIED)
         {
             Debug.Assert(UnsafeNativeMethods.IsWindow(handle), "Handle being parked is not a valid window handle");
-            Debug.Assert(((int)UnsafeNativeMethods.GetWindowLong(handle, NativeMethods.GWL_STYLE) & NativeMethods.WS_CHILD) != 0, "Only WS_CHILD windows should be parked.");
+            Debug.Assert(((int)UnsafeNativeMethods.GetWindowLong(handle, NativeMethods.GWL_STYLE) & (int)User32.WS.CHILD) != 0, "Only WS_CHILD windows should be parked.");
 
             ThreadContext cxt = GetContextForHandle(handle);
             if (cxt != null)

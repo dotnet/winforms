@@ -972,26 +972,6 @@ namespace System.Windows.Forms
         public const int WA_ACTIVE = 1;
         public const int WA_CLICKACTIVE = 2;
 
-        public const int WS_OVERLAPPED = 0x00000000;
-        public const int WS_POPUP = unchecked((int)0x80000000);
-        public const int WS_CHILD = 0x40000000;
-        public const int WS_MINIMIZE = 0x20000000;
-        public const int WS_VISIBLE = 0x10000000;
-        public const int WS_DISABLED = 0x08000000;
-        public const int WS_CLIPSIBLINGS = 0x04000000;
-        public const int WS_CLIPCHILDREN = 0x02000000;
-        public const int WS_MAXIMIZE = 0x01000000;
-        public const int WS_CAPTION = 0x00C00000;
-        public const int WS_BORDER = 0x00800000;
-        public const int WS_DLGFRAME = 0x00400000;
-        public const int WS_VSCROLL = 0x00200000;
-        public const int WS_HSCROLL = 0x00100000;
-        public const int WS_SYSMENU = 0x00080000;
-        public const int WS_THICKFRAME = 0x00040000;
-        public const int WS_TABSTOP = 0x00010000;
-        public const int WS_MINIMIZEBOX = 0x00020000;
-        public const int WS_MAXIMIZEBOX = 0x00010000;
-
         public const int WHEEL_DELTA = 120;
 
         // wParam of report message WM_IME_NOTIFY (public\sdk\imm.h)

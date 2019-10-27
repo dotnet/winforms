@@ -151,8 +151,8 @@ namespace System.Windows.Forms
             get
             {
                 CreateParams cp = base.CreateParams;
-                cp.Style |= NativeMethods.WS_HSCROLL;
-                cp.Style |= NativeMethods.WS_VSCROLL;
+                cp.Style |= (int)User32.WS.HSCROLL;
+                cp.Style |= (int)User32.WS.VSCROLL;
                 return cp;
             }
         }

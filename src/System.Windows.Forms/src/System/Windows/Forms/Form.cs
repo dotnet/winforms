@@ -844,16 +844,16 @@ namespace System.Windows.Forms
             {
                 CreateParams cp = base.CreateParams;
 
-                if (IsHandleCreated && (WindowStyle & NativeMethods.WS_DISABLED) != 0)
+                if (IsHandleCreated && (WindowStyle & (int)User32.WS.DISABLED) != 0)
                 {
                     // Forms that are parent of a modal dialog must keep their WS_DISABLED style
-                    cp.Style |= NativeMethods.WS_DISABLED;
+                    cp.Style |= (int)User32.WS.DISABLED;
                 }
                 else if (TopLevel)
                 {
                     // It doesn't seem to make sense to allow a top-level form to be disabled
                     //
-                    cp.Style &= (~NativeMethods.WS_DISABLED);
+                    cp.Style &= ~(int)User32.WS.DISABLED;
                 }
 
                 if (TopLevel && (formState[FormStateLayered] != 0))
@@ -897,7 +897,7 @@ namespace System.Windows.Forms
                         if (form != null
                             && form.WindowState == FormWindowState.Maximized)
                         {
-                            cp.Style |= NativeMethods.WS_MAXIMIZE;
+                            cp.Style |= (int)User32.WS.MAXIMIZE;
                             formState[FormStateWindowState] = (int)FormWindowState.Maximized;
                             SetState(States.SizeLockedByOS, true);
                         }
@@ -905,7 +905,7 @@ namespace System.Windows.Forms
 
                     if (formState[FormStateMdiChildMax] != 0)
                     {
-                        cp.Style |= NativeMethods.WS_MAXIMIZE;
+                        cp.Style |= (int)User32.WS.MAXIMIZE;
                     }
                     cp.ExStyle |= (int)User32.WS_EX.MDICHILD;
                 }
@@ -917,10 +917,10 @@ namespace System.Windows.Forms
                     // to allow applyClientSize to adjust the size before displaying
                     // the form.
                     //
-                    if ((cp.Style & NativeMethods.WS_VISIBLE) != 0)
+                    if ((cp.Style & (int)User32.WS.VISIBLE) != 0)
                     {
                         formState[FormStateShowWindowOnCreate] = 1;
-                        cp.Style &= (~NativeMethods.WS_VISIBLE);
+                        cp.Style &= ~(int)User32.WS.VISIBLE;
                     }
                     else
                     {
@@ -931,9 +931,9 @@ namespace System.Windows.Forms
                 if (RightToLeft == RightToLeft.Yes && RightToLeftLayout)
                 {
                     //We want to turn on mirroring for Form explicitly.
-                    cp.ExStyle |= (int)User32.WS_EX.LAYOUTRTL | (int)User32.WS_EX.NOINHERITLAYOUT;
+                    cp.ExStyle |= (int)(User32.WS_EX.LAYOUTRTL | User32.WS_EX.NOINHERITLAYOUT);
                     //Don't need these styles when mirroring is turned on.
-                    cp.ExStyle &= ~((int)User32.WS_EX.RTLREADING | (int)User32.WS_EX.RIGHT | (int)User32.WS_EX.LEFTSCROLLBAR);
+                    cp.ExStyle &= ~(int)(User32.WS_EX.RTLREADING | User32.WS_EX.RIGHT | User32.WS_EX.LEFTSCROLLBAR);
                 }
                 return cp;
             }
@@ -3639,34 +3639,34 @@ namespace System.Windows.Forms
             {
                 if (!string.IsNullOrEmpty(Text))
                 {
-                    cp.Style |= NativeMethods.WS_CAPTION;
+                    cp.Style |= (int)User32.WS.CAPTION;
                 }
 
                 if (ControlBox)
                 {
-                    cp.Style |= NativeMethods.WS_SYSMENU | NativeMethods.WS_CAPTION;
+                    cp.Style |= (int)(User32.WS.SYSMENU | User32.WS.CAPTION);
                 }
                 else
                 {
-                    cp.Style &= (~NativeMethods.WS_SYSMENU);
+                    cp.Style &= ~(int)User32.WS.SYSMENU;
                 }
 
                 if (MaximizeBox)
                 {
-                    cp.Style |= NativeMethods.WS_MAXIMIZEBOX;
+                    cp.Style |= (int)User32.WS.MAXIMIZEBOX;
                 }
                 else
                 {
-                    cp.Style &= ~NativeMethods.WS_MAXIMIZEBOX;
+                    cp.Style &= ~(int)User32.WS.MAXIMIZEBOX;
                 }
 
                 if (MinimizeBox)
                 {
-                    cp.Style |= NativeMethods.WS_MINIMIZEBOX;
+                    cp.Style |= (int)User32.WS.MINIMIZEBOX;
                 }
                 else
                 {
-                    cp.Style &= ~NativeMethods.WS_MINIMIZEBOX;
+                    cp.Style &= ~(int)User32.WS.MINIMIZEBOX;
                 }
 
                 if (HelpButton && !MaximizeBox && !MinimizeBox && ControlBox)
@@ -3694,25 +3694,25 @@ namespace System.Windows.Forms
                 case FormBorderStyle.None:
                     break;
                 case FormBorderStyle.FixedSingle:
-                    cp.Style |= NativeMethods.WS_BORDER;
+                    cp.Style |= (int)User32.WS.BORDER;
                     break;
                 case FormBorderStyle.Sizable:
-                    cp.Style |= NativeMethods.WS_BORDER | NativeMethods.WS_THICKFRAME;
+                    cp.Style |= (int)(User32.WS.BORDER | User32.WS.THICKFRAME);
                     break;
                 case FormBorderStyle.Fixed3D:
-                    cp.Style |= NativeMethods.WS_BORDER;
+                    cp.Style |= (int)User32.WS.BORDER;
                     cp.ExStyle |= (int)User32.WS_EX.CLIENTEDGE;
                     break;
                 case FormBorderStyle.FixedDialog:
-                    cp.Style |= NativeMethods.WS_BORDER;
+                    cp.Style |= (int)User32.WS.BORDER;
                     cp.ExStyle |= (int)User32.WS_EX.DLGMODALFRAME;
                     break;
                 case FormBorderStyle.FixedToolWindow:
-                    cp.Style |= NativeMethods.WS_BORDER;
+                    cp.Style |= (int)User32.WS.BORDER;
                     cp.ExStyle |= (int)User32.WS_EX.TOOLWINDOW;
                     break;
                 case FormBorderStyle.SizableToolWindow:
-                    cp.Style |= NativeMethods.WS_BORDER | NativeMethods.WS_THICKFRAME;
+                    cp.Style |= (int)(User32.WS.BORDER | User32.WS.THICKFRAME);
                     cp.ExStyle |= (int)User32.WS_EX.TOOLWINDOW;
                     break;
             }
@@ -3727,7 +3727,7 @@ namespace System.Windows.Forms
             {
                 // When computing the client window size, don't tell them that
                 // we are going to be maximized!
-                int maskedStyle = cp.Style & ~(NativeMethods.WS_MAXIMIZE | NativeMethods.WS_MINIMIZE);
+                int maskedStyle = cp.Style & ~(int)(User32.WS.MAXIMIZE | User32.WS.MINIMIZE);
                 Size correct = ComputeWindowSize(ClientSize, maskedStyle, cp.ExStyle);
                 cp.Width = correct.Width;
                 cp.Height = correct.Height;
@@ -3798,10 +3798,10 @@ namespace System.Windows.Forms
             switch ((FormWindowState)formState[FormStateWindowState])
             {
                 case FormWindowState.Maximized:
-                    cp.Style |= NativeMethods.WS_MAXIMIZE;
+                    cp.Style |= (int)User32.WS.MAXIMIZE;
                     break;
                 case FormWindowState.Minimized:
-                    cp.Style |= NativeMethods.WS_MINIMIZE;
+                    cp.Style |= (int)User32.WS.MINIMIZE;
                     break;
             }
         }

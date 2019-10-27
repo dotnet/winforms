@@ -296,10 +296,10 @@ namespace System.Windows.Forms
                 //Give the window the WS_EX_TOOLWINDOW extended style, and remove the WS_EX_APPWINDOW style. As a side effect, the window will have a smaller caption than a normal window.
                 //Give the window the WS_POPUP style and make it owned by a hidden window. (Form)
 
-                cp.Style &= ~(NativeMethods.WS_CAPTION | NativeMethods.WS_CLIPSIBLINGS);         /* no caption, no siblings */
+                cp.Style &= ~(int)(User32.WS.CAPTION | User32.WS.CLIPSIBLINGS);         /* no caption, no siblings */
                 cp.ExStyle &= ~(int)User32.WS_EX.APPWINDOW;  /* show in taskbar = false */
                 // | NativeMethods.WS_EX_TOOLWINDOW
-                cp.Style |= (TopLevel) ? NativeMethods.WS_POPUP : NativeMethods.WS_CHILD;
+                cp.Style |= TopLevel ? unchecked((int)User32.WS.POPUP) : (int)User32.WS.CHILD;
                 cp.ExStyle |= (int)User32.WS_EX.CONTROLPARENT;  /* show in taskbar = false */
 
                 bool topLevel = TopLevel;
@@ -320,7 +320,7 @@ namespace System.Windows.Forms
                 }
                 else if (!topLevel)
                 {
-                    cp.Style |= NativeMethods.WS_CLIPSIBLINGS;
+                    cp.Style |= (int)User32.WS.CLIPSIBLINGS;
                 }
 
                 // We're turning off CLIPSIBLINGS because in the designer the elements of the form beneath
@@ -1825,14 +1825,14 @@ namespace System.Windows.Forms
                 if (value)
                 {
                     // setting toplevel = true
-                    styleFlags &= ~NativeMethods.WS_CHILD;
-                    styleFlags |= NativeMethods.WS_POPUP;
+                    styleFlags &= ~(int)User32.WS.CHILD;
+                    styleFlags |= unchecked((int)User32.WS.POPUP);
                 }
                 else
                 {
                     // this is a child window
-                    styleFlags &= ~NativeMethods.WS_POPUP;
-                    styleFlags |= NativeMethods.WS_CHILD;
+                    styleFlags &= ~unchecked((int)User32.WS.POPUP);
+                    styleFlags |= (int)User32.WS.CHILD;
                 }
 
                 WindowStyle = styleFlags;

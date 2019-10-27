@@ -401,7 +401,7 @@ namespace System.Windows.Forms
             {
                 CreateParams cp = base.CreateParams;
                 cp.ClassName = "COMBOBOX";
-                cp.Style |= NativeMethods.WS_VSCROLL | NativeMethods.CBS_HASSTRINGS | NativeMethods.CBS_AUTOHSCROLL;
+                cp.Style |= (int)User32.WS.VSCROLL | NativeMethods.CBS_HASSTRINGS | NativeMethods.CBS_AUTOHSCROLL;
                 cp.ExStyle |= (int)User32.WS_EX.CLIENTEDGE;
                 if (!integralHeight)
                 {

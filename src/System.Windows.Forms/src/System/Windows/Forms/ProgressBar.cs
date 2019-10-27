@@ -66,7 +66,7 @@ namespace System.Windows.Forms
                     // We want to turn on mirroring for Form explicitly.
                     cp.ExStyle |= (int)User32.WS_EX.LAYOUTRTL;
                     // Don't need these styles when mirroring is turned on.
-                    cp.ExStyle &= ~((int)User32.WS_EX.RTLREADING | (int)User32.WS_EX.RIGHT | (int)User32.WS_EX.LEFTSCROLLBAR);
+                    cp.ExStyle &= ~(int)(User32.WS_EX.RTLREADING | User32.WS_EX.RIGHT | User32.WS_EX.LEFTSCROLLBAR);
                 }
 
                 return cp;

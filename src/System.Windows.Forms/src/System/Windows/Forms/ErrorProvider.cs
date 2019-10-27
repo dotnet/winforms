@@ -873,7 +873,7 @@ namespace System.Windows.Forms
                     CreateParams cparams = new CreateParams
                     {
                         Caption = string.Empty,
-                        Style = NativeMethods.WS_VISIBLE | NativeMethods.WS_CHILD,
+                        Style = (int)(User32.WS.VISIBLE | User32.WS.CHILD),
                         ClassStyle = (int)User32.CS.DBLCLKS,
                         X = 0,
                         Y = 0,
