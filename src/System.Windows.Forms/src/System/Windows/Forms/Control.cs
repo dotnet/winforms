@@ -1615,7 +1615,7 @@ namespace System.Windows.Forms
                 cp.Style = NativeMethods.WS_CLIPCHILDREN;
                 if (GetStyle(ControlStyles.ContainerControl))
                 {
-                    cp.ExStyle |= NativeMethods.WS_EX_CONTROLPARENT;
+                    cp.ExStyle |= (int)User32.WS_EX.CONTROLPARENT;
                 }
                 cp.ClassStyle = (int)NativeMethods.ClassStyle.CS_DBLCLKS;
 
@@ -1659,9 +1659,9 @@ namespace System.Windows.Forms
                 // Set Rtl bits
                 if (RightToLeft == RightToLeft.Yes)
                 {
-                    cp.ExStyle |= NativeMethods.WS_EX_RTLREADING;
-                    cp.ExStyle |= NativeMethods.WS_EX_RIGHT;
-                    cp.ExStyle |= NativeMethods.WS_EX_LEFTSCROLLBAR;
+                    cp.ExStyle |= (int)User32.WS_EX.RTLREADING;
+                    cp.ExStyle |= (int)User32.WS_EX.RIGHT;
+                    cp.ExStyle |= (int)User32.WS_EX.LEFTSCROLLBAR;
                 }
 
                 return cp;
@@ -2850,7 +2850,7 @@ namespace System.Windows.Forms
                 if (!IsHandleCreated)
                 {
                     CreateParams cp = CreateParams;
-                    SetState(States.Mirrored, (cp.ExStyle & NativeMethods.WS_EX_LAYOUTRTL) != 0);
+                    SetState(States.Mirrored, (cp.ExStyle & (int)User32.WS_EX.LAYOUTRTL) != 0);
                 }
                 return GetState(States.Mirrored);
             }
@@ -5010,7 +5010,7 @@ namespace System.Windows.Forms
                 }
 
                 CreateParams cp = CreateParams;
-                SetState(States.Mirrored, (cp.ExStyle & NativeMethods.WS_EX_LAYOUTRTL) != 0);
+                SetState(States.Mirrored, (cp.ExStyle & (int)User32.WS_EX.LAYOUTRTL) != 0);
 
                 // Adjust for scrolling of parent...
                 if (_parent != null)
@@ -5033,7 +5033,7 @@ namespace System.Windows.Forms
                 // And if we are WS_CHILD, ensure we have a parent handle.
                 if (cp.Parent == IntPtr.Zero && (cp.Style & NativeMethods.WS_CHILD) != 0)
                 {
-                    Debug.Assert((cp.ExStyle & NativeMethods.WS_EX_MDICHILD) == 0, "Can't put MDI child forms on the parking form");
+                    Debug.Assert((cp.ExStyle & (int)User32.WS_EX.MDICHILD) == 0, "Can't put MDI child forms on the parking form");
                     Application.ParkHandle(cp);
                 }
 
@@ -5202,7 +5202,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            if (0 != (NativeMethods.WS_EX_MDICHILD & (int)(long)UnsafeNativeMethods.GetWindowLong(new HandleRef(_window, InternalHandle), NativeMethods.GWL_EXSTYLE)))
+            if (0 != ((int)User32.WS_EX.MDICHILD & (int)(long)UnsafeNativeMethods.GetWindowLong(new HandleRef(_window, InternalHandle), NativeMethods.GWL_EXSTYLE)))
             {
                 UnsafeNativeMethods.DefMDIChildProc(InternalHandle, WindowMessages.WM_CLOSE, IntPtr.Zero, IntPtr.Zero);
             }
@@ -11806,7 +11806,7 @@ namespace System.Windows.Forms
                 if (exStyle != cp.ExStyle)
                 {
                     WindowExStyle = cp.ExStyle;
-                    SetState(States.Mirrored, (cp.ExStyle & NativeMethods.WS_EX_LAYOUTRTL) != 0);
+                    SetState(States.Mirrored, (cp.ExStyle & (int)User32.WS_EX.LAYOUTRTL) != 0);
                 }
 
                 User32.SetWindowPos(

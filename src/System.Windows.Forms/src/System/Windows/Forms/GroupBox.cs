@@ -148,7 +148,7 @@ namespace System.Windows.Forms
                     cp.ClassName = null;
                     cp.Style &= ~NativeMethods.BS_GROUPBOX;
                 }
-                cp.ExStyle |= NativeMethods.WS_EX_CONTROLPARENT;
+                cp.ExStyle |= (int)User32.WS_EX.CONTROLPARENT;
 
                 return cp;
             }

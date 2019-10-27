@@ -678,7 +678,7 @@ namespace System.Windows.Forms
                 get
                 {
                     CreateParams cp = base.CreateParams;
-                    cp.ExStyle |= NativeMethods.WS_EX_LAYOUTRTL;
+                    cp.ExStyle |= (int)User32.WS_EX.LAYOUTRTL;
                     return cp;
                 }
             }

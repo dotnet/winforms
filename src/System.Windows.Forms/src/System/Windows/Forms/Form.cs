@@ -858,7 +858,7 @@ namespace System.Windows.Forms
 
                 if (TopLevel && (formState[FormStateLayered] != 0))
                 {
-                    cp.ExStyle |= NativeMethods.WS_EX_LAYERED;
+                    cp.ExStyle |= (int)User32.WS_EX.LAYERED;
                 }
 
                 IWin32Window dialogOwner = (IWin32Window)Properties.GetObject(PropDialogOwner);
@@ -873,7 +873,7 @@ namespace System.Windows.Forms
 
                 if (formState[FormStateTaskBar] != 0)
                 {
-                    cp.ExStyle |= NativeMethods.WS_EX_APPWINDOW;
+                    cp.ExStyle |= (int)User32.WS_EX.APPWINDOW;
                 }
 
                 FormBorderStyle borderStyle = FormBorderStyle;
@@ -882,7 +882,7 @@ namespace System.Windows.Forms
                      borderStyle == FormBorderStyle.Fixed3D ||
                      borderStyle == FormBorderStyle.FixedSingle))
                 {
-                    cp.ExStyle |= NativeMethods.WS_EX_DLGMODALFRAME;
+                    cp.ExStyle |= (int)User32.WS_EX.DLGMODALFRAME;
                 }
 
                 if (IsMdiChild)
@@ -907,7 +907,7 @@ namespace System.Windows.Forms
                     {
                         cp.Style |= NativeMethods.WS_MAXIMIZE;
                     }
-                    cp.ExStyle |= NativeMethods.WS_EX_MDICHILD;
+                    cp.ExStyle |= (int)User32.WS_EX.MDICHILD;
                 }
 
                 if (TopLevel || IsMdiChild)
@@ -928,12 +928,12 @@ namespace System.Windows.Forms
                     }
                 }
 
-                if (RightToLeft == RightToLeft.Yes && RightToLeftLayout == true)
+                if (RightToLeft == RightToLeft.Yes && RightToLeftLayout)
                 {
                     //We want to turn on mirroring for Form explicitly.
-                    cp.ExStyle |= NativeMethods.WS_EX_LAYOUTRTL | NativeMethods.WS_EX_NOINHERITLAYOUT;
+                    cp.ExStyle |= (int)User32.WS_EX.LAYOUTRTL | (int)User32.WS_EX.NOINHERITLAYOUT;
                     //Don't need these styles when mirroring is turned on.
-                    cp.ExStyle &= ~(NativeMethods.WS_EX_RTLREADING | NativeMethods.WS_EX_RIGHT | NativeMethods.WS_EX_LEFTSCROLLBAR);
+                    cp.ExStyle &= ~((int)User32.WS_EX.RTLREADING | (int)User32.WS_EX.RIGHT | (int)User32.WS_EX.LEFTSCROLLBAR);
                 }
                 return cp;
             }
@@ -2343,7 +2343,7 @@ namespace System.Windows.Forms
                 {
                     CreateParams cp = new CreateParams
                     {
-                        ExStyle = NativeMethods.WS_EX_TOOLWINDOW
+                        ExStyle = (int)User32.WS_EX.TOOLWINDOW
                     };
                     ownerWindow.CreateHandle(cp);
                 }
@@ -3675,11 +3675,11 @@ namespace System.Windows.Forms
                     // But someone must have failed the check, because Windows 2000
                     // will show a help button if either the maximize or
                     // minimize button is disabled.
-                    cp.ExStyle |= NativeMethods.WS_EX_CONTEXTHELP;
+                    cp.ExStyle |= (int)User32.WS_EX.CONTEXTHELP;
                 }
                 else
                 {
-                    cp.ExStyle &= ~NativeMethods.WS_EX_CONTEXTHELP;
+                    cp.ExStyle &= ~(int)User32.WS_EX.CONTEXTHELP;
                 }
             }
         }
@@ -3701,19 +3701,19 @@ namespace System.Windows.Forms
                     break;
                 case FormBorderStyle.Fixed3D:
                     cp.Style |= NativeMethods.WS_BORDER;
-                    cp.ExStyle |= NativeMethods.WS_EX_CLIENTEDGE;
+                    cp.ExStyle |= (int)User32.WS_EX.CLIENTEDGE;
                     break;
                 case FormBorderStyle.FixedDialog:
                     cp.Style |= NativeMethods.WS_BORDER;
-                    cp.ExStyle |= NativeMethods.WS_EX_DLGMODALFRAME;
+                    cp.ExStyle |= (int)User32.WS_EX.DLGMODALFRAME;
                     break;
                 case FormBorderStyle.FixedToolWindow:
                     cp.Style |= NativeMethods.WS_BORDER;
-                    cp.ExStyle |= NativeMethods.WS_EX_TOOLWINDOW;
+                    cp.ExStyle |= (int)User32.WS_EX.TOOLWINDOW;
                     break;
                 case FormBorderStyle.SizableToolWindow:
                     cp.Style |= NativeMethods.WS_BORDER | NativeMethods.WS_THICKFRAME;
-                    cp.ExStyle |= NativeMethods.WS_EX_TOOLWINDOW;
+                    cp.ExStyle |= (int)User32.WS_EX.TOOLWINDOW;
                     break;
             }
         }
@@ -5533,44 +5533,46 @@ namespace System.Windows.Forms
         {
             if (owner == this)
             {
-                throw new InvalidOperationException(string.Format(SR.OwnsSelfOrOwner,
-                                                  "Show"));
+                throw new InvalidOperationException(string.Format(SR.OwnsSelfOrOwner, "Show"));
             }
-            else if (Visible)
+            
+            if (Visible)
             {
-                throw new InvalidOperationException(string.Format(SR.ShowDialogOnVisible,
-                                                  "Show"));
+                throw new InvalidOperationException(string.Format(SR.ShowDialogOnVisible, "Show"));
             }
-            else if (!Enabled)
+
+            if (!Enabled)
             {
-                throw new InvalidOperationException(string.Format(SR.ShowDialogOnDisabled,
-                                                  "Show"));
+                throw new InvalidOperationException(string.Format(SR.ShowDialogOnDisabled, "Show"));
             }
-            else if (!TopLevel)
+
+            if (!TopLevel)
             {
-                throw new InvalidOperationException(string.Format(SR.ShowDialogOnNonTopLevel,
-                                                  "Show"));
+                throw new InvalidOperationException(string.Format(SR.ShowDialogOnNonTopLevel, "Show"));
             }
-            else if (!SystemInformation.UserInteractive)
+
+            if (!SystemInformation.UserInteractive)
             {
                 throw new InvalidOperationException(SR.CantShowModalOnNonInteractive);
             }
-            else if ((owner != null) && ((int)UnsafeNativeMethods.GetWindowLong(new HandleRef(owner, Control.GetSafeHandle(owner)), NativeMethods.GWL_EXSTYLE)
-                     & NativeMethods.WS_EX_TOPMOST) == 0)
+
+            if ((owner != null) && ((int)UnsafeNativeMethods.GetWindowLong(new HandleRef(owner, Control.GetSafeHandle(owner)), NativeMethods.GWL_EXSTYLE)
+                     & (int)User32.WS_EX.TOPMOST) == 0)
             {   // It's not the top-most window
-                if (owner is Control)
+                if (owner is Control ownerControl)
                 {
-                    owner = ((Control)owner).TopLevelControlInternal;
+                    owner = ownerControl.TopLevelControlInternal;
                 }
             }
+
             IntPtr hWndActive = User32.GetActiveWindow();
             IntPtr hWndOwner = owner == null ? hWndActive : Control.GetSafeHandle(owner);
             IntPtr hWndOldOwner = IntPtr.Zero;
             Properties.SetObject(PropDialogOwner, owner);
             Form oldOwner = OwnerInternal;
-            if (owner is Form && owner != oldOwner)
+            if (owner is Form ownerForm && owner != oldOwner)
             {
-                Owner = (Form)owner;
+                Owner = ownerForm;
             }
             if (hWndOwner != IntPtr.Zero && hWndOwner != Handle)
             {
@@ -5604,39 +5606,40 @@ namespace System.Windows.Forms
         {
             if (owner == this)
             {
-                throw new ArgumentException(string.Format(SR.OwnsSelfOrOwner,
-                                                  "showDialog"), "owner");
+                throw new ArgumentException(string.Format(SR.OwnsSelfOrOwner, "showDialog"), nameof(owner));
             }
-            else if (Visible)
+            
+            if (Visible)
             {
-                throw new InvalidOperationException(string.Format(SR.ShowDialogOnVisible,
-                                                  "showDialog"));
+                throw new InvalidOperationException(string.Format(SR.ShowDialogOnVisible, "showDialog"));
             }
-            else if (!Enabled)
+            
+            if (!Enabled)
             {
-                throw new InvalidOperationException(string.Format(SR.ShowDialogOnDisabled,
-                                                  "showDialog"));
+                throw new InvalidOperationException(string.Format(SR.ShowDialogOnDisabled, "showDialog"));
             }
-            else if (!TopLevel)
+            
+            if (!TopLevel)
             {
-                throw new InvalidOperationException(string.Format(SR.ShowDialogOnNonTopLevel,
-                                                  "showDialog"));
+                throw new InvalidOperationException(string.Format(SR.ShowDialogOnNonTopLevel, "showDialog"));
             }
-            else if (Modal)
+            
+            if (Modal)
             {
-                throw new InvalidOperationException(string.Format(SR.ShowDialogOnModal,
-                                                  "showDialog"));
+                throw new InvalidOperationException(string.Format(SR.ShowDialogOnModal, "showDialog"));
             }
-            else if (!SystemInformation.UserInteractive)
+           
+            if (!SystemInformation.UserInteractive)
             {
                 throw new InvalidOperationException(SR.CantShowModalOnNonInteractive);
             }
-            else if ((owner != null) && ((int)UnsafeNativeMethods.GetWindowLong(new HandleRef(owner, Control.GetSafeHandle(owner)), NativeMethods.GWL_EXSTYLE)
-                     & NativeMethods.WS_EX_TOPMOST) == 0)
+           
+            if ((owner != null) && ((int)UnsafeNativeMethods.GetWindowLong(new HandleRef(owner, GetSafeHandle(owner)), NativeMethods.GWL_EXSTYLE)
+                     & (int)User32.WS_EX.TOPMOST) == 0)
             {   // It's not the top-most window
-                if (owner is Control)
+                if (owner is Control ownerControl)
                 {
-                    owner = ((Control)owner).TopLevelControlInternal;
+                    owner = ownerControl.TopLevelControlInternal;
                 }
             }
 
@@ -5659,9 +5662,9 @@ namespace System.Windows.Forms
 
             Form oldOwner = OwnerInternal;
 
-            if (owner is Form && owner != oldOwner)
+            if (owner is Form ownerForm && owner != oldOwner)
             {
-                Owner = (Form)owner;
+                Owner = ownerForm;
             }
 
             try

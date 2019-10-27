@@ -1008,7 +1008,7 @@ namespace System.Windows.Forms
             if (TopLevelControl?.RightToLeft == RightToLeft.Yes)
             {
                 bool isWindowMirrored = ((unchecked((int)(long)UnsafeNativeMethods.GetWindowLong(
-                    new HandleRef(this, Control.GetSafeHandle(hWnd)), NativeMethods.GWL_STYLE)) & NativeMethods.WS_EX_LAYOUTRTL) == NativeMethods.WS_EX_LAYOUTRTL);
+                    new HandleRef(this, Control.GetSafeHandle(hWnd)), NativeMethods.GWL_STYLE)) & (int)User32.WS_EX.LAYOUTRTL) == (int)User32.WS_EX.LAYOUTRTL);
 
                 // Indicates that the ToolTip text will be displayed in the opposite direction
                 // to the text in the parent window.

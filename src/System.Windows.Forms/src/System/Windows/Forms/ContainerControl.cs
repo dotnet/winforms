@@ -292,7 +292,7 @@ namespace System.Windows.Forms
             get
             {
                 CreateParams cp = base.CreateParams;
-                cp.ExStyle |= NativeMethods.WS_EX_CONTROLPARENT;
+                cp.ExStyle |= (int)User32.WS_EX.CONTROLPARENT;
                 return cp;
             }
         }

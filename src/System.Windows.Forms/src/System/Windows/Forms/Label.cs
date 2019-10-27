@@ -301,7 +301,7 @@ namespace System.Windows.Forms
                     // Since we're owner draw, I don't see any point in setting the
                     // SS_CENTER/SS_RIGHT styles.
                     //
-                    cp.ExStyle &= ~NativeMethods.WS_EX_RIGHT;   // WS_EX_RIGHT overrides the SS_XXXX alignment styles
+                    cp.ExStyle &= ~(int)User32.WS_EX.RIGHT;   // WS_EX_RIGHT overrides the SS_XXXX alignment styles
                 }
 
                 if (!OwnerDraw)

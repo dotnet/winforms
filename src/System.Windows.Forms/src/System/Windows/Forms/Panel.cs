@@ -129,15 +129,15 @@ namespace System.Windows.Forms
             get
             {
                 CreateParams cp = base.CreateParams;
-                cp.ExStyle |= NativeMethods.WS_EX_CONTROLPARENT;
+                cp.ExStyle |= (int)User32.WS_EX.CONTROLPARENT;
 
-                cp.ExStyle &= (~NativeMethods.WS_EX_CLIENTEDGE);
+                cp.ExStyle &= ~(int)User32.WS_EX.CLIENTEDGE;
                 cp.Style &= (~NativeMethods.WS_BORDER);
 
                 switch (_borderStyle)
                 {
                     case BorderStyle.Fixed3D:
-                        cp.ExStyle |= NativeMethods.WS_EX_CLIENTEDGE;
+                        cp.ExStyle |= (int)User32.WS_EX.CLIENTEDGE;
                         break;
                     case BorderStyle.FixedSingle:
                         cp.Style |= NativeMethods.WS_BORDER;

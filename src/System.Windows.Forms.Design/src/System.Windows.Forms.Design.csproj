@@ -167,6 +167,7 @@
     <Compile Include="..\..\Common\src\Interop\User32\Interop.WH.cs" Link="Interop\User32\Interop.WH.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.WindowMessage.cs" Link="Interop\User32\Interop.WindowMessage.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.WINDOWPOS.cs" Link="Interop\User32\Interop.WINDOWPOS.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.WS_EX.cs" Link="Interop\User32\Interop.WS_EX.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\System\ComponentModel\Design\Arrow.ico">

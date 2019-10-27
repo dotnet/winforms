@@ -673,7 +673,7 @@ namespace System.Windows.Forms.Design
                 {
                     CreateParams cp = base.CreateParams;
 
-                    cp.ExStyle |= NativeMethods.WS_EX_STATICEDGE;
+                    cp.ExStyle |= (int)User32.WS_EX.STATICEDGE;
                     return cp;
                 }
             }

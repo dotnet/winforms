@@ -297,17 +297,17 @@ namespace System.Windows.Forms
                 //Give the window the WS_POPUP style and make it owned by a hidden window. (Form)
 
                 cp.Style &= ~(NativeMethods.WS_CAPTION | NativeMethods.WS_CLIPSIBLINGS);         /* no caption, no siblings */
-                cp.ExStyle &= ~(NativeMethods.WS_EX_APPWINDOW);  /* show in taskbar = false */
+                cp.ExStyle &= ~(int)User32.WS_EX.APPWINDOW;  /* show in taskbar = false */
                 // | NativeMethods.WS_EX_TOOLWINDOW
                 cp.Style |= (TopLevel) ? NativeMethods.WS_POPUP : NativeMethods.WS_CHILD;
-                cp.ExStyle |= (NativeMethods.WS_EX_CONTROLPARENT);  /* show in taskbar = false */
+                cp.ExStyle |= (int)User32.WS_EX.CONTROLPARENT;  /* show in taskbar = false */
 
                 bool topLevel = TopLevel;
 
                 // opacity
-                if (topLevel && (state[stateLayered]))
+                if (topLevel && state[stateLayered])
                 {
-                    cp.ExStyle |= NativeMethods.WS_EX_LAYERED;
+                    cp.ExStyle |= (int)User32.WS_EX.LAYERED;
                 }
                 else if (topLevel)
                 {

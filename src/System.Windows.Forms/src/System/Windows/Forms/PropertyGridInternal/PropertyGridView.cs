@@ -444,7 +444,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 if (edit != null && edit.IsHandleCreated)
                 {
                     int exStyle = unchecked((int)((long)UnsafeNativeMethods.GetWindowLong(new HandleRef(edit, edit.Handle), NativeMethods.GWL_EXSTYLE)));
-                    return ((exStyle & NativeMethods.WS_EX_RTLREADING) != 0);
+                    return ((exStyle & (int)User32.WS_EX.RTLREADING) != 0);
                 }
                 else
                 {
@@ -6352,7 +6352,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 get
                 {
                     CreateParams cp = base.CreateParams;
-                    cp.ExStyle |= NativeMethods.WS_EX_TOOLWINDOW;
+                    cp.ExStyle |= (int)User32.WS_EX.TOOLWINDOW;
                     cp.Style |= NativeMethods.WS_POPUP | NativeMethods.WS_BORDER;
                     if (OSFeature.IsPresent(SystemParameter.DropShadow))
                     {
@@ -7045,7 +7045,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     CreateParams cp = base.CreateParams;
                     cp.Style &= ~NativeMethods.WS_BORDER;
-                    cp.ExStyle &= ~NativeMethods.WS_EX_CLIENTEDGE;
+                    cp.ExStyle &= ~(int)User32.WS_EX.CLIENTEDGE;
                     return cp;
                 }
             }
