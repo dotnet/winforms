@@ -446,11 +446,6 @@ namespace System.Windows.Forms
 
         internal const int OLEOP_DOVERB = 1;
 
-        /* clipboard formats - use as parameter to RegisterClipboardFormat() */
-        internal const string CF_RTF = "Rich Text Format";
-        internal const string CF_RTFNOOBJS = "Rich Text Format Without Objects";
-        internal const string CF_RETEXTOBJ = "RichEdit Text and Objects";
-
         /*  UndoName info */
         internal const int UID_UNKNOWN = 0;
         internal const int UID_TYPING = 1;

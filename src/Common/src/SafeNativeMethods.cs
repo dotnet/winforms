@@ -53,9 +53,6 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern int GetMessagePos();
 
-        [DllImport(ExternDll.User32, SetLastError = true, CharSet = CharSet.Auto)]
-        public static extern int RegisterClipboardFormat(string format);
-
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public static extern int GetClipboardFormatName(int format, StringBuilder lpString, int cchMax);
 

@@ -5,6 +5,7 @@
 using System.ComponentModel;
 using System.Text;
 using System.Runtime.InteropServices;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -179,14 +180,14 @@ namespace System.Windows.Forms
                 }
 
                 // Need to add this format string
-                int formatId = SafeNativeMethods.RegisterClipboardFormat(format);
+                uint formatId = User32.RegisterClipboardFormatW(format);
                 if (formatId == 0)
                 {
                     throw new Win32Exception(Marshal.GetLastWin32Error(), SR.RegisterCFFailed);
                 }
 
                 EnsureFormatSpace(1);
-                s_formatList[s_formatCount] = new Format(format, formatId);
+                s_formatList[s_formatCount] = new Format(format, (int)formatId);
                 return s_formatList[s_formatCount++];
             }
         }

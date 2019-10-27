@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.Runtime.InteropServices;
 using WinForms.Common.Tests;
 using Xunit;
+using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
@@ -120,9 +121,6 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<Win32Exception>(() => DataFormats.GetFormat(format));
         }
 
-        [DllImport("user32.dll")]
-        private static extern int RegisterClipboardFormat(string format);
-
         public static IEnumerable<object[]> GetFormat_Int_TestData()
         {
             yield return new object[] { 2, "Bitmap" };
@@ -146,22 +144,10 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { -1, "Format65535" };
             yield return new object[] { 1234, "Format1234" };
 
-            int? manuallyRegisteredFormatId = null;
-            int? longManuallyRegisteredFormatId = null;
-            try
-            {
-                manuallyRegisteredFormatId = RegisterClipboardFormat("ManuallyRegisteredFormat");
-                longManuallyRegisteredFormatId = RegisterClipboardFormat(new string('a', 255));
-            }
-            catch
-            {
-            }
-
-            if (manuallyRegisteredFormatId.HasValue)
-            {
-                yield return new object[] { manuallyRegisteredFormatId, "ManuallyRegisteredFormat" };
-                yield return new object[] { longManuallyRegisteredFormatId, new string('a', 255) };
-            }
+            uint manuallyRegisteredFormatId = User32.RegisterClipboardFormatW("ManuallyRegisteredFormat");
+            uint longManuallyRegisteredFormatId = User32.RegisterClipboardFormatW(new string('a', 255));
+            yield return new object[] { (int)manuallyRegisteredFormatId, "ManuallyRegisteredFormat" };
+            yield return new object[] { (int)longManuallyRegisteredFormatId, new string('a', 255) };
         }
 
         [Theory]
