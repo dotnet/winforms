@@ -110,7 +110,7 @@ namespace System.Windows.Forms
                 // so that MDI Client windows can have the WS_VISIBLE style removed from the window style
                 // to make them not visible but still present.
                 cp.Style |= NativeMethods.WS_VSCROLL | NativeMethods.WS_HSCROLL;
-                cp.ExStyle |= NativeMethods.WS_EX_CLIENTEDGE;
+                cp.ExStyle |= (int)User32.WS_EX.CLIENTEDGE;
                 cp.Param = new NativeMethods.CLIENTCREATESTRUCT(IntPtr.Zero, 1);
                 ISite site = ParentInternal?.Site;
                 if (site != null && site.DesignMode)
@@ -122,9 +122,9 @@ namespace System.Windows.Forms
                 if (RightToLeft == RightToLeft.Yes && ParentInternal != null && ParentInternal.IsMirrored)
                 {
                     //We want to turn on mirroring for MdiClient explicitly.
-                    cp.ExStyle |= NativeMethods.WS_EX_LAYOUTRTL | NativeMethods.WS_EX_NOINHERITLAYOUT;
+                    cp.ExStyle |= (int)User32.WS_EX.LAYOUTRTL | (int)User32.WS_EX.NOINHERITLAYOUT;
                     //Don't need these styles when mirroring is turned on.
-                    cp.ExStyle &= ~(NativeMethods.WS_EX_RTLREADING | NativeMethods.WS_EX_RIGHT | NativeMethods.WS_EX_LEFTSCROLLBAR);
+                    cp.ExStyle &= ~((int)User32.WS_EX.RTLREADING | (int)User32.WS_EX.RIGHT | (int)User32.WS_EX.LEFTSCROLLBAR);
                 }
 
                 return cp;

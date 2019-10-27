@@ -2381,7 +2381,7 @@ namespace System.ComponentModel.Design
                     get
                     {
                         CreateParams cp = base.CreateParams;
-                        cp.ExStyle |= NativeMethods.WS_EX_TOOLWINDOW;
+                        cp.ExStyle |= (int)User32.WS_EX.TOOLWINDOW;
                         cp.Style |= NativeMethods.WS_POPUP | NativeMethods.WS_BORDER;
                         cp.ClassStyle |= NativeMethods.CS_SAVEBITS;
                         if (_parentControl != null)
@@ -2508,7 +2508,6 @@ namespace System.ComponentModel.Design
             {
                 public const int WA_INACTIVE = 0;
                 public const int WA_ACTIVE = 1;
-                public const int WS_EX_TOOLWINDOW = 0x00000080;
                 public const int WS_POPUP = unchecked((int)0x80000000);
                 public const int WS_BORDER = 0x00800000;
                 public const int GWL_HWNDPARENT = (-8);

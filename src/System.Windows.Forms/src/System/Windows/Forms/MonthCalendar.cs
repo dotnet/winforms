@@ -381,12 +381,12 @@ namespace System.Windows.Forms
                     cp.Style |= NativeMethods.MCS_WEEKNUMBERS;
                 }
 
-                if (RightToLeft == RightToLeft.Yes && RightToLeftLayout == true)
+                if (RightToLeft == RightToLeft.Yes && RightToLeftLayout)
                 {
                     //We want to turn on mirroring for Form explicitly.
-                    cp.ExStyle |= NativeMethods.WS_EX_LAYOUTRTL;
+                    cp.ExStyle |= (int)User32.WS_EX.LAYOUTRTL;
                     //Don't need these styles when mirroring is turned on.
-                    cp.ExStyle &= ~(NativeMethods.WS_EX_RTLREADING | NativeMethods.WS_EX_RIGHT | NativeMethods.WS_EX_LEFTSCROLLBAR);
+                    cp.ExStyle &= ~((int)User32.WS_EX.RTLREADING | (int)User32.WS_EX.RIGHT | (int)User32.WS_EX.LEFTSCROLLBAR);
                 }
 
                 return cp;

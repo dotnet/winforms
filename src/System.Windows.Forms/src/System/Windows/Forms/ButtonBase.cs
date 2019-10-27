@@ -195,7 +195,7 @@ namespace System.Windows.Forms
                 CreateParams cp = base.CreateParams;
                 if (!OwnerDraw)
                 {
-                    cp.ExStyle &= ~NativeMethods.WS_EX_RIGHT;   // WS_EX_RIGHT overrides the BS_XXXX alignment styles
+                    cp.ExStyle &= ~(int)User32.WS_EX.RIGHT;   // WS_EX_RIGHT overrides the BS_XXXX alignment styles
 
                     cp.Style |= NativeMethods.BS_MULTILINE;
 

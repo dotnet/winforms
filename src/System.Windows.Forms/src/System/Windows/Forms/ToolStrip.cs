@@ -822,7 +822,7 @@ namespace System.Windows.Forms
                 {
                     CreateParams cp = new CreateParams
                     {
-                        ExStyle = NativeMethods.WS_EX_TOOLWINDOW
+                        ExStyle = (int)User32.WS_EX.TOOLWINDOW
                     };
                     dropDownOwnerWindow.CreateHandle(cp);
                 }

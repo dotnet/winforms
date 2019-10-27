@@ -385,7 +385,7 @@ namespace System.Windows.Forms
                 if (BorderStyle.FixedSingle == BorderStyle && ((cp.Style & NativeMethods.WS_BORDER) != 0))
                 {
                     cp.Style &= (~NativeMethods.WS_BORDER);
-                    cp.ExStyle |= NativeMethods.WS_EX_CLIENTEDGE;
+                    cp.ExStyle |= (int)User32.WS_EX.CLIENTEDGE;
                 }
 
                 return cp;

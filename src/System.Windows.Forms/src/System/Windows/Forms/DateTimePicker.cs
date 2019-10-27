@@ -478,14 +478,14 @@ namespace System.Windows.Forms
                         break;
                 }
 
-                cp.ExStyle |= NativeMethods.WS_EX_CLIENTEDGE;
+                cp.ExStyle |= (int)User32.WS_EX.CLIENTEDGE;
 
                 if (RightToLeft == RightToLeft.Yes && RightToLeftLayout == true)
                 {
                     //We want to turn on mirroring for DateTimePicker explicitly.
-                    cp.ExStyle |= NativeMethods.WS_EX_LAYOUTRTL;
+                    cp.ExStyle |= (int)User32.WS_EX.LAYOUTRTL;
                     //Don't need these styles when mirroring is turned on.
-                    cp.ExStyle &= ~(NativeMethods.WS_EX_RTLREADING | NativeMethods.WS_EX_RIGHT | NativeMethods.WS_EX_LEFTSCROLLBAR);
+                    cp.ExStyle &= ~((int)User32.WS_EX.RTLREADING | (int)User32.WS_EX.RIGHT | (int)User32.WS_EX.LEFTSCROLLBAR);
                 }
 
                 return cp;
@@ -1659,8 +1659,8 @@ namespace System.Windows.Forms
                 if (handle != IntPtr.Zero)
                 {
                     int style = unchecked((int)((long)UnsafeNativeMethods.GetWindowLong(new HandleRef(this, handle), NativeMethods.GWL_EXSTYLE)));
-                    style |= NativeMethods.WS_EX_LAYOUTRTL | NativeMethods.WS_EX_NOINHERITLAYOUT;
-                    style &= ~(NativeMethods.WS_EX_RIGHT | NativeMethods.WS_EX_RTLREADING);
+                    style |= (int)User32.WS_EX.LAYOUTRTL | (int)User32.WS_EX.NOINHERITLAYOUT;
+                    style &= ~((int)User32.WS_EX.RIGHT | (int)User32.WS_EX.RTLREADING);
                     UnsafeNativeMethods.SetWindowLong(new HandleRef(this, handle), NativeMethods.GWL_EXSTYLE, new HandleRef(this, (IntPtr)style));
                 }
             }
