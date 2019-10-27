@@ -141,7 +141,7 @@ namespace System.Windows.Forms
                         {
                             fixed (byte* ppal = aj)
                             {
-                                NativeMethods.RGBQUAD* prgb = (NativeMethods.RGBQUAD*)pcolors;
+                                Gdi32.RGBQUAD* prgb = (Gdi32.RGBQUAD*)pcolors;
                                 NativeMethods.PALETTEENTRY* lppe = (NativeMethods.PALETTEENTRY*)ppal;
 
                                 // Convert the palette entries to RGB quad entries

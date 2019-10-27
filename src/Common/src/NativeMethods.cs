@@ -2564,14 +2564,6 @@ namespace System.Windows.Forms
             HRESULT GetClassInfo(out UnsafeNativeMethods.ITypeInfo ppTI);
         }
 
-        public struct RGBQUAD
-        {
-            public byte rgbBlue;
-            public byte rgbGreen;
-            public byte rgbRed;
-            public byte rgbReserved;
-        }
-
         [StructLayout(LayoutKind.Sequential)]
         public struct PALETTEENTRY
         {
