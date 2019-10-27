@@ -90,13 +90,6 @@ namespace System.Windows.Forms
         private const int STG_STREAMINIT = 1;
         private const int STG_STORAGE = 2;
 
-        private const int OLEIVERB_SHOW = -1;
-        private const int OLEIVERB_HIDE = -3;
-        private const int OLEIVERB_UIACTIVATE = -4;
-        private const int OLEIVERB_INPLACEACTIVATE = -5;
-        private const int OLEIVERB_PROPERTIES = -7;
-        private const int OLEIVERB_PRIMARY = 0;
-
         private readonly User32.WindowMessage REGMSG_MSG = User32.RegisterWindowMessageW(Application.WindowMessagesVersion + "_subclassCheck");
         private const int REGMSG_RETVAL = 123;
 
@@ -1605,7 +1598,7 @@ namespace System.Windows.Forms
                                     // if we do this in both codepaths, then we will force handle creation of the fake window
                                     // even if we don't need it...
                                     // This optimization will break, however, if:
-                                    // a) the hWnd goes away on a OLEIVERB_HIDE and
+                                    // a) the hWnd goes away on a Ole32.OLEIVERB.HIDE and
                                     // b) this is a simple frame control
                                     // However, if you satisfy both of these conditions then you must be REALLY
                                     // brain dead and you don't deserve to work anyway...
@@ -1639,7 +1632,7 @@ namespace System.Windows.Forms
                             OnInPlaceActive();
                             break;
                         case OC_INPLACE:
-                            DoVerb(OLEIVERB_SHOW);
+                            DoVerb((int)Ole32.OLEIVERB.SHOW);
                             Debug.Assert(GetOcState() == OC_UIACTIVE, " failed transition");
                             SetOcState(OC_UIACTIVE);
                             break;
@@ -1664,7 +1657,7 @@ namespace System.Windows.Forms
         {
             try
             {
-                DoVerb(OLEIVERB_INPLACEACTIVATE);
+                DoVerb((int)Ole32.OLEIVERB.INPLACEACTIVATE);
             }
             catch (Exception t)
             {
@@ -1696,7 +1689,7 @@ namespace System.Windows.Forms
             Debug.Assert(CanUIActivate, "we have to be able to uiactivate");
             if (CanUIActivate)
             {
-                DoVerb(OLEIVERB_UIACTIVATE);
+                DoVerb((int)Ole32.OLEIVERB.UIACTIVATE);
             }
         }
 
@@ -1811,7 +1804,7 @@ namespace System.Windows.Forms
             Control ctl = f?.ActiveControl;
             try
             {
-                DoVerb(OLEIVERB_SHOW);
+                DoVerb((int)Ole32.OLEIVERB.SHOW);
             }
             catch (Exception t)
             {
@@ -1833,7 +1826,7 @@ namespace System.Windows.Forms
             Debug.Assert(IsHandleCreated, "gotta have a window to hide");
             Debug.Assert(GetOcState() >= OC_INPLACE, "have to be in place in order to hide.");
 
-            DoVerb(OLEIVERB_HIDE);
+            DoVerb((int)Ole32.OLEIVERB.HIDE);
             if (GetOcState() < OC_INPLACE)
             {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "Naughty control inplace deactivated on a hide verb...");
@@ -2401,7 +2394,7 @@ namespace System.Windows.Forms
         {
             Control parent = ParentInternal;
             RECT posRect = Bounds;
-            GetOleObject().DoVerb(verb, null, oleSite, -1, parent != null ? parent.Handle : IntPtr.Zero, &posRect);
+            GetOleObject().DoVerb((Ole32.OLEIVERB)verb, null, oleSite, -1, parent != null ? parent.Handle : IntPtr.Zero, &posRect);
         }
 
         private bool AwaitingDefreezing()
@@ -4882,15 +4875,7 @@ namespace System.Windows.Forms
             return iOleInPlaceActiveObject;
         }
 
-        private UnsafeNativeMethods.IOleObject GetOleObject()
-        {
-            if (iOleObject == null)
-            {
-                Debug.Assert(instance != null, "must have the ocx");
-                iOleObject = (UnsafeNativeMethods.IOleObject)instance;
-            }
-            return iOleObject;
-        }
+        private UnsafeNativeMethods.IOleObject GetOleObject() => iOleObject ??= (UnsafeNativeMethods.IOleObject)instance;
 
         private Ole32.IOleInPlaceObject GetInPlaceObject()
         {
@@ -6054,27 +6039,12 @@ namespace System.Windows.Forms
 
             internal void OnUIDeactivate(AxHost site)
             {
-#if DEBUG
-                if (siteUIActive != null)
-                {
-                    Debug.Assert(siteUIActive == site, "deactivating when not active...");
-                }
-#endif // DEBUG
+                Debug.Assert(siteUIActive == null || siteUIActive == site, "deactivating when not active...");
 
                 siteUIActive = null;
                 site.RemoveSelectionHandler();
                 site.SetSelectionStyle(1);
                 site.editMode = EDITM_NONE;
-                if (site.GetSiteOwnsDeactivation())
-                {
-                    Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, " our site owns deactivation ");
-                    ContainerControl f = site.ContainingControl;
-                    Debug.Assert(f != null, "a control has to be on a ContainerControl...");
-                    if (f != null)
-                    {
-                        //    f.setActiveControl(null);
-                    }
-                }
             }
 
             internal void OnUIActivate(AxHost site)
@@ -6106,7 +6076,6 @@ namespace System.Windows.Forms
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "active Object is now " + site.ToString());
                 siteUIActive = site;
                 ContainerControl f = site.ContainingControl;
-                Debug.Assert(f != null, "a control has to be on a ContainerControl...");
                 if (f != null)
                 {
                     f.ActiveControl = site;

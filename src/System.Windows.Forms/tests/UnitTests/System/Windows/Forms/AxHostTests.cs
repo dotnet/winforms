@@ -891,6 +891,64 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.Created);
         }
 
+        public static IEnumerable<object[]> DoVerb_TestData()
+        {
+            yield return new object[] { 1 };
+            yield return new object[] { 0 };
+            yield return new object[] { -1 };
+            yield return new object[] { -2 };
+            yield return new object[] { -3 };
+            yield return new object[] { -4 };
+            yield return new object[] { -5 };
+            yield return new object[] { -6 };
+            yield return new object[] { -7 };
+        }
+        
+        [StaTheory]
+        [MemberData(nameof(DoVerb_TestData))]
+        public void AxHost_DoVerb_InvokeWithHandle_Success(int verb)
+        {
+            using var control = new SubAxHost("8856f961-340a-11d0-a96b-00c04fd705a2");
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            control.DoVerb(verb);
+        }
+        
+        [StaTheory]
+        [MemberData(nameof(DoVerb_TestData))]
+        public void AxHost_DoVerb_InvokeWithHandleWithParent_Success(int verb)
+        {
+            using var parent = new Control();
+            var control = new SubAxHost("8856f961-340a-11d0-a96b-00c04fd705a2")
+            {
+                Parent = parent
+            };
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            Assert.True(parent.IsHandleCreated);
+            control.DoVerb(verb);
+            Assert.True(parent.IsHandleCreated);
+        }
+        
+        [StaTheory]
+        [MemberData(nameof(DoVerb_TestData))]
+        public void AxHost_DoVerb_InvokeWithHandleWithParentWithoutHandle_Success(int verb)
+        {
+            using var parent = new Control();
+            var control = new SubAxHost("8856f961-340a-11d0-a96b-00c04fd705a2");
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            control.Parent = parent;
+            Assert.False(parent.IsHandleCreated);
+            control.DoVerb(verb);
+            Assert.True(parent.IsHandleCreated);
+        }
+        
+        [StaTheory]
+        [MemberData(nameof(DoVerb_TestData))]
+        public void AxHost_DoVerb_InvokeWithoutHandle_ThrowsNullReferenceException(int verb)
+        {
+            using var control = new SubAxHost("00000000-0000-0000-0000-000000000000");
+            Assert.Throws<NullReferenceException>(() => control.DoVerb(verb));
+        }
+
         [StaFact]
         public void AxHost_EndInit_Invoke_Nop()
         {

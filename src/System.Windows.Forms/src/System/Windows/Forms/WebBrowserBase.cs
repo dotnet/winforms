@@ -708,7 +708,7 @@ namespace System.Windows.Forms
             }
         }
 
-        internal unsafe bool DoVerb(int verb)
+        internal unsafe bool DoVerb(Ole32.OLEIVERB verb)
         {
             RECT posRect = Bounds;
             HRESULT hr = axOleObject.DoVerb(verb, null, ActiveXSite, 0, Handle, &posRect);
@@ -1022,7 +1022,7 @@ namespace System.Windows.Forms
             {
                 try
                 {
-                    DoVerb(NativeMethods.OLEIVERB_INPLACEACTIVATE);
+                    DoVerb(Ole32.OLEIVERB.INPLACEACTIVATE);
                 }
                 catch (Exception t)
                 {
@@ -1068,7 +1068,7 @@ namespace System.Windows.Forms
             {
                 try
                 {
-                    DoVerb(NativeMethods.OLEIVERB_UIACTIVATE);
+                    DoVerb(Ole32.OLEIVERB.UIACTIVATE);
                 }
                 catch (Exception t)
                 {

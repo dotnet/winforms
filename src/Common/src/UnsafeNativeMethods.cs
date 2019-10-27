@@ -1059,8 +1059,8 @@ namespace System.Windows.Forms
                       string szContainerObj);
 
             [PreserveSig]
-            int Close(
-                    int dwSaveOption);
+            HRESULT Close(
+                Ole32.OLECLOSE dwSaveOption);
 
             [PreserveSig]
             int SetMoniker(
@@ -1094,7 +1094,7 @@ namespace System.Windows.Forms
 
             [PreserveSig]
             HRESULT DoVerb(
-                int iVerb,
+                Ole32.OLEIVERB iVerb,
                 User32.MSG* lpmsg,
                 IOleClientSite pActiveSite,
                 int lindex,
