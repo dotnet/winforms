@@ -874,7 +874,7 @@ namespace System.Windows.Forms
                     {
                         Caption = string.Empty,
                         Style = NativeMethods.WS_VISIBLE | NativeMethods.WS_CHILD,
-                        ClassStyle = (int)NativeMethods.ClassStyle.CS_DBLCLKS,
+                        ClassStyle = (int)User32.CS.DBLCLKS,
                         X = 0,
                         Y = 0,
                         Width = 0,

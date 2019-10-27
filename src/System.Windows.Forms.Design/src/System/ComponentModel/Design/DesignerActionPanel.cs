@@ -2383,7 +2383,7 @@ namespace System.ComponentModel.Design
                         CreateParams cp = base.CreateParams;
                         cp.ExStyle |= (int)User32.WS_EX.TOOLWINDOW;
                         cp.Style |= NativeMethods.WS_POPUP | NativeMethods.WS_BORDER;
-                        cp.ClassStyle |= NativeMethods.CS_SAVEBITS;
+                        cp.ClassStyle |= (int)User32.CS.SAVEBITS;
                         if (_parentControl != null)
                         {
                             if (!_parentControl.IsDisposed)
@@ -2511,7 +2511,6 @@ namespace System.ComponentModel.Design
                 public const int WS_POPUP = unchecked((int)0x80000000);
                 public const int WS_BORDER = 0x00800000;
                 public const int GWL_HWNDPARENT = (-8);
-                public const int CS_SAVEBITS = 0x0800;
 
                 internal static class Util
                 {

@@ -6356,7 +6356,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     cp.Style |= NativeMethods.WS_POPUP | NativeMethods.WS_BORDER;
                     if (OSFeature.IsPresent(SystemParameter.DropShadow))
                     {
-                        cp.ClassStyle |= (int)NativeMethods.ClassStyle.CS_DROPSHADOW;
+                        cp.ClassStyle |= (int)User32.CS.DROPSHADOW;
                     }
                     if (gridView != null)
                     {

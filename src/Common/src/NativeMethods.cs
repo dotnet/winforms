@@ -110,13 +110,6 @@ namespace System.Windows.Forms
 
         public const int cmb4 = 0x0473;
 
-        public enum ClassStyle : uint
-        {
-            CS_DBLCLKS = 0x0008,
-            CS_DROPSHADOW = 0x00020000,
-            CS_SAVEBITS = 0x0800
-        }
-
         public const int CF_TEXT = 1,
         CF_BITMAP = 2,
         CF_METAFILEPICT = 3,

@@ -128,6 +128,7 @@
     <Compile Include="..\..\Common\src\Interop\User32\Interop.BeginPaint.cs" Link="Interop\User32\Interop.BeginPaint.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.CallNextHookEx.cs" Link="Interop\User32\Interop.CallNextHookEx.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.ClientToScreen.cs" Link="Interop\User32\Interop.ClientToScreen.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.CS.cs" Link="Interop\User32\Interop.CS.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.DefWindowProcW.cs" Link="Interop\User32\Interop.DefWindowProcW.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.EndPaint.cs" Link="Interop\User32\Interop.EndPaint.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.GetActiveWindow.cs" Link="Interop\User32\Interop.GetActiveWindow.cs" />
