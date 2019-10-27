@@ -172,6 +172,7 @@
     <Compile Include="..\..\Common\src\Interop\User32\Interop.WINDOWPOS.cs" Link="Interop\User32\Interop.WINDOWPOS.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.WS.cs" Link="Interop\User32\Interop.WS.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.WS_EX.cs" Link="Interop\User32\Interop.WS_EX.cs" />
+    <Compile Include="..\..\Common\src\Interop\UxTheme\Interop.MARGINS.cs" Link="Interop\UxTheme\Interop.MARGINS.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\System\ComponentModel\Design\Arrow.ico">

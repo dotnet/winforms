@@ -827,7 +827,7 @@ namespace System.Windows.Forms.VisualStyles
                 throw new InvalidEnumArgumentException(nameof(prop), (int)prop, typeof(MarginProperty));
             }
 
-            NativeMethods.MARGINS margins = new NativeMethods.MARGINS();
+            UxTheme.MARGINS margins = default;
 
             using (WindowsGraphicsWrapper wgr = new WindowsGraphicsWrapper(dc, AllGraphicsProperties))
             {
