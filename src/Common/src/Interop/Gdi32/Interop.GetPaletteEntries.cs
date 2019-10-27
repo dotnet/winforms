@@ -19,13 +19,5 @@ internal static partial class Interop
                 return GetPaletteEntries(hpal, 0, (uint)entries.Length, entry);
             }
         }
-
-        public struct PALETTEENTRY
-        {
-            public byte peRed;
-            public byte peGreen;
-            public byte peBlue;
-            public byte peFlags;
-        }
     }
 }
