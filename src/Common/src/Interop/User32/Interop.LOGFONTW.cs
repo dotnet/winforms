@@ -20,14 +20,14 @@ internal static partial class Interop
             public int lfWidth;
             public int lfEscapement;
             public int lfOrientation;
-            public int lfWeight;
+            public Gdi32.FW lfWeight;
             public byte lfItalic;
             public byte lfUnderline;
             public byte lfStrikeOut;
             public byte lfCharSet;
-            public byte lfOutPrecision;
+            public Gdi32.OUT_PRECIS lfOutPrecision;
             public byte lfClipPrecision;
-            public byte lfQuality;
+            public Gdi32.QUALITY lfQuality;
             public byte lfPitchAndFamily;
             private fixed char _lfFaceName[LF_FACESIZE];
             private Span<char> lfFaceName

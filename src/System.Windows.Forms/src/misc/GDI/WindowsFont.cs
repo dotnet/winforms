@@ -51,7 +51,7 @@ namespace System.Windows.Forms.Internal
                 if (Hfont == IntPtr.Zero)
                 {
                     _logFont.FaceName = DefaultFaceName;
-                    _logFont.lfOutPrecision = IntNativeMethods.OUT_TT_ONLY_PRECIS; // TrueType only.
+                    _logFont.lfOutPrecision = Gdi32.OUT_PRECIS.TT_ONLY; // TrueType only.
 
                     Hfont = Gdi32.CreateFontIndirectW(ref _logFont);
                 }
@@ -68,7 +68,7 @@ namespace System.Windows.Forms.Internal
         ///  Contructs a WindowsFont object from an existing System.Drawing.Font object (GDI+), based on the screen dc MapMode
         ///  and resolution (normally: MM_TEXT and 96 dpi).
         /// </summary>
-        public static WindowsFont FromFont(Font font, WindowsFontQuality fontQuality = WindowsFontQuality.Default)
+        public static WindowsFont FromFont(Font font, Gdi32.QUALITY fontQuality = Gdi32.QUALITY.DEFAULT)
         {
             string familyName = font.FontFamily.Name;
 
@@ -100,9 +100,9 @@ namespace System.Windows.Forms.Internal
             {
                 lfHeight = -pixelsY,
                 lfCharSet = font.GdiCharSet,
-                lfOutPrecision = IntNativeMethods.OUT_TT_PRECIS,
-                lfQuality = (byte)fontQuality,
-                lfWeight = (font.Style & FontStyle.Bold) == FontStyle.Bold ? IntNativeMethods.FW_BOLD : IntNativeMethods.FW_NORMAL,
+                lfOutPrecision = Gdi32.OUT_PRECIS.TT,
+                lfQuality = fontQuality,
+                lfWeight = (font.Style & FontStyle.Bold) == FontStyle.Bold ? Gdi32.FW.BOLD : Gdi32.FW.NORMAL,
                 lfItalic = (font.Style & FontStyle.Italic) == FontStyle.Italic ? True : False,
                 lfUnderline = (font.Style & FontStyle.Underline) == FontStyle.Underline ? True : False,
                 lfStrikeOut = (font.Style & FontStyle.Strikeout) == FontStyle.Strikeout ? True : False,
@@ -132,7 +132,7 @@ namespace System.Windows.Forms.Internal
             Gdi32.GetObjectW(hFont, out User32.LOGFONTW logFont);
 
             FontStyle style = FontStyle.Regular;
-            if (logFont.lfWeight == IntNativeMethods.FW_BOLD)
+            if (logFont.lfWeight == Gdi32.FW.BOLD)
             {
                 style |= FontStyle.Bold;
             }
@@ -282,11 +282,11 @@ namespace System.Windows.Forms.Internal
         /// <summary>
         ///  Rendering quality.
         /// </summary>
-        public WindowsFontQuality Quality
+        public Gdi32.QUALITY Quality
         {
             get
             {
-                return (WindowsFontQuality)_logFont.lfQuality;
+                return _logFont.lfQuality;
             }
         }
 
@@ -386,28 +386,27 @@ namespace System.Windows.Forms.Internal
         /// <summary>
         ///  Attempts to match the TextRenderingHint of the specified Graphics object with a LOGFONT.lfQuality value.
         /// </summary>
-        public static WindowsFontQuality WindowsFontQualityFromTextRenderingHint(Graphics g)
+        public static Gdi32.QUALITY WindowsFontQualityFromTextRenderingHint(Graphics g)
         {
             if (g == null)
             {
-                return WindowsFontQuality.Default;
+                return Gdi32.QUALITY.DEFAULT;
             }
 
             switch (g.TextRenderingHint)
             {
                 case TextRenderingHint.ClearTypeGridFit:
-                    return WindowsFontQuality.ClearType;
+                    return Gdi32.QUALITY.CLEARTYPE;
                 case TextRenderingHint.AntiAliasGridFit:
-                    return WindowsFontQuality.AntiAliased;
                 case TextRenderingHint.AntiAlias:
-                    return WindowsFontQuality.AntiAliased;
+                    return Gdi32.QUALITY.ANTIALIASED;
                 case TextRenderingHint.SingleBitPerPixelGridFit:
-                    return WindowsFontQuality.Proof;
+                    return Gdi32.QUALITY.PROOF;
                 case TextRenderingHint.SingleBitPerPixel:
-                    return WindowsFontQuality.Draft;
+                    return Gdi32.QUALITY.DRAFT;
                 default:
                 case TextRenderingHint.SystemDefault:
-                    return WindowsFontQuality.Default;
+                    return Gdi32.QUALITY.DEFAULT;
             }
         }
     }
