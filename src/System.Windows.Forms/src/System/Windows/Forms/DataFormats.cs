@@ -215,22 +215,16 @@ namespace System.Windows.Forms
                     }
                 }
 
-                // The max length of the name of clipboard formats is equal to the max length
-                // of a Win32 Atom of 255 chars. An additional null terminator character is added,
-                // giving a required capacity of 256 chars.
-                var nameBuilder = new StringBuilder(256);
-
-                // This can happen if windows adds a standard format that we don't know about,
-                // so we should play it safe.
-                if (SafeNativeMethods.GetClipboardFormatName(clampedId, nameBuilder, nameBuilder.Capacity) == 0)
+                string name = User32.GetClipboardFormatNameW(clampedId);
+                if (name == null)
                 {
-                    nameBuilder.Length = 0;
-                    nameBuilder.Append("Format").Append(clampedId);
+                    // This can happen if windows adds a standard format that we don't know about,
+                    // so we should play it safe.
+                    name = "Format" + clampedId;
                 }
 
                 EnsureFormatSpace(1);
-                s_formatList[s_formatCount] = new Format(nameBuilder.ToString(), clampedId);
-
+                s_formatList[s_formatCount] = new Format(name, clampedId);
                 return s_formatList[s_formatCount++];
             }
         }
