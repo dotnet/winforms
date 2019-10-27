@@ -258,23 +258,23 @@ namespace System.Windows.Forms
             {
                 s_formatList = new Format[]
                 {
-                    //         Text name        Win32 format ID      Data stored as a Win32 handle?
-                    new Format(UnicodeText,  NativeMethods.CF_UNICODETEXT),
-                    new Format(Text,         NativeMethods.CF_TEXT),
-                    new Format(Bitmap,       NativeMethods.CF_BITMAP),
-                    new Format(MetafilePict, NativeMethods.CF_METAFILEPICT),
-                    new Format(EnhancedMetafile,  NativeMethods.CF_ENHMETAFILE),
-                    new Format(Dif,          NativeMethods.CF_DIF),
-                    new Format(Tiff,         NativeMethods.CF_TIFF),
-                    new Format(OemText,      NativeMethods.CF_OEMTEXT),
-                    new Format(Dib,          NativeMethods.CF_DIB),
-                    new Format(Palette,      NativeMethods.CF_PALETTE),
-                    new Format(PenData,      NativeMethods.CF_PENDATA),
-                    new Format(Riff,         NativeMethods.CF_RIFF),
-                    new Format(WaveAudio,    NativeMethods.CF_WAVE),
-                    new Format(SymbolicLink, NativeMethods.CF_SYLK),
-                    new Format(FileDrop,     NativeMethods.CF_HDROP),
-                    new Format(Locale,       NativeMethods.CF_LOCALE)
+                    //         Text name        Win32 format ID
+                    new Format(UnicodeText,       (int)User32.CF.UNICODETEXT),
+                    new Format(Text,              (int)User32.CF.TEXT),
+                    new Format(Bitmap,            (int)User32.CF.BITMAP),
+                    new Format(MetafilePict,      (int)User32.CF.METAFILEPICT),
+                    new Format(EnhancedMetafile,  (int)User32.CF.ENHMETAFILE),
+                    new Format(Dif,               (int)User32.CF.DIF),
+                    new Format(Tiff,              (int)User32.CF.TIFF),
+                    new Format(OemText,           (int)User32.CF.OEMTEXT),
+                    new Format(Dib,               (int)User32.CF.DIB),
+                    new Format(Palette,           (int)User32.CF.PALETTE),
+                    new Format(PenData,           (int)User32.CF.PENDATA),
+                    new Format(Riff,              (int)User32.CF.RIFF),
+                    new Format(WaveAudio,         (int)User32.CF.WAVE),
+                    new Format(SymbolicLink,      (int)User32.CF.SYLK),
+                    new Format(FileDrop,          (int)User32.CF.HDROP),
+                    new Format(Locale,            (int)User32.CF.LOCALE)
                 };
 
                 s_formatCount = s_formatList.Length;

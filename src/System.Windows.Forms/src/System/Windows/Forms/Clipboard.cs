@@ -52,8 +52,8 @@ namespace System.Windows.Forms
                 for (int i = 0; i < formats.Length; i++)
                 {
                     short format = formats[i].cfFormat;
-                    if (format != NativeMethods.CF_TEXT &&
-                        format != NativeMethods.CF_UNICODETEXT &&
+                    if (format != (short)User32.CF.TEXT &&
+                        format != (short)User32.CF.UNICODETEXT &&
                         format != DataFormats.GetFormat("System.String").Id &&
                         format != DataFormats.GetFormat("Csv").Id)
                     {
