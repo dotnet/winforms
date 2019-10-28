@@ -3944,15 +3944,7 @@ namespace System.Windows.Forms
             return container;
         }
 
-        private UnsafeNativeMethods.IOleControl GetOleControl()
-        {
-            if (iOleControl == null)
-            {
-                Debug.Assert(instance != null, "must have the ocx");
-                iOleControl = (UnsafeNativeMethods.IOleControl)instance;
-            }
-            return iOleControl;
-        }
+        private UnsafeNativeMethods.IOleControl GetOleControl() => iOleControl ??= (UnsafeNativeMethods.IOleControl)instance;
 
         private Ole32.IOleInPlaceActiveObject GetInPlaceActiveObject()
         {
@@ -3978,15 +3970,7 @@ namespace System.Windows.Forms
             return iOleInPlaceActiveObject;
         }
 
-        private UnsafeNativeMethods.IOleObject GetOleObject()
-        {
-            if (iOleObject == null)
-            {
-                Debug.Assert(instance != null, "must have the ocx");
-                iOleObject = (UnsafeNativeMethods.IOleObject)instance;
-            }
-            return iOleObject;
-        }
+        private UnsafeNativeMethods.IOleObject GetOleObject() => iOleObject ??= (UnsafeNativeMethods.IOleObject)instance;
 
         private Ole32.IOleInPlaceObject GetInPlaceObject()
         {
