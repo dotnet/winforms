@@ -4,6 +4,7 @@
 
 using System;
 using System.Runtime.InteropServices;
+using System.Windows.Forms;
 
 internal static partial class Interop
 {
@@ -12,10 +13,10 @@ internal static partial class Interop
         [DllImport(Libraries.User32, ExactSpelling = true)]
         public static extern IntPtr SetCapture(IntPtr hWnd);
 
-        public static IntPtr SetCapture(HandleRef hWnd)
+        public static IntPtr SetCapture(IHandle handle)
         {
-            IntPtr result = SetCapture(hWnd.Handle);
-            GC.KeepAlive(hWnd.Wrapper);
+            IntPtr result = SetCapture(handle.Handle);
+            GC.KeepAlive(handle);
             return result;
         }
     }

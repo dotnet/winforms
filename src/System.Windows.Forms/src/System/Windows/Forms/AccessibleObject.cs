@@ -526,10 +526,10 @@ namespace System.Windows.Forms
             return false;
         }
 
-        internal virtual bool IsPatternSupported(int patternId)
+        internal virtual bool IsPatternSupported(UiaCore.UIA patternId)
         {
             // Override this, in your derived class, if you implement UIAutomation patterns
-            if (patternId == NativeMethods.UIA_InvokePatternId)
+            if (patternId == UiaCore.UIA.InvokePatternId)
             {
                 return IsInvokePatternAvailable;
             }
@@ -544,9 +544,9 @@ namespace System.Windows.Forms
 
         internal virtual UiaCore.IRawElementProviderSimple HostRawElementProvider => null;
 
-        internal virtual object GetPropertyValue(int propertyID)
+        internal virtual object GetPropertyValue(UiaCore.UIA propertyID)
         {
-            if (propertyID == NativeMethods.UIA_IsInvokePatternAvailablePropertyId)
+            if (propertyID == UiaCore.UIA.IsInvokePatternAvailablePropertyId)
             {
                 return IsInvokePatternAvailable;
             }
@@ -788,7 +788,7 @@ namespace System.Windows.Forms
         UiaCore.IRawElementProviderSimple UiaCore.IRawElementProviderSimple.HostRawElementProvider
             => HostRawElementProvider;
 
-        object UiaCore.IRawElementProviderSimple.GetPatternProvider(int patternId)
+        object UiaCore.IRawElementProviderSimple.GetPatternProvider(UiaCore.UIA patternId)
         {
             if (IsPatternSupported(patternId))
             {
@@ -800,7 +800,7 @@ namespace System.Windows.Forms
             }
         }
 
-        object UiaCore.IRawElementProviderSimple.GetPropertyValue(int propertyID)
+        object UiaCore.IRawElementProviderSimple.GetPropertyValue(UiaCore.UIA propertyID)
             => GetPropertyValue(propertyID);
 
         object UiaCore.IRawElementProviderFragment.Navigate(UiaCore.NavigateDirection direction)
@@ -2259,7 +2259,7 @@ namespace System.Windows.Forms
             throw new NotSupportedException(SR.AccessibleObjectLiveRegionNotSupported);
         }
 
-        internal bool RaiseAutomationEvent(int eventId)
+        internal bool RaiseAutomationEvent(UiaCore.UIA eventId)
         {
             if (UiaCore.UiaClientsAreListening().IsTrue())
             {
@@ -2270,7 +2270,7 @@ namespace System.Windows.Forms
             return false;
         }
 
-        internal bool RaiseAutomationPropertyChangedEvent(int propertyId, object oldValue, object newValue)
+        internal bool RaiseAutomationPropertyChangedEvent(UiaCore.UIA propertyId, object oldValue, object newValue)
         {
             if (UiaCore.UiaClientsAreListening().IsTrue())
             {
@@ -2787,61 +2787,61 @@ namespace System.Windows.Forms
         UiaCore.IRawElementProviderSimple UiaCore.IRawElementProviderSimple.HostRawElementProvider
             => publicIRawElementProviderSimple.HostRawElementProvider;
 
-        object UiaCore.IRawElementProviderSimple.GetPatternProvider(int patternId)
+        object UiaCore.IRawElementProviderSimple.GetPatternProvider(UiaCore.UIA patternId)
         {
             object obj = publicIRawElementProviderSimple.GetPatternProvider(patternId);
             if (obj != null)
             {
                 // we always want to return the internal accessible object
-                if (patternId == NativeMethods.UIA_ExpandCollapsePatternId)
+                if (patternId == UiaCore.UIA.ExpandCollapsePatternId)
                 {
                     return (UiaCore.IExpandCollapseProvider)this;
                 }
-                else if (patternId == NativeMethods.UIA_ValuePatternId)
+                else if (patternId == UiaCore.UIA.ValuePatternId)
                 {
                     return (UiaCore.IValueProvider)this;
                 }
-                else if (patternId == NativeMethods.UIA_RangeValuePatternId)
+                else if (patternId == UiaCore.UIA.RangeValuePatternId)
                 {
                     return (UiaCore.IRangeValueProvider)this;
                 }
-                else if (patternId == NativeMethods.UIA_TogglePatternId)
+                else if (patternId == UiaCore.UIA.TogglePatternId)
                 {
                     return (UiaCore.IToggleProvider)this;
                 }
-                else if (patternId == NativeMethods.UIA_TablePatternId)
+                else if (patternId == UiaCore.UIA.TablePatternId)
                 {
                     return (UiaCore.ITableProvider)this;
                 }
-                else if (patternId == NativeMethods.UIA_TableItemPatternId)
+                else if (patternId == UiaCore.UIA.TableItemPatternId)
                 {
                     return (UiaCore.ITableItemProvider)this;
                 }
-                else if (patternId == NativeMethods.UIA_GridPatternId)
+                else if (patternId == UiaCore.UIA.GridPatternId)
                 {
                     return (UiaCore.IGridProvider)this;
                 }
-                else if (patternId == NativeMethods.UIA_GridItemPatternId)
+                else if (patternId == UiaCore.UIA.GridItemPatternId)
                 {
                     return (UiaCore.IGridItemProvider)this;
                 }
-                else if (patternId == NativeMethods.UIA_InvokePatternId)
+                else if (patternId == UiaCore.UIA.InvokePatternId)
                 {
                     return (UiaCore.IInvokeProvider)this;
                 }
-                else if (patternId == NativeMethods.UIA_LegacyIAccessiblePatternId)
+                else if (patternId == UiaCore.UIA.LegacyIAccessiblePatternId)
                 {
                     return (UiaCore.ILegacyIAccessibleProvider)this;
                 }
-                else if (patternId == NativeMethods.UIA_SelectionPatternId)
+                else if (patternId == UiaCore.UIA.SelectionPatternId)
                 {
                     return (UiaCore.ISelectionProvider)this;
                 }
-                else if (patternId == NativeMethods.UIA_SelectionItemPatternId)
+                else if (patternId == UiaCore.UIA.SelectionItemPatternId)
                 {
                     return (UiaCore.ISelectionItemProvider)this;
                 }
-                else if (patternId == NativeMethods.UIA_ScrollItemPatternId)
+                else if (patternId == UiaCore.UIA.ScrollItemPatternId)
                 {
                     return (UiaCore.IScrollItemProvider)this;
                 }
@@ -2856,7 +2856,7 @@ namespace System.Windows.Forms
             }
         }
 
-        object UiaCore.IRawElementProviderSimple.GetPropertyValue(int propertyID)
+        object UiaCore.IRawElementProviderSimple.GetPropertyValue(UiaCore.UIA propertyID)
             => publicIRawElementProviderSimple.GetPropertyValue(propertyID);
 
         object UiaCore.IRawElementProviderFragment.Navigate(UiaCore.NavigateDirection direction)

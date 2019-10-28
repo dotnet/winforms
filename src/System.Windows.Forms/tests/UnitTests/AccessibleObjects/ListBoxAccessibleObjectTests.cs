@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using Xunit;
+using static Interop;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects
 {
@@ -27,7 +28,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
             for (int i = 0; i < childCount; i++)
             {
                 var child = listBox.AccessibilityObject.GetChild(i);
-                Assert.True(child.IsPatternSupported(NativeMethods.UIA_ScrollItemPatternId));
+                Assert.True(child.IsPatternSupported(UiaCore.UIA.ScrollItemPatternId));
             }
         }
     }

@@ -733,7 +733,7 @@ namespace System.Windows.Forms
                 switch (borderStyle)
                 {
                     case BorderStyle.Fixed3D:
-                        cp.ExStyle |= NativeMethods.WS_EX_CLIENTEDGE;
+                        cp.ExStyle |= (int)User32.WS_EX.CLIENTEDGE;
                         break;
                     case BorderStyle.FixedSingle:
                         cp.Style |= NativeMethods.WS_BORDER;
@@ -799,9 +799,9 @@ namespace System.Windows.Forms
                 if (RightToLeft == RightToLeft.Yes && RightToLeftLayout == true)
                 {
                     //We want to turn on mirroring for Form explicitly.
-                    cp.ExStyle |= NativeMethods.WS_EX_LAYOUTRTL;
+                    cp.ExStyle |= (int)User32.WS_EX.LAYOUTRTL;
                     //Don't need these styles when mirroring is turned on.
-                    cp.ExStyle &= ~(NativeMethods.WS_EX_RTLREADING | NativeMethods.WS_EX_RIGHT | NativeMethods.WS_EX_LEFTSCROLLBAR);
+                    cp.ExStyle &= ~((int)User32.WS_EX.RTLREADING | (int)User32.WS_EX.RIGHT | (int)User32.WS_EX.LEFTSCROLLBAR);
                 }
                 return cp;
             }
@@ -2795,8 +2795,8 @@ namespace System.Windows.Forms
                         // real item state to be sure.
                         if (!HideSelection)
                         {
-                            int realState = GetItemState((int)(nmcd->nmcd.dwItemSpec));
-                            if ((realState & NativeMethods.LVIS_SELECTED) == 0)
+                            ComCtl32.LVIS realState = GetItemState((int)(nmcd->nmcd.dwItemSpec));
+                            if ((realState & ComCtl32.LVIS.SELECTED) == 0)
                             {
                                 state &= ~NativeMethods.CDIS_SELECTED;
                             }
@@ -3551,22 +3551,22 @@ namespace System.Windows.Forms
             return pt;
         }
 
-        internal int GetItemState(int index)
+        internal ComCtl32.LVIS GetItemState(int index)
         {
-            return GetItemState(index, NativeMethods.LVIS_FOCUSED | NativeMethods.LVIS_SELECTED | NativeMethods.LVIS_CUT |
-                                NativeMethods.LVIS_DROPHILITED | NativeMethods.LVIS_OVERLAYMASK |
-                                NativeMethods.LVIS_STATEIMAGEMASK);
+            return GetItemState(index, ComCtl32.LVIS.FOCUSED | ComCtl32.LVIS.SELECTED | ComCtl32.LVIS.CUT |
+                                ComCtl32.LVIS.DROPHILITED | ComCtl32.LVIS.OVERLAYMASK |
+                                ComCtl32.LVIS.STATEIMAGEMASK);
         }
 
-        internal int GetItemState(int index, int mask)
+        internal ComCtl32.LVIS GetItemState(int index, ComCtl32.LVIS mask)
         {
             if (index < 0 || ((VirtualMode && index >= VirtualListSize) || (!VirtualMode && index >= itemCount)))
             {
                 throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
             }
-            Debug.Assert(IsHandleCreated, "How did we add items without a handle?");
 
-            return unchecked((int)(long)SendMessage((int)LVM.GETITEMSTATE, index, mask));
+            Debug.Assert(IsHandleCreated, "How did we add items without a handle?");
+            return unchecked((ComCtl32.LVIS)(long)SendMessage((int)LVM.GETITEMSTATE, index, (int)mask));
         }
 
         /// <summary>
@@ -4336,12 +4336,6 @@ namespace System.Windows.Forms
             }
         }
 
-        private void LvnBeginDrag(MouseButtons buttons, NativeMethods.NMLISTVIEW nmlv)
-        {
-            ListViewItem item = Items[nmlv.iItem];
-            OnItemDrag(new ItemDragEventArgs(buttons, item));
-        }
-
         /// <summary>
         ///  Fires the afterLabelEdit event.
         /// </summary>
@@ -4529,7 +4523,7 @@ namespace System.Windows.Forms
             // This not noticeable if the customer paints the items w/ the same background color as the list view itself.
             // However, if the customer paints the items w/ a color different from the list view's back color
             // then when the user changes selection the native list view will not invalidate the entire list view item area.
-            SendMessage((int)LVM.SETTEXTBKCOLOR, 0, NativeMethods.CLR_NONE);
+            SendMessage((int)LVM.SETTEXTBKCOLOR, 0, ComCtl32.CLR.NONE);
 
             // LVS_NOSCROLL does not work well when the list view is in View.Details or in View.List modes.
             // we have to set this style after the list view was created and before we position the native list view items.
@@ -4544,9 +4538,9 @@ namespace System.Windows.Forms
             // in VirtualMode we have to tell the list view to ask for the list view item's state image index
             if (VirtualMode)
             {
-                int callbackMask = unchecked((int)(long)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)LVM.GETCALLBACKMASK, 0, 0));
-                callbackMask |= NativeMethods.LVIS_STATEIMAGEMASK;
-                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)LVM.SETCALLBACKMASK, callbackMask, 0);
+                ComCtl32.LVIS callbackMask = unchecked((ComCtl32.LVIS)(long)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)LVM.GETCALLBACKMASK, 0, 0));
+                callbackMask |= ComCtl32.LVIS.STATEIMAGEMASK;
+                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)LVM.SETCALLBACKMASK, (int)callbackMask, 0);
             }
 
             if (ComctlSupportsVisualStyles)
@@ -4812,7 +4806,7 @@ namespace System.Windows.Forms
                 SendMessage((int)LVM.SETBKCOLOR, 0, color);
                 // We should probably be OK if we don't set the TEXTBKCOLOR to CLR_NONE.
                 // However, for the sake of being more robust, reset the TECTBKCOLOR to CLR_NONE when the system palette changes.
-                SendMessage((int)LVM.SETTEXTBKCOLOR, 0, NativeMethods.CLR_NONE);
+                SendMessage((int)LVM.SETTEXTBKCOLOR, 0, ComCtl32.CLR.NONE);
             }
         }
 
@@ -5325,14 +5319,14 @@ namespace System.Windows.Forms
             UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)LVM.SETITEMPOSITION32, index, ref pt);
         }
 
-        internal void SetItemState(int index, int state, int mask)
+        internal void SetItemState(int index, ComCtl32.LVIS state, ComCtl32.LVIS mask)
         {
             if (index < -1 || ((VirtualMode && index >= VirtualListSize) || (!VirtualMode && index >= itemCount)))
             {
                 throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
             }
-            Debug.Assert(index == -1 || IsHandleCreated, "How did we add items without a handle?");
 
+            Debug.Assert(index == -1 || IsHandleCreated, "How did we add items without a handle?");
             if (IsHandleCreated)
             {
                 NativeMethods.LVITEM lvItem = new NativeMethods.LVITEM
@@ -6156,9 +6150,9 @@ namespace System.Windows.Forms
 
                 case NativeMethods.LVN_COLUMNCLICK:
                     {
-                        NativeMethods.NMLISTVIEW nmlv = (NativeMethods.NMLISTVIEW)m.GetLParam(typeof(NativeMethods.NMLISTVIEW));
+                        ComCtl32.NMLISTVIEW* nmlv = (ComCtl32.NMLISTVIEW*)m.LParam;
                         listViewState[LISTVIEWSTATE_columnClicked] = true;
-                        columnIndex = nmlv.iSubItem;
+                        columnIndex = nmlv->iSubItem;
                         break;
                     }
 
@@ -6185,14 +6179,14 @@ namespace System.Windows.Forms
 
                 case NativeMethods.LVN_BEGINDRAG:
                     {
-                        // the items collection was modified while dragging
-                        // that means that we can't reliably give the user the item on which the dragging started
-                        // so don't tell the user about this operation...
-                        //
+                        // The items collection was modified while dragging that means that
+                        // we can't reliably give the user the item on which the dragging
+                        // started so don't tell the user about this operation.
                         if (!ItemCollectionChangedInMouseDown)
                         {
-                            NativeMethods.NMLISTVIEW nmlv = (NativeMethods.NMLISTVIEW)m.GetLParam(typeof(NativeMethods.NMLISTVIEW));
-                            LvnBeginDrag(MouseButtons.Left, nmlv);
+                            ComCtl32.NMLISTVIEW* nmlv = (ComCtl32.NMLISTVIEW*)m.LParam;
+                            ListViewItem item = Items[nmlv->iItem];
+                            OnItemDrag(new ItemDragEventArgs(MouseButtons.Left, item));
                         }
 
                         break;
@@ -6200,27 +6194,28 @@ namespace System.Windows.Forms
 
                 case NativeMethods.LVN_BEGINRDRAG:
                     {
-                        // the items collection was modified while dragging
-                        // that means that we can't reliably give the user the item on which the dragging started
-                        // so don't tell the user about this operation...
-                        //
+                        // The items collection was modified while dragging. That means that
+                        // we can't reliably give the user the item on which the dragging
+                        // started so don't tell the user about this operation.
                         if (!ItemCollectionChangedInMouseDown)
                         {
-                            NativeMethods.NMLISTVIEW nmlv = (NativeMethods.NMLISTVIEW)m.GetLParam(typeof(NativeMethods.NMLISTVIEW));
-                            LvnBeginDrag(MouseButtons.Right, nmlv);
+                            ComCtl32.NMLISTVIEW* nmlv = (ComCtl32.NMLISTVIEW*)m.LParam;
+                            ListViewItem item = Items[nmlv->iItem];
+                            OnItemDrag(new ItemDragEventArgs(MouseButtons.Right, item));
                         }
+
                         break;
                     }
 
                 case NativeMethods.LVN_ITEMCHANGING:
                     {
-                        NativeMethods.NMLISTVIEW* nmlv = (NativeMethods.NMLISTVIEW*)m.LParam;
+                        ComCtl32.NMLISTVIEW* nmlv = (ComCtl32.NMLISTVIEW*)m.LParam;
                         if ((nmlv->uChanged & NativeMethods.LVIF_STATE) != 0)
                         {
                             // Because the state image mask is 1-based, a value of 1 means unchecked,
                             // anything else means checked.  We convert this to the more standard 0 or 1
-                            CheckState oldState = (CheckState)(((nmlv->uOldState & NativeMethods.LVIS_STATEIMAGEMASK) >> 12) == 1 ? 0 : 1);
-                            CheckState newState = (CheckState)(((nmlv->uNewState & NativeMethods.LVIS_STATEIMAGEMASK) >> 12) == 1 ? 0 : 1);
+                            CheckState oldState = (CheckState)(((int)(nmlv->uOldState & ComCtl32.LVIS.STATEIMAGEMASK) >> 12) == 1 ? 0 : 1);
+                            CheckState newState = (CheckState)(((int)(nmlv->uNewState & ComCtl32.LVIS.STATEIMAGEMASK) >> 12) == 1 ? 0 : 1);
 
                             if (oldState != newState)
                             {
@@ -6234,14 +6229,14 @@ namespace System.Windows.Forms
 
                 case NativeMethods.LVN_ITEMCHANGED:
                     {
-                        NativeMethods.NMLISTVIEW* nmlv = (NativeMethods.NMLISTVIEW*)m.LParam;
+                        ComCtl32.NMLISTVIEW* nmlv = (ComCtl32.NMLISTVIEW*)m.LParam;
                         // Check for state changes to the selected state...
                         if ((nmlv->uChanged & NativeMethods.LVIF_STATE) != 0)
                         {
                             // Because the state image mask is 1-based, a value of 1 means unchecked,
                             // anything else means checked.  We convert this to the more standard 0 or 1
-                            CheckState oldValue = (CheckState)(((nmlv->uOldState & NativeMethods.LVIS_STATEIMAGEMASK) >> 12) == 1 ? 0 : 1);
-                            CheckState newValue = (CheckState)(((nmlv->uNewState & NativeMethods.LVIS_STATEIMAGEMASK) >> 12) == 1 ? 0 : 1);
+                            CheckState oldValue = (CheckState)(((int)(nmlv->uOldState & ComCtl32.LVIS.STATEIMAGEMASK) >> 12) == 1 ? 0 : 1);
+                            CheckState newValue = (CheckState)(((int)(nmlv->uNewState & ComCtl32.LVIS.STATEIMAGEMASK) >> 12) == 1 ? 0 : 1);
 
                             if (newValue != oldValue)
                             {
@@ -6252,8 +6247,8 @@ namespace System.Windows.Forms
                                 AccessibilityNotifyClients(AccessibleEvents.NameChange, nmlv->iItem);
                             }
 
-                            int oldState = nmlv->uOldState & NativeMethods.LVIS_SELECTED;
-                            int newState = nmlv->uNewState & NativeMethods.LVIS_SELECTED;
+                            ComCtl32.LVIS oldState = nmlv->uOldState & ComCtl32.LVIS.SELECTED;
+                            ComCtl32.LVIS newState = nmlv->uNewState & ComCtl32.LVIS.SELECTED;
                             // Windows common control always fires
                             // this event twice, once with newState, oldState, and again with
                             // oldState, newState.
@@ -6340,11 +6335,12 @@ namespace System.Windows.Forms
                         //just maintain state and fire double click.. in final mouseUp...
                         listViewState[LISTVIEWSTATE_doubleclickFired] = true;
                     }
-                    //fire Up in the Wndproc !!
+
+                    // Fire mouse up in the Wndproc
                     listViewState[LISTVIEWSTATE_mouseUpFired] = false;
-                    //problem getting the UP... outside the control...
-                    //
-                    CaptureInternal = true;
+
+                    // Make sure we get the mouse up if it happens outside the control.
+                    Capture = true;
                     break;
 
                 case NativeMethods.LVN_KEYDOWN:
@@ -6434,7 +6430,7 @@ namespace System.Windows.Forms
                                 dispInfo.item.iIndent = lvItem.IndentCount;
                             }
 
-                            if ((dispInfo.item.stateMask & NativeMethods.LVIS_STATEIMAGEMASK) != 0)
+                            if ((dispInfo.item.stateMask & ComCtl32.LVIS.STATEIMAGEMASK) != 0)
                             {
                                 dispInfo.item.state |= lvItem.RawStateImageIndex;
                             }
@@ -6447,14 +6443,14 @@ namespace System.Windows.Forms
                         if (VirtualMode && m.LParam != IntPtr.Zero)
                         {
                             NativeMethods.NMLVODSTATECHANGE odStateChange = (NativeMethods.NMLVODSTATECHANGE)m.GetLParam(typeof(NativeMethods.NMLVODSTATECHANGE));
-                            bool selectedChanged = (odStateChange.uNewState & NativeMethods.LVIS_SELECTED) != (odStateChange.uOldState & NativeMethods.LVIS_SELECTED);
+                            bool selectedChanged = (odStateChange.uNewState & ComCtl32.LVIS.SELECTED) != (odStateChange.uOldState & ComCtl32.LVIS.SELECTED);
                             if (selectedChanged)
                             {
                                 // we have to substract 1 from iTo
                                 //
                                 //
                                 int iTo = odStateChange.iTo;
-                                ListViewVirtualItemsSelectionRangeChangedEventArgs lvvisrce = new ListViewVirtualItemsSelectionRangeChangedEventArgs(odStateChange.iFrom, iTo, (odStateChange.uNewState & NativeMethods.LVIS_SELECTED) != 0);
+                                ListViewVirtualItemsSelectionRangeChangedEventArgs lvvisrce = new ListViewVirtualItemsSelectionRangeChangedEventArgs(odStateChange.iFrom, iTo, (odStateChange.uNewState & ComCtl32.LVIS.SELECTED) != 0);
                                 OnVirtualItemsSelectionRangeChanged(lvvisrce);
                             }
                         }
@@ -6575,7 +6571,7 @@ namespace System.Windows.Forms
                     // Ensure that the itemCollectionChangedInMouseDown is not set
                     // before processing the mousedown event.
                     ItemCollectionChangedInMouseDown = false;
-                    CaptureInternal = true;
+                    Capture = true;
                     WmMouseDown(ref m, MouseButtons.Left, 2);
                     break;
 
@@ -6612,7 +6608,7 @@ namespace System.Windows.Forms
                     ItemCollectionChangedInMouseDown = false;
 
                     listViewState[LISTVIEWSTATE_mouseUpFired] = true;
-                    CaptureInternal = false;
+                    Capture = false;
                     break;
                 case WindowMessages.WM_MBUTTONDBLCLK:
                     WmMouseDown(ref m, MouseButtons.Middle, 2);
@@ -6634,7 +6630,7 @@ namespace System.Windows.Forms
                         OnMouseUp(new MouseEventArgs(downButton, 1, NativeMethods.Util.SignedLOWORD(m.LParam), NativeMethods.Util.SignedHIWORD(m.LParam), 0));
                         listViewState[LISTVIEWSTATE_mouseUpFired] = true;
                     }
-                    CaptureInternal = false;
+                    Capture = false;
                     base.WndProc(ref m);
                     break;
                 case WindowMessages.WM_MOUSEHOVER:
@@ -7548,7 +7544,7 @@ namespace System.Windows.Forms
                     }
                     if (owner.IsHandleCreated)
                     {
-                        owner.SetItemState(itemIndex, NativeMethods.LVIS_SELECTED, NativeMethods.LVIS_SELECTED);
+                        owner.SetItemState(itemIndex, ComCtl32.LVIS.SELECTED, ComCtl32.LVIS.SELECTED);
                         return Count;
                     }
                     else
@@ -7575,7 +7571,7 @@ namespace System.Windows.Forms
                 }
                 if (owner.IsHandleCreated)
                 {
-                    owner.SetItemState(-1, 0, NativeMethods.LVIS_SELECTED);
+                    owner.SetItemState(-1, 0, ComCtl32.LVIS.SELECTED);
                 }
             }
 
@@ -7610,7 +7606,7 @@ namespace System.Windows.Forms
                     }
                     if (owner.IsHandleCreated)
                     {
-                        owner.SetItemState(itemIndex, 0, NativeMethods.LVIS_SELECTED);
+                        owner.SetItemState(itemIndex, 0, ComCtl32.LVIS.SELECTED);
                     }
                 }
                 else
@@ -8959,7 +8955,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Searches for Controls by their Name property, builds up an array
             ///  of all the controls that match.
-                    /// </summary>
+            /// </summary>
             public ListViewItem[] Find(string key, bool searchAllSubItems)
             {
                 ArrayList foundItems = FindInternal(key, searchAllSubItems, this, new ArrayList());
@@ -8973,7 +8969,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Searches for Controls by their Name property, builds up an arraylist
             ///  of all the controls that match.
-                    /// </summary>
+            /// </summary>
             private ArrayList FindInternal(string key, bool searchAllSubItems, ListViewItemCollection listViewItems, ArrayList foundItems)
             {
                 if ((listViewItems == null) || (foundItems == null))
@@ -9378,7 +9374,9 @@ namespace System.Windows.Forms
                     owner.ItemCollectionChangedInMouseDown = true;
                 }
 
+#pragma warning disable SA1408 // Conditional expressions should declare precedence
                 if (comparer != null || (owner.Sorting != SortOrder.None) && !owner.VirtualMode)
+#pragma warning restore SA1408 // Conditional expressions should declare precedence
                 {
                     owner.Sort();
                 }
@@ -9686,9 +9684,9 @@ namespace System.Windows.Forms
                 return base.IsIAccessibleExSupported();
             }
 
-            internal override object GetPropertyValue(int propertyID)
+            internal override object GetPropertyValue(UiaCore.UIA propertyID)
             {
-                if (propertyID == NativeMethods.UIA_ItemStatusPropertyId)
+                if (propertyID == UiaCore.UIA.ItemStatusPropertyId)
                 {
                     switch (owner.Sorting)
                     {

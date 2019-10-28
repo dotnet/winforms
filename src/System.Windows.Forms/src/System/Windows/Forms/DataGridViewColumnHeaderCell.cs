@@ -808,7 +808,9 @@ namespace System.Windows.Forms
                     int state = (int)HeaderItemState.Normal;
 
                     // Set the state to Pressed/Hot only if the column can be sorted or selected
+#pragma warning disable SA1408 // Conditional expressions should declare precedence
                     if (OwningColumn != null && OwningColumn.SortMode != DataGridViewColumnSortMode.NotSortable ||
+#pragma warning restore SA1408 // Conditional expressions should declare precedence
                         DataGridView.SelectionMode == DataGridViewSelectionMode.FullColumnSelect ||
                         DataGridView.SelectionMode == DataGridViewSelectionMode.ColumnHeaderSelect)
                     {
@@ -1540,32 +1542,32 @@ namespace System.Windows.Forms
 
             #region IRawElementProviderSimple Implementation
 
-            internal override bool IsPatternSupported(int patternId)
+            internal override bool IsPatternSupported(UiaCore.UIA patternId)
             {
-                return patternId.Equals(NativeMethods.UIA_LegacyIAccessiblePatternId) ||
-                    patternId.Equals(NativeMethods.UIA_InvokePatternId);
+                return patternId.Equals(UiaCore.UIA.LegacyIAccessiblePatternId) ||
+                    patternId.Equals(UiaCore.UIA.InvokePatternId);
             }
 
-            internal override object GetPropertyValue(int propertyId)
+            internal override object GetPropertyValue(UiaCore.UIA propertyId)
             {
                 switch (propertyId)
                 {
-                    case NativeMethods.UIA_NamePropertyId:
+                    case UiaCore.UIA.NamePropertyId:
                         return Name;
-                    case NativeMethods.UIA_ControlTypePropertyId:
-                        return NativeMethods.UIA_HeaderControlTypeId;
-                    case NativeMethods.UIA_IsEnabledPropertyId:
+                    case UiaCore.UIA.ControlTypePropertyId:
+                        return UiaCore.UIA.HeaderControlTypeId;
+                    case UiaCore.UIA.IsEnabledPropertyId:
                         return Owner.DataGridView.Enabled;
-                    case NativeMethods.UIA_HelpTextPropertyId:
+                    case UiaCore.UIA.HelpTextPropertyId:
                         return Help ?? string.Empty;
-                    case NativeMethods.UIA_IsKeyboardFocusablePropertyId:
+                    case UiaCore.UIA.IsKeyboardFocusablePropertyId:
                         return (State & AccessibleStates.Focusable) == AccessibleStates.Focusable;
-                    case NativeMethods.UIA_HasKeyboardFocusPropertyId:
-                    case NativeMethods.UIA_IsPasswordPropertyId:
+                    case UiaCore.UIA.HasKeyboardFocusPropertyId:
+                    case UiaCore.UIA.IsPasswordPropertyId:
                         return false;
-                    case NativeMethods.UIA_IsOffscreenPropertyId:
+                    case UiaCore.UIA.IsOffscreenPropertyId:
                         return (State & AccessibleStates.Offscreen) == AccessibleStates.Offscreen;
-                    case NativeMethods.UIA_AccessKeyPropertyId:
+                    case UiaCore.UIA.AccessKeyPropertyId:
                         return string.Empty;
                 }
 

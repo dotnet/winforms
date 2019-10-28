@@ -806,8 +806,10 @@ namespace System.Windows.Forms.Tests
         public static IEnumerable<object[]> ForeColor_Set_TestData()
         {
             yield return new object[] { Color.Empty, SystemColors.WindowText };
+            yield return new object[] { Color.FromArgb(254, 1, 2, 3), Color.FromArgb(254, 1, 2, 3) };
+            yield return new object[] { Color.White, Color.White };
+            yield return new object[] { Color.Black, Color.Black };
             yield return new object[] { Color.Red, Color.Red };
-            yield return new object[] { Color.FromArgb(0x01, 0x02, 0x03, 0x4), Color.FromArgb(0x01, 0x02, 0x03, 0x4) };
         }
 
         [Theory]
@@ -2256,51 +2258,84 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [CommonMemberData(nameof(CommonTestHelper.GetPaddingNormalizedTheoryData))]
-        public void Padding_Set_GetReturnsExpected(Padding value, Padding expected)
+        public void TreeView_Padding_Set_GetReturnsExpected(Padding value, Padding expected)
         {
-            var control = new TreeView
+            using var control = new TreeView
             {
                 Padding = value
             };
             Assert.Equal(expected, control.Padding);
+            Assert.False(control.IsHandleCreated);
 
             // Set same.
             control.Padding = value;
             Assert.Equal(expected, control.Padding);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetPaddingNormalizedTheoryData))]
+        public void TreeView_Padding_SetWithHandle_GetReturnsExpected(Padding value, Padding expected)
+        {
+            using var control = new TreeView();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            control.Padding = value;
+            Assert.Equal(expected, control.Padding);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set same.
+            control.Padding = value;
+            Assert.Equal(expected, control.Padding);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
         }
 
         [Fact]
-        public void Padding_SetWithHandler_CallsPaddingChanged()
+        public void TreeView_Padding_SetWithHandler_CallsPaddingChanged()
         {
-            var control = new TreeView();
+            using var control = new TreeView();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
-                Assert.Same(control, sender);
-                Assert.Same(EventArgs.Empty, e);
+                Assert.Equal(control, sender);
+                Assert.Equal(EventArgs.Empty, e);
                 callCount++;
             };
             control.PaddingChanged += handler;
 
             // Set different.
-            control.Padding = new Padding(1);
-            Assert.Equal(new Padding(1), control.Padding);
+            var padding1 = new Padding(1);
+            control.Padding = padding1;
+            Assert.Equal(padding1, control.Padding);
             Assert.Equal(1, callCount);
 
             // Set same.
-            control.Padding = new Padding(1);
-            Assert.Equal(new Padding(1), control.Padding);
+            control.Padding = padding1;
+            Assert.Equal(padding1, control.Padding);
             Assert.Equal(1, callCount);
 
             // Set different.
-            control.Padding = new Padding(2);
-            Assert.Equal(new Padding(2), control.Padding);
+            var padding2 = new Padding(2);
+            control.Padding = padding2;
+            Assert.Equal(padding2, control.Padding);
             Assert.Equal(2, callCount);
 
             // Remove handler.
             control.PaddingChanged -= handler;
-            control.Padding = new Padding(1);
-            Assert.Equal(new Padding(1), control.Padding);
+            control.Padding = padding1;
+            Assert.Equal(padding1, control.Padding);
             Assert.Equal(2, callCount);
         }
 

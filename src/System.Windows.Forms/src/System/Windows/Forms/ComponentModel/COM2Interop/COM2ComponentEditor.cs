@@ -24,33 +24,28 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 }
             }
 
-            if (obj is NativeMethods.ISpecifyPropertyPages)
+            if (obj is Ole32.ISpecifyPropertyPages ispp)
             {
+                var uuids = new Ole32.CAUUID();
                 try
                 {
-                    NativeMethods.tagCAUUID uuids = new NativeMethods.tagCAUUID();
-                    try
+                    HRESULT hr = ispp.GetPages(&uuids);
+                    if (!hr.Succeeded())
                     {
-                        ((NativeMethods.ISpecifyPropertyPages)obj).GetPages(uuids);
-                        if (uuids.cElems > 0)
-                        {
-                            return true;
-                        }
+                        return false;
                     }
-                    finally
-                    {
-                        if (uuids.pElems != IntPtr.Zero)
-                        {
-                            Marshal.FreeCoTaskMem(uuids.pElems);
-                        }
-                    }
-                }
-                catch
-                {
-                }
 
-                return false;
+                    return uuids.cElems > 0;
+                }
+                finally
+                {
+                    if (uuids.pElems != null)
+                    {
+                        Marshal.FreeCoTaskMem((IntPtr)uuids.pElems);
+                    }
+                }
             }
+
             return false;
         }
 
@@ -66,54 +61,68 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 HRESULT hr = ((Ole32.IPerPropertyBrowsing)obj).MapPropertyToPage(Ole32.DispatchID.MEMBERID_NIL, &guid);
                 if (hr == HRESULT.S_OK & !guid.Equals(Guid.Empty))
                 {
-                    object o = obj;
-                    SafeNativeMethods.OleCreatePropertyFrame(new HandleRef(parent, handle), 0, 0, "PropertyPages", 1, ref o, 1, new Guid[] { guid }, Application.CurrentCulture.LCID, 0, IntPtr.Zero);
-                    return true;
-                }
-            }
-
-            if (obj is NativeMethods.ISpecifyPropertyPages)
-            {
-                bool failed = false;
-                Exception failureException;
-
-                try
-                {
-                    NativeMethods.tagCAUUID uuids = new NativeMethods.tagCAUUID();
+                    IntPtr pUnk = Marshal.GetIUnknownForObject(obj);
                     try
                     {
-                        ((NativeMethods.ISpecifyPropertyPages)obj).GetPages(uuids);
-                        if (uuids.cElems <= 0)
-                        {
-                            return false;
-                        }
-                    }
-                    catch
-                    {
-                        return false;
-                    }
-                    try
-                    {
-                        object o = obj;
-                        SafeNativeMethods.OleCreatePropertyFrame(new HandleRef(parent, handle), 0, 0, "PropertyPages", 1, ref o, uuids.cElems, new HandleRef(uuids, uuids.pElems), Application.CurrentCulture.LCID, 0, IntPtr.Zero);
+                        Oleaut32.OleCreatePropertyFrame(
+                            new HandleRef(parent, handle),
+                            0,
+                            0,
+                            "PropertyPages",
+                            1,
+                            &pUnk,
+                            1,
+                            &guid,
+                            (uint)Application.CurrentCulture.LCID,
+                            0,
+                            IntPtr.Zero);
                         return true;
                     }
                     finally
                     {
-                        if (uuids.pElems != IntPtr.Zero)
-                        {
-                            Marshal.FreeCoTaskMem(uuids.pElems);
-                        }
+                        Marshal.Release(pUnk);
+                    }
+                }
+            }
+
+            if (obj is Ole32.ISpecifyPropertyPages ispp)
+            {
+                try
+                {
+                    var uuids = new Ole32.CAUUID();
+                    HRESULT hr = ispp.GetPages(&uuids);
+                    if (!hr.Succeeded() || uuids.cElems == 0)
+                    {
+                        return false;
                     }
 
+                    IntPtr pUnk = Marshal.GetIUnknownForObject(obj);
+                    try
+                    {
+                        Oleaut32.OleCreatePropertyFrame(
+                            new HandleRef(parent, handle),
+                            0,
+                            0,
+                            "PropertyPages",
+                            1,
+                            &pUnk,
+                            uuids.cElems,
+                            uuids.pElems,
+                            (uint)Application.CurrentCulture.LCID,
+                            0,
+                            IntPtr.Zero);
+                        return true;
+                    }
+                    finally
+                    {
+                        Marshal.Release(pUnk);
+                        if (uuids.pElems != null)
+                        {
+                            Marshal.FreeCoTaskMem((IntPtr)uuids.pElems);
+                        }
+                    }
                 }
-                catch (Exception ex1)
-                {
-                    failed = true;
-                    failureException = ex1;
-                }
-
-                if (failed)
+                catch (Exception ex)
                 {
                     string errString = SR.ErrorPropertyPageFailed;
 
@@ -125,9 +134,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                                 MessageBoxButtons.OK, MessageBoxIcon.Error,
                                 MessageBoxDefaultButton.Button1, 0);
                     }
-                    else if (failureException != null)
+                    else if (ex != null)
                     {
-                        uiSvc.ShowError(failureException, errString);
+                        uiSvc.ShowError(ex, errString);
                     }
                     else
                     {
@@ -135,9 +144,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     }
                 }
             }
+
             return false;
         }
-
     }
-
 }

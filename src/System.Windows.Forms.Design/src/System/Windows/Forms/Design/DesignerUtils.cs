@@ -291,7 +291,7 @@ namespace System.Windows.Forms.Design
                 IntPtr oldPen = Gdi32.SelectObject(hDC, isPrimary ? s_grabHandlePenPrimary : s_grabHandlePen);
 
                 //draw our rounded rect grabhandle
-                SafeNativeMethods.RoundRect(new HandleRef(glyph, hDC), bounds.Left, bounds.Top, bounds.Right, bounds.Bottom, 2, 2);
+                Gdi32.RoundRect(hDC, bounds.Left, bounds.Top, bounds.Right, bounds.Bottom, 2, 2);
 
                 //restore old pen and brush
                 Gdi32.SelectObject(hDC, oldBrush);
@@ -316,7 +316,7 @@ namespace System.Windows.Forms.Design
                 IntPtr oldPen = Gdi32.SelectObject(hDC, s_grabHandlePenPrimary);
 
                 //draw our rect no-resize handle
-                SafeNativeMethods.Rectangle(new HandleRef(glyph, hDC), bounds.Left, bounds.Top, bounds.Right, bounds.Bottom);
+                Gdi32.Rectangle(hDC, bounds.Left, bounds.Top, bounds.Right, bounds.Bottom);
                 //restore old pen and brush
                 Gdi32.SelectObject(hDC, oldBrush);
                 Gdi32.SelectObject(hDC, oldPen);
@@ -338,11 +338,11 @@ namespace System.Windows.Forms.Design
                 IntPtr oldPen = Gdi32.SelectObject(hDC, s_grabHandlePenPrimary);
                 // Upper rect - upper rect is always filled with the primary brush
                 IntPtr oldBrush = Gdi32.SelectObject(hDC, s_grabHandleFillBrushPrimary);
-                SafeNativeMethods.RoundRect(new HandleRef(glyph, hDC), bounds.Left + LOCKHANDLEUPPER_OFFSET, bounds.Top,
-                                            bounds.Left + LOCKHANDLEUPPER_OFFSET + LOCKHANDLESIZE_UPPER, bounds.Top + LOCKHANDLESIZE_UPPER, 2, 2);
+                Gdi32.RoundRect(hDC, bounds.Left + LOCKHANDLEUPPER_OFFSET, bounds.Top, bounds.Left + LOCKHANDLEUPPER_OFFSET + LOCKHANDLESIZE_UPPER, bounds.Top + LOCKHANDLESIZE_UPPER, 2, 2);
+
                 // Lower rect - its fillbrush depends on the primary selection
                 Gdi32.SelectObject(hDC, isPrimary ? s_grabHandleFillBrushPrimary : s_grabHandleFillBrush);
-                SafeNativeMethods.Rectangle(new HandleRef(glyph, hDC), bounds.Left, bounds.Top + LOCKHANDLELOWER_OFFSET, bounds.Right, bounds.Bottom);
+                Gdi32.Rectangle(hDC, bounds.Left, bounds.Top + LOCKHANDLELOWER_OFFSET, bounds.Right, bounds.Bottom);
 
                 //restore old pen and brush
                 Gdi32.SelectObject(hDC, oldBrush);
@@ -467,11 +467,27 @@ namespace System.Windows.Forms.Design
                 {
                     gDest.Clear(SystemColors.Control);
                 }
+
                 IntPtr destDC = gDest.GetHdc();
-                //perform our bitblit operation to push the image into the dest bitmap
-                SafeNativeMethods.BitBlt(destDC, 0, 0, image.Width, image.Height, controlDC, 0, 0, 0xcc0020/*RasterOp.SOURCE*/);
-                //clean up all our handles and what not
-                gDest.ReleaseHdc(destDC);
+                try
+                {
+                    // Perform our bitblit operation to push the image into the dest bitmap
+                    Gdi32.BitBlt(
+                        destDC,
+                        0,
+                        0,
+                        image.Width,
+                        image.Height,
+                        controlDC,
+                        0,
+                        0,
+                        Gdi32.ROP.SRCCOPY);
+                }
+                finally
+                {
+                    // Clean up all our handles and what not
+                    gDest.ReleaseHdc(destDC);
+                }
             }
         }
 

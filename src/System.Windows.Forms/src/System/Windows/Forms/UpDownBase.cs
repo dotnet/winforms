@@ -319,7 +319,7 @@ namespace System.Windows.Forms
                     switch (borderStyle)
                     {
                         case BorderStyle.Fixed3D:
-                            cp.ExStyle |= NativeMethods.WS_EX_CLIENTEDGE;
+                            cp.ExStyle |= (int)User32.WS_EX.CLIENTEDGE;
                             break;
                         case BorderStyle.FixedSingle:
                             cp.Style |= NativeMethods.WS_BORDER;
@@ -1428,40 +1428,30 @@ namespace System.Windows.Forms
 
             // Called when the mouse button is pressed - we need to start
             // spinning the value of the updown.
-            //
             private void BeginButtonPress(MouseEventArgs e)
             {
-
                 int half_height = Size.Height / 2;
 
                 if (e.Y < half_height)
                 {
-
                     // Up button
-                    //
                     pushed = captured = ButtonID.Up;
                     Invalidate();
-
                 }
                 else
                 {
-
                     // Down button
-                    //
                     pushed = captured = ButtonID.Down;
                     Invalidate();
                 }
 
                 // Capture the mouse
-                //
-                CaptureInternal = true;
+                Capture = true;
 
                 // Generate UpDown event
-                //
                 OnUpDown(new UpDownEventArgs((int)pushed));
 
                 // Start the timer for new updown events
-                //
                 StartTimer();
             }
 
@@ -1472,10 +1462,8 @@ namespace System.Windows.Forms
 
             // Called when the mouse button is released - we need to stop
             // spinning the value of the updown.
-            //
             private void EndButtonPress()
             {
-
                 pushed = ButtonID.None;
                 captured = ButtonID.None;
 
@@ -1483,7 +1471,7 @@ namespace System.Windows.Forms
                 StopTimer();
 
                 // Release the mouse
-                CaptureInternal = false;
+                Capture = false;
 
                 // Redraw the buttons
                 Invalidate();

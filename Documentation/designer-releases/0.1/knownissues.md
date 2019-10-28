@@ -179,7 +179,7 @@ references.
 Workaround: Enable *Partial Load Mode (PLM)* in Visual Studio. The steps to
 enable PLM are as follows:
 
-1. Download this zip file \<link of the zip file goes here\> and unzip its
+1. Download this [zip file](https://webpifeed.blob.core.windows.net/webpifeed/Partners/PLM.zip) and unzip its
 contents to a safe location.
 
 2. For the Visual Studio instance that needs to be patched, launch its developer

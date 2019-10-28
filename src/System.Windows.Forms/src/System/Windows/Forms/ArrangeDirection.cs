@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Runtime.InteropServices;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -16,21 +17,21 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Arranges vertically, from top to bottom.
         /// </summary>
-        Down = NativeMethods.ARW_DOWN,
+        Down = User32.ARW.DOWN,
 
         /// <summary>
         ///  Arranges horizontally, from left to right.
         /// </summary>
-        Left = NativeMethods.ARW_LEFT,
+        Left = User32.ARW.LEFT,
 
         /// <summary>
         ///  Arranges horizontally, from right to left.
         /// </summary>
-        Right = NativeMethods.ARW_RIGHT,
+        Right = User32.ARW.RIGHT,
 
         /// <summary>
         ///  Arranges vertically, from bottom to top.
         /// </summary>
-        Up = NativeMethods.ARW_UP,
+        Up = User32.ARW.UP,
     }
 }

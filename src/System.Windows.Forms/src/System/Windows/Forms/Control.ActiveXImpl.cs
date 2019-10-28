@@ -53,8 +53,8 @@ namespace System.Windows.Forms
             private readonly IWindowTarget _controlWindowTarget;
             private IntPtr _clipRegion;
             private UnsafeNativeMethods.IOleClientSite _clientSite;
-            private UnsafeNativeMethods.IOleInPlaceUIWindow _inPlaceUiWindow;
-            private UnsafeNativeMethods.IOleInPlaceFrame _inPlaceFrame;
+            private Ole32.IOleInPlaceUIWindow _inPlaceUiWindow;
+            private Ole32.IOleInPlaceFrame _inPlaceFrame;
             private readonly ArrayList _adviseList;
             private IAdviseSink _viewAdviseSink;
             private BitVector32 _activeXState;
@@ -254,8 +254,7 @@ namespace System.Windows.Forms
                         if (Assembly.GetEntryAssembly() == null)
                         {
                             // Now check for IHTMLDocument2
-
-                            if (NativeMethods.Succeeded(_clientSite.GetContainer(out UnsafeNativeMethods.IOleContainer container)) && container is Mshtml.IHTMLDocument)
+                            if (_clientSite.GetContainer(out Ole32.IOleContainer container).Succeeded() && container is Mshtml.IHTMLDocument)
                             {
                                 s_isIE = true;
                                 Debug.WriteLineIf(CompModSwitches.ActiveX.TraceVerbose, "AxSource:IsIE running under IE");
@@ -305,15 +304,15 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Implements IOleObject::Close
             /// </summary>
-            internal void Close(int dwSaveOption)
+            internal void Close(Ole32.OLECLOSE dwSaveOption)
             {
                 if (_activeXState[s_inPlaceActive])
                 {
                     InPlaceDeactivate();
                 }
 
-                if ((dwSaveOption == NativeMethods.OLECLOSE_SAVEIFDIRTY ||
-                     dwSaveOption == NativeMethods.OLECLOSE_PROMPTSAVE) &&
+                if ((dwSaveOption == Ole32.OLECLOSE.SAVEIFDIRTY ||
+                     dwSaveOption == Ole32.OLECLOSE.PROMPTSAVE) &&
                     _activeXState[s_isDirty])
                 {
 
@@ -329,7 +328,7 @@ namespace System.Windows.Forms
             ///  Implements IOleObject::DoVerb
             /// </summary>
             internal unsafe HRESULT DoVerb(
-                int iVerb,
+                Ole32.OLEIVERB iVerb,
                 User32.MSG* lpmsg,
                 UnsafeNativeMethods.IOleClientSite pActiveSite,
                 int lindex,
@@ -339,10 +338,10 @@ namespace System.Windows.Forms
                 Debug.WriteLineIf(CompModSwitches.ActiveX.TraceVerbose, "AxSource:ActiveXImpl:DoVerb(" + iVerb + ")");
                 switch (iVerb)
                 {
-                    case NativeMethods.OLEIVERB_SHOW:
-                    case NativeMethods.OLEIVERB_INPLACEACTIVATE:
-                    case NativeMethods.OLEIVERB_UIACTIVATE:
-                    case NativeMethods.OLEIVERB_PRIMARY:
+                    case Ole32.OLEIVERB.SHOW:
+                    case Ole32.OLEIVERB.INPLACEACTIVATE:
+                    case Ole32.OLEIVERB.UIACTIVATE:
+                    case Ole32.OLEIVERB.PRIMARY:
                         Debug.WriteLineIf(CompModSwitches.ActiveX.TraceVerbose, "DoVerb:Show, InPlaceActivate, UIActivate");
                         InPlaceActivate(iVerb);
 
@@ -396,7 +395,7 @@ namespace System.Windows.Forms
                         break;
 
                     // These affect our visibility
-                    case NativeMethods.OLEIVERB_HIDE:
+                    case Ole32.OLEIVERB.HIDE:
                         Debug.WriteLineIf(CompModSwitches.ActiveX.TraceVerbose, "DoVerb:Hide");
                         UIDeactivate();
                         InPlaceDeactivate();
@@ -409,7 +408,7 @@ namespace System.Windows.Forms
                     // All other verbs are notimpl.
                     default:
                         Debug.WriteLineIf(CompModSwitches.ActiveX.TraceVerbose, "DoVerb:Other");
-                        ThrowHr(NativeMethods.E_NOTIMPL);
+                        ThrowHr(HRESULT.E_NOTIMPL);
                         break;
                 }
 
@@ -420,7 +419,7 @@ namespace System.Windows.Forms
             ///  Implements IViewObject2::Draw.
             /// </summary>
             internal void Draw(
-                int dwDrawAspect,
+                Ole32.DVASPECT dwDrawAspect,
                 int lindex,
                 IntPtr pvAspect,
                 NativeMethods.tagDVTARGETDEVICE ptd,
@@ -436,12 +435,12 @@ namespace System.Windows.Forms
                 //
                 switch (dwDrawAspect)
                 {
-                    case NativeMethods.DVASPECT_CONTENT:
-                    case NativeMethods.DVASPECT_OPAQUE:
-                    case NativeMethods.DVASPECT_TRANSPARENT:
+                    case Ole32.DVASPECT.CONTENT:
+                    case Ole32.DVASPECT.OPAQUE:
+                    case Ole32.DVASPECT.TRANSPARENT:
                         break;
                     default:
-                        ThrowHr(NativeMethods.DV_E_DVASPECT);
+                        ThrowHr(HRESULT.DV_E_DVASPECT);
                         break;
                 }
 
@@ -452,7 +451,7 @@ namespace System.Windows.Forms
                 Gdi32.ObjectType hdcType = Gdi32.GetObjectType(hdcDraw);
                 if (hdcType == Gdi32.ObjectType.OBJ_METADC)
                 {
-                    ThrowHr(NativeMethods.VIEW_E_DRAW);
+                    ThrowHr(HRESULT.VIEW_E_DRAW);
                 }
 
                 RECT rc;
@@ -460,7 +459,7 @@ namespace System.Windows.Forms
                 var pW = new Point();
                 var sWindowExt = new Size();
                 var sViewportExt = new Size();
-                int iMode = NativeMethods.MM_TEXT;
+                Gdi32.MM iMode = Gdi32.MM.TEXT;
 
                 if (!_control.IsHandleCreated)
                 {
@@ -480,11 +479,11 @@ namespace System.Windows.Forms
                     // use.
                     SafeNativeMethods.LPtoDP(new HandleRef(null, hdcDraw), ref rc, 2);
 
-                    iMode = SafeNativeMethods.SetMapMode(new HandleRef(null, hdcDraw), NativeMethods.MM_ANISOTROPIC);
-                    SafeNativeMethods.SetWindowOrgEx(hdcDraw, 0, 0, &pW);
-                    SafeNativeMethods.SetWindowExtEx(hdcDraw, _control.Width, _control.Height, &sWindowExt);
-                    SafeNativeMethods.SetViewportOrgEx(hdcDraw, rc.left, rc.top, &pVp);
-                    SafeNativeMethods.SetViewportExtEx(hdcDraw, rc.right - rc.left, rc.bottom - rc.top, &sViewportExt);
+                    iMode = Gdi32.SetMapMode(hdcDraw, Gdi32.MM.ANISOTROPIC);
+                    Gdi32.SetWindowOrgEx(hdcDraw, 0, 0, &pW);
+                    Gdi32.SetWindowExtEx(hdcDraw, _control.Width, _control.Height, &sWindowExt);
+                    Gdi32.SetViewportOrgEx(hdcDraw, rc.left, rc.top, &pVp);
+                    Gdi32.SetViewportExtEx(hdcDraw, rc.right - rc.left, rc.bottom - rc.top, &sViewportExt);
                 }
 
                 // Now do the actual drawing.  We must ask all of our children to draw as well.
@@ -501,7 +500,7 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        _control.PrintToMetaFile(new HandleRef(null, hdcDraw), flags);
+                        _control.PrintToMetaFile(hdcDraw, flags);
                     }
                 }
                 finally
@@ -509,11 +508,11 @@ namespace System.Windows.Forms
                     // And clean up the DC
                     if (prcBounds != null)
                     {
-                        SafeNativeMethods.SetWindowOrgEx(hdcDraw, pW.X, pW.Y, null);
-                        SafeNativeMethods.SetWindowExtEx(hdcDraw, sWindowExt.Width, sWindowExt.Height, null);
-                        SafeNativeMethods.SetViewportOrgEx(hdcDraw, pVp.X, pVp.Y, null);
-                        SafeNativeMethods.SetViewportExtEx(hdcDraw, sViewportExt.Width, sViewportExt.Height, null);
-                        SafeNativeMethods.SetMapMode(new HandleRef(null, hdcDraw), iMode);
+                        Gdi32.SetWindowOrgEx(hdcDraw, pW.X, pW.Y, null);
+                        Gdi32.SetWindowExtEx(hdcDraw, sWindowExt.Width, sWindowExt.Height, null);
+                        Gdi32.SetViewportOrgEx(hdcDraw, pVp.X, pVp.Y, null);
+                        Gdi32.SetViewportExtEx(hdcDraw, sViewportExt.Width, sViewportExt.Height, null);
+                        Gdi32.SetMapMode(hdcDraw, iMode);
                     }
                 }
             }
@@ -532,12 +531,12 @@ namespace System.Windows.Forms
                     NativeMethods.tagOLEVERB verbPrimary = new NativeMethods.tagOLEVERB();
                     NativeMethods.tagOLEVERB verbProperties = new NativeMethods.tagOLEVERB();
 
-                    verbShow.lVerb = NativeMethods.OLEIVERB_SHOW;
-                    verbInplaceActivate.lVerb = NativeMethods.OLEIVERB_INPLACEACTIVATE;
-                    verbUIActivate.lVerb = NativeMethods.OLEIVERB_UIACTIVATE;
-                    verbHide.lVerb = NativeMethods.OLEIVERB_HIDE;
-                    verbPrimary.lVerb = NativeMethods.OLEIVERB_PRIMARY;
-                    verbProperties.lVerb = NativeMethods.OLEIVERB_PROPERTIES;
+                    verbShow.lVerb = Ole32.OLEIVERB.SHOW;
+                    verbInplaceActivate.lVerb = Ole32.OLEIVERB.INPLACEACTIVATE;
+                    verbUIActivate.lVerb = Ole32.OLEIVERB.UIACTIVATE;
+                    verbHide.lVerb = Ole32.OLEIVERB.HIDE;
+                    verbPrimary.lVerb = Ole32.OLEIVERB.PRIMARY;
+                    verbProperties.lVerb = Ole32.OLEIVERB.PROPERTIES;
                     verbProperties.lpszVerbName = SR.AXProperties;
                     verbProperties.grfAttribs = NativeMethods.ActiveX.OLEVERBATTRIB_ONCONTAINERMENU;
 
@@ -586,12 +585,12 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Implements IViewObject2::GetAdvise.
             /// </summary>
-            internal void GetAdvise(int[] paspects, int[] padvf, IAdviseSink[] pAdvSink)
+            internal void GetAdvise(Ole32.DVASPECT[] paspects, int[] padvf, IAdviseSink[] pAdvSink)
             {
                 // if they want it, give it to them
                 if (paspects != null)
                 {
-                    paspects[0] = NativeMethods.DVASPECT_CONTENT;
+                    paspects[0] = Ole32.DVASPECT.CONTENT;
                 }
 
                 if (padvf != null)
@@ -751,9 +750,9 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Implements IOleObject::GetExtent.
             /// </summary>
-            internal unsafe void GetExtent(uint dwDrawAspect, Size* pSizel)
+            internal unsafe void GetExtent(Ole32.DVASPECT dwDrawAspect, Size* pSizel)
             {
-                if ((dwDrawAspect & NativeMethods.DVASPECT_CONTENT) != 0)
+                if ((dwDrawAspect & Ole32.DVASPECT.CONTENT) != 0)
                 {
                     Size size = _control.Size;
 
@@ -763,7 +762,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    ThrowHr(NativeMethods.DV_E_DVASPECT);
+                    ThrowHr(HRESULT.DV_E_DVASPECT);
                 }
             }
 
@@ -843,7 +842,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  In place activates this Object.
             /// </summary>
-            internal unsafe void InPlaceActivate(int verb)
+            internal unsafe void InPlaceActivate(Ole32.OLEIVERB verb)
             {
                 // If we don't have a client site, then there's not much to do.
                 // We also punt if this isn't an in-place site, since we can't
@@ -858,13 +857,12 @@ namespace System.Windows.Forms
                 {
                     Debug.WriteLineIf(CompModSwitches.ActiveX.TraceVerbose, "\tActiveXImpl:InPlaceActivate --> inplaceactive");
 
-                    int hr = inPlaceSite.CanInPlaceActivate();
-
-                    if (hr != NativeMethods.S_OK)
+                    HRESULT hr = inPlaceSite.CanInPlaceActivate();
+                    if (hr != HRESULT.S_OK)
                     {
-                        if (NativeMethods.Succeeded(hr))
+                        if (hr.Succeeded())
                         {
-                            hr = NativeMethods.E_FAIL;
+                            hr = HRESULT.E_FAIL;
                         }
                         ThrowHr(hr);
                     }
@@ -878,9 +876,9 @@ namespace System.Windows.Forms
                 if (!_activeXState[s_inPlaceVisible])
                 {
                     Debug.WriteLineIf(CompModSwitches.ActiveX.TraceVerbose, "\tActiveXImpl:InPlaceActivate --> inplacevisible");
-                    NativeMethods.tagOIFI inPlaceFrameInfo = new NativeMethods.tagOIFI
+                    var inPlaceFrameInfo = new Ole32.OLEINPLACEFRAMEINFO
                     {
-                        cb = Marshal.SizeOf<NativeMethods.tagOIFI>()
+                        cb = (uint)Marshal.SizeOf<Ole32.OLEINPLACEFRAMEINFO>()
                     };
 
                     // We are entering a secure context here.
@@ -888,7 +886,7 @@ namespace System.Windows.Forms
                     HRESULT hr = _inPlaceUiWindow.GetWindow(&hwndParent);
                     if (!hr.Succeeded())
                     {
-                        ThrowHr((int)hr);
+                        ThrowHr(hr);
                     }
 
                     var posRect = new RECT();
@@ -907,11 +905,11 @@ namespace System.Windows.Forms
                     }
 
                     inPlaceSite.GetWindowContext(
-                        out UnsafeNativeMethods.IOleInPlaceFrame pFrame,
-                        out UnsafeNativeMethods.IOleInPlaceUIWindow pWindow,
+                        out Ole32.IOleInPlaceFrame pFrame,
+                        out Ole32.IOleInPlaceUIWindow pWindow,
                         &posRect,
                         &clipRect,
-                        inPlaceFrameInfo);
+                        &inPlaceFrameInfo);
 
                     SetObjectRects(&posRect, &clipRect);
 
@@ -925,7 +923,7 @@ namespace System.Windows.Forms
                     // If it doesn't, that means that the host
                     // won't reflect messages back to us.
                     HWNDParent = hwndParent;
-                    UnsafeNativeMethods.SetParent(new HandleRef(_control, _control.Handle), new HandleRef(null, hwndParent));
+                    User32.SetParent(new HandleRef(_control, _control.Handle), hwndParent);
 
                     // Now create our handle if it hasn't already been done.
                     _control.CreateControl();
@@ -937,7 +935,7 @@ namespace System.Windows.Forms
                 }
 
                 // if we weren't asked to UIActivate, then we're done.
-                if (verb != NativeMethods.OLEIVERB_PRIMARY && verb != NativeMethods.OLEIVERB_UIACTIVATE)
+                if (verb != Ole32.OLEIVERB.PRIMARY && verb != Ole32.OLEIVERB.UIACTIVATE)
                 {
                     Debug.WriteLineIf(CompModSwitches.ActiveX.TraceVerbose, "\tActiveXImpl:InPlaceActivate --> not becoming UIActive");
                     return;
@@ -967,20 +965,20 @@ namespace System.Windows.Forms
                     }
 
                     // we have to explicitly say we don't wany any border space.
-                    int hr = _inPlaceFrame.SetBorderSpace(null);
-                    if (NativeMethods.Failed(hr) && hr != NativeMethods.OLE_E_INVALIDRECT &&
-                        hr != NativeMethods.INPLACE_E_NOTOOLSPACE && hr != NativeMethods.E_NOTIMPL)
+                    HRESULT hr = _inPlaceFrame.SetBorderSpace(null);
+                    if (!hr.Succeeded() && hr != HRESULT.OLE_E_INVALIDRECT &&
+                        hr != HRESULT.INPLACE_E_NOTOOLSPACE && hr != HRESULT.E_NOTIMPL)
                     {
-                        Marshal.ThrowExceptionForHR(hr);
+                        Marshal.ThrowExceptionForHR((int)hr);
                     }
 
                     if (_inPlaceUiWindow != null)
                     {
                         hr = _inPlaceFrame.SetBorderSpace(null);
-                        if (NativeMethods.Failed(hr) && hr != NativeMethods.OLE_E_INVALIDRECT &&
-                            hr != NativeMethods.INPLACE_E_NOTOOLSPACE && hr != NativeMethods.E_NOTIMPL)
+                        if (!hr.Succeeded() && hr != HRESULT.OLE_E_INVALIDRECT &&
+                            hr != HRESULT.INPLACE_E_NOTOOLSPACE && hr != HRESULT.E_NOTIMPL)
                         {
-                            Marshal.ThrowExceptionForHR(hr);
+                            Marshal.ThrowExceptionForHR((int)hr);
                         }
                     }
                 }
@@ -1371,16 +1369,15 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Implements IOleInPlaceActiveObject::OnDocWindowActivate.
             /// </summary>
-            internal void OnDocWindowActivate(int fActivate)
+            internal void OnDocWindowActivate(BOOL fActivate)
             {
-                if (_activeXState[s_uiActive] && fActivate != 0 && _inPlaceFrame != null)
+                if (_activeXState[s_uiActive] && fActivate.IsTrue() && _inPlaceFrame != null)
                 {
                     // we have to explicitly say we don't wany any border space.
-                    int hr = _inPlaceFrame.SetBorderSpace(null);
-
-                    if (NativeMethods.Failed(hr) && hr != NativeMethods.INPLACE_E_NOTOOLSPACE && hr != NativeMethods.E_NOTIMPL)
+                    HRESULT hr = _inPlaceFrame.SetBorderSpace(null);
+                    if (!hr.Succeeded() && hr != HRESULT.INPLACE_E_NOTOOLSPACE && hr != HRESULT.E_NOTIMPL)
                     {
-                        Marshal.ThrowExceptionForHR(hr);
+                        Marshal.ThrowExceptionForHR((int)hr);
                     }
                 }
             }
@@ -1398,7 +1395,7 @@ namespace System.Windows.Forms
 
                 if (focus && _activeXState[s_inPlaceActive] && !_activeXState[s_uiActive])
                 {
-                    InPlaceActivate(NativeMethods.OLEIVERB_UIACTIVATE);
+                    InPlaceActivate(Ole32.OLEIVERB.UIACTIVATE);
                 }
             }
 
@@ -1446,17 +1443,17 @@ namespace System.Windows.Forms
                 }
 
                 // Now use the rest of the goo that we got passed in.
-
                 pQaControl.cbSize = Marshal.SizeOf<UnsafeNativeMethods.tagQACONTROL>();
 
                 SetClientSite(pQaContainer.pClientSite);
 
                 if (pQaContainer.pAdviseSink != null)
                 {
-                    SetAdvise(NativeMethods.DVASPECT_CONTENT, 0, (IAdviseSink)pQaContainer.pAdviseSink);
+                    SetAdvise(Ole32.DVASPECT.CONTENT, 0, (IAdviseSink)pQaContainer.pAdviseSink);
                 }
 
-                ((UnsafeNativeMethods.IOleObject)_control).GetMiscStatus(NativeMethods.DVASPECT_CONTENT, out int status);
+                Ole32.OLEMISC status = 0;
+                ((UnsafeNativeMethods.IOleObject)_control).GetMiscStatus(Ole32.DVASPECT.CONTENT, &status);
                 pQaControl.dwMiscStatus = status;
 
                 // Advise the event sink so VB6 can catch events raised from UserControls.
@@ -1512,7 +1509,7 @@ namespace System.Windows.Forms
                 /// <summary>
                 ///  Get the COM connection point container from the CLR's CCW and advise for the given event id.
                 /// </summary>
-                public static bool AdviseConnectionPoint(object connectionPoint, object sink, Type eventInterface, out int cookie)
+                public static bool AdviseConnectionPoint(object connectionPoint, object sink, Type eventInterface, out uint pdwCookie)
                 {
                     // Note that we cannot simply cast the connectionPoint object to
                     // System.Runtime.InteropServices.ComTypes.IConnectionPointContainer because the .NET
@@ -1524,14 +1521,14 @@ namespace System.Windows.Forms
 
                     using (ComConnectionPointContainer cpc = new ComConnectionPointContainer(connectionPoint, true))
                     {
-                        return AdviseConnectionPoint(cpc, sink, eventInterface, out cookie);
+                        return AdviseConnectionPoint(cpc, sink, eventInterface, out pdwCookie);
                     }
                 }
 
                 /// <summary>
                 ///  Find the COM connection point and call Advise for the given event id.
                 /// </summary>
-                internal static bool AdviseConnectionPoint(ComConnectionPointContainer cpc, object sink, Type eventInterface, out int cookie)
+                internal static bool AdviseConnectionPoint(ComConnectionPointContainer cpc, object sink, Type eventInterface, out uint pdwCookie)
                 {
                     // Note that we cannot simply cast the returned IConnectionPoint to
                     // System.Runtime.InteropServices.ComTypes.IConnectionPoint because the .NET
@@ -1545,7 +1542,7 @@ namespace System.Windows.Forms
                         {
                             // Finally...we can call IConnectionPoint.Advise to hook up a native COM event sink
                             // to a managed .NET event interface.
-                            return cp.Advise(punkEventsSink.DangerousGetHandle(), out cookie);
+                            return cp.Advise(punkEventsSink.DangerousGetHandle(), out pdwCookie);
                         }
                     }
                 }
@@ -1751,10 +1748,10 @@ namespace System.Windows.Forms
                     /// <summary>
                     ///  Call IConnectioinPoint.Advise using Delegate.Invoke on the v-table slot.
                     /// </summary>
-                    public bool Advise(IntPtr punkEventSink, out int cookie)
+                    public bool Advise(IntPtr punkEventSink, out uint pdwCookie)
                     {
                         AdviseD advise = (AdviseD)Marshal.GetDelegateForFunctionPointer(_vtbl.AdvisePtr, typeof(AdviseD));
-                        if (advise.Invoke(handle, punkEventSink, out cookie) == 0)
+                        if (advise.Invoke(handle, punkEventSink, out pdwCookie) == 0)
                         {
                             return true;
                         }
@@ -1762,7 +1759,7 @@ namespace System.Windows.Forms
                     }
 
                     [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-                    private delegate int AdviseD(IntPtr This, IntPtr punkEventSink, out int cookie);
+                    private delegate int AdviseD(IntPtr This, IntPtr punkEventSink, out uint pdwCookie);
                 }
 
             }
@@ -1902,12 +1899,12 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Implements IViewObject2::SetAdvise.
             /// </summary>
-            internal void SetAdvise(int aspects, int advf, IAdviseSink pAdvSink)
+            internal void SetAdvise(Ole32.DVASPECT aspects, int advf, IAdviseSink pAdvSink)
             {
                 // if it's not a content aspect, we don't support it.
-                if ((aspects & NativeMethods.DVASPECT_CONTENT) == 0)
+                if ((aspects & Ole32.DVASPECT.CONTENT) == 0)
                 {
-                    ThrowHr(NativeMethods.DV_E_DVASPECT);
+                    ThrowHr(HRESULT.DV_E_DVASPECT);
                 }
 
                 // set up some flags  [we gotta stash for GetAdvise ...]
@@ -2027,9 +2024,9 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Implements IOleObject::SetExtent
             /// </summary>
-            internal unsafe void SetExtent(uint dwDrawAspect, Size* pSizel)
+            internal unsafe void SetExtent(Ole32.DVASPECT dwDrawAspect, Size* pSizel)
             {
-                if ((dwDrawAspect & NativeMethods.DVASPECT_CONTENT) != 0)
+                if ((dwDrawAspect & Ole32.DVASPECT.CONTENT) != 0)
                 {
                     if (_activeXState[s_changingExtents])
                     {
@@ -2095,7 +2092,7 @@ namespace System.Windows.Forms
                 else
                 {
                     // We don't support any other aspects
-                    ThrowHr(NativeMethods.DV_E_DVASPECT);
+                    ThrowHr(HRESULT.DV_E_DVASPECT);
                 }
             }
 
@@ -2248,12 +2245,11 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///  Throws the given hresult.  This is used by ActiveX sourcing.
+            ///  Throws the given hresult. This is used by ActiveX sourcing.
             /// </summary>
-            internal static void ThrowHr(int hr)
+            internal static void ThrowHr(HRESULT hr)
             {
-                ExternalException e = new ExternalException(SR.ExternalException, hr);
-                throw e;
+                throw new ExternalException(SR.ExternalException, (int)hr);
             }
 
             /// <summary>
@@ -2391,7 +2387,7 @@ namespace System.Windows.Forms
             {
                 if (dwConnection > _adviseList.Count || _adviseList[dwConnection - 1] == null)
                 {
-                    ThrowHr(NativeMethods.OLE_E_NOCONNECTION);
+                    ThrowHr(HRESULT.OLE_E_NOCONNECTION);
                 }
 
                 IAdviseSink sink = (IAdviseSink)_adviseList[dwConnection - 1];
@@ -2496,7 +2492,7 @@ namespace System.Windows.Forms
                 //       is to make sure we don't call OnViewChange in this case.
                 if (_viewAdviseSink != null && !_activeXState[s_saving])
                 {
-                    _viewAdviseSink.OnViewChange(NativeMethods.DVASPECT_CONTENT, -1);
+                    _viewAdviseSink.OnViewChange((int)Ole32.DVASPECT.CONTENT, -1);
 
                     if (_activeXState[s_viewAdviseOnlyOnce])
                     {

@@ -11,19 +11,19 @@ internal static partial class Interop
     internal static partial class User32
     {
         [DllImport(Libraries.User32, ExactSpelling = true)]
-        public static extern IntPtr PostMessageW(
+        public static extern BOOL PostMessageW(
             IntPtr hWnd,
             WindowMessage Msg,
             IntPtr wParam = default,
             IntPtr lParam = default);
 
-        public static IntPtr PostMessageW(
+        public static BOOL PostMessageW(
             IHandle hWnd,
             WindowMessage Msg,
             IntPtr wParam = default,
             IntPtr lParam = default)
         {
-            IntPtr result = PostMessageW(hWnd.Handle, Msg, wParam, lParam);
+            BOOL result = PostMessageW(hWnd.Handle, Msg, wParam, lParam);
             GC.KeepAlive(hWnd);
             return result;
         }

@@ -66,6 +66,22 @@ namespace WinForms.Common.Tests
             return data;
         }
 
+        public static TheoryData<Enum> GetEnumTypeTheoryDataInvalidMasked(Type enumType)
+        {
+            var data = new TheoryData<Enum>();
+            IEnumerable<Enum> values = Enum.GetValues(enumType).Cast<Enum>().OrderBy(p => p);
+
+            long allMasked = 0;
+            foreach (Enum value in values)
+            {
+                allMasked |= Convert.ToInt64(value);
+            }
+
+            data.Add((Enum)Enum.ToObject(enumType, int.MaxValue));
+            data.Add((Enum)Enum.ToObject(enumType, allMasked + 1));
+            return data;
+        }
+
         #region Primitives
 
         // helper method to generate theory data for all values of a boolean
@@ -314,6 +330,8 @@ namespace WinForms.Common.Tests
             {
                 { Color.Red, Color.Red },
                 { Color.FromArgb(254, 1, 2, 3), Color.FromArgb(254, 1, 2, 3) },
+                { Color.White, Color.White },
+                { Color.Black, Color.Black },
                 { Color.Empty, Control.DefaultForeColor }
             };
         }

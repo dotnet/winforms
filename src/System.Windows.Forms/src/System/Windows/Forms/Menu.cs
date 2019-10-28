@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.Runtime.InteropServices;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -218,8 +219,9 @@ namespace System.Windows.Forms
         {
             if (handle != IntPtr.Zero)
             {
-                UnsafeNativeMethods.DestroyMenu(new HandleRef(this, handle));
+                User32.DestroyMenu(new HandleRef(this, handle));
             }
+
             handle = IntPtr.Zero;
             if (created)
             {
@@ -258,10 +260,7 @@ namespace System.Windows.Forms
             }
         }
 
-        protected virtual IntPtr CreateMenuHandle()
-        {
-            return UnsafeNativeMethods.CreatePopupMenu();
-        }
+        protected virtual IntPtr CreateMenuHandle() => User32.CreatePopupMenu();
 
         internal void CreateMenuItems()
         {
@@ -283,10 +282,11 @@ namespace System.Windows.Forms
                 {
                     items[i].ClearHandles();
                 }
-                while (UnsafeNativeMethods.GetMenuItemCount(new HandleRef(this, handle)) > 0)
+                while (User32.GetMenuItemCount(new HandleRef(this, handle)) > 0)
                 {
-                    UnsafeNativeMethods.RemoveMenu(new HandleRef(this, handle), 0, NativeMethods.MF_BYPOSITION);
+                    User32.RemoveMenu(new HandleRef(this, handle), 0, User32.MF.BYPOSITION);
                 }
+
                 created = false;
             }
         }
@@ -317,15 +317,17 @@ namespace System.Windows.Forms
                 }
                 items = null;
             }
+
             if (handle != IntPtr.Zero)
             {
-                UnsafeNativeMethods.DestroyMenu(new HandleRef(this, handle));
+                User32.DestroyMenu(new HandleRef(this, handle));
                 handle = IntPtr.Zero;
                 if (disposing)
                 {
                     ClearHandles();
                 }
             }
+
             base.Dispose(disposing);
         }
 

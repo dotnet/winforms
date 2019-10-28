@@ -10,8 +10,8 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
     public class PropertyGridViewAccessibleObjectTests
     {
         [Theory]
-        [InlineData(NativeMethods.UIA_GridPatternId)]
-        [InlineData(NativeMethods.UIA_TablePatternId)]
+        [InlineData((int)UiaCore.UIA.GridPatternId)]
+        [InlineData((int)UiaCore.UIA.TablePatternId)]
         public void PropertyGridAccessibleObject_Supports_TablePattern(int pattern)
         {
             PropertyGrid propertyGrid = new PropertyGrid();
@@ -26,12 +26,12 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
             // Second child entry should be PropertyGridView.
             var gridViewChild = firstChild.FragmentNavigate(UiaCore.NavigateDirection.NextSibling) as AccessibleObject;
 
-            Assert.True(gridViewChild.IsPatternSupported(pattern));
+            Assert.True(gridViewChild.IsPatternSupported(((UiaCore.UIA)pattern)));
         }
 
         [Theory]
-        [InlineData(NativeMethods.UIA_GridItemPatternId)]
-        [InlineData(NativeMethods.UIA_TableItemPatternId)]
+        [InlineData((int)UiaCore.UIA.GridItemPatternId)]
+        [InlineData((int)UiaCore.UIA.TableItemPatternId)]
         public void PropertyGridViewAccessibleObject_Supports_TablePattern(int pattern)
         {
             PropertyGrid propertyGrid = new PropertyGrid();
@@ -41,7 +41,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
             var defaultGridEntry = propertyGrid.GetDefaultGridEntry();
             var parentGridEntry = defaultGridEntry.ParentGridEntry; // Category which has item pattern.
             var accessibleObject = parentGridEntry.AccessibilityObject;
-            Assert.True(accessibleObject.IsPatternSupported(pattern));
+            Assert.True(accessibleObject.IsPatternSupported((UiaCore.UIA)pattern));
         }
     }
 }

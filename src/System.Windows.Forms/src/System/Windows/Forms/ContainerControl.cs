@@ -292,7 +292,7 @@ namespace System.Windows.Forms
             get
             {
                 CreateParams cp = base.CreateParams;
-                cp.ExStyle |= NativeMethods.WS_EX_CONTROLPARENT;
+                cp.ExStyle |= (int)User32.WS_EX.CONTROLPARENT;
                 return cp;
             }
         }
@@ -788,7 +788,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnAutoValidateChanged(EventArgs e) => _autoValidateChanged?.Invoke(this, e);
 
-        internal override void OnFrameWindowActivate(bool fActivate)
+        private protected override void OnFrameWindowActivate(bool fActivate)
         {
             if (fActivate)
             {

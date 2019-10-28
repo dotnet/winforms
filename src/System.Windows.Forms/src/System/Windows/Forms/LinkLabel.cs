@@ -1076,7 +1076,7 @@ namespace System.Windows.Forms
                         FocusLink = (Link)links[i];
                         InvalidateLink(FocusLink);
                     }
-                    CaptureInternal = true;
+                    Capture = true;
                     break;
                 }
             }
@@ -1108,7 +1108,7 @@ namespace System.Windows.Forms
                 {
                     ((Link)links[i]).State &= (~LinkState.Active);
                     InvalidateLink((Link)links[i]);
-                    CaptureInternal = false;
+                    Capture = false;
 
                     Link clicked = PointInLink(e.X, e.Y);
 
@@ -2728,9 +2728,9 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal override object GetPropertyValue(int propertyID)
+            internal override object GetPropertyValue(UiaCore.UIA propertyID)
             {
-                if (propertyID == NativeMethods.UIA_IsEnabledPropertyId)
+                if (propertyID == UiaCore.UIA.IsEnabledPropertyId)
                 {
                     if (!Owner.Enabled)
                     {
@@ -2901,9 +2901,9 @@ namespace System.Windows.Forms
 
             internal override bool IsIAccessibleExSupported() => true;
 
-            internal override object GetPropertyValue(int propertyID)
+            internal override object GetPropertyValue(UiaCore.UIA propertyID)
             {
-                if (propertyID == NativeMethods.UIA_IsEnabledPropertyId)
+                if (propertyID == UiaCore.UIA.IsEnabledPropertyId)
                 {
                     if (!link.Owner.Enabled)
                     {

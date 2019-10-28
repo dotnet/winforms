@@ -90,13 +90,6 @@ namespace System.Windows.Forms
         private const int STG_STREAMINIT = 1;
         private const int STG_STORAGE = 2;
 
-        private const int OLEIVERB_SHOW = -1;
-        private const int OLEIVERB_HIDE = -3;
-        private const int OLEIVERB_UIACTIVATE = -4;
-        private const int OLEIVERB_INPLACEACTIVATE = -5;
-        private const int OLEIVERB_PROPERTIES = -7;
-        private const int OLEIVERB_PRIMARY = 0;
-
         private readonly User32.WindowMessage REGMSG_MSG = User32.RegisterWindowMessageW(Application.WindowMessagesVersion + "_subclassCheck");
         private const int REGMSG_RETVAL = 123;
 
@@ -155,7 +148,7 @@ namespace System.Windows.Forms
 
         private int storageType = STG_UNKNOWN;
         private int ocState = OC_PASSIVE;
-        private int miscStatusBits;
+        private Ole32.OLEMISC _miscStatusBits;
         private int freezeCount = 0;
         private readonly int flags = 0;
         private int selectionStyle = 0;
@@ -190,10 +183,10 @@ namespace System.Windows.Forms
         private Ole32.IOleInPlaceObject iOleInPlaceObject;
         private UnsafeNativeMethods.IOleObject iOleObject;
         private UnsafeNativeMethods.IOleControl iOleControl;
-        private UnsafeNativeMethods.IOleInPlaceActiveObject iOleInPlaceActiveObject;
-        private UnsafeNativeMethods.IOleInPlaceActiveObject iOleInPlaceActiveObjectExternal;
+        private Ole32.IOleInPlaceActiveObject iOleInPlaceActiveObject;
+        private Ole32.IOleInPlaceActiveObject iOleInPlaceActiveObjectExternal;
         private Ole32.IPerPropertyBrowsing iPerPropertyBrowsing;
-        private NativeMethods.ICategorizeProperties iCategorizeProperties;
+        private VSSDK.ICategorizeProperties iCategorizeProperties;
         private UnsafeNativeMethods.IPersistPropertyBag iPersistPropBag;
         private Ole32.IPersistStream iPersistStream;
         private Ole32.IPersistStreamInit iPersistStreamInit;
@@ -320,14 +313,15 @@ namespace System.Windows.Forms
         {
         }
 
-        private void RealizeStyles()
+        private unsafe void RealizeStyles()
         {
             SetStyle(ControlStyles.UserPaint, false);
-            int hr = GetOleObject().GetMiscStatus(NativeMethods.ActiveX.DVASPECT_CONTENT, out int bits);
-            if (!NativeMethods.Failed(hr))
+            Ole32.OLEMISC bits = 0;
+            HRESULT hr = GetOleObject().GetMiscStatus(Ole32.DVASPECT.CONTENT, &bits);
+            if (hr.Succeeded())
             {
-                miscStatusBits = bits;
-                ParseMiscBits(miscStatusBits);
+                _miscStatusBits = bits;
+                ParseMiscBits(_miscStatusBits);
             }
         }
 
@@ -528,9 +522,11 @@ namespace System.Windows.Forms
             get
             {
                 int ocState = GetOcState();
+#pragma warning disable SA1408 // Conditional expressions should declare precedence
                 return (axState[fOwnWindow] &&
                        (ocState > OC_RUNNING || (IsUserMode() && ocState >= OC_RUNNING)) ||
                        ocState >= OC_INPLACE);
+#pragma warning restore SA1408 // Conditional expressions should declare precedence
             }
         }
 
@@ -1325,15 +1321,15 @@ namespace System.Windows.Forms
             Size sz = new Size(width, height);
             bool resetExtents = !IsUserMode();
             Pixel2hiMetric(ref sz);
-            Interop.HRESULT hr = GetOleObject().SetExtent(NativeMethods.ActiveX.DVASPECT_CONTENT, &sz);
+            Interop.HRESULT hr = GetOleObject().SetExtent(Ole32.DVASPECT.CONTENT, &sz);
             if (hr != Interop.HRESULT.S_OK)
             {
                 resetExtents = true;
             }
             if (resetExtents)
             {
-                GetOleObject().GetExtent(NativeMethods.ActiveX.DVASPECT_CONTENT, &sz);
-                GetOleObject().SetExtent(NativeMethods.ActiveX.DVASPECT_CONTENT, &sz);
+                GetOleObject().GetExtent(Ole32.DVASPECT.CONTENT, &sz);
+                GetOleObject().SetExtent(Ole32.DVASPECT.CONTENT, &sz);
             }
 
             return GetExtent();
@@ -1342,7 +1338,7 @@ namespace System.Windows.Forms
         private unsafe Size GetExtent()
         {
             var sz = new Size();
-            GetOleObject().GetExtent(NativeMethods.ActiveX.DVASPECT_CONTENT, &sz);
+            GetOleObject().GetExtent(Ole32.DVASPECT.CONTENT, &sz);
             HiMetric2Pixel(ref sz);
             return sz;
         }
@@ -1602,7 +1598,7 @@ namespace System.Windows.Forms
                                     // if we do this in both codepaths, then we will force handle creation of the fake window
                                     // even if we don't need it...
                                     // This optimization will break, however, if:
-                                    // a) the hWnd goes away on a OLEIVERB_HIDE and
+                                    // a) the hWnd goes away on a Ole32.OLEIVERB.HIDE and
                                     // b) this is a simple frame control
                                     // However, if you satisfy both of these conditions then you must be REALLY
                                     // brain dead and you don't deserve to work anyway...
@@ -1636,7 +1632,7 @@ namespace System.Windows.Forms
                             OnInPlaceActive();
                             break;
                         case OC_INPLACE:
-                            DoVerb(OLEIVERB_SHOW);
+                            DoVerb((int)Ole32.OLEIVERB.SHOW);
                             Debug.Assert(GetOcState() == OC_UIACTIVE, " failed transition");
                             SetOcState(OC_UIACTIVE);
                             break;
@@ -1661,7 +1657,7 @@ namespace System.Windows.Forms
         {
             try
             {
-                DoVerb(OLEIVERB_INPLACEACTIVATE);
+                DoVerb((int)Ole32.OLEIVERB.INPLACEACTIVATE);
             }
             catch (Exception t)
             {
@@ -1693,7 +1689,7 @@ namespace System.Windows.Forms
             Debug.Assert(CanUIActivate, "we have to be able to uiactivate");
             if (CanUIActivate)
             {
-                DoVerb(OLEIVERB_UIACTIVATE);
+                DoVerb((int)Ole32.OLEIVERB.UIACTIVATE);
             }
         }
 
@@ -1808,7 +1804,7 @@ namespace System.Windows.Forms
             Control ctl = f?.ActiveControl;
             try
             {
-                DoVerb(OLEIVERB_SHOW);
+                DoVerb((int)Ole32.OLEIVERB.SHOW);
             }
             catch (Exception t)
             {
@@ -1830,7 +1826,7 @@ namespace System.Windows.Forms
             Debug.Assert(IsHandleCreated, "gotta have a window to hide");
             Debug.Assert(GetOcState() >= OC_INPLACE, "have to be in place in order to hide.");
 
-            DoVerb(OLEIVERB_HIDE);
+            DoVerb((int)Ole32.OLEIVERB.HIDE);
             if (GetOcState() < OC_INPLACE)
             {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "Naughty control inplace deactivated on a hide verb...");
@@ -1916,7 +1912,7 @@ namespace System.Windows.Forms
                 axState[siteProcessedInputKey] = false;
                 try
                 {
-                    UnsafeNativeMethods.IOleInPlaceActiveObject activeObj = GetInPlaceActiveObject();
+                    Ole32.IOleInPlaceActiveObject activeObj = GetInPlaceActiveObject();
                     if (activeObj != null)
                     {
                         HRESULT hr = activeObj.TranslateAccelerator(&win32Message);
@@ -2398,7 +2394,7 @@ namespace System.Windows.Forms
         {
             Control parent = ParentInternal;
             RECT posRect = Bounds;
-            GetOleObject().DoVerb(verb, null, oleSite, -1, parent != null ? parent.Handle : IntPtr.Zero, &posRect);
+            GetOleObject().DoVerb((Ole32.OLEIVERB)verb, null, oleSite, -1, parent != null ? parent.Handle : IntPtr.Zero, &posRect);
         }
 
         private bool AwaitingDefreezing()
@@ -2589,54 +2585,45 @@ namespace System.Windows.Forms
             return instance;
         }
 
-        private CategoryAttribute GetCategoryForDispid(Ole32.DispatchID dispid)
+        private unsafe CategoryAttribute GetCategoryForDispid(Ole32.DispatchID dispid)
         {
-            NativeMethods.ICategorizeProperties icp = GetCategorizeProperties();
+            VSSDK.ICategorizeProperties icp = GetCategorizeProperties();
             if (icp == null)
             {
                 return null;
             }
 
-            CategoryAttribute rval = null;
-            int propcat = 0;
-            try
+            VSSDK.PROPCAT propcat = 0;
+            HRESULT hr = icp.MapPropertyToCategory(dispid, &propcat);
+            if (hr != HRESULT.S_OK || propcat == 0)
             {
-                icp.MapPropertyToCategory(dispid, ref propcat);
-                if (propcat != 0)
-                {
-                    int cat = -propcat;
-                    if (cat > 0 && cat < categoryNames.Length && categoryNames[cat] != null)
-                    {
-                        return categoryNames[cat];
-                    }
-                    cat = -cat;
-                    int key = cat;
-                    if (objectDefinedCategoryNames != null)
-                    {
-                        rval = (CategoryAttribute)objectDefinedCategoryNames[key];
-                        if (rval != null)
-                        {
-                            return rval;
-                        }
-                    }
+                return null;
+            }
 
-                    int hr = icp.GetCategoryName(cat, CultureInfo.CurrentCulture.LCID, out string name);
-                    if (hr == NativeMethods.S_OK && name != null)
-                    {
-                        rval = new CategoryAttribute(name);
-                        if (objectDefinedCategoryNames == null)
-                        {
-                            objectDefinedCategoryNames = new Hashtable();
-                        }
-                        objectDefinedCategoryNames.Add(key, rval);
-                        return rval;
-                    }
+            int index = -(int)propcat;
+            if (index > 0 && index < categoryNames.Length && categoryNames[index] != null)
+            {
+                return categoryNames[index];
+            }
+
+            if (objectDefinedCategoryNames != null)
+            {
+                CategoryAttribute rval = (CategoryAttribute)objectDefinedCategoryNames[propcat];
+                if (rval != null)
+                {
+                    return rval;
                 }
             }
-            catch (Exception t)
+
+            hr = icp.GetCategoryName(propcat, (uint)CultureInfo.CurrentCulture.LCID, out string name);
+            if (hr == HRESULT.S_OK && name != null)
             {
-                Debug.Fail(t.ToString());
+                var rval = new CategoryAttribute(name);
+                objectDefinedCategoryNames ??= new Hashtable();
+                objectDefinedCategoryNames.Add(propcat, rval);
+                return rval;
             }
+
             return null;
         }
 
@@ -3275,40 +3262,35 @@ namespace System.Windows.Forms
                 return false;
             }
 
-            return (GetOcx() is NativeMethods.ISpecifyPropertyPages);
+            return GetOcx() is Ole32.ISpecifyPropertyPages;
         }
 
-        public bool HasPropertyPages()
+        public unsafe bool HasPropertyPages()
         {
             if (!CanShowPropertyPages())
             {
                 return false;
             }
 
-            NativeMethods.ISpecifyPropertyPages ispp = (NativeMethods.ISpecifyPropertyPages)GetOcx();
+            Ole32.ISpecifyPropertyPages ispp = (Ole32.ISpecifyPropertyPages)GetOcx();
+            var uuids = new Ole32.CAUUID();
             try
             {
-                NativeMethods.tagCAUUID uuids = new NativeMethods.tagCAUUID();
-                try
+                HRESULT hr = ispp.GetPages(&uuids);
+                if (!hr.Succeeded())
                 {
-                    ispp.GetPages(uuids);
-                    if (uuids.cElems > 0)
-                    {
-                        return true;
-                    }
+                    return false;
                 }
-                finally
-                {
-                    if (uuids.pElems != IntPtr.Zero)
-                    {
-                        Marshal.FreeCoTaskMem(uuids.pElems);
-                    }
-                }
+
+                return uuids.cElems > 0;
             }
-            catch
+            finally
             {
+                if (uuids.pElems != null)
+                {
+                    Marshal.FreeCoTaskMem((IntPtr)uuids.pElems);
+                }
             }
-            return false;
         }
 
         private unsafe void ShowPropertyPageForDispid(Ole32.DispatchID dispid, Guid guid)
@@ -3374,73 +3356,73 @@ namespace System.Windows.Forms
             ShowPropertyPages(ParentInternal);
         }
 
-        public void ShowPropertyPages(Control control)
+        public unsafe void ShowPropertyPages(Control control)
         {
+            if (!CanShowPropertyPages())
+            {
+                return;
+            }
+
+            Ole32.ISpecifyPropertyPages ispp = (Ole32.ISpecifyPropertyPages)GetOcx();
+            var uuids = new Ole32.CAUUID();
+            HRESULT hr = ispp.GetPages(&uuids);
+            if (!hr.Succeeded() || uuids.cElems == 0)
+            {
+                return;
+            }
+
+            IDesignerHost host = null;
+            if (Site != null)
+            {
+                host = (IDesignerHost)Site.GetService(typeof(IDesignerHost));
+            }
+
+            DesignerTransaction trans = null;
             try
             {
-                if (!CanShowPropertyPages())
+                if (host != null)
                 {
-                    return;
+                    trans = host.CreateTransaction(SR.AXEditProperties);
                 }
 
-                NativeMethods.ISpecifyPropertyPages ispp = (NativeMethods.ISpecifyPropertyPages)GetOcx();
-                NativeMethods.tagCAUUID uuids = new NativeMethods.tagCAUUID();
+                IntPtr handle = (ContainingControl == null) ? IntPtr.Zero : ContainingControl.Handle;
+                IntPtr pUnk = Marshal.GetIUnknownForObject(GetOcx());
                 try
                 {
-                    ispp.GetPages(uuids);
-                    if (uuids.cElems <= 0)
-                    {
-                        return;
-                    }
-                }
-                catch
-                {
-                    return;
-                }
-
-                // State oldOcxState = OcxState;
-
-                IDesignerHost host = null;
-                if (Site != null)
-                {
-                    host = (IDesignerHost)Site.GetService(typeof(IDesignerHost));
-                }
-
-                DesignerTransaction trans = null;
-                try
-                {
-                    if (host != null)
-                    {
-                        trans = host.CreateTransaction(SR.AXEditProperties);
-                    }
-
-                    string name = null;
-                    object o = GetOcx();
-                    IntPtr handle = (ContainingControl == null) ? IntPtr.Zero : ContainingControl.Handle;
-                    SafeNativeMethods.OleCreatePropertyFrame(new HandleRef(this, handle), 0, 0, name, 1, ref o, uuids.cElems, new HandleRef(null, uuids.pElems), Application.CurrentCulture.LCID, 0, IntPtr.Zero);
+                    Oleaut32.OleCreatePropertyFrame(
+                        new HandleRef(this, handle),
+                        0,
+                        0,
+                        null,
+                        1,
+                        &pUnk,
+                        uuids.cElems,
+                        uuids.pElems,
+                        (uint)Application.CurrentCulture.LCID,
+                        0,
+                        IntPtr.Zero);
                 }
                 finally
                 {
-                    if (oleSite != null)
-                    {
-                        ((Ole32.IPropertyNotifySink)oleSite).OnChanged(Ole32.DispatchID.UNKNOWN);
-                    }
-
-                    if (trans != null)
-                    {
-                        trans.Commit();
-                    }
-
-                    if (uuids.pElems != IntPtr.Zero)
-                    {
-                        Marshal.FreeCoTaskMem(uuids.pElems);
-                    }
+                    Marshal.Release(pUnk);
                 }
             }
-            catch (Exception t)
+            finally
             {
-                Debug.Fail(t.ToString());
-                throw t;
+                if (oleSite != null)
+                {
+                    ((Ole32.IPropertyNotifySink)oleSite).OnChanged(Ole32.DispatchID.UNKNOWN);
+                }
+
+                if (trans != null)
+                {
+                    trans.Commit();
+                }
+
+                if (uuids.pElems != null)
+                {
+                    Marshal.FreeCoTaskMem((IntPtr)uuids.pElems);
+                }
             }
         }
 
@@ -4295,11 +4277,11 @@ namespace System.Windows.Forms
                 return NativeMethods.E_NOTIMPL;
             }
 
-            int UnsafeNativeMethods.IOleClientSite.GetContainer(out UnsafeNativeMethods.IOleContainer container)
+            HRESULT UnsafeNativeMethods.IOleClientSite.GetContainer(out Ole32.IOleContainer container)
             {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in getContainer");
                 container = host.GetParentContainer();
-                return NativeMethods.S_OK;
+                return HRESULT.S_OK;
             }
 
             unsafe int UnsafeNativeMethods.IOleClientSite.ShowObject()
@@ -4382,10 +4364,10 @@ namespace System.Windows.Forms
                 return HRESULT.E_NOTIMPL;
             }
 
-            int UnsafeNativeMethods.IOleInPlaceSite.CanInPlaceActivate()
+            HRESULT UnsafeNativeMethods.IOleInPlaceSite.CanInPlaceActivate()
             {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in CanInPlaceActivate");
-                return NativeMethods.S_OK;
+                return HRESULT.S_OK;
             }
 
             int UnsafeNativeMethods.IOleInPlaceSite.OnInPlaceActivate()
@@ -4406,11 +4388,11 @@ namespace System.Windows.Forms
             }
 
             unsafe HRESULT UnsafeNativeMethods.IOleInPlaceSite.GetWindowContext(
-                out UnsafeNativeMethods.IOleInPlaceFrame ppFrame,
-                out UnsafeNativeMethods.IOleInPlaceUIWindow ppDoc,
+                out Ole32.IOleInPlaceFrame ppFrame,
+                out Ole32.IOleInPlaceUIWindow ppDoc,
                 RECT* lprcPosRect,
                 RECT* lprcClipRect,
-                NativeMethods.tagOIFI lpFrameInfo)
+                Ole32.OLEINPLACEFRAMEINFO* lpFrameInfo)
             {
                 ppDoc = null;
                 ppFrame = host.GetParentContainer();
@@ -4424,11 +4406,11 @@ namespace System.Windows.Forms
                 *lprcClipRect = WebBrowserHelper.GetClipRect();
                 if (lpFrameInfo != null)
                 {
-                    lpFrameInfo.cb = Marshal.SizeOf<NativeMethods.tagOIFI>();
-                    lpFrameInfo.fMDIApp = false;
-                    lpFrameInfo.hAccel = IntPtr.Zero;
-                    lpFrameInfo.cAccelEntries = 0;
-                    lpFrameInfo.hwndFrame = host.ParentInternal.Handle;
+                    lpFrameInfo->cb = (uint)Marshal.SizeOf<Ole32.OLEINPLACEFRAMEINFO>();
+                    lpFrameInfo->fMDIApp = BOOL.FALSE;
+                    lpFrameInfo->hAccel = IntPtr.Zero;
+                    lpFrameInfo->cAccelEntries = 0;
+                    lpFrameInfo->hwndFrame = host.ParentInternal.Handle;
                 }
 
                 return HRESULT.S_OK;
@@ -4673,8 +4655,8 @@ namespace System.Windows.Forms
                 DisposeAxControl();
                 return false;
             }
-            miscStatusBits = qaControl.dwMiscStatus;
-            ParseMiscBits(miscStatusBits);
+            _miscStatusBits = qaControl.dwMiscStatus;
+            ParseMiscBits(_miscStatusBits);
             return true;
         }
 
@@ -4802,17 +4784,17 @@ namespace System.Windows.Forms
             }
         }
 
-        private void ParseMiscBits(int bits)
+        private void ParseMiscBits(Ole32.OLEMISC bits)
         {
-            axState[fOwnWindow] = ((bits & NativeMethods.ActiveX.OLEMISC_INVISIBLEATRUNTIME) != 0) && IsUserMode();
-            axState[fSimpleFrame] = ((bits & NativeMethods.ActiveX.OLEMISC_SIMPLEFRAME) != 0);
+            axState[fOwnWindow] = ((bits & Ole32.OLEMISC.INVISIBLEATRUNTIME) != 0) && IsUserMode();
+            axState[fSimpleFrame] = ((bits & Ole32.OLEMISC.SIMPLEFRAME) != 0);
         }
 
         private void SlowActivate()
         {
             bool setClientSite = false;
 
-            if ((miscStatusBits & NativeMethods.ActiveX.OLEMISC_SETCLIENTSITEFIRST) != 0)
+            if ((_miscStatusBits & Ole32.OLEMISC.SETCLIENTSITEFIRST) != 0)
             {
                 GetOleObject().SetClientSite(oleSite);
                 setClientSite = true;
@@ -4869,7 +4851,7 @@ namespace System.Windows.Forms
             return iOleControl;
         }
 
-        private UnsafeNativeMethods.IOleInPlaceActiveObject GetInPlaceActiveObject()
+        private Ole32.IOleInPlaceActiveObject GetInPlaceActiveObject()
         {
             // if our AxContainer was set an external active object then use it.
             if (iOleInPlaceActiveObjectExternal != null)
@@ -4883,7 +4865,7 @@ namespace System.Windows.Forms
                 Debug.Assert(instance != null, "must have the ocx");
                 try
                 {
-                    iOleInPlaceActiveObject = (UnsafeNativeMethods.IOleInPlaceActiveObject)instance;
+                    iOleInPlaceActiveObject = (Ole32.IOleInPlaceActiveObject)instance;
                 }
                 catch (InvalidCastException e)
                 {
@@ -4893,15 +4875,7 @@ namespace System.Windows.Forms
             return iOleInPlaceActiveObject;
         }
 
-        private UnsafeNativeMethods.IOleObject GetOleObject()
-        {
-            if (iOleObject == null)
-            {
-                Debug.Assert(instance != null, "must have the ocx");
-                iOleObject = (UnsafeNativeMethods.IOleObject)instance;
-            }
-            return iOleObject;
-        }
+        private UnsafeNativeMethods.IOleObject GetOleObject() => iOleObject ??= (UnsafeNativeMethods.IOleObject)instance;
 
         private Ole32.IOleInPlaceObject GetInPlaceObject()
         {
@@ -4920,14 +4894,14 @@ namespace System.Windows.Forms
             return iOleInPlaceObject;
         }
 
-        private NativeMethods.ICategorizeProperties GetCategorizeProperties()
+        private VSSDK.ICategorizeProperties GetCategorizeProperties()
         {
             if (iCategorizeProperties == null && !axState[checkedCP] && instance != null)
             {
                 axState[checkedCP] = true;
-                if (instance is NativeMethods.ICategorizeProperties)
+                if (instance is VSSDK.ICategorizeProperties)
                 {
-                    iCategorizeProperties = (NativeMethods.ICategorizeProperties)instance;
+                    iCategorizeProperties = (VSSDK.ICategorizeProperties)instance;
                 }
             }
             return iCategorizeProperties;
@@ -5517,7 +5491,7 @@ namespace System.Windows.Forms
             }
         }
 
-        internal class AxContainer : UnsafeNativeMethods.IOleContainer, UnsafeNativeMethods.IOleInPlaceFrame, IReflect
+        internal class AxContainer : Ole32.IOleContainer, Ole32.IOleInPlaceFrame, IReflect
         {
             internal ContainerControl parent;
             private IContainer assocContainer; // associated IContainer...
@@ -6065,27 +6039,12 @@ namespace System.Windows.Forms
 
             internal void OnUIDeactivate(AxHost site)
             {
-#if DEBUG
-                if (siteUIActive != null)
-                {
-                    Debug.Assert(siteUIActive == site, "deactivating when not active...");
-                }
-#endif // DEBUG
+                Debug.Assert(siteUIActive == null || siteUIActive == site, "deactivating when not active...");
 
                 siteUIActive = null;
                 site.RemoveSelectionHandler();
                 site.SetSelectionStyle(1);
                 site.editMode = EDITM_NONE;
-                if (site.GetSiteOwnsDeactivation())
-                {
-                    Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, " our site owns deactivation ");
-                    ContainerControl f = site.ContainingControl;
-                    Debug.Assert(f != null, "a control has to be on a ContainerControl...");
-                    if (f != null)
-                    {
-                        //    f.setActiveControl(null);
-                    }
-                }
             }
 
             internal void OnUIActivate(AxHost site)
@@ -6117,7 +6076,6 @@ namespace System.Windows.Forms
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "active Object is now " + site.ToString());
                 siteUIActive = site;
                 ContainerControl f = site.ContainingControl;
-                Debug.Assert(f != null, "a control has to be on a ContainerControl...");
                 if (f != null)
                 {
                     f.ActiveControl = site;
@@ -6194,19 +6152,18 @@ namespace System.Windows.Forms
             }
 
             // IOleContainer methods:
-
-            int UnsafeNativeMethods.IOleContainer.ParseDisplayName(object pbc, string pszDisplayName, int[] pchEaten, object[] ppmkOut)
+            unsafe HRESULT Ole32.IOleContainer.ParseDisplayName(IntPtr pbc, string pszDisplayName, uint *pchEaten, IntPtr* ppmkOut)
             {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in ParseDisplayName");
                 if (ppmkOut != null)
                 {
-                    ppmkOut[0] = null;
+                    *ppmkOut = IntPtr.Zero;
                 }
 
-                return NativeMethods.E_NOTIMPL;
+                return HRESULT.E_NOTIMPL;
             }
 
-            HRESULT UnsafeNativeMethods.IOleContainer.EnumObjects(Ole32.OLECONTF grfFlags, out Ole32.IEnumUnknown ppenum)
+            HRESULT Ole32.IOleContainer.EnumObjects(Ole32.OLECONTF grfFlags, out Ole32.IEnumUnknown ppenum)
             {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in EnumObjects");
                 ppenum = null;
@@ -6228,14 +6185,14 @@ namespace System.Windows.Forms
                 return HRESULT.S_OK;
             }
 
-            int UnsafeNativeMethods.IOleContainer.LockContainer(bool fLock)
+            HRESULT Ole32.IOleContainer.LockContainer(BOOL fLock)
             {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in LockContainer");
-                return NativeMethods.E_NOTIMPL;
+                return HRESULT.E_NOTIMPL;
             }
 
             // IOleInPlaceFrame methods:
-            unsafe HRESULT UnsafeNativeMethods.IOleInPlaceFrame.GetWindow(IntPtr* phwnd)
+            unsafe HRESULT Ole32.IOleInPlaceFrame.GetWindow(IntPtr* phwnd)
             {
                 if (phwnd == null)
                 {
@@ -6247,28 +6204,28 @@ namespace System.Windows.Forms
                 return HRESULT.S_OK;
             }
 
-            HRESULT UnsafeNativeMethods.IOleInPlaceFrame.ContextSensitiveHelp(BOOL fEnterMode)
+            HRESULT Ole32.IOleInPlaceFrame.ContextSensitiveHelp(BOOL fEnterMode)
             {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in ContextSensitiveHelp");
                 return HRESULT.S_OK;
             }
 
-            int UnsafeNativeMethods.IOleInPlaceFrame.GetBorder(NativeMethods.COMRECT lprectBorder)
+            unsafe HRESULT Ole32.IOleInPlaceFrame.GetBorder(RECT* lprectBorder)
             {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in GetBorder");
-                return NativeMethods.E_NOTIMPL;
+                return HRESULT.E_NOTIMPL;
             }
 
-            int UnsafeNativeMethods.IOleInPlaceFrame.RequestBorderSpace(NativeMethods.COMRECT pborderwidths)
+            unsafe HRESULT Ole32.IOleInPlaceFrame.RequestBorderSpace(RECT* pborderwidths)
             {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in RequestBorderSpace");
-                return NativeMethods.E_NOTIMPL;
+                return HRESULT.E_NOTIMPL;
             }
 
-            int UnsafeNativeMethods.IOleInPlaceFrame.SetBorderSpace(NativeMethods.COMRECT pborderwidths)
+            unsafe HRESULT Ole32.IOleInPlaceFrame.SetBorderSpace(RECT* pborderwidths)
             {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in SetBorderSpace");
-                return NativeMethods.E_NOTIMPL;
+                return HRESULT.E_NOTIMPL;
             }
 
             internal void OnExitEditMode(AxHost ctl)
@@ -6282,7 +6239,7 @@ namespace System.Windows.Forms
                 ctlInEditMode = null;
             }
 
-            int UnsafeNativeMethods.IOleInPlaceFrame.SetActiveObject(UnsafeNativeMethods.IOleInPlaceActiveObject pActiveObject, string pszObjName)
+            HRESULT Ole32.IOleInPlaceFrame.SetActiveObject(Ole32.IOleInPlaceActiveObject pActiveObject, string pszObjName)
             {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in SetActiveObject " + (pszObjName ?? "<null>"));
                 if (siteUIActive != null)
@@ -6303,7 +6260,7 @@ namespace System.Windows.Forms
                         ctlInEditMode.editMode = EDITM_NONE;
                         ctlInEditMode = null;
                     }
-                    return NativeMethods.S_OK;
+                    return HRESULT.S_OK;
                 }
                 AxHost ctl = null;
                 if (pActiveObject is UnsafeNativeMethods.IOleObject oleObject)
@@ -6345,40 +6302,41 @@ namespace System.Windows.Forms
                         }
                     }
                 }
-                return NativeMethods.S_OK;
+
+                return HRESULT.S_OK;
             }
 
-            int UnsafeNativeMethods.IOleInPlaceFrame.InsertMenus(IntPtr hmenuShared, NativeMethods.tagOleMenuGroupWidths lpMenuWidths)
+            unsafe HRESULT Ole32.IOleInPlaceFrame.InsertMenus(IntPtr hmenuShared, Ole32.OLEMENUGROUPWIDTHS* lpMenuWidths)
             {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in InsertMenus");
-                return NativeMethods.S_OK;
+                return HRESULT.S_OK;
             }
 
-            int UnsafeNativeMethods.IOleInPlaceFrame.SetMenu(IntPtr hmenuShared, IntPtr holemenu, IntPtr hwndActiveObject)
+            HRESULT Ole32.IOleInPlaceFrame.SetMenu(IntPtr hmenuShared, IntPtr holemenu, IntPtr hwndActiveObject)
             {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in SetMenu");
-                return NativeMethods.E_NOTIMPL;
+                return HRESULT.E_NOTIMPL;
             }
 
-            int UnsafeNativeMethods.IOleInPlaceFrame.RemoveMenus(IntPtr hmenuShared)
+            HRESULT Ole32.IOleInPlaceFrame.RemoveMenus(IntPtr hmenuShared)
             {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in RemoveMenus");
-                return NativeMethods.E_NOTIMPL;
+                return HRESULT.E_NOTIMPL;
             }
 
-            int UnsafeNativeMethods.IOleInPlaceFrame.SetStatusText(string pszStatusText)
+            HRESULT Ole32.IOleInPlaceFrame.SetStatusText(string pszStatusText)
             {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in SetStatusText");
-                return NativeMethods.E_NOTIMPL;
+                return HRESULT.E_NOTIMPL;
             }
 
-            int UnsafeNativeMethods.IOleInPlaceFrame.EnableModeless(bool fEnable)
+            HRESULT Ole32.IOleInPlaceFrame.EnableModeless(BOOL fEnable)
             {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in EnableModeless");
-                return NativeMethods.E_NOTIMPL;
+                return HRESULT.E_NOTIMPL;
             }
 
-            unsafe HRESULT UnsafeNativeMethods.IOleInPlaceFrame.TranslateAccelerator(User32.MSG* lpmsg, ushort wID)
+            unsafe HRESULT Ole32.IOleInPlaceFrame.TranslateAccelerator(User32.MSG* lpmsg, ushort wID)
             {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in IOleInPlaceFrame.TranslateAccelerator");
                 return HRESULT.S_FALSE;

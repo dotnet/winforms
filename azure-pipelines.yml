@@ -5,10 +5,18 @@
 # so they can be used to control yaml flow.
 
 variables:
-  _PublishUsingPipelines: true
-  _DotNetArtifactsCategory: WINDOWSDESKTOP
+  - name: _PublishUsingPipelines
+    value: true
+  - name: _DotNetArtifactsCategory
+    value: WINDOWSDESKTOP
+ 
   # clean the local repo on the build agents
-  Build.Repository.Clean: true
+  - name: Build.Repository.Clean
+    value: true
+
+  # used for post-build phases, internal builds only
+  - ${{ if and(ne(variables['System.TeamProject'], 'public'), notin(variables['Build.Reason'], 'PullRequest')) }}:
+    - group: DotNet-Winforms-SDLValidation-Params
   
 # trigger ci builds for completed checkins into master and any release branches
 trigger:

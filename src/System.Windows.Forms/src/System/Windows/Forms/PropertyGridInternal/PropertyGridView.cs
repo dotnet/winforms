@@ -444,7 +444,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 if (edit != null && edit.IsHandleCreated)
                 {
                     int exStyle = unchecked((int)((long)UnsafeNativeMethods.GetWindowLong(new HandleRef(edit, edit.Handle), NativeMethods.GWL_EXSTYLE)));
-                    return ((exStyle & NativeMethods.WS_EX_RTLREADING) != 0);
+                    return ((exStyle & (int)User32.WS_EX.RTLREADING) != 0);
                 }
                 else
                 {
@@ -962,7 +962,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             if (GetFlag(FlagIsSplitterMove))
             {
                 SetFlag(FlagIsSplitterMove, false);
-                CaptureInternal = false;
+                Capture = false;
 
                 if (selectedRow != -1)
                 {
@@ -3635,7 +3635,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 UnfocusSelection();
                 SetFlag(FlagIsSplitterMove, true);
                 tipInfo = -1;
-                CaptureInternal = true;
+                Capture = true;
                 return;
             }
 
@@ -5338,7 +5338,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 var oldExpandedState = value ? UiaCore.ExpandCollapseState.Collapsed : UiaCore.ExpandCollapseState.Expanded;
                 var newExpandedState = value ? UiaCore.ExpandCollapseState.Expanded : UiaCore.ExpandCollapseState.Collapsed;
                 selectedGridEntry?.AccessibilityObject?.RaiseAutomationPropertyChangedEvent(
-                    NativeMethods.UIA_ExpandCollapseExpandCollapseStatePropertyId,
+                    UiaCore.UIA.ExpandCollapseExpandCollapseStatePropertyId,
                     oldExpandedState,
                     newExpandedState);
 
@@ -6352,11 +6352,11 @@ namespace System.Windows.Forms.PropertyGridInternal
                 get
                 {
                     CreateParams cp = base.CreateParams;
-                    cp.ExStyle |= NativeMethods.WS_EX_TOOLWINDOW;
+                    cp.ExStyle |= (int)User32.WS_EX.TOOLWINDOW;
                     cp.Style |= NativeMethods.WS_POPUP | NativeMethods.WS_BORDER;
                     if (OSFeature.IsPresent(SystemParameter.DropShadow))
                     {
-                        cp.ClassStyle |= (int)NativeMethods.ClassStyle.CS_DROPSHADOW;
+                        cp.ClassStyle |= (int)User32.CS.DROPSHADOW;
                     }
                     if (gridView != null)
                     {
@@ -6445,14 +6445,12 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             public void DoModalLoop()
             {
-
                 // Push a modal loop.  This seems expensive, but I think it is a
                 // better user model than returning from DropDownControl immediately.
-                //
                 while (Visible)
                 {
                     Application.DoEventsModal();
-                    UnsafeNativeMethods.MsgWaitForMultipleObjectsEx(0, IntPtr.Zero, 250, NativeMethods.QS_ALLINPUT, NativeMethods.MWMO_INPUTAVAILABLE);
+                    User32.MsgWaitForMultipleObjectsEx(0, IntPtr.Zero, 250, User32.QS.ALLINPUT, User32.MWMO.INPUTAVAILABLE);
                 }
             }
 
@@ -7047,7 +7045,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     CreateParams cp = base.CreateParams;
                     cp.Style &= ~NativeMethods.WS_BORDER;
-                    cp.ExStyle &= ~NativeMethods.WS_EX_CLIENTEDGE;
+                    cp.ExStyle &= ~(int)User32.WS_EX.CLIENTEDGE;
                     return cp;
                 }
             }
@@ -7191,31 +7189,31 @@ namespace System.Windows.Forms.PropertyGridInternal
                 return GetCurrentIndex() + 1; // Index is zero-based, Child ID is 1-based.
             }
 
-            internal override object GetPropertyValue(int propertyID)
+            internal override object GetPropertyValue(UiaCore.UIA propertyID)
             {
                 switch (propertyID)
                 {
-                    case NativeMethods.UIA_RuntimeIdPropertyId:
+                    case UiaCore.UIA.RuntimeIdPropertyId:
                         return RuntimeId;
-                    case NativeMethods.UIA_BoundingRectanglePropertyId:
+                    case UiaCore.UIA.BoundingRectanglePropertyId:
                         return BoundingRectangle;
-                    case NativeMethods.UIA_ControlTypePropertyId:
-                        return NativeMethods.UIA_ListItemControlTypeId;
-                    case NativeMethods.UIA_NamePropertyId:
+                    case UiaCore.UIA.ControlTypePropertyId:
+                        return UiaCore.UIA.ListItemControlTypeId;
+                    case UiaCore.UIA.NamePropertyId:
                         return Name;
-                    case NativeMethods.UIA_AccessKeyPropertyId:
+                    case UiaCore.UIA.AccessKeyPropertyId:
                         return KeyboardShortcut;
-                    case NativeMethods.UIA_HasKeyboardFocusPropertyId:
+                    case UiaCore.UIA.HasKeyboardFocusPropertyId:
                         return _owningGridViewListBox.Focused;
-                    case NativeMethods.UIA_IsKeyboardFocusablePropertyId:
+                    case UiaCore.UIA.IsKeyboardFocusablePropertyId:
                         return (State & AccessibleStates.Focusable) == AccessibleStates.Focusable;
-                    case NativeMethods.UIA_IsEnabledPropertyId:
+                    case UiaCore.UIA.IsEnabledPropertyId:
                         return _owningGridViewListBox.Enabled;
-                    case NativeMethods.UIA_HelpTextPropertyId:
+                    case UiaCore.UIA.HelpTextPropertyId:
                         return Help ?? string.Empty;
-                    case NativeMethods.UIA_IsPasswordPropertyId:
+                    case UiaCore.UIA.IsPasswordPropertyId:
                         return false;
-                    case NativeMethods.UIA_IsOffscreenPropertyId:
+                    case UiaCore.UIA.IsOffscreenPropertyId:
                         return (State & AccessibleStates.Offscreen) == AccessibleStates.Offscreen;
                     default:
                         return base.GetPropertyValue(propertyID);
@@ -7251,10 +7249,10 @@ namespace System.Windows.Forms.PropertyGridInternal
             /// </summary>
             /// <param name="patternId">The pattern ID.</param>
             /// <returns>True if specified </returns>
-            internal override bool IsPatternSupported(int patternId)
+            internal override bool IsPatternSupported(UiaCore.UIA patternId)
             {
-                if (patternId == NativeMethods.UIA_LegacyIAccessiblePatternId ||
-                    patternId == NativeMethods.UIA_InvokePatternId)
+                if (patternId == UiaCore.UIA.LegacyIAccessiblePatternId ||
+                    patternId == UiaCore.UIA.InvokePatternId)
                 {
                     return true;
                 }
@@ -7325,7 +7323,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             internal override void SetFocus()
             {
-                RaiseAutomationEvent(NativeMethods.UIA_AutomationFocusChangedEventId);
+                RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
 
                 base.SetFocus();
             }
@@ -7444,13 +7442,13 @@ namespace System.Windows.Forms.PropertyGridInternal
             /// </summary>
             /// <param name="propertyId">Identifier indicating the property to return</param>
             /// <returns>Returns a ValInfo indicating whether the element supports this property, or has no value for it.</returns>
-            internal override object GetPropertyValue(int propertyID)
+            internal override object GetPropertyValue(UiaCore.UIA propertyID)
             {
-                if (propertyID == NativeMethods.UIA_ControlTypePropertyId)
+                if (propertyID == UiaCore.UIA.ControlTypePropertyId)
                 {
-                    return NativeMethods.UIA_ListControlTypeId;
+                    return UiaCore.UIA.ListControlTypeId;
                 }
-                else if (propertyID == NativeMethods.UIA_NamePropertyId)
+                else if (propertyID == UiaCore.UIA.NamePropertyId)
                 {
                     return Name;
                 }
@@ -7460,7 +7458,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             internal override void SetFocus()
             {
-                RaiseAutomationEvent(NativeMethods.UIA_AutomationFocusChangedEventId);
+                RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
 
                 base.SetFocus();
             }
@@ -7647,7 +7645,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 base.OnGotFocus(e);
 
-                this.AccessibilityObject.RaiseAutomationEvent(NativeMethods.UIA_AutomationFocusChangedEventId);
+                this.AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
             }
 
             protected override void OnKeyDown(KeyEventArgs ke)
@@ -7998,34 +7996,34 @@ namespace System.Windows.Forms.PropertyGridInternal
                     }
                 }
 
-                internal override object GetPropertyValue(int propertyID)
+                internal override object GetPropertyValue(UiaCore.UIA propertyID)
                 {
                     switch (propertyID)
                     {
-                        case NativeMethods.UIA_RuntimeIdPropertyId:
+                        case UiaCore.UIA.RuntimeIdPropertyId:
                             return RuntimeId;
-                        case NativeMethods.UIA_ControlTypePropertyId:
-                            return NativeMethods.UIA_EditControlTypeId;
-                        case NativeMethods.UIA_NamePropertyId:
+                        case UiaCore.UIA.ControlTypePropertyId:
+                            return UiaCore.UIA.EditControlTypeId;
+                        case UiaCore.UIA.NamePropertyId:
                             return Name;
-                        case NativeMethods.UIA_HasKeyboardFocusPropertyId:
+                        case UiaCore.UIA.HasKeyboardFocusPropertyId:
                             return Owner.Focused;
-                        case NativeMethods.UIA_IsEnabledPropertyId:
+                        case UiaCore.UIA.IsEnabledPropertyId:
                             return !IsReadOnly;
-                        case NativeMethods.UIA_ClassNamePropertyId:
+                        case UiaCore.UIA.ClassNamePropertyId:
                             return Owner.GetType().ToString();
-                        case NativeMethods.UIA_FrameworkIdPropertyId:
+                        case UiaCore.UIA.FrameworkIdPropertyId:
                             return NativeMethods.WinFormFrameworkId;
-                        case NativeMethods.UIA_IsValuePatternAvailablePropertyId:
-                            return IsPatternSupported(NativeMethods.UIA_ValuePatternId);
+                        case UiaCore.UIA.IsValuePatternAvailablePropertyId:
+                            return IsPatternSupported(UiaCore.UIA.ValuePatternId);
                     }
 
                     return base.GetPropertyValue(propertyID);
                 }
 
-                internal override bool IsPatternSupported(int patternId)
+                internal override bool IsPatternSupported(UiaCore.UIA patternId)
                 {
-                    if (patternId == NativeMethods.UIA_ValuePatternId)
+                    if (patternId == UiaCore.UIA.ValuePatternId)
                     {
                         return true;
                     }
@@ -8110,7 +8108,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 internal override void SetFocus()
                 {
-                    RaiseAutomationEvent(NativeMethods.UIA_AutomationFocusChangedEventId);
+                    RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
 
                     base.SetFocus();
                 }
@@ -8131,8 +8129,8 @@ namespace System.Windows.Forms.PropertyGridInternal
             private readonly IMouseHookClient client;
 
             internal uint _thisProcessID = 0;
-            private GCHandle mouseHookRoot;
-            private IntPtr mouseHookHandle = IntPtr.Zero;
+            private GCHandle _mouseHookRoot;
+            private IntPtr _mouseHookHandle = IntPtr.Zero;
             private bool hookDisable = false;
 
             private bool processing;
@@ -8151,7 +8149,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             readonly string callingStack;
             ~MouseHook()
             {
-                Debug.Assert(mouseHookHandle == IntPtr.Zero, "Finalizing an active mouse hook.  This will crash the process.  Calling stack: " + callingStack);
+                Debug.Assert(_mouseHookHandle == IntPtr.Zero, "Finalizing an active mouse hook.  This will crash the process.  Calling stack: " + callingStack);
             }
 #endif
 
@@ -8173,7 +8171,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 get
                 {
                     GC.KeepAlive(this);
-                    return mouseHookHandle != IntPtr.Zero;
+                    return _mouseHookHandle != IntPtr.Zero;
                 }
                 set
                 {
@@ -8202,7 +8200,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 // Locking 'this' here is ok since this is an internal class.
                 lock (this)
                 {
-                    if (mouseHookHandle != IntPtr.Zero)
+                    if (_mouseHookHandle != IntPtr.Zero)
                     {
                         return;
                     }
@@ -8212,15 +8210,14 @@ namespace System.Windows.Forms.PropertyGridInternal
                         User32.GetWindowThreadProcessId(control, out _thisProcessID);
                     }
 
-                    NativeMethods.HookProc hook = new NativeMethods.HookProc(new MouseHookObject(this).Callback);
-                    mouseHookRoot = GCHandle.Alloc(hook);
-
-                    mouseHookHandle = UnsafeNativeMethods.SetWindowsHookEx(
-                        NativeMethods.WH_MOUSE,
+                    var hook = new User32.HOOKPROC(new MouseHookObject(this).Callback);
+                    _mouseHookRoot = GCHandle.Alloc(hook);
+                    _mouseHookHandle = User32.SetWindowsHookExW(
+                        User32.WH.MOUSE,
                         hook,
                         IntPtr.Zero,
                         Kernel32.GetCurrentThreadId());
-                    Debug.Assert(mouseHookHandle != IntPtr.Zero, "Failed to install mouse hook");
+                    Debug.Assert(_mouseHookHandle != IntPtr.Zero, "Failed to install mouse hook");
                     Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "DropDownHolder:HookMouse()");
                 }
             }
@@ -8228,10 +8225,10 @@ namespace System.Windows.Forms.PropertyGridInternal
             /// <summary>
             ///  HookProc used for catch mouse messages.
             /// </summary>
-            private IntPtr MouseHookProc(int nCode, IntPtr wparam, IntPtr lparam)
+            private IntPtr MouseHookProc(User32.HC nCode, IntPtr wparam, IntPtr lparam)
             {
                 GC.KeepAlive(this);
-                if (nCode == NativeMethods.HC_ACTION)
+                if (nCode == User32.HC.ACTION)
                 {
                     NativeMethods.MOUSEHOOKSTRUCT mhs = Marshal.PtrToStructure<NativeMethods.MOUSEHOOKSTRUCT>(lparam);
                     if (mhs != null)
@@ -8255,7 +8252,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     }
                 }
 
-                return UnsafeNativeMethods.CallNextHookEx(new HandleRef(this, mouseHookHandle), nCode, wparam, lparam);
+                return User32.CallNextHookEx(new HandleRef(this, _mouseHookHandle), nCode, wparam, lparam);
             }
 
             /// <summary>
@@ -8267,11 +8264,11 @@ namespace System.Windows.Forms.PropertyGridInternal
                 // Locking 'this' here is ok since this is an internal class.
                 lock (this)
                 {
-                    if (mouseHookHandle != IntPtr.Zero)
+                    if (_mouseHookHandle != IntPtr.Zero)
                     {
-                        UnsafeNativeMethods.UnhookWindowsHookEx(new HandleRef(this, mouseHookHandle));
-                        mouseHookRoot.Free();
-                        mouseHookHandle = IntPtr.Zero;
+                        User32.UnhookWindowsHookEx(new HandleRef(this, _mouseHookHandle));
+                        _mouseHookRoot.Free();
+                        _mouseHookHandle = IntPtr.Zero;
                         Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "DropDownHolder:UnhookMouse()");
                     }
                 }
@@ -8361,7 +8358,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     reference = new WeakReference(parent, false);
                 }
 
-                public virtual IntPtr Callback(int nCode, IntPtr wparam, IntPtr lparam)
+                public virtual IntPtr Callback(User32.HC nCode, IntPtr wparam, IntPtr lparam)
                 {
                     IntPtr ret = IntPtr.Zero;
                     try
@@ -8487,28 +8484,28 @@ namespace System.Windows.Forms.PropertyGridInternal
             /// </summary>
             /// <param name="propertyId">Identifier indicating the property to return</param>
             /// <returns>Returns a ValInfo indicating whether the element supports this property, or has no value for it.</returns>
-            internal override object GetPropertyValue(int propertyID)
+            internal override object GetPropertyValue(UiaCore.UIA propertyID)
             {
                 switch (propertyID)
                 {
-                    case NativeMethods.UIA_ControlTypePropertyId:
-                        return NativeMethods.UIA_TableControlTypeId;
-                    case NativeMethods.UIA_NamePropertyId:
+                    case UiaCore.UIA.ControlTypePropertyId:
+                        return UiaCore.UIA.TableControlTypeId;
+                    case UiaCore.UIA.NamePropertyId:
                         return Name;
-                    case NativeMethods.UIA_IsTablePatternAvailablePropertyId:
-                    case NativeMethods.UIA_IsGridPatternAvailablePropertyId:
+                    case UiaCore.UIA.IsTablePatternAvailablePropertyId:
+                    case UiaCore.UIA.IsGridPatternAvailablePropertyId:
                         return true;
                 }
 
                 return base.GetPropertyValue(propertyID);
             }
 
-            internal override bool IsPatternSupported(int patternId)
+            internal override bool IsPatternSupported(UiaCore.UIA patternId)
             {
                 switch (patternId)
                 {
-                    case NativeMethods.UIA_TablePatternId:
-                    case NativeMethods.UIA_GridPatternId:
+                    case UiaCore.UIA.TablePatternId:
+                    case UiaCore.UIA.GridPatternId:
                         return true;
                 }
 

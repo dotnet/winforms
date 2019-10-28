@@ -3,8 +3,8 @@ parameters:
   # be read from a user-defined variable (Azure DevOps limitation)
   agentPoolName: Hosted Windows 2019 with VS2019
   agentPool: ''
-  runAsPublic: true                      
-  repoName: dotnet/winforms              
+  runAsPublic: true
+  repoName: dotnet/winforms
 
 stages:
 - stage: build
@@ -30,66 +30,50 @@ stages:
         variables:
 
           # needed for signing
-          - name: _TeamName
-            value: DotNetCore
-          - name: _SignType
-            value: test
-          - name: _SignArgs
-            value: ''
-          - name: _Sign
-            value: true
+          - _TeamName: DotNetCore
+          - _SignType: test
+          - _SignArgs: ''
+          - _Sign: true
 
           # needed for darc (dependency flow) publishing
-          - name: _PublishType
-            value: none
-          - name: _DotNetPublishToBlobFeed
-            value: false
-          - name: _PublishArgs
-            value: ''
-          - name: _OfficialBuildIdArgs
-            value: ''
+          - _PublishType: none
+          - _DotNetPublishToBlobFeed: false
+          - _PublishArgs: ''
+          - _OfficialBuildIdArgs: ''
 
           # Override some values if we're building internally (not public)
           - ${{ if eq(parameters.runAsPublic, 'false') }}:
 
-            # note: You have to use list syntax here (-name: value) or 
-            # you will get errors about declaring the same variable multiple times
-            - name: _PublishType
-              value: blob
-            - name: _SignType
-              value: real
-            - name: _DotNetPublishToBlobFeed
-              value: true
+            - _PublishType: blob
+            - _SignType: real
+            - _DotNetPublishToBlobFeed: true
             - group: DotNet-Blob-Feed
             - group: DotNet-Symbol-Server-Pats
-            - name: _PublishBlobFeedUrl
-              value: https://dotnetfeed.blob.core.windows.net/dotnet-windowsdesktop/index.json
+            - _PublishBlobFeedUrl: https://dotnetfeed.blob.core.windows.net/dotnet-windowsdesktop/index.json
 
             # note: Even though they are referenced here, user defined variables (like $(_SignType)) 
             # are not resolved until the agent is running on the machine. They can be overridden any 
             # time before they are resolved, like in the job matrix below (see Build_Debug)
-            - name: _SignArgs
-              value: /p:DotNetSignType=$(_SignType) /p:TeamName=$(_TeamName) /p:Sign=$(_Sign)
-            - name: _PublishArgs
-              value: /p:DotNetPublishBlobFeedKey=$(dotnetfeed-storage-access-key-1)
+            - _SignArgs: /p:DotNetSignType=$(_SignType) /p:TeamName=$(_TeamName) /p:Sign=$(_Sign)
+            - _PublishArgs: /p:DotNetPublishBlobFeedKey=$(dotnetfeed-storage-access-key-1)
                 /p:DotNetPublishBlobFeedUrl=$(_PublishBlobFeedUrl)
                 /p:DotNetPublishToBlobFeed=$(_DotNetPublishToBlobFeed)
                 /p:DotNetPublishUsingPipelines=$(_PublishUsingPipelines)
                 /p:DotNetArtifactsCategory=$(_DotNetArtifactsCategory)
                 /p:DotNetSymbolServerTokenMsdl=$(microsoft-symbol-server-pat)
                 /p:DotNetSymbolServerTokenSymWeb=$(symweb-symbol-server-pat)
-            - name: _OfficialBuildIdArgs
-              value: /p:OfficialBuildId=$(BUILD.BUILDNUMBER)
+            - _OfficialBuildIdArgs: /p:OfficialBuildId=$(BUILD.BUILDNUMBER)
 
         strategy:
           matrix:
-            Debug:
-              _BuildConfig: Debug
-              # override some variables for debug
-              _PublishType: none
-              _SignType: test
-              _DotNetPublishToBlobFeed : false
-              _Coverage: true
+            ${{ if ne(parameters.runAsPublic, 'false') }}:
+              Debug:
+                _BuildConfig: Debug
+                # override some variables for debug
+                _PublishType: none
+                _SignType: test
+                _DotNetPublishToBlobFeed : false
+                _Coverage: true
             Release:
               _BuildConfig: Release
               _Coverage: false
@@ -160,21 +144,19 @@ stages:
       # Symbol validation isn't being very reliable lately. This should be enabled back
       # once this issue is resolved: https://github.com/dotnet/arcade/issues/2871
       enableSymbolValidation: false
-      # Sourcelink validation isn't passing for Arcade due to some regressions. This should be
-      # enabled back once this issue is resolved: https://github.com/dotnet/arcade/issues/2912
       enableSourceLinkValidation: true
-      # This is to enable SDL runs part of Post-Build Validation Stage
-      # Disabled for now until winforms onboards to TSA
+
+      # these param values come from the DotNet-Winforms-SDLValidation-Params azdo variable group
       SDLValidationParameters:
         enable: true
-        params: ' -SourceToolsList @("policheck","credscan")
-        -TsaInstanceURL "https://devdiv.visualstudio.com/"
-        -TsaProjectName "DEVDIV"
-        -TsaNotificationEmail "wffteam@microsoft.com"
-        -TsaCodebaseAdmin "REDMOND\advolker"
-        -TsaBugAreaPath "DevDiv\NET\NET Core\Winforms"
-        -TsaIterationPath "DevDiv"
-        -TsaRepositoryName "Winforms"
-        -TsaCodebaseName "Winforms"
-        -TsaOnboard $True
-        -TsaPublish $True'
+        params: ' -SourceToolsList $(_TsaSourceToolsList)
+        -TsaInstanceURL $(_TsaInstanceURL)
+        -TsaProjectName $(_TsaProjectName)
+        -TsaNotificationEmail $(_TsaNotificationEmail)
+        -TsaCodebaseAdmin $(_TsaCodebaseAdmin)
+        -TsaBugAreaPath $(_TsaBugAreaPath)
+        -TsaIterationPath $(_TsaIterationPath)
+        -TsaRepositoryName $(_TsaRepositoryName)
+        -TsaCodebaseName $(_TsaCodebaseName)
+        -TsaOnboard $(_TsaOnboard)
+        -TsaPublish $(_TsaPublish)'

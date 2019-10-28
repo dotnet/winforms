@@ -5996,11 +5996,6 @@ Geçersiz işlemin gerçekleştiği yığın izi:
         <target state="translated">Resim bir Bit Eşlem olmalı.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ImageListCantRecreate">
-        <source>Unless the list is empty, '{0}' cannot be changed once the ImageList has been used.</source>
-        <target state="translated">Liste boş değilse, ImageList bir kez kullanıldıktan sonra '{0}' değiştirilemez.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="ImageListColorDepthDescr">
         <source>The number of colors to use to render images.</source>
         <target state="translated">Resimleri işlemek için kullanılacak renk sayısı.</target>

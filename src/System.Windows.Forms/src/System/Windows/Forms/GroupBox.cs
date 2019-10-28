@@ -148,7 +148,7 @@ namespace System.Windows.Forms
                     cp.ClassName = null;
                     cp.Style &= ~NativeMethods.BS_GROUPBOX;
                 }
-                cp.ExStyle |= NativeMethods.WS_EX_CONTROLPARENT;
+                cp.ExStyle |= (int)User32.WS_EX.CONTROLPARENT;
 
                 return cp;
             }
@@ -795,13 +795,13 @@ namespace System.Windows.Forms
 
             internal override bool IsIAccessibleExSupported() => true;
 
-            internal override object GetPropertyValue(int propertyID)
+            internal override object GetPropertyValue(UiaCore.UIA propertyID)
             {
                 switch (propertyID)
                 {
-                    case NativeMethods.UIA_ControlTypePropertyId:
-                        return NativeMethods.UIA_GroupControlTypeId;
-                    case NativeMethods.UIA_IsKeyboardFocusablePropertyId:
+                    case UiaCore.UIA.ControlTypePropertyId:
+                        return UiaCore.UIA.GroupControlTypeId;
+                    case UiaCore.UIA.IsKeyboardFocusablePropertyId:
                         return true;
                 }
 

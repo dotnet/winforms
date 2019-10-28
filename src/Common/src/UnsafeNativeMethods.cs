@@ -122,17 +122,28 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public static extern IntPtr GetMenu(HandleRef hWnd);
 
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern bool GetMenuItemInfo(HandleRef hMenu, int uItem, bool fByPosition, [In, Out] NativeMethods.MENUITEMINFO_T lpmii);
+        [DllImport(Libraries.User32, CharSet = CharSet.Auto)]
+        public static extern BOOL GetMenuItemInfo(IntPtr hMenu, int uItem, bool fByPosition, [In, Out] NativeMethods.MENUITEMINFO_T lpmii);
 
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern bool GetMenuItemInfo(HandleRef hMenu, int uItem, bool fByPosition, [In, Out] NativeMethods.MENUITEMINFO_T_RW lpmii);
+        public static BOOL GetMenuItemInfo(HandleRef hMenu, int uItem, bool fByPosition, NativeMethods.MENUITEMINFO_T lpmii)
+        {
+            BOOL result = GetMenuItemInfo(hMenu.Handle, uItem, fByPosition, lpmii);
+            GC.KeepAlive(hMenu.Wrapper);
+            return result;
+        }
+
+        [DllImport(Libraries.User32, CharSet = CharSet.Auto)]
+        public static extern BOOL GetMenuItemInfo(IntPtr hMenu, int uItem, bool fByPosition, [In, Out] NativeMethods.MENUITEMINFO_T_RW lpmii);
+
+        public static BOOL GetMenuItemInfo(HandleRef hMenu, int uItem, bool fByPosition, NativeMethods.MENUITEMINFO_T_RW lpmii)
+        {
+            BOOL result = GetMenuItemInfo(hMenu.Handle, uItem, fByPosition, lpmii);
+            GC.KeepAlive(hMenu.Wrapper);
+            return result;
+        }
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public extern static bool SetMenuItemInfo(HandleRef hMenu, int uItem, bool fByPosition, NativeMethods.MENUITEMINFO_T lpmii);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true)]
-        public static extern IntPtr CreateMenu();
 
         [DllImport(ExternDll.Comdlg32, SetLastError = true, CharSet = CharSet.Auto)]
         public static extern bool GetOpenFileName([In, Out] NativeMethods.OPENFILENAME_I ofn);
@@ -154,24 +165,6 @@ namespace System.Windows.Forms
 
         [DllImport(ExternDll.Kernel32, ExactSpelling = true, EntryPoint = "RtlMoveMemory", CharSet = CharSet.Unicode)]
         public static extern void CopyMemoryW(IntPtr pdst, char[] psrc, int cb);
-
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern IntPtr SetWindowsHookEx(int idHook, NativeMethods.HookProc lpfn, IntPtr hmod, uint dwThreadId);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern int GetKeyboardState(byte[] keystate);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern int SetKeyboardState(byte[] keystate);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern bool UnhookWindowsHookEx(HandleRef hhook);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern short GetAsyncKeyState(int vkey);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern IntPtr CallNextHookEx(HandleRef hhook, int code, IntPtr wparam, IntPtr lparam);
 
         [DllImport(ExternDll.Kernel32, CharSet = CharSet.Auto, SetLastError = true)]
         public static extern int GetModuleFileName(HandleRef hModule, StringBuilder buffer, int length);
@@ -204,12 +197,6 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.User32, ExactSpelling = true)]
         public static extern IntPtr ChildWindowFromPointEx(IntPtr hwndParent, Point pt, int uFlags);
 
-        #region SendKeys SendInput functionality
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern bool BlockInput([In, MarshalAs(UnmanagedType.Bool)] bool fBlockIt);
-
-        #endregion
 
         [DllImport(ExternDll.User32, ExactSpelling = true)]
         public static extern IntPtr GetDCEx(HandleRef hWnd, HandleRef hrgnClip, int flags);
@@ -293,12 +280,6 @@ namespace System.Windows.Forms
         public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, StringBuilder lParam);
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, ref NativeMethods.TBBUTTON lParam);
-
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, ref NativeMethods.TBBUTTONINFO lParam);
-
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, NativeMethods.TV_HITTESTINFO lParam);
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
@@ -343,9 +324,6 @@ namespace System.Windows.Forms
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, NativeMethods.FINDTEXT lParam);
-
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, NativeMethods.TEXTRANGE lParam);
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, ref Point lParam);
@@ -398,9 +376,6 @@ namespace System.Windows.Forms
         public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, NativeMethods.MCHITTESTINFO lParam);
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, NativeMethods.SYSTEMTIME lParam);
-
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, NativeMethods.SYSTEMTIMEARRAY lParam);
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
@@ -427,9 +402,6 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public extern static IntPtr SendMessage(HandleRef hWnd, int Msg, IntPtr wParam, NativeMethods.ListViewCompareCallback pfnCompare);
 
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern IntPtr SetParent(HandleRef hWnd, HandleRef hWndParent);
-
         [DllImport(ExternDll.User32, ExactSpelling = true)]
         public static extern bool GetWindowRect(HandleRef hWnd, ref RECT rect);
 
@@ -445,12 +417,6 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public static extern IntPtr DefMDIChildProc(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam);
 
-        [DllImport(ExternDll.Kernel32, CharSet = CharSet.Auto)]
-        public static extern bool GetComputerName(StringBuilder lpBuffer, int[] nSize);
-
-        [DllImport(ExternDll.Advapi32, CharSet = CharSet.Auto)]
-        public static extern bool GetUserName(StringBuilder lpBuffer, int[] nSize);
-
         [DllImport(ExternDll.User32, ExactSpelling = true)]
         public static extern IntPtr GetProcessWindowStation();
 
@@ -459,9 +425,6 @@ namespace System.Windows.Forms
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern IntPtr GetForegroundWindow();
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern int MsgWaitForMultipleObjectsEx(int nCount, IntPtr pHandles, int dwMilliseconds, int dwWakeMask, int dwFlags);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern IntPtr GetDesktopWindow();
@@ -480,15 +443,6 @@ namespace System.Windows.Forms
 
         [DllImport(ExternDll.Oleacc, ExactSpelling = true, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
         public static extern int CreateStdAccessibleObject(HandleRef hWnd, int objID, ref Guid refiid, [In, Out, MarshalAs(UnmanagedType.Interface)] ref object pAcc);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern int GetMenuItemID(HandleRef hMenu, int nPos);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern IntPtr GetSubMenu(HandleRef hwnd, int index);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern int GetMenuItemCount(HandleRef hMenu);
 
         [DllImport(ExternDll.User32, ExactSpelling = true)]
         public static extern IntPtr GetWindowDC(HandleRef hWnd);
@@ -552,20 +506,8 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto, EntryPoint = "SetWindowLongPtr")]
         public static extern IntPtr SetWindowLongPtr64(HandleRef hWnd, int nIndex, NativeMethods.WndProc wndproc);
 
-        [DllImport(ExternDll.User32, ExactSpelling = true)]
-        public static extern IntPtr CreatePopupMenu();
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern bool RemoveMenu(HandleRef hMenu, int uPosition, int uFlags);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true)]
-        public static extern bool DestroyMenu(HandleRef hMenu);
-
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern bool SetForegroundWindow(HandleRef hWnd);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern IntPtr GetSystemMenu(HandleRef hWnd, bool bRevert);
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public static extern IntPtr DefFrameProc(IntPtr hWnd, IntPtr hWndClient, int msg, IntPtr wParam, IntPtr lParam);
@@ -573,17 +515,8 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto, SetLastError = true)]
         public static extern bool SetLayeredWindowAttributes(HandleRef hwnd, int crKey, byte bAlpha, int dwFlags);
 
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public extern static bool SetMenu(HandleRef hWnd, HandleRef hMenu);
-
         [DllImport(ExternDll.Kernel32, CharSet = CharSet.Auto)]
         public static extern void GetStartupInfo([In, Out] NativeMethods.STARTUPINFO_I startupinfo_i);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern bool SetMenuDefaultItem(HandleRef hwnd, int nIndex, bool pos);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern bool EnableMenuItem(HandleRef hMenu, int UIDEnabledItem, int uEnable);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern IntPtr SetActiveWindow(HandleRef hWnd);
@@ -612,23 +545,9 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.User32, ExactSpelling = true)]
         public static extern IntPtr WindowFromPoint(Point pt);
 
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern void PostQuitMessage(int nExitCode);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern void WaitMessage();
-
         // This method is not available until Windows 8.1
         [DllImport(ExternDll.User32, ExactSpelling = true, SetLastError = true)]
         public static extern uint GetDpiForWindow(HandleRef hWnd);
-
-        // For system power status
-        //
-        [DllImport(ExternDll.Kernel32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern bool GetSystemPowerStatus([In, Out] ref NativeMethods.SYSTEM_POWER_STATUS systemPowerStatus);
-
-        [DllImport(ExternDll.Powrprof, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern bool SetSuspendState(bool hiberate, bool forceCritical, bool disableWakeEvent);
 
         //for RegionData
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
@@ -704,7 +623,8 @@ namespace System.Windows.Forms
                 out object moniker);
 
             [PreserveSig]
-            int GetContainer(out IOleContainer container);
+            HRESULT GetContainer(
+                out Ole32.IOleContainer container);
 
             [PreserveSig]
             int ShowObject();
@@ -730,7 +650,7 @@ namespace System.Windows.Forms
                 BOOL fEnterMode);
 
             [PreserveSig]
-            int CanInPlaceActivate();
+            HRESULT CanInPlaceActivate();
 
             [PreserveSig]
             int OnInPlaceActivate();
@@ -740,12 +660,11 @@ namespace System.Windows.Forms
 
             [PreserveSig]
             HRESULT GetWindowContext(
-                out IOleInPlaceFrame ppFrame,
-                out IOleInPlaceUIWindow ppDoc,
+                out Ole32.IOleInPlaceFrame ppFrame,
+                out Ole32.IOleInPlaceUIWindow ppDoc,
                 RECT* lprcPosRect,
                 RECT* lprcClipRect,
-                [In, Out]
-                NativeMethods.tagOIFI lpFrameInfo);
+                Ole32.OLEINPLACEFRAMEINFO* lpFrameInfo);
 
             [PreserveSig]
             HRESULT Scroll(
@@ -767,101 +686,6 @@ namespace System.Windows.Forms
             [PreserveSig]
             HRESULT OnPosRectChange(
                 RECT* lprcPosRect);
-        }
-
-        [ComImport(), Guid("0000011B-0000-0000-C000-000000000046"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IOleContainer
-        {
-            [PreserveSig]
-            int ParseDisplayName(
-                [In, MarshalAs(UnmanagedType.Interface)]
-                object pbc,
-                [In, MarshalAs(UnmanagedType.BStr)]
-                string pszDisplayName,
-                [Out, MarshalAs(UnmanagedType.LPArray)]
-                int[] pchEaten,
-                [Out, MarshalAs(UnmanagedType.LPArray)]
-                object[] ppmkOut);
-
-            [PreserveSig]
-            HRESULT EnumObjects(
-                Ole32.OLECONTF grfFlags,
-                out Ole32.IEnumUnknown ppenum);
-
-            [PreserveSig]
-            int LockContainer(
-                bool fLock);
-        }
-
-        [ComImport]
-        [Guid("00000116-0000-0000-C000-000000000046")]
-        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public unsafe interface IOleInPlaceFrame
-        {
-            [PreserveSig]
-            HRESULT GetWindow(
-                IntPtr* phwnd);
-
-            [PreserveSig]
-            HRESULT ContextSensitiveHelp(
-                BOOL fEnterMode);
-
-            [PreserveSig]
-            int GetBorder(
-                [Out]
-                NativeMethods.COMRECT lprectBorder);
-
-            [PreserveSig]
-            int RequestBorderSpace(
-                [In]
-                NativeMethods.COMRECT pborderwidths);
-
-            [PreserveSig]
-            int SetBorderSpace(
-                [In]
-                NativeMethods.COMRECT pborderwidths);
-
-            [PreserveSig]
-            int SetActiveObject(
-                [In, MarshalAs(UnmanagedType.Interface)]
-                IOleInPlaceActiveObject pActiveObject,
-                [In, MarshalAs(UnmanagedType.LPWStr)]
-                string pszObjName);
-
-            [PreserveSig]
-            int InsertMenus(
-                [In]
-                IntPtr hmenuShared,
-                [In, Out]
-                NativeMethods.tagOleMenuGroupWidths lpMenuWidths);
-
-            [PreserveSig]
-            int SetMenu(
-                [In]
-                IntPtr hmenuShared,
-                [In]
-                IntPtr holemenu,
-                [In]
-                IntPtr hwndActiveObject);
-
-            [PreserveSig]
-            int RemoveMenus(
-                [In]
-                IntPtr hmenuShared);
-
-            [PreserveSig]
-            int SetStatusText(
-                [In, MarshalAs(UnmanagedType.LPWStr)]
-                string pszStatusText);
-
-            [PreserveSig]
-            int EnableModeless(
-                bool fEnable);
-
-            [PreserveSig]
-            HRESULT TranslateAccelerator(
-                User32.MSG* lpmsg,
-                ushort wID);
         }
 
         // Used to control the webbrowser appearance and provide DTE to script via window.external
@@ -890,13 +714,10 @@ namespace System.Windows.Forms
             [PreserveSig]
             HRESULT ShowUI(
                 uint dwID,
-                [In]
-                IOleInPlaceActiveObject activeObject,
+                Ole32.IOleInPlaceActiveObject activeObject,
                 Ole32.IOleCommandTarget commandTarget,
-                [In]
-                IOleInPlaceFrame frame,
-                [In]
-                IOleInPlaceUIWindow doc);
+                Ole32.IOleInPlaceFrame frame,
+                Ole32.IOleInPlaceUIWindow doc);
 
             [return: MarshalAs(UnmanagedType.I4)]
             [PreserveSig]
@@ -912,11 +733,9 @@ namespace System.Windows.Forms
                 [In, MarshalAs(UnmanagedType.Bool)]
                 bool fEnable);
 
-            [return: MarshalAs(UnmanagedType.I4)]
             [PreserveSig]
-            int OnDocWindowActivate(
-                [In, MarshalAs(UnmanagedType.Bool)]
-                bool fActivate);
+            HRESULT OnDocWindowActivate(
+                BOOL fActivate);
 
             [return: MarshalAs(UnmanagedType.I4)]
             [PreserveSig]
@@ -924,14 +743,11 @@ namespace System.Windows.Forms
                 [In, MarshalAs(UnmanagedType.Bool)]
                 bool fActivate);
 
-            [return: MarshalAs(UnmanagedType.I4)]
             [PreserveSig]
-            int ResizeBorder(
-                [In]
-                NativeMethods.COMRECT rect,
-                [In]
-                IOleInPlaceUIWindow doc,
-                bool fFrameWindow);
+            HRESULT ResizeBorder(
+                RECT* rect,
+                Ole32.IOleInPlaceUIWindow doc,
+                BOOL fFrameWindow);
 
             [PreserveSig]
             HRESULT TranslateAccelerator(
@@ -1221,75 +1037,6 @@ namespace System.Windows.Forms
             void SetPoint(int x, int y, int type, int extend);
             void ScrollIntoView(int value);
             object GetEmbeddedObject();
-        };
-
-        [ComImport]
-        [Guid("00000115-0000-0000-C000-000000000046")]
-        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public unsafe interface IOleInPlaceUIWindow
-        {
-            [PreserveSig]
-            HRESULT GetWindow(
-                IntPtr* phwnd);
-
-            [PreserveSig]
-            HRESULT ContextSensitiveHelp(
-                BOOL fEnterMode);
-
-            [PreserveSig]
-            int GetBorder(
-                   [Out]
-                      NativeMethods.COMRECT lprectBorder);
-
-            [PreserveSig]
-            int RequestBorderSpace(
-                   [In]
-                      NativeMethods.COMRECT pborderwidths);
-
-            [PreserveSig]
-            int SetBorderSpace(
-                   [In]
-                      NativeMethods.COMRECT pborderwidths);
-
-            void SetActiveObject(
-                   [In, MarshalAs(UnmanagedType.Interface)]
-                      IOleInPlaceActiveObject pActiveObject,
-                   [In, MarshalAs(UnmanagedType.LPWStr)]
-                      string pszObjName);
-        }
-
-        [ComImport]
-        [Guid("00000117-0000-0000-C000-000000000046")]
-        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public unsafe interface IOleInPlaceActiveObject
-        {
-            [PreserveSig]
-            HRESULT GetWindow(
-                IntPtr* phwnd);
-
-            [PreserveSig]
-            HRESULT ContextSensitiveHelp(
-                BOOL fEnterMode);
-
-            [PreserveSig]
-            HRESULT TranslateAccelerator(
-                User32.MSG* lpmsg);
-
-            void OnFrameWindowActivate(
-                    bool fActivate);
-
-            void OnDocWindowActivate(
-                    int fActivate);
-
-            void ResizeBorder(
-                   [In]
-                      NativeMethods.COMRECT prcBorder,
-                   [In]
-                      IOleInPlaceUIWindow pUIWindow,
-                    bool fFrameWindow);
-
-            void EnableModeless(
-                    int fEnable);
         }
 
         [ComImport]
@@ -1312,8 +1059,8 @@ namespace System.Windows.Forms
                       string szContainerObj);
 
             [PreserveSig]
-            int Close(
-                    int dwSaveOption);
+            HRESULT Close(
+                Ole32.OLECLOSE dwSaveOption);
 
             [PreserveSig]
             int SetMoniker(
@@ -1347,7 +1094,7 @@ namespace System.Windows.Forms
 
             [PreserveSig]
             HRESULT DoVerb(
-                int iVerb,
+                Ole32.OLEIVERB iVerb,
                 User32.MSG* lpmsg,
                 IOleClientSite pActiveSite,
                 int lindex,
@@ -1376,10 +1123,14 @@ namespace System.Windows.Forms
                      out string userType);
 
             [PreserveSig]
-            HRESULT SetExtent(uint dwDrawAspect, Size* pSizel);
+            HRESULT SetExtent(
+                Ole32.DVASPECT dwDrawAspect,
+                Size* pSizel);
 
             [PreserveSig]
-            HRESULT GetExtent(uint dwDrawAspect, Size* pSizel);
+            HRESULT GetExtent(
+                Ole32.DVASPECT dwDrawAspect,
+                Size* pSizel);
 
             [PreserveSig]
             int Advise(
@@ -1395,10 +1146,9 @@ namespace System.Windows.Forms
             int EnumAdvise(out IEnumSTATDATA e);
 
             [PreserveSig]
-            int GetMiscStatus(
-                   [In, MarshalAs(UnmanagedType.U4)]
-                     int dwAspect,
-                    out int misc);
+            HRESULT GetMiscStatus(
+                Ole32.DVASPECT dwAspect,
+                Ole32.OLEMISC* pdwStatus);
 
             [PreserveSig]
             int SetColorScheme(
@@ -1491,10 +1241,14 @@ namespace System.Windows.Forms
                      out string userType);
 
             [PreserveSig]
-            HRESULT SetExtent(uint dwDrawAspect, Size* pSizel);
+            HRESULT SetExtent(
+                Ole32.DVASPECT dwDrawAspect, 
+                Size* pSizel);
 
             [PreserveSig]
-            HRESULT GetExtent(uint dwDrawAspect, Size* pSizel);
+            HRESULT GetExtent(
+                Ole32.DVASPECT dwDrawAspect,
+                Size* pSizel);
 
             [PreserveSig]
             int Advise(
@@ -1511,10 +1265,9 @@ namespace System.Windows.Forms
             int EnumAdvise(out IEnumSTATDATA e);
 
             [PreserveSig]
-            int GetMiscStatus(
-                   [In, MarshalAs(UnmanagedType.U4)]
-                     int dwAspect,
-                    out int misc);
+            HRESULT GetMiscStatus(
+                Ole32.DVASPECT dwAspect,
+                Ole32.OLEMISC* pdwStatus);
 
             [PreserveSig]
             int SetColorScheme(
@@ -1560,8 +1313,7 @@ namespace System.Windows.Forms
         {
             [PreserveSig]
             int Draw(
-                [In, MarshalAs(UnmanagedType.U4)]
-                int dwDrawAspect,
+                Ole32.DVASPECT dwDrawAspect,
                 int lindex,
                 IntPtr pvAspect,
                 [In]
@@ -1578,8 +1330,7 @@ namespace System.Windows.Forms
 
             [PreserveSig]
             int GetColorSet(
-                [In, MarshalAs(UnmanagedType.U4)]
-                int dwDrawAspect,
+                Ole32.DVASPECT dwDrawAspect,
                 int lindex,
                 IntPtr pvAspect,
                 [In]
@@ -1590,8 +1341,7 @@ namespace System.Windows.Forms
 
             [PreserveSig]
             int Freeze(
-                [In, MarshalAs(UnmanagedType.U4)]
-                int dwDrawAspect,
+                Ole32.DVASPECT dwDrawAspect,
                 int lindex,
                 IntPtr pvAspect,
                 [Out]
@@ -1603,8 +1353,7 @@ namespace System.Windows.Forms
                 int dwFreeze);
 
             void SetAdvise(
-                [In, MarshalAs(UnmanagedType.U4)]
-                int aspects,
+                Ole32.DVASPECT aspects,
                 [In, MarshalAs(UnmanagedType.U4)]
                 int advf,
                 [In, MarshalAs(UnmanagedType.Interface)]
@@ -1613,7 +1362,7 @@ namespace System.Windows.Forms
             void GetAdvise(
                 // These can be NULL if caller doesn't want them
                 [In, Out, MarshalAs(UnmanagedType.LPArray)]
-                int[] paspects,
+                Ole32.DVASPECT[] paspects,
                 // These can be NULL if caller doesn't want them
                 [In, Out, MarshalAs(UnmanagedType.LPArray)]
                 int[] advf,
@@ -1628,8 +1377,7 @@ namespace System.Windows.Forms
         public unsafe interface IViewObject2 /* : IViewObject */
         {
             void Draw(
-                [In, MarshalAs(UnmanagedType.U4)]
-                int dwDrawAspect,
+                Ole32.DVASPECT dwDrawAspect,
                 int lindex,
                 IntPtr pvAspect,
                 [In]
@@ -1646,8 +1394,7 @@ namespace System.Windows.Forms
 
             [PreserveSig]
             int GetColorSet(
-                [In, MarshalAs(UnmanagedType.U4)]
-                int dwDrawAspect,
+                Ole32.DVASPECT dwDrawAspect,
                 int lindex,
                 IntPtr pvAspect,
                 [In]
@@ -1658,8 +1405,7 @@ namespace System.Windows.Forms
 
             [PreserveSig]
             int Freeze(
-                [In, MarshalAs(UnmanagedType.U4)]
-                int dwDrawAspect,
+                Ole32.DVASPECT dwDrawAspect,
                 int lindex,
                 IntPtr pvAspect,
                 [Out]
@@ -1671,8 +1417,7 @@ namespace System.Windows.Forms
                 int dwFreeze);
 
             void SetAdvise(
-                [In, MarshalAs(UnmanagedType.U4)]
-                int aspects,
+                Ole32.DVASPECT aspects,
                 [In, MarshalAs(UnmanagedType.U4)]
                 int advf,
                 [In, MarshalAs(UnmanagedType.Interface)]
@@ -1681,7 +1426,7 @@ namespace System.Windows.Forms
             void GetAdvise(
                 // These can be NULL if caller doesn't want them
                 [In, Out, MarshalAs(UnmanagedType.LPArray)]
-                int[] paspects,
+                Ole32.DVASPECT[] paspects,
                 // These can be NULL if caller doesn't want them
                 [In, Out, MarshalAs(UnmanagedType.LPArray)]
                 int[] advf,
@@ -1691,7 +1436,7 @@ namespace System.Windows.Forms
 
             [PreserveSig]
             HRESULT GetExtent(
-                uint dwDrawAspect,
+                Ole32.DVASPECT dwDrawAspect,
                 int lindex,
                 NativeMethods.tagDVTARGETDEVICE ptd,
                 Size *lpsizel);
@@ -1816,23 +1561,6 @@ namespace System.Windows.Forms
 
             void Clone(
                out IEnumOLEVERB ppenum);
-        }
-
-        [ComImport(), Guid("EAC04BC0-3791-11d2-BB95-0060977B464C"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IAutoComplete2
-        {
-            int Init(
-                    [In] HandleRef hwndEdit,          // hwnd of editbox or editbox deriviative.
-                    [In] IEnumString punkACL,          // Pointer to object containing string to complete from. (IEnumString *)
-                    [In] string pwszRegKeyPath,       //
-                    [In] string pwszQuickComplete
-                    );
-
-            void Enable([In] bool fEnable);            // Is it enabled?
-
-            int SetOptions([In] int dwFlag);
-
-            void GetOptions([Out] IntPtr pdwFlag);
         }
 
         public abstract class CharBuffer
@@ -1991,11 +1719,9 @@ namespace System.Windows.Forms
                       int[] pRefType);
 
             [PreserveSig]
-            int GetImplTypeFlags(
-                    [In, MarshalAs(UnmanagedType.U4)]
-                     int index,
-                    [Out, MarshalAs(UnmanagedType.LPArray)]
-                      int[] pImplTypeFlags);
+            HRESULT GetImplTypeFlags(
+                uint index,
+                Ole32.IMPLTYPEFLAG* pImplTypeFlags);
 
             [PreserveSig]
             int GetIDsOfNames(IntPtr rgszNames, int cNames, IntPtr pMemId);
@@ -2012,15 +1738,12 @@ namespace System.Windows.Forms
                 [Out, MarshalAs(UnmanagedType.LPArray)] string[] pBstrHelpFile);
 
             [PreserveSig]
-            int GetDllEntry(
-                     int memid,
-                      NativeMethods.tagINVOKEKIND invkind,
-                    [Out, MarshalAs(UnmanagedType.LPArray)]
-                      string[] pBstrDllName,
-                    [Out, MarshalAs(UnmanagedType.LPArray)]
-                      string[] pBstrName,
-                    [Out, MarshalAs(UnmanagedType.LPArray)]
-                      short[] pwOrdinal);
+            HRESULT GetDllEntry(
+                Ole32.DispatchID memid,
+                INVOKEKIND invkind,
+                [Out, MarshalAs(UnmanagedType.LPArray)] string[] pBstrDllName,
+                [Out, MarshalAs(UnmanagedType.LPArray)] string[] pBstrName,
+                short* pwOrdinal);
 
             [PreserveSig]
             HRESULT GetRefTypeInfo(
@@ -2110,14 +1833,12 @@ namespace System.Windows.Forms
             [MarshalAs(UnmanagedType.U4)/*leftover(offset=0, cbSize)*/]
             public int cbSize = Marshal.SizeOf<tagQACONTROL>();
 
-            [MarshalAs(UnmanagedType.U4)/*leftover(offset=4, dwMiscStatus)*/]
-            public int dwMiscStatus = 0;
+            public Ole32.OLEMISC dwMiscStatus = 0;
 
             [MarshalAs(UnmanagedType.U4)/*leftover(offset=8, dwViewStatus)*/]
             public int dwViewStatus = 0;
 
-            [MarshalAs(UnmanagedType.U4)/*leftover(offset=12, dwEventCookie)*/]
-            public int dwEventCookie = 0;
+            public uint dwEventCookie = 0;
 
             [MarshalAs(UnmanagedType.U4)/*leftover(offset=16, dwPropNotifyCookie)*/]
             public int dwPropNotifyCookie = 0;

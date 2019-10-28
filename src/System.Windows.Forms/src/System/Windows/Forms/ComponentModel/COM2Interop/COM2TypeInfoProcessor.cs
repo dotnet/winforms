@@ -290,7 +290,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
             try
             {
-                ref readonly NativeMethods.tagTYPEATTR typeAttr = ref UnsafeNativeMethods.PtrToRef<NativeMethods.tagTYPEATTR>(pTypeAttr);
+                ref readonly Ole32.TYPEATTR typeAttr = ref UnsafeNativeMethods.PtrToRef<Ole32.TYPEATTR>(pTypeAttr);
                 if (versions != null)
                 {
                     versions[0] = typeAttr.wMajorVerNum;
@@ -310,38 +310,38 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         ///  user defined, which and may be aliased into other type infos.  This function
         ///  will recusively walk the ITypeInfos to resolve the type to a clr Type.
         /// </summary>
-        private static Type GetValueTypeFromTypeDesc(in NativeMethods.tagTYPEDESC typeDesc, UnsafeNativeMethods.ITypeInfo typeInfo, object[] typeData)
+        private static Type GetValueTypeFromTypeDesc(in Ole32.TYPEDESC typeDesc, UnsafeNativeMethods.ITypeInfo typeInfo, object[] typeData)
         {
             IntPtr hreftype;
             HRESULT hr = HRESULT.S_OK;
 
-            switch ((NativeMethods.tagVT)typeDesc.vt)
+            switch (typeDesc.vt)
             {
                 default:
-                    return VTToType((NativeMethods.tagVT)typeDesc.vt);
+                    return VTToType(typeDesc.vt);
 
-                case NativeMethods.tagVT.VT_UNKNOWN:
-                case NativeMethods.tagVT.VT_DISPATCH:
+                case Ole32.VARENUM.UNKNOWN:
+                case Ole32.VARENUM.DISPATCH:
                     // get the guid
                     typeData[0] = GetGuidForTypeInfo(typeInfo, null);
 
                     // return the type
-                    return VTToType((NativeMethods.tagVT)typeDesc.vt);
+                    return VTToType(typeDesc.vt);
 
-                case NativeMethods.tagVT.VT_USERDEFINED:
+                case Ole32.VARENUM.USERDEFINED:
                     // we'll need to recurse into a user defined reference typeinfo
                     Debug.Assert(typeDesc.unionMember != IntPtr.Zero, "typeDesc doesn't contain an hreftype!");
                     hreftype = typeDesc.unionMember;
                     break;
 
-                case NativeMethods.tagVT.VT_PTR:
+                case Ole32.VARENUM.PTR:
                     // we'll need to recurse into a user defined reference typeinfo
                     Debug.Assert(typeDesc.unionMember != IntPtr.Zero, "typeDesc doesn't contain an refTypeDesc!");
-                    ref readonly NativeMethods.tagTYPEDESC refTypeDesc = ref UnsafeNativeMethods.PtrToRef<NativeMethods.tagTYPEDESC>(typeDesc.unionMember);
+                    ref readonly Ole32.TYPEDESC refTypeDesc = ref UnsafeNativeMethods.PtrToRef<Ole32.TYPEDESC>(typeDesc.unionMember);
 
-                    if (refTypeDesc.vt == (int)NativeMethods.tagVT.VT_VARIANT)
+                    if (refTypeDesc.vt == Ole32.VARENUM.VARIANT)
                     {
-                        return VTToType((NativeMethods.tagVT)refTypeDesc.vt);
+                        return VTToType(refTypeDesc.vt);
                     }
 
                     hreftype = refTypeDesc.unionMember;
@@ -374,7 +374,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
                     try
                     {
-                        ref readonly NativeMethods.tagTYPEATTR refTypeAttr = ref UnsafeNativeMethods.PtrToRef<NativeMethods.tagTYPEATTR>(pRefTypeAttr);
+                        ref readonly Ole32.TYPEATTR refTypeAttr = ref UnsafeNativeMethods.PtrToRef<Ole32.TYPEATTR>(pRefTypeAttr);
                         Guid g = refTypeAttr.guid;
 
                         // save the guid if we've got one here
@@ -383,20 +383,18 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                             typeData[0] = g;
                         }
 
-                        switch ((NativeMethods.tagTYPEKIND)refTypeAttr.typekind)
+                        switch (refTypeAttr.typekind)
                         {
-
-                            case NativeMethods.tagTYPEKIND.TKIND_ENUM:
+                            case Ole32.TYPEKIND.ENUM:
                                 return ProcessTypeInfoEnum(refTypeInfo);
-                            //return VTToType(tagVT.VT_I4);
-                            case NativeMethods.tagTYPEKIND.TKIND_ALIAS:
+                            case Ole32.TYPEKIND.ALIAS:
                                 // recurse here
-                                return GetValueTypeFromTypeDesc(refTypeAttr.Get_tdescAlias(), refTypeInfo, typeData);
-                            case NativeMethods.tagTYPEKIND.TKIND_DISPATCH:
-                                return VTToType(NativeMethods.tagVT.VT_DISPATCH);
-                            case NativeMethods.tagTYPEKIND.TKIND_INTERFACE:
-                            case NativeMethods.tagTYPEKIND.TKIND_COCLASS:
-                                return VTToType(NativeMethods.tagVT.VT_UNKNOWN);
+                                return GetValueTypeFromTypeDesc(refTypeAttr.tdescAlias, refTypeInfo, typeData);
+                            case Ole32.TYPEKIND.DISPATCH:
+                                return VTToType(Ole32.VARENUM.DISPATCH);
+                            case Ole32.TYPEKIND.INTERFACE:
+                            case Ole32.TYPEKIND.COCLASS:
+                                return VTToType(Ole32.VARENUM.UNKNOWN);
                             default:
                                 return null;
                         }
@@ -513,7 +511,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             return props;
         }
 
-        private static PropInfo ProcessDataCore(UnsafeNativeMethods.ITypeInfo typeInfo, IDictionary propInfoList, Ole32.DispatchID dispid, Ole32.DispatchID nameDispID, in NativeMethods.tagTYPEDESC typeDesc, int flags)
+        private static PropInfo ProcessDataCore(UnsafeNativeMethods.ITypeInfo typeInfo, IDictionary propInfoList, Ole32.DispatchID dispid, Ole32.DispatchID nameDispID, in Ole32.TYPEDESC typeDesc, Ole32.VARFLAGS flags)
         {
             string pPropName = null;
             string pPropDesc = null;
@@ -575,7 +573,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
                 if (pi.NonBrowsable)
                 {
-                    flags |= (int)NativeMethods.tagVARFLAGS.VARFLAG_FNONBROWSABLE;
+                    flags |= Ole32.VARFLAGS.FNONBROWSABLE;
                 }
 
                 if (pTypeData[0] != null)
@@ -585,13 +583,13 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
 
             // check the flags
-            if ((flags & (int)NativeMethods.tagVARFLAGS.VARFLAG_FREADONLY) != 0)
+            if ((flags & Ole32.VARFLAGS.FREADONLY) != 0)
             {
                 pi.ReadOnly = PropInfo.ReadOnlyTrue;
             }
 
-            if ((flags & (int)NativeMethods.tagVARFLAGS.VARFLAG_FHIDDEN) != 0 ||
-                (flags & (int)NativeMethods.tagVARFLAGS.VARFLAG_FNONBROWSABLE) != 0 ||
+            if ((flags & Ole32.VARFLAGS.FHIDDEN) != 0 ||
+                (flags & Ole32.VARFLAGS.FNONBROWSABLE) != 0 ||
                 pi.Name[0] == '_' ||
                 dispid == Ole32.DispatchID.HWND)
             {
@@ -599,13 +597,13 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 pi.NonBrowsable = true;
             }
 
-            if ((flags & (int)NativeMethods.tagVARFLAGS.VARFLAG_FUIDEFAULT) != 0)
+            if ((flags & Ole32.VARFLAGS.FUIDEFAULT) != 0)
             {
                 pi.IsDefault = true;
             }
 
-            if ((flags & (int)NativeMethods.tagVARFLAGS.VARFLAG_FBINDABLE) != 0 &&
-                (flags & (int)NativeMethods.tagVARFLAGS.VARFLAG_FDISPLAYBIND) != 0)
+            if ((flags & Ole32.VARFLAGS.FBINDABLE) != 0 &&
+                (flags & Ole32.VARFLAGS.FDISPLAYBIND) != 0)
             {
                 pi.Attributes.Add(new BindableAttribute(true));
             }
@@ -622,7 +620,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             return pi;
         }
 
-        private static void ProcessFunctions(UnsafeNativeMethods.ITypeInfo typeInfo, IDictionary propInfoList, Ole32.DispatchID dispidToGet, Ole32.DispatchID nameDispID, ref bool addAboutBox)
+        private unsafe static void ProcessFunctions(UnsafeNativeMethods.ITypeInfo typeInfo, IDictionary propInfoList, Ole32.DispatchID dispidToGet, Ole32.DispatchID nameDispID, ref bool addAboutBox)
         {
             IntPtr pTypeAttr = IntPtr.Zero;
             HRESULT hr = typeInfo.GetTypeAttr(ref pTypeAttr);
@@ -633,7 +631,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
             try
             {
-                ref readonly NativeMethods.tagTYPEATTR typeAttr = ref UnsafeNativeMethods.PtrToRef<NativeMethods.tagTYPEATTR>(pTypeAttr);
+                ref readonly Ole32.TYPEATTR typeAttr = ref UnsafeNativeMethods.PtrToRef<Ole32.TYPEATTR>(pTypeAttr);
 
                 bool isPropGet;
                 PropInfo pi;
@@ -650,8 +648,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
                     try
                     {
-                        ref readonly NativeMethods.tagFUNCDESC funcDesc = ref UnsafeNativeMethods.PtrToRef<NativeMethods.tagFUNCDESC>(pFuncDesc);
-                        if (funcDesc.invkind == (int)NativeMethods.tagINVOKEKIND.INVOKE_FUNC ||
+                        ref readonly Ole32.FUNCDESC funcDesc = ref UnsafeNativeMethods.PtrToRef<Ole32.FUNCDESC>(pFuncDesc);
+                        if (funcDesc.invkind == Ole32.INVOKEKIND.FUNC ||
                             (dispidToGet != Ole32.DispatchID.MEMBERID_NIL && funcDesc.memid != dispidToGet))
                         {
 
@@ -662,10 +660,10 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                             continue;
                         }
 
-                        NativeMethods.tagTYPEDESC typeDesc;
+                        Ole32.TYPEDESC typeDesc;
 
                         // is this a get or a put?
-                        isPropGet = (funcDesc.invkind == (int)NativeMethods.tagINVOKEKIND.INVOKE_PROPERTYGET);
+                        isPropGet = (funcDesc.invkind == Ole32.INVOKEKIND.PROPERTYGET);
 
                         if (isPropGet)
                         {
@@ -683,20 +681,19 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                         }
                         else
                         {
-                            Debug.Assert(funcDesc.lprgelemdescParam != IntPtr.Zero, "ELEMDESC param is null!");
-                            if (funcDesc.lprgelemdescParam == IntPtr.Zero || funcDesc.cParams != 1)
+                            Debug.Assert(funcDesc.lprgelemdescParam != null, "ELEMDESC param is null!");
+                            if (funcDesc.lprgelemdescParam == null || funcDesc.cParams != 1)
                             {
 
                                 continue;
                             }
 
-                            ref readonly NativeMethods.tagELEMDESC ed = ref UnsafeNativeMethods.PtrToRef<NativeMethods.tagELEMDESC>(funcDesc.lprgelemdescParam);
                             unsafe
                             {
-                                typeDesc = ed.tdesc;
+                                typeDesc = funcDesc.lprgelemdescParam->tdesc;
                             }
                         }
-                        pi = ProcessDataCore(typeInfo, propInfoList, funcDesc.memid, nameDispID, in typeDesc, funcDesc.wFuncFlags);
+                        pi = ProcessDataCore(typeInfo, propInfoList, funcDesc.memid, nameDispID, in typeDesc, (Ole32.VARFLAGS)funcDesc.wFuncFlags);
 
                         // if we got a setmethod, it's not readonly
                         if (pi != null && !isPropGet)
@@ -741,7 +738,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
                 try
                 {
-                    ref readonly NativeMethods.tagTYPEATTR typeAttr = ref UnsafeNativeMethods.PtrToRef<NativeMethods.tagTYPEATTR>(pTypeAttr);
+                    ref readonly Ole32.TYPEATTR typeAttr = ref UnsafeNativeMethods.PtrToRef<Ole32.TYPEATTR>(pTypeAttr);
 
                     int nItems = typeAttr.cVars;
 
@@ -772,10 +769,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
                         try
                         {
-                            ref readonly NativeMethods.tagVARDESC varDesc = ref UnsafeNativeMethods.PtrToRef<NativeMethods.tagVARDESC>(pVarDesc);
-
-                            if (varDesc.varkind != (int)NativeMethods.tagVARKIND.VAR_CONST ||
-                                varDesc.unionMember == IntPtr.Zero)
+                            ref readonly Ole32.VARDESC varDesc = ref UnsafeNativeMethods.PtrToRef<Ole32.VARDESC>(pVarDesc);
+                            if (varDesc.varkind != Ole32.VARKIND.CONST || varDesc.unionMember == IntPtr.Zero)
                             {
                                 continue;
                             }
@@ -899,7 +894,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
             try
             {
-                ref readonly NativeMethods.tagTYPEATTR typeAttr = ref UnsafeNativeMethods.PtrToRef<NativeMethods.tagTYPEATTR>(pTypeAttr);
+                ref readonly Ole32.TYPEATTR typeAttr = ref UnsafeNativeMethods.PtrToRef<Ole32.TYPEATTR>(pTypeAttr);
                 for (int i = 0; i < typeAttr.cVars; i++)
                 {
                     IntPtr pVarDesc = IntPtr.Zero;
@@ -912,9 +907,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
                     try
                     {
-                        ref readonly NativeMethods.tagVARDESC varDesc = ref UnsafeNativeMethods.PtrToRef<NativeMethods.tagVARDESC>(pVarDesc);
+                        ref readonly Ole32.VARDESC varDesc = ref UnsafeNativeMethods.PtrToRef<Ole32.VARDESC>(pVarDesc);
 
-                        if (varDesc.varkind == (int)NativeMethods.tagVARKIND.VAR_CONST ||
+                        if (varDesc.varkind == Ole32.VARKIND.CONST ||
                             (dispidToGet != Ole32.DispatchID.MEMBERID_NIL && varDesc.memid != dispidToGet))
                         {
                             continue;
@@ -944,97 +939,77 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
         }
 
-        private static Type VTToType(NativeMethods.tagVT vt)
+        private static Type VTToType(Ole32.VARENUM vt)
         {
             switch (vt)
             {
-                case NativeMethods.tagVT.VT_EMPTY:
-                case NativeMethods.tagVT.VT_NULL:
+                case Ole32.VARENUM.EMPTY:
+                case Ole32.VARENUM.NULL:
                     return null;
-                case NativeMethods.tagVT.VT_I1:
+                case Ole32.VARENUM.I1:
                     return typeof(sbyte);
-                case NativeMethods.tagVT.VT_UI1:
+                case Ole32.VARENUM.UI1:
                     return typeof(byte);
-
-                case NativeMethods.tagVT.VT_I2:
+                case Ole32.VARENUM.I2:
                     return typeof(short);
-                case NativeMethods.tagVT.VT_UI2:
+                case Ole32.VARENUM.UI2:
                     return typeof(ushort);
-
-                case NativeMethods.tagVT.VT_I4:
-                case NativeMethods.tagVT.VT_INT:
+                case Ole32.VARENUM.I4:
+                case Ole32.VARENUM.INT:
                     return typeof(int);
-
-                case NativeMethods.tagVT.VT_UI4:
-                case NativeMethods.tagVT.VT_UINT:
+                case Ole32.VARENUM.UI4:
+                case Ole32.VARENUM.UINT:
                     return typeof(uint);
-
-                case NativeMethods.tagVT.VT_I8:
+                case Ole32.VARENUM.I8:
                     return typeof(long);
-                case NativeMethods.tagVT.VT_UI8:
+                case Ole32.VARENUM.UI8:
                     return typeof(ulong);
-
-                case NativeMethods.tagVT.VT_R4:
+                case Ole32.VARENUM.R4:
                     return typeof(float);
-
-                case NativeMethods.tagVT.VT_R8:
+                case Ole32.VARENUM.R8:
                     return typeof(double);
-
-                case NativeMethods.tagVT.VT_CY:
+                case Ole32.VARENUM.CY:
                     return typeof(decimal);
-                case NativeMethods.tagVT.VT_DATE:
+                case Ole32.VARENUM.DATE:
                     return typeof(DateTime);
-                case NativeMethods.tagVT.VT_BSTR:
-                case NativeMethods.tagVT.VT_LPSTR:
-                case NativeMethods.tagVT.VT_LPWSTR:
+                case Ole32.VARENUM.BSTR:
+                case Ole32.VARENUM.LPSTR:
+                case Ole32.VARENUM.LPWSTR:
                     return typeof(string);
-
-                case NativeMethods.tagVT.VT_DISPATCH:
+                case Ole32.VARENUM.DISPATCH:
                     return typeof(UnsafeNativeMethods.IDispatch);
-                case NativeMethods.tagVT.VT_UNKNOWN:
+                case Ole32.VARENUM.UNKNOWN:
                     return typeof(object);
-
-                case NativeMethods.tagVT.VT_ERROR:
-                case NativeMethods.tagVT.VT_HRESULT:
+                case Ole32.VARENUM.ERROR:
+                case Ole32.VARENUM.HRESULT:
                     return typeof(int);
-
-                case NativeMethods.tagVT.VT_BOOL:
+                case Ole32.VARENUM.BOOL:
                     return typeof(bool);
-
-                case NativeMethods.tagVT.VT_VARIANT:
+                case Ole32.VARENUM.VARIANT:
                     return typeof(Com2Variant);
-                case NativeMethods.tagVT.VT_CLSID:
+                case Ole32.VARENUM.CLSID:
                     return typeof(Guid);
-
-                case NativeMethods.tagVT.VT_FILETIME:
+                case Ole32.VARENUM.FILETIME:
                     return typeof(FILETIME);
-
-                case NativeMethods.tagVT.VT_USERDEFINED:
+                case Ole32.VARENUM.USERDEFINED:
                     throw new ArgumentException(string.Format(SR.COM2UnhandledVT, "VT_USERDEFINED"));
-
-                /*case VT_ENUM:
-                    if (enumNames != null || null != pPropertyInfo.GetEnum()) {
-                        return typeof(IEnum);
-                    }
-                    goto default;*/
-                case NativeMethods.tagVT.VT_VOID:
-                case NativeMethods.tagVT.VT_PTR:
-                case NativeMethods.tagVT.VT_SAFEARRAY:
-                case NativeMethods.tagVT.VT_CARRAY:
-
-                case NativeMethods.tagVT.VT_RECORD:
-                case NativeMethods.tagVT.VT_BLOB:
-                case NativeMethods.tagVT.VT_STREAM:
-                case NativeMethods.tagVT.VT_STORAGE:
-                case NativeMethods.tagVT.VT_STREAMED_OBJECT:
-                case NativeMethods.tagVT.VT_STORED_OBJECT:
-                case NativeMethods.tagVT.VT_BLOB_OBJECT:
-                case NativeMethods.tagVT.VT_CF:
-                case NativeMethods.tagVT.VT_BSTR_BLOB:
-                case NativeMethods.tagVT.VT_VECTOR:
-                case NativeMethods.tagVT.VT_ARRAY:
-                case NativeMethods.tagVT.VT_BYREF:
-                case NativeMethods.tagVT.VT_RESERVED:
+                case Ole32.VARENUM.VOID:
+                case Ole32.VARENUM.PTR:
+                case Ole32.VARENUM.SAFEARRAY:
+                case Ole32.VARENUM.CARRAY:
+                case Ole32.VARENUM.RECORD:
+                case Ole32.VARENUM.BLOB:
+                case Ole32.VARENUM.STREAM:
+                case Ole32.VARENUM.STORAGE:
+                case Ole32.VARENUM.STREAMED_OBJECT:
+                case Ole32.VARENUM.STORED_OBJECT:
+                case Ole32.VARENUM.BLOB_OBJECT:
+                case Ole32.VARENUM.CF:
+                case Ole32.VARENUM.BSTR_BLOB:
+                case Ole32.VARENUM.VECTOR:
+                case Ole32.VARENUM.ARRAY:
+                case Ole32.VARENUM.BYREF:
+                case Ole32.VARENUM.RESERVED:
                 default:
                     throw new ArgumentException(string.Format(SR.COM2UnhandledVT, ((int)vt).ToString(CultureInfo.InvariantCulture)));
             }

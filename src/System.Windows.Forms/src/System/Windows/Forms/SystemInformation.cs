@@ -347,7 +347,7 @@ namespace System.Windows.Forms
         ///  Gets the maximum number of milliseconds allowed between mouse clicks for a
         ///  double-click.
         /// </summary>
-        public static int DoubleClickTime => SafeNativeMethods.GetDoubleClickTime();
+        public static int DoubleClickTime => unchecked((int)User32.GetDoubleClickTime());
 
         /// <summary>
         ///  Gets the dimensions in pixels, of the grid used to arrange icons in a large
@@ -619,15 +619,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets the computer name of the current system.
         /// </summary>
-        public static string ComputerName
-        {
-            get
-            {
-                var sb = new StringBuilder(256);
-                UnsafeNativeMethods.GetComputerName(sb, new int[] { sb.Capacity });
-                return sb.ToString();
-            }
-        }
+        public static string ComputerName => Environment.MachineName;
 
         /// <summary>
         ///  Gets the user's domain name.
@@ -669,15 +661,7 @@ namespace System.Windows.Forms
         ///  Gets the user name for the current thread, that is, the name of the user currently logged onto
         ///  the system.
         /// </summary>
-        public static string UserName
-        {
-            get
-            {
-                var sb = new StringBuilder(256);
-                UnsafeNativeMethods.GetUserName(sb, new int[] { sb.Capacity });
-                return sb.ToString();
-            }
-        }
+        public static string UserName => Environment.UserName;
 
         private static void EnsureSystemEvents()
         {
@@ -930,15 +914,14 @@ namespace System.Windows.Forms
             get
             {
                 ScreenOrientation so = ScreenOrientation.Angle0;
-                NativeMethods.DEVMODE dm = new NativeMethods.DEVMODE
+                var dm = new User32.DEVMODEW
                 {
-                    dmSize = (short)Marshal.SizeOf<NativeMethods.DEVMODE>(),
-                    dmDriverExtra = 0
+                    dmSize = (ushort)Marshal.SizeOf<User32.DEVMODEW>(),
                 };
                 try
                 {
-                    SafeNativeMethods.EnumDisplaySettings(null, -1 /*ENUM_CURRENT_SETTINGS*/, ref dm);
-                    if ((dm.dmFields & NativeMethods.DM_DISPLAYORIENTATION) > 0)
+                    User32.EnumDisplaySettingsW(null, User32.ENUM.CURRENT_SETTINGS, ref dm);
+                    if ((dm.dmFields & User32.DM.DISPLAYORIENTATION) > 0)
                     {
                         so = dm.dmDisplayOrientation;
                     }
@@ -1007,14 +990,13 @@ namespace System.Windows.Forms
             {
                 // Try to open the input desktop. If it fails with access denied assume
                 // the app is running on a secure desktop.
-                IntPtr hDsk = SafeNativeMethods.OpenInputDesktop(0, false, NativeMethods.DESKTOP_SWITCHDESKTOP);
+                IntPtr hDsk = User32.OpenInputDesktop(0, BOOL.FALSE, User32.DESKTOP.SWITCHDESKTOP);
                 if (hDsk == IntPtr.Zero)
                 {
-                    int error = Marshal.GetLastWin32Error();
-                    return error == NativeMethods.ERROR_ACCESS_DENIED;
+                    return Marshal.GetLastWin32Error() == ERROR.ACCESS_DENIED;
                 }
 
-                SafeNativeMethods.CloseDesktop(hDsk);
+                User32.CloseDesktop(hDsk);
             }
 
             return false;

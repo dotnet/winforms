@@ -250,27 +250,27 @@ namespace System.Windows.Forms
 
             internal override bool IsIAccessibleExSupported() => true;
 
-            internal override object GetPropertyValue(int propertyID)
+            internal override object GetPropertyValue(UiaCore.UIA propertyID)
             {
                 switch (propertyID)
                 {
-                    case NativeMethods.UIA_NamePropertyId:
+                    case UiaCore.UIA.NamePropertyId:
                         return Name;
-                    case NativeMethods.UIA_HasKeyboardFocusPropertyId:
+                    case UiaCore.UIA.HasKeyboardFocusPropertyId:
                         return false; // Only inner cell should be announced as focused by Narrator but not entire DGV.
-                    case NativeMethods.UIA_IsKeyboardFocusablePropertyId:
+                    case UiaCore.UIA.IsKeyboardFocusablePropertyId:
                         return owner.CanFocus;
-                    case NativeMethods.UIA_IsEnabledPropertyId:
+                    case UiaCore.UIA.IsEnabledPropertyId:
                         return owner.Enabled;
-                    case NativeMethods.UIA_IsControlElementPropertyId:
+                    case UiaCore.UIA.IsControlElementPropertyId:
                         return true;
-                    case NativeMethods.UIA_IsTablePatternAvailablePropertyId:
-                        return IsPatternSupported(NativeMethods.UIA_TablePatternId);
-                    case NativeMethods.UIA_IsGridPatternAvailablePropertyId:
-                        return IsPatternSupported(NativeMethods.UIA_GridPatternId);
-                    case NativeMethods.UIA_ControlTypePropertyId:
-                        return NativeMethods.UIA_TableControlTypeId;
-                    case NativeMethods.UIA_ItemStatusPropertyId:
+                    case UiaCore.UIA.IsTablePatternAvailablePropertyId:
+                        return IsPatternSupported(UiaCore.UIA.TablePatternId);
+                    case UiaCore.UIA.IsGridPatternAvailablePropertyId:
+                        return IsPatternSupported(UiaCore.UIA.GridPatternId);
+                    case UiaCore.UIA.ControlTypePropertyId:
+                        return UiaCore.UIA.TableControlTypeId;
+                    case UiaCore.UIA.ItemStatusPropertyId:
                         // Whether the owner DataGridView can be sorted by some column.
                         // If so, provide not-sorted/sorted-by item status.
                         bool canSort = false;
@@ -302,10 +302,10 @@ namespace System.Windows.Forms
                 return base.GetPropertyValue(propertyID);
             }
 
-            internal override bool IsPatternSupported(int patternId)
+            internal override bool IsPatternSupported(UiaCore.UIA patternId)
             {
-                if (patternId == NativeMethods.UIA_TablePatternId ||
-                    patternId == NativeMethods.UIA_GridPatternId)
+                if (patternId == UiaCore.UIA.TablePatternId ||
+                    patternId == UiaCore.UIA.GridPatternId)
                 {
                     return true;
                 }
@@ -513,39 +513,39 @@ namespace System.Windows.Forms
 
             #region IRawElementProviderSimple Implementation
 
-            internal override bool IsPatternSupported(int patternId)
+            internal override bool IsPatternSupported(UiaCore.UIA patternId)
             {
-                return patternId.Equals(NativeMethods.UIA_LegacyIAccessiblePatternId);
+                return patternId.Equals(UiaCore.UIA.LegacyIAccessiblePatternId);
             }
 
-            internal override object GetPropertyValue(int propertyId)
+            internal override object GetPropertyValue(UiaCore.UIA propertyId)
             {
                 switch (propertyId)
                 {
-                    case NativeMethods.UIA_NamePropertyId:
+                    case UiaCore.UIA.NamePropertyId:
                         return SR.DataGridView_AccEditingPanelAccName;
-                    case NativeMethods.UIA_ControlTypePropertyId:
-                        return NativeMethods.UIA_PaneControlTypeId;
-                    case NativeMethods.UIA_IsKeyboardFocusablePropertyId:
+                    case UiaCore.UIA.ControlTypePropertyId:
+                        return UiaCore.UIA.PaneControlTypeId;
+                    case UiaCore.UIA.IsKeyboardFocusablePropertyId:
                         return true;
-                    case NativeMethods.UIA_HasKeyboardFocusPropertyId:
+                    case UiaCore.UIA.HasKeyboardFocusPropertyId:
                         return dataGridView.CurrentCell != null;
-                    case NativeMethods.UIA_IsEnabledPropertyId:
+                    case UiaCore.UIA.IsEnabledPropertyId:
                         return dataGridView.Enabled;
-                    case NativeMethods.UIA_IsOffscreenPropertyId:
+                    case UiaCore.UIA.IsOffscreenPropertyId:
                         return false;
-                    case NativeMethods.UIA_IsControlElementPropertyId:
-                    case NativeMethods.UIA_IsContentElementPropertyId:
+                    case UiaCore.UIA.IsControlElementPropertyId:
+                    case UiaCore.UIA.IsContentElementPropertyId:
                         return true;
-                    case NativeMethods.UIA_IsPasswordPropertyId:
+                    case UiaCore.UIA.IsPasswordPropertyId:
                         return false;
-                    case NativeMethods.UIA_AccessKeyPropertyId:
+                    case UiaCore.UIA.AccessKeyPropertyId:
                         return panel.AccessibilityObject.KeyboardShortcut;
-                    case NativeMethods.UIA_HelpTextPropertyId:
+                    case UiaCore.UIA.HelpTextPropertyId:
                         return string.Empty;
-                    case NativeMethods.UIA_IsLegacyIAccessiblePatternAvailablePropertyId:
+                    case UiaCore.UIA.IsLegacyIAccessiblePatternAvailablePropertyId:
                         return true;
-                    case NativeMethods.UIA_ProviderDescriptionPropertyId:
+                    case UiaCore.UIA.ProviderDescriptionPropertyId:
                         return SR.DataGridViewEditingPanelUiaProviderDescription;
                 }
 

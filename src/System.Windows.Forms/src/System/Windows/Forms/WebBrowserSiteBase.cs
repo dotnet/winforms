@@ -184,10 +184,10 @@ namespace System.Windows.Forms
             return NativeMethods.E_NOTIMPL;
         }
 
-        int UnsafeNativeMethods.IOleClientSite.GetContainer(out UnsafeNativeMethods.IOleContainer container)
+        HRESULT UnsafeNativeMethods.IOleClientSite.GetContainer(out Ole32.IOleContainer container)
         {
             container = Host.GetParentContainer();
-            return NativeMethods.S_OK;
+            return HRESULT.S_OK;
         }
 
         unsafe int UnsafeNativeMethods.IOleClientSite.ShowObject()
@@ -242,9 +242,9 @@ namespace System.Windows.Forms
             return HRESULT.E_NOTIMPL;
         }
 
-        int UnsafeNativeMethods.IOleInPlaceSite.CanInPlaceActivate()
+        HRESULT UnsafeNativeMethods.IOleInPlaceSite.CanInPlaceActivate()
         {
-            return NativeMethods.S_OK;
+            return HRESULT.S_OK;
         }
 
         unsafe int UnsafeNativeMethods.IOleInPlaceSite.OnInPlaceActivate()
@@ -263,11 +263,11 @@ namespace System.Windows.Forms
         }
 
         unsafe HRESULT UnsafeNativeMethods.IOleInPlaceSite.GetWindowContext(
-            out UnsafeNativeMethods.IOleInPlaceFrame ppFrame,
-            out UnsafeNativeMethods.IOleInPlaceUIWindow ppDoc,
+            out Ole32.IOleInPlaceFrame ppFrame,
+            out Ole32.IOleInPlaceUIWindow ppDoc,
             RECT* lprcPosRect,
             RECT* lprcClipRect,
-            NativeMethods.tagOIFI lpFrameInfo)
+            Ole32.OLEINPLACEFRAMEINFO* lpFrameInfo)
         {
             ppDoc = null;
             ppFrame = Host.GetParentContainer();
@@ -281,11 +281,11 @@ namespace System.Windows.Forms
             *lprcClipRect = WebBrowserHelper.GetClipRect();
             if (lpFrameInfo != null)
             {
-                lpFrameInfo.cb = Marshal.SizeOf<NativeMethods.tagOIFI>();
-                lpFrameInfo.fMDIApp = false;
-                lpFrameInfo.hAccel = IntPtr.Zero;
-                lpFrameInfo.cAccelEntries = 0;
-                lpFrameInfo.hwndFrame = (Host.ParentInternal == null) ? IntPtr.Zero : Host.ParentInternal.Handle;
+                lpFrameInfo->cb = (uint)Marshal.SizeOf<Ole32.OLEINPLACEFRAMEINFO>();
+                lpFrameInfo->fMDIApp = BOOL.FALSE;
+                lpFrameInfo->hAccel = IntPtr.Zero;
+                lpFrameInfo->cAccelEntries = 0;
+                lpFrameInfo->hwndFrame = (Host.ParentInternal == null) ? IntPtr.Zero : Host.ParentInternal.Handle;
             }
 
             return HRESULT.S_OK;

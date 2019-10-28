@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using static Interop;
+
 namespace System.Windows.Forms
 {
     /// <summary>
@@ -14,27 +16,27 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Starts at the lower-left corner of the screen, which is the default position.
         /// </summary>
-        BottomLeft = NativeMethods.ARW_BOTTOMLEFT,
+        BottomLeft = User32.ARW.BOTTOMLEFT,
 
         /// <summary>
         ///  Starts at the lower-right corner of the screen.
         /// </summary>
-        BottomRight = NativeMethods.ARW_BOTTOMRIGHT,
+        BottomRight = User32.ARW.BOTTOMRIGHT,
 
         /// <summary>
         ///  Hides minimized windows by moving them off the visible area of the
         ///  screen.
         /// </summary>
-        Hide = NativeMethods.ARW_HIDE,
+        Hide = User32.ARW.HIDE,
 
         /// <summary>
         ///  Starts at the upper-left corner of the screen.
         /// </summary>
-        TopLeft = NativeMethods.ARW_TOPLEFT,
+        TopLeft = User32.ARW.TOPLEFT,
 
         /// <summary>
         ///  Starts at the upper-right corner of the screen.
         /// </summary>
-        TopRight = NativeMethods.ARW_TOPRIGHT,
+        TopRight = User32.ARW.TOPRIGHT,
     }
 }

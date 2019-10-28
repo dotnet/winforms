@@ -396,20 +396,20 @@ namespace System.Windows.Forms
 
                 if (Wrappable)
                 {
-                    cp.Style |= NativeMethods.TBSTYLE_WRAPPABLE;
+                    cp.Style |= (int)ComCtl32.TBSTYLE.WRAPABLE;
                 }
 
                 if (ShowToolTips && !DesignMode)
                 {
-                    cp.Style |= NativeMethods.TBSTYLE_TOOLTIPS;
+                    cp.Style |= (int)ComCtl32.TBSTYLE.TOOLTIPS;
                 }
 
-                cp.ExStyle &= (~NativeMethods.WS_EX_CLIENTEDGE);
+                cp.ExStyle &= ~(int)User32.WS_EX.CLIENTEDGE;
                 cp.Style &= (~NativeMethods.WS_BORDER);
                 switch (borderStyle)
                 {
                     case BorderStyle.Fixed3D:
-                        cp.ExStyle |= NativeMethods.WS_EX_CLIENTEDGE;
+                        cp.ExStyle |= (int)User32.WS_EX.CLIENTEDGE;
                         break;
                     case BorderStyle.FixedSingle:
                         cp.Style |= NativeMethods.WS_BORDER;
@@ -421,7 +421,7 @@ namespace System.Windows.Forms
                     case ToolBarAppearance.Normal:
                         break;
                     case ToolBarAppearance.Flat:
-                        cp.Style |= NativeMethods.TBSTYLE_FLAT;
+                        cp.Style |= (int)ComCtl32.TBSTYLE.FLAT;
                         break;
                 }
 
@@ -430,7 +430,7 @@ namespace System.Windows.Forms
                     case ToolBarTextAlign.Underneath:
                         break;
                     case ToolBarTextAlign.Right:
-                        cp.Style |= NativeMethods.TBSTYLE_LIST;
+                        cp.Style |= (int)ComCtl32.TBSTYLE.LIST;
                         break;
                 }
 
@@ -1139,11 +1139,10 @@ namespace System.Windows.Forms
 
                 for (int x = 0; x < buttonCount; x++)
                 {
-
-                    NativeMethods.TBBUTTONINFO tbbi = new NativeMethods.TBBUTTONINFO
+                    var tbbi = new ComCtl32.TBBUTTONINFOW
                     {
-                        cbSize = Marshal.SizeOf<NativeMethods.TBBUTTONINFO>(),
-                        cx = buttons[x].Width
+                        cbSize = (uint)Marshal.SizeOf<ComCtl32.TBBUTTONINFOW>(),
+                        cx = (ushort)buttons[x].Width
                     };
 
                     if (tbbi.cx > maxWidth)
@@ -1151,8 +1150,8 @@ namespace System.Windows.Forms
                         maxWidth = tbbi.cx;
                     }
 
-                    tbbi.dwMask = NativeMethods.TBIF_SIZE;
-                    UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TB_SETBUTTONINFO, x, ref tbbi);
+                    tbbi.dwMask = ComCtl32.TBIF.SIZE;
+                    User32.SendMessageW(this, (User32.WindowMessage)ComCtl32.TB.SETBUTTONINFOW, (IntPtr)x, ref tbbi);
                 }
             }
         }
@@ -1210,8 +1209,8 @@ namespace System.Windows.Forms
             Insert(index, value);
             if (IsHandleCreated)
             {
-                NativeMethods.TBBUTTON tbbutton = value.GetTBBUTTON(index);
-                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TB_INSERTBUTTON, index, ref tbbutton);
+                ComCtl32.TBBUTTON tbbutton = value.GetTBBUTTON(index);
+                User32.SendMessageW(this, (User32.WindowMessage)ComCtl32.TB.INSERTBUTTONW, (IntPtr)index, ref tbbutton);
             }
             UpdateButtons();
         }
@@ -1248,12 +1247,12 @@ namespace System.Windows.Forms
 
             if (IsHandleCreated)
             {
-                NativeMethods.TBBUTTONINFO tbbi = value.GetTBBUTTONINFO(updateText, index);
-                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TB_SETBUTTONINFO, index, ref tbbi);
+                ComCtl32.TBBUTTONINFOW tbbi = value.GetTBBUTTONINFO(updateText, index);
+                User32.SendMessageW(this, (User32.WindowMessage)ComCtl32.TB.SETBUTTONINFOW, (IntPtr)index, ref tbbi);
 
-                if (tbbi.pszText != IntPtr.Zero)
+                if (tbbi.pszText != null)
                 {
-                    Marshal.FreeHGlobal(tbbi.pszText);
+                    Marshal.FreeHGlobal((IntPtr)tbbi.pszText);
                 }
 
                 if (recreate)
@@ -1302,13 +1301,13 @@ namespace System.Windows.Forms
 
             // we have to set the button struct size, because they don't.
             //
-            SendMessage(NativeMethods.TB_BUTTONSTRUCTSIZE, Marshal.SizeOf<NativeMethods.TBBUTTON>(), 0);
+            SendMessage(NativeMethods.TB_BUTTONSTRUCTSIZE, Marshal.SizeOf<ComCtl32.TBBUTTON>(), 0);
 
             // set up some extra goo
             //
             if (DropDownArrows)
             {
-                SendMessage(NativeMethods.TB_SETEXTENDEDSTYLE, 0, NativeMethods.TBSTYLE_EX_DRAWDDARROWS);
+                SendMessage(NativeMethods.TB_SETEXTENDEDSTYLE, 0, (int)ComCtl32.TBSTYLE.EX_DRAWDDARROWS);
             }
 
             // if we have an imagelist, add it in now.
@@ -1396,15 +1395,13 @@ namespace System.Windows.Forms
                     }
 
                     // insert the buttons and set their parent pointers
-                    //
-                    int cb = Marshal.SizeOf<NativeMethods.TBBUTTON>();
+                    int cb = Marshal.SizeOf<ComCtl32.TBBUTTON>();
                     int count = buttonCount;
                     ptbbuttons = Marshal.AllocHGlobal(checked(cb * count));
 
                     for (int x = 0; x < count; x++)
                     {
-
-                        NativeMethods.TBBUTTON tbbutton = buttons[x].GetTBBUTTON(x);
+                        ComCtl32.TBBUTTON tbbutton = buttons[x].GetTBBUTTON(x);
                         Marshal.StructureToPtr(tbbutton, (IntPtr)(checked((long)ptbbuttons + (cb * x))), true);
                         buttons[x].parent = this;
                     }
@@ -1571,11 +1568,11 @@ namespace System.Windows.Forms
         ///  The button clicked was a dropdown button.  If it has a menu specified,
         ///  show it now.  Otherwise, fire an onButtonDropDown event.
         /// </summary>
-        private void WmNotifyDropDown(ref Message m)
+        private unsafe void WmNotifyDropDown(ref Message m)
         {
-            NativeMethods.NMTOOLBAR nmTB = (NativeMethods.NMTOOLBAR)m.GetLParam(typeof(NativeMethods.NMTOOLBAR));
+            ComCtl32.NMTOOLBARW* nmTB = (ComCtl32.NMTOOLBARW*)m.LParam;
 
-            ToolBarButton tbb = (ToolBarButton)buttons[nmTB.iItem];
+            ToolBarButton tbb = (ToolBarButton)buttons[nmTB->iItem];
             if (tbb == null)
             {
                 throw new InvalidOperationException(SR.ToolBarButtonNotFound);
@@ -1589,7 +1586,7 @@ namespace System.Windows.Forms
                 RECT rc = new RECT();
                 NativeMethods.TPMPARAMS tpm = new NativeMethods.TPMPARAMS();
 
-                SendMessage(NativeMethods.TB_GETRECT, nmTB.iItem, ref rc);
+                SendMessage(NativeMethods.TB_GETRECT, nmTB->iItem, ref rc);
 
                 if ((menu.GetType()).IsAssignableFrom(typeof(ContextMenu)))
                 {
@@ -1603,7 +1600,7 @@ namespace System.Windows.Forms
                         main.ProcessInitMenuPopup(menu.Handle);
                     }
 
-                    UnsafeNativeMethods.MapWindowPoints(new HandleRef(nmTB.hdr, nmTB.hdr.hwndFrom), NativeMethods.NullHandleRef, ref rc, 2);
+                    UnsafeNativeMethods.MapWindowPoints(new HandleRef(nmTB->hdr, nmTB->hdr.hwndFrom), NativeMethods.NullHandleRef, ref rc, 2);
 
                     tpm.rcExclude_left = rc.left;
                     tpm.rcExclude_top = rc.top;
@@ -1651,45 +1648,45 @@ namespace System.Windows.Forms
         // Track the currently hot item since the user might be using the tab and
         // arrow keys to navigate the toolbar and if that's the case, we'll need to know where to re-
         // position the tooltip window when the underlying toolbar control attempts to display it.
-        private void WmNotifyHotItemChange(ref Message m)
+        private unsafe void WmNotifyHotItemChange(ref Message m)
         {
             // Should we set the hot item?
-            NativeMethods.NMTBHOTITEM nmTbHotItem = (NativeMethods.NMTBHOTITEM)m.GetLParam(typeof(NativeMethods.NMTBHOTITEM));
-            if (NativeMethods.HICF_ENTERING == (nmTbHotItem.dwFlags & NativeMethods.HICF_ENTERING))
+            ComCtl32.NMTBHOTITEM* nmTbHotItem = (ComCtl32.NMTBHOTITEM*)m.LParam;
+            if ((nmTbHotItem->dwFlags & ComCtl32.HICF.ENTERING) == ComCtl32.HICF.ENTERING)
             {
-                hotItem = nmTbHotItem.idNew;
+                hotItem = nmTbHotItem->idNew;
             }
-            else if (NativeMethods.HICF_LEAVING == (nmTbHotItem.dwFlags & NativeMethods.HICF_LEAVING))
+            else if ((nmTbHotItem->dwFlags & ComCtl32.HICF.LEAVING) == ComCtl32.HICF.LEAVING)
             {
                 hotItem = -1;
             }
-            else if (NativeMethods.HICF_MOUSE == (nmTbHotItem.dwFlags & NativeMethods.HICF_MOUSE))
+            else if ((nmTbHotItem->dwFlags & ComCtl32.HICF.MOUSE) == ComCtl32.HICF.MOUSE)
             {
-                hotItem = nmTbHotItem.idNew;
+                hotItem = nmTbHotItem->idNew;
             }
-            else if (NativeMethods.HICF_ARROWKEYS == (nmTbHotItem.dwFlags & NativeMethods.HICF_ARROWKEYS))
+            else if ((nmTbHotItem->dwFlags & ComCtl32.HICF.ARROWKEYS) == ComCtl32.HICF.ARROWKEYS)
             {
-                hotItem = nmTbHotItem.idNew;
+                hotItem = nmTbHotItem->idNew;
             }
-            else if (NativeMethods.HICF_ACCELERATOR == (nmTbHotItem.dwFlags & NativeMethods.HICF_ACCELERATOR))
+            else if ((nmTbHotItem->dwFlags & ComCtl32.HICF.ACCELERATOR) == ComCtl32.HICF.ACCELERATOR)
             {
-                hotItem = nmTbHotItem.idNew;
+                hotItem = nmTbHotItem->idNew;
             }
-            else if (NativeMethods.HICF_DUPACCEL == (nmTbHotItem.dwFlags & NativeMethods.HICF_DUPACCEL))
+            else if ((nmTbHotItem->dwFlags & ComCtl32.HICF.DUPACCEL) == ComCtl32.HICF.DUPACCEL)
             {
-                hotItem = nmTbHotItem.idNew;
+                hotItem = nmTbHotItem->idNew;
             }
-            else if (NativeMethods.HICF_RESELECT == (nmTbHotItem.dwFlags & NativeMethods.HICF_RESELECT))
+            else if ((nmTbHotItem->dwFlags & ComCtl32.HICF.RESELECT) == ComCtl32.HICF.RESELECT)
             {
-                hotItem = nmTbHotItem.idNew;
+                hotItem = nmTbHotItem->idNew;
             }
-            else if (NativeMethods.HICF_LMOUSE == (nmTbHotItem.dwFlags & NativeMethods.HICF_LMOUSE))
+            else if ((nmTbHotItem->dwFlags & ComCtl32.HICF.LMOUSE) == ComCtl32.HICF.LMOUSE)
             {
-                hotItem = nmTbHotItem.idNew;
+                hotItem = nmTbHotItem->idNew;
             }
-            else if (NativeMethods.HICF_TOGGLEDROPDOWN == (nmTbHotItem.dwFlags & NativeMethods.HICF_TOGGLEDROPDOWN))
+            else if ((nmTbHotItem->dwFlags & ComCtl32.HICF.TOGGLEDROPDOWN) == ComCtl32.HICF.TOGGLEDROPDOWN)
             {
-                hotItem = nmTbHotItem.idNew;
+                hotItem = nmTbHotItem->idNew;
             }
         }
 

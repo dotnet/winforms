@@ -297,17 +297,17 @@ namespace System.Windows.Forms.PropertyGridInternal
         /// </summary>
         /// <param name="propertyId">Identifier indicating the property to return</param>
         /// <returns>Returns a ValInfo indicating whether the element supports this property, or has no value for it.</returns>
-        internal override object GetPropertyValue(int propertyID)
+        internal override object GetPropertyValue(UiaCore.UIA propertyID)
         {
             switch (propertyID)
             {
-                case NativeMethods.UIA_ControlTypePropertyId:
-                    return NativeMethods.UIA_ButtonControlTypeId;
-                case NativeMethods.UIA_NamePropertyId:
+                case UiaCore.UIA.ControlTypePropertyId:
+                    return UiaCore.UIA.ButtonControlTypeId;
+                case UiaCore.UIA.NamePropertyId:
                     return Name;
-                case NativeMethods.UIA_IsLegacyIAccessiblePatternAvailablePropertyId:
+                case UiaCore.UIA.IsLegacyIAccessiblePatternAvailablePropertyId:
                     return true;
-                case NativeMethods.UIA_LegacyIAccessibleRolePropertyId:
+                case UiaCore.UIA.LegacyIAccessibleRolePropertyId:
                     return Role;
                 default:
                     return base.GetPropertyValue(propertyID);
@@ -319,9 +319,9 @@ namespace System.Windows.Forms.PropertyGridInternal
         /// </summary>
         /// <param name="patternId">The pattern ID.</param>
         /// <returns>True if specified pattern is supported, otherwise false.</returns>
-        internal override bool IsPatternSupported(int patternId)
+        internal override bool IsPatternSupported(UiaCore.UIA patternId)
         {
-            if (patternId == NativeMethods.UIA_LegacyIAccessiblePatternId)
+            if (patternId == UiaCore.UIA.LegacyIAccessiblePatternId)
             {
                 return true;
             }
@@ -348,7 +348,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         /// </summary>
         internal override void SetFocus()
         {
-            RaiseAutomationEvent(NativeMethods.UIA_AutomationFocusChangedEventId);
+            RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
 
             base.SetFocus();
         }

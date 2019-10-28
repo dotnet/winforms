@@ -5,6 +5,7 @@
 using System.ComponentModel;
 using System.Text;
 using System.Runtime.InteropServices;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -179,14 +180,14 @@ namespace System.Windows.Forms
                 }
 
                 // Need to add this format string
-                int formatId = SafeNativeMethods.RegisterClipboardFormat(format);
+                uint formatId = User32.RegisterClipboardFormatW(format);
                 if (formatId == 0)
                 {
                     throw new Win32Exception(Marshal.GetLastWin32Error(), SR.RegisterCFFailed);
                 }
 
                 EnsureFormatSpace(1);
-                s_formatList[s_formatCount] = new Format(format, formatId);
+                s_formatList[s_formatCount] = new Format(format, (int)formatId);
                 return s_formatList[s_formatCount++];
             }
         }
@@ -214,22 +215,16 @@ namespace System.Windows.Forms
                     }
                 }
 
-                // The max length of the name of clipboard formats is equal to the max length
-                // of a Win32 Atom of 255 chars. An additional null terminator character is added,
-                // giving a required capacity of 256 chars.
-                var nameBuilder = new StringBuilder(256);
-
-                // This can happen if windows adds a standard format that we don't know about,
-                // so we should play it safe.
-                if (SafeNativeMethods.GetClipboardFormatName(clampedId, nameBuilder, nameBuilder.Capacity) == 0)
+                string name = User32.GetClipboardFormatNameW(clampedId);
+                if (name == null)
                 {
-                    nameBuilder.Length = 0;
-                    nameBuilder.Append("Format").Append(clampedId);
+                    // This can happen if windows adds a standard format that we don't know about,
+                    // so we should play it safe.
+                    name = "Format" + clampedId;
                 }
 
                 EnsureFormatSpace(1);
-                s_formatList[s_formatCount] = new Format(nameBuilder.ToString(), clampedId);
-
+                s_formatList[s_formatCount] = new Format(name, clampedId);
                 return s_formatList[s_formatCount++];
             }
         }
@@ -263,23 +258,23 @@ namespace System.Windows.Forms
             {
                 s_formatList = new Format[]
                 {
-                    //         Text name        Win32 format ID      Data stored as a Win32 handle?
-                    new Format(UnicodeText,  NativeMethods.CF_UNICODETEXT),
-                    new Format(Text,         NativeMethods.CF_TEXT),
-                    new Format(Bitmap,       NativeMethods.CF_BITMAP),
-                    new Format(MetafilePict, NativeMethods.CF_METAFILEPICT),
-                    new Format(EnhancedMetafile,  NativeMethods.CF_ENHMETAFILE),
-                    new Format(Dif,          NativeMethods.CF_DIF),
-                    new Format(Tiff,         NativeMethods.CF_TIFF),
-                    new Format(OemText,      NativeMethods.CF_OEMTEXT),
-                    new Format(Dib,          NativeMethods.CF_DIB),
-                    new Format(Palette,      NativeMethods.CF_PALETTE),
-                    new Format(PenData,      NativeMethods.CF_PENDATA),
-                    new Format(Riff,         NativeMethods.CF_RIFF),
-                    new Format(WaveAudio,    NativeMethods.CF_WAVE),
-                    new Format(SymbolicLink, NativeMethods.CF_SYLK),
-                    new Format(FileDrop,     NativeMethods.CF_HDROP),
-                    new Format(Locale,       NativeMethods.CF_LOCALE)
+                    //         Text name        Win32 format ID
+                    new Format(UnicodeText,       (int)User32.CF.UNICODETEXT),
+                    new Format(Text,              (int)User32.CF.TEXT),
+                    new Format(Bitmap,            (int)User32.CF.BITMAP),
+                    new Format(MetafilePict,      (int)User32.CF.METAFILEPICT),
+                    new Format(EnhancedMetafile,  (int)User32.CF.ENHMETAFILE),
+                    new Format(Dif,               (int)User32.CF.DIF),
+                    new Format(Tiff,              (int)User32.CF.TIFF),
+                    new Format(OemText,           (int)User32.CF.OEMTEXT),
+                    new Format(Dib,               (int)User32.CF.DIB),
+                    new Format(Palette,           (int)User32.CF.PALETTE),
+                    new Format(PenData,           (int)User32.CF.PENDATA),
+                    new Format(Riff,              (int)User32.CF.RIFF),
+                    new Format(WaveAudio,         (int)User32.CF.WAVE),
+                    new Format(SymbolicLink,      (int)User32.CF.SYLK),
+                    new Format(FileDrop,          (int)User32.CF.HDROP),
+                    new Format(Locale,            (int)User32.CF.LOCALE)
                 };
 
                 s_formatCount = s_formatList.Length;

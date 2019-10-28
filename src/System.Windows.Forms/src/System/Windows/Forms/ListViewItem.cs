@@ -333,7 +333,7 @@ namespace System.Windows.Forms
             {
                 if (listView != null && listView.IsHandleCreated)
                 {
-                    return listView.GetItemState(Index, NativeMethods.LVIS_FOCUSED) != 0;
+                    return listView.GetItemState(Index, ComCtl32.LVIS.FOCUSED) != 0;
                 }
 
                 return false;
@@ -343,7 +343,7 @@ namespace System.Windows.Forms
             {
                 if (listView != null && listView.IsHandleCreated)
                 {
-                    listView.SetItemState(Index, value ? NativeMethods.LVIS_FOCUSED : 0, NativeMethods.LVIS_FOCUSED);
+                    listView.SetItemState(Index, value ? ComCtl32.LVIS.FOCUSED : 0, ComCtl32.LVIS.FOCUSED);
                 }
             }
         }
@@ -620,7 +620,7 @@ namespace System.Windows.Forms
             }
         }
 
-        internal int RawStateImageIndex => (SavedStateImageIndex + 1) << 12;
+        internal ComCtl32.LVIS RawStateImageIndex => (ComCtl32.LVIS)((SavedStateImageIndex + 1) << 12);
 
         /// <summary>
         ///  Accessor for our state bit vector.
@@ -654,7 +654,7 @@ namespace System.Windows.Forms
             {
                 if (listView != null && listView.IsHandleCreated)
                 {
-                    return listView.GetItemState(Index, NativeMethods.LVIS_SELECTED) != 0;
+                    return listView.GetItemState(Index, ComCtl32.LVIS.SELECTED) != 0;
                 }
 
                 return StateSelected;
@@ -663,7 +663,7 @@ namespace System.Windows.Forms
             {
                 if (listView != null && listView.IsHandleCreated)
                 {
-                    listView.SetItemState(Index, value ? NativeMethods.LVIS_SELECTED : 0, NativeMethods.LVIS_SELECTED);
+                    listView.SetItemState(Index, value ? ComCtl32.LVIS.SELECTED : 0, ComCtl32.LVIS.SELECTED);
 
                     // update comctl32's selection information.
                     listView.SetSelectionMark(Index);
@@ -694,8 +694,8 @@ namespace System.Windows.Forms
             {
                 if (listView != null && listView.IsHandleCreated)
                 {
-                    int state = listView.GetItemState(Index, NativeMethods.LVIS_STATEIMAGEMASK);
-                    return ((state >> 12) - 1);   // index is 1-based
+                    ComCtl32.LVIS state = listView.GetItemState(Index, ComCtl32.LVIS.STATEIMAGEMASK);
+                    return (((int)state >> 12) - 1);   // index is 1-based
                 }
 
                 return SavedStateImageIndex;
@@ -710,8 +710,8 @@ namespace System.Windows.Forms
                 if (listView != null && listView.IsHandleCreated)
                 {
                     this.state[s_stateImageMaskSet] = (value == -1 ? 0 : 1);
-                    int state = ((value + 1) << 12);  // index is 1-based
-                    listView.SetItemState(Index, state, NativeMethods.LVIS_STATEIMAGEMASK);
+                    ComCtl32.LVIS state = (ComCtl32.LVIS)((value + 1) << 12);  // index is 1-based
+                    listView.SetItemState(Index, state, ComCtl32.LVIS.STATEIMAGEMASK);
                 }
                 SavedStateImageIndex = value;
             }
@@ -1027,18 +1027,18 @@ namespace System.Windows.Forms
             }
 
             // Update Item state in one shot
-            int itemState = 0;
-            int stateMask = 0;
+            ComCtl32.LVIS itemState = 0;
+            ComCtl32.LVIS stateMask = 0;
             if (StateSelected)
             {
-                itemState |= NativeMethods.LVIS_SELECTED;
-                stateMask |= NativeMethods.LVIS_SELECTED;
+                itemState |= ComCtl32.LVIS.SELECTED;
+                stateMask |= ComCtl32.LVIS.SELECTED;
             }
 
             if (SavedStateImageIndex > -1)
             {
-                itemState |= ((SavedStateImageIndex + 1) << 12);
-                stateMask |= NativeMethods.LVIS_STATEIMAGEMASK;
+                itemState |= (ComCtl32.LVIS)((SavedStateImageIndex + 1) << 12);
+                stateMask |= ComCtl32.LVIS.STATEIMAGEMASK;
             }
 
             lvItem.mask |= NativeMethods.LVIF_STATE;
@@ -1073,11 +1073,11 @@ namespace System.Windows.Forms
 
                 if (checkSelection)
                 {
-                    lvItem.stateMask = NativeMethods.LVIS_SELECTED;
+                    lvItem.stateMask = ComCtl32.LVIS.SELECTED;
                 }
 
                 // we want to get all the information, including the state image mask
-                lvItem.stateMask |= NativeMethods.LVIS_STATEIMAGEMASK;
+                lvItem.stateMask |= ComCtl32.LVIS.STATEIMAGEMASK;
 
                 if (lvItem.stateMask == 0)
                 {
@@ -1091,9 +1091,9 @@ namespace System.Windows.Forms
                 // Update this class' information
                 if (checkSelection)
                 {
-                    StateSelected = (lvItem.state & NativeMethods.LVIS_SELECTED) != 0;
+                    StateSelected = (lvItem.state & ComCtl32.LVIS.SELECTED) != 0;
                 }
-                SavedStateImageIndex = ((lvItem.state & NativeMethods.LVIS_STATEIMAGEMASK) >> 12) - 1;
+                SavedStateImageIndex = ((int)(lvItem.state & ComCtl32.LVIS.STATEIMAGEMASK) >> 12) - 1;
 
                 group = null;
                 foreach (ListViewGroup lvg in ListView.Groups)

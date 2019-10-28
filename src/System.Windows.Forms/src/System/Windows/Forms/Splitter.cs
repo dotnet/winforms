@@ -240,13 +240,13 @@ namespace System.Windows.Forms
             get
             {
                 CreateParams cp = base.CreateParams;
-                cp.ExStyle &= (~NativeMethods.WS_EX_CLIENTEDGE);
+                cp.ExStyle &= ~(int)User32.WS_EX.CLIENTEDGE;
                 cp.Style &= (~NativeMethods.WS_BORDER);
 
                 switch (borderStyle)
                 {
                     case BorderStyle.Fixed3D:
-                        cp.ExStyle |= NativeMethods.WS_EX_CLIENTEDGE;
+                        cp.ExStyle |= (int)User32.WS_EX.CLIENTEDGE;
                         break;
                     case BorderStyle.FixedSingle:
                         cp.Style |= NativeMethods.WS_BORDER;
@@ -949,7 +949,7 @@ namespace System.Windows.Forms
                 }
                 Application.AddMessageFilter(splitterMessageFilter);
 
-                CaptureInternal = true;
+                Capture = true;
                 DrawSplitBar(DRAW_START);
             }
         }
@@ -961,7 +961,7 @@ namespace System.Windows.Forms
         {
             DrawSplitBar(DRAW_END);
             splitTarget = null;
-            CaptureInternal = false;
+            Capture = false;
             if (splitterMessageFilter != null)
             {
                 Application.RemoveMessageFilter(splitterMessageFilter);

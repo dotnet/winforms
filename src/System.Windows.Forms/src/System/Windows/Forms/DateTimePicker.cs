@@ -408,9 +408,9 @@ namespace System.Windows.Forms
                 // the information from win32 DateTimePicker is reliable only when ShowCheckBoxes is True
                 if (ShowCheckBox && IsHandleCreated)
                 {
-                    NativeMethods.SYSTEMTIME sys = new NativeMethods.SYSTEMTIME();
-                    int gdt = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.DTM_GETSYSTEMTIME, 0, sys);
-                    return gdt == NativeMethods.GDT_VALID;
+                    var sys = new Kernel32.SYSTEMTIME();
+                    ComCtl32.GDT gdt = (ComCtl32.GDT)User32.SendMessageW(this, User32.WindowMessage.DTM_GETSYSTEMTIME, IntPtr.Zero, ref sys);
+                    return gdt == ComCtl32.GDT.VALID;
                 }
                 else
                 {
@@ -426,15 +426,12 @@ namespace System.Windows.Forms
                     {
                         if (value)
                         {
-                            int gdt = NativeMethods.GDT_VALID;
-                            NativeMethods.SYSTEMTIME sys = DateTimePicker.DateTimeToSysTime(Value);
-                            UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.DTM_SETSYSTEMTIME, gdt, sys);
+                            Kernel32.SYSTEMTIME sys = DateTimePicker.DateTimeToSysTime(Value);
+                            User32.SendMessageW(this, User32.WindowMessage.DTM_SETSYSTEMTIME, (IntPtr)ComCtl32.GDT.VALID, ref sys);
                         }
                         else
                         {
-                            int gdt = NativeMethods.GDT_NONE;
-                            NativeMethods.SYSTEMTIME sys = null;
-                            UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.DTM_SETSYSTEMTIME, gdt, sys);
+                            User32.SendMessageW(this, User32.WindowMessage.DTM_SETSYSTEMTIME, (IntPtr)ComCtl32.GDT.NONE, IntPtr.Zero);
                         }
                     }
                     // this.validTime is used when the DateTimePicker receives date time change notification
@@ -481,14 +478,14 @@ namespace System.Windows.Forms
                         break;
                 }
 
-                cp.ExStyle |= NativeMethods.WS_EX_CLIENTEDGE;
+                cp.ExStyle |= (int)User32.WS_EX.CLIENTEDGE;
 
                 if (RightToLeft == RightToLeft.Yes && RightToLeftLayout == true)
                 {
                     //We want to turn on mirroring for DateTimePicker explicitly.
-                    cp.ExStyle |= NativeMethods.WS_EX_LAYOUTRTL;
+                    cp.ExStyle |= (int)User32.WS_EX.LAYOUTRTL;
                     //Don't need these styles when mirroring is turned on.
-                    cp.ExStyle &= ~(NativeMethods.WS_EX_RTLREADING | NativeMethods.WS_EX_RIGHT | NativeMethods.WS_EX_LEFTSCROLLBAR);
+                    cp.ExStyle &= ~((int)User32.WS_EX.RTLREADING | (int)User32.WS_EX.RIGHT | (int)User32.WS_EX.LEFTSCROLLBAR);
                 }
 
                 return cp;
@@ -1049,13 +1046,9 @@ namespace System.Windows.Forms
 
                     if (IsHandleCreated)
                     {
-                        /*
-                        * Make sure any changes to this code
-                        * get propagated to createHandle
-                        */
-                        int gdt = NativeMethods.GDT_VALID;
-                        NativeMethods.SYSTEMTIME sys = DateTimePicker.DateTimeToSysTime(value);
-                        UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.DTM_SETSYSTEMTIME, gdt, sys);
+                        // Make sure any changes to this code get propagated to createHandle
+                        Kernel32.SYSTEMTIME sys = DateTimePicker.DateTimeToSysTime(value);
+                        User32.SendMessageW(this, User32.WindowMessage.DTM_SETSYSTEMTIME, (IntPtr)ComCtl32.GDT.VALID, ref sys);
                     }
 
                     if (valueChanged)
@@ -1146,19 +1139,13 @@ namespace System.Windows.Forms
 
             if (userHasSetValue && validTime)
             {
-                /*
-                * Make sure any changes to this code
-                * get propagated to setValue
-                */
-                int gdt = NativeMethods.GDT_VALID;
-                NativeMethods.SYSTEMTIME sys = DateTimePicker.DateTimeToSysTime(Value);
-                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.DTM_SETSYSTEMTIME, gdt, sys);
+                // Make sure any changes to this code get propagated to setValue
+                Kernel32.SYSTEMTIME sys = DateTimePicker.DateTimeToSysTime(Value);
+                User32.SendMessageW(this, User32.WindowMessage.DTM_SETSYSTEMTIME, (IntPtr)ComCtl32.GDT.VALID, ref sys);
             }
             else if (!validTime)
             {
-                int gdt = NativeMethods.GDT_NONE;
-                NativeMethods.SYSTEMTIME sys = null;
-                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.DTM_SETSYSTEMTIME, gdt, sys);
+                User32.SendMessageW(this, User32.WindowMessage.DTM_SETSYSTEMTIME, (IntPtr)ComCtl32.GDT.NONE, IntPtr.Zero);
             }
 
             if (format == DateTimePickerFormat.Custom)
@@ -1385,9 +1372,8 @@ namespace System.Windows.Forms
             // Update the text displayed in the DateTimePicker
             if (IsHandleCreated)
             {
-                int gdt = NativeMethods.GDT_VALID;
-                NativeMethods.SYSTEMTIME sys = DateTimePicker.DateTimeToSysTime(value);
-                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.DTM_SETSYSTEMTIME, gdt, sys);
+                Kernel32.SYSTEMTIME sys = DateTimePicker.DateTimeToSysTime(value);
+                User32.SendMessageW(this, User32.WindowMessage.DTM_SETSYSTEMTIME, (IntPtr)ComCtl32.GDT.VALID, ref sys);
             }
 
             // Updating Checked to false will set the control to "no date",
@@ -1447,10 +1433,10 @@ namespace System.Windows.Forms
             {
                 int flags = 0;
 
-                NativeMethods.SYSTEMTIMEARRAY sa = new NativeMethods.SYSTEMTIMEARRAY();
+                var sa = new NativeMethods.SYSTEMTIMEARRAY();
 
                 flags |= NativeMethods.GDTR_MIN | NativeMethods.GDTR_MAX;
-                NativeMethods.SYSTEMTIME sys = DateTimePicker.DateTimeToSysTime(min);
+                Kernel32.SYSTEMTIME sys = DateTimePicker.DateTimeToSysTime(min);
                 sa.wYear1 = sys.wYear;
                 sa.wMonth1 = sys.wMonth;
                 sa.wDayOfWeek1 = sys.wDayOfWeek;
@@ -1640,15 +1626,15 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Handles the DTN_DATETIMECHANGE notification
         /// </summary>
-        private void WmDateTimeChange(ref Message m)
+        private unsafe void WmDateTimeChange(ref Message m)
         {
-            NativeMethods.NMDATETIMECHANGE nmdtc = (NativeMethods.NMDATETIMECHANGE)m.GetLParam(typeof(NativeMethods.NMDATETIMECHANGE));
+            ComCtl32.NMDATETIMECHANGE* nmdtc = (ComCtl32.NMDATETIMECHANGE*)m.LParam;
             DateTime temp = value;
             bool oldvalid = validTime;
-            if (nmdtc.dwFlags != NativeMethods.GDT_NONE)
+            if (nmdtc->dwFlags != ComCtl32.GDT.NONE)
             {
                 validTime = true;
-                value = DateTimePicker.SysTimeToDateTime(nmdtc.st);
+                value = DateTimePicker.SysTimeToDateTime(nmdtc->st);
                 userHasSetValue = true;
             }
             else
@@ -1673,8 +1659,8 @@ namespace System.Windows.Forms
                 if (handle != IntPtr.Zero)
                 {
                     int style = unchecked((int)((long)UnsafeNativeMethods.GetWindowLong(new HandleRef(this, handle), NativeMethods.GWL_EXSTYLE)));
-                    style |= NativeMethods.WS_EX_LAYOUTRTL | NativeMethods.WS_EX_NOINHERITLAYOUT;
-                    style &= ~(NativeMethods.WS_EX_RIGHT | NativeMethods.WS_EX_RTLREADING);
+                    style |= (int)User32.WS_EX.LAYOUTRTL | (int)User32.WS_EX.NOINHERITLAYOUT;
+                    style &= ~((int)User32.WS_EX.RIGHT | (int)User32.WS_EX.RTLREADING);
                     UnsafeNativeMethods.SetWindowLong(new HandleRef(this, handle), NativeMethods.GWL_EXSTYLE, new HandleRef(this, (IntPtr)style));
                 }
             }
@@ -1745,9 +1731,9 @@ namespace System.Windows.Forms
         ///  Takes a DateTime value and returns a SYSTEMTIME struct
         ///  Note: 1 second granularity
         /// </summary>
-        internal static NativeMethods.SYSTEMTIME DateTimeToSysTime(DateTime time)
+        internal static Kernel32.SYSTEMTIME DateTimeToSysTime(DateTime time)
         {
-            NativeMethods.SYSTEMTIME sys = new NativeMethods.SYSTEMTIME
+            var sys = new Kernel32.SYSTEMTIME
             {
                 wYear = (short)time.Year,
                 wMonth = (short)time.Month,
@@ -1765,7 +1751,7 @@ namespace System.Windows.Forms
         ///  Takes a SYSTEMTIME struct and returns a DateTime value
         ///  Note: 1 second granularity.
         /// </summary>
-        internal static DateTime SysTimeToDateTime(NativeMethods.SYSTEMTIME s)
+        internal static DateTime SysTimeToDateTime(Kernel32.SYSTEMTIME s)
         {
             return new DateTime(s.wYear, s.wMonth, s.wDay, s.wHour, s.wMinute, s.wSecond);
         }
@@ -1866,22 +1852,22 @@ namespace System.Windows.Forms
 
             internal override bool IsIAccessibleExSupported() => true;
 
-            internal override object GetPropertyValue(int propertyID)
+            internal override object GetPropertyValue(UiaCore.UIA propertyID)
             {
                 switch (propertyID)
                 {
-                    case NativeMethods.UIA_IsTogglePatternAvailablePropertyId:
-                        return IsPatternSupported(NativeMethods.UIA_TogglePatternId);
-                    case NativeMethods.UIA_LocalizedControlTypePropertyId:
+                    case UiaCore.UIA.IsTogglePatternAvailablePropertyId:
+                        return IsPatternSupported(UiaCore.UIA.TogglePatternId);
+                    case UiaCore.UIA.LocalizedControlTypePropertyId:
                         return DateTimePickerLocalizedControlTypeString;
                     default:
                         return base.GetPropertyValue(propertyID);
                 }
             }
 
-            internal override bool IsPatternSupported(int patternId)
+            internal override bool IsPatternSupported(UiaCore.UIA patternId)
             {
-                if (patternId == NativeMethods.UIA_TogglePatternId && ((DateTimePicker)Owner).ShowCheckBox)
+                if (patternId == UiaCore.UIA.TogglePatternId && ((DateTimePicker)Owner).ShowCheckBox)
                 {
                     return true;
                 }

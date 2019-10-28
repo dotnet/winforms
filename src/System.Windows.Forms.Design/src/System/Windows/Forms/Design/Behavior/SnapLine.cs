@@ -141,10 +141,10 @@ namespace System.Windows.Forms.Design.Behavior
             // check for our special-cased margin filter
             if (line1.Filter.Contains(Margin))
             {
-                if (line1.Filter.Equals(MarginRight) && (line2.Filter.Equals(MarginLeft) || line2.Filter.Equals(PaddingRight)) ||
-                  line1.Filter.Equals(MarginLeft) && (line2.Filter.Equals(MarginRight) || line2.Filter.Equals(PaddingLeft)) ||
-                  line1.Filter.Equals(MarginTop) && (line2.Filter.Equals(MarginBottom) || line2.Filter.Equals(PaddingTop)) ||
-                  line1.Filter.Equals(MarginBottom) && (line2.Filter.Equals(MarginTop) || line2.Filter.Equals(PaddingBottom)))
+                if ((line1.Filter.Equals(MarginRight) && (line2.Filter.Equals(MarginLeft) || line2.Filter.Equals(PaddingRight))) ||
+                  (line1.Filter.Equals(MarginLeft) && (line2.Filter.Equals(MarginRight) || line2.Filter.Equals(PaddingLeft))) ||
+                  (line1.Filter.Equals(MarginTop) && (line2.Filter.Equals(MarginBottom) || line2.Filter.Equals(PaddingTop))) ||
+                  (line1.Filter.Equals(MarginBottom) && (line2.Filter.Equals(MarginTop) || line2.Filter.Equals(PaddingBottom))))
                 {
                     return true;
                 }

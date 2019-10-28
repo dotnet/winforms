@@ -673,7 +673,7 @@ namespace System.Windows.Forms.Design
                 {
                     CreateParams cp = base.CreateParams;
 
-                    cp.ExStyle |= NativeMethods.WS_EX_STATICEDGE;
+                    cp.ExStyle |= (int)User32.WS_EX.STATICEDGE;
                     return cp;
                 }
             }
@@ -702,8 +702,8 @@ namespace System.Windows.Forms.Design
                 }
             }
 
-            private void DrawTreeItem(string itemText, int imageIndex, IntPtr dc, RECT rcIn,
-                                        int state, int backColor, int textColor)
+            private unsafe void DrawTreeItem(string itemText, int imageIndex, IntPtr dc, RECT rcIn,
+                                             int state, int backColor, int textColor)
             {
                 Size size = new Size();
                 var rc2 = new RECT();
@@ -728,7 +728,7 @@ namespace System.Windows.Forms.Design
                 else
                 {
                     Gdi32.SetBkColor(dc, backColor);
-                    IntUnsafeNativeMethods.ExtTextOut(new HandleRef(null, dc), 0, 0, NativeMethods.ETO_CLIPPED | NativeMethods.ETO_OPAQUE, ref rc, null, 0, null);
+                    Gdi32.ExtTextOutW(dc, 0, 0, Gdi32.ETO.CLIPPED | Gdi32.ETO.OPAQUE, ref rc, null, 0, null);
                 }
 
                 // Get the height of the font
@@ -747,9 +747,13 @@ namespace System.Windows.Forms.Design
                     ref rc2,
                     User32.DT.LEFT | User32.DT.VCENTER | User32.DT.END_ELLIPSIS | User32.DT.NOPREFIX);
 
-                SafeNativeMethods.ImageList_Draw(new HandleRef(imagelist, imagelist.Handle), imageIndex, new HandleRef(null, dc),
-                                       PADDING_HORZ, rc.top + (((rc.bottom - rc.top) - SIZE_ICON_Y) >> 1),
-                                       NativeMethods.ILD_TRANSPARENT);
+                ComCtl32.ImageList.Draw(
+                    imagelist,
+                    imageIndex,
+                    dc,
+                    PADDING_HORZ,
+                    rc.top + (((rc.bottom - rc.top) - SIZE_ICON_Y) >> 1),
+                    ComCtl32.ILD.TRANSPARENT);
 
                 // Draw the hot-tracking border if needed
                 if ((state & STATE_HOT) != 0)
@@ -762,10 +766,10 @@ namespace System.Windows.Forms.Design
                     rc2.top = rc.top;
                     rc2.bottom = rc.top + 1;
                     rc2.right = rc.right;
-                    IntUnsafeNativeMethods.ExtTextOut(new HandleRef(null, dc), 0, 0, NativeMethods.ETO_OPAQUE, ref rc2, null, 0, null);
+                    Gdi32.ExtTextOutW(dc, 0, 0, Gdi32.ETO.OPAQUE, ref rc2, null, 0, null);
                     rc2.bottom = rc.bottom;
                     rc2.right = rc.left + 1;
-                    IntUnsafeNativeMethods.ExtTextOut(new HandleRef(null, dc), 0, 0, NativeMethods.ETO_OPAQUE, ref rc2, null, 0, null);
+                    Gdi32.ExtTextOutW(dc, 0, 0, Gdi32.ETO.OPAQUE, ref rc2, null, 0, null);
 
                     // bottom right
                     Gdi32.SetBkColor(dc, ColorTranslator.ToWin32(SystemColors.ControlDark));
@@ -773,10 +777,10 @@ namespace System.Windows.Forms.Design
                     rc2.right = rc.right;
                     rc2.top = rc.bottom - 1;
                     rc2.bottom = rc.bottom;
-                    IntUnsafeNativeMethods.ExtTextOut(new HandleRef(null, dc), 0, 0, NativeMethods.ETO_OPAQUE, ref rc2, null, 0, null);
+                    Gdi32.ExtTextOutW(dc, 0, 0, Gdi32.ETO.OPAQUE, ref rc2, null, 0, null);
                     rc2.left = rc.right - 1;
                     rc2.top = rc.top;
-                    IntUnsafeNativeMethods.ExtTextOut(new HandleRef(null, dc), 0, 0, NativeMethods.ETO_OPAQUE, ref rc2, null, 0, null);
+                    Gdi32.ExtTextOutW(dc, 0, 0, Gdi32.ETO.OPAQUE, ref rc2, null, 0, null);
 
                     Gdi32.SetBkColor(dc, savedColor);
                 }

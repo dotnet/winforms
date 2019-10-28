@@ -103,10 +103,10 @@ namespace System.Windows.Forms.Internal
         /// </summary>
         public static WindowsFont GetWindowsFont(Font font)
         {
-            return GetWindowsFont(font, WindowsFontQuality.Default);
+            return GetWindowsFont(font, Interop.Gdi32.QUALITY.DEFAULT);
         }
 
-        public static WindowsFont GetWindowsFont(Font font, WindowsFontQuality fontQuality)
+        public static WindowsFont GetWindowsFont(Font font, Interop.Gdi32.QUALITY fontQuality)
         {
             if (font == null)
             {

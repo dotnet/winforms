@@ -1090,7 +1090,7 @@ namespace System.Drawing.Design
                 }
             }
 
-            protected override int Options => NativeMethods.CC_FULLOPEN | NativeMethods.CC_ENABLETEMPLATEHANDLE;
+            protected override int Options => (int)(Comdlg32.CC.FULLOPEN | Comdlg32.CC.ENABLETEMPLATEHANDLE);
 
             protected override void Dispose(bool disposing)
             {

@@ -5996,11 +5996,6 @@ Cette opération non conforme s'est produite sur la trace de la pile :
         <target state="translated">L'image doit être une bitmap.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ImageListCantRecreate">
-        <source>Unless the list is empty, '{0}' cannot be changed once the ImageList has been used.</source>
-        <target state="translated">Sauf si la liste est vide, '{0}' ne peut pas être modifié une fois que ImageList a été utilisé.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="ImageListColorDepthDescr">
         <source>The number of colors to use to render images.</source>
         <target state="translated">Le nombre de couleurs à utiliser pour restituer les images.</target>

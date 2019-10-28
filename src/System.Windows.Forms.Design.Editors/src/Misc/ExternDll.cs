@@ -36,7 +36,6 @@ namespace System
 
 #else
         public const string Activeds = "activeds.dll";
-        public const string Advapi32 = "advapi32.dll";
         public const string Comctl32 = "comctl32.dll";
         public const string Comdlg32 = "comdlg32.dll";
         public const string Gdi32 = "gdi32.dll";
@@ -55,7 +54,6 @@ namespace System
         public const string Oleaut32 = "oleaut32.dll";
         public const string Olepro32 = "olepro32.dll";
         public const string PerfCounter = "perfcounter.dll";
-        public const string Powrprof = "Powrprof.dll";
         public const string Psapi = "psapi.dll";
         public const string Shell32 = "shell32.dll";
         public const string User32 = "user32.dll";

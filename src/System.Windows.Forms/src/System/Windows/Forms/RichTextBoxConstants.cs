@@ -431,12 +431,6 @@ namespace System.Windows.Forms
          */
         internal const int PFA_JUSTIFY = 4;        /* New paragraph-alignment option 2.0 (*) */
 
-        internal const int SEL_EMPTY = 0x0000;
-        internal const int SEL_TEXT = 0x0001;
-        internal const int SEL_OBJECT = 0x0002;
-        internal const int SEL_MULTICHAR = 0x0004;
-        internal const int SEL_MULTIOBJECT = 0x0008;
-
         internal const int tomTrue = -1,
                             tomFalse = 0,
                             tomNone = 0,
@@ -451,11 +445,6 @@ namespace System.Windows.Forms
         internal const int GCM_RIGHTMOUSEDROP = 0x8000;
 
         internal const int OLEOP_DOVERB = 1;
-
-        /* clipboard formats - use as parameter to RegisterClipboardFormat() */
-        internal const string CF_RTF = "Rich Text Format";
-        internal const string CF_RTFNOOBJS = "Rich Text Format Without Objects";
-        internal const string CF_RETEXTOBJ = "RichEdit Text and Objects";
 
         /*  UndoName info */
         internal const int UID_UNKNOWN = 0;

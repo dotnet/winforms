@@ -35,14 +35,14 @@ internal static partial class Interop
             /// <param name="patternId">Identifier indicating the interface to return</param>
             /// <returns>Returns the interface as an object, if supported; otherwise returns null/</returns>
             [return: MarshalAs(UnmanagedType.IUnknown)]
-            object GetPatternProvider(int patternId);
+            object GetPatternProvider(UIA patternId);
 
             /// <summary>
             ///  Request value of specified property from an element.
             /// </summary>
             /// <param name="propertyId">Identifier indicating the property to return</param>
             /// <returns>Returns a ValInfo indicating whether the element supports this property, or has no value for it.</returns>
-            object GetPropertyValue(int propertyId);
+            object GetPropertyValue(UIA propertyId);
 
             // Only native impl roots need to return something for this,
             // proxies always return null (cause we already know their HWNDs)

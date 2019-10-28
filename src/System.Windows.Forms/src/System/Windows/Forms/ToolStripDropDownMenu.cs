@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -265,8 +266,7 @@ namespace System.Windows.Forms
             ToolStripDropDownMenu managedDropDown = new ToolStripDropDownMenu();
             managedDropDown.SuspendLayout();
 
-            HandleRef menuHandle = new HandleRef(null, hmenu);
-            int count = UnsafeNativeMethods.GetMenuItemCount(menuHandle);
+            int count = User32.GetMenuItemCount(hmenu);
 
             ToolStripItem itemToAdd;
 
@@ -281,7 +281,7 @@ namespace System.Windows.Forms
                     fMask = NativeMethods.MIIM_FTYPE,
                     fType = NativeMethods.MIIM_FTYPE
                 };
-                UnsafeNativeMethods.GetMenuItemInfo(menuHandle, i, /*fByPosition=*/ true, info);
+                UnsafeNativeMethods.GetMenuItemInfo(hmenu, i, /*fByPosition=*/ true, info);
 
                 if (info.fType == NativeMethods.MFT_SEPARATOR)
                 {
@@ -298,7 +298,7 @@ namespace System.Windows.Forms
                         fType = NativeMethods.MIIM_ID
                     };
 
-                    UnsafeNativeMethods.GetMenuItemInfo(menuHandle, i, /*fByPosition=*/ true, info);
+                    UnsafeNativeMethods.GetMenuItemInfo(hmenu, i, /*fByPosition=*/ true, info);
 
                     // create the managed object - toolstripmenu item knows how to grok hmenu for information.
                     itemToAdd = new ToolStripMenuItem(hmenu, info.wID, targetWindow);
@@ -311,7 +311,7 @@ namespace System.Windows.Forms
                         fType = NativeMethods.MIIM_SUBMENU
                     };
 
-                    UnsafeNativeMethods.GetMenuItemInfo(menuHandle, i, /*fByPosition=*/ true, info);
+                    UnsafeNativeMethods.GetMenuItemInfo(hmenu, i, /*fByPosition=*/ true, info);
 
                     if (info.hSubMenu != IntPtr.Zero)
                     {

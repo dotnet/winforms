@@ -57,8 +57,7 @@ namespace System.Windows.Forms
                                 lock (internalSyncObject)
                                 {
                                     ComCtl32.InitCommonControls();
-                                    nativeImageList = new ImageList.NativeImageList(
-                                        SafeNativeMethods.ImageList_Read(new Ole32.GPStream(ms)));
+                                    nativeImageList = new ImageList.NativeImageList(ComCtl32.ImageList.Read(new Ole32.GPStream(ms)));
                                 }
                             }
                             finally
@@ -241,15 +240,15 @@ namespace System.Windows.Forms
 
             try
             {
-                int hResult = SafeNativeMethods.ImageList_WriteEx(new HandleRef(this, imagelistHandle), NativeMethods.ILP_DOWNLEVEL, new Ole32.GPStream(stream));
-                return (hResult == NativeMethods.S_OK);
+                HRESULT hr = ComCtl32.ImageList.WriteEx(new HandleRef(this, imagelistHandle), ComCtl32.ILP.DOWNLEVEL, new Ole32.GPStream(stream));
+                return hr == HRESULT.S_OK;
             }
             catch (EntryPointNotFoundException)
             {
                 // WriteEx wasn't found - that's fine - we will use Write.
             }
 
-            return SafeNativeMethods.ImageList_Write(new HandleRef(this, imagelistHandle), new Ole32.GPStream(stream));
+            return ComCtl32.ImageList.Write(new HandleRef(this, imagelistHandle), new Ole32.GPStream(stream)).IsTrue();
         }
 
         /// <summary>

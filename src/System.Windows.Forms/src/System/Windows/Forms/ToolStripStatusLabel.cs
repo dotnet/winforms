@@ -8,6 +8,7 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms.Automation;
 using System.Windows.Forms.Design;
 using System.Windows.Forms.Layout;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -274,17 +275,17 @@ namespace System.Windows.Forms
             /// <returns>True if operation succeeds, False otherwise.</returns>
             public override bool RaiseLiveRegionChanged()
             {
-                return RaiseAutomationEvent(NativeMethods.UIA_LiveRegionChangedEventId);
+                return RaiseAutomationEvent(UiaCore.UIA.LiveRegionChangedEventId);
             }
 
-            internal override object GetPropertyValue(int propertyID)
+            internal override object GetPropertyValue(UiaCore.UIA propertyID)
             {
                 switch (propertyID)
                 {
-                    case NativeMethods.UIA_LiveSettingPropertyId:
+                    case UiaCore.UIA.LiveSettingPropertyId:
                         return ownerItem.LiveSetting;
-                    case NativeMethods.UIA_ControlTypePropertyId:
-                        return NativeMethods.UIA_TextControlTypeId;
+                    case UiaCore.UIA.ControlTypePropertyId:
+                        return UiaCore.UIA.TextControlTypeId;
                 }
 
                 return base.GetPropertyValue(propertyID);

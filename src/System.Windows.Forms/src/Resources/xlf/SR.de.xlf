@@ -5996,11 +5996,6 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
         <target state="translated">Das Bild muss eine Bitmap sein.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ImageListCantRecreate">
-        <source>Unless the list is empty, '{0}' cannot be changed once the ImageList has been used.</source>
-        <target state="translated">{0} kann nach der Verwendung der ImageList nur noch geändert werden, wenn die Liste leer ist.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="ImageListColorDepthDescr">
         <source>The number of colors to use to render images.</source>
         <target state="translated">Die Zahl der zum Darstellen von Bildern zu verwendenden Farben.</target>

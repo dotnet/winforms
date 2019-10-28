@@ -816,7 +816,7 @@ namespace System.Windows.Forms.Design.Behavior
                 if (!IsLocalDrag(e))
                 {
                     _behaviorService._validDragArgs = e;
-                    NativeMethods.GetCursorPos(out Point pt);
+                    User32.GetCursorPos(out Point pt);
                     NativeMethods.MapWindowPoints(IntPtr.Zero, Handle, ref pt, 1);
                     _behaviorService.PropagateHitTest(pt);
 
@@ -850,7 +850,7 @@ namespace System.Windows.Forms.Design.Behavior
                 if (!IsLocalDrag(e))
                 {
                     _behaviorService._validDragArgs = e;
-                    NativeMethods.GetCursorPos(out Point pt);
+                    User32.GetCursorPos(out Point pt);
                     NativeMethods.MapWindowPoints(IntPtr.Zero, Handle, ref pt, 1);
                     _behaviorService.PropagateHitTest(pt);
                 }
@@ -1078,16 +1078,13 @@ namespace System.Windows.Forms.Design.Behavior
                             User32.GetWindowThreadProcessId(adornerWindow, out _thisProcessID);
                         }
 
-                        NativeMethods.HookProc hook = new NativeMethods.HookProc(MouseHookProc);
+                        var hook = new User32.HOOKPROC(MouseHookProc);
                         _mouseHookRoot = GCHandle.Alloc(hook);
-
-#pragma warning disable 618
-                        _mouseHookHandle = UnsafeNativeMethods.SetWindowsHookEx(
-                            NativeMethods.WH_MOUSE,
+                        _mouseHookHandle = User32.SetWindowsHookExW(
+                            User32.WH.MOUSE,
                             hook,
                             IntPtr.Zero,
                             (uint)AppDomain.GetCurrentThreadId());
-#pragma warning restore 618
                         if (_mouseHookHandle != IntPtr.Zero)
                         {
                             _isHooked = true;
@@ -1096,9 +1093,9 @@ namespace System.Windows.Forms.Design.Behavior
                     }
                 }
 
-                private unsafe IntPtr MouseHookProc(int nCode, IntPtr wparam, IntPtr lparam)
+                private unsafe IntPtr MouseHookProc(User32.HC nCode, IntPtr wparam, IntPtr lparam)
                 {
-                    if (_isHooked && nCode == NativeMethods.HC_ACTION)
+                    if (_isHooked && nCode == User32.HC.ACTION)
                     {
                         NativeMethods.MOUSEHOOKSTRUCT mhs = Marshal.PtrToStructure<NativeMethods.MOUSEHOOKSTRUCT>(lparam);
                         if (mhs != null)
@@ -1130,7 +1127,7 @@ namespace System.Windows.Forms.Design.Behavior
                     }
 
                     Debug.Assert(_isHooked, "How did we get here when we are diposed?");
-                    return UnsafeNativeMethods.CallNextHookEx(new HandleRef(this, _mouseHookHandle), nCode, wparam, lparam);
+                    return User32.CallNextHookEx(new HandleRef(this, _mouseHookHandle), nCode, wparam, lparam);
                 }
 
                 private void UnhookMouse()
@@ -1139,7 +1136,7 @@ namespace System.Windows.Forms.Design.Behavior
                     {
                         if (_mouseHookHandle != IntPtr.Zero)
                         {
-                            UnsafeNativeMethods.UnhookWindowsHookEx(new HandleRef(this, _mouseHookHandle));
+                            User32.UnhookWindowsHookEx(new HandleRef(this, _mouseHookHandle));
                             _mouseHookRoot.Free();
                             _mouseHookHandle = IntPtr.Zero;
                             _isHooked = false;
@@ -1410,7 +1407,7 @@ namespace System.Windows.Forms.Design.Behavior
 
                 if (_toolboxSvc != null && _toolboxSvc.SetCursor())
                 {
-                    cursor = new Cursor(NativeMethods.GetCursor());
+                    cursor = new Cursor(User32.GetCursor());
                 }
             }
             _adornerWindow.Cursor = cursor;

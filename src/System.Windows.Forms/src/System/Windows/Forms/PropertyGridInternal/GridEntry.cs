@@ -3220,43 +3220,43 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
             }
 
-            internal override object GetPropertyValue(int propertyID)
+            internal override object GetPropertyValue(UiaCore.UIA propertyID)
             {
                 switch (propertyID)
                 {
-                    case NativeMethods.UIA_NamePropertyId:
+                    case UiaCore.UIA.NamePropertyId:
                         return Name;
-                    case NativeMethods.UIA_ControlTypePropertyId:
+                    case UiaCore.UIA.ControlTypePropertyId:
 
                         // The accessible hierarchy is changed so we cannot use Button type
                         // for the grid items to not break automation logic that searches for the first
                         // button in the PropertyGridView to show dialog/drop-down. In Level < 3 action
                         // button is one of the first children of PropertyGridView.
-                        return NativeMethods.UIA_TreeItemControlTypeId;
-                    case NativeMethods.UIA_IsExpandCollapsePatternAvailablePropertyId:
-                        return (Object)IsPatternSupported(NativeMethods.UIA_ExpandCollapsePatternId);
-                    case NativeMethods.UIA_AccessKeyPropertyId:
+                        return UiaCore.UIA.TreeItemControlTypeId;
+                    case UiaCore.UIA.IsExpandCollapsePatternAvailablePropertyId:
+                        return (Object)IsPatternSupported(UiaCore.UIA.ExpandCollapsePatternId);
+                    case UiaCore.UIA.AccessKeyPropertyId:
                         return string.Empty;
-                    case NativeMethods.UIA_HasKeyboardFocusPropertyId:
+                    case UiaCore.UIA.HasKeyboardFocusPropertyId:
                         return owner.hasFocus;
-                    case NativeMethods.UIA_IsKeyboardFocusablePropertyId:
+                    case UiaCore.UIA.IsKeyboardFocusablePropertyId:
                         return (State & AccessibleStates.Focusable) == AccessibleStates.Focusable;
-                    case NativeMethods.UIA_IsEnabledPropertyId:
+                    case UiaCore.UIA.IsEnabledPropertyId:
                         return true;
-                    case NativeMethods.UIA_AutomationIdPropertyId:
+                    case UiaCore.UIA.AutomationIdPropertyId:
                         return GetHashCode().ToString();
-                    case NativeMethods.UIA_HelpTextPropertyId:
+                    case UiaCore.UIA.HelpTextPropertyId:
                         return Help ?? string.Empty;
-                    case NativeMethods.UIA_IsPasswordPropertyId:
+                    case UiaCore.UIA.IsPasswordPropertyId:
                         return false;
-                    case NativeMethods.UIA_IsOffscreenPropertyId:
+                    case UiaCore.UIA.IsOffscreenPropertyId:
                         return (State & AccessibleStates.Offscreen) == AccessibleStates.Offscreen;
-                    case NativeMethods.UIA_IsGridItemPatternAvailablePropertyId:
-                    case NativeMethods.UIA_IsTableItemPatternAvailablePropertyId:
+                    case UiaCore.UIA.IsGridItemPatternAvailablePropertyId:
+                    case UiaCore.UIA.IsTableItemPatternAvailablePropertyId:
                         return true;
-                    case NativeMethods.UIA_LegacyIAccessibleRolePropertyId:
+                    case UiaCore.UIA.LegacyIAccessibleRolePropertyId:
                         return Role;
-                    case NativeMethods.UIA_LegacyIAccessibleDefaultActionPropertyId:
+                    case UiaCore.UIA.LegacyIAccessibleDefaultActionPropertyId:
                         return DefaultAction;
 
                     default:
@@ -3264,15 +3264,15 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
             }
 
-            internal override bool IsPatternSupported(int patternId)
+            internal override bool IsPatternSupported(UiaCore.UIA patternId)
             {
                 switch (patternId)
                 {
-                    case NativeMethods.UIA_InvokePatternId:
-                    case NativeMethods.UIA_LegacyIAccessiblePatternId:
+                    case UiaCore.UIA.InvokePatternId:
+                    case UiaCore.UIA.LegacyIAccessiblePatternId:
                         return true;
 
-                    case NativeMethods.UIA_ExpandCollapsePatternId:
+                    case UiaCore.UIA.ExpandCollapsePatternId:
                         if (owner != null && owner.Expandable)
                         {
                             return true;
@@ -3280,8 +3280,8 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                         break;
 
-                    case NativeMethods.UIA_GridItemPatternId:
-                    case NativeMethods.UIA_TableItemPatternId:
+                    case UiaCore.UIA.GridItemPatternId:
+                    case UiaCore.UIA.TableItemPatternId:
                         if (owner == null || owner.OwnerGrid == null || owner.OwnerGrid.SortedByCategories)
                         {
                             break;
@@ -3531,7 +3531,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 base.SetFocus();
 
-                RaiseAutomationEvent(NativeMethods.UIA_AutomationFocusChangedEventId);
+                RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
             }
 
             internal override int Row

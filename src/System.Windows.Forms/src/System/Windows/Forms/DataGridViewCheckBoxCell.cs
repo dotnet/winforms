@@ -1828,23 +1828,23 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal override object GetPropertyValue(int propertyID)
+            internal override object GetPropertyValue(UiaCore.UIA propertyID)
             {
-                if (propertyID == NativeMethods.UIA_IsTogglePatternAvailablePropertyId)
+                if (propertyID == UiaCore.UIA.IsTogglePatternAvailablePropertyId)
                 {
-                    return (object)IsPatternSupported(NativeMethods.UIA_TogglePatternId);
+                    return (object)IsPatternSupported(UiaCore.UIA.TogglePatternId);
                 }
-                else if (propertyID == NativeMethods.UIA_ControlTypePropertyId)
+                else if (propertyID == UiaCore.UIA.ControlTypePropertyId)
                 {
-                    return NativeMethods.UIA_CheckBoxControlTypeId;
+                    return UiaCore.UIA.CheckBoxControlTypeId;
                 }
 
                 return base.GetPropertyValue(propertyID);
             }
 
-            internal override bool IsPatternSupported(int patternId)
+            internal override bool IsPatternSupported(UiaCore.UIA patternId)
             {
-                if (patternId == NativeMethods.UIA_TogglePatternId)
+                if (patternId == UiaCore.UIA.TogglePatternId)
                 {
                     return true;
                 }

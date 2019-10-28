@@ -5996,11 +5996,6 @@ Trasování zásobníku, kde došlo k neplatné operaci:
         <target state="translated">Obrázek musí být rastrová mapa.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ImageListCantRecreate">
-        <source>Unless the list is empty, '{0}' cannot be changed once the ImageList has been used.</source>
-        <target state="translated">Pokud seznam není prázdný, {0} nelze změnit poté, co byl použit seznam ImageList.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="ImageListColorDepthDescr">
         <source>The number of colors to use to render images.</source>
         <target state="translated">Počet barev použitých k vykreslování obrázků.</target>

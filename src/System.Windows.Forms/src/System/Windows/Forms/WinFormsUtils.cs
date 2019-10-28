@@ -558,7 +558,7 @@ namespace System.Windows.Forms
         ///  mapping.Graphics.DrawRectangle(Pens.Black, rect);
         ///  }
         ///  }
-        ///  finally { g.ReleaseHdc(hDC.Handle);}
+        ///  finally { g.ReleaseHdc(hDC);}
         ///
         ///  PERF: DCMapping is a structure so that it will allocate on the stack rather than in GC managed
         ///  memory. This way disposing the object does not force a GC. Since DCMapping objects aren't
@@ -571,9 +571,9 @@ namespace System.Windows.Forms
             private Graphics _graphics;
             private Rectangle _translatedBounds;
 
-            public unsafe DCMapping(HandleRef hDC, Rectangle bounds)
+            public unsafe DCMapping(IntPtr hDC, Rectangle bounds)
             {
-                if (hDC.Handle == IntPtr.Zero)
+                if (hDC == IntPtr.Zero)
                 {
                     throw new ArgumentNullException(nameof(hDC));
                 }
@@ -583,11 +583,11 @@ namespace System.Windows.Forms
 
                 _translatedBounds = bounds;
                 _graphics = null;
-                _dc = DeviceContext.FromHdc(hDC.Handle);
+                _dc = DeviceContext.FromHdc(hDC);
                 _dc.SaveHdc();
 
                 // Retrieve the x-coordinates and y-coordinates of the viewport origin for the specified device context.
-                success = SafeNativeMethods.GetViewportOrgEx(hDC, out Point viewportOrg);
+                success = Gdi32.GetViewportOrgEx(hDC, out Point viewportOrg).IsTrue();
                 Debug.Assert(success, "GetViewportOrgEx() failed.");
 
                 // Create a new rectangular clipping region based off of the bounds specified, shifted over by the x & y specified in the viewport origin.
@@ -606,7 +606,7 @@ namespace System.Windows.Forms
 
                     // Shift the viewpoint origint by coordinates specified in "bounds".
                     var lastViewPort = new Point();
-                    success = SafeNativeMethods.SetViewportOrgEx(hDC, viewportOrg.X + bounds.Left, viewportOrg.Y + bounds.Top, &lastViewPort);
+                    success = Gdi32.SetViewportOrgEx(hDC, viewportOrg.X + bounds.Left, viewportOrg.Y + bounds.Top, &lastViewPort).IsTrue();
                     Debug.Assert(success, "SetViewportOrgEx() failed.");
 
                     RegionType originalRegionType;

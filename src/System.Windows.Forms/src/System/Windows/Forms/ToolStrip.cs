@@ -822,7 +822,7 @@ namespace System.Windows.Forms
                 {
                     CreateParams cp = new CreateParams
                     {
-                        ExStyle = NativeMethods.WS_EX_TOOLWINDOW
+                        ExStyle = (int)User32.WS_EX.TOOLWINDOW
                     };
                     dropDownOwnerWindow.CreateHandle(cp);
                 }
@@ -3079,21 +3079,34 @@ namespace System.Windows.Forms
 
         // This function will print to the PrinterDC. ToolStrip have there own buffered painting and doesnt play very well
         // with the DC translations done by base Control class. Hence we do our own Painting and the BitBLT the DC into the printerDc.
-        internal override void PrintToMetaFileRecursive(HandleRef hDC, IntPtr lParam, Rectangle bounds)
+        private protected override void PrintToMetaFileRecursive(IntPtr hDC, IntPtr lParam, Rectangle bounds)
         {
             using (Bitmap image = new Bitmap(bounds.Width, bounds.Height))
             using (Graphics g = Graphics.FromImage(image))
             {
                 IntPtr imageHdc = g.GetHdc();
-                //send the actual wm_print message
-                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), WindowMessages.WM_PRINT, (IntPtr)imageHdc,
-                    (IntPtr)(NativeMethods.PRF_CHILDREN | NativeMethods.PRF_CLIENT | NativeMethods.PRF_ERASEBKGND | NativeMethods.PRF_NONCLIENT));
+                try
+                {
+                    //send the actual wm_print message
+                    UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), WindowMessages.WM_PRINT, (IntPtr)imageHdc,
+                        (IntPtr)(NativeMethods.PRF_CHILDREN | NativeMethods.PRF_CLIENT | NativeMethods.PRF_ERASEBKGND | NativeMethods.PRF_NONCLIENT));
 
-                //now BLT the result to the destination bitmap.
-                IntPtr desthDC = hDC.Handle;
-                SafeNativeMethods.BitBlt(new HandleRef(this, desthDC), bounds.X, bounds.Y, bounds.Width, bounds.Height,
-                                             new HandleRef(g, imageHdc), 0, 0, NativeMethods.SRCCOPY);
-                g.ReleaseHdcInternal(imageHdc);
+                    // Now BLT the result to the destination bitmap.
+                    Gdi32.BitBlt(
+                        new HandleRef(this, hDC),
+                        bounds.X,
+                        bounds.Y,
+                        bounds.Width,
+                        bounds.Height,
+                        new HandleRef(g, imageHdc),
+                        0,
+                        0,
+                        Gdi32.ROP.SRCCOPY);
+                }
+                finally
+                {
+                    g.ReleaseHdcInternal(imageHdc);
+                }
             }
         }
 
@@ -3617,29 +3630,36 @@ namespace System.Windows.Forms
             }
         }
 
+#if DEBUG
         protected override void OnInvalidated(InvalidateEventArgs e)
         {
             base.OnInvalidated(e);
-#if false
-// DEBUG code which is helpful for FlickerFest debugging.
-            if (FlickerDebug.TraceVerbose) {
+            // Debug code which is helpful for FlickerFest debugging.
+            if (FlickerDebug.TraceVerbose)
+            {
                 string name = this.Name;
-                if (string.IsNullOrEmpty(name)) {
-                    if (IsDropDown) {
+                if (string.IsNullOrEmpty(name))
+                {
+                    if (IsDropDown)
+                    {
                         ToolStripItem item = ((ToolStripDropDown)this).OwnerItem;
-                        if (item != null && item.Name != null) {
+                        if (item != null && item.Name != null)
+                        {
                             name = item.Name = ".DropDown";
                         }
                     }
-                    if (string.IsNullOrEmpty(name)) {
-                        name = this.GetType().Name;
+                    if (string.IsNullOrEmpty(name))
+                    {
+                        name = GetType().Name;
                     }
                 }
+
                 // for debugging VS we want to filter out the propgrid toolstrip
-                Debug.WriteLineIf(!(this.ParentInternal is PropertyGrid), "Invalidate called on: " + name + new StackTrace().ToString());
+                Debug.WriteLineIf(!(ParentInternal is PropertyGrid), "Invalidate called on: " + name + new StackTrace().ToString());
             }
-#endif
         }
+#endif
+
         /// <summary>
         ///  Summary of OnHandleCreated.
         /// </summary>
@@ -3795,7 +3815,7 @@ namespace System.Windows.Forms
                     // set capture only when we know we're not on a dropdown (already effectively have capture due to modal menufilter)
                     // and the item in question requires the mouse to be in the same item to be clicked.
                     SetToolStripState(STATE_LASTMOUSEDOWNEDITEMCAPTURE, true);
-                    CaptureInternal = true;
+                    Capture = true;
                 }
                 MenuAutoExpand = true;
 
@@ -4040,7 +4060,7 @@ namespace System.Windows.Forms
 
                                     // PERF - consider - we only actually need to copy the clipping rect.
                                     // copy the background from the toolstrip onto the offscreen bitmap
-                                    SafeNativeMethods.BitBlt(
+                                    Gdi32.BitBlt(
                                         new HandleRef(ItemHdcInfo, itemHDC),
                                         0,
                                         0,
@@ -4049,7 +4069,7 @@ namespace System.Windows.Forms
                                         toolStripHDC,
                                         item.Bounds.X,
                                         item.Bounds.Y,
-                                        NativeMethods.SRCCOPY);
+                                        Gdi32.ROP.SRCCOPY);
 
                                     // paint the item into the offscreen bitmap
                                     using (PaintEventArgs itemPaintEventArgs = new PaintEventArgs(itemGraphics, clippingRect))
@@ -4058,7 +4078,7 @@ namespace System.Windows.Forms
                                     }
 
                                     // copy the item back onto the toolstrip
-                                    SafeNativeMethods.BitBlt(
+                                    Gdi32.BitBlt(
                                         toolStripHDC,
                                         item.Bounds.X,
                                         item.Bounds.Y,
@@ -4067,7 +4087,7 @@ namespace System.Windows.Forms
                                         new HandleRef(ItemHdcInfo, itemHDC),
                                         0,
                                         0,
-                                        NativeMethods.SRCCOPY);
+                                        Gdi32.ROP.SRCCOPY);
 
                                     GC.KeepAlive(ItemHdcInfo);
                                 }
@@ -5583,11 +5603,11 @@ namespace System.Windows.Forms
                 return base.FragmentNavigate(direction);
             }
 
-            internal override object GetPropertyValue(int propertyID)
+            internal override object GetPropertyValue(UiaCore.UIA propertyID)
             {
-                if (propertyID == NativeMethods.UIA_ControlTypePropertyId)
+                if (propertyID == UiaCore.UIA.ControlTypePropertyId)
                 {
-                    return NativeMethods.UIA_ToolBarControlTypeId;
+                    return UiaCore.UIA.ToolBarControlTypeId;
                 }
 
                 return base.GetPropertyValue(propertyID);
@@ -5716,7 +5736,7 @@ namespace System.Windows.Forms
                 }
 
                 // create compatible bitmap with the correct size.
-                _cachedItemBitmap = SafeNativeMethods.CreateCompatibleBitmap(toolStripHDC, bitmapSize.Width, bitmapSize.Height);
+                _cachedItemBitmap = Gdi32.CreateCompatibleBitmap(toolStripHDC, bitmapSize.Width, bitmapSize.Height);
                 IntPtr oldBitmap = Gdi32.SelectObject(_cachedItemHDC, _cachedItemBitmap);
 
                 // delete the old bitmap

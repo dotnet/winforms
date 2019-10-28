@@ -851,19 +851,19 @@ namespace System.Windows.Forms
             {
             }
 
-            internal override object GetPropertyValue(int propertyID)
+            internal override object GetPropertyValue(UiaCore.UIA propertyID)
             {
-                if (propertyID == NativeMethods.UIA_ControlTypePropertyId)
+                if (propertyID == UiaCore.UIA.ControlTypePropertyId)
                 {
-                    return NativeMethods.UIA_EditControlTypeId;
+                    return UiaCore.UIA.EditControlTypeId;
                 }
 
                 return base.GetPropertyValue(propertyID);
             }
 
-            internal override bool IsPatternSupported(int patternId)
+            internal override bool IsPatternSupported(UiaCore.UIA patternId)
             {
-                if (patternId == NativeMethods.UIA_ValuePatternId)
+                if (patternId == UiaCore.UIA.ValuePatternId)
                 {
                     return true;
                 }

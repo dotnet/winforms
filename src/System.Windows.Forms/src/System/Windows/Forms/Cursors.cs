@@ -94,6 +94,6 @@ namespace System.Windows.Forms
 
         public static Cursor PanWest => s_panWest ??= new Cursor(typeof(Cursor), "west.cur");
 
-        public static Cursor Hand => s_hand ??= new Cursor(typeof(Cursor), "hand.cur");
+        public static Cursor Hand => s_hand ??= new Cursor(User32.CursorResourceId.IDC_HAND);
     }
 }

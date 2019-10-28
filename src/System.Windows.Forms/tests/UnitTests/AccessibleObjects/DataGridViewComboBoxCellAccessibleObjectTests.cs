@@ -3,13 +3,14 @@
 // See the LICENSE file in the project root for more information.
 
 using Xunit;
+using static Interop;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects
 {
     public class DataGridViewComboBoxCellAccessibleObjectTests
     {
         [Theory]
-        [InlineData(NativeMethods.UIA_IsExpandCollapsePatternAvailablePropertyId, true)]
+        [InlineData((int)UiaCore.UIA.IsExpandCollapsePatternAvailablePropertyId, true)]
         public void GetPropertyValue_Returns_Correct_Value(int propertyID, object expectedPropertyValue)
         {
             DataGridView dataGridView = new DataGridView();
@@ -17,7 +18,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
             dataGridView.Columns.Add(column);
             dataGridView.Rows.Add();
 
-            object actualPropertyValue = dataGridView.Rows[0].Cells[0].AccessibilityObject.GetPropertyValue(propertyID);
+            object actualPropertyValue = dataGridView.Rows[0].Cells[0].AccessibilityObject.GetPropertyValue((UiaCore.UIA)propertyID);
 
             Assert.Equal(expectedPropertyValue, actualPropertyValue);
         }

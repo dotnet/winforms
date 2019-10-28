@@ -315,8 +315,16 @@ namespace System.Windows.Forms
             //
             Gdi32.SetBkColor(target, 0x00ffffff); // white
             Gdi32.SetTextColor(target, 0x00000000); // black
-            SafeNativeMethods.BitBlt(new HandleRef(null, target), 0, 0, size.Width, size.Height, new HandleRef(null, source),
-                                     0, 0, 0x220326); // RasterOp.SOURCE.Invert().AndWith(RasterOp.TARGET).GetRop());
+            Gdi32.BitBlt(
+                target,
+                0,
+                0,
+                size.Width,
+                size.Height,
+                source,
+                0,
+                0,
+                (Gdi32.ROP)0x220326); // RasterOp.SOURCE.Invert().AndWith(RasterOp.TARGET).GetRop());
 
             Gdi32.SelectObject(source, previousSourceBitmap);
             Gdi32.SelectObject(target, previousTargetBitmap);
@@ -358,17 +366,22 @@ namespace System.Windows.Forms
             int destHeight = blockRegionSize.Height;
 
             DeviceContext dc = DeviceContext.FromHwnd(sourceHwnd);
-            HandleRef targetHDC = new HandleRef(null, targetDC.GetHdc());
-            HandleRef screenHDC = new HandleRef(null, dc.Hdc);
-
+            IntPtr targetHDC = targetDC.GetHdc();
             try
             {
-                bool result = SafeNativeMethods.BitBlt(targetHDC, destinationLocation.X, destinationLocation.Y, destWidth, destHeight,
-                                                      screenHDC,
-                                                      sourceLocation.X, sourceLocation.Y, (int)copyPixelOperation);
+                BOOL result = Gdi32.BitBlt(
+                    targetHDC,
+                    destinationLocation.X,
+                    destinationLocation.Y,
+                    destWidth,
+                    destHeight,
+                    dc.Hdc,
+                    sourceLocation.X,
+                    sourceLocation.Y,
+                    (Gdi32.ROP)copyPixelOperation);
 
-                //a zero result indicates a win32 exception has been thrown
-                if (!result)
+                // Zero result indicates a win32 exception has been thrown
+                if (!result.IsTrue())
                 {
                     throw new Win32Exception();
                 }
@@ -573,7 +586,6 @@ namespace System.Windows.Forms
                     break;
 
                 default:
-                    Debug.Fail("Unknown border style");
                     break;
             }
         }
@@ -1997,7 +2009,7 @@ namespace System.Windows.Forms
             IntPtr oldBrush = Gdi32.SelectObject(dc, Gdi32.GetStockObject(Gdi32.StockObject.HOLLOW_BRUSH));
             IntPtr oldPen = Gdi32.SelectObject(dc, pen);
             Gdi32.SetBkColor(dc, ColorTranslator.ToWin32(graphicsColor));
-            SafeNativeMethods.Rectangle(new HandleRef(null, dc), rectangle.X, rectangle.Y, rectangle.Right, rectangle.Bottom);
+            Gdi32.Rectangle(dc, rectangle.X, rectangle.Y, rectangle.Right, rectangle.Bottom);
 
             Gdi32.SetROP2(dc, prevRop2);
             Gdi32.SelectObject(dc, oldBrush);
@@ -2026,8 +2038,8 @@ namespace System.Windows.Forms
             IntPtr oldBrush = Gdi32.SelectObject(dc, Gdi32.GetStockObject(Gdi32.StockObject.HOLLOW_BRUSH));
             IntPtr oldPen = Gdi32.SelectObject(dc, pen);
 
-            SafeNativeMethods.MoveToEx(new HandleRef(null, dc), start.X, start.Y, null);
-            SafeNativeMethods.LineTo(new HandleRef(null, dc), end.X, end.Y);
+            Gdi32.MoveToEx(dc, start.X, start.Y, null);
+            Gdi32.LineTo(dc, end.X, end.Y);
 
             Gdi32.SetROP2(dc, prevRop2);
             Gdi32.SelectObject(dc, oldBrush);
@@ -2275,14 +2287,14 @@ namespace System.Windows.Forms
             User32.LOGFONTW logfont = User32.LOGFONTW.FromFont(source);
 
             short fontWeight = target.Weight;
-            if (fontWeight != logfont.lfWeight)
+            if (fontWeight != (short)logfont.lfWeight)
             {
                 target.Weight = (short)logfont.lfWeight;
                 changed = true;
             }
 
             bool fontBold = target.Bold.IsTrue();
-            bool isBold = logfont.lfWeight >= 700;
+            bool isBold = logfont.lfWeight >= Gdi32.FW.BOLD;
             if (fontBold != isBold)
             {
                 target.Bold = isBold.ToBOOL();

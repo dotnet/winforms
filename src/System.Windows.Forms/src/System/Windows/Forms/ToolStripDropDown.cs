@@ -287,7 +287,7 @@ namespace System.Windows.Forms
                 // If we're using themes then go ahead
                 if (DropShadowEnabled)
                 {
-                    cp.ClassStyle |= (int)NativeMethods.ClassStyle.CS_DROPSHADOW;
+                    cp.ClassStyle |= (int)User32.CS.DROPSHADOW;
                 }
                 // we're a borderless menuless control with no min/max boxes
                 // we dont want to show in the taskbar either
@@ -297,17 +297,17 @@ namespace System.Windows.Forms
                 //Give the window the WS_POPUP style and make it owned by a hidden window. (Form)
 
                 cp.Style &= ~(NativeMethods.WS_CAPTION | NativeMethods.WS_CLIPSIBLINGS);         /* no caption, no siblings */
-                cp.ExStyle &= ~(NativeMethods.WS_EX_APPWINDOW);  /* show in taskbar = false */
+                cp.ExStyle &= ~(int)User32.WS_EX.APPWINDOW;  /* show in taskbar = false */
                 // | NativeMethods.WS_EX_TOOLWINDOW
                 cp.Style |= (TopLevel) ? NativeMethods.WS_POPUP : NativeMethods.WS_CHILD;
-                cp.ExStyle |= (NativeMethods.WS_EX_CONTROLPARENT);  /* show in taskbar = false */
+                cp.ExStyle |= (int)User32.WS_EX.CONTROLPARENT;  /* show in taskbar = false */
 
                 bool topLevel = TopLevel;
 
                 // opacity
-                if (topLevel && (state[stateLayered]))
+                if (topLevel && state[stateLayered])
                 {
-                    cp.ExStyle |= NativeMethods.WS_EX_LAYERED;
+                    cp.ExStyle |= (int)User32.WS_EX.LAYERED;
                 }
                 else if (topLevel)
                 {
@@ -316,7 +316,7 @@ namespace System.Windows.Forms
                     //If the display driver has enough memory, it saves the bits for Windows. If the display driver does not have enough memory, Window
                     //saves the bits itself as a bitmap in global memory and also uses some of User's local heap for housekeeping structures for each window.
                     //When the application removes the window, Windows can restore the screen image quickly by using the stored bits.
-                    cp.ClassStyle |= (int)NativeMethods.ClassStyle.CS_SAVEBITS;
+                    cp.ClassStyle |= (int)User32.CS.SAVEBITS;
                 }
                 else if (!topLevel)
                 {
@@ -1878,7 +1878,7 @@ namespace System.Windows.Forms
 
                         if (!openingEventCancelled)
                         {
-                            // do the actual work to open the window.
+                            // Do the actual work to open the window.
                             if (TopLevel)
                             {
                                 ReparentToActiveToolStripWindow();
@@ -1891,14 +1891,15 @@ namespace System.Windows.Forms
                                 // in the parent, make sure it retains where the mouse really was.
                                 OwnerToolStrip.SnapMouseLocation();
 
-                                // Make sure that mouse capture
-                                // transitions between the owner and dropdown.
-                                if (OwnerToolStrip.CaptureInternal)
+                                // Make sure that mouse capture transitions between the owner and dropdown.
+                                if (OwnerToolStrip.Capture)
                                 {
-                                    CaptureInternal = true;
+                                    Capture = true;
                                 }
                             }
+
                             base.SetVisibleCore(visible);
+
                             if (TopLevel)
                             {
                                 ApplyTopMost(true);
@@ -2006,16 +2007,16 @@ namespace System.Windows.Forms
                                 }
                                 finally
                                 {
-                                    // rRmove ourselves from the active dropdown list.
+                                    // Remove ourselves from the active dropdown list.
                                     OwnerToolStrip?.ActiveDropDowns.Remove(this);
                                     ActiveDropDowns.Clear();
 
-                                    // If the user traps the click event and starts
-                                    // pumping their own messages by calling Application.DoEvents, we
-                                    // should release mouse capture.
-                                    if (CaptureInternal)
+                                    // If the user traps the click event and starts pumping their
+                                    // own messages by calling Application.DoEvents, we should
+                                    // release mouse capture.
+                                    if (Capture)
                                     {
-                                        CaptureInternal = false;
+                                        Capture = false;
                                     }
                                 }
 
@@ -2363,15 +2364,15 @@ namespace System.Windows.Forms
                 this.owner = owner;
             }
 
-            internal override object GetPropertyValue(int propertyID)
+            internal override object GetPropertyValue(UiaCore.UIA propertyID)
             {
                 switch (propertyID)
                 {
-                    case NativeMethods.UIA_ControlTypePropertyId:
-                        return NativeMethods.UIA_MenuControlTypeId;
-                    case NativeMethods.UIA_IsKeyboardFocusablePropertyId:
+                    case UiaCore.UIA.ControlTypePropertyId:
+                        return UiaCore.UIA.MenuControlTypeId;
+                    case UiaCore.UIA.IsKeyboardFocusablePropertyId:
                         return (State & AccessibleStates.Focusable) == AccessibleStates.Focusable;
-                    case NativeMethods.UIA_NamePropertyId:
+                    case UiaCore.UIA.NamePropertyId:
                         return Name;
                 }
 

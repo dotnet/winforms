@@ -312,7 +312,7 @@ namespace System.Windows.Forms
                 // Translate for Rtl if necessary
                 //
                 HorizontalAlignment align = RtlTranslateHorizontal(textAlign);
-                cp.ExStyle &= ~NativeMethods.WS_EX_RIGHT;   // WS_EX_RIGHT overrides the ES_XXXX alignment styles
+                cp.ExStyle &= ~(int)User32.WS_EX.RIGHT;   // WS_EX_RIGHT overrides the ES_XXXX alignment styles
                 switch (align)
                 {
                     case HorizontalAlignment.Left:
@@ -775,7 +775,7 @@ namespace System.Windows.Forms
                             if (stringSource == null)
                             {
                                 stringSource = new StringSource(GetStringsForAutoComplete());
-                                if (!stringSource.Bind(new HandleRef(this, Handle), (int)AutoCompleteMode))
+                                if (!stringSource.Bind(new HandleRef(this, Handle), (Shell32.AUTOCOMPLETEOPTIONS)AutoCompleteMode))
                                 {
                                     throw new ArgumentException(SR.AutoCompleteFailure);
                                 }

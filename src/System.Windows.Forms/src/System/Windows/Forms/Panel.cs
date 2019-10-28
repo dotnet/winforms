@@ -129,15 +129,15 @@ namespace System.Windows.Forms
             get
             {
                 CreateParams cp = base.CreateParams;
-                cp.ExStyle |= NativeMethods.WS_EX_CONTROLPARENT;
+                cp.ExStyle |= (int)User32.WS_EX.CONTROLPARENT;
 
-                cp.ExStyle &= (~NativeMethods.WS_EX_CLIENTEDGE);
+                cp.ExStyle &= ~(int)User32.WS_EX.CLIENTEDGE;
                 cp.Style &= (~NativeMethods.WS_BORDER);
 
                 switch (_borderStyle)
                 {
                     case BorderStyle.Fixed3D:
-                        cp.ExStyle |= NativeMethods.WS_EX_CLIENTEDGE;
+                        cp.ExStyle |= (int)User32.WS_EX.CLIENTEDGE;
                         break;
                     case BorderStyle.FixedSingle:
                         cp.Style |= NativeMethods.WS_BORDER;
@@ -226,17 +226,13 @@ namespace System.Windows.Forms
             base.OnResize(eventargs);
         }
 
-        internal override void PrintToMetaFileRecursive(HandleRef hDC, IntPtr lParam, Rectangle bounds)
+        private protected override void PrintToMetaFileRecursive(IntPtr hDC, IntPtr lParam, Rectangle bounds)
         {
             base.PrintToMetaFileRecursive(hDC, lParam, bounds);
 
-            using (WindowsFormsUtils.DCMapping mapping = new WindowsFormsUtils.DCMapping(hDC, bounds))
-            {
-                using (Graphics g = Graphics.FromHdcInternal(hDC.Handle))
-                {
-                    ControlPaint.PrintBorder(g, new Rectangle(Point.Empty, Size), BorderStyle, Border3DStyle.Sunken);
-                }
-            }
+            using var mapping = new WindowsFormsUtils.DCMapping(hDC, bounds);
+            using Graphics g = Graphics.FromHdcInternal(hDC);
+            ControlPaint.PrintBorder(g, new Rectangle(Point.Empty, Size), BorderStyle, Border3DStyle.Sunken);
         }
 
         /// <summary>

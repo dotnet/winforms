@@ -338,7 +338,7 @@ namespace System.Windows.Forms
                 // Translate for Rtl if necessary
                 //
                 HorizontalAlignment align = RtlTranslateHorizontal(textAlign);
-                cp.ExStyle &= ~NativeMethods.WS_EX_RIGHT;   // WS_EX_RIGHT overrides the ES_XXXX alignment styles
+                cp.ExStyle &= ~(int)User32.WS_EX.RIGHT;   // WS_EX_RIGHT overrides the ES_XXXX alignment styles
                 switch (align)
                 {
                     case HorizontalAlignment.Left:
@@ -2915,7 +2915,7 @@ namespace System.Windows.Forms
                 Debug.Assert(ImeMode == ImeMode.Disable, "IME enabled when in RO or Pwd mode.");
             }
 #endif
-            // Non-Korean IMEs complete compositon when all characters in the string has been composed (when user hits enter);
+            // Non-Korean IMEs complete composition when all characters in the string has been composed (when user hits enter);
             // Currently, we don't support checking the composition string characters because it would require similar logic
             // as the MaskedTextBox itself.
 
@@ -2923,13 +2923,13 @@ namespace System.Windows.Forms
             {
                 byte imeConvertionType = imeConvertionNone;
 
-                // Check if there's an update to the compositon string:
-                if ((m.LParam.ToInt32() & NativeMethods.GCS_COMPSTR) != 0)
+                // Check if there's an update to the composition string:
+                if ((m.LParam.ToInt32() & (int)Imm32.GCS.COMPSTR) != 0)
                 {
                     // The character in the composition has been updated but not yet converted.
                     imeConvertionType = imeConvertionUpdate;
                 }
-                else if ((m.LParam.ToInt32() & NativeMethods.GCS_RESULTSTR) != 0)
+                else if ((m.LParam.ToInt32() & (int)Imm32.GCS.RESULTSTR) != 0)
                 {
                     // The character(s) in the composition has been fully converted.
                     imeConvertionType = imeConvertionCompleted;

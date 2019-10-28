@@ -2,7 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
@@ -26,50 +26,40 @@ namespace System.Windows.Forms
     Designer("System.Windows.Forms.Design.TabControlDesigner, " + AssemblyRef.SystemDesign),
     SRDescription(nameof(SR.DescriptionTabControl))
     ]
-    public class TabControl : Control
+    public partial class TabControl : Control
     {
-        private static readonly Size DEFAULT_ITEMSIZE = Size.Empty;
-        private static readonly Point DEFAULT_PADDING = new Point(6, 3);
+        private static readonly Size DefaultItemSize = Size.Empty;
+        private static readonly Point DefaultPaddingPoint = new Point(6, 3);
 
-        //properties
-        private readonly TabPageCollection tabCollection;
-        private TabAlignment alignment = TabAlignment.Top;
-        private TabDrawMode drawMode = TabDrawMode.Normal;
-        private ImageList imageList = null;
-        private Size itemSize = DEFAULT_ITEMSIZE;
-        private Point padding = DEFAULT_PADDING;
-        private TabSizeMode sizeMode = TabSizeMode.Normal;
-        private TabAppearance appearance = TabAppearance.Normal;
-        private Rectangle cachedDisplayRect = Rectangle.Empty;
-        private bool currentlyScaling = false;
-        private int selectedIndex = -1;
-        private Size cachedSize = Size.Empty;
-        private string controlTipText = string.Empty;
-        private bool handleInTable;
+        // Properties
+        private readonly TabPageCollection _tabCollection;
+        private TabAlignment _alignment = TabAlignment.Top;
+        private TabDrawMode _drawMode = TabDrawMode.Normal;
+        private ImageList _imageList;
+        private Size _itemSize = DefaultItemSize;
+        private Point _padding = DefaultPaddingPoint;
+        private TabSizeMode _sizeMode = TabSizeMode.Normal;
+        private TabAppearance _appearance = TabAppearance.Normal;
+        private Rectangle _cachedDisplayRect;
+        private bool _currentlyScaling;
+        private int _selectedIndex = -1;
+        private string _controlTipText = string.Empty;
+        private bool _handleInTable;
 
-        //events
-        private EventHandler onSelectedIndexChanged;
-        private DrawItemEventHandler onDrawItem;
+        // Events
+        private EventHandler _onSelectedIndexChanged;
+        private DrawItemEventHandler _onDrawItem;
 
-        //events
-        private static readonly object EVENT_DESELECTING = new object();
-        private static readonly object EVENT_DESELECTED = new object();
-        private static readonly object EVENT_SELECTING = new object();
-        private static readonly object EVENT_SELECTED = new object();
-        private static readonly object EVENT_RIGHTTOLEFTLAYOUTCHANGED = new object();
+        private static readonly object s_deselectingEvent = new object();
+        private static readonly object s_deselectedEvent = new object();
+        private static readonly object s_selectingEvent = new object();
+        private static readonly object s_selectedEvent = new object();
+        private static readonly object s_rightToLeftLayoutChangedEvent = new object();
 
-        private const int TABCONTROLSTATE_hotTrack = 0x00000001;
-        private const int TABCONTROLSTATE_multiline = 0x00000002;
-        private const int TABCONTROLSTATE_showToolTips = 0x00000004;
-        private const int TABCONTROLSTATE_getTabRectfromItemSize = 0x00000008;
-        private const int TABCONTROLSTATE_fromCreateHandles = 0x00000010;
-        private const int TABCONTROLSTATE_UISelection = 0x00000020;
-        private const int TABCONTROLSTATE_selectFirstControl = 0x00000040;
-        private const int TABCONTROLSTATE_insertingItem = 0x00000080;
-        private const int TABCONTROLSTATE_autoSize = 0x00000100;
+        // Perf: take all the bools and put them into a state variable: see TabControlState consts above
+        private BitVector32 _tabControlState;
 
-        // PERF: take all the bools and put them into a state variable
-        private Collections.Specialized.BitVector32 tabControlState; // see TABCONTROLSTATE_ consts above
+        public const string TabBaseReLayoutMessageName = "_TabBaseReLayout";
 
         /// <summary>
         ///  This message is posted by the control to itself after a TabPage is
@@ -78,16 +68,16 @@ namespace System.Windows.Forms
         ///  display rectangle.  When the message is received, the control calls
         ///  updateTabSelection() to layout the TabPages correctly.
         /// </summary>
-        private readonly User32.WindowMessage tabBaseReLayoutMessage = User32.RegisterWindowMessageW(Application.WindowMessagesVersion + "_TabBaseReLayout");
+        private readonly User32.WindowMessage _tabBaseReLayoutMessage = User32.RegisterWindowMessageW(Application.WindowMessagesVersion + TabBaseReLayoutMessageName);
 
-        //state
-        private TabPage[] tabPages;
-        private int tabPageCount;
-        private int lastSelection;
+        // State
+        private TabPage[] _tabPages;
+        private int _tabPageCount;
+        private int _lastSelection;
         private short _windowId;
 
-        private bool rightToLeftLayout = false;
-        private bool skipUpdateSize;
+        private bool _rightToLeftLayout;
+        private bool _skipUpdateSize;
 
         /// <summary>
         ///  Constructs a TabBase object, usually as the base class for a TabStrip or TabControl.
@@ -95,9 +85,9 @@ namespace System.Windows.Forms
         public TabControl()
         : base()
         {
-            tabControlState = new Collections.Specialized.BitVector32(0x00000000);
+            _tabControlState = new Collections.Specialized.BitVector32(0x00000000);
 
-            tabCollection = new TabPageCollection(this);
+            _tabCollection = new TabPageCollection(this);
             SetStyle(ControlStyles.UserPaint, false);
         }
 
@@ -119,12 +109,12 @@ namespace System.Windows.Forms
         {
             get
             {
-                return alignment;
+                return _alignment;
             }
 
             set
             {
-                if (alignment != value)
+                if (_alignment != value)
                 {
                     //valid values are 0x0 to 0x3
                     if (!ClientUtils.IsEnumValid(value, (int)value, (int)TabAlignment.Top, (int)TabAlignment.Right))
@@ -132,8 +122,8 @@ namespace System.Windows.Forms
                         throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(TabAlignment));
                     }
 
-                    alignment = value;
-                    if (alignment == TabAlignment.Left || alignment == TabAlignment.Right)
+                    _alignment = value;
+                    if (_alignment == TabAlignment.Left || _alignment == TabAlignment.Right)
                     {
                         Multiline = true;
                     }
@@ -159,19 +149,19 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (appearance == TabAppearance.FlatButtons && alignment != TabAlignment.Top)
+                if (_appearance == TabAppearance.FlatButtons && _alignment != TabAlignment.Top)
                 {
                     return TabAppearance.Buttons;
                 }
                 else
                 {
-                    return appearance;
+                    return _appearance;
                 }
             }
 
             set
             {
-                if (appearance != value)
+                if (_appearance != value)
                 {
                     //valid values are 0x0 to 0x2
                     if (!ClientUtils.IsEnumValid(value, (int)value, (int)TabAppearance.Normal, (int)TabAppearance.FlatButtons))
@@ -179,7 +169,7 @@ namespace System.Windows.Forms
                         throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(TabAppearance));
                     }
 
-                    appearance = value;
+                    _appearance = value;
                     RecreateHandle();
 
                     //Fire OnStyleChanged(EventArgs.Empty) here since we are no longer calling UpdateStyles( ) but always reCreating the Handle.
@@ -319,7 +309,7 @@ namespace System.Windows.Forms
                     cp.Style |= NativeMethods.TCS_MULTILINE;
                 }
 
-                if (drawMode == TabDrawMode.OwnerDrawFixed)
+                if (_drawMode == TabDrawMode.OwnerDrawFixed)
                 {
                     cp.Style |= NativeMethods.TCS_OWNERDRAWFIXED;
                 }
@@ -329,37 +319,37 @@ namespace System.Windows.Forms
                     cp.Style |= NativeMethods.TCS_TOOLTIPS;
                 }
 
-                if (alignment == TabAlignment.Bottom ||
-                    alignment == TabAlignment.Right)
+                if (_alignment == TabAlignment.Bottom ||
+                    _alignment == TabAlignment.Right)
                 {
                     cp.Style |= NativeMethods.TCS_BOTTOM;
                 }
 
-                if (alignment == TabAlignment.Left ||
-                    alignment == TabAlignment.Right)
+                if (_alignment == TabAlignment.Left ||
+                    _alignment == TabAlignment.Right)
                 {
                     cp.Style |= NativeMethods.TCS_VERTICAL | NativeMethods.TCS_MULTILINE;
                 }
 
-                if (tabControlState[TABCONTROLSTATE_hotTrack])
+                if (GetState(State.HotTrack))
                 {
                     cp.Style |= NativeMethods.TCS_HOTTRACK;
                 }
 
-                if (appearance == TabAppearance.Normal)
+                if (_appearance == TabAppearance.Normal)
                 {
                     cp.Style |= NativeMethods.TCS_TABS;
                 }
                 else
                 {
                     cp.Style |= NativeMethods.TCS_BUTTONS;
-                    if (appearance == TabAppearance.FlatButtons && alignment == TabAlignment.Top)
+                    if (_appearance == TabAppearance.FlatButtons && _alignment == TabAlignment.Top)
                     {
                         cp.Style |= NativeMethods.TCS_FLATBUTTONS;
                     }
                 }
 
-                switch (sizeMode)
+                switch (_sizeMode)
                 {
                     case TabSizeMode.Normal:
                         cp.Style |= NativeMethods.TCS_RAGGEDRIGHT;
@@ -372,12 +362,12 @@ namespace System.Windows.Forms
                         break;
                 }
 
-                if (RightToLeft == RightToLeft.Yes && RightToLeftLayout == true)
+                if (RightToLeft == RightToLeft.Yes && RightToLeftLayout)
                 {
                     //We want to turn on mirroring for Form explicitly.
-                    cp.ExStyle |= NativeMethods.WS_EX_LAYOUTRTL | NativeMethods.WS_EX_NOINHERITLAYOUT;
+                    cp.ExStyle |= (int)User32.WS_EX.LAYOUTRTL | (int)User32.WS_EX.NOINHERITLAYOUT;
                     //Don't need these styles when mirroring is turned on.
-                    cp.ExStyle &= ~(NativeMethods.WS_EX_RTLREADING | NativeMethods.WS_EX_RIGHT | NativeMethods.WS_EX_LEFTSCROLLBAR);
+                    cp.ExStyle &= ~((int)User32.WS_EX.RTLREADING | (int)User32.WS_EX.RIGHT | (int)User32.WS_EX.LEFTSCROLLBAR);
                 }
 
                 return cp;
@@ -394,10 +384,10 @@ namespace System.Windows.Forms
         {
             get
             {
-                // Null out cachedDisplayRect whenever we do anything to change it...
-                if (!cachedDisplayRect.IsEmpty)
+                // Set the cached display rect to Rectangle.Empty whenever we do anything to change it.
+                if (!_cachedDisplayRect.IsEmpty)
                 {
-                    return cachedDisplayRect;
+                    return _cachedDisplayRect;
                 }
 
                 RECT rect = Bounds;
@@ -426,7 +416,7 @@ namespace System.Windows.Forms
                 r.X -= p.X;
                 r.Y -= p.Y;
 
-                cachedDisplayRect = r;
+                _cachedDisplayRect = r;
                 return r;
             }
         }
@@ -443,7 +433,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return drawMode;
+                return _drawMode;
             }
 
             set
@@ -454,9 +444,9 @@ namespace System.Windows.Forms
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(TabDrawMode));
                 }
 
-                if (drawMode != value)
+                if (_drawMode != value)
                 {
-                    drawMode = value;
+                    _drawMode = value;
                     RecreateHandle();
                 }
             }
@@ -472,16 +462,12 @@ namespace System.Windows.Forms
         ]
         public bool HotTrack
         {
-            get
-            {
-                return tabControlState[TABCONTROLSTATE_hotTrack];
-            }
-
+            get => GetState(State.HotTrack);
             set
             {
                 if (HotTrack != value)
                 {
-                    tabControlState[TABCONTROLSTATE_hotTrack] = value;
+                    SetState(State.HotTrack, value);
                     if (IsHandleCreated)
                     {
                         RecreateHandle();
@@ -504,22 +490,22 @@ namespace System.Windows.Forms
         {
             get
             {
-                return imageList;
+                return _imageList;
             }
             set
             {
-                if (imageList != value)
+                if (_imageList != value)
                 {
                     EventHandler recreateHandler = new EventHandler(ImageListRecreateHandle);
                     EventHandler disposedHandler = new EventHandler(DetachImageList);
 
-                    if (imageList != null)
+                    if (_imageList != null)
                     {
-                        imageList.RecreateHandle -= recreateHandler;
-                        imageList.Disposed -= disposedHandler;
+                        _imageList.RecreateHandle -= recreateHandler;
+                        _imageList.Disposed -= disposedHandler;
                     }
 
-                    imageList = value;
+                    _imageList = value;
                     IntPtr handle = (value != null) ? value.Handle : IntPtr.Zero;
                     if (IsHandleCreated)
                     {
@@ -554,34 +540,27 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (itemSize.IsEmpty)
+                if (_itemSize.IsEmpty)
                 {
-
                     // Obtain the current itemsize of the first tab from the winctl control
-                    //
                     if (IsHandleCreated)
                     {
-                        tabControlState[TABCONTROLSTATE_getTabRectfromItemSize] = true;
+                        SetState(State.GetTabRectfromItemSize, true);
                         return GetTabRect(0).Size;
                     }
-                    else
-                    {
-                        return DEFAULT_ITEMSIZE;
-                    }
+                    
+                    return DefaultItemSize;
                 }
-                else
-                {
-                    return itemSize;
-                }
+                
+                return _itemSize;
             }
-
             set
             {
                 if (value.Width < 0 || value.Height < 0)
                 {
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(ItemSize), value));
                 }
-                itemSize = value;
+                _itemSize = value;
                 ApplyItemSize();
                 UpdateSize();
                 Invalidate();
@@ -597,14 +576,8 @@ namespace System.Windows.Forms
         /// </summary>
         private bool InsertingItem
         {
-            get
-            {
-                return (bool)tabControlState[TABCONTROLSTATE_insertingItem];
-            }
-            set
-            {
-                tabControlState[TABCONTROLSTATE_insertingItem] = value;
-            }
+            get => GetState(State.InsertingItem);
+            set => SetState(State.InsertingItem, value);
         }
 
         /// <summary>
@@ -621,18 +594,15 @@ namespace System.Windows.Forms
         ]
         public bool Multiline
         {
-            get
-            {
-                return tabControlState[TABCONTROLSTATE_multiline];
-            }
+            get => GetState(State.Multiline);
             set
             {
                 if (Multiline != value)
                 {
-                    tabControlState[TABCONTROLSTATE_multiline] = value;
-                    if (Multiline == false && (alignment == TabAlignment.Left || alignment == TabAlignment.Right))
+                    SetState(State.Multiline, value);
+                    if (Multiline == false && (_alignment == TabAlignment.Left || _alignment == TabAlignment.Right))
                     {
-                        alignment = TabAlignment.Top;
+                        _alignment = TabAlignment.Top;
                     }
 
                     RecreateHandle();
@@ -653,7 +623,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return padding;
+                return _padding;
             }
             set
             {
@@ -662,9 +632,9 @@ namespace System.Windows.Forms
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(Padding), value));
                 }
 
-                if (padding != value)
+                if (_padding != value)
                 {
-                    padding = value;
+                    _padding = value;
                     if (IsHandleCreated)
                     {
                         RecreateHandle();
@@ -690,14 +660,14 @@ namespace System.Windows.Forms
             get
             {
 
-                return rightToLeftLayout;
+                return _rightToLeftLayout;
             }
 
             set
             {
-                if (value != rightToLeftLayout)
+                if (value != _rightToLeftLayout)
                 {
-                    rightToLeftLayout = value;
+                    _rightToLeftLayout = value;
                     using (new LayoutTransaction(this, this, PropertyNames.RightToLeftLayout))
                     {
                         OnRightToLeftLayoutChanged(EventArgs.Empty);
@@ -752,7 +722,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    return selectedIndex;
+                    return _selectedIndex;
                 }
             }
             set
@@ -768,44 +738,44 @@ namespace System.Windows.Forms
                     {
                         // Guard Against CreateHandle ..
                         // And also if we are setting SelectedIndex ourselves from SelectNextTab..
-                        if (!tabControlState[TABCONTROLSTATE_fromCreateHandles] && !tabControlState[TABCONTROLSTATE_selectFirstControl])
+                        if (!GetState(State.FromCreateHandles) && !GetState(State.SelectFirstControl))
                         {
-                            tabControlState[TABCONTROLSTATE_UISelection] = true;
+                            SetState(State.UISelection, true);
                             // Fire Deselecting .. Deselected on currently selected TabPage...
                             if (WmSelChanging())
                             {
-                                tabControlState[TABCONTROLSTATE_UISelection] = false;
+                                SetState(State.UISelection, false);
                                 return;
                             }
                             if (ValidationCancelled)
                             {
-                                tabControlState[TABCONTROLSTATE_UISelection] = false;
+                                SetState(State.UISelection, false);
                                 return;
                             }
                         }
 
                         SendMessage(NativeMethods.TCM_SETCURSEL, value, 0);
 
-                        if (!tabControlState[TABCONTROLSTATE_fromCreateHandles] && !tabControlState[TABCONTROLSTATE_selectFirstControl])
+                        if (!GetState(State.FromCreateHandles) && !GetState(State.SelectFirstControl))
                         {
                             // Fire Selecting & Selected .. Also if Selecting is Canceled..
                             // then retuern as we do not change the SelectedIndex...
-                            tabControlState[TABCONTROLSTATE_selectFirstControl] = true;
+                            SetState(State.SelectFirstControl, true);
                             if (WmSelChange())
                             {
-                                tabControlState[TABCONTROLSTATE_UISelection] = false;
-                                tabControlState[TABCONTROLSTATE_selectFirstControl] = false;
+                                SetState(State.UISelection, false);
+                                SetState(State.SelectFirstControl, false);
                                 return;
                             }
                             else
                             {
-                                tabControlState[TABCONTROLSTATE_selectFirstControl] = false;
+                                SetState(State.SelectFirstControl, false);
                             }
                         }
                     }
                     else
                     {
-                        selectedIndex = value;
+                        _selectedIndex = value;
                     }
                 }
             }
@@ -845,8 +815,8 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    Debug.Assert(0 <= index && index < tabPages.Length, "SelectedIndex returned an invalid index");
-                    return tabPages[index];
+                    Debug.Assert(0 <= index && index < _tabPages.Length, "SelectedIndex returned an invalid index");
+                    return _tabPages[index];
                 }
             }
             set
@@ -873,11 +843,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                return sizeMode;
+                return _sizeMode;
             }
             set
             {
-                if (sizeMode == value)
+                if (_sizeMode == value)
                 {
                     return;
                 }
@@ -888,7 +858,7 @@ namespace System.Windows.Forms
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(TabSizeMode));
                 }
 
-                sizeMode = value;
+                _sizeMode = value;
                 RecreateHandle();
             }
         }
@@ -905,15 +875,12 @@ namespace System.Windows.Forms
         ]
         public bool ShowToolTips
         {
-            get
-            {
-                return tabControlState[TABCONTROLSTATE_showToolTips];
-            }
+            get => GetState(State.ShowToolTips);
             set
             {
                 if (ShowToolTips != value)
                 {
-                    tabControlState[TABCONTROLSTATE_showToolTips] = value;
+                    SetState(State.ShowToolTips, value);
                     RecreateHandle();
                 }
             }
@@ -930,7 +897,7 @@ namespace System.Windows.Forms
         ]
         public int TabCount
         {
-            get { return tabPageCount; }
+            get { return _tabPageCount; }
         }
 
         /// <summary>
@@ -947,7 +914,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return tabCollection;
+                return _tabCollection;
             }
         }
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), Bindable(false)]
@@ -973,22 +940,22 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.drawItemEventDescr))]
         public event DrawItemEventHandler DrawItem
         {
-            add => onDrawItem += value;
-            remove => onDrawItem -= value;
+            add => _onDrawItem += value;
+            remove => _onDrawItem -= value;
         }
 
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnRightToLeftLayoutChangedDescr))]
         public event EventHandler RightToLeftLayoutChanged
         {
-            add => Events.AddHandler(EVENT_RIGHTTOLEFTLAYOUTCHANGED, value);
-            remove => Events.RemoveHandler(EVENT_RIGHTTOLEFTLAYOUTCHANGED, value);
+            add => Events.AddHandler(s_rightToLeftLayoutChangedEvent, value);
+            remove => Events.RemoveHandler(s_rightToLeftLayoutChangedEvent, value);
         }
 
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.selectedIndexChangedEventDescr))]
         public event EventHandler SelectedIndexChanged
         {
-            add => onSelectedIndexChanged += value;
-            remove => onSelectedIndexChanged -= value;
+            add => _onSelectedIndexChanged += value;
+            remove => _onSelectedIndexChanged -= value;
         }
 
         /// <summary>
@@ -998,8 +965,8 @@ namespace System.Windows.Forms
         ]
         public event TabControlCancelEventHandler Selecting
         {
-            add => Events.AddHandler(EVENT_SELECTING, value);
-            remove => Events.RemoveHandler(EVENT_SELECTING, value);
+            add => Events.AddHandler(s_selectingEvent, value);
+            remove => Events.RemoveHandler(s_selectingEvent, value);
         }
 
         /// <summary>
@@ -1009,8 +976,8 @@ namespace System.Windows.Forms
         ]
         public event TabControlEventHandler Selected
         {
-            add => Events.AddHandler(EVENT_SELECTED, value);
-            remove => Events.RemoveHandler(EVENT_SELECTED, value);
+            add => Events.AddHandler(s_selectedEvent, value);
+            remove => Events.RemoveHandler(s_selectedEvent, value);
         }
 
         /// <summary>
@@ -1020,8 +987,8 @@ namespace System.Windows.Forms
         ]
         public event TabControlCancelEventHandler Deselecting
         {
-            add => Events.AddHandler(EVENT_DESELECTING, value);
-            remove => Events.RemoveHandler(EVENT_DESELECTING, value);
+            add => Events.AddHandler(s_deselectingEvent, value);
+            remove => Events.RemoveHandler(s_deselectingEvent, value);
         }
 
         /// <summary>
@@ -1031,8 +998,8 @@ namespace System.Windows.Forms
         ]
         public event TabControlEventHandler Deselected
         {
-            add => Events.AddHandler(EVENT_DESELECTED, value);
-            remove => Events.RemoveHandler(EVENT_DESELECTED, value);
+            add => Events.AddHandler(s_deselectedEvent, value);
+            remove => Events.RemoveHandler(s_deselectedEvent, value);
         }
 
         /// <summary>
@@ -1059,8 +1026,8 @@ namespace System.Windows.Forms
 
         internal int AddNativeTabPage(NativeMethods.TCITEM_T tcitem)
         {
-            int index = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TCM_INSERTITEM, tabPageCount + 1, tcitem);
-            User32.PostMessageW(this, tabBaseReLayoutMessage);
+            int index = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TCM_INSERTITEM, _tabPageCount + 1, tcitem);
+            User32.PostMessageW(this, _tabBaseReLayoutMessage);
             return index;
         }
 
@@ -1068,9 +1035,9 @@ namespace System.Windows.Forms
         {
             if (IsHandleCreated && ShouldSerializeItemSize())
             {
-                SendMessage(NativeMethods.TCM_SETITEMSIZE, 0, (int)NativeMethods.Util.MAKELPARAM(itemSize.Width, itemSize.Height));
+                SendMessage(NativeMethods.TCM_SETITEMSIZE, 0, (int)NativeMethods.Util.MAKELPARAM(_itemSize.Width, _itemSize.Height));
             }
-            cachedDisplayRect = Rectangle.Empty;
+            _cachedDisplayRect = Rectangle.Empty;
         }
 
         internal void BeginUpdate()
@@ -1160,9 +1127,9 @@ namespace System.Windows.Forms
         {
             if (disposing)
             {
-                if (imageList != null)
+                if (_imageList != null)
                 {
-                    imageList.Disposed -= new EventHandler(DetachImageList);
+                    _imageList.Disposed -= new EventHandler(DetachImageList);
                 }
             }
             base.Dispose(disposing);
@@ -1180,11 +1147,11 @@ namespace System.Windows.Forms
 
         internal int FindTabPage(TabPage tabPage)
         {
-            if (tabPages != null)
+            if (_tabPages != null)
             {
-                for (int i = 0; i < tabPageCount; i++)
+                for (int i = 0; i < _tabPageCount; i++)
                 {
-                    if (tabPages[i].Equals(tabPage))
+                    if (_tabPages[i].Equals(tabPage))
                     {
                         return i;
                     }
@@ -1200,11 +1167,11 @@ namespace System.Windows.Forms
 
         internal TabPage GetTabPage(int index)
         {
-            if (index < 0 || index >= tabPageCount)
+            if (index < 0 || index >= _tabPageCount)
             {
                 throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
             }
-            return tabPages[index];
+            return _tabPages[index];
         }
 
         /// <summary>
@@ -1212,10 +1179,10 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual object[] GetItems()
         {
-            TabPage[] result = new TabPage[tabPageCount];
-            if (tabPageCount > 0)
+            TabPage[] result = new TabPage[_tabPageCount];
+            if (_tabPageCount > 0)
             {
-                Array.Copy(tabPages, 0, result, 0, tabPageCount);
+                Array.Copy(_tabPages, 0, result, 0, _tabPageCount);
             }
 
             return result;
@@ -1226,10 +1193,10 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual object[] GetItems(Type baseType)
         {
-            object[] result = (object[])Array.CreateInstance(baseType, tabPageCount);
-            if (tabPageCount > 0)
+            object[] result = (object[])Array.CreateInstance(baseType, _tabPageCount);
+            if (_tabPageCount > 0)
             {
-                Array.Copy(tabPages, 0, result, 0, tabPageCount);
+                Array.Copy(_tabPages, 0, result, 0, _tabPageCount);
             }
 
             return result;
@@ -1245,11 +1212,12 @@ namespace System.Windows.Forms
         /// </summary>
         public Rectangle GetTabRect(int index)
         {
-            if (index < 0 || (index >= tabPageCount && !tabControlState[TABCONTROLSTATE_getTabRectfromItemSize]))
+            if (index < 0 || (index >= _tabPageCount && !GetState(State.GetTabRectfromItemSize)))
             {
                 throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
             }
-            tabControlState[TABCONTROLSTATE_getTabRectfromItemSize] = false;
+
+            SetState(State.GetTabRectfromItemSize, false);
             RECT rect = new RECT();
 
             // normally, we would not want to create the handle for this, but since
@@ -1278,23 +1246,23 @@ namespace System.Windows.Forms
 
         internal void Insert(int index, TabPage tabPage)
         {
-            if (tabPages == null)
+            if (_tabPages == null)
             {
-                tabPages = new TabPage[4];
+                _tabPages = new TabPage[4];
             }
-            else if (tabPages.Length == tabPageCount)
+            else if (_tabPages.Length == _tabPageCount)
             {
-                TabPage[] newTabPages = new TabPage[tabPageCount * 2];
-                Array.Copy(tabPages, 0, newTabPages, 0, tabPageCount);
-                tabPages = newTabPages;
+                TabPage[] newTabPages = new TabPage[_tabPageCount * 2];
+                Array.Copy(_tabPages, 0, newTabPages, 0, _tabPageCount);
+                _tabPages = newTabPages;
             }
-            if (index < tabPageCount)
+            if (index < _tabPageCount)
             {
-                Array.Copy(tabPages, index, tabPages, index + 1, tabPageCount - index);
+                Array.Copy(_tabPages, index, _tabPages, index + 1, _tabPageCount - index);
             }
-            tabPages[index] = tabPage;
-            tabPageCount++;
-            cachedDisplayRect = Rectangle.Empty;
+            _tabPages[index] = tabPage;
+            _tabPageCount++;
+            _cachedDisplayRect = Rectangle.Empty;
             ApplyItemSize();
             if (Appearance == TabAppearance.FlatButtons)
             {
@@ -1307,7 +1275,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void InsertItem(int index, TabPage tabPage)
         {
-            if (index < 0 || ((tabPages != null) && index > tabPageCount))
+            if (index < 0 || ((_tabPages != null) && index > _tabPageCount))
             {
                 throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
             }
@@ -1360,22 +1328,22 @@ namespace System.Windows.Forms
         {
             //Add the handle to hashtable for Ids ..
             _windowId = NativeWindow.CreateWindowId(this);
-            handleInTable = true;
+            _handleInTable = true;
 
             // Set the padding BEFORE setting the control's font (as done
             // in base.OnHandleCreated()) so that the tab control will honor both the
             // horizontal and vertical dimensions of the padding rectangle.
-            if (!padding.IsEmpty)
+            if (!_padding.IsEmpty)
             {
-                SendMessage(NativeMethods.TCM_SETPADDING, 0, NativeMethods.Util.MAKELPARAM(padding.X, padding.Y));
+                SendMessage(NativeMethods.TCM_SETPADDING, 0, NativeMethods.Util.MAKELPARAM(_padding.X, _padding.Y));
             }
 
             base.OnHandleCreated(e);
-            cachedDisplayRect = Rectangle.Empty;
+            _cachedDisplayRect = Rectangle.Empty;
             ApplyItemSize();
-            if (imageList != null)
+            if (_imageList != null)
             {
-                SendMessage(NativeMethods.TCM_SETIMAGELIST, 0, imageList.Handle);
+                SendMessage(NativeMethods.TCM_SETIMAGELIST, 0, _imageList.Handle);
             }
 
             if (ShowToolTips)
@@ -1402,18 +1370,18 @@ namespace System.Windows.Forms
             //
             ResizePages();
 
-            if (selectedIndex != -1)
+            if (_selectedIndex != -1)
             {
                 try
                 {
-                    tabControlState[TABCONTROLSTATE_fromCreateHandles] = true;
-                    SelectedIndex = selectedIndex;
+                    SetState(State.FromCreateHandles, true);
+                    SelectedIndex = _selectedIndex;
                 }
                 finally
                 {
-                    tabControlState[TABCONTROLSTATE_fromCreateHandles] = false;
+                    SetState(State.FromCreateHandles, false);
                 }
-                selectedIndex = -1;
+                _selectedIndex = -1;
             }
             UpdateTabSelection(false);
         }
@@ -1422,14 +1390,14 @@ namespace System.Windows.Forms
         {
             if (!Disposing)
             {
-                selectedIndex = SelectedIndex;
+                _selectedIndex = SelectedIndex;
             }
             //Remove the Handle from NativewIndow....
 
             // Don't try to remove the Handle if we've already done so
-            if (handleInTable)
+            if (_handleInTable)
             {
-                handleInTable = false;
+                _handleInTable = false;
                 NativeWindow.RemoveWindowFromIDTable(_windowId);
             }
 
@@ -1445,7 +1413,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnDrawItem(DrawItemEventArgs e)
         {
-            onDrawItem?.Invoke(this, e);
+            _onDrawItem?.Invoke(this, e);
         }
 
         /// <summary>
@@ -1522,21 +1490,21 @@ namespace System.Windows.Forms
         {
             // Avoid temporarily resizing the TabControl while the parent
             // recreates its handle to avoid
-            skipUpdateSize = true;
+            _skipUpdateSize = true;
             try
             {
                 base.OnParentHandleRecreated();
             }
             finally
             {
-                skipUpdateSize = false;
+                _skipUpdateSize = false;
             }
         }
 
         protected override void OnResize(EventArgs e)
         {
             base.OnResize(e);
-            cachedDisplayRect = Rectangle.Empty;
+            _cachedDisplayRect = Rectangle.Empty;
             UpdateTabSelection(false);
         }
 
@@ -1553,7 +1521,7 @@ namespace System.Windows.Forms
                 RecreateHandle();
             }
 
-            if (Events[EVENT_RIGHTTOLEFTLAYOUTCHANGED] is EventHandler eh)
+            if (Events[s_rightToLeftLayoutChangedEvent] is EventHandler eh)
             {
                 eh(this, e);
             }
@@ -1569,10 +1537,10 @@ namespace System.Windows.Forms
         protected virtual void OnSelectedIndexChanged(EventArgs e)
         {
             int index = SelectedIndex;
-            cachedDisplayRect = Rectangle.Empty;
-            UpdateTabSelection(tabControlState[TABCONTROLSTATE_UISelection]);
-            tabControlState[TABCONTROLSTATE_UISelection] = false;
-            onSelectedIndexChanged?.Invoke(this, e);
+            _cachedDisplayRect = Rectangle.Empty;
+            UpdateTabSelection(GetState(State.UISelection));
+            SetState(State.UISelection, false);
+            _onSelectedIndexChanged?.Invoke(this, e);
         }
 
         /// <summary>
@@ -1580,7 +1548,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnSelecting(TabControlCancelEventArgs e)
         {
-            ((TabControlCancelEventHandler)Events[EVENT_SELECTING])?.Invoke(this, e);
+            ((TabControlCancelEventHandler)Events[s_selectingEvent])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -1588,7 +1556,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnSelected(TabControlEventArgs e)
         {
-            ((TabControlEventHandler)Events[EVENT_SELECTED])?.Invoke(this, e);
+            ((TabControlEventHandler)Events[s_selectedEvent])?.Invoke(this, e);
 
             // Raise the enter event for this tab.
             if (SelectedTab != null)
@@ -1603,7 +1571,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnDeselecting(TabControlCancelEventArgs e)
         {
-            ((TabControlCancelEventHandler)Events[EVENT_DESELECTING])?.Invoke(this, e);
+            ((TabControlCancelEventHandler)Events[s_deselectingEvent])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -1611,7 +1579,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnDeselected(TabControlEventArgs e)
         {
-            ((TabControlEventHandler)Events[EVENT_DESELECTED])?.Invoke(this, e);
+            ((TabControlEventHandler)Events[s_deselectedEvent])?.Invoke(this, e);
 
             // Raise the Leave event for this tab.
             if (SelectedTab != null)
@@ -1635,7 +1603,7 @@ namespace System.Windows.Forms
 
         internal void UpdateSize()
         {
-            if (skipUpdateSize)
+            if (_skipUpdateSize)
             {
                 return;
             }
@@ -1653,7 +1621,7 @@ namespace System.Windows.Forms
         protected override void OnFontChanged(EventArgs e)
         {
             base.OnFontChanged(e);
-            cachedDisplayRect = Rectangle.Empty;
+            _cachedDisplayRect = Rectangle.Empty;
             UpdateSize();
         }
 
@@ -1671,8 +1639,8 @@ namespace System.Windows.Forms
             {
                 SendMessage(NativeMethods.TCM_DELETEALLITEMS, 0, 0);
             }
-            this.tabPages = null;
-            tabPageCount = 0;
+            this._tabPages = null;
+            _tabPageCount = 0;
 
             base.RecreateHandleCore();
 
@@ -1682,12 +1650,12 @@ namespace System.Windows.Forms
             }
             try
             {
-                tabControlState[TABCONTROLSTATE_fromCreateHandles] = true;
+                SetState(State.FromCreateHandles, true);
                 SelectedIndex = index;
             }
             finally
             {
-                tabControlState[TABCONTROLSTATE_fromCreateHandles] = false;
+                SetState(State.FromCreateHandles, false);
             }
 
             // The comctl32 TabControl seems to have some painting glitches. Briefly
@@ -1701,38 +1669,38 @@ namespace System.Windows.Forms
             Controls.Clear();
 
             SendMessage(NativeMethods.TCM_DELETEALLITEMS, 0, 0);
-            tabPages = null;
-            tabPageCount = 0;
+            _tabPages = null;
+            _tabPageCount = 0;
         }
 
         internal void RemoveTabPage(int index)
         {
-            if (index < 0 || index >= tabPageCount)
+            if (index < 0 || index >= _tabPageCount)
             {
                 throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
             }
 
-            tabPageCount--;
-            if (index < tabPageCount)
+            _tabPageCount--;
+            if (index < _tabPageCount)
             {
-                Array.Copy(tabPages, index + 1, tabPages, index, tabPageCount - index);
+                Array.Copy(_tabPages, index + 1, _tabPages, index, _tabPageCount - index);
             }
-            tabPages[tabPageCount] = null;
+            _tabPages[_tabPageCount] = null;
             if (IsHandleCreated)
             {
                 SendMessage(NativeMethods.TCM_DELETEITEM, index, 0);
             }
-            cachedDisplayRect = Rectangle.Empty;
+            _cachedDisplayRect = Rectangle.Empty;
         }
 
         private void ResetItemSize()
         {
-            ItemSize = DEFAULT_ITEMSIZE;
+            ItemSize = DefaultItemSize;
         }
 
         private void ResetPadding()
         {
-            Padding = DEFAULT_PADDING;
+            Padding = DefaultPaddingPoint;
 
         }
 
@@ -1752,13 +1720,13 @@ namespace System.Windows.Forms
         internal void SetToolTip(ToolTip toolTip, string controlToolTipText)
         {
             UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TCM_SETTOOLTIPS, new HandleRef(toolTip, toolTip.Handle), 0);
-            controlTipText = controlToolTipText;
+            _controlTipText = controlToolTipText;
 
         }
 
         internal void SetTabPage(int index, TabPage tabPage, NativeMethods.TCITEM_T tcitem)
         {
-            if (index < 0 || index >= tabPageCount)
+            if (index < 0 || index >= _tabPageCount)
             {
                 throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
             }
@@ -1772,7 +1740,7 @@ namespace System.Windows.Forms
             {
                 UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TCM_SETCURSEL, (IntPtr)index, IntPtr.Zero);
             }
-            tabPages[index] = tabPage;
+            _tabPages[index] = tabPage;
         }
 
         /// <summary>
@@ -1832,12 +1800,12 @@ namespace System.Windows.Forms
             // Fire Deselecting .. Deselected on currently selected TabPage...
             if (WmSelChanging())
             {
-                tabControlState[TABCONTROLSTATE_UISelection] = false;
+                SetState(State.UISelection, false);
                 return;
             }
             if (ValidationCancelled)
             {
-                tabControlState[TABCONTROLSTATE_UISelection] = false;
+                SetState(State.UISelection, false);
                 return;
             }
             else
@@ -1864,20 +1832,20 @@ namespace System.Windows.Forms
                     // So adding this new Flag to select the first control.
                     try
                     {
-                        tabControlState[TABCONTROLSTATE_UISelection] = true;
-                        tabControlState[TABCONTROLSTATE_selectFirstControl] = true;
+                        SetState(State.UISelection, true);
+                        SetState(State.SelectFirstControl, true);
                         SelectedIndex = sel;
                         // This is required so that we select the first control if the TabControl is not current focused.
-                        tabControlState[TABCONTROLSTATE_selectFirstControl] = !focused;
+                        SetState(State.SelectFirstControl, !focused);
                         // Fire Selecting .. Selected on newly selected TabPage...
                         WmSelChange();
 
                     }
                     finally
                     {
-                        // tabControlState[TABCONTROLSTATE_selectFirstControl] can be true if the TabControl is not focussed
+                        // tabControlState[State.SelectFirstControl] can be true if the TabControl is not focussed
                         // But at the end of this function reset the state !!
-                        tabControlState[TABCONTROLSTATE_selectFirstControl] = false;
+                        SetState(State.SelectFirstControl, false);
                         ke.Handled = true;
                     }
 
@@ -1893,12 +1861,12 @@ namespace System.Windows.Forms
 
         private bool ShouldSerializeItemSize()
         {
-            return !itemSize.Equals(DEFAULT_ITEMSIZE);
+            return !_itemSize.Equals(DefaultItemSize);
         }
 
         private new bool ShouldSerializePadding()
         {
-            return !padding.Equals(DEFAULT_PADDING);
+            return !_padding.Equals(DefaultPaddingPoint);
         }
 
         /// <summary>
@@ -1921,9 +1889,9 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Never)]
         protected override void ScaleCore(float dx, float dy)
         {
-            currentlyScaling = true;
+            _currentlyScaling = true;
             base.ScaleCore(dx, dy);
-            currentlyScaling = false;
+            _currentlyScaling = false;
         }
 
         /// <summary>
@@ -1943,7 +1911,7 @@ namespace System.Windows.Forms
                     // will force a layout to occur.  After this layout
                     // the tabpage will then be scaled again resulting
                     // in incorrect sizes.  Suspend Layout in this case.
-                    if (currentlyScaling)
+                    if (_currentlyScaling)
                     {
                         tabPages[index].SuspendLayout();
                     }
@@ -1955,7 +1923,7 @@ namespace System.Windows.Forms
                     // issue, since ReSize is calling low frequence.
                     tabPages[index].Invalidate();
 
-                    if (currentlyScaling)
+                    if (_currentlyScaling)
                     {
                         tabPages[index].ResumeLayout(false);
                     }
@@ -1963,9 +1931,9 @@ namespace System.Windows.Forms
                     tabPages[index].Visible = true;
                     if (updateFocus)
                     {
-                        if (!Focused || tabControlState[TABCONTROLSTATE_selectFirstControl])
+                        if (!Focused || GetState(State.SelectFirstControl))
                         {
-                            tabControlState[TABCONTROLSTATE_UISelection] = false;
+                            SetState(State.UISelection, false);
                             bool selectNext = tabPages[index].SelectNextControl(null, true, true, false, false);
 
                             if (selectNext)
@@ -2017,7 +1985,7 @@ namespace System.Windows.Forms
         protected override void OnStyleChanged(EventArgs e)
         {
             base.OnStyleChanged(e);
-            cachedDisplayRect = Rectangle.Empty;
+            _cachedDisplayRect = Rectangle.Empty;
             UpdateTabSelection(false);
         }
 
@@ -2029,7 +1997,7 @@ namespace System.Windows.Forms
             // It's possible that changes to this TabPage will change the DisplayRectangle of the
             // TabControl, so invalidate and resize the size of this page.
             //
-            cachedDisplayRect = Rectangle.Empty;
+            _cachedDisplayRect = Rectangle.Empty;
             UpdateTabSelection(false);
         }
 
@@ -2046,7 +2014,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                ttt.lpszText = controlTipText;
+                ttt.lpszText = _controlTipText;
             }
 
             ttt.hinst = IntPtr.Zero;
@@ -2093,7 +2061,7 @@ namespace System.Windows.Forms
             else
             {
                 // user Cancelled the Selection of the new Tab.
-                SendMessage(NativeMethods.TCM_SETCURSEL, lastSelection, 0);
+                SendMessage(NativeMethods.TCM_SETCURSEL, _lastSelection, 0);
                 UpdateTabSelection(true);
             }
             return tcc.Cancel;
@@ -2117,7 +2085,7 @@ namespace System.Windows.Forms
             // Set the return value to a global
             // if 'cancelled' return from here else..
             // fire Deselected.
-            lastSelection = SelectedIndex;
+            _lastSelection = SelectedIndex;
             TabControlCancelEventArgs tcc = new TabControlCancelEventArgs(SelectedTab, SelectedIndex, false, TabControlAction.Deselecting);
             OnDeselecting(tcc);
             if (!tcc.Cancel)
@@ -2131,14 +2099,14 @@ namespace System.Windows.Forms
         private void WmTabBaseReLayout(ref Message m)
         {
             BeginUpdate();
-            cachedDisplayRect = Rectangle.Empty;
+            _cachedDisplayRect = Rectangle.Empty;
             UpdateTabSelection(false);
             EndUpdate();
             Invalidate(true);
 
             // Remove other TabBaseReLayout messages from the message queue
             var msg = new User32.MSG();
-            while (User32.PeekMessageW(ref msg, this, tabBaseReLayoutMessage, tabBaseReLayoutMessage).IsTrue())
+            while (User32.PeekMessageW(ref msg, this, _tabBaseReLayoutMessage, _tabBaseReLayoutMessage).IsTrue())
             {
                 // No-op.
             }
@@ -2168,39 +2136,39 @@ namespace System.Windows.Forms
                     {
                         // new switch added to prevent the TabControl from changing to next TabPage ...
                         //in case of validation cancelled...
-                        //Turn  tabControlState[TABCONTROLSTATE_UISelection] = false and Return So that no WmSelChange() gets fired.
-                        //If validation not cancelled then tabControlState[TABCONTROLSTATE_UISelection] is turned ON to set the focus on to the ...
+                        //Turn  tabControlState[State.UISelection] = false and Return So that no WmSelChange() gets fired.
+                        //If validation not cancelled then tabControlState[State.UISelection] is turned ON to set the focus on to the ...
                         //next TabPage..
 
                         case NativeMethods.TCN_SELCHANGING:
                             if (WmSelChanging())
                             {
                                 m.Result = (IntPtr)1;
-                                tabControlState[TABCONTROLSTATE_UISelection] = false;
+                                SetState(State.UISelection, false);
                                 return;
                             }
 
                             if (ValidationCancelled)
                             {
                                 m.Result = (IntPtr)1;
-                                tabControlState[TABCONTROLSTATE_UISelection] = false;
+                                SetState(State.UISelection, false);
                                 return;
                             }
                             else
                             {
-                                tabControlState[TABCONTROLSTATE_UISelection] = true;
+                                SetState(State.UISelection, true);
                             }
                             break;
                         case NativeMethods.TCN_SELCHANGE:
                             if (WmSelChange())
                             {
                                 m.Result = (IntPtr)1;
-                                tabControlState[TABCONTROLSTATE_UISelection] = false;
+                                SetState(State.UISelection, false);
                                 return;
                             }
                             else
                             {
-                                tabControlState[TABCONTROLSTATE_UISelection] = true;
+                                SetState(State.UISelection, true);
                             }
                             break;
                         case NativeMethods.TTN_GETDISPINFO:
@@ -2212,7 +2180,7 @@ namespace System.Windows.Forms
                     }
                     break;
             }
-            if (m.Msg == (int)tabBaseReLayoutMessage)
+            if (m.Msg == (int)_tabBaseReLayoutMessage)
             {
                 WmTabBaseReLayout(ref m);
                 return;
@@ -2220,539 +2188,8 @@ namespace System.Windows.Forms
             base.WndProc(ref m);
         }
 
-        public class TabPageCollection : IList
-        {
-            private readonly TabControl owner;
-            ///  A caching mechanism for key accessor
-            ///  We use an index here rather than control so that we don't have lifetime
-            ///  issues by holding on to extra references.
-            private int lastAccessedIndex = -1;
+        private bool GetState(State state) => _tabControlState[(int)state];
 
-            public TabPageCollection(TabControl owner)
-            {
-                this.owner = owner ?? throw new ArgumentNullException(nameof(owner));
-            }
-
-            public virtual TabPage this[int index]
-            {
-                get
-                {
-                    return owner.GetTabPage(index);
-                }
-                set
-                {
-                    owner.SetTabPage(index, value, value.GetTCITEM());
-                }
-            }
-
-            object IList.this[int index]
-            {
-                get
-                {
-                    return this[index];
-                }
-                set
-                {
-                    if (value is TabPage)
-                    {
-                        this[index] = (TabPage)value;
-                    }
-                    else
-                    {
-                        throw new ArgumentException(nameof(value));
-                    }
-                }
-            }
-
-            /// <summary>
-            ///  Retrieves the child control with the specified key.
-            /// </summary>
-            public virtual TabPage this[string key]
-            {
-                get
-                {
-                    // We do not support null and empty string as valid keys.
-                    if (string.IsNullOrEmpty(key))
-                    {
-                        return null;
-                    }
-
-                    // Search for the key in our collection
-                    int index = IndexOfKey(key);
-                    if (IsValidIndex(index))
-                    {
-                        return this[index];
-                    }
-                    else
-                    {
-                        return null;
-                    }
-
-                }
-            }
-
-            [Browsable(false)]
-            public int Count
-            {
-                get
-                {
-                    return owner.tabPageCount;
-                }
-            }
-
-            object ICollection.SyncRoot
-            {
-                get
-                {
-                    return this;
-                }
-            }
-
-            bool ICollection.IsSynchronized
-            {
-                get
-                {
-                    return false;
-                }
-            }
-
-            bool IList.IsFixedSize
-            {
-                get
-                {
-                    return false;
-                }
-            }
-
-            public bool IsReadOnly
-            {
-                get
-                {
-                    return false;
-                }
-            }
-
-            public void Add(TabPage value)
-            {
-
-                if (value == null)
-                {
-                    throw new ArgumentNullException(nameof(value));
-                }
-
-                owner.Controls.Add(value);
-            }
-
-            int IList.Add(object value)
-            {
-                if (value is TabPage)
-                {
-                    Add((TabPage)value);
-                    return IndexOf((TabPage)value);
-                }
-                else
-                {
-                    throw new ArgumentException(nameof(value));
-                }
-            }
-
-            // <-- NEW ADD OVERLOADS FOR WHIDBEY
-
-            public void Add(string text)
-            {
-                TabPage page = new TabPage
-                {
-                    Text = text
-                };
-                Add(page);
-            }
-
-            public void Add(string key, string text)
-            {
-                TabPage page = new TabPage
-                {
-                    Name = key,
-                    Text = text
-                };
-                Add(page);
-            }
-
-            public void Add(string key, string text, int imageIndex)
-            {
-                TabPage page = new TabPage
-                {
-                    Name = key,
-                    Text = text,
-                    ImageIndex = imageIndex
-                };
-                Add(page);
-            }
-
-            public void Add(string key, string text, string imageKey)
-            {
-                TabPage page = new TabPage
-                {
-                    Name = key,
-                    Text = text,
-                    ImageKey = imageKey
-                };
-                Add(page);
-            }
-
-            // END - NEW ADD OVERLOADS FOR WHIDBEY -->
-
-            public void AddRange(TabPage[] pages)
-            {
-                if (pages == null)
-                {
-                    throw new ArgumentNullException(nameof(pages));
-                }
-                foreach (TabPage page in pages)
-                {
-                    Add(page);
-                }
-            }
-
-            public bool Contains(TabPage page)
-            {
-
-                //check for the page not to be null
-                if (page == null)
-                {
-                    throw new ArgumentNullException(nameof(page));
-                }
-                //end check
-
-                return IndexOf(page) != -1;
-            }
-
-            bool IList.Contains(object page)
-            {
-                if (page is TabPage)
-                {
-                    return Contains((TabPage)page);
-                }
-                else
-                {
-                    return false;
-                }
-            }
-
-            /// <summary>
-            ///  Returns true if the collection contains an item with the specified key, false otherwise.
-            /// </summary>
-            public virtual bool ContainsKey(string key)
-            {
-                return IsValidIndex(IndexOfKey(key));
-            }
-
-            public int IndexOf(TabPage page)
-            {
-
-                //check for the page not to be null
-                if (page == null)
-                {
-                    throw new ArgumentNullException(nameof(page));
-                }
-                //end check
-
-                for (int index = 0; index < Count; ++index)
-                {
-                    if (this[index] == page)
-                    {
-                        return index;
-                    }
-                }
-                return -1;
-            }
-
-            int IList.IndexOf(object page)
-            {
-                if (page is TabPage)
-                {
-                    return IndexOf((TabPage)page);
-                }
-                else
-                {
-                    return -1;
-                }
-            }
-            /// <summary>
-            ///  The zero-based index of the first occurrence of value within the entire CollectionBase, if found; otherwise, -1.
-            /// </summary>
-            public virtual int IndexOfKey(string key)
-            {
-                // Step 0 - Arg validation
-                if (string.IsNullOrEmpty(key))
-                {
-                    return -1; // we dont support empty or null keys.
-                }
-
-                // step 1 - check the last cached item
-                if (IsValidIndex(lastAccessedIndex))
-                {
-                    if (WindowsFormsUtils.SafeCompareStrings(this[lastAccessedIndex].Name, key, /* ignoreCase = */ true))
-                    {
-                        return lastAccessedIndex;
-                    }
-                }
-
-                // step 2 - search for the item
-                for (int i = 0; i < Count; i++)
-                {
-                    if (WindowsFormsUtils.SafeCompareStrings(this[i].Name, key, /* ignoreCase = */ true))
-                    {
-                        lastAccessedIndex = i;
-                        return i;
-                    }
-                }
-
-                // step 3 - we didn't find it.  Invalidate the last accessed index and return -1.
-                lastAccessedIndex = -1;
-                return -1;
-            }
-
-            /// <summary>
-            ///  Inserts the supplied Tabpage at the given index.
-            /// </summary>
-            public void Insert(int index, TabPage tabPage)
-            {
-                owner.InsertItem(index, tabPage);
-                try
-                {
-                    // See InsertingItem property
-                    owner.InsertingItem = true;
-                    owner.Controls.Add(tabPage);
-                }
-                finally
-                {
-                    owner.InsertingItem = false;
-                }
-                owner.Controls.SetChildIndex(tabPage, index);
-            }
-
-            void IList.Insert(int index, object tabPage)
-            {
-                if (tabPage is TabPage)
-                {
-                    Insert(index, (TabPage)tabPage);
-                }
-                else
-                {
-                    throw new ArgumentException(nameof(tabPage));
-                }
-            }
-
-            // <-- NEW INSERT OVERLOADS FOR WHIDBEY
-
-            public void Insert(int index, string text)
-            {
-                TabPage page = new TabPage
-                {
-                    Text = text
-                };
-                Insert(index, page);
-            }
-
-            public void Insert(int index, string key, string text)
-            {
-                TabPage page = new TabPage
-                {
-                    Name = key,
-                    Text = text
-                };
-                Insert(index, page);
-            }
-
-            public void Insert(int index, string key, string text, int imageIndex)
-            {
-                TabPage page = new TabPage
-                {
-                    Name = key,
-                    Text = text
-                };
-                Insert(index, page);
-                // ImageKey and ImageIndex require parenting...
-                page.ImageIndex = imageIndex;
-            }
-
-            public void Insert(int index, string key, string text, string imageKey)
-            {
-                TabPage page = new TabPage
-                {
-                    Name = key,
-                    Text = text
-                };
-                Insert(index, page);
-                // ImageKey and ImageIndex require parenting...
-                page.ImageKey = imageKey;
-            }
-
-            // END - NEW INSERT OVERLOADS FOR WHIDBEY -->
-
-            /// <summary>
-            ///  Determines if the index is valid for the collection.
-            /// </summary>
-            private bool IsValidIndex(int index)
-            {
-                return ((index >= 0) && (index < Count));
-            }
-
-            public virtual void Clear()
-            {
-                owner.RemoveAll();
-            }
-
-            void ICollection.CopyTo(Array dest, int index)
-            {
-                if (Count > 0)
-                {
-                    System.Array.Copy(owner.GetTabPages(), 0, dest, index, Count);
-                }
-            }
-
-            public IEnumerator GetEnumerator()
-            {
-                TabPage[] tabPages = owner.GetTabPages();
-                if (tabPages != null)
-                {
-                    return tabPages.GetEnumerator();
-                }
-                else
-                {
-                    return Array.Empty<TabPage>().GetEnumerator();
-                }
-            }
-
-            public void Remove(TabPage value)
-            {
-
-                //check for the value not to be null
-                if (value == null)
-                {
-                    throw new ArgumentNullException(nameof(value));
-                }
-                //end check
-                owner.Controls.Remove(value);
-            }
-
-            void IList.Remove(object value)
-            {
-                if (value is TabPage)
-                {
-                    Remove((TabPage)value);
-                }
-            }
-
-            public void RemoveAt(int index)
-            {
-                owner.Controls.RemoveAt(index);
-            }
-
-            /// <summary>
-            ///  Removes the child control with the specified key.
-            /// </summary>
-            public virtual void RemoveByKey(string key)
-            {
-                int index = IndexOfKey(key);
-                if (IsValidIndex(index))
-                {
-                    RemoveAt(index);
-                }
-            }
-
-        }
-
-        /// <summary>
-        ///  Collection of controls...
-        /// </summary>
-        [ComVisible(false)]
-        public new class ControlCollection : Control.ControlCollection
-        {
-            private readonly TabControl owner;
-
-            /*C#r: protected*/
-
-            public ControlCollection(TabControl owner)
-            : base(owner)
-            {
-                this.owner = owner;
-            }
-
-            public override void Add(Control value)
-            {
-                if (!(value is TabPage))
-                {
-                    throw new ArgumentException(string.Format(SR.TabControlInvalidTabPageType, value.GetType().Name));
-                }
-
-                TabPage tabPage = (TabPage)value;
-
-                // See InsertingItem property
-                if (!owner.InsertingItem)
-                {
-                    if (owner.IsHandleCreated)
-                    {
-                        owner.AddTabPage(tabPage, tabPage.GetTCITEM());
-                    }
-                    else
-                    {
-                        owner.Insert(owner.TabCount, tabPage);
-                    }
-                }
-
-                base.Add(tabPage);
-                tabPage.Visible = false;
-
-                // Without this check, we force handle creation on the tabcontrol
-                // which is not good at all of there are any OCXs on it.
-                //
-                if (owner.IsHandleCreated)
-                {
-                    tabPage.Bounds = owner.DisplayRectangle;
-                }
-
-                // site the tabPage if necessary.
-                ISite site = owner.Site;
-                if (site != null)
-                {
-                    ISite siteTab = tabPage.Site;
-                    if (siteTab == null)
-                    {
-                        IContainer container = site.Container;
-                        if (container != null)
-                        {
-                            container.Add(tabPage);
-                        }
-                    }
-                }
-                owner.ApplyItemSize();
-                owner.UpdateTabSelection(false);
-
-            }
-
-            public override void Remove(Control value)
-            {
-                base.Remove(value);
-                if (!(value is TabPage))
-                {
-                    return;
-                }
-                int index = owner.FindTabPage((TabPage)value);
-                int curSelectedIndex = owner.SelectedIndex;
-
-                if (index != -1)
-                {
-                    owner.RemoveTabPage(index);
-                    if (index == curSelectedIndex)
-                    {
-                        owner.SelectedIndex = 0; //Always select the first tabPage is the Selected TabPage is removed.
-                    }
-                }
-                owner.UpdateTabSelection(false);
-            }
-
-        }
-
+        private void SetState(State state, bool value) => _tabControlState[(int)state] = value;
     }
 }

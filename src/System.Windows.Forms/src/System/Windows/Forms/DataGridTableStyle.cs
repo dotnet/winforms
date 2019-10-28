@@ -636,7 +636,7 @@ namespace System.Windows.Forms
                     throw new ArgumentException(string.Format(SR.DataGridDefaultTableSet, nameof(HeaderFont)));
                 }
 
-                if (value == null && headerFont != null || (value != null && !value.Equals(headerFont)))
+                if ((value == null && headerFont != null) || (value != null && !value.Equals(headerFont)))
                 {
                     headerFont = value;
                     OnHeaderFontChanged(EventArgs.Empty);
@@ -1593,17 +1593,6 @@ namespace System.Windows.Forms
             }
         }
 
-#if false
-        /// <summary>
-        ///  The DataColumnCollection class actually wires up this
-        ///  event handler to the PropertyChanged events of
-        ///  a DataGridTable's columns.
-        /// </summary>
-        internal void OnColumnChanged(object sender, PropertyChangedEvent event) {
-            if (event.PropertyName.Equals("Visible"))
-                GenerateVisibleColumnsCache();
-        }
-#endif
         protected virtual void OnReadOnlyChanged(EventArgs e)
         {
             if (Events[EventReadOnly] is EventHandler eh)

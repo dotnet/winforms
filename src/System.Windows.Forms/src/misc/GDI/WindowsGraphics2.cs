@@ -46,33 +46,6 @@ namespace System.Windows.Forms.Internal
 
         ///  Drawing methods.
 
-        public unsafe void DrawPie(WindowsPen pen, Rectangle bounds, float startAngle, float sweepAngle)
-        {
-            HandleRef hdc = new HandleRef(DeviceContext, DeviceContext.Hdc);
-
-            if (pen != null)
-            {
-                // 1. Select the pen in the DC
-                Gdi32.SelectObject(hdc, new HandleRef(pen, pen.HPen));
-            }
-
-            // 2. call the functions
-            // we first draw a path that goes :
-            // from center of pie, draw arc (this draw the line to the beginning of the arc
-            // then, draw the closing line.
-            // paint the path with the pen
-            int sideLength = Math.Min(bounds.Width, bounds.Height);
-            Point p = new Point(bounds.X + sideLength / 2, bounds.Y + sideLength / 2);
-            int radius = sideLength / 2;
-            IntUnsafeNativeMethods.BeginPath(hdc);
-            Point oldPoint = default;
-            IntUnsafeNativeMethods.MoveToEx(hdc, p.X, p.Y, &oldPoint);
-            IntUnsafeNativeMethods.AngleArc(hdc, p.X, p.Y, radius, startAngle, sweepAngle);
-            IntUnsafeNativeMethods.LineTo(hdc, p.X, p.Y);
-            IntUnsafeNativeMethods.EndPath(hdc);
-            IntUnsafeNativeMethods.StrokePath(hdc);
-        }
-
         private void DrawEllipse(WindowsPen pen, WindowsBrush brush,
             int nLeftRect,  // x-coord of upper-left corner of rectangle
             int nTopRect,   // y-coord of upper-left corner of rectangle
@@ -164,9 +137,6 @@ namespace System.Windows.Forms.Internal
             }
 
             Debug.Assert(((uint)flags & GdiUnsupportedFlagMask) == 0, "Some custom flags were left over and are not GDI compliant!");
-            Debug.Assert((flags & User32.DT.CALCRECT) == 0, "CALCRECT flag is set, text won't be drawn");
-
-            HandleRef hdc = new HandleRef(DeviceContext, DeviceContext.Hdc);
 
             // DrawText requires default text alignment.
             if (DeviceContext.TextAlignment != default)
@@ -202,7 +172,7 @@ namespace System.Windows.Forms.Internal
 
             User32.DRAWTEXTPARAMS dtparams = GetTextMargins(font);
 
-            bounds = AdjustForVerticalAlignment(hdc, text, bounds, flags, ref dtparams);
+            bounds = AdjustForVerticalAlignment(DeviceContext, text, bounds, flags, ref dtparams);
 
             // Adjust unbounded rect to avoid overflow since Rectangle ctr does not do param validation.
             if (bounds.Width == MaxSize.Width)
@@ -215,15 +185,14 @@ namespace System.Windows.Forms.Internal
             }
 
             var rect = new RECT(bounds);
-            User32.DrawTextExW(hdc, text, text.Length, ref rect, flags, ref dtparams);
+            User32.DrawTextExW(DeviceContext, text, text.Length, ref rect, flags, ref dtparams);
 
             // No need to restore previous objects into the dc (see comments on top of the class).
         }
 
         public Color GetNearestColor(Color color)
         {
-            HandleRef hdc = new HandleRef(null, DeviceContext.Hdc);
-            int colorResult = IntUnsafeNativeMethods.GetNearestColor(hdc, ColorTranslator.ToWin32(color));
+            int colorResult = Gdi32.GetNearestColor(DeviceContext.Hdc, ColorTranslator.ToWin32(color));
             return ColorTranslator.FromWin32(colorResult);
         }
 
@@ -438,7 +407,7 @@ namespace System.Windows.Forms.Internal
         ///  This way we paint the top of the text at the top of the bounds passed in.
         /// </summary>
         public static Rectangle AdjustForVerticalAlignment(
-            HandleRef hdc,
+            IHandle hdc,
             string text,
             Rectangle bounds,
             User32.DT flags,
@@ -507,7 +476,7 @@ namespace System.Windows.Forms.Internal
             Gdi32.SelectObject(hdc, Gdi32.GetStockObject(Gdi32.StockObject.HOLLOW_BRUSH));
 
             // Add 1 to width and height to create the 'bounding box' (convert from point to size).
-            IntUnsafeNativeMethods.Rectangle(hdc, x, y, x + width, y + height);
+            Gdi32.Rectangle(hdc, x, y, x + width, y + height);
 
             if (rasterOp != Gdi32.R2.COPYPEN)
             {
@@ -565,9 +534,8 @@ namespace System.Windows.Forms.Internal
             }
 
             Point oldPoint = new Point();
-
-            IntUnsafeNativeMethods.MoveToEx(hdc, x1, y1, &oldPoint);
-            IntUnsafeNativeMethods.LineTo(hdc, x2, y2);
+            Gdi32.MoveToEx(hdc, x1, y1, &oldPoint);
+            Gdi32.LineTo(hdc, x2, y2);
 
             if (bckMode != Gdi32.BKMODE.TRANSPARENT)
             {
@@ -579,7 +547,7 @@ namespace System.Windows.Forms.Internal
                 DeviceContext.SetRasterOperation(rasterOp);
             }
 
-            IntUnsafeNativeMethods.MoveToEx(hdc, oldPoint.X, oldPoint.Y, &oldPoint);
+            Gdi32.MoveToEx(hdc, oldPoint.X, oldPoint.Y, &oldPoint);
         }
 
         /// <summary>
@@ -588,14 +556,9 @@ namespace System.Windows.Forms.Internal
         /// </summary>
         public Gdi32.TEXTMETRICW GetTextMetrics()
         {
-            var tm = new Gdi32.TEXTMETRICW();
-            HandleRef hdc = new HandleRef(DeviceContext, DeviceContext.Hdc);
-
             // Set the mapping mode to MM_TEXT so we deal with units of pixels.
-            DeviceContextMapMode mapMode = DeviceContext.MapMode;
-
-            bool setupDC = mapMode != DeviceContextMapMode.Text;
-
+            Gdi32.MM mapMode = DeviceContext.MapMode;
+            bool setupDC = mapMode != Gdi32.MM.TEXT;
             if (setupDC)
             {
                 // Changing the MapMode will affect viewport and window extent and origin, we save the dc
@@ -607,10 +570,12 @@ namespace System.Windows.Forms.Internal
             {
                 if (setupDC)
                 {
-                    mapMode = DeviceContext.SetMapMode(DeviceContextMapMode.Text);
+                    mapMode = DeviceContext.SetMapMode(Gdi32.MM.TEXT);
                 }
 
-                Gdi32.GetTextMetricsW(hdc, ref tm);
+                var tm = new Gdi32.TEXTMETRICW();
+                Gdi32.GetTextMetricsW(new HandleRef(DeviceContext, DeviceContext.Hdc), ref tm);
+                return tm;
             }
             finally
             {
@@ -619,8 +584,6 @@ namespace System.Windows.Forms.Internal
                     DeviceContext.RestoreHdc();
                 }
             }
-
-            return tm;
         }
     }
 }

@@ -280,9 +280,7 @@ namespace System.Windows.Forms
             {
                 column._width = DataGridTableStyle.PreferredColumnWidth;
             }
-#if false
-            column.AddOnPropertyChanged(owner.OnColumnChanged);
-#endif
+
             int index = items.Add(column);
             OnCollectionChanged(new CollectionChangeEventArgs(CollectionChangeAction.Add, column));
             return index;
@@ -540,9 +538,6 @@ namespace System.Windows.Forms
             toRemove.SetDataGridTableInColumn(null, true);
             toRemove.MappingNameChanged -= new EventHandler(ColumnStyleMappingNameChanged);
             toRemove.PropertyDescriptorChanged -= new EventHandler(ColumnStylePropDescChanged);
-#if false
-            toRemove.RemoveOnPropertyChange(owner.OnColumnChanged);
-#endif
             items.RemoveAt(index);
             OnCollectionChanged(new CollectionChangeEventArgs(CollectionChangeAction.Remove, toRemove));
         }

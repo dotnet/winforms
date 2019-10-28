@@ -3114,22 +3114,22 @@ namespace System.Windows.Forms
 
             internal override bool IsIAccessibleExSupported() => true;
 
-            internal override object GetPropertyValue(int propertyID)
+            internal override object GetPropertyValue(UiaCore.UIA propertyID)
             {
                 switch (propertyID)
                 {
-                    case NativeMethods.UIA_ControlTypePropertyId:
-                        return NativeMethods.UIA_ComboBoxControlTypeId;
-                    case NativeMethods.UIA_IsExpandCollapsePatternAvailablePropertyId:
-                        return IsPatternSupported(NativeMethods.UIA_ExpandCollapsePatternId);
+                    case UiaCore.UIA.ControlTypePropertyId:
+                        return UiaCore.UIA.ComboBoxControlTypeId;
+                    case UiaCore.UIA.IsExpandCollapsePatternAvailablePropertyId:
+                        return IsPatternSupported(UiaCore.UIA.ExpandCollapsePatternId);
                 }
 
                 return base.GetPropertyValue(propertyID);
             }
 
-            internal override bool IsPatternSupported(int patternId)
+            internal override bool IsPatternSupported(UiaCore.UIA patternId)
             {
-                if (patternId == NativeMethods.UIA_ExpandCollapsePatternId)
+                if (patternId == UiaCore.UIA.ExpandCollapsePatternId)
                 {
                     return true;
                 }

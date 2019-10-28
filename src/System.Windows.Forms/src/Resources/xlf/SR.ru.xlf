@@ -5997,11 +5997,6 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">Изображение должно быть растровым.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ImageListCantRecreate">
-        <source>Unless the list is empty, '{0}' cannot be changed once the ImageList has been used.</source>
-        <target state="translated">После использования ImageList '{0}' не может изменяться, кроме случая, когда список пуст.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="ImageListColorDepthDescr">
         <source>The number of colors to use to render images.</source>
         <target state="translated">Число цветов, используемых для отрисовки изображений.</target>

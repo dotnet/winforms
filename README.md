@@ -6,6 +6,7 @@ Windows Forms (WinForms) is a UI framework for building Windows desktop applicat
 
 Windows Forms also provides one of the most productive ways to create desktop applications based on the visual designer provided in Visual Studio. It enables drag-and-drop of visual controls and other similar functionality that make it easy to build desktop applications.
 
+## Windows Forms Designer
 For more information about the designer, please see the [Windows Forms Designer Documentation](Documentation/winforms-designer.md).
 
 To learn about project priorities as well as status and ship dates see the [Windows Forms Roadmap](roadmap.md).

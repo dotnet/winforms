@@ -45,12 +45,6 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Paste special flags.
         /// </summary>
-        private const int DV_E_DVASPECT = unchecked((int)0x8004006B);
-        private const int DVASPECT_CONTENT = 1;
-        private const int DVASPECT_THUMBNAIL = 2;
-        private const int DVASPECT_ICON = 4;
-        private const int DVASPECT_DOCPRINT = 8;
-
         internal const int INPUT = 0x0001;
         internal const int OUTPUT = 0x0002;
         internal const int DIRECTIONMASK = INPUT | OUTPUT;
@@ -391,7 +385,7 @@ namespace System.Windows.Forms
                 if (BorderStyle.FixedSingle == BorderStyle && ((cp.Style & NativeMethods.WS_BORDER) != 0))
                 {
                     cp.Style &= (~NativeMethods.WS_BORDER);
-                    cp.ExStyle |= NativeMethods.WS_EX_CLIENTEDGE;
+                    cp.ExStyle |= (int)User32.WS_EX.CLIENTEDGE;
                 }
 
                 return cp;
@@ -2216,7 +2210,7 @@ namespace System.Windows.Forms
 
             // Use the TEXTRANGE to move our text buffer forward
             // or backwards within the main text
-            NativeMethods.TEXTRANGE txrg = new NativeMethods.TEXTRANGE
+            var txrg = new Richedit.TEXTRANGE
             {
                 chrg = new Richedit.CHARRANGE
                 {
@@ -2272,7 +2266,7 @@ namespace System.Windows.Forms
 
                     // go get the text in this range, if we didn't get any text then punt
                     int len;
-                    len = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), RichEditMessages.EM_GETTEXTRANGE, 0, txrg);
+                    len = (int)User32.SendMessageW(this, (User32.WindowMessage)RichEditMessages.EM_GETTEXTRANGE, IntPtr.Zero, ref txrg);
                     if (len == 0)
                     {
                         chrg.cpMax = chrg.cpMin = -1; // Hit end of control without finding what we wanted
@@ -3490,7 +3484,7 @@ namespace System.Windows.Forms
         /// </remarks>
         private string CharRangeToString(Richedit.CHARRANGE c)
         {
-            NativeMethods.TEXTRANGE txrg = new NativeMethods.TEXTRANGE
+            var txrg = new Richedit.TEXTRANGE
             {
                 chrg = c
             };
@@ -3510,7 +3504,7 @@ namespace System.Windows.Forms
             }
 
             txrg.lpstrText = unmanagedBuffer;
-            int len = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), RichEditMessages.EM_GETTEXTRANGE, 0, txrg);
+            int len = (int)User32.SendMessageW(this, (User32.WindowMessage)RichEditMessages.EM_GETTEXTRANGE, IntPtr.Zero, ref txrg);
             Debug.Assert(len != 0, "CHARRANGE from RichTextBox was bad! - impossible?");
             charBuffer.PutCoTaskMem(unmanagedBuffer);
             if (txrg.lpstrText != IntPtr.Zero)
@@ -3600,18 +3594,18 @@ namespace System.Windows.Forms
                     case RichTextBoxConstants.EN_REQUESTRESIZE:
                         if (!CallOnContentsResized)
                         {
-                            NativeMethods.REQRESIZE reqResize = (NativeMethods.REQRESIZE)m.GetLParam(typeof(NativeMethods.REQRESIZE));
+                            Richedit.REQRESIZE* reqResize = (Richedit.REQRESIZE*)m.LParam;
                             if (BorderStyle == System.Windows.Forms.BorderStyle.Fixed3D)
                             {
-                                reqResize.rc.bottom++;
+                                reqResize->rc.bottom++;
                             }
-                            OnContentsResized(new ContentsResizedEventArgs(Rectangle.FromLTRB(reqResize.rc.left, reqResize.rc.top, reqResize.rc.right, reqResize.rc.bottom)));
+                            OnContentsResized(new ContentsResizedEventArgs(reqResize->rc));
                         }
                         break;
 
                     case RichTextBoxConstants.EN_SELCHANGE:
-                        NativeMethods.SELCHANGE selChange = (NativeMethods.SELCHANGE)m.GetLParam(typeof(NativeMethods.SELCHANGE));
-                        WmSelectionChange(selChange);
+                        Richedit.SELCHANGE* selChange = (Richedit.SELCHANGE*)m.LParam;
+                        WmSelectionChange(*selChange);
                         break;
 
                     case RichTextBoxConstants.EN_PROTECTED:
@@ -3734,7 +3728,7 @@ namespace System.Windows.Forms
             return es;
         }
 
-        private void WmSelectionChange(NativeMethods.SELCHANGE selChange)
+        private void WmSelectionChange(Richedit.SELCHANGE selChange)
         {
             int selStart = selChange.chrg.cpMin;
             int selEnd = selChange.chrg.cpMax;

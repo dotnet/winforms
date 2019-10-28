@@ -336,7 +336,7 @@ namespace System.Windows.Forms
                 switch (borderStyle)
                 {
                     case BorderStyle.Fixed3D:
-                        cp.ExStyle |= NativeMethods.WS_EX_CLIENTEDGE;
+                        cp.ExStyle |= (int)User32.WS_EX.CLIENTEDGE;
                         break;
                     case BorderStyle.FixedSingle:
                         cp.Style |= NativeMethods.WS_BORDER;
@@ -406,12 +406,12 @@ namespace System.Windows.Forms
                 // IsMirrored ends up calling CreateParams - you dig!
                 if (RightToLeft == RightToLeft.Yes)
                 {
-                    if (RightToLeftLayout == true)
+                    if (RightToLeftLayout)
                     {
                         //We want to turn on mirroring for TreeView explicitly.
-                        cp.ExStyle |= NativeMethods.WS_EX_LAYOUTRTL;
+                        cp.ExStyle |= (int)User32.WS_EX.LAYOUTRTL;
                         //Don't need these styles when mirroring is turned on.
-                        cp.ExStyle &= ~(NativeMethods.WS_EX_RTLREADING | NativeMethods.WS_EX_RIGHT | NativeMethods.WS_EX_LEFTSCROLLBAR);
+                        cp.ExStyle &= ~((int)User32.WS_EX.RTLREADING | (int)User32.WS_EX.RIGHT | (int)User32.WS_EX.LEFTSCROLLBAR);
                     }
                     else
                     {
@@ -2138,7 +2138,7 @@ namespace System.Windows.Forms
             IntPtr handleOld = SendMessage(NativeMethods.TVM_SETIMAGELIST, NativeMethods.TVSIL_STATE, handle);
             if ((handleOld != IntPtr.Zero) && (handleOld != handle))
             {
-                SafeNativeMethods.ImageList_Destroy_Native(new HandleRef(this, handleOld));
+                ComCtl32.ImageList.Destroy(new HandleRef(this, handleOld));
             }
         }
 
@@ -2149,7 +2149,7 @@ namespace System.Windows.Forms
             IntPtr handle = SendMessage(NativeMethods.TVM_GETIMAGELIST, NativeMethods.TVSIL_STATE, IntPtr.Zero);
             if (handle != IntPtr.Zero)
             {
-                SafeNativeMethods.ImageList_Destroy_Native(new HandleRef(this, handle));
+                ComCtl32.ImageList.Destroy(new HandleRef(this, handle));
                 if (reset)
                 {
                     SendMessage(NativeMethods.TVM_SETIMAGELIST, NativeMethods.TVSIL_STATE, IntPtr.Zero);
@@ -2638,7 +2638,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private IntPtr TvnBeginLabelEdit(NativeMethods.NMTVDISPINFO nmtvdi)
+        private IntPtr TvnBeginLabelEdit(ComCtl32.NMTVDISPINFOW nmtvdi)
         {
             // Check for invalid node handle
             if (nmtvdi.item.hItem == IntPtr.Zero)
@@ -2657,7 +2657,7 @@ namespace System.Windows.Forms
             return (IntPtr)(e.CancelEdit ? 1 : 0);
         }
 
-        private IntPtr TvnEndLabelEdit(NativeMethods.NMTVDISPINFO nmtvdi)
+        private IntPtr TvnEndLabelEdit(ComCtl32.NMTVDISPINFOW nmtvdi)
         {
             editNode = null;
 
@@ -3083,10 +3083,10 @@ namespace System.Windows.Forms
                         TvnBeginDrag(MouseButtons.Right, nmtv);
                         break;
                     case NativeMethods.TVN_BEGINLABELEDIT:
-                        m.Result = TvnBeginLabelEdit((NativeMethods.NMTVDISPINFO)m.GetLParam(typeof(NativeMethods.NMTVDISPINFO)));
+                        m.Result = TvnBeginLabelEdit(*(ComCtl32.NMTVDISPINFOW*)m.LParam);
                         break;
                     case NativeMethods.TVN_ENDLABELEDIT:
-                        m.Result = TvnEndLabelEdit((NativeMethods.NMTVDISPINFO)m.GetLParam(typeof(NativeMethods.NMTVDISPINFO)));
+                        m.Result = TvnEndLabelEdit(*(ComCtl32.NMTVDISPINFOW*)m.LParam);
                         break;
                     case NativeMethods.NM_CLICK:
                     case NativeMethods.NM_RCLICK:
@@ -3304,13 +3304,15 @@ namespace System.Windows.Forms
                     break;
                 case WindowMessages.WM_LBUTTONDBLCLK:
                     WmMouseDown(ref m, MouseButtons.Left, 2);
-                    //just maintain state and fire double click.. in final mouseUp...
+
+                    // Just maintain state and fire double click in final mouseUp.
                     treeViewState[TREEVIEWSTATE_doubleclickFired] = true;
-                    //fire Up in the Wndproc !!
+
+                    // Fire mouse up in the Wndproc.
                     treeViewState[TREEVIEWSTATE_mouseUpFired] = false;
-                    //problem getting the UP... outside the control...
-                    //
-                    CaptureInternal = true;
+
+                    // Make sure we get the mouse up if it happens outside the control.
+                    Capture = true;
                     break;
                 case WindowMessages.WM_LBUTTONDOWN:
                     try
@@ -3322,7 +3324,8 @@ namespace System.Windows.Forms
                     {
                         treeViewState[TREEVIEWSTATE_ignoreSelects] = false;
                     }
-                    //Always Reset the MouseupFired....
+
+                    // Always reset the MouseupFired.
                     treeViewState[TREEVIEWSTATE_mouseUpFired] = false;
                     NativeMethods.TV_HITTESTINFO tvhip = new NativeMethods.TV_HITTESTINFO
                     {
@@ -3363,8 +3366,8 @@ namespace System.Windows.Forms
                         pt_y = NativeMethods.Util.SignedHIWORD(m.LParam)
                     };
                     IntPtr hnode = UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TVM_HITTEST, 0, tvhi);
-                    //Important for CheckBoxes ... click needs to be fired ...
-                    //
+
+                    // Important for CheckBoxes. Click needs to be fired.
                     if (hnode != IntPtr.Zero)
                     {
                         if (!ValidationCancelled && !treeViewState[TREEVIEWSTATE_doubleclickFired] & !treeViewState[TREEVIEWSTATE_mouseUpFired])
@@ -3401,18 +3404,18 @@ namespace System.Windows.Forms
 
                     treeViewState[TREEVIEWSTATE_doubleclickFired] = false;
                     treeViewState[TREEVIEWSTATE_mouseUpFired] = false;
-                    CaptureInternal = false;
+                    Capture = false;
 
-                    //always clear our hit-tested node we cached on mouse down
+                    // Always clear our hit-tested node we cached on mouse down
                     hNodeMouseDown = IntPtr.Zero;
                     break;
                 case WindowMessages.WM_MBUTTONDBLCLK:
-                    //fire Up in the Wndproc !!
+                    // Fire mouse up in the Wndproc.
                     treeViewState[TREEVIEWSTATE_mouseUpFired] = false;
                     WmMouseDown(ref m, MouseButtons.Middle, 2);
                     break;
                 case WindowMessages.WM_MBUTTONDOWN:
-                    //Always Reset the MouseupFired....
+                    // Always reset MouseupFired.
                     treeViewState[TREEVIEWSTATE_mouseUpFired] = false;
                     WmMouseDown(ref m, MouseButtons.Middle, 1);
                     downButton = MouseButtons.Middle;
@@ -3425,13 +3428,15 @@ namespace System.Windows.Forms
                     break;
                 case WindowMessages.WM_RBUTTONDBLCLK:
                     WmMouseDown(ref m, MouseButtons.Right, 2);
-                    //just maintain state and fire double click.. in final mouseUp...
+
+                    // Just maintain state and fire double click in the final mouseUp.
                     treeViewState[TREEVIEWSTATE_doubleclickFired] = true;
-                    //fire Up in the Wndproc !!
+
+                    // Fire mouse up in the Wndproc
                     treeViewState[TREEVIEWSTATE_mouseUpFired] = false;
-                    //problem getting the UP... outside the control...
-                    //
-                    CaptureInternal = true;
+
+                    // Make sure we get the mouse up if it happens outside the control.
+                    Capture = true;
                     break;
                 case WindowMessages.WM_RBUTTONDOWN:
                     //Always Reset the MouseupFired....

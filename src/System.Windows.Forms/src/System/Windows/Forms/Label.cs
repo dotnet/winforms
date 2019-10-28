@@ -301,7 +301,7 @@ namespace System.Windows.Forms
                     // Since we're owner draw, I don't see any point in setting the
                     // SS_CENTER/SS_RIGHT styles.
                     //
-                    cp.ExStyle &= ~NativeMethods.WS_EX_RIGHT;   // WS_EX_RIGHT overrides the SS_XXXX alignment styles
+                    cp.ExStyle &= ~(int)User32.WS_EX.RIGHT;   // WS_EX_RIGHT overrides the SS_XXXX alignment styles
                 }
 
                 if (!OwnerDraw)
@@ -1593,17 +1593,13 @@ namespace System.Windows.Forms
             Animate();
         }
 
-        internal override void PrintToMetaFileRecursive(HandleRef hDC, IntPtr lParam, Rectangle bounds)
+        private protected override void PrintToMetaFileRecursive(IntPtr hDC, IntPtr lParam, Rectangle bounds)
         {
             base.PrintToMetaFileRecursive(hDC, lParam, bounds);
 
-            using (WindowsFormsUtils.DCMapping mapping = new WindowsFormsUtils.DCMapping(hDC, bounds))
-            {
-                using (Graphics g = Graphics.FromHdcInternal(hDC.Handle))
-                {
-                    ControlPaint.PrintBorder(g, new Rectangle(Point.Empty, Size), BorderStyle, Border3DStyle.SunkenOuter);
-                }
-            }
+            using var mapping = new WindowsFormsUtils.DCMapping(hDC, bounds);
+            using Graphics g = Graphics.FromHdcInternal(hDC);
+            ControlPaint.PrintBorder(g, new Rectangle(Point.Empty, Size), BorderStyle, Border3DStyle.SunkenOuter);
         }
 
         /// <summary>
@@ -1736,11 +1732,11 @@ namespace System.Windows.Forms
 
             internal override bool IsIAccessibleExSupported() => true;
 
-            internal override object GetPropertyValue(int propertyID)
+            internal override object GetPropertyValue(UiaCore.UIA propertyID)
             {
-                if (propertyID == NativeMethods.UIA_ControlTypePropertyId)
+                if (propertyID == UiaCore.UIA.ControlTypePropertyId)
                 {
-                    return NativeMethods.UIA_TextControlTypeId;
+                    return UiaCore.UIA.TextControlTypeId;
                 }
 
                 return base.GetPropertyValue(propertyID);
