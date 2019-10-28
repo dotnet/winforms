@@ -17,81 +17,84 @@ namespace System.Windows.Forms.Tests
         private const string PathImageLocation = "bitmaps/nature24bits.jpg";
         private const string UrlImageLocation = "https://github.com/dotnet/corefx-testdata/raw/master/System.Drawing.Common.TestData/bitmaps/nature24bits.jpg";
 
-        [Fact]
+        [WinFormsFact]
         public void PictureBox_Ctor_Default()
         {
-            var pictureBox = new SubPictureBox();
-            Assert.False(pictureBox.AllowDrop);
-            Assert.Equal(AnchorStyles.Top | AnchorStyles.Left, pictureBox.Anchor);
-            Assert.False(pictureBox.AutoSize);
-            Assert.Equal(Control.DefaultBackColor, pictureBox.BackColor);
-            Assert.Null(pictureBox.BackgroundImage);
-            Assert.Equal(ImageLayout.Tile, pictureBox.BackgroundImageLayout);
-            Assert.Null(pictureBox.BindingContext);
-            Assert.Equal(BorderStyle.None, pictureBox.BorderStyle);
-            Assert.Equal(50, pictureBox.Bottom);
-            Assert.Equal(new Rectangle(0, 0, 100, 50), pictureBox.Bounds);
-            Assert.False(pictureBox.CanEnableIme);
-            Assert.True(pictureBox.CanRaiseEvents);
-            Assert.True(pictureBox.CausesValidation);
-            Assert.Equal(new Size(100, 50), pictureBox.ClientSize);
-            Assert.Equal(new Rectangle(0, 0, 100, 50), pictureBox.ClientRectangle);
-            Assert.Null(pictureBox.Container);
-            Assert.Null(pictureBox.ContextMenu);
-            Assert.Null(pictureBox.ContextMenuStrip);
-            Assert.Empty(pictureBox.Controls);
-            Assert.Same(pictureBox.Controls, pictureBox.Controls);
-            Assert.False(pictureBox.Created);
-            Assert.Same(Cursors.Default, pictureBox.Cursor);
-            Assert.Same(Cursors.Default, pictureBox.DefaultCursor);
-            Assert.Equal(ImeMode.Disable, pictureBox.DefaultImeMode);
-            Assert.Equal(new Padding(3), pictureBox.DefaultMargin);
-            Assert.Equal(Size.Empty, pictureBox.DefaultMaximumSize);
-            Assert.Equal(Size.Empty, pictureBox.DefaultMinimumSize);
-            Assert.Equal(Padding.Empty, pictureBox.DefaultPadding);
-            Assert.Equal(new Size(100, 50), pictureBox.DefaultSize);
-            Assert.False(pictureBox.DesignMode);
-            Assert.Equal(new Rectangle(0, 0, 100, 50), pictureBox.DisplayRectangle);
-            Assert.Equal(DockStyle.None, pictureBox.Dock);
-            Assert.True(pictureBox.DoubleBuffered);
-            Assert.True(pictureBox.Enabled);
-            Assert.NotNull(pictureBox.ErrorImage);
-            Assert.Same(pictureBox.ErrorImage, pictureBox.ErrorImage);
-            Assert.NotNull(pictureBox.Events);
-            Assert.Same(pictureBox.Events, pictureBox.Events);
-            Assert.Equal(Control.DefaultFont, pictureBox.Font);
-            Assert.Equal(pictureBox.FontHeight, pictureBox.FontHeight);
-            Assert.Equal(Control.DefaultForeColor, pictureBox.ForeColor);
-            Assert.False(pictureBox.HasChildren);
-            Assert.Null(pictureBox.Image);
-            Assert.Null(pictureBox.ImageLocation);
-            Assert.Equal(ImeMode.Disable, pictureBox.ImeMode);
-            Assert.Equal(ImeMode.Disable, pictureBox.ImeModeBase);
-            Assert.NotNull(pictureBox.InitialImage);
-            Assert.Same(pictureBox.InitialImage, pictureBox.InitialImage);
-            Assert.Equal(0, pictureBox.Left);
-            Assert.Equal(Point.Empty, pictureBox.Location);
-            Assert.Equal(new Padding(3), pictureBox.Margin);
-            Assert.Equal(Padding.Empty, pictureBox.Padding);
-            Assert.Null(pictureBox.Parent);
-            Assert.Equal("Microsoft\u00AE .NET", pictureBox.ProductName);
-            Assert.False(pictureBox.RecreatingHandle);
-            Assert.Null(pictureBox.Region);
-            Assert.False(pictureBox.ResizeRedraw);
-            Assert.Equal(100, pictureBox.Right);
-            Assert.Equal(RightToLeft.No, pictureBox.RightToLeft);
-            Assert.Null(pictureBox.Site);
-            Assert.Equal(new Size(100, 50), pictureBox.Size);
-            Assert.Equal(PictureBoxSizeMode.Normal, pictureBox.SizeMode);
-            Assert.Equal(0, pictureBox.TabIndex);
-            Assert.False(pictureBox.TabStop);
-            Assert.Empty(pictureBox.Text);
-            Assert.Equal(0, pictureBox.Top);
-            Assert.True(pictureBox.Visible);
-            Assert.False(pictureBox.WaitOnLoad);
-            Assert.Equal(100, pictureBox.Width);
+            using var control = new SubPictureBox();
+            Assert.False(control.AllowDrop);
+            Assert.Equal(AnchorStyles.Top | AnchorStyles.Left, control.Anchor);
+            Assert.False(control.AutoSize);
+            Assert.Equal(Control.DefaultBackColor, control.BackColor);
+            Assert.Null(control.BackgroundImage);
+            Assert.Equal(ImageLayout.Tile, control.BackgroundImageLayout);
+            Assert.Null(control.BindingContext);
+            Assert.Equal(BorderStyle.None, control.BorderStyle);
+            Assert.Equal(50, control.Bottom);
+            Assert.Equal(new Rectangle(0, 0, 100, 50), control.Bounds);
+            Assert.False(control.CanEnableIme);
+            Assert.True(control.CanRaiseEvents);
+            Assert.True(control.CausesValidation);
+            Assert.Equal(new Size(100, 50), control.ClientSize);
+            Assert.Equal(new Rectangle(0, 0, 100, 50), control.ClientRectangle);
+            Assert.Null(control.Container);
+            Assert.Null(control.ContextMenu);
+            Assert.Null(control.ContextMenuStrip);
+            Assert.Empty(control.Controls);
+            Assert.Same(control.Controls, control.Controls);
+            Assert.False(control.Created);
+            Assert.Same(Cursors.Default, control.Cursor);
+            Assert.Same(Cursors.Default, control.DefaultCursor);
+            Assert.Equal(ImeMode.Disable, control.DefaultImeMode);
+            Assert.Equal(new Padding(3), control.DefaultMargin);
+            Assert.Equal(Size.Empty, control.DefaultMaximumSize);
+            Assert.Equal(Size.Empty, control.DefaultMinimumSize);
+            Assert.Equal(Padding.Empty, control.DefaultPadding);
+            Assert.Equal(new Size(100, 50), control.DefaultSize);
+            Assert.False(control.DesignMode);
+            Assert.Equal(new Rectangle(0, 0, 100, 50), control.DisplayRectangle);
+            Assert.Equal(DockStyle.None, control.Dock);
+            Assert.True(control.DoubleBuffered);
+            Assert.True(control.Enabled);
+            Assert.NotNull(control.ErrorImage);
+            Assert.Same(control.ErrorImage, control.ErrorImage);
+            Assert.NotNull(control.Events);
+            Assert.Same(control.Events, control.Events);
+            Assert.Equal(Control.DefaultFont, control.Font);
+            Assert.Equal(control.FontHeight, control.FontHeight);
+            Assert.Equal(Control.DefaultForeColor, control.ForeColor);
+            Assert.False(control.HasChildren);
+            Assert.Null(control.Image);
+            Assert.Null(control.ImageLocation);
+            Assert.Equal(ImeMode.Disable, control.ImeMode);
+            Assert.Equal(ImeMode.Disable, control.ImeModeBase);
+            Assert.NotNull(control.InitialImage);
+            Assert.Same(control.InitialImage, control.InitialImage);
+            Assert.Equal(0, control.Left);
+            Assert.Equal(Point.Empty, control.Location);
+            Assert.Equal(new Padding(3), control.Margin);
+            Assert.Equal(Size.Empty, control.MaximumSize);
+            Assert.Equal(Size.Empty, control.MinimumSize);
+            Assert.Equal(Padding.Empty, control.Padding);
+            Assert.Null(control.Parent);
+            Assert.Equal(new Size(100, 50), control.PreferredSize);
+            Assert.Equal("Microsoft\u00AE .NET", control.ProductName);
+            Assert.False(control.RecreatingHandle);
+            Assert.Null(control.Region);
+            Assert.False(control.ResizeRedraw);
+            Assert.Equal(100, control.Right);
+            Assert.Equal(RightToLeft.No, control.RightToLeft);
+            Assert.Null(control.Site);
+            Assert.Equal(new Size(100, 50), control.Size);
+            Assert.Equal(PictureBoxSizeMode.Normal, control.SizeMode);
+            Assert.Equal(0, control.TabIndex);
+            Assert.False(control.TabStop);
+            Assert.Empty(control.Text);
+            Assert.Equal(0, control.Top);
+            Assert.True(control.Visible);
+            Assert.False(control.WaitOnLoad);
+            Assert.Equal(100, control.Width);
 
-            Assert.False(pictureBox.IsHandleCreated);
+            Assert.False(control.IsHandleCreated);
         }
 
         [Theory]
@@ -2068,11 +2071,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void PictureBox_OnHandleCreated_Invoke_CallsHandleCreated(EventArgs eventArgs)
         {
-            var control = new SubPictureBox();
+            using var control = new SubPictureBox();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -2085,18 +2088,53 @@ namespace System.Windows.Forms.Tests
             control.HandleCreated += handler;
             control.OnHandleCreated(eventArgs);
             Assert.Equal(1, callCount);
+            Assert.False(control.Created);
+            Assert.False(control.IsHandleCreated);
 
             // Remove handler.
             control.HandleCreated -= handler;
             control.OnHandleCreated(eventArgs);
             Assert.Equal(1, callCount);
+            Assert.False(control.Created);
+            Assert.False(control.IsHandleCreated);
         }
 
-        [Theory]
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void PictureBox_OnHandleCreated_InvokeWithHandle_CallsHandleCreated(EventArgs eventArgs)
+        {
+            using var control = new SubPictureBox();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            Assert.True(control.GetStyle(ControlStyles.UserPaint));
+
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.HandleCreated += handler;
+            control.OnHandleCreated(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.True(control.Created);
+            Assert.True(control.IsHandleCreated);
+
+            // Remove handler.
+            control.HandleCreated -= handler;
+            control.OnHandleCreated(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.True(control.Created);
+            Assert.True(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void PictureBox_OnHandleDestroyed_Invoke_CallsHandleDestroyed(EventArgs eventArgs)
         {
-            var control = new SubPictureBox();
+            using var control = new SubPictureBox();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -2109,11 +2147,45 @@ namespace System.Windows.Forms.Tests
             control.HandleDestroyed += handler;
             control.OnHandleDestroyed(eventArgs);
             Assert.Equal(1, callCount);
+            Assert.False(control.Created);
+            Assert.False(control.IsHandleCreated);
 
             // Remove handler.
             control.HandleDestroyed -= handler;
             control.OnHandleDestroyed(eventArgs);
             Assert.Equal(1, callCount);
+            Assert.False(control.Created);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void PictureBox_OnHandleDestroyed_InvokeWithHandle_CallsHandleDestroyed(EventArgs eventArgs)
+        {
+            using var control = new SubPictureBox();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.HandleDestroyed += handler;
+            control.OnHandleDestroyed(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.True(control.Created);
+            Assert.True(control.IsHandleCreated);
+
+            // Remove handler.
+            control.HandleDestroyed -= handler;
+            control.OnHandleDestroyed(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.True(control.Created);
+            Assert.True(control.IsHandleCreated);
         }
 
         [Theory]

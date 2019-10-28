@@ -341,7 +341,7 @@ namespace System.Windows.Forms.Tests
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ToolStripItem_AllowDrop_Set_GetReturnsExpected(bool value)
         {
-            var item = new SubToolStripItem
+            using var item = new SubToolStripItem
             {
                 AllowDrop = value
             };
@@ -350,17 +350,20 @@ namespace System.Windows.Forms.Tests
             // Set same.
             item.AllowDrop = value;
             Assert.Equal(value, item.AllowDrop);
+
+            // Set different.
+            item.AllowDrop = !value;
+            Assert.Equal(!value, item.AllowDrop);
         }
 
         [Theory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ToolStripItem_AllowDrop_SetWithParent_GetReturnsExpected(bool value)
         {
-            var parent = new ToolStrip();
-            var item = new SubToolStripItem
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
             {
                 Parent = parent,
-
                 AllowDrop = value
             };
             Assert.Equal(value, item.AllowDrop);
@@ -368,6 +371,10 @@ namespace System.Windows.Forms.Tests
             // Set same.
             item.AllowDrop = value;
             Assert.Equal(value, item.AllowDrop);
+
+            // Set different.
+            item.AllowDrop = !value;
+            Assert.Equal(!value, item.AllowDrop);
         }
 
         public static IEnumerable<object[]> Anchor_TestData()

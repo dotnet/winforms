@@ -42,17 +42,24 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
-        public void AllowDrop_Set_GetReturnsExpected(bool value)
+        public void ToolStripPanel_AllowDrop_Set_GetReturnsExpected(bool value)
         {
-            var panel = new ToolStripPanel
+            using var panel = new ToolStripPanel
             {
                 AllowDrop = value
             };
             Assert.Equal(value, panel.AllowDrop);
+            Assert.False(panel.IsHandleCreated);
 
             // Set same.
             panel.AllowDrop = value;
             Assert.Equal(value, panel.AllowDrop);
+            Assert.False(panel.IsHandleCreated);
+
+            // Set different.
+            panel.AllowDrop = !value;
+            Assert.Equal(!value, panel.AllowDrop);
+            Assert.False(panel.IsHandleCreated);
         }
 
         [Theory]
