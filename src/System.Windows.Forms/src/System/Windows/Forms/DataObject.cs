@@ -30,11 +30,6 @@ namespace System.Windows.Forms
         private static readonly string CF_DEPRECATED_FILENAME = "FileName";
         private static readonly string CF_DEPRECATED_FILENAMEW = "FileNameW";
 
-        private const int DV_E_FORMATETC = unchecked((int)0x80040064);
-        private const int DV_E_LINDEX = unchecked((int)0x80040068);
-        private const int DV_E_TYMED = unchecked((int)0x80040069);
-        private const int OLE_E_NOTRUNNING = unchecked((int)0x80040005);
-        private const int OLE_E_ADVISENOTSUPPORTED = unchecked((int)0x80040003);
         private const int DATA_S_SAMEFORMATETC = 0x00040130;
 
         private static readonly TYMED[] ALLOWED_TYMEDS =
@@ -542,17 +537,17 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        Marshal.ThrowExceptionForHR(DV_E_TYMED);
+                        Marshal.ThrowExceptionForHR((int)HRESULT.DV_E_TYMED);
                     }
                 }
                 else
                 {
-                    Marshal.ThrowExceptionForHR(DV_E_FORMATETC);
+                    Marshal.ThrowExceptionForHR((int)HRESULT.DV_E_FORMATETC);
                 }
             }
             else
             {
-                Marshal.ThrowExceptionForHR(DV_E_TYMED);
+                Marshal.ThrowExceptionForHR((int)HRESULT.DV_E_TYMED);
             }
         }
 
@@ -594,8 +589,9 @@ namespace System.Windows.Forms
             {
                 return ((OleConverter)innerData).OleDataObject.EnumDAdvise(out enumAdvise);
             }
+
             enumAdvise = null;
-            return (OLE_E_ADVISENOTSUPPORTED);
+            return (int)HRESULT.OLE_E_ADVISENOTSUPPORTED;
         }
 
         // <summary>
@@ -678,7 +674,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                Marshal.ThrowExceptionForHR(DV_E_TYMED);
+                Marshal.ThrowExceptionForHR((int)HRESULT.DV_E_TYMED);
             }
         }
 
@@ -712,23 +708,19 @@ namespace System.Windows.Forms
             {
                 if (GetTymedUseable(formatetc.tymed))
                 {
-
                     if (formatetc.cfFormat == 0)
                     {
                         Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "QueryGetData::returning S_FALSE because cfFormat == 0");
-                        return NativeMethods.S_FALSE;
+                        return (int)HRESULT.S_FALSE;
                     }
-                    else
+                    else if (!GetDataPresent(DataFormats.GetFormat(formatetc.cfFormat).Name))
                     {
-                        if (!GetDataPresent(DataFormats.GetFormat(formatetc.cfFormat).Name))
-                        {
-                            return (DV_E_FORMATETC);
-                        }
+                        return (int)HRESULT.DV_E_FORMATETC;
                     }
                 }
                 else
                 {
-                    return (DV_E_TYMED);
+                    return (int)HRESULT.DV_E_TYMED;
                 }
             }
             else
@@ -739,7 +731,7 @@ namespace System.Windows.Forms
             int format = unchecked((ushort)formatetc.cfFormat);
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "QueryGetData::cfFormat " + format.ToString(CultureInfo.InvariantCulture) + " found");
 #endif
-            return NativeMethods.S_OK;
+            return (int)HRESULT.S_OK;
         }
 
         // <summary>
@@ -816,14 +808,11 @@ namespace System.Windows.Forms
                 string[] filelist = (string[])data;
                 hr = SaveStringToHandle(medium.unionmember, filelist[0], true);
             }
-            else if (format.Equals(DataFormats.Dib)
-                     && data is Image)
+            else if (format.Equals(DataFormats.Dib) && data is Image)
             {
-                // GDI+ does not properly handle saving to DIB images.  Since the
-                // clipboard will take an HBITMAP and publish a Dib, we don't need
-                // to support this.
-                //
-                hr = DV_E_TYMED;
+                // GDI+ does not properly handle saving to DIB images. Since the clipboard will take
+                // an HBITMAP and publish a Dib, we don't need to support this.
+                hr = (int)HRESULT.DV_E_TYMED;
             }
             else if (format.Equals(DataFormats.Serializable)
                      || data is ISerializable
