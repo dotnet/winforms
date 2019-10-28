@@ -454,7 +454,6 @@ namespace System.Windows.Forms.VisualStyles
             {
                 throw new ArgumentNullException(nameof(dc));
             }
-
             if (childControl == null)
             {
                 throw new ArgumentNullException(nameof(childControl));
@@ -467,11 +466,10 @@ namespace System.Windows.Forms.VisualStyles
 
             if (childControl.Handle != IntPtr.Zero)
             {
-                using (WindowsGraphicsWrapper wgr = new WindowsGraphicsWrapper(dc, AllGraphicsProperties))
-                {
-                    HandleRef hdc = new HandleRef(wgr, wgr.WindowsGraphics.DeviceContext.Hdc);
-                    lastHResult = SafeNativeMethods.DrawThemeParentBackground(new HandleRef(this, childControl.Handle), hdc, new NativeMethods.COMRECT(bounds));
-                }
+                using var wgr = new WindowsGraphicsWrapper(dc, AllGraphicsProperties);
+                var hdc = new HandleRef(wgr, wgr.WindowsGraphics.DeviceContext.Hdc);
+                RECT rc = bounds;
+                lastHResult = (int)UxTheme.DrawThemeParentBackground(childControl, hdc, ref rc);
             }
         }
 
