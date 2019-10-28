@@ -273,7 +273,7 @@ namespace System.Windows.Forms.VisualStyles
             DrawBackground(dc, bounds, IntPtr.Zero);
         }
 
-        internal void DrawBackground(IDeviceContext dc, Rectangle bounds, IntPtr hWnd)
+        internal unsafe void DrawBackground(IDeviceContext dc, Rectangle bounds, IntPtr hWnd)
         {
             if (dc == null)
             {
@@ -291,12 +291,14 @@ namespace System.Windows.Forms.VisualStyles
                 {
                     using (ThemeHandle hTheme = ThemeHandle.Create(_class, true, hWnd))
                     {
-                        lastHResult = SafeNativeMethods.DrawThemeBackground(new HandleRef(this, hTheme.NativeHandle), hdc, part, state, new NativeMethods.COMRECT(bounds), null);
+                        RECT rect  = bounds;
+                        lastHResult = (int)UxTheme.DrawThemeBackground(hTheme, hdc, part, state, ref rect, null);
                     }
                 }
                 else
                 {
-                    lastHResult = SafeNativeMethods.DrawThemeBackground(new HandleRef(this, Handle), hdc, part, state, new NativeMethods.COMRECT(bounds), null);
+                    RECT rect  = bounds;
+                    lastHResult = (int)UxTheme.DrawThemeBackground(this, hdc, part, state, ref rect, null);
                 }
             }
         }
@@ -309,7 +311,7 @@ namespace System.Windows.Forms.VisualStyles
             DrawBackground(dc, bounds, clipRectangle, IntPtr.Zero);
         }
 
-        internal void DrawBackground(IDeviceContext dc, Rectangle bounds, Rectangle clipRectangle, IntPtr hWnd)
+        internal unsafe void DrawBackground(IDeviceContext dc, Rectangle bounds, Rectangle clipRectangle, IntPtr hWnd)
         {
             if (dc == null)
             {
@@ -331,12 +333,16 @@ namespace System.Windows.Forms.VisualStyles
                 {
                     using (ThemeHandle hTheme = ThemeHandle.Create(_class, true, hWnd))
                     {
-                        lastHResult = SafeNativeMethods.DrawThemeBackground(new HandleRef(this, hTheme.NativeHandle), hdc, part, state, new NativeMethods.COMRECT(bounds), new NativeMethods.COMRECT(clipRectangle));
+                        RECT rect = bounds;
+                        RECT clipRect = clipRectangle;
+                        lastHResult = (int)UxTheme.DrawThemeBackground(hTheme, hdc, part, state, ref rect, &clipRect);
                     }
                 }
                 else
                 {
-                    lastHResult = SafeNativeMethods.DrawThemeBackground(new HandleRef(this, Handle), hdc, part, state, new NativeMethods.COMRECT(bounds), new NativeMethods.COMRECT(clipRectangle));
+                    RECT rect = bounds;
+                    RECT clipRect = clipRectangle;
+                    lastHResult = (int)UxTheme.DrawThemeBackground(this, hdc, part, state, ref rect, &clipRect);
                 }
             }
         }

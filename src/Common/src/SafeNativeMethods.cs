@@ -163,9 +163,6 @@ namespace System.Windows.Forms
 
         // Theming/Visual Styles
         [DllImport(ExternDll.Uxtheme, CharSet = CharSet.Auto)]
-        public static extern int DrawThemeBackground(HandleRef hTheme, HandleRef hdc, int partId, int stateId, [In] NativeMethods.COMRECT pRect, [In] NativeMethods.COMRECT pClipRect);
-
-        [DllImport(ExternDll.Uxtheme, CharSet = CharSet.Auto)]
         public static extern int DrawThemeEdge(HandleRef hTheme, HandleRef hdc, int iPartId, int iStateId, [In] NativeMethods.COMRECT pDestRect, int uEdge, int uFlags, [Out] NativeMethods.COMRECT pContentRect);
 
         [DllImport(ExternDll.Uxtheme, CharSet = CharSet.Auto)]
