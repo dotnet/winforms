@@ -19,7 +19,6 @@ namespace System.Windows.Forms.VisualStyles
     {
         private const TextFormatFlags AllGraphicsProperties = TextFormatFlags.PreserveGraphicsClipping | TextFormatFlags.PreserveGraphicsTranslateTransform;
 
-        internal const int EdgeAdjust = 0x2000; //used with Edges in VisualStyleRenderer.DrawThemeEdge
         private string _class;
         private int part;
         private int state;
@@ -372,15 +371,12 @@ namespace System.Windows.Forms.VisualStyles
                 throw new InvalidEnumArgumentException(nameof(effects), (int)effects, typeof(EdgeEffects));
             }
 
-            NativeMethods.COMRECT rect = new NativeMethods.COMRECT();
-
-            using (WindowsGraphicsWrapper wgr = new WindowsGraphicsWrapper(dc, AllGraphicsProperties))
-            {
-                HandleRef hdc = new HandleRef(wgr, wgr.WindowsGraphics.DeviceContext.Hdc);
-                lastHResult = SafeNativeMethods.DrawThemeEdge(new HandleRef(this, Handle), hdc, part, state, new NativeMethods.COMRECT(bounds), (int)style, (int)edges | (int)effects | EdgeAdjust, rect);
-            }
-
-            return Rectangle.FromLTRB(rect.left, rect.top, rect.right, rect.bottom);
+            using var wgr = new WindowsGraphicsWrapper(dc, AllGraphicsProperties);
+            var hdc = new HandleRef(wgr, wgr.WindowsGraphics.DeviceContext.Hdc);
+            RECT destRect = bounds;
+            var contentRect = new RECT();
+            lastHResult = (int)UxTheme.DrawThemeEdge(this, hdc, part, state, ref destRect, (User32.EDGE)style, (User32.BF)edges | (User32.BF)effects | User32.BF.ADJUST, ref contentRect);
+            return contentRect;
         }
 
         /// <summary>
