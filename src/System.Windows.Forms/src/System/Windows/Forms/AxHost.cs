@@ -1714,7 +1714,7 @@ namespace System.Windows.Forms
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "Naughty control didn't call showObject...");
                 try
                 {
-                    ((UnsafeNativeMethods.IOleClientSite)oleSite).ShowObject();
+                    ((Ole32.IOleClientSite)oleSite).ShowObject();
                 }
                 catch
                 {

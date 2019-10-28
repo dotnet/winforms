@@ -23,7 +23,7 @@ namespace System.Windows.Forms
         /// </summary>
         private class OleInterfaces :
             Ole32.IOleControlSite,
-            UnsafeNativeMethods.IOleClientSite,
+            Ole32.IOleClientSite,
             UnsafeNativeMethods.IOleInPlaceSite,
             Ole32.ISimpleFrameSite,
             Ole32.IVBGetControl,
@@ -354,27 +354,32 @@ namespace System.Windows.Forms
             }
 
             // IOleClientSite methods:
-            int UnsafeNativeMethods.IOleClientSite.SaveObject()
+            HRESULT Ole32.IOleClientSite.SaveObject()
             {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in SaveObject");
-                return NativeMethods.E_NOTIMPL;
+                return HRESULT.E_NOTIMPL;
             }
 
-            int UnsafeNativeMethods.IOleClientSite.GetMoniker(int dwAssign, int dwWhichMoniker, out object moniker)
+            unsafe HRESULT Ole32.IOleClientSite.GetMoniker(Ole32.OLEGETMONIKER dwAssign, Ole32.OLEWHICHMK dwWhichMoniker, IntPtr* ppmk)
             {
+                if (ppmk == null)
+                {
+                    return HRESULT.E_POINTER;
+                }
+
                 Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetMoniker");
-                moniker = null;
-                return NativeMethods.E_NOTIMPL;
+                *ppmk = IntPtr.Zero;
+                return HRESULT.E_NOTIMPL;
             }
 
-            HRESULT UnsafeNativeMethods.IOleClientSite.GetContainer(out Ole32.IOleContainer container)
+            HRESULT Ole32.IOleClientSite.GetContainer(out Ole32.IOleContainer container)
             {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in getContainer");
                 container = host.GetParentContainer();
                 return HRESULT.S_OK;
             }
 
-            unsafe int UnsafeNativeMethods.IOleClientSite.ShowObject()
+            unsafe HRESULT Ole32.IOleClientSite.ShowObject()
             {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in ShowObject");
                 if (host.GetAxState(AxHost.fOwnWindow))
@@ -418,19 +423,19 @@ namespace System.Windows.Forms
                     throw new InvalidOperationException(SR.AXWindowlessControl);
                 }
 
-                return NativeMethods.S_OK;
+                return HRESULT.S_OK;
             }
 
-            int UnsafeNativeMethods.IOleClientSite.OnShowWindow(int fShow)
+            HRESULT Ole32.IOleClientSite.OnShowWindow(BOOL fShow)
             {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in OnShowWindow");
-                return NativeMethods.S_OK;
+                return HRESULT.S_OK;
             }
 
-            int UnsafeNativeMethods.IOleClientSite.RequestNewObjectLayout()
+            HRESULT Ole32.IOleClientSite.RequestNewObjectLayout()
             {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in RequestNewObjectLayout");
-                return NativeMethods.E_NOTIMPL;
+                return HRESULT.E_NOTIMPL;
             }
 
             // IOleInPlaceSite methods:

@@ -52,7 +52,7 @@ namespace System.Windows.Forms
             private readonly Control _control;
             private readonly IWindowTarget _controlWindowTarget;
             private IntPtr _clipRegion;
-            private UnsafeNativeMethods.IOleClientSite _clientSite;
+            private Ole32.IOleClientSite _clientSite;
             private Ole32.IOleInPlaceUIWindow _inPlaceUiWindow;
             private Ole32.IOleInPlaceFrame _inPlaceFrame;
             private readonly ArrayList _adviseList;
@@ -330,7 +330,7 @@ namespace System.Windows.Forms
             internal unsafe HRESULT DoVerb(
                 Ole32.OLEIVERB iVerb,
                 User32.MSG* lpmsg,
-                UnsafeNativeMethods.IOleClientSite pActiveSite,
+                Ole32.IOleClientSite pActiveSite,
                 int lindex,
                 IntPtr hwndParent,
                 RECT* lprcPosRect)
@@ -658,10 +658,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Implements IOleObject::GetClientSite.
             /// </summary>
-            internal UnsafeNativeMethods.IOleClientSite GetClientSite()
-            {
-                return _clientSite;
-            }
+            internal Ole32.IOleClientSite GetClientSite() => _clientSite;
 
             internal unsafe HRESULT GetControlInfo(NativeMethods.tagCONTROLINFO pCI)
             {
@@ -1928,7 +1925,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Implements IOleObject::SetClientSite.
             /// </summary>
-            internal void SetClientSite(UnsafeNativeMethods.IOleClientSite value)
+            internal void SetClientSite(Ole32.IOleClientSite value)
             {
                 if (_clientSite != null)
                 {
