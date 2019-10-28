@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -9,6 +9,7 @@ using System.ComponentModel.Design;
 using System.Drawing;
 using System.Drawing.Design;
 using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using Xunit;
@@ -22,7 +23,8 @@ namespace System.Windows.Forms.Design.Editors.Tests
         [InlineData(typeof(Array), typeof(ArrayEditor))]
         [InlineData(typeof(IList), typeof(CollectionEditor))]
         [InlineData(typeof(ICollection), typeof(CollectionEditor))]
-        [InlineData(typeof(byte[]), typeof(ArrayEditor))]
+        [InlineData(typeof(byte[]), typeof(BinaryEditor))]
+        [InlineData(typeof(Stream), typeof(BinaryEditor))]
         [InlineData(typeof(string[]), typeof(StringArrayEditor))]
         [InlineData(typeof(Bitmap), typeof(BitmapEditor))]
         [InlineData(typeof(Color), typeof(ColorEditor))]

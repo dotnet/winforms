@@ -32,6 +32,31 @@
         <target state="translated">Cambiar tamaño de {0} controles</target>
         <note />
       </trans-unit>
+      <trans-unit id="BinaryEditorAllFiles">
+        <source>All Files</source>
+        <target state="new">All Files</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="BinaryEditorFileError">
+        <source>Error writing to file: {0}</source>
+        <target state="new">Error writing to file: {0}</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="BinaryEditorFileName">
+        <source>ByteArray</source>
+        <target state="new">ByteArray</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="BinaryEditorSaveFile">
+        <source>Save File As</source>
+        <target state="new">Save File As</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="BinaryEditorTitle">
+        <source>Byte Array Property Editor</source>
+        <target state="new">Byte Array Property Editor</target>
+        <note />
+      </trans-unit>
       <trans-unit id="CodeDomComponentSerializationServiceClosedStore">
         <source>The serialization store is closed.  New objects cannot be added to a closed store.</source>
         <target state="translated">El almacén de serialización está cerrado. No se pueden agregar nuevos objetos a un almacén cerrado.</target>
