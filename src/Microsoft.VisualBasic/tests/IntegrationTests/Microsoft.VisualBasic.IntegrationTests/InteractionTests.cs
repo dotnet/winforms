@@ -49,6 +49,15 @@ namespace Microsoft.VisualBasic.IntegrationTests
         }
 
         [Fact]
+        public void VBInputBox_ShowDialog()
+        {
+            Process process = StartTestProcess("VBInputBox.ShowDialog");
+            EndProcess(process);
+            Assert.True(process.HasExited);
+            Assert.NotEqual(2, process.ExitCode);
+        }
+
+        [Fact]
         public void MsgBox()
         {
             Process process = StartTestProcess("Interaction.MsgBox");

@@ -19,6 +19,7 @@ namespace Microsoft.VisualBasic.MyServices.Internal.Tests
             var process = TestHelpers.StartProcess(startInfo);
             TestHelpers.EndProcess(process, timeout: 1000);
             Assert.True(process.HasExited);
+            Assert.NotEqual(2, process.ExitCode);
         }
     }
 }
