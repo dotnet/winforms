@@ -134,7 +134,7 @@ namespace System.Windows.Forms
                     long iColors = 1 << (bmp.bmBitsPixel * bmp.bmPlanes);
                     if (iColors <= 256)
                     {
-                        byte[] aj = new byte[Marshal.SizeOf<NativeMethods.PALETTEENTRY>() * 256];
+                        byte[] aj = new byte[sizeof(Gdi32.PALETTEENTRY) * 256];
                         SafeNativeMethods.GetSystemPaletteEntries(hdcSrc, 0, (int)iColors, aj);
 
                         fixed (byte* pcolors = lpbmi.bmiColors)
@@ -142,7 +142,7 @@ namespace System.Windows.Forms
                             fixed (byte* ppal = aj)
                             {
                                 Gdi32.RGBQUAD* prgb = (Gdi32.RGBQUAD*)pcolors;
-                                NativeMethods.PALETTEENTRY* lppe = (NativeMethods.PALETTEENTRY*)ppal;
+                                Gdi32.PALETTEENTRY* lppe = (Gdi32.PALETTEENTRY*)ppal;
 
                                 // Convert the palette entries to RGB quad entries
                                 for (i = 0; i < (int)iColors; i++)

@@ -2519,15 +2519,6 @@ namespace System.Windows.Forms
         }
 
         [StructLayout(LayoutKind.Sequential)]
-        public struct PALETTEENTRY
-        {
-            public byte peRed;
-            public byte peGreen;
-            public byte peBlue;
-            public byte peFlags;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
         public struct BITMAPINFO_FLAT
         {
             public int bmiHeader_biSize;// = Marshal.SizeOf<BITMAPINFOHEADER>();

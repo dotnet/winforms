@@ -6,12 +6,12 @@ internal static partial class Interop
 {
     internal static partial class Gdi32
     {
-        public struct RGBQUAD
+        public struct PALETTEENTRY
         {
-            public byte rgbBlue;
-            public byte rgbGreen;
-            public byte rgbRed;
-            public byte rgbReserved;
+            public byte peRed;
+            public byte peGreen;
+            public byte peBlue;
+            public byte peFlags;
         }
     }
 }
