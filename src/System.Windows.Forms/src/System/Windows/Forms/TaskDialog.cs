@@ -1209,7 +1209,7 @@ namespace System.Windows.Forms
                         // notifications until we receive the posted message.
                         if (User32.PostMessageW(
                             hWnd,
-                            ContinueButtonClickHandlingMessage) == IntPtr.Zero)
+                            ContinueButtonClickHandlingMessage).IsFalse())
                         {
                             // Ignore. This should not happen in normal circumstances, and even then
                             // we don't need to fail.
