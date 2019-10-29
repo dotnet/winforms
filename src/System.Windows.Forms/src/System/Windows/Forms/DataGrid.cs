@@ -3764,7 +3764,9 @@ namespace System.Windows.Forms
             if (ToolTipProvider != null)
             {
                 ResetToolTip();
-            } ((EventHandler)Events[EVENT_SCROLL])?.Invoke(this, e);
+            }
+            
+            ((EventHandler)Events[EVENT_SCROLL])?.Invoke(this, e);
         }
 
         /// <summary>

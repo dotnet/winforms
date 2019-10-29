@@ -474,10 +474,8 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnButtonClick(EventArgs e)
         {
-            if (DefaultItem != null)
-            {
-                DefaultItem.FireEvent(ToolStripItemEventType.Click);
-            } ((EventHandler)Events[EventButtonClick])?.Invoke(this, e);
+            DefaultItem?.FireEvent(ToolStripItemEventType.Click);
+            ((EventHandler)Events[EventButtonClick])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -486,10 +484,8 @@ namespace System.Windows.Forms
         /// </summary>
         public virtual void OnButtonDoubleClick(EventArgs e)
         {
-            if (DefaultItem != null)
-            {
-                DefaultItem.FireEvent(ToolStripItemEventType.DoubleClick);
-            } ((EventHandler)Events[EventButtonDoubleClick])?.Invoke(this, e);
+            DefaultItem?.FireEvent(ToolStripItemEventType.DoubleClick);
+            ((EventHandler)Events[EventButtonDoubleClick])?.Invoke(this, e);
         }
 
         /// <summary>
