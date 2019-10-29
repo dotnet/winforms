@@ -607,35 +607,6 @@ namespace System.Windows.Forms
             }
         }
 
-        [ComImport(), Guid("00000118-0000-0000-C000-000000000046"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IOleClientSite
-        {
-            [PreserveSig]
-            int SaveObject();
-
-            [PreserveSig]
-            int GetMoniker(
-                [In, MarshalAs(UnmanagedType.U4)]
-                int dwAssign,
-                [In, MarshalAs(UnmanagedType.U4)]
-                int dwWhichMoniker,
-                [Out, MarshalAs(UnmanagedType.Interface)]
-                out object moniker);
-
-            [PreserveSig]
-            HRESULT GetContainer(
-                out Ole32.IOleContainer container);
-
-            [PreserveSig]
-            int ShowObject();
-
-            [PreserveSig]
-            int OnShowWindow(int fShow);
-
-            [PreserveSig]
-            int RequestNewObjectLayout();
-        }
-
         [ComImport]
         [Guid("00000119-0000-0000-C000-000000000046")]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
@@ -1045,11 +1016,12 @@ namespace System.Windows.Forms
         public unsafe interface IOleObject
         {
             [PreserveSig]
-            int SetClientSite(
-                   [In, MarshalAs(UnmanagedType.Interface)]
-                      IOleClientSite pClientSite);
+            HRESULT SetClientSite(
+                Ole32.IOleClientSite pClientSite);
 
-            IOleClientSite GetClientSite();
+            [PreserveSig]
+            HRESULT GetClientSite(
+                out Ole32.IOleClientSite ppClientSite);
 
             [PreserveSig]
             int SetHostNames(
@@ -1063,20 +1035,15 @@ namespace System.Windows.Forms
                 Ole32.OLECLOSE dwSaveOption);
 
             [PreserveSig]
-            int SetMoniker(
-                   [In, MarshalAs(UnmanagedType.U4)]
-                     int dwWhichMoniker,
-                   [In, MarshalAs(UnmanagedType.Interface)]
-                     object pmk);
+            HRESULT SetMoniker(
+                Ole32.OLEWHICHMK dwWhichMoniker,
+                [MarshalAs(UnmanagedType.Interface)] object pmk);
 
             [PreserveSig]
-            int GetMoniker(
-                  [In, MarshalAs(UnmanagedType.U4)]
-                     int dwAssign,
-                  [In, MarshalAs(UnmanagedType.U4)]
-                     int dwWhichMoniker,
-                  [Out, MarshalAs(UnmanagedType.Interface)]
-                     out object moniker);
+            HRESULT GetMoniker(
+                Ole32.OLEGETMONIKER dwAssign,
+                Ole32.OLEWHICHMK dwWhichMoniker,
+                IntPtr* ppmk);
 
             [PreserveSig]
             int InitFromData(
@@ -1096,7 +1063,7 @@ namespace System.Windows.Forms
             HRESULT DoVerb(
                 Ole32.OLEIVERB iVerb,
                 User32.MSG* lpmsg,
-                IOleClientSite pActiveSite,
+                Ole32.IOleClientSite pActiveSite,
                 int lindex,
                 IntPtr hwndParent,
                 RECT* lprcPosRect);
@@ -1162,12 +1129,12 @@ namespace System.Windows.Forms
         public unsafe interface IOleInPlaceObjectWindowless
         {
             [PreserveSig]
-            int SetClientSite(
-                   [In, MarshalAs(UnmanagedType.Interface)]
-                      IOleClientSite pClientSite);
+            HRESULT SetClientSite(
+                Ole32.IOleClientSite pClientSite);
 
             [PreserveSig]
-            int GetClientSite(out IOleClientSite site);
+            HRESULT GetClientSite(
+                out Ole32.IOleClientSite ppClientSite);
 
             [PreserveSig]
             int SetHostNames(
@@ -1181,20 +1148,15 @@ namespace System.Windows.Forms
                     int dwSaveOption);
 
             [PreserveSig]
-            int SetMoniker(
-                   [In, MarshalAs(UnmanagedType.U4)]
-                     int dwWhichMoniker,
-                   [In, MarshalAs(UnmanagedType.Interface)]
-                     object pmk);
+            HRESULT SetMoniker(
+                Ole32.OLEWHICHMK dwWhichMoniker,
+                [MarshalAs(UnmanagedType.Interface)] object pmk);
 
             [PreserveSig]
-            int GetMoniker(
-                  [In, MarshalAs(UnmanagedType.U4)]
-                     int dwAssign,
-                  [In, MarshalAs(UnmanagedType.U4)]
-                     int dwWhichMoniker,
-                  [Out, MarshalAs(UnmanagedType.Interface)]
-                     out object moniker);
+            HRESULT GetMoniker(
+                Ole32.OLEGETMONIKER dwAssign,
+                Ole32.OLEWHICHMK dwWhichMoniker,
+                IntPtr* ppmk);
 
             [PreserveSig]
             int InitFromData(
@@ -1214,7 +1176,7 @@ namespace System.Windows.Forms
             HRESULT DoVerb(
                 int iVerb,
                 User32.MSG* lpmsg,
-                IOleClientSite pActiveSite,
+                Ole32.IOleClientSite pActiveSite,
                 int lindex,
                 IntPtr hwndParent,
                 RECT* lprcPosRect);
@@ -1791,7 +1753,7 @@ namespace System.Windows.Forms
             [MarshalAs(UnmanagedType.U4)]
             public int cbSize = Marshal.SizeOf<tagQACONTAINER>();
 
-            public IOleClientSite pClientSite;
+            public Ole32.IOleClientSite pClientSite;
 
             [MarshalAs(UnmanagedType.Interface)]
             public object pAdviseSink = null;

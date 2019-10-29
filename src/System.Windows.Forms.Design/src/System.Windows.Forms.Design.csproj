@@ -94,6 +94,7 @@
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.ILockBytes.cs" Link="Interop\Ole32\Interop.ILockBytes.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.IMPLTYPEFLAG.cs" Link="Interop\Ole32\Interop.IMPLTYPEFLAG.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.INVOKEKIND.cs" Link="Interop\Ole32\Interop.INVOKEKIND.cs" />
+    <Compile Include="..\..\Common\src\Interop\Ole32\Interop.IOleClientSite.cs" Link="Interop\Ole32\Interop.IOleClientSite.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.IOleCommandTarget.cs" Link="Interop\Ole32\Interop.IOleCommandTarget.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.IOleContainer.cs" Link="Interop\Ole32\Interop.IOleContainer.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.IOleInPlaceActiveObject.cs" Link="Interop\Ole32\Interop.IOleInPlaceActiveObject.cs" />
@@ -108,10 +109,12 @@
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.OLECMDF.cs" Link="Interop\Ole32\Interop.OLECMDF.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.OLECMDID.cs" Link="Interop\Ole32\Interop.OLECMDID.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.OLECONTF.cs" Link="Interop\Ole32\Interop.OLECONTF.cs" />
+    <Compile Include="..\..\Common\src\Interop\Ole32\Interop.OLEGETMONIKER.cs" Link="Interop\Ole32\Interop.OLEGETMONIKER.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.OLEINPLACEFRAMEINFO.cs" Link="Interop\Ole32\Interop.OLEINPLACEFRAMEINFO.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.OLEIVERB.cs" Link="Interop\Ole32\Interop.OLEIVERB.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.OLEMENUGROUPWIDTHS.cs" Link="Interop\Ole32\Interop.OLEMENUGROUPWIDTHS.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.OLEMISC.cs" Link="Interop\Ole32\Interop.OLEMISC.cs" />
+    <Compile Include="..\..\Common\src\Interop\Ole32\Interop.OLEWHICHMK.cs" Link="Interop\Ole32\Interop.OLEWHICHMK.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.PARAMDESC.cs" Link="Interop\Ole32\Interop.PARAMDESC.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.PARAMFLAG.cs" Link="Interop\Ole32\Interop.PARAMFLAG.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.RevokeDragDrop.cs" Link="Interop\Ole32\Interop.RevokeDragDrop.cs" />

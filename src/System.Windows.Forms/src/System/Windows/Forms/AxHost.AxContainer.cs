@@ -790,19 +790,13 @@ namespace System.Windows.Forms
                 AxHost ctl = null;
                 if (pActiveObject is UnsafeNativeMethods.IOleObject oleObject)
                 {
-                    UnsafeNativeMethods.IOleClientSite clientSite = null;
-                    try
+                    HRESULT hr = oleObject.GetClientSite(out Ole32.IOleClientSite clientSite);
+                    Debug.Assert(hr.Succeeded());
+                    if (clientSite is OleInterfaces)
                     {
-                        clientSite = oleObject.GetClientSite();
-                        if (clientSite is OleInterfaces)
-                        {
-                            ctl = ((OleInterfaces)(clientSite)).GetAxHost();
-                        }
+                        ctl = ((OleInterfaces)(clientSite)).GetAxHost();
                     }
-                    catch (COMException t)
-                    {
-                        Debug.Fail(t.ToString());
-                    }
+
                     if (ctlInEditMode != null)
                     {
                         Debug.Fail("control " + ctlInEditMode.ToString() + " did not reset its edit mode to null");

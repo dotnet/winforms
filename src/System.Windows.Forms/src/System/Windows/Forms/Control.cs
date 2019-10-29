@@ -13928,17 +13928,18 @@ namespace System.Windows.Forms
             return HRESULT.S_OK;
         }
 
-        int UnsafeNativeMethods.IOleObject.SetClientSite(UnsafeNativeMethods.IOleClientSite pClientSite)
+        HRESULT UnsafeNativeMethods.IOleObject.SetClientSite(Ole32.IOleClientSite pClientSite)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:SetClientSite");
             ActiveXInstance.SetClientSite(pClientSite);
-            return NativeMethods.S_OK;
+            return HRESULT.S_OK;
         }
 
-        UnsafeNativeMethods.IOleClientSite UnsafeNativeMethods.IOleObject.GetClientSite()
+        HRESULT UnsafeNativeMethods.IOleObject.GetClientSite(out Ole32.IOleClientSite ppClientSite)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetClientSite");
-            return ActiveXInstance.GetClientSite();
+            ppClientSite = ActiveXInstance.GetClientSite();
+            return HRESULT.S_OK;
         }
 
         int UnsafeNativeMethods.IOleObject.SetHostNames(string szContainerApp, string szContainerObj)
@@ -13956,17 +13957,22 @@ namespace System.Windows.Forms
             return HRESULT.S_OK;
         }
 
-        int UnsafeNativeMethods.IOleObject.SetMoniker(int dwWhichMoniker, object pmk)
+        HRESULT UnsafeNativeMethods.IOleObject.SetMoniker(Ole32.OLEWHICHMK dwWhichMoniker, object pmk)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:SetMoniker");
-            return NativeMethods.E_NOTIMPL;
+            return HRESULT.E_NOTIMPL;
         }
 
-        int UnsafeNativeMethods.IOleObject.GetMoniker(int dwAssign, int dwWhichMoniker, out object moniker)
+        unsafe HRESULT UnsafeNativeMethods.IOleObject.GetMoniker(Ole32.OLEGETMONIKER dwAssign, Ole32.OLEWHICHMK dwWhichMoniker, IntPtr* ppmk)
         {
+            if (ppmk == null)
+            {
+                return HRESULT.E_POINTER;
+            }
+
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetMoniker");
-            moniker = null;
-            return NativeMethods.E_NOTIMPL;
+            *ppmk = IntPtr.Zero;
+            return HRESULT.E_NOTIMPL;
         }
 
         int UnsafeNativeMethods.IOleObject.InitFromData(IComDataObject pDataObject, int fCreation, int dwReserved)
@@ -13985,7 +13991,7 @@ namespace System.Windows.Forms
         unsafe HRESULT UnsafeNativeMethods.IOleObject.DoVerb(
             Ole32.OLEIVERB iVerb,
             User32.MSG* lpmsg,
-            UnsafeNativeMethods.IOleClientSite pActiveSite,
+            Ole32.IOleClientSite pActiveSite,
             int lindex,
             IntPtr hwndParent,
             RECT* lprcPosRect)

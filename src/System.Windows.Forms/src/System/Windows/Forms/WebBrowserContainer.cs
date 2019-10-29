@@ -111,19 +111,12 @@ namespace System.Windows.Forms
             WebBrowserBase ctl = null;
             if (pActiveObject is UnsafeNativeMethods.IOleObject oleObject)
             {
-                UnsafeNativeMethods.IOleClientSite clientSite = null;
-                try
+                oleObject.GetClientSite(out Ole32.IOleClientSite clientSite);
+                if (clientSite is WebBrowserSiteBase webBrowserSiteBase)
                 {
-                    clientSite = oleObject.GetClientSite();
-                    if (clientSite is WebBrowserSiteBase webBrowserSiteBase)
-                    {
-                        ctl = webBrowserSiteBase.GetAXHost();
-                    }
+                    ctl = webBrowserSiteBase.Host;
                 }
-                catch (COMException t)
-                {
-                    Debug.Fail(t.ToString());
-                }
+
                 if (ctlInEditMode != null)
                 {
                     Debug.Fail("control " + ctlInEditMode.ToString() + " did not reset its edit mode to null");

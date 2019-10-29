@@ -25,8 +25,8 @@ namespace System.Windows.Forms
     /// </summary>
     public class WebBrowserSiteBase :
         Ole32.IOleControlSite,
-        UnsafeNativeMethods.IOleClientSite,
         UnsafeNativeMethods.IOleInPlaceSite,
+        Ole32.IOleClientSite,
         Ole32.ISimpleFrameSite,
         Ole32.IPropertyNotifySink,
         IDisposable
@@ -170,27 +170,27 @@ namespace System.Windows.Forms
 
         HRESULT Ole32.IOleControlSite.ShowPropertyFrame() => HRESULT.E_NOTIMPL;
 
-        //
         // IOleClientSite methods:
-        //
-        int UnsafeNativeMethods.IOleClientSite.SaveObject()
+        HRESULT Ole32.IOleClientSite.SaveObject() => HRESULT.E_NOTIMPL;
+
+        unsafe HRESULT Ole32.IOleClientSite.GetMoniker(Ole32.OLEGETMONIKER dwAssign, Ole32.OLEWHICHMK dwWhichMoniker, IntPtr* ppmk)
         {
-            return NativeMethods.E_NOTIMPL;
+            if (ppmk == null)
+            {
+                return HRESULT.E_POINTER;
+            }
+
+            *ppmk = IntPtr.Zero;
+            return HRESULT.E_NOTIMPL;
         }
 
-        int UnsafeNativeMethods.IOleClientSite.GetMoniker(int dwAssign, int dwWhichMoniker, out object moniker)
-        {
-            moniker = null;
-            return NativeMethods.E_NOTIMPL;
-        }
-
-        HRESULT UnsafeNativeMethods.IOleClientSite.GetContainer(out Ole32.IOleContainer container)
+        HRESULT Ole32.IOleClientSite.GetContainer(out Ole32.IOleContainer container)
         {
             container = Host.GetParentContainer();
             return HRESULT.S_OK;
         }
 
-        unsafe int UnsafeNativeMethods.IOleClientSite.ShowObject()
+        unsafe HRESULT Ole32.IOleClientSite.ShowObject()
         {
             if (Host.ActiveXState >= WebBrowserHelper.AXState.InPlaceActive)
             {
@@ -212,18 +212,13 @@ namespace System.Windows.Forms
                     throw new InvalidOperationException(SR.AXWindowlessControl);
                 }
             }
-            return NativeMethods.S_OK;
+
+            return HRESULT.S_OK;
         }
 
-        int UnsafeNativeMethods.IOleClientSite.OnShowWindow(int fShow)
-        {
-            return NativeMethods.S_OK;
-        }
+        HRESULT Ole32.IOleClientSite.OnShowWindow(BOOL fShow) => HRESULT.S_OK;
 
-        int UnsafeNativeMethods.IOleClientSite.RequestNewObjectLayout()
-        {
-            return NativeMethods.E_NOTIMPL;
-        }
+        HRESULT Ole32.IOleClientSite.RequestNewObjectLayout() => HRESULT.E_NOTIMPL;
 
         // IOleInPlaceSite methods:
         unsafe HRESULT UnsafeNativeMethods.IOleInPlaceSite.GetWindow(IntPtr* phwnd)
@@ -412,14 +407,6 @@ namespace System.Windows.Forms
                 Debug.Fail(t.ToString());
                 throw;
             }
-        }
-
-        //
-        // Internal helper methods:
-        //
-        internal WebBrowserBase GetAXHost()
-        {
-            return Host;
         }
 
         internal void StartEvents()
