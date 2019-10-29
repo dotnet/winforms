@@ -7,12 +7,19 @@ using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
 using System.Reflection;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace System.Windows.Forms.Design.Tests
 {
     public class DesignerAttributeTests
     {
         private const string AssemblyRef_SystemWinforms = "System.Windows.Forms, Version=" + FXAssembly.Version + ", Culture=neutral, PublicKeyToken=" + AssemblyRef.MicrosoftPublicKey;
+        private readonly ITestOutputHelper _output;
+
+        public DesignerAttributeTests(ITestOutputHelper output)
+        {
+            _output = output;
+        }
 
         public static IEnumerable<object[]> GetAttributeOfType_TestData(string assembly, Type attributeType)
         {
@@ -53,7 +60,10 @@ namespace System.Windows.Forms.Design.Tests
         [MemberData(nameof(GetAttributeOfType_TestData), AssemblyRef_SystemWinforms, typeof(DesignerAttribute))]
         public void DesignerAttributes_DesignerAttribute_TypeExists(DesignerAttribute attribute)
         {
-            Assert.NotNull(Type.GetType(attribute.DesignerTypeName, false));
+            var type = Type.GetType(attribute.DesignerTypeName, false);
+            _output.WriteLine($"{attribute.DesignerTypeName} --> {type?.FullName}");
+
+            Assert.NotNull(type);
         }
 
         [Theory]
@@ -62,28 +72,40 @@ namespace System.Windows.Forms.Design.Tests
         [MemberData(nameof(GetAttributeOfType_TestData), AssemblyRef.SystemWinformsDesign, typeof(DesignerSerializerAttribute))]
         public void DesignerAttributes_DesignerSerializerAttribute_TypeExists(DesignerSerializerAttribute attribute)
         {
-            Assert.NotNull(Type.GetType(attribute.SerializerTypeName, false));
+            var type = Type.GetType(attribute.SerializerTypeName, false);
+            _output.WriteLine($"{attribute.SerializerTypeName} --> {type?.FullName}");
+
+            Assert.NotNull(type);
         }
 
         [Theory]
         [MemberData(nameof(GetAttributeWithType_TestData), AssemblyRef_SystemWinforms, typeof(DefaultPropertyAttribute))]
         public void DesignerAttributes_DefaultPropertyAttribute_PropertyExists(Type type, DefaultPropertyAttribute attribute)
         {
-            Assert.NotNull(type.GetProperty(attribute.Name));
+            var propertyInfo = type.GetProperty(attribute.Name);
+            _output.WriteLine($"{attribute.Name} --> {propertyInfo?.Name}");
+
+            Assert.NotNull(propertyInfo);
         }
 
         [Theory]
         [MemberData(nameof(GetAttributeWithType_TestData), AssemblyRef_SystemWinforms, typeof(DefaultBindingPropertyAttribute))]
         public void DesignerAttributes_DefaultBindingPropertyAttribute_PropertyExists(Type type, DefaultBindingPropertyAttribute attribute)
         {
-            Assert.NotNull(type.GetProperty(attribute.Name));
+            var propertyInfo = type.GetProperty(attribute.Name);
+            _output.WriteLine($"{attribute.Name} --> {propertyInfo?.Name}");
+
+            Assert.NotNull(propertyInfo);
         }
 
         [Theory]
         [MemberData(nameof(GetAttributeWithType_TestData), AssemblyRef_SystemWinforms, typeof(DefaultEventAttribute))]
         public void DesignerAttributes_DefaultEventAttribute_EventExists(Type type, DefaultEventAttribute attribute)
         {
-            Assert.NotNull(type.GetEvent(attribute.Name));
+            var eventInfo = type.GetEvent(attribute.Name);
+            _output.WriteLine($"{attribute.Name} --> {eventInfo?.Name}");
+
+            Assert.NotNull(eventInfo);
         }
 
         [Theory]
@@ -91,7 +113,10 @@ namespace System.Windows.Forms.Design.Tests
         [MemberData(nameof(GetAttributeOfTypeAndProperty_TestData), AssemblyRef_SystemWinforms, typeof(TypeConverterAttribute))]
         public void DesignerAttributes_TypeConverterAttribute_TypeExists(TypeConverterAttribute attribute)
         {
-            Assert.NotNull(Type.GetType(attribute.ConverterTypeName, false));
+            var type = Type.GetType(attribute.ConverterTypeName, false);
+            _output.WriteLine($"{attribute.ConverterTypeName} --> {type?.Name}");
+
+            Assert.NotNull(type);
         }
 
         [Theory]
@@ -99,7 +124,10 @@ namespace System.Windows.Forms.Design.Tests
         [MemberData(nameof(GetAttributeOfTypeAndProperty_TestData), AssemblyRef_SystemWinforms, typeof(EditorAttribute))]
         public void DesignerAttributes_EditorAttribute_TypeExists(EditorAttribute attribute)
         {
-            Assert.NotNull(Type.GetType(attribute.EditorTypeName, false));
+            var type = Type.GetType(attribute.EditorTypeName, false);
+            _output.WriteLine($"{attribute.EditorTypeName} --> {type?.Name}");
+
+            Assert.NotNull(type);
         }
     }
 }
