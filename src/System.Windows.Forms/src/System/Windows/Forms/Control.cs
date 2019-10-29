@@ -14354,16 +14354,16 @@ namespace System.Windows.Forms
             return NativeMethods.E_NOTIMPL;
         }
 
-        void UnsafeNativeMethods.IViewObject.SetAdvise(Ole32.DVASPECT aspects, int advf, IAdviseSink pAdvSink)
+        HRESULT UnsafeNativeMethods.IViewObject.SetAdvise(Ole32.DVASPECT aspects, Ole32.ADVF advf, IAdviseSink pAdvSink)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:SetAdvise");
-            ActiveXInstance.SetAdvise(aspects, advf, pAdvSink);
+            return ActiveXInstance.SetAdvise(aspects, advf, pAdvSink);
         }
 
-        void UnsafeNativeMethods.IViewObject.GetAdvise(Ole32.DVASPECT[] paspects, int[] padvf, IAdviseSink[] pAdvSink)
+        unsafe HRESULT UnsafeNativeMethods.IViewObject.GetAdvise(Ole32.DVASPECT* pAspects, Ole32.ADVF* pAdvf, IAdviseSink[] ppAdvSink)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetAdvise");
-            ActiveXInstance.GetAdvise(paspects, padvf, pAdvSink);
+            return ActiveXInstance.GetAdvise(pAspects, pAdvf, ppAdvSink);
         }
 
         void UnsafeNativeMethods.IViewObject2.Draw(Ole32.DVASPECT dwDrawAspect, int lindex, IntPtr pvAspect, NativeMethods.tagDVTARGETDEVICE ptd,
@@ -14399,16 +14399,16 @@ namespace System.Windows.Forms
             return NativeMethods.E_NOTIMPL;
         }
 
-        void UnsafeNativeMethods.IViewObject2.SetAdvise(Ole32.DVASPECT aspects, int advf, IAdviseSink pAdvSink)
+        HRESULT UnsafeNativeMethods.IViewObject2.SetAdvise(Ole32.DVASPECT aspects, Ole32.ADVF advf, IAdviseSink pAdvSink)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:SetAdvise");
-            ActiveXInstance.SetAdvise(aspects, advf, pAdvSink);
+            return ActiveXInstance.SetAdvise(aspects, advf, pAdvSink);
         }
 
-        void UnsafeNativeMethods.IViewObject2.GetAdvise(Ole32.DVASPECT[] paspects, int[] padvf, IAdviseSink[] pAdvSink)
+        unsafe HRESULT UnsafeNativeMethods.IViewObject2.GetAdvise(Ole32.DVASPECT* pAspects, Ole32.ADVF* pAdvf, IAdviseSink[] ppAdvSink)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetAdvise");
-            ActiveXInstance.GetAdvise(paspects, padvf, pAdvSink);
+            return ActiveXInstance.GetAdvise(pAspects, pAdvf, ppAdvSink);
         }
 
         unsafe Interop.HRESULT UnsafeNativeMethods.IViewObject2.GetExtent(Ole32.DVASPECT dwDrawAspect, int lindex, NativeMethods.tagDVTARGETDEVICE ptd, Size *lpsizel)

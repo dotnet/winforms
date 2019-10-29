@@ -19,14 +19,8 @@ namespace System.Windows.Forms
 
         public const int STATUS_PENDING = 0x103; //259 = STILL_ALIVE
 
-        public const int ACM_OPENA = (0x0400 + 100),
-        ACM_OPENW = (0x0400 + 103),
-        ADVF_NODATA = 1,
-        ADVF_ONLYONCE = 4,
-        ADVF_PRIMEFIRST = 2;
-        // Note: ADVF_ONLYONCE and ADVF_PRIMEFIRST values now conform with objidl.dll but are backwards from
-        // Platform SDK documentation as of 07/21/2003.
-        // http://msdn.microsoft.com/library/default.asp?url=/library/en-us/com/htm/oen_a2z_8jxi.asp.
+        public const int ACM_OPENA = (0x0400 + 100);
+        public const int ACM_OPENW = (0x0400 + 103);
 
         public const int BCM_GETIDEALSIZE = 0x1601,
         BI_RGB = 0,
