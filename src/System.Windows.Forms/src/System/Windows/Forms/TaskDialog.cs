@@ -1209,13 +1209,10 @@ namespace System.Windows.Forms
                         // notifications until we receive the posted message.
                         if (User32.PostMessageW(
                             hWnd,
-                            ContinueButtonClickHandlingMessage).IsFalse())
+                            ContinueButtonClickHandlingMessage).IsTrue())
                         {
-                            // Ignore. This should not happen in normal circumstances, and even then
-                            // we don't need to fail.
-                        }
-
-                        _ignoreButtonClickedNotifications = true;
+                            _ignoreButtonClickedNotifications = true;
+                        }                        
 
                         int buttonID = (int)wParam;
                         TaskDialogButton? button = _boundPage.GetBoundButtonByID(buttonID);
