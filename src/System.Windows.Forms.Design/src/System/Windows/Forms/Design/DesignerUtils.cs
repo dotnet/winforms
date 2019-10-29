@@ -188,7 +188,7 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                int lastXY = SafeNativeMethods.GetMessagePos();
+                int lastXY = (int)User32.GetMessagePos();
                 return new Point(NativeMethods.Util.SignedLOWORD(lastXY), NativeMethods.Util.SignedHIWORD(lastXY));
             }
         }

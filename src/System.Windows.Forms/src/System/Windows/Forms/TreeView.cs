@@ -3129,7 +3129,7 @@ namespace System.Windows.Forms
                             else
                             {
                                 treeViewState[TREEVIEWSTATE_showTreeViewContextMenu] = true;
-                                SendMessage(WindowMessages.WM_CONTEXTMENU, Handle, SafeNativeMethods.GetMessagePos());
+                                SendMessage(WindowMessages.WM_CONTEXTMENU, Handle, (int)User32.GetMessagePos());
                             }
                             m.Result = (IntPtr)1;
 
