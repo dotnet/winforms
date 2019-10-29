@@ -585,33 +585,33 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Implements IViewObject2::GetAdvise.
             /// </summary>
-            internal void GetAdvise(Ole32.DVASPECT[] paspects, int[] padvf, IAdviseSink[] pAdvSink)
+            internal unsafe HRESULT GetAdvise(Ole32.DVASPECT* pAspects, Ole32.ADVF* pAdvf, IAdviseSink[] ppAdvSink)
             {
-                // if they want it, give it to them
-                if (paspects != null)
+                if (pAspects != null)
                 {
-                    paspects[0] = Ole32.DVASPECT.CONTENT;
+                    *pAspects = Ole32.DVASPECT.CONTENT;
                 }
 
-                if (padvf != null)
+                if (pAdvf != null)
                 {
-                    padvf[0] = 0;
+                    *pAdvf = 0;
 
                     if (_activeXState[s_viewAdviseOnlyOnce])
                     {
-                        padvf[0] |= NativeMethods.ADVF_ONLYONCE;
+                        *pAdvf |= Ole32.ADVF.ONLYONCE;
                     }
-
                     if (_activeXState[s_viewAdvisePrimeFirst])
                     {
-                        padvf[0] |= NativeMethods.ADVF_PRIMEFIRST;
+                        *pAdvf |= Ole32.ADVF.PRIMEFIRST;
                     }
                 }
 
-                if (pAdvSink != null)
+                if (ppAdvSink != null)
                 {
-                    pAdvSink[0] = _viewAdviseSink;
+                    ppAdvSink[0] = _viewAdviseSink;
                 }
+
+                return HRESULT.S_OK;
             }
 
             /// <summary>
@@ -1896,17 +1896,17 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Implements IViewObject2::SetAdvise.
             /// </summary>
-            internal void SetAdvise(Ole32.DVASPECT aspects, int advf, IAdviseSink pAdvSink)
+            internal HRESULT SetAdvise(Ole32.DVASPECT aspects, Ole32.ADVF advf, IAdviseSink pAdvSink)
             {
                 // if it's not a content aspect, we don't support it.
                 if ((aspects & Ole32.DVASPECT.CONTENT) == 0)
                 {
-                    ThrowHr(HRESULT.DV_E_DVASPECT);
+                    return HRESULT.DV_E_DVASPECT;
                 }
 
-                // set up some flags  [we gotta stash for GetAdvise ...]
-                _activeXState[s_viewAdvisePrimeFirst] = (advf & NativeMethods.ADVF_PRIMEFIRST) != 0 ? true : false;
-                _activeXState[s_viewAdviseOnlyOnce] = (advf & NativeMethods.ADVF_ONLYONCE) != 0 ? true : false;
+                // Set up some flags to return from GetAdvise.
+                _activeXState[s_viewAdvisePrimeFirst] = (advf & Ole32.ADVF.PRIMEFIRST) != 0;
+                _activeXState[s_viewAdviseOnlyOnce] = (advf & Ole32.ADVF.ONLYONCE) != 0;
 
                 if (_viewAdviseSink != null && Marshal.IsComObject(_viewAdviseSink))
                 {
@@ -1920,6 +1920,8 @@ namespace System.Windows.Forms
                 {
                     ViewChanged();
                 }
+
+                return HRESULT.S_OK;
             }
 
             /// <summary>

@@ -1270,8 +1270,10 @@ namespace System.Windows.Forms
                     int bFreeze);
         }
 
-        [ComImport(), Guid("0000010d-0000-0000-C000-000000000046"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IViewObject
+        [ComImport]
+        [Guid("0000010d-0000-0000-C000-000000000046")]
+        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+        public unsafe interface IViewObject
         {
             [PreserveSig]
             int Draw(
@@ -1314,23 +1316,19 @@ namespace System.Windows.Forms
                 [In, MarshalAs(UnmanagedType.U4)]
                 int dwFreeze);
 
-            void SetAdvise(
+            [PreserveSig]
+            HRESULT SetAdvise(
                 Ole32.DVASPECT aspects,
-                [In, MarshalAs(UnmanagedType.U4)]
-                int advf,
-                [In, MarshalAs(UnmanagedType.Interface)]
+                Ole32.ADVF advf,
                 IAdviseSink pAdvSink);
 
-            void GetAdvise(
+            [PreserveSig]
+            HRESULT GetAdvise(
+                Ole32.DVASPECT* pAspects,
+                Ole32.ADVF* pAdvf,
                 // These can be NULL if caller doesn't want them
                 [In, Out, MarshalAs(UnmanagedType.LPArray)]
-                Ole32.DVASPECT[] paspects,
-                // These can be NULL if caller doesn't want them
-                [In, Out, MarshalAs(UnmanagedType.LPArray)]
-                int[] advf,
-                // These can be NULL if caller doesn't want them
-                [In, Out, MarshalAs(UnmanagedType.LPArray)]
-                IAdviseSink[] pAdvSink);
+                IAdviseSink[] ppAdvSink);
         }
 
         [ComImport]
@@ -1378,23 +1376,19 @@ namespace System.Windows.Forms
                 [In, MarshalAs(UnmanagedType.U4)]
                 int dwFreeze);
 
-            void SetAdvise(
+            [PreserveSig]
+            HRESULT SetAdvise(
                 Ole32.DVASPECT aspects,
-                [In, MarshalAs(UnmanagedType.U4)]
-                int advf,
-                [In, MarshalAs(UnmanagedType.Interface)]
+                Ole32.ADVF advf,
                 IAdviseSink pAdvSink);
 
-            void GetAdvise(
+            [PreserveSig]
+            HRESULT GetAdvise(
+                Ole32.DVASPECT* pAspects,
+                Ole32.ADVF* pAdvf,
                 // These can be NULL if caller doesn't want them
                 [In, Out, MarshalAs(UnmanagedType.LPArray)]
-                Ole32.DVASPECT[] paspects,
-                // These can be NULL if caller doesn't want them
-                [In, Out, MarshalAs(UnmanagedType.LPArray)]
-                int[] advf,
-                // These can be NULL if caller doesn't want them
-                [In, Out, MarshalAs(UnmanagedType.LPArray)]
-                IAdviseSink[] pAdvSink);
+                IAdviseSink[] ppAdvSink);
 
             [PreserveSig]
             HRESULT GetExtent(
