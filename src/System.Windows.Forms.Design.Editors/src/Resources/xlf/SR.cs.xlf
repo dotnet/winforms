@@ -130,7 +130,7 @@
       <trans-unit id="ContentAlignmentEditorTopRightAccName">
         <source>Top Right</source>
         <target state="new">Top Right</target>
-      <note />
+        <note />
       </trans-unit>
       <trans-unit id="DataSourceLocksItems">
         <source>Items collection cannot be modified when the DataSource property is set.</source>
@@ -185,6 +185,11 @@
       <trans-unit id="ImageCollectionEditorFormText">
         <source>Images Collection Editor</source>
         <target state="translated">Editor kolekce Images</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ListViewSubItemBaseName">
+        <source>ListViewSubItem</source>
+        <target state="new">ListViewSubItem</target>
         <note />
       </trans-unit>
       <trans-unit id="MultilineStringEditorWatermark">
