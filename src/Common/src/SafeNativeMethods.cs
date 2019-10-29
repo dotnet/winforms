@@ -101,9 +101,6 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern bool ValidateRect(IntPtr hwnd, IntPtr prect);
 
-        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true)]
-        public static extern bool LPtoDP(HandleRef hDC, ref RECT lpRect, int nCount);
-
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern bool IsWindowEnabled(HandleRef hWnd);
 
