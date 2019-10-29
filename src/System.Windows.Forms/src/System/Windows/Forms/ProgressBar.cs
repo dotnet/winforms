@@ -595,11 +595,14 @@ namespace System.Windows.Forms
         protected override void OnHandleCreated(EventArgs e)
         {
             base.OnHandleCreated(e);
-            SendMessage(NativeMethods.PBM_SETRANGE32, _minimum, _maximum);
-            SendMessage(NativeMethods.PBM_SETSTEP, _step, 0);
-            SendMessage(NativeMethods.PBM_SETPOS, _value, 0);
-            UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.PBM_SETBKCOLOR, 0, ColorTranslator.ToWin32(BackColor));
-            UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.PBM_SETBARCOLOR, 0, ColorTranslator.ToWin32(ForeColor));
+            if (IsHandleCreated)
+            {
+                SendMessage(NativeMethods.PBM_SETRANGE32, _minimum, _maximum);
+                SendMessage(NativeMethods.PBM_SETSTEP, _step, 0);
+                SendMessage(NativeMethods.PBM_SETPOS, _value, 0);
+                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.PBM_SETBKCOLOR, 0, ColorTranslator.ToWin32(BackColor));
+                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.PBM_SETBARCOLOR, 0, ColorTranslator.ToWin32(ForeColor));
+            }
             StartMarquee();
             SystemEvents.UserPreferenceChanged += new UserPreferenceChangedEventHandler(UserPreferenceChangedHandler);
         }

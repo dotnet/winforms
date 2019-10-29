@@ -2024,15 +2024,15 @@ namespace System.Windows.Forms.Tests
             control.HandleCreated += handler;
             control.OnHandleCreated(eventArgs);
             Assert.Equal(1, callCount);
-            Assert.True(control.Created);
-            Assert.True(control.IsHandleCreated);
+            Assert.False(control.Created);
+            Assert.False(control.IsHandleCreated);
 
             // Remove handler.
             control.HandleCreated -= handler;
             control.OnHandleCreated(eventArgs);
             Assert.Equal(1, callCount);
-            Assert.True(control.Created);
-            Assert.True(control.IsHandleCreated);
+            Assert.False(control.Created);
+            Assert.False(control.IsHandleCreated);
         }
 
         [WinFormsTheory]
