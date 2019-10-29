@@ -1344,10 +1344,6 @@ namespace System.Windows.Forms
             AutoSize = true;
         }
 
-        /// <summary>
-        ///  Summary of OnLayout.
-        /// </summary>
-        /// <param name=e></param>
         protected virtual void OnClosed(ToolStripDropDownClosedEventArgs e)
         {
             if (IsHandleCreated)
@@ -1356,15 +1352,16 @@ namespace System.Windows.Forms
                 {
                     AccessibilityNotifyClients(AccessibleEvents.SystemMenuPopupEnd, -1);
                 }
-            } ((ToolStripDropDownClosedEventHandler)Events[EventClosed])?.Invoke(this, e);
+            }
+            
+            ((ToolStripDropDownClosedEventHandler)Events[EventClosed])?.Invoke(this, e);
         }
-
-        //
 
         protected virtual void OnClosing(ToolStripDropDownClosingEventArgs e)
         {
             ((ToolStripDropDownClosingEventHandler)Events[EventClosing])?.Invoke(this, e);
         }
+
         /// <summary>
         ///  When our handle is being created, suspend the deactivation
         ///  portion of the WndProc, as we'll never be shown.
@@ -1423,7 +1420,9 @@ namespace System.Windows.Forms
                 {
                     AccessibilityNotifyClients(AccessibleEvents.SystemMenuPopupStart, -1);
                 }
-            } ((EventHandler)Events[EventOpened])?.Invoke(this, e);
+            }
+            
+            ((EventHandler)Events[EventOpened])?.Invoke(this, e);
         }
 
         protected override void OnVisibleChanged(EventArgs e)

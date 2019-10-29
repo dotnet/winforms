@@ -3698,7 +3698,9 @@ namespace System.Windows.Forms
                 // it becomes visible.)   We will recalculate this in SetDisplayedItems, but for the moment
                 // if we find an item that ParticipatesInLayout, mark us as having visible items.
                 HasVisibleItems = true;
-            } ((ToolStripItemEventHandler)Events[EventItemAdded])?.Invoke(this, e);
+            }
+            
+            ((ToolStripItemEventHandler)Events[EventItemAdded])?.Invoke(this, e);
         }
 
         /// <summary>

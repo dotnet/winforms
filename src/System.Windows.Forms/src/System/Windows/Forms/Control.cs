@@ -8004,7 +8004,9 @@ namespace System.Windows.Forms
                 {
                     ListenToUserPreferenceChanged(GetTopLevel());
                 }
-            } ((EventHandler)Events[s_handleCreatedEvent])?.Invoke(this, e);
+            }
+            
+            ((EventHandler)Events[s_handleCreatedEvent])?.Invoke(this, e);
 
             if (IsHandleCreated)
             {
@@ -8211,7 +8213,9 @@ namespace System.Windows.Forms
             if (_parent != null)
             {
                 _parent.ChildGotFocus(this);
-            } ((EventHandler)Events[s_gotFocusEvent])?.Invoke(this, e);
+            }
+            
+            ((EventHandler)Events[s_gotFocusEvent])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -8264,7 +8268,9 @@ namespace System.Windows.Forms
                 {
                     controls[i].OnParentInvalidated(e);
                 }
-            } ((InvalidateEventHandler)Events[s_invalidatedEvent])?.Invoke(this, e);
+            }
+            
+            ((InvalidateEventHandler)Events[s_invalidatedEvent])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -8364,7 +8370,9 @@ namespace System.Windows.Forms
             if (IsActiveX)
             {
                 ActiveXOnFocus(false);
-            } ((EventHandler)Events[s_lostFocusEvent])?.Invoke(this, e);
+            }
+            
+            ((EventHandler)Events[s_lostFocusEvent])?.Invoke(this, e);
         }
 
         protected virtual void OnMarginChanged(EventArgs e)
@@ -8521,7 +8529,9 @@ namespace System.Windows.Forms
             if (GetStyle(ControlStyles.ResizeRedraw))
             {
                 Invalidate();
-            } ((EventHandler)Events[s_paddingChangedEvent])?.Invoke(this, e);
+            }
+            
+            ((EventHandler)Events[s_paddingChangedEvent])?.Invoke(this, e);
         }
 
         /// <summary>
