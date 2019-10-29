@@ -131,7 +131,7 @@ namespace System.Windows.Forms
             {
                 CreateParams cp = base.CreateParams;
                 cp.ClassName = "SCROLLBAR";
-                cp.Style &= (~NativeMethods.WS_BORDER);
+                cp.Style &= ~(int)User32.WS.BORDER;
                 return cp;
             }
         }

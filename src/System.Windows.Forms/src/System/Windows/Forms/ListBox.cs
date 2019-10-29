@@ -318,7 +318,7 @@ namespace System.Windows.Forms
                 CreateParams cp = base.CreateParams;
                 cp.ClassName = "LISTBOX";
 
-                cp.Style |= NativeMethods.WS_VSCROLL | NativeMethods.LBS_NOTIFY | NativeMethods.LBS_HASSTRINGS;
+                cp.Style |= (int)User32.WS.VSCROLL | NativeMethods.LBS_NOTIFY | NativeMethods.LBS_HASSTRINGS;
                 if (scrollAlwaysVisible)
                 {
                     cp.Style |= NativeMethods.LBS_DISABLENOSCROLL;
@@ -340,17 +340,17 @@ namespace System.Windows.Forms
                         cp.ExStyle |= (int)User32.WS_EX.CLIENTEDGE;
                         break;
                     case BorderStyle.FixedSingle:
-                        cp.Style |= NativeMethods.WS_BORDER;
+                        cp.Style |= (int)User32.WS.BORDER;
                         break;
                 }
 
                 if (multiColumn)
                 {
-                    cp.Style |= NativeMethods.LBS_MULTICOLUMN | NativeMethods.WS_HSCROLL;
+                    cp.Style |= NativeMethods.LBS_MULTICOLUMN | (int)User32.WS.HSCROLL;
                 }
                 else if (horizontalScrollbar)
                 {
-                    cp.Style |= NativeMethods.WS_HSCROLL;
+                    cp.Style |= (int)User32.WS.HSCROLL;
                 }
 
                 switch (selectionMode)

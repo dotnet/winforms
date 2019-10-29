@@ -764,7 +764,7 @@ namespace System.Windows.Forms
             if (OwnerDraw)
             {
                 int style = unchecked((int)((long)UnsafeNativeMethods.GetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_STYLE)));
-                style &= ~NativeMethods.WS_BORDER;
+                style &= ~(int)User32.WS.BORDER;
                 UnsafeNativeMethods.SetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_STYLE, new HandleRef(null, (IntPtr)style));
             }
 

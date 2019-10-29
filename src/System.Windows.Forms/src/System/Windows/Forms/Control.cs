@@ -1612,7 +1612,7 @@ namespace System.Windows.Forms
                 cp.Width = _width;
                 cp.Height = _height;
 
-                cp.Style = NativeMethods.WS_CLIPCHILDREN;
+                cp.Style = (int)User32.WS.CLIPCHILDREN;
                 if (GetStyle(ControlStyles.ContainerControl))
                 {
                     cp.ExStyle |= (int)User32.WS_EX.CONTROLPARENT;
@@ -1625,7 +1625,7 @@ namespace System.Windows.Forms
                     // parking form if cp.parent == 0.
                     //
                     cp.Parent = _parent == null ? IntPtr.Zero : _parent.InternalHandle;
-                    cp.Style |= NativeMethods.WS_CHILD | NativeMethods.WS_CLIPSIBLINGS;
+                    cp.Style |= (int)(User32.WS.CHILD | User32.WS.CLIPSIBLINGS);
                 }
                 else
                 {
@@ -1634,19 +1634,19 @@ namespace System.Windows.Forms
 
                 if ((_state & States.TabStop) != 0)
                 {
-                    cp.Style |= NativeMethods.WS_TABSTOP;
+                    cp.Style |= (int)User32.WS.TABSTOP;
                 }
 
                 if ((_state & States.Visible) != 0)
                 {
-                    cp.Style |= NativeMethods.WS_VISIBLE;
+                    cp.Style |= (int)User32.WS.VISIBLE;
                 }
 
                 // Unlike Visible, Windows doesn't correctly inherit disabledness from its parent -- an enabled child
                 // of a disabled parent will look enabled but not get mouse events
                 if (!Enabled)
                 {
-                    cp.Style |= NativeMethods.WS_DISABLED;
+                    cp.Style |= (int)User32.WS.DISABLED;
                 }
 
                 // If we are being hosted as an Ax control, try to prevent the parking window
@@ -3581,7 +3581,7 @@ namespace System.Windows.Forms
                     TabStopInternal = value;
                     if (IsHandleCreated)
                     {
-                        SetWindowStyle(NativeMethods.WS_TABSTOP, value);
+                        SetWindowStyle((int)User32.WS.TABSTOP, value);
                     }
 
                     OnTabStopChanged(EventArgs.Empty);
@@ -5031,7 +5031,7 @@ namespace System.Windows.Forms
                 }
 
                 // And if we are WS_CHILD, ensure we have a parent handle.
-                if (cp.Parent == IntPtr.Zero && (cp.Style & NativeMethods.WS_CHILD) != 0)
+                if (cp.Parent == IntPtr.Zero && (cp.Style & (int)User32.WS.CHILD) != 0)
                 {
                     Debug.Assert((cp.ExStyle & (int)User32.WS_EX.MDICHILD) == 0, "Can't put MDI child forms on the parking form");
                     Application.ParkHandle(cp);
@@ -11807,7 +11807,7 @@ namespace System.Windows.Forms
                 // resolve the Form's lazy visibility.
                 if ((_state & States.Visible) != 0)
                 {
-                    cp.Style |= NativeMethods.WS_VISIBLE;
+                    cp.Style |= (int)User32.WS.VISIBLE;
                 }
                 if (winStyle != cp.Style)
                 {
@@ -11873,7 +11873,7 @@ namespace System.Windows.Forms
 
                     int style = unchecked((int)((long)UnsafeNativeMethods.GetWindowLong(new HandleRef(null, lastParentHandle), NativeMethods.GWL_STYLE)));
 
-                    if ((style & NativeMethods.WS_CHILD) == 0)
+                    if ((style & (int)User32.WS.CHILD) == 0)
                     {
                         break;
                     }

@@ -240,8 +240,8 @@ namespace System.Windows.Forms
             get
             {
                 CreateParams cp = base.CreateParams;
+                cp.Style &= ~(int)User32.WS.BORDER;
                 cp.ExStyle &= ~(int)User32.WS_EX.CLIENTEDGE;
-                cp.Style &= (~NativeMethods.WS_BORDER);
 
                 switch (borderStyle)
                 {
@@ -249,7 +249,7 @@ namespace System.Windows.Forms
                         cp.ExStyle |= (int)User32.WS_EX.CLIENTEDGE;
                         break;
                     case BorderStyle.FixedSingle:
-                        cp.Style |= NativeMethods.WS_BORDER;
+                        cp.Style |= (int)User32.WS.BORDER;
                         break;
                 }
                 return cp;
