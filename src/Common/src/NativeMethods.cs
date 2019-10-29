@@ -30,19 +30,6 @@ namespace System.Windows.Forms
 
         public const int BCM_GETIDEALSIZE = 0x1601,
         BI_RGB = 0,
-        BDR_RAISEDOUTER = 0x0001,
-        BDR_SUNKENOUTER = 0x0002,
-        BDR_RAISEDINNER = 0x0004,
-        BDR_SUNKENINNER = 0x0008,
-        BDR_RAISED = 0x0005,
-        BDR_SUNKEN = 0x000a,
-        BF_LEFT = 0x0001,
-        BF_TOP = 0x0002,
-        BF_RIGHT = 0x0004,
-        BF_BOTTOM = 0x0008,
-        BF_ADJUST = 0x2000,
-        BF_FLAT = 0x4000,
-        BF_MIDDLE = 0x0800,
         BFFM_INITIALIZED = 1,
         BFFM_SELCHANGED = 2,
         BFFM_SETSELECTION = 0x400 + 103,
@@ -246,10 +233,6 @@ namespace System.Windows.Forms
         E_UNEXPECTED = unchecked((int)0x8000FFFF),
         INET_E_DEFAULT_ACTION = unchecked((int)0x800C0011),
         EMR_POLYTEXTOUT = 97,
-        EDGE_RAISED = (0x0001 | 0x0004),
-        EDGE_SUNKEN = (0x0002 | 0x0008),
-        EDGE_ETCHED = (0x0002 | 0x0004),
-        EDGE_BUMP = (0x0001 | 0x0008),
         ES_LEFT = 0x0000,
         ES_CENTER = 0x0001,
         ES_RIGHT = 0x0002,
@@ -2549,10 +2532,6 @@ namespace System.Windows.Forms
         public const int DPI_AWARENESS_CONTEXT_UNAWARE_GDISCALED = -5;
 
         // Theming/Visual Styles stuff
-        public const int STAP_ALLOW_NONCLIENT = (1 << 0);
-        public const int STAP_ALLOW_CONTROLS = (1 << 1);
-        public const int STAP_ALLOW_WEBCONTENT = (1 << 2);
-
         public const int WS_EX_TRANSPARENT = 0x00000020;
 
         // Threading stuff

@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Runtime.InteropServices;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -16,28 +17,28 @@ namespace System.Windows.Forms
         /// <summary>
         ///  A three-dimensional border on the left edge of the control.
         /// </summary>
-        Left = NativeMethods.BF_LEFT,
+        Left = (int)User32.BF.LEFT,
 
         /// <summary>
         ///  A three-dimensional border on the top edge of the rectangle.
         /// </summary>
-        Top = NativeMethods.BF_TOP,
+        Top = (int)User32.BF.TOP,
 
         /// <summary>
         ///  A three-dimensional border on the right side of the rectangle.
         /// </summary>
-        Right = NativeMethods.BF_RIGHT,
+        Right = (int)User32.BF.RIGHT,
 
         /// <summary>
         ///  A three-dimensional border on the bottom side of the rectangle.
         /// </summary>
-        Bottom = NativeMethods.BF_BOTTOM,
+        Bottom = (int)User32.BF.BOTTOM,
 
         /// <summary>
         ///  The interior of the rectangle is filled with the color defined for
         ///  three-dimensional controls instead of the background color for the form.
         /// </summary>
-        Middle = NativeMethods.BF_MIDDLE,
+        Middle = (int)User32.BF.MIDDLE,
 
         /// <summary>
         ///  A three-dimensional border on all four edges and fill the middle of

@@ -157,36 +157,6 @@ namespace System.Windows.Forms
 
         // Theming/Visual Styles
         [DllImport(ExternDll.Uxtheme, CharSet = CharSet.Auto)]
-        public static extern bool IsAppThemed();
-
-        [DllImport(ExternDll.Uxtheme, CharSet = CharSet.Auto)]
-        public static extern int GetThemeAppProperties();
-
-        [DllImport(ExternDll.Uxtheme, CharSet = CharSet.Auto)]
-        public static extern void SetThemeAppProperties(int Flags);
-
-        [DllImport(ExternDll.Uxtheme, CharSet = CharSet.Auto)]
-        public static extern IntPtr OpenThemeData(HandleRef hwnd, [MarshalAs(UnmanagedType.LPWStr)] string pszClassList);
-
-        [DllImport(ExternDll.Uxtheme, CharSet = CharSet.Auto)]
-        public static extern int CloseThemeData(HandleRef hTheme);
-
-        [DllImport(ExternDll.Uxtheme, CharSet=CharSet.Auto)]
-        public static extern bool IsThemePartDefined(HandleRef hTheme, int iPartId, int iStateId);
-
-        [DllImport(ExternDll.Uxtheme, CharSet = CharSet.Auto)]
-        public static extern int DrawThemeBackground(HandleRef hTheme, HandleRef hdc, int partId, int stateId, [In] NativeMethods.COMRECT pRect, [In] NativeMethods.COMRECT pClipRect);
-
-        [DllImport(ExternDll.Uxtheme, CharSet = CharSet.Auto)]
-        public static extern int DrawThemeEdge(HandleRef hTheme, HandleRef hdc, int iPartId, int iStateId, [In] NativeMethods.COMRECT pDestRect, int uEdge, int uFlags, [Out] NativeMethods.COMRECT pContentRect);
-
-        [DllImport(ExternDll.Uxtheme, CharSet = CharSet.Auto)]
-        public static extern int DrawThemeParentBackground(HandleRef hwnd, HandleRef hdc, [In] NativeMethods.COMRECT prc);
-
-        [DllImport(ExternDll.Uxtheme, CharSet = CharSet.Auto)]
-        public static extern int DrawThemeText(HandleRef hTheme, HandleRef hdc, int iPartId, int iStateId, [MarshalAs(UnmanagedType.LPWStr)] string pszText, int iCharCount, int dwTextFlags, int dwTextFlags2, [In] NativeMethods.COMRECT pRect);
-
-        [DllImport(ExternDll.Uxtheme, CharSet = CharSet.Auto)]
         public static extern int GetThemeBackgroundContentRect(HandleRef hTheme, HandleRef hdc, int iPartId, int iStateId, [In] NativeMethods.COMRECT pBoundingRect, [Out] NativeMethods.COMRECT pContentRect);
 
         [DllImport(ExternDll.Uxtheme, CharSet = CharSet.Auto)]

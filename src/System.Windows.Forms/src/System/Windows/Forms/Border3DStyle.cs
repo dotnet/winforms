@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Runtime.InteropServices;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -16,51 +17,51 @@ namespace System.Windows.Forms
         ///  The border is drawn outside the specified rectangle, preserving the
         ///  dimensions of the rectangle for drawing.
         /// </summary>
-        Adjust = NativeMethods.BF_ADJUST,
+        Adjust = (int)User32.BF.ADJUST,
 
         /// <summary>
         ///  The border has a raised outer edge and a sunken inner edge.
         /// </summary>
-        Bump = NativeMethods.EDGE_BUMP,
+        Bump = (int)User32.EDGE.BUMP,
 
         /// <summary>
         ///  The border has a with a sunken inner edge and a raised outer edge.
         /// </summary>
-        Etched = NativeMethods.EDGE_ETCHED,
+        Etched = (int)User32.EDGE.ETCHED,
 
         /// <summary>
         ///  The border has a with no three-dimensional effects.
         /// </summary>
-        Flat = NativeMethods.BF_FLAT | NativeMethods.EDGE_SUNKEN,
+        Flat = (int)User32.BF.FLAT | (int)User32.EDGE.SUNKEN,
 
         /// <summary>
         ///  The border has a with raised inner and outer edges.
         /// </summary>
-        Raised = NativeMethods.EDGE_RAISED,
+        Raised = (int)User32.EDGE.RAISED,
 
         /// <summary>
         ///  The border has a with a raised inner edge and no outer edge.
         /// </summary>
-        RaisedInner = NativeMethods.BDR_RAISEDINNER,
+        RaisedInner = (int)User32.BDR.RAISEDINNER,
 
         /// <summary>
         ///  The border has a with a raised outer edge and no inner edge.
         /// </summary>
-        RaisedOuter = NativeMethods.BDR_RAISEDOUTER,
+        RaisedOuter = (int)User32.BDR.RAISEDOUTER,
 
         /// <summary>
         ///  The border has a with sunken inner and outer edges.
         /// </summary>
-        Sunken = NativeMethods.EDGE_SUNKEN,
+        Sunken = (int)User32.EDGE.SUNKEN,
 
         /// <summary>
         ///  The border has a with a sunken inner edge and no outer edge.
         /// </summary>
-        SunkenInner = NativeMethods.BDR_SUNKENINNER,
+        SunkenInner = (int)User32.BDR.SUNKENINNER,
 
         /// <summary>
         ///  The border has a with a sunken outer edge and no inner edge.
         /// </summary>
-        SunkenOuter = NativeMethods.BDR_SUNKENOUTER,
+        SunkenOuter = (int)User32.BDR.SUNKENOUTER,
     }
 }

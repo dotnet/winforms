@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using static Interop;
+
 namespace System.Windows.Forms.VisualStyles
 {
     /// <summary>
@@ -18,16 +20,16 @@ namespace System.Windows.Forms.VisualStyles
         /// <summary>
         ///  Visual styles enabled only for client area.
         /// </summary>
-        ClientAreaEnabled = NativeMethods.STAP_ALLOW_CONTROLS,
+        ClientAreaEnabled = (int)UxTheme.STAP.ALLOW_CONTROLS,
 
         /// <summary>
         ///  Visual styles enabled only for non-client area.
         /// </summary>
-        NonClientAreaEnabled = NativeMethods.STAP_ALLOW_NONCLIENT,
+        NonClientAreaEnabled = (int)UxTheme.STAP.ALLOW_NONCLIENT,
 
         /// <summary>
         ///  Visual styles enabled only for client and non-client areas.
         /// </summary>
-        ClientAndNonClientAreasEnabled = NativeMethods.STAP_ALLOW_NONCLIENT | NativeMethods.STAP_ALLOW_CONTROLS
+        ClientAndNonClientAreasEnabled = (int)(UxTheme.STAP.ALLOW_NONCLIENT | UxTheme.STAP.ALLOW_CONTROLS)
     }
 }

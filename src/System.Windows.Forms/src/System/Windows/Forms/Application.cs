@@ -594,14 +594,14 @@ namespace System.Windows.Forms
                     return VisualStyleState.NoneEnabled;
                 }
 
-                VisualStyleState vState = (VisualStyleState)SafeNativeMethods.GetThemeAppProperties();
+                VisualStyleState vState = (VisualStyleState)UxTheme.GetThemeAppProperties();
                 return vState;
             }
             set
             {
                 if (VisualStyleInformation.IsSupportedByOS)
                 {
-                    SafeNativeMethods.SetThemeAppProperties((int)value);
+                    UxTheme.SetThemeAppProperties((UxTheme.STAP)value);
 
                     // 248887 we need to send a WM_THEMECHANGED to the top level windows of this application.
                     // We do it this way to ensure that we get all top level windows -- whether we created them or not.
