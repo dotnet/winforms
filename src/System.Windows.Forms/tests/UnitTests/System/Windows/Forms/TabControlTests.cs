@@ -67,8 +67,14 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(Size.Empty, control.ItemSize);
             Assert.Equal(0, control.Left);
             Assert.Equal(Point.Empty, control.Location);
+            Assert.Equal(new Padding(3), control.Margin);
+            Assert.Equal(Size.Empty, control.MaximumSize);
+            Assert.Equal(Size.Empty, control.MinimumSize);
             Assert.False(control.Multiline);
             Assert.Equal(new Point(6, 3), control.Padding);
+            Assert.Null(control.Parent);
+            Assert.Equal(new Size(200, 100), control.PreferredSize);
+            Assert.Equal("Microsoft\u00AE .NET", control.ProductName);
             Assert.False(control.RecreatingHandle);
             Assert.Null(control.Region);
             Assert.False(control.ResizeRedraw);
@@ -111,6 +117,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createParams.X);
             Assert.Equal(0, createParams.Y);
             Assert.Same(createParams, control.CreateParams);
+            Assert.False(control.IsHandleCreated);
         }
 
         [WinFormsTheory]
@@ -1557,6 +1564,44 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expectedCreatedCallCount2, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(expectedCreatedCallCount2, createdCallCount);
+        }
+
+        [WinFormsFact]
+        public void TabControl_RightToLeftLayout_SetWithHandler_CallsRightToLeftLayoutChanged()
+        {
+            using var control = new TabControl
+            {
+                RightToLeftLayout = true
+            };
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                callCount++;
+            };
+            control.RightToLeftLayoutChanged += handler;
+        
+            // Set different.
+            control.RightToLeftLayout = false;
+            Assert.False(control.RightToLeftLayout);
+            Assert.Equal(1, callCount);
+        
+            // Set same.
+            control.RightToLeftLayout = false;
+            Assert.False(control.RightToLeftLayout);
+            Assert.Equal(1, callCount);
+        
+            // Set different.
+            control.RightToLeftLayout = true;
+            Assert.True(control.RightToLeftLayout);
+            Assert.Equal(2, callCount);
+        
+            // Remove handler.
+            control.RightToLeftLayoutChanged -= handler;
+            control.RightToLeftLayout = false;
+            Assert.False(control.RightToLeftLayout);
+            Assert.Equal(2, callCount);
         }
 
         [WinFormsFact]

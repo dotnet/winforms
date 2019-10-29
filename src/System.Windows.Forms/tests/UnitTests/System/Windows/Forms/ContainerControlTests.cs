@@ -12,10 +12,10 @@ namespace System.Windows.Forms.Tests
 {
     public class ContainerControlTests
     {
-        [Fact]
+        [WinFormsFact]
         public void ContainerControl_Ctor_Default()
         {
-            var control = new SubContainerControl();
+            using var control = new SubContainerControl();
             Assert.Null(control.ActiveControl);
             Assert.False(control.AllowDrop);
             Assert.Equal(AnchorStyles.Top | AnchorStyles.Left, control.Anchor);
@@ -79,7 +79,13 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(ImeMode.NoControl, control.ImeModeBase);
             Assert.Equal(0, control.Left);
             Assert.Equal(Point.Empty, control.Location);
+            Assert.Equal(new Padding(3), control.Margin);
+            Assert.Equal(Size.Empty, control.MaximumSize);
+            Assert.Equal(Size.Empty, control.MinimumSize);
             Assert.Equal(Padding.Empty, control.Padding);
+            Assert.Null(control.Parent);
+            Assert.Equal(Size.Empty, control.PreferredSize);
+            Assert.Equal("Microsoft\u00AE .NET", control.ProductName);
             Assert.False(control.RecreatingHandle);
             Assert.Null(control.Region);
             Assert.False(control.ResizeRedraw);
@@ -100,10 +106,10 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.IsHandleCreated);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ContainerControl_CreateParams_GetDefault_ReturnsExpected()
         {
-            var control = new SubContainerControl();
+            using var control = new SubContainerControl();
             CreateParams createParams = control.CreateParams;
             Assert.Null(createParams.Caption);
             Assert.Null(createParams.ClassName);
@@ -117,6 +123,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createParams.X);
             Assert.Equal(0, createParams.Y);
             Assert.Same(createParams, control.CreateParams);
+            Assert.False(control.IsHandleCreated);
         }
 
         [Fact]

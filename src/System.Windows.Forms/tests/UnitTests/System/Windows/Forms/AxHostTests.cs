@@ -69,9 +69,12 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, control.Left);
             Assert.Equal(Point.Empty, control.Location);
             Assert.Equal(new Padding(3), control.Margin);
+            Assert.Equal(Size.Empty, control.MaximumSize);
+            Assert.Equal(Size.Empty, control.MinimumSize);
             Assert.Null(control.OcxState);
             Assert.Equal(Padding.Empty, control.Padding);
             Assert.Null(control.Parent);
+            Assert.Equal(new Size(75, 23), control.PreferredSize);
             Assert.Equal("Microsoft\u00AE .NET", control.ProductName);
             Assert.False(control.RecreatingHandle);
             Assert.Null(control.Region);
@@ -144,9 +147,12 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, control.Left);
             Assert.Equal(Point.Empty, control.Location);
             Assert.Equal(new Padding(3), control.Margin);
+            Assert.Equal(Size.Empty, control.MaximumSize);
+            Assert.Equal(Size.Empty, control.MinimumSize);
             Assert.Null(control.OcxState);
             Assert.Equal(Padding.Empty, control.Padding);
             Assert.Null(control.Parent);
+            Assert.Equal(new Size(75, 23), control.PreferredSize);
             Assert.Equal("Microsoft\u00AE .NET", control.ProductName);
             Assert.False(control.RecreatingHandle);
             Assert.Null(control.Region);
@@ -181,10 +187,10 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<FormatException>(() => new SubAxHost(clsid));
         }
 
-        [StaFact]
+        [WinFormsFact]
         public void AxHost_CreateParams_GetDefault_ReturnsExpected()
         {
-            var control = new SubAxHost("00000000-0000-0000-0000-000000000000");
+            using var control = new SubAxHost("00000000-0000-0000-0000-000000000000");
             CreateParams createParams = control.CreateParams;
             Assert.Null(createParams.Caption);
             Assert.Null(createParams.ClassName);
@@ -198,6 +204,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createParams.X);
             Assert.Equal(0, createParams.Y);
             Assert.Same(createParams, control.CreateParams);
+            Assert.False(control.IsHandleCreated);
         }
 
         [StaTheory]
