@@ -212,30 +212,6 @@ namespace System.Windows.Forms
             public const int MinimumColorDepth = 1301;
         }
 
-        // for Windows Windows 7 to Windows 8.
-        [DllImport(ExternDll.User32, SetLastError = true)]
-        public static extern bool IsProcessDPIAware();
-
-        // for Windows Windows 7 to Windows 8.
-        [DllImport(ExternDll.User32, SetLastError = true)]
-        public static extern bool SetProcessDPIAware();
-
-        // for Windows 8.1 and above
-        [DllImport(ExternDll.ShCore, SetLastError = true)]
-        public static extern int SetProcessDpiAwareness(NativeMethods.PROCESS_DPI_AWARENESS awareness);
-
-        // for Windows 8.1 and above
-        [DllImport(ExternDll.ShCore, SetLastError = true)]
-        public static extern int GetProcessDpiAwareness(IntPtr processHandle, out NativeMethods.PROCESS_DPI_AWARENESS awareness);
-
-        // for Windows 10 version RS2 and above
-        [DllImport(ExternDll.User32, SetLastError = true)]
-        public static extern bool IsValidDpiAwarenessContext(int dpiFlag);
-
-        // for Windows 10 version RS2 and above
-        [DllImport(ExternDll.User32, SetLastError = true)]
-        public static extern bool SetProcessDpiAwarenessContext(int dpiFlag);
-
         [DllImport(ExternDll.Uxtheme, CharSet = CharSet.Auto)]
         public extern static int SetWindowTheme(IntPtr hWnd, string subAppName, string subIdList);
 

@@ -2488,20 +2488,6 @@ namespace System.Windows.Forms
             return uri.LocalPath + uri.Fragment;
         }
 
-        public enum PROCESS_DPI_AWARENESS
-        {
-            PROCESS_DPI_UNINITIALIZED = -1,
-            PROCESS_DPI_UNAWARE = 0,
-            PROCESS_SYSTEM_DPI_AWARE = 1,
-            PROCESS_PER_MONITOR_DPI_AWARE = 2
-        }
-
-        public const int DPI_AWARENESS_CONTEXT_UNAWARE = -1;
-        public const int DPI_AWARENESS_CONTEXT_SYSTEM_AWARE = -2;
-        public const int DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE = -3;
-        public const int DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2 = -4;
-        public const int DPI_AWARENESS_CONTEXT_UNAWARE_GDISCALED = -5;
-
         // Theming/Visual Styles stuff
         public const int WS_EX_TRANSPARENT = 0x00000020;
 
