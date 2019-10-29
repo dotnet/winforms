@@ -121,6 +121,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createParams.X);
             Assert.Equal(0, createParams.Y);
             Assert.Same(createParams, control.CreateParams);
+            Assert.False(control.IsHandleCreated);
         }
 
         [Theory]

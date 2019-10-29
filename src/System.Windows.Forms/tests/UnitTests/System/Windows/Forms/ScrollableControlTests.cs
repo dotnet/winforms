@@ -100,10 +100,10 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.IsHandleCreated);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ScrollableControl_CreateParams_GetDefault_ReturnsExpected()
         {
-            var control = new SubScrollableControl();
+            using var control = new SubScrollableControl();
             CreateParams createParams = control.CreateParams;
             Assert.Null(createParams.Caption);
             Assert.Null(createParams.ClassName);
@@ -117,6 +117,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createParams.X);
             Assert.Equal(0, createParams.Y);
             Assert.Same(createParams, control.CreateParams);
+            Assert.False(control.IsHandleCreated);
         }
 
         public static IEnumerable<object[]> SetClientRectangle_TestData()

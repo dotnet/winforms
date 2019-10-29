@@ -102,10 +102,10 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.IsHandleCreated);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void HScrollBar_CreateParams_GetDefault_ReturnsExpected()
         {
-            var control = new SubHScrollBar();
+            using var control = new SubHScrollBar();
             CreateParams createParams = control.CreateParams;
             Assert.Null(createParams.Caption);
             Assert.Equal("SCROLLBAR", createParams.ClassName);
@@ -119,6 +119,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createParams.X);
             Assert.Equal(0, createParams.Y);
             Assert.Same(createParams, control.CreateParams);
+            Assert.False(control.IsHandleCreated);
         }
 
         [Theory]

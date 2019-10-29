@@ -106,10 +106,10 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.IsHandleCreated);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void FlowLayoutPanel_CreateParams_GetDefault_ReturnsExpected()
         {
-            var control = new SubFlowLayoutPanel();
+            using var control = new SubFlowLayoutPanel();
             CreateParams createParams = control.CreateParams;
             Assert.Null(createParams.Caption);
             Assert.Null(createParams.ClassName);
@@ -123,6 +123,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createParams.X);
             Assert.Equal(0, createParams.Y);
             Assert.Same(createParams, control.CreateParams);
+            Assert.False(control.IsHandleCreated);
         }
 
         [Theory]

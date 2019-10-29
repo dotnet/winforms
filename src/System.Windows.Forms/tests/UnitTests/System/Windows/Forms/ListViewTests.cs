@@ -134,10 +134,10 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.IsHandleCreated);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ListView_CreateParams_GetDefault_ReturnsExpected()
         {
-            var control = new SubListView();
+            using var control = new SubListView();
             CreateParams createParams = control.CreateParams;
             Assert.Null(createParams.Caption);
             Assert.Equal("SysListView32", createParams.ClassName);
@@ -151,6 +151,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createParams.X);
             Assert.Equal(0, createParams.Y);
             Assert.Same(createParams, control.CreateParams);
+            Assert.False(control.IsHandleCreated);
         }
 
         [Theory]

@@ -337,7 +337,7 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<InvalidEnumArgumentException>("value", () => item.Alignment = value);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ToolStripItem_AllowDrop_Set_GetReturnsExpected(bool value)
         {
@@ -356,7 +356,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(!value, item.AllowDrop);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ToolStripItem_AllowDrop_SetWithParent_GetReturnsExpected(bool value)
         {

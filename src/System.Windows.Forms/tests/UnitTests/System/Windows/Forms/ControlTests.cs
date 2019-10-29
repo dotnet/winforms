@@ -6317,7 +6317,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(mock.Object, cont.WindowTarget);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void Control_AllowDrop_Set_GetReturnsExpected(bool value)
         {
@@ -6342,7 +6342,7 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void Control_AllowDrop_SetWithHandleNonSTAThread_ThrowsInvalidOperationException()
         {
-            var control = new Control();
+            using var control = new Control();
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             int invalidatedCallCount = 0;
             control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -6367,11 +6367,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createdCallCount);
         }
 
-        [StaTheory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void Control_AllowDrop_SetWithHandleSTA_GetReturnsExpected(bool value)
         {
-            var control = new Control();
+            using var control = new Control();
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             int invalidatedCallCount = 0;
             control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -14287,7 +14287,7 @@ namespace System.Windows.Forms.Tests
         [WinFormsFact]
         public void Control_ResetMouseEventArgs_InvokeWithoutHandle_Success()
         {
-            var control = new SubControl();
+            using var control = new SubControl();
             control.ResetMouseEventArgs();
             Assert.False(control.IsHandleCreated);
 
@@ -14299,7 +14299,7 @@ namespace System.Windows.Forms.Tests
         [WinFormsFact]
         public void Control_ResetMouseEventArgs_InvokeWithHandle_Success()
         {
-            var control = new SubControl();
+            using var control = new SubControl();
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             int invalidatedCallCount = 0;
             control.Invalidated += (sender, e) => invalidatedCallCount++;

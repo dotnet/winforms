@@ -12,7 +12,7 @@ namespace System.Windows.Forms.Tests
 {
     public class MonthCalendarTests
     {
-        [Fact]
+        [WinFormsFact]
         public void MonthCalendar_Ctor_Default()
         {
             using var control = new SubMonthCalendar();
@@ -124,7 +124,7 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.IsHandleCreated);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void MonthCalendar_CreateParams_GetDefault_ReturnsExpected()
         {
             using var control = new SubMonthCalendar();
@@ -141,6 +141,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createParams.X);
             Assert.Equal(0, createParams.Y);
             Assert.Same(createParams, control.CreateParams);
+            Assert.False(control.IsHandleCreated);
         }
 
         public static IEnumerable<object[]> AnnuallyBoldedDates_Set_TestData()

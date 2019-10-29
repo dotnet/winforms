@@ -117,6 +117,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createParams.X);
             Assert.Equal(0, createParams.Y);
             Assert.Same(createParams, control.CreateParams);
+            Assert.False(control.IsHandleCreated);
         }
 
         [WinFormsTheory]
@@ -1565,10 +1566,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expectedCreatedCallCount2, createdCallCount);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void TabControl_RightToLeftLayout_SetWithHandler_CallsRightToLeftLayoutChanged()
         {
-            var control = new TabControl
+            using var control = new TabControl
             {
                 RightToLeftLayout = true
             };

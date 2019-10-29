@@ -15,10 +15,10 @@ namespace System.Windows.Forms.Design.Tests
 {
     public class ComponentEditorPageTests
     {
-        [Fact]
+        [WinFormsFact]
         public void ComponentEditorPagePanel_Ctor_Default()
         {
-            var control = new SubComponentEditorPage();
+            using var control = new SubComponentEditorPage();
             Assert.False(control.AllowDrop);
             Assert.Equal(AnchorStyles.Top | AnchorStyles.Left, control.Anchor);
             Assert.False(control.AutoScroll);
@@ -113,10 +113,10 @@ namespace System.Windows.Forms.Design.Tests
             Assert.False(control.IsHandleCreated);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ComponentEditorPage_CreateParams_GetDefault_ReturnsExpected()
         {
-            var control = new SubComponentEditorPage();
+            using var control = new SubComponentEditorPage();
             CreateParams createParams = control.CreateParams;
             Assert.Null(createParams.Caption);
             Assert.Null(createParams.ClassName);
@@ -130,6 +130,7 @@ namespace System.Windows.Forms.Design.Tests
             Assert.Equal(0, createParams.X);
             Assert.Equal(0, createParams.Y);
             Assert.Same(createParams, control.CreateParams);
+            Assert.False(control.IsHandleCreated);
         }
 
         [Theory]

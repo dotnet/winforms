@@ -286,10 +286,10 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<ArgumentNullException>("value", () => new ToolStrip(new ToolStripItem[] { null }));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ToolStrip_CreateParams_GetDefault_ReturnsExpected()
         {
-            var control = new SubToolStrip();
+            using var control = new SubToolStrip();
             CreateParams createParams = control.CreateParams;
             Assert.Null(createParams.Caption);
             Assert.Null(createParams.ClassName);
@@ -303,6 +303,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createParams.X);
             Assert.Equal(0, createParams.Y);
             Assert.Same(createParams, control.CreateParams);
+            Assert.False(control.IsHandleCreated);
         }
 
         [Theory]
