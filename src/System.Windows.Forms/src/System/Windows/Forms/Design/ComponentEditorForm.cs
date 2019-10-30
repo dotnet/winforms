@@ -813,24 +813,22 @@ namespace System.Windows.Forms.Design
 
                 switch (nmtvcd.nmcd.dwDrawStage)
                 {
-                    case NativeMethods.CDDS_PREPAINT:
-                        m.Result = (IntPtr)(NativeMethods.CDRF_NOTIFYITEMDRAW | NativeMethods.CDRF_NOTIFYPOSTPAINT);
+                    case ComCtl32.CDDS.PREPAINT:
+                        m.Result = (IntPtr)(ComCtl32.CDRF.NOTIFYITEMDRAW | ComCtl32.CDRF.NOTIFYPOSTPAINT);
                         break;
-                    case NativeMethods.CDDS_ITEMPREPAINT:
+                    case ComCtl32.CDDS.ITEMPREPAINT:
                         {
                             TreeNode itemNode = TreeNode.FromHandle(this, (IntPtr)nmtvcd.nmcd.dwItemSpec);
                             if (itemNode != null)
                             {
                                 int state = STATE_NORMAL;
-                                int itemState = nmtvcd.nmcd.uItemState;
-
-                                if (((itemState & NativeMethods.CDIS_HOT) != 0) ||
-                                   ((itemState & NativeMethods.CDIS_FOCUS) != 0))
+                                ComCtl32.CDIS itemState = nmtvcd.nmcd.uItemState;
+                                if (((itemState & ComCtl32.CDIS.HOT) != 0) || ((itemState & ComCtl32.CDIS.FOCUS) != 0))
                                 {
                                     state |= STATE_HOT;
                                 }
 
-                                if ((itemState & NativeMethods.CDIS_SELECTED) != 0)
+                                if ((itemState & ComCtl32.CDIS.SELECTED) != 0)
                                 {
                                     state |= STATE_SELECTED;
                                 }
@@ -839,15 +837,15 @@ namespace System.Windows.Forms.Design
                                          nmtvcd.nmcd.hdc, nmtvcd.nmcd.rc,
                                          state, ColorTranslator.ToWin32(SystemColors.Control), ColorTranslator.ToWin32(SystemColors.ControlText));
                             }
-                            m.Result = (IntPtr)NativeMethods.CDRF_SKIPDEFAULT;
+                            m.Result = (IntPtr)ComCtl32.CDRF.SKIPDEFAULT;
 
                         }
                         break;
-                    case NativeMethods.CDDS_POSTPAINT:
-                        m.Result = (IntPtr)NativeMethods.CDRF_SKIPDEFAULT;
+                    case ComCtl32.CDDS.POSTPAINT:
+                        m.Result = (IntPtr)ComCtl32.CDRF.SKIPDEFAULT;
                         break;
                     default:
-                        m.Result = (IntPtr)NativeMethods.CDRF_DODEFAULT;
+                        m.Result = (IntPtr)ComCtl32.CDRF.DODEFAULT;
                         break;
                 }
             }

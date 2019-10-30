@@ -121,28 +121,6 @@ namespace System.Windows.Forms
         CB_FINDSTRINGEXACT = 0x0158,
         CB_GETDROPPEDWIDTH = 0x015F,
         CB_SETDROPPEDWIDTH = 0x0160,
-        CDRF_DODEFAULT = 0x00000000,
-        CDRF_NEWFONT = 0x00000002,
-        CDRF_SKIPDEFAULT = 0x00000004,
-        CDRF_NOTIFYPOSTPAINT = 0x00000010,
-        CDRF_NOTIFYITEMDRAW = 0x00000020,
-        CDRF_NOTIFYSUBITEMDRAW = CDRF_NOTIFYITEMDRAW,
-        CDDS_PREPAINT = 0x00000001,
-        CDDS_POSTPAINT = 0x00000002,
-        CDDS_ITEM = 0x00010000,
-        CDDS_SUBITEM = 0x00020000,
-        CDDS_ITEMPREPAINT = (0x00010000 | 0x00000001),
-        CDDS_ITEMPOSTPAINT = (0x00010000 | 0x00000002),
-        CDIS_SELECTED = 0x0001,
-        CDIS_GRAYED = 0x0002,
-        CDIS_DISABLED = 0x0004,
-        CDIS_CHECKED = 0x0008,
-        CDIS_FOCUS = 0x0010,
-        CDIS_DEFAULT = 0x0020,
-        CDIS_HOT = 0x0040,
-        CDIS_MARKED = 0x0080,
-        CDIS_INDETERMINATE = 0x0100,
-        CDIS_SHOWKEYBOARDCUES = 0x0200,
         CCM_SETVERSION = (0x2000 + 0x7),
         CCM_GETVERSION = (0x2000 + 0x8),
         CCS_NORESIZE = 0x00000004,
@@ -1828,22 +1806,10 @@ namespace System.Windows.Forms
         [StructLayout(LayoutKind.Sequential)]
         public class NMTVCUSTOMDRAW
         {
-            public NMCUSTOMDRAW nmcd;
+            public ComCtl32.NMCUSTOMDRAW nmcd;
             public int clrText;
             public int clrTextBk;
             public int iLevel = 0;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public struct NMCUSTOMDRAW
-        {
-            public User32.NMHDR nmcd;
-            public int dwDrawStage;
-            public IntPtr hdc;
-            public RECT rc;
-            public IntPtr dwItemSpec;
-            public int uItemState;
-            public IntPtr lItemlParam;
         }
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
@@ -1866,7 +1832,7 @@ namespace System.Windows.Forms
         [StructLayout(LayoutKind.Sequential)]
         public struct NMLVCUSTOMDRAW
         {
-            public NMCUSTOMDRAW nmcd;
+            public ComCtl32.NMCUSTOMDRAW nmcd;
             public int clrText;
             public int clrTextBk;
             public int iSubItem;
