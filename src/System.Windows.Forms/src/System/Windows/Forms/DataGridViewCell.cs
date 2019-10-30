@@ -1290,20 +1290,23 @@ namespace System.Windows.Forms
                 dgv.EditingPanel.Controls.Remove(dgv.EditingControl);
                 Debug.Assert(dgv.EditingControl.ParentInternal == null);
 
-                if (dgv.EditingControl is DataGridViewTextBoxEditingControl)
+                if (AccessibleRestructuringNeeded)
                 {
-                    dgv.TextBoxControlWasDetached = true;
+                    if (dgv.EditingControl is DataGridViewTextBoxEditingControl)
+                    {
+                        dgv.TextBoxControlWasDetached = true;
+                    }
+
+                    if (dgv.EditingControl is DataGridViewComboBoxEditingControl)
+                    {
+                        dgv.ComboBoxControlWasDetached = true;
+                    }
+
+                    dgv.EditingControlAccessibleObject.SetParent(null);
+                    AccessibilityObject.SetDetachableChild(null);
+
+                    AccessibilityObject.RaiseStructureChangedEvent(UnsafeNativeMethods.StructureChangeType.ChildRemoved, dgv.EditingControlAccessibleObject.RuntimeId);
                 }
-
-                if (dgv.EditingControl is DataGridViewComboBoxEditingControl)
-                {
-                    dgv.ComboBoxControlWasDetached = true;
-                }
-
-                dgv.EditingControlAccessibleObject.SetParent(null);
-                AccessibilityObject.SetDetachableChild(null);
-
-                AccessibilityObject.RaiseStructureChangedEvent(UnsafeNativeMethods.StructureChangeType.ChildRemoved, dgv.EditingControlAccessibleObject.RuntimeId);
             }
             if (dgv.EditingPanel.ParentInternal != null)
             {
@@ -1321,6 +1324,28 @@ namespace System.Windows.Forms
             // the CurrentMouseLocation is reset to DATAGRIDVIEWCELL_flagAreaNotSet
             // so that the tooltip appears again on mousemove after the editing.
             CurrentMouseLocation = DATAGRIDVIEWCELL_flagAreaNotSet;
+        }
+
+        /// <summary>
+        /// Gets the value indicating whether DataGridView editing control should be processed in accessible
+        /// hierarchy restructuring. This check is necessary to not restructure the accessible hierarchy for
+        /// custom editing controls and for derived classes as inherited accessibility may differ or
+        /// may be not inherited at all.
+        /// </summary>
+        /// <returns>True if accessible hierarchy should be manually recreated for the cell and editing control, otherwise False.</returns>
+        private bool AccessibleRestructuringNeeded
+        {
+            get
+            {
+                // Get the type of the editing control and cache it to not call expensive GetType() method repeatedly.
+                Type editingControlType = DataGridView.EditingControl.GetType();
+
+                return
+                    (editingControlType == typeof(DataGridViewComboBoxEditingControl) &&
+                    !editingControlType.IsSubclassOf(typeof(DataGridViewComboBoxEditingControl))) ||
+                    (editingControlType == typeof(DataGridViewTextBoxEditingControl) &&
+                    !editingControlType.IsSubclassOf(typeof(DataGridViewTextBoxEditingControl)));
+            }
         }
 
         public void Dispose()
@@ -2706,8 +2731,9 @@ namespace System.Windows.Forms
             Debug.Assert(dgv.EditingControl.ParentInternal == dgv.EditingPanel);
             Debug.Assert(dgv.EditingPanel.ParentInternal == dgv);
 
-            if ((dgv.ComboBoxControlWasDetached && dgv.EditingControl is DataGridViewComboBoxEditingControl) ||
-                (dgv.TextBoxControlWasDetached && dgv.EditingControl is DataGridViewTextBoxEditingControl))
+            if (AccessibleRestructuringNeeded &&
+                ((dgv.ComboBoxControlWasDetached && dgv.EditingControl is DataGridViewComboBoxEditingControl) ||
+                (dgv.TextBoxControlWasDetached && dgv.EditingControl is DataGridViewTextBoxEditingControl)))
             {
                 // Recreate control handle is necessary for cases when the same control was detached and then
                 // reattached to clear accessible hierarchy cache and not announce previous editing cell.
