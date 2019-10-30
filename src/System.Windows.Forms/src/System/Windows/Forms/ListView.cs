@@ -2589,7 +2589,7 @@ namespace System.Windows.Forms
 
             try
             {
-                NativeMethods.NMLVCUSTOMDRAW* nmcd = (NativeMethods.NMLVCUSTOMDRAW*)m.LParam;
+                ComCtl32.NMLVCUSTOMDRAW* nmcd = (ComCtl32.NMLVCUSTOMDRAW*)m.LParam;
                 // Find out which stage we're drawing
                 switch (nmcd->nmcd.dwDrawStage)
                 {
@@ -2608,7 +2608,7 @@ namespace System.Windows.Forms
                         odCacheFontHandle = FontHandle;
 
                         // If preparing to paint a group item, make sure its bolded.
-                        if (nmcd->dwItemType == NativeMethods.LVCDI_GROUP)
+                        if (nmcd->dwItemType == ComCtl32.LVCDI.GROUP)
                         {
                             if (odCacheFontHandleWrapper != null)
                             {
@@ -3645,27 +3645,24 @@ namespace System.Windows.Forms
             };
 
             // Header
-            //
             string header = group.Header;
             lvgroup.pszHeader = Marshal.StringToHGlobalAuto(header);
             lvgroup.cchHeader = header.Length;
 
             // Group ID
-            //
             lvgroup.iGroupId = group.ID;
 
             // Alignment
-            //
             switch (group.HeaderAlignment)
             {
                 case HorizontalAlignment.Left:
-                    lvgroup.uAlign = NativeMethods.LVGA_HEADER_LEFT;
+                    lvgroup.uAlign = ComCtl32.LVGA.HEADER_LEFT;
                     break;
                 case HorizontalAlignment.Right:
-                    lvgroup.uAlign = NativeMethods.LVGA_HEADER_RIGHT;
+                    lvgroup.uAlign = ComCtl32.LVGA.HEADER_RIGHT;
                     break;
                 case HorizontalAlignment.Center:
-                    lvgroup.uAlign = NativeMethods.LVGA_HEADER_CENTER;
+                    lvgroup.uAlign = ComCtl32.LVGA.HEADER_CENTER;
                     break;
             }
             return lvgroup;

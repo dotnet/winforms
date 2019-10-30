@@ -434,8 +434,6 @@ namespace System.Windows.Forms
         LVA_ALIGNLEFT = 0x0001,
         LVA_ALIGNTOP = 0x0002,
         LVA_SNAPTOGRID = 0x0005,
-        LVCDI_ITEM = 0x0000,
-        LVCDI_GROUP = 0x00000001,
         LVCF_FMT = 0x0001,
         LVCF_WIDTH = 0x0002,
         LVCF_TEXT = 0x0004,
@@ -443,12 +441,6 @@ namespace System.Windows.Forms
         LVCF_IMAGE = 0x0010,
         LVCF_ORDER = 0x0020,
         LVCFMT_IMAGE = 0x0800,
-        LVGA_HEADER_LEFT = 0x00000001,
-        LVGA_HEADER_CENTER = 0x00000002,
-        LVGA_HEADER_RIGHT = 0x00000004,
-        LVGA_FOOTER_LEFT = 0x00000008,
-        LVGA_FOOTER_CENTER = 0x00000010,
-        LVGA_FOOTER_RIGHT = 0x00000020,
         LVGF_NONE = 0x00000000,
         LVGF_HEADER = 0x00000001,
         LVGF_FOOTER = 0x00000002,
@@ -1829,25 +1821,6 @@ namespace System.Windows.Forms
             public short st_wMilliseconds = 0;
         }
 
-        [StructLayout(LayoutKind.Sequential)]
-        public struct NMLVCUSTOMDRAW
-        {
-            public ComCtl32.NMCUSTOMDRAW nmcd;
-            public int clrText;
-            public int clrTextBk;
-            public int iSubItem;
-            public int dwItemType;
-            // Item Custom Draw
-            public int clrFace;
-            public int iIconEffect;
-            public int iIconPhase;
-            public int iPartId;
-            public int iStateId;
-            // Group Custom Draw
-            public RECT rcText;
-            public uint uAlign;
-        }
-
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
         public class NMLVGETINFOTIP
         {
@@ -1987,7 +1960,7 @@ namespace System.Windows.Forms
             public int iGroupId;
             public uint stateMask = 0;
             public uint state = 0;
-            public uint uAlign;
+            public ComCtl32.LVGA uAlign;
 
             public override string ToString()
             {
