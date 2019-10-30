@@ -621,6 +621,17 @@ namespace System.Windows.Forms
             _delayTimes[(int)ComCtl32.TTDT.INITIAL] = _delayTimes[(int)ComCtl32.TTDT.AUTOMATIC];
         }
 
+        /// <summary>
+        ///  ScreenReader announces ToolTip text for an element
+        /// </summary>
+        private void AnnounceText(Control tool, string text)
+        {
+            tool?.AccessibilityObject?.RaiseAutomationNotification(
+                Automation.AutomationNotificationKind.ActionCompleted,
+                Automation.AutomationNotificationProcessing.All,
+                ToolTipTitle + " " + text);
+        }
+
         private void HandleCreated(object sender, EventArgs eventargs)
         {
             // Reset the toplevel control when the owner's handle is recreated.
@@ -2066,6 +2077,11 @@ namespace System.Windows.Forms
             {
                 // The dataGridView cancelled the tooltip.
                 e.Cancel = true;
+            }
+
+            if (!e.Cancel)
+            {
+                AnnounceText(toolControl, GetCaptionForTool(toolControl));
             }
 
             // We need to re-get the rectangle of the tooltip here because
