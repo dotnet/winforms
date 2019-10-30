@@ -77,6 +77,8 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.HScroll);
             Assert.Equal(ImeMode.NoControl, control.ImeMode);
             Assert.Equal(ImeMode.NoControl, control.ImeModeBase);
+            Assert.NotNull(control.LayoutEngine);
+            Assert.Same(control.LayoutEngine, control.LayoutEngine);
             Assert.Equal(0, control.Left);
             Assert.Equal(Point.Empty, control.Location);
             Assert.Equal(new Padding(3), control.Margin);
@@ -97,6 +99,7 @@ namespace System.Windows.Forms.Tests
             Assert.True(control.TabStop);
             Assert.Empty(control.Text);
             Assert.Equal(0, control.Top);
+            Assert.Null(control.TopLevelControl);
             Assert.True(control.Visible);
             Assert.NotNull(control.VerticalScroll);
             Assert.Same(control.VerticalScroll, control.VerticalScroll);

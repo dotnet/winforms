@@ -69,6 +69,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(ImeMode.Disable, control.ImeModeBase);
             Assert.NotNull(control.InitialImage);
             Assert.Same(control.InitialImage, control.InitialImage);
+            Assert.NotNull(control.LayoutEngine);
+            Assert.Same(control.LayoutEngine, control.LayoutEngine);
             Assert.Equal(0, control.Left);
             Assert.Equal(Point.Empty, control.Location);
             Assert.Equal(new Padding(3), control.Margin);
@@ -90,6 +92,7 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.TabStop);
             Assert.Empty(control.Text);
             Assert.Equal(0, control.Top);
+            Assert.Null(control.TopLevelControl);
             Assert.True(control.Visible);
             Assert.False(control.WaitOnLoad);
             Assert.Equal(100, control.Width);
@@ -2520,13 +2523,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
         }
 
-
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void PictureBox_OnResize_Invoke_CallsResize(EventArgs eventArgs)
         {
-            var control = new SubPictureBox();
-            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            using var control = new SubPictureBox();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -2534,55 +2535,87 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
+            int layoutCallCount = 0;
+            control.Layout += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(control, e.AffectedControl);
+                Assert.Equal("Bounds", e.AffectedProperty);
+                layoutCallCount++;
+            };
+
+            // Call with handler.
+            control.Resize += handler;
+            control.OnResize(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(1, layoutCallCount);
+
+            // Remove handler.
+            control.Resize -= handler;
+            control.OnResize(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(2, layoutCallCount);
+        }
+
+        public static IEnumerable<object[]> OnResize_WithHandle_TestData()
+        {
+            yield return new object[] { true, null, 1 };
+            yield return new object[] { true, new EventArgs(), 1 };
+            yield return new object[] { false, null, 0 };
+            yield return new object[] { false, new EventArgs(), 0 };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(OnResize_WithHandle_TestData))]
+        public void PictureBox_OnResize_InvokeWithHandle_CallsResize(bool resizeRedraw, EventArgs eventArgs, int expectedInvalidatedCallCount)
+        {
+            using var control = new SubPictureBox();
+            control.SetStyle(ControlStyles.ResizeRedraw, resizeRedraw);
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+            int layoutCallCount = 0;
+            control.Layout += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(control, e.AffectedControl);
+                Assert.Equal("Bounds", e.AffectedProperty);
+                layoutCallCount++;
+            };
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
             int invalidatedCallCount = 0;
             control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
 
             // Call with handler.
             control.Resize += handler;
             control.OnResize(eventArgs);
             Assert.Equal(1, callCount);
-            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(1, layoutCallCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
 
             // Remove handler.
             control.Resize -= handler;
             control.OnResize(eventArgs);
             Assert.Equal(1, callCount);
-            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(2, layoutCallCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(expectedInvalidatedCallCount * 2, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
         }
 
-        [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
-        public void PictureBox_OnResize_InvokeWithResizeRedraw_CallsResizeAndInvalidate(EventArgs eventArgs)
-        {
-            var control = new SubPictureBox();
-            control.SetStyle(ControlStyles.ResizeRedraw, true);
-            Assert.NotEqual(IntPtr.Zero, control.Handle);
-            int callCount = 0;
-            EventHandler handler = (sender, e) =>
-            {
-                Assert.Same(control, sender);
-                Assert.Same(eventArgs, e);
-                callCount++;
-            };
-            int invalidatedCallCount = 0;
-            InvalidateEventHandler invalidatedHandler = (sender, e) => invalidatedCallCount++;
-
-            // Call with handler.
-            control.Resize += handler;
-            control.Invalidated += invalidatedHandler;
-            control.OnResize(eventArgs);
-            Assert.Equal(1, callCount);
-            Assert.Equal(1, invalidatedCallCount);
-
-            // Remove handler.
-            control.Resize -= handler;
-            control.Invalidated -= invalidatedHandler;
-            control.OnResize(eventArgs);
-            Assert.Equal(1, callCount);
-            Assert.Equal(1, invalidatedCallCount);
-        }
-
-        [Theory]
+        [WinFormsTheory]
         [InlineData(PictureBoxSizeMode.Normal, 0)]
         [InlineData(PictureBoxSizeMode.StretchImage, 1)]
         [InlineData(PictureBoxSizeMode.AutoSize, 0)]
@@ -2590,7 +2623,7 @@ namespace System.Windows.Forms.Tests
         [InlineData(PictureBoxSizeMode.Zoom, 1)]
         public void PictureBox_OnResize_Invoke_CallsInvalidate(PictureBoxSizeMode sizeMode, int expectedInvalidatedCallCount)
         {
-            var control = new SubPictureBox
+            using var control = new SubPictureBox
             {
                 SizeMode = sizeMode
             };
@@ -2601,20 +2634,31 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(EventArgs.Empty, e);
                 callCount++;
             };
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
             int invalidatedCallCount = 0;
             control.Invalidated += (sender, e) => invalidatedCallCount++;
-            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
 
             // Call with handler.
             control.Resize += handler;
             control.OnResize(EventArgs.Empty);
             Assert.Equal(1, callCount);
+            Assert.True(control.IsHandleCreated);
             Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
 
             // Remove handler.
             control.Resize -= handler;
             control.OnResize(EventArgs.Empty);
+            Assert.Equal(1, callCount);
+            Assert.True(control.IsHandleCreated);
             Assert.Equal(expectedInvalidatedCallCount * 2, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
         }
 
         [Theory]

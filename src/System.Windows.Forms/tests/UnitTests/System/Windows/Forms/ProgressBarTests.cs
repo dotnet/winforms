@@ -61,6 +61,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(23, control.Height);
             Assert.Equal(ImeMode.Disable, control.ImeMode);
             Assert.Equal(ImeMode.Disable, control.ImeModeBase);
+            Assert.NotNull(control.LayoutEngine);
+            Assert.Same(control.LayoutEngine, control.LayoutEngine);
             Assert.Equal(0, control.Left);
             Assert.Equal(Point.Empty, control.Location);
             Assert.Equal(100, control.MarqueeAnimationSpeed);
@@ -84,6 +86,7 @@ namespace System.Windows.Forms.Tests
             Assert.True(control.TabStop);
             Assert.Empty(control.Text);
             Assert.Equal(0, control.Top);
+            Assert.Null(control.TopLevelControl);
             Assert.Equal(0, control.Value);
             Assert.True(control.Visible);
             Assert.Equal(100, control.Width);

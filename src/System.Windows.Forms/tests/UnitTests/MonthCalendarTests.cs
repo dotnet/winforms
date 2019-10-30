@@ -75,6 +75,8 @@ namespace System.Windows.Forms.Tests
             Assert.True(control.Height > 0);
             Assert.Equal(ImeMode.Disable, control.ImeMode);
             Assert.Equal(ImeMode.Disable, control.ImeModeBase);
+            Assert.NotNull(control.LayoutEngine);
+            Assert.Same(control.LayoutEngine, control.LayoutEngine);
             Assert.Equal(0, control.Left);
             Assert.Equal(Point.Empty, control.Location);
             Assert.Equal(new Padding(9), control.Margin);
@@ -117,6 +119,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(DateTime.Now.Date, control.TodayDate);
             Assert.False(control.TodayDateSet);
             Assert.Equal(0, control.Top);
+            Assert.Null(control.TopLevelControl);
             Assert.Equal(SystemColors.GrayText, control.TrailingForeColor);
             Assert.True(control.Visible);
             Assert.True(control.Width > 0);

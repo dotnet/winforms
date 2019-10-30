@@ -88,6 +88,8 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.LabelEdit);
             Assert.True(control.LabelWrap);
             Assert.Null(control.LargeImageList);
+            Assert.NotNull(control.LayoutEngine);
+            Assert.Same(control.LayoutEngine, control.LayoutEngine);
             Assert.Equal(0, control.Left);
             Assert.Null(control.ListViewItemSorter);
             Assert.Equal(Point.Empty, control.Location);
@@ -124,6 +126,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(Size.Empty, control.TileSize);
             Assert.Equal(0, control.Top);
             Assert.Throws<InvalidOperationException>(() => control.TopItem);
+            Assert.Null(control.TopLevelControl);
             Assert.True(control.UseCompatibleStateImageBehavior);
             Assert.Equal(View.LargeIcon, control.View);
             Assert.Equal(0, control.VirtualListSize);
