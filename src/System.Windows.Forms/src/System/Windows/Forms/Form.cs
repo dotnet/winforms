@@ -3125,7 +3125,7 @@ namespace System.Windows.Forms
 
             IntPtr h = Handle;
             RECT rc = new RECT();
-            SafeNativeMethods.GetClientRect(new HandleRef(this, h), ref rc);
+            User32.GetClientRect(new HandleRef(this, h), ref rc);
             Rectangle currentClient = Rectangle.FromLTRB(rc.left, rc.top, rc.right, rc.bottom);
 
             Rectangle bounds = Bounds;
@@ -3152,7 +3152,7 @@ namespace System.Windows.Forms
                 bounds.Width = correct.Width;
                 bounds.Height = correct.Height;
                 Bounds = bounds;
-                SafeNativeMethods.GetClientRect(new HandleRef(this, h), ref rc);
+                User32.GetClientRect(new HandleRef(this, h), ref rc);
                 currentClient = Rectangle.FromLTRB(rc.left, rc.top, rc.right, rc.bottom);
             }
 

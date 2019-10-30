@@ -689,7 +689,7 @@ namespace System.Windows.Forms
             {
                 // Get window's client rectangle (i.e. without chrome) expressed in screen coordinates
                 var clientRectangle = new RECT();
-                UnsafeNativeMethods.GetClientRect(new HandleRef(this, Handle), ref clientRectangle);
+                User32.GetClientRect(new HandleRef(this, Handle), ref clientRectangle);
                 var topLeftPoint = new Point();
                 User32.ClientToScreen(new HandleRef(this, Handle), ref topLeftPoint);
                 return new Rectangle(topLeftPoint.X, topLeftPoint.Y, clientRectangle.right, clientRectangle.bottom);

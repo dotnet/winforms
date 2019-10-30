@@ -86,9 +86,6 @@ namespace System.Windows.Forms
         public static extern bool EnableWindow(HandleRef hWnd, bool enable);
 
         [DllImport(ExternDll.User32, ExactSpelling = true)]
-        public static extern bool GetClientRect(HandleRef hWnd, ref RECT rect);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true)]
         public static extern bool ValidateRect(HandleRef hWnd, ref RECT rect);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]

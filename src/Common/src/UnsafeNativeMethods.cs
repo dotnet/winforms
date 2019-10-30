@@ -537,12 +537,6 @@ namespace System.Windows.Forms
         public static extern IntPtr PostMessage(HandleRef hwnd, int msg, int wparam, IntPtr lparam);
 
         [DllImport(ExternDll.User32, ExactSpelling = true)]
-        public static extern bool GetClientRect(HandleRef hWnd, ref RECT rect);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern bool GetClientRect(HandleRef hWnd, IntPtr rect);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true)]
         public static extern IntPtr WindowFromPoint(Point pt);
 
         // This method is not available until Windows 8.1

@@ -569,7 +569,7 @@ namespace System.Windows.Forms
                     int offsetY = -rect.top;
 
                     // fetch the client rect, then apply the offset.
-                    UnsafeNativeMethods.GetClientRect(new HandleRef(this, Handle), ref rect);
+                    User32.GetClientRect(new HandleRef(this, Handle), ref rect);
 
                     rect.left += offsetX;
                     rect.right += offsetX;

@@ -4822,7 +4822,7 @@ namespace System.Windows.Forms
             {
                 var rc = new RECT();
                 var wpos = new User32.WINDOWPOS();
-                UnsafeNativeMethods.GetClientRect(new HandleRef(this, Handle), ref rc);
+                User32.GetClientRect(new HandleRef(this, Handle), ref rc);
 
                 var hd = new User32.HDLAYOUT
                 {
