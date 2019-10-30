@@ -2748,12 +2748,12 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Performs custom draw handling
         /// </summary>
-        private void CustomDraw(ref Message m)
+        private unsafe void CustomDraw(ref Message m)
         {
-            NativeMethods.NMTVCUSTOMDRAW nmcd = (NativeMethods.NMTVCUSTOMDRAW)m.GetLParam(typeof(NativeMethods.NMTVCUSTOMDRAW));
+            ComCtl32.NMTVCUSTOMDRAW* nmtvcd = (ComCtl32.NMTVCUSTOMDRAW*)m.LParam;
 
             // Find out which stage we're drawing
-            switch (nmcd.nmcd.dwDrawStage)
+            switch (nmtvcd->nmcd.dwDrawStage)
             {
                 // Do we want OwnerDraw for this paint cycle?
                 case ComCtl32.CDDS.PREPAINT:
@@ -2762,8 +2762,8 @@ namespace System.Windows.Forms
                 // We've got opt-in on owner draw for items - so handle each one.
                 case ComCtl32.CDDS.ITEMPREPAINT:
                     // get the node
-                    Debug.Assert(nmcd.nmcd.dwItemSpec != IntPtr.Zero, "Invalid node handle in ITEMPREPAINT");
-                    TreeNode node = NodeFromHandle((IntPtr)nmcd.nmcd.dwItemSpec);
+                    Debug.Assert(nmtvcd->nmcd.dwItemSpec != IntPtr.Zero, "Invalid node handle in ITEMPREPAINT");
+                    TreeNode node = NodeFromHandle((IntPtr)nmtvcd->nmcd.dwItemSpec);
 
                     if (node == null)
                     {
@@ -2773,7 +2773,7 @@ namespace System.Windows.Forms
                         return;
                     }
 
-                    ComCtl32.CDIS state = nmcd.nmcd.uItemState;
+                    ComCtl32.CDIS state = nmtvcd->nmcd.uItemState;
 
                     // The commctrl TreeView allows you to draw the whole row of a node
                     // or nothing at all. The way we provide OwnerDrawText is by asking it
@@ -2781,14 +2781,13 @@ namespace System.Windows.Forms
                     // as background color.
                     if (drawMode == TreeViewDrawMode.OwnerDrawText)
                     {
-                        nmcd.clrText = nmcd.clrTextBk;
-                        Marshal.StructureToPtr(nmcd, m.LParam, false);
+                        nmtvcd->clrText = nmtvcd->clrTextBk;
                         m.Result = (IntPtr)(ComCtl32.CDRF.NEWFONT | ComCtl32.CDRF.NOTIFYPOSTPAINT);
                         return;
                     }
                     else if (drawMode == TreeViewDrawMode.OwnerDrawAll)
                     {
-                        Graphics g = Graphics.FromHdcInternal(nmcd.nmcd.hdc);
+                        Graphics g = Graphics.FromHdcInternal(nmtvcd->nmcd.hdc);
 
                         DrawTreeNodeEventArgs e;
 
@@ -2847,28 +2846,21 @@ namespace System.Windows.Forms
                     // TreeView has problems with drawing items at times; it gets confused
                     // as to which colors apply to which items (see focus rectangle shifting;
                     // when one item is selected, click and hold on another). This needs to be fixed.
-
-                    bool colordelta = false;
                     Color riFore = renderinfo.ForeColor;
                     Color riBack = renderinfo.BackColor;
                     if (renderinfo != null && !riFore.IsEmpty)
                     {
-                        nmcd.clrText = ColorTranslator.ToWin32(riFore);
-                        colordelta = true;
+                        nmtvcd->clrText = ColorTranslator.ToWin32(riFore);
                     }
                     if (renderinfo != null && !riBack.IsEmpty)
                     {
-                        nmcd.clrTextBk = ColorTranslator.ToWin32(riBack);
-                        colordelta = true;
+                        nmtvcd->clrTextBk = ColorTranslator.ToWin32(riBack);
                     }
-                    if (colordelta)
-                    {
-                        Marshal.StructureToPtr(nmcd, m.LParam, false);
-                    }
+
                     if (renderinfo != null && renderinfo.Font != null)
                     {
                         // Mess with the DC directly...
-                        Gdi32.SelectObject(new HandleRef(nmcd.nmcd, nmcd.nmcd.hdc), new HandleRef(renderinfo, renderinfo.FontHandle));
+                        Gdi32.SelectObject(new HandleRef(nmtvcd->nmcd, nmtvcd->nmcd.hdc), new HandleRef(renderinfo, renderinfo.FontHandle));
                         // There is a problem in winctl that clips node fonts if the fontsize
                         // is larger than the treeview font size. The behavior is much better in comctl 5 and above.
                         m.Result = (IntPtr)ComCtl32.CDRF.NEWFONT;
@@ -2882,10 +2874,10 @@ namespace System.Windows.Forms
                     //User draws only the text in OwnerDrawText mode, as explained in comments above
                     if (drawMode == TreeViewDrawMode.OwnerDrawText)
                     {
-                        Debug.Assert(nmcd.nmcd.dwItemSpec != IntPtr.Zero, "Invalid node handle in ITEMPOSTPAINT");
+                        Debug.Assert(nmtvcd->nmcd.dwItemSpec != IntPtr.Zero, "Invalid node handle in ITEMPOSTPAINT");
 
                         // Get the node
-                        node = NodeFromHandle((IntPtr)nmcd.nmcd.dwItemSpec);
+                        node = NodeFromHandle((IntPtr)nmtvcd->nmcd.dwItemSpec);
 
                         if (node == null)
                         {
@@ -2894,7 +2886,7 @@ namespace System.Windows.Forms
                             return;
                         }
 
-                        Graphics g = Graphics.FromHdcInternal(nmcd.nmcd.hdc);
+                        Graphics g = Graphics.FromHdcInternal(nmtvcd->nmcd.hdc);
 
                         DrawTreeNodeEventArgs e;
 
@@ -2905,7 +2897,7 @@ namespace System.Windows.Forms
                             Point textLoc = new Point(bounds.X - 1, bounds.Y); // required to center the text
                             bounds = new Rectangle(textLoc, new Size(textSize.Width, bounds.Height));
 
-                            e = new DrawTreeNodeEventArgs(g, node, bounds, (TreeNodeStates)(nmcd.nmcd.uItemState));
+                            e = new DrawTreeNodeEventArgs(g, node, bounds, (TreeNodeStates)(nmtvcd->nmcd.uItemState));
                             OnDrawNode(e);
 
                             if (e.DrawDefault)

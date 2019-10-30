@@ -1795,15 +1795,6 @@ namespace System.Windows.Forms
             public IntPtr hItem = IntPtr.Zero;
         }
 
-        [StructLayout(LayoutKind.Sequential)]
-        public class NMTVCUSTOMDRAW
-        {
-            public ComCtl32.NMCUSTOMDRAW nmcd;
-            public int clrText;
-            public int clrTextBk;
-            public int iLevel = 0;
-        }
-
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
         public class MCHITTESTINFO
         {

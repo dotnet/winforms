@@ -807,22 +807,21 @@ namespace System.Windows.Forms.Design
                 }
             }
 
-            private void OnCustomDraw(ref Message m)
+            private unsafe void OnCustomDraw(ref Message m)
             {
-                NativeMethods.NMTVCUSTOMDRAW nmtvcd = (NativeMethods.NMTVCUSTOMDRAW)m.GetLParam(typeof(NativeMethods.NMTVCUSTOMDRAW));
-
-                switch (nmtvcd.nmcd.dwDrawStage)
+                ComCtl32.NMTVCUSTOMDRAW* nmtvcd = (ComCtl32.NMTVCUSTOMDRAW*)m.LParam;
+                switch (nmtvcd->nmcd.dwDrawStage)
                 {
                     case ComCtl32.CDDS.PREPAINT:
                         m.Result = (IntPtr)(ComCtl32.CDRF.NOTIFYITEMDRAW | ComCtl32.CDRF.NOTIFYPOSTPAINT);
                         break;
                     case ComCtl32.CDDS.ITEMPREPAINT:
                         {
-                            TreeNode itemNode = TreeNode.FromHandle(this, (IntPtr)nmtvcd.nmcd.dwItemSpec);
+                            TreeNode itemNode = TreeNode.FromHandle(this, (IntPtr)nmtvcd->nmcd.dwItemSpec);
                             if (itemNode != null)
                             {
                                 int state = STATE_NORMAL;
-                                ComCtl32.CDIS itemState = nmtvcd.nmcd.uItemState;
+                                ComCtl32.CDIS itemState = nmtvcd->nmcd.uItemState;
                                 if (((itemState & ComCtl32.CDIS.HOT) != 0) || ((itemState & ComCtl32.CDIS.FOCUS) != 0))
                                 {
                                     state |= STATE_HOT;
@@ -834,7 +833,7 @@ namespace System.Windows.Forms.Design
                                 }
 
                                 DrawTreeItem(itemNode.Text, itemNode.ImageIndex,
-                                         nmtvcd.nmcd.hdc, nmtvcd.nmcd.rc,
+                                         nmtvcd->nmcd.hdc, nmtvcd->nmcd.rc,
                                          state, ColorTranslator.ToWin32(SystemColors.Control), ColorTranslator.ToWin32(SystemColors.ControlText));
                             }
                             m.Result = (IntPtr)ComCtl32.CDRF.SKIPDEFAULT;
