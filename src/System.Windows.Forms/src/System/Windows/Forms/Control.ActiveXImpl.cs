@@ -467,7 +467,6 @@ namespace System.Windows.Forms
                 }
 
                 // if they didn't give us a rectangle, just copy over ours
-                //
                 if (prcBounds != null)
                 {
                     rc = new RECT(prcBounds.left, prcBounds.top, prcBounds.right, prcBounds.bottom);
@@ -475,9 +474,9 @@ namespace System.Windows.Forms
                     // To draw to a given rect, we scale the DC in such a way as to
                     // make the values it takes match our own happy MM_TEXT.  Then,
                     // we back-convert prcBounds so that we convert it to this coordinate
-                    // system.  This puts us in the most similar coordinates as we currently
+                    // system. This puts us in the most similar coordinates as we currently
                     // use.
-                    SafeNativeMethods.LPtoDP(new HandleRef(null, hdcDraw), ref rc, 2);
+                    Gdi32.LPtoDP(hdcDraw, ref rc, 2);
 
                     iMode = Gdi32.SetMapMode(hdcDraw, Gdi32.MM.ANISOTROPIC);
                     Gdi32.SetWindowOrgEx(hdcDraw, 0, 0, &pW);
