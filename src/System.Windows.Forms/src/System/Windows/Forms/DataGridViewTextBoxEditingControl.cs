@@ -301,7 +301,10 @@ namespace System.Windows.Forms
         {
             base.OnHandleCreated(e);
 
-            dataGridView.SetAccessibleObjectParent(this.AccessibilityObject);
+            if (dataGridView != null)
+            {
+                dataGridView.SetAccessibleObjectParent(this.AccessibilityObject);
+            }
         }
     }
 
