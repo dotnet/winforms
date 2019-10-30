@@ -1628,7 +1628,7 @@ namespace System.Windows.Forms
             //call Sendmessage.
             //
             RECT r = new RECT();
-            UnsafeNativeMethods.GetClientRect(new HandleRef(this, Handle), ref r);
+            User32.GetClientRect(new HandleRef(this, Handle), ref r);
             if (r.left <= x && x < r.right && r.top <= y && y < r.bottom)
             {
                 int index = unchecked((int)(long)SendMessage(NativeMethods.LB_ITEMFROMPOINT, 0, unchecked((int)(long)NativeMethods.Util.MAKELPARAM(x, y))));

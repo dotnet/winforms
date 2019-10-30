@@ -8546,7 +8546,7 @@ namespace System.Windows.Forms
             // We need the true client rectangle as clip rectangle causes
             // problems on "Windows Classic" theme.
             RECT rect = new RECT();
-            UnsafeNativeMethods.GetClientRect(new HandleRef(_window, InternalHandle), ref rect);
+            User32.GetClientRect(new HandleRef(_window, InternalHandle), ref rect);
 
             PaintBackground(pevent, new Rectangle(rect.left, rect.top, rect.right, rect.bottom));
         }
@@ -11553,7 +11553,7 @@ namespace System.Windows.Forms
         protected internal void UpdateBounds()
         {
             RECT rect = new RECT();
-            UnsafeNativeMethods.GetClientRect(new HandleRef(_window, InternalHandle), ref rect);
+            User32.GetClientRect(new HandleRef(_window, InternalHandle), ref rect);
             int clientWidth = rect.right;
             int clientHeight = rect.bottom;
             UnsafeNativeMethods.GetWindowRect(new HandleRef(_window, InternalHandle), ref rect);
@@ -12057,7 +12057,7 @@ namespace System.Windows.Forms
                         return;
                     }
                     RECT rc = new RECT();
-                    UnsafeNativeMethods.GetClientRect(new HandleRef(this, Handle), ref rc);
+                    User32.GetClientRect(new HandleRef(this, Handle), ref rc);
                     using (PaintEventArgs pevent = new PaintEventArgs(dc, Rectangle.FromLTRB(rc.left, rc.top, rc.right, rc.bottom)))
                     {
                         PaintWithErrorHandling(pevent, PaintLayerBackground);

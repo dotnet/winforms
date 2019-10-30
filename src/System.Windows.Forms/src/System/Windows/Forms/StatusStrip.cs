@@ -632,7 +632,7 @@ namespace System.Windows.Forms
                         // get the client area of the topmost window.  If we're next to the edge then
                         // the sizing grip is valid.
                         RECT rootHwndClientArea = new RECT();
-                        UnsafeNativeMethods.GetClientRect(rootHwnd, ref rootHwndClientArea);
+                        User32.GetClientRect(rootHwnd, ref rootHwndClientArea);
 
                         // map the size grip FROM statusStrip coords TO the toplevel window coords.
                         Point gripLocation;

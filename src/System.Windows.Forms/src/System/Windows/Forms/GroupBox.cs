@@ -724,7 +724,7 @@ namespace System.Windows.Forms
         private void WmEraseBkgnd(ref Message m)
         {
             RECT rect = new RECT();
-            SafeNativeMethods.GetClientRect(new HandleRef(this, Handle), ref rect);
+            User32.GetClientRect(new HandleRef(this, Handle), ref rect);
             using (Graphics graphics = Graphics.FromHdcInternal(m.WParam))
             {
                 using (Brush b = new SolidBrush(BackColor))

@@ -3625,7 +3625,7 @@ namespace System.Windows.Forms
             if ((DropDownStyle == ComboBoxStyle.Simple) && ParentInternal != null)
             {
                 RECT rect = new RECT();
-                SafeNativeMethods.GetClientRect(new HandleRef(this, Handle), ref rect);
+                User32.GetClientRect(new HandleRef(this, Handle), ref rect);
                 Control p = ParentInternal;
                 Graphics graphics = Graphics.FromHdcInternal(m.WParam);
                 if (p != null)
