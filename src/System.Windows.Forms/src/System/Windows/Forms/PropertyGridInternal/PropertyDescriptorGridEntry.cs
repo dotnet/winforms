@@ -1256,12 +1256,63 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             internal override bool IsPatternSupported(int patternId)
             {
-                if (patternId == NativeMethods.UIA_ValuePatternId)
+                if (patternId == NativeMethods.UIA_ValuePatternId ||
+                    (patternId == NativeMethods.UIA_ExpandCollapsePatternId && owner.Enumerable))
                 {
                     return true;
                 }
 
                 return base.IsPatternSupported(patternId);
+            }
+
+            internal override void Expand()
+            {
+                if (ExpandCollapseState == UnsafeNativeMethods.ExpandCollapseState.Collapsed)
+                {
+                    ExpandOrCollapse();
+                }
+            }
+
+            internal override void Collapse()
+            {
+                if (ExpandCollapseState == UnsafeNativeMethods.ExpandCollapseState.Expanded)
+                {
+                    ExpandOrCollapse();
+                }
+            }
+
+            private void ExpandOrCollapse()
+            {
+                var propertyGridView = GetPropertyGridView();
+                if (propertyGridView == null)
+                {
+                    return;
+                }
+
+                int row = propertyGridView.GetRowFromGridEntry(_owningPropertyDescriptorGridEntry);
+                if (row != -1)
+                {
+                    propertyGridView.PopupDialog(row);
+                }
+            }
+
+            internal override UnsafeNativeMethods.ExpandCollapseState ExpandCollapseState
+            {
+                get
+                {
+                    var propertyGridView = GetPropertyGridView();
+                    if (propertyGridView == null)
+                    {
+                        return UnsafeNativeMethods.ExpandCollapseState.Collapsed;
+                    }
+
+                    if (_owningPropertyDescriptorGridEntry == propertyGridView.SelectedGridEntry && propertyGridView.DropDownVisible)
+                    {
+                        return UnsafeNativeMethods.ExpandCollapseState.Expanded;
+                    }
+
+                    return UnsafeNativeMethods.ExpandCollapseState.Collapsed;
+                }
             }
 
             internal override object GetPropertyValue(int propertyID)
