@@ -441,15 +441,6 @@ namespace System.Windows.Forms
         LVCF_IMAGE = 0x0010,
         LVCF_ORDER = 0x0020,
         LVCFMT_IMAGE = 0x0800,
-        LVGF_NONE = 0x00000000,
-        LVGF_HEADER = 0x00000001,
-        LVGF_FOOTER = 0x00000002,
-        LVGF_STATE = 0x00000004,
-        LVGF_ALIGN = 0x00000008,
-        LVGF_GROUPID = 0x00000010,
-        LVGS_NORMAL = 0x00000000,
-        LVGS_COLLAPSED = 0x00000001,
-        LVGS_HIDDEN = 0x00000002,
         LVIM_AFTER = 0x00000001,
         LVTVIF_FIXEDSIZE = 0x00000003,
         LVTVIM_TILESIZE = 0x00000001,
@@ -1937,26 +1928,6 @@ namespace System.Windows.Forms
             public int iSubItem = 0;
             public int iImage;
             public int iOrder = 0;
-        }
-
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
-        public class LVGROUP
-        {
-            public uint cbSize = (uint)Marshal.SizeOf<LVGROUP>();
-            public uint mask;
-            public IntPtr pszHeader;
-            public int cchHeader;
-            public IntPtr pszFooter = IntPtr.Zero;
-            public int cchFooter = 0;
-            public int iGroupId;
-            public uint stateMask = 0;
-            public uint state = 0;
-            public ComCtl32.LVGA uAlign;
-
-            public override string ToString()
-            {
-                return "LVGROUP: header = " + pszHeader.ToString() + ", iGroupId = " + iGroupId.ToString(CultureInfo.InvariantCulture);
-            }
         }
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]

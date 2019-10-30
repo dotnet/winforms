@@ -2995,7 +2995,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private void DestroyLVGROUP(NativeMethods.LVGROUP lvgroup)
+        private void DestroyLVGROUP(ComCtl32.LVGROUP lvgroup)
         {
             if (lvgroup.pszHeader != IntPtr.Zero)
             {
@@ -3637,11 +3637,12 @@ namespace System.Windows.Forms
             return Rectangle.FromLTRB(itemrect.left, itemrect.top, itemrect.right, itemrect.bottom);
         }
 
-        private NativeMethods.LVGROUP GetLVGROUP(ListViewGroup group)
+        private ComCtl32.LVGROUP GetLVGROUP(ListViewGroup group)
         {
-            NativeMethods.LVGROUP lvgroup = new NativeMethods.LVGROUP
+            var lvgroup = new ComCtl32.LVGROUP
             {
-                mask = NativeMethods.LVGF_HEADER | NativeMethods.LVGF_GROUPID | NativeMethods.LVGF_ALIGN
+                cbSize = (uint)Marshal.SizeOf<ComCtl32.LVGROUP>(),
+                mask = ComCtl32.LVGF.HEADER | ComCtl32.LVGF.GROUPID | ComCtl32.LVGF.ALIGN
             };
 
             // Header
@@ -3973,11 +3974,11 @@ namespace System.Windows.Forms
             Debug.Assert(IsHandleCreated, "InsertGroupNative precondition: list-view handle must be created");
             Debug.Assert(group == DefaultGroup || Groups.Contains(group), "Make sure ListView.Groups contains this group before adding the native LVGROUP. Otherwise, custom-drawing may break.");
 
-            NativeMethods.LVGROUP lvgroup = new NativeMethods.LVGROUP();
+            var lvgroup = new ComCtl32.LVGROUP();
             try
             {
                 lvgroup = GetLVGROUP(group);
-                int retval = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)LVM.INSERTGROUP, index, lvgroup);
+                int retval = (int)User32.SendMessageW(this, (User32.WindowMessage)LVM.INSERTGROUP, (IntPtr)index, ref lvgroup);
                 Debug.Assert(retval != -1, "Failed to insert group");
             }
             finally
@@ -5578,14 +5579,11 @@ namespace System.Windows.Forms
         {
             Debug.Assert(IsHandleCreated, "UpdateGroupNative precondition: list-view handle must be created");
 
-            NativeMethods.LVGROUP lvgroup = new NativeMethods.LVGROUP();
+            var lvgroup = new ComCtl32.LVGROUP();
             try
             {
                 lvgroup = GetLVGROUP(group);
-                int retval = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle),
-                                                                  (int)LVM.SETGROUPINFO,
-                                                                  group.ID,
-                                                                  lvgroup);
+                int retval = (int)User32.SendMessageW(this, (User32.WindowMessage)LVM.SETGROUPINFO, (IntPtr)group.ID, ref lvgroup);
             }
             finally
             {
@@ -5593,7 +5591,6 @@ namespace System.Windows.Forms
             }
 
             // The comctl32 ListView does not correctly invalidate itself, so we need to invalidate the entire ListView
-            //
             Invalidate();
         }
 
