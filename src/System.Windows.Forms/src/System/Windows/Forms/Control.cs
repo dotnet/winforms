@@ -11572,8 +11572,6 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected void UpdateBounds(int x, int y, int width, int height)
         {
-            Debug.Assert(!IsHandleCreated, "Don't call this method when handle is created!!");
-
             // reverse-engineer the AdjustWindowRectEx call to figure out
             // the appropriate clientWidth and clientHeight
             RECT rect = new RECT();
