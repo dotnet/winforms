@@ -14147,10 +14147,10 @@ namespace System.Windows.Forms
             return HRESULT.S_OK;
         }
 
-        int UnsafeNativeMethods.IOleObject.SetColorScheme(NativeMethods.tagLOGPALETTE pLogpal)
+        unsafe HRESULT UnsafeNativeMethods.IOleObject.SetColorScheme(Gdi32.LOGPALETTE* pLogpal)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:SetColorScheme");
-            return NativeMethods.S_OK;
+            return HRESULT.S_OK;
         }
 
         unsafe HRESULT Ole32.IOleWindow.GetWindow(IntPtr* phwnd)
@@ -14338,14 +14338,18 @@ namespace System.Windows.Forms
             return NativeMethods.S_OK;
         }
 
-        int UnsafeNativeMethods.IViewObject.GetColorSet(Ole32.DVASPECT dwDrawAspect, int lindex, IntPtr pvAspect, NativeMethods.tagDVTARGETDEVICE ptd,
-                                                   IntPtr hicTargetDev, NativeMethods.tagLOGPALETTE ppColorSet)
+        unsafe HRESULT UnsafeNativeMethods.IViewObject.GetColorSet(
+            Ole32.DVASPECT dwDrawAspect,
+            int lindex,
+            IntPtr pvAspect,
+            NativeMethods.tagDVTARGETDEVICE ptd,
+            IntPtr hicTargetDev,
+            Gdi32.LOGPALETTE* ppColorSet)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetColorSet");
 
             // GDI+ doesn't do palettes.
-            //
-            return NativeMethods.E_NOTIMPL;
+            return HRESULT.E_NOTIMPL;
         }
 
         int UnsafeNativeMethods.IViewObject.Freeze(Ole32.DVASPECT dwDrawAspect, int lindex, IntPtr pvAspect, IntPtr pdwFreeze)
@@ -14383,14 +14387,18 @@ namespace System.Windows.Forms
             Debug.Unindent();
         }
 
-        int UnsafeNativeMethods.IViewObject2.GetColorSet(Ole32.DVASPECT dwDrawAspect, int lindex, IntPtr pvAspect, NativeMethods.tagDVTARGETDEVICE ptd,
-                                                    IntPtr hicTargetDev, NativeMethods.tagLOGPALETTE ppColorSet)
+        unsafe HRESULT UnsafeNativeMethods.IViewObject2.GetColorSet(
+            Ole32.DVASPECT dwDrawAspect,
+            int lindex,
+            IntPtr pvAspect,
+            NativeMethods.tagDVTARGETDEVICE ptd,
+            IntPtr hicTargetDev,
+            Gdi32.LOGPALETTE* ppColorSet)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetColorSet");
 
             // GDI+ doesn't do palettes.
-            //
-            return NativeMethods.E_NOTIMPL;
+            return HRESULT.E_NOTIMPL;
         }
 
         int UnsafeNativeMethods.IViewObject2.Freeze(Ole32.DVASPECT dwDrawAspect, int lindex, IntPtr pvAspect, IntPtr pdwFreeze)

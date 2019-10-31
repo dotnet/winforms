@@ -1671,16 +1671,6 @@ namespace System.Windows.Forms
         }
 
         [StructLayout(LayoutKind.Sequential)/*leftover(noAutoOffset)*/]
-        public sealed class tagLOGPALETTE
-        {
-            [MarshalAs(UnmanagedType.U2)/*leftover(offset=0, palVersion)*/]
-            public short palVersion = 0;
-
-            [MarshalAs(UnmanagedType.U2)/*leftover(offset=2, palNumEntries)*/]
-            public short palNumEntries = 0;
-        }
-
-        [StructLayout(LayoutKind.Sequential)/*leftover(noAutoOffset)*/]
         public sealed class tagCONTROLINFO
         {
             [MarshalAs(UnmanagedType.U4)/*leftover(offset=0, cb)*/]

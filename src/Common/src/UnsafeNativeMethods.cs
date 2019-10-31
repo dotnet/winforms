@@ -1109,9 +1109,8 @@ namespace System.Windows.Forms
                 Ole32.OLEMISC* pdwStatus);
 
             [PreserveSig]
-            int SetColorScheme(
-                   [In]
-                      NativeMethods.tagLOGPALETTE pLogpal);
+            HRESULT SetColorScheme(
+                Gdi32.LOGPALETTE* pLogpal);
         }
 
         [ComImport]
@@ -1223,9 +1222,8 @@ namespace System.Windows.Forms
                 Ole32.OLEMISC* pdwStatus);
 
             [PreserveSig]
-            int SetColorScheme(
-                   [In]
-                      NativeMethods.tagLOGPALETTE pLogpal);
+            HRESULT SetColorScheme(
+                Gdi32.LOGPALETTE* pLogpal);
 
             [PreserveSig]
             int OnWindowMessage(
@@ -1284,15 +1282,13 @@ namespace System.Windows.Forms
                 int dwContinue);
 
             [PreserveSig]
-            int GetColorSet(
+            HRESULT GetColorSet(
                 Ole32.DVASPECT dwDrawAspect,
                 int lindex,
                 IntPtr pvAspect,
-                [In]
                 NativeMethods.tagDVTARGETDEVICE ptd,
                 IntPtr hicTargetDev,
-                [Out]
-                NativeMethods.tagLOGPALETTE ppColorSet);
+                Gdi32.LOGPALETTE* ppColorSet);
 
             [PreserveSig]
             int Freeze(
@@ -1344,15 +1340,13 @@ namespace System.Windows.Forms
                 int dwContinue);
 
             [PreserveSig]
-            int GetColorSet(
+            HRESULT GetColorSet(
                 Ole32.DVASPECT dwDrawAspect,
                 int lindex,
                 IntPtr pvAspect,
-                [In]
                 NativeMethods.tagDVTARGETDEVICE ptd,
                 IntPtr hicTargetDev,
-                [Out]
-                NativeMethods.tagLOGPALETTE ppColorSet);
+                Gdi32.LOGPALETTE* ppColorSet);
 
             [PreserveSig]
             int Freeze(
