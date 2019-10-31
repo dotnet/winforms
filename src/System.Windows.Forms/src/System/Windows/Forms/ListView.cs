@@ -6340,8 +6340,8 @@ namespace System.Windows.Forms
                 case NativeMethods.LVN_KEYDOWN:
                     if (CheckBoxes)
                     {
-                        NativeMethods.NMLVKEYDOWN lvkd = (NativeMethods.NMLVKEYDOWN)m.GetLParam(typeof(NativeMethods.NMLVKEYDOWN));
-                        if (lvkd.wVKey == (short)Keys.Space)
+                        ComCtl32.NMLVKEYDOWN* lvkd = (ComCtl32.NMLVKEYDOWN*)m.LParam;
+                        if (lvkd->wVKey == (short)Keys.Space)
                         {
                             ListViewItem focusedItem = FocusedItem;
                             if (focusedItem != null)

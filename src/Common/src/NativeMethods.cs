@@ -1815,14 +1815,6 @@ namespace System.Windows.Forms
             public IntPtr lParam = IntPtr.Zero;
         }
 
-        [StructLayout(LayoutKind.Sequential)]
-        public class NMLVKEYDOWN
-        {
-            public User32.NMHDR hdr;
-            public short wVKey = 0;
-            public uint flags = 0;
-        }
-
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
         public class LVHITTESTINFO
         {
