@@ -7,7 +7,6 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Design;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Windows.Forms.Layout;
 
 namespace System.Windows.Forms
@@ -422,73 +421,6 @@ namespace System.Windows.Forms
             }
 
             return (TabPage)c;
-        }
-
-        internal NativeMethods.TCITEM_T GetTCITEM()
-        {
-            var tcitem = new NativeMethods.TCITEM_T
-            {
-                mask = 0,
-                pszText = null,
-                cchTextMax = 0,
-                lParam = IntPtr.Zero
-            };
-
-            string text = Text;
-
-            PrefixAmpersands(ref text);
-            if (text != null)
-            {
-                tcitem.mask |= NativeMethods.TCIF_TEXT;
-                tcitem.pszText = text;
-                tcitem.cchTextMax = text.Length;
-            }
-
-            int imageIndex = ImageIndex;
-
-            tcitem.mask |= NativeMethods.TCIF_IMAGE;
-            tcitem.iImage = ImageIndexer.ActualIndex;
-            return tcitem;
-        }
-
-        private void PrefixAmpersands(ref string value)
-        {
-            // Due to a comctl32 problem, ampersands underline the next letter in the
-            // text string, but the accelerators don't work.
-            // So in this function, we prefix ampersands with another ampersand
-            // so that they actually appear as ampersands.
-            if (string.IsNullOrEmpty(value))
-            {
-                return;
-            }
-
-            // If there are no ampersands, we don't need to do anything here
-            if (value.IndexOf('&') < 0)
-            {
-                return;
-            }
-
-            // Insert extra ampersands
-            var newString = new StringBuilder();
-            for (int i = 0; i < value.Length; ++i)
-            {
-                if (value[i] == '&')
-                {
-                    if (i < value.Length - 1 && value[i + 1] == '&')
-                    {
-                        // Skip the second ampersand
-                        ++i;
-                    }
-
-                    newString.Append("&&");
-                }
-                else
-                {
-                    newString.Append(value[i]);
-                }
-            }
-
-            value = newString.ToString();
         }
 
         /// <summary>

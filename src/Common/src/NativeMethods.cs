@@ -784,8 +784,6 @@ namespace System.Windows.Forms
         TVN_BEGINRDRAG = ((0 - 400) - 57),
         TVN_BEGINLABELEDIT = ((0 - 400) - 59),
         TVN_ENDLABELEDIT = ((0 - 400) - 60),
-        TCIF_TEXT = 0x0001,
-        TCIF_IMAGE = 0x0002,
         TCN_SELCHANGE = ((0 - 550) - 1),
         TCN_SELCHANGING = ((0 - 550) - 2),
         TVM_SETBKCOLOR = (TV_FIRST + 29),
@@ -1539,18 +1537,6 @@ namespace System.Windows.Forms
             {
                 return "Left = " + left + " Top " + top + " Right = " + right + " Bottom = " + bottom;
             }
-        }
-
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-        public class TCITEM_T
-        {
-            public int mask;
-            public int dwState = 0;
-            public int dwStateMask = 0;
-            public string pszText;
-            public int cchTextMax;
-            public int iImage;
-            public IntPtr lParam;
         }
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]

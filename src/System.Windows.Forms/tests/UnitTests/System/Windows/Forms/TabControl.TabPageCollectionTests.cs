@@ -1520,11 +1520,11 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void TabPageCollection_IndexOf_NullValue_ThrowsArgumentNullException()
+        public void TabPageCollection_IndexOf_NullPage_ThrowsArgumentNullException()
         {
             using var owner = new TabControl();
             var collection = new TabControl.TabPageCollection(owner);
-            Assert.Throws<ArgumentNullException>("value", () => collection.IndexOf(null));
+            Assert.Throws<ArgumentNullException>("page", () => collection.IndexOf(null));
         }
 
         [WinFormsFact]
@@ -2812,19 +2812,12 @@ namespace System.Windows.Forms.Tests
         [WinFormsFact]
         public void TabPageCollection_Item_SetNull_ThrowsNullReferenceException()
         {
-            using var owner = new TabControl();
-            using var page = new TabPage();
+            var owner = new TabControl();
+            var page = new TabPage();
             var collection = new TabControl.TabPageCollection(owner);
             collection.Add(page);
 
-            try
-            {
-                Assert.Throws<NullReferenceException>(() => collection[0] = null);
-            }
-            finally
-            {
-                collection.Clear();
-            }
+            Assert.Throws<NullReferenceException>(() => collection[0] = null);
         }
         
         [WinFormsTheory]

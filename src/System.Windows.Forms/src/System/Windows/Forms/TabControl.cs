@@ -9,6 +9,7 @@ using System.Drawing;
 using System.Drawing.Design;
 using System.Globalization;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Windows.Forms.Layout;
 using static Interop;
 
@@ -1026,7 +1027,7 @@ namespace System.Windows.Forms
 
         internal int AddNativeTabPage(TabPage tabPage)
         {
-            int index = (int)SendMessage(ComCtl32.TCM.INSERTITEMW, _tabPageCount + 1, tabPage);
+            int index = (int)SendMessage(ComCtl32.TCM.INSERTITEMW, (IntPtr)(_tabPageCount + 1), tabPage);
             User32.PostMessageW(this, _tabBaseReLayoutMessage);
             return index;
         }
@@ -1287,7 +1288,7 @@ namespace System.Windows.Forms
 
             if (IsHandleCreated)
             {
-                int retIndex = (int)SendMessage(ComCtl32.TCM.INSERTITEMW, index, tabPage);
+                int retIndex = (int)SendMessage(ComCtl32.TCM.INSERTITEMW, (IntPtr)index, tabPage);
                 if (retIndex >= 0)
                 {
                     Insert(retIndex, tabPage);
@@ -1730,7 +1731,7 @@ namespace System.Windows.Forms
 
             if (IsHandleCreated)
             {
-                SendMessage(ComCtl32.TCM.SETITEMW, index, tabPage);
+                SendMessage(ComCtl32.TCM.SETITEMW, (IntPtr)index, tabPage);
             }
 
             // Make the Updated tab page the currently selected tab page
@@ -2190,10 +2191,65 @@ namespace System.Windows.Forms
 
         private void SetState(State state, bool value) => _tabControlState[(int)state] = value;
 
-        private IntPtr SendMessage(ComCtl32.TCM msg, int wParam, TabPage tabPage)
+        private unsafe IntPtr SendMessage(ComCtl32.TCM msg, IntPtr wParam, TabPage tabPage)
         {
-            NativeMethods.TCITEM_T tcitem = tabPage.GetTCITEM();
-            return UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)msg, wParam, tcitem);
+            var tcitem = new ComCtl32.TCITEMW();
+            string text = tabPage.Text;
+            PrefixAmpersands(ref text);
+            if (text != null)
+            {
+                tcitem.mask |= ComCtl32.TCIF.TEXT;
+                tcitem.cchTextMax = text.Length;
+            }
+
+            int imageIndex = tabPage.ImageIndex;
+            tcitem.mask |= ComCtl32.TCIF.IMAGE;
+            tcitem.iImage = tabPage.ImageIndexer.ActualIndex;
+
+            fixed (char* pText = text)
+            {
+                return User32.SendMessageW(this, (User32.WindowMessage)msg, wParam, ref tcitem);
+            }
+        }
+
+        private static void PrefixAmpersands(ref string value)
+        {
+            // Due to a comctl32 problem, ampersands underline the next letter in the
+            // text string, but the accelerators don't work.
+            // So in this function, we prefix ampersands with another ampersand
+            // so that they actually appear as ampersands.
+            if (string.IsNullOrEmpty(value))
+            {
+                return;
+            }
+
+            // If there are no ampersands, we don't need to do anything here
+            if (value.IndexOf('&') < 0)
+            {
+                return;
+            }
+
+            // Insert extra ampersands
+            var newString = new StringBuilder();
+            for (int i = 0; i < value.Length; ++i)
+            {
+                if (value[i] == '&')
+                {
+                    if (i < value.Length - 1 && value[i + 1] == '&')
+                    {
+                        // Skip the second ampersand
+                        ++i;
+                    }
+
+                    newString.Append("&&");
+                }
+                else
+                {
+                    newString.Append(value[i]);
+                }
+            }
+
+            value = newString.ToString();
         }
     }
 }
