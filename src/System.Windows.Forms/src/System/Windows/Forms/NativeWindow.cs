@@ -438,8 +438,8 @@ namespace System.Windows.Forms
                     IntPtr createResult = IntPtr.Zero;
                     int lastWin32Error = 0;
 
-                    // Parking window dpi awarness context need to match with dpi awarenss context of control being
-                    // parented to this parkign window. Otherwise, reparenting of control will fail.
+                    // Parking window dpi awareness context need to match with dpi awareness context of control being
+                    // parented to this parking window. Otherwise, reparenting of control will fail.
                     using (DpiHelper.EnterDpiAwarenessScope(DpiAwarenessContext))
                     {
                         IntPtr modHandle = Kernel32.GetModuleHandleW(null);
