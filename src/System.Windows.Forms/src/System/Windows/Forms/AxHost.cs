@@ -1138,13 +1138,10 @@ namespace System.Windows.Forms
             // destroy that window, these controls will crash trying to process WM_CHAR.
             // We now check to see if we are losing focus to a child, and if so, not call
             // UIDeactivate().
-            //
-
             bool uiDeactivate = (GetHandleNoCreate() != hwndFocus);
-
             if (uiDeactivate && IsHandleCreated)
             {
-                uiDeactivate = !UnsafeNativeMethods.IsChild(new HandleRef(this, GetHandleNoCreate()), new HandleRef(null, hwndFocus));
+                uiDeactivate = !User32.IsChild(new HandleRef(this, GetHandleNoCreate()), hwndFocus).IsTrue();
             }
 
             base.OnLostFocus(e);
@@ -1152,7 +1149,6 @@ namespace System.Windows.Forms
             {
                 UiDeactivate();
             }
-
         }
 
         private void OnNewSelection(object sender, EventArgs e)

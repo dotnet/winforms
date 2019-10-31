@@ -1162,7 +1162,7 @@ namespace System.Windows.Forms.Design.Behavior
                         IntPtr handle = adornerWindow.DesignerFrame.Handle;
 
                         // if it's us or one of our children, just process as normal
-                        if (adornerWindow.ProcessingDrag || (hWnd != handle && SafeNativeMethods.IsChild(new HandleRef(this, handle), new HandleRef(this, hWnd))))
+                        if (adornerWindow.ProcessingDrag || (hWnd != handle && User32.IsChild(new HandleRef(this, handle), hWnd).IsTrue()))
                         {
                             Debug.Assert(_thisProcessID != 0, "Didn't get our process id!");
 

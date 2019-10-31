@@ -3751,7 +3751,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 // Ensure that tooltips don't display when host application is not foreground app.
                 // Assume that we don't want to display the tooltips
                 IntPtr foregroundWindow = UnsafeNativeMethods.GetForegroundWindow();
-                if (UnsafeNativeMethods.IsChild(new HandleRef(null, foregroundWindow), new HandleRef(null, Handle)))
+                if (User32.IsChild(foregroundWindow, new HandleRef(this, Handle)).IsTrue())
                 {
                     // Don't show the tips if a dropdown is showing
                     if ((dropDownHolder == null || dropDownHolder.Component == null) || rowMoveCur == selectedRow)
