@@ -2,23 +2,21 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using static System.Windows.Forms.Design.UnsafeNativeMethods;
-
 namespace System.Windows.Forms.Design
 {
     internal class StringCollectionEditorTextBox : TextBox
     {
         private int currentRowIndex = 0;
 
-        private IRawElementProviderSimple uiaProvider;
+        private Interop.UiaCore.IRawElementProviderSimple uiaProvider;
 
-        public IRawElementProviderSimple UiaProvider
+        public Interop.UiaCore.IRawElementProviderSimple UiaProvider
         {
             get
             {
                 if (uiaProvider == null)
                 {
-                    uiaProvider = new TextBoxUiaProvider(this, this.CreateAccessibilityInstance());
+                    uiaProvider = new TextBoxUiaProvider(this, CreateAccessibilityInstance());
                 }
 
                 return uiaProvider;
@@ -72,7 +70,7 @@ namespace System.Windows.Forms.Design
             }
 
             var textBoxUiaProvider = UiaProvider as TextBoxUiaProvider;
-            textBoxUiaProvider.RaiseAutomationEvent(NativeMethods.UIA_AutomationFocusChangedEventId);
+            textBoxUiaProvider.RaiseAutomationEvent((int)Interop.UiaCore.UIA.AutomationFocusChangedEventId);
 
             int selectionStart = GetFirstCharIndexOfCurrentLine();
 
@@ -97,8 +95,8 @@ namespace System.Windows.Forms.Design
             // Select(selectionStart, selectionEnd - selectionStart + 1);
 
             textBoxUiaProvider.RaiseAutomationNotification(
-                NativeMethods.AutomationNotificationKind.Other,
-                NativeMethods.AutomationNotificationProcessing.All,
+                Interop.UiaCore.AutomationNotificationKind.Other,
+                Interop.UiaCore.AutomationNotificationProcessing.All,
                 stringEntryAnnouncement);
 
             currentRowIndex = GetLineFromCharIndex(selectionStart);
@@ -113,7 +111,7 @@ namespace System.Windows.Forms.Design
         {
             if (m.Msg == Interop.WindowMessages.WM_GETOBJECT && m.LParam == (IntPtr)(NativeMethods.UiaRootObjectId))
             {
-                m.Result = UnsafeNativeMethods.UiaReturnRawElementProvider(
+                m.Result = Interop.UiaCore.UiaReturnRawElementProvider(
                     new Runtime.InteropServices.HandleRef(this, Handle),
                     m.WParam,
                     m.LParam,
@@ -124,7 +122,7 @@ namespace System.Windows.Forms.Design
 
             if (m.Msg == Interop.WindowMessages.WM_DESTROY)
             {
-                UnsafeNativeMethods.UiaReturnRawElementProvider(new Runtime.InteropServices.HandleRef(this, Handle), new IntPtr(0), new IntPtr(0), null);
+                Interop.UiaCore.UiaReturnRawElementProvider(new Runtime.InteropServices.HandleRef(this, Handle), new IntPtr(0), new IntPtr(0), null);
             }
 
             base.WndProc(ref m);

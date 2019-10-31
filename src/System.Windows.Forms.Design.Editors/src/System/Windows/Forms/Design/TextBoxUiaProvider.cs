@@ -2,11 +2,11 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using static System.Windows.Forms.Design.UnsafeNativeMethods;
+using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms.Design
 {
-    internal class TextBoxUiaProvider : IRawElementProviderSimple
+    internal class TextBoxUiaProvider : Interop.UiaCore.IRawElementProviderSimple
     {
         private TextBox _owningTextBox;
         private AccessibleObject _defaultAccessibilityObject;
@@ -18,50 +18,48 @@ namespace System.Windows.Forms.Design
             _defaultAccessibilityObject = accessibilityObject;
         }
 
-        public IRawElementProviderSimple HostRawElementProvider
+        public Interop.UiaCore.IRawElementProviderSimple HostRawElementProvider
         {
             get
             {
-                IRawElementProviderSimple provider;
-                UnsafeNativeMethods.UiaHostProviderFromHwnd(new Runtime.InteropServices.HandleRef(this, _owningTextBox.Handle), out provider);
+                Interop.UiaCore.IRawElementProviderSimple provider;
+                Interop.UiaCore.UiaHostProviderFromHwnd(new Runtime.InteropServices.HandleRef(this, _owningTextBox.Handle), out provider);
                 return provider;
             }
         }
 
-        public ProviderOptions ProviderOptions
+        public Interop.UiaCore.ProviderOptions ProviderOptions
         {
             get
             {
-                return ProviderOptions.ServerSideProvider;
+                return Interop.UiaCore.ProviderOptions.ServerSideProvider;
             }
         }
 
-        public object GetPatternProvider(int patternId)
-        {
-            return null;
-        }
+        [return: MarshalAs(UnmanagedType.IUnknown)]
+        public object GetPatternProvider(Interop.UiaCore.UIA patternId) => null;
 
-        public object GetPropertyValue(int propertyId)
+        public object GetPropertyValue(Interop.UiaCore.UIA propertyId)
         {
             switch (propertyId)
             {
-                case NativeMethods.UIA_ControlTypePropertyId:
-                    return NativeMethods.UIA_EditControlTypeId;
-                case NativeMethods.UIA_NamePropertyId:
+                case Interop.UiaCore.UIA.ControlTypePropertyId:
+                    return Interop.UiaCore.UIA.EditControlTypeId;
+                case Interop.UiaCore.UIA.NamePropertyId:
                     return _defaultAccessibilityObject.Name;
-                case NativeMethods.UIA_AccessKeyPropertyId:
+                case Interop.UiaCore.UIA.AccessKeyPropertyId:
                     return _defaultAccessibilityObject.KeyboardShortcut ?? string.Empty;
-                case NativeMethods.UIA_HasKeyboardFocusPropertyId:
+                case Interop.UiaCore.UIA.HasKeyboardFocusPropertyId:
                     return (_defaultAccessibilityObject.State & AccessibleStates.Focused) == AccessibleStates.Focused;
-                case NativeMethods.UIA_IsKeyboardFocusablePropertyId:
+                case Interop.UiaCore.UIA.IsKeyboardFocusablePropertyId:
                     return (_defaultAccessibilityObject.State & AccessibleStates.Focusable) == AccessibleStates.Focusable;
-                case NativeMethods.UIA_IsEnabledPropertyId:
+                case Interop.UiaCore.UIA.IsEnabledPropertyId:
                     return _owningTextBox.Enabled;
-                case NativeMethods.UIA_HelpTextPropertyId:
+                case Interop.UiaCore.UIA.HelpTextPropertyId:
                     return _defaultAccessibilityObject.Help ?? string.Empty;
-                case NativeMethods.UIA_IsPasswordPropertyId:
+                case Interop.UiaCore.UIA.IsPasswordPropertyId:
                     return false;
-                case NativeMethods.UIA_IsOffscreenPropertyId:
+                case Interop.UiaCore.UIA.IsOffscreenPropertyId:
                     return (_defaultAccessibilityObject.State & AccessibleStates.Offscreen) == AccessibleStates.Offscreen;
             }
 
@@ -78,18 +76,18 @@ namespace System.Windows.Forms.Design
 
         public bool RaiseAutomationEvent(int eventId)
         {
-            if (UnsafeNativeMethods.UiaClientsAreListening())
+            if (Interop.UiaCore.UiaClientsAreListening() == Interop.BOOL.TRUE)
             {
-                int result = UnsafeNativeMethods.UiaRaiseAutomationEvent(this, eventId);
-                return result == NativeMethods.S_OK;
+                Interop.HRESULT result = Interop.UiaCore.UiaRaiseAutomationEvent(this, (Interop.UiaCore.UIA)eventId);
+                return result == Interop.HRESULT.S_OK;
             }
 
             return false;
         }
 
         public bool RaiseAutomationNotification(
-            NativeMethods.AutomationNotificationKind notificationKind,
-            NativeMethods.AutomationNotificationProcessing notificationProcessing,
+            Interop.UiaCore.AutomationNotificationKind notificationKind,
+            Interop.UiaCore.AutomationNotificationProcessing notificationProcessing,
             string notificationText)
         {
             if (!notificationEventAvailable)
@@ -97,16 +95,16 @@ namespace System.Windows.Forms.Design
                 return false;
             }
 
-            if (!UnsafeNativeMethods.UiaClientsAreListening())
+            if (Interop.UiaCore.UiaClientsAreListening() == Interop.BOOL.FALSE)
             {
                 return false;
             }
 
-            int result = NativeMethods.S_FALSE;
+            Interop.HRESULT result = Interop.HRESULT.S_FALSE;
             try
             {
                 // The activityId can be any string. It cannot be null. It isn’t used currently.
-                result = UnsafeNativeMethods.UiaRaiseNotificationEvent(
+                result = Interop.UiaCore.UiaRaiseNotificationEvent(
                 this,
                 notificationKind,
                 notificationProcessing,

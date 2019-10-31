@@ -78,6 +78,16 @@
     <Compile Include="..\..\Common\src\Interop\Shell32\Interop.SHBrowseForFolder.cs" Link="Interop\Shell32\Interop.SHBrowseForFolder.cs" />
     <Compile Include="..\..\Common\src\Interop\Shell32\Interop.SHGetPathFromIDListLongPath.cs" Link="Interop\Shell32\Interop.SHGetPathFromIDListLongPath.cs" />
     <Compile Include="..\..\Common\src\Interop\Shell32\Interop.SHGetSpecialFolderLocation.cs" Link="Interop\Shell32\Interop.SHGetSpecialFolderLocation.cs" />
+    <Compile Include="..\..\Common\src\Interop\UiaCore\Interop.AutomationNotificationKind.cs" Link="Interop\UiaCore\Interop.AutomationNotificationKind.cs" />
+    <Compile Include="..\..\Common\src\Interop\UiaCore\Interop.AutomationNotificationProcessing.cs" Link="Interop\UiaCore\Interop.AutomationNotificationProcessing.cs" />
+    <Compile Include="..\..\Common\src\Interop\UiaCore\Interop.IRawElementProviderSimple.cs" Link="Interop\UiaCore\Interop.IRawElementProviderSimple.cs" />
+    <Compile Include="..\..\Common\src\Interop\UiaCore\Interop.ProviderOptions.cs" Link="Interop\UiaCore\Interop.ProviderOptions.cs" />
+    <Compile Include="..\..\Common\src\Interop\UiaCore\Interop.UIA.cs" Link="Interop\UiaCore\Interop.UIA.cs" />
+    <Compile Include="..\..\Common\src\Interop\UiaCore\Interop.UiaClientsAreListening.cs" Link="Interop\UiaCore\Interop.UiaClientsAreListening.cs=" />
+    <Compile Include="..\..\Common\src\Interop\UiaCore\Interop.UiaHostProviderFromHwnd.cs" Link="Interop\UiaCore\Interop.UiaHostProviderFromHwnd.cs=" />
+    <Compile Include="..\..\Common\src\Interop\UiaCore\Interop.UiaRaiseAutomationEvent.cs" Link="Interop\UiaCore\Interop.UiaRaiseAutomationEvent.cs=" />
+    <Compile Include="..\..\Common\src\Interop\UiaCore\Interop.UiaRaiseNotificationEvent.cs" Link="Interop\UiaCore\Interop.UiaRaiseNotificationEvent.cs=" />
+    <Compile Include="..\..\Common\src\Interop\UiaCore\Interop.UiaReturnRawElementProvider.cs" Link="Interop\UiaCore\Interop.UiaReturnRawElementProvider.cs=" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.DrawText.cs" Link="Interop\User32\Interop.DrawText.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.GetWindowText.cs" Link="Interop\User32\Interop.GetWindowText.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.GetDC.cs" Link="Interop\User32\Interop.GetDC.cs" />
