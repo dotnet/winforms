@@ -918,7 +918,10 @@ namespace System.Windows.Forms
                     // If it doesn't, that means that the host
                     // won't reflect messages back to us.
                     HWNDParent = hwndParent;
-                    User32.SetParent(new HandleRef(_control, _control.Handle), hwndParent);
+                    if (User32.SetParent(new HandleRef(_control, _control.Handle), hwndParent) == IntPtr.Zero)
+                    {
+                        throw new Win32Exception(Marshal.GetLastWin32Error(), SR.Win32SetParentFailed);
+                    }
 
                     // Now create our handle if it hasn't already been done.
                     _control.CreateControl();
