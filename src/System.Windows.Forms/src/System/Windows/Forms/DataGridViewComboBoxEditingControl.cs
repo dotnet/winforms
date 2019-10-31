@@ -161,7 +161,7 @@ namespace System.Windows.Forms
         {
             base.OnHandleCreated(e);
 
-            dataGridView.SetAccessibleObjectParent(this.AccessibilityObject);
+            dataGridView?.SetAccessibleObjectParent(this.AccessibilityObject);
         }
     }
 
