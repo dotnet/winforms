@@ -33,7 +33,7 @@ namespace System.Windows.Forms
                 {
                     if (_owner.IsHandleCreated)
                     {
-                        _owner.AddTabPage(tabPage, tabPage.GetTCITEM());
+                        _owner.AddTabPage(tabPage);
                     }
                     else
                     {

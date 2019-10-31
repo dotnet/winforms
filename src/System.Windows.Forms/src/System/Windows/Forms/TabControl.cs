@@ -1013,9 +1013,9 @@ namespace System.Windows.Forms
             remove => base.Paint -= value;
         }
 
-        internal int AddTabPage(TabPage tabPage, NativeMethods.TCITEM_T tcitem)
+        internal int AddTabPage(TabPage tabPage)
         {
-            int index = AddNativeTabPage(tcitem);
+            int index = AddNativeTabPage(tabPage);
             if (index >= 0)
             {
                 Insert(index, tabPage);
@@ -1024,9 +1024,9 @@ namespace System.Windows.Forms
             return index;
         }
 
-        internal int AddNativeTabPage(NativeMethods.TCITEM_T tcitem)
+        internal int AddNativeTabPage(TabPage tabPage)
         {
-            int index = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)ComCtl32.TCM.INSERTITEMW, _tabPageCount + 1, tcitem);
+            int index = (int)SendMessage(ComCtl32.TCM.INSERTITEMW, _tabPageCount + 1, tabPage);
             User32.PostMessageW(this, _tabBaseReLayoutMessage);
             return index;
         }
@@ -1285,17 +1285,14 @@ namespace System.Windows.Forms
                 throw new ArgumentNullException(nameof(tabPage));
             }
 
-            int retIndex;
             if (IsHandleCreated)
             {
-                NativeMethods.TCITEM_T tcitem = tabPage.GetTCITEM();
-                retIndex = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)ComCtl32.TCM.INSERTITEMW, index, tcitem);
+                int retIndex = (int)SendMessage(ComCtl32.TCM.INSERTITEMW, index, tabPage);
                 if (retIndex >= 0)
                 {
                     Insert(retIndex, tabPage);
                 }
             }
-
         }
 
         /// <summary>
@@ -1363,7 +1360,7 @@ namespace System.Windows.Forms
             //
             foreach (TabPage page in TabPages)
             {
-                AddNativeTabPage(page.GetTCITEM());
+                AddNativeTabPage(page);
             }
 
             // Resize the pages
@@ -1724,7 +1721,7 @@ namespace System.Windows.Forms
 
         }
 
-        internal void SetTabPage(int index, TabPage tabPage, NativeMethods.TCITEM_T tcitem)
+        internal void SetTabPage(int index, TabPage tabPage)
         {
             if (index < 0 || index >= _tabPageCount)
             {
@@ -1733,8 +1730,9 @@ namespace System.Windows.Forms
 
             if (IsHandleCreated)
             {
-                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)ComCtl32.TCM.SETITEMW, index, tcitem);
+                SendMessage(ComCtl32.TCM.SETITEMW, index, tabPage);
             }
+
             // Make the Updated tab page the currently selected tab page
             if (DesignMode && IsHandleCreated)
             {
@@ -1992,7 +1990,7 @@ namespace System.Windows.Forms
         internal void UpdateTab(TabPage tabPage)
         {
             int index = FindTabPage(tabPage);
-            SetTabPage(index, tabPage, tabPage.GetTCITEM());
+            SetTabPage(index, tabPage);
 
             // It's possible that changes to this TabPage will change the DisplayRectangle of the
             // TabControl, so invalidate and resize the size of this page.
@@ -2191,5 +2189,11 @@ namespace System.Windows.Forms
         private bool GetState(State state) => _tabControlState[(int)state];
 
         private void SetState(State state, bool value) => _tabControlState[(int)state] = value;
+
+        private IntPtr SendMessage(ComCtl32.TCM msg, int wParam, TabPage tabPage)
+        {
+            NativeMethods.TCITEM_T tcitem = tabPage.GetTCITEM();
+            return UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)msg, wParam, tcitem);
+        }
     }
 }
