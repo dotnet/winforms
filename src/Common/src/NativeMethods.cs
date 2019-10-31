@@ -121,28 +121,6 @@ namespace System.Windows.Forms
         CB_FINDSTRINGEXACT = 0x0158,
         CB_GETDROPPEDWIDTH = 0x015F,
         CB_SETDROPPEDWIDTH = 0x0160,
-        CDRF_DODEFAULT = 0x00000000,
-        CDRF_NEWFONT = 0x00000002,
-        CDRF_SKIPDEFAULT = 0x00000004,
-        CDRF_NOTIFYPOSTPAINT = 0x00000010,
-        CDRF_NOTIFYITEMDRAW = 0x00000020,
-        CDRF_NOTIFYSUBITEMDRAW = CDRF_NOTIFYITEMDRAW,
-        CDDS_PREPAINT = 0x00000001,
-        CDDS_POSTPAINT = 0x00000002,
-        CDDS_ITEM = 0x00010000,
-        CDDS_SUBITEM = 0x00020000,
-        CDDS_ITEMPREPAINT = (0x00010000 | 0x00000001),
-        CDDS_ITEMPOSTPAINT = (0x00010000 | 0x00000002),
-        CDIS_SELECTED = 0x0001,
-        CDIS_GRAYED = 0x0002,
-        CDIS_DISABLED = 0x0004,
-        CDIS_CHECKED = 0x0008,
-        CDIS_FOCUS = 0x0010,
-        CDIS_DEFAULT = 0x0020,
-        CDIS_HOT = 0x0040,
-        CDIS_MARKED = 0x0080,
-        CDIS_INDETERMINATE = 0x0100,
-        CDIS_SHOWKEYBOARDCUES = 0x0200,
         CCM_SETVERSION = (0x2000 + 0x7),
         CCM_GETVERSION = (0x2000 + 0x8),
         CCS_NORESIZE = 0x00000004,
@@ -456,8 +434,6 @@ namespace System.Windows.Forms
         LVA_ALIGNLEFT = 0x0001,
         LVA_ALIGNTOP = 0x0002,
         LVA_SNAPTOGRID = 0x0005,
-        LVCDI_ITEM = 0x0000,
-        LVCDI_GROUP = 0x00000001,
         LVCF_FMT = 0x0001,
         LVCF_WIDTH = 0x0002,
         LVCF_TEXT = 0x0004,
@@ -465,21 +441,6 @@ namespace System.Windows.Forms
         LVCF_IMAGE = 0x0010,
         LVCF_ORDER = 0x0020,
         LVCFMT_IMAGE = 0x0800,
-        LVGA_HEADER_LEFT = 0x00000001,
-        LVGA_HEADER_CENTER = 0x00000002,
-        LVGA_HEADER_RIGHT = 0x00000004,
-        LVGA_FOOTER_LEFT = 0x00000008,
-        LVGA_FOOTER_CENTER = 0x00000010,
-        LVGA_FOOTER_RIGHT = 0x00000020,
-        LVGF_NONE = 0x00000000,
-        LVGF_HEADER = 0x00000001,
-        LVGF_FOOTER = 0x00000002,
-        LVGF_STATE = 0x00000004,
-        LVGF_ALIGN = 0x00000008,
-        LVGF_GROUPID = 0x00000010,
-        LVGS_NORMAL = 0x00000000,
-        LVGS_COLLAPSED = 0x00000001,
-        LVGS_HIDDEN = 0x00000002,
         LVIM_AFTER = 0x00000001,
         LVTVIF_FIXEDSIZE = 0x00000003,
         LVTVIM_TILESIZE = 0x00000001,
@@ -1825,27 +1786,6 @@ namespace System.Windows.Forms
             public IntPtr hItem = IntPtr.Zero;
         }
 
-        [StructLayout(LayoutKind.Sequential)]
-        public class NMTVCUSTOMDRAW
-        {
-            public NMCUSTOMDRAW nmcd;
-            public int clrText;
-            public int clrTextBk;
-            public int iLevel = 0;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public struct NMCUSTOMDRAW
-        {
-            public User32.NMHDR nmcd;
-            public int dwDrawStage;
-            public IntPtr hdc;
-            public RECT rc;
-            public IntPtr dwItemSpec;
-            public int uItemState;
-            public IntPtr lItemlParam;
-        }
-
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
         public class MCHITTESTINFO
         {
@@ -1861,25 +1801,6 @@ namespace System.Windows.Forms
             public short st_wMinute = 0;
             public short st_wSecond = 0;
             public short st_wMilliseconds = 0;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public struct NMLVCUSTOMDRAW
-        {
-            public NMCUSTOMDRAW nmcd;
-            public int clrText;
-            public int clrTextBk;
-            public int iSubItem;
-            public int dwItemType;
-            // Item Custom Draw
-            public int clrFace;
-            public int iIconEffect;
-            public int iIconPhase;
-            public int iPartId;
-            public int iStateId;
-            // Group Custom Draw
-            public RECT rcText;
-            public uint uAlign;
         }
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
@@ -2007,26 +1928,6 @@ namespace System.Windows.Forms
             public int iSubItem = 0;
             public int iImage;
             public int iOrder = 0;
-        }
-
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
-        public class LVGROUP
-        {
-            public uint cbSize = (uint)Marshal.SizeOf<LVGROUP>();
-            public uint mask;
-            public IntPtr pszHeader;
-            public int cchHeader;
-            public IntPtr pszFooter = IntPtr.Zero;
-            public int cchFooter = 0;
-            public int iGroupId;
-            public uint stateMask = 0;
-            public uint state = 0;
-            public uint uAlign;
-
-            public override string ToString()
-            {
-                return "LVGROUP: header = " + pszHeader.ToString() + ", iGroupId = " + iGroupId.ToString(CultureInfo.InvariantCulture);
-            }
         }
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
