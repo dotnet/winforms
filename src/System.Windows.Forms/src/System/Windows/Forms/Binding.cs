@@ -83,7 +83,6 @@ namespace System.Windows.Forms
             _formatString = formatString;
             _nullValue = nullValue;
             _formatInfo = formatInfo;
-            _formattingEnabled = formattingEnabled;
             DataSourceUpdateMode = dataSourceUpdateMode;
 
             CheckBinding();
