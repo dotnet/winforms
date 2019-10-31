@@ -306,59 +306,59 @@ namespace System.Windows.Forms
                 //
                 if (Multiline == true)
                 {
-                    cp.Style |= NativeMethods.TCS_MULTILINE;
+                    cp.Style |= (int)ComCtl32.TCS.MULTILINE;
                 }
 
                 if (_drawMode == TabDrawMode.OwnerDrawFixed)
                 {
-                    cp.Style |= NativeMethods.TCS_OWNERDRAWFIXED;
+                    cp.Style |= (int)ComCtl32.TCS.OWNERDRAWFIXED;
                 }
 
                 if (ShowToolTips && !DesignMode)
                 {
-                    cp.Style |= NativeMethods.TCS_TOOLTIPS;
+                    cp.Style |= (int)ComCtl32.TCS.TOOLTIPS;
                 }
 
                 if (_alignment == TabAlignment.Bottom ||
                     _alignment == TabAlignment.Right)
                 {
-                    cp.Style |= NativeMethods.TCS_BOTTOM;
+                    cp.Style |= (int)ComCtl32.TCS.BOTTOM;
                 }
 
                 if (_alignment == TabAlignment.Left ||
                     _alignment == TabAlignment.Right)
                 {
-                    cp.Style |= NativeMethods.TCS_VERTICAL | NativeMethods.TCS_MULTILINE;
+                    cp.Style |= (int)ComCtl32.TCS.VERTICAL | (int)ComCtl32.TCS.MULTILINE;
                 }
 
                 if (GetState(State.HotTrack))
                 {
-                    cp.Style |= NativeMethods.TCS_HOTTRACK;
+                    cp.Style |= (int)ComCtl32.TCS.HOTTRACK;
                 }
 
                 if (_appearance == TabAppearance.Normal)
                 {
-                    cp.Style |= NativeMethods.TCS_TABS;
+                    cp.Style |= (int)ComCtl32.TCS.TABS;
                 }
                 else
                 {
-                    cp.Style |= NativeMethods.TCS_BUTTONS;
+                    cp.Style |= (int)ComCtl32.TCS.BUTTONS;
                     if (_appearance == TabAppearance.FlatButtons && _alignment == TabAlignment.Top)
                     {
-                        cp.Style |= NativeMethods.TCS_FLATBUTTONS;
+                        cp.Style |= (int)ComCtl32.TCS.FLATBUTTONS;
                     }
                 }
 
                 switch (_sizeMode)
                 {
                     case TabSizeMode.Normal:
-                        cp.Style |= NativeMethods.TCS_RAGGEDRIGHT;
+                        cp.Style |= (int)ComCtl32.TCS.RAGGEDRIGHT;
                         break;
                     case TabSizeMode.FillToRight:
-                        cp.Style |= NativeMethods.TCS_RIGHTJUSTIFY;
+                        cp.Style |= (int)ComCtl32.TCS.RIGHTJUSTIFY;
                         break;
                     case TabSizeMode.Fixed:
-                        cp.Style |= NativeMethods.TCS_FIXEDWIDTH;
+                        cp.Style |= (int)ComCtl32.TCS.FIXEDWIDTH;
                         break;
                 }
 
