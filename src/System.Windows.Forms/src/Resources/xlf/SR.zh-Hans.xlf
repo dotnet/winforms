@@ -10881,6 +10881,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">宽度必须大于 MinWidth。</target>
         <note />
       </trans-unit>
+      <trans-unit id="Win32SetParentFailed">
+        <source>Failed to set Win32 parent window of the Control.</source>
+        <target state="new">Failed to set Win32 parent window of the Control.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="Win32WindowAlreadyCreated">
         <source>SetCompatibleTextRenderingDefault must be called before the first IWin32Window object is created in the application.</source>
         <target state="translated">在应用程序中创建第一个 IWin32Window 对象之前，必须调用 SetCompatibleTextRenderingDefault。</target>

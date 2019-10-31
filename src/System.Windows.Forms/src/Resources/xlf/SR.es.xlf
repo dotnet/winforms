@@ -10881,6 +10881,11 @@ El seguimiento de la pila donde tuvo lugar la operación no válida fue:
         <target state="translated">El ancho debe ser mayor que MinWidth.</target>
         <note />
       </trans-unit>
+      <trans-unit id="Win32SetParentFailed">
+        <source>Failed to set Win32 parent window of the Control.</source>
+        <target state="new">Failed to set Win32 parent window of the Control.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="Win32WindowAlreadyCreated">
         <source>SetCompatibleTextRenderingDefault must be called before the first IWin32Window object is created in the application.</source>
         <target state="translated">SetCompatibleTextRenderingDefault se debe llamar antes de crear el primer objeto IWin32Window en la aplicación.</target>

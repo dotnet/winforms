@@ -7497,7 +7497,10 @@ namespace System.Windows.Forms
             {
                 if (IsHandleCreated)
                 {
-                    User32.SetParent(new HandleRef(this, Handle), new HandleRef(parent, parent.Handle));
+                    if (User32.SetParent(new HandleRef(this, Handle), new HandleRef(parent, parent.Handle)) == IntPtr.Zero)
+                    {
+                        throw new Win32Exception(Marshal.GetLastWin32Error(), SR.Win32SetParentFailed);
+                    }
                     UpdateZOrder();
                 }
             }
@@ -9782,6 +9785,7 @@ namespace System.Windows.Forms
                     }
 
                     HandleRef parentHandle = new HandleRef(this, User32.GetParent(this));
+                    bool recreationSuccessful = false;
 
                     try
                     {
@@ -9824,23 +9828,43 @@ namespace System.Windows.Forms
                             // do the main work of recreating the handle
                             DestroyHandle();
                             CreateHandle();
+                            // Note that CreateHandle --> _window.CreateHandle may fail due to DPI awareness setting.
+                            // By carefully choosing the correct parking window / keeping this and this.Parent DPI awareness untouched,
+                            // the call shouldn't fail.
+                            // However, it will be another story if external dervied class messes with this.CreateParams.Parent.
+                            recreationSuccessful = true;
                         }
                         finally
                         {
                             _state &= ~States.Recreate;
-
-                            // inform children that their parent's handle has recreated
-                            if (controlSnapshot != null)
+                            // inform children that their parent's handle has recreated.
+                            if (recreationSuccessful)
                             {
-                                for (int i = 0; i < controlSnapshot.Length; i++)
+                                // childControl.OnParentHandleRecreated will access this.Handle.
+                                // this.Handle is valid only if CreateHandle is successful.
+                                // Do not go through this if CreateHandle fails (and an Exception is probably on its way bubbling up).
+                                if (controlSnapshot != null)
                                 {
-                                    Control childControl = controlSnapshot[i];
-                                    if (childControl != null && childControl.IsHandleCreated)
+                                    for (int i = 0; i < controlSnapshot.Length; i++)
                                     {
-                                        // SetParent back to the new Parent handle
-                                        childControl.OnParentHandleRecreated();
+                                        Control childControl = controlSnapshot[i];
+                                        if (childControl != null && childControl.IsHandleCreated)
+                                        {
+                                            // SetParent back to the new Parent handle
+                                            childControl.OnParentHandleRecreated();
+                                            // If a control fails to re-parent itself,
+                                            // It and its next siblings will keep States.ParentRecreating state, parked in ParkingWindow.
+                                            // We let the error bubble up immediately.
+                                        }
                                     }
                                 }
+                            }
+                            else if (_window.Handle == IntPtr.Zero)
+                            {
+                                // this.DestroyHandle succeeded, but CreateHandle failed.
+                                // The control is actually destroyed.
+                                created = false;
+                                SetState(States.Created, false);
                             }
                         }
                         if (created)
@@ -9850,14 +9874,19 @@ namespace System.Windows.Forms
                     }
                     finally
                     {
-                        if (parentHandle.Handle != IntPtr.Zero                               // the parent was not null
-                            && (FromHandle(parentHandle.Handle) == null || _parent == null) // but wasnt a windows forms window
+                        if (recreationSuccessful
+                            && parentHandle.Handle != IntPtr.Zero                               // the parent was not null
+                            && (FromHandle(parentHandle.Handle) == null || _parent == null)     // but wasnt a windows forms window
                             && UnsafeNativeMethods.IsWindow(parentHandle))
                         {                 // and still is a window
                             // correctly parent back up to where we were before.
                             // if we were parented to a proper windows forms control, CreateControl would have properly parented
                             // us back.
-                            User32.SetParent(new HandleRef(this, Handle), parentHandle);
+                            if (User32.SetParent(new HandleRef(this, Handle), parentHandle) == IntPtr.Zero)
+                            {
+                                // Somehow we failed to SetParent due to, e.g., different DPI awareness setting.
+                                throw new Win32Exception(Marshal.GetLastWin32Error(), SR.Win32SetParentFailed);
+                            }
                         }
                     }
 
@@ -10918,7 +10947,12 @@ namespace System.Windows.Forms
                         }
                         else
                         {
-                            User32.SetParent(new HandleRef(_window, Handle), value);
+                            if (User32.SetParent(new HandleRef(_window, Handle), value) == IntPtr.Zero)
+                            {
+                                // Somehow we failed to SetParent due to, e.g., different DPI awareness setting.
+                                throw new Win32Exception(Marshal.GetLastWin32Error(), SR.Win32SetParentFailed);
+                                // Throwing exception will also keep the handle parked inside ParkingWindow.
+                            }
                             if (_parent != null)
                             {
                                 _parent.UpdateChildZOrder(this);
@@ -10932,7 +10966,10 @@ namespace System.Windows.Forms
                     // The handle was previously parented to the parking window. Its TopLevel property was
                     // then changed to true so the above call to GetParent returns null even though the parent of the control is
                     // not null. We need to explicitly set the parent to null.
-                    User32.SetParent(new HandleRef(_window, Handle), IntPtr.Zero);
+                    if (User32.SetParent(new HandleRef(_window, Handle), IntPtr.Zero) == IntPtr.Zero)
+                    {
+                        throw new Win32Exception(Marshal.GetLastWin32Error(), SR.Win32SetParentFailed);
+                    }
                     Application.UnparkHandle(new HandleRef(_window, Handle), _window.DpiAwarenessContext);
                 }
             }

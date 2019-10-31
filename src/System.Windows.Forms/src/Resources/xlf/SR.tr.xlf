@@ -10881,6 +10881,11 @@ Geçersiz işlemin gerçekleştiği yığın izi:
         <target state="translated">Width değeri MinWidth değerinden büyük olmalı.</target>
         <note />
       </trans-unit>
+      <trans-unit id="Win32SetParentFailed">
+        <source>Failed to set Win32 parent window of the Control.</source>
+        <target state="new">Failed to set Win32 parent window of the Control.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="Win32WindowAlreadyCreated">
         <source>SetCompatibleTextRenderingDefault must be called before the first IWin32Window object is created in the application.</source>
         <target state="translated">Uygulamada ilk IWin32Window nesnesi oluşturulmadan önce SetCompatibleTextRenderingDefault çağrılmalıdır.</target>
