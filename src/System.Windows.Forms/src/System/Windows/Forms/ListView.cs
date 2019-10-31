@@ -6364,8 +6364,8 @@ namespace System.Windows.Forms
 
                 case NativeMethods.LVN_ODCACHEHINT:
                     // tell the user to prepare the cache:
-                    NativeMethods.NMLVCACHEHINT cacheHint = (NativeMethods.NMLVCACHEHINT)m.GetLParam(typeof(NativeMethods.NMLVCACHEHINT));
-                    OnCacheVirtualItems(new CacheVirtualItemsEventArgs(cacheHint.iFrom, cacheHint.iTo));
+                    ComCtl32.NMLVCACHEHINT* cacheHint = (ComCtl32.NMLVCACHEHINT*)m.LParam;
+                    OnCacheVirtualItems(new CacheVirtualItemsEventArgs(cacheHint->iFrom, cacheHint->iTo));
                     break;
 
                 default:

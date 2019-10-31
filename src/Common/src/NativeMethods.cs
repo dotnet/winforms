@@ -1943,14 +1943,6 @@ namespace System.Windows.Forms
         }
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-        public class NMLVCACHEHINT
-        {
-            public User32.NMHDR hdr;
-            public int iFrom = 0;
-            public int iTo = 0;
-        }
-
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
         public class NMLVDISPINFO
         {
             public User32.NMHDR hdr;
