@@ -1957,16 +1957,6 @@ namespace System.Windows.Forms
         }
 
         [StructLayout(LayoutKind.Sequential)]
-        public class NMLVODSTATECHANGE
-        {
-            public User32.NMHDR hdr;
-            public int iFrom = 0;
-            public int iTo = 0;
-            public ComCtl32.LVIS uNewState;
-            public ComCtl32.LVIS uOldState;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
         public class CLIENTCREATESTRUCT
         {
             public IntPtr hWindowMenu;

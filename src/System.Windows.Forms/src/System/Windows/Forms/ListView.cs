@@ -6436,15 +6436,13 @@ namespace System.Windows.Forms
                     {
                         if (VirtualMode && m.LParam != IntPtr.Zero)
                         {
-                            NativeMethods.NMLVODSTATECHANGE odStateChange = (NativeMethods.NMLVODSTATECHANGE)m.GetLParam(typeof(NativeMethods.NMLVODSTATECHANGE));
-                            bool selectedChanged = (odStateChange.uNewState & ComCtl32.LVIS.SELECTED) != (odStateChange.uOldState & ComCtl32.LVIS.SELECTED);
+                            ComCtl32.NMLVODSTATECHANGE* odStateChange = (ComCtl32.NMLVODSTATECHANGE*)m.LParam;
+                            bool selectedChanged = (odStateChange->uNewState & ComCtl32.LVIS.SELECTED) != (odStateChange->uOldState & ComCtl32.LVIS.SELECTED);
                             if (selectedChanged)
                             {
                                 // we have to substract 1 from iTo
-                                //
-                                //
-                                int iTo = odStateChange.iTo;
-                                ListViewVirtualItemsSelectionRangeChangedEventArgs lvvisrce = new ListViewVirtualItemsSelectionRangeChangedEventArgs(odStateChange.iFrom, iTo, (odStateChange.uNewState & ComCtl32.LVIS.SELECTED) != 0);
+                                int iTo = odStateChange->iTo;
+                                ListViewVirtualItemsSelectionRangeChangedEventArgs lvvisrce = new ListViewVirtualItemsSelectionRangeChangedEventArgs(odStateChange->iFrom, iTo, (odStateChange->uNewState & ComCtl32.LVIS.SELECTED) != 0);
                                 OnVirtualItemsSelectionRangeChanged(lvvisrce);
                             }
                         }
