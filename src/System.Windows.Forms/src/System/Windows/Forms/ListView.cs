@@ -6451,8 +6451,8 @@ namespace System.Windows.Forms
                     {
                         if (ShowItemToolTips && m.LParam != IntPtr.Zero)
                         {
-                            NativeMethods.NMLVGETINFOTIP infoTip = (NativeMethods.NMLVGETINFOTIP)m.GetLParam(typeof(NativeMethods.NMLVGETINFOTIP));
-                            ListViewItem lvi = Items[infoTip.item];
+                            ComCtl32.NMLVGETINFOTIPW* infoTip = (ComCtl32.NMLVGETINFOTIPW*)m.LParam;
+                            ListViewItem lvi = Items[infoTip->item];
                             if (lvi != null && !string.IsNullOrEmpty(lvi.ToolTipText))
                             {
                                 // Setting the max width has the added benefit of enabling multiline tool tips
@@ -6461,9 +6461,7 @@ namespace System.Windows.Forms
                                 // UNICODE. Use char.
                                 // we need to copy the null terminator character ourselves
                                 char[] charBuf = (lvi.ToolTipText + "\0").ToCharArray();
-                                Marshal.Copy(charBuf, 0, infoTip.lpszText, Math.Min(charBuf.Length, infoTip.cchTextMax));
-
-                                Marshal.StructureToPtr(infoTip, (IntPtr)m.LParam, false);
+                                Marshal.Copy(charBuf, 0, infoTip->lpszText, Math.Min(charBuf.Length, infoTip->cchTextMax));
                             }
                         }
                     }

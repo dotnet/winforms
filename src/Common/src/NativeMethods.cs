@@ -1804,18 +1804,6 @@ namespace System.Windows.Forms
         }
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-        public class NMLVGETINFOTIP
-        {
-            public User32.NMHDR nmhdr;
-            public int flags = 0;
-            public IntPtr lpszText = IntPtr.Zero;
-            public int cchTextMax = 0;
-            public int item = 0;
-            public int subItem = 0;
-            public IntPtr lParam = IntPtr.Zero;
-        }
-
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
         public class LVHITTESTINFO
         {
             public int pt_x;
