@@ -1763,66 +1763,6 @@ namespace System.Windows.Forms
             public static extern int SHILCreateFromPath([MarshalAs(UnmanagedType.LPWStr)]string pszPath, out IntPtr ppIdl, ref uint rgflnOut);
         }
 
-        [ComVisible(true)]
-        [Guid("B722BCC6-4E68-101B-A2BC-00AA00404770")]
-        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IOleDocumentView
-        {
-            [PreserveSig]
-            HRESULT SetInPlaceSite(
-                Ole32.IOleInPlaceSite pIPSite);
-
-            [PreserveSig]
-            HRESULT GetInPlaceSite(
-                out Ole32.IOleInPlaceSite ppIPSite);
-
-            [return: MarshalAs(UnmanagedType.Interface)]
-            object GetDocument();
-
-            void SetRect(
-                 [In]
-                    ref RECT prcView);
-
-            void GetRect(
-                 [In, Out]
-                    ref RECT prcView);
-
-            void SetRectComplex(
-                 [In]
-                    RECT prcView,
-                 [In]
-                    RECT prcHScroll,
-                 [In]
-                    RECT prcVScroll,
-                 [In]
-                    RECT prcSizeBox);
-
-            void Show(bool fShow);
-
-            [PreserveSig]
-            int UIActivate(bool fUIActivate);
-
-            void Open();
-
-            [PreserveSig]
-            int Close(
-                 [In, MarshalAs(UnmanagedType.U4)]
-                    int dwReserved);
-
-            void SaveViewState(
-                 [In, MarshalAs(UnmanagedType.Interface)]
-                    IStream pstm);
-
-            void ApplyViewState(
-                 [In, MarshalAs(UnmanagedType.Interface)]
-                    IStream pstm);
-
-            [PreserveSig]
-            HRESULT Clone(
-                Ole32.IOleInPlaceSite pIPSiteNew,
-                out IOleDocumentView ppViewNew);
-        }
-
         /// <summary>
         ///  This class provides static methods to create, activate and deactivate the theming scope.
         /// </summary>
