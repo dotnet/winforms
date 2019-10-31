@@ -1341,10 +1341,8 @@ namespace System.Windows.Forms
                 Type editingControlType = DataGridView.EditingControl.GetType();
 
                 return
-                    (editingControlType == typeof(DataGridViewComboBoxEditingControl) &&
-                    !editingControlType.IsSubclassOf(typeof(DataGridViewComboBoxEditingControl))) ||
-                    (editingControlType == typeof(DataGridViewTextBoxEditingControl) &&
-                    !editingControlType.IsSubclassOf(typeof(DataGridViewTextBoxEditingControl)));
+                    (editingControlType == typeof(DataGridViewComboBoxEditingControl) && !editingControlType.IsSubclassOf(typeof(DataGridViewComboBoxEditingControl))) ||
+                    (editingControlType == typeof(DataGridViewTextBoxEditingControl) && !editingControlType.IsSubclassOf(typeof(DataGridViewTextBoxEditingControl)));
             }
         }
 
