@@ -1345,8 +1345,11 @@ namespace System.Windows.Forms
                                         IntPtr dc = offscreen.GetHdc();
                                         try
                                         {
-                                            SafeNativeMethods.DrawFrameControl(new HandleRef(offscreen, dc), ref rcCheck,
-                                                                               NativeMethods.DFC_MENU, NativeMethods.DFCS_MENUCHECK);
+                                            User32.DrawFrameControl(
+                                                new HandleRef(offscreen, dc),
+                                                ref rcCheck,
+                                                User32.DFC.MENU,
+                                                User32.DFCS.MENUCHECK);
                                         }
                                         finally
                                         {

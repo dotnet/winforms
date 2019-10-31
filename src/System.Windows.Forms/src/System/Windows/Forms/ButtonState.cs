@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using static Interop;
+
 namespace System.Windows.Forms
 {
     /// <summary>
@@ -14,17 +16,17 @@ namespace System.Windows.Forms
         ///  The button has a checked or latched appearance. Use this appearance to
         ///  show that a toggle button has been pressed.
         /// </summary>
-        Checked = NativeMethods.DFCS_CHECKED,
+        Checked = (int)User32.DFCS.CHECKED,
 
         /// <summary>
         ///  The button has a flat, two-dimensional appearance.
         /// </summary>
-        Flat = NativeMethods.DFCS_FLAT,
+        Flat = (int)User32.DFCS.FLAT,
 
         /// <summary>
         ///  The button is inactive (grayed).
         /// </summary>
-        Inactive = NativeMethods.DFCS_INACTIVE,
+        Inactive = (int)User32.DFCS.INACTIVE,
 
         /// <summary>
         ///  The button has its normal appearance (three-dimensional and not pressed).
@@ -34,7 +36,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The button is currently pressed.
         /// </summary>
-        Pushed = NativeMethods.DFCS_PUSHED,
+        Pushed = (int)User32.DFCS.PUSHED,
 
         /// <summary>
         ///  All viable flags in the bit mask are used.
