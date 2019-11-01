@@ -244,9 +244,6 @@ namespace System.Windows.Forms
         public static extern IntPtr GetAncestor(HandleRef hWnd, int flags);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern bool IsChild(HandleRef hWndParent, HandleRef hwnd);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern bool IsZoomed(HandleRef hWnd);
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]

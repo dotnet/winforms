@@ -1036,17 +1036,12 @@ namespace System.Windows.Forms
                 {
                     return true;
                 }
+
                 IntPtr hwndFocus = User32.GetFocus();
-                return hwndFocus != IntPtr.Zero
-                    && SafeNativeMethods.IsChild(new HandleRef(this, Handle), new HandleRef(null, hwndFocus));
+                return hwndFocus != IntPtr.Zero && User32.IsChild(new HandleRef(this, Handle), hwndFocus).IsTrue();
             }
         }
 
-        //
-        // protected overrides:
-        //
-        //
-        //
         protected override void Dispose(bool disposing)
         {
             if (disposing)

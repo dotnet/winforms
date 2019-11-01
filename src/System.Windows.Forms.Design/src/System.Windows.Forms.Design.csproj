@@ -155,6 +155,7 @@
     <Compile Include="..\..\Common\src\Interop\User32\Interop.GetWindowThreadProcessId.cs" Link="Interop\User32\Interop.GetWindowThreadProcessId.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.HC.cs" Link="Interop\User32\Interop.HC.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.HOOKPROC.cs" Link="Interop\User32\Interop.HOOKPROC.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.IsChild.cs" Link="Interop\User32\Interop.IsChild.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.IsProcessDPIAware.cs" Link="Interop\User32\Interop.IsProcessDPIAware.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.IsValidDpiAwarenessContext.cs" Link="Interop\User32\Interop.IsValidDpiAwarenessContext.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.MK.cs" Link="Interop\User32\Interop.MK.cs" />

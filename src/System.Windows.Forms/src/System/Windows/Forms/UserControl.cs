@@ -285,12 +285,7 @@ namespace System.Windows.Forms
             }
 
             IntPtr hwnd = Handle;
-            if (hwnd == hwndFocus || SafeNativeMethods.IsChild(new HandleRef(this, hwnd), new HandleRef(null, hwndFocus)))
-            {
-                return true;
-            }
-
-            return false;
+            return hwnd == hwndFocus || User32.IsChild(new HandleRef(this, hwnd), hwndFocus).IsTrue();
         }
 
         /// <summary>

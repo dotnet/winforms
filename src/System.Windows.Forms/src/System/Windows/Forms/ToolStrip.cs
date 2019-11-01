@@ -4959,27 +4959,19 @@ namespace System.Windows.Forms
                     // otherwise we'd unexpectedly change selection to whatever the cursor was over at this moment.
                     SnapMouseLocation();
 
-                    // start auto expanding for keyboard and mouse.
-                    // MenuAutoExpand = true;
-
-                    HandleRef thisHandle = new HandleRef(this, Handle);
-                    HandleRef otherHandle = new HandleRef(null, otherHwnd);
-
                     // make sure the otherHandle is not a child of thisHandle
-                    if ((thisHandle.Handle != otherHandle.Handle) &&
-                        !UnsafeNativeMethods.IsChild(thisHandle, otherHandle))
+                    if ((Handle != otherHwnd) && !User32.IsChild(new HandleRef(this, Handle), otherHwnd).IsTrue())
                     {
-
                         // make sure the root window of the otherHwnd is the same as
                         // the root window of thisHwnd.
                         HandleRef thisHwndRoot = WindowsFormsUtils.GetRootHWnd(this);
-                        HandleRef otherHwndRoot = WindowsFormsUtils.GetRootHWnd(otherHandle);
+                        HandleRef otherHwndRoot = WindowsFormsUtils.GetRootHWnd(new HandleRef(null, otherHwnd));
 
                         if (thisHwndRoot.Handle == otherHwndRoot.Handle && (thisHwndRoot.Handle != IntPtr.Zero))
                         {
-                            Debug.WriteLineIf(SnapFocusDebug.TraceVerbose, "[ToolStrip SnapFocus]: Caching for return focus:" + WindowsFormsUtils.GetControlInformation(otherHandle.Handle));
+                            Debug.WriteLineIf(SnapFocusDebug.TraceVerbose, "[ToolStrip SnapFocus]: Caching for return focus:" + WindowsFormsUtils.GetControlInformation(otherHwnd));
                             // we know we're in the same window heirarchy.
-                            hwndThatLostFocus = otherHandle.Handle;
+                            hwndThatLostFocus = otherHwnd;
                         }
                     }
                 }
@@ -5637,7 +5629,7 @@ namespace System.Windows.Forms
 
         // When we click somewhere outside of the toolstrip it should be as if we hit esc.
 
-        internal class RestoreFocusMessageFilter : IMessageFilter
+        internal sealed class RestoreFocusMessageFilter : IMessageFilter
         {
             private readonly ToolStrip ownerToolStrip;
 
@@ -5657,7 +5649,6 @@ namespace System.Windows.Forms
 
                 switch (m.Msg)
                 {
-
                     case WindowMessages.WM_LBUTTONDOWN:
                     case WindowMessages.WM_RBUTTONDOWN:
                     case WindowMessages.WM_MBUTTONDOWN:
@@ -5668,10 +5659,10 @@ namespace System.Windows.Forms
                         {
                             // if we've clicked on something that's not a child of the toolstrip and we
                             // currently have focus, restore it.
-                            if (!UnsafeNativeMethods.IsChild(new HandleRef(this, ownerToolStrip.Handle), new HandleRef(this, m.HWnd)))
+                            if (!User32.IsChild(new HandleRef(ownerToolStrip, ownerToolStrip.Handle), m.HWnd).IsTrue())
                             {
                                 HandleRef rootHwnd = WindowsFormsUtils.GetRootHWnd(ownerToolStrip);
-                                if (rootHwnd.Handle == m.HWnd || UnsafeNativeMethods.IsChild(rootHwnd, new HandleRef(this, m.HWnd)))
+                                if (rootHwnd.Handle == m.HWnd || User32.IsChild(rootHwnd, m.HWnd).IsTrue())
                                 {
                                     // Only RestoreFocus if the hwnd is a child of the root window and isnt on the toolstrip.
                                     RestoreFocusInternal();

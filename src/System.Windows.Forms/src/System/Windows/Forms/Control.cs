@@ -1419,23 +1419,12 @@ namespace System.Windows.Forms
                 }
 
                 IntPtr focusHwnd = User32.GetFocus();
-
                 if (focusHwnd == IntPtr.Zero)
                 {
                     return false;
                 }
 
-                if (focusHwnd == Handle)
-                {
-                    return true;
-                }
-
-                if (UnsafeNativeMethods.IsChild(new HandleRef(this, Handle), new HandleRef(this, focusHwnd)))
-                {
-                    return true;
-                }
-
-                return false;
+                return focusHwnd == Handle || User32.IsChild(new HandleRef(this, Handle), focusHwnd).IsTrue();
             }
         }
 
