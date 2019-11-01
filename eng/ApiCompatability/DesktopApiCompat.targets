@@ -1,0 +1,7 @@
+<Project>
+  <ItemGroup Condition="'$(RunApiCompat)' == 'true'">
+    <PackageReference Include="Microsoft.DotNet.ApiCompat"
+                      Version="$(MicrosoftDotNetApiCompatPackageVersion)"
+                      PrivateAssets="All" />
+  </ItemGroup>
+</Project>
