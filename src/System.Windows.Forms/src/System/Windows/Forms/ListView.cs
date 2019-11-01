@@ -6340,8 +6340,8 @@ namespace System.Windows.Forms
                 case NativeMethods.LVN_KEYDOWN:
                     if (CheckBoxes)
                     {
-                        NativeMethods.NMLVKEYDOWN lvkd = (NativeMethods.NMLVKEYDOWN)m.GetLParam(typeof(NativeMethods.NMLVKEYDOWN));
-                        if (lvkd.wVKey == (short)Keys.Space)
+                        ComCtl32.NMLVKEYDOWN* lvkd = (ComCtl32.NMLVKEYDOWN*)m.LParam;
+                        if (lvkd->wVKey == (short)Keys.Space)
                         {
                             ListViewItem focusedItem = FocusedItem;
                             if (focusedItem != null)
@@ -6364,8 +6364,8 @@ namespace System.Windows.Forms
 
                 case NativeMethods.LVN_ODCACHEHINT:
                     // tell the user to prepare the cache:
-                    NativeMethods.NMLVCACHEHINT cacheHint = (NativeMethods.NMLVCACHEHINT)m.GetLParam(typeof(NativeMethods.NMLVCACHEHINT));
-                    OnCacheVirtualItems(new CacheVirtualItemsEventArgs(cacheHint.iFrom, cacheHint.iTo));
+                    ComCtl32.NMLVCACHEHINT* cacheHint = (ComCtl32.NMLVCACHEHINT*)m.LParam;
+                    OnCacheVirtualItems(new CacheVirtualItemsEventArgs(cacheHint->iFrom, cacheHint->iTo));
                     break;
 
                 default:
@@ -6436,15 +6436,13 @@ namespace System.Windows.Forms
                     {
                         if (VirtualMode && m.LParam != IntPtr.Zero)
                         {
-                            NativeMethods.NMLVODSTATECHANGE odStateChange = (NativeMethods.NMLVODSTATECHANGE)m.GetLParam(typeof(NativeMethods.NMLVODSTATECHANGE));
-                            bool selectedChanged = (odStateChange.uNewState & ComCtl32.LVIS.SELECTED) != (odStateChange.uOldState & ComCtl32.LVIS.SELECTED);
+                            ComCtl32.NMLVODSTATECHANGE* odStateChange = (ComCtl32.NMLVODSTATECHANGE*)m.LParam;
+                            bool selectedChanged = (odStateChange->uNewState & ComCtl32.LVIS.SELECTED) != (odStateChange->uOldState & ComCtl32.LVIS.SELECTED);
                             if (selectedChanged)
                             {
                                 // we have to substract 1 from iTo
-                                //
-                                //
-                                int iTo = odStateChange.iTo;
-                                ListViewVirtualItemsSelectionRangeChangedEventArgs lvvisrce = new ListViewVirtualItemsSelectionRangeChangedEventArgs(odStateChange.iFrom, iTo, (odStateChange.uNewState & ComCtl32.LVIS.SELECTED) != 0);
+                                int iTo = odStateChange->iTo;
+                                ListViewVirtualItemsSelectionRangeChangedEventArgs lvvisrce = new ListViewVirtualItemsSelectionRangeChangedEventArgs(odStateChange->iFrom, iTo, (odStateChange->uNewState & ComCtl32.LVIS.SELECTED) != 0);
                                 OnVirtualItemsSelectionRangeChanged(lvvisrce);
                             }
                         }
@@ -6453,8 +6451,8 @@ namespace System.Windows.Forms
                     {
                         if (ShowItemToolTips && m.LParam != IntPtr.Zero)
                         {
-                            NativeMethods.NMLVGETINFOTIP infoTip = (NativeMethods.NMLVGETINFOTIP)m.GetLParam(typeof(NativeMethods.NMLVGETINFOTIP));
-                            ListViewItem lvi = Items[infoTip.item];
+                            ComCtl32.NMLVGETINFOTIPW* infoTip = (ComCtl32.NMLVGETINFOTIPW*)m.LParam;
+                            ListViewItem lvi = Items[infoTip->item];
                             if (lvi != null && !string.IsNullOrEmpty(lvi.ToolTipText))
                             {
                                 // Setting the max width has the added benefit of enabling multiline tool tips
@@ -6463,9 +6461,7 @@ namespace System.Windows.Forms
                                 // UNICODE. Use char.
                                 // we need to copy the null terminator character ourselves
                                 char[] charBuf = (lvi.ToolTipText + "\0").ToCharArray();
-                                Marshal.Copy(charBuf, 0, infoTip.lpszText, Math.Min(charBuf.Length, infoTip.cchTextMax));
-
-                                Marshal.StructureToPtr(infoTip, (IntPtr)m.LParam, false);
+                                Marshal.Copy(charBuf, 0, infoTip->lpszText, Math.Min(charBuf.Length, infoTip->cchTextMax));
                             }
                         }
                     }

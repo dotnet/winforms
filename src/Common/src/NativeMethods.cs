@@ -1794,26 +1794,6 @@ namespace System.Windows.Forms
         }
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-        public class NMLVGETINFOTIP
-        {
-            public User32.NMHDR nmhdr;
-            public int flags = 0;
-            public IntPtr lpszText = IntPtr.Zero;
-            public int cchTextMax = 0;
-            public int item = 0;
-            public int subItem = 0;
-            public IntPtr lParam = IntPtr.Zero;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public class NMLVKEYDOWN
-        {
-            public User32.NMHDR hdr;
-            public short wVKey = 0;
-            public uint flags = 0;
-        }
-
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
         public class LVHITTESTINFO
         {
             public int pt_x;
@@ -1941,14 +1921,6 @@ namespace System.Windows.Forms
         }
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-        public class NMLVCACHEHINT
-        {
-            public User32.NMHDR hdr;
-            public int iFrom = 0;
-            public int iTo = 0;
-        }
-
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
         public class NMLVDISPINFO
         {
             public User32.NMHDR hdr;
@@ -1960,16 +1932,6 @@ namespace System.Windows.Forms
         {
             public User32.NMHDR hdr;
             public LVITEM_NOTEXT item;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public class NMLVODSTATECHANGE
-        {
-            public User32.NMHDR hdr;
-            public int iFrom = 0;
-            public int iTo = 0;
-            public ComCtl32.LVIS uNewState;
-            public ComCtl32.LVIS uOldState;
         }
 
         [StructLayout(LayoutKind.Sequential)]
