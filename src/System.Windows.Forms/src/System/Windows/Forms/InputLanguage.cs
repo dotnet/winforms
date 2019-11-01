@@ -14,7 +14,7 @@ namespace System.Windows.Forms
     /// <summary>
     ///  Provides methods and fields to manage the input language.
     /// </summary>
-    public sealed class InputLanguage
+    public sealed class InputLanguage : IHandle
     {
         /// <summary>
         ///  The HKL handle.
@@ -40,7 +40,7 @@ namespace System.Windows.Forms
             {
                 Application.OleRequired();
                 // note we can obtain the KeyboardLayout for a given thread...
-                return new InputLanguage(SafeNativeMethods.GetKeyboardLayout(0));
+                return new InputLanguage(User32.GetKeyboardLayout(0));
             }
             set
             {
@@ -48,9 +48,9 @@ namespace System.Windows.Forms
                 Application.OleRequired();
                 if (value == null)
                 {
-                    value = InputLanguage.DefaultInputLanguage;
+                    value = DefaultInputLanguage;
                 }
-                IntPtr handleOld = SafeNativeMethods.ActivateKeyboardLayout(new HandleRef(value, value.handle), 0);
+                IntPtr handleOld = User32.ActivateKeyboardLayout(new HandleRef(value, value.handle), 0);
                 if (handleOld == IntPtr.Zero)
                 {
                     throw new ArgumentException(SR.ErrorBadInputLanguage, nameof(value));
@@ -79,14 +79,16 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Returns a list of all installed input languages.
         /// </summary>
-        public static InputLanguageCollection InstalledInputLanguages
+        public static unsafe InputLanguageCollection InstalledInputLanguages
         {
             get
             {
-                int size = SafeNativeMethods.GetKeyboardLayoutList(0, null);
-
+                int size = User32.GetKeyboardLayoutList(0, null);
                 IntPtr[] handles = new IntPtr[size];
-                SafeNativeMethods.GetKeyboardLayoutList(size, handles);
+                fixed (IntPtr* pHandles = handles)
+                {
+                    User32.GetKeyboardLayoutList(size, pHandles);
+                }
 
                 InputLanguage[] ils = new InputLanguage[size];
                 for (int i = 0; i < size; i++)
