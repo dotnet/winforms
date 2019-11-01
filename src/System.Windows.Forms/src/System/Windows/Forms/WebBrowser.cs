@@ -1500,26 +1500,26 @@ namespace System.Windows.Forms
             {
                 WebBrowser wb = (WebBrowser)Host;
 
-                info.dwDoubleClick = (int)NativeMethods.DOCHOSTUIDBLCLICK.DEFAULT;
-                info.dwFlags = (int)NativeMethods.DOCHOSTUIFLAG.NO3DOUTERBORDER |
-                                (int)NativeMethods.DOCHOSTUIFLAG.DISABLE_SCRIPT_INACTIVE;
+                info.dwDoubleClick = DOCHOSTUIDBLCLK.DEFAULT;
+                info.dwFlags = DOCHOSTUIFLAG.NO3DOUTERBORDER |
+                               DOCHOSTUIFLAG.DISABLE_SCRIPT_INACTIVE;
 
                 if (wb.ScrollBarsEnabled)
                 {
-                    info.dwFlags |= (int)NativeMethods.DOCHOSTUIFLAG.FLAT_SCROLLBAR;
+                    info.dwFlags |= DOCHOSTUIFLAG.FLAT_SCROLLBAR;
                 }
                 else
                 {
-                    info.dwFlags |= (int)NativeMethods.DOCHOSTUIFLAG.SCROLL_NO;
+                    info.dwFlags |= DOCHOSTUIFLAG.SCROLL_NO;
                 }
 
                 if (Application.RenderWithVisualStyles)
                 {
-                    info.dwFlags |= (int)NativeMethods.DOCHOSTUIFLAG.THEME;
+                    info.dwFlags |= DOCHOSTUIFLAG.THEME;
                 }
                 else
                 {
-                    info.dwFlags |= (int)NativeMethods.DOCHOSTUIFLAG.NOTHEME;
+                    info.dwFlags |= DOCHOSTUIFLAG.NOTHEME;
                 }
 
                 return NativeMethods.S_OK;

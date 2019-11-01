@@ -78,6 +78,8 @@
     <Compile Include="..\..\Common\src\Interop\Kernel32\Interop.MAX_UNICODESTRING_LEN.cs" Link="Interop\Kernel32\Interop.MAX_UNICODESTRING_LEN.cs" />
     <Compile Include="..\..\Common\src\Interop\Kernel32\Interop.OpenProcess.cs" Link="Interop\Kernel32\Interop.OpenProcess.cs" />
     <Compile Include="..\..\Common\src\Interop\Kernel32\Interop.ProcessAccessOptions.cs" Link="Interop\Kernel32\Interop.ProcessAccessOptions.cs" />
+    <Compile Include="..\..\Common\src\Interop\Mshtml\Interop.DOCHOSTUIDBLCLK.cs" Link="Interop\Mshtml\Interop.DOCHOSTUIDBLCLK.cs" />
+    <Compile Include="..\..\Common\src\Interop\Mshtml\Interop.DOCHOSTUIFLAG.cs" Link="Interop\Mshtml\Interop.DOCHOSTUIFLAG.cs" />
     <Compile Include="..\..\Common\src\Interop\NtDll\Interop.RTL_OSVERSIONINFOEX.cs" Link="Interop\NtDll\Interop.RTL_OSVERSIONINFOEX.cs" />
     <Compile Include="..\..\Common\src\Interop\NtDll\Interop.RtlGetVersion.cs" Link="Interop\NtDll\Interop.RtlGetVersion.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.ADVF.cs" Link="Interop\Ole32\Interop.ADVF.cs" />

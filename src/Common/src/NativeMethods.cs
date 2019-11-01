@@ -2105,38 +2105,13 @@ namespace System.Windows.Forms
             [MarshalAs(UnmanagedType.U4)]
             public int cbSize = Marshal.SizeOf<DOCHOSTUIINFO>();
             [MarshalAs(UnmanagedType.I4)]
-            public int dwFlags;
+            public Mshtml.DOCHOSTUIFLAG dwFlags;
             [MarshalAs(UnmanagedType.I4)]
-            public int dwDoubleClick;
+            public Mshtml.DOCHOSTUIDBLCLK dwDoubleClick;
             [MarshalAs(UnmanagedType.I4)]
             public int dwReserved1 = 0;
             [MarshalAs(UnmanagedType.I4)]
             public int dwReserved2 = 0;
-        }
-
-        public enum DOCHOSTUIFLAG
-        {
-            DIALOG = 0x1,
-            DISABLE_HELP_MENU = 0x2,
-            NO3DBORDER = 0x4,
-            SCROLL_NO = 0x8,
-            DISABLE_SCRIPT_INACTIVE = 0x10,
-            OPENNEWWIN = 0x20,
-            DISABLE_OFFSCREEN = 0x40,
-            FLAT_SCROLLBAR = 0x80,
-            DIV_BLOCKDEFAULT = 0x100,
-            ACTIVATE_CLIENTHIT_ONLY = 0x200,
-            NO3DOUTERBORDER = 0x00200000,
-            THEME = 0x00040000,
-            NOTHEME = 0x80000,
-            DISABLE_COOKIE = 0x400
-        }
-
-        public enum DOCHOSTUIDBLCLICK
-        {
-            DEFAULT = 0x0,
-            SHOWPROPERTIES = 0x1,
-            SHOWCODE = 0x2
         }
 
         [StructLayout(LayoutKind.Sequential)]
