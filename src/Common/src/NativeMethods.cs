@@ -868,19 +868,6 @@ namespace System.Windows.Forms
         TVSIL_STATE = 2,
         TVM_SORTCHILDRENCB = (TV_FIRST + 21);
 
-        public const int TVHT_NOWHERE = 0x0001,
-        TVHT_ONITEMICON = 0x0002,
-        TVHT_ONITEMLABEL = 0x0004,
-        TVHT_ONITEM = (TVHT_ONITEMICON | TVHT_ONITEMLABEL | TVHT_ONITEMSTATEICON),
-        TVHT_ONITEMINDENT = 0x0008,
-        TVHT_ONITEMBUTTON = 0x0010,
-        TVHT_ONITEMRIGHT = 0x0020,
-        TVHT_ONITEMSTATEICON = 0x0040,
-        TVHT_ABOVE = 0x0100,
-        TVHT_BELOW = 0x0200,
-        TVHT_TORIGHT = 0x0400,
-        TVHT_TOLEFT = 0x0800;
-
         public const int UIS_SET = 1,
         UIS_CLEAR = 2,
         UIS_INITIALIZE = 3,
@@ -1742,7 +1729,7 @@ namespace System.Windows.Forms
         {
             public int pt_x;
             public int pt_y;
-            public int flags = 0;
+            public ComCtl32.TVHT flags = 0;
             public IntPtr hItem = IntPtr.Zero;
         }
 
