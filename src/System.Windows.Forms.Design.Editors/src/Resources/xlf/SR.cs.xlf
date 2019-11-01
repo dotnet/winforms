@@ -27,41 +27,6 @@
         <target state="translated">Nahoru</target>
         <note />
       </trans-unit>
-      <trans-unit id="CollectionEditorCantRemoveItem">
-        <source>The item '{0}' cannot be removed.</source>
-        <target state="translated">Položku {0} nelze odebrat.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="CollectionEditorCaption">
-        <source>{0} Collection Editor</source>
-        <target state="translated">Editor kolekce {0}</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="CollectionEditorInheritedReadOnlySelection">
-        <source>Read-only component(s) selected.</source>
-        <target state="translated">Byly vybrány součásti jen pro čtení.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="CollectionEditorProperties">
-        <source>{0} &amp;properties:</source>
-        <target state="translated">{0} - &amp;vlastnosti:</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="CollectionEditorPropertiesMultiSelect">
-        <source>Multi-Select &amp;Properties:</source>
-        <target state="translated">&amp;Vlastnosti násobného výběru:</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="CollectionEditorPropertiesNone">
-        <source>&amp;Properties:</source>
-        <target state="translated">&amp;Vlastnosti:</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="CollectionEditorUndoBatchDesc">
-        <source>Add or remove {0} objects</source>
-        <target state="translated">Přidání nebo odebrání objektů (počet: {0})</target>
-        <note />
-      </trans-unit>
       <trans-unit id="ColorEditorAccName">
         <source>Color Picker</source>
         <target state="translated">Výběr barev</target>
@@ -132,11 +97,6 @@
         <target state="new">Top Right</target>
         <note />
       </trans-unit>
-      <trans-unit id="DataSourceLocksItems">
-        <source>Items collection cannot be modified when the DataSource property is set.</source>
-        <target state="new">Items collection cannot be modified when the DataSource property is set.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="DockEditorAccName">
         <source>Dock Picker</source>
         <target state="translated">Ukotvit výběr</target>
@@ -182,16 +142,6 @@
         <target state="translated">Otevřít soubor</target>
         <note />
       </trans-unit>
-      <trans-unit id="ImageCollectionEditorFormText">
-        <source>Images Collection Editor</source>
-        <target state="translated">Editor kolekce Images</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ListViewSubItemBaseName">
-        <source>ListViewSubItem</source>
-        <target state="new">ListViewSubItem</target>
-        <note />
-      </trans-unit>
       <trans-unit id="MultilineStringEditorWatermark">
         <source>Press Enter to begin a new line.
 Press Ctrl+Enter to accept Text.</source>
@@ -226,7 +176,7 @@ Stisknutím kombinace kláves Ctrl+Enter text přijměte.</target>
       </trans-unit>
       <trans-unit id="imageFileDescription">
         <source>All image files</source>
-        <target state="translated">Všechny soubory obrázků</target>
+        <target state="new">All image files</target>
         <note />
       </trans-unit>
       <trans-unit id="metafileFileDescription">

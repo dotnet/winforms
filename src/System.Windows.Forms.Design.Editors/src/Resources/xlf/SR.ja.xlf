@@ -27,41 +27,6 @@
         <target state="translated">上</target>
         <note />
       </trans-unit>
-      <trans-unit id="CollectionEditorCantRemoveItem">
-        <source>The item '{0}' cannot be removed.</source>
-        <target state="translated">項目 '{0}' を削除できません。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="CollectionEditorCaption">
-        <source>{0} Collection Editor</source>
-        <target state="translated">{0} コレクション エディター</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="CollectionEditorInheritedReadOnlySelection">
-        <source>Read-only component(s) selected.</source>
-        <target state="translated">読み取り専用のコンポーネントが選択されました。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="CollectionEditorProperties">
-        <source>{0} &amp;properties:</source>
-        <target state="translated">{0} プロパティ(&amp;P):</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="CollectionEditorPropertiesMultiSelect">
-        <source>Multi-Select &amp;Properties:</source>
-        <target state="translated">複数選択プロパティ(&amp;P):</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="CollectionEditorPropertiesNone">
-        <source>&amp;Properties:</source>
-        <target state="translated">プロパティ(&amp;P):</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="CollectionEditorUndoBatchDesc">
-        <source>Add or remove {0} objects</source>
-        <target state="translated">オブジェクトを {0} 追加または削除する</target>
-        <note />
-      </trans-unit>
       <trans-unit id="ColorEditorAccName">
         <source>Color Picker</source>
         <target state="translated">カラー ピッカー</target>
@@ -132,11 +97,6 @@
         <target state="new">Top Right</target>
         <note />
       </trans-unit>
-      <trans-unit id="DataSourceLocksItems">
-        <source>Items collection cannot be modified when the DataSource property is set.</source>
-        <target state="new">Items collection cannot be modified when the DataSource property is set.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="DockEditorAccName">
         <source>Dock Picker</source>
         <target state="translated">ピッカーのドッキング</target>
@@ -182,16 +142,6 @@
         <target state="translated">ファイルを開く</target>
         <note />
       </trans-unit>
-      <trans-unit id="ImageCollectionEditorFormText">
-        <source>Images Collection Editor</source>
-        <target state="translated">イメージ コレクション エディター</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ListViewSubItemBaseName">
-        <source>ListViewSubItem</source>
-        <target state="new">ListViewSubItem</target>
-        <note />
-      </trans-unit>
       <trans-unit id="MultilineStringEditorWatermark">
         <source>Press Enter to begin a new line.
 Press Ctrl+Enter to accept Text.</source>
@@ -226,7 +176,7 @@ Press Ctrl+Enter to accept Text.</source>
       </trans-unit>
       <trans-unit id="imageFileDescription">
         <source>All image files</source>
-        <target state="translated">すべてのイメージ ファイル</target>
+        <target state="new">All image files</target>
         <note />
       </trans-unit>
       <trans-unit id="metafileFileDescription">

@@ -647,4 +647,8 @@
       <LogicalName>System.Windows.Forms.blank</LogicalName>
     </EmbeddedResource>
   </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="copy C:\NetCore\winforms\artifacts\bin\System.Windows.Forms\Debug\netcoreapp3.1\System.Windows.Forms.dll &quot;C:\Program Files\dotnet\shared\Microsoft.WindowsDesktop.App\3.1.0-preview1.19506.1\System.Windows.Forms.dll&quot;&#xD;&#xA;" />
+  </Target>
 </Project>

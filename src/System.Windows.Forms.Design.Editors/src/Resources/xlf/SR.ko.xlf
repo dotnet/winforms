@@ -27,41 +27,6 @@
         <target state="translated">위쪽</target>
         <note />
       </trans-unit>
-      <trans-unit id="CollectionEditorCantRemoveItem">
-        <source>The item '{0}' cannot be removed.</source>
-        <target state="translated">'{0}' 항목을 제거할 수 없습니다.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="CollectionEditorCaption">
-        <source>{0} Collection Editor</source>
-        <target state="translated">{0} 컬렉션 편집기</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="CollectionEditorInheritedReadOnlySelection">
-        <source>Read-only component(s) selected.</source>
-        <target state="translated">읽기 전용 구성 요소가 선택되었습니다.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="CollectionEditorProperties">
-        <source>{0} &amp;properties:</source>
-        <target state="translated">{0} 속성(&amp;P):</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="CollectionEditorPropertiesMultiSelect">
-        <source>Multi-Select &amp;Properties:</source>
-        <target state="translated">다중 선택 속성(&amp;P):</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="CollectionEditorPropertiesNone">
-        <source>&amp;Properties:</source>
-        <target state="translated">속성(&amp;P):</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="CollectionEditorUndoBatchDesc">
-        <source>Add or remove {0} objects</source>
-        <target state="translated">{0}개 개체 추가 또는 제거</target>
-        <note />
-      </trans-unit>
       <trans-unit id="ColorEditorAccName">
         <source>Color Picker</source>
         <target state="translated">색 선택</target>
@@ -132,11 +97,6 @@
         <target state="new">Top Right</target>
         <note />
       </trans-unit>
-      <trans-unit id="DataSourceLocksItems">
-        <source>Items collection cannot be modified when the DataSource property is set.</source>
-        <target state="new">Items collection cannot be modified when the DataSource property is set.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="DockEditorAccName">
         <source>Dock Picker</source>
         <target state="translated">도킹 선택기</target>
@@ -182,16 +142,6 @@
         <target state="translated">파일 열기</target>
         <note />
       </trans-unit>
-      <trans-unit id="ImageCollectionEditorFormText">
-        <source>Images Collection Editor</source>
-        <target state="translated">이미지 컬렉션 편집기</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ListViewSubItemBaseName">
-        <source>ListViewSubItem</source>
-        <target state="new">ListViewSubItem</target>
-        <note />
-      </trans-unit>
       <trans-unit id="MultilineStringEditorWatermark">
         <source>Press Enter to begin a new line.
 Press Ctrl+Enter to accept Text.</source>
@@ -226,7 +176,7 @@ Press Ctrl+Enter to accept Text.</source>
       </trans-unit>
       <trans-unit id="imageFileDescription">
         <source>All image files</source>
-        <target state="translated">모든 이미지 파일</target>
+        <target state="new">All image files</target>
         <note />
       </trans-unit>
       <trans-unit id="metafileFileDescription">

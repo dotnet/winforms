@@ -72,6 +72,41 @@
         <target state="translated">이러한 형식의 serialization 저장소는 지원되지 않습니다. CreateStore 메서드에서 반환된 저장소를 사용하십시오.</target>
         <note />
       </trans-unit>
+      <trans-unit id="CollectionEditorCantRemoveItem">
+        <source>The item '{0}' cannot be removed.</source>
+        <target state="new">The item '{0}' cannot be removed.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CollectionEditorCaption">
+        <source>{0} Collection Editor</source>
+        <target state="new">{0} Collection Editor</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CollectionEditorInheritedReadOnlySelection">
+        <source>Read-only component(s) selected.</source>
+        <target state="new">Read-only component(s) selected.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CollectionEditorProperties">
+        <source>{0} &amp;properties:</source>
+        <target state="new">{0} &amp;properties:</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CollectionEditorPropertiesMultiSelect">
+        <source>Multi-Select &amp;Properties:</source>
+        <target state="new">Multi-Select &amp;Properties:</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CollectionEditorPropertiesNone">
+        <source>&amp;Properties:</source>
+        <target state="new">&amp;Properties:</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CollectionEditorUndoBatchDesc">
+        <source>Add or remove {0} objects</source>
+        <target state="new">Add or remove {0} objects</target>
+        <note />
+      </trans-unit>
       <trans-unit id="CommandSetAlignByPrimary">
         <source>Format {0} components (alignment)</source>
         <target state="translated">{0}개 구성 요소에 서식 지정(맞춤)</target>
@@ -237,6 +272,11 @@
       {1}
 
       스택 추적:{2}</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DataSourceLocksItems">
+        <source>Items collection cannot be modified when the DataSource property is set.</source>
+        <target state="new">Items collection cannot be modified when the DataSource property is set.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerActionPanel_CouldNotConvertValue">
@@ -523,6 +563,11 @@
         <target state="translated">Extender 공급자 {0}이(가) Extender로 이미 추가되었습니다. 다른 공급자를 추가하면 속성이 중복됩니다.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ImageCollectionEditorFormText">
+        <source>Images Collection Editor</source>
+        <target state="new">Images Collection Editor</target>
+        <note />
+      </trans-unit>
       <trans-unit id="InheritanceServiceReadOnlyCollection">
         <source>Read-Only</source>
         <target state="translated">읽기 전용</target>
@@ -536,6 +581,11 @@
       <trans-unit id="InvalidBoundArgument">
         <source>'{1}' is not a valid value for '{0}'. '{0}' should be between {2} and {3}.</source>
         <target state="translated">'{1}'은(는) '{0}'에 사용할 수 없는 값입니다. '{0}'은(는) {2}에서 {3} 사이에 있어야 합니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ListViewSubItemBaseName">
+        <source>ListViewSubItem</source>
+        <target state="new">ListViewSubItem</target>
         <note />
       </trans-unit>
       <trans-unit id="None">
@@ -933,6 +983,16 @@
         <target state="translated">DropDown 트랜잭션의 ToolStrip MenuItem 삽입입니다.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ToolStripItemCollectionEditorLabelMultipleItems">
+        <source>(&amp;Multiple Items)</source>
+        <target state="new">(&amp;Multiple Items)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripItemCollectionEditorLabelNone">
+        <source>(&amp;None)</source>
+        <target state="new">(&amp;None)</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ToolStripItemCollectionEditorVerb">
         <source>&amp;Edit Items...</source>
         <target state="translated">항목 편집(&amp;E)...</target>
@@ -1081,6 +1141,11 @@
       <trans-unit id="WindowsFormsCommandCenterY">
         <source>Vertical center of {0} component(s)</source>
         <target state="translated">{0}개 구성 요소를 세로로 가운데에 맞춥니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="imageFileDescription">
+        <source>All image files</source>
+        <target state="new">All image files</target>
         <note />
       </trans-unit>
       <trans-unit id="lockedDescr">

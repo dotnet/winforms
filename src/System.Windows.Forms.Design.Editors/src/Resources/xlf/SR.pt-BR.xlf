@@ -27,41 +27,6 @@
         <target state="translated">Superior</target>
         <note />
       </trans-unit>
-      <trans-unit id="CollectionEditorCantRemoveItem">
-        <source>The item '{0}' cannot be removed.</source>
-        <target state="translated">O item '{0}' não pode ser removido.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="CollectionEditorCaption">
-        <source>{0} Collection Editor</source>
-        <target state="translated">Editor de Coleção {0}</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="CollectionEditorInheritedReadOnlySelection">
-        <source>Read-only component(s) selected.</source>
-        <target state="translated">Componente(s) somente leitura selecionado(s).</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="CollectionEditorProperties">
-        <source>{0} &amp;properties:</source>
-        <target state="translated">&amp;propriedades {0}:</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="CollectionEditorPropertiesMultiSelect">
-        <source>Multi-Select &amp;Properties:</source>
-        <target state="translated">&amp;Propriedades de Seleção Múltipla:</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="CollectionEditorPropertiesNone">
-        <source>&amp;Properties:</source>
-        <target state="translated">&amp;Propriedades:</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="CollectionEditorUndoBatchDesc">
-        <source>Add or remove {0} objects</source>
-        <target state="translated">Adicionar ou remover objetos {0}</target>
-        <note />
-      </trans-unit>
       <trans-unit id="ColorEditorAccName">
         <source>Color Picker</source>
         <target state="translated">Seletor de Cor</target>
@@ -132,11 +97,6 @@
         <target state="new">Top Right</target>
         <note />
       </trans-unit>
-      <trans-unit id="DataSourceLocksItems">
-        <source>Items collection cannot be modified when the DataSource property is set.</source>
-        <target state="new">Items collection cannot be modified when the DataSource property is set.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="DockEditorAccName">
         <source>Dock Picker</source>
         <target state="translated">Encaixar Seletor</target>
@@ -182,16 +142,6 @@
         <target state="translated">Abrir Arquivo</target>
         <note />
       </trans-unit>
-      <trans-unit id="ImageCollectionEditorFormText">
-        <source>Images Collection Editor</source>
-        <target state="translated">Editor de Coleção de Imagens</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ListViewSubItemBaseName">
-        <source>ListViewSubItem</source>
-        <target state="new">ListViewSubItem</target>
-        <note />
-      </trans-unit>
       <trans-unit id="MultilineStringEditorWatermark">
         <source>Press Enter to begin a new line.
 Press Ctrl+Enter to accept Text.</source>
@@ -226,7 +176,7 @@ Pressione Ctrl+Enter para aceitar Texto.</target>
       </trans-unit>
       <trans-unit id="imageFileDescription">
         <source>All image files</source>
-        <target state="translated">Todos os arquivos de imagem</target>
+        <target state="new">All image files</target>
         <note />
       </trans-unit>
       <trans-unit id="metafileFileDescription">

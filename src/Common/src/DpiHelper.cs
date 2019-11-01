@@ -458,6 +458,29 @@ namespace System.Windows.Forms
             }
             return false;
         }
+
+        /// <summary>
+        /// Create a new button bitmap scaled for the device units. 
+        /// Note: original image might be disposed.
+        /// </summary>
+        /// <param name="button">button with an image, image size is defined in logical units</param>
+        public static void ScaleButtonImageLogicalToDevice(Button button)
+        {
+            if (button == null)
+            {
+                return;
+            }
+
+            Bitmap buttonBitmap = button.Image as Bitmap;
+            if (buttonBitmap == null)
+            {
+                return;
+            }
+
+            Bitmap deviceBitmap = CreateScaledBitmap(buttonBitmap);
+            button.Image.Dispose();
+            button.Image = deviceBitmap;
+        }
     }
 
     internal enum DpiAwarenessContext

@@ -72,6 +72,41 @@
         <target state="translated">不支持这种类型的序列化存储区。请使用 CreateStore 方法返回的存储区。</target>
         <note />
       </trans-unit>
+      <trans-unit id="CollectionEditorCantRemoveItem">
+        <source>The item '{0}' cannot be removed.</source>
+        <target state="new">The item '{0}' cannot be removed.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CollectionEditorCaption">
+        <source>{0} Collection Editor</source>
+        <target state="new">{0} Collection Editor</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CollectionEditorInheritedReadOnlySelection">
+        <source>Read-only component(s) selected.</source>
+        <target state="new">Read-only component(s) selected.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CollectionEditorProperties">
+        <source>{0} &amp;properties:</source>
+        <target state="new">{0} &amp;properties:</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CollectionEditorPropertiesMultiSelect">
+        <source>Multi-Select &amp;Properties:</source>
+        <target state="new">Multi-Select &amp;Properties:</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CollectionEditorPropertiesNone">
+        <source>&amp;Properties:</source>
+        <target state="new">&amp;Properties:</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CollectionEditorUndoBatchDesc">
+        <source>Add or remove {0} objects</source>
+        <target state="new">Add or remove {0} objects</target>
+        <note />
+      </trans-unit>
       <trans-unit id="CommandSetAlignByPrimary">
         <source>Format {0} components (alignment)</source>
         <target state="translated">格式化 {0} 组件(对齐)</target>
@@ -237,6 +272,11 @@
       {1}
 
       堆栈跟踪:{2}</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DataSourceLocksItems">
+        <source>Items collection cannot be modified when the DataSource property is set.</source>
+        <target state="new">Items collection cannot be modified when the DataSource property is set.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerActionPanel_CouldNotConvertValue">
@@ -523,6 +563,11 @@
         <target state="translated">扩展程序提供程序 {0} 已添加为扩展程序。添加其他扩展程序提供程序将导致重复的属性。</target>
         <note />
       </trans-unit>
+      <trans-unit id="ImageCollectionEditorFormText">
+        <source>Images Collection Editor</source>
+        <target state="new">Images Collection Editor</target>
+        <note />
+      </trans-unit>
       <trans-unit id="InheritanceServiceReadOnlyCollection">
         <source>Read-Only</source>
         <target state="translated">只读</target>
@@ -536,6 +581,11 @@
       <trans-unit id="InvalidBoundArgument">
         <source>'{1}' is not a valid value for '{0}'. '{0}' should be between {2} and {3}.</source>
         <target state="translated">“{1}”不是“{0}”的有效值。“{0}”应介于 {2} 和 {3} 之间。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ListViewSubItemBaseName">
+        <source>ListViewSubItem</source>
+        <target state="new">ListViewSubItem</target>
         <note />
       </trans-unit>
       <trans-unit id="None">
@@ -933,6 +983,16 @@
         <target state="translated">DropDown 事务中的“ToolStrip 菜单项插入”。</target>
         <note />
       </trans-unit>
+      <trans-unit id="ToolStripItemCollectionEditorLabelMultipleItems">
+        <source>(&amp;Multiple Items)</source>
+        <target state="new">(&amp;Multiple Items)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripItemCollectionEditorLabelNone">
+        <source>(&amp;None)</source>
+        <target state="new">(&amp;None)</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ToolStripItemCollectionEditorVerb">
         <source>&amp;Edit Items...</source>
         <target state="translated">编辑项(&amp;E)...</target>
@@ -1081,6 +1141,11 @@
       <trans-unit id="WindowsFormsCommandCenterY">
         <source>Vertical center of {0} component(s)</source>
         <target state="translated">{0} 组件的垂直中心</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="imageFileDescription">
+        <source>All image files</source>
+        <target state="new">All image files</target>
         <note />
       </trans-unit>
       <trans-unit id="lockedDescr">

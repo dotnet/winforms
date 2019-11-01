@@ -768,4 +768,43 @@
   <data name="BinaryEditorTitle" xml:space="preserve">
     <value>Byte Array Property Editor</value>
   </data>
+  <data name="CollectionEditorCantRemoveItem" xml:space="preserve">
+    <value>The item '{0}' cannot be removed.</value>
+  </data>
+  <data name="CollectionEditorCaption" xml:space="preserve">
+    <value>{0} Collection Editor</value>
+  </data>
+  <data name="CollectionEditorInheritedReadOnlySelection" xml:space="preserve">
+    <value>Read-only component(s) selected.</value>
+  </data>
+  <data name="CollectionEditorProperties" xml:space="preserve">
+    <value>{0} &amp;properties:</value>
+  </data>
+  <data name="CollectionEditorPropertiesMultiSelect" xml:space="preserve">
+    <value>Multi-Select &amp;Properties:</value>
+  </data>
+  <data name="CollectionEditorPropertiesNone" xml:space="preserve">
+    <value>&amp;Properties:</value>
+  </data>
+  <data name="CollectionEditorUndoBatchDesc" xml:space="preserve">
+    <value>Add or remove {0} objects</value>
+  </data>
+  <data name="DataSourceLocksItems" xml:space="preserve">
+    <value>Items collection cannot be modified when the DataSource property is set.</value>
+  </data>
+  <data name="ImageCollectionEditorFormText" xml:space="preserve">
+    <value>Images Collection Editor</value>
+  </data>
+  <data name="imageFileDescription" xml:space="preserve">
+    <value>All image files</value>
+  </data>
+  <data name="ToolStripItemCollectionEditorLabelNone" xml:space="preserve">
+    <value>(&amp;None)</value>
+  </data>
+  <data name="ToolStripItemCollectionEditorLabelMultipleItems" xml:space="preserve">
+    <value>(&amp;Multiple Items)</value>
+  </data>
+  <data name="ListViewSubItemBaseName" xml:space="preserve">
+    <value>ListViewSubItem</value>
+  </data>
 </root>

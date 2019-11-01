@@ -22,6 +22,8 @@ namespace System.ComponentModel.Design
     /// </summary>
     public class CollectionEditor : UITypeEditor
     {
+        private const int VK_PROCESSKEY = 0xE5;
+
         private Type _collectionItemType;
         private Type[] _newItemTypes;
         private ITypeDescriptorContext _currentContext;
@@ -2131,7 +2133,7 @@ namespace System.ComponentModel.Design
                         _lastKeyDown = m;
 
                         // the first thing the ime does on a key it cares about is send a VK_PROCESSKEY, so we use that to sling focus to the grid.
-                        if (unchecked((int)(long)m.WParam) == NativeMethods.VK_PROCESSKEY)
+                        if (unchecked((int)(long)m.WParam) == VK_PROCESSKEY)
                         {
                             if (PropertyGrid != null)
                             {
