@@ -66,19 +66,6 @@ namespace System.Windows.Forms.Design
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public static extern IntPtr SendMessage(IntPtr hWnd, int msg, int wParam, string lParam);
 
-        internal class Util
-        {
-            public static int MAKELONG(int low, int high)
-            {
-                return (high << 16) | (low & 0xffff);
-            }
-
-            public static int LOWORD(int n)
-            {
-                return n & 0xffff;
-            }
-        }
-
         public const int CHILDID_SELF = 0;
     }
 }

@@ -1634,7 +1634,7 @@ namespace System.Windows.Forms.Design
                 if (!_inHitTest)
                 {
                     _inHitTest = true;
-                    Point pt = new Point((short)NativeMethods.Util.LOWORD(unchecked((int)(long)m.LParam)), (short)NativeMethods.Util.HIWORD(unchecked((int)(long)m.LParam)));
+                    Point pt = new Point((short)PARAM.LOWORD(m.LParam), (short)PARAM.HIWORD(m.LParam));
                     try
                     {
                         _liveRegion = GetHitTest(pt);
@@ -1708,8 +1708,8 @@ namespace System.Windows.Forms.Design
             {
                 var pt = new Point
                 {
-                    X = NativeMethods.Util.SignedLOWORD(unchecked((int)(long)m.LParam)),
-                    Y = NativeMethods.Util.SignedHIWORD(unchecked((int)(long)m.LParam))
+                    X = PARAM.SignedLOWORD(m.LParam),
+                    Y = PARAM.SignedHIWORD(m.LParam)
                 };
                 User32.MapWindowPoints(m.HWnd, IntPtr.Zero, ref pt, 1);
                 x = pt.X;
@@ -1717,8 +1717,8 @@ namespace System.Windows.Forms.Design
             }
             else if (m.Msg >= WindowMessages.WM_NCMOUSEMOVE && m.Msg <= WindowMessages.WM_NCMBUTTONDBLCLK)
             {
-                x = NativeMethods.Util.SignedLOWORD(unchecked((int)(long)m.LParam));
-                y = NativeMethods.Util.SignedHIWORD(unchecked((int)(long)m.LParam));
+                x = PARAM.SignedLOWORD(m.LParam);
+                y = PARAM.SignedHIWORD(m.LParam);
             }
 
             // This is implemented on the base designer for UI activation support.  We call it so that we can support UI activation.
@@ -2158,8 +2158,8 @@ namespace System.Windows.Forms.Design
                     }
 
                     // We handle this in addition to a right mouse button. Why?  Because we often eat the right mouse button, so it may never generate a WM_CONTEXTMENU.  However, the system may generate one in response to an F-10.
-                    x = NativeMethods.Util.SignedLOWORD(unchecked((int)(long)m.LParam));
-                    y = NativeMethods.Util.SignedHIWORD(unchecked((int)(long)m.LParam));
+                    x = PARAM.SignedLOWORD(m.LParam);
+                    y = PARAM.SignedHIWORD(m.LParam);
 
                     ToolStripKeyboardHandlingService keySvc = (ToolStripKeyboardHandlingService)GetService(typeof(ToolStripKeyboardHandlingService));
                     bool handled = false;
@@ -2361,10 +2361,10 @@ namespace System.Windows.Forms.Design
 
         private int GetParentPointFromLparam(IntPtr lParam)
         {
-            Point pt = new Point(NativeMethods.Util.SignedLOWORD(unchecked((int)(long)lParam)), NativeMethods.Util.SignedHIWORD(unchecked((int)(long)lParam)));
+            Point pt = new Point(PARAM.SignedLOWORD(lParam), PARAM.SignedHIWORD(lParam));
             pt = Control.PointToScreen(pt);
             pt = Control.Parent.PointToClient(pt);
-            return NativeMethods.Util.MAKELONG(pt.X, pt.Y);
+            return PARAM.ToInt(pt.X, pt.Y);
         }
 
         [ComVisible(true)]
@@ -2687,7 +2687,7 @@ namespace System.Windows.Forms.Design
                 {
                     _designer.RemoveSubclassedWindow(m.HWnd);
                 }
-                if (m.Msg == WindowMessages.WM_PARENTNOTIFY && NativeMethods.Util.LOWORD(unchecked((int)(long)m.WParam)) == (short)WindowMessages.WM_CREATE)
+                if (m.Msg == WindowMessages.WM_PARENTNOTIFY && PARAM.LOWORD(m.WParam) == (short)WindowMessages.WM_CREATE)
                 {
                     _designer.HookChildHandles(m.LParam); // they will get removed from the collection just above
                 }

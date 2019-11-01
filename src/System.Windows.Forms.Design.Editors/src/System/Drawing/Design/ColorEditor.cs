@@ -1134,7 +1134,7 @@ namespace System.Drawing.Design
                         this.Color = Color.Empty;
                         break;
                     case WindowMessages.WM_COMMAND:
-                        switch (NativeMethods.Util.LOWORD(unchecked((int)(long)wParam)))
+                        switch (PARAM.LOWORD(wParam))
                         {
                             case COLOR_ADD:
                                 byte red, green, blue;
@@ -1146,7 +1146,7 @@ namespace System.Drawing.Design
                                 blue = (byte)NativeMethods.GetDlgItemInt(hwnd, COLOR_BLUE, err, false);
                                 Debug.Assert(!err[0], "Couldn't find dialog member COLOR_BLUE");
                                 this.Color = Color.FromArgb(red, green, blue);
-                                NativeMethods.PostMessage(hwnd, WindowMessages.WM_COMMAND, (IntPtr)NativeMethods.Util.MAKELONG(NativeMethods.IDOK, 0), NativeMethods.GetDlgItem(hwnd, NativeMethods.IDOK));
+                                NativeMethods.PostMessage(hwnd, WindowMessages.WM_COMMAND, PARAM.FromLowHigh(NativeMethods.IDOK, 0), NativeMethods.GetDlgItem(hwnd, NativeMethods.IDOK));
                                 break;
                         }
                         break;

@@ -1479,8 +1479,8 @@ namespace System.Windows.Forms
                             // of the active dropdown.  If not, we should dismiss it.
                             //
                             ProcessMouseButtonPressed(m.HWnd,
-                                /*x=*/NativeMethods.Util.SignedLOWORD(m.LParam),
-                                /*y=*/NativeMethods.Util.SignedHIWORD(m.LParam));
+                                /*x=*/PARAM.SignedLOWORD(m.LParam),
+                                /*y=*/PARAM.SignedHIWORD(m.LParam));
 
                             break;
                         case WindowMessages.WM_NCLBUTTONDOWN:
@@ -1491,8 +1491,8 @@ namespace System.Windows.Forms
                             // of the active dropdown.  If not, we should dismiss it.
                             //
                             ProcessMouseButtonPressed(/*nc messages are in screen coords*/IntPtr.Zero,
-                                /*x=*/NativeMethods.Util.SignedLOWORD(m.LParam),
-                                /*y=*/NativeMethods.Util.SignedHIWORD(m.LParam));
+                                /*x=*/PARAM.SignedLOWORD(m.LParam),
+                                /*y=*/PARAM.SignedHIWORD(m.LParam));
                             break;
 
                         case WindowMessages.WM_KEYDOWN:

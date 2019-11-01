@@ -372,7 +372,7 @@ namespace System.Windows.Forms
             switch (m.Msg)
             {
                 case WindowMessages.WM_REFLECT + WindowMessages.WM_COMMAND:
-                    if (NativeMethods.Util.HIWORD(m.WParam) == NativeMethods.BN_CLICKED)
+                    if (PARAM.HIWORD(m.WParam) == NativeMethods.BN_CLICKED)
                     {
                         Debug.Assert(!GetStyle(ControlStyles.UserPaint), "Shouldn't get BN_CLICKED when UserPaint");
                         if (!ValidationCancelled)

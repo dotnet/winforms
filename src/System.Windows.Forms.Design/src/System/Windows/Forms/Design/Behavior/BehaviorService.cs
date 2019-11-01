@@ -932,8 +932,8 @@ namespace System.Windows.Forms.Design.Behavior
                         break;
 
                     case WindowMessages.WM_NCHITTEST:
-                        Point pt = new Point((short)NativeMethods.Util.LOWORD(unchecked((int)(long)m.LParam)),
-                                             (short)NativeMethods.Util.HIWORD(unchecked((int)(long)m.LParam)));
+                        Point pt = new Point((short)PARAM.LOWORD(m.LParam),
+                                             (short)PARAM.HIWORD(m.LParam));
                         var pt1 = new Point();
                         User32.MapWindowPoints(IntPtr.Zero, Handle, ref pt1, 1);
                         pt.Offset(pt1.X, pt1.Y);
@@ -1180,7 +1180,8 @@ namespace System.Windows.Forms.Design.Behavior
                                 _processingMessage = true;
                                 var pt = new Point(x, y);
                                 User32.MapWindowPoints(IntPtr.Zero, adornerWindow.Handle, ref pt, 1);
-                                Message m = Message.Create(hWnd, msg, (IntPtr)0, (IntPtr)MAKELONG(pt.Y, pt.X));
+                                Message m = Message.Create(hWnd, msg, (IntPtr)0, PARAM.FromLowHigh(pt.Y, pt.X));
+
                                 // No one knows why we get an extra click here from VS. As a workaround, we check the TimeStamp and discard it.
                                 if (m.Msg == WindowMessages.WM_LBUTTONDOWN)
                                 {
@@ -1210,11 +1211,6 @@ namespace System.Windows.Forms.Design.Behavior
                         }
                     }
                     return false;
-                }
-
-                public static int MAKELONG(int low, int high)
-                {
-                    return (high << 16) | (low & 0xffff);
                 }
             }
         }

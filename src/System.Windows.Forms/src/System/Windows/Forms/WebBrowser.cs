@@ -1407,8 +1407,8 @@ namespace System.Windows.Forms
             switch (m.Msg)
             {
                 case WindowMessages.WM_CONTEXTMENU:
-                    int x = NativeMethods.Util.SignedLOWORD(m.LParam);
-                    int y = NativeMethods.Util.SignedHIWORD(m.LParam);
+                    int x = PARAM.SignedLOWORD(m.LParam);
+                    int y = PARAM.SignedHIWORD(m.LParam);
 
                     if (!ShowContextMenu(x, y))
                     {

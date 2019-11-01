@@ -1847,7 +1847,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                             else
                             {
                                 Rectangle r = GetRectangle(row, rowValue ? ROWVALUE : ROWLABEL);
-                                return (r.Y << 16 | (r.X & 0xFFFF));
+                                return PARAM.ToInt(r.X, r.Y);
                             }
                         }
                         else
@@ -3234,7 +3234,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     Math.Abs(screenPoint.Y - rowSelectPos.Y) < SystemInformation.DoubleClickSize.Height)
                 {
                     DoubleClickRow(selectedRow, false, ROWVALUE);
-                    Edit.SendMessage(WindowMessages.WM_LBUTTONUP, 0, (int)(me.Y << 16 | (me.X & 0xFFFF)));
+                    Edit.SendMessage(WindowMessages.WM_LBUTTONUP, 0, PARAM.FromLowHigh(me.X, me.Y));
                     Edit.SelectAll();
                 }
                 rowSelectPos = Point.Empty;
@@ -4183,8 +4183,8 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 Point editPoint = PointToScreen(lastMouseDown);
                 editPoint = Edit.PointToClient(editPoint);
-                Edit.SendMessage(WindowMessages.WM_LBUTTONDOWN, 0, (int)(editPoint.Y << 16 | (editPoint.X & 0xFFFF)));
-                Edit.SendMessage(WindowMessages.WM_LBUTTONUP, 0, (int)(editPoint.Y << 16 | (editPoint.X & 0xFFFF)));
+                Edit.SendMessage(WindowMessages.WM_LBUTTONDOWN, 0, PARAM.FromLowHigh(editPoint.X, editPoint.Y));
+                Edit.SendMessage(WindowMessages.WM_LBUTTONUP, 0, PARAM.FromLowHigh(editPoint.X, editPoint.Y));
             }
 
             if (setSelectTime)
@@ -7017,7 +7017,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     SetState(States.Modal, true);
                     Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "DropDownHolder:WM_ACTIVATE()");
                     IntPtr activatedWindow = (IntPtr)m.LParam;
-                    if (Visible && NativeMethods.Util.LOWORD(m.WParam) == NativeMethods.WA_INACTIVE && !OwnsWindow(activatedWindow))
+                    if (Visible && PARAM.LOWORD(m.WParam) == NativeMethods.WA_INACTIVE && !OwnsWindow(activatedWindow))
                     {
                         gridView.CloseDropDownInternal(false);
                         return;

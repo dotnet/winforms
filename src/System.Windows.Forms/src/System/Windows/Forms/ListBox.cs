@@ -1631,11 +1631,11 @@ namespace System.Windows.Forms
             User32.GetClientRect(new HandleRef(this, Handle), ref r);
             if (r.left <= x && x < r.right && r.top <= y && y < r.bottom)
             {
-                int index = unchecked((int)(long)SendMessage(NativeMethods.LB_ITEMFROMPOINT, 0, unchecked((int)(long)NativeMethods.Util.MAKELPARAM(x, y))));
-                if (NativeMethods.Util.HIWORD(index) == 0)
+                int index = unchecked((int)(long)SendMessage(NativeMethods.LB_ITEMFROMPOINT, 0, unchecked((int)(long)PARAM.FromLowHigh(x, y))));
+                if (PARAM.HIWORD(index) == 0)
                 {
                     // Inside ListBox client area
-                    return NativeMethods.Util.LOWORD(index);
+                    return PARAM.LOWORD(index);
                 }
             }
 
@@ -2437,7 +2437,7 @@ namespace System.Windows.Forms
 
         protected virtual void WmReflectCommand(ref Message m)
         {
-            switch (NativeMethods.Util.HIWORD(m.WParam))
+            switch (PARAM.HIWORD(m.WParam))
             {
                 case NativeMethods.LBN_SELCHANGE:
                     if (selectedItems != null)
@@ -2537,8 +2537,8 @@ namespace System.Windows.Forms
                 case WindowMessages.WM_LBUTTONUP:
                     // Get the mouse location
                     //
-                    int x = NativeMethods.Util.SignedLOWORD(m.LParam);
-                    int y = NativeMethods.Util.SignedHIWORD(m.LParam);
+                    int x = PARAM.SignedLOWORD(m.LParam);
+                    int y = PARAM.SignedHIWORD(m.LParam);
                     Point pt = new Point(x, y);
                     pt = PointToScreen(pt);
                     bool captured = Capture;
@@ -2546,8 +2546,8 @@ namespace System.Windows.Forms
                     {
                         if (!doubleClickFired && !ValidationCancelled)
                         {
-                            OnClick(new MouseEventArgs(MouseButtons.Left, 1, NativeMethods.Util.SignedLOWORD(m.LParam), NativeMethods.Util.SignedHIWORD(m.LParam), 0));
-                            OnMouseClick(new MouseEventArgs(MouseButtons.Left, 1, NativeMethods.Util.SignedLOWORD(m.LParam), NativeMethods.Util.SignedHIWORD(m.LParam), 0));
+                            OnClick(new MouseEventArgs(MouseButtons.Left, 1, PARAM.SignedLOWORD(m.LParam), PARAM.SignedHIWORD(m.LParam), 0));
+                            OnMouseClick(new MouseEventArgs(MouseButtons.Left, 1, PARAM.SignedLOWORD(m.LParam), PARAM.SignedHIWORD(m.LParam), 0));
                         }
                         else
                         {
@@ -2556,8 +2556,8 @@ namespace System.Windows.Forms
                             // so we can't use that as a double-click substitute
                             if (!ValidationCancelled)
                             {
-                                OnDoubleClick(new MouseEventArgs(MouseButtons.Left, 2, NativeMethods.Util.SignedLOWORD(m.LParam), NativeMethods.Util.SignedHIWORD(m.LParam), 0));
-                                OnMouseDoubleClick(new MouseEventArgs(MouseButtons.Left, 2, NativeMethods.Util.SignedLOWORD(m.LParam), NativeMethods.Util.SignedHIWORD(m.LParam), 0));
+                                OnDoubleClick(new MouseEventArgs(MouseButtons.Left, 2, PARAM.SignedLOWORD(m.LParam), PARAM.SignedHIWORD(m.LParam), 0));
+                                OnMouseDoubleClick(new MouseEventArgs(MouseButtons.Left, 2, PARAM.SignedLOWORD(m.LParam), PARAM.SignedHIWORD(m.LParam), 0));
                             }
                         }
                     }
@@ -2584,8 +2584,8 @@ namespace System.Windows.Forms
                 case WindowMessages.WM_RBUTTONUP:
                     // Get the mouse location
                     //
-                    int rx = NativeMethods.Util.SignedLOWORD(m.LParam);
-                    int ry = NativeMethods.Util.SignedHIWORD(m.LParam);
+                    int rx = PARAM.SignedLOWORD(m.LParam);
+                    int ry = PARAM.SignedHIWORD(m.LParam);
                     Point rpt = new Point(rx, ry);
                     rpt = PointToScreen(rpt);
                     bool rCaptured = Capture;
