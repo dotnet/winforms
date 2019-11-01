@@ -595,58 +595,6 @@ namespace System.Windows.Forms
             }
         }
 
-        [ComImport]
-        [Guid("00000119-0000-0000-C000-000000000046")]
-        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public unsafe interface IOleInPlaceSite
-        {
-            [PreserveSig]
-            HRESULT GetWindow(
-                IntPtr* phwnd);
-
-            [PreserveSig]
-            HRESULT ContextSensitiveHelp(
-                BOOL fEnterMode);
-
-            [PreserveSig]
-            HRESULT CanInPlaceActivate();
-
-            [PreserveSig]
-            int OnInPlaceActivate();
-
-            [PreserveSig]
-            int OnUIActivate();
-
-            [PreserveSig]
-            HRESULT GetWindowContext(
-                out Ole32.IOleInPlaceFrame ppFrame,
-                out Ole32.IOleInPlaceUIWindow ppDoc,
-                RECT* lprcPosRect,
-                RECT* lprcClipRect,
-                Ole32.OLEINPLACEFRAMEINFO* lpFrameInfo);
-
-            [PreserveSig]
-            HRESULT Scroll(
-                Size scrollExtant);
-
-            [PreserveSig]
-            int OnUIDeactivate(
-                int fUndoable);
-
-            [PreserveSig]
-            int OnInPlaceDeactivate();
-
-            [PreserveSig]
-            int DiscardUndoState();
-
-            [PreserveSig]
-            HRESULT DeactivateAndUndo();
-
-            [PreserveSig]
-            HRESULT OnPosRectChange(
-                RECT* lprcPosRect);
-        }
-
         // Used to control the webbrowser appearance and provide DTE to script via window.external
         [ComImport]
         [ComVisible(true)]
@@ -1804,64 +1752,6 @@ namespace System.Windows.Forms
 
             [DllImport(ExternDll.Shell32, PreserveSig = true)]
             public static extern int SHILCreateFromPath([MarshalAs(UnmanagedType.LPWStr)]string pszPath, out IntPtr ppIdl, ref uint rgflnOut);
-        }
-
-        [ComVisible(true), Guid("B722BCC6-4E68-101B-A2BC-00AA00404770"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IOleDocumentView
-        {
-            void SetInPlaceSite(
-                 [In, MarshalAs(UnmanagedType.Interface)]
-                    IOleInPlaceSite pIPSite);
-
-            [return: MarshalAs(UnmanagedType.Interface)]
-            IOleInPlaceSite GetInPlaceSite();
-
-            [return: MarshalAs(UnmanagedType.Interface)]
-            object GetDocument();
-
-            void SetRect(
-                 [In]
-                    ref RECT prcView);
-
-            void GetRect(
-                 [In, Out]
-                    ref RECT prcView);
-
-            void SetRectComplex(
-                 [In]
-                    RECT prcView,
-                 [In]
-                    RECT prcHScroll,
-                 [In]
-                    RECT prcVScroll,
-                 [In]
-                    RECT prcSizeBox);
-
-            void Show(bool fShow);
-
-            [PreserveSig]
-            int UIActivate(bool fUIActivate);
-
-            void Open();
-
-            [PreserveSig]
-            int Close(
-                 [In, MarshalAs(UnmanagedType.U4)]
-                    int dwReserved);
-
-            void SaveViewState(
-                 [In, MarshalAs(UnmanagedType.Interface)]
-                    IStream pstm);
-
-            void ApplyViewState(
-                 [In, MarshalAs(UnmanagedType.Interface)]
-                    IStream pstm);
-
-            void Clone(
-                 [In, MarshalAs(UnmanagedType.Interface)]
-                    IOleInPlaceSite pIPSiteNew,
-                 [Out, MarshalAs(UnmanagedType.LPArray)]
-                    IOleDocumentView[] ppViewNew);
         }
 
         /// <summary>

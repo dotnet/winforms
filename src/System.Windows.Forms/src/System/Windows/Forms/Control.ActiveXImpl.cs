@@ -843,7 +843,7 @@ namespace System.Windows.Forms
                 // If we don't have a client site, then there's not much to do.
                 // We also punt if this isn't an in-place site, since we can't
                 // go active then.
-                if (!(_clientSite is UnsafeNativeMethods.IOleInPlaceSite inPlaceSite))
+                if (!(_clientSite is Ole32.IOleInPlaceSite inPlaceSite))
                 {
                     return;
                 }
@@ -1008,7 +1008,7 @@ namespace System.Windows.Forms
                 _activeXState[s_inPlaceVisible] = false;
 
                 // Notify our site of our deactivation.
-                if (_clientSite is UnsafeNativeMethods.IOleInPlaceSite oleClientSite)
+                if (_clientSite is Ole32.IOleInPlaceSite oleClientSite)
                 {
                     oleClientSite.OnInPlaceDeactivate();
                 }
@@ -2042,7 +2042,7 @@ namespace System.Windows.Forms
                         // Otherwise, just set it on our control directly.
                         if (_activeXState[s_inPlaceActive])
                         {
-                            if (_clientSite is UnsafeNativeMethods.IOleInPlaceSite ioleClientSite)
+                            if (_clientSite is Ole32.IOleInPlaceSite ioleClientSite)
                             {
                                 Rectangle bounds = _control.Bounds;
                                 bounds.Location = new Point(bounds.X, bounds.Y);
@@ -2370,7 +2370,7 @@ namespace System.Windows.Forms
                 Debug.Assert(_inPlaceFrame != null, "No inplace frame -- how dod we go UI active?");
                 _inPlaceFrame.SetActiveObject(null, null);
 
-                if (_clientSite is UnsafeNativeMethods.IOleInPlaceSite ioleClientSite)
+                if (_clientSite is Ole32.IOleInPlaceSite ioleClientSite)
                 {
                     ioleClientSite.OnUIDeactivate(0);
                 }
@@ -2403,7 +2403,7 @@ namespace System.Windows.Forms
             {
                 if (!_activeXState[s_adjustingRect] && _activeXState[s_inPlaceVisible])
                 {
-                    if (_clientSite is UnsafeNativeMethods.IOleInPlaceSite ioleClientSite)
+                    if (_clientSite is Ole32.IOleInPlaceSite ioleClientSite)
                     {
                         var rc = new RECT();
                         if ((flags & User32.SWP.NOMOVE) != 0)

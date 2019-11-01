@@ -112,7 +112,6 @@
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.OLECMDID.cs" Link="Interop\Ole32\Interop.OLECMDID.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.OLECONTF.cs" Link="Interop\Ole32\Interop.OLECONTF.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.OLEGETMONIKER.cs" Link="Interop\Ole32\Interop.OLEGETMONIKER.cs" />
-    <Compile Include="..\..\Common\src\Interop\Ole32\Interop.OLEINPLACEFRAMEINFO.cs" Link="Interop\Ole32\Interop.OLEINPLACEFRAMEINFO.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.OLEIVERB.cs" Link="Interop\Ole32\Interop.OLEIVERB.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.OLEMENUGROUPWIDTHS.cs" Link="Interop\Ole32\Interop.OLEMENUGROUPWIDTHS.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.OLEMISC.cs" Link="Interop\Ole32\Interop.OLEMISC.cs" />

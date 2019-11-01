@@ -24,7 +24,7 @@ namespace System.Windows.Forms
         private class OleInterfaces :
             Ole32.IOleControlSite,
             Ole32.IOleClientSite,
-            UnsafeNativeMethods.IOleInPlaceSite,
+            Ole32.IOleInPlaceSite,
             Ole32.ISimpleFrameSite,
             Ole32.IVBGetControl,
             Ole32.IGetVBAObject,
@@ -440,7 +440,7 @@ namespace System.Windows.Forms
 
             // IOleInPlaceSite methods:
 
-            unsafe HRESULT UnsafeNativeMethods.IOleInPlaceSite.GetWindow(IntPtr* phwnd)
+            unsafe HRESULT Ole32.IOleInPlaceSite.GetWindow(IntPtr* phwnd)
             {
                 if (phwnd == null)
                 {
@@ -453,36 +453,36 @@ namespace System.Windows.Forms
                 return HRESULT.S_OK;
             }
 
-            HRESULT UnsafeNativeMethods.IOleInPlaceSite.ContextSensitiveHelp(BOOL fEnterMode)
+            HRESULT Ole32.IOleInPlaceSite.ContextSensitiveHelp(BOOL fEnterMode)
             {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in ContextSensitiveHelp");
                 return HRESULT.E_NOTIMPL;
             }
 
-            HRESULT UnsafeNativeMethods.IOleInPlaceSite.CanInPlaceActivate()
+            HRESULT Ole32.IOleInPlaceSite.CanInPlaceActivate()
             {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in CanInPlaceActivate");
                 return HRESULT.S_OK;
             }
 
-            int UnsafeNativeMethods.IOleInPlaceSite.OnInPlaceActivate()
+            HRESULT Ole32.IOleInPlaceSite.OnInPlaceActivate()
             {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in OnInPlaceActivate");
                 host.SetAxState(AxHost.ownDisposing, false);
                 host.SetAxState(AxHost.rejectSelection, false);
                 host.SetOcState(OC_INPLACE);
-                return NativeMethods.S_OK;
+                return HRESULT.S_OK;
             }
 
-            int UnsafeNativeMethods.IOleInPlaceSite.OnUIActivate()
+            HRESULT Ole32.IOleInPlaceSite.OnUIActivate()
             {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in OnUIActivate for " + host.ToString());
                 host.SetOcState(OC_UIACTIVE);
                 host.GetParentContainer().OnUIActivate(host);
-                return NativeMethods.S_OK;
+                return HRESULT.S_OK;
             }
 
-            unsafe HRESULT UnsafeNativeMethods.IOleInPlaceSite.GetWindowContext(
+            unsafe HRESULT Ole32.IOleInPlaceSite.GetWindowContext(
                 out Ole32.IOleInPlaceFrame ppFrame,
                 out Ole32.IOleInPlaceUIWindow ppDoc,
                 RECT* lprcPosRect,
@@ -511,12 +511,9 @@ namespace System.Windows.Forms
                 return HRESULT.S_OK;
             }
 
-            Interop.HRESULT UnsafeNativeMethods.IOleInPlaceSite.Scroll(Size scrollExtant)
-            {
-                return Interop.HRESULT.S_FALSE;
-            }
+            HRESULT Ole32.IOleInPlaceSite.Scroll(Size scrollExtant) => HRESULT.S_FALSE;
 
-            int UnsafeNativeMethods.IOleInPlaceSite.OnUIDeactivate(int fUndoable)
+            HRESULT Ole32.IOleInPlaceSite.OnUIDeactivate(BOOL fUndoable)
             {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in OnUIDeactivate for " + host.ToString());
                 host.GetParentContainer().OnUIDeactivate(host);
@@ -524,36 +521,37 @@ namespace System.Windows.Forms
                 {
                     host.SetOcState(OC_INPLACE);
                 }
-                return NativeMethods.S_OK;
+
+                return HRESULT.S_OK;
             }
 
-            int UnsafeNativeMethods.IOleInPlaceSite.OnInPlaceDeactivate()
+            HRESULT Ole32.IOleInPlaceSite.OnInPlaceDeactivate()
             {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in OnInPlaceDeactivate");
                 if (host.GetOcState() == OC_UIACTIVE)
                 {
-                    ((UnsafeNativeMethods.IOleInPlaceSite)this).OnUIDeactivate(0);
+                    ((Ole32.IOleInPlaceSite)this).OnUIDeactivate(0);
                 }
 
                 host.GetParentContainer().OnInPlaceDeactivate(host);
                 host.DetachWindow();
                 host.SetOcState(OC_RUNNING);
-                return NativeMethods.S_OK;
+                return HRESULT.S_OK;
             }
 
-            int UnsafeNativeMethods.IOleInPlaceSite.DiscardUndoState()
+            HRESULT Ole32.IOleInPlaceSite.DiscardUndoState()
             {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in DiscardUndoState");
-                return NativeMethods.S_OK;
+                return HRESULT.S_OK;
             }
 
-            HRESULT UnsafeNativeMethods.IOleInPlaceSite.DeactivateAndUndo()
+            HRESULT Ole32.IOleInPlaceSite.DeactivateAndUndo()
             {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in DeactivateAndUndo for " + host.ToString());
                 return host.GetInPlaceObject().UIDeactivate();
             }
 
-            unsafe HRESULT UnsafeNativeMethods.IOleInPlaceSite.OnPosRectChange(RECT* lprcPosRect)
+            unsafe HRESULT Ole32.IOleInPlaceSite.OnPosRectChange(RECT* lprcPosRect)
             {
                 if (lprcPosRect == null)
                 {
