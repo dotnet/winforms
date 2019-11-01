@@ -96,7 +96,7 @@ namespace System.Windows.Forms
                 if (_childCount != 0)
                     return;
 
-                IntPtr hwndChild = UnsafeNativeMethods.GetWindow(new HandleRef(this, Handle), NativeMethods.GW_CHILD);
+                IntPtr hwndChild = User32.GetWindow(new HandleRef(this, Handle), User32.GW.CHILD);
                 if (hwndChild == IntPtr.Zero)
                 {
                     DestroyHandle();

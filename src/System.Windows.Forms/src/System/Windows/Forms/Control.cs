@@ -2702,7 +2702,7 @@ namespace System.Windows.Forms
                     }
 
                     for (prev = start;
-                         (next = UnsafeNativeMethods.GetWindow(new HandleRef(null, prev), NativeMethods.GW_HWNDPREV)) != IntPtr.Zero;
+                         (next = User32.GetWindow(new HandleRef(null, prev), User32.GW.HWNDPREV)) != IntPtr.Zero;
                          prev = next)
                     {
 
@@ -6025,9 +6025,9 @@ namespace System.Windows.Forms
         {
             ArrayList windows = new ArrayList();
 
-            for (IntPtr hWndChild = UnsafeNativeMethods.GetWindow(new HandleRef(null, hWndParent), NativeMethods.GW_CHILD);
+            for (IntPtr hWndChild = User32.GetWindow(new HandleRef(null, hWndParent), User32.GW.CHILD);
                  hWndChild != IntPtr.Zero;
-                 hWndChild = UnsafeNativeMethods.GetWindow(new HandleRef(null, hWndChild), NativeMethods.GW_HWNDNEXT))
+                 hWndChild = User32.GetWindow(new HandleRef(null, hWndChild), User32.GW.HWNDNEXT))
             {
                 windows.Add(hWndChild);
             }
@@ -11675,7 +11675,7 @@ namespace System.Windows.Forms
             int newIndex = 0;
             int curIndex = Controls.GetChildIndex(ctl);
             IntPtr hWnd = ctl.InternalHandle;
-            while ((hWnd = UnsafeNativeMethods.GetWindow(new HandleRef(null, hWnd), NativeMethods.GW_HWNDPREV)) != IntPtr.Zero)
+            while ((hWnd = User32.GetWindow(new HandleRef(null, hWnd), User32.GW.HWNDPREV)) != IntPtr.Zero)
             {
                 Control c = FromHandle(hWnd);
                 if (c != null)
@@ -11747,7 +11747,7 @@ namespace System.Windows.Forms
                     break;
                 }
             }
-            if (UnsafeNativeMethods.GetWindow(new HandleRef(ctl._window, ctl.Handle), NativeMethods.GW_HWNDPREV) != prevHandle)
+            if (User32.GetWindow(new HandleRef(ctl._window, ctl.Handle), User32.GW.HWNDPREV) != prevHandle)
             {
                 _state |= States.NoZOrder;
                 try

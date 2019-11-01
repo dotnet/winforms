@@ -2536,7 +2536,7 @@ namespace System.Windows.Forms
 
             if (ok && DropDownStyle != ComboBoxStyle.DropDownList)
             {
-                IntPtr hwnd = UnsafeNativeMethods.GetWindow(new HandleRef(this, Handle), NativeMethods.GW_CHILD);
+                IntPtr hwnd = User32.GetWindow(new HandleRef(this, Handle), User32.GW.CHILD);
                 if (hwnd != IntPtr.Zero)
                 {
 
@@ -2549,7 +2549,7 @@ namespace System.Windows.Forms
 
                         // get the edits hwnd...
                         //
-                        hwnd = UnsafeNativeMethods.GetWindow(new HandleRef(this, hwnd), NativeMethods.GW_HWNDNEXT);
+                        hwnd = User32.GetWindow(new HandleRef(this, hwnd), User32.GW.HWNDNEXT);
                     }
 
                     childEdit = new ComboBoxChildNativeWindow(this, ChildWindowType.Edit);
