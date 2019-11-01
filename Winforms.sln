@@ -46,6 +46,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Accessibility", "src\Accessibility\src\Accessibility.ilproj", "{351D8601-6E21-45E8-B3B9-847C4540BD4E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Accessibility-version", "src\Accessibility\ver\Accessibility-version.csproj", "{6103E743-057D-41C6-946C-23A751A08748}"
+	ProjectSection(ProjectDependencies) = postProject
+		{5950A0B3-7977-4138-8837-1F9531A3C9C9} = {5950A0B3-7977-4138-8837-1F9531A3C9C9}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Accessibility", "Accessibility", "{088DD24C-DF6B-45F3-A8BC-592580A4B2A9}"
 	ProjectSection(SolutionItems) = preProject
@@ -104,6 +107,20 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "accessibility", "accessibility", "{D390F7D2-1E11-4DEE-B7F1-4FD0681A81F0}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AccessibilityTests", "src\System.Windows.Forms\tests\AccessibilityTests\AccessibilityTests.csproj", "{A9F13504-5560-4CC7-80A2-11E23E5852E1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ApiCompatability", "ApiCompatability", "{9B468403-49CC-482E-8D94-79BD0A7C45EB}"
+	ProjectSection(SolutionItems) = preProject
+		eng\ApiCompatability\DesktopApiCompat.props = eng\ApiCompatability\DesktopApiCompat.props
+		eng\ApiCompatability\DesktopApiCompat.targets = eng\ApiCompatability\DesktopApiCompat.targets
+		eng\ApiCompatability\DesktopAttributeTypeExclusions.txt = eng\ApiCompatability\DesktopAttributeTypeExclusions.txt
+		eng\ApiCompatability\PreviousReleaseApiCompat.props = eng\ApiCompatability\PreviousReleaseApiCompat.props
+		eng\ApiCompatability\PreviousReleaseApiCompat.targets = eng\ApiCompatability\PreviousReleaseApiCompat.targets
+		eng\ApiCompatability\ResolveMatchingPreviousReleaseContract.targets = eng\ApiCompatability\ResolveMatchingPreviousReleaseContract.targets
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PreviousReleaseWitnessProject", "PreviousReleaseWitnessProject", "{DE508AD2-A8FD-4151-B9A5-32C0D11DBA62}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WinFormsStableAPIProject", "eng\ApiCompatability\WinFormsStableAPIProject\WinFormsStableAPIProject.csproj", "{5950A0B3-7977-4138-8837-1F9531A3C9C9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -195,6 +212,10 @@ Global
 		{A9F13504-5560-4CC7-80A2-11E23E5852E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A9F13504-5560-4CC7-80A2-11E23E5852E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A9F13504-5560-4CC7-80A2-11E23E5852E1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5950A0B3-7977-4138-8837-1F9531A3C9C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5950A0B3-7977-4138-8837-1F9531A3C9C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5950A0B3-7977-4138-8837-1F9531A3C9C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5950A0B3-7977-4138-8837-1F9531A3C9C9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -226,6 +247,9 @@ Global
 		{AF320975-3529-48A7-B4C9-67BCE1E1B9BE} = {8F20A905-BD37-4D80-B8DF-FA45276FC23F}
 		{D390F7D2-1E11-4DEE-B7F1-4FD0681A81F0} = {DF68A171-D27B-4E6A-8A7E-63A651622355}
 		{A9F13504-5560-4CC7-80A2-11E23E5852E1} = {D390F7D2-1E11-4DEE-B7F1-4FD0681A81F0}
+		{9B468403-49CC-482E-8D94-79BD0A7C45EB} = {462AD69A-9395-4E98-882D-569CDE562559}
+		{DE508AD2-A8FD-4151-B9A5-32C0D11DBA62} = {9B468403-49CC-482E-8D94-79BD0A7C45EB}
+		{5950A0B3-7977-4138-8837-1F9531A3C9C9} = {DE508AD2-A8FD-4151-B9A5-32C0D11DBA62}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7B1B0433-F612-4E5A-BE7E-FCF5B9F6E136}

@@ -9,5 +9,12 @@
     <ProjectReference Include="..\..\System.Windows.Forms.Design.Editors\src\System.Windows.Forms.Design.Editors.csproj" />
     <ProjectReference Include="..\..\System.Windows.Forms.Design\src\System.Windows.Forms.Design.csproj" />
   </ItemGroup>
+
+  <Target Name="RemoveReferenceToSelf" BeforeTargets="ResolveAssemblyReferences">
+    <ItemGroup>
+      <!-- in case we're regenerating a facade that is already automatically reference because it is part of the base shared framework -->
+      <Reference Remove="@(Reference)"  Condition="'%(FileName)%(Extension)' == '$(AssemblyName).dll'" />
+    </ItemGroup>
+  </Target>
   
 </Project>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+  <Target Name="ResolveMatchingContract" BeforeTargets="ResolveAssemblyReferences">
+    <Error Condition="!Exists('$(DesktopReferencePath)')" Text="Error, failed to restore '$(DesktopReferencePath)'" />
+    <!-- if this library has a matching name in desktop, set that as the ResolvedMatching contract
+         to be used by both GenFacades and APICompat. -->
+    <ItemGroup>
+      <ResolvedMatchingContract Condition="Exists('$(DesktopReferencePath)$(AssemblyName).dll')" Include="$(DesktopReferencePath)$(AssemblyName).dll" />
+    </ItemGroup>
+
+    <PropertyGroup>
+      <RunApiCompatForSrc Condition="!Exists('@(ResolvedMatchingContract)')">false</RunApiCompatForSrc>
+    </PropertyGroup>
+  </Target>
+</Project>

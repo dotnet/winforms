@@ -1,0 +1,47 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <AvoidRunningResolveMatchingPreviousReleaseContract>true</AvoidRunningResolveMatchingPreviousReleaseContract>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <!-- You should simply be able to change this in order to witness another version -->
+    <StableVersionToWitness>3.0.0</StableVersionToWitness>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Control the version of the Ref Pack used via the WindowsDesktop SDK -->
+    <FrameworkReference
+      Update="Microsoft.NETCore.App" 
+      TargetingPackVersion="$(StableVersionToWitness)"
+      RuntimeFrameworkVersion="$(StableVersionToWitness)" />
+  </ItemGroup>
+
+  <!-- The purpose of this target is to return a path from a referenced package / project -->
+  <Target Name="GetPreviousReleaseContract" DependsOnTargets="ResolveReferences" Returns="@(_contractReferencePath)">
+    <Error Condition="'$(ContractName)' == ''" Text="ContractName must be specified" />
+    <ItemGroup>
+      <_contractReferencePath Include="@(ReferencePath)" Condition="'%(FileName)' == '$(ContractName)'" />
+      <_allReferenceDirectories Include="%(ReferencePath.RootDir)%(ReferencePath.Directory)" />
+      <_contractReferencePath DependencyPaths="@(_allReferenceDirectories)" />
+    </ItemGroup>
+  </Target>
+
+  <Target Name="Build">
+    <!-- This will override the default Build target. -->
+  </Target>
+  <Target Name="Rebuild">
+    <!-- This will override the default Rebuild target. -->
+  </Target>
+  <Target Name="BuildAndTest">
+    <!-- This will override the default BuildAndTest target. -->
+  </Target>
+  <Target Name="RebuildAndTest">
+    <!-- This will override the default RebuildAndTest target. -->
+  </Target>
+
+</Project>

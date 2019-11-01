@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  
   <PropertyGroup>
     <IsFacadeAssembly Condition="'$(IsFacadeAssembly)'=='' AND ($(MSBuildProjectName.EndsWith('.Facade')))">true</IsFacadeAssembly>
   </PropertyGroup>
@@ -11,22 +10,10 @@
 
     <!-- Produce a full PDB for facade assemblies -->
     <DebugType>full</DebugType>
-
-    <MicrosoftTargetingPackNETFrameworkv472Package></MicrosoftTargetingPackNETFrameworkv472Package>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(IsFacadeAssembly)'=='true'">  
     <!-- PrivateAssets="All": don't flow package references to callers -->
-    <PackageReference Include="Microsoft.TargetingPack.NETFramework.v4.7.2" Version="$(MicrosoftTargetingPackNETFrameworkv472PackageVersion)" PrivateAssets="All" GeneratePathProperty="true" ExcludeAssets="All" NoWarn="NU1701" />
     <PackageReference Include="Microsoft.DotNet.GenFacades" Version="$(MicrosoftDotNetGenFacadesPackageVersion)" PrivateAssets="All" />
   </ItemGroup>
-  
-  <Target Condition="'$(IsFacadeAssembly)'=='true'" Name="ResolveMatchingContract" BeforeTargets="ResolveAssemblyReferences">
-    <ItemGroup>
-      <ResolvedMatchingContract Include="$(PkgMicrosoft_TargetingPack_NETFramework_v4_7_2)\lib\*\$(AssemblyName).dll" />
-
-      <!-- in case we're regenerating a facade that is already referenced -->
-      <Reference Remove="@(Reference)"  Condition="'%(FileName)%(Extension)' == '$(AssemblyName).dll'" />
-    </ItemGroup>
-  </Target>
 </Project>

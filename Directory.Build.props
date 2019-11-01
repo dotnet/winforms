@@ -2,8 +2,9 @@
 <Project>
   <Import Project="Sdk.props" Sdk="Microsoft.DotNet.Arcade.Sdk" />
   <Import Project="$(RepositoryEngineeringDir)CodeStyle.props" />  
-  <Import Project="eng\FacadeAssemblies.props" />
-
+  <Import Project="$(RepositoryEngineeringDir)FacadeAssemblies.props" />
+  <Import Project="$(RepositoryEngineeringDir)ApiCompatability\DesktopApiCompat.props" />
+  <Import Project="$(RepositoryEngineeringDir)ApiCompatability\PreviousReleaseApiCompat.props" />
   <PropertyGroup>
     <Product>Microsoft&#xAE; .NET</Product>
     <Copyright>$(CopyrightNetFoundation)</Copyright>
@@ -31,6 +32,15 @@
     <!-- Exclude anything tagged with Obsolete or with ExcludeFromCodeCoverage !!Avoid using this!! -->
     <ExcludeByAttribute>Obsolete,ExcludeFromCodeCoverage</ExcludeByAttribute>
     <ExcludeByFile />
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <AvoidRunningResolveMatchingPreviousReleaseContract>false</AvoidRunningResolveMatchingPreviousReleaseContract>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PreviousReleaseStableApiProject>$(RepositoryEngineeringDir)ApiCompatability\WinFormsStableAPIProject\WinFormsStableAPIProject.csproj</PreviousReleaseStableApiProject>
+    <DesktopReferencePath>$(NuGetPackageRoot)microsoft.targetingpack.netframework.v4.7.2\$(MicrosoftTargetingPackNETFrameworkv472PackageVersion)\lib\net472\</DesktopReferencePath>
   </PropertyGroup>
 
   <!-- Make sure coverage targets are defined even in projects where coverlet is not installed -->

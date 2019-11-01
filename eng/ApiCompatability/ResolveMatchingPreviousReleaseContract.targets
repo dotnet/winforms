@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+  <Target Name="ResolveMatchingPreviousReleaseContract" BeforeTargets="ResolveAssemblyReferences" Condition="'$(AvoidRunningResolveMatchingPreviousReleaseContract)' == 'false'">
+    <Error Condition="!Exists('$(PreviousReleaseStableApiProject)')" Text="Error, failed to locate '$(PreviousReleaseStableApiProject)'" />
+    <MSBuild Projects="$(PreviousReleaseStableApiProject)"
+             Targets="GetPreviousReleaseContract"
+             Properties="ContractName=$(AssemblyName);TargetFramework=$(TargetFramework)">
+      <Output TaskParameter="TargetOutputs" ItemName="ResolveMatchingPreviousReleaseContract"/>
+    </MSBuild>
+    <PropertyGroup>
+      <ResolvedMatchingPreviousReleaseContract>%(ResolveMatchingPreviousReleaseContract.DependencyPaths)</ResolvedMatchingPreviousReleaseContract>
+    </PropertyGroup>
+    <PropertyGroup>
+      <RunPreviousReleaseApiCompatForSrc Condition="!Exists('@(ResolvedMatchingPreviousReleaseContract)')">false</RunPreviousReleaseApiCompatForSrc>
+    </PropertyGroup>
+  </Target>
+</Project>

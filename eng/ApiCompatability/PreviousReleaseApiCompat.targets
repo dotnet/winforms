@@ -1,0 +1,65 @@
+<Project>
+
+  <PropertyGroup>
+      <!-- If DotNetTool is undefined, we default to assuming 'dotnet' is on the path -->
+    <DotNetTool Condition="'$(DotNetTool)' == ''">dotnet</DotNetTool>
+    <_ApiCompatPath>$(MSBuildThisFileDirectory)\..\tools\netcoreapp2.1\Microsoft.DotNet.ApiCompat.dll</_ApiCompatPath>
+    <_ApiCompatCommand>"$(DotNetTool)" "$(_ApiCompatPath)"</_ApiCompatCommand>
+
+  </PropertyGroup>
+
+    <!-- ApiCompat for Implementation Assemblies  -->
+  <Target Name="ValidateApiCompatAgainstPreviousRelease"
+          Condition="'$(RunApiCompatAgainstPreviousReleaseForSrc)' == 'true' and '$(RunApiCompat)' == 'true'">
+    
+    <Error Condition="'@(ResolvedMatchingPreviousReleaseContract)' == ''" 
+           Text="ResolvedMatchingPreviousReleaseContract item must be specified to run API compat." />
+    <Error Condition="!Exists('%(ResolvedMatchingPreviousReleaseContract.FullPath)')" 
+           Text="ResolvedMatchingPreviousReleaseContract '%(ResolvedMatchingPreviousReleaseContract.FullPath)' did not exist." />
+
+    <ItemGroup>
+      <_DependencyDirectoriesTemp Include="@(ReferencePath -> '%(RootDir)%(Directory)')" />
+      <!-- Remove duplicate directories by batching over them -->
+      <!-- Add project references first to give precedence to project-specific files -->
+      <_DependencyDirectories Condition="'%(_DependencyDirectoriesTemp.ReferenceSourceTarget)' == 'ProjectReference'" Include="%(_DependencyDirectoriesTemp.Identity)" />
+      <_DependencyDirectories Condition="'%(_DependencyDirectoriesTemp.ReferenceSourceTarget)' != 'ProjectReference'" Include="%(_DependencyDirectoriesTemp.Identity)" />
+      <_ContractDependencyDirectories Include="@(ResolvedMatchingPreviousReleaseContract -> '%(RootDir)%(Directory)')" />
+      <_ContractDependencyDirectories Include="@(ResolvedMatchingPreviousReleaseContract -> '%(DependencyPaths)')" />
+      <_ContractDependencyDirectories Include="$(ContractDependencyPaths)" />
+    </ItemGroup>
+
+    <PropertyGroup>
+      <PreviousReleaseApiCompatArgs>$(PreviousReleaseApiCompatArgs) --left-operand $(PreviousReleaseAPICompatLeftOperand) --right-operand $(PreviousReleaseAPICompatRightOperand)</PreviousReleaseApiCompatArgs>
+      <PreviousReleaseApiCompatArgs>$(PreviousReleaseApiCompatArgs) "@(ResolvedMatchingPreviousReleaseContract)"</PreviousReleaseApiCompatArgs>
+      <PreviousReleaseApiCompatArgs>$(PreviousReleaseApiCompatArgs) --contract-depends "@(_ContractDependencyDirectories, ','),"</PreviousReleaseApiCompatArgs>
+      <PreviousReleaseApiCompatArgs Condition="'$(PreviousReleaseApiCompatExcludeAttributeList)' != ''">$(PreviousReleaseApiCompatArgs) --exclude-attributes "$(PreviousReleaseApiCompatExcludeAttributeList)"</PreviousReleaseApiCompatArgs>
+      <PreviousReleaseApiCompatArgs Condition="'$(PreviousReleaseApiCompatEnforceOptionalRules)' == 'true'">$(PreviousReleaseApiCompatArgs) --enforce-optional-rules</PreviousReleaseApiCompatArgs>
+      <PreviousReleaseApiCompatArgs Condition="'$(BaselineAllAPICompatError)' != 'true' and Exists('$(PreviousReleaseApiCompatBaseline)')">$(PreviousReleaseApiCompatArgs) --baseline "$(PreviousReleaseApiCompatBaseline)"</PreviousReleaseApiCompatArgs>
+      <!-- Must be last option. -->
+      <PreviousReleaseApiCompatArgs>$(PreviousReleaseApiCompatArgs) --impl-dirs "$(IntermediateOutputPath),@(_DependencyDirectories, ','),"</PreviousReleaseApiCompatArgs>
+      <PreviousReleaseApiCompatBaselineAll Condition="'$(BaselineAllAPICompatError)' == 'true'">&gt; $(PreviousReleaseApiCompatBaseline)</PreviousReleaseApiCompatBaselineAll>
+      <ApiCompatExitCode>0</ApiCompatExitCode>
+
+      <PreviousReleaseApiCompatResponseFile>$(IntermediateOutputPath)apicompat.rsp</PreviousReleaseApiCompatResponseFile>
+    </PropertyGroup>
+
+    <MakeDir Directories="$(IntermediateOutputPath)" />
+    <WriteLinesToFile File="$(PreviousReleaseApiCompatResponseFile)" Lines="$(PreviousReleaseApiCompatArgs)" Overwrite="true" />
+
+    <Exec Command="$(_ApiCompatCommand) @&quot;$(PreviousReleaseApiCompatResponseFile)&quot; $(PreviousReleaseApiCompatBaselineAll)"
+          CustomErrorRegularExpression="^[a-zA-Z]+ :"
+          StandardOutputImportance="Low"
+          IgnoreExitCode="true">
+      <Output TaskParameter="ExitCode" PropertyName="ApiCompatExitCode" />
+    </Exec>
+
+    <!--
+      To force incremental builds to show failures again we are invalidating
+      one compile input.
+    -->
+    <Touch Condition="'$(ApiCompatExitCode)' != '0'" Files="$(IntermediateOutputPath)$(_ApiCompatSemaphoreFile)" AlwaysCreate="true">
+      <Output TaskParameter="TouchedFiles" ItemName="FileWrites" />
+    </Touch>
+    <Error Condition="'$(ApiCompatExitCode)' != '0'" Text="ApiCompat failed for '$(TargetPath)'" />
+  </Target> 
+</Project>

@@ -1,0 +1,27 @@
+<Project>
+
+<!--
+  This file is intended to be used in combination with DesktopApiCompat.targets, 
+  ResolveMetchingContract.targets, and DesktopAttributeTypeExclusion.txt to check
+  implementation against Classic Desktop reference assemblies excluding known 
+  changes notated in DesktopAPICompatBaseline files.
+
+  You can use the /p:BaselineAllAPICompatError=true flag to regenerate baseline files.
+-->
+
+  <PropertyGroup>
+    <RunApiCompat>true</RunApiCompat>
+    <!-- only validate that the current implementation is compatible
+         with the old one, not vice-versa (since latest may have new
+         API missing from old) -->
+    <RunApiCompatForSrc>true</RunApiCompatForSrc>
+    <RunMatchingRefApiCompat>false</RunMatchingRefApiCompat>
+    <DesktopAPICompatLeftOperand>".NET 4.7.2 implementation"</DesktopAPICompatLeftOperand>
+    <DesktopAPICompatRightOperand>".NET Core 3.1 implementation"</DesktopAPICompatRightOperand>
+    <ApiCompatArgs>$(ApiCompatArgs) --left-operand $(DesktopAPICompatLeftOperand) --right-operand $(DesktopAPICompatRightOperand)</ApiCompatArgs>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <ApiCompatExcludeAttributeList>$(RepositoryEngineeringDir)/ApiCompatability/DesktopAttributeTypeExclusions.txt</ApiCompatExcludeAttributeList>
+  </PropertyGroup>
+</Project>

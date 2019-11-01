@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+  <!-- This file will be automatically included by Arcade if it exists-->
+  <ItemGroup>
+    <PackageDownload Include="Microsoft.TargetingPack.NETFramework.v4.7.2" Version="[$(MicrosoftTargetingPackNETFrameworkv472PackageVersion)]" />
+  </ItemGroup>
+</Project>
