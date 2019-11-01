@@ -1,0 +1,47 @@
+Compat issues with assembly System.Drawing:
+CannotRemoveAttribute : Attribute 'System.Runtime.InteropServices.ComVisibleAttribute' exists on 'System.Drawing.Bitmap' in the .NET 4.7.2 implementation but not the .NET Core 3.0 implementation.
+CannotRemoveAttribute : Attribute 'System.ComponentModel.EditorAttribute' exists on 'System.Drawing.Bitmap' in the .NET 4.7.2 implementation but not the .NET Core 3.0 implementation.
+CannotRemoveBaseTypeOrInterface : Type 'System.Drawing.BitmapSuffixInSameAssemblyAttribute' does not implement interface 'System.Runtime.InteropServices._Attribute' in the .NET Core 3.0 implementation but it does in the .NET 4.7.2 implementation.
+CannotRemoveBaseTypeOrInterface : Type 'System.Drawing.BitmapSuffixInSatelliteAssemblyAttribute' does not implement interface 'System.Runtime.InteropServices._Attribute' in the .NET Core 3.0 implementation but it does in the .NET 4.7.2 implementation.
+CannotMakeTypeAbstract : Type 'System.Drawing.Brushes' is abstract in the .NET Core 3.0 implementation but is not abstract in the .NET 4.7.2 implementation.
+CannotMakeTypeAbstract : Type 'System.Drawing.BufferedGraphicsManager' is abstract in the .NET Core 3.0 implementation but is not abstract in the .NET 4.7.2 implementation.
+CannotRemoveAttribute : Attribute 'System.Diagnostics.DebuggerDisplayAttribute' exists on 'System.Drawing.Color' in the .NET 4.7.2 implementation but not the .NET Core 3.0 implementation.
+CannotRemoveAttribute : Attribute 'System.ComponentModel.EditorAttribute' exists on 'System.Drawing.Color' in the .NET 4.7.2 implementation but not the .NET Core 3.0 implementation.
+CannotRemoveAttribute : Attribute 'System.ComponentModel.TypeConverterAttribute' exists on 'System.Drawing.Color' in the .NET 4.7.2 implementation but not the .NET Core 3.0 implementation.
+CannotMakeTypeAbstract : Type 'System.Drawing.ColorTranslator' is abstract in the .NET Core 3.0 implementation but is not abstract in the .NET 4.7.2 implementation.
+CannotRemoveAttribute : Attribute 'System.ComponentModel.EditorAttribute' exists on 'System.Drawing.ContentAlignment' in the .NET 4.7.2 implementation but not the .NET Core 3.0 implementation.
+CannotRemoveAttribute : Attribute 'System.Runtime.InteropServices.ComVisibleAttribute' exists on 'System.Drawing.CopyPixelOperation' in the .NET 4.7.2 implementation but not the .NET Core 3.0 implementation.
+CannotRemoveAttribute : Attribute 'System.Runtime.InteropServices.ComVisibleAttribute' exists on 'System.Drawing.Font' in the .NET 4.7.2 implementation but not the .NET Core 3.0 implementation.
+CannotRemoveAttribute : Attribute 'System.ComponentModel.EditorAttribute' exists on 'System.Drawing.Font' in the .NET 4.7.2 implementation but not the .NET Core 3.0 implementation.
+CannotRemoveAttribute : Attribute 'System.ComponentModel.TypeConverterAttribute' exists on 'System.Drawing.Font' in the .NET 4.7.2 implementation but not the .NET Core 3.0 implementation.
+CannotRemoveAttribute : Attribute 'System.ComponentModel.EditorAttribute' exists on 'System.Drawing.Icon' in the .NET 4.7.2 implementation but not the .NET Core 3.0 implementation.
+CannotRemoveAttribute : Attribute 'System.ComponentModel.TypeConverterAttribute' exists on 'System.Drawing.Icon' in the .NET 4.7.2 implementation but not the .NET Core 3.0 implementation.
+CannotRemoveAttribute : Attribute 'System.Runtime.InteropServices.ComVisibleAttribute' exists on 'System.Drawing.Image' in the .NET 4.7.2 implementation but not the .NET Core 3.0 implementation.
+CannotRemoveAttribute : Attribute 'System.ComponentModel.EditorAttribute' exists on 'System.Drawing.Image' in the .NET 4.7.2 implementation but not the .NET Core 3.0 implementation.
+CannotRemoveAttribute : Attribute 'System.ComponentModel.TypeConverterAttribute' exists on 'System.Drawing.Image' in the .NET 4.7.2 implementation but not the .NET Core 3.0 implementation.
+CannotMakeTypeAbstract : Type 'System.Drawing.Pens' is abstract in the .NET Core 3.0 implementation but is not abstract in the .NET 4.7.2 implementation.
+CannotRemoveAttribute : Attribute 'System.Runtime.InteropServices.ComVisibleAttribute' exists on 'System.Drawing.Point' in the .NET 4.7.2 implementation but not the .NET Core 3.0 implementation.
+CannotRemoveAttribute : Attribute 'System.ComponentModel.TypeConverterAttribute' exists on 'System.Drawing.Point' in the .NET 4.7.2 implementation but not the .NET Core 3.0 implementation.
+CannotRemoveAttribute : Attribute 'System.Runtime.InteropServices.ComVisibleAttribute' exists on 'System.Drawing.PointF' in the .NET 4.7.2 implementation but not the .NET Core 3.0 implementation.
+CannotRemoveAttribute : Attribute 'System.Runtime.InteropServices.ComVisibleAttribute' exists on 'System.Drawing.Rectangle' in the .NET 4.7.2 implementation but not the .NET Core 3.0 implementation.
+CannotRemoveAttribute : Attribute 'System.ComponentModel.TypeConverterAttribute' exists on 'System.Drawing.Rectangle' in the .NET 4.7.2 implementation but not the .NET Core 3.0 implementation.
+CannotRemoveAttribute : Attribute 'System.Runtime.InteropServices.ComVisibleAttribute' exists on 'System.Drawing.Size' in the .NET 4.7.2 implementation but not the .NET Core 3.0 implementation.
+CannotRemoveAttribute : Attribute 'System.ComponentModel.TypeConverterAttribute' exists on 'System.Drawing.Size' in the .NET 4.7.2 implementation but not the .NET Core 3.0 implementation.
+CannotRemoveAttribute : Attribute 'System.Runtime.InteropServices.ComVisibleAttribute' exists on 'System.Drawing.SizeF' in the .NET 4.7.2 implementation but not the .NET Core 3.0 implementation.
+CannotRemoveAttribute : Attribute 'System.ComponentModel.TypeConverterAttribute' exists on 'System.Drawing.SizeF' in the .NET 4.7.2 implementation but not the .NET Core 3.0 implementation.
+CannotMakeTypeAbstract : Type 'System.Drawing.SystemBrushes' is abstract in the .NET Core 3.0 implementation but is not abstract in the .NET 4.7.2 implementation.
+CannotMakeTypeAbstract : Type 'System.Drawing.SystemColors' is abstract in the .NET Core 3.0 implementation but is not abstract in the .NET 4.7.2 implementation.
+CannotMakeTypeAbstract : Type 'System.Drawing.SystemFonts' is abstract in the .NET Core 3.0 implementation but is not abstract in the .NET 4.7.2 implementation.
+CannotMakeTypeAbstract : Type 'System.Drawing.SystemIcons' is abstract in the .NET Core 3.0 implementation but is not abstract in the .NET 4.7.2 implementation.
+CannotMakeTypeAbstract : Type 'System.Drawing.SystemPens' is abstract in the .NET Core 3.0 implementation but is not abstract in the .NET 4.7.2 implementation.
+CannotRemoveBaseTypeOrInterface : Type 'System.Drawing.ToolboxBitmapAttribute' does not implement interface 'System.Runtime.InteropServices._Attribute' in the .NET Core 3.0 implementation but it does in the .NET 4.7.2 implementation.
+CannotRemoveAttribute : Attribute 'System.ComponentModel.TypeConverterAttribute' exists on 'System.Drawing.Imaging.ImageFormat' in the .NET 4.7.2 implementation but not the .NET Core 3.0 implementation.
+CannotRemoveAttribute : Attribute 'System.ComponentModel.EditorAttribute' exists on 'System.Drawing.Imaging.Metafile' in the .NET 4.7.2 implementation but not the .NET Core 3.0 implementation.
+CannotRemoveBaseTypeOrInterface : Type 'System.Drawing.Printing.InvalidPrinterException' does not implement interface 'System.Runtime.InteropServices._Exception' in the .NET Core 3.0 implementation but it does in the .NET 4.7.2 implementation.
+CannotRemoveAttribute : Attribute 'System.ComponentModel.TypeConverterAttribute' exists on 'System.Drawing.Printing.Margins' in the .NET 4.7.2 implementation but not the .NET Core 3.0 implementation.
+CannotRemoveAttribute : Attribute 'System.ComponentModel.DefaultEventAttribute' exists on 'System.Drawing.Printing.PrintDocument' in the .NET 4.7.2 implementation but not the .NET Core 3.0 implementation.
+CannotRemoveAttribute : Attribute 'System.ComponentModel.DefaultPropertyAttribute' exists on 'System.Drawing.Printing.PrintDocument' in the .NET 4.7.2 implementation but not the .NET Core 3.0 implementation.
+CannotRemoveAttribute : Attribute 'System.Drawing.SRDescriptionAttribute' exists on 'System.Drawing.Printing.PrintDocument' in the .NET 4.7.2 implementation but not the .NET Core 3.0 implementation.
+CannotRemoveAttribute : Attribute 'System.ComponentModel.ToolboxItemFilterAttribute' exists on 'System.Drawing.Printing.PrintDocument' in the .NET 4.7.2 implementation but not the .NET Core 3.0 implementation.
+CannotRemoveBaseTypeOrInterface : Type 'System.Drawing.Printing.PrintingPermissionAttribute' does not implement interface 'System.Runtime.InteropServices._Attribute' in the .NET Core 3.0 implementation but it does in the .NET 4.7.2 implementation.
+Total Issues: 45

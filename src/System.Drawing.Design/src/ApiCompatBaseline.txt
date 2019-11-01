@@ -1,8 +1,7 @@
 Compat issues with assembly System.Drawing.Design:
-TypesMustExist : Type 'System.Drawing.Design.ContentAlignmentEditor' does not exist in the implementation but it does exist in the contract.
-TypesMustExist : Type 'System.Drawing.Design.FontNameEditor' does not exist in the implementation but it does exist in the contract.
-TypesMustExist : Type 'System.Drawing.Design.IconEditor' does not exist in the implementation but it does exist in the contract.
-TypesMustExist : Type 'System.Drawing.Design.ToolboxItemContainer' does not exist in the implementation but it does exist in the contract.
-TypesMustExist : Type 'System.Drawing.Design.ToolboxItemCreator' does not exist in the implementation but it does exist in the contract.
-TypesMustExist : Type 'System.Drawing.Design.ToolboxService' does not exist in the implementation but it does exist in the contract.
-Total Issues: 6
+TypesMustExist : Type 'System.Drawing.Design.ContentAlignmentEditor' does not exist in the .NET Core 3.0 implementation but it does exist in the .NET 4.7.2 implementation.
+TypesMustExist : Type 'System.Drawing.Design.IconEditor' does not exist in the .NET Core 3.0 implementation but it does exist in the .NET 4.7.2 implementation.
+TypesMustExist : Type 'System.Drawing.Design.ToolboxItemContainer' does not exist in the .NET Core 3.0 implementation but it does exist in the .NET 4.7.2 implementation.
+TypesMustExist : Type 'System.Drawing.Design.ToolboxItemCreator' does not exist in the .NET Core 3.0 implementation but it does exist in the .NET 4.7.2 implementation.
+TypesMustExist : Type 'System.Drawing.Design.ToolboxService' does not exist in the .NET Core 3.0 implementation but it does exist in the .NET 4.7.2 implementation.
+Total Issues: 5
