@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using static Interop;
+
 namespace System.Windows.Forms
 {
     /// <summary>
@@ -12,26 +14,26 @@ namespace System.Windows.Forms
         /// <summary>
         ///  A Close button.
         /// </summary>
-        Close = NativeMethods.DFCS_CAPTIONCLOSE,
+        Close = (int)User32.DFCS.CAPTIONCLOSE,
 
         /// <summary>
         ///  A Help button.
         /// </summary>
-        Help = NativeMethods.DFCS_CAPTIONHELP,
+        Help = (int)User32.DFCS.CAPTIONHELP,
 
         /// <summary>
         ///  A Maximize button.
         /// </summary>
-        Maximize = NativeMethods.DFCS_CAPTIONMAX,
+        Maximize = (int)User32.DFCS.CAPTIONMAX,
 
         /// <summary>
         ///  A Minimize button.
         /// </summary>
-        Minimize = NativeMethods.DFCS_CAPTIONMIN,
+        Minimize = (int)User32.DFCS.CAPTIONMIN,
 
         /// <summary>
         ///  A Restore button.
         /// </summary>
-        Restore = NativeMethods.DFCS_CAPTIONRESTORE,
+        Restore = (int)User32.DFCS.CAPTIONRESTORE,
     }
 }

@@ -4,19 +4,18 @@
 
 using System;
 using System.Runtime.InteropServices;
-using System.Windows.Forms;
 
 internal static partial class Interop
 {
     internal static partial class User32
     {
-        [DllImport(Libraries.User32, ExactSpelling = true, SetLastError = true)]
-        public static extern int SetScrollPos(IntPtr hWnd, SB nBar, int nPos, BOOL bRedraw);
+        [DllImport(Libraries.User32, ExactSpelling = true)]
+        public static extern BOOL DrawFrameControl(IntPtr hdc, ref RECT rect, DFC type, DFCS state);
 
-        public static int SetScrollPos(IHandle hWnd, SB nBar, int nPos, BOOL bRedraw)
+        public static BOOL DrawFrameControl(HandleRef hdc, ref RECT rect, DFC type, DFCS state)
         {
-            int result = SetScrollPos(hWnd.Handle, nBar, nPos, bRedraw);
-            GC.KeepAlive(hWnd);
+            BOOL result = DrawFrameControl(hdc.Handle, ref rect, type, state);
+            GC.KeepAlive(hdc.Wrapper);
             return result;
         }
     }

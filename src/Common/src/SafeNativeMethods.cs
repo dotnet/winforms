@@ -132,9 +132,6 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.User32, ExactSpelling = true)]
         public static extern bool DrawEdge(HandleRef hDC, ref RECT rect, int edge, int flags);
 
-        [DllImport(ExternDll.User32, ExactSpelling = true)]
-        public static extern bool DrawFrameControl(HandleRef hDC, ref RECT rect, int type, int state);
-
         // Theming/Visual Styles
         [DllImport(ExternDll.Uxtheme, CharSet = CharSet.Auto)]
         public static extern int GetThemeBackgroundContentRect(HandleRef hTheme, HandleRef hdc, int iPartId, int iStateId, [In] NativeMethods.COMRECT pBoundingRect, [Out] NativeMethods.COMRECT pContentRect);

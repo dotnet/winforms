@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using static Interop;
+
 namespace System.Windows.Forms
 {
     /// <summary>
@@ -11,27 +13,27 @@ namespace System.Windows.Forms
     public enum ScrollButton
     {
         /// <summary>
-        ////  A down-scroll arrow.
+        ///  A down-scroll arrow.
         /// </summary>
-        Down = NativeMethods.DFCS_SCROLLDOWN,
+        Down = (int)User32.DFCS.SCROLLDOWN,
 
         /// <summary>
-        ////  A left-scroll arrow.
+        ///  A left-scroll arrow.
         /// </summary>
-        Left = NativeMethods.DFCS_SCROLLLEFT,
+        Left = (int)User32.DFCS.SCROLLLEFT,
 
         /// <summary>
-        ////  A right-scroll arrow.
+        ///  A right-scroll arrow.
         /// </summary>
-        Right = NativeMethods.DFCS_SCROLLRIGHT,
+        Right = (int)User32.DFCS.SCROLLRIGHT,
 
         /// <summary>
-        ////  An up-scroll arrow.
+        ///  An up-scroll arrow.
         /// </summary>
-        Up = NativeMethods.DFCS_SCROLLUP,
+        Up = (int)User32.DFCS.SCROLLUP,
 
-        Min = NativeMethods.DFCS_SCROLLUP,
+        Min = (int)User32.DFCS.SCROLLUP,
 
-        Max = NativeMethods.DFCS_SCROLLRIGHT,
+        Max = (int)User32.DFCS.SCROLLRIGHT,
     }
 }
