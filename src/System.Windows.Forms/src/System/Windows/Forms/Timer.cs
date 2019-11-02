@@ -263,7 +263,7 @@ namespace System.Windows.Forms
                 {
                     if (EnsureHandle())
                     {
-                        _timerID = (int)SafeNativeMethods.SetTimer(new HandleRef(this, Handle), s_timerID++, interval, IntPtr.Zero);
+                        _timerID = (int)User32.SetTimer(new HandleRef(this, Handle), s_timerID++, interval, IntPtr.Zero);
                     }
                 }
             }
@@ -300,7 +300,7 @@ namespace System.Windows.Forms
                         try
                         {
                             _stoppingTimer = true;
-                            SafeNativeMethods.KillTimer(new HandleRef(this, hWnd), _timerID);
+                            User32.KillTimer(new HandleRef(this, hWnd), _timerID);
                         }
                         finally
                         {
