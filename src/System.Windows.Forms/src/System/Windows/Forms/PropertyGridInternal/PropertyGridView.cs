@@ -3149,7 +3149,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 bool found = false;
                 for (IntPtr hwnd = UnsafeNativeMethods.GetForegroundWindow();
-                    hwnd != IntPtr.Zero; hwnd = UnsafeNativeMethods.GetParent(new HandleRef(null, hwnd)))
+                    hwnd != IntPtr.Zero; hwnd = User32.GetParent(hwnd))
                 {
                     if (hwnd == dropDownHolder.Handle)
                     {

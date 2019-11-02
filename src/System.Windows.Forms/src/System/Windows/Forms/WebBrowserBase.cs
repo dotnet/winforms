@@ -1266,7 +1266,7 @@ namespace System.Windows.Forms
 
             if (cc == null)
             {
-                cc = Control.FromHandle(UnsafeNativeMethods.GetParent(new HandleRef(this, Handle))) as ContainerControl;
+                cc = Control.FromHandle(User32.GetParent(this)) as ContainerControl;
             }
 
             // Never use the parking window for this: its hwnd can be destroyed at any time.

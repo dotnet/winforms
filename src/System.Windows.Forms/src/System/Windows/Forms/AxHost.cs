@@ -2666,16 +2666,6 @@ namespace System.Windows.Forms
             {
                 Debug.Fail(t.ToString());
             }
-            // It so happens that some controls don't get focus in this case, so
-            // we have got to force it onto them...
-            //         int hwndFocusNow = NativeMethods.GetFocus();
-            //         Windows.SetFocus(getHandle());
-            //         while (hwndFocusNow != getHandle()) {
-            //             if (hwndFocusNow == 0) {
-            //                 break;
-            //             }
-            //             hwndFocusNow = Windows.GetParent(hwndFocusNow);
-            //         }
         }
 
         //
