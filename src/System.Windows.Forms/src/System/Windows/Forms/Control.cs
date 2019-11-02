@@ -9010,6 +9010,7 @@ namespace System.Windows.Forms
 
         internal void PerformLayout(LayoutEventArgs args)
         {
+            Debug.Assert(args != null, "This method should never be called with null args.");
             if (GetAnyDisposingInHierarchy())
             {
                 return;
@@ -9018,7 +9019,7 @@ namespace System.Windows.Forms
             if (_layoutSuspendCount > 0)
             {
                 SetState(States.LayoutDeferred, true);
-                if (_cachedLayoutEventArgs == null || (GetExtendedState(ExtendedStates.ClearLayoutArgs) && args != null))
+                if (_cachedLayoutEventArgs == null || GetExtendedState(ExtendedStates.ClearLayoutArgs))
                 {
                     _cachedLayoutEventArgs = args;
                     if (GetExtendedState(ExtendedStates.ClearLayoutArgs))
