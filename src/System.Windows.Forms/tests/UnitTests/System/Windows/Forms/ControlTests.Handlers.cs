@@ -1030,6 +1030,61 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
         }
 
+        public static IEnumerable<object[]> ControlEventArgs_TestData()
+        {
+            yield return new object[] { null };
+            yield return new object[] { new ControlEventArgs(null) };
+            yield return new object[] { new ControlEventArgs(new Control()) };
+        }
+        
+        [WinFormsTheory]
+        [MemberData(nameof(ControlEventArgs_TestData))]
+        public void Control_OnControlAdded_Invoke_CallsControlAdded(ControlEventArgs eventArgs)
+        {
+            using var control = new SubControl();
+            int callCount = 0;
+            ControlEventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+        
+            // Call with handler.
+            control.ControlAdded += handler;
+            control.OnControlAdded(eventArgs);
+            Assert.Equal(1, callCount);
+        
+           // Remove handler.
+           control.ControlAdded -= handler;
+           control.OnControlAdded(eventArgs);
+           Assert.Equal(1, callCount);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(ControlEventArgs_TestData))]
+        public void Control_OnControlRemoved_Invoke_CallsControlRemoved(ControlEventArgs eventArgs)
+        {
+            using var control = new SubControl();
+            int callCount = 0;
+            ControlEventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+        
+            // Call with handler.
+            control.ControlRemoved += handler;
+            control.OnControlRemoved(eventArgs);
+            Assert.Equal(1, callCount);
+        
+           // Remove handler.
+           control.ControlRemoved -= handler;
+           control.OnControlRemoved(eventArgs);
+           Assert.Equal(1, callCount);
+        }
+
         [Fact]
         public void Control_OnCreateControl_Invoke_Nop()
         {
