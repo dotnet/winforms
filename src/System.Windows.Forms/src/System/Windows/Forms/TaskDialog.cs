@@ -7,6 +7,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
 using System.Runtime.InteropServices;
 using static Interop;
 
@@ -1032,15 +1033,22 @@ namespace System.Windows.Forms
             // the task dialog will already have set the caption from the new page.
             DenyIfDialogNotUpdatable();
 
-            // TODO: Because we use SetWindowText() directly (as there is no task
+            // Note: Because we use SetWindowText() directly (as there is no task
             // dialog message for setting the title), there is a small discrepancy
             // between specifying an empty title in the TASKDIALOGCONFIG structure
             // and setting an empty title with this method: An empty string (or null)
             // in the TASKDIALOGCONFIG struture causes the dialog title to be the
             // executable name (e.g. "MyApplication.exe"), but using an empty string
-            // (or null) with this method causes the window title to be empty.
-            // We could replicate the Task Dialog behavior by also using the
+            // (or null) with SetWindowText() causes the window title to be empty.
+            // Therefore, we replicate the task dialog behavior by also using the
             // executable's name as title if the string is null or empty.
+            if (TaskDialogPage.IsNativeStringNullOrEmpty(caption))
+            {
+                caption = Path.GetFileName(
+                    UnsafeNativeMethods.GetModuleFileNameLongPath(NativeMethods.NullHandleRef)
+                    .ToString());
+            }
+
             User32.SetWindowTextW(Handle, caption);
         }
 
