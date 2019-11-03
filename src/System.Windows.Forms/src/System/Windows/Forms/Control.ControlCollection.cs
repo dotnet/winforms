@@ -342,12 +342,9 @@ namespace System.Windows.Forms
 
                 if (value.ParentInternal == Owner)
                 {
-                    Debug.Assert(Owner != null);
-
                     value.SetParentHandle(IntPtr.Zero);
 
                     // Remove the control from the internal control array
-                    //
                     InnerList.Remove(value);
                     value.AssignParent(null);
                     LayoutTransaction.DoLayout(Owner, value, PropertyNames.Parent);
