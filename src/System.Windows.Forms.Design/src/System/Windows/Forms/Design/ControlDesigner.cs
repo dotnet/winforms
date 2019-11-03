@@ -2656,9 +2656,9 @@ namespace System.Windows.Forms.Design
                 if (child == null || Control is UserControl)
                 {
                     // Now do the children of this window.
-                    HookChildHandles(UnsafeNativeMethods.GetWindow(hwndChild, NativeMethods.GW_CHILD));
+                    HookChildHandles(User32.GetWindow(hwndChild, User32.GW.CHILD));
                 }
-                hwndChild = UnsafeNativeMethods.GetWindow(hwndChild, NativeMethods.GW_HWNDNEXT);
+                hwndChild = User32.GetWindow(hwndChild, User32.GW.HWNDNEXT);
             }
         }
 
@@ -2687,7 +2687,7 @@ namespace System.Windows.Forms.Design
             // 1.  Child handles that do not have a Control associated  with them.  We must subclass these and prevent them from getting design-time events.
             // 2.   Child handles that do have a Control associated with them, but the control does not have a designer. We must hook the WindowTarget on these controls and prevent them from getting design-time events.
             // 3.   Child handles that do have a Control associated with them, and the control has a designer.  We ignore these and let the designer handle their messages.
-            HookChildHandles(UnsafeNativeMethods.GetWindow(Control.Handle, NativeMethods.GW_CHILD));
+            HookChildHandles(User32.GetWindow(Control.Handle, User32.GW.CHILD));
             HookChildControls(Control);
         }
 

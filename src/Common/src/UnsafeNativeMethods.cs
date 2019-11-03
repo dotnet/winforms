@@ -400,12 +400,6 @@ namespace System.Windows.Forms
         public static extern bool GetWindowRect(HandleRef hWnd, ref RECT rect);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern IntPtr GetWindow(HandleRef hWnd, int uCmd);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern IntPtr GetWindow(IntPtr hWnd, int uCmd);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern IntPtr GetDlgItem(HandleRef hWnd, int nIDDlgItem);
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]

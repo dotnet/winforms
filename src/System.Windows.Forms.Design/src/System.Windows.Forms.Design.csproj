@@ -152,8 +152,10 @@
     <Compile Include="..\..\Common\src\Interop\User32\Interop.GetKeyState.cs" Link="Interop\User32\Interop.GetKeyState.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.GetMessagePos.cs" Link="Interop\User32\Interop.GetMessagePos.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.GetUpdateRgn.cs" Link="Interop\User32\Interop.GetUpdateRgn.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.GetWindow.cs" Link="Interop\User32\Interop.GetWindow.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.GetWindowText.cs" Link="Interop\User32\Interop.GetWindowText.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.GetWindowThreadProcessId.cs" Link="Interop\User32\Interop.GetWindowThreadProcessId.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.GW.cs" Link="Interop\User32\Interop.GW.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.HC.cs" Link="Interop\User32\Interop.HC.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.HOOKPROC.cs" Link="Interop\User32\Interop.HOOKPROC.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.IsChild.cs" Link="Interop\User32\Interop.IsChild.cs" />
