@@ -81,6 +81,8 @@ namespace System.Windows.Forms.Design.Tests
             Assert.Same(control.Icon, control.Icon);
             Assert.Equal(ImeMode.NoControl, control.ImeMode);
             Assert.Equal(ImeMode.NoControl, control.ImeModeBase);
+            Assert.NotNull(control.LayoutEngine);
+            Assert.Same(control.LayoutEngine, control.LayoutEngine);
             Assert.Equal(0, control.Left);
             Assert.Equal(0, control.Loading);
             Assert.False(control.LoadRequired);
@@ -104,6 +106,7 @@ namespace System.Windows.Forms.Design.Tests
             Assert.Empty(control.Text);
             Assert.Empty(control.Title);
             Assert.Equal(0, control.Top);
+            Assert.Null(control.TopLevelControl);
             Assert.False(control.Visible);
             Assert.NotNull(control.VerticalScroll);
             Assert.Same(control.VerticalScroll, control.VerticalScroll);

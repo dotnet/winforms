@@ -131,6 +131,7 @@ namespace System.Windows.Forms.Tests
             Assert.Empty(control.Text);
             Assert.Equal(ToolStripTextDirection.Horizontal, control.TextDirection);
             Assert.Equal(0, control.Top);
+            Assert.Null(control.TopLevelControl);
             Assert.NotNull(control.VerticalScroll);
             Assert.Same(control.VerticalScroll, control.VerticalScroll);
             Assert.True(control.Visible);
@@ -264,6 +265,7 @@ namespace System.Windows.Forms.Tests
             Assert.Empty(control.Text);
             Assert.Equal(ToolStripTextDirection.Horizontal, control.TextDirection);
             Assert.Equal(0, control.Top);
+            Assert.Null(control.TopLevelControl);
             Assert.NotNull(control.VerticalScroll);
             Assert.Same(control.VerticalScroll, control.VerticalScroll);
             Assert.True(control.Visible);
