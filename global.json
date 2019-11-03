@@ -17,7 +17,7 @@
   "msbuild-sdks": {
     "Microsoft.DotNet.Arcade.Sdk": "5.0.0-beta.19530.15",
     "Microsoft.DotNet.Helix.Sdk": "5.0.0-beta.19530.15",
-    "Microsoft.NET.Sdk.IL": "5.0.0-alpha1.19551.3"
+    "Microsoft.NET.Sdk.IL": "5.0.0-alpha1.19552.1"
   },
   "native-tools": {
     "dotnet-api-docs_netcoreapp3.0": "0.0.0.1"
