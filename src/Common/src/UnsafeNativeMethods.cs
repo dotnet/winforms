@@ -521,9 +521,6 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern bool IsWindow(HandleRef hWnd);
 
-        public const int LAYOUT_RTL = 0x00000001;
-        public const int LAYOUT_BITMAPORIENTATIONPRESERVED = 0x00000008;
-
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public static extern IntPtr PostMessage(HandleRef hwnd, int msg, int wparam, int lparam);
 
