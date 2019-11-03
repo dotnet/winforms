@@ -125,7 +125,7 @@ namespace System.Windows.Forms
                     _alignment = value;
                     if (_alignment == TabAlignment.Left || _alignment == TabAlignment.Right)
                     {
-                        Multiline = true;
+                        SetState(State.Multiline, true);
                     }
 
                     RecreateHandle();
