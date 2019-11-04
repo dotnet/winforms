@@ -20,7 +20,13 @@ namespace System.Windows.Forms.Design
         public static extern IntPtr GetActiveWindow();
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
+        public static extern IntPtr GetWindowLong(HandleRef hWnd, int nIndex);
+
+        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern void NotifyWinEvent(int winEvent, HandleRef hwnd, int objType, int objID);
+
+        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
+        public static extern int MsgWaitForMultipleObjectsEx(int nCount, IntPtr pHandles, int dwMilliseconds, int dwWakeMask, int dwFlags);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern IntPtr SetFocus(HandleRef hWnd);

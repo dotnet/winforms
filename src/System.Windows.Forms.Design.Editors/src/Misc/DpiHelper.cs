@@ -82,7 +82,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private static Bitmap ScaleBitmapToSize(Bitmap logicalImage, Size deviceImageSize)
+        internal static Bitmap ScaleBitmapToSize(Bitmap logicalImage, Size deviceImageSize)
         {
             Bitmap deviceImage;
             deviceImage = new Bitmap(deviceImageSize.Width, deviceImageSize.Height, logicalImage.PixelFormat);

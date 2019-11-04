@@ -13,6 +13,7 @@ internal static partial class Interop
         public const int WM_MOVE = 0x0003;
         public const int WM_SIZE = 0x0005;
         public const int WM_ACTIVATE = 0x0006;
+        public const int WA_INACTIVE = 0;
         public const int WM_SETFOCUS = 0x0007;
         public const int WM_KILLFOCUS = 0x0008;
         public const int WM_ENABLE = 0x000A;
