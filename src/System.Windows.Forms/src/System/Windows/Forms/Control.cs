@@ -9828,6 +9828,7 @@ namespace System.Windows.Forms
                             // do the main work of recreating the handle
                             DestroyHandle();
                             CreateHandle();
+
                             // Note that CreateHandle --> _window.CreateHandle may fail due to DPI awareness setting.
                             // By carefully choosing the correct parking window / keeping this and this.Parent DPI awareness untouched,
                             // the call shouldn't fail.
@@ -9850,11 +9851,11 @@ namespace System.Windows.Forms
                                         Control childControl = controlSnapshot[i];
                                         if (childControl != null && childControl.IsHandleCreated)
                                         {
-                                            // SetParent back to the new Parent handle
-                                            childControl.OnParentHandleRecreated();
+                                            // SetParent back to the new Parent handle.
                                             // If a control fails to re-parent itself,
                                             // It and its next siblings will keep States.ParentRecreating state, parked in ParkingWindow.
                                             // We let the error bubble up immediately.
+                                            childControl.OnParentHandleRecreated();
                                         }
                                     }
                                 }
@@ -9875,10 +9876,13 @@ namespace System.Windows.Forms
                     finally
                     {
                         if (recreationSuccessful
-                            && parentHandle.Handle != IntPtr.Zero                               // the parent was not null
-                            && (FromHandle(parentHandle.Handle) == null || _parent == null)     // but wasnt a windows forms window
+                            // The window has a parent Win32 window before re-creation
+                            && parentHandle.Handle != IntPtr.Zero
+                            // But the parent is not a managed WinForm Control, and this.Parent == null
+                            && (FromHandle(parentHandle.Handle) == null || _parent == null)
+                            // Still, parentHandle is a valid native Win32 window handle, e.g. the desktop window.
                             && UnsafeNativeMethods.IsWindow(parentHandle))
-                        {                 // and still is a window
+                        {
                             // correctly parent back up to where we were before.
                             // if we were parented to a proper windows forms control, CreateControl would have properly parented
                             // us back.
@@ -10949,10 +10953,11 @@ namespace System.Windows.Forms
                         {
                             if (User32.SetParent(new HandleRef(_window, Handle), value) == IntPtr.Zero)
                             {
-                                // Somehow we failed to SetParent due to, e.g., different DPI awareness setting.
-                                throw new Win32Exception(Marshal.GetLastWin32Error(), SR.Win32SetParentFailed);
+                                // Somehow we failed to SetParent, for example, due to different DPI awareness setting.
                                 // Throwing exception will also keep the handle parked inside ParkingWindow.
+                                throw new Win32Exception(Marshal.GetLastWin32Error(), SR.Win32SetParentFailed);
                             }
+
                             if (_parent != null)
                             {
                                 _parent.UpdateChildZOrder(this);
@@ -10970,6 +10975,7 @@ namespace System.Windows.Forms
                     {
                         throw new Win32Exception(Marshal.GetLastWin32Error(), SR.Win32SetParentFailed);
                     }
+
                     Application.UnparkHandle(new HandleRef(_window, Handle), _window.DpiAwarenessContext);
                 }
             }
