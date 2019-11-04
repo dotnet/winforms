@@ -152,18 +152,6 @@ namespace System.Windows.Forms
         public static extern bool IsThemeBackgroundPartiallyTransparent(HandleRef hTheme, int iPartId, int iStateId);
 
         [DllImport(ExternDll.Uxtheme, CharSet = CharSet.Auto)]
-        public static extern bool GetThemeSysBool(HandleRef hTheme, int iBoolId);
-
-        [DllImport(ExternDll.Uxtheme, CharSet = CharSet.Auto)]
-        public static extern int GetThemeSysInt(HandleRef hTheme, int iIntId, ref int piValue);
-
-        public static class VisualStyleSystemProperty
-        {
-            public const int SupportsFlatMenus = 1001;
-            public const int MinimumColorDepth = 1301;
-        }
-
-        [DllImport(ExternDll.Uxtheme, CharSet = CharSet.Auto)]
         public extern static int SetWindowTheme(IntPtr hWnd, string subAppName, string subIdList);
     }
 }
