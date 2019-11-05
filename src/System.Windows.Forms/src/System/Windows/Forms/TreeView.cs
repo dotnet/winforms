@@ -2203,7 +2203,7 @@ namespace System.Windows.Forms
             tvhip.pt_y = pos.Y;
             IntPtr hnode = UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TVM_HITTEST, 0, tvhip);
 
-            if (hnode != IntPtr.Zero && ((tvhip.flags & NativeMethods.TVHT_ONITEM) != 0))
+            if (hnode != IntPtr.Zero && ((tvhip.flags & ComCtl32.TVHT.ONITEM) != 0))
             {
                 TreeNode tn = NodeFromHandle(hnode);
                 if (tn != prevHoveredNode && tn != null)
@@ -2978,7 +2978,7 @@ namespace System.Windows.Forms
             tvhip.pt_y = pos.Y;
             IntPtr hnode = UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TVM_HITTEST, 0, tvhip);
 
-            if (hnode != IntPtr.Zero && ((tvhip.flags & NativeMethods.TVHT_ONITEM) != 0))
+            if (hnode != IntPtr.Zero && ((tvhip.flags & ComCtl32.TVHT.ONITEM) != 0))
             {
                 TreeNode tn = NodeFromHandle(hnode);
                 if (tn != null)
@@ -3013,7 +3013,7 @@ namespace System.Windows.Forms
             tvhip.pt_x = pos.X;
             tvhip.pt_y = pos.Y;
             IntPtr hnode = UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TVM_HITTEST, 0, tvhip);
-            if (hnode != IntPtr.Zero && ((tvhip.flags & NativeMethods.TVHT_ONITEM) != 0))
+            if (hnode != IntPtr.Zero && ((tvhip.flags & ComCtl32.TVHT.ONITEM) != 0))
             {
                 TreeNode tn = NodeFromHandle(hnode);
                 if (ShowNodeToolTips && tn != null && (!string.IsNullOrEmpty(tn.ToolTipText)))
@@ -3090,7 +3090,7 @@ namespace System.Windows.Forms
                         tvhip.pt_y = pos.Y;
                         IntPtr hnode = UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TVM_HITTEST, 0, tvhip);
                         if (nmtv->nmhdr.code != NativeMethods.NM_CLICK
-                                    || (tvhip.flags & NativeMethods.TVHT_ONITEM) != 0)
+                                    || (tvhip.flags & ComCtl32.TVHT.ONITEM) != 0)
                         {
                             button = nmtv->nmhdr.code == NativeMethods.NM_CLICK
                                 ? MouseButtons.Left : MouseButtons.Right;
@@ -3100,7 +3100,7 @@ namespace System.Windows.Forms
                         // LBUTTONUP happens on TVHT_ONITEM. This is a comctl quirk.
                         // We work around that by calling OnMouseUp here.
                         if (nmtv->nmhdr.code != NativeMethods.NM_CLICK
-                            || (tvhip.flags & NativeMethods.TVHT_ONITEM) != 0 || FullRowSelect)
+                            || (tvhip.flags & ComCtl32.TVHT.ONITEM) != 0 || FullRowSelect)
                         {
                             if (hnode != IntPtr.Zero && !ValidationCancelled)
                             {
@@ -3129,7 +3129,7 @@ namespace System.Windows.Forms
                         if (!treeViewState[TREEVIEWSTATE_mouseUpFired])
                         {
                             if (nmtv->nmhdr.code != NativeMethods.NM_CLICK
-                            || (tvhip.flags & NativeMethods.TVHT_ONITEM) != 0)
+                            || (tvhip.flags & ComCtl32.TVHT.ONITEM) != 0)
                             {
                                 // The treeview's WndProc doesn't get the WM_LBUTTONUP messages when
                                 // LBUTTONUP happens on TVHT_ONITEM. This is a comctl quirk.
@@ -3327,7 +3327,7 @@ namespace System.Windows.Forms
 
                     // This gets around the TreeView behavior of temporarily moving the selection
                     // highlight to a node when the user clicks on its checkbox.
-                    if ((tvhip.flags & NativeMethods.TVHT_ONITEMSTATEICON) != 0)
+                    if ((tvhip.flags & ComCtl32.TVHT.ONITEMSTATEICON) != 0)
                     {
                         //We donot pass the Message to the Control .. so fire MouseDowm ...
                         OnMouseDown(new MouseEventArgs(MouseButtons.Left, 1, NativeMethods.Util.SignedLOWORD(m.LParam), NativeMethods.Util.SignedHIWORD(m.LParam), 0));
