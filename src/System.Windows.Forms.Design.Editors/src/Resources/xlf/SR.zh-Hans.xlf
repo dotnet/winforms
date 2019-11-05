@@ -187,6 +187,11 @@
         <target state="translated">图像集合编辑器</target>
         <note />
       </trans-unit>
+      <trans-unit id="ListViewSubItemBaseName">
+        <source>ListViewSubItem</source>
+        <target state="new">ListViewSubItem</target>
+        <note />
+      </trans-unit>
       <trans-unit id="MultilineStringEditorWatermark">
         <source>Press Enter to begin a new line.
 Press Ctrl+Enter to accept Text.</source>
