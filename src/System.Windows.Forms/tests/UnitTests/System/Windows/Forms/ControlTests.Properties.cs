@@ -5826,19 +5826,101 @@ namespace System.Windows.Forms.Tests
             Assert.False(property.ShouldSerializeValue(control));
         }
 
-        [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
-        public void Control_Name_Set_GetReturnsExpected(string value)
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        public void Control_Name_GetWithSite_ReturnsExpected(string siteName, string expected)
         {
-            var control = new Control
+            var mockSite = new Mock<ISite>(MockBehavior.Strict);
+            mockSite
+                .Setup(s => s.Container)
+                .Returns((IContainer)null);
+            mockSite
+                .Setup(s => s.GetService(typeof(AmbientProperties)))
+                .Returns(null);
+            mockSite
+                .Setup(s => s.Name)
+                .Returns(siteName);
+            using var control = new Control
+            {
+                Site = mockSite.Object
+            };
+            Assert.Equal(expected, control.Name);
+            mockSite.Verify(s => s.Name, Times.Once());
+            
+            // Get again.
+            Assert.Equal(expected, control.Name);
+            mockSite.Verify(s => s.Name, Times.Exactly(2));
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        public void Control_Name_Set_GetReturnsExpected(string value, string expected)
+        {
+            using var control = new Control
             {
                 Name = value
             };
-            Assert.Equal(value ?? string.Empty, control.Name);
-
-            // Set same.
+            Assert.Equal(expected, control.Name);
+            Assert.False(control.IsHandleCreated);
+            
+            // Get again.
             control.Name = value;
-            Assert.Equal(value ?? string.Empty, control.Name);
+            Assert.Equal(expected, control.Name);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        public void Control_Name_SetWithCustomOldValue_GetReturnsExpected(string value, string expected)
+        {
+            using var control = new Control
+            {
+                Name = "oldName"
+            };
+
+            control.Name = value;
+            Assert.Equal(expected, control.Name);
+            Assert.False(control.IsHandleCreated);
+            
+            // Get again.
+            control.Name = value;
+            Assert.Equal(expected, control.Name);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData("name", null, "name", 0)]
+        [InlineData("", null, "", 1)]
+        [InlineData("", "", "", 1)]
+        [InlineData("", "siteName", "siteName", 1)]
+        [InlineData(null, null, "", 1)]
+        [InlineData(null, "", "", 1)]
+        [InlineData(null, "siteName", "siteName", 1)]
+        public void Control_Name_SetWithSite_GetReturnsExpected(string value, string siteName, string expected, int expectedSiteCallCount)
+        {
+            var mockSite = new Mock<ISite>(MockBehavior.Strict);
+            mockSite
+                .Setup(s => s.Container)
+                .Returns((IContainer)null);
+            mockSite
+                .Setup(s => s.GetService(typeof(AmbientProperties)))
+                .Returns(null);
+            mockSite
+                .Setup(s => s.Name)
+                .Returns(siteName);
+            using var control = new Control
+            {
+                Site = mockSite.Object,
+                Name = value
+            };
+            Assert.Equal(expected, control.Name);
+            Assert.False(control.IsHandleCreated);
+            mockSite.Verify(s => s.Name, Times.Exactly(expectedSiteCallCount));
+            
+            // Get again.
+            Assert.Equal(expected, control.Name);
+            Assert.False(control.IsHandleCreated);
+            mockSite.Verify(s => s.Name, Times.Exactly(expectedSiteCallCount * 2));
         }
 
         public static IEnumerable<object[]> Padding_Get_TestData()
@@ -6289,13 +6371,37 @@ namespace System.Windows.Forms.Tests
             Assert.Null(control.Parent);
         }
 
-        [Fact]
-        public void Control_PreferedSizeGet()
+        [WinFormsFact]
+        public void Control_PreferredSize_GetWithChildrenSimple_ReturnsExpected()
         {
-            var cont = new Control();
+            using var control = new Control();
+            using var child = new Control
+            {
+                Size = new Size(16, 20)
+            };
+            control.Controls.Add(child);
+            Assert.Equal(new Size(0, 0), control.PreferredSize);
 
-            // act and assert
-            Assert.Equal(Size.Empty, cont.PreferredSize);
+            // Call again.
+            Assert.Equal(new Size(0, 0), control.PreferredSize);
+        }
+
+        [WinFormsFact]
+        public void Control_PreferredSize_GetWithChildrenAdvanced_ReturnsExpected()
+        {
+            using var control = new BorderedControl
+            {
+                Padding = new Padding(1, 2, 3, 4)
+            };
+            using var child = new Control
+            {
+                Size = new Size(16, 20)
+            };
+            control.Controls.Add(child);
+            Assert.Equal(new Size(0, 0), control.PreferredSize);
+
+            // Call again.
+            Assert.Equal(new Size(0, 0), control.PreferredSize);
         }
 
         public static IEnumerable<object[]> Region_Set_TestData()

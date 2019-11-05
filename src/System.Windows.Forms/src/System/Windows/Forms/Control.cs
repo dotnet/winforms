@@ -10095,10 +10095,8 @@ namespace System.Windows.Forms
                 Debug.WriteLine(GetType().Name + "::ResumeLayout( preformLayout = " + performLayout + ", newCount = " + Math.Max(0, _layoutSuspendCount - 1) + ")");
             }
 #endif
-            Debug.Assert(_layoutSuspendCount > 0, "Unbalanance suspend/resume layout.");
 
             bool performedLayout = false;
-
             if (_layoutSuspendCount > 0)
             {
                 if (_layoutSuspendCount == 1)

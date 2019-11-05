@@ -753,6 +753,8 @@ namespace System.Windows.Forms.Tests
 
             public new bool GetTopLevel() => base.GetTopLevel();
 
+            public new void InitLayout() => base.InitLayout();
+
             public new bool IsInputChar(char charCode) => base.IsInputChar(charCode);
 
             public new bool IsInputKey(Keys keyData) => base.IsInputKey(keyData);
@@ -776,6 +778,10 @@ namespace System.Windows.Forms.Tests
             public new void OnContextMenuChanged(EventArgs e) => base.OnContextMenuChanged(e);
 
             public new void OnContextMenuStripChanged(EventArgs e) => base.OnContextMenuStripChanged(e);
+
+            public new void OnControlAdded(ControlEventArgs e) => base.OnControlAdded(e);
+
+            public new void OnControlRemoved(ControlEventArgs e) => base.OnControlRemoved(e);
 
             public new void OnCreateControl() => base.OnCreateControl();
 
@@ -916,6 +922,8 @@ namespace System.Windows.Forms.Tests
             public new void UpdateBounds(int x, int y, int width, int height, int clientWidth, int clientHeight) => base.UpdateBounds(x, y, width, height, clientWidth, clientHeight);
 
             public new void UpdateStyles() => base.UpdateStyles();
+
+            public new void UpdateZOrder() => base.UpdateZOrder();
         }
     }
 }
