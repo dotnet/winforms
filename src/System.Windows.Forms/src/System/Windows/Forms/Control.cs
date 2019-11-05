@@ -10953,8 +10953,8 @@ namespace System.Windows.Forms
                         {
                             if (User32.SetParent(new HandleRef(_window, Handle), value) == IntPtr.Zero)
                             {
-                                // Somehow we failed to SetParent, for example, due to different DPI awareness setting.
-                                // Throwing exception will also keep the handle parked inside ParkingWindow.
+                                // Somehow we failed to SetParent, e.g. due to different DPI awareness setting.
+                                // Throwing exception will keep the handle parked inside ParkingWindow if recreate == true.
                                 throw new Win32Exception(Marshal.GetLastWin32Error(), SR.Win32SetParentFailed);
                             }
 
