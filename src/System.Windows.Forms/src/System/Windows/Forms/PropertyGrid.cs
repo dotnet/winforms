@@ -3998,7 +3998,7 @@ namespace System.Windows.Forms
                             // if we're not hosted in a windows forms thing, just give the parent the focus
                             if (!result && Parent == null)
                             {
-                                IntPtr hWndParent = UnsafeNativeMethods.GetParent(new HandleRef(this, Handle));
+                                IntPtr hWndParent = User32.GetParent(this);
                                 if (hWndParent != IntPtr.Zero)
                                 {
                                     User32.SetFocus(hWndParent);

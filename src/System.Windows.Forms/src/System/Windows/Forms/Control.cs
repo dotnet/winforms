@@ -2613,7 +2613,7 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        IntPtr parentHandle = UnsafeNativeMethods.GetParent(new HandleRef(this, Handle));
+                        IntPtr parentHandle = User32.GetParent(this);
                         IntPtr lastParentHandle = parentHandle;
 
                         StringBuilder sb = new StringBuilder(32);
@@ -2636,7 +2636,7 @@ namespace System.Windows.Forms
                             }
 
                             lastParentHandle = parentHandle;
-                            parentHandle = UnsafeNativeMethods.GetParent(new HandleRef(null, parentHandle));
+                            parentHandle = User32.GetParent(parentHandle);
                         }
                     }
 
@@ -9752,7 +9752,7 @@ namespace System.Windows.Forms
                 //           (we're in charge here, we've got to change the state of the root window)
                 UnsafeNativeMethods.SendMessage(
                     new HandleRef(topMostParent, topMostParent.Handle),
-                    UnsafeNativeMethods.GetParent(new HandleRef(null, topMostParent.Handle)) == IntPtr.Zero ? WindowMessages.WM_CHANGEUISTATE : WindowMessages.WM_UPDATEUISTATE,
+                    User32.GetParent(topMostParent.Handle) == IntPtr.Zero ? WindowMessages.WM_CHANGEUISTATE : WindowMessages.WM_UPDATEUISTATE,
                     (IntPtr)(NativeMethods.UIS_CLEAR | (toClear << 16)),
                     IntPtr.Zero);
             }
@@ -9900,7 +9900,7 @@ namespace System.Windows.Forms
                         UnhookMouseEvent();
                     }
 
-                    HandleRef parentHandle = new HandleRef(this, UnsafeNativeMethods.GetParent(new HandleRef(this, Handle)));
+                    HandleRef parentHandle = new HandleRef(this, User32.GetParent(this));
 
                     try
                     {
@@ -11002,7 +11002,7 @@ namespace System.Windows.Forms
 
             if (IsHandleCreated)
             {
-                IntPtr parentHandle = UnsafeNativeMethods.GetParent(new HandleRef(_window, Handle));
+                IntPtr parentHandle = User32.GetParent(this);
                 bool topLevel = GetTopLevel();
                 if (parentHandle != value || (parentHandle == IntPtr.Zero && !topLevel))
                 {
@@ -11549,7 +11549,7 @@ namespace System.Windows.Forms
             UnsafeNativeMethods.GetWindowRect(new HandleRef(_window, InternalHandle), ref rect);
             if (!GetTopLevel())
             {
-                UnsafeNativeMethods.MapWindowPoints(NativeMethods.NullHandleRef, new HandleRef(null, UnsafeNativeMethods.GetParent(new HandleRef(_window, InternalHandle))), ref rect, 2);
+                UnsafeNativeMethods.MapWindowPoints(NativeMethods.NullHandleRef, new HandleRef(null, User32.GetParent(new HandleRef(_window, InternalHandle))), ref rect, 2);
             }
 
             UpdateBounds(rect.left, rect.top, rect.right - rect.left,
@@ -11704,7 +11704,7 @@ namespace System.Windows.Forms
         {
             if (!Disposing && findNewParent && IsHandleCreated)
             {
-                IntPtr parentHandle = UnsafeNativeMethods.GetParent(new HandleRef(this, Handle));
+                IntPtr parentHandle = User32.GetParent(this);
                 if (parentHandle != IntPtr.Zero)
                 {
                     ReflectParent = FromHandle(parentHandle);
@@ -11857,7 +11857,7 @@ namespace System.Windows.Forms
                 while (parentHandle != IntPtr.Zero)
                 {
                     lastParentHandle = parentHandle;
-                    parentHandle = UnsafeNativeMethods.GetParent(new HandleRef(null, parentHandle));
+                    parentHandle = User32.GetParent(parentHandle);
 
                     int style = unchecked((int)((long)UnsafeNativeMethods.GetWindowLong(new HandleRef(null, lastParentHandle), NativeMethods.GWL_STYLE)));
 
@@ -13227,7 +13227,7 @@ namespace System.Windows.Forms
             DefWndProc(ref m);
             // Update new size / position
             UpdateBounds();
-            if (_parent != null && UnsafeNativeMethods.GetParent(new HandleRef(_window, InternalHandle)) == _parent.InternalHandle &&
+            if (_parent != null && User32.GetParent(new HandleRef(_window, InternalHandle)) == _parent.InternalHandle &&
                 (_state & States.NoZOrder) == 0)
             {
 

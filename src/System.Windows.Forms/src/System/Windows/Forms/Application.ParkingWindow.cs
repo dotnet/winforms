@@ -129,10 +129,12 @@ namespace System.Windows.Forms
             internal void UnparkHandle(HandleRef handle)
             {
                 if (!IsHandleCreated)
+                {
                     return;
+                }
 
                 Debug.Assert(
-                    UnsafeNativeMethods.GetParent(handle) != Handle,
+                    User32.GetParent(handle) != Handle,
                     "Always set the handle's parent to someone else before calling UnparkHandle");
 
                 // If there are no child windows in this handle any longer, destroy the parking window.

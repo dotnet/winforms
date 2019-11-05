@@ -2201,7 +2201,7 @@ namespace System.Windows.Forms
                     {
                         // Offset the rectangle back to client coordinates
                         RECT rcIntersect = intersect;
-                        IntPtr hWndParent = UnsafeNativeMethods.GetParent(new HandleRef(_control, _control.Handle));
+                        IntPtr hWndParent = User32.GetParent(_control);
 
                         Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "Old Intersect: " + new Rectangle(rcIntersect.left, rcIntersect.top, rcIntersect.right - rcIntersect.left, rcIntersect.bottom - rcIntersect.top));
                         Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "New Control Bounds: " + posRect);
