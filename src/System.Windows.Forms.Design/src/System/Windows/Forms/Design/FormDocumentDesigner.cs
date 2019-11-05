@@ -20,10 +20,6 @@ namespace System.Windows.Forms.Design
     {
         private Size _autoScaleBaseSize = Size.Empty;
         private bool _inAutoscale = false;
-        private int _heightDelta = 0;
-        private bool _isMenuInherited; //indicates if the 'active menu' is inherited
-        private bool _hasMenu = false;
-        private InheritanceAttribute _inheritanceAttribute;
         private bool _initializing = false;
         private bool _autoSize = false;
         private ToolStripAdornerWindowService _toolStripAdornerWindowService = null;
@@ -126,13 +122,6 @@ namespace System.Windows.Forms.Design
             set
             {
                 IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
-                if (host != null)
-                {
-                    if (host.Loading)
-                    {
-                        _heightDelta = GetMenuHeight();
-                    }
-                }
                 ((Form)Component).ClientSize = value;
             }
         }
@@ -153,59 +142,6 @@ namespace System.Windows.Forms.Design
                 if (value)
                 {
                     HookChildControls(Control);
-                }
-            }
-        }
-
-        /// <summary>
-        ///  Returns true if the active menu is an inherited component.  We use this to determine if we need to resize the base control or not.
-        /// </summary>
-        private bool IsMenuInherited
-        {
-            get
-            {
-                if (_inheritanceAttribute == null && Menu != null)
-                {
-                    _inheritanceAttribute = (InheritanceAttribute)TypeDescriptor.GetAttributes(Menu)[typeof(InheritanceAttribute)];
-                    if (_inheritanceAttribute.Equals(InheritanceAttribute.NotInherited))
-                    {
-                        _isMenuInherited = false;
-                    }
-                    else
-                    {
-                        _isMenuInherited = true;
-                    }
-                }
-                return _isMenuInherited;
-            }
-        }
-
-        /// <summary>
-        ///  Accessor method for the menu property on control.  We shadow this property at design time.
-        /// </summary>
-        internal MainMenu Menu
-        {
-            get => (MainMenu)ShadowProperties["Menu"];
-            set
-            {
-                if (value == ShadowProperties["Menu"])
-                {
-                    return;
-                }
-                ShadowProperties["Menu"] = value;
-                IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
-                if (host != null && !host.Loading)
-                {
-                    EnsureMenuEditorService(value);
-                    if (menuEditorService != null)
-                    {
-                        menuEditorService.SetMenu(value);
-                    }
-                }
-
-                if (_heightDelta == 0)
-                {
-                    _heightDelta = GetMenuHeight();
                 }
             }
         }
@@ -356,98 +292,12 @@ namespace System.Windows.Forms.Design
             base.Dispose(disposing);
         }
 
-        internal override void DoProperMenuSelection(ICollection selComponents)
-        {
-            foreach (object obj in selComponents)
-            {
-                //first check to see if our selection is any kind of menu: main, context, item AND the designer for the component is this one
-                if (obj is Menu menu)
-                {
-                    //if it's a menu item, set the selection
-                    if (menu is MenuItem item)
-                    {
-                        Menu currentMenu = menuEditorService.GetMenu();
-                        // before we set the selection, we need to check if the item belongs the current menu, if not, we need to set the menu editor to the appropiate menu, then set selection
-                        MenuItem parent = item;
-                        while (parent.Parent is MenuItem)
-                        {
-                            parent = (MenuItem)parent.Parent;
-                        }
-
-                        if (!(currentMenu == parent.Parent))
-                        {
-                            menuEditorService.SetMenu(parent.Parent);
-                        }
-
-                        // ok, here we have the correct editor selected for this item. Now, if there's only one item selected, then let the editor service know, if there is more than one - then the selection was done through the menu editor and we don't need to tell it
-                        if (selComponents.Count == 1)
-                        {
-                            menuEditorService.SetSelection(item);
-                        }
-                    }
-                    // here, either it's a main or context menu, even if the menu is the current one, we still want to call this "SetMenu" method, 'cause that'll collapse it and  remove the focus
-                    else
-                    {
-                        menuEditorService.SetMenu(menu);
-                    }
-                    return;
-                }
-                // Here, something is selected, but it is in no way, shape, or form a menu so, we'll collapse our active menu accordingly
-                else
-                {
-                    if (Menu != null && Menu.MenuItems.Count == 0)
-                    {
-                        menuEditorService.SetMenu(null);
-                    }
-                    else
-                    {
-                        menuEditorService.SetMenu(Menu);
-                    }
-                    NativeMethods.SendMessage(Control.Handle, WindowMessages.WM_NCACTIVATE, 1, 0);
-                }
-            }
-        }
-
-        /// <summary>
-        ///  Determines if a MenuEditorService has already been started. If not, this method will create a new instance of the service.  We override  this because we want to allow any kind of menu to start the service, not just ContextMenus.
-        /// </summary>
-        protected override void EnsureMenuEditorService(IComponent c)
-        {
-            if (menuEditorService == null && c is Menu)
-            {
-                menuEditorService = (IMenuEditorService)GetService(typeof(IMenuEditorService));
-            }
-        }
-
         private void EnsureToolStripWindowAdornerService()
         {
             if (_toolStripAdornerWindowService == null)
             {
                 _toolStripAdornerWindowService = (ToolStripAdornerWindowService)GetService(typeof(ToolStripAdornerWindowService));
             }
-        }
-
-        /// <summary>
-        ///  Gets the current menu height so we know how much to increment the form size by
-        /// </summary>
-        private int GetMenuHeight()
-        {
-            if (Menu == null || (IsMenuInherited && _initializing))
-            {
-                return 0;
-            }
-
-            if (menuEditorService != null)
-            {
-                // there is a magic property on teh menueditorservice that gives us this information.  Unfortuantely, we can't compute it ourselves -- the menu shown in the designer isn't a windows one so we can't ask windows.
-                PropertyDescriptor heightProp = TypeDescriptor.GetProperties(menuEditorService)["MenuHeight"];
-                if (heightProp != null)
-                {
-                    int height = (int)heightProp.GetValue(menuEditorService);
-                    return height;
-                }
-            }
-            return SystemInformation.MenuHeight;
         }
 
         /// <summary>
@@ -479,21 +329,6 @@ namespace System.Windows.Forms.Design
         /// </summary>
         private void OnComponentAdded(object source, ComponentEventArgs ce)
         {
-            if (ce.Component is Menu)
-            {
-                IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
-                if (host != null && !host.Loading)
-                {
-                    //if it's a MainMenu & we don't have one set for the form yet, then do it...
-                    if (ce.Component is MainMenu && !_hasMenu)
-                    {
-                        PropertyDescriptor menuProp = TypeDescriptor.GetProperties(Component)["Menu"];
-                        Debug.Assert(menuProp != null, "What the happened to the Menu property");
-                        menuProp.SetValue(Component, ce.Component);
-                        _hasMenu = true;
-                    }
-                }
-            }
             if (ce.Component is ToolStrip && _toolStripAdornerWindowService == null)
             {
                 IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
@@ -509,21 +344,6 @@ namespace System.Windows.Forms.Design
         /// </summary>
         private void OnComponentRemoved(object source, ComponentEventArgs ce)
         {
-            if (ce.Component is Menu)
-            {
-                //if we deleted the form's mainmenu, set it null...
-                if (ce.Component == Menu)
-                {
-                    PropertyDescriptor menuProp = TypeDescriptor.GetProperties(Component)["Menu"];
-                    Debug.Assert(menuProp != null, "What the happened to the Menu property");
-                    menuProp.SetValue(Component, null);
-                    _hasMenu = false;
-                }
-                else if (menuEditorService != null && ce.Component == menuEditorService.GetMenu())
-                {
-                    menuEditorService.SetMenu(Menu);
-                }
-            }
             if (ce.Component is ToolStrip && _toolStripAdornerWindowService != null)
             {
                 _toolStripAdornerWindowService = null;
@@ -538,24 +358,6 @@ namespace System.Windows.Forms.Design
                 {
                     CancelButton = null;
                 }
-            }
-        }
-
-        /// <summary>
-        ///  We're watching the handle creation in case we have a menu editor. If we do, the menu editor will have to be torn down and recreated.
-        /// </summary>
-        protected override void OnCreateHandle()
-        {
-            if (Menu != null && menuEditorService != null)
-            {
-                menuEditorService.SetMenu(null);
-                menuEditorService.SetMenu(Menu);
-            }
-
-            if (_heightDelta != 0)
-            {
-                ((Form)Component).Height += _heightDelta;
-                _heightDelta = 0;
             }
         }
 
@@ -612,23 +414,6 @@ namespace System.Windows.Forms.Design
                     svc.SyncSelection();
                 }
 
-                // if there is a menu and we need to update our height because of it, do it now.
-                if (_heightDelta == 0)
-                {
-                    _heightDelta = GetMenuHeight();
-                }
-
-                if (_heightDelta != 0)
-                {
-                    form.Height += _heightDelta;
-                    _heightDelta = 0;
-                }
-
-                // After loading the form if the ControlBox and ShowInTaskbar properties are false,  the form will be sized incorrectly.  This is due to the text property being set after the ControlBox and ShowInTaskbar properties, which causes windows to recalculate our client area wrong.  The reason it does this is because after setting the ShowInTaskbar and ControlBox it assumes we have no titlebar, and bases the clientSize we pass it on that. In reality our ClientSize DOES depend on having a titlebar, so windows gets confused. This only happens at designtime, because at runtime our special DesignTime only MainMenu  is not around to mess things up.  Because of this, I'm adding this nasty workaround to  correctly update the height at design time.
-                if (!form.ControlBox && !form.ShowInTaskbar && !string.IsNullOrEmpty(form.Text) && Menu != null && !IsMenuInherited)
-                {
-                    form.Height += SystemInformation.CaptionHeight + 1;
-                }
                 form.PerformLayout();
             }
 
@@ -642,7 +427,7 @@ namespace System.Windows.Forms.Design
             PropertyDescriptor prop;
             base.PreFilterProperties(properties);
             // Handle shadowed properties
-            string[] shadowProps = new string[] { "Opacity", "Menu", "IsMdiContainer", "Size", "ShowInTaskBar", "WindowState", "AutoSize", "AcceptButton", "CancelButton" };
+            string[] shadowProps = new string[] { "Opacity", "IsMdiContainer", "Size", "ShowInTaskBar", "WindowState", "AutoSize", "AcceptButton", "CancelButton" };
             Attribute[] empty = Array.Empty<Attribute>();
             for (int i = 0; i < shadowProps.Length; i++)
             {
@@ -682,13 +467,6 @@ namespace System.Windows.Forms.Design
                 {
                     updateSize = host.Loading;
                 }
-            }
-            // we want to update the size if we have a menu and...
-            // 1) we're doing an autoscale
-            // 2) we're loading a form without an inherited menu (inherited forms will already have the right size)
-            if (updateSize && Menu != null && (wp->flags & NativeMethods.SWP_NOSIZE) == 0 && (IsMenuInherited || _inAutoscale))
-            {
-                _heightDelta = GetMenuHeight();
             }
         }
 

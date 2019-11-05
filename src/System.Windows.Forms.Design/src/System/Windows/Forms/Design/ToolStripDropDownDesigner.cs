@@ -6,7 +6,6 @@ using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Configuration;
-using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Globalization;
 using System.Windows.Forms.Design.Behavior;
@@ -26,7 +25,6 @@ namespace System.Windows.Forms.Design
         private bool selected;
         private ControlBodyGlyph dummyToolStripGlyph;
         private uint _editingCollection = 0; // non-zero if the collection editor is up for this ToolStrip or a child of it.
-        MainMenu parentMenu = null;
         FormDocumentDesigner parentFormDesigner = null;
         internal ToolStripMenuItem currentParent = null;
         private INestedContainer nestedContainer = null; //NestedContainer for our DesignTime MenuItem.
@@ -292,11 +290,6 @@ namespace System.Windows.Forms.Design
             if (menuItem == null)
             {
                 return;
-            }
-            //Add MenuBack
-            if (parentMenu != null && parentFormDesigner != null)
-            {
-                parentFormDesigner.Menu = parentMenu;
             }
 
             selected = false;
@@ -649,20 +642,18 @@ namespace System.Windows.Forms.Design
             {
                 return;
             }
+
             Control parent = designMenu.Parent as Control;
             if (parent is Form parentForm)
             {
                 parentFormDesigner = host.GetDesigner(parentForm) as FormDocumentDesigner;
-                if (parentFormDesigner != null && parentFormDesigner.Menu != null)
-                {
-                    parentMenu = parentFormDesigner.Menu;
-                    parentFormDesigner.Menu = null;
-                }
             }
+
             selected = true;
             designMenu.Visible = true;
             designMenu.BringToFront();
             menuItem.Visible = true;
+
             // Check if this is a design-time DropDown
             if (currentParent != null && currentParent != menuItem)
             {

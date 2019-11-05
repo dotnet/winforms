@@ -44,7 +44,6 @@ namespace System.Windows.Forms
         private readonly int id = 0;
         private bool added = false;
         private NotifyIconNativeWindow window = null;
-        private ContextMenu contextMenu = null;
         private ContextMenuStrip contextMenuStrip = null;
         private ToolTipIcon balloonTipIcon;
         private string balloonTipText = string.Empty;
@@ -191,29 +190,6 @@ namespace System.Windows.Forms
         {
             add => Events.AddHandler(EVENT_BALLOONTIPSHOWN, value);
             remove => Events.RemoveHandler(EVENT_BALLOONTIPSHOWN, value);
-        }
-
-        /// <summary>
-        ///  Gets or sets context menu
-        ///  for the tray icon.
-        /// </summary>
-        [
-        Browsable(false),
-        DefaultValue(null),
-        SRCategory(nameof(SR.CatBehavior)),
-        SRDescription(nameof(SR.NotifyIconMenuDescr))
-        ]
-        public ContextMenu ContextMenu
-        {
-            get
-            {
-                return contextMenu;
-            }
-
-            set
-            {
-                contextMenu = value;
-            }
         }
 
         [
@@ -437,7 +413,6 @@ namespace System.Windows.Forms
                     UpdateIcon(false);
                     window.DestroyHandle();
                     window = null;
-                    contextMenu = null;
                     contextMenuStrip = null;
                 }
             }
@@ -647,7 +622,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void ShowContextMenu()
         {
-            if (contextMenu != null || contextMenuStrip != null)
+            if (contextMenuStrip != null)
             {
                 UnsafeNativeMethods.GetCursorPos(out Point pt);
 
@@ -656,26 +631,9 @@ namespace System.Windows.Forms
                 // forced after the call.
                 UnsafeNativeMethods.SetForegroundWindow(new HandleRef(window, window.Handle));
 
-                if (contextMenu != null)
-                {
-                    contextMenu.OnPopup(EventArgs.Empty);
-
-                    SafeNativeMethods.TrackPopupMenuEx(new HandleRef(contextMenu, contextMenu.Handle),
-                                             NativeMethods.TPM_VERTICAL | NativeMethods.TPM_RIGHTALIGN,
-                                             pt.X,
-                                             pt.Y,
-                                             new HandleRef(window, window.Handle),
-                                             null);
-
-                    // Force task switch (see above)
-                    UnsafeNativeMethods.PostMessage(new HandleRef(window, window.Handle), WindowMessages.WM_NULL, IntPtr.Zero, IntPtr.Zero);
-                }
-                else if (contextMenuStrip != null)
-                {
-                    // this will set the context menu strip to be toplevel
-                    // and will allow us to overlap the system tray
-                    contextMenuStrip.ShowInTaskbar(pt.X, pt.Y);
-                }
+                // this will set the context menu strip to be toplevel
+                // and will allow us to overlap the system tray
+                contextMenuStrip.ShowInTaskbar(pt.X, pt.Y);
             }
         }
 
@@ -818,7 +776,7 @@ namespace System.Windows.Forms
                             WmMouseDown(ref msg, MouseButtons.Right, 1);
                             break;
                         case WindowMessages.WM_RBUTTONUP:
-                            if (contextMenu != null || contextMenuStrip != null)
+                            if (contextMenuStrip != null)
                             {
                                 ShowContextMenu();
                             }
@@ -851,88 +809,21 @@ namespace System.Windows.Forms
                         window.DefWndProc(ref msg);
                     }
                     break;
-                case WindowMessages.WM_DRAWITEM:
-                    // If the wparam is zero, then the message was sent by a menu.
-                    // See WM_DRAWITEM in MSDN.
-                    if (msg.WParam == IntPtr.Zero)
-                    {
-                        WmDrawItemMenuItem(ref msg);
-                    }
-                    break;
-                case WindowMessages.WM_MEASUREITEM:
-                    // If the wparam is zero, then the message was sent by a menu.
-                    if (msg.WParam == IntPtr.Zero)
-                    {
-                        WmMeasureMenuItem(ref msg);
-                    }
-                    break;
-
-                case WindowMessages.WM_INITMENUPOPUP:
-                    WmInitMenuPopup(ref msg);
-                    break;
 
                 case WindowMessages.WM_DESTROY:
                     // Remove the icon from the taskbar
                     UpdateIcon(false);
                     break;
 
+                case WindowMessages.WM_INITMENUPOPUP:
                 default:
                     if (msg.Msg == WM_TASKBARCREATED)
                     {
                         WmTaskbarCreated(ref msg);
                     }
+
                     window.DefWndProc(ref msg);
                     break;
-            }
-        }
-
-        private void WmInitMenuPopup(ref Message m)
-        {
-            if (contextMenu != null)
-            {
-                if (contextMenu.ProcessInitMenuPopup(m.WParam))
-                {
-                    return;
-                }
-            }
-
-            window.DefWndProc(ref m);
-        }
-
-        private void WmMeasureMenuItem(ref Message m)
-        {
-            // Obtain the menu item object
-            NativeMethods.MEASUREITEMSTRUCT mis = (NativeMethods.MEASUREITEMSTRUCT)m.GetLParam(typeof(NativeMethods.MEASUREITEMSTRUCT));
-
-            Debug.Assert(m.LParam != IntPtr.Zero, "m.lparam is null");
-
-            // A pointer to the correct MenuItem is stored in the measure item
-            // information sent with the message.
-            // (See MenuItem.CreateMenuItemInfo)
-            MenuItem menuItem = MenuItem.GetMenuItemFromItemData(mis.itemData);
-            Debug.Assert(menuItem != null, "UniqueID is not associated with a menu item");
-
-            // Delegate this message to the menu item
-            if (menuItem != null)
-            {
-                menuItem.WmMeasureItem(ref m);
-            }
-        }
-
-        private void WmDrawItemMenuItem(ref Message m)
-        {
-            // Obtain the menu item object
-            NativeMethods.DRAWITEMSTRUCT dis = (NativeMethods.DRAWITEMSTRUCT)m.GetLParam(typeof(NativeMethods.DRAWITEMSTRUCT));
-
-            // A pointer to the correct MenuItem is stored in the draw item
-            // information sent with the message.
-            // (See MenuItem.CreateMenuItemInfo)
-            MenuItem menuItem = MenuItem.GetMenuItemFromItemData(dis.itemData);
-
-            // Delegate this message to the menu item
-            if (menuItem != null)
-            {
-                menuItem.WmDrawItem(ref m);
             }
         }
 

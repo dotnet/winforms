@@ -11,9 +11,9 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms.Layout;
 using Microsoft.Win32;
+using static Interop;
 using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 using Util = System.Windows.Forms.NativeMethods.Util;
-using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -2602,12 +2602,6 @@ namespace System.Windows.Forms
             base.OnBackColorChanged(e);
         }
 
-        protected override void OnContextMenuChanged(EventArgs e)
-        {
-            base.OnContextMenuChanged(e);
-            UpdateOleCallback();
-        }
-
         protected override void OnRightToLeftChanged(EventArgs e)
         {
             base.OnRightToLeftChanged(e);
@@ -4157,51 +4151,9 @@ namespace System.Windows.Forms
             public HRESULT GetContextMenu(short seltype, IntPtr lpoleobj, ref Richedit.CHARRANGE lpchrg, out IntPtr hmenu)
             {
                 Debug.WriteLineIf(RichTextDbg.TraceVerbose, "IRichEditOleCallback::GetContextMenu");
-                ContextMenu cm = owner.ContextMenu;
-                if (cm == null || owner.ShortcutsEnabled == false)
-                {
-                    hmenu = IntPtr.Zero;
-                }
-                else
-                {
-                    cm.sourceControl = owner;
-                    cm.OnPopup(EventArgs.Empty);
-                    // RichEd calls DestroyMenu after displaying the context menu
-                    IntPtr handle = cm.Handle;
-                    // if another control shares the same context menu
-                    // then we have to mark the context menu's handles empty because
-                    // RichTextBox will delete the menu handles once the popup menu is dismissed.
-                    Menu menu = cm;
-                    while (true)
-                    {
-                        int i = 0;
-                        int count = menu.ItemCount;
-                        for (; i < count; i++)
-                        {
-                            if (menu.items[i].handle != IntPtr.Zero)
-                            {
-                                menu = menu.items[i];
-                                break;
-                            }
-                        }
-                        if (i == count)
-                        {
-                            menu.handle = IntPtr.Zero;
-                            menu.created = false;
-                            if (menu == cm)
-                            {
-                                break;
-                            }
-                            else
-                            {
-                                menu = ((MenuItem)menu).Parent;
-                            }
-                        }
-                    }
 
-                    hmenu = handle;
-                }
-
+                // do nothing, we don't have ContextMenu any longer
+                hmenu = IntPtr.Zero;
                 return HRESULT.S_OK;
             }
         }
