@@ -7481,6 +7481,11 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
         <target state="translated">Gibt an, welche jährlichen Tage fett angezeigt werden sollen.</target>
         <note />
       </trans-unit>
+      <trans-unit id="MonthCalendarBodyAccessibleName">
+        <source>Calendar body</source>
+        <target state="new">Calendar body</target>
+        <note />
+      </trans-unit>
       <trans-unit id="MonthCalendarDimensionsDescr">
         <source>The number of rows and columns of months in a month calendar.</source>
         <target state="translated">Die Anzahl der Spalten und Zeilen von Monaten in einem Monatskalender.</target>
@@ -7531,6 +7536,11 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
         <target state="translated">Gibt an, welche monatlichen Daten fett angezeigt werden sollen.</target>
         <note />
       </trans-unit>
+      <trans-unit id="MonthCalendarNextButtonAccessibleName">
+        <source>Next</source>
+        <target state="new">Next</target>
+        <note />
+      </trans-unit>
       <trans-unit id="MonthCalendarOnDateChangedDescr">
         <source>Occurs when the range of dates changes due to user selection, or through next/previous month navigation.</source>
         <target state="translated">Tritt ein, wenn sich der Datumsbereich aufgrund einer Benutzerauswahl oder einer Navigation zum nächsten oder vorherigen Monat ändert.</target>
@@ -7539,6 +7549,11 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       <trans-unit id="MonthCalendarOnDateSelectedDescr">
         <source>Occurs when the user selects a date or a range of dates.</source>
         <target state="translated">Tritt ein, wenn der Benutzer ein Datum oder einen Datumsbereich auswählt.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="MonthCalendarPreviousButtonAccessibleName">
+        <source>Previous</source>
+        <target state="new">Previous</target>
         <note />
       </trans-unit>
       <trans-unit id="MonthCalendarRange">
@@ -7614,6 +7629,11 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       <trans-unit id="MonthCalendarTitleForeColorDescr">
         <source>The color used to display text within the calendar's title.</source>
         <target state="translated">Die Farbe, in der der Text in der Kalenderüberschrift angezeigt wird.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="MonthCalendarTodayButtonAccessibleName">
+        <source>Today: {0}</source>
+        <target state="new">Today: {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="MonthCalendarTodayDateDescr">

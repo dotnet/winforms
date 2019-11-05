@@ -7481,6 +7481,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">表示要以粗體表示一年之中的哪些日期。</target>
         <note />
       </trans-unit>
+      <trans-unit id="MonthCalendarBodyAccessibleName">
+        <source>Calendar body</source>
+        <target state="new">Calendar body</target>
+        <note />
+      </trans-unit>
       <trans-unit id="MonthCalendarDimensionsDescr">
         <source>The number of rows and columns of months in a month calendar.</source>
         <target state="translated">月曆中月份欄和列的數目。</target>
@@ -7531,6 +7536,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">要以粗體表示一月之中的哪些日期。</target>
         <note />
       </trans-unit>
+      <trans-unit id="MonthCalendarNextButtonAccessibleName">
+        <source>Next</source>
+        <target state="new">Next</target>
+        <note />
+      </trans-unit>
       <trans-unit id="MonthCalendarOnDateChangedDescr">
         <source>Occurs when the range of dates changes due to user selection, or through next/previous month navigation.</source>
         <target state="translated">當因為使用者選取或透過下個月/上個月巡覽所造成日期範圍變更時發生。</target>
@@ -7539,6 +7549,11 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="MonthCalendarOnDateSelectedDescr">
         <source>Occurs when the user selects a date or a range of dates.</source>
         <target state="translated">當使用者選取日期或日期範圍時發生。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="MonthCalendarPreviousButtonAccessibleName">
+        <source>Previous</source>
+        <target state="new">Previous</target>
         <note />
       </trans-unit>
       <trans-unit id="MonthCalendarRange">
@@ -7614,6 +7629,11 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="MonthCalendarTitleForeColorDescr">
         <source>The color used to display text within the calendar's title.</source>
         <target state="translated">用來顯示日曆標題內文字的色彩。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="MonthCalendarTodayButtonAccessibleName">
+        <source>Today: {0}</source>
+        <target state="new">Today: {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="MonthCalendarTodayDateDescr">

@@ -7481,6 +7481,11 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
         <target state="translated">Indica le date dell'anno da visualizzare in grassetto.</target>
         <note />
       </trans-unit>
+      <trans-unit id="MonthCalendarBodyAccessibleName">
+        <source>Calendar body</source>
+        <target state="new">Calendar body</target>
+        <note />
+      </trans-unit>
       <trans-unit id="MonthCalendarDimensionsDescr">
         <source>The number of rows and columns of months in a month calendar.</source>
         <target state="translated">Numero di righe e colonne dei mesi in un calendario mensile.</target>
@@ -7531,6 +7536,11 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
         <target state="translated">Indica le date mensili da visualizzare in grassetto.</target>
         <note />
       </trans-unit>
+      <trans-unit id="MonthCalendarNextButtonAccessibleName">
+        <source>Next</source>
+        <target state="new">Next</target>
+        <note />
+      </trans-unit>
       <trans-unit id="MonthCalendarOnDateChangedDescr">
         <source>Occurs when the range of dates changes due to user selection, or through next/previous month navigation.</source>
         <target state="translated">Generato quando l'intervallo delle date cambia in seguito alla selezione dell'utente o alla navigazione al mese precedente o successivo.</target>
@@ -7539,6 +7549,11 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
       <trans-unit id="MonthCalendarOnDateSelectedDescr">
         <source>Occurs when the user selects a date or a range of dates.</source>
         <target state="translated">Generato quando l'utente seleziona una data o un intervallo di date.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="MonthCalendarPreviousButtonAccessibleName">
+        <source>Previous</source>
+        <target state="new">Previous</target>
         <note />
       </trans-unit>
       <trans-unit id="MonthCalendarRange">
@@ -7614,6 +7629,11 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
       <trans-unit id="MonthCalendarTitleForeColorDescr">
         <source>The color used to display text within the calendar's title.</source>
         <target state="translated">Colore utilizzato per visualizzare il testo del titolo del calendario.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="MonthCalendarTodayButtonAccessibleName">
+        <source>Today: {0}</source>
+        <target state="new">Today: {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="MonthCalendarTodayDateDescr">

@@ -7481,6 +7481,11 @@ Trasování zásobníku, kde došlo k neplatné operaci:
         <target state="translated">Určuje, která data v rámci roku mají být zobrazena tučně.</target>
         <note />
       </trans-unit>
+      <trans-unit id="MonthCalendarBodyAccessibleName">
+        <source>Calendar body</source>
+        <target state="new">Calendar body</target>
+        <note />
+      </trans-unit>
       <trans-unit id="MonthCalendarDimensionsDescr">
         <source>The number of rows and columns of months in a month calendar.</source>
         <target state="translated">Počet řádků a sloupců měsíců v měsíčním kalendáři.</target>
@@ -7531,6 +7536,11 @@ Trasování zásobníku, kde došlo k neplatné operaci:
         <target state="translated">Určuje, která data v rámci měsíce mají být zobrazena tučně.</target>
         <note />
       </trans-unit>
+      <trans-unit id="MonthCalendarNextButtonAccessibleName">
+        <source>Next</source>
+        <target state="new">Next</target>
+        <note />
+      </trans-unit>
       <trans-unit id="MonthCalendarOnDateChangedDescr">
         <source>Occurs when the range of dates changes due to user selection, or through next/previous month navigation.</source>
         <target state="translated">Vyvolá se v případě, že se rozsah dat změní z důvodu výběru uživatele nebo prostřednictvím přechodu na další nebo předchozí měsíc.</target>
@@ -7539,6 +7549,11 @@ Trasování zásobníku, kde došlo k neplatné operaci:
       <trans-unit id="MonthCalendarOnDateSelectedDescr">
         <source>Occurs when the user selects a date or a range of dates.</source>
         <target state="translated">Vyvolá se v případě, že uživatel vybere datum nebo rozsah dat.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="MonthCalendarPreviousButtonAccessibleName">
+        <source>Previous</source>
+        <target state="new">Previous</target>
         <note />
       </trans-unit>
       <trans-unit id="MonthCalendarRange">
@@ -7614,6 +7629,11 @@ Trasování zásobníku, kde došlo k neplatné operaci:
       <trans-unit id="MonthCalendarTitleForeColorDescr">
         <source>The color used to display text within the calendar's title.</source>
         <target state="translated">Barva pozadí použitá k zobrazení textu v nadpisu kalendáře.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="MonthCalendarTodayButtonAccessibleName">
+        <source>Today: {0}</source>
+        <target state="new">Today: {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="MonthCalendarTodayDateDescr">

@@ -10,8 +10,9 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms.Internal;
 using System.Windows.Forms.Layout;
 using Microsoft.Win32;
-using ArrayList = System.Collections.ArrayList;
+
 using static Interop;
+using ArrayList = System.Collections.ArrayList;
 
 namespace System.Windows.Forms
 {
@@ -62,7 +63,7 @@ namespace System.Windows.Forms
     Designer("System.Windows.Forms.Design.MonthCalendarDesigner, " + AssemblyRef.SystemDesign),
     SRDescription(nameof(SR.DescriptionMonthCalendar))
     ]
-    public class MonthCalendar : Control
+    public partial class MonthCalendar : Control
     {
         const long DAYS_TO_1601 = 548229;
         const long DAYS_TO_10000 = 3615900;
@@ -365,20 +366,20 @@ namespace System.Windows.Forms
             {
                 CreateParams cp = base.CreateParams;
                 cp.ClassName = NativeMethods.WC_MONTHCAL;
-                cp.Style |= NativeMethods.MCS_MULTISELECT | NativeMethods.MCS_DAYSTATE;
+                cp.Style |= (int)ComCtl32.MCS.MULTISELECT | (int)ComCtl32.MCS.DAYSTATE;
                 if (!showToday)
                 {
-                    cp.Style |= NativeMethods.MCS_NOTODAY;
+                    cp.Style |= (int)ComCtl32.MCS.NOTODAY;
                 }
 
                 if (!showTodayCircle)
                 {
-                    cp.Style |= NativeMethods.MCS_NOTODAYCIRCLE;
+                    cp.Style |= (int)ComCtl32.MCS.NOTODAYCIRCLE;
                 }
 
                 if (showWeekNumbers)
                 {
-                    cp.Style |= NativeMethods.MCS_WEEKNUMBERS;
+                    cp.Style |= (int)ComCtl32.MCS.WEEKNUMBERS;
                 }
 
                 if (RightToLeft == RightToLeft.Yes && RightToLeftLayout == true)
@@ -466,7 +467,7 @@ namespace System.Windows.Forms
                         }
                         else
                         {
-                            SendMessage(NativeMethods.MCM_SETFIRSTDAYOFWEEK, 0, (int)value);
+                            SendMessage((int)ComCtl32.MCM.SETFIRSTDAYOFWEEK, 0, (int)value);
                         }
                     }
                 }
@@ -569,7 +570,7 @@ namespace System.Windows.Forms
                 {
                     if (IsHandleCreated)
                     {
-                        if (unchecked((int)(long)SendMessage(NativeMethods.MCM_SETMAXSELCOUNT, value, 0)) == 0)
+                        if (unchecked((int)(long)SendMessage((int)ComCtl32.MCM.SETMAXSELCOUNT, value, 0)) == 0)
                         {
                             throw new ArgumentException(string.Format(SR.MonthCalendarMaxSelCount, value.ToString("D")), nameof(value));
                         }
@@ -757,7 +758,7 @@ namespace System.Windows.Forms
 
                     if (IsHandleCreated)
                     {
-                        SendMessage(NativeMethods.MCM_SETMONTHDELTA, value, 0);
+                        SendMessage((int)ComCtl32.MCM.SETMONTHDELTA, value, 0);
                     }
                     scrollChange = value;
                 }
@@ -982,7 +983,7 @@ namespace System.Windows.Forms
                 if (IsHandleCreated)
                 {
 
-                    if (unchecked((int)(long)SendMessage(NativeMethods.MCM_GETMINREQRECT, 0, ref rect)) == 0)
+                    if (unchecked((int)(long)SendMessage((int)ComCtl32.MCM.GETMINREQRECT, 0, ref rect)) == 0)
                     {
                         throw new InvalidOperationException(SR.InvalidSingleMonthSize);
                     }
@@ -1014,6 +1015,8 @@ namespace System.Windows.Forms
                 base.Size = value;
             }
         }
+
+        internal override bool SupportsUiaProviders => true;
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), Bindable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override string Text
@@ -1055,8 +1058,8 @@ namespace System.Windows.Forms
 
                 if (IsHandleCreated)
                 {
-                    NativeMethods.SYSTEMTIME st = new NativeMethods.SYSTEMTIME();
-                    int res = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.MCM_GETTODAY, 0, st);
+                    Kernel32.SYSTEMTIME st = new Kernel32.SYSTEMTIME();
+                    int res = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)ComCtl32.MCM.GETTODAY, 0, ref st);
                     Debug.Assert(res != 0, "MCM_GETTODAY failed");
                     return DateTimePicker.SysTimeToDateTime(st).Date;
                 }
@@ -1131,7 +1134,7 @@ namespace System.Windows.Forms
                                                               "value"));
                 }
                 titleBackColor = value;
-                SetControlColor(NativeMethods.MCSC_TITLEBK, value);
+                SetControlColor(ComCtl32.MCSC.TITLEBK, value);
             }
         }
 
@@ -1157,7 +1160,7 @@ namespace System.Windows.Forms
                                                               "value"));
                 }
                 titleForeColor = value;
-                SetControlColor(NativeMethods.MCSC_TITLETEXT, value);
+                SetControlColor(ComCtl32.MCSC.TITLETEXT, value);
             }
         }
 
@@ -1183,7 +1186,7 @@ namespace System.Windows.Forms
                                                               "value"));
                 }
                 trailingForeColor = value;
-                SetControlColor(NativeMethods.MCSC_TRAILINGTEXT, value);
+                SetControlColor(ComCtl32.MCSC.TRAILINGTEXT, value);
             }
         }
 
@@ -1398,31 +1401,31 @@ namespace System.Windows.Forms
         /// </summary>
         private HitArea GetHitArea(int hit)
         {
-            switch (hit)
+            switch ((ComCtl32.MCHT)hit)
             {
-                case NativeMethods.MCHT_TITLEBK:
+                case ComCtl32.MCHT.TITLEBK:
                     return HitArea.TitleBackground;
-                case NativeMethods.MCHT_TITLEMONTH:
+                case ComCtl32.MCHT.TITLEMONTH:
                     return HitArea.TitleMonth;
-                case NativeMethods.MCHT_TITLEYEAR:
+                case ComCtl32.MCHT.TITLEYEAR:
                     return HitArea.TitleYear;
-                case NativeMethods.MCHT_TITLEBTNNEXT:
+                case ComCtl32.MCHT.TITLEBTNNEXT:
                     return HitArea.NextMonthButton;
-                case NativeMethods.MCHT_TITLEBTNPREV:
+                case ComCtl32.MCHT.TITLEBTNPREV:
                     return HitArea.PrevMonthButton;
-                case NativeMethods.MCHT_CALENDARBK:
+                case ComCtl32.MCHT.CALENDARBK:
                     return HitArea.CalendarBackground;
-                case NativeMethods.MCHT_CALENDARDATE:
+                case ComCtl32.MCHT.CALENDARDATE:
                     return HitArea.Date;
-                case NativeMethods.MCHT_CALENDARDATENEXT:
+                case ComCtl32.MCHT.CALENDARDATENEXT:
                     return HitArea.NextMonthDate;
-                case NativeMethods.MCHT_CALENDARDATEPREV:
+                case ComCtl32.MCHT.CALENDARDATEPREV:
                     return HitArea.PrevMonthDate;
-                case NativeMethods.MCHT_CALENDARDAY:
+                case ComCtl32.MCHT.CALENDARDAY:
                     return HitArea.DayOfWeek;
-                case NativeMethods.MCHT_CALENDARWEEKNUM:
+                case ComCtl32.MCHT.CALENDARWEEKNUM:
                     return HitArea.WeekNumbers;
-                case NativeMethods.MCHT_TODAYLINK:
+                case ComCtl32.MCHT.TODAYLINK:
                     return HitArea.TodayLink;
                 default:
                     return HitArea.Nowhere;
@@ -1439,9 +1442,10 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Used internally to get the minimum size needed to display the
-        ///  MonthCalendar.  This is needed because
-        ///  NativeMethods.MCM_GETMINREQRECT returns an incorrect value if showToday
-        ///  is set to false.  If updateRows is true, then the
+        ///  MonthCalendar. This is needed because
+        ///  ComCtl32.MCM.GETMINREQRECT
+        ///  returns an incorrect value if showToday
+        ///  is set to false. If updateRows is true, then the
         ///  number of rows will be updated according to height.
         /// </summary>
         private Size GetMinReqRect(int newDimensionLength, bool updateRows, bool updateCols)
@@ -1487,7 +1491,7 @@ namespace System.Windows.Forms
             //
             if (IsHandleCreated)
             {
-                int maxTodayWidth = unchecked((int)(long)SendMessage(NativeMethods.MCM_GETMAXTODAYWIDTH, 0, 0));
+                int maxTodayWidth = unchecked((int)(long)SendMessage((int)ComCtl32.MCM.GETMAXTODAYWIDTH, 0, 0));
                 if (maxTodayWidth > minSize.Width)
                 {
                     minSize.Width = maxTodayWidth;
@@ -1505,9 +1509,9 @@ namespace System.Windows.Forms
         {
             NativeMethods.SYSTEMTIMEARRAY sa = new NativeMethods.SYSTEMTIMEARRAY();
             SelectionRange range = new SelectionRange();
-            UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.MCM_GETMONTHRANGE, flag, sa);
+            UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)ComCtl32.MCM.GETMONTHRANGE, flag, sa);
 
-            NativeMethods.SYSTEMTIME st = new NativeMethods.SYSTEMTIME
+            Kernel32.SYSTEMTIME st = new Kernel32.SYSTEMTIME
             {
                 wYear = sa.wYear1,
                 wMonth = sa.wMonth1,
@@ -1551,35 +1555,39 @@ namespace System.Windows.Forms
         /// </summary>
         public HitTestInfo HitTest(int x, int y)
         {
-            NativeMethods.MCHITTESTINFO mchi = new NativeMethods.MCHITTESTINFO
+            ComCtl32.MCHITTESTINFO mchi = new ComCtl32.MCHITTESTINFO
             {
-                pt_x = x,
-                pt_y = y,
-                cbSize = Marshal.SizeOf<NativeMethods.MCHITTESTINFO>()
+                pt = new POINT
+                {
+                    x = x,
+                    y = y
+                },
+                st = new Kernel32.SYSTEMTIME(),
+                cbSize = Marshal.SizeOf<ComCtl32.MCHITTESTINFO>()
             };
-            UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.MCM_HITTEST, 0, mchi);
+            UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)ComCtl32.MCM.HITTEST, 0, ref mchi);
 
             // If the hit area has an associated valid date, get it
             //
             HitArea hitArea = GetHitArea(mchi.uHit);
             if (HitTestInfo.HitAreaHasValidDateTime(hitArea))
             {
-                NativeMethods.SYSTEMTIME sys = new NativeMethods.SYSTEMTIME
+                Kernel32.SYSTEMTIME sys = new Kernel32.SYSTEMTIME
                 {
-                    wYear = mchi.st_wYear,
-                    wMonth = mchi.st_wMonth,
-                    wDayOfWeek = mchi.st_wDayOfWeek,
-                    wDay = mchi.st_wDay,
-                    wHour = mchi.st_wHour,
-                    wMinute = mchi.st_wMinute,
-                    wSecond = mchi.st_wSecond,
-                    wMilliseconds = mchi.st_wMilliseconds
+                    wYear = mchi.st.wYear,
+                    wMonth = mchi.st.wMonth,
+                    wDayOfWeek = mchi.st.wDayOfWeek,
+                    wDay = mchi.st.wDay,
+                    wHour = mchi.st.wHour,
+                    wMinute = mchi.st.wMinute,
+                    wSecond = mchi.st.wSecond,
+                    wMilliseconds = mchi.st.wMilliseconds
                 };
-                return new HitTestInfo(new Point(mchi.pt_x, mchi.pt_y), hitArea, DateTimePicker.SysTimeToDateTime(sys));
+                return new HitTestInfo(new Point(mchi.pt.x, mchi.pt.y), hitArea, DateTimePicker.SysTimeToDateTime(sys));
             }
             else
             {
-                return new HitTestInfo(new Point(mchi.pt_x, mchi.pt_y), hitArea);
+                return new HitTestInfo(new Point(mchi.pt.x, mchi.pt.y), hitArea);
             }
         }
 
@@ -1622,21 +1630,21 @@ namespace System.Windows.Forms
             SetSelRange(selectionStart, selectionEnd);
             if (maxSelectionCount != DEFAULT_MAX_SELECTION_COUNT)
             {
-                SendMessage(NativeMethods.MCM_SETMAXSELCOUNT, maxSelectionCount, 0);
+                SendMessage((int)ComCtl32.MCM.SETMAXSELCOUNT, maxSelectionCount, 0);
             }
             AdjustSize();
 
             if (todayDateSet)
             {
-                NativeMethods.SYSTEMTIME st = DateTimePicker.DateTimeToSysTime(todayDate);
-                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.MCM_SETTODAY, 0, st);
+                Kernel32.SYSTEMTIME st = DateTimePicker.DateTimeToSysTime(todayDate);
+                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)ComCtl32.MCM.SETTODAY, 0, ref st);
             }
 
-            SetControlColor(NativeMethods.MCSC_TEXT, ForeColor);
-            SetControlColor(NativeMethods.MCSC_MONTHBK, BackColor);
-            SetControlColor(NativeMethods.MCSC_TITLEBK, titleBackColor);
-            SetControlColor(NativeMethods.MCSC_TITLETEXT, titleForeColor);
-            SetControlColor(NativeMethods.MCSC_TRAILINGTEXT, trailingForeColor);
+            SetControlColor(ComCtl32.MCSC.TEXT, ForeColor);
+            SetControlColor(ComCtl32.MCSC.MONTHBK, BackColor);
+            SetControlColor(ComCtl32.MCSC.TITLEBK, titleBackColor);
+            SetControlColor(ComCtl32.MCSC.TITLETEXT, titleForeColor);
+            SetControlColor(ComCtl32.MCSC.TRAILINGTEXT, trailingForeColor);
 
             int firstDay;
             if (firstDayOfWeek == Day.Default)
@@ -1647,12 +1655,12 @@ namespace System.Windows.Forms
             {
                 firstDay = (int)firstDayOfWeek;
             }
-            SendMessage(NativeMethods.MCM_SETFIRSTDAYOFWEEK, 0, firstDay);
+            SendMessage((int)ComCtl32.MCM.SETFIRSTDAYOFWEEK, 0, firstDay);
 
             SetRange();
             if (scrollChange != DEFAULT_SCROLL_CHANGE)
             {
-                SendMessage(NativeMethods.MCM_SETMONTHDELTA, scrollChange, 0);
+                SendMessage((int)ComCtl32.MCM.SETMONTHDELTA, scrollChange, 0);
             }
 
             SystemEvents.UserPreferenceChanged += new UserPreferenceChangedEventHandler(MarshaledUserPreferenceChanged);
@@ -1684,6 +1692,13 @@ namespace System.Windows.Forms
             onDateSelected?.Invoke(this, drevent);
         }
 
+        protected override void OnGotFocus(EventArgs e)
+        {
+            base.OnGotFocus(e);
+
+            AccessibilityObject.RaiseAutomationEvent(NativeMethods.UIA_AutomationFocusChangedEventId);
+        }
+
         protected override void OnFontChanged(EventArgs e)
         {
             base.OnFontChanged(e);
@@ -1693,13 +1708,13 @@ namespace System.Windows.Forms
         protected override void OnForeColorChanged(EventArgs e)
         {
             base.OnForeColorChanged(e);
-            SetControlColor(NativeMethods.MCSC_TEXT, ForeColor);
+            SetControlColor(ComCtl32.MCSC.TEXT, ForeColor);
         }
 
         protected override void OnBackColorChanged(EventArgs e)
         {
             base.OnBackColorChanged(e);
-            SetControlColor(NativeMethods.MCSC_MONTHBK, BackColor);
+            SetControlColor(ComCtl32.MCSC.MONTHBK, BackColor);
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -1939,6 +1954,13 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
+        ///  Sends a Win32 message to this control.  If the control does not yet
+        ///  have a handle, it will be created.
+        /// </summary>
+        private IntPtr SendMessage(int msg, int wparam, ref ComCtl32.MCGRIDINFO lparam) =>
+            ComCtl32.SendMessage(new HandleRef(this, Handle), msg, wparam, ref lparam);
+
+        /// <summary>
         ///  Overrides Control.SetBoundsCore to enforce auto-sizing.
         /// </summary>
         protected override void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified)
@@ -1974,11 +1996,11 @@ namespace System.Windows.Forms
         /// <summary>
         ///  If the handle has been created, this applies the color to the control
         /// </summary>
-        private void SetControlColor(int colorIndex, Color value)
+        private void SetControlColor(ComCtl32.MCSC colorIndex, Color value)
         {
             if (IsHandleCreated)
             {
-                SendMessage(NativeMethods.MCM_SETCOLOR, colorIndex, ColorTranslator.ToWin32(value));
+                SendMessage((int)ComCtl32.MCM.SETCOLOR, (int)colorIndex, ColorTranslator.ToWin32(value));
             }
         }
 
@@ -2020,7 +2042,7 @@ namespace System.Windows.Forms
 
                 NativeMethods.SYSTEMTIMEARRAY sa = new NativeMethods.SYSTEMTIMEARRAY();
                 flag |= NativeMethods.GDTR_MIN | NativeMethods.GDTR_MAX;
-                NativeMethods.SYSTEMTIME sys = DateTimePicker.DateTimeToSysTime(minDate);
+                Kernel32.SYSTEMTIME sys = DateTimePicker.DateTimeToSysTime(minDate);
                 sa.wYear1 = sys.wYear;
                 sa.wMonth1 = sys.wMonth;
                 sa.wDayOfWeek1 = sys.wDayOfWeek;
@@ -2031,7 +2053,7 @@ namespace System.Windows.Forms
                 sa.wDayOfWeek2 = sys.wDayOfWeek;
                 sa.wDay2 = sys.wDay;
 
-                if ((int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.MCM_SETRANGE, flag, sa) == 0)
+                if ((int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)ComCtl32.MCM.SETRANGE, flag, sa) == 0)
                 {
                     throw new InvalidOperationException(string.Format(SR.MonthCalendarRange, minDate.ToShortDateString(), maxDate.ToShortDateString()));
                 }
@@ -2173,7 +2195,7 @@ namespace System.Windows.Forms
             {
                 NativeMethods.SYSTEMTIMEARRAY sa = new NativeMethods.SYSTEMTIMEARRAY();
 
-                NativeMethods.SYSTEMTIME sys = DateTimePicker.DateTimeToSysTime(lower);
+                Kernel32.SYSTEMTIME sys = DateTimePicker.DateTimeToSysTime(lower);
                 sa.wYear1 = sys.wYear;
                 sa.wMonth1 = sys.wMonth;
                 sa.wDayOfWeek1 = sys.wDayOfWeek;
@@ -2183,7 +2205,7 @@ namespace System.Windows.Forms
                 sa.wMonth2 = sys.wMonth;
                 sa.wDayOfWeek2 = sys.wDayOfWeek;
                 sa.wDay2 = sys.wDay;
-                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.MCM_SETSELRANGE, 0, sa);
+                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)ComCtl32.MCM.SETSELRANGE, 0, sa);
             }
 
             if (changed)
@@ -2286,12 +2308,16 @@ namespace System.Windows.Forms
         {
             if (IsHandleCreated)
             {
-                NativeMethods.SYSTEMTIME st = null;
+
                 if (todayDateSet)
                 {
-                    st = DateTimePicker.DateTimeToSysTime(todayDate);
+                    Kernel32.SYSTEMTIME st = DateTimePicker.DateTimeToSysTime(todayDate);
+                    UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)ComCtl32.MCM.SETTODAY, 0, ref st);
                 }
-                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.MCM_SETTODAY, 0, st);
+                else
+                {
+                    UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)ComCtl32.MCM.SETTODAY, 0, IntPtr.Zero);
+                }
             }
         }
 
@@ -2327,6 +2353,9 @@ namespace System.Windows.Forms
 
             AccessibilityNotifyClients(AccessibleEvents.NameChange, -1);
             AccessibilityNotifyClients(AccessibleEvents.ValueChange, -1);
+
+            MonthCalendarAccessibleObject calendarAccessibleObject = (MonthCalendarAccessibleObject)AccessibilityObject;
+            calendarAccessibleObject.RaiseAutomationEventForChild(NativeMethods.UIA_AutomationFocusChangedEventId, selectionStart, selectionEnd);
 
             //subhag
             if (start.Ticks < minDate.Ticks || end.Ticks < minDate.Ticks)
@@ -2629,159 +2658,5 @@ namespace System.Windows.Forms
             /// </summary>
             TodayLink = 12,
         }
-
-        [ComVisible(true)]
-        internal class MonthCalendarAccessibleObject : ControlAccessibleObject
-        {
-            private readonly MonthCalendar calendar;
-
-            public MonthCalendarAccessibleObject(Control owner)
-                : base(owner)
-            {
-                calendar = owner as MonthCalendar;
-            }
-
-            public override AccessibleRole Role
-            {
-                get
-                {
-                    if (calendar != null)
-                    {
-                        AccessibleRole role = calendar.AccessibleRole;
-                        if (role != AccessibleRole.Default)
-                        {
-                            return role;
-                        }
-                    }
-                    return AccessibleRole.Table;
-                }
-            }
-
-            public override string Help
-            {
-                get
-                {
-                    var help = base.Help;
-                    if (help != null)
-                    {
-                        return help;
-                    }
-                    else
-                    {
-                        if (calendar != null)
-                        {
-                            return calendar.GetType().Name + "(" + calendar.GetType().BaseType.Name + ")";
-                        }
-                    }
-                    return string.Empty;
-                }
-            }
-
-            public override string Name
-            {
-                get
-                {
-                    string name = base.Name;
-                    if (name != null)
-                    {
-                        return name;
-                    }
-
-                    if (calendar != null)
-                    {
-
-                        if (calendar.mcCurView == NativeMethods.MONTCALENDAR_VIEW_MODE.MCMV_MONTH)
-                        {
-                            if (System.DateTime.Equals(calendar.SelectionStart.Date, calendar.SelectionEnd.Date))
-                            {
-                                name = string.Format(SR.MonthCalendarSingleDateSelected, calendar.SelectionStart.ToLongDateString());
-                            }
-                            else
-                            {
-                                name = string.Format(SR.MonthCalendarRangeSelected, calendar.SelectionStart.ToLongDateString(), calendar.SelectionEnd.ToLongDateString());
-                            }
-                        }
-                        else if (calendar.mcCurView == NativeMethods.MONTCALENDAR_VIEW_MODE.MCMV_YEAR)
-                        {
-                            if (System.DateTime.Equals(calendar.SelectionStart.Month, calendar.SelectionEnd.Month))
-                            {
-                                name = string.Format(SR.MonthCalendarSingleDateSelected, calendar.SelectionStart.ToString("y"));
-                            }
-                            else
-                            {
-                                name = string.Format(SR.MonthCalendarRangeSelected, calendar.SelectionStart.ToString("y"), calendar.SelectionEnd.ToString("y"));
-                            }
-                        }
-                        else if (calendar.mcCurView == NativeMethods.MONTCALENDAR_VIEW_MODE.MCMV_DECADE)
-                        {
-                            if (System.DateTime.Equals(calendar.SelectionStart.Year, calendar.SelectionEnd.Year))
-                            {
-                                name = string.Format(SR.MonthCalendarSingleYearSelected, calendar.SelectionStart.ToString("yyyy"));
-                            }
-                            else
-                            {
-                                name = string.Format(SR.MonthCalendarYearRangeSelected, calendar.SelectionStart.ToString("yyyy"), calendar.SelectionEnd.ToString("yyyy"));
-                            }
-                        }
-                        else if (calendar.mcCurView == NativeMethods.MONTCALENDAR_VIEW_MODE.MCMV_CENTURY)
-                        {
-                            name = string.Format(SR.MonthCalendarSingleDecadeSelected, calendar.SelectionStart.ToString("yyyy"));
-                        }
-                    }
-                    return name;
-                }
-            }
-
-            public override string Value
-            {
-                get
-                {
-                    var value = string.Empty;
-                    try
-                    {
-                        if (calendar != null)
-                        {
-                            if (calendar.mcCurView == NativeMethods.MONTCALENDAR_VIEW_MODE.MCMV_MONTH)
-                            {
-                                if (System.DateTime.Equals(calendar.SelectionStart.Date, calendar.SelectionEnd.Date))
-                                {
-                                    value = calendar.SelectionStart.ToLongDateString();
-                                }
-                                else
-                                {
-                                    value = string.Format("{0} - {1}", calendar.SelectionStart.ToLongDateString(), calendar.SelectionEnd.ToLongDateString());
-                                }
-                            }
-                            else if (calendar.mcCurView == NativeMethods.MONTCALENDAR_VIEW_MODE.MCMV_YEAR)
-                            {
-                                if (System.DateTime.Equals(calendar.SelectionStart.Month, calendar.SelectionEnd.Month))
-                                {
-                                    value = calendar.SelectionStart.ToString("y");
-                                }
-                                else
-                                {
-                                    value = string.Format("{0} - {1}", calendar.SelectionStart.ToString("y"), calendar.SelectionEnd.ToString("y"));
-                                }
-                            }
-                            else
-                            {
-                                value = string.Format("{0} - {1}", calendar.SelectionRange.Start.ToString(), calendar.SelectionRange.End.ToString());
-                            }
-                        }
-                    }
-                    catch
-                    {
-                        value = base.Value;
-                    }
-                    return value;
-                }
-                set
-                {
-                    base.Value = value;
-                }
-            }
-        }
-
     } // end class MonthCalendar
 }
-

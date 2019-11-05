@@ -7481,6 +7481,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">年間のどの日付を太字にするかを示します。</target>
         <note />
       </trans-unit>
+      <trans-unit id="MonthCalendarBodyAccessibleName">
+        <source>Calendar body</source>
+        <target state="new">Calendar body</target>
+        <note />
+      </trans-unit>
       <trans-unit id="MonthCalendarDimensionsDescr">
         <source>The number of rows and columns of months in a month calendar.</source>
         <target state="translated">月表示カレンダーの月の行と列の数です。</target>
@@ -7531,6 +7536,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">月ごとに太字で表示する日付を示します。</target>
         <note />
       </trans-unit>
+      <trans-unit id="MonthCalendarNextButtonAccessibleName">
+        <source>Next</source>
+        <target state="new">Next</target>
+        <note />
+      </trans-unit>
       <trans-unit id="MonthCalendarOnDateChangedDescr">
         <source>Occurs when the range of dates changes due to user selection, or through next/previous month navigation.</source>
         <target state="translated">ユーザーの選択、または翌/先月の変更により、日にちの範囲が変更されたときに発生します。</target>
@@ -7539,6 +7549,11 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="MonthCalendarOnDateSelectedDescr">
         <source>Occurs when the user selects a date or a range of dates.</source>
         <target state="translated">ユーザーがある日付を選択したとき、または日数の範囲を指定したときに発生します。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="MonthCalendarPreviousButtonAccessibleName">
+        <source>Previous</source>
+        <target state="new">Previous</target>
         <note />
       </trans-unit>
       <trans-unit id="MonthCalendarRange">
@@ -7614,6 +7629,11 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="MonthCalendarTitleForeColorDescr">
         <source>The color used to display text within the calendar's title.</source>
         <target state="translated">カレンダーの表題内のテキストの色です。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="MonthCalendarTodayButtonAccessibleName">
+        <source>Today: {0}</source>
+        <target state="new">Today: {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="MonthCalendarTodayDateDescr">

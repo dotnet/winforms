@@ -4511,6 +4511,9 @@ Stack trace where the illegal operation occurred was:
   <data name="MonthCalendarAnnuallyBoldedDatesDescr" xml:space="preserve">
     <value>Indicates which annual dates should be boldface.</value>
   </data>
+  <data name="MonthCalendarBodyAccessibleName" xml:space="preserve">
+    <value>Calendar body</value>
+  </data>
   <data name="MonthCalendarDimensionsDescr" xml:space="preserve">
     <value>The number of rows and columns of months in a month calendar.</value>
   </data>
@@ -4541,11 +4544,17 @@ Stack trace where the illegal operation occurred was:
   <data name="MonthCalendarMonthlyBoldedDatesDescr" xml:space="preserve">
     <value>Indicates which monthly dates to bold.</value>
   </data>
+  <data name="MonthCalendarNextButtonAccessibleName" xml:space="preserve">
+    <value>Next</value>
+  </data>
   <data name="MonthCalendarOnDateChangedDescr" xml:space="preserve">
     <value>Occurs when the range of dates changes due to user selection, or through next/previous month navigation.</value>
   </data>
   <data name="MonthCalendarOnDateSelectedDescr" xml:space="preserve">
     <value>Occurs when the user selects a date or a range of dates.</value>
+  </data>
+  <data name="MonthCalendarPreviousButtonAccessibleName" xml:space="preserve">
+    <value>Previous</value>
   </data>
   <data name="MonthCalendarRange" xml:space="preserve">
     <value>Unable to set the MonthCalendar range from {0} to {1}.</value>
@@ -4579,6 +4588,9 @@ Stack trace where the illegal operation occurred was:
   </data>
   <data name="MonthCalendarTitleForeColorDescr" xml:space="preserve">
     <value>The color used to display text within the calendar's title.</value>
+  </data>
+  <data name="MonthCalendarTodayButtonAccessibleName" xml:space="preserve">
+    <value>Today: {0}</value>
   </data>
   <data name="MonthCalendarTodayDateDescr" xml:space="preserve">
     <value>The current day.</value>

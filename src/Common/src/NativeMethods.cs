@@ -852,47 +852,14 @@ namespace System.Windows.Forms
         MDITILE_VERTICAL = 0x0000,
         MDITILE_HORIZONTAL = 0x0001,
         MDITILE_SKIPDISABLED = 0x0002,
-        MCM_SETMAXSELCOUNT = (0x1000 + 4),
-        MCM_SETSELRANGE = (0x1000 + 6),
-        MCM_GETMONTHRANGE = (0x1000 + 7),
-        MCM_GETMINREQRECT = (0x1000 + 9),
-        MCM_SETCOLOR = (0x1000 + 10),
-        MCM_SETTODAY = (0x1000 + 12),
-        MCM_GETTODAY = (0x1000 + 13),
-        MCM_HITTEST = (0x1000 + 14),
-        MCM_SETFIRSTDAYOFWEEK = (0x1000 + 15),
-        MCM_SETRANGE = (0x1000 + 18),
-        MCM_SETMONTHDELTA = (0x1000 + 20),
-        MCM_GETMAXTODAYWIDTH = (0x1000 + 21),
-        MCHT_TITLE = 0x00010000,
-        MCHT_CALENDAR = 0x00020000,
-        MCHT_TODAYLINK = 0x00030000,
-        MCHT_TITLEBK = (0x00010000),
-        MCHT_TITLEMONTH = (0x00010000 | 0x0001),
-        MCHT_TITLEYEAR = (0x00010000 | 0x0002),
-        MCHT_TITLEBTNNEXT = (0x00010000 | 0x01000000 | 0x0003),
-        MCHT_TITLEBTNPREV = (0x00010000 | 0x02000000 | 0x0003),
-        MCHT_CALENDARBK = (0x00020000),
-        MCHT_CALENDARDATE = (0x00020000 | 0x0001),
-        MCHT_CALENDARDATENEXT = ((0x00020000 | 0x0001) | 0x01000000),
-        MCHT_CALENDARDATEPREV = ((0x00020000 | 0x0001) | 0x02000000),
-        MCHT_CALENDARDAY = (0x00020000 | 0x0002),
-        MCHT_CALENDARWEEKNUM = (0x00020000 | 0x0003),
-        MCSC_TEXT = 1,
-        MCSC_TITLEBK = 2,
-        MCSC_TITLETEXT = 3,
-        MCSC_MONTHBK = 4,
-        MCSC_TRAILINGTEXT = 5,
+ 
         MCN_VIEWCHANGE = (0 - 750), // MCN_SELECT -4  - give state of calendar view
         MCN_SELCHANGE = ((0 - 750) + 1),
         MCN_GETDAYSTATE = ((0 - 750) + 3),
         MCN_SELECT = ((0 - 750) + 4),
-        MCS_DAYSTATE = 0x0001,
-        MCS_MULTISELECT = 0x0002,
-        MCS_WEEKNUMBERS = 0x0004,
-        MCS_NOTODAYCIRCLE = 0x0008,
-        MCS_NOTODAY = 0x0010,
+
         MSAA_MENU_SIG = (unchecked((int)0xAA0DF00D));
+
 
         public const int NIM_ADD = 0x00000000,
         NIM_MODIFY = 0x00000001,
@@ -2708,27 +2675,6 @@ namespace System.Windows.Forms
         }
 
         [StructLayout(LayoutKind.Sequential)]
-        public class SYSTEMTIME
-        {
-            public short wYear;
-            public short wMonth;
-            public short wDayOfWeek;
-            public short wDay;
-            public short wHour;
-            public short wMinute;
-            public short wSecond;
-            public short wMilliseconds;
-
-            public override string ToString()
-            {
-                return "[SYSTEMTIME: "
-                + wDay.ToString(CultureInfo.InvariantCulture) + "/" + wMonth.ToString(CultureInfo.InvariantCulture) + "/" + wYear.ToString(CultureInfo.InvariantCulture)
-                + " " + wHour.ToString(CultureInfo.InvariantCulture) + ":" + wMinute.ToString(CultureInfo.InvariantCulture) + ":" + wSecond.ToString(CultureInfo.InvariantCulture)
-                + "]";
-            }
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
         public class COMRECT
         {
             public int left;
@@ -3746,35 +3692,18 @@ namespace System.Windows.Forms
         }
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-        public class MCHITTESTINFO
-        {
-            public int cbSize = Marshal.SizeOf<MCHITTESTINFO>();
-            public int pt_x = 0;
-            public int pt_y = 0;
-            public int uHit = 0;
-            public short st_wYear = 0;
-            public short st_wMonth = 0;
-            public short st_wDayOfWeek = 0;
-            public short st_wDay = 0;
-            public short st_wHour = 0;
-            public short st_wMinute = 0;
-            public short st_wSecond = 0;
-            public short st_wMilliseconds = 0;
-        }
-
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
         public class NMSELCHANGE
         {
             public NMHDR nmhdr;
-            public SYSTEMTIME stSelStart = null;
-            public SYSTEMTIME stSelEnd = null;
+            public Interop.Kernel32.SYSTEMTIME stSelStart;
+            public Interop.Kernel32.SYSTEMTIME stSelEnd;
         }
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
         public class NMDAYSTATE
         {
             public NMHDR nmhdr;
-            public SYSTEMTIME stStart = null;
+            public Interop.Kernel32.SYSTEMTIME stStart;
             public int cDayState = 0;
             public IntPtr prgDayState;
         }
@@ -4033,7 +3962,7 @@ namespace System.Windows.Forms
         {
             public NMHDR nmhdr;
             public int dwFlags = 0;
-            public SYSTEMTIME st = null;
+            public Interop.Kernel32.SYSTEMTIME st;
         }
 
         [StructLayout(LayoutKind.Sequential)]
@@ -4092,6 +4021,8 @@ namespace System.Windows.Forms
             public short wParamL;
             public short wParamH;
         }
+
+        public const int INPUT_MOUSE = 0;
 
         [StructLayout(LayoutKind.Sequential)]
         public struct INPUT
