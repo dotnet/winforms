@@ -122,6 +122,9 @@
   <data name="imageFileDescription" xml:space="preserve">
     <value>All image files</value>
   </data>
+  <data name="ListViewSubItemBaseName" xml:space="preserve">
+    <value>ListViewSubItem</value>
+  </data>
   <data name="metafileFileDescription" xml:space="preserve">
     <value>Metafiles</value>
   </data>

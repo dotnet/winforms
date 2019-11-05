@@ -94,7 +94,7 @@ namespace System.Windows.Forms.Design.Editors.Tests
         [InlineData(typeof(ListViewItem), "ImageIndex", typeof(ImageIndexEditor))]
         [InlineData(typeof(ListViewItem), "ImageKey", typeof(ImageIndexEditor))]
         [InlineData(typeof(ListViewItem), "StateImageIndex", typeof(ImageIndexEditor))]
-        //[InlineData(typeof(ListViewItem), "SubItems", typeof(ListViewSubItemCollectionEditor))]
+        [InlineData(typeof(ListViewItem), "SubItems", typeof(ListViewSubItemCollectionEditor))]
         //[InlineData(typeof(MaskedTextBox), "Mask", typeof(MaskPropertyEditor))]
         //[InlineData(typeof(MaskedTextBox), "Text", typeof(MaskedTextBoxTextEditor))]
         [InlineData(typeof(MonthCalendar), "MaxDate", typeof(DateTimeEditor))]
