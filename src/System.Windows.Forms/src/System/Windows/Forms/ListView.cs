@@ -4505,10 +4505,10 @@ namespace System.Windows.Forms
 
             base.OnHandleCreated(e);
 
-            int version = unchecked((int)(long)SendMessage(NativeMethods.CCM_GETVERSION, 0, 0));
+            int version = unchecked((int)(long)SendMessage((int)ComCtl32.CCM.GETVERSION, 0, 0));
             if (version < 5)
             {
-                SendMessage(NativeMethods.CCM_SETVERSION, 5, 0);
+                SendMessage((int)ComCtl32.CCM.SETVERSION, 5, 0);
             }
             UpdateExtendedStyles();
             RealizeProperties();
