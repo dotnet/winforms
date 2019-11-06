@@ -2308,7 +2308,7 @@ namespace System.Windows.Forms
 
                                 // Someone returned true from IsInputKey or IsInputChar
                                 User32.TranslateMessage(ref *lpmsg);
-                                if (SafeNativeMethods.IsWindowUnicode(new HandleRef(null, lpmsg->hwnd)))
+                                if (User32.IsWindowUnicode(lpmsg->hwnd).IsTrue())
                                 {
                                     User32.DispatchMessageW(ref *lpmsg);
                                 }
