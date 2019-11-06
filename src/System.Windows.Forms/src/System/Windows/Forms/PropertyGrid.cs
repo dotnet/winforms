@@ -4932,7 +4932,7 @@ namespace System.Windows.Forms
             {
                 // convert the coordinates to
                 var temp = new Point(me.X, me.Y);
-                UnsafeNativeMethods.MapWindowPoints(new HandleRef(child, child.Handle), new HandleRef(this, Handle), ref temp, 1);
+                User32.MapWindowPoints(new HandleRef(child, child.Handle), new HandleRef(this, Handle), ref temp, 1);
 
                 // forward the message
                 pt = temp;

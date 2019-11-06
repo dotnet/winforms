@@ -285,7 +285,7 @@ namespace System.Windows.Forms.Design
         internal Point GetOffsetToClientArea()
         {
             var nativeOffset = new Point();
-            NativeMethods.MapWindowPoints(Control.Handle, Control.Parent.Handle, ref nativeOffset, 1);
+            User32.MapWindowPoints(Control.Handle, Control.Parent.Handle, ref nativeOffset, 1);
             Point offset = Control.Location;
             // If the 2 controls do not have the same orientation, then force one to make sure we calculate the correct offset
             if (Control.IsMirrored != Control.Parent.IsMirrored)
@@ -1748,7 +1748,7 @@ namespace System.Windows.Forms.Design
                     X = NativeMethods.Util.SignedLOWORD(unchecked((int)(long)m.LParam)),
                     Y = NativeMethods.Util.SignedHIWORD(unchecked((int)(long)m.LParam))
                 };
-                NativeMethods.MapWindowPoints(m.HWnd, IntPtr.Zero, ref pt, 1);
+                User32.MapWindowPoints(m.HWnd, IntPtr.Zero, ref pt, 1);
                 x = pt.X;
                 y = pt.Y;
             }
@@ -2060,9 +2060,9 @@ namespace System.Windows.Forms.Design
                             {
                                 // Re-map the clip rect we pass to the paint event args to our child coordinates.
                                 var pt = new Point();
-                                NativeMethods.MapWindowPoints(m.HWnd, Control.Handle, ref pt, 1);
+                                User32.MapWindowPoints(m.HWnd, Control.Handle, ref pt, 1);
                                 gr.TranslateTransform(-pt.X, -pt.Y);
-                                NativeMethods.MapWindowPoints(m.HWnd, Control.Handle, ref clip, 2);
+                                User32.MapWindowPoints(m.HWnd, Control.Handle, ref clip, 2);
                             }
                             paintRect = new Rectangle(clip.left, clip.top, clip.right - clip.left, clip.bottom - clip.top);
                             PaintEventArgs pevent = new PaintEventArgs(gr, paintRect);
