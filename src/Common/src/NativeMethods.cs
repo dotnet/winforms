@@ -645,9 +645,6 @@ namespace System.Windows.Forms
         PATCOPY = 0x00F00021,
         PATINVERT = 0x005A0049;
 
-        public const int PBS_SMOOTH = 0x01,
-        PBS_MARQUEE = 0x08;
-
         //public const int RECO_PASTE = 0x00000000;   // paste from clipboard
         public const int RECO_DROP = 0x00000001;    // drop
                                                     //public const int RECO_COPY  = 0x00000002;    // copy to the clipboard

@@ -54,11 +54,11 @@ namespace System.Windows.Forms
                 cp.ClassName = NativeMethods.WC_PROGRESS;
                 if (Style == ProgressBarStyle.Continuous)
                 {
-                    cp.Style |= NativeMethods.PBS_SMOOTH;
+                    cp.Style |= (int)ComCtl32.PBS.SMOOTH;
                 }
                 else if (Style == ProgressBarStyle.Marquee && !DesignMode)
                 {
-                    cp.Style |= NativeMethods.PBS_MARQUEE;
+                    cp.Style |= (int)ComCtl32.PBS.MARQUEE;
                 }
 
                 if (RightToLeft == RightToLeft.Yes && RightToLeftLayout)
