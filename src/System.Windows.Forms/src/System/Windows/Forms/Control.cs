@@ -13771,32 +13771,41 @@ namespace System.Windows.Forms
             OnQueryContinueDrag(queryContinueDragEventArgs);
         }
 
-        HRESULT UnsafeNativeMethods.IOleControl.GetControlInfo(NativeMethods.tagCONTROLINFO pCI)
+        unsafe HRESULT UnsafeNativeMethods.IOleControl.GetControlInfo(Ole32.CONTROLINFO* pCI)
         {
-            Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetControlInfo");
+            if (pCI == null)
+            {
+                return HRESULT.E_POINTER;
+            }
 
-            pCI.cb = Marshal.SizeOf<NativeMethods.tagCONTROLINFO>();
-            pCI.hAccel = IntPtr.Zero;
-            pCI.cAccel = 0;
-            pCI.dwFlags = 0;
+            Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetControlInfo");
+            pCI->cb = (uint)Marshal.SizeOf<Ole32.CONTROLINFO>();
+            pCI->hAccel = IntPtr.Zero;
+            pCI->cAccel = 0;
+            pCI->dwFlags = 0;
 
             if (IsInputKey(Keys.Return))
             {
-                pCI.dwFlags |= NativeMethods.CTRLINFO_EATS_RETURN;
+                pCI->dwFlags |= Ole32.CTRLINFO.EATS_RETURN;
             }
             if (IsInputKey(Keys.Escape))
             {
-                pCI.dwFlags |= NativeMethods.CTRLINFO_EATS_ESCAPE;
+                pCI->dwFlags |= Ole32.CTRLINFO.EATS_ESCAPE;
             }
 
             return ActiveXInstance.GetControlInfo(pCI);
         }
 
-        HRESULT UnsafeNativeMethods.IOleControl.OnMnemonic(ref User32.MSG pMsg)
+        unsafe HRESULT UnsafeNativeMethods.IOleControl.OnMnemonic(User32.MSG* pMsg)
         {
+            if (pMsg == null)
+            {
+                return HRESULT.E_INVALIDARG;
+            }
+
             // If we got a mnemonic here, then the appropriate control will focus itself which
             // will cause us to become UI active.
-            bool processed = ProcessMnemonic((char)pMsg.wParam);
+            bool processed = ProcessMnemonic((char)pMsg->wParam);
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:OnMnemonic processed: " + processed.ToString());
             return HRESULT.S_OK;
         }
@@ -13810,12 +13819,12 @@ namespace System.Windows.Forms
             return HRESULT.S_OK;
         }
 
-        int UnsafeNativeMethods.IOleControl.FreezeEvents(int bFreeze)
+        HRESULT UnsafeNativeMethods.IOleControl.FreezeEvents(BOOL bFreeze)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:FreezeEvents.  Freeze: " + bFreeze);
-            ActiveXInstance.EventsFrozen = (bFreeze != 0);
-            Debug.Assert(ActiveXInstance.EventsFrozen == (bFreeze != 0), "Failed to set EventsFrozen correctly");
-            return NativeMethods.S_OK;
+            ActiveXInstance.EventsFrozen = bFreeze.IsTrue();
+            Debug.Assert(ActiveXInstance.EventsFrozen == bFreeze.IsTrue(), "Failed to set EventsFrozen correctly");
+            return HRESULT.S_OK;
         }
 
         unsafe HRESULT Ole32.IOleInPlaceActiveObject.GetWindow(IntPtr* phwnd)

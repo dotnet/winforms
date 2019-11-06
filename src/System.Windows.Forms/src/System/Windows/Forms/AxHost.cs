@@ -1969,12 +1969,16 @@ namespace System.Windows.Forms
             {
                 try
                 {
-                    var ctlInfo = new NativeMethods.tagCONTROLINFO();
-                    HRESULT hr = GetOleControl().GetControlInfo(ctlInfo);
+                    var ctlInfo = new Ole32.CONTROLINFO
+                    {
+                        cb = (uint)Marshal.SizeOf<Ole32.CONTROLINFO>()
+                    };
+                    HRESULT hr = GetOleControl().GetControlInfo(&ctlInfo);
                     if (!hr.Succeeded())
                     {
                         return false;
                     }
+
                     var msg = new User32.MSG
                     {
                         // Sadly, we don't have a message so we must fake one ourselves...
@@ -1990,7 +1994,7 @@ namespace System.Windows.Forms
                     msg.pt = p;
                     if (Ole32.IsAccelerator(new HandleRef(ctlInfo, ctlInfo.hAccel), ctlInfo.cAccel, ref msg, null).IsTrue())
                     {
-                        GetOleControl().OnMnemonic(ref msg);
+                        GetOleControl().OnMnemonic(&msg);
                         Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "\t Processed mnemonic " + msg);
                         Focus();
                         return true;
@@ -2402,26 +2406,12 @@ namespace System.Windows.Forms
             Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "freezing " + v.ToString());
             if (v)
             {
-                try
-                {
-                    GetOleControl().FreezeEvents(-1);
-                }
-                catch (COMException t)
-                {
-                    Debug.Fail(t.ToString());
-                }
+                GetOleControl().FreezeEvents(BOOL.TRUE);
                 freezeCount++;
             }
             else
             {
-                try
-                {
-                    GetOleControl().FreezeEvents(0);
-                }
-                catch (COMException t)
-                {
-                    Debug.Fail(t.ToString());
-                }
+                GetOleControl().FreezeEvents(BOOL.FALSE);
                 freezeCount--;
             }
             Debug.Assert(freezeCount >= 0, "invalid freeze count!");

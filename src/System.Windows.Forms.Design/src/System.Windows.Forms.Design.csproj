@@ -85,6 +85,8 @@
     <Compile Include="..\..\Common\src\Interop\NtDll\Interop.RtlGetVersion.cs" Link="Interop\NtDll\Interop.RtlGetVersion.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.ADVF.cs" Link="Interop\Ole32\Interop.ADVF.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.CALLCONV.cs" Link="Interop\Ole32\Interop.CALLCONV.cs" />
+    <Compile Include="..\..\Common\src\Interop\Ole32\Interop.CONTROLINFO.cs" Link="Interop\Ole32\Interop.CONTROLINFO.cs" />
+    <Compile Include="..\..\Common\src\Interop\Ole32\Interop.CTRLINFO.cs" Link="Interop\Ole32\Interop.CTRLINFO.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.DESCKIND.cs" Link="Interop\Ole32\Interop.DESCKIND.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.DispatchId.cs" Link="Interop\Ole32\Interop.DispatchId.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.DISPPARAMS.cs" Link="Interop\Ole32\Interop.DISPPARAMS.cs" />

@@ -131,9 +131,7 @@ namespace System.Windows.Forms
         CBEM_GETITEM = (0x0400 + 13),
         CBEN_ENDEDIT = ((0 - 800) - 6),
         CONNECT_E_NOCONNECTION = unchecked((int)0x80040200),
-        CONNECT_E_CANNOTCONNECT = unchecked((int)0x80040202),
-        CTRLINFO_EATS_RETURN = 1,
-        CTRLINFO_EATS_ESCAPE = 2;
+        CONNECT_E_CANNOTCONNECT = unchecked((int)0x80040202);
 
         public const uint DISPATCH_METHOD = 0x1;
         public const uint DISPATCH_PROPERTYGET = 0x2;
@@ -1612,21 +1610,6 @@ namespace System.Windows.Forms
 
             [MarshalAs(UnmanagedType.U4)/*leftover(offset=12, grfAttribs)*/]
             public int grfAttribs;
-        }
-
-        [StructLayout(LayoutKind.Sequential)/*leftover(noAutoOffset)*/]
-        public sealed class tagCONTROLINFO
-        {
-            [MarshalAs(UnmanagedType.U4)/*leftover(offset=0, cb)*/]
-            public int cb = Marshal.SizeOf<tagCONTROLINFO>();
-
-            public IntPtr hAccel;
-
-            [MarshalAs(UnmanagedType.U2)/*leftover(offset=8, cAccel)*/]
-            public short cAccel;
-
-            [MarshalAs(UnmanagedType.U4)/*leftover(offset=10, dwFlags)*/]
-            public int dwFlags;
         }
 
         [StructLayout(LayoutKind.Sequential)]

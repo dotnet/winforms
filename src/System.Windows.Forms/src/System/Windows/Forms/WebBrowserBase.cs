@@ -326,8 +326,11 @@ namespace System.Windows.Forms
             {
                 try
                 {
-                    var ctlInfo = new NativeMethods.tagCONTROLINFO();
-                    HRESULT hr = axOleControl.GetControlInfo(ctlInfo);
+                    var ctlInfo = new Ole32.CONTROLINFO
+                    {
+                        cb = (uint)Marshal.SizeOf<Ole32.CONTROLINFO>()
+                    };
+                    HRESULT hr = axOleControl.GetControlInfo(&ctlInfo);
                     if (hr.Succeeded())
                     {
                         //
@@ -347,7 +350,7 @@ namespace System.Windows.Forms
                         msg.pt = p;
                         if (Ole32.IsAccelerator(new HandleRef(ctlInfo, ctlInfo.hAccel), ctlInfo.cAccel, ref msg, null).IsFalse())
                         {
-                            axOleControl.OnMnemonic(ref msg);
+                            axOleControl.OnMnemonic(&msg);
                             Focus();
                             processed = true;
                         }

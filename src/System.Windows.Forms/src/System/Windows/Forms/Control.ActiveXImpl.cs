@@ -659,7 +659,7 @@ namespace System.Windows.Forms
             /// </summary>
             internal Ole32.IOleClientSite GetClientSite() => _clientSite;
 
-            internal unsafe HRESULT GetControlInfo(NativeMethods.tagCONTROLINFO pCI)
+            internal unsafe HRESULT GetControlInfo(Ole32.CONTROLINFO* pCI)
             {
                 if (_accelCount == -1)
                 {
@@ -738,8 +738,8 @@ namespace System.Windows.Forms
                     }
                 }
 
-                pCI.cAccel = _accelCount;
-                pCI.hAccel = _accelTable;
+                pCI->cAccel = (ushort)_accelCount;
+                pCI->hAccel = _accelTable;
                 return HRESULT.S_OK;
             }
 
