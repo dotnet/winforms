@@ -1722,16 +1722,20 @@ namespace System.Windows.Forms
 
         }
 
-        internal void SetTabPage(int index, TabPage tabPage)
+        internal void SetTabPage(int index, TabPage value)
         {
             if (index < 0 || index >= _tabPageCount)
             {
                 throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
             }
+            if (value == null)
+            {
+                throw new ArgumentNullException(nameof(value));
+            }
 
             if (IsHandleCreated)
             {
-                SendMessage(ComCtl32.TCM.SETITEMW, (IntPtr)index, tabPage);
+                SendMessage(ComCtl32.TCM.SETITEMW, (IntPtr)index, value);
             }
 
             // Make the Updated tab page the currently selected tab page
@@ -1739,7 +1743,7 @@ namespace System.Windows.Forms
             {
                 User32.SendMessageW(this, (User32.WindowMessage)ComCtl32.TCM.SETCURSEL, (IntPtr)index, IntPtr.Zero);
             }
-            _tabPages[index] = tabPage;
+            _tabPages[index] = value;
         }
 
         /// <summary>

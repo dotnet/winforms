@@ -2810,14 +2810,26 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void TabPageCollection_Item_SetNull_ThrowsNullReferenceException()
+        public void TabPageCollection_Item_SetNull_ThrowsArgumentNullException()
         {
-            var owner = new TabControl();
-            var page = new TabPage();
+            using var owner = new TabControl();
+            using var page = new TabPage();
             var collection = new TabControl.TabPageCollection(owner);
             collection.Add(page);
 
-            Assert.Throws<NullReferenceException>(() => collection[0] = null);
+            Assert.Throws<ArgumentNullException>("value", () => collection[0] = null);
+        }
+
+        [WinFormsFact]
+        public void TabPageCollection_Item_SetNullWithHandle_ThrowsArgumentNullException()
+        {
+            using var owner = new TabControl();
+            using var page = new TabPage();
+            var collection = new TabControl.TabPageCollection(owner);
+            Assert.NotEqual(IntPtr.Zero, owner.Handle);
+            collection.Add(page);
+
+            Assert.Throws<ArgumentNullException>("value", () => collection[0] = null);
         }
         
         [WinFormsTheory]
