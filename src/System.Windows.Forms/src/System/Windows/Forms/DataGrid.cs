@@ -6402,14 +6402,13 @@ namespace System.Windows.Forms
         /// </summary>
         private void DrawSplitBar(Rectangle r)
         {
-            IntPtr parentHandle = Handle;
-            IntPtr dc = UnsafeNativeMethods.GetDCEx(new HandleRef(this, parentHandle), NativeMethods.NullHandleRef, NativeMethods.DCX_CACHE | NativeMethods.DCX_LOCKWINDOWUPDATE);
+            IntPtr dc = User32.GetDCEx(this, IntPtr.Zero, User32.DCX.CACHE | User32.DCX.LOCKWINDOWUPDATE);
             IntPtr halftone = ControlPaint.CreateHalftoneHBRUSH();
             IntPtr saveBrush = Gdi32.SelectObject(dc, halftone);
             SafeNativeMethods.PatBlt(new HandleRef(this, dc), r.X, r.Y, r.Width, r.Height, NativeMethods.PATINVERT);
             Gdi32.SelectObject(dc, saveBrush);
             Gdi32.DeleteObject(halftone);
-            User32.ReleaseDC(new HandleRef(this, parentHandle), dc);
+            User32.ReleaseDC(new HandleRef(this, Handle), dc);
         }
 
         /// <summary>
