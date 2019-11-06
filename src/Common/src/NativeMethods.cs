@@ -1781,23 +1781,6 @@ namespace System.Windows.Forms
             public int cColumns; // tile view columns
             public IntPtr puColumns;
 
-            public unsafe void Reset()
-            {
-                pszText = null;
-                mask = 0;
-                iItem = 0;
-                iSubItem = 0;
-                stateMask = 0;
-                state = 0;
-                cchTextMax = 0;
-                iImage = 0;
-                lParam = IntPtr.Zero;
-                iIndent = 0;
-                iGroupId = 0;
-                cColumns = 0;
-                puColumns = IntPtr.Zero;
-            }
-
             public override string ToString()
             {
                 return "LVITEM: pszText = " + pszText

@@ -4113,7 +4113,6 @@ namespace System.Windows.Forms
             }
 
             // Create and add the LVITEM
-            NativeMethods.LVITEM lvItem = new NativeMethods.LVITEM();
             int actualIndex = -1;
             IntPtr hGlobalColumns = IntPtr.Zero;
             int maxColumns = 0;
@@ -4133,7 +4132,7 @@ namespace System.Windows.Forms
 
                     Debug.Assert(Items.Contains(li), "Make sure ListView.Items contains this item before adding the native LVITEM. Otherwise, custom-drawing may break.");
 
-                    lvItem.Reset();
+                    var lvItem = new NativeMethods.LVITEM();
                     lvItem.mask = ComCtl32.LVIF.TEXT | ComCtl32.LVIF.IMAGE | ComCtl32.LVIF.PARAM | ComCtl32.LVIF.INDENT;
                     lvItem.iItem = index + i;
                     lvItem.pszText = li.Text;
