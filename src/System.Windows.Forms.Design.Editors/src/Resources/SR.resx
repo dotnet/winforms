@@ -276,4 +276,10 @@ Press Ctrl+Enter to accept Text.</value>
   <data name="FormatStringDialogTitle" xml:space="preserve">
     <value>Format String Dialog</value>
   </data>
+  <data name="HelpProviderEditorFilter" xml:space="preserve">
+    <value>All Help Files(*.chm,*.col,*.htm,*.html)|*.chm;*.col;*.htm;*.html|Compressed HTML Files(*.chm)|*.chm|Help Collection Files(*.col)|*.col|HTML Files(*.htm,*.html)|*.htm;*.html|All Files(*.*)|*.*</value>
+  </data>
+  <data name="HelpProviderEditorTitle" xml:space="preserve">
+    <value>Open Help File</value>
+  </data>
 </root>
