@@ -378,13 +378,6 @@ namespace System.Windows.Forms
         LVSIL_NORMAL = 0,
         LVSIL_SMALL = 1,
         LVSIL_STATE = 2,
-        LVIF_TEXT = 0x0001,
-        LVIF_IMAGE = 0x0002,
-        LVIF_INDENT = 0x0010,
-        LVIF_PARAM = 0x0004,
-        LVIF_STATE = 0x0008,
-        LVIF_GROUPID = 0x0100,
-        LVIF_COLUMNS = 0x0200,
         LVNI_FOCUSED = 0x0001,
         LVNI_SELECTED = 0x0002,
         LVIR_BOUNDS = 0,
@@ -1774,7 +1767,7 @@ namespace System.Windows.Forms
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
         public struct LVITEM
         {
-            public int mask;
+            public ComCtl32.LVIF mask;
             public int iItem;
             public int iSubItem;
             public ComCtl32.LVIS state;
@@ -1819,7 +1812,7 @@ namespace System.Windows.Forms
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
         public struct LVITEM_NOTEXT
         {
-            public int mask;
+            public ComCtl32.LVIF mask;
             public int iItem;
             public int iSubItem;
             public ComCtl32.LVIS state;

@@ -49,6 +49,7 @@
     <Compile Include="..\..\Common\src\Interop\Interop.Libraries.cs" Link="Interop\Interop.Libraries.cs" />
     <Compile Include="..\..\Common\src\Interop\Interop.WindowMessages.cs" Link="Interop\Interop.WindowMessages.cs" />
     <Compile Include="..\..\Common\src\Interop\ComCtl32\Interop.LVIS.cs" Link="Interop\ComCtl32\Interop.LVIS.cs" />
+    <Compile Include="..\..\Common\src\Interop\ComCtl32\Interop.LVIF.cs" Link="Interop\ComCtl32\Interop.LVIF.cs" />
     <Compile Include="..\..\Common\src\Interop\ComCtl32\Interop.NMTREEVIEW.cs" Link="Interop\ComCtl32\Interop.NMTREEVIEW.cs" />
     <Compile Include="..\..\Common\src\Interop\ComCtl32\Interop.TVITEMW.cs" Link="Interop\ComCtl32\Interop.TVITEMW.cs" />
     <Compile Include="..\..\Common\src\Interop\ComCtl32\Interop.TVIF.cs" Link="Interop\ComCtl32\Interop.TVIF.cs" />

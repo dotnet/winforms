@@ -3959,7 +3959,7 @@ namespace System.Windows.Forms
                     NativeMethods.LVITEM lvItem = new NativeMethods.LVITEM
                     {
                         iItem = item.Index,
-                        mask = NativeMethods.LVIF_GROUPID
+                        mask = ComCtl32.LVIF.GROUPID
                     };
                     UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)LVM.GETITEM, 0, ref lvItem);
                     Debug.Assert(lvItem.iGroupId != -1, "there is a list view item which is not parented");
@@ -4134,7 +4134,7 @@ namespace System.Windows.Forms
                     Debug.Assert(Items.Contains(li), "Make sure ListView.Items contains this item before adding the native LVITEM. Otherwise, custom-drawing may break.");
 
                     lvItem.Reset();
-                    lvItem.mask = NativeMethods.LVIF_TEXT | NativeMethods.LVIF_IMAGE | NativeMethods.LVIF_PARAM | NativeMethods.LVIF_INDENT;
+                    lvItem.mask = ComCtl32.LVIF.TEXT | ComCtl32.LVIF.IMAGE | ComCtl32.LVIF.PARAM | ComCtl32.LVIF.INDENT;
                     lvItem.iItem = index + i;
                     lvItem.pszText = li.Text;
                     lvItem.iImage = li.ImageIndexer.ActualIndex;
@@ -4143,7 +4143,7 @@ namespace System.Windows.Forms
 
                     if (GroupsEnabled)
                     {
-                        lvItem.mask |= NativeMethods.LVIF_GROUPID;
+                        lvItem.mask |= ComCtl32.LVIF.GROUPID;
                         lvItem.iGroupId = GetNativeGroupId(li);
 
 #if DEBUG
@@ -4152,7 +4152,7 @@ namespace System.Windows.Forms
 #endif
                     }
 
-                    lvItem.mask |= NativeMethods.LVIF_COLUMNS;
+                    lvItem.mask |= ComCtl32.LVIF.COLUMNS;
                     lvItem.cColumns = columnHeaders != null ? Math.Min(MAXTILECOLUMNS, columnHeaders.Length) : 0;
 
                     // make sure that our columns memory is big enough.
@@ -5273,7 +5273,7 @@ namespace System.Windows.Forms
             {
                 NativeMethods.LVITEM lvItem = new NativeMethods.LVITEM
                 {
-                    mask = NativeMethods.LVIF_IMAGE,
+                    mask = ComCtl32.LVIF.IMAGE,
                     iItem = index,
                     iImage = image
                 };
@@ -5291,7 +5291,7 @@ namespace System.Windows.Forms
             {
                 NativeMethods.LVITEM lvItem = new NativeMethods.LVITEM
                 {
-                    mask = NativeMethods.LVIF_INDENT,
+                    mask = ComCtl32.LVIF.INDENT,
                     iItem = index,
                     iIndent = indentCount
                 };
@@ -5329,7 +5329,7 @@ namespace System.Windows.Forms
             {
                 NativeMethods.LVITEM lvItem = new NativeMethods.LVITEM
                 {
-                    mask = NativeMethods.LVIF_STATE,
+                    mask = ComCtl32.LVIF.STATE,
                     state = state,
                     stateMask = mask
                 };
@@ -5374,7 +5374,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            lvItem.mask = NativeMethods.LVIF_TEXT;
+            lvItem.mask = ComCtl32.LVIF.TEXT;
             lvItem.iItem = itemIndex;
             lvItem.iSubItem = subItemIndex;
             lvItem.pszText = text;
@@ -6204,7 +6204,7 @@ namespace System.Windows.Forms
                 case NativeMethods.LVN_ITEMCHANGING:
                     {
                         ComCtl32.NMLISTVIEW* nmlv = (ComCtl32.NMLISTVIEW*)m.LParam;
-                        if ((nmlv->uChanged & NativeMethods.LVIF_STATE) != 0)
+                        if ((nmlv->uChanged & ComCtl32.LVIF.STATE) != 0)
                         {
                             // Because the state image mask is 1-based, a value of 1 means unchecked,
                             // anything else means checked.  We convert this to the more standard 0 or 1
@@ -6225,7 +6225,7 @@ namespace System.Windows.Forms
                     {
                         ComCtl32.NMLISTVIEW* nmlv = (ComCtl32.NMLISTVIEW*)m.LParam;
                         // Check for state changes to the selected state...
-                        if ((nmlv->uChanged & NativeMethods.LVIF_STATE) != 0)
+                        if ((nmlv->uChanged & ComCtl32.LVIF.STATE) != 0)
                         {
                             // Because the state image mask is 1-based, a value of 1 means unchecked,
                             // anything else means checked.  We convert this to the more standard 0 or 1
@@ -6385,7 +6385,7 @@ namespace System.Windows.Forms
                             }
 
                             lvItem.SetItemIndex(this, dispInfo.item.iItem);
-                            if ((dispInfo.item.mask & NativeMethods.LVIF_TEXT) != 0)
+                            if ((dispInfo.item.mask & ComCtl32.LVIF.TEXT) != 0)
                             {
                                 string text;
                                 if (dispInfo.item.iSubItem == 0)
@@ -6414,12 +6414,12 @@ namespace System.Windows.Forms
                                 Marshal.Copy(buff, 0, dispInfo.item.pszText, text.Length + 1);
                             }
 
-                            if ((dispInfo.item.mask & NativeMethods.LVIF_IMAGE) != 0 && lvItem.ImageIndex != -1)
+                            if ((dispInfo.item.mask & ComCtl32.LVIF.IMAGE) != 0 && lvItem.ImageIndex != -1)
                             {
                                 dispInfo.item.iImage = lvItem.ImageIndex;
                             }
 
-                            if ((dispInfo.item.mask & NativeMethods.LVIF_INDENT) != 0)
+                            if ((dispInfo.item.mask & ComCtl32.LVIF.INDENT) != 0)
                             {
                                 dispInfo.item.iIndent = lvItem.IndentCount;
                             }
@@ -9380,7 +9380,7 @@ namespace System.Windows.Forms
                     // Obtain internal index of the item
                     NativeMethods.LVITEM lvItem = new NativeMethods.LVITEM
                     {
-                        mask = NativeMethods.LVIF_PARAM,
+                        mask = ComCtl32.LVIF.PARAM,
                         iItem = displayIndex
                     };
                     UnsafeNativeMethods.SendMessage(new HandleRef(owner, owner.Handle), (int)LVM.GETITEM, 0, ref lvItem);
