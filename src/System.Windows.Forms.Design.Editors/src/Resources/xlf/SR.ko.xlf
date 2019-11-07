@@ -287,6 +287,16 @@
         <target state="translated">파일 열기</target>
         <note />
       </trans-unit>
+      <trans-unit id="HelpProviderEditorFilter">
+        <source>All Help Files(*.chm,*.col,*.htm,*.html)|*.chm;*.col;*.htm;*.html|Compressed HTML Files(*.chm)|*.chm|Help Collection Files(*.col)|*.col|HTML Files(*.htm,*.html)|*.htm;*.html|All Files(*.*)|*.*</source>
+        <target state="new">All Help Files(*.chm,*.col,*.htm,*.html)|*.chm;*.col;*.htm;*.html|Compressed HTML Files(*.chm)|*.chm|Help Collection Files(*.col)|*.col|HTML Files(*.htm,*.html)|*.htm;*.html|All Files(*.*)|*.*</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="HelpProviderEditorTitle">
+        <source>Open Help File</source>
+        <target state="new">Open Help File</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ImageCollectionEditorFormText">
         <source>Images Collection Editor</source>
         <target state="translated">이미지 컬렉션 편집기</target>
