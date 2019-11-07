@@ -995,8 +995,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-            ///  Indicates the drawing mode for the tree view.
-            /// </summary>
+        ///  Indicates the drawing mode for the tree view.
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(TreeViewDrawMode.Normal),
@@ -1711,13 +1711,6 @@ namespace System.Windows.Forms
         {
             if (disposing)
             {
-
-                foreach (TreeNode node in Nodes)
-                {
-                    node.ContextMenu = null;
-                }
-
-                //
                 lock (this)
                 {
                     DetachImageListHandlers();
@@ -3115,7 +3108,7 @@ namespace System.Windows.Forms
                         if (nmtv->nmhdr.code == NativeMethods.NM_RCLICK)
                         {
                             TreeNode treeNode = NodeFromHandle(hnode);
-                            if (treeNode != null && (treeNode.ContextMenu != null || treeNode.ContextMenuStrip != null))
+                            if (treeNode != null && treeNode.ContextMenuStrip != null)
                             {
                                 ShowContextMenu(treeNode);
                             }
@@ -3151,41 +3144,14 @@ namespace System.Windows.Forms
         /// </summary>
         private void ShowContextMenu(TreeNode treeNode)
         {
-            if (treeNode.ContextMenu != null || treeNode.ContextMenuStrip != null)
+            if (treeNode.ContextMenuStrip != null)
             {
-
-                ContextMenu contextMenu = treeNode.ContextMenu;
                 ContextMenuStrip menu = treeNode.ContextMenuStrip;
 
-                if (contextMenu != null)
-                {
-                    UnsafeNativeMethods.GetCursorPos(out Point pt);
-
-                    // Summary: the current window must be made the foreground window
-                    // before calling TrackPopupMenuEx, and a task switch must be
-                    // forced after the call.
-
-                    UnsafeNativeMethods.SetForegroundWindow(new HandleRef(this, Handle));
-
-                    contextMenu.OnPopup(EventArgs.Empty);
-
-                    SafeNativeMethods.TrackPopupMenuEx(new HandleRef(contextMenu, contextMenu.Handle),
-                                             NativeMethods.TPM_VERTICAL,
-                                             pt.X,
-                                             pt.Y,
-                                             new HandleRef(this, Handle),
-                                             null);
-
-                    // Force task switch (see above)
-                    UnsafeNativeMethods.PostMessage(new HandleRef(this, Handle), WindowMessages.WM_NULL, IntPtr.Zero, IntPtr.Zero);
-                }
                 // Need to send TVM_SELECTITEM to highlight the node while the contextMenuStrip is being shown.
-                else if (menu != null)
-                {
-                    UnsafeNativeMethods.PostMessage(new HandleRef(this, Handle), NativeMethods.TVM_SELECTITEM, NativeMethods.TVGN_DROPHILITE, treeNode.Handle);
-                    menu.ShowInternal(this, PointToClient(MousePosition),/*keyboardActivated*/false);
-                    menu.Closing += new ToolStripDropDownClosingEventHandler(ContextMenuStripClosing);
-                }
+                UnsafeNativeMethods.PostMessage(new HandleRef(this, Handle), NativeMethods.TVM_SELECTITEM, NativeMethods.TVGN_DROPHILITE, treeNode.Handle);
+                menu.ShowInternal(this, PointToClient(MousePosition),/*keyboardActivated*/false);
+                menu.Closing += new ToolStripDropDownClosingEventHandler(ContextMenuStripClosing);
             }
         }
 
@@ -3469,22 +3435,15 @@ namespace System.Windows.Forms
                     {
                         // this is the Shift + F10 Case....
                         TreeNode treeNode = SelectedNode;
-                        if (treeNode != null && (treeNode.ContextMenu != null || treeNode.ContextMenuStrip != null))
+                        if (treeNode != null && treeNode.ContextMenuStrip != null)
                         {
                             Point client;
                             client = new Point(treeNode.Bounds.X, treeNode.Bounds.Y + treeNode.Bounds.Height / 2);
                             // VisualStudio7 # 156, only show the context menu when clicked in the client area
-                            if (ClientRectangle.Contains(client))
+                            if (ClientRectangle.Contains(client) && treeNode.ContextMenuStrip != null)
                             {
-                                if (treeNode.ContextMenu != null)
-                                {
-                                    treeNode.ContextMenu.Show(this, client);
-                                }
-                                else if (treeNode.ContextMenuStrip != null)
-                                {
-                                    bool keyboardActivated = (unchecked((int)(long)m.LParam) == -1);
-                                    treeNode.ContextMenuStrip.ShowInternal(this, client, keyboardActivated);
-                                }
+                                bool keyboardActivated = (unchecked((int)(long)m.LParam) == -1);
+                                treeNode.ContextMenuStrip.ShowInternal(this, client, keyboardActivated);
                             }
                         }
                         else

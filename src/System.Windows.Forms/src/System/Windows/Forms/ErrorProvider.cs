@@ -676,7 +676,7 @@ namespace System.Windows.Forms
         /// </summary>
         public bool CanExtend(object extendee)
         {
-            return extendee is Control && !(extendee is Form) && !(extendee is ToolBar);
+            return extendee is Control && !(extendee is Form);
         }
 
         /// <summary>
@@ -1072,7 +1072,7 @@ namespace System.Windows.Forms
                 if (_tipWindow != null)
                 {
                     var info = new ComCtl32.ToolInfoWrapper(this, item.Id);
-                    info .SendMessage(_tipWindow, WindowMessages.TTM_DELTOOLW);
+                    info.SendMessage(_tipWindow, WindowMessages.TTM_DELTOOLW);
                 }
 
                 if (items.Count == 0)

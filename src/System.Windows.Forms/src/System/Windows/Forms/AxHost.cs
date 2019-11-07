@@ -426,20 +426,6 @@ namespace System.Windows.Forms
             }
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        public override ContextMenu ContextMenu
-        {
-            get
-            {
-                return base.ContextMenu;
-            }
-
-            set
-            {
-                base.ContextMenu = value;
-            }
-        }
-
         /// <summary>
         ///  Deriving classes can override this to configure a default size for their control.
         ///  This is more efficient than setting the size in the control's constructor.
@@ -667,13 +653,6 @@ namespace System.Windows.Forms
         new public event EventHandler BindingContextChanged
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "BindingContextChanged"));
-            remove { }
-        }
-
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler ContextMenuChanged
-        {
-            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "ContextMenuChanged"));
             remove { }
         }
 
@@ -3090,7 +3069,7 @@ namespace System.Windows.Forms
             //
             if (storage != null)
             {
-                HRESULT hr =  iPersistStorage.Load(storage);
+                HRESULT hr = iPersistStorage.Load(storage);
                 if (hr != HRESULT.S_OK)
                 {
                     Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "Error trying load depersist from IStorage: " + hr);
@@ -4232,7 +4211,7 @@ namespace System.Windows.Forms
                 return NativeMethods.S_OK;
             }
 
-            unsafe HRESULT UnsafeNativeMethods.IOleControlSite.TransformCoords(Point *pPtlHimetric, PointF *pPtfContainer, uint dwFlags)
+            unsafe HRESULT UnsafeNativeMethods.IOleControlSite.TransformCoords(Point* pPtlHimetric, PointF* pPtfContainer, uint dwFlags)
             {
                 if (pPtlHimetric == null || pPtfContainer == null)
                 {

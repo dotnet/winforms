@@ -659,11 +659,6 @@ namespace System.Windows.Forms
                 treeView.SetToolTip(this, GetToolTip(associatedControl));
             }
 
-            if (associatedControl is ToolBar toolBar)
-            {
-                toolBar.SetToolTip(this);
-            }
-
             if (associatedControl is TabControl tabControl && tabControl.ShowToolTips)
             {
                 tabControl.SetToolTip(this, GetToolTip(associatedControl));

@@ -1973,7 +1973,7 @@ namespace System.Windows.Forms
                     //set the mouse capture .. this is the Child Wndproc..
                     //
 
-                    if (ContextMenu != null || ContextMenuStrip != null)
+                    if (ContextMenuStrip != null)
                     {
                         CaptureInternal = true;
                     }
@@ -1997,12 +1997,6 @@ namespace System.Windows.Forms
                 case WindowMessages.WM_RBUTTONUP:
                     mousePressed = false;
                     mouseEvents = false;
-                    //set the mouse capture .. this is the Child Wndproc..
-                    //
-                    if (ContextMenu != null)
-                    {
-                        CaptureInternal = false;
-                    }
 
                     DefChildWndProc(ref m);
                     //the up gets fired from "Combo-box's WndPrc --- So Convert these Coordinates to Combobox coordianate...
@@ -2014,7 +2008,7 @@ namespace System.Windows.Forms
 
                 case WindowMessages.WM_CONTEXTMENU:
                     // Forward context menu messages to the parent control
-                    if (ContextMenu != null || ContextMenuStrip != null)
+                    if (ContextMenuStrip != null)
                     {
                         UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), WindowMessages.WM_CONTEXTMENU, m.WParam, m.LParam);
                     }

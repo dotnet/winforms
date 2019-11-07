@@ -920,7 +920,7 @@ namespace System.Windows.Forms.Tests
             {
                 Parent = oldParent
             };
-            
+
             control.Parent = value;
             Assert.Same(value, control.Parent);
             Assert.Empty(oldParent.Controls);
@@ -1016,7 +1016,7 @@ namespace System.Windows.Forms.Tests
             {
                 ParentInternal = oldParent
             };
-            
+
             control.ParentInternal = value;
             Assert.Same(value, control.ParentInternal);
             Assert.Empty(oldParent.Controls);
@@ -3566,11 +3566,11 @@ namespace System.Windows.Forms.Tests
                 CausesValidation = value
             };
             Assert.Equal(value, control.CausesValidation);
-            
+
             // Set same
             control.CausesValidation = value;
             Assert.Equal(value, control.CausesValidation);
-            
+
             // Set different
             control.CausesValidation = !value;
             Assert.Equal(!value, control.CausesValidation);
@@ -3640,17 +3640,6 @@ namespace System.Windows.Forms.Tests
             // Set same.
             control.ClientSize = value;
             Assert.Equal(value, control.ClientSize);
-        }
-
-        [Fact]
-        public void Control_ContextMenuGetSet()
-        {
-            var cont = new Control();
-            var expected = new ContextMenu();
-
-            cont.ContextMenu = expected;
-
-            Assert.Equal(expected, cont.ContextMenu);
         }
 
         [Fact]
@@ -3740,7 +3729,7 @@ namespace System.Windows.Forms.Tests
             {
                 Dock = DockStyle.Top
             };
-             
+
             control.Dock = value;
             Assert.Equal(value, control.Dock);
             Assert.Equal(AnchorStyles.Top | AnchorStyles.Left, control.Anchor);
@@ -3770,7 +3759,7 @@ namespace System.Windows.Forms.Tests
             {
                 Anchor = anchor
             };
-             
+
             control.Dock = value;
             Assert.Equal(value, control.Dock);
             Assert.Equal(expectedAnchor, control.Anchor);

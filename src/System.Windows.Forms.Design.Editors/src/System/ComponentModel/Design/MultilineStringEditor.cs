@@ -2,20 +2,17 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
 using System.Collections;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Design;
 using System.Globalization;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Windows.Forms;
 using System.Windows.Forms.Design;
 using Microsoft.Win32;
-
-using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 using static Interop;
+using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 
 namespace System.ComponentModel.Design
 {
@@ -478,7 +475,7 @@ namespace System.ComponentModel.Design
             public HRESULT GetNewStorage(out Ole32.IStorage storage)
             {
                 Debug.WriteLineIf(RichTextDbg.TraceVerbose, "IRichTextBoxOleCallback::GetNewStorage");
-    
+
                 Ole32.ILockBytes pLockBytes = Ole32.CreateILockBytesOnHGlobal(IntPtr.Zero, true);
                 Debug.Assert(pLockBytes != null, "pLockBytes is NULL!");
 
@@ -560,7 +557,7 @@ namespace System.ComponentModel.Design
 
                     return HRESULT.E_FAIL;
                 }
-                
+
                 return HRESULT.E_NOTIMPL;
             }
 
@@ -584,20 +581,10 @@ namespace System.ComponentModel.Design
 
             public HRESULT GetContextMenu(short seltype, IntPtr lpoleobj, ref Richedit.CHARRANGE lpchrg, out IntPtr hmenu)
             {
-                TextBox tb = new TextBox
-                {
-                    Visible = true
-                };
-                ContextMenu cm = tb.ContextMenu;
-                if (cm == null || _owner.ShortcutsEnabled == false)
-                {
-                    hmenu = IntPtr.Zero;
-                }
-                else
-                {
-                    hmenu = cm.Handle;
-                }
+                Debug.WriteLineIf(RichTextDbg.TraceVerbose, "IRichTextBoxOleCallback::GetContextMenu");
 
+                // do nothing, we don't have ContextMenu any longer
+                hmenu = IntPtr.Zero;
                 return HRESULT.S_OK;
             }
         }
