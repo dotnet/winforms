@@ -1201,7 +1201,7 @@ namespace System.Windows.Forms
                             // If the component wants us to process the message, do it.
                             // The component manager hosts windows from many places.  We must be sensitive
                             // to ansi / Unicode windows here.
-                            if (msg.hwnd != IntPtr.Zero && SafeNativeMethods.IsWindowUnicode(new HandleRef(null, msg.hwnd)))
+                            if (msg.hwnd != IntPtr.Zero && User32.IsWindowUnicode(msg.hwnd).IsTrue())
                             {
                                 unicodeWindow = true;
                                 if (User32.GetMessageW(ref msg).IsFalse())

@@ -126,9 +126,6 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.User32, ExactSpelling = true)]
         public static extern bool ScrollWindow(HandleRef hWnd, int nXAmount, int nYAmount, ref RECT rectScrollRegion, ref RECT rectClip);
 
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern bool IsWindowUnicode(HandleRef hWnd);
-
         [DllImport(ExternDll.User32, ExactSpelling = true)]
         public static extern bool DrawEdge(HandleRef hDC, ref RECT rect, int edge, int flags);
 
