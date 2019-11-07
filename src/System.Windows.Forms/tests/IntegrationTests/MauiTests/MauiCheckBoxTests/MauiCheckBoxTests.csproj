@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\References.targets" />
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="Maui.Core">
+      <HintPath>\\winformssrvvm01\NETCoreMigration\RTTestCasesMigration\Maui.Core.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>
