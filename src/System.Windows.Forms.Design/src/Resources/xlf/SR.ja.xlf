@@ -665,6 +665,111 @@
         <target state="new">The service {0} is required but could not be found.  If you have removed this service ensure that you provide a replacement.</target>
         <note />
       </trans-unit>
+      <trans-unit id="MaskDescriptorNotMaskFullErrorMsg">
+        <source>Mask is not full.</source>
+        <target state="new">Mask is not full.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="MaskDescriptorNull">
+        <source>The provided MaskDescriptor is null.</source>
+        <target state="new">The provided MaskDescriptor is null.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="MaskDescriptorNullOrEmptyRequiredProperty">
+        <source>One or more required properties are null or empty.</source>
+        <target state="new">One or more required properties are null or empty.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="MaskDescriptorValidatingTypeNone">
+        <source>(none)</source>
+        <target state="new">(none)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="MaskDesignerDialogCustomEntry">
+        <source>&lt;Custom&gt;</source>
+        <target state="new">&lt;Custom&gt;</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="MaskDesignerDialogDataFormat">
+        <source>Data Format</source>
+        <target state="new">Data Format</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="MaskDesignerDialogDlgCaption">
+        <source>Input Mask</source>
+        <target state="new">Input Mask</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="MaskDesignerDialogMaskDescription">
+        <source>Mask Description</source>
+        <target state="new">Mask Description</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="MaskDesignerDialogValidatingType">
+        <source>Validating Type</source>
+        <target state="new">Validating Type</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="MaskedTextBoxDesignerVerbsSetMaskDesc">
+        <source>Set Mask...</source>
+        <target state="new">Set Mask...</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="MaskedTextBoxHintAlphanumericCharacterExpected">
+        <source>Alphanumeric character expected</source>
+        <target state="new">Alphanumeric character expected</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="MaskedTextBoxHintAsciiCharacterExpected">
+        <source>ASCII character expected</source>
+        <target state="new">ASCII character expected</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="MaskedTextBoxHintDigitExpected">
+        <source>Digit expected</source>
+        <target state="new">Digit expected</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="MaskedTextBoxHintInvalidInput">
+        <source>Invalid input character</source>
+        <target state="new">Invalid input character</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="MaskedTextBoxHintLetterExpected">
+        <source>Letter expected</source>
+        <target state="new">Letter expected</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="MaskedTextBoxHintNonEditPosition">
+        <source>Non edit position</source>
+        <target state="new">Non edit position</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="MaskedTextBoxHintPositionOutOfRange">
+        <source>Position out of range</source>
+        <target state="new">Position out of range</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="MaskedTextBoxHintPromptCharNotAllowed">
+        <source>Prompt character disallowed as input</source>
+        <target state="new">Prompt character disallowed as input</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="MaskedTextBoxHintSignedDigitExpected">
+        <source>Signed digit expected</source>
+        <target state="new">Signed digit expected</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="MaskedTextBoxHintUnavailableEditPosition">
+        <source>Unavailable edit position</source>
+        <target state="new">Unavailable edit position</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="MaskedTextBoxTextEditorErrorFormatString">
+        <source>Error at position {0}: {1}.</source>
+        <target state="new">Error at position {0}: {1}.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="None">
         <source>(None)</source>
         <target state="translated">(なし)</target>
