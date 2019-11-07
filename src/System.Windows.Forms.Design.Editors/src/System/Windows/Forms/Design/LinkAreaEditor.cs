@@ -2,10 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Diagnostics;
-using System.Drawing.Design;
 using System.ComponentModel;
 using System.ComponentModel.Design;
+using System.Drawing.Design;
 
 namespace System.Windows.Forms.Design
 {
@@ -15,7 +14,7 @@ namespace System.Windows.Forms.Design
     /// </summary>
     internal class LinkAreaEditor : UITypeEditor
     {
-        private LinkAreaUI linkAreaUI;
+        private LinkAreaUI _linkAreaUI;
 
         /// <summary>
         /// Edits the given object value using the editor style provided by
@@ -23,54 +22,53 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
-            Debug.Assert(provider != null, "No service provider; we cannot edit the value");
-
-            if (provider != null)
+            if (provider == null)
             {
-                IWindowsFormsEditorService edSvc = (IWindowsFormsEditorService)provider.GetService(typeof(IWindowsFormsEditorService));
+                return value;
+            }
+
+            IWindowsFormsEditorService edSvc = (IWindowsFormsEditorService)provider.GetService(typeof(IWindowsFormsEditorService));
+            if (edSvc == null)
+            {
+                return value;
+            }
+
+            if (_linkAreaUI == null)
+            {
                 IHelpService helpService = (IHelpService)provider.GetService(typeof(IHelpService));
 
-                Debug.Assert(edSvc != null, "No editor service; we cannot edit the value");
+                // child modal dialog -launching in System Aware mode
+                _linkAreaUI = DpiHelper.CreateInstanceInSystemAwareContext(() => new LinkAreaUI(this, helpService));
+            }
 
-                if (edSvc != null)
+            string text = string.Empty;
+            PropertyDescriptor prop = null;
+
+            if (context != null && context.Instance != null)
+            {
+                prop = TypeDescriptor.GetProperties(context.Instance)["Text"];
+                if (prop != null && prop.PropertyType == typeof(string))
                 {
-                    if (linkAreaUI == null)
-                    {
-
-                        // child modal dialog -launching in System Aware mode
-                        linkAreaUI = DpiHelper.CreateInstanceInSystemAwareContext(() => new LinkAreaUI(this, helpService));
-                    }
-
-                    string text = string.Empty;
-                    PropertyDescriptor prop = null;
-
-                    if (context != null && context.Instance != null)
-                    {
-                        prop = TypeDescriptor.GetProperties(context.Instance)["Text"];
-                        if (prop != null && prop.PropertyType == typeof(string))
-                        {
-                            text = (string)prop.GetValue(context.Instance);
-                        }
-                    }
-
-                    string originalText = text;
-                    linkAreaUI.SampleText = text;
-                    linkAreaUI.Start(edSvc, value);
-
-                    if (edSvc.ShowDialog(linkAreaUI) == DialogResult.OK)
-                    {
-                        value = linkAreaUI.Value;
-
-                        text = linkAreaUI.SampleText;
-                        if (!originalText.Equals(text) && prop != null && prop.PropertyType == typeof(string))
-                        {
-                            prop.SetValue(context.Instance, text);
-                        }
-                    }
-
-                    linkAreaUI.End();
+                    text = (string)prop.GetValue(context.Instance);
                 }
             }
+
+            string originalText = text;
+            _linkAreaUI.SampleText = text;
+            _linkAreaUI.Start(edSvc, value);
+
+            if (edSvc.ShowDialog(_linkAreaUI) == DialogResult.OK)
+            {
+                value = _linkAreaUI.Value;
+
+                text = _linkAreaUI.SampleText;
+                if (!originalText.Equals(text) && prop != null && prop.PropertyType == typeof(string))
+                {
+                    prop.SetValue(context.Instance, text);
+                }
+            }
+
+            _linkAreaUI.End();
 
             return value;
         }
@@ -79,29 +77,26 @@ namespace System.Windows.Forms.Design
         /// Gets the editing style of the Edit method.
         /// </summary>
         public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
-        {
-            return UITypeEditorEditStyle.Modal;
-        }
+            => UITypeEditorEditStyle.Modal;
 
         /// <summary>
         ///      Dialog box for the link area.
         /// </summary>
         internal class LinkAreaUI : Form
         {
-            private Label caption = new Label();
-            private TextBox sampleEdit = new TextBox();
-            private Button okButton = new Button();
-            private Button cancelButton = new Button();
-            private TableLayoutPanel okCancelTableLayoutPanel;
-            private LinkAreaEditor editor;
-            private IWindowsFormsEditorService edSvc;
-            private object value;
-            private IHelpService helpService = null;
+            private Label _caption = new Label();
+            private TextBox _sampleEdit = new TextBox();
+            private Button _okButton = new Button();
+            private Button _cancelButton = new Button();
+            private TableLayoutPanel _okCancelTableLayoutPanel;
+            private readonly LinkAreaEditor _editor;
+            private IWindowsFormsEditorService _edSvc;
+            private readonly IHelpService _helpService = null;
 
             public LinkAreaUI(LinkAreaEditor editor, IHelpService helpService)
             {
-                this.editor = editor;
-                this.helpService = helpService;
+                _editor = editor;
+                _helpService = helpService;
                 InitializeComponent();
             }
 
@@ -109,131 +104,110 @@ namespace System.Windows.Forms.Design
             {
                 get
                 {
-                    return sampleEdit.Text;
+                    return _sampleEdit.Text;
                 }
                 set
                 {
-                    sampleEdit.Text = value;
+                    _sampleEdit.Text = value;
                     UpdateSelection();
                 }
             }
 
-            public object Value
-            {
-                get
-                {
-                    return value;
-                }
-            }
+            public object Value { get; private set; }
 
             public void End()
             {
-                edSvc = null;
-                value = null;
+                _edSvc = null;
+                Value = null;
             }
 
             private void InitializeComponent()
             {
                 ComponentResourceManager resources = new ComponentResourceManager(typeof(LinkAreaEditor));
-                this.caption = new Label();
-                this.sampleEdit = new TextBox();
-                this.okButton = new Button();
-                this.cancelButton = new Button();
-                this.okCancelTableLayoutPanel = new TableLayoutPanel();
-                this.okCancelTableLayoutPanel.SuspendLayout();
-                this.SuspendLayout();
-                this.okButton.Click += new EventHandler(this.okButton_click);
+                _caption = new Label();
+                _sampleEdit = new TextBox();
+                _okButton = new Button();
+                _cancelButton = new Button();
+                _okCancelTableLayoutPanel = new TableLayoutPanel();
+                _okCancelTableLayoutPanel.SuspendLayout();
+                SuspendLayout();
+                _okButton.Click += new EventHandler(okButton_click);
                 // 
                 // caption
                 // 
-                resources.ApplyResources(this.caption, "caption");
-                this.caption.Margin = new Padding(3, 1, 3, 0);
-                this.caption.Name = "caption";
+                resources.ApplyResources(_caption, "caption");
+                _caption.Margin = new Padding(3, 1, 3, 0);
+                _caption.Name = "caption";
                 // 
                 // sampleEdit
                 // 
-                resources.ApplyResources(this.sampleEdit, "sampleEdit");
-                this.sampleEdit.Margin = new Padding(3, 2, 3, 3);
-                this.sampleEdit.Name = "sampleEdit";
-                this.sampleEdit.HideSelection = false;
-                this.sampleEdit.ScrollBars = ScrollBars.Vertical;
+                resources.ApplyResources(_sampleEdit, "sampleEdit");
+                _sampleEdit.Margin = new Padding(3, 2, 3, 3);
+                _sampleEdit.Name = "sampleEdit";
+                _sampleEdit.HideSelection = false;
+                _sampleEdit.ScrollBars = ScrollBars.Vertical;
                 // 
                 // okButton
                 // 
-                resources.ApplyResources(this.okButton, "okButton");
-                this.okButton.DialogResult = DialogResult.OK;
-                this.okButton.Margin = new Padding(0, 0, 2, 0);
-                this.okButton.Name = "okButton";
+                resources.ApplyResources(_okButton, "okButton");
+                _okButton.DialogResult = DialogResult.OK;
+                _okButton.Margin = new Padding(0, 0, 2, 0);
+                _okButton.Name = "okButton";
                 // 
                 // cancelButton
                 // 
-                resources.ApplyResources(this.cancelButton, "cancelButton");
-                this.cancelButton.DialogResult = DialogResult.Cancel;
-                this.cancelButton.Margin = new Padding(3, 0, 0, 0);
-                this.cancelButton.Name = "cancelButton";
+                resources.ApplyResources(_cancelButton, "cancelButton");
+                _cancelButton.DialogResult = DialogResult.Cancel;
+                _cancelButton.Margin = new Padding(3, 0, 0, 0);
+                _cancelButton.Name = "cancelButton";
                 // 
                 // okCancelTableLayoutPanel
                 // 
-                resources.ApplyResources(this.okCancelTableLayoutPanel, "okCancelTableLayoutPanel");
-                this.okCancelTableLayoutPanel.ColumnCount = 2;
-                this.okCancelTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-                this.okCancelTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-                this.okCancelTableLayoutPanel.Controls.Add(this.okButton, 0, 0);
-                this.okCancelTableLayoutPanel.Controls.Add(this.cancelButton, 1, 0);
-                this.okCancelTableLayoutPanel.Margin = new Padding(3, 1, 3, 3);
-                this.okCancelTableLayoutPanel.Name = "okCancelTableLayoutPanel";
-                this.okCancelTableLayoutPanel.RowCount = 1;
-                this.okCancelTableLayoutPanel.RowStyles.Add(new RowStyle());
-                this.okCancelTableLayoutPanel.RowStyles.Add(new RowStyle());
+                resources.ApplyResources(_okCancelTableLayoutPanel, "okCancelTableLayoutPanel");
+                _okCancelTableLayoutPanel.ColumnCount = 2;
+                _okCancelTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+                _okCancelTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+                _okCancelTableLayoutPanel.Controls.Add(_okButton, 0, 0);
+                _okCancelTableLayoutPanel.Controls.Add(_cancelButton, 1, 0);
+                _okCancelTableLayoutPanel.Margin = new Padding(3, 1, 3, 3);
+                _okCancelTableLayoutPanel.Name = "okCancelTableLayoutPanel";
+                _okCancelTableLayoutPanel.RowCount = 1;
+                _okCancelTableLayoutPanel.RowStyles.Add(new RowStyle());
+                _okCancelTableLayoutPanel.RowStyles.Add(new RowStyle());
                 // 
                 // LinkAreaEditor
                 // 
                 resources.ApplyResources(this, "$this");
-                this.AutoScaleMode = AutoScaleMode.Font;
-                this.CancelButton = this.cancelButton;
-                this.Controls.Add(this.okCancelTableLayoutPanel);
-                this.Controls.Add(this.sampleEdit);
-                this.Controls.Add(this.caption);
-                this.HelpButton = true;
-                this.MaximizeBox = false;
-                this.MinimizeBox = false;
-                this.Name = "LinkAreaEditor";
-                this.ShowIcon = false;
-                this.ShowInTaskbar = false;
-                this.HelpButtonClicked += new CancelEventHandler(this.LinkAreaEditor_HelpButtonClicked);
-                this.okCancelTableLayoutPanel.ResumeLayout(false);
-                this.okCancelTableLayoutPanel.PerformLayout();
-                this.ResumeLayout(false);
-                this.PerformLayout();
+                AutoScaleMode = AutoScaleMode.Font;
+                CancelButton = _cancelButton;
+                Controls.Add(_okCancelTableLayoutPanel);
+                Controls.Add(_sampleEdit);
+                Controls.Add(_caption);
+                HelpButton = true;
+                MaximizeBox = false;
+                MinimizeBox = false;
+                Name = "LinkAreaEditor";
+                ShowIcon = false;
+                ShowInTaskbar = false;
+                HelpButtonClicked += new CancelEventHandler(LinkAreaEditor_HelpButtonClicked);
+                _okCancelTableLayoutPanel.ResumeLayout(false);
+                _okCancelTableLayoutPanel.PerformLayout();
+                ResumeLayout(false);
+                PerformLayout();
             }
 
             private void okButton_click(object sender, EventArgs e)
             {
-                value = new LinkArea(sampleEdit.SelectionStart, sampleEdit.SelectionLength);
+                Value = new LinkArea(_sampleEdit.SelectionStart, _sampleEdit.SelectionLength);
             }
 
-            private string HelpTopic
-            {
-                get
-                {
-                    return "net.ComponentModel.LinkAreaEditor";
-                }
-            }
+            private string HelpTopic => "net.ComponentModel.LinkAreaEditor";
 
             /// <summary>
             /// Called when the help button is clicked.
             /// </summary>
             private void ShowHelp()
-            {
-                if (helpService != null)
-                {
-                    helpService.ShowHelpFromKeyword(HelpTopic);
-                }
-                else
-                {
-                    Debug.Fail("Unable to get IHelpService.");
-                }
-            }
+                => _helpService?.ShowHelpFromKeyword(HelpTopic);
 
             private void LinkAreaEditor_HelpButtonClicked(object sender, CancelEventArgs e)
             {
@@ -243,28 +217,30 @@ namespace System.Windows.Forms.Design
 
             public void Start(IWindowsFormsEditorService edSvc, object value)
             {
-                this.edSvc = edSvc;
-                this.value = value;
+                _edSvc = edSvc;
+                Value = value;
                 UpdateSelection();
-                ActiveControl = sampleEdit;
+                ActiveControl = _sampleEdit;
             }
 
             private void UpdateSelection()
             {
-                if (value is LinkArea)
+                if (!(Value is LinkArea))
                 {
-                    LinkArea pt = (LinkArea)value;
-                    try
+                    return;
+                }
+
+                LinkArea pt = (LinkArea)Value;
+                try
+                {
+                    _sampleEdit.SelectionStart = pt.Start;
+                    _sampleEdit.SelectionLength = pt.Length;
+                }
+                catch (Exception ex)
+                {
+                    if (ClientUtils.IsCriticalException(ex))
                     {
-                        sampleEdit.SelectionStart = pt.Start;
-                        sampleEdit.SelectionLength = pt.Length;
-                    }
-                    catch (Exception ex)
-                    {
-                        if (ClientUtils.IsCriticalException(ex))
-                        {
-                            throw;
-                        }
+                        throw;
                     }
                 }
             }
