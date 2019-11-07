@@ -209,6 +209,11 @@ Stisknutím kombinace kláves Ctrl+Enter text přijměte.</target>
         <target state="translated">RTL_False</target>
         <note />
       </trans-unit>
+      <trans-unit id="SelectedPathEditorLabel">
+        <source>Select the path to the folder that will initially be selected in the FolderBrowserDialog.</source>
+        <target state="new">Select the path to the folder that will initially be selected in the FolderBrowserDialog.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ShortcutKeys_InvalidKey">
         <source>(Unknown)</source>
         <target state="translated">(Neznámý)</target>
