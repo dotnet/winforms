@@ -1600,7 +1600,7 @@ namespace System.Windows.Forms
                         main.ProcessInitMenuPopup(menu.Handle);
                     }
 
-                    UnsafeNativeMethods.MapWindowPoints(new HandleRef(nmTB->hdr, nmTB->hdr.hwndFrom), NativeMethods.NullHandleRef, ref rc, 2);
+                    User32.MapWindowPoints(nmTB->hdr.hwndFrom, IntPtr.Zero, ref rc, 2);
 
                     tpm.rcExclude_left = rc.left;
                     tpm.rcExclude_top = rc.top;

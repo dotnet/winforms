@@ -1814,7 +1814,7 @@ namespace System.Windows.Forms.Design
             bool dropAtHead = false;
             ToolStrip parentToolStrip = ToolStrip;
             var offset = new Point(de.X, de.Y);
-            NativeMethods.MapWindowPoints(IntPtr.Zero, parentToolStrip.Handle, ref offset, 1);
+            User32.MapWindowPoints(IntPtr.Zero, parentToolStrip.Handle, ref offset, 1);
             if (ToolStrip.Orientation == Orientation.Horizontal)
             {
                 if (ToolStrip.RightToLeft == RightToLeft.Yes)

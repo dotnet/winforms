@@ -164,6 +164,7 @@
     <Compile Include="..\..\Common\src\Interop\User32\Interop.IsChild.cs" Link="Interop\User32\Interop.IsChild.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.IsProcessDPIAware.cs" Link="Interop\User32\Interop.IsProcessDPIAware.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.IsValidDpiAwarenessContext.cs" Link="Interop\User32\Interop.IsValidDpiAwarenessContext.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.MapWindowPoints.cs" Link="Interop\User32\Interop.MapWindowPoints.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.MK.cs" Link="Interop\User32\Interop.MK.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.MSG.cs" Link="Interop\User32\Interop.MSG.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.MsgWaitForMultipleObjectsEx.cs" Link="Interop\User32\Interop.MsgWaitForMultipleObjectsEx.cs" />
