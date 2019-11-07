@@ -197,10 +197,6 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.User32, ExactSpelling = true)]
         public static extern IntPtr ChildWindowFromPointEx(IntPtr hwndParent, Point pt, int uFlags);
 
-
-        [DllImport(ExternDll.User32, ExactSpelling = true)]
-        public static extern IntPtr GetDCEx(HandleRef hWnd, HandleRef hrgnClip, int flags);
-
         [DllImport(ExternDll.Kernel32, CharSet = CharSet.Auto)]
         public static extern uint GetShortPathName(string lpszLongPath, StringBuilder lpszShortPath, uint cchBuffer);
 
