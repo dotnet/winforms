@@ -2,6 +2,26 @@
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
   <file datatype="xml" source-language="en" target-language="tr" original="../SR.resx">
     <body>
+      <trans-unit id="BasicDesignerLoaderAlreadyLoaded">
+        <source>The designer is already loaded.</source>
+        <target state="new">The designer is already loaded.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="BasicDesignerLoaderDifferentHost">
+        <source>The designer loader has already been loaded from another host.  You can only have one designer loader for each host.</source>
+        <target state="new">The designer loader has already been loaded from another host.  You can only have one designer loader for each host.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="BasicDesignerLoaderMissingService">
+        <source>The service {0} is required but could not be found.  If you have removed this service ensure that you provide a replacement.</source>
+        <target state="new">The service {0} is required but could not be found.  If you have removed this service ensure that you provide a replacement.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="BasicDesignerLoaderNotInitialized">
+        <source>The designer loader has not been initialized yet.  You may only call this method after initialization.</source>
+        <target state="new">The designer loader has not been initialized yet.  You may only call this method after initialization.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="BehaviorServiceCopyControl">
         <source>Copy and move {0}</source>
         <target state="translated">{0} kopyala ve taşı</target>
@@ -45,6 +65,78 @@
       <trans-unit id="CodeDomComponentSerializationServiceUnknownStore">
         <source>This type of serialization store is not supported.  Use a store returned by the CreateStore method.</source>
         <target state="translated">Bu tür serileştirme deposu desteklenmiyor. CreateStore metodu tarafından döndürülen bir depo kullanın.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CodeDomDesignerLoaderBadSerializationObject">
+        <source>The serialization data object is not of the proper type.</source>
+        <target state="new">The serialization data object is not of the proper type.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CodeDomDesignerLoaderDocumentFailureTypeDesignerNotInstalled">
+        <source>	{0} --- The designer for base class '{1}' is not installed.</source>
+        <target state="new">	{0} --- The designer for base class '{1}' is not installed.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CodeDomDesignerLoaderDocumentFailureTypeNotDesignable">
+        <source>	{0} --- The base class '{1}' cannot be designed.</source>
+        <target state="new">	{0} --- The base class '{1}' cannot be designed.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CodeDomDesignerLoaderDocumentFailureTypeNotFound">
+        <source>	{0} --- The base class '{1}' could not be loaded.  Ensure the assembly has been referenced and that all projects have been built.</source>
+        <target state="new">	{0} --- The base class '{1}' could not be loaded.  Ensure the assembly has been referenced and that all projects have been built.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CodeDomDesignerLoaderDupComponentName">
+        <source>There is already a component named '{0}'.  Components must have unique names, and names must be case-insensitive.  A name also cannot conflict with the name of any component in an inherited class.</source>
+        <target state="new">There is already a component named '{0}'.  Components must have unique names, and names must be case-insensitive.  A name also cannot conflict with the name of any component in an inherited class.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CodeDomDesignerLoaderInvalidBlankIdentifier">
+        <source>Empty identifiers are not valid.</source>
+        <target state="new">Empty identifiers are not valid.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CodeDomDesignerLoaderInvalidIdentifier">
+        <source>'{0}' is not a valid identifier.</source>
+        <target state="new">'{0}' is not a valid identifier.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CodeDomDesignerLoaderNoLanguageSupport">
+        <source>The language did not provide a code parser for this file.  Please make sure that this file type supports a designer.</source>
+        <target state="new">The language did not provide a code parser for this file.  Please make sure that this file type supports a designer.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CodeDomDesignerLoaderNoRootSerializer">
+        <source>The designer could not be shown for this file because none of the classes within it can be designed.</source>
+        <target state="new">The designer could not be shown for this file because none of the classes within it can be designed.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CodeDomDesignerLoaderNoRootSerializerWithFailures">
+        <source>The designer could not be shown for this file because none of the classes within it can be designed.  The designer inspected the following classes in the file: 
+{0}</source>
+        <target state="new">The designer could not be shown for this file because none of the classes within it can be designed.  The designer inspected the following classes in the file: 
+{0}</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CodeDomDesignerLoaderNoTypeResolution">
+        <source>The designer loader did not supply a type resolution service, which is a requirement for CodeDom serialization.</source>
+        <target state="new">The designer loader did not supply a type resolution service, which is a requirement for CodeDom serialization.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CodeDomDesignerLoaderPropGenerateMember">
+        <source>Indicates if a member variable will be generated for this component.</source>
+        <target state="new">Indicates if a member variable will be generated for this component.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CodeDomDesignerLoaderPropModifiers">
+        <source>Indicates the visibility level of the object.</source>
+        <target state="new">Indicates the visibility level of the object.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CodeDomDesignerLoaderSerializerTypeNotFirstType">
+        <source>The class {0} can be designed, but is not the first class in the file.  Visual Studio requires that designers use the first class in the file.  Move the class code so that it is the first class in the file and try loading the designer again.</source>
+        <target state="new">The class {0} can be designed, but is not the first class in the file.  Visual Studio requires that designers use the first class in the file.  Move the class code so that it is the first class in the file and try loading the designer again.</target>
         <note />
       </trans-unit>
       <trans-unit id="CommandSetAlignByPrimary">
@@ -493,6 +585,31 @@
         <target state="translated">{0} bileşeni boyutlandır</target>
         <note />
       </trans-unit>
+      <trans-unit id="EventBindingServiceBadArgType">
+        <source>The event {0} expects an argument type of {1}.</source>
+        <target state="new">The event {0} expects an argument type of {1}.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="EventBindingServiceEventReadOnly">
+        <source>The event {0} is read-only and cannot be changed.</source>
+        <target state="new">The event {0} is read-only and cannot be changed.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="EventBindingServiceMissingService">
+        <source>The service {0} is required but could not be found.  If you have removed this service ensure that you provide a replacement.</source>
+        <target state="new">The service {0} is required but could not be found.  If you have removed this service ensure that you provide a replacement.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="EventBindingServiceNoSite">
+        <source>Events cannot be set on the object passed to the event binding service because a site associated with the object could not be located.</source>
+        <target state="new">Events cannot be set on the object passed to the event binding service because a site associated with the object could not be located.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="EventBindingServiceSetValue">
+        <source>Set {0}.{1} event</source>
+        <target state="new">Set {0}.{1} event</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ExtenderProviderServiceDuplicateProvider">
         <source>The extender provider {0} has already been added as an extender.  Adding another would result in duplicate properties.</source>
         <target state="translated">{0} uzatma sağlayıcısı zaten bir uzatma olarak eklendi. Bir uzatma daha eklemek yinelenen özelliklere neden olabilir.</target>
@@ -511,6 +628,16 @@
       <trans-unit id="InvalidBoundArgument">
         <source>'{1}' is not a valid value for '{0}'. '{0}' should be between {2} and {3}.</source>
         <target state="translated">'{1}' değeri '{0}' öğesi için geçerli değil. '{0}' değeri {2} ile {3} arasında olmalıdır.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="LocalizationProviderManualReload">
+        <source>You must close and re-open the designer for this change to take effect.</source>
+        <target state="new">You must close and re-open the designer for this change to take effect.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="LocalizationProviderMissingService">
+        <source>The service {0} is required but could not be found.  If you have removed this service ensure that you provide a replacement.</source>
+        <target state="new">The service {0} is required but could not be found.  If you have removed this service ensure that you provide a replacement.</target>
         <note />
       </trans-unit>
       <trans-unit id="None">
