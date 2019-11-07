@@ -1173,23 +1173,23 @@ namespace System.Windows.Forms
         [ComImport]
         [Guid("B196B288-BAB4-101A-B69C-00AA00341D07")]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IOleControl
+        public unsafe interface IOleControl
         {
             [PreserveSig]
             HRESULT GetControlInfo(
-                [Out] NativeMethods.tagCONTROLINFO pCI);
+                Ole32.CONTROLINFO* pCI);
 
             [PreserveSig]
             HRESULT OnMnemonic(
-                ref User32.MSG pMsg);
+                User32.MSG* pMsg);
 
             [PreserveSig]
             HRESULT OnAmbientPropertyChange(
                 Ole32.DispatchID dispID);
 
             [PreserveSig]
-            int FreezeEvents(
-                    int bFreeze);
+            HRESULT FreezeEvents(
+                BOOL bFreeze);
         }
 
         [ComImport]
