@@ -187,6 +187,26 @@
         <target state="translated">Görüntüler Koleksiyonu Düzenleyicisi</target>
         <note />
       </trans-unit>
+      <trans-unit id="LinkAreaEditorCancel">
+        <source>Cancel</source>
+        <target state="new">Cancel</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="LinkAreaEditorCaption">
+        <source>LinkArea Editor</source>
+        <target state="new">LinkArea Editor</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="LinkAreaEditorDescription">
+        <source>Select a &amp;range of text to make your link:</source>
+        <target state="new">Select a &amp;range of text to make your link:</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="LinkAreaEditorOK">
+        <source>OK</source>
+        <target state="new">OK</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ListViewSubItemBaseName">
         <source>ListViewSubItem</source>
         <target state="new">ListViewSubItem</target>
