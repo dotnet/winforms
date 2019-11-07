@@ -983,7 +983,8 @@ namespace System.Windows.Forms
                 RECT* lprcPosRect);
 
             [PreserveSig]
-            int EnumVerbs(out IEnumOLEVERB e);
+            HRESULT EnumVerbs(
+                out IEnumOLEVERB e);
 
             [PreserveSig]
             int OleUpdate();
@@ -1095,7 +1096,8 @@ namespace System.Windows.Forms
                 RECT* lprcPosRect);
 
             [PreserveSig]
-            int EnumVerbs(out IEnumOLEVERB e);
+            HRESULT EnumVerbs(
+                out IEnumOLEVERB e);
 
             [PreserveSig]
             int OleUpdate();
@@ -1404,26 +1406,26 @@ namespace System.Windows.Forms
             int EnumConnections(out object pEnum);
         }
 
-        [ComImport(), Guid("00000104-0000-0000-C000-000000000046"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IEnumOLEVERB
+        [ComImport]
+        [Guid("00000104-0000-0000-C000-000000000046")]
+        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+        public unsafe interface IEnumOLEVERB
         {
             [PreserveSig]
-            int Next(
-                   [MarshalAs(UnmanagedType.U4)]
-                int celt,
-                   [Out]
-                NativeMethods.tagOLEVERB rgelt,
-                   [Out, MarshalAs(UnmanagedType.LPArray)]
-                int[] pceltFetched);
+            HRESULT Next(
+                uint celt,
+                Ole32.OLEVERB rgelt,
+                uint* pceltFetched);
 
             [PreserveSig]
-            int Skip(
-                   [In, MarshalAs(UnmanagedType.U4)]
-                 int celt);
+            HRESULT Skip(
+                uint celt);
 
-            void Reset();
+            [PreserveSig]
+            HRESULT Reset();
 
-            void Clone(
+            [PreserveSig]
+            HRESULT Clone(
                out IEnumOLEVERB ppenum);
         }
 
