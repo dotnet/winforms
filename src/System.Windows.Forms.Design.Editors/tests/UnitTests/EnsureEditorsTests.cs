@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -82,7 +82,7 @@ namespace System.Windows.Forms.Design.Editors.Tests
         [InlineData(typeof(DateTimePicker), "Value", typeof(DateTimeEditor))]
         [InlineData(typeof(DomainUpDown), "Items", typeof(StringCollectionEditor))]
         //[InlineData(typeof(ErrorProvider), "DataMember", typeof(DataMemberListEditor))]
-        //[InlineData(typeof(FolderBrowserDialog), "SelectedPath", typeof(SelectedPathEditor))]
+        [InlineData(typeof(FolderBrowserDialog), "SelectedPath", typeof(SelectedPathEditor))]
         //[InlineData(typeof(HelpProvider), "HelpNamespace", typeof(HelpNamespaceEditor))]
         [InlineData(typeof(Label), "ImageIndex", typeof(ImageIndexEditor))]
         [InlineData(typeof(Label), "ImageKey", typeof(ImageIndexEditor))]
