@@ -7,6 +7,7 @@ using System.Runtime.CompilerServices;
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.DataMemberFieldConverter))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.ImageCollectionEditor))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.ImageIndexEditor))]
+[assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.LinkAreaEditor))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.ListControlStringCollectionEditor))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.ListViewGroupCollectionEditor))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.ListViewItemCollectionEditor))]

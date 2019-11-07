@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
@@ -194,6 +194,18 @@ Press Ctrl+Enter to accept Text.</value>
   </data>
   <data name="ContentAlignmentEditorTopRightAccName" xml:space="preserve">
     <value>Top Right</value>
+  </data>
+  <data name="LinkAreaEditorCancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="LinkAreaEditorCaption" xml:space="preserve">
+    <value>LinkArea Editor</value>
+  </data>
+  <data name="LinkAreaEditorDescription" xml:space="preserve">
+    <value>Select a &amp;range of text to make your link:</value>
+  </data>
+  <data name="LinkAreaEditorOK" xml:space="preserve">
+    <value>OK</value>
   </data>
   <data name="iconFileDescription" xml:space="preserve">
     <value>Icon files</value>
