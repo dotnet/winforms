@@ -50,7 +50,7 @@ namespace System.Windows.Forms
         private UnsafeNativeMethods.IOleObject axOleObject;
         private Ole32.IOleInPlaceObject axOleInPlaceObject;
         private Ole32.IOleInPlaceActiveObject axOleInPlaceActiveObject;
-        private UnsafeNativeMethods.IOleControl axOleControl;
+        private Ole32.IOleControl axOleControl;
         private WebBrowserBaseNativeWindow axWindow;
         // We need to change the size of the inner ActiveX control before the
         //WebBrowserBase control's size is changed (i.e., before WebBrowserBase.Bounds
@@ -1115,10 +1115,10 @@ namespace System.Windows.Forms
             axOleObject = (UnsafeNativeMethods.IOleObject)activeXInstance;
             axOleInPlaceObject = (Ole32.IOleInPlaceObject)activeXInstance;
             axOleInPlaceActiveObject = (Ole32.IOleInPlaceActiveObject)activeXInstance;
-            axOleControl = (UnsafeNativeMethods.IOleControl)activeXInstance;
-            //
-            // Lets give the inheriting classes a chance to cast
-            // the ActiveX object to the appropriate interfaces.
+            axOleControl = (Ole32.IOleControl)activeXInstance;
+
+            // Give the inheriting classes a chance to cast the ActiveX object to the
+            // appropriate interfaces.
             AttachInterfaces(activeXInstance);
         }
 

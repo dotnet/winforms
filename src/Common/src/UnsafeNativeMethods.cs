@@ -1161,28 +1161,6 @@ namespace System.Windows.Forms
         };
 
         [ComImport]
-        [Guid("B196B288-BAB4-101A-B69C-00AA00341D07")]
-        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public unsafe interface IOleControl
-        {
-            [PreserveSig]
-            HRESULT GetControlInfo(
-                Ole32.CONTROLINFO* pCI);
-
-            [PreserveSig]
-            HRESULT OnMnemonic(
-                User32.MSG* pMsg);
-
-            [PreserveSig]
-            HRESULT OnAmbientPropertyChange(
-                Ole32.DispatchID dispID);
-
-            [PreserveSig]
-            HRESULT FreezeEvents(
-                BOOL bFreeze);
-        }
-
-        [ComImport]
         [Guid("0000010d-0000-0000-C000-000000000046")]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
         public unsafe interface IViewObject
