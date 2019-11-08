@@ -16,146 +16,101 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
 {
     public class MauiLabelTests : ReflectBase
     {
-        Label lbl;
-        Size NewSize, OldSize;
+        private readonly Label _lbl;
+        private Size _newSize, _oldSize;
 
         public MauiLabelTests(String[] args) : base(args)
         {
-            lbl = new Label();
-            lbl.AutoSize = true;
-            lbl.Text = "Hello";
-            this.Controls.Add(lbl);
+            this.BringToForeground();
+            _lbl = new Label();
+            _lbl.AutoSize = true;
+            _lbl.Text = "Hello";
+            Controls.Add(_lbl);
         }
 
-        /**
-        * Calls static method LaunchTest to start the test
-        */
         public static void Main(String[] args)
         {
+            Thread.CurrentThread.SetCulture("en-US");
             Application.Run(new MauiLabelTests(args));
         }
 
-
-        //==========================================
-        // Test Methods
-        //==========================================
         [Scenario(true)]
-        public ScenarioResult AutoTTScenario(TParams p)
+        public ScenarioResult AutoSize_Changes_Size_When_True(TParams p)
         {
-            p.log.WriteLine("Make Sure autosize works on T-T toggel");
-            lbl.AutoSize = true;
-            lbl.Size = new Size(10, 10);
-            lbl.Text = "Hello";
-            OldSize = lbl.Size;
-            lbl.Text = "Say Hello";
-            lbl.AutoSize = true;
-            NewSize = lbl.Size;
-            return new ScenarioResult(!(NewSize.Equals(OldSize)));
+            p.log.WriteLine("Make Sure label size is changed when the text changes and autosize is true");
+            _lbl.AutoSize = true;
+
+            _lbl.Size = new Size(10, 10);
+            _lbl.Text = "Hello";
+            _oldSize = _lbl.Size;
+            _lbl.Text = "Say Hello";
+            _newSize = _lbl.Size;
+            return new ScenarioResult(!(_newSize.Equals(_oldSize)));
         }
 
         [Scenario(true)]
-        public ScenarioResult AutoTFScenario(TParams p)
+        public ScenarioResult AutoSize_Not_Changes_Size_When_False(TParams p)
         {
-            p.log.WriteLine("Make Sure autosize works on T-F toggel");
-            lbl.AutoSize = true;
-            Size initialSize = new Size(10, 10);
-            lbl.Size = initialSize;
-            lbl.Text = "Say Hello to me";
-            OldSize = lbl.Size;
-            lbl.AutoSize = false;
-            NewSize = lbl.Size;
+            p.log.WriteLine("Make Sure label size is not changed when the text changes and autosize is false");
+            _lbl.AutoSize = false;
 
-            string descr = "";
-            if (NewSize.Equals(OldSize))
+            _lbl.Size = new Size(10, 10);
+            _lbl.Text = "Hello";
+            _oldSize = _lbl.Size;
+            _lbl.Text = "Say Hello";
+            _newSize = _lbl.Size;
+            return new ScenarioResult((_newSize.Equals(_oldSize)));
+        }
+
+        [Scenario(true)]
+        public ScenarioResult TextAlign_Valid_Integral_Scenario(TParams p)
+        {
+            p.log.WriteLine("Make Sure I can set all ContentAlignment via integral");
+            _lbl.AutoSize = true;
+
+            foreach (int value in Enum.GetValues(typeof(ContentAlignment)))
             {
-                descr = "Bug # 43661";
-            }
-
-            return new ScenarioResult((!NewSize.Equals(OldSize)) && NewSize.Equals(initialSize), descr, p.log);
-        }
-
-        [Scenario(true)]
-        public ScenarioResult AutoFFScenario(TParams p)
-        {
-            p.log.WriteLine("Make Sure autosize works on F-F toggel");
-            lbl.AutoSize = false;
-            lbl.Size = new Size(10, 10);
-            OldSize = lbl.Size;
-            lbl.Text = "is there a bug in this code here";
-            lbl.AutoSize = false;
-            NewSize = lbl.Size;
-            return new ScenarioResult(NewSize.Equals(OldSize));
-        }
-
-        [Scenario(true)]
-        public ScenarioResult AutoFTScenario(TParams p)
-        {
-            p.log.WriteLine("Make Sure autosize works on F-T toggel");
-            lbl.AutoSize = false;
-            lbl.Size = new Size(10, 10);
-            lbl.Text = "Say Hello";
-            OldSize = lbl.Size;
-            lbl.AutoSize = true;
-            NewSize = lbl.Size;
-            return new ScenarioResult(!NewSize.Equals(OldSize));
-        }
-
-        [Scenario(true)]
-        public ScenarioResult TextAlignEnumScenario(TParams p)
-        {
-            p.log.WriteLine("Make Sure I can set all Align Enums");
-            lbl.AutoSize = true;
-            try
-            {
-                lbl.TextAlign = ContentAlignment.TopLeft;
-                lbl.TextAlign = ContentAlignment.TopCenter;
-                lbl.TextAlign = ContentAlignment.TopRight;
-
-                lbl.TextAlign = ContentAlignment.MiddleLeft;
-                lbl.TextAlign = ContentAlignment.MiddleCenter;
-                lbl.TextAlign = ContentAlignment.MiddleRight;
-
-                lbl.TextAlign = ContentAlignment.BottomLeft;
-                lbl.TextAlign = ContentAlignment.BottomCenter;
-                lbl.TextAlign = ContentAlignment.BottomRight;
-            }
-            catch (Win32Exception)
-            {
-                return new ScenarioResult(false, "Failed to set all Alignment enums");
+                try
+                {
+                    _lbl.TextAlign = (ContentAlignment)value;
+                }
+                catch
+                {
+                    return new ScenarioResult(false, $"Failed to set ContentAlignment: {value}");
+                }
             }
             return ScenarioResult.Pass;
         }
 
         [Scenario(true)]
-        public ScenarioResult TextAlignValidLiteralScenario(TParams p)
+        public ScenarioResult TextAlign_Valid_Literal_Scenario(TParams p)
         {
-            // all numeric values from ContentAlignment
-            int[] contentAlignmentValues = { 1, 2, 4, 16, 32, 64, 256, 512, 1024 };
+            p.log.WriteLine("Make Sure I can set all ContentAlignment via literals");
+            _lbl.AutoSize = true;
 
-            p.log.WriteLine("Make Sure I can set all Align Enums via literals");
-            lbl.AutoSize = true;
-            int len = contentAlignmentValues.Length;
-            try
+            foreach (string value in Enum.GetNames(typeof(ContentAlignment)))
             {
-                for (int n = 0; n < len; n++)
-                    lbl.TextAlign = (ContentAlignment)contentAlignmentValues[n];
-            }
-            catch (Win32Exception)
-            {
-                return new ScenarioResult(false, "Failed to set all Alignment enums");
+                try
+                {
+                    _lbl.TextAlign = (ContentAlignment)Enum.Parse(typeof(ContentAlignment), value);
+                }
+                catch
+                {
+                    return new ScenarioResult(false, $"Failed to set ContentAlignment: {value}");
+                }
             }
             return ScenarioResult.Pass;
         }
 
         [Scenario(true)]
-        public ScenarioResult TextAlignInValidLiteralScenario(TParams p)
+        public ScenarioResult TextAlign_Invalid_Integral_Scenario(TParams p)
         {
-            p.log.WriteLine("Make Sure I get Exceptions on -1 Align Enums via literals");
-            lbl.AutoSize = true;
+            p.log.WriteLine("Make Sure I get Exceptions on -1 Align Enums via integral");
+            _lbl.AutoSize = true;
+
             try
             {
-                int i = -1;
-                lbl.TextAlign = (ContentAlignment)i;
+                _lbl.TextAlign = (ContentAlignment)(-1);
             }
             catch (ArgumentException e)
             {
@@ -167,17 +122,18 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
                 p.log.WriteLine("exception was caught: " + e.Message);
                 return new ScenarioResult(false, "FAILED: wrong exception was thrown", p.log);
             }
-            return new ScenarioResult(false, "Failed to throw exception on -1 textalignment", p.log);
+            return new ScenarioResult(false, "Failed to throw exception on -1 text alignment", p.log);
         }
 
         [Scenario(true)]
-        public ScenarioResult TextAlignInValidLiteral2Scenario(TParams p)
+        public ScenarioResult TextAlign_Invalid_Integral_Scenario2(TParams p)
         {
-            p.log.WriteLine("Make Sure I get Exceptions on 3 Align Enums via literals");
-            lbl.AutoSize = true;
+            p.log.WriteLine("Make Sure I get Exceptions on 3 Align Enums via integral");
+            _lbl.AutoSize = true;
+
             try
             {
-                lbl.TextAlign = (ContentAlignment)3;
+                _lbl.TextAlign = (ContentAlignment)3;
             }
             catch (ArgumentException e)
             {
@@ -193,12 +149,3 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
         }
     }
 }
-// [Scenarios]
-//@ AutoTTScenario()
-//@ AutoTFScenario()
-//@ AutoFFScenario()
-//@ AutoFTScenario()
-//@ TextAlignEnumScenario()
-//@ TextAlignValidLiteralScenario()
-//@ TextAlignInValidLiteralScenario()
-//@ TextAlignInValidLiteral2Scenario()
