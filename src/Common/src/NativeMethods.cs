@@ -618,22 +618,12 @@ namespace System.Windows.Forms
         PRF_CLIENT = 0x00000004,
         PRF_ERASEBKGND = 0x00000008,
         PRF_CHILDREN = 0x00000010,
-        PBM_SETRANGE = (0x0400 + 1),
-        PBM_SETPOS = (0x0400 + 2),
-        PBM_SETSTEP = (0x0400 + 4),
-        PBM_SETRANGE32 = (0x0400 + 6),
-        PBM_SETBARCOLOR = (0x0400 + 9),
-        PBM_SETMARQUEE = (0x0400 + 10),
-        PBM_SETBKCOLOR = (0x2000 + 1),
         PSM_SETTITLEA = (0x0400 + 111),
         PSM_SETTITLEW = (0x0400 + 120),
         PSM_SETFINISHTEXTA = (0x0400 + 115),
         PSM_SETFINISHTEXTW = (0x0400 + 121),
         PATCOPY = 0x00F00021,
         PATINVERT = 0x005A0049;
-
-        public const int PBS_SMOOTH = 0x01,
-        PBS_MARQUEE = 0x08;
 
         //public const int RECO_PASTE = 0x00000000;   // paste from clipboard
         public const int RECO_DROP = 0x00000001;    // drop
