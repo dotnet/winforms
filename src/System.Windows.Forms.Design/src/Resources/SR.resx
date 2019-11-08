@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -828,5 +828,83 @@
   </data>
   <data name="EventBindingServiceSetValue" xml:space="preserve">
     <value>Set {0}.{1} event</value>
+  </data>
+  <data name="BinaryEditorAllFiles" xml:space="preserve">
+    <value>All Files</value>
+  </data>
+  <data name="BinaryEditorFileError" xml:space="preserve">
+    <value>Error writing to file: {0}</value>
+  </data>
+  <data name="BinaryEditorFileName" xml:space="preserve">
+    <value>ByteArray</value>
+  </data>
+  <data name="BinaryEditorSaveFile" xml:space="preserve">
+    <value>Save File As</value>
+  </data>
+  <data name="BinaryEditorTitle" xml:space="preserve">
+    <value>Byte Array Property Editor</value>
+  </data>
+  <data name="MaskDescriptorNullOrEmptyRequiredProperty" xml:space="preserve">
+    <value>One or more required properties are null or empty.</value>
+  </data>
+  <data name="MaskDescriptorNull" xml:space="preserve">
+    <value>The provided MaskDescriptor is null.</value>
+  </data>
+  <data name="MaskDescriptorNotMaskFullErrorMsg" xml:space="preserve">
+    <value>Mask is not full.</value>
+  </data>
+  <data name="MaskDescriptorValidatingTypeNone" xml:space="preserve">
+    <value>(none)</value>
+  </data>
+  <data name="MaskDesignerDialogCustomEntry" xml:space="preserve">
+    <value>&lt;Custom&gt;</value>
+  </data>
+  <data name="MaskDesignerDialogDataFormat" xml:space="preserve">
+    <value>Data Format</value>
+  </data>
+  <data name="MaskDesignerDialogDlgCaption" xml:space="preserve">
+    <value>Input Mask</value>
+  </data>
+  <data name="MaskDesignerDialogMaskDescription" xml:space="preserve">
+    <value>Mask Description</value>
+  </data>
+  <data name="MaskDesignerDialogValidatingType" xml:space="preserve">
+    <value>Validating Type</value>
+  </data>
+  <data name="MaskedTextBoxDesignerVerbsSetMaskDesc" xml:space="preserve">
+    <value>Set Mask...</value>
+  </data>
+  <data name="MaskedTextBoxTextEditorErrorFormatString" xml:space="preserve">
+    <value>Error at position {0}: {1}.</value>
+  </data>
+  <data name="MaskedTextBoxHintAsciiCharacterExpected" xml:space="preserve">
+    <value>ASCII character expected</value>
+  </data>
+  <data name="MaskedTextBoxHintAlphanumericCharacterExpected" xml:space="preserve">
+    <value>Alphanumeric character expected</value>
+  </data>
+  <data name="MaskedTextBoxHintDigitExpected" xml:space="preserve">
+    <value>Digit expected</value>
+  </data>
+  <data name="MaskedTextBoxHintSignedDigitExpected" xml:space="preserve">
+    <value>Signed digit expected</value>
+  </data>
+  <data name="MaskedTextBoxHintLetterExpected" xml:space="preserve">
+    <value>Letter expected</value>
+  </data>
+  <data name="MaskedTextBoxHintPromptCharNotAllowed" xml:space="preserve">
+    <value>Prompt character disallowed as input</value>
+  </data>
+  <data name="MaskedTextBoxHintUnavailableEditPosition" xml:space="preserve">
+    <value>Unavailable edit position</value>
+  </data>
+  <data name="MaskedTextBoxHintNonEditPosition" xml:space="preserve">
+    <value>Non edit position</value>
+  </data>
+  <data name="MaskedTextBoxHintPositionOutOfRange" xml:space="preserve">
+    <value>Position out of range</value>
+  </data>
+  <data name="MaskedTextBoxHintInvalidInput" xml:space="preserve">
+    <value>Invalid input character</value>
   </data>
 </root>
