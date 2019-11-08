@@ -25,11 +25,11 @@ namespace System.Windows.Forms
     [DefaultProperty("Text")]
     public class TabPage : Panel
     {
-        private ImageList.Indexer imageIndexer;
-        private string toolTipText = string.Empty;
-        private bool enterFired = false;
-        private bool leaveFired = false;
-        private bool useVisualStyleBackColor = false;
+        private ImageList.Indexer _imageIndexer;
+        private string _toolTipText = string.Empty;
+        private bool _enterFired = false;
+        private bool _leaveFired = false;
+        private bool _useVisualStyleBackColor = false;
 
         /// <summary>
         ///  Constructs an empty TabPage.
@@ -113,12 +113,9 @@ namespace System.Windows.Forms
                 {
                     if (value != Color.Empty)
                     {
-                        PropertyDescriptor pd = TypeDescriptor.GetProperties(this)["UseVisualStyleBackColor"];
+                        PropertyDescriptor pd = TypeDescriptor.GetProperties(this)[nameof(UseVisualStyleBackColor)];
                         Debug.Assert(pd != null);
-                        if (pd != null)
-                        {
-                            pd.SetValue(this, false);
-                        }
+                        pd?.SetValue(this, false);
                     }
                 }
                 else
@@ -135,7 +132,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected override ControlCollection CreateControlsInstance() => new TabPageControlCollection(this);
 
-        internal ImageList.Indexer ImageIndexer => imageIndexer ??= new ImageList.Indexer();
+        internal ImageList.Indexer ImageIndexer => _imageIndexer ??= new ImageList.Indexer();
 
         /// <summary>
         ///  Returns the imageIndex for the TabPage. This should point to an image
@@ -238,15 +235,15 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.TabItemUseVisualStyleBackColorDescr))]
         public bool UseVisualStyleBackColor
         {
-            get => useVisualStyleBackColor;
+            get => _useVisualStyleBackColor;
             set
             {
-                if (useVisualStyleBackColor == value)
+                if (_useVisualStyleBackColor == value)
                 {
                     return;
                 }
 
-                useVisualStyleBackColor = value;
+                _useVisualStyleBackColor = value;
                 Invalidate(true);
             }
         }
@@ -276,7 +273,6 @@ namespace System.Windows.Forms
         public override Size MaximumSize
         {
             get => base.MaximumSize;
-
             set => base.MaximumSize = value;
         }
 
@@ -285,7 +281,6 @@ namespace System.Windows.Forms
         public override Size MinimumSize
         {
             get => base.MinimumSize;
-
             set => base.MinimumSize = value;
         }
 
@@ -362,7 +357,7 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.TabItemToolTipTextDescr))]
         public string ToolTipText
         {
-            get => toolTipText;
+            get => _toolTipText;
             set
             {
                 if (value == null)
@@ -370,12 +365,12 @@ namespace System.Windows.Forms
                     value = string.Empty;
                 }
 
-                if (value == toolTipText)
+                if (value == _toolTipText)
                 {
                     return;
                 }
 
-                toolTipText = value;
+                _toolTipText = value;
                 UpdateParent();
             }
         }
@@ -431,7 +426,7 @@ namespace System.Windows.Forms
 
         internal NativeMethods.TCITEM_T GetTCITEM()
         {
-            NativeMethods.TCITEM_T tcitem = new NativeMethods.TCITEM_T
+            var tcitem = new NativeMethods.TCITEM_T
             {
                 mask = 0,
                 pszText = null,
@@ -501,7 +496,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal void FireLeave(EventArgs e)
         {
-            leaveFired = true;
+            _leaveFired = true;
             OnLeave(e);
         }
 
@@ -510,7 +505,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal void FireEnter(EventArgs e)
         {
-            enterFired = true;
+            _enterFired = true;
             OnEnter(e);
         }
 
@@ -527,12 +522,12 @@ namespace System.Windows.Forms
         {
             if (ParentInternal is TabControl parent)
             {
-                if (enterFired)
+                if (_enterFired)
                 {
                     base.OnEnter(e);
                 }
 
-                enterFired = false;
+                _enterFired = false;
             }
         }
 
@@ -550,12 +545,12 @@ namespace System.Windows.Forms
         {
             if (ParentInternal is TabControl parent)
             {
-                if (leaveFired)
+                if (_leaveFired)
                 {
                     base.OnLeave(e);
                 }
 
-                leaveFired = false;
+                _leaveFired = false;
             }
         }
 
