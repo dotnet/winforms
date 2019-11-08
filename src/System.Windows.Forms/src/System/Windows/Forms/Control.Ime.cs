@@ -15,26 +15,7 @@ namespace System.Windows.Forms
     /// <summary>
     ///  Control's IME feature.
     /// </summary>
-    public partial class Control :
-        Component,
-        UnsafeNativeMethods.IOleControl,
-        UnsafeNativeMethods.IOleObject,
-        Ole32.IOleInPlaceObject,
-        Ole32.IOleInPlaceActiveObject,
-        Ole32.IOleWindow,
-        UnsafeNativeMethods.IViewObject,
-        UnsafeNativeMethods.IViewObject2,
-        UnsafeNativeMethods.IPersist,
-        Ole32.IPersistStreamInit,
-        UnsafeNativeMethods.IPersistPropertyBag,
-        Ole32.IPersistStorage,
-        UnsafeNativeMethods.IQuickActivate,
-        ISupportOleDropSource,
-        IDropTarget,
-        ISynchronizeInvoke,
-        IWin32Window,
-        IArrangedElement,
-        IBindableComponent
+    public partial class Control
     {
         /// <summary>
         ///  Constants starting/ending the WM_CHAR messages to ignore count.  See ImeWmCharsToIgnore property.

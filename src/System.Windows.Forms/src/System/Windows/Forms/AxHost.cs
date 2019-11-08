@@ -181,7 +181,7 @@ namespace System.Windows.Forms
         private object instance;
         private Ole32.IOleInPlaceObject iOleInPlaceObject;
         private UnsafeNativeMethods.IOleObject iOleObject;
-        private UnsafeNativeMethods.IOleControl iOleControl;
+        private Ole32.IOleControl iOleControl;
         private Ole32.IOleInPlaceActiveObject iOleInPlaceActiveObject;
         private Ole32.IOleInPlaceActiveObject iOleInPlaceActiveObjectExternal;
         private Ole32.IPerPropertyBrowsing iPerPropertyBrowsing;
@@ -1016,8 +1016,7 @@ namespace System.Windows.Forms
             {
                 // if it is, call DISPID_AMBIENT_DISPLAYNAME directly on the
                 // control itself.
-                //
-                if (GetOcx() is UnsafeNativeMethods.IOleControl oleCtl)
+                if (GetOcx() is Ole32.IOleControl oleCtl)
                 {
                     oleCtl.OnAmbientPropertyChange(Ole32.DispatchID.AMBIENT_DISPLAYNAME);
                 }
@@ -3920,7 +3919,7 @@ namespace System.Windows.Forms
             return container;
         }
 
-        private UnsafeNativeMethods.IOleControl GetOleControl() => iOleControl ??= (UnsafeNativeMethods.IOleControl)instance;
+        private Ole32.IOleControl GetOleControl() => iOleControl ??= (Ole32.IOleControl)instance;
 
         private Ole32.IOleInPlaceActiveObject GetInPlaceActiveObject()
         {

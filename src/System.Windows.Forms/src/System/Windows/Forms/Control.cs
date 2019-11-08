@@ -46,7 +46,7 @@ namespace System.Windows.Forms
     ]
     public partial class Control :
         Component,
-        UnsafeNativeMethods.IOleControl,
+        Ole32.IOleControl,
         UnsafeNativeMethods.IOleObject,
         Ole32.IOleInPlaceObject,
         Ole32.IOleInPlaceActiveObject,
@@ -13771,7 +13771,7 @@ namespace System.Windows.Forms
             OnQueryContinueDrag(queryContinueDragEventArgs);
         }
 
-        unsafe HRESULT UnsafeNativeMethods.IOleControl.GetControlInfo(Ole32.CONTROLINFO* pCI)
+        unsafe HRESULT Ole32.IOleControl.GetControlInfo(Ole32.CONTROLINFO* pCI)
         {
             if (pCI == null)
             {
@@ -13796,7 +13796,7 @@ namespace System.Windows.Forms
             return ActiveXInstance.GetControlInfo(pCI);
         }
 
-        unsafe HRESULT UnsafeNativeMethods.IOleControl.OnMnemonic(User32.MSG* pMsg)
+        unsafe HRESULT Ole32.IOleControl.OnMnemonic(User32.MSG* pMsg)
         {
             if (pMsg == null)
             {
@@ -13810,7 +13810,7 @@ namespace System.Windows.Forms
             return HRESULT.S_OK;
         }
 
-        HRESULT UnsafeNativeMethods.IOleControl.OnAmbientPropertyChange(Ole32.DispatchID dispID)
+        HRESULT Ole32.IOleControl.OnAmbientPropertyChange(Ole32.DispatchID dispID)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:OnAmbientPropertyChange.  Dispid: " + dispID);
             Debug.Indent();
@@ -13819,7 +13819,7 @@ namespace System.Windows.Forms
             return HRESULT.S_OK;
         }
 
-        HRESULT UnsafeNativeMethods.IOleControl.FreezeEvents(BOOL bFreeze)
+        HRESULT Ole32.IOleControl.FreezeEvents(BOOL bFreeze)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:FreezeEvents.  Freeze: " + bFreeze);
             ActiveXInstance.EventsFrozen = bFreeze.IsTrue();
