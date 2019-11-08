@@ -4,6 +4,7 @@
 
 using System.ComponentModel;
 using System.Diagnostics;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -14,18 +15,18 @@ namespace System.Windows.Forms
         /// </summary>
         private class ActiveXVerbEnum : UnsafeNativeMethods.IEnumOLEVERB
         {
-            private readonly NativeMethods.tagOLEVERB[] _verbs;
-            private int _current;
+            private readonly Ole32.OLEVERB[] _verbs;
+            private uint _current;
 
-            internal ActiveXVerbEnum(NativeMethods.tagOLEVERB[] verbs)
+            internal ActiveXVerbEnum(Ole32.OLEVERB[] verbs)
             {
                 _verbs = verbs;
                 _current = 0;
             }
 
-            public int Next(int celt, NativeMethods.tagOLEVERB rgelt, int[] pceltFetched)
+            public unsafe HRESULT Next(uint celt, Ole32.OLEVERB rgelt, uint* pceltFetched)
             {
-                int fetched = 0;
+                uint fetched = 0;
 
                 if (celt != 1)
                 {
@@ -46,7 +47,7 @@ namespace System.Windows.Forms
 
                 if (pceltFetched != null)
                 {
-                    pceltFetched[0] = fetched;
+                    *pceltFetched = fetched;
                 }
 
 #if DEBUG
@@ -54,38 +55,38 @@ namespace System.Windows.Forms
                 {
                     Debug.WriteLine($"AxSource:IEnumOLEVERB::Next returning {fetched} verbs:");
                     Debug.Indent();
-                    for (int i = _current - fetched; i < _current; i++)
+                    for (uint i = _current - fetched; i < _current; i++)
                     {
                         Debug.WriteLine($"{i}: {_verbs[i].lVerb} {_verbs[i].lpszVerbName ?? string.Empty}");
                     }
                     Debug.Unindent();
                 }
 #endif
-                return (celt == 0 ? NativeMethods.S_OK : NativeMethods.S_FALSE);
+                return (celt == 0 ? HRESULT.S_OK : HRESULT.S_FALSE);
             }
 
-            public int Skip(int celt)
+            public HRESULT Skip(uint celt)
             {
                 if (_current + celt < _verbs.Length)
                 {
                     _current += celt;
-                    return NativeMethods.S_OK;
+                    return HRESULT.S_OK;
                 }
-                else
-                {
-                    _current = _verbs.Length;
-                    return NativeMethods.S_FALSE;
-                }
+
+                _current = (uint)_verbs.Length;
+                return HRESULT.S_FALSE;
             }
 
-            public void Reset()
+            public HRESULT Reset()
             {
                 _current = 0;
+                return HRESULT.S_OK;
             }
 
-            public void Clone(out UnsafeNativeMethods.IEnumOLEVERB ppenum)
+            public HRESULT Clone(out UnsafeNativeMethods.IEnumOLEVERB ppenum)
             {
                 ppenum = new ActiveXVerbEnum(_verbs);
+                return HRESULT.S_OK;
             }
         }
     }

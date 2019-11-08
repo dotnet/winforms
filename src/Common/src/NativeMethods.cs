@@ -1586,21 +1586,6 @@ namespace System.Windows.Forms
             }
         }
 
-        [StructLayout(LayoutKind.Sequential)/*leftover(noAutoOffset)*/]
-        public sealed class tagOLEVERB
-        {
-            public Ole32.OLEIVERB lVerb;
-
-            [MarshalAs(UnmanagedType.LPWStr)/*leftover(offset=4, customMarshal="UniStringMarshaller", lpszVerbName)*/]
-            public string lpszVerbName;
-
-            [MarshalAs(UnmanagedType.U4)/*leftover(offset=8, fuFlags)*/]
-            public int fuFlags;
-
-            [MarshalAs(UnmanagedType.U4)/*leftover(offset=12, grfAttribs)*/]
-            public int grfAttribs;
-        }
-
         [StructLayout(LayoutKind.Sequential)]
         public sealed class tagDVTARGETDEVICE
         {
@@ -2057,8 +2042,6 @@ namespace System.Windows.Forms
             public const int ALIGN_LEFT = 0x3;
             public const int ALIGN_RIGHT = 0x4;
             public const int ALIGN_MAX = 0x4;
-            public const int OLEVERBATTRIB_NEVERDIRTIES = 0x1;
-            public const int OLEVERBATTRIB_ONCONTAINERMENU = 0x2;
 
             public static Guid IID_IUnknown = new Guid("{00000000-0000-0000-C000-000000000046}");
 

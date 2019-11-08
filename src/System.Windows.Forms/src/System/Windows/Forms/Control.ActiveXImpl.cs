@@ -43,7 +43,7 @@ namespace System.Windows.Forms
             private static readonly int s_adjustingRect = BitVector32.CreateMask(s_uiDead);
 
             private static Point s_logPixels = Point.Empty;
-            private static NativeMethods.tagOLEVERB[] s_axVerbs;
+            private static Ole32.OLEVERB[] s_axVerbs;
 
             private static int s_globalActiveXCount = 0;
             private static bool s_checkedIE;
@@ -519,16 +519,16 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Returns a new verb enumerator.
             /// </summary>
-            internal static int EnumVerbs(out UnsafeNativeMethods.IEnumOLEVERB e)
+            internal static HRESULT EnumVerbs(out UnsafeNativeMethods.IEnumOLEVERB e)
             {
                 if (s_axVerbs == null)
                 {
-                    NativeMethods.tagOLEVERB verbShow = new NativeMethods.tagOLEVERB();
-                    NativeMethods.tagOLEVERB verbInplaceActivate = new NativeMethods.tagOLEVERB();
-                    NativeMethods.tagOLEVERB verbUIActivate = new NativeMethods.tagOLEVERB();
-                    NativeMethods.tagOLEVERB verbHide = new NativeMethods.tagOLEVERB();
-                    NativeMethods.tagOLEVERB verbPrimary = new NativeMethods.tagOLEVERB();
-                    NativeMethods.tagOLEVERB verbProperties = new NativeMethods.tagOLEVERB();
+                    var verbShow = new Ole32.OLEVERB();
+                    var verbInplaceActivate = new Ole32.OLEVERB();
+                    var verbUIActivate = new Ole32.OLEVERB();
+                    var verbHide = new Ole32.OLEVERB();
+                    var verbPrimary = new Ole32.OLEVERB();
+                    var verbProperties = new Ole32.OLEVERB();
 
                     verbShow.lVerb = Ole32.OLEIVERB.SHOW;
                     verbInplaceActivate.lVerb = Ole32.OLEIVERB.INPLACEACTIVATE;
@@ -537,9 +537,10 @@ namespace System.Windows.Forms
                     verbPrimary.lVerb = Ole32.OLEIVERB.PRIMARY;
                     verbProperties.lVerb = Ole32.OLEIVERB.PROPERTIES;
                     verbProperties.lpszVerbName = SR.AXProperties;
-                    verbProperties.grfAttribs = NativeMethods.ActiveX.OLEVERBATTRIB_ONCONTAINERMENU;
+                    verbProperties.grfAttribs = Ole32.OLEVERBATTRIB.ONCONTAINERMENU;
 
-                    s_axVerbs = new NativeMethods.tagOLEVERB[] {
+                    s_axVerbs = new Ole32.OLEVERB[]
+                    {
                         verbShow,
                         verbInplaceActivate,
                         verbUIActivate,
@@ -549,7 +550,7 @@ namespace System.Windows.Forms
                 }
 
                 e = new ActiveXVerbEnum(s_axVerbs);
-                return NativeMethods.S_OK;
+                return HRESULT.S_OK;
             }
 
             /// <summary>

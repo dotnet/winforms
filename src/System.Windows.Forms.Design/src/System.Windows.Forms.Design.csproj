@@ -121,6 +121,8 @@
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.OLEIVERB.cs" Link="Interop\Ole32\Interop.OLEIVERB.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.OLEMENUGROUPWIDTHS.cs" Link="Interop\Ole32\Interop.OLEMENUGROUPWIDTHS.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.OLEMISC.cs" Link="Interop\Ole32\Interop.OLEMISC.cs" />
+    <Compile Include="..\..\Common\src\Interop\Ole32\Interop.OLEVERB.cs" Link="Interop\Ole32\Interop.OLEVERB.cs" />
+    <Compile Include="..\..\Common\src\Interop\Ole32\Interop.OLEVERBATTRIB.cs" Link="Interop\Ole32\Interop.OLEVERBATTRIB.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.OLEWHICHMK.cs" Link="Interop\Ole32\Interop.OLEWHICHMK.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.PARAMDESC.cs" Link="Interop\Ole32\Interop.PARAMDESC.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.PARAMFLAG.cs" Link="Interop\Ole32\Interop.PARAMFLAG.cs" />
@@ -166,6 +168,7 @@
     <Compile Include="..\..\Common\src\Interop\User32\Interop.IsProcessDPIAware.cs" Link="Interop\User32\Interop.IsProcessDPIAware.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.IsValidDpiAwarenessContext.cs" Link="Interop\User32\Interop.IsValidDpiAwarenessContext.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.MapWindowPoints.cs" Link="Interop\User32\Interop.MapWindowPoints.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.MF.cs" Link="Interop\User32\Interop.MF.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.MK.cs" Link="Interop\User32\Interop.MK.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.MSG.cs" Link="Interop\User32\Interop.MSG.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.MsgWaitForMultipleObjectsEx.cs" Link="Interop\User32\Interop.MsgWaitForMultipleObjectsEx.cs" />
