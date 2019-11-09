@@ -30,7 +30,7 @@ namespace System.Windows.Forms
         // Reference to the native ActiveX control's IWebBrowser2
         // Do not reference this directly. Use the AxIWebBrowser2
         // property instead.
-        private UnsafeNativeMethods.IWebBrowser2 axIWebBrowser2;
+        private Mshtml.IWebBrowser2 axIWebBrowser2;
 
         private AxHost.ConnectionPointCookie cookie;   // To hook up events from the native WebBrowser
         private Stream documentStreamToSetOnLoad;
@@ -1072,7 +1072,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void AttachInterfaces(object nativeActiveXObject)
         {
-            axIWebBrowser2 = (UnsafeNativeMethods.IWebBrowser2)nativeActiveXObject;
+            axIWebBrowser2 = (Mshtml.IWebBrowser2)nativeActiveXObject;
         }
 
         /// <summary>
@@ -1427,7 +1427,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private UnsafeNativeMethods.IWebBrowser2 AxIWebBrowser2
+        private Mshtml.IWebBrowser2 AxIWebBrowser2
         {
             get
             {
