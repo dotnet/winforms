@@ -1903,7 +1903,7 @@ namespace System.Windows.Forms
                             {
                                 ApplyTopMost(true);
                             }
-                            else if (IsHandleCreated && SafeNativeMethods.IsWindowEnabled(new HandleRef(this, Handle)))
+                            else if (IsHandleCreated && User32.IsWindowEnabled(this).IsTrue())
                             {
                                 User32.SetWindowPos(
                                     new HandleRef(this, Handle),

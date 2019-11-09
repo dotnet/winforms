@@ -29,9 +29,6 @@ namespace System.Windows.Forms.Design
         public static extern IntPtr GetDlgItem(IntPtr hWnd, int nIDDlgItem);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern bool EnableWindow(IntPtr hWnd, bool enable);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern int GetDlgItemInt(IntPtr hWnd, int nIDDlgItem, bool[] err, bool signed);
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]

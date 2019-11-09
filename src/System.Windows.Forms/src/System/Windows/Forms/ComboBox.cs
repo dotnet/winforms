@@ -6136,13 +6136,7 @@ namespace System.Windows.Forms
                 return true;
             }
 
-            internal bool Visible
-            {
-                get
-                {
-                    return SafeNativeMethods.IsWindowVisible(new HandleRef(this, Handle));
-                }
-            }
+            internal bool Visible => User32.IsWindowVisible(this).IsTrue();
 
             static internal bool AutoCompleteActive
             {

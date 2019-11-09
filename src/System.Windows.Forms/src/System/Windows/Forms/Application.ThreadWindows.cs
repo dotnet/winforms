@@ -43,7 +43,7 @@ namespace System.Windows.Forms
                 // We only do visible and enabled windows.  Also, we only do top level windows.
                 // Finally, we only include windows that are DNA windows, since other MSO components
                 // will be responsible for disabling their own windows.
-                if (SafeNativeMethods.IsWindowVisible(new HandleRef(null, hWnd)) && SafeNativeMethods.IsWindowEnabled(new HandleRef(null, hWnd)))
+                if (User32.IsWindowVisible(hWnd).IsTrue() && User32.IsWindowEnabled(hWnd).IsTrue())
                 {
                     bool add = true;
 
@@ -111,7 +111,7 @@ namespace System.Windows.Forms
                     Debug.WriteLineIf(CompModSwitches.MSOComponentManager.TraceInfo, "ComponentManager : Changing enabled on window: " + hWnd.ToString() + " : " + state.ToString());
                     if (UnsafeNativeMethods.IsWindow(new HandleRef(null, hWnd)))
                     {
-                        SafeNativeMethods.EnableWindow(new HandleRef(null, hWnd), state);
+                        User32.EnableWindow(hWnd, state.ToBOOL());
                     }
                 }
 
