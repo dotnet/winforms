@@ -1481,7 +1481,7 @@ namespace System.ComponentModel.Design.Tests
             var component = new RootDesignerComponent();
             host.Container.Add(component);
             INestedContainer nestedContainer = Assert.IsAssignableFrom<INestedContainer>(component.Site.GetService(typeof(INestedContainer)));
-            Assert.Null(component.Site.GetService(typeof(int)));
+            Assert.Same(service, component.Site.GetService(typeof(int)));
             Assert.Same(component.Site, component.Site.GetService(typeof(IDictionaryService)));
             Assert.Same(nestedContainer, component.Site.GetService(typeof(INestedContainer)));
         }
