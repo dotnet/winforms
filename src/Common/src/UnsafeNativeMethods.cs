@@ -1325,36 +1325,34 @@ namespace System.Windows.Forms
             HRESULT GetContentExtent(Size* pSizel);
         }
 
-        [ComImport(), Guid("55272A00-42CB-11CE-8135-00AA004BB851"),
-        InterfaceType(ComInterfaceType.InterfaceIsIUnknown)
-        ]
+        [ComImport]
+        [Guid("55272A00-42CB-11CE-8135-00AA004BB851")]
+        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
         public interface IPropertyBag
         {
             [PreserveSig]
-            int Read(
-                [In, MarshalAs(UnmanagedType.LPWStr)]
+            HRESULT Read(
+                [MarshalAs(UnmanagedType.LPWStr)]
                 string pszPropName,
-                [In, Out]
                 ref object pVar,
-                [In]
                 IErrorLog pErrorLog);
 
             [PreserveSig]
-            int Write(
-                [In, MarshalAs(UnmanagedType.LPWStr)]
+            HRESULT Write(
+                [MarshalAs(UnmanagedType.LPWStr)]
                 string pszPropName,
-                [In]
                 ref object pVar);
         }
 
-        [ComImport(), Guid("3127CA40-446E-11CE-8135-00AA004BB851"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IErrorLog
+        [ComImport]
+        [Guid("3127CA40-446E-11CE-8135-00AA004BB851")]
+        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+        public unsafe interface IErrorLog
         {
-            void AddError(
-                   [In, MarshalAs(UnmanagedType.LPWStr)]
-                             string pszPropName_p0,
-                   [In, MarshalAs(UnmanagedType.Struct)]
-                              NativeMethods.tagEXCEPINFO pExcepInfo_p1);
+            [PreserveSig]
+            HRESULT AddError(
+                [MarshalAs(UnmanagedType.LPWStr)] string pszPropName,
+                Ole32.EXCEPINFO* pExcepInfo);
         }
 
         [ComImport(),
@@ -1516,7 +1514,7 @@ namespace System.Windows.Forms
                 uint dwFlags,
                 Ole32.DISPPARAMS* pDispParams,
                 [Out, MarshalAs(UnmanagedType.LPArray)] object[] pVarResult,
-                [Out, In] NativeMethods.tagEXCEPINFO pExcepInfo,
+                Ole32.EXCEPINFO* pExcepInfo,
                 IntPtr* pArgErr);
         }
 
