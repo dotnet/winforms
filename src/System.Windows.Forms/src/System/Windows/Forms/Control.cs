@@ -14309,9 +14309,17 @@ namespace System.Windows.Forms
             return Interop.HRESULT.S_OK;
         }
 
-        int UnsafeNativeMethods.IViewObject.Draw(Ole32.DVASPECT dwDrawAspect, int lindex, IntPtr pvAspect, NativeMethods.tagDVTARGETDEVICE ptd,
-                                            IntPtr hdcTargetDev, IntPtr hdcDraw, NativeMethods.COMRECT lprcBounds, NativeMethods.COMRECT lprcWBounds,
-                                            IntPtr pfnContinue, int dwContinue)
+        unsafe HRESULT UnsafeNativeMethods.IViewObject.Draw(
+            Ole32.DVASPECT dwDrawAspect,
+            int lindex,
+            IntPtr pvAspect,
+            Ole32.DVTARGETDEVICE* ptd,
+            IntPtr hdcTargetDev,
+            IntPtr hdcDraw,
+            NativeMethods.COMRECT lprcBounds,
+            NativeMethods.COMRECT lprcWBounds,
+            IntPtr pfnContinue,
+            int dwContinue)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:Draw");
 
@@ -14324,20 +14332,20 @@ namespace System.Windows.Forms
             }
             catch (ExternalException ex)
             {
-                return ex.ErrorCode;
+                return (HRESULT)ex.ErrorCode;
             }
             finally
             {
                 Debug.Unindent();
             }
-            return NativeMethods.S_OK;
+            return HRESULT.S_OK;
         }
 
         unsafe HRESULT UnsafeNativeMethods.IViewObject.GetColorSet(
             Ole32.DVASPECT dwDrawAspect,
             int lindex,
             IntPtr pvAspect,
-            NativeMethods.tagDVTARGETDEVICE ptd,
+            Ole32.DVTARGETDEVICE* ptd,
             IntPtr hicTargetDev,
             Gdi32.LOGPALETTE* ppColorSet)
         {
@@ -14371,9 +14379,17 @@ namespace System.Windows.Forms
             return ActiveXInstance.GetAdvise(pAspects, pAdvf, ppAdvSink);
         }
 
-        void UnsafeNativeMethods.IViewObject2.Draw(Ole32.DVASPECT dwDrawAspect, int lindex, IntPtr pvAspect, NativeMethods.tagDVTARGETDEVICE ptd,
-                                             IntPtr hdcTargetDev, IntPtr hdcDraw, NativeMethods.COMRECT lprcBounds, NativeMethods.COMRECT lprcWBounds,
-                                             IntPtr pfnContinue, int dwContinue)
+        unsafe void UnsafeNativeMethods.IViewObject2.Draw(
+            Ole32.DVASPECT dwDrawAspect,
+            int lindex,
+            IntPtr pvAspect,
+            Ole32.DVTARGETDEVICE* ptd,
+            IntPtr hdcTargetDev,
+            IntPtr hdcDraw,
+            NativeMethods.COMRECT lprcBounds,
+            NativeMethods.COMRECT lprcWBounds,
+            IntPtr pfnContinue,
+            int dwContinue)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:Draw");
             Debug.Indent();
@@ -14386,7 +14402,7 @@ namespace System.Windows.Forms
             Ole32.DVASPECT dwDrawAspect,
             int lindex,
             IntPtr pvAspect,
-            NativeMethods.tagDVTARGETDEVICE ptd,
+            Ole32.DVTARGETDEVICE* ptd,
             IntPtr hicTargetDev,
             Gdi32.LOGPALETTE* ppColorSet)
         {
@@ -14420,7 +14436,7 @@ namespace System.Windows.Forms
             return ActiveXInstance.GetAdvise(pAspects, pAdvf, ppAdvSink);
         }
 
-        unsafe Interop.HRESULT UnsafeNativeMethods.IViewObject2.GetExtent(Ole32.DVASPECT dwDrawAspect, int lindex, NativeMethods.tagDVTARGETDEVICE ptd, Size *lpsizel)
+        unsafe Interop.HRESULT UnsafeNativeMethods.IViewObject2.GetExtent(Ole32.DVASPECT dwDrawAspect, int lindex, Ole32.DVTARGETDEVICE* ptd, Size *lpsizel)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetExtent (IViewObject2)");
             // we already have an implementation of this [from IOleObject]
