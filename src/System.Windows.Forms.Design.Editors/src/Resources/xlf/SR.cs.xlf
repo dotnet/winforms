@@ -27,6 +27,16 @@
         <target state="translated">Nahoru</target>
         <note />
       </trans-unit>
+      <trans-unit id="CellStyleBuilderNormalPreviewAccName">
+        <source>Normal Preview</source>
+        <target state="new">Normal Preview</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CellStyleBuilderSelectedPreviewAccName">
+        <source>Selected Preview</source>
+        <target state="new">Selected Preview</target>
+        <note />
+      </trans-unit>
       <trans-unit id="CollectionEditorCantRemoveItem">
         <source>The item '{0}' cannot be removed.</source>
         <target state="translated">Položku {0} nelze odebrat.</target>
