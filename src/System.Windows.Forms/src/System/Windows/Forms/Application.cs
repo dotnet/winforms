@@ -847,7 +847,7 @@ namespace System.Windows.Forms
             if (assemblyLoc != null)
             {
                 // CSC embeds DLL manifests as resource ID 2
-                UseVisualStyles = UnsafeNativeMethods.ThemingScope.CreateActivationContext(assemblyLoc, nativeResourceManifestID: 2);
+                UseVisualStyles = ThemingScope.CreateActivationContext(assemblyLoc, nativeResourceManifestID: 2);
                 Debug.Assert(UseVisualStyles, "Enable Visual Styles failed");
             }
         }

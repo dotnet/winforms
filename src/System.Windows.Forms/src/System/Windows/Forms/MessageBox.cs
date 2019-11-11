@@ -415,7 +415,7 @@ namespace System.Windows.Forms
 
                 // Activate theming scope to get theming for controls at design time and when hosted in browser.
                 // NOTE: If a theming context is already active, this call is very fast, so shouldn't be a perf issue.
-                userCookie = UnsafeNativeMethods.ThemingScope.Activate();
+                userCookie = ThemingScope.Activate();
             }
 
             Application.BeginModalMessageLoop();
@@ -427,7 +427,7 @@ namespace System.Windows.Forms
             finally
             {
                 Application.EndModalMessageLoop();
-                UnsafeNativeMethods.ThemingScope.Deactivate(userCookie);
+                ThemingScope.Deactivate(userCookie);
             }
 
             // Right after the dialog box is closed, Windows sends WM_SETFOCUS back to the previously active control
