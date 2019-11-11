@@ -936,7 +936,7 @@ namespace System.Windows.Forms
                     if (originalImeContext == IntPtr.Zero)
                     {
                         Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Verbose, "ImmCreateContext()");
-                        inputContext = UnsafeNativeMethods.ImmCreateContext();
+                        inputContext = Imm32.ImmCreateContext();
                         if (inputContext != IntPtr.Zero)
                         {
                             Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Verbose, "ImmAssociateContext(" + handle + ", " + inputContext + ")");
