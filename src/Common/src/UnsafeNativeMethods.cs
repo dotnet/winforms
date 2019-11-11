@@ -1590,9 +1590,9 @@ namespace System.Windows.Forms
         /// </summary>
         internal class ThemingScope
         {
-            private static ACTCTX enableThemingActivationContext;
-            private static IntPtr hActCtx;
-            private static bool contextCreationSucceeded;
+            private static Kernel32.ACTCTXW s_enableThemingActivationContext;
+            private static IntPtr s_hActCtx;
+            private static bool s_contextCreationSucceeded;
 
             /// <summary>
             ///  We now use explicitactivate everywhere and use this method to determine if we
@@ -1600,12 +1600,11 @@ namespace System.Windows.Forms
             /// </summary>
             private static bool IsContextActive()
             {
-                IntPtr current = IntPtr.Zero;
-
-                if (contextCreationSucceeded && GetCurrentActCtx(out current))
+                if (s_contextCreationSucceeded && Kernel32.GetCurrentActCtx(out IntPtr current).IsTrue())
                 {
-                    return current == hActCtx;
+                    return current == s_hActCtx;
                 }
+
                 return false;
             }
 
@@ -1619,11 +1618,11 @@ namespace System.Windows.Forms
             {
                 IntPtr userCookie = IntPtr.Zero;
 
-                if (Application.UseVisualStyles && contextCreationSucceeded && OSFeature.Feature.IsPresent(OSFeature.Themes))
+                if (Application.UseVisualStyles && s_contextCreationSucceeded && OSFeature.Feature.IsPresent(OSFeature.Themes))
                 {
                     if (!IsContextActive())
                     {
-                        if (!ActivateActCtx(hActCtx, out userCookie))
+                        if (!Kernel32.ActivateActCtx(s_hActCtx, out userCookie))
                         {
                             // Be sure cookie always zero if activation failed
                             userCookie = IntPtr.Zero;
@@ -1641,7 +1640,7 @@ namespace System.Windows.Forms
             {
                 if (userCookie != IntPtr.Zero && OSFeature.Feature.IsPresent(OSFeature.Themes))
                 {
-                    if (DeactivateActCtx(0, userCookie))
+                    if (Kernel32.DeactivateActCtx(0, userCookie).IsTrue())
                     {
                         // deactivation succeeded...
                         userCookie = IntPtr.Zero;
@@ -1651,55 +1650,29 @@ namespace System.Windows.Forms
                 return userCookie;
             }
 
-            public static bool CreateActivationContext(string dllPath, int nativeResourceManifestID)
+            public unsafe static bool CreateActivationContext(string dllPath, int nativeResourceManifestID)
             {
                 lock (typeof(ThemingScope))
                 {
-                    if (!contextCreationSucceeded && OSFeature.Feature.IsPresent(OSFeature.Themes))
+                    if (!s_contextCreationSucceeded && OSFeature.Feature.IsPresent(OSFeature.Themes))
                     {
-
-                        enableThemingActivationContext = new ACTCTX
+                        fixed (char* pDllPath = dllPath)
                         {
-                            cbSize = Marshal.SizeOf<ACTCTX>(),
-                            lpSource = dllPath,
-                            lpResourceName = (IntPtr)nativeResourceManifestID,
-                            dwFlags = ACTCTX_FLAG_RESOURCE_NAME_VALID
-                        };
+                            s_enableThemingActivationContext = new Kernel32.ACTCTXW
+                            {
+                                cbSize = (uint)Marshal.SizeOf<Kernel32.ACTCTXW>(),
+                                lpSource = pDllPath,
+                                lpResourceName = (IntPtr)nativeResourceManifestID,
+                                dwFlags = Kernel32.ACTCTX_FLAG.RESOURCE_NAME_VALID
+                            };
 
-                        hActCtx = CreateActCtx(ref enableThemingActivationContext);
-                        contextCreationSucceeded = (hActCtx != new IntPtr(-1));
+                            s_hActCtx = Kernel32.CreateActCtxW(ref s_enableThemingActivationContext);
+                        }
+                        s_contextCreationSucceeded = (s_hActCtx != new IntPtr(-1));
                     }
 
-                    return contextCreationSucceeded;
+                    return s_contextCreationSucceeded;
                 }
-            }
-
-            // All the pinvoke goo...
-            [DllImport(ExternDll.Kernel32)]
-
-            private extern static IntPtr CreateActCtx(ref ACTCTX actctx);
-            [DllImport(ExternDll.Kernel32)]
-
-            private extern static bool ActivateActCtx(IntPtr hActCtx, out IntPtr lpCookie);
-            [DllImport(ExternDll.Kernel32)]
-
-            private extern static bool DeactivateActCtx(int dwFlags, IntPtr lpCookie);
-            [DllImport(ExternDll.Kernel32)]
-
-            private extern static bool GetCurrentActCtx(out IntPtr handle);
-
-            private const int ACTCTX_FLAG_RESOURCE_NAME_VALID = 0x008;
-
-            private struct ACTCTX
-            {
-                public int cbSize;
-                public uint dwFlags;
-                public string lpSource;
-                public ushort wProcessorArchitecture;
-                public ushort wLangId;
-                public string lpAssemblyDirectory;
-                public IntPtr lpResourceName;
-                public string lpApplicationName;
             }
         }
 
