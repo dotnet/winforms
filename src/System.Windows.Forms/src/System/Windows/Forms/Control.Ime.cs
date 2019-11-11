@@ -1286,7 +1286,7 @@ namespace System.Windows.Forms
                 if (inputContext != IntPtr.Zero)
                 {
                     Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Verbose, "ImmSetOpenStatus(" + inputContext + ", " + open + ")");
-                    bool succeeded = UnsafeNativeMethods.ImmSetOpenStatus(new HandleRef(null, inputContext), open);
+                    bool succeeded = Imm32.ImmSetOpenStatus(inputContext, open.ToBOOL()).IsTrue();
                     Debug.Assert(succeeded, "Could not set the IME open status.");
 
                     if (succeeded)

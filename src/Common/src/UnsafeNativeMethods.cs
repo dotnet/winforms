@@ -216,9 +216,6 @@ namespace System.Windows.Forms
         public static extern IntPtr ImmAssociateContext(HandleRef hWnd, HandleRef hIMC);
 
         [DllImport(ExternDll.Imm32, CharSet = CharSet.Auto)]
-        public static extern bool ImmSetOpenStatus(HandleRef hIMC, bool open);
-
-        [DllImport(ExternDll.Imm32, CharSet = CharSet.Auto)]
         public static extern bool ImmNotifyIME(HandleRef hIMC, int dwAction, int dwIndex, int dwValue);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
