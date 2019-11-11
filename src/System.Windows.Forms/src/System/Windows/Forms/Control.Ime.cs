@@ -927,7 +927,7 @@ namespace System.Windows.Forms
             if (ImeModeConversion.InputLanguageTable != ImeModeConversion.UnsupportedTable)
             {
                 Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Verbose, "ImmGetContext(" + handle + ")");
-                IntPtr inputContext = UnsafeNativeMethods.ImmGetContext(new HandleRef(null, handle));
+                IntPtr inputContext = Imm32.ImmGetContext(handle);
                 Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Verbose, "context = " + inputContext);
 
                 // Enable IME by associating the IME context to the window.
@@ -988,7 +988,7 @@ namespace System.Windows.Forms
             }
 
             Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Verbose, "ImmGetContext(" + handle + ")");
-            inputContext = UnsafeNativeMethods.ImmGetContext(new HandleRef(null, handle));
+            inputContext = Imm32.ImmGetContext(handle);
             Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Verbose, "context = " + inputContext);
 
             if (inputContext == IntPtr.Zero)
@@ -1083,7 +1083,7 @@ namespace System.Windows.Forms
                     goto cleanup;
                 }
 
-                inputContext = UnsafeNativeMethods.ImmGetContext(new HandleRef(null, handle));
+                inputContext = Imm32.ImmGetContext(handle);
 
                 if (inputContext == IntPtr.Zero)
                 {
@@ -1147,7 +1147,7 @@ namespace System.Windows.Forms
             Debug.Indent();
 
             Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Verbose, "ImmGetContext(" + handle + ")");
-            IntPtr inputContext = UnsafeNativeMethods.ImmGetContext(new HandleRef(null, handle));
+            IntPtr inputContext = Imm32.ImmGetContext(handle);
             Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Verbose, "context = " + inputContext);
 
             bool retval = false;
@@ -1248,7 +1248,7 @@ namespace System.Windows.Forms
                         ImeModeConversion conversionEntry = (ImeModeConversion)ImeModeConversion.ImeModeConversionBits[imeMode];
 
                         Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Verbose, "ImmGetContext(" + handle + ")");
-                        IntPtr inputContext = UnsafeNativeMethods.ImmGetContext(new HandleRef(null, handle));
+                        IntPtr inputContext = Imm32.ImmGetContext(handle);
                         Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Verbose, "context = " + inputContext);
                         Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Verbose, "ImmGetConversionStatus(" + inputContext + ", conversion, sentence)");
                         UnsafeNativeMethods.ImmGetConversionStatus(new HandleRef(null, inputContext), ref conversion, ref sentence);
@@ -1280,7 +1280,7 @@ namespace System.Windows.Forms
             if (ImeModeConversion.InputLanguageTable != ImeModeConversion.UnsupportedTable)
             {
                 Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Verbose, "ImmGetContext(" + handle + ")");
-                IntPtr inputContext = UnsafeNativeMethods.ImmGetContext(new HandleRef(null, handle));
+                IntPtr inputContext = Imm32.ImmGetContext(handle);
                 Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Verbose, "context = " + inputContext);
 
                 if (inputContext != IntPtr.Zero)

@@ -1168,8 +1168,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void ImeNotify(int action)
         {
-            HandleRef handle = new HandleRef(this, Handle);
-            IntPtr inputContext = UnsafeNativeMethods.ImmGetContext(handle);
+            IntPtr inputContext = Imm32.ImmGetContext(this);
 
             if (inputContext != IntPtr.Zero)
             {
@@ -1179,7 +1178,7 @@ namespace System.Windows.Forms
                 }
                 finally
                 {
-                    UnsafeNativeMethods.ImmReleaseContext(handle, new HandleRef(null, inputContext));
+                    UnsafeNativeMethods.ImmReleaseContext(new HandleRef(this, Handle), new HandleRef(null, inputContext));
                 }
             }
             else
