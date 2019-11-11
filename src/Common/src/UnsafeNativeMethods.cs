@@ -212,9 +212,6 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.Imm32, CharSet = CharSet.Auto)]
         public static extern bool ImmGetConversionStatus(HandleRef hIMC, ref int conversion, ref int sentence);
 
-        [DllImport(ExternDll.Imm32, CharSet = CharSet.Auto)]
-        public static extern bool ImmNotifyIME(HandleRef hIMC, int dwAction, int dwIndex, int dwValue);
-
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern IntPtr GetAncestor(HandleRef hWnd, int flags);
 

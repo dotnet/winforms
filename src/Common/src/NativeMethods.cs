@@ -226,14 +226,7 @@ namespace System.Windows.Forms
         ATTR_CONVERTED = 0x02,
         ATTR_TARGET_NOTCONVERTED = 0x03,
         ATTR_INPUT_ERROR = 0x04,
-        ATTR_FIXEDCONVERTED = 0x05,
-
-        // dwAction for ImmNotifyIME
-        NI_COMPOSITIONSTR = 0x0015,
-
-        // dwIndex for ImmNotifyIME/NI_COMPOSITIONSTR
-        CPS_COMPLETE = 0x01,
-        CPS_CANCEL = 0x04;
+        ATTR_FIXEDCONVERTED = 0x05;
 
         public const int
         HTTRANSPARENT = (-1),
