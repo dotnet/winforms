@@ -418,21 +418,19 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Implements IViewObject2::Draw.
             /// </summary>
-            internal unsafe void Draw(
+            internal unsafe HRESULT Draw(
                 Ole32.DVASPECT dwDrawAspect,
                 int lindex,
                 IntPtr pvAspect,
                 Ole32.DVTARGETDEVICE* ptd,
                 IntPtr hdcTargetDev,
                 IntPtr hdcDraw,
-                NativeMethods.COMRECT prcBounds,
-                NativeMethods.COMRECT lprcWBounds,
+                RECT* prcBounds,
+                RECT* lprcWBounds,
                 IntPtr pfnContinue,
-                int dwContinue)
+                uint dwContinue)
             {
-
                 // support the aspects required for multi-pass drawing
-                //
                 switch (dwDrawAspect)
                 {
                     case Ole32.DVASPECT.CONTENT:
@@ -440,8 +438,7 @@ namespace System.Windows.Forms
                     case Ole32.DVASPECT.TRANSPARENT:
                         break;
                     default:
-                        ThrowHr(HRESULT.DV_E_DVASPECT);
-                        break;
+                        return HRESULT.DV_E_DVASPECT;
                 }
 
                 // We can paint to an enhanced metafile, but not all GDI / GDI+ is
@@ -451,10 +448,9 @@ namespace System.Windows.Forms
                 Gdi32.ObjectType hdcType = Gdi32.GetObjectType(hdcDraw);
                 if (hdcType == Gdi32.ObjectType.OBJ_METADC)
                 {
-                    ThrowHr(HRESULT.VIEW_E_DRAW);
+                    return HRESULT.VIEW_E_DRAW;
                 }
 
-                RECT rc;
                 var pVp = new Point();
                 var pW = new Point();
                 var sWindowExt = new Size();
@@ -469,7 +465,7 @@ namespace System.Windows.Forms
                 // if they didn't give us a rectangle, just copy over ours
                 if (prcBounds != null)
                 {
-                    rc = new RECT(prcBounds.left, prcBounds.top, prcBounds.right, prcBounds.bottom);
+                    RECT rc = *prcBounds;
 
                     // To draw to a given rect, we scale the DC in such a way as to
                     // make the values it takes match our own happy MM_TEXT.  Then,
@@ -514,6 +510,8 @@ namespace System.Windows.Forms
                         Gdi32.SetMapMode(hdcDraw, iMode);
                     }
                 }
+
+                return HRESULT.S_OK;
             }
 
             /// <summary>
