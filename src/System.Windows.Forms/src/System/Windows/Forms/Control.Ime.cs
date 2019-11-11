@@ -905,7 +905,7 @@ namespace System.Windows.Forms
                 // Disable the IME by disassociating the context from the window.
                 //
                 Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Verbose, "ImmAssociateContext(" + handle + ", null)");
-                IntPtr oldContext = UnsafeNativeMethods.ImmAssociateContext(new HandleRef(null, handle), NativeMethods.NullHandleRef);
+                IntPtr oldContext = Imm32.ImmAssociateContext(handle, IntPtr.Zero);
                 if (oldContext != IntPtr.Zero)
                 {
                     originalImeContext = oldContext;
@@ -940,13 +940,13 @@ namespace System.Windows.Forms
                         if (inputContext != IntPtr.Zero)
                         {
                             Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Verbose, "ImmAssociateContext(" + handle + ", " + inputContext + ")");
-                            UnsafeNativeMethods.ImmAssociateContext(new HandleRef(null, handle), new HandleRef(null, inputContext));
+                            Imm32.ImmAssociateContext(handle, inputContext);
                         }
                     }
                     else
                     {
                         Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Verbose, "ImmAssociateContext()");
-                        UnsafeNativeMethods.ImmAssociateContext(new HandleRef(null, handle), new HandleRef(null, originalImeContext));
+                        Imm32.ImmAssociateContext(handle, originalImeContext);
                     }
                 }
                 else
