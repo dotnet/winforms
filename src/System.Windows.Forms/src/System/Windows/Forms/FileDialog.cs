@@ -473,22 +473,22 @@ namespace System.Windows.Forms
         ///  Defines the common dialog box hook procedure that is overridden to add
         ///  specific functionality to the file dialog box.
         /// </summary>
-        protected override IntPtr HookProc(IntPtr hWnd, int msg, IntPtr wparam, IntPtr lparam)
+        protected unsafe override IntPtr HookProc(IntPtr hWnd, int msg, IntPtr wparam, IntPtr lparam)
         {
             if (msg == WindowMessages.WM_NOTIFY)
             {
                 _dialogHWnd = User32.GetParent(hWnd);
                 try
                 {
-                    UnsafeNativeMethods.OFNOTIFY notify = Marshal.PtrToStructure<UnsafeNativeMethods.OFNOTIFY>(lparam);
+                    Comdlg32.OFNOTIFYW* notify = (Comdlg32.OFNOTIFYW*)lparam;
 
-                    switch (notify.hdr_code)
+                    switch (notify->hdr.code)
                     {
                         case -601: /* CDN_INITDONE */
                             MoveToScreenCenter(_dialogHWnd);
                             break;
                         case -602: /* CDN_SELCHANGE */
-                            NativeMethods.OPENFILENAME_I ofn = Marshal.PtrToStructure<NativeMethods.OPENFILENAME_I>(notify.lpOFN);
+                            NativeMethods.OPENFILENAME_I ofn = Marshal.PtrToStructure<NativeMethods.OPENFILENAME_I>(notify->lpOFN);
                             // Get the buffer size required to store the selected file names.
                             int sizeNeeded = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, _dialogHWnd), 1124 /*CDM_GETSPEC*/, System.IntPtr.Zero, System.IntPtr.Zero);
                             if (sizeNeeded > ofn.nMaxFile)
@@ -506,8 +506,7 @@ namespace System.Windows.Forms
                                     ofn.lpstrFile = newBuffer;
                                     ofn.nMaxFile = newBufferSize;
                                     _charBuffer = charBufferTmp;
-                                    Marshal.StructureToPtr(ofn, notify.lpOFN, true);
-                                    Marshal.StructureToPtr(notify, lparam, true);
+                                    Marshal.StructureToPtr(ofn, notify->lpOFN, true);
                                 }
                                 catch
                                 {
@@ -539,7 +538,7 @@ namespace System.Windows.Forms
                                     return NativeMethods.InvalidIntPtr;
                                 }
                             }
-                            if (!DoFileOk(notify.lpOFN))
+                            if (!DoFileOk(notify->lpOFN))
                             {
                                 UnsafeNativeMethods.SetWindowLong(new HandleRef(null, hWnd), 0, new HandleRef(null, NativeMethods.InvalidIntPtr));
                                 return NativeMethods.InvalidIntPtr;

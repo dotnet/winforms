@@ -1517,18 +1517,6 @@ namespace System.Windows.Forms
             void ReleaseVarDesc(IntPtr varDesc);
         }
 
-        [StructLayout(LayoutKind.Sequential)]
-        public class OFNOTIFY
-        {
-            // hdr was a by-value NMHDR structure
-            public IntPtr hdr_hwndFrom = IntPtr.Zero;
-            public IntPtr hdr_idFrom = IntPtr.Zero;
-            public int hdr_code = 0;
-
-            public IntPtr lpOFN = IntPtr.Zero;
-            public IntPtr pszFile = IntPtr.Zero;
-        }
-
         internal class Shell32
         {
             [DllImport(ExternDll.Shell32, PreserveSig = true)]
