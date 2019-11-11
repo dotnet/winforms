@@ -5464,31 +5464,33 @@ namespace System.Windows.Forms
         ///  handle, so we traverse up the parent chain until we find one.
         ///  Failing that, we just return ouselves.
         /// </summary>
-        [MethodImpl(MethodImplOptions.Synchronized)]
         private Control FindMarshalingControl()
         {
-            Control c = this;
-
-            while (c != null && !c.IsHandleCreated)
+            lock (this)
             {
-                Control p = c.ParentInternal;
-                c = p;
-            }
+                Control c = this;
 
-            if (c == null)
-            {
-                // No control with a created handle.  We
-                // just use our own control.  MarshaledInvoke
-                // will throw an exception because there
-                // is no handle.
-                c = this;
-            }
-            else
-            {
-                Debug.Assert(c.IsHandleCreated, "FindMarshalingControl chose a bad control.");
-            }
+                while (c != null && !c.IsHandleCreated)
+                {
+                    Control p = c.ParentInternal;
+                    c = p;
+                }
 
-            return c;
+                if (c == null)
+                {
+                    // No control with a created handle.  We
+                    // just use our own control.  MarshaledInvoke
+                    // will throw an exception because there
+                    // is no handle.
+                    c = this;
+                }
+                else
+                {
+                    Debug.Assert(c.IsHandleCreated, "FindMarshalingControl chose a bad control.");
+                }
+
+                return c;
+            }
         }
 
         protected bool GetTopLevel()
@@ -9823,10 +9825,11 @@ namespace System.Windows.Forms
 
                 // do the main work of recreating the handle
                 DestroyHandle();
+
                 // Note that CreateHandle --> _window.CreateHandle may fail due to DPI awareness setting.
                 // By carefully choosing the correct parking window / keeping this and this.Parent DPI awareness untouched,
                 // the call shouldn't fail.
-                // However, it will be another story if external dervied class messes with this.CreateParams.Parent.
+                // However, it could fail if this.CreateParams.Parent is changed outside our control.
                 CreateHandle();
             }
             catch (Exception)
@@ -9837,21 +9840,26 @@ namespace System.Windows.Forms
                 {
                     SetState(States.Created, false);
                 }
+
                 throw;
             }
             finally
             {
                 SetState(States.Recreate, false);
+
                 // Inform children their parent's handle has been created.
                 // This means
-                // 1) an Exception gets thrown before DestroyHandle.
-                //      We will restore the parents of the child controls.
-                // or
-                // 2) CreateHandle is successful.
+                // an Exception gets thrown before/during the invocation of DestroyHandle.
+                //      In this case, GetState(States.Created) == true.
+                //      We will restore the Parent value of the (visited) child controls.
+                // - or -
+                // an Exception gets thrown in CreateHandle.
+                //      In this case, _window.Handle will be IntPtr.Zero,
+                //      and we should have GetState(States.Created) == false.
+                //      Do not go through this if CreateHandle fails (and an Exception is probably on its way bubbling up).
+                // - or -
+                // CreateHandle is successful.
                 //      We will move the child controls to the new parent.
-                // If an Exception gets thrown in CreateHandle, _window.Handle will be IntPtr.Zero,
-                // and we should have GetState(States.Created) == false.
-                // Do not go through this if CreateHandle fails (and an Exception is probably on its way bubbling up).
                 if (controlSnapshot != null && GetState(States.Created))
                 {
                     for (int i = 0; i < controlSnapshot.Length; i++)
@@ -9859,9 +9867,10 @@ namespace System.Windows.Forms
                         Control childControl = controlSnapshot[i];
                         if (childControl != null && childControl.IsHandleCreated)
                         {
-                            // SetParent back to the new Parent handle.
-                            // If a control fails to re-parent itself,
-                            // It and its next siblings will keep States.ParentRecreating state, parked in ParkingWindow.
+                            // Re-parent the control.
+                            // If the control fails to re-parent itself,
+                            // It and its next siblings will keep States.ParentRecreating state,
+                            // parked in ParkingWindow.
                             // We let the error bubble up immediately.
                             childControl.OnParentHandleRecreated();
                         }
