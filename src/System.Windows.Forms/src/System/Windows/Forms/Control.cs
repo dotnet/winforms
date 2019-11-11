@@ -14273,12 +14273,13 @@ namespace System.Windows.Forms
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistStreamInit.InitNew");
         }
 
-        void UnsafeNativeMethods.IQuickActivate.QuickActivate(UnsafeNativeMethods.tagQACONTAINER pQaContainer, UnsafeNativeMethods.tagQACONTROL pQaControl)
+        HRESULT UnsafeNativeMethods.IQuickActivate.QuickActivate(Ole32.QACONTAINER pQaContainer, UnsafeNativeMethods.tagQACONTROL pQaControl)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:QuickActivate");
             Debug.Indent();
-            ActiveXInstance.QuickActivate(pQaContainer, pQaControl);
+            HRESULT hr = ActiveXInstance.QuickActivate(pQaContainer, pQaControl);
             Debug.Unindent();
+            return hr;
         }
 
         unsafe Interop.HRESULT UnsafeNativeMethods.IQuickActivate.SetContentExtent(Size* pSizel)

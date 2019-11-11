@@ -1979,14 +1979,6 @@ namespace System.Windows.Forms
         public class ActiveX
         {
             public const int OCM__BASE = 0x2000;
-            public const int QACONTAINER_SHOWHATCHING = 0x1;
-            public const int QACONTAINER_SHOWGRABHANDLES = 0x2;
-            public const int QACONTAINER_USERMODE = 0x4;
-            public const int QACONTAINER_DISPLAYASDEFAULT = 0x8;
-            public const int QACONTAINER_UIDEAD = 0x10;
-            public const int QACONTAINER_AUTOCLIP = 0x20;
-            public const int QACONTAINER_MESSAGEREFLECT = 0x40;
-            public const int QACONTAINER_SUPPORTSMNEMONICS = 0x80;
             public const int ALIGN_MIN = 0x0;
             public const int ALIGN_NO_CHANGE = 0x0;
             public const int ALIGN_TOP = 0x1;

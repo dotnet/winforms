@@ -1421,7 +1421,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Our implementation of IQuickActivate::QuickActivate
             /// </summary>
-            internal void QuickActivate(UnsafeNativeMethods.tagQACONTAINER pQaContainer, UnsafeNativeMethods.tagQACONTROL pQaControl)
+            internal HRESULT QuickActivate(Ole32.QACONTAINER pQaContainer, UnsafeNativeMethods.tagQACONTROL pQaControl)
             {
                 // Hookup our ambient colors
                 AmbientProperty prop = LookupAmbient(Ole32.DispatchID.AMBIENT_BACKCOLOR);
@@ -1437,9 +1437,7 @@ namespace System.Windows.Forms
 
                     try
                     {
-                        Ole32.IFont ifont = (Ole32.IFont)pQaContainer.pFont;
-                        IntPtr hfont = ifont.hFont;
-                        prop.Value = Font.FromHfont(hfont);
+                        prop.Value = Font.FromHfont(pQaContainer.pFont.hFont);
                     }
                     catch (Exception e) when (!ClientUtils.IsSecurityOrCriticalException(e))
                     {
@@ -1455,7 +1453,7 @@ namespace System.Windows.Forms
 
                 if (pQaContainer.pAdviseSink != null)
                 {
-                    SetAdvise(Ole32.DVASPECT.CONTENT, 0, (IAdviseSink)pQaContainer.pAdviseSink);
+                    SetAdvise(Ole32.DVASPECT.CONTENT, 0, pQaContainer.pAdviseSink);
                 }
 
                 Ole32.OLEMISC status = 0;
@@ -1484,12 +1482,8 @@ namespace System.Windows.Forms
                             // This is easier said than done. See notes in AdviseHelper.AdviseConnectionPoint.
                             AdviseHelper.AdviseConnectionPoint(_control, pQaContainer.pUnkEventSink, eventInterface, out pQaControl.dwEventCookie);
                         }
-                        catch (Exception e)
+                        catch (Exception e) when (!ClientUtils.IsSecurityOrCriticalException(e))
                         {
-                            if (ClientUtils.IsSecurityOrCriticalException(e))
-                            {
-                                throw;
-                            }
                         }
                     }
                 }
@@ -1503,6 +1497,8 @@ namespace System.Windows.Forms
                 {
                     Marshal.ReleaseComObject(pQaContainer.pUnkEventSink);
                 }
+
+                return HRESULT.S_OK;
             }
 
             /// <summary>
