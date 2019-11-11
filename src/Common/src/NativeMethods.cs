@@ -272,9 +272,7 @@ namespace System.Windows.Forms
         HBMMENU_POPUP_MAXIMIZE = 10,
         HBMMENU_POPUP_MINIMIZE = 11;
 
-        public const int IME_CMODE_NATIVE = 0x0001,
-        IME_CMODE_KATAKANA = 0x0002,
-        IME_CMODE_FULLSHAPE = 0x0008,
+        public const int
         ICON_SMALL = 0,
         ICON_BIG = 1,
         IMAGE_ICON = 1,

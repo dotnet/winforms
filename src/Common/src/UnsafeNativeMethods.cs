@@ -206,12 +206,6 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.Kernel32, CharSet = CharSet.Auto)]
         public static extern void GetTempFileName(string tempDirName, string prefixName, int unique, StringBuilder sb);
 
-        [DllImport(ExternDll.Imm32, CharSet = CharSet.Auto)]
-        public static extern bool ImmSetConversionStatus(HandleRef hIMC, int conversion, int sentence);
-
-        [DllImport(ExternDll.Imm32, CharSet = CharSet.Auto)]
-        public static extern bool ImmGetConversionStatus(HandleRef hIMC, ref int conversion, ref int sentence);
-
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern IntPtr GetAncestor(HandleRef hWnd, int flags);
 

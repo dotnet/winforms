@@ -1006,36 +1006,31 @@ namespace System.Windows.Forms
             }
 
             // Determine the IME mode from the conversion status
-            //
-
-            int conversion = 0;     // Combination of conversion mode values
-            int sentence = 0;       // Sentence mode value
-
             Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Verbose, "ImmGetConversionStatus(" + inputContext + ", conversion, sentence)");
-            UnsafeNativeMethods.ImmGetConversionStatus(new HandleRef(null, inputContext), ref conversion, ref sentence);
+            Imm32.ImmGetConversionStatus(inputContext, out Imm32.IME_CMODE conversion, out Imm32.IME_SMODE sentence);
 
             Debug.Assert(countryTable != null, "countryTable is null");
 
-            if ((conversion & NativeMethods.IME_CMODE_NATIVE) != 0)
+            if ((conversion & Imm32.IME_CMODE.NATIVE) != 0)
             {
-                if ((conversion & NativeMethods.IME_CMODE_KATAKANA) != 0)
+                if ((conversion & Imm32.IME_CMODE.KATAKANA) != 0)
                 {
-                    retval = ((conversion & NativeMethods.IME_CMODE_FULLSHAPE) != 0)
+                    retval = ((conversion & Imm32.IME_CMODE.FULLSHAPE) != 0)
                                 ? countryTable[ImeModeConversion.ImeNativeFullKatakana]
                                 : countryTable[ImeModeConversion.ImeNativeHalfKatakana];
                     goto cleanup;
                 }
                 else
-                { // ! Katakana
-                    retval = ((conversion & NativeMethods.IME_CMODE_FULLSHAPE) != 0)
+                {
+                    retval = ((conversion & Imm32.IME_CMODE.FULLSHAPE) != 0)
                                 ? countryTable[ImeModeConversion.ImeNativeFullHiragana]
                                 : countryTable[ImeModeConversion.ImeNativeHalfHiragana];
                     goto cleanup;
                 }
             }
             else
-            { // ! IME_CMODE_NATIVE
-                retval = ((conversion & NativeMethods.IME_CMODE_FULLSHAPE) != 0)
+            {
+                retval = ((conversion & Imm32.IME_CMODE.FULLSHAPE) != 0)
                             ? countryTable[ImeModeConversion.ImeAlphaFull]
                             : countryTable[ImeModeConversion.ImeAlphaHalf];
             }
@@ -1097,30 +1092,27 @@ namespace System.Windows.Forms
                     goto cleanup;
                 }
 
-                int conversion = 0;     // Combination of conversion mode values
-                int sentence = 0;       // Sentence mode value
-
-                UnsafeNativeMethods.ImmGetConversionStatus(new HandleRef(null, inputContext), ref conversion, ref sentence);
+                Imm32.ImmGetConversionStatus(inputContext, out Imm32.IME_CMODE conversion, out Imm32.IME_SMODE sentence);
                 ImeMode retval;
 
-                if ((conversion & NativeMethods.IME_CMODE_NATIVE) != 0)
+                if ((conversion & Imm32.IME_CMODE.NATIVE) != 0)
                 {
-                    if ((conversion & NativeMethods.IME_CMODE_KATAKANA) != 0)
+                    if ((conversion & Imm32.IME_CMODE.KATAKANA) != 0)
                     {
-                        retval = ((conversion & NativeMethods.IME_CMODE_FULLSHAPE) != 0)
+                        retval = ((conversion & Imm32.IME_CMODE.FULLSHAPE) != 0)
                                     ? countryTable[ImeModeConversion.ImeNativeFullKatakana]
                                     : countryTable[ImeModeConversion.ImeNativeHalfKatakana];
                     }
                     else
-                    { // ! Katakana
-                        retval = ((conversion & NativeMethods.IME_CMODE_FULLSHAPE) != 0)
+                    {
+                        retval = ((conversion & Imm32.IME_CMODE.FULLSHAPE) != 0)
                                     ? countryTable[ImeModeConversion.ImeNativeFullHiragana]
                                     : countryTable[ImeModeConversion.ImeNativeHalfHiragana];
                     }
                 }
                 else
-                { // ! IME_CMODE_NATIVE
-                    retval = ((conversion & NativeMethods.IME_CMODE_FULLSHAPE) != 0)
+                {
+                    retval = ((conversion & Imm32.IME_CMODE.FULLSHAPE) != 0)
                                 ? countryTable[ImeModeConversion.ImeAlphaFull]
                                 : countryTable[ImeModeConversion.ImeAlphaHalf];
                 }
@@ -1188,9 +1180,6 @@ namespace System.Windows.Forms
                 goto cleanup;     // We only support Japanese, Korean and Chinese IME.
             }
 
-            int conversion = 0;     // Combination of conversion mode values
-            int sentence = 0;       // Sentence mode value
-
             Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Warning, "\tSetting IME context to " + imeMode);
 
             if (imeMode == ImeMode.Disable)
@@ -1251,13 +1240,13 @@ namespace System.Windows.Forms
                         IntPtr inputContext = Imm32.ImmGetContext(handle);
                         Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Verbose, "context = " + inputContext);
                         Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Verbose, "ImmGetConversionStatus(" + inputContext + ", conversion, sentence)");
-                        UnsafeNativeMethods.ImmGetConversionStatus(new HandleRef(null, inputContext), ref conversion, ref sentence);
+                        Imm32.ImmGetConversionStatus(inputContext, out Imm32.IME_CMODE conversion, out Imm32.IME_SMODE sentence);
 
                         conversion |= conversionEntry.setBits;
                         conversion &= ~conversionEntry.clearBits;
 
                         Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Verbose, "ImmSetConversionStatus(" + inputContext + ", conversion, sentence)");
-                        bool retval = UnsafeNativeMethods.ImmSetConversionStatus(new HandleRef(null, inputContext), conversion, sentence);
+                        Imm32.ImmSetConversionStatus(inputContext, conversion, sentence);
                         Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Verbose, "ImmReleaseContext(" + handle + ", " + inputContext + ")");
                         Imm32.ImmReleaseContext(handle, inputContext);
                     }
@@ -1312,8 +1301,8 @@ namespace System.Windows.Forms
     {
         private static Dictionary<ImeMode, ImeModeConversion> imeModeConversionBits;
 
-        internal int setBits;
-        internal int clearBits;
+        internal Imm32.IME_CMODE setBits;
+        internal Imm32.IME_CMODE clearBits;
 
         // Tables of conversions from IME context bits to IME mode
         //
@@ -1463,50 +1452,50 @@ namespace System.Windows.Forms
 
                     // Hiragana, On
                     //
-                    conversion.setBits = NativeMethods.IME_CMODE_FULLSHAPE | NativeMethods.IME_CMODE_NATIVE;
-                    conversion.clearBits = NativeMethods.IME_CMODE_KATAKANA;
+                    conversion.setBits = Imm32.IME_CMODE.FULLSHAPE | Imm32.IME_CMODE.NATIVE;
+                    conversion.clearBits = Imm32.IME_CMODE.KATAKANA;
                     imeModeConversionBits.Add(ImeMode.Hiragana, conversion);
 
                     // Katakana
                     //
-                    conversion.setBits = NativeMethods.IME_CMODE_FULLSHAPE | NativeMethods.IME_CMODE_KATAKANA | NativeMethods.IME_CMODE_NATIVE;
+                    conversion.setBits = Imm32.IME_CMODE.FULLSHAPE | Imm32.IME_CMODE.KATAKANA | Imm32.IME_CMODE.NATIVE;
                     conversion.clearBits = 0;
                     imeModeConversionBits.Add(ImeMode.Katakana, conversion);
 
                     // KatakanaHalf
                     //
-                    conversion.setBits = NativeMethods.IME_CMODE_KATAKANA | NativeMethods.IME_CMODE_NATIVE;
-                    conversion.clearBits = NativeMethods.IME_CMODE_FULLSHAPE;
+                    conversion.setBits = Imm32.IME_CMODE.KATAKANA | Imm32.IME_CMODE.NATIVE;
+                    conversion.clearBits = Imm32.IME_CMODE.FULLSHAPE;
                     imeModeConversionBits.Add(ImeMode.KatakanaHalf, conversion);
 
                     // AlphaFull
                     //
-                    conversion.setBits = NativeMethods.IME_CMODE_FULLSHAPE;
-                    conversion.clearBits = NativeMethods.IME_CMODE_KATAKANA | NativeMethods.IME_CMODE_NATIVE;
+                    conversion.setBits = Imm32.IME_CMODE.FULLSHAPE;
+                    conversion.clearBits = Imm32.IME_CMODE.KATAKANA | Imm32.IME_CMODE.NATIVE;
                     imeModeConversionBits.Add(ImeMode.AlphaFull, conversion);
 
                     // Alpha
                     //
                     conversion.setBits = 0;
-                    conversion.clearBits = NativeMethods.IME_CMODE_FULLSHAPE | NativeMethods.IME_CMODE_KATAKANA | NativeMethods.IME_CMODE_NATIVE;
+                    conversion.clearBits = Imm32.IME_CMODE.FULLSHAPE | Imm32.IME_CMODE.KATAKANA | Imm32.IME_CMODE.NATIVE;
                     imeModeConversionBits.Add(ImeMode.Alpha, conversion);
 
                     // HangulFull
                     //
-                    conversion.setBits = NativeMethods.IME_CMODE_FULLSHAPE | NativeMethods.IME_CMODE_NATIVE;
+                    conversion.setBits = Imm32.IME_CMODE.FULLSHAPE | Imm32.IME_CMODE.NATIVE;
                     conversion.clearBits = 0;
                     imeModeConversionBits.Add(ImeMode.HangulFull, conversion);
 
                     // Hangul
                     //
-                    conversion.setBits = NativeMethods.IME_CMODE_NATIVE;
-                    conversion.clearBits = NativeMethods.IME_CMODE_FULLSHAPE;
+                    conversion.setBits = Imm32.IME_CMODE.NATIVE;
+                    conversion.clearBits = Imm32.IME_CMODE.FULLSHAPE;
                     imeModeConversionBits.Add(ImeMode.Hangul, conversion);
 
                     // OnHalf
                     //
-                    conversion.setBits = NativeMethods.IME_CMODE_NATIVE;
-                    conversion.clearBits = NativeMethods.IME_CMODE_KATAKANA | NativeMethods.IME_CMODE_FULLSHAPE;
+                    conversion.setBits = Imm32.IME_CMODE.NATIVE;
+                    conversion.clearBits = Imm32.IME_CMODE.KATAKANA | Imm32.IME_CMODE.FULLSHAPE;
                     imeModeConversionBits.Add(ImeMode.OnHalf, conversion);
                 }
 
