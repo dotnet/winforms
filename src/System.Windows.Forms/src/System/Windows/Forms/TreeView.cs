@@ -1986,6 +1986,12 @@ namespace System.Windows.Forms
 
         protected override void OnHandleCreated(EventArgs e)
         {
+            if (!IsHandleCreated)
+            {
+                base.OnHandleCreated(e);
+                return;
+            }
+
             TreeNode savedSelectedNode = selectedNode;
             selectedNode = null;
 
