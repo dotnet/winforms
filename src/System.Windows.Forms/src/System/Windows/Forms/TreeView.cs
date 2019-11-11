@@ -1222,7 +1222,6 @@ namespace System.Windows.Forms
             {
                 if (IsHandleCreated)
                 {
-                    Debug.Assert(selectedNode == null || selectedNode.TreeView != this, "handle is created, but we're still caching selectedNode");
                     IntPtr hItem = SendMessage(NativeMethods.TVM_GETNEXTITEM, NativeMethods.TVGN_CARET, 0);
                     if (hItem == IntPtr.Zero)
                     {
