@@ -786,7 +786,7 @@ namespace System.Windows.Forms
 
             [PreserveSig]
             HRESULT EnumVerbs(
-                out IEnumOLEVERB e);
+                out Ole32.IEnumOLEVERB ppEnumOleVerb);
 
             [PreserveSig]
             int OleUpdate();
@@ -899,7 +899,7 @@ namespace System.Windows.Forms
 
             [PreserveSig]
             HRESULT EnumVerbs(
-                out IEnumOLEVERB e);
+                out Ole32.IEnumOLEVERB ppEnumOleVerb);
 
             [PreserveSig]
             int OleUpdate();
@@ -989,29 +989,6 @@ namespace System.Windows.Forms
                 Ole32.IPropertyBag pPropBag,
                 BOOL fClearDirty,
                 BOOL fSaveAllProperties);
-        }
-
-        [ComImport]
-        [Guid("00000104-0000-0000-C000-000000000046")]
-        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public unsafe interface IEnumOLEVERB
-        {
-            [PreserveSig]
-            HRESULT Next(
-                uint celt,
-                Ole32.OLEVERB rgelt,
-                uint* pceltFetched);
-
-            [PreserveSig]
-            HRESULT Skip(
-                uint celt);
-
-            [PreserveSig]
-            HRESULT Reset();
-
-            [PreserveSig]
-            HRESULT Clone(
-               out IEnumOLEVERB ppenum);
         }
 
         public abstract class CharBuffer

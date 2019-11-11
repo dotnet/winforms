@@ -13,7 +13,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Simple verb enumerator.
         /// </summary>
-        private class ActiveXVerbEnum : UnsafeNativeMethods.IEnumOLEVERB
+        private class ActiveXVerbEnum : Ole32.IEnumOLEVERB
         {
             private readonly Ole32.OLEVERB[] _verbs;
             private uint _current;
@@ -83,7 +83,7 @@ namespace System.Windows.Forms
                 return HRESULT.S_OK;
             }
 
-            public HRESULT Clone(out UnsafeNativeMethods.IEnumOLEVERB ppenum)
+            public HRESULT Clone(out Ole32.IEnumOLEVERB ppenum)
             {
                 ppenum = new ActiveXVerbEnum(_verbs);
                 return HRESULT.S_OK;

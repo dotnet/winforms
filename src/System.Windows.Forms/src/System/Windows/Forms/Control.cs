@@ -13726,10 +13726,10 @@ namespace System.Windows.Forms
             }
         }
 
-        HRESULT UnsafeNativeMethods.IOleObject.EnumVerbs(out UnsafeNativeMethods.IEnumOLEVERB e)
+        HRESULT UnsafeNativeMethods.IOleObject.EnumVerbs(out Ole32.IEnumOLEVERB ppEnumOleVerb)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:EnumVerbs");
-            return ActiveXImpl.EnumVerbs(out e);
+            return ActiveXImpl.EnumVerbs(out ppEnumOleVerb);
         }
 
         int UnsafeNativeMethods.IOleObject.OleUpdate()
