@@ -1178,7 +1178,7 @@ namespace System.Windows.Forms
                 }
                 finally
                 {
-                    UnsafeNativeMethods.ImmReleaseContext(new HandleRef(this, Handle), new HandleRef(null, inputContext));
+                    Imm32.ImmReleaseContext(this, inputContext);
                 }
             }
             else

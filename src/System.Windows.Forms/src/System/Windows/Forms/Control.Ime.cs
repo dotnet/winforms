@@ -952,7 +952,7 @@ namespace System.Windows.Forms
                 else
                 {
                     Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Verbose, "ImmReleaseContext(" + handle + ", " + inputContext + ")");
-                    UnsafeNativeMethods.ImmReleaseContext(new HandleRef(null, handle), new HandleRef(null, inputContext));
+                    Imm32.ImmReleaseContext(handle, inputContext);
                 }
 
                 // Make sure the IME is opened.
@@ -1044,7 +1044,7 @@ namespace System.Windows.Forms
             if (inputContext != IntPtr.Zero)
             {
                 Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Verbose, "ImmReleaseContext(" + handle + ", " + inputContext + ")");
-                UnsafeNativeMethods.ImmReleaseContext(new HandleRef(null, handle), new HandleRef(null, inputContext));
+                Imm32.ImmReleaseContext(handle, inputContext);
             }
 
             ImeContext.TraceImeStatus(handle);
@@ -1130,7 +1130,7 @@ namespace System.Windows.Forms
             cleanup:
                 if (inputContext != IntPtr.Zero)
                 {
-                    UnsafeNativeMethods.ImmReleaseContext(new HandleRef(null, handle), new HandleRef(null, inputContext));
+                    Imm32.ImmReleaseContext(handle, inputContext);
                 }
 
                 Debug.WriteLine(status);
@@ -1157,7 +1157,7 @@ namespace System.Windows.Forms
                 Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Verbose, "ImmGetOpenStatus(" + inputContext + ")");
                 retval = Imm32.ImmGetOpenStatus(inputContext).IsTrue();
                 Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Verbose, "ImmReleaseContext(" + handle + ", " + inputContext + ")");
-                UnsafeNativeMethods.ImmReleaseContext(new HandleRef(null, handle), new HandleRef(null, inputContext));
+                Imm32.ImmReleaseContext(handle, inputContext);
             }
 
             Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Verbose, "    IsOpen = " + retval);
@@ -1259,7 +1259,7 @@ namespace System.Windows.Forms
                         Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Verbose, "ImmSetConversionStatus(" + inputContext + ", conversion, sentence)");
                         bool retval = UnsafeNativeMethods.ImmSetConversionStatus(new HandleRef(null, inputContext), conversion, sentence);
                         Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Verbose, "ImmReleaseContext(" + handle + ", " + inputContext + ")");
-                        UnsafeNativeMethods.ImmReleaseContext(new HandleRef(null, handle), new HandleRef(null, inputContext));
+                        Imm32.ImmReleaseContext(handle, inputContext);
                     }
                     break;
             }
@@ -1292,7 +1292,7 @@ namespace System.Windows.Forms
                     if (succeeded)
                     {
                         Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Verbose, "ImmReleaseContext(" + handle + ", " + inputContext + ")");
-                        succeeded = UnsafeNativeMethods.ImmReleaseContext(new HandleRef(null, handle), new HandleRef(null, inputContext));
+                        succeeded = Imm32.ImmReleaseContext(handle, inputContext).IsTrue();
                         Debug.Assert(succeeded, "Could not release IME context.");
                     }
                 }

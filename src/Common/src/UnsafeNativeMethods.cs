@@ -213,9 +213,6 @@ namespace System.Windows.Forms
         public static extern bool ImmGetConversionStatus(HandleRef hIMC, ref int conversion, ref int sentence);
 
         [DllImport(ExternDll.Imm32, CharSet = CharSet.Auto)]
-        public static extern bool ImmReleaseContext(HandleRef hWnd, HandleRef hIMC);
-
-        [DllImport(ExternDll.Imm32, CharSet = CharSet.Auto)]
         public static extern IntPtr ImmAssociateContext(HandleRef hWnd, HandleRef hIMC);
 
         [DllImport(ExternDll.Imm32, CharSet = CharSet.Auto)]
