@@ -1091,7 +1091,7 @@ namespace System.Windows.Forms
                     goto cleanup;
                 }
 
-                if (!UnsafeNativeMethods.ImmGetOpenStatus(new HandleRef(null, inputContext)))
+                if (!Imm32.ImmGetOpenStatus(inputContext).IsTrue())
                 {
                     status = string.Format(CultureInfo.CurrentCulture, "Ime closed for handle=[{0}]", handle);
                     goto cleanup;
@@ -1155,7 +1155,7 @@ namespace System.Windows.Forms
             if (inputContext != IntPtr.Zero)
             {
                 Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Verbose, "ImmGetOpenStatus(" + inputContext + ")");
-                retval = UnsafeNativeMethods.ImmGetOpenStatus(new HandleRef(null, inputContext));
+                retval = Imm32.ImmGetOpenStatus(inputContext).IsTrue();
                 Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Verbose, "ImmReleaseContext(" + handle + ", " + inputContext + ")");
                 UnsafeNativeMethods.ImmReleaseContext(new HandleRef(null, handle), new HandleRef(null, inputContext));
             }
