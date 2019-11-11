@@ -418,11 +418,11 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Implements IViewObject2::Draw.
             /// </summary>
-            internal void Draw(
+            internal unsafe void Draw(
                 Ole32.DVASPECT dwDrawAspect,
                 int lindex,
                 IntPtr pvAspect,
-                NativeMethods.tagDVTARGETDEVICE ptd,
+                Ole32.DVTARGETDEVICE* ptd,
                 IntPtr hdcTargetDev,
                 IntPtr hdcDraw,
                 NativeMethods.COMRECT prcBounds,

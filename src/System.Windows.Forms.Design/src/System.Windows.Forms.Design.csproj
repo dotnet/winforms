@@ -90,6 +90,7 @@
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.DispatchId.cs" Link="Interop\Ole32\Interop.DispatchId.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.DISPPARAMS.cs" Link="Interop\Ole32\Interop.DISPPARAMS.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.DVASPECT.cs" Link="Interop\Ole32\Interop.DVASPECT.cs" />
+    <Compile Include="..\..\Common\src\Interop\Ole32\Interop.DVTARGETDEVICE.cs" Link="Interop\Ole32\Interop.DVTARGETDEVICE.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.ELEMDESC.cs" Link="Interop\Ole32\Interop.ELEMDESC.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.EXCEPINFO.cs" Link="Interop\Ole32\Interop.EXCEPINFO.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.FUNCDESC.cs" Link="Interop\Ole32\Interop.FUNCDESC.cs" />

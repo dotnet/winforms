@@ -1576,21 +1576,6 @@ namespace System.Windows.Forms
             }
         }
 
-        [StructLayout(LayoutKind.Sequential)]
-        public sealed class tagDVTARGETDEVICE
-        {
-            [MarshalAs(UnmanagedType.U4)]
-            public int tdSize = 0;
-            [MarshalAs(UnmanagedType.U2)]
-            public short tdDriverNameOffset = 0;
-            [MarshalAs(UnmanagedType.U2)]
-            public short tdDeviceNameOffset = 0;
-            [MarshalAs(UnmanagedType.U2)]
-            public short tdPortNameOffset = 0;
-            [MarshalAs(UnmanagedType.U2)]
-            public short tdExtDevmodeOffset = 0;
-        }
-
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
         public class TCITEM_T
         {

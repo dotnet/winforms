@@ -1168,12 +1168,11 @@ namespace System.Windows.Forms
         public unsafe interface IViewObject
         {
             [PreserveSig]
-            int Draw(
+            HRESULT Draw(
                 Ole32.DVASPECT dwDrawAspect,
                 int lindex,
                 IntPtr pvAspect,
-                [In]
-                NativeMethods.tagDVTARGETDEVICE ptd,
+                Ole32.DVTARGETDEVICE* ptd,
                 IntPtr hdcTargetDev,
                 IntPtr hdcDraw,
                 [In]
@@ -1189,7 +1188,7 @@ namespace System.Windows.Forms
                 Ole32.DVASPECT dwDrawAspect,
                 int lindex,
                 IntPtr pvAspect,
-                NativeMethods.tagDVTARGETDEVICE ptd,
+                Ole32.DVTARGETDEVICE* ptd,
                 IntPtr hicTargetDev,
                 Gdi32.LOGPALETTE* ppColorSet);
 
@@ -1230,8 +1229,7 @@ namespace System.Windows.Forms
                 Ole32.DVASPECT dwDrawAspect,
                 int lindex,
                 IntPtr pvAspect,
-                [In]
-                NativeMethods.tagDVTARGETDEVICE ptd,
+                Ole32.DVTARGETDEVICE* ptd,
                 IntPtr hdcTargetDev,
                 IntPtr hdcDraw,
                 [In]
@@ -1247,7 +1245,7 @@ namespace System.Windows.Forms
                 Ole32.DVASPECT dwDrawAspect,
                 int lindex,
                 IntPtr pvAspect,
-                NativeMethods.tagDVTARGETDEVICE ptd,
+                Ole32.DVTARGETDEVICE* ptd,
                 IntPtr hicTargetDev,
                 Gdi32.LOGPALETTE* ppColorSet);
 
@@ -1282,7 +1280,7 @@ namespace System.Windows.Forms
             HRESULT GetExtent(
                 Ole32.DVASPECT dwDrawAspect,
                 int lindex,
-                NativeMethods.tagDVTARGETDEVICE ptd,
+                Ole32.DVTARGETDEVICE* ptd,
                 Size *lpsizel);
         }
 
