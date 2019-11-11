@@ -162,7 +162,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 if (Marshal.IsComObject(component) && component is UnsafeNativeMethods.IDispatch)
                 {
                     UnsafeNativeMethods.IDispatch pDisp = (UnsafeNativeMethods.IDispatch)component;
-                    var pExcepInfo = new NativeMethods.tagEXCEPINFO();
+                    var pExcepInfo = new Ole32.EXCEPINFO();
                     var dispParams = new Ole32.DISPPARAMS();
                     Guid g = Guid.Empty;
                     HRESULT hr = pDisp.Invoke(
@@ -172,7 +172,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                         NativeMethods.DISPATCH_METHOD,
                         &dispParams,
                         null,
-                        pExcepInfo,
+                        &pExcepInfo,
                         null);
                     Debug.Assert(hr.Succeeded(), "Failed to launch about box.");
                 }

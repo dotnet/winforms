@@ -1121,7 +1121,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Implements IPersistPropertyBag::Load
             /// </summary>
-            internal void Load(UnsafeNativeMethods.IPropertyBag pPropBag, UnsafeNativeMethods.IErrorLog pErrorLog)
+            internal unsafe void Load(UnsafeNativeMethods.IPropertyBag pPropBag, UnsafeNativeMethods.IErrorLog pErrorLog)
             {
                 PropertyDescriptorCollection props = TypeDescriptor.GetProperties(_control,
                     new Attribute[] { DesignerSerializationVisibilityAttribute.Visible });
@@ -1133,15 +1133,14 @@ namespace System.Windows.Forms
                     try
                     {
                         object obj = null;
-                        int hr = pPropBag.Read(props[i].Name, ref obj, pErrorLog);
-
-                        if (NativeMethods.Succeeded(hr) && obj != null)
+                        HRESULT hr = pPropBag.Read(props[i].Name, ref obj, pErrorLog);
+                        if (hr.Succeeded() && obj != null)
                         {
                             Debug.Indent();
                             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "Property was in bag");
 
                             string errorString = null;
-                            int errorCode = 0;
+                            HRESULT errorCode = HRESULT.S_OK;
 
                             try
                             {
@@ -1195,13 +1194,13 @@ namespace System.Windows.Forms
                             catch (Exception e)
                             {
                                 errorString = e.ToString();
-                                if (e is ExternalException)
+                                if (e is ExternalException ee)
                                 {
-                                    errorCode = ((ExternalException)e).ErrorCode;
+                                    errorCode = (HRESULT)ee.ErrorCode;
                                 }
                                 else
                                 {
-                                    errorCode = NativeMethods.E_FAIL;
+                                    errorCode = HRESULT.E_FAIL;
                                 }
                             }
                             if (errorString != null)
@@ -1209,13 +1208,23 @@ namespace System.Windows.Forms
                                 Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "Exception converting property: " + errorString);
                                 if (pErrorLog != null)
                                 {
-                                    NativeMethods.tagEXCEPINFO err = new NativeMethods.tagEXCEPINFO
+                                    IntPtr bstrSource = Marshal.StringToBSTR(_control.GetType().FullName);
+                                    IntPtr bstrDescription = Marshal.StringToBSTR(errorString);
+                                    try
                                     {
-                                        bstrSource = _control.GetType().FullName,
-                                        bstrDescription = errorString,
-                                        scode = errorCode
-                                    };
-                                    pErrorLog.AddError(props[i].Name, err);
+                                        var err = new Ole32.EXCEPINFO
+                                        {
+                                            bstrSource = bstrSource,
+                                            bstrDescription = bstrDescription,
+                                            scode = errorCode
+                                        };
+                                        pErrorLog.AddError(props[i].Name, &err);
+                                    }
+                                    finally
+                                    {
+                                        Marshal.FreeBSTR(bstrSource);
+                                        Marshal.FreeBSTR(bstrDescription);
+                                    }
                                 }
                             }
                             Debug.Unindent();
@@ -2587,21 +2596,21 @@ namespace System.Windows.Forms
                     }
                 }
 
-                int UnsafeNativeMethods.IPropertyBag.Read(string pszPropName, ref object pVar, UnsafeNativeMethods.IErrorLog pErrorLog)
+                HRESULT UnsafeNativeMethods.IPropertyBag.Read(string pszPropName, ref object pVar, UnsafeNativeMethods.IErrorLog pErrorLog)
                 {
                     if (!_bag.Contains(pszPropName))
                     {
-                        return NativeMethods.E_INVALIDARG;
+                        return HRESULT.E_INVALIDARG;
                     }
 
                     pVar = _bag[pszPropName];
-                    return NativeMethods.S_OK;
+                    return HRESULT.S_OK;
                 }
 
-                int UnsafeNativeMethods.IPropertyBag.Write(string pszPropName, ref object pVar)
+                HRESULT UnsafeNativeMethods.IPropertyBag.Write(string pszPropName, ref object pVar)
                 {
                     _bag[pszPropName] = pVar;
-                    return NativeMethods.S_OK;
+                    return HRESULT.S_OK;
                 }
 
                 internal void Write(Ole32.IStream istream)

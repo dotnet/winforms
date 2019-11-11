@@ -908,7 +908,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
             UnsafeNativeMethods.IDispatch pDisp = (UnsafeNativeMethods.IDispatch)component;
             object[] pVarResult = new object[1];
-            var pExcepInfo = new NativeMethods.tagEXCEPINFO();
+            var pExcepInfo = new Ole32.EXCEPINFO();
             var dispParams = new Ole32.DISPPARAMS();
             Guid g = Guid.Empty;
 
@@ -919,7 +919,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 NativeMethods.DISPATCH_PROPERTYGET,
                 &dispParams,
                 pVarResult,
-                pExcepInfo,
+                &pExcepInfo,
                 null);
 
             switch (hr)
@@ -1288,7 +1288,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
             UnsafeNativeMethods.IDispatch pDisp = (UnsafeNativeMethods.IDispatch)owner;
 
-            NativeMethods.tagEXCEPINFO excepInfo = new NativeMethods.tagEXCEPINFO();
+            var excepInfo = new Ole32.EXCEPINFO();
             var dispParams = new Ole32.DISPPARAMS();
             dispParams.cArgs = 1;
             dispParams.cNamedArgs = 1;
@@ -1315,14 +1315,17 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                         NativeMethods.DISPATCH_PROPERTYPUT,
                         &dispParams,
                         null,
-                        excepInfo,
+                        &excepInfo,
                         &pArgError);
 
                     string errorInfo = null;
                     if (hr == HRESULT.DISP_E_EXCEPTION && excepInfo.scode != 0)
                     {
-                        hr = (HRESULT)excepInfo.scode;
-                        errorInfo = excepInfo.bstrDescription;
+                        hr = excepInfo.scode;
+                        if (excepInfo.bstrDescription != IntPtr.Zero)
+                        {
+                            errorInfo = Marshal.PtrToStringBSTR(excepInfo.bstrDescription);
+                        }
                     }
 
                     switch (hr)

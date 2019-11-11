@@ -91,6 +91,7 @@
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.DISPPARAMS.cs" Link="Interop\Ole32\Interop.DISPPARAMS.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.DVASPECT.cs" Link="Interop\Ole32\Interop.DVASPECT.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.ELEMDESC.cs" Link="Interop\Ole32\Interop.ELEMDESC.cs" />
+    <Compile Include="..\..\Common\src\Interop\Ole32\Interop.EXCEPINFO.cs" Link="Interop\Ole32\Interop.EXCEPINFO.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.FUNCDESC.cs" Link="Interop\Ole32\Interop.FUNCDESC.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.FUNCFLAGS.cs" Link="Interop\Ole32\Interop.FUNCFLAGS.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.FUNCKIND.cs" Link="Interop\Ole32\Interop.FUNCKIND.cs" />

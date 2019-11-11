@@ -1603,29 +1603,6 @@ namespace System.Windows.Forms
             public IntPtr lParam;
         }
 
-        [StructLayout(LayoutKind.Sequential)]
-        public class tagEXCEPINFO
-        {
-            [MarshalAs(UnmanagedType.U2)]
-            public short wCode = 0;
-            [MarshalAs(UnmanagedType.U2)]
-            public short wReserved = 0;
-            [MarshalAs(UnmanagedType.BStr)]
-            public string bstrSource = null;
-            [MarshalAs(UnmanagedType.BStr)]
-            public string bstrDescription = null;
-            [MarshalAs(UnmanagedType.BStr)]
-            public string bstrHelpFile = null;
-            [MarshalAs(UnmanagedType.U4)]
-            public int dwHelpContext = 0;
-
-            public IntPtr pvReserved = IntPtr.Zero;
-
-            public IntPtr pfnDeferredFillIn = IntPtr.Zero;
-            [MarshalAs(UnmanagedType.U4)]
-            public int scode = 0;
-        }
-
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
         public class TOOLTIPTEXT
         {
