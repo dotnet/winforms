@@ -99,6 +99,7 @@
     <Compile Include="..\..\Common\src\Interop\User32\Interop.DPI_AWARENESS_CONTEXT.cs" Link="Interop\User32\Interop.DPI_AWARENESS_CONTEXT.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.DrawText.cs" Link="Interop\User32\Interop.DrawText.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.DT.cs" Link="Interop\User32\Interop.DT.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.EnableWindow.cs" Link="Interop\User32\Interop.EnableWindow.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.GetActiveWindow.cs" Link="Interop\User32\Interop.GetActiveWindow.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.GetDC.cs" Link="Interop\User32\Interop.GetDC.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.GetFocus.cs" Link="Interop\User32\Interop.GetFocus.cs" />

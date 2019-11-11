@@ -1210,9 +1210,9 @@ namespace System.Windows.Forms
                 {
                     return false;
                 }
-                bool visible = SafeNativeMethods.IsWindowVisible(new HandleRef(_window, Handle));
-                bool enabled = SafeNativeMethods.IsWindowEnabled(new HandleRef(_window, Handle));
-                return (visible && enabled);
+
+                return User32.IsWindowVisible(this).IsTrue()
+                    && User32.IsWindowEnabled(this).IsTrue();
             }
         }
 
@@ -2709,7 +2709,7 @@ namespace System.Windows.Forms
                         UnsafeNativeMethods.GetWindowRect(new HandleRef(null, next), ref temp);
                         Rectangle current = Rectangle.FromLTRB(temp.left, temp.top, temp.right, temp.bottom);
 
-                        if (SafeNativeMethods.IsWindowVisible(new HandleRef(null, next)))
+                        if (User32.IsWindowVisible(next).IsTrue())
                         {
                             working.Exclude(current);
                         }
@@ -3234,7 +3234,7 @@ namespace System.Windows.Forms
                                 regionHandle = ActiveXMergeRegion(regionHandle);
                             }
 
-                            if (UnsafeNativeMethods.SetWindowRgn(new HandleRef(this, Handle), new HandleRef(this, regionHandle), SafeNativeMethods.IsWindowVisible(new HandleRef(this, Handle))) != 0)
+                            if (UnsafeNativeMethods.SetWindowRgn(new HandleRef(this, Handle), new HandleRef(this, regionHandle), User32.IsWindowVisible(this).IsTrue()) != 0)
                             {
                                 //The Hwnd owns the region.
                                 regionHandle = IntPtr.Zero;
@@ -4796,7 +4796,7 @@ namespace System.Windows.Forms
             {
                 _parent.Controls.SetChildIndex(this, 0);
             }
-            else if (IsHandleCreated && GetTopLevel() && SafeNativeMethods.IsWindowEnabled(new HandleRef(_window, Handle)))
+            else if (IsHandleCreated && GetTopLevel() && User32.IsWindowEnabled(this).IsTrue())
             {
                 User32.SetWindowPos(
                     new HandleRef(_window, Handle),
@@ -7396,7 +7396,7 @@ namespace System.Windows.Forms
 
             if (IsHandleCreated)
             {
-                SafeNativeMethods.EnableWindow(new HandleRef(this, Handle), Enabled);
+                User32.EnableWindow(new HandleRef(this, Handle), Enabled.ToBOOL());
 
                 // User-paint controls should repaint when their enabled state changes
                 if (GetStyle(ControlStyles.UserPaint))
@@ -7948,7 +7948,7 @@ namespace System.Windows.Forms
                             regionHandle = ActiveXMergeRegion(regionHandle);
                         }
 
-                        if (UnsafeNativeMethods.SetWindowRgn(new HandleRef(this, Handle), new HandleRef(this, regionHandle), SafeNativeMethods.IsWindowVisible(new HandleRef(this, Handle))) != 0)
+                        if (UnsafeNativeMethods.SetWindowRgn(new HandleRef(this, Handle), new HandleRef(this, regionHandle), User32.IsWindowVisible(this).IsTrue()) != 0)
                         {
                             //The HWnd owns the region.
                             regionHandle = IntPtr.Zero;
@@ -11213,7 +11213,7 @@ namespace System.Windows.Forms
                     // PERF - setting Visible=false twice can get us into this else block
                     // which makes us process WM_WINDOWPOS* messages - make sure we've already 
                     // visible=false - if not, make it so.
-                    if (!SafeNativeMethods.IsWindowVisible(new HandleRef(this, Handle)))
+                    if (!User32.IsWindowVisible(this).IsTrue())
                     {
                         // we're already invisible - bail.
                         return;

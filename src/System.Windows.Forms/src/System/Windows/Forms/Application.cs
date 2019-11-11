@@ -620,7 +620,7 @@ namespace System.Windows.Forms
         {
             uint thisPID = Kernel32.GetCurrentProcessId();
             User32.GetWindowThreadProcessId(handle, out uint processId);
-            if (processId == thisPID && SafeNativeMethods.IsWindowVisible(new HandleRef(null, handle)))
+            if (processId == thisPID && User32.IsWindowVisible(handle).IsTrue())
             {
                 SendThemeChangedRecursive(handle, IntPtr.Zero);
                 User32.RedrawWindow(
