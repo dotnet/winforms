@@ -9779,6 +9779,7 @@ namespace System.Windows.Forms
                     Debug.WriteLine("");
                 }
 #endif
+                bool created = GetState(States.Created);
                 if (GetState(States.TrackingMouseEvent))
                 {
                     SetState(States.MouseEnterPending, true);
@@ -9878,7 +9879,10 @@ namespace System.Windows.Forms
                     }
                 }
 
-                CreateControl();
+                if (created)
+                {
+                    CreateControl();
+                }
 
                 if (// The window has a parent Win32 window before re-creation
                     parentHandle.Handle != IntPtr.Zero
