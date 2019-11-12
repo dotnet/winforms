@@ -9,10 +9,21 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        [DllImport(Libraries.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern IntPtr GetWindow(HandleRef hWnd, GW uCmd);
-
-        [DllImport(Libraries.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
+        [DllImport(Libraries.User32, ExactSpelling = true)]
         public static extern IntPtr GetWindow(IntPtr hWnd, GW uCmd);
+
+        public static IntPtr GetWindow(IHandle hWnd, GW uCmd)
+        {
+            IntPtr result = GetWindow(hWnd.Handle, uCmd);
+            GC.KeepAlive(hWnd);
+            return result;
+        }
+
+        public static IntPtr GetWindow(HandleRef hWnd, GW uCmd)
+        {
+            IntPtr result = GetWindow(hWnd.Handle, uCmd);
+            GC.KeepAlive(hWnd.Wrapper);
+            return result;
+        }
     }
 }

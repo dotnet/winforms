@@ -264,9 +264,6 @@ namespace System.Windows.Forms
         public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, StringBuilder lParam);
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, NativeMethods.TV_HITTESTINFO lParam);
-
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, NativeMethods.LVBKIMAGE lParam);
 
         [DllImport(ExternDll.User32, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
@@ -1306,21 +1303,23 @@ namespace System.Windows.Forms
             void Save(IPropertyBag pPropBag, BOOL fClearDirty, BOOL fSaveAllProperties);
         }
 
-        [ComImport()]
+        [ComImport]
         [Guid("CF51ED10-62FE-11CF-BF86-00A0C9034836")]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
         public unsafe interface IQuickActivate
         {
-            void QuickActivate(
-                              tagQACONTAINER pQaContainer,
-                              [Out]
-                              tagQACONTROL pQaControl);
+            [PreserveSig]
+            HRESULT QuickActivate(
+                Ole32.QACONTAINER pQaContainer,
+                [Out] tagQACONTROL pQaControl);
 
             [PreserveSig]
-            HRESULT SetContentExtent(Size* pSizel);
+            HRESULT SetContentExtent(
+                Size* pSizel);
 
             [PreserveSig]
-            HRESULT GetContentExtent(Size* pSizel);
+            HRESULT GetContentExtent(
+                Size* pSizel);
         }
 
         [ComImport]
@@ -1623,48 +1622,6 @@ namespace System.Windows.Forms
 
             [PreserveSig]
             void ReleaseVarDesc(IntPtr varDesc);
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public sealed class tagQACONTAINER
-        {
-            [MarshalAs(UnmanagedType.U4)]
-            public int cbSize = Marshal.SizeOf<tagQACONTAINER>();
-
-            public Ole32.IOleClientSite pClientSite;
-
-            [MarshalAs(UnmanagedType.Interface)]
-            public object pAdviseSink = null;
-
-            public Ole32.IPropertyNotifySink pPropertyNotifySink;
-
-            [MarshalAs(UnmanagedType.Interface)]
-            public object pUnkEventSink = null;
-
-            [MarshalAs(UnmanagedType.U4)]
-            public int dwAmbientFlags;
-
-            [MarshalAs(UnmanagedType.U4)]
-            public uint colorFore;
-
-            [MarshalAs(UnmanagedType.U4)]
-            public uint colorBack;
-
-            [MarshalAs(UnmanagedType.Interface)]
-            public object pFont;
-
-            [MarshalAs(UnmanagedType.Interface)]
-            public object pUndoMgr = null;
-
-            [MarshalAs(UnmanagedType.U4)]
-            public int dwAppearance;
-
-            public int lcid;
-
-            public IntPtr hpal = IntPtr.Zero;
-
-            [MarshalAs(UnmanagedType.Interface)]
-            public object pBindHost = null;
         }
 
         [StructLayout(LayoutKind.Sequential)/*leftover(noAutoOffset)*/]
