@@ -86,19 +86,18 @@ namespace System.ComponentModel.Design
             treeView.ShowLines = false;
 
             IntPtr hwnd = treeView.Handle;
-            int exstyle = TreeView_GetExtendedStyle(hwnd);
-            exstyle |= NativeMethods.TVS_EX_DOUBLEBUFFER | NativeMethods.TVS_EX_FADEINOUTEXPANDOS;
+            ComCtl32.TVS_EX exstyle = TreeView_GetExtendedStyle(hwnd);
+            exstyle |= ComCtl32.TVS_EX.DOUBLEBUFFER | ComCtl32.TVS_EX.FADEINOUTEXPANDOS;
             TreeView_SetExtendedStyle(hwnd, exstyle, 0);
         }
-        private static int TreeView_GetExtendedStyle(IntPtr handle)
+        private static ComCtl32.TVS_EX TreeView_GetExtendedStyle(IntPtr handle)
         {
-            IntPtr ptr = NativeMethods.SendMessage(handle, NativeMethods.TVM_GETEXTENDEDSTYLE, IntPtr.Zero, IntPtr.Zero);
-            return ptr.ToInt32();
+            return (ComCtl32.TVS_EX)NativeMethods.SendMessage(handle, NativeMethods.TVM_GETEXTENDEDSTYLE, IntPtr.Zero, IntPtr.Zero);
         }
 
-        private static void TreeView_SetExtendedStyle(IntPtr handle, int extendedStyle, int mask)
+        private static void TreeView_SetExtendedStyle(IntPtr handle, ComCtl32.TVS_EX extendedStyle, int mask)
         {
-            NativeMethods.SendMessage(handle, NativeMethods.TVM_SETEXTENDEDSTYLE, new IntPtr(mask), new IntPtr(extendedStyle));
+            NativeMethods.SendMessage(handle, NativeMethods.TVM_SETEXTENDEDSTYLE, (IntPtr)mask, (IntPtr)extendedStyle);
         }
 
         public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
