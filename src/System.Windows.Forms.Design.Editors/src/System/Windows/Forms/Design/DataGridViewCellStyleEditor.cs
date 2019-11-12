@@ -14,9 +14,9 @@ namespace System.Windows.Forms.Design.Editors
 
         private DataGridViewCellStyleBuilder builderDialog;
 
-        /// <devdoc>
+        /// <summary>
         ///      Edits the given object value using the editor style provided by GetEditorStyle. A service provider is provided so that any required editing services can be obtained.
-        /// </devdoc>
+        /// </summary>
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
 
@@ -42,14 +42,12 @@ namespace System.Windows.Forms.Design.Editors
                             builderDialog.Font = (Font)uiService.Styles["DialogFont"];
                         }
 
-                        DataGridViewCellStyle dgvcs = value as DataGridViewCellStyle;
-                        if (dgvcs != null)
+                        if (value is DataGridViewCellStyle dgvcs)
                         {
                             builderDialog.CellStyle = dgvcs;
                         }
 
                         builderDialog.Context = context;
-
                         try
                         {
                             if (builderDialog.ShowDialog() == DialogResult.OK)
@@ -63,13 +61,12 @@ namespace System.Windows.Forms.Design.Editors
                     }
                 }
             }
-
             return value;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Retrieves the editing style of the Edit method.  If the method is not supported, this will return None.
-        /// </devdoc>
+        /// </summary>
         public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
         {
             return UITypeEditorEditStyle.Modal;

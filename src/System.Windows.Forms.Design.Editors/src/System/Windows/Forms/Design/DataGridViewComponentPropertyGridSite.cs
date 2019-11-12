@@ -9,45 +9,34 @@ namespace System.Windows.Forms.Design
     internal class DataGridViewComponentPropertyGridSite : ISite
     {
 
-        private IServiceProvider sp;
-        private IComponent comp;
-        private bool inGetService = false;
+        private readonly IServiceProvider _sp;
+        private readonly IComponent _comp;
+        private bool _inGetService = false;
 
         public DataGridViewComponentPropertyGridSite(IServiceProvider sp, IComponent comp)
         {
-            this.sp = sp;
-            this.comp = comp;
+            _sp = sp;
+            _comp = comp;
         }
 
-        /** The component sited by this component site. */
-        /// <include file='doc\ISite.uex' path='docs/doc[@for="ISite.Component"]/*' />
-        /// <devdoc>
-        ///    <para>When implemented by a class, gets the component associated with the <see cref='System.ComponentModel.ISite'/>.</para>
-        /// </devdoc>
-        public IComponent Component { get { return comp; } }
+        /// <summary>
+        ///    When implemented by a class, gets the component associated with the <see cref='System.ComponentModel.ISite'/>.
+        /// </summary>
+        public IComponent Component { get { return _comp; } }
 
-        /** The container in which the component is sited. */
-        /// <include file='doc\ISite.uex' path='docs/doc[@for="ISite.Container"]/*' />
-        /// <devdoc>
-        /// <para>When implemented by a class, gets the container associated with the <see cref='System.ComponentModel.ISite'/>.</para>
-        /// </devdoc>
+        /// <summary>
+        /// When implemented by a class, gets the container associated with the <see cref='System.ComponentModel.ISite'/>.
+        /// </summary>
         public IContainer Container { get { return null; } }
 
-        /** Indicates whether the component is in design mode. */
-        /// <include file='doc\ISite.uex' path='docs/doc[@for="ISite.DesignMode"]/*' />
-        /// <devdoc>
-        ///    <para>When implemented by a class, determines whether the component is in design mode.</para>
-        /// </devdoc>
+        /// <summary>
+        ///    When implemented by a class, determines whether the component is in design mode.
+        /// </summary>
         public bool DesignMode { get { return false; } }
 
-        /**
-         * The name of the component.
-         */
-        /// <include file='doc\ISite.uex' path='docs/doc[@for="ISite.Name"]/*' />
-        /// <devdoc>
-        ///    <para>When implemented by a class, gets or sets the name of
-        ///       the component associated with the <see cref='System.ComponentModel.ISite'/>.</para>
-        /// </devdoc>
+        /// <summary>
+        ///    When implemented by a class, gets or sets the name of the component associated with the <see cref='System.ComponentModel.ISite'/>.
+        /// </summary>
         public string Name
         {
             get { return null; }
@@ -56,16 +45,16 @@ namespace System.Windows.Forms.Design
 
         public object GetService(Type t)
         {
-            if (!inGetService && sp != null)
+            if (!_inGetService && _sp != null)
             {
                 try
                 {
-                    inGetService = true;
-                    return sp.GetService(t);
+                    _inGetService = true;
+                    return _sp.GetService(t);
                 }
                 finally
                 {
-                    inGetService = false;
+                    _inGetService = false;
                 }
             }
             return null;

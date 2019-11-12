@@ -14,106 +14,94 @@ namespace System.Windows.Forms.Design
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private PropertyGrid cellStyleProperties;
-        private GroupBox previewGroupBox;
-        private Button okButton;
-        private Button cancelButton;
-        private Label label1;
-        private DataGridView listenerDataGridView;
-        private DataGridView sampleDataGridView;
-        private DataGridView sampleDataGridViewSelected;
-        private TableLayoutPanel sampleViewTableLayoutPanel;
-        private TableLayoutPanel okCancelTableLayoutPanel;
-        private TableLayoutPanel overarchingTableLayoutPanel;
-        private TableLayoutPanel sampleViewGridsTableLayoutPanel;
-        private Container components = null;
-        private Label normalLabel = null;
-        private Label selectedLabel = null;
-        private IHelpService helpService = null;
-        private IComponent comp = null;
-        private IServiceProvider serviceProvider = null;
+        private PropertyGrid _cellStyleProperties;
+        private GroupBox _previewGroupBox;
+        private Button _okButton;
+        private Button _cancelButton;
+        private Label _label1;
+        private DataGridView _listenerDataGridView;
+        private DataGridView _sampleDataGridView;
+        private DataGridView _sampleDataGridViewSelected;
+        private TableLayoutPanel _sampleViewTableLayoutPanel;
+        private TableLayoutPanel _okCancelTableLayoutPanel;
+        private TableLayoutPanel _overarchingTableLayoutPanel;
+        private TableLayoutPanel _sampleViewGridsTableLayoutPanel;
+        private Container _components = null;
+        private Label _normalLabel = null;
+        private Label _selectedLabel = null;
+        private IHelpService _helpService = null;
+        private IComponent _comp = null;
+        private IServiceProvider _serviceProvider = null;
 
-        private DataGridViewCellStyle cellStyle;
-        private ITypeDescriptorContext context = null;
+        private DataGridViewCellStyle _cellStyle;
+        private ITypeDescriptorContext _context = null;
 
         public DataGridViewCellStyleBuilder(IServiceProvider serviceProvider, IComponent comp)
         {
-            //
             // Required for Windows Form Designer support
-            //
             InitializeComponent();
-            //
             // Adds columns and rows to the grid, also resizes them
-            //
             InitializeGrids();
 
-            listenerDataGridView = new System.Windows.Forms.DataGridView();
-            this.serviceProvider = serviceProvider;
-            this.comp = comp;
+            _listenerDataGridView = new System.Windows.Forms.DataGridView();
+            _serviceProvider = serviceProvider;
+            _comp = comp;
 
-            if (this.serviceProvider != null)
+            if (_serviceProvider != null)
             {
-                helpService = (IHelpService)serviceProvider.GetService(typeof(IHelpService));
+                _helpService = (IHelpService)serviceProvider.GetService(typeof(IHelpService));
             }
-
-            cellStyleProperties.Site = new DataGridViewComponentPropertyGridSite(serviceProvider, comp);
+            _cellStyleProperties.Site = new DataGridViewComponentPropertyGridSite(serviceProvider, comp);
         }
 
         private void InitializeGrids()
         {
-            sampleDataGridViewSelected.Size = new System.Drawing.Size(100, Font.Height + 9);
-            sampleDataGridView.Size = new System.Drawing.Size(100, Font.Height + 9);
-            sampleDataGridView.AccessibilityObject.Name = SR.CellStyleBuilderNormalPreviewAccName;
+            _sampleDataGridViewSelected.Size = new System.Drawing.Size(100, Font.Height + 9);
+            _sampleDataGridView.Size = new System.Drawing.Size(100, Font.Height + 9);
+            _sampleDataGridView.AccessibilityObject.Name = SR.CellStyleBuilderNormalPreviewAccName;
 
             DataGridViewRow row = new DataGridViewRow();
             row.Cells.Add(new DialogDataGridViewCell());
             row.Cells[0].Value = "####";
             row.Cells[0].AccessibilityObject.Name = SR.CellStyleBuilderSelectedPreviewAccName;
 
-            sampleDataGridViewSelected.Columns.Add(new DataGridViewTextBoxColumn());
-            sampleDataGridViewSelected.Rows.Add(row);
-            sampleDataGridViewSelected.Rows[0].Selected = true;
-            sampleDataGridViewSelected.AccessibilityObject.Name = SR.CellStyleBuilderSelectedPreviewAccName;
-
+            _sampleDataGridViewSelected.Columns.Add(new DataGridViewTextBoxColumn());
+            _sampleDataGridViewSelected.Rows.Add(row);
+            _sampleDataGridViewSelected.Rows[0].Selected = true;
+            _sampleDataGridViewSelected.AccessibilityObject.Name = SR.CellStyleBuilderSelectedPreviewAccName;
 
             row = new DataGridViewRow();
             row.Cells.Add(new DialogDataGridViewCell());
             row.Cells[0].Value = "####";
             row.Cells[0].AccessibilityObject.Name = SR.CellStyleBuilderNormalPreviewAccName;
 
-            sampleDataGridView.Columns.Add(new DataGridViewTextBoxColumn());
-            sampleDataGridView.Rows.Add(row);
+            _sampleDataGridView.Columns.Add(new DataGridViewTextBoxColumn());
+            _sampleDataGridView.Rows.Add(row);
         }
 
         public DataGridViewCellStyle CellStyle
         {
-            get
-            {
-                return cellStyle;
-            }
+            get => _cellStyle;
             set
             {
-                cellStyle = new DataGridViewCellStyle(value);
-                cellStyleProperties.SelectedObject = cellStyle;
+                _cellStyle = new DataGridViewCellStyle(value);
+                _cellStyleProperties.SelectedObject = _cellStyle;
                 ListenerDataGridViewDefaultCellStyleChanged(null, EventArgs.Empty);
-                listenerDataGridView.DefaultCellStyle = cellStyle;
-                listenerDataGridView.DefaultCellStyleChanged += new EventHandler(ListenerDataGridViewDefaultCellStyleChanged);
+                _listenerDataGridView.DefaultCellStyle = _cellStyle;
+                _listenerDataGridView.DefaultCellStyleChanged += new EventHandler(ListenerDataGridViewDefaultCellStyleChanged);
             }
         }
 
         public ITypeDescriptorContext Context
         {
-            set
-            {
-                context = value;
-            }
+            set => _context = value;
         }
 
         private void ListenerDataGridViewDefaultCellStyleChanged(object sender, EventArgs e)
         {
-            DataGridViewCellStyle cellStyleTmp = new DataGridViewCellStyle(cellStyle);
-            sampleDataGridView.DefaultCellStyle = cellStyleTmp;
-            sampleDataGridViewSelected.DefaultCellStyle = cellStyleTmp;
+            DataGridViewCellStyle cellStyleTmp = new DataGridViewCellStyle(_cellStyle);
+            _sampleDataGridView.DefaultCellStyle = cellStyleTmp;
+            _sampleDataGridViewSelected.DefaultCellStyle = cellStyleTmp;
         }
 
         /// <summary>
@@ -123,9 +111,9 @@ namespace System.Windows.Forms.Design
         {
             if (disposing)
             {
-                if (components != null)
+                if (_components != null)
                 {
-                    components.Dispose();
+                    _components.Dispose();
                 }
             }
             base.Dispose(disposing);
@@ -133,165 +121,136 @@ namespace System.Windows.Forms.Design
 
         #region Windows Form Designer generated code
         /// <summary>
-        /// Required method for Designer support - do not modify
-        /// the contents of this method with the code editor.
+        /// Required method for Designer support - do not modify the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent()
         {
             ComponentResourceManager resources = new ComponentResourceManager(typeof(DataGridViewCellStyleBuilder));
-            cellStyleProperties = new PropertyGrid();
-            sampleViewTableLayoutPanel = new TableLayoutPanel();
-            sampleViewGridsTableLayoutPanel = new TableLayoutPanel();
-            normalLabel = new Label();
-            sampleDataGridView = new DataGridView();
-            selectedLabel = new Label();
-            sampleDataGridViewSelected = new DataGridView();
-            label1 = new Label();
-            okButton = new Button();
-            cancelButton = new Button();
-            okCancelTableLayoutPanel = new TableLayoutPanel();
-            previewGroupBox = new GroupBox();
-            overarchingTableLayoutPanel = new TableLayoutPanel();
-            sampleViewTableLayoutPanel.SuspendLayout();
-            sampleViewGridsTableLayoutPanel.SuspendLayout();
-            ((ISupportInitialize)(sampleDataGridView)).BeginInit();
-            ((ISupportInitialize)(sampleDataGridViewSelected)).BeginInit();
-            okCancelTableLayoutPanel.SuspendLayout();
-            previewGroupBox.SuspendLayout();
-            overarchingTableLayoutPanel.SuspendLayout();
+            _cellStyleProperties = new PropertyGrid();
+            _sampleViewTableLayoutPanel = new TableLayoutPanel();
+            _sampleViewGridsTableLayoutPanel = new TableLayoutPanel();
+            _normalLabel = new Label();
+            _sampleDataGridView = new DataGridView();
+            _selectedLabel = new Label();
+            _sampleDataGridViewSelected = new DataGridView();
+            _label1 = new Label();
+            _okButton = new Button();
+            _cancelButton = new Button();
+            _okCancelTableLayoutPanel = new TableLayoutPanel();
+            _previewGroupBox = new GroupBox();
+            _overarchingTableLayoutPanel = new TableLayoutPanel();
+            _sampleViewTableLayoutPanel.SuspendLayout();
+            _sampleViewGridsTableLayoutPanel.SuspendLayout();
+            ((ISupportInitialize)(_sampleDataGridView)).BeginInit();
+            ((ISupportInitialize)(_sampleDataGridViewSelected)).BeginInit();
+            _okCancelTableLayoutPanel.SuspendLayout();
+            _previewGroupBox.SuspendLayout();
+            _overarchingTableLayoutPanel.SuspendLayout();
             SuspendLayout();
-            // 
             // cellStyleProperties
-            // 
-            resources.ApplyResources(cellStyleProperties, "cellStyleProperties");
+            resources.ApplyResources(_cellStyleProperties, "cellStyleProperties");
 
             // Linecolor assigned here is causing issues in the HC mode. Going with runtime default for HC mode.
             if (!SystemInformation.HighContrast)
             {
-                cellStyleProperties.LineColor = Drawing.SystemColors.ScrollBar;
+                _cellStyleProperties.LineColor = Drawing.SystemColors.ScrollBar;
             }
 
-            cellStyleProperties.Margin = new Padding(0, 0, 0, 3);
-            cellStyleProperties.Name = "cellStyleProperties";
-            cellStyleProperties.ToolbarVisible = false;
-            // 
+            _cellStyleProperties.Margin = new Padding(0, 0, 0, 3);
+            _cellStyleProperties.Name = "cellStyleProperties";
+            _cellStyleProperties.ToolbarVisible = false;
             // sampleViewTableLayoutPanel
-            // 
-            resources.ApplyResources(sampleViewTableLayoutPanel, "sampleViewTableLayoutPanel");
-            sampleViewTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 423F));
-            sampleViewTableLayoutPanel.Controls.Add(sampleViewGridsTableLayoutPanel, 0, 1);
-            sampleViewTableLayoutPanel.Controls.Add(label1, 0, 0);
-            sampleViewTableLayoutPanel.Name = "sampleViewTableLayoutPanel";
-            sampleViewTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            sampleViewTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            // 
+            resources.ApplyResources(_sampleViewTableLayoutPanel, "sampleViewTableLayoutPanel");
+            _sampleViewTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 423F));
+            _sampleViewTableLayoutPanel.Controls.Add(_sampleViewGridsTableLayoutPanel, 0, 1);
+            _sampleViewTableLayoutPanel.Controls.Add(_label1, 0, 0);
+            _sampleViewTableLayoutPanel.Name = "sampleViewTableLayoutPanel";
+            _sampleViewTableLayoutPanel.RowStyles.Add(new RowStyle());
+            _sampleViewTableLayoutPanel.RowStyles.Add(new RowStyle());
             // sampleViewGridsTableLayoutPanel
-            // 
-            resources.ApplyResources(sampleViewGridsTableLayoutPanel, "sampleViewGridsTableLayoutPanel");
-            sampleViewGridsTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 10F));
-            sampleViewGridsTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30F));
-            sampleViewGridsTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
-            sampleViewGridsTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30F));
-            sampleViewGridsTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 10F));
-            sampleViewGridsTableLayoutPanel.Controls.Add(normalLabel, 1, 0);
-            sampleViewGridsTableLayoutPanel.Controls.Add(sampleDataGridView, 1, 1);
-            sampleViewGridsTableLayoutPanel.Controls.Add(selectedLabel, 3, 0);
-            sampleViewGridsTableLayoutPanel.Controls.Add(sampleDataGridViewSelected, 3, 1);
-            sampleViewGridsTableLayoutPanel.Margin = new System.Windows.Forms.Padding(0, 3, 0, 0);
-            sampleViewGridsTableLayoutPanel.Name = "sampleViewGridsTableLayoutPanel";
-            sampleViewGridsTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            sampleViewGridsTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            // 
+            resources.ApplyResources(_sampleViewGridsTableLayoutPanel, "sampleViewGridsTableLayoutPanel");
+            _sampleViewGridsTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 10F));
+            _sampleViewGridsTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30F));
+            _sampleViewGridsTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
+            _sampleViewGridsTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30F));
+            _sampleViewGridsTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 10F));
+            _sampleViewGridsTableLayoutPanel.Controls.Add(_normalLabel, 1, 0);
+            _sampleViewGridsTableLayoutPanel.Controls.Add(_sampleDataGridView, 1, 1);
+            _sampleViewGridsTableLayoutPanel.Controls.Add(_selectedLabel, 3, 0);
+            _sampleViewGridsTableLayoutPanel.Controls.Add(_sampleDataGridViewSelected, 3, 1);
+            _sampleViewGridsTableLayoutPanel.Margin = new Padding(0, 3, 0, 0);
+            _sampleViewGridsTableLayoutPanel.Name = "sampleViewGridsTableLayoutPanel";
+            _sampleViewGridsTableLayoutPanel.RowStyles.Add(new RowStyle());
+            _sampleViewGridsTableLayoutPanel.RowStyles.Add(new RowStyle());
             // normalLabel
-            // 
-            resources.ApplyResources(normalLabel, "normalLabel");
-            normalLabel.Margin = new Padding(0);
-            normalLabel.Name = "normalLabel";
-            // 
+            resources.ApplyResources(_normalLabel, "normalLabel");
+            _normalLabel.Margin = new Padding(0);
+            _normalLabel.Name = "normalLabel";
             // sampleDataGridView
-            // 
-            sampleDataGridView.AllowUserToAddRows = false;
-            resources.ApplyResources(sampleDataGridView, "sampleDataGridView");
-            sampleDataGridView.ColumnHeadersVisible = false;
-            sampleDataGridView.Margin = new Padding(0);
-            sampleDataGridView.Name = "sampleDataGridView";
-            sampleDataGridView.ReadOnly = true;
-            sampleDataGridView.RowHeadersVisible = false;
-            sampleDataGridView.CellStateChanged += new DataGridViewCellStateChangedEventHandler(sampleDataGridView_CellStateChanged);
-            // 
+            _sampleDataGridView.AllowUserToAddRows = false;
+            resources.ApplyResources(_sampleDataGridView, "sampleDataGridView");
+            _sampleDataGridView.ColumnHeadersVisible = false;
+            _sampleDataGridView.Margin = new Padding(0);
+            _sampleDataGridView.Name = "sampleDataGridView";
+            _sampleDataGridView.ReadOnly = true;
+            _sampleDataGridView.RowHeadersVisible = false;
+            _sampleDataGridView.CellStateChanged += new DataGridViewCellStateChangedEventHandler(sampleDataGridView_CellStateChanged);
             // selectedLabel
-            // 
-            resources.ApplyResources(selectedLabel, "selectedLabel");
-            selectedLabel.Margin = new Padding(0);
-            selectedLabel.Name = "selectedLabel";
-            // 
+            resources.ApplyResources(_selectedLabel, "selectedLabel");
+            _selectedLabel.Margin = new Padding(0);
+            _selectedLabel.Name = "selectedLabel";
             // sampleDataGridViewSelected
-            // 
-            sampleDataGridViewSelected.AllowUserToAddRows = false;
-            resources.ApplyResources(sampleDataGridViewSelected, "sampleDataGridViewSelected");
-            sampleDataGridViewSelected.ColumnHeadersVisible = false;
-            sampleDataGridViewSelected.Margin = new Padding(0);
-            sampleDataGridViewSelected.Name = "sampleDataGridViewSelected";
-            sampleDataGridViewSelected.ReadOnly = true;
-            sampleDataGridViewSelected.RowHeadersVisible = false;
-            // 
+            _sampleDataGridViewSelected.AllowUserToAddRows = false;
+            resources.ApplyResources(_sampleDataGridViewSelected, "sampleDataGridViewSelected");
+            _sampleDataGridViewSelected.ColumnHeadersVisible = false;
+            _sampleDataGridViewSelected.Margin = new Padding(0);
+            _sampleDataGridViewSelected.Name = "sampleDataGridViewSelected";
+            _sampleDataGridViewSelected.ReadOnly = true;
+            _sampleDataGridViewSelected.RowHeadersVisible = false;
             // label1
-            // 
-            resources.ApplyResources(label1, "label1");
-            label1.Margin = new Padding(0, 0, 0, 3);
-            label1.Name = "label1";
-            // 
+            resources.ApplyResources(_label1, "label1");
+            _label1.Margin = new Padding(0, 0, 0, 3);
+            _label1.Name = "label1";
             // okButton
-            // 
-            resources.ApplyResources(okButton, "okButton");
-            okButton.DialogResult = DialogResult.OK;
-            okButton.Margin = new Padding(0, 0, 3, 0);
-            okButton.Name = "okButton";
-            // 
+            resources.ApplyResources(_okButton, "okButton");
+            _okButton.DialogResult = DialogResult.OK;
+            _okButton.Margin = new Padding(0, 0, 3, 0);
+            _okButton.Name = "okButton";
             // cancelButton
-            // 
-            resources.ApplyResources(cancelButton, "cancelButton");
-            cancelButton.DialogResult = DialogResult.Cancel;
-            cancelButton.Margin = new Padding(3, 0, 0, 0);
-            cancelButton.Name = "cancelButton";
-            // 
+            resources.ApplyResources(_cancelButton, "cancelButton");
+            _cancelButton.DialogResult = DialogResult.Cancel;
+            _cancelButton.Margin = new Padding(3, 0, 0, 0);
+            _cancelButton.Name = "cancelButton";
             // okCancelTableLayoutPanel
-            // 
-            resources.ApplyResources(okCancelTableLayoutPanel, "okCancelTableLayoutPanel");
-            okCancelTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            okCancelTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            okCancelTableLayoutPanel.Controls.Add(okButton, 0, 0);
-            okCancelTableLayoutPanel.Controls.Add(cancelButton, 1, 0);
-            okCancelTableLayoutPanel.Margin = new System.Windows.Forms.Padding(0, 3, 0, 0);
-            okCancelTableLayoutPanel.Name = "okCancelTableLayoutPanel";
-            okCancelTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            // 
+            resources.ApplyResources(_okCancelTableLayoutPanel, "okCancelTableLayoutPanel");
+            _okCancelTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            _okCancelTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            _okCancelTableLayoutPanel.Controls.Add(_okButton, 0, 0);
+            _okCancelTableLayoutPanel.Controls.Add(_cancelButton, 1, 0);
+            _okCancelTableLayoutPanel.Margin = new Padding(0, 3, 0, 0);
+            _okCancelTableLayoutPanel.Name = "okCancelTableLayoutPanel";
+            _okCancelTableLayoutPanel.RowStyles.Add(new RowStyle());
             // previewGroupBox
-            // 
-            resources.ApplyResources(previewGroupBox, "previewGroupBox");
-            previewGroupBox.Controls.Add(sampleViewTableLayoutPanel);
-            previewGroupBox.Margin = new Padding(0, 3, 0, 3);
-            previewGroupBox.Name = "previewGroupBox";
-            previewGroupBox.TabStop = false;
-            // 
+            resources.ApplyResources(_previewGroupBox, "previewGroupBox");
+            _previewGroupBox.Controls.Add(_sampleViewTableLayoutPanel);
+            _previewGroupBox.Margin = new Padding(0, 3, 0, 3);
+            _previewGroupBox.Name = "previewGroupBox";
+            _previewGroupBox.TabStop = false;
             // overarchingTableLayoutPanel
-            // 
-            resources.ApplyResources(overarchingTableLayoutPanel, "overarchingTableLayoutPanel");
-            overarchingTableLayoutPanel.ColumnStyles.Add(new ColumnStyle());
-            overarchingTableLayoutPanel.Controls.Add(cellStyleProperties, 0, 0);
-            overarchingTableLayoutPanel.Controls.Add(okCancelTableLayoutPanel, 0, 2);
-            overarchingTableLayoutPanel.Controls.Add(previewGroupBox, 0, 1);
-            overarchingTableLayoutPanel.Name = "overarchingTableLayoutPanel";
-            overarchingTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            overarchingTableLayoutPanel.RowStyles.Add(new RowStyle());
-            overarchingTableLayoutPanel.RowStyles.Add(new RowStyle());
-            // 
+            resources.ApplyResources(_overarchingTableLayoutPanel, "overarchingTableLayoutPanel");
+            _overarchingTableLayoutPanel.ColumnStyles.Add(new ColumnStyle());
+            _overarchingTableLayoutPanel.Controls.Add(_cellStyleProperties, 0, 0);
+            _overarchingTableLayoutPanel.Controls.Add(_okCancelTableLayoutPanel, 0, 2);
+            _overarchingTableLayoutPanel.Controls.Add(_previewGroupBox, 0, 1);
+            _overarchingTableLayoutPanel.Name = "overarchingTableLayoutPanel";
+            _overarchingTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            _overarchingTableLayoutPanel.RowStyles.Add(new RowStyle());
+            _overarchingTableLayoutPanel.RowStyles.Add(new RowStyle());
             // DataGridViewCellStyleBuilder
-            // 
             resources.ApplyResources(this, "$this");
             AutoScaleDimensions = new Drawing.SizeF(6F, 13F);
             AutoScaleMode = AutoScaleMode.Font;
-            Controls.Add(overarchingTableLayoutPanel);
+            Controls.Add(_overarchingTableLayoutPanel);
             FormBorderStyle = FormBorderStyle.FixedDialog;
             HelpButton = true;
             MaximizeBox = false;
@@ -299,21 +258,21 @@ namespace System.Windows.Forms.Design
             Name = "DataGridViewCellStyleBuilder";
             ShowIcon = false;
             ShowInTaskbar = false;
-            HelpButtonClicked += new System.ComponentModel.CancelEventHandler(DataGridViewCellStyleBuilder_HelpButtonClicked);
-            HelpRequested += new System.Windows.Forms.HelpEventHandler(DataGridViewCellStyleBuilder_HelpRequested);
-            Load += new System.EventHandler(DataGridViewCellStyleBuilder_Load);
-            sampleViewTableLayoutPanel.ResumeLayout(false);
-            sampleViewTableLayoutPanel.PerformLayout();
-            sampleViewGridsTableLayoutPanel.ResumeLayout(false);
-            sampleViewGridsTableLayoutPanel.PerformLayout();
-            ((ISupportInitialize)(sampleDataGridView)).EndInit();
-            ((ISupportInitialize)(sampleDataGridViewSelected)).EndInit();
-            okCancelTableLayoutPanel.ResumeLayout(false);
-            okCancelTableLayoutPanel.PerformLayout();
-            previewGroupBox.ResumeLayout(false);
-            previewGroupBox.PerformLayout();
-            overarchingTableLayoutPanel.ResumeLayout(false);
-            overarchingTableLayoutPanel.PerformLayout();
+            HelpButtonClicked += new CancelEventHandler(DataGridViewCellStyleBuilder_HelpButtonClicked);
+            HelpRequested += new HelpEventHandler(DataGridViewCellStyleBuilder_HelpRequested);
+            Load += new EventHandler(DataGridViewCellStyleBuilder_Load);
+            _sampleViewTableLayoutPanel.ResumeLayout(false);
+            _sampleViewTableLayoutPanel.PerformLayout();
+            _sampleViewGridsTableLayoutPanel.ResumeLayout(false);
+            _sampleViewGridsTableLayoutPanel.PerformLayout();
+            ((ISupportInitialize)(_sampleDataGridView)).EndInit();
+            ((ISupportInitialize)(_sampleDataGridViewSelected)).EndInit();
+            _okCancelTableLayoutPanel.ResumeLayout(false);
+            _okCancelTableLayoutPanel.PerformLayout();
+            _previewGroupBox.ResumeLayout(false);
+            _previewGroupBox.PerformLayout();
+            _overarchingTableLayoutPanel.ResumeLayout(false);
+            _overarchingTableLayoutPanel.PerformLayout();
             ResumeLayout(false);
         }
         #endregion
@@ -345,8 +304,7 @@ namespace System.Windows.Forms.Design
 
         private void DataGridViewCellStyleBuilder_HelpRequestHandled()
         {
-            IHelpService helpService = context.GetService(typeof(IHelpService)) as IHelpService;
-            if (helpService != null)
+            if (_context.GetService(typeof(IHelpService)) is IHelpService helpService)
             {
                 helpService.ShowHelpFromKeyword("vs.CellStyleDialog");
             }
@@ -355,31 +313,28 @@ namespace System.Windows.Forms.Design
         private void DataGridViewCellStyleBuilder_Load(object sender, System.EventArgs e)
         {
             // The cell inside the sampleDataGridView should not be selected.
-            sampleDataGridView.ClearSelection();
+            _sampleDataGridView.ClearSelection();
 
-            // make sure that the cell inside the sampleDataGridView and sampleDataGridViewSelected fill their
-            // respective dataGridView's
-            sampleDataGridView.Rows[0].Height = sampleDataGridView.Height;
-            sampleDataGridView.Columns[0].Width = sampleDataGridView.Width;
+            // make sure that the cell inside the sampleDataGridView and sampleDataGridViewSelected fill their respective dataGridView's
+            _sampleDataGridView.Rows[0].Height = _sampleDataGridView.Height;
+            _sampleDataGridView.Columns[0].Width = _sampleDataGridView.Width;
 
-            sampleDataGridViewSelected.Rows[0].Height = sampleDataGridViewSelected.Height;
-            sampleDataGridViewSelected.Columns[0].Width = sampleDataGridViewSelected.Width;
+            _sampleDataGridViewSelected.Rows[0].Height = _sampleDataGridViewSelected.Height;
+            _sampleDataGridViewSelected.Columns[0].Width = _sampleDataGridViewSelected.Width;
 
-            // sync the Layout event for both sample DataGridView's
-            // so that when the sample DataGridView's are laid out we know to change the size of their cells
-            sampleDataGridView.Layout += new System.Windows.Forms.LayoutEventHandler(sampleDataGridView_Layout);
-            sampleDataGridViewSelected.Layout += new System.Windows.Forms.LayoutEventHandler(sampleDataGridView_Layout);
+            // sync the Layout event for both sample DataGridView's so that when the sample DataGridView's are laid out we know to change the size of their cells
+            _sampleDataGridView.Layout += new System.Windows.Forms.LayoutEventHandler(sampleDataGridView_Layout);
+            _sampleDataGridViewSelected.Layout += new System.Windows.Forms.LayoutEventHandler(sampleDataGridView_Layout);
         }
 
         private void sampleDataGridView_CellStateChanged(object sender, System.Windows.Forms.DataGridViewCellStateChangedEventArgs e)
         {
-            Debug.Assert(e.Cell == sampleDataGridView.Rows[0].Cells[0], "the sample data grid view has only one cell");
-            Debug.Assert(sender == sampleDataGridView, "did we forget to unhook notification");
+            Debug.Assert(e.Cell == _sampleDataGridView.Rows[0].Cells[0], "the sample data grid view has only one cell");
+            Debug.Assert(sender == _sampleDataGridView, "did we forget to unhook notification");
             if ((e.StateChanged & DataGridViewElementStates.Selected) != 0 && (e.Cell.State & DataGridViewElementStates.Selected) != 0)
             {
-                // The cell inside the sample data grid view became selected.
-                // We don't want that to happen
-                sampleDataGridView.ClearSelection();
+                // The cell inside the sample data grid view became selected. We don't want that to happen
+                _sampleDataGridView.ClearSelection();
             }
         }
 
@@ -392,15 +347,14 @@ namespace System.Windows.Forms.Design
 
         private class DialogDataGridViewCell : DataGridViewTextBoxCell
         {
-            DialogDataGridViewCellAccessibleObject accObj = null;
+            DialogDataGridViewCellAccessibleObject _accObj = null;
             protected override AccessibleObject CreateAccessibilityInstance()
             {
-                if (accObj == null)
+                if (_accObj == null)
                 {
-                    accObj = new DialogDataGridViewCellAccessibleObject(this);
+                    _accObj = new DialogDataGridViewCellAccessibleObject(this);
                 }
-
-                return accObj;
+                return _accObj;
             }
 
             private class DialogDataGridViewCellAccessibleObject : DataGridViewCell.DataGridViewCellAccessibleObject
@@ -409,18 +363,11 @@ namespace System.Windows.Forms.Design
                 {
                 }
 
-                string name = "";
+                string _name = "";
                 public override string Name
                 {
-                    get
-                    {
-                        return name;
-                    }
-                    set
-                    {
-                        name = value;
-                    }
-
+                    get => _name;
+                    set => _name = value;
                 }
             }
         }

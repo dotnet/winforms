@@ -5,62 +5,44 @@
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 
 namespace System.Windows.Forms.Design.Editors
 {
     internal class ColumnHeaderCollectionEditor : CollectionEditor
     {
-        /// <devdoc>
+        /// <summary>
         /// Initializes a new instance of the <see cref='System.Windows.Forms.Design.ImageCollectionEditor'/> class.
-        /// </devdoc>
-
-        //Called through reflection
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        /// </summary>
         public ColumnHeaderCollectionEditor(Type type) : base(type)
         {
         }
 
-
-        /// <devdoc>
+        /// <summary>
         ///    Gets the help topic to display for the dialog help button or pressing F1. Override to display a different help topic.
-        /// </devdoc>
+        /// </summary>
         protected override string HelpTopic
         {
-            get
-            {
-                return "net.ComponentModel.ColumnHeaderCollectionEditor";
-            }
+            get => "net.ComponentModel.ColumnHeaderCollectionEditor";
         }
 
-        /// <devdoc>
+        /// <summary>
         ///       Sets the specified collection to have the specified array of items.
-        /// </devdoc>
+        /// </summary>
         protected override object SetItems(object editValue, object[] value)
         {
-
-            if (editValue != null)
+            if (editValue is ListView.ColumnHeaderCollection list)
             {
-                // We look to see if the value implements IList, and if it does,  we set through that.
-                Debug.Assert(editValue is System.Collections.IList, "editValue is not an IList");
-                ListView.ColumnHeaderCollection list = editValue as ListView.ColumnHeaderCollection;
-                if (editValue != null)
-                {
-                    list.Clear();
-                    ColumnHeader[] colHeaders = new ColumnHeader[value.Length];
-                    Array.Copy(value, 0, colHeaders, 0, value.Length);
-                    list.AddRange(colHeaders);
-                }
+                list.Clear();
+                ColumnHeader[] colHeaders = new ColumnHeader[value.Length];
+                Array.Copy(value, 0, colHeaders, 0, value.Length);
+                list.AddRange(colHeaders);
             }
-
             return editValue;
         }
 
-        /// <devdoc>
-        ///    <para>
+        /// <summary>
         ///       Removes the item from listview column header collection
-        ///    </para>
-        /// </devdoc>
+        /// </summary>
         internal override void OnItemRemoving(object item)
         {
             if (!(Context.Instance is ListView listview))
@@ -70,7 +52,6 @@ namespace System.Windows.Forms.Design.Editors
 
             if (item is ColumnHeader column)
             {
-
                 IComponentChangeService cs = GetService(typeof(IComponentChangeService)) as IComponentChangeService;
                 PropertyDescriptor itemsProp = null;
                 if (cs != null)
