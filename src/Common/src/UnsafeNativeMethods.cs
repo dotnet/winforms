@@ -1234,7 +1234,7 @@ namespace System.Windows.Forms
             [PreserveSig]
             HRESULT QuickActivate(
                 Ole32.QACONTAINER pQaContainer,
-                [Out] tagQACONTROL pQaControl);
+                Ole32.QACONTROL* pQaControl);
 
             [PreserveSig]
             HRESULT SetContentExtent(
@@ -1545,26 +1545,6 @@ namespace System.Windows.Forms
 
             [PreserveSig]
             void ReleaseVarDesc(IntPtr varDesc);
-        }
-
-        [StructLayout(LayoutKind.Sequential)/*leftover(noAutoOffset)*/]
-        public sealed class tagQACONTROL
-        {
-            [MarshalAs(UnmanagedType.U4)/*leftover(offset=0, cbSize)*/]
-            public int cbSize = Marshal.SizeOf<tagQACONTROL>();
-
-            public Ole32.OLEMISC dwMiscStatus = 0;
-
-            [MarshalAs(UnmanagedType.U4)/*leftover(offset=8, dwViewStatus)*/]
-            public int dwViewStatus = 0;
-
-            public uint dwEventCookie = 0;
-
-            [MarshalAs(UnmanagedType.U4)/*leftover(offset=16, dwPropNotifyCookie)*/]
-            public int dwPropNotifyCookie = 0;
-
-            [MarshalAs(UnmanagedType.U4)/*leftover(offset=20, dwPointerActivationPolicy)*/]
-            public int dwPointerActivationPolicy = 0;
         }
 
         [StructLayout(LayoutKind.Sequential)]
