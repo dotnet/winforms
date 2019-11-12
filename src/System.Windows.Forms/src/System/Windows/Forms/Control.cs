@@ -10722,7 +10722,6 @@ namespace System.Windows.Forms
 
         internal IntPtr SendMessage(int msg, int wparam, IntPtr lparam)
         {
-            Debug.Assert(IsHandleCreated, "Performance alert!  Calling Control::SendMessage and forcing handle creation.  Re-work control so handle creation is not required to set properties.  If there is no work around, wrap the call in an IsHandleCreated check.");
             return UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), msg, (IntPtr)wparam, lparam);
         }
 

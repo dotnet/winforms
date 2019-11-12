@@ -6,6 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using Moq;
 using WinForms.Common.Tests;
 using Xunit;
 
@@ -13,59 +14,678 @@ namespace System.Windows.Forms.Tests
 {
     public class TreeViewTests
     {
-        [Fact]
-        public void Ctor_Default()
+        public TreeViewTests()
         {
-            var treeView = new SubTreeView();
-            Assert.Equal(SystemColors.Window, treeView.BackColor);
-            Assert.Null(treeView.BackgroundImage);
-            Assert.Equal(ImageLayout.Tile, treeView.BackgroundImageLayout);
-            Assert.Equal(BorderStyle.Fixed3D, treeView.BorderStyle);
-            Assert.False(treeView.CheckBoxes);
-            Assert.Equal(new Size(121, 97), treeView.DefaultSize);
-            Assert.Equal(0, treeView.DisplayRectangle.X);
-            Assert.Equal(0, treeView.DisplayRectangle.Y);
-            Assert.True(treeView.DisplayRectangle.Width > 0);
-            Assert.True(treeView.DisplayRectangle.Height > 0);
-            Assert.False(treeView.DoubleBuffered);
-            Assert.Equal(TreeViewDrawMode.Normal, treeView.DrawMode);
-            Assert.Equal(SystemColors.WindowText, treeView.ForeColor);
-            Assert.False(treeView.FullRowSelect);
-            Assert.True(treeView.HideSelection);
-            Assert.False(treeView.HotTracking);
-            Assert.Equal(-1, treeView.ImageIndex);
-            Assert.Equal(string.Empty, treeView.ImageKey);
-            Assert.NotNull(treeView.ImageIndexer);
-            Assert.Equal(0, treeView.ImageIndexer.Index);
-            Assert.Null(treeView.ImageList);
-            Assert.Equal(19, treeView.Indent);
-            Assert.Equal(Control.DefaultFont.Height + 3, treeView.ItemHeight);
-            Assert.False(treeView.LabelEdit);
-            Assert.Equal(Color.Empty, treeView.LineColor);
-            Assert.Same(treeView.Nodes, treeView.Nodes);
-            Assert.Empty(treeView.Nodes);
-            Assert.Equal(Padding.Empty, treeView.Padding);
-            Assert.Equal("\\", treeView.PathSeparator);
-            Assert.False(treeView.RightToLeftLayout);
-            Assert.NotNull(treeView.root);
-            Assert.True(treeView.Scrollable);
-            Assert.Equal(-1, treeView.SelectedImageIndex);
-            Assert.Equal(string.Empty, treeView.SelectedImageKey);
-            Assert.NotNull(treeView.SelectedImageIndexer);
-            Assert.Equal(0, treeView.SelectedImageIndexer.Index);
-            Assert.Null(treeView.SelectedNode);
-            Assert.Equal(new Size(121, 97), treeView.Size);
-            Assert.True(treeView.ShowLines);
-            Assert.False(treeView.ShowNodeToolTips);
-            Assert.True(treeView.ShowPlusMinus);
-            Assert.True(treeView.ShowRootLines);
-            Assert.False(treeView.Sorted);
-            Assert.Null(treeView.StateImageList);
-            Assert.Empty(treeView.Text);
-            Assert.Null(treeView.TopNode);
-            Assert.Null(treeView.TreeViewNodeSorter);
-            Assert.True(treeView.Visible);
-            Assert.Equal(0, treeView.VisibleCount);
+            Application.ThreadException += (sender, e) => throw new Exception(e.Exception.StackTrace.ToString());
+        }
+
+        [WinFormsFact]
+        public void TreeView_Ctor_Default()
+        {
+            using var control = new SubTreeView();
+            Assert.False(control.AllowDrop);
+            Assert.Equal(AnchorStyles.Top | AnchorStyles.Left, control.Anchor);
+            Assert.False(control.AutoSize);
+            Assert.Equal(SystemColors.Window, control.BackColor);
+            Assert.Null(control.BackgroundImage);
+            Assert.Equal(ImageLayout.Tile, control.BackgroundImageLayout);
+            Assert.Null(control.BindingContext);
+            Assert.Equal(BorderStyle.Fixed3D, control.BorderStyle);
+            Assert.Equal(97, control.Bottom);
+            Assert.Equal(new Rectangle(0, 0, 121, 97), control.Bounds);
+            Assert.True(control.CanEnableIme);
+            Assert.True(control.CanRaiseEvents);
+            Assert.True(control.CausesValidation);
+            Assert.False(control.CheckBoxes);
+            Assert.Equal(117, control.ClientSize.Width);
+            Assert.Equal(93, control.ClientSize.Height);
+            Assert.Equal(new Rectangle(0, 0, 117, 93), control.ClientRectangle);
+            Assert.Null(control.Container);
+            Assert.Null(control.ContextMenu);
+            Assert.Null(control.ContextMenuStrip);
+            Assert.Empty(control.Controls);
+            Assert.Same(control.Controls, control.Controls);
+            Assert.False(control.Created);
+            Assert.Same(Cursors.Default, control.Cursor);
+            Assert.Same(Cursors.Default, control.DefaultCursor);
+            Assert.Equal(ImeMode.Inherit, control.DefaultImeMode);
+            Assert.Equal(new Padding(3), control.DefaultMargin);
+            Assert.Equal(Size.Empty, control.DefaultMaximumSize);
+            Assert.Equal(Size.Empty, control.DefaultMinimumSize);
+            Assert.Equal(Padding.Empty, control.DefaultPadding);
+            Assert.Equal(new Size(121, 97), control.DefaultSize);
+            Assert.False(control.DesignMode);
+            Assert.Equal(new Rectangle(0, 0, 117, 93), control.DisplayRectangle);
+            Assert.Equal(DockStyle.None, control.Dock);
+            Assert.False(control.DoubleBuffered);
+            Assert.Equal(TreeViewDrawMode.Normal, control.DrawMode);
+            Assert.True(control.Enabled);
+            Assert.NotNull(control.Events);
+            Assert.Same(control.Events, control.Events);
+            Assert.Equal(Control.DefaultFont, control.Font);
+            Assert.Equal(control.Font.Height, control.FontHeight);
+            Assert.Equal(SystemColors.WindowText, control.ForeColor);
+            Assert.False(control.FullRowSelect);
+            Assert.False(control.HasChildren);
+            Assert.Equal(97, control.Height);
+            Assert.True(control.HideSelection);
+            Assert.False(control.HotTracking);
+            Assert.Equal(-1, control.ImageIndex);
+            Assert.Equal(string.Empty, control.ImageKey);
+            Assert.Null(control.ImageList);
+            Assert.Equal(ImeMode.NoControl, control.ImeMode);
+            Assert.Equal(ImeMode.NoControl, control.ImeModeBase);
+            Assert.Equal(19, control.Indent);
+            Assert.Equal(Control.DefaultFont.Height + 3, control.ItemHeight);
+            Assert.False(control.LabelEdit);
+            Assert.NotNull(control.LayoutEngine);
+            Assert.Same(control.LayoutEngine, control.LayoutEngine);
+            Assert.Equal(0, control.Left);
+            Assert.Equal(Color.Empty, control.LineColor);
+            Assert.Equal(Point.Empty, control.Location);
+            Assert.Equal(new Padding(3), control.Margin);
+            Assert.Equal(Size.Empty, control.MaximumSize);
+            Assert.Equal(Size.Empty, control.MinimumSize);
+            Assert.Same(control.Nodes, control.Nodes);
+            Assert.Empty(control.Nodes);
+            Assert.Equal(Padding.Empty, control.Padding);
+            Assert.Null(control.Parent);
+            Assert.Equal("\\", control.PathSeparator);
+            Assert.Equal("Microsoft\u00AE .NET", control.ProductName);
+            Assert.Equal(new Size(121, 97), control.PreferredSize);
+            Assert.False(control.RecreatingHandle);
+            Assert.Null(control.Region);
+            Assert.False(control.ResizeRedraw);
+            Assert.Equal(121, control.Right);
+            Assert.Equal(RightToLeft.No, control.RightToLeft);
+            Assert.False(control.RightToLeftLayout);
+            Assert.True(control.Scrollable);
+            Assert.Equal(-1, control.SelectedImageIndex);
+            Assert.Equal(string.Empty, control.SelectedImageKey);
+            Assert.Null(control.SelectedNode);
+            Assert.True(control.ShowLines);
+            Assert.False(control.ShowNodeToolTips);
+            Assert.True(control.ShowPlusMinus);
+            Assert.True(control.ShowRootLines);
+            Assert.Null(control.Site);
+            Assert.Equal(new Size(121, 97), control.Size);
+            Assert.False(control.Sorted);
+            Assert.Null(control.StateImageList);
+            Assert.Equal(0, control.TabIndex);
+            Assert.True(control.TabStop);
+            Assert.Empty(control.Text);
+            Assert.Equal(0, control.Top);
+            Assert.Null(control.TopLevelControl);
+            Assert.Null(control.TopNode);
+            Assert.Null(control.TreeViewNodeSorter);
+            Assert.True(control.Visible);
+            Assert.Equal(0, control.VisibleCount);
+            Assert.Equal(121, control.Width);
+
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void TreeView_CreateParams_GetDefault_ReturnsExpected()
+        {
+            using var control = new SubTreeView();
+            CreateParams createParams = control.CreateParams;
+            Assert.Null(createParams.Caption);
+            Assert.Equal("SysTreeView32", createParams.ClassName);
+            Assert.Equal(0x8, createParams.ClassStyle);
+            Assert.Equal(0x200, createParams.ExStyle);
+            Assert.Equal(97, createParams.Height);
+            Assert.Equal(IntPtr.Zero, createParams.Parent);
+            Assert.Null(createParams.Param);
+            Assert.Equal(0x56010007, createParams.Style);
+            Assert.Equal(121, createParams.Width);
+            Assert.Equal(0, createParams.X);
+            Assert.Equal(0, createParams.Y);
+            Assert.Same(createParams, control.CreateParams);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void TreeView_CreateParams_GetDefaultWithHandle_ReturnsExpected()
+        {
+            using var control = new SubTreeView();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            CreateParams createParams = control.CreateParams;
+            Assert.Null(createParams.Caption);
+            Assert.Equal("SysTreeView32", createParams.ClassName);
+            Assert.Equal(0x8, createParams.ClassStyle);
+            Assert.Equal(0x200, createParams.ExStyle);
+            Assert.Equal(97, createParams.Height);
+            Assert.Equal(IntPtr.Zero, createParams.Parent);
+            Assert.Null(createParams.Param);
+            Assert.Equal(0x56010007, createParams.Style);
+            Assert.Equal(121, createParams.Width);
+            Assert.Equal(0, createParams.X);
+            Assert.Equal(0, createParams.Y);
+            Assert.Same(createParams, control.CreateParams);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsTheory]
+        [InlineData(BorderStyle.None, 0x56010007, 0)]
+        [InlineData(BorderStyle.Fixed3D, 0x56010007, 0x200)]
+        [InlineData(BorderStyle.FixedSingle, 0x56810007, 0)]
+        public void TreeView_CreateParams_GetBorder_ReturnsExpected(BorderStyle borderStyle, int expectedStyle, int expectedExStyle)
+        {
+            using var control = new SubTreeView
+            {
+                BorderStyle = borderStyle
+            };
+
+            CreateParams createParams = control.CreateParams;
+            Assert.Null(createParams.Caption);
+            Assert.Equal("SysTreeView32", createParams.ClassName);
+            Assert.Equal(0x8, createParams.ClassStyle);
+            Assert.Equal(expectedExStyle, createParams.ExStyle);
+            Assert.Equal(97, createParams.Height);
+            Assert.Equal(IntPtr.Zero, createParams.Parent);
+            Assert.Null(createParams.Param);
+            Assert.Equal(expectedStyle, createParams.Style);
+            Assert.Equal(121, createParams.Width);
+            Assert.Equal(0, createParams.X);
+            Assert.Equal(0, createParams.Y);
+            Assert.Same(createParams, control.CreateParams);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(true, 0x56010007)]
+        [InlineData(false, 0x56012007)]
+        public void TreeView_CreateParams_GetScrollable_ReturnsExpected(bool scrollable, int expectedStyle)
+        {
+            using var control = new SubTreeView
+            {
+                Scrollable = scrollable
+            };
+
+            CreateParams createParams = control.CreateParams;
+            Assert.Null(createParams.Caption);
+            Assert.Equal("SysTreeView32", createParams.ClassName);
+            Assert.Equal(0x8, createParams.ClassStyle);
+            Assert.Equal(0x200, createParams.ExStyle);
+            Assert.Equal(97, createParams.Height);
+            Assert.Equal(IntPtr.Zero, createParams.Parent);
+            Assert.Null(createParams.Param);
+            Assert.Equal(expectedStyle, createParams.Style);
+            Assert.Equal(121, createParams.Width);
+            Assert.Equal(0, createParams.X);
+            Assert.Equal(0, createParams.Y);
+            Assert.Same(createParams, control.CreateParams);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(true, 0x56010007)]
+        [InlineData(false, 0x56010027)]
+        public void TreeView_CreateParams_GetHideSelection_ReturnsExpected(bool hideSelection, int expectedStyle)
+        {
+            using var control = new SubTreeView
+            {
+                HideSelection = hideSelection
+            };
+
+            CreateParams createParams = control.CreateParams;
+            Assert.Null(createParams.Caption);
+            Assert.Equal("SysTreeView32", createParams.ClassName);
+            Assert.Equal(0x8, createParams.ClassStyle);
+            Assert.Equal(0x200, createParams.ExStyle);
+            Assert.Equal(97, createParams.Height);
+            Assert.Equal(IntPtr.Zero, createParams.Parent);
+            Assert.Null(createParams.Param);
+            Assert.Equal(expectedStyle, createParams.Style);
+            Assert.Equal(121, createParams.Width);
+            Assert.Equal(0, createParams.X);
+            Assert.Equal(0, createParams.Y);
+            Assert.Same(createParams, control.CreateParams);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(true, 0x5601000F)]
+        [InlineData(false, 0x56010007)]
+        public void TreeView_CreateParams_GetLabelEdit_ReturnsExpected(bool labelEdit, int expectedStyle)
+        {
+            using var control = new SubTreeView
+            {
+                LabelEdit = labelEdit
+            };
+
+            CreateParams createParams = control.CreateParams;
+            Assert.Null(createParams.Caption);
+            Assert.Equal("SysTreeView32", createParams.ClassName);
+            Assert.Equal(0x8, createParams.ClassStyle);
+            Assert.Equal(0x200, createParams.ExStyle);
+            Assert.Equal(97, createParams.Height);
+            Assert.Equal(IntPtr.Zero, createParams.Parent);
+            Assert.Null(createParams.Param);
+            Assert.Equal(expectedStyle, createParams.Style);
+            Assert.Equal(121, createParams.Width);
+            Assert.Equal(0, createParams.X);
+            Assert.Equal(0, createParams.Y);
+            Assert.Same(createParams, control.CreateParams);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(true, 0x56010007)]
+        [InlineData(false, 0x56010005)]
+        public void TreeView_CreateParams_GetShowLines_ReturnsExpected(bool showLines, int expectedStyle)
+        {
+            using var control = new SubTreeView
+            {
+                ShowLines = showLines
+            };
+
+            CreateParams createParams = control.CreateParams;
+            Assert.Null(createParams.Caption);
+            Assert.Equal("SysTreeView32", createParams.ClassName);
+            Assert.Equal(0x8, createParams.ClassStyle);
+            Assert.Equal(0x200, createParams.ExStyle);
+            Assert.Equal(97, createParams.Height);
+            Assert.Equal(IntPtr.Zero, createParams.Parent);
+            Assert.Null(createParams.Param);
+            Assert.Equal(expectedStyle, createParams.Style);
+            Assert.Equal(121, createParams.Width);
+            Assert.Equal(0, createParams.X);
+            Assert.Equal(0, createParams.Y);
+            Assert.Same(createParams, control.CreateParams);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(true, 0x56010007)]
+        [InlineData(false, 0x56010006)]
+        public void TreeView_CreateParams_GetShowPlusMinus_ReturnsExpected(bool showPlusMinus, int expectedStyle)
+        {
+            using var control = new SubTreeView
+            {
+                ShowPlusMinus = showPlusMinus
+            };
+
+            CreateParams createParams = control.CreateParams;
+            Assert.Null(createParams.Caption);
+            Assert.Equal("SysTreeView32", createParams.ClassName);
+            Assert.Equal(0x8, createParams.ClassStyle);
+            Assert.Equal(0x200, createParams.ExStyle);
+            Assert.Equal(97, createParams.Height);
+            Assert.Equal(IntPtr.Zero, createParams.Parent);
+            Assert.Null(createParams.Param);
+            Assert.Equal(expectedStyle, createParams.Style);
+            Assert.Equal(121, createParams.Width);
+            Assert.Equal(0, createParams.X);
+            Assert.Equal(0, createParams.Y);
+            Assert.Same(createParams, control.CreateParams);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(true, 0x56010007)]
+        [InlineData(false, 0x56010003)]
+        public void TreeView_CreateParams_GetShowRootLines_ReturnsExpected(bool showRootLines, int expectedStyle)
+        {
+            using var control = new SubTreeView
+            {
+                ShowRootLines = showRootLines
+            };
+
+            CreateParams createParams = control.CreateParams;
+            Assert.Null(createParams.Caption);
+            Assert.Equal("SysTreeView32", createParams.ClassName);
+            Assert.Equal(0x8, createParams.ClassStyle);
+            Assert.Equal(0x200, createParams.ExStyle);
+            Assert.Equal(97, createParams.Height);
+            Assert.Equal(IntPtr.Zero, createParams.Parent);
+            Assert.Null(createParams.Param);
+            Assert.Equal(expectedStyle, createParams.Style);
+            Assert.Equal(121, createParams.Width);
+            Assert.Equal(0, createParams.X);
+            Assert.Equal(0, createParams.Y);
+            Assert.Same(createParams, control.CreateParams);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(true, 0x56010207)]
+        [InlineData(false, 0x56010007)]
+        public void TreeView_CreateParams_GetHotTracking_ReturnsExpected(bool hotTracking, int expectedStyle)
+        {
+            using var control = new SubTreeView
+            {
+                HotTracking = hotTracking
+            };
+
+            CreateParams createParams = control.CreateParams;
+            Assert.Null(createParams.Caption);
+            Assert.Equal("SysTreeView32", createParams.ClassName);
+            Assert.Equal(0x8, createParams.ClassStyle);
+            Assert.Equal(0x200, createParams.ExStyle);
+            Assert.Equal(97, createParams.Height);
+            Assert.Equal(IntPtr.Zero, createParams.Parent);
+            Assert.Null(createParams.Param);
+            Assert.Equal(expectedStyle, createParams.Style);
+            Assert.Equal(121, createParams.Width);
+            Assert.Equal(0, createParams.X);
+            Assert.Equal(0, createParams.Y);
+            Assert.Same(createParams, control.CreateParams);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(true, 0x56011007)]
+        [InlineData(false, 0x56010007)]
+        public void TreeView_CreateParams_GetFullRowSelect_ReturnsExpected(bool fullRowSelect, int expectedStyle)
+        {
+            using var control = new SubTreeView
+            {
+                FullRowSelect = fullRowSelect
+            };
+
+            CreateParams createParams = control.CreateParams;
+            Assert.Null(createParams.Caption);
+            Assert.Equal("SysTreeView32", createParams.ClassName);
+            Assert.Equal(0x8, createParams.ClassStyle);
+            Assert.Equal(0x200, createParams.ExStyle);
+            Assert.Equal(97, createParams.Height);
+            Assert.Equal(IntPtr.Zero, createParams.Parent);
+            Assert.Null(createParams.Param);
+            Assert.Equal(expectedStyle, createParams.Style);
+            Assert.Equal(121, createParams.Width);
+            Assert.Equal(0, createParams.X);
+            Assert.Equal(0, createParams.Y);
+            Assert.Same(createParams, control.CreateParams);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(1)]
+        [InlineData(2)]
+        public void TreeView_CreateParams_GetItemHeight_ReturnsExpected(int value)
+        {
+            using var control = new SubTreeView
+            {
+                ItemHeight = value
+            };
+
+            CreateParams createParams = control.CreateParams;
+            Assert.Null(createParams.Caption);
+            Assert.Equal("SysTreeView32", createParams.ClassName);
+            Assert.Equal(0x8, createParams.ClassStyle);
+            Assert.Equal(0x200, createParams.ExStyle);
+            Assert.Equal(97, createParams.Height);
+            Assert.Equal(IntPtr.Zero, createParams.Parent);
+            Assert.Null(createParams.Param);
+            Assert.Equal(0x56010007, createParams.Style);
+            Assert.Equal(121, createParams.Width);
+            Assert.Equal(0, createParams.X);
+            Assert.Equal(0, createParams.Y);
+            Assert.Same(createParams, control.CreateParams);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(1)]
+        [InlineData(2)]
+        public void TreeView_CreateParams_GetItemHeightWithHandle_ReturnsExpected(int itemHeight)
+        {
+            using var control = new SubTreeView
+            {
+                ItemHeight = itemHeight
+            };
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            CreateParams createParams = control.CreateParams;
+            Assert.Null(createParams.Caption);
+            Assert.Equal("SysTreeView32", createParams.ClassName);
+            Assert.Equal(0x8, createParams.ClassStyle);
+            Assert.Equal(0x200, createParams.ExStyle);
+            Assert.Equal(97, createParams.Height);
+            Assert.Equal(IntPtr.Zero, createParams.Parent);
+            Assert.Null(createParams.Param);
+            Assert.Equal(0x56010007, createParams.Style);
+            Assert.Equal(121, createParams.Width);
+            Assert.Equal(0, createParams.X);
+            Assert.Equal(0, createParams.Y);
+            Assert.Same(createParams, control.CreateParams);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsTheory]
+        [InlineData(11, 0x56014007, 1)]
+        [InlineData(12, 0x56010007, 0)]
+        public void TreeView_CreateParams_GetItemHeightInSetterWithHandle_ReturnsExpected(int itemHeight, int expectedStyle, int expectedCreatedCallCount)
+        {
+            using var control = new SubTreeView();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) =>
+            {
+                CreateParams createParams = control.CreateParams;
+                Assert.Null(createParams.Caption);
+                Assert.Equal("SysTreeView32", createParams.ClassName);
+                Assert.Equal(0x8, createParams.ClassStyle);
+                Assert.Equal(0x200, createParams.ExStyle);
+                Assert.Equal(97, createParams.Height);
+                Assert.Equal(IntPtr.Zero, createParams.Parent);
+                Assert.Null(createParams.Param);
+                Assert.Equal(expectedStyle, createParams.Style);
+                Assert.Equal(121, createParams.Width);
+                Assert.Equal(0, createParams.X);
+                Assert.Equal(0, createParams.Y);
+                Assert.Same(createParams, control.CreateParams);
+                Assert.True(control.IsHandleCreated);
+                createdCallCount++;
+            };
+            control.ItemHeight = itemHeight;
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(expectedCreatedCallCount, createdCallCount);
+        }
+
+        [WinFormsTheory]
+        [InlineData(true, true)]
+        [InlineData(true, false)]
+        [InlineData(false, true)]
+        [InlineData(false, false)]
+        public void TreeView_CreateParams_GetShowNodeTooltips_ReturnsExpected(bool designMode, bool showNodeTooltips)
+        {
+            var mockSite = new Mock<ISite>(MockBehavior.Strict);
+            mockSite
+                .Setup(s => s.GetService(typeof(AmbientProperties)))
+                .Returns(null);
+            mockSite
+                .Setup(s => s.Container)
+                .Returns((IContainer)null);
+            mockSite
+                .Setup(s => s.DesignMode)
+                .Returns(designMode);
+            using var control = new SubTreeView
+            {
+                Site = mockSite.Object,
+                ShowNodeToolTips = showNodeTooltips
+            };
+
+            CreateParams createParams = control.CreateParams;
+            Assert.Null(createParams.Caption);
+            Assert.Equal("SysTreeView32", createParams.ClassName);
+            Assert.Equal(0x8, createParams.ClassStyle);
+            Assert.Equal(0x200, createParams.ExStyle);
+            Assert.Equal(97, createParams.Height);
+            Assert.Equal(IntPtr.Zero, createParams.Parent);
+            Assert.Null(createParams.Param);
+            Assert.Equal(0x56010007, createParams.Style);
+            Assert.Equal(121, createParams.Width);
+            Assert.Equal(0, createParams.X);
+            Assert.Equal(0, createParams.Y);
+            Assert.Same(createParams, control.CreateParams);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(true, true, 0x56010007)]
+        [InlineData(true, false, 0x56010007)]
+        [InlineData(false, true, 0x56010807)]
+        [InlineData(false, false, 0x56010007)]
+        public void TreeView_CreateParams_GetShowNodeTooltipsWithHandle_ReturnsExpected(bool designMode, bool showNodeTooltips, int expectedStyle)
+        {
+            var mockSite = new Mock<ISite>(MockBehavior.Strict);
+            mockSite
+                .Setup(s => s.GetService(typeof(AmbientProperties)))
+                .Returns(null);
+            mockSite
+                .Setup(s => s.Container)
+                .Returns((IContainer)null);
+            mockSite
+                .Setup(s => s.DesignMode)
+                .Returns(designMode);
+            using var control = new SubTreeView
+            {
+                Site = mockSite.Object,
+                ShowNodeToolTips = showNodeTooltips
+            };
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            CreateParams createParams = control.CreateParams;
+            Assert.Null(createParams.Caption);
+            Assert.Equal("SysTreeView32", createParams.ClassName);
+            Assert.Equal(0x8, createParams.ClassStyle);
+            Assert.Equal(0x200, createParams.ExStyle);
+            Assert.Equal(97, createParams.Height);
+            Assert.Equal(IntPtr.Zero, createParams.Parent);
+            Assert.Null(createParams.Param);
+            Assert.Equal(expectedStyle, createParams.Style);
+            Assert.Equal(121, createParams.Width);
+            Assert.Equal(0, createParams.X);
+            Assert.Equal(0, createParams.Y);
+            Assert.Same(createParams, control.CreateParams);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        public void TreeView_CreateParams_GetCheckBoxes_ReturnsExpected(bool checkBoxes)
+        {
+            using var control = new SubTreeView
+            {
+                CheckBoxes = checkBoxes
+            };
+
+            CreateParams createParams = control.CreateParams;
+            Assert.Null(createParams.Caption);
+            Assert.Equal("SysTreeView32", createParams.ClassName);
+            Assert.Equal(0x8, createParams.ClassStyle);
+            Assert.Equal(0x200, createParams.ExStyle);
+            Assert.Equal(97, createParams.Height);
+            Assert.Equal(IntPtr.Zero, createParams.Parent);
+            Assert.Null(createParams.Param);
+            Assert.Equal(0x56010007, createParams.Style);
+            Assert.Equal(121, createParams.Width);
+            Assert.Equal(0, createParams.X);
+            Assert.Equal(0, createParams.Y);
+            Assert.Same(createParams, control.CreateParams);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(true, 0x56010107)]
+        [InlineData(false, 0x56010007)]
+        public void TreeView_CreateParams_GetCheckBoxesWithHandle_ReturnsExpected(bool checkBoxes, int expectedStyle)
+        {
+            using var control = new SubTreeView
+            {
+                CheckBoxes = checkBoxes
+            };
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            CreateParams createParams = control.CreateParams;
+            Assert.Null(createParams.Caption);
+            Assert.Equal("SysTreeView32", createParams.ClassName);
+            Assert.Equal(0x8, createParams.ClassStyle);
+            Assert.Equal(0x200, createParams.ExStyle);
+            Assert.Equal(97, createParams.Height);
+            Assert.Equal(IntPtr.Zero, createParams.Parent);
+            Assert.Null(createParams.Param);
+            Assert.Equal(expectedStyle, createParams.Style);
+            Assert.Equal(121, createParams.Width);
+            Assert.Equal(0, createParams.X);
+            Assert.Equal(0, createParams.Y);
+            Assert.Same(createParams, control.CreateParams);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsTheory]
+        [InlineData(RightToLeft.Inherit, true, 0x56010007, 0x200)]
+        [InlineData(RightToLeft.No, true, 0x56010007, 0x200)]
+        [InlineData(RightToLeft.Yes, true, 0x56010007, 0x400200)]
+        [InlineData(RightToLeft.Inherit, false, 0x56010007, 0x200)]
+        [InlineData(RightToLeft.No, false, 0x56010007, 0x200)]
+        [InlineData(RightToLeft.Yes, false, 0x56010047, 0x7200)]
+        public void TreeView_CreateParams_GetRightToLeft_ReturnsExpected(RightToLeft rightToLeft, bool rightToLeftLayout, int expectedStyle, int expectedExStyle)
+        {
+            using var control = new SubTreeView
+            {
+                RightToLeft = rightToLeft,
+                RightToLeftLayout = rightToLeftLayout
+            };
+            CreateParams createParams = control.CreateParams;
+            Assert.Null(createParams.Caption);
+            Assert.Equal("SysTreeView32", createParams.ClassName);
+            Assert.Equal(0x8, createParams.ClassStyle);
+            Assert.Equal(expectedExStyle, createParams.ExStyle);
+            Assert.Equal(97, createParams.Height);
+            Assert.Equal(IntPtr.Zero, createParams.Parent);
+            Assert.Null(createParams.Param);
+            Assert.Equal(expectedStyle, createParams.Style);
+            Assert.Equal(121, createParams.Width);
+            Assert.Equal(0, createParams.X);
+            Assert.Equal(0, createParams.Y);
+            Assert.Same(createParams, control.CreateParams);
         }
 
         public static IEnumerable<object[]> BackColor_TestData()
@@ -2019,7 +2639,6 @@ namespace System.Windows.Forms.Tests
             };
             Assert.Equal(expectedHeight, treeView.ItemHeight);
         }
-
         public static IEnumerable<object[]> ItemHeight_Set_TestData()
         {
             yield return new object[] { -1, Control.DefaultFont.Height + 3 };
@@ -2028,61 +2647,77 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { 32766, 32766 };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(ItemHeight_Set_TestData))]
-        public void ItemHeight_Set_GetReturnsExpected(int value, int expected)
+        public void TreeView_ItemHeight_Set_GetReturnsExpected(int value, int expected)
         {
-            var treeView = new TreeView
+            using var control = new TreeView
             {
                 ItemHeight = value
             };
-            Assert.Equal(expected, treeView.ItemHeight);
+            Assert.Equal(expected, control.ItemHeight);
+            Assert.False(control.IsHandleCreated);
 
             // Set same.
-            treeView.ItemHeight = value;
-            Assert.Equal(expected, treeView.ItemHeight);
+            control.ItemHeight = value;
+            Assert.Equal(expected, control.ItemHeight);
+            Assert.False(control.IsHandleCreated);
         }
 
         [Theory]
-        [InlineData(-1)]
-        [InlineData(1)]
-        [InlineData(2)]
-        [InlineData(32766)]
-        public void ItemHeight_SetWithHandle_GetReturnsExpected(int value)
+        [InlineData(-1, 0)]
+        [InlineData(1, 1)]
+        [InlineData(2, 0)]
+        [InlineData(32766, 0)]
+        public void TreeView_ItemHeight_SetWithHandle_GetReturnsExpected(int value, int expectedCreatedCallCount)
         {
-            var treeView = new TreeView();
-            Assert.NotEqual(IntPtr.Zero, treeView.Handle);
+            var control = new TreeView();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
 
-            treeView.ItemHeight = value;
-            Assert.True(treeView.ItemHeight > 0);
+            control.ItemHeight = value;
+            Assert.True(control.ItemHeight > 0);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(expectedCreatedCallCount, createdCallCount);
 
             // Set same.
-            treeView.ItemHeight = value;
-            Assert.True(treeView.ItemHeight > 0);
+            control.ItemHeight = value;
+            Assert.True(control.ItemHeight > 0);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(expectedCreatedCallCount, createdCallCount);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(-2)]
         [InlineData(0)]
         [InlineData(32767)]
-        public void ItemHeight_SetInvalid_ThrowsArgumentOutOfRangeException(int value)
+        public void TreeView_ItemHeight_SetInvalid_ThrowsArgumentOutOfRangeException(int value)
         {
-            var treeView = new TreeView();
-            Assert.Throws<ArgumentOutOfRangeException>("value", () => treeView.ItemHeight = value);
+            using var control = new TreeView();
+            Assert.Throws<ArgumentOutOfRangeException>("value", () => control.ItemHeight = value);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(-2)]
         [InlineData(0)]
         [InlineData(-1)]
         [InlineData(32767)]
-        public void ItemHeight_SetInvalidWithCustomValue_ThrowsArgumentOutOfRangeException(int indent)
+        public void TreeView_ItemHeight_SetInvalidWithCustomValue_ThrowsArgumentOutOfRangeException(int indent)
         {
-            var treeView = new TreeView
+            using var control = new TreeView
             {
                 ItemHeight = 1
             };
-            Assert.Throws<ArgumentOutOfRangeException>("value", () => treeView.ItemHeight = indent);
+            Assert.Throws<ArgumentOutOfRangeException>("value", () => control.ItemHeight = indent);
         }
 
         [Theory]
@@ -3991,15 +4626,2016 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<ArgumentException>(() => node.Nodes.Add(node));
         }
 
+        [WinFormsFact]
+        public void TreeView_GetAutoSizeMode_Invoke_ReturnsExpected()
+        {
+            using var control = new SubTreeView();
+            Assert.Equal(AutoSizeMode.GrowOnly, control.GetAutoSizeMode());
+        }
+
+        public static IEnumerable<object[]> GetNodeAt_Empty_TestData()
+        {
+            yield return new object[] { new Point(int.MinValue, int.MinValue) };
+            yield return new object[] { new Point(-1, -2) };
+            yield return new object[] { new Point(-1, 0) };
+            yield return new object[] { new Point(-1, 2) };
+            yield return new object[] { new Point(0, -2) };
+            yield return new object[] { new Point(0, 0) };
+            yield return new object[] { new Point(0, 2) };
+            yield return new object[] { new Point(1, -2) };
+            yield return new object[] { new Point(1, 0) };
+            yield return new object[] { new Point(1, 2) };
+            yield return new object[] { new Point(int.MaxValue, int.MaxValue) };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(GetNodeAt_Empty_TestData))]
+        public void TreeView_GetNodeAt_InvokePointEmpty_ReturnsNull(Point pt)
+        {
+            using var control = new TreeView();
+            Assert.Null(control.GetNodeAt(pt));
+            Assert.True(control.IsHandleCreated);
+
+            // Call again.
+            Assert.Null(control.GetNodeAt(pt));
+            Assert.True(control.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> GetNodeAt_NotEmptyValid_TestData()
+        {
+            yield return new object[] { new Point(0, 0) };
+            yield return new object[] { new Point(20, 0) };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(GetNodeAt_NotEmptyValid_TestData))]
+        public void TreeView_GetNodeAt_InvokePointNotEmptyValid_Success(Point pt)
+        {
+            using var control = new TreeView();
+            var node1 = new TreeNode("Some Long Text");
+            control.Nodes.Add(node1);
+            Assert.Same(node1, control.GetNodeAt(pt));
+            Assert.True(control.IsHandleCreated);
+
+            // Call again.
+            Assert.Same(node1, control.GetNodeAt(pt));
+            Assert.True(control.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> GetNodeAt_NotEmptyInvalid_TestData()
+        {
+            yield return new object[] { new Point(int.MinValue, int.MinValue) };
+            yield return new object[] { new Point(-1, -2) };
+            yield return new object[] { new Point(-1, 0) };
+            yield return new object[] { new Point(-1, 2) };
+            yield return new object[] { new Point(0, -2) };
+            yield return new object[] { new Point(1, -2) };
+            yield return new object[] { new Point(int.MaxValue, int.MaxValue) };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(GetNodeAt_NotEmptyInvalid_TestData))]
+        public void TreeView_GetNodeAt_InvokePointNotEmptyInvalid_Success(Point pt)
+        {
+            using var control = new TreeView();
+            var node1 = new TreeNode("Some Long Text");
+            control.Nodes.Add(node1);
+            Assert.Null(control.GetNodeAt(pt));
+            Assert.True(control.IsHandleCreated);
+
+            // Call again.
+            Assert.Null(control.GetNodeAt(pt));
+            Assert.True(control.IsHandleCreated);
+        }
+        
+        [WinFormsTheory]
+        [MemberData(nameof(GetNodeAt_Empty_TestData))]
+        public void TreeView_GetNodeAt_InvokePointEmptyWithHandle_Success(Point pt)
+        {
+            using var control = new TreeView();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            Assert.Null(control.GetNodeAt(pt));
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Call again.
+            Assert.Null(control.GetNodeAt(pt));
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(GetNodeAt_NotEmptyValid_TestData))]
+        public void TreeView_GetNodeAt_InvokePointNotEmptyValidWithHandle_Success(Point pt)
+        {
+            using var control = new TreeView();
+            var node1 = new TreeNode("Some Long Text");
+            control.Nodes.Add(node1);
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            Assert.Same(node1, control.GetNodeAt(pt));
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Call again.
+            Assert.Same(node1, control.GetNodeAt(pt));
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(GetNodeAt_NotEmptyInvalid_TestData))]
+        public void TreeView_GetNodeAt_InvokePointNotEmptyInvalidWithHandle_Success(Point pt)
+        {
+            using var control = new TreeView();
+            var node1 = new TreeNode("Some Long Text");
+            control.Nodes.Add(node1);
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            Assert.Null(control.GetNodeAt(pt));
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Call again.
+            Assert.Null(control.GetNodeAt(pt));
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(GetNodeAt_Empty_TestData))]
+        public void TreeView_GetNodeAt_InvokeIntIntEmpty_ReturnsNull(Point pt)
+        {
+            using var control = new TreeView();
+            Assert.Null(control.GetNodeAt(pt.X, pt.Y));
+            Assert.True(control.IsHandleCreated);
+
+            // Call again.
+            Assert.Null(control.GetNodeAt(pt.X, pt.Y));
+            Assert.True(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(GetNodeAt_NotEmptyValid_TestData))]
+        public void TreeView_GetNodeAt_InvokeIntIntNotEmptyValid_Success(Point pt)
+        {
+            using var control = new TreeView();
+            var node1 = new TreeNode("Some Long Text");
+            control.Nodes.Add(node1);
+            Assert.Same(node1, control.GetNodeAt(pt.X, pt.Y));
+            Assert.True(control.IsHandleCreated);
+
+            // Call again.
+            Assert.Same(node1, control.GetNodeAt(pt.X, pt.Y));
+            Assert.True(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(GetNodeAt_NotEmptyInvalid_TestData))]
+        public void TreeView_GetNodeAt_InvokeIntIntNotEmptyInvalid_Success(Point pt)
+        {
+            using var control = new TreeView();
+            var node1 = new TreeNode("Some Long Text");
+            control.Nodes.Add(node1);
+            Assert.Null(control.GetNodeAt(pt.X, pt.Y));
+            Assert.True(control.IsHandleCreated);
+
+            // Call again.
+            Assert.Null(control.GetNodeAt(pt.X, pt.Y));
+            Assert.True(control.IsHandleCreated);
+        }
+        
+        [WinFormsTheory]
+        [MemberData(nameof(GetNodeAt_Empty_TestData))]
+        public void TreeView_GetNodeAt_InvokeIntIntEmptyWithHandle_Success(Point pt)
+        {
+            using var control = new TreeView();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            Assert.Null(control.GetNodeAt(pt.X, pt.Y));
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Call again.
+            Assert.Null(control.GetNodeAt(pt.X, pt.Y));
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(GetNodeAt_NotEmptyValid_TestData))]
+        public void TreeView_GetNodeAt_InvokeIntIntNotEmptyValidWithHandle_Success(Point pt)
+        {
+            using var control = new TreeView();
+            var node1 = new TreeNode("Some Long Text");
+            control.Nodes.Add(node1);
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            Assert.Same(node1, control.GetNodeAt(pt.X, pt.Y));
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Call again.
+            Assert.Same(node1, control.GetNodeAt(pt.X, pt.Y));
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(GetNodeAt_NotEmptyInvalid_TestData))]
+        public void TreeView_GetNodeAt_InvokeIntIntNotEmptyInvalidWithHandle_Success(Point pt)
+        {
+            using var control = new TreeView();
+            var node1 = new TreeNode("Some Long Text");
+            control.Nodes.Add(node1);
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            Assert.Null(control.GetNodeAt(pt.X, pt.Y));
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Call again.
+            Assert.Null(control.GetNodeAt(pt.X, pt.Y));
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsTheory]
+        [InlineData(ControlStyles.ContainerControl, false)]
+        [InlineData(ControlStyles.UserPaint, false)]
+        [InlineData(ControlStyles.Opaque, false)]
+        [InlineData(ControlStyles.ResizeRedraw, false)]
+        [InlineData(ControlStyles.FixedWidth, false)]
+        [InlineData(ControlStyles.FixedHeight, false)]
+        [InlineData(ControlStyles.StandardClick, false)]
+        [InlineData(ControlStyles.Selectable, true)]
+        [InlineData(ControlStyles.UserMouse, false)]
+        [InlineData(ControlStyles.SupportsTransparentBackColor, false)]
+        [InlineData(ControlStyles.StandardDoubleClick, true)]
+        [InlineData(ControlStyles.AllPaintingInWmPaint, true)]
+        [InlineData(ControlStyles.CacheText, false)]
+        [InlineData(ControlStyles.EnableNotifyMessage, false)]
+        [InlineData(ControlStyles.DoubleBuffer, false)]
+        [InlineData(ControlStyles.OptimizedDoubleBuffer, false)]
+        [InlineData(ControlStyles.UseTextForAccessibility, false)]
+        [InlineData((ControlStyles)0, true)]
+        [InlineData((ControlStyles)int.MaxValue, false)]
+        [InlineData((ControlStyles)(-1), false)]
+        public void TreeView_GetStyle_Invoke_ReturnsExpected(ControlStyles flag, bool expected)
+        {
+            using var control = new SubTreeView();
+            Assert.Equal(expected, control.GetStyle(flag));
+
+            // Call again to test caching.
+            Assert.Equal(expected, control.GetStyle(flag));
+        }
+
+        public static IEnumerable<object[]> HitTest_Empty_TestData()
+        {
+            yield return new object[] { new Point(int.MinValue, int.MinValue), TreeViewHitTestLocations.AboveClientArea | TreeViewHitTestLocations.LeftOfClientArea };
+            yield return new object[] { new Point(-1, -2), TreeViewHitTestLocations.AboveClientArea | TreeViewHitTestLocations.LeftOfClientArea };
+            yield return new object[] { new Point(-1, 0), TreeViewHitTestLocations.LeftOfClientArea };
+            yield return new object[] { new Point(-1, 2), TreeViewHitTestLocations.LeftOfClientArea };
+            yield return new object[] { new Point(0, -2), TreeViewHitTestLocations.AboveClientArea };
+            yield return new object[] { new Point(0, 0), TreeViewHitTestLocations.None };
+            yield return new object[] { new Point(0, 2), TreeViewHitTestLocations.None };
+            yield return new object[] { new Point(1, -2), TreeViewHitTestLocations.AboveClientArea };
+            yield return new object[] { new Point(1, 0), TreeViewHitTestLocations.None };
+            yield return new object[] { new Point(1, 2), TreeViewHitTestLocations.None };
+            yield return new object[] { new Point(int.MaxValue, int.MaxValue), TreeViewHitTestLocations.BelowClientArea | TreeViewHitTestLocations.RightOfClientArea };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(HitTest_Empty_TestData))]
+        public void TreeView_HitTest_InvokePointEmpty_Success(Point pt, TreeViewHitTestLocations expectedLocations)
+        {
+            using var control = new TreeView();
+            TreeViewHitTestInfo result = control.HitTest(pt);
+            Assert.Equal(expectedLocations, result.Location);
+            Assert.Null(result.Node);
+            Assert.True(control.IsHandleCreated);
+
+            // Call again.
+            result = control.HitTest(pt);
+            Assert.Equal(expectedLocations, result.Location);
+            Assert.Null(result.Node);
+            Assert.True(control.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> HitTest_NotEmptyValid_TestData()
+        {
+            yield return new object[] { new Point(0, 0), TreeViewHitTestLocations.Indent };
+            yield return new object[] { new Point(20, 0), TreeViewHitTestLocations.Label };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(HitTest_NotEmptyValid_TestData))]
+        public void TreeView_HitTest_InvokePointNotEmptyValid_Success(Point pt, TreeViewHitTestLocations expectedLocations)
+        {
+            using var control = new TreeView();
+            var node1 = new TreeNode("Some Long Text");
+            control.Nodes.Add(node1);
+            TreeViewHitTestInfo result = control.HitTest(pt);
+            Assert.Equal(expectedLocations, result.Location);
+            Assert.Same(node1, result.Node);
+            Assert.True(control.IsHandleCreated);
+
+            // Call again.
+            result = control.HitTest(pt);
+            Assert.Equal(expectedLocations, result.Location);
+            Assert.Same(node1, result.Node);
+            Assert.True(control.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> HitTest_NotEmptyInvalid_TestData()
+        {
+            yield return new object[] { new Point(int.MinValue, int.MinValue), TreeViewHitTestLocations.AboveClientArea | TreeViewHitTestLocations.LeftOfClientArea };
+            yield return new object[] { new Point(-1, -2), TreeViewHitTestLocations.AboveClientArea | TreeViewHitTestLocations.LeftOfClientArea };
+            yield return new object[] { new Point(-1, 0), TreeViewHitTestLocations.LeftOfClientArea };
+            yield return new object[] { new Point(-1, 2), TreeViewHitTestLocations.LeftOfClientArea };
+            yield return new object[] { new Point(0, -2), TreeViewHitTestLocations.AboveClientArea };
+            yield return new object[] { new Point(1, -2), TreeViewHitTestLocations.AboveClientArea };
+            yield return new object[] { new Point(int.MaxValue, int.MaxValue), TreeViewHitTestLocations.BelowClientArea | TreeViewHitTestLocations.RightOfClientArea };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(HitTest_NotEmptyInvalid_TestData))]
+        public void TreeView_HitTest_InvokePointNotEmptyInvalid_Success(Point pt, TreeViewHitTestLocations expectedLocations)
+        {
+            using var control = new TreeView();
+            var node1 = new TreeNode("Some Long Text");
+            control.Nodes.Add(node1);
+            TreeViewHitTestInfo result = control.HitTest(pt);
+            Assert.Equal(expectedLocations, result.Location);
+            Assert.Null(result.Node);
+            Assert.True(control.IsHandleCreated);
+
+            // Call again.
+            result = control.HitTest(pt);
+            Assert.Equal(expectedLocations, result.Location);
+            Assert.Null(result.Node);
+            Assert.True(control.IsHandleCreated);
+        }
+        
+        [WinFormsTheory]
+        [MemberData(nameof(HitTest_Empty_TestData))]
+        public void TreeView_HitTest_InvokePointEmptyWithHandle_Success(Point pt, TreeViewHitTestLocations expectedLocations)
+        {
+            using var control = new TreeView();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            TreeViewHitTestInfo result = control.HitTest(pt);
+            Assert.Equal(expectedLocations, result.Location);
+            Assert.Null(result.Node);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Call again.
+            result = control.HitTest(pt);
+            Assert.Equal(expectedLocations, result.Location);
+            Assert.Null(result.Node);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(HitTest_NotEmptyValid_TestData))]
+        public void TreeView_HitTest_InvokePointNotEmptyValidWithHandle_Success(Point pt, TreeViewHitTestLocations expectedLocations)
+        {
+            using var control = new TreeView();
+            var node1 = new TreeNode("Some Long Text");
+            control.Nodes.Add(node1);
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            TreeViewHitTestInfo result = control.HitTest(pt);
+            Assert.Equal(expectedLocations, result.Location);
+            Assert.Same(node1, result.Node);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Call again.
+            result = control.HitTest(pt);
+            Assert.Equal(expectedLocations, result.Location);
+            Assert.Same(node1, result.Node);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(HitTest_NotEmptyInvalid_TestData))]
+        public void TreeView_HitTest_InvokePointNotEmptyInvalidWithHandle_Success(Point pt, TreeViewHitTestLocations expectedLocations)
+        {
+            using var control = new TreeView();
+            var node1 = new TreeNode("Some Long Text");
+            control.Nodes.Add(node1);
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            TreeViewHitTestInfo result = control.HitTest(pt);
+            Assert.Equal(expectedLocations, result.Location);
+            Assert.Null(result.Node);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Call again.
+            result = control.HitTest(pt);
+            Assert.Equal(expectedLocations, result.Location);
+            Assert.Null(result.Node);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(HitTest_Empty_TestData))]
+        public void TreeView_HitTest_InvokeIntIntEmpty_Success(Point pt, TreeViewHitTestLocations expectedLocations)
+        {
+            using var control = new TreeView();
+            TreeViewHitTestInfo result = control.HitTest(pt.X, pt.Y);
+            Assert.Equal(expectedLocations, result.Location);
+            Assert.Null(result.Node);
+            Assert.True(control.IsHandleCreated);
+
+            // Call again.
+            result = control.HitTest(pt.X, pt.Y);
+            Assert.Equal(expectedLocations, result.Location);
+            Assert.Null(result.Node);
+            Assert.True(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(HitTest_NotEmptyValid_TestData))]
+        public void TreeView_HitTest_InvokeIntIntNotEmptyValid_Success(Point pt, TreeViewHitTestLocations expectedLocations)
+        {
+            using var control = new TreeView();
+            var node1 = new TreeNode("Some Long Text");
+            control.Nodes.Add(node1);
+            TreeViewHitTestInfo result = control.HitTest(pt.X, pt.Y);
+            Assert.Equal(expectedLocations, result.Location);
+            Assert.Same(node1, result.Node);
+            Assert.True(control.IsHandleCreated);
+
+            // Call again.
+            result = control.HitTest(pt.X, pt.Y);
+            Assert.Equal(expectedLocations, result.Location);
+            Assert.Same(node1, result.Node);
+            Assert.True(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(HitTest_NotEmptyInvalid_TestData))]
+        public void TreeView_HitTest_InvokeIntIntNotEmptyInvalid_Success(Point pt, TreeViewHitTestLocations expectedLocations)
+        {
+            using var control = new TreeView();
+            var node1 = new TreeNode("Some Long Text");
+            control.Nodes.Add(node1);
+            TreeViewHitTestInfo result = control.HitTest(pt.X, pt.Y);
+            Assert.Equal(expectedLocations, result.Location);
+            Assert.Null(result.Node);
+            Assert.True(control.IsHandleCreated);
+
+            // Call again.
+            result = control.HitTest(pt.X, pt.Y);
+            Assert.Equal(expectedLocations, result.Location);
+            Assert.Null(result.Node);
+            Assert.True(control.IsHandleCreated);
+        }
+        
+        [WinFormsTheory]
+        [MemberData(nameof(HitTest_Empty_TestData))]
+        public void TreeView_HitTest_InvokeIntIntEmptyWithHandle_Success(Point pt, TreeViewHitTestLocations expectedLocations)
+        {
+            using var control = new TreeView();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            TreeViewHitTestInfo result = control.HitTest(pt.X, pt.Y);
+            Assert.Equal(expectedLocations, result.Location);
+            Assert.Null(result.Node);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Call again.
+            result = control.HitTest(pt.X, pt.Y);
+            Assert.Equal(expectedLocations, result.Location);
+            Assert.Null(result.Node);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(HitTest_NotEmptyValid_TestData))]
+        public void TreeView_HitTest_InvokeIntIntNotEmptyValidWithHandle_Success(Point pt, TreeViewHitTestLocations expectedLocations)
+        {
+            using var control = new TreeView();
+            var node1 = new TreeNode("Some Long Text");
+            control.Nodes.Add(node1);
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            TreeViewHitTestInfo result = control.HitTest(pt.X, pt.Y);
+            Assert.Equal(expectedLocations, result.Location);
+            Assert.Same(node1, result.Node);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Call again.
+            result = control.HitTest(pt.X, pt.Y);
+            Assert.Equal(expectedLocations, result.Location);
+            Assert.Same(node1, result.Node);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(HitTest_NotEmptyInvalid_TestData))]
+        public void TreeView_HitTest_InvokeIntIntNotEmptyInvalidWithHandle_Success(Point pt, TreeViewHitTestLocations expectedLocations)
+        {
+            using var control = new TreeView();
+            var node1 = new TreeNode("Some Long Text");
+            control.Nodes.Add(node1);
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            TreeViewHitTestInfo result = control.HitTest(pt.X, pt.Y);
+            Assert.Equal(expectedLocations, result.Location);
+            Assert.Null(result.Node);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Call again.
+            result = control.HitTest(pt.X, pt.Y);
+            Assert.Equal(expectedLocations, result.Location);
+            Assert.Null(result.Node);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        public static IEnumerable<object[]> TreeViewEventArgs_TestData()
+        {
+            yield return new object[] { null };
+            yield return new object[] { new TreeViewEventArgs(null) };
+            yield return new object[] { new TreeViewEventArgs(new TreeNode()) };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(TreeViewEventArgs_TestData))]
+        public void TreeView_OnAfterCheck_Invoke_CallsAfterCheck(TreeViewEventArgs eventArgs)
+        {
+            using var control = new SubTreeView();
+            int callCount = 0;
+            TreeViewEventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+        
+            // Call with handler.
+            control.AfterCheck += handler;
+            control.OnAfterCheck(eventArgs);
+            Assert.Equal(1, callCount);
+        
+            // Remove handler.
+            control.AfterCheck -= handler;
+            control.OnAfterCheck(eventArgs);
+            Assert.Equal(1, callCount);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(TreeViewEventArgs_TestData))]
+        public void TreeView_OnAfterCollapse_Invoke_CallsAfterCollapse(TreeViewEventArgs eventArgs)
+        {
+            using var control = new SubTreeView();
+            int callCount = 0;
+            TreeViewEventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+        
+            // Call with handler.
+            control.AfterCollapse += handler;
+            control.OnAfterCollapse(eventArgs);
+            Assert.Equal(1, callCount);
+        
+            // Remove handler.
+            control.AfterCollapse -= handler;
+            control.OnAfterCollapse(eventArgs);
+            Assert.Equal(1, callCount);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(TreeViewEventArgs_TestData))]
+        public void TreeView_OnAfterExpand_Invoke_CallsAfterExpand(TreeViewEventArgs eventArgs)
+        {
+            using var control = new SubTreeView();
+            int callCount = 0;
+            TreeViewEventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+        
+            // Call with handler.
+            control.AfterExpand += handler;
+            control.OnAfterExpand(eventArgs);
+            Assert.Equal(1, callCount);
+        
+            // Remove handler.
+            control.AfterExpand -= handler;
+            control.OnAfterExpand(eventArgs);
+            Assert.Equal(1, callCount);
+        }
+
+        public static IEnumerable<object[]> NodeLabelEditEventArgs_TestData()
+        {
+            yield return new object[] { null };
+            yield return new object[] { new NodeLabelEditEventArgs(null) };
+            yield return new object[] { new NodeLabelEditEventArgs(new TreeNode()) };
+            yield return new object[] { new NodeLabelEditEventArgs(new TreeNode(), "label") };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(NodeLabelEditEventArgs_TestData))]
+        public void TreeView_OnAfterLabelEdit_Invoke_CallsAfterLabelEdit(NodeLabelEditEventArgs eventArgs)
+        {
+            using var control = new SubTreeView();
+            int callCount = 0;
+            NodeLabelEditEventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+        
+            // Call with handler.
+            control.AfterLabelEdit += handler;
+            control.OnAfterLabelEdit(eventArgs);
+            Assert.Equal(1, callCount);
+        
+            // Remove handler.
+            control.AfterLabelEdit -= handler;
+            control.OnAfterLabelEdit(eventArgs);
+            Assert.Equal(1, callCount);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(TreeViewEventArgs_TestData))]
+        public void TreeView_OnAfterSelect_Invoke_CallsOnAfterSelect(TreeViewEventArgs eventArgs)
+        {
+            using var control = new SubTreeView();
+            int callCount = 0;
+            TreeViewEventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+        
+            // Call with handler.
+            control.AfterSelect += handler;
+            control.OnAfterSelect(eventArgs);
+            Assert.Equal(1, callCount);
+        
+            // Remove handler.
+            control.AfterSelect -= handler;
+            control.OnAfterSelect(eventArgs);
+            Assert.Equal(1, callCount);
+        }
+
+        public static IEnumerable<object[]> TreeViewCancelEventArgs_TestData()
+        {
+            yield return new object[] { null };
+            yield return new object[] { new TreeViewCancelEventArgs(null, false, TreeViewAction.ByKeyboard) };
+            yield return new object[] { new TreeViewCancelEventArgs(new TreeNode(), true, TreeViewAction.ByKeyboard) };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(TreeViewCancelEventArgs_TestData))]
+        public void TreeView_OnBeforeExpand_Invoke_CallsBeforeExpand(TreeViewCancelEventArgs eventArgs)
+        {
+            using var control = new SubTreeView();
+            int callCount = 0;
+            TreeViewCancelEventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+        
+            // Call with handler.
+            control.BeforeExpand += handler;
+            control.OnBeforeExpand(eventArgs);
+            Assert.Equal(1, callCount);
+        
+            // Remove handler.
+            control.BeforeExpand -= handler;
+            control.OnBeforeExpand(eventArgs);
+            Assert.Equal(1, callCount);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(NodeLabelEditEventArgs_TestData))]
+        public void TreeView_OnBeforeLabelEdit_Invoke_CallsBeforeLabelEdit(NodeLabelEditEventArgs eventArgs)
+        {
+            using var control = new SubTreeView();
+            int callCount = 0;
+            NodeLabelEditEventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+        
+            // Call with handler.
+            control.BeforeLabelEdit += handler;
+            control.OnBeforeLabelEdit(eventArgs);
+            Assert.Equal(1, callCount);
+        
+            // Remove handler.
+            control.BeforeLabelEdit -= handler;
+            control.OnBeforeLabelEdit(eventArgs);
+            Assert.Equal(1, callCount);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(TreeViewCancelEventArgs_TestData))]
+        public void TreeView_OnBeforeCollapse_Invoke_CallsBeforeCollapse(TreeViewCancelEventArgs eventArgs)
+        {
+            using var control = new SubTreeView();
+            int callCount = 0;
+            TreeViewCancelEventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+        
+            // Call with handler.
+            control.BeforeCollapse += handler;
+            control.OnBeforeCollapse(eventArgs);
+            Assert.Equal(1, callCount);
+        
+            // Remove handler.
+            control.BeforeCollapse -= handler;
+            control.OnBeforeCollapse(eventArgs);
+            Assert.Equal(1, callCount);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(TreeViewCancelEventArgs_TestData))]
+        public void TreeView_OnBeforeSelect_Invoke_CallsBeforeSelect(TreeViewCancelEventArgs eventArgs)
+        {
+            using var control = new SubTreeView();
+            int callCount = 0;
+            TreeViewCancelEventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+        
+            // Call with handler.
+            control.BeforeSelect += handler;
+            control.OnBeforeSelect(eventArgs);
+            Assert.Equal(1, callCount);
+        
+            // Remove handler.
+            control.BeforeSelect -= handler;
+            control.OnBeforeSelect(eventArgs);
+            Assert.Equal(1, callCount);
+        }
+
+        public static IEnumerable<object[]> OnDrawNode_TestData()
+        {
+            yield return new object[] { null };
+            yield return new object[] { new DrawTreeNodeEventArgs(null, null, Rectangle.Empty, TreeNodeStates.Checked) };
+
+            var image = new Bitmap(10, 10);
+            Graphics graphics = Graphics.FromImage(image);
+            yield return new object[] { new DrawTreeNodeEventArgs(graphics, new TreeNode(), new Rectangle(1, 2, 3, 4), TreeNodeStates.Checked) };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(OnDrawNode_TestData))]
+        public void TreeView_OnDrawNode_Invoke_CallsDrawNode(DrawTreeNodeEventArgs eventArgs)
+        {
+            using var control = new SubTreeView();
+            int callCount = 0;
+            DrawTreeNodeEventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+        
+            // Call with handler.
+            control.DrawNode += handler;
+            control.OnDrawNode(eventArgs);
+            Assert.Equal(1, callCount);
+        
+            // Remove handler.
+            control.DrawNode -= handler;
+            control.OnDrawNode(eventArgs);
+            Assert.Equal(1, callCount);
+        }
+
+        public static IEnumerable<object[]> OnItemDrag_TestData()
+        {
+            yield return new object[] { null };
+            yield return new object[] { new ItemDragEventArgs(MouseButtons.None) };
+            yield return new object[] { new ItemDragEventArgs(MouseButtons.Right, new object()) };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(OnItemDrag_TestData))]
+        public void TreeView_OnItemDrag_Invoke_CallsItemDrag(ItemDragEventArgs eventArgs)
+        {
+            using var control = new SubTreeView();
+            int callCount = 0;
+            ItemDragEventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+        
+            // Call with handler.
+            control.ItemDrag += handler;
+            control.OnItemDrag(eventArgs);
+            Assert.Equal(1, callCount);
+        
+            // Remove handler.
+            control.ItemDrag -= handler;
+            control.OnItemDrag(eventArgs);
+            Assert.Equal(1, callCount);
+        }
+
+        public static IEnumerable<object[]> OnKeyDown_TestData()
+        {
+            yield return new object[] { new KeyEventArgs(Keys.None) };
+            yield return new object[] { new KeyEventArgs(Keys.A) };
+            yield return new object[] { new KeyEventArgs(Keys.Space) };
+            yield return new object[] { new KeyEventArgs(Keys.Control | Keys.Space) };
+        }
+
+        [Theory]
+        [MemberData(nameof(OnKeyDown_TestData))]
+        public void TreeView_OnKeyDown_Invoke_CallsKeyDown(KeyEventArgs eventArgs)
+        {
+            using var control = new SubTreeView();
+            int callCount = 0;
+            KeyEventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.KeyDown += handler;
+            control.OnKeyDown(eventArgs);
+            Assert.Equal(1, callCount);
+
+            // Remove handler.
+            control.KeyDown -= handler;
+            control.OnKeyDown(eventArgs);
+            Assert.Equal(1, callCount);
+        }
+
+        public static IEnumerable<object[]> OnKeyDown_WithSelectedNode_TestData()
+        {
+            yield return new object[] { false, true, false, new KeyEventArgs(Keys.None), 0, 0, false };
+            yield return new object[] { false, true, false, new KeyEventArgs(Keys.A), 0, 0, false };
+            yield return new object[] { false, true, false, new KeyEventArgs(Keys.Space), 1, 1, true };
+            yield return new object[] { false, true, true, new KeyEventArgs(Keys.Space), 1, 0, true };
+            yield return new object[] { false, true, false, new KeyEventArgs(Keys.Control | Keys.Space), 1, 1, true };
+            yield return new object[] { false, true, true, new KeyEventArgs(Keys.Control | Keys.Space), 1, 0, true };
+            
+            yield return new object[] { true, true, false, new KeyEventArgs(Keys.Space), 0, 0, true };
+            yield return new object[] { true, false, false, new KeyEventArgs(Keys.Space), 0, 0, true };
+            yield return new object[] { false, false, false, new KeyEventArgs(Keys.Space), 0, 0, false };
+        }
+
+        [Theory]
+        [MemberData(nameof(OnKeyDown_WithSelectedNode_TestData))]
+        public void TreeView_OnKeyDown_InvokeWithSelectedNode_CallsKeyDown(bool handled, bool checkBoxes, bool cancel, KeyEventArgs eventArgs, int expectedBeforeCheckCallCount, int expectedAfterCheckCallCount, bool expectedHandled)
+        {
+            using var control = new SubTreeView
+            {
+                CheckBoxes = checkBoxes
+            };
+            var node = new TreeNode();
+            control.Nodes.Add(node);
+            control.SelectedNode = node;
+
+            int callCount = 0;
+            KeyEventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+                e.Handled = handled;
+            };
+            int beforeCheckCallCount = 0;
+            TreeViewCancelEventHandler beforeCheckHandler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Equal(TreeViewAction.ByKeyboard, e.Action);
+                Assert.False(e.Cancel);
+                beforeCheckCallCount++;
+                e.Cancel = cancel;
+            };
+            int afterCheckCallCount = 0;
+            TreeViewEventHandler afterCheckHandler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Equal(TreeViewAction.ByKeyboard, e.Action);
+                afterCheckCallCount++;
+            };
+
+            // Call with handler.
+            control.KeyDown += handler;
+            control.BeforeCheck += beforeCheckHandler;
+            control.AfterCheck += afterCheckHandler;
+            control.OnKeyDown(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(expectedAfterCheckCallCount == 1, node.Checked);
+            Assert.Equal(expectedHandled, eventArgs.Handled);
+            Assert.Equal(expectedBeforeCheckCallCount, beforeCheckCallCount);
+            Assert.Equal(expectedAfterCheckCallCount, afterCheckCallCount);
+            
+            // Call again.
+            control.OnKeyDown(eventArgs);
+            Assert.Equal(2, callCount);
+            Assert.False(node.Checked);
+            Assert.Equal(expectedHandled, eventArgs.Handled);
+            Assert.Equal(expectedBeforeCheckCallCount * 2, beforeCheckCallCount);
+            Assert.Equal(expectedAfterCheckCallCount * 2, afterCheckCallCount);
+
+            // Remove handler.
+            control.KeyDown -= handler;
+            control.BeforeCheck -= beforeCheckHandler;
+            control.AfterCheck -= afterCheckHandler;
+            control.OnKeyDown(eventArgs);
+            Assert.Equal(2, callCount);
+            Assert.Equal(expectedHandled, eventArgs.Handled);
+            Assert.Equal(expectedBeforeCheckCallCount * 2, beforeCheckCallCount);
+            Assert.Equal(expectedAfterCheckCallCount * 2, afterCheckCallCount);
+        }
+
+        [WinFormsFact]
+        public void TreeView_OnKeyDown_NullEventArgs_ThrowsNullReferenceException()
+        {
+            using var control = new SubTreeView();
+            Assert.Throws<NullReferenceException>(() => control.OnKeyDown(null));
+        }
+
+        public static IEnumerable<object[]> OnKeyPress_TestData()
+        {
+            yield return new object[] { true, new KeyPressEventArgs('\0'), true };
+            yield return new object[] { true, new KeyPressEventArgs('a'), true };
+            yield return new object[] { true, new KeyPressEventArgs(' '), true };
+            
+            yield return new object[] { false, new KeyPressEventArgs('\0'), false };
+            yield return new object[] { false, new KeyPressEventArgs('a'), false };
+            yield return new object[] { false, new KeyPressEventArgs(' '), true };
+        }
+
+        [Theory]
+        [MemberData(nameof(OnKeyPress_TestData))]
+        public void TreeView_OnKeyPress_Invoke_CallsKeyPress(bool handled, KeyPressEventArgs eventArgs, bool expectedHandled)
+        {
+            using var control = new SubTreeView();
+            int callCount = 0;
+            KeyPressEventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                e.Handled = handled;
+                callCount++;
+            };
+
+            // Call with handler.
+            control.KeyPress += handler;
+            control.OnKeyPress(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(expectedHandled, eventArgs.Handled);
+
+            // Remove handler.
+            control.KeyPress -= handler;
+            control.OnKeyPress(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(expectedHandled, eventArgs.Handled);
+        }
+
+        [WinFormsFact]
+        public void TreeView_OnKeyPress_NullEventArgs_ThrowsNullReferenceException()
+        {
+            using var control = new SubTreeView();
+            Assert.Throws<NullReferenceException>(() => control.OnKeyPress(null));
+        }
+
+        public static IEnumerable<object[]> OnKeyUp_TestData()
+        {
+            yield return new object[] { true, new KeyEventArgs(Keys.None), true };
+            yield return new object[] { true, new KeyEventArgs(Keys.A), true };
+            yield return new object[] { true, new KeyEventArgs(Keys.Space), true };
+            yield return new object[] { true, new KeyEventArgs(Keys.Control | Keys.Space), true };
+            
+            yield return new object[] { false, new KeyEventArgs(Keys.None), false };
+            yield return new object[] { false, new KeyEventArgs(Keys.A), false };
+            yield return new object[] { false, new KeyEventArgs(Keys.Space), true };
+            yield return new object[] { false, new KeyEventArgs(Keys.Control | Keys.Space), true };
+        }
+
+        [Theory]
+        [MemberData(nameof(OnKeyUp_TestData))]
+        public void TreeView_OnKeyUp_Invoke_CallsKeyUp(bool handled, KeyEventArgs eventArgs, bool expectedHandled)
+        {
+            using var control = new SubTreeView();
+            int callCount = 0;
+            KeyEventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                e.Handled = handled;
+                callCount++;
+            };
+
+            // Call with handler.
+            control.KeyUp += handler;
+            control.OnKeyUp(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(expectedHandled, eventArgs.Handled);
+
+            // Remove handler.
+            control.KeyUp -= handler;
+            control.OnKeyUp(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(expectedHandled, eventArgs.Handled);
+        }
+
+        [WinFormsFact]
+        public void TreeView_OnKeyUp_NullEventArgs_ThrowsNullReferenceException()
+        {
+            using var control = new SubTreeView();
+            Assert.Throws<NullReferenceException>(() => control.OnKeyUp(null));
+        }
+
+        /*
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void TreeView_OnHandleCreated_Invoke_CallsHandleCreated(EventArgs eventArgs)
+        {
+            using var control = new SubTreeView();
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                //Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.HandleCreated += handler;
+            control.OnHandleCreated(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.False(control.Created);
+            Assert.False(control.IsHandleCreated);
+
+            // Remove handler.
+            control.HandleCreated -= handler;
+            control.OnHandleCreated(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.False(control.Created);
+            Assert.False(control.IsHandleCreated);
+        }
+        */
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void TreeView_OnHandleCreated_InvokeWithHandle_CallsHandleCreated(EventArgs eventArgs)
+        {
+            using var control = new SubTreeView();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            Assert.False(control.GetStyle(ControlStyles.UserPaint));
+
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.HandleCreated += handler;
+            control.OnHandleCreated(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.True(control.Created);
+            Assert.True(control.IsHandleCreated);
+
+            // Remove handler.
+            control.HandleCreated -= handler;
+            control.OnHandleCreated(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.True(control.Created);
+            Assert.True(control.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> OnHandleCreated_WithHandleWithProperties_TestData()
+        {
+            yield return new object[] { new Image[0], null, false };
+            yield return new object[] { new Image[] { new Bitmap(10, 10) }, null, true };
+            yield return new object[] { new Image[0], new EventArgs(), false };
+            yield return new object[] { new Image[] { new Bitmap(10, 10) }, new EventArgs(), true };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(OnHandleCreated_WithHandleWithProperties_TestData))]
+        public void TreeView_OnHandleCreated_InvokeWithHandleWithProperties_CallsHandleCreated(Image[] images, EventArgs eventArgs, bool expectedStateImageListHandleCreated)
+        {
+            using var imageList = new ImageList();
+            using var stateImageList = new ImageList();
+            stateImageList.Images.AddRange(images);
+            using var control = new SubTreeView
+            {
+                CheckBoxes = true,
+                ShowNodeToolTips = true,
+                BackColor = Color.Red,
+                ForeColor = Color.Blue,
+                LineColor = Color.Yellow,
+                ImageList = imageList,
+                StateImageList = stateImageList,
+                Indent = 10,
+                ItemHeight = 11
+            };
+            var node = new TreeNode();
+            control.Nodes.Add(node);
+            control.SelectedNode = node;
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            Assert.False(control.GetStyle(ControlStyles.UserPaint));
+
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.HandleCreated += handler;
+            control.OnHandleCreated(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.True(control.CheckBoxes);
+            Assert.True(control.ShowNodeToolTips);
+            Assert.Equal(Color.Red, control.BackColor);
+            Assert.Equal(Color.Blue, control.ForeColor);
+            Assert.Equal(Color.Yellow, control.LineColor);
+            Assert.Same(imageList, control.ImageList);
+            Assert.True(control.ImageList.HandleCreated);
+            Assert.Same(stateImageList, control.StateImageList);
+            Assert.Equal(expectedStateImageListHandleCreated, control.StateImageList.HandleCreated);
+            Assert.Equal(10, control.Indent);
+            Assert.Equal(11, control.ItemHeight);
+            Assert.True(control.Created);
+            Assert.True(control.IsHandleCreated);
+
+            // Remove handler.
+            control.HandleCreated -= handler;
+            control.OnHandleCreated(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.True(control.CheckBoxes);
+            Assert.True(control.ShowNodeToolTips);
+            Assert.Equal(Color.Red, control.BackColor);
+            Assert.Equal(Color.Blue, control.ForeColor);
+            Assert.Equal(Color.Yellow, control.LineColor);
+            Assert.Same(imageList, control.ImageList);
+            Assert.True(control.ImageList.HandleCreated);
+            Assert.Same(stateImageList, control.StateImageList);
+            Assert.Equal(expectedStateImageListHandleCreated, control.StateImageList.HandleCreated);
+            Assert.Equal(10, control.Indent);
+            Assert.Equal(11, control.ItemHeight);
+            Assert.True(control.Created);
+            Assert.True(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(OnHandleCreated_WithHandleWithProperties_TestData))]
+        public void TreeView_OnHandleCreated_InvokeWithHandleWithPropertiesDesignMode_CallsHandleCreated(Image[] images, EventArgs eventArgs, bool expectedStateImageListHandleCreated)
+        {
+            using var imageList = new ImageList();
+            using var stateImageList = new ImageList();
+            stateImageList.Images.AddRange(images);
+            var mockSite = new Mock<ISite>(MockBehavior.Strict);
+            mockSite
+                .Setup(s => s.GetService(typeof(AmbientProperties)))
+                .Returns(null);
+            mockSite
+                .Setup(s => s.Container)
+                .Returns((IContainer)null);
+            mockSite
+                .Setup(s => s.DesignMode)
+                .Returns(true);
+            using var control = new SubTreeView
+            {
+                CheckBoxes = true,
+                ShowNodeToolTips = true,
+                BackColor = Color.Red,
+                ForeColor = Color.Blue,
+                LineColor = Color.Yellow,
+                ImageList = imageList,
+                StateImageList = stateImageList,
+                Indent = 10,
+                ItemHeight = 11,
+                Site = mockSite.Object
+            };
+            var node = new TreeNode();
+            control.Nodes.Add(node);
+            control.SelectedNode = node;
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            Assert.False(control.GetStyle(ControlStyles.UserPaint));
+
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.HandleCreated += handler;
+            control.OnHandleCreated(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.True(control.CheckBoxes);
+            Assert.True(control.ShowNodeToolTips);
+            Assert.Equal(Color.Red, control.BackColor);
+            Assert.Equal(Color.Blue, control.ForeColor);
+            Assert.Equal(Color.Yellow, control.LineColor);
+            Assert.Same(imageList, control.ImageList);
+            Assert.True(control.ImageList.HandleCreated);
+            Assert.Same(stateImageList, control.StateImageList);
+            Assert.Equal(expectedStateImageListHandleCreated, control.StateImageList.HandleCreated);
+            Assert.Equal(10, control.Indent);
+            Assert.Equal(11, control.ItemHeight);
+            Assert.True(control.Created);
+            Assert.True(control.IsHandleCreated);
+
+            // Remove handler.
+            control.HandleCreated -= handler;
+            control.OnHandleCreated(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.True(control.CheckBoxes);
+            Assert.True(control.ShowNodeToolTips);
+            Assert.Equal(Color.Red, control.BackColor);
+            Assert.Equal(Color.Blue, control.ForeColor);
+            Assert.Equal(Color.Yellow, control.LineColor);
+            Assert.Same(imageList, control.ImageList);
+            Assert.True(control.ImageList.HandleCreated);
+            Assert.Same(stateImageList, control.StateImageList);
+            Assert.Equal(expectedStateImageListHandleCreated, control.StateImageList.HandleCreated);
+            Assert.Equal(10, control.Indent);
+            Assert.Equal(11, control.ItemHeight);
+            Assert.True(control.Created);
+            Assert.True(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void TreeView_OnHandleDestroyed_Invoke_CallsHandleDestroyed(EventArgs eventArgs)
+        {
+            using var control = new SubTreeView();
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.HandleDestroyed += handler;
+            control.OnHandleDestroyed(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.True(control.Created);
+            Assert.True(control.IsHandleCreated);
+
+            // Remove handler.
+            control.HandleDestroyed -= handler;
+            control.OnHandleDestroyed(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.True(control.Created);
+            Assert.True(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void TreeView_OnHandleDestroyed_InvokeWithHandle_CallsHandleDestroyed(EventArgs eventArgs)
+        {
+            using var control = new SubTreeView();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.HandleDestroyed += handler;
+            control.OnHandleDestroyed(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.True(control.Created);
+            Assert.True(control.IsHandleCreated);
+
+            // Remove handler.
+            control.HandleDestroyed -= handler;
+            control.OnHandleDestroyed(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.True(control.Created);
+            Assert.True(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void TreeView_OnHandleDestroyed_InvokeWithHandleWithSelectedNode_CallsHandleDestroyed(EventArgs eventArgs)
+        {
+            using var control = new SubTreeView();
+            var node = new TreeNode();
+            control.Nodes.Add(node);
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            control.SelectedNode = node;
+
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.HandleDestroyed += handler;
+            control.OnHandleDestroyed(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Same(node, control.SelectedNode);
+            Assert.True(control.Created);
+            Assert.True(control.IsHandleCreated);
+
+            // Remove handler.
+            control.HandleDestroyed -= handler;
+            control.OnHandleDestroyed(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Same(node, control.SelectedNode);
+            Assert.True(control.Created);
+            Assert.True(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void TreeView_OnHandleDestroyed_InvokeWithHandleWithStateImageList_CallsHandleDestroyed(EventArgs eventArgs)
+        {
+            using var imageList = new ImageList();
+            Assert.NotEqual(IntPtr.Zero, imageList.Handle);
+
+            using var control = new SubTreeView
+            {
+                StateImageList = imageList
+            };
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                //Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.HandleDestroyed += handler;
+            control.OnHandleDestroyed(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Same(imageList, control.StateImageList);
+            Assert.True(control.Created);
+            Assert.True(control.IsHandleCreated);
+
+            // Remove handler.
+            control.HandleDestroyed -= handler;
+            control.OnHandleDestroyed(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Same(imageList, control.StateImageList);
+            Assert.True(control.Created);
+            Assert.True(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void TreeView_OnMouseHover_Invoke_CallsMouseHover(EventArgs eventArgs)
+        {
+            using var control = new SubTreeView();
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+            int nodeCallCount = 0;
+            control.NodeMouseHover += (sender, e) => nodeCallCount++;
+
+            // Call with handler.
+            control.MouseHover += handler;
+            control.OnMouseHover(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(0, nodeCallCount);
+            Assert.True(control.IsHandleCreated);
+            
+            // Call again.
+            control.OnMouseHover(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(0, nodeCallCount);
+            Assert.True(control.IsHandleCreated);
+            
+            // Call leave.
+            control.OnMouseLeave(null);
+            control.OnMouseHover(eventArgs);
+            Assert.Equal(2, callCount);
+            Assert.Equal(0, nodeCallCount);
+            Assert.True(control.IsHandleCreated);
+
+            // Remove handler.
+            control.MouseHover -= handler;
+            control.OnMouseHover(eventArgs);
+            Assert.Equal(2, callCount);
+            Assert.Equal(0, nodeCallCount);
+            Assert.True(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void TreeView_OnMouseHover_InvokeWithHandle_CallsMouseHover(EventArgs eventArgs)
+        {
+            using var control = new SubTreeView();
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+            int nodeCallCount = 0;
+            control.NodeMouseHover += (sender, e) => nodeCallCount++;
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            // Call with handler.
+            control.MouseHover += handler;
+            control.OnMouseHover(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(0, nodeCallCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+            
+            // Call again.
+            control.OnMouseHover(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(0, nodeCallCount);
+            Assert.True(control.IsHandleCreated);
+
+            // Call leave.
+            control.OnMouseLeave(null);
+            control.OnMouseHover(eventArgs);
+            Assert.Equal(2, callCount);
+            Assert.Equal(0, nodeCallCount);
+            Assert.True(control.IsHandleCreated);
+
+            // Remove handler.
+            control.MouseHover -= handler;
+            control.OnMouseHover(eventArgs);
+            Assert.Equal(2, callCount);
+            Assert.Equal(0, nodeCallCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void TreeView_OnMouseLeave_Invoke_CallsMouseLeave(EventArgs eventArgs)
+        {
+            using var control = new SubTreeView();
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.MouseLeave += handler;
+            control.OnMouseLeave(eventArgs);
+            Assert.Equal(1, callCount);
+
+            // Remove handler.
+            control.MouseLeave -= handler;
+            control.OnMouseLeave(eventArgs);
+            Assert.Equal(1, callCount);
+        }
+
+        public static IEnumerable<object[]> TreeNodeMouseClickEventArgs_TestData()
+        {
+            yield return new object[] { null };
+            yield return new object[] { new TreeNodeMouseClickEventArgs(null, MouseButtons.None, 0, 0, 0) };
+            yield return new object[] { new TreeNodeMouseClickEventArgs(new TreeNode(), MouseButtons.Right, 1, 2, 3) };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(TreeNodeMouseClickEventArgs_TestData))]
+        public void TreeView_OnNodeMouseClick_Invoke_CallsNodeMouseClick(TreeNodeMouseClickEventArgs eventArgs)
+        {
+            using var control = new SubTreeView();
+            int callCount = 0;
+            TreeNodeMouseClickEventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+        
+            // Call with handler.
+            control.NodeMouseClick += handler;
+            control.OnNodeMouseClick(eventArgs);
+            Assert.Equal(1, callCount);
+        
+            // Remove handler.
+            control.NodeMouseClick -= handler;
+            control.OnNodeMouseClick(eventArgs);
+            Assert.Equal(1, callCount);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(TreeNodeMouseClickEventArgs_TestData))]
+        public void TreeView_OnNodeMouseDoubleClick_Invoke_CallsNodeMouseDoubleClick(TreeNodeMouseClickEventArgs eventArgs)
+        {
+            using var control = new SubTreeView();
+            int callCount = 0;
+            TreeNodeMouseClickEventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+        
+            // Call with handler.
+            control.NodeMouseDoubleClick += handler;
+            control.OnNodeMouseDoubleClick(eventArgs);
+            Assert.Equal(1, callCount);
+        
+            // Remove handler.
+            control.NodeMouseDoubleClick -= handler;
+            control.OnNodeMouseDoubleClick(eventArgs);
+            Assert.Equal(1, callCount);
+        }
+
+        public static IEnumerable<object[]> OnNodeMouseHover_TestData()
+        {
+            yield return new object[] { null };
+            yield return new object[] { new TreeNodeMouseHoverEventArgs(null) };
+            yield return new object[] { new TreeNodeMouseHoverEventArgs(new TreeNode()) };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(OnNodeMouseHover_TestData))]
+        public void TreeView_OnNodeMouseHover_Invoke_CallsNodeMouseHover(TreeNodeMouseHoverEventArgs eventArgs)
+        {
+            using var control = new SubTreeView();
+            int callCount = 0;
+            TreeNodeMouseHoverEventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+        
+            // Call with handler.
+            control.NodeMouseHover += handler;
+            control.OnNodeMouseHover(eventArgs);
+            Assert.Equal(1, callCount);
+        
+            // Remove handler.
+            control.NodeMouseHover -= handler;
+            control.OnNodeMouseHover(eventArgs);
+            Assert.Equal(1, callCount);
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void TreeView_OnRightToLeftLayoutChanged_Invoke_CallsRightToLeftLayoutChanged(EventArgs eventArgs)
+        {
+            using var control = new SubTreeView();
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.RightToLeftLayoutChanged += handler;
+            control.OnRightToLeftLayoutChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.False(control.IsHandleCreated);
+
+            // Remove handler.
+            control.RightToLeftLayoutChanged -= handler;
+            control.OnRightToLeftLayoutChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void TreeView_OnRightToLeftLayoutChanged_InvokeWithRightToLeftYes_CallsRightToLeftLayoutChanged(EventArgs eventArgs)
+        {
+            using var control = new SubTreeView
+            {
+                RightToLeft = RightToLeft.Yes
+            };
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.RightToLeftLayoutChanged += handler;
+            control.OnRightToLeftLayoutChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.False(control.IsHandleCreated);
+
+            // Remove handler.
+            control.RightToLeftLayoutChanged -= handler;
+            control.OnRightToLeftLayoutChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void TreeView_OnRightToLeftLayoutChanged_InvokeWithHandle_CallsRightToLeftLayoutChanged(EventArgs eventArgs)
+        {
+            using var control = new SubTreeView();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+            int invalidatedCallCount = 0;
+            InvalidateEventHandler invalidatedHandler = (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            EventHandler styleChangedHandler = (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            EventHandler createdHandler = (sender, e) => createdCallCount++;
+
+            // Call with handler.
+            control.RightToLeftLayoutChanged += handler;
+            control.Invalidated += invalidatedHandler;
+            control.StyleChanged += styleChangedHandler;
+            control.HandleCreated += createdHandler;
+            control.OnRightToLeftLayoutChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Remove handler.
+            control.RightToLeftLayoutChanged -= handler;
+            control.Invalidated -= invalidatedHandler;
+            control.StyleChanged -= styleChangedHandler;
+            control.HandleCreated -= createdHandler;
+            control.OnRightToLeftLayoutChanged(eventArgs);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void TreeView_OnRightToLeftLayoutChanged_InvokeWithHandleWithRightToLeftYes_CallsRightToLeftLayoutChanged(EventArgs eventArgs)
+        {
+            using var control = new SubTreeView
+            {
+                RightToLeft = RightToLeft.Yes
+            };
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+            int invalidatedCallCount = 0;
+            InvalidateEventHandler invalidatedHandler = (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            EventHandler styleChangedHandler = (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            EventHandler createdHandler = (sender, e) => createdCallCount++;
+
+            // Call with handler.
+            control.RightToLeftLayoutChanged += handler;
+            control.Invalidated += invalidatedHandler;
+            control.StyleChanged += styleChangedHandler;
+            control.HandleCreated += createdHandler;
+            control.OnRightToLeftLayoutChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(1, createdCallCount);
+
+            // Remove handler.
+            control.RightToLeftLayoutChanged -= handler;
+            control.Invalidated -= invalidatedHandler;
+            control.StyleChanged -= styleChangedHandler;
+            control.HandleCreated -= createdHandler;
+            control.OnRightToLeftLayoutChanged(eventArgs);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(1, createdCallCount);
+        }
+
+        [WinFormsFact]
+        public void TreeView_OnRightToLeftLayoutChanged_InvokeInDisposing_DoesNotCallRightToLeftLayoutChanged()
+        {
+            using var control = new SubTreeView
+            {
+                RightToLeft = RightToLeft.Yes
+            };
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+
+            int callCount = 0;
+            control.RightToLeftLayoutChanged += (sender, e) => callCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            int disposedCallCount = 0;
+            control.Disposed += (sender, e) =>
+            {
+                control.OnRightToLeftLayoutChanged(EventArgs.Empty);
+                Assert.Equal(0, callCount);
+                Assert.Equal(0, createdCallCount);
+                disposedCallCount++;
+            };
+
+            control.Dispose();
+            Assert.Equal(1, disposedCallCount);
+        }
+
         private class SubTreeView : TreeView
         {
+            public new bool CanEnableIme => base.CanEnableIme;
+
+            public new bool CanRaiseEvents => base.CanRaiseEvents;
+
+            public new CreateParams CreateParams => base.CreateParams;
+
+            public new Cursor DefaultCursor => base.DefaultCursor;
+
+            public new ImeMode DefaultImeMode => base.DefaultImeMode;
+
+            public new Padding DefaultMargin => base.DefaultMargin;
+
+            public new Size DefaultMaximumSize => base.DefaultMaximumSize;
+
+            public new Size DefaultMinimumSize => base.DefaultMinimumSize;
+
+            public new Padding DefaultPadding => base.DefaultPadding;
+
             public new Size DefaultSize => base.DefaultSize;
+
+            public new bool DesignMode => base.DesignMode;
 
             public new bool DoubleBuffered
             {
                 get => base.DoubleBuffered;
                 set => base.DoubleBuffered = value;
             }
+
+            public new EventHandlerList Events => base.Events;
+
+            public new int FontHeight
+            {
+                get => base.FontHeight;
+                set => base.FontHeight = value;
+            }
+
+            public new ImeMode ImeModeBase
+            {
+                get => base.ImeModeBase;
+                set => base.ImeModeBase = value;
+            }
+
+            public new bool ResizeRedraw
+            {
+                get => base.ResizeRedraw;
+                set => base.ResizeRedraw = value;
+            }
+
+            public new AutoSizeMode GetAutoSizeMode() => base.GetAutoSizeMode();
+
+            public new bool GetStyle(ControlStyles flag) => base.GetStyle(flag);
+
+            public new void OnAfterCheck(TreeViewEventArgs e) => base.OnAfterCheck(e);
+            
+            public new void OnAfterCollapse(TreeViewEventArgs e) => base.OnAfterCollapse(e);
+
+            public new void OnAfterExpand(TreeViewEventArgs e) => base.OnAfterExpand(e);
+
+            public new void OnAfterLabelEdit(NodeLabelEditEventArgs e) => base.OnAfterLabelEdit(e);
+
+            public new void OnAfterSelect(TreeViewEventArgs e) => base.OnAfterSelect(e);
+
+            public new void OnBeforeCheck(TreeViewCancelEventArgs e) => base.OnBeforeCheck(e);
+
+            public new void OnBeforeCollapse(TreeViewCancelEventArgs e) => base.OnBeforeCollapse(e);
+
+            public new void OnBeforeExpand(TreeViewCancelEventArgs e) => base.OnBeforeExpand(e);
+
+            public new void OnBeforeLabelEdit(NodeLabelEditEventArgs e) => base.OnBeforeLabelEdit(e);
+
+            public new void OnBeforeSelect(TreeViewCancelEventArgs e) => base.OnBeforeSelect(e);
+
+            public new void OnDrawNode(DrawTreeNodeEventArgs e) => base.OnDrawNode(e);
+
+            public new void OnItemDrag(ItemDragEventArgs e) => base.OnItemDrag(e);
+
+            public new void OnKeyDown(KeyEventArgs e) => base.OnKeyDown(e);
+            
+            public new void OnKeyPress(KeyPressEventArgs e) => base.OnKeyPress(e);
+
+            public new void OnKeyUp(KeyEventArgs e) => base.OnKeyUp(e);
+
+            public new void OnHandleCreated(EventArgs e) => base.OnHandleCreated(e);
+
+            public new void OnHandleDestroyed(EventArgs e) => base.OnHandleDestroyed(e);
+
+            public new void OnMouseHover(EventArgs e) => base.OnMouseHover(e);
+
+            public new void OnMouseLeave(EventArgs e) => base.OnMouseLeave(e);
+
+            public new void OnNodeMouseClick(TreeNodeMouseClickEventArgs e) => base.OnNodeMouseClick(e);
+            
+            public new void OnNodeMouseDoubleClick(TreeNodeMouseClickEventArgs e) => base.OnNodeMouseDoubleClick(e);
+
+            public new void OnNodeMouseHover(TreeNodeMouseHoverEventArgs e) => base.OnNodeMouseHover(e);
+
+            public new void OnRightToLeftLayoutChanged(EventArgs e) => base.OnRightToLeftLayoutChanged(e);
         }
     }
 }

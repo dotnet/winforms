@@ -68,18 +68,6 @@ namespace System.Windows.Forms.Design
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public static extern IntPtr SendMessage(IntPtr hWnd, int msg, int wParam, string lParam);
 
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern IntPtr SendMessage(IntPtr hWnd, int Msg, int wParam, [In] [Out] TV_HITTESTINFO lParam);
-
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto, Pack = 1)]
-        public class TV_HITTESTINFO
-        {
-            public int flags = 0;
-            public int hItem = 0;
-            public int pt_x = 0;
-            public int pt_y = 0;
-        }
-
         internal class Util
         {
             public static int MAKELONG(int low, int high)
