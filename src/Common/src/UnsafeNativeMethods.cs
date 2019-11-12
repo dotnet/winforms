@@ -236,9 +236,6 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, StringBuilder lParam);
 
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, NativeMethods.LVBKIMAGE lParam);
-
         [DllImport(ExternDll.User32, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
         public static extern IntPtr SendMessage(IntPtr hwnd, int msg, bool wparam, int lparam);
 

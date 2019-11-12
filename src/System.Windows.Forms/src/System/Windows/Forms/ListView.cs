@@ -403,7 +403,7 @@ namespace System.Windows.Forms
         DefaultValue(false),
         SRDescription(nameof(SR.ListViewBackgroundImageTiledDescr))
         ]
-        public bool BackgroundImageTiled
+        public unsafe bool BackgroundImageTiled
         {
             get
             {
@@ -418,26 +418,24 @@ namespace System.Windows.Forms
                     {
                         // Don't call SetBackgroundImage because SetBackgroundImage deletes the existing image
                         // We don't need to delete it and this causes BAD problems w/ the Win32 list view control.
-                        NativeMethods.LVBKIMAGE lvbkImage = new NativeMethods.LVBKIMAGE
+                        fixed (char* pBackgroundImageFileName = backgroundImageFileName)
                         {
-                            xOffset = 0,
-                            yOffset = 0
-                        };
+                            var lvbkImage = new ComCtl32.LVBKIMAGEW();
+                            if (BackgroundImageTiled)
+                            {
+                                lvbkImage.ulFlags = ComCtl32.LVBKIF.STYLE_TILE;
+                            }
+                            else
+                            {
+                                lvbkImage.ulFlags = ComCtl32.LVBKIF.STYLE_NORMAL;
+                            }
 
-                        if (BackgroundImageTiled)
-                        {
-                            lvbkImage.ulFlags = NativeMethods.LVBKIF_STYLE_TILE;
+                            lvbkImage.ulFlags |= ComCtl32.LVBKIF.SOURCE_URL;
+                            lvbkImage.pszImage = pBackgroundImageFileName;
+                            lvbkImage.cchImageMax = (uint)(backgroundImageFileName.Length + 1);
+
+                            User32.SendMessageW(this, (User32.WindowMessage)LVM.SETBKIMAGE, IntPtr.Zero, ref lvbkImage);
                         }
-                        else
-                        {
-                            lvbkImage.ulFlags = NativeMethods.LVBKIF_STYLE_NORMAL;
-                        }
-
-                        lvbkImage.ulFlags |= NativeMethods.LVBKIF_SOURCE_URL;
-                        lvbkImage.pszImage = backgroundImageFileName;
-                        lvbkImage.cchImageMax = backgroundImageFileName.Length + 1;
-
-                        UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)LVM.SETBKIMAGE, 0, lvbkImage);
                     }
                 }
             }
@@ -5001,16 +4999,12 @@ namespace System.Windows.Forms
             UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)LVM.SCROLL, 0, scrollY);
         }
 
-        private void SetBackgroundImage()
+        private unsafe void SetBackgroundImage()
         {
             // needed for OleInitialize
             Application.OleRequired();
 
-            NativeMethods.LVBKIMAGE lvbkImage = new NativeMethods.LVBKIMAGE
-            {
-                xOffset = 0,
-                yOffset = 0
-            };
+            var lvbkImage = new ComCtl32.LVBKIMAGEW();
 
             // first, is there an existing temporary file to delete, remember its name
             // so that we can delete it if the list control doesn't...
@@ -5018,7 +5012,6 @@ namespace System.Windows.Forms
 
             if (BackgroundImage != null)
             {
-
                 // save the image to a temporary file name
                 string tempDirName = System.IO.Path.GetTempPath();
                 Text.StringBuilder sb = new Text.StringBuilder(1024);
@@ -5028,25 +5021,28 @@ namespace System.Windows.Forms
 
                 BackgroundImage.Save(backgroundImageFileName, System.Drawing.Imaging.ImageFormat.Bmp);
 
-                lvbkImage.pszImage = backgroundImageFileName;
-                lvbkImage.cchImageMax = backgroundImageFileName.Length + 1;
-                lvbkImage.ulFlags = NativeMethods.LVBKIF_SOURCE_URL;
+                lvbkImage.cchImageMax = (uint)(backgroundImageFileName.Length + 1);
+                lvbkImage.ulFlags = ComCtl32.LVBKIF.SOURCE_URL;
                 if (BackgroundImageTiled)
                 {
-                    lvbkImage.ulFlags |= NativeMethods.LVBKIF_STYLE_TILE;
+                    lvbkImage.ulFlags |= ComCtl32.LVBKIF.STYLE_TILE;
                 }
                 else
                 {
-                    lvbkImage.ulFlags |= NativeMethods.LVBKIF_STYLE_NORMAL;
+                    lvbkImage.ulFlags |= ComCtl32.LVBKIF.STYLE_NORMAL;
                 }
             }
             else
             {
-                lvbkImage.ulFlags = NativeMethods.LVBKIF_SOURCE_NONE;
+                lvbkImage.ulFlags = ComCtl32.LVBKIF.SOURCE_NONE;
                 backgroundImageFileName = string.Empty;
             }
 
-            UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)LVM.SETBKIMAGE, 0, lvbkImage);
+            fixed (char* pBackgroundImageFileName = backgroundImageFileName)
+            {
+                lvbkImage.pszImage = pBackgroundImageFileName;
+                User32.SendMessageW(this, (User32.WindowMessage)LVM.SETBKIMAGE, IntPtr.Zero, ref lvbkImage);
+            }
 
             if (string.IsNullOrEmpty(fileNameToDelete))
             {
