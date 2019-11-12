@@ -49,7 +49,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
         }
 
         [Scenario(true)]
-        public ScenarioResult AutoSize_Not_Changes_Size_When_False(TParams p)
+        public ScenarioResult AutoSize_Does_Not_Change_Size_When_False(TParams p)
         {
             p.log.WriteLine("Make Sure label size is not changed when the text changes and autosize is false");
             _lbl.AutoSize = false;
@@ -63,7 +63,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
         }
 
         [Scenario(true)]
-        public ScenarioResult TextAlign_Valid_Integral_Scenario(TParams p)
+        public ScenarioResult Set_TextAlign_With_Enum_Values(TParams p)
         {
             p.log.WriteLine("Make Sure I can set all ContentAlignment via integral");
             _lbl.AutoSize = true;
@@ -83,7 +83,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
         }
 
         [Scenario(true)]
-        public ScenarioResult TextAlign_Valid_Literal_Scenario(TParams p)
+        public ScenarioResult Set_TextAlign_With_Enum_Names(TParams p)
         {
             p.log.WriteLine("Make Sure I can set all ContentAlignment via literals");
             _lbl.AutoSize = true;
@@ -103,7 +103,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
         }
 
         [Scenario(true)]
-        public ScenarioResult TextAlign_Invalid_Integral_Scenario(TParams p)
+        public ScenarioResult Set_TextAlign_With_Invalid_Enum_Value(TParams p)
         {
             p.log.WriteLine("Make Sure I get Exceptions on -1 Align Enums via integral");
             _lbl.AutoSize = true;
@@ -123,29 +123,6 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
                 return new ScenarioResult(false, "FAILED: wrong exception was thrown", p.log);
             }
             return new ScenarioResult(false, "Failed to throw exception on -1 text alignment", p.log);
-        }
-
-        [Scenario(true)]
-        public ScenarioResult TextAlign_Invalid_Integral_Scenario2(TParams p)
-        {
-            p.log.WriteLine("Make Sure I get Exceptions on 3 Align Enums via integral");
-            _lbl.AutoSize = true;
-
-            try
-            {
-                _lbl.TextAlign = (ContentAlignment)3;
-            }
-            catch (ArgumentException e)
-            {
-                p.log.WriteLine("exception was caught: " + e.Message);
-                return ScenarioResult.Pass;
-            }
-            catch (Exception e)
-            {
-                p.log.WriteLine("exception was caught: " + e.Message);
-                return new ScenarioResult(false, "FAILED: wrong exception was thrown", p.log);
-            }
-            return new ScenarioResult(false, "Failed to throw exception on 3 textalignment", p.log);
         }
     }
 }
