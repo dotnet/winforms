@@ -3679,19 +3679,15 @@ namespace System.Windows.Forms
 
             UnsafeNativeMethods.IQuickActivate iqa = (UnsafeNativeMethods.IQuickActivate)instance;
 
-            UnsafeNativeMethods.tagQACONTAINER qaContainer = new UnsafeNativeMethods.tagQACONTAINER();
-            UnsafeNativeMethods.tagQACONTROL qaControl = new UnsafeNativeMethods.tagQACONTROL();
+            var qaContainer = new Ole32.QACONTAINER
+            {
+                cbSize = (uint)Marshal.SizeOf<Ole32.QACONTAINER>()
+            };
+            var qaControl = new UnsafeNativeMethods.tagQACONTROL();
 
             qaContainer.pClientSite = oleSite;
             qaContainer.pPropertyNotifySink = oleSite;
-            //         qaContainer.pControlSite = oleSite;
-            //         qaContainer.pAdviseSink = null;
-            //         qaContainer.pUnkEventSink = null;
-            //         qaContainer.pUndoMgr = null;
-            //         qaContainer.pBindHost = null;
-            //         qaContainer.pServiveProvider = null;
-            //         qaContainer.hpal = 0;
-            qaContainer.pFont = GetIFontFromFont(GetParentContainer().parent.Font);
+            qaContainer.pFont = (Ole32.IFont)GetIFontFromFont(GetParentContainer().parent.Font);
             qaContainer.dwAppearance = 0;
             qaContainer.lcid = Application.CurrentCulture.LCID;
 
@@ -3707,32 +3703,23 @@ namespace System.Windows.Forms
                 qaContainer.colorFore = GetOleColorFromColor(SystemColors.WindowText);
                 qaContainer.colorBack = GetOleColorFromColor(SystemColors.Window);
             }
-            qaContainer.dwAmbientFlags = NativeMethods.ActiveX.QACONTAINER_AUTOCLIP | NativeMethods.ActiveX.QACONTAINER_MESSAGEREFLECT |
-                                         NativeMethods.ActiveX.QACONTAINER_SUPPORTSMNEMONICS;
+            qaContainer.dwAmbientFlags = Ole32.QACONTAINERFLAGS.AUTOCLIP | Ole32.QACONTAINERFLAGS.MESSAGEREFLECT | Ole32.QACONTAINERFLAGS.SUPPORTSMNEMONICS;
             if (IsUserMode())
             {
-                qaContainer.dwAmbientFlags |= NativeMethods.ActiveX.QACONTAINER_USERMODE;
-            }
-            else
-            {
-                // Can't set ui dead becuase MFC controls return NOWHERE on NCHITTEST which
-                // messes up the designer...
-                // But, without this the FarPoint SpreadSheet and the Office SpreadSheet
-                // controls take keyboard input at design time.
-                //qaContainer.dwAmbientFlags |= NativeMethods.ActiveX.QACONTAINER_UIDEAD;
-                // qaContainer.dwAmbientFlags |= ActiveX.QACONTAINER_SHOWHATCHING;
+                // In design mode we'd ideally set QACONTAINER_UIDEAD on dwAmbientFlags 
+                // so controls don't take keyboard input, but MFC controls return NOWHERE on
+                // NCHITTEST, which messes up the designer.
+                qaContainer.dwAmbientFlags |= Ole32.QACONTAINERFLAGS.USERMODE;
             }
 
-            try
+            HRESULT hr = iqa.QuickActivate(qaContainer, qaControl);
+            if (!hr.Succeeded())
             {
-                iqa.QuickActivate(qaContainer, qaControl);
-            }
-            catch (Exception t)
-            {
-                Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "Failed to QuickActivate: " + t.ToString());
+                Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "Failed to QuickActivate: " + hr.ToString());
                 DisposeAxControl();
                 return false;
             }
+
             _miscStatusBits = qaControl.dwMiscStatus;
             ParseMiscBits(_miscStatusBits);
             return true;
