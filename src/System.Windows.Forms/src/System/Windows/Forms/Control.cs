@@ -2702,7 +2702,7 @@ namespace System.Windows.Forms
                     }
 
                     for (prev = start;
-                         (next = User32.GetWindow(new HandleRef(null, prev), User32.GW.HWNDPREV)) != IntPtr.Zero;
+                         (next = User32.GetWindow(prev, User32.GW.HWNDPREV)) != IntPtr.Zero;
                          prev = next)
                     {
 
@@ -6025,9 +6025,9 @@ namespace System.Windows.Forms
         {
             ArrayList windows = new ArrayList();
 
-            for (IntPtr hWndChild = User32.GetWindow(new HandleRef(null, hWndParent), User32.GW.CHILD);
+            for (IntPtr hWndChild = User32.GetWindow(hWndParent, User32.GW.CHILD);
                  hWndChild != IntPtr.Zero;
-                 hWndChild = User32.GetWindow(new HandleRef(null, hWndChild), User32.GW.HWNDNEXT))
+                 hWndChild = User32.GetWindow(hWndChild, User32.GW.HWNDNEXT))
             {
                 windows.Add(hWndChild);
             }
@@ -11671,7 +11671,7 @@ namespace System.Windows.Forms
             int newIndex = 0;
             int curIndex = Controls.GetChildIndex(ctl);
             IntPtr hWnd = ctl.InternalHandle;
-            while ((hWnd = User32.GetWindow(new HandleRef(null, hWnd), User32.GW.HWNDPREV)) != IntPtr.Zero)
+            while ((hWnd = User32.GetWindow(hWnd, User32.GW.HWNDPREV)) != IntPtr.Zero)
             {
                 Control c = FromHandle(hWnd);
                 if (c != null)
