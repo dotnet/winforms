@@ -37,11 +37,7 @@ namespace System.Windows.Forms.Design
         /// <summary>
         ///    When implemented by a class, gets or sets the name of the component associated with the <see cref='System.ComponentModel.ISite'/>.
         /// </summary>
-        public string Name
-        {
-            get => null;
-            set { }
-        }
+        public string Name { get; set; }
 
         public object GetService(Type t)
         {
