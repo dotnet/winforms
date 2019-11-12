@@ -121,8 +121,6 @@ namespace System.Windows.Forms
         CB_FINDSTRINGEXACT = 0x0158,
         CB_GETDROPPEDWIDTH = 0x015F,
         CB_SETDROPPEDWIDTH = 0x0160,
-        CCM_SETVERSION = (0x2000 + 0x7),
-        CCM_GETVERSION = (0x2000 + 0x8),
         CCS_NORESIZE = 0x00000004,
         CCS_NOPARENTALIGN = 0x00000008,
         CCS_NODIVIDER = 0x00000040,
@@ -804,23 +802,8 @@ namespace System.Windows.Forms
         TVN_BEGINRDRAG = ((0 - 400) - 57),
         TVN_BEGINLABELEDIT = ((0 - 400) - 59),
         TVN_ENDLABELEDIT = ((0 - 400) - 60),
-        TCM_SETIMAGELIST = (0x1300 + 3),
         TCIF_TEXT = 0x0001,
         TCIF_IMAGE = 0x0002,
-        TCM_GETITEM = (0x1300 + 60),
-        TCM_SETITEM = (0x1300 + 61),
-        TCM_INSERTITEM = (0x1300 + 62),
-        TCM_DELETEITEM = (0x1300 + 8),
-        TCM_DELETEALLITEMS = (0x1300 + 9),
-        TCM_GETITEMRECT = (0x1300 + 10),
-        TCM_GETCURSEL = (0x1300 + 11),
-        TCM_SETCURSEL = (0x1300 + 12),
-        TCM_ADJUSTRECT = (0x1300 + 40),
-        TCM_SETITEMSIZE = (0x1300 + 41),
-        TCM_SETPADDING = (0x1300 + 43),
-        TCM_GETROWCOUNT = (0x1300 + 44),
-        TCM_GETTOOLTIPS = (0x1300 + 45),
-        TCM_SETTOOLTIPS = (0x1300 + 46),
         TCN_SELCHANGE = ((0 - 550) - 1),
         TCN_SELCHANGING = ((0 - 550) - 2),
         TVM_SETBKCOLOR = (TV_FIRST + 29),
@@ -1621,15 +1604,6 @@ namespace System.Windows.Forms
         }
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-        public class TV_HITTESTINFO
-        {
-            public int pt_x;
-            public int pt_y;
-            public ComCtl32.TVHT flags = 0;
-            public IntPtr hItem = IntPtr.Zero;
-        }
-
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
         public class MCHITTESTINFO
         {
             public int cbSize = Marshal.SizeOf<MCHITTESTINFO>();
@@ -1979,14 +1953,6 @@ namespace System.Windows.Forms
         public class ActiveX
         {
             public const int OCM__BASE = 0x2000;
-            public const int QACONTAINER_SHOWHATCHING = 0x1;
-            public const int QACONTAINER_SHOWGRABHANDLES = 0x2;
-            public const int QACONTAINER_USERMODE = 0x4;
-            public const int QACONTAINER_DISPLAYASDEFAULT = 0x8;
-            public const int QACONTAINER_UIDEAD = 0x10;
-            public const int QACONTAINER_AUTOCLIP = 0x20;
-            public const int QACONTAINER_MESSAGEREFLECT = 0x40;
-            public const int QACONTAINER_SUPPORTSMNEMONICS = 0x80;
             public const int ALIGN_MIN = 0x0;
             public const int ALIGN_NO_CHANGE = 0x0;
             public const int ALIGN_TOP = 0x1;
@@ -2161,9 +2127,6 @@ namespace System.Windows.Forms
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public static extern IntPtr SendMessage(IntPtr hWnd, int msg, int wParam, string lParam);
-
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public extern static IntPtr SendMessage(IntPtr hWnd, int Msg, int wParam, [In, Out] TV_HITTESTINFO lParam);
 
         [DllImport(ExternDll.User32, ExactSpelling = true)]
         public static extern bool GetUpdateRect(IntPtr hwnd, ref RECT rc, bool fErase);
