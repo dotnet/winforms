@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -523,12 +523,9 @@ namespace System.Windows.Forms
         MCN_SELCHANGE = ((0 - 750) + 1),
         MCN_GETDAYSTATE = ((0 - 750) + 3),
         MCN_SELECT = ((0 - 750) + 4),
-        MCS_DAYSTATE = 0x0001,
-        MCS_MULTISELECT = 0x0002,
-        MCS_WEEKNUMBERS = 0x0004,
-        MCS_NOTODAYCIRCLE = 0x0008,
-        MCS_NOTODAY = 0x0010,
+
         MSAA_MENU_SIG = (unchecked((int)0xAA0DF00D));
+
 
         public const int NIM_ADD = 0x00000000,
         NIM_MODIFY = 0x00000001,
@@ -1601,23 +1598,6 @@ namespace System.Windows.Forms
             public int iOrder = 0;
             public int type = 0;
             public IntPtr pvFilter = IntPtr.Zero;
-        }
-
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-        public class MCHITTESTINFO
-        {
-            public int cbSize = Marshal.SizeOf<MCHITTESTINFO>();
-            public int pt_x = 0;
-            public int pt_y = 0;
-            public int uHit = 0;
-            public short st_wYear = 0;
-            public short st_wMonth = 0;
-            public short st_wDayOfWeek = 0;
-            public short st_wDay = 0;
-            public short st_wHour = 0;
-            public short st_wMinute = 0;
-            public short st_wSecond = 0;
-            public short st_wMilliseconds = 0;
         }
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]

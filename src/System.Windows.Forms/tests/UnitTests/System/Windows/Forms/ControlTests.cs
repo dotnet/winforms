@@ -5,11 +5,8 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Drawing.Imaging;
-using Moq;
 using WinForms.Common.Tests;
 using Xunit;
-using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
@@ -34,7 +31,6 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(Size.Empty, control.ClientSize);
             Assert.Equal(Rectangle.Empty, control.ClientRectangle);
             Assert.Null(control.Container);
-            Assert.Null(control.ContextMenu);
             Assert.Null(control.ContextMenuStrip);
             Assert.Empty(control.Controls);
             Assert.Same(control.Controls, control.Controls);
@@ -113,7 +109,6 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(Size.Empty, control.ClientSize);
             Assert.Equal(Rectangle.Empty, control.ClientRectangle);
             Assert.Null(control.Container);
-            Assert.Null(control.ContextMenu);
             Assert.Null(control.ContextMenuStrip);
             Assert.Empty(control.Controls);
             Assert.Same(control.Controls, control.Controls);
@@ -198,7 +193,6 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(new Rectangle(0, 0, width, height), control.ClientRectangle);
             Assert.Equal(new Size(width, height), control.ClientSize);
             Assert.Null(control.Container);
-            Assert.Null(control.ContextMenu);
             Assert.Null(control.ContextMenuStrip);
             Assert.Empty(control.Controls);
             Assert.Same(control.Controls, control.Controls);
@@ -282,7 +276,6 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(Rectangle.Empty, control.ClientRectangle);
             Assert.Equal(Size.Empty, control.ClientSize);
             Assert.Null(control.Container);
-            Assert.Null(control.ContextMenu);
             Assert.Null(control.ContextMenuStrip);
             Assert.Empty(control.Controls);
             Assert.Same(control.Controls, control.Controls);
@@ -309,7 +302,8 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.HasChildren);
             Assert.Equal(0, control.Height);
             Assert.Equal(ImeMode.NoControl, control.ImeMode);
-            Assert.Equal(ImeMode.NoControl, control.ImeModeBase);            Assert.Same(control.LayoutEngine, control.LayoutEngine);
+            Assert.Equal(ImeMode.NoControl, control.ImeModeBase);
+            Assert.Same(control.LayoutEngine, control.LayoutEngine);
             Assert.Equal(0, control.Left);
             Assert.Equal(Point.Empty, control.Location);
             Assert.Equal(new Padding(3), control.Margin);
@@ -366,7 +360,6 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(new Rectangle(0, 0, width, height), control.ClientRectangle);
             Assert.Equal(new Size(width, height), control.ClientSize);
             Assert.Null(control.Container);
-            Assert.Null(control.ContextMenu);
             Assert.Null(control.ContextMenuStrip);
             Assert.Empty(control.Controls);
             Assert.Same(control.Controls, control.Controls);
@@ -774,8 +767,6 @@ namespace System.Windows.Forms.Tests
             public new void OnClick(EventArgs e) => base.OnClick(e);
 
             public new void OnClientSizeChanged(EventArgs e) => base.OnClientSizeChanged(e);
-
-            public new void OnContextMenuChanged(EventArgs e) => base.OnContextMenuChanged(e);
 
             public new void OnContextMenuStripChanged(EventArgs e) => base.OnContextMenuStripChanged(e);
 

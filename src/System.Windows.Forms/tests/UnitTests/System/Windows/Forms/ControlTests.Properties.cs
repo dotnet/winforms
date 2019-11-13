@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -1973,117 +1973,6 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(new Size(10, 10), control.ClientSize);
             Assert.Equal(5, callCount);
             Assert.Equal(2, sizeChangedCallCount);
-        }
-
-        public static IEnumerable<object[]> ContextMenu_Set_TestData()
-        {
-            yield return new object[] { null };
-            yield return new object[] { new ContextMenu() };
-        }
-
-        [Theory]
-        [MemberData(nameof(ContextMenu_Set_TestData))]
-        public void Control_ContextMenu_Set_GetReturnsExpected(ContextMenu value)
-        {
-            var control = new Control
-            {
-                ContextMenu = value
-            };
-            Assert.Same(value, control.ContextMenu);
-
-            // Set same.
-            control.ContextMenu = value;
-            Assert.Same(value, control.ContextMenu);
-        }
-
-        [Theory]
-        [MemberData(nameof(ContextMenu_Set_TestData))]
-        public void Control_ContextMenu_SetWithNonNullOldValue_GetReturnsExpected(ContextMenu value)
-        {
-            var control = new Control
-            {
-                ContextMenu = new ContextMenu()
-            };
-            control.ContextMenu = value;
-            Assert.Same(value, control.ContextMenu);
-
-            // Set same.
-            control.ContextMenu = value;
-            Assert.Same(value, control.ContextMenu);
-        }
-
-        [Fact]
-        public void Control_ContextMenu_SetDisposeNew_RemovesContextMenu()
-        {
-            var menu = new ContextMenu();
-            var control = new Control
-            {
-                ContextMenu = menu
-            };
-            Assert.Same(menu, control.ContextMenu);
-
-            menu.Dispose();
-            Assert.Null(control.ContextMenu);
-        }
-
-        [Fact]
-        public void Control_ContextMenu_SetDisposeOld_RemovesContextMenu()
-        {
-            var menu1 = new ContextMenu();
-            var menu2 = new ContextMenu();
-            var control = new Control
-            {
-                ContextMenu = menu1
-            };
-            Assert.Same(menu1, control.ContextMenu);
-
-            control.ContextMenu = menu2;
-            Assert.Same(menu2, control.ContextMenu);
-
-            menu1.Dispose();
-            Assert.Same(menu2, control.ContextMenu);
-        }
-
-        [Fact]
-        public void Control_ContextMenu_SetWithHandler_CallsContextMenuChanged()
-        {
-            var control = new Control();
-            int callCount = 0;
-            EventHandler handler = (sender, e) =>
-            {
-                Assert.Same(control, sender);
-                Assert.Same(EventArgs.Empty, e);
-                callCount++;
-            };
-            control.ContextMenuChanged += handler;
-
-            // Set different.
-            var menu1 = new ContextMenu();
-            control.ContextMenu = menu1;
-            Assert.Same(menu1, control.ContextMenu);
-            Assert.Equal(1, callCount);
-
-            // Set same.
-            control.ContextMenu = menu1;
-            Assert.Same(menu1, control.ContextMenu);
-            Assert.Equal(1, callCount);
-
-            // Set different.
-            var menu2 = new ContextMenu();
-            control.ContextMenu = menu2;
-            Assert.Same(menu2, control.ContextMenu);
-            Assert.Equal(2, callCount);
-
-            // Set null.
-            control.ContextMenu = null;
-            Assert.Null(control.ContextMenu);
-            Assert.Equal(3, callCount);
-
-            // Remove handler.
-            control.ContextMenuChanged -= handler;
-            control.ContextMenu = menu1;
-            Assert.Same(menu1, control.ContextMenu);
-            Assert.Equal(3, callCount);
         }
 
         public static IEnumerable<object[]> ContextMenuStrip_Set_TestData()
@@ -5113,7 +5002,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { new Size(0, 10), new Size(0, 10), 1 };
             yield return new object[] { new Size(1, 0), new Size(1, 0), 1 };
             yield return new object[] { new Size(10, 0), new Size(10, 0), 1 };
-            yield return new object[] { new Size(-1, -2), Size.Empty,  0 };
+            yield return new object[] { new Size(-1, -2), Size.Empty, 0 };
             yield return new object[] { new Size(1, 2), new Size(1, 2), 1 };
             yield return new object[] { new Size(3, 4), new Size(3, 4), 1 };
             yield return new object[] { new Size(ushort.MaxValue - 1, ushort.MaxValue - 1), new Size(ushort.MaxValue - 1, ushort.MaxValue - 1), 1 };
@@ -5443,7 +5332,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { new Size(0, 10), new Size(0, 10), 1 };
             yield return new object[] { new Size(1, 0), new Size(1, 0), 1 };
             yield return new object[] { new Size(10, 0), new Size(10, 0), 1 };
-            yield return new object[] { new Size(-1, -2), Size.Empty,  0 };
+            yield return new object[] { new Size(-1, -2), Size.Empty, 0 };
             yield return new object[] { new Size(1, 2), new Size(1, 2), 1 };
             yield return new object[] { new Size(3, 4), new Size(3, 4), 1 };
             yield return new object[] { new Size(ushort.MaxValue - 1, ushort.MaxValue - 1), new Size(ushort.MaxValue - 1, ushort.MaxValue - 1), 1 };
@@ -5846,7 +5735,7 @@ namespace System.Windows.Forms.Tests
             };
             Assert.Equal(expected, control.Name);
             mockSite.Verify(s => s.Name, Times.Once());
-            
+
             // Get again.
             Assert.Equal(expected, control.Name);
             mockSite.Verify(s => s.Name, Times.Exactly(2));
@@ -5862,7 +5751,7 @@ namespace System.Windows.Forms.Tests
             };
             Assert.Equal(expected, control.Name);
             Assert.False(control.IsHandleCreated);
-            
+
             // Get again.
             control.Name = value;
             Assert.Equal(expected, control.Name);
@@ -5881,7 +5770,7 @@ namespace System.Windows.Forms.Tests
             control.Name = value;
             Assert.Equal(expected, control.Name);
             Assert.False(control.IsHandleCreated);
-            
+
             // Get again.
             control.Name = value;
             Assert.Equal(expected, control.Name);
@@ -5916,7 +5805,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, control.Name);
             Assert.False(control.IsHandleCreated);
             mockSite.Verify(s => s.Name, Times.Exactly(expectedSiteCallCount));
-            
+
             // Get again.
             Assert.Equal(expected, control.Name);
             Assert.False(control.IsHandleCreated);
@@ -6244,7 +6133,7 @@ namespace System.Windows.Forms.Tests
             {
                 Parent = oldParent
             };
-            
+
             control.Parent = value;
             Assert.Same(value, control.Parent);
             Assert.Empty(oldParent.Controls);

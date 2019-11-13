@@ -5,7 +5,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.IO;
 using Moq;
 using WinForms.Common.Tests;
 using Xunit;
@@ -37,7 +36,6 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(new Size(100, 50), control.ClientSize);
             Assert.Equal(new Rectangle(0, 0, 100, 50), control.ClientRectangle);
             Assert.Null(control.Container);
-            Assert.Null(control.ContextMenu);
             Assert.Null(control.ContextMenuStrip);
             Assert.Empty(control.Controls);
             Assert.Same(control.Controls, control.Controls);
@@ -784,7 +782,7 @@ namespace System.Windows.Forms.Tests
         {
             Image image1 = new Bitmap(10, 10);
             Image image2 = new Bitmap(10, 10);
-            
+
             foreach (string value in new string[] { " ", "NoSuchImage" })
             {
                 yield return new object[] { null, null, value };
@@ -1114,7 +1112,7 @@ namespace System.Windows.Forms.Tests
             {
                 Parent = oldParent
             };
-            
+
             control.Parent = value;
             Assert.Same(value, control.Parent);
             Assert.Empty(oldParent.Controls);
@@ -1774,7 +1772,7 @@ namespace System.Windows.Forms.Tests
         {
             var pictureBox = new PictureBox
             {
-                ImageLocation = imageLocation 
+                ImageLocation = imageLocation
             };
             Assert.Equal(imageLocation, pictureBox.ImageLocation);
             Assert.Null(pictureBox.Image);
@@ -2393,7 +2391,7 @@ namespace System.Windows.Forms.Tests
                 Image = image
             };
             Assert.Same(image, pictureBox.Image);
-            
+
             pictureBox.OnPaint(eventArgs);
             Assert.Same(image, pictureBox.Image);
         }
@@ -2409,7 +2407,7 @@ namespace System.Windows.Forms.Tests
             };
             Assert.Null(pictureBox.Image);
             Assert.Equal(PathImageLocation, pictureBox.ImageLocation);
-            
+
             pictureBox.WaitOnLoad = true;
             pictureBox.OnPaint(eventArgs);
             Assert.Equal(new Size(110, 100), pictureBox.Image.Size);
@@ -2435,7 +2433,7 @@ namespace System.Windows.Forms.Tests
             };
             Assert.Same(imageLocation, pictureBox.ImageLocation);
             Assert.Null(pictureBox.Image);
-            
+
             pictureBox.WaitOnLoad = true;
             pictureBox.OnPaint(eventArgs);
             Assert.Same(imageLocation, pictureBox.ImageLocation);
@@ -2465,7 +2463,7 @@ namespace System.Windows.Forms.Tests
             };
             Assert.Same(imageLocation, pictureBox.ImageLocation);
             Assert.Null(pictureBox.Image);
-            
+
             pictureBox.WaitOnLoad = true;
             pictureBox.OnPaint(eventArgs);
             Assert.Same(imageLocation, pictureBox.ImageLocation);

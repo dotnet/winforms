@@ -1,11 +1,9 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using Moq;
 using WinForms.Common.Tests;
 using Xunit;
 
@@ -31,10 +29,10 @@ namespace System.Windows.Forms.Tests
             control.OnAutoSizeChanged(eventArgs);
             Assert.Equal(1, callCount);
 
-           // Remove handler.
-           control.AutoSizeChanged -= handler;
-           control.OnAutoSizeChanged(eventArgs);
-           Assert.Equal(1, callCount);
+            // Remove handler.
+            control.AutoSizeChanged -= handler;
+            control.OnAutoSizeChanged(eventArgs);
+            Assert.Equal(1, callCount);
         }
 
         [Theory]
@@ -78,7 +76,7 @@ namespace System.Windows.Forms.Tests
                 callCount++;
             };
             int invalidatedCallCount = 0;
-            InvalidateEventHandler invalidatedHandler =(sender, e) => invalidatedCallCount++;
+            InvalidateEventHandler invalidatedHandler = (sender, e) => invalidatedCallCount++;
             int styleChangedCallCount = 0;
             EventHandler styleChangedHandler = (sender, e) => styleChangedCallCount++;
             int createdCallCount = 0;
@@ -984,30 +982,6 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
-        public void Control_OnContextMenuChanged_Invoke_CallsContextMenuChanged(EventArgs eventArgs)
-        {
-            var control = new SubControl();
-            int callCount = 0;
-            EventHandler handler = (sender, e) =>
-            {
-                Assert.Same(control, sender);
-                Assert.Same(eventArgs, e);
-                callCount++;
-            };
-
-            // Call with handler.
-            control.ContextMenuChanged += handler;
-            control.OnContextMenuChanged(eventArgs);
-            Assert.Equal(1, callCount);
-
-            // Remove handler.
-            control.ContextMenuChanged -= handler;
-            control.OnContextMenuChanged(eventArgs);
-            Assert.Equal(1, callCount);
-        }
-
-        [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnContextMenuStripChanged_Invoke_CallsContextMenuStripChanged(EventArgs eventArgs)
         {
             var control = new SubControl();
@@ -1036,7 +1010,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { new ControlEventArgs(null) };
             yield return new object[] { new ControlEventArgs(new Control()) };
         }
-        
+
         [WinFormsTheory]
         [MemberData(nameof(ControlEventArgs_TestData))]
         public void Control_OnControlAdded_Invoke_CallsControlAdded(ControlEventArgs eventArgs)
@@ -1049,16 +1023,16 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-        
+
             // Call with handler.
             control.ControlAdded += handler;
             control.OnControlAdded(eventArgs);
             Assert.Equal(1, callCount);
-        
-           // Remove handler.
-           control.ControlAdded -= handler;
-           control.OnControlAdded(eventArgs);
-           Assert.Equal(1, callCount);
+
+            // Remove handler.
+            control.ControlAdded -= handler;
+            control.OnControlAdded(eventArgs);
+            Assert.Equal(1, callCount);
         }
 
         [WinFormsTheory]
@@ -1073,16 +1047,16 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-        
+
             // Call with handler.
             control.ControlRemoved += handler;
             control.OnControlRemoved(eventArgs);
             Assert.Equal(1, callCount);
-        
-           // Remove handler.
-           control.ControlRemoved -= handler;
-           control.OnControlRemoved(eventArgs);
-           Assert.Equal(1, callCount);
+
+            // Remove handler.
+            control.ControlRemoved -= handler;
+            control.OnControlRemoved(eventArgs);
+            Assert.Equal(1, callCount);
         }
 
         [Fact]
@@ -1662,7 +1636,7 @@ namespace System.Windows.Forms.Tests
                 callCount++;
             };
             int invalidatedCallCount = 0;
-            InvalidateEventHandler invalidatedHandler =(sender, e) => invalidatedCallCount++;
+            InvalidateEventHandler invalidatedHandler = (sender, e) => invalidatedCallCount++;
             int styleChangedCallCount = 0;
             EventHandler styleChangedHandler = (sender, e) => styleChangedCallCount++;
             int createdCallCount = 0;
@@ -4210,10 +4184,10 @@ namespace System.Windows.Forms.Tests
             control.OnStyleChanged(eventArgs);
             Assert.Equal(1, callCount);
 
-           // Remove handler.
-           control.StyleChanged -= handler;
-           control.OnStyleChanged(eventArgs);
-           Assert.Equal(1, callCount);
+            // Remove handler.
+            control.StyleChanged -= handler;
+            control.OnStyleChanged(eventArgs);
+            Assert.Equal(1, callCount);
         }
 
         [WinFormsTheory]
@@ -4234,10 +4208,10 @@ namespace System.Windows.Forms.Tests
             control.OnTabStopChanged(eventArgs);
             Assert.Equal(1, callCount);
 
-           // Remove handler.
-           control.TabStopChanged -= handler;
-           control.OnTabStopChanged(eventArgs);
-           Assert.Equal(1, callCount);
+            // Remove handler.
+            control.TabStopChanged -= handler;
+            control.OnTabStopChanged(eventArgs);
+            Assert.Equal(1, callCount);
         }
 
         [Theory]
@@ -4258,10 +4232,10 @@ namespace System.Windows.Forms.Tests
             control.OnTextChanged(eventArgs);
             Assert.Equal(1, callCount);
 
-           // Remove handler.
-           control.TextChanged -= handler;
-           control.OnTextChanged(eventArgs);
-           Assert.Equal(1, callCount);
+            // Remove handler.
+            control.TextChanged -= handler;
+            control.OnTextChanged(eventArgs);
+            Assert.Equal(1, callCount);
         }
 
         [Theory]

@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -118,12 +118,12 @@ namespace System.Windows.Forms.Tests
             control.SetTopLevel(topLevel);
             int layoutCallCount = 0;
             control.Layout += (sender, e) => layoutCallCount++;
-            
+
             control.BringToFront();
             Assert.Equal(topLevel, control.GetTopLevel());
             Assert.Equal(0, layoutCallCount);
             Assert.Equal(topLevel, control.IsHandleCreated);
-            
+
             // Call again.
             control.BringToFront();
             Assert.Equal(topLevel, control.GetTopLevel());
@@ -159,7 +159,7 @@ namespace System.Windows.Forms.Tests
             Assert.False(child1.IsHandleCreated);
             Assert.False(child2.IsHandleCreated);
             Assert.False(parent.IsHandleCreated);
-            
+
             // Call again.
             child2.BringToFront();
             Assert.Equal(new Control[] { child2, child1 }, parent.Controls.Cast<Control>());
@@ -168,7 +168,7 @@ namespace System.Windows.Forms.Tests
             Assert.False(child1.IsHandleCreated);
             Assert.False(child2.IsHandleCreated);
             Assert.False(parent.IsHandleCreated);
-            
+
             parent.Layout -= parentHandler;
         }
 
@@ -210,7 +210,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createdCallCount);
             Assert.False(child2.IsHandleCreated);
             Assert.False(parent.IsHandleCreated);
-            
+
             // Call again.
             child2.BringToFront();
             Assert.Equal(new Control[] { child2, child1 }, parent.Controls.Cast<Control>());
@@ -222,7 +222,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createdCallCount);
             Assert.False(child2.IsHandleCreated);
             Assert.False(parent.IsHandleCreated);
-            
+
             parent.Layout -= parentHandler;
         }
 
@@ -273,7 +273,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, parentInvalidatedCallCount);
             Assert.Equal(0, parentStyleChangedCallCount);
             Assert.Equal(0, parentCreatedCallCount);
-            
+
             // Call again.
             child2.BringToFront();
             Assert.Equal(new Control[] { child2, child1 }, parent.Controls.Cast<Control>());
@@ -288,7 +288,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, parentInvalidatedCallCount);
             Assert.Equal(0, parentStyleChangedCallCount);
             Assert.Equal(0, parentCreatedCallCount);
-            
+
             parent.Layout -= parentHandler;
         }
 
@@ -331,7 +331,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, parentInvalidatedCallCount);
             Assert.Equal(0, parentStyleChangedCallCount);
             Assert.Equal(0, parentCreatedCallCount);
-            
+
             // Call again.
             child2.BringToFront();
             Assert.Equal(new Control[] { child2, child1 }, parent.Controls.Cast<Control>());
@@ -343,7 +343,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, parentInvalidatedCallCount);
             Assert.Equal(0, parentStyleChangedCallCount);
             Assert.Equal(0, parentCreatedCallCount);
-            
+
             parent.Layout -= parentHandler;
         }
 
@@ -377,7 +377,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            
+
             // Call again.
             control.BringToFront();
             Assert.Equal(topLevel, control.GetTopLevel());
@@ -763,7 +763,7 @@ namespace System.Windows.Forms.Tests
             Assert.True(parent.Contains(child2));
             Assert.True(parent.Contains(grandchild1));
             Assert.False(parent.Contains(parent));
-            
+
             Assert.True(control.Contains(child1));
             Assert.True(control.Contains(child2));
             Assert.True(control.Contains(grandchild1));
@@ -1435,12 +1435,12 @@ namespace System.Windows.Forms.Tests
             using var control = new SubControl();
             control.InitLayout();
             Assert.False(control.IsHandleCreated);
-            
+
             // Call again.
             control.InitLayout();
             Assert.False(control.IsHandleCreated);
         }
-        
+
         [WinFormsFact]
         public void Control_InitLayout_InvokeMocked_Success()
         {
@@ -1450,7 +1450,7 @@ namespace System.Windows.Forms.Tests
                 .Setup(e => e.InitLayout(control, BoundsSpecified.All))
                 .Verifiable();
             control.SetLayoutEngine(mockLayoutEngine.Object);
-            
+
             control.InitLayout();
             mockLayoutEngine.Verify(e => e.InitLayout(control, BoundsSpecified.All), Times.Once());
             Assert.False(control.IsHandleCreated);
@@ -1468,7 +1468,7 @@ namespace System.Windows.Forms.Tests
             control.SetLayoutEngine(null);
             Assert.Throws<NullReferenceException>(() => control.InitLayout());
         }
-        
+
         private class CustomLayoutEngineControl : Control
         {
             private LayoutEngine _layoutEngine;
@@ -1521,7 +1521,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { Keys.Insert, false };
             yield return new object[] { Keys.Space, false };
             yield return new object[] { Keys.Home, false };
-            yield return new object[] { Keys.End, false }; ;
+            yield return new object[] { Keys.End, false };
             yield return new object[] { Keys.Back, false };
             yield return new object[] { Keys.Next, false };
             yield return new object[] { Keys.Prior, false };
@@ -1551,7 +1551,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { Keys.Control | Keys.Insert, false };
             yield return new object[] { Keys.Control | Keys.Space, false };
             yield return new object[] { Keys.Control | Keys.Home, false };
-            yield return new object[] { Keys.Control | Keys.End, false }; ;
+            yield return new object[] { Keys.Control | Keys.End, false };
             yield return new object[] { Keys.Control | Keys.Back, false };
             yield return new object[] { Keys.Control | Keys.Next, false };
             yield return new object[] { Keys.Control | Keys.Prior, false };
@@ -1581,7 +1581,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { Keys.Alt | Keys.Insert, false };
             yield return new object[] { Keys.Alt | Keys.Space, false };
             yield return new object[] { Keys.Alt | Keys.Home, false };
-            yield return new object[] { Keys.Alt | Keys.End, false }; ;
+            yield return new object[] { Keys.Alt | Keys.End, false };
             yield return new object[] { Keys.Alt | Keys.Back, false };
             yield return new object[] { Keys.Alt | Keys.Next, false };
             yield return new object[] { Keys.Alt | Keys.Prior, false };
@@ -1635,7 +1635,7 @@ namespace System.Windows.Forms.Tests
             control.PerformLayout();
             Assert.Equal(1, layoutCallCount);
             Assert.False(control.IsHandleCreated);
-            
+
             // Call again.
             control.PerformLayout();
             Assert.Equal(2, layoutCallCount);
@@ -1665,7 +1665,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, layoutCallCount);
             mockLayoutEngine.Verify(e => e.Layout(control, It.IsAny<LayoutEventArgs>()), Times.Once());
             Assert.False(control.IsHandleCreated);
-            
+
             // Call again.
             control.PerformLayout();
             Assert.Equal(2, layoutCallCount);
@@ -1697,7 +1697,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, parentLayoutCallCount);
             Assert.False(control.IsHandleCreated);
             Assert.False(parent.IsHandleCreated);
-            
+
             // Call again.
             control.PerformLayout();
             Assert.Equal(2, layoutCallCount);
@@ -1745,7 +1745,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expectedParentLayoutCallCount, parentLayoutCallCount);
             mockLayoutEngine.Verify(e => e.Layout(control, It.IsAny<LayoutEventArgs>()), Times.Once());
             Assert.False(control.IsHandleCreated);
-            Assert.False(parent.IsHandleCreated);            
+            Assert.False(parent.IsHandleCreated);
 
             // Call again.
             control.PerformLayout();
@@ -1754,7 +1754,7 @@ namespace System.Windows.Forms.Tests
             mockLayoutEngine.Verify(e => e.Layout(control, It.IsAny<LayoutEventArgs>()), Times.Exactly(2));
             Assert.False(control.IsHandleCreated);
             Assert.False(parent.IsHandleCreated);
-            
+
             parent.Layout -= parentHandler;
         }
 
@@ -1816,7 +1816,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, layoutCallCount);
             control.PerformLayout();
             Assert.Equal(0, layoutCallCount);
-            
+
             // Resume again.
             control.ResumeLayout(performLayout);
             Assert.Equal(expectedLayoutCallCount, layoutCallCount);
@@ -1887,7 +1887,7 @@ namespace System.Windows.Forms.Tests
             control.PerformLayout(affectedControl, affectedProperty);
             Assert.Equal(1, layoutCallCount);
             Assert.False(control.IsHandleCreated);
-            
+
             // Call again.
             control.PerformLayout(affectedControl, affectedProperty);
             Assert.Equal(2, layoutCallCount);
@@ -1918,7 +1918,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, layoutCallCount);
             mockLayoutEngine.Verify(e => e.Layout(control, It.IsAny<LayoutEventArgs>()), Times.Once());
             Assert.False(control.IsHandleCreated);
-            
+
             // Call again.
             control.PerformLayout(affectedControl, affectedProperty);
             Assert.Equal(2, layoutCallCount);
@@ -1951,7 +1951,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, parentLayoutCallCount);
             Assert.False(control.IsHandleCreated);
             Assert.False(parent.IsHandleCreated);
-            
+
             // Call again.
             control.PerformLayout(affectedControl, affectedProperty);
             Assert.Equal(2, layoutCallCount);
@@ -1965,7 +1965,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { true, null, null, 1 };
             yield return new object[] { true, new Control(), string.Empty, 1 };
             yield return new object[] { true, new Control(), "AffectedProperty", 1 };
-            
+
             yield return new object[] { false, null, null, 0 };
             yield return new object[] { false, new Control(), string.Empty, 0 };
             yield return new object[] { false, new Control(), "AffectedProperty", 0 };
@@ -2009,7 +2009,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expectedParentLayoutCallCount, parentLayoutCallCount);
             mockLayoutEngine.Verify(e => e.Layout(control, It.IsAny<LayoutEventArgs>()), Times.Once());
             Assert.False(control.IsHandleCreated);
-            Assert.False(parent.IsHandleCreated);            
+            Assert.False(parent.IsHandleCreated);
 
             // Call again.
             control.PerformLayout(affectedControl, affectedProperty);
@@ -2018,7 +2018,7 @@ namespace System.Windows.Forms.Tests
             mockLayoutEngine.Verify(e => e.Layout(control, It.IsAny<LayoutEventArgs>()), Times.Exactly(2));
             Assert.False(control.IsHandleCreated);
             Assert.False(parent.IsHandleCreated);
-            
+
             parent.Layout -= parentHandler;
         }
 
@@ -2027,7 +2027,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { true, null, null, 1 };
             yield return new object[] { true, new Control(), string.Empty, 1 };
             yield return new object[] { true, new Control(), "AffectedProperty", 1 };
-            
+
             yield return new object[] { false, null, null, 0 };
             yield return new object[] { false, new Control(), string.Empty, 0 };
             yield return new object[] { false, new Control(), "AffectedProperty", 0 };
@@ -2089,7 +2089,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, layoutCallCount);
             control.PerformLayout(affectedControl, affectedProperty);
             Assert.Equal(0, layoutCallCount);
-            
+
             // Resume again.
             control.ResumeLayout(performLayout);
             Assert.Equal(expectedLayoutCallCount, layoutCallCount);
@@ -2391,51 +2391,6 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [InlineData(Keys.A)]
-        public void Control_ProcessCmdKey_InvokeWithContextMenu_ReturnsFalse(Keys keyData)
-        {
-            using var menu = new ContextMenu();
-            using var control = new SubControl
-            {
-                ContextMenu = menu
-            };
-            var msg = new Message();
-            Assert.False(control.ProcessCmdKey(ref msg, keyData));
-            Assert.Same(control, menu.SourceControl);
-            Assert.False(control.IsHandleCreated);
-        }
-
-        [WinFormsTheory]
-        [InlineData(Keys.A, true)]
-        [InlineData(Keys.A, false)]
-        public void Control_ProcessCmdKey_InvokeWithCustomContextMenu_ReturnsExpected(Keys keyData, bool result)
-        {
-            using var control = new SubControl();
-            var msg = new Message
-            {
-                Msg = 1
-            };
-            int callCount = 0;
-            using var contextMenu = new CustomProcessCmdKeyContextMenu();
-            bool action(Message actualMsg, Keys actualKeyData, Control actualControl)
-            {
-                Assert.Equal(1, actualMsg.Msg);
-                Assert.Equal(keyData, actualKeyData);
-                Assert.Same(control, actualControl);
-                Assert.Null(contextMenu.SourceControl);
-                callCount++;
-                return result;
-            }
-            contextMenu.ProcessCmdKeyAction = action;
-            control.ContextMenu = contextMenu;
-
-            Assert.Equal(result, control.ProcessCmdKey(ref msg, keyData));
-            Assert.Null(contextMenu.SourceControl);
-            Assert.Equal(1, callCount);
-            Assert.False(control.IsHandleCreated);
-        }
-
-        [WinFormsTheory]
-        [InlineData(Keys.A)]
         public void Control_ProcessCmdKey_InvokeWithParent_ReturnsFalse(Keys keyData)
         {
             using var parent = new Control();
@@ -2475,59 +2430,6 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(result, control.ProcessCmdKey(ref msg, keyData));
             Assert.Equal(1, callCount);
             Assert.False(control.IsHandleCreated);
-        }
-
-        [WinFormsTheory]
-        [InlineData(Keys.A, true, true, 0, true)]
-        [InlineData(Keys.A, true, false, 0, true)]
-        [InlineData(Keys.A, false, true, 1, true)]
-        [InlineData(Keys.A, false, false, 1, false)]
-        public void Control_ProcessCmdKey_InvokeWithCustomContextMenuAndParent_ReturnsExpected(Keys keyData, bool contextMenuResult, bool parentResult, int expectedParentCallCount, bool expectedResult)
-        {
-            using var control = new SubControl();
-            var msg = new Message
-            {
-                Msg = 1
-            };
-            using var contextMenu = new CustomProcessCmdKeyContextMenu();
-            int contextMenuCallCount = 0;
-            bool contextMenuAction(Message actualMsg, Keys actualKeyData, Control actualControl)
-            {
-                Assert.Equal(1, actualMsg.Msg);
-                Assert.Equal(keyData, actualKeyData);
-                Assert.Same(control, actualControl);
-                Assert.Null(contextMenu.SourceControl);
-                contextMenuCallCount++;
-                return contextMenuResult;
-            }
-            contextMenu.ProcessCmdKeyAction = contextMenuAction;
-            control.ContextMenu = contextMenu;
-            int parentCallCount = 0;
-            bool parentAction(Message actualMsg, Keys actualKeyData)
-            {
-                Assert.Equal(1, actualMsg.Msg);
-                Assert.Equal(keyData, actualKeyData);
-                parentCallCount++;
-                return parentResult;
-            }
-            using var parent = new CustomProcessControl
-            {
-                ProcessCmdKeyAction = parentAction
-            };
-            control.Parent = parent;
-
-            Assert.Equal(expectedResult, control.ProcessCmdKey(ref msg, keyData));
-            Assert.Null(contextMenu.SourceControl);
-            Assert.Equal(1, contextMenuCallCount);
-            Assert.Equal(expectedParentCallCount, parentCallCount);
-            Assert.False(control.IsHandleCreated);
-        }
-
-        private class CustomProcessCmdKeyContextMenu : ContextMenu
-        {
-            public Func<Message, Keys, Control, bool> ProcessCmdKeyAction { get; set; }
-
-            protected internal override bool ProcessCmdKey(ref Message msg, Keys keyData, Control control) => ProcessCmdKeyAction(msg, keyData, control);
         }
 
         [WinFormsTheory]
@@ -3471,7 +3373,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { null, null, true, 1 };
             yield return new object[] { new Control(), string.Empty, true, 1 };
             yield return new object[] { new Control(), "AffectedProperty", true, 1 };
-            
+
             yield return new object[] { null, null, false, 0 };
             yield return new object[] { new Control(), string.Empty, false, 0 };
             yield return new object[] { new Control(), "AffectedProperty", false, 0 };
@@ -3713,7 +3615,7 @@ namespace System.Windows.Forms.Tests
             mockLayoutEngine.Verify(e => e.InitLayout(child, BoundsSpecified.All), Times.Exactly(expectedInitLayoutCallCount * 2));
             Assert.False(control.IsHandleCreated);
         }
-        
+
         [WinFormsTheory]
         [MemberData(nameof(ResumeLayout_TestData))]
         public void Control_ResumeLayout_InvokeSuspendedWithLayoutRequestWithHandle_Success(Control affectedControl, string affectedProperty, bool performLayout, int expectedLayoutCallCount)
@@ -3763,12 +3665,12 @@ namespace System.Windows.Forms.Tests
             control.SetTopLevel(topLevel);
             int layoutCallCount = 0;
             control.Layout += (sender, e) => layoutCallCount++;
-            
+
             control.SendToBack();
             Assert.Equal(topLevel, control.GetTopLevel());
             Assert.Equal(0, layoutCallCount);
             Assert.Equal(topLevel, control.IsHandleCreated);
-            
+
             // Call again.
             control.SendToBack();
             Assert.Equal(topLevel, control.GetTopLevel());
@@ -3804,7 +3706,7 @@ namespace System.Windows.Forms.Tests
             Assert.False(child1.IsHandleCreated);
             Assert.False(child2.IsHandleCreated);
             Assert.False(parent.IsHandleCreated);
-            
+
             // Call again.
             child1.SendToBack();
             Assert.Equal(new Control[] { child2, child1 }, parent.Controls.Cast<Control>());
@@ -3813,7 +3715,7 @@ namespace System.Windows.Forms.Tests
             Assert.False(child1.IsHandleCreated);
             Assert.False(child2.IsHandleCreated);
             Assert.False(parent.IsHandleCreated);
-            
+
             parent.Layout -= parentHandler;
         }
 
@@ -3855,7 +3757,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createdCallCount);
             Assert.False(child2.IsHandleCreated);
             Assert.False(parent.IsHandleCreated);
-            
+
             // Call again.
             child1.SendToBack();
             Assert.Equal(new Control[] { child2, child1 }, parent.Controls.Cast<Control>());
@@ -3867,7 +3769,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createdCallCount);
             Assert.False(child2.IsHandleCreated);
             Assert.False(parent.IsHandleCreated);
-            
+
             parent.Layout -= parentHandler;
         }
 
@@ -3918,7 +3820,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, parentInvalidatedCallCount);
             Assert.Equal(0, parentStyleChangedCallCount);
             Assert.Equal(0, parentCreatedCallCount);
-            
+
             // Call again.
             child1.SendToBack();
             Assert.Equal(new Control[] { child2, child1 }, parent.Controls.Cast<Control>());
@@ -3933,7 +3835,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, parentInvalidatedCallCount);
             Assert.Equal(0, parentStyleChangedCallCount);
             Assert.Equal(0, parentCreatedCallCount);
-            
+
             parent.Layout -= parentHandler;
         }
 
@@ -3976,7 +3878,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, parentInvalidatedCallCount);
             Assert.Equal(0, parentStyleChangedCallCount);
             Assert.Equal(0, parentCreatedCallCount);
-            
+
             // Call again.
             child1.SendToBack();
             Assert.Equal(new Control[] { child2, child1 }, parent.Controls.Cast<Control>());
@@ -3988,7 +3890,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, parentInvalidatedCallCount);
             Assert.Equal(0, parentStyleChangedCallCount);
             Assert.Equal(0, parentCreatedCallCount);
-            
+
             parent.Layout -= parentHandler;
         }
 
@@ -4022,7 +3924,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            
+
             // Call again.
             control.SendToBack();
             Assert.Equal(topLevel, control.GetTopLevel());
@@ -6253,7 +6155,7 @@ namespace System.Windows.Forms.Tests
             using var control = new SubControl();
             control.UpdateZOrder();
             Assert.False(control.IsHandleCreated);
-            
+
             // Call again.
             control.UpdateZOrder();
             Assert.False(control.IsHandleCreated);
@@ -6271,7 +6173,7 @@ namespace System.Windows.Forms.Tests
             control.UpdateZOrder();
             Assert.False(control.IsHandleCreated);
             Assert.False(parent.IsHandleCreated);
-            
+
             // Call again.
             control.UpdateZOrder();
             Assert.False(control.IsHandleCreated);
@@ -6300,7 +6202,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
             Assert.False(parent.IsHandleCreated);
-            
+
             // Call again.
             control.UpdateZOrder();
             Assert.True(control.IsHandleCreated);
@@ -6333,7 +6235,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, parentInvalidatedCallCount);
             Assert.Equal(0, parentStyleChangedCallCount);
             Assert.Equal(0, parentCreatedCallCount);
-            
+
             // Call again.
             control.UpdateZOrder();
             Assert.False(control.IsHandleCreated);
@@ -6374,7 +6276,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, parentInvalidatedCallCount);
             Assert.Equal(0, parentStyleChangedCallCount);
             Assert.Equal(0, parentCreatedCallCount);
-            
+
             // Call again.
             control.UpdateZOrder();
             Assert.True(control.IsHandleCreated);
@@ -6420,7 +6322,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, parentInvalidatedCallCount);
             Assert.Equal(0, parentStyleChangedCallCount);
             Assert.Equal(0, parentCreatedCallCount);
-            
+
             // Call again.
             child2.UpdateZOrder();
             Assert.True(child1.IsHandleCreated);
@@ -6468,7 +6370,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, parentInvalidatedCallCount);
             Assert.Equal(0, parentStyleChangedCallCount);
             Assert.Equal(0, parentCreatedCallCount);
-            
+
             // Call again.
             child2.UpdateZOrder();
             Assert.False(child1.IsHandleCreated);

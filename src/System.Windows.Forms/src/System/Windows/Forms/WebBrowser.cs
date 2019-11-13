@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -8,9 +8,9 @@ using System.Drawing;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
-using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 using static Interop;
 using static Interop.Mshtml;
+using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 
 namespace System.Windows.Forms
 {
@@ -1366,9 +1366,7 @@ namespace System.Windows.Forms
         private bool ShowContextMenu(int x, int y)
         {
             ContextMenuStrip contextMenuStrip = ContextMenuStrip;
-            ContextMenu contextMenu = contextMenuStrip != null ? null : ContextMenu;
-
-            if (contextMenuStrip != null || contextMenu != null)
+            if (contextMenuStrip != null)
             {
                 Point client;
                 bool keyboardActivated = false;
@@ -1389,10 +1387,6 @@ namespace System.Windows.Forms
                     if (contextMenuStrip != null)
                     {
                         contextMenuStrip.ShowInternal(this, client, keyboardActivated);
-                    }
-                    else if (contextMenu != null)
-                    {
-                        contextMenu.Show(this, client);
                     }
 
                     return true;

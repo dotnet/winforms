@@ -1181,16 +1181,26 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             private UiaCore.IRawElementProviderFragment GetFirstChild()
             {
+                if (_owningPropertyDescriptorGridEntry == null)
+                {
+                    return null;
+                }
+
                 if (_owningPropertyDescriptorGridEntry.ChildCount > 0)
                 {
                     return _owningPropertyDescriptorGridEntry.Children.GetEntry(0).AccessibilityObject;
                 }
 
-                var propertyGridViewAccessibleObject = (PropertyGridView.PropertyGridViewAccessibleObject)Parent;
-                var propertyGridView = propertyGridViewAccessibleObject.Owner as PropertyGridView;
-                if (_owningPropertyDescriptorGridEntry == propertyGridView.SelectedGridEntry)
+                var propertyGridView = GetPropertyGridView();
+                if (propertyGridView == null)
                 {
-                    if (propertyGridView.SelectedGridEntry.Enumerable)
+                    return null;
+                }
+
+                var selectedGridEntry = propertyGridView.SelectedGridEntry;
+                if (_owningPropertyDescriptorGridEntry == selectedGridEntry)
+                {
+                    if (selectedGridEntry.Enumerable)
                     {
                         return propertyGridView.DropDownListBoxAccessibleObject;
                     }
@@ -1203,17 +1213,27 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             private UiaCore.IRawElementProviderFragment GetLastChild()
             {
+                if (_owningPropertyDescriptorGridEntry == null)
+                {
+                    return null;
+                }
+
                 if (_owningPropertyDescriptorGridEntry.ChildCount > 0)
                 {
                     return _owningPropertyDescriptorGridEntry.Children
                         .GetEntry(_owningPropertyDescriptorGridEntry.ChildCount - 1).AccessibilityObject;
                 }
 
-                var propertyGridViewAccessibleObject = (PropertyGridView.PropertyGridViewAccessibleObject)Parent;
-                var propertyGridView = propertyGridViewAccessibleObject.Owner as PropertyGridView;
-                if (_owningPropertyDescriptorGridEntry == propertyGridView.SelectedGridEntry)
+                var propertyGridView = GetPropertyGridView();
+                if (propertyGridView == null)
                 {
-                    if (propertyGridView.SelectedGridEntry.Enumerable && propertyGridView.DropDownButton.Visible)
+                    return null;
+                }
+
+                var selectedGridEntry = propertyGridView.SelectedGridEntry;
+                if (_owningPropertyDescriptorGridEntry == selectedGridEntry)
+                {
+                    if (selectedGridEntry.Enumerable && propertyGridView.DropDownButton.Visible)
                     {
                         return propertyGridView.DropDownButton.AccessibilityObject;
                     }
@@ -1224,14 +1244,76 @@ namespace System.Windows.Forms.PropertyGridInternal
                 return null;
             }
 
+            private PropertyGridView GetPropertyGridView()
+            {
+                var propertyGridViewAccessibleObject = Parent as PropertyGridView.PropertyGridViewAccessibleObject;
+                if (propertyGridViewAccessibleObject == null)
+                {
+                    return null;
+                }
+
+                return propertyGridViewAccessibleObject.Owner as PropertyGridView;
+            }
+
             internal override bool IsPatternSupported(UiaCore.UIA patternId)
             {
-                if (patternId == UiaCore.UIA.ValuePatternId)
+                if (patternId == UiaCore.UIA.ValuePatternId ||
+                    (patternId == UiaCore.UIA.ExpandCollapsePatternId && owner.Enumerable))
                 {
                     return true;
                 }
 
                 return base.IsPatternSupported(patternId);
+            }
+
+            internal override void Expand()
+            {
+                if (ExpandCollapseState == UiaCore.ExpandCollapseState.Collapsed)
+                {
+                    ExpandOrCollapse();
+                }
+            }
+
+            internal override void Collapse()
+            {
+                if (ExpandCollapseState == UiaCore.ExpandCollapseState.Expanded)
+                {
+                    ExpandOrCollapse();
+                }
+            }
+
+            private void ExpandOrCollapse()
+            {
+                var propertyGridView = GetPropertyGridView();
+                if (propertyGridView == null)
+                {
+                    return;
+                }
+
+                int row = propertyGridView.GetRowFromGridEntry(_owningPropertyDescriptorGridEntry);
+                if (row != -1)
+                {
+                    propertyGridView.PopupDialog(row);
+                }
+            }
+
+            internal override UiaCore.ExpandCollapseState ExpandCollapseState
+            {
+                get
+                {
+                    var propertyGridView = GetPropertyGridView();
+                    if (propertyGridView == null)
+                    {
+                        return UiaCore.ExpandCollapseState.Collapsed;
+                    }
+
+                    if (_owningPropertyDescriptorGridEntry == propertyGridView.SelectedGridEntry && propertyGridView.DropDownVisible)
+                    {
+                        return UiaCore.ExpandCollapseState.Expanded;
+                    }
+
+                    return UiaCore.ExpandCollapseState.Collapsed;
+                }
             }
 
             internal override object GetPropertyValue(UiaCore.UIA propertyID)

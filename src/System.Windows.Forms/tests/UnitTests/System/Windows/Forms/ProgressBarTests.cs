@@ -35,7 +35,6 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(new Rectangle(0, 0, 100, 23), control.ClientRectangle);
             Assert.Equal(new Size(100, 23), control.ClientSize);
             Assert.Null(control.Container);
-            Assert.Null(control.ContextMenu);
             Assert.Null(control.ContextMenuStrip);
             Assert.Empty(control.Controls);
             Assert.Same(control.Controls, control.Controls);
@@ -334,12 +333,12 @@ namespace System.Windows.Forms.Tests
             };
             Assert.Equal(value, control.CausesValidation);
             Assert.False(control.IsHandleCreated);
-            
+
             // Set same
             control.CausesValidation = value;
             Assert.Equal(value, control.CausesValidation);
             Assert.False(control.IsHandleCreated);
-            
+
             // Set different
             control.CausesValidation = !value;
             Assert.Equal(!value, control.CausesValidation);
@@ -1255,22 +1254,22 @@ namespace System.Windows.Forms.Tests
                 callCount++;
             };
             control.RightToLeftLayoutChanged += handler;
-        
+
             // Set different.
             control.RightToLeftLayout = false;
             Assert.False(control.RightToLeftLayout);
             Assert.Equal(1, callCount);
-        
+
             // Set same.
             control.RightToLeftLayout = false;
             Assert.False(control.RightToLeftLayout);
             Assert.Equal(1, callCount);
-        
+
             // Set different.
             control.RightToLeftLayout = true;
             Assert.True(control.RightToLeftLayout);
             Assert.Equal(2, callCount);
-        
+
             // Remove handler.
             control.RightToLeftLayoutChanged -= handler;
             control.RightToLeftLayout = false;
@@ -1847,7 +1846,7 @@ namespace System.Windows.Forms.Tests
                 callCount++;
             };
             int invalidatedCallCount = 0;
-            InvalidateEventHandler invalidatedHandler =(sender, e) => invalidatedCallCount++;
+            InvalidateEventHandler invalidatedHandler = (sender, e) => invalidatedCallCount++;
             int styleChangedCallCount = 0;
             EventHandler styleChangedHandler = (sender, e) => styleChangedCallCount++;
             int createdCallCount = 0;
@@ -1913,16 +1912,16 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-        
+
             // Call with handler.
             control.Enter += handler;
             control.OnEnter(eventArgs);
             Assert.Equal(1, callCount);
-        
-           // Remove handler.
-           control.Enter -= handler;
-           control.OnEnter(eventArgs);
-           Assert.Equal(1, callCount);
+
+            // Remove handler.
+            control.Enter -= handler;
+            control.OnEnter(eventArgs);
+            Assert.Equal(1, callCount);
         }
 
         [WinFormsTheory]
@@ -2214,16 +2213,16 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-        
+
             // Call with handler.
             control.Leave += handler;
             control.OnLeave(eventArgs);
             Assert.Equal(1, callCount);
-        
-           // Remove handler.
-           control.Leave -= handler;
-           control.OnLeave(eventArgs);
-           Assert.Equal(1, callCount);
+
+            // Remove handler.
+            control.Leave -= handler;
+            control.OnLeave(eventArgs);
+            Assert.Equal(1, callCount);
         }
 
         [WinFormsTheory]
@@ -2529,7 +2528,7 @@ namespace System.Windows.Forms.Tests
             control.ForeColor = Color.Black;
             control.ResetForeColor();
             Assert.Equal(SystemColors.Highlight, control.ForeColor);
-            
+
             // Reset again.
             control.ResetForeColor();
             Assert.Equal(SystemColors.Highlight, control.ForeColor);
@@ -2607,11 +2606,11 @@ namespace System.Windows.Forms.Tests
             public new void OnForeColorChanged(EventArgs e) => base.OnForeColorChanged(e);
 
             public new void OnHandleCreated(EventArgs e) => base.OnHandleCreated(e);
-            
+
             public new void OnHandleDestroyed(EventArgs e) => base.OnHandleDestroyed(e);
-            
+
             public new void OnKeyDown(KeyEventArgs e) => base.OnKeyDown(e);
-            
+
             public new void OnKeyPress(KeyPressEventArgs e) => base.OnKeyPress(e);
 
             public new void OnKeyUp(KeyEventArgs e) => base.OnKeyUp(e);

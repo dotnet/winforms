@@ -43,7 +43,6 @@ namespace System.Windows.Forms.Tests
             Assert.True(control.ClientRectangle.Width > 0);
             Assert.True(control.ClientRectangle.Height > 0);
             Assert.Null(control.Container);
-            Assert.Null(control.ContextMenu);
             Assert.Null(control.ContextMenuStrip);
             Assert.Empty(control.Controls);
             Assert.Same(control.Controls, control.Controls);

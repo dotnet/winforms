@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -351,7 +351,7 @@ namespace System.Windows.Forms
         // For MonthCalendar
         //
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, NativeMethods.MCHITTESTINFO lParam);
+        public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, ref Interop.ComCtl32.MCHITTESTINFO lParam);
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, NativeMethods.SYSTEMTIMEARRAY lParam);
@@ -1201,7 +1201,7 @@ namespace System.Windows.Forms
                 Ole32.DVASPECT dwDrawAspect,
                 int lindex,
                 Ole32.DVTARGETDEVICE* ptd,
-                Size *lpsizel);
+                Size* lpsizel);
         }
 
         [ComImport(), Guid("0000010C-0000-0000-C000-000000000046"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
@@ -1705,5 +1705,8 @@ namespace System.Windows.Forms
                 public string lpApplicationName;
             }
         }
+
+        [DllImport(ExternDll.User32, CharSet = CharSet.Auto, ExactSpelling = true, SetLastError = true)]
+        internal static extern bool GetPhysicalCursorPos([In, Out] ref Interop.POINT pt);
     }
 }

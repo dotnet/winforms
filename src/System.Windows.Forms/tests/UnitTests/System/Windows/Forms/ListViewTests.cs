@@ -45,7 +45,6 @@ namespace System.Windows.Forms.Tests
             Assert.Empty(control.Columns);
             Assert.Same(control.Columns, control.Columns);
             Assert.Null(control.Container);
-            Assert.Null(control.ContextMenu);
             Assert.Null(control.ContextMenuStrip);
             Assert.Empty(control.Controls);
             Assert.Same(control.Controls, control.Controls);

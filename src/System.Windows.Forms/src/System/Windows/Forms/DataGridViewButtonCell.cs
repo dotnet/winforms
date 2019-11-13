@@ -240,6 +240,16 @@ namespace System.Windows.Forms
             return contentBounds;
         }
 
+        private protected override string GetDefaultToolTipText()
+        {
+            if (string.IsNullOrEmpty(Value?.ToString()?.Trim(' ')) || Value is DBNull)
+            {
+                return SR.DefaultDataGridViewButtonCellTollTipText;
+            }
+
+            return null;
+        }
+
         protected override Rectangle GetErrorIconBounds(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex)
         {
             if (cellStyle == null)

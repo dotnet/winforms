@@ -41,7 +41,6 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(93, control.ClientSize.Height);
             Assert.Equal(new Rectangle(0, 0, 117, 93), control.ClientRectangle);
             Assert.Null(control.Container);
-            Assert.Null(control.ContextMenu);
             Assert.Null(control.ContextMenuStrip);
             Assert.Empty(control.Controls);
             Assert.Same(control.Controls, control.Controls);
@@ -705,7 +704,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, control.BackColor);
 
             // Set same.
-            control.BackColor  = value;
+            control.BackColor = value;
             Assert.Equal(expected, control.BackColor);
         }
 
@@ -720,7 +719,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, control.BackColor);
 
             // Set same.
-            control.BackColor  = value;
+            control.BackColor = value;
             Assert.Equal(expected, control.BackColor);
         }
 
@@ -770,7 +769,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, control.BackgroundImage);
 
             // Set same.
-            control.BackgroundImage  = value;
+            control.BackgroundImage = value;
             Assert.Equal(value, control.BackgroundImage);
         }
 
@@ -2169,9 +2168,9 @@ namespace System.Windows.Forms.Tests
         public static IEnumerable<object[]> ImageKey_Set_TestData()
         {
             yield return new object[] { null, "", 0 };
-            yield return new object[] { "", "",  0 };
-            yield return new object[] { "reasonable", "reasonable",  -1 };
-            yield return new object[] { "(none)", "",  0 };
+            yield return new object[] { "", "", 0 };
+            yield return new object[] { "reasonable", "reasonable", -1 };
+            yield return new object[] { "(none)", "", 0 };
             yield return new object[] { "imageKey", "imageKey", -1 };
             yield return new object[] { "ImageKey", "ImageKey", -1 };
         }
@@ -2238,9 +2237,9 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [InlineData(null, "", 0)]
-        [InlineData("", "",  1)]
-        [InlineData("reasonable", "reasonable",  -1)]
-        [InlineData("(none)", "",  0)]
+        [InlineData("", "", 1)]
+        [InlineData("reasonable", "reasonable", -1)]
+        [InlineData("(none)", "", 0)]
         [InlineData("imageKey", "imageKey", -1)]
         [InlineData("ImageKey", "ImageKey", -1)]
         public void ImageKey_SetWithNonEmptyImageListWithImageIndex_GetReturnsExpected(string value, string expected, int expectedImageIndex)
@@ -3602,9 +3601,9 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [InlineData(null, "", 0)]
-        [InlineData("", "",  1)]
-        [InlineData("reasonable", "reasonable",  -1)]
-        [InlineData("(none)", "",  0)]
+        [InlineData("", "", 1)]
+        [InlineData("reasonable", "reasonable", -1)]
+        [InlineData("(none)", "", 0)]
         [InlineData("imageKey", "imageKey", -1)]
         [InlineData("ImageKey", "ImageKey", -1)]
         public void SelectedImageKey_SetWithNonEmptyImageListWithImageIndex_GetReturnsExpected(string value, string expected, int expectedImageIndex)
@@ -4707,7 +4706,7 @@ namespace System.Windows.Forms.Tests
             Assert.Null(control.GetNodeAt(pt));
             Assert.True(control.IsHandleCreated);
         }
-        
+
         [WinFormsTheory]
         [MemberData(nameof(GetNodeAt_Empty_TestData))]
         public void TreeView_GetNodeAt_InvokePointEmptyWithHandle_Success(Point pt)
@@ -4835,7 +4834,7 @@ namespace System.Windows.Forms.Tests
             Assert.Null(control.GetNodeAt(pt.X, pt.Y));
             Assert.True(control.IsHandleCreated);
         }
-        
+
         [WinFormsTheory]
         [MemberData(nameof(GetNodeAt_Empty_TestData))]
         public void TreeView_GetNodeAt_InvokeIntIntEmptyWithHandle_Success(Point pt)
@@ -5037,7 +5036,7 @@ namespace System.Windows.Forms.Tests
             Assert.Null(result.Node);
             Assert.True(control.IsHandleCreated);
         }
-        
+
         [WinFormsTheory]
         [MemberData(nameof(HitTest_Empty_TestData))]
         public void TreeView_HitTest_InvokePointEmptyWithHandle_Success(Point pt, TreeViewHitTestLocations expectedLocations)
@@ -5189,7 +5188,7 @@ namespace System.Windows.Forms.Tests
             Assert.Null(result.Node);
             Assert.True(control.IsHandleCreated);
         }
-        
+
         [WinFormsTheory]
         [MemberData(nameof(HitTest_Empty_TestData))]
         public void TreeView_HitTest_InvokeIntIntEmptyWithHandle_Success(Point pt, TreeViewHitTestLocations expectedLocations)
@@ -5306,12 +5305,12 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-        
+
             // Call with handler.
             control.AfterCheck += handler;
             control.OnAfterCheck(eventArgs);
             Assert.Equal(1, callCount);
-        
+
             // Remove handler.
             control.AfterCheck -= handler;
             control.OnAfterCheck(eventArgs);
@@ -5330,12 +5329,12 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-        
+
             // Call with handler.
             control.AfterCollapse += handler;
             control.OnAfterCollapse(eventArgs);
             Assert.Equal(1, callCount);
-        
+
             // Remove handler.
             control.AfterCollapse -= handler;
             control.OnAfterCollapse(eventArgs);
@@ -5354,12 +5353,12 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-        
+
             // Call with handler.
             control.AfterExpand += handler;
             control.OnAfterExpand(eventArgs);
             Assert.Equal(1, callCount);
-        
+
             // Remove handler.
             control.AfterExpand -= handler;
             control.OnAfterExpand(eventArgs);
@@ -5386,12 +5385,12 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-        
+
             // Call with handler.
             control.AfterLabelEdit += handler;
             control.OnAfterLabelEdit(eventArgs);
             Assert.Equal(1, callCount);
-        
+
             // Remove handler.
             control.AfterLabelEdit -= handler;
             control.OnAfterLabelEdit(eventArgs);
@@ -5410,12 +5409,12 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-        
+
             // Call with handler.
             control.AfterSelect += handler;
             control.OnAfterSelect(eventArgs);
             Assert.Equal(1, callCount);
-        
+
             // Remove handler.
             control.AfterSelect -= handler;
             control.OnAfterSelect(eventArgs);
@@ -5441,12 +5440,12 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-        
+
             // Call with handler.
             control.BeforeExpand += handler;
             control.OnBeforeExpand(eventArgs);
             Assert.Equal(1, callCount);
-        
+
             // Remove handler.
             control.BeforeExpand -= handler;
             control.OnBeforeExpand(eventArgs);
@@ -5465,12 +5464,12 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-        
+
             // Call with handler.
             control.BeforeLabelEdit += handler;
             control.OnBeforeLabelEdit(eventArgs);
             Assert.Equal(1, callCount);
-        
+
             // Remove handler.
             control.BeforeLabelEdit -= handler;
             control.OnBeforeLabelEdit(eventArgs);
@@ -5489,12 +5488,12 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-        
+
             // Call with handler.
             control.BeforeCollapse += handler;
             control.OnBeforeCollapse(eventArgs);
             Assert.Equal(1, callCount);
-        
+
             // Remove handler.
             control.BeforeCollapse -= handler;
             control.OnBeforeCollapse(eventArgs);
@@ -5513,12 +5512,12 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-        
+
             // Call with handler.
             control.BeforeSelect += handler;
             control.OnBeforeSelect(eventArgs);
             Assert.Equal(1, callCount);
-        
+
             // Remove handler.
             control.BeforeSelect -= handler;
             control.OnBeforeSelect(eventArgs);
@@ -5547,12 +5546,12 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-        
+
             // Call with handler.
             control.DrawNode += handler;
             control.OnDrawNode(eventArgs);
             Assert.Equal(1, callCount);
-        
+
             // Remove handler.
             control.DrawNode -= handler;
             control.OnDrawNode(eventArgs);
@@ -5578,12 +5577,12 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-        
+
             // Call with handler.
             control.ItemDrag += handler;
             control.OnItemDrag(eventArgs);
             Assert.Equal(1, callCount);
-        
+
             // Remove handler.
             control.ItemDrag -= handler;
             control.OnItemDrag(eventArgs);
@@ -5630,7 +5629,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { false, true, true, new KeyEventArgs(Keys.Space), 1, 0, true };
             yield return new object[] { false, true, false, new KeyEventArgs(Keys.Control | Keys.Space), 1, 1, true };
             yield return new object[] { false, true, true, new KeyEventArgs(Keys.Control | Keys.Space), 1, 0, true };
-            
+
             yield return new object[] { true, true, false, new KeyEventArgs(Keys.Space), 0, 0, true };
             yield return new object[] { true, false, false, new KeyEventArgs(Keys.Space), 0, 0, true };
             yield return new object[] { false, false, false, new KeyEventArgs(Keys.Space), 0, 0, false };
@@ -5683,7 +5682,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expectedHandled, eventArgs.Handled);
             Assert.Equal(expectedBeforeCheckCallCount, beforeCheckCallCount);
             Assert.Equal(expectedAfterCheckCallCount, afterCheckCallCount);
-            
+
             // Call again.
             control.OnKeyDown(eventArgs);
             Assert.Equal(2, callCount);
@@ -5715,7 +5714,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { true, new KeyPressEventArgs('\0'), true };
             yield return new object[] { true, new KeyPressEventArgs('a'), true };
             yield return new object[] { true, new KeyPressEventArgs(' '), true };
-            
+
             yield return new object[] { false, new KeyPressEventArgs('\0'), false };
             yield return new object[] { false, new KeyPressEventArgs('a'), false };
             yield return new object[] { false, new KeyPressEventArgs(' '), true };
@@ -5761,7 +5760,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { true, new KeyEventArgs(Keys.A), true };
             yield return new object[] { true, new KeyEventArgs(Keys.Space), true };
             yield return new object[] { true, new KeyEventArgs(Keys.Control | Keys.Space), true };
-            
+
             yield return new object[] { false, new KeyEventArgs(Keys.None), false };
             yield return new object[] { false, new KeyEventArgs(Keys.A), false };
             yield return new object[] { false, new KeyEventArgs(Keys.Space), true };
@@ -6174,13 +6173,13 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
             Assert.Equal(0, nodeCallCount);
             Assert.True(control.IsHandleCreated);
-            
+
             // Call again.
             control.OnMouseHover(eventArgs);
             Assert.Equal(1, callCount);
             Assert.Equal(0, nodeCallCount);
             Assert.True(control.IsHandleCreated);
-            
+
             // Call leave.
             control.OnMouseLeave(null);
             control.OnMouseHover(eventArgs);
@@ -6227,7 +6226,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            
+
             // Call again.
             control.OnMouseHover(eventArgs);
             Assert.Equal(1, callCount);
@@ -6295,12 +6294,12 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-        
+
             // Call with handler.
             control.NodeMouseClick += handler;
             control.OnNodeMouseClick(eventArgs);
             Assert.Equal(1, callCount);
-        
+
             // Remove handler.
             control.NodeMouseClick -= handler;
             control.OnNodeMouseClick(eventArgs);
@@ -6319,12 +6318,12 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-        
+
             // Call with handler.
             control.NodeMouseDoubleClick += handler;
             control.OnNodeMouseDoubleClick(eventArgs);
             Assert.Equal(1, callCount);
-        
+
             // Remove handler.
             control.NodeMouseDoubleClick -= handler;
             control.OnNodeMouseDoubleClick(eventArgs);
@@ -6350,12 +6349,12 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-        
+
             // Call with handler.
             control.NodeMouseHover += handler;
             control.OnNodeMouseHover(eventArgs);
             Assert.Equal(1, callCount);
-        
+
             // Remove handler.
             control.NodeMouseHover -= handler;
             control.OnNodeMouseHover(eventArgs);
@@ -6592,7 +6591,7 @@ namespace System.Windows.Forms.Tests
             public new bool GetStyle(ControlStyles flag) => base.GetStyle(flag);
 
             public new void OnAfterCheck(TreeViewEventArgs e) => base.OnAfterCheck(e);
-            
+
             public new void OnAfterCollapse(TreeViewEventArgs e) => base.OnAfterCollapse(e);
 
             public new void OnAfterExpand(TreeViewEventArgs e) => base.OnAfterExpand(e);
@@ -6616,7 +6615,7 @@ namespace System.Windows.Forms.Tests
             public new void OnItemDrag(ItemDragEventArgs e) => base.OnItemDrag(e);
 
             public new void OnKeyDown(KeyEventArgs e) => base.OnKeyDown(e);
-            
+
             public new void OnKeyPress(KeyPressEventArgs e) => base.OnKeyPress(e);
 
             public new void OnKeyUp(KeyEventArgs e) => base.OnKeyUp(e);
@@ -6630,7 +6629,7 @@ namespace System.Windows.Forms.Tests
             public new void OnMouseLeave(EventArgs e) => base.OnMouseLeave(e);
 
             public new void OnNodeMouseClick(TreeNodeMouseClickEventArgs e) => base.OnNodeMouseClick(e);
-            
+
             public new void OnNodeMouseDoubleClick(TreeNodeMouseClickEventArgs e) => base.OnNodeMouseDoubleClick(e);
 
             public new void OnNodeMouseHover(TreeNodeMouseHoverEventArgs e) => base.OnNodeMouseHover(e);
