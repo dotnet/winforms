@@ -4985,7 +4985,6 @@ namespace System.Windows.Forms.Tests
         public static IEnumerable<object[]> HitTest_NotEmptyValid_TestData()
         {
             yield return new object[] { new Point(0, 0), TreeViewHitTestLocations.Indent };
-            yield return new object[] { new Point(20, 0), TreeViewHitTestLocations.Label };
         }
 
         [WinFormsTheory]
