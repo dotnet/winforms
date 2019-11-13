@@ -25,7 +25,7 @@ namespace System.Windows.Forms.Design.Editors
             IWindowsFormsEditorService edSvc = (IWindowsFormsEditorService)provider.GetService(typeof(IWindowsFormsEditorService));
             if (edSvc == null)
             {
-                throw new ArgumentNullException(nameof(edSvc));
+                throw new InvalidOperationException("Service provider couldn't fetch " + nameof(edSvc));
             }
 
             IUIService uiService = (IUIService)provider.GetService(typeof(IUIService));

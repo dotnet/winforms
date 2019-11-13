@@ -41,19 +41,19 @@ namespace System.Windows.Forms.Design
 
         public object GetService(Type t)
         {
-            if (!_inGetService && _sp != null)
+            if (_inGetService || _sp == null)
             {
-                try
-                {
-                    _inGetService = true;
-                    return _sp.GetService(t);
-                }
-                finally
-                {
-                    _inGetService = false;
-                }
+                return null;
             }
-            return null;
+            try
+            {
+                _inGetService = true;
+                return _sp.GetService(t);
+            }
+            finally
+            {
+                _inGetService = false;
+            }
         }
     }
 }
