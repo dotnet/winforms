@@ -23,8 +23,6 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
         {
             this.BringToForeground();
             _lbl = new Label();
-            _lbl.AutoSize = true;
-            _lbl.Text = "Hello";
             Controls.Add(_lbl);
         }
 
