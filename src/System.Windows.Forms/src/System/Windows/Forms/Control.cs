@@ -6305,7 +6305,6 @@ namespace System.Windows.Forms
                 IntPtr regionHandle = GetHRgn(region);
                 try
                 {
-                    Debug.Assert(regionHandle != IntPtr.Zero, "Region wasn't null but HRGN is?");
                     if (invalidateChildren)
                     {
                         User32.RedrawWindow(
