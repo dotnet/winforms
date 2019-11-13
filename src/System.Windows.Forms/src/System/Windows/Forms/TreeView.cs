@@ -1750,7 +1750,7 @@ namespace System.Windows.Forms
                     SendMessage(WindowMessages.WM_SETREDRAW, 0, 0);
                     if (delayed)
                     {
-                        UnsafeNativeMethods.PostMessage(new HandleRef(this, Handle), WindowMessages.WM_SETREDRAW, (IntPtr)1, IntPtr.Zero);
+                        User32.PostMessageW(this, User32.WindowMessage.WM_SETREDRAW, (IntPtr)1, IntPtr.Zero);
                     }
                     else
                     {
@@ -3146,7 +3146,7 @@ namespace System.Windows.Forms
                 ContextMenuStrip menu = treeNode.ContextMenuStrip;
 
                 // Need to send TVM_SELECTITEM to highlight the node while the contextMenuStrip is being shown.
-                UnsafeNativeMethods.PostMessage(new HandleRef(this, Handle), NativeMethods.TVM_SELECTITEM, NativeMethods.TVGN_DROPHILITE, treeNode.Handle);
+                User32.PostMessageW(this, (User32.WindowMessage)NativeMethods.TVM_SELECTITEM, (IntPtr)NativeMethods.TVGN_DROPHILITE, treeNode.Handle);
                 menu.ShowInternal(this, PointToClient(MousePosition),/*keyboardActivated*/false);
                 menu.Closing += new ToolStripDropDownClosingEventHandler(ContextMenuStripClosing);
             }

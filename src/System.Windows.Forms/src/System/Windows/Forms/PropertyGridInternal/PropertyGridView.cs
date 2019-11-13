@@ -6208,12 +6208,12 @@ namespace System.Windows.Forms.PropertyGridInternal
                 case WindowMessages.WM_IME_STARTCOMPOSITION:
                     Edit.Focus();
                     Edit.Clear();
-                    UnsafeNativeMethods.PostMessage(new HandleRef(Edit, Edit.Handle), WindowMessages.WM_IME_STARTCOMPOSITION, 0, 0);
+                    User32.PostMessageW(Edit, User32.WindowMessage.WM_IME_STARTCOMPOSITION);
                     return;
 
                 case WindowMessages.WM_IME_COMPOSITION:
                     Edit.Focus();
-                    UnsafeNativeMethods.PostMessage(new HandleRef(Edit, Edit.Handle), WindowMessages.WM_IME_COMPOSITION, m.WParam, m.LParam);
+                    User32.PostMessageW(Edit, User32.WindowMessage.WM_IME_COMPOSITION, m.WParam, m.LParam);
                     return;
 
                 case WindowMessages.WM_GETDLGCODE:
@@ -7624,7 +7624,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     Focus();
                     SelectAll();
-                    UnsafeNativeMethods.PostMessage(new HandleRef(this, Handle), WindowMessages.WM_CHAR, (IntPtr)keyChar, IntPtr.Zero);
+                    User32.PostMessageW(this, User32.WindowMessage.WM_CHAR, (IntPtr)keyChar);
                 }
             }
 

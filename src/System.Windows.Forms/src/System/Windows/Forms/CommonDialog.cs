@@ -69,7 +69,7 @@ namespace System.Windows.Forms
             }
             else if (msg == WindowMessages.WM_SETFOCUS)
             {
-                UnsafeNativeMethods.PostMessage(new HandleRef(null, hWnd), CDM_SETDEFAULTFOCUS, 0, 0);
+                User32.PostMessageW(hWnd, (User32.WindowMessage)CDM_SETDEFAULTFOCUS);
             }
             else if (msg == CDM_SETDEFAULTFOCUS)
             {

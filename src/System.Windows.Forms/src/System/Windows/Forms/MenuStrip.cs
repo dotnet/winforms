@@ -235,7 +235,7 @@ namespace System.Windows.Forms
                         Debug.WriteLineIf(ToolStrip.SnapFocusDebug.TraceVerbose, "[MenuStrip.ProcessCmdKey] Rolling up the menu and invoking the system menu");
                         ToolStripManager.ModalMenuFilter.ExitMenuMode();
                         // send a WM_SYSCOMMAND SC_KEYMENU + Space to activate the system menu.
-                        UnsafeNativeMethods.PostMessage(WindowsFormsUtils.GetRootHWnd(this), WindowMessages.WM_SYSCOMMAND, (int)User32.SC.KEYMENU, (int)Keys.Space);
+                        User32.PostMessageW(WindowsFormsUtils.GetRootHWnd(this), User32.WindowMessage.WM_SYSCOMMAND, (IntPtr)User32.SC.KEYMENU, (IntPtr)Keys.Space);
                         return true;
                     }
                 }

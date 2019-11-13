@@ -27,5 +27,16 @@ internal static partial class Interop
             GC.KeepAlive(hWnd);
             return result;
         }
+
+        public static BOOL PostMessageW(
+            HandleRef hWnd,
+            WindowMessage Msg,
+            IntPtr wParam = default,
+            IntPtr lParam = default)
+        {
+            BOOL result = PostMessageW(hWnd.Handle, Msg, wParam, lParam);
+            GC.KeepAlive(hWnd.Wrapper);
+            return result;
+        }
     }
 }

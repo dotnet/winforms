@@ -2720,8 +2720,11 @@ namespace System.Windows.Forms
             {
                 // If you call SendMessage instead of PostMessage, the control
                 // will resize itself to the size of the parent's client area.  Don't know why...
-                UnsafeNativeMethods.PostMessage(new HandleRef(this, Handle), RichEditMessages.EM_SETOPTIONS, (IntPtr)RichTextBoxConstants.ECOOP_OR,
-                                                (IntPtr)RichTextBoxConstants.ECO_SELECTIONBAR);
+                User32.PostMessageW(
+                    this,
+                    (User32.WindowMessage)RichEditMessages.EM_SETOPTIONS,
+                    (IntPtr)RichTextBoxConstants.ECOOP_OR,
+                    (IntPtr)RichTextBoxConstants.ECO_SELECTIONBAR);
             }
 
             if (languageOption != LanguageOption)
@@ -3756,7 +3759,7 @@ namespace System.Windows.Forms
 
                         SendMessage(WindowMessages.WM_KILLFOCUS, 0, 0);
                         SendMessage(WindowMessages.WM_SETFOCUS, 0, 0);
-                        UnsafeNativeMethods.PostMessage(new HandleRef(this, Handle), EditMessages.EM_SETSEL, selEnd - 1, selEnd);
+                        User32.PostMessageW(this, (User32.WindowMessage)EditMessages.EM_SETSEL, (IntPtr)(selEnd - 1), (IntPtr)selEnd);
                     }
                 }
             }

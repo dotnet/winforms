@@ -3854,7 +3854,7 @@ namespace System.Windows.Forms
 
                         if (!Application.RenderWithVisualStyles && GetStyle(ControlStyles.UserPaint) == false && DropDownStyle == ComboBoxStyle.DropDownList && (FlatStyle == FlatStyle.Flat || FlatStyle == FlatStyle.Popup))
                         {
-                            UnsafeNativeMethods.PostMessage(new HandleRef(this, Handle), WindowMessages.WM_MOUSELEAVE, 0, 0);
+                            User32.PostMessageW(this, User32.WindowMessage.WM_MOUSELEAVE);
                         }
                     }
 

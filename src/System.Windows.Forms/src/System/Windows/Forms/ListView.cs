@@ -2316,7 +2316,7 @@ namespace System.Windows.Forms
                 case NativeMethods.LVA_SNAPTOGRID:
                     if (IsHandleCreated)
                     {
-                        UnsafeNativeMethods.PostMessage(new HandleRef(this, Handle), (int)LVM.ARRANGE, (int)value, 0);
+                        User32.PostMessageW(this, (User32.WindowMessage)LVM.ARRANGE, (IntPtr)value, IntPtr.Zero);
                     }
                     break;
 
@@ -5471,18 +5471,10 @@ namespace System.Windows.Forms
         {
             if (!VirtualMode && IsHandleCreated && AutoArrange && (View == View.LargeIcon || View == View.SmallIcon))
             {
-
                 // this only has an affect for large icon and small icon views.
-                //
                 try
                 {
                     BeginUpdate();
-                    /*
-                       Not sure this does anything that just calling the function doesn't...
-
-                      for (int i = 0; i < this.itemCount; i ++) {
-                        UnsafeNativeMethods.PostMessage(new HandleRef(this, this.Handle), ListViewMessages.LVM_UPDATE, this.Items[i].Index, 0);
-                    } */
                     SendMessage((int)LVM.UPDATE, -1, 0);
                 }
                 finally
