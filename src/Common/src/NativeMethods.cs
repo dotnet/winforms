@@ -467,8 +467,6 @@ namespace System.Windows.Forms
         MA_ACTIVATEANDEAT = 0x0002,
         MA_NOACTIVATE = 0x0003,
         MA_NOACTIVATEANDEAT = 0x0004,
-        MNC_EXECUTE = 2,
-        MNC_SELECT = 3,
         MIIM_STATE = 0x00000001,
         MIIM_ID = 0x00000002,
         MIIM_SUBMENU = 0x00000004,
@@ -674,11 +672,6 @@ namespace System.Windows.Forms
         }
 
         public const int
-        TPM_LEFTBUTTON = 0x0000,
-        TPM_RIGHTBUTTON = 0x0002,
-        TPM_LEFTALIGN = 0x0000,
-        TPM_RIGHTALIGN = 0x0008,
-        TPM_VERTICAL = 0x0040,
         TV_FIRST = 0x1100,
         TB_ENABLEBUTTON = (0x0400 + 1),
         TB_ISBUTTONCHECKED = (0x0400 + 10),
@@ -1145,17 +1138,6 @@ namespace System.Windows.Forms
         public delegate int ListViewCompareCallback(IntPtr lParam1, IntPtr lParam2, IntPtr lParamSort);
 
         public delegate int TreeViewCompareCallback(IntPtr lParam1, IntPtr lParam2, IntPtr lParamSort);
-
-        [StructLayout(LayoutKind.Sequential)]
-        public class TPMPARAMS
-        {
-            public int cbSize = Marshal.SizeOf<TPMPARAMS>();
-            // rcExclude was a by-value RECT structure
-            public int rcExclude_left;
-            public int rcExclude_top;
-            public int rcExclude_right;
-            public int rcExclude_bottom;
-        }
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
         public class STARTUPINFO_I
