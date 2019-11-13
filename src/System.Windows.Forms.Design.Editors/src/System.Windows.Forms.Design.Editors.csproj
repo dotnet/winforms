@@ -67,6 +67,7 @@
     <Compile Include="..\..\Common\src\Interop\ComCtl32\Interop.TVITEMW.cs" Link="Interop\ComCtl32\Interop.TVITEMW.cs" />
     <Compile Include="..\..\Common\src\Interop\ComCtl32\Interop.TVIF.cs" Link="Interop\ComCtl32\Interop.TVIF.cs" />
     <Compile Include="..\..\Common\src\Interop\ComCtl32\Interop.TVC.cs" Link="Interop\ComCtl32\Interop.TVC.cs" />
+    <Compile Include="..\..\Common\src\Interop\ComCtl32\Interop.TVS_EX.cs" Link="Interop\ComCtl32\Interop.TVS_EX.cs" />
     <Compile Include="..\..\Common\src\Interop\ComCtl32\Interop.TVIS.cs" Link="Interop\ComCtl32\Interop.TVIS.cs" />
     <Compile Include="..\..\Common\src\Interop\Comdlg32\Interop.CC.cs" Link="Interop\Comdlg32\Interop.CC.cs" />
     <Compile Include="..\..\Common\src\Interop\Gdi32\Interop.DeleteObject.cs" Link="Interop\Gdi32\Interop.DeleteObject.cs" />

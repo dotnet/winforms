@@ -437,9 +437,6 @@ namespace System.Windows.Forms
         public const int TVM_SETEXTENDEDSTYLE = TV_FIRST + 44;
         public const int TVM_GETEXTENDEDSTYLE = TV_FIRST + 45;
 
-        public const int TVS_EX_FADEINOUTEXPANDOS = 0x0040;
-        public const int TVS_EX_DOUBLEBUFFER = 0x0004;
-
         public static readonly uint LOCALE_USER_DEFAULT = MAKELCID(LANG_USER_DEFAULT);
         public static readonly uint LANG_USER_DEFAULT = MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT);
 
@@ -746,18 +743,6 @@ namespace System.Windows.Forms
         TB_TOP = 6,
         TB_BOTTOM = 7,
         TB_ENDTRACK = 8,
-        TVS_HASBUTTONS = 0x0001,
-        TVS_HASLINES = 0x0002,
-        TVS_LINESATROOT = 0x0004,
-        TVS_EDITLABELS = 0x0008,
-        TVS_SHOWSELALWAYS = 0x0020,
-        TVS_RTLREADING = 0x0040,
-        TVS_CHECKBOXES = 0x0100,
-        TVS_TRACKSELECT = 0x0200,
-        TVS_FULLROWSELECT = 0x1000,
-        TVS_NONEVENHEIGHT = 0x4000,
-        TVS_INFOTIP = 0x0800,
-        TVS_NOTOOLTIPS = 0x0080,
         TVI_ROOT = (unchecked((int)0xFFFF0000)),
         TVI_FIRST = (unchecked((int)0xFFFF0001)),
         TVM_INSERTITEM = (0x1100 + 50),

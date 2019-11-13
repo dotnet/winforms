@@ -350,56 +350,56 @@ namespace System.Windows.Forms
 
                 if (!HideSelection)
                 {
-                    cp.Style |= NativeMethods.TVS_SHOWSELALWAYS;
+                    cp.Style |= (int)ComCtl32.TVS.SHOWSELALWAYS;
                 }
 
                 if (LabelEdit)
                 {
-                    cp.Style |= NativeMethods.TVS_EDITLABELS;
+                    cp.Style |= (int)ComCtl32.TVS.EDITLABELS;
                 }
 
                 if (ShowLines)
                 {
-                    cp.Style |= NativeMethods.TVS_HASLINES;
+                    cp.Style |= (int)ComCtl32.TVS.HASLINES;
                 }
 
                 if (ShowPlusMinus)
                 {
-                    cp.Style |= NativeMethods.TVS_HASBUTTONS;
+                    cp.Style |= (int)ComCtl32.TVS.HASBUTTONS;
                 }
 
                 if (ShowRootLines)
                 {
-                    cp.Style |= NativeMethods.TVS_LINESATROOT;
+                    cp.Style |= (int)ComCtl32.TVS.LINESATROOT;
                 }
 
                 if (HotTracking)
                 {
-                    cp.Style |= NativeMethods.TVS_TRACKSELECT;
+                    cp.Style |= (int)ComCtl32.TVS.TRACKSELECT;
                 }
 
                 if (FullRowSelect)
                 {
-                    cp.Style |= NativeMethods.TVS_FULLROWSELECT;
+                    cp.Style |= (int)ComCtl32.TVS.FULLROWSELECT;
                 }
 
                 if (setOddHeight)
                 {
-                    cp.Style |= NativeMethods.TVS_NONEVENHEIGHT;
+                    cp.Style |= (int)ComCtl32.TVS.NONEVENHEIGHT;
                 }
 
                 // Don't set TVS_CHECKBOXES here if the window isn't created yet.
                 // See OnHandleCreated for explanation
                 if (ShowNodeToolTips && IsHandleCreated && !DesignMode)
                 {
-                    cp.Style |= NativeMethods.TVS_INFOTIP;
+                    cp.Style |= (int)ComCtl32.TVS.INFOTIP;
                 }
 
                 // Don't set TVS_CHECKBOXES here if the window isn't created yet.
                 // See OnHandleCreated for explanation
                 if (CheckBoxes && IsHandleCreated)
                 {
-                    cp.Style |= NativeMethods.TVS_CHECKBOXES;
+                    cp.Style |= (int)ComCtl32.TVS.CHECKBOXES;
                 }
 
                 // Don't call IsMirrored from CreateParams. That will lead to some nasty problems, since
@@ -415,7 +415,7 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        cp.Style |= NativeMethods.TVS_RTLREADING;
+                        cp.Style |= (int)ComCtl32.TVS.RTLREADING;
                     }
                 }
 
@@ -2003,14 +2003,14 @@ namespace System.Windows.Forms
             if (CheckBoxes)
             {
                 int style = unchecked((int)(UnsafeNativeMethods.GetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_STYLE)));
-                style |= NativeMethods.TVS_CHECKBOXES;
+                style |= (int)ComCtl32.TVS.CHECKBOXES;
                 UnsafeNativeMethods.SetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_STYLE, new HandleRef(null, (IntPtr)style));
             }
 
             if (ShowNodeToolTips && !DesignMode)
             {
                 int style = unchecked((int)(UnsafeNativeMethods.GetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_STYLE)));
-                style |= NativeMethods.TVS_INFOTIP;
+                style |= (int)ComCtl32.TVS.INFOTIP;
                 UnsafeNativeMethods.SetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_STYLE, new HandleRef(null, (IntPtr)style));
             }
 
@@ -2695,7 +2695,9 @@ namespace System.Windows.Forms
             }
         }
 
-        // Setting the NativeMethods.TVS_CHECKBOXES style clears the checked state
+        /// <remarks>
+        ///  Setting the ComCtl32.TVS.CHECKBOXES style clears the checked state
+        /// </remarks>
         private void UpdateCheckedState(TreeNode node, bool update)
         {
             // This looks funny, but CheckedInternal returns the cached isChecked value and the internal
