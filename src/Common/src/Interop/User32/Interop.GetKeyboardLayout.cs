@@ -10,6 +10,6 @@ internal static partial class Interop
     internal static partial class User32
     {
         [DllImport(Libraries.User32, ExactSpelling = true)]
-        public static extern unsafe int GetKeyboardLayoutList(int size, IntPtr* hkls);
+        public static extern IntPtr GetKeyboardLayout(uint idThread);
     }
 }
