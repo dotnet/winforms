@@ -38,8 +38,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(new Rectangle(0, 0, 100, 25), control.ClientRectangle);
             Assert.Equal(new Size(100, 25), control.ClientSize);
             Assert.Null(control.Container);
-            Assert.Null(control.ContextMenu);
-            Assert.Null(control.ContextMenu);
+            Assert.Null(control.ContextMenuStrip);
             Assert.Empty(control.Controls);
             Assert.Same(control.Controls, control.Controls);
             Assert.False(control.Created);

@@ -5,7 +5,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using Moq;
 using WinForms.Common.Tests;
 using Xunit;
 
@@ -38,7 +37,6 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(new Size(200, 100), control.ClientSize);
             Assert.False(control.Created);
             Assert.Null(control.Container);
-            Assert.Null(control.ContextMenu);
             Assert.Null(control.ContextMenuStrip);
             Assert.Empty(control.Controls);
             Assert.Same(control.Controls, control.Controls);

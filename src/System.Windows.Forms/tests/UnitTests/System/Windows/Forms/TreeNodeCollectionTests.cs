@@ -26,7 +26,6 @@ namespace System.Windows.Forms.Tests
             Assert.True(treeNode.Bounds.Width > 0);
             Assert.True(treeNode.Bounds.Height > 0);
             Assert.False(treeNode.Checked);
-            Assert.Null(treeNode.ContextMenu);
             Assert.Null(treeNode.ContextMenuStrip);
             Assert.Null(treeNode.FirstNode);
             Assert.Equal(Color.Empty, treeNode.ForeColor);

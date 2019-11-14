@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -350,56 +350,56 @@ namespace System.Windows.Forms
 
                 if (!HideSelection)
                 {
-                    cp.Style |= NativeMethods.TVS_SHOWSELALWAYS;
+                    cp.Style |= (int)ComCtl32.TVS.SHOWSELALWAYS;
                 }
 
                 if (LabelEdit)
                 {
-                    cp.Style |= NativeMethods.TVS_EDITLABELS;
+                    cp.Style |= (int)ComCtl32.TVS.EDITLABELS;
                 }
 
                 if (ShowLines)
                 {
-                    cp.Style |= NativeMethods.TVS_HASLINES;
+                    cp.Style |= (int)ComCtl32.TVS.HASLINES;
                 }
 
                 if (ShowPlusMinus)
                 {
-                    cp.Style |= NativeMethods.TVS_HASBUTTONS;
+                    cp.Style |= (int)ComCtl32.TVS.HASBUTTONS;
                 }
 
                 if (ShowRootLines)
                 {
-                    cp.Style |= NativeMethods.TVS_LINESATROOT;
+                    cp.Style |= (int)ComCtl32.TVS.LINESATROOT;
                 }
 
                 if (HotTracking)
                 {
-                    cp.Style |= NativeMethods.TVS_TRACKSELECT;
+                    cp.Style |= (int)ComCtl32.TVS.TRACKSELECT;
                 }
 
                 if (FullRowSelect)
                 {
-                    cp.Style |= NativeMethods.TVS_FULLROWSELECT;
+                    cp.Style |= (int)ComCtl32.TVS.FULLROWSELECT;
                 }
 
                 if (setOddHeight)
                 {
-                    cp.Style |= NativeMethods.TVS_NONEVENHEIGHT;
+                    cp.Style |= (int)ComCtl32.TVS.NONEVENHEIGHT;
                 }
 
                 // Don't set TVS_CHECKBOXES here if the window isn't created yet.
                 // See OnHandleCreated for explanation
                 if (ShowNodeToolTips && IsHandleCreated && !DesignMode)
                 {
-                    cp.Style |= NativeMethods.TVS_INFOTIP;
+                    cp.Style |= (int)ComCtl32.TVS.INFOTIP;
                 }
 
                 // Don't set TVS_CHECKBOXES here if the window isn't created yet.
                 // See OnHandleCreated for explanation
                 if (CheckBoxes && IsHandleCreated)
                 {
-                    cp.Style |= NativeMethods.TVS_CHECKBOXES;
+                    cp.Style |= (int)ComCtl32.TVS.CHECKBOXES;
                 }
 
                 // Don't call IsMirrored from CreateParams. That will lead to some nasty problems, since
@@ -415,7 +415,7 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        cp.Style |= NativeMethods.TVS_RTLREADING;
+                        cp.Style |= (int)ComCtl32.TVS.RTLREADING;
                     }
                 }
 
@@ -986,8 +986,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-            ///  Indicates the drawing mode for the tree view.
-            /// </summary>
+        ///  Indicates the drawing mode for the tree view.
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(TreeViewDrawMode.Normal),
@@ -1701,13 +1701,6 @@ namespace System.Windows.Forms
         {
             if (disposing)
             {
-
-                foreach (TreeNode node in Nodes)
-                {
-                    node.ContextMenu = null;
-                }
-
-                //
                 lock (this)
                 {
                     DetachImageListHandlers();
@@ -2010,14 +2003,14 @@ namespace System.Windows.Forms
             if (CheckBoxes)
             {
                 int style = unchecked((int)(UnsafeNativeMethods.GetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_STYLE)));
-                style |= NativeMethods.TVS_CHECKBOXES;
+                style |= (int)ComCtl32.TVS.CHECKBOXES;
                 UnsafeNativeMethods.SetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_STYLE, new HandleRef(null, (IntPtr)style));
             }
 
             if (ShowNodeToolTips && !DesignMode)
             {
                 int style = unchecked((int)(UnsafeNativeMethods.GetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_STYLE)));
-                style |= NativeMethods.TVS_INFOTIP;
+                style |= (int)ComCtl32.TVS.INFOTIP;
                 UnsafeNativeMethods.SetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_STYLE, new HandleRef(null, (IntPtr)style));
             }
 
@@ -2702,7 +2695,9 @@ namespace System.Windows.Forms
             }
         }
 
-        // Setting the NativeMethods.TVS_CHECKBOXES style clears the checked state
+        /// <remarks>
+        ///  Setting the ComCtl32.TVS.CHECKBOXES style clears the checked state
+        /// </remarks>
         private void UpdateCheckedState(TreeNode node, bool update)
         {
             // This looks funny, but CheckedInternal returns the cached isChecked value and the internal
@@ -3110,7 +3105,7 @@ namespace System.Windows.Forms
                         if (nmtv->nmhdr.code == NativeMethods.NM_RCLICK)
                         {
                             TreeNode treeNode = NodeFromHandle(hnode);
-                            if (treeNode != null && (treeNode.ContextMenu != null || treeNode.ContextMenuStrip != null))
+                            if (treeNode != null && treeNode.ContextMenuStrip != null)
                             {
                                 ShowContextMenu(treeNode);
                             }
@@ -3146,41 +3141,14 @@ namespace System.Windows.Forms
         /// </summary>
         private void ShowContextMenu(TreeNode treeNode)
         {
-            if (treeNode.ContextMenu != null || treeNode.ContextMenuStrip != null)
+            if (treeNode.ContextMenuStrip != null)
             {
-
-                ContextMenu contextMenu = treeNode.ContextMenu;
                 ContextMenuStrip menu = treeNode.ContextMenuStrip;
 
-                if (contextMenu != null)
-                {
-                    User32.GetCursorPos(out Point pt);
-
-                    // Summary: the current window must be made the foreground window
-                    // before calling TrackPopupMenuEx, and a task switch must be
-                    // forced after the call.
-
-                    UnsafeNativeMethods.SetForegroundWindow(new HandleRef(this, Handle));
-
-                    contextMenu.OnPopup(EventArgs.Empty);
-
-                    SafeNativeMethods.TrackPopupMenuEx(new HandleRef(contextMenu, contextMenu.Handle),
-                                             NativeMethods.TPM_VERTICAL,
-                                             pt.X,
-                                             pt.Y,
-                                             new HandleRef(this, Handle),
-                                             null);
-
-                    // Force task switch (see above)
-                    UnsafeNativeMethods.PostMessage(new HandleRef(this, Handle), WindowMessages.WM_NULL, IntPtr.Zero, IntPtr.Zero);
-                }
                 // Need to send TVM_SELECTITEM to highlight the node while the contextMenuStrip is being shown.
-                else if (menu != null)
-                {
-                    UnsafeNativeMethods.PostMessage(new HandleRef(this, Handle), NativeMethods.TVM_SELECTITEM, NativeMethods.TVGN_DROPHILITE, treeNode.Handle);
-                    menu.ShowInternal(this, PointToClient(MousePosition),/*keyboardActivated*/false);
-                    menu.Closing += new ToolStripDropDownClosingEventHandler(ContextMenuStripClosing);
-                }
+                UnsafeNativeMethods.PostMessage(new HandleRef(this, Handle), NativeMethods.TVM_SELECTITEM, NativeMethods.TVGN_DROPHILITE, treeNode.Handle);
+                menu.ShowInternal(this, PointToClient(MousePosition),/*keyboardActivated*/false);
+                menu.Closing += new ToolStripDropDownClosingEventHandler(ContextMenuStripClosing);
             }
         }
 
@@ -3466,22 +3434,15 @@ namespace System.Windows.Forms
                     {
                         // this is the Shift + F10 Case....
                         TreeNode treeNode = SelectedNode;
-                        if (treeNode != null && (treeNode.ContextMenu != null || treeNode.ContextMenuStrip != null))
+                        if (treeNode != null && treeNode.ContextMenuStrip != null)
                         {
                             Point client;
                             client = new Point(treeNode.Bounds.X, treeNode.Bounds.Y + treeNode.Bounds.Height / 2);
                             // VisualStudio7 # 156, only show the context menu when clicked in the client area
-                            if (ClientRectangle.Contains(client))
+                            if (ClientRectangle.Contains(client) && treeNode.ContextMenuStrip != null)
                             {
-                                if (treeNode.ContextMenu != null)
-                                {
-                                    treeNode.ContextMenu.Show(this, client);
-                                }
-                                else if (treeNode.ContextMenuStrip != null)
-                                {
-                                    bool keyboardActivated = (unchecked((int)(long)m.LParam) == -1);
-                                    treeNode.ContextMenuStrip.ShowInternal(this, client, keyboardActivated);
-                                }
+                                bool keyboardActivated = (unchecked((int)(long)m.LParam) == -1);
+                                treeNode.ContextMenuStrip.ShowInternal(this, client, keyboardActivated);
                             }
                         }
                         else
