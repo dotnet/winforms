@@ -27,7 +27,7 @@ namespace System.Windows.Forms
             public virtual TabPage this[int index]
             {
                 get => _owner.GetTabPage(index);
-                set => _owner.SetTabPage(index, value, value.GetTCITEM());
+                set => _owner.SetTabPage(index, value);
             }
 
             object IList.this[int index]
