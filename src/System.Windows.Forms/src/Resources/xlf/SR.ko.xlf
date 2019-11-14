@@ -99,7 +99,7 @@
       </trans-unit>
       <trans-unit id="AXOcxStateLoaded">
         <source>ActiveX control cannot be reloaded with an OcxState of a different storage type.</source>
-        <target state="translated">저장소 형식이 다른 OcxState를 사용하여 ActiveX 컨트롤을 다시 로드할 수 없습니다.</target>
+        <target state="translated">스토리지 형식이 다른 OcxState를 사용하여 ActiveX 컨트롤을 다시 로드할 수 없습니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="AXProperties">
@@ -219,7 +219,7 @@
       </trans-unit>
       <trans-unit id="ApplicationCannotChangeApplicationExceptionMode">
         <source>Application exception mode cannot be changed once any Controls are created in the application.</source>
-        <target state="translated">응용 프로그램에서 컨트롤이 만들어진 이후에는 응용 프로그램 예외 모드를 변경할 수 없습니다.</target>
+        <target state="translated">애플리케이션에서 컨트롤이 만들어진 이후에는 애플리케이션 예외 모드를 변경할 수 없습니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="ApplicationCannotChangeThreadExceptionMode">
@@ -719,7 +719,7 @@
       </trans-unit>
       <trans-unit id="CantShowModalOnNonInteractive">
         <source>Showing a modal dialog box or form when the application is not running in UserInteractive mode is not a valid operation. Specify the ServiceNotification or DefaultDesktopOnly style to display a notification from a service application.</source>
-        <target state="translated">응용 프로그램이 UserInteractive 모드에서 실행되지 않을 때에는 모달 대화 상자나 폼을 표시할 수 없습니다. 서비스 응용 프로그램에서 알림을 표시하려면 ServiceNotification 또는 DefaultDesktopOnly 스타일을 지정하십시오.</target>
+        <target state="translated">애플리케이션이 UserInteractive 모드에서 실행되지 않을 때에는 모달 대화 상자나 폼을 표시할 수 없습니다. 서비스 애플리케이션에서 알림을 표시하려면 ServiceNotification 또는 DefaultDesktopOnly 스타일을 지정하십시오.</target>
         <note />
       </trans-unit>
       <trans-unit id="CatAccessibility">
@@ -959,7 +959,7 @@
       </trans-unit>
       <trans-unit id="CombinationOfAccessibilitySwitchesNotSupported">
         <source>Desktop applications are required to opt in to all earlier accessibility improvements to get the later improvements. To do this, ensure that if the AppContext switch 'Switch.UseLegacyAccessibilityFeatures.N' is set to 'false', then 'Switch.UseLegacyAccessibilityFeatures' and all 'Switch.UseLegacyAccessibilityFeatures.M' switches, when M &lt; N, evaluate to false as well. Note that, if a switch for a particular set of accessibility improvements is not present, its value is determined by the target framework version. You can remedy this by adding these switches and setting their value to false.</source>
-        <target state="translated">데스크톱 응용 프로그램은 이전의 모든 접근성 개선 사항을 옵트인하여 이후의 개선 사항을 받아야 합니다. 이렇게 하려면 AppContext 스위치 'Switch.UseLegacyAccessibilityFeatures.N'이 'false'로 설정되어 있는지 확인한 다음 M &lt; N일 때 'Switch.UseLegacyAccessibilityFeatures' 및 모든 'Switch.UseLegacyAccessibilityFeatures.M' 스위치도 false로 계산되는지 확인합니다. 특정 접근성 개선 사항 집합에 대한 스위치가 없는 경우 해당 값은 대상 프레임워크 버전에 따라 결정됩니다. 이러한 스위치를 추가하고 값을 false로 설정하여 이 문제를 해결할 수 있습니다.</target>
+        <target state="translated">데스크톱 애플리케이션은 이전의 모든 접근성 개선 사항을 옵트인하여 이후의 개선 사항을 받아야 합니다. 이렇게 하려면 AppContext 스위치 'Switch.UseLegacyAccessibilityFeatures.N'이 'false'로 설정되어 있는지 확인한 다음 M &lt; N일 때 'Switch.UseLegacyAccessibilityFeatures' 및 모든 'Switch.UseLegacyAccessibilityFeatures.M' 스위치도 false로 계산되는지 확인합니다. 특정 접근성 개선 사항 집합에 대한 스위치가 없는 경우 해당 값은 대상 프레임워크 버전에 따라 결정됩니다. 이러한 스위치를 추가하고 값을 false로 설정하여 이 문제를 해결할 수 있습니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="ComboBoxAutoCompleteCustomSourceDescr">
@@ -1219,7 +1219,7 @@
       </trans-unit>
       <trans-unit id="ContextMenuStripSourceControlDescr">
         <source>The last control that caused this context menu strip to be displayed.</source>
-        <target state="new">The last control that caused this context menu strip to be displayed.</target>
+        <target state="translated">상황에 맞는 메뉴 스트립을 표시한 마지막 컨트롤입니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="ControlAccessibileObjectInvalid">
@@ -1514,7 +1514,7 @@
       </trans-unit>
       <trans-unit id="ControlIsAccessibleDescr">
         <source>Indicates whether the control is visible to accessibility applications.</source>
-        <target state="translated">컨트롤이 내게 필요한 옵션 지원 응용 프로그램에 나타나는지 여부를 나타냅니다.</target>
+        <target state="translated">컨트롤이 내게 필요한 옵션 지원 애플리케이션에 나타나는지 여부를 나타냅니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="ControlIsKeyLockedNumCapsScrollLockKeysSupportedOnly">
@@ -3109,7 +3109,7 @@
       </trans-unit>
       <trans-unit id="DataGridView_CellValuePushedDescr">
         <source>Occurs when the DataGridView.VirtualMode property of the DataGridView control is true, and a cell value has changed and requires storage in the underlying data source.</source>
-        <target state="translated">DataGridView 컨트롤의 DataGridView.VirtualMode 속성이 true이고 셀 값이 변경되어 내부 데이터 소스에 저장소가 필요할 때 발생합니다.</target>
+        <target state="translated">DataGridView 컨트롤의 DataGridView.VirtualMode 속성이 true이고 셀 값이 변경되어 내부 데이터 소스에 스토리지가 필요할 때 발생합니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_CheckBoxColumnFalseValueDescr">
@@ -3479,7 +3479,7 @@
       </trans-unit>
       <trans-unit id="DataGridView_EnableHeadersVisualStylesDescr">
         <source>Indicates whether row and column headers use the visual styles of the user's current theme if visual styles are enabled for the application.</source>
-        <target state="translated">응용 프로그램에서 비주얼 스타일을 사용하는 경우, 행 및 열 머리글에 사용자 현재 테마의 비주얼 스타일을 사용하는지 여부를 나타냅니다.</target>
+        <target state="translated">애플리케이션에서 비주얼 스타일을 사용하는 경우, 행 및 열 머리글에 사용자 현재 테마의 비주얼 스타일을 사용하는지 여부를 나타냅니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_ErrorMessageCaption">
@@ -4061,7 +4061,7 @@ To replace this default dialog please handle the DataError event.</source>
       </trans-unit>
       <trans-unit id="DataObjectDibNotSupported">
         <source>Bitmap object does not directly support the device-independent bitmap format.  Either specify auto-conversion or perform a SetData with the Bitmap data format.</source>
-        <target state="translated">Bitmap 개체는 장치 독립적 비트맵 형식을 직접 지원하지 않습니다. 자동 변환을 지정하거나 Bitmap 데이터 형식으로 SetData를 수행하십시오.</target>
+        <target state="translated">Bitmap 개체는 디바이스 독립적 비트맵 형식을 직접 지원하지 않습니다. 자동 변환을 지정하거나 Bitmap 데이터 형식으로 SetData를 수행하십시오.</target>
         <note />
       </trans-unit>
       <trans-unit id="DataObjectWhitespaceEmptyFormatNotAllowed">
@@ -4346,7 +4346,7 @@ To replace this default dialog please handle the DataError event.</source>
       </trans-unit>
       <trans-unit id="DescriptionMenuStrip">
         <source>Displays application commands and options grouped by functionality.</source>
-        <target state="translated">기능별로 그룹화된 응용 프로그램 명령과 옵션을 표시합니다.</target>
+        <target state="translated">기능별로 그룹화된 애플리케이션 명령과 옵션을 표시합니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="DescriptionMonthCalendar">
@@ -4521,7 +4521,7 @@ To replace this default dialog please handle the DataError event.</source>
       </trans-unit>
       <trans-unit id="DomainUpDownWrapDescr">
         <source>Indicates whether values wrap around at either end of the item list.</source>
-        <target state="translated">항목 목록의 한쪽 끝에서 값을 줄 바꿈할지 여부를 나타냅니다.</target>
+        <target state="translated">항목 목록의 한쪽 끝에서 값을 래핑할지 여부를 나타냅니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="DragDropRegFailed">
@@ -4633,7 +4633,7 @@ To replace this default dialog please handle the DataError event.</source>
         <source>Unhandled exception has occurred in a component in your application. If you click Continue, the application will ignore this error and attempt to continue.
 
 {0}.</source>
-        <target state="translated">응용 프로그램의 구성 요소에서 처리되지 않은 예외가 발생했습니다. [계속]을 클릭하면 응용 프로그램에서 이 오류를 무시하고 계속합니다.
+        <target state="translated">애플리케이션의 구성 요소에서 처리되지 않은 예외가 발생했습니다. [계속]을 클릭하면 애플리케이션에서 이 오류를 무시하고 계속합니다.
 
 {0}</target>
         <note />
@@ -4647,7 +4647,7 @@ To replace this default dialog please handle the DataError event.</source>
         <source>Unhandled exception has occurred in your application. If you click Continue, the application will ignore this error and attempt to continue. If you click Quit, the application will close immediately.
 
 {0}.</source>
-        <target state="translated">응용 프로그램에서 처리되지 않은 예외가 발생했습니다. [계속]을 클릭하면 응용 프로그램에서 이 오류를 무시하고 계속합니다. [끝내기]를 클릭하면 응용 프로그램이 즉시 닫힙니다.
+        <target state="translated">애플리케이션에서 처리되지 않은 예외가 발생했습니다. [계속]을 클릭하면 애플리케이션에서 이 오류를 무시하고 계속합니다. [끝내기]를 클릭하면 애플리케이션이 즉시 닫힙니다.
 
 {0}</target>
         <note />
@@ -4667,8 +4667,8 @@ To replace this default dialog please handle the DataError event.</source>
 debugging. Contact the application author for more
 information.
 </source>
-        <target state="translated">응용 프로그램에서는 Windows JIT(Just In Time) 디버깅을 지원하지
-않습니다. 자세한 내용은 응용 프로그램 작성자에게 
+        <target state="translated">애플리케이션에서는 Windows JIT(Just In Time) 디버깅을 지원하지
+않습니다. 자세한 내용은 애플리케이션 작성자에게 
 문의하십시오.
 </target>
         <note />
@@ -4677,7 +4677,7 @@ information.
         <source>Application does not support just-in-time (JIT)
 debugging. See the end of this message for details.
 </source>
-        <target state="translated">응용 프로그램에서 Windows JIT(Just In Time) 디버깅을 지원하지
+        <target state="translated">애플리케이션에서 Windows JIT(Just In Time) 디버깅을 지원하지
 않습니다. 자세한 내용은 이 메시지의 뒷부분을 참조하십시오.
 </target>
         <note />
@@ -5788,7 +5788,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="LabelAutoSizeDescr">
         <source>Enables automatic resizing based on font size. Note that this is only valid for label controls that do not wrap text.</source>
-        <target state="translated">글꼴 크기에 따른 자동 크기 조정 기능을 사용합니다. 이 기능은 텍스트 줄 바꿈을 하지 않는 레이블 컨트롤에만 사용할 수 있습니다.</target>
+        <target state="translated">글꼴 크기에 따른 자동 크기 조정 기능을 사용합니다. 이 기능은 텍스트 래핑을 하지 않는 레이블 컨트롤에만 사용할 수 있습니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="LabelBackgroundImageDescr">
@@ -6473,7 +6473,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="ListViewLabelWrapDescr">
         <source>Determines whether label text can wrap to a new line.</source>
-        <target state="translated">레이블 텍스트를 줄 바꿈할 수 있는지 여부를 결정합니다.</target>
+        <target state="translated">레이블 텍스트를 래핑할 수 있는지 여부를 결정합니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewLargeImageListDescr">
@@ -6813,12 +6813,12 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="MenuItemShortCutDescr">
         <source>The shortcut key associated with the menu item. </source>
-        <target state="new">The shortcut key associated with the menu item. </target>
+        <target state="translated">메뉴 항목에 연결된 바로 가기 키입니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="MenuItemShowShortCutDescr">
         <source>Indicates whether the shorcut key for the menu item is displayed on the item. </source>
-        <target state="new">Indicates whether the shorcut key for the menu item is displayed on the item. </target>
+        <target state="translated">메뉴 항목의 바로 가기 키가 항목에 표시되는지 여부를 나타냅니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="MenuStripMdiWindowListItem">
@@ -6843,7 +6843,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="MonthCalendarBodyAccessibleName">
         <source>Calendar body</source>
-        <target state="new">Calendar body</target>
+        <target state="translated">일정 본문</target>
         <note />
       </trans-unit>
       <trans-unit id="MonthCalendarDimensionsDescr">
@@ -6898,7 +6898,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="MonthCalendarNextButtonAccessibleName">
         <source>Next</source>
-        <target state="new">Next</target>
+        <target state="translated">다음</target>
         <note />
       </trans-unit>
       <trans-unit id="MonthCalendarOnDateChangedDescr">
@@ -6913,7 +6913,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="MonthCalendarPreviousButtonAccessibleName">
         <source>Previous</source>
-        <target state="new">Previous</target>
+        <target state="translated">이전</target>
         <note />
       </trans-unit>
       <trans-unit id="MonthCalendarRange">
@@ -6993,7 +6993,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="MonthCalendarTodayButtonAccessibleName">
         <source>Today: {0}</source>
-        <target state="new">Today: {0}</target>
+        <target state="translated">오늘: {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="MonthCalendarTodayDateDescr">
@@ -8343,7 +8343,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="RestartNotSupported">
         <source>Restart method is not supported for this application type.</source>
-        <target state="translated">Restart 메서드는 이 응용 프로그램 종류에서 지원되지 않습니다.</target>
+        <target state="translated">Restart 메서드는 이 애플리케이션 종류에서 지원되지 않습니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="RichControlLresult">
@@ -8658,7 +8658,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="SendKeysNoMessageLoop">
         <source>SendKeys cannot run inside this application because the application is not handling Windows messages.  Either change the application to handle messages, or use the SendKeys.SendWait method.</source>
-        <target state="translated">이 응용 프로그램에서 Windows 메시지를 처리할 수 없으므로 응용 프로그램 안에서 SendKeys를 실행할 수 없습니다. 메시지를 처리하는 응용 프로그램으로 변경하거나 SendKeys.SendWait 메서드를 사용하십시오.</target>
+        <target state="translated">이 애플리케이션에서 Windows 메시지를 처리할 수 없으므로 애플리케이션 안에서 SendKeys를 실행할 수 없습니다. 메시지를 처리하는 애플리케이션으로 변경하거나 SendKeys.SendWait 메서드를 사용하십시오.</target>
         <note />
       </trans-unit>
       <trans-unit id="SerializationException">
@@ -9288,7 +9288,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="TextBoxWordWrapDescr">
         <source>Indicates if lines are automatically word-wrapped for multiline edit controls.</source>
-        <target state="translated">다중 행 편집 컨트롤의 자동 줄 바꿈 여부를 나타냅니다.</target>
+        <target state="translated">다중 행 편집 컨트롤의 자동 래핑 여부를 나타냅니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="TextParseFailedFormat">
@@ -10873,7 +10873,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="Win32WindowAlreadyCreated">
         <source>SetCompatibleTextRenderingDefault must be called before the first IWin32Window object is created in the application.</source>
-        <target state="translated">SetCompatibleTextRenderingDefault는 응용 프로그램에 첫 번째 IWin32Window 개체가 만들어지기 전에 호출해야 합니다.</target>
+        <target state="translated">SetCompatibleTextRenderingDefault는 애플리케이션에 첫 번째 IWin32Window 개체가 만들어지기 전에 호출해야 합니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="WindowsFormsSetEvent">
