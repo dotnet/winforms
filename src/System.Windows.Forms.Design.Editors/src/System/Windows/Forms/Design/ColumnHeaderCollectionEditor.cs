@@ -4,7 +4,6 @@
 
 using System.ComponentModel;
 using System.ComponentModel.Design;
-using System.Diagnostics;
 
 namespace System.Windows.Forms.Design.Editors
 {
@@ -18,7 +17,7 @@ namespace System.Windows.Forms.Design.Editors
         }
 
         /// <summary>
-        ///    Gets the help topic to display for the dialog help button or pressing F1. Override to display a different help topic.
+        /// Gets the help topic to display for the dialog help button or pressing F1. Override to display a different help topic.
         /// </summary>
         protected override string HelpTopic
         {
@@ -26,7 +25,7 @@ namespace System.Windows.Forms.Design.Editors
         }
 
         /// <summary>
-        ///       Sets the specified collection to have the specified array of items.
+        /// Sets the specified collection to have the specified array of items.
         /// </summary>
         protected override object SetItems(object editValue, object[] value)
         {
@@ -41,7 +40,7 @@ namespace System.Windows.Forms.Design.Editors
         }
 
         /// <summary>
-        ///       Removes the item from listview column header collection
+        /// Removes the item from listview column header collection
         /// </summary>
         internal override void OnItemRemoving(object item)
         {
