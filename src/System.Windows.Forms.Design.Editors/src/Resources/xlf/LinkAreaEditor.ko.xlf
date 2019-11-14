@@ -4,27 +4,27 @@
     <body>
       <trans-unit id="$this.Text">
         <source>LinkArea Editor</source>
-        <target state="new">LinkArea Editor</target>
+        <target state="translated">LinkArea 편집기</target>
         <note />
       </trans-unit>
       <trans-unit id="cancelButton.Text">
         <source>Cancel</source>
-        <target state="new">Cancel</target>
+        <target state="translated">취소</target>
         <note />
       </trans-unit>
       <trans-unit id="caption.Text">
         <source>Select a &amp;range of text to make your link:</source>
-        <target state="new">Select a &amp;range of text to make your link:</target>
+        <target state="translated">링크로 만들 텍스트 범위를 선택하십시오(&amp;R).</target>
         <note />
       </trans-unit>
       <trans-unit id="okButton.Text">
         <source>OK</source>
-        <target state="new">OK</target>
+        <target state="translated">확인</target>
         <note />
       </trans-unit>
       <trans-unit id="sampleEdit.Text">
         <source>textBox1</source>
-        <target state="new">textBox1</target>
+        <target state="translated">textBox1</target>
         <note />
       </trans-unit>
     </body>

@@ -4,37 +4,37 @@
     <body>
       <trans-unit id="$this.Text">
         <source>Input Mask</source>
-        <target state="new">Input Mask</target>
+        <target state="translated">Masque de saisie</target>
         <note />
       </trans-unit>
       <trans-unit id="btnCancel.Text">
         <source>Cancel</source>
-        <target state="new">Cancel</target>
+        <target state="translated">Annuler</target>
         <note />
       </trans-unit>
       <trans-unit id="btnOK.Text">
         <source>OK</source>
-        <target state="new">OK</target>
+        <target state="translated">OK</target>
         <note />
       </trans-unit>
       <trans-unit id="checkBoxUseValidatingType.Text">
         <source>&amp;Use ValidatingType</source>
-        <target state="new">&amp;Use ValidatingType</target>
+        <target state="translated">&amp;Utiliser ValidatingType</target>
         <note />
       </trans-unit>
       <trans-unit id="lblHeader.Text">
         <source>&amp;Select a predefined mask description from the list below or select Custom to define a custom mask.</source>
-        <target state="new">&amp;Select a predefined mask description from the list below or select Custom to define a custom mask.</target>
+        <target state="translated">&amp;Sélectionnez une description de masque prédéfini dans la liste ci-dessous ou bien l'option Personnalisé pour définir un masque personnalisé.</target>
         <note />
       </trans-unit>
       <trans-unit id="lblMask.Text">
         <source>&amp;Mask:</source>
-        <target state="new">&amp;Mask:</target>
+        <target state="translated">&amp;Masque :</target>
         <note />
       </trans-unit>
       <trans-unit id="lblTryIt.Text">
         <source>&amp;Preview:</source>
-        <target state="new">&amp;Preview:</target>
+        <target state="translated">&amp;Aperçu :</target>
         <note />
       </trans-unit>
     </body>
