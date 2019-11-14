@@ -17,7 +17,6 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
     public class MauiLabelTests : ReflectBase
     {
         private readonly Label _lbl;
-        private Size _newSize, _oldSize;
 
         public MauiLabelTests(String[] args) : base(args)
         {
@@ -40,10 +39,10 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
 
             _lbl.Size = new Size(10, 10);
             _lbl.Text = "Hello";
-            _oldSize = _lbl.Size;
+            Size oldSize = _lbl.Size;
             _lbl.Text = "Say Hello";
-            _newSize = _lbl.Size;
-            return new ScenarioResult(!(_newSize.Equals(_oldSize)));
+            Size newSize = _lbl.Size;
+            return new ScenarioResult(newSize != oldSize);
         }
 
         [Scenario(true)]
@@ -54,10 +53,10 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
 
             _lbl.Size = new Size(10, 10);
             _lbl.Text = "Hello";
-            _oldSize = _lbl.Size;
+            Size oldSize = _lbl.Size;
             _lbl.Text = "Say Hello";
-            _newSize = _lbl.Size;
-            return new ScenarioResult((_newSize.Equals(_oldSize)));
+            Size newSize = _lbl.Size;
+            return new ScenarioResult(newSize == oldSize);
         }
 
         [Scenario(true)]
