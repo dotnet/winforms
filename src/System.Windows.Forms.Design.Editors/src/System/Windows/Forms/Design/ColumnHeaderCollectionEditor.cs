@@ -5,7 +5,7 @@
 using System.ComponentModel;
 using System.ComponentModel.Design;
 
-namespace System.Windows.Forms.Design.Editors
+namespace System.Windows.Forms.Design
 {
     internal class ColumnHeaderCollectionEditor : CollectionEditor
     {
