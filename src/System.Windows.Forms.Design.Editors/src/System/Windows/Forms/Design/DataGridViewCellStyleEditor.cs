@@ -6,7 +6,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Design;
 
-namespace System.Windows.Forms.Design.Editors
+namespace System.Windows.Forms.Design
 {
     internal class DataGridViewCellStyleEditor : UITypeEditor
     {
