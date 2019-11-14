@@ -7,6 +7,9 @@
     <EnableDefaultItems>false</EnableDefaultItems>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     
+    <!-- Suppress some nuget warnings that are breaking our build until https://github.com/dotnet/arcade/issues/4337 is resolved -->
+    <NoWarn>$(NoWarn);NU5131;NU5128</NoWarn>
+
     <!-- Opt-out repo features -->
     <UsingToolXliff>false</UsingToolXliff>
   </PropertyGroup>
