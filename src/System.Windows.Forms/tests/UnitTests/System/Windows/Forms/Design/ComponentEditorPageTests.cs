@@ -4,10 +4,8 @@
 
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.ComponentModel.Design;
 using System.Drawing;
 using Moq;
-using Moq.Protected;
 using WinForms.Common.Tests;
 using Xunit;
 
@@ -42,7 +40,6 @@ namespace System.Windows.Forms.Design.Tests
             Assert.False(control.CommitOnDeactivate);
             Assert.Null(control.Component);
             Assert.Null(control.Container);
-            Assert.Null(control.ContextMenu);
             Assert.Null(control.ContextMenuStrip);
             Assert.Empty(control.Controls);
             Assert.Same(control.Controls, control.Controls);

@@ -55,8 +55,6 @@ namespace System.Windows.Forms.Design
         public const int TV_FIRST = 0x1100;
         public const int TVM_SETEXTENDEDSTYLE = TV_FIRST + 44;
         public const int TVM_GETEXTENDEDSTYLE = TV_FIRST + 45;
-        public const int TVS_EX_FADEINOUTEXPANDOS = 0x0040;
-        public const int TVS_EX_DOUBLEBUFFER = 0x0004;
         public const int SWP_HIDEWINDOW = 0x0080;
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]

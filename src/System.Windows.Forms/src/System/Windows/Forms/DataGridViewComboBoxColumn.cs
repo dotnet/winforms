@@ -139,7 +139,7 @@ namespace System.Windows.Forms
             DefaultValue(""),
             SRCategory(nameof(SR.CatData)),
             SRDescription(nameof(SR.DataGridView_ComboBoxColumnDisplayMemberDescr)),
-            TypeConverter("System.Windows.Forms.Design.DataMemberFieldConverter, " + AssemblyRef.SystemWinformsDesign),
+            TypeConverter("System.Windows.Forms.Design.DataMemberFieldConverter, " + AssemblyRef.SystemDesign),
             Editor("System.Windows.Forms.Design.DataMemberFieldEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))
         ]
         public string DisplayMember
@@ -353,7 +353,7 @@ namespace System.Windows.Forms
             DefaultValue(""),
             SRCategory(nameof(SR.CatData)),
             SRDescription(nameof(SR.DataGridView_ComboBoxColumnValueMemberDescr)),
-            TypeConverter("System.Windows.Forms.Design.DataMemberFieldConverter, " + AssemblyRef.SystemWinformsDesign),
+            TypeConverter("System.Windows.Forms.Design.DataMemberFieldConverter, " + AssemblyRef.SystemDesign),
             Editor("System.Windows.Forms.Design.DataMemberFieldEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))
         ]
         public string ValueMember

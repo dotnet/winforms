@@ -37,7 +37,6 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(new Rectangle(0, 0, 75, 23), control.ClientRectangle);
             Assert.Null(control.Container);
             Assert.Null(control.ContainingControl);
-            Assert.Null(control.ContextMenu);
             Assert.Null(control.ContextMenuStrip);
             Assert.Empty(control.Controls);
             Assert.Same(control.Controls, control.Controls);
@@ -118,7 +117,6 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(new Rectangle(0, 0, 75, 23), control.ClientRectangle);
             Assert.Null(control.Container);
             Assert.Null(control.ContainingControl);
-            Assert.Null(control.ContextMenu);
             Assert.Null(control.ContextMenuStrip);
             Assert.Empty(control.Controls);
             Assert.Same(control.Controls, control.Controls);
@@ -353,75 +351,6 @@ namespace System.Windows.Forms.Tests
             Assert.Same(value, control.ContainingControl);
         }
 
-        public static IEnumerable<object[]> ContextMenu_Set_TestData()
-        {
-            yield return new object[] { null };
-            yield return new object[] { new ContextMenu() };
-        }
-
-        [StaTheory]
-        [MemberData(nameof(ContextMenu_Set_TestData))]
-        public void AxHost_ContextMenu_Set_GetReturnsExpected(ContextMenu value)
-        {
-            var control = new SubAxHost("00000000-0000-0000-0000-000000000000")
-            {
-                ContextMenu = value
-            };
-            Assert.Same(value, control.ContextMenu);
-
-            // Set same.
-            control.ContextMenu = value;
-            Assert.Same(value, control.ContextMenu);
-        }
-
-        [StaTheory]
-        [MemberData(nameof(ContextMenu_Set_TestData))]
-        public void AxHost_ContextMenu_SetWithNonNullOldValue_GetReturnsExpected(ContextMenu value)
-        {
-            var control = new SubAxHost("00000000-0000-0000-0000-000000000000")
-            {
-                ContextMenu = new ContextMenu()
-            };
-            control.ContextMenu = value;
-            Assert.Same(value, control.ContextMenu);
-
-            // Set same.
-            control.ContextMenu = value;
-            Assert.Same(value, control.ContextMenu);
-        }
-
-        [StaFact]
-        public void AxHost_ContextMenu_SetDisposeNew_RemovesContextMenu()
-        {
-            var menu = new ContextMenu();
-            var control = new SubAxHost("00000000-0000-0000-0000-000000000000")
-            {
-                ContextMenu = menu
-            };
-            Assert.Same(menu, control.ContextMenu);
-
-            menu.Dispose();
-            Assert.Null(control.ContextMenu);
-        }
-
-        [StaFact]
-        public void AxHost_ContextMenu_SetDisposeOld_RemovesContextMenu()
-        {
-            var menu1 = new ContextMenu();
-            var menu2 = new ContextMenu();
-            var control = new SubAxHost("00000000-0000-0000-0000-000000000000")
-            {
-                ContextMenu = menu1
-            };
-            Assert.Same(menu1, control.ContextMenu);
-
-            control.ContextMenu = menu2;
-            Assert.Same(menu2, control.ContextMenu);
-
-            menu1.Dispose();
-            Assert.Same(menu2, control.ContextMenu);
-        }
-
         [StaTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetCursorTheoryData))]
         public void AxHost_Cursor_Set_GetReturnsExpected(Cursor value)
@@ -651,15 +580,6 @@ namespace System.Windows.Forms.Tests
             EventHandler handler = (sender, e) => { };
             Assert.Throws<NotSupportedException>(() => control.Click += handler);
             control.Click -= handler;
-        }
-
-        [StaFact]
-        public void AxHost_ContextMenuChanged_AddRemove_ThrowsNotSupportedException()
-        {
-            var control = new SubAxHost("00000000-0000-0000-0000-000000000000");
-            EventHandler handler = (sender, e) => { };
-            Assert.Throws<NotSupportedException>(() => control.ContextMenuChanged += handler);
-            control.ContextMenuChanged -= handler;
         }
 
         [StaFact]
@@ -916,7 +836,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { -6 };
             yield return new object[] { -7 };
         }
-        
+
         [StaTheory]
         [MemberData(nameof(DoVerb_TestData))]
         public void AxHost_DoVerb_InvokeWithHandle_Success(int verb)
@@ -925,7 +845,7 @@ namespace System.Windows.Forms.Tests
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             control.DoVerb(verb);
         }
-        
+
         [StaTheory]
         [MemberData(nameof(DoVerb_TestData))]
         public void AxHost_DoVerb_InvokeWithHandleWithParent_Success(int verb)
@@ -940,7 +860,7 @@ namespace System.Windows.Forms.Tests
             control.DoVerb(verb);
             Assert.True(parent.IsHandleCreated);
         }
-        
+
         [StaTheory]
         [MemberData(nameof(DoVerb_TestData))]
         public void AxHost_DoVerb_InvokeWithHandleWithParentWithoutHandle_Success(int verb)
@@ -953,7 +873,7 @@ namespace System.Windows.Forms.Tests
             control.DoVerb(verb);
             Assert.True(parent.IsHandleCreated);
         }
-        
+
         [StaTheory]
         [MemberData(nameof(DoVerb_TestData))]
         public void AxHost_DoVerb_InvokeWithoutHandle_ThrowsNullReferenceException(int verb)

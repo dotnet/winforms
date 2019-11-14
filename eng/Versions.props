@@ -11,7 +11,7 @@
   <!-- Below have corresponding entries in Versions.Details.XML because they are updated via Maestro -->
   <!-- Core Setup for coherency -->
   <PropertyGroup>
-    <MicrosoftNETCoreAppPackageVersion>5.0.0-alpha.1.19559.5</MicrosoftNETCoreAppPackageVersion>
+    <MicrosoftNETCoreAppPackageVersion>5.0.0-alpha.1.19562.8</MicrosoftNETCoreAppPackageVersion>
   </PropertyGroup>
   <!-- CoreFX via Core Setup -->
   <PropertyGroup>
@@ -28,12 +28,12 @@
   </PropertyGroup>
   <!-- CoreCLR via Core Setup -->
   <PropertyGroup>
-    <MicrosoftNETCoreILAsmVersion>5.0.0-alpha1.19559.4</MicrosoftNETCoreILAsmVersion>
+    <MicrosoftNETCoreILAsmVersion>5.0.0-alpha1.19562.1</MicrosoftNETCoreILAsmVersion>
   </PropertyGroup>
   <!-- Arcade -->
   <PropertyGroup>
-    <MicrosoftDotNetGenFacadesPackageVersion>5.0.0-beta.19558.11</MicrosoftDotNetGenFacadesPackageVersion>
-    <MicrosoftDotNetXUnitExtensionsPackageVersion>5.0.0-beta.19558.11</MicrosoftDotNetXUnitExtensionsPackageVersion>
+    <MicrosoftDotNetGenFacadesPackageVersion>5.0.0-beta.19562.5</MicrosoftDotNetGenFacadesPackageVersion>
+    <MicrosoftDotNetXUnitExtensionsPackageVersion>5.0.0-beta.19562.5</MicrosoftDotNetXUnitExtensionsPackageVersion>
   </PropertyGroup>
   <!-- Below have no corresponding entries in Versions.Details.XML because they are not updated via Maestro -->
   <!-- XUnit-related (not extensions) -->

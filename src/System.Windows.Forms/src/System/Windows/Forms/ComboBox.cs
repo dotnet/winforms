@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -1828,6 +1828,11 @@ namespace System.Windows.Forms
                     // once in the combobox and once here.
                     if (fireSetFocus)
                     {
+                        if (!DesignMode && childEdit != null && m.HWnd == childEdit.Handle)
+                        {
+                            WmImeSetFocus();
+                        }
+
                         InvokeGotFocus(this, EventArgs.Empty);
                     }
 
@@ -1969,7 +1974,7 @@ namespace System.Windows.Forms
                     mousePressed = true;
                     mouseEvents = true;
 
-                    if (ContextMenu != null || ContextMenuStrip != null)
+                    if (ContextMenuStrip != null)
                     {
                         // Set the mouse capture as this is the child Wndproc.
                         Capture = true;
@@ -1995,12 +2000,6 @@ namespace System.Windows.Forms
                     mousePressed = false;
                     mouseEvents = false;
 
-                    if (ContextMenu != null)
-                    {
-                        // Set the mouse capture as this is the child Wndproc.
-                        Capture = false;
-                    }
-
                     DefChildWndProc(ref m);
 
                     // The message gets fired from Combo-box's WndPrc - convert to Combobox coordinates
@@ -2011,7 +2010,7 @@ namespace System.Windows.Forms
 
                 case WindowMessages.WM_CONTEXTMENU:
                     // Forward context menu messages to the parent control
-                    if (ContextMenu != null || ContextMenuStrip != null)
+                    if (ContextMenuStrip != null)
                     {
                         UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), WindowMessages.WM_CONTEXTMENU, m.WParam, m.LParam);
                     }

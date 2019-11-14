@@ -275,19 +275,6 @@ namespace System.Windows.Forms
             }
         }
 
-        public override ContextMenu ContextMenu
-        {
-            get
-            {
-                return base.ContextMenu;
-            }
-            set
-            {
-                base.ContextMenu = value;
-                upDownEdit.ContextMenu = value;
-            }
-        }
-
         public override ContextMenuStrip ContextMenuStrip
         {
             get
@@ -1290,7 +1277,7 @@ namespace System.Windows.Forms
             internal override void WmContextMenu(ref Message m)
             {
                 // Want to make the SourceControl to be the UpDownBase, not the Edit.
-                if (ContextMenu == null && ContextMenuStrip != null)
+                if (ContextMenuStrip != null)
                 {
                     WmContextMenu(ref m, parent);
                 }

@@ -51,5 +51,13 @@ internal static partial class Interop
             GC.KeepAlive(hWndTo.Wrapper);
             return result;
         }
+
+        public static int MapWindowPoints(HandleRef hWndFrom, HandleRef hWndTo, ref RECT lpPoints, uint cPoints)
+        {
+            int result = MapWindowPoints(hWndFrom.Handle, hWndTo.Handle, ref lpPoints, cPoints);
+            GC.KeepAlive(hWndFrom.Wrapper);
+            GC.KeepAlive(hWndTo.Wrapper);
+            return result;
+        }
     }
 }

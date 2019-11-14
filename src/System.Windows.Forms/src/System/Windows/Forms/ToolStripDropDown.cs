@@ -242,22 +242,6 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new ContextMenu ContextMenu
-        {
-            get { return base.ContextMenu; }
-            set { base.ContextMenu = value; }
-        }
-
-        [Browsable(false)]
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler ContextMenuChanged
-        {
-            add => base.ContextMenuChanged += value;
-            remove => base.ContextMenuChanged -= value;
-        }
-
-        [Browsable(false)]
-        [EditorBrowsable(EditorBrowsableState.Never)]
         public new ContextMenuStrip ContextMenuStrip
         {
             get { return base.ContextMenuStrip; }
@@ -273,11 +257,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-            ///  This is called when creating a window. Inheriting classes can overide
+        ///  This is called when creating a window. Inheriting classes can overide
         ///  this to add extra functionality, but should not forget to first call
         ///  base.CreateParams() to make sure the control continues to work
         ///  correctly.
-            /// </summary>
+        /// </summary>
         protected override CreateParams CreateParams
         {
             get
