@@ -17,6 +17,10 @@
     <TargetFrameworkName>netcoreapp</TargetFrameworkName>
     <TargetFrameworkVersion>3.0</TargetFrameworkVersion>
     <TargetFramework>$(TargetFrameworkName)$(TargetFrameworkVersion)</TargetFramework>
+
+    <!-- Suppress some nuget warnings that are breaking our build until https://github.com/dotnet/arcade/issues/4337 is resolved -->
+    <NoWarn>$(NoWarn);NU5131;NU5128</NoWarn>
+
   </PropertyGroup>
 
   <!-- This is a Packaging Project -->
