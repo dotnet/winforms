@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Net.Mail;
 using WinForms.Common.Tests;
 using Xunit;
 
@@ -211,6 +212,49 @@ namespace System.Windows.Forms.Design.Tests
             try
             {
                 controlDesigner.OnCreateHandleMethod();
+            }
+            catch (Exception ex)
+            {
+                Assert.True(false, "Expected no exception, but got: " + ex.Message);
+            }
+        }
+
+        [Fact]
+        public void SelectionRulesButtonTest()
+        {
+            TestControlDesigner controlDesigner = new TestControlDesigner();
+            Assert.NotNull(controlDesigner);
+
+            SelectionRules testRules = SelectionRules.Visible;
+            testRules |= SelectionRules.AllSizeable;
+            testRules |= SelectionRules.Moveable;
+
+            controlDesigner.Initialize(new Button());
+            try
+            {
+                SelectionRules selectionRules = controlDesigner.SelectionRules;
+                Assert.Equal(selectionRules, testRules);
+            }
+            catch (Exception ex)
+            {
+                Assert.True(false, "Expected no exception, but got: " + ex.Message);
+            }
+        }
+
+        [Fact]
+        public void SelectionRulesToolbarTest()
+        {
+            TestControlDesigner controlDesigner = new TestControlDesigner();
+            Assert.NotNull(controlDesigner);
+
+            SelectionRules testRules = SelectionRules.Visible;
+            testRules |= SelectionRules.BottomSizeable;
+
+            controlDesigner.Initialize(new ToolBar());
+            try
+            {
+                SelectionRules selectionRules = controlDesigner.SelectionRules;
+                Assert.Equal(selectionRules, testRules);
             }
             catch (Exception ex)
             {
