@@ -1219,7 +1219,7 @@
       </trans-unit>
       <trans-unit id="ContextMenuStripSourceControlDescr">
         <source>The last control that caused this context menu strip to be displayed.</source>
-        <target state="new">The last control that caused this context menu strip to be displayed.</target>
+        <target state="translated">Ultimo controllo che ha causato la visualizzazione di questo elenco di menu di scelta rapida.</target>
         <note />
       </trans-unit>
       <trans-unit id="ControlAccessibileObjectInvalid">
@@ -4521,7 +4521,7 @@ Per sostituire questa finestra di dialogo predefinita, gestire l'evento DataErro
       </trans-unit>
       <trans-unit id="DomainUpDownWrapDescr">
         <source>Indicates whether values wrap around at either end of the item list.</source>
-        <target state="translated">Indica se i valori si dispongono intorno alle estremità dell'elenco di elementi.</target>
+        <target state="translated">Indica se i valori vengono disposti in corrispondenza delle estremità dell'elenco di elementi.</target>
         <note />
       </trans-unit>
       <trans-unit id="DragDropRegFailed">
@@ -4934,7 +4934,7 @@ Sostituirlo?</target>
       </trans-unit>
       <trans-unit id="FlowPanelWrapContentsDescr">
         <source>Indicates whether contents are wrapped or clipped at the control boundary.</source>
-        <target state="translated">Indica se il contenuto viene mandato a capo o troncato in corrispondenza del limite del controllo.</target>
+        <target state="translated">Indica se il contenuto viene portato a capo o troncato in corrispondenza del limite del controllo.</target>
         <note />
       </trans-unit>
       <trans-unit id="FnDallowScriptChangeDescr">
@@ -5788,7 +5788,7 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
       </trans-unit>
       <trans-unit id="LabelAutoSizeDescr">
         <source>Enables automatic resizing based on font size. Note that this is only valid for label controls that do not wrap text.</source>
-        <target state="translated">Abilita il ridimensionamento automatico in base alla dimensione del carattere. Valido solo per controlli etichetta senza testo a capo.</target>
+        <target state="translated">Abilita il ridimensionamento automatico in base alle dimensioni del carattere. Valido solo per controlli etichetta senza testo a capo.</target>
         <note />
       </trans-unit>
       <trans-unit id="LabelBackgroundImageDescr">
@@ -6473,7 +6473,7 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
       </trans-unit>
       <trans-unit id="ListViewLabelWrapDescr">
         <source>Determines whether label text can wrap to a new line.</source>
-        <target state="translated">Determina se il testo dell'etichetta può essere mandato a capo.</target>
+        <target state="translated">Determina se il testo dell'etichetta può andare a capo.</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewLargeImageListDescr">
@@ -6813,12 +6813,12 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
       </trans-unit>
       <trans-unit id="MenuItemShortCutDescr">
         <source>The shortcut key associated with the menu item. </source>
-        <target state="new">The shortcut key associated with the menu item. </target>
+        <target state="translated">Il tasto di scelta rapida associato alla voce di menu. </target>
         <note />
       </trans-unit>
       <trans-unit id="MenuItemShowShortCutDescr">
         <source>Indicates whether the shorcut key for the menu item is displayed on the item. </source>
-        <target state="new">Indicates whether the shorcut key for the menu item is displayed on the item. </target>
+        <target state="translated">Indica se il tasto di scelta rapida della voce di menu viene visualizzato sulla voce. </target>
         <note />
       </trans-unit>
       <trans-unit id="MenuStripMdiWindowListItem">
@@ -6843,7 +6843,7 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
       </trans-unit>
       <trans-unit id="MonthCalendarBodyAccessibleName">
         <source>Calendar body</source>
-        <target state="new">Calendar body</target>
+        <target state="translated">Corpo del calendario</target>
         <note />
       </trans-unit>
       <trans-unit id="MonthCalendarDimensionsDescr">
@@ -6898,7 +6898,7 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
       </trans-unit>
       <trans-unit id="MonthCalendarNextButtonAccessibleName">
         <source>Next</source>
-        <target state="new">Next</target>
+        <target state="translated">Avanti</target>
         <note />
       </trans-unit>
       <trans-unit id="MonthCalendarOnDateChangedDescr">
@@ -6913,7 +6913,7 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
       </trans-unit>
       <trans-unit id="MonthCalendarPreviousButtonAccessibleName">
         <source>Previous</source>
-        <target state="new">Previous</target>
+        <target state="translated">Indietro</target>
         <note />
       </trans-unit>
       <trans-unit id="MonthCalendarRange">
@@ -6993,7 +6993,7 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
       </trans-unit>
       <trans-unit id="MonthCalendarTodayButtonAccessibleName">
         <source>Today: {0}</source>
-        <target state="new">Today: {0}</target>
+        <target state="translated">Data odierna: {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="MonthCalendarTodayDateDescr">
@@ -9288,7 +9288,7 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
       </trans-unit>
       <trans-unit id="TextBoxWordWrapDescr">
         <source>Indicates if lines are automatically word-wrapped for multiline edit controls.</source>
-        <target state="translated">Indica se le righe verranno riportate automaticamente a capo in un controllo di modifica multilinea.</target>
+        <target state="translated">Indica se le righe verranno portate automaticamente a capo in un controllo di modifica su più righe.</target>
         <note />
       </trans-unit>
       <trans-unit id="TextParseFailedFormat">

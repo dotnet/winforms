@@ -4,22 +4,22 @@
     <body>
       <trans-unit id="BasicDesignerLoaderAlreadyLoaded">
         <source>The designer is already loaded.</source>
-        <target state="new">The designer is already loaded.</target>
+        <target state="translated">Le concepteur est déjà chargé.</target>
         <note />
       </trans-unit>
       <trans-unit id="BasicDesignerLoaderDifferentHost">
         <source>The designer loader has already been loaded from another host.  You can only have one designer loader for each host.</source>
-        <target state="new">The designer loader has already been loaded from another host.  You can only have one designer loader for each host.</target>
+        <target state="translated">Le chargeur du concepteur a déjà été chargé à partir d'un autre hôte. Vous ne pouvez disposer que d'un chargeur de concepteur par hôte.</target>
         <note />
       </trans-unit>
       <trans-unit id="BasicDesignerLoaderMissingService">
         <source>The service {0} is required but could not be found.  If you have removed this service ensure that you provide a replacement.</source>
-        <target state="new">The service {0} is required but could not be found.  If you have removed this service ensure that you provide a replacement.</target>
+        <target state="translated">Le service {0} requis est introuvable. Si vous avez supprimé ce service, assurez-vous qu'un service de remplacement est fourni.</target>
         <note />
       </trans-unit>
       <trans-unit id="BasicDesignerLoaderNotInitialized">
         <source>The designer loader has not been initialized yet.  You may only call this method after initialization.</source>
-        <target state="new">The designer loader has not been initialized yet.  You may only call this method after initialization.</target>
+        <target state="translated">Le chargeur du concepteur n'a pas encore été initialisé. Vous pouvez uniquement appeler cette méthode après initialisation.</target>
         <note />
       </trans-unit>
       <trans-unit id="BehaviorServiceCopyControl">
@@ -54,27 +54,27 @@
       </trans-unit>
       <trans-unit id="BinaryEditorAllFiles">
         <source>All Files</source>
-        <target state="new">All Files</target>
+        <target state="translated">Tous les fichiers</target>
         <note />
       </trans-unit>
       <trans-unit id="BinaryEditorFileError">
         <source>Error writing to file: {0}</source>
-        <target state="new">Error writing to file: {0}</target>
+        <target state="translated">Erreur lors de l'écriture dans le fichier : {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="BinaryEditorFileName">
         <source>ByteArray</source>
-        <target state="new">ByteArray</target>
+        <target state="translated">ByteArray</target>
         <note />
       </trans-unit>
       <trans-unit id="BinaryEditorSaveFile">
         <source>Save File As</source>
-        <target state="new">Save File As</target>
+        <target state="translated">Enregistrer le fichier sous</target>
         <note />
       </trans-unit>
       <trans-unit id="BinaryEditorTitle">
         <source>Byte Array Property Editor</source>
-        <target state="new">Byte Array Property Editor</target>
+        <target state="translated">Éditeur de propriétés du tableau d'octets</target>
         <note />
       </trans-unit>
       <trans-unit id="CodeDomComponentSerializationServiceClosedStore">
@@ -94,74 +94,74 @@
       </trans-unit>
       <trans-unit id="CodeDomDesignerLoaderBadSerializationObject">
         <source>The serialization data object is not of the proper type.</source>
-        <target state="new">The serialization data object is not of the proper type.</target>
+        <target state="translated">Le type de l'objet serialization data n'est pas correct.</target>
         <note />
       </trans-unit>
       <trans-unit id="CodeDomDesignerLoaderDocumentFailureTypeDesignerNotInstalled">
         <source>	{0} --- The designer for base class '{1}' is not installed.</source>
-        <target state="new">	{0} --- The designer for base class '{1}' is not installed.</target>
+        <target state="translated">	{0} --- Le concepteur pour la classe de base '{1}' n'est pas installé.</target>
         <note />
       </trans-unit>
       <trans-unit id="CodeDomDesignerLoaderDocumentFailureTypeNotDesignable">
         <source>	{0} --- The base class '{1}' cannot be designed.</source>
-        <target state="new">	{0} --- The base class '{1}' cannot be designed.</target>
+        <target state="translated">	{0} --- Le design de la classe de base '{1}' ne peut pas être effectué.</target>
         <note />
       </trans-unit>
       <trans-unit id="CodeDomDesignerLoaderDocumentFailureTypeNotFound">
         <source>	{0} --- The base class '{1}' could not be loaded.  Ensure the assembly has been referenced and that all projects have been built.</source>
-        <target state="new">	{0} --- The base class '{1}' could not be loaded.  Ensure the assembly has been referenced and that all projects have been built.</target>
+        <target state="translated">	{0} --- Impossible de charger la classe de base '{1}'. Assurez-vous que l'assembly a été référencé et que tous les projets ont été générés.</target>
         <note />
       </trans-unit>
       <trans-unit id="CodeDomDesignerLoaderDupComponentName">
         <source>There is already a component named '{0}'.  Components must have unique names, and names must be case-insensitive.  A name also cannot conflict with the name of any component in an inherited class.</source>
-        <target state="new">There is already a component named '{0}'.  Components must have unique names, and names must be case-insensitive.  A name also cannot conflict with the name of any component in an inherited class.</target>
+        <target state="translated">Il existe déjà un composant appelé '{0}'. Les composants doivent avoir des noms uniques qui ne respectent pas la casse. Un nom ne peut pas être en conflit avec le nom d'un composant dans une classe héritée.</target>
         <note />
       </trans-unit>
       <trans-unit id="CodeDomDesignerLoaderInvalidBlankIdentifier">
         <source>Empty identifiers are not valid.</source>
-        <target state="new">Empty identifiers are not valid.</target>
+        <target state="translated">Les identificateurs vides ne sont pas valides.</target>
         <note />
       </trans-unit>
       <trans-unit id="CodeDomDesignerLoaderInvalidIdentifier">
         <source>'{0}' is not a valid identifier.</source>
-        <target state="new">'{0}' is not a valid identifier.</target>
+        <target state="translated">« {0} » n'est pas un identificateur valide.</target>
         <note />
       </trans-unit>
       <trans-unit id="CodeDomDesignerLoaderNoLanguageSupport">
         <source>The language did not provide a code parser for this file.  Please make sure that this file type supports a designer.</source>
-        <target state="new">The language did not provide a code parser for this file.  Please make sure that this file type supports a designer.</target>
+        <target state="translated">Le langage n'a fourni aucun analyseur de code pour ce fichier. Vérifiez que ce type de fichier prend en charge un concepteur.</target>
         <note />
       </trans-unit>
       <trans-unit id="CodeDomDesignerLoaderNoRootSerializer">
         <source>The designer could not be shown for this file because none of the classes within it can be designed.</source>
-        <target state="new">The designer could not be shown for this file because none of the classes within it can be designed.</target>
+        <target state="translated">Impossible d'afficher le concepteur pour ce fichier, car aucune des classes qu'il contient ne peut être créée.</target>
         <note />
       </trans-unit>
       <trans-unit id="CodeDomDesignerLoaderNoRootSerializerWithFailures">
         <source>The designer could not be shown for this file because none of the classes within it can be designed.  The designer inspected the following classes in the file: 
 {0}</source>
-        <target state="new">The designer could not be shown for this file because none of the classes within it can be designed.  The designer inspected the following classes in the file: 
+        <target state="translated">Impossible d'afficher le concepteur pour ce fichier, car aucune des classes qu'il contient ne peut être créée. Le concepteur a inspecté les classes suivantes dans le fichier : 
 {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="CodeDomDesignerLoaderNoTypeResolution">
         <source>The designer loader did not supply a type resolution service, which is a requirement for CodeDom serialization.</source>
-        <target state="new">The designer loader did not supply a type resolution service, which is a requirement for CodeDom serialization.</target>
+        <target state="translated">Le chargeur du concepteur n'a fourni aucun service de résolution de type (élément requis pour la sérialisation CodeDom).</target>
         <note />
       </trans-unit>
       <trans-unit id="CodeDomDesignerLoaderPropGenerateMember">
         <source>Indicates if a member variable will be generated for this component.</source>
-        <target state="new">Indicates if a member variable will be generated for this component.</target>
+        <target state="translated">Indique si une variable membre sera générée pour ce composant.</target>
         <note />
       </trans-unit>
       <trans-unit id="CodeDomDesignerLoaderPropModifiers">
         <source>Indicates the visibility level of the object.</source>
-        <target state="new">Indicates the visibility level of the object.</target>
+        <target state="translated">Indique le niveau de visibilité de l'objet.</target>
         <note />
       </trans-unit>
       <trans-unit id="CodeDomDesignerLoaderSerializerTypeNotFirstType">
         <source>The class {0} can be designed, but is not the first class in the file.  Visual Studio requires that designers use the first class in the file.  Move the class code so that it is the first class in the file and try loading the designer again.</source>
-        <target state="new">The class {0} can be designed, but is not the first class in the file.  Visual Studio requires that designers use the first class in the file.  Move the class code so that it is the first class in the file and try loading the designer again.</target>
+        <target state="translated">La classe {0} peut être conçue, mais il ne s'agit pas de la première classe du fichier. Visual Studio requiert que les concepteurs utilisent la première classe du fichier. Déplacez le code de la classe afin qu'il s'agisse de la première classe du fichier et essayez de recharger le concepteur.</target>
         <note />
       </trans-unit>
       <trans-unit id="CommandSetAlignByPrimary">
@@ -612,27 +612,27 @@
       </trans-unit>
       <trans-unit id="EventBindingServiceBadArgType">
         <source>The event {0} expects an argument type of {1}.</source>
-        <target state="new">The event {0} expects an argument type of {1}.</target>
+        <target state="translated">L'événement {0} attend un type d'argument de {1}.</target>
         <note />
       </trans-unit>
       <trans-unit id="EventBindingServiceEventReadOnly">
         <source>The event {0} is read-only and cannot be changed.</source>
-        <target state="new">The event {0} is read-only and cannot be changed.</target>
+        <target state="translated">L'événement {0} est en lecture seule et ne peut être modifié.</target>
         <note />
       </trans-unit>
       <trans-unit id="EventBindingServiceMissingService">
         <source>The service {0} is required but could not be found.  If you have removed this service ensure that you provide a replacement.</source>
-        <target state="new">The service {0} is required but could not be found.  If you have removed this service ensure that you provide a replacement.</target>
+        <target state="translated">Le service {0} requis est introuvable. Si vous avez supprimé ce service, assurez-vous qu'un service de remplacement est fourni.</target>
         <note />
       </trans-unit>
       <trans-unit id="EventBindingServiceNoSite">
         <source>Events cannot be set on the object passed to the event binding service because a site associated with the object could not be located.</source>
-        <target state="new">Events cannot be set on the object passed to the event binding service because a site associated with the object could not be located.</target>
+        <target state="translated">Impossible de définir les événements dans l'objet passé au service de liaison d'événements, car un site associé à l'objet n'a pas pu être trouvé.</target>
         <note />
       </trans-unit>
       <trans-unit id="EventBindingServiceSetValue">
         <source>Set {0}.{1} event</source>
-        <target state="new">Set {0}.{1} event</target>
+        <target state="translated">Définir l'événement {0}.{1}</target>
         <note />
       </trans-unit>
       <trans-unit id="ExtenderProviderServiceDuplicateProvider">
@@ -657,117 +657,117 @@
       </trans-unit>
       <trans-unit id="LocalizationProviderManualReload">
         <source>You must close and re-open the designer for this change to take effect.</source>
-        <target state="new">You must close and re-open the designer for this change to take effect.</target>
+        <target state="translated">Vous devez fermer et rouvrir le concepteur afin que cette modification soit prise en compte.</target>
         <note />
       </trans-unit>
       <trans-unit id="LocalizationProviderMissingService">
         <source>The service {0} is required but could not be found.  If you have removed this service ensure that you provide a replacement.</source>
-        <target state="new">The service {0} is required but could not be found.  If you have removed this service ensure that you provide a replacement.</target>
+        <target state="translated">Le service {0} requis est introuvable. Si vous avez supprimé ce service, assurez-vous qu'un service de remplacement est fourni.</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskDescriptorNotMaskFullErrorMsg">
         <source>Mask is not full.</source>
-        <target state="new">Mask is not full.</target>
+        <target state="translated">Le masque n'est pas plein.</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskDescriptorNull">
         <source>The provided MaskDescriptor is null.</source>
-        <target state="new">The provided MaskDescriptor is null.</target>
+        <target state="translated">Le MaskDescriptor fourni est null.</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskDescriptorNullOrEmptyRequiredProperty">
         <source>One or more required properties are null or empty.</source>
-        <target state="new">One or more required properties are null or empty.</target>
+        <target state="translated">Une ou plusieurs propriétés requises sont null ou vides.</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskDescriptorValidatingTypeNone">
         <source>(none)</source>
-        <target state="new">(none)</target>
+        <target state="translated">(aucun)</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskDesignerDialogCustomEntry">
         <source>&lt;Custom&gt;</source>
-        <target state="new">&lt;Custom&gt;</target>
+        <target state="translated">&lt;Personnalisé&gt;</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskDesignerDialogDataFormat">
         <source>Data Format</source>
-        <target state="new">Data Format</target>
+        <target state="translated">Format de données</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskDesignerDialogDlgCaption">
         <source>Input Mask</source>
-        <target state="new">Input Mask</target>
+        <target state="translated">Masque de saisie</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskDesignerDialogMaskDescription">
         <source>Mask Description</source>
-        <target state="new">Mask Description</target>
+        <target state="translated">Description du masque</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskDesignerDialogValidatingType">
         <source>Validating Type</source>
-        <target state="new">Validating Type</target>
+        <target state="translated">Type de validation</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskedTextBoxDesignerVerbsSetMaskDesc">
         <source>Set Mask...</source>
-        <target state="new">Set Mask...</target>
+        <target state="translated">Définir le masque...</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskedTextBoxHintAlphanumericCharacterExpected">
         <source>Alphanumeric character expected</source>
-        <target state="new">Alphanumeric character expected</target>
+        <target state="translated">Caractère alphanumérique attendu</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskedTextBoxHintAsciiCharacterExpected">
         <source>ASCII character expected</source>
-        <target state="new">ASCII character expected</target>
+        <target state="translated">Caractère ASCII attendu</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskedTextBoxHintDigitExpected">
         <source>Digit expected</source>
-        <target state="new">Digit expected</target>
+        <target state="translated">Chiffre attendu</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskedTextBoxHintInvalidInput">
         <source>Invalid input character</source>
-        <target state="new">Invalid input character</target>
+        <target state="translated">Caractère d'entrée non valide</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskedTextBoxHintLetterExpected">
         <source>Letter expected</source>
-        <target state="new">Letter expected</target>
+        <target state="translated">Lettre attendue</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskedTextBoxHintNonEditPosition">
         <source>Non edit position</source>
-        <target state="new">Non edit position</target>
+        <target state="translated">Position de non modification</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskedTextBoxHintPositionOutOfRange">
         <source>Position out of range</source>
-        <target state="new">Position out of range</target>
+        <target state="translated">Position hors limites</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskedTextBoxHintPromptCharNotAllowed">
         <source>Prompt character disallowed as input</source>
-        <target state="new">Prompt character disallowed as input</target>
+        <target state="translated">Caractère d'invite non autorisé en tant qu'entrée</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskedTextBoxHintSignedDigitExpected">
         <source>Signed digit expected</source>
-        <target state="new">Signed digit expected</target>
+        <target state="translated">Chiffre signé attendu</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskedTextBoxHintUnavailableEditPosition">
         <source>Unavailable edit position</source>
-        <target state="new">Unavailable edit position</target>
+        <target state="translated">Position de modification non disponible</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskedTextBoxTextEditorErrorFormatString">
         <source>Error at position {0}: {1}.</source>
-        <target state="new">Error at position {0}: {1}.</target>
+        <target state="translated">Erreur sur la position {0} : {1}.</target>
         <note />
       </trans-unit>
       <trans-unit id="None">

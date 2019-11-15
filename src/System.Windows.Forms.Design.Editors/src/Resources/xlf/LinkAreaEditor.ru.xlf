@@ -4,27 +4,27 @@
     <body>
       <trans-unit id="$this.Text">
         <source>LinkArea Editor</source>
-        <target state="new">LinkArea Editor</target>
+        <target state="translated">Редактор LinkArea</target>
         <note />
       </trans-unit>
       <trans-unit id="cancelButton.Text">
         <source>Cancel</source>
-        <target state="new">Cancel</target>
+        <target state="translated">Отмена</target>
         <note />
       </trans-unit>
       <trans-unit id="caption.Text">
         <source>Select a &amp;range of text to make your link:</source>
-        <target state="new">Select a &amp;range of text to make your link:</target>
+        <target state="translated">&amp;Выберите часть текста для преобразования в ссылку:</target>
         <note />
       </trans-unit>
       <trans-unit id="okButton.Text">
         <source>OK</source>
-        <target state="new">OK</target>
+        <target state="translated">ОК</target>
         <note />
       </trans-unit>
       <trans-unit id="sampleEdit.Text">
         <source>textBox1</source>
-        <target state="new">textBox1</target>
+        <target state="translated">textBox1</target>
         <note />
       </trans-unit>
     </body>

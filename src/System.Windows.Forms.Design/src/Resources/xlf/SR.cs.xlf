@@ -4,22 +4,22 @@
     <body>
       <trans-unit id="BasicDesignerLoaderAlreadyLoaded">
         <source>The designer is already loaded.</source>
-        <target state="new">The designer is already loaded.</target>
+        <target state="translated">Návrhář je již zaveden.</target>
         <note />
       </trans-unit>
       <trans-unit id="BasicDesignerLoaderDifferentHost">
         <source>The designer loader has already been loaded from another host.  You can only have one designer loader for each host.</source>
-        <target state="new">The designer loader has already been loaded from another host.  You can only have one designer loader for each host.</target>
+        <target state="translated">Zaváděcí program pro návrháře se už načetl z jiného hostitele. Pro každého hostitele je možné použít jenom jeden zaváděcí program pro návrháře.</target>
         <note />
       </trans-unit>
       <trans-unit id="BasicDesignerLoaderMissingService">
         <source>The service {0} is required but could not be found.  If you have removed this service ensure that you provide a replacement.</source>
-        <target state="new">The service {0} is required but could not be found.  If you have removed this service ensure that you provide a replacement.</target>
+        <target state="translated">Služba {0} je požadována, ale nebyla nalezena. Pokud jste tuto službu odebrali, zajistěte její náhradu.</target>
         <note />
       </trans-unit>
       <trans-unit id="BasicDesignerLoaderNotInitialized">
         <source>The designer loader has not been initialized yet.  You may only call this method after initialization.</source>
-        <target state="new">The designer loader has not been initialized yet.  You may only call this method after initialization.</target>
+        <target state="translated">Zaváděcí program pro návrháře dosud nebyl inicializován. Tuto metodu je možné volat až po inicializaci.</target>
         <note />
       </trans-unit>
       <trans-unit id="BehaviorServiceCopyControl">
@@ -54,27 +54,27 @@
       </trans-unit>
       <trans-unit id="BinaryEditorAllFiles">
         <source>All Files</source>
-        <target state="new">All Files</target>
+        <target state="translated">Všechny soubory</target>
         <note />
       </trans-unit>
       <trans-unit id="BinaryEditorFileError">
         <source>Error writing to file: {0}</source>
-        <target state="new">Error writing to file: {0}</target>
+        <target state="translated">Chyba při zápisu do souboru: {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="BinaryEditorFileName">
         <source>ByteArray</source>
-        <target state="new">ByteArray</target>
+        <target state="translated">ByteArray</target>
         <note />
       </trans-unit>
       <trans-unit id="BinaryEditorSaveFile">
         <source>Save File As</source>
-        <target state="new">Save File As</target>
+        <target state="translated">Uložit soubor jako</target>
         <note />
       </trans-unit>
       <trans-unit id="BinaryEditorTitle">
         <source>Byte Array Property Editor</source>
-        <target state="new">Byte Array Property Editor</target>
+        <target state="translated">Editor vlastností bajtového pole</target>
         <note />
       </trans-unit>
       <trans-unit id="CodeDomComponentSerializationServiceClosedStore">
@@ -94,74 +94,74 @@
       </trans-unit>
       <trans-unit id="CodeDomDesignerLoaderBadSerializationObject">
         <source>The serialization data object is not of the proper type.</source>
-        <target state="new">The serialization data object is not of the proper type.</target>
+        <target state="translated">Datový objekt serializace nemá správný typ.</target>
         <note />
       </trans-unit>
       <trans-unit id="CodeDomDesignerLoaderDocumentFailureTypeDesignerNotInstalled">
         <source>	{0} --- The designer for base class '{1}' is not installed.</source>
-        <target state="new">	{0} --- The designer for base class '{1}' is not installed.</target>
+        <target state="translated">	{0} - Nebyl nainstalován návrhář pro základní třídu {1}.</target>
         <note />
       </trans-unit>
       <trans-unit id="CodeDomDesignerLoaderDocumentFailureTypeNotDesignable">
         <source>	{0} --- The base class '{1}' cannot be designed.</source>
-        <target state="new">	{0} --- The base class '{1}' cannot be designed.</target>
+        <target state="translated">	{0} - Základní třídu {1} nelze navrhnout.</target>
         <note />
       </trans-unit>
       <trans-unit id="CodeDomDesignerLoaderDocumentFailureTypeNotFound">
         <source>	{0} --- The base class '{1}' could not be loaded.  Ensure the assembly has been referenced and that all projects have been built.</source>
-        <target state="new">	{0} --- The base class '{1}' could not be loaded.  Ensure the assembly has been referenced and that all projects have been built.</target>
+        <target state="translated">	{0} - Nelze načíst základní třídu {1}. Ověřte, že existuje odkaz na sestavení a všechny projekty byly sestaveny.</target>
         <note />
       </trans-unit>
       <trans-unit id="CodeDomDesignerLoaderDupComponentName">
         <source>There is already a component named '{0}'.  Components must have unique names, and names must be case-insensitive.  A name also cannot conflict with the name of any component in an inherited class.</source>
-        <target state="new">There is already a component named '{0}'.  Components must have unique names, and names must be case-insensitive.  A name also cannot conflict with the name of any component in an inherited class.</target>
+        <target state="translated">Komponenta s názvem {0} již existuje. Komponenty musí mít jedinečné názvy a v názvech se musí rozlišovat velká a malá písmena. Název také nemůže být v konfliktu s názvem jakékoli komponenty ve zděděné třídě.</target>
         <note />
       </trans-unit>
       <trans-unit id="CodeDomDesignerLoaderInvalidBlankIdentifier">
         <source>Empty identifiers are not valid.</source>
-        <target state="new">Empty identifiers are not valid.</target>
+        <target state="translated">Prázdné identifikátory nejsou platné.</target>
         <note />
       </trans-unit>
       <trans-unit id="CodeDomDesignerLoaderInvalidIdentifier">
         <source>'{0}' is not a valid identifier.</source>
-        <target state="new">'{0}' is not a valid identifier.</target>
+        <target state="translated">Identifikátor {0} není platný.</target>
         <note />
       </trans-unit>
       <trans-unit id="CodeDomDesignerLoaderNoLanguageSupport">
         <source>The language did not provide a code parser for this file.  Please make sure that this file type supports a designer.</source>
-        <target state="new">The language did not provide a code parser for this file.  Please make sure that this file type supports a designer.</target>
+        <target state="translated">Jazyk neposkytl analyzátor kódu pro tento soubor. Ověřte, zda tento typ souborů podporuje návrháře.</target>
         <note />
       </trans-unit>
       <trans-unit id="CodeDomDesignerLoaderNoRootSerializer">
         <source>The designer could not be shown for this file because none of the classes within it can be designed.</source>
-        <target state="new">The designer could not be shown for this file because none of the classes within it can be designed.</target>
+        <target state="translated">Pro tento soubor nebylo možné zobrazit návrháře, protože žádné třídy, které tento soubor obsahuje, nelze navrhovat.</target>
         <note />
       </trans-unit>
       <trans-unit id="CodeDomDesignerLoaderNoRootSerializerWithFailures">
         <source>The designer could not be shown for this file because none of the classes within it can be designed.  The designer inspected the following classes in the file: 
 {0}</source>
-        <target state="new">The designer could not be shown for this file because none of the classes within it can be designed.  The designer inspected the following classes in the file: 
+        <target state="translated">Pro tento soubor nebylo možné zobrazit návrháře, protože žádné třídy, které tento soubor obsahuje, nelze navrhovat. Návrhář v souboru zkontroloval následující třídy: 
 {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="CodeDomDesignerLoaderNoTypeResolution">
         <source>The designer loader did not supply a type resolution service, which is a requirement for CodeDom serialization.</source>
-        <target state="new">The designer loader did not supply a type resolution service, which is a requirement for CodeDom serialization.</target>
+        <target state="translated">Zaváděcí program návrháře nedodal službu pro rozlišení typu vyžadovanou v případě serializace CodeDom.</target>
         <note />
       </trans-unit>
       <trans-unit id="CodeDomDesignerLoaderPropGenerateMember">
         <source>Indicates if a member variable will be generated for this component.</source>
-        <target state="new">Indicates if a member variable will be generated for this component.</target>
+        <target state="translated">Určuje, zda bude pro tuto součást generována členská proměnná.</target>
         <note />
       </trans-unit>
       <trans-unit id="CodeDomDesignerLoaderPropModifiers">
         <source>Indicates the visibility level of the object.</source>
-        <target state="new">Indicates the visibility level of the object.</target>
+        <target state="translated">Určuje úroveň viditelnosti objektu.</target>
         <note />
       </trans-unit>
       <trans-unit id="CodeDomDesignerLoaderSerializerTypeNotFirstType">
         <source>The class {0} can be designed, but is not the first class in the file.  Visual Studio requires that designers use the first class in the file.  Move the class code so that it is the first class in the file and try loading the designer again.</source>
-        <target state="new">The class {0} can be designed, but is not the first class in the file.  Visual Studio requires that designers use the first class in the file.  Move the class code so that it is the first class in the file and try loading the designer again.</target>
+        <target state="translated">Třída {0} může být navržena, není však první třídou v souboru. V aplikaci Visual Studio je vyžadováno, aby návrháři používali první třídu v souboru. Přesuňte kód třídy tak, aby byl první třídou v souboru a zopakujte načtení návrháře.</target>
         <note />
       </trans-unit>
       <trans-unit id="CommandSetAlignByPrimary">
@@ -612,27 +612,27 @@
       </trans-unit>
       <trans-unit id="EventBindingServiceBadArgType">
         <source>The event {0} expects an argument type of {1}.</source>
-        <target state="new">The event {0} expects an argument type of {1}.</target>
+        <target state="translated">Pro událost {0} je očekáván argument typu {1}.</target>
         <note />
       </trans-unit>
       <trans-unit id="EventBindingServiceEventReadOnly">
         <source>The event {0} is read-only and cannot be changed.</source>
-        <target state="new">The event {0} is read-only and cannot be changed.</target>
+        <target state="translated">Událost {0} je určena jen ke čtení a nelze ji změnit.</target>
         <note />
       </trans-unit>
       <trans-unit id="EventBindingServiceMissingService">
         <source>The service {0} is required but could not be found.  If you have removed this service ensure that you provide a replacement.</source>
-        <target state="new">The service {0} is required but could not be found.  If you have removed this service ensure that you provide a replacement.</target>
+        <target state="translated">Služba {0} je požadována, ale nebyla nalezena. Pokud jste tuto službu odebrali, zajistěte její náhradu.</target>
         <note />
       </trans-unit>
       <trans-unit id="EventBindingServiceNoSite">
         <source>Events cannot be set on the object passed to the event binding service because a site associated with the object could not be located.</source>
-        <target state="new">Events cannot be set on the object passed to the event binding service because a site associated with the object could not be located.</target>
+        <target state="translated">Nelze nastavit událost v objektu předaném službě vazeb událostí, protože nebyla nalezena síť přidružená k objektu.</target>
         <note />
       </trans-unit>
       <trans-unit id="EventBindingServiceSetValue">
         <source>Set {0}.{1} event</source>
-        <target state="new">Set {0}.{1} event</target>
+        <target state="translated">Nastavit událost {0}.{1}</target>
         <note />
       </trans-unit>
       <trans-unit id="ExtenderProviderServiceDuplicateProvider">
@@ -657,117 +657,117 @@
       </trans-unit>
       <trans-unit id="LocalizationProviderManualReload">
         <source>You must close and re-open the designer for this change to take effect.</source>
-        <target state="new">You must close and re-open the designer for this change to take effect.</target>
+        <target state="translated">Tato změna se uplatní až po zavření a opětovném otevření návrháře.</target>
         <note />
       </trans-unit>
       <trans-unit id="LocalizationProviderMissingService">
         <source>The service {0} is required but could not be found.  If you have removed this service ensure that you provide a replacement.</source>
-        <target state="new">The service {0} is required but could not be found.  If you have removed this service ensure that you provide a replacement.</target>
+        <target state="translated">Služba {0} je požadována, ale nebyla nalezena. Pokud jste tuto službu odebrali, zajistěte její náhradu.</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskDescriptorNotMaskFullErrorMsg">
         <source>Mask is not full.</source>
-        <target state="new">Mask is not full.</target>
+        <target state="translated">Maska není úplná.</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskDescriptorNull">
         <source>The provided MaskDescriptor is null.</source>
-        <target state="new">The provided MaskDescriptor is null.</target>
+        <target state="translated">Zprostředkovatel MaskDescriptor má hodnotu Null.</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskDescriptorNullOrEmptyRequiredProperty">
         <source>One or more required properties are null or empty.</source>
-        <target state="new">One or more required properties are null or empty.</target>
+        <target state="translated">Jedna nebo více vyžadovaných vlastností je prázdná nebo rovna hodnotě Null.</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskDescriptorValidatingTypeNone">
         <source>(none)</source>
-        <target state="new">(none)</target>
+        <target state="translated">(Žádný)</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskDesignerDialogCustomEntry">
         <source>&lt;Custom&gt;</source>
-        <target state="new">&lt;Custom&gt;</target>
+        <target state="translated">&lt;Vlastní&gt;</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskDesignerDialogDataFormat">
         <source>Data Format</source>
-        <target state="new">Data Format</target>
+        <target state="translated">Formát dat</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskDesignerDialogDlgCaption">
         <source>Input Mask</source>
-        <target state="new">Input Mask</target>
+        <target state="translated">Vstupní maska</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskDesignerDialogMaskDescription">
         <source>Mask Description</source>
-        <target state="new">Mask Description</target>
+        <target state="translated">Popis masky</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskDesignerDialogValidatingType">
         <source>Validating Type</source>
-        <target state="new">Validating Type</target>
+        <target state="translated">Typ ověření</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskedTextBoxDesignerVerbsSetMaskDesc">
         <source>Set Mask...</source>
-        <target state="new">Set Mask...</target>
+        <target state="translated">Nastavit masku...</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskedTextBoxHintAlphanumericCharacterExpected">
         <source>Alphanumeric character expected</source>
-        <target state="new">Alphanumeric character expected</target>
+        <target state="translated">Byl očekáván alfanumerický znak.</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskedTextBoxHintAsciiCharacterExpected">
         <source>ASCII character expected</source>
-        <target state="new">ASCII character expected</target>
+        <target state="translated">Byl očekáván znak ASCII.</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskedTextBoxHintDigitExpected">
         <source>Digit expected</source>
-        <target state="new">Digit expected</target>
+        <target state="translated">Byla očekávána číslice.</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskedTextBoxHintInvalidInput">
         <source>Invalid input character</source>
-        <target state="new">Invalid input character</target>
+        <target state="translated">Neplatný znak na vstupu</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskedTextBoxHintLetterExpected">
         <source>Letter expected</source>
-        <target state="new">Letter expected</target>
+        <target state="translated">Bylo očekáváno písmeno.</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskedTextBoxHintNonEditPosition">
         <source>Non edit position</source>
-        <target state="new">Non edit position</target>
+        <target state="translated">Pozice neurčená pro úpravy</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskedTextBoxHintPositionOutOfRange">
         <source>Position out of range</source>
-        <target state="new">Position out of range</target>
+        <target state="translated">Pozice mimo rozsah</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskedTextBoxHintPromptCharNotAllowed">
         <source>Prompt character disallowed as input</source>
-        <target state="new">Prompt character disallowed as input</target>
+        <target state="translated">Znak výzvy není jako vstup povolen.</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskedTextBoxHintSignedDigitExpected">
         <source>Signed digit expected</source>
-        <target state="new">Signed digit expected</target>
+        <target state="translated">Bylo očekáváno číslo se znaménkem.</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskedTextBoxHintUnavailableEditPosition">
         <source>Unavailable edit position</source>
-        <target state="new">Unavailable edit position</target>
+        <target state="translated">Nedostupná pozice pro úpravy</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskedTextBoxTextEditorErrorFormatString">
         <source>Error at position {0}: {1}.</source>
-        <target state="new">Error at position {0}: {1}.</target>
+        <target state="translated">Chyba na pozici {0}: {1}</target>
         <note />
       </trans-unit>
       <trans-unit id="None">
