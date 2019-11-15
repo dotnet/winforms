@@ -113,7 +113,6 @@ namespace System.Windows.Forms
                     if (value != Color.Empty)
                     {
                         PropertyDescriptor pd = TypeDescriptor.GetProperties(this)[nameof(UseVisualStyleBackColor)];
-                        Debug.Assert(pd != null);
                         pd?.SetValue(this, false);
                     }
                 }
