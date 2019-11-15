@@ -1315,7 +1315,7 @@ namespace System.Windows.Forms
         SRCategory(nameof(SR.CatBehavior)),
         RefreshProperties(RefreshProperties.Repaint),
         TypeConverter(typeof(NoneExcludedImageIndexConverter)),
-        Editor("System.Windows.Forms.Design.ToolStripImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
+        Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
         Browsable(false),
         RelatedImageList("Owner.ImageList")
         ]

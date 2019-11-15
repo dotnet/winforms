@@ -462,11 +462,6 @@ namespace System.Windows.Forms.Design
                     UnhookChildControls(Control);
                 }
 
-                if (ContextMenu != null)
-                {
-                    ContextMenu.Disposed -= new EventHandler(DetachContextMenu);
-                }
-
                 if (_designerTarget != null)
                 {
                     _designerTarget.Dispose();
@@ -512,38 +507,6 @@ namespace System.Windows.Forms.Design
         private interface IDesignerTarget : IDisposable
         {
             void DefWndProc(ref Message m);
-        }
-
-        private void DetachContextMenu(object sender, EventArgs e)
-        {
-            ContextMenu = null;
-        }
-
-        private ContextMenu ContextMenu
-        {
-            get => (ContextMenu)ShadowProperties["ContextMenu"];
-            set
-            {
-                ContextMenu oldValue = (ContextMenu)ShadowProperties["ContextMenu"];
-
-                if (oldValue != value)
-                {
-                    EventHandler disposedHandler = new EventHandler(DetachContextMenu);
-
-                    if (oldValue != null)
-                    {
-                        oldValue.Disposed -= disposedHandler;
-                    }
-
-                    ShadowProperties["ContextMenu"] = value;
-
-                    if (value != null)
-                    {
-                        value.Disposed += disposedHandler;
-                    }
-                }
-
-            }
         }
 
         private void DataSource_ComponentRemoved(object sender, ComponentEventArgs e)
@@ -1598,7 +1561,7 @@ namespace System.Windows.Forms.Design
             base.PreFilterProperties(properties);
             PropertyDescriptor prop;
             // Handle shadowed properties
-            string[] shadowProps = new string[] { "Visible", "Enabled", "ContextMenu", "AllowDrop", "Location", "Name" };
+            string[] shadowProps = new string[] { "Visible", "Enabled", "AllowDrop", "Location", "Name" };
 
             Attribute[] empty = Array.Empty<Attribute>();
             for (int i = 0; i < shadowProps.Length; i++)

@@ -55,8 +55,6 @@ namespace System.Windows.Forms.Design
         public const int TV_FIRST = 0x1100;
         public const int TVM_SETEXTENDEDSTYLE = TV_FIRST + 44;
         public const int TVM_GETEXTENDEDSTYLE = TV_FIRST + 45;
-        public const int TVS_EX_FADEINOUTEXPANDOS = 0x0040;
-        public const int TVS_EX_DOUBLEBUFFER = 0x0004;
         public const int SWP_HIDEWINDOW = 0x0080;
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
@@ -67,18 +65,6 @@ namespace System.Windows.Forms.Design
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public static extern IntPtr SendMessage(IntPtr hWnd, int msg, int wParam, string lParam);
-
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern IntPtr SendMessage(IntPtr hWnd, int Msg, int wParam, [In] [Out] TV_HITTESTINFO lParam);
-
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto, Pack = 1)]
-        public class TV_HITTESTINFO
-        {
-            public int flags = 0;
-            public int hItem = 0;
-            public int pt_x = 0;
-            public int pt_y = 0;
-        }
 
         internal class Util
         {

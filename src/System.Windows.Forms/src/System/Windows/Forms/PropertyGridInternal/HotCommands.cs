@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -292,17 +292,25 @@ namespace System.Windows.Forms.PropertyGridInternal
         /// <param name="propertyId">Identifier indicating the property to return</param>
         /// <returns>Returns a ValInfo indicating whether the element supports this property, or has no value for it.</returns>
         internal override object GetPropertyValue(UiaCore.UIA propertyID)
-        {
-            if (propertyID == UiaCore.UIA.ControlTypePropertyId)
+            => propertyID switch
             {
-                return UiaCore.UIA.PaneControlTypeId;
-            }
-            else if (propertyID == UiaCore.UIA.NamePropertyId)
-            {
-                return Name;
-            }
+                UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.PaneControlTypeId,
+                UiaCore.UIA.NamePropertyId => Name,
+                _ => base.GetPropertyValue(propertyID)
+            };
 
-            return base.GetPropertyValue(propertyID);
+        public override string Name
+        {
+            get
+            {
+                string name = Owner?.AccessibleName;
+                if (name != null)
+                {
+                    return name;
+                }
+
+                return _parentPropertyGrid?.Name;
+            }
         }
     }
 }

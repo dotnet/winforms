@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -437,9 +437,6 @@ namespace System.Windows.Forms
         public const int TVM_SETEXTENDEDSTYLE = TV_FIRST + 44;
         public const int TVM_GETEXTENDEDSTYLE = TV_FIRST + 45;
 
-        public const int TVS_EX_FADEINOUTEXPANDOS = 0x0040;
-        public const int TVS_EX_DOUBLEBUFFER = 0x0004;
-
         public static readonly uint LOCALE_USER_DEFAULT = MAKELCID(LANG_USER_DEFAULT);
         public static readonly uint LANG_USER_DEFAULT = MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT);
 
@@ -470,8 +467,6 @@ namespace System.Windows.Forms
         MA_ACTIVATEANDEAT = 0x0002,
         MA_NOACTIVATE = 0x0003,
         MA_NOACTIVATEANDEAT = 0x0004,
-        MNC_EXECUTE = 2,
-        MNC_SELECT = 3,
         MIIM_STATE = 0x00000001,
         MIIM_ID = 0x00000002,
         MIIM_SUBMENU = 0x00000004,
@@ -523,12 +518,9 @@ namespace System.Windows.Forms
         MCN_SELCHANGE = ((0 - 750) + 1),
         MCN_GETDAYSTATE = ((0 - 750) + 3),
         MCN_SELECT = ((0 - 750) + 4),
-        MCS_DAYSTATE = 0x0001,
-        MCS_MULTISELECT = 0x0002,
-        MCS_WEEKNUMBERS = 0x0004,
-        MCS_NOTODAYCIRCLE = 0x0008,
-        MCS_NOTODAY = 0x0010,
+
         MSAA_MENU_SIG = (unchecked((int)0xAA0DF00D));
+
 
         public const int NIM_ADD = 0x00000000,
         NIM_MODIFY = 0x00000001,
@@ -680,11 +672,6 @@ namespace System.Windows.Forms
         }
 
         public const int
-        TPM_LEFTBUTTON = 0x0000,
-        TPM_RIGHTBUTTON = 0x0002,
-        TPM_LEFTALIGN = 0x0000,
-        TPM_RIGHTALIGN = 0x0008,
-        TPM_VERTICAL = 0x0040,
         TV_FIRST = 0x1100,
         TB_ENABLEBUTTON = (0x0400 + 1),
         TB_ISBUTTONCHECKED = (0x0400 + 10),
@@ -749,18 +736,6 @@ namespace System.Windows.Forms
         TB_TOP = 6,
         TB_BOTTOM = 7,
         TB_ENDTRACK = 8,
-        TVS_HASBUTTONS = 0x0001,
-        TVS_HASLINES = 0x0002,
-        TVS_LINESATROOT = 0x0004,
-        TVS_EDITLABELS = 0x0008,
-        TVS_SHOWSELALWAYS = 0x0020,
-        TVS_RTLREADING = 0x0040,
-        TVS_CHECKBOXES = 0x0100,
-        TVS_TRACKSELECT = 0x0200,
-        TVS_FULLROWSELECT = 0x1000,
-        TVS_NONEVENHEIGHT = 0x4000,
-        TVS_INFOTIP = 0x0800,
-        TVS_NOTOOLTIPS = 0x0080,
         TVI_ROOT = (unchecked((int)0xFFFF0000)),
         TVI_FIRST = (unchecked((int)0xFFFF0001)),
         TVM_INSERTITEM = (0x1100 + 50),
@@ -802,8 +777,6 @@ namespace System.Windows.Forms
         TVN_BEGINRDRAG = ((0 - 400) - 57),
         TVN_BEGINLABELEDIT = ((0 - 400) - 59),
         TVN_ENDLABELEDIT = ((0 - 400) - 60),
-        TCIF_TEXT = 0x0001,
-        TCIF_IMAGE = 0x0002,
         TCN_SELCHANGE = ((0 - 550) - 1),
         TCN_SELCHANGING = ((0 - 550) - 2),
         TVM_SETBKCOLOR = (TV_FIRST + 29),
@@ -1163,17 +1136,6 @@ namespace System.Windows.Forms
         public delegate int ListViewCompareCallback(IntPtr lParam1, IntPtr lParam2, IntPtr lParamSort);
 
         public delegate int TreeViewCompareCallback(IntPtr lParam1, IntPtr lParam2, IntPtr lParamSort);
-
-        [StructLayout(LayoutKind.Sequential)]
-        public class TPMPARAMS
-        {
-            public int cbSize = Marshal.SizeOf<TPMPARAMS>();
-            // rcExclude was a by-value RECT structure
-            public int rcExclude_left;
-            public int rcExclude_top;
-            public int rcExclude_right;
-            public int rcExclude_bottom;
-        }
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
         public class STARTUPINFO_I
@@ -1560,18 +1522,6 @@ namespace System.Windows.Forms
         }
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-        public class TCITEM_T
-        {
-            public int mask;
-            public int dwState = 0;
-            public int dwStateMask = 0;
-            public string pszText;
-            public int cchTextMax;
-            public int iImage;
-            public IntPtr lParam;
-        }
-
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
         public class TOOLTIPTEXT
         {
             public User32.NMHDR hdr;
@@ -1601,32 +1551,6 @@ namespace System.Windows.Forms
             public int iOrder = 0;
             public int type = 0;
             public IntPtr pvFilter = IntPtr.Zero;
-        }
-
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-        public class TV_HITTESTINFO
-        {
-            public int pt_x;
-            public int pt_y;
-            public ComCtl32.TVHT flags = 0;
-            public IntPtr hItem = IntPtr.Zero;
-        }
-
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-        public class MCHITTESTINFO
-        {
-            public int cbSize = Marshal.SizeOf<MCHITTESTINFO>();
-            public int pt_x = 0;
-            public int pt_y = 0;
-            public int uHit = 0;
-            public short st_wYear = 0;
-            public short st_wMonth = 0;
-            public short st_wDayOfWeek = 0;
-            public short st_wDay = 0;
-            public short st_wHour = 0;
-            public short st_wMinute = 0;
-            public short st_wSecond = 0;
-            public short st_wMilliseconds = 0;
         }
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
@@ -2136,9 +2060,6 @@ namespace System.Windows.Forms
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public static extern IntPtr SendMessage(IntPtr hWnd, int msg, int wParam, string lParam);
-
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public extern static IntPtr SendMessage(IntPtr hWnd, int Msg, int wParam, [In, Out] TV_HITTESTINFO lParam);
 
         [DllImport(ExternDll.User32, ExactSpelling = true)]
         public static extern bool GetUpdateRect(IntPtr hwnd, ref RECT rc, bool fErase);

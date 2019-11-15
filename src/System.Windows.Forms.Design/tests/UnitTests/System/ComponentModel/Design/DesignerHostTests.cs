@@ -1459,7 +1459,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Fact]
-        public void DesignerHost_AddComponentISiteGetService_InvokeWithNestedContainer_ReturnsNull()
+        public void DesignerHost_AddComponentISiteGetService_InvokeWithNestedContainer_ReturnsService()
         {
             var service = new object();
             var mockServiceProvider = new Mock<IServiceProvider>(MockBehavior.Strict);

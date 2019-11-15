@@ -26,7 +26,6 @@ namespace System.Windows.Forms.Tests
             Assert.Empty(notifyIcon.BalloonTipText);
             Assert.Empty(notifyIcon.BalloonTipTitle);
             Assert.Null(notifyIcon.Container);
-            Assert.Null(notifyIcon.ContextMenu);
             Assert.Null(notifyIcon.ContextMenuStrip);
             Assert.Null(notifyIcon.Icon);
             Assert.Null(notifyIcon.Site);
@@ -44,7 +43,6 @@ namespace System.Windows.Forms.Tests
             Assert.Empty(notifyIcon.BalloonTipText);
             Assert.Empty(notifyIcon.BalloonTipTitle);
             Assert.Same(container, notifyIcon.Container);
-            Assert.Null(notifyIcon.ContextMenu);
             Assert.Null(notifyIcon.ContextMenuStrip);
             Assert.Null(notifyIcon.Icon);
             Assert.NotNull(notifyIcon.Site);
@@ -145,61 +143,6 @@ namespace System.Windows.Forms.Tests
             notifyIcon.BalloonTipTitle = value;
             Assert.Equal(value, notifyIcon.BalloonTipTitle);
         }
-
-        public static IEnumerable<object[]> ContextMenu_Set_TestData()
-        {
-            yield return new object[] { null };
-            yield return new object[] { new ContextMenu() };
-        }
-
-        [WinFormsTheory]
-        [MemberData(nameof(ContextMenu_Set_TestData))]
-        public void CollectionForm_ContextMenu_Set_GetReturnsExpected(ContextMenu value)
-        {
-            using var notifyIcon = new NotifyIcon
-            {
-                ContextMenu = value
-            };
-            Assert.Equal(value, notifyIcon.ContextMenu);
-
-            // Set same.
-            notifyIcon.ContextMenu = value;
-            Assert.Equal(value, notifyIcon.ContextMenu);
-        }
-
-        [WinFormsTheory]
-        [MemberData(nameof(ContextMenu_Set_TestData))]
-        public void CollectionForm_ContextMenu_SetWithCustomOldValue_GetReturnsExpected(ContextMenu value)
-        {
-            using var menu = new ContextMenu();
-            using var notifyIcon = new NotifyIcon
-            {
-                ContextMenu = menu
-            };
-            
-            notifyIcon.ContextMenu = value;
-            Assert.Equal(value, notifyIcon.ContextMenu);
-
-            // Set same.
-            notifyIcon.ContextMenu = value;
-            Assert.Equal(value, notifyIcon.ContextMenu);
-        }
-
-        [WinFormsTheory]
-        [MemberData(nameof(ContextMenu_Set_TestData))]
-        public void CollectionForm_ContextMenu_SetDisposed_GetReturnsExpected(ContextMenu value)
-        {
-            using var notifyIcon = new NotifyIcon();
-            notifyIcon.Dispose();
-
-            notifyIcon.ContextMenu = value;
-            Assert.Equal(value, notifyIcon.ContextMenu);
-
-            // Set same.
-            notifyIcon.ContextMenu = value;
-            Assert.Equal(value, notifyIcon.ContextMenu);
-        }
-
         public static IEnumerable<object[]> ContextMenuStrip_Set_TestData()
         {
             yield return new object[] { null };
@@ -784,7 +727,6 @@ namespace System.Windows.Forms.Tests
             Assert.Empty(notifyIcon.BalloonTipText);
             Assert.Empty(notifyIcon.BalloonTipTitle);
             Assert.Null(notifyIcon.Container);
-            Assert.Null(notifyIcon.ContextMenu);
             Assert.Null(notifyIcon.ContextMenuStrip);
             Assert.Null(notifyIcon.Icon);
             Assert.Null(notifyIcon.Site);
@@ -799,7 +741,6 @@ namespace System.Windows.Forms.Tests
             Assert.Empty(notifyIcon.BalloonTipText);
             Assert.Empty(notifyIcon.BalloonTipTitle);
             Assert.Null(notifyIcon.Container);
-            Assert.Null(notifyIcon.ContextMenu);
             Assert.Null(notifyIcon.ContextMenuStrip);
             Assert.Null(notifyIcon.Icon);
             Assert.Null(notifyIcon.Site);
@@ -824,14 +765,12 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(Dispose_WithProperties_TestData))]
         public void NotifyIcon_Dispose_InvokePropertiesSet_Success(bool visible, Icon icon)
         {
-            using var contextMenu = new ContextMenu();
             using var contextMenuStrip = new ContextMenuStrip();
             using var notifyIcon = new NotifyIcon
             {
                 BalloonTipIcon = ToolTipIcon.Error,
                 BalloonTipText = "BalloonTipText",
                 BalloonTipTitle = "BalloonTipTitle",
-                ContextMenu = contextMenu,
                 ContextMenuStrip = contextMenuStrip,
                 Icon = icon,
                 Text = "Text",
@@ -846,7 +785,6 @@ namespace System.Windows.Forms.Tests
             Assert.Equal("BalloonTipText", notifyIcon.BalloonTipText);
             Assert.Equal("BalloonTipTitle", notifyIcon.BalloonTipTitle);
             Assert.Null(notifyIcon.Container);
-            Assert.Null(notifyIcon.ContextMenu);
             Assert.Null(notifyIcon.ContextMenuStrip);
             Assert.Null(notifyIcon.Icon);
             Assert.Null(notifyIcon.Site);
@@ -860,7 +798,6 @@ namespace System.Windows.Forms.Tests
             Assert.Equal("BalloonTipText", notifyIcon.BalloonTipText);
             Assert.Equal("BalloonTipTitle", notifyIcon.BalloonTipTitle);
             Assert.Null(notifyIcon.Container);
-            Assert.Null(notifyIcon.ContextMenu);
             Assert.Null(notifyIcon.ContextMenuStrip);
             Assert.Null(notifyIcon.Icon);
             Assert.Null(notifyIcon.Site);

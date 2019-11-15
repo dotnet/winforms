@@ -10,9 +10,9 @@ Note: if the Uri is a new place, you will need to add a subscription from that p
   </ProductDependencies>
   <ToolsetDependencies>
     <!-- Core Setup for coherency -->
-    <Dependency Name="Microsoft.NETCore.App" Version="5.0.0-alpha.1.19559.5">
+    <Dependency Name="Microsoft.NETCore.App" Version="5.0.0-alpha.1.19562.8">
       <Uri>https://github.com/dotnet/core-setup</Uri>
-      <Sha>72dd42ffc2dd50509a4a4255d21f01e87a1b431f</Sha>
+      <Sha>6fab00563d09dca0d2b777a4f0dbda59d19c8546</Sha>
     </Dependency>
     <!-- CoreFX via Core Setup -->
     <Dependency Name="Microsoft.NETCore.Platforms" Version="5.0.0-alpha.1.19556.7" CoherentParentDependency="Microsoft.NETCore.App">
@@ -56,32 +56,32 @@ Note: if the Uri is a new place, you will need to add a subscription from that p
       <Sha>475778fa982064e26a8b3a5d7545112f6586ac61</Sha>
     </Dependency>
     <!-- CoreCLR via Core Setup -->
-    <Dependency Name="Microsoft.NET.Sdk.IL" Version="5.0.0-alpha1.19559.4" CoherentParentDependency="Microsoft.NETCore.App">
+    <Dependency Name="Microsoft.NET.Sdk.IL" Version="5.0.0-alpha1.19562.1" CoherentParentDependency="Microsoft.NETCore.App">
       <Uri>https://github.com/dotnet/coreclr</Uri>
-      <Sha>ad6876360bc31ff7b901621b159aceab47a09e50</Sha>
+      <Sha>d5bb8bf2437d447750cf0203dd55bb5160ff36b8</Sha>
       <SourceBuildId>5596</SourceBuildId>
     </Dependency>
-    <Dependency Name="Microsoft.NETCore.ILAsm" Version="5.0.0-alpha1.19559.4" CoherentParentDependency="Microsoft.NETCore.App">
+    <Dependency Name="Microsoft.NETCore.ILAsm" Version="5.0.0-alpha1.19562.1" CoherentParentDependency="Microsoft.NETCore.App">
       <Uri>https://github.com/dotnet/coreclr</Uri>
-      <Sha>ad6876360bc31ff7b901621b159aceab47a09e50</Sha>
+      <Sha>d5bb8bf2437d447750cf0203dd55bb5160ff36b8</Sha>
       <SourceBuildId>5596</SourceBuildId>
     </Dependency>
     <!-- Arcade -->
-    <Dependency Name="Microsoft.DotNet.Arcade.Sdk" Version="5.0.0-beta.19558.11">
+    <Dependency Name="Microsoft.DotNet.Arcade.Sdk" Version="5.0.0-beta.19564.2">
       <Uri>https://github.com/dotnet/arcade</Uri>
-      <Sha>be7971c98d4ad60cdf8c3d1aa41f950f42bd466a</Sha>
+      <Sha>44214d4d7d9091e31f57c5e6bc51180cbb0f79bf</Sha>
     </Dependency>
-    <Dependency Name="Microsoft.DotNet.GenFacades" Version="5.0.0-beta.19558.11">
+    <Dependency Name="Microsoft.DotNet.GenFacades" Version="5.0.0-beta.19564.2">
       <Uri>https://github.com/dotnet/arcade</Uri>
-      <Sha>be7971c98d4ad60cdf8c3d1aa41f950f42bd466a</Sha>
+      <Sha>44214d4d7d9091e31f57c5e6bc51180cbb0f79bf</Sha>
     </Dependency>
-    <Dependency Name="Microsoft.DotNet.Helix.Sdk" Version="5.0.0-beta.19558.11">
+    <Dependency Name="Microsoft.DotNet.Helix.Sdk" Version="5.0.0-beta.19564.2">
       <Uri>https://github.com/dotnet/arcade</Uri>
-      <Sha>be7971c98d4ad60cdf8c3d1aa41f950f42bd466a</Sha>
+      <Sha>44214d4d7d9091e31f57c5e6bc51180cbb0f79bf</Sha>
     </Dependency>
-    <Dependency Name="Microsoft.DotNet.XUnitExtensions" Version="5.0.0-beta.19558.11">
+    <Dependency Name="Microsoft.DotNet.XUnitExtensions" Version="5.0.0-beta.19564.2">
       <Uri>https://github.com/dotnet/arcade</Uri>
-      <Sha>be7971c98d4ad60cdf8c3d1aa41f950f42bd466a</Sha>
+      <Sha>44214d4d7d9091e31f57c5e6bc51180cbb0f79bf</Sha>
     </Dependency>
   </ToolsetDependencies>
 </Dependencies>

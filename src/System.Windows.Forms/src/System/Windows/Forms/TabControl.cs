@@ -9,6 +9,7 @@ using System.Drawing;
 using System.Drawing.Design;
 using System.Globalization;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Windows.Forms.Layout;
 using static Interop;
 
@@ -1013,9 +1014,9 @@ namespace System.Windows.Forms
             remove => base.Paint -= value;
         }
 
-        internal int AddTabPage(TabPage tabPage, NativeMethods.TCITEM_T tcitem)
+        internal int AddTabPage(TabPage tabPage)
         {
-            int index = AddNativeTabPage(tcitem);
+            int index = AddNativeTabPage(tabPage);
             if (index >= 0)
             {
                 Insert(index, tabPage);
@@ -1024,9 +1025,9 @@ namespace System.Windows.Forms
             return index;
         }
 
-        internal int AddNativeTabPage(NativeMethods.TCITEM_T tcitem)
+        internal int AddNativeTabPage(TabPage tabPage)
         {
-            int index = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)ComCtl32.TCM.INSERTITEMW, _tabPageCount + 1, tcitem);
+            int index = (int)SendMessage(ComCtl32.TCM.INSERTITEMW, (IntPtr)(_tabPageCount + 1), tabPage);
             User32.PostMessageW(this, _tabBaseReLayoutMessage);
             return index;
         }
@@ -1285,17 +1286,14 @@ namespace System.Windows.Forms
                 throw new ArgumentNullException(nameof(tabPage));
             }
 
-            int retIndex;
             if (IsHandleCreated)
             {
-                NativeMethods.TCITEM_T tcitem = tabPage.GetTCITEM();
-                retIndex = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)ComCtl32.TCM.INSERTITEMW, index, tcitem);
+                int retIndex = (int)SendMessage(ComCtl32.TCM.INSERTITEMW, (IntPtr)index, tabPage);
                 if (retIndex >= 0)
                 {
                     Insert(retIndex, tabPage);
                 }
             }
-
         }
 
         /// <summary>
@@ -1363,7 +1361,7 @@ namespace System.Windows.Forms
             //
             foreach (TabPage page in TabPages)
             {
-                AddNativeTabPage(page.GetTCITEM());
+                AddNativeTabPage(page);
             }
 
             // Resize the pages
@@ -1724,23 +1722,28 @@ namespace System.Windows.Forms
 
         }
 
-        internal void SetTabPage(int index, TabPage tabPage, NativeMethods.TCITEM_T tcitem)
+        internal void SetTabPage(int index, TabPage value)
         {
             if (index < 0 || index >= _tabPageCount)
             {
                 throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
             }
+            if (value == null)
+            {
+                throw new ArgumentNullException(nameof(value));
+            }
 
             if (IsHandleCreated)
             {
-                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)ComCtl32.TCM.SETITEMW, index, tcitem);
+                SendMessage(ComCtl32.TCM.SETITEMW, (IntPtr)index, value);
             }
+
             // Make the Updated tab page the currently selected tab page
             if (DesignMode && IsHandleCreated)
             {
                 User32.SendMessageW(this, (User32.WindowMessage)ComCtl32.TCM.SETCURSEL, (IntPtr)index, IntPtr.Zero);
             }
-            _tabPages[index] = tabPage;
+            _tabPages[index] = value;
         }
 
         /// <summary>
@@ -1992,7 +1995,7 @@ namespace System.Windows.Forms
         internal void UpdateTab(TabPage tabPage)
         {
             int index = FindTabPage(tabPage);
-            SetTabPage(index, tabPage, tabPage.GetTCITEM());
+            SetTabPage(index, tabPage);
 
             // It's possible that changes to this TabPage will change the DisplayRectangle of the
             // TabControl, so invalidate and resize the size of this page.
@@ -2191,5 +2194,66 @@ namespace System.Windows.Forms
         private bool GetState(State state) => _tabControlState[(int)state];
 
         private void SetState(State state, bool value) => _tabControlState[(int)state] = value;
+
+        private unsafe IntPtr SendMessage(ComCtl32.TCM msg, IntPtr wParam, TabPage tabPage)
+        {
+            var tcitem = new ComCtl32.TCITEMW();
+            string text = tabPage.Text;
+            PrefixAmpersands(ref text);
+            if (text != null)
+            {
+                tcitem.mask |= ComCtl32.TCIF.TEXT;
+                tcitem.cchTextMax = text.Length;
+            }
+
+            int imageIndex = tabPage.ImageIndex;
+            tcitem.mask |= ComCtl32.TCIF.IMAGE;
+            tcitem.iImage = tabPage.ImageIndexer.ActualIndex;
+
+            fixed (char* pText = text)
+            {
+                return User32.SendMessageW(this, (User32.WindowMessage)msg, wParam, ref tcitem);
+            }
+        }
+
+        private static void PrefixAmpersands(ref string value)
+        {
+            // Due to a comctl32 problem, ampersands underline the next letter in the
+            // text string, but the accelerators don't work.
+            // So in this function, we prefix ampersands with another ampersand
+            // so that they actually appear as ampersands.
+            if (string.IsNullOrEmpty(value))
+            {
+                return;
+            }
+
+            // If there are no ampersands, we don't need to do anything here
+            if (value.IndexOf('&') < 0)
+            {
+                return;
+            }
+
+            // Insert extra ampersands
+            var newString = new StringBuilder();
+            for (int i = 0; i < value.Length; ++i)
+            {
+                if (value[i] == '&')
+                {
+                    if (i < value.Length - 1 && value[i + 1] == '&')
+                    {
+                        // Skip the second ampersand
+                        ++i;
+                    }
+
+                    newString.Append("&&");
+                }
+                else
+                {
+                    newString.Append(value[i]);
+                }
+            }
+
+            value = newString.ToString();
+        }
     }
 }

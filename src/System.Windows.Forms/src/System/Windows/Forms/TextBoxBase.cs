@@ -2227,7 +2227,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void WmTextBoxContextMenu(ref Message m)
         {
-            if (ContextMenu != null || ContextMenuStrip != null)
+            if (ContextMenuStrip != null)
             {
                 int x = NativeMethods.Util.SignedLOWORD(m.LParam);
                 int y = NativeMethods.Util.SignedHIWORD(m.LParam);
@@ -2251,11 +2251,7 @@ namespace System.Windows.Forms
                 // VisualStudio7 # 156, only show the context menu when clicked in the client area
                 if (ClientRectangle.Contains(client))
                 {
-                    if (ContextMenu != null)
-                    {
-                        ContextMenu.Show(this, client);
-                    }
-                    else if (ContextMenuStrip != null)
+                    if (ContextMenuStrip != null)
                     {
                         ContextMenuStrip.ShowInternal(this, client, keyboardActivated);
                     }

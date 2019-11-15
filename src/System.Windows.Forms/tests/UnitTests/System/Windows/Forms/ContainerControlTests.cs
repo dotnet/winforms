@@ -40,7 +40,6 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(Rectangle.Empty, control.ClientRectangle);
             Assert.Equal(Size.Empty, control.ClientSize);
             Assert.Null(control.Container);
-            Assert.Null(control.ContextMenu);
             Assert.Null(control.ContextMenuStrip);
             Assert.Empty(control.Controls);
             Assert.Same(control.Controls, control.Controls);
@@ -534,16 +533,16 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-        
+
             // Call with handler.
             control.AutoValidateChanged += handler;
             control.OnAutoValidateChanged(eventArgs);
             Assert.Equal(1, callCount);
-        
-           // Remove handler.
-           control.AutoValidateChanged -= handler;
-           control.OnAutoValidateChanged(eventArgs);
-           Assert.Equal(1, callCount);
+
+            // Remove handler.
+            control.AutoValidateChanged -= handler;
+            control.OnAutoValidateChanged(eventArgs);
+            Assert.Equal(1, callCount);
         }
 
         [Theory]
@@ -558,16 +557,16 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-        
+
             // Call with handler.
             control.FontChanged += handler;
             control.OnFontChanged(eventArgs);
             Assert.Equal(1, callCount);
-        
-           // Remove handler.
-           control.FontChanged -= handler;
-           control.OnFontChanged(eventArgs);
-           Assert.Equal(1, callCount);
+
+            // Remove handler.
+            control.FontChanged -= handler;
+            control.OnFontChanged(eventArgs);
+            Assert.Equal(1, callCount);
         }
 
         [Theory]
@@ -585,18 +584,18 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-        
+
             // Call with handler.
             control.FontChanged += handler;
             control.OnFontChanged(eventArgs);
             Assert.Equal(new Size(1, 1), control.AutoScaleFactor);
             Assert.Equal(1, callCount);
-        
-           // Remove handler.
-           control.FontChanged -= handler;
-           control.OnFontChanged(eventArgs);
+
+            // Remove handler.
+            control.FontChanged -= handler;
+            control.OnFontChanged(eventArgs);
             Assert.Equal(new Size(1, 1), control.AutoScaleFactor);
-           Assert.Equal(1, callCount);
+            Assert.Equal(1, callCount);
         }
 
         [Theory]
@@ -611,16 +610,16 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-        
+
             // Call with handler.
             control.Layout += handler;
             control.OnLayout(eventArgs);
             Assert.Equal(1, callCount);
-        
-           // Remove handler.
-           control.Layout -= handler;
-           control.OnLayout(eventArgs);
-           Assert.Equal(1, callCount);
+
+            // Remove handler.
+            control.Layout -= handler;
+            control.OnLayout(eventArgs);
+            Assert.Equal(1, callCount);
         }
 
         [Theory]

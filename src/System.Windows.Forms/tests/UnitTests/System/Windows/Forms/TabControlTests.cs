@@ -35,7 +35,6 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(new Rectangle(0, 0, 200, 100), control.ClientRectangle);
             Assert.Equal(new Size(200, 100), control.ClientSize);
             Assert.Null(control.Container);
-            Assert.Null(control.ContextMenu);
             Assert.Null(control.ContextMenuStrip);
             Assert.Empty(control.Controls);
             Assert.Same(control.Controls, control.Controls);
@@ -1632,22 +1631,22 @@ namespace System.Windows.Forms.Tests
                 callCount++;
             };
             control.RightToLeftLayoutChanged += handler;
-        
+
             // Set different.
             control.RightToLeftLayout = false;
             Assert.False(control.RightToLeftLayout);
             Assert.Equal(1, callCount);
-        
+
             // Set same.
             control.RightToLeftLayout = false;
             Assert.False(control.RightToLeftLayout);
             Assert.Equal(1, callCount);
-        
+
             // Set different.
             control.RightToLeftLayout = true;
             Assert.True(control.RightToLeftLayout);
             Assert.Equal(2, callCount);
-        
+
             // Remove handler.
             control.RightToLeftLayoutChanged -= handler;
             control.RightToLeftLayout = false;
@@ -3483,7 +3482,8 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { Keys.Insert, false };
             yield return new object[] { Keys.Space, false };
             yield return new object[] { Keys.Home, true };
-            yield return new object[] { Keys.End, true }; ;
+            yield return new object[] { Keys.End, true };
+            ;
             yield return new object[] { Keys.Back, false };
             yield return new object[] { Keys.Next, true };
             yield return new object[] { Keys.Prior, true };
@@ -3507,7 +3507,8 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { Keys.Control | Keys.Insert, false };
             yield return new object[] { Keys.Control | Keys.Space, false };
             yield return new object[] { Keys.Control | Keys.Home, true };
-            yield return new object[] { Keys.Control | Keys.End, true }; ;
+            yield return new object[] { Keys.Control | Keys.End, true };
+            ;
             yield return new object[] { Keys.Control | Keys.Back, false };
             yield return new object[] { Keys.Control | Keys.Next, true };
             yield return new object[] { Keys.Control | Keys.Prior, true };
@@ -3535,7 +3536,8 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { Keys.Alt | Keys.Insert, false };
             yield return new object[] { Keys.Alt | Keys.Space, false };
             yield return new object[] { Keys.Alt | Keys.Home, false };
-            yield return new object[] { Keys.Alt | Keys.End, false }; ;
+            yield return new object[] { Keys.Alt | Keys.End, false };
+            ;
             yield return new object[] { Keys.Alt | Keys.Back, false };
             yield return new object[] { Keys.Alt | Keys.Next, false };
             yield return new object[] { Keys.Alt | Keys.Prior, false };
