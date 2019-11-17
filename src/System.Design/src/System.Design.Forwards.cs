@@ -3,7 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Runtime.CompilerServices;
-
+[assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.ColumnHeaderCollectionEditor))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.DataMemberFieldConverter))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.FormatStringEditor))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.HelpNamespaceEditor))]
