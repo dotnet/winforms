@@ -1836,7 +1836,7 @@ namespace System.Windows.Forms
             // Catch all exceptions, except when the NativeWindow indicates
             // that a debuggable WndProc callback should be used, in which
             // case we don't catch any exception. This is so that an attached
-            // debugger can stop that the original location where the exception
+            // debugger can stop at the original location where the exception
             // was thrown.
             return !NativeWindow.WndProcShouldBeDebuggable;
         }
