@@ -551,6 +551,16 @@ namespace System.Windows.Forms
             return checkBoxBounds;
         }
 
+        private protected override string GetDefaultToolTipText()
+        {
+            if (string.IsNullOrEmpty(Value?.ToString()?.Trim(' ')) || Value is DBNull)
+            {
+                return SR.DataGridViewCheckBoxCell_ClipboardFalse;
+            }
+
+            return null;
+        }
+
         protected override Rectangle GetErrorIconBounds(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex)
         {
             if (cellStyle == null)
@@ -1345,8 +1355,11 @@ namespace System.Windows.Forms
                                         IntPtr dc = offscreen.GetHdc();
                                         try
                                         {
-                                            SafeNativeMethods.DrawFrameControl(new HandleRef(offscreen, dc), ref rcCheck,
-                                                                               NativeMethods.DFC_MENU, NativeMethods.DFCS_MENUCHECK);
+                                            User32.DrawFrameControl(
+                                                new HandleRef(offscreen, dc),
+                                                ref rcCheck,
+                                                User32.DFC.MENU,
+                                                User32.DFCS.MENUCHECK);
                                         }
                                         finally
                                         {

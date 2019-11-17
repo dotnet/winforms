@@ -335,7 +335,7 @@ namespace System.Windows.Forms
                 switch (BorderStyle)
                 {
                     case BorderStyle.FixedSingle:
-                        cp.Style |= NativeMethods.WS_BORDER;
+                        cp.Style |= (int)User32.WS.BORDER;
                         break;
                     case BorderStyle.Fixed3D:
                         cp.Style |= NativeMethods.SS_SUNKEN;

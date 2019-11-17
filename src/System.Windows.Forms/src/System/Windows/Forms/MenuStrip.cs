@@ -176,7 +176,9 @@ namespace System.Windows.Forms
             if (IsHandleCreated)
             {
                 AccessibilityNotifyClients(AccessibleEvents.SystemMenuStart, -1);
-            } ((EventHandler)Events[EventMenuActivate])?.Invoke(this, e);
+            }
+            
+            ((EventHandler)Events[EventMenuActivate])?.Invoke(this, e);
         }
 
         protected virtual void OnMenuDeactivate(EventArgs e)
@@ -184,7 +186,9 @@ namespace System.Windows.Forms
             if (IsHandleCreated)
             {
                 AccessibilityNotifyClients(AccessibleEvents.SystemMenuEnd, -1);
-            } ((EventHandler)Events[EventMenuDeactivate])?.Invoke(this, e);
+            }
+            
+            ((EventHandler)Events[EventMenuDeactivate])?.Invoke(this, e);
         }
 
         /// <summary>

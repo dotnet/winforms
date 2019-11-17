@@ -188,7 +188,7 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                int lastXY = SafeNativeMethods.GetMessagePos();
+                int lastXY = (int)User32.GetMessagePos();
                 return new Point(NativeMethods.Util.SignedLOWORD(lastXY), NativeMethods.Util.SignedHIWORD(lastXY));
             }
         }
@@ -928,15 +928,14 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        private static int TreeView_GetExtendedStyle(IntPtr handle)
+        private static ComCtl32.TVS_EX TreeView_GetExtendedStyle(IntPtr handle)
         {
-            IntPtr ptr = NativeMethods.SendMessage(handle, NativeMethods.TVM_GETEXTENDEDSTYLE, IntPtr.Zero, IntPtr.Zero);
-            return ptr.ToInt32();
+            return (ComCtl32.TVS_EX)NativeMethods.SendMessage(handle, NativeMethods.TVM_GETEXTENDEDSTYLE, IntPtr.Zero, IntPtr.Zero);
         }
 
-        private static void TreeView_SetExtendedStyle(IntPtr handle, int extendedStyle, int mask)
+        private static void TreeView_SetExtendedStyle(IntPtr handle, ComCtl32.TVS_EX extendedStyle, int mask)
         {
-            NativeMethods.SendMessage(handle, NativeMethods.TVM_SETEXTENDEDSTYLE, new IntPtr(mask), new IntPtr(extendedStyle));
+            NativeMethods.SendMessage(handle, NativeMethods.TVM_SETEXTENDEDSTYLE, (IntPtr)mask, (IntPtr)extendedStyle);
         }
 
         /// <summary>
@@ -953,8 +952,8 @@ namespace System.Windows.Forms.Design
             treeView.ShowLines = false;
             IntPtr hwnd = treeView.Handle;
             SafeNativeMethods.SetWindowTheme(hwnd, "Explorer", null);
-            int exstyle = TreeView_GetExtendedStyle(hwnd);
-            exstyle |= NativeMethods.TVS_EX_DOUBLEBUFFER | NativeMethods.TVS_EX_FADEINOUTEXPANDOS;
+            ComCtl32.TVS_EX exstyle = TreeView_GetExtendedStyle(hwnd);
+            exstyle |= ComCtl32.TVS_EX.DOUBLEBUFFER | ComCtl32.TVS_EX.FADEINOUTEXPANDOS;
             TreeView_SetExtendedStyle(hwnd, exstyle, 0);
         }
 

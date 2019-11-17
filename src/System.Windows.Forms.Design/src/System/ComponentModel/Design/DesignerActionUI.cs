@@ -1033,7 +1033,7 @@ namespace System.ComponentModel.Design
         private bool IsWindowEnabled(IntPtr handle)
         {
             int style = (int)UnsafeNativeMethods.GetWindowLong(new HandleRef(this, handle), NativeMethods.GWL_STYLE);
-            return (style & NativeMethods.WS_DISABLED) == 0;
+            return (style & (int)User32.WS.DISABLED) == 0;
         }
 
         private void WmActivate(ref Message m)

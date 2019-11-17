@@ -34,7 +34,7 @@ namespace System.Windows.Forms.VisualStyles
         /// <summary>
         ///  Returns true if a visual style has currently been applied by the user, else false.
         /// </summary>
-        public static bool IsEnabledByUser => SafeNativeMethods.IsAppThemed();
+        public static bool IsEnabledByUser => UxTheme.IsAppThemed().IsTrue();
 
         internal static unsafe string ThemeFilename
         {

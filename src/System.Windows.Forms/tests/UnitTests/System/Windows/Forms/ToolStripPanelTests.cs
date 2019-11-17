@@ -1,8 +1,8 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using WinForms.Common.Tests;
 using Xunit;
@@ -11,48 +11,142 @@ namespace System.Windows.Forms.Tests
 {
     public class ToolStripPanelTests
     {
-        [Fact]
+        [WinFormsFact]
         public void Ctor_Default()
         {
-            var panel = new SubToolStripPanel();
-            Assert.False(panel.AllowDrop);
-            Assert.False(panel.AutoScroll);
-            Assert.Equal(Size.Empty, panel.AutoScrollMargin);
-            Assert.Equal(Point.Empty, panel.AutoScrollPosition);
-            Assert.True(panel.AutoSize);
-            Assert.Equal(Padding.Empty, panel.DefaultMargin);
-            Assert.Equal(Padding.Empty, panel.DefaultPadding);
-            Assert.NotNull(panel.DockPadding);
-            Assert.Same(panel.DockPadding, panel.DockPadding);
-            Assert.Equal(0, panel.DockPadding.Top);
-            Assert.Equal(0, panel.DockPadding.Bottom);
-            Assert.Equal(0, panel.DockPadding.Left);
-            Assert.Equal(0, panel.DockPadding.Right);
-            Assert.Equal(Rectangle.Empty, panel.DisplayRectangle);
-            Assert.NotNull(panel.HorizontalScroll);
-            Assert.Same(panel.HorizontalScroll, panel.HorizontalScroll);
-            Assert.False(panel.HScroll);
-            Assert.Equal(Padding.Empty, panel.Margin);
-            Assert.Equal(Padding.Empty, panel.Padding);
-            Assert.Equal(new Padding(3, 0, 0, 0), panel.RowMargin);
-            Assert.NotNull(panel.VerticalScroll);
-            Assert.Same(panel.VerticalScroll, panel.VerticalScroll);
-            Assert.False(panel.VScroll);
+            using var control = new SubToolStripPanel();
+            Assert.Null(control.ActiveControl);
+            Assert.False(control.AllowDrop);
+            Assert.Equal(AnchorStyles.Top | AnchorStyles.Left, control.Anchor);
+            Assert.False(control.AutoScroll);
+            Assert.Equal(SizeF.Empty, control.AutoScaleDimensions);
+            Assert.Equal(new SizeF(1, 1), control.AutoScaleFactor);
+            Assert.Equal(Size.Empty, control.AutoScrollMargin);
+            Assert.Equal(AutoScaleMode.None, control.AutoScaleMode);
+            Assert.Equal(Size.Empty, control.AutoScrollMinSize);
+            Assert.Equal(Point.Empty, control.AutoScrollPosition);
+            Assert.True(control.AutoSize);
+            Assert.Equal(Control.DefaultBackColor, control.BackColor);
+            Assert.Null(control.BackgroundImage);
+            Assert.Equal(ImageLayout.Tile, control.BackgroundImageLayout);
+            Assert.NotNull(control.BindingContext);
+            Assert.Same(control.BindingContext, control.BindingContext);
+            Assert.Equal(0, control.Bottom);
+            Assert.Equal(Rectangle.Empty, control.Bounds);
+            Assert.False(control.CanEnableIme);
+            Assert.True(control.CanRaiseEvents);
+            Assert.True(control.CausesValidation);
+            Assert.Equal(Rectangle.Empty, control.ClientRectangle);
+            Assert.Equal(Size.Empty, control.ClientSize);
+            Assert.Null(control.Container);
+            Assert.Null(control.ContextMenuStrip);
+            Assert.Empty(control.Controls);
+            Assert.Same(control.Controls, control.Controls);
+            Assert.False(control.Created);
+            Assert.Equal(SizeF.Empty, control.CurrentAutoScaleDimensions);
+            Assert.Equal(Cursors.Default, control.Cursor);
+            Assert.Equal(Cursors.Default, control.DefaultCursor);
+            Assert.Equal(ImeMode.Inherit, control.DefaultImeMode);
+            Assert.Equal(Padding.Empty, control.DefaultMargin);
+            Assert.Equal(Size.Empty, control.DefaultMaximumSize);
+            Assert.Equal(Size.Empty, control.DefaultMinimumSize);
+            Assert.Equal(Padding.Empty, control.DefaultPadding);
+            Assert.Equal(Size.Empty, control.DefaultSize);
+            Assert.False(control.DesignMode);
+            Assert.Equal(Rectangle.Empty, control.DisplayRectangle);
+            Assert.Equal(DockStyle.None, control.Dock);
+            Assert.NotNull(control.DockPadding);
+            Assert.Same(control.DockPadding, control.DockPadding);
+            Assert.Equal(0, control.DockPadding.Top);
+            Assert.Equal(0, control.DockPadding.Bottom);
+            Assert.Equal(0, control.DockPadding.Left);
+            Assert.Equal(0, control.DockPadding.Right);
+            Assert.True(control.DoubleBuffered);
+            Assert.True(control.Enabled);
+            Assert.NotNull(control.Events);
+            Assert.Same(control.Events, control.Events);
+            Assert.Equal(Control.DefaultFont, control.Font);
+            Assert.Equal(control.Font.Height, control.FontHeight);
+            Assert.Equal(Control.DefaultForeColor, control.ForeColor);
+            Assert.False(control.HasChildren);
+            Assert.Equal(0, control.Height);
+            Assert.NotNull(control.HorizontalScroll);
+            Assert.Same(control.HorizontalScroll, control.HorizontalScroll);
+            Assert.False(control.HScroll);
+            Assert.Equal(ImeMode.NoControl, control.ImeMode);
+            Assert.Equal(ImeMode.NoControl, control.ImeModeBase);
+            Assert.NotNull(control.LayoutEngine);
+            Assert.Same(control.LayoutEngine, control.LayoutEngine);
+            Assert.Equal(0, control.Left);
+            Assert.Equal(Point.Empty, control.Location);
+            Assert.Equal(Padding.Empty, control.Margin);
+            Assert.Equal(Size.Empty, control.MaximumSize);
+            Assert.Equal(Size.Empty, control.MinimumSize);
+            Assert.Equal(Padding.Empty, control.Padding);
+            Assert.Null(control.Parent);
+            Assert.Equal(Size.Empty, control.PreferredSize);
+            Assert.Equal("Microsoft\u00AE .NET", control.ProductName);
+            Assert.False(control.RecreatingHandle);
+            Assert.Null(control.Region);
+            Assert.True(control.ResizeRedraw);
+            Assert.Equal(0, control.Right);
+            Assert.Equal(RightToLeft.No, control.RightToLeft);
+            Assert.Equal(new Padding(3, 0, 0, 0), control.RowMargin);
+            Assert.Null(control.Site);
+            Assert.Equal(Size.Empty, control.Size);
+            Assert.Equal(0, control.TabIndex);
+            Assert.False(control.TabStop);
+            Assert.Empty(control.Text);
+            Assert.Equal(0, control.Top);
+            Assert.Null(control.TopLevelControl);
+            Assert.True(control.Visible);
+            Assert.NotNull(control.VerticalScroll);
+            Assert.Same(control.VerticalScroll, control.VerticalScroll);
+            Assert.False(control.VScroll);
+            Assert.Equal(0, control.Width);
+
+            Assert.False(control.IsHandleCreated);
         }
 
-        [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
-        public void AllowDrop_Set_GetReturnsExpected(bool value)
+        [WinFormsFact]
+        public void ToolStripPanel_CreateParams_GetDefault_ReturnsExpected()
         {
-            var panel = new ToolStripPanel
+            using var control = new SubToolStripPanel();
+            CreateParams createParams = control.CreateParams;
+            Assert.Null(createParams.Caption);
+            Assert.Null(createParams.ClassName);
+            Assert.Equal(0x8, createParams.ClassStyle);
+            Assert.Equal(0x10000, createParams.ExStyle);
+            Assert.Equal(0, createParams.Height);
+            Assert.Equal(IntPtr.Zero, createParams.Parent);
+            Assert.Null(createParams.Param);
+            Assert.Equal(0x56000000, createParams.Style);
+            Assert.Equal(0, createParams.Width);
+            Assert.Equal(0, createParams.X);
+            Assert.Equal(0, createParams.Y);
+            Assert.Same(createParams, control.CreateParams);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        public void ToolStripPanel_AllowDrop_Set_GetReturnsExpected(bool value)
+        {
+            using var panel = new ToolStripPanel
             {
                 AllowDrop = value
             };
             Assert.Equal(value, panel.AllowDrop);
+            Assert.False(panel.IsHandleCreated);
 
             // Set same.
             panel.AllowDrop = value;
             Assert.Equal(value, panel.AllowDrop);
+            Assert.False(panel.IsHandleCreated);
+
+            // Set different.
+            panel.AllowDrop = !value;
+            Assert.Equal(!value, panel.AllowDrop);
+            Assert.False(panel.IsHandleCreated);
         }
 
         [Theory]
@@ -184,13 +278,67 @@ namespace System.Windows.Forms.Tests
 
         private class SubToolStripPanel : ToolStripPanel
         {
-            public new Padding DefaultPadding => base.DefaultPadding;
+            public new SizeF AutoScaleFactor => base.AutoScaleFactor;
+
+            public new bool CanEnableIme => base.CanEnableIme;
+
+            public new bool CanRaiseEvents => base.CanRaiseEvents;
+
+            public new CreateParams CreateParams => base.CreateParams;
+
+            public new Cursor DefaultCursor => base.DefaultCursor;
+
+            public new ImeMode DefaultImeMode => base.DefaultImeMode;
 
             public new Padding DefaultMargin => base.DefaultMargin;
 
-            public new bool HScroll => base.HScroll;
+            public new Size DefaultMaximumSize => base.DefaultMaximumSize;
 
-            public new bool VScroll => base.VScroll;
+            public new Size DefaultMinimumSize => base.DefaultMinimumSize;
+
+            public new Padding DefaultPadding => base.DefaultPadding;
+
+            public new Size DefaultSize => base.DefaultSize;
+
+            public new bool DesignMode => base.DesignMode;
+
+            public new bool DoubleBuffered
+            {
+                get => base.DoubleBuffered;
+                set => base.DoubleBuffered = value;
+            }
+
+            public new EventHandlerList Events => base.Events;
+
+            public new int FontHeight
+            {
+                get => base.FontHeight;
+                set => base.FontHeight = value;
+            }
+
+            public new ImeMode ImeModeBase
+            {
+                get => base.ImeModeBase;
+                set => base.ImeModeBase = value;
+            }
+
+            public new bool ResizeRedraw
+            {
+                get => base.ResizeRedraw;
+                set => base.ResizeRedraw = value;
+            }
+
+            public new bool HScroll
+            {
+                get => base.HScroll;
+                set => base.HScroll = value;
+            }
+
+            public new bool VScroll
+            {
+                get => base.VScroll;
+                set => base.VScroll = value;
+            }
         }
     }
 }

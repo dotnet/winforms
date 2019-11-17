@@ -32,7 +32,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                int lastXY = SafeNativeMethods.GetMessagePos();
+                int lastXY = (int)User32.GetMessagePos();
                 return new Point(NativeMethods.Util.SignedLOWORD(lastXY), NativeMethods.Util.SignedHIWORD(lastXY));
             }
         }
@@ -313,7 +313,7 @@ namespace System.Windows.Forms
         /// </summary>
         public static Point TranslatePoint(Point point, Control fromControl, Control toControl)
         {
-            UnsafeNativeMethods.MapWindowPoints(new HandleRef(fromControl, fromControl.Handle), new HandleRef(toControl, toControl.Handle), ref point, 1);
+            User32.MapWindowPoints(new HandleRef(fromControl, fromControl.Handle), new HandleRef(toControl, toControl.Handle), ref point, 1);
             return point;
         }
 

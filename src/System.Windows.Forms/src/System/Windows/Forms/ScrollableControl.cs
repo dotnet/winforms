@@ -181,19 +181,19 @@ namespace System.Windows.Forms
 
                 if (HScroll || HorizontalScroll.Visible)
                 {
-                    cp.Style |= NativeMethods.WS_HSCROLL;
+                    cp.Style |= (int)User32.WS.HSCROLL;
                 }
                 else
                 {
-                    cp.Style &= (~NativeMethods.WS_HSCROLL);
+                    cp.Style &= ~(int)User32.WS.HSCROLL;
                 }
                 if (VScroll || VerticalScroll.Visible)
                 {
-                    cp.Style |= NativeMethods.WS_VSCROLL;
+                    cp.Style |= (int)User32.WS.VSCROLL;
                 }
                 else
                 {
-                    cp.Style &= (~NativeMethods.WS_VSCROLL);
+                    cp.Style &= ~(int)User32.WS.VSCROLL;
                 }
 
                 return cp;

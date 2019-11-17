@@ -1168,7 +1168,7 @@ namespace System.Windows.Forms
                     if (activeToolStrip != null)
                     {
                         var pt = new Point(x, y);
-                        UnsafeNativeMethods.MapWindowPoints(new HandleRef(activeToolStrip, hwndMouseMessageIsFrom), new HandleRef(activeToolStrip, activeToolStrip.Handle), ref pt, 1);
+                        User32.MapWindowPoints(new HandleRef(activeToolStrip, hwndMouseMessageIsFrom), new HandleRef(activeToolStrip, activeToolStrip.Handle), ref pt, 1);
                         if (!activeToolStrip.ClientRectangle.Contains(pt.X, pt.Y))
                         {
                             if (activeToolStrip is ToolStripDropDown activeToolStripDropDown)
@@ -1350,15 +1350,7 @@ namespace System.Windows.Forms
 
             private static bool IsChildOrSameWindow(HandleRef hwndParent, HandleRef hwndChild)
             {
-                if (hwndParent.Handle == hwndChild.Handle)
-                {
-                    return true;
-                }
-                if (UnsafeNativeMethods.IsChild(hwndParent, hwndChild))
-                {
-                    return true;
-                }
-                return false;
+                return hwndParent.Handle == hwndChild.Handle || User32.IsChild(hwndParent, hwndChild).IsTrue();
             }
 
             private static bool IsKeyOrMouseMessage(Message m)

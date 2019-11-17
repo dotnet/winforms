@@ -75,7 +75,7 @@ namespace System.Windows.Forms
             {
                 if (color.IsEmpty)
                 {
-                    color = SafeNativeMethods.ColorFromCOLORREF((int)listView.SendMessage((int)LVM.GETINSERTMARKCOLOR, 0, 0));
+                    color = COLORREF.COLORREFToColor((int)listView.SendMessage((int)LVM.GETINSERTMARKCOLOR, 0, 0));
                 }
                 return color;
             }
@@ -86,7 +86,7 @@ namespace System.Windows.Forms
                     color = value;
                     if (listView.IsHandleCreated)
                     {
-                        listView.SendMessage((int)LVM.SETINSERTMARKCOLOR, 0, SafeNativeMethods.ColorToCOLORREF(color));
+                        listView.SendMessage((int)LVM.SETINSERTMARKCOLOR, 0, COLORREF.ColorToCOLORREF(color));
                     }
                 }
             }
@@ -139,7 +139,7 @@ namespace System.Windows.Forms
 
             if (!color.IsEmpty)
             {
-                listView.SendMessage((int)LVM.SETINSERTMARKCOLOR, 0, SafeNativeMethods.ColorToCOLORREF(color));
+                listView.SendMessage((int)LVM.SETINSERTMARKCOLOR, 0, COLORREF.ColorToCOLORREF(color));
             }
         }
     }

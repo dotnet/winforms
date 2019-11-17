@@ -203,7 +203,7 @@ namespace System.Windows.Forms
                 toolStrip = new PropertyGridToolStrip(this);
                 toolStrip.SuspendLayout();
                 toolStrip.ShowItemToolTips = true;
-                toolStrip.AccessibleName = SR.PropertyGridToolbarAccessibleName;
+
                 toolStrip.AccessibleRole = AccessibleRole.ToolBar;
                 toolStrip.TabStop = true;
                 toolStrip.AllowMerge = false;
@@ -3524,6 +3524,11 @@ namespace System.Windows.Forms
         {
             OnPropertyValueChanged(new PropertyValueChangedEventArgs(changedItem, oldValue));
 
+            if (changedItem == null)
+            {
+                return;
+            }
+
             // Announce the property value change like standalone combobox control do: "[something] selected".
             bool dropDown = false;
             Type propertyType = changedItem.PropertyDescriptor.PropertyType;
@@ -3998,7 +4003,7 @@ namespace System.Windows.Forms
                             // if we're not hosted in a windows forms thing, just give the parent the focus
                             if (!result && Parent == null)
                             {
-                                IntPtr hWndParent = UnsafeNativeMethods.GetParent(new HandleRef(this, Handle));
+                                IntPtr hWndParent = User32.GetParent(this);
                                 if (hWndParent != IntPtr.Zero)
                                 {
                                     User32.SetFocus(hWndParent);
@@ -4932,7 +4937,7 @@ namespace System.Windows.Forms
             {
                 // convert the coordinates to
                 var temp = new Point(me.X, me.Y);
-                UnsafeNativeMethods.MapWindowPoints(new HandleRef(child, child.Handle), new HandleRef(this, Handle), ref temp, 1);
+                User32.MapWindowPoints(new HandleRef(child, child.Handle), new HandleRef(this, Handle), ref temp, 1);
 
                 // forward the message
                 pt = temp;
@@ -5951,6 +5956,32 @@ namespace System.Windows.Forms
 
             return -1;
         }
+
+        internal override object GetPropertyValue(UiaCore.UIA propertyID) =>
+            propertyID switch
+            {
+                UiaCore.UIA.NamePropertyId => Name,
+                _ => base.GetPropertyValue(propertyID),
+            };
+
+        public override string Name
+        {
+            get
+            {
+                string name = Owner?.AccessibleName;
+                if (name != null)
+                {
+                    return name;
+                }
+
+                return Owner.Name;
+            }
+
+            set
+            {
+                Owner.AccessibleName = value;
+            }
+        }
     }
 
     /// <summary>
@@ -6029,17 +6060,25 @@ namespace System.Windows.Forms
         /// <param name="propertyId">Identifier indicating the property to return</param>
         /// <returns>Returns a ValInfo indicating whether the element supports this property, or has no value for it.</returns>
         internal override object GetPropertyValue(UiaCore.UIA propertyID)
-        {
-            if (propertyID == UiaCore.UIA.ControlTypePropertyId)
+            => propertyID switch
             {
-                return UiaCore.UIA.ToolBarControlTypeId;
-            }
-            else if (propertyID == UiaCore.UIA.NamePropertyId)
-            {
-                return Name;
-            }
+                UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.ToolBarControlTypeId,
+                UiaCore.UIA.NamePropertyId => Name,
+                _ => base.GetPropertyValue(propertyID)
+            };
 
-            return base.GetPropertyValue(propertyID);
+        public override string Name
+        {
+            get
+            {
+                string name = Owner?.AccessibleName;
+                if (name != null)
+                {
+                    return name;
+                }
+
+                return _parentPropertyGrid?.Name;
+            }
         }
     }
 }

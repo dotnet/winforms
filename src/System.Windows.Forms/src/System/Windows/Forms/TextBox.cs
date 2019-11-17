@@ -333,11 +333,11 @@ namespace System.Windows.Forms
                         && textAlign == HorizontalAlignment.Left
                         && !WordWrap)
                     {
-                        cp.Style |= NativeMethods.WS_HSCROLL;
+                        cp.Style |= (int)User32.WS.HSCROLL;
                     }
                     if ((scrollBars & ScrollBars.Vertical) == ScrollBars.Vertical)
                     {
-                        cp.Style |= NativeMethods.WS_VSCROLL;
+                        cp.Style |= (int)User32.WS.VSCROLL;
                     }
                 }
 

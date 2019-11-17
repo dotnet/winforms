@@ -477,7 +477,7 @@ namespace System.Windows.Forms
         {
             if (msg == WindowMessages.WM_NOTIFY)
             {
-                _dialogHWnd = UnsafeNativeMethods.GetParent(new HandleRef(null, hWnd));
+                _dialogHWnd = User32.GetParent(hWnd);
                 try
                 {
                     UnsafeNativeMethods.OFNOTIFY notify = Marshal.PtrToStructure<UnsafeNativeMethods.OFNOTIFY>(lparam);

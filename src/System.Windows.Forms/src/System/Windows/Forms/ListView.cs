@@ -710,7 +710,7 @@ namespace System.Windows.Forms
                 if (IsHandleCreated)
                 {
                     int currentStyle = unchecked((int)((long)UnsafeNativeMethods.GetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_STYLE)));
-                    cp.Style |= (currentStyle & (NativeMethods.WS_HSCROLL | NativeMethods.WS_VSCROLL));
+                    cp.Style |= (currentStyle & (int)(User32.WS.HSCROLL | User32.WS.VSCROLL));
                 }
 
                 cp.Style |= NativeMethods.LVS_SHAREIMAGELISTS;
@@ -736,7 +736,7 @@ namespace System.Windows.Forms
                         cp.ExStyle |= (int)User32.WS_EX.CLIENTEDGE;
                         break;
                     case BorderStyle.FixedSingle:
-                        cp.Style |= NativeMethods.WS_BORDER;
+                        cp.Style |= (int)User32.WS.BORDER;
                         break;
                 }
 
@@ -796,12 +796,12 @@ namespace System.Windows.Forms
                     cp.Style |= (int)viewStyle;
                 }
 
-                if (RightToLeft == RightToLeft.Yes && RightToLeftLayout == true)
+                if (RightToLeft == RightToLeft.Yes && RightToLeftLayout)
                 {
                     //We want to turn on mirroring for Form explicitly.
                     cp.ExStyle |= (int)User32.WS_EX.LAYOUTRTL;
                     //Don't need these styles when mirroring is turned on.
-                    cp.ExStyle &= ~((int)User32.WS_EX.RTLREADING | (int)User32.WS_EX.RIGHT | (int)User32.WS_EX.LEFTSCROLLBAR);
+                    cp.ExStyle &= ~(int)(User32.WS_EX.RTLREADING | User32.WS_EX.RIGHT | User32.WS_EX.LEFTSCROLLBAR);
                 }
                 return cp;
             }
@@ -2589,18 +2589,18 @@ namespace System.Windows.Forms
 
             try
             {
-                NativeMethods.NMLVCUSTOMDRAW* nmcd = (NativeMethods.NMLVCUSTOMDRAW*)m.LParam;
+                ComCtl32.NMLVCUSTOMDRAW* nmcd = (ComCtl32.NMLVCUSTOMDRAW*)m.LParam;
                 // Find out which stage we're drawing
                 switch (nmcd->nmcd.dwDrawStage)
                 {
-                    case NativeMethods.CDDS_PREPAINT:
+                    case ComCtl32.CDDS.PREPAINT:
                         if (OwnerDraw)
                         {
-                            m.Result = (IntPtr)(NativeMethods.CDRF_NOTIFYITEMDRAW);
+                            m.Result = (IntPtr)(ComCtl32.CDRF.NOTIFYITEMDRAW);
                             return;
                         }
                         // We want custom draw for this paint cycle
-                        m.Result = (IntPtr)(NativeMethods.CDRF_NOTIFYSUBITEMDRAW | NativeMethods.CDRF_NEWFONT);
+                        m.Result = (IntPtr)(ComCtl32.CDRF.NOTIFYSUBITEMDRAW | ComCtl32.CDRF.NEWFONT);
                         // refresh the cache of the current color & font settings for this paint cycle
                         odCacheBackColor = BackColor;
                         odCacheForeColor = ForeColor;
@@ -2608,7 +2608,7 @@ namespace System.Windows.Forms
                         odCacheFontHandle = FontHandle;
 
                         // If preparing to paint a group item, make sure its bolded.
-                        if (nmcd->dwItemType == NativeMethods.LVCDI_GROUP)
+                        if (nmcd->dwItemType == ComCtl32.LVCDI.GROUP)
                         {
                             if (odCacheFontHandleWrapper != null)
                             {
@@ -2618,7 +2618,7 @@ namespace System.Windows.Forms
                             odCacheFontHandleWrapper = new FontHandleWrapper(odCacheFont);
                             odCacheFontHandle = odCacheFontHandleWrapper.Handle;
                             Gdi32.SelectObject(new HandleRef(nmcd->nmcd, nmcd->nmcd.hdc), new HandleRef(odCacheFontHandleWrapper, odCacheFontHandleWrapper.Handle));
-                            m.Result = (IntPtr)NativeMethods.CDRF_NEWFONT;
+                            m.Result = (IntPtr)ComCtl32.CDRF.NEWFONT;
                         }
                         return;
 
@@ -2627,7 +2627,7 @@ namespace System.Windows.Forms
 
                     //HOWEVER... we only want to do this for report styles...
 
-                    case NativeMethods.CDDS_ITEMPREPAINT:
+                    case ComCtl32.CDDS.ITEMPREPAINT:
 
                         int itemIndex = (int)nmcd->nmcd.dwItemSpec;
                         // The following call silently returns Rectangle.Empty if no corresponding
@@ -2676,13 +2676,13 @@ namespace System.Windows.Forms
                             // For other view styles, we do it here.
                             if (viewStyle == View.Details)
                             {
-                                m.Result = (IntPtr)(NativeMethods.CDRF_NOTIFYSUBITEMDRAW);
+                                m.Result = (IntPtr)(ComCtl32.CDRF.NOTIFYSUBITEMDRAW);
                             }
                             else
                             {
                                 if (!e.DrawDefault)
                                 {
-                                    m.Result = (IntPtr)(NativeMethods.CDRF_SKIPDEFAULT);
+                                    m.Result = (IntPtr)(ComCtl32.CDRF.SKIPDEFAULT);
                                 }
                             }
 
@@ -2694,7 +2694,7 @@ namespace System.Windows.Forms
 
                         if (viewStyle == View.Details || viewStyle == View.Tile)
                         {
-                            m.Result = (IntPtr)(NativeMethods.CDRF_NOTIFYSUBITEMDRAW | NativeMethods.CDRF_NEWFONT);
+                            m.Result = (IntPtr)(ComCtl32.CDRF.NOTIFYSUBITEMDRAW | ComCtl32.CDRF.NEWFONT);
                             dontmess = true; // don't mess with our return value!
 
                             //ITEMPREPAINT is used to work out the rect for the first column!!! GAH!!!
@@ -2706,9 +2706,9 @@ namespace System.Windows.Forms
 
                         //If it's not a report, we fall through and change the main item's styles
 
-                        goto case (NativeMethods.CDDS_SUBITEM | NativeMethods.CDDS_ITEMPREPAINT);
+                        goto case (ComCtl32.CDDS.SUBITEM | ComCtl32.CDDS.ITEMPREPAINT);
 
-                    case (NativeMethods.CDDS_SUBITEM | NativeMethods.CDDS_ITEMPREPAINT):
+                    case (ComCtl32.CDDS.SUBITEM | ComCtl32.CDDS.ITEMPREPAINT):
 
                         itemIndex = (int)nmcd->nmcd.dwItemSpec;
                         // The following call silently returns Rectangle.Empty if no corresponding
@@ -2774,7 +2774,7 @@ namespace System.Windows.Forms
 
                             if (skipCustomDrawCode)
                             {
-                                m.Result = (IntPtr)(NativeMethods.CDRF_SKIPDEFAULT);
+                                m.Result = (IntPtr)(ComCtl32.CDRF.SKIPDEFAULT);
                                 return; // skip our custom draw code
                             }
                         }
@@ -2784,11 +2784,11 @@ namespace System.Windows.Forms
                         // if we're doing the whole row in one style, change our result!
                         if (dontmess && item.UseItemStyleForSubItems)
                         {
-                            m.Result = (IntPtr)NativeMethods.CDRF_NEWFONT;
+                            m.Result = (IntPtr)ComCtl32.CDRF.NEWFONT;
                         }
                         Debug.Assert(item != null, "Item was null in ITEMPREPAINT");
 
-                        int state = nmcd->nmcd.uItemState;
+                        ComCtl32.CDIS state = nmcd->nmcd.uItemState;
                         // There is a known and documented problem in the ListView winctl control -
                         // if the LVS_SHOWSELALWAYS style is set, then the item state will have
                         // the CDIS_SELECTED bit set for all items. So we need to verify with the
@@ -2798,7 +2798,7 @@ namespace System.Windows.Forms
                             ComCtl32.LVIS realState = GetItemState((int)(nmcd->nmcd.dwItemSpec));
                             if ((realState & ComCtl32.LVIS.SELECTED) == 0)
                             {
-                                state &= ~NativeMethods.CDIS_SELECTED;
+                                state &= ~ComCtl32.CDIS.SELECTED;
                             }
                         }
 
@@ -2806,7 +2806,7 @@ namespace System.Windows.Forms
                         // cases where subitems aren't visible (ie. non-Details modes), so if subitem
                         // is invalid, point it at the main item's render info
 
-                        int subitem = ((nmcd->nmcd.dwDrawStage & NativeMethods.CDDS_SUBITEM) != 0) ? nmcd->iSubItem : 0;
+                        int subitem = ((nmcd->nmcd.dwDrawStage & ComCtl32.CDDS.SUBITEM) != 0) ? nmcd->iSubItem : 0;
 
                         // Work out the style in which to render this item
                         //
@@ -2818,7 +2818,7 @@ namespace System.Windows.Forms
                         if (item != null && subitem < item.SubItems.Count)
                         {
                             haveRenderInfo = true;
-                            if (subitem == 0 && (state & NativeMethods.CDIS_HOT) != 0 && HotTracking)
+                            if (subitem == 0 && (state & ComCtl32.CDIS.HOT) != 0 && HotTracking)
                             {
                                 disposeSubItemFont = true;
                                 subItemFont = new Font(item.SubItems[0].Font, FontStyle.Underline);
@@ -2828,7 +2828,7 @@ namespace System.Windows.Forms
                                 subItemFont = item.SubItems[subitem].Font;
                             }
 
-                            if (subitem > 0 || (state & (NativeMethods.CDIS_SELECTED | NativeMethods.CDIS_GRAYED | NativeMethods.CDIS_HOT | NativeMethods.CDIS_DISABLED)) == 0)
+                            if (subitem > 0 || (state & (ComCtl32.CDIS.SELECTED | ComCtl32.CDIS.GRAYED | ComCtl32.CDIS.HOT | ComCtl32.CDIS.DISABLED)) == 0)
                             {
                                 // we only propogate colors if we're displaying things normally
                                 // the user can override this method to do all kinds of other bad things if they
@@ -2859,10 +2859,10 @@ namespace System.Windows.Forms
                         else if ((activation == ItemActivation.OneClick)
                               || (activation == ItemActivation.TwoClick))
                         {
-                            if ((state & (NativeMethods.CDIS_SELECTED
-                                        | NativeMethods.CDIS_GRAYED
-                                        | NativeMethods.CDIS_HOT
-                                        | NativeMethods.CDIS_DISABLED)) != 0)
+                            if ((state & (ComCtl32.CDIS.SELECTED
+                                        | ComCtl32.CDIS.GRAYED
+                                        | ComCtl32.CDIS.HOT
+                                        | ComCtl32.CDIS.DISABLED)) != 0)
                             {
                                 changeColor = false;
                             }
@@ -2953,7 +2953,7 @@ namespace System.Windows.Forms
 
                         if (!dontmess)
                         {
-                            m.Result = (IntPtr)NativeMethods.CDRF_NEWFONT;
+                            m.Result = (IntPtr)ComCtl32.CDRF.NEWFONT;
                         }
                         if (disposeSubItemFont)
                         {
@@ -2962,14 +2962,14 @@ namespace System.Windows.Forms
                         return;
 
                     default:
-                        m.Result = (IntPtr)NativeMethods.CDRF_DODEFAULT;
+                        m.Result = (IntPtr)ComCtl32.CDRF.DODEFAULT;
                         return;
                 }
             }
             catch (Exception e)
             {
                 Debug.Fail("Exception occurred attempting to setup custom draw. Disabling custom draw for this control", e.ToString());
-                m.Result = (IntPtr)NativeMethods.CDRF_DODEFAULT;
+                m.Result = (IntPtr)ComCtl32.CDRF.DODEFAULT;
             }
         }
 
@@ -2995,7 +2995,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private void DestroyLVGROUP(NativeMethods.LVGROUP lvgroup)
+        private void DestroyLVGROUP(ComCtl32.LVGROUP lvgroup)
         {
             if (lvgroup.pszHeader != IntPtr.Zero)
             {
@@ -3637,35 +3637,33 @@ namespace System.Windows.Forms
             return Rectangle.FromLTRB(itemrect.left, itemrect.top, itemrect.right, itemrect.bottom);
         }
 
-        private NativeMethods.LVGROUP GetLVGROUP(ListViewGroup group)
+        private ComCtl32.LVGROUP GetLVGROUP(ListViewGroup group)
         {
-            NativeMethods.LVGROUP lvgroup = new NativeMethods.LVGROUP
+            var lvgroup = new ComCtl32.LVGROUP
             {
-                mask = NativeMethods.LVGF_HEADER | NativeMethods.LVGF_GROUPID | NativeMethods.LVGF_ALIGN
+                cbSize = (uint)Marshal.SizeOf<ComCtl32.LVGROUP>(),
+                mask = ComCtl32.LVGF.HEADER | ComCtl32.LVGF.GROUPID | ComCtl32.LVGF.ALIGN
             };
 
             // Header
-            //
             string header = group.Header;
             lvgroup.pszHeader = Marshal.StringToHGlobalAuto(header);
             lvgroup.cchHeader = header.Length;
 
             // Group ID
-            //
             lvgroup.iGroupId = group.ID;
 
             // Alignment
-            //
             switch (group.HeaderAlignment)
             {
                 case HorizontalAlignment.Left:
-                    lvgroup.uAlign = NativeMethods.LVGA_HEADER_LEFT;
+                    lvgroup.uAlign = ComCtl32.LVGA.HEADER_LEFT;
                     break;
                 case HorizontalAlignment.Right:
-                    lvgroup.uAlign = NativeMethods.LVGA_HEADER_RIGHT;
+                    lvgroup.uAlign = ComCtl32.LVGA.HEADER_RIGHT;
                     break;
                 case HorizontalAlignment.Center:
-                    lvgroup.uAlign = NativeMethods.LVGA_HEADER_CENTER;
+                    lvgroup.uAlign = ComCtl32.LVGA.HEADER_CENTER;
                     break;
             }
             return lvgroup;
@@ -3961,7 +3959,7 @@ namespace System.Windows.Forms
                     NativeMethods.LVITEM lvItem = new NativeMethods.LVITEM
                     {
                         iItem = item.Index,
-                        mask = NativeMethods.LVIF_GROUPID
+                        mask = ComCtl32.LVIF.GROUPID
                     };
                     UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)LVM.GETITEM, 0, ref lvItem);
                     Debug.Assert(lvItem.iGroupId != -1, "there is a list view item which is not parented");
@@ -3976,11 +3974,11 @@ namespace System.Windows.Forms
             Debug.Assert(IsHandleCreated, "InsertGroupNative precondition: list-view handle must be created");
             Debug.Assert(group == DefaultGroup || Groups.Contains(group), "Make sure ListView.Groups contains this group before adding the native LVGROUP. Otherwise, custom-drawing may break.");
 
-            NativeMethods.LVGROUP lvgroup = new NativeMethods.LVGROUP();
+            var lvgroup = new ComCtl32.LVGROUP();
             try
             {
                 lvgroup = GetLVGROUP(group);
-                int retval = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)LVM.INSERTGROUP, index, lvgroup);
+                int retval = (int)User32.SendMessageW(this, (User32.WindowMessage)LVM.INSERTGROUP, (IntPtr)index, ref lvgroup);
                 Debug.Assert(retval != -1, "Failed to insert group");
             }
             finally
@@ -4115,7 +4113,6 @@ namespace System.Windows.Forms
             }
 
             // Create and add the LVITEM
-            NativeMethods.LVITEM lvItem = new NativeMethods.LVITEM();
             int actualIndex = -1;
             IntPtr hGlobalColumns = IntPtr.Zero;
             int maxColumns = 0;
@@ -4135,8 +4132,8 @@ namespace System.Windows.Forms
 
                     Debug.Assert(Items.Contains(li), "Make sure ListView.Items contains this item before adding the native LVITEM. Otherwise, custom-drawing may break.");
 
-                    lvItem.Reset();
-                    lvItem.mask = NativeMethods.LVIF_TEXT | NativeMethods.LVIF_IMAGE | NativeMethods.LVIF_PARAM | NativeMethods.LVIF_INDENT;
+                    var lvItem = new NativeMethods.LVITEM();
+                    lvItem.mask = ComCtl32.LVIF.TEXT | ComCtl32.LVIF.IMAGE | ComCtl32.LVIF.PARAM | ComCtl32.LVIF.INDENT;
                     lvItem.iItem = index + i;
                     lvItem.pszText = li.Text;
                     lvItem.iImage = li.ImageIndexer.ActualIndex;
@@ -4145,7 +4142,7 @@ namespace System.Windows.Forms
 
                     if (GroupsEnabled)
                     {
-                        lvItem.mask |= NativeMethods.LVIF_GROUPID;
+                        lvItem.mask |= ComCtl32.LVIF.GROUPID;
                         lvItem.iGroupId = GetNativeGroupId(li);
 
 #if DEBUG
@@ -4154,7 +4151,7 @@ namespace System.Windows.Forms
 #endif
                     }
 
-                    lvItem.mask |= NativeMethods.LVIF_COLUMNS;
+                    lvItem.mask |= ComCtl32.LVIF.COLUMNS;
                     lvItem.cColumns = columnHeaders != null ? Math.Min(MAXTILECOLUMNS, columnHeaders.Length) : 0;
 
                     // make sure that our columns memory is big enough.
@@ -4508,10 +4505,10 @@ namespace System.Windows.Forms
 
             base.OnHandleCreated(e);
 
-            int version = unchecked((int)(long)SendMessage(NativeMethods.CCM_GETVERSION, 0, 0));
+            int version = unchecked((int)(long)SendMessage((int)ComCtl32.CCM.GETVERSION, 0, 0));
             if (version < 5)
             {
-                SendMessage(NativeMethods.CCM_SETVERSION, 5, 0);
+                SendMessage((int)ComCtl32.CCM.SETVERSION, 5, 0);
             }
             UpdateExtendedStyles();
             RealizeProperties();
@@ -4817,12 +4814,12 @@ namespace System.Windows.Forms
 
         private unsafe void PositionHeader()
         {
-            IntPtr hdrHWND = UnsafeNativeMethods.GetWindow(new HandleRef(this, Handle), NativeMethods.GW_CHILD);
+            IntPtr hdrHWND = User32.GetWindow(new HandleRef(this, Handle), User32.GW.CHILD);
             if (hdrHWND != IntPtr.Zero)
             {
                 var rc = new RECT();
                 var wpos = new User32.WINDOWPOS();
-                UnsafeNativeMethods.GetClientRect(new HandleRef(this, Handle), ref rc);
+                User32.GetClientRect(new HandleRef(this, Handle), ref rc);
 
                 var hd = new User32.HDLAYOUT
                 {
@@ -5275,7 +5272,7 @@ namespace System.Windows.Forms
             {
                 NativeMethods.LVITEM lvItem = new NativeMethods.LVITEM
                 {
-                    mask = NativeMethods.LVIF_IMAGE,
+                    mask = ComCtl32.LVIF.IMAGE,
                     iItem = index,
                     iImage = image
                 };
@@ -5293,7 +5290,7 @@ namespace System.Windows.Forms
             {
                 NativeMethods.LVITEM lvItem = new NativeMethods.LVITEM
                 {
-                    mask = NativeMethods.LVIF_INDENT,
+                    mask = ComCtl32.LVIF.INDENT,
                     iItem = index,
                     iIndent = indentCount
                 };
@@ -5331,7 +5328,7 @@ namespace System.Windows.Forms
             {
                 NativeMethods.LVITEM lvItem = new NativeMethods.LVITEM
                 {
-                    mask = NativeMethods.LVIF_STATE,
+                    mask = ComCtl32.LVIF.STATE,
                     state = state,
                     stateMask = mask
                 };
@@ -5376,7 +5373,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            lvItem.mask = NativeMethods.LVIF_TEXT;
+            lvItem.mask = ComCtl32.LVIF.TEXT;
             lvItem.iItem = itemIndex;
             lvItem.iSubItem = subItemIndex;
             lvItem.pszText = text;
@@ -5581,14 +5578,11 @@ namespace System.Windows.Forms
         {
             Debug.Assert(IsHandleCreated, "UpdateGroupNative precondition: list-view handle must be created");
 
-            NativeMethods.LVGROUP lvgroup = new NativeMethods.LVGROUP();
+            var lvgroup = new ComCtl32.LVGROUP();
             try
             {
                 lvgroup = GetLVGROUP(group);
-                int retval = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle),
-                                                                  (int)LVM.SETGROUPINFO,
-                                                                  group.ID,
-                                                                  lvgroup);
+                int retval = (int)User32.SendMessageW(this, (User32.WindowMessage)LVM.SETGROUPINFO, (IntPtr)group.ID, ref lvgroup);
             }
             finally
             {
@@ -5596,7 +5590,6 @@ namespace System.Windows.Forms
             }
 
             // The comctl32 ListView does not correctly invalidate itself, so we need to invalidate the entire ListView
-            //
             Invalidate();
         }
 
@@ -5753,17 +5746,17 @@ namespace System.Windows.Forms
             {
                 try
                 {
-                    NativeMethods.NMCUSTOMDRAW* nmcd = (NativeMethods.NMCUSTOMDRAW*)m.LParam;
+                    ComCtl32.NMCUSTOMDRAW* nmcd = (ComCtl32.NMCUSTOMDRAW*)m.LParam;
                     // Find out which stage we're drawing
                     switch (nmcd->dwDrawStage)
                     {
-                        case NativeMethods.CDDS_PREPAINT:
+                        case ComCtl32.CDDS.PREPAINT:
                             {
-                                m.Result = (IntPtr)(NativeMethods.CDRF_NOTIFYITEMDRAW);
+                                m.Result = (IntPtr)(ComCtl32.CDRF.NOTIFYITEMDRAW);
                                 return true; // we are done - don't do default handling
 
                             }
-                        case NativeMethods.CDDS_ITEMPREPAINT:
+                        case ComCtl32.CDDS.ITEMPREPAINT:
                             {
                                 using (Graphics g = Graphics.FromHdcInternal(nmcd->hdc))
                                 {
@@ -5782,13 +5775,13 @@ namespace System.Windows.Forms
                                     OnDrawColumnHeader(e);
                                     if (e.DrawDefault)
                                     {
-                                        m.Result = (IntPtr)(NativeMethods.CDRF_DODEFAULT);
+                                        m.Result = (IntPtr)(ComCtl32.CDRF.DODEFAULT);
                                         return false;
                                     }
                                     else
                                     {
 
-                                        m.Result = (IntPtr)(NativeMethods.CDRF_SKIPDEFAULT);
+                                        m.Result = (IntPtr)(ComCtl32.CDRF.SKIPDEFAULT);
                                         return true; // we are done - don't do default handling
                                     }
                                 }
@@ -5801,7 +5794,7 @@ namespace System.Windows.Forms
                 catch (Exception e)
                 {
                     Debug.Fail("Exception occurred attempting to setup header custom draw. Disabling custom draw for the column header", e.ToString());
-                    m.Result = (IntPtr)NativeMethods.CDRF_DODEFAULT;
+                    m.Result = (IntPtr)ComCtl32.CDRF.DODEFAULT;
                 }
             }
 
@@ -6210,7 +6203,7 @@ namespace System.Windows.Forms
                 case NativeMethods.LVN_ITEMCHANGING:
                     {
                         ComCtl32.NMLISTVIEW* nmlv = (ComCtl32.NMLISTVIEW*)m.LParam;
-                        if ((nmlv->uChanged & NativeMethods.LVIF_STATE) != 0)
+                        if ((nmlv->uChanged & ComCtl32.LVIF.STATE) != 0)
                         {
                             // Because the state image mask is 1-based, a value of 1 means unchecked,
                             // anything else means checked.  We convert this to the more standard 0 or 1
@@ -6231,7 +6224,7 @@ namespace System.Windows.Forms
                     {
                         ComCtl32.NMLISTVIEW* nmlv = (ComCtl32.NMLISTVIEW*)m.LParam;
                         // Check for state changes to the selected state...
-                        if ((nmlv->uChanged & NativeMethods.LVIF_STATE) != 0)
+                        if ((nmlv->uChanged & ComCtl32.LVIF.STATE) != 0)
                         {
                             // Because the state image mask is 1-based, a value of 1 means unchecked,
                             // anything else means checked.  We convert this to the more standard 0 or 1
@@ -6346,8 +6339,8 @@ namespace System.Windows.Forms
                 case NativeMethods.LVN_KEYDOWN:
                     if (CheckBoxes)
                     {
-                        NativeMethods.NMLVKEYDOWN lvkd = (NativeMethods.NMLVKEYDOWN)m.GetLParam(typeof(NativeMethods.NMLVKEYDOWN));
-                        if (lvkd.wVKey == (short)Keys.Space)
+                        ComCtl32.NMLVKEYDOWN* lvkd = (ComCtl32.NMLVKEYDOWN*)m.LParam;
+                        if (lvkd->wVKey == (short)Keys.Space)
                         {
                             ListViewItem focusedItem = FocusedItem;
                             if (focusedItem != null)
@@ -6370,8 +6363,8 @@ namespace System.Windows.Forms
 
                 case NativeMethods.LVN_ODCACHEHINT:
                     // tell the user to prepare the cache:
-                    NativeMethods.NMLVCACHEHINT cacheHint = (NativeMethods.NMLVCACHEHINT)m.GetLParam(typeof(NativeMethods.NMLVCACHEHINT));
-                    OnCacheVirtualItems(new CacheVirtualItemsEventArgs(cacheHint.iFrom, cacheHint.iTo));
+                    ComCtl32.NMLVCACHEHINT* cacheHint = (ComCtl32.NMLVCACHEHINT*)m.LParam;
+                    OnCacheVirtualItems(new CacheVirtualItemsEventArgs(cacheHint->iFrom, cacheHint->iTo));
                     break;
 
                 default:
@@ -6391,7 +6384,7 @@ namespace System.Windows.Forms
                             }
 
                             lvItem.SetItemIndex(this, dispInfo.item.iItem);
-                            if ((dispInfo.item.mask & NativeMethods.LVIF_TEXT) != 0)
+                            if ((dispInfo.item.mask & ComCtl32.LVIF.TEXT) != 0)
                             {
                                 string text;
                                 if (dispInfo.item.iSubItem == 0)
@@ -6420,12 +6413,12 @@ namespace System.Windows.Forms
                                 Marshal.Copy(buff, 0, dispInfo.item.pszText, text.Length + 1);
                             }
 
-                            if ((dispInfo.item.mask & NativeMethods.LVIF_IMAGE) != 0 && lvItem.ImageIndex != -1)
+                            if ((dispInfo.item.mask & ComCtl32.LVIF.IMAGE) != 0 && lvItem.ImageIndex != -1)
                             {
                                 dispInfo.item.iImage = lvItem.ImageIndex;
                             }
 
-                            if ((dispInfo.item.mask & NativeMethods.LVIF_INDENT) != 0)
+                            if ((dispInfo.item.mask & ComCtl32.LVIF.INDENT) != 0)
                             {
                                 dispInfo.item.iIndent = lvItem.IndentCount;
                             }
@@ -6442,15 +6435,13 @@ namespace System.Windows.Forms
                     {
                         if (VirtualMode && m.LParam != IntPtr.Zero)
                         {
-                            NativeMethods.NMLVODSTATECHANGE odStateChange = (NativeMethods.NMLVODSTATECHANGE)m.GetLParam(typeof(NativeMethods.NMLVODSTATECHANGE));
-                            bool selectedChanged = (odStateChange.uNewState & ComCtl32.LVIS.SELECTED) != (odStateChange.uOldState & ComCtl32.LVIS.SELECTED);
+                            ComCtl32.NMLVODSTATECHANGE* odStateChange = (ComCtl32.NMLVODSTATECHANGE*)m.LParam;
+                            bool selectedChanged = (odStateChange->uNewState & ComCtl32.LVIS.SELECTED) != (odStateChange->uOldState & ComCtl32.LVIS.SELECTED);
                             if (selectedChanged)
                             {
                                 // we have to substract 1 from iTo
-                                //
-                                //
-                                int iTo = odStateChange.iTo;
-                                ListViewVirtualItemsSelectionRangeChangedEventArgs lvvisrce = new ListViewVirtualItemsSelectionRangeChangedEventArgs(odStateChange.iFrom, iTo, (odStateChange.uNewState & ComCtl32.LVIS.SELECTED) != 0);
+                                int iTo = odStateChange->iTo;
+                                ListViewVirtualItemsSelectionRangeChangedEventArgs lvvisrce = new ListViewVirtualItemsSelectionRangeChangedEventArgs(odStateChange->iFrom, iTo, (odStateChange->uNewState & ComCtl32.LVIS.SELECTED) != 0);
                                 OnVirtualItemsSelectionRangeChanged(lvvisrce);
                             }
                         }
@@ -6459,8 +6450,8 @@ namespace System.Windows.Forms
                     {
                         if (ShowItemToolTips && m.LParam != IntPtr.Zero)
                         {
-                            NativeMethods.NMLVGETINFOTIP infoTip = (NativeMethods.NMLVGETINFOTIP)m.GetLParam(typeof(NativeMethods.NMLVGETINFOTIP));
-                            ListViewItem lvi = Items[infoTip.item];
+                            ComCtl32.NMLVGETINFOTIPW* infoTip = (ComCtl32.NMLVGETINFOTIPW*)m.LParam;
+                            ListViewItem lvi = Items[infoTip->item];
                             if (lvi != null && !string.IsNullOrEmpty(lvi.ToolTipText))
                             {
                                 // Setting the max width has the added benefit of enabling multiline tool tips
@@ -6469,9 +6460,7 @@ namespace System.Windows.Forms
                                 // UNICODE. Use char.
                                 // we need to copy the null terminator character ourselves
                                 char[] charBuf = (lvi.ToolTipText + "\0").ToCharArray();
-                                Marshal.Copy(charBuf, 0, infoTip.lpszText, Math.Min(charBuf.Length, infoTip.cchTextMax));
-
-                                Marshal.StructureToPtr(infoTip, (IntPtr)m.LParam, false);
+                                Marshal.Copy(charBuf, 0, infoTip->lpszText, Math.Min(charBuf.Length, infoTip->cchTextMax));
                             }
                         }
                     }
@@ -9390,7 +9379,7 @@ namespace System.Windows.Forms
                     // Obtain internal index of the item
                     NativeMethods.LVITEM lvItem = new NativeMethods.LVITEM
                     {
-                        mask = NativeMethods.LVIF_PARAM,
+                        mask = ComCtl32.LVIF.PARAM,
                         iItem = displayIndex
                     };
                     UnsafeNativeMethods.SendMessage(new HandleRef(owner, owner.Handle), (int)LVM.GETITEM, 0, ref lvItem);

@@ -9,7 +9,7 @@ internal static partial class Interop
 {
     internal static partial class Gdi32
     {
-        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
+        [DllImport(Libraries.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern BOOL BitBlt(
             IntPtr hdc,
             int x,

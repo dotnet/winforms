@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -221,7 +221,7 @@ namespace System.Windows.Forms
                 if (!value.Equals(calendarForeColor))
                 {
                     calendarForeColor = value;
-                    SetControlColor(NativeMethods.MCSC_TEXT, value);
+                    SetControlColor(ComCtl32.MCSC.TEXT, value);
                 }
             }
         }
@@ -300,7 +300,7 @@ namespace System.Windows.Forms
                 if (!value.Equals(calendarTitleBackColor))
                 {
                     calendarTitleBackColor = value;
-                    SetControlColor(NativeMethods.MCSC_TITLEBK, value);
+                    SetControlColor(ComCtl32.MCSC.TITLEBK, value);
                 }
             }
         }
@@ -329,7 +329,7 @@ namespace System.Windows.Forms
                 if (!value.Equals(calendarTitleForeColor))
                 {
                     calendarTitleForeColor = value;
-                    SetControlColor(NativeMethods.MCSC_TITLETEXT, value);
+                    SetControlColor(ComCtl32.MCSC.TITLETEXT, value);
                 }
             }
         }
@@ -358,7 +358,7 @@ namespace System.Windows.Forms
                 if (!value.Equals(calendarTrailingText))
                 {
                     calendarTrailingText = value;
-                    SetControlColor(NativeMethods.MCSC_TRAILINGTEXT, value);
+                    SetControlColor(ComCtl32.MCSC.TRAILINGTEXT, value);
                 }
             }
         }
@@ -387,7 +387,7 @@ namespace System.Windows.Forms
                 if (!value.Equals(calendarMonthBackground))
                 {
                     calendarMonthBackground = value;
-                    SetControlColor(NativeMethods.MCSC_MONTHBK, value);
+                    SetControlColor(ComCtl32.MCSC.MONTHBK, value);
                 }
             }
         }
@@ -480,12 +480,12 @@ namespace System.Windows.Forms
 
                 cp.ExStyle |= (int)User32.WS_EX.CLIENTEDGE;
 
-                if (RightToLeft == RightToLeft.Yes && RightToLeftLayout == true)
+                if (RightToLeft == RightToLeft.Yes && RightToLeftLayout)
                 {
                     //We want to turn on mirroring for DateTimePicker explicitly.
                     cp.ExStyle |= (int)User32.WS_EX.LAYOUTRTL;
                     //Don't need these styles when mirroring is turned on.
-                    cp.ExStyle &= ~((int)User32.WS_EX.RTLREADING | (int)User32.WS_EX.RIGHT | (int)User32.WS_EX.LEFTSCROLLBAR);
+                    cp.ExStyle &= ~(int)(User32.WS_EX.RTLREADING | User32.WS_EX.RIGHT | User32.WS_EX.LEFTSCROLLBAR);
                 }
 
                 return cp;
@@ -1387,11 +1387,11 @@ namespace System.Windows.Forms
         /// <summary>
         ///  If the handle has been created, this applies the color to the control
         /// </summary>
-        private void SetControlColor(int colorIndex, Color value)
+        private void SetControlColor(Interop.ComCtl32.MCSC colorIndex, Color value)
         {
             if (IsHandleCreated)
             {
-                SendMessage(NativeMethods.DTM_SETMCCOLOR, colorIndex, ColorTranslator.ToWin32(value));
+                SendMessage(NativeMethods.DTM_SETMCCOLOR, (int)colorIndex, ColorTranslator.ToWin32(value));
             }
         }
 
@@ -1411,11 +1411,11 @@ namespace System.Windows.Forms
         /// </summary>
         private void SetAllControlColors()
         {
-            SetControlColor(NativeMethods.MCSC_MONTHBK, calendarMonthBackground);
-            SetControlColor(NativeMethods.MCSC_TEXT, calendarForeColor);
-            SetControlColor(NativeMethods.MCSC_TITLEBK, calendarTitleBackColor);
-            SetControlColor(NativeMethods.MCSC_TITLETEXT, calendarTitleForeColor);
-            SetControlColor(NativeMethods.MCSC_TRAILINGTEXT, calendarTrailingText);
+            SetControlColor(ComCtl32.MCSC.MONTHBK, calendarMonthBackground);
+            SetControlColor(ComCtl32.MCSC.TEXT, calendarForeColor);
+            SetControlColor(ComCtl32.MCSC.TITLEBK, calendarTitleBackColor);
+            SetControlColor(ComCtl32.MCSC.TITLETEXT, calendarTitleForeColor);
+            SetControlColor(ComCtl32.MCSC.TRAILINGTEXT, calendarTrailingText);
         }
 
         /// <summary>
@@ -1436,7 +1436,7 @@ namespace System.Windows.Forms
                 var sa = new NativeMethods.SYSTEMTIMEARRAY();
 
                 flags |= NativeMethods.GDTR_MIN | NativeMethods.GDTR_MAX;
-                Kernel32.SYSTEMTIME sys = DateTimePicker.DateTimeToSysTime(min);
+                Kernel32.SYSTEMTIME sys = DateTimeToSysTime(min);
                 sa.wYear1 = sys.wYear;
                 sa.wMonth1 = sys.wMonth;
                 sa.wDayOfWeek1 = sys.wDayOfWeek;
@@ -1445,7 +1445,7 @@ namespace System.Windows.Forms
                 sa.wMinute1 = sys.wMinute;
                 sa.wSecond1 = sys.wSecond;
                 sa.wMilliseconds1 = sys.wMilliseconds;
-                sys = DateTimePicker.DateTimeToSysTime(max);
+                sys = DateTimeToSysTime(max);
                 sa.wYear2 = sys.wYear;
                 sa.wMonth2 = sys.wMonth;
                 sa.wDayOfWeek2 = sys.wDayOfWeek;
@@ -1659,8 +1659,8 @@ namespace System.Windows.Forms
                 if (handle != IntPtr.Zero)
                 {
                     int style = unchecked((int)((long)UnsafeNativeMethods.GetWindowLong(new HandleRef(this, handle), NativeMethods.GWL_EXSTYLE)));
-                    style |= (int)User32.WS_EX.LAYOUTRTL | (int)User32.WS_EX.NOINHERITLAYOUT;
-                    style &= ~((int)User32.WS_EX.RIGHT | (int)User32.WS_EX.RTLREADING);
+                    style |= (int)(User32.WS_EX.LAYOUTRTL | User32.WS_EX.NOINHERITLAYOUT);
+                    style &= ~(int)(User32.WS_EX.RIGHT | User32.WS_EX.RTLREADING);
                     UnsafeNativeMethods.SetWindowLong(new HandleRef(this, handle), NativeMethods.GWL_EXSTYLE, new HandleRef(this, (IntPtr)style));
                 }
             }

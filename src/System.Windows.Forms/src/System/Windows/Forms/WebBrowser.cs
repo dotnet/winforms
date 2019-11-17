@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -8,9 +8,9 @@ using System.Drawing;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
-using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 using static Interop;
 using static Interop.Mshtml;
+using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 
 namespace System.Windows.Forms
 {
@@ -30,7 +30,7 @@ namespace System.Windows.Forms
         // Reference to the native ActiveX control's IWebBrowser2
         // Do not reference this directly. Use the AxIWebBrowser2
         // property instead.
-        private UnsafeNativeMethods.IWebBrowser2 axIWebBrowser2;
+        private Mshtml.IWebBrowser2 axIWebBrowser2;
 
         private AxHost.ConnectionPointCookie cookie;   // To hook up events from the native WebBrowser
         private Stream documentStreamToSetOnLoad;
@@ -1036,17 +1036,12 @@ namespace System.Windows.Forms
                 {
                     return true;
                 }
+
                 IntPtr hwndFocus = User32.GetFocus();
-                return hwndFocus != IntPtr.Zero
-                    && SafeNativeMethods.IsChild(new HandleRef(this, Handle), new HandleRef(null, hwndFocus));
+                return hwndFocus != IntPtr.Zero && User32.IsChild(new HandleRef(this, Handle), hwndFocus).IsTrue();
             }
         }
 
-        //
-        // protected overrides:
-        //
-        //
-        //
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -1077,7 +1072,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void AttachInterfaces(object nativeActiveXObject)
         {
-            axIWebBrowser2 = (UnsafeNativeMethods.IWebBrowser2)nativeActiveXObject;
+            axIWebBrowser2 = (Mshtml.IWebBrowser2)nativeActiveXObject;
         }
 
         /// <summary>
@@ -1371,9 +1366,7 @@ namespace System.Windows.Forms
         private bool ShowContextMenu(int x, int y)
         {
             ContextMenuStrip contextMenuStrip = ContextMenuStrip;
-            ContextMenu contextMenu = contextMenuStrip != null ? null : ContextMenu;
-
-            if (contextMenuStrip != null || contextMenu != null)
+            if (contextMenuStrip != null)
             {
                 Point client;
                 bool keyboardActivated = false;
@@ -1394,10 +1387,6 @@ namespace System.Windows.Forms
                     if (contextMenuStrip != null)
                     {
                         contextMenuStrip.ShowInternal(this, client, keyboardActivated);
-                    }
-                    else if (contextMenu != null)
-                    {
-                        contextMenu.Show(this, client);
                     }
 
                     return true;
@@ -1432,7 +1421,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private UnsafeNativeMethods.IWebBrowser2 AxIWebBrowser2
+        private Mshtml.IWebBrowser2 AxIWebBrowser2
         {
             get
             {
@@ -1505,26 +1494,26 @@ namespace System.Windows.Forms
             {
                 WebBrowser wb = (WebBrowser)Host;
 
-                info.dwDoubleClick = (int)NativeMethods.DOCHOSTUIDBLCLICK.DEFAULT;
-                info.dwFlags = (int)NativeMethods.DOCHOSTUIFLAG.NO3DOUTERBORDER |
-                                (int)NativeMethods.DOCHOSTUIFLAG.DISABLE_SCRIPT_INACTIVE;
+                info.dwDoubleClick = DOCHOSTUIDBLCLK.DEFAULT;
+                info.dwFlags = DOCHOSTUIFLAG.NO3DOUTERBORDER |
+                               DOCHOSTUIFLAG.DISABLE_SCRIPT_INACTIVE;
 
                 if (wb.ScrollBarsEnabled)
                 {
-                    info.dwFlags |= (int)NativeMethods.DOCHOSTUIFLAG.FLAT_SCROLLBAR;
+                    info.dwFlags |= DOCHOSTUIFLAG.FLAT_SCROLLBAR;
                 }
                 else
                 {
-                    info.dwFlags |= (int)NativeMethods.DOCHOSTUIFLAG.SCROLL_NO;
+                    info.dwFlags |= DOCHOSTUIFLAG.SCROLL_NO;
                 }
 
                 if (Application.RenderWithVisualStyles)
                 {
-                    info.dwFlags |= (int)NativeMethods.DOCHOSTUIFLAG.THEME;
+                    info.dwFlags |= DOCHOSTUIFLAG.THEME;
                 }
                 else
                 {
-                    info.dwFlags |= (int)NativeMethods.DOCHOSTUIFLAG.NOTHEME;
+                    info.dwFlags |= DOCHOSTUIFLAG.NOTHEME;
                 }
 
                 return NativeMethods.S_OK;

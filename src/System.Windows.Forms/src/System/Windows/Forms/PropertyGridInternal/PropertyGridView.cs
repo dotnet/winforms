@@ -11,7 +11,6 @@ using System.Drawing.Design;
 using System.Drawing.Drawing2D;
 using System.Globalization;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Windows.Forms.Design;
 using System.Windows.Forms.VisualStyles;
 using Microsoft.Win32;
@@ -235,7 +234,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             get
             {
-                return CanCopy && selectedGridEntry.IsTextEditable;
+                return CanCopy && selectedGridEntry != null && selectedGridEntry.IsTextEditable;
             }
         }
 
@@ -1086,6 +1085,19 @@ namespace System.Windows.Forms.PropertyGridInternal
                             SelectRow(selectedRow);
                         }
                     }
+
+                    if (selectedRow != -1)
+                    {
+                        var gridEntry = GetGridEntryFromRow(selectedRow);
+                        if (gridEntry != null)
+                        {
+                            gridEntry.AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
+                            gridEntry.AccessibilityObject.RaiseAutomationPropertyChangedEvent(
+                                UiaCore.UIA.ExpandCollapseExpandCollapseStatePropertyId,
+                                UiaCore.ExpandCollapseState.Expanded,
+                                UiaCore.ExpandCollapseState.Collapsed);
+                        }
+                    }
                 }
             }
             finally
@@ -1355,7 +1367,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     Edit.Copy();
                 }
-                else
+                else if (selectedGridEntry != null)
                 {
                     Clipboard.SetDataObject(selectedGridEntry.GetPropertyTextValue());
                 }
@@ -1944,6 +1956,16 @@ namespace System.Windows.Forms.PropertyGridInternal
             dropDownHolder.FocusComponent();
             SelectEdit(false);
 
+            var gridEntry = GetGridEntryFromRow(selectedRow);
+            if (gridEntry != null)
+            {
+                gridEntry.AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
+                gridEntry.AccessibilityObject.RaiseAutomationPropertyChangedEvent(
+                    UiaCore.UIA.ExpandCollapseExpandCollapseStatePropertyId,
+                    UiaCore.ExpandCollapseState.Collapsed,
+                    UiaCore.ExpandCollapseState.Expanded);
+            }
+
             try
             {
                 DropDownButton.IgnoreMouse = true;
@@ -2440,7 +2462,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             return rect;
         }
 
-        internal /*protected virtual*/ int GetRowFromGridEntry(GridEntry gridEntry)
+        internal int GetRowFromGridEntry(GridEntry gridEntry)
         {
             GridEntryCollection rgipesAll = GetAllGridEntries();
             if (gridEntry == null || rgipesAll == null)
@@ -3149,7 +3171,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 bool found = false;
                 for (IntPtr hwnd = UnsafeNativeMethods.GetForegroundWindow();
-                    hwnd != IntPtr.Zero; hwnd = UnsafeNativeMethods.GetParent(new HandleRef(null, hwnd)))
+                    hwnd != IntPtr.Zero; hwnd = User32.GetParent(hwnd))
                 {
                     if (hwnd == dropDownHolder.Handle)
                     {
@@ -3591,7 +3613,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                }
             */
 
-            if (selectedGridEntry.Enumerable &&
+            if (selectedGridEntry != null && selectedGridEntry.Enumerable &&
                 dropDownHolder != null && dropDownHolder.Visible &&
                 (keyCode == Keys.Up || keyCode == Keys.Down))
             {
@@ -3751,7 +3773,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 // Ensure that tooltips don't display when host application is not foreground app.
                 // Assume that we don't want to display the tooltips
                 IntPtr foregroundWindow = UnsafeNativeMethods.GetForegroundWindow();
-                if (UnsafeNativeMethods.IsChild(new HandleRef(null, foregroundWindow), new HandleRef(null, Handle)))
+                if (User32.IsChild(foregroundWindow, new HandleRef(this, Handle)).IsTrue())
                 {
                     // Don't show the tips if a dropdown is showing
                     if ((dropDownHolder == null || dropDownHolder.Component == null) || rowMoveCur == selectedRow)
@@ -6352,8 +6374,8 @@ namespace System.Windows.Forms.PropertyGridInternal
                 get
                 {
                     CreateParams cp = base.CreateParams;
+                    cp.Style |= unchecked((int)(User32.WS.POPUP | User32.WS.BORDER));
                     cp.ExStyle |= (int)User32.WS_EX.TOOLWINDOW;
-                    cp.Style |= NativeMethods.WS_POPUP | NativeMethods.WS_BORDER;
                     if (OSFeature.IsPresent(SystemParameter.DropShadow))
                     {
                         cp.ClassStyle |= (int)User32.CS.DROPSHADOW;
@@ -6628,7 +6650,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 InstanceCreationEditor ice = e.Link.LinkData as InstanceCreationEditor;
 
                 Debug.Assert(ice != null, "How do we have a link without the InstanceCreationEditor?");
-                if (ice != null)
+                if (ice != null && gridView?.SelectedGridEntry != null)
                 {
                     Type createType = gridView.SelectedGridEntry.PropertyType;
                     if (createType != null)
@@ -7044,7 +7066,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 get
                 {
                     CreateParams cp = base.CreateParams;
-                    cp.Style &= ~NativeMethods.WS_BORDER;
+                    cp.Style &= ~(int)User32.WS.BORDER;
                     cp.ExStyle &= ~(int)User32.WS_EX.CLIENTEDGE;
                     return cp;
                 }
@@ -7386,7 +7408,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             /// <returns>Returns the element in the specified direction.</returns>
             internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
             {
-                if (direction == UiaCore.NavigateDirection.Parent)
+                if (direction == UiaCore.NavigateDirection.Parent && _owningPropertyGridView.SelectedGridEntry != null)
                 {
                     return _owningPropertyGridView.SelectedGridEntry.AccessibilityObject;
                 }
@@ -7783,7 +7805,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     {
                         case Keys.Return:
                             bool fwdReturn = !psheet.NeedsCommit;
-                            if (psheet.UnfocusSelection() && fwdReturn)
+                            if (psheet.UnfocusSelection() && fwdReturn && psheet.SelectedGridEntry != null)
                             {
                                 psheet.SelectedGridEntry.OnValueReturnKey();
                             }
@@ -7966,7 +7988,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 /// <returns>Returns the element in the specified direction.</returns>
                 internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
                 {
-                    if (direction == UiaCore.NavigateDirection.Parent)
+                    if (direction == UiaCore.NavigateDirection.Parent && propertyGridView.SelectedGridEntry != null)
                     {
                         return propertyGridView.SelectedGridEntry.AccessibilityObject;
                     }
@@ -8485,32 +8507,22 @@ namespace System.Windows.Forms.PropertyGridInternal
             /// <param name="propertyId">Identifier indicating the property to return</param>
             /// <returns>Returns a ValInfo indicating whether the element supports this property, or has no value for it.</returns>
             internal override object GetPropertyValue(UiaCore.UIA propertyID)
-            {
-                switch (propertyID)
+                => propertyID switch
                 {
-                    case UiaCore.UIA.ControlTypePropertyId:
-                        return UiaCore.UIA.TableControlTypeId;
-                    case UiaCore.UIA.NamePropertyId:
-                        return Name;
-                    case UiaCore.UIA.IsTablePatternAvailablePropertyId:
-                    case UiaCore.UIA.IsGridPatternAvailablePropertyId:
-                        return true;
-                }
-
-                return base.GetPropertyValue(propertyID);
-            }
+                    UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.TableControlTypeId,
+                    UiaCore.UIA.NamePropertyId => Name,
+                    UiaCore.UIA.IsTablePatternAvailablePropertyId => true,
+                    UiaCore.UIA.IsGridPatternAvailablePropertyId => true,
+                    _ => base.GetPropertyValue(propertyID)
+                };
 
             internal override bool IsPatternSupported(UiaCore.UIA patternId)
-            {
-                switch (patternId)
+                => patternId switch
                 {
-                    case UiaCore.UIA.TablePatternId:
-                    case UiaCore.UIA.GridPatternId:
-                        return true;
-                }
-
-                return base.IsPatternSupported(patternId);
-            }
+                    UiaCore.UIA.TablePatternId => true,
+                    UiaCore.UIA.GridPatternId => true,
+                    _ => base.IsPatternSupported(patternId)
+                };
 
             public override string Name
             {
@@ -8521,10 +8533,8 @@ namespace System.Windows.Forms.PropertyGridInternal
                     {
                         return name;
                     }
-                    else
-                    {
-                        return SR.PropertyGridDefaultAccessibleName;
-                    }
+
+                    return string.Format(SR.PropertyGridDefaultAccessibleNameTemplate, _owningPropertyGridView?.OwnerGrid?.Name);
                 }
             }
 

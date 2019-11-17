@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -401,7 +401,7 @@ namespace System.Windows.Forms
             {
                 CreateParams cp = base.CreateParams;
                 cp.ClassName = "COMBOBOX";
-                cp.Style |= NativeMethods.WS_VSCROLL | NativeMethods.CBS_HASSTRINGS | NativeMethods.CBS_AUTOHSCROLL;
+                cp.Style |= (int)User32.WS.VSCROLL | NativeMethods.CBS_HASSTRINGS | NativeMethods.CBS_AUTOHSCROLL;
                 cp.ExStyle |= (int)User32.WS_EX.CLIENTEDGE;
                 if (!integralHeight)
                 {
@@ -1828,6 +1828,11 @@ namespace System.Windows.Forms
                     // once in the combobox and once here.
                     if (fireSetFocus)
                     {
+                        if (!DesignMode && childEdit != null && m.HWnd == childEdit.Handle)
+                        {
+                            WmImeSetFocus();
+                        }
+
                         InvokeGotFocus(this, EventArgs.Empty);
                     }
 
@@ -1969,7 +1974,7 @@ namespace System.Windows.Forms
                     mousePressed = true;
                     mouseEvents = true;
 
-                    if (ContextMenu != null || ContextMenuStrip != null)
+                    if (ContextMenuStrip != null)
                     {
                         // Set the mouse capture as this is the child Wndproc.
                         Capture = true;
@@ -1995,12 +2000,6 @@ namespace System.Windows.Forms
                     mousePressed = false;
                     mouseEvents = false;
 
-                    if (ContextMenu != null)
-                    {
-                        // Set the mouse capture as this is the child Wndproc.
-                        Capture = false;
-                    }
-
                     DefChildWndProc(ref m);
 
                     // The message gets fired from Combo-box's WndPrc - convert to Combobox coordinates
@@ -2011,7 +2010,7 @@ namespace System.Windows.Forms
 
                 case WindowMessages.WM_CONTEXTMENU:
                     // Forward context menu messages to the parent control
-                    if (ContextMenu != null || ContextMenuStrip != null)
+                    if (ContextMenuStrip != null)
                     {
                         UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), WindowMessages.WM_CONTEXTMENU, m.WParam, m.LParam);
                     }
@@ -2536,7 +2535,7 @@ namespace System.Windows.Forms
 
             if (ok && DropDownStyle != ComboBoxStyle.DropDownList)
             {
-                IntPtr hwnd = UnsafeNativeMethods.GetWindow(new HandleRef(this, Handle), NativeMethods.GW_CHILD);
+                IntPtr hwnd = User32.GetWindow(new HandleRef(this, Handle), User32.GW.CHILD);
                 if (hwnd != IntPtr.Zero)
                 {
 
@@ -2549,7 +2548,7 @@ namespace System.Windows.Forms
 
                         // get the edits hwnd...
                         //
-                        hwnd = UnsafeNativeMethods.GetWindow(new HandleRef(this, hwnd), NativeMethods.GW_HWNDNEXT);
+                        hwnd = User32.GetWindow(new HandleRef(this, hwnd), User32.GW.HWNDNEXT);
                     }
 
                     childEdit = new ComboBoxChildNativeWindow(this, ChildWindowType.Edit);
@@ -3625,7 +3624,7 @@ namespace System.Windows.Forms
             if ((DropDownStyle == ComboBoxStyle.Simple) && ParentInternal != null)
             {
                 RECT rect = new RECT();
-                SafeNativeMethods.GetClientRect(new HandleRef(this, Handle), ref rect);
+                User32.GetClientRect(new HandleRef(this, Handle), ref rect);
                 Control p = ParentInternal;
                 Graphics graphics = Graphics.FromHdcInternal(m.WParam);
                 if (p != null)
@@ -6136,13 +6135,7 @@ namespace System.Windows.Forms
                 return true;
             }
 
-            internal bool Visible
-            {
-                get
-                {
-                    return SafeNativeMethods.IsWindowVisible(new HandleRef(this, Handle));
-                }
-            }
+            internal bool Visible => User32.IsWindowVisible(this).IsTrue();
 
             static internal bool AutoCompleteActive
             {

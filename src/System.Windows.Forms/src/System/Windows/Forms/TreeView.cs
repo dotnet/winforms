@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -331,7 +331,7 @@ namespace System.Windows.Forms
                 if (IsHandleCreated)
                 {
                     int currentStyle = unchecked((int)((long)UnsafeNativeMethods.GetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_STYLE)));
-                    cp.Style |= (currentStyle & (NativeMethods.WS_HSCROLL | NativeMethods.WS_VSCROLL));
+                    cp.Style |= currentStyle & (int)(User32.WS.HSCROLL | User32.WS.VSCROLL);
                 }
                 switch (borderStyle)
                 {
@@ -339,7 +339,7 @@ namespace System.Windows.Forms
                         cp.ExStyle |= (int)User32.WS_EX.CLIENTEDGE;
                         break;
                     case BorderStyle.FixedSingle:
-                        cp.Style |= NativeMethods.WS_BORDER;
+                        cp.Style |= (int)User32.WS.BORDER;
                         break;
                 }
 
@@ -350,56 +350,56 @@ namespace System.Windows.Forms
 
                 if (!HideSelection)
                 {
-                    cp.Style |= NativeMethods.TVS_SHOWSELALWAYS;
+                    cp.Style |= (int)ComCtl32.TVS.SHOWSELALWAYS;
                 }
 
                 if (LabelEdit)
                 {
-                    cp.Style |= NativeMethods.TVS_EDITLABELS;
+                    cp.Style |= (int)ComCtl32.TVS.EDITLABELS;
                 }
 
                 if (ShowLines)
                 {
-                    cp.Style |= NativeMethods.TVS_HASLINES;
+                    cp.Style |= (int)ComCtl32.TVS.HASLINES;
                 }
 
                 if (ShowPlusMinus)
                 {
-                    cp.Style |= NativeMethods.TVS_HASBUTTONS;
+                    cp.Style |= (int)ComCtl32.TVS.HASBUTTONS;
                 }
 
                 if (ShowRootLines)
                 {
-                    cp.Style |= NativeMethods.TVS_LINESATROOT;
+                    cp.Style |= (int)ComCtl32.TVS.LINESATROOT;
                 }
 
                 if (HotTracking)
                 {
-                    cp.Style |= NativeMethods.TVS_TRACKSELECT;
+                    cp.Style |= (int)ComCtl32.TVS.TRACKSELECT;
                 }
 
                 if (FullRowSelect)
                 {
-                    cp.Style |= NativeMethods.TVS_FULLROWSELECT;
+                    cp.Style |= (int)ComCtl32.TVS.FULLROWSELECT;
                 }
 
                 if (setOddHeight)
                 {
-                    cp.Style |= NativeMethods.TVS_NONEVENHEIGHT;
+                    cp.Style |= (int)ComCtl32.TVS.NONEVENHEIGHT;
                 }
 
                 // Don't set TVS_CHECKBOXES here if the window isn't created yet.
                 // See OnHandleCreated for explanation
                 if (ShowNodeToolTips && IsHandleCreated && !DesignMode)
                 {
-                    cp.Style |= NativeMethods.TVS_INFOTIP;
+                    cp.Style |= (int)ComCtl32.TVS.INFOTIP;
                 }
 
                 // Don't set TVS_CHECKBOXES here if the window isn't created yet.
                 // See OnHandleCreated for explanation
                 if (CheckBoxes && IsHandleCreated)
                 {
-                    cp.Style |= NativeMethods.TVS_CHECKBOXES;
+                    cp.Style |= (int)ComCtl32.TVS.CHECKBOXES;
                 }
 
                 // Don't call IsMirrored from CreateParams. That will lead to some nasty problems, since
@@ -411,11 +411,11 @@ namespace System.Windows.Forms
                         //We want to turn on mirroring for TreeView explicitly.
                         cp.ExStyle |= (int)User32.WS_EX.LAYOUTRTL;
                         //Don't need these styles when mirroring is turned on.
-                        cp.ExStyle &= ~((int)User32.WS_EX.RTLREADING | (int)User32.WS_EX.RIGHT | (int)User32.WS_EX.LEFTSCROLLBAR);
+                        cp.ExStyle &= ~(int)(User32.WS_EX.RTLREADING | User32.WS_EX.RIGHT | User32.WS_EX.LEFTSCROLLBAR);
                     }
                     else
                     {
-                        cp.Style |= NativeMethods.TVS_RTLREADING;
+                        cp.Style |= (int)ComCtl32.TVS.RTLREADING;
                     }
                 }
 
@@ -986,8 +986,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-            ///  Indicates the drawing mode for the tree view.
-            /// </summary>
+        ///  Indicates the drawing mode for the tree view.
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(TreeViewDrawMode.Normal),
@@ -1222,7 +1222,6 @@ namespace System.Windows.Forms
             {
                 if (IsHandleCreated)
                 {
-                    Debug.Assert(selectedNode == null || selectedNode.TreeView != this, "handle is created, but we're still caching selectedNode");
                     IntPtr hItem = SendMessage(NativeMethods.TVM_GETNEXTITEM, NativeMethods.TVGN_CARET, 0);
                     if (hItem == IntPtr.Zero)
                     {
@@ -1702,13 +1701,6 @@ namespace System.Windows.Forms
         {
             if (disposing)
             {
-
-                foreach (TreeNode node in Nodes)
-                {
-                    node.ContextMenu = null;
-                }
-
-                //
                 lock (this)
                 {
                     DetachImageListHandlers();
@@ -1794,12 +1786,11 @@ namespace System.Windows.Forms
         /// </summary>
         public TreeViewHitTestInfo HitTest(int x, int y)
         {
-            NativeMethods.TV_HITTESTINFO tvhi = new NativeMethods.TV_HITTESTINFO
+            var tvhi = new ComCtl32.TVHITTESTINFO
             {
-                pt_x = x,
-                pt_y = y
+                pt = new Point(x, y)
             };
-            IntPtr hnode = UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TVM_HITTEST, 0, tvhi);
+            IntPtr hnode = User32.SendMessageW(this, (User32.WindowMessage)NativeMethods.TVM_HITTEST, IntPtr.Zero, ref tvhi);
             TreeNode node = (hnode == IntPtr.Zero ? null : NodeFromHandle(hnode));
             TreeViewHitTestLocations loc = (TreeViewHitTestLocations)tvhi.flags;
             return (new TreeViewHitTestInfo(node, loc));
@@ -1841,14 +1832,12 @@ namespace System.Windows.Forms
         /// </summary>
         public TreeNode GetNodeAt(int x, int y)
         {
-            NativeMethods.TV_HITTESTINFO tvhi = new NativeMethods.TV_HITTESTINFO
+            var tvhi = new ComCtl32.TVHITTESTINFO
             {
-                pt_x = x,
-                pt_y = y
+                pt = new Point(x, y)
             };
 
-            IntPtr hnode = UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TVM_HITTEST, 0, tvhi);
-
+            IntPtr hnode = User32.SendMessageW(this, (User32.WindowMessage)NativeMethods.TVM_HITTEST, IntPtr.Zero, ref tvhi);
             return (hnode == IntPtr.Zero ? null : NodeFromHandle(hnode));
         }
 
@@ -1989,15 +1978,21 @@ namespace System.Windows.Forms
 
         protected override void OnHandleCreated(EventArgs e)
         {
+            if (!IsHandleCreated)
+            {
+                base.OnHandleCreated(e);
+                return;
+            }
+
             TreeNode savedSelectedNode = selectedNode;
             selectedNode = null;
 
             base.OnHandleCreated(e);
 
-            int version = unchecked((int)(long)SendMessage(NativeMethods.CCM_GETVERSION, 0, 0));
+            int version = unchecked((int)(long)SendMessage((int)ComCtl32.CCM.GETVERSION, 0, 0));
             if (version < 5)
             {
-                SendMessage(NativeMethods.CCM_SETVERSION, 5, 0);
+                SendMessage((int)ComCtl32.CCM.SETVERSION, 5, 0);
             }
 
             // Workaround for problem in TreeView where it doesn't recognize the TVS_CHECKBOXES
@@ -2008,14 +2003,14 @@ namespace System.Windows.Forms
             if (CheckBoxes)
             {
                 int style = unchecked((int)(UnsafeNativeMethods.GetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_STYLE)));
-                style |= NativeMethods.TVS_CHECKBOXES;
+                style |= (int)ComCtl32.TVS.CHECKBOXES;
                 UnsafeNativeMethods.SetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_STYLE, new HandleRef(null, (IntPtr)style));
             }
 
             if (ShowNodeToolTips && !DesignMode)
             {
                 int style = unchecked((int)(UnsafeNativeMethods.GetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_STYLE)));
-                style |= NativeMethods.TVS_INFOTIP;
+                style |= (int)ComCtl32.TVS.INFOTIP;
                 UnsafeNativeMethods.SetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_STYLE, new HandleRef(null, (IntPtr)style));
             }
 
@@ -2196,14 +2191,13 @@ namespace System.Windows.Forms
             ///  within the TreeView so the appropriate
             ///  NodeHovered event can be raised.
 
-            NativeMethods.TV_HITTESTINFO tvhip = new NativeMethods.TV_HITTESTINFO();
-            Point pos = Cursor.Position;
-            pos = PointToClient(pos);
-            tvhip.pt_x = pos.X;
-            tvhip.pt_y = pos.Y;
-            IntPtr hnode = UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TVM_HITTEST, 0, tvhip);
+            var tvhip = new ComCtl32.TVHITTESTINFO
+            {
+                pt = PointToClient(Cursor.Position)
+            };
 
-            if (hnode != IntPtr.Zero && ((tvhip.flags & NativeMethods.TVHT_ONITEM) != 0))
+            IntPtr hnode = User32.SendMessageW(this, (User32.WindowMessage)NativeMethods.TVM_HITTEST, IntPtr.Zero, ref tvhip);
+            if (hnode != IntPtr.Zero && ((tvhip.flags & ComCtl32.TVHT.ONITEM) != 0))
             {
                 TreeNode tn = NodeFromHandle(hnode);
                 if (tn != prevHoveredNode && tn != null)
@@ -2701,7 +2695,9 @@ namespace System.Windows.Forms
             }
         }
 
-        // Setting the NativeMethods.TVS_CHECKBOXES style clears the checked state
+        /// <remarks>
+        ///  Setting the ComCtl32.TVS.CHECKBOXES style clears the checked state
+        /// </remarks>
         private void UpdateCheckedState(TreeNode node, bool update)
         {
             // This looks funny, but CheckedInternal returns the cached isChecked value and the internal
@@ -2748,33 +2744,32 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Performs custom draw handling
         /// </summary>
-        private void CustomDraw(ref Message m)
+        private unsafe void CustomDraw(ref Message m)
         {
-            NativeMethods.NMTVCUSTOMDRAW nmcd = (NativeMethods.NMTVCUSTOMDRAW)m.GetLParam(typeof(NativeMethods.NMTVCUSTOMDRAW));
+            ComCtl32.NMTVCUSTOMDRAW* nmtvcd = (ComCtl32.NMTVCUSTOMDRAW*)m.LParam;
 
             // Find out which stage we're drawing
-            switch (nmcd.nmcd.dwDrawStage)
+            switch (nmtvcd->nmcd.dwDrawStage)
             {
                 // Do we want OwnerDraw for this paint cycle?
-                case NativeMethods.CDDS_PREPAINT:
-                    m.Result = (IntPtr)NativeMethods.CDRF_NOTIFYITEMDRAW; // yes, we do...
+                case ComCtl32.CDDS.PREPAINT:
+                    m.Result = (IntPtr)ComCtl32.CDRF.NOTIFYITEMDRAW; // yes, we do...
                     return;
                 // We've got opt-in on owner draw for items - so handle each one.
-                case NativeMethods.CDDS_ITEMPREPAINT:
+                case ComCtl32.CDDS.ITEMPREPAINT:
                     // get the node
-                    Debug.Assert(nmcd.nmcd.dwItemSpec != IntPtr.Zero, "Invalid node handle in ITEMPREPAINT");
-                    TreeNode node = NodeFromHandle((IntPtr)nmcd.nmcd.dwItemSpec);
+                    Debug.Assert(nmtvcd->nmcd.dwItemSpec != IntPtr.Zero, "Invalid node handle in ITEMPREPAINT");
+                    TreeNode node = NodeFromHandle((IntPtr)nmtvcd->nmcd.dwItemSpec);
 
                     if (node == null)
                     {
                         // this can happen if we are presently inserting the node - it hasn't yet
                         // been added to the handle table
-
-                        m.Result = (IntPtr)(NativeMethods.CDRF_SKIPDEFAULT);
+                        m.Result = (IntPtr)(ComCtl32.CDRF.SKIPDEFAULT);
                         return;
                     }
 
-                    int state = nmcd.nmcd.uItemState;
+                    ComCtl32.CDIS state = nmtvcd->nmcd.uItemState;
 
                     // The commctrl TreeView allows you to draw the whole row of a node
                     // or nothing at all. The way we provide OwnerDrawText is by asking it
@@ -2782,14 +2777,13 @@ namespace System.Windows.Forms
                     // as background color.
                     if (drawMode == TreeViewDrawMode.OwnerDrawText)
                     {
-                        nmcd.clrText = nmcd.clrTextBk;
-                        Marshal.StructureToPtr(nmcd, m.LParam, false);
-                        m.Result = (IntPtr)(NativeMethods.CDRF_NEWFONT | NativeMethods.CDRF_NOTIFYPOSTPAINT);
+                        nmtvcd->clrText = nmtvcd->clrTextBk;
+                        m.Result = (IntPtr)(ComCtl32.CDRF.NEWFONT | ComCtl32.CDRF.NOTIFYPOSTPAINT);
                         return;
                     }
                     else if (drawMode == TreeViewDrawMode.OwnerDrawAll)
                     {
-                        Graphics g = Graphics.FromHdcInternal(nmcd.nmcd.hdc);
+                        Graphics g = Graphics.FromHdcInternal(nmtvcd->nmcd.hdc);
 
                         DrawTreeNodeEventArgs e;
 
@@ -2823,7 +2817,7 @@ namespace System.Windows.Forms
 
                         if (!e.DrawDefault)
                         {
-                            m.Result = (IntPtr)(NativeMethods.CDRF_SKIPDEFAULT);
+                            m.Result = (IntPtr)(ComCtl32.CDRF.SKIPDEFAULT);
                             return;
                         }
                     }
@@ -2833,60 +2827,53 @@ namespace System.Windows.Forms
                     // Diagnostic output
                     Debug.WriteLine("Itemstate: "+state);
                     Debug.WriteLine("Itemstate: "+
-                                            "\nDISABLED" + (((state & NativeMethods.CDIS_DISABLED) != 0) ? "TRUE" : "FALSE") +
-                                            "\nHOT" + (((state & NativeMethods.CDIS_HOT) != 0) ? "TRUE" : "FALSE") +
-                                            "\nGRAYED" + (((state & NativeMethods.CDIS_GRAYED) != 0) ? "TRUE" : "FALSE") +
-                                            "\nSELECTED" + (((state & NativeMethods.CDIS_SELECTED) != 0) ? "TRUE" : "FALSE") +
-                                            "\nFOCUS" + (((state & NativeMethods.CDIS_FOCUS) != 0) ? "TRUE" : "FALSE") +
-                                            "\nDEFAULT" + (((state & NativeMethods.CDIS_DEFAULT) != 0) ? "TRUE" : "FALSE") +
-                                            "\nMARKED" + (((state & NativeMethods.CDIS_MARKED) != 0) ? "TRUE" : "FALSE") +
-                                            "\nINDETERMINATE" + (((state & NativeMethods.CDIS_INDETERMINATE) != 0) ? "TRUE" : "FALSE"));
+                                            "\nDISABLED" + (((state & ComCtl32.CDIS.DISABLED) != 0) ? "TRUE" : "FALSE") +
+                                            "\nHOT" + (((state & ComCtl32.CDIS.HOT) != 0) ? "TRUE" : "FALSE") +
+                                            "\nGRAYED" + (((state & ComCtl32.CDIS.GRAYED) != 0) ? "TRUE" : "FALSE") +
+                                            "\nSELECTED" + (((state & ComCtl32.CDIS.SELECTED) != 0) ? "TRUE" : "FALSE") +
+                                            "\nFOCUS" + (((state & ComCtl32.CDIS.FOCUS) != 0) ? "TRUE" : "FALSE") +
+                                            "\nDEFAULT" + (((state & ComCtl32.CDIS.DEFAULT) != 0) ? "TRUE" : "FALSE") +
+                                            "\nMARKED" + (((state & ComCtl32.CDIS.MARKED) != 0) ? "TRUE" : "FALSE") +
+                                            "\nINDETERMINATE" + (((state & ComCtl32.CDIS.INDETERMINATE) != 0) ? "TRUE" : "FALSE"));
 #endif
 
-                    OwnerDrawPropertyBag renderinfo = GetItemRenderStyles(node, state);
+                    OwnerDrawPropertyBag renderinfo = GetItemRenderStyles(node, (int)state);
 
                     // TreeView has problems with drawing items at times; it gets confused
                     // as to which colors apply to which items (see focus rectangle shifting;
                     // when one item is selected, click and hold on another). This needs to be fixed.
-
-                    bool colordelta = false;
                     Color riFore = renderinfo.ForeColor;
                     Color riBack = renderinfo.BackColor;
                     if (renderinfo != null && !riFore.IsEmpty)
                     {
-                        nmcd.clrText = ColorTranslator.ToWin32(riFore);
-                        colordelta = true;
+                        nmtvcd->clrText = ColorTranslator.ToWin32(riFore);
                     }
                     if (renderinfo != null && !riBack.IsEmpty)
                     {
-                        nmcd.clrTextBk = ColorTranslator.ToWin32(riBack);
-                        colordelta = true;
+                        nmtvcd->clrTextBk = ColorTranslator.ToWin32(riBack);
                     }
-                    if (colordelta)
-                    {
-                        Marshal.StructureToPtr(nmcd, m.LParam, false);
-                    }
+
                     if (renderinfo != null && renderinfo.Font != null)
                     {
                         // Mess with the DC directly...
-                        Gdi32.SelectObject(new HandleRef(nmcd.nmcd, nmcd.nmcd.hdc), new HandleRef(renderinfo, renderinfo.FontHandle));
+                        Gdi32.SelectObject(new HandleRef(nmtvcd->nmcd, nmtvcd->nmcd.hdc), new HandleRef(renderinfo, renderinfo.FontHandle));
                         // There is a problem in winctl that clips node fonts if the fontsize
                         // is larger than the treeview font size. The behavior is much better in comctl 5 and above.
-                        m.Result = (IntPtr)NativeMethods.CDRF_NEWFONT;
+                        m.Result = (IntPtr)ComCtl32.CDRF.NEWFONT;
                         return;
                     }
 
                     // fall through and do the default drawing work
                     goto default;
 
-                case (NativeMethods.CDDS_ITEMPOSTPAINT):
+                case (ComCtl32.CDDS.ITEMPOSTPAINT):
                     //User draws only the text in OwnerDrawText mode, as explained in comments above
                     if (drawMode == TreeViewDrawMode.OwnerDrawText)
                     {
-                        Debug.Assert(nmcd.nmcd.dwItemSpec != IntPtr.Zero, "Invalid node handle in ITEMPOSTPAINT");
+                        Debug.Assert(nmtvcd->nmcd.dwItemSpec != IntPtr.Zero, "Invalid node handle in ITEMPOSTPAINT");
 
                         // Get the node
-                        node = NodeFromHandle((IntPtr)nmcd.nmcd.dwItemSpec);
+                        node = NodeFromHandle((IntPtr)nmtvcd->nmcd.dwItemSpec);
 
                         if (node == null)
                         {
@@ -2895,7 +2882,7 @@ namespace System.Windows.Forms
                             return;
                         }
 
-                        Graphics g = Graphics.FromHdcInternal(nmcd.nmcd.hdc);
+                        Graphics g = Graphics.FromHdcInternal(nmtvcd->nmcd.hdc);
 
                         DrawTreeNodeEventArgs e;
 
@@ -2906,7 +2893,7 @@ namespace System.Windows.Forms
                             Point textLoc = new Point(bounds.X - 1, bounds.Y); // required to center the text
                             bounds = new Rectangle(textLoc, new Size(textSize.Width, bounds.Height));
 
-                            e = new DrawTreeNodeEventArgs(g, node, bounds, (TreeNodeStates)(nmcd.nmcd.uItemState));
+                            e = new DrawTreeNodeEventArgs(g, node, bounds, (TreeNodeStates)(nmtvcd->nmcd.uItemState));
                             OnDrawNode(e);
 
                             if (e.DrawDefault)
@@ -2940,7 +2927,7 @@ namespace System.Windows.Forms
                             g.Dispose();
                         }
 
-                        m.Result = (IntPtr)NativeMethods.CDRF_NOTIFYSUBITEMDRAW;
+                        m.Result = (IntPtr)ComCtl32.CDRF.NOTIFYSUBITEMDRAW;
                         return;
                     }
 
@@ -2948,7 +2935,7 @@ namespace System.Windows.Forms
 
                 default:
                     // just in case we get a spurious message, tell it to do the right thing
-                    m.Result = (IntPtr)NativeMethods.CDRF_DODEFAULT;
+                    m.Result = (IntPtr)ComCtl32.CDRF.DODEFAULT;
                     return;
             }
         }
@@ -2966,7 +2953,7 @@ namespace System.Windows.Forms
             }
 
             // we only change colors if we're displaying things normally
-            if ((state & (NativeMethods.CDIS_SELECTED | NativeMethods.CDIS_GRAYED | NativeMethods.CDIS_HOT | NativeMethods.CDIS_DISABLED)) == 0)
+            if ((state & (int)(ComCtl32.CDIS.SELECTED | ComCtl32.CDIS.GRAYED | ComCtl32.CDIS.HOT | ComCtl32.CDIS.DISABLED)) == 0)
             {
                 retval.ForeColor = node.propBag.ForeColor;
                 retval.BackColor = node.propBag.BackColor;
@@ -2980,14 +2967,12 @@ namespace System.Windows.Forms
             User32.NMHDR* nmhdr = (User32.NMHDR*)m.LParam;
             IntPtr tooltipHandle = nmhdr->hwndFrom;
 
-            NativeMethods.TV_HITTESTINFO tvhip = new NativeMethods.TV_HITTESTINFO();
-            Point pos = Cursor.Position;
-            pos = PointToClient(pos);
-            tvhip.pt_x = pos.X;
-            tvhip.pt_y = pos.Y;
-            IntPtr hnode = UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TVM_HITTEST, 0, tvhip);
-
-            if (hnode != IntPtr.Zero && ((tvhip.flags & NativeMethods.TVHT_ONITEM) != 0))
+            var tvhip = new ComCtl32.TVHITTESTINFO
+            {
+                pt = PointToClient(Cursor.Position)
+            };
+            IntPtr hnode = User32.SendMessageW(this, (User32.WindowMessage)NativeMethods.TVM_HITTEST, IntPtr.Zero, ref tvhip);
+            if (hnode != IntPtr.Zero && ((tvhip.flags & ComCtl32.TVHT.ONITEM) != 0))
             {
                 TreeNode tn = NodeFromHandle(hnode);
                 if (tn != null)
@@ -3016,13 +3001,12 @@ namespace System.Windows.Forms
             NativeMethods.TOOLTIPTEXT ttt = (NativeMethods.TOOLTIPTEXT)m.GetLParam(typeof(NativeMethods.TOOLTIPTEXT));
             string tipText = controlToolTipText;
 
-            NativeMethods.TV_HITTESTINFO tvhip = new NativeMethods.TV_HITTESTINFO();
-            Point pos = Cursor.Position;
-            pos = PointToClient(pos);
-            tvhip.pt_x = pos.X;
-            tvhip.pt_y = pos.Y;
-            IntPtr hnode = UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TVM_HITTEST, 0, tvhip);
-            if (hnode != IntPtr.Zero && ((tvhip.flags & NativeMethods.TVHT_ONITEM) != 0))
+            var tvhip = new ComCtl32.TVHITTESTINFO
+            {
+                pt = PointToClient(Cursor.Position)
+            };
+            IntPtr hnode = User32.SendMessageW(this, (User32.WindowMessage)NativeMethods.TVM_HITTEST, IntPtr.Zero, ref tvhip);
+            if (hnode != IntPtr.Zero && ((tvhip.flags & ComCtl32.TVHT.ONITEM) != 0))
             {
                 TreeNode tn = NodeFromHandle(hnode);
                 if (ShowNodeToolTips && tn != null && (!string.IsNullOrEmpty(tn.ToolTipText)))
@@ -3091,15 +3075,14 @@ namespace System.Windows.Forms
                     case NativeMethods.NM_CLICK:
                     case NativeMethods.NM_RCLICK:
                         MouseButtons button = MouseButtons.Left;
-
-                        NativeMethods.TV_HITTESTINFO tvhip = new NativeMethods.TV_HITTESTINFO();
-                        Point pos = Cursor.Position;
-                        pos = PointToClient(pos);
-                        tvhip.pt_x = pos.X;
-                        tvhip.pt_y = pos.Y;
-                        IntPtr hnode = UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TVM_HITTEST, 0, tvhip);
+                        Point pos = PointToClient(Cursor.Position);
+                        var tvhip = new ComCtl32.TVHITTESTINFO
+                        {
+                            pt = pos
+                        };
+                        IntPtr hnode = User32.SendMessageW(this, (User32.WindowMessage)NativeMethods.TVM_HITTEST, IntPtr.Zero, ref tvhip);
                         if (nmtv->nmhdr.code != NativeMethods.NM_CLICK
-                                    || (tvhip.flags & NativeMethods.TVHT_ONITEM) != 0)
+                                    || (tvhip.flags & ComCtl32.TVHT.ONITEM) != 0)
                         {
                             button = nmtv->nmhdr.code == NativeMethods.NM_CLICK
                                 ? MouseButtons.Left : MouseButtons.Right;
@@ -3109,7 +3092,7 @@ namespace System.Windows.Forms
                         // LBUTTONUP happens on TVHT_ONITEM. This is a comctl quirk.
                         // We work around that by calling OnMouseUp here.
                         if (nmtv->nmhdr.code != NativeMethods.NM_CLICK
-                            || (tvhip.flags & NativeMethods.TVHT_ONITEM) != 0 || FullRowSelect)
+                            || (tvhip.flags & ComCtl32.TVHT.ONITEM) != 0 || FullRowSelect)
                         {
                             if (hnode != IntPtr.Zero && !ValidationCancelled)
                             {
@@ -3122,14 +3105,14 @@ namespace System.Windows.Forms
                         if (nmtv->nmhdr.code == NativeMethods.NM_RCLICK)
                         {
                             TreeNode treeNode = NodeFromHandle(hnode);
-                            if (treeNode != null && (treeNode.ContextMenu != null || treeNode.ContextMenuStrip != null))
+                            if (treeNode != null && treeNode.ContextMenuStrip != null)
                             {
                                 ShowContextMenu(treeNode);
                             }
                             else
                             {
                                 treeViewState[TREEVIEWSTATE_showTreeViewContextMenu] = true;
-                                SendMessage(WindowMessages.WM_CONTEXTMENU, Handle, SafeNativeMethods.GetMessagePos());
+                                SendMessage(WindowMessages.WM_CONTEXTMENU, Handle, (int)User32.GetMessagePos());
                             }
                             m.Result = (IntPtr)1;
 
@@ -3138,7 +3121,7 @@ namespace System.Windows.Forms
                         if (!treeViewState[TREEVIEWSTATE_mouseUpFired])
                         {
                             if (nmtv->nmhdr.code != NativeMethods.NM_CLICK
-                            || (tvhip.flags & NativeMethods.TVHT_ONITEM) != 0)
+                            || (tvhip.flags & ComCtl32.TVHT.ONITEM) != 0)
                             {
                                 // The treeview's WndProc doesn't get the WM_LBUTTONUP messages when
                                 // LBUTTONUP happens on TVHT_ONITEM. This is a comctl quirk.
@@ -3158,41 +3141,14 @@ namespace System.Windows.Forms
         /// </summary>
         private void ShowContextMenu(TreeNode treeNode)
         {
-            if (treeNode.ContextMenu != null || treeNode.ContextMenuStrip != null)
+            if (treeNode.ContextMenuStrip != null)
             {
-
-                ContextMenu contextMenu = treeNode.ContextMenu;
                 ContextMenuStrip menu = treeNode.ContextMenuStrip;
 
-                if (contextMenu != null)
-                {
-                    User32.GetCursorPos(out Point pt);
-
-                    // Summary: the current window must be made the foreground window
-                    // before calling TrackPopupMenuEx, and a task switch must be
-                    // forced after the call.
-
-                    UnsafeNativeMethods.SetForegroundWindow(new HandleRef(this, Handle));
-
-                    contextMenu.OnPopup(EventArgs.Empty);
-
-                    SafeNativeMethods.TrackPopupMenuEx(new HandleRef(contextMenu, contextMenu.Handle),
-                                             NativeMethods.TPM_VERTICAL,
-                                             pt.X,
-                                             pt.Y,
-                                             new HandleRef(this, Handle),
-                                             null);
-
-                    // Force task switch (see above)
-                    UnsafeNativeMethods.PostMessage(new HandleRef(this, Handle), WindowMessages.WM_NULL, IntPtr.Zero, IntPtr.Zero);
-                }
                 // Need to send TVM_SELECTITEM to highlight the node while the contextMenuStrip is being shown.
-                else if (menu != null)
-                {
-                    UnsafeNativeMethods.PostMessage(new HandleRef(this, Handle), NativeMethods.TVM_SELECTITEM, NativeMethods.TVGN_DROPHILITE, treeNode.Handle);
-                    menu.ShowInternal(this, PointToClient(MousePosition),/*keyboardActivated*/false);
-                    menu.Closing += new ToolStripDropDownClosingEventHandler(ContextMenuStripClosing);
-                }
+                UnsafeNativeMethods.PostMessage(new HandleRef(this, Handle), NativeMethods.TVM_SELECTITEM, NativeMethods.TVGN_DROPHILITE, treeNode.Handle);
+                menu.ShowInternal(this, PointToClient(MousePosition),/*keyboardActivated*/false);
+                menu.Closing += new ToolStripDropDownClosingEventHandler(ContextMenuStripClosing);
             }
         }
 
@@ -3327,16 +3283,15 @@ namespace System.Windows.Forms
 
                     // Always reset the MouseupFired.
                     treeViewState[TREEVIEWSTATE_mouseUpFired] = false;
-                    NativeMethods.TV_HITTESTINFO tvhip = new NativeMethods.TV_HITTESTINFO
+                    var tvhip = new ComCtl32.TVHITTESTINFO
                     {
-                        pt_x = NativeMethods.Util.SignedLOWORD(m.LParam),
-                        pt_y = NativeMethods.Util.SignedHIWORD(m.LParam)
+                        pt = new Point(NativeMethods.Util.SignedLOWORD(m.LParam), NativeMethods.Util.SignedHIWORD(m.LParam))
                     };
-                    hNodeMouseDown = UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TVM_HITTEST, 0, tvhip);
+                    hNodeMouseDown = User32.SendMessageW(this, (User32.WindowMessage)NativeMethods.TVM_HITTEST, IntPtr.Zero, ref tvhip);
 
                     // This gets around the TreeView behavior of temporarily moving the selection
                     // highlight to a node when the user clicks on its checkbox.
-                    if ((tvhip.flags & NativeMethods.TVHT_ONITEMSTATEICON) != 0)
+                    if ((tvhip.flags & ComCtl32.TVHT.ONITEMSTATEICON) != 0)
                     {
                         //We donot pass the Message to the Control .. so fire MouseDowm ...
                         OnMouseDown(new MouseEventArgs(MouseButtons.Left, 1, NativeMethods.Util.SignedLOWORD(m.LParam), NativeMethods.Util.SignedHIWORD(m.LParam), 0));
@@ -3360,12 +3315,11 @@ namespace System.Windows.Forms
                     break;
                 case WindowMessages.WM_LBUTTONUP:
                 case WindowMessages.WM_RBUTTONUP:
-                    NativeMethods.TV_HITTESTINFO tvhi = new NativeMethods.TV_HITTESTINFO
+                    var tvhi = new ComCtl32.TVHITTESTINFO
                     {
-                        pt_x = NativeMethods.Util.SignedLOWORD(m.LParam),
-                        pt_y = NativeMethods.Util.SignedHIWORD(m.LParam)
+                        pt = new Point(NativeMethods.Util.SignedLOWORD(m.LParam), NativeMethods.Util.SignedHIWORD(m.LParam))
                     };
-                    IntPtr hnode = UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TVM_HITTEST, 0, tvhi);
+                    IntPtr hnode = User32.SendMessageW(this, (User32.WindowMessage)NativeMethods.TVM_HITTEST, IntPtr.Zero, ref tvhi);
 
                     // Important for CheckBoxes. Click needs to be fired.
                     if (hnode != IntPtr.Zero)
@@ -3442,12 +3396,11 @@ namespace System.Windows.Forms
                     //Always Reset the MouseupFired....
                     treeViewState[TREEVIEWSTATE_mouseUpFired] = false;
                     //Cache the hit-tested node for verification when mouse up is fired
-                    NativeMethods.TV_HITTESTINFO tvhit = new NativeMethods.TV_HITTESTINFO
+                    var tvhit = new ComCtl32.TVHITTESTINFO
                     {
-                        pt_x = NativeMethods.Util.SignedLOWORD(m.LParam),
-                        pt_y = NativeMethods.Util.SignedHIWORD(m.LParam)
+                        pt = new Point(NativeMethods.Util.SignedLOWORD(m.LParam), NativeMethods.Util.SignedHIWORD(m.LParam))
                     };
-                    hNodeMouseDown = UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TVM_HITTEST, 0, tvhit);
+                    hNodeMouseDown = User32.SendMessageW(this, (User32.WindowMessage)NativeMethods.TVM_HITTEST, IntPtr.Zero, ref tvhit);
 
                     WmMouseDown(ref m, MouseButtons.Right, 1);
                     downButton = MouseButtons.Right;
@@ -3481,22 +3434,15 @@ namespace System.Windows.Forms
                     {
                         // this is the Shift + F10 Case....
                         TreeNode treeNode = SelectedNode;
-                        if (treeNode != null && (treeNode.ContextMenu != null || treeNode.ContextMenuStrip != null))
+                        if (treeNode != null && treeNode.ContextMenuStrip != null)
                         {
                             Point client;
                             client = new Point(treeNode.Bounds.X, treeNode.Bounds.Y + treeNode.Bounds.Height / 2);
                             // VisualStudio7 # 156, only show the context menu when clicked in the client area
-                            if (ClientRectangle.Contains(client))
+                            if (ClientRectangle.Contains(client) && treeNode.ContextMenuStrip != null)
                             {
-                                if (treeNode.ContextMenu != null)
-                                {
-                                    treeNode.ContextMenu.Show(this, client);
-                                }
-                                else if (treeNode.ContextMenuStrip != null)
-                                {
-                                    bool keyboardActivated = (unchecked((int)(long)m.LParam) == -1);
-                                    treeNode.ContextMenuStrip.ShowInternal(this, client, keyboardActivated);
-                                }
+                                bool keyboardActivated = (unchecked((int)(long)m.LParam) == -1);
+                                treeNode.ContextMenuStrip.ShowInternal(this, client, keyboardActivated);
                             }
                         }
                         else

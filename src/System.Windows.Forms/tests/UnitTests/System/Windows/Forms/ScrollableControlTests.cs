@@ -12,10 +12,10 @@ namespace System.Windows.Forms.Tests
 {
     public class ScrollableControlTests
     {
-        [Fact]
+        [WinFormsFact]
         public void ScrollableControl_Ctor_Default()
         {
-            var control = new SubScrollableControl();
+            using var control = new SubScrollableControl();
             Assert.False(control.AllowDrop);
             Assert.Equal(AnchorStyles.Top | AnchorStyles.Left, control.Anchor);
             Assert.False(control.AutoScroll);
@@ -35,7 +35,6 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(Rectangle.Empty, control.ClientRectangle);
             Assert.Equal(Size.Empty, control.ClientSize);
             Assert.Null(control.Container);
-            Assert.Null(control.ContextMenu);
             Assert.Null(control.ContextMenuStrip);
             Assert.Empty(control.Controls);
             Assert.Same(control.Controls, control.Controls);
@@ -71,9 +70,17 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.HScroll);
             Assert.Equal(ImeMode.NoControl, control.ImeMode);
             Assert.Equal(ImeMode.NoControl, control.ImeModeBase);
+            Assert.NotNull(control.LayoutEngine);
+            Assert.Same(control.LayoutEngine, control.LayoutEngine);
             Assert.Equal(0, control.Left);
             Assert.Equal(Point.Empty, control.Location);
+            Assert.Equal(new Padding(3), control.Margin);
+            Assert.Equal(Size.Empty, control.MaximumSize);
+            Assert.Equal(Size.Empty, control.MinimumSize);
             Assert.Equal(Padding.Empty, control.Padding);
+            Assert.Null(control.Parent);
+            Assert.Equal(Size.Empty, control.PreferredSize);
+            Assert.Equal("Microsoft\u00AE .NET", control.ProductName);
             Assert.False(control.RecreatingHandle);
             Assert.Null(control.Region);
             Assert.False(control.ResizeRedraw);
@@ -85,6 +92,7 @@ namespace System.Windows.Forms.Tests
             Assert.True(control.TabStop);
             Assert.Empty(control.Text);
             Assert.Equal(0, control.Top);
+            Assert.Null(control.TopLevelControl);
             Assert.True(control.Visible);
             Assert.NotNull(control.VerticalScroll);
             Assert.Same(control.VerticalScroll, control.VerticalScroll);
@@ -94,10 +102,10 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.IsHandleCreated);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ScrollableControl_CreateParams_GetDefault_ReturnsExpected()
         {
-            var control = new SubScrollableControl();
+            using var control = new SubScrollableControl();
             CreateParams createParams = control.CreateParams;
             Assert.Null(createParams.Caption);
             Assert.Null(createParams.ClassName);
@@ -111,6 +119,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createParams.X);
             Assert.Equal(0, createParams.Y);
             Assert.Same(createParams, control.CreateParams);
+            Assert.False(control.IsHandleCreated);
         }
 
         public static IEnumerable<object[]> SetClientRectangle_TestData()

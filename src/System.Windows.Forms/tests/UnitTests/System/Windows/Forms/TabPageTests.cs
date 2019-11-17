@@ -14,94 +14,103 @@ namespace System.Windows.Forms.Tests
 {
     public class TabPageTests
     {
-        [Fact]
+        [WinFormsFact]
         public void TabPage_Ctor_Default()
         {
-            var page = new SubTabPage();
-            Assert.False(page.AllowDrop);
-            Assert.Equal(AnchorStyles.Top | AnchorStyles.Left, page.Anchor);
-            Assert.False(page.AutoScroll);
-            Assert.Equal(Size.Empty, page.AutoScrollMargin);
-            Assert.Equal(Size.Empty, page.AutoScrollMinSize);
-            Assert.Equal(Point.Empty, page.AutoScrollPosition);
-            Assert.False(page.AutoSize);
-            Assert.Equal(AutoSizeMode.GrowOnly, page.AutoSizeMode);
-            Assert.Equal(Control.DefaultBackColor, page.BackColor);
-            Assert.Null(page.BackgroundImage);
-            Assert.Equal(ImageLayout.Tile, page.BackgroundImageLayout);
-            Assert.Null(page.BindingContext);
-            Assert.Equal(BorderStyle.None, page.BorderStyle);
-            Assert.Equal(100, page.Bottom);
-            Assert.Equal(new Rectangle(0, 0, 200, 100), page.Bounds);
-            Assert.True(page.CanEnableIme);
-            Assert.True(page.CanRaiseEvents);
-            Assert.True(page.CausesValidation);
-            Assert.Equal(new Rectangle(0, 0, 200, 100), page.ClientRectangle);
-            Assert.Equal(new Size(200, 100), page.ClientSize);
-            Assert.Null(page.Container);
-            Assert.True(page.CausesValidation);
-            Assert.Empty(page.Controls);
-            Assert.Same(page.Controls, page.Controls);
-            Assert.IsType<TabPage.TabPageControlCollection>(page.Controls);
-            Assert.False(page.Created);
-            Assert.Same(Cursors.Default, page.Cursor);
-            Assert.Same(Cursors.Default, page.DefaultCursor);
-            Assert.Equal(ImeMode.Inherit, page.DefaultImeMode);
-            Assert.Equal(new Padding(3), page.DefaultMargin);
-            Assert.Equal(Size.Empty, page.DefaultMaximumSize);
-            Assert.Equal(Size.Empty, page.DefaultMinimumSize);
-            Assert.Equal(Padding.Empty, page.DefaultPadding);
-            Assert.Equal(new Size(200, 100), page.DefaultSize);
-            Assert.False(page.DesignMode);
-            Assert.Equal(new Rectangle(0, 0, 200, 100), page.DisplayRectangle);
-            Assert.Equal(DockStyle.None, page.Dock);
-            Assert.NotNull(page.DockPadding);
-            Assert.Same(page.DockPadding, page.DockPadding);
-            Assert.Equal(0, page.DockPadding.Top);
-            Assert.Equal(0, page.DockPadding.Bottom);
-            Assert.Equal(0, page.DockPadding.Left);
-            Assert.Equal(0, page.DockPadding.Right);
-            Assert.False(page.DoubleBuffered);
-            Assert.True(page.Enabled);
-            Assert.NotNull(page.Events);
-            Assert.Same(page.Events, page.Events);
-            Assert.Equal(Control.DefaultFont, page.Font);
-            Assert.Equal(page.Font.Height, page.FontHeight);
-            Assert.Equal(Control.DefaultForeColor, page.ForeColor);
-            Assert.False(page.HasChildren);
-            Assert.Equal(100, page.Height);
-            Assert.NotNull(page.HorizontalScroll);
-            Assert.Same(page.HorizontalScroll, page.HorizontalScroll);
-            Assert.False(page.HScroll);
-            Assert.Equal(ImeMode.NoControl, page.ImeMode);
-            Assert.Equal(ImeMode.NoControl, page.ImeModeBase);
-            Assert.Equal(0, page.Left);
-            Assert.Equal(Point.Empty, page.Location);
-            Assert.Equal(Padding.Empty, page.Padding);
-            Assert.False(page.RecreatingHandle);
-            Assert.Null(page.Region);
-            Assert.False(page.ResizeRedraw);
-            Assert.Equal(200, page.Right);
-            Assert.Equal(RightToLeft.No, page.RightToLeft);
-            Assert.Equal(new Size(200, 100), page.Size);
-            Assert.Equal(0, page.TabIndex);
-            Assert.False(page.TabStop);
-            Assert.Empty(page.Text);
-            Assert.Equal(0, page.Top);
-            Assert.False(page.UseVisualStyleBackColor);
-            Assert.True(page.Visible);
-            Assert.NotNull(page.VerticalScroll);
-            Assert.Same(page.VerticalScroll, page.VerticalScroll);
-            Assert.False(page.VScroll);
-            Assert.Equal(200, page.Width);
+            using var control = new SubTabPage();
+            Assert.False(control.AllowDrop);
+            Assert.Equal(AnchorStyles.Top | AnchorStyles.Left, control.Anchor);
+            Assert.False(control.AutoScroll);
+            Assert.Equal(Size.Empty, control.AutoScrollMargin);
+            Assert.Equal(Size.Empty, control.AutoScrollMinSize);
+            Assert.Equal(Point.Empty, control.AutoScrollPosition);
+            Assert.False(control.AutoSize);
+            Assert.Equal(AutoSizeMode.GrowOnly, control.AutoSizeMode);
+            Assert.Equal(Control.DefaultBackColor, control.BackColor);
+            Assert.Null(control.BackgroundImage);
+            Assert.Equal(ImageLayout.Tile, control.BackgroundImageLayout);
+            Assert.Null(control.BindingContext);
+            Assert.Equal(BorderStyle.None, control.BorderStyle);
+            Assert.Equal(100, control.Bottom);
+            Assert.Equal(new Rectangle(0, 0, 200, 100), control.Bounds);
+            Assert.True(control.CanEnableIme);
+            Assert.True(control.CanRaiseEvents);
+            Assert.True(control.CausesValidation);
+            Assert.Equal(new Rectangle(0, 0, 200, 100), control.ClientRectangle);
+            Assert.Equal(new Size(200, 100), control.ClientSize);
+            Assert.Null(control.Container);
+            Assert.True(control.CausesValidation);
+            Assert.Empty(control.Controls);
+            Assert.Same(control.Controls, control.Controls);
+            Assert.IsType<TabPage.TabPageControlCollection>(control.Controls);
+            Assert.False(control.Created);
+            Assert.Same(Cursors.Default, control.Cursor);
+            Assert.Same(Cursors.Default, control.DefaultCursor);
+            Assert.Equal(ImeMode.Inherit, control.DefaultImeMode);
+            Assert.Equal(new Padding(3), control.DefaultMargin);
+            Assert.Equal(Size.Empty, control.DefaultMaximumSize);
+            Assert.Equal(Size.Empty, control.DefaultMinimumSize);
+            Assert.Equal(Padding.Empty, control.DefaultPadding);
+            Assert.Equal(new Size(200, 100), control.DefaultSize);
+            Assert.False(control.DesignMode);
+            Assert.Equal(new Rectangle(0, 0, 200, 100), control.DisplayRectangle);
+            Assert.Equal(DockStyle.None, control.Dock);
+            Assert.NotNull(control.DockPadding);
+            Assert.Same(control.DockPadding, control.DockPadding);
+            Assert.Equal(0, control.DockPadding.Top);
+            Assert.Equal(0, control.DockPadding.Bottom);
+            Assert.Equal(0, control.DockPadding.Left);
+            Assert.Equal(0, control.DockPadding.Right);
+            Assert.False(control.DoubleBuffered);
+            Assert.True(control.Enabled);
+            Assert.NotNull(control.Events);
+            Assert.Same(control.Events, control.Events);
+            Assert.Equal(Control.DefaultFont, control.Font);
+            Assert.Equal(control.Font.Height, control.FontHeight);
+            Assert.Equal(Control.DefaultForeColor, control.ForeColor);
+            Assert.False(control.HasChildren);
+            Assert.Equal(100, control.Height);
+            Assert.NotNull(control.HorizontalScroll);
+            Assert.Same(control.HorizontalScroll, control.HorizontalScroll);
+            Assert.False(control.HScroll);
+            Assert.Equal(ImeMode.NoControl, control.ImeMode);
+            Assert.Equal(ImeMode.NoControl, control.ImeModeBase);
+            Assert.NotNull(control.LayoutEngine);
+            Assert.Same(control.LayoutEngine, control.LayoutEngine);
+            Assert.Equal(0, control.Left);
+            Assert.Equal(Point.Empty, control.Location);
+            Assert.Equal(new Padding(3), control.Margin);
+            Assert.Equal(Size.Empty, control.MaximumSize);
+            Assert.Equal(Size.Empty, control.MinimumSize);
+            Assert.Equal(Padding.Empty, control.Padding);
+            Assert.Null(control.Parent);
+            Assert.Equal(Size.Empty, control.PreferredSize);
+            Assert.Equal("Microsoft\u00AE .NET", control.ProductName);
+            Assert.False(control.RecreatingHandle);
+            Assert.Null(control.Region);
+            Assert.False(control.ResizeRedraw);
+            Assert.Equal(200, control.Right);
+            Assert.Equal(RightToLeft.No, control.RightToLeft);
+            Assert.Equal(new Size(200, 100), control.Size);
+            Assert.Equal(0, control.TabIndex);
+            Assert.False(control.TabStop);
+            Assert.Empty(control.Text);
+            Assert.Equal(0, control.Top);
+            Assert.Null(control.TopLevelControl);
+            Assert.False(control.UseVisualStyleBackColor);
+            Assert.True(control.Visible);
+            Assert.NotNull(control.VerticalScroll);
+            Assert.Same(control.VerticalScroll, control.VerticalScroll);
+            Assert.False(control.VScroll);
+            Assert.Equal(200, control.Width);
 
-            Assert.False(page.IsHandleCreated);
+            Assert.False(control.IsHandleCreated);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void TabPage_CreateParams_GetDefault_ReturnsExpected()
         {
-            var control = new SubTabPage();
+            using var control = new SubTabPage();
             CreateParams createParams = control.CreateParams;
             Assert.Null(createParams.Caption);
             Assert.Null(createParams.ClassName);
@@ -115,6 +124,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createParams.X);
             Assert.Equal(0, createParams.Y);
             Assert.Same(createParams, control.CreateParams);
+            Assert.False(control.IsHandleCreated);
         }
 
         [Theory]

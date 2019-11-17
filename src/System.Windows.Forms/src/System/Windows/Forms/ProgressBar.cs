@@ -54,11 +54,11 @@ namespace System.Windows.Forms
                 cp.ClassName = NativeMethods.WC_PROGRESS;
                 if (Style == ProgressBarStyle.Continuous)
                 {
-                    cp.Style |= NativeMethods.PBS_SMOOTH;
+                    cp.Style |= (int)ComCtl32.PBS.SMOOTH;
                 }
                 else if (Style == ProgressBarStyle.Marquee && !DesignMode)
                 {
-                    cp.Style |= NativeMethods.PBS_MARQUEE;
+                    cp.Style |= (int)ComCtl32.PBS.MARQUEE;
                 }
 
                 if (RightToLeft == RightToLeft.Yes && RightToLeftLayout)
@@ -66,7 +66,7 @@ namespace System.Windows.Forms
                     // We want to turn on mirroring for Form explicitly.
                     cp.ExStyle |= (int)User32.WS_EX.LAYOUTRTL;
                     // Don't need these styles when mirroring is turned on.
-                    cp.ExStyle &= ~((int)User32.WS_EX.RTLREADING | (int)User32.WS_EX.RIGHT | (int)User32.WS_EX.LEFTSCROLLBAR);
+                    cp.ExStyle &= ~(int)(User32.WS_EX.RTLREADING | User32.WS_EX.RIGHT | User32.WS_EX.LEFTSCROLLBAR);
                 }
 
                 return cp;
@@ -221,8 +221,9 @@ namespace System.Windows.Forms
             {
                 if (value < 0)
                 {
-                    throw new ArgumentOutOfRangeException("MarqueeAnimationSpeed must be non-negative");
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(MarqueeAnimationSpeed), value, 0));
                 }
+
                 _marqueeAnimationSpeed = value;
                 if (!DesignMode)
                 {
@@ -240,11 +241,11 @@ namespace System.Windows.Forms
             {
                 if (_marqueeAnimationSpeed == 0)
                 {
-                    SendMessage(NativeMethods.PBM_SETMARQUEE, 0, _marqueeAnimationSpeed);
+                    SendMessage((int)ComCtl32.PBM.SETMARQUEE, 0, _marqueeAnimationSpeed);
                 }
                 else
                 {
-                    SendMessage(NativeMethods.PBM_SETMARQUEE, 1, _marqueeAnimationSpeed);
+                    SendMessage((int)ComCtl32.PBM.SETMARQUEE, 1, _marqueeAnimationSpeed);
                 }
             }
         }
@@ -283,7 +284,7 @@ namespace System.Windows.Forms
 
                     if (IsHandleCreated)
                     {
-                        SendMessage(NativeMethods.PBM_SETRANGE32, _minimum, _maximum);
+                        SendMessage((int)ComCtl32.PBM.SETRANGE32, _minimum, _maximum);
                         UpdatePos();
                     }
                 }
@@ -324,7 +325,7 @@ namespace System.Windows.Forms
 
                     if (IsHandleCreated)
                     {
-                        SendMessage(NativeMethods.PBM_SETRANGE32, _minimum, _maximum);
+                        SendMessage((int)ComCtl32.PBM.SETRANGE32, _minimum, _maximum);
                         UpdatePos();
                     }
                 }
@@ -336,7 +337,7 @@ namespace System.Windows.Forms
             base.OnBackColorChanged(e);
             if (IsHandleCreated)
             {
-                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.PBM_SETBKCOLOR, 0, ColorTranslator.ToWin32(BackColor));
+                User32.SendMessageW(this, (User32.WindowMessage)ComCtl32.PBM.SETBKCOLOR, IntPtr.Zero, (IntPtr)ColorTranslator.ToWin32(BackColor));
             }
         }
 
@@ -345,7 +346,7 @@ namespace System.Windows.Forms
             base.OnForeColorChanged(e);
             if (IsHandleCreated)
             {
-                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.PBM_SETBARCOLOR, 0, ColorTranslator.ToWin32(ForeColor));
+                User32.SendMessageW(this, (User32.WindowMessage)ComCtl32.PBM.SETBARCOLOR, IntPtr.Zero, (IntPtr)ColorTranslator.ToWin32(ForeColor));
             }
         }
 
@@ -414,7 +415,7 @@ namespace System.Windows.Forms
                 _step = value;
                 if (IsHandleCreated)
                 {
-                    SendMessage(NativeMethods.PBM_SETSTEP, _step, 0);
+                    SendMessage((int)ComCtl32.PBM.SETSTEP, _step, 0);
                 }
             }
         }
@@ -594,11 +595,14 @@ namespace System.Windows.Forms
         protected override void OnHandleCreated(EventArgs e)
         {
             base.OnHandleCreated(e);
-            SendMessage(NativeMethods.PBM_SETRANGE32, _minimum, _maximum);
-            SendMessage(NativeMethods.PBM_SETSTEP, _step, 0);
-            SendMessage(NativeMethods.PBM_SETPOS, _value, 0);
-            UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.PBM_SETBKCOLOR, 0, ColorTranslator.ToWin32(BackColor));
-            UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.PBM_SETBARCOLOR, 0, ColorTranslator.ToWin32(ForeColor));
+            if (IsHandleCreated)
+            {
+                SendMessage((int)ComCtl32.PBM.SETRANGE32, _minimum, _maximum);
+                SendMessage((int)ComCtl32.PBM.SETSTEP, _step, 0);
+                SendMessage((int)ComCtl32.PBM.SETPOS, _value, 0);
+                User32.SendMessageW(this, (User32.WindowMessage)ComCtl32.PBM.SETBKCOLOR, IntPtr.Zero, (IntPtr)ColorTranslator.ToWin32(BackColor));
+                User32.SendMessageW(this, (User32.WindowMessage)ComCtl32.PBM.SETBARCOLOR, IntPtr.Zero, (IntPtr)ColorTranslator.ToWin32(ForeColor));
+            }
             StartMarquee();
             SystemEvents.UserPreferenceChanged += new UserPreferenceChangedEventHandler(UserPreferenceChangedHandler);
         }
@@ -676,7 +680,7 @@ namespace System.Windows.Forms
         {
             if (IsHandleCreated)
             {
-                SendMessage(NativeMethods.PBM_SETPOS, _value, 0);
+                SendMessage((int)ComCtl32.PBM.SETPOS, _value, 0);
             }
         }
 
@@ -688,8 +692,8 @@ namespace System.Windows.Forms
         {
             if (IsHandleCreated)
             {
-                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.PBM_SETBARCOLOR, 0, ColorTranslator.ToWin32(ForeColor));
-                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.PBM_SETBKCOLOR, 0, ColorTranslator.ToWin32(BackColor));
+                User32.SendMessageW(this, (User32.WindowMessage)ComCtl32.PBM.SETBARCOLOR, IntPtr.Zero, (IntPtr)ColorTranslator.ToWin32(ForeColor));
+                User32.SendMessageW(this, (User32.WindowMessage)ComCtl32.PBM.SETBKCOLOR, IntPtr.Zero, (IntPtr)ColorTranslator.ToWin32(BackColor));
             }
         }
 

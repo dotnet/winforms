@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -676,7 +676,7 @@ namespace System.Windows.Forms
         /// </summary>
         public bool CanExtend(object extendee)
         {
-            return extendee is Control && !(extendee is Form) && !(extendee is ToolBar);
+            return extendee is Control && !(extendee is Form);
         }
 
         /// <summary>
@@ -873,7 +873,7 @@ namespace System.Windows.Forms
                     CreateParams cparams = new CreateParams
                     {
                         Caption = string.Empty,
-                        Style = NativeMethods.WS_VISIBLE | NativeMethods.WS_CHILD,
+                        Style = (int)(User32.WS.VISIBLE | User32.WS.CHILD),
                         ClassStyle = (int)User32.CS.DBLCLKS,
                         X = 0,
                         Y = 0,
@@ -1078,7 +1078,7 @@ namespace System.Windows.Forms
                 if (_tipWindow != null)
                 {
                     var info = new ComCtl32.ToolInfoWrapper(this, item.Id);
-                    info .SendMessage(_tipWindow, User32.WindowMessage.TTM_DELTOOLW);
+                    info.SendMessage(_tipWindow, User32.WindowMessage.TTM_DELTOOLW);
                 }
 
                 if (items.Count == 0)

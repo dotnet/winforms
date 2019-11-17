@@ -1273,8 +1273,7 @@ namespace System.Windows.Forms
         /// </summary>
         public static void DrawButton(Graphics graphics, int x, int y, int width, int height, ButtonState state)
         {
-            DrawFrameControl(graphics, x, y, width, height, NativeMethods.DFC_BUTTON,
-                             NativeMethods.DFCS_BUTTONPUSH | (int)state, Color.Empty, Color.Empty);
+            DrawFrameControl(graphics, x, y, width, height, User32.DFC.BUTTON, User32.DFCS.BUTTONPUSH | (User32.DFCS)state, Color.Empty, Color.Empty);
         }
 
         /// <summary>
@@ -1290,8 +1289,7 @@ namespace System.Windows.Forms
         /// </summary>
         public static void DrawCaptionButton(Graphics graphics, int x, int y, int width, int height, CaptionButton button, ButtonState state)
         {
-            DrawFrameControl(graphics, x, y, width, height, NativeMethods.DFC_CAPTION,
-                             (int)button | (int)state, Color.Empty, Color.Empty);
+            DrawFrameControl(graphics, x, y, width, height, User32.DFC.CAPTION, (User32.DFCS)button | (User32.DFCS)state, Color.Empty, Color.Empty);
         }
 
         /// <summary>
@@ -1314,8 +1312,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                DrawFrameControl(graphics, x, y, width, height, NativeMethods.DFC_BUTTON,
-                                 NativeMethods.DFCS_BUTTONCHECK | (int)state, Color.Empty, Color.Empty);
+                DrawFrameControl(graphics, x, y, width, height, User32.DFC.BUTTON, User32.DFCS.BUTTONCHECK | (User32.DFCS)state, Color.Empty, Color.Empty);
             }
         }
 
@@ -1332,8 +1329,7 @@ namespace System.Windows.Forms
         /// </summary>
         public static void DrawComboButton(Graphics graphics, int x, int y, int width, int height, ButtonState state)
         {
-            DrawFrameControl(graphics, x, y, width, height, NativeMethods.DFC_SCROLL,
-                             NativeMethods.DFCS_SCROLLCOMBOBOX | (int)state, Color.Empty, Color.Empty);
+            DrawFrameControl(graphics, x, y, width, height, User32.DFC.SCROLL, User32.DFCS.SCROLLCOMBOBOX | (User32.DFCS)state, Color.Empty, Color.Empty);
         }
 
         /// <summary>
@@ -1445,8 +1441,7 @@ namespace System.Windows.Forms
                         IntPtr dc = g2.GetHdc();
                         try
                         {
-                            SafeNativeMethods.DrawFrameControl(new HandleRef(null, dc), ref rcCheck,
-                                                               NativeMethods.DFC_MENU, NativeMethods.DFCS_MENUCHECK);
+                            User32.DrawFrameControl(dc, ref rcCheck, User32.DFC.MENU, User32.DFCS.MENUCHECK);
                         }
                         finally
                         {
@@ -1511,8 +1506,16 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Draws a win32 frame control.
         /// </summary>
-        private static void DrawFrameControl(Graphics graphics, int x, int y, int width, int height,
-                                             int kind, int state, Color foreColor, Color backColor)
+        private static void DrawFrameControl(
+            Graphics graphics,
+            int x,
+            int y,
+            int width,
+            int height,
+            User32.DFC kind,
+            User32.DFCS state,
+            Color foreColor,
+            Color backColor)
         {
             if (graphics == null)
             {
@@ -1535,8 +1538,9 @@ namespace System.Windows.Forms
                     g2.Clear(Color.Transparent);
 
                     using (WindowsGraphics wg = WindowsGraphics.FromGraphics(g2))
-                    { // Get Win32 dc with Graphics properties applied to it.
-                        SafeNativeMethods.DrawFrameControl(new HandleRef(wg, wg.DeviceContext.Hdc), ref rcFrame, kind, (int)state);
+                    { 
+                        // Get Win32 dc with Graphics properties applied to it.
+                        User32.DrawFrameControl(new HandleRef(wg, wg.DeviceContext.Hdc), ref rcFrame, kind, state);
                     }
 
                     if (foreColor == Color.Empty || backColor == Color.Empty)
@@ -1924,8 +1928,7 @@ namespace System.Windows.Forms
         /// </summary>
         public static void DrawMenuGlyph(Graphics graphics, int x, int y, int width, int height, MenuGlyph glyph)
         {
-            DrawFrameControl(graphics, x, y, width, height, NativeMethods.DFC_MENU,
-                             (int)glyph, Color.Empty, Color.Empty);
+            DrawFrameControl(graphics, x, y, width, height, User32.DFC.MENU, (User32.DFCS)glyph, Color.Empty, Color.Empty);
         }
 
         /// <summary>
@@ -1934,7 +1937,7 @@ namespace System.Windows.Forms
         /// </summary>
         public static void DrawMenuGlyph(Graphics graphics, int x, int y, int width, int height, MenuGlyph glyph, Color foreColor, Color backColor)
         {
-            DrawFrameControl(graphics, x, y, width, height, NativeMethods.DFC_MENU, (int)glyph, foreColor, backColor);
+            DrawFrameControl(graphics, x, y, width, height, User32.DFC.MENU, (User32.DFCS)glyph, foreColor, backColor);
         }
 
         /// <summary>
@@ -1947,8 +1950,7 @@ namespace System.Windows.Forms
 
         public static void DrawMixedCheckBox(Graphics graphics, int x, int y, int width, int height, ButtonState state)
         {
-            DrawFrameControl(graphics, x, y, width, height, NativeMethods.DFC_BUTTON,
-                             NativeMethods.DFCS_BUTTON3STATE | (int)state, Color.Empty, Color.Empty);
+            DrawFrameControl(graphics, x, y, width, height, User32.DFC.BUTTON, User32.DFCS.BUTTON3STATE | (User32.DFCS)state, Color.Empty, Color.Empty);
         }
 
         /// <summary>
@@ -1964,8 +1966,7 @@ namespace System.Windows.Forms
         /// </summary>
         public static void DrawRadioButton(Graphics graphics, int x, int y, int width, int height, ButtonState state)
         {
-            DrawFrameControl(graphics, x, y, width, height, NativeMethods.DFC_BUTTON,
-                             NativeMethods.DFCS_BUTTONRADIO | ((int)state), Color.Empty, Color.Empty);
+            DrawFrameControl(graphics, x, y, width, height, User32.DFC.BUTTON, User32.DFCS.BUTTONRADIO | (User32.DFCS)state, Color.Empty, Color.Empty);
         }
 
         /// <summary>
@@ -1990,7 +1991,7 @@ namespace System.Windows.Forms
                 graphicsColor = Color.Black;
             }
 
-            IntPtr dc = UnsafeNativeMethods.GetDCEx(new HandleRef(null, UnsafeNativeMethods.GetDesktopWindow()), NativeMethods.NullHandleRef, NativeMethods.DCX_WINDOW | NativeMethods.DCX_LOCKWINDOWUPDATE | NativeMethods.DCX_CACHE);
+            IntPtr dc = User32.GetDCEx(UnsafeNativeMethods.GetDesktopWindow(), IntPtr.Zero, User32.DCX.WINDOW | User32.DCX.LOCKWINDOWUPDATE | User32.DCX.CACHE);
             IntPtr pen;
 
             switch (style)
@@ -2031,7 +2032,7 @@ namespace System.Windows.Forms
         {
             Gdi32.R2 rop2 = (Gdi32.R2)GetColorRop(backColor, (int)Gdi32.R2.NOTXORPEN, (int)Gdi32.R2.XORPEN);
 
-            IntPtr dc = UnsafeNativeMethods.GetDCEx(new HandleRef(null, UnsafeNativeMethods.GetDesktopWindow()), NativeMethods.NullHandleRef, NativeMethods.DCX_WINDOW | NativeMethods.DCX_LOCKWINDOWUPDATE | NativeMethods.DCX_CACHE);
+            IntPtr dc = User32.GetDCEx(UnsafeNativeMethods.GetDesktopWindow(), IntPtr.Zero, User32.DCX.WINDOW | User32.DCX.LOCKWINDOWUPDATE | User32.DCX.CACHE);
             IntPtr pen = Gdi32.CreatePen(Gdi32.PS.SOLID, 1, ColorTranslator.ToWin32(backColor));
 
             Gdi32.R2 prevRop2 = Gdi32.SetROP2(dc, rop2);
@@ -2061,8 +2062,7 @@ namespace System.Windows.Forms
         /// </summary>
         public static void DrawScrollButton(Graphics graphics, int x, int y, int width, int height, ScrollButton button, ButtonState state)
         {
-            DrawFrameControl(graphics, x, y, width, height, NativeMethods.DFC_SCROLL,
-                             (int)button | (int)state, Color.Empty, Color.Empty);
+            DrawFrameControl(graphics, x, y, width, height, User32.DFC.SCROLL, (User32.DFCS)button | (User32.DFCS)state, Color.Empty, Color.Empty);
         }
 
         /// <summary>
@@ -2222,7 +2222,7 @@ namespace System.Windows.Forms
                                    0x5a0049); // RasterOp.BRUSH.XorWith(RasterOp.TARGET));
             Gdi32.R2 rop2 = Gdi32.R2.NOT;
 
-            IntPtr dc = UnsafeNativeMethods.GetDCEx(new HandleRef(null, UnsafeNativeMethods.GetDesktopWindow()), NativeMethods.NullHandleRef, NativeMethods.DCX_WINDOW | NativeMethods.DCX_LOCKWINDOWUPDATE | NativeMethods.DCX_CACHE);
+            IntPtr dc = User32.GetDCEx(UnsafeNativeMethods.GetDesktopWindow(), IntPtr.Zero, User32.DCX.WINDOW | User32.DCX.LOCKWINDOWUPDATE | User32.DCX.CACHE);
             IntPtr brush = Gdi32.CreateSolidBrush(ColorTranslator.ToWin32(backColor));
 
             Gdi32.R2 prevRop2 = Gdi32.SetROP2(dc, rop2);

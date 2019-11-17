@@ -594,14 +594,14 @@ namespace System.Windows.Forms
                     return VisualStyleState.NoneEnabled;
                 }
 
-                VisualStyleState vState = (VisualStyleState)SafeNativeMethods.GetThemeAppProperties();
+                VisualStyleState vState = (VisualStyleState)UxTheme.GetThemeAppProperties();
                 return vState;
             }
             set
             {
                 if (VisualStyleInformation.IsSupportedByOS)
                 {
-                    SafeNativeMethods.SetThemeAppProperties((int)value);
+                    UxTheme.SetThemeAppProperties((UxTheme.STAP)value);
 
                     // 248887 we need to send a WM_THEMECHANGED to the top level windows of this application.
                     // We do it this way to ensure that we get all top level windows -- whether we created them or not.
@@ -620,7 +620,7 @@ namespace System.Windows.Forms
         {
             uint thisPID = Kernel32.GetCurrentProcessId();
             User32.GetWindowThreadProcessId(handle, out uint processId);
-            if (processId == thisPID && SafeNativeMethods.IsWindowVisible(new HandleRef(null, handle)))
+            if (processId == thisPID && User32.IsWindowVisible(handle).IsTrue())
             {
                 SendThemeChangedRecursive(handle, IntPtr.Zero);
                 User32.RedrawWindow(
@@ -1073,7 +1073,7 @@ namespace System.Windows.Forms
         internal static void ParkHandle(HandleRef handle, DpiAwarenessContext dpiAwarenessContext = DpiAwarenessContext.DPI_AWARENESS_CONTEXT_UNSPECIFIED)
         {
             Debug.Assert(UnsafeNativeMethods.IsWindow(handle), "Handle being parked is not a valid window handle");
-            Debug.Assert(((int)UnsafeNativeMethods.GetWindowLong(handle, NativeMethods.GWL_STYLE) & NativeMethods.WS_CHILD) != 0, "Only WS_CHILD windows should be parked.");
+            Debug.Assert(((int)UnsafeNativeMethods.GetWindowLong(handle, NativeMethods.GWL_STYLE) & (int)User32.WS.CHILD) != 0, "Only WS_CHILD windows should be parked.");
 
             ThreadContext cxt = GetContextForHandle(handle);
             if (cxt != null)

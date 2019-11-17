@@ -275,19 +275,6 @@ namespace System.Windows.Forms
             }
         }
 
-        public override ContextMenu ContextMenu
-        {
-            get
-            {
-                return base.ContextMenu;
-            }
-            set
-            {
-                base.ContextMenu = value;
-                upDownEdit.ContextMenu = value;
-            }
-        }
-
         public override ContextMenuStrip ContextMenuStrip
         {
             get
@@ -313,7 +300,7 @@ namespace System.Windows.Forms
             {
                 CreateParams cp = base.CreateParams;
 
-                cp.Style &= (~NativeMethods.WS_BORDER);
+                cp.Style &= ~(int)User32.WS.BORDER;
                 if (!Application.RenderWithVisualStyles)
                 {
                     switch (borderStyle)
@@ -322,7 +309,7 @@ namespace System.Windows.Forms
                             cp.ExStyle |= (int)User32.WS_EX.CLIENTEDGE;
                             break;
                         case BorderStyle.FixedSingle:
-                            cp.Style |= NativeMethods.WS_BORDER;
+                            cp.Style |= (int)User32.WS.BORDER;
                             break;
                     }
                 }
@@ -1120,7 +1107,7 @@ namespace System.Windows.Forms
                 // same control as PointToClient or PointToScreen, just
                 // with two specific controls in mind.
                 var point = new Point(e.X, e.Y);
-                UnsafeNativeMethods.MapWindowPoints(new HandleRef(child, child.Handle), new HandleRef(this, Handle), ref point, 1);
+                User32.MapWindowPoints(new HandleRef(child, child.Handle), new HandleRef(this, Handle), ref point, 1);
                 return new MouseEventArgs(e.Button, e.Clicks, point.X, point.Y, e.Delta);
             }
             return e;
@@ -1290,7 +1277,7 @@ namespace System.Windows.Forms
             internal override void WmContextMenu(ref Message m)
             {
                 // Want to make the SourceControl to be the UpDownBase, not the Edit.
-                if (ContextMenu == null && ContextMenuStrip != null)
+                if (ContextMenuStrip != null)
                 {
                     WmContextMenu(ref m, parent);
                 }

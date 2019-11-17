@@ -836,7 +836,6 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { null, false };
             yield return new object[] { new object(), false };
             yield return new object[] { new Component(), false };
-            yield return new object[] { new ToolBar(), false };
             yield return new object[] { new Form(), false };
             yield return new object[] { new Control(), true };
         }

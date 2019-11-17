@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using Moq;
@@ -12,93 +13,100 @@ namespace System.Windows.Forms.Tests
 {
     public class PanelTests
     {
-        [Fact]
+        [WinFormsFact]
         public void Panel_Ctor_Default()
         {
-            var panel = new SubPanel();
-            Assert.False(panel.AllowDrop);
-            Assert.Equal(AnchorStyles.Top | AnchorStyles.Left, panel.Anchor);
-            Assert.False(panel.AutoScroll);
-            Assert.Equal(Size.Empty, panel.AutoScrollMargin);
-            Assert.Equal(Size.Empty, panel.AutoScrollMinSize);
-            Assert.Equal(Point.Empty, panel.AutoScrollPosition);
-            Assert.False(panel.AutoSize);
-            Assert.Equal(AutoSizeMode.GrowOnly, panel.AutoSizeMode);
-            Assert.Equal(Control.DefaultBackColor, panel.BackColor);
-            Assert.Null(panel.BackgroundImage);
-            Assert.Equal(ImageLayout.Tile, panel.BackgroundImageLayout);
-            Assert.Null(panel.BindingContext);
-            Assert.Equal(BorderStyle.None, panel.BorderStyle);
-            Assert.Equal(100, panel.Bottom);
-            Assert.Equal(new Rectangle(0, 0, 200, 100), panel.Bounds);
-            Assert.True(panel.CanEnableIme);
-            Assert.True(panel.CanRaiseEvents);
-            Assert.True(panel.CausesValidation);
-            Assert.Equal(new Rectangle(0, 0, 200, 100), panel.ClientRectangle);
-            Assert.Equal(new Size(200, 100), panel.ClientSize);
-            Assert.Null(panel.Container);
-            Assert.Null(panel.ContextMenu);
-            Assert.Null(panel.ContextMenuStrip);
-            Assert.Empty(panel.Controls);
-            Assert.Same(panel.Controls, panel.Controls);
-            Assert.False(panel.Created);
-            Assert.Equal(Cursors.Default, panel.Cursor);
-            Assert.Equal(Cursors.Default, panel.DefaultCursor);
-            Assert.Equal(ImeMode.Inherit, panel.DefaultImeMode);
-            Assert.Equal(new Padding(3), panel.DefaultMargin);
-            Assert.Equal(Size.Empty, panel.DefaultMaximumSize);
-            Assert.Equal(Size.Empty, panel.DefaultMinimumSize);
-            Assert.Equal(Padding.Empty, panel.DefaultPadding);
-            Assert.Equal(new Size(200, 100), panel.DefaultSize);
-            Assert.False(panel.DesignMode);
-            Assert.Equal(new Rectangle(0, 0, 200, 100), panel.DisplayRectangle);
-            Assert.Equal(DockStyle.None, panel.Dock);
-            Assert.NotNull(panel.DockPadding);
-            Assert.Same(panel.DockPadding, panel.DockPadding);
-            Assert.Equal(0, panel.DockPadding.Top);
-            Assert.Equal(0, panel.DockPadding.Bottom);
-            Assert.Equal(0, panel.DockPadding.Left);
-            Assert.Equal(0, panel.DockPadding.Right);
-            Assert.False(panel.DoubleBuffered);
-            Assert.True(panel.Enabled);
-            Assert.NotNull(panel.Events);
-            Assert.Same(panel.Events, panel.Events);
-            Assert.Equal(Control.DefaultFont, panel.Font);
-            Assert.Equal(panel.Font.Height, panel.FontHeight);
-            Assert.Equal(Control.DefaultForeColor, panel.ForeColor);
-            Assert.False(panel.HasChildren);
-            Assert.Equal(100, panel.Height);
-            Assert.NotNull(panel.HorizontalScroll);
-            Assert.Same(panel.HorizontalScroll, panel.HorizontalScroll);
-            Assert.False(panel.HScroll);
-            Assert.Equal(ImeMode.NoControl, panel.ImeMode);
-            Assert.Equal(ImeMode.NoControl, panel.ImeModeBase);
-            Assert.Equal(0, panel.Left);
-            Assert.Equal(Point.Empty, panel.Location);
-            Assert.Equal(Padding.Empty, panel.Padding);
-            Assert.False(panel.RecreatingHandle);
-            Assert.Null(panel.Region);
-            Assert.False(panel.ResizeRedraw);
-            Assert.Equal(200, panel.Right);
-            Assert.Equal(RightToLeft.No, panel.RightToLeft);
-            Assert.Equal(new Size(200, 100), panel.Size);
-            Assert.Equal(0, panel.TabIndex);
-            Assert.False(panel.TabStop);
-            Assert.Empty(panel.Text);
-            Assert.Equal(0, panel.Top);
-            Assert.True(panel.Visible);
-            Assert.NotNull(panel.VerticalScroll);
-            Assert.Same(panel.VerticalScroll, panel.VerticalScroll);
-            Assert.False(panel.VScroll);
-            Assert.Equal(200, panel.Width);
+            using var control = new SubPanel();
+            Assert.False(control.AllowDrop);
+            Assert.Equal(AnchorStyles.Top | AnchorStyles.Left, control.Anchor);
+            Assert.False(control.AutoScroll);
+            Assert.Equal(Size.Empty, control.AutoScrollMargin);
+            Assert.Equal(Size.Empty, control.AutoScrollMinSize);
+            Assert.Equal(Point.Empty, control.AutoScrollPosition);
+            Assert.False(control.AutoSize);
+            Assert.Equal(AutoSizeMode.GrowOnly, control.AutoSizeMode);
+            Assert.Equal(Control.DefaultBackColor, control.BackColor);
+            Assert.Null(control.BackgroundImage);
+            Assert.Equal(ImageLayout.Tile, control.BackgroundImageLayout);
+            Assert.Null(control.BindingContext);
+            Assert.Equal(BorderStyle.None, control.BorderStyle);
+            Assert.Equal(100, control.Bottom);
+            Assert.Equal(new Rectangle(0, 0, 200, 100), control.Bounds);
+            Assert.True(control.CanEnableIme);
+            Assert.True(control.CanRaiseEvents);
+            Assert.True(control.CausesValidation);
+            Assert.Equal(new Rectangle(0, 0, 200, 100), control.ClientRectangle);
+            Assert.Equal(new Size(200, 100), control.ClientSize);
+            Assert.Null(control.Container);
+            Assert.Null(control.ContextMenuStrip);
+            Assert.Empty(control.Controls);
+            Assert.Same(control.Controls, control.Controls);
+            Assert.False(control.Created);
+            Assert.Equal(Cursors.Default, control.Cursor);
+            Assert.Equal(Cursors.Default, control.DefaultCursor);
+            Assert.Equal(ImeMode.Inherit, control.DefaultImeMode);
+            Assert.Equal(new Padding(3), control.DefaultMargin);
+            Assert.Equal(Size.Empty, control.DefaultMaximumSize);
+            Assert.Equal(Size.Empty, control.DefaultMinimumSize);
+            Assert.Equal(Padding.Empty, control.DefaultPadding);
+            Assert.Equal(new Size(200, 100), control.DefaultSize);
+            Assert.False(control.DesignMode);
+            Assert.Equal(new Rectangle(0, 0, 200, 100), control.DisplayRectangle);
+            Assert.Equal(DockStyle.None, control.Dock);
+            Assert.NotNull(control.DockPadding);
+            Assert.Same(control.DockPadding, control.DockPadding);
+            Assert.Equal(0, control.DockPadding.Top);
+            Assert.Equal(0, control.DockPadding.Bottom);
+            Assert.Equal(0, control.DockPadding.Left);
+            Assert.Equal(0, control.DockPadding.Right);
+            Assert.False(control.DoubleBuffered);
+            Assert.True(control.Enabled);
+            Assert.NotNull(control.Events);
+            Assert.Same(control.Events, control.Events);
+            Assert.Equal(Control.DefaultFont, control.Font);
+            Assert.Equal(control.Font.Height, control.FontHeight);
+            Assert.Equal(Control.DefaultForeColor, control.ForeColor);
+            Assert.False(control.HasChildren);
+            Assert.Equal(100, control.Height);
+            Assert.NotNull(control.HorizontalScroll);
+            Assert.Same(control.HorizontalScroll, control.HorizontalScroll);
+            Assert.False(control.HScroll);
+            Assert.Equal(ImeMode.NoControl, control.ImeMode);
+            Assert.Equal(ImeMode.NoControl, control.ImeModeBase);
+            Assert.NotNull(control.LayoutEngine);
+            Assert.Same(control.LayoutEngine, control.LayoutEngine);
+            Assert.Equal(0, control.Left);
+            Assert.Equal(Point.Empty, control.Location);
+            Assert.Equal(new Padding(3), control.Margin);
+            Assert.Equal(Size.Empty, control.MaximumSize);
+            Assert.Equal(Size.Empty, control.MinimumSize);
+            Assert.Equal(Padding.Empty, control.Padding);
+            Assert.Equal(Size.Empty, control.PreferredSize);
+            Assert.Equal("Microsoft\u00AE .NET", control.ProductName);
+            Assert.False(control.RecreatingHandle);
+            Assert.Null(control.Region);
+            Assert.False(control.ResizeRedraw);
+            Assert.Equal(200, control.Right);
+            Assert.Equal(RightToLeft.No, control.RightToLeft);
+            Assert.Equal(new Size(200, 100), control.Size);
+            Assert.Equal(0, control.TabIndex);
+            Assert.False(control.TabStop);
+            Assert.Empty(control.Text);
+            Assert.Equal(0, control.Top);
+            Assert.Null(control.TopLevelControl);
+            Assert.True(control.Visible);
+            Assert.NotNull(control.VerticalScroll);
+            Assert.Same(control.VerticalScroll, control.VerticalScroll);
+            Assert.False(control.VScroll);
+            Assert.Equal(200, control.Width);
 
-            Assert.False(panel.IsHandleCreated);
+            Assert.False(control.IsHandleCreated);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void Panel_CreateParams_GetDefault_ReturnsExpected()
         {
-            var control = new SubPanel();
+            using var control = new SubPanel();
             CreateParams createParams = control.CreateParams;
             Assert.Null(createParams.Caption);
             Assert.Null(createParams.ClassName);
@@ -112,6 +120,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createParams.X);
             Assert.Equal(0, createParams.Y);
             Assert.Same(createParams, control.CreateParams);
+            Assert.False(control.IsHandleCreated);
         }
 
         [Theory]
@@ -476,12 +485,135 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
         }
 
-
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Panel_OnResize_Invoke_CallsResize(EventArgs eventArgs)
         {
-            var control = new SubPanel();
+            using var control = new SubPanel();
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+            int layoutCallCount = 0;
+            control.Layout += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(control, e.AffectedControl);
+                Assert.Equal("Bounds", e.AffectedProperty);
+                layoutCallCount++;
+            };
+
+            // Call with handler.
+            control.Resize += handler;
+            control.OnResize(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(1, layoutCallCount);
+
+            // Remove handler.
+            control.Resize -= handler;
+            control.OnResize(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(2, layoutCallCount);
+        }
+
+        public static IEnumerable<object[]> OnResize_WithHandle_TestData()
+        {
+            yield return new object[] { true, null, 1 };
+            yield return new object[] { true, new EventArgs(), 1 };
+            yield return new object[] { false, null, 0 };
+            yield return new object[] { false, new EventArgs(), 0 };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(OnResize_WithHandle_TestData))]
+        public void Panel_OnResize_InvokeWithHandle_CallsResize(bool resizeRedraw, EventArgs eventArgs, int expectedInvalidatedCallCount)
+        {
+            using var control = new SubPanel();
+            control.SetStyle(ControlStyles.ResizeRedraw, resizeRedraw);
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+            int layoutCallCount = 0;
+            control.Layout += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(control, e.AffectedControl);
+                Assert.Equal("Bounds", e.AffectedProperty);
+                layoutCallCount++;
+            };
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            // Call with handler.
+            control.Resize += handler;
+            control.OnResize(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(1, layoutCallCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Remove handler.
+            control.Resize -= handler;
+            control.OnResize(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(2, layoutCallCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(expectedInvalidatedCallCount * 2, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        public static IEnumerable<object[]> OnResize_DesignMode_TestData()
+        {
+            yield return new object[] { true, BorderStyle.None, null, 2 };
+            yield return new object[] { true, BorderStyle.None, new EventArgs(), 2 };
+            yield return new object[] { true, BorderStyle.Fixed3D, null, 1 };
+            yield return new object[] { true, BorderStyle.Fixed3D, new EventArgs(), 1 };
+            yield return new object[] { true, BorderStyle.FixedSingle, null, 1 };
+            yield return new object[] { true, BorderStyle.FixedSingle, new EventArgs(), 1 };
+
+            yield return new object[] { false, BorderStyle.None, null, 1 };
+            yield return new object[] { false, BorderStyle.None, new EventArgs(), 1 };
+            yield return new object[] { false, BorderStyle.Fixed3D, null, 0 };
+            yield return new object[] { false, BorderStyle.Fixed3D, new EventArgs(), 0 };
+            yield return new object[] { false, BorderStyle.FixedSingle, null, 0 };
+            yield return new object[] { false, BorderStyle.FixedSingle, new EventArgs(), 0 };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(OnResize_DesignMode_TestData))]
+        public void Panel_OnResize_InvokeWithDesignMode_CallsResize(bool resizeRedraw, BorderStyle borderStyle, EventArgs eventArgs, int expectedInvalidatedCallCount)
+        {
+            var mockSite = new Mock<ISite>(MockBehavior.Strict);
+            mockSite
+                .Setup(s => s.Container)
+                .Returns((IContainer)null);
+            mockSite
+                .Setup(s => s.DesignMode)
+                .Returns(true);
+            mockSite
+                .Setup(s => s.GetService(typeof(AmbientProperties)))
+                .Returns(null);
+            using var control = new SubPanel
+            {
+                Site = mockSite.Object,
+                BorderStyle = borderStyle
+            };
+            control.SetStyle(ControlStyles.ResizeRedraw, resizeRedraw);
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             int callCount = 0;
             EventHandler handler = (sender, e) =>
@@ -492,136 +624,28 @@ namespace System.Windows.Forms.Tests
             };
             int invalidatedCallCount = 0;
             control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
 
             // Call with handler.
             control.Resize += handler;
             control.OnResize(eventArgs);
             Assert.Equal(1, callCount);
-            Assert.Equal(0, invalidatedCallCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
 
             // Remove handler.
             control.Resize -= handler;
             control.OnResize(eventArgs);
             Assert.Equal(1, callCount);
-            Assert.Equal(0, invalidatedCallCount);
-        }
-
-        [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
-        public void Panel_OnResize_InvokeWithResizeRedraw_CallsResizeAndInvalidate(EventArgs eventArgs)
-        {
-            var control = new SubPanel();
-            control.SetStyle(ControlStyles.ResizeRedraw, true);
-            Assert.NotEqual(IntPtr.Zero, control.Handle);
-            int callCount = 0;
-            EventHandler handler = (sender, e) =>
-            {
-                Assert.Same(control, sender);
-                Assert.Same(eventArgs, e);
-                callCount++;
-            };
-            int invalidatedCallCount = 0;
-            InvalidateEventHandler invalidatedHandler = (sender, e) => invalidatedCallCount++;
-
-            // Call with handler.
-            control.Resize += handler;
-            control.Invalidated += invalidatedHandler;
-            control.OnResize(eventArgs);
-            Assert.Equal(1, callCount);
-            Assert.Equal(1, invalidatedCallCount);
-
-            // Remove handler.
-            control.Resize -= handler;
-            control.Invalidated -= invalidatedHandler;
-            control.OnResize(eventArgs);
-            Assert.Equal(1, callCount);
-            Assert.Equal(1, invalidatedCallCount);
-        }
-
-        [Theory]
-        [InlineData(BorderStyle.None, 1)]
-        [InlineData(BorderStyle.Fixed3D, 0)]
-        [InlineData(BorderStyle.FixedSingle, 0)]
-        public void Panel_OnResize_InvokeWithDesignMode_CallsResizeAndInvalidate(BorderStyle borderStyle, int expectedCallCount)
-        {
-            var mockSite = new Mock<ISite>(MockBehavior.Strict);
-            mockSite
-                .Setup(s => s.DesignMode)
-                .Returns(true);
-            mockSite
-                .Setup(s => s.GetService(typeof(AmbientProperties)))
-                .Returns(null);
-            var control = new SubPanel
-            {
-                Site = mockSite.Object,
-                BorderStyle = borderStyle
-            };
-            Assert.NotEqual(IntPtr.Zero, control.Handle);
-            int callCount = 0;
-            EventHandler handler = (sender, e) =>
-            {
-                Assert.Same(control, sender);
-                Assert.Same(EventArgs.Empty, e);
-                callCount++;
-            };
-            int invalidatedCallCount = 0;
-            InvalidateEventHandler invalidatedHandler = (sender, e) => invalidatedCallCount++;
-
-            // Call with handler.
-            control.Resize += handler;
-            control.Invalidated += invalidatedHandler;
-            control.OnResize(EventArgs.Empty);
-            Assert.Equal(1, callCount);
-            Assert.Equal(expectedCallCount, invalidatedCallCount);
-
-            // Remove handler.
-            control.Resize -= handler;
-            control.Invalidated -= invalidatedHandler;
-            control.OnResize(EventArgs.Empty);
-            Assert.Equal(1, callCount);
-            Assert.Equal(expectedCallCount, invalidatedCallCount);
-        }
-
-        [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
-        public void Panel_OnResize_InvokeWithDesignModeAndResizeRedraw_CallsResizeAndInvalidate(EventArgs eventArgs)
-        {
-            var mockSite = new Mock<ISite>(MockBehavior.Strict);
-            mockSite
-                .Setup(s => s.DesignMode)
-                .Returns(true);
-            mockSite
-                .Setup(s => s.GetService(typeof(AmbientProperties)))
-                .Returns(null);
-            var control = new SubPanel
-            {
-                Site = mockSite.Object
-            };
-            control.SetStyle(ControlStyles.ResizeRedraw, true);
-            Assert.NotEqual(IntPtr.Zero, control.Handle);
-            int callCount = 0;
-            EventHandler handler = (sender, e) =>
-            {
-                Assert.Same(control, sender);
-                Assert.Same(eventArgs, e);
-                callCount++;
-            };
-            int invalidatedCallCount = 0;
-            InvalidateEventHandler invalidatedHandler = (sender, e) => invalidatedCallCount++;
-
-            // Call with handler.
-            control.Resize += handler;
-            control.Invalidated += invalidatedHandler;
-            control.OnResize(eventArgs);
-            Assert.Equal(1, callCount);
-            Assert.Equal(2, invalidatedCallCount);
-
-            // Remove handler.
-            control.Resize -= handler;
-            control.Invalidated -= invalidatedHandler;
-            control.OnResize(eventArgs);
-            Assert.Equal(1, callCount);
-            Assert.Equal(2, invalidatedCallCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(expectedInvalidatedCallCount * 2, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
         }
 
         [Fact]

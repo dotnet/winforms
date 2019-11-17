@@ -10,7 +10,7 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        [DllImport(ExternDll.User32, ExactSpelling = true, SetLastError = true)]
+        [DllImport(Libraries.User32, ExactSpelling = true, SetLastError = true)]
         public static extern int SetScrollPos(IntPtr hWnd, SB nBar, int nPos, BOOL bRedraw);
 
         public static int SetScrollPos(IHandle hWnd, SB nBar, int nPos, BOOL bRedraw)

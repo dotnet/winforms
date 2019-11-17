@@ -15,26 +15,7 @@ namespace System.Windows.Forms
     /// <summary>
     ///  Control's IME feature.
     /// </summary>
-    public partial class Control :
-        Component,
-        UnsafeNativeMethods.IOleControl,
-        UnsafeNativeMethods.IOleObject,
-        Ole32.IOleInPlaceObject,
-        Ole32.IOleInPlaceActiveObject,
-        Ole32.IOleWindow,
-        UnsafeNativeMethods.IViewObject,
-        UnsafeNativeMethods.IViewObject2,
-        UnsafeNativeMethods.IPersist,
-        Ole32.IPersistStreamInit,
-        UnsafeNativeMethods.IPersistPropertyBag,
-        Ole32.IPersistStorage,
-        UnsafeNativeMethods.IQuickActivate,
-        ISupportOleDropSource,
-        IDropTarget,
-        ISynchronizeInvoke,
-        IWin32Window,
-        IArrangedElement,
-        IBindableComponent
+    public partial class Control
     {
         /// <summary>
         ///  Constants starting/ending the WM_CHAR messages to ignore count.  See ImeWmCharsToIgnore property.
@@ -51,12 +32,6 @@ namespace System.Windows.Forms
         ///  This flag prevents resetting ImeMode value of the focused control.  See IgnoreWmImeNotify property.
         /// </summary>
         private static bool ignoreWmImeNotify;
-
-        /// <summary>
-        ///  This flag works around an Issue with the Chinese IME sending IMENotify messages prior to WmInputLangChange
-        ///  which would cause this code to use OnHalf as the default mode overriding .ImeMode property. See WmImeNotify
-        /// </summary>
-        private static bool lastLanguageChinese = false;
 
         /// <summary>
         ///  The ImeMode in the property store.
@@ -711,11 +686,6 @@ namespace System.Windows.Forms
                 PropagatingImeMode = ImeMode.Off;
             }
 
-            if (ImeModeConversion.InputLanguageTable == ImeModeConversion.ChineseTable)
-            {
-                IgnoreWmImeNotify = false;
-            }
-
             Form form = FindForm();
 
             if (form != null)
@@ -787,24 +757,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void WmImeNotify(ref Message m)
         {
-            ImeMode[] inputLanguageTable = ImeModeConversion.InputLanguageTable;
-
-            // During a change to the Chinese language with Focus already set, the Chinese IME will send several WmImeNotify messages
-            // before ever sending a WmInputLangChange event. Also, the IME will report an IME input context during this time that we
-            // interpret as On = 'OnHalf'. The combination of these causes us to update the default Cached ImeMode to OnHalf, overriding
-            // the control's ImeMode property -- unwanted behavior. We workaround this by skipping our mode synchronization during these
-            // IMENotify messages until we get a WmInputLangChange event.
-            //
-            // If this is the first time here after conversion to chinese language, wait for WmInputLanguageChange
-            // before listening to WmImeNotifys.
-            if ((inputLanguageTable == ImeModeConversion.ChineseTable) && !lastLanguageChinese)
-            {
-                IgnoreWmImeNotify = true;
-            }
-
-            lastLanguageChinese = (inputLanguageTable == ImeModeConversion.ChineseTable);
-
-            if (ImeSupported && inputLanguageTable != ImeModeConversion.UnsupportedTable && !IgnoreWmImeNotify)
+            if (ImeSupported && ImeModeConversion.InputLanguageTable != ImeModeConversion.UnsupportedTable && !IgnoreWmImeNotify)
             {
                 int wparam = (int)m.WParam;
 

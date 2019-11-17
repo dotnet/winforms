@@ -1459,7 +1459,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Fact]
-        public void DesignerHost_AddComponentISiteGetService_InvokeWithNestedContainer_ReturnsNull()
+        public void DesignerHost_AddComponentISiteGetService_InvokeWithNestedContainer_ReturnsService()
         {
             var service = new object();
             var mockServiceProvider = new Mock<IServiceProvider>(MockBehavior.Strict);
@@ -1481,7 +1481,7 @@ namespace System.ComponentModel.Design.Tests
             var component = new RootDesignerComponent();
             host.Container.Add(component);
             INestedContainer nestedContainer = Assert.IsAssignableFrom<INestedContainer>(component.Site.GetService(typeof(INestedContainer)));
-            Assert.Null(component.Site.GetService(typeof(int)));
+            Assert.Same(service, component.Site.GetService(typeof(int)));
             Assert.Same(component.Site, component.Site.GetService(typeof(IDictionaryService)));
             Assert.Same(nestedContainer, component.Site.GetService(typeof(INestedContainer)));
         }

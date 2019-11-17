@@ -11,9 +11,9 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms.Layout;
 using Microsoft.Win32;
+using static Interop;
 using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 using Util = System.Windows.Forms.NativeMethods.Util;
-using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -363,7 +363,7 @@ namespace System.Windows.Forms
                     if (((int)ScrollBars & RichTextBoxConstants.RTB_HORIZ) != 0 && !WordWrap)
                     {
                         // RichEd infers word wrap from the absence of horizontal scroll bars
-                        cp.Style |= NativeMethods.WS_HSCROLL;
+                        cp.Style |= (int)User32.WS.HSCROLL;
                         if (((int)ScrollBars & RichTextBoxConstants.RTB_FORCE) != 0)
                         {
                             cp.Style |= RichTextBoxConstants.ES_DISABLENOSCROLL;
@@ -372,7 +372,7 @@ namespace System.Windows.Forms
 
                     if (((int)ScrollBars & RichTextBoxConstants.RTB_VERT) != 0)
                     {
-                        cp.Style |= NativeMethods.WS_VSCROLL;
+                        cp.Style |= (int)User32.WS.VSCROLL;
                         if (((int)ScrollBars & RichTextBoxConstants.RTB_FORCE) != 0)
                         {
                             cp.Style |= RichTextBoxConstants.ES_DISABLENOSCROLL;
@@ -382,9 +382,9 @@ namespace System.Windows.Forms
 
                 // Remove the WS_BORDER style from the control, if we're trying to set it,
                 // to prevent the control from displaying the single point rectangle around the 3D border
-                if (BorderStyle.FixedSingle == BorderStyle && ((cp.Style & NativeMethods.WS_BORDER) != 0))
+                if (BorderStyle.FixedSingle == BorderStyle && ((cp.Style & (int)User32.WS.BORDER) != 0))
                 {
-                    cp.Style &= (~NativeMethods.WS_BORDER);
+                    cp.Style &= ~(int)User32.WS.BORDER;
                     cp.ExStyle |= (int)User32.WS_EX.CLIENTEDGE;
                 }
 
@@ -2596,12 +2596,6 @@ namespace System.Windows.Forms
             base.OnBackColorChanged(e);
         }
 
-        protected override void OnContextMenuChanged(EventArgs e)
-        {
-            base.OnContextMenuChanged(e);
-            UpdateOleCallback();
-        }
-
         protected override void OnRightToLeftChanged(EventArgs e)
         {
             base.OnRightToLeftChanged(e);
@@ -4155,51 +4149,9 @@ namespace System.Windows.Forms
             public HRESULT GetContextMenu(short seltype, IntPtr lpoleobj, ref Richedit.CHARRANGE lpchrg, out IntPtr hmenu)
             {
                 Debug.WriteLineIf(RichTextDbg.TraceVerbose, "IRichEditOleCallback::GetContextMenu");
-                ContextMenu cm = owner.ContextMenu;
-                if (cm == null || owner.ShortcutsEnabled == false)
-                {
-                    hmenu = IntPtr.Zero;
-                }
-                else
-                {
-                    cm.sourceControl = owner;
-                    cm.OnPopup(EventArgs.Empty);
-                    // RichEd calls DestroyMenu after displaying the context menu
-                    IntPtr handle = cm.Handle;
-                    // if another control shares the same context menu
-                    // then we have to mark the context menu's handles empty because
-                    // RichTextBox will delete the menu handles once the popup menu is dismissed.
-                    Menu menu = cm;
-                    while (true)
-                    {
-                        int i = 0;
-                        int count = menu.ItemCount;
-                        for (; i < count; i++)
-                        {
-                            if (menu.items[i].handle != IntPtr.Zero)
-                            {
-                                menu = menu.items[i];
-                                break;
-                            }
-                        }
-                        if (i == count)
-                        {
-                            menu.handle = IntPtr.Zero;
-                            menu.created = false;
-                            if (menu == cm)
-                            {
-                                break;
-                            }
-                            else
-                            {
-                                menu = ((MenuItem)menu).Parent;
-                            }
-                        }
-                    }
 
-                    hmenu = handle;
-                }
-
+                // do nothing, we don't have ContextMenu any longer
+                hmenu = IntPtr.Zero;
                 return HRESULT.S_OK;
             }
         }

@@ -11,11 +11,11 @@ namespace System.Windows.Forms
     {
         private class AxSourcingSite : ISite
         {
-            private readonly UnsafeNativeMethods.IOleClientSite _clientSite;
+            private readonly Ole32.IOleClientSite _clientSite;
             private string _name;
             private HtmlShimManager _shimManager;
 
-            internal AxSourcingSite(IComponent component, UnsafeNativeMethods.IOleClientSite clientSite, string name)
+            internal AxSourcingSite(IComponent component, Ole32.IOleClientSite clientSite, string name)
             {
                 Component = component;
                 _clientSite = clientSite;

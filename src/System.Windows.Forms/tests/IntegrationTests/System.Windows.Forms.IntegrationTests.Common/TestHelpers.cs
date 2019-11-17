@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -29,6 +29,12 @@ namespace System.Windows.Forms.IntegrationTests.Common
         }
 
         /// <summary>
+        ///  Should always match the TargetFramework in the .csproj
+        /// </summary>
+        private static string TargetFramework
+            => "netcoreapp5.0";
+
+        /// <summary>
         ///  Get the output exe path for a specified project.
         ///  Throws an exception if the path does not exist
         /// </summary>
@@ -40,7 +46,7 @@ namespace System.Windows.Forms.IntegrationTests.Common
                 throw new ArgumentNullException(nameof(projectName));
 
             var repoRoot = GetRepoRoot();
-            var exePath = Path.Combine(repoRoot, $"artifacts\\bin\\{projectName}\\{Config}\\netcoreapp5.0\\{projectName}.exe");
+            var exePath = Path.Combine(repoRoot, $"artifacts\\bin\\{projectName}\\{Config}\\{TargetFramework}\\{projectName}.exe");
 
             if (!File.Exists(exePath))
                 throw new FileNotFoundException("File does not exist", exePath);

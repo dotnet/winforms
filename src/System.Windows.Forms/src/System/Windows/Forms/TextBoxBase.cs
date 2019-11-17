@@ -469,8 +469,8 @@ namespace System.Windows.Forms
                     cp.Style |= NativeMethods.ES_READONLY;
                 }
 
+                cp.Style &= ~(int)User32.WS.BORDER;
                 cp.ExStyle &= ~(int)User32.WS_EX.CLIENTEDGE;
-                cp.Style &= (~NativeMethods.WS_BORDER);
 
                 switch (borderStyle)
                 {
@@ -478,7 +478,7 @@ namespace System.Windows.Forms
                         cp.ExStyle |= (int)User32.WS_EX.CLIENTEDGE;
                         break;
                     case BorderStyle.FixedSingle:
-                        cp.Style |= NativeMethods.WS_BORDER;
+                        cp.Style |= (int)User32.WS.BORDER;
                         break;
                 }
                 if (textBoxFlags[multiline])
@@ -2227,7 +2227,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void WmTextBoxContextMenu(ref Message m)
         {
-            if (ContextMenu != null || ContextMenuStrip != null)
+            if (ContextMenuStrip != null)
             {
                 int x = NativeMethods.Util.SignedLOWORD(m.LParam);
                 int y = NativeMethods.Util.SignedHIWORD(m.LParam);
@@ -2251,11 +2251,7 @@ namespace System.Windows.Forms
                 // VisualStudio7 # 156, only show the context menu when clicked in the client area
                 if (ClientRectangle.Contains(client))
                 {
-                    if (ContextMenu != null)
-                    {
-                        ContextMenu.Show(this, client);
-                    }
-                    else if (ContextMenuStrip != null)
+                    if (ContextMenuStrip != null)
                     {
                         ContextMenuStrip.ShowInternal(this, client, keyboardActivated);
                     }

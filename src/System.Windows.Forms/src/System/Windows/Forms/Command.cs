@@ -173,10 +173,12 @@ namespace System.Windows.Forms
         public virtual bool Invoke()
         {
             object target = Target;
-            if (!(target is ICommandExecutor))
+            if (!(target is ICommandExecutor executor))
             {
                 return false;
-            } ((ICommandExecutor)target).Execute();
+            }
+            
+            executor.Execute();
             return true;
         }
     }

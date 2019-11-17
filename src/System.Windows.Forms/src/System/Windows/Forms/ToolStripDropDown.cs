@@ -242,22 +242,6 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new ContextMenu ContextMenu
-        {
-            get { return base.ContextMenu; }
-            set { base.ContextMenu = value; }
-        }
-
-        [Browsable(false)]
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler ContextMenuChanged
-        {
-            add => base.ContextMenuChanged += value;
-            remove => base.ContextMenuChanged -= value;
-        }
-
-        [Browsable(false)]
-        [EditorBrowsable(EditorBrowsableState.Never)]
         public new ContextMenuStrip ContextMenuStrip
         {
             get { return base.ContextMenuStrip; }
@@ -273,11 +257,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-            ///  This is called when creating a window. Inheriting classes can overide
+        ///  This is called when creating a window. Inheriting classes can overide
         ///  this to add extra functionality, but should not forget to first call
         ///  base.CreateParams() to make sure the control continues to work
         ///  correctly.
-            /// </summary>
+        /// </summary>
         protected override CreateParams CreateParams
         {
             get
@@ -296,10 +280,10 @@ namespace System.Windows.Forms
                 //Give the window the WS_EX_TOOLWINDOW extended style, and remove the WS_EX_APPWINDOW style. As a side effect, the window will have a smaller caption than a normal window.
                 //Give the window the WS_POPUP style and make it owned by a hidden window. (Form)
 
-                cp.Style &= ~(NativeMethods.WS_CAPTION | NativeMethods.WS_CLIPSIBLINGS);         /* no caption, no siblings */
+                cp.Style &= ~(int)(User32.WS.CAPTION | User32.WS.CLIPSIBLINGS);         /* no caption, no siblings */
                 cp.ExStyle &= ~(int)User32.WS_EX.APPWINDOW;  /* show in taskbar = false */
                 // | NativeMethods.WS_EX_TOOLWINDOW
-                cp.Style |= (TopLevel) ? NativeMethods.WS_POPUP : NativeMethods.WS_CHILD;
+                cp.Style |= TopLevel ? unchecked((int)User32.WS.POPUP) : (int)User32.WS.CHILD;
                 cp.ExStyle |= (int)User32.WS_EX.CONTROLPARENT;  /* show in taskbar = false */
 
                 bool topLevel = TopLevel;
@@ -320,7 +304,7 @@ namespace System.Windows.Forms
                 }
                 else if (!topLevel)
                 {
-                    cp.Style |= NativeMethods.WS_CLIPSIBLINGS;
+                    cp.Style |= (int)User32.WS.CLIPSIBLINGS;
                 }
 
                 // We're turning off CLIPSIBLINGS because in the designer the elements of the form beneath
@@ -1344,10 +1328,6 @@ namespace System.Windows.Forms
             AutoSize = true;
         }
 
-        /// <summary>
-        ///  Summary of OnLayout.
-        /// </summary>
-        /// <param name=e></param>
         protected virtual void OnClosed(ToolStripDropDownClosedEventArgs e)
         {
             if (IsHandleCreated)
@@ -1356,15 +1336,16 @@ namespace System.Windows.Forms
                 {
                     AccessibilityNotifyClients(AccessibleEvents.SystemMenuPopupEnd, -1);
                 }
-            } ((ToolStripDropDownClosedEventHandler)Events[EventClosed])?.Invoke(this, e);
+            }
+            
+            ((ToolStripDropDownClosedEventHandler)Events[EventClosed])?.Invoke(this, e);
         }
-
-        //
 
         protected virtual void OnClosing(ToolStripDropDownClosingEventArgs e)
         {
             ((ToolStripDropDownClosingEventHandler)Events[EventClosing])?.Invoke(this, e);
         }
+
         /// <summary>
         ///  When our handle is being created, suspend the deactivation
         ///  portion of the WndProc, as we'll never be shown.
@@ -1423,7 +1404,9 @@ namespace System.Windows.Forms
                 {
                     AccessibilityNotifyClients(AccessibleEvents.SystemMenuPopupStart, -1);
                 }
-            } ((EventHandler)Events[EventOpened])?.Invoke(this, e);
+            }
+            
+            ((EventHandler)Events[EventOpened])?.Invoke(this, e);
         }
 
         protected override void OnVisibleChanged(EventArgs e)
@@ -1825,14 +1808,14 @@ namespace System.Windows.Forms
                 if (value)
                 {
                     // setting toplevel = true
-                    styleFlags &= ~NativeMethods.WS_CHILD;
-                    styleFlags |= NativeMethods.WS_POPUP;
+                    styleFlags &= ~(int)User32.WS.CHILD;
+                    styleFlags |= unchecked((int)User32.WS.POPUP);
                 }
                 else
                 {
                     // this is a child window
-                    styleFlags &= ~NativeMethods.WS_POPUP;
-                    styleFlags |= NativeMethods.WS_CHILD;
+                    styleFlags &= ~unchecked((int)User32.WS.POPUP);
+                    styleFlags |= (int)User32.WS.CHILD;
                 }
 
                 WindowStyle = styleFlags;
@@ -1904,7 +1887,7 @@ namespace System.Windows.Forms
                             {
                                 ApplyTopMost(true);
                             }
-                            else if (IsHandleCreated && SafeNativeMethods.IsWindowEnabled(new HandleRef(this, Handle)))
+                            else if (IsHandleCreated && User32.IsWindowEnabled(this).IsTrue())
                             {
                                 User32.SetWindowPos(
                                     new HandleRef(this, Handle),

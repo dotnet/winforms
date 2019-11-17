@@ -97,7 +97,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public Point AdornerWindowPointToScreen(Point p)
         {
-            NativeMethods.MapWindowPoints(_toolStripAdornerWindow.Handle, IntPtr.Zero, ref p, 1);
+            User32.MapWindowPoints(_toolStripAdornerWindow.Handle, IntPtr.Zero, ref p, 1);
             return p;
         }
 
@@ -121,7 +121,7 @@ namespace System.Windows.Forms.Design
             }
 
             var pt = new Point(c.Left, c.Top);
-            NativeMethods.MapWindowPoints(c.Parent.Handle, _toolStripAdornerWindow.Handle, ref pt, 1);
+            User32.MapWindowPoints(c.Parent.Handle, _toolStripAdornerWindow.Handle, ref pt, 1);
             return pt;
         }
 
@@ -195,7 +195,7 @@ namespace System.Windows.Forms.Design
                 get
                 {
                     CreateParams cp = base.CreateParams;
-                    cp.Style &= ~(NativeMethods.WS_CLIPCHILDREN | NativeMethods.WS_CLIPSIBLINGS);
+                    cp.Style &= ~(int)(User32.WS.CLIPCHILDREN | User32.WS.CLIPSIBLINGS);
                     cp.ExStyle |= NativeMethods.WS_EX_TRANSPARENT;
                     return cp;
                 }
