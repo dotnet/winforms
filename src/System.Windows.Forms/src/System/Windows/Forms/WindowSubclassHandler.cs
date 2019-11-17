@@ -282,7 +282,7 @@ namespace System.Windows.Forms
         protected virtual void HandleWndProcException(Exception exception)
         {
             // Simply rethrow the exception here.
-            ExceptionDispatchInfo.Capture(exception).Throw();
+            ExceptionDispatchInfo.Throw(exception);
         }
     }
 }
