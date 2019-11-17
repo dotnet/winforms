@@ -22,12 +22,9 @@ namespace System.Windows.Forms
         /// </summary>
         private static bool IsContextActive()
         {
-            if (s_contextCreationSucceeded && Kernel32.GetCurrentActCtx(out IntPtr current).IsTrue())
-            {
-                return current == s_hActCtx;
-            }
-
-            return false;
+            return s_contextCreationSucceeded
+                && Kernel32.GetCurrentActCtx(out IntPtr current).IsTrue()
+                && current == s_hActCtx;
         }
 
         /// <summary>
@@ -38,35 +35,25 @@ namespace System.Windows.Forms
         /// </summary>
         public static IntPtr Activate()
         {
-            IntPtr userCookie = IntPtr.Zero;
-
-            if (Application.UseVisualStyles && s_contextCreationSucceeded && OSFeature.Feature.IsPresent(OSFeature.Themes))
+            if (IsContextActiveButNotCreated() && Kernel32.ActivateActCtx(s_hActCtx, out IntPtr userCookie))
             {
-                if (!IsContextActive())
-                {
-                    if (!Kernel32.ActivateActCtx(s_hActCtx, out userCookie))
-                    {
-                        // Be sure cookie always zero if activation failed
-                        userCookie = IntPtr.Zero;
-                    }
-                }
+                return userCookie;
             }
 
-            return userCookie;
+            return IntPtr.Zero;
         }
+
+        private static bool IsContextActiveButNotCreated()
+            => Application.UseVisualStyles && s_contextCreationSucceeded && !IsContextActive();        
 
         /// <summary>
         ///  Use this to deactivate a context activated by calling ExplicitActivate.
         /// </summary>
         public static IntPtr Deactivate(IntPtr userCookie)
         {
-            if (userCookie != IntPtr.Zero && OSFeature.Feature.IsPresent(OSFeature.Themes))
+            if (userCookie == IntPtr.Zero || Kernel32.DeactivateActCtx(0, userCookie).IsTrue())
             {
-                if (Kernel32.DeactivateActCtx(0, userCookie).IsTrue())
-                {
-                    // deactivation succeeded...
-                    userCookie = IntPtr.Zero;
-                }
+                return IntPtr.Zero;
             }
 
             return userCookie;
@@ -76,7 +63,7 @@ namespace System.Windows.Forms
         {
             lock (typeof(ThemingScope))
             {
-                if (!s_contextCreationSucceeded && OSFeature.Feature.IsPresent(OSFeature.Themes))
+                if (!s_contextCreationSucceeded)
                 {
                     fixed (char* pDllPath = dllPath)
                     {
