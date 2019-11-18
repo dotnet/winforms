@@ -775,11 +775,7 @@ namespace System.Windows.Forms
         TVSIL_STATE = 2,
         TVM_SORTCHILDRENCB = (TV_FIRST + 21);
 
-        public const int
-        USERCLASSTYPE_FULL = 1,
-        USERCLASSTYPE_SHORT = 2,
-        USERCLASSTYPE_APPNAME = 3,
-        UOI_FLAGS = 1;
+        public const int UOI_FLAGS = 1;
 
         public const int WSF_VISIBLE = 0x0001;
 

@@ -295,10 +295,10 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Implements IOleObject::Advise
             /// </summary>
-            internal int Advise(IAdviseSink pAdvSink)
+            internal uint Advise(IAdviseSink pAdvSink)
             {
                 _adviseList.Add(pAdvSink);
-                return _adviseList.Count;
+                return (uint)_adviseList.Count;
             }
 
             /// <summary>
@@ -2390,19 +2390,21 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Implements IOleObject::Unadvise
             /// </summary>
-            internal void Unadvise(int dwConnection)
+            internal HRESULT Unadvise(uint dwConnection)
             {
-                if (dwConnection > _adviseList.Count || _adviseList[dwConnection - 1] == null)
+                if (dwConnection > _adviseList.Count || _adviseList[(int)dwConnection - 1] == null)
                 {
-                    ThrowHr(HRESULT.OLE_E_NOCONNECTION);
+                    return HRESULT.OLE_E_NOCONNECTION;
                 }
 
-                IAdviseSink sink = (IAdviseSink)_adviseList[dwConnection - 1];
-                _adviseList.RemoveAt(dwConnection - 1);
+                IAdviseSink sink = (IAdviseSink)_adviseList[(int)dwConnection - 1];
+                _adviseList.RemoveAt((int)dwConnection - 1);
                 if (sink != null && Marshal.IsComObject(sink))
                 {
                     Marshal.ReleaseComObject(sink);
                 }
+
+                return HRESULT.S_OK;
             }
 
             /// <summary>
