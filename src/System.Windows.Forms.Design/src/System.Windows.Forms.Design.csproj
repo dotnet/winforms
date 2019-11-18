@@ -141,8 +141,10 @@
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.OLEWHICHMK.cs" Link="Interop\Ole32\Interop.OLEWHICHMK.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.PARAMDESC.cs" Link="Interop\Ole32\Interop.PARAMDESC.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.PARAMFLAG.cs" Link="Interop\Ole32\Interop.PARAMFLAG.cs" />
+    <Compile Include="..\..\Common\src\Interop\Ole32\Interop.POINTERINACTIVE.cs" Link="Interop\Ole32\Interop.POINTERINACTIVE.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.QACONTAINER.cs" Link="Interop\Ole32\Interop.QACONTAINER.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.QACONTAINERFLAGS.cs" Link="Interop\Ole32\Interop.QACONTAINERFLAGS.cs" />
+    <Compile Include="..\..\Common\src\Interop\Ole32\Interop.QACONTROL.cs" Link="Interop\Ole32\Interop.QACONTROL.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.RevokeDragDrop.cs" Link="Interop\Ole32\Interop.RevokeDragDrop.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.STATFLAG.cs" Link="Interop\Ole32\Interop.STATFLAG.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.STATSTG.cs" Link="Interop\Ole32\Interop.STATSTG.cs" />
@@ -155,6 +157,7 @@
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.VARENUM.cs" Link="Interop\Ole32\Interop.VARENUM.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.VARFLAGS.cs" Link="Interop\Ole32\Interop.VARFLAGS.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.VARKIND.cs" Link="Interop\Ole32\Interop.VARKIND.cs" />
+    <Compile Include="..\..\Common\src\Interop\Ole32\Interop.VIEWSTATUS.cs" Link="Interop\Ole32\Interop.VIEWSTATUS.cs" />
     <Compile Include="..\..\Common\src\Interop\Richedit\Interop.CHARRANGE.cs" Link="Interop\Richedit\Interop.CHARRANGE.cs" />
     <Compile Include="..\..\Common\src\Interop\SHCore\Interop.GetProcessDpiAwareness.cs" Link="Interop\SHCore\Interop.GetProcessDpiAwareness.cs" />
     <Compile Include="..\..\Common\src\Interop\SHCore\Interop.PROCESS_DPI_AWARENESS.cs" Link="Interop\SHCore\Interop.PROCESS_DPI_AWARENESS.cs" />

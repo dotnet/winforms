@@ -13979,7 +13979,7 @@ namespace System.Windows.Forms
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistStreamInit.InitNew");
         }
 
-        HRESULT UnsafeNativeMethods.IQuickActivate.QuickActivate(Ole32.QACONTAINER pQaContainer, UnsafeNativeMethods.tagQACONTROL pQaControl)
+        unsafe HRESULT UnsafeNativeMethods.IQuickActivate.QuickActivate(Ole32.QACONTAINER pQaContainer, Ole32.QACONTROL* pQaControl)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:QuickActivate");
             Debug.Indent();

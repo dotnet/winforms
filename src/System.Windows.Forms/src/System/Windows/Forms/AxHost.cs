@@ -3649,7 +3649,7 @@ namespace System.Windows.Forms
             return (logP * hm + HMperInch / 2) / HMperInch;
         }
 
-        private bool QuickActivate()
+        private unsafe bool QuickActivate()
         {
             if (!(instance is UnsafeNativeMethods.IQuickActivate))
             {
@@ -3662,7 +3662,10 @@ namespace System.Windows.Forms
             {
                 cbSize = (uint)Marshal.SizeOf<Ole32.QACONTAINER>()
             };
-            var qaControl = new UnsafeNativeMethods.tagQACONTROL();
+            var qaControl = new Ole32.QACONTROL
+            {
+                cbSize = (uint)Marshal.SizeOf<Ole32.QACONTROL>()
+            };
 
             qaContainer.pClientSite = oleSite;
             qaContainer.pPropertyNotifySink = oleSite;
@@ -3691,7 +3694,7 @@ namespace System.Windows.Forms
                 qaContainer.dwAmbientFlags |= Ole32.QACONTAINERFLAGS.USERMODE;
             }
 
-            HRESULT hr = iqa.QuickActivate(qaContainer, qaControl);
+            HRESULT hr = iqa.QuickActivate(qaContainer, &qaControl);
             if (!hr.Succeeded())
             {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "Failed to QuickActivate: " + hr.ToString());
