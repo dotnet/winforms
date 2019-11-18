@@ -1318,22 +1318,22 @@ namespace System.Windows.Forms
             // back to our parent.  They should track.
             internal class UpDownEditAccessibleObject : ControlAccessibleObject
             {
-                readonly UpDownBase parent;
+                readonly UpDownBase _parent;
 
                 public UpDownEditAccessibleObject(UpDownEdit owner, UpDownBase parent) : base(owner)
                 {
-                    this.parent = parent;
+                    _parent = parent;
                 }
 
                 public override string Name
                 {
                     get
                     {
-                        return parent.AccessibilityObject.Name;
+                        return _parent.AccessibilityObject.Name;
                     }
                     set
                     {
-                        parent.AccessibilityObject.Name = value;
+                        _parent.AccessibilityObject.Name = value;
                     }
                 }
 
@@ -1341,7 +1341,7 @@ namespace System.Windows.Forms
                 {
                     get
                     {
-                        return parent.AccessibilityObject.KeyboardShortcut;
+                        return _parent.AccessibilityObject.KeyboardShortcut;
                     }
                 }
             }
@@ -1359,11 +1359,6 @@ namespace System.Windows.Forms
         /// </summary>
         internal class UpDownButtons : Control
         {
-            //
-
-            /////////////////////////////////////////////////////////////////////
-            // Member variables
-            //
             /////////////////////////////////////////////////////////////////////
             // Parent control
             private readonly UpDownBase parent;
@@ -1751,6 +1746,8 @@ namespace System.Windows.Forms
                 parent.OnStopTimer();
             }
 
+            internal override bool SupportsUiaProviders => true;
+
             /// <summary>
             ///  Generates updown events when the timer calls this function.
             /// </summary>
@@ -1785,45 +1782,42 @@ namespace System.Windows.Forms
 
             internal class UpDownButtonsAccessibleObject : ControlAccessibleObject
             {
-
                 private DirectionButtonAccessibleObject upButton;
                 private DirectionButtonAccessibleObject downButton;
 
+                private UpDownButtons _owner;
+
                 public UpDownButtonsAccessibleObject(UpDownButtons owner) : base(owner)
                 {
+                    _owner = owner;
                 }
 
-                public override string Name
+                internal override UiaCore.IRawElementProviderFragment ElementProviderFromPoint(double x, double y)
                 {
-                    get
-                    {
-                        string baseName = base.Name;
-                        if (baseName == null || baseName.Length == 0)
-                        {
-                            // Spinner is already announced so use type name.
-                            return Owner.ParentInternal.GetType().Name;
-                        }
+                    AccessibleObject element = HitTest((int)x, (int)y);
 
-                        return baseName;
-                    }
-                    set
+                    if (element != null)
                     {
-                        base.Name = value;
+                        return element;
                     }
+
+                    return base.ElementProviderFromPoint(x, y);
                 }
 
-                public override AccessibleRole Role
+                internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
                 {
-                    get
+                    switch (direction)
                     {
-                        AccessibleRole role = Owner.AccessibleRole;
-                        if (role != AccessibleRole.Default)
-                        {
-                            return role;
-                        }
-                        return AccessibleRole.SpinButton;
+                        case UiaCore.NavigateDirection.FirstChild:
+                            return GetChild(0);
+                        case UiaCore.NavigateDirection.LastChild:
+                            return GetChild(1);
+                        default:
+                            return base.FragmentNavigate(direction);
                     }
                 }
+
+                internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot => this;
 
                 private DirectionButtonAccessibleObject UpButton
                 {
@@ -1833,6 +1827,7 @@ namespace System.Windows.Forms
                         {
                             upButton = new DirectionButtonAccessibleObject(this, true);
                         }
+
                         return upButton;
                     }
                 }
@@ -1845,24 +1840,20 @@ namespace System.Windows.Forms
                         {
                             downButton = new DirectionButtonAccessibleObject(this, false);
                         }
+
                         return downButton;
                     }
                 }
 
-                /// <summary>
-                /// </summary>
                 public override AccessibleObject GetChild(int index)
                 {
-
                     // Up button
-                    //
                     if (index == 0)
                     {
                         return UpButton;
                     }
 
                     // Down button
-                    //
                     if (index == 1)
                     {
                         return DownButton;
@@ -1871,40 +1862,200 @@ namespace System.Windows.Forms
                     return null;
                 }
 
-                /// <summary>
-                /// </summary>
                 public override int GetChildCount()
                 {
                     return 2;
                 }
 
+                internal override object GetPropertyValue(UiaCore.UIA propertyID)
+                {
+                    switch (propertyID)
+                    {
+                        case UiaCore.UIA.NamePropertyId:
+                            return Name;
+                        case UiaCore.UIA.RuntimeIdPropertyId:
+                            return RuntimeId;
+                        case UiaCore.UIA.ControlTypePropertyId:
+                            return UiaCore.UIA.SpinnerControlTypeId;
+                        case UiaCore.UIA.BoundingRectanglePropertyId:
+                            return Bounds;
+                        case UiaCore.UIA.LegacyIAccessibleStatePropertyId:
+                            return State;
+                        case UiaCore.UIA.LegacyIAccessibleRolePropertyId:
+                            return Role;
+                        default:
+                            return base.GetPropertyValue(propertyID);
+                    }
+                }
+
+                public override AccessibleObject HitTest(int x, int y)
+                {
+                    if (UpButton.Bounds.Contains(x, y))
+                    {
+                        return UpButton;
+                    }
+
+                    if (DownButton.Bounds.Contains(x, y))
+                    {
+                        return DownButton;
+                    }
+
+                    return null;
+                }
+
+                internal override UiaCore.IRawElementProviderSimple HostRawElementProvider
+                {
+                    get
+                    {
+                        UiaCore.UiaHostProviderFromHwnd(new HandleRef(this, Handle), out UiaCore.IRawElementProviderSimple provider);
+                        return provider;
+                    }
+                }
+
+
+                public override string Name
+                {
+                    get
+                    {
+                        string baseName = base.Name;
+
+                        if (baseName == null || baseName.Length == 0)
+                        {
+                            return SR.DefaultUpDownButtonsAccessibleName;
+                        }
+
+                        return baseName;
+                    }
+                    set
+                    {
+                        base.Name = value;
+                    }
+                }
+
+                public override AccessibleObject Parent => _owner.AccessibilityObject;
+
+                public override AccessibleRole Role
+                {
+                    get
+                    {
+                        AccessibleRole role = Owner.AccessibleRole;
+                        
+                        if (role != AccessibleRole.Default)
+                        {
+                            return role;
+                        }
+                        return AccessibleRole.SpinButton;
+                    }
+                }
+
+                /// <summary>
+                ///  Gets the runtime ID.
+                /// </summary>
+                internal override int[] RuntimeId
+                {
+                    get
+                    {
+                        if (_owner == null)
+                        {
+                            return base.RuntimeId;
+                        }
+
+                        // we need to provide a unique ID
+                        // others are implementing this in the same manner
+                        // first item is static - 0x2a (RuntimeIDFirstItem)
+                        // second item can be anything, but here it is a hash
+
+                        var runtimeId = new int[3];
+                        runtimeId[0] = RuntimeIDFirstItem;
+                        runtimeId[1] = (int)(long)_owner.Handle;
+                        runtimeId[2] = _owner.GetHashCode();
+
+                        return runtimeId;
+                    }
+                }
+
                 internal class DirectionButtonAccessibleObject : AccessibleObject
                 {
-                    private readonly bool up;
-                    private readonly UpDownButtonsAccessibleObject parent;
+                    private readonly bool _up;
+                    private readonly UpDownButtonsAccessibleObject _parent;
 
                     public DirectionButtonAccessibleObject(UpDownButtonsAccessibleObject parent, bool up)
                     {
-                        this.parent = parent;
-                        this.up = up;
+                        _parent = parent;
+                        _up = up;
                     }
+
+                    /// <summary>
+                    ///  Gets the runtime ID.
+                    /// </summary>
+                    internal override int[] RuntimeId
+                    {
+                        get
+                        {
+                            var runtimeId = new int[4];
+
+                            runtimeId[0] = _parent.RuntimeId[0];
+                            runtimeId[1] = _parent.RuntimeId[1];
+                            runtimeId[2] = _parent.RuntimeId[2];
+                            runtimeId[3] = _up ? 1 : 0;
+
+                            return runtimeId;
+                        }
+                    }
+
+                    internal override object GetPropertyValue(UiaCore.UIA propertyID)
+                    {
+                        switch (propertyID)
+                        {
+                            case UiaCore.UIA.NamePropertyId:
+                                return Name;
+                            case UiaCore.UIA.RuntimeIdPropertyId:
+                                return RuntimeId;
+                            case UiaCore.UIA.ControlTypePropertyId:
+                                return UiaCore.UIA.ButtonControlTypeId;
+                            case UiaCore.UIA.BoundingRectanglePropertyId:
+                                return Bounds;
+                            case UiaCore.UIA.LegacyIAccessibleStatePropertyId:
+                                return State;
+                            case UiaCore.UIA.LegacyIAccessibleRolePropertyId:
+                                return Role;
+                            default:
+                                return base.GetPropertyValue(propertyID);
+                        }
+                    }
+
+                    internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
+                    {
+                        switch (direction)
+                        {
+                            case UiaCore.NavigateDirection.Parent:
+                                return Parent;
+                            case UiaCore.NavigateDirection.NextSibling:
+                                return _up ? Parent.GetChild(1) : null;
+                            case UiaCore.NavigateDirection.PreviousSibling:
+                                return _up ? null : Parent.GetChild(0);
+                            default:
+                                return base.FragmentNavigate(direction);
+                        }
+                    }
+
+                    internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot => Parent;
 
                     public override Rectangle Bounds
                     {
                         get
                         {
                             // Get button bounds
-                            //
-                            Rectangle bounds = ((UpDownButtons)parent.Owner).Bounds;
+                            Rectangle bounds = ((UpDownButtons)_parent.Owner).Bounds;
                             bounds.Height /= 2;
-                            if (!up)
+
+                            if (!_up)
                             {
                                 bounds.Y += bounds.Height;
                             }
 
                             // Convert to screen co-ords
-                            //
-                            return (((UpDownButtons)parent.Owner).ParentInternal).RectangleToScreen(bounds);
+                            return (((UpDownButtons)_parent.Owner).ParentInternal).RectangleToScreen(bounds);
                         }
                     }
 
@@ -1912,10 +2063,11 @@ namespace System.Windows.Forms
                     {
                         get
                         {
-                            if (up)
+                            if (_up)
                             {
                                 return SR.UpDownBaseUpButtonAccName;
                             }
+
                             return SR.UpDownBaseDownButtonAccName;
                         }
                         set
@@ -1927,7 +2079,7 @@ namespace System.Windows.Forms
                     {
                         get
                         {
-                            return parent;
+                            return _parent;
                         }
                     }
 
