@@ -9,6 +9,7 @@ internal static partial class Interop
         public const string Comctl32 = "comctl32.dll";
         public const string Comdlg32 = "comdlg32.dll";
         public const string Gdi32 = "gdi32.dll";
+        public const string Imm32 = "imm32.dll";
         public const string Kernel32 = "kernel32.dll";
         public const string NtDll = "ntdll.dll";
         public const string Ole32 = "ole32.dll";

@@ -206,33 +206,6 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.Kernel32, CharSet = CharSet.Auto)]
         public static extern void GetTempFileName(string tempDirName, string prefixName, int unique, StringBuilder sb);
 
-        [DllImport(ExternDll.Imm32, CharSet = CharSet.Auto)]
-        public static extern bool ImmSetConversionStatus(HandleRef hIMC, int conversion, int sentence);
-
-        [DllImport(ExternDll.Imm32, CharSet = CharSet.Auto)]
-        public static extern bool ImmGetConversionStatus(HandleRef hIMC, ref int conversion, ref int sentence);
-
-        [DllImport(ExternDll.Imm32, CharSet = CharSet.Auto)]
-        public static extern IntPtr ImmGetContext(HandleRef hWnd);
-
-        [DllImport(ExternDll.Imm32, CharSet = CharSet.Auto)]
-        public static extern bool ImmReleaseContext(HandleRef hWnd, HandleRef hIMC);
-
-        [DllImport(ExternDll.Imm32, CharSet = CharSet.Auto)]
-        public static extern IntPtr ImmAssociateContext(HandleRef hWnd, HandleRef hIMC);
-
-        [DllImport(ExternDll.Imm32, CharSet = CharSet.Auto)]
-        public static extern IntPtr ImmCreateContext();
-
-        [DllImport(ExternDll.Imm32, CharSet = CharSet.Auto)]
-        public static extern bool ImmSetOpenStatus(HandleRef hIMC, bool open);
-
-        [DllImport(ExternDll.Imm32, CharSet = CharSet.Auto)]
-        public static extern bool ImmGetOpenStatus(HandleRef hIMC);
-
-        [DllImport(ExternDll.Imm32, CharSet = CharSet.Auto)]
-        public static extern bool ImmNotifyIME(HandleRef hIMC, int dwAction, int dwIndex, int dwValue);
-
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern IntPtr GetAncestor(HandleRef hWnd, int flags);
 

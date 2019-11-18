@@ -1160,26 +1160,25 @@ namespace System.Windows.Forms
         private void ImeComplete()
         {
             flagState[IME_COMPLETING] = true;
-            ImeNotify(NativeMethods.CPS_COMPLETE);
+            ImeNotify(Imm32.CPS.COMPLETE);
         }
 
         /// <summary>
         ///  Notifies the IMM about changes to the status of the IME input context.
         /// </summary>
-        private void ImeNotify(int action)
+        private void ImeNotify(Imm32.CPS action)
         {
-            HandleRef handle = new HandleRef(this, Handle);
-            IntPtr inputContext = UnsafeNativeMethods.ImmGetContext(handle);
+            IntPtr inputContext = Imm32.ImmGetContext(this);
 
             if (inputContext != IntPtr.Zero)
             {
                 try
                 {
-                    UnsafeNativeMethods.ImmNotifyIME(new HandleRef(null, inputContext), NativeMethods.NI_COMPOSITIONSTR, action, 0);
+                    Imm32.ImmNotifyIME(inputContext, Imm32.NI.COMPOSITIONSTR, action, 0);
                 }
                 finally
                 {
-                    UnsafeNativeMethods.ImmReleaseContext(handle, new HandleRef(null, inputContext));
+                    Imm32.ImmReleaseContext(this, inputContext);
                 }
             }
             else
