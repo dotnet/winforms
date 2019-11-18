@@ -44,15 +44,9 @@ namespace System.Windows.Forms.Design
                 }
 
                 _builderDialog.Context = context;
-                try
+                if (_builderDialog.ShowDialog() == DialogResult.OK)
                 {
-                    if (_builderDialog.ShowDialog() == DialogResult.OK)
-                    {
-                        value = _builderDialog.CellStyle;
-                    }
-                }
-                finally
-                {
+                    value = _builderDialog.CellStyle;
                 }
             }
             return value;
