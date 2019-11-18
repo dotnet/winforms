@@ -4594,6 +4594,11 @@ To replace this default dialog please handle the DataError event.</source>
         <target state="translated">表示要繫結錯誤的資料來源。</target>
         <note />
       </trans-unit>
+      <trans-unit id="ErrorProviderDefaultAccessibleName">
+        <source>Error provider</source>
+        <target state="new">Error provider</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ErrorProviderErrorDescr">
         <source>The error description for a control.</source>
         <target state="translated">控制項的錯誤描述。</target>

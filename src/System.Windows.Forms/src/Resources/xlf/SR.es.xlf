@@ -4594,6 +4594,11 @@ Para reemplazar este cuadro de diálogo predeterminado controle el evento DataEr
         <target state="translated">Indica el origen de los datos en los que se deben enlazar errores.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ErrorProviderDefaultAccessibleName">
+        <source>Error provider</source>
+        <target state="new">Error provider</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ErrorProviderErrorDescr">
         <source>The error description for a control.</source>
         <target state="translated">Descripción del error de un control.</target>
