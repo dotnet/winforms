@@ -1202,25 +1202,6 @@ namespace System.Windows.Forms
         }
 
         [ComImport]
-        [Guid("CF51ED10-62FE-11CF-BF86-00A0C9034836")]
-        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public unsafe interface IQuickActivate
-        {
-            [PreserveSig]
-            HRESULT QuickActivate(
-                Ole32.QACONTAINER pQaContainer,
-                Ole32.QACONTROL* pQaControl);
-
-            [PreserveSig]
-            HRESULT SetContentExtent(
-                Size* pSizel);
-
-            [PreserveSig]
-            HRESULT GetContentExtent(
-                Size* pSizel);
-        }
-
-        [ComImport]
         [Guid("00000104-0000-0000-C000-000000000046")]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
         public unsafe interface IEnumOLEVERB

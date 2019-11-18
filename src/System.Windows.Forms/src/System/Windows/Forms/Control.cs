@@ -57,7 +57,7 @@ namespace System.Windows.Forms
         Ole32.IPersistStreamInit,
         UnsafeNativeMethods.IPersistPropertyBag,
         Ole32.IPersistStorage,
-        UnsafeNativeMethods.IQuickActivate,
+        Ole32.IQuickActivate,
         ISupportOleDropSource,
         IDropTarget,
         ISynchronizeInvoke,
@@ -13979,7 +13979,7 @@ namespace System.Windows.Forms
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistStreamInit.InitNew");
         }
 
-        unsafe HRESULT UnsafeNativeMethods.IQuickActivate.QuickActivate(Ole32.QACONTAINER pQaContainer, Ole32.QACONTROL* pQaControl)
+        unsafe HRESULT Ole32.IQuickActivate.QuickActivate(Ole32.QACONTAINER pQaContainer, Ole32.QACONTROL* pQaControl)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:QuickActivate");
             Debug.Indent();
@@ -13988,7 +13988,7 @@ namespace System.Windows.Forms
             return hr;
         }
 
-        unsafe Interop.HRESULT UnsafeNativeMethods.IQuickActivate.SetContentExtent(Size* pSizel)
+        unsafe Interop.HRESULT Ole32.IQuickActivate.SetContentExtent(Size* pSizel)
         {
             if (pSizel == null)
             {
@@ -14002,7 +14002,7 @@ namespace System.Windows.Forms
             return Interop.HRESULT.S_OK;
         }
 
-        unsafe Interop.HRESULT UnsafeNativeMethods.IQuickActivate.GetContentExtent(Size* pSizel)
+        unsafe Interop.HRESULT Ole32.IQuickActivate.GetContentExtent(Size* pSizel)
         {
             if (pSizel == null)
             {

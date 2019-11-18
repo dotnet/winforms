@@ -3651,12 +3651,12 @@ namespace System.Windows.Forms
 
         private unsafe bool QuickActivate()
         {
-            if (!(instance is UnsafeNativeMethods.IQuickActivate))
+            if (!(instance is Ole32.IQuickActivate))
             {
                 return false;
             }
 
-            UnsafeNativeMethods.IQuickActivate iqa = (UnsafeNativeMethods.IQuickActivate)instance;
+            Ole32.IQuickActivate iqa = (Ole32.IQuickActivate)instance;
 
             var qaContainer = new Ole32.QACONTAINER
             {
