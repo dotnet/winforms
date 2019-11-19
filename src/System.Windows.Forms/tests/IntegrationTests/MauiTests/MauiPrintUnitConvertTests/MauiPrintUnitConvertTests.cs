@@ -31,29 +31,14 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
         protected override Type Class
         {
             get
-            { 
-                { 
-                    return typeof(PrinterUnitConvert);
-                } 
+            {
+                return typeof(PrinterUnitConvert);
             }
         }
 
         protected override Object CreateObject(TParams p)
         {
             return null;
-        }
-
-        protected PrinterUnitConvert GetPrinterUnitConvert(TParams p)
-        {
-            if (p.target is PrinterUnitConvert) 
-            { 
-                return (PrinterUnitConvert)p.target;
-            }
-            else
-            {
-                p.log.WriteLine("target !instanceof System.Drawing.Printing.PrinterUnitConvert.");
-                return null;
-            }
         }
 
         [Scenario(true)]
@@ -99,7 +84,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
                 intResultValue = PrinterUnitConvert.Convert(intValue, _fromUnit, _toUnit);
                 p.log.WriteLine("resultValue=" + intResultValue.ToString());
             }
-            catch (Exception)
+            catch
             {
                 intResultValue = PrinterUnitConvert.Convert(intValue, _toUnit, _fromUnit);
                 p.log.WriteLine("resultValue=" + intResultValue.ToString());
@@ -138,7 +123,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
             ScenarioResult result = new ScenarioResult(true);
 
             sizeValue = p.ru.GetSize();
-             _fromUnit = p.ru.GetEnumValue<PrinterUnit>();
+            _fromUnit = p.ru.GetEnumValue<PrinterUnit>();
             _toUnit = p.ru.GetEnumValue<PrinterUnit>();
 
             p.log.WriteLine("value=" + sizeValue.ToString());
@@ -150,7 +135,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
                 sizeResultValue = PrinterUnitConvert.Convert(sizeValue, _fromUnit, _toUnit);
                 p.log.WriteLine("resultValue=" + sizeResultValue.ToString());
             }
-            catch (Exception)
+            catch
             {
                 sizeResultValue = PrinterUnitConvert.Convert(sizeValue, _toUnit, _fromUnit);
                 p.log.WriteLine("resultValue=" + sizeResultValue.ToString());
