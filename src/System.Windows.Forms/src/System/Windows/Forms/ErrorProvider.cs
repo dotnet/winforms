@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -92,6 +92,17 @@ namespace System.Windows.Forms
             }
 
             container.Add(this);
+        }
+
+        /// <summary>
+        ///  ScreenReader announces the error description string of the specified control
+        /// </summary>
+        private void AnnounceErrorText(Control control, string text)
+        {
+            control?.AccessibilityObject?.RaiseAutomationNotification(
+                Automation.AutomationNotificationKind.ActionCompleted,
+                Automation.AutomationNotificationProcessing.All,
+                text);
         }
 
         public override ISite Site
@@ -786,6 +797,7 @@ namespace System.Windows.Forms
         public void SetError(Control control, string value)
         {
             EnsureControlItem(control).Error = value;
+            AnnounceErrorText(control, value);
         }
 
         /// <summary>
