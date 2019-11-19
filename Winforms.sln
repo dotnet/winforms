@@ -115,6 +115,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microsoft.VisualBasic.Integ
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VisualBasicRuntimeTest", "src\Microsoft.VisualBasic\tests\IntegrationTests\VisualBasicRuntimeTest\VisualBasicRuntimeTest.csproj", "{EC7608D1-1857-432E-930F-0F89B98979FB}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MauiXDataFormatsTests", "src\System.Windows.Forms\tests\IntegrationTests\MauiTests\MauiXDataFormatsTests\MauiXDataFormatsTests.csproj", "{AC13B972-E0F6-4AB8-A3D3-583B8D7D4FE7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -225,6 +227,10 @@ Global
 		{EC7608D1-1857-432E-930F-0F89B98979FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EC7608D1-1857-432E-930F-0F89B98979FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EC7608D1-1857-432E-930F-0F89B98979FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AC13B972-E0F6-4AB8-A3D3-583B8D7D4FE7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC13B972-E0F6-4AB8-A3D3-583B8D7D4FE7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC13B972-E0F6-4AB8-A3D3-583B8D7D4FE7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC13B972-E0F6-4AB8-A3D3-583B8D7D4FE7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -261,6 +267,7 @@ Global
 		{A756D568-AC89-4577-A9B2-E147784AB728} = {77FEDB47-F7F6-490D-AF7C-ABB4A9E0B9D7}
 		{1C6F6ADA-97B1-4EB9-934D-0071BB618729} = {680FB14C-7B0C-4D63-9F1A-18ACCDB0F52A}
 		{EC7608D1-1857-432E-930F-0F89B98979FB} = {680FB14C-7B0C-4D63-9F1A-18ACCDB0F52A}
+		{AC13B972-E0F6-4AB8-A3D3-583B8D7D4FE7} = {8F20A905-BD37-4D80-B8DF-FA45276FC23F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7B1B0433-F612-4E5A-BE7E-FCF5B9F6E136}
