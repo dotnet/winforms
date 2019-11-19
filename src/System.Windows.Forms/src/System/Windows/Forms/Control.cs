@@ -4939,7 +4939,7 @@ namespace System.Windows.Forms
                 {
                     // Activate theming scope to get theming for controls at design time and when hosted in browser.
                     // NOTE: If a theming context is already active, this call is very fast, so shouldn't be a perf issue.
-                    userCookie = UnsafeNativeMethods.ThemingScope.Activate();
+                    userCookie = ThemingScope.Activate();
                 }
 
                 CreateParams cp = CreateParams;
@@ -4978,7 +4978,7 @@ namespace System.Windows.Forms
             finally
             {
                 SetState(States.CreatingHandle, false);
-                UnsafeNativeMethods.ThemingScope.Deactivate(userCookie);
+                ThemingScope.Deactivate(userCookie);
             }
 
             // For certain controls (e.g., ComboBox) CreateWindowEx

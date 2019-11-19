@@ -979,7 +979,7 @@ namespace System.Windows.Forms
                 IntPtr userCookie = IntPtr.Zero;
                 if (UseVisualStyles)
                 {
-                    userCookie = UnsafeNativeMethods.ThemingScope.Activate();
+                    userCookie = ThemingScope.Activate();
                 }
 
                 try
@@ -988,7 +988,7 @@ namespace System.Windows.Forms
                 }
                 finally
                 {
-                    UnsafeNativeMethods.ThemingScope.Deactivate(userCookie);
+                    ThemingScope.Deactivate(userCookie);
                 }
             }
 

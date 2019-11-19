@@ -210,7 +210,7 @@ namespace System.Windows.Forms
 
                     if (Application.UseVisualStyles)
                     {
-                        userCookie = UnsafeNativeMethods.ThemingScope.Activate();
+                        userCookie = ThemingScope.Activate();
                     }
 
                     Application.BeginModalMessageLoop();
@@ -231,7 +231,7 @@ namespace System.Windows.Forms
                         UnsafeNativeMethods.SetWindowLong(new HandleRef(this, hwndOwner), NativeMethods.GWL_WNDPROC, new HandleRef(this, _defOwnerWndProc));
                     }
 
-                    UnsafeNativeMethods.ThemingScope.Deactivate(userCookie);
+                    ThemingScope.Deactivate(userCookie);
 
                     _defOwnerWndProc = IntPtr.Zero;
                     _hookedWndProc = IntPtr.Zero;

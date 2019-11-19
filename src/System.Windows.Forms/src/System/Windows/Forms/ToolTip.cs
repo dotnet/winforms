@@ -747,7 +747,7 @@ namespace System.Windows.Forms
                 return;
             }
 
-            IntPtr userCookie = UnsafeNativeMethods.ThemingScope.Activate();
+            IntPtr userCookie = ThemingScope.Activate();
             try
             {
 
@@ -772,7 +772,7 @@ namespace System.Windows.Forms
             }
             finally
             {
-                UnsafeNativeMethods.ThemingScope.Deactivate(userCookie);
+                ThemingScope.Deactivate(userCookie);
             }
 
             // If in OwnerDraw mode, we don't want the default border.
