@@ -1245,33 +1245,6 @@ namespace System.Windows.Forms
                 Ole32.EXCEPINFO* pExcepInfo);
         }
 
-        [ComImport(),
-        Guid("B196B286-BAB4-101A-B69C-00AA00341D07"),
-        InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IConnectionPoint
-        {
-            [PreserveSig]
-            int GetConnectionInterface(out Guid iid);
-
-            [PreserveSig]
-            int GetConnectionPointContainer(
-                [MarshalAs(UnmanagedType.Interface)]
-            ref IConnectionPointContainer pContainer);
-
-            [PreserveSig]
-            int Advise(
-                   [In, MarshalAs(UnmanagedType.Interface)]
-                  object pUnkSink,
-                 ref int cookie);
-
-            [PreserveSig]
-            int Unadvise(
-                     int cookie);
-
-            [PreserveSig]
-            int EnumConnections(out object pEnum);
-        }
-
         [ComImport]
         [Guid("00000104-0000-0000-C000-000000000046")]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
@@ -1359,18 +1332,6 @@ namespace System.Windows.Forms
                     buffer[offset++] = (char)0;
                 }
             }
-        }
-
-        [ComImport(),
-        Guid("B196B284-BAB4-101A-B69C-00AA00341D07"),
-        InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IConnectionPointContainer
-        {
-            [return: MarshalAs(UnmanagedType.Interface)]
-            object EnumConnectionPoints();
-
-            [PreserveSig]
-            int FindConnectionPoint([In] ref Guid guid, [Out, MarshalAs(UnmanagedType.Interface)]out IConnectionPoint ppCP);
         }
 
         [ComImport]
