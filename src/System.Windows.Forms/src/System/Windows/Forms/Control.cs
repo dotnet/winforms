@@ -13881,7 +13881,7 @@ namespace System.Windows.Forms
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistPropertyBag.GetClassID.  ClassID: " + pClassID.ToString());
         }
 
-        void UnsafeNativeMethods.IPersistPropertyBag.Load(UnsafeNativeMethods.IPropertyBag pPropBag, UnsafeNativeMethods.IErrorLog pErrorLog)
+        void UnsafeNativeMethods.IPersistPropertyBag.Load(Ole32.IPropertyBag pPropBag, Ole32.IErrorLog pErrorLog)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:Load (IPersistPropertyBag)");
             Debug.Indent();
@@ -13889,7 +13889,7 @@ namespace System.Windows.Forms
             Debug.Unindent();
         }
 
-        void UnsafeNativeMethods.IPersistPropertyBag.Save(UnsafeNativeMethods.IPropertyBag pPropBag, BOOL fClearDirty, BOOL fSaveAllProperties)
+        void UnsafeNativeMethods.IPersistPropertyBag.Save(Ole32.IPropertyBag pPropBag, BOOL fClearDirty, BOOL fSaveAllProperties)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:Save (IPersistPropertyBag)");
             Debug.Indent();
