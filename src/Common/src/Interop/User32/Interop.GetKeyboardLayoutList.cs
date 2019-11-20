@@ -9,7 +9,7 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        [DllImport(Libraries.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern IntPtr GetKeyboardLayout(int dwLayout);
+        [DllImport(Libraries.User32, ExactSpelling = true)]
+        public unsafe static extern int GetKeyboardLayoutList(int nBuff, IntPtr* lpList);
     }
 }
