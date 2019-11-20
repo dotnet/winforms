@@ -41,7 +41,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
         {
             DataFormats.Format formatObj;
 
-            String strFormat = Get_DataFormat_String(p);
+            string strFormat = Get_DataFormat_String(p);
             p.log.WriteLine("Format type : " + strFormat);
             formatObj = DataFormats.GetFormat(strFormat);
 
@@ -60,9 +60,9 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
             return new ScenarioResult(formatObj.Id == iFormat, "Unexpected format type : " + formatObj.Id);
         }
 
-        private String Get_DataFormat_String(TParams p)
+        private string Get_DataFormat_String(TParams p)
         {
-            String[] strFormats = new String[] { "UnicodeText", "Text", "Bitmap", "MetafilePict", "EnhancedMetafile", "DIF",
+            string[] strFormats = new string[] { "UnicodeText", "Text", "Bitmap", "MetafilePict", "EnhancedMetafile", "DIF",
                                      "TIFF", "OEMText", "DIB", "Palette", "PenData", "RIFF", "WaveAudio", "SymbolicLink",
                                      "FileDrop", "Locale","Test1", "Test2", "Test3" };
 
@@ -80,12 +80,16 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
             return iFormatNum[iRandNum];
         }
 
-        private Boolean Verify_Format_Type(String strExp, String strOrg)
+        private Boolean Verify_Format_Type(string strExp, string strOrg)
         {
             if (String.Compare(strExp.Substring(strExp.IndexOf(":") + 1), strOrg, true) == 0)
+            {
                 return true;
+            }
             else
+            {
                 return false;
+            }
         }
     }
 }
