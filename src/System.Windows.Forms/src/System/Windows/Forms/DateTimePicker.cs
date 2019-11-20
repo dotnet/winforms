@@ -1431,30 +1431,11 @@ namespace System.Windows.Forms
         {
             if (IsHandleCreated)
             {
-                int flags = 0;
-
-                var sa = new NativeMethods.SYSTEMTIMEARRAY();
-
-                flags |= NativeMethods.GDTR_MIN | NativeMethods.GDTR_MAX;
-                Kernel32.SYSTEMTIME sys = DateTimeToSysTime(min);
-                sa.wYear1 = sys.wYear;
-                sa.wMonth1 = sys.wMonth;
-                sa.wDayOfWeek1 = sys.wDayOfWeek;
-                sa.wDay1 = sys.wDay;
-                sa.wHour1 = sys.wHour;
-                sa.wMinute1 = sys.wMinute;
-                sa.wSecond1 = sys.wSecond;
-                sa.wMilliseconds1 = sys.wMilliseconds;
-                sys = DateTimeToSysTime(max);
-                sa.wYear2 = sys.wYear;
-                sa.wMonth2 = sys.wMonth;
-                sa.wDayOfWeek2 = sys.wDayOfWeek;
-                sa.wDay2 = sys.wDay;
-                sa.wHour2 = sys.wHour;
-                sa.wMinute2 = sys.wMinute;
-                sa.wSecond2 = sys.wSecond;
-                sa.wMilliseconds2 = sys.wMilliseconds;
-                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.DTM_SETRANGE, flags, sa);
+                Span<Kernel32.SYSTEMTIME> sa = stackalloc Kernel32.SYSTEMTIME[2];
+                sa[0] = DateTimeToSysTime(min);
+                sa[1] = DateTimeToSysTime(max);
+                int flags = NativeMethods.GDTR_MIN | NativeMethods.GDTR_MAX;
+                User32.SendMessageW(this, (User32.WindowMessage)NativeMethods.DTM_SETRANGE, (IntPtr)flags, ref sa[0]);
             }
         }
 

@@ -883,27 +883,6 @@ namespace System.Windows.Forms
             public int dwFlags;
         }
 
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-        internal class SYSTEMTIMEARRAY
-        {
-            public short wYear1;
-            public short wMonth1;
-            public short wDayOfWeek1;
-            public short wDay1;
-            public short wHour1;
-            public short wMinute1;
-            public short wSecond1;
-            public short wMilliseconds1;
-            public short wYear2;
-            public short wMonth2;
-            public short wDayOfWeek2;
-            public short wDay2;
-            public short wHour2;
-            public short wMinute2;
-            public short wSecond2;
-            public short wMilliseconds2;
-        }
-
         public delegate bool EnumChildrenCallback(IntPtr hwnd, IntPtr lParam);
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
