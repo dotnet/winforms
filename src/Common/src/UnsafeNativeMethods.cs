@@ -1191,9 +1191,14 @@ namespace System.Windows.Forms
 
             void InitNew();
 
-            void Load(IPropertyBag pPropBag, IErrorLog pErrorLog);
+            void Load(
+                Ole32.IPropertyBag pPropBag,
+                Ole32.IErrorLog pErrorLog);
 
-            void Save(IPropertyBag pPropBag, BOOL fClearDirty, BOOL fSaveAllProperties);
+            void Save(
+                Ole32.IPropertyBag pPropBag,
+                BOOL fClearDirty,
+                BOOL fSaveAllProperties);
         }
 
         [ComImport]
@@ -1213,36 +1218,6 @@ namespace System.Windows.Forms
             [PreserveSig]
             HRESULT GetContentExtent(
                 Size* pSizel);
-        }
-
-        [ComImport]
-        [Guid("55272A00-42CB-11CE-8135-00AA004BB851")]
-        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IPropertyBag
-        {
-            [PreserveSig]
-            HRESULT Read(
-                [MarshalAs(UnmanagedType.LPWStr)]
-                string pszPropName,
-                ref object pVar,
-                IErrorLog pErrorLog);
-
-            [PreserveSig]
-            HRESULT Write(
-                [MarshalAs(UnmanagedType.LPWStr)]
-                string pszPropName,
-                ref object pVar);
-        }
-
-        [ComImport]
-        [Guid("3127CA40-446E-11CE-8135-00AA004BB851")]
-        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public unsafe interface IErrorLog
-        {
-            [PreserveSig]
-            HRESULT AddError(
-                [MarshalAs(UnmanagedType.LPWStr)] string pszPropName,
-                Ole32.EXCEPINFO* pExcepInfo);
         }
 
         [ComImport]

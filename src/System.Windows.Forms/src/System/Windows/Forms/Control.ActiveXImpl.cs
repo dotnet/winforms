@@ -1121,7 +1121,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Implements IPersistPropertyBag::Load
             /// </summary>
-            internal unsafe void Load(UnsafeNativeMethods.IPropertyBag pPropBag, UnsafeNativeMethods.IErrorLog pErrorLog)
+            internal unsafe void Load(Ole32.IPropertyBag pPropBag, Ole32.IErrorLog pErrorLog)
             {
                 PropertyDescriptorCollection props = TypeDescriptor.GetProperties(_control,
                     new Attribute[] { DesignerSerializationVisibilityAttribute.Visible });
@@ -1831,7 +1831,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Implements IPersistPropertyBag::Save
             /// </summary>
-            internal void Save(UnsafeNativeMethods.IPropertyBag pPropBag, BOOL fClearDirty, BOOL fSaveAllProperties)
+            internal void Save(Ole32.IPropertyBag pPropBag, BOOL fClearDirty, BOOL fSaveAllProperties)
             {
                 PropertyDescriptorCollection props = TypeDescriptor.GetProperties(_control,
                     new Attribute[] { DesignerSerializationVisibilityAttribute.Visible });
@@ -2550,7 +2550,7 @@ namespace System.Windows.Forms
             ///  This is a property bag implementation that sits on a stream.  It can
             ///  read and write the bag to the stream.
             /// </summary>
-            private class PropertyBagStream : UnsafeNativeMethods.IPropertyBag
+            private class PropertyBagStream : Ole32.IPropertyBag
             {
                 private Hashtable _bag = new Hashtable();
 
@@ -2597,7 +2597,7 @@ namespace System.Windows.Forms
                     }
                 }
 
-                HRESULT UnsafeNativeMethods.IPropertyBag.Read(string pszPropName, ref object pVar, UnsafeNativeMethods.IErrorLog pErrorLog)
+                HRESULT Ole32.IPropertyBag.Read(string pszPropName, ref object pVar, Ole32.IErrorLog pErrorLog)
                 {
                     if (!_bag.Contains(pszPropName))
                     {
@@ -2608,7 +2608,7 @@ namespace System.Windows.Forms
                     return HRESULT.S_OK;
                 }
 
-                HRESULT UnsafeNativeMethods.IPropertyBag.Write(string pszPropName, ref object pVar)
+                HRESULT Ole32.IPropertyBag.Write(string pszPropName, ref object pVar)
                 {
                     _bag[pszPropName] = pVar;
                     return HRESULT.S_OK;

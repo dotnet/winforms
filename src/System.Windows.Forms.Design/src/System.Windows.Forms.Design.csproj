@@ -112,6 +112,7 @@
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.IDLFLAG.cs" Link="Interop\Ole32\Interop.IDLFLAG.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.IDropTarget.cs" Link="Interop\Ole32\Interop.IDropTarget.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.IEnumUnknown.cs" Link="Interop\Ole32\Interop.IEnumUnknown.cs" />
+    <Compile Include="..\..\Common\src\Interop\Ole32\Interop.IErrorLog.cs" Link="Interop\Ole32\Interop.IErrorLog.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.IFont.cs" Link="Interop\Ole32\Interop.IFont.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.ILockBytes.cs" Link="Interop\Ole32\Interop.ILockBytes.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.IMPLTYPEFLAG.cs" Link="Interop\Ole32\Interop.IMPLTYPEFLAG.cs" />
@@ -122,6 +123,7 @@
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.IOleInPlaceActiveObject.cs" Link="Interop\Ole32\Interop.IOleInPlaceActiveObject.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.IOleInPlaceFrame.cs" Link="Interop\Ole32\Interop.IOleInPlaceFrame.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.IOleInPlaceUIWindow.cs" Link="Interop\Ole32\Interop.IOleInPlaceUIWindow.cs" />
+    <Compile Include="..\..\Common\src\Interop\Ole32\Interop.IPropertyBag.cs" Link="Interop\Ole32\Interop.IPropertyBag.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.IPropertyNotifySink.cs" Link="Interop\Ole32\Interop.IPropertyNotifySink.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.IServiceProvider.cs" Link="Interop\Ole32\Interop.IServiceProvider.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.IStorage.cs" Link="Interop\Ole32\Interop.IStorage.cs" />

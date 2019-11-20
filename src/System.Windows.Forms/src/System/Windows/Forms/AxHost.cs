@@ -2978,7 +2978,7 @@ namespace System.Windows.Forms
             SetOcState(OC_RUNNING);
         }
 
-        private void DepersistFromIPropertyBag(UnsafeNativeMethods.IPropertyBag propBag)
+        private void DepersistFromIPropertyBag(Ole32.IPropertyBag propBag)
         {
             iPersistPropBag.Load(propBag, null);
         }
