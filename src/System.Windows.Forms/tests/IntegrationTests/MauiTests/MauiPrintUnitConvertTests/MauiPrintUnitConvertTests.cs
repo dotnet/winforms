@@ -60,8 +60,9 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
                 doubleResultValue = PrinterUnitConvert.Convert(doubleValue, _fromUnit, _toUnit);
                 p.log.WriteLine("resultValue=" + doubleResultValue.ToString());
             }
-            catch
+            catch (Exception e)
             {
+                p.log.WriteLine(e.Message);
                 return new ScenarioResult(false, "Double value: " + doubleValue.ToString() + " cannot convert from " + _fromUnit.ToString() + " type to " + _toUnit.ToString() + " type.");
             }
 
@@ -87,8 +88,9 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
                 intResultValue = PrinterUnitConvert.Convert(intValue, _fromUnit, _toUnit);
                 p.log.WriteLine("resultValue=" + intResultValue.ToString());
             }
-            catch
+            catch (Exception e)
             {
+                p.log.WriteLine(e.Message);
                 return new ScenarioResult(false, "Int value: " + intValue.ToString() + " cannot convert from " + _fromUnit.ToString() + " type to " + _toUnit.ToString() + " type.");
             }
 
@@ -114,8 +116,9 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
                 pointResultValue = PrinterUnitConvert.Convert(pointValue, _fromUnit, _toUnit);
                 p.log.WriteLine("resultValue=" + pointResultValue.ToString());
             }
-            catch
+            catch (Exception e)
             {
+                p.log.WriteLine(e.Message);
                 return new ScenarioResult(false, "Point value: " + pointValue.ToString() + " cannot convert from " + _fromUnit.ToString() + " type to " + _toUnit.ToString() + " type.");
             }
 
@@ -141,8 +144,9 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
                 sizeResultValue = PrinterUnitConvert.Convert(sizeValue, _fromUnit, _toUnit);
                 p.log.WriteLine("resultValue=" + sizeResultValue.ToString());
             }
-            catch
+            catch (Exception e)
             {
+                p.log.WriteLine(e.Message);
                 return new ScenarioResult(false, "Size value: " + sizeValue.ToString() + " cannot convert from " + _fromUnit.ToString() + " type to " + _toUnit.ToString() + " type.");
             }
 
@@ -168,8 +172,9 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
                 rectangleResultValue = PrinterUnitConvert.Convert(rectangleValue, _fromUnit, _toUnit);
                 p.log.WriteLine("resultValue=" + rectangleResultValue.ToString());
             }
-            catch
+            catch (Exception e)
             {
+                p.log.WriteLine(e.Message);
                 return new ScenarioResult(false, "Rectangle value: " + rectangleValue.ToString() + " cannot convert from " + _fromUnit.ToString() + " type to " + _toUnit.ToString() + " type.");
             }
 
@@ -195,8 +200,9 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
                 marginsResultValue = PrinterUnitConvert.Convert(marginsValue, _fromUnit, _toUnit);
                 p.log.WriteLine("resultValue=" + marginsResultValue.ToString());
             }
-            catch
+            catch (Exception e)
             {
+                p.log.WriteLine(e.Message);
                 return new ScenarioResult(false, "Margins value: " + marginsValue.ToString() + " cannot convert from " + _fromUnit.ToString() + " type to " + _toUnit.ToString() + " type.");
             }
 
