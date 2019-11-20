@@ -14,6 +14,7 @@ namespace System.Windows.Forms.Design.Tests
     public class DesignerAttributeTests
     {
         private const string AssemblyRef_SystemWinforms = "System.Windows.Forms, Version=" + FXAssembly.Version + ", Culture=neutral, PublicKeyToken=" + AssemblyRef.MicrosoftPublicKey;
+        private const string AssemblyRef_SystemWinformsDesign = "System.Windows.Forms.Design, Version=" + FXAssembly.Version + ", Culture=neutral, PublicKeyToken=" + AssemblyRef.MicrosoftPublicKey;
         private readonly ITestOutputHelper _output;
 
         public DesignerAttributeTests(ITestOutputHelper output)
@@ -69,7 +70,7 @@ namespace System.Windows.Forms.Design.Tests
         [Theory]
         [MemberData(nameof(GetAttributeOfType_TestData), AssemblyRef.SystemDrawing, typeof(DesignerSerializerAttribute))]
         [MemberData(nameof(GetAttributeOfType_TestData), AssemblyRef_SystemWinforms, typeof(DesignerSerializerAttribute))]
-        [MemberData(nameof(GetAttributeOfType_TestData), AssemblyRef.SystemWinformsDesign, typeof(DesignerSerializerAttribute))]
+        [MemberData(nameof(GetAttributeOfType_TestData), AssemblyRef_SystemWinformsDesign, typeof(DesignerSerializerAttribute))]
         public void DesignerAttributes_DesignerSerializerAttribute_TypeExists(DesignerSerializerAttribute attribute)
         {
             var type = Type.GetType(attribute.SerializerTypeName, false);

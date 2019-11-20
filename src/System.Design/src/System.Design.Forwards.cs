@@ -3,6 +3,8 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Runtime.CompilerServices;
+
+// internal UITypeEditors
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.ColumnHeaderCollectionEditor))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.DataMemberFieldConverter))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.DataGridViewCellStyleEditor))]
@@ -21,3 +23,6 @@ using System.Runtime.CompilerServices;
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.StringArrayEditor))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.StringCollectionEditor))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.TabPageCollectionEditor))]
+
+// internal serializers
+[assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.ControlCodeDomSerializer))]
