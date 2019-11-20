@@ -3,12 +3,10 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Threading;
-using WFCTestLib.Log;
+using System.Windows.Forms.IntegrationTests.Common;
 using ReflectTools;
 using ReflectTools.AutoPME;
-using System;
-using System.Windows.Forms;
-using System.Windows.Forms.IntegrationTests.Common;
+using WFCTestLib.Log;
 
 namespace System.Windows.Forms.IntegrationTests.MauiTests
 {
@@ -27,7 +25,10 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
 
         protected override Type Class
         {
-            get { return typeof(DataFormats); }
+            get 
+            { 
+                return typeof(DataFormats); 
+            }
         }
 
         protected override Object CreateObject(TParams p)
@@ -35,32 +36,28 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
             return null;
         }
 
-        //========================================
-        // Test Methods
-        //========================================
         [Scenario(true)]
         public ScenarioResult Get_Format_By_String(TParams p)
         {
-
-            DataFormats.Format formatObj1;
+            DataFormats.Format formatObj;
 
             String strFormat = Get_DataFormat_String(p);
             p.log.WriteLine("Format type : " + strFormat);
-            formatObj1 = DataFormats.GetFormat(strFormat);
+            formatObj = DataFormats.GetFormat(strFormat);
 
-            return new ScenarioResult(Verify_Format_Type(formatObj1.Name, strFormat), "Unexpected format type : " + formatObj1.Name);
+            return new ScenarioResult(Verify_Format_Type(formatObj.Name, strFormat), "Unexpected format type : " + formatObj.Name);
         }
 
         [Scenario(true)]
         public ScenarioResult Get_Format_By_Id(TParams p)
         {
-            DataFormats.Format formatObj1;
+            DataFormats.Format formatObj;
 
             int iFormat = Get_DataFormat_Int(p);
             p.log.WriteLine("Format type number : " + iFormat);
-            formatObj1 = DataFormats.GetFormat(iFormat);
+            formatObj = DataFormats.GetFormat(iFormat);
 
-            return new ScenarioResult(formatObj1.Id == iFormat, "Unexpected format type : " + formatObj1.Id);
+            return new ScenarioResult(formatObj.Id == iFormat, "Unexpected format type : " + formatObj.Id);
         }
 
         private String Get_DataFormat_String(TParams p)
