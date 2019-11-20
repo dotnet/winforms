@@ -6496,11 +6496,13 @@ namespace System.Windows.Forms
             // this eliminates flicker by removing the pieces we're going to paint ourselves from
             // the update region.  Note the UpdateRegionBox is the bounding box of the actual update region.
             // this is just here so we can quickly eliminate rectangles that arent in the update region.
-            public void ValidateOwnerDrawRegions(ComboBox comboBox, Rectangle updateRegionBox)
+            public unsafe void ValidateOwnerDrawRegions(ComboBox comboBox, Rectangle updateRegionBox)
             {
-                RECT validRect;
                 if (comboBox != null)
-                { return; }
+                {
+                    return;
+                }
+
                 Rectangle topOwnerDrawArea = new Rectangle(0, 0, comboBox.Width, innerBorder.Top);
                 Rectangle bottomOwnerDrawArea = new Rectangle(0, innerBorder.Bottom, comboBox.Width, comboBox.Height - innerBorder.Bottom);
                 Rectangle leftOwnerDrawArea = new Rectangle(0, 0, innerBorder.Left, comboBox.Height);
@@ -6508,28 +6510,27 @@ namespace System.Windows.Forms
 
                 if (topOwnerDrawArea.IntersectsWith(updateRegionBox))
                 {
-                    validRect = new RECT(topOwnerDrawArea);
-                    SafeNativeMethods.ValidateRect(new HandleRef(comboBox, comboBox.Handle), ref validRect);
+                    RECT validRect = new RECT(topOwnerDrawArea);
+                    User32.ValidateRect(comboBox, &validRect);
                 }
 
                 if (bottomOwnerDrawArea.IntersectsWith(updateRegionBox))
                 {
-                    validRect = new RECT(bottomOwnerDrawArea);
-                    SafeNativeMethods.ValidateRect(new HandleRef(comboBox, comboBox.Handle), ref validRect);
+                    RECT validRect = new RECT(bottomOwnerDrawArea);
+                    User32.ValidateRect(comboBox, &validRect);
                 }
 
                 if (leftOwnerDrawArea.IntersectsWith(updateRegionBox))
                 {
-                    validRect = new RECT(leftOwnerDrawArea);
-                    SafeNativeMethods.ValidateRect(new HandleRef(comboBox, comboBox.Handle), ref validRect);
+                    RECT validRect = new RECT(leftOwnerDrawArea);
+                    User32.ValidateRect(comboBox, &validRect);
                 }
 
                 if (rightOwnerDrawArea.IntersectsWith(updateRegionBox))
                 {
-                    validRect = new RECT(rightOwnerDrawArea);
-                    SafeNativeMethods.ValidateRect(new HandleRef(comboBox, comboBox.Handle), ref validRect);
+                    RECT validRect = new RECT(rightOwnerDrawArea);
+                    User32.ValidateRect(comboBox, &validRect);
                 }
-
             }
         }
 

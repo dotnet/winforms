@@ -1625,7 +1625,7 @@ namespace System.Windows.Forms.Design
         /// <summary>
         ///  This method should be called by the extending designer for each message the control would normally receive.  This allows the designer to pre-process messages before allowing them to be routed to the control.
         /// </summary>
-        protected virtual void WndProc(ref Message m)
+        protected unsafe virtual void WndProc(ref Message m)
         {
             IMouseHandler mouseHandler = null;
             // We look at WM_NCHITTEST to determine if the mouse is in a live region of the control
@@ -1994,7 +1994,7 @@ namespace System.Windows.Forms.Design
                     // First, save off the update region and call our base class.
                     if (OleDragDropHandler.FreezePainting)
                     {
-                        SafeNativeMethods.ValidateRect(m.HWnd, IntPtr.Zero);
+                        User32.ValidateRect(m.HWnd, null);
                         break;
                     }
                     if (Control == null)
