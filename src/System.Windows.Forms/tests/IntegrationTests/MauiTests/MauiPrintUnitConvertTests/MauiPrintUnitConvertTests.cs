@@ -47,8 +47,6 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
             double doubleValue;
             double doubleResultValue;
 
-            ScenarioResult result = new ScenarioResult(true);
-
             doubleValue = p.ru.GetDouble();
             _fromUnit = p.ru.GetEnumValue<PrinterUnit>();
             _toUnit = p.ru.GetEnumValue<PrinterUnit>();
@@ -57,10 +55,17 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
             p.log.WriteLine("fromUnit=" + _fromUnit.ToString());
             p.log.WriteLine("toUnit=" + _toUnit.ToString());
 
-            doubleResultValue = PrinterUnitConvert.Convert(doubleValue, _fromUnit, _toUnit);
-            p.log.WriteLine("resultValue=" + doubleResultValue.ToString());
+            try
+            {
+                doubleResultValue = PrinterUnitConvert.Convert(doubleValue, _fromUnit, _toUnit);
+                p.log.WriteLine("resultValue=" + doubleResultValue.ToString());
+            }
+            catch
+            {
+                return new ScenarioResult(false, "Double value: " + doubleValue.ToString() + "cannot convert from" + _fromUnit.ToString() + " type to" + _toUnit.ToString() + "type.");
+            }
 
-            return result;
+            return new ScenarioResult(true);
         }
 
         [Scenario(true)]
@@ -68,8 +73,6 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
         {
             int intValue;
             int intResultValue;
-
-            ScenarioResult result = new ScenarioResult(true);
 
             intValue = p.ru.GetInt();
             _fromUnit = p.ru.GetEnumValue<PrinterUnit>();
@@ -86,10 +89,10 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
             }
             catch
             {
-                intResultValue = PrinterUnitConvert.Convert(intValue, _toUnit, _fromUnit);
-                p.log.WriteLine("resultValue=" + intResultValue.ToString());
+                return new ScenarioResult(false, "Int value: " + intValue.ToString() + "cannot convert from" + _fromUnit.ToString() + " type to" + _toUnit.ToString() + "type.");
             }
-            return result;
+
+            return new ScenarioResult(true);
         }
 
         [Scenario(true)]
@@ -97,8 +100,6 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
         {
             Point pointValue;
             Point pointResultValue;
-
-            ScenarioResult result = new ScenarioResult(true);
 
             pointValue = p.ru.GetPoint();
             _fromUnit = p.ru.GetEnumValue<PrinterUnit>();
@@ -108,10 +109,17 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
             p.log.WriteLine("fromUnit=" + _fromUnit.ToString());
             p.log.WriteLine("toUnit=" + _toUnit.ToString());
 
-            pointResultValue = PrinterUnitConvert.Convert(pointValue, _fromUnit, _toUnit);
-            p.log.WriteLine("resultValue=" + pointResultValue.ToString());
+            try
+            {
+                pointResultValue = PrinterUnitConvert.Convert(pointValue, _fromUnit, _toUnit);
+                p.log.WriteLine("resultValue=" + pointResultValue.ToString());
+            }
+            catch
+            {
+                return new ScenarioResult(false, "Point value: " + pointValue.ToString() + "cannot convert from" + _fromUnit.ToString() + " type to" + _toUnit.ToString() + "type.");
+            }
 
-            return result;
+            return new ScenarioResult(true);
         }
 
         [Scenario(true)]
@@ -119,8 +127,6 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
         {
             Size sizeValue;
             Size sizeResultValue;
-
-            ScenarioResult result = new ScenarioResult(true);
 
             sizeValue = p.ru.GetSize();
             _fromUnit = p.ru.GetEnumValue<PrinterUnit>();
@@ -137,11 +143,10 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
             }
             catch
             {
-                sizeResultValue = PrinterUnitConvert.Convert(sizeValue, _toUnit, _fromUnit);
-                p.log.WriteLine("resultValue=" + sizeResultValue.ToString());
+                return new ScenarioResult(false, "Size value: " + sizeValue.ToString() + "cannot convert from" + _fromUnit.ToString() + " type to" + _toUnit.ToString() + "type.");
             }
 
-            return result;
+            return new ScenarioResult(true);
         }
 
         [Scenario(true)]
@@ -149,8 +154,6 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
         {
             Rectangle rectangleValue;
             Rectangle rectangleResultValue;
-
-            ScenarioResult result = new ScenarioResult(true);
 
             rectangleValue = p.ru.GetRectangle();
             _fromUnit = p.ru.GetEnumValue<PrinterUnit>();
@@ -160,10 +163,17 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
             p.log.WriteLine("fromUnit=" + _fromUnit.ToString());
             p.log.WriteLine("toUnit=" + _toUnit.ToString());
 
-            rectangleResultValue = PrinterUnitConvert.Convert(rectangleValue, _fromUnit, _toUnit);
-            p.log.WriteLine("resultValue=" + rectangleResultValue.ToString());
+            try
+            {
+                rectangleResultValue = PrinterUnitConvert.Convert(rectangleValue, _fromUnit, _toUnit);
+                p.log.WriteLine("resultValue=" + rectangleResultValue.ToString());
+            }
+            catch
+            {
+                return new ScenarioResult(false, "Rectangle value: " + rectangleValue.ToString() + "cannot convert from" + _fromUnit.ToString() + " type to" + _toUnit.ToString() + "type.");
+            }
 
-            return result;
+            return new ScenarioResult(true);
         }
 
         [Scenario(true)]
@@ -171,8 +181,6 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
         {
             Margins marginsValue;
             Margins marginsResultValue;
-
-            ScenarioResult result = new ScenarioResult(true);
 
             marginsValue = new Margins(p.ru.GetRange(0, char.MaxValue), p.ru.GetRange(0, char.MaxValue), p.ru.GetRange(0, char.MaxValue), p.ru.GetRange(0, char.MaxValue));
             _fromUnit = p.ru.GetEnumValue<PrinterUnit>();
@@ -182,10 +190,17 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
             p.log.WriteLine("fromUnit=" + _fromUnit.ToString());
             p.log.WriteLine("toUnit=" + _toUnit.ToString());
 
-            marginsResultValue = PrinterUnitConvert.Convert(marginsValue, _fromUnit, _toUnit);
-            p.log.WriteLine("resultValue=" + marginsResultValue.ToString());
+            try
+            {
+                marginsResultValue = PrinterUnitConvert.Convert(marginsValue, _fromUnit, _toUnit);
+                p.log.WriteLine("resultValue=" + marginsResultValue.ToString());
+            }
+            catch
+            {
+                return new ScenarioResult(false, "Margins value: " + marginsValue.ToString() + "cannot convert from" + _fromUnit.ToString() + " type to" + _toUnit.ToString() + "type.");
+            }
 
-            return result;
+            return new ScenarioResult(true);
         }
     }
 }
