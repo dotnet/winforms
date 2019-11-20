@@ -62,7 +62,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
             }
             catch
             {
-                return new ScenarioResult(false, "Double value: " + doubleValue.ToString() + "cannot convert from" + _fromUnit.ToString() + " type to" + _toUnit.ToString() + "type.");
+                return new ScenarioResult(false, "Double value: " + doubleValue.ToString() + " cannot convert from " + _fromUnit.ToString() + " type to " + _toUnit.ToString() + " type.");
             }
 
             return new ScenarioResult(true);
@@ -89,7 +89,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
             }
             catch
             {
-                return new ScenarioResult(false, "Int value: " + intValue.ToString() + "cannot convert from" + _fromUnit.ToString() + " type to" + _toUnit.ToString() + "type.");
+                return new ScenarioResult(false, "Int value: " + intValue.ToString() + " cannot convert from " + _fromUnit.ToString() + " type to " + _toUnit.ToString() + " type.");
             }
 
             return new ScenarioResult(true);
@@ -116,7 +116,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
             }
             catch
             {
-                return new ScenarioResult(false, "Point value: " + pointValue.ToString() + "cannot convert from" + _fromUnit.ToString() + " type to" + _toUnit.ToString() + "type.");
+                return new ScenarioResult(false, "Point value: " + pointValue.ToString() + " cannot convert from " + _fromUnit.ToString() + " type to " + _toUnit.ToString() + " type.");
             }
 
             return new ScenarioResult(true);
@@ -143,7 +143,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
             }
             catch
             {
-                return new ScenarioResult(false, "Size value: " + sizeValue.ToString() + "cannot convert from" + _fromUnit.ToString() + " type to" + _toUnit.ToString() + "type.");
+                return new ScenarioResult(false, "Size value: " + sizeValue.ToString() + " cannot convert from " + _fromUnit.ToString() + " type to " + _toUnit.ToString() + " type.");
             }
 
             return new ScenarioResult(true);
@@ -170,7 +170,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
             }
             catch
             {
-                return new ScenarioResult(false, "Rectangle value: " + rectangleValue.ToString() + "cannot convert from" + _fromUnit.ToString() + " type to" + _toUnit.ToString() + "type.");
+                return new ScenarioResult(false, "Rectangle value: " + rectangleValue.ToString() + " cannot convert from " + _fromUnit.ToString() + " type to " + _toUnit.ToString() + " type.");
             }
 
             return new ScenarioResult(true);
@@ -197,7 +197,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
             }
             catch
             {
-                return new ScenarioResult(false, "Margins value: " + marginsValue.ToString() + "cannot convert from" + _fromUnit.ToString() + " type to" + _toUnit.ToString() + "type.");
+                return new ScenarioResult(false, "Margins value: " + marginsValue.ToString() + " cannot convert from " + _fromUnit.ToString() + " type to " + _toUnit.ToString() + " type.");
             }
 
             return new ScenarioResult(true);
