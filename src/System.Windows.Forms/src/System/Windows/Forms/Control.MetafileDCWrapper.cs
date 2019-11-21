@@ -114,20 +114,18 @@ namespace System.Windows.Forms
                         return false;
                     }
 
-                    NativeMethods.BITMAPINFO_FLAT lpbmi = new NativeMethods.BITMAPINFO_FLAT
+                    var lpbmi = new Gdi32.BITMAPINFO
                     {
-                        bmiHeader_biSize = Marshal.SizeOf<NativeMethods.BITMAPINFOHEADER>(),
-                        bmiHeader_biWidth = bmp.bmWidth,
-                        bmiHeader_biHeight = bmp.bmHeight,
-                        bmiHeader_biPlanes = 1,
-                        bmiHeader_biBitCount = (short)bmp.bmBitsPixel,
-                        bmiHeader_biCompression = NativeMethods.BI_RGB,
-                        bmiHeader_biSizeImage = 0,               //Not needed since using BI_RGB
-                        bmiHeader_biXPelsPerMeter = 0,
-                        bmiHeader_biYPelsPerMeter = 0,
-                        bmiHeader_biClrUsed = 0,
-                        bmiHeader_biClrImportant = 0,
-                        bmiColors = new byte[NativeMethods.BITMAPINFO_MAX_COLORSIZE * 4]
+                        bmiHeader = new Gdi32.BITMAPINFOHEADER
+                        {
+                            biSize = (uint)sizeof(Gdi32.BITMAPINFOHEADER),
+                            biWidth = bmp.bmWidth,
+                            biHeight = bmp.bmHeight,
+                            biPlanes = 1,
+                            biBitCount = bmp.bmBitsPixel,
+                            biCompression = Gdi32.BI.RGB
+                        },
+                        bmiColors = new byte[Gdi32.BITMAPINFO.MaxColorSize * 4]
                     };
 
                     // Include the palette for 256 color bitmaps

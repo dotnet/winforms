@@ -15,8 +15,6 @@ namespace System.Windows.Forms
         public static IntPtr LPSTR_TEXTCALLBACK = (IntPtr)(-1);
         public static HandleRef NullHandleRef = new HandleRef(null, IntPtr.Zero);
 
-        public const int BITMAPINFO_MAX_COLORSIZE = 256;
-
         public const int STATUS_PENDING = 0x103; //259 = STILL_ALIVE
 
         public const int ACM_OPENA = (0x0400 + 100);
@@ -1895,25 +1893,6 @@ namespace System.Windows.Forms
         {
             [PreserveSig]
             HRESULT GetClassInfo(out UnsafeNativeMethods.ITypeInfo ppTI);
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public struct BITMAPINFO_FLAT
-        {
-            public int bmiHeader_biSize;// = Marshal.SizeOf<BITMAPINFOHEADER>();
-            public int bmiHeader_biWidth;
-            public int bmiHeader_biHeight;
-            public short bmiHeader_biPlanes;
-            public short bmiHeader_biBitCount;
-            public int bmiHeader_biCompression;
-            public int bmiHeader_biSizeImage;
-            public int bmiHeader_biXPelsPerMeter;
-            public int bmiHeader_biYPelsPerMeter;
-            public int bmiHeader_biClrUsed;
-            public int bmiHeader_biClrImportant;
-
-            [MarshalAs(System.Runtime.InteropServices.UnmanagedType.ByValArray, SizeConst = BITMAPINFO_MAX_COLORSIZE * 4)]
-            public byte[] bmiColors; // RGBQUAD structs... Blue-Green-Red-Reserved, repeat...
         }
 
         /// <summary>
