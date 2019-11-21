@@ -26,3 +26,17 @@ using System.Runtime.CompilerServices;
 
 // internal serializers
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.ControlCodeDomSerializer))]
+[assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.DataGridViewRowCollectionCodeDomSerializer))]
+[assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.TableLayoutControlCollectionCodeDomSerializer))]
+[assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.TableLayoutPanelCodeDomSerializer))]
+[assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.ToolStripCodeDomSerializer))]
+[assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.ToolStripMenuItemCodeDomSerializer))]
+
+// internal designers
+[assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.FormDocumentDesigner))]
+[assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.MaskedTextBoxDesigner))]
+[assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.TextBoxBaseDesigner))]
+[assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.ToolStripDesigner))]
+[assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.ToolStripDropDownDesigner))]
+[assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.ToolStripItemDesigner))]
+[assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.ToolStripMenuItemDesigner))]
