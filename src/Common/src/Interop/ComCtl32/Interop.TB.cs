@@ -8,10 +8,9 @@ internal static partial class Interop
     {
         public enum TB : int
         {
-            FIRST = 0x1000,
-            GETBUTTONINFOW = FIRST + 63,
-            SETBUTTONINFOW = FIRST + 64,
-            INSERTBUTTONW = FIRST + 67,
+            GETBUTTONINFOW = User32.WM_USER + 63,
+            SETBUTTONINFOW = User32.WM_USER + 64,
+            INSERTBUTTONW = User32.WM_USER + 67,
         }
     }
 }
