@@ -39,35 +39,35 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
         }
 
         [Scenario(true)]
-        protected ScenarioResult get_Asterisk(TParams p)
+        protected ScenarioResult Get_Asterisk(TParams p)
         {
             SystemSounds.Asterisk.Play();
             return new ScenarioResult(true, "get_Asterisk failure");
         }
 
         [Scenario(true)]
-        protected ScenarioResult get_Beep(TParams p)
+        protected ScenarioResult Get_Beep(TParams p)
         {
             SystemSounds.Beep.Play();
             return new ScenarioResult(true, "get_Beep failure");
         }
 
         [Scenario(true)]
-        protected ScenarioResult get_Exclamation(TParams p)
+        protected ScenarioResult Get_Exclamation(TParams p)
         {
             SystemSounds.Exclamation.Play();
             return new ScenarioResult(true, "get_Exclamation failure");
         }
 
         [Scenario(true)]
-        protected ScenarioResult get_Hand(TParams p)
+        protected ScenarioResult Get_Hand(TParams p)
         {
             SystemSounds.Hand.Play();
             return new ScenarioResult(true, "get_Hand failure");
         }
 
         [Scenario(true)]
-        protected ScenarioResult get_Question(TParams p)
+        protected ScenarioResult Get_Question(TParams p)
         {
             SystemSounds.Question.Play();
             return new ScenarioResult(true, "get_Question failure");
