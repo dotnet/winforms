@@ -160,8 +160,14 @@ namespace System.Windows.Forms
                     byte[] lpBits = new byte[totalBytesReqd];
 
                     // Get the bitmap bits
-                    int diRet = SafeNativeMethods.GetDIBits(hdcSrc, hBitmap, 0, bmp.bmHeight, lpBits,
-                            ref lpbmi, NativeMethods.DIB_RGB_COLORS);
+                    int diRet = Gdi32.GetDIBits(
+                        hdcSrc,
+                        hBitmap,
+                        0,
+                        (uint)bmp.bmHeight,
+                        lpBits,
+                        ref lpbmi,
+                        Gdi32.DIB.RGB_COLORS);
                     if (diRet == 0)
                     {
                         return false;
@@ -185,10 +191,20 @@ namespace System.Windows.Forms
                     }
 
                     // Paint the bitmap
-                    int iRet = SafeNativeMethods.StretchDIBits(hdcDest,
-                            xDest, yDest, cxDest, cyDest, 0, 0, bmp.bmWidth, bmp.bmHeight,
-                            lpBits, ref lpbmi, NativeMethods.DIB_RGB_COLORS, NativeMethods.SRCCOPY);
-
+                    int iRet = Gdi32.StretchDIBits(
+                        hdcDest,
+                        xDest,
+                        yDest,
+                        cxDest,
+                        cyDest,
+                        0,
+                        0,
+                        bmp.bmWidth,
+                        bmp.bmHeight,
+                        lpBits,
+                        ref lpbmi,
+                        Gdi32.DIB.RGB_COLORS,
+                        Gdi32.ROP.SRCCOPY);
                     if (iRet == NativeMethods.GDI_ERROR)
                     {
                         return false;

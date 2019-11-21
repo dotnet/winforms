@@ -119,7 +119,6 @@ namespace System.Windows.Forms
         public const int
         DISP_E_MEMBERNOTFOUND = unchecked((int)0x80020003),
         DISP_E_PARAMNOTFOUND = unchecked((int)0x80020004),
-        DIB_RGB_COLORS = 0,
         DI_NORMAL = 0x0003,
         DLGC_WANTARROWS = 0x0001,
         DLGC_WANTTAB = 0x0002,
@@ -621,8 +620,7 @@ namespace System.Windows.Forms
         SBT_OWNERDRAW = 0x1000,
         SBT_NOBORDERS = 0x0100,
         SBT_POPOUT = 0x0200,
-        SBT_RTLREADING = 0x0400,
-        SRCCOPY = 0x00CC0020;
+        SBT_RTLREADING = 0x0400;
 
         public const int S_OK = 0x00000000;
         public const int S_FALSE = 0x00000001;
