@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Net.Mail;
+using System.Windows.Forms;
 using WinForms.Common.Tests;
 using Xunit;
 
@@ -219,7 +220,7 @@ namespace System.Windows.Forms.Design.Tests
             }
         }
 
-        [Fact]
+        [WinFormsFact]
         public void SelectionRulesButtonTest()
         {
             TestControlDesigner controlDesigner = new TestControlDesigner();
@@ -230,8 +231,9 @@ namespace System.Windows.Forms.Design.Tests
             testRules |= SelectionRules.Moveable;
 
             controlDesigner.Initialize(new Button());
+
             try
-            {
+           {
                 SelectionRules selectionRules = controlDesigner.SelectionRules;
                 Assert.Equal(selectionRules, testRules);
             }
@@ -239,9 +241,11 @@ namespace System.Windows.Forms.Design.Tests
             {
                 Assert.True(false, "Expected no exception, but got: " + ex.Message);
             }
+
+            controlDesigner.Dispose();
         }
 
-        [Fact]
+        [WinFormsFact]
         public void SelectionRulesToolbarTest()
         {
             TestControlDesigner controlDesigner = new TestControlDesigner();
