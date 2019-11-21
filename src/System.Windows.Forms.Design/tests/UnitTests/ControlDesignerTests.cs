@@ -233,7 +233,7 @@ namespace System.Windows.Forms.Design.Tests
             controlDesigner.Initialize(new Button());
 
             try
-           {
+            {
                 SelectionRules selectionRules = controlDesigner.SelectionRules;
                 Assert.Equal(selectionRules, testRules);
             }
