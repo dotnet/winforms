@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\References.targets" />
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="Maui.Core">
+      <HintPath>..\lib\Maui.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Maui.TestLog">
+      <HintPath>..\lib\Maui.TestLog.dll</HintPath>
+    </Reference>
+    <Reference Include="MDLog">
+      <HintPath>..\lib\MDLog.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>
