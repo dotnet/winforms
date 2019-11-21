@@ -23,7 +23,6 @@ namespace System.Windows.Forms
         public const int ACM_OPENW = (0x0400 + 103);
 
         public const int BCM_GETIDEALSIZE = 0x1601,
-        BI_RGB = 0,
         BFFM_INITIALIZED = 1,
         BFFM_SELCHANGED = 2,
         BFFM_SETSELECTION = 0x400 + 103,
@@ -1391,22 +1390,6 @@ namespace System.Windows.Forms
             public short ___MISSING_ALIGNMENT__ = 0;
             public int nSizeMin;
             public int nSizeMax;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public class BITMAPINFOHEADER
-        {
-            public int biSize = 40;    // ndirect.DllLib.sizeOf( this );
-            public int biWidth;
-            public int biHeight;
-            public short biPlanes;
-            public short biBitCount;
-            public int biCompression;
-            public int biSizeImage = 0;
-            public int biXPelsPerMeter = 0;
-            public int biYPelsPerMeter = 0;
-            public int biClrUsed = 0;
-            public int biClrImportant = 0;
         }
 
         [StructLayout(LayoutKind.Sequential)]
