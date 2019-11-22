@@ -6880,27 +6880,51 @@ namespace System.Windows.Forms.Tests
         {
             foreach (BoundsSpecified specified in Enum.GetValues(typeof(BoundsSpecified)))
             {
-                yield return new object[] { 0, 0, 0, 0, specified, 0 };
-                yield return new object[] { -1, -2, -3, -4, specified, 1 };
-                yield return new object[] { 1, 0, 0, 0, specified, 0 };
-                yield return new object[] { 0, 2, 0, 0, specified, 0 };
-                yield return new object[] { 1, 2, 0, 0, specified, 0 };
-                yield return new object[] { 0, 0, 1, 0, specified, 1 };
-                yield return new object[] { 0, 0, 0, 2, specified, 1 };
-                yield return new object[] { 0, 0, 1, 2, specified, 1 };
-                yield return new object[] { 1, 2, 30, 40, specified, 1 };
+                yield return new object[] { 0, 0, 0, 0, specified, 0, 0 };
+                yield return new object[] { -1, -2, -3, -4, specified, 1, 1 };
+                yield return new object[] { 1, 0, 0, 0, specified, 1, 0 };
+                yield return new object[] { 0, 2, 0, 0, specified, 1, 0 };
+                yield return new object[] { 1, 2, 0, 0, specified, 1, 0 };
+                yield return new object[] { 0, 0, 1, 0, specified, 0, 1 };
+                yield return new object[] { 0, 0, 0, 2, specified, 0, 1 };
+                yield return new object[] { 0, 0, 1, 2, specified, 0, 1 };
+                yield return new object[] { 1, 2, 30, 40, specified, 1, 1 };
             }
         }
 
         [WinFormsTheory]
         [MemberData(nameof(SetBoundsCore_TestData))]
-        public void Control_SetBoundsCore_Invoke_Success(int x, int y, int width, int height, BoundsSpecified specified, int expectedLayoutCallCount)
+        public void Control_SetBoundsCore_Invoke_Success(int x, int y, int width, int height, BoundsSpecified specified, int expectedLocationChangedCallCount, int expectedLayoutCallCount)
         {
             using var control = new SubControl();
+            int moveCallCount = 0;
+            int locationChangedCallCount = 0;
             int layoutCallCount = 0;
             int resizeCallCount = 0;
             int sizeChangedCallCount = 0;
             int clientSizeChangedCallCount = 0;
+            control.Move += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                Assert.Equal(locationChangedCallCount, moveCallCount);
+                Assert.Equal(layoutCallCount, moveCallCount);
+                Assert.Equal(resizeCallCount, moveCallCount);
+                Assert.Equal(sizeChangedCallCount, moveCallCount);
+                Assert.Equal(clientSizeChangedCallCount, moveCallCount);
+                moveCallCount++;
+            };
+            control.LocationChanged += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                Assert.Equal(moveCallCount - 1, locationChangedCallCount);
+                Assert.Equal(layoutCallCount, locationChangedCallCount);
+                Assert.Equal(resizeCallCount, locationChangedCallCount);
+                Assert.Equal(sizeChangedCallCount, locationChangedCallCount);
+                Assert.Equal(clientSizeChangedCallCount, locationChangedCallCount);
+                locationChangedCallCount++;
+            };
             control.Layout += (sender, e) =>
             {
                 Assert.Same(control, sender);
@@ -6951,6 +6975,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(width, control.Width);
             Assert.Equal(height, control.Height);
             Assert.Equal(new Rectangle(x, y, width, height), control.Bounds);
+            Assert.Equal(expectedLocationChangedCallCount, moveCallCount);
+            Assert.Equal(expectedLocationChangedCallCount, locationChangedCallCount);
             Assert.Equal(expectedLayoutCallCount, layoutCallCount);
             Assert.Equal(expectedLayoutCallCount, resizeCallCount);
             Assert.Equal(expectedLayoutCallCount, sizeChangedCallCount);
@@ -6970,6 +6996,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(width, control.Width);
             Assert.Equal(height, control.Height);
             Assert.Equal(new Rectangle(x, y, width, height), control.Bounds);
+            Assert.Equal(expectedLocationChangedCallCount, moveCallCount);
+            Assert.Equal(expectedLocationChangedCallCount, locationChangedCallCount);
             Assert.Equal(expectedLayoutCallCount, layoutCallCount);
             Assert.Equal(expectedLayoutCallCount, resizeCallCount);
             Assert.Equal(expectedLayoutCallCount, sizeChangedCallCount);
@@ -6981,40 +7009,64 @@ namespace System.Windows.Forms.Tests
         {
             foreach (BoundsSpecified specified in Enum.GetValues(typeof(BoundsSpecified)))
             {
-                yield return new object[] { Size.Empty, Size.Empty, 1, 2, 30, 40, specified, 30, 40, 1 };
-                yield return new object[] { new Size(10, 20), Size.Empty, 1, 2, 30, 40, specified, 30, 40, 1 };
-                yield return new object[] { new Size(30, 40), Size.Empty, 1, 2, 30, 40, specified, 30, 40, 0 };
-                yield return new object[] { new Size(31, 40), Size.Empty, 1, 2, 30, 40, specified, 31, 40, 0 };
-                yield return new object[] { new Size(30, 41), Size.Empty, 1, 2, 30, 40, specified, 30, 41, 0 };
-                yield return new object[] { new Size(40, 50), Size.Empty, 1, 2, 30, 40, specified, 40, 50, 0 };
-                yield return new object[] { Size.Empty, new Size(20, 10), 1, 2, 30, 40, specified, 20, 10, 1 };
-                yield return new object[] { Size.Empty, new Size(30, 40), 1, 2, 30, 40, specified, 30, 40, 1 };
-                yield return new object[] { Size.Empty, new Size(31, 40), 1, 2, 30, 40, specified, 30, 40, 1 };
-                yield return new object[] { Size.Empty, new Size(30, 41), 1, 2, 30, 40, specified, 30, 40, 1 };
-                yield return new object[] { Size.Empty, new Size(40, 50), 1, 2, 30, 40, specified, 30, 40, 1 };
-                yield return new object[] { new Size(10, 20), new Size(40, 50), 1, 2, 30, 40, specified, 30, 40, 1 };
-                yield return new object[] { new Size(10, 20), new Size(20, 30), 1, 2, 30, 40, specified, 20, 30, 1 };
-                yield return new object[] { new Size(10, 20), new Size(20, 30), 1, 2, 30, 40, specified, 20, 30, 1 };
-                yield return new object[] { new Size(30, 40), new Size(20, 30), 1, 2, 30, 40, specified, 30, 40, 0 };
-                yield return new object[] { new Size(30, 40), new Size(40, 50), 1, 2, 30, 40, specified, 30, 40, 0 };
-                yield return new object[] { new Size(40, 50), new Size(20, 30), 1, 2, 30, 40, specified, 40, 50, 0 };
-                yield return new object[] { new Size(40, 50), new Size(40, 50), 1, 2, 30, 40, specified, 40, 50, 0 };
+                yield return new object[] { Size.Empty, Size.Empty, 1, 2, 30, 40, specified, 30, 40, 1, 1 };
+                yield return new object[] { new Size(10, 20), Size.Empty, 1, 2, 30, 40, specified, 30, 40, 1, 1 };
+                yield return new object[] { new Size(30, 40), Size.Empty, 1, 2, 30, 40, specified, 30, 40, 1, 0 };
+                yield return new object[] { new Size(31, 40), Size.Empty, 1, 2, 30, 40, specified, 31, 40, 1, 0 };
+                yield return new object[] { new Size(30, 41), Size.Empty, 1, 2, 30, 40, specified, 30, 41, 1, 0 };
+                yield return new object[] { new Size(40, 50), Size.Empty, 1, 2, 30, 40, specified, 40, 50, 1, 0 };
+                yield return new object[] { Size.Empty, new Size(20, 10), 1, 2, 30, 40, specified, 20, 10, 1, 1 };
+                yield return new object[] { Size.Empty, new Size(30, 40), 1, 2, 30, 40, specified, 30, 40, 1, 1 };
+                yield return new object[] { Size.Empty, new Size(31, 40), 1, 2, 30, 40, specified, 30, 40, 1, 1 };
+                yield return new object[] { Size.Empty, new Size(30, 41), 1, 2, 30, 40, specified, 30, 40, 1, 1 };
+                yield return new object[] { Size.Empty, new Size(40, 50), 1, 2, 30, 40, specified, 30, 40, 1, 1 };
+                yield return new object[] { new Size(10, 20), new Size(40, 50), 1, 2, 30, 40, specified, 30, 40, 1, 1 };
+                yield return new object[] { new Size(10, 20), new Size(20, 30), 1, 2, 30, 40, specified, 20, 30, 1, 1 };
+                yield return new object[] { new Size(10, 20), new Size(20, 30), 1, 2, 30, 40, specified, 20, 30, 1, 1 };
+                yield return new object[] { new Size(30, 40), new Size(20, 30), 1, 2, 30, 40, specified, 30, 40, 1, 0 };
+                yield return new object[] { new Size(30, 40), new Size(40, 50), 1, 2, 30, 40, specified, 30, 40, 1, 0 };
+                yield return new object[] { new Size(40, 50), new Size(20, 30), 1, 2, 30, 40, specified, 40, 50, 1, 0 };
+                yield return new object[] { new Size(40, 50), new Size(40, 50), 1, 2, 30, 40, specified, 40, 50, 1, 0 };
             }
         }
 
         [WinFormsTheory]
         [MemberData(nameof(SetBoundsCore_WithConstrainedSize_TestData))]
-        public void Control_SetBoundsCore_InvokeWithConstrainedSize_Success(Size minimumSize, Size maximumSize, int x, int y, int width, int height, BoundsSpecified specified, int expectedWidth, int expectedHeight, int expectedLayoutCallCount)
+        public void Control_SetBoundsCore_InvokeWithConstrainedSize_Success(Size minimumSize, Size maximumSize, int x, int y, int width, int height, BoundsSpecified specified, int expectedWidth, int expectedHeight, int expectedLocationChangedCallCount, int expectedLayoutCallCount)
         {
             using var control = new SubControl
             {
                 MinimumSize = minimumSize,
                 MaximumSize = maximumSize
             };
+            int moveCallCount = 0;
+            int locationChangedCallCount = 0;
             int layoutCallCount = 0;
             int resizeCallCount = 0;
             int sizeChangedCallCount = 0;
             int clientSizeChangedCallCount = 0;
+            control.Move += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                Assert.Equal(locationChangedCallCount, moveCallCount);
+                Assert.Equal(layoutCallCount, moveCallCount);
+                Assert.Equal(resizeCallCount, moveCallCount);
+                Assert.Equal(sizeChangedCallCount, moveCallCount);
+                Assert.Equal(clientSizeChangedCallCount, moveCallCount);
+                moveCallCount++;
+            };
+            control.LocationChanged += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                Assert.Equal(moveCallCount - 1, locationChangedCallCount);
+                Assert.Equal(layoutCallCount, locationChangedCallCount);
+                Assert.Equal(resizeCallCount, locationChangedCallCount);
+                Assert.Equal(sizeChangedCallCount, locationChangedCallCount);
+                Assert.Equal(clientSizeChangedCallCount, locationChangedCallCount);
+                locationChangedCallCount++;
+            };
             control.Layout += (sender, e) =>
             {
                 Assert.Same(control, sender);
@@ -7065,6 +7117,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expectedWidth, control.Width);
             Assert.Equal(expectedHeight, control.Height);
             Assert.Equal(new Rectangle(x, y, expectedWidth, expectedHeight), control.Bounds);
+            Assert.Equal(expectedLocationChangedCallCount, moveCallCount);
+            Assert.Equal(expectedLocationChangedCallCount, locationChangedCallCount);
             Assert.Equal(expectedLayoutCallCount, layoutCallCount);
             Assert.Equal(expectedLayoutCallCount, resizeCallCount);
             Assert.Equal(expectedLayoutCallCount, sizeChangedCallCount);
@@ -7084,6 +7138,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expectedWidth, control.Width);
             Assert.Equal(expectedHeight, control.Height);
             Assert.Equal(new Rectangle(x, y, expectedWidth, expectedHeight), control.Bounds);
+            Assert.Equal(expectedLocationChangedCallCount, moveCallCount);
+            Assert.Equal(expectedLocationChangedCallCount, locationChangedCallCount);
             Assert.Equal(expectedLayoutCallCount, layoutCallCount);
             Assert.Equal(expectedLayoutCallCount, resizeCallCount);
             Assert.Equal(expectedLayoutCallCount, sizeChangedCallCount);
@@ -7095,27 +7151,51 @@ namespace System.Windows.Forms.Tests
         {
             foreach (BoundsSpecified specified in Enum.GetValues(typeof(BoundsSpecified)))
             {
-                yield return new object[] { 0, 0, 0, 0, specified, 0, 0, 0 };
-                yield return new object[] { -1, -2, -3, -4, specified, -7, -8, 1 };
-                yield return new object[] { 1, 0, 0, 0, specified, -4, -4, 1 };
-                yield return new object[] { 0, 2, 0, 0, specified, -4, -4, 1 };
-                yield return new object[] { 1, 2, 0, 0, specified, -4, -4, 1 };
-                yield return new object[] { 0, 0, 1, 0, specified, -3, -4, 1 };
-                yield return new object[] { 0, 0, 0, 2, specified, -4, -2, 1 };
-                yield return new object[] { 0, 0, 1, 2, specified, -3, -2, 1 };
-                yield return new object[] { 1, 2, 30, 40, specified, 26, 36, 1 };
+                yield return new object[] { 0, 0, 0, 0, specified, 0, 0, 0, 0 };
+                yield return new object[] { -1, -2, -3, -4, specified, -7, -8, 1, 1 };
+                yield return new object[] { 1, 0, 0, 0, specified, -4, -4, 1, 1 };
+                yield return new object[] { 0, 2, 0, 0, specified, -4, -4, 1, 1 };
+                yield return new object[] { 1, 2, 0, 0, specified, -4, -4, 1, 1 };
+                yield return new object[] { 0, 0, 1, 0, specified, -3, -4, 0, 1 };
+                yield return new object[] { 0, 0, 0, 2, specified, -4, -2, 0, 1 };
+                yield return new object[] { 0, 0, 1, 2, specified, -3, -2, 0, 1 };
+                yield return new object[] { 1, 2, 30, 40, specified, 26, 36, 1, 1 };
             }
         }
 
         [WinFormsTheory]
         [MemberData(nameof(SetBoundsCore_WithCustomStyle_TestData))]
-        public void Control_SetBoundsCore_InvokeWithCustomStyle_Success(int x, int y, int width, int height, BoundsSpecified specified, int expectedClientWidth, int expectedClientHeight, int expectedLayoutCallCount)
+        public void Control_SetBoundsCore_InvokeWithCustomStyle_Success(int x, int y, int width, int height, BoundsSpecified specified, int expectedClientWidth, int expectedClientHeight, int expectedLocationChangedCallCount, int expectedLayoutCallCount)
         {
             using var control = new BorderedControl();
+            int moveCallCount = 0;
+            int locationChangedCallCount = 0;
             int layoutCallCount = 0;
             int resizeCallCount = 0;
             int sizeChangedCallCount = 0;
             int clientSizeChangedCallCount = 0;
+            control.Move += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                Assert.Equal(locationChangedCallCount, moveCallCount);
+                Assert.Equal(layoutCallCount, moveCallCount);
+                Assert.Equal(resizeCallCount, moveCallCount);
+                Assert.Equal(sizeChangedCallCount, moveCallCount);
+                Assert.Equal(clientSizeChangedCallCount, moveCallCount);
+                moveCallCount++;
+            };
+            control.LocationChanged += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                Assert.Equal(moveCallCount - 1, locationChangedCallCount);
+                Assert.Equal(layoutCallCount, locationChangedCallCount);
+                Assert.Equal(resizeCallCount, locationChangedCallCount);
+                Assert.Equal(sizeChangedCallCount, locationChangedCallCount);
+                Assert.Equal(clientSizeChangedCallCount, locationChangedCallCount);
+                locationChangedCallCount++;
+            };
             control.Layout += (sender, e) =>
             {
                 Assert.Same(control, sender);
@@ -7166,6 +7246,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(width, control.Width);
             Assert.Equal(height, control.Height);
             Assert.Equal(new Rectangle(x, y, width, height), control.Bounds);
+            Assert.Equal(expectedLocationChangedCallCount, moveCallCount);
+            Assert.Equal(expectedLocationChangedCallCount, locationChangedCallCount);
             Assert.Equal(expectedLayoutCallCount, layoutCallCount);
             Assert.Equal(expectedLayoutCallCount, resizeCallCount);
             Assert.Equal(expectedLayoutCallCount, sizeChangedCallCount);
@@ -7185,6 +7267,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(width, control.Width);
             Assert.Equal(height, control.Height);
             Assert.Equal(new Rectangle(x, y, width, height), control.Bounds);
+            Assert.Equal(expectedLocationChangedCallCount, moveCallCount);
+            Assert.Equal(expectedLocationChangedCallCount, locationChangedCallCount);
             Assert.Equal(expectedLayoutCallCount, layoutCallCount);
             Assert.Equal(expectedLayoutCallCount, resizeCallCount);
             Assert.Equal(expectedLayoutCallCount, sizeChangedCallCount);
@@ -7194,18 +7278,42 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [MemberData(nameof(SetBoundsCore_TestData))]
-        public void Control_SetBoundsCore_InvokeWithParent_Success(int x, int y, int width, int height, BoundsSpecified specified, int expectedLayoutCallCount)
+        public void Control_SetBoundsCore_InvokeWithParent_Success(int x, int y, int width, int height, BoundsSpecified specified, int expectedLocationChangedCallCount, int expectedLayoutCallCount)
         {
             using var parent = new Control();
             using var control = new SubControl
             {
                 Parent = parent
             };
+            int moveCallCount = 0;
+            int locationChangedCallCount = 0;
             int layoutCallCount = 0;
             int resizeCallCount = 0;
             int sizeChangedCallCount = 0;
             int clientSizeChangedCallCount = 0;
             int parentLayoutCallCount = 0;
+            control.Move += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                Assert.Equal(locationChangedCallCount, moveCallCount);
+                Assert.Equal(layoutCallCount, moveCallCount);
+                Assert.Equal(resizeCallCount, moveCallCount);
+                Assert.Equal(sizeChangedCallCount, moveCallCount);
+                Assert.Equal(clientSizeChangedCallCount, moveCallCount);
+                moveCallCount++;
+            };
+            control.LocationChanged += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                Assert.Equal(moveCallCount - 1, locationChangedCallCount);
+                Assert.Equal(layoutCallCount, locationChangedCallCount);
+                Assert.Equal(resizeCallCount, locationChangedCallCount);
+                Assert.Equal(sizeChangedCallCount, locationChangedCallCount);
+                Assert.Equal(clientSizeChangedCallCount, locationChangedCallCount);
+                locationChangedCallCount++;
+            };
             control.Layout += (sender, e) =>
             {
                 Assert.Same(control, sender);
@@ -7274,6 +7382,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(width, control.Width);
                 Assert.Equal(height, control.Height);
                 Assert.Equal(new Rectangle(x, y, width, height), control.Bounds);
+                Assert.Equal(expectedLocationChangedCallCount, moveCallCount);
+                Assert.Equal(expectedLocationChangedCallCount, locationChangedCallCount);
                 Assert.Equal(expectedLayoutCallCount, layoutCallCount);
                 Assert.Equal(expectedLayoutCallCount, resizeCallCount);
                 Assert.Equal(expectedLayoutCallCount, sizeChangedCallCount);
@@ -7294,6 +7404,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(width, control.Width);
                 Assert.Equal(height, control.Height);
                 Assert.Equal(new Rectangle(x, y, width, height), control.Bounds);
+                Assert.Equal(expectedLocationChangedCallCount, moveCallCount);
+                Assert.Equal(expectedLocationChangedCallCount, locationChangedCallCount);
                 Assert.Equal(expectedLayoutCallCount, layoutCallCount);
                 Assert.Equal(expectedLayoutCallCount, resizeCallCount);
                 Assert.Equal(expectedLayoutCallCount, sizeChangedCallCount);
@@ -7311,38 +7423,70 @@ namespace System.Windows.Forms.Tests
         {
             foreach (BoundsSpecified specified in Enum.GetValues(typeof(BoundsSpecified)))
             {
-                yield return new object[] { true, 0, 0, 0, 0, specified, 0, 0, 0, 0 };
-                yield return new object[] { true, -1, -2, -3, -4, specified, 0, 0, 0, 0 };
-                yield return new object[] { true, 1, 0, 0, 0, specified, 0, 0, 0, 0 };
-                yield return new object[] { true, 0, 2, 0, 0, specified, 0, 0, 0, 0 };
-                yield return new object[] { true, 1, 2, 0, 0, specified, 0, 0, 0, 0 };
-                yield return new object[] { true, 0, 0, 1, 0, specified, 1, 0, 1, 1 };
-                yield return new object[] { true, 0, 0, 0, 2, specified, 0, 2, 1, 1 };
-                yield return new object[] { true, 0, 0, 1, 2, specified, 1, 2, 1, 1 };
-                yield return new object[] { true, 1, 2, 30, 40, specified, 30, 40, 1, 1 };
+                yield return new object[] { true, 0, 0, 0, 0, specified, 0, 0, 0, 0, 0 };
+                yield return new object[] { true, -1, -2, -3, -4, specified, 0, 0, 1, 0, 0 };
+                yield return new object[] { true, 1, 0, 0, 0, specified, 0, 0, 1, 0, 0 };
+                yield return new object[] { true, 0, 2, 0, 0, specified, 0, 0, 1, 0, 0 };
+                yield return new object[] { true, 1, 2, 0, 0, specified, 0, 0, 1, 0, 0 };
+                yield return new object[] { true, 0, 0, 1, 0, specified, 1, 0, 0, 1, 1 };
+                yield return new object[] { true, 0, 0, 0, 2, specified, 0, 2, 0, 1, 1 };
+                yield return new object[] { true, 0, 0, 1, 2, specified, 1, 2, 0, 1, 1 };
+                yield return new object[] { true, 1, 2, 30, 40, specified, 30, 40, 1, 1, 1 };
 
-                yield return new object[] { false, 0, 0, 0, 0, specified, 0, 0, 0, 0 };
-                yield return new object[] { false, -1, -2, -3, -4, specified, 0, 0, 0, 0 };
-                yield return new object[] { false, 1, 0, 0, 0, specified, 0, 0, 0, 0 };
-                yield return new object[] { false, 0, 2, 0, 0, specified, 0, 0, 0, 0 };
-                yield return new object[] { false, 1, 2, 0, 0, specified, 0, 0, 0, 0 };
-                yield return new object[] { false, 0, 0, 1, 0, specified, 1, 0, 1, 0 };
-                yield return new object[] { false, 0, 0, 0, 2, specified, 0, 2, 1, 0 };
-                yield return new object[] { false, 0, 0, 1, 2, specified, 1, 2, 1, 0 };
-                yield return new object[] { false, 1, 2, 30, 40, specified, 30, 40, 1, 0 };
+                yield return new object[] { false, 0, 0, 0, 0, specified, 0, 0, 0, 0, 0 };
+                yield return new object[] { false, -1, -2, -3, -4, specified, 0, 0, 1, 0, 0 };
+                yield return new object[] { false, 1, 0, 0, 0, specified, 0, 0, 1, 0, 0 };
+                yield return new object[] { false, 0, 2, 0, 0, specified, 0, 0, 1, 0, 0 };
+                yield return new object[] { false, 1, 2, 0, 0, specified, 0, 0, 1, 0, 0 };
+                yield return new object[] { false, 0, 0, 1, 0, specified, 1, 0, 0, 1, 0 };
+                yield return new object[] { false, 0, 0, 0, 2, specified, 0, 2, 0, 1, 0 };
+                yield return new object[] { false, 0, 0, 1, 2, specified, 1, 2, 0, 1, 0 };
+                yield return new object[] { false, 1, 2, 30, 40, specified, 30, 40, 1, 1, 0 };
             }
         }
 
         [WinFormsTheory]
         [MemberData(nameof(SetBoundsCore_WithHandle_TestData))]
-        public void Control_SetBoundsCore_InvokeWithHandle_Success(bool resizeRedraw, int x, int y, int width, int height, BoundsSpecified specified, int expectedWidth, int expectedHeight, int expectedLayoutCallCount, int expectedInvalidatedCallCount)
+        public void Control_SetBoundsCore_InvokeWithHandle_Success(bool resizeRedraw, int x, int y, int width, int height, BoundsSpecified specified, int expectedWidth, int expectedHeight, int expectedLocationChangedCallCount, int expectedLayoutCallCount, int expectedInvalidatedCallCount)
         {
             using var control = new SubControl();
             control.SetStyle(ControlStyles.ResizeRedraw, resizeRedraw);
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            int moveCallCount = 0;
+            int locationChangedCallCount = 0;
             int layoutCallCount = 0;
             int resizeCallCount = 0;
             int sizeChangedCallCount = 0;
             int clientSizeChangedCallCount = 0;
+            control.Move += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                Assert.Equal(locationChangedCallCount, moveCallCount);
+                Assert.Equal(layoutCallCount, moveCallCount);
+                Assert.Equal(resizeCallCount, moveCallCount);
+                Assert.Equal(sizeChangedCallCount, moveCallCount);
+                Assert.Equal(clientSizeChangedCallCount, moveCallCount);
+                moveCallCount++;
+            };
+            control.LocationChanged += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                Assert.Equal(moveCallCount - 1, locationChangedCallCount);
+                Assert.Equal(layoutCallCount, locationChangedCallCount);
+                Assert.Equal(resizeCallCount, locationChangedCallCount);
+                Assert.Equal(sizeChangedCallCount, locationChangedCallCount);
+                Assert.Equal(clientSizeChangedCallCount, locationChangedCallCount);
+                locationChangedCallCount++;
+            };
             control.Layout += (sender, e) =>
             {
                 Assert.Same(control, sender);
@@ -7380,13 +7524,6 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(sizeChangedCallCount - 1, clientSizeChangedCallCount);
                 clientSizeChangedCallCount++;
             };
-            Assert.NotEqual(IntPtr.Zero, control.Handle);
-            int invalidatedCallCount = 0;
-            control.Invalidated += (sender, e) => invalidatedCallCount++;
-            int styleChangedCallCount = 0;
-            control.StyleChanged += (sender, e) => styleChangedCallCount++;
-            int createdCallCount = 0;
-            control.HandleCreated += (sender, e) => createdCallCount++;
 
             control.SetBoundsCore(x, y, width, height, specified);
             Assert.Equal(new Size(expectedWidth, expectedHeight), control.ClientSize);
@@ -7400,6 +7537,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expectedWidth, control.Width);
             Assert.Equal(expectedHeight, control.Height);
             Assert.Equal(new Rectangle(x, y, expectedWidth, expectedHeight), control.Bounds);
+            Assert.Equal(expectedLocationChangedCallCount, moveCallCount);
+            Assert.Equal(expectedLocationChangedCallCount, locationChangedCallCount);
             Assert.Equal(expectedLayoutCallCount, layoutCallCount);
             Assert.Equal(expectedLayoutCallCount, resizeCallCount);
             Assert.Equal(expectedLayoutCallCount, sizeChangedCallCount);
@@ -7422,6 +7561,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expectedWidth, control.Width);
             Assert.Equal(expectedHeight, control.Height);
             Assert.Equal(new Rectangle(x, y, expectedWidth, expectedHeight), control.Bounds);
+            Assert.Equal(expectedLocationChangedCallCount, moveCallCount);
+            Assert.Equal(expectedLocationChangedCallCount, locationChangedCallCount);
             Assert.Equal(expectedLayoutCallCount, layoutCallCount);
             Assert.Equal(expectedLayoutCallCount, resizeCallCount);
             Assert.Equal(expectedLayoutCallCount, sizeChangedCallCount);
@@ -7434,7 +7575,7 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [MemberData(nameof(SetBoundsCore_WithHandle_TestData))]
-        public void Control_SetBoundsCore_InvokeWithParentWithHandle_Success(bool resizeRedraw, int x, int y, int width, int height, BoundsSpecified specified, int expectedWidth, int expectedHeight, int expectedLayoutCallCount, int expectedInvalidatedCallCount)
+        public void Control_SetBoundsCore_InvokeWithParentWithHandle_Success(bool resizeRedraw, int x, int y, int width, int height, BoundsSpecified specified, int expectedWidth, int expectedHeight, int expectedLocationChangedCallCount, int expectedLayoutCallCount, int expectedInvalidatedCallCount)
         {
             using var parent = new Control();
             using var control = new SubControl
@@ -7442,11 +7583,49 @@ namespace System.Windows.Forms.Tests
                 Parent = parent
             };
             control.SetStyle(ControlStyles.ResizeRedraw, resizeRedraw);
+            Assert.NotEqual(IntPtr.Zero, parent.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+            int parentInvalidatedCallCount = 0;
+            parent.Invalidated += (sender, e) => parentInvalidatedCallCount++;
+            int parentStyleChangedCallCount = 0;
+            parent.StyleChanged += (sender, e) => parentStyleChangedCallCount++;
+            int parentCreatedCallCount = 0;
+            parent.HandleCreated += (sender, e) => parentCreatedCallCount++;
+
+            int moveCallCount = 0;
+            int locationChangedCallCount = 0;
             int layoutCallCount = 0;
             int resizeCallCount = 0;
             int sizeChangedCallCount = 0;
             int clientSizeChangedCallCount = 0;
             int parentLayoutCallCount = 0;
+            control.Move += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                Assert.Equal(locationChangedCallCount, moveCallCount);
+                Assert.Equal(layoutCallCount, moveCallCount);
+                Assert.Equal(resizeCallCount, moveCallCount);
+                Assert.Equal(sizeChangedCallCount, moveCallCount);
+                Assert.Equal(clientSizeChangedCallCount, moveCallCount);
+                moveCallCount++;
+            };
+            control.LocationChanged += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                Assert.Equal(moveCallCount - 1, locationChangedCallCount);
+                Assert.Equal(layoutCallCount, locationChangedCallCount);
+                Assert.Equal(resizeCallCount, locationChangedCallCount);
+                Assert.Equal(sizeChangedCallCount, locationChangedCallCount);
+                Assert.Equal(clientSizeChangedCallCount, locationChangedCallCount);
+                locationChangedCallCount++;
+            };
             control.Layout += (sender, e) =>
             {
                 Assert.Same(control, sender);
@@ -7500,19 +7679,6 @@ namespace System.Windows.Forms.Tests
                 parentLayoutCallCount++;
             };
             parent.Layout += parentHandler;
-            Assert.NotEqual(IntPtr.Zero, parent.Handle);
-            int invalidatedCallCount = 0;
-            control.Invalidated += (sender, e) => invalidatedCallCount++;
-            int styleChangedCallCount = 0;
-            control.StyleChanged += (sender, e) => styleChangedCallCount++;
-            int createdCallCount = 0;
-            control.HandleCreated += (sender, e) => createdCallCount++;
-            int parentInvalidatedCallCount = 0;
-            parent.Invalidated += (sender, e) => parentInvalidatedCallCount++;
-            int parentStyleChangedCallCount = 0;
-            parent.StyleChanged += (sender, e) => parentStyleChangedCallCount++;
-            int parentCreatedCallCount = 0;
-            parent.HandleCreated += (sender, e) => parentCreatedCallCount++;
 
             try
             {
@@ -7528,6 +7694,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(expectedWidth, control.Width);
                 Assert.Equal(expectedHeight, control.Height);
                 Assert.Equal(new Rectangle(x, y, expectedWidth, expectedHeight), control.Bounds);
+                Assert.Equal(expectedLocationChangedCallCount, moveCallCount);
+                Assert.Equal(expectedLocationChangedCallCount, locationChangedCallCount);
                 Assert.Equal(expectedLayoutCallCount, layoutCallCount);
                 Assert.Equal(expectedLayoutCallCount, parentLayoutCallCount);
                 Assert.Equal(expectedLayoutCallCount, resizeCallCount);
@@ -7555,6 +7723,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(expectedWidth, control.Width);
                 Assert.Equal(expectedHeight, control.Height);
                 Assert.Equal(new Rectangle(x, y, expectedWidth, expectedHeight), control.Bounds);
+                Assert.Equal(expectedLocationChangedCallCount, moveCallCount);
+                Assert.Equal(expectedLocationChangedCallCount, locationChangedCallCount);
                 Assert.Equal(expectedLayoutCallCount, layoutCallCount);
                 Assert.Equal(expectedLayoutCallCount, parentLayoutCallCount);
                 Assert.Equal(expectedLayoutCallCount, resizeCallCount);

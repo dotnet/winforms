@@ -207,7 +207,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal UnsafeNativeMethods.IPropertyBag GetPropBag()
+            internal Ole32.IPropertyBag GetPropBag()
             {
                 return PropertyBagBinary;
             }

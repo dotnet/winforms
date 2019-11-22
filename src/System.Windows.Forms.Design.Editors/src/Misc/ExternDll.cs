@@ -41,7 +41,6 @@ namespace System
         public const string Gdi32 = "gdi32.dll";
         public const string Gdiplus = "gdiplus.dll";
         public const string Hhctrl = "hhctrl.ocx";
-        public const string Imm32 = "imm32.dll";
         public const string Kernel32 = "kernel32.dll";
         public const string Loadperf = "Loadperf.dll";
         public const string Mscoree = "mscoree.dll";

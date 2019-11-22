@@ -226,14 +226,7 @@ namespace System.Windows.Forms
         ATTR_CONVERTED = 0x02,
         ATTR_TARGET_NOTCONVERTED = 0x03,
         ATTR_INPUT_ERROR = 0x04,
-        ATTR_FIXEDCONVERTED = 0x05,
-
-        // dwAction for ImmNotifyIME
-        NI_COMPOSITIONSTR = 0x0015,
-
-        // dwIndex for ImmNotifyIME/NI_COMPOSITIONSTR
-        CPS_COMPLETE = 0x01,
-        CPS_CANCEL = 0x04;
+        ATTR_FIXEDCONVERTED = 0x05;
 
         public const int
         HTTRANSPARENT = (-1),
@@ -279,9 +272,7 @@ namespace System.Windows.Forms
         HBMMENU_POPUP_MAXIMIZE = 10,
         HBMMENU_POPUP_MINIMIZE = 11;
 
-        public const int IME_CMODE_NATIVE = 0x0001,
-        IME_CMODE_KATAKANA = 0x0002,
-        IME_CMODE_FULLSHAPE = 0x0008,
+        public const int
         ICON_SMALL = 0,
         ICON_BIG = 1,
         IMAGE_ICON = 1,
@@ -890,27 +881,6 @@ namespace System.Windows.Forms
             public int fInherit;
             public int fReserved;
             public int dwFlags;
-        }
-
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-        internal class SYSTEMTIMEARRAY
-        {
-            public short wYear1;
-            public short wMonth1;
-            public short wDayOfWeek1;
-            public short wDay1;
-            public short wHour1;
-            public short wMinute1;
-            public short wSecond1;
-            public short wMilliseconds1;
-            public short wYear2;
-            public short wMonth2;
-            public short wDayOfWeek2;
-            public short wDay2;
-            public short wHour2;
-            public short wMinute2;
-            public short wSecond2;
-            public short wMilliseconds2;
         }
 
         public delegate bool EnumChildrenCallback(IntPtr hwnd, IntPtr lParam);

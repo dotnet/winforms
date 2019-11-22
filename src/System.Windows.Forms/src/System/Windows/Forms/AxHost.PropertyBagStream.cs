@@ -12,7 +12,7 @@ namespace System.Windows.Forms
 {
     public abstract partial class AxHost
     {
-        internal class PropertyBagStream : UnsafeNativeMethods.IPropertyBag
+        internal class PropertyBagStream : Ole32.IPropertyBag
         {
             private Hashtable bag = new Hashtable();
 
@@ -30,7 +30,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            HRESULT UnsafeNativeMethods.IPropertyBag.Read(string pszPropName, ref object pVar, UnsafeNativeMethods.IErrorLog pErrorLog)
+            HRESULT Ole32.IPropertyBag.Read(string pszPropName, ref object pVar, Ole32.IErrorLog pErrorLog)
             {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "Reading property " + pszPropName + " from OCXState propertybag.");
 
@@ -50,7 +50,7 @@ namespace System.Windows.Forms
                 return (pVar == null) ? HRESULT.E_INVALIDARG : HRESULT.S_OK;
             }
 
-            HRESULT UnsafeNativeMethods.IPropertyBag.Write(string pszPropName, ref object pVar)
+            HRESULT Ole32.IPropertyBag.Write(string pszPropName, ref object pVar)
             {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "Writing property " + pszPropName + " [" + pVar + "] into OCXState propertybag.");
                 if (pVar != null && !pVar.GetType().IsSerializable)

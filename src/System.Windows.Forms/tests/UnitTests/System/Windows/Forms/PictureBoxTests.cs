@@ -1376,27 +1376,29 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<InvalidEnumArgumentException>("value", () => pictureBox.SizeMode = value);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(0)]
         [InlineData(1)]
         [InlineData(2)]
         public void PictureBox_TabIndex_Set_GetReturnsExpected(int value)
         {
-            var control = new PictureBox
+            using var control = new PictureBox
             {
                 TabIndex = value
             };
             Assert.Equal(value, control.TabIndex);
+            Assert.False(control.IsHandleCreated);
 
             // Set same.
             control.TabIndex = value;
             Assert.Equal(value, control.TabIndex);
+            Assert.False(control.IsHandleCreated);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void PictureBox_TabIndex_SetWithHandler_CallsTabIndexChanged()
         {
-            var control = new PictureBox
+            using var control = new PictureBox
             {
                 TabIndex = 0
             };
@@ -1431,55 +1433,74 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(2, callCount);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void PictureBox_TabIndex_SetNegative_CallsArgumentOutOfRangeException()
         {
-            var control = new PictureBox();
+            using var control = new PictureBox();
             Assert.Throws<ArgumentOutOfRangeException>("value", () => control.TabIndex = -1);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void PictureBox_TabStop_Set_GetReturnsExpected(bool value)
         {
-            var control = new PictureBox
+            using var control = new PictureBox
             {
                 TabStop = value
             };
             Assert.Equal(value, control.TabStop);
+            Assert.False(control.IsHandleCreated);
 
             // Set same.
             control.TabStop = value;
             Assert.Equal(value, control.TabStop);
+            Assert.False(control.IsHandleCreated);
 
             // Set different.
             control.TabStop = value;
             Assert.Equal(value, control.TabStop);
+            Assert.False(control.IsHandleCreated);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void PictureBox_TabStop_SetWithHandle_GetReturnsExpected(bool value)
         {
-            var control = new PictureBox();
+            using var control = new PictureBox();
             Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
 
             control.TabStop = value;
             Assert.Equal(value, control.TabStop);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
 
             // Set same.
             control.TabStop = value;
-            Assert.Equal(value, control.TabStop);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
 
             // Set different.
             control.TabStop = value;
-            Assert.Equal(value, control.TabStop);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void PictureBox_TabStop_SetWithHandler_CallsTabStopChanged()
         {
-            var control = new PictureBox
+            using var control = new PictureBox
             {
                 TabStop = true
             };
