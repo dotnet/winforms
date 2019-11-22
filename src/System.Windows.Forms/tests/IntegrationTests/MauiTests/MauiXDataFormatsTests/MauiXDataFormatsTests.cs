@@ -23,18 +23,9 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
             Application.Run(new MauiXDataFormatsTests(args));
         }
 
-        protected override Type Class
-        {
-            get 
-            { 
-                return typeof(DataFormats); 
-            }
-        }
+        protected override Type Class => typeof(DataFormats);
 
-        protected override Object CreateObject(TParams p)
-        {
-            return null;
-        }
+        protected override Object CreateObject(TParams p) => null;
 
         [Scenario(true)]
         public ScenarioResult Get_Format_By_String(TParams p)
