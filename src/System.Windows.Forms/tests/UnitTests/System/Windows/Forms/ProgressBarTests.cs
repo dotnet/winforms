@@ -77,6 +77,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(100, control.Right);
             Assert.Equal(RightToLeft.No, control.RightToLeft);
             Assert.False(control.RightToLeftLayout);
+            Assert.True(control.ShowFocusCues);
+            Assert.True(control.ShowKeyboardCues);
             Assert.Null(control.Site);
             Assert.Equal(new Size(100, 23), control.Size);
             Assert.Equal(10, control.Step);
@@ -2590,6 +2592,10 @@ namespace System.Windows.Forms.Tests
                 get => base.ResizeRedraw;
                 set => base.ResizeRedraw = value;
             }
+
+            public new bool ShowFocusCues => base.ShowFocusCues;
+
+            public new bool ShowKeyboardCues => base.ShowKeyboardCues;
 
             public new AccessibleObject CreateAccessibilityInstance() => base.CreateAccessibilityInstance();
 

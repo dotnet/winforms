@@ -88,6 +88,8 @@ namespace System.Windows.Forms.Tests
             Assert.True(control.Right > 0);
             Assert.Equal(RightToLeft.No, control.RightToLeft);
             Assert.True(control.ScaleScrollBarForDpiChange);
+            Assert.True(control.ShowFocusCues);
+            Assert.True(control.ShowKeyboardCues);
             Assert.Null(control.Site);
             Assert.True(control.Size.Width > 0);
             Assert.True(control.Size.Height > 0);
@@ -224,6 +226,10 @@ namespace System.Windows.Forms.Tests
                 get => base.ResizeRedraw;
                 set => base.ResizeRedraw = value;
             }
+
+            public new bool ShowFocusCues => base.ShowFocusCues;
+
+            public new bool ShowKeyboardCues => base.ShowKeyboardCues;
         }
     }
 }
