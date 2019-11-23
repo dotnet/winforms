@@ -29,12 +29,7 @@ namespace System.Windows.Forms
         public WindowsFormsSynchronizationContext()
         {
             DestinationThread = Thread.CurrentThread;   //store the current thread to ensure its still alive during an invoke.
-            Application.ThreadContext context = Application.ThreadContext.FromCurrent();
-            Debug.Assert(context != null);
-            if (context != null)
-            {
-                controlToSendTo = context.MarshalingControl;
-            }
+            controlToSendTo = Application.ThreadContext.FromCurrent().MarshalingControl;
             Debug.Assert(controlToSendTo.IsHandleCreated, "Marshaling control should have created its handle in its ctor.");
         }
 
