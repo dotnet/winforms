@@ -80,22 +80,12 @@ namespace System.Windows.Forms
                 throw new InvalidAsynchronousStateException(SR.ThreadNoLongerValid);
             }
 
-            Debug.Assert(controlToSendTo != null, "Should always have the marshaling control by this point");
-
-            if (controlToSendTo != null)
-            {
-                controlToSendTo.Invoke(d, new object[] { state });
-            }
+            controlToSendTo?.Invoke(d, new object[] { state });
         }
 
         public override void Post(SendOrPostCallback d, object state)
         {
-            Debug.Assert(controlToSendTo != null, "Should always have the marshaling control by this point");
-
-            if (controlToSendTo != null)
-            {
-                controlToSendTo.BeginInvoke(d, new object[] { state });
-            }
+            controlToSendTo?.BeginInvoke(d, new object[] { state });
         }
 
         public override SynchronizationContext CreateCopy()
