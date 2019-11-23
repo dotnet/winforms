@@ -779,11 +779,7 @@ namespace System.Windows.Forms
         TVSIL_STATE = 2,
         TVM_SORTCHILDRENCB = (TV_FIRST + 21);
 
-        public const int UIS_SET = 1,
-        UIS_CLEAR = 2,
-        UIS_INITIALIZE = 3,
-        UISF_HIDEFOCUS = 0x1,
-        UISF_HIDEACCEL = 0x2,
+        public const int
         USERCLASSTYPE_FULL = 1,
         USERCLASSTYPE_SHORT = 2,
         USERCLASSTYPE_APPNAME = 3,
