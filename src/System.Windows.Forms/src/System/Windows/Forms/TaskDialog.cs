@@ -693,7 +693,7 @@ namespace System.Windows.Forms
                     // v6 (provided that Application.EnableVisualStyles() was called
                     // earlier). Otherwise, the "TaskDialogIndirect" entry point will
                     // not be available in comctl32.dll.
-                    IntPtr themingCookie = UnsafeNativeMethods.ThemingScope.Activate();
+                    IntPtr themingCookie = ThemingScope.Activate();
                     HRESULT returnValue;
                     int resultButtonID;
                     try
@@ -714,7 +714,7 @@ namespace System.Windows.Forms
                     finally
                     {
                         // Revert the theming scope.
-                        UnsafeNativeMethods.ThemingScope.Deactivate(themingCookie);
+                        ThemingScope.Deactivate(themingCookie);
                     }
 
                     // Marshal.ThrowExceptionForHR will use the IErrorInfo on the
