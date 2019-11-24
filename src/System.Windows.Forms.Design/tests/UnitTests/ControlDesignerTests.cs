@@ -6,6 +6,7 @@ using System.Net.Mail;
 using System.Windows.Forms;
 using WinForms.Common.Tests;
 using Xunit;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace System.Windows.Forms.Design.Tests
 {
@@ -221,7 +222,7 @@ namespace System.Windows.Forms.Design.Tests
         }
 
         [WinFormsFact]
-        public void SelectionRulesButtonTest()
+        public void SelectionRulesTest()
         {
             TestControlDesigner controlDesigner = new TestControlDesigner();
             Assert.NotNull(controlDesigner);
@@ -243,27 +244,6 @@ namespace System.Windows.Forms.Design.Tests
             }
 
             controlDesigner.Dispose();
-        }
-
-        [WinFormsFact]
-        public void SelectionRulesToolbarTest()
-        {
-            TestControlDesigner controlDesigner = new TestControlDesigner();
-            Assert.NotNull(controlDesigner);
-
-            SelectionRules testRules = SelectionRules.Visible;
-            testRules |= SelectionRules.BottomSizeable;
-
-            controlDesigner.Initialize(new ToolBar());
-            try
-            {
-                SelectionRules selectionRules = controlDesigner.SelectionRules;
-                Assert.Equal(selectionRules, testRules);
-            }
-            catch (Exception ex)
-            {
-                Assert.True(false, "Expected no exception, but got: " + ex.Message);
-            }
         }
     }
 }
