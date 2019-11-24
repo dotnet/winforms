@@ -2477,7 +2477,7 @@ namespace System.ComponentModel.Design
                 {
                     if (m.Msg == WindowMessages.WM_ACTIVATE)
                     {
-                        if (Visible && PARAM.LOWORD(m.WParam) == NativeMethods.WA_INACTIVE)
+                        if (Visible && PARAM.LOWORD(m.WParam) == (int)User32.WA.INACTIVE)
                         {
                             if (!OwnsWindow(m.LParam))
                             {
@@ -2506,8 +2506,6 @@ namespace System.ComponentModel.Design
             #region Interop definitions
             private static class NativeMethods
             {
-                public const int WA_INACTIVE = 0;
-                public const int WA_ACTIVE = 1;
                 public const int GWL_HWNDPARENT = (-8);
             }
 

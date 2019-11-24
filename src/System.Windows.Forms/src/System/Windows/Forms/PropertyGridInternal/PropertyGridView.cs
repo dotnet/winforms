@@ -7017,14 +7017,14 @@ namespace System.Windows.Forms.PropertyGridInternal
                     SetState(States.Modal, true);
                     Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "DropDownHolder:WM_ACTIVATE()");
                     IntPtr activatedWindow = (IntPtr)m.LParam;
-                    if (Visible && PARAM.LOWORD(m.WParam) == NativeMethods.WA_INACTIVE && !OwnsWindow(activatedWindow))
+                    if (Visible && PARAM.LOWORD(m.WParam) == (int)User32.WA.INACTIVE && !OwnsWindow(activatedWindow))
                     {
                         gridView.CloseDropDownInternal(false);
                         return;
                     }
 
                     // prevent the IMsoComponentManager active code from getting fired.
-                    //Active = ((int)m.WParam & 0x0000FFFF) != NativeMethods.WA_INACTIVE;
+                    //Active = ((int)m.WParam & 0x0000FFFF) != User32.WA.INACTIVE;
                     //return;
                 }
                 else if (m.Msg == WindowMessages.WM_CLOSE)

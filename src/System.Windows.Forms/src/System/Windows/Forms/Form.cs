@@ -6205,7 +6205,7 @@ namespace System.Windows.Forms
         private void WmActivate(ref Message m)
         {
             Application.FormActivated(Modal, true); // inform MsoComponentManager we're active
-            Active = PARAM.LOWORD(m.WParam) != NativeMethods.WA_INACTIVE;
+            Active = PARAM.LOWORD(m.WParam) != (int)User32.WA.INACTIVE;
             Application.FormActivated(Modal, Active); // inform MsoComponentManager we're active
         }
 
