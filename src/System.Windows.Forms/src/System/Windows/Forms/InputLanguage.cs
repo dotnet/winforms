@@ -19,17 +19,17 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The HKL handle.
         /// </summary>
-        private readonly IntPtr handle;
+        private readonly IntPtr _handle;
 
         internal InputLanguage(IntPtr handle)
         {
-            this.handle = handle;
+            _handle = handle;
         }
 
         /// <summary>
         ///  Returns the culture of the current input language.
         /// </summary>
-        public CultureInfo Culture => new CultureInfo((int)handle & 0xFFFF);
+        public CultureInfo Culture => new CultureInfo((int)_handle & 0xFFFF);
 
         /// <summary>
         ///  Gets or sets the input language for the current thread.
@@ -39,8 +39,7 @@ namespace System.Windows.Forms
             get
             {
                 Application.OleRequired();
-                // note we can obtain the KeyboardLayout for a given thread...
-                return new InputLanguage(SafeNativeMethods.GetKeyboardLayout(0));
+                return new InputLanguage(User32.GetKeyboardLayout(0));
             }
             set
             {
@@ -48,9 +47,9 @@ namespace System.Windows.Forms
                 Application.OleRequired();
                 if (value == null)
                 {
-                    value = InputLanguage.DefaultInputLanguage;
+                    value = DefaultInputLanguage;
                 }
-                IntPtr handleOld = SafeNativeMethods.ActivateKeyboardLayout(new HandleRef(value, value.handle), 0);
+                IntPtr handleOld = User32.ActivateKeyboardLayout(value.Handle, 0);
                 if (handleOld == IntPtr.Zero)
                 {
                     throw new ArgumentException(SR.ErrorBadInputLanguage, nameof(value));
@@ -74,19 +73,22 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Returns the handle for the input language.
         /// </summary>
-        public IntPtr Handle => handle;
+        public IntPtr Handle => _handle;
 
         /// <summary>
         ///  Returns a list of all installed input languages.
         /// </summary>
-        public static InputLanguageCollection InstalledInputLanguages
+        public unsafe static InputLanguageCollection InstalledInputLanguages
         {
             get
             {
-                int size = SafeNativeMethods.GetKeyboardLayoutList(0, null);
+                int size = User32.GetKeyboardLayoutList(0, null);
 
-                IntPtr[] handles = new IntPtr[size];
-                SafeNativeMethods.GetKeyboardLayoutList(size, handles);
+                var handles = new IntPtr[size];
+                fixed (IntPtr *pHandles = handles)
+                {
+                    User32.GetKeyboardLayoutList(size, pHandles);
+                }
 
                 InputLanguage[] ils = new InputLanguage[size];
                 for (int i = 0; i < size; i++)
@@ -146,7 +148,7 @@ namespace System.Windows.Forms
 
                 string layoutName = null;
 
-                IntPtr currentHandle = handle;
+                IntPtr currentHandle = _handle;
                 int language = unchecked((int)(long)currentHandle) & 0xffff;
                 int device = (unchecked((int)(long)currentHandle) >> 16) & 0x0fff;
 
@@ -311,7 +313,7 @@ namespace System.Windows.Forms
         /// </summary>
         public override bool Equals(object value)
         {
-            return (value is InputLanguage other) && (handle == other.handle);
+            return (value is InputLanguage other) && (_handle == other._handle);
         }
 
         /// <summary>
@@ -330,7 +332,7 @@ namespace System.Windows.Forms
 
             foreach (InputLanguage lang in InstalledInputLanguages)
             {
-                if ((unchecked((int)(long)lang.handle) & 0xFFFF) == lcid)
+                if ((unchecked((int)(long)lang._handle) & 0xFFFF) == lcid)
                 {
                     return lang;
                 }
@@ -342,7 +344,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Hash code for this input language.
         /// </summary>
-        public override int GetHashCode() => unchecked((int)(long)handle);
+        public override int GetHashCode() => unchecked((int)(long)_handle);
 
         private static string PadWithZeroes(string input, int length)
         {

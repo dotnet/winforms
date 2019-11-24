@@ -206,33 +206,6 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.Kernel32, CharSet = CharSet.Auto)]
         public static extern void GetTempFileName(string tempDirName, string prefixName, int unique, StringBuilder sb);
 
-        [DllImport(ExternDll.Imm32, CharSet = CharSet.Auto)]
-        public static extern bool ImmSetConversionStatus(HandleRef hIMC, int conversion, int sentence);
-
-        [DllImport(ExternDll.Imm32, CharSet = CharSet.Auto)]
-        public static extern bool ImmGetConversionStatus(HandleRef hIMC, ref int conversion, ref int sentence);
-
-        [DllImport(ExternDll.Imm32, CharSet = CharSet.Auto)]
-        public static extern IntPtr ImmGetContext(HandleRef hWnd);
-
-        [DllImport(ExternDll.Imm32, CharSet = CharSet.Auto)]
-        public static extern bool ImmReleaseContext(HandleRef hWnd, HandleRef hIMC);
-
-        [DllImport(ExternDll.Imm32, CharSet = CharSet.Auto)]
-        public static extern IntPtr ImmAssociateContext(HandleRef hWnd, HandleRef hIMC);
-
-        [DllImport(ExternDll.Imm32, CharSet = CharSet.Auto)]
-        public static extern IntPtr ImmCreateContext();
-
-        [DllImport(ExternDll.Imm32, CharSet = CharSet.Auto)]
-        public static extern bool ImmSetOpenStatus(HandleRef hIMC, bool open);
-
-        [DllImport(ExternDll.Imm32, CharSet = CharSet.Auto)]
-        public static extern bool ImmGetOpenStatus(HandleRef hIMC);
-
-        [DllImport(ExternDll.Imm32, CharSet = CharSet.Auto)]
-        public static extern bool ImmNotifyIME(HandleRef hIMC, int dwAction, int dwIndex, int dwValue);
-
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern IntPtr GetAncestor(HandleRef hWnd, int flags);
 
@@ -349,9 +322,6 @@ namespace System.Windows.Forms
         //
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, ref Interop.ComCtl32.MCHITTESTINFO lParam);
-
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, NativeMethods.SYSTEMTIMEARRAY lParam);
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, int lParam);
@@ -759,88 +729,6 @@ namespace System.Windows.Forms
         {
         }
 
-        [ComVisible(true), Guid("8CC497C0-A1DF-11ce-8098-00AA0047BE5D"),
-        InterfaceType(ComInterfaceType.InterfaceIsDual)]
-        public interface ITextDocument
-        {
-            string GetName();
-            object GetSelection();
-            int GetStoryCount();
-            object GetStoryRanges();
-            int GetSaved();
-            void SetSaved(int value);
-            object GetDefaultTabStop();
-            void SetDefaultTabStop(object value);
-            void New();
-            void Open(object pVar, int flags, int codePage);
-            void Save(object pVar, int flags, int codePage);
-            int Freeze();
-            int Unfreeze();
-            void BeginEditCollection();
-            void EndEditCollection();
-            int Undo(int count);
-            int Redo(int count);
-            [return: MarshalAs(UnmanagedType.Interface)] ITextRange Range(int cp1, int cp2);
-            [return: MarshalAs(UnmanagedType.Interface)] ITextRange RangeFromPoint(int x, int y);
-        };
-
-        [ComVisible(true), Guid("8CC497C2-A1DF-11ce-8098-00AA0047BE5D"),
-        InterfaceType(ComInterfaceType.InterfaceIsDual)]
-        public interface ITextRange
-        {
-            string GetText();
-            void SetText(string text);
-            object GetChar();
-            void SetChar(object ch);
-            [return: MarshalAs(UnmanagedType.Interface)] ITextRange GetDuplicate();
-            [return: MarshalAs(UnmanagedType.Interface)] ITextRange GetFormattedText();
-            void SetFormattedText([In, MarshalAs(UnmanagedType.Interface)] ITextRange range);
-            int GetStart();
-            void SetStart(int cpFirst);
-            int GetEnd();
-            void SetEnd(int cpLim);
-            object GetFont();
-            void SetFont(object font);
-            object GetPara();
-            void SetPara(object para);
-            int GetStoryLength();
-            int GetStoryType();
-            void Collapse(int start);
-            int Expand(int unit);
-            int GetIndex(int unit);
-            void SetIndex(int unit, int index, int extend);
-            void SetRange(int cpActive, int cpOther);
-            int InRange([In, MarshalAs(UnmanagedType.Interface)] ITextRange range);
-            int InStory([In, MarshalAs(UnmanagedType.Interface)] ITextRange range);
-            int IsEqual([In, MarshalAs(UnmanagedType.Interface)] ITextRange range);
-            void Select();
-            int StartOf(int unit, int extend);
-            int EndOf(int unit, int extend);
-            int Move(int unit, int count);
-            int MoveStart(int unit, int count);
-            int MoveEnd(int unit, int count);
-            int MoveWhile(object cset, int count);
-            int MoveStartWhile(object cset, int count);
-            int MoveEndWhile(object cset, int count);
-            int MoveUntil(object cset, int count);
-            int MoveStartUntil(object cset, int count);
-            int MoveEndUntil(object cset, int count);
-            int FindText(string text, int cch, int flags);
-            int FindTextStart(string text, int cch, int flags);
-            int FindTextEnd(string text, int cch, int flags);
-            int Delete(int unit, int count);
-            void Cut([Out] out object pVar);
-            void Copy([Out] out object pVar);
-            void Paste(object pVar, int format);
-            int CanPaste(object pVar, int format);
-            int CanEdit();
-            void ChangeCase(int type);
-            void GetPoint(int type, [Out] out int x, [Out] out int y);
-            void SetPoint(int x, int y, int type, int extend);
-            void ScrollIntoView(int value);
-            object GetEmbeddedObject();
-        }
-
         [ComImport]
         [Guid("00000112-0000-0000-C000-000000000046")]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
@@ -1218,85 +1106,14 @@ namespace System.Windows.Forms
 
             void InitNew();
 
-            void Load(IPropertyBag pPropBag, IErrorLog pErrorLog);
+            void Load(
+                Ole32.IPropertyBag pPropBag,
+                Ole32.IErrorLog pErrorLog);
 
-            void Save(IPropertyBag pPropBag, BOOL fClearDirty, BOOL fSaveAllProperties);
-        }
-
-        [ComImport]
-        [Guid("CF51ED10-62FE-11CF-BF86-00A0C9034836")]
-        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public unsafe interface IQuickActivate
-        {
-            [PreserveSig]
-            HRESULT QuickActivate(
-                Ole32.QACONTAINER pQaContainer,
-                [Out] tagQACONTROL pQaControl);
-
-            [PreserveSig]
-            HRESULT SetContentExtent(
-                Size* pSizel);
-
-            [PreserveSig]
-            HRESULT GetContentExtent(
-                Size* pSizel);
-        }
-
-        [ComImport]
-        [Guid("55272A00-42CB-11CE-8135-00AA004BB851")]
-        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IPropertyBag
-        {
-            [PreserveSig]
-            HRESULT Read(
-                [MarshalAs(UnmanagedType.LPWStr)]
-                string pszPropName,
-                ref object pVar,
-                IErrorLog pErrorLog);
-
-            [PreserveSig]
-            HRESULT Write(
-                [MarshalAs(UnmanagedType.LPWStr)]
-                string pszPropName,
-                ref object pVar);
-        }
-
-        [ComImport]
-        [Guid("3127CA40-446E-11CE-8135-00AA004BB851")]
-        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public unsafe interface IErrorLog
-        {
-            [PreserveSig]
-            HRESULT AddError(
-                [MarshalAs(UnmanagedType.LPWStr)] string pszPropName,
-                Ole32.EXCEPINFO* pExcepInfo);
-        }
-
-        [ComImport(),
-        Guid("B196B286-BAB4-101A-B69C-00AA00341D07"),
-        InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IConnectionPoint
-        {
-            [PreserveSig]
-            int GetConnectionInterface(out Guid iid);
-
-            [PreserveSig]
-            int GetConnectionPointContainer(
-                [MarshalAs(UnmanagedType.Interface)]
-            ref IConnectionPointContainer pContainer);
-
-            [PreserveSig]
-            int Advise(
-                   [In, MarshalAs(UnmanagedType.Interface)]
-                  object pUnkSink,
-                 ref int cookie);
-
-            [PreserveSig]
-            int Unadvise(
-                     int cookie);
-
-            [PreserveSig]
-            int EnumConnections(out object pEnum);
+            void Save(
+                Ole32.IPropertyBag pPropBag,
+                BOOL fClearDirty,
+                BOOL fSaveAllProperties);
         }
 
         [ComImport]
@@ -1386,18 +1203,6 @@ namespace System.Windows.Forms
                     buffer[offset++] = (char)0;
                 }
             }
-        }
-
-        [ComImport(),
-        Guid("B196B284-BAB4-101A-B69C-00AA00341D07"),
-        InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IConnectionPointContainer
-        {
-            [return: MarshalAs(UnmanagedType.Interface)]
-            object EnumConnectionPoints();
-
-            [PreserveSig]
-            int FindConnectionPoint([In] ref Guid guid, [Out, MarshalAs(UnmanagedType.Interface)]out IConnectionPoint ppCP);
         }
 
         [ComImport]
@@ -1544,38 +1349,6 @@ namespace System.Windows.Forms
             void ReleaseVarDesc(IntPtr varDesc);
         }
 
-        [StructLayout(LayoutKind.Sequential)/*leftover(noAutoOffset)*/]
-        public sealed class tagQACONTROL
-        {
-            [MarshalAs(UnmanagedType.U4)/*leftover(offset=0, cbSize)*/]
-            public int cbSize = Marshal.SizeOf<tagQACONTROL>();
-
-            public Ole32.OLEMISC dwMiscStatus = 0;
-
-            [MarshalAs(UnmanagedType.U4)/*leftover(offset=8, dwViewStatus)*/]
-            public int dwViewStatus = 0;
-
-            public uint dwEventCookie = 0;
-
-            [MarshalAs(UnmanagedType.U4)/*leftover(offset=16, dwPropNotifyCookie)*/]
-            public int dwPropNotifyCookie = 0;
-
-            [MarshalAs(UnmanagedType.U4)/*leftover(offset=20, dwPointerActivationPolicy)*/]
-            public int dwPointerActivationPolicy = 0;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public class OFNOTIFY
-        {
-            // hdr was a by-value NMHDR structure
-            public IntPtr hdr_hwndFrom = IntPtr.Zero;
-            public IntPtr hdr_idFrom = IntPtr.Zero;
-            public int hdr_code = 0;
-
-            public IntPtr lpOFN = IntPtr.Zero;
-            public IntPtr pszFile = IntPtr.Zero;
-        }
-
         internal class Shell32
         {
             [DllImport(ExternDll.Shell32, PreserveSig = true)]
@@ -1583,124 +1356,6 @@ namespace System.Windows.Forms
 
             [DllImport(ExternDll.Shell32, PreserveSig = true)]
             public static extern int SHILCreateFromPath([MarshalAs(UnmanagedType.LPWStr)]string pszPath, out IntPtr ppIdl, ref uint rgflnOut);
-        }
-
-        /// <summary>
-        ///  This class provides static methods to create, activate and deactivate the theming scope.
-        /// </summary>
-        internal class ThemingScope
-        {
-            private static ACTCTX enableThemingActivationContext;
-            private static IntPtr hActCtx;
-            private static bool contextCreationSucceeded;
-
-            /// <summary>
-            ///  We now use explicitactivate everywhere and use this method to determine if we
-            ///  really need to activate the activationcontext.  This should be pretty fast.
-            /// </summary>
-            private static bool IsContextActive()
-            {
-                IntPtr current = IntPtr.Zero;
-
-                if (contextCreationSucceeded && GetCurrentActCtx(out current))
-                {
-                    return current == hActCtx;
-                }
-                return false;
-            }
-
-            /// <summary>
-            ///  Activate() does nothing if a theming context is already active on the current thread, which is good
-            ///  for perf reasons. However, in some cases, like in the Timer callback, we need to put another context
-            ///  on the stack even if one is already present. In such cases, this method helps - you get to manage
-            ///  the cookie yourself though.
-            /// </summary>
-            public static IntPtr Activate()
-            {
-                IntPtr userCookie = IntPtr.Zero;
-
-                if (Application.UseVisualStyles && contextCreationSucceeded && OSFeature.Feature.IsPresent(OSFeature.Themes))
-                {
-                    if (!IsContextActive())
-                    {
-                        if (!ActivateActCtx(hActCtx, out userCookie))
-                        {
-                            // Be sure cookie always zero if activation failed
-                            userCookie = IntPtr.Zero;
-                        }
-                    }
-                }
-
-                return userCookie;
-            }
-
-            /// <summary>
-            ///  Use this to deactivate a context activated by calling ExplicitActivate.
-            /// </summary>
-            public static IntPtr Deactivate(IntPtr userCookie)
-            {
-                if (userCookie != IntPtr.Zero && OSFeature.Feature.IsPresent(OSFeature.Themes))
-                {
-                    if (DeactivateActCtx(0, userCookie))
-                    {
-                        // deactivation succeeded...
-                        userCookie = IntPtr.Zero;
-                    }
-                }
-
-                return userCookie;
-            }
-
-            public static bool CreateActivationContext(string dllPath, int nativeResourceManifestID)
-            {
-                lock (typeof(ThemingScope))
-                {
-                    if (!contextCreationSucceeded && OSFeature.Feature.IsPresent(OSFeature.Themes))
-                    {
-
-                        enableThemingActivationContext = new ACTCTX
-                        {
-                            cbSize = Marshal.SizeOf<ACTCTX>(),
-                            lpSource = dllPath,
-                            lpResourceName = (IntPtr)nativeResourceManifestID,
-                            dwFlags = ACTCTX_FLAG_RESOURCE_NAME_VALID
-                        };
-
-                        hActCtx = CreateActCtx(ref enableThemingActivationContext);
-                        contextCreationSucceeded = (hActCtx != new IntPtr(-1));
-                    }
-
-                    return contextCreationSucceeded;
-                }
-            }
-
-            // All the pinvoke goo...
-            [DllImport(ExternDll.Kernel32)]
-
-            private extern static IntPtr CreateActCtx(ref ACTCTX actctx);
-            [DllImport(ExternDll.Kernel32)]
-
-            private extern static bool ActivateActCtx(IntPtr hActCtx, out IntPtr lpCookie);
-            [DllImport(ExternDll.Kernel32)]
-
-            private extern static bool DeactivateActCtx(int dwFlags, IntPtr lpCookie);
-            [DllImport(ExternDll.Kernel32)]
-
-            private extern static bool GetCurrentActCtx(out IntPtr handle);
-
-            private const int ACTCTX_FLAG_RESOURCE_NAME_VALID = 0x008;
-
-            private struct ACTCTX
-            {
-                public int cbSize;
-                public uint dwFlags;
-                public string lpSource;
-                public ushort wProcessorArchitecture;
-                public ushort wLangId;
-                public string lpAssemblyDirectory;
-                public IntPtr lpResourceName;
-                public string lpApplicationName;
-            }
         }
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto, ExactSpelling = true, SetLastError = true)]

@@ -891,6 +891,8 @@ namespace System.Windows.Forms.Tests
 
             public new void OnStyleChanged(EventArgs e) => base.OnStyleChanged(e);
 
+            public new void OnTabIndexChanged(EventArgs e) => base.OnTabIndexChanged(e);
+
             public new void OnTabStopChanged(EventArgs e) => base.OnTabStopChanged(e);
 
             public new void OnTextChanged(EventArgs e) => base.OnTextChanged(e);

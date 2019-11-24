@@ -282,4 +282,10 @@ Press Ctrl+Enter to accept Text.</value>
   <data name="HelpProviderEditorTitle" xml:space="preserve">
     <value>Open Help File</value>
   </data>
+  <data name="CellStyleBuilderNormalPreviewAccName" xml:space="preserve">
+    <value>Normal Preview</value>
+  </data>
+  <data name="CellStyleBuilderSelectedPreviewAccName" xml:space="preserve">
+    <value>Selected Preview</value>
+  </data>
 </root>

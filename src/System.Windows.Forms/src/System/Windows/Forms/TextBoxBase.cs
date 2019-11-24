@@ -1792,13 +1792,13 @@ namespace System.Windows.Forms
                         if (editOlePtr != IntPtr.Zero)
                         {
                             IntPtr iTextDocument = IntPtr.Zero;
-                            Guid iiTextDocumentGuid = typeof(UnsafeNativeMethods.ITextDocument).GUID;
+                            Guid iiTextDocumentGuid = typeof(Richedit.ITextDocument).GUID;
 
                             try
                             {
                                 Marshal.QueryInterface(editOlePtr, ref iiTextDocumentGuid, out iTextDocument);
 
-                                if (Marshal.GetObjectForIUnknown(iTextDocument) is UnsafeNativeMethods.ITextDocument textDocument)
+                                if (Marshal.GetObjectForIUnknown(iTextDocument) is Richedit.ITextDocument textDocument)
                                 {
 
                                     // When the user calls RichTextBox::ScrollToCaret we want the RichTextBox to show as
@@ -1813,7 +1813,7 @@ namespace System.Windows.Forms
                                     int selStartLine = GetLineFromCharIndex(selStart);
 
                                     // 1. Scroll the RichTextBox all the way to the bottom
-                                    UnsafeNativeMethods.ITextRange textRange = textDocument.Range(WindowText.Length - 1, WindowText.Length - 1);
+                                    Richedit.ITextRange textRange = textDocument.Range(WindowText.Length - 1, WindowText.Length - 1);
                                     textRange.ScrollIntoView(0);   // 0 ==> tomEnd
 
                                     // 2. Get the first visible line.

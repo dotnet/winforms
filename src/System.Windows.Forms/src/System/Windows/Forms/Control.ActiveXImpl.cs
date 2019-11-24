@@ -1121,7 +1121,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Implements IPersistPropertyBag::Load
             /// </summary>
-            internal unsafe void Load(UnsafeNativeMethods.IPropertyBag pPropBag, UnsafeNativeMethods.IErrorLog pErrorLog)
+            internal unsafe void Load(Ole32.IPropertyBag pPropBag, Ole32.IErrorLog pErrorLog)
             {
                 PropertyDescriptorCollection props = TypeDescriptor.GetProperties(_control,
                     new Attribute[] { DesignerSerializationVisibilityAttribute.Visible });
@@ -1421,8 +1421,13 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Our implementation of IQuickActivate::QuickActivate
             /// </summary>
-            internal HRESULT QuickActivate(Ole32.QACONTAINER pQaContainer, UnsafeNativeMethods.tagQACONTROL pQaControl)
+            internal unsafe HRESULT QuickActivate(Ole32.QACONTAINER pQaContainer, Ole32.QACONTROL* pQaControl)
             {
+                if (pQaControl == null)
+                {
+                    return HRESULT.E_FAIL;
+                }
+
                 // Hookup our ambient colors
                 AmbientProperty prop = LookupAmbient(Ole32.DispatchID.AMBIENT_BACKCOLOR);
                 prop.Value = ColorTranslator.FromOle(unchecked((int)pQaContainer.colorBack));
@@ -1447,7 +1452,7 @@ namespace System.Windows.Forms
                 }
 
                 // Now use the rest of the goo that we got passed in.
-                pQaControl.cbSize = Marshal.SizeOf<UnsafeNativeMethods.tagQACONTROL>();
+                pQaControl->cbSize = (uint)Marshal.SizeOf<Ole32.QACONTROL>();
 
                 SetClientSite(pQaContainer.pClientSite);
 
@@ -1458,7 +1463,7 @@ namespace System.Windows.Forms
 
                 Ole32.OLEMISC status = 0;
                 ((UnsafeNativeMethods.IOleObject)_control).GetMiscStatus(Ole32.DVASPECT.CONTENT, &status);
-                pQaControl.dwMiscStatus = status;
+                pQaControl->dwMiscStatus = status;
 
                 // Advise the event sink so VB6 can catch events raised from UserControls.
                 // VB6 expects the control to do this during IQuickActivate, otherwise it will not hook events at runtime.
@@ -1480,7 +1485,7 @@ namespace System.Windows.Forms
                         {
                             // For the default source interface, call IConnectionPoint.Advise with the supplied event sink.
                             // This is easier said than done. See notes in AdviseHelper.AdviseConnectionPoint.
-                            AdviseHelper.AdviseConnectionPoint(_control, pQaContainer.pUnkEventSink, eventInterface, out pQaControl.dwEventCookie);
+                            AdviseHelper.AdviseConnectionPoint(_control, pQaContainer.pUnkEventSink, eventInterface, out pQaControl->dwEventCookie);
                         }
                         catch (Exception e) when (!ClientUtils.IsSecurityOrCriticalException(e))
                         {
@@ -1826,7 +1831,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Implements IPersistPropertyBag::Save
             /// </summary>
-            internal void Save(UnsafeNativeMethods.IPropertyBag pPropBag, BOOL fClearDirty, BOOL fSaveAllProperties)
+            internal void Save(Ole32.IPropertyBag pPropBag, BOOL fClearDirty, BOOL fSaveAllProperties)
             {
                 PropertyDescriptorCollection props = TypeDescriptor.GetProperties(_control,
                     new Attribute[] { DesignerSerializationVisibilityAttribute.Visible });
@@ -2545,7 +2550,7 @@ namespace System.Windows.Forms
             ///  This is a property bag implementation that sits on a stream.  It can
             ///  read and write the bag to the stream.
             /// </summary>
-            private class PropertyBagStream : UnsafeNativeMethods.IPropertyBag
+            private class PropertyBagStream : Ole32.IPropertyBag
             {
                 private Hashtable _bag = new Hashtable();
 
@@ -2592,7 +2597,7 @@ namespace System.Windows.Forms
                     }
                 }
 
-                HRESULT UnsafeNativeMethods.IPropertyBag.Read(string pszPropName, ref object pVar, UnsafeNativeMethods.IErrorLog pErrorLog)
+                HRESULT Ole32.IPropertyBag.Read(string pszPropName, ref object pVar, Ole32.IErrorLog pErrorLog)
                 {
                     if (!_bag.Contains(pszPropName))
                     {
@@ -2603,7 +2608,7 @@ namespace System.Windows.Forms
                     return HRESULT.S_OK;
                 }
 
-                HRESULT UnsafeNativeMethods.IPropertyBag.Write(string pszPropName, ref object pVar)
+                HRESULT Ole32.IPropertyBag.Write(string pszPropName, ref object pVar)
                 {
                     _bag[pszPropName] = pVar;
                     return HRESULT.S_OK;
