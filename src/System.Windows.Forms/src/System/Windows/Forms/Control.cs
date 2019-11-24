@@ -14023,28 +14023,26 @@ namespace System.Windows.Forms
             Ole32.DVTARGETDEVICE* ptd,
             IntPtr hdcTargetDev,
             IntPtr hdcDraw,
-            NativeMethods.COMRECT lprcBounds,
-            NativeMethods.COMRECT lprcWBounds,
+            RECT* lprcBounds,
+            RECT* lprcWBounds,
             IntPtr pfnContinue,
-            int dwContinue)
+            uint dwContinue)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:Draw");
 
             Debug.Indent();
-            try
-            {
-                ActiveXInstance.Draw(dwDrawAspect, lindex, pvAspect, ptd, hdcTargetDev,
-                                 hdcDraw, lprcBounds, lprcWBounds, pfnContinue, dwContinue);
-
-            }
-            catch (ExternalException ex)
-            {
-                return (HRESULT)ex.ErrorCode;
-            }
-            finally
-            {
-                Debug.Unindent();
-            }
+            HRESULT hr = ActiveXInstance.Draw(
+                dwDrawAspect,
+                lindex,
+                pvAspect,
+                ptd,
+                hdcTargetDev,
+                hdcDraw,
+                lprcBounds,
+                lprcWBounds,
+                pfnContinue,
+                dwContinue);
+            Debug.Unindent();
             return HRESULT.S_OK;
         }
 
@@ -14086,23 +14084,33 @@ namespace System.Windows.Forms
             return ActiveXInstance.GetAdvise(pAspects, pAdvf, ppAdvSink);
         }
 
-        unsafe void UnsafeNativeMethods.IViewObject2.Draw(
+        unsafe HRESULT UnsafeNativeMethods.IViewObject2.Draw(
             Ole32.DVASPECT dwDrawAspect,
             int lindex,
             IntPtr pvAspect,
             Ole32.DVTARGETDEVICE* ptd,
             IntPtr hdcTargetDev,
             IntPtr hdcDraw,
-            NativeMethods.COMRECT lprcBounds,
-            NativeMethods.COMRECT lprcWBounds,
+            RECT* lprcBounds,
+            RECT* lprcWBounds,
             IntPtr pfnContinue,
-            int dwContinue)
+            uint dwContinue)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:Draw");
             Debug.Indent();
-            ActiveXInstance.Draw(dwDrawAspect, lindex, pvAspect, ptd, hdcTargetDev,
-                                 hdcDraw, lprcBounds, lprcWBounds, pfnContinue, dwContinue);
+            HRESULT hr = ActiveXInstance.Draw(
+                dwDrawAspect,
+                lindex,
+                pvAspect,
+                ptd,
+                hdcTargetDev,
+                hdcDraw,
+                lprcBounds,
+                lprcWBounds,
+                pfnContinue,
+                dwContinue);
             Debug.Unindent();
+            return hr;
         }
 
         unsafe HRESULT UnsafeNativeMethods.IViewObject2.GetColorSet(

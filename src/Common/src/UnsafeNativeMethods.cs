@@ -980,13 +980,10 @@ namespace System.Windows.Forms
                 Ole32.DVTARGETDEVICE* ptd,
                 IntPtr hdcTargetDev,
                 IntPtr hdcDraw,
-                [In]
-                NativeMethods.COMRECT lprcBounds,
-                [In]
-                NativeMethods.COMRECT lprcWBounds,
+                RECT* lprcBounds,
+                RECT* lprcWBounds,
                 IntPtr pfnContinue,
-                [In]
-                int dwContinue);
+                uint dwContinue);
 
             [PreserveSig]
             HRESULT GetColorSet(
@@ -1030,20 +1027,18 @@ namespace System.Windows.Forms
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
         public unsafe interface IViewObject2 /* : IViewObject */
         {
-            void Draw(
+            [PreserveSig]
+            HRESULT Draw(
                 Ole32.DVASPECT dwDrawAspect,
                 int lindex,
                 IntPtr pvAspect,
                 Ole32.DVTARGETDEVICE* ptd,
                 IntPtr hdcTargetDev,
                 IntPtr hdcDraw,
-                [In]
-                NativeMethods.COMRECT lprcBounds,
-                [In]
-                NativeMethods.COMRECT lprcWBounds,
+                RECT* lprcBounds,
+                RECT* lprcWBounds,
                 IntPtr pfnContinue,
-                [In]
-                int dwContinue);
+                uint dwContinue);
 
             [PreserveSig]
             HRESULT GetColorSet(
