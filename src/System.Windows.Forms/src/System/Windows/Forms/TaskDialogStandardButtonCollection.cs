@@ -41,6 +41,24 @@ namespace System.Windows.Forms
             return collection;
         }
 
+        // Note: This indexer is not needed for functionality; it only exists to avoid an overload
+        // resolution behavior in the C# compiler which would otherwise use the TaskDialogResult
+        // indexer from class KeyedCollection instead of the int indexer from class Collection
+        // for an expression like "page.StandardButtons[0]" (using the int literal 0).
+        // See: https://github.com/dotnet/winforms/pull/1133#issuecomment-557483834
+        /// <summary>
+        ///   Gets or sets the element at the specified index.
+        /// </summary>
+        /// <param name="index">The zero-based index of the element to get or set.</param>
+        /// <returns>The element at the specified index.</returns>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="index"/> is less than zero.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="index"/> is equal to or greater than <see cref="Count"/>.</exception>
+        public new TaskDialogStandardButton this[int index]
+        {
+            get => base[index];
+            set => base[index] = value;
+        }
+
         internal TaskDialogPage? BoundPage
         {
             get;
