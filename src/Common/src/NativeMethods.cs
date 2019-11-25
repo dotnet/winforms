@@ -332,10 +332,6 @@ namespace System.Windows.Forms
         LOCK_EXCLUSIVE = 0x2,
         LOCK_ONLYONCE = 0x4,
         LV_VIEW_TILE = 0x0004,
-        LVBKIF_SOURCE_NONE = 0x0000,
-        LVBKIF_SOURCE_URL = 0x0002,
-        LVBKIF_STYLE_NORMAL = 0x0000,
-        LVBKIF_STYLE_TILE = 0x0010,
         LVS_ICON = 0x0000,
         LVS_REPORT = 0x0001,
         LVS_SMALLICON = 0x0002,
@@ -1531,17 +1527,6 @@ namespace System.Windows.Forms
             public int flags = 0;
             public int iItem = 0;
             public int iSubItem = 0;
-        }
-
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-        public class LVBKIMAGE
-        {
-            public int ulFlags;
-            public IntPtr hBmp = IntPtr.Zero; // not used
-            public string pszImage;
-            public int cchImageMax;
-            public int xOffset;
-            public int yOffset;
         }
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
