@@ -116,6 +116,7 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VisualBasicRuntimeTest", "src\Microsoft.VisualBasic\tests\IntegrationTests\VisualBasicRuntimeTest\VisualBasicRuntimeTest.csproj", "{EC7608D1-1857-432E-930F-0F89B98979FB}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MauiXDataFormatsTests", "src\System.Windows.Forms\tests\IntegrationTests\MauiTests\MauiXDataFormatsTests\MauiXDataFormatsTests.csproj", "{AC13B972-E0F6-4AB8-A3D3-583B8D7D4FE7}"
+EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MauiLabelTests", "src\System.Windows.Forms\tests\IntegrationTests\MauiTests\MauiLabelTests\MauiLabelTests.csproj", "{D49B43AE-F6CC-43BA-91B6-1B248F22BCDD}"
 EndProject
 Global
