@@ -97,13 +97,11 @@
     <Compile Include="..\..\Common\src\Interop\Kernel32\Interop.MultiByteToWideChar.cs" Link="Interop\Kernel32\Interop.MultiByteToWideChar.cs" />
     <Compile Include="..\..\Common\src\Interop\NtDll\Interop.RTL_OSVERSIONINFOEX.cs" Link="Interop\NtDll\Interop.RTL_OSVERSIONINFOEX.cs" />
     <Compile Include="..\..\Common\src\Interop\NtDll\Interop.RtlGetVersion.cs" Link="Interop\NtDll\Interop.RtlGetVersion.cs" />
-    <Compile Include="..\..\Common\src\Interop\Ole32\Interop.ADVF.cs" Link="Interop\Ole32\Interop.ADVF.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.CALLCONV.cs" Link="Interop\Ole32\Interop.CALLCONV.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.DESCKIND.cs" Link="Interop\Ole32\Interop.DESCKIND.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.DispatchId.cs" Link="Interop\Ole32\Interop.DispatchId.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.DISPPARAMS.cs" Link="Interop\Ole32\Interop.DISPPARAMS.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.DVASPECT.cs" Link="Interop\Ole32\Interop.DVASPECT.cs" />
-    <Compile Include="..\..\Common\src\Interop\Ole32\Interop.DVTARGETDEVICE.cs" Link="Interop\Ole32\Interop.DVTARGETDEVICE.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.ELEMDESC.cs" Link="Interop\Ole32\Interop.ELEMDESC.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.EXCEPINFO.cs" Link="Interop\Ole32\Interop.EXCEPINFO.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.FUNCDESC.cs" Link="Interop\Ole32\Interop.FUNCDESC.cs" />
