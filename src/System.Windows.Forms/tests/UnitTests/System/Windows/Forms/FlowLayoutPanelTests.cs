@@ -10,8 +10,16 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
+    using Point = System.Drawing.Point;
+    using Size = System.Drawing.Size;
+
     public class FlowLayoutPanelTests
     {
+        public FlowLayoutPanelTests()
+        {
+            Application.ThreadException += (sender, e) => throw new Exception(e.Exception.StackTrace.ToString());
+        }
+
         [WinFormsFact]
         public void FlowLayoutPanel_Ctor_Default()
         {
@@ -198,6 +206,13 @@ namespace System.Windows.Forms.Tests
             Assert.False(extenderProvider.CanExtend(extendee));
         }
 
+        [WinFormsFact]
+        public void FlowLayoutPanel_GetAutoSizeMode_Invoke_ReturnsExpected()
+        {
+            using var control = new SubFlowLayoutPanel();
+            Assert.Equal(AutoSizeMode.GrowOnly, control.GetAutoSizeMode());
+        }
+
         [Fact]
         public void GetFlowBreak_ValidControl_ReturnsExpected()
         {
@@ -210,6 +225,36 @@ namespace System.Windows.Forms.Tests
         {
             var panel = new FlowLayoutPanel();
             Assert.Throws<ArgumentNullException>("control", () => panel.GetFlowBreak(null));
+        }
+
+        [WinFormsTheory]
+        [InlineData(ControlStyles.ContainerControl, true)]
+        [InlineData(ControlStyles.UserPaint, true)]
+        [InlineData(ControlStyles.Opaque, false)]
+        [InlineData(ControlStyles.ResizeRedraw, false)]
+        [InlineData(ControlStyles.FixedWidth, false)]
+        [InlineData(ControlStyles.FixedHeight, false)]
+        [InlineData(ControlStyles.StandardClick, true)]
+        [InlineData(ControlStyles.Selectable, false)]
+        [InlineData(ControlStyles.UserMouse, false)]
+        [InlineData(ControlStyles.SupportsTransparentBackColor, true)]
+        [InlineData(ControlStyles.StandardDoubleClick, true)]
+        [InlineData(ControlStyles.AllPaintingInWmPaint, false)]
+        [InlineData(ControlStyles.CacheText, false)]
+        [InlineData(ControlStyles.EnableNotifyMessage, false)]
+        [InlineData(ControlStyles.DoubleBuffer, false)]
+        [InlineData(ControlStyles.OptimizedDoubleBuffer, false)]
+        [InlineData(ControlStyles.UseTextForAccessibility, true)]
+        [InlineData((ControlStyles)0, true)]
+        [InlineData((ControlStyles)int.MaxValue, false)]
+        [InlineData((ControlStyles)(-1), false)]
+        public void FlowLayoutPanel_GetStyle_Invoke_ReturnsExpected(ControlStyles flag, bool expected)
+        {
+            using var control = new SubFlowLayoutPanel();
+            Assert.Equal(expected, control.GetStyle(flag));
+
+            // Call again to test caching.
+            Assert.Equal(expected, control.GetStyle(flag));
         }
 
         [Theory]
@@ -303,6 +348,10 @@ namespace System.Windows.Forms.Tests
                 get => base.VScroll;
                 set => base.VScroll = value;
             }
+
+            public new AutoSizeMode GetAutoSizeMode() => base.GetAutoSizeMode();
+
+            public new bool GetStyle(ControlStyles flag) => base.GetStyle(flag);
         }
     }
 }

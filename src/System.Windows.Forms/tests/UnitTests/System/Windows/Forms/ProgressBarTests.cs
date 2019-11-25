@@ -8,6 +8,7 @@ using System.Drawing;
 using Moq;
 using WinForms.Common.Tests;
 using Xunit;
+using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
@@ -16,6 +17,11 @@ namespace System.Windows.Forms.Tests
 
     public class ProgressBarTests
     {
+        public ProgressBarTests()
+        {
+            Application.ThreadException += (sender, e) => throw new Exception(e.Exception.StackTrace.ToString());
+        }
+
         [WinFormsFact]
         public void ProgressBar_Ctor_Default()
         {
@@ -1714,6 +1720,13 @@ namespace System.Windows.Forms.Tests
             Assert.NotEqual(IntPtr.Zero, control.Handle);
         }
 
+        [WinFormsFact]
+        public void ProgressBar_GetAutoSizeMode_Invoke_ReturnsExpected()
+        {
+            using var control = new SubProgressBar();
+            Assert.Equal(AutoSizeMode.GrowOnly, control.GetAutoSizeMode());
+        }
+
         [WinFormsTheory]
         [InlineData(ControlStyles.ContainerControl, false)]
         [InlineData(ControlStyles.UserPaint, false)]
@@ -1732,11 +1745,15 @@ namespace System.Windows.Forms.Tests
         [InlineData(ControlStyles.DoubleBuffer, false)]
         [InlineData(ControlStyles.OptimizedDoubleBuffer, false)]
         [InlineData(ControlStyles.UseTextForAccessibility, false)]
+        [InlineData((ControlStyles)0, true)]
         [InlineData((ControlStyles)int.MaxValue, false)]
         [InlineData((ControlStyles)(-1), false)]
         public void ProgressBar_GetStyle_Invoke_ReturnsExpected(ControlStyles flag, bool expected)
         {
             using var control = new SubProgressBar();
+            Assert.Equal(expected, control.GetStyle(flag));
+
+            // Call again to test caching.
             Assert.Equal(expected, control.GetStyle(flag));
         }
 
@@ -2600,6 +2617,8 @@ namespace System.Windows.Forms.Tests
             public new AccessibleObject CreateAccessibilityInstance() => base.CreateAccessibilityInstance();
 
             public new void CreateHandle() => base.CreateHandle();
+
+            public new AutoSizeMode GetAutoSizeMode() => base.GetAutoSizeMode();
 
             public new bool GetStyle(ControlStyles flag) => base.GetStyle(flag);
 

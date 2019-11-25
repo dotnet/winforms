@@ -10,8 +10,16 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
+    using Point = System.Drawing.Point;
+    using Size = System.Drawing.Size;
+
     public class ScrollableControlTests
     {
+        public ScrollableControlTests()
+        {
+            Application.ThreadException += (sender, e) => throw new Exception(e.Exception.StackTrace.ToString());
+        }
+
         [WinFormsFact]
         public void ScrollableControl_Ctor_Default()
         {
@@ -507,6 +515,43 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expectedVScroll, control.VScroll);
         }
 
+        [WinFormsFact]
+        public void ScrollableControl_GetAutoSizeMode_Invoke_ReturnsExpected()
+        {
+            using var control = new SubScrollableControl();
+            Assert.Equal(AutoSizeMode.GrowOnly, control.GetAutoSizeMode());
+        }
+
+        [WinFormsTheory]
+        [InlineData(ControlStyles.ContainerControl, true)]
+        [InlineData(ControlStyles.UserPaint, true)]
+        [InlineData(ControlStyles.Opaque, false)]
+        [InlineData(ControlStyles.ResizeRedraw, false)]
+        [InlineData(ControlStyles.FixedWidth, false)]
+        [InlineData(ControlStyles.FixedHeight, false)]
+        [InlineData(ControlStyles.StandardClick, true)]
+        [InlineData(ControlStyles.Selectable, true)]
+        [InlineData(ControlStyles.UserMouse, false)]
+        [InlineData(ControlStyles.SupportsTransparentBackColor, false)]
+        [InlineData(ControlStyles.StandardDoubleClick, true)]
+        [InlineData(ControlStyles.AllPaintingInWmPaint, false)]
+        [InlineData(ControlStyles.CacheText, false)]
+        [InlineData(ControlStyles.EnableNotifyMessage, false)]
+        [InlineData(ControlStyles.DoubleBuffer, false)]
+        [InlineData(ControlStyles.OptimizedDoubleBuffer, false)]
+        [InlineData(ControlStyles.UseTextForAccessibility, true)]
+        [InlineData((ControlStyles)0, true)]
+        [InlineData((ControlStyles)int.MaxValue, false)]
+        [InlineData((ControlStyles)(-1), false)]
+        public void ScrollableControl_GetStyle_Invoke_ReturnsExpected(ControlStyles flag, bool expected)
+        {
+            using var control = new SubScrollableControl();
+            Assert.Equal(expected, control.GetStyle(flag));
+
+            // Call again to test caching.
+            Assert.Equal(expected, control.GetStyle(flag));
+        }
+
         [Theory]
         [CommonMemberData(nameof(CommonTestHelper.GetLayoutEventArgsTheoryData))]
         public void ScrollableControl_OnLayout_Invoke_CallsLayout(LayoutEventArgs eventArgs)
@@ -815,7 +860,11 @@ namespace System.Windows.Forms.Tests
 
             public new void AdjustFormScrollbars(bool displayScrollbars) => base.AdjustFormScrollbars(displayScrollbars);
 
+            public new AutoSizeMode GetAutoSizeMode() => base.GetAutoSizeMode();
+
             public new bool GetScrollState(int bit) => base.GetScrollState(bit);
+
+            public new bool GetStyle(ControlStyles flag) => base.GetStyle(flag);
 
             public new void OnLayout(LayoutEventArgs e) => base.OnLayout(e);
 

@@ -9,11 +9,20 @@ using System.Linq;
 using Moq;
 using WinForms.Common.Tests;
 using Xunit;
+using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
+    using Point = System.Drawing.Point;
+    using Size = System.Drawing.Size;
+
     public class TabControlTests
     {
+        public TabControlTests()
+        {
+            Application.ThreadException += (sender, e) => throw new Exception(e.Exception.StackTrace.ToString());
+        }
+
         [WinFormsFact]
         public void TabControl_Ctor_Default()
         {
@@ -3359,6 +3368,13 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
+        public void TabControl_GetAutoSizeMode_Invoke_ReturnsExpected()
+        {
+            using var control = new SubTabControl();
+            Assert.Equal(AutoSizeMode.GrowOnly, control.GetAutoSizeMode());
+        }
+
+        [WinFormsFact]
         public void TabControl_GetItems_InvokeWithoutPages_ReturnsExpected()
         {
             using var control = new SubTabControl();
@@ -3466,11 +3482,15 @@ namespace System.Windows.Forms.Tests
         [InlineData(ControlStyles.DoubleBuffer, false)]
         [InlineData(ControlStyles.OptimizedDoubleBuffer, false)]
         [InlineData(ControlStyles.UseTextForAccessibility, true)]
+        [InlineData((ControlStyles)0, true)]
         [InlineData((ControlStyles)int.MaxValue, false)]
         [InlineData((ControlStyles)(-1), false)]
         public void TabControl_GetStyle_Invoke_ReturnsExpected(ControlStyles flag, bool expected)
         {
             using var control = new SubTabControl();
+            Assert.Equal(expected, control.GetStyle(flag));
+
+            // Call again to test caching.
             Assert.Equal(expected, control.GetStyle(flag));
         }
 
@@ -4699,6 +4719,8 @@ namespace System.Windows.Forms.Tests
             public new Control.ControlCollection CreateControlsInstance() => base.CreateControlsInstance();
 
             public new void CreateHandle() => base.CreateHandle();
+
+            public new AutoSizeMode GetAutoSizeMode() => base.GetAutoSizeMode();
 
             public new object[] GetItems() => base.GetItems();
 
