@@ -46,9 +46,6 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.Hhctrl, CharSet = CharSet.Auto)]
         public static extern int HtmlHelp(HandleRef hwndCaller, [MarshalAs(UnmanagedType.LPTStr)]string pszFile, int uCommand, [MarshalAs(UnmanagedType.LPStruct)]NativeMethods.HH_AKLINK dwData);
 
-        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern bool PatBlt(HandleRef hdc, int left, int top, int width, int height, int rop);
-
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public static extern bool GetMonitorInfo(HandleRef hmonitor, [In, Out]NativeMethods.MONITORINFOEX info);
 

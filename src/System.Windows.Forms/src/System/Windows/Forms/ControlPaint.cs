@@ -2217,7 +2217,7 @@ namespace System.Windows.Forms
         /// </summary>
         public static void FillReversibleRectangle(Rectangle rectangle, Color backColor)
         {
-            int rop3 = GetColorRop(backColor,
+            Gdi32.ROP rop3 = (Gdi32.ROP)GetColorRop(backColor,
                                    0xa50065, // RasterOp.BRUSH.Invert().XorWith(RasterOp.TARGET),
                                    0x5a0049); // RasterOp.BRUSH.XorWith(RasterOp.TARGET));
             Gdi32.R2 rop2 = Gdi32.R2.NOT;
@@ -2229,7 +2229,7 @@ namespace System.Windows.Forms
             IntPtr oldBrush = Gdi32.SelectObject(dc, brush);
 
             // PatBlt must be the only Win32 function that wants height in width rather than x2,y2.
-            SafeNativeMethods.PatBlt(new HandleRef(null, dc), rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height, rop3);
+            Gdi32.PatBlt(dc, rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height, rop3);
 
             Gdi32.SetROP2(dc, prevRop2);
             Gdi32.SelectObject(dc, oldBrush);

@@ -736,7 +736,7 @@ namespace System.Windows.Forms
             IntPtr dc = User32.GetDCEx(ParentInternal, IntPtr.Zero, User32.DCX.CACHE | User32.DCX.LOCKWINDOWUPDATE);
             IntPtr halftone = ControlPaint.CreateHalftoneHBRUSH();
             IntPtr saveBrush = Gdi32.SelectObject(dc, halftone);
-            SafeNativeMethods.PatBlt(new HandleRef(ParentInternal, dc), r.X, r.Y, r.Width, r.Height, NativeMethods.PATINVERT);
+            Gdi32.PatBlt(new HandleRef(ParentInternal, dc), r.X, r.Y, r.Width, r.Height, Gdi32.ROP.PATINVERT);
             Gdi32.SelectObject(dc, saveBrush);
             Gdi32.DeleteObject(halftone);
             User32.ReleaseDC(new HandleRef(ParentInternal, ParentInternal.Handle), dc);
