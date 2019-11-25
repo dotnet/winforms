@@ -189,8 +189,13 @@ namespace System.Windows.Forms
 
                     byte[] enoughBits = new byte[bitmap.Width * bitmap.Height];
                     IntPtr bitmapInfo = CreateBitmapInfo(bitmap, hdcS);
-                    hBitmap = SafeNativeMethods.CreateDIBSection(new HandleRef(null, hdcS), new HandleRef(null, bitmapInfo), NativeMethods.DIB_RGB_COLORS,
-                                                                        enoughBits, IntPtr.Zero, 0);
+                    hBitmap = Gdi32.CreateDIBSection(
+                        hdcS,
+                        bitmapInfo,
+                        Gdi32.DIB.RGB_COLORS,
+                        enoughBits,
+                        IntPtr.Zero,
+                        0);
 
                     Marshal.FreeCoTaskMem(bitmapInfo);
 
