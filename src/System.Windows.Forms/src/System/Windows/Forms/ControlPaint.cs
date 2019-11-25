@@ -150,7 +150,7 @@ namespace System.Windows.Forms
             // leave everything else 0
 
             // Set up color table --
-            IntPtr palette = SafeNativeMethods.CreateHalftonePalette(new HandleRef(null, hdcS));
+            IntPtr palette = Gdi32.CreateHalftonePalette(hdcS);
             Gdi32.GetObjectW(palette, out uint entryCount);
             var entries = new Gdi32.PALETTEENTRY[entryCount];
             Gdi32.GetPaletteEntries(palette, entries);

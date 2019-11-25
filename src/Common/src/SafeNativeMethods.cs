@@ -56,9 +56,6 @@ namespace System.Windows.Forms
         public static extern bool EnumDisplayMonitors(HandleRef hdc, NativeMethods.COMRECT rcClip, NativeMethods.MonitorEnumProc lpfnEnum, IntPtr dwData);
 
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true)]
-        public static extern IntPtr /*HPALETTE*/ CreateHalftonePalette(HandleRef hdc);
-
-        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true)]
         public static extern IntPtr CreateDIBSection(HandleRef hdc, HandleRef pbmi, int iUsage, byte[] ppvBits, IntPtr hSection, int dwOffset);
 
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true)]
