@@ -73,7 +73,8 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
 
         private Boolean Verify_Format_Type(string strExp, string strOrg)
         {
-            if (String.Compare(strExp.Substring(strExp.IndexOf(":") + 1), strOrg, true) == 0)
+            string strExpSub = strExp.Substring(strExp.IndexOf(":") + 1);
+            if (string.Compare(strExpSub, strOrg, true) == 0)
             {
                 return true;
             }
