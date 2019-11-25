@@ -83,6 +83,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(75, control.Right);
             Assert.False(control.RightToLeft);
             Assert.Equal(RightToLeft.No, ((Control)control).RightToLeft);
+            Assert.True(control.ShowFocusCues);
+            Assert.True(control.ShowKeyboardCues);
             Assert.Null(control.Site);
             Assert.Equal(new Size(75, 23), control.Size);
             Assert.Equal(0, control.TabIndex);
@@ -163,6 +165,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(75, control.Right);
             Assert.False(control.RightToLeft);
             Assert.Equal(RightToLeft.No, ((Control)control).RightToLeft);
+            Assert.True(control.ShowFocusCues);
+            Assert.True(control.ShowKeyboardCues);
             Assert.Null(control.Site);
             Assert.Equal(new Size(75, 23), control.Size);
             Assert.Equal(0, control.TabIndex);
@@ -1338,6 +1342,10 @@ namespace System.Windows.Forms.Tests
                 get => base.ResizeRedraw;
                 set => base.ResizeRedraw = value;
             }
+
+            public new bool ShowFocusCues => base.ShowFocusCues;
+
+            public new bool ShowKeyboardCues => base.ShowKeyboardCues;
 
             public new void AttachInterfaces() => base.AttachInterfaces();
 

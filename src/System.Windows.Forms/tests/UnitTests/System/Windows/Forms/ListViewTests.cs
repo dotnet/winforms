@@ -120,8 +120,10 @@ namespace System.Windows.Forms.Tests
             Assert.Same(control.SelectedIndices, control.SelectedIndices);
             Assert.Empty(control.SelectedItems);
             Assert.Same(control.SelectedItems, control.SelectedItems);
+            Assert.True(control.ShowFocusCues);
             Assert.True(control.ShowGroups);
             Assert.False(control.ShowItemToolTips);
+            Assert.True(control.ShowKeyboardCues);
             Assert.Null(control.SmallImageList);
             Assert.Null(control.Site);
             Assert.Equal(new Size(121, 97), control.Size);
@@ -3442,6 +3444,10 @@ namespace System.Windows.Forms.Tests
                 get => base.ResizeRedraw;
                 set => base.ResizeRedraw = value;
             }
+
+            public new bool ShowFocusCues => base.ShowFocusCues;
+
+            public new bool ShowKeyboardCues => base.ShowKeyboardCues;
 
             public new bool GetStyle(ControlStyles flag) => base.GetStyle(flag);
 

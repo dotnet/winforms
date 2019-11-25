@@ -84,6 +84,8 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.RightToLeftLayout);
             Assert.Equal(-1, control.SelectedIndex);
             Assert.Null(control.SelectedTab);
+            Assert.True(control.ShowFocusCues);
+            Assert.True(control.ShowKeyboardCues);
             Assert.False(control.ShowToolTips);
             Assert.Null(control.Site);
             Assert.Equal(new Size(200, 100), control.Size);
@@ -4689,6 +4691,10 @@ namespace System.Windows.Forms.Tests
                 get => base.ResizeRedraw;
                 set => base.ResizeRedraw = value;
             }
+
+            public new bool ShowFocusCues => base.ShowFocusCues;
+
+            public new bool ShowKeyboardCues => base.ShowKeyboardCues;
 
             public new Control.ControlCollection CreateControlsInstance() => base.CreateControlsInstance();
 

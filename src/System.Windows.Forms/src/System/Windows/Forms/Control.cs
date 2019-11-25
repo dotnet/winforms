@@ -3718,15 +3718,14 @@ namespace System.Windows.Forms
                     else
                     {
                         // if we're in the hidden state, we need to manufacture an update message so everyone knows it.
-                        //
-                        int actionMask = NativeMethods.UISF_HIDEACCEL << 16;
+                        int actionMask = (int)User32.UISF.HIDEACCEL << 16;
                         _uiCuesState |= UICuesStates.KeyboardHidden;
 
                         // The side effect of this initial state is that adding new controls may clear the accelerator
                         // state (has been this way forever)
                         UnsafeNativeMethods.SendMessage(new HandleRef(TopMostParent, TopMostParent.Handle),
                                 WindowMessages.WM_CHANGEUISTATE,
-                                (IntPtr)(actionMask | NativeMethods.UIS_SET),
+                                (IntPtr)(actionMask | (int)User32.UIS.SET),
                                 IntPtr.Zero);
                     }
                 }
@@ -3764,13 +3763,13 @@ namespace System.Windows.Forms
                         _uiCuesState |= UICuesStates.FocusHidden;
 
                         // if we're in the hidden state, we need to manufacture an update message so everyone knows it.
-                        int actionMask = (NativeMethods.UISF_HIDEACCEL | NativeMethods.UISF_HIDEFOCUS) << 16;
+                        int actionMask = (int)(User32.UISF.HIDEACCEL | User32.UISF.HIDEFOCUS) << 16;
 
                         // The side effect of this initial state is that adding new controls may clear the focus cue state
                         // state (has been this way forever)
                         UnsafeNativeMethods.SendMessage(new HandleRef(TopMostParent, TopMostParent.Handle),
                                 WindowMessages.WM_CHANGEUISTATE,
-                                (IntPtr)(actionMask | NativeMethods.UIS_SET),
+                                (IntPtr)(actionMask | (int)User32.UIS.SET),
                                 IntPtr.Zero);
 
                     }
@@ -9579,16 +9578,16 @@ namespace System.Windows.Forms
             }
 
             Control topMostParent = null;
-            int current = unchecked((int)(long)SendMessage(WindowMessages.WM_QUERYUISTATE, 0, 0));
+            User32.UISF current = unchecked((User32.UISF)(long)SendMessage(WindowMessages.WM_QUERYUISTATE, 0, 0));
 
             // dont trust when a control says the accelerators are showing.
             // make sure the topmost parent agrees with this as we could be in a mismatched state.
             if (current == 0 /*accelerator and focus cues are showing*/)
             {
                 topMostParent = TopMostParent;
-                current = (int)topMostParent.SendMessage(WindowMessages.WM_QUERYUISTATE, 0, 0);
+                current = (User32.UISF)topMostParent.SendMessage(WindowMessages.WM_QUERYUISTATE, 0, 0);
             }
-            int toClear = 0;
+            User32.UISF toClear = 0;
 
             // if we are here, a key or tab has been pressed on this control.
             // now that we know the state of accelerators, check to see if we need
@@ -9598,19 +9597,19 @@ namespace System.Windows.Forms
 
             if (keyCode == Keys.F10 || keyCode == Keys.Menu)
             {
-                if ((current & NativeMethods.UISF_HIDEACCEL) != 0)
+                if ((current & User32.UISF.HIDEACCEL) != 0)
                 {
                     // Keyboard accelerators are hidden, they need to be shown
-                    toClear |= NativeMethods.UISF_HIDEACCEL;
+                    toClear |= User32.UISF.HIDEACCEL;
                 }
             }
 
             if (keyCode == Keys.Tab)
             {
-                if ((current & NativeMethods.UISF_HIDEFOCUS) != 0)
+                if ((current & User32.UISF.HIDEFOCUS) != 0)
                 {
                     // Focus indicators are hidden, they need to be shown
-                    toClear |= NativeMethods.UISF_HIDEFOCUS;
+                    toClear |= User32.UISF.HIDEFOCUS;
                 }
             }
 
@@ -9635,7 +9634,7 @@ namespace System.Windows.Forms
                 UnsafeNativeMethods.SendMessage(
                     new HandleRef(topMostParent, topMostParent.Handle),
                     User32.GetParent(topMostParent.Handle) == IntPtr.Zero ? WindowMessages.WM_CHANGEUISTATE : WindowMessages.WM_UPDATEUISTATE,
-                    (IntPtr)(NativeMethods.UIS_CLEAR | (toClear << 16)),
+                    (IntPtr)((int)User32.UIS.CLEAR | ((int)toClear << 16)),
                     IntPtr.Zero);
             }
         }
@@ -12859,11 +12858,11 @@ namespace System.Windows.Forms
 
             DefWndProc(ref m);
 
-            int cmd = NativeMethods.Util.LOWORD(m.WParam);
+            User32.UIS cmd = (User32.UIS)NativeMethods.Util.LOWORD(m.WParam);
 
             // if we're initializing, dont bother updating the uiCuesState/Firing the event.
 
-            if (cmd == NativeMethods.UIS_INITIALIZE)
+            if (cmd == User32.UIS.INITIALIZE)
             {
                 return;
             }
@@ -12877,12 +12876,12 @@ namespace System.Windows.Forms
             // When we're called here with a UIS_CLEAR and the hidden state is set
             // that means we want to show the accelerator.
             UICues UIcues = UICues.None;
-            if ((NativeMethods.Util.HIWORD(m.WParam) & NativeMethods.UISF_HIDEACCEL) != 0)
+            if (((User32.UISF)NativeMethods.Util.HIWORD(m.WParam) & User32.UISF.HIDEACCEL) != 0)
             {
 
                 // yes, clear means show.  nice api, guys.
                 //
-                bool showKeyboard = (cmd == NativeMethods.UIS_CLEAR);
+                bool showKeyboard = (cmd == User32.UIS.CLEAR);
 
                 if (showKeyboard != keyboard || !keyboardInitialized)
                 {
@@ -12902,10 +12901,10 @@ namespace System.Windows.Forms
             }
 
             // Same deal for the Focus cues as the keyboard cues.
-            if ((NativeMethods.Util.HIWORD(m.WParam) & NativeMethods.UISF_HIDEFOCUS) != 0)
+            if (((User32.UISF)NativeMethods.Util.HIWORD(m.WParam) & User32.UISF.HIDEFOCUS) != 0)
             {
                 // yes, clear means show.  nice api, guys.
-                bool showFocus = (cmd == NativeMethods.UIS_CLEAR);
+                bool showFocus = (cmd == User32.UIS.CLEAR);
 
                 if (showFocus != focus || !focusInitialized)
                 {

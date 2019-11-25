@@ -102,7 +102,9 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(-1, control.SelectedImageIndex);
             Assert.Equal(string.Empty, control.SelectedImageKey);
             Assert.Null(control.SelectedNode);
+            Assert.True(control.ShowFocusCues);
             Assert.True(control.ShowLines);
+            Assert.True(control.ShowKeyboardCues);
             Assert.False(control.ShowNodeToolTips);
             Assert.True(control.ShowPlusMinus);
             Assert.True(control.ShowRootLines);
@@ -6584,6 +6586,10 @@ namespace System.Windows.Forms.Tests
                 get => base.ResizeRedraw;
                 set => base.ResizeRedraw = value;
             }
+
+            public new bool ShowFocusCues => base.ShowFocusCues;
+
+            public new bool ShowKeyboardCues => base.ShowKeyboardCues;
 
             public new AutoSizeMode GetAutoSizeMode() => base.GetAutoSizeMode();
 

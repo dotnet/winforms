@@ -9,6 +9,7 @@ using System.Drawing.Imaging;
 using Moq;
 using WinForms.Common.Tests;
 using Xunit;
+using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
@@ -8430,6 +8431,108 @@ namespace System.Windows.Forms.Tests
         {
             var control = new Control();
             Assert.Throws<InvalidEnumArgumentException>("value", () => control.RightToLeft = value);
+        }
+
+        [WinFormsFact]
+        public void Control_ShowFocusCues_GetWithHandle_ReturnsExpected()
+        {
+            using var control = new SubControl();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            Assert.False(control.ShowFocusCues);
+        }
+        
+        [WinFormsTheory]
+        [InlineData((int)User32.UIS.CLEAR | ((int)User32.UISF.ACTIVE << 16), false)]
+        [InlineData((int)User32.UIS.CLEAR | ((int)User32.UISF.HIDEACCEL << 16), false)]
+        [InlineData((int)User32.UIS.CLEAR | ((int)User32.UISF.HIDEFOCUS << 16), true)]
+        [InlineData((int)User32.UIS.CLEAR | ((int)(User32.UISF.HIDEACCEL | User32.UISF.HIDEFOCUS) << 16), true)]
+        [InlineData((int)User32.UIS.SET | ((int)User32.UISF.ACTIVE << 16), false)]
+        [InlineData((int)User32.UIS.SET | ((int)User32.UISF.HIDEACCEL << 16), false)]
+        [InlineData((int)User32.UIS.SET | ((int)User32.UISF.HIDEFOCUS << 16), false)]
+        [InlineData((int)User32.UIS.SET | ((int)(User32.UISF.HIDEACCEL | User32.UISF.HIDEFOCUS) << 16), false)]
+        [InlineData((int)User32.UIS.INITIALIZE | ((int)User32.UISF.ACTIVE << 16), false)]
+        [InlineData((int)User32.UIS.INITIALIZE | ((int)User32.UISF.HIDEACCEL << 16), false)]
+        [InlineData((int)User32.UIS.INITIALIZE | ((int)User32.UISF.HIDEFOCUS << 16), false)]
+        [InlineData((int)User32.UIS.INITIALIZE | ((int)(User32.UISF.HIDEACCEL | User32.UISF.HIDEFOCUS) << 16), false)]
+        public void Control_ShowFocusCues_GetWithHandleMessageSent_ReturnsExpected(int wParam, bool expected)
+        {
+            using var control = new SubControl();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            User32.SendMessageW(control.Handle, User32.WindowMessage.WM_UPDATEUISTATE, (IntPtr)wParam, IntPtr.Zero);
+            Assert.Equal(expected, control.ShowFocusCues);
+        }
+        
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        public void Control_ShowFocusCues_GetWithSiteWithHandle_ReturnsExpected(bool designMode)
+        {
+            var mockSite = new Mock<ISite>(MockBehavior.Strict);
+            mockSite
+                .Setup(s => s.Container)
+                .Returns((IContainer)null);
+            mockSite
+                .Setup(s => s.GetService(typeof(AmbientProperties)))
+                .Returns(null);
+            mockSite
+                .Setup(s => s.DesignMode)
+                .Returns(designMode);
+            using var control = new SubControl
+            {
+                Site = mockSite.Object
+            };
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            Assert.False(control.ShowFocusCues);
+        }
+        
+        [WinFormsFact]
+        public void Control_ShowKeyboardCues_GetWithHandle_ReturnsExpected()
+        {
+            using var control = new SubControl();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            Assert.False(control.ShowKeyboardCues);
+        }
+        
+        [WinFormsTheory]
+        [InlineData((int)User32.UIS.CLEAR | ((int)User32.UISF.ACTIVE << 16), false)]
+        [InlineData((int)User32.UIS.CLEAR | ((int)User32.UISF.HIDEACCEL << 16), true)]
+        [InlineData((int)User32.UIS.CLEAR | ((int)User32.UISF.HIDEFOCUS << 16), false)]
+        [InlineData((int)User32.UIS.CLEAR | ((int)(User32.UISF.HIDEACCEL | User32.UISF.HIDEFOCUS) << 16), true)]
+        [InlineData((int)User32.UIS.SET | ((int)User32.UISF.ACTIVE << 16), false)]
+        [InlineData((int)User32.UIS.SET | ((int)User32.UISF.HIDEACCEL << 16), false)]
+        [InlineData((int)User32.UIS.SET | ((int)User32.UISF.HIDEFOCUS << 16), false)]
+        [InlineData((int)User32.UIS.SET | ((int)(User32.UISF.HIDEACCEL | User32.UISF.HIDEFOCUS) << 16), false)]
+        [InlineData((int)User32.UIS.INITIALIZE | ((int)User32.UISF.ACTIVE << 16), false)]
+        [InlineData((int)User32.UIS.INITIALIZE | ((int)User32.UISF.HIDEACCEL << 16), false)]
+        [InlineData((int)User32.UIS.INITIALIZE | ((int)User32.UISF.HIDEFOCUS << 16), false)]
+        [InlineData((int)User32.UIS.INITIALIZE | ((int)(User32.UISF.HIDEACCEL | User32.UISF.HIDEFOCUS) << 16), false)]
+        public void Control_ShowKeyboardCues_GetWithHandleMessageSent_ReturnsExpected(int wParam, bool expected)
+        {
+            using var control = new SubControl();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            User32.SendMessageW(control.Handle, User32.WindowMessage.WM_UPDATEUISTATE, (IntPtr)wParam, IntPtr.Zero);
+            Assert.Equal(expected, control.ShowKeyboardCues);
+        }
+        
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        public void Control_ShowKeyboardCues_GetWithSiteWithHandle_ReturnsExpected(bool designMode)
+        {
+            var mockSite = new Mock<ISite>(MockBehavior.Strict);
+            mockSite
+                .Setup(s => s.Container)
+                .Returns((IContainer)null);
+            mockSite
+                .Setup(s => s.GetService(typeof(AmbientProperties)))
+                .Returns(null);
+            mockSite
+                .Setup(s => s.DesignMode)
+                .Returns(designMode);
+            using var control = new SubControl
+            {
+                Site = mockSite.Object
+            };
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            Assert.Equal(designMode, control.ShowKeyboardCues);
         }
 
         public static IEnumerable<object[]> Site_Set_TestData()

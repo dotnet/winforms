@@ -78,6 +78,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, control.Right);
             Assert.Equal(RightToLeft.No, control.RightToLeft);
             Assert.True(control.ScaleScrollBarForDpiChange);
+            Assert.True(control.ShowFocusCues);
+            Assert.True(control.ShowKeyboardCues);
             Assert.Null(control.Site);
             Assert.Equal(Size.Empty, control.Size);
             Assert.Equal(1, control.SmallChange);
@@ -2022,6 +2024,10 @@ namespace System.Windows.Forms.Tests
                 get => base.ResizeRedraw;
                 set => base.ResizeRedraw = value;
             }
+
+            public new bool ShowFocusCues => base.ShowFocusCues;
+
+            public new bool ShowKeyboardCues => base.ShowKeyboardCues;
 
             public new void OnClick(EventArgs e) => base.OnClick(e);
 

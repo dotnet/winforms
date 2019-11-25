@@ -103,6 +103,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(DateTime.Now.Date, control.SelectionRange.End);
             Assert.NotSame(control.SelectionRange, control.SelectionRange);
             Assert.Equal(DateTime.Now.Date, control.SelectionStart);
+            Assert.True(control.ShowFocusCues);
+            Assert.True(control.ShowKeyboardCues);
             Assert.True(control.ShowToday);
             Assert.True(control.ShowTodayCircle);
             Assert.False(control.ShowWeekNumbers);
@@ -3755,6 +3757,10 @@ namespace System.Windows.Forms.Tests
                 get => base.ResizeRedraw;
                 set => base.ResizeRedraw = value;
             }
+
+            public new bool ShowFocusCues => base.ShowFocusCues;
+
+            public new bool ShowKeyboardCues => base.ShowKeyboardCues;
 
             public new AccessibleObject CreateAccessibilityInstance() => base.CreateAccessibilityInstance();
 
