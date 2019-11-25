@@ -809,7 +809,7 @@ namespace System.Windows.Forms
         {
             if (!RecreatingHandle)
             {
-                IntPtr userCookie = UnsafeNativeMethods.ThemingScope.Activate();
+                IntPtr userCookie = ThemingScope.Activate();
                 try
                 {
                     var icc = new ComCtl32.INITCOMMONCONTROLSEX
@@ -820,7 +820,7 @@ namespace System.Windows.Forms
                 }
                 finally
                 {
-                    UnsafeNativeMethods.ThemingScope.Deactivate(userCookie);
+                    ThemingScope.Deactivate(userCookie);
                 }
             }
             base.CreateHandle();

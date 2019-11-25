@@ -2978,7 +2978,7 @@ namespace System.Windows.Forms
             SetOcState(OC_RUNNING);
         }
 
-        private void DepersistFromIPropertyBag(UnsafeNativeMethods.IPropertyBag propBag)
+        private void DepersistFromIPropertyBag(Ole32.IPropertyBag propBag)
         {
             iPersistPropBag.Load(propBag, null);
         }
@@ -3649,20 +3649,23 @@ namespace System.Windows.Forms
             return (logP * hm + HMperInch / 2) / HMperInch;
         }
 
-        private bool QuickActivate()
+        private unsafe bool QuickActivate()
         {
-            if (!(instance is UnsafeNativeMethods.IQuickActivate))
+            if (!(instance is Ole32.IQuickActivate))
             {
                 return false;
             }
 
-            UnsafeNativeMethods.IQuickActivate iqa = (UnsafeNativeMethods.IQuickActivate)instance;
+            Ole32.IQuickActivate iqa = (Ole32.IQuickActivate)instance;
 
             var qaContainer = new Ole32.QACONTAINER
             {
                 cbSize = (uint)Marshal.SizeOf<Ole32.QACONTAINER>()
             };
-            var qaControl = new UnsafeNativeMethods.tagQACONTROL();
+            var qaControl = new Ole32.QACONTROL
+            {
+                cbSize = (uint)Marshal.SizeOf<Ole32.QACONTROL>()
+            };
 
             qaContainer.pClientSite = oleSite;
             qaContainer.pPropertyNotifySink = oleSite;
@@ -3691,7 +3694,7 @@ namespace System.Windows.Forms
                 qaContainer.dwAmbientFlags |= Ole32.QACONTAINERFLAGS.USERMODE;
             }
 
-            HRESULT hr = iqa.QuickActivate(qaContainer, qaControl);
+            HRESULT hr = iqa.QuickActivate(qaContainer, &qaControl);
             if (!hr.Succeeded())
             {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "Failed to QuickActivate: " + hr.ToString());

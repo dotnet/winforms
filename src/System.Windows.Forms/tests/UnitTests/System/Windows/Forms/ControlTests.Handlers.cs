@@ -4916,6 +4916,30 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void Control_OnTabIndexChanged_Invoke_CallsTabIndexChanged(EventArgs eventArgs)
+        {
+            using var control = new SubControl();
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.TabIndexChanged += handler;
+            control.OnTabIndexChanged(eventArgs);
+            Assert.Equal(1, callCount);
+
+            // Remove handler.
+            control.TabIndexChanged -= handler;
+            control.OnTabIndexChanged(eventArgs);
+            Assert.Equal(1, callCount);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnTabStopChanged_Invoke_CallsTabStopChanged(EventArgs eventArgs)
         {
             using var control = new SubControl();
@@ -4962,11 +4986,23 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
         }
 
-        [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
-        public void Control_OnVisibleChanged_Invoke_CallsVisibleChanged(EventArgs eventArgs)
+        public static IEnumerable<object[]> OnVisibleChanged_TestData()
         {
-            using var control = new SubControl();
+            foreach (bool visible in new bool[] { true, false })
+            {
+                yield return new object[] { visible, null };
+                yield return new object[] { visible, new EventArgs() };
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(OnVisibleChanged_TestData))]
+        public void Control_OnVisibleChanged_Invoke_CallsVisibleChanged(bool visible, EventArgs eventArgs)
+        {
+            using var control = new SubControl
+            {
+                Visible = visible
+            };
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -4974,31 +5010,79 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-            int invalidatedCallCount = 0;
-            InvalidateEventHandler invalidatedHandler = (sender, e) => invalidatedCallCount++;
 
             // Call with handler.
             control.VisibleChanged += handler;
-            control.Invalidated += invalidatedHandler;
             control.OnVisibleChanged(eventArgs);
             Assert.Equal(1, callCount);
-            Assert.Equal(0, invalidatedCallCount);
+            Assert.False(control.IsHandleCreated);
 
             // Remove handler.
             control.VisibleChanged -= handler;
-            control.Invalidated -= invalidatedHandler;
             control.OnVisibleChanged(eventArgs);
             Assert.Equal(1, callCount);
-            Assert.Equal(0, invalidatedCallCount);
+            Assert.False(control.IsHandleCreated);
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
-        public void Control_OnVisibleChanged_InvokeWithHandle_CallsVisibleChangedCallsInvalidated(EventArgs eventArgs)
+        [MemberData(nameof(OnVisibleChanged_TestData))]
+        public void Control_OnVisibleChanged_InvokeWithParent_CallsVisibleChanged(bool visible, EventArgs eventArgs)
         {
-            using var control = new SubControl();
+            using var parent = new Control();
+            using var control = new SubControl
+            {
+                Parent = parent,
+                Visible = visible
+            };
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.VisibleChanged += handler;
+            control.OnVisibleChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(visible, control.IsHandleCreated);
+
+            // Remove handler.
+            control.VisibleChanged -= handler;
+            control.OnVisibleChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(visible, control.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> OnVisibleChanged_WithHandle_TestData()
+        {
+            foreach (bool visible in new bool[] { true, false })
+            {
+                foreach (bool userPaint in new bool[] { true, false })
+                {
+                    yield return new object[] { visible, userPaint, null };
+                    yield return new object[] { visible, userPaint, new EventArgs() };
+                }
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(OnVisibleChanged_WithHandle_TestData))]
+        public void Control_OnVisibleChanged_InvokeWithHandle_CallsVisibleChangedCallsInvalidated(bool visible, bool userPaint, EventArgs eventArgs)
+        {
+            using var control = new SubControl
+            {
+                Visible = visible
+            };
+            control.SetStyle(ControlStyles.UserPaint, userPaint);
             Assert.NotEqual(IntPtr.Zero, control.Handle);
-            Assert.True(control.GetStyle(ControlStyles.UserPaint));
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
 
             int callCount = 0;
             EventHandler handler = (sender, e) =>
@@ -5007,32 +5091,44 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-            int invalidatedCallCount = 0;
-            InvalidateEventHandler invalidatedHandler = (sender, e) => invalidatedCallCount++;
 
             // Call with handler.
             control.VisibleChanged += handler;
-            control.Invalidated += invalidatedHandler;
             control.OnVisibleChanged(eventArgs);
             Assert.Equal(1, callCount);
+            Assert.True(control.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
 
             // Remove handler.
             control.VisibleChanged -= handler;
-            control.Invalidated -= invalidatedHandler;
             control.OnVisibleChanged(eventArgs);
             Assert.Equal(1, callCount);
+            Assert.True(control.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
-        public void Control_OnVisibleChanged_InvokeWithHandleNoUserPaint_CallsVisibleChangedDoesNotCallInvalidated(EventArgs eventArgs)
+        [MemberData(nameof(OnVisibleChanged_WithHandle_TestData))]
+        public void Control_OnVisibleChanged_InvokeWithParentWithHandle_CallsVisibleChanged(bool visible, bool userPaint, EventArgs eventArgs)
         {
-            using var control = new SubControl();
-            control.SetStyle(ControlStyles.UserPaint, false);
+            using var parent = new Control();
+            using var control = new SubControl
+            {
+                Parent = parent,
+                Visible = visible
+            };
+            control.SetStyle(ControlStyles.UserPaint, userPaint);
             Assert.NotEqual(IntPtr.Zero, control.Handle);
-            Assert.False(control.GetStyle(ControlStyles.UserPaint));
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
 
             int callCount = 0;
             EventHandler handler = (sender, e) =>
@@ -5041,35 +5137,51 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-            int invalidatedCallCount = 0;
-            InvalidateEventHandler invalidatedHandler = (sender, e) => invalidatedCallCount++;
 
             // Call with handler.
             control.VisibleChanged += handler;
-            control.Invalidated += invalidatedHandler;
             control.OnVisibleChanged(eventArgs);
             Assert.Equal(1, callCount);
+            Assert.True(control.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
 
             // Remove handler.
             control.VisibleChanged -= handler;
-            control.Invalidated -= invalidatedHandler;
             control.OnVisibleChanged(eventArgs);
             Assert.Equal(1, callCount);
+            Assert.True(control.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        public static IEnumerable<object[]> OnVisibleChanged_WithChildren_TestData()
+        {
+            yield return new object[] { true, null, 1 };
+            yield return new object[] { true, new EventArgs(), 1 };
+            yield return new object[] { false, null, 0 };
+            yield return new object[] { false, new EventArgs(), 0 };
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
-        public void Control_OnVisibleChanged_InvokeWithChildren_CallsVisibleChanged(EventArgs eventArgs)
+        [MemberData(nameof(OnVisibleChanged_WithChildren_TestData))]
+        public void Control_OnVisibleChanged_InvokeWithChildren_CallsVisibleChanged(bool visible, EventArgs eventArgs, int expectedChildCallCount)
         {
-            var child1 = new Control();
-            var child2 = new Control();
-            using var control = new SubControl();
+            using var grandchild1 = new Control();
+            using var child1 = new Control();
+            using var child2 = new Control();
+            using var control = new SubControl
+            {
+                Visible = visible
+            };
+            child1.Controls.Add(grandchild1);
             control.Controls.Add(child1);
             control.Controls.Add(child2);
 
             int callCount = 0;
+            int grandchildCallCount1 = 0;
             int childCallCount1 = 0;
             int childCallCount2 = 0;
             EventHandler handler = (sender, e) =>
@@ -5077,6 +5189,12 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(control, sender);
                 Assert.Same(eventArgs, e);
                 callCount++;
+            };
+            EventHandler grandchildHandler1 = (sender, e) =>
+            {
+                Assert.Same(grandchild1, sender);
+                Assert.Same(eventArgs, e);
+                grandchildCallCount1++;
             };
             EventHandler childHandler1 = (sender, e) =>
             {
@@ -5095,38 +5213,48 @@ namespace System.Windows.Forms.Tests
             control.VisibleChanged += handler;
             child1.VisibleChanged += childHandler1;
             child2.VisibleChanged += childHandler2;
+            grandchild1.VisibleChanged += grandchildHandler1;
             control.OnVisibleChanged(eventArgs);
             Assert.Equal(1, callCount);
-            Assert.Equal(1, childCallCount1);
-            Assert.Equal(1, childCallCount2);
+            Assert.Equal(expectedChildCallCount, childCallCount1);
+            Assert.Equal(expectedChildCallCount, childCallCount2);
+            Assert.Equal(expectedChildCallCount, grandchildCallCount1);
 
             // Remove handler.
             control.VisibleChanged -= handler;
             child1.VisibleChanged -= childHandler1;
             child2.VisibleChanged -= childHandler2;
+            grandchild1.VisibleChanged -= grandchildHandler1;
             control.OnVisibleChanged(eventArgs);
             Assert.Equal(1, callCount);
-            Assert.Equal(1, childCallCount1);
-            Assert.Equal(1, childCallCount2);
+            Assert.Equal(expectedChildCallCount, childCallCount1);
+            Assert.Equal(expectedChildCallCount, childCallCount2);
+            Assert.Equal(expectedChildCallCount, grandchildCallCount1);
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
-        public void Control_OnVisibleChanged_InvokeWithChildrenNotVisible_CallsVisibleChanged(EventArgs eventArgs)
+        [MemberData(nameof(OnVisibleChanged_TestData))]
+        public void Control_OnVisibleChanged_InvokeWithChildrenNotVisible_CallsVisibleChanged(bool visible, EventArgs eventArgs)
         {
-            var child1 = new Control
+            using var grandchild1 = new Control();
+            using var child1 = new Control
             {
                 Visible = false
             };
-            var child2 = new Control
+            using var child2 = new Control
             {
                 Visible = false
             };
-            using var control = new SubControl();
+            using var control = new SubControl
+            {
+                Visible = visible
+            };
+            child1.Controls.Add(grandchild1);
             control.Controls.Add(child1);
             control.Controls.Add(child2);
 
             int callCount = 0;
+            int grandchildCallCount1 = 0;
             int childCallCount1 = 0;
             int childCallCount2 = 0;
             EventHandler handler = (sender, e) =>
@@ -5135,36 +5263,31 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-            EventHandler childHandler1 = (sender, e) =>
-            {
-                Assert.Same(child1, sender);
-                Assert.Same(eventArgs, e);
-                childCallCount1++;
-            };
-            EventHandler childHandler2 = (sender, e) =>
-            {
-                Assert.Same(child2, sender);
-                Assert.Same(eventArgs, e);
-                childCallCount2++;
-            };
+            EventHandler grandchildHandler1 = (sender, e) => grandchildCallCount1++;
+            EventHandler childHandler1 = (sender, e) => childCallCount1++;
+            EventHandler childHandler2 = (sender, e) => childCallCount2++;
 
             // Call with handler.
             control.VisibleChanged += handler;
             child1.VisibleChanged += childHandler1;
             child2.VisibleChanged += childHandler2;
+            grandchild1.VisibleChanged += grandchildHandler1;
             control.OnVisibleChanged(eventArgs);
             Assert.Equal(1, callCount);
             Assert.Equal(0, childCallCount1);
             Assert.Equal(0, childCallCount2);
+            Assert.Equal(0, grandchildCallCount1);
 
             // Remove handler.
             control.VisibleChanged -= handler;
             child1.VisibleChanged -= childHandler1;
             child2.VisibleChanged -= childHandler2;
+            grandchild1.VisibleChanged -= grandchildHandler1;
             control.OnVisibleChanged(eventArgs);
             Assert.Equal(1, callCount);
             Assert.Equal(0, childCallCount1);
             Assert.Equal(0, childCallCount2);
+            Assert.Equal(0, grandchildCallCount1);
         }
     }
 }

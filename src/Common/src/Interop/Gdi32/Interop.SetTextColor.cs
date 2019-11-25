@@ -15,14 +15,14 @@ internal static partial class Interop
 
         public static int SetTextColor(IHandle hdc, int color)
         {
-            int result = GetTextColor(hdc.Handle);
+            int result = SetTextColor(hdc.Handle, color);
             GC.KeepAlive(hdc);
             return result;
         }
 
         public static int SetTextColor(HandleRef hdc, int color)
         {
-            int result = GetTextColor(hdc.Handle);
+            int result = SetTextColor(hdc.Handle, color);
             GC.KeepAlive(hdc.Wrapper);
             return result;
         }

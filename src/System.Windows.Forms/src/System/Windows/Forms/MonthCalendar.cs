@@ -1339,7 +1339,7 @@ namespace System.Windows.Forms
         {
             if (!RecreatingHandle)
             {
-                IntPtr userCookie = UnsafeNativeMethods.ThemingScope.Activate();
+                IntPtr userCookie = ThemingScope.Activate();
                 try
                 {
                     var icc = new ComCtl32.INITCOMMONCONTROLSEX
@@ -1350,7 +1350,7 @@ namespace System.Windows.Forms
                 }
                 finally
                 {
-                    UnsafeNativeMethods.ThemingScope.Deactivate(userCookie);
+                    ThemingScope.Deactivate(userCookie);
                 }
             }
             base.CreateHandle();
@@ -1507,26 +1507,13 @@ namespace System.Windows.Forms
 
         private SelectionRange GetMonthRange(int flag)
         {
-            var sa = new NativeMethods.SYSTEMTIMEARRAY();
-            SelectionRange range = new SelectionRange();
-            UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)ComCtl32.MCM.GETMONTHRANGE, flag, sa);
-
-            var st = new Kernel32.SYSTEMTIME
+            Span<Kernel32.SYSTEMTIME> sa = stackalloc Kernel32.SYSTEMTIME[2];
+            User32.SendMessageW(this, (User32.WindowMessage)ComCtl32.MCM.GETMONTHRANGE, (IntPtr)flag, ref sa[0]);
+            return new SelectionRange
             {
-                wYear = sa.wYear1,
-                wMonth = sa.wMonth1,
-                wDayOfWeek = sa.wDayOfWeek1,
-                wDay = sa.wDay1
+                Start = DateTimePicker.SysTimeToDateTime(sa[0]),
+                End = DateTimePicker.SysTimeToDateTime(sa[1])
             };
-
-            range.Start = DateTimePicker.SysTimeToDateTime(st);
-            st.wYear = sa.wYear2;
-            st.wMonth = sa.wMonth2;
-            st.wDayOfWeek = sa.wDayOfWeek2;
-            st.wDay = sa.wDay2;
-            range.End = DateTimePicker.SysTimeToDateTime(st);
-
-            return range;
         }
 
         /// <summary>
@@ -2037,20 +2024,11 @@ namespace System.Windows.Forms
             // Updated the calendar range
             if (IsHandleCreated)
             {
-                var sa = new NativeMethods.SYSTEMTIMEARRAY();
+                Span<Kernel32.SYSTEMTIME> sa = stackalloc Kernel32.SYSTEMTIME[2];
+                sa[0] = DateTimePicker.DateTimeToSysTime(minDate);
+                sa[1] = DateTimePicker.DateTimeToSysTime(maxDate);
                 int flag = NativeMethods.GDTR_MIN | NativeMethods.GDTR_MAX;
-                Kernel32.SYSTEMTIME sys = DateTimePicker.DateTimeToSysTime(minDate);
-                sa.wYear1 = sys.wYear;
-                sa.wMonth1 = sys.wMonth;
-                sa.wDayOfWeek1 = sys.wDayOfWeek;
-                sa.wDay1 = sys.wDay;
-                sys = DateTimePicker.DateTimeToSysTime(maxDate);
-                sa.wYear2 = sys.wYear;
-                sa.wMonth2 = sys.wMonth;
-                sa.wDayOfWeek2 = sys.wDayOfWeek;
-                sa.wDay2 = sys.wDay;
-
-                if ((int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)ComCtl32.MCM.SETRANGE, flag, sa) == 0)
+                if ((int)User32.SendMessageW(this, (User32.WindowMessage)ComCtl32.MCM.SETRANGE, (IntPtr)flag, ref sa[0]) == 0)
                 {
                     throw new InvalidOperationException(string.Format(SR.MonthCalendarRange, minDate.ToShortDateString(), maxDate.ToShortDateString()));
                 }
@@ -2188,19 +2166,10 @@ namespace System.Windows.Forms
             // Always set the value on the control, to ensure that it is up to date.
             if (IsHandleCreated)
             {
-                var sa = new NativeMethods.SYSTEMTIMEARRAY();
-
-                Kernel32.SYSTEMTIME sys = DateTimePicker.DateTimeToSysTime(lower);
-                sa.wYear1 = sys.wYear;
-                sa.wMonth1 = sys.wMonth;
-                sa.wDayOfWeek1 = sys.wDayOfWeek;
-                sa.wDay1 = sys.wDay;
-                sys = DateTimePicker.DateTimeToSysTime(upper);
-                sa.wYear2 = sys.wYear;
-                sa.wMonth2 = sys.wMonth;
-                sa.wDayOfWeek2 = sys.wDayOfWeek;
-                sa.wDay2 = sys.wDay;
-                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)ComCtl32.MCM.SETSELRANGE, 0, sa);
+                Span<Kernel32.SYSTEMTIME> sa = stackalloc Kernel32.SYSTEMTIME[2];
+                sa[0] = DateTimePicker.DateTimeToSysTime(lower);
+                sa[1] = DateTimePicker.DateTimeToSysTime(upper);
+                User32.SendMessageW(this, (User32.WindowMessage)ComCtl32.MCM.SETSELRANGE, IntPtr.Zero, ref sa[0]);
             }
 
             if (changed)

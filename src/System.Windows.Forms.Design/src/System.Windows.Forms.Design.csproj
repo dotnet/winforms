@@ -112,6 +112,7 @@
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.IDLFLAG.cs" Link="Interop\Ole32\Interop.IDLFLAG.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.IDropTarget.cs" Link="Interop\Ole32\Interop.IDropTarget.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.IEnumUnknown.cs" Link="Interop\Ole32\Interop.IEnumUnknown.cs" />
+    <Compile Include="..\..\Common\src\Interop\Ole32\Interop.IErrorLog.cs" Link="Interop\Ole32\Interop.IErrorLog.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.IFont.cs" Link="Interop\Ole32\Interop.IFont.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.ILockBytes.cs" Link="Interop\Ole32\Interop.ILockBytes.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.IMPLTYPEFLAG.cs" Link="Interop\Ole32\Interop.IMPLTYPEFLAG.cs" />
@@ -122,6 +123,7 @@
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.IOleInPlaceActiveObject.cs" Link="Interop\Ole32\Interop.IOleInPlaceActiveObject.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.IOleInPlaceFrame.cs" Link="Interop\Ole32\Interop.IOleInPlaceFrame.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.IOleInPlaceUIWindow.cs" Link="Interop\Ole32\Interop.IOleInPlaceUIWindow.cs" />
+    <Compile Include="..\..\Common\src\Interop\Ole32\Interop.IPropertyBag.cs" Link="Interop\Ole32\Interop.IPropertyBag.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.IPropertyNotifySink.cs" Link="Interop\Ole32\Interop.IPropertyNotifySink.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.IServiceProvider.cs" Link="Interop\Ole32\Interop.IServiceProvider.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.IStorage.cs" Link="Interop\Ole32\Interop.IStorage.cs" />
@@ -141,8 +143,6 @@
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.OLEWHICHMK.cs" Link="Interop\Ole32\Interop.OLEWHICHMK.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.PARAMDESC.cs" Link="Interop\Ole32\Interop.PARAMDESC.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.PARAMFLAG.cs" Link="Interop\Ole32\Interop.PARAMFLAG.cs" />
-    <Compile Include="..\..\Common\src\Interop\Ole32\Interop.QACONTAINER.cs" Link="Interop\Ole32\Interop.QACONTAINER.cs" />
-    <Compile Include="..\..\Common\src\Interop\Ole32\Interop.QACONTAINERFLAGS.cs" Link="Interop\Ole32\Interop.QACONTAINERFLAGS.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.RevokeDragDrop.cs" Link="Interop\Ole32\Interop.RevokeDragDrop.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.STATFLAG.cs" Link="Interop\Ole32\Interop.STATFLAG.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.STATSTG.cs" Link="Interop\Ole32\Interop.STATSTG.cs" />
@@ -155,6 +155,7 @@
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.VARENUM.cs" Link="Interop\Ole32\Interop.VARENUM.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.VARFLAGS.cs" Link="Interop\Ole32\Interop.VARFLAGS.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.VARKIND.cs" Link="Interop\Ole32\Interop.VARKIND.cs" />
+    <Compile Include="..\..\Common\src\Interop\Ole32\Interop.VIEWSTATUS.cs" Link="Interop\Ole32\Interop.VIEWSTATUS.cs" />
     <Compile Include="..\..\Common\src\Interop\Richedit\Interop.CHARRANGE.cs" Link="Interop\Richedit\Interop.CHARRANGE.cs" />
     <Compile Include="..\..\Common\src\Interop\SHCore\Interop.GetProcessDpiAwareness.cs" Link="Interop\SHCore\Interop.GetProcessDpiAwareness.cs" />
     <Compile Include="..\..\Common\src\Interop\SHCore\Interop.PROCESS_DPI_AWARENESS.cs" Link="Interop\SHCore\Interop.PROCESS_DPI_AWARENESS.cs" />
