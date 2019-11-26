@@ -63,6 +63,7 @@
     <Compile Include="..\..\Common\src\Interop\ComCtl32\Interop.TVHT.cs" Link="Interop\ComCtl32\Interop.TVHT.cs" />
     <Compile Include="..\..\Common\src\Interop\ComCtl32\Interop.TVIS.cs" Link="Interop\ComCtl32\Interop.TVIS.cs" />
     <Compile Include="..\..\Common\src\Interop\ComCtl32\Interop.TVS_EX.cs" Link="Interop\ComCtl32\Interop.TVS_EX.cs" />
+    <Compile Include="..\..\Common\src\Interop\Comdlg32\Interop.CF.cs" Link="Interop\Comdlg32\Interop.CF.cs" />
     <Compile Include="..\..\Common\src\Interop\Gdi32\Interop.BitBlt.cs" Link="Interop\Gdi32\Interop.BitBlt.cs" />
     <Compile Include="..\..\Common\src\Interop\Gdi32\Interop.CreatePen.cs" Link="Interop\Gdi32\Interop.CreatePen.cs" />
     <Compile Include="..\..\Common\src\Interop\ComCtl32\Interop.MCGIF.cs" Link="Interop\ComCtl32\Interop.MCGIF.cs" />
