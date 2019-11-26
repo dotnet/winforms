@@ -11,10 +11,18 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
+    using Point = System.Drawing.Point;
+    using Size = System.Drawing.Size;
+
     public class PictureBoxTests
     {
         private const string PathImageLocation = "bitmaps/nature24bits.jpg";
         private const string UrlImageLocation = "https://github.com/dotnet/corefx-testdata/raw/master/System.Drawing.Common.TestData/bitmaps/nature24bits.jpg";
+
+        public PictureBoxTests()
+        {
+            Application.ThreadException += (sender, e) => throw new Exception(e.Exception.StackTrace.ToString());
+        }
 
         [WinFormsFact]
         public void PictureBox_Ctor_Default()
@@ -1830,6 +1838,43 @@ namespace System.Windows.Forms.Tests
             pictureBox.Dispose();
         }
 
+        [WinFormsFact]
+        public void PictureBox_GetAutoSizeMode_Invoke_ReturnsExpected()
+        {
+            using var control = new SubPictureBox();
+            Assert.Equal(AutoSizeMode.GrowOnly, control.GetAutoSizeMode());
+        }
+
+        [WinFormsTheory]
+        [InlineData(ControlStyles.ContainerControl, false)]
+        [InlineData(ControlStyles.UserPaint, true)]
+        [InlineData(ControlStyles.Opaque, false)]
+        [InlineData(ControlStyles.ResizeRedraw, false)]
+        [InlineData(ControlStyles.FixedWidth, false)]
+        [InlineData(ControlStyles.FixedHeight, false)]
+        [InlineData(ControlStyles.StandardClick, true)]
+        [InlineData(ControlStyles.Selectable, false)]
+        [InlineData(ControlStyles.UserMouse, false)]
+        [InlineData(ControlStyles.SupportsTransparentBackColor, true)]
+        [InlineData(ControlStyles.StandardDoubleClick, true)]
+        [InlineData(ControlStyles.AllPaintingInWmPaint, true)]
+        [InlineData(ControlStyles.CacheText, false)]
+        [InlineData(ControlStyles.EnableNotifyMessage, false)]
+        [InlineData(ControlStyles.DoubleBuffer, false)]
+        [InlineData(ControlStyles.OptimizedDoubleBuffer, true)]
+        [InlineData(ControlStyles.UseTextForAccessibility, true)]
+        [InlineData((ControlStyles)0, true)]
+        [InlineData((ControlStyles)int.MaxValue, false)]
+        [InlineData((ControlStyles)(-1), false)]
+        public void PictureBox_GetStyle_Invoke_ReturnsExpected(ControlStyles flag, bool expected)
+        {
+            using var control = new SubPictureBox();
+            Assert.Equal(expected, control.GetStyle(flag));
+
+            // Call again to test caching.
+            Assert.Equal(expected, control.GetStyle(flag));
+        }
+
         [Theory]
         [InlineData("NoSuchImage")]
         [InlineData("  ")]
@@ -2790,6 +2835,8 @@ namespace System.Windows.Forms.Tests
             public new bool ShowFocusCues => base.ShowFocusCues;
 
             public new bool ShowKeyboardCues => base.ShowKeyboardCues;
+
+            public new AutoSizeMode GetAutoSizeMode() => base.GetAutoSizeMode();
 
             public new bool GetStyle(ControlStyles flag) => base.GetStyle(flag);
 

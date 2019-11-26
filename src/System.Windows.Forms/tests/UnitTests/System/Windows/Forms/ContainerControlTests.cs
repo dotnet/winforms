@@ -10,8 +10,16 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
+    using Point = System.Drawing.Point;
+    using Size = System.Drawing.Size;
+
     public class ContainerControlTests
     {
+        public ContainerControlTests()
+        {
+            Application.ThreadException += (sender, e) => throw new Exception(e.Exception.StackTrace.ToString());
+        }
+
         [WinFormsFact]
         public void ContainerControl_Ctor_Default()
         {
@@ -449,6 +457,43 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(3, callCount);
         }
 
+        [WinFormsFact]
+        public void ContainerControl_GetAutoSizeMode_Invoke_ReturnsExpected()
+        {
+            using var control = new SubContainerControl();
+            Assert.Equal(AutoSizeMode.GrowOnly, control.GetAutoSizeMode());
+        }
+
+        [WinFormsTheory]
+        [InlineData(ControlStyles.ContainerControl, true)]
+        [InlineData(ControlStyles.UserPaint, true)]
+        [InlineData(ControlStyles.Opaque, false)]
+        [InlineData(ControlStyles.ResizeRedraw, false)]
+        [InlineData(ControlStyles.FixedWidth, false)]
+        [InlineData(ControlStyles.FixedHeight, false)]
+        [InlineData(ControlStyles.StandardClick, true)]
+        [InlineData(ControlStyles.Selectable, true)]
+        [InlineData(ControlStyles.UserMouse, false)]
+        [InlineData(ControlStyles.SupportsTransparentBackColor, false)]
+        [InlineData(ControlStyles.StandardDoubleClick, true)]
+        [InlineData(ControlStyles.AllPaintingInWmPaint, false)]
+        [InlineData(ControlStyles.CacheText, false)]
+        [InlineData(ControlStyles.EnableNotifyMessage, false)]
+        [InlineData(ControlStyles.DoubleBuffer, false)]
+        [InlineData(ControlStyles.OptimizedDoubleBuffer, false)]
+        [InlineData(ControlStyles.UseTextForAccessibility, true)]
+        [InlineData((ControlStyles)0, true)]
+        [InlineData((ControlStyles)int.MaxValue, false)]
+        [InlineData((ControlStyles)(-1), false)]
+        public void ContainerControl_GetStyle_Invoke_ReturnsExpected(ControlStyles flag, bool expected)
+        {
+            using var control = new SubContainerControl();
+            Assert.Equal(expected, control.GetStyle(flag));
+
+            // Call again to test caching.
+            Assert.Equal(expected, control.GetStyle(flag));
+        }
+
         [Theory]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(AutoScaleMode))]
         public void PerformAutoScale_InvokeWithoutChildren_Success(AutoScaleMode autoScaleMode)
@@ -723,6 +768,10 @@ namespace System.Windows.Forms.Tests
                 get => base.VScroll;
                 set => base.VScroll = value;
             }
+
+            public new AutoSizeMode GetAutoSizeMode() => base.GetAutoSizeMode();
+
+            public new bool GetStyle(ControlStyles flag) => base.GetStyle(flag);
 
             public new void UpdateDefaultButton() => base.UpdateDefaultButton();
 

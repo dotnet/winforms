@@ -4461,6 +4461,44 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.IsHandleCreated);
         }
 
+        [WinFormsFact]
+        public void Control_Refresh_InvokeWithoutHandle_Nop()
+        {
+            using var control = new Control();
+            control.Refresh();
+            Assert.False(control.IsHandleCreated);
+            
+            // Call again.
+            control.Refresh();
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void Control_Refresh_InvokeWithHandle_Success()
+        {
+            using var control = new Control();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            control.Refresh();
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(1, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+            
+            // Call again.
+            control.Refresh();
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(2, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
         [Theory]
         [InlineData(1, 2)]
         [InlineData(0, 0)]
@@ -8208,6 +8246,44 @@ namespace System.Windows.Forms.Tests
         {
             var control = new Control();
             Assert.Equal("System.Windows.Forms.Control", control.ToString());
+        }
+
+        [WinFormsFact]
+        public void Control_Update_InvokeWithoutHandle_Nop()
+        {
+            using var control = new Control();
+            control.Update();
+            Assert.False(control.IsHandleCreated);
+            
+            // Call again.
+            control.Update();
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void Control_Update_InvokeWithHandle_Success()
+        {
+            using var control = new Control();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            control.Update();
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+            
+            // Call again.
+            control.Update();
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
         }
 
         [WinFormsFact]

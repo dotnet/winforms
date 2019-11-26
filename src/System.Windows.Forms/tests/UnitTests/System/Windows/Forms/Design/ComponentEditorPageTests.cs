@@ -11,8 +11,16 @@ using Xunit;
 
 namespace System.Windows.Forms.Design.Tests
 {
+    using Point = System.Drawing.Point;
+    using Size = System.Drawing.Size;
+
     public class ComponentEditorPageTests
     {
+        public ComponentEditorPageTests()
+        {
+            Application.ThreadException += (sender, e) => throw new Exception(e.Exception.StackTrace.ToString());
+        }
+
         [WinFormsFact]
         public void ComponentEditorPagePanel_Ctor_Default()
         {
@@ -590,6 +598,43 @@ namespace System.Windows.Forms.Design.Tests
             Assert.Equal(1, page.PreProcessMessageCallCount);
         }
 
+        [WinFormsFact]
+        public void ComponentEditorPage_GetAutoSizeMode_Invoke_ReturnsExpected()
+        {
+            using var control = new SubComponentEditorPage();
+            Assert.Equal(AutoSizeMode.GrowOnly, control.GetAutoSizeMode());
+        }
+
+        [WinFormsTheory]
+        [InlineData(ControlStyles.ContainerControl, true)]
+        [InlineData(ControlStyles.UserPaint, true)]
+        [InlineData(ControlStyles.Opaque, false)]
+        [InlineData(ControlStyles.ResizeRedraw, false)]
+        [InlineData(ControlStyles.FixedWidth, false)]
+        [InlineData(ControlStyles.FixedHeight, false)]
+        [InlineData(ControlStyles.StandardClick, true)]
+        [InlineData(ControlStyles.Selectable, false)]
+        [InlineData(ControlStyles.UserMouse, false)]
+        [InlineData(ControlStyles.SupportsTransparentBackColor, true)]
+        [InlineData(ControlStyles.StandardDoubleClick, true)]
+        [InlineData(ControlStyles.AllPaintingInWmPaint, false)]
+        [InlineData(ControlStyles.CacheText, false)]
+        [InlineData(ControlStyles.EnableNotifyMessage, false)]
+        [InlineData(ControlStyles.DoubleBuffer, false)]
+        [InlineData(ControlStyles.OptimizedDoubleBuffer, false)]
+        [InlineData(ControlStyles.UseTextForAccessibility, true)]
+        [InlineData((ControlStyles)0, true)]
+        [InlineData((ControlStyles)int.MaxValue, false)]
+        [InlineData((ControlStyles)(-1), false)]
+        public void ComponentEditorPage_GetStyle_Invoke_ReturnsExpected(ControlStyles flag, bool expected)
+        {
+            using var control = new SubComponentEditorPage();
+            Assert.Equal(expected, control.GetStyle(flag));
+
+            // Call again to test caching.
+            Assert.Equal(expected, control.GetStyle(flag));
+        }
+
         [Theory]
         [InlineData(true, false)]
         [InlineData(false, true)]
@@ -840,10 +885,14 @@ namespace System.Windows.Forms.Design.Tests
             public new void EnterLoadingMode() => base.EnterLoadingMode();
 
             public new void ExitLoadingMode() => base.ExitLoadingMode();
+            
+            public new AutoSizeMode GetAutoSizeMode() => base.GetAutoSizeMode();
 
             public new Control GetControl() => base.GetControl();
 
             public new IComponent GetSelectedComponent() => base.GetSelectedComponent();
+
+            public new bool GetStyle(ControlStyles flag) => base.GetStyle(flag);
 
             public new bool IsFirstActivate() => base.IsFirstActivate();
 

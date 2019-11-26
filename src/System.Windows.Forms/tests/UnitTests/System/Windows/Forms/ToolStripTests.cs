@@ -11,10 +11,18 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
+    using Point = System.Drawing.Point;
+    using Size = System.Drawing.Size;
+
     public class ToolStripTests
     {
+        public ToolStripTests()
+        {
+            Application.ThreadException += (sender, e) => throw new Exception(e.Exception.StackTrace.ToString());
+        }
+
         [WinFormsFact]
-        public void ToolStrip_Ctor()
+        public void ToolStrip_Ctor_Default()
         {
             using var control = new SubToolStrip();
             Assert.False(control.AllowItemReorder);
@@ -151,7 +159,7 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [MemberData(nameof(Ctor_ToolStripItemArray_TestData))]
-        public void ToolStrip_CtorToolStripItemArray(ToolStripItem[] items)
+        public void ToolStrip_Ctor_ToolStripItemArray(ToolStripItem[] items)
         {
             using var control = new SubToolStrip(items);
             Assert.False(control.AllowItemReorder);
@@ -364,6 +372,42 @@ namespace System.Windows.Forms.Tests
             var toolStrip = new SubToolStrip();
             Assert.Null(toolStrip.CreateLayoutSettings(layoutStyle));
         }
+        [WinFormsFact]
+        public void ToolStrip_GetAutoSizeMode_Invoke_ReturnsExpected()
+        {
+            using var control = new SubToolStrip();
+            Assert.Equal(AutoSizeMode.GrowAndShrink, control.GetAutoSizeMode());
+        }
+
+        [WinFormsTheory]
+        [InlineData(ControlStyles.ContainerControl, true)]
+        [InlineData(ControlStyles.UserPaint, true)]
+        [InlineData(ControlStyles.Opaque, false)]
+        [InlineData(ControlStyles.ResizeRedraw, false)]
+        [InlineData(ControlStyles.FixedWidth, false)]
+        [InlineData(ControlStyles.FixedHeight, false)]
+        [InlineData(ControlStyles.StandardClick, true)]
+        [InlineData(ControlStyles.Selectable, false)]
+        [InlineData(ControlStyles.UserMouse, false)]
+        [InlineData(ControlStyles.SupportsTransparentBackColor, true)]
+        [InlineData(ControlStyles.StandardDoubleClick, true)]
+        [InlineData(ControlStyles.AllPaintingInWmPaint, true)]
+        [InlineData(ControlStyles.CacheText, false)]
+        [InlineData(ControlStyles.EnableNotifyMessage, false)]
+        [InlineData(ControlStyles.DoubleBuffer, false)]
+        [InlineData(ControlStyles.OptimizedDoubleBuffer, true)]
+        [InlineData(ControlStyles.UseTextForAccessibility, true)]
+        [InlineData((ControlStyles)0, true)]
+        [InlineData((ControlStyles)int.MaxValue, false)]
+        [InlineData((ControlStyles)(-1), false)]
+        public void ToolStrip_GetStyle_Invoke_ReturnsExpected(ControlStyles flag, bool expected)
+        {
+            using var control = new SubToolStrip();
+            Assert.Equal(expected, control.GetStyle(flag));
+
+            // Call again to test caching.
+            Assert.Equal(expected, control.GetStyle(flag));
+        }
 
         private class SubToolStrip : ToolStrip
         {
@@ -450,6 +494,10 @@ namespace System.Windows.Forms.Tests
             }
 
             public new LayoutSettings CreateLayoutSettings(ToolStripLayoutStyle layoutStyle) => base.CreateLayoutSettings(layoutStyle);
+
+            public new AutoSizeMode GetAutoSizeMode() => base.GetAutoSizeMode();
+
+            public new bool GetStyle(ControlStyles flag) => base.GetStyle(flag);
         }
 
         private class SubToolStripItem : ToolStripItem

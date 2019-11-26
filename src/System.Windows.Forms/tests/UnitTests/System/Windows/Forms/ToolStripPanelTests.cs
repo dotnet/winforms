@@ -11,8 +11,13 @@ namespace System.Windows.Forms.Tests
 {
     public class ToolStripPanelTests
     {
+        public ToolStripPanelTests()
+        {
+            Application.ThreadException += (sender, e) => throw new Exception(e.Exception.StackTrace.ToString());
+        }
+
         [WinFormsFact]
-        public void Ctor_Default()
+        public void ToolStripPanel_Ctor_Default()
         {
             using var control = new SubToolStripPanel();
             Assert.Null(control.ActiveControl);
@@ -277,6 +282,42 @@ namespace System.Windows.Forms.Tests
             panel.RowMargin = value;
             Assert.Equal(value, panel.RowMargin);
         }
+        [WinFormsFact]
+        public void ToolStripPanel_GetAutoSizeMode_Invoke_ReturnsExpected()
+        {
+            using var control = new SubToolStripPanel();
+            Assert.Equal(AutoSizeMode.GrowOnly, control.GetAutoSizeMode());
+        }
+
+        [WinFormsTheory]
+        [InlineData(ControlStyles.ContainerControl, true)]
+        [InlineData(ControlStyles.UserPaint, true)]
+        [InlineData(ControlStyles.Opaque, false)]
+        [InlineData(ControlStyles.ResizeRedraw, true)]
+        [InlineData(ControlStyles.FixedWidth, false)]
+        [InlineData(ControlStyles.FixedHeight, false)]
+        [InlineData(ControlStyles.StandardClick, true)]
+        [InlineData(ControlStyles.Selectable, false)]
+        [InlineData(ControlStyles.UserMouse, false)]
+        [InlineData(ControlStyles.SupportsTransparentBackColor, true)]
+        [InlineData(ControlStyles.StandardDoubleClick, true)]
+        [InlineData(ControlStyles.AllPaintingInWmPaint, false)]
+        [InlineData(ControlStyles.CacheText, false)]
+        [InlineData(ControlStyles.EnableNotifyMessage, false)]
+        [InlineData(ControlStyles.DoubleBuffer, false)]
+        [InlineData(ControlStyles.OptimizedDoubleBuffer, true)]
+        [InlineData(ControlStyles.UseTextForAccessibility, true)]
+        [InlineData((ControlStyles)0, true)]
+        [InlineData((ControlStyles)int.MaxValue, false)]
+        [InlineData((ControlStyles)(-1), false)]
+        public void ToolStripPanel_GetStyle_Invoke_ReturnsExpected(ControlStyles flag, bool expected)
+        {
+            using var control = new SubToolStripPanel();
+            Assert.Equal(expected, control.GetStyle(flag));
+
+            // Call again to test caching.
+            Assert.Equal(expected, control.GetStyle(flag));
+        }
 
         private class SubToolStripPanel : ToolStripPanel
         {
@@ -345,6 +386,10 @@ namespace System.Windows.Forms.Tests
                 get => base.VScroll;
                 set => base.VScroll = value;
             }
+
+            public new AutoSizeMode GetAutoSizeMode() => base.GetAutoSizeMode();
+
+            public new bool GetStyle(ControlStyles flag) => base.GetStyle(flag);
         }
     }
 }
