@@ -171,7 +171,7 @@ namespace System.Windows.Forms
             get
             {
                 CreateParams cp = base.CreateParams;
-                cp.ClassName = NativeMethods.WC_TRACKBAR;
+                cp.ClassName = ComCtl32.WindowClasses.WC_TRACKBAR;
 
                 switch (tickStyle)
                 {

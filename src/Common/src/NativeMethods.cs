@@ -845,17 +845,7 @@ namespace System.Windows.Forms
         public const int XBUTTON1 = 0x0001;
         public const int XBUTTON2 = 0x0002;
 
-        public const string TOOLTIPS_CLASS = "tooltips_class32";
-
-        public const string WC_DATETIMEPICK = "SysDateTimePick32",
-        WC_LISTVIEW = "SysListView32",
-        WC_MONTHCAL = "SysMonthCal32",
-        WC_PROGRESS = "msctls_progress32",
-        WC_STATUSBAR = "msctls_statusbar32",
-        WC_TOOLBAR = "ToolbarWindow32",
-        WC_TRACKBAR = "msctls_trackbar32",
-        WC_TREEVIEW = "SysTreeView32",
-        WC_TABCONTROL = "SysTabControl32",
+        public const string
         MSH_MOUSEWHEEL = "MSWHEEL_ROLLMSG",
         MSH_SCROLL_LINES = "MSH_SCROLL_LINES_MSG";
 

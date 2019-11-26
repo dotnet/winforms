@@ -125,7 +125,7 @@ namespace System.Windows.Forms.Tests
             using var control = new SubTextBox();
             CreateParams createParams = control.CreateParams;
             Assert.Null(createParams.Caption);
-            Assert.Equal("EDIT", createParams.ClassName);
+            Assert.Equal("Edit", createParams.ClassName);
             Assert.Equal(0x8, createParams.ClassStyle);
             Assert.Equal(0x200, createParams.ExStyle);
             Assert.Equal(control.PreferredHeight, createParams.Height);

@@ -121,7 +121,7 @@ namespace System.Windows.Forms.Tests
             using var control = new SubHScrollBar();
             CreateParams createParams = control.CreateParams;
             Assert.Null(createParams.Caption);
-            Assert.Equal("SCROLLBAR", createParams.ClassName);
+            Assert.Equal("ScrollBar", createParams.ClassName);
             Assert.Equal(0x8, createParams.ClassStyle);
             Assert.Equal(0, createParams.ExStyle);
             Assert.True(createParams.Height > 0);

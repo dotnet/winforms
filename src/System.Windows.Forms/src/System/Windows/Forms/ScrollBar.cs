@@ -130,7 +130,7 @@ namespace System.Windows.Forms
             get
             {
                 CreateParams cp = base.CreateParams;
-                cp.ClassName = "SCROLLBAR";
+                cp.ClassName = ComCtl32.WindowClasses.WC_SCROLLBAR;
                 cp.Style &= ~(int)User32.WS.BORDER;
                 return cp;
             }

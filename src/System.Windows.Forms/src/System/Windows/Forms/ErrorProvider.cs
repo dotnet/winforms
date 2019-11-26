@@ -893,7 +893,7 @@ namespace System.Windows.Forms
                     cparams = new CreateParams
                     {
                         Parent = Handle,
-                        ClassName = NativeMethods.TOOLTIPS_CLASS,
+                        ClassName = ComCtl32.WindowClasses.TOOLTIPS_CLASS,
                         Style = NativeMethods.TTS_ALWAYSTIP
                     };
                     _tipWindow = new NativeWindow();

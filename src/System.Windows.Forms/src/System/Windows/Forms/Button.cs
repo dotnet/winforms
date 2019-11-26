@@ -144,7 +144,7 @@ namespace System.Windows.Forms
             get
             {
                 CreateParams cp = base.CreateParams;
-                cp.ClassName = "BUTTON";
+                cp.ClassName = ComCtl32.WindowClasses.WC_BUTTON;
                 if (GetStyle(ControlStyles.UserPaint))
                 {
                     cp.Style |= NativeMethods.BS_OWNERDRAW;

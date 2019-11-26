@@ -324,7 +324,7 @@ namespace System.Windows.Forms
             get
             {
                 CreateParams cp = base.CreateParams;
-                cp.ClassName = NativeMethods.WC_TREEVIEW;
+                cp.ClassName = ComCtl32.WindowClasses.WC_TREEVIEW;
 
                 // Keep the scrollbar if we are just updating styles...
                 //

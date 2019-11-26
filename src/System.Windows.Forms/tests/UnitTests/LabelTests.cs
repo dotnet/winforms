@@ -117,7 +117,7 @@ namespace System.Windows.Forms.Tests
             using var control = new SubLabel();
             CreateParams createParams = control.CreateParams;
             Assert.Null(createParams.Caption);
-            Assert.Equal("STATIC", createParams.ClassName);
+            Assert.Equal("Static", createParams.ClassName);
             Assert.Equal(0x8, createParams.ClassStyle);
             Assert.Equal(0, createParams.ExStyle);
             Assert.Equal(23, createParams.Height);

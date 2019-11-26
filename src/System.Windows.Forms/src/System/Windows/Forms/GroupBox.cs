@@ -138,7 +138,7 @@ namespace System.Windows.Forms
                 CreateParams cp = base.CreateParams;
                 if (!OwnerDraw)
                 {
-                    cp.ClassName = "BUTTON";
+                    cp.ClassName = ComCtl32.WindowClasses.WC_BUTTON;
                     cp.Style |= NativeMethods.BS_GROUPBOX;
                 }
                 else
