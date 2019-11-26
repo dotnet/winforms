@@ -609,7 +609,7 @@ namespace System.Windows.Forms.Design.Behavior
                 {
                     CreateParams cp = base.CreateParams;
                     cp.Style &= ~(int)(User32.WS.CLIPCHILDREN | User32.WS.CLIPSIBLINGS);
-                    cp.ExStyle |= NativeMethods.WS_EX_TRANSPARENT;
+                    cp.ExStyle |= (int)User32.WS_EX.TRANSPARENT;
                     return cp;
                 }
             }

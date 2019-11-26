@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -1993,9 +1993,6 @@ namespace System.Windows.Forms
             Uri uri = new Uri(fileName);
             return uri.LocalPath + uri.Fragment;
         }
-
-        // Theming/Visual Styles stuff
-        public const int WS_EX_TRANSPARENT = 0x00000020;
 
         // Threading stuff
         public const uint STILL_ACTIVE = 259;
