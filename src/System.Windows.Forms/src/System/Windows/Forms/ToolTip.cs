@@ -203,7 +203,7 @@ namespace System.Windows.Forms
                 {
                     cp.Parent = TopLevelControl.Handle;
                 }
-                cp.ClassName = NativeMethods.TOOLTIPS_CLASS;
+                cp.ClassName = ComCtl32.WindowClasses.TOOLTIPS_CLASS;
                 if (_showAlways)
                 {
                     cp.Style = NativeMethods.TTS_ALWAYSTIP;

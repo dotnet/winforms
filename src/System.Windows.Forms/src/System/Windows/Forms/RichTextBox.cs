@@ -356,7 +356,7 @@ namespace System.Windows.Forms
                 }
 
                 CreateParams cp = base.CreateParams;
-                cp.ClassName = RichTextBoxConstants.WC_RICHEDITW_41;
+                cp.ClassName = ComCtl32.WindowClasses.MSFTEDIT_CLASS;
 
                 if (Multiline)
                 {

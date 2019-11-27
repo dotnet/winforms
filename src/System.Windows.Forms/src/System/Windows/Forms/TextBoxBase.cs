@@ -457,7 +457,7 @@ namespace System.Windows.Forms
             get
             {
                 CreateParams cp = base.CreateParams;
-                cp.ClassName = "EDIT";
+                cp.ClassName = ComCtl32.WindowClasses.WC_EDIT;
                 cp.Style |= NativeMethods.ES_AUTOHSCROLL | NativeMethods.ES_AUTOVSCROLL;
                 if (!textBoxFlags[hideSelection])
                 {

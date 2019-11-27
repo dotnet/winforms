@@ -137,7 +137,7 @@ namespace System.Windows.Forms.Tests
             using var control = new SubListBox();
             CreateParams createParams = control.CreateParams;
             Assert.Null(createParams.Caption);
-            Assert.Equal("LISTBOX", createParams.ClassName);
+            Assert.Equal("ListBox", createParams.ClassName);
             Assert.Equal(0x8, createParams.ClassStyle);
             Assert.Equal(0x200, createParams.ExStyle);
             Assert.Equal(96, createParams.Height);

@@ -701,7 +701,7 @@ namespace System.Windows.Forms
             {
                 CreateParams cp = base.CreateParams;
 
-                cp.ClassName = NativeMethods.WC_LISTVIEW;
+                cp.ClassName = ComCtl32.WindowClasses.WC_LISTVIEW;
 
                 // Keep the scrollbar if we are just updating styles...
                 //

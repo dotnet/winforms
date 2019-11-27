@@ -365,7 +365,7 @@ namespace System.Windows.Forms
             get
             {
                 CreateParams cp = base.CreateParams;
-                cp.ClassName = NativeMethods.WC_MONTHCAL;
+                cp.ClassName = ComCtl32.WindowClasses.WC_MONTHCAL;
                 cp.Style |= (int)ComCtl32.MCS.MULTISELECT | (int)ComCtl32.MCS.DAYSTATE;
                 if (!showToday)
                 {

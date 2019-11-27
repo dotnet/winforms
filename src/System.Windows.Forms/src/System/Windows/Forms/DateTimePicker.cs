@@ -460,7 +460,7 @@ namespace System.Windows.Forms
             get
             {
                 CreateParams cp = base.CreateParams;
-                cp.ClassName = NativeMethods.WC_DATETIMEPICK;
+                cp.ClassName = ComCtl32.WindowClasses.WC_DATETIMEPICK;
 
                 cp.Style |= style;
 

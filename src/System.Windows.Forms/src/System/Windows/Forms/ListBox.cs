@@ -316,7 +316,7 @@ namespace System.Windows.Forms
             get
             {
                 CreateParams cp = base.CreateParams;
-                cp.ClassName = "LISTBOX";
+                cp.ClassName = ComCtl32.WindowClasses.WC_LISTBOX;
 
                 cp.Style |= (int)User32.WS.VSCROLL | NativeMethods.LBS_NOTIFY | NativeMethods.LBS_HASSTRINGS;
                 if (scrollAlwaysVisible)
