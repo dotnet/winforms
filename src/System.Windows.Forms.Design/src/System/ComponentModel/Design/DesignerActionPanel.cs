@@ -2477,9 +2477,9 @@ namespace System.ComponentModel.Design
                 {
                     if (m.Msg == WindowMessages.WM_ACTIVATE)
                     {
-                        if (Visible && NativeMethods.Util.LOWORD(unchecked((int)(long)m.WParam)) == NativeMethods.WA_INACTIVE)
+                        if (Visible && PARAM.LOWORD(m.WParam) == NativeMethods.WA_INACTIVE)
                         {
-                            if (!OwnsWindow((IntPtr)m.LParam))
+                            if (!OwnsWindow(m.LParam))
                             {
                                 Visible = false;
                                 if (m.LParam == IntPtr.Zero)
@@ -2509,11 +2509,6 @@ namespace System.ComponentModel.Design
                 public const int WA_INACTIVE = 0;
                 public const int WA_ACTIVE = 1;
                 public const int GWL_HWNDPARENT = (-8);
-
-                internal static class Util
-                {
-                    public static int LOWORD(int n) => n & 0xffff;
-                }
             }
 
             private static class SafeNativeMethods

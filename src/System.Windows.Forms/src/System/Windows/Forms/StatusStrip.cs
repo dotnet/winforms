@@ -618,8 +618,8 @@ namespace System.Windows.Forms
                 // if we're within the grip bounds tell windows
                 // that we're the bottom right of the window.
                 Rectangle sizeGripBounds = SizeGripBounds;
-                int x = NativeMethods.Util.LOWORD(m.LParam);
-                int y = NativeMethods.Util.HIWORD(m.LParam);
+                int x = PARAM.LOWORD(m.LParam);
+                int y = PARAM.HIWORD(m.LParam);
 
                 if (sizeGripBounds.Contains(PointToClient(new Point(x, y))))
                 {
@@ -686,8 +686,8 @@ namespace System.Windows.Forms
             {
                 if (m.Msg == WindowMessages.WM_NCHITTEST)
                 {
-                    int x = NativeMethods.Util.LOWORD(m.LParam);
-                    int y = NativeMethods.Util.HIWORD(m.LParam);
+                    int x = PARAM.LOWORD(m.LParam);
+                    int y = PARAM.HIWORD(m.LParam);
 
                     if (ClientRectangle.Contains(PointToClient(new Point(x, y))))
                     {

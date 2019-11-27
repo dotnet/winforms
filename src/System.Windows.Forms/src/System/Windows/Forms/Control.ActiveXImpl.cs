@@ -357,8 +357,8 @@ namespace System.Windows.Forms
                                 IntPtr hwndMap = lpmsg->hwnd == IntPtr.Zero ? hwndParent : lpmsg->hwnd;
                                 var pt = new Point
                                 {
-                                    X = NativeMethods.Util.LOWORD(lpmsg->lParam),
-                                    Y = NativeMethods.Util.HIWORD(lpmsg->lParam)
+                                    X = PARAM.LOWORD(lpmsg->lParam),
+                                    Y = PARAM.HIWORD(lpmsg->lParam)
                                 };
                                 User32.MapWindowPoints(hwndMap, new HandleRef(_control, _control.Handle), ref pt, 1);
 
@@ -372,7 +372,7 @@ namespace System.Windows.Forms
                                     target = realTarget;
                                 }
 
-                                lpmsg->lParam = NativeMethods.Util.MAKELPARAM(pt.X, pt.Y);
+                                lpmsg->lParam = PARAM.FromLowHigh(pt.X, pt.Y);
                             }
 
 #if DEBUG

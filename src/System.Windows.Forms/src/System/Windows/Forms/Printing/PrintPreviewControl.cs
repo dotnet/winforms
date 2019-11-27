@@ -339,7 +339,7 @@ namespace System.Windows.Forms
 
         private int AdjustScroll(Message m, int pos, int maxPos, bool horizontal)
         {
-            switch ((User32.SBH)NativeMethods.Util.LOWORD(m.WParam))
+            switch ((User32.SBH)PARAM.LOWORD(m.WParam))
             {
                 case User32.SBH.THUMBPOSITION:
                 case User32.SBH.THUMBTRACK:
@@ -355,7 +355,7 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        pos = NativeMethods.Util.HIWORD(m.WParam);
+                        pos = PARAM.HIWORD(m.WParam);
                     }
                     break;
                 case User32.SBH.LINELEFT:

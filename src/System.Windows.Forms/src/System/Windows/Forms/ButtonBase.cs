@@ -1367,7 +1367,7 @@ namespace System.Windows.Forms
                 switch (m.Msg)
                 {
                     case WindowMessages.WM_REFLECT + WindowMessages.WM_COMMAND:
-                        if (NativeMethods.Util.HIWORD(m.WParam) == NativeMethods.BN_CLICKED && !ValidationCancelled)
+                        if (PARAM.HIWORD(m.WParam) == NativeMethods.BN_CLICKED && !ValidationCancelled)
                         {
                             OnClick(EventArgs.Empty);
                         }

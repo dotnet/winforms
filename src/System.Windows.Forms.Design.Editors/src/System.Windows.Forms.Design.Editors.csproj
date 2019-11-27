@@ -58,6 +58,7 @@
     <Compile Include="..\..\Common\src\DpiHelper.DpiAwarenessContext.cs" Link="Common\DpiHelper.DpiAwarenessContext.cs" />
     <Compile Include="..\..\Common\src\ScreenDC.cs" Link="Common\ScreenDC.cs" />
     <Compile Include="..\..\Common\src\Interop\Interop.BOOL.cs" Link="Interop\Interop.BOOL.cs" />
+    <Compile Include="..\..\Common\src\Interop\Interop.PARAM.cs" Link="Interop\Interop.PARAM.cs" />
     <Compile Include="..\..\Common\src\Interop\Interop.RECT.cs" Link="Interop\Interop.RECT.cs" />
     <Compile Include="..\..\Common\src\Interop\Interop.Libraries.cs" Link="Interop\Interop.Libraries.cs" />
     <Compile Include="..\..\Common\src\Interop\Interop.HRESULT.cs" Link="Interop\Interop.HRESULT.cs" />

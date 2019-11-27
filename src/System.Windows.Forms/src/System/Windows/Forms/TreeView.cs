@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -2731,7 +2731,7 @@ namespace System.Windows.Forms
             // Windows TreeView pushes its own message loop in WM_xBUTTONDOWN, so fire the
             // event before calling defWndProc or else it won't get fired until the button
             // comes back up.
-            OnMouseDown(new MouseEventArgs(button, clicks, NativeMethods.Util.SignedLOWORD(m.LParam), NativeMethods.Util.SignedHIWORD(m.LParam), 0));
+            OnMouseDown(new MouseEventArgs(button, clicks, PARAM.SignedLOWORD(m.LParam), PARAM.SignedHIWORD(m.LParam), 0));
 
             //If Validation is cancelled dont fire any events through the Windows TreeView's message loop...
             if (!ValidationCancelled)
@@ -3285,7 +3285,7 @@ namespace System.Windows.Forms
                     treeViewState[TREEVIEWSTATE_mouseUpFired] = false;
                     var tvhip = new ComCtl32.TVHITTESTINFO
                     {
-                        pt = new Point(NativeMethods.Util.SignedLOWORD(m.LParam), NativeMethods.Util.SignedHIWORD(m.LParam))
+                        pt = new Point(PARAM.SignedLOWORD(m.LParam), PARAM.SignedHIWORD(m.LParam))
                     };
                     hNodeMouseDown = User32.SendMessageW(this, (User32.WindowMessage)NativeMethods.TVM_HITTEST, IntPtr.Zero, ref tvhip);
 
@@ -3294,7 +3294,7 @@ namespace System.Windows.Forms
                     if ((tvhip.flags & ComCtl32.TVHT.ONITEMSTATEICON) != 0)
                     {
                         //We donot pass the Message to the Control .. so fire MouseDowm ...
-                        OnMouseDown(new MouseEventArgs(MouseButtons.Left, 1, NativeMethods.Util.SignedLOWORD(m.LParam), NativeMethods.Util.SignedHIWORD(m.LParam), 0));
+                        OnMouseDown(new MouseEventArgs(MouseButtons.Left, 1, PARAM.SignedLOWORD(m.LParam), PARAM.SignedHIWORD(m.LParam), 0));
                         if (!ValidationCancelled && CheckBoxes)
                         {
                             TreeNode node = NodeFromHandle(hNodeMouseDown);
@@ -3317,7 +3317,7 @@ namespace System.Windows.Forms
                 case WindowMessages.WM_RBUTTONUP:
                     var tvhi = new ComCtl32.TVHITTESTINFO
                     {
-                        pt = new Point(NativeMethods.Util.SignedLOWORD(m.LParam), NativeMethods.Util.SignedHIWORD(m.LParam))
+                        pt = new Point(PARAM.SignedLOWORD(m.LParam), PARAM.SignedHIWORD(m.LParam))
                     };
                     IntPtr hnode = User32.SendMessageW(this, (User32.WindowMessage)NativeMethods.TVM_HITTEST, IntPtr.Zero, ref tvhi);
 
@@ -3332,11 +3332,11 @@ namespace System.Windows.Forms
                             //on mouse down then we will fire our OnNodeMoseClick event.
                             if (hnode == hNodeMouseDown)
                             {
-                                OnNodeMouseClick(new TreeNodeMouseClickEventArgs(NodeFromHandle(hnode), downButton, 1, NativeMethods.Util.SignedLOWORD(m.LParam), NativeMethods.Util.SignedHIWORD(m.LParam)));
+                                OnNodeMouseClick(new TreeNodeMouseClickEventArgs(NodeFromHandle(hnode), downButton, 1, PARAM.SignedLOWORD(m.LParam), PARAM.SignedHIWORD(m.LParam)));
                             }
 
-                            OnClick(new MouseEventArgs(downButton, 1, NativeMethods.Util.SignedLOWORD(m.LParam), NativeMethods.Util.SignedHIWORD(m.LParam), 0));
-                            OnMouseClick(new MouseEventArgs(downButton, 1, NativeMethods.Util.SignedLOWORD(m.LParam), NativeMethods.Util.SignedHIWORD(m.LParam), 0));
+                            OnClick(new MouseEventArgs(downButton, 1, PARAM.SignedLOWORD(m.LParam), PARAM.SignedHIWORD(m.LParam), 0));
+                            OnMouseClick(new MouseEventArgs(downButton, 1, PARAM.SignedLOWORD(m.LParam), PARAM.SignedHIWORD(m.LParam), 0));
                         }
 
                         if (treeViewState[TREEVIEWSTATE_doubleclickFired])
@@ -3345,15 +3345,15 @@ namespace System.Windows.Forms
                             if (!ValidationCancelled)
                             {
                                 //OnDoubleClick(EventArgs.Empty);
-                                OnNodeMouseDoubleClick(new TreeNodeMouseClickEventArgs(NodeFromHandle(hnode), downButton, 2, NativeMethods.Util.SignedLOWORD(m.LParam), NativeMethods.Util.SignedHIWORD(m.LParam)));
-                                OnDoubleClick(new MouseEventArgs(downButton, 2, NativeMethods.Util.SignedLOWORD(m.LParam), NativeMethods.Util.SignedHIWORD(m.LParam), 0));
-                                OnMouseDoubleClick(new MouseEventArgs(downButton, 2, NativeMethods.Util.SignedLOWORD(m.LParam), NativeMethods.Util.SignedHIWORD(m.LParam), 0));
+                                OnNodeMouseDoubleClick(new TreeNodeMouseClickEventArgs(NodeFromHandle(hnode), downButton, 2, PARAM.SignedLOWORD(m.LParam), PARAM.SignedHIWORD(m.LParam)));
+                                OnDoubleClick(new MouseEventArgs(downButton, 2, PARAM.SignedLOWORD(m.LParam), PARAM.SignedHIWORD(m.LParam), 0));
+                                OnMouseDoubleClick(new MouseEventArgs(downButton, 2, PARAM.SignedLOWORD(m.LParam), PARAM.SignedHIWORD(m.LParam), 0));
                             }
                         }
                     }
                     if (!treeViewState[TREEVIEWSTATE_mouseUpFired])
                     {
-                        OnMouseUp(new MouseEventArgs(downButton, 1, NativeMethods.Util.SignedLOWORD(m.LParam), NativeMethods.Util.SignedHIWORD(m.LParam), 0));
+                        OnMouseUp(new MouseEventArgs(downButton, 1, PARAM.SignedLOWORD(m.LParam), PARAM.SignedHIWORD(m.LParam), 0));
                     }
 
                     treeViewState[TREEVIEWSTATE_doubleclickFired] = false;
@@ -3398,7 +3398,7 @@ namespace System.Windows.Forms
                     //Cache the hit-tested node for verification when mouse up is fired
                     var tvhit = new ComCtl32.TVHITTESTINFO
                     {
-                        pt = new Point(NativeMethods.Util.SignedLOWORD(m.LParam), NativeMethods.Util.SignedHIWORD(m.LParam))
+                        pt = new Point(PARAM.SignedLOWORD(m.LParam), PARAM.SignedHIWORD(m.LParam))
                     };
                     hNodeMouseDown = User32.SendMessageW(this, (User32.WindowMessage)NativeMethods.TVM_HITTEST, IntPtr.Zero, ref tvhit);
 

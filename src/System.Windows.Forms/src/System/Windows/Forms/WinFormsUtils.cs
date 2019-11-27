@@ -33,7 +33,7 @@ namespace System.Windows.Forms
             get
             {
                 int lastXY = (int)User32.GetMessagePos();
-                return new Point(NativeMethods.Util.SignedLOWORD(lastXY), NativeMethods.Util.SignedHIWORD(lastXY));
+                return new Point(PARAM.SignedLOWORD(lastXY), PARAM.SignedHIWORD(lastXY));
             }
         }
 

@@ -991,7 +991,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void WmReflectCommand(ref Message m)
         {
-            switch (NativeMethods.Util.HIWORD(m.WParam))
+            switch (PARAM.HIWORD(m.WParam))
             {
                 case NativeMethods.LBN_SELCHANGE:
                     LbnSelChange();
@@ -1018,7 +1018,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void WmReflectVKeyToItem(ref Message m)
         {
-            int keycode = NativeMethods.Util.LOWORD(m.WParam);
+            int keycode = PARAM.LOWORD(m.WParam);
             switch ((Keys)keycode)
             {
                 case Keys.Up:

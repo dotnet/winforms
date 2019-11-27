@@ -147,14 +147,14 @@ namespace System.Windows.Forms
 
             protected override void WndProc(ref Message m)
             {
-                if (m.Msg == Interop.WindowMessages.WM_SHOWWINDOW)
+                if (m.Msg == WindowMessages.WM_SHOWWINDOW)
                     return;
 
                 base.WndProc(ref m);
                 switch (m.Msg)
                 {
-                    case Interop.WindowMessages.WM_PARENTNOTIFY:
-                        if (NativeMethods.Util.LOWORD(unchecked((int)(long)m.WParam)) == Interop.WindowMessages.WM_DESTROY)
+                    case WindowMessages.WM_PARENTNOTIFY:
+                        if (PARAM.LOWORD(m.WParam) == WindowMessages.WM_DESTROY)
                         {
                             UnsafeNativeMethods.PostMessage(new HandleRef(this, Handle), WM_CHECKDESTROY, IntPtr.Zero, IntPtr.Zero);
                         }

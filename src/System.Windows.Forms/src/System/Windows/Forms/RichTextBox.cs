@@ -13,7 +13,6 @@ using System.Windows.Forms.Layout;
 using Microsoft.Win32;
 using static Interop;
 using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
-using Util = System.Windows.Forms.NativeMethods.Util;
 
 namespace System.Windows.Forms
 {
@@ -3525,7 +3524,7 @@ namespace System.Windows.Forms
             //
             if (m.LParam == Handle && !GetState(States.CreatingHandle))
             {
-                switch (Util.HIWORD(m.WParam))
+                switch (PARAM.HIWORD(m.WParam))
                 {
 
                     case NativeMethods.EN_HSCROLL:
@@ -3869,7 +3868,7 @@ namespace System.Windows.Forms
                 case WindowMessages.WM_VSCROLL:
                 {
                     base.WndProc(ref m);
-                    User32.SBV loWord = (User32.SBV)Util.LOWORD(m.WParam);
+                    User32.SBV loWord = (User32.SBV)PARAM.LOWORD(m.WParam);
                     if (loWord == User32.SBV.THUMBTRACK)
                     {
                         OnVScroll(EventArgs.Empty);
@@ -3883,7 +3882,7 @@ namespace System.Windows.Forms
                 case WindowMessages.WM_HSCROLL:
                 {
                     base.WndProc(ref m);
-                    User32.SBH loWord = (User32.SBH)Util.LOWORD(m.WParam);
+                    User32.SBH loWord = (User32.SBH)PARAM.LOWORD(m.WParam);
                     if (loWord == User32.SBH.THUMBTRACK)
                     {
                         OnHScroll(EventArgs.Empty);

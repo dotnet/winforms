@@ -5184,7 +5184,7 @@ namespace System.Windows.Forms
 
             if (IsHandleCreated)
             {
-                SendMessage((int)LVM.SETCOLUMNWIDTH, columnIndex, NativeMethods.Util.MAKELPARAM(width, 0));
+                SendMessage((int)LVM.SETCOLUMNWIDTH, columnIndex, PARAM.FromLowHigh(width, 0));
             }
 
             if (IsHandleCreated &&
@@ -5194,7 +5194,7 @@ namespace System.Windows.Forms
                 if (compensate != 0)
                 {
                     int newWidth = columnHeaders[columnIndex].Width + compensate;
-                    SendMessage((int)LVM.SETCOLUMNWIDTH, columnIndex, NativeMethods.Util.MAKELPARAM(newWidth, 0));
+                    SendMessage((int)LVM.SETCOLUMNWIDTH, columnIndex, PARAM.FromLowHigh(newWidth, 0));
                 }
             }
         }
@@ -5203,7 +5203,7 @@ namespace System.Windows.Forms
         {
             if (IsHandleCreated)
             {
-                SendMessage((int)LVM.SETCOLUMNWIDTH, index, NativeMethods.Util.MAKELPARAM(width, 0));
+                SendMessage((int)LVM.SETCOLUMNWIDTH, index, PARAM.FromLowHigh(width, 0));
             }
         }
 
@@ -5694,8 +5694,8 @@ namespace System.Windows.Forms
             // Windows ListView pushes its own Windows ListView in WM_xBUTTONDOWN, so fire the
             // event before calling defWndProc or else it won't get fired until the button
             // comes back up.
-            int x = NativeMethods.Util.SignedLOWORD(m.LParam);
-            int y = NativeMethods.Util.SignedHIWORD(m.LParam);
+            int x = PARAM.SignedLOWORD(m.LParam);
+            int y = PARAM.SignedHIWORD(m.LParam);
             OnMouseDown(new MouseEventArgs(button, clicks, x, y, 0));
 
             //If Validation is cancelled dont fire any events through the Windows ListView's message loop...
@@ -6582,11 +6582,11 @@ namespace System.Windows.Forms
                     {
                         listViewState[LISTVIEWSTATE_doubleclickFired] = false;
                         OnDoubleClick(EventArgs.Empty);
-                        OnMouseDoubleClick(new MouseEventArgs(downButton, 2, NativeMethods.Util.SignedLOWORD(m.LParam), NativeMethods.Util.SignedHIWORD(m.LParam), 0));
+                        OnMouseDoubleClick(new MouseEventArgs(downButton, 2, PARAM.SignedLOWORD(m.LParam), PARAM.SignedHIWORD(m.LParam), 0));
                     }
                     if (!listViewState[LISTVIEWSTATE_mouseUpFired])
                     {
-                        OnMouseUp(new MouseEventArgs(downButton, 1, NativeMethods.Util.SignedLOWORD(m.LParam), NativeMethods.Util.SignedHIWORD(m.LParam), 0));
+                        OnMouseUp(new MouseEventArgs(downButton, 1, PARAM.SignedLOWORD(m.LParam), PARAM.SignedHIWORD(m.LParam), 0));
                         listViewState[LISTVIEWSTATE_expectingMouseUp] = false;
                     }
 
@@ -6612,7 +6612,7 @@ namespace System.Windows.Forms
                 case WindowMessages.WM_MOUSEMOVE:
                     if (listViewState[LISTVIEWSTATE_expectingMouseUp] && !listViewState[LISTVIEWSTATE_mouseUpFired] && MouseButtons == MouseButtons.None)
                     {
-                        OnMouseUp(new MouseEventArgs(downButton, 1, NativeMethods.Util.SignedLOWORD(m.LParam), NativeMethods.Util.SignedHIWORD(m.LParam), 0));
+                        OnMouseUp(new MouseEventArgs(downButton, 1, PARAM.SignedLOWORD(m.LParam), PARAM.SignedHIWORD(m.LParam), 0));
                         listViewState[LISTVIEWSTATE_mouseUpFired] = true;
                     }
                     Capture = false;

@@ -860,7 +860,7 @@ namespace System.Windows.Forms
             string lDescription = string.Empty;
             if (msg == WindowMessages.WM_PARENTNOTIFY)
             {
-                lDescription = Parenthesize(MsgToString(NativeMethods.Util.LOWORD(wparam)));
+                lDescription = Parenthesize(MsgToString(PARAM.LOWORD(wparam)));
             }
 
             return

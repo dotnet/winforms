@@ -1036,7 +1036,7 @@ namespace System.Windows.Forms
         {
             if (IsHandleCreated && ShouldSerializeItemSize())
             {
-                SendMessage((int)ComCtl32.TCM.SETITEMSIZE, 0, (int)NativeMethods.Util.MAKELPARAM(_itemSize.Width, _itemSize.Height));
+                SendMessage((int)ComCtl32.TCM.SETITEMSIZE, 0, (int)PARAM.FromLowHigh(_itemSize.Width, _itemSize.Height));
             }
             _cachedDisplayRect = Rectangle.Empty;
         }
@@ -1333,7 +1333,7 @@ namespace System.Windows.Forms
             // horizontal and vertical dimensions of the padding rectangle.
             if (!_padding.IsEmpty)
             {
-                SendMessage((int)ComCtl32.TCM.SETPADDING, 0, NativeMethods.Util.MAKELPARAM(_padding.X, _padding.Y));
+                SendMessage((int)ComCtl32.TCM.SETPADDING, 0, PARAM.FromLowHigh(_padding.X, _padding.Y));
             }
 
             base.OnHandleCreated(e);

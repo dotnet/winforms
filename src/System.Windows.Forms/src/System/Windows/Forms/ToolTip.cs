@@ -1566,8 +1566,8 @@ namespace System.Windows.Forms
                 return false;
             }
 
-            int width = NativeMethods.Util.LOWORD(result);
-            int height = NativeMethods.Util.HIWORD(result);
+            int width = PARAM.LOWORD(result);
+            int height = PARAM.HIWORD(result);
             bubbleSize = new Size(width, height);
             return true;
         }
