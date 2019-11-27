@@ -150,7 +150,7 @@ namespace System.Windows.Forms
             // leave everything else 0
 
             // Set up color table --
-            IntPtr palette = SafeNativeMethods.CreateHalftonePalette(new HandleRef(null, hdcS));
+            IntPtr palette = Gdi32.CreateHalftonePalette(hdcS);
             Gdi32.GetObjectW(palette, out uint entryCount);
             var entries = new Gdi32.PALETTEENTRY[entryCount];
             Gdi32.GetPaletteEntries(palette, entries);
@@ -189,8 +189,13 @@ namespace System.Windows.Forms
 
                     byte[] enoughBits = new byte[bitmap.Width * bitmap.Height];
                     IntPtr bitmapInfo = CreateBitmapInfo(bitmap, hdcS);
-                    hBitmap = SafeNativeMethods.CreateDIBSection(new HandleRef(null, hdcS), new HandleRef(null, bitmapInfo), NativeMethods.DIB_RGB_COLORS,
-                                                                        enoughBits, IntPtr.Zero, 0);
+                    hBitmap = Gdi32.CreateDIBSection(
+                        hdcS,
+                        bitmapInfo,
+                        Gdi32.DIB.RGB_COLORS,
+                        enoughBits,
+                        IntPtr.Zero,
+                        0);
 
                     Marshal.FreeCoTaskMem(bitmapInfo);
 
