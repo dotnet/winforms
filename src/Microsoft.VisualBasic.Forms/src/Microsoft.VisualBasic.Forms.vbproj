@@ -6,6 +6,7 @@
     <RootNamespace></RootNamespace>
     <LangVersion>15.0</LangVersion>
     <VBRuntime>None</VBRuntime>
+    <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
   </PropertyGroup>
 
   <ItemGroup>
