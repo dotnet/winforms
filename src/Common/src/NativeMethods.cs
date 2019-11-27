@@ -63,21 +63,6 @@ namespace System.Windows.Forms
         CDERR_REGISTERMSGFAIL = 0x000C,
         CFERR_NOFONTS = 0x2001,
         CFERR_MAXLESSTHANMIN = 0x2002,
-        CF_SCREENFONTS = 0x00000001,
-        CF_SHOWHELP = 0x00000004,
-        CF_ENABLEHOOK = 0x00000008,
-        CF_INITTOLOGFONTSTRUCT = 0x00000040,
-        CF_EFFECTS = 0x00000100,
-        CF_APPLY = 0x00000200,
-        CF_SCRIPTSONLY = 0x00000400,
-        CF_NOVECTORFONTS = 0x00000800,
-        CF_NOSIMULATIONS = 0x00001000,
-        CF_LIMITSIZE = 0x00002000,
-        CF_FIXEDPITCHONLY = 0x00004000,
-        CF_FORCEFONTEXIST = 0x00010000,
-        CF_TTONLY = 0x00040000,
-        CF_SELECTSCRIPT = 0x00400000,
-        CF_NOVERTFONTS = 0x01000000,
         CP_WINANSI = 1004;
 
         public const int cmb4 = 0x0473;
@@ -1395,7 +1380,7 @@ namespace System.Windows.Forms
             public IntPtr hDC;
             public IntPtr lpLogFont;
             public int iPointSize = 0;
-            public int Flags;
+            public Comdlg32.CF Flags;
             public int rgbColors;
             public IntPtr lCustData = IntPtr.Zero;
             public WndProc lpfnHook;
