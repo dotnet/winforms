@@ -11409,7 +11409,10 @@ namespace System.Windows.Forms
         /// </summary>
         public void Update()
         {
-            SafeNativeMethods.UpdateWindow(new HandleRef(_window, InternalHandle));
+            if (IsHandleCreated)
+            {
+                User32.UpdateWindow(this);
+            }
         }
 
         /// <summary>
