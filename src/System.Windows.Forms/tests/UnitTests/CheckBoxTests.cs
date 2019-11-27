@@ -6,7 +6,6 @@ using System.ComponentModel;
 using System.Drawing;
 using WinForms.Common.Tests;
 using Xunit;
-using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
@@ -239,6 +238,50 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, box.CheckState);
         }
 
+        [WinFormsTheory]
+        [InlineData(true, CheckState.Checked, true, CheckState.Indeterminate)]
+        [InlineData(true, CheckState.Unchecked, true, CheckState.Checked)]
+        [InlineData(true, CheckState.Indeterminate, false, CheckState.Unchecked)]
+        [InlineData(false, CheckState.Checked, false, CheckState.Unchecked)]
+        [InlineData(false, CheckState.Unchecked, true, CheckState.Checked)]
+        [InlineData(false, CheckState.Indeterminate, false, CheckState.Unchecked)]
+        public void CheckBox_OnClick_AutoCheck_SetCorrectCheckState(bool threeState, CheckState checkState, bool expectedChecked, CheckState expectedCheckState)
+        {
+            using var box = new SubCheckBox
+            {
+                AutoCheck = true,
+                ThreeState = threeState,
+                CheckState = checkState
+            };
+
+            box.OnClick(EventArgs.Empty);
+
+            Assert.Equal(expectedChecked, box.Checked);
+            Assert.Equal(expectedCheckState, box.CheckState);
+        }
+
+        [WinFormsTheory]
+        [InlineData(true, CheckState.Checked, true)]
+        [InlineData(true, CheckState.Unchecked, false)]
+        [InlineData(true, CheckState.Indeterminate, true)]
+        [InlineData(false, CheckState.Checked, true)]
+        [InlineData(false, CheckState.Unchecked, false)]
+        [InlineData(false, CheckState.Indeterminate, true)]
+        public void CheckBox_OnClick_AutoCheckFalse_DoesNotChangeCheckState(bool threeState, CheckState expectedCheckState, bool expectedChecked)
+        {
+            using var box = new SubCheckBox
+            {
+                AutoCheck = false,
+                ThreeState = threeState,
+                CheckState = expectedCheckState
+            };
+
+            box.OnClick(EventArgs.Empty);
+
+            Assert.Equal(expectedChecked, box.Checked);
+            Assert.Equal(expectedCheckState, box.CheckState);
+        }
+
         /// <summary>
         ///  Data for the CheckStateGetSet test
         /// </summary>
@@ -372,7 +415,6 @@ namespace System.Windows.Forms.Tests
 
         public class SubCheckBox : CheckBox
         {
-
             public new bool CanEnableIme => base.CanEnableIme;
 
             public new bool CanRaiseEvents => base.CanRaiseEvents;
@@ -434,6 +476,8 @@ namespace System.Windows.Forms.Tests
             public new AutoSizeMode GetAutoSizeMode() => base.GetAutoSizeMode();
 
             public new bool GetStyle(ControlStyles flag) => base.GetStyle(flag);
+
+            public new void OnClick(EventArgs e) => base.OnClick(e);
         }
     }
 }
