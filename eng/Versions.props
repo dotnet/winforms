@@ -5,10 +5,6 @@
     <!-- where #####. come from the date and .## is the build-per-day -->
     <VersionPrefix>4.8.1</VersionPrefix>
     <PreReleaseVersionLabel>servicing</PreReleaseVersionLabel>
-    <!--
-        When StabilizePackageVersion is set to 'true', this branch will produce stable outputs for 'Shipping' packages
-    -->
-    <StabilizePackageVersion Condition="'$(StabilizePackageVersion)' == ''">false</StabilizePackageVersion>
     <!-- Set to true to produce shipping version strings in non-official builds, instead of fixed values like 42.42.42.42 for AssemblyVersion -->
     <DotNetUseShippingVersions>true</DotNetUseShippingVersions>
     <!-- Use the compiler in the CLI instead of in the sdk, since the sdk one doesn't work with netcoreapp3.0 yet -->
