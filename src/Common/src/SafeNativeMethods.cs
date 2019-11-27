@@ -43,9 +43,6 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.Hhctrl, CharSet = CharSet.Auto)]
         public static extern int HtmlHelp(HandleRef hwndCaller, [MarshalAs(UnmanagedType.LPTStr)]string pszFile, int uCommand, [MarshalAs(UnmanagedType.LPStruct)]NativeMethods.HH_AKLINK dwData);
 
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern bool GetMonitorInfo(HandleRef hmonitor, [In, Out]NativeMethods.MONITORINFOEX info);
-
         [DllImport(ExternDll.User32, ExactSpelling = true)]
         public static extern bool EnumDisplayMonitors(HandleRef hdc, NativeMethods.COMRECT rcClip, NativeMethods.MonitorEnumProc lpfnEnum, IntPtr dwData);
 

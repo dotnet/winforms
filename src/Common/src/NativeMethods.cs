@@ -918,26 +918,6 @@ namespace System.Windows.Forms
             internal string pszWindow = null;
         }
 
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto, Pack = 4)]
-        public class MONITORINFOEX
-        {
-            internal int cbSize = Marshal.SizeOf<MONITORINFOEX>();
-            internal RECT rcMonitor = new RECT();
-            internal RECT rcWork = new RECT();
-            internal int dwFlags = 0;
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 32)]
-            internal char[] szDevice = new char[32];
-        }
-
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto, Pack = 4)]
-        public class MONITORINFO
-        {
-            internal int cbSize = Marshal.SizeOf<MONITORINFO>();
-            internal RECT rcMonitor = new RECT();
-            internal RECT rcWork = new RECT();
-            internal int dwFlags = 0;
-        }
-
         public delegate int EditStreamCallback(IntPtr dwCookie, IntPtr buf, int cb, out int transferred);
 
         [StructLayout(LayoutKind.Sequential)]
