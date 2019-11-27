@@ -55,12 +55,6 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true)]
         public static extern IntPtr /*HBITMAP*/ CreateBitmap(int nWidth, int nHeight, int nPlanes, int nBitsPerPixel, byte[] lpvBits);
 
-        [DllImport(ExternDll.User32, ExactSpelling = true)]
-        public static extern bool ValidateRect(HandleRef hWnd, ref RECT rect);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern bool ValidateRect(IntPtr hwnd, IntPtr prect);
-
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto, SetLastError = true)]
         public static extern bool EnumWindows(EnumThreadWindowsCallback callback, IntPtr extraData);
 
