@@ -78,15 +78,43 @@ Tests are built and executed by file name convention
   * For example, tests for the `Button` class should in the `ButtonTests` class
 * Test names should start with the class they are testing
   * For example, all tests for the `Button` class should start with "Button"
-* Test names should end with a description of what the test does
-  * For example, `Button_AutoSizeModeGetSet`
-  * This is very useful when viewing test results, and when browsing in the test explorer
+* Test names should end with a description of what the test does - this is very useful when viewing test results, and when browsing in the test explorer. As far as naming conventions are concerned we don't mandate a specific one, as long as a test name clearly communicates its purpose.
+  * For example, `Button_AutoSizeModeGetSet` or `MyButton_Click_should_throw_ArgumentNullException`.
+
+#### Decoration
+
+* All tests that deal with UI controls or types that require synchro0nization context must be decorated with `WinFormsFact` or `WinFormsTheory` attributes.
+* Other tests can be decorated with `StaFact`, `StaTheory`, `Fact` or `Theory`
+
+#### Dispose created objects
+
+* All tests creating disposable objects (e.g. UI controls) must dispose them. Otherwise it could lead to memory leaks (bad but not terminal) and race conditions that could lead to hung tests (terminal).
+  ```cs
+    [WinFormsFact]
+    public void ButtonBase_GetAutoSizeMode_Invoke_ReturnsExpected()
+    {
+        using var control = new SubButtonBase();
+        Assert.Equal(AutoSizeMode.GrowOnly, control.GetAutoSizeMode());
+    }  
+  ```
+  
+### Throw unhandled exceptions
+
+We have been observed unexplainable hanging tests. To get better handle on the situation we have started trapping `ThreadException`s.
+Each test class must add a handler to its constructor similar to the one below:
+  ```cs
+    public ButtonBaseTests()
+    {
+        Application.ThreadException += (sender, e) => throw new Exception(e.Exception.StackTrace.ToString());
+    } 
+  ```
 
 #### Strategy
 
 ##### Unit tests should be part of the same PR as code changes
 
-* Unit tests must be added for any change to public APIs. We will accept unit tests for internal methods as well.
+* Unit tests must be added for any change to public APIs. 
+* We will accept unit tests for internal/private methods as well. Some non-public API can be accessed directly (e.g. `internal`), some via subclassing (e.g. `virtual`) or via the public surface. However there are plenty of instances where a non-public API can't be easily accessed or arranged for. In this cases it is totally acceptible to use Reflection API to arrange, act and assert. For example: https://gist.github.com/JeremyKuhne/e8c9c33d037ac5e5ed4c477817cae414
 
 ##### Code Coverage
 
@@ -95,7 +123,7 @@ Tests are built and executed by file name convention
 
 ##### Avoid duplicating tests just for different inputs
 
-* Use `[Theory]` for this, followed by either `[InlineData]` or `[MemberData]`. See existing tests for examples on how to use these attributes
+* Use `WinFormsTheory`, `StaTheory` or `Theory` attributes for this, followed by either `[InlineData]` or `[MemberData]`. See existing tests for examples on how to use these attributes
 * The exception to this is if the code behavior is fundamentally different based on the inputs. For example, if a method throws an `ArgumentException` for invalid inputs, that should be a separate test.
 
 ##### One test (or test data) per code path please
