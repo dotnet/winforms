@@ -765,10 +765,6 @@ namespace System.Windows.Forms
 
         public const int WSF_VISIBLE = 0x0001;
 
-        public const int WA_INACTIVE = 0;
-        public const int WA_ACTIVE = 1;
-        public const int WA_CLICKACTIVE = 2;
-
         public const int WHEEL_DELTA = 120;
 
         // wParam of report message WM_IME_NOTIFY (public\sdk\imm.h)

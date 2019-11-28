@@ -212,6 +212,7 @@
     <Compile Include="..\..\Common\src\Interop\User32\Interop.TrackMouseEvent.cs" Link="Interop\User32\Interop.TrackMouseEvent.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.UnhookWindowsHookEx.cs" Link="Interop\User32\Interop.UnhookWindowsHookEx.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.ValidateRect.cs" Link="Interop\User32\Interop.ValidateRect.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.WA.cs" Link="Interop\User32\Interop.WA.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.WH.cs" Link="Interop\User32\Interop.WH.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.WindowMessage.cs" Link="Interop\User32\Interop.WindowMessage.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.WINDOWPOS.cs" Link="Interop\User32\Interop.WINDOWPOS.cs" />
