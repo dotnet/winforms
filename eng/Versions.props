@@ -32,9 +32,9 @@
   </PropertyGroup>
   <!-- Arcade -->
   <PropertyGroup>
-    <MicrosoftDotNetApiCompatPackageVersion>1.0.0-beta.19572.3</MicrosoftDotNetApiCompatPackageVersion>
-    <MicrosoftDotNetGenFacadesPackageVersion>1.0.0-beta.19572.3</MicrosoftDotNetGenFacadesPackageVersion>
-    <MicrosoftDotNetXUnitExtensionsPackageVersion>2.4.1-beta.19572.3</MicrosoftDotNetXUnitExtensionsPackageVersion>
+    <MicrosoftDotNetApiCompatPackageVersion>1.0.0-beta.19577.5</MicrosoftDotNetApiCompatPackageVersion>
+    <MicrosoftDotNetGenFacadesPackageVersion>1.0.0-beta.19577.5</MicrosoftDotNetGenFacadesPackageVersion>
+    <MicrosoftDotNetXUnitExtensionsPackageVersion>2.4.1-beta.19577.5</MicrosoftDotNetXUnitExtensionsPackageVersion>
   </PropertyGroup>
   <!-- Below have no corresponding entries in Versions.Details.XML because they are not updated via Maestro -->
   <!-- XUnit-related (not extensions) -->
