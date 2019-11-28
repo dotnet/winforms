@@ -2679,6 +2679,35 @@ namespace System.Windows.Forms.Tests
             Assert.True(control.IsHandleCreated);
         }
 
+        public static IEnumerable<object[]> IsMnemonic_TestData()
+        {
+            yield return new object[] { '&', null, false };
+            yield return new object[] { '&', "", false };
+            yield return new object[] { '&', "text", false };
+            yield return new object[] { '&', "&", false };
+            yield return new object[] { 'a', null, false };
+            yield return new object[] { 'a', "", false };
+            yield return new object[] { 'a', "text", false };
+            yield return new object[] { 'a', "a", false };
+            yield return new object[] { 'a', "&", false };
+            yield return new object[] { 'a', "&a", true };
+            yield return new object[] { 'A', "&a", true };
+            yield return new object[] { 'a', "&A", true };
+            yield return new object[] { 'A', "&A", true };
+            yield return new object[] { 'a', "&&a", false };
+            yield return new object[] { 'a', "a&a", true };
+            yield return new object[] { 'a', "a&ab", true };
+            yield return new object[] { 'a', "a&b", false };
+            yield return new object[] { 'a', "a&ba", false };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(IsMnemonic_TestData))]
+        public void Control_IsMnemonic_Invoke_ReturnsExpected(char charCode, string text, bool expected)
+        {
+            Assert.Equal(expected, Control.IsMnemonic(charCode, text));
+        }
+
         public static IEnumerable<object[]> NotifyInvalidated_TestData()
         {
             yield return new object[] { Rectangle.Empty };
@@ -10323,6 +10352,459 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, parentInvalidatedCallCount);
             Assert.Equal(0, parentStyleChangedCallCount);
             Assert.Equal(0, parentCreatedCallCount);
+        }
+
+        public static IEnumerable<object[]> WndProc_EraseBkgndWithoutHandleWithoutWParam_TestData()
+        {
+            foreach (bool opaque in new bool[] { true, false })
+            {
+                yield return new object[] { true, true, opaque, (IntPtr)1, false };
+                yield return new object[] { true, false, opaque, IntPtr.Zero, false };
+                yield return new object[] { false, true, opaque, IntPtr.Zero, false };
+                yield return new object[] { false, false, opaque, IntPtr.Zero, false };
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(WndProc_EraseBkgndWithoutHandleWithoutWParam_TestData))]
+        public void Control_WndProc_InvokeEraseBkgndWithoutHandleWithoutWParam_Success(bool userPaint, bool allPaintingInWmPaint, bool opaque, IntPtr expectedResult, bool expectedIsHandleCreated)
+        {
+            using (new NoAssertContext())
+            {
+                using var control = new SubControl();
+                control.SetStyle(ControlStyles.UserPaint, userPaint);
+                control.SetStyle(ControlStyles.AllPaintingInWmPaint, allPaintingInWmPaint);
+                control.SetStyle(ControlStyles.Opaque, opaque);
+                int paintCallCount = 0;
+                control.Paint += (sender, e) => paintCallCount++;
+
+                var m = new Message
+                {
+                    Msg = (int)User32.WindowMessage.WM_ERASEBKGND,
+                    Result = (IntPtr)250
+                };
+                control.WndProc(ref m);
+                Assert.Equal(expectedResult, m.Result);
+                Assert.Equal(expectedIsHandleCreated, control.IsHandleCreated);
+                Assert.Equal(0, paintCallCount);
+            }
+        }
+
+        public static IEnumerable<object[]> WndProc_EraseBkgndWithoutHandleWithWParam_TestData()
+        {
+            foreach (bool opaque in new bool[] { true, false })
+            {
+                yield return new object[] { true, true, opaque, (IntPtr)1, false };
+                yield return new object[] { true, false, opaque, (IntPtr)1, true };
+                yield return new object[] { false, true, opaque, IntPtr.Zero, false };
+                yield return new object[] { false, false, opaque, IntPtr.Zero, false };
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(WndProc_EraseBkgndWithoutHandleWithWParam_TestData))]
+        public void Control_WndProc_InvokeEraseBkgndWithoutHandleWithWParam_Success(bool userPaint, bool allPaintingInWmPaint, bool opaque, IntPtr expectedResult, bool expectedIsHandleCreated)
+        {
+            using (new NoAssertContext())
+            {
+                using var control = new SubControl();
+                control.SetStyle(ControlStyles.UserPaint, userPaint);
+                control.SetStyle(ControlStyles.AllPaintingInWmPaint, allPaintingInWmPaint);
+                control.SetStyle(ControlStyles.Opaque, opaque);
+                int paintCallCount = 0;
+                control.Paint += (sender, e) => paintCallCount++;
+
+                using var image = new Bitmap(10, 10);
+                using Graphics graphics = Graphics.FromImage(image);
+                IntPtr hdc = graphics.GetHdc();
+                try
+                {
+                    var m = new Message
+                    {
+                        Msg = (int)User32.WindowMessage.WM_ERASEBKGND,
+                        WParam = hdc,
+                        Result = (IntPtr)250
+                    };
+                    control.WndProc(ref m);
+                    Assert.Equal(expectedResult, m.Result);
+                    Assert.Equal(expectedIsHandleCreated, control.IsHandleCreated);
+                    Assert.Equal(0, paintCallCount);
+                }
+                finally
+                {
+                    graphics.ReleaseHdc();
+                }
+            }
+        }       
+
+        public static IEnumerable<object[]> WndProc_EraseBkgndWithHandleWithoutWParam_TestData()
+        {
+            foreach (bool opaque in new bool[] { true, false })
+            {
+                yield return new object[] { true, true, opaque, (IntPtr)1 };
+                yield return new object[] { true, false, opaque, IntPtr.Zero };
+                yield return new object[] { false, true, opaque, IntPtr.Zero };
+                yield return new object[] { false, false, opaque, IntPtr.Zero };
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(WndProc_EraseBkgndWithHandleWithoutWParam_TestData))]
+        public void Control_WndProc_InvokeEraseBkgndWithHandleWithoutWParam_Success(bool userPaint, bool allPaintingInWmPaint, bool opaque, IntPtr expectedResult)
+        {
+            using var control = new SubControl();
+            control.SetStyle(ControlStyles.UserPaint, userPaint);
+            control.SetStyle(ControlStyles.AllPaintingInWmPaint, allPaintingInWmPaint);
+            control.SetStyle(ControlStyles.Opaque, opaque);
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+            int paintCallCount = 0;
+            control.Paint += (sender, e) => paintCallCount++;
+
+            var m = new Message
+            {
+                Msg = (int)User32.WindowMessage.WM_ERASEBKGND,
+                Result = (IntPtr)250
+            };
+            control.WndProc(ref m);
+            Assert.Equal(expectedResult, m.Result);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+            Assert.Equal(0, paintCallCount);
+        }
+
+        public static IEnumerable<object[]> WndProc_EraseBkgndWithHandleWithWParam_TestData()
+        {
+            foreach (bool opaque in new bool[] { true, false })
+            {
+                yield return new object[] { true, true, opaque, (IntPtr)1 };
+                yield return new object[] { true, false, opaque, (IntPtr)1 };
+                yield return new object[] { false, true, opaque, IntPtr.Zero };
+                yield return new object[] { false, false, opaque, IntPtr.Zero };
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(WndProc_EraseBkgndWithHandleWithWParam_TestData))]
+        public void Control_WndProc_InvokeEraseBkgndWithHandleWithWParam_Success(bool userPaint, bool allPaintingInWmPaint, bool opaque, IntPtr expectedResult)
+        {
+            using var control = new SubControl();
+            control.SetStyle(ControlStyles.UserPaint, userPaint);
+            control.SetStyle(ControlStyles.AllPaintingInWmPaint, allPaintingInWmPaint);
+            control.SetStyle(ControlStyles.Opaque, opaque);
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+            int paintCallCount = 0;
+            control.Paint += (sender, e) => paintCallCount++;
+
+            using var image = new Bitmap(10, 10);
+            using Graphics graphics = Graphics.FromImage(image);
+            IntPtr hdc = graphics.GetHdc();
+            try
+            {
+                var m = new Message
+                {
+                    Msg = (int)User32.WindowMessage.WM_ERASEBKGND,
+                    WParam = hdc,
+                    Result = (IntPtr)250
+                };
+                control.WndProc(ref m);
+                Assert.Equal(expectedResult, m.Result);
+                Assert.True(control.IsHandleCreated);
+                Assert.Equal(0, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+                Assert.Equal(0, paintCallCount);
+            }
+            finally
+            {
+                graphics.ReleaseHdc();
+            }
+        }
+
+        public static IEnumerable<object[]> WndProc_PrintClientWithoutHandleWithoutWParam_TestData()
+        {
+            yield return new object[] { true, true, (IntPtr)250, 1 };
+            yield return new object[] { false, true, IntPtr.Zero, 0 };
+            yield return new object[] { false, false, IntPtr.Zero, 0 };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(WndProc_PrintClientWithoutHandleWithoutWParam_TestData))]
+        public void Control_WndProc_InvokePrintClientWithoutHandleWithoutWParam_Success(bool userPaint, bool opaque, IntPtr expectedResult, int expectedPaintCallCount)
+        {
+            using (new NoAssertContext())
+            {
+                using var control = new SubControl();
+                control.SetStyle(ControlStyles.UserPaint, userPaint);
+                control.SetStyle(ControlStyles.Opaque, opaque);
+                int paintCallCount = 0;
+                control.Paint += (sender, e) => paintCallCount++;
+
+                var m = new Message
+                {
+                    Msg = (int)User32.WindowMessage.WM_PRINTCLIENT,
+                    Result = (IntPtr)250
+                };
+                control.WndProc(ref m);
+                Assert.Equal(expectedResult, m.Result);
+                Assert.False(control.IsHandleCreated);
+                Assert.Equal(expectedPaintCallCount, paintCallCount);
+            }
+        }
+
+        [WinFormsFact]
+        public void Control_WndProc_InvokePrintClientWithoutHandleWithoutWParamUserPaint_ThrowsNullReferenceException()
+        {
+            using (new NoAssertContext())
+            {
+                using var control = new SubControl();
+                control.SetStyle(ControlStyles.UserPaint, true);
+                control.SetStyle(ControlStyles.Opaque, false);
+                int paintCallCount = 0;
+                control.Paint += (sender, e) => paintCallCount++;
+
+                var m = new Message
+                {
+                    Msg = (int)User32.WindowMessage.WM_PRINTCLIENT,
+                    Result = (IntPtr)250
+                };
+                Assert.Throws<NullReferenceException>(() => control.WndProc(ref m));
+                Assert.Equal((IntPtr)250, m.Result);
+                Assert.False(control.IsHandleCreated);
+                Assert.Equal(0, paintCallCount);
+            }
+        }
+
+        public static IEnumerable<object[]> WndProc_PrintClientWithoutHandleWithWParam_TestData()
+        {
+            yield return new object[] { true, true, (IntPtr)250, 1 };
+            yield return new object[] { true, false, (IntPtr)250, 1 };
+            yield return new object[] { false, true, IntPtr.Zero, 0 };
+            yield return new object[] { false, false, IntPtr.Zero, 0 };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(WndProc_PrintClientWithoutHandleWithWParam_TestData))]
+        public void Control_WndProc_InvokePrintClientWithoutHandleWithWParam_Success(bool userPaint, bool opaque, IntPtr expectedResult, int expectedPaintCallCount)
+        {
+            using (new NoAssertContext())
+            {
+                using var control = new SubControl();
+                control.SetStyle(ControlStyles.UserPaint, userPaint);
+                control.SetStyle(ControlStyles.Opaque, opaque);
+                int paintCallCount = 0;
+                control.Paint += (sender, e) => paintCallCount++;
+
+                using var image = new Bitmap(10, 10);
+                using Graphics graphics = Graphics.FromImage(image);
+                IntPtr hdc = graphics.GetHdc();
+                try
+                {
+                    var m = new Message
+                    {
+                        Msg = (int)User32.WindowMessage.WM_PRINTCLIENT,
+                        WParam = hdc,
+                        Result = (IntPtr)250
+                    };
+                    control.WndProc(ref m);
+                    Assert.Equal(expectedResult, m.Result);
+                    Assert.False(control.IsHandleCreated);
+                    Assert.Equal(expectedPaintCallCount, paintCallCount);
+                }
+                finally
+                {
+                    graphics.ReleaseHdc();
+                }
+            }
+        }
+
+        public static IEnumerable<object[]> WndProc_PrintClientWithHandleWithoutWParam_TestData()
+        {
+            yield return new object[] { true, true, (IntPtr)250, 1 };
+            yield return new object[] { false, true, IntPtr.Zero, 0 };
+            yield return new object[] { false, false, IntPtr.Zero, 0 };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(WndProc_PrintClientWithHandleWithoutWParam_TestData))]
+        public void Control_WndProc_InvokePrintClientWithHandleWithoutWParam_Success(bool userPaint, bool opaque, IntPtr expectedResult, int expectedPaintCallCount)
+        {
+            using var control = new SubControl();
+            control.SetStyle(ControlStyles.UserPaint, userPaint);
+            control.SetStyle(ControlStyles.Opaque, opaque);
+            int paintCallCount = 0;
+            control.Paint += (sender, e) => paintCallCount++;
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            var m = new Message
+            {
+                Msg = (int)User32.WindowMessage.WM_PRINTCLIENT,
+                Result = (IntPtr)250
+            };
+            control.WndProc(ref m);
+            Assert.Equal(expectedResult, m.Result);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+            Assert.Equal(expectedPaintCallCount, paintCallCount);
+        }
+
+        [WinFormsFact]
+        public void Control_WndProc_InvokePrintClientWithHandleWithoutWParamUserPaint_ThrowsNullReferenceException()
+        {
+            using var control = new SubControl();
+            control.SetStyle(ControlStyles.UserPaint, true);
+            control.SetStyle(ControlStyles.Opaque, false);
+            int paintCallCount = 0;
+            control.Paint += (sender, e) => paintCallCount++;
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            var m = new Message
+            {
+                Msg = (int)User32.WindowMessage.WM_PRINTCLIENT,
+                Result = (IntPtr)250
+            };
+            Assert.Throws<NullReferenceException>(() => control.WndProc(ref m));
+            Assert.Equal((IntPtr)250, m.Result);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(1, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+            Assert.Equal(0, paintCallCount);
+        }
+
+        public static IEnumerable<object[]> WndProc_PrintClientWithHandleWithWParam_TestData()
+        {
+            yield return new object[] { true, true, (IntPtr)250, 1 };
+            yield return new object[] { true, false, (IntPtr)250, 1 };
+            yield return new object[] { false, true, IntPtr.Zero, 0 };
+            yield return new object[] { false, false, IntPtr.Zero, 0 };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(WndProc_PrintClientWithHandleWithWParam_TestData))]
+        public void Control_WndProc_InvokePrintClientWithHandleWithWParam_Success(bool userPaint, bool opaque, IntPtr expectedResult, int expectedPaintCallCount)
+        {
+            using var control = new SubControl();
+            control.SetStyle(ControlStyles.UserPaint, userPaint);
+            control.SetStyle(ControlStyles.Opaque, opaque);
+            int paintCallCount = 0;
+            control.Paint += (sender, e) => paintCallCount++;
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            using var image = new Bitmap(10, 10);
+            using Graphics graphics = Graphics.FromImage(image);
+            IntPtr hdc = graphics.GetHdc();
+            try
+            {
+                var m = new Message
+                {
+                    Msg = (int)User32.WindowMessage.WM_PRINTCLIENT,
+                    WParam = hdc,
+                    Result = (IntPtr)250
+                };
+                control.WndProc(ref m);
+                Assert.Equal(expectedResult, m.Result);
+                Assert.True(control.IsHandleCreated);
+                Assert.Equal(0, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+                Assert.Equal(expectedPaintCallCount, paintCallCount);
+            }
+            finally
+            {
+                graphics.ReleaseHdc();
+            }
+        }
+
+        [WinFormsFact]
+        public void Control_WndProc_InvokeMouseHoverWithoutHandle_Success()
+        {
+            using (new NoAssertContext())
+            {
+                using var control = new SubControl();
+                int callCount = 0;
+                control.MouseHover += (sender, e) =>
+                {
+                    Assert.Same(control, sender);
+                    Assert.Same(EventArgs.Empty, e);
+                    callCount++;
+                };
+                var m = new Message
+                {
+                    Msg = (int)User32.WindowMessage.WM_MOUSEHOVER,
+                    Result = (IntPtr)250
+                };
+                control.WndProc(ref m);
+                Assert.Equal(IntPtr.Zero, m.Result);
+                Assert.Equal(1, callCount);
+                Assert.False(control.IsHandleCreated);
+            }
+        }
+
+        [WinFormsFact]
+        public void Control_WndProc_InvokeMouseHoverWithHandle_Success()
+        {
+            using var control = new SubControl();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            int callCount = 0;
+            control.MouseHover += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                callCount++;
+            };
+            var m = new Message
+            {
+                Msg = (int)User32.WindowMessage.WM_MOUSEHOVER,
+                Result = (IntPtr)250
+            };
+            control.WndProc(ref m);
+            Assert.Equal(IntPtr.Zero, m.Result);
+            Assert.Equal(1, callCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
         }
     }
 }

@@ -109,9 +109,6 @@ namespace System.Windows.Forms.Internal
 
         public static WindowsGraphics FromGraphics(Graphics g, ApplyGraphicsProperties properties)
         {
-            Debug.Assert(g != null, "null Graphics object.");
-            //Debug.Assert( properties != ApplyGraphicsProperties.None, "Consider using other WindowsGraphics constructor if not preserving Graphics properties." );
-
             WindowsRegion wr = null;
             float[] elements = null;
 
