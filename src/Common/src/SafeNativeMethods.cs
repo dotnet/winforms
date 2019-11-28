@@ -129,9 +129,5 @@ namespace System.Windows.Forms
 
         [DllImport(ExternDll.Uxtheme, CharSet = CharSet.Auto)]
         public static extern bool IsThemeBackgroundPartiallyTransparent(HandleRef hTheme, int iPartId, int iStateId);
-
-        [DllImport(ExternDll.Uxtheme, CharSet = CharSet.Auto)]
-        public extern static int SetWindowTheme(IntPtr hWnd, string subAppName, string subIdList);
     }
 }
-

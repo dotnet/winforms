@@ -767,7 +767,7 @@ namespace System.Windows.Forms
 
                 if (SystemInformation.HighContrast)
                 {
-                    SafeNativeMethods.SetWindowTheme(Handle, "", "");
+                    UxTheme.SetWindowTheme(Handle, string.Empty, string.Empty);
                 }
             }
             finally
