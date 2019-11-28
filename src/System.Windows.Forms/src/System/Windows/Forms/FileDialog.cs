@@ -535,13 +535,13 @@ namespace System.Windows.Forms
                                 {
                                     // This is the second CDN_FILEOK, so we want to ignore it.
                                     _ignoreSecondFileOkNotification = false;
-                                    UnsafeNativeMethods.SetWindowLong(new HandleRef(null, hWnd), 0, new HandleRef(null, NativeMethods.InvalidIntPtr));
+                                    User32.SetWindowLong(hWnd, 0, NativeMethods.InvalidIntPtr);
                                     return NativeMethods.InvalidIntPtr;
                                 }
                             }
                             if (!DoFileOk(notify->lpOFN))
                             {
-                                UnsafeNativeMethods.SetWindowLong(new HandleRef(null, hWnd), 0, new HandleRef(null, NativeMethods.InvalidIntPtr));
+                                User32.SetWindowLong(hWnd, 0, NativeMethods.InvalidIntPtr);
                                 return NativeMethods.InvalidIntPtr;
                             }
                             break;

@@ -1074,7 +1074,7 @@ namespace System.Windows.Forms
                     // If the owner window of the dialog is still enabled, disable it now.
                     // This can happen if the owner window is from a different thread or
                     // process.
-                    hwndOwner = UnsafeNativeMethods.GetWindowLong(new HandleRef(_currentForm, _currentForm.Handle), NativeMethods.GWL_HWNDPARENT);
+                    hwndOwner = User32.GetWindowLong(_currentForm, User32.GWL.HWNDPARENT);
                     if (hwndOwner != IntPtr.Zero)
                     {
                         if (User32.IsWindowEnabled(hwndOwner).IsTrue())

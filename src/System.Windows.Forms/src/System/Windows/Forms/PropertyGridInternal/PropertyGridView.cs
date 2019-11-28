@@ -440,8 +440,8 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 if (edit != null && edit.IsHandleCreated)
                 {
-                    int exStyle = unchecked((int)((long)UnsafeNativeMethods.GetWindowLong(new HandleRef(edit, edit.Handle), NativeMethods.GWL_EXSTYLE)));
-                    return ((exStyle & (int)User32.WS_EX.RTLREADING) != 0);
+                    int exStyle = unchecked((int)((long)User32.GetWindowLong(edit, User32.GWL.EXSTYLE)));
+                    return (exStyle & (int)User32.WS_EX.RTLREADING) != 0;
                 }
                 else
                 {
@@ -1939,7 +1939,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             // control is a top=level window. standard way of setparent on the control is prohibited for top-level controls.
             // It is unknown why this control was created as a top-level control. Windows does not recommend this way of setting parent.
             // We are not touching this for this relase. We may revisit it in next release.
-            UnsafeNativeMethods.SetWindowLong(new HandleRef(dropDownHolder, dropDownHolder.Handle), NativeMethods.GWL_HWNDPARENT, new HandleRef(this, Handle));
+            User32.SetWindowLong(dropDownHolder, User32.GWL.HWNDPARENT, new HandleRef(this, Handle));
             dropDownHolder.SetBounds(loc.X, loc.Y, size.Width, size.Height);
             User32.ShowWindow(dropDownHolder, User32.SW.SHOWNA);
             Edit.Filter = true;
@@ -6539,7 +6539,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 while (hWnd != IntPtr.Zero)
                 {
-                    hWnd = UnsafeNativeMethods.GetWindowLong(new HandleRef(null, hWnd), NativeMethods.GWL_HWNDPARENT);
+                    hWnd = User32.GetWindowLong(hWnd, User32.GWL.HWNDPARENT);
                     if (hWnd == IntPtr.Zero)
                     {
                         return false;
@@ -7820,7 +7820,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 switch (m.Msg)
                 {
                     case WindowMessages.WM_STYLECHANGED:
-                        if ((unchecked((int)(long)m.WParam) & NativeMethods.GWL_EXSTYLE) != 0)
+                        if ((unchecked((int)(long)m.WParam) & (int)User32.GWL.EXSTYLE) != 0)
                         {
                             psheet.Invalidate();
                         }

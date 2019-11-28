@@ -704,8 +704,8 @@ namespace System.Windows.Forms
                 //
                 if (IsHandleCreated)
                 {
-                    int currentStyle = unchecked((int)(long)UnsafeNativeMethods.GetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_STYLE));
-                    cp.Style |= currentStyle & (int)(User32.WS.HSCROLL | User32.WS.VSCROLL);
+                    int currentStyle = unchecked((int)((long)User32.GetWindowLong(this, User32.GWL.STYLE)));
+                    cp.Style |= (currentStyle & (int)(User32.WS.HSCROLL | User32.WS.VSCROLL));
                 }
 
                 cp.Style |= (int)LVS.SHAREIMAGELISTS;
@@ -4444,9 +4444,9 @@ namespace System.Windows.Forms
             //
             if (!Scrollable)
             {
-                int style = unchecked((int)(long)UnsafeNativeMethods.GetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_STYLE));
+                int style = unchecked((int)((long)User32.GetWindowLong(this, User32.GWL.STYLE)));
                 style |= (int)LVS.NOSCROLL;
-                UnsafeNativeMethods.SetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_STYLE, new HandleRef(null, (IntPtr)style));
+                User32.SetWindowLong(this, User32.GWL.STYLE, (IntPtr)style);
             }
 
             // in VirtualMode we have to tell the list view to ask for the list view item's state image index

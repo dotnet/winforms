@@ -40,6 +40,14 @@ internal static partial class Interop
             return result;
         }
 
+        public static IntPtr SetWindowLong(IHandle hWnd, GWL nIndex, HandleRef dwNewLong)
+        {
+            IntPtr result = SetWindowLong(hWnd.Handle, nIndex, dwNewLong.Handle);
+            GC.KeepAlive(hWnd);
+            GC.KeepAlive(dwNewLong.Wrapper);
+            return result;
+        }
+
         public static IntPtr SetWindowLong(IHandle hWnd, GWL nIndex, WNDPROC dwNewLong)
         {
             IntPtr pointer = Marshal.GetFunctionPointerForDelegate(dwNewLong);
@@ -53,6 +61,22 @@ internal static partial class Interop
             IntPtr pointer = Marshal.GetFunctionPointerForDelegate(dwNewLong);
             IntPtr result = SetWindowLong(hWnd, nIndex, pointer);
             GC.KeepAlive(dwNewLong);
+            return result;
+        }
+
+        public static IntPtr SetWindowLong(HandleRef hWnd, GWL nIndex, WNDPROCINT dwNewLong)
+        {
+            IntPtr pointer = Marshal.GetFunctionPointerForDelegate(dwNewLong);
+            IntPtr result = SetWindowLong(hWnd.Handle, nIndex, pointer);
+            GC.KeepAlive(hWnd.Wrapper);
+            return result;
+        }
+
+        public static IntPtr SetWindowLong(HandleRef hWnd, GWL nIndex, HandleRef dwNewLong)
+        {
+            IntPtr result = SetWindowLong(hWnd.Handle, nIndex, dwNewLong.Handle);
+            GC.KeepAlive(hWnd.Wrapper);
+            GC.KeepAlive(dwNewLong.Wrapper);
             return result;
         }
     }

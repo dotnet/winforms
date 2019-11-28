@@ -1685,7 +1685,7 @@ namespace System.Windows.Forms
         private void ReparentToActiveToolStripWindow()
         {
             ToolStripManager.ModalMenuFilter.SetActiveToolStrip(this);
-            UnsafeNativeMethods.SetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_HWNDPARENT, ToolStripManager.ModalMenuFilter.ActiveHwnd);
+            User32.SetWindowLong(this, User32.GWL.HWNDPARENT, ToolStripManager.ModalMenuFilter.ActiveHwnd);
         }
 
         private void ReparentToDropDownOwnerWindow()
@@ -1694,7 +1694,7 @@ namespace System.Windows.Forms
             // this prevents a taskbar entry.
             NativeWindow ownerWindow = DropDownOwnerWindow;
             HandleRef ownerHandle = new HandleRef(ownerWindow, ownerWindow.Handle);
-            UnsafeNativeMethods.SetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_HWNDPARENT, ownerHandle);
+            User32.SetWindowLong(this, User32.GWL.HWNDPARENT, ownerHandle);
         }
 
         internal override void ResetScaling(int newDpi)

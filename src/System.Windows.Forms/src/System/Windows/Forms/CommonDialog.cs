@@ -198,7 +198,7 @@ namespace System.Windows.Forms
                     s_helpMsg = User32.RegisterWindowMessageW("commdlg_help");
                 }
 
-                NativeMethods.WndProc ownerProc = new NativeMethods.WndProc(OwnerWndProc);
+                User32.WNDPROCINT ownerProc = new User32.WNDPROCINT(OwnerWndProc);
                 _hookedWndProc = Marshal.GetFunctionPointerForDelegate(ownerProc);
                 Debug.Assert(IntPtr.Zero == _defOwnerWndProc, "The previous subclass wasn't properly cleaned up");
 
@@ -206,7 +206,7 @@ namespace System.Windows.Forms
                 try
                 {
                     // UnsafeNativeMethods.[Get|Set]WindowLong is smart enough to call SetWindowLongPtr on 64-bit OS
-                    _defOwnerWndProc = UnsafeNativeMethods.SetWindowLong(new HandleRef(this, hwndOwner), NativeMethods.GWL_WNDPROC, ownerProc);
+                    _defOwnerWndProc = User32.SetWindowLong(new HandleRef(this, hwndOwner), User32.GWL.WNDPROC, ownerProc);
 
                     if (Application.UseVisualStyles)
                     {
@@ -225,10 +225,10 @@ namespace System.Windows.Forms
                 }
                 finally
                 {
-                    IntPtr currentSubClass = UnsafeNativeMethods.GetWindowLong(new HandleRef(this, hwndOwner), NativeMethods.GWL_WNDPROC);
+                    IntPtr currentSubClass = User32.GetWindowLong(new HandleRef(this, hwndOwner), User32.GWL.WNDPROC);
                     if (_defOwnerWndProc != IntPtr.Zero || currentSubClass != _hookedWndProc)
                     {
-                        UnsafeNativeMethods.SetWindowLong(new HandleRef(this, hwndOwner), NativeMethods.GWL_WNDPROC, new HandleRef(this, _defOwnerWndProc));
+                        User32.SetWindowLong(new HandleRef(this, hwndOwner), User32.GWL.WNDPROC, new HandleRef(this, _defOwnerWndProc));
                     }
 
                     ThemingScope.Deactivate(userCookie);
