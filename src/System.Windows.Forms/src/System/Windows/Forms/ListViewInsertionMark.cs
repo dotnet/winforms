@@ -2,10 +2,11 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
-using System.Diagnostics;
 using static Interop;
+using static Interop.ComCtl32;
 
 namespace System.Windows.Forms
 {
@@ -122,7 +123,7 @@ namespace System.Windows.Forms
         ///
         public int NearestIndex(Point pt)
         {
-            NativeMethods.LVINSERTMARK lvInsertMark = new NativeMethods.LVINSERTMARK();
+            LVINSERTMARK lvInsertMark = new LVINSERTMARK();
             UnsafeNativeMethods.SendMessage(new HandleRef(listView, listView.Handle), (int)LVM.INSERTMARKHITTEST, ref pt, lvInsertMark);
             return lvInsertMark.iItem;
         }
@@ -130,7 +131,7 @@ namespace System.Windows.Forms
         internal void UpdateListView()
         {
             Debug.Assert(listView.IsHandleCreated, "ApplySavedState Precondition: List-view handle must be created");
-            NativeMethods.LVINSERTMARK lvInsertMark = new NativeMethods.LVINSERTMARK
+            LVINSERTMARK lvInsertMark = new LVINSERTMARK
             {
                 dwFlags = appearsAfterItem ? NativeMethods.LVIM_AFTER : 0,
                 iItem = index

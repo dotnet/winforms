@@ -1705,7 +1705,7 @@ namespace System.Windows.Forms
         ///  handle for this control.  If the control's handle hasn't been
         ///  created yet, this method will return the current thread's ID.
         /// </summary>
-        internal uint CreateThreadId => IsHandleCreated 
+        internal uint CreateThreadId => IsHandleCreated
             ? User32.GetWindowThreadProcessId(this, out _)
             : Kernel32.GetCurrentThreadId();
 
@@ -2212,7 +2212,7 @@ namespace System.Windows.Forms
         {
             Font local = (Font)Properties.GetObject(s_fontProperty);
             Font resolved = Font;
-            Font newFont = new Font(Font.FontFamily, Font.Size*  factor, Font.Style);
+            Font newFont = new Font(Font.FontFamily, Font.Size * factor, Font.Style);
 
             if ((local == null) || !local.Equals(newFont))
             {
@@ -7879,7 +7879,7 @@ namespace System.Windows.Forms
                     ListenToUserPreferenceChanged(GetTopLevel());
                 }
             }
-            
+
             ((EventHandler)Events[s_handleCreatedEvent])?.Invoke(this, e);
 
             if (IsHandleCreated)
@@ -8088,7 +8088,7 @@ namespace System.Windows.Forms
             {
                 _parent.ChildGotFocus(this);
             }
-            
+
             ((EventHandler)Events[s_gotFocusEvent])?.Invoke(this, e);
         }
 
@@ -8143,7 +8143,7 @@ namespace System.Windows.Forms
                     controls[i].OnParentInvalidated(e);
                 }
             }
-            
+
             ((InvalidateEventHandler)Events[s_invalidatedEvent])?.Invoke(this, e);
         }
 
@@ -8245,7 +8245,7 @@ namespace System.Windows.Forms
             {
                 ActiveXOnFocus(false);
             }
-            
+
             ((EventHandler)Events[s_lostFocusEvent])?.Invoke(this, e);
         }
 
@@ -8404,7 +8404,7 @@ namespace System.Windows.Forms
             {
                 Invalidate();
             }
-            
+
             ((EventHandler)Events[s_paddingChangedEvent])?.Invoke(this, e);
         }
 
@@ -10631,16 +10631,6 @@ namespace System.Windows.Forms
         ///  Sends a Win32 message to this control.  If the control does not yet
         ///  have a handle, it will be created.
         /// </summary>
-        internal IntPtr SendMessage(int msg, bool wparam, int lparam)
-        {
-            Debug.Assert(IsHandleCreated, "Performance alert!  Calling Control::SendMessage and forcing handle creation.  Re-work control so handle creation is not required to set properties.  If there is no work around, wrap the call in an IsHandleCreated check.");
-            return UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), msg, wparam, lparam);
-        }
-
-        /// <summary>
-        ///  Sends a Win32 message to this control.  If the control does not yet
-        ///  have a handle, it will be created.
-        /// </summary>
         internal IntPtr SendMessage(int msg, int wparam, string lparam)
         {
             Debug.Assert(IsHandleCreated, "Performance alert!  Calling Control::SendMessage and forcing handle creation.  Re-work control so handle creation is not required to set properties.  If there is no work around, wrap the call in an IsHandleCreated check.");
@@ -12234,7 +12224,7 @@ namespace System.Windows.Forms
                     if (local != null)
                     {
                         var factor = (float)_deviceDpi / deviceDpiOld;
-                        Font = new Font(local.FontFamily, local.Size*  factor, local.Style, local.Unit, local.GdiCharSet, local.GdiVerticalFont);
+                        Font = new Font(local.FontFamily, local.Size * factor, local.Style, local.Unit, local.GdiCharSet, local.GdiVerticalFont);
                     }
 
                     RescaleConstantsForDpi(deviceDpiOld, _deviceDpi);
@@ -12610,7 +12600,7 @@ namespace System.Windows.Forms
                         {
                             Gdi32.SelectPalette(dc, oldPal, BOOL.FALSE);
                         }
-                        
+
                         bufferedGraphics?.Dispose();
                     }
                 }

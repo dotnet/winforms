@@ -6,7 +6,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing.Design;
 using System.Runtime.InteropServices;
-using static Interop;
+using static Interop.ComCtl32;
 
 namespace System.Windows.Forms
 {

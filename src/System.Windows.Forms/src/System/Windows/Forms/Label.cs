@@ -523,7 +523,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Gets or sets the key accessor for the image list.  This specifies the image
-	    ///	  from the image list to display on
+        ///	  from the image list to display on
         ///  <see cref='Label'/>.
         /// </summary>
         [
@@ -1253,7 +1253,7 @@ namespace System.Windows.Forms
             return (FlatStyle == FlatStyle.System || !UseCompatibleTextRendering);
         }
 
-// See ComboBox.cs GetComboHeight
+        // See ComboBox.cs GetComboHeight
         internal override Size GetPreferredSizeCore(Size proposedConstraints)
         {
             Size bordersAndPadding = GetBordersAndPadding();
