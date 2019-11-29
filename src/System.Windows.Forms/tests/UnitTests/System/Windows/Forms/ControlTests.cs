@@ -895,6 +895,8 @@ namespace System.Windows.Forms.Tests
 
             public new void OnParentVisibleChanged(EventArgs e) => base.OnParentVisibleChanged(e);
 
+            public new void OnPrint(PaintEventArgs e) => base.OnPrint(e);
+
             public new void OnQueryContinueDrag(QueryContinueDragEventArgs e) => base.OnQueryContinueDrag(e);
 
             public new void OnRegionChanged(EventArgs e) => base.OnRegionChanged(e);
@@ -954,6 +956,8 @@ namespace System.Windows.Forms.Tests
             public new void UpdateStyles() => base.UpdateStyles();
 
             public new void UpdateZOrder() => base.UpdateZOrder();
+
+            public new void WndProc(ref Message m) => base.WndProc(ref m);
         }
     }
 }

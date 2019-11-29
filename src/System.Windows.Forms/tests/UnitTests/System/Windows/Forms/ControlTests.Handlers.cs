@@ -1701,61 +1701,28 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.IsHandleCreated);
         }
 
-        [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
-        public void Control_OnFontChanged_InvokeWithHandle_CallsFontChangedAndInvalidated(EventArgs eventArgs)
+        public static IEnumerable<object[]> OnFontChanged_WithHandle_TestData()
         {
-            using var control = new SubControl();
-            Assert.NotEqual(IntPtr.Zero, control.Handle);
-            Assert.True(control.GetStyle(ControlStyles.UserPaint));
-
-            int callCount = 0;
-            EventHandler handler = (sender, e) =>
+            foreach (bool userPaint in new bool[] { true, false })
             {
-                Assert.Same(control, sender);
-                Assert.Same(eventArgs, e);
-                callCount++;
-            };
-            int invalidatedCallCount = 0;
-            InvalidateEventHandler invalidatedHandler = (sender, e) => invalidatedCallCount++;
-            int styleChangedCallCount = 0;
-            EventHandler styleChangedHandler = (sender, e) => styleChangedCallCount++;
-            int createdCallCount = 0;
-            EventHandler createdHandler = (sender, e) => createdCallCount++;
-
-            // Call with handler.
-            control.FontChanged += handler;
-            control.Invalidated += invalidatedHandler;
-            control.StyleChanged += styleChangedHandler;
-            control.HandleCreated += createdHandler;
-            control.OnFontChanged(eventArgs);
-            Assert.Equal(1, callCount);
-            Assert.Equal(1, invalidatedCallCount);
-            Assert.Equal(0, styleChangedCallCount);
-            Assert.Equal(0, createdCallCount);
-            Assert.True(control.IsHandleCreated);
-
-            // Remove handler.
-            control.FontChanged -= handler;
-            control.Invalidated -= invalidatedHandler;
-            control.StyleChanged -= styleChangedHandler;
-            control.HandleCreated -= createdHandler;
-            control.OnFontChanged(eventArgs);
-            Assert.Equal(1, callCount);
-            Assert.Equal(1, invalidatedCallCount);
-            Assert.Equal(0, styleChangedCallCount);
-            Assert.Equal(0, createdCallCount);
-            Assert.True(control.IsHandleCreated);
+                yield return new object[] { userPaint, null };
+                yield return new object[] { userPaint, new EventArgs() };
+            }
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
-        public void Control_OnFontChanged_InvokeWithHandleNoUserPaint_CallsFontChangedAndInvalidated(EventArgs eventArgs)
+        [MemberData(nameof(OnFontChanged_WithHandle_TestData))]
+        public void Control_OnFontChanged_InvokeWithHandle_CallsFontChangedAndInvalidated(bool userPaint, EventArgs eventArgs)
         {
             using var control = new SubControl();
-            control.SetStyle(ControlStyles.UserPaint, false);
+            control.SetStyle(ControlStyles.UserPaint, userPaint);
             Assert.NotEqual(IntPtr.Zero, control.Handle);
-            Assert.False(control.GetStyle(ControlStyles.UserPaint));
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
 
             int callCount = 0;
             EventHandler handler = (sender, e) =>
@@ -1764,32 +1731,26 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-            int invalidatedCallCount = 0;
-            InvalidateEventHandler invalidatedHandler = (sender, e) => invalidatedCallCount++;
-            int styleChangedCallCount = 0;
-            EventHandler styleChangedHandler = (sender, e) => styleChangedCallCount++;
-            int createdCallCount = 0;
-            EventHandler createdHandler = (sender, e) => createdCallCount++;
 
             // Call with handler.
             control.FontChanged += handler;
-            control.Invalidated += invalidatedHandler;
             control.OnFontChanged(eventArgs);
             Assert.Equal(1, callCount);
+            Assert.Equal(Control.DefaultFont.Height, control.FontHeight);
+            Assert.True(control.IsHandleCreated);
             Assert.Equal(1, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.True(control.IsHandleCreated);
 
             // Remove handler.
             control.FontChanged -= handler;
-            control.Invalidated -= invalidatedHandler;
             control.OnFontChanged(eventArgs);
             Assert.Equal(1, callCount);
-            Assert.Equal(1, invalidatedCallCount);
+            Assert.Equal(Control.DefaultFont.Height, control.FontHeight);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(2, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.True(control.IsHandleCreated);
         }
 
         [WinFormsTheory]
@@ -1900,6 +1861,30 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
             Assert.Equal(0, child1CallCount);
             Assert.Equal(0, child2CallCount);
+        }
+
+        [WinFormsFact]
+        public void Control_OnFontChanged_InvokeInDisposing_DoesNotCallFontChanged()
+        {
+            using var control = new SubControl();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+
+            int callCount = 0;
+            control.FontChanged += (sender, e) => callCount++;
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+
+            int disposedCallCount = 0;
+            control.Disposed += (sender, e) =>
+            {
+                control.OnFontChanged(EventArgs.Empty);
+                Assert.Equal(0, callCount);
+                Assert.Equal(0, invalidatedCallCount);
+                disposedCallCount++;
+            };
+
+            control.Dispose();
+            Assert.Equal(1, disposedCallCount);
         }
 
         [WinFormsTheory]
@@ -4164,7 +4149,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void OnPaintBackground_NullEventArgs_ThrowsNullReferenceException()
+        public void Control_OnPaintBackground_NullEventArgs_ThrowsNullReferenceException()
         {
             using var control = new SubControl();
             Assert.Throws<NullReferenceException>(() => control.OnPaintBackground(null));
@@ -4614,6 +4599,162 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, callCount);
         }
 
+        public static IEnumerable<object[]> OnPrint_WithoutHandle_TestData()
+        {
+            foreach (bool opaque in new bool[] { true, false })
+            {
+                yield return new object[] { true, opaque, 1, false };
+                yield return new object[] { false, opaque, 0, true };
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(OnPrint_WithoutHandle_TestData))]
+        public void Control_OnPrint_InvokeWithoutHandle_Success(bool userPaint, bool opaque, int expectedPaintCallCount, bool expectedIsHandleCreated)
+        {
+            using var control = new SubControl();
+            control.SetStyle(ControlStyles.UserPaint, userPaint);
+            control.SetStyle(ControlStyles.Opaque, opaque);
+            int paintCallCount = 0;
+            control.Paint += (sender, e) => paintCallCount++;
+
+            using var image = new Bitmap(10, 10);
+            using Graphics graphics = Graphics.FromImage(image);
+            var eventArgs = new PaintEventArgs(graphics, Rectangle.Empty);
+            control.OnPrint(eventArgs);
+            Assert.Equal(expectedPaintCallCount, paintCallCount);
+            Assert.Equal(expectedIsHandleCreated, control.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void Control_OnPrint_InvokeExceptionThrownInOnPaintWithoutHandle_Success()
+        {
+            using var control = new SubControl();
+            int paintCallCount = 0;
+            control.Paint += (sender, e) =>
+            {
+                paintCallCount++;
+                throw new DivideByZeroException();
+            };
+
+            using var image = new Bitmap(10, 10);
+            using Graphics graphics = Graphics.FromImage(image);
+            var eventArgs = new PaintEventArgs(graphics, Rectangle.Empty);
+            Assert.Throws<DivideByZeroException>(() => control.OnPrint(eventArgs));
+            Assert.Equal(1, paintCallCount);
+            Assert.False(control.IsHandleCreated);
+
+            // Print again.
+            control.OnPrint(eventArgs);
+            Assert.Equal(1, paintCallCount);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> OnPrint_WithHandle_TestData()
+        {
+            foreach (bool opaque in new bool[] { true, false })
+            {
+                yield return new object[] { true, opaque, 1 };
+                yield return new object[] { false, opaque, 0 };
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(OnPrint_WithHandle_TestData))]
+        public void Control_OnPrint_InvokeWithHandle_Success(bool userPaint, bool opaque, int expectedPaintCallCount)
+        {
+            using var control = new SubControl();
+            control.SetStyle(ControlStyles.UserPaint, userPaint);
+            control.SetStyle(ControlStyles.Opaque, opaque);
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+            int paintCallCount = 0;
+            control.Paint += (sender, e) => paintCallCount++;
+
+            using var image = new Bitmap(10, 10);
+            using Graphics graphics = Graphics.FromImage(image);
+            var eventArgs = new PaintEventArgs(graphics, Rectangle.Empty);
+            control.OnPrint(eventArgs);
+            Assert.Equal(expectedPaintCallCount, paintCallCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsFact]
+        public void Control_OnPrint_InvokeExceptionThrownInOnPaintWithHandle_Success()
+        {
+            using var control = new SubControl();
+            int paintCallCount = 0;
+            control.Paint += (sender, e) =>
+            {
+                paintCallCount++;
+                throw new DivideByZeroException();
+            };
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            using var image = new Bitmap(10, 10);
+            using Graphics graphics = Graphics.FromImage(image);
+            var eventArgs = new PaintEventArgs(graphics, Rectangle.Empty);
+            Assert.Throws<DivideByZeroException>(() => control.OnPrint(eventArgs));
+            Assert.Equal(1, paintCallCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(1, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Print again.
+            control.OnPrint(eventArgs);
+            Assert.Equal(1, paintCallCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(1, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsFact]
+        public void Control_OnPrint_InvokeSetTextInPrint_CachesText()
+        {
+            using var control = new SubControl();
+
+            int printCallCount = 0;
+            control.Paint += (sender, e) =>
+            {
+                string longString = new string('a', 65536);
+                control.Text = longString;
+                Assert.Equal(longString, control.Text);
+                printCallCount++;
+            };
+
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            Assert.Empty(control.Text);
+
+            using var image = new Bitmap(10, 10);
+            using Graphics graphics = Graphics.FromImage(image);
+            var eventArgs = new PaintEventArgs(graphics, Rectangle.Empty);
+            control.OnPrint(eventArgs);
+            Assert.Equal(1, printCallCount);
+            Assert.Empty(control.Text);
+        }
+
+        [WinFormsFact]
+        public void Control_OnPrint_InvokeNullE_ThrowsArgumentNullException()
+        {
+            using var control = new SubControl();
+            Assert.Throws<ArgumentNullException>("e", () => control.OnPrint(null));
+        }
 
         public static IEnumerable<object[]> QueryContinueDragEventArgs_TestData()
         {
