@@ -867,17 +867,6 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///  ScreenReader announces ToolTip text for an element
-            /// </summary>
-            private void AnnounceText(Control tool, string text)
-            {
-                tool?.AccessibilityObject?.RaiseAutomationNotification(
-                    Automation.AutomationNotificationKind.ActionCompleted,
-                    Automation.AutomationNotificationProcessing.All,
-                    text);
-            }
-
-            /// <summary>
             ///  Called to get rid of any resources the Object may have.
             /// </summary>
             public void Dispose() => EnsureDestroyed();
@@ -1079,7 +1068,7 @@ namespace System.Windows.Forms
 
                         if(toolTipShown)
                         {
-                            AnnounceText(((ControlItem)items[i]).Control, ((ControlItem)items[i]).Error);
+                            _provider.AnnounceErrorText(_items[i].Control, _items[i].Error);
                         }
                     }
                 }
