@@ -197,9 +197,7 @@ namespace System.Windows.Forms
         GMR_DAYSTATE = 1,
         GDI_ERROR = (unchecked((int)0xFFFFFFFF)),
         GDTR_MIN = 0x0001,
-        GDTR_MAX = 0x0002,
-        GA_PARENT = 1,
-        GA_ROOT = 2;
+        GDTR_MAX = 0x0002;
 
         // attribute for COMPOSITIONSTRING Structure
         public const int

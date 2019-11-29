@@ -1379,7 +1379,7 @@ namespace System.Windows.Forms
                         // winforms code.  This can happen with ActiveX controls that launch dialogs specificially
 
                         // First, get the first top-level window in the hierarchy.
-                        IntPtr hwndRoot = UnsafeNativeMethods.GetAncestor(new HandleRef(null, msg.hwnd), NativeMethods.GA_ROOT);
+                        IntPtr hwndRoot = User32.GetAncestor(msg.hwnd, User32.GA.ROOT);
 
                         // If we got a valid HWND, then call IsDialogMessage on it.  If that returns true, it's been processed
                         // so we should return true to prevent Translate/Dispatch from being called.

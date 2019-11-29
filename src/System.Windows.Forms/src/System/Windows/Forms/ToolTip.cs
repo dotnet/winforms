@@ -304,7 +304,7 @@ namespace System.Windows.Forms
                 (windowControl.ShowParams & (User32.SW)0xF) != User32.SW.SHOWNOACTIVATE)
             {
                 IntPtr hWnd = User32.GetActiveWindow();
-                IntPtr rootHwnd = UnsafeNativeMethods.GetAncestor(new HandleRef(window, window.Handle), NativeMethods.GA_ROOT);
+                IntPtr rootHwnd = User32.GetAncestor(new HandleRef(window, window.Handle), User32.GA.ROOT);
                 if (hWnd != rootHwnd)
                 {
                     TipInfo tt = (TipInfo)_tools[windowControl];
