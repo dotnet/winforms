@@ -4,21 +4,19 @@
 
 using System;
 using System.Globalization;
-using System.Runtime.InteropServices;
 
 internal static partial class Interop
 {
     internal static partial class ComCtl32
     {
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-        public struct LVITEM
+        public unsafe struct LVITEM
         {
             public LVIF mask;
             public int iItem;
             public int iSubItem;
             public LVIS state;
             public LVIS stateMask;
-            public string pszText;
+            public char* /* LPWSTR */ pszText;
             public int cchTextMax;
             public int iImage;
             public IntPtr lParam;
@@ -27,9 +25,9 @@ internal static partial class Interop
             public int cColumns; // tile view columns
             public IntPtr puColumns;
 
-            public override string ToString()
+            public unsafe override string ToString()
             {
-                return "LVITEM: pszText = " + pszText
+                return "LVITEM: pszText = " + new string(pszText)
                      + ", iItem = " + iItem.ToString(CultureInfo.InvariantCulture)
                      + ", iSubItem = " + iSubItem.ToString(CultureInfo.InvariantCulture)
                      + ", state = " + state.ToString(CultureInfo.InvariantCulture)

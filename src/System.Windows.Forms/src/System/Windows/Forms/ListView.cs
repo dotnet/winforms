@@ -4101,7 +4101,7 @@ namespace System.Windows.Forms
         ///  This only will be called when the Handle has been created for the list view.
         ///  This method loops through the items, sets up their state then adds them.
         /// </summary>
-        private int InsertItemsNative(int index, ListViewItem[] items)
+        private unsafe int InsertItemsNative(int index, ListViewItem[] items)
         {
             if (items == null || items.Length == 0)
             {
@@ -4140,7 +4140,6 @@ namespace System.Windows.Forms
                     var lvItem = new LVITEM();
                     lvItem.mask = LVIF.TEXT | LVIF.IMAGE | LVIF.PARAM | LVIF.INDENT;
                     lvItem.iItem = index + i;
-                    lvItem.pszText = li.Text;
                     lvItem.iImage = li.ImageIndexer.ActualIndex;
                     lvItem.iIndent = li.IndentCount;
                     lvItem.lParam = (IntPtr)li.ID;
@@ -4193,10 +4192,15 @@ namespace System.Windows.Forms
 
                     try
                     {
-
                         li.UpdateStateToListView(lvItem.iItem, ref lvItem, false);
 
-                        insertIndex = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)LVM.INSERTITEM, 0, ref lvItem);
+                        fixed (char* pText = li.Text)
+                        {
+                            lvItem.pszText = pText;
+
+                            insertIndex = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)LVM.INSERTITEM, 0, ref lvItem);
+                        }
+
                         if (actualIndex == -1)
                         {
                             actualIndex = insertIndex;
@@ -5348,11 +5352,9 @@ namespace System.Windows.Forms
         ///<summary>
         ///  For perf, allow a LVITEM to be passed in so we can reuse in tight loops.
         ///</summary>
-        private void SetItemText(int itemIndex, int subItemIndex, string text, ref LVITEM lvItem)
+        private unsafe void SetItemText(int itemIndex, int subItemIndex, string text, ref LVITEM lvItem)
         {
             Debug.Assert(IsHandleCreated, "SetItemText with no handle");
-
-            //
 
             if (View == View.List && subItemIndex == 0)
             {
@@ -5379,9 +5381,13 @@ namespace System.Windows.Forms
             lvItem.mask = LVIF.TEXT;
             lvItem.iItem = itemIndex;
             lvItem.iSubItem = subItemIndex;
-            lvItem.pszText = text;
 
-            UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)LVM.SETITEMTEXT, itemIndex, ref lvItem);
+            fixed (char* pText = text)
+            {
+                lvItem.pszText = pText;
+
+                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)LVM.SETITEMTEXT, itemIndex, ref lvItem);
+            }
         }
 
         //
@@ -6156,14 +6162,22 @@ namespace System.Windows.Forms
                     {
                         listViewState[LISTVIEWSTATE_inLabelEdit] = false;
                         NMLVDISPINFO nmlvdp = (NMLVDISPINFO)m.GetLParam(typeof(NMLVDISPINFO));
-                        LabelEditEventArgs e = new LabelEditEventArgs(nmlvdp.item.iItem, nmlvdp.item.pszText);
-                        OnAfterLabelEdit(e);
-                        m.Result = (IntPtr)(e.CancelEdit ? 0 : 1);
+
                         // from msdn:
                         //   "If the user cancels editing, the pszText member of the LVITEM structure is NULL"
-                        if (!e.CancelEdit && nmlvdp.item.pszText != null)
+                        string text = null;
+                        if (nmlvdp.item.pszText != null)
                         {
-                            Items[nmlvdp.item.iItem].Text = nmlvdp.item.pszText;
+                            text = new string(nmlvdp.item.pszText);
+                        }
+
+                        LabelEditEventArgs e = new LabelEditEventArgs(nmlvdp.item.iItem, text);
+                        OnAfterLabelEdit(e);
+                        m.Result = (IntPtr)(e.CancelEdit ? 0 : 1);
+
+                        if (!e.CancelEdit && text != null)
+                        {
+                            Items[nmlvdp.item.iItem].Text = text;
                         }
 
                         break;
@@ -8534,9 +8548,8 @@ namespace System.Windows.Forms
                 // in Tile view our ListView uses the column header collection to update the Tile Information
                 if (owner.IsHandleCreated && owner.View != View.Tile)
                 {
-                    int retval = unchecked((int)(long)owner.SendMessage((int)LVM.DELETECOLUMN, index, 0));
-
-                    if (0 == retval)
+                    IntPtr retval = User32.SendMessageW(owner, (User32.WindowMessage)LVM.DELETECOLUMN, (IntPtr)index);
+                    if (retval == IntPtr.Zero)
                     {
                         throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                     }
@@ -9385,13 +9398,14 @@ namespace System.Windows.Forms
                         mask = LVIF.PARAM,
                         iItem = displayIndex
                     };
-                    UnsafeNativeMethods.SendMessage(new HandleRef(owner, owner.Handle), (int)LVM.GETITEM, 0, ref lvItem);
+
+                    //  public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, [In, Out] ref LVITEM lParam);
+                    //return User32.SendMessageW(this, (User32.WindowMessage)msg, wParam, ref tcitem);
+                    User32.SendMessageW<LVITEM>(owner, (User32.WindowMessage)LVM.GETITEM, IntPtr.Zero, ref lvItem);
                     return (int)lvItem.lParam;
                 }
-                else
-                {
-                    return this[displayIndex].ID;
-                }
+
+                return this[displayIndex].ID;
             }
 
             public void Clear()
