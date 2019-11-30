@@ -1949,9 +1949,6 @@ namespace System.Windows.Forms
         // Threading stuff
         public const uint STILL_ACTIVE = 259;
 
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern IntPtr WindowFromPoint(int x, int y);
-
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public static extern IntPtr SendMessage(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam);
 

@@ -895,7 +895,7 @@ namespace System.Windows.Forms
             if (mevent.Button == MouseButtons.Left)
             {
                 Point pt = PointToScreen(new Point(mevent.X, mevent.Y));
-                if (UnsafeNativeMethods.WindowFromPoint(pt) == Handle && !ValidationCancelled)
+                if (User32.WindowFromPoint(pt) == Handle && !ValidationCancelled)
                 {
                     if (!doubleClickFired)
                     {
@@ -1254,7 +1254,7 @@ namespace System.Windows.Forms
                 MouseEventArgs me = parent.TranslateMouseEvent(this, e);
                 if (e.Button == MouseButtons.Left)
                 {
-                    if (!parent.ValidationCancelled && UnsafeNativeMethods.WindowFromPoint(pt) == Handle)
+                    if (!parent.ValidationCancelled && User32.WindowFromPoint(pt) == Handle)
                     {
                         if (!doubleClickFired)
                         {
@@ -1612,7 +1612,7 @@ namespace System.Windows.Forms
                 MouseEventArgs me = parent.TranslateMouseEvent(this, e);
                 if (e.Button == MouseButtons.Left)
                 {
-                    if (!parent.ValidationCancelled && UnsafeNativeMethods.WindowFromPoint(pt) == Handle)
+                    if (!parent.ValidationCancelled && User32.WindowFromPoint(pt) == Handle)
                     {
                         if (!doubleClickFired)
                         {
