@@ -914,7 +914,7 @@ namespace System.Windows.Forms
                                 var msg = new User32.MSG();
                                 while (User32.PeekMessageW(ref msg, msgMin: User32.WindowMessage.WM_PAINT, msgMax: User32.WindowMessage.WM_PAINT).IsTrue())
                                 {
-                                    SafeNativeMethods.UpdateWindow(new HandleRef(null, msg.hwnd));
+                                    User32.UpdateWindow(msg.hwnd);
 
                                     // Infinite loop protection
                                     if (_numPaintsServiced++ > MAX_PAINTS_TO_SERVICE)
