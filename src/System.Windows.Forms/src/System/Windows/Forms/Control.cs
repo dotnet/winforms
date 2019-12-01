@@ -5587,7 +5587,7 @@ namespace System.Windows.Forms
                     return ctl;
                 }
 
-                handle = UnsafeNativeMethods.GetAncestor(new HandleRef(null, handle), NativeMethods.GA_PARENT);
+                handle = User32.GetAncestor(handle, User32.GA.PARENT);
             }
             return null;
         }

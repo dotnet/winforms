@@ -254,7 +254,7 @@ namespace System.Windows.Forms
         /// </summary>
         public static HandleRef GetRootHWnd(HandleRef hwnd)
         {
-            IntPtr rootHwnd = UnsafeNativeMethods.GetAncestor(new HandleRef(hwnd, hwnd.Handle), NativeMethods.GA_ROOT);
+            IntPtr rootHwnd = User32.GetAncestor(new HandleRef(hwnd, hwnd.Handle), User32.GA.ROOT);
             return new HandleRef(hwnd.Wrapper, rootHwnd);
         }
 

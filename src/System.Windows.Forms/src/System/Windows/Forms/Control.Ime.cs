@@ -403,7 +403,7 @@ namespace System.Windows.Forms
                         // this is the case of a disabled winforms control hosted in a non-Form shell.
                         if (imeMode == ImeMode.Disable)
                         {
-                            focusHandle = UnsafeNativeMethods.GetAncestor(new HandleRef(null, focusHandle), NativeMethods.GA_ROOT);
+                            focusHandle = User32.GetAncestor(focusHandle, User32.GA.ROOT);
 
                             if (focusHandle != IntPtr.Zero)
                             {
