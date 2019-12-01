@@ -1060,7 +1060,7 @@ namespace System.Windows.Forms
             if (baseVar != null && baseVar.IsActiveX)
             {
                 // Find the matching HWnd matching the ScreenCoord and find if the Control has a Tooltip.
-                IntPtr hwndControl = UnsafeNativeMethods.WindowFromPoint(screenCoords);
+                IntPtr hwndControl = User32.WindowFromPoint(screenCoords);
                 if (hwndControl != IntPtr.Zero)
                 {
                     Control currentControl = Control.FromHandle(hwndControl);

@@ -12312,7 +12312,7 @@ namespace System.Windows.Forms
 
                 if ((_controlStyle & ControlStyles.StandardClick) == ControlStyles.StandardClick)
                 {
-                    if (GetState(States.MousePressed) && !IsDisposed && UnsafeNativeMethods.WindowFromPoint(pt) == Handle)
+                    if (GetState(States.MousePressed) && !IsDisposed && User32.WindowFromPoint(pt) == Handle)
                     {
                         fireClick = true;
                     }

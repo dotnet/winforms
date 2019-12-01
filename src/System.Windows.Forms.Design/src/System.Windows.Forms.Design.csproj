@@ -214,6 +214,7 @@
     <Compile Include="..\..\Common\src\Interop\User32\Interop.ValidateRect.cs" Link="Interop\User32\Interop.ValidateRect.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.WA.cs" Link="Interop\User32\Interop.WA.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.WH.cs" Link="Interop\User32\Interop.WH.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.WindowFromPoint.cs" Link="Interop\User32\Interop.WindowFromPoint.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.WindowMessage.cs" Link="Interop\User32\Interop.WindowMessage.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.WINDOWPOS.cs" Link="Interop\User32\Interop.WINDOWPOS.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.WS.cs" Link="Interop\User32\Interop.WS.cs" />
