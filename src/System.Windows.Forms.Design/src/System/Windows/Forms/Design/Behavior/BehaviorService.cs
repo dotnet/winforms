@@ -1185,11 +1185,11 @@ namespace System.Windows.Forms.Design.Behavior
                                 // No one knows why we get an extra click here from VS. As a workaround, we check the TimeStamp and discard it.
                                 if (m.Msg == WindowMessages.WM_LBUTTONDOWN)
                                 {
-                                    _lastLButtonDownTimeStamp = UnsafeNativeMethods.GetMessageTime();
+                                    _lastLButtonDownTimeStamp = User32.GetMessageTime();
                                 }
                                 else if (m.Msg == WindowMessages.WM_LBUTTONDBLCLK)
                                 {
-                                    int lButtonDoubleClickTimeStamp = UnsafeNativeMethods.GetMessageTime();
+                                    int lButtonDoubleClickTimeStamp = User32.GetMessageTime();
                                     if (lButtonDoubleClickTimeStamp == _lastLButtonDownTimeStamp)
                                     {
                                         return true;

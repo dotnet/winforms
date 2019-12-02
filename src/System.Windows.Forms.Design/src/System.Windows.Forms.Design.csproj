@@ -175,6 +175,7 @@
     <Compile Include="..\..\Common\src\Interop\User32\Interop.GetFocus.cs" Link="Interop\User32\Interop.GetFocus.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.GetKeyState.cs" Link="Interop\User32\Interop.GetKeyState.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.GetMessagePos.cs" Link="Interop\User32\Interop.GetMessagePos.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.GetMessageTime.cs" Link="Interop\User32\Interop.GetMessageTime.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.GetUpdateRgn.cs" Link="Interop\User32\Interop.GetUpdateRgn.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.GetWindow.cs" Link="Interop\User32\Interop.GetWindow.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.GetWindowText.cs" Link="Interop\User32\Interop.GetWindowText.cs" />
