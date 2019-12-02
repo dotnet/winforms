@@ -569,5 +569,12 @@ namespace System.Windows.Forms.VisualStyles.Tests
             var renderer = new VisualStyleRenderer(VisualStyleElement.Button.PushButton.Hot);
             Assert.Throws<ArgumentException>(null, () => renderer.SetParameters(element));
         }
+
+        [Fact]
+        public void VisualStyleRenderer_IsBackgroundPartiallyTransparent_Invoke_ReturnsExpected()
+        {
+            var renderer = new VisualStyleRenderer("BUTTON", 0, 0);
+            Assert.False(renderer.IsBackgroundPartiallyTransparent());
+        }
     }
 }

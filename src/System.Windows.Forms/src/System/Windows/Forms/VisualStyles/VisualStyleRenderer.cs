@@ -987,7 +987,7 @@ namespace System.Windows.Forms.VisualStyles
         /// </summary>
         public bool IsBackgroundPartiallyTransparent()
         {
-            return (SafeNativeMethods.IsThemeBackgroundPartiallyTransparent(new HandleRef(this, Handle), part, state));
+            return UxTheme.IsThemeBackgroundPartiallyTransparent(this, part, state).IsTrue();
         }
 
         /// <summary>
