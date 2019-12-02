@@ -129,12 +129,7 @@ try {
     }
     exit 0
   }
-  
-  if ((Test-Path variable:LastExitCode) -And ($LastExitCode -ne 0)) {
-    Write-PipelineTelemetryError -Category 'InitializeToolset' -Message 'Eng/common/tools.ps1 returned a non-zero exit code.'
-    ExitWithExitCode $LastExitCode
-  }
-  
+
   if ($help -or (($null -ne $properties) -and ($properties.Contains('/help') -or $properties.Contains('/?')))) {
     Print-Usage
     exit 0
