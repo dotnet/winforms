@@ -127,6 +127,7 @@ try {
 }
 catch {
   Write-Host $_.ScriptStackTrace
-  Write-PipelineTelemetryError -Category "NativeToolsetBootstrapping" -Message $_
+  # We cannot change this to Write-PipelineTelemetryError because of https://github.com/dotnet/arcade/issues/4482
+  Write-Error $_
   exit 1
 }
