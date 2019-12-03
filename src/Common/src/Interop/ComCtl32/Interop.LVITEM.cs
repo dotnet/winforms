@@ -4,13 +4,11 @@
 
 using System;
 using System.Globalization;
-using System.Runtime.InteropServices;
 
 internal static partial class Interop
 {
     internal static partial class ComCtl32
     {
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
         public struct LVITEM
         {
             public LVIF mask;
