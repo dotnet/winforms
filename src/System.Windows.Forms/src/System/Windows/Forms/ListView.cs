@@ -708,8 +708,8 @@ namespace System.Windows.Forms
                 //
                 if (IsHandleCreated)
                 {
-                    int currentStyle = unchecked((int)((long)UnsafeNativeMethods.GetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_STYLE)));
-                    cp.Style |= (currentStyle & (int)(User32.WS.HSCROLL | User32.WS.VSCROLL));
+                    int currentStyle = unchecked((int)(long)UnsafeNativeMethods.GetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_STYLE));
+                    cp.Style |= currentStyle & (int)(User32.WS.HSCROLL | User32.WS.VSCROLL);
                 }
 
                 cp.Style |= NativeMethods.LVS_SHAREIMAGELISTS;
@@ -1761,37 +1761,21 @@ namespace System.Windows.Forms
             remove => base.TextChanged -= value;
         }
 
-        [
-            SRCategory(nameof(SR.CatAppearance)),
-            Browsable(true),
-            SRDescription(nameof(SR.ListViewTileSizeDescr)),
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [Browsable(true)]
+        [SRDescription(nameof(SR.ListViewTileSizeDescr))]
         public unsafe Size TileSize
         {
             get
             {
-                if (tileSize.IsEmpty)
-                {
-                    if (IsHandleCreated)
-                    {
-                        // Get the default value from the ListView
-                        //
-                        LVTILEVIEWINFO tileViewInfo = new LVTILEVIEWINFO
-                        {
-                            cbSize = (uint)sizeof(LVTILEVIEWINFO),
-                            dwMask = LVTVIM.TILESIZE
-                        };
-                        UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)LVM.GETTILEVIEWINFO, 0, ref tileViewInfo);
-                        return tileViewInfo.sizeTile;
-                    }
-                    else
-                    {
-                        return Size.Empty;
-                    }
-                }
-                else
+                if (!tileSize.IsEmpty)
                 {
                     return tileSize;
+                }
+
+                if (!IsHandleCreated)
+                {
+                    return Size.Empty;
                 }
 
                 var tileViewInfo = new LVTILEVIEWINFO
@@ -1805,30 +1789,14 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (tileSize != value)
+                if (tileSize == value)
                 {
-                    if (value.IsEmpty || value.Height <= 0 || value.Width <= 0)
-                    {
-                        throw new ArgumentOutOfRangeException(nameof(TileSize), SR.ListViewTileSizeMustBePositive);
-                    }
+                    return;
+                }
 
-                    tileSize = value;
-                    if (IsHandleCreated)
-                    {
-                        LVTILEVIEWINFO tileViewInfo = new LVTILEVIEWINFO
-                        {
-                            cbSize = (uint)sizeof(LVTILEVIEWINFO),
-                            dwMask = LVTVIM.TILESIZE,
-                            dwFlags = LVTVIF.FIXEDSIZE,
-                            sizeTile = tileSize
-                        };
-                        bool retval = UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)LVM.SETTILEVIEWINFO, 0, ref tileViewInfo);
-                        Debug.Assert(retval, "LVM_SETTILEVIEWINFO failed");
-                        if (AutoArrange)
-                        {
-                            UpdateListViewItemsLocations();
-                        }
-                    }
+                if (value.IsEmpty || value.Height <= 0 || value.Width <= 0)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(TileSize), SR.ListViewTileSizeMustBePositive);
                 }
 
                 tileSize = value;
@@ -2033,7 +2001,7 @@ namespace System.Windows.Forms
             {
                 if (value < 0)
                 {
-                    throw new ArgumentException(string.Format(SR.ListViewVirtualListSizeInvalidArgument, "value", (value)));
+                    throw new ArgumentException(string.Format(SR.ListViewVirtualListSizeInvalidArgument, "value", value));
                 }
 
                 if (value == virtualListSize)
@@ -2627,7 +2595,7 @@ namespace System.Windows.Forms
                     case CDDS.PREPAINT:
                         if (OwnerDraw)
                         {
-                            m.Result = (IntPtr)(CDRF.NOTIFYITEMDRAW);
+                            m.Result = (IntPtr)CDRF.NOTIFYITEMDRAW;
                             return;
                         }
                         // We want custom draw for this paint cycle
@@ -2692,7 +2660,7 @@ namespace System.Windows.Forms
                                        Items[(int)nmcd->nmcd.dwItemSpec],
                                        itemBounds,
                                        (int)nmcd->nmcd.dwItemSpec,
-                                       (ListViewItemStates)(nmcd->nmcd.uItemState));
+                                       (ListViewItemStates)nmcd->nmcd.uItemState);
 
                                 OnDrawItem(e);
                             }
@@ -2707,13 +2675,13 @@ namespace System.Windows.Forms
                             // For other view styles, we do it here.
                             if (viewStyle == View.Details)
                             {
-                                m.Result = (IntPtr)(CDRF.NOTIFYSUBITEMDRAW);
+                                m.Result = (IntPtr)CDRF.NOTIFYSUBITEMDRAW;
                             }
                             else
                             {
                                 if (!e.DrawDefault)
                                 {
-                                    m.Result = (IntPtr)(CDRF.SKIPDEFAULT);
+                                    m.Result = (IntPtr)CDRF.SKIPDEFAULT;
                                 }
                             }
 
@@ -2739,7 +2707,7 @@ namespace System.Windows.Forms
 
                         goto case (CDDS.SUBITEM | CDDS.ITEMPREPAINT);
 
-                    case (CDDS.SUBITEM | CDDS.ITEMPREPAINT):
+                    case CDDS.SUBITEM | CDDS.ITEMPREPAINT:
 
                         itemIndex = (int)nmcd->nmcd.dwItemSpec;
                         // The following call silently returns Rectangle.Empty if no corresponding
@@ -2789,7 +2757,7 @@ namespace System.Windows.Forms
                                                   itemIndex,
                                                   nmcd->iSubItem,
                                                   columnHeaders[nmcd->iSubItem],
-                                                  (ListViewItemStates)(nmcd->nmcd.uItemState));
+                                                  (ListViewItemStates)nmcd->nmcd.uItemState);
                                         OnDrawSubItem(e);
 
                                         // the customer still wants to draw the default.
@@ -2805,13 +2773,13 @@ namespace System.Windows.Forms
 
                             if (skipCustomDrawCode)
                             {
-                                m.Result = (IntPtr)(CDRF.SKIPDEFAULT);
+                                m.Result = (IntPtr)CDRF.SKIPDEFAULT;
                                 return; // skip our custom draw code
                             }
                         }
 
                         // get the node
-                        ListViewItem item = Items[(int)(nmcd->nmcd.dwItemSpec)];
+                        ListViewItem item = Items[(int)nmcd->nmcd.dwItemSpec];
                         // if we're doing the whole row in one style, change our result!
                         if (dontmess && item.UseItemStyleForSubItems)
                         {
@@ -2826,7 +2794,7 @@ namespace System.Windows.Forms
                         // real item state to be sure.
                         if (!HideSelection)
                         {
-                            LVIS realState = GetItemState((int)(nmcd->nmcd.dwItemSpec));
+                            LVIS realState = GetItemState((int)nmcd->nmcd.dwItemSpec);
                             if ((realState & LVIS.SELECTED) == 0)
                             {
                                 state &= ~CDIS.SELECTED;
@@ -3323,7 +3291,7 @@ namespace System.Windows.Forms
                     if (isTextSearch)
                     {
                         lvFindInfo.flags = LVFI.STRING;
-                        lvFindInfo.flags |= (isPrefixSearch ? LVFI.PARTIAL : 0);
+                        lvFindInfo.flags |= isPrefixSearch ? LVFI.PARTIAL : 0;
                         lvFindInfo.psz = pText;
                     }
                     else
@@ -3588,7 +3556,7 @@ namespace System.Windows.Forms
 
         internal LVIS GetItemState(int index, LVIS mask)
         {
-            if (index < 0 || ((VirtualMode && index >= VirtualListSize) || (!VirtualMode && index >= itemCount)))
+            if (index < 0 || (VirtualMode && index >= VirtualListSize) || (!VirtualMode && index >= itemCount))
             {
                 throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
             }
@@ -3804,7 +3772,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                return (new ListViewHitTestInfo(item, null, location));
+                return new ListViewHitTestInfo(item, null, location);
             }
         }
 
@@ -3855,7 +3823,7 @@ namespace System.Windows.Forms
             }
 
             // Add the column to our internal array
-            int columnCount = (columnHeaders == null ? 0 : columnHeaders.Length);
+            int columnCount = columnHeaders == null ? 0 : columnHeaders.Length;
             if (columnCount > 0)
             {
                 ColumnHeader[] newHeaders = new ColumnHeader[columnCount + 1];
@@ -4552,7 +4520,7 @@ namespace System.Windows.Forms
             //
             if (!Scrollable)
             {
-                int style = unchecked((int)((long)UnsafeNativeMethods.GetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_STYLE)));
+                int style = unchecked((int)(long)UnsafeNativeMethods.GetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_STYLE));
                 style |= NativeMethods.LVS_NOSCROLL;
                 UnsafeNativeMethods.SetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_STYLE, new HandleRef(null, (IntPtr)style));
             }
@@ -4599,7 +4567,7 @@ namespace System.Windows.Forms
                 listItemsArray = null;
             }
 
-            int columnCount = (columnHeaders == null ? 0 : columnHeaders.Length);
+            int columnCount = columnHeaders == null ? 0 : columnHeaders.Length;
             if (columnCount > 0)
             {
                 int[] indices = new int[columnHeaders.Length];
@@ -5290,7 +5258,7 @@ namespace System.Windows.Forms
 
         internal void SetItemImage(int index, int image)
         {
-            if (index < 0 || ((VirtualMode && index >= VirtualListSize) || (!VirtualMode && index >= itemCount)))
+            if (index < 0 || (VirtualMode && index >= VirtualListSize) || (!VirtualMode && index >= itemCount))
             {
                 throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
             }
@@ -5308,7 +5276,7 @@ namespace System.Windows.Forms
 
         internal void SetItemIndentCount(int index, int indentCount)
         {
-            if (index < 0 || ((VirtualMode && index >= VirtualListSize) || (!VirtualMode && index >= itemCount)))
+            if (index < 0 || (VirtualMode && index >= VirtualListSize) || (!VirtualMode && index >= itemCount))
             {
                 throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
             }
@@ -5344,7 +5312,7 @@ namespace System.Windows.Forms
 
         internal void SetItemState(int index, LVIS state, LVIS mask)
         {
-            if (index < -1 || ((VirtualMode && index >= VirtualListSize) || (!VirtualMode && index >= itemCount)))
+            if (index < -1 || (VirtualMode && index >= VirtualListSize) || (!VirtualMode && index >= itemCount))
             {
                 throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
             }
@@ -5777,7 +5745,7 @@ namespace System.Windows.Forms
                     {
                         case CDDS.PREPAINT:
                             {
-                                m.Result = (IntPtr)(CDRF.NOTIFYITEMDRAW);
+                                m.Result = (IntPtr)CDRF.NOTIFYITEMDRAW;
                                 return true; // we are done - don't do default handling
 
                             }
@@ -5791,22 +5759,22 @@ namespace System.Windows.Forms
                                     var e = new DrawListViewColumnHeaderEventArgs(
                                         g,
                                         nmcd->rc,
-                                        (int)(nmcd->dwItemSpec),
+                                        (int)nmcd->dwItemSpec,
                                         columnHeaders[(int)nmcd->dwItemSpec],
-                                        (ListViewItemStates)(nmcd->uItemState),
+                                        (ListViewItemStates)nmcd->uItemState,
                                         foreColor,
                                         backColor,
                                         font);
                                     OnDrawColumnHeader(e);
                                     if (e.DrawDefault)
                                     {
-                                        m.Result = (IntPtr)(CDRF.DODEFAULT);
+                                        m.Result = (IntPtr)CDRF.DODEFAULT;
                                         return false;
                                     }
                                     else
                                     {
 
-                                        m.Result = (IntPtr)(CDRF.SKIPDEFAULT);
+                                        m.Result = (IntPtr)CDRF.SKIPDEFAULT;
                                         return true; // we are done - don't do default handling
                                     }
                                 }
@@ -6734,11 +6702,11 @@ namespace System.Windows.Forms
                 ListViewItem nextItem = (ListViewItem)obj2;
                 if (sortOrder == SortOrder.Ascending)
                 {
-                    return (string.Compare(currentItem.Text, nextItem.Text, false, CultureInfo.CurrentCulture));
+                    return string.Compare(currentItem.Text, nextItem.Text, false, CultureInfo.CurrentCulture);
                 }
                 else
                 {
-                    return (string.Compare(nextItem.Text, currentItem.Text, false, CultureInfo.CurrentCulture));
+                    return string.Compare(nextItem.Text, currentItem.Text, false, CultureInfo.CurrentCulture);
                 }
             }
         }
@@ -7233,7 +7201,7 @@ namespace System.Windows.Forms
             /// </summary>
             private bool IsValidIndex(int index)
             {
-                return ((index >= 0) && (index < Count));
+                return (index >= 0) && (index < Count);
             }
 
             int IList.IndexOf(object item)
@@ -7863,7 +7831,7 @@ namespace System.Windows.Forms
             /// </summary>
             private bool IsValidIndex(int index)
             {
-                return ((index >= 0) && (index < Count));
+                return (index >= 0) && (index < Count);
             }
 
             void IList.Remove(object value)
@@ -7915,7 +7883,7 @@ namespace System.Windows.Forms
                     throw new InvalidOperationException(SR.ListViewCantAccessSelectedItemsCollectionWhenInVirtualMode);
                 }
 
-                return (IndexOf(item) != -1);
+                return IndexOf(item) != -1;
             }
 
             bool IList.Contains(object item)
@@ -8211,7 +8179,7 @@ namespace System.Windows.Forms
             /// </summary>
             private bool IsValidIndex(int index)
             {
-                return ((index >= 0) && (index < Count));
+                return (index >= 0) && (index < Count);
             }
 
             /// <summary>
@@ -9087,7 +9055,7 @@ namespace System.Windows.Forms
             /// </summary>
             private bool IsValidIndex(int index)
             {
-                return ((index >= 0) && (index < Count));
+                return (index >= 0) && (index < Count);
             }
 
             public ListViewItem Insert(int index, ListViewItem item)
