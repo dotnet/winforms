@@ -62,14 +62,7 @@ function Print-Usage() {
   Write-Host "The above arguments can be shortened as much as to be unambiguous (e.g. -co for configuration, -t for test, etc.)."
 }
 
-try {
-  . $PSScriptRoot\tools.ps1
-}
-catch {
-  Write-Host $_.ScriptStackTrace
-  Write-PipelineTelemetryError -Category 'InitializeToolset' -Message $_
-  exit 1
-}
+. $PSScriptRoot\tools.ps1
 
 function InitializeCustomToolset {
   if (-not $restore) {
@@ -140,20 +133,12 @@ try {
     $nodeReuse = $false
   }
 
-}
-catch {
-  Write-Host $_.ScriptStackTrace
-  Write-PipelineTelemetryError -Category 'InitializeToolset' -Message $_
-  ExitWithExitCode 1
-}
+  # We have to exclude "InitializeNativeTools" from the try-catch blocks because of
+  # https://github.com/dotnet/arcade/issues/4482
+  if ($restore) {
+    InitializeNativeTools
+  }
 
-# We have to exclude "InitializeNativeTools" from the try-catch blocks because of
-# https://github.com/dotnet/arcade/issues/4482
-if ($restore) {
-  InitializeNativeTools
-}
-
-try {
   Build
 }
 catch {
