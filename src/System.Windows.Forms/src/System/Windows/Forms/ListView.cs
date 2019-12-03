@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -1766,7 +1766,7 @@ namespace System.Windows.Forms
             Browsable(true),
             SRDescription(nameof(SR.ListViewTileSizeDescr)),
         ]
-        public Size TileSize
+        public unsafe Size TileSize
         {
             get
             {
@@ -1778,9 +1778,10 @@ namespace System.Windows.Forms
                         //
                         LVTILEVIEWINFO tileViewInfo = new LVTILEVIEWINFO
                         {
+                            cbSize = (uint)sizeof(LVTILEVIEWINFO),
                             dwMask = LVTVIM.TILESIZE
                         };
-                        UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)LVM.GETTILEVIEWINFO, 0, tileViewInfo);
+                        UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)LVM.GETTILEVIEWINFO, 0, ref tileViewInfo);
                         return tileViewInfo.sizeTile;
                     }
                     else
@@ -1792,6 +1793,15 @@ namespace System.Windows.Forms
                 {
                     return tileSize;
                 }
+
+                var tileViewInfo = new LVTILEVIEWINFO
+                {
+                    cbSize = (uint)sizeof(LVTILEVIEWINFO),
+                    dwMask = LVTVIM.TILESIZE
+                };
+                User32.SendMessageW(this, (User32.WindowMessage)LVM.GETTILEVIEWINFO, IntPtr.Zero, ref tileViewInfo);
+
+                return tileViewInfo.sizeTile;
             }
             set
             {
@@ -1807,17 +1817,39 @@ namespace System.Windows.Forms
                     {
                         LVTILEVIEWINFO tileViewInfo = new LVTILEVIEWINFO
                         {
+                            cbSize = (uint)sizeof(LVTILEVIEWINFO),
                             dwMask = LVTVIM.TILESIZE,
                             dwFlags = LVTVIF.FIXEDSIZE,
                             sizeTile = tileSize
                         };
-                        bool retval = UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)LVM.SETTILEVIEWINFO, 0, tileViewInfo);
+                        bool retval = UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)LVM.SETTILEVIEWINFO, 0, ref tileViewInfo);
                         Debug.Assert(retval, "LVM_SETTILEVIEWINFO failed");
                         if (AutoArrange)
                         {
                             UpdateListViewItemsLocations();
                         }
                     }
+                }
+
+                tileSize = value;
+                if (!IsHandleCreated)
+                {
+                    return;
+                }
+
+                var tileViewInfo = new LVTILEVIEWINFO
+                {
+                    cbSize = (uint)sizeof(LVTILEVIEWINFO),
+                    dwMask = LVTVIM.TILESIZE,
+                    dwFlags = LVTVIF.FIXEDSIZE,
+                    sizeTile = tileSize
+                };
+                IntPtr retval = User32.SendMessageW(this, (User32.WindowMessage)LVM.SETTILEVIEWINFO, IntPtr.Zero, ref tileViewInfo);
+                Debug.Assert(retval != IntPtr.Zero, "LVM_SETTILEVIEWINFO failed");
+
+                if (AutoArrange)
+                {
+                    UpdateListViewItemsLocations();
                 }
             }
         }
@@ -5594,24 +5626,23 @@ namespace System.Windows.Forms
         }
 
         // updates the win32 list view w/ our tile info - columns + tile size
-        private void UpdateTileView()
+        private unsafe void UpdateTileView()
         {
             Debug.Assert(ComctlSupportsVisualStyles, "this function works only when ComCtl 6.0 and higher is loaded");
             Debug.Assert(viewStyle == View.Tile, "this function should be called only in Tile view");
-            LVTILEVIEWINFO tileViewInfo = new LVTILEVIEWINFO
+
+            var tileViewInfo = new LVTILEVIEWINFO
             {
-                // the tile view info line count
-                dwMask = LVTVIM.COLUMNS,
-                cLines = columnHeaders != null ? columnHeaders.Length : 0
+                cbSize = (uint)sizeof(LVTILEVIEWINFO),
+
+                dwMask = LVTVIM.COLUMNS | LVTVIM.TILESIZE,
+                dwFlags = LVTVIF.FIXEDSIZE,
+                cLines = columnHeaders != null ? columnHeaders.Length : 0,
+                sizeTile = TileSize,
             };
 
-            // the tile view info size
-            tileViewInfo.dwMask |= LVTVIM.TILESIZE;
-            tileViewInfo.dwFlags = LVTVIF.FIXEDSIZE;
-            tileViewInfo.sizeTile = TileSize;
-
-            bool retval = UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)LVM.SETTILEVIEWINFO, 0, tileViewInfo);
-            Debug.Assert(retval, "LVM_SETTILEVIEWINFO failed");
+            IntPtr retval = User32.SendMessageW(this, (User32.WindowMessage)LVM.SETTILEVIEWINFO, IntPtr.Zero, ref tileViewInfo);
+            Debug.Assert(retval != IntPtr.Zero, "LVM_SETTILEVIEWINFO failed");
         }
 
         private void WmNmClick(ref Message m)
@@ -6112,8 +6143,6 @@ namespace System.Windows.Forms
         {
             User32.NMHDR* nmhdr = (User32.NMHDR*)m.LParam;
 
-            Debug.WriteLine($"{m}, code: {nmhdr->code}");
-
             switch (nmhdr->code)
             {
                 case NativeMethods.NM_CUSTOMDRAW:
@@ -6537,8 +6566,6 @@ namespace System.Windows.Forms
 
         protected override void WndProc(ref Message m)
         {
-            Debug.WriteLine($"{m}");
-
             switch (m.Msg)
             {
                 case WindowMessages.WM_REFLECT + WindowMessages.WM_NOTIFY:

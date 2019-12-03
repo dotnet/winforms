@@ -3,16 +3,14 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Drawing;
-using System.Runtime.InteropServices;
 
 internal static partial class Interop
 {
     internal static partial class ComCtl32
     {
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-        public class LVTILEVIEWINFO
+        public struct LVTILEVIEWINFO
         {
-            public uint cbSize = (uint)Marshal.SizeOf<LVTILEVIEWINFO>();
+            public uint cbSize;
             public LVTVIM dwMask;
             public LVTVIF dwFlags;
             public Size sizeTile;
