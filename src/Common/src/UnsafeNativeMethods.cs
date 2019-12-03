@@ -753,18 +753,15 @@ namespace System.Windows.Forms
                 IntPtr* ppmk);
 
             [PreserveSig]
-            int InitFromData(
-                   [In, MarshalAs(UnmanagedType.Interface)]
-                     IComDataObject pDataObject,
-                    int fCreation,
-                   [In, MarshalAs(UnmanagedType.U4)]
-                     int dwReserved);
+            HRESULT InitFromData(
+                IComDataObject pDataObject,
+                BOOL fCreation,
+                uint dwReserved);
 
             [PreserveSig]
-            int GetClipboardData(
-                   [In, MarshalAs(UnmanagedType.U4)]
-                     int dwReserved,
-                    out IComDataObject data);
+            HRESULT GetClipboardData(
+                uint dwReserved,
+                out IComDataObject ppDataObject);
 
             [PreserveSig]
             HRESULT DoVerb(
@@ -780,22 +777,19 @@ namespace System.Windows.Forms
                 out IEnumOLEVERB e);
 
             [PreserveSig]
-            int OleUpdate();
+            HRESULT OleUpdate();
 
             [PreserveSig]
-            int IsUpToDate();
+            HRESULT IsUpToDate();
 
             [PreserveSig]
-            int GetUserClassID(
-                   [In, Out]
-                      ref Guid pClsid);
+            HRESULT GetUserClassID(
+                Guid* pClsid);
 
             [PreserveSig]
-            int GetUserType(
-                   [In, MarshalAs(UnmanagedType.U4)]
-                     int dwFormOfType,
-                   [Out, MarshalAs(UnmanagedType.LPWStr)]
-                     out string userType);
+            HRESULT GetUserType(
+                Ole32.USERCLASSTYPE dwFormOfType,
+                [MarshalAs(UnmanagedType.LPWStr)] out string userType);
 
             [PreserveSig]
             HRESULT SetExtent(
@@ -808,17 +802,17 @@ namespace System.Windows.Forms
                 Size* pSizel);
 
             [PreserveSig]
-            int Advise(
-                    IAdviseSink pAdvSink,
-                    out int cookie);
+            HRESULT Advise(
+                IAdviseSink pAdvSink,
+                uint* pdwConnection);
 
             [PreserveSig]
-            int Unadvise(
-                   [In, MarshalAs(UnmanagedType.U4)]
-                     int dwConnection);
+            HRESULT Unadvise(
+                uint dwConnection);
 
             [PreserveSig]
-            int EnumAdvise(out IEnumSTATDATA e);
+            HRESULT EnumAdvise(
+                out IEnumSTATDATA e);
 
             [PreserveSig]
             HRESULT GetMiscStatus(
@@ -866,18 +860,15 @@ namespace System.Windows.Forms
                 IntPtr* ppmk);
 
             [PreserveSig]
-            int InitFromData(
-                   [In, MarshalAs(UnmanagedType.Interface)]
-                     IComDataObject pDataObject,
-                    int fCreation,
-                   [In, MarshalAs(UnmanagedType.U4)]
-                     int dwReserved);
+            HRESULT InitFromData(
+                IComDataObject pDataObject,
+                BOOL fCreation,
+                uint dwReserved);
 
             [PreserveSig]
-            int GetClipboardData(
-                   [In, MarshalAs(UnmanagedType.U4)]
-                     int dwReserved,
-                    out IComDataObject data);
+            HRESULT GetClipboardData(
+                uint dwReserved,
+                out IComDataObject ppDataObject);
 
             [PreserveSig]
             HRESULT DoVerb(
@@ -893,22 +884,19 @@ namespace System.Windows.Forms
                 out IEnumOLEVERB e);
 
             [PreserveSig]
-            int OleUpdate();
+            HRESULT OleUpdate();
 
             [PreserveSig]
-            int IsUpToDate();
+            HRESULT IsUpToDate();
 
             [PreserveSig]
-            int GetUserClassID(
-                   [In, Out]
-                      ref Guid pClsid);
+            HRESULT GetUserClassID(
+                Guid* pClsid);
 
             [PreserveSig]
-            int GetUserType(
-                   [In, MarshalAs(UnmanagedType.U4)]
-                     int dwFormOfType,
-                   [Out, MarshalAs(UnmanagedType.LPWStr)]
-                     out string userType);
+            HRESULT GetUserType(
+                Ole32.USERCLASSTYPE dwFormOfType,
+                [MarshalAs(UnmanagedType.LPWStr)] out string pszUserType);
 
             [PreserveSig]
             HRESULT SetExtent(
@@ -921,18 +909,17 @@ namespace System.Windows.Forms
                 Size* pSizel);
 
             [PreserveSig]
-            int Advise(
-                   [In, MarshalAs(UnmanagedType.Interface)]
-                     IAdviseSink pAdvSink,
-                    out int cookie);
+            HRESULT Advise(
+                IAdviseSink pAdvSink,
+                uint* pdwConnection);
 
             [PreserveSig]
-            int Unadvise(
-                   [In, MarshalAs(UnmanagedType.U4)]
-                     int dwConnection);
+            HRESULT Unadvise(
+                uint dwConnection);
 
             [PreserveSig]
-            int EnumAdvise(out IEnumSTATDATA e);
+            HRESULT EnumAdvise(
+                out IEnumSTATDATA e);
 
             [PreserveSig]
             HRESULT GetMiscStatus(

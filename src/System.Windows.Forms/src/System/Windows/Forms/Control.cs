@@ -13678,17 +13678,17 @@ namespace System.Windows.Forms
             return HRESULT.E_NOTIMPL;
         }
 
-        int UnsafeNativeMethods.IOleObject.InitFromData(IComDataObject pDataObject, int fCreation, int dwReserved)
+        HRESULT UnsafeNativeMethods.IOleObject.InitFromData(IComDataObject pDataObject, BOOL fCreation, uint dwReserved)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:InitFromData");
-            return NativeMethods.E_NOTIMPL;
+            return HRESULT.E_NOTIMPL;
         }
 
-        int UnsafeNativeMethods.IOleObject.GetClipboardData(int dwReserved, out IComDataObject data)
+        HRESULT UnsafeNativeMethods.IOleObject.GetClipboardData(uint dwReserved, out IComDataObject ppDataObject)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetClipboardData");
-            data = null;
-            return NativeMethods.E_NOTIMPL;
+            ppDataObject = null;
+            return HRESULT.E_NOTIMPL;
         }
 
         unsafe HRESULT UnsafeNativeMethods.IOleObject.DoVerb(
@@ -13735,37 +13735,43 @@ namespace System.Windows.Forms
             return ActiveXImpl.EnumVerbs(out e);
         }
 
-        int UnsafeNativeMethods.IOleObject.OleUpdate()
+        HRESULT UnsafeNativeMethods.IOleObject.OleUpdate()
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:OleUpdate");
-            return NativeMethods.S_OK;
+            return HRESULT.S_OK;
         }
 
-        int UnsafeNativeMethods.IOleObject.IsUpToDate()
+        HRESULT UnsafeNativeMethods.IOleObject.IsUpToDate()
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IsUpToDate");
-            return NativeMethods.S_OK;
+            return HRESULT.S_OK;
         }
 
-        int UnsafeNativeMethods.IOleObject.GetUserClassID(ref Guid pClsid)
+        unsafe HRESULT UnsafeNativeMethods.IOleObject.GetUserClassID(Guid* pClsid)
         {
-            pClsid = GetType().GUID;
-            Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetUserClassID.  ClassID: " + pClsid.ToString());
-            return NativeMethods.S_OK;
+            if (pClsid == null)
+            {
+                return HRESULT.E_POINTER;
+            }
+
+            *pClsid = GetType().GUID;
+            Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetUserClassID.  ClassID: " + pClsid->ToString());
+            return HRESULT.S_OK;
         }
 
-        int UnsafeNativeMethods.IOleObject.GetUserType(int dwFormOfType, out string userType)
+        HRESULT UnsafeNativeMethods.IOleObject.GetUserType(Ole32.USERCLASSTYPE dwFormOfType, out string pszUserType)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetUserType");
-            if (dwFormOfType == NativeMethods.USERCLASSTYPE_FULL)
+            if (dwFormOfType == Ole32.USERCLASSTYPE.FULL)
             {
-                userType = GetType().FullName;
+                pszUserType = GetType().FullName;
             }
             else
             {
-                userType = GetType().Name;
+                pszUserType = GetType().Name;
             }
-            return NativeMethods.S_OK;
+
+            return HRESULT.S_OK;
         }
 
         unsafe Interop.HRESULT UnsafeNativeMethods.IOleObject.SetExtent(Ole32.DVASPECT dwDrawAspect, Size* pSizel)
@@ -13797,27 +13803,32 @@ namespace System.Windows.Forms
             return Interop.HRESULT.S_OK;
         }
 
-        int UnsafeNativeMethods.IOleObject.Advise(IAdviseSink pAdvSink, out int cookie)
+        unsafe HRESULT UnsafeNativeMethods.IOleObject.Advise(IAdviseSink pAdvSink, uint* pdwConnection)
         {
+            if (pdwConnection == null)
+            {
+                return HRESULT.E_POINTER;
+            }
+
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:Advise");
-            cookie = ActiveXInstance.Advise(pAdvSink);
-            return NativeMethods.S_OK;
+            *pdwConnection = ActiveXInstance.Advise(pAdvSink);
+            return HRESULT.S_OK;
         }
 
-        int UnsafeNativeMethods.IOleObject.Unadvise(int dwConnection)
+        HRESULT UnsafeNativeMethods.IOleObject.Unadvise(uint dwConnection)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:Unadvise");
             Debug.Indent();
-            ActiveXInstance.Unadvise(dwConnection);
+            HRESULT hr = ActiveXInstance.Unadvise(dwConnection);
             Debug.Unindent();
-            return NativeMethods.S_OK;
+            return hr;
         }
 
-        int UnsafeNativeMethods.IOleObject.EnumAdvise(out IEnumSTATDATA e)
+        HRESULT UnsafeNativeMethods.IOleObject.EnumAdvise(out IEnumSTATDATA e)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:EnumAdvise");
             e = null;
-            return NativeMethods.E_NOTIMPL;
+            return HRESULT.E_NOTIMPL;
         }
 
         unsafe HRESULT UnsafeNativeMethods.IOleObject.GetMiscStatus(Ole32.DVASPECT dwAspect, Ole32.OLEMISC* pdwStatus)

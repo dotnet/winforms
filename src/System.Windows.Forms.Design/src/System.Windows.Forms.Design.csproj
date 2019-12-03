@@ -151,6 +151,7 @@
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.STGTY.cs" Link="Interop\Ole32\Interop.STGTY.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.TYPEKIND.cs" Link="Interop\Ole32\Interop.TYPEKIND.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.TYPEDESC.cs" Link="Interop\Ole32\Interop.TYPEDESC.cs" />
+    <Compile Include="..\..\Common\src\Interop\Ole32\Interop.USERCLASSTYPE.cs" Link="Interop\Ole32\Interop.USERCLASSTYPE.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.VARDESC.cs" Link="Interop\Ole32\Interop.VARDESC.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.VARENUM.cs" Link="Interop\Ole32\Interop.VARENUM.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.VARFLAGS.cs" Link="Interop\Ole32\Interop.VARFLAGS.cs" />
