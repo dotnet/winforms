@@ -105,7 +105,7 @@ try {
     Write-Error "There are multiple copies of $ToolName in $($ToolInstallDirectory): `n$(@($ToolFilePath | out-string))"
     exit 1
   } elseif (@($ToolFilePath).Length -Lt 1) {
-    Write-Error "$ToolName was not found in $ToolFilePath."
+    Write-Host "$ToolName was not found in $ToolFilePath."
     exit 1
   }
 
@@ -127,7 +127,6 @@ try {
 }
 catch {
   Write-Host $_.ScriptStackTrace
-  # We cannot change this to Write-PipelineTelemetryError because of https://github.com/dotnet/arcade/issues/4482
-  Write-Error $_
+  Write-PipelineTelemetryError -Category "NativeToolsetBootstrapping" -Message $_
   exit 1
 }

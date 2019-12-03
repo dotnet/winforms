@@ -113,7 +113,7 @@ try {
             }
             $toolInstallationFailure = $true
         } else {
-            Write-PipelineTelemetryError -Category 'NativeToolsBootstrap' -Message $errMsg
+            Write-Host $errMsg
             exit 1
         }
       }
@@ -121,7 +121,7 @@ try {
 
     if ((Get-Variable 'toolInstallationFailure' -ErrorAction 'SilentlyContinue') -and $toolInstallationFailure) {
         # We cannot change this to Write-PipelineTelemetryError because of https://github.com/dotnet/arcade/issues/4482
-        Write-Error 'Native tools bootstrap failed'
+        Write-Host 'Native tools bootstrap failed'
         exit 1
     }
   }
