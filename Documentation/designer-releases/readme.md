@@ -1,12 +1,8 @@
 # Windows Forms Designer Release Notes
 
-The .NET Core Windows Forms visual designer will be part of a future Visual Studio 2019 update, but it is currently available as a pre-release Visual Studio extension.
+The .NET Core Windows Forms visual designer is in Preview and available with the [Preview version of Visual Studio](https://visualstudio.microsoft.com/vs/preview/). Once you install the Visual Studio Preview, enable the WinForms .NET Core Designer in in **Tools -> Options -> Environment -> Preview Features** check **Use the preview Windows Forms designer for .NET Core apps**.
 
-Releases happen once per month and are available for download below. We strongly recommend using the latest stable release, but the older ones are available just in case.
+Releases of .NET Core Windows Forms Designer are tied to Visual Studio Preview releases, so update to the latest Visual Studio version to get the latest designer features.
 
-## Latest Stable Release
-
-- [Download the VSIX](https://aka.ms/winforms-designer)
+- [Latest release blogpost](0.1/releasenotes.md)
 - [Getting started](0.1/gettingstarted.md)
-- [Release notes](0.1/releasenotes.md)
-- [Known issues](0.1/knownissues.md)
