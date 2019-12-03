@@ -111,6 +111,7 @@
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.FUNCKIND.cs" Link="Interop\Ole32\Interop.FUNCKIND.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.IDLFLAG.cs" Link="Interop\Ole32\Interop.IDLFLAG.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.IDropTarget.cs" Link="Interop\Ole32\Interop.IDropTarget.cs" />
+    <Compile Include="..\..\Common\src\Interop\Ole32\Interop.IEnumOLEVERB.cs" Link="Interop\Ole32\Interop.IEnumOLEVERB.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.IEnumUnknown.cs" Link="Interop\Ole32\Interop.IEnumUnknown.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.IErrorLog.cs" Link="Interop\Ole32\Interop.IErrorLog.cs" />
     <Compile Include="..\..\Common\src\Interop\Ole32\Interop.IFont.cs" Link="Interop\Ole32\Interop.IFont.cs" />

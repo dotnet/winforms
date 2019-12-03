@@ -517,7 +517,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Returns a new verb enumerator.
             /// </summary>
-            internal static HRESULT EnumVerbs(out UnsafeNativeMethods.IEnumOLEVERB e)
+            internal static HRESULT EnumVerbs(out Ole32.IEnumOLEVERB ppEnumOleVerb)
             {
                 if (s_axVerbs == null)
                 {
@@ -547,7 +547,7 @@ namespace System.Windows.Forms
                     };
                 }
 
-                e = new ActiveXVerbEnum(s_axVerbs);
+                ppEnumOleVerb = new ActiveXVerbEnum(s_axVerbs);
                 return HRESULT.S_OK;
             }
 
