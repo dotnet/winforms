@@ -17,9 +17,6 @@ namespace System.Windows.Forms
 {
     internal static class UnsafeNativeMethods
     {
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern int GetMessageTime();
-
         [DllImport(ExternDll.User32)]
         public static extern int GetClassName(HandleRef hwnd, StringBuilder lpClassName, int nMaxCount);
 
