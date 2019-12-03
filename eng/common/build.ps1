@@ -140,10 +140,20 @@ try {
     $nodeReuse = $false
   }
 
-  if ($restore) {
-    InitializeNativeTools
-  }
+}
+catch {
+  Write-Host $_.ScriptStackTrace
+  Write-PipelineTelemetryError -Category 'InitializeToolset' -Message $_
+  ExitWithExitCode 1
+}
 
+# We have to exclude "InitializeNativeTools" from the try-catch blocks because of
+# https://github.com/dotnet/arcade/issues/4482
+if ($restore) {
+  InitializeNativeTools
+}
+
+try {
   Build
 }
 catch {
