@@ -2804,26 +2804,31 @@ namespace System.Windows.Forms
             base.OnSelectedIndexChanged(e);
             ((EventHandler)Events[EVENT_SELECTEDINDEXCHANGED])?.Invoke(this, e);
 
+            if (!IsHandleCreated)
+            {
+                return;
+            }
+
             if (dropDownWillBeClosed)
             {
                 // This is after-closing selection - do not focus on the list item
                 // and reset the state to announce the selections later.
                 dropDownWillBeClosed = false;
+                return;
             }
-            else if (IsHandleCreated && AccessibilityObject is ComboBoxAccessibleObject accessibleObject)
+
+            if (AccessibilityObject is ComboBoxAccessibleObject accessibleObject &&
+                (DropDownStyle == ComboBoxStyle.DropDownList || DropDownStyle == ComboBoxStyle.DropDown))
             {
                 // Announce DropDown- and DropDownList-styled ComboBox item selection using keyboard
                 // in case when Level 3 is enabled and DropDown is not in expanded state. Simple-styled
                 // ComboBox selection is announced by TextProvider.
-                if (DropDownStyle == ComboBoxStyle.DropDownList || DropDownStyle == ComboBoxStyle.DropDown)
+                if (dropDown)
                 {
-                    if (dropDown)
-                    {
-                        accessibleObject.SetComboBoxItemFocus();
-                    }
-
-                    accessibleObject.SetComboBoxItemSelection();
+                    accessibleObject.SetComboBoxItemFocus();
                 }
+
+                accessibleObject.SetComboBoxItemSelection();
             }
 
             // set the position in the dataSource, if there is any
