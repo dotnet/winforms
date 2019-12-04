@@ -46,7 +46,7 @@ internal static partial class Interop
                     // Keep looping until we get a buffer that can fit.
                     if (actualTextLength > windowTitleBuffer.Length - 2)
                     {
-                        // We know the text is at last actualTextLength characters
+                        // We know the text is at least actualTextLength characters
                         // long, so use this as minimum value for the next iteration.
                         textLength = actualTextLength;
                         ArrayPool<char>.Shared.Return(windowTitleBuffer);
