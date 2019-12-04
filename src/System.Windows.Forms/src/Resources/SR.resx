@@ -6653,7 +6653,6 @@ Stack trace where the illegal operation occurred was:
   <data name="DefaultUpDownButtonsAccessibleName" xml:space="preserve">
     <value>UpDown</value>
   </data>
-</root>
   <data name="Win32SetParentFailed" xml:space="preserve">
     <value>Failed to set Win32 parent window of the Control.</value>
   </data>
