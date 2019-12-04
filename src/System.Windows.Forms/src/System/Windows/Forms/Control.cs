@@ -1705,7 +1705,7 @@ namespace System.Windows.Forms
         ///  handle for this control.  If the control's handle hasn't been
         ///  created yet, this method will return the current thread's ID.
         /// </summary>
-        internal uint CreateThreadId => IsHandleCreated 
+        internal uint CreateThreadId => IsHandleCreated
             ? User32.GetWindowThreadProcessId(this, out _)
             : Kernel32.GetCurrentThreadId();
 
@@ -2212,7 +2212,7 @@ namespace System.Windows.Forms
         {
             Font local = (Font)Properties.GetObject(s_fontProperty);
             Font resolved = Font;
-            Font newFont = new Font(Font.FontFamily, Font.Size*  factor, Font.Style);
+            Font newFont = new Font(Font.FontFamily, Font.Size * factor, Font.Style);
 
             if ((local == null) || !local.Equals(newFont))
             {
@@ -7882,7 +7882,7 @@ namespace System.Windows.Forms
                     ListenToUserPreferenceChanged(GetTopLevel());
                 }
             }
-            
+
             ((EventHandler)Events[s_handleCreatedEvent])?.Invoke(this, e);
 
             if (IsHandleCreated)
@@ -8091,7 +8091,7 @@ namespace System.Windows.Forms
             {
                 _parent.ChildGotFocus(this);
             }
-            
+
             ((EventHandler)Events[s_gotFocusEvent])?.Invoke(this, e);
         }
 
@@ -8146,7 +8146,7 @@ namespace System.Windows.Forms
                     controls[i].OnParentInvalidated(e);
                 }
             }
-            
+
             ((InvalidateEventHandler)Events[s_invalidatedEvent])?.Invoke(this, e);
         }
 
@@ -8248,7 +8248,7 @@ namespace System.Windows.Forms
             {
                 ActiveXOnFocus(false);
             }
-            
+
             ((EventHandler)Events[s_lostFocusEvent])?.Invoke(this, e);
         }
 
@@ -8407,7 +8407,7 @@ namespace System.Windows.Forms
             {
                 Invalidate();
             }
-            
+
             ((EventHandler)Events[s_paddingChangedEvent])?.Invoke(this, e);
         }
 
@@ -9667,7 +9667,7 @@ namespace System.Windows.Forms
             if (!IsDisposed)
             {
                 var msg = new User32.MSG();
-                while (User32.PeekMessageW(ref msg, this, msgMin, msgMax).IsTrue())
+                while (User32.PeekMessageW(ref msg, this, msgMin, msgMax, User32.PM.REMOVE).IsTrue())
                 {
                     // No-op.
                 }
@@ -12286,7 +12286,7 @@ namespace System.Windows.Forms
                     if (local != null)
                     {
                         var factor = (float)_deviceDpi / deviceDpiOld;
-                        Font = new Font(local.FontFamily, local.Size*  factor, local.Style, local.Unit, local.GdiCharSet, local.GdiVerticalFont);
+                        Font = new Font(local.FontFamily, local.Size * factor, local.Style, local.Unit, local.GdiCharSet, local.GdiVerticalFont);
                     }
 
                     RescaleConstantsForDpi(deviceDpiOld, _deviceDpi);
@@ -12662,7 +12662,7 @@ namespace System.Windows.Forms
                         {
                             Gdi32.SelectPalette(dc, oldPal, BOOL.FALSE);
                         }
-                        
+
                         bufferedGraphics?.Dispose();
                     }
                 }

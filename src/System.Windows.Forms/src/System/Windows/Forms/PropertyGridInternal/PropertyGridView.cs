@@ -5778,7 +5778,8 @@ namespace System.Windows.Forms.PropertyGridInternal
             while (User32.PeekMessageW(ref mouseMsg,
                 IntPtr.Zero,
                 (User32.WindowMessage)WindowMessages.WM_MOUSEFIRST,
-                (User32.WindowMessage)WindowMessages.WM_MOUSELAST).IsTrue())
+                (User32.WindowMessage)WindowMessages.WM_MOUSELAST,
+                User32.PM.REMOVE).IsTrue())
             {
                 // No-op.
             }
@@ -5860,7 +5861,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             // which usually discards the message by returning 1 to GetMessage(). But this won't occur until after the
             // error dialog gets closed, which is much too late.
             var mouseMsg = new User32.MSG();
-            while (User32.PeekMessageW(ref mouseMsg, msgMin: User32.WM_MOUSEFIRST, msgMax: User32.WM_MOUSELAST).IsTrue())
+            while (User32.PeekMessageW(ref mouseMsg, IntPtr.Zero, User32.WM_MOUSEFIRST, User32.WM_MOUSELAST, User32.PM.REMOVE).IsTrue())
             {
                 // No-op.
             }
