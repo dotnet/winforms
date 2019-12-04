@@ -4513,7 +4513,7 @@ Stack trace where the illegal operation occurred was:
   </data>
   <data name="PrintPreviewDialog_PrintPreview" xml:space="preserve">
     <value>Print preview</value>
-   </data>
+  </data>
   <data name="PrintPreviewDocumentDescr" xml:space="preserve">
     <value>PrintDocument to be previewed.</value>
   </data>
@@ -6652,5 +6652,8 @@ Stack trace where the illegal operation occurred was:
   </data>
   <data name="DefaultUpDownButtonsAccessibleName" xml:space="preserve">
     <value>UpDown</value>
+  </data>
+  <data name="Win32SetParentFailed" xml:space="preserve">
+    <value>Failed to set Win32 parent window of the Control.</value>
   </data>
 </root>
