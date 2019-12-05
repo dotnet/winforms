@@ -451,10 +451,6 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern bool IsWindow(HandleRef hWnd);
 
-        // This method is not available until Windows 8.1
-        [DllImport(ExternDll.User32, ExactSpelling = true, SetLastError = true)]
-        public static extern uint GetDpiForWindow(HandleRef hWnd);
-
         //for RegionData
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
         public static extern int GetRegionData(HandleRef hRgn, int size, IntPtr lpRgnData);
