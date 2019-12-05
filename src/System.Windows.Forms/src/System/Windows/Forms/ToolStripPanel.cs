@@ -912,7 +912,7 @@ namespace System.Windows.Forms
                             try
                             {
                                 var msg = new User32.MSG();
-                                while (User32.PeekMessageW(ref msg, msgMin: User32.WindowMessage.WM_PAINT, msgMax: User32.WindowMessage.WM_PAINT).IsTrue())
+                                while (User32.PeekMessageW(ref msg, IntPtr.Zero, User32.WindowMessage.WM_PAINT, User32.WindowMessage.WM_PAINT, User32.PM.REMOVE).IsTrue())
                                 {
                                     User32.UpdateWindow(msg.hwnd);
 

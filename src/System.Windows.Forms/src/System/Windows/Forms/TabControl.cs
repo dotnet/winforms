@@ -549,10 +549,10 @@ namespace System.Windows.Forms
                         SetState(State.GetTabRectfromItemSize, true);
                         return GetTabRect(0).Size;
                     }
-                    
+
                     return DefaultItemSize;
                 }
-                
+
                 return _itemSize;
             }
             set
@@ -2109,7 +2109,7 @@ namespace System.Windows.Forms
 
             // Remove other TabBaseReLayout messages from the message queue
             var msg = new User32.MSG();
-            while (User32.PeekMessageW(ref msg, this, _tabBaseReLayoutMessage, _tabBaseReLayoutMessage).IsTrue())
+            while (User32.PeekMessageW(ref msg, this, _tabBaseReLayoutMessage, _tabBaseReLayoutMessage, User32.PM.REMOVE).IsTrue())
             {
                 // No-op.
             }
