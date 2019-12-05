@@ -1963,7 +1963,7 @@ namespace System.Windows.Forms
 
                 if (editing)
                 {
-                    UnsafeNativeMethods.PostMessage(new HandleRef(tv, tv.Handle), NativeMethods.TVM_EDITLABEL, IntPtr.Zero, handle);
+                    User32.PostMessageW(tv, (User32.WindowMessage)NativeMethods.TVM_EDITLABEL, IntPtr.Zero, handle);
                 }
 
                 User32.InvalidateRect(new HandleRef(tv, tv.Handle), null, BOOL.FALSE);

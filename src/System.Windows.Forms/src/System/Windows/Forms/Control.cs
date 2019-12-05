@@ -11800,7 +11800,7 @@ namespace System.Windows.Forms
 
                 if (lastParentHandle != IntPtr.Zero)
                 {
-                    UnsafeNativeMethods.PostMessage(new HandleRef(null, lastParentHandle), WindowMessages.WM_CLOSE, IntPtr.Zero, IntPtr.Zero);
+                    User32.PostMessageW(lastParentHandle, User32.WindowMessage.WM_CLOSE);
                 }
             }
 
