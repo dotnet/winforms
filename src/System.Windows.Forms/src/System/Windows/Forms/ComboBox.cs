@@ -2657,6 +2657,11 @@ namespace System.Windows.Forms
         {
             ((EventHandler)Events[EVENT_DROPDOWN])?.Invoke(this, e);
 
+            if (!IsHandleCreated)
+            {
+                return;
+            }
+
             // Notify collapsed/expanded property change.
             AccessibilityObject.RaiseAutomationPropertyChangedEvent(
                 UiaCore.UIA.ExpandCollapseExpandCollapseStatePropertyId,
@@ -2799,30 +2804,31 @@ namespace System.Windows.Forms
             base.OnSelectedIndexChanged(e);
             ((EventHandler)Events[EVENT_SELECTEDINDEXCHANGED])?.Invoke(this, e);
 
+            if (!IsHandleCreated)
+            {
+                return;
+            }
+
             if (dropDownWillBeClosed)
             {
                 // This is after-closing selection - do not focus on the list item
                 // and reset the state to announce the selections later.
                 dropDownWillBeClosed = false;
+                return;
             }
-            else
+
+            if (AccessibilityObject is ComboBoxAccessibleObject accessibleObject &&
+                (DropDownStyle == ComboBoxStyle.DropDownList || DropDownStyle == ComboBoxStyle.DropDown))
             {
-                if (AccessibilityObject is ComboBoxAccessibleObject accessibleObject)
+                // Announce DropDown- and DropDownList-styled ComboBox item selection using keyboard
+                // in case when Level 3 is enabled and DropDown is not in expanded state. Simple-styled
+                // ComboBox selection is announced by TextProvider.
+                if (dropDown)
                 {
-
-                    // Announce DropDown- and DropDownList-styled ComboBox item selection using keyboard
-                    // in case when Level 3 is enabled and DropDown is not in expanded state. Simple-styled
-                    // ComboBox selection is announced by TextProvider.
-                    if (DropDownStyle == ComboBoxStyle.DropDownList || DropDownStyle == ComboBoxStyle.DropDown)
-                    {
-                        if (dropDown)
-                        {
-                            accessibleObject.SetComboBoxItemFocus();
-                        }
-
-                        accessibleObject.SetComboBoxItemSelection();
-                    }
+                    accessibleObject.SetComboBoxItemFocus();
                 }
+
+                accessibleObject.SetComboBoxItemSelection();
             }
 
             // set the position in the dataSource, if there is any
@@ -3080,6 +3086,11 @@ namespace System.Windows.Forms
         protected virtual void OnDropDownClosed(EventArgs e)
         {
             ((EventHandler)Events[EVENT_DROPDOWNCLOSED])?.Invoke(this, e);
+
+            if (!IsHandleCreated)
+            {
+                return;
+            }
 
             // Need to announce the focus on combo-box with new selected value on drop-down close.
             // If do not do this focus in Level 3 stays on list item of unvisible list.
@@ -3658,7 +3669,7 @@ namespace System.Windows.Forms
                 if (childDropDown != null)
                 {
                     // Need to notify UI Automation that it can safely remove all map entries that refer to the specified window.
-                    ReleaseUiaProvider(childListBox.Handle);
+                    ReleaseUiaProvider(childDropDown.Handle);
 
                     childDropDown.ReleaseHandle();
                 }
