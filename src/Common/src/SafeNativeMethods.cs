@@ -123,8 +123,5 @@ namespace System.Windows.Forms
 
         [DllImport(ExternDll.Uxtheme, CharSet = CharSet.Auto)]
         public static extern int HitTestThemeBackground(HandleRef hTheme, HandleRef hdc, int iPartId, int iStateId, int dwOptions, [In] NativeMethods.COMRECT pRect, HandleRef hrgn, Point ptTest, ref ushort pwHitTestCode);
-
-        [DllImport(ExternDll.Uxtheme, CharSet = CharSet.Auto)]
-        public static extern bool IsThemeBackgroundPartiallyTransparent(HandleRef hTheme, int iPartId, int iStateId);
     }
 }
