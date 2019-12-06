@@ -11,6 +11,7 @@ using System.Windows.Forms.VisualStyles;
 using Moq;
 using WinForms.Common.Tests;
 using Xunit;
+using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
@@ -1033,6 +1034,46 @@ namespace System.Windows.Forms.Tests
         [InlineData(-1)]
         [InlineData(0)]
         [InlineData(1)]
+        public void TabPage_ImageIndex_SetWithDesignModeParent_GetReturnsExpected(int value)
+        {
+            var mockSite = new Mock<ISite>(MockBehavior.Strict);
+            mockSite
+                .Setup(s => s.GetService(typeof(AmbientProperties)))
+                .Returns(null);
+            mockSite
+                .Setup(s => s.DesignMode)
+                .Returns(true);
+            mockSite
+                .Setup(s => s.Container)
+                .Returns((IContainer)null);
+            using var parent = new TabControl
+            {
+                Site = mockSite.Object
+            };
+            using var control = new TabPage
+            {
+                Parent = parent,
+                ImageIndex = value
+            };
+            Assert.Equal(value, control.ImageIndex);
+            Assert.Empty(control.ImageKey);
+            Assert.False(control.Visible);
+            Assert.False(control.IsHandleCreated);
+            Assert.False(parent.IsHandleCreated);
+
+            // Set same.
+            control.ImageIndex = value;
+            Assert.Equal(value, control.ImageIndex);
+            Assert.Empty(control.ImageKey);
+            Assert.False(control.Visible);
+            Assert.False(control.IsHandleCreated);
+            Assert.False(parent.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(-1)]
+        [InlineData(0)]
+        [InlineData(1)]
         public void TabPage_ImageIndex_SetWithImageKey_GetReturnsExpected(int value)
         {
             using var control = new TabPage
@@ -1141,6 +1182,193 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, parentCreatedCallCount);
         }
 
+        [WinFormsTheory]
+        [InlineData(-1)]
+        [InlineData(0)]
+        [InlineData(1)]
+        public void TabPage_ImageIndex_SetWithDesignModeParentWithHandle_GetReturnsExpected(int value)
+        {
+            var mockSite = new Mock<ISite>(MockBehavior.Strict);
+            mockSite
+                .Setup(s => s.GetService(typeof(AmbientProperties)))
+                .Returns(null);
+            mockSite
+                .Setup(s => s.DesignMode)
+                .Returns(true);
+            mockSite
+                .Setup(s => s.Container)
+                .Returns((IContainer)null);
+            using var parent = new TabControl
+            {
+                Site = mockSite.Object
+            };
+            using var control = new TabPage
+            {
+                Parent = parent
+            };
+            Assert.NotEqual(IntPtr.Zero, parent.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+            int parentInvalidatedCallCount = 0;
+            parent.Invalidated += (sender, e) => parentInvalidatedCallCount++;
+            int parentStyleChangedCallCount = 0;
+            parent.StyleChanged += (sender, e) => parentStyleChangedCallCount++;
+            int parentCreatedCallCount = 0;
+            parent.HandleCreated += (sender, e) => parentCreatedCallCount++;
+            
+            control.ImageIndex = value;
+            Assert.Equal(value, control.ImageIndex);
+            Assert.Empty(control.ImageKey);
+            Assert.True(control.Visible);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(1, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+            Assert.True(parent.IsHandleCreated);
+            Assert.Equal(0, parentInvalidatedCallCount);
+            Assert.Equal(0, parentStyleChangedCallCount);
+            Assert.Equal(0, parentCreatedCallCount);
+
+            // Set same.
+            control.ImageIndex = value;
+            Assert.Equal(value, control.ImageIndex);
+            Assert.Empty(control.ImageKey);
+            Assert.True(control.Visible);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(2, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+            Assert.True(parent.IsHandleCreated);
+            Assert.Equal(0, parentInvalidatedCallCount);
+            Assert.Equal(0, parentStyleChangedCallCount);
+            Assert.Equal(0, parentCreatedCallCount);
+        }
+
+        [WinFormsTheory]
+        [InlineData(-1)]
+        [InlineData(0)]
+        [InlineData(1)]
+        public unsafe void TabPageCollection_ImageIndex_SetGetItemsWithHandle_Success(int imageIndex)
+        {
+            using var owner = new TabControl();
+            using var page1 = new TabPage();
+            using var page2 = new TabPage
+            {
+                Text = "Text",
+                ImageIndex = 1
+            };
+            using var page3 = new NullTextTabPage();
+            owner.TabPages.Add(page1);
+            owner.TabPages.Add(page2);
+            owner.TabPages.Add(page3);
+            Assert.NotEqual(IntPtr.Zero, owner.Handle);
+
+            page2.ImageIndex = imageIndex;
+            Assert.Equal((IntPtr)3, User32.SendMessageW(owner.Handle, (User32.WindowMessage)ComCtl32.TCM.GETITEMCOUNT, IntPtr.Zero, IntPtr.Zero));
+
+            char* buffer = stackalloc char[256];
+            ComCtl32.TCITEMW item = default;
+            item.cchTextMax = int.MaxValue;
+            item.pszText = buffer;
+            item.dwStateMask = (ComCtl32.TCIS)uint.MaxValue;
+            item.mask = (ComCtl32.TCIF)uint.MaxValue;
+
+            // Get item 0.
+            Assert.Equal((IntPtr)1, User32.SendMessageW(owner.Handle, (User32.WindowMessage)ComCtl32.TCM.GETITEMW, (IntPtr)0, ref item));
+            Assert.Equal(ComCtl32.TCIS.BUTTONPRESSED, item.dwState);
+            Assert.Equal(IntPtr.Zero, item.lParam);
+            Assert.Equal(int.MaxValue, item.cchTextMax);
+            Assert.Empty(new string(item.pszText));
+            Assert.Equal(-1, item.iImage);
+
+            // Get item 1.
+            Assert.Equal((IntPtr)1, User32.SendMessageW(owner.Handle, (User32.WindowMessage)ComCtl32.TCM.GETITEMW, (IntPtr)1, ref item));
+            Assert.Equal((ComCtl32.TCIS)0, item.dwState);
+            Assert.Equal(IntPtr.Zero, item.lParam);
+            Assert.Equal(int.MaxValue, item.cchTextMax);
+            Assert.Equal("Text", new string(item.pszText));
+            Assert.Equal(imageIndex, item.iImage);
+            
+            // Get item 2.
+            Assert.Equal((IntPtr)1, User32.SendMessageW(owner.Handle, (User32.WindowMessage)ComCtl32.TCM.GETITEMW, (IntPtr)2, ref item));
+            Assert.Equal((ComCtl32.TCIS)0, item.dwState);
+            Assert.Equal(IntPtr.Zero, item.lParam);
+            Assert.Equal(int.MaxValue, item.cchTextMax);
+            Assert.Empty(new string(item.pszText));
+            Assert.Equal(-1, item.iImage);
+        }
+
+        [WinFormsTheory]
+        [InlineData(-1)]
+        [InlineData(0)]
+        [InlineData(1)]
+        public unsafe void TabPageCollection_ImageIndex_SetGetItemsWithHandleDesignMode_Success(int imageIndex)
+        {
+            var mockSite = new Mock<ISite>(MockBehavior.Strict);
+            mockSite
+                .Setup(s => s.GetService(typeof(AmbientProperties)))
+                .Returns(null);
+            mockSite
+                .Setup(s => s.DesignMode)
+                .Returns(true);
+            mockSite
+                .Setup(s => s.Container)
+                .Returns((IContainer)null);
+            using var owner = new TabControl
+            {
+                Site = mockSite.Object
+            };
+            using var page1 = new TabPage();
+            using var page2 = new TabPage
+            {
+                Text = "Text",
+                ImageIndex = 1
+            };
+            using var page3 = new NullTextTabPage();
+            owner.TabPages.Add(page1);
+            owner.TabPages.Add(page2);
+            owner.TabPages.Add(page3);
+            Assert.NotEqual(IntPtr.Zero, owner.Handle);
+
+            page2.ImageIndex = imageIndex;
+            Assert.Equal((IntPtr)3, User32.SendMessageW(owner.Handle, (User32.WindowMessage)ComCtl32.TCM.GETITEMCOUNT, IntPtr.Zero, IntPtr.Zero));
+
+            char* buffer = stackalloc char[256];
+            ComCtl32.TCITEMW item = default;
+            item.cchTextMax = int.MaxValue;
+            item.pszText = buffer;
+            item.dwStateMask = (ComCtl32.TCIS)uint.MaxValue;
+            item.mask = (ComCtl32.TCIF)uint.MaxValue;
+
+            // Get item 0.
+            Assert.Equal((IntPtr)1, User32.SendMessageW(owner.Handle, (User32.WindowMessage)ComCtl32.TCM.GETITEMW, (IntPtr)0, ref item));
+            Assert.Equal((ComCtl32.TCIS)0, item.dwState);
+            Assert.Equal(IntPtr.Zero, item.lParam);
+            Assert.Equal(int.MaxValue, item.cchTextMax);
+            Assert.Empty(new string(item.pszText));
+            Assert.Equal(-1, item.iImage);
+
+            // Get item 1.
+            Assert.Equal((IntPtr)1, User32.SendMessageW(owner.Handle, (User32.WindowMessage)ComCtl32.TCM.GETITEMW, (IntPtr)1, ref item));
+            Assert.Equal(ComCtl32.TCIS.BUTTONPRESSED, item.dwState);
+            Assert.Equal(IntPtr.Zero, item.lParam);
+            Assert.Equal(int.MaxValue, item.cchTextMax);
+            Assert.Equal("Text", new string(item.pszText));
+            Assert.Equal(imageIndex, item.iImage);
+            
+            // Get item 2.
+            Assert.Equal((IntPtr)1, User32.SendMessageW(owner.Handle, (User32.WindowMessage)ComCtl32.TCM.GETITEMW, (IntPtr)2, ref item));
+            Assert.Equal((ComCtl32.TCIS)0, item.dwState);
+            Assert.Equal(IntPtr.Zero, item.lParam);
+            Assert.Equal(int.MaxValue, item.cchTextMax);
+            Assert.Empty(new string(item.pszText));
+            Assert.Equal(-1, item.iImage);
+        }
+
         [WinFormsFact]
         public void TabPage_ImageIndex_SetInvalidValue_ThrowsArgumentOutOfRangeException()
         {
@@ -1174,6 +1402,43 @@ namespace System.Windows.Forms.Tests
         public void TabPage_ImageKey_SetWithParent_GetReturnsExpected(string value)
         {
             using var parent = new TabControl();
+            using var control = new TabPage
+            {
+                ImageKey = value
+            };
+            Assert.Equal(-1, control.ImageIndex);
+            Assert.Equal(value, control.ImageKey);
+            Assert.True(control.Visible);
+            Assert.False(control.IsHandleCreated);
+            Assert.False(parent.IsHandleCreated);
+
+            // Set same.
+            control.ImageKey = value;
+            Assert.Equal(-1, control.ImageIndex);
+            Assert.Equal(value, control.ImageKey);
+            Assert.True(control.Visible);
+            Assert.False(control.IsHandleCreated);
+            Assert.False(parent.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetStringTheoryData))]
+        public void TabPage_ImageKey_SetWithDesignModeParent_GetReturnsExpected(string value)
+        {
+            var mockSite = new Mock<ISite>(MockBehavior.Strict);
+            mockSite
+                .Setup(s => s.GetService(typeof(AmbientProperties)))
+                .Returns(null);
+            mockSite
+                .Setup(s => s.DesignMode)
+                .Returns(true);
+            mockSite
+                .Setup(s => s.Container)
+                .Returns((IContainer)null);
+            using var parent = new TabControl
+            {
+                Site = mockSite.Object
+            };
             using var control = new TabPage
             {
                 ImageKey = value
@@ -1295,6 +1560,185 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, parentInvalidatedCallCount);
             Assert.Equal(0, parentStyleChangedCallCount);
             Assert.Equal(0, parentCreatedCallCount);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetStringTheoryData))]
+        public void TabPage_ImageKey_SetWithDesignModeParentWithHandle_GetReturnsExpected(string value)
+        {
+            var mockSite = new Mock<ISite>(MockBehavior.Strict);
+            mockSite
+                .Setup(s => s.GetService(typeof(AmbientProperties)))
+                .Returns(null);
+            mockSite
+                .Setup(s => s.DesignMode)
+                .Returns(true);
+            mockSite
+                .Setup(s => s.Container)
+                .Returns((IContainer)null);
+            using var parent = new TabControl
+            {
+                Site = mockSite.Object
+            };
+            using var control = new TabPage
+            {
+                Parent = parent
+            };
+            Assert.NotEqual(IntPtr.Zero, parent.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+            int parentInvalidatedCallCount = 0;
+            parent.Invalidated += (sender, e) => parentInvalidatedCallCount++;
+            int parentStyleChangedCallCount = 0;
+            parent.StyleChanged += (sender, e) => parentStyleChangedCallCount++;
+            int parentCreatedCallCount = 0;
+            parent.HandleCreated += (sender, e) => parentCreatedCallCount++;
+            
+            control.ImageKey = value;
+            Assert.Equal(-1, control.ImageIndex);
+            Assert.Equal(value, control.ImageKey);
+            Assert.True(control.Visible);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(1, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+            Assert.True(parent.IsHandleCreated);
+            Assert.Equal(0, parentInvalidatedCallCount);
+            Assert.Equal(0, parentStyleChangedCallCount);
+            Assert.Equal(0, parentCreatedCallCount);
+
+            // Set same.
+            control.ImageKey = value;
+            Assert.Equal(-1, control.ImageIndex);
+            Assert.Equal(value, control.ImageKey);
+            Assert.True(control.Visible);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(2, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+            Assert.True(parent.IsHandleCreated);
+            Assert.Equal(0, parentInvalidatedCallCount);
+            Assert.Equal(0, parentStyleChangedCallCount);
+            Assert.Equal(0, parentCreatedCallCount);
+        }
+
+        [WinFormsFact]
+        public unsafe void TabPageCollection_ImageKey_SetGetItemsWithHandle_Success()
+        {
+            using var owner = new TabControl();
+            using var page1 = new TabPage();
+            using var page2 = new TabPage
+            {
+                Text = "Text",
+                ImageIndex = 1
+            };
+            using var page3 = new NullTextTabPage();
+            owner.TabPages.Add(page1);
+            owner.TabPages.Add(page2);
+            owner.TabPages.Add(page3);
+            Assert.NotEqual(IntPtr.Zero, owner.Handle);
+
+            page2.ImageKey = "ImageKey";
+            Assert.Equal((IntPtr)3, User32.SendMessageW(owner.Handle, (User32.WindowMessage)ComCtl32.TCM.GETITEMCOUNT, IntPtr.Zero, IntPtr.Zero));
+
+            char* buffer = stackalloc char[256];
+            ComCtl32.TCITEMW item = default;
+            item.cchTextMax = int.MaxValue;
+            item.pszText = buffer;
+            item.dwStateMask = (ComCtl32.TCIS)uint.MaxValue;
+            item.mask = (ComCtl32.TCIF)uint.MaxValue;
+
+            // Get item 0.
+            Assert.Equal((IntPtr)1, User32.SendMessageW(owner.Handle, (User32.WindowMessage)ComCtl32.TCM.GETITEMW, (IntPtr)0, ref item));
+            Assert.Equal(ComCtl32.TCIS.BUTTONPRESSED, item.dwState);
+            Assert.Equal(IntPtr.Zero, item.lParam);
+            Assert.Equal(int.MaxValue, item.cchTextMax);
+            Assert.Empty(new string(item.pszText));
+            Assert.Equal(-1, item.iImage);
+
+            // Get item 1.
+            Assert.Equal((IntPtr)1, User32.SendMessageW(owner.Handle, (User32.WindowMessage)ComCtl32.TCM.GETITEMW, (IntPtr)1, ref item));
+            Assert.Equal((ComCtl32.TCIS)0, item.dwState);
+            Assert.Equal(IntPtr.Zero, item.lParam);
+            Assert.Equal(int.MaxValue, item.cchTextMax);
+            Assert.Equal("Text", new string(item.pszText));
+            Assert.Equal(-1, item.iImage);
+            
+            // Get item 2.
+            Assert.Equal((IntPtr)1, User32.SendMessageW(owner.Handle, (User32.WindowMessage)ComCtl32.TCM.GETITEMW, (IntPtr)2, ref item));
+            Assert.Equal((ComCtl32.TCIS)0, item.dwState);
+            Assert.Equal(IntPtr.Zero, item.lParam);
+            Assert.Equal(int.MaxValue, item.cchTextMax);
+            Assert.Empty(new string(item.pszText));
+            Assert.Equal(-1, item.iImage);
+        }
+
+        [WinFormsFact]
+        public unsafe void TabPageCollection_ImageKey_SetGetItemsWithHandleDesignMode_Success()
+        {
+            var mockSite = new Mock<ISite>(MockBehavior.Strict);
+            mockSite
+                .Setup(s => s.GetService(typeof(AmbientProperties)))
+                .Returns(null);
+            mockSite
+                .Setup(s => s.DesignMode)
+                .Returns(true);
+            mockSite
+                .Setup(s => s.Container)
+                .Returns((IContainer)null);
+            using var owner = new TabControl
+            {
+                Site = mockSite.Object
+            };
+            using var page1 = new TabPage();
+            using var page2 = new TabPage
+            {
+                Text = "Text",
+                ImageIndex = 1
+            };
+            using var page3 = new NullTextTabPage();
+            owner.TabPages.Add(page1);
+            owner.TabPages.Add(page2);
+            owner.TabPages.Add(page3);
+            Assert.NotEqual(IntPtr.Zero, owner.Handle);
+
+            page2.ImageKey = "ImageKey";
+            Assert.Equal((IntPtr)3, User32.SendMessageW(owner.Handle, (User32.WindowMessage)ComCtl32.TCM.GETITEMCOUNT, IntPtr.Zero, IntPtr.Zero));
+
+            char* buffer = stackalloc char[256];
+            ComCtl32.TCITEMW item = default;
+            item.cchTextMax = int.MaxValue;
+            item.pszText = buffer;
+            item.dwStateMask = (ComCtl32.TCIS)uint.MaxValue;
+            item.mask = (ComCtl32.TCIF)uint.MaxValue;
+
+            // Get item 0.
+            Assert.Equal((IntPtr)1, User32.SendMessageW(owner.Handle, (User32.WindowMessage)ComCtl32.TCM.GETITEMW, (IntPtr)0, ref item));
+            Assert.Equal((ComCtl32.TCIS)0, item.dwState);
+            Assert.Equal(IntPtr.Zero, item.lParam);
+            Assert.Equal(int.MaxValue, item.cchTextMax);
+            Assert.Empty(new string(item.pszText));
+            Assert.Equal(-1, item.iImage);
+
+            // Get item 1.
+            Assert.Equal((IntPtr)1, User32.SendMessageW(owner.Handle, (User32.WindowMessage)ComCtl32.TCM.GETITEMW, (IntPtr)1, ref item));
+            Assert.Equal(ComCtl32.TCIS.BUTTONPRESSED, item.dwState);
+            Assert.Equal(IntPtr.Zero, item.lParam);
+            Assert.Equal(int.MaxValue, item.cchTextMax);
+            Assert.Equal("Text", new string(item.pszText));
+            Assert.Equal(-1, item.iImage);
+            
+            // Get item 2.
+            Assert.Equal((IntPtr)1, User32.SendMessageW(owner.Handle, (User32.WindowMessage)ComCtl32.TCM.GETITEMW, (IntPtr)2, ref item));
+            Assert.Equal((ComCtl32.TCIS)0, item.dwState);
+            Assert.Equal(IntPtr.Zero, item.lParam);
+            Assert.Equal(int.MaxValue, item.cchTextMax);
+            Assert.Empty(new string(item.pszText));
+            Assert.Equal(-1, item.iImage);
         }
 
         public static IEnumerable<object[]> Location_Set_TestData()
@@ -2197,6 +2641,42 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        public void TabPage_Text_SetWithDesignModeParent_GetReturnsExpected(string value, string expected)
+        {
+            var mockSite = new Mock<ISite>(MockBehavior.Strict);
+            mockSite
+                .Setup(s => s.GetService(typeof(AmbientProperties)))
+                .Returns(null);
+            mockSite
+                .Setup(s => s.DesignMode)
+                .Returns(true);
+            mockSite
+                .Setup(s => s.Container)
+                .Returns((IContainer)null);
+            using var parent = new TabControl
+            {
+                Site = mockSite.Object
+            };
+            using var control = new TabPage
+            {
+                Parent = parent,
+                Text = value
+            };
+            Assert.Equal(expected, control.Text);
+            Assert.False(control.Visible);
+            Assert.False(control.IsHandleCreated);
+            Assert.False(parent.IsHandleCreated);
+
+            // Set same.
+            control.Text = value;
+            Assert.Equal(expected, control.Text);
+            Assert.False(control.Visible);
+            Assert.False(control.IsHandleCreated);
+            Assert.False(parent.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void TabPage_Text_SetWithHandle_GetReturnsExpected(string value, string expected)
         {
             using var control = new TabPage();
@@ -2273,6 +2753,189 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, parentCreatedCallCount);
         }
 
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        public void TabPage_Text_SetWithDesignModeParentWithHandle_GetReturnsExpected(string value, string expected)
+        {
+            var mockSite = new Mock<ISite>(MockBehavior.Strict);
+            mockSite
+                .Setup(s => s.GetService(typeof(AmbientProperties)))
+                .Returns(null);
+            mockSite
+                .Setup(s => s.DesignMode)
+                .Returns(true);
+            mockSite
+                .Setup(s => s.Container)
+                .Returns((IContainer)null);
+            using var parent = new TabControl
+            {
+                Site = mockSite.Object
+            };
+            using var control = new TabPage
+            {
+                Parent = parent
+            };
+            Assert.NotEqual(IntPtr.Zero, parent.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+            int parentInvalidatedCallCount = 0;
+            parent.Invalidated += (sender, e) => parentInvalidatedCallCount++;
+            int parentStyleChangedCallCount = 0;
+            parent.StyleChanged += (sender, e) => parentStyleChangedCallCount++;
+            int parentCreatedCallCount = 0;
+            parent.HandleCreated += (sender, e) => parentCreatedCallCount++;
+
+            control.Text = value;
+            Assert.Equal(expected, control.Text);
+            Assert.True(control.Visible);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(1, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+            Assert.True(parent.IsHandleCreated);
+            Assert.Equal(0, parentInvalidatedCallCount);
+            Assert.Equal(0, parentStyleChangedCallCount);
+            Assert.Equal(0, parentCreatedCallCount);
+
+            // Set same.
+            control.Text = value;
+            Assert.Equal(expected, control.Text);
+            Assert.True(control.Visible);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(2, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+            Assert.True(parent.IsHandleCreated);
+            Assert.Equal(0, parentInvalidatedCallCount);
+            Assert.Equal(0, parentStyleChangedCallCount);
+            Assert.Equal(0, parentCreatedCallCount);
+        }
+
+        [WinFormsTheory]
+        [InlineData("Text", "Text")]
+        [InlineData("&&Text", "&&Text")]
+        [InlineData("&", "&&")]
+        [InlineData("&Text", "&&Text")]
+        public unsafe void TabPageCollection_Text_SetGetItemsWithHandle_Success(string text, string expectedText)
+        {
+            using var owner = new TabControl();
+            using var page1 = new TabPage();
+            using var page2 = new TabPage
+            {
+                ImageIndex = 1
+            };
+            using var page3 = new NullTextTabPage();
+            owner.TabPages.Add(page1);
+            owner.TabPages.Add(page2);
+            owner.TabPages.Add(page3);
+            Assert.NotEqual(IntPtr.Zero, owner.Handle);
+
+            page2.Text = text;
+            Assert.Equal((IntPtr)3, User32.SendMessageW(owner.Handle, (User32.WindowMessage)ComCtl32.TCM.GETITEMCOUNT, IntPtr.Zero, IntPtr.Zero));
+
+            char* buffer = stackalloc char[256];
+            ComCtl32.TCITEMW item = default;
+            item.cchTextMax = int.MaxValue;
+            item.pszText = buffer;
+            item.dwStateMask = (ComCtl32.TCIS)uint.MaxValue;
+            item.mask = (ComCtl32.TCIF)uint.MaxValue;
+
+            // Get item 0.
+            Assert.Equal((IntPtr)1, User32.SendMessageW(owner.Handle, (User32.WindowMessage)ComCtl32.TCM.GETITEMW, (IntPtr)0, ref item));
+            Assert.Equal(ComCtl32.TCIS.BUTTONPRESSED, item.dwState);
+            Assert.Equal(IntPtr.Zero, item.lParam);
+            Assert.Equal(int.MaxValue, item.cchTextMax);
+            Assert.Empty(new string(item.pszText));
+            Assert.Equal(-1, item.iImage);
+
+            // Get item 1.
+            Assert.Equal((IntPtr)1, User32.SendMessageW(owner.Handle, (User32.WindowMessage)ComCtl32.TCM.GETITEMW, (IntPtr)1, ref item));
+            Assert.Equal((ComCtl32.TCIS)0, item.dwState);
+            Assert.Equal(IntPtr.Zero, item.lParam);
+            Assert.Equal(int.MaxValue, item.cchTextMax);
+            Assert.Equal(expectedText, new string(item.pszText));
+            Assert.Equal(1, item.iImage);
+            
+            // Get item 2.
+            Assert.Equal((IntPtr)1, User32.SendMessageW(owner.Handle, (User32.WindowMessage)ComCtl32.TCM.GETITEMW, (IntPtr)2, ref item));
+            Assert.Equal((ComCtl32.TCIS)0, item.dwState);
+            Assert.Equal(IntPtr.Zero, item.lParam);
+            Assert.Equal(int.MaxValue, item.cchTextMax);
+            Assert.Empty(new string(item.pszText));
+            Assert.Equal(-1, item.iImage);
+        }
+
+        [WinFormsTheory]
+        [InlineData("Text", "Text")]
+        [InlineData("&&Text", "&&Text")]
+        [InlineData("&", "&&")]
+        [InlineData("&Text", "&&Text")]
+        public unsafe void TabPageCollection_Text_SetGetItemsWithHandleDesignMode_Success(string text, string expectedText)
+        {
+            var mockSite = new Mock<ISite>(MockBehavior.Strict);
+            mockSite
+                .Setup(s => s.GetService(typeof(AmbientProperties)))
+                .Returns(null);
+            mockSite
+                .Setup(s => s.DesignMode)
+                .Returns(true);
+            mockSite
+                .Setup(s => s.Container)
+                .Returns((IContainer)null);
+            using var owner = new TabControl
+            {
+                Site = mockSite.Object
+            };
+            using var page1 = new TabPage();
+            using var page2 = new TabPage
+            {
+                ImageIndex = 1
+            };
+            using var page3 = new NullTextTabPage();
+            owner.TabPages.Add(page1);
+            owner.TabPages.Add(page2);
+            owner.TabPages.Add(page3);
+            Assert.NotEqual(IntPtr.Zero, owner.Handle);
+
+            page2.Text = text;
+            Assert.Equal((IntPtr)3, User32.SendMessageW(owner.Handle, (User32.WindowMessage)ComCtl32.TCM.GETITEMCOUNT, IntPtr.Zero, IntPtr.Zero));
+
+            char* buffer = stackalloc char[256];
+            ComCtl32.TCITEMW item = default;
+            item.cchTextMax = int.MaxValue;
+            item.pszText = buffer;
+            item.dwStateMask = (ComCtl32.TCIS)uint.MaxValue;
+            item.mask = (ComCtl32.TCIF)uint.MaxValue;
+
+            // Get item 0.
+            Assert.Equal((IntPtr)1, User32.SendMessageW(owner.Handle, (User32.WindowMessage)ComCtl32.TCM.GETITEMW, (IntPtr)0, ref item));
+            Assert.Equal((ComCtl32.TCIS)0, item.dwState);
+            Assert.Equal(IntPtr.Zero, item.lParam);
+            Assert.Equal(int.MaxValue, item.cchTextMax);
+            Assert.Empty(new string(item.pszText));
+            Assert.Equal(-1, item.iImage);
+
+            // Get item 1.
+            Assert.Equal((IntPtr)1, User32.SendMessageW(owner.Handle, (User32.WindowMessage)ComCtl32.TCM.GETITEMW, (IntPtr)1, ref item));
+            Assert.Equal(ComCtl32.TCIS.BUTTONPRESSED, item.dwState);
+            Assert.Equal(IntPtr.Zero, item.lParam);
+            Assert.Equal(int.MaxValue, item.cchTextMax);
+            Assert.Equal(expectedText, new string(item.pszText));
+            Assert.Equal(1, item.iImage);
+            
+            // Get item 2.
+            Assert.Equal((IntPtr)1, User32.SendMessageW(owner.Handle, (User32.WindowMessage)ComCtl32.TCM.GETITEMW, (IntPtr)2, ref item));
+            Assert.Equal((ComCtl32.TCIS)0, item.dwState);
+            Assert.Equal(IntPtr.Zero, item.lParam);
+            Assert.Equal(int.MaxValue, item.cchTextMax);
+            Assert.Empty(new string(item.pszText));
+            Assert.Equal(-1, item.iImage);
+        }
+
         [WinFormsFact]
         public void TabPage_Text_SetWithHandler_CallsTextChanged()
         {
@@ -2330,6 +2993,42 @@ namespace System.Windows.Forms.Tests
         public void TabPage_ToolTipText_SetWithParent_GetReturnsExpected(string value, string expected)
         {
             using var parent = new TabControl();
+            using var control = new TabPage
+            {
+                Parent = parent,
+                ToolTipText = value
+            };
+            Assert.Equal(expected, control.ToolTipText);
+            Assert.False(control.Visible);
+            Assert.False(control.IsHandleCreated);
+            Assert.False(parent.IsHandleCreated);
+
+            // Set same.
+            control.ToolTipText = value;
+            Assert.Equal(expected, control.ToolTipText);
+            Assert.False(control.Visible);
+            Assert.False(control.IsHandleCreated);
+            Assert.False(parent.IsHandleCreated);
+        }
+        
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        public void TabPage_ToolTipText_SetWithDesignModeParent_GetReturnsExpected(string value, string expected)
+        {
+            var mockSite = new Mock<ISite>(MockBehavior.Strict);
+            mockSite
+                .Setup(s => s.GetService(typeof(AmbientProperties)))
+                .Returns(null);
+            mockSite
+                .Setup(s => s.DesignMode)
+                .Returns(true);
+            mockSite
+                .Setup(s => s.Container)
+                .Returns((IContainer)null);
+            using var parent = new TabControl
+            {
+                Site = mockSite.Object
+            };
             using var control = new TabPage
             {
                 Parent = parent,
@@ -2426,6 +3125,185 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, parentInvalidatedCallCount);
             Assert.Equal(0, parentStyleChangedCallCount);
             Assert.Equal(0, parentCreatedCallCount);
+        }
+
+        [WinFormsTheory]
+        [InlineData(null, "", 0)]
+        [InlineData("", "", 0)]
+        [InlineData("text", "text", 1)]
+        public void TabPage_ToolTipText_SetWithDesignModeParentWithHandle_GetReturnsExpected(string value, string expected, int expectedInvalidateCallCount)
+        {
+            var mockSite = new Mock<ISite>(MockBehavior.Strict);
+            mockSite
+                .Setup(s => s.GetService(typeof(AmbientProperties)))
+                .Returns(null);
+            mockSite
+                .Setup(s => s.DesignMode)
+                .Returns(true);
+            mockSite
+                .Setup(s => s.Container)
+                .Returns((IContainer)null);
+            using var parent = new TabControl
+            {
+                Site = mockSite.Object
+            };
+            using var control = new TabPage
+            {
+                Parent = parent
+            };
+            Assert.NotEqual(IntPtr.Zero, parent.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+            int parentInvalidatedCallCount = 0;
+            parent.Invalidated += (sender, e) => parentInvalidatedCallCount++;
+            int parentStyleChangedCallCount = 0;
+            parent.StyleChanged += (sender, e) => parentStyleChangedCallCount++;
+            int parentCreatedCallCount = 0;
+            parent.HandleCreated += (sender, e) => parentCreatedCallCount++;
+
+            control.ToolTipText = value;
+            Assert.Equal(expected, control.ToolTipText);
+            Assert.True(control.Visible);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(expectedInvalidateCallCount, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+            Assert.True(parent.IsHandleCreated);
+            Assert.Equal(0, parentInvalidatedCallCount);
+            Assert.Equal(0, parentStyleChangedCallCount);
+            Assert.Equal(0, parentCreatedCallCount);
+
+            // Set same.
+            control.ToolTipText = value;
+            Assert.Equal(expected, control.ToolTipText);
+            Assert.True(control.Visible);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(expectedInvalidateCallCount, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+            Assert.True(parent.IsHandleCreated);
+            Assert.Equal(0, parentInvalidatedCallCount);
+            Assert.Equal(0, parentStyleChangedCallCount);
+            Assert.Equal(0, parentCreatedCallCount);
+        }
+
+        [WinFormsFact]
+        public unsafe void TabPageCollection_ToolTipText_SetGetItemsWithHandle_Success()
+        {
+            using var owner = new TabControl();
+            using var page1 = new TabPage();
+            using var page2 = new TabPage
+            {
+                Text = "Text",
+                ImageIndex = 1
+            };
+            using var page3 = new NullTextTabPage();
+            owner.TabPages.Add(page1);
+            owner.TabPages.Add(page2);
+            owner.TabPages.Add(page3);
+            Assert.NotEqual(IntPtr.Zero, owner.Handle);
+
+            page2.ToolTipText = "ToolTipText";
+            Assert.Equal((IntPtr)3, User32.SendMessageW(owner.Handle, (User32.WindowMessage)ComCtl32.TCM.GETITEMCOUNT, IntPtr.Zero, IntPtr.Zero));
+
+            char* buffer = stackalloc char[256];
+            ComCtl32.TCITEMW item = default;
+            item.cchTextMax = int.MaxValue;
+            item.pszText = buffer;
+            item.dwStateMask = (ComCtl32.TCIS)uint.MaxValue;
+            item.mask = (ComCtl32.TCIF)uint.MaxValue;
+
+            // Get item 0.
+            Assert.Equal((IntPtr)1, User32.SendMessageW(owner.Handle, (User32.WindowMessage)ComCtl32.TCM.GETITEMW, (IntPtr)0, ref item));
+            Assert.Equal(ComCtl32.TCIS.BUTTONPRESSED, item.dwState);
+            Assert.Equal(IntPtr.Zero, item.lParam);
+            Assert.Equal(int.MaxValue, item.cchTextMax);
+            Assert.Empty(new string(item.pszText));
+            Assert.Equal(-1, item.iImage);
+
+            // Get item 1.
+            Assert.Equal((IntPtr)1, User32.SendMessageW(owner.Handle, (User32.WindowMessage)ComCtl32.TCM.GETITEMW, (IntPtr)1, ref item));
+            Assert.Equal((ComCtl32.TCIS)0, item.dwState);
+            Assert.Equal(IntPtr.Zero, item.lParam);
+            Assert.Equal(int.MaxValue, item.cchTextMax);
+            Assert.Equal("Text", new string(item.pszText));
+            Assert.Equal(1, item.iImage);
+            
+            // Get item 2.
+            Assert.Equal((IntPtr)1, User32.SendMessageW(owner.Handle, (User32.WindowMessage)ComCtl32.TCM.GETITEMW, (IntPtr)2, ref item));
+            Assert.Equal((ComCtl32.TCIS)0, item.dwState);
+            Assert.Equal(IntPtr.Zero, item.lParam);
+            Assert.Equal(int.MaxValue, item.cchTextMax);
+            Assert.Empty(new string(item.pszText));
+            Assert.Equal(-1, item.iImage);
+        }
+
+        [WinFormsFact]
+        public unsafe void TabPageCollection_ToolTipText_SetGetItemsWithHandleDesignMode_Success()
+        {
+            var mockSite = new Mock<ISite>(MockBehavior.Strict);
+            mockSite
+                .Setup(s => s.GetService(typeof(AmbientProperties)))
+                .Returns(null);
+            mockSite
+                .Setup(s => s.DesignMode)
+                .Returns(true);
+            mockSite
+                .Setup(s => s.Container)
+                .Returns((IContainer)null);
+            using var owner = new TabControl
+            {
+                Site = mockSite.Object
+            };
+            using var page1 = new TabPage();
+            using var page2 = new TabPage
+            {
+                Text = "Text",
+                ImageIndex = 1
+            };
+            using var page3 = new NullTextTabPage();
+            owner.TabPages.Add(page1);
+            owner.TabPages.Add(page2);
+            owner.TabPages.Add(page3);
+            Assert.NotEqual(IntPtr.Zero, owner.Handle);
+
+            page2.ToolTipText = "ToolTipText";
+            Assert.Equal((IntPtr)3, User32.SendMessageW(owner.Handle, (User32.WindowMessage)ComCtl32.TCM.GETITEMCOUNT, IntPtr.Zero, IntPtr.Zero));
+
+            char* buffer = stackalloc char[256];
+            ComCtl32.TCITEMW item = default;
+            item.cchTextMax = int.MaxValue;
+            item.pszText = buffer;
+            item.dwStateMask = (ComCtl32.TCIS)uint.MaxValue;
+            item.mask = (ComCtl32.TCIF)uint.MaxValue;
+
+            // Get item 0.
+            Assert.Equal((IntPtr)1, User32.SendMessageW(owner.Handle, (User32.WindowMessage)ComCtl32.TCM.GETITEMW, (IntPtr)0, ref item));
+            Assert.Equal((ComCtl32.TCIS)0, item.dwState);
+            Assert.Equal(IntPtr.Zero, item.lParam);
+            Assert.Equal(int.MaxValue, item.cchTextMax);
+            Assert.Empty(new string(item.pszText));
+            Assert.Equal(-1, item.iImage);
+
+            // Get item 1.
+            Assert.Equal((IntPtr)1, User32.SendMessageW(owner.Handle, (User32.WindowMessage)ComCtl32.TCM.GETITEMW, (IntPtr)1, ref item));
+            Assert.Equal(ComCtl32.TCIS.BUTTONPRESSED, item.dwState);
+            Assert.Equal(IntPtr.Zero, item.lParam);
+            Assert.Equal(int.MaxValue, item.cchTextMax);
+            Assert.Equal("Text", new string(item.pszText));
+            Assert.Equal(1, item.iImage);
+            
+            // Get item 2.
+            Assert.Equal((IntPtr)1, User32.SendMessageW(owner.Handle, (User32.WindowMessage)ComCtl32.TCM.GETITEMW, (IntPtr)2, ref item));
+            Assert.Equal((ComCtl32.TCIS)0, item.dwState);
+            Assert.Equal(IntPtr.Zero, item.lParam);
+            Assert.Equal(int.MaxValue, item.cchTextMax);
+            Assert.Empty(new string(item.pszText));
+            Assert.Equal(-1, item.iImage);
         }
 
         [WinFormsTheory]
@@ -3808,6 +4686,22 @@ namespace System.Windows.Forms.Tests
         {
             using var control = new TabPage("text");
             Assert.Equal("TabPage: {text}", control.ToString());
+        }
+
+        [WinFormsFact]
+        public void TabPage_ToString_InvokeWithNullText_ReturnsExpected()
+        {
+            using var control = new NullTextTabPage();
+            Assert.Equal("TabPage: {}", control.ToString());
+        }
+
+        private class NullTextTabPage : TabPage
+        {
+            public override string Text
+            {
+                get => null;
+                set { }
+            }
         }
 
         private class SubTabPage : TabPage

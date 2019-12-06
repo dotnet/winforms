@@ -992,6 +992,87 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(2, callCount);
         }
 
+        [WinFormsFact]
+        public void TabControl_Handle_GetNoImageList_Success()
+        {
+            using var control = new TabControl();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            Assert.Equal(IntPtr.Zero, User32.SendMessageW(control.Handle, (User32.WindowMessage)ComCtl32.TCM.GETIMAGELIST, IntPtr.Zero, IntPtr.Zero));
+        }
+        
+        [WinFormsFact]
+        public void TabControl_Handle_GetWithImageList_Success()
+        {
+            using var imageList = new ImageList();
+            using var control = new TabControl
+            {
+                ImageList = imageList
+            };
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            Assert.Equal(imageList.Handle, User32.SendMessageW(control.Handle, (User32.WindowMessage)ComCtl32.TCM.GETIMAGELIST, IntPtr.Zero, IntPtr.Zero));
+        }
+
+        [WinFormsFact]
+        public void TabControl_Handle_GetItemsEmpty_Success()
+        {
+            using var control = new TabControl();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            Assert.Equal(IntPtr.Zero, User32.SendMessageW(control.Handle, (User32.WindowMessage)ComCtl32.TCM.GETITEMCOUNT, IntPtr.Zero, IntPtr.Zero));
+        }
+
+        [WinFormsTheory]
+        [InlineData("Text", "Text")]
+        [InlineData("&&Text", "&&Text")]
+        [InlineData("&", "&&")]
+        [InlineData("&Text", "&&Text")]
+        public unsafe void TabControl_Handle_GetItems_Success(string text, string expectedText)
+        {
+            using var control = new TabControl();
+            using var page1 = new TabPage();
+            using var page2 = new TabPage
+            {
+                Text = text,
+                ImageIndex = 1
+            };
+            using var page3 = new NullTextTabPage();
+            control.TabPages.Add(page1);
+            control.TabPages.Add(page2);
+            control.TabPages.Add(page3);
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            Assert.Equal((IntPtr)3, User32.SendMessageW(control.Handle, (User32.WindowMessage)ComCtl32.TCM.GETITEMCOUNT, IntPtr.Zero, IntPtr.Zero));
+
+            char* buffer = stackalloc char[256];
+            ComCtl32.TCITEMW item = default;
+            item.cchTextMax = int.MaxValue;
+            item.pszText = buffer;
+            item.dwStateMask = (ComCtl32.TCIS)uint.MaxValue;
+            item.mask = (ComCtl32.TCIF)uint.MaxValue;
+
+            // Get item 0.
+            Assert.Equal((IntPtr)1, User32.SendMessageW(control.Handle, (User32.WindowMessage)ComCtl32.TCM.GETITEMW, (IntPtr)0, ref item));
+            Assert.Equal(ComCtl32.TCIS.BUTTONPRESSED, item.dwState);
+            Assert.Equal(IntPtr.Zero, item.lParam);
+            Assert.Equal(int.MaxValue, item.cchTextMax);
+            Assert.Empty(new string(item.pszText));
+            Assert.Equal(-1, item.iImage);
+
+            // Get item 1.
+            Assert.Equal((IntPtr)1, User32.SendMessageW(control.Handle, (User32.WindowMessage)ComCtl32.TCM.GETITEMW, (IntPtr)1, ref item));
+            Assert.Equal((ComCtl32.TCIS)0, item.dwState);
+            Assert.Equal(IntPtr.Zero, item.lParam);
+            Assert.Equal(int.MaxValue, item.cchTextMax);
+            Assert.Equal(expectedText, new string(item.pszText));
+            Assert.Equal(1, item.iImage);
+            
+            // Get item 2.
+            Assert.Equal((IntPtr)1, User32.SendMessageW(control.Handle, (User32.WindowMessage)ComCtl32.TCM.GETITEMW, (IntPtr)2, ref item));
+            Assert.Equal((ComCtl32.TCIS)0, item.dwState);
+            Assert.Equal(IntPtr.Zero, item.lParam);
+            Assert.Equal(int.MaxValue, item.cchTextMax);
+            Assert.Empty(new string(item.pszText));
+            Assert.Equal(-1, item.iImage);
+        }
+
         [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void TabControl_HotTrack_Set_GetReturnsExpected(bool value)
@@ -4661,6 +4742,14 @@ namespace System.Windows.Forms.Tests
         {
         }
 
+        private class NullTextTabPage : TabPage
+        {
+            public override string Text
+            {
+                get => null;
+                set { }
+            }
+        }
 
         public class SubTabControl : TabControl
         {

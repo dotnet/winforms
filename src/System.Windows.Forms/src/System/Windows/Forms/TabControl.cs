@@ -1014,7 +1014,7 @@ namespace System.Windows.Forms
             remove => base.Paint -= value;
         }
 
-        internal int AddTabPage(TabPage tabPage)
+        private int AddTabPage(TabPage tabPage)
         {
             int index = AddNativeTabPage(tabPage);
             if (index >= 0)
@@ -1025,7 +1025,7 @@ namespace System.Windows.Forms
             return index;
         }
 
-        internal int AddNativeTabPage(TabPage tabPage)
+        private int AddNativeTabPage(TabPage tabPage)
         {
             int index = (int)SendMessage(ComCtl32.TCM.INSERTITEMW, (IntPtr)(_tabPageCount + 1), tabPage);
             User32.PostMessageW(this, _tabBaseReLayoutMessage);
@@ -1671,7 +1671,7 @@ namespace System.Windows.Forms
             _tabPageCount = 0;
         }
 
-        internal void RemoveTabPage(int index)
+        private void RemoveTabPage(int index)
         {
             if (index < 0 || index >= _tabPageCount)
             {
@@ -1722,7 +1722,7 @@ namespace System.Windows.Forms
 
         }
 
-        internal void SetTabPage(int index, TabPage value)
+        private void SetTabPage(int index, TabPage value)
         {
             if (index < 0 || index >= _tabPageCount)
             {
@@ -2212,6 +2212,7 @@ namespace System.Windows.Forms
 
             fixed (char* pText = text)
             {
+                tcitem.pszText = pText;
                 return User32.SendMessageW(this, (User32.WindowMessage)msg, wParam, ref tcitem);
             }
         }
