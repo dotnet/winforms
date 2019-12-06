@@ -1092,7 +1092,7 @@ namespace System.Windows.Forms.Tests
         [InlineData(-1)]
         [InlineData(0)]
         [InlineData(1)]
-        public void TabPage_ImageIndex_SetWithHandleWithParent_GetReturnsExpected(int value)
+        public void TabPage_ImageIndex_SetWithParentWithHandle_GetReturnsExpected(int value)
         {
             using var parent = new TabControl();
             using var control = new TabPage
@@ -1148,7 +1148,7 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<ArgumentOutOfRangeException>("value", () => control.ImageIndex = -2);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetStringTheoryData))]
         public void TabPage_ImageKey_Set_GetReturnsExpected(string value)
         {
@@ -1798,11 +1798,70 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(3, moveCallCount);
         }
 
+        [WinFormsFact]
+        public void TabPage_Location_ResetValue_Success()
+        {
+            PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(TabPage))[nameof(TabPage.Location)];
+            using var control = new TabPage();
+            Assert.False(property.CanResetValue(control));
+
+            control.Location = new Point(1, 0);
+            Assert.Equal(new Point(1, 0), control.Location);
+            Assert.False(property.CanResetValue(control));
+
+            control.Location = new Point(0, 1);
+            Assert.Equal(new Point(0, 1), control.Location);
+            Assert.False(property.CanResetValue(control));
+
+            control.Location = new Point(1, 2);
+            Assert.Equal(new Point(1, 2), control.Location);
+            Assert.False(property.CanResetValue(control));
+
+            property.ResetValue(control);
+            Assert.Equal(new Point(1, 2), control.Location);
+            Assert.False(property.CanResetValue(control));
+            
+            control.Location = Point.Empty;
+            Assert.Equal(Point.Empty, control.Location);
+            Assert.False(property.CanResetValue(control));
+        }
+
+        [WinFormsFact]
+        public void TabPage_Location_ShouldSerializeValue_Success()
+        {
+            PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(TabPage))[nameof(TabPage.Location)];
+            using var control = new TabPage();
+            Assert.False(property.ShouldSerializeValue(control));
+
+            control.Location = new Point(1, 0);
+            Assert.Equal(new Point(1, 0), control.Location);
+            Assert.True(property.ShouldSerializeValue(control));
+
+            control.Location = new Point(0, 1);
+            Assert.Equal(new Point(0, 1), control.Location);
+            Assert.True(property.ShouldSerializeValue(control));
+
+            control.Location = new Point(1, 2);
+            Assert.Equal(new Point(1, 2), control.Location);
+            Assert.True(property.ShouldSerializeValue(control));
+
+            property.ResetValue(control);
+            Assert.Equal(new Point(1, 2), control.Location);
+            Assert.True(property.ShouldSerializeValue(control));
+            
+            control.Location = Point.Empty;
+            Assert.Equal(Point.Empty, control.Location);
+            Assert.False(property.ShouldSerializeValue(control));
+        }
+
         [WinFormsTheory]
         [MemberData(nameof(ControlTests.MaximumSize_Set_TestData), MemberType = typeof(ControlTests))]
-        public void Control_MaximumSize_Set_GetReturnsExpected(Size value)
+        public void TabPage_MaximumSize_Set_GetReturnsExpected(Size value)
         {
-            using var control = new Control();
+            using var control = new TabPage
+            {
+                Size = Size.Empty
+            };
             int layoutCallCount = 0;
             control.Layout += (sender, e) => layoutCallCount++;
 
@@ -1822,9 +1881,12 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [MemberData(nameof(ControlTests.MinimumSize_Set_TestData), MemberType = typeof(ControlTests))]
-        public void Control_MinimumSize_Set_GetReturnsExpected(Size value, Size expectedSize, int expectedLayoutCallCount)
+        public void TabPage_MinimumSize_Set_GetReturnsExpected(Size value, Size expectedSize, int expectedLayoutCallCount)
         {
-            using var control = new Control();
+            using var control = new TabPage
+            {
+                Size = Size.Empty
+            };
             int layoutCallCount = 0;
             control.Layout += (sender, e) =>
             {
@@ -3604,7 +3666,7 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> SetBoundsCore_WithParentWithHandle_TestData()
         {
-            foreach (BoundsSpecified specified in new[] { BoundsSpecified.All })//Enum.GetValues(typeof(BoundsSpecified)))
+            foreach (BoundsSpecified specified in Enum.GetValues(typeof(BoundsSpecified)))
             {
                 foreach (bool resizeRedraw in new bool[] { true, false })
                 {

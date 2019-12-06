@@ -1079,9 +1079,10 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(ImageList_Set_TestData))]
         public void TabControl_ImageList_SetWithNonNullOldValue_GetReturnsExpected(ImageList value)
         {
+            using var oldValue = new ImageList();
             using var control = new TabControl
             {
-                ImageList = new ImageList()
+                ImageList = oldValue
             };
 
             control.ImageList = value;
@@ -1127,9 +1128,10 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(ImageList_Set_TestData))]
         public void TabControl_ImageList_SetWithHandleWithNonNullOldValue_GetReturnsExpected(ImageList value)
         {
+            using var oldValue = new ImageList();
             using var control = new TabControl
             {
-                ImageList = new ImageList()
+                ImageList = oldValue
             };
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             int invalidatedCallCount = 0;
@@ -1182,6 +1184,33 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
+        public void TabControl_ImageList_Set_CreatesImageHandle()
+        {
+            using var control = new TabControl();
+            using var imageList =  new ImageList();
+            control.ImageList = imageList;
+            Assert.True(imageList.HandleCreated);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void TabControl_ImageList_SetGetImageListWithHandle_Success()
+        {
+            using var control = new TabControl();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+
+            // Set non-null.
+            using var imageList =  new ImageList();
+            control.ImageList = imageList;
+            Assert.True(imageList.HandleCreated);
+            Assert.Equal(imageList.Handle, User32.SendMessageW(control.Handle, (User32.WindowMessage)ComCtl32.TCM.GETIMAGELIST, IntPtr.Zero, IntPtr.Zero));
+
+            // Set null.
+            control.ImageList = null;
+            Assert.Equal(IntPtr.Zero, User32.SendMessageW(control.Handle, (User32.WindowMessage)ComCtl32.TCM.GETIMAGELIST, IntPtr.Zero, IntPtr.Zero));
+        }
+
+        [WinFormsFact]
         public void TabControl_ImageList_Dispose_DetachesFromTabControl()
         {
             using var imageList1 = new ImageList();
@@ -1200,6 +1229,7 @@ namespace System.Windows.Forms.Tests
             control.ImageList = imageList2;
             imageList1.Dispose();
             Assert.Same(imageList2, control.ImageList);
+            Assert.False(control.IsHandleCreated);
         }
 
         [WinFormsFact]
@@ -1234,6 +1264,78 @@ namespace System.Windows.Forms.Tests
             control.ImageList = imageList2;
             imageList1.Dispose();
             Assert.Same(imageList2, control.ImageList);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsFact]
+        public void TabControl_ImageList_RecreateHandle_Nop()
+        {
+            using var imageList1 = new ImageList();
+            int recreateCallCount1 = 0;
+            imageList1.RecreateHandle += (sender, e) => recreateCallCount1++;
+            using var imageList2 = new ImageList();
+            using var control = new TabControl
+            {
+                ImageList = imageList1
+            };
+            Assert.Same(imageList1, control.ImageList);
+            Assert.Equal(0, recreateCallCount1);
+
+            imageList1.ImageSize = new Size(1, 2);
+            Assert.Equal(1, recreateCallCount1);
+            Assert.Same(imageList1, control.ImageList);
+            Assert.False(control.IsHandleCreated);
+
+            // Make sure we detached the setter.
+            control.ImageList = imageList2;
+            imageList1.ImageSize = new Size(2, 3);
+            Assert.Equal(2, recreateCallCount1);
+            Assert.Same(imageList2, control.ImageList);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void TabControl_ImageList_RecreateHandleWithHandle_Success()
+        {
+            using var imageList1 = new ImageList();
+            int recreateCallCount1 = 0;
+            imageList1.RecreateHandle += (sender, e) => recreateCallCount1++;
+            using var imageList2 = new ImageList();
+            using var control = new TabControl();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            control.ImageList = imageList1;
+            Assert.Same(imageList1, control.ImageList);
+            Assert.Equal(0, recreateCallCount1);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            imageList1.ImageSize = new Size(1, 2);
+            Assert.Equal(1, recreateCallCount1);
+            Assert.Same(imageList1, control.ImageList);
+            Assert.Equal(imageList1.Handle, User32.SendMessageW(control.Handle, (User32.WindowMessage)ComCtl32.TCM.GETIMAGELIST, IntPtr.Zero, IntPtr.Zero));
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Make sure we detached the setter.
+            control.ImageList = imageList2;
+            imageList1.ImageSize = new Size(2, 3);
+            Assert.Equal(2, recreateCallCount1);
+            Assert.Same(imageList2, control.ImageList);
+            Assert.Equal(imageList2.Handle, User32.SendMessageW(control.Handle, (User32.WindowMessage)ComCtl32.TCM.GETIMAGELIST, IntPtr.Zero, IntPtr.Zero));
             Assert.True(control.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
@@ -1352,7 +1454,54 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(2, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
+        }
 
+        [WinFormsFact]
+        public void TabControl_ItemSize_ResetValue_Success()
+        {
+            PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(TabControl))[nameof(TabControl.ItemSize)];
+            using var control = new TabControl();
+            Assert.False(property.CanResetValue(control));
+
+            control.ItemSize = new Size(1, 0);
+            Assert.Equal(new Size(1, 0), control.ItemSize);
+            Assert.True(property.CanResetValue(control));
+
+            control.ItemSize = new Size(0, 1);
+            Assert.Equal(new Size(0, 1), control.ItemSize);
+            Assert.True(property.CanResetValue(control));
+
+            control.ItemSize = new Size(1, 2);
+            Assert.Equal(new Size(1, 2), control.ItemSize);
+            Assert.True(property.CanResetValue(control));
+
+            property.ResetValue(control);
+            Assert.Equal(Size.Empty, control.ItemSize);
+            Assert.False(property.CanResetValue(control));
+        }
+
+        [WinFormsFact]
+        public void TabControl_ItemSize_ShouldSerializeValue_Success()
+        {
+            PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(TabControl))[nameof(TabControl.ItemSize)];
+            using var control = new TabControl();
+            Assert.False(property.ShouldSerializeValue(control));
+
+            control.ItemSize = new Size(1, 0);
+            Assert.Equal(new Size(1, 0), control.ItemSize);
+            Assert.True(property.ShouldSerializeValue(control));
+
+            control.ItemSize = new Size(0, 1);
+            Assert.Equal(new Size(0, 1), control.ItemSize);
+            Assert.True(property.ShouldSerializeValue(control));
+
+            control.ItemSize = new Size(1, 2);
+            Assert.Equal(new Size(1, 2), control.ItemSize);
+            Assert.True(property.ShouldSerializeValue(control));
+
+            property.ResetValue(control);
+            Assert.Equal(Size.Empty, control.ItemSize);
+            Assert.False(property.ShouldSerializeValue(control));
         }
 
         [WinFormsFact]
@@ -1514,6 +1663,54 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(1, createdCallCount);
+        }
+
+        [WinFormsFact]
+        public void TabControl_Padding_ResetValue_Success()
+        {
+            PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(TabControl))[nameof(TabControl.Padding)];
+            using var control = new TabControl();
+            Assert.False(property.CanResetValue(control));
+
+            control.Padding = new Point(1, 0);
+            Assert.Equal(new Point(1, 0), control.Padding);
+            Assert.True(property.CanResetValue(control));
+
+            control.Padding = new Point(0, 1);
+            Assert.Equal(new Point(0, 1), control.Padding);
+            Assert.True(property.CanResetValue(control));
+
+            control.Padding = new Point(1, 2);
+            Assert.Equal(new Point(1, 2), control.Padding);
+            Assert.True(property.CanResetValue(control));
+
+            property.ResetValue(control);
+            Assert.Equal(new Point(6, 3), control.Padding);
+            Assert.False(property.CanResetValue(control));
+        }
+
+        [WinFormsFact]
+        public void TabControl_Padding_ShouldSerializeValue_Success()
+        {
+            PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(TabControl))[nameof(TabControl.Padding)];
+            using var control = new TabControl();
+            Assert.False(property.ShouldSerializeValue(control));
+
+            control.Padding = new Point(1, 0);
+            Assert.Equal(new Point(1, 0), control.Padding);
+            Assert.True(property.ShouldSerializeValue(control));
+
+            control.Padding = new Point(0, 1);
+            Assert.Equal(new Point(0, 1), control.Padding);
+            Assert.True(property.ShouldSerializeValue(control));
+
+            control.Padding = new Point(1, 2);
+            Assert.Equal(new Point(1, 2), control.Padding);
+            Assert.True(property.ShouldSerializeValue(control));
+
+            property.ResetValue(control);
+            Assert.Equal(new Point(6, 3), control.Padding);
+            Assert.False(property.ShouldSerializeValue(control));
         }
 
         [WinFormsFact]
@@ -3030,6 +3227,13 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, pageCreatedCallCount2);
         }
 
+        [WinFormsFact]
+        public void TabControl_DeselectTab_NullTabPageName_ThrowsArgumentNullException()
+        {
+            using var control = new TabControl();
+            Assert.Throws<ArgumentNullException>("tabPageName", () => control.DeselectTab((string)null));
+        }
+
         [WinFormsTheory]
         [InlineData("")]
         [InlineData("NoSuchName")]
@@ -3233,6 +3437,45 @@ namespace System.Windows.Forms.Tests
             control.TabPages.Add(page1);
             control.TabPages.Add(page2);
             Assert.Throws<ArgumentOutOfRangeException>("index", () => control.DeselectTab(index));
+        }
+
+        [WinFormsFact]
+        public void TabControl_Dispose_InvokeWithImageList_DetachesImageList()
+        {
+            using var control = new TabControl();
+            using var imageList = new ImageList();
+            control.ImageList = imageList;
+            control.Dispose();
+            Assert.Same(imageList, control.ImageList);
+
+            imageList.Dispose();
+            Assert.Same(imageList, control.ImageList);
+        }
+        
+        [WinFormsFact]
+        public void TabControl_Dispose_InvokeDisposingWithImageList_DetachesImageList()
+        {
+            using var control = new SubTabControl();
+            using var imageList = new ImageList();
+            control.ImageList = imageList;
+            control.Dispose(true);
+            Assert.Same(imageList, control.ImageList);
+
+            imageList.Dispose();
+            Assert.Same(imageList, control.ImageList);
+        }
+        
+        [WinFormsFact]
+        public void TabControl_Dispose_InvokeNotDisposingWithImageList_DoesNotDetachImageList()
+        {
+            using var control = new SubTabControl();
+            using var imageList = new ImageList();
+            control.ImageList = imageList;
+            control.Dispose(false);
+            Assert.Same(imageList, control.ImageList);
+
+            imageList.Dispose();
+            Assert.Null(control.ImageList);
         }
 
         [WinFormsTheory]
@@ -3494,6 +3737,31 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, control.GetStyle(flag));
         }
 
+        [WinFormsFact]
+        public void TabControl_GetToolTipText_Invoke_ReturnsExpectd()
+        {
+            using var control = new SubTabControl();
+            using var item = new TabPage
+            {
+                ToolTipText = "text"
+            };
+            Assert.Equal("text", control.GetToolTipText(item));
+        }
+
+        [WinFormsFact]
+        public void TabControl_GetToolTipText_NullItem_ThrowsNullReferenceException()
+        {
+            using var control = new SubTabControl();
+            Assert.Throws<NullReferenceException>(() => control.GetToolTipText(null));
+        }
+
+        [WinFormsFact]
+        public void TabControl_GetToolTipText_ItemNotTabPage_ThrowsInvalidCastException()
+        {
+            using var control = new SubTabControl();
+            Assert.Throws<InvalidCastException>(() => control.GetToolTipText(new object()));
+        }
+
         public static IEnumerable<object[]> IsInputKey_TestData()
         {
             yield return new object[] { Keys.Tab, false };
@@ -3747,6 +4015,144 @@ namespace System.Windows.Forms.Tests
             control.DrawItem -= handler;
             control.OnDrawItem(eventArgs);
             Assert.Equal(1, callCount);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void TabControl_OnEnter_Invoke_CallsEnter(EventArgs eventArgs)
+        {
+            using var control = new SubTabControl();
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+        
+            // Call with handler.
+            control.Enter += handler;
+            control.OnEnter(eventArgs);
+            Assert.Equal(1, callCount);
+        
+            // Remove handler.
+            control.Enter -= handler;
+            control.OnEnter(eventArgs);
+            Assert.Equal(1, callCount);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void TabControl_OnEnter_InvokeWithSelectedTab_CallsEnter(EventArgs eventArgs)
+        {
+            using var control = new SubTabControl();
+            using var page1 = new TabPage();
+            using var page2 = new TabPage();
+            control.TabPages.Add(page1);
+            control.TabPages.Add(page2);
+            control.SelectedTab = page2;
+
+            int callCount = 0;
+            int childCallCount1 = 0;
+            int childCallCount2 = 0;
+            page1.Enter += (sender, e) => childCallCount1++;
+            page2.Enter += (sender, e) =>
+            {
+                Assert.Same(page2, sender);
+                Assert.Same(eventArgs, e);
+                childCallCount2++;
+            };
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                Assert.Equal(0, childCallCount1);
+                Assert.Equal(0, childCallCount2);
+                callCount++;
+            };
+        
+            // Call with handler.
+            control.Enter += handler;
+            control.OnEnter(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(0, childCallCount1);
+            Assert.Equal(1, childCallCount2);
+        
+            // Remove handler.
+            control.Enter -= handler;
+            control.OnEnter(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(0, childCallCount1);
+            Assert.Equal(2, childCallCount2);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void TabControl_OnLeave_Invoke_CallsLeave(EventArgs eventArgs)
+        {
+            using var control = new SubTabControl();
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+        
+            // Call with handler.
+            control.Leave += handler;
+            control.OnLeave(eventArgs);
+            Assert.Equal(1, callCount);
+        
+            // Remove handler.
+            control.Leave -= handler;
+            control.OnLeave(eventArgs);
+            Assert.Equal(1, callCount);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void TabControl_OnLeave_InvokeWithSelectedTab_CallsLeave(EventArgs eventArgs)
+        {
+            using var control = new SubTabControl();
+            using var page1 = new TabPage();
+            using var page2 = new TabPage();
+            control.TabPages.Add(page1);
+            control.TabPages.Add(page2);
+            control.SelectedTab = page2;
+
+            int callCount = 0;
+            int childCallCount1 = 0;
+            int childCallCount2 = 0;
+            page1.Leave += (sender, e) => childCallCount1++;
+            page2.Leave += (sender, e) =>
+            {
+                Assert.Same(page2, sender);
+                Assert.Same(eventArgs, e);
+                childCallCount2++;
+            };
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                Assert.Equal(0, childCallCount1);
+                Assert.Equal(1, childCallCount2);
+                callCount++;
+            };
+        
+            // Call with handler.
+            control.Leave += handler;
+            control.OnLeave(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(0, childCallCount1);
+            Assert.Equal(1, childCallCount2);
+        
+            // Remove handler.
+            control.Leave -= handler;
+            control.OnLeave(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(0, childCallCount1);
+            Assert.Equal(2, childCallCount2);
         }
 
         [WinFormsTheory]
@@ -4657,6 +5063,24 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<ArgumentOutOfRangeException>("index", () => control.SelectTab(index));
         }
 
+        [WinFormsFact]
+        public void TabControl_ToString_InvokeEmpty_ReturnsExpected()
+        {
+            using var control = new TabControl();
+            Assert.Equal("System.Windows.Forms.TabControl, TabPages.Count: 0", control.ToString());
+        }
+        
+        [WinFormsFact]
+        public void TabControl_ToString_InvokeNotEmpty_ReturnsExpected()
+        {
+            using var control = new TabControl();
+            using var page1 = new TabPage("text1");
+            using var page2 = new TabPage("text2");
+            control.TabPages.Add(page1);
+            control.TabPages.Add(page2);
+            Assert.Equal("System.Windows.Forms.TabControl, TabPages.Count: 2, TabPages[0]: TabPage: {text1}", control.ToString());
+        }
+
         private class SubTabPage : TabPage
         {
         }
@@ -4720,6 +5144,8 @@ namespace System.Windows.Forms.Tests
 
             public new void CreateHandle() => base.CreateHandle();
 
+            public new void Dispose(bool disposing) => base.Dispose(disposing);
+
             public new AutoSizeMode GetAutoSizeMode() => base.GetAutoSizeMode();
 
             public new object[] GetItems() => base.GetItems();
@@ -4728,6 +5154,8 @@ namespace System.Windows.Forms.Tests
 
             public new bool GetStyle(ControlStyles flag) => base.GetStyle(flag);
 
+            public new string GetToolTipText(object item) => base.GetToolTipText(item);
+
             public new bool IsInputKey(Keys keyData) => base.IsInputKey(keyData);
 
             public new void OnDeselected(TabControlEventArgs e) => base.OnDeselected(e);
@@ -4735,6 +5163,10 @@ namespace System.Windows.Forms.Tests
             public new void OnDeselecting(TabControlCancelEventArgs e) => base.OnDeselecting(e);
 
             public new void OnDrawItem(DrawItemEventArgs e) => base.OnDrawItem(e);
+
+            public new void OnEnter(EventArgs e) => base.OnEnter(e);
+
+            public new void OnLeave(EventArgs e) => base.OnLeave(e);
 
             public new void OnRightToLeftLayoutChanged(EventArgs e) => base.OnRightToLeftLayoutChanged(e);
 
