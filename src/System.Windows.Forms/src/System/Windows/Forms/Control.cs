@@ -7813,7 +7813,7 @@ namespace System.Windows.Forms
                 if (DpiHelper.IsPerMonitorV2Awareness && !(typeof(Form).IsAssignableFrom(GetType())))
                 {
                     int old = _deviceDpi;
-                    _deviceDpi = (int)UnsafeNativeMethods.GetDpiForWindow(new HandleRef(this, HandleInternal));
+                    _deviceDpi = (int)User32.GetDpiForWindow(this);
                     if (old != _deviceDpi)
                     {
                         RescaleConstantsForDpi(old, _deviceDpi);
@@ -12275,7 +12275,7 @@ namespace System.Windows.Forms
             if (IsHandleCreated)
             {
                 int deviceDpiOld = _deviceDpi;
-                _deviceDpi = (int)UnsafeNativeMethods.GetDpiForWindow(new HandleRef(this, HandleInternal));
+                _deviceDpi = (int)User32.GetDpiForWindow(this);
 
                 // Controls are by default font scaled.
                 // Dpi change requires font to be recalculated inorder to get controls scaled with right dpi.
