@@ -4594,6 +4594,11 @@ To replace this default dialog please handle the DataError event.</source>
         <target state="translated">エラーをバインドする、データのソースを示します。</target>
         <note />
       </trans-unit>
+      <trans-unit id="ErrorProviderDefaultAccessibleName">
+        <source>Error provider</source>
+        <target state="new">Error provider</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ErrorProviderErrorDescr">
         <source>The error description for a control.</source>
         <target state="translated">コントロールのエラーの説明です。</target>
