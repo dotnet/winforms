@@ -2527,8 +2527,6 @@ namespace System.Windows.Forms
             }
         }
 
-        internal virtual bool HasMenu => false;
-
         /// <summary>
         ///  The height of this control
         /// </summary>
@@ -5745,7 +5743,7 @@ namespace System.Windows.Forms
             // because windows scales them for us.
             RECT adornments = new RECT(0, 0, 0, 0);
             CreateParams cp = CreateParams;
-            AdjustWindowRectEx(ref adornments, cp.Style, HasMenu, cp.ExStyle);
+            AdjustWindowRectEx(ref adornments, cp.Style, false, cp.ExStyle);
 
             float dx = factor.Width;
             float dy = factor.Height;
@@ -10357,7 +10355,7 @@ namespace System.Windows.Forms
         {
             CreateParams cp = CreateParams;
             RECT adornments = new RECT(0, 0, 0, 0);
-            AdjustWindowRectEx(ref adornments, cp.Style, HasMenu, cp.ExStyle);
+            AdjustWindowRectEx(ref adornments, cp.Style, false, cp.ExStyle);
             Size minSize = MinimumSize;
             Size maxSize = MaximumSize;
 
@@ -10900,7 +10898,7 @@ namespace System.Windows.Forms
         {
             RECT rect = new RECT(0, 0, width, height);
             CreateParams cp = CreateParams;
-            AdjustWindowRectEx(ref rect, cp.Style, HasMenu, cp.ExStyle);
+            AdjustWindowRectEx(ref rect, cp.Style, false, cp.ExStyle);
             return rect.Size;
         }
 

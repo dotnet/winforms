@@ -1065,11 +1065,6 @@ namespace System.Windows.Forms
             }
         }
 
-        internal override bool HasMenu
-        {
-            get => false;
-        }
-
         /// <summary>
         ///  Gets or sets a value indicating whether a
         ///  help button should be displayed in the caption box of the form.
@@ -3167,7 +3162,7 @@ namespace System.Windows.Forms
         private Size ComputeWindowSize(Size clientSize, int style, int exStyle)
         {
             RECT result = new RECT(0, 0, clientSize.Width, clientSize.Height);
-            AdjustWindowRectEx(ref result, style, HasMenu, exStyle);
+            AdjustWindowRectEx(ref result, style, false, exStyle);
             return new Size(result.right - result.left, result.bottom - result.top);
         }
 
