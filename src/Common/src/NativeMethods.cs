@@ -761,23 +761,6 @@ namespace System.Windows.Forms
 
         public const int WHEEL_DELTA = 120;
 
-        // wParam of report message WM_IME_NOTIFY (public\sdk\imm.h)
-        public const int
-        //IMN_CLOSESTATUSWINDOW = 0x0001,
-        IMN_OPENSTATUSWINDOW = 0x0002,
-        //IMN_CHANGECANDIDATE   = 0x0003,
-        //IMN_CLOSECANDIDATE    = 0x0004,
-        //IMN_OPENCANDIDATE     = 0x0005,
-        IMN_SETCONVERSIONMODE = 0x0006,
-        //IMN_SETSENTENCEMODE   = 0x0007,
-        IMN_SETOPENSTATUS = 0x0008;
-        //IMN_SETCANDIDATEPOS    = 0x0009,
-        //IMN_SETCOMPOSITIONFONT = 0x000A,
-        //IMN_SETCOMPOSITIONWINDOW = 0x000B,
-        //IMN_SETSTATUSWINDOWPOS   = 0x000C,
-        //IMN_GUIDELINE            = 0x000D,
-        //IMN_PRIVATE              = 0x000E;
-
         public static int START_PAGE_GENERAL = unchecked((int)0xffffffff);
 
         //  Result action ids for PrintDlgEx.
