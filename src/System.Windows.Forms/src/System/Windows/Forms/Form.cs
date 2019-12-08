@@ -4807,21 +4807,18 @@ namespace System.Windows.Forms
             }
 
             EnumThreadWindowsCallback etwcb = null;
-            SafeNativeMethods.EnumThreadWindowsCallback callback = null;
+            User32.EnumThreadWindowsCallback callback = null;
             if (IsHandleCreated)
             {
                 // First put all the owned windows into a list
                 etwcb = new EnumThreadWindowsCallback();
-                if (etwcb != null)
-                {
-                    callback = new SafeNativeMethods.EnumThreadWindowsCallback(etwcb.Callback);
-                    User32.EnumThreadWindows(
-                        Kernel32.GetCurrentThreadId(),
-                        new User32.EnumThreadWindowsCallback(callback),
-                        this);
-                    // Reset the owner of the windows in the list
-                    etwcb.ResetOwners();
-                }
+                callback = etwcb.Callback;
+                User32.EnumThreadWindows(
+                    Kernel32.GetCurrentThreadId(),
+                    callback,
+                    this);
+                // Reset the owner of the windows in the list
+                etwcb.ResetOwners();
             }
 
             base.RecreateHandleCore();

@@ -605,8 +605,8 @@ namespace System.Windows.Forms
 
                     // 248887 we need to send a WM_THEMECHANGED to the top level windows of this application.
                     // We do it this way to ensure that we get all top level windows -- whether we created them or not.
-                    SafeNativeMethods.EnumThreadWindowsCallback callback = new SafeNativeMethods.EnumThreadWindowsCallback(Application.SendThemeChanged);
-                    SafeNativeMethods.EnumWindows(callback, IntPtr.Zero);
+                    User32.EnumWindowsCallback callback = SendThemeChanged;
+                    User32.EnumWindows(callback, IntPtr.Zero);
 
                     GC.KeepAlive(callback);
                 }
