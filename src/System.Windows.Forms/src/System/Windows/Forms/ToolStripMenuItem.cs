@@ -829,61 +829,56 @@ namespace System.Windows.Forms
             };
             UnsafeNativeMethods.GetMenuItemInfo(new HandleRef(this, nativeMenuHandle), nativeMenuCommandID, /*fByPosition instead of ID=*/ false, info);
 
-            if (info.hbmpItem != IntPtr.Zero && info.hbmpItem.ToInt32() > NativeMethods.HBMMENU_POPUP_MINIMIZE)
+            if (info.hbmpItem != IntPtr.Zero && info.hbmpItem.ToInt32() > (int)User32.HBMMENU.POPUP_MINIMIZE)
             {
                 return Bitmap.FromHbitmap(info.hbmpItem);
             }
-            else
+
+            // its a system defined bitmap
+            int buttonToUse = -1;
+
+            switch (info.hbmpItem.ToInt32())
             {
-                // its a system defined bitmap
-                int buttonToUse = -1;
-
-                switch (info.hbmpItem.ToInt32())
-                {
-                    case NativeMethods.HBMMENU_MBAR_CLOSE:
-                    case NativeMethods.HBMMENU_MBAR_CLOSE_D:
-                    case NativeMethods.HBMMENU_POPUP_CLOSE:
-                        buttonToUse = (int)CaptionButton.Close;
-                        break;
-
-                    case NativeMethods.HBMMENU_MBAR_MINIMIZE:
-                    case NativeMethods.HBMMENU_MBAR_MINIMIZE_D:
-                    case NativeMethods.HBMMENU_POPUP_MINIMIZE:
-                        buttonToUse = (int)CaptionButton.Minimize;
-                        break;
-
-                    case NativeMethods.HBMMENU_MBAR_RESTORE:
-                    case NativeMethods.HBMMENU_POPUP_RESTORE:
-                        buttonToUse = (int)CaptionButton.Restore;
-                        break;
-
-                    case NativeMethods.HBMMENU_POPUP_MAXIMIZE:
-                        buttonToUse = (int)CaptionButton.Maximize;
-                        break;
-
-                    case NativeMethods.HBMMENU_SYSTEM:
-                    //
-                    case NativeMethods.HBMMENU_CALLBACK:
-                    // owner draw not supported
-                    default:
-                        break;
-                }
-                if (buttonToUse > -1)
-                {
-
-                    // we've mapped to a system defined bitmap we know how to draw
-                    Bitmap image = new Bitmap(16, 16);
-
-                    using (Graphics g = Graphics.FromImage(image))
-                    {
-                        ControlPaint.DrawCaptionButton(g, new Rectangle(Point.Empty, image.Size), (CaptionButton)buttonToUse, ButtonState.Flat);
-                        g.DrawRectangle(SystemPens.Control, 0, 0, image.Width - 1, image.Height - 1);
-                    }
-
-                    image.MakeTransparent(SystemColors.Control);
-                    return image;
-                }
+                case (int)User32.HBMMENU.MBAR_CLOSE:
+                case (int)User32.HBMMENU.MBAR_CLOSE_D:
+                case (int)User32.HBMMENU.POPUP_CLOSE:
+                    buttonToUse = (int)CaptionButton.Close;
+                    break;
+                case (int)User32.HBMMENU.MBAR_MINIMIZE:
+                case (int)User32.HBMMENU.MBAR_MINIMIZE_D:
+                case (int)User32.HBMMENU.POPUP_MINIMIZE:
+                    buttonToUse = (int)CaptionButton.Minimize;
+                    break;
+                case (int)User32.HBMMENU.MBAR_RESTORE:
+                case (int)User32.HBMMENU.POPUP_RESTORE:
+                    buttonToUse = (int)CaptionButton.Restore;
+                    break;
+                case (int)User32.HBMMENU.POPUP_MAXIMIZE:
+                    buttonToUse = (int)CaptionButton.Maximize;
+                    break;
+                case (int)User32.HBMMENU.SYSTEM:
+                //
+                case (int)User32.HBMMENU.CALLBACK:
+                // owner draw not supported
+                default:
+                    break;
             }
+
+            if (buttonToUse > -1)
+            {
+                // we've mapped to a system defined bitmap we know how to draw
+                Bitmap image = new Bitmap(16, 16);
+
+                using (Graphics g = Graphics.FromImage(image))
+                {
+                    ControlPaint.DrawCaptionButton(g, new Rectangle(Point.Empty, image.Size), (CaptionButton)buttonToUse, ButtonState.Flat);
+                    g.DrawRectangle(SystemPens.Control, 0, 0, image.Width - 1, image.Height - 1);
+                }
+
+                image.MakeTransparent(SystemColors.Control);
+                return image;
+            }
+            
             return null;
         }
 

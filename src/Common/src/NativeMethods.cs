@@ -226,19 +226,6 @@ namespace System.Windows.Forms
 
         public const int HDS_FULLDRAG = 0x0080;
 
-        // Corresponds to bitmaps in MENUITEMINFO
-        public const int HBMMENU_CALLBACK = -1,
-        HBMMENU_SYSTEM = 1,
-        HBMMENU_MBAR_RESTORE = 2,
-        HBMMENU_MBAR_MINIMIZE = 3,
-        HBMMENU_MBAR_CLOSE = 5,
-        HBMMENU_MBAR_CLOSE_D = 6,
-        HBMMENU_MBAR_MINIMIZE_D = 7,
-        HBMMENU_POPUP_CLOSE = 8,
-        HBMMENU_POPUP_RESTORE = 9,
-        HBMMENU_POPUP_MAXIMIZE = 10,
-        HBMMENU_POPUP_MINIMIZE = 11;
-
         public const int
         ICON_SMALL = 0,
         ICON_BIG = 1,
