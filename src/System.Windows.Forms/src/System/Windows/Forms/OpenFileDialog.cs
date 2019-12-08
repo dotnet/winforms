@@ -47,14 +47,8 @@ namespace System.Windows.Forms
         ]
         public bool Multiselect
         {
-            get
-            {
-                return GetOption(NativeMethods.OFN_ALLOWMULTISELECT);
-            }
-            set
-            {
-                SetOption(NativeMethods.OFN_ALLOWMULTISELECT, value);
-            }
+            get => GetOption((int)Comdlg32.OFN.ALLOWMULTISELECT);
+            set => SetOption((int)Comdlg32.OFN.ALLOWMULTISELECT, value);
         }
 
         /// <summary>
@@ -68,14 +62,8 @@ namespace System.Windows.Forms
         ]
         public bool ReadOnlyChecked
         {
-            get
-            {
-                return GetOption(NativeMethods.OFN_READONLY);
-            }
-            set
-            {
-                SetOption(NativeMethods.OFN_READONLY, value);
-            }
+            get => GetOption((int)Comdlg32.OFN.READONLY);
+            set => SetOption((int)Comdlg32.OFN.READONLY, value);
         }
 
         /// <summary>
@@ -88,14 +76,8 @@ namespace System.Windows.Forms
         ]
         public bool ShowReadOnly
         {
-            get
-            {
-                return !GetOption(NativeMethods.OFN_HIDEREADONLY);
-            }
-            set
-            {
-                SetOption(NativeMethods.OFN_HIDEREADONLY, !value);
-            }
+            get => !GetOption((int)Comdlg32.OFN.HIDEREADONLY);
+            set => SetOption((int)Comdlg32.OFN.HIDEREADONLY, !value);
         }
 
         /// <summary>
@@ -119,7 +101,7 @@ namespace System.Windows.Forms
         public override void Reset()
         {
             base.Reset();
-            SetOption(NativeMethods.OFN_FILEMUSTEXIST, true);
+            SetOption((int)Comdlg32.OFN.FILEMUSTEXIST, true);
         }
 
         /// <summary>

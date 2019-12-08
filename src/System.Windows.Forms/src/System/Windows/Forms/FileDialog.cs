@@ -68,8 +68,8 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.FDcheckFileExistsDescr))]
         public virtual bool CheckFileExists
         {
-            get => GetOption(NativeMethods.OFN_FILEMUSTEXIST);
-            set => SetOption(NativeMethods.OFN_FILEMUSTEXIST, value);
+            get => GetOption((int)Comdlg32.OFN.FILEMUSTEXIST);
+            set => SetOption((int)Comdlg32.OFN.FILEMUSTEXIST, value);
         }
 
         /// <summary>
@@ -81,8 +81,8 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.FDcheckPathExistsDescr))]
         public bool CheckPathExists
         {
-            get => GetOption(NativeMethods.OFN_PATHMUSTEXIST);
-            set => SetOption(NativeMethods.OFN_PATHMUSTEXIST, value);
+            get => GetOption((int)Comdlg32.OFN.PATHMUSTEXIST);
+            set => SetOption((int)Comdlg32.OFN.PATHMUSTEXIST, value);
         }
 
         /// <summary>
@@ -122,8 +122,8 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.FDdereferenceLinksDescr))]
         public bool DereferenceLinks
         {
-            get => !GetOption(NativeMethods.OFN_NODEREFERENCELINKS);
-            set => SetOption(NativeMethods.OFN_NODEREFERENCELINKS, !value);
+            get => !GetOption((int)Comdlg32.OFN.NODEREFERENCELINKS);
+            set => SetOption((int)Comdlg32.OFN.NODEREFERENCELINKS, !value);
         }
 
         private protected string DialogCaption => User32.GetWindowText(new HandleRef(this, _dialogHWnd));
@@ -272,10 +272,10 @@ namespace System.Windows.Forms
         {
             get
             {
-                return _options & (NativeMethods.OFN_READONLY | NativeMethods.OFN_HIDEREADONLY |
-                                  NativeMethods.OFN_NOCHANGEDIR | NativeMethods.OFN_SHOWHELP | NativeMethods.OFN_NOVALIDATE |
-                                  NativeMethods.OFN_ALLOWMULTISELECT | NativeMethods.OFN_PATHMUSTEXIST |
-                                  NativeMethods.OFN_NODEREFERENCELINKS);
+                return _options & (int)(Comdlg32.OFN.READONLY | Comdlg32.OFN.HIDEREADONLY |
+                                  Comdlg32.OFN.NOCHANGEDIR | Comdlg32.OFN.SHOWHELP | Comdlg32.OFN.NOVALIDATE |
+                                  Comdlg32.OFN.ALLOWMULTISELECT | Comdlg32.OFN.PATHMUSTEXIST |
+                                  Comdlg32.OFN.NODEREFERENCELINKS);
             }
         }
 
@@ -288,8 +288,8 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.FDrestoreDirectoryDescr))]
         public bool RestoreDirectory
         {
-            get => GetOption(NativeMethods.OFN_NOCHANGEDIR);
-            set => SetOption(NativeMethods.OFN_NOCHANGEDIR, value);
+            get => GetOption((int)Comdlg32.OFN.NOCHANGEDIR);
+            set => SetOption((int)Comdlg32.OFN.NOCHANGEDIR, value);
         }
 
         /// <summary>
@@ -301,8 +301,8 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.FDshowHelpDescr))]
         public bool ShowHelp
         {
-            get => GetOption(NativeMethods.OFN_SHOWHELP);
-            set => SetOption(NativeMethods.OFN_SHOWHELP, value);
+            get => GetOption((int)Comdlg32.OFN.SHOWHELP);
+            set => SetOption((int)Comdlg32.OFN.SHOWHELP, value);
         }
 
         /// <summary>
@@ -335,8 +335,8 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.FDvalidateNamesDescr))]
         public bool ValidateNames
         {
-            get => !GetOption(NativeMethods.OFN_NOVALIDATE);
-            set => SetOption(NativeMethods.OFN_NOVALIDATE, !value);
+            get => !GetOption((int)Comdlg32.OFN.NOVALIDATE);
+            set => SetOption((int)Comdlg32.OFN.NOVALIDATE, !value);
         }
 
         /// <summary>
@@ -365,14 +365,14 @@ namespace System.Windows.Forms
             bool ok = false;
             try
             {
-                _options = _options & ~NativeMethods.OFN_READONLY |
-                          ofn.Flags & NativeMethods.OFN_READONLY;
+                _options = _options & ~(int)Comdlg32.OFN.READONLY |
+                          ofn.Flags & (int)Comdlg32.OFN.READONLY;
                 FilterIndex = ofn.nFilterIndex;
                 _charBuffer.PutCoTaskMem(ofn.lpstrFile);
 
                 Thread.MemoryBarrier();
 
-                if ((_options & NativeMethods.OFN_ALLOWMULTISELECT) == 0)
+                if ((_options & (int)Comdlg32.OFN.ALLOWMULTISELECT) == 0)
                 {
                     _fileNames = new string[] { _charBuffer.GetString() };
                 }
@@ -609,7 +609,7 @@ namespace System.Windows.Forms
         /// </summary>
         private bool ProcessFileNames()
         {
-            if ((_options & NativeMethods.OFN_NOVALIDATE) == 0)
+            if ((_options & (int)Comdlg32.OFN.NOVALIDATE) == 0)
             {
                 string[] extensions = FilterExtensions;
                 for (int i = 0; i < _fileNames.Length; i++)
@@ -617,7 +617,7 @@ namespace System.Windows.Forms
                     string fileName = _fileNames[i];
                     if ((_options & AddExtensionOption) != 0 && !Path.HasExtension(fileName))
                     {
-                        bool fileMustExist = (_options & NativeMethods.OFN_FILEMUSTEXIST) != 0;
+                        bool fileMustExist = (_options & (int)Comdlg32.OFN.FILEMUSTEXIST) != 0;
 
                         for (int j = 0; j < extensions.Length; j++)
                         {
@@ -692,7 +692,7 @@ namespace System.Windows.Forms
         /// </summary>
         private protected virtual bool PromptUserIfAppropriate(string fileName)
         {
-            if ((_options & NativeMethods.OFN_FILEMUSTEXIST) != 0)
+            if ((_options & (int)Comdlg32.OFN.FILEMUSTEXIST) != 0)
             {
                 if (!FileExists(fileName))
                 {
@@ -709,8 +709,7 @@ namespace System.Windows.Forms
         /// </summary>
         public override void Reset()
         {
-            _options = NativeMethods.OFN_HIDEREADONLY | NativeMethods.OFN_PATHMUSTEXIST |
-                      AddExtensionOption;
+            _options = (int)(Comdlg32.OFN.HIDEREADONLY | Comdlg32.OFN.PATHMUSTEXIST) | AddExtensionOption;
             _title = null;
             _initialDir = null;
             _defaultExt = null;
@@ -761,9 +760,9 @@ namespace System.Windows.Forms
                 ofn.nMaxFile = FileBufferSize;
                 ofn.lpstrInitialDir = _initialDir;
                 ofn.lpstrTitle = _title;
-                ofn.Flags = Options | (NativeMethods.OFN_EXPLORER | NativeMethods.OFN_ENABLEHOOK | NativeMethods.OFN_ENABLESIZING);
+                ofn.Flags = Options | (int)(Comdlg32.OFN.EXPLORER | Comdlg32.OFN.ENABLEHOOK | Comdlg32.OFN.ENABLESIZING);
                 ofn.lpfnHook = hookProcPtr;
-                ofn.FlagsEx = NativeMethods.OFN_USESHELLITEM;
+                ofn.FlagsEx = (int)Comdlg32.OFN_EX.NONE;
                 if (_defaultExt != null && AddExtension)
                 {
                     ofn.lpstrDefExt = _defaultExt;
