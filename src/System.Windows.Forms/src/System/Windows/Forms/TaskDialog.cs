@@ -639,7 +639,7 @@ namespace System.Windows.Forms
         /// </param>
         /// <returns>The <see cref="TaskDialogButton"/> which was clicked by the
         /// user to close the dialog.</returns>
-        public TaskDialogButton ShowDialog(IntPtr hwndOwner)
+        public unsafe TaskDialogButton ShowDialog(IntPtr hwndOwner)
         {
             // Recursive Show() is not possible because a TaskDialog instance can only
             // represent a single native dialog.
@@ -663,7 +663,7 @@ namespace System.Windows.Forms
                     _startupLocation,
                     _setToForeground,
                     out IntPtr ptrToFree,
-                    out IntPtr ptrTaskDialogConfig);
+                    out ComCtl32.TASKDIALOGCONFIG* ptrTaskDialogConfig);
 
                 _boundPage = _page;
                 try
@@ -1375,7 +1375,7 @@ namespace System.Windows.Forms
         ///   event because the task dialog is not yet displayed in that state.
         /// </para>
         /// </remarks>
-        private void Navigate(TaskDialogPage page)
+        private unsafe void Navigate(TaskDialogPage page)
         {
             // We allow to nagivate the dialog even if the previous navigation did
             // not complete yet, as this seems to work in the native implementation.
@@ -1480,7 +1480,7 @@ namespace System.Windows.Forms
                     startupLocation: default,
                     setToForeground: false,
                     out IntPtr ptrToFree,
-                    out IntPtr ptrTaskDialogConfig);
+                    out ComCtl32.TASKDIALOGCONFIG* ptrTaskDialogConfig);
                 try
                 {
                     // Enqueue the page before sending the message. This ensures
@@ -1498,7 +1498,7 @@ namespace System.Windows.Forms
                         SendTaskDialogMessage(
                             ComCtl32.TDM.NAVIGATE_PAGE,
                             0,
-                            ptrTaskDialogConfig,
+                            (IntPtr)ptrTaskDialogConfig,
                             checkWaitingForNavigation: false);
                     }
                     catch
@@ -1544,7 +1544,7 @@ namespace System.Windows.Forms
             TaskDialogStartupLocation startupLocation,
             bool setToForeground,
             out IntPtr ptrToFree,
-            out IntPtr ptrTaskDialogConfig)
+            out ComCtl32.TASKDIALOGCONFIG* ptrTaskDialogConfig)
         {
             page.Bind(
                 this,
@@ -1632,9 +1632,9 @@ namespace System.Windows.Forms
                         // as additional size when allocating the memory.
                         var currentPtr = (byte*)ptrToFree;
                         Align(ref currentPtr);
-                        ptrTaskDialogConfig = (IntPtr)currentPtr;
+                        ptrTaskDialogConfig = (ComCtl32.TASKDIALOGCONFIG*)currentPtr;
 
-                        ref ComCtl32.TASKDIALOGCONFIG taskDialogConfig = ref *(ComCtl32.TASKDIALOGCONFIG*)currentPtr;
+                        ref ComCtl32.TASKDIALOGCONFIG taskDialogConfig = ref *ptrTaskDialogConfig;
                         currentPtr += sizeof(ComCtl32.TASKDIALOGCONFIG);
 
                         // Assign the structure with the constructor syntax, which will
