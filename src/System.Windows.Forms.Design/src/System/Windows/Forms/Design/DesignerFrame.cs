@@ -454,7 +454,7 @@ namespace System.Windows.Forms.Design
                 User32.SetParent(control.Handle, Handle);
                 User32.SetWindowPos(
                     control.Handle,
-                    User32.HWND_TOP,
+                    User32.HWND.TOP,
                     flags: User32.SWP.NOSIZE | User32.SWP.NOMOVE);
             }
 
@@ -566,7 +566,7 @@ namespace System.Windows.Forms.Design
                             {
                                 User32.SetWindowPos(
                                     c.Handle,
-                                    User32.HWND_TOP,
+                                    User32.HWND.TOP,
                                     flags: User32.SWP.NOSIZE | User32.SWP.NOMOVE);
                             }
                         }

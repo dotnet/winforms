@@ -1812,7 +1812,7 @@ namespace System.Windows.Forms
                 window.CreateHandle(CreateParams);
                 User32.SetWindowPos(
                     new HandleRef(this, Handle),
-                    User32.HWND_TOPMOST,
+                    User32.HWND.TOPMOST,
                     flags: User32.SWP.NOMOVE | User32.SWP.NOSIZE | User32.SWP.NOACTIVATE);
 
                 // Setting the max width has the added benefit of enabling multiline tool tips

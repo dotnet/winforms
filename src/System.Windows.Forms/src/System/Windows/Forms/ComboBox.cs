@@ -3546,7 +3546,7 @@ namespace System.Windows.Forms
                 }
                 User32.SetWindowPos(
                     new HandleRef(this, dropDownHandle),
-                    User32.HWND_TOP,
+                    User32.HWND.TOP,
                     0,
                     0,
                     DropDownWidth,

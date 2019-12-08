@@ -9,12 +9,6 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        public static IntPtr HWND_TOP = (IntPtr)0;
-        public static IntPtr HWND_BOTTOM = (IntPtr)1;
-        public static IntPtr HWND_TOPMOST = (IntPtr)(-1);
-        public static IntPtr HWND_NOTOPMOST = (IntPtr)(-2);
-        public static IntPtr HWND_MESSAGE = (IntPtr)(-3);
-
         [DllImport(Libraries.User32, ExactSpelling = true)]
         public static extern BOOL SetWindowPos(
             IntPtr hWnd,

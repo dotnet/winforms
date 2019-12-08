@@ -4741,7 +4741,7 @@ namespace System.Windows.Forms
             {
                 User32.SetWindowPos(
                     new HandleRef(_window, Handle),
-                    User32.HWND_TOP,
+                    User32.HWND.TOP,
                     flags: User32.SWP.NOMOVE | User32.SWP.NOSIZE);
             }
         }
@@ -10697,7 +10697,7 @@ namespace System.Windows.Forms
             {
                 User32.SetWindowPos(
                     new HandleRef(_window, Handle),
-                    User32.HWND_BOTTOM,
+                    User32.HWND.BOTTOM,
                     flags: User32.SWP.NOMOVE | User32.SWP.NOSIZE);
             }
         }
@@ -11156,7 +11156,7 @@ namespace System.Windows.Forms
                 {
                     User32.SetWindowPos(
                         new HandleRef(_window, Handle),
-                        User32.HWND_TOP,
+                        User32.HWND.TOP,
                         flags: User32.SWP.NOSIZE
                             | User32.SWP.NOMOVE
                             | User32.SWP.NOZORDER
@@ -11664,7 +11664,7 @@ namespace System.Windows.Forms
                 return;
             }
 
-            IntPtr prevHandle = User32.HWND_TOP;
+            IntPtr prevHandle = User32.HWND.TOP;
             for (int i = Controls.GetChildIndex(ctl); --i >= 0;)
             {
                 Control c = Controls[i];
@@ -11737,7 +11737,7 @@ namespace System.Windows.Forms
 
                 User32.SetWindowPos(
                     new HandleRef(this, Handle),
-                    User32.HWND_TOP,
+                    User32.HWND.TOP,
                     flags: User32.SWP.DRAWFRAME
                         | User32.SWP.NOACTIVATE
                         | User32.SWP.NOMOVE

@@ -1514,7 +1514,7 @@ namespace System.Windows.Forms
                         // when the user tries to grab a resizing border.
                         User32.SetWindowPos(
                             new HandleRef(this, Handle),
-                            User32.HWND_TOP,
+                            User32.HWND.TOP,
                             Location.X,
                             Location.Y,
                             Size.Width,
@@ -2269,7 +2269,7 @@ namespace System.Windows.Forms
                 {
                     User32.SetWindowPos(
                         new HandleRef(this, Handle),
-                        value ? User32.HWND_TOPMOST : User32.HWND_NOTOPMOST,
+                        value ? User32.HWND.TOPMOST : User32.HWND.NOTOPMOST,
                         flags: User32.SWP.NOMOVE | User32.SWP.NOSIZE);
                 }
 
@@ -4395,7 +4395,7 @@ namespace System.Windows.Forms
                     {
                         User32.SetWindowPos(
                             new HandleRef(this, HandleInternal),
-                            User32.HWND_TOP,
+                            User32.HWND.TOP,
                             e.SuggestedRectangle.X,
                             e.SuggestedRectangle.Y,
                             e.SuggestedRectangle.Width,

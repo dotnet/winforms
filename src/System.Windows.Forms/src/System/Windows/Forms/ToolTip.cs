@@ -1961,7 +1961,7 @@ namespace System.Windows.Forms
 
             User32.SetWindowPos(
                 new HandleRef(this, Handle),
-                User32.HWND_TOPMOST,
+                User32.HWND.TOPMOST,
                 moveToLocation.X,
                 moveToLocation.Y,
                 tipSize.Width,
@@ -2118,7 +2118,7 @@ namespace System.Windows.Forms
                 _cancelled = true;
                 User32.SetWindowPos(
                     new HandleRef(this, Handle),
-                    User32.HWND_TOPMOST,
+                    User32.HWND.TOPMOST,
                     flags: User32.SWP.NOACTIVATE | User32.SWP.NOOWNERZORDER);
             }
             else
@@ -2128,7 +2128,7 @@ namespace System.Windows.Forms
                 // Only width/height changes are respected, so set top,left to what we got earlier
                 User32.SetWindowPos(
                     new HandleRef(this, Handle),
-                    User32.HWND_TOPMOST,
+                    User32.HWND.TOPMOST,
                     r.left,
                     r.top,
                     currentTooltipSize.Width,

@@ -936,7 +936,7 @@ namespace System.Windows.Forms
                     User32.SendMessageW(_tipWindow, User32.WindowMessage.TTM_SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
                     User32.SetWindowPos(
                         new HandleRef(_tipWindow, _tipWindow.Handle),
-                        User32.HWND_TOP,
+                        User32.HWND.TOP,
                         flags: User32.SWP.NOSIZE | User32.SWP.NOMOVE | User32.SWP.NOACTIVATE);
                     User32.SendMessageW(_tipWindow, User32.WindowMessage.TTM_SETDELAYTIME, (IntPtr)ComCtl32.TTDT.INITIAL, (IntPtr)0);
                 }
@@ -965,7 +965,7 @@ namespace System.Windows.Forms
                 // have a bizare region window, this is needed.
                 User32.SetWindowPos(
                     new HandleRef(this, Handle),
-                    User32.HWND_TOP,
+                    User32.HWND.TOP,
                     _windowBounds.X,
                     _windowBounds.Y,
                     _windowBounds.Width,
@@ -1282,7 +1282,7 @@ namespace System.Windows.Forms
 
                 User32.SetWindowPos(
                     new HandleRef(this, Handle),
-                    User32.HWND_TOP,
+                    User32.HWND.TOP,
                     _windowBounds.X,
                     _windowBounds.Y,
                     _windowBounds.Width,

@@ -96,7 +96,7 @@ namespace System.Windows.Forms
             int y = screen.Y + (screen.Height - r.bottom + r.top) / 3;
             User32.SetWindowPos(
                 hWnd,
-                User32.HWND_TOP,
+                User32.HWND.TOP,
                 x,
                 y,
                 flags: User32.SWP.NOSIZE | User32.SWP.NOZORDER | User32.SWP.NOACTIVATE);

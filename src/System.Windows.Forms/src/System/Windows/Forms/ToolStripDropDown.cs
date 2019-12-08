@@ -1084,7 +1084,7 @@ namespace System.Windows.Forms
             {
                 User32.SetWindowPos(
                     new HandleRef(this, Handle),
-                    topMost ? User32.HWND_TOPMOST : User32.HWND_NOTOPMOST,
+                    topMost ? User32.HWND.TOPMOST : User32.HWND.NOTOPMOST,
                     flags: User32.SWP.NOMOVE | User32.SWP.NOSIZE | User32.SWP.NOACTIVATE);
             }
         }
@@ -1891,7 +1891,7 @@ namespace System.Windows.Forms
                             {
                                 User32.SetWindowPos(
                                     new HandleRef(this, Handle),
-                                    User32.HWND_TOP,
+                                    User32.HWND.TOP,
                                     flags: User32.SWP.NOMOVE | User32.SWP.NOSIZE | User32.SWP.NOACTIVATE);
                             }
                         }

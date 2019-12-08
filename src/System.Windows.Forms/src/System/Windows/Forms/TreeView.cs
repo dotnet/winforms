@@ -2068,7 +2068,7 @@ namespace System.Windows.Forms
                 User32.SWP flags = User32.SWP.NOZORDER | User32.SWP.NOACTIVATE | User32.SWP.NOMOVE;
                 User32.SetWindowPos(
                     new HandleRef(this, Handle),
-                    User32.HWND_TOP,
+                    User32.HWND.TOP,
                     Left,
                     Top,
                     int.MaxValue,
@@ -2081,7 +2081,7 @@ namespace System.Windows.Forms
                 {
                     User32.SetWindowPos(
                         new HandleRef(this, Handle),
-                        User32.HWND_TOP,
+                        User32.HWND.TOP,
                         Left,
                         Top,
                         oldSize,
@@ -2985,7 +2985,7 @@ namespace System.Windows.Forms
                         User32.SendMessageW(tooltipHandle, User32.WindowMessage.TTM_ADJUSTRECT, PARAM.FromBool(true), ref bounds);
                         User32.SetWindowPos(
                             new HandleRef(this, tooltipHandle),
-                            User32.HWND_TOPMOST,
+                            User32.HWND.TOPMOST,
                             bounds.Left,
                             bounds.Top,
                             flags: User32.SWP.NOACTIVATE | User32.SWP.NOSIZE | User32.SWP.NOZORDER);

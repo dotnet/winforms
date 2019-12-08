@@ -1123,13 +1123,13 @@ namespace System.Drawing.Design
                         User32.EnableWindow(hwndCtl, BOOL.FALSE);
                         User32.SetWindowPos(
                             hwndCtl,
-                            User32.HWND_TOP,
+                            User32.HWND.TOP,
                             flags: User32.SWP.HIDEWINDOW);
                         hwndCtl = NativeMethods.GetDlgItem(hwnd, NativeMethods.IDOK);
                         User32.EnableWindow(hwndCtl, BOOL.FALSE);
                         User32.SetWindowPos(
                             hwndCtl,
-                            User32.HWND_TOP,
+                            User32.HWND.TOP,
                             flags: User32.SWP.HIDEWINDOW);
                         this.Color = Color.Empty;
                         break;
