@@ -199,15 +199,6 @@ namespace System.Windows.Forms
         GDTR_MIN = 0x0001,
         GDTR_MAX = 0x0002;
 
-        // attribute for COMPOSITIONSTRING Structure
-        public const int
-        ATTR_INPUT = 0x00,
-        ATTR_TARGET_CONVERTED = 0x01,
-        ATTR_CONVERTED = 0x02,
-        ATTR_TARGET_NOTCONVERTED = 0x03,
-        ATTR_INPUT_ERROR = 0x04,
-        ATTR_FIXEDCONVERTED = 0x05;
-
         public const int
         HTTRANSPARENT = (-1),
         HTNOWHERE = 0,
@@ -257,12 +248,6 @@ namespace System.Windows.Forms
         ICON_BIG = 1,
         IMAGE_ICON = 1,
         IMAGE_CURSOR = 2;
-
-        public const int IDM_PRINT = 27,
-        IDM_PAGESETUP = 2004,
-        IDM_PRINTPREVIEW = 2003,
-        IDM_PROPERTIES = 28,
-        IDM_SAVEAS = 71;
 
         public const int LB_ERR = (-1),
         LB_ERRSPACE = (-2),
