@@ -562,7 +562,7 @@ namespace System.Windows.Forms
                     RECT rect = new RECT();
                     CreateParams cp = CreateParams;
 
-                    AdjustWindowRectEx(ref rect, cp.Style, HasMenu, cp.ExStyle);
+                    AdjustWindowRectEx(ref rect, cp.Style, false, cp.ExStyle);
 
                     // the coordinates we get back are negative, we need to translate this back to positive.
                     int offsetX = -rect.left; // one to get back to 0,0, another to translate
