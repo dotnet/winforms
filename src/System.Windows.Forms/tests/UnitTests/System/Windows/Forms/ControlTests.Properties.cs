@@ -6024,6 +6024,54 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
+        public void Control_Location_ResetValue_Success()
+        {
+            PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(Control))[nameof(Control.Location)];
+            using var control = new Control();
+            Assert.True(property.CanResetValue(control));
+
+            control.Location = new Point(1, 0);
+            Assert.Equal(new Point(1, 0), control.Location);
+            Assert.True(property.CanResetValue(control));
+
+            control.Location = new Point(0, 1);
+            Assert.Equal(new Point(0, 1), control.Location);
+            Assert.True(property.CanResetValue(control));
+
+            control.Location = new Point(1, 2);
+            Assert.Equal(new Point(1, 2), control.Location);
+            Assert.True(property.CanResetValue(control));
+
+            property.ResetValue(control);
+            Assert.Equal(Point.Empty, control.Location);
+            Assert.True(property.CanResetValue(control));
+        }
+
+        [WinFormsFact]
+        public void Control_Location_ShouldSerializeValue_Success()
+        {
+            PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(Control))[nameof(Control.Location)];
+            using var control = new Control();
+            Assert.True(property.ShouldSerializeValue(control));
+
+            control.Location = new Point(1, 0);
+            Assert.Equal(new Point(1, 0), control.Location);
+            Assert.True(property.ShouldSerializeValue(control));
+
+            control.Location = new Point(0, 1);
+            Assert.Equal(new Point(0, 1), control.Location);
+            Assert.True(property.ShouldSerializeValue(control));
+
+            control.Location = new Point(1, 2);
+            Assert.Equal(new Point(1, 2), control.Location);
+            Assert.True(property.ShouldSerializeValue(control));
+
+            property.ResetValue(control);
+            Assert.Equal(Point.Empty, control.Location);
+            Assert.True(property.ShouldSerializeValue(control));
+        }
+
+        [WinFormsFact]
         public void Control_Location_SetWithHandler_CallsLocationChanged()
         {
             using var control = new Control();

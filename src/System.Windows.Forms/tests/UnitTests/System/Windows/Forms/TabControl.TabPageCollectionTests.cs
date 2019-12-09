@@ -137,18 +137,18 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> Add_WithHandle_TestData()
         {
-            yield return new object[] { TabAppearance.Buttons, Size.Empty, new Rectangle(4, 27, 392, 269), 0 };
-            yield return new object[] { TabAppearance.FlatButtons, Size.Empty, new Rectangle(4, 27, 392, 269), 1 };
-            yield return new object[] { TabAppearance.Normal, Size.Empty, new Rectangle(4, 24, 392, 272), 0 };
+            yield return new object[] { TabAppearance.Buttons, Size.Empty, 0 };
+            yield return new object[] { TabAppearance.FlatButtons, Size.Empty, 1 };
+            yield return new object[] { TabAppearance.Normal, Size.Empty, 0 };
             
-            yield return new object[] { TabAppearance.Buttons, new Size(100, 120), new Rectangle(4, 124, 392, 172), 0 };
-            yield return new object[] { TabAppearance.FlatButtons, new Size(100, 120), new Rectangle(4, 124, 392, 172), 1 };
-            yield return new object[] { TabAppearance.Normal, new Size(100, 120), new Rectangle(4, 124, 392, 172), 0 };
+            yield return new object[] { TabAppearance.Buttons, new Size(100, 120), 0 };
+            yield return new object[] { TabAppearance.FlatButtons, new Size(100, 120), 1 };
+            yield return new object[] { TabAppearance.Normal, new Size(100, 120), 0 };
         }
 
         [WinFormsTheory]
         [MemberData(nameof(Add_WithHandle_TestData))]
-        public void TabPageCollection_Add_InvokeValueWithoutHandleOwnerWithHandle_Success(TabAppearance appearance, Size itemSize, Rectangle expectedBounds1, int expectedParentInvalidatedCallCount)
+        public void TabPageCollection_Add_InvokeValueWithoutHandleOwnerWithHandle_Success(TabAppearance appearance, Size itemSize, int expectedParentInvalidatedCallCount)
         {
             using var owner = new TabControl
             {
@@ -190,7 +190,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(value1, Assert.Single(owner.Controls));
                 Assert.Same(owner, value1.Parent);
                 Assert.True(value1.Visible);
-                Assert.Equal(expectedBounds1, value1.Bounds);
+                Assert.Equal(owner.DisplayRectangle, value1.Bounds);
                 Assert.Null(value1.Site);
                 Assert.Equal(0, owner.SelectedIndex);
                 Assert.Equal(2, layoutCallCount1);
@@ -218,11 +218,11 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(new Control[] { value1, value2 }, owner.Controls.Cast<Control>());
                 Assert.Same(owner, value1.Parent);
                 Assert.True(value1.Visible);
-                Assert.Equal(expectedBounds1, value1.Bounds);
+                Assert.Equal(owner.DisplayRectangle, value1.Bounds);
                 Assert.Null(value1.Site);
                 Assert.Same(owner, value2.Parent);
                 Assert.False(value2.Visible);
-                Assert.Equal(expectedBounds1, value2.Bounds);
+                Assert.Equal(owner.DisplayRectangle, value2.Bounds);
                 Assert.Null(value2.Site);
                 Assert.Equal(0, owner.SelectedIndex);
                 Assert.Equal(2, layoutCallCount1);
@@ -260,11 +260,11 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(new Control[] { value2, value1 }, owner.Controls.Cast<Control>());
                 Assert.Same(owner, value1.Parent);
                 Assert.False(value1.Visible);
-                Assert.Equal(expectedBounds1, value1.Bounds);
+                Assert.Equal(owner.DisplayRectangle, value1.Bounds);
                 Assert.Null(value1.Site);
                 Assert.Same(owner, value2.Parent);
                 Assert.False(value2.Visible);
-                Assert.Equal(expectedBounds1, value2.Bounds);
+                Assert.Equal(owner.DisplayRectangle, value2.Bounds);
                 Assert.Null(value2.Site);
                 Assert.Equal(0, owner.SelectedIndex);
                 Assert.Equal(3, layoutCallCount1);
@@ -453,7 +453,7 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [MemberData(nameof(Add_WithHandle_TestData))]
-        public void TabPageCollection_Add_InvokeValueWithHandleOwnerWithHandle_Success(TabAppearance appearance, Size itemSize, Rectangle expectedBounds1, int expectedParentInvalidatedCallCount)
+        public void TabPageCollection_Add_InvokeValueWithHandleOwnerWithHandle_Success(TabAppearance appearance, Size itemSize, int expectedParentInvalidatedCallCount)
         {
             using var owner = new TabControl
             {
@@ -509,7 +509,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(value1, Assert.Single(owner.Controls));
                 Assert.Same(owner, value1.Parent);
                 Assert.True(value1.Visible);
-                Assert.Equal(expectedBounds1, value1.Bounds);
+                Assert.Equal(owner.DisplayRectangle, value1.Bounds);
                 Assert.Null(value1.Site);
                 Assert.Equal(0, owner.SelectedIndex);
                 Assert.Equal(2, layoutCallCount1);
@@ -540,11 +540,11 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(new Control[] { value1, value2 }, owner.Controls.Cast<Control>());
                 Assert.Same(owner, value1.Parent);
                 Assert.True(value1.Visible);
-                Assert.Equal(expectedBounds1, value1.Bounds);
+                Assert.Equal(owner.DisplayRectangle, value1.Bounds);
                 Assert.Null(value1.Site);
                 Assert.Same(owner, value2.Parent);
                 Assert.False(value2.Visible);
-                Assert.Equal(expectedBounds1, value2.Bounds);
+                Assert.Equal(owner.DisplayRectangle, value2.Bounds);
                 Assert.Null(value2.Site);
                 Assert.Equal(0, owner.SelectedIndex);
                 Assert.Equal(2, layoutCallCount1);
@@ -588,11 +588,11 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(new Control[] { value2, value1 }, owner.Controls.Cast<Control>());
                 Assert.Same(owner, value1.Parent);
                 Assert.False(value1.Visible);
-                Assert.Equal(expectedBounds1, value1.Bounds);
+                Assert.Equal(owner.DisplayRectangle, value1.Bounds);
                 Assert.Null(value1.Site);
                 Assert.Same(owner, value2.Parent);
                 Assert.False(value2.Visible);
-                Assert.Equal(expectedBounds1, value2.Bounds);
+                Assert.Equal(owner.DisplayRectangle, value2.Bounds);
                 Assert.Null(value2.Site);
                 Assert.Equal(0, owner.SelectedIndex);
                 Assert.Equal(3, layoutCallCount1);
@@ -1730,7 +1730,7 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [MemberData(nameof(Add_WithHandle_TestData))]
-        public void TabPageCollection_Insert_InvokeValueWithoutHandleOwnerWithHandle_Success(TabAppearance appearance, Size itemSize, Rectangle expectedBounds1, int expectedParentInvalidatedCallCount)
+        public void TabPageCollection_Insert_InvokeValueWithoutHandleOwnerWithHandle_Success(TabAppearance appearance, Size itemSize, int expectedParentInvalidatedCallCount)
         {
             using var owner = new TabControl
             {
@@ -1772,7 +1772,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(value1, Assert.Single(owner.Controls));
                 Assert.Same(owner, value1.Parent);
                 Assert.True(value1.Visible);
-                Assert.Equal(expectedBounds1, value1.Bounds);
+                Assert.Equal(owner.DisplayRectangle, value1.Bounds);
                 Assert.Null(value1.Site);
                 Assert.Equal(0, owner.SelectedIndex);
                 Assert.Equal(2, layoutCallCount1);
@@ -1800,11 +1800,11 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(new Control[] { value2, value1 }, owner.Controls.Cast<Control>());
                 Assert.Same(owner, value1.Parent);
                 Assert.True(value1.Visible);
-                Assert.Equal(expectedBounds1, value1.Bounds);
+                Assert.Equal(owner.DisplayRectangle, value1.Bounds);
                 Assert.Null(value1.Site);
                 Assert.Same(owner, value2.Parent);
                 Assert.False(value2.Visible);
-                Assert.Equal(expectedBounds1, value2.Bounds);
+                Assert.Equal(owner.DisplayRectangle, value2.Bounds);
                 Assert.Null(value2.Site);
                 Assert.Equal(1, owner.SelectedIndex);
                 Assert.Equal(2, layoutCallCount1);
@@ -1844,11 +1844,11 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(new Control[] { value2, value1 }, owner.Controls.Cast<Control>());
                 Assert.Same(owner, value1.Parent);
                 Assert.False(value1.Visible);
-                Assert.Equal(expectedBounds1, value1.Bounds);
+                Assert.Equal(owner.DisplayRectangle, value1.Bounds);
                 Assert.Null(value1.Site);
                 Assert.Same(owner, value2.Parent);
                 Assert.False(value2.Visible);
-                Assert.Equal(expectedBounds1, value2.Bounds);
+                Assert.Equal(owner.DisplayRectangle, value2.Bounds);
                 Assert.Null(value2.Site);
                 Assert.Equal(1, owner.SelectedIndex);
                 Assert.Equal(3, layoutCallCount1);
@@ -2047,7 +2047,7 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [MemberData(nameof(Add_WithHandle_TestData))]
-        public void TabPageCollection_Insert_InvokeValueWithHandleOwnerWithHandle_Success(TabAppearance appearance, Size itemSize, Rectangle expectedBounds1, int expectedParentInvalidatedCallCount)
+        public void TabPageCollection_Insert_InvokeValueWithHandleOwnerWithHandle_Success(TabAppearance appearance, Size itemSize, int expectedParentInvalidatedCallCount)
         {
             using var owner = new TabControl
             {
@@ -2103,7 +2103,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(value1, Assert.Single(owner.Controls));
                 Assert.Same(owner, value1.Parent);
                 Assert.True(value1.Visible);
-                Assert.Equal(expectedBounds1, value1.Bounds);
+                Assert.Equal(owner.DisplayRectangle, value1.Bounds);
                 Assert.Null(value1.Site);
                 Assert.Equal(0, owner.SelectedIndex);
                 Assert.Equal(2, layoutCallCount1);
@@ -2134,11 +2134,11 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(new Control[] { value2, value1 }, owner.Controls.Cast<Control>());
                 Assert.Same(owner, value1.Parent);
                 Assert.True(value1.Visible);
-                Assert.Equal(expectedBounds1, value1.Bounds);
+                Assert.Equal(owner.DisplayRectangle, value1.Bounds);
                 Assert.Null(value1.Site);
                 Assert.Same(owner, value2.Parent);
                 Assert.False(value2.Visible);
-                Assert.Equal(expectedBounds1, value2.Bounds);
+                Assert.Equal(owner.DisplayRectangle, value2.Bounds);
                 Assert.Null(value2.Site);
                 Assert.Equal(1, owner.SelectedIndex);
                 Assert.Equal(2, layoutCallCount1);
@@ -2184,11 +2184,11 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(new Control[] { value2, value1 }, owner.Controls.Cast<Control>());
                 Assert.Same(owner, value1.Parent);
                 Assert.False(value1.Visible);
-                Assert.Equal(expectedBounds1, value1.Bounds);
+                Assert.Equal(owner.DisplayRectangle, value1.Bounds);
                 Assert.Null(value1.Site);
                 Assert.Same(owner, value2.Parent);
                 Assert.False(value2.Visible);
-                Assert.Equal(expectedBounds1, value2.Bounds);
+                Assert.Equal(owner.DisplayRectangle, value2.Bounds);
                 Assert.Null(value2.Site);
                 Assert.Equal(1, owner.SelectedIndex);
                 Assert.Equal(3, layoutCallCount1);
