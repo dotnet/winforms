@@ -778,7 +778,7 @@ namespace System.Windows.Forms
                 // We guard against re-entrancy since the ImeModeChanged event can be raised and any changes from the handler could
                 // lead to another WM_IME_NOTIFY loop.
 
-                if (wparam == NativeMethods.IMN_SETCONVERSIONMODE || wparam == NativeMethods.IMN_SETOPENSTATUS)
+                if (wparam == (int)Imm32.IMN.SETCONVERSIONMODE || wparam == (int)Imm32.IMN.SETOPENSTATUS)
                 {
                     Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Info, string.Format(CultureInfo.CurrentCulture, "Inside WmImeNotify(m.wparam=[{0}]), this={1}", m.WParam, this));
                     Debug.Indent();
