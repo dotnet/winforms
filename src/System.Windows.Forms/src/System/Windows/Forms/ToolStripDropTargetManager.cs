@@ -272,7 +272,7 @@ namespace System.Windows.Forms
                     Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "Registering as drop target: " + owner.Handle.ToString());
 
                     // Register
-                    HRESULT n = Ole32.RegisterDragDrop(new HandleRef(owner, owner.Handle), (Ole32.IDropTarget)new DropTarget(this));
+                    HRESULT n = Ole32.RegisterDragDrop(owner, new DropTarget(this));
                     Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "   ret:" + n.ToString(CultureInfo.InvariantCulture));
                     if (n != HRESULT.S_OK && n != HRESULT.DRAGDROP_E_ALREADYREGISTERED)
                     {
