@@ -23,6 +23,10 @@ namespace System.Windows.Forms.Tests
         public void TreeView_Ctor_Default()
         {
             using var control = new SubTreeView();
+            Assert.Null(control.AccessibleDefaultActionDescription);
+            Assert.Null(control.AccessibleDescription);
+            Assert.Null(control.AccessibleName);
+            Assert.Equal(AccessibleRole.Default, control.AccessibleRole);
             Assert.False(control.AllowDrop);
             Assert.Equal(AnchorStyles.Top | AnchorStyles.Left, control.Anchor);
             Assert.False(control.AutoSize);
@@ -34,13 +38,17 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(97, control.Bottom);
             Assert.Equal(new Rectangle(0, 0, 121, 97), control.Bounds);
             Assert.True(control.CanEnableIme);
+            Assert.False(control.CanFocus);
             Assert.True(control.CanRaiseEvents);
+            Assert.True(control.CanSelect);
+            Assert.False(control.Capture);
             Assert.True(control.CausesValidation);
             Assert.False(control.CheckBoxes);
             Assert.Equal(117, control.ClientSize.Width);
             Assert.Equal(93, control.ClientSize.Height);
             Assert.Equal(new Rectangle(0, 0, 117, 93), control.ClientRectangle);
             Assert.Null(control.Container);
+            Assert.False(control.ContainsFocus);
             Assert.Null(control.ContextMenuStrip);
             Assert.Empty(control.Controls);
             Assert.Same(control.Controls, control.Controls);
@@ -61,6 +69,7 @@ namespace System.Windows.Forms.Tests
             Assert.True(control.Enabled);
             Assert.NotNull(control.Events);
             Assert.Same(control.Events, control.Events);
+            Assert.False(control.Focused);
             Assert.Equal(Control.DefaultFont, control.Font);
             Assert.Equal(control.Font.Height, control.FontHeight);
             Assert.Equal(SystemColors.WindowText, control.ForeColor);
@@ -75,6 +84,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(ImeMode.NoControl, control.ImeMode);
             Assert.Equal(ImeMode.NoControl, control.ImeModeBase);
             Assert.Equal(19, control.Indent);
+            Assert.False(control.IsAccessible);
+            Assert.False(control.IsMirrored);
             Assert.Equal(Control.DefaultFont.Height + 3, control.ItemHeight);
             Assert.False(control.LabelEdit);
             Assert.NotNull(control.LayoutEngine);
@@ -119,6 +130,7 @@ namespace System.Windows.Forms.Tests
             Assert.Null(control.TopLevelControl);
             Assert.Null(control.TopNode);
             Assert.Null(control.TreeViewNodeSorter);
+            Assert.False(control.UseWaitCursor);
             Assert.True(control.Visible);
             Assert.Equal(0, control.VisibleCount);
             Assert.Equal(121, control.Width);

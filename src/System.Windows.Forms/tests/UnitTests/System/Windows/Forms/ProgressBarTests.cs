@@ -26,6 +26,10 @@ namespace System.Windows.Forms.Tests
         public void ProgressBar_Ctor_Default()
         {
             using var control = new SubProgressBar();
+            Assert.Null(control.AccessibleDefaultActionDescription);
+            Assert.Null(control.AccessibleDescription);
+            Assert.Null(control.AccessibleName);
+            Assert.Equal(AccessibleRole.Default, control.AccessibleRole);
             Assert.False(control.AllowDrop);
             Assert.Equal(AnchorStyles.Top | AnchorStyles.Left, control.Anchor);
             Assert.False(control.AutoSize);
@@ -36,11 +40,15 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(23, control.Bottom);
             Assert.Equal(new Rectangle(0, 0, 100, 23), control.Bounds);
             Assert.False(control.CanEnableIme);
+            Assert.False(control.CanFocus);
             Assert.True(control.CanRaiseEvents);
+            Assert.False(control.CanSelect);
+            Assert.False(control.Capture);
             Assert.True(control.CausesValidation);
             Assert.Equal(new Rectangle(0, 0, 100, 23), control.ClientRectangle);
             Assert.Equal(new Size(100, 23), control.ClientSize);
             Assert.Null(control.Container);
+            Assert.False(control.ContainsFocus);
             Assert.Null(control.ContextMenuStrip);
             Assert.Empty(control.Controls);
             Assert.Same(control.Controls, control.Controls);
@@ -59,6 +67,7 @@ namespace System.Windows.Forms.Tests
             Assert.True(control.Enabled);
             Assert.NotNull(control.Events);
             Assert.Same(control.Events, control.Events);
+            Assert.False(control.Focused);
             Assert.Equal(Control.DefaultFont, control.Font);
             Assert.Equal(control.Font.Height, control.FontHeight);
             Assert.Equal(SystemColors.Highlight, control.ForeColor);
@@ -66,6 +75,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(23, control.Height);
             Assert.Equal(ImeMode.Disable, control.ImeMode);
             Assert.Equal(ImeMode.Disable, control.ImeModeBase);
+            Assert.False(control.IsAccessible);
+            Assert.False(control.IsMirrored);
             Assert.NotNull(control.LayoutEngine);
             Assert.Same(control.LayoutEngine, control.LayoutEngine);
             Assert.Equal(0, control.Left);
@@ -94,6 +105,7 @@ namespace System.Windows.Forms.Tests
             Assert.Empty(control.Text);
             Assert.Equal(0, control.Top);
             Assert.Null(control.TopLevelControl);
+            Assert.False(control.UseWaitCursor);
             Assert.Equal(0, control.Value);
             Assert.True(control.Visible);
             Assert.Equal(100, control.Width);

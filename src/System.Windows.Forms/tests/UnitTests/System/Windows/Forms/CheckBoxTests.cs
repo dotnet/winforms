@@ -23,6 +23,10 @@ namespace System.Windows.Forms.Tests
         public void CheckBox_Ctor_Default()
         {
             using var control = new SubCheckBox();
+            Assert.Null(control.AccessibleDefaultActionDescription);
+            Assert.Null(control.AccessibleDescription);
+            Assert.Null(control.AccessibleName);
+            Assert.Equal(AccessibleRole.Default, control.AccessibleRole);
             Assert.False(control.AllowDrop);
             Assert.Equal(Appearance.Normal, control.Appearance);
             Assert.Equal(AnchorStyles.Top | AnchorStyles.Left, control.Anchor);
@@ -36,7 +40,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(24, control.Bottom);
             Assert.Equal(new Rectangle(0, 0, 104, 24), control.Bounds);
             Assert.False(control.CanEnableIme);
+            Assert.False(control.CanFocus);
             Assert.True(control.CanRaiseEvents);
+            Assert.True(control.CanSelect);
+            Assert.False(control.Capture);
             Assert.True(control.CausesValidation);
             Assert.Equal(ContentAlignment.MiddleLeft, control.CheckAlign);
             Assert.False(control.Checked);
@@ -44,6 +51,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(new Size(104, 24), control.ClientSize);
             Assert.Equal(new Rectangle(0, 0, 104, 24), control.ClientRectangle);
             Assert.Null(control.Container);
+            Assert.False(control.ContainsFocus);
             Assert.Null(control.ContextMenuStrip);
             Assert.Empty(control.Controls);
             Assert.Same(control.Controls, control.Controls);
@@ -66,6 +74,7 @@ namespace System.Windows.Forms.Tests
             Assert.NotNull(control.FlatAppearance);
             Assert.Same(control.FlatAppearance, control.FlatAppearance);
             Assert.Equal(FlatStyle.Standard, control.FlatStyle);
+            Assert.False(control.Focused);
             Assert.Equal(Control.DefaultFont, control.Font);
             Assert.Equal(control.Font.Height, control.FontHeight);
             Assert.Equal(Control.DefaultForeColor, control.ForeColor);
@@ -78,7 +87,9 @@ namespace System.Windows.Forms.Tests
             Assert.Null(control.ImageList);
             Assert.Equal(ImeMode.Disable, control.ImeMode);
             Assert.Equal(ImeMode.Disable, control.ImeModeBase);
+            Assert.False(control.IsAccessible);
             Assert.False(control.IsDefault);
+            Assert.False(control.IsMirrored);
             Assert.NotNull(control.LayoutEngine);
             Assert.Same(control.LayoutEngine, control.LayoutEngine);
             Assert.Equal(0, control.Left);
@@ -111,6 +122,7 @@ namespace System.Windows.Forms.Tests
             Assert.True(control.UseMnemonic);
             Assert.True(control.UseCompatibleTextRendering);
             Assert.True(control.UseVisualStyleBackColor);
+            Assert.False(control.UseWaitCursor);
             Assert.True(control.Visible);
             Assert.Equal(104, control.Width);
 
