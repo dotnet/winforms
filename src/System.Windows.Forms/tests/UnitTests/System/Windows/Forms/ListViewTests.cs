@@ -26,6 +26,10 @@ namespace System.Windows.Forms.Tests
         public void ListView_Ctor_Default()
         {
             using var control = new SubListView();
+            Assert.Null(control.AccessibleDefaultActionDescription);
+            Assert.Null(control.AccessibleDescription);
+            Assert.Null(control.AccessibleName);
+            Assert.Equal(AccessibleRole.Default, control.AccessibleRole);
             Assert.Equal(ItemActivation.Standard, control.Activation);
             Assert.Equal(ListViewAlignment.Top, control.Alignment);
             Assert.False(control.AllowColumnReorder);
@@ -42,7 +46,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(97, control.Bottom);
             Assert.Equal(new Rectangle(0, 0, 121, 97), control.Bounds);
             Assert.True(control.CanEnableIme);
+            Assert.False(control.CanFocus);
             Assert.True(control.CanRaiseEvents);
+            Assert.True(control.CanSelect);
+            Assert.False(control.Capture);
             Assert.True(control.CausesValidation);
             Assert.False(control.CheckBoxes);
             Assert.Empty(control.CheckedIndices);
@@ -52,8 +59,9 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(new Size(117, 93), control.ClientSize);
             Assert.Equal(new Rectangle(0, 0, 117, 93), control.ClientRectangle);
             Assert.Empty(control.Columns);
-            Assert.Same(control.Columns, control.Columns);
+            Assert.Same(control.Columns, control.Columns); 
             Assert.Null(control.Container);
+            Assert.False(control.ContainsFocus);
             Assert.Null(control.ContextMenuStrip);
             Assert.Empty(control.Controls);
             Assert.Same(control.Controls, control.Controls);
@@ -73,6 +81,7 @@ namespace System.Windows.Forms.Tests
             Assert.True(control.Enabled);
             Assert.NotNull(control.Events);
             Assert.Same(control.Events, control.Events);
+            Assert.False(control.Focused);
             Assert.Null(control.FocusedItem);
             Assert.Equal(Control.DefaultFont, control.Font);
             Assert.Equal(control.Font.Height, control.FontHeight);
@@ -91,6 +100,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(ImeMode.NoControl, control.ImeModeBase);
             Assert.NotNull(control.InsertionMark);
             Assert.Same(control.InsertionMark, control.InsertionMark);
+            Assert.False(control.IsAccessible);
+            Assert.False(control.IsMirrored);
             Assert.Empty(control.Items);
             Assert.Same(control.Items, control.Items);
             Assert.False(control.LabelEdit);
@@ -138,6 +149,7 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<InvalidOperationException>(() => control.TopItem);
             Assert.Null(control.TopLevelControl);
             Assert.True(control.UseCompatibleStateImageBehavior);
+            Assert.False(control.UseWaitCursor);
             Assert.Equal(View.LargeIcon, control.View);
             Assert.Equal(0, control.VirtualListSize);
             Assert.False(control.VirtualMode);

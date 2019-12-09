@@ -25,6 +25,10 @@ namespace System.Windows.Forms.Tests
         {
             using var control = new SubRichTextBox();
             Assert.False(control.AcceptsTab);
+            Assert.Null(control.AccessibleDefaultActionDescription);
+            Assert.Null(control.AccessibleDescription);
+            Assert.Null(control.AccessibleName);
+            Assert.Equal(AccessibleRole.Default, control.AccessibleRole);
             Assert.False(control.AllowDrop);
             Assert.Equal(AnchorStyles.Top | AnchorStyles.Left, control.Anchor);
             Assert.False(control.AutoSize);
@@ -38,13 +42,17 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(new Rectangle(0, 0, 100, 96), control.Bounds);
             Assert.Equal(0, control.BulletIndent);
             Assert.True(control.CanEnableIme);
+            Assert.False(control.CanFocus);
             Assert.True(control.CanRaiseEvents);
             Assert.False(control.CanRedo);
+            Assert.True(control.CanSelect);
             Assert.False(control.CanUndo);
+            Assert.False(control.Capture);
             Assert.True(control.CausesValidation);
             Assert.Equal(new Size(96, 92), control.ClientSize);
             Assert.Equal(new Rectangle(0, 0, 96, 92), control.ClientRectangle);
             Assert.Null(control.Container);
+            Assert.False(control.ContainsFocus);
             Assert.Null(control.ContextMenuStrip);
             Assert.Empty(control.Controls);
             Assert.Same(control.Controls, control.Controls);
@@ -67,6 +75,7 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.EnableAutoDragDrop);
             Assert.NotNull(control.Events);
             Assert.Same(control.Events, control.Events);
+            Assert.False(control.Focused);
             Assert.Equal(Control.DefaultFont, control.Font);
             Assert.Equal(control.Font.Height, control.FontHeight);
             Assert.Equal(SystemColors.WindowText, control.ForeColor);
@@ -75,6 +84,8 @@ namespace System.Windows.Forms.Tests
             Assert.True(control.HideSelection);
             Assert.Equal(ImeMode.NoControl, control.ImeMode);
             Assert.Equal(ImeMode.NoControl, control.ImeModeBase);
+            Assert.False(control.IsAccessible);
+            Assert.False(control.IsMirrored);
             Assert.Equal(RichTextBoxLanguageOptions.AutoFont | RichTextBoxLanguageOptions.DualFont, control.LanguageOption);
             Assert.NotNull(control.LayoutEngine);
             Assert.Same(control.LayoutEngine, control.LayoutEngine);
@@ -116,6 +127,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, control.Top);
             Assert.Null(control.TopLevelControl);
             Assert.Empty(control.UndoActionName);
+            Assert.False(control.UseWaitCursor);
             Assert.True(control.Visible);
             Assert.Equal(100, control.Width);
             Assert.True(control.WordWrap);

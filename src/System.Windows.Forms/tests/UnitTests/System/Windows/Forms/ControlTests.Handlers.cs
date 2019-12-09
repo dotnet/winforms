@@ -1241,6 +1241,30 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void Control_OnDockChanged_Invoke_CallsDockChanged(EventArgs eventArgs)
+        {
+            using var control = new SubControl();
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+        
+            // Call with handler.
+            control.DockChanged += handler;
+            control.OnDockChanged(eventArgs);
+            Assert.Equal(1, callCount);
+        
+            // Remove handler.
+            control.DockChanged -= handler;
+            control.OnDockChanged(eventArgs);
+            Assert.Equal(1, callCount);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnDoubleClick_Invoke_CallsDoubleClick(EventArgs eventArgs)
         {
             using var control = new SubControl();

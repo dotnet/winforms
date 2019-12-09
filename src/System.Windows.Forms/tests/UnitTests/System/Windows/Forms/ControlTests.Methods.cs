@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
+using System.Reflection;
+using System.Threading.Tasks;
 using System.Windows.Forms.Layout;
 using Moq;
 using WinForms.Common.Tests;
@@ -545,6 +547,17 @@ namespace System.Windows.Forms.Tests
             Assert.NotEqual(IntPtr.Zero, control.Handle);
         }
 
+        [WinFormsFact]
+        public void Control_CreateControl_InvokeNotVisible_Nop()
+        {
+            using var control = new Control
+            {
+                Visible = false
+            };
+            control.CreateControl();
+            Assert.False(control.IsHandleCreated);
+        }
+
         [Fact]
         public void Control_CreateControl_InvokeWithHandler_CallsHandleCreated()
         {
@@ -563,6 +576,13 @@ namespace System.Windows.Forms.Tests
             Assert.True(control.Created);
             Assert.True(control.IsHandleCreated);
             Assert.NotEqual(IntPtr.Zero, control.Handle);
+        }
+
+        [WinFormsFact]
+        public void Control_CreateControl_InvokeCantCreate_ThrowsWin32Exception()
+        {
+            using var control = new NoCreateControl();
+            Assert.Throws<Win32Exception>(() => control.CreateControl());
         }
 
         [Fact]
@@ -687,6 +707,18 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
+        public void Control_CreateHandle_InvokeNotVisible_Nop()
+        {
+            using var control = new SubControl
+            {
+                Visible = false
+            };
+            control.CreateHandle();
+            Assert.True(control.IsHandleCreated);
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+        }
+
+        [WinFormsFact]
         public void Control_CreateHandle_InvokeWithHandler_CallsHandleCreated()
         {
             using var control = new SubControl();
@@ -704,6 +736,13 @@ namespace System.Windows.Forms.Tests
             Assert.True(control.Created);
             Assert.True(control.IsHandleCreated);
             Assert.NotEqual(IntPtr.Zero, control.Handle);
+        }
+
+        [WinFormsFact]
+        public void Control_CreateHandle_InvokeCantCreate_ThrowsWin32Exception()
+        {
+            using var control = new NoCreateControl();
+            Assert.Throws<Win32Exception>(() => control.CreateHandle());
         }
 
         [WinFormsFact]
@@ -1431,6 +1470,84 @@ namespace System.Windows.Forms.Tests
 
             // act and assert
             Assert.Null(cont.GetNextControl(first, false));
+        }
+
+        public static IEnumerable<object[]> GetPreferredSize_TestData()
+        {
+            yield return new object[] { Size.Empty };
+            yield return new object[] { new Size(-1, -2) };
+            yield return new object[] { new Size(10, 20) };
+            yield return new object[] { new Size(30, 40) };
+            yield return new object[] { new Size(int.MaxValue, int.MaxValue) };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(GetPreferredSize_TestData))]
+        public void Control_GetPreferredSize_Invoke_ReturnsExpected(Size proposedSize)
+        {
+            using var control = new Control();
+            Assert.Equal(Size.Empty, control.GetPreferredSize(proposedSize));
+            Assert.False(control.IsHandleCreated);
+            
+            // Call again.
+            Assert.Equal(Size.Empty, control.GetPreferredSize(proposedSize));
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(GetPreferredSize_TestData))]
+        public void Control_GetPreferredSize_InvokeWithBounds_ReturnsExpected(Size proposedSize)
+        {
+            using var control = new Control
+            {
+                Bounds = new Rectangle(1, 2, 30, 40)
+            };
+            Assert.Equal(new Size(30, 40), control.GetPreferredSize(proposedSize));
+            Assert.False(control.IsHandleCreated);
+            
+            // Call again.
+            Assert.Equal(new Size(30, 40), control.GetPreferredSize(proposedSize));
+            Assert.False(control.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> GetPreferredSize_WithConstrainedSize_TestData()
+        {
+            yield return new object[] { Size.Empty, Size.Empty, new Size(30, 40), Size.Empty };
+            yield return new object[] { new Size(10, 20), Size.Empty, new Size(30, 40), new Size(10, 20) };
+            yield return new object[] { new Size(30, 40), Size.Empty, new Size(30, 40), new Size(30, 40) };
+            yield return new object[] { new Size(31, 40), Size.Empty, new Size(30, 40), new Size(31, 40) };
+            yield return new object[] { new Size(30, 41), Size.Empty, new Size(30, 40), new Size(30, 41) };
+            yield return new object[] { new Size(40, 50), Size.Empty, new Size(30, 40), new Size(40, 50) };
+            yield return new object[] { Size.Empty, new Size(20, 10), new Size(30, 40), Size.Empty };
+            yield return new object[] { Size.Empty, new Size(30, 40), new Size(30, 40), Size.Empty };
+            yield return new object[] { Size.Empty, new Size(31, 40), new Size(30, 40), Size.Empty };
+            yield return new object[] { Size.Empty, new Size(30, 41), new Size(30, 40), Size.Empty };
+            yield return new object[] { Size.Empty, new Size(40, 50), new Size(30, 40), Size.Empty };
+            yield return new object[] { new Size(10, 20), new Size(40, 50), new Size(30, 40), new Size(10, 20) };
+            yield return new object[] { new Size(10, 20), new Size(40, 50), new Size(int.MaxValue, int.MaxValue), new Size(10, 20) };
+            yield return new object[] { new Size(10, 20), new Size(20, 30), new Size(30, 40), new Size(10, 20) };
+            yield return new object[] { new Size(10, 20), new Size(20, 30), new Size(30, 40), new Size(10, 20) };
+            yield return new object[] { new Size(30, 40), new Size(20, 30), new Size(30, 40), new Size(30, 40) };
+            yield return new object[] { new Size(30, 40), new Size(40, 50), new Size(30, 40), new Size(30, 40) };
+            yield return new object[] { new Size(40, 50), new Size(20, 30), new Size(30, 40), new Size(40, 50) };
+            yield return new object[] { new Size(40, 50), new Size(40, 50), new Size(30, 40), new Size(40, 50) };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(GetPreferredSize_WithConstrainedSize_TestData))]
+        public void Control_GetPreferredSize_InvokeWithConstrainedSize_ReturnsExpected(Size minimumSize, Size maximumSize, Size proposedSize, Size expected)
+        {
+            using var control = new Control
+            {
+                MinimumSize = minimumSize,
+                MaximumSize = maximumSize,
+            };
+            Assert.Equal(expected, control.GetPreferredSize(proposedSize));
+            Assert.False(control.IsHandleCreated);
+            
+            // Call again.
+            Assert.Equal(expected, control.GetPreferredSize(proposedSize));
+            Assert.False(control.IsHandleCreated);
         }
 
         [WinFormsTheory]
@@ -2362,10 +2479,192 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, childStyleChangedCallCount);
             Assert.Equal(0, childCreatedCallCount);
         }
+        [WinFormsFact]
+        public void Control_InvokeDelegateSameThread_Success()
+        {
+            using var control = new Control();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            int callCount = 0;
+            Action method = () =>
+            {
+                callCount++;
+            };
+            control.Invoke(method);
+            Assert.Equal(1, callCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+        
+        [WinFormsFact]
+        public void Control_InvokeDelegateThrowsExceptionSameThread_Success()
+        {
+            using var control = new Control();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            int callCount = 0;
+            Action method = () =>
+            {
+                callCount++;
+                throw new DivideByZeroException();
+            };
+            Assert.Throws<DivideByZeroException>(() => control.Invoke(method));
+            Assert.Equal(1, callCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+        
+        [WinFormsFact]
+        public async Task Control_InvokeDelegateThrowsExceptionDifferentThread_Success()
+        {
+            using var control = new Control();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            int callCount = 0;
+            Action method = () =>
+            {
+                callCount++;
+                throw new DivideByZeroException();
+            };
+            await Task.Run(() =>
+            {
+                Assert.Throws<DivideByZeroException>(() => control.Invoke(method));
+            });
+            Assert.Equal(1, callCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+        
+        [WinFormsFact]
+        public void Control_InvokeDelegateObjectSameThread_Success()
+        {
+            using var control = new Control();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            int callCount = 0;
+            Action<int> method = (i) =>
+            {
+                Assert.Equal(1, i);
+                callCount++;
+            };
+            control.Invoke(method, new object[] { 1 });
+            Assert.Equal(1, callCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+        
+        [WinFormsFact]
+        public void Control_InvokeDelegateObjectThrowsExceptionSameThread_Success()
+        {
+            using var control = new Control();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            int callCount = 0;
+            Action<int> method = (i) =>
+            {
+                Assert.Equal(1, i);
+                callCount++;
+                throw new DivideByZeroException();
+            };
+            Assert.Throws<DivideByZeroException>(() => control.Invoke(method, new object[] { 1 }));
+            Assert.Equal(1, callCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+        
+        [WinFormsFact]
+        public async Task Control_InvokeDelegateObjectThrowsExceptionDifferentThread_Success()
+        {
+            using var control = new Control();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            int callCount = 0;
+            Action<int> method = (param) =>
+            {
+                Assert.Equal(1, param);
+                callCount++;
+                throw new DivideByZeroException();
+            };
+            await Task.Run(() =>
+            {
+                Assert.Throws<DivideByZeroException>(() => control.Invoke(method, new object[] { 1 }));
+            });
+            Assert.Equal(1, callCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsFact]
+        public void Control_Invoke_InvokeWithoutHandle_ThrowsInvalidOperationException()
+        {
+            using var control = new Control();
+            Action method = () => { };
+            Assert.Throws<InvalidOperationException>(() => control.Invoke(method));
+            Assert.Throws<InvalidOperationException>(() => control.Invoke(method, new object[0]));
+        }
+
+        [WinFormsFact]
+        public void Control_Invoke_InvokeInvalidParameters_ThrowsargetParameterCountException()
+        {
+            using var control = new Control();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            Action<int> method = (i) => { };
+            Assert.Throws<TargetParameterCountException>(() => control.Invoke(method));
+            Assert.Throws<TargetParameterCountException>(() => control.Invoke(method, null));
+            Assert.Throws<TargetParameterCountException>(() => control.Invoke(method, new object[0]));
+        }
 
         [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
-        public void Control_InvokeGotFocus_Invoke_CallsLostFocus(EventArgs eventArgs)
+        public void Control_InvokeGotFocus_Invoke_CallsGotFocus(EventArgs eventArgs)
         {
             using var otherControl = new Control();
             using var control = new SubControl();
@@ -3683,7 +3982,6 @@ namespace System.Windows.Forms.Tests
             protected override bool IsInputKey(Keys keyData) => IsInputKeyAction(keyData);
         }
 
-
         private class CustomProcessControl : Control
         {
             public Func<Message, Keys, bool> ProcessCmdKeyAction { get; set; }
@@ -4528,14 +4826,19 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createdCallCount);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(1, 2)]
         [InlineData(0, 0)]
         [InlineData(-1, -2)]
         public void Control_RescaleConstantsForDpi_Invoke_Nop(int deviceDpiOld, int deviceDpiNew)
         {
-            var control = new SubControl();
+            using var control = new SubControl();
             control.RescaleConstantsForDpi(deviceDpiOld, deviceDpiNew);
+            Assert.False(control.IsHandleCreated);
+
+            // Call again.
+            control.RescaleConstantsForDpi(deviceDpiOld, deviceDpiNew);
+            Assert.False(control.IsHandleCreated);
         }
 
         [WinFormsFact]
@@ -5017,6 +5320,146 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(RtlTranslateContent_TestData))]
+        public void Control_RtlTranslateAlignment_InvokeContentAlignment_ReturnsExpected(RightToLeft rightToLeft, ContentAlignment align, ContentAlignment expected)
+        {
+            using var control = new SubControl
+            {
+                RightToLeft = rightToLeft
+            };
+            Assert.Equal(expected, control.RtlTranslateAlignment(align));
+            Assert.False(control.IsHandleCreated);
+
+            // Call again.
+            Assert.Equal(expected, control.RtlTranslateAlignment(align));
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(RtlTranslateLeftRight_TestData))]
+        public void Control_RtlTranslateAlignment_InvokeLeftRightAlignment_ReturnsExpected(RightToLeft rightToLeft, LeftRightAlignment align, LeftRightAlignment expected)
+        {
+            using var control = new SubControl
+            {
+                RightToLeft = rightToLeft
+            };
+            Assert.Equal(expected, control.RtlTranslateAlignment(align));
+            Assert.False(control.IsHandleCreated);
+
+            // Call again.
+            Assert.Equal(expected, control.RtlTranslateAlignment(align));
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(RtlTranslateHorizontal_TestData))]
+        public void Control_RtlTranslateAlignment_InvokeHorizontalAlignment_ReturnsExpected(RightToLeft rightToLeft, HorizontalAlignment align, HorizontalAlignment expected)
+        {
+            using var control = new SubControl
+            {
+                RightToLeft = rightToLeft
+            };
+            Assert.Equal(expected, control.RtlTranslateAlignment(align));
+            Assert.False(control.IsHandleCreated);
+
+            // Call again.
+            Assert.Equal(expected, control.RtlTranslateAlignment(align));
+            Assert.False(control.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> RtlTranslateContent_TestData()
+        {
+            foreach (ContentAlignment align in Enum.GetValues(typeof(ContentAlignment)))
+            {
+                yield return new object[] { RightToLeft.No, align, align };
+                yield return new object[] { RightToLeft.Inherit, align, align };
+            }
+            
+            yield return new object[] { RightToLeft.Yes, ContentAlignment.BottomCenter, ContentAlignment.BottomCenter };
+            yield return new object[] { RightToLeft.Yes, ContentAlignment.BottomLeft, ContentAlignment.BottomRight };
+            yield return new object[] { RightToLeft.Yes, ContentAlignment.BottomRight, ContentAlignment.BottomLeft };
+            yield return new object[] { RightToLeft.Yes, ContentAlignment.MiddleCenter, ContentAlignment.MiddleCenter };
+            yield return new object[] { RightToLeft.Yes, ContentAlignment.MiddleLeft, ContentAlignment.MiddleRight };
+            yield return new object[] { RightToLeft.Yes, ContentAlignment.MiddleRight, ContentAlignment.MiddleLeft };
+            yield return new object[] { RightToLeft.Yes, ContentAlignment.TopCenter, ContentAlignment.TopCenter };
+            yield return new object[] { RightToLeft.Yes, ContentAlignment.TopLeft, ContentAlignment.TopRight };
+            yield return new object[] { RightToLeft.Yes, ContentAlignment.TopRight, ContentAlignment.TopLeft };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(RtlTranslateContent_TestData))]
+        public void Control_RtlTranslateContent_Invoke_ReturnsExpected(RightToLeft rightToLeft, ContentAlignment align, ContentAlignment expected)
+        {
+            using var control = new SubControl
+            {
+                RightToLeft = rightToLeft
+            };
+            Assert.Equal(expected, control.RtlTranslateContent(align));
+            Assert.False(control.IsHandleCreated);
+
+            // Call again.
+            Assert.Equal(expected, control.RtlTranslateContent(align));
+            Assert.False(control.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> RtlTranslateLeftRight_TestData()
+        {
+            foreach (LeftRightAlignment align in Enum.GetValues(typeof(LeftRightAlignment)))
+            {
+                yield return new object[] { RightToLeft.No, align, align };
+                yield return new object[] { RightToLeft.Inherit, align, align };
+            }
+            
+            yield return new object[] { RightToLeft.Yes, LeftRightAlignment.Left, LeftRightAlignment.Right };
+            yield return new object[] { RightToLeft.Yes, LeftRightAlignment.Right, LeftRightAlignment.Left };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(RtlTranslateLeftRight_TestData))]
+        public void Control_RtlTranslateLeftRight_Invoke_ReturnsExpected(RightToLeft rightToLeft, LeftRightAlignment align, LeftRightAlignment expected)
+        {
+            using var control = new SubControl
+            {
+                RightToLeft = rightToLeft
+            };
+            Assert.Equal(expected, control.RtlTranslateLeftRight(align));
+            Assert.False(control.IsHandleCreated);
+
+            // Call again.
+            Assert.Equal(expected, control.RtlTranslateLeftRight(align));
+            Assert.False(control.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> RtlTranslateHorizontal_TestData()
+        {
+            foreach (HorizontalAlignment align in Enum.GetValues(typeof(HorizontalAlignment)))
+            {
+                yield return new object[] { RightToLeft.No, align, align };
+                yield return new object[] { RightToLeft.Inherit, align, align };
+            }
+            
+            yield return new object[] { RightToLeft.Yes, HorizontalAlignment.Center, HorizontalAlignment.Center };
+            yield return new object[] { RightToLeft.Yes, HorizontalAlignment.Left, HorizontalAlignment.Right };
+            yield return new object[] { RightToLeft.Yes, HorizontalAlignment.Right, HorizontalAlignment.Left };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(RtlTranslateHorizontal_TestData))]
+        public void Control_RtlTranslateHorizontal_Invoke_ReturnsExpected(RightToLeft rightToLeft, HorizontalAlignment align, HorizontalAlignment expected)
+        {
+            using var control = new SubControl
+            {
+                RightToLeft = rightToLeft
+            };
+            Assert.Equal(expected, control.RtlTranslateHorizontal(align));
+            Assert.False(control.IsHandleCreated);
+
+            // Call again.
+            Assert.Equal(expected, control.RtlTranslateHorizontal(align));
+            Assert.False(control.IsHandleCreated);
         }
 
         [WinFormsTheory]
@@ -10649,6 +11092,64 @@ namespace System.Windows.Forms.Tests
                 graphics.ReleaseHdc();
             }
         }
+        
+        [WinFormsFact]
+        public void Control_WndProc_InvokeKillFocusWithoutHandle_Success()
+        {
+            using (new NoAssertContext())
+            {
+                using var control = new SubControl();
+                int callCount = 0;
+                control.LostFocus += (sender, e) =>
+                {
+                    Assert.Same(control, sender);
+                    Assert.Same(EventArgs.Empty, e);
+                    callCount++;
+                };
+                var m = new Message
+                {
+                    Msg = (int)User32.WindowMessage.WM_KILLFOCUS,
+                    Result = (IntPtr)250
+                };
+                control.WndProc(ref m);
+                Assert.Equal(IntPtr.Zero, m.Result);
+                Assert.Equal(1, callCount);
+                Assert.False(control.IsHandleCreated);
+            }
+        }
+
+        [WinFormsFact]
+        public void Control_WndProc_InvokeKillFocusWithHandle_Success()
+        {
+            using var control = new SubControl();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            int callCount = 0;
+            control.LostFocus += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                callCount++;
+            };
+            var m = new Message
+            {
+                Msg = (int)User32.WindowMessage.WM_KILLFOCUS,
+                Result = (IntPtr)250
+            };
+            control.WndProc(ref m);
+            Assert.Equal(IntPtr.Zero, m.Result);
+            Assert.Equal(1, callCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
 
         public static IEnumerable<object[]> WndProc_PrintClientWithoutHandleWithoutWParam_TestData()
         {
@@ -10921,6 +11422,369 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsFact]
+        public void Control_WndProc_InvokeSetFocusWithoutHandle_Success()
+        {
+            using (new NoAssertContext())
+            {
+                using var control = new SubControl();
+                int callCount = 0;
+                control.GotFocus += (sender, e) =>
+                {
+                    Assert.Same(control, sender);
+                    Assert.Same(EventArgs.Empty, e);
+                    callCount++;
+                };
+                var m = new Message
+                {
+                    Msg = (int)User32.WindowMessage.WM_SETFOCUS,
+                    Result = (IntPtr)250
+                };
+                control.WndProc(ref m);
+                Assert.Equal(IntPtr.Zero, m.Result);
+                Assert.Equal(1, callCount);
+                Assert.True(control.IsHandleCreated);
+            }
+        }
+
+        [WinFormsFact]
+        public void Control_WndProc_InvokeSetFocusWithHandle_Success()
+        {
+            using var control = new SubControl();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            int callCount = 0;
+            control.GotFocus += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                callCount++;
+            };
+            var m = new Message
+            {
+                Msg = (int)User32.WindowMessage.WM_SETFOCUS,
+                Result = (IntPtr)250
+            };
+            control.WndProc(ref m);
+            Assert.Equal(IntPtr.Zero, m.Result);
+            Assert.Equal(1, callCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsFact]
+        public void Control_WndProc_InvokeSetFocusWithParentContainerControlWithHandle_Success()
+        {
+            using var parent = new ContainerControl();
+            using var control = new SubControl
+            {
+                Parent = parent
+            };
+            Assert.Null(parent.ActiveControl);
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            int callCount = 0;
+            control.GotFocus += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                callCount++;
+            };
+            var m = new Message
+            {
+                Msg = (int)User32.WindowMessage.WM_SETFOCUS,
+                Result = (IntPtr)250
+            };
+            control.WndProc(ref m);
+            Assert.Equal(IntPtr.Zero, m.Result);
+            Assert.Equal(1, callCount);
+            Assert.Same(control, parent.ActiveControl);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        public static IEnumerable<object[]> WndProc_SetFocusWithParentIContainer_TestData()
+        {
+            yield return new object[] { true, true, IntPtr.Zero, 1, 1 };
+            yield return new object[] { true, false, (IntPtr)250, 1, 0 };
+            yield return new object[] { false, true, IntPtr.Zero, 0, 1 };
+            yield return new object[] { false, false, IntPtr.Zero, 0, 1 };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(WndProc_SetFocusWithParentIContainer_TestData))]
+        public void Control_WndProc_InvokeSetFocusWithParentIContainerControlWithHandle_Success(bool containerControl, bool enabled, IntPtr expectedResult, int expectedActivateControlCallCount, int expectedCallCount)
+        {
+            using var parent = new CustomContainerControl();
+            parent.SetStyle(ControlStyles.ContainerControl, containerControl);
+            using var control = new SubControl
+            {
+                Parent = parent
+            };
+            Assert.Null(parent.ActiveControl);
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+            int activateControlCallCount = 0;
+            parent.ActivateControlAction = (active) =>
+            {
+                Assert.Same(control, active);
+                activateControlCallCount++;
+                return enabled;
+            };
+
+            int callCount = 0;
+            control.GotFocus += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                callCount++;
+            };
+            var m = new Message
+            {
+                Msg = (int)User32.WindowMessage.WM_SETFOCUS,
+                Result = (IntPtr)250
+            };
+            control.WndProc(ref m);
+            Assert.Equal(expectedResult, m.Result);
+            Assert.Equal(expectedCallCount, callCount);
+            Assert.Equal(expectedActivateControlCallCount, activateControlCallCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        private class CustomContainerControl : Control, IContainerControl
+        {
+            public CustomContainerControl()
+            {
+                SetStyle(ControlStyles.ContainerControl, true);
+            }
+
+            public Control ActiveControl { get; set; }
+
+            public Func<Control, bool> ActivateControlAction { get; set; }
+
+            public bool ActivateControl(Control active) => ActivateControlAction(active);
+
+            public new void SetStyle(ControlStyles flag, bool value) => base.SetStyle(flag, value);
+        }
+
+        [WinFormsFact]
+        public void Control_WndProc_InvokeSetFocusWithParentContainerControlWithParentContainerControlWithHandle_Success()
+        {
+            using var grandparent = new ContainerControl();
+            using var parent = new ContainerControl
+            {
+                Parent = grandparent
+            };
+            using var control = new SubControl
+            {
+                Parent = parent
+            };
+            Assert.Null(parent.ActiveControl);
+            Assert.Null(grandparent.ActiveControl);
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            int callCount = 0;
+            control.GotFocus += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                callCount++;
+            };
+            var m = new Message
+            {
+                Msg = (int)User32.WindowMessage.WM_SETFOCUS,
+                Result = (IntPtr)250
+            };
+            control.WndProc(ref m);
+            Assert.Equal(IntPtr.Zero, m.Result);
+            Assert.Equal(1, callCount);
+            Assert.Same(control, parent.ActiveControl);
+            Assert.Same(parent, grandparent.ActiveControl);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsFact]
+        public void Control_WndProc_InvokeSetFocusWithParentContainerControlWithParentControlWithHandle_Success()
+        {
+            using var grandparent = new Control();
+            using var parent = new ContainerControl
+            {
+                Parent = grandparent
+            };
+            using var control = new SubControl
+            {
+                Parent = parent
+            };
+            Assert.Null(parent.ActiveControl);
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            int callCount = 0;
+            control.GotFocus += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                callCount++;
+            };
+            var m = new Message
+            {
+                Msg = (int)User32.WindowMessage.WM_SETFOCUS,
+                Result = (IntPtr)250
+            };
+            control.WndProc(ref m);
+            Assert.Equal(IntPtr.Zero, m.Result);
+            Assert.Equal(1, callCount);
+            Assert.Same(control, parent.ActiveControl);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsFact]
+        public void Control_WndProc_InvokeSetFocusWithParentContainerControlWithParentContainerControlAlreadyActiveWithHandle_Success()
+        {
+            using var grandparent = new ContainerControl();
+            using var parent = new ContainerControl
+            {
+                Parent = grandparent
+            };
+            using var control = new SubControl
+            {
+                Parent = parent
+            };
+            parent.ActiveControl = control;
+            grandparent.ActiveControl = parent;
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            int callCount = 0;
+            control.GotFocus += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                callCount++;
+            };
+            var m = new Message
+            {
+                Msg = (int)User32.WindowMessage.WM_SETFOCUS,
+                Result = (IntPtr)250
+            };
+            control.WndProc(ref m);
+            Assert.Equal(IntPtr.Zero, m.Result);
+            Assert.Equal(1, callCount);
+            Assert.Same(control, parent.ActiveControl);
+            Assert.Same(parent, grandparent.ActiveControl);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsFact]
+        public void Control_WndProc_InvokeSetFocusWithParentContainerControlWithParentWithHandle_Success()
+        {
+            using var grandparent = new Control();
+            using var parent = new ContainerControl
+            {
+                Parent = grandparent
+            };
+            using var control = new SubControl
+            {
+                Parent = parent
+            };
+            Assert.Null(parent.ActiveControl);
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            int callCount = 0;
+            control.GotFocus += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                callCount++;
+            };
+            var m = new Message
+            {
+                Msg = (int)User32.WindowMessage.WM_SETFOCUS,
+                Result = (IntPtr)250
+            };
+            control.WndProc(ref m);
+            Assert.Equal(IntPtr.Zero, m.Result);
+            Assert.Equal(1, callCount);
+            Assert.Same(control, parent.ActiveControl);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        private class NoCreateControl : Control
+        {
+            protected override void WndProc(ref Message m)
+            {
+                if (m.Msg == (int)User32.WindowMessage.WM_NCCREATE)
+                {
+                    m.Result = IntPtr.Zero;
+                    return;
+                }
+                else
+                {
+                    base.WndProc(ref m);
+                }
+            }
+
+            public new void CreateHandle() => base.CreateHandle();
         }
     }
 }

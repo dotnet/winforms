@@ -26,6 +26,10 @@ namespace System.Windows.Forms.Tests
         public void ListBox_Ctor_Default()
         {
             using var control = new SubListBox();
+            Assert.Null(control.AccessibleDefaultActionDescription);
+            Assert.Null(control.AccessibleDescription);
+            Assert.Null(control.AccessibleName);
+            Assert.Equal(AccessibleRole.Default, control.AccessibleRole);
             Assert.False(control.AllowDrop);
             Assert.True(control.AllowSelection);
             Assert.Equal(AnchorStyles.Top | AnchorStyles.Left, control.Anchor);
@@ -38,12 +42,16 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(96, control.Bottom);
             Assert.Equal(new Rectangle(0, 0, 120, 96), control.Bounds);
             Assert.True(control.CanEnableIme);
+            Assert.False(control.CanFocus);
             Assert.True(control.CanRaiseEvents);
+            Assert.True(control.CanSelect);
+            Assert.False(control.Capture);
             Assert.True(control.CausesValidation);
             Assert.Equal(new Size(116, 92), control.ClientSize);
             Assert.Equal(new Rectangle(0, 0, 116, 92), control.ClientRectangle);
-            Assert.Equal(0, control.ColumnWidth);
+            Assert.Equal(0, control.ColumnWidth); 
             Assert.Null(control.Container);
+            Assert.False(control.ContainsFocus);
             Assert.Null(control.ContextMenuStrip);
             Assert.Empty(control.Controls);
             Assert.Same(control.Controls, control.Controls);
@@ -69,6 +77,7 @@ namespace System.Windows.Forms.Tests
             Assert.True(control.Enabled);
             Assert.NotNull(control.Events);
             Assert.Same(control.Events, control.Events);
+            Assert.False(control.Focused);
             Assert.Equal(Control.DefaultFont, control.Font);
             Assert.Equal(control.Font.Height, control.FontHeight);
             Assert.Equal(SystemColors.WindowText, control.ForeColor);
@@ -82,6 +91,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(ImeMode.NoControl, control.ImeMode);
             Assert.Equal(ImeMode.NoControl, control.ImeModeBase);
             Assert.True(control.IntegralHeight);
+            Assert.False(control.IsAccessible);
+            Assert.False(control.IsMirrored);
             Assert.Equal(13, control.ItemHeight);
             Assert.Empty(control.Items);
             Assert.Same(control.Items, control.Items);
@@ -124,6 +135,7 @@ namespace System.Windows.Forms.Tests
             Assert.Null(control.TopLevelControl);
             Assert.False(control.UseCustomTabOffsets);
             Assert.True(control.UseTabStops);
+            Assert.False(control.UseWaitCursor);
             Assert.Empty(control.ValueMember);
             Assert.True(control.Visible);
             Assert.Equal(120, control.Width);

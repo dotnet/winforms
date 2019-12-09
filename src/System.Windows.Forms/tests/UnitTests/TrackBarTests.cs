@@ -24,6 +24,10 @@ namespace System.Windows.Forms.Tests
         public void TrackBar_Ctor_Default()
         {
             using var control = new SubTrackBar();
+            Assert.Null(control.AccessibleDefaultActionDescription);
+            Assert.Null(control.AccessibleDescription);
+            Assert.Null(control.AccessibleName);
+            Assert.Equal(AccessibleRole.Default, control.AccessibleRole);
             Assert.False(control.AllowDrop);
             Assert.Equal(AnchorStyles.Top | AnchorStyles.Left, control.Anchor);
             Assert.True(control.AutoSize);
@@ -37,7 +41,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(104, control.Bounds.Width);
             Assert.True(control.Bounds.Height > 0);
             Assert.False(control.CanEnableIme);
+            Assert.False(control.CanFocus);
             Assert.True(control.CanRaiseEvents);
+            Assert.True(control.CanSelect);
+            Assert.False(control.Capture);
             Assert.True(control.CausesValidation);
             Assert.Equal(104, control.ClientSize.Width);
             Assert.True(control.ClientSize.Height > 0);
@@ -46,6 +53,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(104, control.ClientRectangle.Width);
             Assert.True(control.ClientRectangle.Height > 0);
             Assert.Null(control.Container);
+            Assert.False(control.ContainsFocus);
             Assert.Null(control.ContextMenuStrip);
             Assert.Empty(control.Controls);
             Assert.Same(control.Controls, control.Controls);
@@ -69,6 +77,7 @@ namespace System.Windows.Forms.Tests
             Assert.True(control.Enabled);
             Assert.NotNull(control.Events);
             Assert.Same(control.Events, control.Events);
+            Assert.False(control.Focused);
             Assert.Equal(Control.DefaultFont, control.Font);
             Assert.Equal(control.Font.Height, control.FontHeight);
             Assert.Equal(SystemColors.WindowText, control.ForeColor);
@@ -76,6 +85,8 @@ namespace System.Windows.Forms.Tests
             Assert.True(control.Height > 0);
             Assert.Equal(ImeMode.Disable, control.ImeMode);
             Assert.Equal(ImeMode.Disable, control.ImeModeBase);
+            Assert.False(control.IsAccessible);
+            Assert.False(control.IsMirrored);
             Assert.Equal(5, control.LargeChange);
             Assert.NotNull(control.LayoutEngine);
             Assert.Same(control.LayoutEngine, control.LayoutEngine);
@@ -111,6 +122,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(TickStyle.BottomRight, control.TickStyle);
             Assert.Equal(0, control.Top);
             Assert.Null(control.TopLevelControl);
+            Assert.False(control.UseWaitCursor);
             Assert.Equal(0, control.Value);
             Assert.True(control.Visible);
             Assert.Equal(104, control.Width);

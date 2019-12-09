@@ -16,6 +16,10 @@ namespace System.Windows.Forms.Tests
         public void MonthCalendar_Ctor_Default()
         {
             using var control = new SubMonthCalendar();
+            Assert.Null(control.AccessibleDefaultActionDescription);
+            Assert.Null(control.AccessibleDescription);
+            Assert.Null(control.AccessibleName);
+            Assert.Equal(AccessibleRole.Default, control.AccessibleRole);
             Assert.False(control.AllowDrop);
             Assert.Equal(AnchorStyles.Top | AnchorStyles.Left, control.Anchor);
             Assert.Empty(control.AnnuallyBoldedDates);
@@ -34,7 +38,10 @@ namespace System.Windows.Forms.Tests
             Assert.True(control.Bounds.Height > 0);
             Assert.Equal(new Size(1, 1), control.CalendarDimensions);
             Assert.False(control.CanEnableIme);
+            Assert.False(control.CanFocus);
             Assert.True(control.CanRaiseEvents);
+            Assert.True(control.CanSelect);
+            Assert.False(control.Capture);
             Assert.True(control.CausesValidation);
             Assert.True(control.ClientSize.Width > 0);
             Assert.True(control.ClientSize.Height > 0);
@@ -43,6 +50,7 @@ namespace System.Windows.Forms.Tests
             Assert.True(control.ClientRectangle.Width > 0);
             Assert.True(control.ClientRectangle.Height > 0);
             Assert.Null(control.Container);
+            Assert.False(control.ContainsFocus);
             Assert.Null(control.ContextMenuStrip);
             Assert.Empty(control.Controls);
             Assert.Same(control.Controls, control.Controls);
@@ -67,6 +75,7 @@ namespace System.Windows.Forms.Tests
             Assert.NotNull(control.Events);
             Assert.Same(control.Events, control.Events);
             Assert.Equal(Day.Default, control.FirstDayOfWeek);
+            Assert.False(control.Focused);
             Assert.Equal(Control.DefaultFont, control.Font);
             Assert.Equal(control.Font.Height, control.FontHeight);
             Assert.Equal(SystemColors.WindowText, control.ForeColor);
@@ -74,6 +83,8 @@ namespace System.Windows.Forms.Tests
             Assert.True(control.Height > 0);
             Assert.Equal(ImeMode.Disable, control.ImeMode);
             Assert.Equal(ImeMode.Disable, control.ImeModeBase);
+            Assert.False(control.IsAccessible);
+            Assert.False(control.IsMirrored);
             Assert.NotNull(control.LayoutEngine);
             Assert.Same(control.LayoutEngine, control.LayoutEngine);
             Assert.Equal(0, control.Left);
@@ -122,6 +133,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, control.Top);
             Assert.Null(control.TopLevelControl);
             Assert.Equal(SystemColors.GrayText, control.TrailingForeColor);
+            Assert.False(control.UseWaitCursor);
             Assert.True(control.Visible);
             Assert.True(control.Width > 0);
 
@@ -3487,7 +3499,7 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.IsHandleCreated);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(1, 2)]
         [InlineData(0, 0)]
         [InlineData(-1, -2)]
@@ -3495,6 +3507,11 @@ namespace System.Windows.Forms.Tests
         {
             using var control = new SubMonthCalendar();
             control.RescaleConstantsForDpi(deviceDpiOld, deviceDpiNew);
+            Assert.False(control.IsHandleCreated);
+
+            // Call again.
+            control.RescaleConstantsForDpi(deviceDpiOld, deviceDpiNew);
+            Assert.False(control.IsHandleCreated);
         }
 
         public static IEnumerable<object[]> SetDate_TestData()

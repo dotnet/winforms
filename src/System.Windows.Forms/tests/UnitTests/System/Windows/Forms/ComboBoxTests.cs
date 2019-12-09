@@ -26,6 +26,10 @@ namespace System.Windows.Forms.Tests
         public void ComboBox_Ctor_Default()
         {
             using var control = new SubComboBox();
+            Assert.Null(control.AccessibleDefaultActionDescription);
+            Assert.Null(control.AccessibleDescription);
+            Assert.Null(control.AccessibleName);
+            Assert.Equal(AccessibleRole.Default, control.AccessibleRole);
             Assert.False(control.AllowDrop);
             Assert.True(control.AllowSelection);
             Assert.Equal(AnchorStyles.Top | AnchorStyles.Left, control.Anchor);
@@ -41,11 +45,15 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(control.PreferredHeight, control.Bottom);
             Assert.Equal(new Rectangle(0, 0, 121, control.PreferredHeight), control.Bounds);
             Assert.True(control.CanEnableIme);
+            Assert.False(control.CanFocus);
             Assert.True(control.CanRaiseEvents);
+            Assert.True(control.CanSelect);
+            Assert.False(control.Capture);
             Assert.True(control.CausesValidation);
             Assert.Equal(new Size(117, control.PreferredHeight - 4), control.ClientSize);
             Assert.Equal(new Rectangle(0, 0, 117, control.PreferredHeight - 4), control.ClientRectangle);
             Assert.Null(control.Container);
+            Assert.False(control.ContainsFocus);
             Assert.Null(control.ContextMenuStrip);
             Assert.Empty(control.Controls);
             Assert.Same(control.Controls, control.Controls);
@@ -87,6 +95,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(ImeMode.NoControl, control.ImeModeBase);
             Assert.True(control.IntegralHeight);
             Assert.Equal(Control.DefaultFont.Height + 2, control.ItemHeight);
+            Assert.False(control.IsAccessible);
+            Assert.False(control.IsMirrored);
             Assert.Empty(control.Items);
             Assert.Same(control.Items, control.Items);
             Assert.NotNull(control.LayoutEngine);
@@ -110,6 +120,8 @@ namespace System.Windows.Forms.Tests
             Assert.Null(control.SelectedValue);
             Assert.Equal(-1, control.SelectedIndex);
             Assert.Null(control.SelectedItem);
+            Assert.True(control.ShowFocusCues);
+            Assert.True(control.ShowKeyboardCues);
             Assert.Null(control.Site);
             Assert.Equal(new Size(121, control.PreferredHeight), control.Size);
             Assert.False(control.Sorted);
@@ -118,6 +130,7 @@ namespace System.Windows.Forms.Tests
             Assert.Empty(control.Text);
             Assert.Equal(0, control.Top);
             Assert.Null(control.TopLevelControl);
+            Assert.False(control.UseWaitCursor);
             Assert.Empty(control.ValueMember);
             Assert.True(control.Visible);
             Assert.Equal(121, control.Width);
@@ -1622,6 +1635,10 @@ namespace System.Windows.Forms.Tests
                 get => base.ResizeRedraw;
                 set => base.ResizeRedraw = value;
             }
+
+            public new bool ShowFocusCues => base.ShowFocusCues;
+
+            public new bool ShowKeyboardCues => base.ShowKeyboardCues;
 
             public new AutoSizeMode GetAutoSizeMode() => base.GetAutoSizeMode();
 
