@@ -129,10 +129,9 @@ stages:
           displayName: Pack, Sign, and Publish
 
         # Upload code coverage data
-        - script: $(Build.SourcesDirectory)/.dotnet/dotnet msbuild
+        - script: $(Build.SourcesDirectory)/.dotnet/dotnet msbuild -restore
             eng/CodeCoverage.proj
             /p:Configuration=$(_BuildConfig)
-            /p:CodeCovToken=$(CODECOV_TOKEN)
             /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\CodeCoverage.binlog
           displayName: Upload coverage to codecov.io (Debug)
           condition: and(succeeded(), eq(variables._Coverage, 'true'))

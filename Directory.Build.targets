@@ -14,12 +14,32 @@
     <CoverletOutput>$(TargetDir)coverage\$(MSBuildProjectName).coverage</CoverletOutput>
   </PropertyGroup>
 
-  <Target Name="InstrumentModulesNoBuildBeforeTest" Condition="'$(CollectCoverage)' == 'true'" BeforeTargets="RunTests">
-    <CallTarget Targets="InstrumentModulesAfterBuild" />
+  <Target Name="InstrumentModulesNoBuild" BeforeTargets="RunTests" Condition="'$(IsUnitTestProject)' == 'true'">
+    <Coverlet.MSbuild.Tasks.InstrumentationTask
+      Condition="'$(CollectCoverage)' == 'true'"
+      Path="$(TargetPath)"
+      Include="$(Include)"
+      IncludeDirectory="$(IncludeDirectory)"
+      Exclude="$(Exclude)"
+      ExcludeByFile="$(ExcludeByFile)"
+      ExcludeByAttribute="$(ExcludeByAttribute)"
+      IncludeTestAssembly="$(IncludeTestAssembly)"
+      SingleHit="$(SingleHit)"
+      MergeWith="$(MergeWith)"
+      UseSourceLink="$(UseSourceLink)" >
+      <Output TaskParameter="InstrumenterState" PropertyName="InstrumenterState"/>
+    </Coverlet.MSbuild.Tasks.InstrumentationTask>
   </Target>
 
-  <Target Name="GenerateCoverageResultAfterTest" Condition="'$(CollectCoverage)' == 'true'" AfterTargets="RunTests">
-    <CallTarget Targets="GenerateCoverageResult" />
+  <Target Name="GenerateCoverageResult" AfterTargets="RunTests" Condition="'$(IsUnitTestProject)' == 'true'">
+    <Coverlet.MSbuild.Tasks.CoverageResultTask
+      Condition="'$(CollectCoverage)' == 'true'"
+      Output="$(CoverletOutput)"
+      OutputFormat="$(CoverletOutputFormat)"
+      Threshold="$(Threshold)"
+      ThresholdType="$(ThresholdType)"
+      ThresholdStat="$(ThresholdStat)"
+      InstrumenterState="$(InstrumenterState)"/>
   </Target>
 
   <ItemGroup>
