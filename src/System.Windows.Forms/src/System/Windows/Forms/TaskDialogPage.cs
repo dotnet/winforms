@@ -109,12 +109,12 @@ namespace System.Windows.Forms
             _customButtons = new TaskDialogCustomButtonCollection();
             _standardButtons = new TaskDialogStandardButtonCollection();
             _radioButtons = new TaskDialogRadioButtonCollection();
-            
+
             // Create empty (hidden) controls.
             _checkBox = new TaskDialogCheckBox();
             _expander = new TaskDialogExpander();
             _footer = new TaskDialogFooter();
-            _progressBar = new TaskDialogProgressBar(TaskDialogProgressBarState.None);            
+            _progressBar = new TaskDialogProgressBar(TaskDialogProgressBarState.None);
         }
 
         /// <summary>
@@ -523,7 +523,7 @@ namespace System.Windows.Forms
         ///   automatically implied.
         /// </para>
         /// </remarks>
-        public bool CanBeMinimized
+        public bool AllowMinimize
         {
             get => GetFlag(ComCtl32.TDF.CAN_BE_MINIMIZED);
             set => SetFlag(ComCtl32.TDF.CAN_BE_MINIMIZED, value);
