@@ -40,12 +40,20 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TaskDialogStandardButton"/> class
-        /// using the specified result.
+        ///  Initializes a new instance of the <see cref="TaskDialogStandardButton"/> class
+        ///  using the specified result.
         /// </summary>
-        /// <param name="result">The <see cref="TaskDialogResult"/> that is represent by this
-        /// <see cref="TaskDialogStandardButton"/>.</param>
-        public TaskDialogStandardButton(TaskDialogResult result)
+        /// <param name="result">The <see cref="TaskDialogResult"/> that is represent by this 
+        ///   <see cref="TaskDialogStandardButton"/>.
+        /// </param>
+        /// <param name="enabled">A value indicating whether the button can respond to user interaction.</param>
+        /// <param name="defaultButton">A value that indicates whether this button is the default button
+        ///   in the task dialog.
+        /// </param>
+        /// <param name="allowCloseDialog">A value that indicates whether the task dialog should close
+        ///   when this button is clicked.
+        /// </param>
+        public TaskDialogStandardButton(TaskDialogResult result, bool enabled = true, bool defaultButton = false, bool allowCloseDialog = true)
         {
             if (!IsValidStandardButtonResult(result))
             {
@@ -53,6 +61,9 @@ namespace System.Windows.Forms
             }
 
             _result = result;
+            Enabled = enabled;
+            DefaultButton = defaultButton;
+            AllowCloseDialog = allowCloseDialog;
         }
 
         /// <summary>
@@ -136,7 +147,7 @@ namespace System.Windows.Forms
             _ => default
         };
 
-        private static bool IsValidStandardButtonResult(TaskDialogResult result) => 
+        private static bool IsValidStandardButtonResult(TaskDialogResult result) =>
             GetButtonFlagForResult(result) != default;
 
         /// <summary>

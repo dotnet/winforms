@@ -97,17 +97,24 @@ namespace System.Windows.Forms
         ///   Creates and adds a <see cref="TaskDialogStandardButton"/> to the collection.
         /// </summary>
         /// <param name="result">The <see cref="TaskDialogResult"/> that is represented by the
-        /// <see cref="TaskDialogStandardButton"/>.</param>
+        ///   <see cref="TaskDialogStandardButton"/>.</param>
+        /// <param name="enabled">A value indicating whether the button can respond to user interaction.</param>
+        /// <param name="defaultButton">A value that indicates whether this button is the default button
+        ///   in the task dialog.
+        /// </param>
+        /// <param name="allowCloseDialog">A value that indicates whether the task dialog should close
+        ///   when this button is clicked.
+        /// </param>
         /// <returns>The created <see cref="TaskDialogStandardButton"/>.</returns>
-        public TaskDialogStandardButton Add(TaskDialogResult result)
+        public TaskDialogStandardButton Add(TaskDialogResult result, bool enabled = true, bool defaultButton = false, bool allowCloseDialog = true)
         {
-            var button = new TaskDialogStandardButton(result);
+            var button = new TaskDialogStandardButton(result, enabled, defaultButton, allowCloseDialog);
             Add(button);
 
             return button;
         }
 
-        internal void HandleKeyChange(TaskDialogStandardButton button, TaskDialogResult newKey) => 
+        internal void HandleKeyChange(TaskDialogStandardButton button, TaskDialogResult newKey) =>
             ChangeItemKey(button, newKey);
 
         /// <inheritdoc/>

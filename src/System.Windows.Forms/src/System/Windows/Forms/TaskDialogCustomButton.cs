@@ -39,11 +39,20 @@ namespace System.Windows.Forms
         /// <param name="descriptionText">An additional description text that will be displayed in
         /// a separate line when the <see cref="TaskDialogCustomButton"/>s of the task dialog are
         /// shown as command links (see <see cref="DescriptionText"/>).</param>
-        public TaskDialogCustomButton(string? text, string? descriptionText = null)
+        /// <param name="defaultButton">A value that indicates whether this button is the default button
+        /// in the task dialog.
+        /// </param>
+        /// <param name="allowCloseDialog">A value that indicates whether the task dialog should close
+        ///   when this button is clicked.
+        /// </param>
+        public TaskDialogCustomButton(string? text, string? descriptionText = null, bool enabled = true, bool defaultButton = false, bool allowCloseDialog = true)
             : this()
         {
             _text = text;
             _descriptionText = descriptionText;
+            Enabled = enabled;
+            DefaultButton = defaultButton;
+            AllowCloseDialog = allowCloseDialog;
         }
 
         /// <summary>

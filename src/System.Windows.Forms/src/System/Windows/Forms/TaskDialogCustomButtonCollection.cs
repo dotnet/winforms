@@ -35,16 +35,19 @@ namespace System.Windows.Forms
         /// </summary>
         /// <param name="text">The text of the custom button.</param>
         /// <param name="descriptionText">The description text of the custom button.</param>
+        /// <param name="enabled">A value indicating whether the button can respond to user interaction.</param>
+        /// <param name="defaultButton">A value that indicates whether this button is the default button
+        ///   in the task dialog.
+        /// </param>
+        /// <param name="allowCloseDialog">A value that indicates whether the task dialog should close
+        ///   when this button is clicked.
+        /// </param>
         /// <returns>The created <see cref="TaskDialogCustomButton"/>.</returns>
-        public TaskDialogCustomButton Add(string? text, string? descriptionText = null)
+        public TaskDialogCustomButton Add(string? text, string? descriptionText = null, bool enabled = true, bool defaultButton = false, bool allowCloseDialog = true)
         {
-            var button = new TaskDialogCustomButton()
-            {
-                Text = text,
-                DescriptionText = descriptionText
-            };
-
+            var button = new TaskDialogCustomButton(text, descriptionText, enabled, defaultButton, allowCloseDialog);
             Add(button);
+
             return button;
         }
 
