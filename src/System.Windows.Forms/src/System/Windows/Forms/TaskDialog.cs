@@ -1410,7 +1410,7 @@ namespace System.Windows.Forms
                     SR.TaskDialogCannotNavigateWithinNavigationEventHandler);
             }
 
-            // Don't allow navigation of the dialog window is already closed (and
+            // Don't allow navigation if the dialog window is already closed (and
             // therefore has set a result button), because that would result in
             // weird/undefined behavior (e.g. returning IDCANCEL (2) as button
             // result even though a different button has already been set as result).

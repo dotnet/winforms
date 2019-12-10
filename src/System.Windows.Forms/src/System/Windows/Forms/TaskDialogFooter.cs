@@ -36,7 +36,7 @@ namespace System.Windows.Forms
         }
 
         public static implicit operator TaskDialogFooter(string footerText)
-          => new TaskDialogFooter(footerText);
+            => new TaskDialogFooter(footerText);
 
         /// <summary>
         ///   Gets or sets the text to be displayed in the dialog's footer area.
