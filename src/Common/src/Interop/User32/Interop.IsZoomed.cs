@@ -4,20 +4,12 @@
 
 using System;
 using System.Runtime.InteropServices;
-using System.Windows.Forms;
 
 internal static partial class Interop
 {
     internal static partial class User32
     {
         [DllImport(Libraries.User32, ExactSpelling = true)]
-        public static extern IntPtr GetAncestor(IntPtr hwnd, GA flags);
-
-        public static IntPtr GetAncestor(IHandle hwnd, GA flags)
-        {
-            IntPtr result = GetAncestor(hwnd.Handle, flags);
-            GC.KeepAlive(hwnd);
-            return result;
-        }
+        public static extern BOOL IsZoomed(IntPtr hWnd);
     }
 }

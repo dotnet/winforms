@@ -250,23 +250,6 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Finds the top level handle for a given handle.
-        /// </summary>
-        public static HandleRef GetRootHWnd(HandleRef hwnd)
-        {
-            IntPtr rootHwnd = User32.GetAncestor(new HandleRef(hwnd, hwnd.Handle), User32.GA.ROOT);
-            return new HandleRef(hwnd.Wrapper, rootHwnd);
-        }
-
-        /// <summary>
-        ///  Finds the top level handle for a given handle.
-        /// </summary>
-        public static HandleRef GetRootHWnd(Control control)
-        {
-            return GetRootHWnd(new HandleRef(control, control.Handle));
-        }
-
-        /// <summary>
         ///  Strips all keyboard mnemonic prefixes from a given string, eg. turning "He&lp" into "Help".
         /// </summary>
         /// <remarks>
