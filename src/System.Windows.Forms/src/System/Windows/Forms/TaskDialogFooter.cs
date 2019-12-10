@@ -14,9 +14,7 @@ namespace System.Windows.Forms
     public sealed class TaskDialogFooter : TaskDialogControl
     {
         private string? _text;
-
         private TaskDialogIcon? _icon;
-
         private bool _boundIconIsFromHandle;
 
         /// <summary>
@@ -36,6 +34,9 @@ namespace System.Windows.Forms
         {
             _text = text;
         }
+
+        public static implicit operator TaskDialogFooter(string footerText)
+          => new TaskDialogFooter(footerText);
 
         /// <summary>
         ///   Gets or sets the text to be displayed in the dialog's footer area.
