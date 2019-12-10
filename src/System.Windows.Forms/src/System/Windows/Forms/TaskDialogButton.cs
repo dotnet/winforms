@@ -26,10 +26,10 @@ namespace System.Windows.Forms
         ///   (except for the <see cref="TaskDialogResult.Help"/> button, which instead
         ///   will raise the <see cref="TaskDialogPage.HelpRequest"/> event afterwards).
         ///   To prevent the dialog from closing when this button is clicked, set the
-        ///   <see cref="ShouldCloseDialog"/> property to <see langword="false"/>.
+        ///   <see cref="AllowCloseDialog"/> property to <see langword="false"/>.
         /// </para>
         /// <para>
-        ///   When <see cref="ShouldCloseDialog"/> is set to <see langword="true"/>,
+        ///   When <see cref="AllowCloseDialog"/> is set to <see langword="true"/>,
         ///   the <see cref="TaskDialog.Closing"/> event will occur afterwards,
         ///   which also allows you to prevent the dialog from closing.
         /// </para>
@@ -60,7 +60,7 @@ namespace System.Windows.Forms
         ///   sets the clicked button as result value.
         /// </para>
         /// </remarks>
-        public bool ShouldCloseDialog { get; set; } = true;
+        public bool AllowCloseDialog { get; set; } = true;
 
         /// <summary>
         ///   Gets or sets a value indicating whether the button can respond to user interaction.
@@ -185,7 +185,7 @@ namespace System.Windows.Forms
         {
             OnClick(EventArgs.Empty);
 
-            return ShouldCloseDialog;
+            return AllowCloseDialog;
         }
 
         private protected override void ApplyInitializationCore()
