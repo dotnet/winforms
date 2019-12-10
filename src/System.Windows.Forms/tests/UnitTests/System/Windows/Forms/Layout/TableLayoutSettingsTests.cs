@@ -707,7 +707,7 @@ namespace System.Windows.Forms.Layout.Tests
             }
         }
 
-        [Theory]
+        [Theory(Skip = "To be reverted once https://github.com/dotnet/winforms/pull/2497 is addressed")]
         [InlineData(typeof(NullTableLayoutSettingsConverter))]
         [InlineData(typeof(NonTableLayoutSettingsConverter))]
         public void TableLayoutSettings_Deserialize_InvalidConverterResult_Success(Type type)
