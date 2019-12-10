@@ -1650,15 +1650,14 @@ namespace System.Windows.Forms
             {
                 return new Point(0, 0);
             }
-            // Get the Combox Rect ...
-            //
-            RECT comboRectMid = new RECT();
-            UnsafeNativeMethods.GetWindowRect(new HandleRef(this, Handle), ref comboRectMid);
-            //
-            //Get the Edit Rectangle...
-            //
-            RECT editRectMid = new RECT();
-            UnsafeNativeMethods.GetWindowRect(new HandleRef(this, childEdit.Handle), ref editRectMid);
+
+            // Get the Combox Rect
+            var comboRectMid = new RECT();
+            User32.GetWindowRect(this, ref comboRectMid);
+
+            //Get the Edit Rectangle.
+            var editRectMid = new RECT();
+            User32.GetWindowRect(childEdit, ref editRectMid);
 
             //get the delta
             int comboXMid = PARAM.SignedLOWORD(m.LParam) + (editRectMid.left - comboRectMid.left);
@@ -1919,8 +1918,8 @@ namespace System.Windows.Forms
                     break;
                 case WindowMessages.WM_LBUTTONUP:
                     // Get the mouse location
-                    RECT rect = new RECT();
-                    UnsafeNativeMethods.GetWindowRect(new HandleRef(this, Handle), ref rect);
+                    var rect = new RECT();
+                    User32.GetWindowRect(this, ref rect);
                     Rectangle clientRect = rect;
 
                     int x = PARAM.SignedLOWORD(m.LParam);
@@ -2068,11 +2067,11 @@ namespace System.Windows.Forms
         /// </summary>
         private void OnMouseLeaveInternal(EventArgs args)
         {
-            RECT rect = new RECT();
-            UnsafeNativeMethods.GetWindowRect(new HandleRef(this, Handle), ref rect);
-            Rectangle Rect = new Rectangle(rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top);
+            var rect = new RECT();
+            User32.GetWindowRect(this, ref rect);
+            Rectangle rectangle = rect;
             Point p = MousePosition;
-            if (!Rect.Contains(p))
+            if (!rectangle.Contains(p))
             {
                 OnMouseLeave(args);
                 mouseInEdit = false;
@@ -3899,10 +3898,9 @@ namespace System.Windows.Forms
                     break;
                 case WindowMessages.WM_LBUTTONUP:
                     // Get the mouse location
-                    //
-                    RECT r = new RECT();
-                    UnsafeNativeMethods.GetWindowRect(new HandleRef(this, Handle), ref r);
-                    Rectangle ClientRect = new Rectangle(r.left, r.top, r.right - r.left, r.bottom - r.top);
+                    var r = new RECT();
+                    User32.GetWindowRect(this, ref r);
+                    Rectangle clientRect = r;
 
                     int x = PARAM.SignedLOWORD(m.LParam);
                     int y = PARAM.SignedHIWORD(m.LParam);
@@ -3916,7 +3914,7 @@ namespace System.Windows.Forms
                     {
                         mouseEvents = false;
                         bool captured = Capture;
-                        if (captured && ClientRect.Contains(pt))
+                        if (captured && clientRect.Contains(pt))
                         {
                             OnClick(new MouseEventArgs(MouseButtons.Left, 1, PARAM.SignedLOWORD(m.LParam), PARAM.SignedHIWORD(m.LParam), 0));
                             OnMouseClick(new MouseEventArgs(MouseButtons.Left, 1, PARAM.SignedLOWORD(m.LParam), PARAM.SignedHIWORD(m.LParam), 0));

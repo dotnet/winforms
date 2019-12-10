@@ -1772,8 +1772,7 @@ namespace System.Windows.Forms
                     // This includes the case where the mouse is over one of our children
                     var r = new RECT();
                     User32.GetCursorPos(out Point p);
-                    UnsafeNativeMethods.GetWindowRect(new HandleRef(this, Handle), ref r);
-
+                    User32.GetWindowRect(this, ref r);
                     if ((r.left <= p.X && p.X < r.right && r.top <= p.Y && p.Y < r.bottom) || User32.GetCapture() == Handle)
                     {
                         SendMessage(WindowMessages.WM_SETCURSOR, Handle, (IntPtr)NativeMethods.HTCLIENT);
@@ -2626,8 +2625,8 @@ namespace System.Windows.Forms
                     }
                 }
 
-                UnsafeNativeMethods.GetWindowRect(new HandleRef(this, Handle), ref temp);
-                working = new Region(Rectangle.FromLTRB(temp.left, temp.top, temp.right, temp.bottom));
+                User32.GetWindowRect(this, ref temp);
+                working = new Region(temp);
 
                 try
                 {
@@ -2647,13 +2646,10 @@ namespace System.Windows.Forms
                          (next = User32.GetWindow(prev, User32.GW.HWNDPREV)) != IntPtr.Zero;
                          prev = next)
                     {
-
-                        UnsafeNativeMethods.GetWindowRect(new HandleRef(null, next), ref temp);
-                        Rectangle current = Rectangle.FromLTRB(temp.left, temp.top, temp.right, temp.bottom);
-
+                        User32.GetWindowRect(next, ref temp);
                         if (User32.IsWindowVisible(next).IsTrue())
                         {
-                            working.Exclude(current);
+                            working.Exclude(temp);
                         }
                     }
 
@@ -9304,8 +9300,8 @@ namespace System.Windows.Forms
 
                 // figure out mapping for the client area
                 RECT windowRect = new RECT();
-                bool success = UnsafeNativeMethods.GetWindowRect(new HandleRef(null, Handle), ref windowRect);
-                Debug.Assert(success, "GetWindowRect() failed.");
+                BOOL success = User32.GetWindowRect(this, ref windowRect);
+                Debug.Assert(success.IsTrue(), "GetWindowRect() failed.");
                 Point clientOffset = PointToScreen(Point.Empty);
                 clientOffset = new Point(clientOffset.X - windowRect.left, clientOffset.Y - windowRect.top);
                 Rectangle clientBounds = new Rectangle(clientOffset, ClientSize);
@@ -11474,7 +11470,7 @@ namespace System.Windows.Forms
             User32.GetClientRect(new HandleRef(_window, InternalHandle), ref rect);
             int clientWidth = rect.right;
             int clientHeight = rect.bottom;
-            UnsafeNativeMethods.GetWindowRect(new HandleRef(_window, InternalHandle), ref rect);
+            User32.GetWindowRect(new HandleRef(_window, InternalHandle), ref rect);
             if (!GetTopLevel())
             {
                 User32.MapWindowPoints(IntPtr.Zero, User32.GetParent(new HandleRef(_window, InternalHandle)), ref rect, 2);
@@ -14353,9 +14349,9 @@ namespace System.Windows.Forms
 
         internal virtual Rectangle GetToolNativeScreenRectangle()
         {
-            RECT rectangle = new RECT();
-            UnsafeNativeMethods.GetWindowRect(new HandleRef(this, Handle), ref rectangle);
-            return Rectangle.FromLTRB(rectangle.left, rectangle.top, rectangle.right, rectangle.bottom);
+            var rectangle = new RECT();
+            User32.GetWindowRect(this, ref rectangle);
+            return rectangle;
         }
 
         internal virtual bool AllowsKeyboardToolTip()

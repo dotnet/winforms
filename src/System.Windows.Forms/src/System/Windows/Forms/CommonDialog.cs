@@ -89,8 +89,8 @@ namespace System.Windows.Forms
         /// </summary>
         private protected static void MoveToScreenCenter(IntPtr hWnd)
         {
-            RECT r = new RECT();
-            UnsafeNativeMethods.GetWindowRect(new HandleRef(null, hWnd), ref r);
+            var r = new RECT();
+            User32.GetWindowRect(hWnd, ref r);
             Rectangle screen = Screen.GetWorkingArea(Control.MousePosition);
             int x = screen.X + (screen.Width - r.right + r.left) / 2;
             int y = screen.Y + (screen.Height - r.bottom + r.top) / 3;
