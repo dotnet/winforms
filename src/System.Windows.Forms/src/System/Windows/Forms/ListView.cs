@@ -5855,7 +5855,7 @@ namespace System.Windows.Forms
                 {
                     //
 
-                    HDITEM2 hdItem = Marshal.PtrToStructure<HDITEM2>((IntPtr)nmheader.pItem);
+                    HDITEMW hdItem = Marshal.PtrToStructure<HDITEMW>(nmheader.pItem);
                     int newColumnWidth = ((hdItem.mask & NativeMethods.HDI_WIDTH) != 0) ? hdItem.cxy : -1;
                     ColumnWidthChangingEventArgs colWidthChanging = new ColumnWidthChangingEventArgs(nmheader.iItem, newColumnWidth);
                     OnColumnWidthChanging(colWidthChanging);
@@ -5977,7 +5977,7 @@ namespace System.Windows.Forms
                 if (header.pItem != IntPtr.Zero)
                 {
 
-                    HDITEM2 hdItem = Marshal.PtrToStructure<HDITEM2>((IntPtr)header.pItem);
+                    HDITEMW hdItem = Marshal.PtrToStructure<HDITEMW>(header.pItem);
                     if ((hdItem.mask & NativeMethods.HDI_ORDER) == NativeMethods.HDI_ORDER)
                     {
 

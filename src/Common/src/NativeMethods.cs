@@ -196,8 +196,6 @@ namespace System.Windows.Forms
         HTBOTTOMRIGHT = 17,
         HTBORDER = 18,
         HCF_HIGHCONTRASTON = 0x00000001,
-        HDI_ORDER = 0x0080,
-        HDI_WIDTH = 0x0001,
         HDM_GETITEMCOUNT = (0x1200 + 0),
         HDM_INSERTITEMW = (0x1200 + 10),
         HDM_GETITEMW = (0x1200 + 11),
