@@ -1471,16 +1471,28 @@ namespace System.Windows.Forms
 
             if (updateRows)
             {
-                Debug.Assert(calendarHeight > INSERT_HEIGHT_SIZE, "Divide by 0");
-                int nRows = (newDimensionLength - todayHeight + INSERT_HEIGHT_SIZE) / (calendarHeight + INSERT_HEIGHT_SIZE);
-                dimensions.Height = (nRows < 1) ? 1 : nRows;
+                if (calendarHeight + INSERT_HEIGHT_SIZE == 0)
+                {
+                    dimensions.Height = 1;
+                }
+                else
+                {
+                    int nRows = (newDimensionLength - todayHeight + INSERT_HEIGHT_SIZE) / (calendarHeight + INSERT_HEIGHT_SIZE);
+                    dimensions.Height = (nRows < 1) ? 1 : nRows;
+                }
             }
 
             if (updateCols)
             {
-                Debug.Assert(minSize.Width > INSERT_WIDTH_SIZE, "Divide by 0");
-                int nCols = (newDimensionLength - scaledExtraPadding) / minSize.Width;
-                dimensions.Width = (nCols < 1) ? 1 : nCols;
+                if (minSize.Width == 0)
+                {
+                    dimensions.Width = 1;
+                }
+                else
+                {
+                    int nCols = (newDimensionLength - scaledExtraPadding) / minSize.Width;
+                    dimensions.Width = (nCols < 1) ? 1 : nCols;
+                }
             }
 
             minSize.Width = (minSize.Width + INSERT_WIDTH_SIZE) * dimensions.Width - INSERT_WIDTH_SIZE;
