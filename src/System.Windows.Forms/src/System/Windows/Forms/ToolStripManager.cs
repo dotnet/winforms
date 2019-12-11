@@ -286,7 +286,7 @@ namespace System.Windows.Forms
 
         private static bool IsOnSameWindow(Control control1, Control control2)
         {
-            return (WindowsFormsUtils.GetRootHWnd(control1).Handle == WindowsFormsUtils.GetRootHWnd(control2).Handle);
+            return User32.GetAncestor(control1, User32.GA.ROOT) == User32.GetAncestor(control2, User32.GA.ROOT);
         }
 
         internal static bool IsThreadUsingToolStrips()
@@ -1840,14 +1840,14 @@ namespace System.Windows.Forms
                             ToolStrip topMostToolStrip = toolStrip.GetToplevelOwnerToolStrip();
                             if (topMostToolStrip != null && activeControl != null)
                             {
-                                HandleRef rootWindowOfToolStrip = WindowsFormsUtils.GetRootHWnd(topMostToolStrip);
-                                HandleRef rootWindowOfControl = WindowsFormsUtils.GetRootHWnd(activeControl);
-                                rootWindowsMatch = (rootWindowOfToolStrip.Handle == rootWindowOfControl.Handle);
+                                IntPtr rootWindowOfToolStrip = User32.GetAncestor(topMostToolStrip, User32.GA.ROOT);
+                                IntPtr rootWindowOfControl = User32.GetAncestor(activeControl, User32.GA.ROOT);
+                                rootWindowsMatch = rootWindowOfToolStrip == rootWindowOfControl;
 
                                 if (rootWindowsMatch)
                                 {
                                     // Double check this is not an MDIContainer type situation...
-                                    if (Control.FromHandle(rootWindowOfControl.Handle) is Form mainForm && mainForm.IsMdiContainer)
+                                    if (Control.FromHandle(rootWindowOfControl) is Form mainForm && mainForm.IsMdiContainer)
                                     {
                                         Form toolStripForm = topMostToolStrip.FindForm();
                                         if (toolStripForm != mainForm && toolStripForm != null)
@@ -1958,10 +1958,10 @@ namespace System.Windows.Forms
                         Debug.WriteLineIf(ToolStrip.SnapFocusDebug.TraceVerbose, "[ProcessMenuKey] attempting to set focus to menustrip");
 
                         // if we've alt-tabbed away dont snap/restore focus.
-                        HandleRef topmostParentOfMenu = WindowsFormsUtils.GetRootHWnd(menuStripToActivate);
+                        IntPtr topmostParentOfMenu = User32.GetAncestor(menuStripToActivate, User32.GA.ROOT);
                         IntPtr foregroundWindow = UnsafeNativeMethods.GetForegroundWindow();
 
-                        if (topmostParentOfMenu.Handle == foregroundWindow)
+                        if (topmostParentOfMenu == foregroundWindow)
                         {
                             Debug.WriteLineIf(ToolStrip.SnapFocusDebug.TraceVerbose, "[ProcessMenuKey] ToolStripManager call MenuStrip.OnMenuKey");
                             return menuStripToActivate.OnMenuKey();
