@@ -1003,6 +1003,173 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<ArgumentOutOfRangeException>("startIndex", () => control.FindStringExact("s", startIndex));
         }
 
+        [WinFormsFact]
+        public void ListBox_GetItemRectangle_InvokeWithoutHandle_ReturnsExpectedAndCreatedHandle()
+        {
+            using var control = new ListBox();
+            control.Items.Add("Item1");
+            control.Items.Add("Item1");
+
+            Rectangle rect1 = control.GetItemRectangle(0);
+            Assert.True(rect1.X >= 0);
+            Assert.True(rect1.Y >= 0);
+            Assert.True(rect1.Width > 0);
+            Assert.True(rect1.Height > 0);
+            Assert.Equal(rect1, control.GetItemRectangle(0));
+            Assert.True(control.IsHandleCreated);
+
+            Rectangle rect2 = control.GetItemRectangle(1);
+            Assert.Equal(rect2.X, rect1.X);
+            Assert.True(rect2.Y >= rect1.Y + rect1.Height);
+            Assert.True(rect2.Width > 0);
+            Assert.True(rect2.Height > 0);
+            Assert.True(control.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void ListBox_GetItemRectangle_InvokeWithHandle_ReturnsExpected()
+        {
+            using var control = new ListBox();
+            control.Items.Add("Item1");
+            control.Items.Add("Item1");
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            Rectangle rect1 = control.GetItemRectangle(0);
+            Assert.True(rect1.X >= 0);
+            Assert.True(rect1.Y >= 0);
+            Assert.True(rect1.Width > 0);
+            Assert.True(rect1.Height > 0);
+            Assert.Equal(rect1, control.GetItemRectangle(0));
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            Rectangle rect2 = control.GetItemRectangle(1);
+            Assert.Equal(rect2.X, rect1.X);
+            Assert.True(rect2.Y >= rect1.Y + rect1.Height);
+            Assert.True(rect2.Width > 0);
+            Assert.True(rect2.Height > 0);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        public static IEnumerable<object[]> GetItemRectangle_CustomGetItemRect_TestData()
+        {
+            yield return new object[] { new RECT(), Rectangle.Empty };
+            yield return new object[] { new RECT(1, 2, 3, 4), new Rectangle(1, 2, 2, 2) };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(GetItemRectangle_CustomGetItemRect_TestData))]
+        public void ListBox_GetItemRectangle_InvokeCustomGetItemRect_ReturnsExpected(object getItemRectResult, Rectangle expected)
+        {
+            using var control = new CustomGetItemRectListBox
+            {
+                GetItemRectResult = (RECT)getItemRectResult
+            };
+            control.Items.Add("Item");
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+
+            Assert.Equal(expected, control.GetItemRectangle(0));
+        }
+
+        private class CustomGetItemRectListBox : ListBox
+        {
+            public RECT GetItemRectResult { get; set; }
+
+            protected unsafe override void WndProc(ref Message m)
+            {
+                if (m.Msg == (int)User32.LB.GETITEMRECT)
+                {
+                    RECT* pRect = (RECT*)m.LParam;
+                    *pRect = GetItemRectResult;
+                    m.Result = (IntPtr)1;
+                    return;
+                }
+
+                base.WndProc(ref m);
+            }
+        }
+
+        [WinFormsFact]
+        public void ListBox_GetItemRectangle_InvokeInvalidGetItemRect_ReturnsExpected()
+        {
+            using var control = new InvalidGetItemRectListBox();
+            control.Items.Add("Item");
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+
+            control.MakeInvalid = true;
+            Assert.Equal(Rectangle.Empty, control.GetItemRectangle(0));
+        }
+
+        private class InvalidGetItemRectListBox : ListBox
+        {
+            public bool MakeInvalid { get; set; }
+
+            protected unsafe override void WndProc(ref Message m)
+            {
+                if (MakeInvalid && m.Msg == (int)User32.LB.GETITEMRECT)
+                {
+                    RECT* pRect = (RECT*)m.LParam;
+                    *pRect = new RECT(1, 2, 3, 4);
+                    m.Result = IntPtr.Zero;
+                    return;
+                }
+
+                base.WndProc(ref m);
+            }
+        }
+
+        [WinFormsFact]
+        public void ListBox_GetItemRectangle_InvalidIndexEmpty_ThrowsArgumentOutOfRangeException()
+        {
+            using var control = new ListBox();
+            Assert.Throws<ArgumentOutOfRangeException>("index", () => control.GetItemRectangle(-1));
+            Assert.Throws<ArgumentOutOfRangeException>("index", () => control.GetItemRectangle(0));
+            Assert.Throws<ArgumentOutOfRangeException>("index", () => control.GetItemRectangle(1));
+        }
+
+        [WinFormsFact]
+        public void ListBox_GetItemRectangle_InvalidIndexNotEmpty_ThrowsArgumentOutOfRangeException()
+        {
+            using var control = new ListBox();
+            control.Items.Add("Item");
+
+            Assert.Throws<ArgumentOutOfRangeException>("index", () => control.GetItemRectangle(-1));
+            Assert.Throws<ArgumentOutOfRangeException>("index", () => control.GetItemRectangle(1));
+            Assert.Throws<ArgumentOutOfRangeException>("index", () => control.GetItemRectangle(2));
+        }
+
+        [WinFormsFact]
+        public void ListBox_GetItemRectangle_InvalidIndexWithHandleEmpty_ThrowsArgumentOutOfRangeException()
+        {
+            using var control = new ListBox();
+            Assert.Throws<ArgumentOutOfRangeException>("index", () => control.GetItemRectangle(-1));
+            Assert.Throws<ArgumentOutOfRangeException>("index", () => control.GetItemRectangle(0));
+            Assert.Throws<ArgumentOutOfRangeException>("index", () => control.GetItemRectangle(1));
+        }
+
+        [WinFormsFact]
+        public void ListBox_GetItemRectangle_InvalidIndexWithHandleNotEmpty_ThrowsArgumentOutOfRangeException()
+        {
+            using var control = new ListBox();
+            control.Items.Add("Item");
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+
+            Assert.Throws<ArgumentOutOfRangeException>("index", () => control.GetItemRectangle(-1));
+            Assert.Throws<ArgumentOutOfRangeException>("index", () => control.GetItemRectangle(1));
+            Assert.Throws<ArgumentOutOfRangeException>("index", () => control.GetItemRectangle(2));
+        }
+
         private class SubListBox : ListBox
         {
             public new bool AllowSelection => base.AllowSelection;

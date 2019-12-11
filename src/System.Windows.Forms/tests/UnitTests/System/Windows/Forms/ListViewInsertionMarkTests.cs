@@ -2,14 +2,21 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections.Generic;
 using System.Drawing;
 using WinForms.Common.Tests;
 using Xunit;
+using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
     public class ListViewInsertionMarkTests
     {
+        public ListViewInsertionMarkTests()
+        {
+            Application.ThreadException += (sender, e) => throw new Exception(e.Exception.StackTrace.ToString());
+        }
+
         [Fact]
         public void ListViewInsertionMark_AppearsAfterItem_Get_ReturnsExpected()
         {
@@ -62,12 +69,102 @@ namespace System.Windows.Forms.Tests
             Assert.False(insertionMark.AppearsAfterItem);
         }
 
-        [Fact]
-        public void ListViewInsertionMark_Color_Get_ReturnsEqual()
+        [WinFormsFact]
+        public void ListViewInsertionMark_Bounds_GetWithoutHandle_ReturnsEqual()
         {
-            var listView = new ListView();
-            ListViewInsertionMark insertionMark = listView.InsertionMark;
+            using var control = new ListView();
+            ListViewInsertionMark insertionMark = control.InsertionMark;
+            Assert.Equal(Rectangle.Empty, insertionMark.Bounds);
             Assert.Equal(insertionMark.Bounds, insertionMark.Bounds);
+            Assert.True(control.IsHandleCreated);
+        }
+        
+        [WinFormsFact]
+        public void ListViewInsertionMark_Bounds_GetWithHandle_ReturnsEqual()
+        {
+            using var control = new ListView();
+            ListViewInsertionMark insertionMark = control.InsertionMark;
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            Assert.Equal(Rectangle.Empty, insertionMark.Bounds);
+            Assert.Equal(insertionMark.Bounds, insertionMark.Bounds);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        public static IEnumerable<object[]> Bounds_GetCustomInsertMarkRect_TestData()
+        {
+            yield return new object[] { new RECT(), Rectangle.Empty };
+            yield return new object[] { new RECT(1, 2, 3, 4), new Rectangle(1, 2, 2, 2) };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(Bounds_GetCustomInsertMarkRect_TestData))]
+        public void ListViewInsertionMark_Bounds_GetCustomGetInsertMarkRect_ReturnsExpected(object getInsertMarkRectResult, Rectangle expected)
+        {
+            using var control = new CustomGetInsertMarkRectListView
+            {
+                GetInsertMarkRectResult = (RECT)getInsertMarkRectResult
+            };
+            ListViewInsertionMark insertionMark = control.InsertionMark;
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+
+            Assert.Equal(expected, insertionMark.Bounds);
+        }
+
+        private class CustomGetInsertMarkRectListView : ListView
+        {
+            public RECT GetInsertMarkRectResult { get; set; }
+
+            protected unsafe override void WndProc(ref Message m)
+            {
+                if (m.Msg == (int)LVM.GETINSERTMARKRECT)
+                {
+                    RECT* pRect = (RECT*)m.LParam;
+                    *pRect = GetInsertMarkRectResult;
+                    m.Result = (IntPtr)1;
+                    return;
+                }
+
+                base.WndProc(ref m);
+            }
+        }
+
+        [WinFormsFact]
+        public void ListViewInsertionMark_Bounds_GetInvalidGetInsertMarkRect_ReturnsExpected()
+        {
+            using var control = new InvalidGetInsertMarkRectListView();
+            ListViewInsertionMark insertionMark = control.InsertionMark;
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+
+            control.MakeInvalid = true;
+            Assert.Equal(new Rectangle(1, 2, 2, 2), insertionMark.Bounds);
+        }
+
+        private class InvalidGetInsertMarkRectListView : ListView
+        {
+            public bool MakeInvalid { get; set; }
+
+            protected unsafe override void WndProc(ref Message m)
+            {
+                if (MakeInvalid && m.Msg == (int)LVM.GETINSERTMARKRECT)
+                {
+                    RECT* pRect = (RECT*)m.LParam;
+                    *pRect = new RECT(1, 2, 3, 4);
+                    m.Result = IntPtr.Zero;
+                    return;
+                }
+
+                base.WndProc(ref m);
+            }
         }
 
         [Fact]
