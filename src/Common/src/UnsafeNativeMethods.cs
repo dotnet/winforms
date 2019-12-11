@@ -209,9 +209,6 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.User32, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
         public static extern IntPtr SendMessage(IntPtr hwnd, int msg, bool wparam, int lparam);
 
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern int SendMessage(HandleRef hWnd, int msg, int wParam, ref ComCtl32.LVHITTESTINFO lParam);
-
         //for Tooltips
         //
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
@@ -264,8 +261,6 @@ namespace System.Windows.Forms
         public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, ref Size lParam);
 
         // For ListView
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, ComCtl32.LVHITTESTINFO lParam);
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, [In, Out] ref ComCtl32.LVITEM lParam);

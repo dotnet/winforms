@@ -3322,13 +3322,13 @@ namespace System.Windows.Forms
                     var lvFindInfo = new ComCtl32.LVFINDINFOW();
                     if (isTextSearch)
                     {
-                        lvFindInfo.flags = ComCtl32.LVFI.STRING;
-                        lvFindInfo.flags |= (isPrefixSearch ? ComCtl32.LVFI.PARTIAL : 0);
+                        lvFindInfo.flags = LVFI.STRING;
+                        lvFindInfo.flags |= (isPrefixSearch ? LVFI.PARTIAL : 0);
                         lvFindInfo.psz = pText;
                     }
                     else
                     {
-                        lvFindInfo.flags = ComCtl32.LVFI.NEARESTXY;
+                        lvFindInfo.flags = LVFI.NEARESTXY;
                         lvFindInfo.pt = pt;
                         // we can do this because SearchDirectionHint is set to the VK_*
                         lvFindInfo.vkDirection = (uint)dir;
@@ -3521,16 +3521,15 @@ namespace System.Windows.Forms
         /// </summary>
         public ListViewItem GetItemAt(int x, int y)
         {
-            LVHITTESTINFO lvhi = new LVHITTESTINFO
+            var lvhi = new LVHITTESTINFO
             {
-                pt_x = x,
-                pt_y = y
+                pt = new POINT(x, y)
             };
 
-            int displayIndex = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)LVM.HITTEST, 0, lvhi);
+            int displayIndex = (int)User32.SendMessageW(this, (User32.WindowMessage)LVM.HITTEST, IntPtr.Zero, ref lvhi);
 
             ListViewItem li = null;
-            if (displayIndex >= 0 && ((lvhi.flags & NativeMethods.LVHT_ONITEM) != 0))
+            if (displayIndex >= 0 && ((lvhi.flags & LVHT.ONITEM) != 0))
             {
                 li = Items[displayIndex];
             }
@@ -3555,14 +3554,12 @@ namespace System.Windows.Forms
 
         internal void GetSubItemAt(int x, int y, out int iItem, out int iSubItem)
         {
-            LVHITTESTINFO lvhi = new LVHITTESTINFO
+            var lvhi = new LVHITTESTINFO
             {
-                pt_x = x,
-                pt_y = y
+                pt = new POINT(x, y)
             };
 
-            int index = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)LVM.SUBITEMHITTEST, 0, lvhi);
-
+            int index = (int)User32.SendMessageW(this, (User32.WindowMessage)LVM.SUBITEMHITTEST, IntPtr.Zero, ref lvhi);
             if (index > -1)
             {
                 iItem = lvhi.iItem;
@@ -3763,33 +3760,31 @@ namespace System.Windows.Forms
                 return new ListViewHitTestInfo(null /*hitItem*/, null /*hitSubItem*/, ListViewHitTestLocations.None /*hitLocation*/);
             }
 
-            LVHITTESTINFO lvhi = new LVHITTESTINFO
+            var lvhi = new LVHITTESTINFO
             {
-                pt_x = x,
-                pt_y = y
+                pt = new POINT(x, y)
             };
 
             int iItem;
-
             if (View == View.Details)
             {
-                iItem = unchecked((int)(long)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)LVM.SUBITEMHITTEST, 0, lvhi));
+                iItem = (int)User32.SendMessageW(this, (User32.WindowMessage)LVM.SUBITEMHITTEST, IntPtr.Zero, ref lvhi);
             }
             else
             {
-                iItem = unchecked((int)(long)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)LVM.HITTEST, 0, lvhi));
+                iItem = (int)User32.SendMessageW(this, (User32.WindowMessage)LVM.HITTEST, IntPtr.Zero, ref lvhi);
             }
 
             ListViewItem item = (iItem == -1) ? null : Items[iItem];
             ListViewHitTestLocations location = ListViewHitTestLocations.None;
 
-            if (item == null && (NativeMethods.LVHT_ABOVE & lvhi.flags) == NativeMethods.LVHT_ABOVE)
+            if (item == null && (LVHT.ABOVE & lvhi.flags) == LVHT.ABOVE)
             {
-                location = (ListViewHitTestLocations)((MASK_HITTESTFLAG & lvhi.flags) | (int)ListViewHitTestLocations.AboveClientArea);
+                location = (ListViewHitTestLocations)((MASK_HITTESTFLAG & (int)lvhi.flags) | (int)ListViewHitTestLocations.AboveClientArea);
             }
-            else if (item != null && (NativeMethods.LVHT_ONITEMSTATEICON & lvhi.flags) == NativeMethods.LVHT_ONITEMSTATEICON)
+            else if (item != null && (LVHT.ONITEMSTATEICON & lvhi.flags) == LVHT.ONITEMSTATEICON)
             {
-                location = (ListViewHitTestLocations)((MASK_HITTESTFLAG & lvhi.flags) | (int)ListViewHitTestLocations.StateImage);
+                location = (ListViewHitTestLocations)((MASK_HITTESTFLAG & (int)lvhi.flags) | (int)ListViewHitTestLocations.StateImage);
             }
             else
             {
@@ -5652,34 +5647,41 @@ namespace System.Windows.Forms
             // If we're checked, hittest to see if we're
             // on the check mark
 
-            if (CheckBoxes)
+            if (!CheckBoxes)
             {
-                Point pos = Cursor.Position;
-                pos = PointToClient(pos);
-                LVHITTESTINFO lvhi = new LVHITTESTINFO
-                {
-                    pt_x = pos.X,
-                    pt_y = pos.Y
-                };
+                return;
+            }
 
-                int displayIndex = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)LVM.HITTEST, 0, lvhi);
-                if (displayIndex != -1 && (lvhi.flags & NativeMethods.LVHT_ONITEMSTATEICON) != 0)
+            Point pos = Cursor.Position;
+            pos = PointToClient(pos);
+            var lvhi = new LVHITTESTINFO
+            {
+                pt = (POINT)pos
+            };
+
+            int displayIndex = (int)User32.SendMessageW(this, (User32.WindowMessage)LVM.HITTEST, IntPtr.Zero, ref lvhi);
+            if (displayIndex == -1 || (lvhi.flags & LVHT.ONITEMSTATEICON) == 0)
+            {
+                return;
+            }
+
+            ListViewItem clickedItem = Items[displayIndex];
+            if (!clickedItem.Selected)
+            {
+                return;
+            }
+
+            bool check = !clickedItem.Checked;
+            if (VirtualMode)
+            {
+                return;
+            }
+
+            foreach (ListViewItem item in SelectedItems)
+            {
+                if (item != clickedItem)
                 {
-                    ListViewItem clickedItem = Items[displayIndex];
-                    if (clickedItem.Selected)
-                    {
-                        bool check = !clickedItem.Checked;
-                        if (!VirtualMode)
-                        {
-                            foreach (ListViewItem item in SelectedItems)
-                            {
-                                if (item != clickedItem)
-                                {
-                                    item.Checked = check;
-                                }
-                            }
-                        }
-                    }
+                    item.Checked = check;
                 }
             }
         }
@@ -5689,22 +5691,23 @@ namespace System.Windows.Forms
             // If we're checked, hittest to see if we're
             // on the item
 
-            if (CheckBoxes)
+            if (!CheckBoxes)
             {
-                Point pos = Cursor.Position;
-                pos = PointToClient(pos);
-                LVHITTESTINFO lvhi = new LVHITTESTINFO
-                {
-                    pt_x = pos.X,
-                    pt_y = pos.Y
-                };
+                return;
+            }
 
-                int displayIndex = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)LVM.HITTEST, 0, lvhi);
-                if (displayIndex != -1 && (lvhi.flags & NativeMethods.LVHT_ONITEM) != 0)
-                {
-                    ListViewItem clickedItem = Items[displayIndex];
-                    clickedItem.Checked = !clickedItem.Checked;
-                }
+            Point pos = Cursor.Position;
+            pos = PointToClient(pos);
+            var lvhi = new LVHITTESTINFO
+            {
+                pt = (POINT)pos
+            };
+
+            int displayIndex = (int)User32.SendMessageW(this, (User32.WindowMessage)LVM.HITTEST, IntPtr.Zero, ref lvhi);
+            if (displayIndex != -1 && (lvhi.flags & LVHT.ONITEM) != 0)
+            {
+                ListViewItem clickedItem = Items[displayIndex];
+                clickedItem.Checked = !clickedItem.Checked;
             }
         }
 
@@ -6117,13 +6120,17 @@ namespace System.Windows.Forms
             return Font.FromHfont(hFont);
         }
 
-        private int GetIndexOfClickedItem(LVHITTESTINFO lvhi)
+        private int GetIndexOfClickedItem()
         {
             Point pos = Cursor.Position;
             pos = PointToClient(pos);
-            lvhi.pt_x = pos.X;
-            lvhi.pt_y = pos.Y;
-            return (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)LVM.HITTEST, 0, lvhi);
+
+            var lvhi = new LVHITTESTINFO
+            {
+                pt = (POINT)pos
+            };
+
+            return (int)User32.SendMessageW(this, (User32.WindowMessage)LVM.HITTEST, IntPtr.Zero, ref lvhi);
 
         }
 
@@ -6315,8 +6322,7 @@ namespace System.Windows.Forms
                     goto case NativeMethods.NM_RCLICK;
 
                 case NativeMethods.NM_RCLICK:
-                    LVHITTESTINFO lvhi = new LVHITTESTINFO();
-                    int displayIndex = GetIndexOfClickedItem(lvhi);
+                    int displayIndex = GetIndexOfClickedItem();
 
                     MouseButtons button = nmhdr->code == NativeMethods.NM_CLICK ? MouseButtons.Left : MouseButtons.Right;
                     Point pos = Cursor.Position;
@@ -6340,9 +6346,7 @@ namespace System.Windows.Forms
                     goto case NativeMethods.NM_RDBLCLK;
 
                 case NativeMethods.NM_RDBLCLK:
-                    LVHITTESTINFO lvhip = new LVHITTESTINFO();
-                    int index = GetIndexOfClickedItem(lvhip);
-
+                    int index = GetIndexOfClickedItem();
                     if (index != -1)
                     {
                         //just maintain state and fire double click.. in final mouseUp...
@@ -6597,8 +6601,7 @@ namespace System.Windows.Forms
 
                     // see the mouse is on item
                     //
-                    LVHITTESTINFO lvhip = new LVHITTESTINFO();
-                    int index = GetIndexOfClickedItem(lvhip);
+                    int index = GetIndexOfClickedItem();
 
                     if (!ValidationCancelled && listViewState[LISTVIEWSTATE_doubleclickFired] && index != -1)
                     {
