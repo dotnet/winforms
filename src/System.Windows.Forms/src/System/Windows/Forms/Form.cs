@@ -3846,9 +3846,8 @@ namespace System.Windows.Forms
                 {
                     Screen desktop = Screen.FromHandle(ownerHandle);
                     Rectangle screenRect = desktop.WorkingArea;
-                    RECT ownerRect = new RECT();
-
-                    UnsafeNativeMethods.GetWindowRect(new HandleRef(null, ownerHandle), ref ownerRect);
+                    var ownerRect = new RECT();
+                    User32.GetWindowRect(ownerHandle, ref ownerRect);
 
                     p.X = (ownerRect.left + ownerRect.right - s.Width) / 2;
                     if (p.X < screenRect.X)

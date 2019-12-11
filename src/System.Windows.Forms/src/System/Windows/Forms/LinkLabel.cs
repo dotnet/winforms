@@ -422,7 +422,7 @@ namespace System.Windows.Forms
                         // This includes the case where the mouse is over one of our children
                         var r = new RECT();
                         User32.GetCursorPos(out Point p);
-                        UnsafeNativeMethods.GetWindowRect(new HandleRef(this, Handle), ref r);
+                        User32.GetWindowRect(this, ref r);
                         if ((r.left <= p.X && p.X < r.right && r.top <= p.Y && p.Y < r.bottom) || User32.GetCapture() == Handle)
                         {
                             SendMessage(WindowMessages.WM_SETCURSOR, Handle, NativeMethods.HTCLIENT);
