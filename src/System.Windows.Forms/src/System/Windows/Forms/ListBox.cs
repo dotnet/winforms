@@ -1556,10 +1556,8 @@ namespace System.Windows.Forms
         public Rectangle GetItemRectangle(int index)
         {
             CheckIndex(index);
-            RECT rect = new RECT();
-            int result = SendMessage((int)User32.LB.GETITEMRECT, index, ref rect).ToInt32();
-
-            if (result == 0)
+            var rect = new RECT();
+            if (User32.SendMessageW(this, (User32.WindowMessage)User32.LB.GETITEMRECT, (IntPtr)index, ref rect) == IntPtr.Zero)
             {
                 return Rectangle.Empty;
             }

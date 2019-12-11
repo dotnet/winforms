@@ -496,7 +496,7 @@ namespace System.Windows.Forms
             if (IsHandleCreated)
             {
                 var rect = new RECT();
-                SendMessage((int)User32.LB.GETITEMRECT, index, ref rect);
+                User32.SendMessageW(this, (User32.WindowMessage)User32.LB.GETITEMRECT, (IntPtr)index, ref rect);
                 User32.InvalidateRect(new HandleRef(this, Handle), &rect, BOOL.FALSE);
             }
         }

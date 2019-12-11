@@ -407,7 +407,7 @@ namespace System.Windows.Forms
                     }
                     if (IsHandleCreated)
                     {
-                        SendMessage((int)ComCtl32.TCM.ADJUSTRECT, 0, ref rect);
+                        User32.SendMessageW(this, (User32.WindowMessage)ComCtl32.TCM.ADJUSTRECT, IntPtr.Zero, ref rect);
                     }
                 }
 
@@ -1228,7 +1228,7 @@ namespace System.Windows.Forms
                 CreateHandle();
             }
 
-            SendMessage((int)ComCtl32.TCM.GETITEMRECT, index, ref rect);
+            User32.SendMessageW(this, (User32.WindowMessage)ComCtl32.TCM.GETITEMRECT, (IntPtr)index, ref rect);
             return Rectangle.FromLTRB(rect.left, rect.top, rect.right, rect.bottom);
         }
 

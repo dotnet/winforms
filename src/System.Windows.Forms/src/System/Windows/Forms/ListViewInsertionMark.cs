@@ -59,8 +59,8 @@ namespace System.Windows.Forms
         {
             get
             {
-                RECT rect = new RECT();
-                listView.SendMessage((int)LVM.GETINSERTMARKRECT, 0, ref rect);
+                var rect = new RECT();
+                User32.SendMessageW(listView, (User32.WindowMessage)LVM.GETINSERTMARKRECT, IntPtr.Zero, ref rect);
                 return Rectangle.FromLTRB(rect.left, rect.top, rect.right, rect.bottom);
             }
         }

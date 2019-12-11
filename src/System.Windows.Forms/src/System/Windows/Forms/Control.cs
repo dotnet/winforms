@@ -10655,15 +10655,6 @@ namespace System.Windows.Forms
         ///  Sends a Win32 message to this control.  If the control does not yet
         ///  have a handle, it will be created.
         /// </summary>
-        internal IntPtr SendMessage(int msg, int wparam, ref RECT lparam)
-        {
-            return UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), msg, wparam, ref lparam);
-        }
-
-        /// <summary>
-        ///  Sends a Win32 message to this control.  If the control does not yet
-        ///  have a handle, it will be created.
-        /// </summary>
         internal IntPtr SendMessage(int msg, bool wparam, int lparam)
         {
             Debug.Assert(IsHandleCreated, "Performance alert!  Calling Control::SendMessage and forcing handle creation.  Re-work control so handle creation is not required to set properties.  If there is no work around, wrap the call in an IsHandleCreated check.");

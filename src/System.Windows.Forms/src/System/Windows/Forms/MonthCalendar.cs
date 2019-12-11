@@ -982,8 +982,7 @@ namespace System.Windows.Forms
 
                 if (IsHandleCreated)
                 {
-
-                    if (unchecked((int)(long)SendMessage((int)ComCtl32.MCM.GETMINREQRECT, 0, ref rect)) == 0)
+                    if (User32.SendMessageW(this, (User32.WindowMessage)ComCtl32.MCM.GETMINREQRECT, IntPtr.Zero, ref rect) == IntPtr.Zero)
                     {
                         throw new InvalidOperationException(SR.InvalidSingleMonthSize);
                     }
