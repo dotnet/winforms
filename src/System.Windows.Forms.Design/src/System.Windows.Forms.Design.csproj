@@ -38,8 +38,9 @@
     <Compile Include="..\..\Common\src\DpiHelper.DpiAwarenessContext.cs" Link="misc\DpiHelper.DpiAwarenessContext.cs" />
     <Compile Include="..\..\Common\src\ExternDll.cs" Link="misc\ExternDll.cs" />
     <Compile Include="..\..\Common\src\FileDialog_Vista_Interop.cs" Link="System\Windows\Forms\FileDialog_Vista_Interop.cs" />
-    <Compile Include="..\..\Common\src\Interop\ComCtl32\Interop.LVCOLUMN.cs" Link="Interop\ComCtl32\Interop.LVCOLUMN.cs" />
-    <Compile Include="..\..\Common\src\Interop\ComCtl32\Interop.LVCOLUMN_T.cs" Link="Interop\ComCtl32\Interop.LVCOLUMN_T.cs" />
+    <Compile Include="..\..\Common\src\Interop\ComCtl32\Interop.LVCF.cs" Link="Interop\ComCtl32\Interop.LVCF.cs" />
+    <Compile Include="..\..\Common\src\Interop\ComCtl32\Interop.LVCFMT.cs" Link="Interop\ComCtl32\Interop.LVCFMT.cs" />
+    <Compile Include="..\..\Common\src\Interop\ComCtl32\Interop.LVCOLUMNW.cs" Link="Interop\ComCtl32\Interop.LVCOLUMNW.cs" />
     <Compile Include="..\..\Common\src\Interop\ComCtl32\Interop.LVHITTESTINFO.cs" Link="Interop\ComCtl32\Interop.LVHITTESTINFO.cs" />
     <Compile Include="..\..\Common\src\Interop\ComCtl32\Interop.LVINSERTMARK.cs" Link="Interop\ComCtl32\Interop.LVINSERTMARK.cs" />
     <Compile Include="..\..\Common\src\Interop\ComCtl32\Interop.LVITEM.cs" Link="Interop\ComCtl32\Interop.LVITEM.cs" />

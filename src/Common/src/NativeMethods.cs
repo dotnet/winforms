@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -281,13 +281,6 @@ namespace System.Windows.Forms
         LVA_ALIGNLEFT = 0x0001,
         LVA_ALIGNTOP = 0x0002,
         LVA_SNAPTOGRID = 0x0005,
-        LVCF_FMT = 0x0001,
-        LVCF_WIDTH = 0x0002,
-        LVCF_TEXT = 0x0004,
-        LVCF_SUBITEM = 0x0008,
-        LVCF_IMAGE = 0x0010,
-        LVCF_ORDER = 0x0020,
-        LVCFMT_IMAGE = 0x0800,
         LVIM_AFTER = 0x00000001,
         LVS_EX_GRIDLINES = 0x00000001,
         LVS_EX_CHECKBOXES = 0x00000004,

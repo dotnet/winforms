@@ -3828,12 +3828,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Inserts a new Column into the ListView
         /// </summary>
-        internal ColumnHeader InsertColumn(int index, ColumnHeader ch)
-        {
-            return InsertColumn(index, ch, true);
-        }
-
-        internal ColumnHeader InsertColumn(int index, ColumnHeader ch, bool refreshSubItems)
+        internal ColumnHeader InsertColumn(int index, ColumnHeader ch, bool refreshSubItems = true)
         {
             if (ch == null)
             {
@@ -3892,7 +3887,7 @@ namespace System.Windows.Forms
             // recreate the handle in that case
             if (ch.ActualImageIndex_Internal != -1 && IsHandleCreated && View != View.Tile)
             {
-                SetColumnInfo(NativeMethods.LVCF_IMAGE, ch);
+                SetColumnInfo(LVCF.IMAGE, ch);
             }
 
             // update the DisplayIndex for each column
@@ -3932,24 +3927,28 @@ namespace System.Windows.Forms
             return ch;
         }
 
-        private int InsertColumnNative(int index, ColumnHeader ch)
+        private unsafe int InsertColumnNative(int index, ColumnHeader ch)
         {
-            LVCOLUMN_T lvColumn = new LVCOLUMN_T
+            var lvColumn = new LVCOLUMNW
             {
-                mask = NativeMethods.LVCF_FMT | NativeMethods.LVCF_TEXT | NativeMethods.LVCF_WIDTH// | NativeMethods.LVCF_ORDER | NativeMethods.LVCF_IMAGE;
+                mask = LVCF.FMT | LVCF.TEXT | LVCF.WIDTH
             };
 
             if (ch.OwnerListview != null && ch.ActualImageIndex_Internal != -1)
             {
-                lvColumn.mask |= NativeMethods.LVCF_IMAGE;
+                lvColumn.mask |= LVCF.IMAGE;
                 lvColumn.iImage = ch.ActualImageIndex_Internal;
             }
 
-            lvColumn.fmt = (int)ch.TextAlign;
+            lvColumn.fmt = (LVCFMT)ch.TextAlign;
             lvColumn.cx = ch.Width;
-            lvColumn.pszText = ch.Text;
 
-            return (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)LVM.INSERTCOLUMN, index, lvColumn);
+            fixed (char* columnHeaderText = ch.Text)
+            {
+                lvColumn.pszText = columnHeaderText;
+
+                return (int)User32.SendMessageW(this, (User32.WindowMessage)LVM.INSERTCOLUMN, (IntPtr)index, ref lvColumn);
+            }
         }
 
         // when the user adds a group, this helper method makes sure that all the items
@@ -5117,53 +5116,56 @@ namespace System.Windows.Forms
             Refresh();
         }
 
-        internal void SetColumnInfo(int mask, ColumnHeader ch)
+        internal unsafe void SetColumnInfo(LVCF mask, ColumnHeader ch)
         {
-            if (IsHandleCreated)
+            if (!IsHandleCreated)
             {
-                Debug.Assert((mask & ~(NativeMethods.LVCF_FMT | NativeMethods.LVCF_TEXT | NativeMethods.LVCF_IMAGE)) == 0, "Unsupported mask in setColumnInfo");
-                LVCOLUMN lvColumn = new LVCOLUMN
-                {
-                    mask = mask
-                };
-
-                if ((mask & NativeMethods.LVCF_IMAGE) != 0 || (mask & NativeMethods.LVCF_FMT) != 0)
-                {
-                    // When we set the ImageIndex we also have to alter the column format.
-                    // This means that we have to include the TextAlign into the column format.
-
-                    lvColumn.mask |= NativeMethods.LVCF_FMT;
-
-                    if (ch.ActualImageIndex_Internal > -1)
-                    {
-                        // you would think that setting iImage would be enough.
-                        // actually we also have to set the format to include LVCFMT_IMAGE
-                        lvColumn.iImage = ch.ActualImageIndex_Internal;
-                        lvColumn.fmt |= NativeMethods.LVCFMT_IMAGE;
-                    }
-
-                    lvColumn.fmt |= (int)ch.TextAlign;
-                }
-
-                if ((mask & NativeMethods.LVCF_TEXT) != 0)
-                {
-                    lvColumn.pszText = Marshal.StringToHGlobalAuto(ch.Text);
-                }
-
-                int retval = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)LVM.SETCOLUMN, ch.Index, lvColumn);
-                if ((mask & NativeMethods.LVCF_TEXT) != 0)
-                {
-                    Marshal.FreeHGlobal(lvColumn.pszText);
-                }
-
-                if (0 == retval)
-                {
-                    throw new InvalidOperationException(SR.ListViewColumnInfoSet);
-                }
-                // When running on AMD64 the list view does not invalidate the column header.
-                // So we do it ourselves.
-                InvalidateColumnHeaders();
+                return;
             }
+
+            Debug.Assert((mask & ~(LVCF.FMT | LVCF.TEXT | LVCF.IMAGE)) == 0, "Unsupported mask in setColumnInfo");
+            LVCOLUMNW lvColumn = new LVCOLUMNW
+            {
+                mask = mask
+            };
+
+            if ((mask & LVCF.IMAGE) != 0 || (mask & LVCF.FMT) != 0)
+            {
+                // When we set the ImageIndex we also have to alter the column format.
+                // This means that we have to include the TextAlign into the column format.
+
+                lvColumn.mask |= LVCF.FMT;
+
+                if (ch.ActualImageIndex_Internal > -1)
+                {
+                    // you would think that setting iImage would be enough.
+                    // actually we also have to set the format to include LVCFMT_IMAGE
+                    lvColumn.iImage = ch.ActualImageIndex_Internal;
+                    lvColumn.fmt |= LVCFMT.IMAGE;
+                }
+
+                lvColumn.fmt |= (LVCFMT)ch.TextAlign;
+            }
+
+            IntPtr result;
+            fixed (char* columnHeaderText = ch.Text)
+            {
+                if ((mask & LVCF.TEXT) != 0)
+                {
+                    lvColumn.pszText = columnHeaderText;
+                }
+
+                result = User32.SendMessageW(this, (User32.WindowMessage)LVM.SETCOLUMN, (IntPtr)ch.Index, ref lvColumn);
+            }
+
+            if (result == IntPtr.Zero)
+            {
+                throw new InvalidOperationException(SR.ListViewColumnInfoSet);
+            }
+
+            // When running on AMD64 the list view does not invalidate the column header.
+            // So we do it ourselves.
+            InvalidateColumnHeaders();
         }
 
         /// <summary>
@@ -5856,7 +5858,7 @@ namespace System.Windows.Forms
                     //
 
                     HDITEMW hdItem = Marshal.PtrToStructure<HDITEMW>(nmheader.pItem);
-                    int newColumnWidth = ((hdItem.mask & NativeMethods.HDI_WIDTH) != 0) ? hdItem.cxy : -1;
+                    int newColumnWidth = ((hdItem.mask & HDI.WIDTH) != 0) ? hdItem.cxy : -1;
                     ColumnWidthChangingEventArgs colWidthChanging = new ColumnWidthChangingEventArgs(nmheader.iItem, newColumnWidth);
                     OnColumnWidthChanging(colWidthChanging);
                     m.Result = (IntPtr)(colWidthChanging.Cancel ? 1 : 0);
@@ -5978,7 +5980,7 @@ namespace System.Windows.Forms
                 {
 
                     HDITEMW hdItem = Marshal.PtrToStructure<HDITEMW>(header.pItem);
-                    if ((hdItem.mask & NativeMethods.HDI_ORDER) == NativeMethods.HDI_ORDER)
+                    if ((hdItem.mask & HDI.ORDER) == HDI.ORDER)
                     {
 
                         int from = Columns[header.iItem].DisplayIndex;

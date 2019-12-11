@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -64,7 +64,7 @@ namespace WinformsControlsTest
 
             // Create columns for the items and subitems.
             // Width of -2 indicates auto-size.
-            listView1.Columns.Add("Item Column", -2, HorizontalAlignment.Left);
+            listView1.Columns.Add("column1", "Item Column", -2, HorizontalAlignment.Left, 0);
             listView1.Columns.Add("Column 2", -2, HorizontalAlignment.Left);
             listView1.Columns.Add("Column 3", -2, HorizontalAlignment.Left);
             listView1.Columns.Add("Column 4", -2, HorizontalAlignment.Center);
@@ -106,7 +106,16 @@ namespace WinformsControlsTest
 
         private void listView1_SelectedIndexChanged(object sender, System.EventArgs e)
         {
-            MessageBox.Show(this, "listView1_SelectedIndexChanged", "event");
+            // MessageBox.Show(this, "listView2_SelectedIndexChanged", "event");
+
+            var listView2 = sender as ListView;
+            if (listView2 == null)
+            {
+                return;
+            }
+
+            var random = new Random();
+            listView2.Columns[random.Next(0, listView2.Columns.Count)].ImageIndex = random.Next(0, 2);
         }
     }
 }

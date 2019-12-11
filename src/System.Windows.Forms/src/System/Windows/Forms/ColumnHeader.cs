@@ -219,7 +219,7 @@ namespace System.Windows.Forms
 
                     if (ListView != null && ListView.IsHandleCreated)
                     {
-                        ListView.SetColumnInfo(NativeMethods.LVCF_IMAGE, this);
+                        ListView.SetColumnInfo(LVCF.IMAGE, this);
                     }
                 }
             }
@@ -256,7 +256,7 @@ namespace System.Windows.Forms
 
                     if (ListView != null && ListView.IsHandleCreated)
                     {
-                        ListView.SetColumnInfo(NativeMethods.LVCF_IMAGE, this);
+                        ListView.SetColumnInfo(LVCF.IMAGE, this);
                     }
                 }
             }
@@ -330,7 +330,7 @@ namespace System.Windows.Forms
                 }
                 if (listview != null)
                 {
-                    listview.SetColumnInfo(NativeMethods.LVCF_TEXT, this);
+                    listview.SetColumnInfo(LVCF.TEXT, this);
                 }
             }
 
@@ -378,7 +378,7 @@ namespace System.Windows.Forms
 
                 if (listview != null)
                 {
-                    listview.SetColumnInfo(NativeMethods.LVCF_FMT, this);
+                    listview.SetColumnInfo(LVCF.FMT, this);
                     listview.Invalidate();
                 }
             }
