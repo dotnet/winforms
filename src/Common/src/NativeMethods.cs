@@ -272,7 +272,6 @@ namespace System.Windows.Forms
         LVA_ALIGNLEFT = 0x0001,
         LVA_ALIGNTOP = 0x0002,
         LVA_SNAPTOGRID = 0x0005,
-        LVIM_AFTER = 0x00000001,
         LVS_EX_GRIDLINES = 0x00000001,
         LVS_EX_CHECKBOXES = 0x00000004,
         LVS_EX_TRACKSELECT = 0x00000008,

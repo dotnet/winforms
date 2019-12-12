@@ -31,7 +31,6 @@ namespace System.Windows.Forms
     	///  after the item - otherwise it appears
     	///  before the item (the default).
         /// </summary>
-        ///
     	public bool AppearsAfterItem
         {
             get
@@ -55,7 +54,6 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Returns bounds of the insertion-mark.
         /// </summary>
-        ///
         public Rectangle Bounds
         {
             get
@@ -69,7 +67,6 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The color of the insertion-mark.
         /// </summary>
-        ///
         public Color Color
         {
             get
@@ -96,7 +93,6 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Item next to which the insertion-mark appears.
         /// </summary>
-        ///
         public int Index
         {
             get
@@ -120,27 +116,31 @@ namespace System.Windows.Forms
         ///  Performs a hit-test at the specified insertion point
         ///  and returns the closest item.
         /// </summary>
-        ///
-        public int NearestIndex(Point pt)
+        public unsafe int NearestIndex(Point pt)
         {
-            LVINSERTMARK lvInsertMark = new LVINSERTMARK();
-            UnsafeNativeMethods.SendMessage(new HandleRef(listView, listView.Handle), (int)LVM.INSERTMARKHITTEST, ref pt, lvInsertMark);
+            var lvInsertMark = new LVINSERTMARK
+            {
+                cbSize = (uint)sizeof(LVINSERTMARK)
+            };
+            User32.SendMessageW(listView, (User32.WindowMessage)LVM.INSERTMARKHITTEST, (IntPtr)(&pt), ref lvInsertMark);
+
             return lvInsertMark.iItem;
         }
 
-        internal void UpdateListView()
+        internal unsafe void UpdateListView()
         {
             Debug.Assert(listView.IsHandleCreated, "ApplySavedState Precondition: List-view handle must be created");
-            LVINSERTMARK lvInsertMark = new LVINSERTMARK
+            var lvInsertMark = new LVINSERTMARK
             {
-                dwFlags = appearsAfterItem ? NativeMethods.LVIM_AFTER : 0,
+                cbSize = (uint)sizeof(LVINSERTMARK),
+                dwFlags = appearsAfterItem ? LVIM.AFTER : LVIM.BEFORE,
                 iItem = index
             };
-            UnsafeNativeMethods.SendMessage(new HandleRef(listView, listView.Handle), (int)LVM.SETINSERTMARK, 0, lvInsertMark);
+            User32.SendMessageW(listView, (User32.WindowMessage)LVM.SETINSERTMARK, IntPtr.Zero, ref lvInsertMark);
 
             if (!color.IsEmpty)
             {
-                listView.SendMessage((int)LVM.SETINSERTMARKCOLOR, 0, COLORREF.ColorToCOLORREF(color));
+                User32.SendMessageW(listView, (User32.WindowMessage)LVM.SETINSERTMARKCOLOR, IntPtr.Zero, (IntPtr)COLORREF.ColorToCOLORREF(color));
             }
         }
     }

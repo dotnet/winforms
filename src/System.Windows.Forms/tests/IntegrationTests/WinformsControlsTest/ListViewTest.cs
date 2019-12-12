@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -20,12 +20,22 @@ namespace WinformsControlsTest
             listView1.View = View.Tile;
 
             var random = new Random();
+            int i = random.Next(100, 300);
 
             Debug.WriteLine(listView1.TileSize);
-            listView1.TileSize = new Size(250, 250);
+            listView1.TileSize = new Size(50, 50);
+            listView1.Items[0].ImageIndex = 0;
+            listView1.Items[1].ImageIndex = 1;
+            listView1.Items[2].ImageIndex = 2;
             listView1.Click += (s, e) =>
             {
-                listView1.TileSize = new Size(random.Next(100, 300), random.Next(25, 50));
+                
+                //listView1.TileSize = new Size(random.Next(100, 300), random.Next(25, 50));
+
+                Point pos = Cursor.Position;
+                pos = PointToClient(pos);
+                var index = listView1.InsertionMark.NearestIndex(pos);
+                Console.WriteLine($"nearest index: {index}");
             };
         }
 

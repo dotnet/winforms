@@ -9,6 +9,7 @@ using System.Linq;
 using WinForms.Common.Tests;
 using Xunit;
 using static Interop;
+using static Interop.ComCtl32;
 
 namespace System.Windows.Forms.Tests
 {
@@ -54,7 +55,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(new Size(117, 93), control.ClientSize);
             Assert.Equal(new Rectangle(0, 0, 117, 93), control.ClientRectangle);
             Assert.Empty(control.Columns);
-            Assert.Same(control.Columns, control.Columns); 
+            Assert.Same(control.Columns, control.Columns);
             Assert.Null(control.Container);
             Assert.False(control.ContainsFocus);
             Assert.Null(control.ContextMenuStrip);
@@ -1993,7 +1994,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { true, false, View.Tile, null, 0 };
             yield return new object[] { true, false, View.Tile, new ImageList(), 0 };
             yield return new object[] { true, false, View.Tile, nonEmptyImageList, 0 };
-            
+
             foreach (bool autoArrange in new bool[] { true, false })
             {
                 yield return new object[] { autoArrange, true, View.Details, null, 0 };
@@ -2009,7 +2010,7 @@ namespace System.Windows.Forms.Tests
                 yield return new object[] { autoArrange, true, View.SmallIcon, new ImageList(), 0 };
                 yield return new object[] { autoArrange, true, View.SmallIcon, nonEmptyImageList, 0 };
             }
-            
+
             yield return new object[] { false, false, View.Details, null, 0 };
             yield return new object[] { false, false, View.Details, new ImageList(), 0 };
             yield return new object[] { false, false, View.Details, nonEmptyImageList, 0 };
@@ -2081,7 +2082,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { true, false, View.Tile, null, 0 };
             yield return new object[] { true, false, View.Tile, new ImageList(), 0 };
             yield return new object[] { true, false, View.Tile, nonEmptyImageList, 0 };
-            
+
             foreach (bool autoArrange in new bool[] { true, false })
             {
                 yield return new object[] { autoArrange, true, View.Details, null, 0 };
@@ -2097,7 +2098,7 @@ namespace System.Windows.Forms.Tests
                 yield return new object[] { autoArrange, true, View.SmallIcon, new ImageList(), 0 };
                 yield return new object[] { autoArrange, true, View.SmallIcon, nonEmptyImageList, 0 };
             }
-            
+
             yield return new object[] { false, false, View.Details, null, 0 };
             yield return new object[] { false, false, View.Details, new ImageList(), 0 };
             yield return new object[] { false, false, View.Details, nonEmptyImageList, 0 };
@@ -2600,7 +2601,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { true, false, View.Tile, null, 0, 0 };
             yield return new object[] { true, false, View.Tile, new ImageList(), 0, 0 };
             yield return new object[] { true, false, View.Tile, nonEmptyImageList, 0, 0 };
-            
+
             foreach (bool autoArrange in new bool[] { true, false })
             {
                 yield return new object[] { autoArrange, true, View.Details, null, 0, 0 };
@@ -2616,7 +2617,7 @@ namespace System.Windows.Forms.Tests
                 yield return new object[] { autoArrange, true, View.SmallIcon, new ImageList(), 2, 2 };
                 yield return new object[] { autoArrange, true, View.SmallIcon, nonEmptyImageList, 2, 2 };
             }
-            
+
             yield return new object[] { false, false, View.Details, null, 0, 0 };
             yield return new object[] { false, false, View.Details, new ImageList(), 1, 0 };
             yield return new object[] { false, false, View.Details, nonEmptyImageList, 1, 0 };
@@ -2688,7 +2689,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { true, false, View.Tile, null, 0, 0 };
             yield return new object[] { true, false, View.Tile, new ImageList(), 0, 0 };
             yield return new object[] { true, false, View.Tile, nonEmptyImageList, 0, 0 };
-            
+
             foreach (bool autoArrange in new bool[] { true, false })
             {
                 yield return new object[] { autoArrange, true, View.Details, null, 1, 0 };
@@ -2704,7 +2705,7 @@ namespace System.Windows.Forms.Tests
                 yield return new object[] { autoArrange, true, View.SmallIcon, new ImageList(), 2, 2 };
                 yield return new object[] { autoArrange, true, View.SmallIcon, nonEmptyImageList, 2, 2 };
             }
-            
+
             yield return new object[] { false, false, View.Details, null, 1, 0 };
             yield return new object[] { false, false, View.Details, new ImageList(), 1, 0 };
             yield return new object[] { false, false, View.Details, nonEmptyImageList, 1, 0 };
@@ -2938,7 +2939,7 @@ namespace System.Windows.Forms.Tests
                     yield return new object[] { true, checkBoxes, autoArrange, true, View.SmallIcon, new ImageList(), 0, 0 };
                     yield return new object[] { true, checkBoxes, autoArrange, true, View.SmallIcon, nonEmptyImageList, 0, 0 };
                 }
-                
+
                 yield return new object[] { true, checkBoxes, false, false, View.Details, null, 0, 0 };
                 yield return new object[] { true, checkBoxes, false, false, View.Details, new ImageList(), 0, 0 };
                 yield return new object[] { true, checkBoxes, false, false, View.Details, nonEmptyImageList, 0, 0 };
@@ -2956,7 +2957,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { true, false, true, false, View.Tile, null, 0, 0 };
             yield return new object[] { true, false, true, false, View.Tile, new ImageList(), 0, 0 };
             yield return new object[] { true, false, true, false, View.Tile, nonEmptyImageList, 0, 0 };
-            
+
             yield return new object[] { true, false, false, false, View.Tile, null, 0, 0 };
             yield return new object[] { true, false, false, false, View.Tile, new ImageList(), 0, 0 };
             yield return new object[] { true, false, false, false, View.Tile, nonEmptyImageList, 0, 0 };
@@ -2990,7 +2991,7 @@ namespace System.Windows.Forms.Tests
                 yield return new object[] { false, true, autoArrange, true, View.SmallIcon, new ImageList(), 1, 1 };
                 yield return new object[] { false, true, autoArrange, true, View.SmallIcon, nonEmptyImageList, 1, 1 };
             }
-            
+
             yield return new object[] { false, true, false, false, View.Details, null, 0, 0 };
             yield return new object[] { false, true, false, false, View.Details, new ImageList(), 1, 1 };
             yield return new object[] { false, true, false, false, View.Details, nonEmptyImageList, 1, 1 };
@@ -3020,7 +3021,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { false, false, true, false, View.Tile, null, 0, 0 };
             yield return new object[] { false, false, true, false, View.Tile, new ImageList(), 0, 0 };
             yield return new object[] { false, false, true, false, View.Tile, nonEmptyImageList, 0, 0 };
-            
+
             foreach (bool autoArrange in new bool[] { true, false })
             {
                 yield return new object[] { false, false, autoArrange, true, View.Details, null, 0, 0 };
@@ -3036,7 +3037,7 @@ namespace System.Windows.Forms.Tests
                 yield return new object[] { false, false, autoArrange, true, View.SmallIcon, new ImageList(), 0, 0 };
                 yield return new object[] { false, false, autoArrange, true, View.SmallIcon, nonEmptyImageList, 0, 0 };
             }
-            
+
             yield return new object[] { false, false, false, false, View.Details, null, 0, 0 };
             yield return new object[] { false, false, false, false, View.Details, new ImageList(), 0, 0 };
             yield return new object[] { false, false, false, false, View.Details, nonEmptyImageList, 0, 0 };
@@ -3126,7 +3127,7 @@ namespace System.Windows.Forms.Tests
                     yield return new object[] { true, checkBoxes, autoArrange, true, View.SmallIcon, new ImageList(), 0, 0 };
                     yield return new object[] { true, checkBoxes, autoArrange, true, View.SmallIcon, nonEmptyImageList, 0, 0 };
                 }
-                
+
                 yield return new object[] { true, checkBoxes, false, false, View.Details, null, 0, 0 };
                 yield return new object[] { true, checkBoxes, false, false, View.Details, new ImageList(), 0, 0 };
                 yield return new object[] { true, checkBoxes, false, false, View.Details, nonEmptyImageList, 0, 0 };
@@ -3144,7 +3145,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { true, false, true, false, View.Tile, null, 0, 0 };
             yield return new object[] { true, false, true, false, View.Tile, new ImageList(), 0, 0 };
             yield return new object[] { true, false, true, false, View.Tile, nonEmptyImageList, 0, 0 };
-            
+
             yield return new object[] { true, false, false, false, View.Tile, null, 0, 0 };
             yield return new object[] { true, false, false, false, View.Tile, new ImageList(), 0, 0 };
             yield return new object[] { true, false, false, false, View.Tile, nonEmptyImageList, 0, 0 };
@@ -3178,7 +3179,7 @@ namespace System.Windows.Forms.Tests
                 yield return new object[] { false, true, autoArrange, true, View.SmallIcon, new ImageList(), 1, 1 };
                 yield return new object[] { false, true, autoArrange, true, View.SmallIcon, nonEmptyImageList, 1, 1 };
             }
-            
+
             yield return new object[] { false, true, false, false, View.Details, null, 1, 1 };
             yield return new object[] { false, true, false, false, View.Details, new ImageList(), 1, 1 };
             yield return new object[] { false, true, false, false, View.Details, nonEmptyImageList, 1, 1 };
@@ -3208,7 +3209,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { false, false, true, false, View.Tile, null, 0, 0 };
             yield return new object[] { false, false, true, false, View.Tile, new ImageList(), 0, 0 };
             yield return new object[] { false, false, true, false, View.Tile, nonEmptyImageList, 0, 0 };
-            
+
             foreach (bool autoArrange in new bool[] { true, false })
             {
                 yield return new object[] { false, false, autoArrange, true, View.Details, null, 0, 0 };
@@ -3224,7 +3225,7 @@ namespace System.Windows.Forms.Tests
                 yield return new object[] { false, false, autoArrange, true, View.SmallIcon, new ImageList(), 0, 0 };
                 yield return new object[] { false, false, autoArrange, true, View.SmallIcon, nonEmptyImageList, 0, 0 };
             }
-            
+
             yield return new object[] { false, false, false, false, View.Details, null, 0, 0 };
             yield return new object[] { false, false, false, false, View.Details, new ImageList(), 0, 0 };
             yield return new object[] { false, false, false, false, View.Details, nonEmptyImageList, 0, 0 };
