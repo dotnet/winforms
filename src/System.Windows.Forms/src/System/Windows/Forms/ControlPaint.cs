@@ -138,15 +138,17 @@ namespace System.Windows.Forms
 
         // Returns address of a BITMAPINFO for use by CreateHBITMAP16Bit.
         // The caller is resposible for freeing the memory returned by this method.
-        private static IntPtr CreateBitmapInfo(Bitmap bitmap, IntPtr hdcS)
+        private unsafe static IntPtr CreateBitmapInfo(Bitmap bitmap, IntPtr hdcS)
         {
-            NativeMethods.BITMAPINFOHEADER header = new NativeMethods.BITMAPINFOHEADER();
-            header.biSize = Marshal.SizeOf(header);
-            header.biWidth = bitmap.Width;
-            header.biHeight = bitmap.Height;
-            header.biPlanes = 1;
-            header.biBitCount = 16;
-            header.biCompression = NativeMethods.BI_RGB;
+            var header = new Gdi32.BITMAPINFOHEADER
+            {
+                biSize = (uint)sizeof(Gdi32.BITMAPINFOHEADER),
+                biWidth = bitmap.Width,
+                biHeight = bitmap.Height,
+                biPlanes = 1,
+                biBitCount = 16,
+                biCompression = Gdi32.BI.RGB
+            };
             // leave everything else 0
 
             // Set up color table --
