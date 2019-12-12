@@ -260,11 +260,6 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, ref Size lParam);
 
-        // For ListView
-
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, [In, Out] ref ComCtl32.LVITEM lParam);
-
         // For MonthCalendar
         //
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]

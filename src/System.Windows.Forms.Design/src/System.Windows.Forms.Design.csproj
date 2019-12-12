@@ -45,7 +45,7 @@
     <Compile Include="..\..\Common\src\Interop\ComCtl32\Interop.LVHT.cs" Link="Interop\ComCtl32\Interop.LVHT.cs" />
     <Compile Include="..\..\Common\src\Interop\ComCtl32\Interop.LVIM.cs" Link="Interop.LVIM.cs" />
     <Compile Include="..\..\Common\src\Interop\ComCtl32\Interop.LVINSERTMARK.cs" Link="Interop\ComCtl32\Interop.LVINSERTMARK.cs" />
-    <Compile Include="..\..\Common\src\Interop\ComCtl32\Interop.LVITEM.cs" Link="Interop\ComCtl32\Interop.LVITEM.cs" />
+    <Compile Include="..\..\Common\src\Interop\ComCtl32\Interop.LVITEMW.cs" Link="Interop\ComCtl32\Interop.LVITEMW.cs" />
     <Compile Include="..\..\Common\src\Interop\ComCtl32\Interop.LVTVIF.cs" Link="Interop\ComCtl32\Interop.LVTVIF.cs" />
     <Compile Include="..\..\Common\src\Interop\ComCtl32\Interop.LVTVIM.cs" Link="Interop\ComCtl32\Interop.LVTVIM.cs" />
     <Compile Include="..\..\Common\src\Interop\ComCtl32\Interop.LVM.cs" Link="Interop.LVM.cs" />

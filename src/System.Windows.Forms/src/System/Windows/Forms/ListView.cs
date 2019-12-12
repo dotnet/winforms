@@ -3633,11 +3633,11 @@ namespace System.Windows.Forms
             return Rectangle.FromLTRB(itemrect.left, itemrect.top, itemrect.right, itemrect.bottom);
         }
 
-        private LVGROUP GetLVGROUP(ListViewGroup group)
+        private unsafe LVGROUP GetLVGROUP(ListViewGroup group)
         {
             var lvgroup = new LVGROUP
             {
-                cbSize = (uint)Marshal.SizeOf<LVGROUP>(),
+                cbSize = (uint)sizeof(LVGROUP),
                 mask = LVGF.HEADER | LVGF.GROUPID | LVGF.ALIGN
             };
 
@@ -3949,12 +3949,12 @@ namespace System.Windows.Forms
                 for (int i = 0; i < Items.Count; i++)
                 {
                     ListViewItem item = Items[i];
-                    LVITEM lvItem = new LVITEM
+                    var lvItem = new LVITEMW
                     {
                         iItem = item.Index,
                         mask = LVIF.GROUPID
                     };
-                    UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)LVM.GETITEM, 0, ref lvItem);
+                    User32.SendMessageW(this, (User32.WindowMessage)LVM.GETITEM, IntPtr.Zero, ref lvItem);
                     Debug.Assert(lvItem.iGroupId != -1, "there is a list view item which is not parented");
                 }
             }
@@ -4089,7 +4089,7 @@ namespace System.Windows.Forms
         ///  This only will be called when the Handle has been created for the list view.
         ///  This method loops through the items, sets up their state then adds them.
         /// </summary>
-        private int InsertItemsNative(int index, ListViewItem[] items)
+        private unsafe int InsertItemsNative(int index, ListViewItem[] items)
         {
             if (items == null || items.Length == 0)
             {
@@ -4114,24 +4114,24 @@ namespace System.Windows.Forms
             try
             {
                 // Set the count of items first.
-                //
-                SendMessage((int)LVM.SETITEMCOUNT, itemCount, 0);
+                User32.SendMessageW(this, (User32.WindowMessage)LVM.SETITEMCOUNT, (IntPtr)itemCount);
 
                 // Now add the items.
-                //
                 for (int i = 0; i < items.Length; i++)
                 {
                     ListViewItem li = items[i];
 
                     Debug.Assert(Items.Contains(li), "Make sure ListView.Items contains this item before adding the native LVITEM. Otherwise, custom-drawing may break.");
 
-                    var lvItem = new LVITEM();
-                    lvItem.mask = LVIF.TEXT | LVIF.IMAGE | LVIF.PARAM | LVIF.INDENT;
-                    lvItem.iItem = index + i;
-                    lvItem.pszText = li.Text;
-                    lvItem.iImage = li.ImageIndexer.ActualIndex;
-                    lvItem.iIndent = li.IndentCount;
-                    lvItem.lParam = (IntPtr)li.ID;
+                    var lvItem = new LVITEMW
+                    {
+                        mask = LVIF.TEXT | LVIF.IMAGE | LVIF.PARAM | LVIF.INDENT | LVIF.COLUMNS,
+                        iItem = index + i,
+                        iImage = li.ImageIndexer.ActualIndex,
+                        iIndent = li.IndentCount,
+                        lParam = (IntPtr)li.ID,
+                        cColumns = columnHeaders != null ? Math.Min(MAXTILECOLUMNS, columnHeaders.Length) : 0,
+                    };
 
                     if (GroupsEnabled)
                     {
@@ -4139,17 +4139,15 @@ namespace System.Windows.Forms
                         lvItem.iGroupId = GetNativeGroupId(li);
 
 #if DEBUG
-                        Debug.Assert(SendMessage((int)LVM.ISGROUPVIEWENABLED, 0, 0) != IntPtr.Zero, "Groups not enabled");
-                        Debug.Assert(SendMessage((int)LVM.HASGROUP, lvItem.iGroupId, 0) != IntPtr.Zero, "Doesn't contain group id: " + lvItem.iGroupId.ToString(CultureInfo.InvariantCulture));
+                        IntPtr result = User32.SendMessageW(this, (User32.WindowMessage)LVM.ISGROUPVIEWENABLED);
+                        Debug.Assert(result != IntPtr.Zero, "Groups not enabled");
+                        result = User32.SendMessageW(this, (User32.WindowMessage)LVM.HASGROUP, (IntPtr)lvItem.iGroupId);
+                        Debug.Assert(result != IntPtr.Zero, "Doesn't contain group id: " + lvItem.iGroupId.ToString(CultureInfo.InvariantCulture));
 #endif
                     }
 
-                    lvItem.mask |= LVIF.COLUMNS;
-                    lvItem.cColumns = columnHeaders != null ? Math.Min(MAXTILECOLUMNS, columnHeaders.Length) : 0;
-
                     // make sure that our columns memory is big enough.
                     // if not, then realloc it.
-                    //
                     if (lvItem.cColumns > maxColumns || hGlobalColumns == IntPtr.Zero)
                     {
                         if (hGlobalColumns != IntPtr.Zero)
@@ -4161,7 +4159,6 @@ namespace System.Windows.Forms
                     }
 
                     // now build and copy in the column indexes.
-                    //
                     lvItem.puColumns = hGlobalColumns;
                     int[] columns = new int[lvItem.cColumns];
                     for (int c = 0; c < lvItem.cColumns; c++)
@@ -4173,7 +4170,6 @@ namespace System.Windows.Forms
                     // Inserting an item into a ListView with checkboxes causes one or more
                     // item check events to be fired for the newly added item.
                     // Therefore, we disable the item check event handler temporarily.
-                    //
                     ItemCheckEventHandler oldOnItemCheck = onItemCheck;
                     onItemCheck = null;
 
@@ -4181,16 +4177,20 @@ namespace System.Windows.Forms
 
                     try
                     {
-
                         li.UpdateStateToListView(lvItem.iItem, ref lvItem, false);
 
-                        insertIndex = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)LVM.INSERTITEM, 0, ref lvItem);
+                        fixed (char* pText = li.Text)
+                        {
+                            lvItem.pszText = pText;
+
+                            insertIndex = (int)User32.SendMessageW(this, (User32.WindowMessage)LVM.INSERTITEM, IntPtr.Zero, ref lvItem);
+                        }
+
                         if (actualIndex == -1)
                         {
                             actualIndex = insertIndex;
 
                             // and update our starting index. so we're going from the same point.
-                            //
                             index = actualIndex;
                         }
                     }
@@ -4198,7 +4198,6 @@ namespace System.Windows.Forms
                     {
 
                         // Restore the item check event handler.
-                        //
                         onItemCheck = oldOnItemCheck;
                     }
 
@@ -4837,7 +4836,7 @@ namespace System.Windows.Forms
 
         private void RealizeAllSubItems()
         {
-            LVITEM lvItem = new LVITEM();
+            var lvItem = new LVITEMW();
             for (int i = 0; i < itemCount; i++)
             {
                 int subItemCount = Items[i].SubItems.Count;
@@ -5262,16 +5261,19 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
             }
-            if (IsHandleCreated)
+
+            if (!IsHandleCreated)
             {
-                LVITEM lvItem = new LVITEM
-                {
-                    mask = LVIF.IMAGE,
-                    iItem = index,
-                    iImage = image
-                };
-                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)LVM.SETITEM, 0, ref lvItem);
+                return;
             }
+
+            var lvItem = new LVITEMW
+            {
+                mask = LVIF.IMAGE,
+                iItem = index,
+                iImage = image
+            };
+            User32.SendMessageW(this, (User32.WindowMessage)LVM.SETITEM, IntPtr.Zero, ref lvItem);
         }
 
         internal void SetItemIndentCount(int index, int indentCount)
@@ -5280,16 +5282,19 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
             }
-            if (IsHandleCreated)
+
+            if (!IsHandleCreated)
             {
-                LVITEM lvItem = new LVITEM
-                {
-                    mask = LVIF.INDENT,
-                    iItem = index,
-                    iIndent = indentCount
-                };
-                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)LVM.SETITEM, 0, ref lvItem);
+                return;
             }
+
+            var lvItem = new LVITEMW
+            {
+                mask = LVIF.INDENT,
+                iItem = index,
+                iIndent = indentCount
+            };
+            User32.SendMessageW(this, (User32.WindowMessage)LVM.SETITEM, IntPtr.Zero, ref lvItem);
         }
 
         internal void SetItemPosition(int index, int x, int y)
@@ -5317,50 +5322,40 @@ namespace System.Windows.Forms
                 throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
             }
 
-            Debug.Assert(index == -1 || IsHandleCreated, "How did we add items without a handle?");
-            if (IsHandleCreated)
+            if (!IsHandleCreated)
             {
-                LVITEM lvItem = new LVITEM
-                {
-                    mask = LVIF.STATE,
-                    state = state,
-                    stateMask = mask
-                };
-                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)LVM.SETITEMSTATE, index, ref lvItem);
+                return;
             }
+
+            var lvItem = new LVITEMW
+            {
+                mask = LVIF.STATE,
+                state = state,
+                stateMask = mask
+            };
+            User32.SendMessageW(this, (User32.WindowMessage)LVM.SETITEMSTATE, (IntPtr)index, ref lvItem);
         }
 
         internal void SetItemText(int itemIndex, int subItemIndex, string text)
         {
-            LVITEM lvItem = new LVITEM();
+            var lvItem = new LVITEMW();
             SetItemText(itemIndex, subItemIndex, text, ref lvItem);
         }
 
         ///<summary>
         ///  For perf, allow a LVITEM to be passed in so we can reuse in tight loops.
         ///</summary>
-        private void SetItemText(int itemIndex, int subItemIndex, string text, ref LVITEM lvItem)
+        private unsafe void SetItemText(int itemIndex, int subItemIndex, string text, ref LVITEMW lvItem)
         {
             Debug.Assert(IsHandleCreated, "SetItemText with no handle");
 
-            //
-
             if (View == View.List && subItemIndex == 0)
             {
-                int colWidth = unchecked((int)(long)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)LVM.GETCOLUMNWIDTH, 0, 0));
+                int colWidth = User32.SendMessageW(this, (User32.WindowMessage)LVM.GETCOLUMNWIDTH).ToInt32();
 
-                Graphics g = CreateGraphicsInternal();
-                int textWidth = 0;
+                using Graphics g = CreateGraphicsInternal();
 
-                try
-                {
-                    textWidth = Size.Ceiling(g.MeasureString(text, Font)).Width;
-                }
-                finally
-                {
-                    g.Dispose();
-                }
-
+                int textWidth = Size.Ceiling(g.MeasureString(text, Font)).Width;
                 if (textWidth > colWidth)
                 {
                     SetColumnWidth(0, textWidth);
@@ -5370,9 +5365,13 @@ namespace System.Windows.Forms
             lvItem.mask = LVIF.TEXT;
             lvItem.iItem = itemIndex;
             lvItem.iSubItem = subItemIndex;
-            lvItem.pszText = text;
 
-            UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)LVM.SETITEMTEXT, itemIndex, ref lvItem);
+            fixed (char* pText = text)
+            {
+                lvItem.pszText = pText;
+
+                User32.SendMessageW(this, (User32.WindowMessage)LVM.SETITEMTEXT, (IntPtr)itemIndex, ref lvItem);
+            }
         }
 
         //
@@ -6148,14 +6147,15 @@ namespace System.Windows.Forms
                     {
                         listViewState[LISTVIEWSTATE_inLabelEdit] = false;
                         NMLVDISPINFO nmlvdp = (NMLVDISPINFO)m.GetLParam(typeof(NMLVDISPINFO));
-                        LabelEditEventArgs e = new LabelEditEventArgs(nmlvdp.item.iItem, nmlvdp.item.pszText);
+                        var text = new string(nmlvdp.item.pszText);
+                        LabelEditEventArgs e = new LabelEditEventArgs(nmlvdp.item.iItem, text);
                         OnAfterLabelEdit(e);
                         m.Result = (IntPtr)(e.CancelEdit ? 0 : 1);
                         // from msdn:
                         //   "If the user cancels editing, the pszText member of the LVITEM structure is NULL"
                         if (!e.CancelEdit && nmlvdp.item.pszText != null)
                         {
-                            Items[nmlvdp.item.iItem].Text = nmlvdp.item.pszText;
+                            Items[nmlvdp.item.iItem].Text = text;
                         }
 
                         break;
@@ -9366,12 +9366,12 @@ namespace System.Windows.Forms
                 if (owner.IsHandleCreated && !owner.ListViewHandleDestroyed)
                 {
                     // Obtain internal index of the item
-                    LVITEM lvItem = new LVITEM
+                    var lvItem = new LVITEMW
                     {
                         mask = LVIF.PARAM,
                         iItem = displayIndex
                     };
-                    UnsafeNativeMethods.SendMessage(new HandleRef(owner, owner.Handle), (int)LVM.GETITEM, 0, ref lvItem);
+                    User32.SendMessageW(owner, (User32.WindowMessage)LVM.GETITEM, IntPtr.Zero, ref lvItem);
                     return (int)lvItem.lParam;
                 }
                 else

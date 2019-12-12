@@ -9,7 +9,7 @@ internal static partial class Interop
         public struct NMLVDISPINFO
         {
             public User32.NMHDR hdr;
-            public LVITEM item;
+            public LVITEMW item;
         }
     }
 }

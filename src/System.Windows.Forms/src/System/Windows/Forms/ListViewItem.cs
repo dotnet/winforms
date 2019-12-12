@@ -11,6 +11,7 @@ using System.Drawing.Design;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
+using static Interop;
 using static Interop.ComCtl32;
 
 namespace System.Windows.Forms
@@ -1004,7 +1005,7 @@ namespace System.Windows.Forms
 
         internal void UpdateStateToListView(int index)
         {
-            var lvItem = new LVITEM();
+            var lvItem = new LVITEMW();
             UpdateStateToListView(index, ref lvItem, true);
         }
 
@@ -1013,7 +1014,7 @@ namespace System.Windows.Forms
         ///  to configure the list view's state for the item. Use a valid index
         ///  if you can, or use -1 if you can't.
         /// </summary>
-        internal void UpdateStateToListView(int index, ref LVITEM lvItem, bool updateOwner)
+        internal void UpdateStateToListView(int index, ref LVITEMW lvItem, bool updateOwner)
         {
             Debug.Assert(listView.IsHandleCreated, "Should only invoke UpdateStateToListView when handle is created.");
 
@@ -1051,13 +1052,15 @@ namespace System.Windows.Forms
                 lvItem.mask |= LVIF.GROUPID;
                 lvItem.iGroupId = listView.GetNativeGroupId(this);
 
-                Debug.Assert(!updateOwner || listView.SendMessage((int)LVM.ISGROUPVIEWENABLED, 0, 0) != IntPtr.Zero, "Groups not enabled");
-                Debug.Assert(!updateOwner || listView.SendMessage((int)LVM.HASGROUP, lvItem.iGroupId, 0) != IntPtr.Zero, "Doesn't contain group id: " + lvItem.iGroupId.ToString(CultureInfo.InvariantCulture));
+                IntPtr result = User32.SendMessageW(listView, (User32.WindowMessage)LVM.ISGROUPVIEWENABLED);
+                Debug.Assert(!updateOwner || result != IntPtr.Zero, "Groups not enabled");
+                result = User32.SendMessageW(listView, (User32.WindowMessage)LVM.HASGROUP, (IntPtr)lvItem.iGroupId);
+                Debug.Assert(!updateOwner || result != IntPtr.Zero, "Doesn't contain group id: " + lvItem.iGroupId.ToString(CultureInfo.InvariantCulture));
             }
 
             if (updateOwner)
             {
-                UnsafeNativeMethods.SendMessage(new HandleRef(listView, listView.Handle), (int)LVM.SETITEM, 0, ref lvItem);
+                User32.SendMessageW(listView, (User32.WindowMessage)LVM.SETITEM, IntPtr.Zero, ref lvItem);
             }
         }
 
@@ -1066,7 +1069,7 @@ namespace System.Windows.Forms
             if (listView != null && listView.IsHandleCreated && displayIndex != -1)
             {
                 // Get information from comctl control
-                var lvItem = new LVITEM
+                var lvItem = new LVITEMW
                 {
                     mask = LVIF.PARAM | LVIF.STATE | LVIF.GROUPID
                 };
@@ -1086,7 +1089,7 @@ namespace System.Windows.Forms
                 }
 
                 lvItem.iItem = displayIndex;
-                UnsafeNativeMethods.SendMessage(new HandleRef(listView, listView.Handle), (int)LVM.GETITEM, 0, ref lvItem);
+                User32.SendMessageW(listView, (User32.WindowMessage)LVM.GETITEM, IntPtr.Zero, ref lvItem);
 
                 // Update this class' information
                 if (checkSelection)
