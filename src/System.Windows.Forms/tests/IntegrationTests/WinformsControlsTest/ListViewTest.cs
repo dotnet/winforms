@@ -29,7 +29,7 @@ namespace WinformsControlsTest
             listView1.Items[2].ImageIndex = 2;
             listView1.Click += (s, e) =>
             {
-                
+
                 //listView1.TileSize = new Size(random.Next(100, 300), random.Next(25, 50));
 
                 Point pos = Cursor.Position;
@@ -59,10 +59,20 @@ namespace WinformsControlsTest
                 // Display grid lines.
                 GridLines = true,
                 // Sort the items in the list in ascending order.
-                Sorting = SortOrder.Ascending
+                Sorting = SortOrder.Ascending,
+
+                VirtualMode = true,
+                VirtualListSize = 3,
             };
             listView2.SelectedIndexChanged += listView2_SelectedIndexChanged;
             listView2.Click += listView2_Click;
+
+            ListViewGroup listViewGroup1 = new ListViewGroup("ListViewGroup", HorizontalAlignment.Left)
+            {
+                Header = "ListViewGroup",
+                Name = "listViewGroup1"
+            };
+            listView2.Groups.AddRange(new ListViewGroup[] { listViewGroup1 });
 
             // Create three items and three sets of subitems for each item.
             ListViewItem item1 = new ListViewItem("item1", 0)
@@ -86,6 +96,20 @@ namespace WinformsControlsTest
             item3.SubItems.Add("8");
             item3.SubItems.Add("9");
 
+            // Add the items to the ListView, but because the listview is in Virtual Mode, we have to manage items ourselves
+            // and thus, we can't call the following:
+            //      listView2.Items.AddRange(new ListViewItem[] { item1, item2, item3 });
+            listView2.RetrieveVirtualItem += (s, e) =>
+            {
+                e.Item = e.ItemIndex switch
+                {
+                    0 => item1,
+                    1 => item2,
+                    2 => item3,
+                    _ => throw new IndexOutOfRangeException(),
+                };
+            };
+
             // Create columns for the items and subitems.
             // Width of -2 indicates auto-size.
             listView2.Columns.Add("column1", "Item Column", -2, HorizontalAlignment.Left, 0);
@@ -93,9 +117,6 @@ namespace WinformsControlsTest
             listView2.Columns.Add("Column 3", -2, HorizontalAlignment.Left);
             listView2.Columns.Add("Column 4", -2, HorizontalAlignment.Center);
             listView2.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
-
-            //Add the items to the ListView.
-            listView2.Items.AddRange(new ListViewItem[] { item1, item2, item3 });
 
             // Create two ImageList objects.
             ImageList imageListSmall = new ImageList();
@@ -110,13 +131,6 @@ namespace WinformsControlsTest
             //Assign the ImageList objects to the ListView.
             listView2.LargeImageList = imageListLarge;
             listView2.SmallImageList = imageListSmall;
-
-            ListViewGroup listViewGroup1 = new ListViewGroup("ListViewGroup", HorizontalAlignment.Left)
-            {
-                Header = "ListViewGroup",
-                Name = "listViewGroup1"
-            };
-            listView2.Groups.AddRange(new ListViewGroup[] { listViewGroup1 });
 
             // Add the ListView to the control collection.
             Controls.Add(listView2);

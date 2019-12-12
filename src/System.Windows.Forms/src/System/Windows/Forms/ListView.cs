@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -1794,7 +1794,7 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                if (value.IsEmpty || value.Height <= 0 || value.Width <= 0)
+                if (value.Height <= 0 || value.Width <= 0)
                 {
                     throw new ArgumentOutOfRangeException(nameof(TileSize), SR.ListViewTileSizeMustBePositive);
                 }
@@ -5351,7 +5351,7 @@ namespace System.Windows.Forms
 
             if (View == View.List && subItemIndex == 0)
             {
-                int colWidth = User32.SendMessageW(this, (User32.WindowMessage)LVM.GETCOLUMNWIDTH).ToInt32();
+                int colWidth = unchecked((int)(long)User32.SendMessageW(this, (User32.WindowMessage)LVM.GETCOLUMNWIDTH));
 
                 using Graphics g = CreateGraphicsInternal();
 
@@ -6127,8 +6127,8 @@ namespace System.Windows.Forms
 
                 case NativeMethods.LVN_BEGINLABELEDIT:
                     {
-                        NMLVDISPINFO_NOTEXT nmlvdp = (NMLVDISPINFO_NOTEXT)m.GetLParam(typeof(NMLVDISPINFO_NOTEXT));
-                        LabelEditEventArgs e = new LabelEditEventArgs(nmlvdp.item.iItem);
+                        NMLVDISPINFO* dispInfo = (NMLVDISPINFO*)m.LParam;
+                        LabelEditEventArgs e = new LabelEditEventArgs(dispInfo->item.iItem);
                         OnBeforeLabelEdit(e);
                         m.Result = (IntPtr)(e.CancelEdit ? 1 : 0);
                         listViewState[LISTVIEWSTATE_inLabelEdit] = !e.CancelEdit;
@@ -6146,16 +6146,17 @@ namespace System.Windows.Forms
                 case NativeMethods.LVN_ENDLABELEDIT:
                     {
                         listViewState[LISTVIEWSTATE_inLabelEdit] = false;
-                        NMLVDISPINFO nmlvdp = (NMLVDISPINFO)m.GetLParam(typeof(NMLVDISPINFO));
-                        var text = new string(nmlvdp.item.pszText);
-                        LabelEditEventArgs e = new LabelEditEventArgs(nmlvdp.item.iItem, text);
+                        NMLVDISPINFO* dispInfo = (NMLVDISPINFO*)m.LParam;
+                        var text = new string(dispInfo->item.pszText);
+                        LabelEditEventArgs e = new LabelEditEventArgs(dispInfo->item.iItem, text);
                         OnAfterLabelEdit(e);
                         m.Result = (IntPtr)(e.CancelEdit ? 0 : 1);
+
                         // from msdn:
                         //   "If the user cancels editing, the pszText member of the LVITEM structure is NULL"
-                        if (!e.CancelEdit && nmlvdp.item.pszText != null)
+                        if (!e.CancelEdit && dispInfo->item.pszText != null)
                         {
-                            Items[nmlvdp.item.iItem].Text = text;
+                            Items[dispInfo->item.iItem].Text = text;
                         }
 
                         break;
@@ -6365,9 +6366,9 @@ namespace System.Windows.Forms
                         // we use the LVN_GETDISPINFO message only in virtual mode
                         if (VirtualMode && m.LParam != IntPtr.Zero)
                         {
-                            NMLVDISPINFO_NOTEXT dispInfo = (NMLVDISPINFO_NOTEXT)m.GetLParam(typeof(NMLVDISPINFO_NOTEXT));
+                            NMLVDISPINFO* dispInfo = (NMLVDISPINFO*)m.LParam;
 
-                            RetrieveVirtualItemEventArgs rVI = new RetrieveVirtualItemEventArgs(dispInfo.item.iItem);
+                            RetrieveVirtualItemEventArgs rVI = new RetrieveVirtualItemEventArgs(dispInfo->item.iItem);
                             OnRetrieveVirtualItem(rVI);
                             ListViewItem lvItem = rVI.Item;
                             if (lvItem == null)
@@ -6375,52 +6376,43 @@ namespace System.Windows.Forms
                                 throw new InvalidOperationException(SR.ListViewVirtualItemRequired);
                             }
 
-                            lvItem.SetItemIndex(this, dispInfo.item.iItem);
-                            if ((dispInfo.item.mask & LVIF.TEXT) != 0)
+                            lvItem.SetItemIndex(this, dispInfo->item.iItem);
+                            if ((dispInfo->item.mask & LVIF.TEXT) != 0)
                             {
-                                string text;
-                                if (dispInfo.item.iSubItem == 0)
+                                ReadOnlySpan<char> text = default;
+                                if (dispInfo->item.iSubItem == 0)
                                 {
                                     text = lvItem.Text;                                         // we want the item
                                 }
                                 else
                                 {
-                                    if (lvItem.SubItems.Count <= dispInfo.item.iSubItem)
+                                    if (lvItem.SubItems.Count <= dispInfo->item.iSubItem)
                                     {
                                         throw new InvalidOperationException(SR.ListViewVirtualModeCantAccessSubItem);
                                     }
                                     else
                                     {
-                                        text = lvItem.SubItems[dispInfo.item.iSubItem].Text;            // we want the sub item
+                                        text = lvItem.SubItems[dispInfo->item.iSubItem].Text;   // we want the sub item
                                     }
                                 }
 
-                                // use the buffer provided by the ComCtrl list view.
-                                if (dispInfo.item.cchTextMax <= text.Length)
-                                {
-                                    text = text.Substring(0, dispInfo.item.cchTextMax - 1);
-                                }
-
-                                char[] buff = (text + "\0").ToCharArray();
-                                Marshal.Copy(buff, 0, dispInfo.item.pszText, text.Length + 1);
+                                dispInfo->item.UpdateText(text);
                             }
 
-                            if ((dispInfo.item.mask & LVIF.IMAGE) != 0 && lvItem.ImageIndex != -1)
+                            if ((dispInfo->item.mask & LVIF.IMAGE) != 0 && lvItem.ImageIndex != -1)
                             {
-                                dispInfo.item.iImage = lvItem.ImageIndex;
+                                dispInfo->item.iImage = lvItem.ImageIndex;
                             }
 
-                            if ((dispInfo.item.mask & LVIF.INDENT) != 0)
+                            if ((dispInfo->item.mask & LVIF.INDENT) != 0)
                             {
-                                dispInfo.item.iIndent = lvItem.IndentCount;
+                                dispInfo->item.iIndent = lvItem.IndentCount;
                             }
 
-                            if ((dispInfo.item.stateMask & LVIS.STATEIMAGEMASK) != 0)
+                            if ((dispInfo->item.stateMask & LVIS.STATEIMAGEMASK) != 0)
                             {
-                                dispInfo.item.state |= lvItem.RawStateImageIndex;
+                                dispInfo->item.state |= lvItem.RawStateImageIndex;
                             }
-                            Marshal.StructureToPtr(dispInfo, (IntPtr)m.LParam, false);
-
                         }
                     }
                     else if (nmhdr->code == NativeMethods.LVN_ODSTATECHANGED)

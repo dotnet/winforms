@@ -27,6 +27,26 @@ internal static partial class Interop
             public IntPtr puColumns;
             public LVCFMT* piColFmt;
             public int iGroup; // readonly. only valid for owner data.
+
+            /// <summary>
+            /// Set the new text. The text length is limited by <see cref="cchTextMax"/>.
+            /// A value of <see cref="cchTextMax"/> will be updated to the length of <paramref name="text"/> + 1.
+            /// </summary>
+            /// <param name="text">The text to set.</param>
+            public void UpdateText(ReadOnlySpan<char> text)
+            {
+                if (cchTextMax <= text.Length)
+                {
+                    text = text.Slice(0, cchTextMax - 1);
+                }
+                else
+                {
+                    cchTextMax = text.Length + 1;
+                }
+
+                text.CopyTo(new Span<char>(pszText, cchTextMax));
+                pszText[text.Length] = '\0';
+            }
         }
     }
 }
