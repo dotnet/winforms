@@ -761,14 +761,23 @@ namespace System.Windows.Forms.Tests
         {
             using var control = new TabControl();
             Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
 
             Rectangle displayRectangle = control.DisplayRectangle;
             Assert.True(displayRectangle.X >= 0);
             Assert.True(displayRectangle.Y >= 0);
             Assert.Equal(200 - displayRectangle.X * 2, control.DisplayRectangle.Width);
             Assert.Equal(100 - displayRectangle.Y * 2, control.DisplayRectangle.Height);
-            Assert.True(control.IsHandleCreated);
             Assert.Equal(displayRectangle, control.DisplayRectangle);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
         }
 
         [WinFormsFact]
@@ -3635,7 +3644,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void TabControl_GetTabRect_InvokeWithoutHandle_ReturnsExpected()
+        public void TabControl_GetTabRect_InvokeWithHandle_ReturnsExpected()
         {
             using var control = new TabControl();
             using var page1 = new TabPage();
@@ -3643,6 +3652,12 @@ namespace System.Windows.Forms.Tests
             control.TabPages.Add(page1);
             control.TabPages.Add(page2);
             Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
 
             Rectangle rect1 = control.GetTabRect(0);
             Assert.True(rect1.X >= 0);
@@ -3658,6 +3673,78 @@ namespace System.Windows.Forms.Tests
             Assert.True(rect2.Width > 0);
             Assert.True(rect2.Height > 0);
             Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        public static IEnumerable<object[]> GetTabRect_InvokeCustomGetItemRect_TestData()
+        {
+            yield return new object[] { new RECT(), Rectangle.Empty };
+            yield return new object[] { new RECT(1, 2, 3, 4), new Rectangle(1, 2, 2, 2) };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(GetTabRect_InvokeCustomGetItemRect_TestData))]
+        public void TabControl_GetTabRect_InvokeCustomGetItemRect_ReturnsExpected(object getItemRectResult, Rectangle expected)
+        {
+            using var control = new CustomGetItemRectTabControl
+            {
+                GetItemRectResult = (RECT)getItemRectResult
+            };
+            using var page = new TabPage();
+            control.TabPages.Add(page);
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+
+            Assert.Equal(expected, control.GetTabRect(0));
+        }
+
+        private class CustomGetItemRectTabControl : TabControl
+        {
+            public RECT GetItemRectResult { get; set; }
+
+            protected unsafe override void WndProc(ref Message m)
+            {
+                if (m.Msg == (int)ComCtl32.TCM.GETITEMRECT)
+                {
+                    RECT* pRect = (RECT*)m.LParam;
+                    *pRect = GetItemRectResult;
+                    m.Result = (IntPtr)1;
+                    return;
+                }
+
+                base.WndProc(ref m);
+            }
+        }
+
+        [WinFormsFact]
+        public void TabControl_GetTabRect_InvokeInvalidGetItemRect_ReturnsExpected()
+        {
+            using var control = new InvalidGetItemRectTabControl();
+            using var page = new TabPage();
+            control.TabPages.Add(page);
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+
+            control.MakeInvalid = true;
+            Assert.Equal(new Rectangle(1, 2, 2, 2), control.GetTabRect(0));
+        }
+
+        private class InvalidGetItemRectTabControl : TabControl
+        {
+            public bool MakeInvalid { get; set; }
+
+            protected unsafe override void WndProc(ref Message m)
+            {
+                if (MakeInvalid && m.Msg == (int)ComCtl32.TCM.GETITEMRECT)
+                {
+                    RECT* pRect = (RECT*)m.LParam;
+                    *pRect = new RECT(1, 2, 3, 4);
+                    m.Result = IntPtr.Zero;
+                    return;
+                }
+
+                base.WndProc(ref m);
+            }
         }
 
         [WinFormsFact]

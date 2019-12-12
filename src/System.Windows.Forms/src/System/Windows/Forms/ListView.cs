@@ -3595,11 +3595,11 @@ namespace System.Windows.Forms
                 return Rectangle.Empty;
             }
 
-            RECT itemrect = new RECT
+            var itemrect = new RECT
             {
                 left = (int)portion
             };
-            if (unchecked((int)(long)SendMessage((int)LVM.GETITEMRECT, index, ref itemrect)) == 0)
+            if (User32.SendMessageW(this, (User32.WindowMessage)LVM.GETITEMRECT, (IntPtr)index, ref itemrect) == IntPtr.Zero)
             {
                 throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
             }
@@ -3623,11 +3623,11 @@ namespace System.Windows.Forms
                 return Rectangle.Empty;
             }
 
-            RECT itemrect = new RECT
+            var itemrect = new RECT
             {
                 left = 0
             };
-            if (unchecked((int)(long)SendMessage((int)LVM.GETITEMRECT, index, ref itemrect)) == 0)
+            if (User32.SendMessageW(this, (User32.WindowMessage)LVM.GETITEMRECT, (IntPtr)index, ref itemrect) == IntPtr.Zero)
             {
                 return Rectangle.Empty;
             }
@@ -3703,12 +3703,12 @@ namespace System.Windows.Forms
                 return Rectangle.Empty;
             }
 
-            RECT itemrect = new RECT
+            var itemrect = new RECT
             {
                 left = (int)portion,
                 top = subItemIndex
             };
-            if (unchecked((int)(long)SendMessage((int)LVM.GETSUBITEMRECT, itemIndex, ref itemrect)) == 0)
+            if (User32.SendMessageW(this, (User32.WindowMessage)LVM.GETSUBITEMRECT, (IntPtr)itemIndex, ref itemrect) == IntPtr.Zero)
             {
                 throw new ArgumentOutOfRangeException(nameof(itemIndex), itemIndex, string.Format(SR.InvalidArgument, nameof(itemIndex), itemIndex));
             }

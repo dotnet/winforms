@@ -3415,6 +3415,181 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(AutoSizeMode.GrowOnly, control.GetAutoSizeMode());
         }
 
+        [WinFormsFact]
+        public void ListView_GetItemRect_InvokeWithoutHandle_ReturnsExpectedAndCreatedHandle()
+        {
+            using var control = new ListView();
+            var item1 = new ListViewItem();
+            var item2 = new ListViewItem();
+            control.Items.Add(item1);
+            control.Items.Add(item2);
+
+            Rectangle rect1 = control.GetItemRect(0);
+            Assert.True(rect1.X >= 0);
+            Assert.True(rect1.Y >= 0);
+            Assert.True(rect1.Width > 0);
+            Assert.True(rect1.Height > 0);
+            Assert.Equal(rect1, control.GetItemRect(0));
+            Assert.True(control.IsHandleCreated);
+
+            Rectangle rect2 = control.GetItemRect(1);
+            Assert.True(rect2.X >= rect1.X + rect1.Width);
+            Assert.Equal(rect2.Y, rect1.Y);
+            Assert.True(rect2.Width > 0);
+            Assert.True(rect2.Height > 0);
+            Assert.True(control.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void ListView_GetItemRect_InvokeWithHandle_ReturnsExpected()
+        {
+            using var control = new ListView();
+            var item1 = new ListViewItem();
+            var item2 = new ListViewItem();
+            control.Items.Add(item1);
+            control.Items.Add(item2);
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            Rectangle rect1 = control.GetItemRect(0);
+            Assert.True(rect1.X >= 0);
+            Assert.True(rect1.Y >= 0);
+            Assert.True(rect1.Width > 0);
+            Assert.True(rect1.Height > 0);
+            Assert.Equal(rect1, control.GetItemRect(0));
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            Rectangle rect2 = control.GetItemRect(1);
+            Assert.True(rect2.X >= rect1.X + rect1.Width);
+            Assert.Equal(rect2.Y, rect1.Y);
+            Assert.True(rect2.Width > 0);
+            Assert.True(rect2.Height > 0);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        public static IEnumerable<object[]> GetItemRect_InvokeCustomGetItemRect_TestData()
+        {
+            yield return new object[] { new RECT(), Rectangle.Empty };
+            yield return new object[] { new RECT(1, 2, 3, 4), new Rectangle(1, 2, 2, 2) };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(GetItemRect_InvokeCustomGetItemRect_TestData))]
+        public void ListView_GetItemRect_InvokeCustomGetItemRect_ReturnsExpected(object getItemRectResult, Rectangle expected)
+        {
+            using var control = new CustomGetItemRectListView
+            {
+                GetItemRectResult = (RECT)getItemRectResult
+            };
+            var item = new ListViewItem();
+            control.Items.Add(item);
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+
+            Assert.Equal(expected, control.GetItemRect(0));
+        }
+
+        private class CustomGetItemRectListView : ListView
+        {
+            public RECT GetItemRectResult { get; set; }
+
+            protected unsafe override void WndProc(ref Message m)
+            {
+                if (m.Msg == (int)LVM.GETITEMRECT)
+                {
+                    RECT* pRect = (RECT*)m.LParam;
+                    *pRect = GetItemRectResult;
+                    m.Result = (IntPtr)1;
+                    return;
+                }
+
+                base.WndProc(ref m);
+            }
+        }
+
+        [WinFormsFact]
+        public void ListView_GetItemRect_InvokeInvalidGetItemRect_ThrowsArgumentOutOfRangeException()
+        {
+            using var control = new InvalidGetItemRectListView();
+            var item = new ListViewItem();
+            control.Items.Add(item);
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+
+            control.MakeInvalid = true;
+            Assert.Throws<ArgumentOutOfRangeException>("index", () => control.GetItemRect(0));
+        }
+
+        private class InvalidGetItemRectListView : ListView
+        {
+            public bool MakeInvalid { get; set; }
+
+            protected unsafe override void WndProc(ref Message m)
+            {
+                if (MakeInvalid && m.Msg == (int)LVM.GETITEMRECT)
+                {
+                    RECT* pRect = (RECT*)m.LParam;
+                    *pRect = new RECT(1, 2, 3, 4);
+                    m.Result = IntPtr.Zero;
+                    return;
+                }
+
+                base.WndProc(ref m);
+            }
+        }
+
+        [WinFormsFact]
+        public void ListView_GetItemRect_InvalidIndexEmpty_ThrowsArgumentOutOfRangeException()
+        {
+            using var control = new ListView();
+            Assert.Throws<ArgumentOutOfRangeException>("index", () => control.GetItemRect(-1));
+            Assert.Throws<ArgumentOutOfRangeException>("index", () => control.GetItemRect(0));
+            Assert.Throws<ArgumentOutOfRangeException>("index", () => control.GetItemRect(1));
+        }
+
+        [WinFormsFact]
+        public void ListView_GetItemRect_InvalidIndexNotEmpty_ThrowsArgumentOutOfRangeException()
+        {
+            using var control = new ListView();
+            var item1 = new ListViewItem();
+            control.Items.Add(item1);
+
+            Assert.Throws<ArgumentOutOfRangeException>("index", () => control.GetItemRect(-1));
+            Assert.Throws<ArgumentOutOfRangeException>("index", () => control.GetItemRect(1));
+            Assert.Throws<ArgumentOutOfRangeException>("index", () => control.GetItemRect(2));
+        }
+
+        [WinFormsFact]
+        public void ListView_GetItemRect_InvalidIndexWithHandleEmpty_ThrowsArgumentOutOfRangeException()
+        {
+            using var control = new ListView();
+            Assert.Throws<ArgumentOutOfRangeException>("index", () => control.GetItemRect(-1));
+            Assert.Throws<ArgumentOutOfRangeException>("index", () => control.GetItemRect(0));
+            Assert.Throws<ArgumentOutOfRangeException>("index", () => control.GetItemRect(1));
+        }
+
+        [WinFormsFact]
+        public void ListView_GetItemRect_InvalidIndexWithHandleNotEmpty_ThrowsArgumentOutOfRangeException()
+        {
+            using var control = new ListView();
+            var item1 = new ListViewItem();
+            control.Items.Add(item1);
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+
+            Assert.Throws<ArgumentOutOfRangeException>("index", () => control.GetItemRect(-1));
+            Assert.Throws<ArgumentOutOfRangeException>("index", () => control.GetItemRect(1));
+            Assert.Throws<ArgumentOutOfRangeException>("index", () => control.GetItemRect(2));
+        }
+
         [WinFormsTheory]
         [InlineData(ControlStyles.ContainerControl, false)]
         [InlineData(ControlStyles.UserPaint, false)]

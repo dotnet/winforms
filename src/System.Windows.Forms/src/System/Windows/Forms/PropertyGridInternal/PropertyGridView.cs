@@ -4551,7 +4551,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             RECT rect = itemRect;
 
-            ToolTip.SendMessage((int)User32.WindowMessage.TTM_ADJUSTRECT, 1, ref rect);
+            User32.SendMessageW(ToolTip, User32.WindowMessage.TTM_ADJUSTRECT, (IntPtr)1, ref rect);
 
             // now offset it back to screen coords
             Point locPoint = parent.PointToScreen(new Point(rect.left, rect.top));
