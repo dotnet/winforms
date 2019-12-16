@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-//#define SELECTEDCHANGED
-
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
@@ -2169,14 +2167,6 @@ namespace System.Windows.Forms
             }
         }
 
-#if SELECTEDCHANGED
-        public event EventHandler SelectedChanged {
-            add => Events.AddHandler(EventSelectedChanged, value);
-            remove => Events.RemoveHandler(EventSelectedChanged, value);
-        }
-#endif
-
-        /// <devdoc/>
         internal protected virtual bool ShowKeyboardCues
         {
             get
@@ -3474,11 +3464,7 @@ namespace System.Windows.Forms
             RaiseEvent(EventRightToLeft, e);
 
         }
-#if SELECTEDCHANGED
-        protected virtual void OnSelectedChanged(EventArgs e) {
-            RaiseEvent(EventSelectedChanged, e);
-        }
-#endif
+
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnTextChanged(EventArgs e)
         {
@@ -3670,10 +3656,6 @@ namespace System.Windows.Forms
                 {
                     ((ToolStripItemAccessibleObject)AccessibilityObject).RaiseFocusChanged();
                 }
-
-#if SELECTEDCHANGED
-                OnSelectedChanged(EventArgs.Empty);
-#endif
             }
         }
 
@@ -4097,9 +4079,6 @@ namespace System.Windows.Forms
                     }
 
                     KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(this);
-#if SELECTEDCHANGED
-                    OnSelectedChanged(EventArgs.Empty);
-#endif
                 }
             }
         }
