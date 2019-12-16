@@ -3993,7 +3993,6 @@ namespace System.Windows.Forms
             if (parent == null)
             {
                 // should not throw here as it's an internal function call.
-                Debug.Fail("could not determine current parent");
                 return fromPoint;
             }
 
@@ -4946,7 +4945,6 @@ namespace System.Windows.Forms
                 lastPreferredSize = currentLayoutOptions.GetPreferredSizeCore(constrainingSize);
                 return lastPreferredSize;
             }
-            Debug.Fail("Why are we here without an owner?");
             return Size.Empty;
         }
 
