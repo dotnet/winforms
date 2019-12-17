@@ -1613,6 +1613,12 @@ namespace System.Windows.Forms
         protected override void OnHandleCreated(EventArgs e)
         {
             base.OnHandleCreated(e);
+
+            if (!IsHandleCreated)
+            {
+                return;
+            }
+
             SetSelRange(selectionStart, selectionEnd);
             if (maxSelectionCount != DEFAULT_MAX_SELECTION_COUNT)
             {
