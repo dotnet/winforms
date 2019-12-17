@@ -9,7 +9,7 @@ using static Interop;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Represents a control of a task dialog.
+    ///   Represents a control of a task dialog.
     /// </summary>
     public abstract class TaskDialogControl
     {
@@ -19,11 +19,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets the object that contains data about the control.
+        ///   Gets or sets the object that contains data about the control.
         /// </summary>
         /// <value>
-        /// An <see cref="object"/> that contains data about the control.
-        /// The default is <see langword="null"/>.
+        ///   An <see cref="object"/> that contains data about the control.
+        ///   The default is <see langword="null"/>.
         /// </value>
         public object? Tag
         {
@@ -44,8 +44,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets a value that indicates whether the current state of this control
-        /// allows it to be created in a task dialog when binding it.
+        ///   Gets a value that indicates whether the current state of this control
+        ///   allows it to be created in a task dialog when binding it.
         /// </summary>
         internal virtual bool IsCreatable
         {
@@ -53,8 +53,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets a value that indicates whether this control has been created
-        /// in a bound task dialog.
+        ///   Gets or sets a value that indicates whether this control has been created
+        ///   in a bound task dialog.
         /// </summary>
         internal bool IsCreated
         {
@@ -86,7 +86,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Applies initialization after the task dialog is displayed or navigated.
+        ///   Applies initialization after the task dialog is displayed or navigated.
         /// </summary>
         internal void ApplyInitialization()
         {
@@ -98,11 +98,13 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// When overridden in a derived class, runs additional binding logic and returns
-        /// flags to be specified before the task dialog is displayed or navigated.
+        ///   When overridden in a derived class, runs additional binding logic and returns
+        ///   flags to be specified before the task dialog is displayed or navigated.
         /// </summary>
         /// <remarks>
-        /// This method will only be called if <see cref="IsCreatable"/> returns <see langword="true"/>.
+        /// <para>
+        ///   This method will only be called if <see cref="IsCreatable"/> returns <see langword="true"/>.
+        /// </para>
         /// </remarks>
         /// <returns></returns>
         private protected virtual ComCtl32.TDF BindCore() => default;
@@ -111,18 +113,22 @@ namespace System.Windows.Forms
         /// 
         /// </summary>
         /// <remarks>
-        /// This method will only be called if <see cref="BindCore"/> was called.
+        /// <para>
+        ///   This method will only be called if <see cref="BindCore"/> was called.
+        /// </para>
         /// </remarks>
         private protected virtual void UnbindCore()
         {
         }
 
         /// <summary>
-        /// When overridden in a subclass, applies initialization after the task dialog
-        /// is displayed or navigated.
+        ///   When overridden in a subclass, applies initialization after the task dialog
+        ///   is displayed or navigated.
         /// </summary>
         /// <remarks>
-        /// This method will only be called if <see cref="IsCreatable"/> returns <see langword="true"/>.
+        /// <para>
+        ///   This method will only be called if <see cref="IsCreatable"/> returns <see langword="true"/>.
+        /// </para>
         /// </remarks>
         private protected virtual void ApplyInitializationCore()
         {

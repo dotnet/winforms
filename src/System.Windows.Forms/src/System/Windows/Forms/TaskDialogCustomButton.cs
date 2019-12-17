@@ -17,6 +17,11 @@ namespace System.Windows.Forms
     ///   A custom button can either be displayed as regular button or as command link,
     ///   depending on the value of <see cref="TaskDialogPage.CustomButtonStyle"/>.
     /// </para>
+    /// <para>
+    ///   Note: The <see cref="TaskDialogPage.CustomButtonStyle"/> setting applies
+    ///   to all <see cref="TaskDialogCustomButton"/> instances of the page; it isn't
+    ///   possible to set it for individual buttons.
+    /// </para>
     /// </remarks>
     public sealed class TaskDialogCustomButton : TaskDialogButton
     {
