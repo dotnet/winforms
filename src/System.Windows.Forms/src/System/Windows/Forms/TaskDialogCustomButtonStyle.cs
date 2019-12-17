@@ -7,23 +7,23 @@
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Specifies how a <see cref="TaskDialogCustomButton"/> is to be
-    /// displayed in a task dialog.
+    ///   Specifies how <see cref="TaskDialogCustomButton"/> instances are to be
+    ///   displayed in a task dialog.
     /// </summary>
     public enum TaskDialogCustomButtonStyle
     {
         /// <summary>
-        /// Custom buttons should be displayed as normal buttons.
+        ///   Custom buttons should be displayed as normal buttons.
         /// </summary>
         Default = 0,
 
         /// <summary>
-        /// Custom buttons should be displayed as command links.
+        ///   Custom buttons should be displayed as command links.
         /// </summary>
         CommandLinks = 1,
 
         /// <summary>
-        /// Custom buttons should be displayed as command links, but without an icon.
+        ///   Custom buttons should be displayed as command links, but without an icon.
         /// </summary>
         CommandLinksNoIcon = 2
     }
