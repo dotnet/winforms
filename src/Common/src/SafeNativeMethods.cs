@@ -16,20 +16,11 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.Gdi32)]
         public static extern int GetSystemPaletteEntries(IntPtr hdc, int iStartIndex, int nEntries, byte[] lppe);
 
-        [DllImport(ExternDll.Gdi32)]
-        public static extern int GetDIBits(IntPtr hdc, IntPtr hbm, int uStartScan, int cScanLines, byte[] lpvBits, ref NativeMethods.BITMAPINFO_FLAT bmi, int uUsage);
-
-        [DllImport(ExternDll.Gdi32)]
-        public static extern int StretchDIBits(IntPtr hdc, int XDest, int YDest, int nDestWidth, int nDestHeight, int XSrc, int YSrc, int nSrcWidth, int nSrcHeight, byte[] lpBits, ref NativeMethods.BITMAPINFO_FLAT lpBitsInfo, int iUsage, int dwRop);
-
         [DllImport(ExternDll.Comdlg32, SetLastError = true, CharSet = CharSet.Auto)]
         public static extern bool ChooseFont([In, Out] NativeMethods.CHOOSEFONT cf);
 
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern int GetBitmapBits(HandleRef hbmp, int cbBuffer, byte[] lpvBits);
-
-        [DllImport(ExternDll.Comdlg32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern int CommDlgExtendedError();
 
         [DllImport(ExternDll.Hhctrl, CharSet = CharSet.Auto)]
         public static extern int HtmlHelp(HandleRef hwndCaller, [MarshalAs(UnmanagedType.LPTStr)]string pszFile, int uCommand, int dwData);
@@ -46,20 +37,8 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.Hhctrl, CharSet = CharSet.Auto)]
         public static extern int HtmlHelp(HandleRef hwndCaller, [MarshalAs(UnmanagedType.LPTStr)]string pszFile, int uCommand, [MarshalAs(UnmanagedType.LPStruct)]NativeMethods.HH_AKLINK dwData);
 
-        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern bool PatBlt(HandleRef hdc, int left, int top, int width, int height, int rop);
-
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern bool GetMonitorInfo(HandleRef hmonitor, [In, Out]NativeMethods.MONITORINFOEX info);
-
         [DllImport(ExternDll.User32, ExactSpelling = true)]
         public static extern bool EnumDisplayMonitors(HandleRef hdc, NativeMethods.COMRECT rcClip, NativeMethods.MonitorEnumProc lpfnEnum, IntPtr dwData);
-
-        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true)]
-        public static extern IntPtr /*HPALETTE*/ CreateHalftonePalette(HandleRef hdc);
-
-        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true)]
-        public static extern IntPtr CreateDIBSection(HandleRef hdc, HandleRef pbmi, int iUsage, byte[] ppvBits, IntPtr hSection, int dwOffset);
 
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true)]
         public static extern IntPtr /*HBITMAP*/ CreateBitmap(int nWidth, int nHeight, int nPlanes, int nBitsPerPixel, IntPtr lpvBits);
@@ -70,22 +49,8 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true)]
         public static extern IntPtr /*HBITMAP*/ CreateBitmap(int nWidth, int nHeight, int nPlanes, int nBitsPerPixel, byte[] lpvBits);
 
-        [DllImport(ExternDll.User32, ExactSpelling = true)]
-        public static extern bool ValidateRect(HandleRef hWnd, ref RECT rect);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern bool ValidateRect(IntPtr hwnd, IntPtr prect);
-
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto, SetLastError = true)]
-        public static extern bool EnumWindows(EnumThreadWindowsCallback callback, IntPtr extraData);
-
-        internal delegate bool EnumThreadWindowsCallback(IntPtr hWnd, IntPtr lParam);
-
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern bool InvalidateRgn(HandleRef hWnd, HandleRef hrgn, bool erase);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern bool UpdateWindow(HandleRef hWnd);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern bool MessageBeep(int type);
@@ -147,24 +112,5 @@ namespace System.Windows.Forms
 
         [DllImport(ExternDll.Uxtheme, CharSet = CharSet.Auto)]
         public static extern int HitTestThemeBackground(HandleRef hTheme, HandleRef hdc, int iPartId, int iStateId, int dwOptions, [In] NativeMethods.COMRECT pRect, HandleRef hrgn, Point ptTest, ref ushort pwHitTestCode);
-
-        [DllImport(ExternDll.Uxtheme, CharSet = CharSet.Auto)]
-        public static extern bool IsThemeBackgroundPartiallyTransparent(HandleRef hTheme, int iPartId, int iStateId);
-
-        [DllImport(ExternDll.Uxtheme, CharSet = CharSet.Auto)]
-        public static extern bool GetThemeSysBool(HandleRef hTheme, int iBoolId);
-
-        [DllImport(ExternDll.Uxtheme, CharSet = CharSet.Auto)]
-        public static extern int GetThemeSysInt(HandleRef hTheme, int iIntId, ref int piValue);
-
-        public static class VisualStyleSystemProperty
-        {
-            public const int SupportsFlatMenus = 1001;
-            public const int MinimumColorDepth = 1301;
-        }
-
-        [DllImport(ExternDll.Uxtheme, CharSet = CharSet.Auto)]
-        public extern static int SetWindowTheme(IntPtr hWnd, string subAppName, string subIdList);
     }
 }
-

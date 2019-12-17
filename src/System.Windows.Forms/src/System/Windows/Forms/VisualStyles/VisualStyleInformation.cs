@@ -229,7 +229,7 @@ namespace System.Windows.Forms.VisualStyles
                         visualStyleRenderer.SetParameters(VisualStyleElement.Window.Caption.Active);
                     }
 
-                    return (SafeNativeMethods.GetThemeSysBool(new HandleRef(null, visualStyleRenderer.Handle), SafeNativeMethods.VisualStyleSystemProperty.SupportsFlatMenus));
+                    return UxTheme.GetThemeSysBool(visualStyleRenderer, UxTheme.TMT.FLATMENUS).IsTrue();
                 }
 
                 return false;
@@ -256,7 +256,7 @@ namespace System.Windows.Forms.VisualStyles
 
                     int mcDepth = 0;
 
-                    SafeNativeMethods.GetThemeSysInt(new HandleRef(null, visualStyleRenderer.Handle), SafeNativeMethods.VisualStyleSystemProperty.MinimumColorDepth, ref mcDepth);
+                    UxTheme.GetThemeSysInt(visualStyleRenderer, UxTheme.TMT.MINCOLORDEPTH, ref mcDepth);
                     return mcDepth;
                 }
 

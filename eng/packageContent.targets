@@ -19,6 +19,8 @@
 
   <PropertyGroup>
     <IntellisenseXmlFileSource>$(IntellisenseXmlDir)$(AssemblyName).xml</IntellisenseXmlFileSource>
+    <!-- TODO: remove when we get dotnet-api-docs_netcoreapp5.0 -->
+    <IntellisenseXmlFileSource Condition="!Exists('$(IntellisenseXmlFileSource)')">$([System.IO.Path]::ChangeExtension('$(TargetPath)', '.xml'))</IntellisenseXmlFileSource>
     
     <IntellisenseXml Condition="'$(ProduceReferenceAssembly)' == 'true' And '$(PackageAsRefAndLib)' != 'true'" >$([System.IO.Path]::ChangeExtension('$(TargetRefPath)', '.xml'))</IntellisenseXml>
     <IntellisenseXml Condition="'$(PackageAsRefAndLib)' == 'true'" >$([System.IO.Path]::ChangeExtension('$(TargetPath)', '.xml'))</IntellisenseXml>

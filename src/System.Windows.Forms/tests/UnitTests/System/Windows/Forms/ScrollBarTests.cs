@@ -11,12 +11,24 @@ using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
+    using Point = System.Drawing.Point;
+    using Size = System.Drawing.Size;
+
     public class ScrollBarTests
     {
+        public ScrollBarTests()
+        {
+            Application.ThreadException += (sender, e) => throw new Exception(e.Exception.StackTrace.ToString());
+        }
+
         [WinFormsFact]
         public void ScrollBar_Ctor_Default()
         {
             using var control = new SubScrollBar();
+            Assert.Null(control.AccessibleDefaultActionDescription);
+            Assert.Null(control.AccessibleDescription);
+            Assert.Null(control.AccessibleName);
+            Assert.Equal(AccessibleRole.Default, control.AccessibleRole);
             Assert.False(control.AllowDrop);
             Assert.Equal(AnchorStyles.Top | AnchorStyles.Left, control.Anchor);
             Assert.False(control.AutoSize);
@@ -27,11 +39,15 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, control.Bottom);
             Assert.Equal(Rectangle.Empty, control.Bounds);
             Assert.False(control.CanEnableIme);
+            Assert.False(control.CanFocus);
             Assert.True(control.CanRaiseEvents);
+            Assert.True(control.CanSelect);
+            Assert.False(control.Capture);
             Assert.True(control.CausesValidation);
             Assert.Equal(Rectangle.Empty, control.ClientRectangle);
             Assert.Equal(Size.Empty, control.ClientSize);
             Assert.Null(control.Container);
+            Assert.False(control.ContainsFocus);
             Assert.Null(control.ContextMenuStrip);
             Assert.Empty(control.Controls);
             Assert.Same(control.Controls, control.Controls);
@@ -51,6 +67,7 @@ namespace System.Windows.Forms.Tests
             Assert.True(control.Enabled);
             Assert.NotNull(control.Events);
             Assert.Same(control.Events, control.Events);
+            Assert.False(control.Focused);
             Assert.Equal(Control.DefaultFont, control.Font);
             Assert.Equal(control.Font.Height, control.FontHeight);
             Assert.Equal(Control.DefaultForeColor, control.ForeColor);
@@ -58,6 +75,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, control.Height);
             Assert.Equal(ImeMode.Disable, control.ImeMode);
             Assert.Equal(ImeMode.Disable, control.ImeModeBase);
+            Assert.False(control.IsAccessible);
+            Assert.False(control.IsMirrored);
             Assert.Equal(10, control.LargeChange);
             Assert.NotNull(control.LayoutEngine);
             Assert.Same(control.LayoutEngine, control.LayoutEngine);
@@ -78,6 +97,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, control.Right);
             Assert.Equal(RightToLeft.No, control.RightToLeft);
             Assert.True(control.ScaleScrollBarForDpiChange);
+            Assert.True(control.ShowFocusCues);
+            Assert.True(control.ShowKeyboardCues);
             Assert.Null(control.Site);
             Assert.Equal(Size.Empty, control.Size);
             Assert.Equal(1, control.SmallChange);
@@ -86,6 +107,7 @@ namespace System.Windows.Forms.Tests
             Assert.Empty(control.Text);
             Assert.Equal(0, control.Top);
             Assert.Null(control.TopLevelControl);
+            Assert.False(control.UseWaitCursor);
             Assert.Equal(0, control.Value);
             Assert.True(control.Visible);
             Assert.Equal(0, control.Width);
@@ -99,7 +121,7 @@ namespace System.Windows.Forms.Tests
             using var control = new SubScrollBar();
             CreateParams createParams = control.CreateParams;
             Assert.Null(createParams.Caption);
-            Assert.Equal("SCROLLBAR", createParams.ClassName);
+            Assert.Equal("ScrollBar", createParams.ClassName);
             Assert.Equal(0x8, createParams.ClassStyle);
             Assert.Equal(0, createParams.ExStyle);
             Assert.Equal(0, createParams.Height);
@@ -1220,6 +1242,43 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<ArgumentOutOfRangeException>("value", () => scrollBar.Value = value);
             Assert.Equal(0, scrollBar.Value);
         }
+        
+        [WinFormsFact]
+        public void ScrollBar_GetAutoSizeMode_Invoke_ReturnsExpected()
+        {
+            using var control = new SubScrollBar();
+            Assert.Equal(AutoSizeMode.GrowOnly, control.GetAutoSizeMode());
+        }
+
+        [WinFormsTheory]
+        [InlineData(ControlStyles.ContainerControl, false)]
+        [InlineData(ControlStyles.UserPaint, false)]
+        [InlineData(ControlStyles.Opaque, false)]
+        [InlineData(ControlStyles.ResizeRedraw, false)]
+        [InlineData(ControlStyles.FixedWidth, false)]
+        [InlineData(ControlStyles.FixedHeight, false)]
+        [InlineData(ControlStyles.StandardClick, false)]
+        [InlineData(ControlStyles.Selectable, true)]
+        [InlineData(ControlStyles.UserMouse, false)]
+        [InlineData(ControlStyles.SupportsTransparentBackColor, false)]
+        [InlineData(ControlStyles.StandardDoubleClick, true)]
+        [InlineData(ControlStyles.AllPaintingInWmPaint, true)]
+        [InlineData(ControlStyles.CacheText, false)]
+        [InlineData(ControlStyles.EnableNotifyMessage, false)]
+        [InlineData(ControlStyles.DoubleBuffer, false)]
+        [InlineData(ControlStyles.OptimizedDoubleBuffer, false)]
+        [InlineData(ControlStyles.UseTextForAccessibility, false)]
+        [InlineData((ControlStyles)0, true)]
+        [InlineData((ControlStyles)int.MaxValue, false)]
+        [InlineData((ControlStyles)(-1), false)]
+        public void ScrollBar_GetStyle_Invoke_ReturnsExpected(ControlStyles flag, bool expected)
+        {
+            using var control = new SubScrollBar();
+            Assert.Equal(expected, control.GetStyle(flag));
+
+            // Call again to test caching.
+            Assert.Equal(expected, control.GetStyle(flag));
+        }
 
         [Theory]
         [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
@@ -2022,6 +2081,14 @@ namespace System.Windows.Forms.Tests
                 get => base.ResizeRedraw;
                 set => base.ResizeRedraw = value;
             }
+
+            public new bool ShowFocusCues => base.ShowFocusCues;
+
+            public new bool ShowKeyboardCues => base.ShowKeyboardCues;
+
+            public new AutoSizeMode GetAutoSizeMode() => base.GetAutoSizeMode();
+
+            public new bool GetStyle(ControlStyles flag) => base.GetStyle(flag);
 
             public new void OnClick(EventArgs e) => base.OnClick(e);
 

@@ -31,7 +31,6 @@ namespace System.Windows.Forms
 
         private const int LB_CHECKED = 1;
         private const int LB_UNCHECKED = 0;
-        private const int LB_ERROR = -1;
         private const int BORDER_SIZE = 1;
 
         /// <summary>
@@ -497,7 +496,7 @@ namespace System.Windows.Forms
             if (IsHandleCreated)
             {
                 var rect = new RECT();
-                SendMessage(NativeMethods.LB_GETITEMRECT, index, ref rect);
+                User32.SendMessageW(this, (User32.WindowMessage)User32.LB.GETITEMRECT, (IntPtr)index, ref rect);
                 User32.InvalidateRect(new HandleRef(this, Handle), &rect, BOOL.FALSE);
             }
         }
@@ -569,7 +568,7 @@ namespace System.Windows.Forms
         protected override void OnHandleCreated(EventArgs e)
         {
             base.OnHandleCreated(e);
-            SendMessage(NativeMethods.LB_SETITEMHEIGHT, 0, ItemHeight);
+            SendMessage((int)User32.LB.SETITEMHEIGHT, 0, ItemHeight);
 
         }
 
@@ -862,7 +861,7 @@ namespace System.Windows.Forms
             //
             if (IsHandleCreated)
             {
-                SendMessage(NativeMethods.LB_SETITEMHEIGHT, 0, ItemHeight);
+                SendMessage((int)User32.LB.SETITEMHEIGHT, 0, ItemHeight);
             }
 
             // The base OnFontChanged will adjust the height of the CheckedListBox accordingly
@@ -991,15 +990,15 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void WmReflectCommand(ref Message m)
         {
-            switch (NativeMethods.Util.HIWORD(m.WParam))
+            switch (PARAM.HIWORD(m.WParam))
             {
-                case NativeMethods.LBN_SELCHANGE:
+                case (int)User32.LBN.SELCHANGE:
                     LbnSelChange();
                     // finally, fire the OnSelectionChange event.
                     base.WmReflectCommand(ref m);
                     break;
 
-                case NativeMethods.LBN_DBLCLK:
+                case (int)User32.LBN.DBLCLK:
                     // We want double-clicks to change the checkstate on each click - just like the CheckBox control
                     //
                     LbnSelChange();
@@ -1018,7 +1017,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void WmReflectVKeyToItem(ref Message m)
         {
-            int keycode = NativeMethods.Util.LOWORD(m.WParam);
+            int keycode = PARAM.LOWORD(m.WParam);
             switch ((Keys)keycode)
             {
                 case Keys.Up:
@@ -1059,7 +1058,7 @@ namespace System.Windows.Forms
                         int item = unchecked((int)(long)m.WParam);
                         if (item < 0 || item >= Items.Count)
                         {
-                            m.Result = (IntPtr)LB_ERROR;
+                            m.Result = (IntPtr)User32.LB_ERR;
                         }
                         else
                         {

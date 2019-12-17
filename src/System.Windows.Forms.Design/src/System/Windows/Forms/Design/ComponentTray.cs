@@ -1625,8 +1625,8 @@ namespace System.Windows.Forms.Design
                     break;
                 case WindowMessages.WM_CONTEXTMENU:
                     // Pop a context menu for the composition designer.
-                    int x = NativeMethods.Util.SignedLOWORD(unchecked((int)(long)m.LParam));
-                    int y = NativeMethods.Util.SignedHIWORD(unchecked((int)(long)m.LParam));
+                    int x = PARAM.SignedLOWORD(m.LParam);
+                    int y = PARAM.SignedHIWORD(m.LParam);
                     if (x == -1 && y == -1)
                     {
                         // for shift-F10
@@ -1639,8 +1639,8 @@ namespace System.Windows.Forms.Design
                 case WindowMessages.WM_NCHITTEST:
                     if (glyphManager != null)
                     {
-                        // Get a hit test on any glyhs that we are managing this way - we know where to route appropriate  messages
-                        Point pt = new Point((short)NativeMethods.Util.LOWORD(unchecked((int)(long)m.LParam)), (short)NativeMethods.Util.HIWORD(unchecked((int)(long)m.LParam)));
+                        // Get a hit test on any glyphs that we are managing this way - we know where to route appropriate  messages
+                        Point pt = new Point((short)PARAM.LOWORD(m.LParam), (short)PARAM.HIWORD(m.LParam));
                         var pt1 = new Point();
                         User32.MapWindowPoints(IntPtr.Zero, Handle, ref pt1, 1);
                         pt.Offset(pt1.X, pt1.Y);
@@ -2556,8 +2556,8 @@ namespace System.Windows.Forms.Design
                         break;
                     case WindowMessages.WM_CONTEXTMENU:
                         // We must handle this ourselves.  Control only allows regular Windows Forms context menus, which doesn't do us much good.  Also, control's button up processing calls DefwndProc first, which causes a right mouse up to be routed as a WM_CONTEXTMENU.  If we don't respond to it here, this message will be bubbled up to our parent, which would pop up a container context menu instead of our own.
-                        int x = NativeMethods.Util.SignedLOWORD(unchecked((int)(long)m.LParam));
-                        int y = NativeMethods.Util.SignedHIWORD(unchecked((int)(long)m.LParam));
+                        int x = PARAM.SignedLOWORD(m.LParam);
+                        int y = PARAM.SignedHIWORD(m.LParam);
                         if (x == -1 && y == -1)
                         {
                             // for shift-F10
@@ -2571,7 +2571,7 @@ namespace System.Windows.Forms.Design
                         if (_tray.glyphManager != null)
                         {
                             // Make sure tha we send our glyphs hit test messages over the TrayControls too
-                            Point pt = new Point((short)NativeMethods.Util.LOWORD(unchecked((int)(long)m.LParam)), (short)NativeMethods.Util.HIWORD(unchecked((int)(long)m.LParam)));
+                            Point pt = new Point((short)PARAM.LOWORD(m.LParam), (short)PARAM.HIWORD(m.LParam));
                             var pt1 = new Point();
                             User32.MapWindowPoints(IntPtr.Zero, Handle, ref pt1, 1);
                             pt.Offset(pt1.X, pt1.Y);

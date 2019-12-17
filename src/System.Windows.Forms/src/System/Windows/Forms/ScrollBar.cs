@@ -130,7 +130,7 @@ namespace System.Windows.Forms
             get
             {
                 CreateParams cp = base.CreateParams;
-                cp.ClassName = "SCROLLBAR";
+                cp.ClassName = ComCtl32.WindowClasses.WC_SCROLLBAR;
                 cp.Style &= ~(int)User32.WS.BORDER;
                 return cp;
             }
@@ -631,7 +631,7 @@ namespace System.Windows.Forms
 
         private void WmReflectScroll(ref Message m)
         {
-            ScrollEventType type = (ScrollEventType)NativeMethods.Util.LOWORD(m.WParam);
+            ScrollEventType type = (ScrollEventType)PARAM.LOWORD(m.WParam);
             DoScroll(type);
         }
 

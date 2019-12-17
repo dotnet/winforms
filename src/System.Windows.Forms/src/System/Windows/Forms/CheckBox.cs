@@ -8,6 +8,7 @@ using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.ButtonInternal;
 using System.Windows.Forms.Layout;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -299,7 +300,7 @@ namespace System.Windows.Forms
             get
             {
                 CreateParams cp = base.CreateParams;
-                cp.ClassName = "BUTTON";
+                cp.ClassName = ComCtl32.WindowClasses.WC_BUTTON;
                 if (OwnerDraw)
                 {
                     cp.Style |= NativeMethods.BS_OWNERDRAW;
@@ -623,7 +624,7 @@ namespace System.Windows.Forms
                 if (base.MouseIsDown)
                 {
                     Point pt = PointToScreen(new Point(mevent.X, mevent.Y));
-                    if (UnsafeNativeMethods.WindowFromPoint(pt) == Handle)
+                    if (User32.WindowFromPoint(pt) == Handle)
                     {
                         //Paint in raised state...
                         ResetFlagsandPaint();

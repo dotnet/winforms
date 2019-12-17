@@ -12,9 +12,6 @@ namespace System.Windows.Forms
         internal const int RTB_VERT = 0x0002;
         internal const int RTB_FORCE = 0x0010;
 
-        /* Richedit4.1 Window Class */
-        internal const string WC_RICHEDITW_41 = "RICHEDIT50W";
-
         /* RichTextBox messages */
 
         // Extended edit style masks

@@ -29,12 +29,7 @@ namespace System.Windows.Forms
         public WindowsFormsSynchronizationContext()
         {
             DestinationThread = Thread.CurrentThread;   //store the current thread to ensure its still alive during an invoke.
-            Application.ThreadContext context = Application.ThreadContext.FromCurrent();
-            Debug.Assert(context != null);
-            if (context != null)
-            {
-                controlToSendTo = context.MarshalingControl;
-            }
+            controlToSendTo = Application.ThreadContext.FromCurrent().MarshalingControl;
             Debug.Assert(controlToSendTo.IsHandleCreated, "Marshaling control should have created its handle in its ctor.");
         }
 
@@ -85,22 +80,12 @@ namespace System.Windows.Forms
                 throw new InvalidAsynchronousStateException(SR.ThreadNoLongerValid);
             }
 
-            Debug.Assert(controlToSendTo != null, "Should always have the marshaling control by this point");
-
-            if (controlToSendTo != null)
-            {
-                controlToSendTo.Invoke(d, new object[] { state });
-            }
+            controlToSendTo?.Invoke(d, new object[] { state });
         }
 
         public override void Post(SendOrPostCallback d, object state)
         {
-            Debug.Assert(controlToSendTo != null, "Should always have the marshaling control by this point");
-
-            if (controlToSendTo != null)
-            {
-                controlToSendTo.BeginInvoke(d, new object[] { state });
-            }
+            controlToSendTo?.BeginInvoke(d, new object[] { state });
         }
 
         public override SynchronizationContext CreateCopy()

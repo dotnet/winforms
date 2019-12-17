@@ -6,16 +6,12 @@ using System;
 
 internal static partial class Interop
 {
-    internal static partial class ComCtl32
+    internal static partial class User32
     {
-        public unsafe struct NMTOOLBARW
+        [Flags]
+        public enum MONITORINFOF : uint
         {
-            public User32.NMHDR hdr;
-            public int iItem;
-            public TBBUTTON tbButton;
-            public int cchText;
-            public char* pszText;
-            public RECT rcButton;
+            PRIMARY = 0x00000001,
         }
     }
 }

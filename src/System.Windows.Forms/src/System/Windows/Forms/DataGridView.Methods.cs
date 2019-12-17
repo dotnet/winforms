@@ -5683,10 +5683,10 @@ namespace System.Windows.Forms
             IntPtr halftone = ControlPaint.CreateHalftoneHBRUSH();
             IntPtr saveBrush = Gdi32.SelectObject(dc, halftone);
 
-            SafeNativeMethods.PatBlt(new HandleRef(this, dc), r.X, r.Y, r.Width, DATAGRIDVIEW_shadowEdgeThickness, NativeMethods.PATINVERT);
-            SafeNativeMethods.PatBlt(new HandleRef(this, dc), r.X, r.Y + r.Height - DATAGRIDVIEW_shadowEdgeThickness, r.Width, DATAGRIDVIEW_shadowEdgeThickness, NativeMethods.PATINVERT);
-            SafeNativeMethods.PatBlt(new HandleRef(this, dc), r.X, r.Y + DATAGRIDVIEW_shadowEdgeThickness, DATAGRIDVIEW_shadowEdgeThickness, r.Height - 2 * DATAGRIDVIEW_shadowEdgeThickness, NativeMethods.PATINVERT);
-            SafeNativeMethods.PatBlt(new HandleRef(this, dc), r.X + r.Width - DATAGRIDVIEW_shadowEdgeThickness, r.Y + DATAGRIDVIEW_shadowEdgeThickness, DATAGRIDVIEW_shadowEdgeThickness, r.Height - 2 * DATAGRIDVIEW_shadowEdgeThickness, NativeMethods.PATINVERT);
+            Gdi32.PatBlt(new HandleRef(this, dc), r.X, r.Y, r.Width, DATAGRIDVIEW_shadowEdgeThickness, Gdi32.ROP.PATINVERT);
+            Gdi32.PatBlt(new HandleRef(this, dc), r.X, r.Y + r.Height - DATAGRIDVIEW_shadowEdgeThickness, r.Width, DATAGRIDVIEW_shadowEdgeThickness, Gdi32.ROP.PATINVERT);
+            Gdi32.PatBlt(new HandleRef(this, dc), r.X, r.Y + DATAGRIDVIEW_shadowEdgeThickness, DATAGRIDVIEW_shadowEdgeThickness, r.Height - 2 * DATAGRIDVIEW_shadowEdgeThickness, Gdi32.ROP.PATINVERT);
+            Gdi32.PatBlt(new HandleRef(this, dc), r.X + r.Width - DATAGRIDVIEW_shadowEdgeThickness, r.Y + DATAGRIDVIEW_shadowEdgeThickness, DATAGRIDVIEW_shadowEdgeThickness, r.Height - 2 * DATAGRIDVIEW_shadowEdgeThickness, Gdi32.ROP.PATINVERT);
 
             Gdi32.SelectObject(dc, saveBrush);
             Gdi32.DeleteObject(halftone);
@@ -5702,7 +5702,7 @@ namespace System.Windows.Forms
             IntPtr dc = User32.GetDCEx(this, IntPtr.Zero, User32.DCX.CACHE | User32.DCX.LOCKWINDOWUPDATE);
             IntPtr halftone = ControlPaint.CreateHalftoneHBRUSH();
             IntPtr saveBrush = Gdi32.SelectObject(dc, halftone);
-            SafeNativeMethods.PatBlt(new HandleRef(this, dc), r.X, r.Y, r.Width, r.Height, NativeMethods.PATINVERT);
+            Gdi32.PatBlt(new HandleRef(this, dc), r.X, r.Y, r.Width, r.Height, Gdi32.ROP.PATINVERT);
             Gdi32.SelectObject(dc, saveBrush);
             Gdi32.DeleteObject(halftone);
             User32.ReleaseDC(new HandleRef(this, Handle), dc);

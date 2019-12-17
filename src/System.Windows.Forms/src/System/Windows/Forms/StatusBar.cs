@@ -197,7 +197,7 @@ namespace System.Windows.Forms
             get
             {
                 CreateParams cp = base.CreateParams;
-                cp.ClassName = NativeMethods.WC_STATUSBAR;
+                cp.ClassName = ComCtl32.WindowClasses.WC_STATUSBAR;
 
                 if (sizeGrip)
                 {
@@ -1058,7 +1058,7 @@ namespace System.Windows.Forms
 
         private void WmNCHitTest(ref Message m)
         {
-            int x = NativeMethods.Util.SignedLOWORD(m.LParam);
+            int x = PARAM.SignedLOWORD(m.LParam);
             Rectangle bounds = Bounds;
             bool callSuper = true;
 
@@ -1662,7 +1662,7 @@ namespace System.Windows.Forms
                     var cp = new CreateParams
                     {
                         Parent = IntPtr.Zero,
-                        ClassName = NativeMethods.TOOLTIPS_CLASS
+                        ClassName = ComCtl32.WindowClasses.TOOLTIPS_CLASS
                     };
                     cp.Style |= NativeMethods.TTS_ALWAYSTIP;
                     cp.ExStyle = 0;

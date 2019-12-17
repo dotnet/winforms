@@ -21,8 +21,8 @@ namespace System.Windows.Forms
         internal DpiChangedEventArgs(int old, Message m)
         {
             DeviceDpiOld = old;
-            DeviceDpiNew = NativeMethods.Util.SignedLOWORD(m.WParam);
-            Debug.Assert(NativeMethods.Util.SignedHIWORD(m.WParam) == DeviceDpiNew, "Non-square pixels!");
+            DeviceDpiNew = PARAM.SignedLOWORD(m.WParam);
+            Debug.Assert(PARAM.SignedHIWORD(m.WParam) == DeviceDpiNew, "Non-square pixels!");
             RECT suggestedRect = Marshal.PtrToStructure<RECT>(m.LParam);
             SuggestedRectangle = Rectangle.FromLTRB(suggestedRect.left, suggestedRect.top, suggestedRect.right, suggestedRect.bottom);
         }

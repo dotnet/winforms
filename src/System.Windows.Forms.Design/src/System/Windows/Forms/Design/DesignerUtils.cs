@@ -189,7 +189,7 @@ namespace System.Windows.Forms.Design
             get
             {
                 int lastXY = (int)User32.GetMessagePos();
-                return new Point(NativeMethods.Util.SignedLOWORD(lastXY), NativeMethods.Util.SignedHIWORD(lastXY));
+                return new Point(PARAM.SignedLOWORD(lastXY), PARAM.SignedHIWORD(lastXY));
             }
         }
 
@@ -951,7 +951,7 @@ namespace System.Windows.Forms.Design
             treeView.HotTracking = true;
             treeView.ShowLines = false;
             IntPtr hwnd = treeView.Handle;
-            SafeNativeMethods.SetWindowTheme(hwnd, "Explorer", null);
+            UxTheme.SetWindowTheme(hwnd, "Explorer", null);
             ComCtl32.TVS_EX exstyle = TreeView_GetExtendedStyle(hwnd);
             exstyle |= ComCtl32.TVS_EX.DOUBLEBUFFER | ComCtl32.TVS_EX.FADEINOUTEXPANDOS;
             TreeView_SetExtendedStyle(hwnd, exstyle, 0);
@@ -973,7 +973,7 @@ namespace System.Windows.Forms.Design
                 throw new ArgumentNullException(nameof(listView));
             }
             IntPtr hwnd = listView.Handle;
-            SafeNativeMethods.SetWindowTheme(hwnd, "Explorer", null);
+            UxTheme.SetWindowTheme(hwnd, "Explorer", null);
             ListView_SetExtendedListViewStyleEx(hwnd, NativeMethods.LVS_EX_DOUBLEBUFFER, NativeMethods.LVS_EX_DOUBLEBUFFER);
         }
     }

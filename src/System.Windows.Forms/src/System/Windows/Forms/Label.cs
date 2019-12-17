@@ -289,7 +289,7 @@ namespace System.Windows.Forms
             get
             {
                 CreateParams cp = base.CreateParams;
-                cp.ClassName = "STATIC";
+                cp.ClassName = ComCtl32.WindowClasses.WC_STATIC;
 
                 if (OwnerDraw)
                 {

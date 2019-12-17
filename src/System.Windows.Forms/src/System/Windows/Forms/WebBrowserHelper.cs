@@ -132,7 +132,9 @@ namespace System.Windows.Forms
             return null;
         }
 
-        // Returns a big COMRECT
+        /// <remarks>
+        ///  Returns a big clip RECT.
+        /// </remarks>
         internal static RECT GetClipRect()
         {
             return new Rectangle(0, 0, 32000, 32000);

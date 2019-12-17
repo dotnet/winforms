@@ -457,7 +457,7 @@ namespace System.Windows.Forms
             get
             {
                 CreateParams cp = base.CreateParams;
-                cp.ClassName = "EDIT";
+                cp.ClassName = ComCtl32.WindowClasses.WC_EDIT;
                 cp.Style |= NativeMethods.ES_AUTOHSCROLL | NativeMethods.ES_AUTOVSCROLL;
                 if (!textBoxFlags[hideSelection])
                 {
@@ -1630,7 +1630,7 @@ namespace System.Windows.Forms
 
             if (mevent.Button == MouseButtons.Left)
             {
-                if (!ValidationCancelled && UnsafeNativeMethods.WindowFromPoint(pt) == Handle)
+                if (!ValidationCancelled && User32.WindowFromPoint(pt) == Handle)
                 {
                     if (!doubleClickFired)
                     {
@@ -1696,9 +1696,9 @@ namespace System.Windows.Forms
         /// </summary>
         public virtual int GetCharIndexFromPosition(Point pt)
         {
-            int longPoint = NativeMethods.Util.MAKELONG(pt.X, pt.Y);
+            int longPoint = PARAM.ToInt(pt.X, pt.Y);
             int index = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), EditMessages.EM_CHARFROMPOS, 0, longPoint);
-            index = NativeMethods.Util.LOWORD(index);
+            index = PARAM.LOWORD(index);
 
             if (index < 0)
             {
@@ -1742,7 +1742,7 @@ namespace System.Windows.Forms
             }
 
             int i = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), EditMessages.EM_POSFROMCHAR, index, 0);
-            return new Point(NativeMethods.Util.SignedLOWORD(i), NativeMethods.Util.SignedHIWORD(i));
+            return new Point(PARAM.SignedLOWORD(i), PARAM.SignedHIWORD(i));
         }
 
         /// <summary>
@@ -2181,11 +2181,11 @@ namespace System.Windows.Forms
         {
             if (!textBoxFlags[codeUpdateText] && !textBoxFlags[creatingHandle])
             {
-                if (NativeMethods.Util.HIWORD(m.WParam) == NativeMethods.EN_CHANGE && CanRaiseTextChangedEvent)
+                if (PARAM.HIWORD(m.WParam) == NativeMethods.EN_CHANGE && CanRaiseTextChangedEvent)
                 {
                     OnTextChanged(EventArgs.Empty);
                 }
-                else if (NativeMethods.Util.HIWORD(m.WParam) == NativeMethods.EN_UPDATE)
+                else if (PARAM.HIWORD(m.WParam) == NativeMethods.EN_UPDATE)
                 {
                     // Force update to the Modified property, which will trigger
                     // ModifiedChanged event handlers
@@ -2229,8 +2229,8 @@ namespace System.Windows.Forms
         {
             if (ContextMenuStrip != null)
             {
-                int x = NativeMethods.Util.SignedLOWORD(m.LParam);
-                int y = NativeMethods.Util.SignedHIWORD(m.LParam);
+                int x = PARAM.SignedLOWORD(m.LParam);
+                int y = PARAM.SignedHIWORD(m.LParam);
                 Point client;
                 bool keyboardActivated = false;
                 // lparam will be exactly -1 when the user invokes the context menu

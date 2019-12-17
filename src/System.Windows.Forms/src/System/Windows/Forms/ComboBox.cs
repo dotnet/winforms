@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -400,7 +400,7 @@ namespace System.Windows.Forms
             get
             {
                 CreateParams cp = base.CreateParams;
-                cp.ClassName = "COMBOBOX";
+                cp.ClassName = ComCtl32.WindowClasses.WC_COMBOBOX;
                 cp.Style |= (int)User32.WS.VSCROLL | NativeMethods.CBS_HASSTRINGS | NativeMethods.CBS_AUTOHSCROLL;
                 cp.ExStyle |= (int)User32.WS_EX.CLIENTEDGE;
                 if (!integralHeight)
@@ -1650,21 +1650,20 @@ namespace System.Windows.Forms
             {
                 return new Point(0, 0);
             }
-            // Get the Combox Rect ...
-            //
-            RECT comboRectMid = new RECT();
-            UnsafeNativeMethods.GetWindowRect(new HandleRef(this, Handle), ref comboRectMid);
-            //
-            //Get the Edit Rectangle...
-            //
-            RECT editRectMid = new RECT();
-            UnsafeNativeMethods.GetWindowRect(new HandleRef(this, childEdit.Handle), ref editRectMid);
+
+            // Get the Combox Rect
+            var comboRectMid = new RECT();
+            User32.GetWindowRect(this, ref comboRectMid);
+
+            //Get the Edit Rectangle.
+            var editRectMid = new RECT();
+            User32.GetWindowRect(childEdit, ref editRectMid);
 
             //get the delta
-            int comboXMid = NativeMethods.Util.SignedLOWORD(m.LParam) + (editRectMid.left - comboRectMid.left);
-            int comboYMid = NativeMethods.Util.SignedHIWORD(m.LParam) + (editRectMid.top - comboRectMid.top);
+            int comboXMid = PARAM.SignedLOWORD(m.LParam) + (editRectMid.left - comboRectMid.left);
+            int comboYMid = PARAM.SignedHIWORD(m.LParam) + (editRectMid.top - comboRectMid.top);
 
-            return (new Point(comboXMid, comboYMid));
+            return new Point(comboXMid, comboYMid);
 
         }
 
@@ -1919,12 +1918,12 @@ namespace System.Windows.Forms
                     break;
                 case WindowMessages.WM_LBUTTONUP:
                     // Get the mouse location
-                    RECT rect = new RECT();
-                    UnsafeNativeMethods.GetWindowRect(new HandleRef(this, Handle), ref rect);
+                    var rect = new RECT();
+                    User32.GetWindowRect(this, ref rect);
                     Rectangle clientRect = rect;
 
-                    int x = NativeMethods.Util.SignedLOWORD(m.LParam);
-                    int y = NativeMethods.Util.SignedHIWORD(m.LParam);
+                    int x = PARAM.SignedLOWORD(m.LParam);
+                    int y = PARAM.SignedHIWORD(m.LParam);
                     Point pt = new Point(x, y);
                     pt = PointToScreen(pt);
 
@@ -1937,8 +1936,8 @@ namespace System.Windows.Forms
                             if (clientRect.Contains(pt))
                             {
                                 mousePressed = false;
-                                OnClick(new MouseEventArgs(MouseButtons.Left, 1, NativeMethods.Util.SignedLOWORD(m.LParam), NativeMethods.Util.SignedHIWORD(m.LParam), 0));
-                                OnMouseClick(new MouseEventArgs(MouseButtons.Left, 1, NativeMethods.Util.SignedLOWORD(m.LParam), NativeMethods.Util.SignedHIWORD(m.LParam), 0));
+                                OnClick(new MouseEventArgs(MouseButtons.Left, 1, PARAM.SignedLOWORD(m.LParam), PARAM.SignedHIWORD(m.LParam), 0));
+                                OnMouseClick(new MouseEventArgs(MouseButtons.Left, 1, PARAM.SignedLOWORD(m.LParam), PARAM.SignedHIWORD(m.LParam), 0));
                             }
                             else
                             {
@@ -1994,7 +1993,7 @@ namespace System.Windows.Forms
                     // Set the mouse capture as this is the child Wndproc.
                     Capture = false;
                     DefChildWndProc(ref m);
-                    OnMouseUp(new MouseEventArgs(MouseButtons.Middle, 1, NativeMethods.Util.SignedLOWORD(m.LParam), NativeMethods.Util.SignedHIWORD(m.LParam), 0));
+                    OnMouseUp(new MouseEventArgs(MouseButtons.Middle, 1, PARAM.SignedLOWORD(m.LParam), PARAM.SignedHIWORD(m.LParam), 0));
                     break;
                 case WindowMessages.WM_RBUTTONUP:
                     mousePressed = false;
@@ -2030,7 +2029,7 @@ namespace System.Windows.Forms
                     break;
 
                 case WindowMessages.WM_SETCURSOR:
-                    if (Cursor != DefaultCursor && childEdit != null && m.HWnd == childEdit.Handle && NativeMethods.Util.LOWORD(m.LParam) == NativeMethods.HTCLIENT)
+                    if (Cursor != DefaultCursor && childEdit != null && m.HWnd == childEdit.Handle && PARAM.LOWORD(m.LParam) == NativeMethods.HTCLIENT)
                     {
                         Cursor.Current = Cursor;
                     }
@@ -2068,11 +2067,11 @@ namespace System.Windows.Forms
         /// </summary>
         private void OnMouseLeaveInternal(EventArgs args)
         {
-            RECT rect = new RECT();
-            UnsafeNativeMethods.GetWindowRect(new HandleRef(this, Handle), ref rect);
-            Rectangle Rect = new Rectangle(rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top);
+            var rect = new RECT();
+            User32.GetWindowRect(this, ref rect);
+            Rectangle rectangle = rect;
             Point p = MousePosition;
-            if (!Rect.Contains(p))
+            if (!rectangle.Contains(p))
             {
                 OnMouseLeave(args);
                 mouseInEdit = false;
@@ -2657,6 +2656,11 @@ namespace System.Windows.Forms
         {
             ((EventHandler)Events[EVENT_DROPDOWN])?.Invoke(this, e);
 
+            if (!IsHandleCreated)
+            {
+                return;
+            }
+
             // Notify collapsed/expanded property change.
             AccessibilityObject.RaiseAutomationPropertyChangedEvent(
                 UiaCore.UIA.ExpandCollapseExpandCollapseStatePropertyId,
@@ -2799,30 +2803,31 @@ namespace System.Windows.Forms
             base.OnSelectedIndexChanged(e);
             ((EventHandler)Events[EVENT_SELECTEDINDEXCHANGED])?.Invoke(this, e);
 
+            if (!IsHandleCreated)
+            {
+                return;
+            }
+
             if (dropDownWillBeClosed)
             {
                 // This is after-closing selection - do not focus on the list item
                 // and reset the state to announce the selections later.
                 dropDownWillBeClosed = false;
+                return;
             }
-            else
+
+            if (AccessibilityObject is ComboBoxAccessibleObject accessibleObject &&
+                (DropDownStyle == ComboBoxStyle.DropDownList || DropDownStyle == ComboBoxStyle.DropDown))
             {
-                if (AccessibilityObject is ComboBoxAccessibleObject accessibleObject)
+                // Announce DropDown- and DropDownList-styled ComboBox item selection using keyboard
+                // in case when Level 3 is enabled and DropDown is not in expanded state. Simple-styled
+                // ComboBox selection is announced by TextProvider.
+                if (dropDown)
                 {
-
-                    // Announce DropDown- and DropDownList-styled ComboBox item selection using keyboard
-                    // in case when Level 3 is enabled and DropDown is not in expanded state. Simple-styled
-                    // ComboBox selection is announced by TextProvider.
-                    if (DropDownStyle == ComboBoxStyle.DropDownList || DropDownStyle == ComboBoxStyle.DropDown)
-                    {
-                        if (dropDown)
-                        {
-                            accessibleObject.SetComboBoxItemFocus();
-                        }
-
-                        accessibleObject.SetComboBoxItemSelection();
-                    }
+                    accessibleObject.SetComboBoxItemFocus();
                 }
+
+                accessibleObject.SetComboBoxItemSelection();
             }
 
             // set the position in the dataSource, if there is any
@@ -3080,6 +3085,11 @@ namespace System.Windows.Forms
         protected virtual void OnDropDownClosed(EventArgs e)
         {
             ((EventHandler)Events[EVENT_DROPDOWNCLOSED])?.Invoke(this, e);
+
+            if (!IsHandleCreated)
+            {
+                return;
+            }
 
             // Need to announce the focus on combo-box with new selected value on drop-down close.
             // If do not do this focus in Level 3 stays on list item of unvisible list.
@@ -3417,7 +3427,7 @@ namespace System.Windows.Forms
                 throw new ArgumentOutOfRangeException(nameof(length), length, string.Format(SR.InvalidArgument, nameof(length), length));
             }
 
-            SendMessage(NativeMethods.CB_SETEDITSEL, 0, NativeMethods.Util.MAKELPARAM(start, end));
+            SendMessage(NativeMethods.CB_SETEDITSEL, 0, PARAM.FromLowHigh(start, end));
         }
 
         /// <summary>
@@ -3658,7 +3668,7 @@ namespace System.Windows.Forms
                 if (childDropDown != null)
                 {
                     // Need to notify UI Automation that it can safely remove all map entries that refer to the specified window.
-                    ReleaseUiaProvider(childListBox.Handle);
+                    ReleaseUiaProvider(childDropDown.Handle);
 
                     childDropDown.ReleaseHandle();
                 }
@@ -3735,7 +3745,7 @@ namespace System.Windows.Forms
 
         private void WmReflectCommand(ref Message m)
         {
-            switch (NativeMethods.Util.HIWORD(m.WParam))
+            switch (PARAM.HIWORD(m.WParam))
             {
                 case NativeMethods.CBN_DBLCLK:
                     //OnDoubleClick(EventArgs.Empty);
@@ -3854,7 +3864,7 @@ namespace System.Windows.Forms
 
                         if (!Application.RenderWithVisualStyles && GetStyle(ControlStyles.UserPaint) == false && DropDownStyle == ComboBoxStyle.DropDownList && (FlatStyle == FlatStyle.Flat || FlatStyle == FlatStyle.Popup))
                         {
-                            UnsafeNativeMethods.PostMessage(new HandleRef(this, Handle), WindowMessages.WM_MOUSELEAVE, 0, 0);
+                            User32.PostMessageW(this, User32.WindowMessage.WM_MOUSELEAVE);
                         }
                     }
 
@@ -3888,13 +3898,12 @@ namespace System.Windows.Forms
                     break;
                 case WindowMessages.WM_LBUTTONUP:
                     // Get the mouse location
-                    //
-                    RECT r = new RECT();
-                    UnsafeNativeMethods.GetWindowRect(new HandleRef(this, Handle), ref r);
-                    Rectangle ClientRect = new Rectangle(r.left, r.top, r.right - r.left, r.bottom - r.top);
+                    var r = new RECT();
+                    User32.GetWindowRect(this, ref r);
+                    Rectangle clientRect = r;
 
-                    int x = NativeMethods.Util.SignedLOWORD(m.LParam);
-                    int y = NativeMethods.Util.SignedHIWORD(m.LParam);
+                    int x = PARAM.SignedLOWORD(m.LParam);
+                    int y = PARAM.SignedHIWORD(m.LParam);
                     Point pt = new Point(x, y);
                     pt = PointToScreen(pt);
                     //mouseEvents is used to keep the check that we get the WM_LBUTTONUP after
@@ -3905,10 +3914,10 @@ namespace System.Windows.Forms
                     {
                         mouseEvents = false;
                         bool captured = Capture;
-                        if (captured && ClientRect.Contains(pt))
+                        if (captured && clientRect.Contains(pt))
                         {
-                            OnClick(new MouseEventArgs(MouseButtons.Left, 1, NativeMethods.Util.SignedLOWORD(m.LParam), NativeMethods.Util.SignedHIWORD(m.LParam), 0));
-                            OnMouseClick(new MouseEventArgs(MouseButtons.Left, 1, NativeMethods.Util.SignedLOWORD(m.LParam), NativeMethods.Util.SignedHIWORD(m.LParam), 0));
+                            OnClick(new MouseEventArgs(MouseButtons.Left, 1, PARAM.SignedLOWORD(m.LParam), PARAM.SignedHIWORD(m.LParam), 0));
+                            OnMouseClick(new MouseEventArgs(MouseButtons.Left, 1, PARAM.SignedLOWORD(m.LParam), PARAM.SignedHIWORD(m.LParam), 0));
 
                         }
                         base.WndProc(ref m);
@@ -6496,11 +6505,13 @@ namespace System.Windows.Forms
             // this eliminates flicker by removing the pieces we're going to paint ourselves from
             // the update region.  Note the UpdateRegionBox is the bounding box of the actual update region.
             // this is just here so we can quickly eliminate rectangles that arent in the update region.
-            public void ValidateOwnerDrawRegions(ComboBox comboBox, Rectangle updateRegionBox)
+            public unsafe void ValidateOwnerDrawRegions(ComboBox comboBox, Rectangle updateRegionBox)
             {
-                RECT validRect;
                 if (comboBox != null)
-                { return; }
+                {
+                    return;
+                }
+
                 Rectangle topOwnerDrawArea = new Rectangle(0, 0, comboBox.Width, innerBorder.Top);
                 Rectangle bottomOwnerDrawArea = new Rectangle(0, innerBorder.Bottom, comboBox.Width, comboBox.Height - innerBorder.Bottom);
                 Rectangle leftOwnerDrawArea = new Rectangle(0, 0, innerBorder.Left, comboBox.Height);
@@ -6508,28 +6519,27 @@ namespace System.Windows.Forms
 
                 if (topOwnerDrawArea.IntersectsWith(updateRegionBox))
                 {
-                    validRect = new RECT(topOwnerDrawArea);
-                    SafeNativeMethods.ValidateRect(new HandleRef(comboBox, comboBox.Handle), ref validRect);
+                    RECT validRect = new RECT(topOwnerDrawArea);
+                    User32.ValidateRect(comboBox, &validRect);
                 }
 
                 if (bottomOwnerDrawArea.IntersectsWith(updateRegionBox))
                 {
-                    validRect = new RECT(bottomOwnerDrawArea);
-                    SafeNativeMethods.ValidateRect(new HandleRef(comboBox, comboBox.Handle), ref validRect);
+                    RECT validRect = new RECT(bottomOwnerDrawArea);
+                    User32.ValidateRect(comboBox, &validRect);
                 }
 
                 if (leftOwnerDrawArea.IntersectsWith(updateRegionBox))
                 {
-                    validRect = new RECT(leftOwnerDrawArea);
-                    SafeNativeMethods.ValidateRect(new HandleRef(comboBox, comboBox.Handle), ref validRect);
+                    RECT validRect = new RECT(leftOwnerDrawArea);
+                    User32.ValidateRect(comboBox, &validRect);
                 }
 
                 if (rightOwnerDrawArea.IntersectsWith(updateRegionBox))
                 {
-                    validRect = new RECT(rightOwnerDrawArea);
-                    SafeNativeMethods.ValidateRect(new HandleRef(comboBox, comboBox.Handle), ref validRect);
+                    RECT validRect = new RECT(rightOwnerDrawArea);
+                    User32.ValidateRect(comboBox, &validRect);
                 }
-
             }
         }
 

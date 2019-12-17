@@ -250,7 +250,7 @@ namespace System.Windows.Forms.Design
                         || (msg == WindowMessages.WM_HSCROLL))
                     {
                         // Send a message to ourselves to scroll
-                        NativeMethods.SendMessage(_designerRegion.Handle, msg, NativeMethods.Util.MAKELONG((int)wScrollNotify, 0), 0);
+                        NativeMethods.SendMessage(_designerRegion.Handle, msg, PARAM.ToInt((int)wScrollNotify, 0), 0);
                         return;
                     }
                     break;
@@ -546,7 +546,7 @@ namespace System.Windows.Forms.Design
             protected override void WndProc(ref Message m)
             {
                 base.WndProc(ref m);
-                if (m.Msg == WindowMessages.WM_PARENTNOTIFY && NativeMethods.Util.LOWORD(unchecked((int)(long)m.WParam)) == (short)WindowMessages.WM_CREATE)
+                if (m.Msg == WindowMessages.WM_PARENTNOTIFY && PARAM.LOWORD(m.WParam) == (short)WindowMessages.WM_CREATE)
                 {
                     if (_overlayList != null)
                     {

@@ -423,7 +423,7 @@ namespace System.Windows.Forms
                 //
                 if (window != null && window.Handle != IntPtr.Zero)
                 {
-                    UnsafeNativeMethods.PostMessage(new HandleRef(window, window.Handle), WindowMessages.WM_CLOSE, 0, 0);
+                    User32.PostMessageW(window, User32.WindowMessage.WM_CLOSE);
                     window.ReleaseHandle();
                 }
             }
@@ -850,7 +850,7 @@ namespace System.Windows.Forms
                 //
                 if (Handle != IntPtr.Zero)
                 {
-                    UnsafeNativeMethods.PostMessage(new HandleRef(this, Handle), WindowMessages.WM_CLOSE, 0, 0);
+                    User32.PostMessageW(this, User32.WindowMessage.WM_CLOSE);
                 }
 
                 // This releases the handle from our window proc, re-routing it back to

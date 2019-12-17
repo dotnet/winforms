@@ -11,12 +11,25 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
+    using Point = System.Drawing.Point;
+    using Size = System.Drawing.Size;
+
     public class ToolStripTests
     {
+        public ToolStripTests()
+        {
+            Application.ThreadException += (sender, e) => throw new Exception(e.Exception.StackTrace.ToString());
+        }
+
         [WinFormsFact]
-        public void ToolStrip_Ctor()
+        public void ToolStrip_Ctor_Default()
         {
             using var control = new SubToolStrip();
+            Assert.Null(control.AccessibleDefaultActionDescription);
+            Assert.Null(control.AccessibleDescription);
+            Assert.Null(control.AccessibleName);
+            Assert.Equal(AccessibleRole.Default, control.AccessibleRole);
+            Assert.False(control.AllowDrop);
             Assert.False(control.AllowItemReorder);
             Assert.True(control.AllowMerge);
             Assert.Equal(AnchorStyles.Top | AnchorStyles.Left, control.Anchor);
@@ -32,12 +45,16 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(25, control.Bottom);
             Assert.Equal(new Rectangle(0, 0, 100, 25), control.Bounds);
             Assert.True(control.CanEnableIme);
+            Assert.False(control.CanFocus);
             Assert.True(control.CanOverflow);
             Assert.True(control.CanRaiseEvents);
+            Assert.False(control.CanSelect);
+            Assert.False(control.Capture);
             Assert.False(control.CausesValidation);
             Assert.Equal(new Rectangle(0, 0, 100, 25), control.ClientRectangle);
             Assert.Equal(new Size(100, 25), control.ClientSize);
             Assert.Null(control.Container);
+            Assert.False(control.ContainsFocus);
             Assert.Null(control.ContextMenuStrip);
             Assert.Empty(control.Controls);
             Assert.Same(control.Controls, control.Controls);
@@ -70,6 +87,7 @@ namespace System.Windows.Forms.Tests
             Assert.True(control.Enabled);
             Assert.NotNull(control.Events);
             Assert.Same(control.Events, control.Events);
+            Assert.False(control.Focused);
             Assert.Equal(Control.DefaultFont, control.Font);
             Assert.Equal(control.Font.Height, control.FontHeight);
             Assert.Equal(Control.DefaultForeColor, control.ForeColor);
@@ -89,8 +107,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(new Size(16, 16), control.ImageScalingSize);
             Assert.Equal(ImeMode.NoControl, control.ImeMode);
             Assert.Equal(ImeMode.NoControl, control.ImeModeBase);
+            Assert.False(control.IsAccessible);
             Assert.False(control.IsCurrentlyDragging);
             Assert.False(control.IsDropDown);
+            Assert.False(control.IsMirrored);
             Assert.Empty(control.Items);
             Assert.Same(control.Items, control.Items);
             Assert.NotNull(control.LayoutEngine);
@@ -121,7 +141,9 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.ResizeRedraw);
             Assert.Equal(100, control.Right);
             Assert.Equal(RightToLeft.No, control.RightToLeft);
+            Assert.True(control.ShowFocusCues);
             Assert.True(control.ShowItemToolTips);
+            Assert.True(control.ShowKeyboardCues);
             Assert.Null(control.Site);
             Assert.Equal(new Size(100, 25), control.Size);
             Assert.False(control.Stretch);
@@ -131,6 +153,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(ToolStripTextDirection.Horizontal, control.TextDirection);
             Assert.Equal(0, control.Top);
             Assert.Null(control.TopLevelControl);
+            Assert.False(control.UseWaitCursor);
             Assert.NotNull(control.VerticalScroll);
             Assert.Same(control.VerticalScroll, control.VerticalScroll);
             Assert.True(control.Visible);
@@ -149,9 +172,14 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [MemberData(nameof(Ctor_ToolStripItemArray_TestData))]
-        public void ToolStrip_CtorToolStripItemArray(ToolStripItem[] items)
+        public void ToolStrip_Ctor_ToolStripItemArray(ToolStripItem[] items)
         {
             using var control = new SubToolStrip(items);
+            Assert.Null(control.AccessibleDefaultActionDescription);
+            Assert.Null(control.AccessibleDescription);
+            Assert.Null(control.AccessibleName);
+            Assert.Equal(AccessibleRole.Default, control.AccessibleRole);
+            Assert.False(control.AllowDrop);
             Assert.False(control.AllowItemReorder);
             Assert.True(control.AllowMerge);
             Assert.Equal(AnchorStyles.Top | AnchorStyles.Left, control.Anchor);
@@ -166,13 +194,18 @@ namespace System.Windows.Forms.Tests
             Assert.Null(control.BindingContext);
             Assert.Equal(25, control.Bottom);
             Assert.Equal(new Rectangle(0, 0, 100, 25), control.Bounds);
+            Assert.True(control.CanEnableIme);
+            Assert.False(control.CanFocus);
             Assert.True(control.CanOverflow);
             Assert.True(control.CanRaiseEvents);
+            Assert.False(control.CanSelect);
+            Assert.False(control.Capture);
             Assert.False(control.CausesValidation);
             Assert.Equal(new Rectangle(0, 0, 100, 25), control.ClientRectangle);
             Assert.Equal(new Size(100, 25), control.ClientSize);
             Assert.False(control.Created);
             Assert.Null(control.Container);
+            Assert.False(control.ContainsFocus);
             Assert.Empty(control.Controls);
             Assert.Same(control.Controls, control.Controls);
             Assert.Same(Cursors.Default, control.Cursor);
@@ -203,6 +236,7 @@ namespace System.Windows.Forms.Tests
             Assert.True(control.Enabled);
             Assert.NotNull(control.Events);
             Assert.Same(control.Events, control.Events);
+            Assert.False(control.Focused);
             Assert.Equal(Control.DefaultFont, control.Font);
             Assert.Equal(control.Font.Height, control.FontHeight);
             Assert.Equal(Control.DefaultForeColor, control.ForeColor);
@@ -227,6 +261,8 @@ namespace System.Windows.Forms.Tests
             Assert.NotSame(items, control.Items);
             Assert.Same(control.Items, control.Items);
             Assert.Equal(items, control.Items.Cast<ToolStripItem>());
+            Assert.False(control.IsAccessible);
+            Assert.False(control.IsMirrored);
             Assert.NotNull(control.LayoutEngine);
             Assert.Same(control.LayoutEngine, control.LayoutEngine);
             Assert.Null(control.LayoutSettings);
@@ -255,7 +291,9 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.ResizeRedraw);
             Assert.Equal(100, control.Right);
             Assert.Equal(RightToLeft.No, control.RightToLeft);
+            Assert.True(control.ShowFocusCues);
             Assert.True(control.ShowItemToolTips);
+            Assert.True(control.ShowKeyboardCues);
             Assert.Null(control.Site);
             Assert.Equal(new Size(100, 25), control.Size);
             Assert.False(control.Stretch);
@@ -265,6 +303,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(ToolStripTextDirection.Horizontal, control.TextDirection);
             Assert.Equal(0, control.Top);
             Assert.Null(control.TopLevelControl);
+            Assert.False(control.UseWaitCursor);
             Assert.NotNull(control.VerticalScroll);
             Assert.Same(control.VerticalScroll, control.VerticalScroll);
             Assert.True(control.Visible);
@@ -362,6 +401,42 @@ namespace System.Windows.Forms.Tests
             var toolStrip = new SubToolStrip();
             Assert.Null(toolStrip.CreateLayoutSettings(layoutStyle));
         }
+        [WinFormsFact]
+        public void ToolStrip_GetAutoSizeMode_Invoke_ReturnsExpected()
+        {
+            using var control = new SubToolStrip();
+            Assert.Equal(AutoSizeMode.GrowAndShrink, control.GetAutoSizeMode());
+        }
+
+        [WinFormsTheory]
+        [InlineData(ControlStyles.ContainerControl, true)]
+        [InlineData(ControlStyles.UserPaint, true)]
+        [InlineData(ControlStyles.Opaque, false)]
+        [InlineData(ControlStyles.ResizeRedraw, false)]
+        [InlineData(ControlStyles.FixedWidth, false)]
+        [InlineData(ControlStyles.FixedHeight, false)]
+        [InlineData(ControlStyles.StandardClick, true)]
+        [InlineData(ControlStyles.Selectable, false)]
+        [InlineData(ControlStyles.UserMouse, false)]
+        [InlineData(ControlStyles.SupportsTransparentBackColor, true)]
+        [InlineData(ControlStyles.StandardDoubleClick, true)]
+        [InlineData(ControlStyles.AllPaintingInWmPaint, true)]
+        [InlineData(ControlStyles.CacheText, false)]
+        [InlineData(ControlStyles.EnableNotifyMessage, false)]
+        [InlineData(ControlStyles.DoubleBuffer, false)]
+        [InlineData(ControlStyles.OptimizedDoubleBuffer, true)]
+        [InlineData(ControlStyles.UseTextForAccessibility, true)]
+        [InlineData((ControlStyles)0, true)]
+        [InlineData((ControlStyles)int.MaxValue, false)]
+        [InlineData((ControlStyles)(-1), false)]
+        public void ToolStrip_GetStyle_Invoke_ReturnsExpected(ControlStyles flag, bool expected)
+        {
+            using var control = new SubToolStrip();
+            Assert.Equal(expected, control.GetStyle(flag));
+
+            // Call again to test caching.
+            Assert.Equal(expected, control.GetStyle(flag));
+        }
 
         private class SubToolStrip : ToolStrip
         {
@@ -437,6 +512,10 @@ namespace System.Windows.Forms.Tests
                 set => base.ResizeRedraw = value;
             }
 
+            public new bool ShowFocusCues => base.ShowFocusCues;
+
+            public new bool ShowKeyboardCues => base.ShowKeyboardCues;
+
             public new bool VScroll
             {
                 get => base.VScroll;
@@ -444,6 +523,10 @@ namespace System.Windows.Forms.Tests
             }
 
             public new LayoutSettings CreateLayoutSettings(ToolStripLayoutStyle layoutStyle) => base.CreateLayoutSettings(layoutStyle);
+
+            public new AutoSizeMode GetAutoSizeMode() => base.GetAutoSizeMode();
+
+            public new bool GetStyle(ControlStyles flag) => base.GetStyle(flag);
         }
 
         private class SubToolStripItem : ToolStripItem

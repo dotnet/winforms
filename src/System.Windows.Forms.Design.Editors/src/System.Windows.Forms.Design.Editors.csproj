@@ -58,11 +58,13 @@
     <Compile Include="..\..\Common\src\DpiHelper.DpiAwarenessContext.cs" Link="Common\DpiHelper.DpiAwarenessContext.cs" />
     <Compile Include="..\..\Common\src\ScreenDC.cs" Link="Common\ScreenDC.cs" />
     <Compile Include="..\..\Common\src\Interop\Interop.BOOL.cs" Link="Interop\Interop.BOOL.cs" />
+    <Compile Include="..\..\Common\src\Interop\Interop.PARAM.cs" Link="Interop\Interop.PARAM.cs" />
     <Compile Include="..\..\Common\src\Interop\Interop.RECT.cs" Link="Interop\Interop.RECT.cs" />
     <Compile Include="..\..\Common\src\Interop\Interop.Libraries.cs" Link="Interop\Interop.Libraries.cs" />
     <Compile Include="..\..\Common\src\Interop\Interop.HRESULT.cs" Link="Interop\Interop.HRESULT.cs" />
     <Compile Include="..\..\Common\src\Interop\Interop.WindowMessages.cs" Link="Interop\Interop.WindowMessages.cs" />
     <Compile Include="..\..\Common\src\Interop\Interop.EditMessages.cs" Link="Interop\Interop.EditMessages.cs" />
+    <Compile Include="..\..\Common\src\Interop\IHandle.cs" Link="Interop\IHandle.cs" />
     <Compile Include="..\..\Common\src\Interop\ComCtl32\Interop.NMTREEVIEW.cs" Link="Interop\ComCtl32\Interop.NMTREEVIEW.cs" />
     <Compile Include="..\..\Common\src\Interop\ComCtl32\Interop.TVITEMW.cs" Link="Interop\ComCtl32\Interop.TVITEMW.cs" />
     <Compile Include="..\..\Common\src\Interop\ComCtl32\Interop.TVIF.cs" Link="Interop\ComCtl32\Interop.TVIF.cs" />
@@ -118,6 +120,7 @@
     <Compile Include="..\..\Common\src\Interop\User32\Interop.NMHDR.cs" Link="Interop\User32\Interop.NMHDR.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.NotifyWinEvent.cs" Link="Interop\User32\Interop.NotifyWinEvent.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.OBJID.cs" Link="Interop\User32\Interop.OBJID.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.PostMessageW.cs" Link="Interop\User32\Interop.PostMessageW.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.RegisterWindowMessageW.cs" Link="Interop\User32\Interop.RegisterWindowMessageW.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.ReleaseDC.cs" Link="Interop\User32\Interop.ReleaseDC.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.ScreenToClient.cs" Link="Interop\User32\Interop.ScreenToClient.cs" />

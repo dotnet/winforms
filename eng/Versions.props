@@ -3,37 +3,37 @@
   <PropertyGroup>
     <VersionPrefix>5.0.0</VersionPrefix>
     <!-- version in our package name #.#.#-below.#####.## -->
-    <PreReleaseVersionLabel>alpha</PreReleaseVersionLabel>
-    <PreReleaseVersionIteration>1</PreReleaseVersionIteration>
+    <PreReleaseVersionLabel>alpha1</PreReleaseVersionLabel>
     <!-- Use the compiler in the CLI instead of in the sdk, since the sdk one doesn't work with netcoreapp5.0 yet -->
     <UsingToolMicrosoftNetCompilers>false</UsingToolMicrosoftNetCompilers>
   </PropertyGroup>
   <!-- Below have corresponding entries in Versions.Details.XML because they are updated via Maestro -->
   <!-- Core Setup for coherency -->
   <PropertyGroup>
-    <MicrosoftNETCoreAppPackageVersion>5.0.0-alpha.1.19564.1</MicrosoftNETCoreAppPackageVersion>
+    <MicrosoftNETCoreAppPackageVersion>5.0.0-alpha1.19514.1</MicrosoftNETCoreAppPackageVersion>
   </PropertyGroup>
   <!-- CoreFX via Core Setup -->
   <PropertyGroup>
-    <MicrosoftNETCorePlatformsPackageVersion>5.0.0-alpha.1.19563.6</MicrosoftNETCorePlatformsPackageVersion>
-    <MicrosoftWin32RegistryPackageVersion>5.0.0-alpha.1.19563.6</MicrosoftWin32RegistryPackageVersion>
-    <MicrosoftWin32SystemEventsPackageVersion>5.0.0-alpha.1.19563.6</MicrosoftWin32SystemEventsPackageVersion>
-    <SystemCodeDomPackageVersion>5.0.0-alpha.1.19563.6</SystemCodeDomPackageVersion>
-    <SystemConfigurationConfigurationManagerPackageVersion>5.0.0-alpha.1.19563.6</SystemConfigurationConfigurationManagerPackageVersion>
-    <SystemDrawingCommonPackageVersion>5.0.0-alpha.1.19563.6</SystemDrawingCommonPackageVersion>
-    <SystemResourcesExtensionsPackageVersion>5.0.0-alpha.1.19563.6</SystemResourcesExtensionsPackageVersion>
-    <SystemSecurityCryptographyCngPackageVersion>5.0.0-alpha.1.19563.6</SystemSecurityCryptographyCngPackageVersion>
-    <SystemSecurityPermissionsPackageVersion>5.0.0-alpha.1.19563.6</SystemSecurityPermissionsPackageVersion>
-    <SystemWindowsExtensionsPackageVersion>5.0.0-alpha.1.19563.6</SystemWindowsExtensionsPackageVersion>
+    <MicrosoftNETCorePlatformsPackageVersion>5.0.0-alpha1.19504.7</MicrosoftNETCorePlatformsPackageVersion>
+    <MicrosoftWin32RegistryPackageVersion>5.0.0-alpha1.19504.7</MicrosoftWin32RegistryPackageVersion>
+    <MicrosoftWin32SystemEventsPackageVersion>5.0.0-alpha1.19504.7</MicrosoftWin32SystemEventsPackageVersion>
+    <SystemCodeDomPackageVersion>5.0.0-alpha1.19504.7</SystemCodeDomPackageVersion>
+    <SystemConfigurationConfigurationManagerPackageVersion>5.0.0-alpha1.19504.7</SystemConfigurationConfigurationManagerPackageVersion>
+    <SystemDrawingCommonPackageVersion>5.0.0-alpha1.19504.7</SystemDrawingCommonPackageVersion>
+    <SystemResourcesExtensionsPackageVersion>5.0.0-alpha1.19504.7</SystemResourcesExtensionsPackageVersion>
+    <SystemSecurityCryptographyCngPackageVersion>5.0.0-alpha1.19504.7</SystemSecurityCryptographyCngPackageVersion>
+    <SystemSecurityPermissionsPackageVersion>5.0.0-alpha1.19504.7</SystemSecurityPermissionsPackageVersion>
+    <SystemWindowsExtensionsPackageVersion>5.0.0-alpha1.19504.7</SystemWindowsExtensionsPackageVersion>
   </PropertyGroup>
   <!-- CoreCLR via Core Setup -->
   <PropertyGroup>
-    <MicrosoftNETCoreILAsmVersion>5.0.0-alpha1.19563.3</MicrosoftNETCoreILAsmVersion>
+    <MicrosoftNETCoreILPackageVersion>3.0.0-preview5-27616-73</MicrosoftNETCoreILPackageVersion>
+    <MicrosoftNETCoreILAsmPackageVersion>5.0.0-alpha1.19513.3</MicrosoftNETCoreILAsmPackageVersion>
   </PropertyGroup>
   <!-- Arcade -->
   <PropertyGroup>
-    <MicrosoftDotNetGenFacadesPackageVersion>5.0.0-beta.19570.6</MicrosoftDotNetGenFacadesPackageVersion>
-    <MicrosoftDotNetXUnitExtensionsPackageVersion>5.0.0-beta.19570.6</MicrosoftDotNetXUnitExtensionsPackageVersion>
+    <MicrosoftDotNetGenFacadesPackageVersion>5.0.0-beta.19613.1</MicrosoftDotNetGenFacadesPackageVersion>
+    <MicrosoftDotNetXUnitExtensionsPackageVersion>5.0.0-beta.19613.1</MicrosoftDotNetXUnitExtensionsPackageVersion>
   </PropertyGroup>
   <!-- Below have no corresponding entries in Versions.Details.XML because they are not updated via Maestro -->
   <!-- XUnit-related (not extensions) -->
@@ -47,8 +47,8 @@
   </PropertyGroup>
   <!-- Code Coverage -->
   <PropertyGroup>
-    <CoverletMSBuildPackageVersion>2.6.3</CoverletMSBuildPackageVersion>
-    <CodecovVersion>1.1.1</CodecovVersion>
+    <CoverletMSBuildPackageVersion>2.7.0</CoverletMSBuildPackageVersion>
+    <CodecovVersion>1.9.0</CodecovVersion>
     <ReportGeneratorVersion>4.0.9</ReportGeneratorVersion>
   </PropertyGroup>
   <!-- Additional unchanging dependencies -->

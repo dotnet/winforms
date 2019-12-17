@@ -49,7 +49,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  while doing a search, if no matches are found, this is returned
         /// </summary>
-        public const int NoMatches = NativeMethods.LB_ERR;
+        public const int NoMatches = User32.LB_ERR;
 
         /// <summary>
         ///  The default item height for an owner-draw ListBox. The ListBox's non-ownderdraw
@@ -299,7 +299,7 @@ namespace System.Windows.Forms
                     }
                     else if (IsHandleCreated)
                     {
-                        SendMessage(NativeMethods.LB_SETCOLUMNWIDTH, columnWidth, 0);
+                        SendMessage((int)User32.LB.SETCOLUMNWIDTH, columnWidth, 0);
                     }
                 }
             }
@@ -316,7 +316,7 @@ namespace System.Windows.Forms
             get
             {
                 CreateParams cp = base.CreateParams;
-                cp.ClassName = "LISTBOX";
+                cp.ClassName = ComCtl32.WindowClasses.WC_LISTBOX;
 
                 cp.Style |= (int)User32.WS.VSCROLL | NativeMethods.LBS_NOTIFY | NativeMethods.LBS_HASSTRINGS;
                 if (scrollAlwaysVisible)
@@ -468,7 +468,7 @@ namespace System.Windows.Forms
             {
                 if (IsHandleCreated)
                 {
-                    return unchecked((int)(long)SendMessage(NativeMethods.LB_GETCARETINDEX, 0, 0));
+                    return unchecked((int)(long)SendMessage((int)User32.LB.GETCARETINDEX, 0, 0));
                 }
 
                 return -1;
@@ -666,7 +666,7 @@ namespace System.Windows.Forms
                     if (drawMode == DrawMode.OwnerDrawFixed && IsHandleCreated)
                     {
                         BeginUpdate();
-                        SendMessage(NativeMethods.LB_SETITEMHEIGHT, 0, value);
+                        SendMessage((int)User32.LB.SETITEMHEIGHT, 0, value);
 
                         // Changing the item height might require a resize for IntegralHeight list boxes
                         //
@@ -914,7 +914,7 @@ namespace System.Windows.Forms
 
                 if (current == SelectionMode.One && IsHandleCreated)
                 {
-                    return unchecked((int)(long)SendMessage(NativeMethods.LB_GETCURSEL, 0, 0));
+                    return unchecked((int)(long)SendMessage((int)User32.LB.GETCURSEL, 0, 0));
                 }
 
                 if (itemsCollection != null && SelectedItems.Count > 0)
@@ -1221,7 +1221,7 @@ namespace System.Windows.Forms
             {
                 if (IsHandleCreated)
                 {
-                    return unchecked((int)(long)SendMessage(NativeMethods.LB_GETTOPINDEX, 0, 0));
+                    return unchecked((int)(long)SendMessage((int)User32.LB.GETTOPINDEX, 0, 0));
                 }
                 else
                 {
@@ -1232,7 +1232,7 @@ namespace System.Windows.Forms
             {
                 if (IsHandleCreated)
                 {
-                    SendMessage(NativeMethods.LB_SETTOPINDEX, value, 0);
+                    SendMessage((int)User32.LB.SETTOPINDEX, value, 0);
                 }
                 else
                 {
@@ -1536,7 +1536,7 @@ namespace System.Windows.Forms
 
             if (IsHandleCreated)
             {
-                int h = unchecked((int)(long)SendMessage(NativeMethods.LB_GETITEMHEIGHT, index, 0));
+                int h = unchecked((int)(long)SendMessage((int)User32.LB.GETITEMHEIGHT, index, 0));
                 if (h == -1)
                 {
                     throw new Win32Exception();
@@ -1556,10 +1556,8 @@ namespace System.Windows.Forms
         public Rectangle GetItemRectangle(int index)
         {
             CheckIndex(index);
-            RECT rect = new RECT();
-            int result = SendMessage(NativeMethods.LB_GETITEMRECT, index, ref rect).ToInt32();
-
-            if (result == 0)
+            var rect = new RECT();
+            if (User32.SendMessageW(this, (User32.WindowMessage)User32.LB.GETITEMRECT, (IntPtr)index, ref rect) == IntPtr.Zero)
             {
                 return Rectangle.Empty;
             }
@@ -1594,7 +1592,7 @@ namespace System.Windows.Forms
         {
             if (IsHandleCreated)
             {
-                int sel = unchecked((int)(long)SendMessage(NativeMethods.LB_GETSEL, index, 0));
+                int sel = unchecked((int)(long)SendMessage((int)User32.LB.GETSEL, index, 0));
                 if (sel == -1)
                 {
                     throw new Win32Exception();
@@ -1631,11 +1629,11 @@ namespace System.Windows.Forms
             User32.GetClientRect(new HandleRef(this, Handle), ref r);
             if (r.left <= x && x < r.right && r.top <= y && y < r.bottom)
             {
-                int index = unchecked((int)(long)SendMessage(NativeMethods.LB_ITEMFROMPOINT, 0, unchecked((int)(long)NativeMethods.Util.MAKELPARAM(x, y))));
-                if (NativeMethods.Util.HIWORD(index) == 0)
+                int index = unchecked((int)(long)SendMessage((int)User32.LB.ITEMFROMPOINT, 0, unchecked((int)(long)PARAM.FromLowHigh(x, y))));
+                if (PARAM.HIWORD(index) == 0)
                 {
                     // Inside ListBox client area
-                    return NativeMethods.Util.LOWORD(index);
+                    return PARAM.LOWORD(index);
                 }
             }
 
@@ -1649,14 +1647,14 @@ namespace System.Windows.Forms
         private int NativeAdd(object item)
         {
             Debug.Assert(IsHandleCreated, "Shouldn't be calling Native methods before the handle is created.");
-            int insertIndex = unchecked((int)(long)SendMessage(NativeMethods.LB_ADDSTRING, 0, GetItemText(item)));
+            int insertIndex = unchecked((int)(long)SendMessage((int)User32.LB.ADDSTRING, 0, GetItemText(item)));
 
-            if (insertIndex == NativeMethods.LB_ERRSPACE)
+            if (insertIndex == User32.LB_ERRSPACE)
             {
                 throw new OutOfMemoryException();
             }
 
-            if (insertIndex == NativeMethods.LB_ERR)
+            if (insertIndex == User32.LB_ERR)
             {
                 // On older platforms the ListBox control returns LB_ERR if there are a
                 // large number (>32000) of items. It doesn't appear to set error codes
@@ -1674,7 +1672,7 @@ namespace System.Windows.Forms
         private void NativeClear()
         {
             Debug.Assert(IsHandleCreated, "Shouldn't be calling Native methods before the handle is created.");
-            SendMessage(NativeMethods.LB_RESETCONTENT, 0, 0);
+            SendMessage((int)User32.LB.RESETCONTENT, 0, 0);
         }
 
         /// <summary>
@@ -1682,9 +1680,9 @@ namespace System.Windows.Forms
         /// </summary>
         internal string NativeGetItemText(int index)
         {
-            int len = unchecked((int)(long)SendMessage(NativeMethods.LB_GETTEXTLEN, index, 0));
+            int len = unchecked((int)(long)SendMessage((int)User32.LB.GETTEXTLEN, index, 0));
             StringBuilder sb = new StringBuilder(len + 1);
-            UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.LB_GETTEXT, index, sb);
+            UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)User32.LB.GETTEXT, index, sb);
             return sb.ToString();
         }
 
@@ -1695,14 +1693,14 @@ namespace System.Windows.Forms
         private int NativeInsert(int index, object item)
         {
             Debug.Assert(IsHandleCreated, "Shouldn't be calling Native methods before the handle is created.");
-            int insertIndex = unchecked((int)(long)SendMessage(NativeMethods.LB_INSERTSTRING, index, GetItemText(item)));
+            int insertIndex = unchecked((int)(long)SendMessage((int)User32.LB.INSERTSTRING, index, GetItemText(item)));
 
-            if (insertIndex == NativeMethods.LB_ERRSPACE)
+            if (insertIndex == User32.LB_ERRSPACE)
             {
                 throw new OutOfMemoryException();
             }
 
-            if (insertIndex == NativeMethods.LB_ERR)
+            if (insertIndex == User32.LB_ERR)
             {
                 // On older platforms the ListBox control returns LB_ERR if there are a
                 // large number (>32000) of items. It doesn't appear to set error codes
@@ -1722,8 +1720,8 @@ namespace System.Windows.Forms
         {
             Debug.Assert(IsHandleCreated, "Shouldn't be calling Native methods before the handle is created.");
 
-            bool selected = (unchecked((int)(long)SendMessage(NativeMethods.LB_GETSEL, (IntPtr)index, IntPtr.Zero)) > 0);
-            SendMessage(NativeMethods.LB_DELETESTRING, index, 0);
+            bool selected = (unchecked((int)(long)SendMessage((int)User32.LB.GETSEL, (IntPtr)index, IntPtr.Zero)) > 0);
+            SendMessage((int)User32.LB.DELETESTRING, index, 0);
 
             //If the item currently selected is removed then we should fire a Selectionchanged event...
             //as the next time selected index returns -1...
@@ -1745,11 +1743,11 @@ namespace System.Windows.Forms
 
             if (selectionMode == SelectionMode.One)
             {
-                SendMessage(NativeMethods.LB_SETCURSEL, (value ? index : -1), 0);
+                SendMessage((int)User32.LB.SETCURSEL, (value ? index : -1), 0);
             }
             else
             {
-                SendMessage(NativeMethods.LB_SETSEL, value ? -1 : 0, index);
+                SendMessage((int)User32.LB.SETSEL, value ? -1 : 0, index);
             }
         }
 
@@ -1776,7 +1774,7 @@ namespace System.Windows.Forms
             {
 
                 case SelectionMode.One:
-                    int index = unchecked((int)(long)SendMessage(NativeMethods.LB_GETCURSEL, 0, 0));
+                    int index = unchecked((int)(long)SendMessage((int)User32.LB.GETCURSEL, 0, 0));
                     if (index >= 0)
                     {
                         result = new int[] { index };
@@ -1786,11 +1784,11 @@ namespace System.Windows.Forms
 
                 case SelectionMode.MultiSimple:
                 case SelectionMode.MultiExtended:
-                    int count = unchecked((int)(long)SendMessage(NativeMethods.LB_GETSELCOUNT, 0, 0));
+                    int count = unchecked((int)(long)SendMessage((int)User32.LB.GETSELCOUNT, 0, 0));
                     if (count > 0)
                     {
                         result = new int[count];
-                        UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.LB_GETSELITEMS, count, result);
+                        UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)User32.LB.GETSELITEMS, count, result);
                     }
                     break;
             }
@@ -1861,20 +1859,20 @@ namespace System.Windows.Forms
 
             //for getting the current Locale to set the Scrollbars...
             //
-            SendMessage(NativeMethods.LB_SETLOCALE, CultureInfo.CurrentCulture.LCID, 0);
+            SendMessage((int)User32.LB.SETLOCALE, CultureInfo.CurrentCulture.LCID, 0);
 
             if (columnWidth != 0)
             {
-                SendMessage(NativeMethods.LB_SETCOLUMNWIDTH, columnWidth, 0);
+                SendMessage((int)User32.LB.SETCOLUMNWIDTH, columnWidth, 0);
             }
             if (drawMode == DrawMode.OwnerDrawFixed)
             {
-                SendMessage(NativeMethods.LB_SETITEMHEIGHT, 0, ItemHeight);
+                SendMessage((int)User32.LB.SETITEMHEIGHT, 0, ItemHeight);
             }
 
             if (topIndex != 0)
             {
-                SendMessage(NativeMethods.LB_SETTOPINDEX, topIndex, 0);
+                SendMessage((int)User32.LB.SETTOPINDEX, topIndex, 0);
             }
 
             if (UseCustomTabOffsets && CustomTabOffsets != null)
@@ -1882,7 +1880,7 @@ namespace System.Windows.Forms
                 int wpar = CustomTabOffsets.Count;
                 int[] offsets = new int[wpar];
                 CustomTabOffsets.CopyTo(offsets, 0);
-                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.LB_SETTABSTOPS, wpar, offsets);
+                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)User32.LB.SETTABSTOPS, wpar, offsets);
             }
 
             if (itemsCollection != null)
@@ -2223,7 +2221,7 @@ namespace System.Windows.Forms
 
                 if (IsHandleCreated)
                 {
-                    SendMessage(NativeMethods.LB_SETCURSEL, DataManager.Position, 0);
+                    SendMessage((int)User32.LB.SETCURSEL, DataManager.Position, 0);
                 }
 
                 // if the list changed and we still did not fire the
@@ -2350,7 +2348,7 @@ namespace System.Windows.Forms
                 {
                     width = MaxItemWidth;
                 }
-                SendMessage(NativeMethods.LB_SETHORIZONTALEXTENT, width, 0);
+                SendMessage((int)User32.LB.SETHORIZONTALEXTENT, width, 0);
             }
         }
 
@@ -2412,7 +2410,7 @@ namespace System.Windows.Forms
                 int wpar = CustomTabOffsets.Count;
                 int[] offsets = new int[wpar];
                 CustomTabOffsets.CopyTo(offsets, 0);
-                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.LB_SETTABSTOPS, wpar, offsets);
+                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)User32.LB.SETTABSTOPS, wpar, offsets);
                 Invalidate();
             }
         }
@@ -2437,16 +2435,16 @@ namespace System.Windows.Forms
 
         protected virtual void WmReflectCommand(ref Message m)
         {
-            switch (NativeMethods.Util.HIWORD(m.WParam))
+            switch (PARAM.HIWORD(m.WParam))
             {
-                case NativeMethods.LBN_SELCHANGE:
+                case (int)User32.LBN.SELCHANGE:
                     if (selectedItems != null)
                     {
                         selectedItems.Dirty();
                     }
                     OnSelectedIndexChanged(EventArgs.Empty);
                     break;
-                case NativeMethods.LBN_DBLCLK:
+                case (int)User32.LBN.DBLCLK:
                     // Handle this inside WM_LBUTTONDBLCLK
                     // OnDoubleClick(EventArgs.Empty);
                     break;
@@ -2537,17 +2535,17 @@ namespace System.Windows.Forms
                 case WindowMessages.WM_LBUTTONUP:
                     // Get the mouse location
                     //
-                    int x = NativeMethods.Util.SignedLOWORD(m.LParam);
-                    int y = NativeMethods.Util.SignedHIWORD(m.LParam);
+                    int x = PARAM.SignedLOWORD(m.LParam);
+                    int y = PARAM.SignedHIWORD(m.LParam);
                     Point pt = new Point(x, y);
                     pt = PointToScreen(pt);
                     bool captured = Capture;
-                    if (captured && UnsafeNativeMethods.WindowFromPoint(pt) == Handle)
+                    if (captured && User32.WindowFromPoint(pt) == Handle)
                     {
                         if (!doubleClickFired && !ValidationCancelled)
                         {
-                            OnClick(new MouseEventArgs(MouseButtons.Left, 1, NativeMethods.Util.SignedLOWORD(m.LParam), NativeMethods.Util.SignedHIWORD(m.LParam), 0));
-                            OnMouseClick(new MouseEventArgs(MouseButtons.Left, 1, NativeMethods.Util.SignedLOWORD(m.LParam), NativeMethods.Util.SignedHIWORD(m.LParam), 0));
+                            OnClick(new MouseEventArgs(MouseButtons.Left, 1, PARAM.SignedLOWORD(m.LParam), PARAM.SignedHIWORD(m.LParam), 0));
+                            OnMouseClick(new MouseEventArgs(MouseButtons.Left, 1, PARAM.SignedLOWORD(m.LParam), PARAM.SignedHIWORD(m.LParam), 0));
                         }
                         else
                         {
@@ -2556,8 +2554,8 @@ namespace System.Windows.Forms
                             // so we can't use that as a double-click substitute
                             if (!ValidationCancelled)
                             {
-                                OnDoubleClick(new MouseEventArgs(MouseButtons.Left, 2, NativeMethods.Util.SignedLOWORD(m.LParam), NativeMethods.Util.SignedHIWORD(m.LParam), 0));
-                                OnMouseDoubleClick(new MouseEventArgs(MouseButtons.Left, 2, NativeMethods.Util.SignedLOWORD(m.LParam), NativeMethods.Util.SignedHIWORD(m.LParam), 0));
+                                OnDoubleClick(new MouseEventArgs(MouseButtons.Left, 2, PARAM.SignedLOWORD(m.LParam), PARAM.SignedHIWORD(m.LParam), 0));
+                                OnMouseDoubleClick(new MouseEventArgs(MouseButtons.Left, 2, PARAM.SignedLOWORD(m.LParam), PARAM.SignedHIWORD(m.LParam), 0));
                             }
                         }
                     }
@@ -2584,12 +2582,12 @@ namespace System.Windows.Forms
                 case WindowMessages.WM_RBUTTONUP:
                     // Get the mouse location
                     //
-                    int rx = NativeMethods.Util.SignedLOWORD(m.LParam);
-                    int ry = NativeMethods.Util.SignedHIWORD(m.LParam);
+                    int rx = PARAM.SignedLOWORD(m.LParam);
+                    int ry = PARAM.SignedHIWORD(m.LParam);
                     Point rpt = new Point(rx, ry);
                     rpt = PointToScreen(rpt);
                     bool rCaptured = Capture;
-                    if (rCaptured && UnsafeNativeMethods.WindowFromPoint(rpt) == Handle)
+                    if (rCaptured && User32.WindowFromPoint(rpt) == Handle)
                     {
                         if (selectedItems != null)
                         {
@@ -4310,7 +4308,7 @@ namespace System.Windows.Forms
 
                             case SelectionMode.MultiSimple:
                             case SelectionMode.MultiExtended:
-                                return unchecked((int)(long)owner.SendMessage(NativeMethods.LB_GETSELCOUNT, 0, 0));
+                                return unchecked((int)(long)owner.SendMessage((int)User32.LB.GETSELCOUNT, 0, 0));
                         }
 
                         return 0;

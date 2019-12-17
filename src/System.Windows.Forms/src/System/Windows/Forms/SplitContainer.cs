@@ -579,7 +579,7 @@ namespace System.Windows.Forms
                         // We want to instantly change the cursor if the mouse is within our bounds.
                         var r = new RECT();
                         User32.GetCursorPos(out Point p);
-                        UnsafeNativeMethods.GetWindowRect(new HandleRef(this, Handle), ref r);
+                        User32.GetWindowRect(this, ref r);
                         if ((r.left <= p.X && p.X < r.right && r.top <= p.Y && p.Y < r.bottom) || User32.GetCapture() == Handle)
                         {
                             SendMessage(WindowMessages.WM_SETCURSOR, Handle, NativeMethods.HTCLIENT);
@@ -1679,7 +1679,7 @@ namespace System.Windows.Forms
             IntPtr dc = User32.GetDCEx(this, IntPtr.Zero, User32.DCX.CACHE | User32.DCX.LOCKWINDOWUPDATE);
             IntPtr halftone = ControlPaint.CreateHalftoneHBRUSH();
             IntPtr saveBrush = Gdi32.SelectObject(dc, halftone);
-            SafeNativeMethods.PatBlt(new HandleRef(this, dc), r.X, r.Y, r.Width, r.Height, NativeMethods.PATINVERT);
+            Gdi32.PatBlt(new HandleRef(this, dc), r.X, r.Y, r.Width, r.Height, Gdi32.ROP.PATINVERT);
             Gdi32.SelectObject(dc, saveBrush);
             Gdi32.DeleteObject(halftone);
             User32.ReleaseDC(new HandleRef(this, Handle), dc);
