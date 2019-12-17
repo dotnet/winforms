@@ -797,8 +797,8 @@ namespace System.Windows.Forms
                     // where a 'this' pointer isn't considered live in an instance method
                     // unless you read a value from the instance.
                     //
-                    // Note: As this is a static field, in theory we would not need to
-                    // call GC.KeepAlive() here, but we still do it to be safe.
+                    // Note: As this is a static field, the call to GC.KeepAlive() might be
+                    // superfluous here, but we still do it to be safe.
                     GC.KeepAlive(s_callbackProcDelegate);
                 }
             }
