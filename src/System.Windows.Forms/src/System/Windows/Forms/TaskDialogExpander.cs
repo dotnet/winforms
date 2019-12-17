@@ -20,7 +20,7 @@ namespace System.Windows.Forms
 
         private string? _collapsedButtonText;
 
-        private bool _expandFooterArea;
+        private TaskDialogExpanderPosition _expanderPosition;
 
         private bool _expanded;
 
@@ -154,24 +154,23 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///   Gets or sets a value that indicates whether the expanded area is displayed at the bottom
-        ///   of the task dialog's footer area, instead of immediately after the dialog's
-        ///   <see cref="TaskDialogPage.Text"/>.
+        ///   Gets or sets the <see cref="TaskDialogExpanderPosition"/> that specifies where
+        ///   the expanded area of the task dialog is to be displayed.
         /// </summary>
         /// <value>
-        ///   <see langword="true"/> if the expanded area is displayed at the bottom of the task dialog's
-        ///   footer area; <see langword="false"/> if the expanded area is displayed immediately after the
-        ///   dialog's <see cref="TaskDialogPage.Text"/>. The default value is <see langword="false"/>.
+        ///   The <see cref="TaskDialogExpanderPosition"/> that specifies where the expanded area
+        ///   of the task dialog is to be displayed. The default is
+        ///   <see cref="TaskDialogExpanderPosition.AfterText"/>.
         /// </value>
-        public bool ExpandFooterArea
+        public TaskDialogExpanderPosition Position
         {
-            get => _expandFooterArea;
+            get => _expanderPosition;
 
             set
             {
                 DenyIfBound();
 
-                _expandFooterArea = value;
+                _expanderPosition = value;
             }
         }
 
@@ -197,7 +196,7 @@ namespace System.Windows.Forms
             {
                 flags |= ComCtl32.TDF.EXPANDED_BY_DEFAULT;
             }
-            if (_expandFooterArea)
+            if (_expanderPosition == TaskDialogExpanderPosition.AfterFooter)
             {
                 flags |= ComCtl32.TDF.EXPAND_FOOTER_AREA;
             }
