@@ -897,19 +897,6 @@ namespace System.Windows.Forms
         }
 
         [ComImport]
-        [Guid("7494683C-37A0-11d2-A273-00C04F8EF4FF")]
-        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IManagedPerPropertyBrowsing
-        {
-            [PreserveSig]
-            HRESULT GetPropertyAttributes(
-                Ole32.DispatchID dispid,
-                ref int pcAttributes,
-                ref IntPtr pbstrAttrNames,
-                ref IntPtr pvariantInitValues);
-        }
-
-        [ComImport]
         [Guid("33C0C1D8-33CF-11d3-BFF2-00C04F990235")]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
         public unsafe interface IProvidePropertyBuilder

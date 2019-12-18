@@ -345,9 +345,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         {
             ArrayList attrs = new ArrayList();
 
-            if (component is NativeMethods.IManagedPerPropertyBrowsing)
+            if (component is VSSDK.IVSMDPerPropertyBrowsing)
             {
-                object[] temp = Com2IManagedPerPropertyBrowsingHandler.GetComponentAttributes((NativeMethods.IManagedPerPropertyBrowsing)component, Ole32.DispatchID.MEMBERID_NIL);
+                object[] temp = Com2IManagedPerPropertyBrowsingHandler.GetComponentAttributes((VSSDK.IVSMDPerPropertyBrowsing)component, Ole32.DispatchID.MEMBERID_NIL);
                 for (int i = 0; i < temp.Length; ++i)
                 {
                     attrs.Add(temp[i]);
