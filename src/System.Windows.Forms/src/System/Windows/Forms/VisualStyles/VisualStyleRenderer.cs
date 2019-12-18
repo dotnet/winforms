@@ -464,7 +464,7 @@ namespace System.Windows.Forms.VisualStyles
                 return;
             }
 
-            if (childControl.Handle != IntPtr.Zero)
+            if (childControl.IsHandleCreated)
             {
                 using var wgr = new WindowsGraphicsWrapper(dc, AllGraphicsProperties);
                 var hdc = new HandleRef(wgr, wgr.WindowsGraphics.DeviceContext.Hdc);
