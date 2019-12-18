@@ -14,13 +14,8 @@ namespace System.Windows.Forms.Tests
 {
     using Size = System.Drawing.Size;
 
-    public class TabControlControlCollectionTests
+    public class TabControlControlCollectionTests : IClassFixture<ThreadExceptionFixture>
     {
-        public TabControlControlCollectionTests()
-        {
-            Application.ThreadException += (sender, e) => throw new Exception(e.Exception.StackTrace.ToString());
-        }
-
         public static IEnumerable<object[]> Ctor_TabControl_TestData()
         {
             yield return new object[] { null };

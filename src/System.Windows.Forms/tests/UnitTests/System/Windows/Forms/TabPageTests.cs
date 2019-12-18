@@ -18,13 +18,8 @@ namespace System.Windows.Forms.Tests
     using Point = System.Drawing.Point;
     using Size = System.Drawing.Size;
 
-    public class TabPageTests
+    public class TabPageTests : IClassFixture<ThreadExceptionFixture>
     {
-        public TabPageTests()
-        {
-            Application.ThreadException += (sender, e) => throw new Exception(e.Exception.StackTrace.ToString());
-        }
-
         [WinFormsFact]
         public void TabPage_Ctor_Default()
         {

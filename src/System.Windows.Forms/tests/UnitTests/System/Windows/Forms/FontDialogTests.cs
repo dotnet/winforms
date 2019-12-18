@@ -11,13 +11,8 @@ using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
-    public class FontDialogTests
+    public class FontDialogTests : IClassFixture<ThreadExceptionFixture>
     {
-        public FontDialogTests()
-        {
-            Application.ThreadException += (sender, e) => throw new Exception(e.Exception.StackTrace.ToString());
-        }
-
         [WinFormsFact]
         public void FontDialog_Ctor_Default()
         {

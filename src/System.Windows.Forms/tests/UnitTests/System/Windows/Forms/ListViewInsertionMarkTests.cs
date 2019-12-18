@@ -10,13 +10,8 @@ using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ListViewInsertionMarkTests
+    public class ListViewInsertionMarkTests : IClassFixture<ThreadExceptionFixture>
     {
-        public ListViewInsertionMarkTests()
-        {
-            Application.ThreadException += (sender, e) => throw new Exception(e.Exception.StackTrace.ToString());
-        }
-
         [Fact]
         public void ListViewInsertionMark_AppearsAfterItem_Get_ReturnsExpected()
         {

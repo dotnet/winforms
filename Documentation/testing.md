@@ -101,12 +101,11 @@ Tests are built and executed by file name convention
 ### Throw unhandled exceptions
 
 We have been observed unexplainable hanging tests. To get better handle on the situation we have started trapping `ThreadException`s.
-Each test class must add a handler to its constructor similar to the one below:
+Each test class must implement the `IClassFixture<ThreadExceptionFixture>` interface similar to the one below:
   ```cs
-    public ButtonBaseTests()
+    public class ButtonBaseTests : IClassFixture<ThreadExceptionFixture>
     {
-        Application.ThreadException += (sender, e) => throw new Exception(e.Exception.StackTrace.ToString());
-    } 
+    }
   ```
 
 #### Strategy

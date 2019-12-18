@@ -6,13 +6,8 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects
 {
-    public class DomainUpDownAccessibleObjectTests
+    public class DomainUpDownAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
     {
-        public DomainUpDownAccessibleObjectTests()
-        {
-            Application.ThreadException += (sender, e) => throw new Exception(e.Exception.StackTrace.ToString());
-        }
-
         [WinFormsFact]
         public void DomainUpDownAccessibleObject_Ctor_Default()
         {

@@ -14,13 +14,8 @@ namespace System.Windows.Forms.Tests
     using Point = System.Drawing.Point;
     using Size = System.Drawing.Size;
 
-    public class ScrollBarTests
+    public class ScrollBarTests : IClassFixture<ThreadExceptionFixture>
     {
-        public ScrollBarTests()
-        {
-            Application.ThreadException += (sender, e) => throw new Exception(e.Exception.StackTrace.ToString());
-        }
-
         [WinFormsFact]
         public void ScrollBar_Ctor_Default()
         {

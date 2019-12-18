@@ -13,13 +13,8 @@ namespace System.Windows.Forms.Tests
     using Point = System.Drawing.Point;
     using Size = System.Drawing.Size;
 
-    public class ScrollableControlTests
+    public class ScrollableControlTests : IClassFixture<ThreadExceptionFixture>
     {
-        public ScrollableControlTests()
-        {
-            Application.ThreadException += (sender, e) => throw new Exception(e.Exception.StackTrace.ToString());
-        }
-
         [WinFormsFact]
         public void ScrollableControl_Ctor_Default()
         {

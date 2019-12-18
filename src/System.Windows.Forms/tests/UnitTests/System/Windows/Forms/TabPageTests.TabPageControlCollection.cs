@@ -8,13 +8,8 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class TabPageTabPageControlCollectionTests
+    public class TabPageTabPageControlCollectionTests : IClassFixture<ThreadExceptionFixture>
     {
-        public TabPageTabPageControlCollectionTests()
-        {
-            Application.ThreadException += (sender, e) => throw new Exception(e.Exception.StackTrace.ToString());
-        }
-
         public static IEnumerable<object[]> Ctor_TabPage_TestData()
         {
             yield return new object[] { null };

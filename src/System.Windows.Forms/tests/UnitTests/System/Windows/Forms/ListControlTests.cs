@@ -16,13 +16,8 @@ namespace System.Windows.Forms.Tests
     using Point = System.Drawing.Point;
     using Size = System.Drawing.Size;
 
-    public class ListControlTests
+    public class ListControlTests : IClassFixture<ThreadExceptionFixture>
     {
-        public ListControlTests()
-        {
-            Application.ThreadException += (sender, e) => throw new Exception(e.Exception.StackTrace.ToString());
-        }
-
         [WinFormsFact]
         public void ListControl_Ctor_Default()
         {

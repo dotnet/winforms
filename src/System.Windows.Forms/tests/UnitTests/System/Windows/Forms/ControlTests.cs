@@ -13,13 +13,8 @@ namespace System.Windows.Forms.Tests
     using Size = System.Drawing.Size;
     using Point = System.Drawing.Point;
 
-    public partial class ControlTests
+    public partial class ControlTests : IClassFixture<ThreadExceptionFixture>
     {
-        public ControlTests()
-        {
-            Application.ThreadException += (sender, e) => throw new Exception(e.Exception.StackTrace.ToString());
-        }
-
         [WinFormsFact]
         public void Control_Ctor_Default()
         {
