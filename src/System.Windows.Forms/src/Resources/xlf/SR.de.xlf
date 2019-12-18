@@ -1019,7 +1019,7 @@
       </trans-unit>
       <trans-unit id="ComboBoxEditDefaultAccessibleName">
         <source>ComboBox</source>
-        <target state="new">ComboBox</target>
+        <target state="translated">ComboBox</target>
         <note />
       </trans-unit>
       <trans-unit id="ComboBoxFlatStyleDescr">
@@ -1217,34 +1217,9 @@
         <target state="translated">Das übergeordnete Formular des Containersteuerelements.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ContextMenuCollapseDescr">
-        <source>Raised when the context menu collapses.</source>
-        <target state="translated">Wird ausgelöst, wenn das Kontextmenü ausgeblendet wird.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ContextMenuImageListDescr">
-        <source>Gets or sets the ImageList associated with this context menu.</source>
-        <target state="translated">Ruft die mit diesem Kontextmenü verknüpfte ImageList ab oder legt sie fest.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ContextMenuInvalidParent">
-        <source>ContextMenu cannot be shown on an invisible control.</source>
-        <target state="translated">ContextMenu kann nicht auf einem unsichtbarem Steuerelement angezeigt werden.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ContextMenuIsImageMarginPresentDescr">
-        <source>Gets or sets a value indicating whether the menu has an image margin.</source>
-        <target state="translated">Ruft einen Wert ab oder legt einen Wert fest, der anzeigt, ob das Menü einen Bildrand hat.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ContextMenuSourceControlDescr">
-        <source>The last control that caused this context menu to be displayed.</source>
-        <target state="translated">Das letzte Steuerelement, dass die Anzeige des Kontextmenüs verursacht hat.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="ContextMenuStripSourceControlDescr">
         <source>The last control that caused this context menu strip to be displayed.</source>
-        <target state="translated">Das letzte Steuerelement, das die Anzeige dieser Kontextmenüleiste verursacht hat.</target>
+        <target state="new">The last control that caused this context menu strip to be displayed.</target>
         <note />
       </trans-unit>
       <trans-unit id="ControlAccessibileObjectInvalid">
@@ -2105,466 +2080,6 @@
       <trans-unit id="DataBindingRemoveAtNotSupportedOnPropertyManager">
         <source>RemoveAt is not supported for property-to-property binding.</source>
         <target state="translated">RemoveAt wird für die Eigenschaftenbindung nicht unterstützt.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridAllowSortingDescr">
-        <source>Indicates whether the grid can be re-sorted by clicking a column header.</source>
-        <target state="translated">Zeigt an, ob das Raster durch Klicken auf den Spaltenheader neu sortiert werden kann.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridAlternatingBackColorDescr">
-        <source>Indicates the background color of alternating rows for a ledger appearance.</source>
-        <target state="translated">Zeigt die Hintergrundfarbe für abwechselnde Zeilen an (Ledger-Darstellung).</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridBackButtonClickDescr">
-        <source>Occurs when the user clicks the Back button on a child table to return to the parent table.</source>
-        <target state="translated">Tritt auf, wenn der Benutzer in einer untergeordneten Tabelle auf die Schaltfläche "Zurück" klickt, um zu der übergeordneten Tabelle zurückzukehren.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridBackgroundColorDescr">
-        <source>Indicates the color of the DataGrid background.</source>
-        <target state="translated">Zeigt die Farbe des DataGrid-Hintergrunds an.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridBeginInit">
-        <source>BeginInit() has already been called without an EndInit().</source>
-        <target state="translated">BeginInit() wurde bereits ohne EndInit() aufgerufen.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridBoolColumnAllowNullValue">
-        <source>Specifies whether the DataGridBoolColumn allows null values.</source>
-        <target state="translated">Gibt an, ob die DataGridBoolColumn NULL-Werte zulässt.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridBorderStyleDescr">
-        <source>Indicates the border style for the DataGrid.</source>
-        <target state="translated">Gibt die Rahmenart für das DataGrid an.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridCaptionBackButtonToolTip">
-        <source>Navigates back to the parent rows.</source>
-        <target state="translated">Navigiert zu den übergeordneten Zeilen zurück.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridCaptionBackColorDescr">
-        <source>Indicates the background color of the top caption.</source>
-        <target state="translated">Gibt die Hintergrundfarbe der oberen Beschriftung an.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridCaptionDetailsButtonToolTip">
-        <source>Shows/Hides the parent rows for the current set of child rows.</source>
-        <target state="translated">Blendet die übergeordneten Zeilen für die aktuellen untergeordneten Zeilen ein bzw. aus.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridCaptionFontDescr">
-        <source>Indicates the font of the top caption.</source>
-        <target state="translated">Gibt die Schriftart der oberen Beschriftung an.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridCaptionForeColorDescr">
-        <source>Indicates the color of text that appears in the top caption.</source>
-        <target state="translated">Gibt die Textfarbe der oberen Beschriftung an.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridCaptionTextDescr">
-        <source>Indicates the text displayed in the top caption.</source>
-        <target state="translated">Gibt den Text in der oberen Beschriftung an.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridCaptionVisibleDescr">
-        <source>Indicates whether the top caption is visible.</source>
-        <target state="translated">Gibt an, ob die obere Beschriftung sichtbar ist.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridColumnCollectionMissing">
-        <source>DataGridColumn instance does not exist in the collection.</source>
-        <target state="translated">Die DataGridColumn-Instanz ist in der Sammlung nicht vorhanden.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridColumnHeadersVisibleDescr">
-        <source>Indicates whether the column headers are visible.</source>
-        <target state="translated">Gibt an, ob die Spaltenheader sichtbar sind.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridColumnListManagerPosition">
-        <source>Position of ListManager must be equal to 'rowNum'.</source>
-        <target state="translated">Die ListManager-Position muss mit rowNum übereinstimmen.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridColumnNoPropertyDescriptor">
-        <source>PropertyDescriptor has not been set on this DataGridColumn.</source>
-        <target state="translated">PropertyDescriptor wurde für diese DataGridColumn nicht festgelegt.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridColumnStyleDuplicateMappingName">
-        <source>Data grid column styles collection already contains a column style with the same mapping name.</source>
-        <target state="translated">Die Sammlung der Spaltenformate des Datenrasters enthält bereits ein Spaltenformat mit diesem Zuordnungsnamen.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridColumnUnbound">
-        <source>DataGridColumnStyle of '{0}' cannot be used because it is not associated with a Property or Column in the DataSource.</source>
-        <target state="translated">Der DataGridColumnStyle {0} kann nicht verwendet werden, da er mit keiner Eigenschaft oder Spalte in der DataSource verknüpft ist.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridColumnWidth">
-        <source>ColumnWidth must be greater than or equal to 0.</source>
-        <target state="translated">ColumnWidth muss größer oder gleich 0 sein.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridCurrentCellDescr">
-        <source>The currently selected cell in the DataGrid.</source>
-        <target state="translated">Die zurzeit ausgewählte Zelle im DataGrid.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridDataMemberDescr">
-        <source>Indicates a sub-list of the DataSource to show in the DataGrid.</source>
-        <target state="translated">Zeigt eine untergeordnete Liste der DataSource an, um sie im DataGrid anzuzeigen.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridDataSourceDescr">
-        <source>Indicates the source of data for the DataGrid.</source>
-        <target state="translated">Zeigt die Datenquelle für das DataGrid an.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridDefaultColumnCollectionChanged">
-        <source>User cannot change the contents of the default GridColumnStylesCollection.</source>
-        <target state="translated">Der Benutzer kann den Inhalt der standardmäßigen GridColumnStylesCollection nicht ändern.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridDefaultTableSet">
-        <source>Value of this property cannot be changed on the default DataGridTableStyle.</source>
-        <target state="translated">Der Wert dieser Eigenschaft für den standardmäßigen DataGridTableStyle kann nicht geändert werden.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridDownButtonClickDescr">
-        <source>Occurs when the user clicks the "show/hide parent rows" icon. </source>
-        <target state="translated">Tritt auf, wenn der Benutzer auf das Symbol zum Anzeigen/Ausblenden von übergeordneten Zeilen klickt. </target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridEmptyColor">
-        <source>Value '{0}' cannot be set to an empty value.</source>
-        <target state="translated">Der Wert {0} kann nicht auf einen leeren Wert festgelegt werden.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridErrorMessageBoxCaption">
-        <source>Committing the row to the original data store has caused an error.</source>
-        <target state="translated">Fehler beim Durchführen des Commits der Zeile im ursprünglichen Datenspeicher .</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridExceptionInPaint">
-        <source>DataGrid received an exception at design time. Reset the DataSource and DataMember property on the grid.</source>
-        <target state="translated">DataGrid hat während der Entwurfszeit eine Ausnahme erhalten. Setzen Sie die DataSource- und DataMember-Eigenschaft im Raster zurück.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridFailedToGetRegionInfo">
-        <source>Program cannot get information about the painting and scrolling region.</source>
-        <target state="translated">Das Programm kann keine Informationen über den Bereich für das Zeichnen und den Bildlauf abrufen.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridFirstVisibleColumnDescr">
-        <source>Indicates the index of the column that is first shown.</source>
-        <target state="translated">Gibt den anfangs angezeigten Index dieser Spalte an.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridFlatModeDescr">
-        <source>Indicates whether the grid has a flat appearance.</source>
-        <target state="translated">Zeigt an, ob das Raster flach dargestellt wird.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridGridLineColorDescr">
-        <source>Indicates the color of the grid lines.</source>
-        <target state="translated">Zeigt die Farbe der Rasterlinien an.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridGridLineStyleDescr">
-        <source>Indicates the style of the grid lines.</source>
-        <target state="translated">Zeigt den Stil der Rasterlinien an.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridGridTablesDescr">
-        <source>The collection of DataGridTableStyle objects that the DataGrid can render its data with.</source>
-        <target state="translated">Die Sammlung von DataGridTableStyle-Objekten, mit denen DataGrid seine Daten darstellen kann.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridHeaderBackColorDescr">
-        <source>Indicates the background color of the column and row headers.</source>
-        <target state="translated">Zeigt die Hintergrundfarbe der Spalten- und Zeilenheader an.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridHeaderFontDescr">
-        <source>Indicates the font of the text in the column and row headers.</source>
-        <target state="translated">Zeigt die Schriftart des Texts in den Spalten- und Zeilenheadern an.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridHeaderForeColorDescr">
-        <source>Indicates the color of the text in the column and row headers.</source>
-        <target state="translated">Zeigt die Farbe des Texts in den Spalten- und Zeilenheadern an.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridHorizScrollBarDescr">
-        <source>Returns the horizontal scroll bar used by the grid.</source>
-        <target state="translated">Gibt die horizontale Schiebeleiste zurück, die vom Raster verwendet wird.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridLinkColorDescr">
-        <source>Indicates the color of the text that appears inside the child links.</source>
-        <target state="translated">Gibt die Farbe des Texts an, der in den untergeordneten Verknüpfungen angezeigt wird.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridLinkHoverColorDescr">
-        <source>Indicates the color of the text that appears inside a child link when the mouse pointer moves over it.</source>
-        <target state="translated">Gibt die Farbe des Textes an, der in einer untergeordneten Verknüpfung angezeigt wird, wenn der Mauszeiger darüber bewegt wird.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridListManagerDescr">
-        <source>The CurrencyManager that the DataGrid uses to get data from the data source.</source>
-        <target state="translated">Der CurrencyManager, den DataGrid für das Abrufen von Daten aus der Datenquelle verwendet.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridNavigateEventDescr">
-        <source>Occurs when the user navigates to the child rows or when the user navigates back to the parent rows.</source>
-        <target state="translated">Tritt ein, wenn der Benutzer zu den untergeordneten Zeilen oder zurück zu den übergeordneten Zeilen navigiert.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridNavigationModeDescr">
-        <source>Indicates whether links to child tables are shown.</source>
-        <target state="translated">Gibt an, ob Verknüpfungen zu untergeordneten Tabellen angezeigt werden.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridNodeClickEventDescr">
-        <source>Occurs when the user clicks on the expansion glyph on the row header.</source>
-        <target state="translated">Tritt ein, wenn der Benutzer auf eine Erweiterungszeichnung im Zeilenheader klickt.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridNullText">
-        <source>(null)</source>
-        <target state="translated">(NULL)</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridOnBackgroundColorChangedDescr">
-        <source>Event raised when the value of the BackgroundColor property is changed on DataGrid.</source>
-        <target state="translated">Das ausgelöste Ereignis, wenn der Wert der BackgroundColor-Eigenschaft für DataGrid geändert wird.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridOnBorderStyleChangedDescr">
-        <source>Event raised when the value of the BorderStyle property is changed on DataGrid.</source>
-        <target state="translated">Das ausgelöste Ereignis, wenn der Wert der BorderStyle-Eigenschaft für DataGrid geändert wird.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridOnCaptionVisibleChangedDescr">
-        <source>Event raised when the value of the CaptionVisible property is changed on DataGrid.</source>
-        <target state="translated">Das ausgelöste Ereignis, wenn der Wert der CaptionVisible-Eigenschaft für DataGrid geändert wird.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridOnCurrentCellChangedDescr">
-        <source>Event raised when the value of the CurrentCell property is changed on DataGrid.</source>
-        <target state="translated">Das ausgelöste Ereignis, wenn der Wert der CurrentCell-Eigenschaft für DataGrid geändert wird.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridOnDataSourceChangedDescr">
-        <source>Event raised when the value of the DataSource property is changed on DataGrid.</source>
-        <target state="translated">Das ausgelöste Ereignis, wenn der Wert der DataSource-Eigenschaft für DataGrid geändert wird.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridOnFlatModeChangedDescr">
-        <source>Event raised when the value of the FlatMode property is changed on DataGrid.</source>
-        <target state="translated">Das ausgelöste Ereignis, wenn der Wert der FlatMode-Eigenschaft für DataGrid geändert wird.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridOnNavigationModeChangedDescr">
-        <source>Event raised when the value of the NavigationMode property is changed on DataGrid.</source>
-        <target state="translated">Das ausgelöste Ereignis, wenn der Wert der NavigationMode-Eigenschaft für DataGrid geändert wird.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridOnParentRowsLabelStyleChangedDescr">
-        <source>Event raised when the value of the ParentRowsLabelStyle property is changed on DataGrid.</source>
-        <target state="translated">Das ausgelöste Ereignis, wenn der Wert der ParentRowsLabelStyle-Eigenschaft für DataGrid geändert wird.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridOnParentRowsVisibleChangedDescr">
-        <source>Event raised when the value of the ParentRowsVisible property is changed on DataGrid.</source>
-        <target state="translated">Das ausgelöste Ereignis, wenn der Wert der ParentRowsVisible-Eigenschaft für DataGrid geändert wird.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridOnReadOnlyChangedDescr">
-        <source>Event raised when the value of the ReadOnly property is changed on DataGrid.</source>
-        <target state="translated">Das ausgelöste Ereignis, wenn der Wert der ReadOnly-Eigenschaft für DataGrid geändert wird.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridParentRowsBackColorDescr">
-        <source>Indicates the background color of the parent rows.</source>
-        <target state="translated">Zeigt die Hintergrundfarbe der übergeordneten Zeilen an.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridParentRowsForeColorDescr">
-        <source>Indicates the color of the text in the parent rows.</source>
-        <target state="translated">Zeigt die Farbe des Texts in den übergeordneten Zeilen an.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridParentRowsLabelStyleDescr">
-        <source>Indicates whether the parent rows show labels for the table and for the columns.</source>
-        <target state="translated">Gibt an, ob die übergeordneten Zeilen Bezeichnungen für die Tabelle oder die Spalten anzeigen.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridParentRowsVisibleDescr">
-        <source>Indicates whether the parent rows area is visible.</source>
-        <target state="translated">Zeigt an, ob der übergeordnete Zeilenbereich sichtbar ist.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridPreferredColumnWidthDescr">
-        <source>Specifies what the default pixel widths of the grid columns are. The default value for PreferredColumnWidth is 75.</source>
-        <target state="translated">Gibt die Standardpixelbreite der Rasterspalten an. Der Standardwert für PreferredColumnWidth ist 75.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridPreferredRowHeightDescr">
-        <source>Indicates the preferred height of the rows.</source>
-        <target state="translated">Zeigt die bevorzugte Höhe der Zeilen an.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridPushedIncorrectValueIntoColumn">
-        <source>Value {0} Do you want to correct this value?</source>
-        <target state="translated">Wert {0}. Möchten Sie diesen Wert korrigieren?</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridReadOnlyDescr">
-        <source>Indicates whether rows in the grid can be edited, added, or deleted.</source>
-        <target state="translated">Zeigt an, ob Rasterzeilen bearbeitet, hinzugefügt oder gelöscht werden können.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridRowHeaderWidthDescr">
-        <source>Indicates the width of the row headers.</source>
-        <target state="translated">Zeigt die Breite der Zeilenheader an.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridRowHeadersVisibleDescr">
-        <source>Indicates whether the row headers are visible.</source>
-        <target state="translated">Zeigt an, ob die Zeilenheader sichtbar sind.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridRowRowHeight">
-        <source>DataGridRow.Height cannot be negative.</source>
-        <target state="translated">DataGridRow.Height kann nicht negativ sein.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridRowRowNumber">
-        <source>DataGridRow cannot have a negative row number.</source>
-        <target state="translated">DataGridRow kann keine negative Zeilennummer haben.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridScrollEventDescr">
-        <source>Occurs when the user scrolls either the horizontal or vertical scroll bar.</source>
-        <target state="translated">Tritt ein, wenn der Benutzer den horizontalen oder vertikalen Bildlauf ausführt.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridSelectedIndexDescr">
-        <source>Indicates the index of the current row.</source>
-        <target state="translated">Zeigt den Index der aktuellen Zeile an.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridSelectionBackColorDescr">
-        <source>Indicates the background color of any selected cells or rows.</source>
-        <target state="translated">Zeigt die Hintergrundfarbe ausgewählter Zellen oder Zeilen an.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridSelectionForeColorDescr">
-        <source>Indicates the color of the text in any selected cells or rows.</source>
-        <target state="translated">Zeigt die Farbe des Texts in ausgewählten Zellen oder Zeilen an.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridSetListManager">
-        <source>ListManager can be set using the DataSource and DataMember properties.</source>
-        <target state="translated">ListManager kann mithilfe der DataSource- und DataMember-Eigenschaften festgelegt werden.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridSetSelectIndex">
-        <source>Position on a null ListManager cannot be set.</source>
-        <target state="translated">Die Position für einen NULL-ListManager kann nicht festgelegt werden.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridSettingCurrentCellNotGood">
-        <source>CurrentCell cannot be set at this time. Moving your code to the Form.Load event should solve this problem.</source>
-        <target state="translated">CurrentCell kann derzeit nicht festgelegt werden. Verschieben Sie den Code in das Ereignis Form.Load, um das Problem zu beheben.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridTableCollectionMissingTable">
-        <source>DataGridTable instance does not exist in the collection.</source>
-        <target state="translated">Die DataGridTable-Instanz ist in der Sammlung nicht vorhanden.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridTableStyleCollectionAddedParentedTableStyle">
-        <source>DataGridTableStyle that is already parented to another DataGrid cannot be added.</source>
-        <target state="translated">Ein DataGridTableStyle, der bereits einem anderen DataGrid übergeordnet ist, kann nicht hinzugefügt werden.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridTableStyleDuplicateMappingName">
-        <source>Data grid table styles collection already contains a table style with the same mapping name.</source>
-        <target state="translated">In der Tabellenformatsammlung des Datenrasters ist bereits ein Tabellenformat mit diesem Zuordnungsnamen vorhanden.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridTableStyleTransparentAlternatingBackColorNotAllowed">
-        <source>DataGridTableStyle does not support transparent AlternatingBackColor.</source>
-        <target state="translated">DataGridTableStyle unterstützt die transparente AlternatingBackColor nicht.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridTableStyleTransparentBackColorNotAllowed">
-        <source>DataGridTableStyle does not support transparent BackColor.</source>
-        <target state="translated">DataGridTableStyle unterstützt die transparente BackColor nicht.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridTableStyleTransparentHeaderBackColorNotAllowed">
-        <source>DataGridTableStyle does not support transparent HeaderBackColor.</source>
-        <target state="translated">DataGridTableStyle unterstützt die transparente HeaderBackColor nicht.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridTableStyleTransparentSelectionBackColorNotAllowed">
-        <source>DataGridTableStyle does not support transparent SelectionBackColor.</source>
-        <target state="translated">DataGridTableStyle unterstützt die transparente SelectionBackColor nicht.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridToolTipEmptyIcon">
-        <source>null rectangle for icon bounds when adding tool tip.</source>
-        <target state="translated">NULL-Rechteck für Symbolbegrenzungen beim Hinzufügen der QuickInfo.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridTransparentAlternatingBackColorNotAllowed">
-        <source>DataGrid control does not support transparent AlternatingBackColor.</source>
-        <target state="translated">Das DataGrid-Steuerelement unterstützt die transparente AlternatingBackColor nicht.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridTransparentBackColorNotAllowed">
-        <source>DataGrid control does not support transparent BackColor.</source>
-        <target state="translated">Das DataGrid-Steuerelement unterstützt die transparente BackColor nicht.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridTransparentCaptionBackColorNotAllowed">
-        <source>DataGrid control does not support transparent CaptionBackColor.</source>
-        <target state="translated">Das DataGrid-Steuerelement unterstützt die transparente CaptionBackColor nicht.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridTransparentHeaderBackColorNotAllowed">
-        <source>DataGrid control does not support transparent HeaderBackColor.</source>
-        <target state="translated">Das DataGrid-Steuerelement unterstützt die transparente HeaderBackColor nicht.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridTransparentParentRowsBackColorNotAllowed">
-        <source>DataGrid control does not support transparent ParentRowsBackColor.</source>
-        <target state="translated">Das DataGrid-Steuerelement unterstützt die transparente ParentRowsBackColor nicht.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridTransparentSelectionBackColorNotAllowed">
-        <source>DataGrid control does not support transparent SelectionBackColor.</source>
-        <target state="translated">Das DataGrid-Steuerelement unterstützt die transparente SelectionBackColor nicht.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridUnbound">
-        <source>Data cannot be read from a DataGrid which is not bound to a DataTable.</source>
-        <target state="translated">Aus einem DataGrid, das nicht an eine DataTable gebunden ist, können keine Daten gelesen werden.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridVertScrollBarDescr">
-        <source>Returns the vertical scroll bar used by the grid.</source>
-        <target state="translated">Gibt die vertikale Schiebeleiste zurück, die vom Raster verwendet wird.</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewAlternatingRowsDefaultCellStyleChangedDescr">
@@ -4684,6 +4199,46 @@ Behandeln Sie das DataError-Ereignis, um dieses Standarddialogfeld zu ersetzen.<
         <target state="translated">Die für die Aktivierung des visuellen Stils erforderliche Standardmanifestdatei kann nicht gefunden werden.</target>
         <note />
       </trans-unit>
+      <trans-unit id="DefaultDataGridViewButtonCellTollTipText">
+        <source>Button</source>
+        <target state="translated">Schaltfläche</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DefaultDataGridViewComboBoxCellTollTipText">
+        <source>ComboBox</source>
+        <target state="translated">ComboBox</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DefaultDataGridViewImageCellToolTipText">
+        <source>Image</source>
+        <target state="translated">Bild</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DefaultDataGridViewLinkCellTollTipText">
+        <source>Link</source>
+        <target state="translated">Link</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DefaultDataGridViewTextBoxCellTollTipText">
+        <source>Edit</source>
+        <target state="translated">Bearbeiten</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DefaultDomainUpDownAccessibleName">
+        <source>DomainUpDown</source>
+        <target state="new">DomainUpDown</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DefaultNumericUpDownAccessibleName">
+        <source>NumericUpDown</source>
+        <target state="new">NumericUpDown</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DefaultUpDownButtonsAccessibleName">
+        <source>UpDown</source>
+        <target state="new">UpDown</target>
+        <note />
+      </trans-unit>
       <trans-unit id="DescriptionBindingNavigator">
         <source>Provides a user interface for navigation and manipulation of data bound to controls on a form.</source>
         <target state="translated">Stellt eine Benutzeroberfläche für die Navigation und Bearbeitung von Daten bereit, die an Steuerelemente für ein Formular gebunden sind.</target>
@@ -5037,6 +4592,11 @@ Behandeln Sie das DataError-Ereignis, um dieses Standarddialogfeld zu ersetzen.<
       <trans-unit id="ErrorProviderDataSourceDescr">
         <source>Indicates the source of data to bind errors against.</source>
         <target state="translated">Zeigt die Datenquelle an, gegen die Fehler gebunden werden sollen.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ErrorProviderDefaultAccessibleName">
+        <source>Error provider</source>
+        <target state="new">Error provider</target>
         <note />
       </trans-unit>
       <trans-unit id="ErrorProviderErrorDescr">
@@ -5632,19 +5192,9 @@ Möchten Sie sie ersetzen?</target>
         <target state="translated">Die Maximalgröße, die das Formular annehmen kann.</target>
         <note />
       </trans-unit>
-      <trans-unit id="FormMenuDescr">
-        <source>The main menu of the form. This must be set to a component of type MainMenu.</source>
-        <target state="translated">Das Hauptmenü dieses Formulars. Dies muss auf eine Komponente des Typs MainMenu festgelegt werden.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="FormMenuStripDescr">
         <source>Specifies the primary MenuStrip for the Form. This property is used for keyboard activation and automatic merging in MDI.</source>
         <target state="translated">Gibt den primären MenuStrip für das Formular an. Diese Eigenschaft wird für die Tastaturaktivierung und das automatische Zusammenführen in MDI verwendet.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="FormMergedMenuDescr">
-        <source>The merged menu of this form, which is used when displaying a single merged MDI menu.</source>
-        <target state="translated">Das zusammengeführte Menü dieses Formulars, das verwendet wird, wenn ein einfaches zusammengeführtes MDI-Menu angezeigt wird.</target>
         <note />
       </trans-unit>
       <trans-unit id="FormMinimizeBoxDescr">
@@ -7141,26 +6691,6 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
         <target state="translated">Das Formular, das als MdiParent für dieses Formular angegeben wurde, ist kein MdiContainer.</target>
         <note />
       </trans-unit>
-      <trans-unit id="MainMenuCollapseDescr">
-        <source>Occurs when the main menu collapses.</source>
-        <target state="translated">Tritt ein, wenn das Hauptmenü ausgeblendet wird.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="MainMenuImageListDescr">
-        <source>Gets or sets the ImageList associated with this main menu.</source>
-        <target state="translated">Ruft die mit dem Hauptmenü verknüpfte ImageList ab oder legt sie fest.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="MainMenuIsImageMarginPresentDescr">
-        <source>Gets or sets a value indicating whether the menu has an image margin.</source>
-        <target state="translated">Ruft einen Wert ab oder legt einen Wert fest, der anzeigt, ob das Menü einen Bildrand hat.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="MainMenuToStringNoForm">
-        <source>&lt;No Form&gt;</source>
-        <target state="translated">&lt;No Form&gt;</target>
-        <note />
-      </trans-unit>
       <trans-unit id="MaskedTextBoxAllowPromptAsInputDescr">
         <source>Indicates whether the prompt character is valid as input.</source>
         <target state="translated">Zeigt an, ob das Eingabeaufforderungszeichen eine gültige Eingabe ist.</target>
@@ -7296,139 +6826,14 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
         <target state="translated">Gibt den Typ des für die Analyse des Eingabetexts zu verwendenden Objekts an, wenn das Steuerelement den Fokus verliert.</target>
         <note />
       </trans-unit>
-      <trans-unit id="MenuBadMenuItem">
-        <source>Parameter must be of type MenuItem.</source>
-        <target state="translated">Der Parameter muss den Typ MenuItem haben.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="MenuImageMarginColorDescr">
-        <source>Gets or sets the background color of this menu's image margin.</source>
-        <target state="translated">Ruft die Hintergrundfarbe des Bildrandes für dieses Menü ab oder legt sie fest.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="MenuIsParentDescr">
-        <source>Indicates if this menu contains any child items.</source>
-        <target state="translated">Gibt an, ob dieses Menü untergeordnete Elemente enthält.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="MenuItemAlreadyExists">
-        <source>Cannot add MenuItem '{0}'. It already exists as a parent of the current menu item.</source>
-        <target state="translated">MenuItem {0} kann nicht hinzugefügt werden, da es bereits als übergeordnetes Menüelement vorhanden ist.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="MenuItemCheckedDescr">
-        <source>Indicates whether the item is checked.</source>
-        <target state="translated">Gibt an, ob das Element ausgewählt ist.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="MenuItemDefaultDescr">
-        <source>Indicates whether the item is the default item.</source>
-        <target state="translated">Gibt an, ob das Element das Standardelement ist.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="MenuItemEnabledDescr">
-        <source>Indicates whether the item is enabled.</source>
-        <target state="translated">Gibt an, ob das Element aktiviert ist.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="MenuItemImageDescr">
-        <source>Gets or sets the image to be displayed on this menu item.</source>
-        <target state="translated">Ruft das für dieses Menüelement anzuzeigende Bild ab oder legt es fest.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="MenuItemImageListDescr">
-        <source>Gets or sets the ImageList associated with this menu item.</source>
-        <target state="translated">Ruft das mit der ImageList verknüpfte Menüelement ab oder legt es fest.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="MenuItemImageMarginColorDescr">
-        <source>Gets or sets the background color of this menu item's image margin.</source>
-        <target state="translated">Ruft die Hintergrundfarbe des Bildrandes für dieses Menü ab oder legt sie fest.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="MenuItemInvalidCheckProperty">
-        <source>True is not a valid value for the Checked property.  This is only valid for MenuItems that have no children and are not top-level.</source>
-        <target state="translated">"True" ist kein gültiger Wert für die Checked-Eigenschaft. Er ist nur für MenuItems gültig, die keine untergeordneten Elemente besitzen und sich nicht auf der obersten Ebene befinden.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="MenuItemMDIListDescr">
-        <source>Determines whether the MDI child window list is appended to this item.</source>
-        <target state="translated">Bestimmt, ob die MDI-Liste untergeordneter Fenster an dieses Element angehängt wird.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="MenuItemMergeOrderDescr">
-        <source>Determines the merge order of the item.</source>
-        <target state="translated">Bestimmt die Zusammenführungsfolge des Elements.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="MenuItemMergeTypeDescr">
-        <source>Determines how the item is handled when menus are merged.</source>
-        <target state="translated">Bestimmt, wie das Element beim Zusammenführen von Menüs behandelt wird.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="MenuItemOnClickDescr">
-        <source>Occurs when the menu item is selected.</source>
-        <target state="translated">Tritt ein, wenn das Menüelement ausgewählt wird.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="MenuItemOnInitDescr">
-        <source>Occurs before the containing menu is displayed.</source>
-        <target state="translated">Tritt ein, bevor das enthaltende Menü angezeigt wird.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="MenuItemOnSelectDescr">
-        <source>Occurs when the menu item is selected.</source>
-        <target state="translated">Tritt ein, wenn das Menüelement ausgewählt wird.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="MenuItemOwnerDrawDescr">
-        <source>Indicates if Windows will draw the menu item or if the user will handle the painting.</source>
-        <target state="translated">Zeigt an, ob Windows oder der Benutzer das Menüelement zeichnet.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="MenuItemRadioCheckDescr">
-        <source>If the item is checked, this value will determine whether the check style is a radio button.</source>
-        <target state="translated">Wenn das Element aktiviert wird, bestimmt der Wert, ob dafür ein Optionsfeld verwendet wird.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="MenuItemShortCutDescr">
         <source>The shortcut key associated with the menu item. </source>
-        <target state="translated">Die dem Menüelement zugeordnete Tastenkombination. </target>
+        <target state="new">The shortcut key associated with the menu item. </target>
         <note />
       </trans-unit>
       <trans-unit id="MenuItemShowShortCutDescr">
         <source>Indicates whether the shorcut key for the menu item is displayed on the item. </source>
-        <target state="translated">Gibt an, ob die Tastenkombination für das Menüelement in dem Element angezeigt wird. </target>
-        <note />
-      </trans-unit>
-      <trans-unit id="MenuItemTextDescr">
-        <source>The caption displayed by the item.</source>
-        <target state="translated">Die Beschriftung, die vom Element angezeigt wird.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="MenuItemVisibleDescr">
-        <source>Indicates whether the item is visible.</source>
-        <target state="translated">Zeigt an, ob das Element sichtbar ist.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="MenuMDIListItemDescr">
-        <source>Retrieves the menu item that contains a list of MDI child windows.</source>
-        <target state="translated">Fragt das Menüelement ab, das ein Liste untergeordneter MDI-Fenster enthält.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="MenuMenuItemsDescr">
-        <source>The menu items for the menu.</source>
-        <target state="translated">Die Menüelemente für das Menü.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="MenuMergeWithSelf">
-        <source>Cannot merge a menu with itself.</source>
-        <target state="translated">Ein Menü kann nicht mit sich selbst zusammengeführt werden.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="MenuRightToLeftDescr">
-        <source>Indicates if this menu should display right to left</source>
-        <target state="translated">Zeigt an, ob dieses Menü von rechts nach links angezeigt werden soll.</target>
+        <target state="new">Indicates whether the shorcut key for the menu item is displayed on the item. </target>
         <note />
       </trans-unit>
       <trans-unit id="MenuStripMdiWindowListItem">
@@ -7449,6 +6854,11 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       <trans-unit id="MonthCalendarAnnuallyBoldedDatesDescr">
         <source>Indicates which annual dates should be boldface.</source>
         <target state="translated">Gibt an, welche jährlichen Tage fett angezeigt werden sollen.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="MonthCalendarBodyAccessibleName">
+        <source>Calendar body</source>
+        <target state="new">Calendar body</target>
         <note />
       </trans-unit>
       <trans-unit id="MonthCalendarDimensionsDescr">
@@ -7501,6 +6911,11 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
         <target state="translated">Gibt an, welche monatlichen Daten fett angezeigt werden sollen.</target>
         <note />
       </trans-unit>
+      <trans-unit id="MonthCalendarNextButtonAccessibleName">
+        <source>Next</source>
+        <target state="new">Next</target>
+        <note />
+      </trans-unit>
       <trans-unit id="MonthCalendarOnDateChangedDescr">
         <source>Occurs when the range of dates changes due to user selection, or through next/previous month navigation.</source>
         <target state="translated">Tritt ein, wenn sich der Datumsbereich aufgrund einer Benutzerauswahl oder einer Navigation zum nächsten oder vorherigen Monat ändert.</target>
@@ -7509,6 +6924,11 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       <trans-unit id="MonthCalendarOnDateSelectedDescr">
         <source>Occurs when the user selects a date or a range of dates.</source>
         <target state="translated">Tritt ein, wenn der Benutzer ein Datum oder einen Datumsbereich auswählt.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="MonthCalendarPreviousButtonAccessibleName">
+        <source>Previous</source>
+        <target state="new">Previous</target>
         <note />
       </trans-unit>
       <trans-unit id="MonthCalendarRange">
@@ -7584,6 +7004,11 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       <trans-unit id="MonthCalendarTitleForeColorDescr">
         <source>The color used to display text within the calendar's title.</source>
         <target state="translated">Die Farbe, in der der Text in der Kalenderüberschrift angezeigt wird.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="MonthCalendarTodayButtonAccessibleName">
+        <source>Today: {0}</source>
+        <target state="new">Today: {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="MonthCalendarTodayDateDescr">
@@ -8646,9 +8071,19 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
         <target state="translated">Eigenschaftenfenster</target>
         <note />
       </trans-unit>
+      <trans-unit id="PropertyGridDefaultAccessibleNameTemplate">
+        <source>{0} Properties Window</source>
+        <target state="translated">{0}-Eigenschaftenfenster</target>
+        <note />
+      </trans-unit>
       <trans-unit id="PropertyGridDisabledItemForeColorDesc">
         <source>The foreground color of disabled text in the grid area.</source>
         <target state="translated">Die Vordergrundfarbe für gesperrten Text im Rasterbereich.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="PropertyGridDocCommentAccessibleNameTemplate">
+        <source>{0} Description</source>
+        <target state="translated">{0}-Beschreibung</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridDropDownButtonAccessibleName">
@@ -9914,136 +9349,6 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       <trans-unit id="TooManyResumeUpdateMenuHandles">
         <source>Too many calls to ResumeUpdateMenuHandles.</source>
         <target state="translated">Zu viele Aufrufe an ResumeUpdateMenuHandles.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ToolBarAppearanceDescr">
-        <source>Controls the appearance of the ToolBar control, using values from the ToolBarAppearance enumeration.</source>
-        <target state="translated">Steuert die Darstellung des ToolBar-Steuerelements mit Werten aus der ToolBarAppearance-Enumeration.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ToolBarAutoSizeDescr">
-        <source>Controls whether the ToolBar will automatically size itself based on Button size.</source>
-        <target state="translated">Steuert, ob die Größe der ToolBar automatisch basierend auf der Schaltflächengröße geändert wird.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ToolBarBadToolBarButton">
-        <source>Parameter must be of type ToolBarButton.</source>
-        <target state="translated">Der Parameter muss den Typ ToolBarButton haben.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ToolBarBorderStyleDescr">
-        <source>Controls what type of border the ToolBar control will have.</source>
-        <target state="translated">Steuert den Rahmentyp des ToolBar-Steuerelements.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ToolBarButtonClickDescr">
-        <source>Occurs whenever a button in the ToolBar is clicked by the user.</source>
-        <target state="translated">Tritt ein, wenn der Benutzer auf eine ToolBar-Schaltfläche klickt.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ToolBarButtonDropDownDescr">
-        <source>Occurs whenever a button with the DropDownButton style is pressed.</source>
-        <target state="translated">Tritt ein, wenn auf eine Schaltfläche mit dem Stil DropDownButton geklickt wird.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ToolBarButtonEnabledDescr">
-        <source>Controls whether this button responds to user input.</source>
-        <target state="translated">Steuert, ob die Schaltfläche auf Benutzereingaben reagiert.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ToolBarButtonImageIndexDescr">
-        <source>Identifies the image displayed on the button.</source>
-        <target state="translated">Gibt das auf der Schaltfläche angezeigte Bild an.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ToolBarButtonInvalidDropDownMenuType">
-        <source>The drop-down menu for a ToolBarButton must be of type ContextMenu.</source>
-        <target state="translated">Das DropdownmMenü für einen ToolBarButton muss den Typ ContextMenu haben.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ToolBarButtonMenuDescr">
-        <source>The shortcut menu that will appear if this button's style is set to DropDownButton.</source>
-        <target state="translated">Das Kontextmenü, das angezeigt wird, wenn der Stil der Schaltfläche auf DropDownButton festgelegt ist.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ToolBarButtonNotFound">
-        <source>References that a non-existent ToolBarButton has been received.</source>
-        <target state="translated">Gibt an, dass ein nicht vorhandener ToolBarButton empfangen wurde.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ToolBarButtonPartialPushDescr">
-        <source>Controls whether the button should be displayed as partially pushed or not, but only if the style of the button is ToggleButton.</source>
-        <target state="translated">Steuert, ob die Schaltfläche als partiell gedrückt angezeigt wird (nur wenn der Stil der Schaltfläche auf ToggleButton festgelegt ist).</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ToolBarButtonPushedDescr">
-        <source>Indicates whether the button is pushed or not. This is most commonly seen for buttons with the TOGGLEBUTTON style.</source>
-        <target state="translated">Gibt an, ob auf die Schaltfläche geklickt wurde (wird häufig für Schaltflächen mit dem TOGGLEBUTTON-Stil verwendet).</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ToolBarButtonSizeDescr">
-        <source>The size of the buttons on the control if the button contents do not require a larger size.</source>
-        <target state="translated">Die Größe der Schaltflächen in dem Steuerelement, wenn für den Inhalt der Schaltfläche keine größere Größe erforderlich ist.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ToolBarButtonStyleDescr">
-        <source>Indicates what style of ToolBarButton this will be.</source>
-        <target state="translated">Gibt den Stil für ToolBarButton an.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ToolBarButtonTextDescr">
-        <source>The caption to be displayed for this button.</source>
-        <target state="translated">Die Beschriftung, die für diese Schaltfläche angezeigt wird.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ToolBarButtonToolTipTextDescr">
-        <source>The ToolTip text to be displayed for this button.</source>
-        <target state="translated">Die QuickInfo, die für diese Schaltfläche angezeigt wird.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ToolBarButtonVisibleDescr">
-        <source>Indicates whether this button should be visible.</source>
-        <target state="translated">Zeigt an, ob diese Schaltfläche sichtbar sein soll.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ToolBarButtonsDescr">
-        <source>The collection of ToolBarButtons that make up this ToolBar.</source>
-        <target state="translated">Die ToolBarButtons-Sammlung, die diese ToolBar bildet.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ToolBarDividerDescr">
-        <source>Controls whether the ToolBar will display a 3-D line at the top of its client area.</source>
-        <target state="translated">Steuert, ob in der ToolBar eine 3D-Zeile am oberen Rand des Clientbereichs angezeigt wird.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ToolBarDropDownArrowsDescr">
-        <source>Controls whether the ToolBar will display an arrow on the side of drop-down buttons.</source>
-        <target state="translated">Steuert, ob in der ToolBar ein Pfeil neben den Dropdown-Schaltflächen angezeigt wird.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ToolBarImageListDescr">
-        <source>The ImageList from which this ToolBar will get all of the button images.</source>
-        <target state="translated">Die ImageList, aus der die ToolBar alle Schaltflächenbilder abruft.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ToolBarImageSizeDescr">
-        <source>The size of the images within the ToolBar's ImageList.</source>
-        <target state="translated">Die Größe der Bilder in der ImageList der Toolbar.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ToolBarShowToolTipsDescr">
-        <source>Indicates whether ToolTips will be shown for each of the buttons, if available.</source>
-        <target state="translated">Gibt an, ob QuickInfos für jede Schaltfläche angezeigt werden, sofern verfügbar.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ToolBarTextAlignDescr">
-        <source>Controls how the text is positioned relative to the Image in each button.</source>
-        <target state="translated">Steuert, wie der Text relativ zum Bild in jeder Schaltfläche positioniert wird.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ToolBarWrappableDescr">
-        <source>Indicates if more than one row of buttons is allowed.</source>
-        <target state="translated">Zeigt an, ob mehr als eine Schaltflächenzeile zulässig ist.</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripAllowItemReorderAndAllowDropCannotBeSetToTrue">
@@ -11579,6 +10884,11 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       <trans-unit id="WidthGreaterThanMinWidth">
         <source>Width must be greater than MinWidth.</source>
         <target state="translated">"Width" muss größer als MinWidth sein.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="Win32SetParentFailed">
+        <source>Failed to set Win32 parent window of the Control.</source>
+        <target state="new">Failed to set Win32 parent window of the Control.</target>
         <note />
       </trans-unit>
       <trans-unit id="Win32WindowAlreadyCreated">

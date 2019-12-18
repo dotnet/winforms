@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -8,9 +8,9 @@ using System.Drawing;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
-using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 using static Interop;
 using static Interop.Mshtml;
+using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 
 namespace System.Windows.Forms
 {
@@ -30,7 +30,7 @@ namespace System.Windows.Forms
         // Reference to the native ActiveX control's IWebBrowser2
         // Do not reference this directly. Use the AxIWebBrowser2
         // property instead.
-        private UnsafeNativeMethods.IWebBrowser2 axIWebBrowser2;
+        private Mshtml.IWebBrowser2 axIWebBrowser2;
 
         private AxHost.ConnectionPointCookie cookie;   // To hook up events from the native WebBrowser
         private Stream documentStreamToSetOnLoad;
@@ -1072,7 +1072,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void AttachInterfaces(object nativeActiveXObject)
         {
-            axIWebBrowser2 = (UnsafeNativeMethods.IWebBrowser2)nativeActiveXObject;
+            axIWebBrowser2 = (Mshtml.IWebBrowser2)nativeActiveXObject;
         }
 
         /// <summary>
@@ -1366,9 +1366,7 @@ namespace System.Windows.Forms
         private bool ShowContextMenu(int x, int y)
         {
             ContextMenuStrip contextMenuStrip = ContextMenuStrip;
-            ContextMenu contextMenu = contextMenuStrip != null ? null : ContextMenu;
-
-            if (contextMenuStrip != null || contextMenu != null)
+            if (contextMenuStrip != null)
             {
                 Point client;
                 bool keyboardActivated = false;
@@ -1390,10 +1388,6 @@ namespace System.Windows.Forms
                     {
                         contextMenuStrip.ShowInternal(this, client, keyboardActivated);
                     }
-                    else if (contextMenu != null)
-                    {
-                        contextMenu.Show(this, client);
-                    }
 
                     return true;
                 }
@@ -1413,8 +1407,8 @@ namespace System.Windows.Forms
             switch (m.Msg)
             {
                 case WindowMessages.WM_CONTEXTMENU:
-                    int x = NativeMethods.Util.SignedLOWORD(m.LParam);
-                    int y = NativeMethods.Util.SignedHIWORD(m.LParam);
+                    int x = PARAM.SignedLOWORD(m.LParam);
+                    int y = PARAM.SignedHIWORD(m.LParam);
 
                     if (!ShowContextMenu(x, y))
                     {
@@ -1427,7 +1421,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private UnsafeNativeMethods.IWebBrowser2 AxIWebBrowser2
+        private Mshtml.IWebBrowser2 AxIWebBrowser2
         {
             get
             {

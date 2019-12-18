@@ -49,7 +49,7 @@ namespace System.Windows.Forms
         private ToolStripSeparator separatorToolStripSeparator1;
         private ToolStripButton closeToolStripButton;
         private ToolStripLabel pageToolStripLabel;
-        
+
         readonly ImageList imageList;
 
         /// <summary>
@@ -392,23 +392,6 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets or sets the <see cref='MainMenu'/>
-        ///  that is displayed in the form.
-        /// </summary>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        new public MainMenu Menu
-        {
-            get
-            {
-                return base.Menu;
-            }
-            set
-            {
-                base.Menu = value;
-            }
-        }
-
-        /// <summary>
         ///  Gets the minimum size the form can be resized to.
         /// </summary>
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden), EditorBrowsable(EditorBrowsableState.Never)]
@@ -541,7 +524,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Gets or sets the form's window state.
-            /// </summary>
+        /// </summary>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public FormWindowState WindowState
         {
@@ -1036,29 +1019,6 @@ namespace System.Windows.Forms
         {
             add => base.FontChanged += value;
             remove => base.FontChanged -= value;
-        }
-
-        /// <summary>
-        ///  The contextMenu associated with this control. The contextMenu
-        ///  will be shown when the user right clicks the mouse on the control.
-        /// </summary>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        public override ContextMenu ContextMenu
-        {
-            get
-            {
-                return base.ContextMenu;
-            }
-            set
-            {
-                base.ContextMenu = value;
-            }
-        }
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler ContextMenuChanged
-        {
-            add => base.ContextMenuChanged += value;
-            remove => base.ContextMenuChanged -= value;
         }
 
         // DockPadding is not relevant to UpDownBase

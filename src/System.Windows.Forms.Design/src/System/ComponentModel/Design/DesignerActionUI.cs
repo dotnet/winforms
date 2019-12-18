@@ -1038,7 +1038,7 @@ namespace System.ComponentModel.Design
 
         private void WmActivate(ref Message m)
         {
-            if (unchecked((int)(long)m.WParam) == NativeMethods.WA_INACTIVE)
+            if (unchecked((int)(long)m.WParam) == (int)User32.WA.INACTIVE)
             {
                 IntPtr hwndActivating = m.LParam;
                 if (WindowOwnsWindow(Handle, hwndActivating))

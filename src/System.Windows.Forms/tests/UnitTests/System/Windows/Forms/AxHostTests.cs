@@ -20,7 +20,11 @@ namespace System.Windows.Forms.Tests
         [InlineData("00000000-0000-0000-0000-000000000000")]
         public void AxHost_Ctor_String(string clsid)
         {
-            var control = new SubAxHost(clsid);
+            using var control = new SubAxHost(clsid);
+            Assert.Null(control.AccessibleDefaultActionDescription);
+            Assert.Null(control.AccessibleDescription);
+            Assert.Null(control.AccessibleName);
+            Assert.Equal(AccessibleRole.Default, control.AccessibleRole);
             Assert.False(control.AllowDrop);
             Assert.Equal(AnchorStyles.Top | AnchorStyles.Left, control.Anchor);
             Assert.False(control.AutoSize);
@@ -31,13 +35,16 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(23, control.Bottom);
             Assert.Equal(new Rectangle(0, 0, 75, 23), control.Bounds);
             Assert.True(control.CanEnableIme);
+            Assert.False(control.CanFocus);
             Assert.True(control.CanRaiseEvents);
+            Assert.False(control.CanSelect);
+            Assert.False(control.Capture);
             Assert.True(control.CausesValidation);
             Assert.Equal(new Size(75, 23), control.ClientSize);
             Assert.Equal(new Rectangle(0, 0, 75, 23), control.ClientRectangle);
             Assert.Null(control.Container);
             Assert.Null(control.ContainingControl);
-            Assert.Null(control.ContextMenu);
+            Assert.False(control.ContainsFocus);
             Assert.Null(control.ContextMenuStrip);
             Assert.Empty(control.Controls);
             Assert.Same(control.Controls, control.Controls);
@@ -58,6 +65,7 @@ namespace System.Windows.Forms.Tests
             Assert.True(control.Enabled);
             Assert.NotNull(control.Events);
             Assert.Same(control.Events, control.Events);
+            Assert.False(control.Focused);
             Assert.Equal(Control.DefaultFont, control.Font);
             Assert.Equal(control.Font.Height, control.FontHeight);
             Assert.Equal(Control.DefaultForeColor, control.ForeColor);
@@ -66,6 +74,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(23, control.Height);
             Assert.Equal(ImeMode.NoControl, control.ImeMode);
             Assert.Equal(ImeMode.NoControl, control.ImeModeBase);
+            Assert.False(control.IsAccessible);
+            Assert.False(control.IsMirrored);
             Assert.NotNull(control.LayoutEngine);
             Assert.Same(control.LayoutEngine, control.LayoutEngine);
             Assert.Equal(0, control.Left);
@@ -84,6 +94,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(75, control.Right);
             Assert.False(control.RightToLeft);
             Assert.Equal(RightToLeft.No, ((Control)control).RightToLeft);
+            Assert.True(control.ShowFocusCues);
+            Assert.True(control.ShowKeyboardCues);
             Assert.Null(control.Site);
             Assert.Equal(new Size(75, 23), control.Size);
             Assert.Equal(0, control.TabIndex);
@@ -91,6 +103,7 @@ namespace System.Windows.Forms.Tests
             Assert.Empty(control.Text);
             Assert.Equal(0, control.Top);
             Assert.Null(control.TopLevelControl);
+            Assert.False(control.UseWaitCursor);
             Assert.True(control.Visible);
             Assert.Equal(75, control.Width);
 
@@ -101,7 +114,11 @@ namespace System.Windows.Forms.Tests
         [InlineData("00000000-0000-0000-0000-000000000000", 0)]
         public void AxHost_Ctor_String_Int(string clsid, int flags)
         {
-            var control = new SubAxHost(clsid, flags);
+            using var control = new SubAxHost(clsid, flags);
+            Assert.Null(control.AccessibleDefaultActionDescription);
+            Assert.Null(control.AccessibleDescription);
+            Assert.Null(control.AccessibleName);
+            Assert.Equal(AccessibleRole.Default, control.AccessibleRole);
             Assert.False(control.AllowDrop);
             Assert.Equal(AnchorStyles.Top | AnchorStyles.Left, control.Anchor);
             Assert.False(control.AutoSize);
@@ -112,13 +129,16 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(23, control.Bottom);
             Assert.Equal(new Rectangle(0, 0, 75, 23), control.Bounds);
             Assert.True(control.CanEnableIme);
+            Assert.False(control.CanFocus);
             Assert.True(control.CanRaiseEvents);
+            Assert.False(control.CanSelect);
+            Assert.False(control.Capture);
             Assert.True(control.CausesValidation);
             Assert.Equal(new Size(75, 23), control.ClientSize);
             Assert.Equal(new Rectangle(0, 0, 75, 23), control.ClientRectangle);
             Assert.Null(control.Container);
             Assert.Null(control.ContainingControl);
-            Assert.Null(control.ContextMenu);
+            Assert.False(control.ContainsFocus);
             Assert.Null(control.ContextMenuStrip);
             Assert.Empty(control.Controls);
             Assert.Same(control.Controls, control.Controls);
@@ -139,6 +159,7 @@ namespace System.Windows.Forms.Tests
             Assert.True(control.Enabled);
             Assert.NotNull(control.Events);
             Assert.Same(control.Events, control.Events);
+            Assert.False(control.Focused);
             Assert.Equal(Control.DefaultFont, control.Font);
             Assert.Equal(control.Font.Height, control.FontHeight);
             Assert.Equal(Control.DefaultForeColor, control.ForeColor);
@@ -147,6 +168,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(23, control.Height);
             Assert.Equal(ImeMode.NoControl, control.ImeMode);
             Assert.Equal(ImeMode.NoControl, control.ImeModeBase);
+            Assert.False(control.IsAccessible);
+            Assert.False(control.IsMirrored);
             Assert.NotNull(control.LayoutEngine);
             Assert.Same(control.LayoutEngine, control.LayoutEngine);
             Assert.Equal(0, control.Left);
@@ -165,6 +188,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(75, control.Right);
             Assert.False(control.RightToLeft);
             Assert.Equal(RightToLeft.No, ((Control)control).RightToLeft);
+            Assert.True(control.ShowFocusCues);
+            Assert.True(control.ShowKeyboardCues);
             Assert.Null(control.Site);
             Assert.Equal(new Size(75, 23), control.Size);
             Assert.Equal(0, control.TabIndex);
@@ -172,6 +197,7 @@ namespace System.Windows.Forms.Tests
             Assert.Empty(control.Text);
             Assert.Equal(0, control.Top);
             Assert.Null(control.TopLevelControl);
+            Assert.False(control.UseWaitCursor);
             Assert.True(control.Visible);
             Assert.Equal(75, control.Width);
 
@@ -351,75 +377,6 @@ namespace System.Windows.Forms.Tests
             // Set same.
             control.ContainingControl = value;
             Assert.Same(value, control.ContainingControl);
-        }
-
-        public static IEnumerable<object[]> ContextMenu_Set_TestData()
-        {
-            yield return new object[] { null };
-            yield return new object[] { new ContextMenu() };
-        }
-
-        [StaTheory]
-        [MemberData(nameof(ContextMenu_Set_TestData))]
-        public void AxHost_ContextMenu_Set_GetReturnsExpected(ContextMenu value)
-        {
-            var control = new SubAxHost("00000000-0000-0000-0000-000000000000")
-            {
-                ContextMenu = value
-            };
-            Assert.Same(value, control.ContextMenu);
-
-            // Set same.
-            control.ContextMenu = value;
-            Assert.Same(value, control.ContextMenu);
-        }
-
-        [StaTheory]
-        [MemberData(nameof(ContextMenu_Set_TestData))]
-        public void AxHost_ContextMenu_SetWithNonNullOldValue_GetReturnsExpected(ContextMenu value)
-        {
-            var control = new SubAxHost("00000000-0000-0000-0000-000000000000")
-            {
-                ContextMenu = new ContextMenu()
-            };
-            control.ContextMenu = value;
-            Assert.Same(value, control.ContextMenu);
-
-            // Set same.
-            control.ContextMenu = value;
-            Assert.Same(value, control.ContextMenu);
-        }
-
-        [StaFact]
-        public void AxHost_ContextMenu_SetDisposeNew_RemovesContextMenu()
-        {
-            var menu = new ContextMenu();
-            var control = new SubAxHost("00000000-0000-0000-0000-000000000000")
-            {
-                ContextMenu = menu
-            };
-            Assert.Same(menu, control.ContextMenu);
-
-            menu.Dispose();
-            Assert.Null(control.ContextMenu);
-        }
-
-        [StaFact]
-        public void AxHost_ContextMenu_SetDisposeOld_RemovesContextMenu()
-        {
-            var menu1 = new ContextMenu();
-            var menu2 = new ContextMenu();
-            var control = new SubAxHost("00000000-0000-0000-0000-000000000000")
-            {
-                ContextMenu = menu1
-            };
-            Assert.Same(menu1, control.ContextMenu);
-
-            control.ContextMenu = menu2;
-            Assert.Same(menu2, control.ContextMenu);
-
-            menu1.Dispose();
-            Assert.Same(menu2, control.ContextMenu);
         }
 
         [StaTheory]
@@ -651,15 +608,6 @@ namespace System.Windows.Forms.Tests
             EventHandler handler = (sender, e) => { };
             Assert.Throws<NotSupportedException>(() => control.Click += handler);
             control.Click -= handler;
-        }
-
-        [StaFact]
-        public void AxHost_ContextMenuChanged_AddRemove_ThrowsNotSupportedException()
-        {
-            var control = new SubAxHost("00000000-0000-0000-0000-000000000000");
-            EventHandler handler = (sender, e) => { };
-            Assert.Throws<NotSupportedException>(() => control.ContextMenuChanged += handler);
-            control.ContextMenuChanged -= handler;
         }
 
         [StaFact]
@@ -916,7 +864,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { -6 };
             yield return new object[] { -7 };
         }
-        
+
         [StaTheory]
         [MemberData(nameof(DoVerb_TestData))]
         public void AxHost_DoVerb_InvokeWithHandle_Success(int verb)
@@ -925,7 +873,7 @@ namespace System.Windows.Forms.Tests
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             control.DoVerb(verb);
         }
-        
+
         [StaTheory]
         [MemberData(nameof(DoVerb_TestData))]
         public void AxHost_DoVerb_InvokeWithHandleWithParent_Success(int verb)
@@ -940,7 +888,7 @@ namespace System.Windows.Forms.Tests
             control.DoVerb(verb);
             Assert.True(parent.IsHandleCreated);
         }
-        
+
         [StaTheory]
         [MemberData(nameof(DoVerb_TestData))]
         public void AxHost_DoVerb_InvokeWithHandleWithParentWithoutHandle_Success(int verb)
@@ -953,7 +901,7 @@ namespace System.Windows.Forms.Tests
             control.DoVerb(verb);
             Assert.True(parent.IsHandleCreated);
         }
-        
+
         [StaTheory]
         [MemberData(nameof(DoVerb_TestData))]
         public void AxHost_DoVerb_InvokeWithoutHandle_ThrowsNullReferenceException(int verb)
@@ -1418,6 +1366,10 @@ namespace System.Windows.Forms.Tests
                 get => base.ResizeRedraw;
                 set => base.ResizeRedraw = value;
             }
+
+            public new bool ShowFocusCues => base.ShowFocusCues;
+
+            public new bool ShowKeyboardCues => base.ShowKeyboardCues;
 
             public new void AttachInterfaces() => base.AttachInterfaces();
 

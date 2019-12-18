@@ -21,12 +21,10 @@ internal static partial class Interop
         public const uint DTM_FIRST         = 0x1000;      // DateTimePicker messages
         public const uint TV_FIRST          = 0x1100;      // TreeView messages
         public const uint HDM_FIRST         = 0x1200;      // Header messages
-        public const uint TCM_FIRST         = 0x1300;      // Tab control messages
         public const uint PGM_FIRST         = 0x1400;      // Pager control messages
         public const uint ECM_FIRST         = 0x1500;      // Edit control messages
         public const uint BCM_FIRST         = 0x1600;      // Button control messages
         public const uint CBM_FIRST         = 0x1700;      // Combobox control messages
-        public const uint CCM_FIRST         = 0x2000;      // Common control shared messages
 
         // https://docs.microsoft.com/en-us/cpp/mfc/tn062-message-reflection-for-windows-controls?view=vs-2019
         public const uint WM_REFLECT = WM_USER + 0x1C00;
@@ -612,14 +610,6 @@ internal static partial class Interop
             HDM_GETFOCUSEDITEM                  = HDM_FIRST + 27,
             HDM_SETFOCUSEDITEM                  = HDM_FIRST + 28,
             WM_REFLECT_NOTIFY                   = WM_REFLECT + WM_NOTIFY,
-            CCM_SETBKCOLOR                      = CCM_FIRST + 1,
-            CCM_SETCOLORSCHEME                  = CCM_FIRST + 2,
-            CCM_GETCOLORSCHEME                  = CCM_FIRST + 3,
-            CCM_GETDROPTARGET                   = CCM_FIRST + 4,
-            CCM_SETUNICODEFORMAT                = CCM_FIRST + 5,
-            CCM_GETUNICODEFORMAT                = CCM_FIRST + 6,
-            CCM_SETVERSION                      = CCM_FIRST + 0x7,
-            CCM_GETVERSION                      = CCM_FIRST + 0x8,
             OCM_COMMAND                         = OCM__BASE + WM_COMMAND,
             OCM_CTLCOLORBTN                     = OCM__BASE + WM_CTLCOLORBTN,
             OCM_CTLCOLOREDIT                    = OCM__BASE + WM_CTLCOLOREDIT,

@@ -242,22 +242,6 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new ContextMenu ContextMenu
-        {
-            get { return base.ContextMenu; }
-            set { base.ContextMenu = value; }
-        }
-
-        [Browsable(false)]
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler ContextMenuChanged
-        {
-            add => base.ContextMenuChanged += value;
-            remove => base.ContextMenuChanged -= value;
-        }
-
-        [Browsable(false)]
-        [EditorBrowsable(EditorBrowsableState.Never)]
         public new ContextMenuStrip ContextMenuStrip
         {
             get { return base.ContextMenuStrip; }
@@ -273,11 +257,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-            ///  This is called when creating a window. Inheriting classes can overide
+        ///  This is called when creating a window. Inheriting classes can overide
         ///  this to add extra functionality, but should not forget to first call
         ///  base.CreateParams() to make sure the control continues to work
         ///  correctly.
-            /// </summary>
+        /// </summary>
         protected override CreateParams CreateParams
         {
             get
@@ -1903,7 +1887,7 @@ namespace System.Windows.Forms
                             {
                                 ApplyTopMost(true);
                             }
-                            else if (IsHandleCreated && SafeNativeMethods.IsWindowEnabled(new HandleRef(this, Handle)))
+                            else if (IsHandleCreated && User32.IsWindowEnabled(this).IsTrue())
                             {
                                 User32.SetWindowPos(
                                     new HandleRef(this, Handle),
@@ -2198,9 +2182,9 @@ namespace System.Windows.Forms
                     // This is the Chrome Panel collection editor scenario
                     // we had focus, then the Chrome panel was activated and we never went away
                     // when we get focus again, we should reactivate our message filter.
-                    Debug.WriteLineIf(ToolStrip.SnapFocusDebug.TraceVerbose, "[ToolStripDropDown.WndProc] got a WM_ACTIVATE " + (((int)m.WParam == NativeMethods.WA_ACTIVE) ? "WA_ACTIVE" : "WA_INACTIVE") + " - checkin if we need to set the active toolstrip");
+                    Debug.WriteLineIf(ToolStrip.SnapFocusDebug.TraceVerbose, "[ToolStripDropDown.WndProc] got a WM_ACTIVATE " + (((int)m.WParam == (int)User32.WA.ACTIVE) ? "WA_ACTIVE" : "WA_INACTIVE") + " - checkin if we need to set the active toolstrip");
 
-                    if ((int)m.WParam == NativeMethods.WA_ACTIVE)
+                    if ((int)m.WParam == (int)User32.WA.ACTIVE)
                     {
                         if (Visible)
                         {

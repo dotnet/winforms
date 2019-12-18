@@ -8,15 +8,21 @@ using System.Drawing;
 using WinForms.Common.Tests;
 using Moq;
 using Xunit;
+using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
     public class ToolTipTests
     {
-        [Fact]
+        public ToolTipTests()
+        {
+            Application.ThreadException += (sender, e) => throw new Exception(e.Exception.StackTrace.ToString());
+        }
+
+        [WinFormsFact]
         public void ToolTip_Ctor_Default()
         {
-            var toolTip = new SubToolTip();
+            using var toolTip = new SubToolTip();
             Assert.True(toolTip.Active);
             Assert.Equal(500, toolTip.AutomaticDelay);
             Assert.Equal(5000, toolTip.AutoPopDelay);
@@ -41,11 +47,11 @@ namespace System.Windows.Forms.Tests
             Assert.True(toolTip.UseFading);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void Ctor_IContainer_TestData()
         {
             var container = new Container();
-            var toolTip = new SubToolTip(container);
+            using var toolTip = new SubToolTip(container);
             Assert.True(toolTip.Active);
             Assert.Equal(500, toolTip.AutomaticDelay);
             Assert.Equal(5000, toolTip.AutoPopDelay);
@@ -70,16 +76,16 @@ namespace System.Windows.Forms.Tests
             Assert.True(toolTip.UseFading);
         }
 
-        [Fact]
-        public void Ctor_NullCont_ThrowsArgumentNullException()
+        [WinFormsFact]
+        public void ToolTip_Ctor_NullCont_ThrowsArgumentNullException()
         {
             Assert.Throws<ArgumentNullException>("cont", () => new ToolTip(null));
         }
 
-        [Fact]
-        public void CreateParams_GetDefault_ReturnsExpected()
+        [WinFormsFact]
+        public void ToolTip_CreateParams_GetDefault_ReturnsExpected()
         {
-            var toolTip = new SubToolTip();
+            using var toolTip = new SubToolTip();
             CreateParams createParams = toolTip.CreateParams;
             Assert.Null(createParams.Caption);
             Assert.Equal("tooltips_class32", createParams.ClassName);

@@ -15,10 +15,6 @@ coverage:
 
 comment:
   layout: "diff, flags"           # coverage difference, flags below
-  behavior: default               # updates, if exists; otherwise post new
-  require_changes: false          # post comment even if coverage does not change
-  require_head: yes               # must have these two in order to post
-  require_base: yes
 
 flags:                            # which files to include in the reporting
   production:

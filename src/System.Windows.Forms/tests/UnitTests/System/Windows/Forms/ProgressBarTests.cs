@@ -8,6 +8,7 @@ using System.Drawing;
 using Moq;
 using WinForms.Common.Tests;
 using Xunit;
+using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
@@ -16,10 +17,19 @@ namespace System.Windows.Forms.Tests
 
     public class ProgressBarTests
     {
+        public ProgressBarTests()
+        {
+            Application.ThreadException += (sender, e) => throw new Exception(e.Exception.StackTrace.ToString());
+        }
+
         [WinFormsFact]
         public void ProgressBar_Ctor_Default()
         {
             using var control = new SubProgressBar();
+            Assert.Null(control.AccessibleDefaultActionDescription);
+            Assert.Null(control.AccessibleDescription);
+            Assert.Null(control.AccessibleName);
+            Assert.Equal(AccessibleRole.Default, control.AccessibleRole);
             Assert.False(control.AllowDrop);
             Assert.Equal(AnchorStyles.Top | AnchorStyles.Left, control.Anchor);
             Assert.False(control.AutoSize);
@@ -30,12 +40,15 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(23, control.Bottom);
             Assert.Equal(new Rectangle(0, 0, 100, 23), control.Bounds);
             Assert.False(control.CanEnableIme);
+            Assert.False(control.CanFocus);
             Assert.True(control.CanRaiseEvents);
+            Assert.False(control.CanSelect);
+            Assert.False(control.Capture);
             Assert.True(control.CausesValidation);
             Assert.Equal(new Rectangle(0, 0, 100, 23), control.ClientRectangle);
             Assert.Equal(new Size(100, 23), control.ClientSize);
             Assert.Null(control.Container);
-            Assert.Null(control.ContextMenu);
+            Assert.False(control.ContainsFocus);
             Assert.Null(control.ContextMenuStrip);
             Assert.Empty(control.Controls);
             Assert.Same(control.Controls, control.Controls);
@@ -54,6 +67,7 @@ namespace System.Windows.Forms.Tests
             Assert.True(control.Enabled);
             Assert.NotNull(control.Events);
             Assert.Same(control.Events, control.Events);
+            Assert.False(control.Focused);
             Assert.Equal(Control.DefaultFont, control.Font);
             Assert.Equal(control.Font.Height, control.FontHeight);
             Assert.Equal(SystemColors.Highlight, control.ForeColor);
@@ -61,6 +75,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(23, control.Height);
             Assert.Equal(ImeMode.Disable, control.ImeMode);
             Assert.Equal(ImeMode.Disable, control.ImeModeBase);
+            Assert.False(control.IsAccessible);
+            Assert.False(control.IsMirrored);
             Assert.NotNull(control.LayoutEngine);
             Assert.Same(control.LayoutEngine, control.LayoutEngine);
             Assert.Equal(0, control.Left);
@@ -78,6 +94,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(100, control.Right);
             Assert.Equal(RightToLeft.No, control.RightToLeft);
             Assert.False(control.RightToLeftLayout);
+            Assert.True(control.ShowFocusCues);
+            Assert.True(control.ShowKeyboardCues);
             Assert.Null(control.Site);
             Assert.Equal(new Size(100, 23), control.Size);
             Assert.Equal(10, control.Step);
@@ -87,6 +105,7 @@ namespace System.Windows.Forms.Tests
             Assert.Empty(control.Text);
             Assert.Equal(0, control.Top);
             Assert.Null(control.TopLevelControl);
+            Assert.False(control.UseWaitCursor);
             Assert.Equal(0, control.Value);
             Assert.True(control.Visible);
             Assert.Equal(100, control.Width);
@@ -334,12 +353,12 @@ namespace System.Windows.Forms.Tests
             };
             Assert.Equal(value, control.CausesValidation);
             Assert.False(control.IsHandleCreated);
-            
+
             // Set same
             control.CausesValidation = value;
             Assert.Equal(value, control.CausesValidation);
             Assert.False(control.IsHandleCreated);
-            
+
             // Set different
             control.CausesValidation = !value;
             Assert.Equal(!value, control.CausesValidation);
@@ -1255,22 +1274,22 @@ namespace System.Windows.Forms.Tests
                 callCount++;
             };
             control.RightToLeftLayoutChanged += handler;
-        
+
             // Set different.
             control.RightToLeftLayout = false;
             Assert.False(control.RightToLeftLayout);
             Assert.Equal(1, callCount);
-        
+
             // Set same.
             control.RightToLeftLayout = false;
             Assert.False(control.RightToLeftLayout);
             Assert.Equal(1, callCount);
-        
+
             // Set different.
             control.RightToLeftLayout = true;
             Assert.True(control.RightToLeftLayout);
             Assert.Equal(2, callCount);
-        
+
             // Remove handler.
             control.RightToLeftLayoutChanged -= handler;
             control.RightToLeftLayout = false;
@@ -1713,6 +1732,13 @@ namespace System.Windows.Forms.Tests
             Assert.NotEqual(IntPtr.Zero, control.Handle);
         }
 
+        [WinFormsFact]
+        public void ProgressBar_GetAutoSizeMode_Invoke_ReturnsExpected()
+        {
+            using var control = new SubProgressBar();
+            Assert.Equal(AutoSizeMode.GrowOnly, control.GetAutoSizeMode());
+        }
+
         [WinFormsTheory]
         [InlineData(ControlStyles.ContainerControl, false)]
         [InlineData(ControlStyles.UserPaint, false)]
@@ -1731,11 +1757,15 @@ namespace System.Windows.Forms.Tests
         [InlineData(ControlStyles.DoubleBuffer, false)]
         [InlineData(ControlStyles.OptimizedDoubleBuffer, false)]
         [InlineData(ControlStyles.UseTextForAccessibility, false)]
+        [InlineData((ControlStyles)0, true)]
         [InlineData((ControlStyles)int.MaxValue, false)]
         [InlineData((ControlStyles)(-1), false)]
         public void ProgressBar_GetStyle_Invoke_ReturnsExpected(ControlStyles flag, bool expected)
         {
             using var control = new SubProgressBar();
+            Assert.Equal(expected, control.GetStyle(flag));
+
+            // Call again to test caching.
             Assert.Equal(expected, control.GetStyle(flag));
         }
 
@@ -1847,7 +1877,7 @@ namespace System.Windows.Forms.Tests
                 callCount++;
             };
             int invalidatedCallCount = 0;
-            InvalidateEventHandler invalidatedHandler =(sender, e) => invalidatedCallCount++;
+            InvalidateEventHandler invalidatedHandler = (sender, e) => invalidatedCallCount++;
             int styleChangedCallCount = 0;
             EventHandler styleChangedHandler = (sender, e) => styleChangedCallCount++;
             int createdCallCount = 0;
@@ -1913,16 +1943,16 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-        
+
             // Call with handler.
             control.Enter += handler;
             control.OnEnter(eventArgs);
             Assert.Equal(1, callCount);
-        
-           // Remove handler.
-           control.Enter -= handler;
-           control.OnEnter(eventArgs);
-           Assert.Equal(1, callCount);
+
+            // Remove handler.
+            control.Enter -= handler;
+            control.OnEnter(eventArgs);
+            Assert.Equal(1, callCount);
         }
 
         [WinFormsTheory]
@@ -2214,16 +2244,16 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-        
+
             // Call with handler.
             control.Leave += handler;
             control.OnLeave(eventArgs);
             Assert.Equal(1, callCount);
-        
-           // Remove handler.
-           control.Leave -= handler;
-           control.OnLeave(eventArgs);
-           Assert.Equal(1, callCount);
+
+            // Remove handler.
+            control.Leave -= handler;
+            control.OnLeave(eventArgs);
+            Assert.Equal(1, callCount);
         }
 
         [WinFormsTheory]
@@ -2529,7 +2559,7 @@ namespace System.Windows.Forms.Tests
             control.ForeColor = Color.Black;
             control.ResetForeColor();
             Assert.Equal(SystemColors.Highlight, control.ForeColor);
-            
+
             // Reset again.
             control.ResetForeColor();
             Assert.Equal(SystemColors.Highlight, control.ForeColor);
@@ -2592,9 +2622,15 @@ namespace System.Windows.Forms.Tests
                 set => base.ResizeRedraw = value;
             }
 
+            public new bool ShowFocusCues => base.ShowFocusCues;
+
+            public new bool ShowKeyboardCues => base.ShowKeyboardCues;
+
             public new AccessibleObject CreateAccessibilityInstance() => base.CreateAccessibilityInstance();
 
             public new void CreateHandle() => base.CreateHandle();
+
+            public new AutoSizeMode GetAutoSizeMode() => base.GetAutoSizeMode();
 
             public new bool GetStyle(ControlStyles flag) => base.GetStyle(flag);
 
@@ -2607,11 +2643,11 @@ namespace System.Windows.Forms.Tests
             public new void OnForeColorChanged(EventArgs e) => base.OnForeColorChanged(e);
 
             public new void OnHandleCreated(EventArgs e) => base.OnHandleCreated(e);
-            
+
             public new void OnHandleDestroyed(EventArgs e) => base.OnHandleDestroyed(e);
-            
+
             public new void OnKeyDown(KeyEventArgs e) => base.OnKeyDown(e);
-            
+
             public new void OnKeyPress(KeyPressEventArgs e) => base.OnKeyPress(e);
 
             public new void OnKeyUp(KeyEventArgs e) => base.OnKeyUp(e);

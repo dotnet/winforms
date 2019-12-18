@@ -10,12 +10,24 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
+    using Point = System.Drawing.Point;
+    using Size = System.Drawing.Size;
+
     public class ScrollableControlTests
     {
+        public ScrollableControlTests()
+        {
+            Application.ThreadException += (sender, e) => throw new Exception(e.Exception.StackTrace.ToString());
+        }
+
         [WinFormsFact]
         public void ScrollableControl_Ctor_Default()
         {
             using var control = new SubScrollableControl();
+            Assert.Null(control.AccessibleDefaultActionDescription);
+            Assert.Null(control.AccessibleDescription);
+            Assert.Null(control.AccessibleName);
+            Assert.Equal(AccessibleRole.Default, control.AccessibleRole);
             Assert.False(control.AllowDrop);
             Assert.Equal(AnchorStyles.Top | AnchorStyles.Left, control.Anchor);
             Assert.False(control.AutoScroll);
@@ -30,12 +42,15 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, control.Bottom);
             Assert.Equal(Rectangle.Empty, control.Bounds);
             Assert.True(control.CanEnableIme);
+            Assert.False(control.CanFocus);
             Assert.True(control.CanRaiseEvents);
+            Assert.True(control.CanSelect);
+            Assert.False(control.Capture);
             Assert.True(control.CausesValidation);
             Assert.Equal(Rectangle.Empty, control.ClientRectangle);
             Assert.Equal(Size.Empty, control.ClientSize);
             Assert.Null(control.Container);
-            Assert.Null(control.ContextMenu);
+            Assert.False(control.ContainsFocus);
             Assert.Null(control.ContextMenuStrip);
             Assert.Empty(control.Controls);
             Assert.Same(control.Controls, control.Controls);
@@ -61,6 +76,7 @@ namespace System.Windows.Forms.Tests
             Assert.True(control.Enabled);
             Assert.NotNull(control.Events);
             Assert.Same(control.Events, control.Events);
+            Assert.False(control.Focused);
             Assert.Equal(Control.DefaultFont, control.Font);
             Assert.Equal(control.Font.Height, control.FontHeight);
             Assert.Equal(Control.DefaultForeColor, control.ForeColor);
@@ -71,6 +87,8 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.HScroll);
             Assert.Equal(ImeMode.NoControl, control.ImeMode);
             Assert.Equal(ImeMode.NoControl, control.ImeModeBase);
+            Assert.False(control.IsAccessible);
+            Assert.False(control.IsMirrored);
             Assert.NotNull(control.LayoutEngine);
             Assert.Same(control.LayoutEngine, control.LayoutEngine);
             Assert.Equal(0, control.Left);
@@ -87,6 +105,8 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.ResizeRedraw);
             Assert.Equal(0, control.Right);
             Assert.Equal(RightToLeft.No, control.RightToLeft);
+            Assert.True(control.ShowFocusCues);
+            Assert.True(control.ShowKeyboardCues);
             Assert.Null(control.Site);
             Assert.Equal(Size.Empty, control.Size);
             Assert.Equal(0, control.TabIndex);
@@ -94,6 +114,7 @@ namespace System.Windows.Forms.Tests
             Assert.Empty(control.Text);
             Assert.Equal(0, control.Top);
             Assert.Null(control.TopLevelControl);
+            Assert.False(control.UseWaitCursor);
             Assert.True(control.Visible);
             Assert.NotNull(control.VerticalScroll);
             Assert.Same(control.VerticalScroll, control.VerticalScroll);
@@ -123,6 +144,60 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.IsHandleCreated);
         }
 
+        [WinFormsTheory]
+        [InlineData(true, true, 0x56110000)]
+        [InlineData(true, false, 0x56110000)]
+        [InlineData(false, true, 0x56110000)]
+        [InlineData(false, false, 0x56010000)]
+        public void ScrollableControl_CreateParams_GetHScroll_ReturnsExpected(bool hScroll, bool horizontalScrollVisible, int expectedStyle)
+        {
+            using var control = new SubScrollableControl();
+            control.HorizontalScroll.Visible = horizontalScrollVisible;
+            control.HScroll = hScroll;
+
+            CreateParams createParams = control.CreateParams;
+            Assert.Null(createParams.Caption);
+            Assert.Null(createParams.ClassName);
+            Assert.Equal(0x8, createParams.ClassStyle);
+            Assert.Equal(0x10000, createParams.ExStyle);
+            Assert.Equal(0, createParams.Height);
+            Assert.Equal(IntPtr.Zero, createParams.Parent);
+            Assert.Null(createParams.Param);
+            Assert.Equal(expectedStyle, createParams.Style);
+            Assert.Equal(0, createParams.Width);
+            Assert.Equal(0, createParams.X);
+            Assert.Equal(0, createParams.Y);
+            Assert.Same(createParams, control.CreateParams);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(true, true, 0x56210000)]
+        [InlineData(true, false, 0x56210000)]
+        [InlineData(false, true, 0x56210000)]
+        [InlineData(false, false, 0x56010000)]
+        public void ScrollableControl_CreateParams_GetVScroll_ReturnsExpected(bool vScroll, bool verticalScrollVisbile, int expectedStyle)
+        {
+            using var control = new SubScrollableControl();
+            control.VerticalScroll.Visible = verticalScrollVisbile;
+            control.VScroll = vScroll;
+
+            CreateParams createParams = control.CreateParams;
+            Assert.Null(createParams.Caption);
+            Assert.Null(createParams.ClassName);
+            Assert.Equal(0x8, createParams.ClassStyle);
+            Assert.Equal(0x10000, createParams.ExStyle);
+            Assert.Equal(0, createParams.Height);
+            Assert.Equal(IntPtr.Zero, createParams.Parent);
+            Assert.Null(createParams.Param);
+            Assert.Equal(expectedStyle, createParams.Style);
+            Assert.Equal(0, createParams.Width);
+            Assert.Equal(0, createParams.X);
+            Assert.Equal(0, createParams.Y);
+            Assert.Same(createParams, control.CreateParams);
+            Assert.False(control.IsHandleCreated);
+        }
+
         public static IEnumerable<object[]> SetClientRectangle_TestData()
         {
             const int width = 70;
@@ -141,11 +216,11 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { false, width, height, width - 20, height - 20, new Rectangle(0, 0, width, height) };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(SetClientRectangle_TestData))]
         public void ScrollableControl_ClientRectangle_should_reduce_if_scrollbars_shown(bool createHandle, int width, int height, int childWidth, int childHeight, Rectangle expected)
         {
-            var control = new SubScrollableControl
+            using var control = new SubScrollableControl
             {
                 AutoScroll = true,
                 ClientSize = new Size(width, height)
@@ -168,197 +243,581 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, control.ClientRectangle);
         }
 
-        [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
-        public void ScrollableControl_AutoScroll_Set_GetReturnsExpected(bool value)
+        [WinFormsTheory]
+        [InlineData(true, 2, 5)]
+        [InlineData(false, 1, 4)]
+        public void ScrollableControl_AutoScroll_Set_GetReturnsExpected(bool value, int expectedLayoutCallCount1, int expectedLayoutCallCount2)
         {
-            var control = new SubScrollableControl
+            using var control = new SubScrollableControl();
+            int layoutCallCount = 0;
+            control.Layout += (sender, e) =>
             {
-                AutoScroll = value
+                Assert.Same(control, sender);
+                Assert.Same(control, e.AffectedControl);
+                Assert.Equal("AutoScroll", e.AffectedProperty);
+                layoutCallCount++;
             };
+
+            control.AutoScroll = value;
             Assert.Equal(value, control.AutoScroll);
             Assert.Equal(value, control.GetScrollState(SubScrollableControl.ScrollStateAutoScrolling));
+            Assert.Equal(expectedLayoutCallCount1, layoutCallCount);
+            Assert.False(control.IsHandleCreated);
 
             // Set same.
             control.AutoScroll = value;
             Assert.Equal(value, control.AutoScroll);
             Assert.Equal(value, control.GetScrollState(SubScrollableControl.ScrollStateAutoScrolling));
+            Assert.Equal(expectedLayoutCallCount1 * 2, layoutCallCount);
+            Assert.False(control.IsHandleCreated);
+
+            // Set different.
+            control.AutoScroll = !value;
+            Assert.Equal(!value, control.AutoScroll);
+            Assert.Equal(!value, control.GetScrollState(SubScrollableControl.ScrollStateAutoScrolling));
+            Assert.Equal(expectedLayoutCallCount2, layoutCallCount);
+            Assert.False(control.IsHandleCreated);
         }
 
-        [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetSizeTheoryData), TestIncludeType.NoNegatives)]
-        public void ScrollableControl_AutoScrollMargin_Set_GetReturnsExpected(Size value)
+        [WinFormsTheory]
+        [InlineData(true, 2, 5)]
+        [InlineData(false, 1, 4)]
+        public void ScrollableControl_AutoScroll_SetWithHandle_GetReturnsExpected(bool value, int expectedLayoutCallCount1, int expectedLayoutCallCount2)
         {
-            var control = new ScrollableControl
+            using var control = new SubScrollableControl();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+            int layoutCallCount = 0;
+            control.Layout += (sender, e) =>
             {
-                AutoScrollMargin = value
+                Assert.Same(control, sender);
+                Assert.Same(control, e.AffectedControl);
+                Assert.Equal("AutoScroll", e.AffectedProperty);
+                layoutCallCount++;
             };
+
+            control.AutoScroll = value;
+            Assert.Equal(value, control.AutoScroll);
+            Assert.Equal(value, control.GetScrollState(SubScrollableControl.ScrollStateAutoScrolling));
+            Assert.Equal(expectedLayoutCallCount1, layoutCallCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set same.
+            control.AutoScroll = value;
+            Assert.Equal(value, control.AutoScroll);
+            Assert.Equal(value, control.GetScrollState(SubScrollableControl.ScrollStateAutoScrolling));
+            Assert.Equal(expectedLayoutCallCount1 * 2, layoutCallCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set different.
+            control.AutoScroll = !value;
+            Assert.Equal(!value, control.AutoScroll);
+            Assert.Equal(!value, control.GetScrollState(SubScrollableControl.ScrollStateAutoScrolling));
+            Assert.Equal(expectedLayoutCallCount2, layoutCallCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        public static IEnumerable<object[]> AutoScrollMargin_Set_TestData()
+        {
+            yield return new object[] { true, new Size(0, 0), 0 };
+            yield return new object[] { true, new Size(1, 0), 1 };
+            yield return new object[] { true, new Size(0, 1), 1 };
+            yield return new object[] { true, new Size(1, 2), 1 };
+            yield return new object[] { false, new Size(0, 0), 0 };
+            yield return new object[] { false, new Size(1, 0), 0 };
+            yield return new object[] { false, new Size(0, 1), 0 };
+            yield return new object[] { false, new Size(1, 2), 0 };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(AutoScrollMargin_Set_TestData))]
+        public void ScrollableControl_AutoScrollMargin_Set_GetReturnsExpected(bool autoScroll, Size value, int expectedLayoutCallCount)
+        {
+            using var control = new ScrollableControl
+            {
+                AutoScroll = autoScroll
+            };
+            int layoutCallCount = 0;
+            control.Layout += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Null(e.AffectedControl);
+                Assert.Null(e.AffectedProperty);
+                layoutCallCount++;
+            };
+
+            control.AutoScrollMargin = value;
             Assert.Equal(value, control.AutoScrollMargin);
+            Assert.Equal(autoScroll, control.AutoScroll);
+            Assert.Equal(expectedLayoutCallCount, layoutCallCount);
+            Assert.False(control.IsHandleCreated);
 
             // Set same.
             control.AutoScrollMargin = value;
             Assert.Equal(value, control.AutoScrollMargin);
+            Assert.Equal(autoScroll, control.AutoScroll);
+            Assert.Equal(expectedLayoutCallCount, layoutCallCount);
+            Assert.False(control.IsHandleCreated);
         }
 
-        [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetSizeTheoryData), TestIncludeType.NoPositives)]
-        public void ScrollableControl_AutoScrollMargin_SetInvalid_ThrowsArgumentOutOfRangeException(Size value)
+        [WinFormsTheory]
+        [MemberData(nameof(AutoScrollMargin_Set_TestData))]
+        public void ScrollableControl_AutoScrollMargin_SetWithHandle_GetReturnsExpected(bool autoScroll, Size value, int expectedLayoutCallCount)
         {
-            var control = new ScrollableControl();
-            Assert.Throws<ArgumentOutOfRangeException>("value", () => control.AutoScrollMargin = value);
+            using var control = new ScrollableControl
+            {
+                AutoScroll = autoScroll
+            };
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+            int layoutCallCount = 0;
+            control.Layout += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Null(e.AffectedControl);
+                Assert.Null(e.AffectedProperty);
+                layoutCallCount++;
+            };
+
+            control.AutoScrollMargin = value;
+            Assert.Equal(value, control.AutoScrollMargin);
+            Assert.Equal(autoScroll, control.AutoScroll);
+            Assert.Equal(expectedLayoutCallCount, layoutCallCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set same.
+            control.AutoScrollMargin = value;
+            Assert.Equal(value, control.AutoScrollMargin);
+            Assert.Equal(autoScroll, control.AutoScroll);
+            Assert.Equal(expectedLayoutCallCount, layoutCallCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
         }
 
-        public static IEnumerable<object[]> SetAutoScrollMargin_TestData()
+        [WinFormsFact]
+        public void ScrollableControl_AutoScrollMargin_ResetValue_Success()
         {
-            yield return new object[] { -1, -1, new Size(0, 0) };
-            yield return new object[] { 0, 0, new Size(0, 0) };
-            yield return new object[] { 0, 1, new Size(0, 1) };
-            yield return new object[] { 1, 0, new Size(1, 0) };
-            yield return new object[] { 1, 2, new Size(1, 2) };
+            PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ScrollableControl))[nameof(ScrollableControl.AutoScrollMargin)];
+            using var control = new ScrollableControl();
+            Assert.False(property.CanResetValue(control));
+
+            control.AutoScrollMargin = new Size(1, 0);
+            Assert.Equal(new Size(1, 0), control.AutoScrollMargin);
+            Assert.True(property.CanResetValue(control));
+
+            control.AutoScrollMargin = new Size(0, 1);
+            Assert.Equal(new Size(0, 1), control.AutoScrollMargin);
+            Assert.True(property.CanResetValue(control));
+
+            control.AutoScrollMargin = new Size(1, 2);
+            Assert.Equal(new Size(1, 2), control.AutoScrollMargin);
+            Assert.True(property.CanResetValue(control));
+
+            property.ResetValue(control);
+            Assert.Equal(Size.Empty, control.AutoScrollMargin);
+            Assert.False(property.CanResetValue(control));
         }
 
-        [Theory]
-        [MemberData(nameof(SetAutoScrollMargin_TestData))]
-        public void ScrollableControl_SetAutoScrollMargin_Invoke_Success(int width, int height, Size expectedAutoScrollMargin)
+        [WinFormsFact]
+        public void ScrollableControl_AutoScrollMargin_ShouldSerializeValue_Success()
         {
-            var control = new ScrollableControl();
-            control.SetAutoScrollMargin(width, height);
-            Assert.Equal(expectedAutoScrollMargin, control.AutoScrollMargin);
+            PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ScrollableControl))[nameof(ScrollableControl.AutoScrollMargin)];
+            using var control = new ScrollableControl();
+            Assert.False(property.ShouldSerializeValue(control));
+
+            control.AutoScrollMargin = new Size(1, 0);
+            Assert.Equal(new Size(1, 0), control.AutoScrollMargin);
+            Assert.True(property.ShouldSerializeValue(control));
+
+            control.AutoScrollMargin = new Size(0, 1);
+            Assert.Equal(new Size(0, 1), control.AutoScrollMargin);
+            Assert.True(property.ShouldSerializeValue(control));
+
+            control.AutoScrollMargin = new Size(1, 2);
+            Assert.Equal(new Size(1, 2), control.AutoScrollMargin);
+            Assert.True(property.ShouldSerializeValue(control));
+
+            property.ResetValue(control);
+            Assert.Equal(Size.Empty, control.AutoScrollMargin);
+            Assert.False(property.ShouldSerializeValue(control));
         }
 
-        [Theory]
+        [WinFormsTheory]
+        [InlineData(-1, 0)]
+        [InlineData(0, -1)]
+        [InlineData(-1, -2)]
+        public void ScrollableControl_AutoScrollMargin_SetInvalid_ThrowsArgumentOutOfRangeException(int x, int y)
+        {
+            using var control = new ScrollableControl();
+            Assert.Throws<ArgumentOutOfRangeException>("value", () => control.AutoScrollMargin = new Size(x, y));
+        }
+
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetPointTheoryData))]
         public void ScrollableControl_AutoScrollPosition_Set_GetReturnsExpected(Point value)
         {
-            var control = new ScrollableControl
+            using var control = new ScrollableControl
             {
                 AutoScrollPosition = value
             };
             Assert.Equal(Point.Empty, control.AutoScrollPosition);
+            Assert.False(control.IsHandleCreated);
 
             // Set same.
             control.AutoScrollPosition = value;
             Assert.Equal(Point.Empty, control.AutoScrollPosition);
+            Assert.False(control.IsHandleCreated);
         }
 
-        [Theory]
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetPointTheoryData))]
+        public void ScrollableControl_AutoScrollPosition_SetWithHandle_GetReturnsExpected(Point value)
+        {
+            using var control = new ScrollableControl();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            control.AutoScrollPosition = value;
+            Assert.Equal(Point.Empty, control.AutoScrollPosition);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set same.
+            control.AutoScrollPosition = value;
+            Assert.Equal(Point.Empty, control.AutoScrollPosition);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetPointTheoryData))]
         public void ScrollableControl_AutoScrollPosition_SetWithAutoScroll_GetReturnsExpected(Point value)
         {
-            var control = new ScrollableControl
+            using var control = new ScrollableControl
             {
                 AutoScroll = true,
                 AutoScrollPosition = value
             };
             Assert.Equal(Point.Empty, control.AutoScrollPosition);
+            Assert.False(control.IsHandleCreated);
 
             // Set same.
             control.AutoScrollPosition = value;
             Assert.Equal(Point.Empty, control.AutoScrollPosition);
+            Assert.False(control.IsHandleCreated);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetPointTheoryData))]
         public void ScrollableControl_AutoScrollPosition_SetWithVisibleBars_GetReturnsExpected(Point value)
         {
-            var control = new ScrollableControl();
+            using var control = new ScrollableControl();
             control.HorizontalScroll.Visible = true;
             control.VerticalScroll.Visible = true;
 
             control.AutoScrollPosition = value;
             Assert.Equal(Point.Empty, control.AutoScrollPosition);
+            Assert.False(control.IsHandleCreated);
 
             // Set same.
             control.AutoScrollPosition = value;
             Assert.Equal(Point.Empty, control.AutoScrollPosition);
+            Assert.False(control.IsHandleCreated);
         }
 
-        [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetSizeTheoryData))]
-        public void ScrollableControl_AutoScrollMinSize_Set_GetReturnsExpected(Size value)
+        public static IEnumerable<object[]> AutoScrollMinSize_TestData()
         {
-            var control = new ScrollableControl
+            yield return new object[] { true, new Size(-1, -2), true, 3 };
+            yield return new object[] { true, new Size(0, 0), true, 0 };
+            yield return new object[] { true, new Size(1, 0), true, 4 };
+            yield return new object[] { true, new Size(0, 1), true, 4 };
+            yield return new object[] { true, new Size(1, 2), true, 4 };
+
+            yield return new object[] { false, new Size(-1, -2), true, 3 };
+            yield return new object[] { false, new Size(0, 0), false, 0 };
+            yield return new object[] { false, new Size(1, 0), true, 4 };
+            yield return new object[] { false, new Size(0, 1), true, 4 };
+            yield return new object[] { false, new Size(1, 2), true, 4 };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(AutoScrollMinSize_TestData))]
+        public void ScrollableControl_AutoScrollMinSize_Set_GetReturnsExpected(bool autoScroll, Size value, bool expectedAutoScroll, int expectedLayoutCallCount)
+        {
+            using var control = new ScrollableControl
             {
-                AutoScrollMinSize = value
+                AutoScroll = autoScroll
             };
+            int layoutCallCount = 0;
+            control.Layout += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                layoutCallCount++;
+            };
+
+            control.AutoScrollMinSize = value;
             Assert.Equal(value, control.AutoScrollMinSize);
-            Assert.Equal(value != Size.Empty, control.AutoScroll);
+            Assert.Equal(expectedAutoScroll, control.AutoScroll);
+            Assert.Equal(expectedLayoutCallCount, layoutCallCount);
+            Assert.False(control.IsHandleCreated);
 
             // Set same.
             control.AutoScrollMinSize = value;
             Assert.Equal(value, control.AutoScrollMinSize);
-            Assert.Equal(value != Size.Empty, control.AutoScroll);
+            Assert.Equal(expectedAutoScroll, control.AutoScroll);
+            Assert.Equal(expectedLayoutCallCount, layoutCallCount);
+            Assert.False(control.IsHandleCreated);
         }
 
-        [Theory]
+        public static IEnumerable<object[]> AutoScrollMinSize_WithHandle_TestData()
+        {
+            yield return new object[] { true, new Size(-1, -2), true, 3, 0 };
+            yield return new object[] { true, new Size(0, 0), true, 0, 0 };
+            yield return new object[] { true, new Size(1, 0), true, 4, 2 };
+            yield return new object[] { true, new Size(0, 1), true, 4, 2 };
+            yield return new object[] { true, new Size(1, 2), true, 4, 2 };
+
+            yield return new object[] { false, new Size(-1, -2), true, 3, 0 };
+            yield return new object[] { false, new Size(0, 0), false, 0, 0 };
+            yield return new object[] { false, new Size(1, 0), true, 4, 2 };
+            yield return new object[] { false, new Size(0, 1), true, 4, 2 };
+            yield return new object[] { false, new Size(1, 2), true, 4, 2 };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(AutoScrollMinSize_WithHandle_TestData))]
+        public void ScrollableControl_AutoScrollMinSize_SetWithHandle_GetReturnsExpected(bool autoScroll, Size value, bool expectedAutoScroll, int expectedLayoutCallCount, int expectedStyleChangedCallCount)
+        {
+            using var control = new ScrollableControl
+            {
+                AutoScroll = autoScroll
+            };
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+            int layoutCallCount = 0;
+            control.Layout += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                layoutCallCount++;
+            };
+
+            control.AutoScrollMinSize = value;
+            Assert.Equal(value, control.AutoScrollMinSize);
+            Assert.Equal(expectedAutoScroll, control.AutoScroll);
+            Assert.Equal(expectedLayoutCallCount, layoutCallCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(expectedStyleChangedCallCount, invalidatedCallCount);
+            Assert.Equal(expectedStyleChangedCallCount, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set same.
+            control.AutoScrollMinSize = value;
+            Assert.Equal(value, control.AutoScrollMinSize);
+            Assert.Equal(expectedAutoScroll, control.AutoScroll);
+            Assert.Equal(expectedLayoutCallCount, layoutCallCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(expectedStyleChangedCallCount, invalidatedCallCount);
+            Assert.Equal(expectedStyleChangedCallCount, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsFact]
+        public void ScrollableControl_AutoScrollMinSize_ResetValue_Success()
+        {
+            PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ScrollableControl))[nameof(ScrollableControl.AutoScrollMinSize)];
+            using var control = new ScrollableControl();
+            Assert.False(property.CanResetValue(control));
+
+            control.AutoScrollMinSize = new Size(1, 0);
+            Assert.Equal(new Size(1, 0), control.AutoScrollMinSize);
+            Assert.True(property.CanResetValue(control));
+
+            control.AutoScrollMinSize = new Size(0, 1);
+            Assert.Equal(new Size(0, 1), control.AutoScrollMinSize);
+            Assert.True(property.CanResetValue(control));
+
+            control.AutoScrollMinSize = new Size(1, 2);
+            Assert.Equal(new Size(1, 2), control.AutoScrollMinSize);
+            Assert.True(property.CanResetValue(control));
+
+            property.ResetValue(control);
+            Assert.Equal(Size.Empty, control.AutoScrollMinSize);
+            Assert.False(property.CanResetValue(control));
+        }
+
+        [WinFormsFact]
+        public void ScrollableControl_AutoScrollMinSize_ShouldSerializeValue_Success()
+        {
+            PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ScrollableControl))[nameof(ScrollableControl.AutoScrollMinSize)];
+            using var control = new ScrollableControl();
+            Assert.False(property.ShouldSerializeValue(control));
+
+            control.AutoScrollMinSize = new Size(1, 0);
+            Assert.Equal(new Size(1, 0), control.AutoScrollMinSize);
+            Assert.True(property.ShouldSerializeValue(control));
+
+            control.AutoScrollMinSize = new Size(0, 1);
+            Assert.Equal(new Size(0, 1), control.AutoScrollMinSize);
+            Assert.True(property.ShouldSerializeValue(control));
+
+            control.AutoScrollMinSize = new Size(1, 2);
+            Assert.Equal(new Size(1, 2), control.AutoScrollMinSize);
+            Assert.True(property.ShouldSerializeValue(control));
+
+            property.ResetValue(control);
+            Assert.Equal(Size.Empty, control.AutoScrollMinSize);
+            Assert.False(property.ShouldSerializeValue(control));
+        }
+
+        [WinFormsTheory]
+        [InlineData(true, false, false)]
+        [InlineData(false, false, false)]
+        [InlineData(true, true, true)]
+        [InlineData(false, true, true)]
+        public void ScrollableControl_DisplayRectangle_GetWithClientRectangle_ReturnsExpected(bool autoScroll, bool hScroll, bool vScroll)
+        {
+            using var control = new SubScrollableControl
+            {
+                ClientSize = new Size(70, 80),
+                Padding = new Padding(1, 2, 3, 4),
+                AutoScroll = autoScroll,
+                HScroll = hScroll,
+                VScroll = vScroll
+            };
+            Assert.Equal(new Rectangle(1, 2, 66, 74), control.DisplayRectangle);
+
+            // Get again.
+            Assert.Equal(new Rectangle(1, 2, 66, 74), control.DisplayRectangle);
+        }
+
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ScrollableControl_HScroll_Set_GetReturnsExpected(bool value)
         {
-            var control = new SubScrollableControl
+            using var control = new SubScrollableControl
             {
                 HScroll = value
             };
             Assert.Equal(value, control.HScroll);
             Assert.Equal(value, control.GetScrollState(SubScrollableControl.ScrollStateHScrollVisible));
+            Assert.False(control.IsHandleCreated);
 
             // Set same.
             control.HScroll = value;
             Assert.Equal(value, control.HScroll);
             Assert.Equal(value, control.GetScrollState(SubScrollableControl.ScrollStateHScrollVisible));
+            Assert.False(control.IsHandleCreated);
+
+            // Set different.
+            control.HScroll = !value;
+            Assert.Equal(!value, control.HScroll);
+            Assert.Equal(!value, control.GetScrollState(SubScrollableControl.ScrollStateHScrollVisible));
+            Assert.False(control.IsHandleCreated);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
-        public void ScrollableControl_VScroll_Set_GetReturnsExpected(bool value)
+        public void ScrollableControl_HScroll_SetWithHandle_GetReturnsExpected(bool value)
         {
-            var control = new SubScrollableControl
-            {
-                VScroll = value
-            };
-            Assert.Equal(value, control.VScroll);
-            Assert.Equal(value, control.GetScrollState(SubScrollableControl.ScrollStateVScrollVisible));
+            using var control = new SubScrollableControl();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            control.HScroll = value;
+            Assert.Equal(value, control.HScroll);
+            Assert.Equal(value, control.GetScrollState(SubScrollableControl.ScrollStateHScrollVisible));
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
 
             // Set same.
             control.HScroll = value;
             Assert.Equal(value, control.HScroll);
-            Assert.Equal(value, control.GetScrollState(SubScrollableControl.ScrollStateVScrollVisible));
+            Assert.Equal(value, control.GetScrollState(SubScrollableControl.ScrollStateHScrollVisible));
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set different.
+            control.HScroll = !value;
+            Assert.Equal(!value, control.HScroll);
+            Assert.Equal(!value, control.GetScrollState(SubScrollableControl.ScrollStateHScrollVisible));
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
         }
 
-        [Theory]
-        [InlineData(false, false)]
-        [InlineData(true, true)]
-        public void ScrollableControl_DisplayRectangle_Get_ReturnsExpected(bool hScroll, bool vScroll)
+        [WinFormsTheory]
+        [MemberData(nameof(ControlTests.Padding_Set_TestData), MemberType = typeof(ControlTests))]
+        public void ScrollableControl_Padding_Set_GetReturnsExpected(Padding value, Padding expected, int expectedLayoutCallCount1, int expectedLayoutCallCount2)
         {
-            var control = new SubScrollableControl
-            {
-                ClientSize = new Size(70, 80),
-                Padding = new Padding(1, 2, 3, 4),
-                HScroll = hScroll,
-                VScroll = vScroll
-            };
-            Assert.Equal(new Rectangle(1, 2, 66, 74), control.DisplayRectangle);
-        }
+            using var control = new ScrollableControl();
+            int layoutCallCount = 0;
+            control.Layout += (sender, e) => layoutCallCount++;
 
-        [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetPaddingNormalizedTheoryData))]
-        public void ScrollableControl_Padding_Set_GetReturnsExpected(Padding value, Padding expected)
-        {
-            var control = new ScrollableControl
-            {
-                Padding = value
-            };
+            control.Padding = value;
             Assert.Equal(expected, control.Padding);
+            Assert.Equal(expectedLayoutCallCount1, layoutCallCount);
+            Assert.False(control.IsHandleCreated);
 
             // Set same.
             control.Padding = value;
             Assert.Equal(expected, control.Padding);
+            Assert.Equal(expectedLayoutCallCount2, layoutCallCount);
+            Assert.False(control.IsHandleCreated);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetRightToLeftTheoryData))]
         public void ScrollableControl_RightToLeft_Set_GetReturnsExpected(RightToLeft value, RightToLeft expected)
         {
-            var control = new ScrollableControl
+            using var control = new ScrollableControl
             {
                 RightToLeft = value
             };
@@ -369,11 +828,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, control.RightToLeft);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ScrollableControl_Visible_Set_GetReturnsExpected(bool value)
         {
-            var control = new ScrollableControl
+            using var control = new ScrollableControl
             {
                 Visible = value
             };
@@ -388,40 +847,503 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(!value, control.Visible);
         }
 
-        [Fact]
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        public void ScrollableControl_VScroll_Set_GetReturnsExpected(bool value)
+        {
+            using var control = new SubScrollableControl
+            {
+                VScroll = value
+            };
+            Assert.Equal(value, control.VScroll);
+            Assert.Equal(value, control.GetScrollState(SubScrollableControl.ScrollStateVScrollVisible));
+            Assert.False(control.IsHandleCreated);
+
+            // Set same.
+            control.VScroll = value;
+            Assert.Equal(value, control.VScroll);
+            Assert.Equal(value, control.GetScrollState(SubScrollableControl.ScrollStateVScrollVisible));
+            Assert.False(control.IsHandleCreated);
+
+            // Set different.
+            control.VScroll = !value;
+            Assert.Equal(!value, control.VScroll);
+            Assert.Equal(!value, control.GetScrollState(SubScrollableControl.ScrollStateVScrollVisible));
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        public void ScrollableControl_VScroll_SetWithHandle_GetReturnsExpected(bool value)
+        {
+            using var control = new SubScrollableControl();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            control.VScroll = value;
+            Assert.Equal(value, control.VScroll);
+            Assert.Equal(value, control.GetScrollState(SubScrollableControl.ScrollStateVScrollVisible));
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set same.
+            control.VScroll = value;
+            Assert.Equal(value, control.VScroll);
+            Assert.Equal(value, control.GetScrollState(SubScrollableControl.ScrollStateVScrollVisible));
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set different.
+            control.VScroll = !value;
+            Assert.Equal(!value, control.VScroll);
+            Assert.Equal(!value, control.GetScrollState(SubScrollableControl.ScrollStateVScrollVisible));
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsFact]
         public void ScrollableControl_ScrollStateAutoScrolling_Get_ReturnsExpected()
         {
             Assert.Equal(0x0001, SubScrollableControl.ScrollStateAutoScrolling);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ScrollableControl_ScrollStateHScrollVisible_Get_ReturnsExpected()
         {
             Assert.Equal(0x0002, SubScrollableControl.ScrollStateHScrollVisible);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ScrollableControl_ScrollStateVScrollVisible_Get_ReturnsExpected()
         {
             Assert.Equal(0x0004, SubScrollableControl.ScrollStateVScrollVisible);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ScrollableControl_ScrollStateUserHasScrolled_Get_ReturnsExpected()
         {
             Assert.Equal(0x0008, SubScrollableControl.ScrollStateUserHasScrolled);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ScrollableControl_ScrollStateFullDrag_Get_ReturnsExpected()
         {
             Assert.Equal(0x0010, SubScrollableControl.ScrollStateFullDrag);
         }
 
-        [Fact]
+        public static IEnumerable<object[]> AdjustFormScrollbars_TestData()
+        {
+            foreach (RightToLeft rightToLeft in Enum.GetValues(typeof(RightToLeft)))
+            {
+                yield return new object[] { rightToLeft, true, 0, true, 0, false, false, 0, false, 0 };
+                yield return new object[] { rightToLeft, true, 0, true, 0, true, false, 0, false, 0 };
+                yield return new object[] { rightToLeft, true, 0, true, 1, false, false, 0, false, 0 };
+                yield return new object[] { rightToLeft, true, 0, true, 1, true, false, 0, false, 0 };
+                yield return new object[] { rightToLeft, true, 1, true, 0, false, false, 0, false, 0 };
+                yield return new object[] { rightToLeft, true, 1, true, 0, true, false, 0, false, 0 };
+                yield return new object[] { rightToLeft, true, 1, true, 1, false, false, 0, false, 1 };
+                yield return new object[] { rightToLeft, true, 1, true, 1, true, false, 0, false, 1 };
+
+                yield return new object[] { rightToLeft, true, 0, false, 0, false, false, 0, false, 0 };
+                yield return new object[] { rightToLeft, true, 0, false, 0, true, false, 0, false, 0 };
+                yield return new object[] { rightToLeft, true, 0, false, 1, false, false, 0, false, 0 };
+                yield return new object[] { rightToLeft, true, 0, false, 1, true, false, 0, false, 0 };
+                yield return new object[] { rightToLeft, true, 1, false, 0, false, false, 0, false, 0 };
+                yield return new object[] { rightToLeft, true, 1, false, 0, true, false, 0, false, 0 };
+                yield return new object[] { rightToLeft, true, 1, false, 1, false, false, 0, false, 1 };
+                yield return new object[] { rightToLeft, true, 1, false, 1, true, false, 0, false, 1 };
+
+                yield return new object[] { rightToLeft, false, 0, true, 0, false, false, 0, false, 0 };
+                yield return new object[] { rightToLeft, false, 0, true, 0, true, false, 0, false, 0 };
+                yield return new object[] { rightToLeft, false, 0, true, 1, false, false, 0, false, 0 };
+                yield return new object[] { rightToLeft, false, 0, true, 1, true, false, 0, false, 0 };
+                yield return new object[] { rightToLeft, false, 1, true, 0, false, false, 0, false, 0 };
+                yield return new object[] { rightToLeft, false, 1, true, 0, true, false, 0, false, 0 };
+                yield return new object[] { rightToLeft, false, 1, true, 1, false, false, 0, false, 1 };
+                yield return new object[] { rightToLeft, false, 1, true, 1, true, false, 0, false, 1 };
+
+                yield return new object[] { rightToLeft, false, 0, false, 0, false, false, 0, false, 0 };
+                yield return new object[] { rightToLeft, false, 0, false, 0, true, false, 0, false, 0 };
+                yield return new object[] { rightToLeft, false, 0, false, 1, false, false, 0, false, 1 };
+                yield return new object[] { rightToLeft, false, 0, false, 1, true, false, 0, false, 1 };
+                yield return new object[] { rightToLeft, false, 1, false, 0, false, false, 1, false, 0 };
+                yield return new object[] { rightToLeft, false, 1, false, 0, true, false, 1, false, 0 };
+                yield return new object[] { rightToLeft, false, 1, false, 1, false, false, 1, false, 1 };
+                yield return new object[] { rightToLeft, false, 1, false, 1, true, false, 1, false, 1 };
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(AdjustFormScrollbars_TestData))]
+        public void ScrollableControl_AdjustFormScrollbars_Invoke_Success(RightToLeft rightToLeft, bool hScroll, int hValue, bool vScroll, int vValue, bool displayScrollbars, bool expectedHScroll, int expectedHValue, bool expectedVScroll, int expectedVValue)
+        {
+            using var control = new SubScrollableControl
+            {
+                RightToLeft = rightToLeft,
+                HScroll = hScroll,
+                VScroll = vScroll
+            };
+            control.HorizontalScroll.Value = hValue;
+            control.VerticalScroll.Value = vValue;
+
+            control.AdjustFormScrollbars(displayScrollbars);
+            Assert.Equal(expectedHScroll, control.HScroll);
+            Assert.Equal(expectedHValue, control.HorizontalScroll.Value);
+            Assert.False(control.HorizontalScroll.Visible);
+            Assert.Equal(expectedVScroll, control.VScroll);
+            Assert.Equal(expectedVValue, control.VerticalScroll.Value);
+            Assert.False(control.VerticalScroll.Visible);
+            Assert.False(control.GetScrollState(SubScrollableControl.ScrollStateUserHasScrolled));
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(AdjustFormScrollbars_TestData))]
+        public void ScrollableControl_AdjustFormScrollbars_InvokeAutoScroll_Success(RightToLeft rightToLeft, bool hScroll, int hValue, bool vScroll, int vValue, bool displayScrollbars, bool expectedHScroll, int expectedHValue, bool expectedVScroll, int expectedVValue)
+        {
+            using var control = new SubScrollableControl
+            {
+                AutoScroll = true,
+                RightToLeft = rightToLeft,
+                HScroll = hScroll,
+                VScroll = vScroll
+            };
+            control.HorizontalScroll.Value = hValue;
+            control.VerticalScroll.Value = vValue;
+
+            control.AdjustFormScrollbars(displayScrollbars);
+            Assert.Equal(expectedHScroll, control.HScroll);
+            Assert.Equal(expectedHValue, control.HorizontalScroll.Value);
+            Assert.False(control.HorizontalScroll.Visible);
+            Assert.Equal(expectedVScroll, control.VScroll);
+            Assert.Equal(expectedVValue, control.VerticalScroll.Value);
+            Assert.False(control.VerticalScroll.Visible);
+            Assert.False(control.GetScrollState(SubScrollableControl.ScrollStateUserHasScrolled));
+            Assert.False(control.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> AdjustFormScrollbars_AutoScrollMinSize_TestData()
+        {
+            foreach (RightToLeft rightToLeft in Enum.GetValues(typeof(RightToLeft)))
+            {
+                yield return new object[] { rightToLeft, true, 0, true, 0, false, true, 0, true, 0 };
+                yield return new object[] { rightToLeft, true, 0, true, 0, true, true, 0, true, 0 };
+                yield return new object[] { rightToLeft, true, 0, true, 1, false, true, 0, true, 0 };
+                yield return new object[] { rightToLeft, true, 0, true, 1, true, true, 0, true, 1 };
+                yield return new object[] { rightToLeft, true, 1, true, 0, false, true, 0, true, 0 };
+                yield return new object[] { rightToLeft, true, 1, true, 0, true, true, 1, true, 0 };
+                yield return new object[] { rightToLeft, true, 1, true, 1, false, true, 0, true, 0 };
+                yield return new object[] { rightToLeft, true, 1, true, 1, true, true, 1, true, 1 };
+
+                yield return new object[] { rightToLeft, true, 0, false, 0, false, true, 0, true, 0 };
+                yield return new object[] { rightToLeft, true, 0, false, 0, true, true, 0, true, 0 };
+                yield return new object[] { rightToLeft, true, 0, false, 1, false, true, 0, true, 0 };
+                yield return new object[] { rightToLeft, true, 0, false, 1, true, true, 0, true, 1 };
+                yield return new object[] { rightToLeft, true, 1, false, 0, false, true, 0, true, 0 };
+                yield return new object[] { rightToLeft, true, 1, false, 0, true, true, 1, true, 0 };
+                yield return new object[] { rightToLeft, true, 1, false, 1, false, true, 0, true, 0 };
+                yield return new object[] { rightToLeft, true, 1, false, 1, true, true, 1, true, 1 };
+
+                yield return new object[] { rightToLeft, false, 0, true, 0, false, true, 0, true, 0 };
+                yield return new object[] { rightToLeft, false, 0, true, 0, true, true, 0, true, 0 };
+                yield return new object[] { rightToLeft, false, 0, true, 1, false, true, 0, true, 0 };
+                yield return new object[] { rightToLeft, false, 0, true, 1, true, true, 0, true, 1 };
+                yield return new object[] { rightToLeft, false, 1, true, 0, false, true, 0, true, 0 };
+                yield return new object[] { rightToLeft, false, 1, true, 0, true, true, 1, true, 0 };
+                yield return new object[] { rightToLeft, false, 1, true, 1, false, true, 0, true, 0 };
+                yield return new object[] { rightToLeft, false, 1, true, 1, true, true, 1, true, 1 };
+
+                yield return new object[] { rightToLeft, false, 0, false, 0, false, false, 0, false, 0 };
+                yield return new object[] { rightToLeft, false, 0, false, 0, true, true, 0, true, 0 };
+                yield return new object[] { rightToLeft, false, 0, false, 1, false, true, 0, true, 0 };
+                yield return new object[] { rightToLeft, false, 0, false, 1, true, true, 0, true, 1 };
+                yield return new object[] { rightToLeft, false, 1, false, 0, false, true, 0, true, 0 };
+                yield return new object[] { rightToLeft, false, 1, false, 0, true, true, 1, true, 0 };
+                yield return new object[] { rightToLeft, false, 1, false, 1, false, true, 0, true, 0 };
+                yield return new object[] { rightToLeft, false, 1, false, 1, true, true, 1, true, 1 };
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(AdjustFormScrollbars_AutoScrollMinSize_TestData))]
+        public void ScrollableControl_AdjustFormScrollbars_InvokeAutoScrollMinSize_Success(RightToLeft rightToLeft, bool hScroll, int hValue, bool vScroll, int vValue, bool displayScrollbars, bool expectedHScroll, int expectedHValue, bool expectedVScroll, int expectedVValue)
+        {
+            using var control = new SubScrollableControl
+            {
+                AutoScrollMinSize = new Size(10, 20),
+                RightToLeft = rightToLeft,
+                HScroll = hScroll,
+                VScroll = vScroll
+            };
+            control.HorizontalScroll.Value = hValue;
+            control.VerticalScroll.Value = vValue;
+
+            control.AdjustFormScrollbars(displayScrollbars);
+            Assert.Equal(expectedHScroll, control.HScroll);
+            Assert.Equal(expectedHValue, control.HorizontalScroll.Value);
+            Assert.True(control.HorizontalScroll.Visible);
+            Assert.Equal(expectedVScroll, control.VScroll);
+            Assert.Equal(expectedVValue, control.VerticalScroll.Value);
+            Assert.True(control.VerticalScroll.Visible);
+            Assert.False(control.GetScrollState(SubScrollableControl.ScrollStateUserHasScrolled));
+            Assert.False(control.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> AdjustFormScrollbars_WithHandle_TestData()
+        {
+            foreach (RightToLeft rightToLeft in Enum.GetValues(typeof(RightToLeft)))
+            {
+                yield return new object[] { rightToLeft, true, 0, true, 0, false, false, 0, false, 0, 1 };
+                yield return new object[] { rightToLeft, true, 0, true, 0, true, false, 0, false, 0, 1 };
+                yield return new object[] { rightToLeft, true, 0, true, 1, false, false, 0, false, 0, 0 };
+                yield return new object[] { rightToLeft, true, 0, true, 1, true, false, 0, false, 0, 0 };
+                yield return new object[] { rightToLeft, true, 1, true, 0, false, false, 0, false, 0, 0 };
+                yield return new object[] { rightToLeft, true, 1, true, 0, true, false, 0, false, 0, 0 };
+                yield return new object[] { rightToLeft, true, 1, true, 1, false, false, 0, false, 1, 0 };
+                yield return new object[] { rightToLeft, true, 1, true, 1, true, false, 0, false, 1, 0 };
+
+                yield return new object[] { rightToLeft, true, 0, false, 0, false, false, 0, false, 0, 1 };
+                yield return new object[] { rightToLeft, true, 0, false, 0, true, false, 0, false, 0, 1 };
+                yield return new object[] { rightToLeft, true, 0, false, 1, false, false, 0, false, 0, 0 };
+                yield return new object[] { rightToLeft, true, 0, false, 1, true, false, 0, false, 0, 0 };
+                yield return new object[] { rightToLeft, true, 1, false, 0, false, false, 0, false, 0, 0 };
+                yield return new object[] { rightToLeft, true, 1, false, 0, true, false, 0, false, 0, 0 };
+                yield return new object[] { rightToLeft, true, 1, false, 1, false, false, 0, false, 1, 0 };
+                yield return new object[] { rightToLeft, true, 1, false, 1, true, false, 0, false, 1, 0 };
+
+                yield return new object[] { rightToLeft, false, 0, true, 0, false, false, 0, false, 0, 1 };
+                yield return new object[] { rightToLeft, false, 0, true, 0, true, false, 0, false, 0, 1 };
+                yield return new object[] { rightToLeft, false, 0, true, 1, false, false, 0, false, 0, 0 };
+                yield return new object[] { rightToLeft, false, 0, true, 1, true, false, 0, false, 0, 0 };
+                yield return new object[] { rightToLeft, false, 1, true, 0, false, false, 0, false, 0, 0 };
+                yield return new object[] { rightToLeft, false, 1, true, 0, true, false, 0, false, 0, 0 };
+                yield return new object[] { rightToLeft, false, 1, true, 1, false, false, 0, false, 1, 0 };
+                yield return new object[] { rightToLeft, false, 1, true, 1, true, false, 0, false, 1, 0 };
+
+                yield return new object[] { rightToLeft, false, 0, false, 0, false, false, 0, false, 0, 0 };
+                yield return new object[] { rightToLeft, false, 0, false, 0, true, false, 0, false, 0, 0 };
+                yield return new object[] { rightToLeft, false, 0, false, 1, false, false, 0, false, 1, 0 };
+                yield return new object[] { rightToLeft, false, 0, false, 1, true, false, 0, false, 1, 0 };
+                yield return new object[] { rightToLeft, false, 1, false, 0, false, false, 1, false, 0, 0 };
+                yield return new object[] { rightToLeft, false, 1, false, 0, true, false, 1, false, 0, 0 };
+                yield return new object[] { rightToLeft, false, 1, false, 1, false, false, 1, false, 1, 0 };
+                yield return new object[] { rightToLeft, false, 1, false, 1, true, false, 1, false, 1, 0 };
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(AdjustFormScrollbars_WithHandle_TestData))]
+        public void ScrollableControl_AdjustFormScrollbars_InvokeWithHandle_Success(RightToLeft rightToLeft, bool hScroll, int hValue, bool vScroll, int vValue, bool displayScrollbars, bool expectedHScroll, int expectedHValue, bool expectedVScroll, int expectedVValue, int expectedInvalidatedCallCount)
+        {
+            using var control = new SubScrollableControl
+            {
+                RightToLeft = rightToLeft,
+                HScroll = hScroll,
+                VScroll = vScroll
+            };
+            control.HorizontalScroll.Value = hValue;
+            control.VerticalScroll.Value = vValue;
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            control.AdjustFormScrollbars(displayScrollbars);
+            Assert.Equal(expectedHScroll, control.HScroll);
+            Assert.Equal(expectedHValue, control.HorizontalScroll.Value);
+            Assert.False(control.HorizontalScroll.Visible);
+            Assert.Equal(expectedVScroll, control.VScroll);
+            Assert.Equal(expectedVValue, control.VerticalScroll.Value);
+            Assert.False(control.VerticalScroll.Visible);
+            Assert.False(control.GetScrollState(SubScrollableControl.ScrollStateUserHasScrolled));
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
+            Assert.Equal(expectedInvalidatedCallCount, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(AdjustFormScrollbars_WithHandle_TestData))]
+        public void ScrollableControl_AdjustFormScrollbars_InvokeWithHandleAutoScroll_Success(RightToLeft rightToLeft, bool hScroll, int hValue, bool vScroll, int vValue, bool displayScrollbars, bool expectedHScroll, int expectedHValue, bool expectedVScroll, int expectedVValue, int expectedInvalidatedCallCount)
+        {
+            using var control = new SubScrollableControl
+            {
+                AutoScroll = true,
+                RightToLeft = rightToLeft,
+                HScroll = hScroll,
+                VScroll = vScroll
+            };
+            control.HorizontalScroll.Value = hValue;
+            control.VerticalScroll.Value = vValue;
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            control.AdjustFormScrollbars(displayScrollbars);
+            Assert.Equal(expectedHScroll, control.HScroll);
+            Assert.Equal(expectedHValue, control.HorizontalScroll.Value);
+            Assert.False(control.HorizontalScroll.Visible);
+            Assert.Equal(expectedVScroll, control.VScroll);
+            Assert.Equal(expectedVValue, control.VerticalScroll.Value);
+            Assert.False(control.VerticalScroll.Visible);
+            Assert.False(control.GetScrollState(SubScrollableControl.ScrollStateUserHasScrolled));
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
+            Assert.Equal(expectedInvalidatedCallCount, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        public static IEnumerable<object[]> AdjustFormScrollbars_WithHandleAutoScrollMinSize_TestData()
+        {
+            foreach (RightToLeft rightToLeft in Enum.GetValues(typeof(RightToLeft)))
+            {
+                yield return new object[] { rightToLeft, true, 0, true, 0, false, true, 0, true, 0, 2 };
+                yield return new object[] { rightToLeft, true, 0, true, 0, true, true, 0, true, 0, 0 };
+                yield return new object[] { rightToLeft, true, 0, true, 1, false, true, 0, true, 0, 2 };
+                yield return new object[] { rightToLeft, true, 0, true, 1, true, true, 0, true, 1, 0 };
+                yield return new object[] { rightToLeft, true, 1, true, 0, false, true, 0, true, 0, 2 };
+                yield return new object[] { rightToLeft, true, 1, true, 0, true, true, 1, true, 0, 0 };
+                yield return new object[] { rightToLeft, true, 1, true, 1, false, true, 0, true, 0, 2 };
+                yield return new object[] { rightToLeft, true, 1, true, 1, true, true, 1, true, 1, 0 };
+
+                yield return new object[] { rightToLeft, true, 0, false, 0, false, true, 0, true, 0, 2 };
+                yield return new object[] { rightToLeft, true, 0, false, 0, true, true, 0, true, 0, 1 };
+                yield return new object[] { rightToLeft, true, 0, false, 1, false, true, 0, true, 0, 2 };
+                yield return new object[] { rightToLeft, true, 0, false, 1, true, true, 0, true, 1, 0 };
+                yield return new object[] { rightToLeft, true, 1, false, 0, false, true, 0, true, 0, 2 };
+                yield return new object[] { rightToLeft, true, 1, false, 0, true, true, 1, true, 0, 0 };
+                yield return new object[] { rightToLeft, true, 1, false, 1, false, true, 0, true, 0, 2 };
+                yield return new object[] { rightToLeft, true, 1, false, 1, true, true, 1, true, 1, 0 };
+
+                yield return new object[] { rightToLeft, false, 0, true, 0, false, true, 0, true, 0, 2 };
+                yield return new object[] { rightToLeft, false, 0, true, 0, true, true, 0, true, 0, 1 };
+                yield return new object[] { rightToLeft, false, 0, true, 1, false, true, 0, true, 0, 2 };
+                yield return new object[] { rightToLeft, false, 0, true, 1, true, true, 0, true, 1, 0 };
+                yield return new object[] { rightToLeft, false, 1, true, 0, false, true, 0, true, 0, 2 };
+                yield return new object[] { rightToLeft, false, 1, true, 0, true, true, 1, true, 0, 0 };
+                yield return new object[] { rightToLeft, false, 1, true, 1, false, true, 0, true, 0, 2 };
+                yield return new object[] { rightToLeft, false, 1, true, 1, true, true, 1, true, 1, 0 };
+
+                yield return new object[] { rightToLeft, false, 0, false, 0, false, false, 0, false, 0, 0 };
+                yield return new object[] { rightToLeft, false, 0, false, 0, true, true, 0, true, 0, 1 };
+                yield return new object[] { rightToLeft, false, 0, false, 1, false, true, 0, true, 0, 2 };
+                yield return new object[] { rightToLeft, false, 0, false, 1, true, true, 0, true, 1, 0 };
+                yield return new object[] { rightToLeft, false, 1, false, 0, false, true, 0, true, 0, 2 };
+                yield return new object[] { rightToLeft, false, 1, false, 0, true, true, 1, true, 0, 0 };
+                yield return new object[] { rightToLeft, false, 1, false, 1, false, true, 0, true, 0, 2 };
+                yield return new object[] { rightToLeft, false, 1, false, 1, true, true, 1, true, 1, 0 };
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(AdjustFormScrollbars_WithHandleAutoScrollMinSize_TestData))]
+        public void ScrollableControl_AdjustFormScrollbars_InvokeWithHandleAutoScrollMinSize_Success(RightToLeft rightToLeft, bool hScroll, int hValue, bool vScroll, int vValue, bool displayScrollbars, bool expectedHScroll, int expectedHValue, bool expectedVScroll, int expectedVValue, int expectedInvalidatedCallCount)
+        {
+            using var control = new SubScrollableControl
+            {
+                AutoScrollMinSize = new Size(10, 20),
+                RightToLeft = rightToLeft,
+                HScroll = hScroll,
+                VScroll = vScroll
+            };
+            control.HorizontalScroll.Value = hValue;
+            control.VerticalScroll.Value = vValue;
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            control.AdjustFormScrollbars(displayScrollbars);
+            Assert.Equal(expectedHScroll, control.HScroll);
+            Assert.Equal(expectedHValue, control.HorizontalScroll.Value);
+            Assert.True(control.HorizontalScroll.Visible);
+            Assert.Equal(expectedVScroll, control.VScroll);
+            Assert.Equal(expectedVValue, control.VerticalScroll.Value);
+            Assert.True(control.VerticalScroll.Visible);
+            Assert.False(control.GetScrollState(SubScrollableControl.ScrollStateUserHasScrolled));
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
+            Assert.Equal(expectedInvalidatedCallCount, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsFact]
+        public void ScrollableControl_GetAutoSizeMode_Invoke_ReturnsExpected()
+        {
+            using var control = new SubScrollableControl();
+            Assert.Equal(AutoSizeMode.GrowOnly, control.GetAutoSizeMode());
+        }
+
+        [WinFormsTheory]
+        [InlineData(0, true)]
+        [InlineData(SubScrollableControl.ScrollStateAutoScrolling, false)]
+        [InlineData(SubScrollableControl.ScrollStateFullDrag, false)]
+        [InlineData(SubScrollableControl.ScrollStateHScrollVisible, false)]
+        [InlineData(SubScrollableControl.ScrollStateUserHasScrolled, false)]
+        [InlineData(SubScrollableControl.ScrollStateVScrollVisible, false)]
+        [InlineData(int.MaxValue, false)]
+        [InlineData((-1), false)]
+        public void ScrollableControl_GetScrollState_Invoke_ReturnsExpected(int bit, bool expected)
+        {
+            using var control = new SubScrollableControl();
+            Assert.Equal(expected, control.GetScrollState(bit));
+        }
+
+        [WinFormsTheory]
+        [InlineData(ControlStyles.ContainerControl, true)]
+        [InlineData(ControlStyles.UserPaint, true)]
+        [InlineData(ControlStyles.Opaque, false)]
+        [InlineData(ControlStyles.ResizeRedraw, false)]
+        [InlineData(ControlStyles.FixedWidth, false)]
+        [InlineData(ControlStyles.FixedHeight, false)]
+        [InlineData(ControlStyles.StandardClick, true)]
+        [InlineData(ControlStyles.Selectable, true)]
+        [InlineData(ControlStyles.UserMouse, false)]
+        [InlineData(ControlStyles.SupportsTransparentBackColor, false)]
+        [InlineData(ControlStyles.StandardDoubleClick, true)]
+        [InlineData(ControlStyles.AllPaintingInWmPaint, false)]
+        [InlineData(ControlStyles.CacheText, false)]
+        [InlineData(ControlStyles.EnableNotifyMessage, false)]
+        [InlineData(ControlStyles.DoubleBuffer, false)]
+        [InlineData(ControlStyles.OptimizedDoubleBuffer, false)]
+        [InlineData(ControlStyles.UseTextForAccessibility, true)]
+        [InlineData((ControlStyles)0, true)]
+        [InlineData((ControlStyles)int.MaxValue, false)]
+        [InlineData((ControlStyles)(-1), false)]
+        public void ScrollableControl_GetStyle_Invoke_ReturnsExpected(ControlStyles flag, bool expected)
+        {
+            using var control = new SubScrollableControl();
+            Assert.Equal(expected, control.GetStyle(flag));
+
+            // Call again to test caching.
+            Assert.Equal(expected, control.GetStyle(flag));
+        }
+
+        [WinFormsFact]
         public void ScrollableControl_OnScroll_Invoke_CallsHandler()
         {
-            var control = new SubScrollableControl();
+            using var control = new SubScrollableControl();
             var eventArgs = new ScrollEventArgs(ScrollEventType.First, 0);
             int callCount = 0;
             ScrollEventHandler handler = (sender, e) =>
@@ -442,10 +1364,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ScrollableControl_OnPaddingChanged_Invoke_CallsHandler()
         {
-            var control = new SubScrollableControl();
+            using var control = new SubScrollableControl();
             var eventArgs = new EventArgs();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
@@ -466,51 +1388,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
         }
 
-        public static IEnumerable<object[]> AdjustFormScrollbars_TestData()
-        {
-            foreach (bool hScroll in new bool[] { true, false })
-            {
-                foreach (bool vScroll in new bool[] { true, false })
-                {
-                    var control1 = new SubScrollableControl
-                    {
-                        HScroll = hScroll,
-                        VScroll = vScroll
-                    };
-                    yield return new object[] { control1, false, false, false };
-
-                    var control2 = new SubScrollableControl
-                    {
-                        HScroll = hScroll,
-                        VScroll = vScroll
-                    };
-                    yield return new object[] { control2, true, false, false };
-                }
-            }
-
-            var controlWithAutoScrollMinSize = new SubScrollableControl
-            {
-                HScroll = true,
-                VScroll = true,
-                AutoScrollMinSize = new Size(10, 20)
-            };
-            yield return new object[] { controlWithAutoScrollMinSize, true, true, true };
-        }
-
-        [Theory]
-        [MemberData(nameof(AdjustFormScrollbars_TestData))]
-        public void ScrollableControl_AdjustFormScrollbars_Invoke_Success(SubScrollableControl control, bool displayScrollbars, bool expectedHScroll, bool expectedVScroll)
-        {
-            control.AdjustFormScrollbars(displayScrollbars);
-            Assert.Equal(expectedHScroll, control.HScroll);
-            Assert.Equal(expectedVScroll, control.VScroll);
-        }
-
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetLayoutEventArgsTheoryData))]
         public void ScrollableControl_OnLayout_Invoke_CallsLayout(LayoutEventArgs eventArgs)
         {
-            var control = new SubScrollableControl();
+            using var control = new SubScrollableControl();
             int callCount = 0;
             LayoutEventHandler handler = (sender, e) =>
             {
@@ -531,10 +1413,10 @@ namespace System.Windows.Forms.Tests
         }
 
 #pragma warning disable 0618
-        [Fact]
+        [WinFormsFact]
         public void ScrollableControl_ScaleCore_InvokeWithDockPadding_Success()
         {
-            var control = new ScrollableControl
+            using var control = new ScrollableControl
             {
                 Padding = new Padding(1, 2, 3, 4)
             };
@@ -551,10 +1433,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(new Padding(1, 2, 3, 4), control.Padding);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ScrollableControl_ScaleCore_InvokeWithoutDockPadding_Success()
         {
-            var control = new ScrollableControl();
+            using var control = new ScrollableControl();
             control.Scale(10, 20);
             Assert.Equal(0, control.DockPadding.Left);
             Assert.Equal(0, control.DockPadding.Top);
@@ -564,10 +1446,10 @@ namespace System.Windows.Forms.Tests
         }
 #pragma warning restore 0618
 
-        [Fact]
+        [WinFormsFact]
         public void ScrollableControl_ScaleControl_InvokeWithDockPadding_Success()
         {
-            var control = new ScrollableControl
+            using var control = new ScrollableControl
             {
                 Padding = new Padding(1, 2, 3, 4)
             };
@@ -584,16 +1466,88 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(new Padding(10, 40, 30, 80), control.Padding);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ScrollableControl_ScaleControl_InvokeWithoutDockPadding_Success()
         {
-            var control = new ScrollableControl();
+            using var control = new ScrollableControl();
             control.Scale(new SizeF(10, 20));
             Assert.Equal(0, control.DockPadding.Left);
             Assert.Equal(0, control.DockPadding.Top);
             Assert.Equal(0, control.DockPadding.Right);
             Assert.Equal(0, control.DockPadding.Bottom);
             Assert.Equal(Padding.Empty, control.Padding);
+        }
+
+        public static IEnumerable<object[]> SetAutoScrollMargin_TestData()
+        {
+            yield return new object[] { true, -1, -1, new Size(0, 0), 0 };
+            yield return new object[] { true, 0, 0, new Size(0, 0), 0 };
+            yield return new object[] { true, 0, 1, new Size(0, 1), 1 };
+            yield return new object[] { true, 1, 0, new Size(1, 0), 1 };
+            yield return new object[] { true, 1, 2, new Size(1, 2), 1 };
+            yield return new object[] { false, -1, -1, new Size(0, 0), 0 };
+            yield return new object[] { false, 0, 0, new Size(0, 0), 0 };
+            yield return new object[] { false, 0, 1, new Size(0, 1), 0 };
+            yield return new object[] { false, 1, 0, new Size(1, 0), 0 };
+            yield return new object[] { false, 1, 2, new Size(1, 2), 0 };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(SetAutoScrollMargin_TestData))]
+        public void ScrollableControl_SetAutoScrollMargin_Invoke_Success(bool autoScroll, int width, int height, Size expectedAutoScrollMargin, int expectedLayoutCallCount)
+        {
+            using var control = new ScrollableControl
+            {
+                AutoScroll = autoScroll
+            };
+            int layoutCallCount = 0;
+            control.Layout += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Null(e.AffectedControl);
+                Assert.Null(e.AffectedProperty);
+                layoutCallCount++;
+            };
+
+            control.SetAutoScrollMargin(width, height);
+            Assert.Equal(expectedAutoScrollMargin, control.AutoScrollMargin);
+            Assert.Equal(autoScroll, control.AutoScroll);
+            Assert.Equal(expectedLayoutCallCount, layoutCallCount);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(SetAutoScrollMargin_TestData))]
+        public void ScrollableControl_SetAutoScrollMargin_InvokeWithHandle_Success(bool autoScroll, int width, int height, Size expectedAutoScrollMargin, int expectedLayoutCallCount)
+        {
+            using var control = new ScrollableControl
+            {
+                AutoScroll = autoScroll
+            };
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+            int layoutCallCount = 0;
+            control.Layout += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Null(e.AffectedControl);
+                Assert.Null(e.AffectedProperty);
+                layoutCallCount++;
+            };
+
+            control.SetAutoScrollMargin(width, height);
+            Assert.Equal(expectedAutoScrollMargin, control.AutoScrollMargin);
+            Assert.Equal(autoScroll, control.AutoScroll);
+            Assert.Equal(expectedLayoutCallCount, layoutCallCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
         }
 
         public static IEnumerable<object[]> SetDisplayRectLocation_TestData()
@@ -630,11 +1584,11 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { false, width, height, 10, 2, new Point(0, 0), nonScrollableSize };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(SetDisplayRectLocation_TestData))]
-        public void SetDisplayRectLocation_Invoke_Success(bool autoScroll, int width, int height, int scrollX, int scrollY, Point expectedDisplayRectangleLocation, Size expectedDisplayRectangleSize)
+        public void ScrollableControl_SetDisplayRectLocation_Invoke_Success(bool autoScroll, int width, int height, int scrollX, int scrollY, Point expectedDisplayRectangleLocation, Size expectedDisplayRectangleSize)
         {
-            var control = new SubScrollableControl
+            using var control = new SubScrollableControl
             {
                 AutoScroll = autoScroll,
                 ClientSize = new Size(width, height)
@@ -646,7 +1600,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(Point.Empty, control.AutoScrollPosition);
 
             // With child.
-            var child = new LargeControl();
+            using var child = new LargeControl();
             control.Controls.Add(child);
             Assert.Equal(child.ExpectedSize, child.Bounds);
 
@@ -655,6 +1609,134 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expectedDisplayRectangleLocation, control.DisplayRectangle.Location);
             Assert.Equal(expectedDisplayRectangleLocation, control.AutoScrollPosition);
             Assert.Equal(child.ExpectedSize, child.Bounds);
+        }
+
+        public static IEnumerable<object[]> SetDisplayRectLocation_WithHandle_TestData()
+        {
+            const int width = 70;
+            const int height = 80;
+            Size scrollableSize = new Size(100, 150);
+            Size nonScrollableSize = new Size(width, height);
+
+            yield return new object[] { true, width, height, 0, 0, new Point(0, 0), scrollableSize, 1 };
+            yield return new object[] { false, width, height, 0, 0, new Point(0, 0), nonScrollableSize, 0 };
+
+            yield return new object[] { true, width, height, -10, 0, new Point(-10, 0), scrollableSize, 1 };
+            yield return new object[] { false, width, height, -10, 0, new Point(0, 0), nonScrollableSize, 0 };
+
+            yield return new object[] { true, width, height, 0, -20, new Point(0, -20), scrollableSize, 1 };
+            yield return new object[] { false, width, height, 0, -20, new Point(0, 0), nonScrollableSize, 0 };
+
+            yield return new object[] { true, width, height, -10, -20, new Point(-10, -20), scrollableSize, 1 };
+            yield return new object[] { false, width, height, -10, -20, new Point(0, 0), nonScrollableSize, 0 };
+
+            // Overflow.
+            yield return new object[] { true, width, height, -100, -20, new Point(-47, -20), scrollableSize, 1 };
+            yield return new object[] { false, width, height, -100, -20, new Point(0, 0), nonScrollableSize, 0 };
+
+            yield return new object[] { true, width, height, -10, -200, new Point(-10, -87), scrollableSize, 1 };
+            yield return new object[] { false, width, height, -10, -200, new Point(0, 0), nonScrollableSize, 0 };
+
+            // Underflow.
+            yield return new object[] { true, width, height, 1, 20, new Point(0, 0), scrollableSize, 1 };
+            yield return new object[] { false, width, height, 1, 20, new Point(0, 0), nonScrollableSize, 0 };
+
+            yield return new object[] { true, width, height, 10, 2, new Point(0, 0), scrollableSize, 1 };
+            yield return new object[] { false, width, height, 10, 2, new Point(0, 0), nonScrollableSize, 0 };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(SetDisplayRectLocation_WithHandle_TestData))]
+        public void ScrollableControl_SetDisplayRectLocation_InvokeWithHandle_Success(bool autoScroll, int width, int height, int scrollX, int scrollY, Point expectedDisplayRectangleLocation, Size expectedDisplayRectangleSize, int expectedInvalidatedCallCount)
+        {
+            using var control = new SubScrollableControl
+            {
+                AutoScroll = autoScroll,
+                ClientSize = new Size(width, height)
+            };
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            // Without child.
+            control.SetDisplayRectLocation(scrollX, scrollY);
+            Assert.Equal(new Rectangle(0, 0, width, height), control.DisplayRectangle);
+            Assert.Equal(Point.Empty, control.AutoScrollPosition);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // With child.
+            using var child = new LargeControl();
+            control.Controls.Add(child);
+            Assert.Equal(child.ExpectedSize, child.Bounds);
+
+            control.SetDisplayRectLocation(scrollX, scrollY);
+            Assert.Equal(expectedDisplayRectangleSize, control.DisplayRectangle.Size);
+            Assert.Equal(expectedDisplayRectangleLocation, control.DisplayRectangle.Location);
+            Assert.Equal(expectedDisplayRectangleLocation, control.AutoScrollPosition);
+            Assert.Equal(new Rectangle(expectedDisplayRectangleLocation, child.ExpectedSize.Size), child.Bounds);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
+            Assert.Equal(expectedInvalidatedCallCount, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        public static IEnumerable<object[]> SetScrollState_TestData()
+        {
+            yield return new object[] { 1, true, true };
+            yield return new object[] { 1, false, false };
+            yield return new object[] { 0, true, true };
+            yield return new object[] { 0, false, true };
+        }
+
+        [Theory]
+        [MemberData(nameof(SetScrollState_TestData))]
+        public void ScrollableControl_SetScrollState_Invoke_GetScrollStateReturnsExpected(int bit, bool value, bool expected)
+        {
+            var control = new SubScrollableControl();
+            control.SetScrollState(bit, value);
+            Assert.Equal(expected, control.GetScrollState(bit));
+            Assert.False(control.IsHandleCreated);
+
+            // Set same.
+            control.SetScrollState(bit, value);
+            Assert.Equal(expected, control.GetScrollState(bit));
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [Theory]
+        [MemberData(nameof(SetScrollState_TestData))]
+        public void ScrollableControl_GetScrollState_InvokeWithHandle_GetStyleReturnsExpected(int bit, bool value, bool expected)
+        {
+            var control = new SubScrollableControl();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            control.SetScrollState(bit, value);
+            Assert.Equal(expected, control.GetScrollState(bit));
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set same.
+            control.SetScrollState(bit, value);
+            Assert.Equal(expected, control.GetScrollState(bit));
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
         }
 
         public static IEnumerable<object[]> ScrollControlIntoView_TestData()
@@ -705,11 +1787,11 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(ScrollControlIntoView_TestData))]
-        public void ScrollControlIntoView_Invoke_Success(bool autoScroll, bool hScroll, bool vScroll, Size clientSize, Control activeControl, Rectangle expectedDisplayRectangle)
+        public void ScrollableControl_ScrollControlIntoView_Invoke_Success(bool autoScroll, bool hScroll, bool vScroll, Size clientSize, Control activeControl, Rectangle expectedDisplayRectangle)
         {
-            var control = new SubScrollableControl
+            using var control = new SubScrollableControl
             {
                 AutoScroll = autoScroll,
                 HScroll = hScroll,
@@ -722,6 +1804,8 @@ namespace System.Windows.Forms.Tests
             }
             control.ScrollControlIntoView(activeControl);
             Assert.Equal(expectedDisplayRectangle, control.DisplayRectangle);
+
+            control.Controls.Clear();
         }
 
         private class LargeControl : Control
@@ -802,6 +1886,10 @@ namespace System.Windows.Forms.Tests
                 set => base.ResizeRedraw = value;
             }
 
+            public new bool ShowFocusCues => base.ShowFocusCues;
+
+            public new bool ShowKeyboardCues => base.ShowKeyboardCues;
+
             public new bool VScroll
             {
                 get => base.VScroll;
@@ -810,7 +1898,11 @@ namespace System.Windows.Forms.Tests
 
             public new void AdjustFormScrollbars(bool displayScrollbars) => base.AdjustFormScrollbars(displayScrollbars);
 
+            public new AutoSizeMode GetAutoSizeMode() => base.GetAutoSizeMode();
+
             public new bool GetScrollState(int bit) => base.GetScrollState(bit);
+
+            public new bool GetStyle(ControlStyles flag) => base.GetStyle(flag);
 
             public new void OnLayout(LayoutEventArgs e) => base.OnLayout(e);
 
@@ -819,6 +1911,10 @@ namespace System.Windows.Forms.Tests
             public new void OnPaddingChanged(EventArgs e) => base.OnPaddingChanged(e);
 
             public new void SetDisplayRectLocation(int x, int y) => base.SetDisplayRectLocation(x, y);
+
+            public new void SetScrollState(int bit, bool value) => base.SetScrollState(bit, value);
+
+            public new void SetStyle(ControlStyles flag, bool value) => base.SetStyle(flag, value);
         }
     }
 }

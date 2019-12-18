@@ -33,7 +33,7 @@ namespace System.Windows.Forms
             get
             {
                 int lastXY = (int)User32.GetMessagePos();
-                return new Point(NativeMethods.Util.SignedLOWORD(lastXY), NativeMethods.Util.SignedHIWORD(lastXY));
+                return new Point(PARAM.SignedLOWORD(lastXY), PARAM.SignedHIWORD(lastXY));
             }
         }
 
@@ -247,23 +247,6 @@ namespace System.Windows.Forms
                 }
             }
             return mnemonic;
-        }
-
-        /// <summary>
-        ///  Finds the top level handle for a given handle.
-        /// </summary>
-        public static HandleRef GetRootHWnd(HandleRef hwnd)
-        {
-            IntPtr rootHwnd = UnsafeNativeMethods.GetAncestor(new HandleRef(hwnd, hwnd.Handle), NativeMethods.GA_ROOT);
-            return new HandleRef(hwnd.Wrapper, rootHwnd);
-        }
-
-        /// <summary>
-        ///  Finds the top level handle for a given handle.
-        /// </summary>
-        public static HandleRef GetRootHWnd(Control control)
-        {
-            return GetRootHWnd(new HandleRef(control, control.Handle));
         }
 
         /// <summary>

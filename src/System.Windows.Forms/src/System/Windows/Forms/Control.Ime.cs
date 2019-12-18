@@ -34,12 +34,6 @@ namespace System.Windows.Forms
         private static bool ignoreWmImeNotify;
 
         /// <summary>
-        ///  This flag works around an Issue with the Chinese IME sending IMENotify messages prior to WmInputLangChange
-        ///  which would cause this code to use OnHalf as the default mode overriding .ImeMode property. See WmImeNotify
-        /// </summary>
-        private static bool lastLanguageChinese = false;
-
-        /// <summary>
         ///  The ImeMode in the property store.
         /// </summary>
         internal ImeMode CachedImeMode
@@ -409,7 +403,7 @@ namespace System.Windows.Forms
                         // this is the case of a disabled winforms control hosted in a non-Form shell.
                         if (imeMode == ImeMode.Disable)
                         {
-                            focusHandle = UnsafeNativeMethods.GetAncestor(new HandleRef(null, focusHandle), NativeMethods.GA_ROOT);
+                            focusHandle = User32.GetAncestor(focusHandle, User32.GA.ROOT);
 
                             if (focusHandle != IntPtr.Zero)
                             {
@@ -692,11 +686,6 @@ namespace System.Windows.Forms
                 PropagatingImeMode = ImeMode.Off;
             }
 
-            if (ImeModeConversion.InputLanguageTable == ImeModeConversion.ChineseTable)
-            {
-                IgnoreWmImeNotify = false;
-            }
-
             Form form = FindForm();
 
             if (form != null)
@@ -768,24 +757,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void WmImeNotify(ref Message m)
         {
-            ImeMode[] inputLanguageTable = ImeModeConversion.InputLanguageTable;
-
-            // During a change to the Chinese language with Focus already set, the Chinese IME will send several WmImeNotify messages
-            // before ever sending a WmInputLangChange event. Also, the IME will report an IME input context during this time that we
-            // interpret as On = 'OnHalf'. The combination of these causes us to update the default Cached ImeMode to OnHalf, overriding
-            // the control's ImeMode property -- unwanted behavior. We workaround this by skipping our mode synchronization during these
-            // IMENotify messages until we get a WmInputLangChange event.
-            //
-            // If this is the first time here after conversion to chinese language, wait for WmInputLanguageChange
-            // before listening to WmImeNotifys.
-            if ((inputLanguageTable == ImeModeConversion.ChineseTable) && !lastLanguageChinese)
-            {
-                IgnoreWmImeNotify = true;
-            }
-
-            lastLanguageChinese = (inputLanguageTable == ImeModeConversion.ChineseTable);
-
-            if (ImeSupported && inputLanguageTable != ImeModeConversion.UnsupportedTable && !IgnoreWmImeNotify)
+            if (ImeSupported && ImeModeConversion.InputLanguageTable != ImeModeConversion.UnsupportedTable && !IgnoreWmImeNotify)
             {
                 int wparam = (int)m.WParam;
 
@@ -806,7 +778,7 @@ namespace System.Windows.Forms
                 // We guard against re-entrancy since the ImeModeChanged event can be raised and any changes from the handler could
                 // lead to another WM_IME_NOTIFY loop.
 
-                if (wparam == NativeMethods.IMN_SETCONVERSIONMODE || wparam == NativeMethods.IMN_SETOPENSTATUS)
+                if (wparam == (int)Imm32.IMN.SETCONVERSIONMODE || wparam == (int)Imm32.IMN.SETOPENSTATUS)
                 {
                     Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Info, string.Format(CultureInfo.CurrentCulture, "Inside WmImeNotify(m.wparam=[{0}]), this={1}", m.WParam, this));
                     Debug.Indent();
@@ -933,7 +905,7 @@ namespace System.Windows.Forms
                 // Disable the IME by disassociating the context from the window.
                 //
                 Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Verbose, "ImmAssociateContext(" + handle + ", null)");
-                IntPtr oldContext = UnsafeNativeMethods.ImmAssociateContext(new HandleRef(null, handle), NativeMethods.NullHandleRef);
+                IntPtr oldContext = Imm32.ImmAssociateContext(handle, IntPtr.Zero);
                 if (oldContext != IntPtr.Zero)
                 {
                     originalImeContext = oldContext;
@@ -955,7 +927,7 @@ namespace System.Windows.Forms
             if (ImeModeConversion.InputLanguageTable != ImeModeConversion.UnsupportedTable)
             {
                 Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Verbose, "ImmGetContext(" + handle + ")");
-                IntPtr inputContext = UnsafeNativeMethods.ImmGetContext(new HandleRef(null, handle));
+                IntPtr inputContext = Imm32.ImmGetContext(handle);
                 Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Verbose, "context = " + inputContext);
 
                 // Enable IME by associating the IME context to the window.
@@ -964,23 +936,23 @@ namespace System.Windows.Forms
                     if (originalImeContext == IntPtr.Zero)
                     {
                         Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Verbose, "ImmCreateContext()");
-                        inputContext = UnsafeNativeMethods.ImmCreateContext();
+                        inputContext = Imm32.ImmCreateContext();
                         if (inputContext != IntPtr.Zero)
                         {
                             Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Verbose, "ImmAssociateContext(" + handle + ", " + inputContext + ")");
-                            UnsafeNativeMethods.ImmAssociateContext(new HandleRef(null, handle), new HandleRef(null, inputContext));
+                            Imm32.ImmAssociateContext(handle, inputContext);
                         }
                     }
                     else
                     {
                         Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Verbose, "ImmAssociateContext()");
-                        UnsafeNativeMethods.ImmAssociateContext(new HandleRef(null, handle), new HandleRef(null, originalImeContext));
+                        Imm32.ImmAssociateContext(handle, originalImeContext);
                     }
                 }
                 else
                 {
                     Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Verbose, "ImmReleaseContext(" + handle + ", " + inputContext + ")");
-                    UnsafeNativeMethods.ImmReleaseContext(new HandleRef(null, handle), new HandleRef(null, inputContext));
+                    Imm32.ImmReleaseContext(handle, inputContext);
                 }
 
                 // Make sure the IME is opened.
@@ -1016,7 +988,7 @@ namespace System.Windows.Forms
             }
 
             Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Verbose, "ImmGetContext(" + handle + ")");
-            inputContext = UnsafeNativeMethods.ImmGetContext(new HandleRef(null, handle));
+            inputContext = Imm32.ImmGetContext(handle);
             Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Verbose, "context = " + inputContext);
 
             if (inputContext == IntPtr.Zero)
@@ -1034,36 +1006,31 @@ namespace System.Windows.Forms
             }
 
             // Determine the IME mode from the conversion status
-            //
-
-            int conversion = 0;     // Combination of conversion mode values
-            int sentence = 0;       // Sentence mode value
-
             Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Verbose, "ImmGetConversionStatus(" + inputContext + ", conversion, sentence)");
-            UnsafeNativeMethods.ImmGetConversionStatus(new HandleRef(null, inputContext), ref conversion, ref sentence);
+            Imm32.ImmGetConversionStatus(inputContext, out Imm32.IME_CMODE conversion, out Imm32.IME_SMODE sentence);
 
             Debug.Assert(countryTable != null, "countryTable is null");
 
-            if ((conversion & NativeMethods.IME_CMODE_NATIVE) != 0)
+            if ((conversion & Imm32.IME_CMODE.NATIVE) != 0)
             {
-                if ((conversion & NativeMethods.IME_CMODE_KATAKANA) != 0)
+                if ((conversion & Imm32.IME_CMODE.KATAKANA) != 0)
                 {
-                    retval = ((conversion & NativeMethods.IME_CMODE_FULLSHAPE) != 0)
+                    retval = ((conversion & Imm32.IME_CMODE.FULLSHAPE) != 0)
                                 ? countryTable[ImeModeConversion.ImeNativeFullKatakana]
                                 : countryTable[ImeModeConversion.ImeNativeHalfKatakana];
                     goto cleanup;
                 }
                 else
-                { // ! Katakana
-                    retval = ((conversion & NativeMethods.IME_CMODE_FULLSHAPE) != 0)
+                {
+                    retval = ((conversion & Imm32.IME_CMODE.FULLSHAPE) != 0)
                                 ? countryTable[ImeModeConversion.ImeNativeFullHiragana]
                                 : countryTable[ImeModeConversion.ImeNativeHalfHiragana];
                     goto cleanup;
                 }
             }
             else
-            { // ! IME_CMODE_NATIVE
-                retval = ((conversion & NativeMethods.IME_CMODE_FULLSHAPE) != 0)
+            {
+                retval = ((conversion & Imm32.IME_CMODE.FULLSHAPE) != 0)
                             ? countryTable[ImeModeConversion.ImeAlphaFull]
                             : countryTable[ImeModeConversion.ImeAlphaHalf];
             }
@@ -1072,7 +1039,7 @@ namespace System.Windows.Forms
             if (inputContext != IntPtr.Zero)
             {
                 Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Verbose, "ImmReleaseContext(" + handle + ", " + inputContext + ")");
-                UnsafeNativeMethods.ImmReleaseContext(new HandleRef(null, handle), new HandleRef(null, inputContext));
+                Imm32.ImmReleaseContext(handle, inputContext);
             }
 
             ImeContext.TraceImeStatus(handle);
@@ -1111,7 +1078,7 @@ namespace System.Windows.Forms
                     goto cleanup;
                 }
 
-                inputContext = UnsafeNativeMethods.ImmGetContext(new HandleRef(null, handle));
+                inputContext = Imm32.ImmGetContext(handle);
 
                 if (inputContext == IntPtr.Zero)
                 {
@@ -1119,36 +1086,33 @@ namespace System.Windows.Forms
                     goto cleanup;
                 }
 
-                if (!UnsafeNativeMethods.ImmGetOpenStatus(new HandleRef(null, inputContext)))
+                if (!Imm32.ImmGetOpenStatus(inputContext).IsTrue())
                 {
                     status = string.Format(CultureInfo.CurrentCulture, "Ime closed for handle=[{0}]", handle);
                     goto cleanup;
                 }
 
-                int conversion = 0;     // Combination of conversion mode values
-                int sentence = 0;       // Sentence mode value
-
-                UnsafeNativeMethods.ImmGetConversionStatus(new HandleRef(null, inputContext), ref conversion, ref sentence);
+                Imm32.ImmGetConversionStatus(inputContext, out Imm32.IME_CMODE conversion, out Imm32.IME_SMODE sentence);
                 ImeMode retval;
 
-                if ((conversion & NativeMethods.IME_CMODE_NATIVE) != 0)
+                if ((conversion & Imm32.IME_CMODE.NATIVE) != 0)
                 {
-                    if ((conversion & NativeMethods.IME_CMODE_KATAKANA) != 0)
+                    if ((conversion & Imm32.IME_CMODE.KATAKANA) != 0)
                     {
-                        retval = ((conversion & NativeMethods.IME_CMODE_FULLSHAPE) != 0)
+                        retval = ((conversion & Imm32.IME_CMODE.FULLSHAPE) != 0)
                                     ? countryTable[ImeModeConversion.ImeNativeFullKatakana]
                                     : countryTable[ImeModeConversion.ImeNativeHalfKatakana];
                     }
                     else
-                    { // ! Katakana
-                        retval = ((conversion & NativeMethods.IME_CMODE_FULLSHAPE) != 0)
+                    {
+                        retval = ((conversion & Imm32.IME_CMODE.FULLSHAPE) != 0)
                                     ? countryTable[ImeModeConversion.ImeNativeFullHiragana]
                                     : countryTable[ImeModeConversion.ImeNativeHalfHiragana];
                     }
                 }
                 else
-                { // ! IME_CMODE_NATIVE
-                    retval = ((conversion & NativeMethods.IME_CMODE_FULLSHAPE) != 0)
+                {
+                    retval = ((conversion & Imm32.IME_CMODE.FULLSHAPE) != 0)
                                 ? countryTable[ImeModeConversion.ImeAlphaFull]
                                 : countryTable[ImeModeConversion.ImeAlphaHalf];
                 }
@@ -1158,7 +1122,7 @@ namespace System.Windows.Forms
             cleanup:
                 if (inputContext != IntPtr.Zero)
                 {
-                    UnsafeNativeMethods.ImmReleaseContext(new HandleRef(null, handle), new HandleRef(null, inputContext));
+                    Imm32.ImmReleaseContext(handle, inputContext);
                 }
 
                 Debug.WriteLine(status);
@@ -1175,7 +1139,7 @@ namespace System.Windows.Forms
             Debug.Indent();
 
             Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Verbose, "ImmGetContext(" + handle + ")");
-            IntPtr inputContext = UnsafeNativeMethods.ImmGetContext(new HandleRef(null, handle));
+            IntPtr inputContext = Imm32.ImmGetContext(handle);
             Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Verbose, "context = " + inputContext);
 
             bool retval = false;
@@ -1183,9 +1147,9 @@ namespace System.Windows.Forms
             if (inputContext != IntPtr.Zero)
             {
                 Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Verbose, "ImmGetOpenStatus(" + inputContext + ")");
-                retval = UnsafeNativeMethods.ImmGetOpenStatus(new HandleRef(null, inputContext));
+                retval = Imm32.ImmGetOpenStatus(inputContext).IsTrue();
                 Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Verbose, "ImmReleaseContext(" + handle + ", " + inputContext + ")");
-                UnsafeNativeMethods.ImmReleaseContext(new HandleRef(null, handle), new HandleRef(null, inputContext));
+                Imm32.ImmReleaseContext(handle, inputContext);
             }
 
             Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Verbose, "    IsOpen = " + retval);
@@ -1215,9 +1179,6 @@ namespace System.Windows.Forms
             {
                 goto cleanup;     // We only support Japanese, Korean and Chinese IME.
             }
-
-            int conversion = 0;     // Combination of conversion mode values
-            int sentence = 0;       // Sentence mode value
 
             Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Warning, "\tSetting IME context to " + imeMode);
 
@@ -1276,18 +1237,18 @@ namespace System.Windows.Forms
                         ImeModeConversion conversionEntry = (ImeModeConversion)ImeModeConversion.ImeModeConversionBits[imeMode];
 
                         Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Verbose, "ImmGetContext(" + handle + ")");
-                        IntPtr inputContext = UnsafeNativeMethods.ImmGetContext(new HandleRef(null, handle));
+                        IntPtr inputContext = Imm32.ImmGetContext(handle);
                         Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Verbose, "context = " + inputContext);
                         Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Verbose, "ImmGetConversionStatus(" + inputContext + ", conversion, sentence)");
-                        UnsafeNativeMethods.ImmGetConversionStatus(new HandleRef(null, inputContext), ref conversion, ref sentence);
+                        Imm32.ImmGetConversionStatus(inputContext, out Imm32.IME_CMODE conversion, out Imm32.IME_SMODE sentence);
 
                         conversion |= conversionEntry.setBits;
                         conversion &= ~conversionEntry.clearBits;
 
                         Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Verbose, "ImmSetConversionStatus(" + inputContext + ", conversion, sentence)");
-                        bool retval = UnsafeNativeMethods.ImmSetConversionStatus(new HandleRef(null, inputContext), conversion, sentence);
+                        Imm32.ImmSetConversionStatus(inputContext, conversion, sentence);
                         Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Verbose, "ImmReleaseContext(" + handle + ", " + inputContext + ")");
-                        UnsafeNativeMethods.ImmReleaseContext(new HandleRef(null, handle), new HandleRef(null, inputContext));
+                        Imm32.ImmReleaseContext(handle, inputContext);
                     }
                     break;
             }
@@ -1308,19 +1269,19 @@ namespace System.Windows.Forms
             if (ImeModeConversion.InputLanguageTable != ImeModeConversion.UnsupportedTable)
             {
                 Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Verbose, "ImmGetContext(" + handle + ")");
-                IntPtr inputContext = UnsafeNativeMethods.ImmGetContext(new HandleRef(null, handle));
+                IntPtr inputContext = Imm32.ImmGetContext(handle);
                 Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Verbose, "context = " + inputContext);
 
                 if (inputContext != IntPtr.Zero)
                 {
                     Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Verbose, "ImmSetOpenStatus(" + inputContext + ", " + open + ")");
-                    bool succeeded = UnsafeNativeMethods.ImmSetOpenStatus(new HandleRef(null, inputContext), open);
+                    bool succeeded = Imm32.ImmSetOpenStatus(inputContext, open.ToBOOL()).IsTrue();
                     Debug.Assert(succeeded, "Could not set the IME open status.");
 
                     if (succeeded)
                     {
                         Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Verbose, "ImmReleaseContext(" + handle + ", " + inputContext + ")");
-                        succeeded = UnsafeNativeMethods.ImmReleaseContext(new HandleRef(null, handle), new HandleRef(null, inputContext));
+                        succeeded = Imm32.ImmReleaseContext(handle, inputContext).IsTrue();
                         Debug.Assert(succeeded, "Could not release IME context.");
                     }
                 }
@@ -1340,8 +1301,8 @@ namespace System.Windows.Forms
     {
         private static Dictionary<ImeMode, ImeModeConversion> imeModeConversionBits;
 
-        internal int setBits;
-        internal int clearBits;
+        internal Imm32.IME_CMODE setBits;
+        internal Imm32.IME_CMODE clearBits;
 
         // Tables of conversions from IME context bits to IME mode
         //
@@ -1491,50 +1452,50 @@ namespace System.Windows.Forms
 
                     // Hiragana, On
                     //
-                    conversion.setBits = NativeMethods.IME_CMODE_FULLSHAPE | NativeMethods.IME_CMODE_NATIVE;
-                    conversion.clearBits = NativeMethods.IME_CMODE_KATAKANA;
+                    conversion.setBits = Imm32.IME_CMODE.FULLSHAPE | Imm32.IME_CMODE.NATIVE;
+                    conversion.clearBits = Imm32.IME_CMODE.KATAKANA;
                     imeModeConversionBits.Add(ImeMode.Hiragana, conversion);
 
                     // Katakana
                     //
-                    conversion.setBits = NativeMethods.IME_CMODE_FULLSHAPE | NativeMethods.IME_CMODE_KATAKANA | NativeMethods.IME_CMODE_NATIVE;
+                    conversion.setBits = Imm32.IME_CMODE.FULLSHAPE | Imm32.IME_CMODE.KATAKANA | Imm32.IME_CMODE.NATIVE;
                     conversion.clearBits = 0;
                     imeModeConversionBits.Add(ImeMode.Katakana, conversion);
 
                     // KatakanaHalf
                     //
-                    conversion.setBits = NativeMethods.IME_CMODE_KATAKANA | NativeMethods.IME_CMODE_NATIVE;
-                    conversion.clearBits = NativeMethods.IME_CMODE_FULLSHAPE;
+                    conversion.setBits = Imm32.IME_CMODE.KATAKANA | Imm32.IME_CMODE.NATIVE;
+                    conversion.clearBits = Imm32.IME_CMODE.FULLSHAPE;
                     imeModeConversionBits.Add(ImeMode.KatakanaHalf, conversion);
 
                     // AlphaFull
                     //
-                    conversion.setBits = NativeMethods.IME_CMODE_FULLSHAPE;
-                    conversion.clearBits = NativeMethods.IME_CMODE_KATAKANA | NativeMethods.IME_CMODE_NATIVE;
+                    conversion.setBits = Imm32.IME_CMODE.FULLSHAPE;
+                    conversion.clearBits = Imm32.IME_CMODE.KATAKANA | Imm32.IME_CMODE.NATIVE;
                     imeModeConversionBits.Add(ImeMode.AlphaFull, conversion);
 
                     // Alpha
                     //
                     conversion.setBits = 0;
-                    conversion.clearBits = NativeMethods.IME_CMODE_FULLSHAPE | NativeMethods.IME_CMODE_KATAKANA | NativeMethods.IME_CMODE_NATIVE;
+                    conversion.clearBits = Imm32.IME_CMODE.FULLSHAPE | Imm32.IME_CMODE.KATAKANA | Imm32.IME_CMODE.NATIVE;
                     imeModeConversionBits.Add(ImeMode.Alpha, conversion);
 
                     // HangulFull
                     //
-                    conversion.setBits = NativeMethods.IME_CMODE_FULLSHAPE | NativeMethods.IME_CMODE_NATIVE;
+                    conversion.setBits = Imm32.IME_CMODE.FULLSHAPE | Imm32.IME_CMODE.NATIVE;
                     conversion.clearBits = 0;
                     imeModeConversionBits.Add(ImeMode.HangulFull, conversion);
 
                     // Hangul
                     //
-                    conversion.setBits = NativeMethods.IME_CMODE_NATIVE;
-                    conversion.clearBits = NativeMethods.IME_CMODE_FULLSHAPE;
+                    conversion.setBits = Imm32.IME_CMODE.NATIVE;
+                    conversion.clearBits = Imm32.IME_CMODE.FULLSHAPE;
                     imeModeConversionBits.Add(ImeMode.Hangul, conversion);
 
                     // OnHalf
                     //
-                    conversion.setBits = NativeMethods.IME_CMODE_NATIVE;
-                    conversion.clearBits = NativeMethods.IME_CMODE_KATAKANA | NativeMethods.IME_CMODE_FULLSHAPE;
+                    conversion.setBits = Imm32.IME_CMODE.NATIVE;
+                    conversion.clearBits = Imm32.IME_CMODE.KATAKANA | Imm32.IME_CMODE.FULLSHAPE;
                     imeModeConversionBits.Add(ImeMode.OnHalf, conversion);
                 }
 

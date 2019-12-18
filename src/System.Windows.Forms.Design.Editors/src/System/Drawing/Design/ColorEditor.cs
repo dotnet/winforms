@@ -1120,13 +1120,13 @@ namespace System.Drawing.Design
                         NativeMethods.SendDlgItemMessage(hwnd, COLOR_GREEN, EditMessages.EM_SETMARGINS, (IntPtr)(NativeMethods.EC_LEFTMARGIN | NativeMethods.EC_RIGHTMARGIN), IntPtr.Zero);
                         NativeMethods.SendDlgItemMessage(hwnd, COLOR_BLUE, EditMessages.EM_SETMARGINS, (IntPtr)(NativeMethods.EC_LEFTMARGIN | NativeMethods.EC_RIGHTMARGIN), IntPtr.Zero);
                         IntPtr hwndCtl = NativeMethods.GetDlgItem(hwnd, COLOR_MIX);
-                        NativeMethods.EnableWindow(hwndCtl, false);
+                        User32.EnableWindow(hwndCtl, BOOL.FALSE);
                         User32.SetWindowPos(
                             hwndCtl,
                             User32.HWND_TOP,
                             flags: User32.SWP.HIDEWINDOW);
                         hwndCtl = NativeMethods.GetDlgItem(hwnd, NativeMethods.IDOK);
-                        NativeMethods.EnableWindow(hwndCtl, false);
+                        User32.EnableWindow(hwndCtl, BOOL.FALSE);
                         User32.SetWindowPos(
                             hwndCtl,
                             User32.HWND_TOP,
@@ -1134,7 +1134,7 @@ namespace System.Drawing.Design
                         this.Color = Color.Empty;
                         break;
                     case WindowMessages.WM_COMMAND:
-                        switch (NativeMethods.Util.LOWORD(unchecked((int)(long)wParam)))
+                        switch (PARAM.LOWORD(wParam))
                         {
                             case COLOR_ADD:
                                 byte red, green, blue;
@@ -1146,7 +1146,7 @@ namespace System.Drawing.Design
                                 blue = (byte)NativeMethods.GetDlgItemInt(hwnd, COLOR_BLUE, err, false);
                                 Debug.Assert(!err[0], "Couldn't find dialog member COLOR_BLUE");
                                 this.Color = Color.FromArgb(red, green, blue);
-                                NativeMethods.PostMessage(hwnd, WindowMessages.WM_COMMAND, (IntPtr)NativeMethods.Util.MAKELONG(NativeMethods.IDOK, 0), NativeMethods.GetDlgItem(hwnd, NativeMethods.IDOK));
+                                User32.PostMessageW(hwnd, User32.WindowMessage.WM_COMMAND, PARAM.FromLowHigh(NativeMethods.IDOK, 0), NativeMethods.GetDlgItem(hwnd, NativeMethods.IDOK));
                                 break;
                         }
                         break;

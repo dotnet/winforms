@@ -403,7 +403,7 @@ namespace System.Windows.Forms
         DefaultValue(false),
         SRDescription(nameof(SR.ListViewBackgroundImageTiledDescr))
         ]
-        public bool BackgroundImageTiled
+        public unsafe bool BackgroundImageTiled
         {
             get
             {
@@ -418,26 +418,24 @@ namespace System.Windows.Forms
                     {
                         // Don't call SetBackgroundImage because SetBackgroundImage deletes the existing image
                         // We don't need to delete it and this causes BAD problems w/ the Win32 list view control.
-                        NativeMethods.LVBKIMAGE lvbkImage = new NativeMethods.LVBKIMAGE
+                        fixed (char* pBackgroundImageFileName = backgroundImageFileName)
                         {
-                            xOffset = 0,
-                            yOffset = 0
-                        };
+                            var lvbkImage = new ComCtl32.LVBKIMAGEW();
+                            if (BackgroundImageTiled)
+                            {
+                                lvbkImage.ulFlags = ComCtl32.LVBKIF.STYLE_TILE;
+                            }
+                            else
+                            {
+                                lvbkImage.ulFlags = ComCtl32.LVBKIF.STYLE_NORMAL;
+                            }
 
-                        if (BackgroundImageTiled)
-                        {
-                            lvbkImage.ulFlags = NativeMethods.LVBKIF_STYLE_TILE;
+                            lvbkImage.ulFlags |= ComCtl32.LVBKIF.SOURCE_URL;
+                            lvbkImage.pszImage = pBackgroundImageFileName;
+                            lvbkImage.cchImageMax = (uint)(backgroundImageFileName.Length + 1);
+
+                            User32.SendMessageW(this, (User32.WindowMessage)LVM.SETBKIMAGE, IntPtr.Zero, ref lvbkImage);
                         }
-                        else
-                        {
-                            lvbkImage.ulFlags = NativeMethods.LVBKIF_STYLE_NORMAL;
-                        }
-
-                        lvbkImage.ulFlags |= NativeMethods.LVBKIF_SOURCE_URL;
-                        lvbkImage.pszImage = backgroundImageFileName;
-                        lvbkImage.cchImageMax = backgroundImageFileName.Length + 1;
-
-                        UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)LVM.SETBKIMAGE, 0, lvbkImage);
                     }
                 }
             }
@@ -703,7 +701,7 @@ namespace System.Windows.Forms
             {
                 CreateParams cp = base.CreateParams;
 
-                cp.ClassName = NativeMethods.WC_LISTVIEW;
+                cp.ClassName = ComCtl32.WindowClasses.WC_LISTVIEW;
 
                 // Keep the scrollbar if we are just updating styles...
                 //
@@ -2318,7 +2316,7 @@ namespace System.Windows.Forms
                 case NativeMethods.LVA_SNAPTOGRID:
                     if (IsHandleCreated)
                     {
-                        UnsafeNativeMethods.PostMessage(new HandleRef(this, Handle), (int)LVM.ARRANGE, (int)value, 0);
+                        User32.PostMessageW(this, (User32.WindowMessage)LVM.ARRANGE, (IntPtr)value, IntPtr.Zero);
                     }
                     break;
 
@@ -2550,7 +2548,7 @@ namespace System.Windows.Forms
         {
             if (!RecreatingHandle)
             {
-                IntPtr userCookie = UnsafeNativeMethods.ThemingScope.Activate();
+                IntPtr userCookie = ThemingScope.Activate();
 
                 try
                 {
@@ -2562,7 +2560,7 @@ namespace System.Windows.Forms
                 }
                 finally
                 {
-                    UnsafeNativeMethods.ThemingScope.Deactivate(userCookie);
+                    ThemingScope.Deactivate(userCookie);
                 }
             }
             base.CreateHandle();
@@ -3597,11 +3595,11 @@ namespace System.Windows.Forms
                 return Rectangle.Empty;
             }
 
-            RECT itemrect = new RECT
+            var itemrect = new RECT
             {
                 left = (int)portion
             };
-            if (unchecked((int)(long)SendMessage((int)LVM.GETITEMRECT, index, ref itemrect)) == 0)
+            if (User32.SendMessageW(this, (User32.WindowMessage)LVM.GETITEMRECT, (IntPtr)index, ref itemrect) == IntPtr.Zero)
             {
                 throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
             }
@@ -3625,11 +3623,11 @@ namespace System.Windows.Forms
                 return Rectangle.Empty;
             }
 
-            RECT itemrect = new RECT
+            var itemrect = new RECT
             {
                 left = 0
             };
-            if (unchecked((int)(long)SendMessage((int)LVM.GETITEMRECT, index, ref itemrect)) == 0)
+            if (User32.SendMessageW(this, (User32.WindowMessage)LVM.GETITEMRECT, (IntPtr)index, ref itemrect) == IntPtr.Zero)
             {
                 return Rectangle.Empty;
             }
@@ -3705,12 +3703,12 @@ namespace System.Windows.Forms
                 return Rectangle.Empty;
             }
 
-            RECT itemrect = new RECT
+            var itemrect = new RECT
             {
                 left = (int)portion,
                 top = subItemIndex
             };
-            if (unchecked((int)(long)SendMessage((int)LVM.GETSUBITEMRECT, itemIndex, ref itemrect)) == 0)
+            if (User32.SendMessageW(this, (User32.WindowMessage)LVM.GETSUBITEMRECT, (IntPtr)itemIndex, ref itemrect) == IntPtr.Zero)
             {
                 throw new ArgumentOutOfRangeException(nameof(itemIndex), itemIndex, string.Format(SR.InvalidArgument, nameof(itemIndex), itemIndex));
             }
@@ -4505,10 +4503,10 @@ namespace System.Windows.Forms
 
             base.OnHandleCreated(e);
 
-            int version = unchecked((int)(long)SendMessage(NativeMethods.CCM_GETVERSION, 0, 0));
+            int version = unchecked((int)(long)SendMessage((int)ComCtl32.CCM.GETVERSION, 0, 0));
             if (version < 5)
             {
-                SendMessage(NativeMethods.CCM_SETVERSION, 5, 0);
+                SendMessage((int)ComCtl32.CCM.SETVERSION, 5, 0);
             }
             UpdateExtendedStyles();
             RealizeProperties();
@@ -5001,16 +4999,12 @@ namespace System.Windows.Forms
             UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)LVM.SCROLL, 0, scrollY);
         }
 
-        private void SetBackgroundImage()
+        private unsafe void SetBackgroundImage()
         {
             // needed for OleInitialize
             Application.OleRequired();
 
-            NativeMethods.LVBKIMAGE lvbkImage = new NativeMethods.LVBKIMAGE
-            {
-                xOffset = 0,
-                yOffset = 0
-            };
+            var lvbkImage = new ComCtl32.LVBKIMAGEW();
 
             // first, is there an existing temporary file to delete, remember its name
             // so that we can delete it if the list control doesn't...
@@ -5018,7 +5012,6 @@ namespace System.Windows.Forms
 
             if (BackgroundImage != null)
             {
-
                 // save the image to a temporary file name
                 string tempDirName = System.IO.Path.GetTempPath();
                 Text.StringBuilder sb = new Text.StringBuilder(1024);
@@ -5028,25 +5021,28 @@ namespace System.Windows.Forms
 
                 BackgroundImage.Save(backgroundImageFileName, System.Drawing.Imaging.ImageFormat.Bmp);
 
-                lvbkImage.pszImage = backgroundImageFileName;
-                lvbkImage.cchImageMax = backgroundImageFileName.Length + 1;
-                lvbkImage.ulFlags = NativeMethods.LVBKIF_SOURCE_URL;
+                lvbkImage.cchImageMax = (uint)(backgroundImageFileName.Length + 1);
+                lvbkImage.ulFlags = ComCtl32.LVBKIF.SOURCE_URL;
                 if (BackgroundImageTiled)
                 {
-                    lvbkImage.ulFlags |= NativeMethods.LVBKIF_STYLE_TILE;
+                    lvbkImage.ulFlags |= ComCtl32.LVBKIF.STYLE_TILE;
                 }
                 else
                 {
-                    lvbkImage.ulFlags |= NativeMethods.LVBKIF_STYLE_NORMAL;
+                    lvbkImage.ulFlags |= ComCtl32.LVBKIF.STYLE_NORMAL;
                 }
             }
             else
             {
-                lvbkImage.ulFlags = NativeMethods.LVBKIF_SOURCE_NONE;
+                lvbkImage.ulFlags = ComCtl32.LVBKIF.SOURCE_NONE;
                 backgroundImageFileName = string.Empty;
             }
 
-            UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)LVM.SETBKIMAGE, 0, lvbkImage);
+            fixed (char* pBackgroundImageFileName = backgroundImageFileName)
+            {
+                lvbkImage.pszImage = pBackgroundImageFileName;
+                User32.SendMessageW(this, (User32.WindowMessage)LVM.SETBKIMAGE, IntPtr.Zero, ref lvbkImage);
+            }
 
             if (string.IsNullOrEmpty(fileNameToDelete))
             {
@@ -5188,7 +5184,7 @@ namespace System.Windows.Forms
 
             if (IsHandleCreated)
             {
-                SendMessage((int)LVM.SETCOLUMNWIDTH, columnIndex, NativeMethods.Util.MAKELPARAM(width, 0));
+                SendMessage((int)LVM.SETCOLUMNWIDTH, columnIndex, PARAM.FromLowHigh(width, 0));
             }
 
             if (IsHandleCreated &&
@@ -5198,7 +5194,7 @@ namespace System.Windows.Forms
                 if (compensate != 0)
                 {
                     int newWidth = columnHeaders[columnIndex].Width + compensate;
-                    SendMessage((int)LVM.SETCOLUMNWIDTH, columnIndex, NativeMethods.Util.MAKELPARAM(newWidth, 0));
+                    SendMessage((int)LVM.SETCOLUMNWIDTH, columnIndex, PARAM.FromLowHigh(newWidth, 0));
                 }
             }
         }
@@ -5207,7 +5203,7 @@ namespace System.Windows.Forms
         {
             if (IsHandleCreated)
             {
-                SendMessage((int)LVM.SETCOLUMNWIDTH, index, NativeMethods.Util.MAKELPARAM(width, 0));
+                SendMessage((int)LVM.SETCOLUMNWIDTH, index, PARAM.FromLowHigh(width, 0));
             }
         }
 
@@ -5475,18 +5471,10 @@ namespace System.Windows.Forms
         {
             if (!VirtualMode && IsHandleCreated && AutoArrange && (View == View.LargeIcon || View == View.SmallIcon))
             {
-
                 // this only has an affect for large icon and small icon views.
-                //
                 try
                 {
                     BeginUpdate();
-                    /*
-                       Not sure this does anything that just calling the function doesn't...
-
-                      for (int i = 0; i < this.itemCount; i ++) {
-                        UnsafeNativeMethods.PostMessage(new HandleRef(this, this.Handle), ListViewMessages.LVM_UPDATE, this.Items[i].Index, 0);
-                    } */
                     SendMessage((int)LVM.UPDATE, -1, 0);
                 }
                 finally
@@ -5698,8 +5686,8 @@ namespace System.Windows.Forms
             // Windows ListView pushes its own Windows ListView in WM_xBUTTONDOWN, so fire the
             // event before calling defWndProc or else it won't get fired until the button
             // comes back up.
-            int x = NativeMethods.Util.SignedLOWORD(m.LParam);
-            int y = NativeMethods.Util.SignedHIWORD(m.LParam);
+            int x = PARAM.SignedLOWORD(m.LParam);
+            int y = PARAM.SignedHIWORD(m.LParam);
             OnMouseDown(new MouseEventArgs(button, clicks, x, y, 0));
 
             //If Validation is cancelled dont fire any events through the Windows ListView's message loop...
@@ -6586,11 +6574,11 @@ namespace System.Windows.Forms
                     {
                         listViewState[LISTVIEWSTATE_doubleclickFired] = false;
                         OnDoubleClick(EventArgs.Empty);
-                        OnMouseDoubleClick(new MouseEventArgs(downButton, 2, NativeMethods.Util.SignedLOWORD(m.LParam), NativeMethods.Util.SignedHIWORD(m.LParam), 0));
+                        OnMouseDoubleClick(new MouseEventArgs(downButton, 2, PARAM.SignedLOWORD(m.LParam), PARAM.SignedHIWORD(m.LParam), 0));
                     }
                     if (!listViewState[LISTVIEWSTATE_mouseUpFired])
                     {
-                        OnMouseUp(new MouseEventArgs(downButton, 1, NativeMethods.Util.SignedLOWORD(m.LParam), NativeMethods.Util.SignedHIWORD(m.LParam), 0));
+                        OnMouseUp(new MouseEventArgs(downButton, 1, PARAM.SignedLOWORD(m.LParam), PARAM.SignedHIWORD(m.LParam), 0));
                         listViewState[LISTVIEWSTATE_expectingMouseUp] = false;
                     }
 
@@ -6616,7 +6604,7 @@ namespace System.Windows.Forms
                 case WindowMessages.WM_MOUSEMOVE:
                     if (listViewState[LISTVIEWSTATE_expectingMouseUp] && !listViewState[LISTVIEWSTATE_mouseUpFired] && MouseButtons == MouseButtons.None)
                     {
-                        OnMouseUp(new MouseEventArgs(downButton, 1, NativeMethods.Util.SignedLOWORD(m.LParam), NativeMethods.Util.SignedHIWORD(m.LParam), 0));
+                        OnMouseUp(new MouseEventArgs(downButton, 1, PARAM.SignedLOWORD(m.LParam), PARAM.SignedHIWORD(m.LParam), 0));
                         listViewState[LISTVIEWSTATE_mouseUpFired] = true;
                     }
                     Capture = false;

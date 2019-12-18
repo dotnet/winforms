@@ -462,11 +462,6 @@ namespace System.Windows.Forms.Design
                     UnhookChildControls(Control);
                 }
 
-                if (ContextMenu != null)
-                {
-                    ContextMenu.Disposed -= new EventHandler(DetachContextMenu);
-                }
-
                 if (_designerTarget != null)
                 {
                     _designerTarget.Dispose();
@@ -512,38 +507,6 @@ namespace System.Windows.Forms.Design
         private interface IDesignerTarget : IDisposable
         {
             void DefWndProc(ref Message m);
-        }
-
-        private void DetachContextMenu(object sender, EventArgs e)
-        {
-            ContextMenu = null;
-        }
-
-        private ContextMenu ContextMenu
-        {
-            get => (ContextMenu)ShadowProperties["ContextMenu"];
-            set
-            {
-                ContextMenu oldValue = (ContextMenu)ShadowProperties["ContextMenu"];
-
-                if (oldValue != value)
-                {
-                    EventHandler disposedHandler = new EventHandler(DetachContextMenu);
-
-                    if (oldValue != null)
-                    {
-                        oldValue.Disposed -= disposedHandler;
-                    }
-
-                    ShadowProperties["ContextMenu"] = value;
-
-                    if (value != null)
-                    {
-                        value.Disposed += disposedHandler;
-                    }
-                }
-
-            }
         }
 
         private void DataSource_ComponentRemoved(object sender, ComponentEventArgs e)
@@ -1598,7 +1561,7 @@ namespace System.Windows.Forms.Design
             base.PreFilterProperties(properties);
             PropertyDescriptor prop;
             // Handle shadowed properties
-            string[] shadowProps = new string[] { "Visible", "Enabled", "ContextMenu", "AllowDrop", "Location", "Name" };
+            string[] shadowProps = new string[] { "Visible", "Enabled", "AllowDrop", "Location", "Name" };
 
             Attribute[] empty = Array.Empty<Attribute>();
             for (int i = 0; i < shadowProps.Length; i++)
@@ -1662,7 +1625,7 @@ namespace System.Windows.Forms.Design
         /// <summary>
         ///  This method should be called by the extending designer for each message the control would normally receive.  This allows the designer to pre-process messages before allowing them to be routed to the control.
         /// </summary>
-        protected virtual void WndProc(ref Message m)
+        protected unsafe virtual void WndProc(ref Message m)
         {
             IMouseHandler mouseHandler = null;
             // We look at WM_NCHITTEST to determine if the mouse is in a live region of the control
@@ -1671,7 +1634,7 @@ namespace System.Windows.Forms.Design
                 if (!_inHitTest)
                 {
                     _inHitTest = true;
-                    Point pt = new Point((short)NativeMethods.Util.LOWORD(unchecked((int)(long)m.LParam)), (short)NativeMethods.Util.HIWORD(unchecked((int)(long)m.LParam)));
+                    Point pt = new Point((short)PARAM.LOWORD(m.LParam), (short)PARAM.HIWORD(m.LParam));
                     try
                     {
                         _liveRegion = GetHitTest(pt);
@@ -1745,8 +1708,8 @@ namespace System.Windows.Forms.Design
             {
                 var pt = new Point
                 {
-                    X = NativeMethods.Util.SignedLOWORD(unchecked((int)(long)m.LParam)),
-                    Y = NativeMethods.Util.SignedHIWORD(unchecked((int)(long)m.LParam))
+                    X = PARAM.SignedLOWORD(m.LParam),
+                    Y = PARAM.SignedHIWORD(m.LParam)
                 };
                 User32.MapWindowPoints(m.HWnd, IntPtr.Zero, ref pt, 1);
                 x = pt.X;
@@ -1754,8 +1717,8 @@ namespace System.Windows.Forms.Design
             }
             else if (m.Msg >= WindowMessages.WM_NCMOUSEMOVE && m.Msg <= WindowMessages.WM_NCMBUTTONDBLCLK)
             {
-                x = NativeMethods.Util.SignedLOWORD(unchecked((int)(long)m.LParam));
-                y = NativeMethods.Util.SignedHIWORD(unchecked((int)(long)m.LParam));
+                x = PARAM.SignedLOWORD(m.LParam);
+                y = PARAM.SignedHIWORD(m.LParam);
             }
 
             // This is implemented on the base designer for UI activation support.  We call it so that we can support UI activation.
@@ -2031,7 +1994,7 @@ namespace System.Windows.Forms.Design
                     // First, save off the update region and call our base class.
                     if (OleDragDropHandler.FreezePainting)
                     {
-                        SafeNativeMethods.ValidateRect(m.HWnd, IntPtr.Zero);
+                        User32.ValidateRect(m.HWnd, null);
                         break;
                     }
                     if (Control == null)
@@ -2195,8 +2158,8 @@ namespace System.Windows.Forms.Design
                     }
 
                     // We handle this in addition to a right mouse button. Why?  Because we often eat the right mouse button, so it may never generate a WM_CONTEXTMENU.  However, the system may generate one in response to an F-10.
-                    x = NativeMethods.Util.SignedLOWORD(unchecked((int)(long)m.LParam));
-                    y = NativeMethods.Util.SignedHIWORD(unchecked((int)(long)m.LParam));
+                    x = PARAM.SignedLOWORD(m.LParam);
+                    y = PARAM.SignedHIWORD(m.LParam);
 
                     ToolStripKeyboardHandlingService keySvc = (ToolStripKeyboardHandlingService)GetService(typeof(ToolStripKeyboardHandlingService));
                     bool handled = false;
@@ -2398,10 +2361,10 @@ namespace System.Windows.Forms.Design
 
         private int GetParentPointFromLparam(IntPtr lParam)
         {
-            Point pt = new Point(NativeMethods.Util.SignedLOWORD(unchecked((int)(long)lParam)), NativeMethods.Util.SignedHIWORD(unchecked((int)(long)lParam)));
+            Point pt = new Point(PARAM.SignedLOWORD(lParam), PARAM.SignedHIWORD(lParam));
             pt = Control.PointToScreen(pt);
             pt = Control.Parent.PointToClient(pt);
-            return NativeMethods.Util.MAKELONG(pt.X, pt.Y);
+            return PARAM.ToInt(pt.X, pt.Y);
         }
 
         [ComVisible(true)]
@@ -2724,7 +2687,7 @@ namespace System.Windows.Forms.Design
                 {
                     _designer.RemoveSubclassedWindow(m.HWnd);
                 }
-                if (m.Msg == WindowMessages.WM_PARENTNOTIFY && NativeMethods.Util.LOWORD(unchecked((int)(long)m.WParam)) == (short)WindowMessages.WM_CREATE)
+                if (m.Msg == WindowMessages.WM_PARENTNOTIFY && PARAM.LOWORD(m.WParam) == (short)WindowMessages.WM_CREATE)
                 {
                     _designer.HookChildHandles(m.LParam); // they will get removed from the collection just above
                 }

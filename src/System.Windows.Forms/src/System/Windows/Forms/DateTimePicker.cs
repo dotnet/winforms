@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -221,7 +221,7 @@ namespace System.Windows.Forms
                 if (!value.Equals(calendarForeColor))
                 {
                     calendarForeColor = value;
-                    SetControlColor(NativeMethods.MCSC_TEXT, value);
+                    SetControlColor(ComCtl32.MCSC.TEXT, value);
                 }
             }
         }
@@ -300,7 +300,7 @@ namespace System.Windows.Forms
                 if (!value.Equals(calendarTitleBackColor))
                 {
                     calendarTitleBackColor = value;
-                    SetControlColor(NativeMethods.MCSC_TITLEBK, value);
+                    SetControlColor(ComCtl32.MCSC.TITLEBK, value);
                 }
             }
         }
@@ -329,7 +329,7 @@ namespace System.Windows.Forms
                 if (!value.Equals(calendarTitleForeColor))
                 {
                     calendarTitleForeColor = value;
-                    SetControlColor(NativeMethods.MCSC_TITLETEXT, value);
+                    SetControlColor(ComCtl32.MCSC.TITLETEXT, value);
                 }
             }
         }
@@ -358,7 +358,7 @@ namespace System.Windows.Forms
                 if (!value.Equals(calendarTrailingText))
                 {
                     calendarTrailingText = value;
-                    SetControlColor(NativeMethods.MCSC_TRAILINGTEXT, value);
+                    SetControlColor(ComCtl32.MCSC.TRAILINGTEXT, value);
                 }
             }
         }
@@ -387,7 +387,7 @@ namespace System.Windows.Forms
                 if (!value.Equals(calendarMonthBackground))
                 {
                     calendarMonthBackground = value;
-                    SetControlColor(NativeMethods.MCSC_MONTHBK, value);
+                    SetControlColor(ComCtl32.MCSC.MONTHBK, value);
                 }
             }
         }
@@ -460,7 +460,7 @@ namespace System.Windows.Forms
             get
             {
                 CreateParams cp = base.CreateParams;
-                cp.ClassName = NativeMethods.WC_DATETIMEPICK;
+                cp.ClassName = ComCtl32.WindowClasses.WC_DATETIMEPICK;
 
                 cp.Style |= style;
 
@@ -1117,7 +1117,7 @@ namespace System.Windows.Forms
         {
             if (!RecreatingHandle)
             {
-                IntPtr userCookie = UnsafeNativeMethods.ThemingScope.Activate();
+                IntPtr userCookie = ThemingScope.Activate();
 
                 try
                 {
@@ -1129,7 +1129,7 @@ namespace System.Windows.Forms
                 }
                 finally
                 {
-                    UnsafeNativeMethods.ThemingScope.Deactivate(userCookie);
+                    ThemingScope.Deactivate(userCookie);
                 }
             }
 
@@ -1387,11 +1387,11 @@ namespace System.Windows.Forms
         /// <summary>
         ///  If the handle has been created, this applies the color to the control
         /// </summary>
-        private void SetControlColor(int colorIndex, Color value)
+        private void SetControlColor(Interop.ComCtl32.MCSC colorIndex, Color value)
         {
             if (IsHandleCreated)
             {
-                SendMessage(NativeMethods.DTM_SETMCCOLOR, colorIndex, ColorTranslator.ToWin32(value));
+                SendMessage(NativeMethods.DTM_SETMCCOLOR, (int)colorIndex, ColorTranslator.ToWin32(value));
             }
         }
 
@@ -1411,11 +1411,11 @@ namespace System.Windows.Forms
         /// </summary>
         private void SetAllControlColors()
         {
-            SetControlColor(NativeMethods.MCSC_MONTHBK, calendarMonthBackground);
-            SetControlColor(NativeMethods.MCSC_TEXT, calendarForeColor);
-            SetControlColor(NativeMethods.MCSC_TITLEBK, calendarTitleBackColor);
-            SetControlColor(NativeMethods.MCSC_TITLETEXT, calendarTitleForeColor);
-            SetControlColor(NativeMethods.MCSC_TRAILINGTEXT, calendarTrailingText);
+            SetControlColor(ComCtl32.MCSC.MONTHBK, calendarMonthBackground);
+            SetControlColor(ComCtl32.MCSC.TEXT, calendarForeColor);
+            SetControlColor(ComCtl32.MCSC.TITLEBK, calendarTitleBackColor);
+            SetControlColor(ComCtl32.MCSC.TITLETEXT, calendarTitleForeColor);
+            SetControlColor(ComCtl32.MCSC.TRAILINGTEXT, calendarTrailingText);
         }
 
         /// <summary>
@@ -1431,30 +1431,11 @@ namespace System.Windows.Forms
         {
             if (IsHandleCreated)
             {
-                int flags = 0;
-
-                var sa = new NativeMethods.SYSTEMTIMEARRAY();
-
-                flags |= NativeMethods.GDTR_MIN | NativeMethods.GDTR_MAX;
-                Kernel32.SYSTEMTIME sys = DateTimePicker.DateTimeToSysTime(min);
-                sa.wYear1 = sys.wYear;
-                sa.wMonth1 = sys.wMonth;
-                sa.wDayOfWeek1 = sys.wDayOfWeek;
-                sa.wDay1 = sys.wDay;
-                sa.wHour1 = sys.wHour;
-                sa.wMinute1 = sys.wMinute;
-                sa.wSecond1 = sys.wSecond;
-                sa.wMilliseconds1 = sys.wMilliseconds;
-                sys = DateTimePicker.DateTimeToSysTime(max);
-                sa.wYear2 = sys.wYear;
-                sa.wMonth2 = sys.wMonth;
-                sa.wDayOfWeek2 = sys.wDayOfWeek;
-                sa.wDay2 = sys.wDay;
-                sa.wHour2 = sys.wHour;
-                sa.wMinute2 = sys.wMinute;
-                sa.wSecond2 = sys.wSecond;
-                sa.wMilliseconds2 = sys.wMilliseconds;
-                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.DTM_SETRANGE, flags, sa);
+                Span<Kernel32.SYSTEMTIME> sa = stackalloc Kernel32.SYSTEMTIME[2];
+                sa[0] = DateTimeToSysTime(min);
+                sa[1] = DateTimeToSysTime(max);
+                int flags = NativeMethods.GDTR_MIN | NativeMethods.GDTR_MAX;
+                User32.SendMessageW(this, (User32.WindowMessage)NativeMethods.DTM_SETRANGE, (IntPtr)flags, ref sa[0]);
             }
         }
 
@@ -1589,7 +1570,7 @@ namespace System.Windows.Forms
                 if (c.hwndFound != IntPtr.Zero)
                 {
                     User32.InvalidateRect(new HandleRef(c, c.hwndFound), null, BOOL.TRUE);
-                    SafeNativeMethods.UpdateWindow(new HandleRef(c, c.hwndFound));
+                    User32.UpdateWindow(c.hwndFound);
                 }
             }
         }

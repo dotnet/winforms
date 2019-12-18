@@ -5,22 +5,33 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.IO;
 using Moq;
 using WinForms.Common.Tests;
 using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
+    using Point = System.Drawing.Point;
+    using Size = System.Drawing.Size;
+
     public class PictureBoxTests
     {
         private const string PathImageLocation = "bitmaps/nature24bits.jpg";
         private const string UrlImageLocation = "https://github.com/dotnet/corefx-testdata/raw/master/System.Drawing.Common.TestData/bitmaps/nature24bits.jpg";
 
+        public PictureBoxTests()
+        {
+            Application.ThreadException += (sender, e) => throw new Exception(e.Exception.StackTrace.ToString());
+        }
+
         [WinFormsFact]
         public void PictureBox_Ctor_Default()
         {
             using var control = new SubPictureBox();
+            Assert.Null(control.AccessibleDefaultActionDescription);
+            Assert.Null(control.AccessibleDescription);
+            Assert.Null(control.AccessibleName);
+            Assert.Equal(AccessibleRole.Default, control.AccessibleRole);
             Assert.False(control.AllowDrop);
             Assert.Equal(AnchorStyles.Top | AnchorStyles.Left, control.Anchor);
             Assert.False(control.AutoSize);
@@ -32,12 +43,15 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(50, control.Bottom);
             Assert.Equal(new Rectangle(0, 0, 100, 50), control.Bounds);
             Assert.False(control.CanEnableIme);
+            Assert.False(control.CanFocus);
             Assert.True(control.CanRaiseEvents);
+            Assert.False(control.CanSelect);
+            Assert.False(control.Capture);
             Assert.True(control.CausesValidation);
             Assert.Equal(new Size(100, 50), control.ClientSize);
             Assert.Equal(new Rectangle(0, 0, 100, 50), control.ClientRectangle);
             Assert.Null(control.Container);
-            Assert.Null(control.ContextMenu);
+            Assert.False(control.ContainsFocus);
             Assert.Null(control.ContextMenuStrip);
             Assert.Empty(control.Controls);
             Assert.Same(control.Controls, control.Controls);
@@ -59,6 +73,7 @@ namespace System.Windows.Forms.Tests
             Assert.Same(control.ErrorImage, control.ErrorImage);
             Assert.NotNull(control.Events);
             Assert.Same(control.Events, control.Events);
+            Assert.False(control.Focused);
             Assert.Equal(Control.DefaultFont, control.Font);
             Assert.Equal(control.FontHeight, control.FontHeight);
             Assert.Equal(Control.DefaultForeColor, control.ForeColor);
@@ -69,6 +84,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(ImeMode.Disable, control.ImeModeBase);
             Assert.NotNull(control.InitialImage);
             Assert.Same(control.InitialImage, control.InitialImage);
+            Assert.False(control.IsAccessible);
+            Assert.False(control.IsMirrored);
             Assert.NotNull(control.LayoutEngine);
             Assert.Same(control.LayoutEngine, control.LayoutEngine);
             Assert.Equal(0, control.Left);
@@ -85,6 +102,8 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.ResizeRedraw);
             Assert.Equal(100, control.Right);
             Assert.Equal(RightToLeft.No, control.RightToLeft);
+            Assert.True(control.ShowFocusCues);
+            Assert.True(control.ShowKeyboardCues);
             Assert.Null(control.Site);
             Assert.Equal(new Size(100, 50), control.Size);
             Assert.Equal(PictureBoxSizeMode.Normal, control.SizeMode);
@@ -93,6 +112,7 @@ namespace System.Windows.Forms.Tests
             Assert.Empty(control.Text);
             Assert.Equal(0, control.Top);
             Assert.Null(control.TopLevelControl);
+            Assert.False(control.UseWaitCursor);
             Assert.True(control.Visible);
             Assert.False(control.WaitOnLoad);
             Assert.Equal(100, control.Width);
@@ -784,7 +804,7 @@ namespace System.Windows.Forms.Tests
         {
             Image image1 = new Bitmap(10, 10);
             Image image2 = new Bitmap(10, 10);
-            
+
             foreach (string value in new string[] { " ", "NoSuchImage" })
             {
                 yield return new object[] { null, null, value };
@@ -1114,7 +1134,7 @@ namespace System.Windows.Forms.Tests
             {
                 Parent = oldParent
             };
-            
+
             control.Parent = value;
             Assert.Same(value, control.Parent);
             Assert.Empty(oldParent.Controls);
@@ -1378,27 +1398,29 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<InvalidEnumArgumentException>("value", () => pictureBox.SizeMode = value);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(0)]
         [InlineData(1)]
         [InlineData(2)]
         public void PictureBox_TabIndex_Set_GetReturnsExpected(int value)
         {
-            var control = new PictureBox
+            using var control = new PictureBox
             {
                 TabIndex = value
             };
             Assert.Equal(value, control.TabIndex);
+            Assert.False(control.IsHandleCreated);
 
             // Set same.
             control.TabIndex = value;
             Assert.Equal(value, control.TabIndex);
+            Assert.False(control.IsHandleCreated);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void PictureBox_TabIndex_SetWithHandler_CallsTabIndexChanged()
         {
-            var control = new PictureBox
+            using var control = new PictureBox
             {
                 TabIndex = 0
             };
@@ -1433,55 +1455,74 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(2, callCount);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void PictureBox_TabIndex_SetNegative_CallsArgumentOutOfRangeException()
         {
-            var control = new PictureBox();
+            using var control = new PictureBox();
             Assert.Throws<ArgumentOutOfRangeException>("value", () => control.TabIndex = -1);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void PictureBox_TabStop_Set_GetReturnsExpected(bool value)
         {
-            var control = new PictureBox
+            using var control = new PictureBox
             {
                 TabStop = value
             };
             Assert.Equal(value, control.TabStop);
+            Assert.False(control.IsHandleCreated);
 
             // Set same.
             control.TabStop = value;
             Assert.Equal(value, control.TabStop);
+            Assert.False(control.IsHandleCreated);
 
             // Set different.
             control.TabStop = value;
             Assert.Equal(value, control.TabStop);
+            Assert.False(control.IsHandleCreated);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void PictureBox_TabStop_SetWithHandle_GetReturnsExpected(bool value)
         {
-            var control = new PictureBox();
+            using var control = new PictureBox();
             Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
 
             control.TabStop = value;
             Assert.Equal(value, control.TabStop);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
 
             // Set same.
             control.TabStop = value;
-            Assert.Equal(value, control.TabStop);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
 
             // Set different.
             control.TabStop = value;
-            Assert.Equal(value, control.TabStop);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void PictureBox_TabStop_SetWithHandler_CallsTabStopChanged()
         {
-            var control = new PictureBox
+            using var control = new PictureBox
             {
                 TabStop = true
             };
@@ -1774,7 +1815,7 @@ namespace System.Windows.Forms.Tests
         {
             var pictureBox = new PictureBox
             {
-                ImageLocation = imageLocation 
+                ImageLocation = imageLocation
             };
             Assert.Equal(imageLocation, pictureBox.ImageLocation);
             Assert.Null(pictureBox.Image);
@@ -1807,6 +1848,43 @@ namespace System.Windows.Forms.Tests
             var pictureBox = new PictureBox();
             pictureBox.Dispose();
             pictureBox.Dispose();
+        }
+
+        [WinFormsFact]
+        public void PictureBox_GetAutoSizeMode_Invoke_ReturnsExpected()
+        {
+            using var control = new SubPictureBox();
+            Assert.Equal(AutoSizeMode.GrowOnly, control.GetAutoSizeMode());
+        }
+
+        [WinFormsTheory]
+        [InlineData(ControlStyles.ContainerControl, false)]
+        [InlineData(ControlStyles.UserPaint, true)]
+        [InlineData(ControlStyles.Opaque, false)]
+        [InlineData(ControlStyles.ResizeRedraw, false)]
+        [InlineData(ControlStyles.FixedWidth, false)]
+        [InlineData(ControlStyles.FixedHeight, false)]
+        [InlineData(ControlStyles.StandardClick, true)]
+        [InlineData(ControlStyles.Selectable, false)]
+        [InlineData(ControlStyles.UserMouse, false)]
+        [InlineData(ControlStyles.SupportsTransparentBackColor, true)]
+        [InlineData(ControlStyles.StandardDoubleClick, true)]
+        [InlineData(ControlStyles.AllPaintingInWmPaint, true)]
+        [InlineData(ControlStyles.CacheText, false)]
+        [InlineData(ControlStyles.EnableNotifyMessage, false)]
+        [InlineData(ControlStyles.DoubleBuffer, false)]
+        [InlineData(ControlStyles.OptimizedDoubleBuffer, true)]
+        [InlineData(ControlStyles.UseTextForAccessibility, true)]
+        [InlineData((ControlStyles)0, true)]
+        [InlineData((ControlStyles)int.MaxValue, false)]
+        [InlineData((ControlStyles)(-1), false)]
+        public void PictureBox_GetStyle_Invoke_ReturnsExpected(ControlStyles flag, bool expected)
+        {
+            using var control = new SubPictureBox();
+            Assert.Equal(expected, control.GetStyle(flag));
+
+            // Call again to test caching.
+            Assert.Equal(expected, control.GetStyle(flag));
         }
 
         [Theory]
@@ -2393,7 +2471,7 @@ namespace System.Windows.Forms.Tests
                 Image = image
             };
             Assert.Same(image, pictureBox.Image);
-            
+
             pictureBox.OnPaint(eventArgs);
             Assert.Same(image, pictureBox.Image);
         }
@@ -2409,7 +2487,7 @@ namespace System.Windows.Forms.Tests
             };
             Assert.Null(pictureBox.Image);
             Assert.Equal(PathImageLocation, pictureBox.ImageLocation);
-            
+
             pictureBox.WaitOnLoad = true;
             pictureBox.OnPaint(eventArgs);
             Assert.Equal(new Size(110, 100), pictureBox.Image.Size);
@@ -2435,7 +2513,7 @@ namespace System.Windows.Forms.Tests
             };
             Assert.Same(imageLocation, pictureBox.ImageLocation);
             Assert.Null(pictureBox.Image);
-            
+
             pictureBox.WaitOnLoad = true;
             pictureBox.OnPaint(eventArgs);
             Assert.Same(imageLocation, pictureBox.ImageLocation);
@@ -2465,7 +2543,7 @@ namespace System.Windows.Forms.Tests
             };
             Assert.Same(imageLocation, pictureBox.ImageLocation);
             Assert.Null(pictureBox.Image);
-            
+
             pictureBox.WaitOnLoad = true;
             pictureBox.OnPaint(eventArgs);
             Assert.Same(imageLocation, pictureBox.ImageLocation);
@@ -2765,6 +2843,12 @@ namespace System.Windows.Forms.Tests
                 get => base.ResizeRedraw;
                 set => base.ResizeRedraw = value;
             }
+
+            public new bool ShowFocusCues => base.ShowFocusCues;
+
+            public new bool ShowKeyboardCues => base.ShowKeyboardCues;
+
+            public new AutoSizeMode GetAutoSizeMode() => base.GetAutoSizeMode();
 
             public new bool GetStyle(ControlStyles flag) => base.GetStyle(flag);
 

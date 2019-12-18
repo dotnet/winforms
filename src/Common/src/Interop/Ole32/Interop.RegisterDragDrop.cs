@@ -4,6 +4,7 @@
 
 using System;
 using System.Runtime.InteropServices;
+using System.Windows.Forms;
 
 internal partial class Interop
 {
@@ -12,10 +13,10 @@ internal partial class Interop
         [DllImport(Libraries.Ole32, ExactSpelling = true)]
         public static extern HRESULT RegisterDragDrop(IntPtr hwnd, IDropTarget pDropTarget);
 
-        public static HRESULT RegisterDragDrop(HandleRef hwnd, IDropTarget pDropTarget)
+        public static HRESULT RegisterDragDrop(IHandle hwnd, IDropTarget pDropTarget)
         {
             HRESULT result = RegisterDragDrop(hwnd.Handle, pDropTarget);
-            GC.KeepAlive(hwnd.Wrapper);
+            GC.KeepAlive(hwnd);
             return result;
         }
     }

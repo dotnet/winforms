@@ -52,7 +52,6 @@ namespace System.Windows.Forms
         private TreeNodeImageIndexer stateImageIndexer;
 
         private string toolTipText = string.Empty;
-        private ContextMenu contextMenu = null;
         private ContextMenuStrip contextMenuStrip = null;
         internal bool nodesCleared = false;
 
@@ -421,23 +420,6 @@ namespace System.Windows.Forms
         ///  The contextMenu associated with this tree node. The contextMenu
         ///  will be shown when the user right clicks the mouse on the control.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        DefaultValue(null),
-        SRDescription(nameof(SR.ControlContextMenuDescr))
-        ]
-        public virtual ContextMenu ContextMenu
-        {
-            get
-            {
-                return contextMenu;
-            }
-            set
-            {
-                contextMenu = value;
-            }
-        }
-
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(null),
@@ -1460,7 +1442,6 @@ namespace System.Windows.Forms
 
             node.StateImageIndexer.Index = StateImageIndexer.Index;
             node.ToolTipText = toolTipText;
-            node.ContextMenu = contextMenu;
             node.ContextMenuStrip = contextMenuStrip;
 
             // only set the key if it's set to something useful
@@ -1982,7 +1963,7 @@ namespace System.Windows.Forms
 
                 if (editing)
                 {
-                    UnsafeNativeMethods.PostMessage(new HandleRef(tv, tv.Handle), NativeMethods.TVM_EDITLABEL, IntPtr.Zero, handle);
+                    User32.PostMessageW(tv, (User32.WindowMessage)NativeMethods.TVM_EDITLABEL, IntPtr.Zero, handle);
                 }
 
                 User32.InvalidateRect(new HandleRef(tv, tv.Handle), null, BOOL.FALSE);

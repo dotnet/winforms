@@ -1,11 +1,17 @@
-<Project Sdk="Microsoft.NET.Sdk">
-
+<Project>
+  <!--
+    https://github.com/dotnet/winforms/issues/2107#issuecomment-559289716
+    https://github.com/microsoft/msbuild/issues/4923#issuecomment-554265394
+    -->
+  <Import Project="Sdk.Props" Sdk="Microsoft.NET.Sdk" />
+  
   <PropertyGroup>
     <AssemblyName>Microsoft.VisualBasic.Forms</AssemblyName>
     <Deterministic>true</Deterministic>
     <RootNamespace></RootNamespace>
     <LangVersion>15.0</LangVersion>
     <VBRuntime>None</VBRuntime>
+    <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
   </PropertyGroup>
 
   <ItemGroup>
@@ -37,5 +43,11 @@
       <LogicalName>Microsoft.VisualBasic.CompilerServices.VBInputBox.resources</LogicalName>
     </EmbeddedResource>
   </ItemGroup>
+
+  <Import Project="Sdk.Targets" Sdk="Microsoft.NET.Sdk" />
+
+  <PropertyGroup>
+    <GetCopyToOutputDirectoryItemsDependsOn>AssignProjectConfiguration;$(GetCopyToOutputDirectoryItemsDependsOn)</GetCopyToOutputDirectoryItemsDependsOn>
+  </PropertyGroup>
 
 </Project>

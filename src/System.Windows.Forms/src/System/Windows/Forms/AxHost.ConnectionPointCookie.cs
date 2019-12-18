@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Threading;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -13,8 +14,8 @@ namespace System.Windows.Forms
     {
         public class ConnectionPointCookie
         {
-            private UnsafeNativeMethods.IConnectionPoint connectionPoint;
-            private int cookie;
+            private Ole32.IConnectionPoint connectionPoint;
+            private uint cookie;
             internal int threadId;
 #if DEBUG
             private readonly string callStack;
@@ -28,14 +29,14 @@ namespace System.Windows.Forms
             {
             }
 
-            internal ConnectionPointCookie(object source, object sink, Type eventInterface, bool throwException)
+            internal unsafe ConnectionPointCookie(object source, object sink, Type eventInterface, bool throwException)
             {
-                if (source is UnsafeNativeMethods.IConnectionPointContainer cpc)
+                if (source is Ole32.IConnectionPointContainer cpc)
                 {
                     try
                     {
                         Guid tmp = eventInterface.GUID;
-                        if (cpc.FindConnectionPoint(ref tmp, out connectionPoint) != NativeMethods.S_OK)
+                        if (cpc.FindConnectionPoint(&tmp, out connectionPoint) != HRESULT.S_OK)
                         {
                             connectionPoint = null;
                         }
@@ -61,9 +62,11 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        int hr = connectionPoint.Advise(sink, ref cookie);
-                        if (hr == NativeMethods.S_OK)
+                        uint tempCookie = 0;
+                        HRESULT hr = connectionPoint.Advise(sink, &tempCookie);
+                        if (hr == HRESULT.S_OK)
                         {
+                            cookie = tempCookie;
                             threadId = Thread.CurrentThread.ManagedThreadId;
                         }
                         else
@@ -115,12 +118,8 @@ namespace System.Windows.Forms
                     {
                         connectionPoint.Unadvise(cookie);
                     }
-                    catch (Exception ex)
+                    catch (Exception ex) when (!ClientUtils.IsCriticalException(ex))
                     {
-                        if (ClientUtils.IsCriticalException(ex))
-                        {
-                            throw;
-                        }
                     }
                     finally
                     {
@@ -131,12 +130,8 @@ namespace System.Windows.Forms
                     {
                         Marshal.ReleaseComObject(connectionPoint);
                     }
-                    catch (Exception ex)
+                    catch (Exception ex) when (!ClientUtils.IsCriticalException(ex))
                     {
-                        if (ClientUtils.IsCriticalException(ex))
-                        {
-                            throw;
-                        }
                     }
                     finally
                     {

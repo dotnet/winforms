@@ -4,7 +4,6 @@
 
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.Runtime.InteropServices;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -208,6 +207,15 @@ namespace System.Windows.Forms
                 Initialize();
                 return s_deviceDpi != LogicalDpi;
             }
+        }
+
+        /// <summary>
+        /// scale logical pixel to the factor
+        /// </summary>
+        public static int ConvertToGivenDpiPixel(int value, double pixelFactor)
+        {
+            var scaledValue = (int)Math.Round(value * pixelFactor);
+            return scaledValue == 0 ? 1 : scaledValue;
         }
 
         /// <summary>

@@ -69,7 +69,7 @@ namespace System.Windows.Forms
             }
             else if (msg == WindowMessages.WM_SETFOCUS)
             {
-                UnsafeNativeMethods.PostMessage(new HandleRef(null, hWnd), CDM_SETDEFAULTFOCUS, 0, 0);
+                User32.PostMessageW(hWnd, (User32.WindowMessage)CDM_SETDEFAULTFOCUS);
             }
             else if (msg == CDM_SETDEFAULTFOCUS)
             {
@@ -89,8 +89,8 @@ namespace System.Windows.Forms
         /// </summary>
         private protected static void MoveToScreenCenter(IntPtr hWnd)
         {
-            RECT r = new RECT();
-            UnsafeNativeMethods.GetWindowRect(new HandleRef(null, hWnd), ref r);
+            var r = new RECT();
+            User32.GetWindowRect(hWnd, ref r);
             Rectangle screen = Screen.GetWorkingArea(Control.MousePosition);
             int x = screen.X + (screen.Width - r.right + r.left) / 2;
             int y = screen.Y + (screen.Height - r.bottom + r.top) / 3;
@@ -210,7 +210,7 @@ namespace System.Windows.Forms
 
                     if (Application.UseVisualStyles)
                     {
-                        userCookie = UnsafeNativeMethods.ThemingScope.Activate();
+                        userCookie = ThemingScope.Activate();
                     }
 
                     Application.BeginModalMessageLoop();
@@ -231,7 +231,7 @@ namespace System.Windows.Forms
                         UnsafeNativeMethods.SetWindowLong(new HandleRef(this, hwndOwner), NativeMethods.GWL_WNDPROC, new HandleRef(this, _defOwnerWndProc));
                     }
 
-                    UnsafeNativeMethods.ThemingScope.Deactivate(userCookie);
+                    ThemingScope.Deactivate(userCookie);
 
                     _defOwnerWndProc = IntPtr.Zero;
                     _hookedWndProc = IntPtr.Zero;

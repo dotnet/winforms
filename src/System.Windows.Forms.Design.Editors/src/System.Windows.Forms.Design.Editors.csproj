@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <AssemblyName>System.Windows.Forms.Design.Editors</AssemblyName>
@@ -22,13 +22,19 @@
       <!-- Unncessary because BorderSidesEditor.resx only contains properties; not string constants -->
       <!--GenerateSource>true</GenerateSource-->
       <Namespace>System.Windows.Forms.Design</Namespace>
-      </EmbeddedResource>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\FormatControl.resx">
+      <Namespace>System.Windows.Forms.Design</Namespace>
+    </EmbeddedResource>
     <EmbeddedResource Update="Resources\ShortcutKeysEditor.resx">
       <!-- Unncessary because ShortcutKeysEditor.resx only contains properties; not string constants -->
       <!--GenerateSource>true</GenerateSource-->
       <Namespace>System.Windows.Forms.Design</Namespace>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\StringCollectionEditor.resx">
+      <Namespace>System.Windows.Forms.Design</Namespace>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\LinkAreaEditor.resx">
       <Namespace>System.Windows.Forms.Design</Namespace>
     </EmbeddedResource>
   </ItemGroup>
@@ -52,15 +58,18 @@
     <Compile Include="..\..\Common\src\DpiHelper.DpiAwarenessContext.cs" Link="Common\DpiHelper.DpiAwarenessContext.cs" />
     <Compile Include="..\..\Common\src\ScreenDC.cs" Link="Common\ScreenDC.cs" />
     <Compile Include="..\..\Common\src\Interop\Interop.BOOL.cs" Link="Interop\Interop.BOOL.cs" />
+    <Compile Include="..\..\Common\src\Interop\Interop.PARAM.cs" Link="Interop\Interop.PARAM.cs" />
     <Compile Include="..\..\Common\src\Interop\Interop.RECT.cs" Link="Interop\Interop.RECT.cs" />
     <Compile Include="..\..\Common\src\Interop\Interop.Libraries.cs" Link="Interop\Interop.Libraries.cs" />
     <Compile Include="..\..\Common\src\Interop\Interop.HRESULT.cs" Link="Interop\Interop.HRESULT.cs" />
     <Compile Include="..\..\Common\src\Interop\Interop.WindowMessages.cs" Link="Interop\Interop.WindowMessages.cs" />
     <Compile Include="..\..\Common\src\Interop\Interop.EditMessages.cs" Link="Interop\Interop.EditMessages.cs" />
+    <Compile Include="..\..\Common\src\Interop\IHandle.cs" Link="Interop\IHandle.cs" />
     <Compile Include="..\..\Common\src\Interop\ComCtl32\Interop.NMTREEVIEW.cs" Link="Interop\ComCtl32\Interop.NMTREEVIEW.cs" />
     <Compile Include="..\..\Common\src\Interop\ComCtl32\Interop.TVITEMW.cs" Link="Interop\ComCtl32\Interop.TVITEMW.cs" />
     <Compile Include="..\..\Common\src\Interop\ComCtl32\Interop.TVIF.cs" Link="Interop\ComCtl32\Interop.TVIF.cs" />
     <Compile Include="..\..\Common\src\Interop\ComCtl32\Interop.TVC.cs" Link="Interop\ComCtl32\Interop.TVC.cs" />
+    <Compile Include="..\..\Common\src\Interop\ComCtl32\Interop.TVS_EX.cs" Link="Interop\ComCtl32\Interop.TVS_EX.cs" />
     <Compile Include="..\..\Common\src\Interop\ComCtl32\Interop.TVIS.cs" Link="Interop\ComCtl32\Interop.TVIS.cs" />
     <Compile Include="..\..\Common\src\Interop\Comdlg32\Interop.CC.cs" Link="Interop\Comdlg32\Interop.CC.cs" />
     <Compile Include="..\..\Common\src\Interop\Gdi32\Interop.DeleteObject.cs" Link="Interop\Gdi32\Interop.DeleteObject.cs" />
@@ -99,6 +108,7 @@
     <Compile Include="..\..\Common\src\Interop\User32\Interop.DPI_AWARENESS_CONTEXT.cs" Link="Interop\User32\Interop.DPI_AWARENESS_CONTEXT.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.DrawText.cs" Link="Interop\User32\Interop.DrawText.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.DT.cs" Link="Interop\User32\Interop.DT.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.EnableWindow.cs" Link="Interop\User32\Interop.EnableWindow.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.GetActiveWindow.cs" Link="Interop\User32\Interop.GetActiveWindow.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.GetDC.cs" Link="Interop\User32\Interop.GetDC.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.GetFocus.cs" Link="Interop\User32\Interop.GetFocus.cs" />
@@ -110,6 +120,7 @@
     <Compile Include="..\..\Common\src\Interop\User32\Interop.NMHDR.cs" Link="Interop\User32\Interop.NMHDR.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.NotifyWinEvent.cs" Link="Interop\User32\Interop.NotifyWinEvent.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.OBJID.cs" Link="Interop\User32\Interop.OBJID.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.PostMessageW.cs" Link="Interop\User32\Interop.PostMessageW.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.RegisterWindowMessageW.cs" Link="Interop\User32\Interop.RegisterWindowMessageW.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.ReleaseDC.cs" Link="Interop\User32\Interop.ReleaseDC.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.ScreenToClient.cs" Link="Interop\User32\Interop.ScreenToClient.cs" />
@@ -122,6 +133,20 @@
     <Compile Include="..\..\Common\src\Interop\User32\Interop.WindowMessage.cs" Link="Interop\User32\Interop.WindowMessage.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.WINDOWPOS.cs" Link="Interop\User32\Interop.WINDOWPOS.cs" />
     <Compile Include="..\..\Common\src\Microsoft\Win32\SafeHandles\CoTaskMemSafeHandle.cs" Link="Microsoft\Win32\SafeHandles\CoTaskMemSafeHandle.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Resources\LinkAreaEditor.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>LinkAreaEditor.resx</DependentUpon>
+    </Compile>
+    <Compile Update="System\Windows\Forms\Design\FormatControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="System\Windows\Forms\Design\FormatStringDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
   </ItemGroup>
 
 </Project>

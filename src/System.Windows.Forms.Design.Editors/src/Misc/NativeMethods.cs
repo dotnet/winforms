@@ -29,13 +29,7 @@ namespace System.Windows.Forms.Design
         public static extern IntPtr GetDlgItem(IntPtr hWnd, int nIDDlgItem);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern bool EnableWindow(IntPtr hWnd, bool enable);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern int GetDlgItemInt(IntPtr hWnd, int nIDDlgItem, bool[] err, bool signed);
-
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern IntPtr PostMessage(IntPtr hwnd, int msg, IntPtr wparam, IntPtr lparam);
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto, Pack = 1)]
         public class TVITEMW
@@ -58,8 +52,6 @@ namespace System.Windows.Forms.Design
         public const int TV_FIRST = 0x1100;
         public const int TVM_SETEXTENDEDSTYLE = TV_FIRST + 44;
         public const int TVM_GETEXTENDEDSTYLE = TV_FIRST + 45;
-        public const int TVS_EX_FADEINOUTEXPANDOS = 0x0040;
-        public const int TVS_EX_DOUBLEBUFFER = 0x0004;
         public const int SWP_HIDEWINDOW = 0x0080;
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
@@ -70,31 +62,6 @@ namespace System.Windows.Forms.Design
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public static extern IntPtr SendMessage(IntPtr hWnd, int msg, int wParam, string lParam);
-
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern IntPtr SendMessage(IntPtr hWnd, int Msg, int wParam, [In] [Out] TV_HITTESTINFO lParam);
-
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto, Pack = 1)]
-        public class TV_HITTESTINFO
-        {
-            public int flags = 0;
-            public int hItem = 0;
-            public int pt_x = 0;
-            public int pt_y = 0;
-        }
-
-        internal class Util
-        {
-            public static int MAKELONG(int low, int high)
-            {
-                return (high << 16) | (low & 0xffff);
-            }
-
-            public static int LOWORD(int n)
-            {
-                return n & 0xffff;
-            }
-        }
 
         public const int CHILDID_SELF = 0;
     }

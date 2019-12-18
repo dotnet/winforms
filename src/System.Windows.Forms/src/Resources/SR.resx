@@ -787,21 +787,6 @@
   <data name="ContainerControlParentFormDescr" xml:space="preserve">
     <value>The parent form of this container control.</value>
   </data>
-  <data name="ContextMenuCollapseDescr" xml:space="preserve">
-    <value>Raised when the context menu collapses.</value>
-  </data>
-  <data name="ContextMenuImageListDescr" xml:space="preserve">
-    <value>Gets or sets the ImageList associated with this context menu.</value>
-  </data>
-  <data name="ContextMenuInvalidParent" xml:space="preserve">
-    <value>ContextMenu cannot be shown on an invisible control.</value>
-  </data>
-  <data name="ContextMenuIsImageMarginPresentDescr" xml:space="preserve">
-    <value>Gets or sets a value indicating whether the menu has an image margin.</value>
-  </data>
-  <data name="ContextMenuSourceControlDescr" xml:space="preserve">
-    <value>The last control that caused this context menu to be displayed.</value>
-  </data>
   <data name="ContextMenuStripSourceControlDescr" xml:space="preserve">
     <value>The last control that caused this context menu strip to be displayed.</value>
   </data>
@@ -1311,282 +1296,6 @@
   </data>
   <data name="DataBindingRemoveAtNotSupportedOnPropertyManager" xml:space="preserve">
     <value>RemoveAt is not supported for property-to-property binding.</value>
-  </data>
-  <data name="DataGridAllowSortingDescr" xml:space="preserve">
-    <value>Indicates whether the grid can be re-sorted by clicking a column header.</value>
-  </data>
-  <data name="DataGridAlternatingBackColorDescr" xml:space="preserve">
-    <value>Indicates the background color of alternating rows for a ledger appearance.</value>
-  </data>
-  <data name="DataGridBackButtonClickDescr" xml:space="preserve">
-    <value>Occurs when the user clicks the Back button on a child table to return to the parent table.</value>
-  </data>
-  <data name="DataGridBackgroundColorDescr" xml:space="preserve">
-    <value>Indicates the color of the DataGrid background.</value>
-  </data>
-  <data name="DataGridBeginInit" xml:space="preserve">
-    <value>BeginInit() has already been called without an EndInit().</value>
-  </data>
-  <data name="DataGridBoolColumnAllowNullValue" xml:space="preserve">
-    <value>Specifies whether the DataGridBoolColumn allows null values.</value>
-  </data>
-  <data name="DataGridBorderStyleDescr" xml:space="preserve">
-    <value>Indicates the border style for the DataGrid.</value>
-  </data>
-  <data name="DataGridCaptionBackButtonToolTip" xml:space="preserve">
-    <value>Navigates back to the parent rows.</value>
-  </data>
-  <data name="DataGridCaptionBackColorDescr" xml:space="preserve">
-    <value>Indicates the background color of the top caption.</value>
-  </data>
-  <data name="DataGridCaptionDetailsButtonToolTip" xml:space="preserve">
-    <value>Shows/Hides the parent rows for the current set of child rows.</value>
-  </data>
-  <data name="DataGridCaptionFontDescr" xml:space="preserve">
-    <value>Indicates the font of the top caption.</value>
-  </data>
-  <data name="DataGridCaptionForeColorDescr" xml:space="preserve">
-    <value>Indicates the color of text that appears in the top caption.</value>
-  </data>
-  <data name="DataGridCaptionTextDescr" xml:space="preserve">
-    <value>Indicates the text displayed in the top caption.</value>
-  </data>
-  <data name="DataGridCaptionVisibleDescr" xml:space="preserve">
-    <value>Indicates whether the top caption is visible.</value>
-  </data>
-  <data name="DataGridColumnCollectionMissing" xml:space="preserve">
-    <value>DataGridColumn instance does not exist in the collection.</value>
-  </data>
-  <data name="DataGridColumnHeadersVisibleDescr" xml:space="preserve">
-    <value>Indicates whether the column headers are visible.</value>
-  </data>
-  <data name="DataGridColumnListManagerPosition" xml:space="preserve">
-    <value>Position of ListManager must be equal to 'rowNum'.</value>
-  </data>
-  <data name="DataGridColumnNoPropertyDescriptor" xml:space="preserve">
-    <value>PropertyDescriptor has not been set on this DataGridColumn.</value>
-  </data>
-  <data name="DataGridColumnStyleDuplicateMappingName" xml:space="preserve">
-    <value>Data grid column styles collection already contains a column style with the same mapping name.</value>
-  </data>
-  <data name="DataGridColumnUnbound" xml:space="preserve">
-    <value>DataGridColumnStyle of '{0}' cannot be used because it is not associated with a Property or Column in the DataSource.</value>
-  </data>
-  <data name="DataGridColumnWidth" xml:space="preserve">
-    <value>ColumnWidth must be greater than or equal to 0.</value>
-  </data>
-  <data name="DataGridCurrentCellDescr" xml:space="preserve">
-    <value>The currently selected cell in the DataGrid.</value>
-  </data>
-  <data name="DataGridDataMemberDescr" xml:space="preserve">
-    <value>Indicates a sub-list of the DataSource to show in the DataGrid.</value>
-  </data>
-  <data name="DataGridDataSourceDescr" xml:space="preserve">
-    <value>Indicates the source of data for the DataGrid.</value>
-  </data>
-  <data name="DataGridDefaultColumnCollectionChanged" xml:space="preserve">
-    <value>User cannot change the contents of the default GridColumnStylesCollection.</value>
-  </data>
-  <data name="DataGridDefaultTableSet" xml:space="preserve">
-    <value>Value of this property cannot be changed on the default DataGridTableStyle.</value>
-  </data>
-  <data name="DataGridDownButtonClickDescr" xml:space="preserve">
-    <value>Occurs when the user clicks the "show/hide parent rows" icon. </value>
-  </data>
-  <data name="DataGridEmptyColor" xml:space="preserve">
-    <value>Value '{0}' cannot be set to an empty value.</value>
-  </data>
-  <data name="DataGridErrorMessageBoxCaption" xml:space="preserve">
-    <value>Committing the row to the original data store has caused an error.</value>
-  </data>
-  <data name="DataGridExceptionInPaint" xml:space="preserve">
-    <value>DataGrid received an exception at design time. Reset the DataSource and DataMember property on the grid.</value>
-  </data>
-  <data name="DataGridFailedToGetRegionInfo" xml:space="preserve">
-    <value>Program cannot get information about the painting and scrolling region.</value>
-  </data>
-  <data name="DataGridFirstVisibleColumnDescr" xml:space="preserve">
-    <value>Indicates the index of the column that is first shown.</value>
-  </data>
-  <data name="DataGridFlatModeDescr" xml:space="preserve">
-    <value>Indicates whether the grid has a flat appearance.</value>
-  </data>
-  <data name="DataGridGridLineColorDescr" xml:space="preserve">
-    <value>Indicates the color of the grid lines.</value>
-  </data>
-  <data name="DataGridGridLineStyleDescr" xml:space="preserve">
-    <value>Indicates the style of the grid lines.</value>
-  </data>
-  <data name="DataGridGridTablesDescr" xml:space="preserve">
-    <value>The collection of DataGridTableStyle objects that the DataGrid can render its data with.</value>
-  </data>
-  <data name="DataGridHeaderBackColorDescr" xml:space="preserve">
-    <value>Indicates the background color of the column and row headers.</value>
-  </data>
-  <data name="DataGridHeaderFontDescr" xml:space="preserve">
-    <value>Indicates the font of the text in the column and row headers.</value>
-  </data>
-  <data name="DataGridHeaderForeColorDescr" xml:space="preserve">
-    <value>Indicates the color of the text in the column and row headers.</value>
-  </data>
-  <data name="DataGridHorizScrollBarDescr" xml:space="preserve">
-    <value>Returns the horizontal scroll bar used by the grid.</value>
-  </data>
-  <data name="DataGridLinkColorDescr" xml:space="preserve">
-    <value>Indicates the color of the text that appears inside the child links.</value>
-  </data>
-  <data name="DataGridLinkHoverColorDescr" xml:space="preserve">
-    <value>Indicates the color of the text that appears inside a child link when the mouse pointer moves over it.</value>
-  </data>
-  <data name="DataGridListManagerDescr" xml:space="preserve">
-    <value>The CurrencyManager that the DataGrid uses to get data from the data source.</value>
-  </data>
-  <data name="DataGridNavigateEventDescr" xml:space="preserve">
-    <value>Occurs when the user navigates to the child rows or when the user navigates back to the parent rows.</value>
-  </data>
-  <data name="DataGridNavigationModeDescr" xml:space="preserve">
-    <value>Indicates whether links to child tables are shown.</value>
-  </data>
-  <data name="DataGridNodeClickEventDescr" xml:space="preserve">
-    <value>Occurs when the user clicks on the expansion glyph on the row header.</value>
-  </data>
-  <data name="DataGridNullText" xml:space="preserve">
-    <value>(null)</value>
-  </data>
-  <data name="DataGridOnBackgroundColorChangedDescr" xml:space="preserve">
-    <value>Event raised when the value of the BackgroundColor property is changed on DataGrid.</value>
-  </data>
-  <data name="DataGridOnBorderStyleChangedDescr" xml:space="preserve">
-    <value>Event raised when the value of the BorderStyle property is changed on DataGrid.</value>
-  </data>
-  <data name="DataGridOnCaptionVisibleChangedDescr" xml:space="preserve">
-    <value>Event raised when the value of the CaptionVisible property is changed on DataGrid.</value>
-  </data>
-  <data name="DataGridOnCurrentCellChangedDescr" xml:space="preserve">
-    <value>Event raised when the value of the CurrentCell property is changed on DataGrid.</value>
-  </data>
-  <data name="DataGridOnDataSourceChangedDescr" xml:space="preserve">
-    <value>Event raised when the value of the DataSource property is changed on DataGrid.</value>
-  </data>
-  <data name="DataGridOnFlatModeChangedDescr" xml:space="preserve">
-    <value>Event raised when the value of the FlatMode property is changed on DataGrid.</value>
-  </data>
-  <data name="DataGridOnNavigationModeChangedDescr" xml:space="preserve">
-    <value>Event raised when the value of the NavigationMode property is changed on DataGrid.</value>
-  </data>
-  <data name="DataGridOnParentRowsLabelStyleChangedDescr" xml:space="preserve">
-    <value>Event raised when the value of the ParentRowsLabelStyle property is changed on DataGrid.</value>
-  </data>
-  <data name="DataGridOnParentRowsVisibleChangedDescr" xml:space="preserve">
-    <value>Event raised when the value of the ParentRowsVisible property is changed on DataGrid.</value>
-  </data>
-  <data name="DataGridOnReadOnlyChangedDescr" xml:space="preserve">
-    <value>Event raised when the value of the ReadOnly property is changed on DataGrid.</value>
-  </data>
-  <data name="DataGridParentRowsBackColorDescr" xml:space="preserve">
-    <value>Indicates the background color of the parent rows.</value>
-  </data>
-  <data name="DataGridParentRowsForeColorDescr" xml:space="preserve">
-    <value>Indicates the color of the text in the parent rows.</value>
-  </data>
-  <data name="DataGridParentRowsLabelStyleDescr" xml:space="preserve">
-    <value>Indicates whether the parent rows show labels for the table and for the columns.</value>
-  </data>
-  <data name="DataGridParentRowsVisibleDescr" xml:space="preserve">
-    <value>Indicates whether the parent rows area is visible.</value>
-  </data>
-  <data name="DataGridPreferredColumnWidthDescr" xml:space="preserve">
-    <value>Specifies what the default pixel widths of the grid columns are. The default value for PreferredColumnWidth is 75.</value>
-  </data>
-  <data name="DataGridPreferredRowHeightDescr" xml:space="preserve">
-    <value>Indicates the preferred height of the rows.</value>
-  </data>
-  <data name="DataGridPushedIncorrectValueIntoColumn" xml:space="preserve">
-    <value>Value {0} Do you want to correct this value?</value>
-  </data>
-  <data name="DataGridReadOnlyDescr" xml:space="preserve">
-    <value>Indicates whether rows in the grid can be edited, added, or deleted.</value>
-  </data>
-  <data name="DataGridRowHeadersVisibleDescr" xml:space="preserve">
-    <value>Indicates whether the row headers are visible.</value>
-  </data>
-  <data name="DataGridRowHeaderWidthDescr" xml:space="preserve">
-    <value>Indicates the width of the row headers.</value>
-  </data>
-  <data name="DataGridRowRowHeight" xml:space="preserve">
-    <value>DataGridRow.Height cannot be negative.</value>
-  </data>
-  <data name="DataGridRowRowNumber" xml:space="preserve">
-    <value>DataGridRow cannot have a negative row number.</value>
-  </data>
-  <data name="DataGridScrollEventDescr" xml:space="preserve">
-    <value>Occurs when the user scrolls either the horizontal or vertical scroll bar.</value>
-  </data>
-  <data name="DataGridSelectedIndexDescr" xml:space="preserve">
-    <value>Indicates the index of the current row.</value>
-  </data>
-  <data name="DataGridSelectionBackColorDescr" xml:space="preserve">
-    <value>Indicates the background color of any selected cells or rows.</value>
-  </data>
-  <data name="DataGridSelectionForeColorDescr" xml:space="preserve">
-    <value>Indicates the color of the text in any selected cells or rows.</value>
-  </data>
-  <data name="DataGridSetListManager" xml:space="preserve">
-    <value>ListManager can be set using the DataSource and DataMember properties.</value>
-  </data>
-  <data name="DataGridSetSelectIndex" xml:space="preserve">
-    <value>Position on a null ListManager cannot be set.</value>
-  </data>
-  <data name="DataGridSettingCurrentCellNotGood" xml:space="preserve">
-    <value>CurrentCell cannot be set at this time. Moving your code to the Form.Load event should solve this problem.</value>
-  </data>
-  <data name="DataGridTableCollectionMissingTable" xml:space="preserve">
-    <value>DataGridTable instance does not exist in the collection.</value>
-  </data>
-  <data name="DataGridTableStyleCollectionAddedParentedTableStyle" xml:space="preserve">
-    <value>DataGridTableStyle that is already parented to another DataGrid cannot be added.</value>
-  </data>
-  <data name="DataGridTableStyleDuplicateMappingName" xml:space="preserve">
-    <value>Data grid table styles collection already contains a table style with the same mapping name.</value>
-  </data>
-  <data name="DataGridTableStyleTransparentAlternatingBackColorNotAllowed" xml:space="preserve">
-    <value>DataGridTableStyle does not support transparent AlternatingBackColor.</value>
-  </data>
-  <data name="DataGridTableStyleTransparentBackColorNotAllowed" xml:space="preserve">
-    <value>DataGridTableStyle does not support transparent BackColor.</value>
-  </data>
-  <data name="DataGridTableStyleTransparentHeaderBackColorNotAllowed" xml:space="preserve">
-    <value>DataGridTableStyle does not support transparent HeaderBackColor.</value>
-  </data>
-  <data name="DataGridTableStyleTransparentSelectionBackColorNotAllowed" xml:space="preserve">
-    <value>DataGridTableStyle does not support transparent SelectionBackColor.</value>
-  </data>
-  <data name="DataGridToolTipEmptyIcon" xml:space="preserve">
-    <value>null rectangle for icon bounds when adding tool tip.</value>
-  </data>
-  <data name="DataGridTransparentAlternatingBackColorNotAllowed" xml:space="preserve">
-    <value>DataGrid control does not support transparent AlternatingBackColor.</value>
-  </data>
-  <data name="DataGridTransparentBackColorNotAllowed" xml:space="preserve">
-    <value>DataGrid control does not support transparent BackColor.</value>
-  </data>
-  <data name="DataGridTransparentCaptionBackColorNotAllowed" xml:space="preserve">
-    <value>DataGrid control does not support transparent CaptionBackColor.</value>
-  </data>
-  <data name="DataGridTransparentHeaderBackColorNotAllowed" xml:space="preserve">
-    <value>DataGrid control does not support transparent HeaderBackColor.</value>
-  </data>
-  <data name="DataGridTransparentParentRowsBackColorNotAllowed" xml:space="preserve">
-    <value>DataGrid control does not support transparent ParentRowsBackColor.</value>
-  </data>
-  <data name="DataGridTransparentSelectionBackColorNotAllowed" xml:space="preserve">
-    <value>DataGrid control does not support transparent SelectionBackColor.</value>
-  </data>
-  <data name="DataGridUnbound" xml:space="preserve">
-    <value>Data cannot be read from a DataGrid which is not bound to a DataTable.</value>
-  </data>
-  <data name="DataGridVertScrollBarDescr" xml:space="preserve">
-    <value>Returns the vertical scroll bar used by the grid.</value>
   </data>
   <data name="DataGridView_AccButtonCellDefaultAction" xml:space="preserve">
     <value>Press</value>
@@ -2845,6 +2554,21 @@ To replace this default dialog please handle the DataError event.</value>
   <data name="DefManifestNotFound" xml:space="preserve">
     <value>Default manifest file required to enable visual styles cannot be found.</value>
   </data>
+  <data name="DefaultDataGridViewButtonCellTollTipText" xml:space="preserve">
+    <value>Button</value>
+  </data>
+  <data name="DefaultDataGridViewComboBoxCellTollTipText" xml:space="preserve">
+    <value>ComboBox</value>
+  </data>
+  <data name="DefaultDataGridViewImageCellToolTipText" xml:space="preserve">
+    <value>Image</value>
+  </data>
+  <data name="DefaultDataGridViewLinkCellTollTipText" xml:space="preserve">
+    <value>Link</value>
+  </data>
+  <data name="DefaultDataGridViewTextBoxCellTollTipText" xml:space="preserve">
+    <value>Edit</value>
+  </data>
   <data name="DescriptionBindingNavigator" xml:space="preserve">
     <value>Provides a user interface for navigation and manipulation of data bound to controls on a form.</value>
   </data>
@@ -3420,14 +3144,8 @@ Do you want to replace it?</value>
   <data name="FormMDIParentDescr" xml:space="preserve">
     <value>Retrieves the MDI parent of this form.</value>
   </data>
-  <data name="FormMenuDescr" xml:space="preserve">
-    <value>The main menu of the form. This must be set to a component of type MainMenu.</value>
-  </data>
   <data name="FormMenuStripDescr" xml:space="preserve">
     <value>Specifies the primary MenuStrip for the Form. This property is used for keyboard activation and automatic merging in MDI.</value>
-  </data>
-  <data name="FormMergedMenuDescr" xml:space="preserve">
-    <value>The merged menu of this form, which is used when displaying a single merged MDI menu.</value>
   </data>
   <data name="FormMinimizeBoxDescr" xml:space="preserve">
     <value>Determines whether a form has a minimize box in the upper-right corner of its caption bar.</value>
@@ -4292,18 +4010,6 @@ Stack trace where the illegal operation occurred was:
   <data name="LoadTextError" xml:space="preserve">
     <value>Cannot load the text.</value>
   </data>
-  <data name="MainMenuCollapseDescr" xml:space="preserve">
-    <value>Occurs when the main menu collapses.</value>
-  </data>
-  <data name="MainMenuImageListDescr" xml:space="preserve">
-    <value>Gets or sets the ImageList associated with this main menu.</value>
-  </data>
-  <data name="MainMenuIsImageMarginPresentDescr" xml:space="preserve">
-    <value>Gets or sets a value indicating whether the menu has an image margin.</value>
-  </data>
-  <data name="MainMenuToStringNoForm" xml:space="preserve">
-    <value>&lt;No Form&gt;</value>
-  </data>
   <data name="MaskedTextBoxAllowPromptAsInputDescr" xml:space="preserve">
     <value>Indicates whether the prompt character is valid as input.</value>
   </data>
@@ -4400,86 +4106,11 @@ Stack trace where the illegal operation occurred was:
   <data name="measureItemEventDescr" xml:space="preserve">
     <value>Occurs whenever a particular item's height needs to be calculated.</value>
   </data>
-  <data name="MenuBadMenuItem" xml:space="preserve">
-    <value>Parameter must be of type MenuItem.</value>
-  </data>
-  <data name="MenuImageMarginColorDescr" xml:space="preserve">
-    <value>Gets or sets the background color of this menu's image margin.</value>
-  </data>
-  <data name="MenuIsParentDescr" xml:space="preserve">
-    <value>Indicates if this menu contains any child items.</value>
-  </data>
-  <data name="MenuItemAlreadyExists" xml:space="preserve">
-    <value>Cannot add MenuItem '{0}'. It already exists as a parent of the current menu item.</value>
-  </data>
-  <data name="MenuItemCheckedDescr" xml:space="preserve">
-    <value>Indicates whether the item is checked.</value>
-  </data>
-  <data name="MenuItemDefaultDescr" xml:space="preserve">
-    <value>Indicates whether the item is the default item.</value>
-  </data>
-  <data name="MenuItemEnabledDescr" xml:space="preserve">
-    <value>Indicates whether the item is enabled.</value>
-  </data>
-  <data name="MenuItemImageDescr" xml:space="preserve">
-    <value>Gets or sets the image to be displayed on this menu item.</value>
-  </data>
-  <data name="MenuItemImageListDescr" xml:space="preserve">
-    <value>Gets or sets the ImageList associated with this menu item.</value>
-  </data>
-  <data name="MenuItemImageMarginColorDescr" xml:space="preserve">
-    <value>Gets or sets the background color of this menu item's image margin.</value>
-  </data>
-  <data name="MenuItemInvalidCheckProperty" xml:space="preserve">
-    <value>True is not a valid value for the Checked property.  This is only valid for MenuItems that have no children and are not top-level.</value>
-  </data>
-  <data name="MenuItemMDIListDescr" xml:space="preserve">
-    <value>Determines whether the MDI child window list is appended to this item.</value>
-  </data>
-  <data name="MenuItemMergeOrderDescr" xml:space="preserve">
-    <value>Determines the merge order of the item.</value>
-  </data>
-  <data name="MenuItemMergeTypeDescr" xml:space="preserve">
-    <value>Determines how the item is handled when menus are merged.</value>
-  </data>
-  <data name="MenuItemOnClickDescr" xml:space="preserve">
-    <value>Occurs when the menu item is selected.</value>
-  </data>
-  <data name="MenuItemOnInitDescr" xml:space="preserve">
-    <value>Occurs before the containing menu is displayed.</value>
-  </data>
-  <data name="MenuItemOnSelectDescr" xml:space="preserve">
-    <value>Occurs when the menu item is selected.</value>
-  </data>
-  <data name="MenuItemOwnerDrawDescr" xml:space="preserve">
-    <value>Indicates if Windows will draw the menu item or if the user will handle the painting.</value>
-  </data>
-  <data name="MenuItemRadioCheckDescr" xml:space="preserve">
-    <value>If the item is checked, this value will determine whether the check style is a radio button.</value>
-  </data>
   <data name="MenuItemShortCutDescr" xml:space="preserve">
     <value>The shortcut key associated with the menu item. </value>
   </data>
   <data name="MenuItemShowShortCutDescr" xml:space="preserve">
     <value>Indicates whether the shorcut key for the menu item is displayed on the item. </value>
-  </data>
-  <data name="MenuItemTextDescr" xml:space="preserve">
-    <value>The caption displayed by the item.</value>
-  </data>
-  <data name="MenuItemVisibleDescr" xml:space="preserve">
-    <value>Indicates whether the item is visible.</value>
-  </data>
-  <data name="MenuMDIListItemDescr" xml:space="preserve">
-    <value>Retrieves the menu item that contains a list of MDI child windows.</value>
-  </data>
-  <data name="MenuMenuItemsDescr" xml:space="preserve">
-    <value>The menu items for the menu.</value>
-  </data>
-  <data name="MenuMergeWithSelf" xml:space="preserve">
-    <value>Cannot merge a menu with itself.</value>
-  </data>
-  <data name="MenuRightToLeftDescr" xml:space="preserve">
-    <value>Indicates if this menu should display right to left</value>
   </data>
   <data name="MenuStripMdiWindowListItem" xml:space="preserve">
     <value>Specifies the item whose DropDown will show the list of MDI windows.</value>
@@ -4492,6 +4123,9 @@ Stack trace where the illegal operation occurred was:
   </data>
   <data name="MonthCalendarAnnuallyBoldedDatesDescr" xml:space="preserve">
     <value>Indicates which annual dates should be boldface.</value>
+  </data>
+  <data name="MonthCalendarBodyAccessibleName" xml:space="preserve">
+    <value>Calendar body</value>
   </data>
   <data name="MonthCalendarDimensionsDescr" xml:space="preserve">
     <value>The number of rows and columns of months in a month calendar.</value>
@@ -4523,11 +4157,17 @@ Stack trace where the illegal operation occurred was:
   <data name="MonthCalendarMonthlyBoldedDatesDescr" xml:space="preserve">
     <value>Indicates which monthly dates to bold.</value>
   </data>
+  <data name="MonthCalendarNextButtonAccessibleName" xml:space="preserve">
+    <value>Next</value>
+  </data>
   <data name="MonthCalendarOnDateChangedDescr" xml:space="preserve">
     <value>Occurs when the range of dates changes due to user selection, or through next/previous month navigation.</value>
   </data>
   <data name="MonthCalendarOnDateSelectedDescr" xml:space="preserve">
     <value>Occurs when the user selects a date or a range of dates.</value>
+  </data>
+  <data name="MonthCalendarPreviousButtonAccessibleName" xml:space="preserve">
+    <value>Previous</value>
   </data>
   <data name="MonthCalendarRange" xml:space="preserve">
     <value>Unable to set the MonthCalendar range from {0} to {1}.</value>
@@ -4561,6 +4201,9 @@ Stack trace where the illegal operation occurred was:
   </data>
   <data name="MonthCalendarTitleForeColorDescr" xml:space="preserve">
     <value>The color used to display text within the calendar's title.</value>
+  </data>
+  <data name="MonthCalendarTodayButtonAccessibleName" xml:space="preserve">
+    <value>Today: {0}</value>
   </data>
   <data name="MonthCalendarTodayDateDescr" xml:space="preserve">
     <value>The current day.</value>
@@ -4868,9 +4511,9 @@ Stack trace where the illegal operation occurred was:
   <data name="PrintPreviewControlZoomNegative" xml:space="preserve">
     <value>Zoom must be 0 or greater. Negative values are not permitted.</value>
   </data>
-   <data name="PrintPreviewDialog_PrintPreview" xml:space="preserve">
+  <data name="PrintPreviewDialog_PrintPreview" xml:space="preserve">
     <value>Print preview</value>
-   </data>
+  </data>
   <data name="PrintPreviewDocumentDescr" xml:space="preserve">
     <value>PrintDocument to be previewed.</value>
   </data>
@@ -5155,6 +4798,12 @@ Stack trace where the illegal operation occurred was:
   </data>
   <data name="PropertyGridDefaultAccessibleName" xml:space="preserve">
     <value>Properties Window</value>
+  </data>
+  <data name="PropertyGridDefaultAccessibleNameTemplate" xml:space="preserve">
+    <value>{0} Properties Window</value>
+  </data>
+  <data name="PropertyGridDocCommentAccessibleNameTemplate" xml:space="preserve">
+    <value>{0} Description</value>
   </data>
   <data name="PropertyGridDisabledItemForeColorDesc" xml:space="preserve">
     <value>The foreground color of disabled text in the grid area.</value>
@@ -5926,84 +5575,6 @@ Stack trace where the illegal operation occurred was:
   </data>
   <data name="TimerTimerDescr" xml:space="preserve">
     <value>Occurs whenever the specified interval time elapses.</value>
-  </data>
-  <data name="ToolBarAppearanceDescr" xml:space="preserve">
-    <value>Controls the appearance of the ToolBar control, using values from the ToolBarAppearance enumeration.</value>
-  </data>
-  <data name="ToolBarAutoSizeDescr" xml:space="preserve">
-    <value>Controls whether the ToolBar will automatically size itself based on Button size.</value>
-  </data>
-  <data name="ToolBarBadToolBarButton" xml:space="preserve">
-    <value>Parameter must be of type ToolBarButton.</value>
-  </data>
-  <data name="ToolBarBorderStyleDescr" xml:space="preserve">
-    <value>Controls what type of border the ToolBar control will have.</value>
-  </data>
-  <data name="ToolBarButtonClickDescr" xml:space="preserve">
-    <value>Occurs whenever a button in the ToolBar is clicked by the user.</value>
-  </data>
-  <data name="ToolBarButtonDropDownDescr" xml:space="preserve">
-    <value>Occurs whenever a button with the DropDownButton style is pressed.</value>
-  </data>
-  <data name="ToolBarButtonEnabledDescr" xml:space="preserve">
-    <value>Controls whether this button responds to user input.</value>
-  </data>
-  <data name="ToolBarButtonImageIndexDescr" xml:space="preserve">
-    <value>Identifies the image displayed on the button.</value>
-  </data>
-  <data name="ToolBarButtonInvalidDropDownMenuType" xml:space="preserve">
-    <value>The drop-down menu for a ToolBarButton must be of type ContextMenu.</value>
-  </data>
-  <data name="ToolBarButtonMenuDescr" xml:space="preserve">
-    <value>The shortcut menu that will appear if this button's style is set to DropDownButton.</value>
-  </data>
-  <data name="ToolBarButtonNotFound" xml:space="preserve">
-    <value>References that a non-existent ToolBarButton has been received.</value>
-  </data>
-  <data name="ToolBarButtonPartialPushDescr" xml:space="preserve">
-    <value>Controls whether the button should be displayed as partially pushed or not, but only if the style of the button is ToggleButton.</value>
-  </data>
-  <data name="ToolBarButtonPushedDescr" xml:space="preserve">
-    <value>Indicates whether the button is pushed or not. This is most commonly seen for buttons with the TOGGLEBUTTON style.</value>
-  </data>
-  <data name="ToolBarButtonsDescr" xml:space="preserve">
-    <value>The collection of ToolBarButtons that make up this ToolBar.</value>
-  </data>
-  <data name="ToolBarButtonSizeDescr" xml:space="preserve">
-    <value>The size of the buttons on the control if the button contents do not require a larger size.</value>
-  </data>
-  <data name="ToolBarButtonStyleDescr" xml:space="preserve">
-    <value>Indicates what style of ToolBarButton this will be.</value>
-  </data>
-  <data name="ToolBarButtonTextDescr" xml:space="preserve">
-    <value>The caption to be displayed for this button.</value>
-  </data>
-  <data name="ToolBarButtonToolTipTextDescr" xml:space="preserve">
-    <value>The ToolTip text to be displayed for this button.</value>
-  </data>
-  <data name="ToolBarButtonVisibleDescr" xml:space="preserve">
-    <value>Indicates whether this button should be visible.</value>
-  </data>
-  <data name="ToolBarDividerDescr" xml:space="preserve">
-    <value>Controls whether the ToolBar will display a 3-D line at the top of its client area.</value>
-  </data>
-  <data name="ToolBarDropDownArrowsDescr" xml:space="preserve">
-    <value>Controls whether the ToolBar will display an arrow on the side of drop-down buttons.</value>
-  </data>
-  <data name="ToolBarImageListDescr" xml:space="preserve">
-    <value>The ImageList from which this ToolBar will get all of the button images.</value>
-  </data>
-  <data name="ToolBarImageSizeDescr" xml:space="preserve">
-    <value>The size of the images within the ToolBar's ImageList.</value>
-  </data>
-  <data name="ToolBarShowToolTipsDescr" xml:space="preserve">
-    <value>Indicates whether ToolTips will be shown for each of the buttons, if available.</value>
-  </data>
-  <data name="ToolBarTextAlignDescr" xml:space="preserve">
-    <value>Controls how the text is positioned relative to the Image in each button.</value>
-  </data>
-  <data name="ToolBarWrappableDescr" xml:space="preserve">
-    <value>Indicates if more than one row of buttons is allowed.</value>
   </data>
   <data name="ToolStripAllowItemReorderAndAllowDropCannotBeSetToTrue" xml:space="preserve">
     <value>AllowItemReorder and AllowDrop cannot both be true.</value>
@@ -7072,5 +6643,20 @@ Stack trace where the illegal operation occurred was:
   </data>
   <data name="TreeNodeCircularReference" xml:space="preserve">
     <value>A circular reference has been made. A TreeNode cannot be added as a descendant of itself.</value>
+  </data>
+  <data name="DefaultNumericUpDownAccessibleName" xml:space="preserve">
+    <value>NumericUpDown</value>
+  </data>
+  <data name="DefaultDomainUpDownAccessibleName" xml:space="preserve">
+    <value>DomainUpDown</value>
+  </data>
+  <data name="DefaultUpDownButtonsAccessibleName" xml:space="preserve">
+    <value>UpDown</value>
+  </data>
+  <data name="Win32SetParentFailed" xml:space="preserve">
+    <value>Failed to set Win32 parent window of the Control.</value>
+  </data>
+  <data name="ErrorProviderDefaultAccessibleName" xml:space="preserve">
+    <value>Error provider</value>
   </data>
 </root>

@@ -1289,47 +1289,41 @@ namespace System.Windows.Forms.Design
                     }
                 }
 
-                // Check if menuEditor is present and active...
-                IMenuEditorService menuEditorService = (IMenuEditorService)GetService(typeof(IMenuEditorService));
-                if (menuEditorService == null || (menuEditorService != null && !menuEditorService.IsActive()))
+                // now walk the ToolStrip and add glyphs for each of it's children
+                foreach (ToolStripItem item in ToolStrip.Items)
                 {
-
-                    // now walk the ToolStrip and add glyphs for each of it's children
-                    foreach (ToolStripItem item in ToolStrip.Items)
+                    if (item is DesignerToolStripControlHost)
                     {
-                        if (item is DesignerToolStripControlHost)
+                        continue;
+                    }
+                    // make sure it's on the ToolStrip...
+                    if (item.Placement == ToolStripItemPlacement.Main)
+                    {
+                        ToolStripItemDesigner itemDesigner = (ToolStripItemDesigner)_host.GetDesigner(item);
+                        if (itemDesigner != null)
                         {
-                            continue;
-                        }
-                        // make sure it's on the ToolStrip...
-                        if (item.Placement == ToolStripItemPlacement.Main)
-                        {
-                            ToolStripItemDesigner itemDesigner = (ToolStripItemDesigner)_host.GetDesigner(item);
-                            if (itemDesigner != null)
+                            bool isPrimary = (item == primarySelection);
+                            if (isPrimary)
                             {
-                                bool isPrimary = (item == primarySelection);
-                                if (isPrimary)
-                                {
-                                    ((ToolStripItemBehavior)toolStripBehavior)._dragBoxFromMouseDown = _dragBoxFromMouseDown;
-                                }
+                                ((ToolStripItemBehavior)toolStripBehavior)._dragBoxFromMouseDown = _dragBoxFromMouseDown;
+                            }
 
-                                // Get Back the Current Bounds if current selection is not  a primary selection
-                                if (!isPrimary)
-                                {
-                                    item.AutoSize = (itemDesigner != null) ? itemDesigner.AutoSize : true;
-                                }
+                            // Get Back the Current Bounds if current selection is not  a primary selection
+                            if (!isPrimary)
+                            {
+                                item.AutoSize = (itemDesigner != null) ? itemDesigner.AutoSize : true;
+                            }
 
-                                Rectangle itemBounds = itemDesigner.GetGlyphBounds();
-                                Control parent = ToolStrip.Parent;
-                                Rectangle parentBounds = BehaviorService.ControlRectInAdornerWindow(parent);
-                                if (IsGlyphTotallyVisible(itemBounds, parentBounds) && item.Visible)
-                                {
-                                    // Add Glyph ONLY AFTER item width is changed...
-                                    ToolStripItemGlyph bodyGlyphForItem = new ToolStripItemGlyph(item, itemDesigner, itemBounds, toolStripBehavior);
-                                    itemDesigner.bodyGlyph = bodyGlyphForItem;
-                                    //Add ItemGlyph to the Collection
-                                    selMgr.BodyGlyphAdorner.Glyphs.Add(bodyGlyphForItem);
-                                }
+                            Rectangle itemBounds = itemDesigner.GetGlyphBounds();
+                            Control parent = ToolStrip.Parent;
+                            Rectangle parentBounds = BehaviorService.ControlRectInAdornerWindow(parent);
+                            if (IsGlyphTotallyVisible(itemBounds, parentBounds) && item.Visible)
+                            {
+                                // Add Glyph ONLY AFTER item width is changed...
+                                ToolStripItemGlyph bodyGlyphForItem = new ToolStripItemGlyph(item, itemDesigner, itemBounds, toolStripBehavior);
+                                itemDesigner.bodyGlyph = bodyGlyphForItem;
+                                //Add ItemGlyph to the Collection
+                                selMgr.BodyGlyphAdorner.Glyphs.Add(bodyGlyphForItem);
                             }
                         }
                     }
@@ -1468,17 +1462,10 @@ namespace System.Windows.Forms.Design
         {
             Control parent = defaultValues["Parent"] as Control;
             Form parentForm = _host.RootComponent as Form;
-            MainMenu parentMenu = null;
             FormDocumentDesigner parentFormDesigner = null;
             if (parentForm != null)
             {
                 parentFormDesigner = _host.GetDesigner(parentForm) as FormDocumentDesigner;
-                if (parentFormDesigner != null && parentFormDesigner.Menu != null)
-                {
-                    // stash off the main menu while we initialize
-                    parentMenu = parentFormDesigner.Menu;
-                    parentFormDesigner.Menu = null;
-                }
             }
 
             ToolStripPanel parentPanel = parent as ToolStripPanel;
@@ -1501,11 +1488,6 @@ namespace System.Windows.Forms.Design
 
             if (parentFormDesigner != null)
             {
-                //Add MenuBack
-                if (parentMenu != null)
-                {
-                    parentFormDesigner.Menu = parentMenu;
-                }
                 //Set MainMenuStrip property
                 if (ToolStrip is MenuStrip)
                 {
@@ -2518,8 +2500,8 @@ namespace System.Windows.Forms.Design
             switch (m.Msg)
             {
                 case WindowMessages.WM_CONTEXTMENU:
-                    int x = NativeMethods.Util.SignedLOWORD(m.LParam);
-                    int y = NativeMethods.Util.SignedHIWORD(m.LParam);
+                    int x = PARAM.SignedLOWORD(m.LParam);
+                    int y = PARAM.SignedHIWORD(m.LParam);
                     bool inBounds = GetHitTest(new Point(x, y));
                     if (inBounds)
                     {

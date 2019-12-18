@@ -59,7 +59,7 @@
       </trans-unit>
       <trans-unit id="lblModifiers.Text">
         <source>Modifiers:</source>
-        <target state="translated">修飾詞:</target>
+        <target state="translated">修飾元:</target>
         <note />
       </trans-unit>
     </body>

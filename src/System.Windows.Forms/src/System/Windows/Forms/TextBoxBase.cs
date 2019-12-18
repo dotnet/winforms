@@ -457,7 +457,7 @@ namespace System.Windows.Forms
             get
             {
                 CreateParams cp = base.CreateParams;
-                cp.ClassName = "EDIT";
+                cp.ClassName = ComCtl32.WindowClasses.WC_EDIT;
                 cp.Style |= NativeMethods.ES_AUTOHSCROLL | NativeMethods.ES_AUTOVSCROLL;
                 if (!textBoxFlags[hideSelection])
                 {
@@ -1630,7 +1630,7 @@ namespace System.Windows.Forms
 
             if (mevent.Button == MouseButtons.Left)
             {
-                if (!ValidationCancelled && UnsafeNativeMethods.WindowFromPoint(pt) == Handle)
+                if (!ValidationCancelled && User32.WindowFromPoint(pt) == Handle)
                 {
                     if (!doubleClickFired)
                     {
@@ -1696,9 +1696,9 @@ namespace System.Windows.Forms
         /// </summary>
         public virtual int GetCharIndexFromPosition(Point pt)
         {
-            int longPoint = NativeMethods.Util.MAKELONG(pt.X, pt.Y);
+            int longPoint = PARAM.ToInt(pt.X, pt.Y);
             int index = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), EditMessages.EM_CHARFROMPOS, 0, longPoint);
-            index = NativeMethods.Util.LOWORD(index);
+            index = PARAM.LOWORD(index);
 
             if (index < 0)
             {
@@ -1742,7 +1742,7 @@ namespace System.Windows.Forms
             }
 
             int i = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), EditMessages.EM_POSFROMCHAR, index, 0);
-            return new Point(NativeMethods.Util.SignedLOWORD(i), NativeMethods.Util.SignedHIWORD(i));
+            return new Point(PARAM.SignedLOWORD(i), PARAM.SignedHIWORD(i));
         }
 
         /// <summary>
@@ -1792,13 +1792,13 @@ namespace System.Windows.Forms
                         if (editOlePtr != IntPtr.Zero)
                         {
                             IntPtr iTextDocument = IntPtr.Zero;
-                            Guid iiTextDocumentGuid = typeof(UnsafeNativeMethods.ITextDocument).GUID;
+                            Guid iiTextDocumentGuid = typeof(Richedit.ITextDocument).GUID;
 
                             try
                             {
                                 Marshal.QueryInterface(editOlePtr, ref iiTextDocumentGuid, out iTextDocument);
 
-                                if (Marshal.GetObjectForIUnknown(iTextDocument) is UnsafeNativeMethods.ITextDocument textDocument)
+                                if (Marshal.GetObjectForIUnknown(iTextDocument) is Richedit.ITextDocument textDocument)
                                 {
 
                                     // When the user calls RichTextBox::ScrollToCaret we want the RichTextBox to show as
@@ -1813,7 +1813,7 @@ namespace System.Windows.Forms
                                     int selStartLine = GetLineFromCharIndex(selStart);
 
                                     // 1. Scroll the RichTextBox all the way to the bottom
-                                    UnsafeNativeMethods.ITextRange textRange = textDocument.Range(WindowText.Length - 1, WindowText.Length - 1);
+                                    Richedit.ITextRange textRange = textDocument.Range(WindowText.Length - 1, WindowText.Length - 1);
                                     textRange.ScrollIntoView(0);   // 0 ==> tomEnd
 
                                     // 2. Get the first visible line.
@@ -2181,11 +2181,11 @@ namespace System.Windows.Forms
         {
             if (!textBoxFlags[codeUpdateText] && !textBoxFlags[creatingHandle])
             {
-                if (NativeMethods.Util.HIWORD(m.WParam) == NativeMethods.EN_CHANGE && CanRaiseTextChangedEvent)
+                if (PARAM.HIWORD(m.WParam) == NativeMethods.EN_CHANGE && CanRaiseTextChangedEvent)
                 {
                     OnTextChanged(EventArgs.Empty);
                 }
-                else if (NativeMethods.Util.HIWORD(m.WParam) == NativeMethods.EN_UPDATE)
+                else if (PARAM.HIWORD(m.WParam) == NativeMethods.EN_UPDATE)
                 {
                     // Force update to the Modified property, which will trigger
                     // ModifiedChanged event handlers
@@ -2227,10 +2227,10 @@ namespace System.Windows.Forms
         /// </summary>
         private void WmTextBoxContextMenu(ref Message m)
         {
-            if (ContextMenu != null || ContextMenuStrip != null)
+            if (ContextMenuStrip != null)
             {
-                int x = NativeMethods.Util.SignedLOWORD(m.LParam);
-                int y = NativeMethods.Util.SignedHIWORD(m.LParam);
+                int x = PARAM.SignedLOWORD(m.LParam);
+                int y = PARAM.SignedHIWORD(m.LParam);
                 Point client;
                 bool keyboardActivated = false;
                 // lparam will be exactly -1 when the user invokes the context menu
@@ -2251,11 +2251,7 @@ namespace System.Windows.Forms
                 // VisualStudio7 # 156, only show the context menu when clicked in the client area
                 if (ClientRectangle.Contains(client))
                 {
-                    if (ContextMenu != null)
-                    {
-                        ContextMenu.Show(this, client);
-                    }
-                    else if (ContextMenuStrip != null)
+                    if (ContextMenuStrip != null)
                     {
                         ContextMenuStrip.ShowInternal(this, client, keyboardActivated);
                     }

@@ -11,9 +11,8 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms.Layout;
 using Microsoft.Win32;
-using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
-using Util = System.Windows.Forms.NativeMethods.Util;
 using static Interop;
+using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 
 namespace System.Windows.Forms
 {
@@ -356,7 +355,7 @@ namespace System.Windows.Forms
                 }
 
                 CreateParams cp = base.CreateParams;
-                cp.ClassName = RichTextBoxConstants.WC_RICHEDITW_41;
+                cp.ClassName = ComCtl32.WindowClasses.MSFTEDIT_CLASS;
 
                 if (Multiline)
                 {
@@ -2596,12 +2595,6 @@ namespace System.Windows.Forms
             base.OnBackColorChanged(e);
         }
 
-        protected override void OnContextMenuChanged(EventArgs e)
-        {
-            base.OnContextMenuChanged(e);
-            UpdateOleCallback();
-        }
-
         protected override void OnRightToLeftChanged(EventArgs e)
         {
             base.OnRightToLeftChanged(e);
@@ -2727,8 +2720,11 @@ namespace System.Windows.Forms
             {
                 // If you call SendMessage instead of PostMessage, the control
                 // will resize itself to the size of the parent's client area.  Don't know why...
-                UnsafeNativeMethods.PostMessage(new HandleRef(this, Handle), RichEditMessages.EM_SETOPTIONS, (IntPtr)RichTextBoxConstants.ECOOP_OR,
-                                                (IntPtr)RichTextBoxConstants.ECO_SELECTIONBAR);
+                User32.PostMessageW(
+                    this,
+                    (User32.WindowMessage)RichEditMessages.EM_SETOPTIONS,
+                    (IntPtr)RichTextBoxConstants.ECOOP_OR,
+                    (IntPtr)RichTextBoxConstants.ECO_SELECTIONBAR);
             }
 
             if (languageOption != LanguageOption)
@@ -3531,7 +3527,7 @@ namespace System.Windows.Forms
             //
             if (m.LParam == Handle && !GetState(States.CreatingHandle))
             {
-                switch (Util.HIWORD(m.WParam))
+                switch (PARAM.HIWORD(m.WParam))
                 {
 
                     case NativeMethods.EN_HSCROLL:
@@ -3763,7 +3759,7 @@ namespace System.Windows.Forms
 
                         SendMessage(WindowMessages.WM_KILLFOCUS, 0, 0);
                         SendMessage(WindowMessages.WM_SETFOCUS, 0, 0);
-                        UnsafeNativeMethods.PostMessage(new HandleRef(this, Handle), EditMessages.EM_SETSEL, selEnd - 1, selEnd);
+                        User32.PostMessageW(this, (User32.WindowMessage)EditMessages.EM_SETSEL, (IntPtr)(selEnd - 1), (IntPtr)selEnd);
                     }
                 }
             }
@@ -3875,7 +3871,7 @@ namespace System.Windows.Forms
                 case WindowMessages.WM_VSCROLL:
                 {
                     base.WndProc(ref m);
-                    User32.SBV loWord = (User32.SBV)Util.LOWORD(m.WParam);
+                    User32.SBV loWord = (User32.SBV)PARAM.LOWORD(m.WParam);
                     if (loWord == User32.SBV.THUMBTRACK)
                     {
                         OnVScroll(EventArgs.Empty);
@@ -3889,7 +3885,7 @@ namespace System.Windows.Forms
                 case WindowMessages.WM_HSCROLL:
                 {
                     base.WndProc(ref m);
-                    User32.SBH loWord = (User32.SBH)Util.LOWORD(m.WParam);
+                    User32.SBH loWord = (User32.SBH)PARAM.LOWORD(m.WParam);
                     if (loWord == User32.SBH.THUMBTRACK)
                     {
                         OnHScroll(EventArgs.Empty);
@@ -4155,51 +4151,9 @@ namespace System.Windows.Forms
             public HRESULT GetContextMenu(short seltype, IntPtr lpoleobj, ref Richedit.CHARRANGE lpchrg, out IntPtr hmenu)
             {
                 Debug.WriteLineIf(RichTextDbg.TraceVerbose, "IRichEditOleCallback::GetContextMenu");
-                ContextMenu cm = owner.ContextMenu;
-                if (cm == null || owner.ShortcutsEnabled == false)
-                {
-                    hmenu = IntPtr.Zero;
-                }
-                else
-                {
-                    cm.sourceControl = owner;
-                    cm.OnPopup(EventArgs.Empty);
-                    // RichEd calls DestroyMenu after displaying the context menu
-                    IntPtr handle = cm.Handle;
-                    // if another control shares the same context menu
-                    // then we have to mark the context menu's handles empty because
-                    // RichTextBox will delete the menu handles once the popup menu is dismissed.
-                    Menu menu = cm;
-                    while (true)
-                    {
-                        int i = 0;
-                        int count = menu.ItemCount;
-                        for (; i < count; i++)
-                        {
-                            if (menu.items[i].handle != IntPtr.Zero)
-                            {
-                                menu = menu.items[i];
-                                break;
-                            }
-                        }
-                        if (i == count)
-                        {
-                            menu.handle = IntPtr.Zero;
-                            menu.created = false;
-                            if (menu == cm)
-                            {
-                                break;
-                            }
-                            else
-                            {
-                                menu = ((MenuItem)menu).Parent;
-                            }
-                        }
-                    }
 
-                    hmenu = handle;
-                }
-
+                // do nothing, we don't have ContextMenu any longer
+                hmenu = IntPtr.Zero;
                 return HRESULT.S_OK;
             }
         }

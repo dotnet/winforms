@@ -5,20 +5,29 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Drawing.Imaging;
-using Moq;
 using WinForms.Common.Tests;
 using Xunit;
-using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
+    using Size = System.Drawing.Size;
+    using Point = System.Drawing.Point;
+
     public partial class ControlTests
     {
-        [Fact]
+        public ControlTests()
+        {
+            Application.ThreadException += (sender, e) => throw new Exception(e.Exception.StackTrace.ToString());
+        }
+
+        [WinFormsFact]
         public void Control_Ctor_Default()
         {
-            var control = new SubControl();
+            using var control = new SubControl();
+            Assert.Null(control.AccessibleDefaultActionDescription);
+            Assert.Null(control.AccessibleDescription);
+            Assert.Null(control.AccessibleName);
+            Assert.Equal(AccessibleRole.Default, control.AccessibleRole);
             Assert.False(control.AllowDrop);
             Assert.Equal(AnchorStyles.Top | AnchorStyles.Left, control.Anchor);
             Assert.False(control.AutoSize);
@@ -29,12 +38,15 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, control.Bottom);
             Assert.Equal(Rectangle.Empty, control.Bounds);
             Assert.True(control.CanEnableIme);
+            Assert.False(control.CanFocus);
             Assert.True(control.CanRaiseEvents);
+            Assert.True(control.CanSelect);
+            Assert.False(control.Capture);
             Assert.True(control.CausesValidation);
             Assert.Equal(Size.Empty, control.ClientSize);
             Assert.Equal(Rectangle.Empty, control.ClientRectangle);
             Assert.Null(control.Container);
-            Assert.Null(control.ContextMenu);
+            Assert.False(control.ContainsFocus);
             Assert.Null(control.ContextMenuStrip);
             Assert.Empty(control.Controls);
             Assert.Same(control.Controls, control.Controls);
@@ -48,13 +60,13 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(Padding.Empty, control.DefaultPadding);
             Assert.Equal(Size.Empty, control.DefaultSize);
             Assert.False(control.DesignMode);
-            Assert.Equal(DpiHelper.DeviceDpi, control._deviceDpi);
             Assert.Equal(Rectangle.Empty, control.DisplayRectangle);
             Assert.Equal(DockStyle.None, control.Dock);
             Assert.False(control.DoubleBuffered);
             Assert.True(control.Enabled);
             Assert.NotNull(control.Events);
             Assert.Same(control.Events, control.Events);
+            Assert.False(control.Focused);
             Assert.Equal(Control.DefaultFont, control.Font);
             Assert.Equal(control.Font.Height, control.FontHeight);
             Assert.Equal(Control.DefaultForeColor, control.ForeColor);
@@ -62,6 +74,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, control.Height);
             Assert.Equal(ImeMode.NoControl, control.ImeMode);
             Assert.Equal(ImeMode.NoControl, control.ImeModeBase);
+            Assert.False(control.IsAccessible);
+            Assert.False(control.IsMirrored);
             Assert.NotNull(control.LayoutEngine);
             Assert.Same(control.LayoutEngine, control.LayoutEngine);
             Assert.Equal(0, control.Left);
@@ -76,10 +90,10 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.RecreatingHandle);
             Assert.Null(control.Region);
             Assert.False(control.ResizeRedraw);
-            Assert.Equal(BoundsSpecified.All, control.RequiredScaling);
-            Assert.True(control.RequiredScalingEnabled);
             Assert.Equal(0, control.Right);
             Assert.Equal(RightToLeft.No, control.RightToLeft);
+            Assert.True(control.ShowFocusCues);
+            Assert.True(control.ShowKeyboardCues);
             Assert.Null(control.Site);
             Assert.Equal(Size.Empty, control.Size);
             Assert.Equal(0, control.TabIndex);
@@ -87,6 +101,7 @@ namespace System.Windows.Forms.Tests
             Assert.Empty(control.Text);
             Assert.Equal(0, control.Top);
             Assert.Null(control.TopLevelControl);
+            Assert.False(control.UseWaitCursor);
             Assert.True(control.Visible);
             Assert.Equal(0, control.Width);
 
@@ -97,7 +112,11 @@ namespace System.Windows.Forms.Tests
         [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void Control_Ctor_String(string text, string expectedText)
         {
-            var control = new SubControl(text);
+            using var control = new SubControl(text);
+            Assert.Null(control.AccessibleDefaultActionDescription);
+            Assert.Null(control.AccessibleDescription);
+            Assert.Null(control.AccessibleName);
+            Assert.Equal(AccessibleRole.Default, control.AccessibleRole);
             Assert.False(control.AllowDrop);
             Assert.Equal(AnchorStyles.Top | AnchorStyles.Left, control.Anchor);
             Assert.False(control.AutoSize);
@@ -108,12 +127,15 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, control.Bottom);
             Assert.Equal(Rectangle.Empty, control.Bounds);
             Assert.True(control.CanEnableIme);
+            Assert.False(control.CanFocus);
             Assert.True(control.CanRaiseEvents);
+            Assert.True(control.CanSelect);
+            Assert.False(control.Capture);
             Assert.True(control.CausesValidation);
             Assert.Equal(Size.Empty, control.ClientSize);
             Assert.Equal(Rectangle.Empty, control.ClientRectangle);
             Assert.Null(control.Container);
-            Assert.Null(control.ContextMenu);
+            Assert.False(control.ContainsFocus);
             Assert.Null(control.ContextMenuStrip);
             Assert.Empty(control.Controls);
             Assert.Same(control.Controls, control.Controls);
@@ -127,13 +149,13 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(Padding.Empty, control.DefaultPadding);
             Assert.Equal(Size.Empty, control.DefaultSize);
             Assert.False(control.DesignMode);
-            Assert.Equal(DpiHelper.DeviceDpi, control._deviceDpi);
             Assert.Equal(Rectangle.Empty, control.DisplayRectangle);
             Assert.Equal(DockStyle.None, control.Dock);
             Assert.False(control.DoubleBuffered);
             Assert.True(control.Enabled);
             Assert.NotNull(control.Events);
             Assert.Same(control.Events, control.Events);
+            Assert.False(control.Focused);
             Assert.Equal(Control.DefaultFont, control.Font);
             Assert.Equal(control.Font.Height, control.FontHeight);
             Assert.Equal(Control.DefaultForeColor, control.ForeColor);
@@ -141,7 +163,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, control.Height);
             Assert.Equal(ImeMode.NoControl, control.ImeMode);
             Assert.Equal(ImeMode.NoControl, control.ImeModeBase);
+            Assert.False(control.IsAccessible);
+            Assert.False(control.IsMirrored);
             Assert.NotNull(control.LayoutEngine);
+            Assert.Same(control.LayoutEngine, control.LayoutEngine);
             Assert.Equal(0, control.Left);
             Assert.Equal(Point.Empty, control.Location);
             Assert.Equal(new Padding(3), control.Margin);
@@ -154,10 +179,10 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.RecreatingHandle);
             Assert.Null(control.Region);
             Assert.False(control.ResizeRedraw);
-            Assert.Equal(BoundsSpecified.All, control.RequiredScaling);
-            Assert.True(control.RequiredScalingEnabled);
             Assert.Equal(0, control.Right);
             Assert.Equal(RightToLeft.No, control.RightToLeft);
+            Assert.True(control.ShowFocusCues);
+            Assert.True(control.ShowKeyboardCues);
             Assert.Null(control.Site);
             Assert.Equal(Size.Empty, control.Size);
             Assert.Equal(0, control.TabIndex);
@@ -165,6 +190,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expectedText, control.Text);
             Assert.Equal(0, control.Top);
             Assert.Null(control.TopLevelControl);
+            Assert.False(control.UseWaitCursor);
             Assert.True(control.Visible);
             Assert.Equal(0, control.Width);
 
@@ -182,7 +208,11 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(Ctor_String_Int_Int_Int_Int_TestData))]
         public void Ctor_String_Int_Int_Int_Int(string text, int left, int top, int width, int height, string expectedText)
         {
-            var control = new SubControl(text, left, top, width, height);
+            using var control = new SubControl(text, left, top, width, height);
+            Assert.Null(control.AccessibleDefaultActionDescription);
+            Assert.Null(control.AccessibleDescription);
+            Assert.Null(control.AccessibleName);
+            Assert.Equal(AccessibleRole.Default, control.AccessibleRole);
             Assert.False(control.AllowDrop);
             Assert.Equal(AnchorStyles.Top | AnchorStyles.Left, control.Anchor);
             Assert.False(control.AutoSize);
@@ -193,12 +223,15 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(top + height, control.Bottom);
             Assert.Equal(new Rectangle(left, top, width, height), control.Bounds);
             Assert.True(control.CanEnableIme);
+            Assert.False(control.CanFocus);
             Assert.True(control.CanRaiseEvents);
+            Assert.True(control.CanSelect);
+            Assert.False(control.Capture);
             Assert.True(control.CausesValidation);
             Assert.Equal(new Rectangle(0, 0, width, height), control.ClientRectangle);
             Assert.Equal(new Size(width, height), control.ClientSize);
             Assert.Null(control.Container);
-            Assert.Null(control.ContextMenu);
+            Assert.False(control.ContainsFocus);
             Assert.Null(control.ContextMenuStrip);
             Assert.Empty(control.Controls);
             Assert.Same(control.Controls, control.Controls);
@@ -212,13 +245,13 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(Padding.Empty, control.DefaultPadding);
             Assert.Equal(Size.Empty, control.DefaultSize);
             Assert.False(control.DesignMode);
-            Assert.Equal(DpiHelper.DeviceDpi, control._deviceDpi);
             Assert.Equal(new Rectangle(0, 0, width, height), control.DisplayRectangle);
             Assert.Equal(DockStyle.None, control.Dock);
             Assert.False(control.DoubleBuffered);
             Assert.True(control.Enabled);
             Assert.NotNull(control.Events);
             Assert.Same(control.Events, control.Events);
+            Assert.False(control.Focused);
             Assert.Equal(Control.DefaultFont, control.Font);
             Assert.Equal(control.Font.Height, control.FontHeight);
             Assert.Equal(Control.DefaultForeColor, control.ForeColor);
@@ -226,6 +259,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(height, control.Height);
             Assert.Equal(ImeMode.NoControl, control.ImeMode);
             Assert.Equal(ImeMode.NoControl, control.ImeModeBase);
+            Assert.False(control.IsAccessible);
+            Assert.False(control.IsMirrored);
+            Assert.NotNull(control.LayoutEngine);
+            Assert.Same(control.LayoutEngine, control.LayoutEngine);
             Assert.Equal(left, control.Left);
             Assert.Equal(new Point(left, top), control.Location);
             Assert.Equal(new Padding(3), control.Margin);
@@ -238,17 +275,18 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.RecreatingHandle);
             Assert.Null(control.Region);
             Assert.False(control.ResizeRedraw);
-            Assert.Equal(BoundsSpecified.All, control.RequiredScaling);
-            Assert.True(control.RequiredScalingEnabled);
             Assert.Equal(left + width, control.Right);
             Assert.Equal(RightToLeft.No, control.RightToLeft);
+            Assert.True(control.ShowFocusCues);
+            Assert.True(control.ShowKeyboardCues);
             Assert.Null(control.Site);
             Assert.Equal(new Size(width, height), control.Size);
             Assert.Equal(0, control.TabIndex);
             Assert.True(control.TabStop);
             Assert.Equal(expectedText, control.Text);
+            Assert.Equal(top, control.Top);
             Assert.Null(control.TopLevelControl);
-
+            Assert.False(control.UseWaitCursor);
             Assert.True(control.Visible);
             Assert.Equal(width, control.Width);
 
@@ -266,7 +304,11 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(Ctor_Control_String_TestData))]
         public void Control_Ctor_Control_String(Control parent, string text, string expectedText)
         {
-            var control = new SubControl(parent, text);
+            using var control = new SubControl(parent, text);
+            Assert.Null(control.AccessibleDefaultActionDescription);
+            Assert.Null(control.AccessibleDescription);
+            Assert.Null(control.AccessibleName);
+            Assert.Equal(AccessibleRole.Default, control.AccessibleRole);
             Assert.False(control.AllowDrop);
             Assert.Equal(AnchorStyles.Top | AnchorStyles.Left, control.Anchor);
             Assert.False(control.AutoSize);
@@ -277,12 +319,15 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, control.Bottom);
             Assert.Equal(Rectangle.Empty, control.Bounds);
             Assert.True(control.CanEnableIme);
+            Assert.False(control.CanFocus);
             Assert.True(control.CanRaiseEvents);
+            Assert.True(control.CanSelect);
+            Assert.False(control.Capture);
             Assert.True(control.CausesValidation);
             Assert.Equal(Rectangle.Empty, control.ClientRectangle);
             Assert.Equal(Size.Empty, control.ClientSize);
             Assert.Null(control.Container);
-            Assert.Null(control.ContextMenu);
+            Assert.False(control.ContainsFocus);
             Assert.Null(control.ContextMenuStrip);
             Assert.Empty(control.Controls);
             Assert.Same(control.Controls, control.Controls);
@@ -296,20 +341,24 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(Padding.Empty, control.DefaultPadding);
             Assert.Equal(Size.Empty, control.DefaultSize);
             Assert.False(control.DesignMode);
-            Assert.Equal(DpiHelper.DeviceDpi, control._deviceDpi);
             Assert.Equal(Rectangle.Empty, control.DisplayRectangle);
             Assert.Equal(DockStyle.None, control.Dock);
             Assert.False(control.DoubleBuffered);
             Assert.True(control.Enabled);
             Assert.NotNull(control.Events);
             Assert.Same(control.Events, control.Events);
+            Assert.False(control.Focused);
             Assert.Equal(Control.DefaultFont, control.Font);
             Assert.Equal(control.Font.Height, control.FontHeight);
             Assert.Equal(Control.DefaultForeColor, control.ForeColor);
             Assert.False(control.HasChildren);
             Assert.Equal(0, control.Height);
             Assert.Equal(ImeMode.NoControl, control.ImeMode);
-            Assert.Equal(ImeMode.NoControl, control.ImeModeBase);            Assert.Same(control.LayoutEngine, control.LayoutEngine);
+            Assert.Equal(ImeMode.NoControl, control.ImeModeBase);
+            Assert.False(control.IsAccessible);
+            Assert.False(control.IsMirrored);
+            Assert.NotNull(control.LayoutEngine);
+            Assert.Same(control.LayoutEngine, control.LayoutEngine);
             Assert.Equal(0, control.Left);
             Assert.Equal(Point.Empty, control.Location);
             Assert.Equal(new Padding(3), control.Margin);
@@ -322,10 +371,10 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.RecreatingHandle);
             Assert.Null(control.Region);
             Assert.False(control.ResizeRedraw);
-            Assert.Equal(BoundsSpecified.All, control.RequiredScaling);
-            Assert.True(control.RequiredScalingEnabled);
             Assert.Equal(0, control.Right);
             Assert.Equal(RightToLeft.No, control.RightToLeft);
+            Assert.True(control.ShowFocusCues);
+            Assert.True(control.ShowKeyboardCues);
             Assert.Null(control.Site);
             Assert.Equal(Size.Empty, control.Size);
             Assert.Equal(0, control.TabIndex);
@@ -333,6 +382,7 @@ namespace System.Windows.Forms.Tests
             Assert.Same(expectedText, control.Text);
             Assert.Equal(0, control.Top);
             Assert.Null(control.TopLevelControl);
+            Assert.False(control.UseWaitCursor);
             Assert.True(control.Visible);
             Assert.Equal(0, control.Width);
 
@@ -350,7 +400,11 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(Ctor_Control_String_Int_Int_Int_Int_TestData))]
         public void Control_Ctor_Control_String_Int_Int_Int_Int(Control parent, string text, int left, int top, int width, int height, string expectedText)
         {
-            var control = new SubControl(parent, text, left, top, width, height);
+            using var control = new SubControl(parent, text, left, top, width, height);
+            Assert.Null(control.AccessibleDefaultActionDescription);
+            Assert.Null(control.AccessibleDescription);
+            Assert.Null(control.AccessibleName);
+            Assert.Equal(AccessibleRole.Default, control.AccessibleRole);
             Assert.False(control.AllowDrop);
             Assert.Equal(AnchorStyles.Top | AnchorStyles.Left, control.Anchor);
             Assert.False(control.AutoSize);
@@ -361,12 +415,15 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(top + height, control.Bottom);
             Assert.Equal(new Rectangle(left, top, width, height), control.Bounds);
             Assert.True(control.CanEnableIme);
+            Assert.False(control.CanFocus);
             Assert.True(control.CanRaiseEvents);
+            Assert.True(control.CanSelect);
+            Assert.False(control.Capture);
             Assert.True(control.CausesValidation);
             Assert.Equal(new Rectangle(0, 0, width, height), control.ClientRectangle);
             Assert.Equal(new Size(width, height), control.ClientSize);
             Assert.Null(control.Container);
-            Assert.Null(control.ContextMenu);
+            Assert.False(control.ContainsFocus);
             Assert.Null(control.ContextMenuStrip);
             Assert.Empty(control.Controls);
             Assert.Same(control.Controls, control.Controls);
@@ -380,13 +437,13 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(Padding.Empty, control.DefaultPadding);
             Assert.Equal(Size.Empty, control.DefaultSize);
             Assert.False(control.DesignMode);
-            Assert.Equal(DpiHelper.DeviceDpi, control._deviceDpi);
             Assert.Equal(new Rectangle(0, 0, width, height), control.DisplayRectangle);
             Assert.Equal(DockStyle.None, control.Dock);
             Assert.False(control.DoubleBuffered);
             Assert.True(control.Enabled);
             Assert.NotNull(control.Events);
             Assert.Same(control.Events, control.Events);
+            Assert.False(control.Focused);
             Assert.Equal(Control.DefaultFont, control.Font);
             Assert.Equal(control.Font.Height, control.FontHeight);
             Assert.Equal(Control.DefaultForeColor, control.ForeColor);
@@ -394,6 +451,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(height, control.Height);
             Assert.Equal(ImeMode.NoControl, control.ImeMode);
             Assert.Equal(ImeMode.NoControl, control.ImeModeBase);
+            Assert.False(control.IsAccessible);
+            Assert.False(control.IsMirrored);
+            Assert.NotNull(control.LayoutEngine);
+            Assert.Same(control.LayoutEngine, control.LayoutEngine);
             Assert.Equal(left, control.Left);
             Assert.Equal(new Point(left, top), control.Location);
             Assert.Equal(new Padding(3), control.Margin);
@@ -406,36 +467,37 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.RecreatingHandle);
             Assert.Null(control.Region);
             Assert.False(control.ResizeRedraw);
-            Assert.Equal(BoundsSpecified.All, control.RequiredScaling);
-            Assert.True(control.RequiredScalingEnabled);
             Assert.Equal(left + width, control.Right);
             Assert.Equal(RightToLeft.No, control.RightToLeft);
+            Assert.True(control.ShowFocusCues);
+            Assert.True(control.ShowKeyboardCues);
             Assert.Null(control.Site);
             Assert.Equal(new Size(width, height), control.Size);
             Assert.Equal(0, control.TabIndex);
             Assert.True(control.TabStop);
             Assert.Same(expectedText, control.Text);
+            Assert.Equal(top, control.Top);
             Assert.Null(control.TopLevelControl);
-
+            Assert.False(control.UseWaitCursor);
             Assert.True(control.Visible);
             Assert.Equal(width, control.Width);
 
             Assert.False(control.IsHandleCreated);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void Control_DefaultBackColor_Get_ReturnsExpected()
         {
             Assert.Equal(SystemColors.Control, Control.DefaultBackColor);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void Control_DefaultForeColor_Get_ReturnsExpected()
         {
             Assert.Equal(SystemColors.ControlText, Control.DefaultForeColor);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void Control_DefaultFont_Get_ReturnsExpected()
         {
             Font font = Control.DefaultFont;
@@ -735,6 +797,10 @@ namespace System.Windows.Forms.Tests
                 set => base.ResizeRedraw = value;
             }
 
+            public new bool ShowFocusCues => base.ShowFocusCues;
+
+            public new bool ShowKeyboardCues => base.ShowKeyboardCues;
+
             public new void AccessibilityNotifyClients(AccessibleEvents accEvent, int childID) => base.AccessibilityNotifyClients(accEvent, childID);
 
             public new void AccessibilityNotifyClients(AccessibleEvents accEvent, int objectID, int childID) => base.AccessibilityNotifyClients(accEvent, objectID, childID);
@@ -755,9 +821,19 @@ namespace System.Windows.Forms.Tests
 
             public new void InitLayout() => base.InitLayout();
 
+            public new void InvokeGotFocus(Control toInvoke, EventArgs e) => base.InvokeGotFocus(toInvoke, e);
+
+            public new void InvokeLostFocus(Control toInvoke, EventArgs e) => base.InvokeLostFocus(toInvoke, e);
+
+            public new void InvokePaint(Control c, PaintEventArgs e) => base.InvokePaint(c, e);
+
+            public new void InvokePaintBackground(Control c, PaintEventArgs e) => base.InvokePaintBackground(c, e);
+
             public new bool IsInputChar(char charCode) => base.IsInputChar(charCode);
 
             public new bool IsInputKey(Keys keyData) => base.IsInputKey(keyData);
+
+            public new void NotifyInvalidate(Rectangle invalidatedArea) => base.NotifyInvalidate(invalidatedArea);
 
             public new void OnAutoSizeChanged(EventArgs e) => base.OnAutoSizeChanged(e);
 
@@ -771,11 +847,11 @@ namespace System.Windows.Forms.Tests
 
             public new void OnCausesValidationChanged(EventArgs e) => base.OnCausesValidationChanged(e);
 
+            public new void OnChangeUICues(UICuesEventArgs e) => base.OnChangeUICues(e);
+
             public new void OnClick(EventArgs e) => base.OnClick(e);
 
             public new void OnClientSizeChanged(EventArgs e) => base.OnClientSizeChanged(e);
-
-            public new void OnContextMenuChanged(EventArgs e) => base.OnContextMenuChanged(e);
 
             public new void OnContextMenuStripChanged(EventArgs e) => base.OnContextMenuStripChanged(e);
 
@@ -787,7 +863,13 @@ namespace System.Windows.Forms.Tests
 
             public new void OnCursorChanged(EventArgs e) => base.OnCursorChanged(e);
 
+            public new void OnDockChanged(EventArgs e) => base.OnDockChanged(e);
+
             public new void OnDoubleClick(EventArgs e) => base.OnDoubleClick(e);
+
+            public new void OnDpiChangedAfterParent(EventArgs e) => base.OnDpiChangedAfterParent(e);
+
+            public new void OnDpiChangedBeforeParent(EventArgs e) => base.OnDpiChangedBeforeParent(e);
 
             public new void OnDragDrop(DragEventArgs e) => base.OnDragDrop(e);
 
@@ -807,6 +889,8 @@ namespace System.Windows.Forms.Tests
 
             public new void OnGiveFeedback(GiveFeedbackEventArgs e) => base.OnGiveFeedback(e);
 
+            public new void OnGotFocus(EventArgs e) => base.OnGotFocus(e);
+
             public new void OnHandleCreated(EventArgs e) => base.OnHandleCreated(e);
 
             public new void OnHandleDestroyed(EventArgs e) => base.OnHandleDestroyed(e);
@@ -814,6 +898,8 @@ namespace System.Windows.Forms.Tests
             public new void OnHelpRequested(HelpEventArgs e) => base.OnHelpRequested(e);
 
             public new void OnImeModeChanged(EventArgs e) => base.OnImeModeChanged(e);
+
+            public new void OnInvalidated(InvalidateEventArgs e) => base.OnInvalidated(e);
 
             public new void OnKeyDown(KeyEventArgs e) => base.OnKeyDown(e);
 
@@ -826,6 +912,12 @@ namespace System.Windows.Forms.Tests
             public new void OnLeave(EventArgs e) => base.OnLeave(e);
 
             public new void OnLocationChanged(EventArgs e) => base.OnLocationChanged(e);
+
+            public new void OnLostFocus(EventArgs e) => base.OnLostFocus(e);
+
+            public new void OnMarginChanged(EventArgs e) => base.OnMarginChanged(e);
+
+            public new void OnMouseCaptureChanged(EventArgs e) => base.OnMouseCaptureChanged(e);
 
             public new void OnMouseClick(MouseEventArgs e) => base.OnMouseClick(e);
 
@@ -851,6 +943,8 @@ namespace System.Windows.Forms.Tests
 
             public new void OnPaint(PaintEventArgs e) => base.OnPaint(e);
 
+            public new void OnPaintBackground(PaintEventArgs e) => base.OnPaintBackground(e);
+
             public new void OnParentChanged(EventArgs e) => base.OnParentChanged(e);
 
             public new void OnParentBackColorChanged(EventArgs e) => base.OnParentBackColorChanged(e);
@@ -869,6 +963,8 @@ namespace System.Windows.Forms.Tests
 
             public new void OnParentVisibleChanged(EventArgs e) => base.OnParentVisibleChanged(e);
 
+            public new void OnPrint(PaintEventArgs e) => base.OnPrint(e);
+
             public new void OnQueryContinueDrag(QueryContinueDragEventArgs e) => base.OnQueryContinueDrag(e);
 
             public new void OnRegionChanged(EventArgs e) => base.OnRegionChanged(e);
@@ -878,6 +974,8 @@ namespace System.Windows.Forms.Tests
             public new void OnSizeChanged(EventArgs e) => base.OnSizeChanged(e);
 
             public new void OnStyleChanged(EventArgs e) => base.OnStyleChanged(e);
+
+            public new void OnTabIndexChanged(EventArgs e) => base.OnTabIndexChanged(e);
 
             public new void OnTabStopChanged(EventArgs e) => base.OnTabStopChanged(e);
 
@@ -905,7 +1003,21 @@ namespace System.Windows.Forms.Tests
 
             public new void ResetMouseEventArgs() => base.ResetMouseEventArgs();
 
+            public new HorizontalAlignment RtlTranslateAlignment(HorizontalAlignment align) => base.RtlTranslateAlignment(align);
+
+            public new LeftRightAlignment RtlTranslateAlignment(LeftRightAlignment align) => base.RtlTranslateAlignment(align);
+
+            public new ContentAlignment RtlTranslateAlignment(ContentAlignment align) => base.RtlTranslateAlignment(align);
+
+            public new ContentAlignment RtlTranslateContent(ContentAlignment align) => base.RtlTranslateContent(align);
+
+            public new HorizontalAlignment RtlTranslateHorizontal(HorizontalAlignment align) => base.RtlTranslateHorizontal(align);
+            
+            public new LeftRightAlignment RtlTranslateLeftRight(LeftRightAlignment align) => base.RtlTranslateLeftRight(align);
+
             public new void SetAutoSizeMode(AutoSizeMode mode) => base.SetAutoSizeMode(mode);
+
+            public new void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified) => base.SetBoundsCore(x, y, width, height, specified);
 
             public new void SetClientSizeCore(int x, int y) => base.SetClientSizeCore(x, y);
 
@@ -924,6 +1036,8 @@ namespace System.Windows.Forms.Tests
             public new void UpdateStyles() => base.UpdateStyles();
 
             public new void UpdateZOrder() => base.UpdateZOrder();
+
+            public new void WndProc(ref Message m) => base.WndProc(ref m);
         }
     }
 }

@@ -4,7 +4,6 @@
 
 using System;
 using System.Runtime.InteropServices;
-using System.Windows.Forms;
 
 internal static partial class Interop
 {
@@ -13,7 +12,7 @@ internal static partial class Interop
         public delegate bool EnumThreadWindowsCallback(IntPtr hWnd, IntPtr lParam);
 
         [DllImport(Libraries.User32, ExactSpelling = true)]
-        public extern static BOOL EnumThreadWindows(uint dwThreadId, EnumThreadWindowsCallback lpfn, IntPtr lParam);
+        public static extern BOOL EnumThreadWindows(uint dwThreadId, EnumThreadWindowsCallback lpfn, IntPtr lParam);
 
         public static BOOL EnumThreadWindows(uint dwThreadId, EnumThreadWindowsCallback lpfn, IHandle lParam)
         {

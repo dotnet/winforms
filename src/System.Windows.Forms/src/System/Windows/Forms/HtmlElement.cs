@@ -457,6 +457,7 @@ namespace System.Windows.Forms
                         dispParams.cNamedArgs = 0;
 
                         object[] retVals = new object[1];
+                        var pExcepInfo = new Ole32.EXCEPINFO();
                         hr = scriptObject.Invoke(
                             dispid,
                             &g,
@@ -464,7 +465,7 @@ namespace System.Windows.Forms
                             NativeMethods.DISPATCH_METHOD,
                             &dispParams,
                             retVals,
-                            new NativeMethods.tagEXCEPINFO(),
+                            &pExcepInfo,
                             null);
                         if (hr == HRESULT.S_OK)
                         {

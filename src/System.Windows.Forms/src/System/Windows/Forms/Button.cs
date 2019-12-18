@@ -144,7 +144,7 @@ namespace System.Windows.Forms
             get
             {
                 CreateParams cp = base.CreateParams;
-                cp.ClassName = "BUTTON";
+                cp.ClassName = ComCtl32.WindowClasses.WC_BUTTON;
                 if (GetStyle(ControlStyles.UserPaint))
                 {
                     cp.Style |= NativeMethods.BS_OWNERDRAW;
@@ -279,7 +279,7 @@ namespace System.Windows.Forms
                 if (isMouseDown)
                 {
                     Point pt = PointToScreen(new Point(mevent.X, mevent.Y));
-                    if (UnsafeNativeMethods.WindowFromPoint(pt) == Handle && !ValidationCancelled)
+                    if (User32.WindowFromPoint(pt) == Handle && !ValidationCancelled)
                     {
                         if (GetStyle(ControlStyles.UserPaint))
                         {
@@ -372,7 +372,7 @@ namespace System.Windows.Forms
             switch (m.Msg)
             {
                 case WindowMessages.WM_REFLECT + WindowMessages.WM_COMMAND:
-                    if (NativeMethods.Util.HIWORD(m.WParam) == NativeMethods.BN_CLICKED)
+                    if (PARAM.HIWORD(m.WParam) == NativeMethods.BN_CLICKED)
                     {
                         Debug.Assert(!GetStyle(ControlStyles.UserPaint), "Shouldn't get BN_CLICKED when UserPaint");
                         if (!ValidationCancelled)

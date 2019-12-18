@@ -51,7 +51,7 @@ namespace System.Windows.Forms
             get
             {
                 CreateParams cp = base.CreateParams;
-                cp.ClassName = NativeMethods.WC_PROGRESS;
+                cp.ClassName = ComCtl32.WindowClasses.WC_PROGRESS;
                 if (Style == ProgressBarStyle.Continuous)
                 {
                     cp.Style |= (int)ComCtl32.PBS.SMOOTH;
@@ -546,7 +546,7 @@ namespace System.Windows.Forms
         {
             if (!RecreatingHandle)
             {
-                IntPtr userCookie = UnsafeNativeMethods.ThemingScope.Activate();
+                IntPtr userCookie = ThemingScope.Activate();
                 try
                 {
                     var icc = new ComCtl32.INITCOMMONCONTROLSEX
@@ -557,7 +557,7 @@ namespace System.Windows.Forms
                 }
                 finally
                 {
-                    UnsafeNativeMethods.ThemingScope.Deactivate(userCookie);
+                    ThemingScope.Deactivate(userCookie);
                 }
             }
 

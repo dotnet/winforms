@@ -68,8 +68,6 @@ namespace System.Windows.Forms
         /// </summary>
         internal PaintEventArgs(IntPtr dc, Rectangle clipRect)
         {
-            Debug.Assert(dc != IntPtr.Zero, "dc is not initialized.");
-
             _dc = dc;
             ClipRectangle = clipRect;
         }

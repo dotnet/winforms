@@ -12,7 +12,7 @@ namespace System.Windows.Forms
 {
     public abstract partial class AxHost
     {
-        internal class PropertyBagStream : UnsafeNativeMethods.IPropertyBag
+        internal class PropertyBagStream : Ole32.IPropertyBag
         {
             private Hashtable bag = new Hashtable();
 
@@ -30,13 +30,13 @@ namespace System.Windows.Forms
                 }
             }
 
-            int UnsafeNativeMethods.IPropertyBag.Read(string pszPropName, ref object pVar, UnsafeNativeMethods.IErrorLog pErrorLog)
+            HRESULT Ole32.IPropertyBag.Read(string pszPropName, ref object pVar, Ole32.IErrorLog pErrorLog)
             {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "Reading property " + pszPropName + " from OCXState propertybag.");
 
                 if (!bag.Contains(pszPropName))
                 {
-                    return NativeMethods.E_INVALIDARG;
+                    return HRESULT.E_INVALIDARG;
                 }
 
                 pVar = bag[pszPropName];
@@ -47,20 +47,20 @@ namespace System.Windows.Forms
                 // out the BSTR field of the variant. Since, the EE or us cannot do anything about this, we will return
                 // a E_INVALIDARG rather than let visual basic6 crash.
                 //
-                return (pVar == null) ? NativeMethods.E_INVALIDARG : NativeMethods.S_OK;
+                return (pVar == null) ? HRESULT.E_INVALIDARG : HRESULT.S_OK;
             }
 
-            int UnsafeNativeMethods.IPropertyBag.Write(string pszPropName, ref object pVar)
+            HRESULT Ole32.IPropertyBag.Write(string pszPropName, ref object pVar)
             {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "Writing property " + pszPropName + " [" + pVar + "] into OCXState propertybag.");
                 if (pVar != null && !pVar.GetType().IsSerializable)
                 {
                     Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "\t " + pVar.GetType().FullName + " is not serializable.");
-                    return NativeMethods.S_OK;
+                    return HRESULT.S_OK;
                 }
 
                 bag[pszPropName] = pVar;
-                return NativeMethods.S_OK;
+                return HRESULT.S_OK;
             }
 
             internal void Write(Stream stream)

@@ -183,17 +183,17 @@ namespace System.Windows.Forms
 
         public override string ToString() => $"{base.ToString()}, Interval: {Interval}";
 
-        private class TimerNativeWindow : NativeWindow
+        private class TimerNativeWindow : NativeWindow, IHandle
         {
             // The timer that owns the window
             private readonly Timer _owner;
 
             // The current id -- this is usally the same as TimerID but we also
             // use it as a flag of when our timer is running.
-            private int _timerID;
+            private IntPtr _timerID;
 
             // An arbitrary timer ID.
-            private static int s_timerID = 1;
+            private static IntPtr s_timerID = (IntPtr)1;
 
             // Setting this when we are stopping the timer so someone can't restart it in the process.
             private bool _stoppingTimer;
@@ -209,7 +209,7 @@ namespace System.Windows.Forms
                 StopTimer();
             }
 
-            public bool IsTimerRunning => _timerID != 0 && Handle != IntPtr.Zero;
+            public bool IsTimerRunning => _timerID != IntPtr.Zero && Handle != IntPtr.Zero;
 
             private bool EnsureHandle()
             {
@@ -259,11 +259,12 @@ namespace System.Windows.Forms
 
             public void StartTimer(int interval)
             {
-                if (_timerID == 0 && !_stoppingTimer)
+                if (_timerID == IntPtr.Zero && !_stoppingTimer)
                 {
                     if (EnsureHandle())
                     {
-                        _timerID = (int)SafeNativeMethods.SetTimer(new HandleRef(this, Handle), s_timerID++, interval, IntPtr.Zero);
+                        _timerID = User32.SetTimer(this, s_timerID, (uint)interval, IntPtr.Zero);
+                        s_timerID = s_timerID + 1;
                     }
                 }
             }
@@ -283,7 +284,7 @@ namespace System.Windows.Forms
                 // Fire a message across threads to destroy the timer and HWND on the thread that created it.
                 if (GetInvokeRequired(hWnd))
                 {
-                    UnsafeNativeMethods.PostMessage(new HandleRef(this, hWnd), WindowMessages.WM_CLOSE, 0, 0);
+                    User32.PostMessageW(new HandleRef(this, hWnd), User32.WindowMessage.WM_CLOSE);
                     return;
                 }
 
@@ -295,16 +296,16 @@ namespace System.Windows.Forms
                         return;
                     }
 
-                    if (_timerID != 0)
+                    if (_timerID != IntPtr.Zero)
                     {
                         try
                         {
                             _stoppingTimer = true;
-                            SafeNativeMethods.KillTimer(new HandleRef(this, hWnd), _timerID);
+                            User32.KillTimer(new HandleRef(this, hWnd), _timerID);
                         }
                         finally
                         {
-                            _timerID = 0;
+                            _timerID = IntPtr.Zero;
                             _stoppingTimer = false;
                         }
                     }
@@ -323,7 +324,7 @@ namespace System.Windows.Forms
             {
                 // Avoid recursing.
                 StopTimer(IntPtr.Zero, destroyHwnd: false);
-                Debug.Assert(_timerID == 0, "Destroying handle with timerID still set.");
+                Debug.Assert(_timerID == IntPtr.Zero, "Destroying handle with timerID still set.");
                 base.DestroyHandle();
             }
 
@@ -336,7 +337,7 @@ namespace System.Windows.Forms
             {
                 // Avoid recursing.
                 StopTimer(IntPtr.Zero, destroyHwnd: false);
-                Debug.Assert(_timerID == 0, "Destroying handle with timerID still set.");
+                Debug.Assert(_timerID == IntPtr.Zero, "Destroying handle with timerID still set.");
                 base.ReleaseHandle();
             }
 
@@ -347,7 +348,7 @@ namespace System.Windows.Forms
                 // For timer messages call the timer event.
                 if (m.Msg == WindowMessages.WM_TIMER)
                 {
-                    if (unchecked((int)(long)m.WParam) == _timerID)
+                    if (m.WParam == _timerID)
                     {
                         _owner.OnTick(EventArgs.Empty);
                         return;

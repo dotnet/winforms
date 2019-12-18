@@ -4,21 +4,31 @@
 
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.ComponentModel.Design;
 using System.Drawing;
 using Moq;
-using Moq.Protected;
 using WinForms.Common.Tests;
 using Xunit;
 
 namespace System.Windows.Forms.Design.Tests
 {
+    using Point = System.Drawing.Point;
+    using Size = System.Drawing.Size;
+
     public class ComponentEditorPageTests
     {
+        public ComponentEditorPageTests()
+        {
+            Application.ThreadException += (sender, e) => throw new Exception(e.Exception.StackTrace.ToString());
+        }
+
         [WinFormsFact]
         public void ComponentEditorPagePanel_Ctor_Default()
         {
             using var control = new SubComponentEditorPage();
+            Assert.Null(control.AccessibleDefaultActionDescription);
+            Assert.Null(control.AccessibleDescription);
+            Assert.Null(control.AccessibleName);
+            Assert.Equal(AccessibleRole.Default, control.AccessibleRole);
             Assert.False(control.AllowDrop);
             Assert.Equal(AnchorStyles.Top | AnchorStyles.Left, control.Anchor);
             Assert.False(control.AutoScroll);
@@ -35,14 +45,17 @@ namespace System.Windows.Forms.Design.Tests
             Assert.Equal(100, control.Bottom);
             Assert.Equal(new Rectangle(0, 0, 200, 100), control.Bounds);
             Assert.True(control.CanEnableIme);
+            Assert.False(control.CanFocus);
             Assert.True(control.CanRaiseEvents);
+            Assert.False(control.CanSelect);
+            Assert.False(control.Capture);
             Assert.True(control.CausesValidation);
             Assert.Equal(new Rectangle(0, 0, 200, 100), control.ClientRectangle);
             Assert.Equal(new Size(200, 100), control.ClientSize);
             Assert.False(control.CommitOnDeactivate);
             Assert.Null(control.Component);
             Assert.Null(control.Container);
-            Assert.Null(control.ContextMenu);
+            Assert.False(control.ContainsFocus);
             Assert.Null(control.ContextMenuStrip);
             Assert.Empty(control.Controls);
             Assert.Same(control.Controls, control.Controls);
@@ -69,6 +82,7 @@ namespace System.Windows.Forms.Design.Tests
             Assert.NotNull(control.Events);
             Assert.Same(control.Events, control.Events);
             Assert.True(control.FirstActivate);
+            Assert.False(control.Focused);
             Assert.Equal(Control.DefaultFont, control.Font);
             Assert.Equal(control.Font.Height, control.FontHeight);
             Assert.Equal(Control.DefaultForeColor, control.ForeColor);
@@ -81,6 +95,8 @@ namespace System.Windows.Forms.Design.Tests
             Assert.Same(control.Icon, control.Icon);
             Assert.Equal(ImeMode.NoControl, control.ImeMode);
             Assert.Equal(ImeMode.NoControl, control.ImeModeBase);
+            Assert.False(control.IsAccessible);
+            Assert.False(control.IsMirrored);
             Assert.NotNull(control.LayoutEngine);
             Assert.Same(control.LayoutEngine, control.LayoutEngine);
             Assert.Equal(0, control.Left);
@@ -100,13 +116,17 @@ namespace System.Windows.Forms.Design.Tests
             Assert.False(control.ResizeRedraw);
             Assert.Equal(200, control.Right);
             Assert.Equal(RightToLeft.No, control.RightToLeft);
+            Assert.True(control.ShowFocusCues);
+            Assert.True(control.ShowKeyboardCues);
             Assert.Equal(new Size(200, 100), control.Size);
+            Assert.Null(control.Site);
             Assert.Equal(0, control.TabIndex);
             Assert.False(control.TabStop);
             Assert.Empty(control.Text);
             Assert.Empty(control.Title);
             Assert.Equal(0, control.Top);
             Assert.Null(control.TopLevelControl);
+            Assert.False(control.UseWaitCursor);
             Assert.False(control.Visible);
             Assert.NotNull(control.VerticalScroll);
             Assert.Same(control.VerticalScroll, control.VerticalScroll);
@@ -590,6 +610,43 @@ namespace System.Windows.Forms.Design.Tests
             Assert.Equal(1, page.PreProcessMessageCallCount);
         }
 
+        [WinFormsFact]
+        public void ComponentEditorPage_GetAutoSizeMode_Invoke_ReturnsExpected()
+        {
+            using var control = new SubComponentEditorPage();
+            Assert.Equal(AutoSizeMode.GrowOnly, control.GetAutoSizeMode());
+        }
+
+        [WinFormsTheory]
+        [InlineData(ControlStyles.ContainerControl, true)]
+        [InlineData(ControlStyles.UserPaint, true)]
+        [InlineData(ControlStyles.Opaque, false)]
+        [InlineData(ControlStyles.ResizeRedraw, false)]
+        [InlineData(ControlStyles.FixedWidth, false)]
+        [InlineData(ControlStyles.FixedHeight, false)]
+        [InlineData(ControlStyles.StandardClick, true)]
+        [InlineData(ControlStyles.Selectable, false)]
+        [InlineData(ControlStyles.UserMouse, false)]
+        [InlineData(ControlStyles.SupportsTransparentBackColor, true)]
+        [InlineData(ControlStyles.StandardDoubleClick, true)]
+        [InlineData(ControlStyles.AllPaintingInWmPaint, false)]
+        [InlineData(ControlStyles.CacheText, false)]
+        [InlineData(ControlStyles.EnableNotifyMessage, false)]
+        [InlineData(ControlStyles.DoubleBuffer, false)]
+        [InlineData(ControlStyles.OptimizedDoubleBuffer, false)]
+        [InlineData(ControlStyles.UseTextForAccessibility, true)]
+        [InlineData((ControlStyles)0, true)]
+        [InlineData((ControlStyles)int.MaxValue, false)]
+        [InlineData((ControlStyles)(-1), false)]
+        public void ComponentEditorPage_GetStyle_Invoke_ReturnsExpected(ControlStyles flag, bool expected)
+        {
+            using var control = new SubComponentEditorPage();
+            Assert.Equal(expected, control.GetStyle(flag));
+
+            // Call again to test caching.
+            Assert.Equal(expected, control.GetStyle(flag));
+        }
+
         [Theory]
         [InlineData(true, false)]
         [InlineData(false, true)]
@@ -803,6 +860,10 @@ namespace System.Windows.Forms.Design.Tests
                 set => base.ResizeRedraw = value;
             }
 
+            public new bool ShowFocusCues => base.ShowFocusCues;
+
+            public new bool ShowKeyboardCues => base.ShowKeyboardCues;
+
             public new bool HScroll
             {
                 get => base.HScroll;
@@ -836,10 +897,14 @@ namespace System.Windows.Forms.Design.Tests
             public new void EnterLoadingMode() => base.EnterLoadingMode();
 
             public new void ExitLoadingMode() => base.ExitLoadingMode();
+            
+            public new AutoSizeMode GetAutoSizeMode() => base.GetAutoSizeMode();
 
             public new Control GetControl() => base.GetControl();
 
             public new IComponent GetSelectedComponent() => base.GetSelectedComponent();
+
+            public new bool GetStyle(ControlStyles flag) => base.GetStyle(flag);
 
             public new bool IsFirstActivate() => base.IsFirstActivate();
 

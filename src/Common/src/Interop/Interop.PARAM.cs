@@ -13,7 +13,34 @@ internal partial class Interop
     internal static class PARAM
     {
         public static IntPtr FromLowHigh(int low, int high)
-            => (IntPtr)((high << 16) | (low & 0xffff));
+            => (IntPtr)ToInt(low, high);
+
+        public static int ToInt(int low, int high)
+            => (high << 16) | (low & 0xffff);
+
+        public static int HIWORD(int n)
+            => (n >> 16) & 0xffff;
+
+        public static int LOWORD(int n)
+            => n & 0xffff;
+
+        public static int LOWORD(IntPtr n)
+            => LOWORD(unchecked((int)(long)n));
+
+        public static int HIWORD(IntPtr n)
+            => HIWORD(unchecked((int)(long)n));
+
+        public static int SignedHIWORD(IntPtr n)
+            => SignedHIWORD(unchecked((int)(long)n));
+
+        public static int SignedLOWORD(IntPtr n)
+            => SignedLOWORD(unchecked((int)(long)n));
+
+        public static int SignedHIWORD(int n)
+            => (int)(short)HIWORD(n);
+
+        public static int SignedLOWORD(int n)
+            => (int)(short)LOWORD(n);
 
         public static IntPtr FromBool(bool value)
             => (IntPtr)(value ? BOOL.TRUE : BOOL.FALSE);
