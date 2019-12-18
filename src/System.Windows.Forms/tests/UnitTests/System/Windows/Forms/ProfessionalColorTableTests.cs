@@ -9,13 +9,8 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ProfessionalColorTableTests
+    public class ProfessionalColorTableTests : IClassFixture<ThreadExceptionFixture>
     {
-        public ProfessionalColorTableTests()
-        {
-            Application.ThreadException += (sender, e) => throw new Exception(e.Exception.StackTrace.ToString());
-        }
-
         [WinFormsFact]
         public void ProfessionalColorTable_Ctor_Default()
         {

@@ -12,13 +12,8 @@ using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ToolTipTests
+    public class ToolTipTests : IClassFixture<ThreadExceptionFixture>
     {
-        public ToolTipTests()
-        {
-            Application.ThreadException += (sender, e) => throw new Exception(e.Exception.StackTrace.ToString());
-        }
-
         [WinFormsFact]
         public void ToolTip_Ctor_Default()
         {

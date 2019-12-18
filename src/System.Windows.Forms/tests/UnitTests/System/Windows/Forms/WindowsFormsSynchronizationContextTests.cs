@@ -9,13 +9,8 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public partial class WindowsFormsSynchronizationContextTests
+    public partial class WindowsFormsSynchronizationContextTests : IClassFixture<ThreadExceptionFixture>
     {
-        public WindowsFormsSynchronizationContextTests()
-        {
-            Application.ThreadException += (sender, e) => throw new Exception(e.Exception.StackTrace.ToString());
-        }
-
         [WinFormsFact]
         public void WindowsFormsSynchronizationContext_CreateCopy_Invoke_Success()
         {

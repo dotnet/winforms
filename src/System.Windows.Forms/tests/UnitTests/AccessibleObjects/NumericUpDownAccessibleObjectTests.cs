@@ -6,13 +6,8 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects
 {
-    public class NumericUpDownAccessibleObjectTests
+    public class NumericUpDownAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
     {
-        public NumericUpDownAccessibleObjectTests()
-        {
-            Application.ThreadException += (sender, e) => throw new Exception(e.Exception.StackTrace.ToString());
-        }
-
         [WinFormsFact]
         public void NumericUpDownAccessibleObject_Ctor_Default()
         {

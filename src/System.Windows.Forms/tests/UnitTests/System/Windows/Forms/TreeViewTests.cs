@@ -12,13 +12,8 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class TreeViewTests
+    public class TreeViewTests : IClassFixture<ThreadExceptionFixture>
     {
-        public TreeViewTests()
-        {
-            Application.ThreadException += (sender, e) => throw new Exception(e.Exception.StackTrace.ToString());
-        }
-
         [WinFormsFact]
         public void TreeView_Ctor_Default()
         {

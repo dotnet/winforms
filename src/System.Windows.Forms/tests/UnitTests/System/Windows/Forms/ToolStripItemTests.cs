@@ -14,13 +14,8 @@ namespace System.Windows.Forms.Tests
 {
     using Size = System.Drawing.Size;
 
-    public class ToolStripItemTests
+    public class ToolStripItemTests : IClassFixture<ThreadExceptionFixture>
     {
-        public ToolStripItemTests()
-        {
-            Application.ThreadException += (sender, e) => throw new Exception(e.Exception.StackTrace.ToString());
-        }
-
         [WinFormsFact]
         public void ToolStripItem_Ctor_Default()
         {

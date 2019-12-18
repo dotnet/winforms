@@ -16,13 +16,8 @@ namespace System.Windows.Forms.Tests
     using Point = System.Drawing.Point;
     using Size = System.Drawing.Size;
 
-    public class PanelTests
+    public class PanelTests : IClassFixture<ThreadExceptionFixture>
     {
-        public PanelTests()
-        {
-            Application.ThreadException += (sender, e) => throw new Exception(e.Exception.StackTrace.ToString());
-        }
-
         [WinFormsFact]
         public void Panel_Ctor_Default()
         {

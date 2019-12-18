@@ -13,13 +13,8 @@ namespace System.Windows.Forms.Tests
     using Point = System.Drawing.Point;
     using Size = System.Drawing.Size;
 
-    public class RichTextBoxTests
+    public class RichTextBoxTests : IClassFixture<ThreadExceptionFixture>
     {
-        public RichTextBoxTests()
-        {
-            Application.ThreadException += (sender, e) => throw new Exception(e.Exception.StackTrace.ToString());
-        }
-
         [WinFormsFact]
         public void RichTextBox_Ctor_Default()
         {

@@ -13,13 +13,8 @@ namespace System.Windows.Forms.Tests
     using Point = System.Drawing.Point;
     using Size = System.Drawing.Size;
 
-    public class FlowLayoutPanelTests
+    public class FlowLayoutPanelTests : IClassFixture<ThreadExceptionFixture>
     {
-        public FlowLayoutPanelTests()
-        {
-            Application.ThreadException += (sender, e) => throw new Exception(e.Exception.StackTrace.ToString());
-        }
-
         [WinFormsFact]
         public void FlowLayoutPanel_Ctor_Default()
         {

@@ -11,13 +11,8 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public partial class AccessibleObjectTests
+    public partial class AccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
     {
-        public AccessibleObjectTests()
-        {
-            Application.ThreadException += (sender, e) => throw new Exception(e.Exception.StackTrace.ToString());
-        }
-
         [WinFormsFact]
         public void AccessibleObject_Ctor_Default()
         {

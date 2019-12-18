@@ -14,13 +14,8 @@ namespace System.Windows.Forms.Design.Tests
     using Point = System.Drawing.Point;
     using Size = System.Drawing.Size;
 
-    public class ComponentEditorPageTests
+    public class ComponentEditorPageTests : IClassFixture<ThreadExceptionFixture>
     {
-        public ComponentEditorPageTests()
-        {
-            Application.ThreadException += (sender, e) => throw new Exception(e.Exception.StackTrace.ToString());
-        }
-
         [WinFormsFact]
         public void ComponentEditorPagePanel_Ctor_Default()
         {

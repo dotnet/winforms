@@ -16,13 +16,8 @@ namespace System.Windows.Forms.Tests
 {
     using Size = System.Drawing.Size;
 
-    public class TabControlTabPageCollectionTests
+    public class TabControlTabPageCollectionTests : IClassFixture<ThreadExceptionFixture>
     {
-        public TabControlTabPageCollectionTests()
-        {
-            Application.ThreadException += (sender, e) => throw new Exception(e.Exception.StackTrace.ToString());
-        }
-
         public static IEnumerable<object[]> Add_TestData()
         {
             yield return new object[] { TabAppearance.Buttons };

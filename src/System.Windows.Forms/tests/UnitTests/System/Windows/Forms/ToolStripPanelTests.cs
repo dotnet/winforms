@@ -9,13 +9,8 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ToolStripPanelTests
+    public class ToolStripPanelTests : IClassFixture<ThreadExceptionFixture>
     {
-        public ToolStripPanelTests()
-        {
-            Application.ThreadException += (sender, e) => throw new Exception(e.Exception.StackTrace.ToString());
-        }
-
         [WinFormsFact]
         public void ToolStripPanel_Ctor_Default()
         {
