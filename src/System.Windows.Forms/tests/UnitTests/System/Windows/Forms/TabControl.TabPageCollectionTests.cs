@@ -1092,10 +1092,7 @@ namespace System.Windows.Forms.Tests
             using var child3 = new TabPage();
             var collection = new TabControl.TabPageCollection(owner);
             int parentLayoutCallCount = 0;
-            void parentHandler(object sender, LayoutEventArgs e)
-            {
-                parentLayoutCallCount++;
-            }
+            void parentHandler(object sender, LayoutEventArgs e) => parentLayoutCallCount++;
             owner.Layout += parentHandler;
             int controlAddedCallCount = 0;
             owner.ControlAdded += (sender, e) => controlAddedCallCount++;
@@ -1228,7 +1225,43 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void TabPageCollection_Clear_Invoke_Success()
+        public void TabPageCollection_Clear_InvokeEmpty_Success()
+        {
+            using var owner = new TabControl();
+            var collection = new TabControl.TabPageCollection(owner);
+            int parentLayoutCallCount = 0;
+            void parentHandler(object sender, LayoutEventArgs e) => parentLayoutCallCount++;
+            owner.Layout += parentHandler;
+            int controlRemovedCallCount = 0;
+            owner.ControlRemoved += (sender, e) => controlRemovedCallCount++;
+
+            try
+            {
+                collection.Clear();
+                Assert.Empty(collection);
+                Assert.Empty(owner.TabPages);
+                Assert.Empty(owner.Controls);
+                Assert.Equal(0, parentLayoutCallCount);
+                Assert.Equal(0, controlRemovedCallCount);
+                Assert.False(owner.IsHandleCreated);
+                
+                // Clear again.
+                collection.Clear();
+                Assert.Empty(collection);
+                Assert.Empty(owner.TabPages);
+                Assert.Empty(owner.Controls);
+                Assert.Equal(0, parentLayoutCallCount);
+                Assert.Equal(0, controlRemovedCallCount);
+                Assert.False(owner.IsHandleCreated);
+            }
+            finally
+            {
+                owner.Layout -= parentHandler;
+            }
+        }
+
+        [WinFormsFact]
+        public void TabPageCollection_Clear_InvokeNotEmpty_Success()
         {
             using var owner = new TabControl();
             using var child1 = new TabPage();
@@ -1261,7 +1294,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Null(child3.Parent);
                 Assert.Equal(1, parentLayoutCallCount);
                 Assert.Equal(3, controlRemovedCallCount);
-                Assert.True(owner.IsHandleCreated);
+                Assert.False(owner.IsHandleCreated);
                 Assert.False(child1.IsHandleCreated);
                 Assert.False(child2.IsHandleCreated);
                 Assert.False(child3.IsHandleCreated);
@@ -1276,7 +1309,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Null(child3.Parent);
                 Assert.Equal(1, parentLayoutCallCount);
                 Assert.Equal(3, controlRemovedCallCount);
-                Assert.True(owner.IsHandleCreated);
+                Assert.False(owner.IsHandleCreated);
                 Assert.False(child1.IsHandleCreated);
                 Assert.False(child2.IsHandleCreated);
                 Assert.False(child3.IsHandleCreated);
@@ -1288,7 +1321,57 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void TabPageCollection_Clear_InvokeWithHandle_Success()
+        public void TabPageCollection_Clear_InvokeEmptyWithHandle_Success()
+        {
+            using var owner = new TabControl();
+            var collection = new TabControl.TabPageCollection(owner);
+
+            int controlRemovedCallCount = 0;
+            owner.ControlRemoved += (sender, e) => controlRemovedCallCount++;
+            Assert.NotEqual(IntPtr.Zero, owner.Handle);
+            int parentInvalidatedCallCount = 0;
+            owner.Invalidated += (sender, e) => parentInvalidatedCallCount++;
+            int parentStyleChangedCallCount = 0;
+            owner.StyleChanged += (sender, e) => parentStyleChangedCallCount++;
+            int parentCreatedCallCount = 0;
+            owner.HandleCreated += (sender, e) => parentCreatedCallCount++;
+            int parentLayoutCallCount = 0;
+            void parentHandler(object sender, LayoutEventArgs e) => parentLayoutCallCount++;
+            owner.Layout += parentHandler;
+
+            try
+            {
+                collection.Clear();
+                Assert.Empty(collection);
+                Assert.Empty(owner.TabPages);
+                Assert.Empty(owner.Controls);
+                Assert.Equal(0, parentLayoutCallCount);
+                Assert.Equal(0, controlRemovedCallCount);
+                Assert.True(owner.IsHandleCreated);
+                Assert.Equal(0, parentInvalidatedCallCount);
+                Assert.Equal(0, parentStyleChangedCallCount);
+                Assert.Equal(0, parentCreatedCallCount);
+                
+                // Clear again.
+                collection.Clear();
+                Assert.Empty(collection);
+                Assert.Empty(owner.TabPages);
+                Assert.Empty(owner.Controls);
+                Assert.Equal(0, parentLayoutCallCount);
+                Assert.Equal(0, controlRemovedCallCount);
+                Assert.True(owner.IsHandleCreated);
+                Assert.Equal(0, parentInvalidatedCallCount);
+                Assert.Equal(0, parentStyleChangedCallCount);
+                Assert.Equal(0, parentCreatedCallCount);
+            }
+            finally
+            {
+                owner.Layout -= parentHandler;
+            }
+        }
+
+        [WinFormsFact]
+        public void TabPageCollection_Clear_InvokeNotEmptyWithHandle_Success()
         {
             using var owner = new TabControl();
             using var child1 = new TabPage();
@@ -1359,6 +1442,23 @@ namespace System.Windows.Forms.Tests
             {
                 owner.Layout -= parentHandler;
             }
+        }
+
+        [WinFormsFact]
+        public void TabPageCollection_Clear_GetItemsWithHandle_Success()
+        {
+            using var owner = new TabControl();
+            using var child1 = new TabPage();
+            using var child2 = new TabPage();
+            using var child3 = new TabPage();
+            var collection = new TabControl.TabPageCollection(owner);
+            collection.Add(child1);
+            collection.Add(child2);
+            collection.Add(child3);
+
+            Assert.NotEqual(IntPtr.Zero, owner.Handle);
+            collection.Clear();
+            Assert.Equal((IntPtr)0, User32.SendMessageW(owner.Handle, (User32.WindowMessage)ComCtl32.TCM.GETITEMCOUNT, IntPtr.Zero, IntPtr.Zero));
         }
 
         [WinFormsFact]
