@@ -15,10 +15,10 @@ namespace System.Windows.Forms.Tests
 {
     public class CommonDialogTests
     {
-        [Fact]
+        [WinFormsFact]
         public void Ctor_Default()
         {
-            var dialog = new SubCommonDialog();
+            using var dialog = new SubCommonDialog();
             Assert.True(dialog.CanRaiseEvents);
             Assert.Null(dialog.Container);
             Assert.False(dialog.DesignMode);
@@ -29,11 +29,11 @@ namespace System.Windows.Forms.Tests
             Assert.Null(dialog.Tag);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void Tag_Set_GetReturnsExpected(object value)
         {
-            var dialog = new SubCommonDialog()
+            using var dialog = new SubCommonDialog()
             {
                 Tag = value
             };
@@ -44,11 +44,11 @@ namespace System.Windows.Forms.Tests
             Assert.Same(value, dialog.Tag);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void OnHelpRequest_Invoke_CallsHelpRequest(EventArgs eventArgs)
         {
-            var dialog = new SubCommonDialog();
+            using var dialog = new SubCommonDialog();
 
             // No handler.
             dialog.OnHelpRequest(eventArgs);
@@ -84,20 +84,20 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { -1 };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(HookProc_TestData))]
         public void HookProc_Invoke_ReturnsZero(int msg)
         {
-            var dialog = new SubCommonDialog();
+            using var dialog = new SubCommonDialog();
             Assert.Equal(IntPtr.Zero, dialog.HookProc(IntPtr.Zero, msg, IntPtr.Zero, IntPtr.Zero));
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(true, DialogResult.OK)]
         [InlineData(false, DialogResult.Cancel)]
         public void ShowDialog_NoOwner_ReturnsExpected(bool runDialogResult, DialogResult expectedDialogResult)
         {
-            var dialog = new SubCommonDialog
+            using var dialog = new SubCommonDialog
             {
                 RunDialogResult = runDialogResult
             };
@@ -105,12 +105,12 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expectedDialogResult, dialog.ShowDialog(null));
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(true, DialogResult.OK)]
         [InlineData(false, DialogResult.Cancel)]
         public void ShowDialog_NonControlOwner_ReturnsExpected(bool runDialogResult, DialogResult expectedDialogResult)
         {
-            var dialog = new SubCommonDialog
+            using var dialog = new SubCommonDialog
             {
                 RunDialogResult = runDialogResult
             };
@@ -121,37 +121,86 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expectedDialogResult, dialog.ShowDialog(owner.Object));
         }
 
-        [Theory]
+        [WinFormsTheory]
+        [InlineData(true, DialogResult.OK)]
+        [InlineData(false, DialogResult.Cancel)]
+        public void ShowDialog_NonControlOwnerWithVisualStyles_ReturnsExpected(bool runDialogResult, DialogResult expectedDialogResult)
+        {
+            Application.EnableVisualStyles();
+
+            using var dialog = new SubCommonDialog
+            {
+                RunDialogResult = runDialogResult
+            };
+            var owner = new Mock<IWin32Window>(MockBehavior.Strict);
+            owner
+                .Setup(o => o.Handle)
+                .Returns(IntPtr.Zero);
+            Assert.Equal(expectedDialogResult, dialog.ShowDialog(owner.Object));
+        }
+
+        [WinFormsTheory]
         [InlineData(true, DialogResult.OK)]
         [InlineData(false, DialogResult.Cancel)]
         public void ShowDialog_ControlOwner_ReturnsExpected(bool runDialogResult, DialogResult expectedDialogResult)
         {
-            var dialog = new SubCommonDialog
+            using var dialog = new SubCommonDialog
             {
                 RunDialogResult = runDialogResult
             };
-            var owner = new Control();
+            using var owner = new Control();
             Assert.Equal(expectedDialogResult, dialog.ShowDialog(owner));
         }
 
-        [Theory]
+        [WinFormsTheory]
+        [InlineData(true, DialogResult.OK)]
+        [InlineData(false, DialogResult.Cancel)]
+        public void ShowDialog_ControlOwnerWithVisualStyles_ReturnsExpected(bool runDialogResult, DialogResult expectedDialogResult)
+        {
+            Application.EnableVisualStyles();
+
+            using var dialog = new SubCommonDialog
+            {
+                RunDialogResult = runDialogResult
+            };
+            using var owner = new Control();
+            Assert.Equal(expectedDialogResult, dialog.ShowDialog(owner));
+        }
+
+        [WinFormsTheory]
         [InlineData(true, DialogResult.OK)]
         [InlineData(false, DialogResult.Cancel)]
         public void ShowDialog_ControlOwnerWithHandle_ReturnsExpected(bool runDialogResult, DialogResult expectedDialogResult)
         {
-            var dialog = new SubCommonDialog
+            using var dialog = new SubCommonDialog
             {
                 RunDialogResult = runDialogResult
             };
-            var owner = new Control();
+            using var owner = new Control();
             Assert.NotEqual(IntPtr.Zero, owner.Handle);
             Assert.Equal(expectedDialogResult, dialog.ShowDialog(owner));
         }
 
-        [Fact]
+        [WinFormsTheory]
+        [InlineData(true, DialogResult.OK)]
+        [InlineData(false, DialogResult.Cancel)]
+        public void ShowDialog_ControlOwnerWithHandleWithVisualStyles_ReturnsExpected(bool runDialogResult, DialogResult expectedDialogResult)
+        {
+            Application.EnableVisualStyles();
+
+            using var dialog = new SubCommonDialog
+            {
+                RunDialogResult = runDialogResult
+            };
+            using var owner = new Control();
+            Assert.NotEqual(IntPtr.Zero, owner.Handle);
+            Assert.Equal(expectedDialogResult, dialog.ShowDialog(owner));
+        }
+
+        [WinFormsFact]
         public void ShowDialog_NonControlOwnerWithHandle_ThrowsWin32Exception()
         {
-            var dialog = new SubCommonDialog();
+            using var dialog = new SubCommonDialog();
             var owner = new Mock<IWin32Window>(MockBehavior.Strict);
             owner
                 .Setup(o => o.Handle)
@@ -159,10 +208,10 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<Win32Exception>(() => dialog.ShowDialog(owner.Object));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void OwnerWndProc_HelpMessage_CallsHelpRequest()
         {
-            var dialog = new SubCommonDialog();
+            using var dialog = new SubCommonDialog();
             FieldInfo field = typeof(CommonDialog).GetField("s_helpMsg", BindingFlags.NonPublic | BindingFlags.Static);
             Assert.NotNull(field);
 
@@ -179,10 +228,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void OwnerWndProc_NonHelpMessage_DoesNotCallHelpRequest()
         {
-            var dialog = new SubCommonDialog();
+            using var dialog = new SubCommonDialog();
             FieldInfo field = typeof(CommonDialog).GetField("s_helpMsg", BindingFlags.NonPublic | BindingFlags.Static);
             Assert.NotNull(field);
 
