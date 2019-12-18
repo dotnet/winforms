@@ -5805,7 +5805,7 @@ namespace System.Windows.Forms
                 case NativeMethods.XBUTTON2:
                     return MouseButtons.XButton2;
             }
-            Debug.Fail("Unknown XButton: " + wparam);
+
             return MouseButtons.None;
         }
 
