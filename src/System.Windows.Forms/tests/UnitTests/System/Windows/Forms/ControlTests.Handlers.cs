@@ -2196,45 +2196,22 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.IsHandleCreated);
         }
 
-        [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
-        public void Control_OnHandleCreated_InvokeWithHandle_CallsHandleCreated(EventArgs eventArgs)
+        public static IEnumerable<object[]> OnHandleCreated_WithHandle_TestData()
         {
-            using var control = new SubControl();
-            Assert.NotEqual(IntPtr.Zero, control.Handle);
-            Assert.True(control.GetStyle(ControlStyles.UserPaint));
-
-            int callCount = 0;
-            EventHandler handler = (sender, e) =>
+            foreach (bool userPaint in new bool[] { true, false })
             {
-                Assert.Same(control, sender);
-                Assert.Same(eventArgs, e);
-                callCount++;
-            };
-
-            // Call with handler.
-            control.HandleCreated += handler;
-            control.OnHandleCreated(eventArgs);
-            Assert.Equal(1, callCount);
-            Assert.True(control.Created);
-            Assert.True(control.IsHandleCreated);
-
-            // Remove handler.
-            control.HandleCreated -= handler;
-            control.OnHandleCreated(eventArgs);
-            Assert.Equal(1, callCount);
-            Assert.True(control.Created);
-            Assert.True(control.IsHandleCreated);
+                yield return new object[] { userPaint, null };
+                yield return new object[] { userPaint, new EventArgs() };
+            }
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
-        public void Control_OnHandleCreated_InvokeWithHandleNoUserPaint_CallsHandleCreated(EventArgs eventArgs)
+        [MemberData(nameof(OnHandleCreated_WithHandle_TestData))]
+        public void Control_OnHandleCreated_InvokeWithHandle_CallsHandleCreated(bool userPaint, EventArgs eventArgs)
         {
             using var control = new SubControl();
-            control.SetStyle(ControlStyles.UserPaint, false);
+            control.SetStyle(ControlStyles.UserPaint, userPaint);
             Assert.NotEqual(IntPtr.Zero, control.Handle);
-            Assert.False(control.GetStyle(ControlStyles.UserPaint));
 
             int callCount = 0;
             EventHandler handler = (sender, e) =>
