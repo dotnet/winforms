@@ -13,11 +13,11 @@ internal partial class Interop
         public static partial class ImageList
         {
             [DllImport(Libraries.Comctl32, ExactSpelling = true, EntryPoint = "ImageList_Remove")]
-            public static extern bool Remove(IntPtr himl, int i);
+            public static extern BOOL Remove(IntPtr himl, int i);
 
             public static BOOL Remove(IHandle himl, int i)
             {
-                BOOL result = Remove(himl, i);
+                BOOL result = Remove(himl.Handle, i);
                 GC.KeepAlive(himl);
                 return result;
             }
