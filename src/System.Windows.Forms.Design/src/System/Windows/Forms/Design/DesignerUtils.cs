@@ -102,7 +102,6 @@ namespace System.Windows.Forms.Design
 
         //use these value to signify ANY of the right, top, left, center, or bottom alignments with the ContentAlignment enum.
         public static readonly ContentAlignment anyTopAlignment = ContentAlignment.TopLeft | ContentAlignment.TopCenter | ContentAlignment.TopRight;
-        /* UNUSED: private static readonly ContentAlignment anyBottom = ContentAlignment.BottomLeft | ContentAlignment.BottomCenter | ContentAlignment.BottomRight;*/
         public static readonly ContentAlignment anyMiddleAlignment = ContentAlignment.MiddleLeft | ContentAlignment.MiddleCenter | ContentAlignment.MiddleRight;
 
         /// <summary>

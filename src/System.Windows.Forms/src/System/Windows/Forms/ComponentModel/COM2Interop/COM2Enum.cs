@@ -130,7 +130,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             this.values = new object[names.Length];
             for (int i = 0; i < names.Length; i++)
             {
-                //Debug.WriteLine(names[i] + ": item " + i.ToString() + ",type=" + values[i].GetType().Name + ", value=" + values[i].ToString());
                 this.names[i] = names[i];
                 this.values[i] = values[i];
                 if (values[i] != null)

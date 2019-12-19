@@ -592,25 +592,6 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  We override this to ensure that press '+' or '=' checks the box,
-        ///  while pressing '-' unchecks the box
-        /// </summary>
-        protected override void OnKeyDown(KeyEventArgs e)
-        {
-            /*
-            if (Enabled) {
-                if (e.KeyCode == Keys.Oemplus || e.KeyCode == Keys.Add) {
-                    CheckState = CheckState.Checked;
-                }
-                if (e.KeyCode == Keys.OemMinus || e.KeyCode == Keys.Subtract) {
-                    CheckState = CheckState.Unchecked;
-                }
-            }
-            */
-            base.OnKeyDown(e);
-        }
-
-        /// <summary>
         ///  Raises the <see cref='ButtonBase.OnMouseUp'/> event.
         /// </summary>
         protected override void OnMouseUp(MouseEventArgs mevent)

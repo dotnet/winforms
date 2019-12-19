@@ -926,20 +926,6 @@ namespace System.Windows.Forms
             Send(keys, null, false);
         }
 
-        /// <summary>
-        ///  Sends keystrokes to the active application.
-        /// </summary>
-        // WARNING: this method will never work if control != null, because while
-        // Windows journaling *looks* like it can be directed to a specific HWND,
-        // it can't.
-        //
-
-        // No one is calling this method so it is safe to comment it out
-
-        //private static void Send(string keys, /*bogus*/ Control control) {
-        //    Send(keys, control, false);
-        //}
-
         private static void Send(string keys, Control control, bool wait)
         {
             if (keys == null || keys.Length == 0)

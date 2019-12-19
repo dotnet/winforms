@@ -1333,7 +1333,6 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
             catch (Exception e)
             {
-                //Debug.fail("Couldn't create a top-level GridEntry");
                 Debug.Fail(e.ToString());
                 throw;
             }
@@ -1908,33 +1907,6 @@ namespace System.Windows.Forms.PropertyGridInternal
             Refresh();
         }
 
-        /*
-        /// <summary>
-        ///  Checks if the value of the current item can be modified by the user.
-        /// </summary>
-        /// <returns>
-        ///  True if the value can be modified
-        /// </returns>
-        public virtual bool CanSetPropertyValue() {
-            return 0 != (Flags & (GridEntry.FLAG_DROPDOWN_EDITABLE | GridEntry.FLAG_TEXT_EDITABLE | GridEntry.FLAG_CUSTOM_EDITABLE | GridEntry.FLAG_ENUMERABLE));
-        }
-        */
-
-        /*
-        /// <summary>
-        ///  Returns if it's an editable item.  An example of a readonly
-        ///  editable item is a collection property -- the property itself
-        ///  can not be modified, but it's value (e.g. it's children) can, so
-        ///  we don't want to draw it as readonly.
-        /// </summary>
-        /// <returns>
-        ///  True if the value associated with this property (e.g. it's children) can be modified even if it's readonly.
-        /// </returns>
-        public virtual bool CanSetReadOnlyPropertyValue() {
-            return GetFlagSet(GridEntry.FLAG_READONLY_EDITABLE);
-        }
-        */
-
         /// <summary>
         ///  Returns if the property can be reset
         /// </summary>
@@ -2127,7 +2099,6 @@ namespace System.Windows.Forms.PropertyGridInternal
 #if PBRS_PAINT_DEBUG
                 blank = Brushes.Red;
 #endif
-                // Debug.WriteLine(rect.X.ToString() +" "+ rect.Y.ToString() +" "+ rect.Width.ToString() +" "+ rect.Height.ToString());
                 g.FillRectangle(blank, rect.X, rect.Y, rect.Width, rect.Height);
             }
 
@@ -2935,14 +2906,6 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             RemoveEventHandler(EVENT_RECREATE_CHILDREN, h);
         }
-
-        /*
-        private string ReplaceCRLF(string str) {
-            str = str.Replace('\r', (char)1);
-            str = str.Replace('\n', (char)1);
-            return str;
-        }
-        */
 
         protected void ResetState()
         {

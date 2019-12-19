@@ -3298,19 +3298,7 @@ namespace System.Windows.Forms
                 byte* bp;
                 long l;
 
-                /*
-                l = (long) es.dwCookie;
-                bp = (byte *) &l;
-                for (int i=0; i < sizeof(long); i++) {
-                    es64.contents[i] = bp[i];
-                }*/
                 *((long*)es64p) = (long)es.dwCookie;
-                /*
-                int il = es.dwError;
-                bp = (byte *) &il;
-                for (int i=0; i < sizeof(int); i++) {
-                    es64.contents[i+8] = bp[i];
-                }*/
                 *((int*)(es64p + 8)) = es.dwError;
 
                 l = (long)Marshal.GetFunctionPointerForDelegate(es.pfnCallback);
@@ -3319,7 +3307,6 @@ namespace System.Windows.Forms
                 {
                     es64.contents[i + 12] = bp[i];
                 }
-                //*((long *)(es64p + 12)) = (long) Marshal.GetFunctionPointerForDelegate(es.pfnCallback);
             }
 
             return es64;
@@ -3336,29 +3323,6 @@ namespace System.Windows.Forms
 
             return errorVal;
         }
-
-        /* FOR 64 BIT DEBUGGING
-                private unsafe string PrintBytes(NativeMethods.EDITSTREAM es) {
-                    StringBuilder sb = new StringBuilder();
-                    fixed (IntPtr *ip = &es.dwCookie) {
-                        byte *bytep = (byte *) ip;
-                        for (int i=0; i < Marshal.SizeOf(es); i++) {
-                            sb.Append(bytep[i].ToString() + " ");
-                        }
-                    }
-                    return sb.ToString();
-                }
-
-                private unsafe string PrintBytes(NativeMethods.EDITSTREAM64 es64) {
-                    StringBuilder sb = new StringBuilder();
-                    fixed (byte *bytep = &es64.contents[0]) {
-                        for (int i=0; i < Marshal.SizeOf(es64); i++) {
-                            sb.Append(bytep[i].ToString() + " ");
-                        }
-                    }
-                    return sb.ToString();
-                }
-        */
 
         private void UpdateOleCallback()
         {

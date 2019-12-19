@@ -1542,7 +1542,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Overriden by LinkLabel.
         /// </summary>
-        internal virtual void OnAutoEllipsisChanged(/*EventArgs e*/)
+        internal virtual void OnAutoEllipsisChanged()
         {
         }
 

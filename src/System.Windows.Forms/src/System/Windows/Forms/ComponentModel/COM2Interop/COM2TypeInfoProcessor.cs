@@ -496,7 +496,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
                 Attribute[] temp = new Attribute[pi.Attributes.Count];
                 pi.Attributes.CopyTo(temp, 0);
-                //Debug.Assert(pi.nonbrowsable || pi.valueType != null, "Browsable property '" + pi.name + "' has a null type");
                 props[pi.Index] = new Com2PropertyDescriptor(pi.DispId, pi.Name, temp, pi.ReadOnly != PropInfo.ReadOnlyFalse, pi.ValueType, pi.TypeData, !hr.Succeeded());
                 if (pi.IsDefault)
                 {

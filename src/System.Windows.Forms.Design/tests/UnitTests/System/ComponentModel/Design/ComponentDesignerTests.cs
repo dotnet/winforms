@@ -2820,7 +2820,6 @@ namespace System.ComponentModel.Design.Tests
         [Fact]
         public void ComponentDesigner_IDesignerFilterPreFilterProperties_WithComponentWithKey_Success()
         {
-            //Debugger.Launch();
             var designer = new SubComponentDesigner();
             IDesignerFilter filter = designer;
             PropertyDescriptor descriptor = TypeDescriptor.GetProperties(typeof(CustomComponent))[0];

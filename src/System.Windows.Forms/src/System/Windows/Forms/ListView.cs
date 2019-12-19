@@ -5380,7 +5380,6 @@ namespace System.Windows.Forms
                 s += ", Items.Count: " + Items.Count.ToString(CultureInfo.CurrentCulture);
                 if (Items.Count > 0 && !VirtualMode)
                 {
-                    //Debug.Assert(Items[0] != null, "Why is there a null item in the list view item collection?");
                     string z = (Items[0] == null) ? "null" : Items[0].ToString();
                     string txt = (z.Length > 40) ? z.Substring(0, 40) : z;
                     s += ", Items[0]: " + txt;

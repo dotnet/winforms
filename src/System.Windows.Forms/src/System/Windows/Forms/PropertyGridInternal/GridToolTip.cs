@@ -166,10 +166,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             for (int i = 0; i < controls.Length; i++)
             {
                 ComCtl32.ToolInfoWrapper<Control> info = GetTOOLINFO(controls[i]);
-                if (info.SendMessage(this, User32.WindowMessage.TTM_UPDATETIPTEXTW) == IntPtr.Zero)
-                {
-                    // Debug.Fail("TTM_UPDATETIPTEXT failed for " + controls[i].GetType().Name);
-                }
+                info.SendMessage(this, User32.WindowMessage.TTM_UPDATETIPTEXTW);
             }
 
             toolTipText = oldText;

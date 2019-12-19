@@ -1200,9 +1200,6 @@ namespace System.Windows.Forms
 
         internal bool GetDisplayed(int rowIndex)
         {
-            // You would think that only attached and visible rows can be displayed.
-            // Actually this assertion is wrong when the row is being deleted.
-            // Debug.Assert(!displayed || (DataGridView != null && DataGridView.Visible && GetVisible(rowIndex)));
             return (GetState(rowIndex) & DataGridViewElementStates.Displayed) != 0;
         }
 

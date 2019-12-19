@@ -70,7 +70,6 @@ namespace System.Windows.Forms.PropertyGridInternal
                 bool fExpandable = Children.Count > 0;
                 if (!fExpandable)
                 {
-                    //Debug.WriteLine("Object " + rgobjs[0].GetType().FullName + " is not expandable because it has no children");
                     SetFlag(GridEntry.FL_EXPANDABLE_FAILED, true);
                 }
                 CategorizePropEntries();

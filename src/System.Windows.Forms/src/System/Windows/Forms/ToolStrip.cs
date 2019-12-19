@@ -2845,9 +2845,6 @@ namespace System.Windows.Forms
         internal virtual void HandleItemClicked(ToolStripItem dismissingItem)
         {
             // post processing after the click has happened.
-            /*if (ContainsFocus && !Focused) {
-                RestoreFocusInternal();
-            }*/
             if (dismissingItem is ToolStripDropDownItem item && !item.HasDropDownItems)
             {
                 KeyboardActive = false;
@@ -5019,15 +5016,7 @@ namespace System.Windows.Forms
             {
                 using (new LayoutTransaction(this, this, PropertyNames.Orientation))
                 {
-                    //
                     //  We want the ToolStrip to size appropriately when the rafting container orientation has switched.
-                    //
-                    /*   if (newRaftingRowOrientation != orientation) {
-                           int oldHeight = this.Height;
-                           this.Height = this.Width;
-                           this.Width = oldHeight;
-                       }*/
-
                     UpdateOrientation(newRaftingRowOrientation);
                     if (LayoutEngine is ToolStripSplitStackLayout && layoutStyle == ToolStripLayoutStyle.StackWithOverflow)
                     {

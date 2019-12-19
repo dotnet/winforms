@@ -478,11 +478,6 @@ namespace System.Windows.Forms.Design
             // Sort MaskDescriptor collection.
             _maskDescriptors.Sort(new MaskDescriptorComparer(sortType, _listViewSortOrder));
 
-            // Sorting the ListView items forces handle recreation, since we have the items sorted and know what item to select
-            // it is better for us to replace the items ourselves.  This way also avoids problems with the selected item  and
-            // the custom entry not getting properly added.
-            // this.listViewCannedMasks.Sort();
-
             // Since we need to pre-process each item before inserting it in the ListView, it is better to remove all items
             // from it first and then add the sorted ones back (no replace).  Stop redrawing while we change the list.
 

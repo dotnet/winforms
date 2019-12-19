@@ -106,8 +106,6 @@ namespace System.Windows.Forms
         {
             set
             {
-                //Debug.Assert(Enum.IsDefined(typeof(DataGridViewAdvancedCellBorderStyle), value));
-                //Debug.Assert(value != DataGridViewAdvancedCellBorderStyle.NotSet);
                 if ((all && top != value) || (!all && bottom != value))
                 {
                     if (all)
@@ -156,8 +154,6 @@ namespace System.Windows.Forms
         {
             set
             {
-                //Debug.Assert(Enum.IsDefined(typeof(DataGridViewAdvancedCellBorderStyle), value));
-                //Debug.Assert(value != DataGridViewAdvancedCellBorderStyle.NotSet);
                 if ((all && top != value) || (!all && left != value))
                 {
                     if ((owner != null && owner.RightToLeftInternal) &&
@@ -215,8 +211,6 @@ namespace System.Windows.Forms
         {
             set
             {
-                //Debug.Assert(Enum.IsDefined(typeof(DataGridViewAdvancedCellBorderStyle), value));
-                //Debug.Assert(value != DataGridViewAdvancedCellBorderStyle.NotSet);
                 if ((all && top != value) || (!all && right != value))
                 {
                     if ((owner != null && !owner.RightToLeftInternal) &&
@@ -266,8 +260,6 @@ namespace System.Windows.Forms
         {
             set
             {
-                //Debug.Assert(Enum.IsDefined(typeof(DataGridViewAdvancedCellBorderStyle), value));
-                //Debug.Assert(value != DataGridViewAdvancedCellBorderStyle.NotSet);
                 if ((all && top != value) || (!all && top != value))
                 {
                     if (all)

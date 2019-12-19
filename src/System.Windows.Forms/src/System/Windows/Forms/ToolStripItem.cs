@@ -4389,12 +4389,6 @@ namespace System.Windows.Forms
                     }
 
                     AccessibleStates accState = AccessibleStates.Focusable | additionalState;
-
-                    //
-                    /*if (HasDropDownItems) {
-                        accState |= AccessibleState.HasPopup;
-                    }*/
-
                     if (ownerItem.Selected || ownerItem.Pressed)
                     {
                         accState |= AccessibleStates.Focused | AccessibleStates.HotTracked;

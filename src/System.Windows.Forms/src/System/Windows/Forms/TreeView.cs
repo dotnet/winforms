@@ -3173,7 +3173,6 @@ namespace System.Windows.Forms
                     // While we are changing size of treeView to avoid the scrollbar; dont respond to the window-sizing messages.
                     if (treeViewState[TREEVIEWSTATE_stopResizeWindowMsgs])
                     {
-                        //Debug.WriteLineIf(treeViewState[TREEVIEWSTATE_stopResizeWindowMsgs], "Sending message directly to DefWndProc() : " + m.ToString());
                         DefWndProc(ref m);
                     }
                     else
@@ -3311,8 +3310,6 @@ namespace System.Windows.Forms
                     {
                         if (!ValidationCancelled && !treeViewState[TREEVIEWSTATE_doubleclickFired] & !treeViewState[TREEVIEWSTATE_mouseUpFired])
                         {
-                            //OnClick(EventArgs.Empty);
-
                             //If the hit-tested node here is the same as the node we hit-tested
                             //on mouse down then we will fire our OnNodeMoseClick event.
                             if (hnode == hNodeMouseDown)
@@ -3329,7 +3326,6 @@ namespace System.Windows.Forms
                             treeViewState[TREEVIEWSTATE_doubleclickFired] = false;
                             if (!ValidationCancelled)
                             {
-                                //OnDoubleClick(EventArgs.Empty);
                                 OnNodeMouseDoubleClick(new TreeNodeMouseClickEventArgs(NodeFromHandle(hnode), downButton, 2, PARAM.SignedLOWORD(m.LParam), PARAM.SignedHIWORD(m.LParam)));
                                 OnDoubleClick(new MouseEventArgs(downButton, 2, PARAM.SignedLOWORD(m.LParam), PARAM.SignedHIWORD(m.LParam), 0));
                                 OnMouseDoubleClick(new MouseEventArgs(downButton, 2, PARAM.SignedLOWORD(m.LParam), PARAM.SignedHIWORD(m.LParam), 0));

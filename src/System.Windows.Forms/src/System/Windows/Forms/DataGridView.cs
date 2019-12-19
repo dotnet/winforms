@@ -1334,7 +1334,7 @@ namespace System.Windows.Forms
                 Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Info, "Inside get_CanEnableIme(), this = " + this);
                 Debug.Indent();
 
-                if (ptCurrentCell.X != -1 /*&& !this.IsCurrentCellInEditMode*/ && ColumnEditable(ptCurrentCell.X))
+                if (ptCurrentCell.X != -1 && ColumnEditable(ptCurrentCell.X))
                 {
                     DataGridViewCell dataGridViewCell = CurrentCellInternal;
                     Debug.Assert(dataGridViewCell != null);
@@ -1882,10 +1882,6 @@ namespace System.Windows.Forms
                 }
                 if (columnHeadersHeightSizeMode != value)
                 {
-                    /*if (value == DataGridViewColumnHeadersHeightSizeMode.AutoSize && !this.ColumnHeadersVisible)
-                    {
-                        We intentionally don't throw an error because of designer code spit order.
-                    }*/
                     DataGridViewAutoSizeModeEventArgs dgvasme = new DataGridViewAutoSizeModeEventArgs(columnHeadersHeightSizeMode == DataGridViewColumnHeadersHeightSizeMode.AutoSize);
                     columnHeadersHeightSizeMode = value;
                     OnColumnHeadersHeightSizeModeChanged(dgvasme);
@@ -2659,7 +2655,6 @@ namespace System.Windows.Forms
                 if (dataGridViewState2[DATAGRIDVIEWSTATE2_enableHeadersVisualStyles] != value)
                 {
                     dataGridViewState2[DATAGRIDVIEWSTATE2_enableHeadersVisualStyles] = value;
-                    //OnEnableHeadersVisualStylesChanged(EventArgs.Empty);
                     // Some autosizing may have to be applied since the margins are potentially changed.
                     OnGlobalAutoSize(); // Put this into OnEnableHeadersVisualStylesChanged if created.
                 }
@@ -4090,12 +4085,6 @@ namespace System.Windows.Forms
                 }
                 if (rowHeadersWidthSizeMode != value)
                 {
-                    /*if (value != DataGridViewRowHeadersWidthSizeMode.EnableResizing &&
-                     *    value != DataGridViewRowHeadersWidthSizeMode.DisableResizing &&
-                     *    !this.RowHeadersVisible)
-                    {
-                        We intentionally don't throw an error because of designer code spit order.
-                    }*/
                     DataGridViewAutoSizeModeEventArgs dgvasme = new DataGridViewAutoSizeModeEventArgs(rowHeadersWidthSizeMode != DataGridViewRowHeadersWidthSizeMode.EnableResizing &&
                                                                                                       rowHeadersWidthSizeMode != DataGridViewRowHeadersWidthSizeMode.DisableResizing);
                     rowHeadersWidthSizeMode = value;
@@ -4681,7 +4670,6 @@ namespace System.Windows.Forms
                 if (dataGridViewState1[DATAGRIDVIEWSTATE1_standardTab] != value)
                 {
                     dataGridViewState1[DATAGRIDVIEWSTATE1_standardTab] = value;
-                    //OnStandardTabChanged(EventArgs.Empty);
                 }
             }
         }
@@ -4901,7 +4889,6 @@ namespace System.Windows.Forms
                 {
                     dataGridViewState1[DATAGRIDVIEWSTATE1_virtualMode] = value;
                     InvalidateRowHeights();
-                    //OnVirtualModeChanged(EventArgs.Empty);
                 }
             }
         }
@@ -5396,13 +5383,6 @@ namespace System.Windows.Forms
             remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNREMOVED, value);
         }
 
-        /*
-        public event EventHandler ColumnsDefaultCellStyleChanged
-        {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCOLUMNSDEFAULTCELLSTYLECHANGED, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNSDEFAULTCELLSTYLECHANGED, value);
-        }*/
-
         [
             SRCategory(nameof(SR.CatBehavior)),
             SRDescription(nameof(SR.DataGridViewColumnSortModeChangedDescr))
@@ -5504,20 +5484,6 @@ namespace System.Windows.Forms
             add => Events.AddHandler(EVENT_DATAGRIDVIEWEDITINGCONTROLSHOWING, value);
             remove => Events.RemoveHandler(EVENT_DATAGRIDVIEWEDITINGCONTROLSHOWING, value);
         }
-
-        /*
-        public event QuestionEventHandler KeepNewRow
-        {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWKEEPNEWROW, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWKEEPNEWROW, value);
-        }*/
-
-        /*
-        public event EventHandler NewRowDiscarded
-        {
-            add => this.Events.AddHandler(EVENT_DATAGRIDVIEWNEWROWDISCARDED, value);
-            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWNEWROWDISCARDED, value);
-        }*/
 
         [
             SRCategory(nameof(SR.CatData)),

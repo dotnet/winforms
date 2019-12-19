@@ -29,7 +29,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentException(string.Format(SR.RelatedListManagerChild, dataField));
             }
-            // this.finalType = fieldInfo.PropertyType;
+
             parentManager.CurrentItemChanged += new EventHandler(ParentManager_CurrentItemChanged);
             Refresh();
         }

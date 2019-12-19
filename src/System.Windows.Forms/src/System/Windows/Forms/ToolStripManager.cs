@@ -1198,11 +1198,9 @@ namespace System.Windows.Forms
                         activeDropDown.Visible = false;
                     }
                 }
-                // if (_inputFilterQueue.Count == 0) {
+
                 ExitMenuModeCore();
                 return true;
-                //}
-                //return false;
             }
 
             internal static void SetActiveToolStrip(ToolStrip toolStrip, bool menuKeyPressed)
@@ -2055,13 +2053,8 @@ namespace System.Windows.Forms
                 for (int i = 0; i < ToolStrips.Count; i++)
                 {
                     ToolStrip candidateTS = (ToolStrip)ToolStrips[i];
-                    //if(candidateTS != null) {
-                    //    Debug.WriteLine("candidate TS: " + candidateTS.Name + " | " + candidateTS.AllowMerge + " | " + (candidateTS.Parent == null ?  "null" : candidateTS.Parent.Name) +" | " + container.Name);
-                    //}
-                    //Debug.WriteLine(candidateTS == null ? "null" : "not null");
                     if (candidateTS != null && candidateTS.AllowMerge && container == candidateTS.FindForm())
                     {
-                        //Debug.WriteLine("adding");
                         result.Add(candidateTS);
                     }
                 }
@@ -2104,7 +2097,6 @@ namespace System.Windows.Forms
             MergeHistory mergeHistory = null;
             if (canMerge)
             {
-                //Debug.WriteLine("Begin merge between src: " + sourceToolStrip.Name + " and target: " + targetToolStrip.Name);
                 Debug.Indent();
                 mergeHistory = new MergeHistory(sourceToolStrip);
 
@@ -2122,7 +2114,6 @@ namespace System.Windows.Forms
                         for (int i = 0, itemToLookAt = 0; i < originalCount; i++)
                         {
                             ToolStripItem item = sourceToolStrip.Items[itemToLookAt];
-                            //Debug.WriteLine("doing the recursive merge for item " + item.Text);
                             MergeRecursive(item, targetToolStrip.Items, mergeHistory.MergeHistoryItemsStack);
 
                             int numberOfItemsMerged = lastCount - sourceToolStrip.Items.Count;
@@ -2136,7 +2127,6 @@ namespace System.Windows.Forms
                         sourceToolStrip.ResumeLayout();
                         targetToolStrip.ResumeLayout();
                     }
-                    //Debug.WriteLine("pusing mergehistory for toolstrip " + sourceToolStrip.Name + " in target toolstrip MergeHistoryStack property");
                     if (mergeHistory.MergeHistoryItemsStack.Count > 0)
                     {
                         // only push this on the stack if we actually did something
@@ -2198,7 +2188,6 @@ namespace System.Windows.Forms
                                 break;
                             case MergeAction.Replace:
                             case MergeAction.Remove:
-                                //Debug.WriteLine("remove");
                                 maction = new MergeHistoryItem(MergeAction.Insert)
                                 {
                                     TargetItem = item
@@ -2209,10 +2198,8 @@ namespace System.Windows.Forms
                                 maction.IndexCollection = destinationItems;
                                 maction.TargetItem = item;
                                 history.Push(maction);
-                                //Debug.WriteLine(maction.ToString());
                                 if (source.MergeAction == MergeAction.Replace)
                                 {
-                                    //Debug.WriteLine("replace");
                                     //ToolStripItem clonedItem = source.Clone();
                                     maction = new MergeHistoryItem(MergeAction.Remove)
                                     {
@@ -2224,7 +2211,6 @@ namespace System.Windows.Forms
                                     maction.Index = indexOfDestinationItem;
                                     maction.IndexCollection = destinationItems;
                                     history.Push(maction);
-                                    //Debug.WriteLine(maction.ToString());
                                 }
                                 break;
                         }
@@ -2244,7 +2230,6 @@ namespace System.Windows.Forms
                         maction.IndexCollection = destinationItems;
                         maction.Index = insertIndex;
                         history.Push(maction);
-                        //Debug.WriteLine(maction.ToString());
                     }
                     break;
                 case MergeAction.Append:
@@ -2258,7 +2243,6 @@ namespace System.Windows.Forms
                     maction.Index = index;
                     maction.IndexCollection = destinationItems;
                     history.Push(maction);
-                    //Debug.WriteLine(maction.ToString());
                     break;
             }
             Debug.Unindent();
@@ -2322,7 +2306,6 @@ namespace System.Windows.Forms
                 // PERF: if we dont have the toolstrip in our merge history, bail.
                 if (!foundToolStrip)
                 {
-                    //Debug.WriteLine("source toolstrip not contained within target " + history.MergedToolStrip.Name);
                     return false;
                 }
             }
@@ -2335,7 +2318,6 @@ namespace System.Windows.Forms
 
             try
             {
-                //Debug.WriteLine("Reverting merge, playing back history for all merged toolstrip ");
                 Stack<ToolStrip> reApply = new Stack<ToolStrip>();
                 foundToolStrip = false;
                 while (targetToolStrip.MergeHistoryStack.Count > 0 && !foundToolStrip)
@@ -2358,7 +2340,6 @@ namespace System.Windows.Forms
                     {
                         reApply.Push(history.MergedToolStrip);
                     }
-                    //Debug.WriteLine("unmerging " + history.MergedToolStrip.Name);
                     Debug.Indent();
                     while (history.MergeHistoryItemsStack.Count > 0)
                     {

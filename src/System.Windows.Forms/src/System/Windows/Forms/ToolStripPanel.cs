@@ -545,10 +545,7 @@ namespace System.Windows.Forms
         {
             if (e.Control is ISupportToolStripPanel controlToBeDragged)
             {
-                if (controlToBeDragged.ToolStripPanelRow != null/* && controlToBeDragged.ToolStripPanelRow != owner*/)
-                {
-                    controlToBeDragged.ToolStripPanelRow.ControlsInternal.Remove(e.Control);
-                }
+                controlToBeDragged.ToolStripPanelRow?.ControlsInternal.Remove(e.Control);
             }
             base.OnControlRemoved(e);
         }
