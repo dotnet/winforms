@@ -12,9 +12,9 @@ You can help us streamline our response time to your feedback and ideas by filin
 
 ## Known Issues
 
-If you encounter an issue using the latest .NET Core 3.0 SDK, please:
+If you encounter an issue using the latest .NET Core 3.1 SDK, please:
 
-1. Check out the [Centralized 3.0 Preview Known Issues document][.net-core-3.0-known-issues],
+1. Check out the [Centralized 3.1 Preview Known Issues document][.net-core-3.1-known-issues],
 1. Explore [this repositories issues][winforms-issues], and then
 1. [Open a new issue][new-issue] if there is none.
 
@@ -39,23 +39,12 @@ We use GitHub [labels][labels] on our issues in order to classify them. We have 
 
 * **Issue Types**: These labels classify the type of issue. We use the following types:
   * [api-suggestion]: Issues which would add new APIs (see [API Review process][corefx-api-review-process] for details).
-    * Note: WinForms API process is not finalized yet. We may need to add additional UI-specific steps to it (e.g. accessibility review). Expect finalized API review version post-3.0 when we will be ready to take new APIs.
   * [bug][bug], [enhancement][enhancement], [test-bug][test-bug], [test-enhancement][test-enhancement], [question][question], [documentation][documentation]: See [label description][label-description] for details.
 * **Other**:
   * [up-for-grabs][up-for-grabs]: Smaller sections of work which we believe are well scoped. These sorts of issues are a good place to start if you are new. Anyone is free to work on these issues.
   * [needs-more-info][needs-more-info]: Issues which need more information to be actionable. Usually this will be because we can't reproduce a reported bug. We'll close these issues after a little bit if we haven't gotten actionable information, but we welcome folks who have acquired more information to reopen the issue.
   * [tenet-compatibility][tenet-compatibility]: Incompatibility between released versions or with WinForms for .NET Framework.
 
-## Milestones
-
-We use [milestones][milestones] to prioritize work for each upcoming release.
-
-* **3.0** milestone work is focused on parity with WinForms for .NET Framework. We do not plan to take contributions or address issues that are not unique to WinForms on .NET Core in 3.0 release. For example:
-  * The following will be put into **Future** milestone and will be reviewed and prioritized after 3.0 final release:
-    * Bugs which are present on both WinForms platforms (for .NET Core and .NET Framework)
-    * Requests for new APIs and features
-* **Future** milestone tracks all potential future work (which may or may not happen). When we are done with 3.0 release, we will move some of these issues into the next immediate milestone.
-  * Please do not start discussions about next post-3.0 milestone until we are close to final 3.0 release. If you want to express your opinion on prioritization, please [up-vote first post of the issue] instead.
 
 ## Assignee
 
@@ -91,8 +80,8 @@ Feel free to use other labels if it helps your triage efforts (for example, **ne
 1. Issue has no **Assignee**, unless someone is working on the issue at the moment.
     * Motivation: Observation is that contributors are less likely to grab assigned issues, no matter what the repository rules say.
 
-1. Use **up-for-grabs** as much as possible, ideally with a quick note about next steps / complexity of the issue.
-    * Note: Per [http://up-for-grabs.net][up-for-grabs-net], such issues should be no longer than few nights' worth of work. They should be actionable (i.e. no mysterious CI failures that can't be tested in the open).
+1. Use **up-for-grabs** as much as possible, ideally with a quick note about next steps / complexity of the issue.<br />
+    NB: Per [http://up-for-grabs.net][up-for-grabs-net], such issues should be no longer than few nights' worth of work. They should be actionable (i.e. no mysterious CI failures that can't be tested in the open).
 
 1. Set milestone to **Future**, unless you can 95%-commit you can fund the issue in specific milestone.
     * Motivation: Helps communicate desire/timeline to community. Can spark further priority/impact discussion.

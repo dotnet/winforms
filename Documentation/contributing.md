@@ -2,6 +2,8 @@
 
 The primary focus of .NET Core 3.0 release for Windows Forms is to achieve parity with .NET Framework. Priority will be given to changes that align with that goal. See the [roadmap](../roadmap.md) to understand project goals.
 
+In .NET 5.0 and beyond we are aiming to optimize our implementations, reduce our memory footprints, increase performance, and update implementations to deliver all aspects of modern Windows UI, including missings properties or actions, and new UI controls.
+
 We need the most help with the following types of changes:
 
 * Test fixes, test improvements, and new tests increasing code coverage.
