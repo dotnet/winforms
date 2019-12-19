@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -89,12 +90,11 @@ namespace System.Windows.Forms
               | FileDialogNative.FOS.FOS_NODEREFERENCELINKS
             ;
             const int UnexpectedOptions =
-                NativeMethods.OFN_USESHELLITEM // This is totally bogus (only used in FileDialog by accident to ensure that places are shown
-              | NativeMethods.OFN_SHOWHELP // If ShowHelp is true, we don't use the Vista Dialog
-              | NativeMethods.OFN_ENABLEHOOK // These shouldn't be set in options (only set in the flags for the legacy dialog)
-              | NativeMethods.OFN_ENABLESIZING // These shouldn't be set in options (only set in the flags for the legacy dialog)
-              | NativeMethods.OFN_EXPLORER // These shouldn't be set in options (only set in the flags for the legacy dialog)
-            ;
+                (int)(Comdlg32.OFN.SHOWHELP // If ShowHelp is true, we don't use the Vista Dialog
+                | Comdlg32.OFN.ENABLEHOOK // These shouldn't be set in options (only set in the flags for the legacy dialog)
+                | Comdlg32.OFN.ENABLESIZING // These shouldn't be set in options (only set in the flags for the legacy dialog)
+                | Comdlg32.OFN.EXPLORER); // These shouldn't be set in options (only set in the flags for the legacy dialog)
+
             Debug.Assert((UnexpectedOptions & _options) == 0, "Unexpected FileDialog options");
 
             FileDialogNative.FOS ret = (FileDialogNative.FOS)_options & BlittableOptions;
@@ -163,12 +163,12 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    if ((_options & NativeMethods.OFN_HIDEREADONLY) != 0)
+                    if ((_options & (int)Comdlg32.OFN.HIDEREADONLY) != 0)
                     {
                         // When the dialog is dismissed OK, the Readonly bit can't
                         // be left on if ShowReadOnly was false
                         // Downlevel this happens automatically, on Vista mode, we need to watch out for it.
-                        _options &= ~NativeMethods.OFN_READONLY;
+                        _options &= ~(int)Comdlg32.OFN.READONLY;
                     }
                 }
             }
