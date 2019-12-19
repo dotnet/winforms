@@ -342,12 +342,13 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                             }
 
                             var.Clear();
-                            if (hr == NativeMethods.S_OK)
+                            if (hr == HRESULT.S_OK)
                             {
                                 itemCount++;
                                 continue;
                             }
-                            else if (itemCount > 0)
+                            
+                            if (itemCount > 0)
                             {
                                 // shorten the arrays to ignore the failed ones.  this isn't terribly
                                 // efficient but shouldn't happen very often.  It's rare for these to fail.
@@ -362,7 +363,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                         string[] strings = new string[itemCount];
                         Array.Copy(nameItems, 0, strings, 0, itemCount);
                         base.PopulateArrays(strings, valueItems);
-
                     }
                 }
                 catch (Exception ex)

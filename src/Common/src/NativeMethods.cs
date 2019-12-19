@@ -144,15 +144,7 @@ namespace System.Windows.Forms
         DTN_DROPDOWN = ((0 - 760) + 6),
         DTN_CLOSEUP = ((0 - 760) + 7);
 
-        public const int E_NOTIMPL = unchecked((int)0x80004001),
-        E_OUTOFMEMORY = unchecked((int)0x8007000E),
-        E_INVALIDARG = unchecked((int)0x80070057),
-        E_NOINTERFACE = unchecked((int)0x80004002),
-        E_POINTER = unchecked((int)0x80004003),
-        E_FAIL = unchecked((int)0x80004005),
-        E_UNEXPECTED = unchecked((int)0x8000FFFF),
-        INET_E_DEFAULT_ACTION = unchecked((int)0x800C0011),
-        EMR_POLYTEXTOUT = 97,
+        public const int EMR_POLYTEXTOUT = 97,
         ES_LEFT = 0x0000,
         ES_CENTER = 0x0001,
         ES_RIGHT = 0x0002,
@@ -543,9 +535,6 @@ namespace System.Windows.Forms
         SBT_NOBORDERS = 0x0100,
         SBT_POPOUT = 0x0200,
         SBT_RTLREADING = 0x0400;
-
-        public const int S_OK = 0x00000000;
-        public const int S_FALSE = 0x00000001;
 
         public static bool Succeeded(int hr)
         {

@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -1466,31 +1466,29 @@ namespace System.Windows.Forms
             //
             // IDocHostUIHandler Implementation
             //
-            int UnsafeNativeMethods.IDocHostUIHandler.ShowContextMenu(uint dwID, ref Point pt, object pcmdtReserved, object pdispReserved)
+            HRESULT UnsafeNativeMethods.IDocHostUIHandler.ShowContextMenu(uint dwID, ref Point pt, object pcmdtReserved, object pdispReserved)
             {
                 WebBrowser wb = (WebBrowser)Host;
 
                 if (wb.IsWebBrowserContextMenuEnabled)
                 {
                     // let MSHTML display its UI
-                    return NativeMethods.S_FALSE;
+                    return HRESULT.S_FALSE;
                 }
-                else
+                
+                if (pt.X == 0 && pt.Y == 0)
                 {
-                    if (pt.X == 0 && pt.Y == 0)
-                    {
-                        // IDocHostUIHandler::ShowContextMenu sends (0,0) when the context menu is invoked via the keyboard
-                        // make it (-1, -1) for the WebBrowser::ShowContextMenu method
-                        pt.X = -1;
-                        pt.Y = -1;
-                    }
-                    wb.ShowContextMenu(pt.X, pt.Y);
-                    // MSHTML should not display its context menu because we displayed ours
-                    return NativeMethods.S_OK;
+                    // IDocHostUIHandler::ShowContextMenu sends (0,0) when the context menu is invoked via the keyboard
+                    // make it (-1, -1) for the WebBrowser::ShowContextMenu method
+                    pt.X = -1;
+                    pt.Y = -1;
                 }
+                wb.ShowContextMenu(pt.X, pt.Y);
+                // MSHTML should not display its context menu because we displayed ours
+                return HRESULT.S_OK;
             }
 
-            int UnsafeNativeMethods.IDocHostUIHandler.GetHostInfo(NativeMethods.DOCHOSTUIINFO info)
+            HRESULT UnsafeNativeMethods.IDocHostUIHandler.GetHostInfo(NativeMethods.DOCHOSTUIINFO info)
             {
                 WebBrowser wb = (WebBrowser)Host;
 
@@ -1516,12 +1514,12 @@ namespace System.Windows.Forms
                     info.dwFlags |= DOCHOSTUIFLAG.NOTHEME;
                 }
 
-                return NativeMethods.S_OK;
+                return HRESULT.S_OK;
             }
 
-            int UnsafeNativeMethods.IDocHostUIHandler.EnableModeless(bool fEnable)
+            HRESULT UnsafeNativeMethods.IDocHostUIHandler.EnableModeless(bool fEnable)
             {
-                return NativeMethods.E_NOTIMPL;
+                return HRESULT.E_NOTIMPL;
             }
 
             HRESULT UnsafeNativeMethods.IDocHostUIHandler.ShowUI(
@@ -1534,14 +1532,14 @@ namespace System.Windows.Forms
                 return HRESULT.S_FALSE;
             }
 
-            int UnsafeNativeMethods.IDocHostUIHandler.HideUI()
+            HRESULT UnsafeNativeMethods.IDocHostUIHandler.HideUI()
             {
-                return NativeMethods.E_NOTIMPL;
+                return HRESULT.E_NOTIMPL;
             }
 
-            int UnsafeNativeMethods.IDocHostUIHandler.UpdateUI()
+            HRESULT UnsafeNativeMethods.IDocHostUIHandler.UpdateUI()
             {
-                return NativeMethods.E_NOTIMPL;
+                return HRESULT.E_NOTIMPL;
             }
 
             HRESULT UnsafeNativeMethods.IDocHostUIHandler.OnDocWindowActivate(BOOL fActivate)
@@ -1549,9 +1547,9 @@ namespace System.Windows.Forms
                 return HRESULT.E_NOTIMPL;
             }
 
-            int UnsafeNativeMethods.IDocHostUIHandler.OnFrameWindowActivate(bool fActivate)
+            HRESULT UnsafeNativeMethods.IDocHostUIHandler.OnFrameWindowActivate(bool fActivate)
             {
-                return NativeMethods.E_NOTIMPL;
+                return HRESULT.E_NOTIMPL;
             }
 
             unsafe HRESULT UnsafeNativeMethods.IDocHostUIHandler.ResizeBorder(RECT* rect, Ole32.IOleInPlaceUIWindow doc, BOOL fFrameWindow)
@@ -1559,9 +1557,9 @@ namespace System.Windows.Forms
                 return HRESULT.E_NOTIMPL;
             }
 
-            int UnsafeNativeMethods.IDocHostUIHandler.GetOptionKeyPath(string[] pbstrKey, int dw)
+            HRESULT UnsafeNativeMethods.IDocHostUIHandler.GetOptionKeyPath(string[] pbstrKey, int dw)
             {
-                return NativeMethods.E_NOTIMPL;
+                return HRESULT.E_NOTIMPL;
             }
 
             HRESULT UnsafeNativeMethods.IDocHostUIHandler.GetDropTarget(Ole32.IDropTarget pDropTarget, out Ole32.IDropTarget ppDropTarget)
@@ -1572,11 +1570,11 @@ namespace System.Windows.Forms
                 return HRESULT.E_NOTIMPL;
             }
 
-            int UnsafeNativeMethods.IDocHostUIHandler.GetExternal(out object ppDispatch)
+            HRESULT UnsafeNativeMethods.IDocHostUIHandler.GetExternal(out object ppDispatch)
             {
                 WebBrowser wb = (WebBrowser)Host;
                 ppDispatch = wb.ObjectForScripting;
-                return NativeMethods.S_OK;
+                return HRESULT.S_OK;
             }
 
             unsafe HRESULT UnsafeNativeMethods.IDocHostUIHandler.TranslateAccelerator(User32.MSG* lpMsg, Guid* pguidCmdGroup, uint nCmdID)
@@ -1601,22 +1599,22 @@ namespace System.Windows.Forms
                 return HRESULT.S_FALSE;
             }
 
-            int UnsafeNativeMethods.IDocHostUIHandler.TranslateUrl(int dwTranslate, string strUrlIn, out string pstrUrlOut)
+            HRESULT UnsafeNativeMethods.IDocHostUIHandler.TranslateUrl(int dwTranslate, string strUrlIn, out string pstrUrlOut)
             {
                 //
                 // Set to null no matter what we return, to prevent the marshaller
                 // from having issues if the pointer points to random stuff.
                 pstrUrlOut = null;
-                return NativeMethods.S_FALSE;
+                return HRESULT.S_FALSE;
             }
 
-            int UnsafeNativeMethods.IDocHostUIHandler.FilterDataObject(IComDataObject pDO, out IComDataObject ppDORet)
+            HRESULT UnsafeNativeMethods.IDocHostUIHandler.FilterDataObject(IComDataObject pDO, out IComDataObject ppDORet)
             {
                 //
                 // Set to null no matter what we return, to prevent the marshaller
                 // from having issues if the pointer points to random stuff.
                 ppDORet = null;
-                return NativeMethods.S_FALSE;
+                return HRESULT.S_FALSE;
             }
 
             //

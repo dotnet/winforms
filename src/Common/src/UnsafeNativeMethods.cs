@@ -512,7 +512,7 @@ namespace System.Windows.Forms
         {
             [return: MarshalAs(UnmanagedType.I4)]
             [PreserveSig]
-            int ShowContextMenu(
+            HRESULT ShowContextMenu(
                 uint dwID,
                 ref Point pt,
                 [In, MarshalAs(UnmanagedType.Interface)]
@@ -522,7 +522,7 @@ namespace System.Windows.Forms
 
             [return: MarshalAs(UnmanagedType.I4)]
             [PreserveSig]
-            int GetHostInfo(
+            HRESULT GetHostInfo(
                 [In, Out]
                 NativeMethods.DOCHOSTUIINFO info);
 
@@ -536,15 +536,15 @@ namespace System.Windows.Forms
 
             [return: MarshalAs(UnmanagedType.I4)]
             [PreserveSig]
-            int HideUI();
+            HRESULT HideUI();
 
             [return: MarshalAs(UnmanagedType.I4)]
             [PreserveSig]
-            int UpdateUI();
+            HRESULT UpdateUI();
 
             [return: MarshalAs(UnmanagedType.I4)]
             [PreserveSig]
-            int EnableModeless(
+            HRESULT EnableModeless(
                 [In, MarshalAs(UnmanagedType.Bool)]
                 bool fEnable);
 
@@ -554,7 +554,7 @@ namespace System.Windows.Forms
 
             [return: MarshalAs(UnmanagedType.I4)]
             [PreserveSig]
-            int OnFrameWindowActivate(
+            HRESULT OnFrameWindowActivate(
                 [In, MarshalAs(UnmanagedType.Bool)]
                 bool fActivate);
 
@@ -572,7 +572,7 @@ namespace System.Windows.Forms
 
             [return: MarshalAs(UnmanagedType.I4)]
             [PreserveSig]
-            int GetOptionKeyPath(
+            HRESULT GetOptionKeyPath(
                 [Out, MarshalAs(UnmanagedType.LPArray)]
                 string[] pbstrKey,
                 [In, MarshalAs(UnmanagedType.U4)]
@@ -585,13 +585,13 @@ namespace System.Windows.Forms
 
             [return: MarshalAs(UnmanagedType.I4)]
             [PreserveSig]
-            int GetExternal(
+            HRESULT GetExternal(
                 [Out, MarshalAs(UnmanagedType.Interface)]
                 out object ppDispatch);
 
             [return: MarshalAs(UnmanagedType.I4)]
             [PreserveSig]
-            int TranslateUrl(
+            HRESULT TranslateUrl(
                 [In, MarshalAs(UnmanagedType.U4)]
                 int dwTranslate,
                 [In, MarshalAs(UnmanagedType.LPWStr)]
@@ -601,7 +601,7 @@ namespace System.Windows.Forms
 
             [return: MarshalAs(UnmanagedType.I4)]
             [PreserveSig]
-            int FilterDataObject(
+            HRESULT FilterDataObject(
                 IComDataObject pDO,
                 out IComDataObject ppDORet);
         }
@@ -620,7 +620,7 @@ namespace System.Windows.Forms
                 out Ole32.IOleClientSite ppClientSite);
 
             [PreserveSig]
-            int SetHostNames(
+            HRESULT SetHostNames(
                    [In, MarshalAs(UnmanagedType.LPWStr)]
                       string szContainerApp,
                    [In, MarshalAs(UnmanagedType.LPWStr)]
