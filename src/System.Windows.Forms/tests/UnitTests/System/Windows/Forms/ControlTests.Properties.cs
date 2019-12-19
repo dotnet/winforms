@@ -4375,20 +4375,20 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<InvalidEnumArgumentException>("value", () => control.Dock = value);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void Control_DoubleBuffered_Get_ReturnsExpected(bool value)
         {
-            var control = new SubControl();
+            using var control = new SubControl();
             control.SetStyle(ControlStyles.OptimizedDoubleBuffer, value);
             Assert.Equal(value, control.DoubleBuffered);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void Control_DoubleBuffered_Set_GetReturnsExpected(bool value)
         {
-            var control = new SubControl
+            using var control = new SubControl
             {
                 DoubleBuffered = value
             };
@@ -4409,11 +4409,11 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.IsHandleCreated);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void Control_DoubleBuffered_SetWithHandle_GetReturnsExpected(bool value)
         {
-            var control = new SubControl();
+            using var control = new SubControl();
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             int invalidatedCallCount = 0;
             control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -4787,7 +4787,7 @@ namespace System.Windows.Forms.Tests
         [CommonMemberData(nameof(CommonTestHelper.GetFontTheoryData))]
         public void Control_Font_Set_GetReturnsExpected(Font value)
         {
-            var control = new SubControl
+            using var control = new SubControl
             {
                 Font = value
             };
@@ -4813,7 +4813,7 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(Font_SetWithFontHeight_TestData))]
         public void Control_Font_SetWithFontHeight_GetReturnsExpected(Font value, int expectedFontHeight)
         {
-            var control = new SubControl
+            using var control = new SubControl
             {
                 FontHeight = 10,
                 Font = value
@@ -4840,7 +4840,7 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(Font_SetNonNullOldValueWithFontHeight_TestData))]
         public void Control_Font_SetNonNullOldValueWithFontHeight_GetReturnsExpected(Font value, int expectedFontHeight)
         {
-            var control = new SubControl
+            using var control = new SubControl
             {
                 FontHeight = 10,
                 Font = new Font("Arial", 1)
@@ -4862,7 +4862,7 @@ namespace System.Windows.Forms.Tests
         [CommonMemberData(nameof(CommonTestHelper.GetFontTheoryData))]
         public void Control_Font_SetWithNonNullOldValue_GetReturnsExpected(Font value)
         {
-            var control = new SubControl
+            using var control = new SubControl
             {
                 Font = new Font("Arial", 1)
             };
@@ -4892,7 +4892,7 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(Font_SetWithHandle_TestData))]
         public void Control_Font_SetWithHandle_GetReturnsExpected(bool userPaint, Font value, int expectedInvalidatedCallCount)
         {
-            var control = new SubControl();
+            using var control = new SubControl();
             control.SetStyle(ControlStyles.UserPaint, userPaint);
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             Assert.Equal(userPaint, control.GetStyle(ControlStyles.UserPaint));
@@ -4935,7 +4935,7 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(Font_SetWithNonNullOldValueWithHandle_TestData))]
         public void Control_Font_SetWithNonNullOldValueWithHandle_GetReturnsExpected(bool userPaint, Font value)
         {
-            var control = new SubControl
+            using var control = new SubControl
             {
                 Font = new Font("Arial", 1)
             };
@@ -4971,7 +4971,7 @@ namespace System.Windows.Forms.Tests
         [WinFormsFact]
         public void Control_Font_SetWithHandler_CallsFontChanged()
         {
-            var control = new Control();
+            using var control = new Control();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -4982,7 +4982,7 @@ namespace System.Windows.Forms.Tests
             control.FontChanged += handler;
 
             // Set different.
-            Font font1 = new Font("Arial", 8.25f);
+            using var font1 = new Font("Arial", 8.25f);
             control.Font = font1;
             Assert.Same(font1, control.Font);
             Assert.Equal(1, callCount);
@@ -4993,7 +4993,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
 
             // Set different.
-            Font font2 = SystemFonts.DialogFont;
+            using var font2 = SystemFonts.DialogFont;
             control.Font = font2;
             Assert.Same(font2, control.Font);
             Assert.Equal(2, callCount);
@@ -11317,6 +11317,54 @@ namespace System.Windows.Forms.Tests
             {
                 parent.Layout -= parentHandler;
             }
+        }
+
+        [WinFormsFact]
+        public void Control_Size_ResetValue_Success()
+        {
+            PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(Control))[nameof(Control.Size)];
+            using var control = new Control();
+            Assert.False(property.CanResetValue(control));
+
+            control.Size = new Size(1, 0);
+            Assert.Equal(new Size(1, 0), control.Size);
+            Assert.True(property.CanResetValue(control));
+
+            control.Size = new Size(0, 1);
+            Assert.Equal(new Size(0, 1), control.Size);
+            Assert.True(property.CanResetValue(control));
+
+            control.Size = new Size(1, 2);
+            Assert.Equal(new Size(1, 2), control.Size);
+            Assert.True(property.CanResetValue(control));
+
+            property.ResetValue(control);
+            Assert.Equal(Size.Empty, control.Size);
+            Assert.False(property.CanResetValue(control));
+        }
+
+        [WinFormsFact]
+        public void Control_Size_ShouldSerializeValue_Success()
+        {
+            PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(Control))[nameof(Control.Size)];
+            using var control = new Control();
+            Assert.False(property.ShouldSerializeValue(control));
+
+            control.Size = new Size(1, 0);
+            Assert.Equal(new Size(1, 0), control.Size);
+            Assert.True(property.ShouldSerializeValue(control));
+
+            control.Size = new Size(0, 1);
+            Assert.Equal(new Size(0, 1), control.Size);
+            Assert.True(property.ShouldSerializeValue(control));
+
+            control.Size = new Size(1, 2);
+            Assert.Equal(new Size(1, 2), control.Size);
+            Assert.True(property.ShouldSerializeValue(control));
+
+            property.ResetValue(control);
+            Assert.Equal(Size.Empty, control.Size);
+            Assert.False(property.ShouldSerializeValue(control));
         }
 
         [WinFormsTheory]

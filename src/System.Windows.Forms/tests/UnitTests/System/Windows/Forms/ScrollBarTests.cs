@@ -5,6 +5,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using System.Runtime.InteropServices;
 using WinForms.Common.Tests;
 using Xunit;
 using static Interop;
@@ -428,7 +429,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(2, callCount);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetFontTheoryData))]
         public void ScrollBar_Font_Set_GetReturnsExpected(Font value)
         {
@@ -438,17 +439,19 @@ namespace System.Windows.Forms.Tests
             };
             Assert.Equal(value ?? Control.DefaultFont, control.Font);
             Assert.Equal(control.Font.Height, control.FontHeight);
+            Assert.False(control.IsHandleCreated);
 
             // Set same.
             control.Font = value;
             Assert.Equal(value ?? Control.DefaultFont, control.Font);
             Assert.Equal(control.Font.Height, control.FontHeight);
+            Assert.False(control.IsHandleCreated);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ScrollBar_Font_SetWithHandler_CallsFontChanged()
         {
-            var control = new SubScrollBar();
+            using var control = new SubScrollBar();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -459,7 +462,7 @@ namespace System.Windows.Forms.Tests
             control.FontChanged += handler;
 
             // Set different.
-            Font font1 = new Font("Arial", 8.25f);
+            using var font1 = new Font("Arial", 8.25f);
             control.Font = font1;
             Assert.Same(font1, control.Font);
             Assert.Equal(1, callCount);
@@ -470,7 +473,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
 
             // Set different.
-            Font font2 = SystemFonts.DialogFont;
+            using var font2 = SystemFonts.DialogFont;
             control.Font = font2;
             Assert.Same(font2, control.Font);
             Assert.Equal(2, callCount);
@@ -595,276 +598,483 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<InvalidEnumArgumentException>("value", () => control.ImeMode = value);
         }
 
-        public static IEnumerable<object[]> LargeChange_TestData()
-        {
-            yield return new object[] { 10 };
-            yield return new object[] { 12 };
-        }
-
-        [Theory]
-        [MemberData(nameof(LargeChange_TestData))]
+        [WinFormsTheory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(5)]
+        [InlineData(10)]
+        [InlineData(11)]
         public void ScrollBar_LargeChange_Set_GetReturnsExpected(int value)
         {
-            var scrollBar = new SubScrollBar
+            using var control = new SubScrollBar
             {
                 LargeChange = value
             };
-            Assert.Equal(value, scrollBar.LargeChange);
+            Assert.Equal(value, control.LargeChange);
+            Assert.False(control.IsHandleCreated);
 
             // Set same.
-            scrollBar.LargeChange = value;
-            Assert.Equal(value, scrollBar.LargeChange);
+            control.LargeChange = value;
+            Assert.Equal(value, control.LargeChange);
+            Assert.False(control.IsHandleCreated);
         }
 
-        [Theory]
-        [MemberData(nameof(LargeChange_TestData))]
+        [WinFormsTheory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(5)]
+        [InlineData(10)]
+        [InlineData(11)]
         public void ScrollBar_LargeChange_SetWithHandle_GetReturnsExpected(int value)
         {
-            var scrollBar = new SubScrollBar();
-            Assert.NotEqual(IntPtr.Zero, scrollBar.Handle);
+            using var control = new SubScrollBar();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
 
-            scrollBar.LargeChange = value;
-            Assert.Equal(value, scrollBar.LargeChange);
+            control.LargeChange = value;
+            Assert.Equal(value, control.LargeChange);
+            var si = new User32.SCROLLINFO
+            {
+                cbSize = (uint)Marshal.SizeOf<User32.SCROLLINFO>(),
+                fMask = User32.SIF.ALL
+            };
+            Assert.True(User32.GetScrollInfo(control.Handle, User32.SB.CTL, ref si).IsTrue());
+            Assert.Equal((uint)value, si.nPage);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
 
             // Set same.
-            scrollBar.LargeChange = value;
-            Assert.Equal(value, scrollBar.LargeChange);
+            control.LargeChange = value;
+            Assert.Equal(value, control.LargeChange);
+            si = new User32.SCROLLINFO
+            {
+                cbSize = (uint)Marshal.SizeOf<User32.SCROLLINFO>(),
+                fMask = User32.SIF.ALL
+            };
+            Assert.True(User32.GetScrollInfo(control.Handle, User32.SB.CTL, ref si).IsTrue());
+            Assert.Equal((uint)value, si.nPage);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
         }
 
-        [Theory]
-        [MemberData(nameof(LargeChange_TestData))]
+        [WinFormsTheory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(5)]
+        [InlineData(10)]
+        [InlineData(11)]
         public void ScrollBar_LargeChange_SetWithHandleDisabled_GetReturnsExpected(int value)
         {
-            var scrollBar = new SubScrollBar
+            using var control = new SubScrollBar
             {
                 Enabled = false
             };
-            Assert.NotEqual(IntPtr.Zero, scrollBar.Handle);
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
 
-            scrollBar.LargeChange = value;
-            Assert.Equal(value, scrollBar.LargeChange);
+            control.LargeChange = value;
+            Assert.Equal(value, control.LargeChange);
+            var si = new User32.SCROLLINFO
+            {
+                cbSize = (uint)Marshal.SizeOf<User32.SCROLLINFO>(),
+                fMask = User32.SIF.ALL
+            };
+            Assert.True(User32.GetScrollInfo(control.Handle, User32.SB.CTL, ref si).IsTrue());
+            Assert.Equal(0u, si.nPage);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
 
             // Set same.
-            scrollBar.LargeChange = value;
-            Assert.Equal(value, scrollBar.LargeChange);
+            control.LargeChange = value;
+            Assert.Equal(value, control.LargeChange);
+            si = new User32.SCROLLINFO
+            {
+                cbSize = (uint)Marshal.SizeOf<User32.SCROLLINFO>(),
+                fMask = User32.SIF.ALL
+            };
+            Assert.True(User32.GetScrollInfo(control.Handle, User32.SB.CTL, ref si).IsTrue());
+            Assert.Equal(0u, si.nPage);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ScrollBar_LargeChange_SetNegative_ThrowsArgumentOutOfRangeException()
         {
-            var scrollBar = new SubScrollBar();
-            Assert.Throws<ArgumentOutOfRangeException>("value", () => scrollBar.LargeChange = -1);
-            Assert.Equal(10, scrollBar.LargeChange);
+            using var control = new SubScrollBar();
+            Assert.Throws<ArgumentOutOfRangeException>("value", () => control.LargeChange = -1);
+            Assert.Equal(10, control.LargeChange);
         }
 
-        public static IEnumerable<object[]> Maximum_Set_TestData()
-        {
-            yield return new object[] { 0, 1 };
-            yield return new object[] { 8, 9 };
-            yield return new object[] { 10, 10 };
-            yield return new object[] { 50, 10 };
-        }
-
-        [Theory]
-        [MemberData(nameof(Maximum_Set_TestData))]
+        [WinFormsTheory]
+        [InlineData(0, 1)]
+        [InlineData(8, 9)]
+        [InlineData(10, 10)]
+        [InlineData(11, 10)]
         public void ScrollBar_Maximum_Set_GetReturnsExpected(int value, int expectedLargeChange)
         {
-            var scrollBar = new SubScrollBar
+            using var control = new SubScrollBar
             {
                 Maximum = value
             };
-            Assert.Equal(value, scrollBar.Maximum);
-            Assert.Equal(0, scrollBar.Minimum);
-            Assert.Equal(0, scrollBar.Value);
-            Assert.Equal(expectedLargeChange, scrollBar.LargeChange);
-            Assert.Equal(1, scrollBar.SmallChange);
+            Assert.Equal(value, control.Maximum);
+            Assert.Equal(0, control.Minimum);
+            Assert.Equal(0, control.Value);
+            Assert.Equal(expectedLargeChange, control.LargeChange);
+            Assert.Equal(1, control.SmallChange);
+            Assert.False(control.IsHandleCreated);
 
             // Set same.
-            scrollBar.Maximum = value;
-            Assert.Equal(value, scrollBar.Maximum);
-            Assert.Equal(0, scrollBar.Minimum);
-            Assert.Equal(0, scrollBar.Value);
-            Assert.Equal(expectedLargeChange, scrollBar.LargeChange);
-            Assert.Equal(1, scrollBar.SmallChange);
+            control.Maximum = value;
+            Assert.Equal(value, control.Maximum);
+            Assert.Equal(0, control.Minimum);
+            Assert.Equal(0, control.Value);
+            Assert.Equal(expectedLargeChange, control.LargeChange);
+            Assert.Equal(1, control.SmallChange);
+            Assert.False(control.IsHandleCreated);
         }
 
-        [Theory]
-        [MemberData(nameof(Maximum_Set_TestData))]
+        [WinFormsTheory]
+        [InlineData(0, 1)]
+        [InlineData(8, 9)]
+        [InlineData(10, 10)]
+        [InlineData(11, 10)]
         public void ScrollBar_Maximum_SetWithHandle_GetReturnsExpected(int value, int expectedLargeChange)
         {
-            var scrollBar = new SubScrollBar();
-            Assert.NotEqual(IntPtr.Zero, scrollBar.Handle);
+            using var control = new SubScrollBar();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
 
-            scrollBar.Maximum = value;
-            Assert.Equal(value, scrollBar.Maximum);
-            Assert.Equal(0, scrollBar.Minimum);
-            Assert.Equal(0, scrollBar.Value);
-            Assert.Equal(expectedLargeChange, scrollBar.LargeChange);
-            Assert.Equal(1, scrollBar.SmallChange);
+            control.Maximum = value;
+            Assert.Equal(value, control.Maximum);
+            Assert.Equal(0, control.Minimum);
+            Assert.Equal(0, control.Value);
+            Assert.Equal(expectedLargeChange, control.LargeChange);
+            Assert.Equal(1, control.SmallChange);
+            var si = new User32.SCROLLINFO
+            {
+                cbSize = (uint)Marshal.SizeOf<User32.SCROLLINFO>(),
+                fMask = User32.SIF.ALL
+            };
+            Assert.True(User32.GetScrollInfo(control.Handle, User32.SB.CTL, ref si).IsTrue());
+            Assert.Equal(value, si.nMax);
+            Assert.Equal(0, si.nMin);
+            Assert.Equal(0, si.nPos);
+            Assert.Equal((uint)expectedLargeChange, si.nPage);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
 
             // Set same.
-            scrollBar.Maximum = value;
-            Assert.Equal(value, scrollBar.Maximum);
-            Assert.Equal(0, scrollBar.Minimum);
-            Assert.Equal(0, scrollBar.Value);
-            Assert.Equal(expectedLargeChange, scrollBar.LargeChange);
-            Assert.Equal(1, scrollBar.SmallChange);
+            control.Maximum = value;
+            Assert.Equal(value, control.Maximum);
+            Assert.Equal(0, control.Minimum);
+            Assert.Equal(0, control.Value);
+            Assert.Equal(expectedLargeChange, control.LargeChange);
+            Assert.Equal(1, control.SmallChange);
+            si = new User32.SCROLLINFO
+            {
+                cbSize = (uint)Marshal.SizeOf<User32.SCROLLINFO>(),
+                fMask = User32.SIF.ALL
+            };
+            Assert.True(User32.GetScrollInfo(control.Handle, User32.SB.CTL, ref si).IsTrue());
+            Assert.Equal(value, si.nMax);
+            Assert.Equal(0, si.nMin);
+            Assert.Equal(0, si.nPos);
+            Assert.Equal((uint)expectedLargeChange, si.nPage);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
         }
 
-        [Theory]
-        [MemberData(nameof(Maximum_Set_TestData))]
+        [WinFormsTheory]
+        [InlineData(0, 1)]
+        [InlineData(8, 9)]
+        [InlineData(10, 10)]
+        [InlineData(11, 10)]
         public void ScrollBar_Maximum_SetWithHandleDisabled_GetReturnsExpected(int value, int expectedLargeChange)
         {
-            var scrollBar = new SubScrollBar
+            using var control = new SubScrollBar
             {
                 Enabled = false
             };
-            Assert.NotEqual(IntPtr.Zero, scrollBar.Handle);
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
 
-            scrollBar.Maximum = value;
-            Assert.Equal(value, scrollBar.Maximum);
-            Assert.Equal(0, scrollBar.Minimum);
-            Assert.Equal(0, scrollBar.Value);
-            Assert.Equal(expectedLargeChange, scrollBar.LargeChange);
-            Assert.Equal(1, scrollBar.SmallChange);
+            control.Maximum = value;
+            Assert.Equal(value, control.Maximum);
+            Assert.Equal(0, control.Minimum);
+            Assert.Equal(0, control.Value);
+            Assert.Equal(expectedLargeChange, control.LargeChange);
+            Assert.Equal(1, control.SmallChange);
+            var si = new User32.SCROLLINFO
+            {
+                cbSize = (uint)Marshal.SizeOf<User32.SCROLLINFO>(),
+                fMask = User32.SIF.ALL
+            };
+            Assert.True(User32.GetScrollInfo(control.Handle, User32.SB.CTL, ref si).IsTrue());
+            Assert.Equal(0, si.nMax);
+            Assert.Equal(0, si.nMin);
+            Assert.Equal(0, si.nPos);
+            Assert.Equal(0u, si.nPage);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
 
             // Set same.
-            scrollBar.Maximum = value;
-            Assert.Equal(value, scrollBar.Maximum);
-            Assert.Equal(0, scrollBar.Minimum);
-            Assert.Equal(0, scrollBar.Value);
-            Assert.Equal(expectedLargeChange, scrollBar.LargeChange);
-            Assert.Equal(1, scrollBar.SmallChange);
+            control.Maximum = value;
+            Assert.Equal(value, control.Maximum);
+            Assert.Equal(0, control.Minimum);
+            Assert.Equal(0, control.Value);
+            Assert.Equal(expectedLargeChange, control.LargeChange);
+            Assert.Equal(1, control.SmallChange);
+            Assert.Equal(0, createdCallCount);
+            si = new User32.SCROLLINFO
+            {
+                cbSize = (uint)Marshal.SizeOf<User32.SCROLLINFO>(),
+                fMask = User32.SIF.ALL
+            };
+            Assert.True(User32.GetScrollInfo(control.Handle, User32.SB.CTL, ref si).IsTrue());
+            Assert.Equal(0, si.nMax);
+            Assert.Equal(0, si.nMin);
+            Assert.Equal(0, si.nPos);
+            Assert.Equal(0u, si.nPage);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ScrollBar_Maximum_SetLessThanValueAndMinimum_SetsValueAndMinimum()
         {
-            var scrollBar = new SubScrollBar
+            using var control = new SubScrollBar
             {
                 Value = 10,
                 Minimum = 8,
                 Maximum = 5
             };
-            Assert.Equal(5, scrollBar.Maximum);
-            Assert.Equal(5, scrollBar.Minimum);
-            Assert.Equal(5, scrollBar.Value);
-            Assert.Equal(1, scrollBar.LargeChange);
-            Assert.Equal(1, scrollBar.SmallChange);
+            Assert.Equal(5, control.Maximum);
+            Assert.Equal(5, control.Minimum);
+            Assert.Equal(5, control.Value);
+            Assert.Equal(1, control.LargeChange);
+            Assert.Equal(1, control.SmallChange);
+            Assert.False(control.IsHandleCreated);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ScrollBar_Maximum_SetNegative_SetsValueAndMinimum()
         {
-            var scrollBar = new SubScrollBar
+            using var control = new SubScrollBar
             {
                 Maximum = -1
             };
-            Assert.Equal(-1, scrollBar.Maximum);
-            Assert.Equal(-1, scrollBar.Minimum);
-            Assert.Equal(-1, scrollBar.Value);
-            Assert.Equal(1, scrollBar.LargeChange);
-            Assert.Equal(1, scrollBar.SmallChange);
+            Assert.Equal(-1, control.Maximum);
+            Assert.Equal(-1, control.Minimum);
+            Assert.Equal(-1, control.Value);
+            Assert.Equal(1, control.LargeChange);
+            Assert.Equal(1, control.SmallChange);
+            Assert.False(control.IsHandleCreated);
         }
 
-        public static IEnumerable<object[]> Minimum_TestData()
-        {
-            yield return new object[] { -1 };
-            yield return new object[] { 0 };
-            yield return new object[] { 5 };
-        }
-
-        [Theory]
-        [MemberData(nameof(Minimum_TestData))]
+        [WinFormsTheory]
+        [InlineData(-1)]
+        [InlineData(0)]
+        [InlineData(5)]
         public void ScrollBar_Minimum_Set_GetReturnsExpected(int value)
         {
-            var scrollBar = new SubScrollBar
+            using var control = new SubScrollBar
             {
                 Value = 5,
                 Minimum = value
             };
-            Assert.Equal(100, scrollBar.Maximum);
-            Assert.Equal(value, scrollBar.Minimum);
-            Assert.Equal(5, scrollBar.Value);
-            Assert.Equal(10, scrollBar.LargeChange);
-            Assert.Equal(1, scrollBar.SmallChange);
+            Assert.Equal(100, control.Maximum);
+            Assert.Equal(value, control.Minimum);
+            Assert.Equal(5, control.Value);
+            Assert.Equal(10, control.LargeChange);
+            Assert.Equal(1, control.SmallChange);
+            Assert.False(control.IsHandleCreated);
 
             // Set same.
-            scrollBar.Minimum = value;
-            Assert.Equal(100, scrollBar.Maximum);
-            Assert.Equal(value, scrollBar.Minimum);
-            Assert.Equal(5, scrollBar.Value);
-            Assert.Equal(10, scrollBar.LargeChange);
-            Assert.Equal(1, scrollBar.SmallChange);
+            control.Minimum = value;
+            Assert.Equal(100, control.Maximum);
+            Assert.Equal(value, control.Minimum);
+            Assert.Equal(5, control.Value);
+            Assert.Equal(10, control.LargeChange);
+            Assert.Equal(1, control.SmallChange);
+            Assert.False(control.IsHandleCreated);
         }
 
-        [Theory]
-        [MemberData(nameof(Minimum_TestData))]
+        [WinFormsTheory]
+        [InlineData(-1)]
+        [InlineData(0)]
+        [InlineData(5)]
         public void ScrollBar_Minimum_SetWithHandle_GetReturnsExpected(int value)
         {
-            var scrollBar = new SubScrollBar
+            using var control = new SubScrollBar
             {
                 Value = 5
             };
-            Assert.NotEqual(IntPtr.Zero, scrollBar.Handle);
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
 
-            scrollBar.Minimum = value;
-            Assert.Equal(100, scrollBar.Maximum);
-            Assert.Equal(value, scrollBar.Minimum);
-            Assert.Equal(5, scrollBar.Value);
-            Assert.Equal(10, scrollBar.LargeChange);
-            Assert.Equal(1, scrollBar.SmallChange);
+            control.Minimum = value;
+            Assert.Equal(100, control.Maximum);
+            Assert.Equal(value, control.Minimum);
+            Assert.Equal(5, control.Value);
+            Assert.Equal(10, control.LargeChange);
+            Assert.Equal(1, control.SmallChange);
+            var si = new User32.SCROLLINFO
+            {
+                cbSize = (uint)Marshal.SizeOf<User32.SCROLLINFO>(),
+                fMask = User32.SIF.ALL
+            };
+            Assert.True(User32.GetScrollInfo(control.Handle, User32.SB.CTL, ref si).IsTrue());
+            Assert.Equal(100, si.nMax);
+            Assert.Equal(value, si.nMin);
+            Assert.Equal(5, si.nPos);
+            Assert.Equal(10u, si.nPage);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
 
             // Set same.
-            scrollBar.Minimum = value;
-            Assert.Equal(100, scrollBar.Maximum);
-            Assert.Equal(value, scrollBar.Minimum);
-            Assert.Equal(5, scrollBar.Value);
-            Assert.Equal(10, scrollBar.LargeChange);
-            Assert.Equal(1, scrollBar.SmallChange);
+            control.Minimum = value;
+            Assert.Equal(100, control.Maximum);
+            Assert.Equal(value, control.Minimum);
+            Assert.Equal(5, control.Value);
+            Assert.Equal(10, control.LargeChange);
+            Assert.Equal(1, control.SmallChange);si = new User32.SCROLLINFO
+            {
+                cbSize = (uint)Marshal.SizeOf<User32.SCROLLINFO>(),
+                fMask = User32.SIF.ALL
+            };
+            Assert.True(User32.GetScrollInfo(control.Handle, User32.SB.CTL, ref si).IsTrue());
+            Assert.Equal(100, si.nMax);
+            Assert.Equal(value, si.nMin);
+            Assert.Equal(5, si.nPos);
+            Assert.Equal(10u, si.nPage);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
         }
 
-        [Theory]
-        [MemberData(nameof(Minimum_TestData))]
+        [WinFormsTheory]
+        [InlineData(-1)]
+        [InlineData(0)]
+        [InlineData(5)]
         public void ScrollBar_Minimum_SetWithHandleDisabled_GetReturnsExpected(int value)
         {
-            var scrollBar = new SubScrollBar
+            using var control = new SubScrollBar
             {
                 Value = 5,
                 Enabled = false
             };
-            Assert.NotEqual(IntPtr.Zero, scrollBar.Handle);
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
 
-            scrollBar.Minimum = value;
-            Assert.Equal(100, scrollBar.Maximum);
-            Assert.Equal(value, scrollBar.Minimum);
-            Assert.Equal(5, scrollBar.Value);
-            Assert.Equal(10, scrollBar.LargeChange);
-            Assert.Equal(1, scrollBar.SmallChange);
+            control.Minimum = value;
+            Assert.Equal(100, control.Maximum);
+            Assert.Equal(value, control.Minimum);
+            Assert.Equal(5, control.Value);
+            Assert.Equal(10, control.LargeChange);
+            Assert.Equal(1, control.SmallChange);
+            var si = new User32.SCROLLINFO
+            {
+                cbSize = (uint)Marshal.SizeOf<User32.SCROLLINFO>(),
+                fMask = User32.SIF.ALL
+            };
+            Assert.True(User32.GetScrollInfo(control.Handle, User32.SB.CTL, ref si).IsTrue());
+            Assert.Equal(0, si.nMax);
+            Assert.Equal(0, si.nMin);
+            Assert.Equal(0, si.nPos);
+            Assert.Equal(0u, si.nPage);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
 
             // Set same.
-            scrollBar.Minimum = value;
-            Assert.Equal(100, scrollBar.Maximum);
-            Assert.Equal(value, scrollBar.Minimum);
-            Assert.Equal(5, scrollBar.Value);
-            Assert.Equal(10, scrollBar.LargeChange);
-            Assert.Equal(1, scrollBar.SmallChange);
+            control.Minimum = value;
+            Assert.Equal(100, control.Maximum);
+            Assert.Equal(value, control.Minimum);
+            Assert.Equal(5, control.Value);
+            Assert.Equal(10, control.LargeChange);
+            Assert.Equal(1, control.SmallChange);
+            si = new User32.SCROLLINFO
+            {
+                cbSize = (uint)Marshal.SizeOf<User32.SCROLLINFO>(),
+                fMask = User32.SIF.ALL
+            };
+            Assert.True(User32.GetScrollInfo(control.Handle, User32.SB.CTL, ref si).IsTrue());
+            Assert.Equal(0, si.nMax);
+            Assert.Equal(0, si.nMin);
+            Assert.Equal(0, si.nPos);
+            Assert.Equal(0u, si.nPage);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ScrollBar_Minimum_SetGreaterThanValueAndMaximum_SetsValueAndMinimum()
         {
-            var scrollBar = new SubScrollBar
+            using var control = new SubScrollBar
             {
                 Value = 10,
                 Maximum = 8,
                 Minimum = 12
             };
-            Assert.Equal(12, scrollBar.Maximum);
-            Assert.Equal(12, scrollBar.Minimum);
-            Assert.Equal(12, scrollBar.Value);
-            Assert.Equal(1, scrollBar.LargeChange);
-            Assert.Equal(1, scrollBar.SmallChange);
+            Assert.Equal(12, control.Maximum);
+            Assert.Equal(12, control.Minimum);
+            Assert.Equal(12, control.Value);
+            Assert.Equal(1, control.LargeChange);
+            Assert.Equal(1, control.SmallChange);
+            Assert.False(control.IsHandleCreated);
         }
 
         [Theory]
@@ -944,68 +1154,102 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(!value, control.ScaleScrollBarForDpiChange);
         }
 
-        public static IEnumerable<object[]> SmallChange_TestData()
+        [WinFormsTheory]
+        [InlineData(0, 0)]
+        [InlineData(1, 1)]
+        [InlineData(5, 5)]
+        [InlineData(10, 10)]
+        [InlineData(11, 10)]
+        public void ScrollBar_SmallChange_Set_GetReturnsExpected(int value, int expected)
         {
-            yield return new object[] { 1, 1 };
-            yield return new object[] { 8, 8 };
-            yield return new object[] { 10, 10 };
-            yield return new object[] { 12, 10 };
-        }
-
-        [Theory]
-        [MemberData(nameof(SmallChange_TestData))]
-        public void ScrollBar_SmallChange_Set_GetReturnsExpected(int value, int expectedValue)
-        {
-            var scrollBar = new SubScrollBar
+            using var control = new SubScrollBar
             {
                 SmallChange = value
             };
-            Assert.Equal(expectedValue, scrollBar.SmallChange);
+            Assert.Equal(expected, control.SmallChange);
+            Assert.False(control.IsHandleCreated);
 
             // Set same.
-            scrollBar.SmallChange = value;
-            Assert.Equal(expectedValue, scrollBar.SmallChange);
+            control.SmallChange = value;
+            Assert.Equal(expected, control.SmallChange);
+            Assert.False(control.IsHandleCreated);
         }
 
-        [Theory]
-        [MemberData(nameof(SmallChange_TestData))]
-        public void ScrollBar_SmallChange_SetWithHandle_GetReturnsExpected(int value, int expectedValue)
+        [WinFormsTheory]
+        [InlineData(0, 0)]
+        [InlineData(1, 1)]
+        [InlineData(5, 5)]
+        [InlineData(10, 10)]
+        [InlineData(11, 10)]
+        public void ScrollBar_SmallChange_SetWithHandle_GetReturnsExpected(int value, int expected)
         {
-            var scrollBar = new SubScrollBar();
-            Assert.NotEqual(IntPtr.Zero, scrollBar.Handle);
+            using var control = new SubScrollBar();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
 
-            scrollBar.SmallChange = value;
-            Assert.Equal(expectedValue, scrollBar.SmallChange);
+            control.SmallChange = value;
+            Assert.Equal(expected, control.SmallChange);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
 
             // Set same.
-            scrollBar.SmallChange = value;
-            Assert.Equal(expectedValue, scrollBar.SmallChange);
+            control.SmallChange = value;
+            Assert.Equal(expected, control.SmallChange);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
         }
 
-        [Theory]
-        [MemberData(nameof(SmallChange_TestData))]
-        public void ScrollBar_SmallChange_SetWithHandleDisabled_GetReturnsExpected(int value, int expectedValue)
+        [WinFormsTheory]
+        [InlineData(0, 0)]
+        [InlineData(1, 1)]
+        [InlineData(5, 5)]
+        [InlineData(10, 10)]
+        [InlineData(11, 10)]
+        public void ScrollBar_SmallChange_SetWithHandleDisabled_GetReturnsExpected(int value, int expected)
         {
-            var scrollBar = new SubScrollBar
+            using var control = new SubScrollBar
             {
                 Enabled = false
             };
-            Assert.NotEqual(IntPtr.Zero, scrollBar.Handle);
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
 
-            scrollBar.SmallChange = value;
-            Assert.Equal(expectedValue, scrollBar.SmallChange);
+            control.SmallChange = value;
+            Assert.Equal(expected, control.SmallChange);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
 
             // Set same.
-            scrollBar.SmallChange = value;
-            Assert.Equal(expectedValue, scrollBar.SmallChange);
+            control.SmallChange = value;
+            Assert.Equal(expected, control.SmallChange);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ScrollBar_SmallChange_SetNegative_ThrowsArgumentOutOfRangeException()
         {
-            var scrollBar = new SubScrollBar();
-            Assert.Throws<ArgumentOutOfRangeException>("value", () => scrollBar.SmallChange = -1);
-            Assert.Equal(1, scrollBar.SmallChange);
+            using var control = new SubScrollBar();
+            Assert.Throws<ArgumentOutOfRangeException>("value", () => control.SmallChange = -1);
+            Assert.Equal(1, control.SmallChange);
         }
 
         [Theory]
@@ -1084,40 +1328,56 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(2, callCount);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void ScrollBar_Text_Set_GetReturnsExpected(string value, string expected)
         {
-            var control = new SubScrollBar
+            using var control = new SubScrollBar
             {
                 Text = value
             };
             Assert.Equal(expected, control.Text);
+            Assert.False(control.IsHandleCreated);
 
             // Set same.
             control.Text = value;
             Assert.Equal(expected, control.Text);
+            Assert.False(control.IsHandleCreated);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void ScrollBar_Text_SetWithHandle_GetReturnsExpected(string value, string expected)
         {
-            var control = new SubScrollBar();
+            using var control = new SubScrollBar();
             Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
 
             control.Text = value;
             Assert.Equal(expected, control.Text);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
 
             // Set same.
             control.Text = value;
             Assert.Equal(expected, control.Text);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ScrollBar_Text_SetWithHandler_CallsTextChanged()
         {
-            var control = new SubScrollBar();
+            using var control = new SubScrollBar();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -1148,94 +1408,169 @@ namespace System.Windows.Forms.Tests
             Assert.Same("text", control.Text);
             Assert.Equal(2, callCount);
         }
-
-        public static IEnumerable<object[]> Value_TestData()
-        {
-            yield return new object[] { 0 };
-            yield return new object[] { 5 };
-            yield return new object[] { 100 };
-        }
-
-        [Theory]
-        [MemberData(nameof(Value_TestData))]
+        
+        [WinFormsTheory]
+        [InlineData(0)]
+        [InlineData(5)]
+        [InlineData(90)]
+        [InlineData(91)]
+        [InlineData(100)]
         public void ScrollBar_Value_Set_GetReturnsExpected(int value)
         {
-            var scrollBar = new SubScrollBar
+            using var control = new SubScrollBar
             {
                 Value = value
             };
-            Assert.Equal(100, scrollBar.Maximum);
-            Assert.Equal(0, scrollBar.Minimum);
-            Assert.Equal(value, scrollBar.Value);
-            Assert.Equal(10, scrollBar.LargeChange);
-            Assert.Equal(1, scrollBar.SmallChange);
+            Assert.Equal(100, control.Maximum);
+            Assert.Equal(0, control.Minimum);
+            Assert.Equal(value, control.Value);
+            Assert.Equal(10, control.LargeChange);
+            Assert.Equal(1, control.SmallChange);
+            Assert.False(control.IsHandleCreated);
 
             // Set same.
-            scrollBar.Value = value;
-            Assert.Equal(100, scrollBar.Maximum);
-            Assert.Equal(0, scrollBar.Minimum);
-            Assert.Equal(value, scrollBar.Value);
-            Assert.Equal(10, scrollBar.LargeChange);
-            Assert.Equal(1, scrollBar.SmallChange);
+            control.Value = value;
+            Assert.Equal(100, control.Maximum);
+            Assert.Equal(0, control.Minimum);
+            Assert.Equal(value, control.Value);
+            Assert.Equal(10, control.LargeChange);
+            Assert.Equal(1, control.SmallChange);
+            Assert.False(control.IsHandleCreated);
         }
 
-        [Theory]
-        [MemberData(nameof(Value_TestData))]
-        public void ScrollBar_Value_SetWithHandle_GetReturnsExpected(int value)
+        [WinFormsTheory]
+        [InlineData(0, 0)]
+        [InlineData(5, 5)]
+        [InlineData(90, 90)]
+        [InlineData(91, 91)]
+        [InlineData(100, 91)]
+        public void ScrollBar_Value_SetWithHandle_GetReturnsExpected(int value, int expectedPos)
         {
-            var scrollBar = new SubScrollBar();
-            Assert.NotEqual(IntPtr.Zero, scrollBar.Handle);
+            using var control = new SubScrollBar();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
 
-            scrollBar.Value = value;
-            Assert.Equal(100, scrollBar.Maximum);
-            Assert.Equal(0, scrollBar.Minimum);
-            Assert.Equal(value, scrollBar.Value);
-            Assert.Equal(10, scrollBar.LargeChange);
-            Assert.Equal(1, scrollBar.SmallChange);
+            control.Value = value;
+            Assert.Equal(100, control.Maximum);
+            Assert.Equal(0, control.Minimum);
+            Assert.Equal(value, control.Value);
+            Assert.Equal(10, control.LargeChange);
+            Assert.Equal(1, control.SmallChange);
+            var si = new User32.SCROLLINFO
+            {
+                cbSize = (uint)Marshal.SizeOf<User32.SCROLLINFO>(),
+                fMask = User32.SIF.ALL
+            };
+            Assert.True(User32.GetScrollInfo(control.Handle, User32.SB.CTL, ref si).IsTrue());
+            Assert.Equal(100, si.nMax);
+            Assert.Equal(0, si.nMin);
+            Assert.Equal(expectedPos, si.nPos);
+            Assert.Equal((uint)10u, si.nPage);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
 
             // Set same.
-            scrollBar.Value = value;
-            Assert.Equal(100, scrollBar.Maximum);
-            Assert.Equal(0, scrollBar.Minimum);
-            Assert.Equal(value, scrollBar.Value);
-            Assert.Equal(10, scrollBar.LargeChange);
-            Assert.Equal(1, scrollBar.SmallChange);
+            control.Value = value;
+            Assert.Equal(100, control.Maximum);
+            Assert.Equal(0, control.Minimum);
+            Assert.Equal(value, control.Value);
+            Assert.Equal(10, control.LargeChange);
+            Assert.Equal(1, control.SmallChange);
+            si = new User32.SCROLLINFO
+            {
+                cbSize = (uint)Marshal.SizeOf<User32.SCROLLINFO>(),
+                fMask = User32.SIF.ALL
+            };
+            Assert.True(User32.GetScrollInfo(control.Handle, User32.SB.CTL, ref si).IsTrue());
+            Assert.Equal(100, si.nMax);
+            Assert.Equal(0, si.nMin);
+            Assert.Equal(expectedPos, si.nPos);
+            Assert.Equal((uint)10u, si.nPage);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
         }
 
-        [Theory]
-        [MemberData(nameof(Value_TestData))]
+        [WinFormsTheory]
+        [InlineData(0)]
+        [InlineData(5)]
+        [InlineData(90)]
+        [InlineData(91)]
+        [InlineData(100)]
         public void ScrollBar_Value_SetWithHandleDisabled_GetReturnsExpected(int value)
         {
-            var scrollBar = new SubScrollBar
+            using var control = new SubScrollBar
             {
                 Enabled = false
             };
-            Assert.NotEqual(IntPtr.Zero, scrollBar.Handle);
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
 
-            scrollBar.Value = value;
-            Assert.Equal(100, scrollBar.Maximum);
-            Assert.Equal(0, scrollBar.Minimum);
-            Assert.Equal(value, scrollBar.Value);
-            Assert.Equal(10, scrollBar.LargeChange);
-            Assert.Equal(1, scrollBar.SmallChange);
+            control.Value = value;
+            Assert.Equal(100, control.Maximum);
+            Assert.Equal(0, control.Minimum);
+            Assert.Equal(value, control.Value);
+            Assert.Equal(10, control.LargeChange);
+            Assert.Equal(1, control.SmallChange);
+            var si = new User32.SCROLLINFO
+            {
+                cbSize = (uint)Marshal.SizeOf<User32.SCROLLINFO>(),
+                fMask = User32.SIF.ALL
+            };
+            Assert.True(User32.GetScrollInfo(control.Handle, User32.SB.CTL, ref si).IsTrue());
+            Assert.Equal(0, si.nMax);
+            Assert.Equal(0, si.nMin);
+            Assert.Equal(0, si.nPos);
+            Assert.Equal(0u, si.nPage);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
 
             // Set same.
-            scrollBar.Value = value;
-            Assert.Equal(100, scrollBar.Maximum);
-            Assert.Equal(0, scrollBar.Minimum);
-            Assert.Equal(value, scrollBar.Value);
-            Assert.Equal(10, scrollBar.LargeChange);
-            Assert.Equal(1, scrollBar.SmallChange);
+            control.Value = value;
+            Assert.Equal(100, control.Maximum);
+            Assert.Equal(0, control.Minimum);
+            Assert.Equal(value, control.Value);
+            Assert.Equal(10, control.LargeChange);
+            Assert.Equal(1, control.SmallChange);
+            si = new User32.SCROLLINFO
+            {
+                cbSize = (uint)Marshal.SizeOf<User32.SCROLLINFO>(),
+                fMask = User32.SIF.ALL
+            };
+            Assert.True(User32.GetScrollInfo(control.Handle, User32.SB.CTL, ref si).IsTrue());
+            Assert.Equal(0, si.nMax);
+            Assert.Equal(0, si.nMin);
+            Assert.Equal(0, si.nPos);
+            Assert.Equal(0u, si.nPage);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(-1)]
         [InlineData(101)]
         public void ScrollBar_Value_SetOutOfRange_ThrowsArgumentOutOfRangeException(int value)
         {
-            var scrollBar = new SubScrollBar();
-            Assert.Throws<ArgumentOutOfRangeException>("value", () => scrollBar.Value = value);
-            Assert.Equal(0, scrollBar.Value);
+            using var control = new SubScrollBar();
+            Assert.Throws<ArgumentOutOfRangeException>("value", () => control.Value = value);
+            Assert.Equal(0, control.Value);
         }
         
         [WinFormsFact]
@@ -1323,11 +1658,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetMouseEventArgsTheoryData))]
         public void ScrollBar_OnMouseClick_Invoke_CallsMouseClick(MouseEventArgs eventArgs)
         {
-            var control = new SubScrollBar();
+            using var control = new SubScrollBar();
             int callCount = 0;
             MouseEventHandler handler = (sender, e) =>
             {
@@ -1347,11 +1682,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetMouseEventArgsTheoryData))]
         public void ScrollBar_OnMouseDoubleClick_Invoke_CallsMouseDoubleClick(MouseEventArgs eventArgs)
         {
-            var control = new SubScrollBar();
+            using var control = new SubScrollBar();
             int callCount = 0;
             MouseEventHandler handler = (sender, e) =>
             {

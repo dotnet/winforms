@@ -9,7 +9,7 @@ using WinForms.Common.Tests;
 
 namespace System.Windows.Forms.Tests
 {
-    public class CheckedListBoxTests
+    public class CheckedListBoxTests : IClassFixture<ThreadExceptionFixture>
     {
         [Fact]
         public void CheckedListBox_Constructor()
@@ -160,7 +160,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, box.ValueMember);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetPaddingNormalizedTheoryData))]
         public void CheckedListBox_Padding_Set_GetReturnsExpected(Padding value, Padding expected)
         {
@@ -177,7 +177,7 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.IsHandleCreated);
         }
 
-        public static IEnumerable<object[]> Padding_Set_TestData()
+        public static IEnumerable<object[]> Padding_SetWithHandle_TestData()
         {
             yield return new object[] { new Padding(), new Padding(), 0, 0 };
             yield return new object[] { new Padding(1, 2, 3, 4), new Padding(1, 2, 3, 4), 1, 1 };
@@ -185,8 +185,8 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { new Padding(-1, -2, -3, -4), Padding.Empty, 1, 2 };
         }
 
-        [Theory]
-        [MemberData(nameof(Padding_Set_TestData))]
+        [WinFormsTheory]
+        [MemberData(nameof(Padding_SetWithHandle_TestData))]
         public void CheckedListBox_Padding_SetWithHandle_GetReturnsExpected(Padding value, Padding expected, int expectedInvalidatedCallCount1, int expectedInvalidatedCallCount2)
         {
             using var control = new CheckedListBox();
@@ -214,7 +214,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createdCallCount);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void CheckedListBox_Padding_SetWithHandler_CallsPaddingChanged()
         {
             using var control = new CheckedListBox();

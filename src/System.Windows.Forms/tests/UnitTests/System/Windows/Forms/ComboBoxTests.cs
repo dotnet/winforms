@@ -449,27 +449,29 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, displayMemberCallCount);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetFontTheoryData))]
-        public void Font_Set_GetReturnsExpected(Font value)
+        public void ComboBox_Font_Set_GetReturnsExpected(Font value)
         {
-            var control = new SubComboBox
+            using var control = new SubComboBox
             {
                 Font = value
             };
             Assert.Equal(value ?? Control.DefaultFont, control.Font);
             Assert.Equal(control.Font.Height, control.FontHeight);
+            Assert.False(control.IsHandleCreated);
 
             // Set same.
             control.Font = value;
             Assert.Equal(value ?? Control.DefaultFont, control.Font);
             Assert.Equal(control.Font.Height, control.FontHeight);
+            Assert.False(control.IsHandleCreated);
         }
 
-        [Fact]
-        public void Font_SetWithHandler_CallsFontChanged()
+        [WinFormsFact]
+        public void ComboBox_Font_SetWithHandler_CallsFontChanged()
         {
-            var control = new ComboBox();
+            using var control = new ComboBox();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -480,7 +482,7 @@ namespace System.Windows.Forms.Tests
             control.FontChanged += handler;
 
             // Set different.
-            Font font1 = new Font("Arial", 8.25f);
+            using var font1 = new Font("Arial", 8.25f);
             control.Font = font1;
             Assert.Same(font1, control.Font);
             Assert.Equal(1, callCount);
@@ -491,7 +493,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
 
             // Set different.
-            Font font2 = SystemFonts.DialogFont;
+            using var font2 = SystemFonts.DialogFont;
             control.Font = font2;
             Assert.Same(font2, control.Font);
             Assert.Equal(2, callCount);
@@ -607,7 +609,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(2, callCount);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetPaddingNormalizedTheoryData))]
         public void ComboBox_Padding_Set_GetReturnsExpected(Padding value, Padding expected)
         {
@@ -624,7 +626,7 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.IsHandleCreated);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetPaddingNormalizedTheoryData))]
         public void ComboBox_Padding_SetWithHandle_GetReturnsExpected(Padding value, Padding expected)
         {
@@ -653,7 +655,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createdCallCount);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ComboBox_Padding_SetWithHandler_CallsPaddingChanged()
         {
             using var control = new ComboBox();

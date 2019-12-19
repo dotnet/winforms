@@ -959,6 +959,837 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.IsHandleCreated);
         }
 
+        [WinFormsFact]
+        public void Control_Dispose_Invoke_Success()
+        {
+            using var control = new Control();
+            int callCount = 0;
+            void handler(object sender, EventArgs e)
+            {
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.False(control.IsHandleCreated);
+                Assert.True(control.Disposing);
+                Assert.Equal(callCount > 0, control.IsDisposed);
+                callCount++;
+            };
+            control.Disposed += handler;
+
+            try
+            {
+                control.Dispose();
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.True(control.IsDisposed);
+                Assert.False(control.Disposing);
+                Assert.Equal(1, callCount);
+                Assert.False(control.IsHandleCreated);
+
+                // Dispose multiple times.
+                control.Dispose();
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.True(control.IsDisposed);
+                Assert.False(control.Disposing);
+                Assert.Equal(2, callCount);
+                Assert.False(control.IsHandleCreated);
+            }
+            finally
+            {
+                control.Disposed -= handler;
+            }
+        }
+
+        [WinFormsFact]
+        public void Control_Dispose_InvokeWithParent_Success()
+        {
+            using var parent = new Control();
+            int controlRemovedCallCount = 0;
+            parent.ControlRemoved += (sender, e) => controlRemovedCallCount++;
+            using var control = new Control
+            {
+                Parent = parent
+            };
+            int callCount = 0;
+            void handler(object sender, EventArgs e)
+            {
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.False(control.IsHandleCreated);
+                Assert.True(control.Disposing);
+                Assert.Equal(callCount > 0, control.IsDisposed);
+                callCount++;
+            };
+            control.Disposed += handler;
+
+            try
+            {
+                control.Dispose();
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.Equal(1, controlRemovedCallCount);
+                Assert.False(control.Disposing);
+                Assert.True(control.IsDisposed);
+                Assert.Equal(1, callCount);
+                Assert.False(control.IsHandleCreated);
+
+                // Dispose multiple times.
+                control.Dispose();
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.Equal(1, controlRemovedCallCount);
+                Assert.False(control.Disposing);
+                Assert.True(control.IsDisposed);
+                Assert.Equal(2, callCount);
+                Assert.False(control.IsHandleCreated);
+            }
+            finally
+            {
+                control.Disposed -= handler;
+            }
+        }
+
+        [WinFormsFact]
+        public void Control_Dispose_InvokeWithChildren_Success()
+        {
+            using var control = new Control();
+            using var child1 = new Control();
+            using var child2 = new Control();
+            control.Controls.Add(child1);
+            control.Controls.Add(child2);
+            int controlRemovedCallCount = 0;
+            control.ControlRemoved += (sender, e) => controlRemovedCallCount++;
+
+            int callCount = 0;
+            void handler(object sender, EventArgs e)
+            {
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.False(control.IsHandleCreated);
+                Assert.True(control.Disposing);
+                Assert.Equal(callCount > 0, control.IsDisposed);
+                callCount++;
+            };
+            control.Disposed += handler;
+            int child1CallCount = 0;
+            child1.Disposed += (sender, e) => child1CallCount++;
+            int child2CallCount = 0;
+            child2.Disposed += (sender, e) => child2CallCount++;
+
+            try
+            {
+                control.Dispose();
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.Null(child1.Parent);
+                Assert.Null(child2.Parent);
+                Assert.Equal(0, controlRemovedCallCount);
+                Assert.False(control.Disposing);
+                Assert.True(control.IsDisposed);
+                Assert.False(child1.Disposing);
+                Assert.True(child1.IsDisposed);
+                Assert.False(child2.Disposing);
+                Assert.True(child2.IsDisposed);
+                Assert.Equal(1, callCount);
+                Assert.Equal(1, child1CallCount);
+                Assert.Equal(1, child2CallCount);
+                Assert.False(control.IsHandleCreated);
+                Assert.False(child1.IsHandleCreated);
+                Assert.False(child2.IsHandleCreated);
+
+                // Dispose multiple times.
+                control.Dispose();
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.Null(child1.Parent);
+                Assert.Null(child2.Parent);
+                Assert.Equal(0, controlRemovedCallCount);
+                Assert.False(control.Disposing);
+                Assert.True(control.IsDisposed);
+                Assert.False(child1.Disposing);
+                Assert.True(child1.IsDisposed);
+                Assert.False(child2.Disposing);
+                Assert.True(child2.IsDisposed);
+                Assert.Equal(2, callCount);
+                Assert.Equal(1, child1CallCount);
+                Assert.Equal(1, child2CallCount);
+                Assert.False(control.IsHandleCreated);
+                Assert.False(child1.IsHandleCreated);
+                Assert.False(child2.IsHandleCreated);
+            }
+            finally
+            {
+                control.Disposed -= handler;
+            }
+        }
+        
+        [WinFormsFact]
+        public void Control_Dispose_InvokeWithBindings_Success()
+        {
+            using var control = new Control();
+            control.DataBindings.Add(new Binding("Text", new object(), "member"));
+
+            int callCount = 0;
+            void handler(object sender, EventArgs e)
+            {
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.False(control.IsHandleCreated);
+                Assert.True(control.Disposing);
+                Assert.Equal(callCount > 0, control.IsDisposed);
+                callCount++;
+            };
+            control.Disposed += handler;
+
+            try
+            {
+                control.Dispose();
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.True(control.IsDisposed);
+                Assert.False(control.Disposing);
+                Assert.Equal(1, callCount);
+                Assert.False(control.IsHandleCreated);
+
+                // Dispose multiple times.
+                control.Dispose();
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.True(control.IsDisposed);
+                Assert.False(control.Disposing);
+                Assert.Equal(2, callCount);
+                Assert.False(control.IsHandleCreated);
+            }
+            finally
+            {
+                control.Disposed -= handler;
+            }
+        }
+
+        [WinFormsFact]
+        public void Control_Dispose_InvokeWithHandle_Success()
+        {
+            using var control = new Control();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+            int destroyedCallCount = 0;
+            control.HandleDestroyed += (sender, e) => destroyedCallCount++;
+
+            int callCount = 0;
+            void handler(object sender, EventArgs e)
+            {
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.False(control.IsHandleCreated);
+                Assert.True(control.Disposing);
+                Assert.Equal(callCount > 0, control.IsDisposed);
+                callCount++;
+            };
+            control.Disposed += handler;
+
+            try
+            {
+                control.Dispose();
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.True(control.IsDisposed);
+                Assert.False(control.Disposing);
+                Assert.Equal(1, callCount);
+                Assert.False(control.IsHandleCreated);
+                Assert.Equal(0, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+                Assert.Equal(1, destroyedCallCount);
+
+                // Dispose multiple times.
+                control.Dispose();
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.True(control.IsDisposed);
+                Assert.False(control.Disposing);
+                Assert.Equal(2, callCount);
+                Assert.False(control.IsHandleCreated);
+                Assert.Equal(0, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+                Assert.Equal(1, destroyedCallCount);
+            }
+            finally
+            {
+                control.Disposed -= handler;
+            }
+        }
+
+        [WinFormsFact]
+        public void Control_Dispose_InvokeInDisposing_Nop()
+        {
+            using var control = new SubControl();
+
+            int disposedCallCount = 0;
+            control.Disposed += (sender, e) =>
+            {
+                control.Dispose();
+                disposedCallCount++;
+            };
+
+            control.Dispose();
+            Assert.Equal(1, disposedCallCount);
+        }
+
+        [WinFormsFact]
+        public void Control_Dispose_InvokeDisposing_Success()
+        {
+            using var control = new SubControl();
+            int callCount = 0;
+            void handler(object sender, EventArgs e)
+            {
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.False(control.IsHandleCreated);
+                Assert.True(control.Disposing);
+                Assert.Equal(callCount > 0, control.IsDisposed);
+                callCount++;
+            };
+            control.Disposed += handler;
+
+            try
+            {
+                control.Dispose(true);
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.True(control.IsDisposed);
+                Assert.False(control.Disposing);
+                Assert.Equal(1, callCount);
+                Assert.False(control.IsHandleCreated);
+
+                // Dispose multiple times.
+                control.Dispose(true);
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.True(control.IsDisposed);
+                Assert.False(control.Disposing);
+                Assert.Equal(2, callCount);
+                Assert.False(control.IsHandleCreated);
+            }
+            finally
+            {
+                control.Disposed -= handler;
+            }
+        }
+        
+        [WinFormsFact]
+        public void Control_Dispose_InvokeNotDisposing_Success()
+        {
+            using var control = new SubControl();
+            int callCount = 0;
+            void handler(object sender, EventArgs e) => callCount++;
+            control.Disposed += handler;
+
+            try
+            {
+                control.Dispose(false);
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.False(control.IsDisposed);
+                Assert.False(control.Disposing);
+                Assert.Equal(0, callCount);
+                Assert.False(control.IsHandleCreated);
+
+                // Dispose multiple times.
+                control.Dispose(false);
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.False(control.IsDisposed);
+                Assert.False(control.Disposing);
+                Assert.Equal(0, callCount);
+                Assert.False(control.IsHandleCreated);
+            }
+            finally
+            {
+                control.Disposed -= handler;
+            }
+        }
+
+        [WinFormsFact]
+        public void Control_Dispose_InvokeDisposingWithParent_Success()
+        {
+            using var parent = new SubControl();
+            int controlRemovedCallCount = 0;
+            parent.ControlRemoved += (sender, e) => controlRemovedCallCount++;
+            using var control = new SubControl
+            {
+                Parent = parent
+            };
+            int callCount = 0;
+            void handler(object sender, EventArgs e)
+            {
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.False(control.IsHandleCreated);
+                Assert.True(control.Disposing);
+                Assert.Equal(callCount > 0, control.IsDisposed);
+                callCount++;
+            };
+            control.Disposed += handler;
+
+            try
+            {
+                control.Dispose(true);
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.Equal(1, controlRemovedCallCount);
+                Assert.False(control.Disposing);
+                Assert.True(control.IsDisposed);
+                Assert.Equal(1, callCount);
+                Assert.False(control.IsHandleCreated);
+
+                // Dispose multiple times.
+                control.Dispose(true);
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.Equal(1, controlRemovedCallCount);
+                Assert.False(control.Disposing);
+                Assert.True(control.IsDisposed);
+                Assert.Equal(2, callCount);
+                Assert.False(control.IsHandleCreated);
+            }
+            finally
+            {
+                control.Disposed -= handler;
+            }
+        }
+
+        [WinFormsFact]
+        public void Control_Dispose_InvokeNotDisposingWithParent_Success()
+        {
+            using var parent = new SubControl();
+            int controlRemovedCallCount = 0;
+            parent.ControlRemoved += (sender, e) => controlRemovedCallCount++;
+            using var control = new SubControl
+            {
+                Parent = parent
+            };
+            int callCount = 0;
+            void handler(object sender, EventArgs e) => callCount++;
+            control.Disposed += handler;
+
+            try
+            {
+                control.Dispose(false);
+                Assert.Same(parent, control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.Equal(0, controlRemovedCallCount);
+                Assert.False(control.Disposing);
+                Assert.False(control.IsDisposed);
+                Assert.Equal(0, callCount);
+                Assert.False(control.IsHandleCreated);
+
+                // Dispose multiple times.
+                control.Dispose(false);
+                Assert.Same(parent, control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.Equal(0, controlRemovedCallCount);
+                Assert.False(control.Disposing);
+                Assert.False(control.IsDisposed);
+                Assert.Equal(0, callCount);
+                Assert.False(control.IsHandleCreated);
+            }
+            finally
+            {
+                control.Disposed -= handler;
+            }
+        }
+
+        [WinFormsFact]
+        public void Control_Dispose_InvokeDisposingWithChildren_Success()
+        {
+            using var control = new SubControl();
+            using var child1 = new SubControl();
+            using var child2 = new SubControl();
+            control.Controls.Add(child1);
+            control.Controls.Add(child2);
+            int controlRemovedCallCount = 0;
+            control.ControlRemoved += (sender, e) => controlRemovedCallCount++;
+
+            int callCount = 0;
+            void handler(object sender, EventArgs e)
+            {
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.False(control.IsHandleCreated);
+                Assert.True(control.Disposing);
+                Assert.Equal(callCount > 0, control.IsDisposed);
+                callCount++;
+            };
+            control.Disposed += handler;
+            int child1CallCount = 0;
+            child1.Disposed += (sender, e) => child1CallCount++;
+            int child2CallCount = 0;
+            child2.Disposed += (sender, e) => child2CallCount++;
+
+            try
+            {
+                control.Dispose(true);
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.Null(child1.Parent);
+                Assert.Null(child2.Parent);
+                Assert.Equal(0, controlRemovedCallCount);
+                Assert.False(control.Disposing);
+                Assert.True(control.IsDisposed);
+                Assert.False(child1.Disposing);
+                Assert.True(child1.IsDisposed);
+                Assert.False(child2.Disposing);
+                Assert.True(child2.IsDisposed);
+                Assert.Equal(1, callCount);
+                Assert.Equal(1, child1CallCount);
+                Assert.Equal(1, child2CallCount);
+                Assert.False(control.IsHandleCreated);
+                Assert.False(child1.IsHandleCreated);
+                Assert.False(child2.IsHandleCreated);
+
+                // Dispose multiple times.
+                control.Dispose(true);
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.Null(child1.Parent);
+                Assert.Null(child2.Parent);
+                Assert.Equal(0, controlRemovedCallCount);
+                Assert.False(control.Disposing);
+                Assert.True(control.IsDisposed);
+                Assert.False(child1.Disposing);
+                Assert.True(child1.IsDisposed);
+                Assert.False(child2.Disposing);
+                Assert.True(child2.IsDisposed);
+                Assert.Equal(2, callCount);
+                Assert.Equal(1, child1CallCount);
+                Assert.Equal(1, child2CallCount);
+                Assert.False(control.IsHandleCreated);
+                Assert.False(child1.IsHandleCreated);
+                Assert.False(child2.IsHandleCreated);
+            }
+            finally
+            {
+                control.Disposed -= handler;
+            }
+        }
+        
+        [WinFormsFact]
+        public void Control_Dispose_InvokeNotDisposingWithChildren_Success()
+        {
+            using var control = new SubControl();
+            using var child1 = new SubControl();
+            using var child2 = new SubControl();
+            control.Controls.Add(child1);
+            control.Controls.Add(child2);
+            int controlRemovedCallCount = 0;
+            control.ControlRemoved += (sender, e) => controlRemovedCallCount++;
+
+            int callCount = 0;
+            void handler(object sender, EventArgs e) => callCount++;
+            control.Disposed += handler;
+            int child1CallCount = 0;
+            child1.Disposed += (sender, e) => child1CallCount++;
+            int child2CallCount = 0;
+            child2.Disposed += (sender, e) => child2CallCount++;
+
+            try
+            {
+                control.Dispose(false);
+                Assert.Null(control.Parent);
+                Assert.Equal(new Control[] { child1, child2 }, control.Controls.Cast<Control>());
+                Assert.Empty(control.DataBindings);
+                Assert.Same(control, child1.Parent);
+                Assert.Same(control, child2.Parent);
+                Assert.Equal(0, controlRemovedCallCount);
+                Assert.False(control.Disposing);
+                Assert.False(control.IsDisposed);
+                Assert.False(child1.Disposing);
+                Assert.False(child1.IsDisposed);
+                Assert.False(child2.Disposing);
+                Assert.False(child2.IsDisposed);
+                Assert.Equal(0, callCount);
+                Assert.Equal(0, child1CallCount);
+                Assert.Equal(0, child2CallCount);
+                Assert.False(control.IsHandleCreated);
+                Assert.False(child1.IsHandleCreated);
+                Assert.False(child2.IsHandleCreated);
+
+                // Dispose multiple times.
+                control.Dispose(false);
+                Assert.Null(control.Parent);
+                Assert.Equal(new Control[] { child1, child2 }, control.Controls.Cast<Control>());
+                Assert.Empty(control.DataBindings);
+                Assert.Same(control, child1.Parent);
+                Assert.Same(control, child2.Parent);
+                Assert.Equal(0, controlRemovedCallCount);
+                Assert.False(control.Disposing);
+                Assert.False(control.IsDisposed);
+                Assert.False(child1.Disposing);
+                Assert.False(child1.IsDisposed);
+                Assert.False(child2.Disposing);
+                Assert.False(child2.IsDisposed);
+                Assert.Equal(0, callCount);
+                Assert.Equal(0, child1CallCount);
+                Assert.Equal(0, child2CallCount);
+                Assert.False(control.IsHandleCreated);
+                Assert.False(child1.IsHandleCreated);
+                Assert.False(child2.IsHandleCreated);
+            }
+            finally
+            {
+                control.Disposed -= handler;
+            }
+        }
+
+        [WinFormsFact]
+        public void Control_Dispose_InvokeDisposingWithBindings_Success()
+        {
+            using var control = new SubControl();
+            control.DataBindings.Add(new Binding("Text", new object(), "member"));
+
+            int callCount = 0;
+            void handler(object sender, EventArgs e)
+            {
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.False(control.IsHandleCreated);
+                Assert.True(control.Disposing);
+                Assert.Equal(callCount > 0, control.IsDisposed);
+                callCount++;
+            };
+            control.Disposed += handler;
+
+            try
+            {
+                control.Dispose(true);
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.True(control.IsDisposed);
+                Assert.False(control.Disposing);
+                Assert.Equal(1, callCount);
+                Assert.False(control.IsHandleCreated);
+
+                // Dispose multiple times.
+                control.Dispose(true);
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.True(control.IsDisposed);
+                Assert.False(control.Disposing);
+                Assert.Equal(2, callCount);
+                Assert.False(control.IsHandleCreated);
+            }
+            finally
+            {
+                control.Disposed -= handler;
+            }
+        }
+        
+        [WinFormsFact]
+        public void Control_Dispose_InvokeNotDisposingWithBindings_Success()
+        {
+            using var control = new SubControl();
+            var binding = new Binding("Text", new object(), "member");
+            control.DataBindings.Add(binding);
+
+            int callCount = 0;
+            void handler(object sender, EventArgs e) => callCount++;
+            control.Disposed += handler;
+
+            try
+            {
+                control.Dispose(false);
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Same(binding, Assert.Single(control.DataBindings));
+                Assert.False(control.IsDisposed);
+                Assert.False(control.Disposing);
+                Assert.Equal(0, callCount);
+                Assert.False(control.IsHandleCreated);
+
+                // Dispose multiple times.
+                control.Dispose(false);
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Same(binding, Assert.Single(control.DataBindings));
+                Assert.False(control.IsDisposed);
+                Assert.False(control.Disposing);
+                Assert.Equal(0, callCount);
+                Assert.False(control.IsHandleCreated);
+            }
+            finally
+            {
+                control.Disposed -= handler;
+            }
+        }
+
+        [WinFormsFact]
+        public void Control_Dispose_InvokeDisposingWithHandle_Success()
+        {
+            using var control = new SubControl();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+            int destroyedCallCount = 0;
+            control.HandleDestroyed += (sender, e) => destroyedCallCount++;
+
+            int callCount = 0;
+            void handler(object sender, EventArgs e)
+            {
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.False(control.IsHandleCreated);
+                Assert.True(control.Disposing);
+                Assert.Equal(callCount > 0, control.IsDisposed);
+                callCount++;
+            };
+            control.Disposed += handler;
+
+            try
+            {
+                control.Dispose(true);
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.True(control.IsDisposed);
+                Assert.False(control.Disposing);
+                Assert.Equal(1, callCount);
+                Assert.False(control.IsHandleCreated);
+                Assert.Equal(0, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+                Assert.Equal(1, destroyedCallCount);
+
+                // Dispose multiple times.
+                control.Dispose(true);
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.True(control.IsDisposed);
+                Assert.False(control.Disposing);
+                Assert.Equal(2, callCount);
+                Assert.False(control.IsHandleCreated);
+                Assert.Equal(0, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+                Assert.Equal(1, destroyedCallCount);
+            }
+            finally
+            {
+                control.Disposed -= handler;
+            }
+        }
+
+        [WinFormsFact]
+        public void Control_Dispose_InvokeNotDisposingWithHandle_Success()
+        {
+            using var control = new SubControl();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+            int destroyedCallCount = 0;
+            control.HandleDestroyed += (sender, e) => destroyedCallCount++;
+
+            int callCount = 0;
+            void handler(object sender, EventArgs e) => callCount++;
+            control.Disposed += handler;
+
+            try
+            {
+                control.Dispose(false);
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.False(control.IsDisposed);
+                Assert.False(control.Disposing);
+                Assert.Equal(0, callCount);
+                Assert.False(control.IsHandleCreated);
+                Assert.Equal(0, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+                Assert.Equal(0, destroyedCallCount);
+
+                // Dispose multiple times.
+                control.Dispose(false);
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.False(control.IsDisposed);
+                Assert.False(control.Disposing);
+                Assert.Equal(0, callCount);
+                Assert.False(control.IsHandleCreated);
+                Assert.Equal(0, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+                Assert.Equal(0, destroyedCallCount);
+            }
+            finally
+            {
+                control.Disposed -= handler;
+            }
+        }
+
+        [WinFormsFact]
+        public void Control_Dispose_InvokeDisposingInDisposing_Nop()
+        {
+            using var control = new SubControl();
+
+            int disposedCallCount = 0;
+            control.Disposed += (sender, e) =>
+            {
+                control.Dispose(true);
+                disposedCallCount++;
+            };
+
+            control.Dispose(true);
+            Assert.Equal(1, disposedCallCount);
+        }
+
         /// <summary>
         ///  Data for the DoDragDrop test
         /// </summary>

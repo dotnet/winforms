@@ -535,34 +535,50 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(!value, control.Enabled);
         }
 
-        [StaTheory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void AxHost_Text_Set_GetReturnsExpected(string value)
         {
-            var control = new SubAxHost("00000000-0000-0000-0000-000000000000")
+            using var control = new SubAxHost("00000000-0000-0000-0000-000000000000")
             {
                 Text = value
             };
             Assert.Equal(value, control.Text);
+            Assert.False(control.IsHandleCreated);
 
             // Set same.
             control.Text = value;
             Assert.Equal(value, control.Text);
+            Assert.False(control.IsHandleCreated);
         }
 
-        [StaTheory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void AxHost_Text_SetWithHandle_GetReturnsExpected(string value)
         {
             var control = new SubAxHost("8856f961-340a-11d0-a96b-00c04fd705a2");
             Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            ((Control)control).StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
 
             control.Text = value;
             Assert.Equal(value, control.Text);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
 
             // Set same.
             control.Text = value;
             Assert.Equal(value, control.Text);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
         }
 
         [StaFact]
