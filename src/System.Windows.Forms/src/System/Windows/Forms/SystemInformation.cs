@@ -634,7 +634,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                IntPtr hwinsta = UnsafeNativeMethods.GetProcessWindowStation();
+                IntPtr hwinsta = User32.GetProcessWindowStation();
                 if (hwinsta != IntPtr.Zero && s_processWinStation != hwinsta)
                 {
                     s_isUserInteractive = true;
