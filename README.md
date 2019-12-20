@@ -60,7 +60,7 @@ Security issues and bugs should be reported privately via email to the Microsoft
 
 This codebase is a fork of the Windows Forms code in the .NET Framework 4.8. In Windows Forms .NET Core 3.0 we have strived to bring the two runtimes to a parity, however since then we have done a number of [changes, including breaking](https://docs.microsoft.com/en-us/dotnet/core/compatibility/winforms), which diverged the two.
 
-Please refer to [Porting guide][porting-guidelines] to learn more about breaking changes.
+For more information about breaking changes, see the [Porting guide][porting-guidelines].
 
 ## Code of Conduct
 
