@@ -50,7 +50,7 @@ Some of the best ways to contribute are to try things out, file bugs, join in de
 
 ### .NET Framework issues
 
-Issues with .NET Framework, including Windows Forms, should be filed on [VS developer community](https://developercommunity.visualstudio.com/spaces/61/index.html) or [Product Support](https://support.microsoft.com/en-us/contactus?ws=support). They should not be filed on this repository.
+Issues with .NET Framework, including Windows Forms, should be filed on the [Developer Community](https://developercommunity.visualstudio.com/spaces/61/index.html) or [Product Support](https://support.microsoft.com/en-us/contactus?ws=support) websites. They should not be filed on this repository.
 
 ### Reporting security issues
 
