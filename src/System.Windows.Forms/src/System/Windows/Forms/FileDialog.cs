@@ -730,14 +730,14 @@ namespace System.Windows.Forms
                 throw new ThreadStateException(string.Format(SR.DebuggingExceptionOnly, SR.ThreadMustBeSTA));
             }
 
-            if (UseVistaDialogInternal)
+            // If running the Vista dialog fails (e.g. on Server Core), we fall back to the
+            // legacy dialog.
+            if (UseVistaDialogInternal && TryRunDialogVista(hWndOwner, out bool returnValue))
             {
-                return RunDialogVista(hWndOwner);
+                return returnValue;
             }
-            else
-            {
-                return RunDialogOld(hWndOwner);
-            }
+            
+            return RunDialogOld(hWndOwner);
         }
 
         private bool RunDialogOld(IntPtr hWndOwner)

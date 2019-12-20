@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Threading;
 using static Interop;
 
@@ -33,15 +34,28 @@ namespace System.Windows.Forms
 
         private protected abstract FileDialogNative.IFileDialog CreateVistaDialog();
 
-        private bool RunDialogVista(IntPtr hWndOwner)
+        private bool TryRunDialogVista(IntPtr hWndOwner, out bool returnValue)
         {
-            FileDialogNative.IFileDialog dialog = CreateVistaDialog();
+            FileDialogNative.IFileDialog dialog;
+            try
+            {
+                // Creating the Vista dialog can fail on Windows Server Core, even if the
+                // Server Core App Compatibility FOD is installed.
+                dialog = CreateVistaDialog();
+            }
+            catch (COMException)
+            {
+                returnValue = false;
+                return false;
+            }
+
             OnBeforeVistaDialog(dialog);
             var events = new VistaDialogEvents(this);
             dialog.Advise(events, out uint eventCookie);
             try
             {
-                return dialog.Show(hWndOwner) == 0;
+                returnValue = dialog.Show(hWndOwner) == 0;
+                return true;
             }
             finally
             {
