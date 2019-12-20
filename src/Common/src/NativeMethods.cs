@@ -813,28 +813,6 @@ namespace System.Windows.Forms
                 BOOL* actionCommitted);
         }
 
-        [StructLayout(LayoutKind.Sequential)]
-        public class IMAGELISTDRAWPARAMS
-        {
-            public int cbSize = Marshal.SizeOf<IMAGELISTDRAWPARAMS>();
-            public IntPtr himl = IntPtr.Zero;
-            public int i = 0;
-            public IntPtr hdcDst = IntPtr.Zero;
-            public int x = 0;
-            public int y = 0;
-            public int cx = 0;
-            public int cy = 0;
-            public int xBitmap = 0;
-            public int yBitmap = 0;
-            public int rgbBk = 0;
-            public int rgbFg = 0;
-            public int fStyle = 0;
-            public int dwRop = 0;
-            public int fState = 0;
-            public int Frame = 0;
-            public int crEffect = 0;
-        }
-
         public delegate IntPtr WndProc(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam);
 
         public delegate int ListViewCompareCallback(IntPtr lParam1, IntPtr lParam2, IntPtr lParamSort);
