@@ -15,7 +15,7 @@ For additional information and assistance, we recommend checking out [this artic
 Review the following resources that describe breaking changes between Windows Forms on .NET Framework and .NET Core:
 
 * The [Breaking changes in Windows Forms (.NET Framework to .NET Core)](https://docs.microsoft.com/dotnet/core/porting/winforms-breaking-changes) describes breaking changes you need to be aware of when migrating your applications from .NET Framework
-* The [Breaking changes in Windows Forms (.NET Core to .NET Core)](https://docs.microsoft.com/en-us/dotnet/core/compatibility/winforms) describes breaking changes you need to be aware of when migrating your applications from one version of .NET Core to another.
+* The [Breaking changes in Windows Forms (.NET Core to .NET Core)](https://docs.microsoft.com/dotnet/core/compatibility/winforms) describes breaking changes you need to be aware of when migrating your applications from one version of .NET Core to another.
 
 ## Prepare your project for porting
 
