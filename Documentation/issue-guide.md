@@ -81,7 +81,7 @@ Feel free to use other labels if it helps your triage efforts (for example, **ne
     * Motivation: Observation is that contributors are less likely to grab assigned issues, no matter what the repository rules say.
 
 1. Use **up-for-grabs** as much as possible, ideally with a quick note about next steps / complexity of the issue.<br />
-    NB: Per [http://up-for-grabs.net][up-for-grabs-net], such issues should be no longer than few nights' worth of work. They should be actionable (i.e. no mysterious CI failures that can't be tested in the open).
+    NB: Per [http://up-for-grabs.net][up-for-grabs-net], such issues should be no longer than few nights' worth of work. They should be actionable (that is, no mysterious CI failures that can't be tested in the open).
 
 1. Set milestone to **Future**, unless you can 95%-commit you can fund the issue in specific milestone.
     * Motivation: Helps communicate desire/timeline to community. Can spark further priority/impact discussion.
