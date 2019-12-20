@@ -13,11 +13,11 @@ internal partial class Interop
         public static partial class ImageList
         {
             [DllImport(Libraries.Comctl32, ExactSpelling = true, EntryPoint = "ImageList_Draw")]
-            public static extern BOOL Draw(IntPtr himl, int i, HandleRef hdcDst, int x, int y, ILD fStyle);
+            public static extern BOOL Draw(IntPtr himl, int i, IntPtr hdcDst, int x, int y, ILD fStyle);
 
             public static BOOL Draw(IHandle himl, int i, IntPtr hdcDst, int x, int y, ILD fStyle)
             {
-                BOOL result = Draw(himl, i, hdcDst, x, y, fStyle);
+                BOOL result = Draw(himl.Handle, i, hdcDst, x, y, fStyle);
                 GC.KeepAlive(himl);
                 return result;
             }

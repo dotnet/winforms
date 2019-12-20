@@ -1043,7 +1043,6 @@ namespace System.Windows.Forms
 
             internal Original(object image, OriginalOptions options, Color customTransparentColor)
             {
-                Debug.Assert(image != null, "image is null");
                 if (!(image is Icon) && !(image is Image))
                 {
                     throw new InvalidOperationException(SR.ImageListEntryType);
