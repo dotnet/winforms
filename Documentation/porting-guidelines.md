@@ -1,4 +1,4 @@
-# Porting existing applications to .NET Core 3.1
+# Port existing applications to .NET Core 3.1
 
 >We suggest doing migration in a separate branch or, if you're not using version
 >control, creating a copy of your project so you have a clean state to go back
