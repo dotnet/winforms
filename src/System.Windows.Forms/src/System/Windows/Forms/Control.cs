@@ -13679,12 +13679,12 @@ namespace System.Windows.Forms
             return HRESULT.S_OK;
         }
 
-        int UnsafeNativeMethods.IOleObject.SetHostNames(string szContainerApp, string szContainerObj)
+        HRESULT UnsafeNativeMethods.IOleObject.SetHostNames(string szContainerApp, string szContainerObj)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:SetHostNames");
             // Since ActiveX controls never "open" for editing, we shouldn't need
             // to store these.
-            return NativeMethods.S_OK;
+            return HRESULT.S_OK;
         }
 
         HRESULT UnsafeNativeMethods.IOleObject.Close(Ole32.OLECLOSE dwSaveOption)

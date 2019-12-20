@@ -520,10 +520,10 @@ namespace System.Windows.Forms
 
                     if ((formatetc.tymed & TYMED.TYMED_HGLOBAL) != 0)
                     {
-                        int hr = SaveDataToHandle(data, format, ref medium);
-                        if (NativeMethods.Failed(hr))
+                        HRESULT hr = SaveDataToHandle(data, format, ref medium);
+                        if (hr.Failed())
                         {
-                            Marshal.ThrowExceptionForHR(hr);
+                            Marshal.ThrowExceptionForHR((int)hr);
                         }
                     }
                     else if ((formatetc.tymed & TYMED.TYMED_GDI) != 0)
@@ -562,7 +562,7 @@ namespace System.Windows.Forms
                 return ((OleConverter)innerData).OleDataObject.DAdvise(ref pFormatetc, advf, pAdvSink, out pdwConnection);
             }
             pdwConnection = 0;
-            return (NativeMethods.E_NOTIMPL);
+            return (int)HRESULT.E_NOTIMPL;
         }
 
         // <summary>
@@ -576,7 +576,7 @@ namespace System.Windows.Forms
                 ((OleConverter)innerData).OleDataObject.DUnadvise(dwConnection);
                 return;
             }
-            Marshal.ThrowExceptionForHR(NativeMethods.E_NOTIMPL);
+            Marshal.ThrowExceptionForHR((int)HRESULT.E_NOTIMPL);
         }
 
         // <summary>
@@ -600,18 +600,16 @@ namespace System.Windows.Forms
         IEnumFORMATETC IComDataObject.EnumFormatEtc(DATADIR dwDirection)
         {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "EnumFormatEtc: " + dwDirection.ToString());
-            if (innerData is OleConverter)
+            if (innerData is OleConverter innerDataOleConverter)
             {
-                return ((OleConverter)innerData).OleDataObject.EnumFormatEtc(dwDirection);
+                return innerDataOleConverter.OleDataObject.EnumFormatEtc(dwDirection);
             }
             if (dwDirection == DATADIR.DATADIR_GET)
             {
                 return new FormatEnumerator(this);
             }
-            else
-            {
-                throw new ExternalException(SR.ExternalException, NativeMethods.E_NOTIMPL);
-            }
+
+            throw new ExternalException(SR.ExternalException, (int)HRESULT.E_NOTIMPL);
         }
 
         // <summary>
@@ -620,12 +618,12 @@ namespace System.Windows.Forms
         int IComDataObject.GetCanonicalFormatEtc(ref FORMATETC pformatetcIn, out FORMATETC pformatetcOut)
         {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "GetCanonicalFormatEtc");
-            if (innerData is OleConverter)
+            if (innerData is OleConverter innerDataOleConverter)
             {
-                return ((OleConverter)innerData).OleDataObject.GetCanonicalFormatEtc(ref pformatetcIn, out pformatetcOut);
+                return innerDataOleConverter.OleDataObject.GetCanonicalFormatEtc(ref pformatetcIn, out pformatetcOut);
             }
             pformatetcOut = new FORMATETC();
-            return (DATA_S_SAMEFORMATETC);
+            return DATA_S_SAMEFORMATETC;
         }
 
         // <summary>
@@ -773,12 +771,12 @@ namespace System.Windows.Forms
                     format.Equals(DataFormats.MetafilePict));
         }
 
-        private int SaveDataToHandle(object data, string format, ref STGMEDIUM medium)
+        private HRESULT SaveDataToHandle(object data, string format, ref STGMEDIUM medium)
         {
-            int hr = NativeMethods.E_FAIL;
-            if (data is Stream)
+            HRESULT hr = HRESULT.E_FAIL;
+            if (data is Stream dataStream)
             {
-                hr = SaveStreamToHandle(ref medium.unionmember, (Stream)data);
+                hr = SaveStreamToHandle(ref medium.unionmember, dataStream);
             }
             else if (format.Equals(DataFormats.Text)
                      || format.Equals(DataFormats.Rtf)
@@ -812,7 +810,7 @@ namespace System.Windows.Forms
             {
                 // GDI+ does not properly handle saving to DIB images. Since the clipboard will take
                 // an HBITMAP and publish a Dib, we don't need to support this.
-                hr = (int)HRESULT.DV_E_TYMED;
+                hr = HRESULT.DV_E_TYMED;
             }
             else if (format.Equals(DataFormats.Serializable)
                      || data is ISerializable
@@ -823,7 +821,7 @@ namespace System.Windows.Forms
             return hr;
         }
 
-        private int SaveObjectToHandle(ref IntPtr handle, object data, bool restrictSerialization)
+        private HRESULT SaveObjectToHandle(ref IntPtr handle, object data, bool restrictSerialization)
         {
             Stream stream = new MemoryStream();
             BinaryWriter bw = new BinaryWriter(stream);
@@ -846,7 +844,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Saves stream out to handle.
         /// </summary>
-        private unsafe int SaveStreamToHandle(ref IntPtr handle, Stream stream)
+        private unsafe HRESULT SaveStreamToHandle(ref IntPtr handle, Stream stream)
         {
             if (handle != IntPtr.Zero)
             {
@@ -857,13 +855,13 @@ namespace System.Windows.Forms
             handle = Kernel32.GlobalAlloc(Kernel32.GMEM.MOVEABLE | Kernel32.GMEM.DDESHARE, (uint)size);
             if (handle == IntPtr.Zero)
             {
-                return NativeMethods.E_OUTOFMEMORY;
+                return HRESULT.E_OUTOFMEMORY;
             }
 
             IntPtr ptr = Kernel32.GlobalLock(handle);
             if (ptr == IntPtr.Zero)
             {
-                return (NativeMethods.E_OUTOFMEMORY);
+                return HRESULT.E_OUTOFMEMORY;
             }
             try
             {
@@ -875,25 +873,22 @@ namespace System.Windows.Forms
             {
                 Kernel32.GlobalUnlock(handle);
             }
-            return NativeMethods.S_OK;
+            return HRESULT.S_OK;
         }
 
         /// <summary>
         ///  Saves a list of files out to the handle in HDROP format.
         /// </summary>
-        private int SaveFileListToHandle(IntPtr handle, string[] files)
+        private HRESULT SaveFileListToHandle(IntPtr handle, string[] files)
         {
-            if (files == null)
+            if (files == null || files.Length < 1)
             {
-                return NativeMethods.S_OK;
+                return HRESULT.S_OK;
             }
-            else if (files.Length < 1)
-            {
-                return NativeMethods.S_OK;
-            }
+
             if (handle == IntPtr.Zero)
             {
-                return (NativeMethods.E_INVALIDARG);
+                return HRESULT.E_INVALIDARG;
             }
 
             IntPtr currentPtr = IntPtr.Zero;
@@ -914,13 +909,13 @@ namespace System.Windows.Forms
                 Kernel32.GMEM.MOVEABLE | Kernel32.GMEM.DDESHARE);
             if (newHandle == IntPtr.Zero)
             {
-                return NativeMethods.E_OUTOFMEMORY;
+                return HRESULT.E_OUTOFMEMORY;
             }
 
             IntPtr basePtr = Kernel32.GlobalLock(newHandle);
             if (basePtr == IntPtr.Zero)
             {
-                return NativeMethods.E_OUTOFMEMORY;
+                return HRESULT.E_OUTOFMEMORY;
             }
 
             currentPtr = basePtr;
@@ -943,18 +938,18 @@ namespace System.Windows.Forms
             currentPtr = (IntPtr)((long)currentPtr + 2);
 
             Kernel32.GlobalUnlock(newHandle);
-            return NativeMethods.S_OK;
+            return HRESULT.S_OK;
         }
 
         /// <summary>
         ///  Save string to handle. If unicode is set to true
         ///  then the string is saved as Unicode, else it is saves as DBCS.
         /// </summary>
-        private int SaveStringToHandle(IntPtr handle, string str, bool unicode)
+        private HRESULT SaveStringToHandle(IntPtr handle, string str, bool unicode)
         {
             if (handle == IntPtr.Zero)
             {
-                return (NativeMethods.E_INVALIDARG);
+                return HRESULT.E_INVALIDARG;
             }
             IntPtr newHandle = IntPtr.Zero;
             if (unicode)
@@ -966,13 +961,13 @@ namespace System.Windows.Forms
                     Kernel32.GMEM.MOVEABLE | Kernel32.GMEM.DDESHARE | Kernel32.GMEM.ZEROINIT);
                 if (newHandle == IntPtr.Zero)
                 {
-                    return NativeMethods.E_OUTOFMEMORY;
+                    return HRESULT.E_OUTOFMEMORY;
                 }
 
                 IntPtr ptr = Kernel32.GlobalLock(newHandle);
                 if (ptr == IntPtr.Zero)
                 {
-                    return NativeMethods.E_OUTOFMEMORY;
+                    return HRESULT.E_OUTOFMEMORY;
                 }
 
                 char[] chars = str.ToCharArray(0, str.Length);
@@ -993,13 +988,13 @@ namespace System.Windows.Forms
                     Kernel32.GMEM.MOVEABLE | Kernel32.GMEM.DDESHARE | Kernel32.GMEM.ZEROINIT);
                 if (newHandle == IntPtr.Zero)
                 {
-                    return NativeMethods.E_OUTOFMEMORY;
+                    return HRESULT.E_OUTOFMEMORY;
                 }
 
                 IntPtr ptr = Kernel32.GlobalLock(newHandle);
                 if (ptr == IntPtr.Zero)
                 {
-                    return NativeMethods.E_OUTOFMEMORY;
+                    return HRESULT.E_OUTOFMEMORY;
                 }
 
                 UnsafeNativeMethods.CopyMemory(ptr, strBytes, pinvokeSize);
@@ -1010,14 +1005,14 @@ namespace System.Windows.Forms
             {
                 Kernel32.GlobalUnlock(newHandle);
             }
-            return NativeMethods.S_OK;
+            return HRESULT.S_OK;
         }
 
-        private int SaveHtmlToHandle(IntPtr handle, string str)
+        private HRESULT SaveHtmlToHandle(IntPtr handle, string str)
         {
             if (handle == IntPtr.Zero)
             {
-                return (NativeMethods.E_INVALIDARG);
+                return HRESULT.E_INVALIDARG;
             }
             IntPtr newHandle = IntPtr.Zero;
 
@@ -1029,13 +1024,13 @@ namespace System.Windows.Forms
                 Kernel32.GMEM.MOVEABLE | Kernel32.GMEM.DDESHARE | Kernel32.GMEM.ZEROINIT);
             if (newHandle == IntPtr.Zero)
             {
-                return NativeMethods.E_OUTOFMEMORY;
+                return HRESULT.E_OUTOFMEMORY;
             }
 
             IntPtr ptr = Kernel32.GlobalLock(newHandle);
             if (ptr == IntPtr.Zero)
             {
-                return NativeMethods.E_OUTOFMEMORY;
+                return HRESULT.E_OUTOFMEMORY;
             }
 
             try
@@ -1048,7 +1043,7 @@ namespace System.Windows.Forms
                 Kernel32.GlobalUnlock(newHandle);
             }
 
-            return NativeMethods.S_OK;
+            return HRESULT.S_OK;
         }
 
         /// <summary>
@@ -1231,9 +1226,9 @@ namespace System.Windows.Forms
                     {
                         pceltFetched[0] = 0;
                     }
-                    return NativeMethods.S_FALSE;
+                    return (int)HRESULT.S_FALSE;
                 }
-                return NativeMethods.S_OK;
+                return (int)HRESULT.S_OK;
             }
 
             public int Skip(int celt)
@@ -1241,17 +1236,17 @@ namespace System.Windows.Forms
                 Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "FormatEnumerator: Skip");
                 if (current + celt >= formats.Count)
                 {
-                    return NativeMethods.S_FALSE;
+                    return (int)HRESULT.S_FALSE;
                 }
                 current += celt;
-                return NativeMethods.S_OK;
+                return (int)HRESULT.S_OK;
             }
 
             public int Reset()
             {
                 Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "FormatEnumerator: Reset");
                 current = 0;
-                return NativeMethods.S_OK;
+                return (int)HRESULT.S_OK;
             }
 
             public void Clone(out IEnumFORMATETC ppenum)
@@ -1305,7 +1300,7 @@ namespace System.Windows.Forms
                 medium.tymed = TYMED.TYMED_ISTREAM;
 
                 // Limit the # of exceptions we may throw below.
-                if (NativeMethods.S_OK != QueryGetDataUnsafe(ref formatetc))
+                if ((int)HRESULT.S_OK != QueryGetDataUnsafe(ref formatetc))
                 {
                     return null;
                 }
@@ -1406,7 +1401,7 @@ namespace System.Windows.Forms
 
                 object data = null;
 
-                if (NativeMethods.S_OK == QueryGetDataUnsafe(ref formatetc))
+                if ((int)HRESULT.S_OK == QueryGetDataUnsafe(ref formatetc))
                 {
                     try
                     {
@@ -1463,7 +1458,7 @@ namespace System.Windows.Forms
                 medium.tymed = tymed;
 
                 object data = null;
-                if (NativeMethods.S_OK == QueryGetDataUnsafe(ref formatetc))
+                if ((int)HRESULT.S_OK == QueryGetDataUnsafe(ref formatetc))
                 {
                     try
                     {
@@ -1534,7 +1529,7 @@ namespace System.Windows.Forms
                 IntPtr ptr = Kernel32.GlobalLock(handle);
                 if (ptr == IntPtr.Zero)
                 {
-                    throw new ExternalException(SR.ExternalException, NativeMethods.E_OUTOFMEMORY);
+                    throw new ExternalException(SR.ExternalException, (int)HRESULT.E_OUTOFMEMORY);
                 }
                 try
                 {
@@ -1786,7 +1781,7 @@ namespace System.Windows.Forms
                 }
 
                 int hr = QueryGetDataUnsafe(ref formatetc);
-                return (hr == NativeMethods.S_OK);
+                return hr == (int)HRESULT.S_OK;
             }
 
             public virtual bool GetDataPresent(string format, bool autoConvert)

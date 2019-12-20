@@ -186,12 +186,12 @@ namespace System.Windows.Forms
 
             public int OnFileOk(FileDialogNative.IFileDialog pfd)
             {
-                return _dialog.HandleVistaFileOk(pfd) ? NativeMethods.S_OK : NativeMethods.S_FALSE;
+                return _dialog.HandleVistaFileOk(pfd) ? (int)HRESULT.S_OK : (int)HRESULT.S_FALSE;
             }
 
             public int OnFolderChanging(FileDialogNative.IFileDialog pfd, FileDialogNative.IShellItem psiFolder)
             {
-                return NativeMethods.S_OK;
+                return (int)HRESULT.S_OK;
             }
 
             public void OnFolderChange(FileDialogNative.IFileDialog pfd)
