@@ -58,7 +58,7 @@ Security issues and bugs should be reported privately via email to the Microsoft
 
 ## Relationship to .NET Framework
 
-This codebase is a fork of the Windows Forms code in the .NET Framework 4.8. In Windows Forms .NET Core 3.0 we have strived to bring the two runtimes to a parity, however since then we have done a number of [changes, including breaking](https://docs.microsoft.com/en-us/dotnet/core/compatibility/winforms), which diverged the two.
+This codebase is a fork of the Windows Forms code in the .NET Framework 4.8. In Windows Forms .NET Core 3.0, we've strived to bring the two runtimes to a parity. However, since then, we've done a number of changes, including [breaking changes](https://docs.microsoft.com/dotnet/core/compatibility/winforms), which diverged the two.
 
 For more information about breaking changes, see the [Porting guide][porting-guidelines].
 
