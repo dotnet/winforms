@@ -1471,21 +1471,6 @@ namespace System.Windows.Forms
             // public RECT rcBound; // Note that we don't define this field as part of the marshaling
         }
 
-        [ComVisible(true), StructLayout(LayoutKind.Sequential)]
-        public class DOCHOSTUIINFO
-        {
-            [MarshalAs(UnmanagedType.U4)]
-            public int cbSize = Marshal.SizeOf<DOCHOSTUIINFO>();
-            [MarshalAs(UnmanagedType.I4)]
-            public Mshtml.DOCHOSTUIFLAG dwFlags;
-            [MarshalAs(UnmanagedType.I4)]
-            public Mshtml.DOCHOSTUIDBLCLK dwDoubleClick;
-            [MarshalAs(UnmanagedType.I4)]
-            public int dwReserved1 = 0;
-            [MarshalAs(UnmanagedType.I4)]
-            public int dwReserved2 = 0;
-        }
-
         [StructLayout(LayoutKind.Sequential)]
         public class ENDROPFILES
         {
