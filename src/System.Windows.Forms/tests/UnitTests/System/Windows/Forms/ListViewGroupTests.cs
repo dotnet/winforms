@@ -408,7 +408,7 @@ namespace System.Windows.Forms.Tests
             ISerializable iSerializable = group;
             var info = new SerializationInfo(typeof(ListViewGroup), new FormatterConverter());
             var context = new StreamingContext();
-            
+
             iSerializable.GetObjectData(info, context);
             Assert.Equal("ListViewGroup", info.GetString("Header"));
             Assert.Equal(HorizontalAlignment.Left, info.GetValue("HeaderAlignment", typeof(HorizontalAlignment)));
@@ -426,7 +426,7 @@ namespace System.Windows.Forms.Tests
             ISerializable iSerializable = group;
             var info = new SerializationInfo(typeof(ListViewGroup), new FormatterConverter());
             var context = new StreamingContext();
-            
+
             iSerializable.GetObjectData(info, context);
             Assert.Equal("ListViewGroup", info.GetString("Header"));
             Assert.Equal(HorizontalAlignment.Left, info.GetValue("HeaderAlignment", typeof(HorizontalAlignment)));

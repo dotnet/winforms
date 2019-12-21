@@ -5514,7 +5514,7 @@ namespace System.Windows.Forms
                     lvgroup.uAlign = LVGA.HEADER_CENTER;
                     break;
             }
-            
+
             fixed (char* pHeader = header)
             {
                 lvgroup.pszHeader = pHeader;

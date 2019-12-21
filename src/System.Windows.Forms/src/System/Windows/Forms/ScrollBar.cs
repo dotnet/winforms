@@ -41,7 +41,7 @@ namespace System.Windows.Forms
 
             TabStop = false;
 
-            if ((CreateParams.Style & NativeMethods.SBS_VERT) != 0)
+            if ((CreateParams.Style & (int)User32.SBS.VERT) != 0)
             {
                 _scrollOrientation = ScrollOrientation.VerticalScroll;
             }
