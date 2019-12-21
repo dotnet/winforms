@@ -765,28 +765,6 @@ namespace System.Windows.Forms
             public byte[] contents = new byte[20];
         }
 
-        [ComImport]
-        [Guid("33C0C1D8-33CF-11d3-BFF2-00C04F990235")]
-        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public unsafe interface IProvidePropertyBuilder
-        {
-            [PreserveSig]
-            HRESULT MapPropertyToBuilder(
-                Ole32.DispatchID dispid,
-                [In, Out, MarshalAs(UnmanagedType.LPArray)] int[] pdwCtlBldType,
-                [In, Out, MarshalAs(UnmanagedType.LPArray)] string[] pbstrGuidBldr,
-                BOOL* builderAvailable);
-
-            [PreserveSig]
-            HRESULT ExecuteBuilder(
-                Ole32.DispatchID dispid,
-                [In, MarshalAs(UnmanagedType.BStr)] string bstrGuidBldr,
-                [In, MarshalAs(UnmanagedType.Interface)] object pdispApp,
-                IntPtr hwndBldrOwner,
-                [Out, In, MarshalAs(UnmanagedType.Struct)] ref object pvarValue,
-                BOOL* actionCommitted);
-        }
-
         public delegate IntPtr WndProc(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam);
 
         public delegate int ListViewCompareCallback(IntPtr lParam1, IntPtr lParam2, IntPtr lParamSort);
