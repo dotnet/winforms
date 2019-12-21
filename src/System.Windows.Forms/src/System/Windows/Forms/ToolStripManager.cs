@@ -1959,7 +1959,7 @@ namespace System.Windows.Forms
 
                         // if we've alt-tabbed away dont snap/restore focus.
                         IntPtr topmostParentOfMenu = User32.GetAncestor(menuStripToActivate, User32.GA.ROOT);
-                        IntPtr foregroundWindow = UnsafeNativeMethods.GetForegroundWindow();
+                        IntPtr foregroundWindow = User32.GetForegroundWindow();
 
                         if (topmostParentOfMenu == foregroundWindow)
                         {
