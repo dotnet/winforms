@@ -6078,18 +6078,19 @@ namespace System.Windows.Forms
                 Debug.Assert(!ACWindows.ContainsKey(acHandle));
                 AssignHandle(acHandle);
                 ACWindows.Add(acHandle, this);
-                UnsafeNativeMethods.EnumChildWindows(new HandleRef(this, acHandle),
-                    new NativeMethods.EnumChildrenCallback(ACNativeWindow.RegisterACWindowRecursive),
-                    NativeMethods.NullHandleRef);
+                User32.EnumChildWindows(
+                    new HandleRef(this, acHandle),
+                    new User32.EnumChildWindowsCallback(RegisterACWindowRecursive),
+                    IntPtr.Zero);
             }
 
-            private static bool RegisterACWindowRecursive(IntPtr handle, IntPtr lparam)
+            private static BOOL RegisterACWindowRecursive(IntPtr handle, IntPtr lparam)
             {
                 if (!ACWindows.ContainsKey(handle))
                 {
                     ACNativeWindow newAC = new ACNativeWindow(handle);
                 }
-                return true;
+                return BOOL.TRUE;
             }
 
             internal bool Visible => User32.IsWindowVisible(this).IsTrue();
@@ -6208,7 +6209,7 @@ namespace System.Windows.Forms
                 GC.KeepAlive(callback);
             }
 
-            private bool Callback(IntPtr hWnd, IntPtr lParam)
+            private BOOL Callback(IntPtr hWnd, IntPtr lParam)
             {
                 HandleRef hRef = new HandleRef(null, hWnd);
 
@@ -6218,7 +6219,7 @@ namespace System.Windows.Forms
                     ACNativeWindow.RegisterACWindow(hRef.Handle, shouldSubClass);
                 }
 
-                return true;
+                return BOOL.TRUE;
             }
 
             static string GetClassName(HandleRef hRef)

@@ -616,7 +616,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  This helper broadcasts out a WM_THEMECHANGED to appropriate top level windows of this app.
         /// </summary>
-        private unsafe static bool SendThemeChanged(IntPtr handle, IntPtr extraParameter)
+        private unsafe static BOOL SendThemeChanged(IntPtr handle, IntPtr extraParameter)
         {
             uint thisPID = Kernel32.GetCurrentProcessId();
             User32.GetWindowThreadProcessId(handle, out uint processId);
@@ -629,7 +629,7 @@ namespace System.Windows.Forms
                     IntPtr.Zero,
                     User32.RDW.INVALIDATE | User32.RDW.FRAME | User32.RDW.ERASE | User32.RDW.ALLCHILDREN);
             }
-            return true;
+            return BOOL.TRUE;
         }
 
         /// <summary>
@@ -637,17 +637,18 @@ namespace System.Windows.Forms
         ///  It is assumed at this point that the handle belongs to the current process
         ///  and has a visible top level window.
         /// </summary>
-        private static bool SendThemeChangedRecursive(IntPtr handle, IntPtr lparam)
+        private static BOOL SendThemeChangedRecursive(IntPtr handle, IntPtr lparam)
         {
             // First send to all children...
-            UnsafeNativeMethods.EnumChildWindows(new HandleRef(null, handle),
-                new NativeMethods.EnumChildrenCallback(Application.SendThemeChangedRecursive),
-                NativeMethods.NullHandleRef);
+            User32.EnumChildWindows(
+                handle,
+                new User32.EnumChildWindowsCallback(SendThemeChangedRecursive),
+                IntPtr.Zero);
 
             // Then do myself.
             UnsafeNativeMethods.SendMessage(new HandleRef(null, handle), Interop.WindowMessages.WM_THEMECHANGED, 0, 0);
 
-            return true;
+            return BOOL.TRUE;
         }
 
         /// <summary>

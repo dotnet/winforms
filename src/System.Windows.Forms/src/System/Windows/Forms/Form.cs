@@ -6807,7 +6807,7 @@ namespace System.Windows.Forms
             {
             }
 
-            internal bool Callback(IntPtr hWnd, IntPtr lParam)
+            internal BOOL Callback(IntPtr hWnd, IntPtr lParam)
             {
                 Debug.Assert(lParam != IntPtr.Zero);
                 HandleRef hRef = new HandleRef(null, hWnd);
@@ -6822,7 +6822,7 @@ namespace System.Windows.Forms
                     }
                     ownedWindows.Add(hRef);
                 }
-                return true;
+                return BOOL.TRUE;
             }
 
             // Resets the owner of all the windows owned by this Form before handle recreation.

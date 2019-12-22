@@ -9,7 +9,7 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        public delegate bool EnumThreadWindowsCallback(IntPtr hWnd, IntPtr lParam);
+        public delegate BOOL EnumThreadWindowsCallback(IntPtr hWnd, IntPtr lParam);
 
         [DllImport(Libraries.User32, ExactSpelling = true)]
         public static extern BOOL EnumThreadWindows(uint dwThreadId, EnumThreadWindowsCallback lpfn, IntPtr lParam);

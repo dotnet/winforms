@@ -38,7 +38,7 @@ namespace System.Windows.Forms
                 GC.KeepAlive(callback);
             }
 
-            private bool Callback(IntPtr hWnd, IntPtr lparam)
+            private BOOL Callback(IntPtr hWnd, IntPtr lparam)
             {
                 // We only do visible and enabled windows.  Also, we only do top level windows.
                 // Finally, we only include windows that are DNA windows, since other MSO components
@@ -68,7 +68,7 @@ namespace System.Windows.Forms
                     }
                 }
 
-                return true;
+                return BOOL.TRUE;
             }
 
             // Disposes all top-level Controls on this thread
