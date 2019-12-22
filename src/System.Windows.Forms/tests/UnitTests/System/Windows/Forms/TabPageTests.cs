@@ -3662,6 +3662,21 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
+        [InlineData(0, true)]
+        [InlineData(SubTabPage.ScrollStateAutoScrolling, false)]
+        [InlineData(SubTabPage.ScrollStateFullDrag, false)]
+        [InlineData(SubTabPage.ScrollStateHScrollVisible, false)]
+        [InlineData(SubTabPage.ScrollStateUserHasScrolled, false)]
+        [InlineData(SubTabPage.ScrollStateVScrollVisible, false)]
+        [InlineData(int.MaxValue, false)]
+        [InlineData((-1), false)]
+        public void TabPage_GetScrollState_Invoke_ReturnsExpected(int bit, bool expected)
+        {
+            using var control = new SubTabPage();
+            Assert.Equal(expected, control.GetScrollState(bit));
+        }
+
+        [WinFormsTheory]
         [InlineData(ControlStyles.ContainerControl, true)]
         [InlineData(ControlStyles.UserPaint, true)]
         [InlineData(ControlStyles.Opaque, false)]
@@ -4790,6 +4805,16 @@ namespace System.Windows.Forms.Tests
 
         private class SubTabPage : TabPage
         {
+            public new const int ScrollStateAutoScrolling = TabPage.ScrollStateAutoScrolling;
+
+            public new const int ScrollStateHScrollVisible = TabPage.ScrollStateHScrollVisible;
+
+            public new const int ScrollStateVScrollVisible = TabPage.ScrollStateVScrollVisible;
+
+            public new const int ScrollStateUserHasScrolled = TabPage.ScrollStateUserHasScrolled;
+
+            public new const int ScrollStateFullDrag = TabPage.ScrollStateFullDrag;
+
             public SubTabPage() : base()
             {
             }
@@ -4865,6 +4890,8 @@ namespace System.Windows.Forms.Tests
             public new ControlCollection CreateControlsInstance() => base.CreateControlsInstance();
 
             public new AutoSizeMode GetAutoSizeMode() => base.GetAutoSizeMode();
+
+            public new bool GetScrollState(int bit) => base.GetScrollState(bit);
 
             public new bool GetStyle(ControlStyles flag) => base.GetStyle(flag);
 
