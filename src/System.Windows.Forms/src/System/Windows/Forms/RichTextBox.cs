@@ -3402,7 +3402,8 @@ namespace System.Windows.Forms
                         Marshal.Release(punk);
                     }
                 }
-                UnsafeNativeMethods.DragAcceptFiles(new HandleRef(this, Handle), false);
+
+                Shell32.DragAcceptFiles(this, BOOL.FALSE);
             }
         }
 
