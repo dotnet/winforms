@@ -5,6 +5,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Reflection;
+using Microsoft.DotNet.RemoteExecutor;
 using Moq;
 using WinForms.Common.Tests;
 using Xunit;
@@ -124,19 +125,26 @@ namespace System.Windows.Forms.Tests
         [WinFormsTheory]
         [InlineData(true, DialogResult.OK)]
         [InlineData(false, DialogResult.Cancel)]
-        public void ShowDialog_NonControlOwnerWithVisualStyles_ReturnsExpected(bool runDialogResult, DialogResult expectedDialogResult)
+        public void ShowDialog_NonControlOwnerWithVisualStyles_ReturnsExpected(bool runDialogResultParam, DialogResult expectedDialogResultParam)
         {
-            Application.EnableVisualStyles();
-
-            using var dialog = new SubCommonDialog
+            // Run this from another thread as we call Application.EnableVisualStyles.
+            RemoteExecutor.Invoke((runDialogResultString, expectedDialogResultString) =>
             {
-                RunDialogResult = runDialogResult
-            };
-            var owner = new Mock<IWin32Window>(MockBehavior.Strict);
-            owner
-                .Setup(o => o.Handle)
-                .Returns(IntPtr.Zero);
-            Assert.Equal(expectedDialogResult, dialog.ShowDialog(owner.Object));
+                bool runDialogResult = bool.Parse(runDialogResultString);
+                DialogResult expectedDialogResult = (DialogResult)Enum.Parse(typeof(DialogResult), expectedDialogResultString);
+                
+                Application.EnableVisualStyles();
+
+                using var dialog = new SubCommonDialog
+                {
+                    RunDialogResult = runDialogResult
+                };
+                var owner = new Mock<IWin32Window>(MockBehavior.Strict);
+                owner
+                    .Setup(o => o.Handle)
+                    .Returns(IntPtr.Zero);
+                Assert.Equal(expectedDialogResult, dialog.ShowDialog(owner.Object));
+            }, runDialogResultParam.ToString(), expectedDialogResultParam.ToString()).Dispose();
         }
 
         [WinFormsTheory]
@@ -155,16 +163,23 @@ namespace System.Windows.Forms.Tests
         [WinFormsTheory]
         [InlineData(true, DialogResult.OK)]
         [InlineData(false, DialogResult.Cancel)]
-        public void ShowDialog_ControlOwnerWithVisualStyles_ReturnsExpected(bool runDialogResult, DialogResult expectedDialogResult)
+        public void ShowDialog_ControlOwnerWithVisualStyles_ReturnsExpected(bool runDialogResultParam, DialogResult expectedDialogResultParam)
         {
-            Application.EnableVisualStyles();
-
-            using var dialog = new SubCommonDialog
+            // Run this from another thread as we call Application.EnableVisualStyles.
+            RemoteExecutor.Invoke((runDialogResultString, expectedDialogResultString) =>
             {
-                RunDialogResult = runDialogResult
-            };
-            using var owner = new Control();
-            Assert.Equal(expectedDialogResult, dialog.ShowDialog(owner));
+                bool runDialogResult = bool.Parse(runDialogResultString);
+                DialogResult expectedDialogResult = (DialogResult)Enum.Parse(typeof(DialogResult), expectedDialogResultString);
+
+                Application.EnableVisualStyles();
+
+                using var dialog = new SubCommonDialog
+                {
+                    RunDialogResult = runDialogResult
+                };
+                using var owner = new Control();
+                Assert.Equal(expectedDialogResult, dialog.ShowDialog(owner));
+            }, runDialogResultParam.ToString(), expectedDialogResultParam.ToString()).Dispose();
         }
 
         [WinFormsTheory]
@@ -184,17 +199,24 @@ namespace System.Windows.Forms.Tests
         [WinFormsTheory]
         [InlineData(true, DialogResult.OK)]
         [InlineData(false, DialogResult.Cancel)]
-        public void ShowDialog_ControlOwnerWithHandleWithVisualStyles_ReturnsExpected(bool runDialogResult, DialogResult expectedDialogResult)
+        public void ShowDialog_ControlOwnerWithHandleWithVisualStyles_ReturnsExpected(bool runDialogResultParam, DialogResult expectedDialogResultParam)
         {
-            Application.EnableVisualStyles();
-
-            using var dialog = new SubCommonDialog
+            // Run this from another thread as we call Application.EnableVisualStyles.
+            RemoteExecutor.Invoke((runDialogResultString, expectedDialogResultString) =>
             {
-                RunDialogResult = runDialogResult
-            };
-            using var owner = new Control();
-            Assert.NotEqual(IntPtr.Zero, owner.Handle);
-            Assert.Equal(expectedDialogResult, dialog.ShowDialog(owner));
+                bool runDialogResult = bool.Parse(runDialogResultString);
+                DialogResult expectedDialogResult = (DialogResult)Enum.Parse(typeof(DialogResult), expectedDialogResultString);
+
+                Application.EnableVisualStyles();
+
+                using var dialog = new SubCommonDialog
+                {
+                    RunDialogResult = runDialogResult
+                };
+                using var owner = new Control();
+                Assert.NotEqual(IntPtr.Zero, owner.Handle);
+                Assert.Equal(expectedDialogResult, dialog.ShowDialog(owner));
+            }, runDialogResultParam.ToString(), expectedDialogResultParam.ToString()).Dispose();
         }
 
         [WinFormsFact]
