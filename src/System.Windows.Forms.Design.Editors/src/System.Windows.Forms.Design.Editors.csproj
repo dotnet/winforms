@@ -105,13 +105,16 @@
     <Compile Include="..\..\Common\src\Interop\Shell32\Interop.SHGetPathFromIDListLongPath.cs" Link="Interop\Shell32\Interop.SHGetPathFromIDListLongPath.cs" />
     <Compile Include="..\..\Common\src\Interop\Shell32\Interop.SHGetSpecialFolderLocation.cs" Link="Interop\Shell32\Interop.SHGetSpecialFolderLocation.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.ClientToScreen.cs" Link="Interop\User32\Interop.ClientToScreen.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.DPI_AWARENESS.cs" Link="Interop\User32\Interop.DPI_AWARENESS.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.DPI_AWARENESS_CONTEXT.cs" Link="Interop\User32\Interop.DPI_AWARENESS_CONTEXT.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.DrawText.cs" Link="Interop\User32\Interop.DrawText.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.DT.cs" Link="Interop\User32\Interop.DT.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.EnableWindow.cs" Link="Interop\User32\Interop.EnableWindow.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.GetActiveWindow.cs" Link="Interop\User32\Interop.GetActiveWindow.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.GetAwarenessFromDpiAwarenessContext.cs" Link="Interop\User32\Interop.GetAwarenessFromDpiAwarenessContext.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.GetDC.cs" Link="Interop\User32\Interop.GetDC.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.GetFocus.cs" Link="Interop\User32\Interop.GetFocus.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.GetWindowDpiAwarenessContext.cs" Link="Interop\User32\Interop.GetWindowDpiAwarenessContext.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.GetWindowText.cs" Link="Interop\User32\Interop.GetWindowText.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.IsProcessDPIAware.cs" Link="Interop\User32\Interop.IsProcessDPIAware.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.IsValidDpiAwarenessContext.cs" Link="Interop\User32\Interop.IsValidDpiAwarenessContext.cs" />
