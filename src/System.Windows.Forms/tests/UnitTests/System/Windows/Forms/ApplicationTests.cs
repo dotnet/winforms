@@ -22,6 +22,22 @@ namespace System.Windows.Forms.Tests
             }).Dispose();
         }
 
+        [WinFormsFact]
+        public void Application_EnableVisualStyles_InvokeAfterGettingRenderWithVisualStyles_Success()
+        {
+            // This is not a recommended scenario per https://docs.microsoft.com/en-us/dotnet/api/system.windows.forms.application.enablevisualstyles
+            // EnableVisualStyles should be executed before any control-related code is.
+            RemoteExecutor.Invoke(() =>
+            {
+                Assert.False(Application.UseVisualStyles);
+                Assert.False(Application.RenderWithVisualStyles);
+
+                Application.EnableVisualStyles();
+                Assert.True(Application.UseVisualStyles, "New Visual Styles will not be applied on Winforms app. This is a high priority bug and must be looked into");
+                Assert.True(Application.RenderWithVisualStyles);
+            }).Dispose();
+        }
+
         [Fact]
         public void Application_OpenForms_Get_ReturnsExpected()
         {
