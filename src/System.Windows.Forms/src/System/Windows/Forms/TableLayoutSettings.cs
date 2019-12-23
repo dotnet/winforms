@@ -595,7 +595,6 @@ namespace System.Windows.Forms
             private TableLayoutColumnStyleCollection columnStyles;
             private TableLayoutRowStyleCollection rowStyles;
             private Dictionary<object, ControlInformation> controlsInfo;
-            private bool isValid = true;
 
             public TableLayoutSettingsStub()
             {
@@ -659,10 +658,6 @@ namespace System.Windows.Forms
                 // since we've given over the styles to the other guy, null out.
                 columnStyles = null;
                 rowStyles = null;
-
-                // set a flag for assertion detection.
-                isValid = false;
-
             }
 
             public TableLayoutColumnStyleCollection ColumnStyles
@@ -675,11 +670,6 @@ namespace System.Windows.Forms
                     }
                     return columnStyles;
                 }
-            }
-
-            public bool IsValid
-            {
-                get { return isValid; }
             }
 
             public TableLayoutRowStyleCollection RowStyles
