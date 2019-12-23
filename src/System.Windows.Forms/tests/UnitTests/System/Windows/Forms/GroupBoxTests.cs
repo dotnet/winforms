@@ -1225,11 +1225,12 @@ namespace System.Windows.Forms.Tests
         public void GroupBox_CreateAccessibilityInstance_Invoke_ReturnsExpected()
         {
             using var control = new SubGroupBox();
-            AccessibleObject instance = control.CreateAccessibilityInstance();
+            Control.ControlAccessibleObject instance = Assert.IsAssignableFrom<Control.ControlAccessibleObject>(control.CreateAccessibilityInstance());
             Assert.NotNull(instance);
+            Assert.Same(control, instance.Owner);
+            Assert.Equal(AccessibleRole.Grouping, instance.Role);
             Assert.NotSame(control.CreateAccessibilityInstance(), instance);
             Assert.NotSame(control.AccessibilityObject, instance);
-            Assert.Equal(AccessibleRole.Grouping, instance.Role);
         }
 
         [WinFormsFact]
@@ -1239,11 +1240,12 @@ namespace System.Windows.Forms.Tests
             {
                 AccessibleRole = AccessibleRole.HelpBalloon
             };
-            AccessibleObject instance = control.CreateAccessibilityInstance();
+            Control.ControlAccessibleObject instance = Assert.IsAssignableFrom<Control.ControlAccessibleObject>(control.CreateAccessibilityInstance());
             Assert.NotNull(instance);
+            Assert.Same(control, instance.Owner);
+            Assert.Equal(AccessibleRole.HelpBalloon, instance.Role);
             Assert.NotSame(control.CreateAccessibilityInstance(), instance);
             Assert.NotSame(control.AccessibilityObject, instance);
-            Assert.Equal(AccessibleRole.HelpBalloon, instance.Role);
         }
 
         [WinFormsFact]
