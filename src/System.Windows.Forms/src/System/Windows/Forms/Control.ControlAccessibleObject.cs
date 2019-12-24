@@ -26,8 +26,6 @@ namespace System.Windows.Forms
 
             public ControlAccessibleObject(Control ownerControl)
             {
-                Debug.Assert(ownerControl != null, "Cannot construct a ControlAccessibleObject with a null ownerControl");
-
                 Owner = ownerControl ?? throw new ArgumentNullException(nameof(ownerControl));
                 IntPtr handle = ownerControl.Handle;
                 Handle = handle;
