@@ -3868,14 +3868,26 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Indicates whether the control is visible.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        Localizable(true),
-        SRDescription(nameof(SR.ControlVisibleDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [Localizable(true)]
+        [SRDescription(nameof(SR.ControlVisibleDescr))]
         public bool Visible
         {
-            get => GetVisibleCore();
+            get
+            {
+                if (!DesiredVisibility)
+                {
+                    return false;
+                }
+
+                // We are only visible if our parent is visible
+                if (ParentInternal == null)
+                {
+                    return true;
+                }
+                
+                return ParentInternal.Visible;
+            }
             set => SetVisibleCore(value);
         }
 
@@ -5810,23 +5822,6 @@ namespace System.Windows.Forms
         }
 
         internal bool DesiredVisibility => GetState(States.Visible);
-
-        internal virtual bool GetVisibleCore()
-        {
-            // We are only visible if our parent is visible
-            if (!DesiredVisibility)
-            {
-                return false;
-            }
-            else if (ParentInternal == null)
-            {
-                return true;
-            }
-            else
-            {
-                return ParentInternal.GetVisibleCore();
-            }
-        }
 
         internal bool GetAnyDisposingInHierarchy()
         {
@@ -11049,7 +11044,7 @@ namespace System.Windows.Forms
 
         protected virtual void SetVisibleCore(bool value)
         {
-            if (GetVisibleCore() != value)
+            if (value != Visible)
             {
                 if (!value)
                 {
@@ -11098,7 +11093,7 @@ namespace System.Windows.Forms
                     }
                 }
 
-                if (GetVisibleCore() != value)
+                if (value != Visible)
                 {
                     SetState(States.Visible, value);
                     fireChange = true;

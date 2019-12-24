@@ -435,28 +435,6 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void Control_GetVisibleCore_NoParent_ReturnsExpected()
-        {
-            var control = new Control();
-            Assert.Null(control.Parent);
-            Assert.True(control.GetVisibleCore());
-        }
-
-        [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
-        public void Control_GetVisibleCoreVisible_Parent_ReturnsExpected(bool value)
-        {
-            var control = new Control();
-            var parent = new Control
-            {
-                Visible = value
-            };
-            control.Parent = parent;
-
-            Assert.Equal(value, control.GetVisibleCore());
-        }
-
-        [Fact]
         public void Control_NotifyEnter()
         {
             bool wasChanged = false;
