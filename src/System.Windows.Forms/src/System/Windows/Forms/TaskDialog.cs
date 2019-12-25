@@ -897,7 +897,7 @@ namespace System.Windows.Forms
                 throw new ArgumentOutOfRangeException(nameof(max));
             }
 
-            // Note: The MAKELPARAM macro converts the value to an unsigned int
+            // The MAKELPARAM macro converts the value to an unsigned int
             // before converting it to a pointer, so we should do the same.
             // However, this means we cannot convert the value directly to an
             // IntPtr; instead we need to first convert it to a pointer type
@@ -989,25 +989,22 @@ namespace System.Windows.Forms
             radioButtonID,
             IntPtr.Zero);
 
-        internal void UpdateTextElement(ComCtl32.TDE element, string? text)
+        internal unsafe void UpdateTextElement(ComCtl32.TDE element, string? text)
         {
             DenyIfDialogNotUpdatable();
 
-            // Note: Instead of null, we must specify the empty string; otherwise
-            // the update would be ignored.
-            IntPtr textPtr = Marshal.StringToHGlobalUni(text ?? string.Empty);
-            try
+            // Instead of null, we must specify the empty string; otherwise the update
+            // would be ignored.
+            text ??= string.Empty;
+
+            // We can just pin the string because sending the message should take
+            // a very short time only and the string will not be modified.
+            fixed (char* textPtr = text)
             {
                 // Note: SetElementText will resize the dialog while UpdateElementText
                 // will not (which would lead to clipped controls), so we use the
                 // former.
-                SendTaskDialogMessage(ComCtl32.TDM.SET_ELEMENT_TEXT, (int)element, textPtr);
-            }
-            finally
-            {
-                // We can now free the memory because SendMessage does not return
-                // until the message has been processed.
-                Marshal.FreeHGlobal(textPtr);
+                SendTaskDialogMessage(ComCtl32.TDM.SET_ELEMENT_TEXT, (int)element, (IntPtr)textPtr);
             }
         }
 
@@ -1028,7 +1025,7 @@ namespace System.Windows.Forms
 
         internal void UpdateCaption(string? caption)
         {
-            // Note: We must not allow to change the caption if we are currently
+            // We must not allow to change the caption if we are currently
             // waiting for a TDN_NAVIGATED notification, because in that case
             // the task dialog will already have set the caption from the new page.
             DenyIfDialogNotUpdatable();
