@@ -4278,7 +4278,6 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Resets the scaling (only in PerMonitorV2 scenarios).
-        ///  Do only call from code which is quirked with PerMonitorV2 quirks for the ToolStrip.
         /// </summary>
         /// <param name="newDpi">The new DPI passed by WmDpiChangedBeforeParent.</param>
         internal virtual void ResetScaling(int newDpi)
