@@ -5,288 +5,163 @@
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms.Design;
-using static Interop;
 
 namespace System.Windows.Forms
 {
-    /// <summary>
-    ///  Called when the background of the ToolStrip is being rendered
-    /// </summary>
     [ToolStripItemDesignerAvailability(ToolStripItemDesignerAvailability.ToolStrip | ToolStripItemDesignerAvailability.ContextMenuStrip)]
-    public class ToolStripSeparator : ToolStripItem
+    public partial class ToolStripSeparator : ToolStripItem
     {
-        private const int ToolStrip_SEPARATORTHICKNESS = 6;
-        private const int ToolStrip_SEPARATORHEIGHT = 23;
+        private const int SeparatorThickness = 6;
+        private const int SeparatorHeight = 23;
 
         public ToolStripSeparator()
         {
             ForeColor = SystemColors.ControlDark;
         }
 
-        [
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Never),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public new bool AutoToolTip
         {
-            get
-            {
-                return base.AutoToolTip;
-            }
-            set
-            {
-                base.AutoToolTip = value;
-            }
+            get => base.AutoToolTip;
+            set => base.AutoToolTip = value;
         }
 
-        [
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Never),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override Image BackgroundImage
         {
-            get
-            {
-                return base.BackgroundImage;
-
-            }
-            set
-            {
-                base.BackgroundImage = value;
-            }
+            get => base.BackgroundImage;
+            set => base.BackgroundImage = value;
         }
 
-        [
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Never),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override ImageLayout BackgroundImageLayout
         {
-            get
-            {
-                return base.BackgroundImageLayout;
-            }
-            set
-            {
-                base.BackgroundImageLayout = value;
-            }
+            get => base.BackgroundImageLayout;
+            set => base.BackgroundImageLayout = value;
         }
 
-        public override bool CanSelect
-        {
-            get
-            {
-                return DesignMode;
-            }
-        }
+        public override bool CanSelect => DesignMode;
 
         /// <summary>
         ///  Deriving classes can override this to configure a default size for their control.
         ///  This is more efficient than setting the size in the control's constructor.
         /// </summary>
-        protected override Size DefaultSize
-        {
-            get
-            {
-                return new Size(ToolStrip_SEPARATORTHICKNESS, ToolStrip_SEPARATORTHICKNESS);
-            }
-        }
+        protected override Size DefaultSize => new Size(SeparatorThickness, SeparatorThickness);
 
-        protected internal override Padding DefaultMargin
-        {
-            get
-            {
-                return Padding.Empty;
-            }
-        }
+        protected internal override Padding DefaultMargin => Padding.Empty;
 
-        [
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Never),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public new bool DoubleClickEnabled
         {
-            get
-            {
-                return base.DoubleClickEnabled;
-            }
-            set
-            {
-                base.DoubleClickEnabled = value;
-            }
+            get => base.DoubleClickEnabled;
+            set => base.DoubleClickEnabled = value;
         }
 
-        [
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Never),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override bool Enabled
         {
-            get
-            {
-                return base.Enabled;
-            }
-            set
-            {
-                base.Enabled = value;
-            }
+            get => base.Enabled;
+            set => base.Enabled = value;
 
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler EnabledChanged
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public new event EventHandler EnabledChanged
         {
             add => base.EnabledChanged += value;
             remove => base.EnabledChanged -= value;
         }
 
-        [
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Never),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public new ToolStripItemDisplayStyle DisplayStyle
         {
-            get
-            {
-                return base.DisplayStyle;
-            }
-            set
-            {
-                base.DisplayStyle = value;
-            }
+            get => base.DisplayStyle;
+            set => base.DisplayStyle = value;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler DisplayStyleChanged
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public new event EventHandler DisplayStyleChanged
         {
             add => base.DisplayStyleChanged += value;
             remove => base.DisplayStyleChanged -= value;
         }
 
-        [
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Never),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override Font Font
         {
-            get
-            {
-                return base.Font;
-            }
-            set
-            {
-                base.Font = value;
-            }
+            get => base.Font;
+            set => base.Font = value;
         }
 
-        [
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Never),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public new ContentAlignment ImageAlign
         {
-            get
-            {
-                return base.ImageAlign;
-            }
-            set
-            {
-                base.ImageAlign = value;
-            }
+            get => base.ImageAlign;
+            set => base.ImageAlign = value;
         }
 
-        [
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Never),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override Image Image
         {
-            get
-            {
-                return base.Image;
-            }
-            set
-            {
-                base.Image = value;
-            }
+            get => base.Image;
+            set => base.Image = value;
         }
 
-        [
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Never),
-        RefreshProperties(RefreshProperties.Repaint),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [RefreshProperties(RefreshProperties.Repaint)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public new int ImageIndex
         {
-            get
-            {
-                return base.ImageIndex;
-            }
-            set
-            {
-                base.ImageIndex = value;
-            }
+            get => base.ImageIndex;
+            set => base.ImageIndex = value;
         }
 
-        [
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Never),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public new string ImageKey
         {
-            get
-            {
-                return base.ImageKey;
-            }
-            set
-            {
-                base.ImageKey = value;
-            }
+            get => base.ImageKey;
+            set => base.ImageKey = value;
         }
 
-        [
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Never),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public new Color ImageTransparentColor
         {
-            get
-            {
-                return base.ImageTransparentColor;
-            }
-            set
-            {
-                base.ImageTransparentColor = value;
-            }
+            get => base.ImageTransparentColor;
+            set => base.ImageTransparentColor = value;
         }
 
-        [
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Never),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public new ToolStripItemImageScaling ImageScaling
         {
-            get
-            {
-                return base.ImageScaling;
-            }
-            set
-            {
-                base.ImageScaling = value;
-            }
+            get => base.ImageScaling;
+            set => base.ImageScaling = value;
         }
 
         private bool IsVertical
@@ -294,7 +169,6 @@ namespace System.Windows.Forms
             get
             {
                 ToolStrip parent = ParentInternal;
-
                 if (parent == null)
                 {
                     parent = Owner;
@@ -316,152 +190,101 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Never),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override string Text
         {
-            get
-            {
-                return base.Text;
-            }
-            set
-            {
-                base.Text = value;
-            }
+            get => base.Text;
+            set => base.Text = value;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler TextChanged
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public new event EventHandler TextChanged
         {
             add => base.TextChanged += value;
             remove => base.TextChanged -= value;
         }
 
-        [
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Never),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public new ContentAlignment TextAlign
         {
-            get
-            {
-                return base.TextAlign;
-            }
-            set
-            {
-                base.TextAlign = value;
-            }
+            get => base.TextAlign;
+            set => base.TextAlign = value;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), DefaultValue(ToolStripTextDirection.Horizontal)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DefaultValue(ToolStripTextDirection.Horizontal)]
         public override ToolStripTextDirection TextDirection
         {
-            get
-            {
-                return base.TextDirection;
-            }
-            set
-            {
-                base.TextDirection = value;
-            }
+            get => base.TextDirection;
+            set => base.TextDirection = value;
         }
 
-        [
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Never),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public new TextImageRelation TextImageRelation
         {
-            get
-            {
-                return base.TextImageRelation;
-            }
-            set
-            {
-                base.TextImageRelation = value;
-            }
+            get => base.TextImageRelation;
+            set => base.TextImageRelation = value;
         }
 
-        [
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Never),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public new string ToolTipText
         {
-            get
-            {
-                return base.ToolTipText;
-            }
-            set
-            {
-                base.ToolTipText = value;
-            }
+            get => base.ToolTipText;
+            set => base.ToolTipText = value;
         }
 
-        [
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Never),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public new bool RightToLeftAutoMirrorImage
         {
-            get
-            {
-                return base.RightToLeftAutoMirrorImage;
-            }
-            set
-            {
-                base.RightToLeftAutoMirrorImage = value;
-            }
+            get => base.RightToLeftAutoMirrorImage;
+            set => base.RightToLeftAutoMirrorImage = value;
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override AccessibleObject CreateAccessibilityInstance()
-        {
-            return new ToolStripSeparatorAccessibleObject(this);
-        }
+            => new ToolStripSeparatorAccessibleObject(this);
 
         public override Size GetPreferredSize(Size constrainingSize)
         {
             ToolStrip parent = ParentInternal;
-
             if (parent == null)
             {
                 parent = Owner;
             }
             if (parent == null)
             {
-                return new Size(ToolStrip_SEPARATORTHICKNESS, ToolStrip_SEPARATORTHICKNESS);
+                return new Size(SeparatorThickness, SeparatorThickness);
             }
 
             if (parent is ToolStripDropDownMenu dropDownMenu)
             {
-                return new Size(parent.Width - (parent.Padding.Horizontal - dropDownMenu.ImageMargin.Width), ToolStrip_SEPARATORTHICKNESS);
+                return new Size(parent.Width - (parent.Padding.Horizontal - dropDownMenu.ImageMargin.Width), SeparatorThickness);
             }
-            else
+            
+            if (parent.LayoutStyle != ToolStripLayoutStyle.HorizontalStackWithOverflow || parent.LayoutStyle != ToolStripLayoutStyle.VerticalStackWithOverflow)
             {
-                if (parent.LayoutStyle != ToolStripLayoutStyle.HorizontalStackWithOverflow || parent.LayoutStyle != ToolStripLayoutStyle.VerticalStackWithOverflow)
-                {
-                    // we dont actually know what size to make it, so just keep it a stock size.
-                    constrainingSize.Width = ToolStrip_SEPARATORHEIGHT;
-                    constrainingSize.Height = ToolStrip_SEPARATORHEIGHT;
-                }
-                if (IsVertical)
-                {
-                    return new Size(ToolStrip_SEPARATORTHICKNESS, constrainingSize.Height);
-                }
-                else
-                {
-                    return new Size(constrainingSize.Width, ToolStrip_SEPARATORTHICKNESS);
-                }
+                // we dont actually know what size to make it, so just keep it a stock size.
+                constrainingSize.Width = SeparatorHeight;
+                constrainingSize.Height = SeparatorHeight;
             }
-
+            if (IsVertical)
+            {
+                return new Size(SeparatorThickness, constrainingSize.Height);
+            }
+            
+            return new Size(constrainingSize.Width, SeparatorThickness);
         }
 
         protected override void OnPaint(PaintEventArgs e)
@@ -475,15 +298,12 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Never)]
         protected override void OnFontChanged(EventArgs e)
         {
-            // PERF: dont call base, we dont care if the font changes
+            // Perf: dont call base, we dont care if the font changes
             RaiseEvent(EventFontChanged, e);
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        internal override bool ShouldSerializeForeColor()
-        {
-            return (ForeColor != SystemColors.ControlDark);
-        }
+        internal override bool ShouldSerializeForeColor() => ForeColor != SystemColors.ControlDark;
 
         internal protected override void SetBounds(Rectangle rect)
         {
@@ -501,47 +321,6 @@ namespace System.Windows.Forms
                 }
             }
             base.SetBounds(rect);
-        }
-
-        /// <summary>
-        ///  An implementation of AccessibleChild for use with ToolStripItems
-        /// </summary>
-        [Runtime.InteropServices.ComVisible(true)]
-        internal class ToolStripSeparatorAccessibleObject : ToolStripItemAccessibleObject
-        {
-            private readonly ToolStripSeparator ownerItem = null;
-
-            public ToolStripSeparatorAccessibleObject(ToolStripSeparator ownerItem) : base(ownerItem)
-            {
-                this.ownerItem = ownerItem;
-            }
-
-            public override AccessibleRole Role
-            {
-                get
-                {
-                    AccessibleRole role = ownerItem.AccessibleRole;
-                    if (role != AccessibleRole.Default)
-                    {
-                        return role;
-                    }
-                    else
-                    {
-                        return AccessibleRole.Separator;
-                    }
-
-                }
-            }
-
-            internal override object GetPropertyValue(UiaCore.UIA propertyID)
-            {
-                if (propertyID == UiaCore.UIA.ControlTypePropertyId)
-                {
-                    return UiaCore.UIA.SeparatorControlTypeId;
-                }
-
-                return base.GetPropertyValue(propertyID);
-            }
         }
     }
 }
