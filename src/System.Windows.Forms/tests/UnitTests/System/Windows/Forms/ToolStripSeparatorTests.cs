@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.IO;
+using Moq;
 using WinForms.Common.Tests;
 using Xunit;
 
@@ -149,6 +150,26 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, item.BackgroundImageLayout);
         }
 
+        [WinFormsFact]
+        public void ToolStripSeparator_CanSelect_InvokeDesignMode_ReturnsTrue()
+        {
+            var mockSite = new Mock<ISite>(MockBehavior.Strict);
+            mockSite
+                .Setup(s => s.Name)
+                .Returns("Name");
+            mockSite
+                .Setup(s => s.DesignMode)
+                .Returns(true);
+            mockSite
+                .Setup(s => s.Container)
+                .Returns((IContainer)null);
+            using var item = new ToolStripSeparator
+            {
+                Site = mockSite.Object
+            };
+            Assert.True(item.CanSelect);
+        }
+
         [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ToolStripItemDisplayStyle))]
         public void ToolStripSeparator_DisplayStyle_Set_GetReturnsExpected(ToolStripItemDisplayStyle value)
@@ -172,7 +193,7 @@ namespace System.Windows.Forms.Tests
             EventHandler handler = (sender, e) =>
             {
                 Assert.Same(item, sender);
-//                Assert.Same(EventArgs.Empty, e);
+                Assert.Same(EventArgs.Empty, e);
                 callCount++;
             };
             item.DisplayStyleChanged += handler;
