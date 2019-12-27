@@ -3137,7 +3137,9 @@ namespace System.Windows.Forms.Tests
             {
                 parent.Layout -= parentHandler;
             }
-        }        [WinFormsFact]
+        }
+
+        [WinFormsFact]
         public void ToolStripItem_Font_ResetValue_Success()
         {
             PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ToolStripItem))[nameof(ToolStripItem.Font)];

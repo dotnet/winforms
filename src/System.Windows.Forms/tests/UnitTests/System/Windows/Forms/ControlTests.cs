@@ -976,6 +976,10 @@ namespace System.Windows.Forms.Tests
 
             public new void OnTextChanged(EventArgs e) => base.OnTextChanged(e);
 
+            public new void OnValidated(EventArgs e) => base.OnValidated(e);
+
+            public new void OnValidating(CancelEventArgs e) => base.OnValidating(e);
+
             public new void OnVisibleChanged(EventArgs e) => base.OnVisibleChanged(e);
 
             public new bool ProcessCmdKey(ref Message msg, Keys keyData) => base.ProcessCmdKey(ref msg, keyData);
