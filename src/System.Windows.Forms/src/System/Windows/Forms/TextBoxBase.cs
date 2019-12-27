@@ -1181,15 +1181,6 @@ namespace System.Windows.Forms
             }
         }
 
-        // Call SetSelectionOnHandle inside CreateHandle()
-        internal virtual bool SetSelectionInCreateHandle
-        {
-            get
-            {
-                return true;
-            }
-        }
-
         /// <summary>
         ///  Gets or sets
         ///  the current text in the text box.
@@ -1448,12 +1439,8 @@ namespace System.Windows.Forms
             {
                 base.CreateHandle();
 
-                if (SetSelectionInCreateHandle)
-                {
-                    // send EM_SETSEL message
-                    SetSelectionOnHandle();
-                }
-
+                // send EM_SETSEL message
+                SetSelectionOnHandle();
             }
             finally
             {
