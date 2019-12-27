@@ -10,60 +10,60 @@ Note: if the Uri is a new place, you will need to add a subscription from that p
   </ProductDependencies>
   <ToolsetDependencies>
     <!-- Core Setup for coherency -->
-    <Dependency Name="Microsoft.NETCore.App" Version="5.0.0-alpha.1.19623.2">
+    <Dependency Name="Microsoft.NETCore.App" Version="5.0.0-alpha.1.19626.2">
       <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>07fa0f7f07a04e8238c63b90b208beebba108399</Sha>
+      <Sha>bc47321f0c1922408fa07e1953e5b9b5735cf7d2</Sha>
     </Dependency>
     <!-- CoreFX via Core Setup -->
-    <Dependency Name="Microsoft.NETCore.Platforms" Version="5.0.0-alpha.1.19623.2" CoherentParentDependency="Microsoft.NETCore.App">
+    <Dependency Name="Microsoft.NETCore.Platforms" Version="5.0.0-alpha.1.19626.2" CoherentParentDependency="Microsoft.NETCore.App">
       <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>07fa0f7f07a04e8238c63b90b208beebba108399</Sha>
+      <Sha>bc47321f0c1922408fa07e1953e5b9b5735cf7d2</Sha>
     </Dependency>
-    <Dependency Name="Microsoft.Win32.Registry" Version="5.0.0-alpha.1.19623.2" CoherentParentDependency="Microsoft.NETCore.App">
+    <Dependency Name="Microsoft.Win32.Registry" Version="5.0.0-alpha.1.19626.2" CoherentParentDependency="Microsoft.NETCore.App">
       <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>07fa0f7f07a04e8238c63b90b208beebba108399</Sha>
+      <Sha>bc47321f0c1922408fa07e1953e5b9b5735cf7d2</Sha>
     </Dependency>
-    <Dependency Name="Microsoft.Win32.SystemEvents" Version="5.0.0-alpha.1.19623.2" CoherentParentDependency="Microsoft.NETCore.App">
+    <Dependency Name="Microsoft.Win32.SystemEvents" Version="5.0.0-alpha.1.19626.2" CoherentParentDependency="Microsoft.NETCore.App">
       <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>07fa0f7f07a04e8238c63b90b208beebba108399</Sha>
+      <Sha>bc47321f0c1922408fa07e1953e5b9b5735cf7d2</Sha>
     </Dependency>
-    <Dependency Name="System.CodeDom" Version="5.0.0-alpha.1.19623.2" CoherentParentDependency="Microsoft.NETCore.App">
+    <Dependency Name="System.CodeDom" Version="5.0.0-alpha.1.19626.2" CoherentParentDependency="Microsoft.NETCore.App">
       <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>07fa0f7f07a04e8238c63b90b208beebba108399</Sha>
+      <Sha>bc47321f0c1922408fa07e1953e5b9b5735cf7d2</Sha>
     </Dependency>
-    <Dependency Name="System.Configuration.ConfigurationManager" Version="5.0.0-alpha.1.19623.2" CoherentParentDependency="Microsoft.NETCore.App">
+    <Dependency Name="System.Configuration.ConfigurationManager" Version="5.0.0-alpha.1.19626.2" CoherentParentDependency="Microsoft.NETCore.App">
       <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>07fa0f7f07a04e8238c63b90b208beebba108399</Sha>
+      <Sha>bc47321f0c1922408fa07e1953e5b9b5735cf7d2</Sha>
     </Dependency>
-    <Dependency Name="System.Drawing.Common" Version="5.0.0-alpha.1.19623.2" CoherentParentDependency="Microsoft.NETCore.App">
+    <Dependency Name="System.Drawing.Common" Version="5.0.0-alpha.1.19626.2" CoherentParentDependency="Microsoft.NETCore.App">
       <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>07fa0f7f07a04e8238c63b90b208beebba108399</Sha>
+      <Sha>bc47321f0c1922408fa07e1953e5b9b5735cf7d2</Sha>
     </Dependency>
-    <Dependency Name="System.Resources.Extensions" Version="5.0.0-alpha.1.19623.2" CoherentParentDependency="Microsoft.NETCore.App">
+    <Dependency Name="System.Resources.Extensions" Version="5.0.0-alpha.1.19626.2" CoherentParentDependency="Microsoft.NETCore.App">
       <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>07fa0f7f07a04e8238c63b90b208beebba108399</Sha>
+      <Sha>bc47321f0c1922408fa07e1953e5b9b5735cf7d2</Sha>
     </Dependency>
-    <Dependency Name="System.Security.Cryptography.Cng" Version="5.0.0-alpha.1.19623.2" CoherentParentDependency="Microsoft.NETCore.App">
+    <Dependency Name="System.Security.Cryptography.Cng" Version="5.0.0-alpha.1.19626.2" CoherentParentDependency="Microsoft.NETCore.App">
       <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>07fa0f7f07a04e8238c63b90b208beebba108399</Sha>
+      <Sha>bc47321f0c1922408fa07e1953e5b9b5735cf7d2</Sha>
     </Dependency>
-    <Dependency Name="System.Security.Permissions" Version="5.0.0-alpha.1.19623.2" CoherentParentDependency="Microsoft.NETCore.App">
+    <Dependency Name="System.Security.Permissions" Version="5.0.0-alpha.1.19626.2" CoherentParentDependency="Microsoft.NETCore.App">
       <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>07fa0f7f07a04e8238c63b90b208beebba108399</Sha>
+      <Sha>bc47321f0c1922408fa07e1953e5b9b5735cf7d2</Sha>
     </Dependency>
-    <Dependency Name="System.Windows.Extensions" Version="5.0.0-alpha.1.19623.2" CoherentParentDependency="Microsoft.NETCore.App">
+    <Dependency Name="System.Windows.Extensions" Version="5.0.0-alpha.1.19626.2" CoherentParentDependency="Microsoft.NETCore.App">
       <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>07fa0f7f07a04e8238c63b90b208beebba108399</Sha>
+      <Sha>bc47321f0c1922408fa07e1953e5b9b5735cf7d2</Sha>
     </Dependency>
     <!-- CoreCLR via Core Setup -->
-    <Dependency Name="Microsoft.NET.Sdk.IL" Version="5.0.0-alpha.1.19623.2" CoherentParentDependency="Microsoft.NETCore.App">
+    <Dependency Name="Microsoft.NET.Sdk.IL" Version="5.0.0-alpha.1.19626.2" CoherentParentDependency="Microsoft.NETCore.App">
       <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>07fa0f7f07a04e8238c63b90b208beebba108399</Sha>
+      <Sha>bc47321f0c1922408fa07e1953e5b9b5735cf7d2</Sha>
       <SourceBuildId>5596</SourceBuildId>
     </Dependency>
-    <Dependency Name="Microsoft.NETCore.ILAsm" Version="5.0.0-alpha.1.19623.2" CoherentParentDependency="Microsoft.NETCore.App">
+    <Dependency Name="Microsoft.NETCore.ILAsm" Version="5.0.0-alpha.1.19626.2" CoherentParentDependency="Microsoft.NETCore.App">
       <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>07fa0f7f07a04e8238c63b90b208beebba108399</Sha>
+      <Sha>bc47321f0c1922408fa07e1953e5b9b5735cf7d2</Sha>
       <SourceBuildId>5596</SourceBuildId>
     </Dependency>
     <!-- Arcade -->
