@@ -16,27 +16,27 @@ namespace System.Windows.Forms
     /// </summary>
     public class ToolStripControlHost : ToolStripItem
     {
-        private Control control;
-        private int suspendSyncSizeCount = 0;
-        private ContentAlignment controlAlign = ContentAlignment.MiddleCenter;
-        private bool inSetVisibleCore = false;
+        private Control _control;
+        private int _suspendSyncSizeCount = 0;
+        private ContentAlignment _controlAlign = ContentAlignment.MiddleCenter;
+        private bool _inSetVisibleCore = false;
 
-        internal static readonly object EventGotFocus = new object();
-        internal static readonly object EventLostFocus = new object();
-        internal static readonly object EventKeyDown = new object();
-        internal static readonly object EventKeyPress = new object();
-        internal static readonly object EventKeyUp = new object();
-        internal static readonly object EventEnter = new object();
-        internal static readonly object EventLeave = new object();
-        internal static readonly object EventValidated = new object();
-        internal static readonly object EventValidating = new object();
+        internal static readonly object s_gotFocusEvent = new object();
+        internal static readonly object s_lostFocusEvent = new object();
+        internal static readonly object s_keyDownEvent = new object();
+        internal static readonly object s_keyPressEvent = new object();
+        internal static readonly object s_keyUpEent = new object();
+        internal static readonly object s_enterEvent = new object();
+        internal static readonly object s_leaveEvent = new object();
+        internal static readonly object s_validatedEvent = new object();
+        internal static readonly object s_validatingEvent = new object();
 
         /// <summary>
         ///  Constructs a ToolStripControlHost
         /// </summary>
         public ToolStripControlHost(Control c)
         {
-            control = c ?? throw new ArgumentNullException(nameof(c), SR.ControlCannotBeNull);
+            _control = c ?? throw new ArgumentNullException(nameof(c), SR.ControlCannotBeNull);
             SyncControlParent();
             c.Visible = true;
             SetBounds(c.Bounds);
@@ -111,7 +111,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (control != null)
+                if (_control != null)
                 {
                     return (DesignMode || Control.CanSelect);
                 }
@@ -133,16 +133,16 @@ namespace System.Windows.Forms
         [DefaultValue(ContentAlignment.MiddleCenter), Browsable(false)]
         public ContentAlignment ControlAlign
         {
-            get { return controlAlign; }
+            get { return _controlAlign; }
             set
             {
                 if (!WindowsFormsUtils.EnumValidator.IsValidContentAlignment(value))
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ContentAlignment));
                 }
-                if (controlAlign != value)
+                if (_controlAlign != value)
                 {
-                    controlAlign = value;
+                    _controlAlign = value;
                     OnBoundsChanged();
                 }
             }
@@ -156,7 +156,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return control;
+                return _control;
             }
         }
 
@@ -250,8 +250,8 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatFocus)), SRDescription(nameof(SR.ControlOnEnterDescr))]
         public event EventHandler Enter
         {
-            add => Events.AddHandler(EventEnter, value);
-            remove => Events.RemoveHandler(EventEnter, value);
+            add => Events.AddHandler(s_enterEvent, value);
+            remove => Events.RemoveHandler(s_enterEvent, value);
         }
 
         [
@@ -285,8 +285,8 @@ namespace System.Windows.Forms
         ]
         public event EventHandler GotFocus
         {
-            add => Events.AddHandler(EventGotFocus, value);
-            remove => Events.RemoveHandler(EventGotFocus, value);
+            add => Events.AddHandler(s_gotFocusEvent, value);
+            remove => Events.RemoveHandler(s_gotFocusEvent, value);
         }
 
         [
@@ -359,8 +359,8 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatFocus)), SRDescription(nameof(SR.ControlOnLeaveDescr))]
         public event EventHandler Leave
         {
-            add => Events.AddHandler(EventLeave, value);
-            remove => Events.RemoveHandler(EventLeave, value);
+            add => Events.AddHandler(s_leaveEvent, value);
+            remove => Events.RemoveHandler(s_leaveEvent, value);
         }
 
         /// <summary>
@@ -374,8 +374,8 @@ namespace System.Windows.Forms
         ]
         public event EventHandler LostFocus
         {
-            add => Events.AddHandler(EventLostFocus, value);
-            remove => Events.RemoveHandler(EventLostFocus, value);
+            add => Events.AddHandler(s_lostFocusEvent, value);
+            remove => Events.RemoveHandler(s_lostFocusEvent, value);
         }
 
         /// <summary>
@@ -384,8 +384,8 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatKey)), SRDescription(nameof(SR.ControlOnKeyDownDescr))]
         public event KeyEventHandler KeyDown
         {
-            add => Events.AddHandler(EventKeyDown, value);
-            remove => Events.RemoveHandler(EventKeyDown, value);
+            add => Events.AddHandler(s_keyDownEvent, value);
+            remove => Events.RemoveHandler(s_keyDownEvent, value);
         }
 
         /// <summary>
@@ -394,8 +394,8 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatKey)), SRDescription(nameof(SR.ControlOnKeyPressDescr))]
         public event KeyPressEventHandler KeyPress
         {
-            add => Events.AddHandler(EventKeyPress, value);
-            remove => Events.RemoveHandler(EventKeyPress, value);
+            add => Events.AddHandler(s_keyPressEvent, value);
+            remove => Events.RemoveHandler(s_keyPressEvent, value);
         }
 
         /// <summary>
@@ -404,8 +404,8 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatKey)), SRDescription(nameof(SR.ControlOnKeyUpDescr))]
         public event KeyEventHandler KeyUp
         {
-            add => Events.AddHandler(EventKeyUp, value);
-            remove => Events.RemoveHandler(EventKeyUp, value);
+            add => Events.AddHandler(s_keyUpEent, value);
+            remove => Events.RemoveHandler(s_keyUpEent, value);
         }
 
         /// <summary>
@@ -417,17 +417,17 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (control != null)
+                if (_control != null)
                 {
-                    return control.RightToLeft;
+                    return _control.RightToLeft;
                 }
                 return base.RightToLeft;
             }
             set
             {
-                if (control != null)
+                if (_control != null)
                 {
-                    control.RightToLeft = value;
+                    _control.RightToLeft = value;
                 }
             }
         }
@@ -470,24 +470,24 @@ namespace System.Windows.Forms
             set
             {
                 Rectangle specifiedBounds = Rectangle.Empty;
-                if (control != null)
+                if (_control != null)
                 {
                     // we dont normally update the specified bounds, but if someone explicitly sets
                     // the size we should.
-                    specifiedBounds = control.Bounds;
+                    specifiedBounds = _control.Bounds;
                     specifiedBounds.Size = value;
-                    CommonProperties.UpdateSpecifiedBounds(control, specifiedBounds.X, specifiedBounds.Y, specifiedBounds.Width, specifiedBounds.Height);
+                    CommonProperties.UpdateSpecifiedBounds(_control, specifiedBounds.X, specifiedBounds.Y, specifiedBounds.Width, specifiedBounds.Height);
                 }
 
                 base.Size = value;
 
-                if (control != null)
+                if (_control != null)
                 {
                     // checking again in case the control has adjusted the size.
-                    Rectangle bounds = control.Bounds;
+                    Rectangle bounds = _control.Bounds;
                     if (bounds != specifiedBounds)
                     {
-                        CommonProperties.UpdateSpecifiedBounds(control, bounds.X, bounds.Y, bounds.Width, bounds.Height);
+                        CommonProperties.UpdateSpecifiedBounds(_control, bounds.X, bounds.Y, bounds.Width, bounds.Height);
                     }
                 }
             }
@@ -575,15 +575,15 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatFocus)), SRDescription(nameof(SR.ControlOnValidatingDescr))]
         public event CancelEventHandler Validating
         {
-            add => Events.AddHandler(EventValidating, value);
-            remove => Events.RemoveHandler(EventValidating, value);
+            add => Events.AddHandler(s_validatingEvent, value);
+            remove => Events.RemoveHandler(s_validatingEvent, value);
         }
 
         [SRCategory(nameof(SR.CatFocus)), SRDescription(nameof(SR.ControlOnValidatedDescr))]
         public event EventHandler Validated
         {
-            add => Events.AddHandler(EventValidated, value);
-            remove => Events.RemoveHandler(EventValidated, value);
+            add => Events.AddHandler(s_validatedEvent, value);
+            remove => Events.RemoveHandler(s_validatedEvent, value);
         }
 
         /// <summary>
@@ -603,7 +603,7 @@ namespace System.Windows.Forms
 
                 // we only call control.Dispose if we are NOT being disposed in the finalizer.
                 Control.Dispose();
-                control = null;
+                _control = null;
             }
         }
 
@@ -615,7 +615,7 @@ namespace System.Windows.Forms
 
         public override Size GetPreferredSize(Size constrainingSize)
         {
-            if (control != null)
+            if (_control != null)
             {
                 return Control.GetPreferredSize(constrainingSize - Padding.Size) + Padding.Size;
             }
@@ -747,7 +747,7 @@ namespace System.Windows.Forms
         }
         private void HandleResize(object sender, EventArgs e)
         {
-            if (suspendSyncSizeCount == 0)
+            if (_suspendSyncSizeCount == 0)
             {
                 OnHostedControlResize(e);
             }
@@ -801,7 +801,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnEnter(EventArgs e)
         {
-            RaiseEvent(EventEnter, e);
+            RaiseEvent(s_enterEvent, e);
         }
 
         /// <summary>
@@ -809,12 +809,12 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnGotFocus(EventArgs e)
         {
-            RaiseEvent(EventGotFocus, e);
+            RaiseEvent(s_gotFocusEvent, e);
         }
 
         protected virtual void OnLeave(EventArgs e)
         {
-            RaiseEvent(EventLeave, e);
+            RaiseEvent(s_leaveEvent, e);
         }
 
         /// <summary>
@@ -822,26 +822,26 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnLostFocus(EventArgs e)
         {
-            RaiseEvent(EventLostFocus, e);
+            RaiseEvent(s_lostFocusEvent, e);
         }
         protected virtual void OnKeyDown(KeyEventArgs e)
         {
-            RaiseKeyEvent(EventKeyDown, e);
+            RaiseKeyEvent(s_keyDownEvent, e);
         }
         protected virtual void OnKeyPress(KeyPressEventArgs e)
         {
-            RaiseKeyPressEvent(EventKeyPress, e);
+            RaiseKeyPressEvent(s_keyPressEvent, e);
         }
         protected virtual void OnKeyUp(KeyEventArgs e)
         {
-            RaiseKeyEvent(EventKeyUp, e);
+            RaiseKeyEvent(s_keyUpEent, e);
         }
         /// <summary>
         ///  Called when the items bounds are changed.  Here, we update the Control's bounds.
         /// </summary>
         protected override void OnBoundsChanged()
         {
-            if (!(control is IArrangedElement element))
+            if (!(_control is IArrangedElement element))
             {
                 return;
             }
@@ -856,9 +856,9 @@ namespace System.Windows.Forms
 
             // sometimes a control can ignore the size passed in, use the adjustment
             // to re-align.
-            if (bounds != control.Bounds)
+            if (bounds != _control.Bounds)
             {
-                bounds = LayoutUtils.Align(control.Size, Bounds, ControlAlign);
+                bounds = LayoutUtils.Align(_control.Size, Bounds, ControlAlign);
                 element.SetBounds(bounds, BoundsSpecified.None);
             }
 
@@ -1001,12 +1001,12 @@ namespace System.Windows.Forms
 
         protected virtual void OnValidating(CancelEventArgs e)
         {
-            RaiseCancelEvent(EventValidating, e);
+            RaiseCancelEvent(s_validatingEvent, e);
         }
 
         protected virtual void OnValidated(EventArgs e)
         {
-            RaiseEvent(EventValidated, e);
+            RaiseEvent(s_validatedEvent, e);
         }
 
         private static WindowsFormsUtils.ReadOnlyControlCollection GetControlCollection(ToolStrip toolStrip)
@@ -1036,9 +1036,9 @@ namespace System.Windows.Forms
 
         protected internal override bool ProcessMnemonic(char charCode)
         {
-            if (control != null)
+            if (_control != null)
             {
-                return control.ProcessMnemonic(charCode);
+                return _control.ProcessMnemonic(charCode);
             }
             return base.ProcessMnemonic(charCode);
         }
@@ -1049,12 +1049,12 @@ namespace System.Windows.Forms
         {
             // This is needed, because if you try and set set visible to true before the parent is visible,
             // we will get called back into here, and set it back to false, since the parent is not visible.
-            if (inSetVisibleCore)
+            if (_inSetVisibleCore)
             {
                 return;
             }
 
-            inSetVisibleCore = true;
+            _inSetVisibleCore = true;
             Control.SuspendLayout();
             try
             {
@@ -1065,7 +1065,7 @@ namespace System.Windows.Forms
                 Control.ResumeLayout(false);
                 // this will go ahead and perform layout.
                 base.SetVisibleCore(visible);
-                inSetVisibleCore = false;
+                _inSetVisibleCore = false;
             }
 
         }
@@ -1084,44 +1084,44 @@ namespace System.Windows.Forms
 
         private void SuspendSizeSync()
         {
-            suspendSyncSizeCount++;
+            _suspendSyncSizeCount++;
         }
 
         private void ResumeSizeSync()
         {
-            suspendSyncSizeCount--;
+            _suspendSyncSizeCount--;
         }
         internal override bool ShouldSerializeBackColor()
         {
-            if (control != null)
+            if (_control != null)
             {
-                return control.ShouldSerializeBackColor();
+                return _control.ShouldSerializeBackColor();
             }
             return base.ShouldSerializeBackColor();
         }
         internal override bool ShouldSerializeForeColor()
         {
-            if (control != null)
+            if (_control != null)
             {
-                return control.ShouldSerializeForeColor();
+                return _control.ShouldSerializeForeColor();
             }
             return base.ShouldSerializeForeColor();
         }
 
         internal override bool ShouldSerializeFont()
         {
-            if (control != null)
+            if (_control != null)
             {
-                return control.ShouldSerializeFont();
+                return _control.ShouldSerializeFont();
             }
             return base.ShouldSerializeFont();
         }
 
         internal override bool ShouldSerializeRightToLeft()
         {
-            if (control != null)
+            if (_control != null)
             {
-                return control.ShouldSerializeRightToLeft();
+                return _control.ShouldSerializeRightToLeft();
             }
             return base.ShouldSerializeRightToLeft();
         }
@@ -1241,14 +1241,14 @@ namespace System.Windows.Forms
         // Everything else is pretty much default implementation.
         private class StubSite : ISite, IDictionaryService
         {
-            private Hashtable _dictionary = null;
-            readonly IComponent comp = null;
-            readonly IComponent owner = null;
+            private Hashtable _dictionary;
+            readonly IComponent _comp;
+            readonly IComponent _owner;
 
-            public StubSite(Component control, Component host)
+            public StubSite(IComponent control, IComponent host)
             {
-                comp = control as IComponent;
-                owner = host as IComponent;
+                _comp = control;
+                _owner = host;
             }
             // The component sited by this component site.
             /// <summary>
@@ -1258,7 +1258,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    return comp;
+                    return _comp;
                 }
             }
 
@@ -1270,7 +1270,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    return owner.Site.Container;
+                    return _owner.Site.Container;
                 }
             }
 
@@ -1282,7 +1282,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    return owner.Site.DesignMode;
+                    return _owner.Site.DesignMode;
                 }
             }
 
@@ -1296,11 +1296,11 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    return owner.Site.Name;
+                    return _owner.Site.Name;
                 }
                 set
                 {
-                    owner.Site.Name = value;
+                    _owner.Site.Name = value;
                 }
             }
 
@@ -1322,9 +1322,9 @@ namespace System.Windows.Forms
                     return this;
                 }
 
-                if (owner.Site != null)
+                if (_owner.Site != null)
                 {
-                    return owner.Site.GetService(service);
+                    return _owner.Site.GetService(service);
                 }
                 return null;
             }
