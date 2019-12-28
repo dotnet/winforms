@@ -5,7 +5,6 @@
 using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design;
-using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms.Layout;
 using static Interop;
@@ -842,30 +841,28 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void OnBoundsChanged()
         {
-            if (control != null)
+            if (!(control is IArrangedElement element))
             {
-                SuspendSizeSync();
-                if (!(control is IArrangedElement element))
-                {
-                    Debug.Fail("why are we here? control should not be null");
-                    return;
-                }
-
-                Size size = LayoutUtils.DeflateRect(Bounds, Padding).Size;
-                Rectangle bounds = LayoutUtils.Align(size, Bounds, ControlAlign);
-
-                // use BoundsSpecified.None so we dont deal w/specified bounds - this way we can tell what someone has set the size to.
-                element.SetBounds(bounds, BoundsSpecified.None);
-
-                // sometimes a control can ignore the size passed in, use the adjustment
-                // to re-align.
-                if (bounds != control.Bounds)
-                {
-                    bounds = LayoutUtils.Align(control.Size, Bounds, ControlAlign);
-                    element.SetBounds(bounds, BoundsSpecified.None);
-                }
-                ResumeSizeSync();
+                return;
             }
+
+            SuspendSizeSync();
+
+            Size size = LayoutUtils.DeflateRect(Bounds, Padding).Size;
+            Rectangle bounds = LayoutUtils.Align(size, Bounds, ControlAlign);
+
+            // use BoundsSpecified.None so we dont deal w/specified bounds - this way we can tell what someone has set the size to.
+            element.SetBounds(bounds, BoundsSpecified.None);
+
+            // sometimes a control can ignore the size passed in, use the adjustment
+            // to re-align.
+            if (bounds != control.Bounds)
+            {
+                bounds = LayoutUtils.Align(control.Size, Bounds, ControlAlign);
+                element.SetBounds(bounds, BoundsSpecified.None);
+            }
+
+            ResumeSizeSync();
         }
 
         /// <summary>
