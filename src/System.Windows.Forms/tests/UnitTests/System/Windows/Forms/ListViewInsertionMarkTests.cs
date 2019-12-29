@@ -7,6 +7,7 @@ using System.Drawing;
 using WinForms.Common.Tests;
 using Xunit;
 using static Interop;
+using static Interop.ComCtl32;
 
 namespace System.Windows.Forms.Tests
 {
@@ -73,7 +74,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(insertionMark.Bounds, insertionMark.Bounds);
             Assert.True(control.IsHandleCreated);
         }
-        
+
         [WinFormsFact]
         public void ListViewInsertionMark_Bounds_GetWithHandle_ReturnsEqual()
         {

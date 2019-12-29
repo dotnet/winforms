@@ -1,9 +1,8 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
 using System.Drawing;
-using System.Globalization;
 using System.Runtime.InteropServices;
 using static Interop;
 
@@ -197,8 +196,6 @@ namespace System.Windows.Forms
         HTBOTTOMRIGHT = 17,
         HTBORDER = 18,
         HCF_HIGHCONTRASTON = 0x00000001,
-        HDI_ORDER = 0x0080,
-        HDI_WIDTH = 0x0001,
         HDM_GETITEMCOUNT = (0x1200 + 0),
         HDM_INSERTITEMW = (0x1200 + 10),
         HDM_GETITEMW = (0x1200 + 11),
@@ -271,30 +268,10 @@ namespace System.Windows.Forms
         LVIR_ICON = 1,
         LVIR_LABEL = 2,
         LVIR_SELECTBOUNDS = 3,
-        LVHT_NOWHERE = 0x0001,
-        LVHT_ONITEMICON = 0x0002,
-        LVHT_ONITEMLABEL = 0x0004,
-        LVHT_ABOVE = 0x0008,
-        LVHT_BELOW = 0x0010,
-        LVHT_RIGHT = 0x0020,
-        LVHT_LEFT = 0x0040,
-        LVHT_ONITEM = (0x0002 | 0x0004 | 0x0008),
-        LVHT_ONITEMSTATEICON = 0x0008,
         LVA_DEFAULT = 0x0000,
         LVA_ALIGNLEFT = 0x0001,
         LVA_ALIGNTOP = 0x0002,
         LVA_SNAPTOGRID = 0x0005,
-        LVCF_FMT = 0x0001,
-        LVCF_WIDTH = 0x0002,
-        LVCF_TEXT = 0x0004,
-        LVCF_SUBITEM = 0x0008,
-        LVCF_IMAGE = 0x0010,
-        LVCF_ORDER = 0x0020,
-        LVCFMT_IMAGE = 0x0800,
-        LVIM_AFTER = 0x00000001,
-        LVTVIF_FIXEDSIZE = 0x00000003,
-        LVTVIM_TILESIZE = 0x00000001,
-        LVTVIM_COLUMNS = 0x00000002,
         LVS_EX_GRIDLINES = 0x00000001,
         LVS_EX_CHECKBOXES = 0x00000004,
         LVS_EX_TRACKSELECT = 0x00000008,
@@ -1150,138 +1127,6 @@ namespace System.Windows.Forms
 
             public IntPtr hinst;
             public int uFlags;
-        }
-
-        // HDN_ITEMCHANGING will send us an HDITEM w/ pszText set to some random pointer.
-        // Marshal.PtrToStructure chokes when it has to convert a random pointer to a string.
-        // For HDN_ITEMCHANGING map pszText to an IntPtr
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-        public class HDITEM2
-        {
-            public int mask = 0;
-            public int cxy = 0;
-            public IntPtr pszText_notUsed = IntPtr.Zero;
-            public IntPtr hbm = IntPtr.Zero;
-            public int cchTextMax = 0;
-            public int fmt = 0;
-            public IntPtr lParam = IntPtr.Zero;
-            public int iImage = 0;
-            public int iOrder = 0;
-            public int type = 0;
-            public IntPtr pvFilter = IntPtr.Zero;
-        }
-
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-        public class LVHITTESTINFO
-        {
-            public int pt_x;
-            public int pt_y;
-            public int flags = 0;
-            public int iItem = 0;
-            public int iSubItem = 0;
-        }
-
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-        public class LVCOLUMN_T
-        {
-            public int mask = 0;
-            public int fmt = 0;
-            public int cx = 0;
-            public string pszText = null;
-            public int cchTextMax = 0;
-            public int iSubItem = 0;
-            public int iImage = 0;
-            public int iOrder = 0;
-        }
-
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-        public struct LVITEM
-        {
-            public ComCtl32.LVIF mask;
-            public int iItem;
-            public int iSubItem;
-            public ComCtl32.LVIS state;
-            public ComCtl32.LVIS stateMask;
-            public string pszText;
-            public int cchTextMax;
-            public int iImage;
-            public IntPtr lParam;
-            public int iIndent;
-            public int iGroupId;
-            public int cColumns; // tile view columns
-            public IntPtr puColumns;
-
-            public override string ToString()
-            {
-                return "LVITEM: pszText = " + pszText
-                     + ", iItem = " + iItem.ToString(CultureInfo.InvariantCulture)
-                     + ", iSubItem = " + iSubItem.ToString(CultureInfo.InvariantCulture)
-                     + ", state = " + state.ToString(CultureInfo.InvariantCulture)
-                     + ", iGroupId = " + iGroupId.ToString(CultureInfo.InvariantCulture)
-                     + ", cColumns = " + cColumns.ToString(CultureInfo.InvariantCulture);
-            }
-        }
-
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-        public struct LVITEM_NOTEXT
-        {
-            public ComCtl32.LVIF mask;
-            public int iItem;
-            public int iSubItem;
-            public ComCtl32.LVIS state;
-            public ComCtl32.LVIS stateMask;
-            public IntPtr /*string*/   pszText;
-            public int cchTextMax;
-            public int iImage;
-            public IntPtr lParam;
-            public int iIndent;
-        }
-
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-        public class LVCOLUMN
-        {
-            public int mask;
-            public int fmt;
-            public int cx = 0;
-            public IntPtr /* LPWSTR */ pszText;
-            public int cchTextMax = 0;
-            public int iSubItem = 0;
-            public int iImage;
-            public int iOrder = 0;
-        }
-
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-        public class LVINSERTMARK
-        {
-            public uint cbSize = (uint)Marshal.SizeOf<LVINSERTMARK>();
-            public int dwFlags;
-            public int iItem;
-            public int dwReserved = 0;
-        }
-
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-        public class LVTILEVIEWINFO
-        {
-            public uint cbSize = (uint)Marshal.SizeOf<LVTILEVIEWINFO>();
-            public int dwMask;
-            public int dwFlags;
-            public Size sizeTile;
-            public int cLines;
-            public RECT rcLabelMargin;
-        }
-
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-        public class NMLVDISPINFO
-        {
-            public User32.NMHDR hdr;
-            public LVITEM item;
-        }
-
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-        public class NMLVDISPINFO_NOTEXT
-        {
-            public User32.NMHDR hdr;
-            public LVITEM_NOTEXT item;
         }
 
         [StructLayout(LayoutKind.Sequential)]

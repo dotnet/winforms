@@ -9,6 +9,7 @@ using Moq;
 using WinForms.Common.Tests;
 using Xunit;
 using static Interop;
+using static Interop.ComCtl32;
 
 namespace System.Windows.Forms.Tests
 {
@@ -118,11 +119,11 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { 0, 0, new int[] { 0, 1, 2 } };
             yield return new object[] { 0, 1, new int[] { 1, 0, 2 } };
             yield return new object[] { 0, 2, new int[] { 2, 0, 1 } };
-            
+
             yield return new object[] { 1, 0, new int[] { 1, 0, 2 } };
             yield return new object[] { 1, 1, new int[] { 0, 1, 2 } };
             yield return new object[] { 1, 2, new int[] { 0, 2, 1 } };
-            
+
             yield return new object[] { 2, 0, new int[] { 1, 2, 0 } };
             yield return new object[] { 2, 1, new int[] { 0, 2, 1 } };
             yield return new object[] { 2, 2, new int[] { 0, 1, 2 } };
@@ -157,7 +158,7 @@ namespace System.Windows.Forms.Tests
         [WinFormsTheory]
         [MemberData(nameof(DisplayIndex_Set_TestData))]
         public void ColumnHeader_DisplayIndex_SetWithListViewWithHandle_GetReturnsExpected(int columnIndex, int value, int[] expectedDisplayIndices)
-{
+        {
             using var listView = new ListView();
             using var header1 = new ColumnHeader();
             using var header2 = new ColumnHeader();
@@ -198,11 +199,11 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { 0, 0, new int[] { 0, 1, 2 } };
             yield return new object[] { 0, 1, new int[] { 1, 0, 2 } };
             yield return new object[] { 0, 2, new int[] { 1, 2, 0 } };
-            
+
             yield return new object[] { 1, 0, new int[] { 1, 0, 2 } };
             yield return new object[] { 1, 1, new int[] { 0, 1, 2 } };
             yield return new object[] { 1, 2, new int[] { 0, 2, 1 } };
-            
+
             yield return new object[] { 2, 0, new int[] { 2, 0, 1 } };
             yield return new object[] { 2, 1, new int[] { 0, 2, 1 } };
             yield return new object[] { 2, 2, new int[] { 0, 1, 2 } };
@@ -871,7 +872,7 @@ namespace System.Windows.Forms.Tests
             header.Name = null;
             Assert.Empty(header.Name);
             Assert.False(property.CanResetValue(header));
-            
+
             // Set empty.
             header.Name = string.Empty;
             Assert.Empty(header.Name);
@@ -898,7 +899,7 @@ namespace System.Windows.Forms.Tests
             header.Name = null;
             Assert.Empty(header.Name);
             Assert.False(property.ShouldSerializeValue(header));
-            
+
             // Set empty.
             header.Name = string.Empty;
             Assert.Empty(header.Name);
@@ -1041,7 +1042,7 @@ namespace System.Windows.Forms.Tests
             header.Text = null;
             Assert.Empty(header.Text);
             Assert.True(property.CanResetValue(header));
-            
+
             // Set empty.
             header.Text = string.Empty;
             Assert.Empty(header.Text);
@@ -1068,7 +1069,7 @@ namespace System.Windows.Forms.Tests
             header.Text = null;
             Assert.Empty(header.Text);
             Assert.True(property.ShouldSerializeValue(header));
-            
+
             // Set empty.
             header.Text = string.Empty;
             Assert.Empty(header.Text);
@@ -1123,7 +1124,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, listView.Columns[columnIndex].TextAlign);
             Assert.False(listView.IsHandleCreated);
         }
-        
+
         [WinFormsTheory]
         [InlineData(0, HorizontalAlignment.Center, HorizontalAlignment.Left)]
         [InlineData(0, HorizontalAlignment.Left, HorizontalAlignment.Left)]
@@ -1223,7 +1224,7 @@ namespace System.Windows.Forms.Tests
             Assert.True(listView.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
-            Assert.Equal(0, createdCallCount);            
+            Assert.Equal(0, createdCallCount);
         }
 
         [WinFormsFact]
@@ -1247,7 +1248,7 @@ namespace System.Windows.Forms.Tests
             Assert.True(listView.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
-            Assert.Equal(0, createdCallCount); 
+            Assert.Equal(0, createdCallCount);
         }
 
         public static IEnumerable<object[]> Width_Set_TestData()
@@ -1369,7 +1370,7 @@ namespace System.Windows.Forms.Tests
             using var header = new ColumnHeader();
             header.AutoResize(headerAutoResize);
             Assert.Equal(60, header.Width);
-            
+
             // Call again.
             header.AutoResize(headerAutoResize);
             Assert.Equal(60, header.Width);
@@ -1414,7 +1415,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            
+
             // Call again.
             header.AutoResize(headerAutoResize);
             Assert.Equal(60, header.Width);
@@ -1626,11 +1627,11 @@ namespace System.Windows.Forms.Tests
             public SubColumnHeader() : base()
             {
             }
-            
+
             public SubColumnHeader(int imageIndex) : base(imageIndex)
             {
             }
-            
+
             public SubColumnHeader(string imageKey) : base(imageKey)
             {
             }

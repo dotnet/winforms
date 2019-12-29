@@ -2,16 +2,14 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using Accessibility;
 using System.Diagnostics;
 using System.Drawing;
-using System.IO;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
 using System.Text;
-using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 using static Interop;
+using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 
 namespace System.Windows.Forms
 {
@@ -211,9 +209,6 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.User32, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
         public static extern IntPtr SendMessage(IntPtr hwnd, int msg, bool wparam, int lparam);
 
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern int SendMessage(HandleRef hWnd, int msg, int wParam, ref NativeMethods.LVHITTESTINFO lParam);
-
         //for Tooltips
         //
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
@@ -265,32 +260,10 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, ref Size lParam);
 
-        // For ListView
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, NativeMethods.LVHITTESTINFO lParam);
-
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, NativeMethods.LVCOLUMN_T lParam);
-
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, [In, Out] ref NativeMethods.LVITEM lParam);
-
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, NativeMethods.LVCOLUMN lParam);
-
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern IntPtr SendMessage(HandleRef hWnd, int msg, ref Point wParam, [In, Out] NativeMethods.LVINSERTMARK lParam);
-
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern bool SendMessage(HandleRef hWnd, int msg, int wParam, NativeMethods.LVINSERTMARK lParam);
-
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern bool SendMessage(HandleRef hWnd, int msg, int wParam, [In, Out] NativeMethods.LVTILEVIEWINFO lParam);
-
         // For MonthCalendar
         //
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, ref Interop.ComCtl32.MCHITTESTINFO lParam);
+        public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, ref ComCtl32.MCHITTESTINFO lParam);
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, int lParam);
@@ -664,7 +637,7 @@ namespace System.Windows.Forms
 
             [PreserveSig]
             HRESULT SetExtent(
-                Ole32.DVASPECT dwDrawAspect, 
+                Ole32.DVASPECT dwDrawAspect,
                 Size* pSizel);
 
             [PreserveSig]

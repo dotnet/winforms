@@ -38,8 +38,19 @@
     <Compile Include="..\..\Common\src\DpiHelper.DpiAwarenessContext.cs" Link="misc\DpiHelper.DpiAwarenessContext.cs" />
     <Compile Include="..\..\Common\src\ExternDll.cs" Link="misc\ExternDll.cs" />
     <Compile Include="..\..\Common\src\FileDialog_Vista_Interop.cs" Link="System\Windows\Forms\FileDialog_Vista_Interop.cs" />
+    <Compile Include="..\..\Common\src\Interop\ComCtl32\Interop.LVCF.cs" Link="Interop\ComCtl32\Interop.LVCF.cs" />
+    <Compile Include="..\..\Common\src\Interop\ComCtl32\Interop.LVCFMT.cs" Link="Interop\ComCtl32\Interop.LVCFMT.cs" />
+    <Compile Include="..\..\Common\src\Interop\ComCtl32\Interop.LVCOLUMNW.cs" Link="Interop\ComCtl32\Interop.LVCOLUMNW.cs" />
+    <Compile Include="..\..\Common\src\Interop\ComCtl32\Interop.LVHITTESTINFO.cs" Link="Interop\ComCtl32\Interop.LVHITTESTINFO.cs" />
+    <Compile Include="..\..\Common\src\Interop\ComCtl32\Interop.LVHT.cs" Link="Interop\ComCtl32\Interop.LVHT.cs" />
+    <Compile Include="..\..\Common\src\Interop\ComCtl32\Interop.LVIM.cs" Link="Interop.LVIM.cs" />
+    <Compile Include="..\..\Common\src\Interop\ComCtl32\Interop.LVINSERTMARK.cs" Link="Interop\ComCtl32\Interop.LVINSERTMARK.cs" />
+    <Compile Include="..\..\Common\src\Interop\ComCtl32\Interop.LVITEMW.cs" Link="Interop\ComCtl32\Interop.LVITEMW.cs" />
+    <Compile Include="..\..\Common\src\Interop\ComCtl32\Interop.LVTVIF.cs" Link="Interop\ComCtl32\Interop.LVTVIF.cs" />
+    <Compile Include="..\..\Common\src\Interop\ComCtl32\Interop.LVTVIM.cs" Link="Interop\ComCtl32\Interop.LVTVIM.cs" />
+    <Compile Include="..\..\Common\src\Interop\ComCtl32\Interop.LVM.cs" Link="Interop.LVM.cs" />
+    <Compile Include="..\..\Common\src\Interop\ComCtl32\Interop.LVTILEVIEWINFO.cs" Link="Interop\ComCtl32\Interop.LVTILEVIEWINFO.cs" />
     <Compile Include="..\..\Common\src\Interop\IHandle.cs" Link="Interop\IHandle.cs" />
-    <Compile Include="..\..\Common\src\Interop\Interop.ListViewMessages.cs" Link="Interop.ListViewMessages.cs" />
     <Compile Include="..\..\Common\src\NativeMethods.cs" Link="System\Windows\Forms\NativeMethods.cs" />
     <Compile Include="..\..\Common\src\OsVersion.cs" Link="Common\OsVersion.cs" />
     <Compile Include="..\..\Common\src\RTLAwareMessageBox.cs" Link="Common\RTLAwareMessageBox.cs" />
