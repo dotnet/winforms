@@ -394,9 +394,12 @@ namespace System.Windows.Forms.Tests
         public void Control_CreateAccessibilityInstance_Invoke_ReturnsExpected()
         {
             using var control = new SubControl();
-            Control.ControlAccessibleObject accessibleObject = Assert.IsType<Control.ControlAccessibleObject>(control.CreateAccessibilityInstance());
-            Assert.Same(control, accessibleObject.Owner);
-            Assert.NotSame(accessibleObject, control.CreateAccessibilityInstance());
+            Control.ControlAccessibleObject instance = Assert.IsAssignableFrom<Control.ControlAccessibleObject>(control.CreateAccessibilityInstance());
+            Assert.NotNull(instance);
+            Assert.Same(control, instance.Owner);
+            Assert.Equal(AccessibleRole.Client, instance.Role);
+            Assert.NotSame(control.CreateAccessibilityInstance(), instance);
+            Assert.NotSame(control.AccessibilityObject, instance);
         }
 
         [Fact]

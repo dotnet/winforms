@@ -2997,6 +2997,62 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(3, rendererChangedCallCount);
         }
 
+        [WinFormsFact]
+        public void ToolStrip_RenderMode_ResetValue_Success()
+        {
+            PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ToolStrip))[nameof(ToolStrip.RenderMode)];
+            using var control = new ToolStrip();
+            Assert.False(property.CanResetValue(control));
+
+            control.RenderMode = ToolStripRenderMode.Professional;
+            Assert.Equal(ToolStripRenderMode.Professional, control.RenderMode);
+            Assert.True(property.CanResetValue(control));
+
+            control.RenderMode = ToolStripRenderMode.System;
+            Assert.Equal(ToolStripRenderMode.System, control.RenderMode);
+            Assert.True(property.CanResetValue(control));
+
+            control.Renderer = new SubToolStripRenderer();
+            Assert.Equal(ToolStripRenderMode.Custom, control.RenderMode);
+            Assert.False(property.CanResetValue(control));
+
+            control.RenderMode = ToolStripRenderMode.ManagerRenderMode;
+            Assert.Equal(ToolStripRenderMode.ManagerRenderMode, control.RenderMode);
+            Assert.False(property.CanResetValue(control));
+
+            property.ResetValue(control);
+            Assert.Equal(ToolStripRenderMode.ManagerRenderMode, control.RenderMode);
+            Assert.False(property.CanResetValue(control));
+        }
+
+        [WinFormsFact]
+        public void ToolStrip_RenderMode_ShouldSerializeValue_Success()
+        {
+            PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ToolStrip))[nameof(ToolStrip.RenderMode)];
+            using var control = new ToolStrip();
+            Assert.False(property.ShouldSerializeValue(control));
+
+            control.RenderMode = ToolStripRenderMode.Professional;
+            Assert.Equal(ToolStripRenderMode.Professional, control.RenderMode);
+            Assert.True(property.ShouldSerializeValue(control));
+
+            control.RenderMode = ToolStripRenderMode.System;
+            Assert.Equal(ToolStripRenderMode.System, control.RenderMode);
+            Assert.True(property.ShouldSerializeValue(control));
+
+            control.Renderer = new SubToolStripRenderer();
+            Assert.Equal(ToolStripRenderMode.Custom, control.RenderMode);
+            Assert.False(property.ShouldSerializeValue(control));
+
+            control.RenderMode = ToolStripRenderMode.ManagerRenderMode;
+            Assert.Equal(ToolStripRenderMode.ManagerRenderMode, control.RenderMode);
+            Assert.False(property.ShouldSerializeValue(control));
+
+            property.ResetValue(control);
+            Assert.Equal(ToolStripRenderMode.ManagerRenderMode, control.RenderMode);
+            Assert.False(property.ShouldSerializeValue(control));
+        }
+
         [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ToolStripRenderMode))]
         public void ToolStrip_RenderMode_SetInvalidValue_ThrowsInvalidEnumArgumentException(ToolStripRenderMode value)
@@ -3570,6 +3626,21 @@ namespace System.Windows.Forms.Tests
             Assert.Null(separator.Image);
         }
 
+        [WinFormsTheory]
+        [InlineData(null, 1)]
+        [InlineData("", 1)]
+        [InlineData("text", 1)]
+        [InlineData("-", 0)]
+        public void ToolStrip_CreateDefaultItem_PerformClick_Success(string text, int expectedCallCount)
+        {
+            int callCount = 0;
+            EventHandler onClick = (sender, e) => callCount++;
+            using var control = new SubToolStrip();
+            ToolStripItem button = Assert.IsAssignableFrom<ToolStripItem>(control.CreateDefaultItem(text, null, onClick));
+            button.PerformClick();
+            Assert.Equal(expectedCallCount, callCount);
+        }
+
         [WinFormsFact]
         public void ToolStrip_CreateLayoutSettings_InvokeFlow_ReturnsExpected()
         {
@@ -3605,6 +3676,354 @@ namespace System.Windows.Forms.Tests
             var toolStrip = new SubToolStrip();
             Assert.Null(toolStrip.CreateLayoutSettings(layoutStyle));
         }
+        [WinFormsFact]
+        public void ToolStrip_Dispose_Invoke_Success()
+        {
+            using var control = new ToolStrip();
+            int callCount = 0;
+            void handler(object sender, EventArgs e)
+            {
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.Items);
+                Assert.Empty(control.DataBindings);
+                Assert.False(control.IsHandleCreated);
+                Assert.True(control.Disposing);
+                Assert.Equal(callCount > 0, control.IsDisposed);
+                callCount++;
+            };
+            control.Disposed += handler;
+
+            try
+            {
+                control.Dispose();
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.Items);
+                Assert.Empty(control.DataBindings);
+                Assert.True(control.IsDisposed);
+                Assert.False(control.Disposing);
+                Assert.Equal(1, callCount);
+                Assert.False(control.IsHandleCreated);
+
+                // Dispose multiple times.
+                control.Dispose();
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.Items);
+                Assert.Empty(control.DataBindings);
+                Assert.True(control.IsDisposed);
+                Assert.False(control.Disposing);
+                Assert.Equal(2, callCount);
+                Assert.False(control.IsHandleCreated);
+            }
+            finally
+            {
+                control.Disposed -= handler;
+            }
+        }
+        
+        [WinFormsFact]
+        public void ToolStrip_Dispose_InvokeWithItems_Success()
+        {
+            using var control = new ToolStrip();
+            using var item1 = new SubToolStripItem();
+            using var item2 = new SubToolStripItem();
+            control.Items.Add(item1);
+            control.Items.Add(item2);
+            int itemRemovedCallCount = 0;
+            control.ItemRemoved += (sender, e) => itemRemovedCallCount++;
+            int controlRemovedCallCount = 0;
+            control.ControlRemoved += (sender, e) => controlRemovedCallCount++;
+
+            int callCount = 0;
+            void handler(object sender, EventArgs e)
+            {
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.Items);
+                Assert.Empty(control.DataBindings);
+                Assert.False(control.IsHandleCreated);
+                Assert.True(control.Disposing);
+                Assert.Equal(callCount > 0, control.IsDisposed);
+                callCount++;
+            };
+            control.Disposed += handler;
+            int item1CallCount = 0;
+            item1.Disposed += (sender, e) => item1CallCount++;
+            int item2CallCount = 0;
+            item2.Disposed += (sender, e) => item2CallCount++;
+
+            try
+            {
+                control.Dispose();
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.Items);
+                Assert.Empty(control.DataBindings);
+                Assert.Null(item1.Owner);
+                Assert.Null(item2.Owner);
+                Assert.Equal(0, controlRemovedCallCount);
+                Assert.Equal(0, itemRemovedCallCount);
+                Assert.True(control.IsDisposed);
+                Assert.False(control.Disposing);
+                Assert.True(item1.IsDisposed);
+                Assert.True(item2.IsDisposed);
+                Assert.Equal(1, callCount);
+                Assert.Equal(1, item1CallCount);
+                Assert.Equal(1, item2CallCount);
+                Assert.False(control.IsHandleCreated);
+
+                // Dispose multiple times.
+                control.Dispose();
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.Items);
+                Assert.Empty(control.DataBindings);
+                Assert.Null(item1.Owner);
+                Assert.Null(item2.Owner);
+                Assert.Equal(0, controlRemovedCallCount);
+                Assert.Equal(0, itemRemovedCallCount);
+                Assert.True(control.IsDisposed);
+                Assert.False(control.Disposing);
+                Assert.True(item1.IsDisposed);
+                Assert.True(item2.IsDisposed);
+                Assert.Equal(2, callCount);
+                Assert.Equal(1, item1CallCount);
+                Assert.Equal(1, item2CallCount);
+                Assert.False(control.IsHandleCreated);
+            }
+            finally
+            {
+                control.Disposed -= handler;
+            }
+        }
+        
+        [WinFormsFact]
+        public void ToolStrip_Dispose_InvokeDisposing_Success()
+        {
+            using var control = new SubToolStrip();
+            int callCount = 0;
+            void handler(object sender, EventArgs e)
+            {
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.Items);
+                Assert.Empty(control.DataBindings);
+                Assert.False(control.IsHandleCreated);
+                Assert.True(control.Disposing);
+                Assert.Equal(callCount > 0, control.IsDisposed);
+                callCount++;
+            };
+            control.Disposed += handler;
+
+            try
+            {
+                control.Dispose(true);
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.Items);
+                Assert.Empty(control.DataBindings);
+                Assert.True(control.IsDisposed);
+                Assert.False(control.Disposing);
+                Assert.Equal(1, callCount);
+                Assert.False(control.IsHandleCreated);
+
+                // Dispose multiple times.
+                control.Dispose(true);
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.Items);
+                Assert.Empty(control.DataBindings);
+                Assert.True(control.IsDisposed);
+                Assert.False(control.Disposing);
+                Assert.Equal(2, callCount);
+                Assert.False(control.IsHandleCreated);
+            }
+            finally
+            {
+                control.Disposed -= handler;
+            }
+        }
+        
+        [WinFormsFact]
+        public void ToolStrip_Dispose_InvokeNotDisposing_Success()
+        {
+            using var control = new SubToolStrip();
+            int callCount = 0;
+            void handler(object sender, EventArgs e) => callCount++;
+            control.Disposed += handler;
+
+            try
+            {
+                control.Dispose(false);
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.Items);
+                Assert.Empty(control.DataBindings);
+                Assert.False(control.IsDisposed);
+                Assert.False(control.Disposing);
+                Assert.Equal(0, callCount);
+                Assert.False(control.IsHandleCreated);
+
+                // Dispose multiple times.
+                control.Dispose(false);
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.Items);
+                Assert.Empty(control.DataBindings);
+                Assert.False(control.IsDisposed);
+                Assert.False(control.Disposing);
+                Assert.Equal(0, callCount);
+                Assert.False(control.IsHandleCreated);
+            }
+            finally
+            {
+                control.Disposed -= handler;
+            }
+        }
+        
+        [WinFormsFact]
+        public void ToolStrip_Dispose_InvokeDisposingWithItems_Success()
+        {
+            using var control = new SubToolStrip();
+            using var item1 = new SubToolStripItem();
+            using var item2 = new SubToolStripItem();
+            control.Items.Add(item1);
+            control.Items.Add(item2);
+            int itemRemovedCallCount = 0;
+            control.ItemRemoved += (sender, e) => itemRemovedCallCount++;
+            int controlRemovedCallCount = 0;
+            control.ControlRemoved += (sender, e) => controlRemovedCallCount++;
+
+            int callCount = 0;
+            void handler(object sender, EventArgs e)
+            {
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.Items);
+                Assert.Empty(control.DataBindings);
+                Assert.False(control.IsHandleCreated);
+                Assert.True(control.Disposing);
+                Assert.Equal(callCount > 0, control.IsDisposed);
+                callCount++;
+            };
+            control.Disposed += handler;
+            int item1CallCount = 0;
+            item1.Disposed += (sender, e) => item1CallCount++;
+            int item2CallCount = 0;
+            item2.Disposed += (sender, e) => item2CallCount++;
+
+            try
+            {
+                control.Dispose(true);
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.Items);
+                Assert.Empty(control.DataBindings);
+                Assert.Null(item1.Owner);
+                Assert.Null(item2.Owner);
+                Assert.Equal(0, controlRemovedCallCount);
+                Assert.Equal(0, itemRemovedCallCount);
+                Assert.True(control.IsDisposed);
+                Assert.False(control.Disposing);
+                Assert.True(item1.IsDisposed);
+                Assert.True(item2.IsDisposed);
+                Assert.Equal(1, callCount);
+                Assert.Equal(1, item1CallCount);
+                Assert.Equal(1, item2CallCount);
+                Assert.False(control.IsHandleCreated);
+
+                // Dispose multiple times.
+                control.Dispose(true);
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.Items);
+                Assert.Empty(control.DataBindings);
+                Assert.Null(item1.Owner);
+                Assert.Null(item2.Owner);
+                Assert.Equal(0, controlRemovedCallCount);
+                Assert.Equal(0, itemRemovedCallCount);
+                Assert.True(control.IsDisposed);
+                Assert.False(control.Disposing);
+                Assert.True(item1.IsDisposed);
+                Assert.True(item2.IsDisposed);
+                Assert.Equal(2, callCount);
+                Assert.Equal(1, item1CallCount);
+                Assert.Equal(1, item2CallCount);
+                Assert.False(control.IsHandleCreated);
+            }
+            finally
+            {
+                control.Disposed -= handler;
+            }
+        }
+        
+        [WinFormsFact]
+        public void ToolStrip_Dispose_InvokeNotDisposingWithItems_Success()
+        {
+            using var control = new SubToolStrip();
+            using var item1 = new SubToolStripItem();
+            using var item2 = new SubToolStripItem();
+            control.Items.Add(item1);
+            control.Items.Add(item2);
+            int itemRemovedCallCount = 0;
+            control.ItemRemoved += (sender, e) => itemRemovedCallCount++;
+            int controlRemovedCallCount = 0;
+            control.ControlRemoved += (sender, e) => controlRemovedCallCount++;
+
+            int callCount = 0;
+            void handler(object sender, EventArgs e) => callCount++;
+            control.Disposed += handler;
+            int item1CallCount = 0;
+            item1.Disposed += (sender, e) => item1CallCount++;
+            int item2CallCount = 0;
+            item2.Disposed += (sender, e) => item2CallCount++;
+
+            try
+            {
+                control.Dispose(false);
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Equal(new ToolStripItem[] { item1, item2 }, control.Items.Cast<ToolStripItem>());
+                Assert.Empty(control.DataBindings);
+                Assert.Same(control, item1.Owner);
+                Assert.Same(control, item2.Owner);
+                Assert.Equal(0, controlRemovedCallCount);
+                Assert.Equal(0, itemRemovedCallCount);
+                Assert.False(control.IsDisposed);
+                Assert.False(control.Disposing);
+                Assert.False(item1.IsDisposed);
+                Assert.False(item2.IsDisposed);
+                Assert.Equal(0, callCount);
+                Assert.Equal(0, item1CallCount);
+                Assert.Equal(0, item2CallCount);
+                Assert.False(control.IsHandleCreated);
+
+                // Dispose multiple times.
+                control.Dispose(false);
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Equal(new ToolStripItem[] { item1, item2 }, control.Items.Cast<ToolStripItem>());
+                Assert.Empty(control.DataBindings);
+                Assert.Same(control, item1.Owner);
+                Assert.Same(control, item2.Owner);
+                Assert.Equal(0, controlRemovedCallCount);
+                Assert.Equal(0, itemRemovedCallCount);
+                Assert.False(control.IsDisposed);
+                Assert.False(control.Disposing);
+                Assert.False(item1.IsDisposed);
+                Assert.False(item2.IsDisposed);
+                Assert.Equal(0, callCount);
+                Assert.Equal(0, item1CallCount);
+                Assert.Equal(0, item2CallCount);
+                Assert.False(control.IsHandleCreated);
+            }
+            finally
+            {
+                control.Disposed -= handler;
+            }
+        }
 
         [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ArrowDirection))]
@@ -3629,6 +4048,21 @@ namespace System.Windows.Forms.Tests
         {
             using var control = new SubToolStrip();
             Assert.Equal(AutoSizeMode.GrowAndShrink, control.GetAutoSizeMode());
+        }
+
+        [WinFormsTheory]
+        [InlineData(0, true)]
+        [InlineData(SubToolStrip.ScrollStateAutoScrolling, false)]
+        [InlineData(SubToolStrip.ScrollStateFullDrag, false)]
+        [InlineData(SubToolStrip.ScrollStateHScrollVisible, false)]
+        [InlineData(SubToolStrip.ScrollStateUserHasScrolled, false)]
+        [InlineData(SubToolStrip.ScrollStateVScrollVisible, false)]
+        [InlineData(int.MaxValue, false)]
+        [InlineData((-1), false)]
+        public void ToolStrip_GetScrollState_Invoke_ReturnsExpected(int bit, bool expected)
+        {
+            using var control = new SubToolStrip();
+            Assert.Equal(expected, control.GetScrollState(bit));
         }
 
         [WinFormsTheory]
@@ -3944,7 +4378,6 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
         }
 
-
         [WinFormsFact]
         public void ToolStrip_OnPaintGrip_InvokeWithHandle_CallsPaintGrip()
         {
@@ -4047,6 +4480,16 @@ namespace System.Windows.Forms.Tests
 
         private class SubToolStrip : ToolStrip
         {
+            public new const int ScrollStateAutoScrolling = ToolStrip.ScrollStateAutoScrolling;
+
+            public new const int ScrollStateHScrollVisible = ToolStrip.ScrollStateHScrollVisible;
+
+            public new const int ScrollStateVScrollVisible = ToolStrip.ScrollStateVScrollVisible;
+
+            public new const int ScrollStateUserHasScrolled = ToolStrip.ScrollStateUserHasScrolled;
+
+            public new const int ScrollStateFullDrag = ToolStrip.ScrollStateFullDrag;
+
             public SubToolStrip() : base()
             {
             }
@@ -4133,7 +4576,11 @@ namespace System.Windows.Forms.Tests
 
             public new LayoutSettings CreateLayoutSettings(ToolStripLayoutStyle layoutStyle) => base.CreateLayoutSettings(layoutStyle);
 
+            public new void Dispose(bool disposing) => base.Dispose(disposing);
+
             public new AutoSizeMode GetAutoSizeMode() => base.GetAutoSizeMode();
+
+            public new bool GetScrollState(int bit) => base.GetScrollState(bit);
 
             public new bool GetStyle(ControlStyles flag) => base.GetStyle(flag);
 

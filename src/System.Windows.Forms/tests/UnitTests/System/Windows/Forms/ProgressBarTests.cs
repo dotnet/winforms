@@ -1711,10 +1711,12 @@ namespace System.Windows.Forms.Tests
         public void ProgressBar_CreateAccessibilityInstance_Invoke_ReturnsExpected()
         {
             using var control = new SubProgressBar();
-            Control.ControlAccessibleObject accessibleObject = Assert.IsAssignableFrom<Control.ControlAccessibleObject>(control.CreateAccessibilityInstance());
-            Assert.IsNotType<Control.ControlAccessibleObject>(accessibleObject);
-            Assert.Same(control, accessibleObject.Owner);
-            Assert.NotSame(accessibleObject, control.CreateAccessibilityInstance());
+            Control.ControlAccessibleObject instance = Assert.IsAssignableFrom<Control.ControlAccessibleObject>(control.CreateAccessibilityInstance());
+            Assert.NotNull(instance);
+            Assert.Same(control, instance.Owner);
+            Assert.Equal(AccessibleRole.ProgressBar, instance.Role);
+            Assert.NotSame(control.CreateAccessibilityInstance(), instance);
+            Assert.NotSame(control.AccessibilityObject, instance);
         }
 
         [WinFormsFact]
