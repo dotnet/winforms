@@ -16,10 +16,7 @@ namespace System.Windows.Forms
 
         public const int STATUS_PENDING = 0x103; //259 = STILL_ALIVE
 
-        public const int cmb4 = 0x0473;
-
-        public const int CW_USEDEFAULT = (unchecked((int)0x80000000)),
-        COLOR_WINDOW = 5;
+        public const int CW_USEDEFAULT = (unchecked((int)0x80000000));
 
         public const int
         DI_NORMAL = 0x0003,
@@ -153,8 +150,7 @@ namespace System.Windows.Forms
                                                     //public const int RECO_CUT   = 0x00000003; // cut to the clipboard
                                                     //public const int RECO_DRAG  = 0x00000004;    // drag
 
-        public const int stc4 = 0x0443,
-        STARTF_USESHOWWINDOW = 0x00000001,
+        public const int STARTF_USESHOWWINDOW = 0x00000001,
         SIZE_RESTORED = 0,
         SIZE_MAXIMIZED = 2,
         SORT_DEFAULT = 0x0,

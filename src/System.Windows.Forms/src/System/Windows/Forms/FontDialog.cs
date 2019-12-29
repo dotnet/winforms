@@ -389,10 +389,10 @@ namespace System.Windows.Forms
                         var logFont = new User32.LOGFONTW();
                         User32.SendMessageW(hWnd, User32.WM.CHOOSEFONT_GETLOGFONT, IntPtr.Zero, ref logFont);
                         UpdateFont(ref logFont);
-                        int index = (int)UnsafeNativeMethods.SendDlgItemMessage(hWnd, 0x473, (int)User32.CB.GETCURSEL, IntPtr.Zero, IntPtr.Zero);
+                        int index = (int)User32.SendDlgItemMessageW(hWnd, User32.DialogItemID.cmb4, (User32.WM)User32.CB.GETCURSEL);
                         if (index != User32.CB_ERR)
                         {
-                            UpdateColor((int)UnsafeNativeMethods.SendDlgItemMessage(hWnd, 0x473, (int)User32.CB.GETITEMDATA, (IntPtr)index, IntPtr.Zero));
+                            UpdateColor((int)User32.SendDlgItemMessageW(hWnd, User32.DialogItemID.cmb4, (User32.WM)User32.CB.GETITEMDATA, (IntPtr)index));
                         }
                         if (NativeWindow.WndProcShouldBeDebuggable)
                         {
@@ -414,9 +414,9 @@ namespace System.Windows.Forms
                 case User32.WM.INITDIALOG:
                     if (!showColor)
                     {
-                        IntPtr hWndCtl = User32.GetDlgItem(hWnd, NativeMethods.cmb4);
+                        IntPtr hWndCtl = User32.GetDlgItem(hWnd, User32.DialogItemID.cmb4);
                         User32.ShowWindow(hWndCtl, User32.SW.HIDE);
-                        hWndCtl = User32.GetDlgItem(hWnd, NativeMethods.stc4);
+                        hWndCtl = User32.GetDlgItem(hWnd, User32.DialogItemID.stc4);
                         User32.ShowWindow(hWndCtl, User32.SW.HIDE);
                     }
                     break;

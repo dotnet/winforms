@@ -12,6 +12,7 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using System.Windows.Forms.Design;
 using static Interop;
+using static Interop.User32;
 
 namespace System.Drawing.Design
 {
@@ -310,7 +311,7 @@ namespace System.Drawing.Design
                 Rectangle r = new Rectangle();
                 FillRectWithCellBounds(focus.X, focus.Y, ref r);
                 Invalidate(Rectangle.Inflate(r, 5, 5));
-                User32.NotifyWinEvent((uint)AccessibleEvents.Focus, new HandleRef(this, Handle), User32.OBJID.CLIENT, 1 + Get1DFrom2D(focus.X, focus.Y));
+                NotifyWinEvent((uint)AccessibleEvents.Focus, new HandleRef(this, Handle), OBJID.CLIENT, 1 + Get1DFrom2D(focus.X, focus.Y));
             }
 
             protected override bool IsInputKey(System.Windows.Forms.Keys keyData)
@@ -337,7 +338,7 @@ namespace System.Drawing.Design
                 colorUI.EditorService.CloseDropDown(); // It will be closed anyway as soon as it sees the WM_ACTIVATE
                 CustomColorDialog dialog = new CustomColorDialog();
 
-                IntPtr hwndFocus = User32.GetFocus();
+                IntPtr hwndFocus = GetFocus();
                 try
                 {
                     DialogResult result = dialog.ShowDialog();
@@ -586,7 +587,7 @@ namespace System.Drawing.Design
                 {
                     // Convert from screen to client coordinates
                     var pt = new Point(x, y);
-                    User32.ScreenToClient(new HandleRef(ColorPalette, ColorPalette.Handle), ref pt);
+                    ScreenToClient(new HandleRef(ColorPalette, ColorPalette.Handle), ref pt);
 
                     int cell = ColorPalette.GetCellFromLocationMouse(pt.X, pt.Y);
                     if (cell != -1)
@@ -621,7 +622,7 @@ namespace System.Drawing.Design
 
                             // Translate rect to screen coordinates
                             var pt = new Point(rect.X, rect.Y);
-                            User32.ClientToScreen(new HandleRef(parent.ColorPalette, parent.ColorPalette.Handle), ref pt);
+                            ClientToScreen(new HandleRef(parent.ColorPalette, parent.ColorPalette.Handle), ref pt);
 
                             return new Rectangle(pt.X, pt.Y, rect.Width, rect.Height);
                         }
@@ -1054,15 +1055,6 @@ namespace System.Drawing.Design
 
         private class CustomColorDialog : ColorDialog
         {
-            private const int COLOR_HUE = 703;
-            private const int COLOR_SAT = 704;
-            private const int COLOR_LUM = 705;
-            private const int COLOR_RED = 706;
-            private const int COLOR_GREEN = 707;
-            private const int COLOR_BLUE = 708;
-            private const int COLOR_ADD = 712;
-            private const int COLOR_MIX = 719;
-
             private IntPtr hInstance;
 
             public CustomColorDialog()
@@ -1107,44 +1099,44 @@ namespace System.Drawing.Design
 
             protected override IntPtr HookProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam)
             {
-                switch ((User32.WM)msg)
+                switch ((WM)msg)
                 {
-                    case User32.WM.INITDIALOG:
-                        UnsafeNativeMethods.SendDlgItemMessage(hwnd, COLOR_HUE, (int)User32.EM.SETMARGINS, (IntPtr)(User32.EC.LEFTMARGIN | User32.EC.RIGHTMARGIN), IntPtr.Zero);
-                        UnsafeNativeMethods.SendDlgItemMessage(hwnd, COLOR_SAT, (int)User32.EM.SETMARGINS, (IntPtr)(User32.EC.LEFTMARGIN | User32.EC.RIGHTMARGIN), IntPtr.Zero);
-                        UnsafeNativeMethods.SendDlgItemMessage(hwnd, COLOR_LUM, (int)User32.EM.SETMARGINS, (IntPtr)(User32.EC.LEFTMARGIN | User32.EC.RIGHTMARGIN), IntPtr.Zero);
-                        UnsafeNativeMethods.SendDlgItemMessage(hwnd, COLOR_RED, (int)User32.EM.SETMARGINS, (IntPtr)(User32.EC.LEFTMARGIN | User32.EC.RIGHTMARGIN), IntPtr.Zero);
-                        UnsafeNativeMethods.SendDlgItemMessage(hwnd, COLOR_GREEN, (int)User32.EM.SETMARGINS, (IntPtr)(User32.EC.LEFTMARGIN | User32.EC.RIGHTMARGIN), IntPtr.Zero);
-                        UnsafeNativeMethods.SendDlgItemMessage(hwnd, COLOR_BLUE, (int)User32.EM.SETMARGINS, (IntPtr)(User32.EC.LEFTMARGIN | User32.EC.RIGHTMARGIN), IntPtr.Zero);
-                        IntPtr hwndCtl = User32.GetDlgItem(hwnd, COLOR_MIX);
-                        User32.EnableWindow(hwndCtl, BOOL.FALSE);
-                        User32.SetWindowPos(
+                    case WM.INITDIALOG:
+                        SendDlgItemMessageW(hwnd, (DialogItemID)COLOR.HUE, (WM)EM.SETMARGINS, (IntPtr)(EC.LEFTMARGIN | EC.RIGHTMARGIN));
+                        SendDlgItemMessageW(hwnd, (DialogItemID)COLOR.SAT, (WM)EM.SETMARGINS, (IntPtr)(EC.LEFTMARGIN | EC.RIGHTMARGIN));
+                        SendDlgItemMessageW(hwnd, (DialogItemID)COLOR.LUM, (WM)EM.SETMARGINS, (IntPtr)(EC.LEFTMARGIN | EC.RIGHTMARGIN));
+                        SendDlgItemMessageW(hwnd, (DialogItemID)COLOR.RED, (WM)EM.SETMARGINS, (IntPtr)(EC.LEFTMARGIN | EC.RIGHTMARGIN));
+                        SendDlgItemMessageW(hwnd, (DialogItemID)COLOR.GREEN, (WM)EM.SETMARGINS, (IntPtr)(EC.LEFTMARGIN | EC.RIGHTMARGIN));
+                        SendDlgItemMessageW(hwnd, (DialogItemID)COLOR.BLUE, (WM)EM.SETMARGINS, (IntPtr)(EC.LEFTMARGIN | EC.RIGHTMARGIN));
+                        IntPtr hwndCtl = GetDlgItem(hwnd, (DialogItemID)COLOR.MIX);
+                        EnableWindow(hwndCtl, BOOL.FALSE);
+                        SetWindowPos(
                             hwndCtl,
-                            User32.HWND_TOP,
-                            flags: User32.SWP.HIDEWINDOW);
-                        hwndCtl = User32.GetDlgItem(hwnd, (int)User32.ID.OK);
-                        User32.EnableWindow(hwndCtl, BOOL.FALSE);
-                        User32.SetWindowPos(
+                            HWND_TOP,
+                            flags: SWP.HIDEWINDOW);
+                        hwndCtl = GetDlgItem(hwnd, (DialogItemID)ID.OK);
+                        EnableWindow(hwndCtl, BOOL.FALSE);
+                        SetWindowPos(
                             hwndCtl,
-                            User32.HWND_TOP,
-                            flags: User32.SWP.HIDEWINDOW);
-                        this.Color = Color.Empty;
+                            HWND_TOP,
+                            flags: SWP.HIDEWINDOW);
+                        Color = Color.Empty;
                         break;
 
-                    case User32.WM.COMMAND:
+                    case WM.COMMAND:
                         switch (PARAM.LOWORD(wParam))
                         {
-                            case COLOR_ADD:
+                            case (int)COLOR.ADD:
                                 byte red, green, blue;
                                 bool[] err = new bool[1];
-                                red = (byte)UnsafeNativeMethods.GetDlgItemInt(hwnd, COLOR_RED, err, false);
+                                red = (byte)UnsafeNativeMethods.GetDlgItemInt(hwnd, (int)COLOR.RED, err, false);
                                 Debug.Assert(!err[0], "Couldn't find dialog member COLOR_RED");
-                                green = (byte)UnsafeNativeMethods.GetDlgItemInt(hwnd, COLOR_GREEN, err, false);
+                                green = (byte)UnsafeNativeMethods.GetDlgItemInt(hwnd, (int)COLOR.GREEN, err, false);
                                 Debug.Assert(!err[0], "Couldn't find dialog member COLOR_GREEN");
-                                blue = (byte)UnsafeNativeMethods.GetDlgItemInt(hwnd, COLOR_BLUE, err, false);
+                                blue = (byte)UnsafeNativeMethods.GetDlgItemInt(hwnd, (int)COLOR.BLUE, err, false);
                                 Debug.Assert(!err[0], "Couldn't find dialog member COLOR_BLUE");
-                                this.Color = Color.FromArgb(red, green, blue);
-                                User32.PostMessageW(hwnd, User32.WM.COMMAND, PARAM.FromLowHigh((int)User32.ID.OK, 0), User32.GetDlgItem(hwnd, (int)User32.ID.OK));
+                                Color = Color.FromArgb(red, green, blue);
+                                PostMessageW(hwnd, WM.COMMAND, PARAM.FromLowHigh((int)ID.OK, 0), GetDlgItem(hwnd, (DialogItemID)ID.OK));
                                 break;
                         }
                         break;

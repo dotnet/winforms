@@ -8,10 +8,11 @@ internal static partial class Interop
 {
     public static partial class UxTheme
     {
+        // The values for this enum can be found in vssym32.h.
+        // Because it has many values, we only have the ones that we are currently using.
         [Flags]
         public enum TMT
         {
-            // This enum has many values, so we only add the ones that we are currently using.
             FLATMENUS = 1001,
             MINCOLORDEPTH = 1301,
 
