@@ -309,16 +309,11 @@ namespace System.Windows.Forms
         {
             if (Owner is ToolStripDropDownMenu dropDownMenu)
             {
-
-                // Scooch over by the padding amount.  The padding is added to
-                // the ToolStripDropDownMenu to keep the non-menu item riffraff
-                // aligned to the text rectangle. When flow layout comes through to set our position
-                // via IArrangedElement DEFY IT!
-                if (dropDownMenu != null)
-                {
-                    rect.X = 2;
-                    rect.Width = dropDownMenu.Width - 4;
-                }
+                // Scooch over by the padding amount. The padding is added to the ToolStripDropDownMenu
+                // to keep the non-menu item aligned to the text rectangle. When flow layout comes
+                // through to set our position via IArrangedElement, ignore it.
+                rect.X = 2;
+                rect.Width = dropDownMenu.Width - 4;
             }
             base.SetBounds(rect);
         }
