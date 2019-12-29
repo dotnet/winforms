@@ -21,6 +21,7 @@ namespace System.Windows.Forms.Tests.InteropTests
             Assert.Throws<ArgumentOutOfRangeException>(() => lvi.UpdateText("012345"));
         }
 
+#pragma warning disable xUnit1026 // Theory methods should use all of their parameters
         [Theory]
         [MemberData(nameof(UpdateText_TestData))]
         public unsafe void UpdateText_should_limit_input_text_to_cchTextMax_less_1_text_longer(string originalText, int maxLength, string newText, string expected)
@@ -42,6 +43,7 @@ namespace System.Windows.Forms.Tests.InteropTests
                 Assert.Equal(maxLength, lvi.cchTextMax);
             }
         }
+#pragma warning restore xUnit1026 // Theory methods should use all of their parameters
 
         public static IEnumerable<object[]> UpdateText_TestData()
         {
