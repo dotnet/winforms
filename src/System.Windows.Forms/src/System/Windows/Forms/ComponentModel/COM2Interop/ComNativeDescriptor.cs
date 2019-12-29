@@ -79,10 +79,10 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             string name = null;
 
             // does IVsPerPropretyBrowsing supply us a name?
-            if (component is NativeMethods.IVsPerPropertyBrowsing)
+            if (component is VSSDK.IVsPerPropertyBrowsing)
             {
-                int hr = ((NativeMethods.IVsPerPropertyBrowsing)component).GetClassName(ref name);
-                if (NativeMethods.Succeeded(hr) && name != null)
+                HRESULT hr = ((VSSDK.IVsPerPropertyBrowsing)component).GetClassName(ref name);
+                if (hr.Succeeded() && name != null)
                 {
                     return name;
                 }

@@ -36,7 +36,7 @@ internal static partial class Interop
                 hdc.Handle,
                 x,
                 y,
-                cy,
+                cx,
                 cy,
                 hdcSrc.Handle,
                 x1,

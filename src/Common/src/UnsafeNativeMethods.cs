@@ -20,25 +20,6 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.User32)]
         public static extern int GetClassName(HandleRef hwnd, StringBuilder lpClassName, int nMaxCount);
 
-        //SetClassLong won't work correctly for 64-bit: we should use SetClassLongPtr instead.  On
-        //32-bit, SetClassLongPtr is just #defined as SetClassLong.  SetClassLong really should
-        //take/return int instead of IntPtr/HandleRef, but since we're running this only for 32-bit
-        //it'll be OK.
-        public static IntPtr SetClassLong(HandleRef hWnd, int nIndex, IntPtr dwNewLong)
-        {
-            if (IntPtr.Size == 4)
-            {
-                return SetClassLongPtr32(hWnd, nIndex, dwNewLong);
-            }
-            return SetClassLongPtr64(hWnd, nIndex, dwNewLong);
-        }
-
-        [DllImport(ExternDll.User32, CharSet = System.Runtime.InteropServices.CharSet.Auto, EntryPoint = "SetClassLong")]
-        public static extern IntPtr SetClassLongPtr32(HandleRef hwnd, int nIndex, IntPtr dwNewLong);
-
-        [DllImport(ExternDll.User32, CharSet = System.Runtime.InteropServices.CharSet.Auto, EntryPoint = "SetClassLongPtr")]
-        public static extern IntPtr SetClassLongPtr64(HandleRef hwnd, int nIndex, IntPtr dwNewLong);
-
         [DllImport(ExternDll.Kernel32, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
         public static extern int GetLocaleInfo(uint Locale, int LCType, StringBuilder lpLCData, int cchData);
 
@@ -341,9 +322,6 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public static extern IntPtr DefMDIChildProc(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam);
 
-        [DllImport(ExternDll.User32, ExactSpelling = true)]
-        public static extern IntPtr GetProcessWindowStation();
-
         [DllImport(ExternDll.User32, SetLastError = true)]
         public static extern bool GetUserObjectInformation(HandleRef hObj, int nIndex, ref NativeMethods.USEROBJECTFLAGS pvBuffer, int nLength, ref int lpnLengthNeeded);
 
@@ -512,7 +490,7 @@ namespace System.Windows.Forms
         {
             [return: MarshalAs(UnmanagedType.I4)]
             [PreserveSig]
-            int ShowContextMenu(
+            HRESULT ShowContextMenu(
                 uint dwID,
                 ref Point pt,
                 [In, MarshalAs(UnmanagedType.Interface)]
@@ -522,7 +500,7 @@ namespace System.Windows.Forms
 
             [return: MarshalAs(UnmanagedType.I4)]
             [PreserveSig]
-            int GetHostInfo(
+            HRESULT GetHostInfo(
                 [In, Out]
                 NativeMethods.DOCHOSTUIINFO info);
 
@@ -536,15 +514,15 @@ namespace System.Windows.Forms
 
             [return: MarshalAs(UnmanagedType.I4)]
             [PreserveSig]
-            int HideUI();
+            HRESULT HideUI();
 
             [return: MarshalAs(UnmanagedType.I4)]
             [PreserveSig]
-            int UpdateUI();
+            HRESULT UpdateUI();
 
             [return: MarshalAs(UnmanagedType.I4)]
             [PreserveSig]
-            int EnableModeless(
+            HRESULT EnableModeless(
                 [In, MarshalAs(UnmanagedType.Bool)]
                 bool fEnable);
 
@@ -554,7 +532,7 @@ namespace System.Windows.Forms
 
             [return: MarshalAs(UnmanagedType.I4)]
             [PreserveSig]
-            int OnFrameWindowActivate(
+            HRESULT OnFrameWindowActivate(
                 [In, MarshalAs(UnmanagedType.Bool)]
                 bool fActivate);
 
@@ -572,7 +550,7 @@ namespace System.Windows.Forms
 
             [return: MarshalAs(UnmanagedType.I4)]
             [PreserveSig]
-            int GetOptionKeyPath(
+            HRESULT GetOptionKeyPath(
                 [Out, MarshalAs(UnmanagedType.LPArray)]
                 string[] pbstrKey,
                 [In, MarshalAs(UnmanagedType.U4)]
@@ -585,13 +563,13 @@ namespace System.Windows.Forms
 
             [return: MarshalAs(UnmanagedType.I4)]
             [PreserveSig]
-            int GetExternal(
+            HRESULT GetExternal(
                 [Out, MarshalAs(UnmanagedType.Interface)]
                 out object ppDispatch);
 
             [return: MarshalAs(UnmanagedType.I4)]
             [PreserveSig]
-            int TranslateUrl(
+            HRESULT TranslateUrl(
                 [In, MarshalAs(UnmanagedType.U4)]
                 int dwTranslate,
                 [In, MarshalAs(UnmanagedType.LPWStr)]
@@ -601,7 +579,7 @@ namespace System.Windows.Forms
 
             [return: MarshalAs(UnmanagedType.I4)]
             [PreserveSig]
-            int FilterDataObject(
+            HRESULT FilterDataObject(
                 IComDataObject pDO,
                 out IComDataObject ppDORet);
         }
@@ -620,7 +598,7 @@ namespace System.Windows.Forms
                 out Ole32.IOleClientSite ppClientSite);
 
             [PreserveSig]
-            int SetHostNames(
+            HRESULT SetHostNames(
                    [In, MarshalAs(UnmanagedType.LPWStr)]
                       string szContainerApp,
                    [In, MarshalAs(UnmanagedType.LPWStr)]

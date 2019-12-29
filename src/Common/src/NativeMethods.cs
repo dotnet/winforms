@@ -144,15 +144,7 @@ namespace System.Windows.Forms
         DTN_DROPDOWN = ((0 - 760) + 6),
         DTN_CLOSEUP = ((0 - 760) + 7);
 
-        public const int E_NOTIMPL = unchecked((int)0x80004001),
-        E_OUTOFMEMORY = unchecked((int)0x8007000E),
-        E_INVALIDARG = unchecked((int)0x80070057),
-        E_NOINTERFACE = unchecked((int)0x80004002),
-        E_POINTER = unchecked((int)0x80004003),
-        E_FAIL = unchecked((int)0x80004005),
-        E_UNEXPECTED = unchecked((int)0x8000FFFF),
-        INET_E_DEFAULT_ACTION = unchecked((int)0x800C0011),
-        EMR_POLYTEXTOUT = 97,
+        public const int EMR_POLYTEXTOUT = 97,
         ES_LEFT = 0x0000,
         ES_CENTER = 0x0001,
         ES_RIGHT = 0x0002,
@@ -544,9 +536,6 @@ namespace System.Windows.Forms
         SBT_POPOUT = 0x0200,
         SBT_RTLREADING = 0x0400;
 
-        public const int S_OK = 0x00000000;
-        public const int S_FALSE = 0x00000001;
-
         public static bool Succeeded(int hr)
         {
             return (hr >= 0);
@@ -559,32 +548,6 @@ namespace System.Windows.Forms
 
         public const int
         TV_FIRST = 0x1100,
-        TB_ENABLEBUTTON = (0x0400 + 1),
-        TB_ISBUTTONCHECKED = (0x0400 + 10),
-        TB_ISBUTTONINDETERMINATE = (0x0400 + 13),
-        TB_ADDBUTTONS = (0x0400 + 68),
-        TB_DELETEBUTTON = (0x0400 + 22),
-        TB_GETBUTTON = (0x0400 + 23),
-        TB_SAVERESTORE = (0x0400 + 76),
-        TB_ADDSTRING = (0x0400 + 77),
-        TB_BUTTONSTRUCTSIZE = (0x0400 + 30),
-        TB_SETBUTTONSIZE = (0x0400 + 31),
-        TB_AUTOSIZE = (0x0400 + 33),
-        TB_GETROWS = (0x0400 + 40),
-        TB_GETBUTTONTEXT = (0x0400 + 75),
-        TB_SETIMAGELIST = (0x0400 + 48),
-        TB_GETRECT = (0x0400 + 51),
-        TB_GETBUTTONSIZE = (0x0400 + 58),
-        TB_SETEXTENDEDSTYLE = (0x0400 + 84),
-        TB_MAPACCELERATOR = (0x0400 + 90),
-        TB_GETTOOLTIPS = (0x0400 + 35),
-        TB_SETTOOLTIPS = (0x0400 + 36),
-        TBN_GETBUTTONINFO = ((0 - 700) - 20),
-        TBN_QUERYINSERT = ((0 - 700) - 6),
-        TBN_DROPDOWN = ((0 - 700) - 10),
-        TBN_HOTITEMCHANGE = ((0 - 700) - 13),
-        TBN_GETDISPINFO = ((0 - 700) - 17),
-        TBN_GETINFOTIP = ((0 - 700) - 19),
         TTS_ALWAYSTIP = 0x01,
         TTS_NOPREFIX = 0x02,
         TTS_NOANIMATE = 0x10,
@@ -803,84 +766,6 @@ namespace System.Windows.Forms
         }
 
         [ComImport]
-        [Guid("0FF510A3-5FA5-49F1-8CCC-190D71083F3E")]
-        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public unsafe interface IVsPerPropertyBrowsing
-        {
-            /// <summary>
-            ///  Hides the property at the given dispid from the properties window
-            ///  implmentors should can return E_NOTIMPL to show all properties that
-            ///  are otherwise browsable.
-            /// </summary>
-            [PreserveSig]
-            HRESULT HideProperty(
-                Ole32.DispatchID dispid,
-                BOOL* pfHide);
-
-            /// <summary>
-            ///  Will have the "+" expandable glyph next to them and can be expanded or collapsed by the user
-            ///  Returning a non-S_OK return code or false for pfDisplay will suppress this feature
-            /// </summary>
-            [PreserveSig]
-            HRESULT DisplayChildProperties(
-                Ole32.DispatchID dispid,
-                BOOL* pfDisplay);
-
-            /// <summary>
-            ///  Retrieves the localized name and description for a property.
-            ///  returning a non-S_OK return code will display the default values
-            /// </summary>
-            [PreserveSig]
-            HRESULT GetLocalizedPropertyInfo(
-                Ole32.DispatchID dispid,
-                int localeID,
-                [Out, MarshalAs(UnmanagedType.LPArray)] string[] pbstrLocalizedName,
-                [Out, MarshalAs(UnmanagedType.LPArray)] string[] pbstrLocalizeDescription);
-
-            /// <summary>
-            ///  Determines if the given (usually current) value for a property is the default.  If it is not default,
-            ///  the property will be shown as bold in the browser to indcate that it has been modified from the default.
-            /// </summary>
-            [PreserveSig]
-            HRESULT HasDefaultValue(
-                Ole32.DispatchID dispid,
-                BOOL* fDefault);
-
-            /// <summary>
-            ///  Determines if a property should be made read only.  This only applies to properties that are writeable,
-            /// </summary>
-            [PreserveSig]
-            HRESULT IsPropertyReadOnly(
-                Ole32.DispatchID dispid,
-                BOOL* fReadOnly);
-
-            /// <summary>
-            ///  Returns the classname for this object. The class name is the non-bolded text
-            ///  that appears in the properties window selection combo.  If this method returns
-            ///  a non-S_OK return code, the default will be used. The default is the name
-            ///  string from a call to ITypeInfo::GetDocumentation(MEMID_NIL, ...);
-            [PreserveSig]
-            int GetClassName([In, Out]ref string pbstrClassName);
-
-            /// <summary>
-            ///  Checks whether the given property can be reset to some default value.
-            ///  If return value is non-S_OK or *pfCanReset is
-            /// </summary>
-            [PreserveSig]
-            HRESULT CanResetPropertyValue(
-                Ole32.DispatchID dispid,
-                BOOL* pfCanReset);
-
-            /// <summary>
-            ///  If the return value is S_OK, the property's value will then be refreshed to the
-            ///  new default values.
-            /// </summary>
-            [PreserveSig]
-            HRESULT ResetPropertyValue(
-                Ole32.DispatchID dispid);
-        }
-
-        [ComImport]
         [Guid("33C0C1D8-33CF-11d3-BFF2-00C04F990235")]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
         public unsafe interface IProvidePropertyBuilder
@@ -900,28 +785,6 @@ namespace System.Windows.Forms
                 IntPtr hwndBldrOwner,
                 [Out, In, MarshalAs(UnmanagedType.Struct)] ref object pvarValue,
                 BOOL* actionCommitted);
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public class IMAGELISTDRAWPARAMS
-        {
-            public int cbSize = Marshal.SizeOf<IMAGELISTDRAWPARAMS>();
-            public IntPtr himl = IntPtr.Zero;
-            public int i = 0;
-            public IntPtr hdcDst = IntPtr.Zero;
-            public int x = 0;
-            public int y = 0;
-            public int cx = 0;
-            public int cy = 0;
-            public int xBitmap = 0;
-            public int yBitmap = 0;
-            public int rgbBk = 0;
-            public int rgbFg = 0;
-            public int fStyle = 0;
-            public int dwRop = 0;
-            public int fState = 0;
-            public int Frame = 0;
-            public int crEffect = 0;
         }
 
         public delegate IntPtr WndProc(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam);

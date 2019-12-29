@@ -156,12 +156,29 @@ namespace System.Windows.Forms
         /// </returns>
         protected override bool RunDialog(IntPtr hWndOwner)
         {
-            return UseVistaDialogInternal ? RunDialogVista(hWndOwner) : RunDialogOld(hWndOwner);
+            // If running the Vista dialog fails (e.g. on Server Core), we fall back to the
+            // legacy dialog.
+            if (UseVistaDialogInternal && TryRunDialogVista(hWndOwner, out bool returnValue))
+                return returnValue;
+
+            return RunDialogOld(hWndOwner);
         }
 
-        private bool RunDialogVista(IntPtr owner)
+        private bool TryRunDialogVista(IntPtr owner, out bool returnValue)
         {
-            var dialog = new FileDialogNative.NativeFileOpenDialog();
+            FileDialogNative.NativeFileOpenDialog dialog;
+            try
+            {
+                // Creating the Vista dialog can fail on Windows Server Core, even if the
+                // Server Core App Compatibility FOD is installed.
+                dialog = new FileDialogNative.NativeFileOpenDialog();
+            }
+            catch (COMException)
+            {
+                returnValue = false;
+                return false;
+            }
+
             try
             {
                 SetDialogProperties(dialog);
@@ -170,7 +187,8 @@ namespace System.Windows.Forms
                 {
                     if ((HRESULT)result == HRESULT.ERROR_CANCELLED)
                     {
-                        return false;
+                        returnValue = false;
+                        return true;
                     }
                     else
                     {
@@ -179,6 +197,7 @@ namespace System.Windows.Forms
                 }
 
                 GetResult(dialog);
+                returnValue = true;
                 return true;
             }
             finally

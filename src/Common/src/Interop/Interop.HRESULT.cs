@@ -35,6 +35,7 @@ internal static partial class Interop
         STG_E_ACCESSDENIED = unchecked((int)0x80030005),
         STG_E_INVALIDPARAMETER = unchecked((int)0x80030057),
         STG_E_INVALIDFLAG = unchecked((int)0x800300FF),
+        E_OUTOFMEMORY = unchecked((int)0x8007000E),
         E_ACCESSDENIED = unchecked((int)0x80070005L),
         E_INVALIDARG = unchecked((int)0x80070057),
         ERROR_CANCELLED = unchecked((int)0x800704C7),
