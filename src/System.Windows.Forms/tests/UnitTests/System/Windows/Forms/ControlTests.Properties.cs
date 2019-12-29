@@ -12209,6 +12209,28 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
+        [InlineData(true, true, true)]
+        [InlineData(true, false, false)]
+        [InlineData(false, true, false)]
+        [InlineData(false, false, false)]
+        public void Control_Visible_GetWithParent_ReturnsExpected(bool parentVisible, bool visible, bool expected)
+        {
+            using var parent = new Control
+            {
+                Visible = parentVisible
+            };
+            using var item = new Control
+            {
+                Parent = parent
+            };
+            Assert.Equal(parentVisible, item.Visible);
+
+            // Set custom.
+            item.Visible = visible;
+            Assert.Equal(expected, item.Visible);
+        }
+
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void Control_Visible_Set_GetReturnsExpected(bool value)
         {

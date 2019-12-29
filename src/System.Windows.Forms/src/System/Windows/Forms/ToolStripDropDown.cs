@@ -1907,7 +1907,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    if (GetVisibleCore())
+                    if (Visible)
                     {
                         ToolStripDropDownCloseReason reason = closeReason;
                         ResetCloseReason();
