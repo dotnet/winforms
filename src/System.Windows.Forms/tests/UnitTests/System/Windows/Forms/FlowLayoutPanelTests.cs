@@ -143,58 +143,86 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.IsHandleCreated);
         }
 
-        [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(FlowDirection))]
-        public void FlowLayoutPanel_FlowDirection_Set_GetReturnsExpected(FlowDirection value)
+        [WinFormsTheory]
+        [InlineData(FlowDirection.BottomUp, 1)]
+        [InlineData(FlowDirection.LeftToRight, 1)]
+        [InlineData(FlowDirection.RightToLeft, 1)]
+        [InlineData(FlowDirection.TopDown, 1)]
+        public void FlowLayoutPanel_FlowDirection_Set_GetReturnsExpected(FlowDirection value, int expectedLayoutCallCount)
         {
-            var panel = new FlowLayoutPanel
+            using var control = new FlowLayoutPanel();
+            int layoutCallCount = 0;
+            control.Layout += (sender, e) =>
             {
-                FlowDirection = value
+                Assert.Same(control, sender);
+                Assert.Same(control, e.AffectedControl);
+                Assert.Equal("FlowDirection", e.AffectedProperty);
+                layoutCallCount++;
             };
-            Assert.Equal(value, panel.FlowDirection);
+
+            control.FlowDirection = value;
+            Assert.Equal(value, control.FlowDirection);
+            Assert.Equal(expectedLayoutCallCount, layoutCallCount);
+            Assert.False(control.IsHandleCreated);
 
             // Set same
-            panel.FlowDirection = value;
-            Assert.Equal(value, panel.FlowDirection);
+            control.FlowDirection = value;
+            Assert.Equal(value, control.FlowDirection);
+            Assert.Equal(expectedLayoutCallCount * 2, layoutCallCount);
+            Assert.False(control.IsHandleCreated);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(FlowDirection))]
         public void FlowLayoutPanel_FlowDirection_SetInvalidValue_ThrowsInvalidEnumArgumentException(FlowDirection value)
         {
-            var panel = new FlowLayoutPanel();
-            Assert.Throws<InvalidEnumArgumentException>("value", () => panel.FlowDirection = value);
+            using var control = new FlowLayoutPanel();
+            Assert.Throws<InvalidEnumArgumentException>("value", () => control.FlowDirection = value);
         }
 
-        [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
-        public void FlowLayoutPanel_WrapContents_Set_GetReturnsExpected(bool value)
+        [WinFormsTheory]
+        [InlineData(true, 1)]
+        [InlineData(false, 1)]
+        public void FlowLayoutPanel_WrapContents_Set_GetReturnsExpected(bool value, int expectedLayoutCallCount)
         {
-            var panel = new FlowLayoutPanel
+            using var control = new FlowLayoutPanel();
+            int layoutCallCount = 0;
+            control.Layout += (sender, e) =>
             {
-                WrapContents = value
+                Assert.Same(control, sender);
+                Assert.Same(control, e.AffectedControl);
+                Assert.Equal("WrapContents", e.AffectedProperty);
+                layoutCallCount++;
             };
-            Assert.Equal(value, panel.WrapContents);
+
+            control.WrapContents = value;
+            Assert.Equal(value, control.WrapContents);
+            Assert.Equal(expectedLayoutCallCount, layoutCallCount);
+            Assert.False(control.IsHandleCreated);
 
             // Set same
-            panel.WrapContents = value;
-            Assert.Equal(value, panel.WrapContents);
+            control.WrapContents = value;
+            Assert.Equal(value, control.WrapContents);
+            Assert.Equal(expectedLayoutCallCount + 1, layoutCallCount);
+            Assert.False(control.IsHandleCreated);
 
             // Set different
-            panel.WrapContents = !value;
-            Assert.Equal(!value, panel.WrapContents);
+            control.WrapContents = !value;
+            Assert.Equal(!value, control.WrapContents);
+            Assert.Equal(expectedLayoutCallCount + 1 + 1, layoutCallCount);
+            Assert.False(control.IsHandleCreated);
         }
 
-        [Fact]
-        public void CanExtend_InvokeWithParent_ReturnsTrue()
+        [WinFormsFact]
+        public void FlowLayoutPanel_CanExtend_InvokeWithParent_ReturnsTrue()
         {
-            var panel = new FlowLayoutPanel();
-            var control = new Control
+            using var control = new FlowLayoutPanel();
+            using var extendee = new Control
             {
-                Parent = panel
+                Parent = control
             };
-            IExtenderProvider extenderProvider = panel;
-            Assert.True(extenderProvider.CanExtend(control));
+            IExtenderProvider extenderProvider = control;
+            Assert.True(extenderProvider.CanExtend(extendee));
         }
 
         public static IEnumerable<object[]> CanExtend_TestData()
@@ -205,12 +233,12 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { new Control { Parent = new Control() } };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(CanExtend_TestData))]
-        public void CanExtend_InvokeNoParent_ReturnsFalse(object extendee)
+        public void FlowLayoutPanel_CanExtend_InvokeNoParent_ReturnsFalse(object extendee)
         {
-            var panel = new FlowLayoutPanel();
-            IExtenderProvider extenderProvider = panel;
+            using var control = new FlowLayoutPanel();
+            IExtenderProvider extenderProvider = control;
             Assert.False(extenderProvider.CanExtend(extendee));
         }
 
@@ -221,18 +249,34 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(AutoSizeMode.GrowOnly, control.GetAutoSizeMode());
         }
 
-        [Fact]
-        public void GetFlowBreak_ValidControl_ReturnsExpected()
+        [WinFormsFact]
+        public void FlowLayoutPanel_GetFlowBreak_InvokeValidControl_ReturnsExpected()
         {
-            var panel = new FlowLayoutPanel();
-            Assert.False(panel.GetFlowBreak(new Control()));
+            using var child = new Control();
+            using var control = new FlowLayoutPanel();
+            Assert.False(control.GetFlowBreak(child));
         }
 
-        [Fact]
-        public void GetFlowBreak_NullControl_ThrowsArgumentNullException()
+        [WinFormsFact]
+        public void FlowLayoutPanel_GetFlowBreak_NullControl_ThrowsArgumentNullException()
         {
-            var panel = new FlowLayoutPanel();
-            Assert.Throws<ArgumentNullException>("control", () => panel.GetFlowBreak(null));
+            using var control = new FlowLayoutPanel();
+            Assert.Throws<ArgumentNullException>("control", () => control.GetFlowBreak(null));
+        }
+
+        [WinFormsTheory]
+        [InlineData(0, true)]
+        [InlineData(SubFlowLayoutPanel.ScrollStateAutoScrolling, false)]
+        [InlineData(SubFlowLayoutPanel.ScrollStateFullDrag, false)]
+        [InlineData(SubFlowLayoutPanel.ScrollStateHScrollVisible, false)]
+        [InlineData(SubFlowLayoutPanel.ScrollStateUserHasScrolled, false)]
+        [InlineData(SubFlowLayoutPanel.ScrollStateVScrollVisible, false)]
+        [InlineData(int.MaxValue, false)]
+        [InlineData((-1), false)]
+        public void FlowLayoutPanel_GetScrollState_Invoke_ReturnsExpected(int bit, bool expected)
+        {
+            using var control = new SubFlowLayoutPanel();
+            Assert.Equal(expected, control.GetScrollState(bit));
         }
 
         [WinFormsTheory]
@@ -265,34 +309,123 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, control.GetStyle(flag));
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
-        public void SetFlowBreak_Invoke_GetFlowBreakReturnsExpected(bool value)
+        public void FlowLayoutPanel_SetFlowBreak_Invoke_GetFlowBreakReturnsExpected(bool value)
         {
-            var panel = new FlowLayoutPanel();
-            var control = new Control();
-            panel.SetFlowBreak(control, value);
-            Assert.Equal(value, panel.GetFlowBreak(control));
+            using var child = new Control();
+            using var control = new FlowLayoutPanel();
+            int layoutCallCount = 0;
+            control.Layout += (sender, e) => layoutCallCount++;
+            int childLayoutCallCount = 0;
+            child.Layout += (sender, e) => childLayoutCallCount++;
+
+            control.SetFlowBreak(child, value);
+            Assert.Equal(value, control.GetFlowBreak(child));
+            Assert.Equal(0, layoutCallCount);
+            Assert.Equal(0, childLayoutCallCount);
+            Assert.False(control.IsHandleCreated);
+            Assert.False(child.IsHandleCreated);
 
             // Set same.
-            panel.SetFlowBreak(control, value);
-            Assert.Equal(value, panel.GetFlowBreak(control));
+            control.SetFlowBreak(child, value);
+            Assert.Equal(value, control.GetFlowBreak(child));
+            Assert.Equal(0, layoutCallCount);
+            Assert.Equal(0, childLayoutCallCount);
+            Assert.False(control.IsHandleCreated);
+            Assert.False(child.IsHandleCreated);
 
             // Set different.
-            panel.SetFlowBreak(control, !value);
-            Assert.Equal(!value, panel.GetFlowBreak(control));
+            control.SetFlowBreak(child, !value);
+            Assert.Equal(!value, control.GetFlowBreak(child));
+            Assert.Equal(0, layoutCallCount);
+            Assert.Equal(0, childLayoutCallCount);
+            Assert.False(control.IsHandleCreated);
+            Assert.False(child.IsHandleCreated);
         }
 
-        [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
-        public void SetFlowBreak_NullControl_ThrowsArgumentNullException(bool value)
+        [WinFormsTheory]
+        [InlineData(true, 1)]
+        [InlineData(false, 0)]
+        public void FlowLayoutPanel_SetFlowBreak_InvokeControlWithParent_GetFlowBreakReturnsExpected(bool value, int expectedParentLayoutCallCount)
         {
-            var panel = new FlowLayoutPanel();
-            Assert.Throws<ArgumentNullException>("control", () => panel.SetFlowBreak(null, value));
+            using var parent = new Control();
+            using var child = new Control
+            {
+                Parent = parent
+            };
+            using var control = new FlowLayoutPanel();
+            int layoutCallCount = 0;
+            control.Layout += (sender, e) => layoutCallCount++;
+            int childLayoutCallCount = 0;
+            child.Layout += (sender, e) => childLayoutCallCount++;
+            int parentLayoutCallCount = 0;
+            void parentHandler(object sender, LayoutEventArgs eventArgs)
+            {
+                Assert.Same(parent, sender);
+                Assert.Same(child, eventArgs.AffectedControl);
+                Assert.Equal("FlowBreak", eventArgs.AffectedProperty);
+                parentLayoutCallCount++;
+            }
+            parent.Layout += parentHandler;
+
+            try
+            {
+                control.SetFlowBreak(child, value);
+                Assert.Equal(value, control.GetFlowBreak(child));
+                Assert.Equal(0, layoutCallCount);
+                Assert.Equal(0, childLayoutCallCount);
+                Assert.Equal(expectedParentLayoutCallCount, parentLayoutCallCount);
+                Assert.False(control.IsHandleCreated);
+                Assert.False(child.IsHandleCreated);
+                Assert.False(parent.IsHandleCreated);
+
+                // Set same.
+                control.SetFlowBreak(child, value);
+                Assert.Equal(value, control.GetFlowBreak(child));
+                Assert.Equal(0, layoutCallCount);
+                Assert.Equal(0, childLayoutCallCount);
+                Assert.Equal(expectedParentLayoutCallCount, parentLayoutCallCount);
+                Assert.False(control.IsHandleCreated);
+                Assert.False(child.IsHandleCreated);
+                Assert.False(parent.IsHandleCreated);
+
+                // Set different.
+                control.SetFlowBreak(child, !value);
+                Assert.Equal(!value, control.GetFlowBreak(child));
+                Assert.Equal(0, layoutCallCount);
+                Assert.Equal(0, childLayoutCallCount);
+                Assert.Equal(expectedParentLayoutCallCount + 1, parentLayoutCallCount);
+                Assert.False(control.IsHandleCreated);
+                Assert.False(child.IsHandleCreated);
+                Assert.False(parent.IsHandleCreated);
+            }
+            finally
+            {
+                parent.Layout -= parentHandler;
+            }
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        public void FlowLayoutPanel_SetFlowBreak_NullControl_ThrowsArgumentNullException(bool value)
+        {
+            using var control = new FlowLayoutPanel();
+            Assert.Throws<ArgumentNullException>("control", () => control.SetFlowBreak(null, value));
         }
 
         private class SubFlowLayoutPanel : FlowLayoutPanel
         {
+            public new const int ScrollStateAutoScrolling = FlowLayoutPanel.ScrollStateAutoScrolling;
+
+            public new const int ScrollStateHScrollVisible = FlowLayoutPanel.ScrollStateHScrollVisible;
+
+            public new const int ScrollStateVScrollVisible = FlowLayoutPanel.ScrollStateVScrollVisible;
+
+            public new const int ScrollStateUserHasScrolled = FlowLayoutPanel.ScrollStateUserHasScrolled;
+
+            public new const int ScrollStateFullDrag = FlowLayoutPanel.ScrollStateFullDrag;
+
             public new bool CanEnableIme => base.CanEnableIme;
 
             public new bool CanRaiseEvents => base.CanRaiseEvents;
@@ -358,6 +491,8 @@ namespace System.Windows.Forms.Tests
             }
 
             public new AutoSizeMode GetAutoSizeMode() => base.GetAutoSizeMode();
+
+            public new bool GetScrollState(int bit) => base.GetScrollState(bit);
 
             public new bool GetStyle(ControlStyles flag) => base.GetStyle(flag);
         }
