@@ -178,6 +178,16 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(23, item.Width);
         }
 
+        [WinFormsFact]
+        public void ToolStripItem_Ctor_String_Image_EventHandler_InvokeClick_CallsOnClick()
+        {
+            int callCount = 0;
+            EventHandler onClick = (sender, e) => callCount++;
+            using var item = new SubToolStripItem("text", null, onClick);
+            item.PerformClick();
+            Assert.Equal(1, callCount);
+        }
+
         public static IEnumerable<object[]> Ctor_String_Image_EventHandler_String_TestData()
         {
             EventHandler onClick = (sender, e) => { };
@@ -261,6 +271,16 @@ namespace System.Windows.Forms.Tests
             Assert.Null(item.ToolTipText);
             Assert.False(item.Visible);
             Assert.Equal(23, item.Width);
+        }
+
+        [WinFormsFact]
+        public void ToolStripItem_Ctor_String_Image_EventHandler_String_InvokeClick_CallsOnClick()
+        {
+            int callCount = 0;
+            EventHandler onClick = (sender, e) => callCount++;
+            using var item = new SubToolStripItem("text", null, onClick, "name");
+            item.PerformClick();
+            Assert.Equal(1, callCount);
         }
 
         public static IEnumerable<object[]> AccessibilityObject_Get_TestData()
@@ -8091,7 +8111,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void ToolStripItem_Text_SetWithHandler_CallsForeColorChanged()
+        public void ToolStripItem_Text_SetWithHandler_CallsTextChanged()
         {
             using var item = new SubToolStripItem();
             int callCount = 0;
@@ -9668,8 +9688,11 @@ namespace System.Windows.Forms.Tests
         public void ToolStripItem_CreateAccessibilityInstance_Invoke_ReturnsExpected()
         {
             using var item = new SubToolStripItem();
-            ToolStripItem.ToolStripItemAccessibleObject accessibleObject = Assert.IsType<ToolStripItem.ToolStripItemAccessibleObject>(item.CreateAccessibilityInstance());
+            ToolStripItem.ToolStripItemAccessibleObject accessibleObject = Assert.IsAssignableFrom<ToolStripItem.ToolStripItemAccessibleObject>(item.CreateAccessibilityInstance());
+            Assert.Equal(AccessibleRole.PushButton, accessibleObject.Role);
+            Assert.Equal(AccessibleStates.Focusable, accessibleObject.State);
             Assert.NotSame(accessibleObject, item.CreateAccessibilityInstance());
+            Assert.NotSame(accessibleObject, item.AccessibilityObject);
         }
 
         [WinFormsFact]
@@ -9996,6 +10019,7 @@ namespace System.Windows.Forms.Tests
             };
             Assert.Null(item.GetCurrentParent());
         }
+
         public static IEnumerable<object[]> GetPreferredSize_TestData()
         {
             yield return new object[] { Size.Empty };
@@ -12168,12 +12192,7 @@ namespace System.Windows.Forms.Tests
         {
             using var item = new SubToolStripItem();
             int callCount = 0;
-            PaintEventHandler handler = (sender, e) =>
-            {
-                Assert.Same(item, sender);
-                Assert.Same(eventArgs, e);
-                callCount++;
-            };
+            PaintEventHandler handler = (sender, e) => callCount++;
 
             // Call with handler.
             item.Paint += handler;
@@ -13562,31 +13581,6 @@ namespace System.Windows.Forms.Tests
         [WinFormsTheory]
         [InlineData(true, 1)]
         [InlineData(false, 0)]
-        public void ToolStripItem_ProcessDialogKey_SpaceKey_PerformsClick(bool enabled, int expectedCallCount)
-        {
-            using var item = new SubToolStripButton
-            {
-                Enabled = enabled
-            };
-
-            int callCount = 0;
-            EventHandler handler = (sender, e) =>
-            {
-                Assert.Same(item, sender);
-                Assert.Same(EventArgs.Empty, e);
-                Assert.True(item.Pressed);
-                callCount++;
-            };
-
-            item.Click += handler;
-            Assert.True(item.ProcessDialogKey(Keys.Enter));
-            Assert.Equal(expectedCallCount, callCount);
-            Assert.False(item.Pressed);
-        }
-
-        [WinFormsTheory]
-        [InlineData(true, 1)]
-        [InlineData(false, 0)]
         public void ToolStripItem_ProcessDialogKey_EnterKeyWithParent_PerformsClick(bool enabled, int expectedCallCount)
         {
             using var parent = new ToolStrip();
@@ -13647,37 +13641,7 @@ namespace System.Windows.Forms.Tests
         {
             using var item = new SubToolStripItem();
             int callCount = 0;
-            EventHandler handler = (sender, e) =>
-            {
-                Assert.Same(item, sender);
-                Assert.Same(EventArgs.Empty, e);
-                Assert.True(item.Pressed);
-                callCount++;
-            };
-
-            item.Click += handler;
-            Assert.False(item.ProcessDialogKey(keyData));
-            Assert.Equal(0, callCount);
-            Assert.False(item.Pressed);
-        }
-
-        [WinFormsTheory]
-        [InlineData(Keys.A)]
-        [InlineData(Keys.None)]
-        [InlineData((Keys)(Keys.None - 1))]
-        public void ToolStripItem_ProcessDialogKey_UnknownKeySpace_ReturnsFalse(Keys keyData)
-        {
-            using var item = new SubToolStripButton();
-            int callCount = 0;
-            EventHandler handler = (sender, e) =>
-            {
-                Assert.Same(item, sender);
-                Assert.Same(EventArgs.Empty, e);
-                Assert.True(item.Pressed);
-                callCount++;
-            };
-
-            item.Click += handler;
+            item.Click += (sender, e) => callCount++;
             Assert.False(item.ProcessDialogKey(keyData));
             Assert.Equal(0, callCount);
             Assert.False(item.Pressed);
@@ -13885,25 +13849,14 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(ToolStripTextDirection.Horizontal, item.TextDirection);
         }
 
-        public static IEnumerable<object[]> Select_TestData()
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        public void ToolStripItem_Select_Invoke_Success(bool enabled)
         {
-            var toolStrip = new ToolStrip();
-            var toolStripItem = new SubToolStripItem();
-            toolStrip.Items.Add(toolStripItem);
-            yield return new object[] { toolStripItem, true };
-
-            var toolStripParent = new ToolStrip();
-            var toolStripParentItem = new SubToolStripItem
+            using var item = new SubToolStripItem
             {
-                Parent = toolStripParent
+                Enabled = enabled
             };
-            yield return new object[] { toolStripParentItem, true };
-        }
-
-        [WinFormsFact]
-        public void ToolStripItem_Select_Invoke_Success()
-        {
-            using var item = new SubToolStripItem();
 
             item.Select();
             Assert.True(item.Selected);
