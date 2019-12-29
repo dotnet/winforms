@@ -297,7 +297,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                IntPtr hwnd = UnsafeNativeMethods.GetForegroundWindow();
+                IntPtr hwnd = User32.GetForegroundWindow();
                 Control c = Control.FromHandle(hwnd);
                 if (c != null && c is Form)
                 {

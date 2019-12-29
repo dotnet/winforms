@@ -1849,7 +1849,7 @@ namespace System.Windows.Forms
                         // Snap the foreground window BEFORE calling any user events so they
                         // dont have a chance to activate something else. This covers the case
                         // where someone handles the opening event and throws up a messagebox.
-                        IntPtr foregroundWindow = UnsafeNativeMethods.GetForegroundWindow();
+                        IntPtr foregroundWindow = User32.GetForegroundWindow();
 
                         // Fire Opening event
                         // Cancellable event in which default value of e.Cancel depends on
