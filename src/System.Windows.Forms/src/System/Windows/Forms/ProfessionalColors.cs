@@ -8,7 +8,7 @@ using Microsoft.Win32;
 
 namespace System.Windows.Forms
 {
-    public sealed class ProfessionalColors
+    public static class ProfessionalColors
     {
         [ThreadStatic]
         private static ProfessionalColorTable professionalColorTable = null;
@@ -35,10 +35,6 @@ namespace System.Windows.Forms
         {
             SystemEvents.UserPreferenceChanged += new UserPreferenceChangedEventHandler(OnUserPreferenceChanged);
             SetScheme();
-        }
-
-        private ProfessionalColors()
-        {
         }
 
         internal static string ColorScheme
