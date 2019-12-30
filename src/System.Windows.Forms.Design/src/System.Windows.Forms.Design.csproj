@@ -74,13 +74,15 @@
     <Compile Include="..\..\Common\src\Interop\ComCtl32\Interop.TVHT.cs" Link="Interop\ComCtl32\Interop.TVHT.cs" />
     <Compile Include="..\..\Common\src\Interop\ComCtl32\Interop.TVIS.cs" Link="Interop\ComCtl32\Interop.TVIS.cs" />
     <Compile Include="..\..\Common\src\Interop\ComCtl32\Interop.TVS_EX.cs" Link="Interop\ComCtl32\Interop.TVS_EX.cs" />
-    <Compile Include="..\..\Common\src\Interop\Comdlg32\Interop.CF.cs" Link="Interop\Comdlg32\Interop.CF.cs" />
-    <Compile Include="..\..\Common\src\Interop\Gdi32\Interop.BitBlt.cs" Link="Interop\Gdi32\Interop.BitBlt.cs" />
-    <Compile Include="..\..\Common\src\Interop\Gdi32\Interop.CreatePen.cs" Link="Interop\Gdi32\Interop.CreatePen.cs" />
     <Compile Include="..\..\Common\src\Interop\ComCtl32\Interop.MCGIF.cs" Link="Interop\ComCtl32\Interop.MCGIF.cs" />
     <Compile Include="..\..\Common\src\Interop\ComCtl32\Interop.MCGIP.cs" Link="Interop\ComCtl32\Interop.MCGIP.cs" />
     <Compile Include="..\..\Common\src\Interop\ComCtl32\Interop.MCGRIDINFO.cs" Link="Interop\ComCtl32\Interop.MCGRIDINFO.cs" />
     <Compile Include="..\..\Common\src\Interop\ComCtl32\Interop.MCHITTESTINFO.cs" Link="Interop\ComCtl32\Interop.MCHITTESTINFO.cs" />
+    <Compile Include="..\..\Common\src\Interop\Comdlg32\Interop.CF.cs" Link="Interop\Comdlg32\Interop.CF.cs" />
+    <Compile Include="..\..\Common\src\Interop\Comdlg32\Interop.PD.cs" Link="Interop\Comdlg32\Interop.PD.cs" />
+    <Compile Include="..\..\Common\src\Interop\Comdlg32\Interop.PD_RESULT.cs" Link="Interop\Comdlg32\Interop.PD_RESULT.cs" />
+    <Compile Include="..\..\Common\src\Interop\Gdi32\Interop.BitBlt.cs" Link="Interop\Gdi32\Interop.BitBlt.cs" />
+    <Compile Include="..\..\Common\src\Interop\Gdi32\Interop.CreatePen.cs" Link="Interop\Gdi32\Interop.CreatePen.cs" />
     <Compile Include="..\..\Common\src\Interop\Gdi32\Interop.CreateRectRgn.cs" Link="Interop\Gdi32\Interop.CreateRectRgn.cs" />
     <Compile Include="..\..\Common\src\Interop\Gdi32\Interop.CreateSolidBrush.cs" Link="Interop\Gdi32\Interop.CreateSolidBrush.cs" />
     <Compile Include="..\..\Common\src\Interop\Gdi32\Interop.DeleteObject.cs" Link="Interop\Gdi32\Interop.DeleteObject.cs" />
