@@ -553,8 +553,6 @@ namespace System.Windows.Forms
         /// </summary>
         internal void VerifyImeRestrictedModeChanged()
         {
-            Debug.Assert(ImeSupported, "This method should not be called from controls that don't support IME input.");
-
             Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Info, "Inside VerifyImeRestrictedModeChanged(), this = " + this);
             Debug.Indent();
 
