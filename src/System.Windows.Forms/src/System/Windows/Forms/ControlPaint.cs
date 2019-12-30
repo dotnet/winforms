@@ -138,19 +138,21 @@ namespace System.Windows.Forms
 
         // Returns address of a BITMAPINFO for use by CreateHBITMAP16Bit.
         // The caller is resposible for freeing the memory returned by this method.
-        private static IntPtr CreateBitmapInfo(Bitmap bitmap, IntPtr hdcS)
+        private unsafe static IntPtr CreateBitmapInfo(Bitmap bitmap, IntPtr hdcS)
         {
-            NativeMethods.BITMAPINFOHEADER header = new NativeMethods.BITMAPINFOHEADER();
-            header.biSize = Marshal.SizeOf(header);
-            header.biWidth = bitmap.Width;
-            header.biHeight = bitmap.Height;
-            header.biPlanes = 1;
-            header.biBitCount = 16;
-            header.biCompression = NativeMethods.BI_RGB;
+            var header = new Gdi32.BITMAPINFOHEADER
+            {
+                biSize = (uint)sizeof(Gdi32.BITMAPINFOHEADER),
+                biWidth = bitmap.Width,
+                biHeight = bitmap.Height,
+                biPlanes = 1,
+                biBitCount = 16,
+                biCompression = Gdi32.BI.RGB
+            };
             // leave everything else 0
 
             // Set up color table --
-            IntPtr palette = SafeNativeMethods.CreateHalftonePalette(new HandleRef(null, hdcS));
+            IntPtr palette = Gdi32.CreateHalftonePalette(hdcS);
             Gdi32.GetObjectW(palette, out uint entryCount);
             var entries = new Gdi32.PALETTEENTRY[entryCount];
             Gdi32.GetPaletteEntries(palette, entries);
@@ -189,8 +191,13 @@ namespace System.Windows.Forms
 
                     byte[] enoughBits = new byte[bitmap.Width * bitmap.Height];
                     IntPtr bitmapInfo = CreateBitmapInfo(bitmap, hdcS);
-                    hBitmap = SafeNativeMethods.CreateDIBSection(new HandleRef(null, hdcS), new HandleRef(null, bitmapInfo), NativeMethods.DIB_RGB_COLORS,
-                                                                        enoughBits, IntPtr.Zero, 0);
+                    hBitmap = Gdi32.CreateDIBSection(
+                        hdcS,
+                        bitmapInfo,
+                        Gdi32.DIB.RGB_COLORS,
+                        enoughBits,
+                        IntPtr.Zero,
+                        0);
 
                     Marshal.FreeCoTaskMem(bitmapInfo);
 
@@ -2217,7 +2224,7 @@ namespace System.Windows.Forms
         /// </summary>
         public static void FillReversibleRectangle(Rectangle rectangle, Color backColor)
         {
-            int rop3 = GetColorRop(backColor,
+            Gdi32.ROP rop3 = (Gdi32.ROP)GetColorRop(backColor,
                                    0xa50065, // RasterOp.BRUSH.Invert().XorWith(RasterOp.TARGET),
                                    0x5a0049); // RasterOp.BRUSH.XorWith(RasterOp.TARGET));
             Gdi32.R2 rop2 = Gdi32.R2.NOT;
@@ -2229,7 +2236,7 @@ namespace System.Windows.Forms
             IntPtr oldBrush = Gdi32.SelectObject(dc, brush);
 
             // PatBlt must be the only Win32 function that wants height in width rather than x2,y2.
-            SafeNativeMethods.PatBlt(new HandleRef(null, dc), rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height, rop3);
+            Gdi32.PatBlt(dc, rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height, rop3);
 
             Gdi32.SetROP2(dc, prevRop2);
             Gdi32.SelectObject(dc, oldBrush);

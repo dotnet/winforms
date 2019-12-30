@@ -8,16 +8,14 @@ internal static partial class Interop
 {
     internal static partial class ComCtl32
     {
-        public struct TBBUTTON
+        public unsafe struct LVBKIMAGEW
         {
-            public int iBitmap;
-            public int idCommand;
-            public TBSTATE fsState;
-            public byte fsStyle;
-            public byte bReserved0;
-            public byte bReserved1;
-            public IntPtr dwData;
-            public IntPtr iString;
+            public LVBKIF ulFlags;
+            public IntPtr hbm;
+            public char* pszImage;
+            public uint cchImageMax;
+            public int xOffsetPercent;
+            public int yOffsetPercent;
         }
     }
 }

@@ -206,18 +206,18 @@ namespace System.Windows.Forms
                     {
                         return true;  // we dont care about the state of VS.
                     }
-                    else
+
+                    IntPtr rootHwnd = User32.GetAncestor(this, User32.GA.ROOT);
+                    if (rootHwnd != IntPtr.Zero)
                     {
-                        HandleRef rootHwnd = WindowsFormsUtils.GetRootHWnd(this);
-                        if (rootHwnd.Handle != IntPtr.Zero)
-                        {
-                            return !UnsafeNativeMethods.IsZoomed(rootHwnd);
-                        }
+                        return !User32.IsZoomed(rootHwnd).IsTrue();
                     }
                 }
+
                 return false;
             }
         }
+
         [
         SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(true),
@@ -618,16 +618,16 @@ namespace System.Windows.Forms
                 // if we're within the grip bounds tell windows
                 // that we're the bottom right of the window.
                 Rectangle sizeGripBounds = SizeGripBounds;
-                int x = NativeMethods.Util.LOWORD(m.LParam);
-                int y = NativeMethods.Util.HIWORD(m.LParam);
+                int x = PARAM.LOWORD(m.LParam);
+                int y = PARAM.HIWORD(m.LParam);
 
                 if (sizeGripBounds.Contains(PointToClient(new Point(x, y))))
                 {
-                    HandleRef rootHwnd = WindowsFormsUtils.GetRootHWnd(this);
+                    IntPtr rootHwnd = User32.GetAncestor(this, User32.GA.ROOT);
 
                     // if the main window isnt maximized - we should paint a resize grip.
                     // double check that we're at the bottom right hand corner of the window.
-                    if (rootHwnd.Handle != IntPtr.Zero && !UnsafeNativeMethods.IsZoomed(rootHwnd))
+                    if (rootHwnd != IntPtr.Zero && !User32.IsZoomed(rootHwnd).IsTrue())
                     {
                         // get the client area of the topmost window.  If we're next to the edge then
                         // the sizing grip is valid.
@@ -686,8 +686,8 @@ namespace System.Windows.Forms
             {
                 if (m.Msg == WindowMessages.WM_NCHITTEST)
                 {
-                    int x = NativeMethods.Util.LOWORD(m.LParam);
-                    int y = NativeMethods.Util.HIWORD(m.LParam);
+                    int x = PARAM.LOWORD(m.LParam);
+                    int y = PARAM.HIWORD(m.LParam);
 
                     if (ClientRectangle.Contains(PointToClient(new Point(x, y))))
                     {

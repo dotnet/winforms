@@ -171,7 +171,7 @@ namespace System.Windows.Forms
             get
             {
                 CreateParams cp = base.CreateParams;
-                cp.ClassName = NativeMethods.WC_TRACKBAR;
+                cp.ClassName = ComCtl32.WindowClasses.WC_TRACKBAR;
 
                 switch (tickStyle)
                 {
@@ -1153,7 +1153,7 @@ namespace System.Windows.Forms
             {
                 case WindowMessages.WM_REFLECT + WindowMessages.WM_HSCROLL:
                 case WindowMessages.WM_REFLECT + WindowMessages.WM_VSCROLL:
-                    switch (NativeMethods.Util.LOWORD(m.WParam))
+                    switch (PARAM.LOWORD(m.WParam))
                     {
                         case NativeMethods.TB_LINEUP:
                         case NativeMethods.TB_LINEDOWN:

@@ -301,7 +301,7 @@ namespace System.Windows.Forms
             get
             {
                 CreateParams cp = base.CreateParams;
-                cp.ClassName = NativeMethods.WC_TABCONTROL;
+                cp.ClassName = ComCtl32.WindowClasses.WC_TABCONTROL;
 
                 // set up window styles
                 //
@@ -407,7 +407,7 @@ namespace System.Windows.Forms
                     }
                     if (IsHandleCreated)
                     {
-                        SendMessage((int)ComCtl32.TCM.ADJUSTRECT, 0, ref rect);
+                        User32.SendMessageW(this, (User32.WindowMessage)ComCtl32.TCM.ADJUSTRECT, IntPtr.Zero, ref rect);
                     }
                 }
 
@@ -549,10 +549,10 @@ namespace System.Windows.Forms
                         SetState(State.GetTabRectfromItemSize, true);
                         return GetTabRect(0).Size;
                     }
-                    
+
                     return DefaultItemSize;
                 }
-                
+
                 return _itemSize;
             }
             set
@@ -1014,7 +1014,7 @@ namespace System.Windows.Forms
             remove => base.Paint -= value;
         }
 
-        internal int AddTabPage(TabPage tabPage)
+        private int AddTabPage(TabPage tabPage)
         {
             int index = AddNativeTabPage(tabPage);
             if (index >= 0)
@@ -1025,7 +1025,7 @@ namespace System.Windows.Forms
             return index;
         }
 
-        internal int AddNativeTabPage(TabPage tabPage)
+        private int AddNativeTabPage(TabPage tabPage)
         {
             int index = (int)SendMessage(ComCtl32.TCM.INSERTITEMW, (IntPtr)(_tabPageCount + 1), tabPage);
             User32.PostMessageW(this, _tabBaseReLayoutMessage);
@@ -1036,7 +1036,7 @@ namespace System.Windows.Forms
         {
             if (IsHandleCreated && ShouldSerializeItemSize())
             {
-                SendMessage((int)ComCtl32.TCM.SETITEMSIZE, 0, (int)NativeMethods.Util.MAKELPARAM(_itemSize.Width, _itemSize.Height));
+                SendMessage((int)ComCtl32.TCM.SETITEMSIZE, 0, (int)PARAM.FromLowHigh(_itemSize.Width, _itemSize.Height));
             }
             _cachedDisplayRect = Rectangle.Empty;
         }
@@ -1228,7 +1228,7 @@ namespace System.Windows.Forms
                 CreateHandle();
             }
 
-            SendMessage((int)ComCtl32.TCM.GETITEMRECT, index, ref rect);
+            User32.SendMessageW(this, (User32.WindowMessage)ComCtl32.TCM.GETITEMRECT, (IntPtr)index, ref rect);
             return Rectangle.FromLTRB(rect.left, rect.top, rect.right, rect.bottom);
         }
 
@@ -1333,7 +1333,7 @@ namespace System.Windows.Forms
             // horizontal and vertical dimensions of the padding rectangle.
             if (!_padding.IsEmpty)
             {
-                SendMessage((int)ComCtl32.TCM.SETPADDING, 0, NativeMethods.Util.MAKELPARAM(_padding.X, _padding.Y));
+                SendMessage((int)ComCtl32.TCM.SETPADDING, 0, PARAM.FromLowHigh(_padding.X, _padding.Y));
             }
 
             base.OnHandleCreated(e);
@@ -1671,7 +1671,7 @@ namespace System.Windows.Forms
             _tabPageCount = 0;
         }
 
-        internal void RemoveTabPage(int index)
+        private void RemoveTabPage(int index)
         {
             if (index < 0 || index >= _tabPageCount)
             {
@@ -1722,7 +1722,7 @@ namespace System.Windows.Forms
 
         }
 
-        internal void SetTabPage(int index, TabPage value)
+        private void SetTabPage(int index, TabPage value)
         {
             if (index < 0 || index >= _tabPageCount)
             {
@@ -2109,7 +2109,7 @@ namespace System.Windows.Forms
 
             // Remove other TabBaseReLayout messages from the message queue
             var msg = new User32.MSG();
-            while (User32.PeekMessageW(ref msg, this, _tabBaseReLayoutMessage, _tabBaseReLayoutMessage).IsTrue())
+            while (User32.PeekMessageW(ref msg, this, _tabBaseReLayoutMessage, _tabBaseReLayoutMessage, User32.PM.REMOVE).IsTrue())
             {
                 // No-op.
             }
@@ -2212,6 +2212,7 @@ namespace System.Windows.Forms
 
             fixed (char* pText = text)
             {
+                tcitem.pszText = pText;
                 return User32.SendMessageW(this, (User32.WindowMessage)msg, wParam, ref tcitem);
             }
         }

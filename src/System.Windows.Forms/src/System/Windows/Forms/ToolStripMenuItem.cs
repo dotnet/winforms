@@ -829,61 +829,56 @@ namespace System.Windows.Forms
             };
             UnsafeNativeMethods.GetMenuItemInfo(new HandleRef(this, nativeMenuHandle), nativeMenuCommandID, /*fByPosition instead of ID=*/ false, info);
 
-            if (info.hbmpItem != IntPtr.Zero && info.hbmpItem.ToInt32() > NativeMethods.HBMMENU_POPUP_MINIMIZE)
+            if (info.hbmpItem != IntPtr.Zero && info.hbmpItem.ToInt32() > (int)User32.HBMMENU.POPUP_MINIMIZE)
             {
                 return Bitmap.FromHbitmap(info.hbmpItem);
             }
-            else
+
+            // its a system defined bitmap
+            int buttonToUse = -1;
+
+            switch (info.hbmpItem.ToInt32())
             {
-                // its a system defined bitmap
-                int buttonToUse = -1;
-
-                switch (info.hbmpItem.ToInt32())
-                {
-                    case NativeMethods.HBMMENU_MBAR_CLOSE:
-                    case NativeMethods.HBMMENU_MBAR_CLOSE_D:
-                    case NativeMethods.HBMMENU_POPUP_CLOSE:
-                        buttonToUse = (int)CaptionButton.Close;
-                        break;
-
-                    case NativeMethods.HBMMENU_MBAR_MINIMIZE:
-                    case NativeMethods.HBMMENU_MBAR_MINIMIZE_D:
-                    case NativeMethods.HBMMENU_POPUP_MINIMIZE:
-                        buttonToUse = (int)CaptionButton.Minimize;
-                        break;
-
-                    case NativeMethods.HBMMENU_MBAR_RESTORE:
-                    case NativeMethods.HBMMENU_POPUP_RESTORE:
-                        buttonToUse = (int)CaptionButton.Restore;
-                        break;
-
-                    case NativeMethods.HBMMENU_POPUP_MAXIMIZE:
-                        buttonToUse = (int)CaptionButton.Maximize;
-                        break;
-
-                    case NativeMethods.HBMMENU_SYSTEM:
-                    //
-                    case NativeMethods.HBMMENU_CALLBACK:
-                    // owner draw not supported
-                    default:
-                        break;
-                }
-                if (buttonToUse > -1)
-                {
-
-                    // we've mapped to a system defined bitmap we know how to draw
-                    Bitmap image = new Bitmap(16, 16);
-
-                    using (Graphics g = Graphics.FromImage(image))
-                    {
-                        ControlPaint.DrawCaptionButton(g, new Rectangle(Point.Empty, image.Size), (CaptionButton)buttonToUse, ButtonState.Flat);
-                        g.DrawRectangle(SystemPens.Control, 0, 0, image.Width - 1, image.Height - 1);
-                    }
-
-                    image.MakeTransparent(SystemColors.Control);
-                    return image;
-                }
+                case (int)User32.HBMMENU.MBAR_CLOSE:
+                case (int)User32.HBMMENU.MBAR_CLOSE_D:
+                case (int)User32.HBMMENU.POPUP_CLOSE:
+                    buttonToUse = (int)CaptionButton.Close;
+                    break;
+                case (int)User32.HBMMENU.MBAR_MINIMIZE:
+                case (int)User32.HBMMENU.MBAR_MINIMIZE_D:
+                case (int)User32.HBMMENU.POPUP_MINIMIZE:
+                    buttonToUse = (int)CaptionButton.Minimize;
+                    break;
+                case (int)User32.HBMMENU.MBAR_RESTORE:
+                case (int)User32.HBMMENU.POPUP_RESTORE:
+                    buttonToUse = (int)CaptionButton.Restore;
+                    break;
+                case (int)User32.HBMMENU.POPUP_MAXIMIZE:
+                    buttonToUse = (int)CaptionButton.Maximize;
+                    break;
+                case (int)User32.HBMMENU.SYSTEM:
+                //
+                case (int)User32.HBMMENU.CALLBACK:
+                // owner draw not supported
+                default:
+                    break;
             }
+
+            if (buttonToUse > -1)
+            {
+                // we've mapped to a system defined bitmap we know how to draw
+                Bitmap image = new Bitmap(16, 16);
+
+                using (Graphics g = Graphics.FromImage(image))
+                {
+                    ControlPaint.DrawCaptionButton(g, new Rectangle(Point.Empty, image.Size), (CaptionButton)buttonToUse, ButtonState.Flat);
+                    g.DrawRectangle(SystemPens.Control, 0, 0, image.Width - 1, image.Height - 1);
+                }
+
+                image.MakeTransparent(SystemColors.Control);
+                return image;
+            }
+            
             return null;
         }
 
@@ -943,14 +938,14 @@ namespace System.Windows.Forms
                     // use PostMessage instead of SendMessage so that the DefWndProc can appropriately handle
                     // the system message... if we use SendMessage the dismissal of our window
                     // breaks things like the modal sizing loop.
-                    UnsafeNativeMethods.PostMessage(new HandleRef(this, targetWindowHandle), WindowMessages.WM_SYSCOMMAND, nativeMenuCommandID, 0);
+                    User32.PostMessageW(new HandleRef(this, targetWindowHandle), User32.WindowMessage.WM_SYSCOMMAND, (IntPtr)nativeMenuCommandID);
                 }
                 else
                 {
                     // These are user added items like ".Net Window..."
 
                     // be consistent with sending a WM_SYSCOMMAND, use POST not SEND.
-                    UnsafeNativeMethods.PostMessage(new HandleRef(this, targetWindowHandle), WindowMessages.WM_COMMAND, nativeMenuCommandID, 0);
+                    User32.PostMessageW(new HandleRef(this, targetWindowHandle), User32.WindowMessage.WM_COMMAND, (IntPtr)nativeMenuCommandID);
                 }
                 Invalidate();
             }

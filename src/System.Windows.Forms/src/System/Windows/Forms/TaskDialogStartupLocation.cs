@@ -12,16 +12,18 @@ namespace System.Windows.Forms
     public enum TaskDialogStartupLocation
     {
         /// <summary>
-        /// The startup location of the task dialog is the center of the screen.
+        ///   The startup location of the task dialog is the center of the screen.
         /// </summary>
         CenterScreen = 0,
 
         /// <summary>
-        /// The startup location of the task dialog is the center of the window that owns it,
-        /// as specified by the <c>owner</c> parameter.
+        ///   The startup location of the task dialog is the center of the window that owns it,
+        ///   as specified by the <c>owner</c> parameter.
         /// </summary>
         /// <remarks>
-        /// This value will only have an effect when showing a modal dialog.
+        /// <para>
+        ///   This value will only have an effect when showing a modal dialog.
+        /// </para>
         /// </remarks>
         CenterParent = 1
     }

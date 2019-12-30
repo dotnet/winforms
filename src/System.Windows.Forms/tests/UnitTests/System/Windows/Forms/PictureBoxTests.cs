@@ -11,15 +11,27 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
+    using Point = System.Drawing.Point;
+    using Size = System.Drawing.Size;
+
     public class PictureBoxTests
     {
         private const string PathImageLocation = "bitmaps/nature24bits.jpg";
         private const string UrlImageLocation = "https://github.com/dotnet/corefx-testdata/raw/master/System.Drawing.Common.TestData/bitmaps/nature24bits.jpg";
 
+        public PictureBoxTests()
+        {
+            Application.ThreadException += (sender, e) => throw new Exception(e.Exception.StackTrace.ToString());
+        }
+
         [WinFormsFact]
         public void PictureBox_Ctor_Default()
         {
             using var control = new SubPictureBox();
+            Assert.Null(control.AccessibleDefaultActionDescription);
+            Assert.Null(control.AccessibleDescription);
+            Assert.Null(control.AccessibleName);
+            Assert.Equal(AccessibleRole.Default, control.AccessibleRole);
             Assert.False(control.AllowDrop);
             Assert.Equal(AnchorStyles.Top | AnchorStyles.Left, control.Anchor);
             Assert.False(control.AutoSize);
@@ -31,11 +43,15 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(50, control.Bottom);
             Assert.Equal(new Rectangle(0, 0, 100, 50), control.Bounds);
             Assert.False(control.CanEnableIme);
+            Assert.False(control.CanFocus);
             Assert.True(control.CanRaiseEvents);
+            Assert.False(control.CanSelect);
+            Assert.False(control.Capture);
             Assert.True(control.CausesValidation);
             Assert.Equal(new Size(100, 50), control.ClientSize);
             Assert.Equal(new Rectangle(0, 0, 100, 50), control.ClientRectangle);
             Assert.Null(control.Container);
+            Assert.False(control.ContainsFocus);
             Assert.Null(control.ContextMenuStrip);
             Assert.Empty(control.Controls);
             Assert.Same(control.Controls, control.Controls);
@@ -57,6 +73,7 @@ namespace System.Windows.Forms.Tests
             Assert.Same(control.ErrorImage, control.ErrorImage);
             Assert.NotNull(control.Events);
             Assert.Same(control.Events, control.Events);
+            Assert.False(control.Focused);
             Assert.Equal(Control.DefaultFont, control.Font);
             Assert.Equal(control.FontHeight, control.FontHeight);
             Assert.Equal(Control.DefaultForeColor, control.ForeColor);
@@ -67,6 +84,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(ImeMode.Disable, control.ImeModeBase);
             Assert.NotNull(control.InitialImage);
             Assert.Same(control.InitialImage, control.InitialImage);
+            Assert.False(control.IsAccessible);
+            Assert.False(control.IsMirrored);
             Assert.NotNull(control.LayoutEngine);
             Assert.Same(control.LayoutEngine, control.LayoutEngine);
             Assert.Equal(0, control.Left);
@@ -83,6 +102,8 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.ResizeRedraw);
             Assert.Equal(100, control.Right);
             Assert.Equal(RightToLeft.No, control.RightToLeft);
+            Assert.True(control.ShowFocusCues);
+            Assert.True(control.ShowKeyboardCues);
             Assert.Null(control.Site);
             Assert.Equal(new Size(100, 50), control.Size);
             Assert.Equal(PictureBoxSizeMode.Normal, control.SizeMode);
@@ -91,6 +112,7 @@ namespace System.Windows.Forms.Tests
             Assert.Empty(control.Text);
             Assert.Equal(0, control.Top);
             Assert.Null(control.TopLevelControl);
+            Assert.False(control.UseWaitCursor);
             Assert.True(control.Visible);
             Assert.False(control.WaitOnLoad);
             Assert.Equal(100, control.Width);
@@ -1828,6 +1850,43 @@ namespace System.Windows.Forms.Tests
             pictureBox.Dispose();
         }
 
+        [WinFormsFact]
+        public void PictureBox_GetAutoSizeMode_Invoke_ReturnsExpected()
+        {
+            using var control = new SubPictureBox();
+            Assert.Equal(AutoSizeMode.GrowOnly, control.GetAutoSizeMode());
+        }
+
+        [WinFormsTheory]
+        [InlineData(ControlStyles.ContainerControl, false)]
+        [InlineData(ControlStyles.UserPaint, true)]
+        [InlineData(ControlStyles.Opaque, false)]
+        [InlineData(ControlStyles.ResizeRedraw, false)]
+        [InlineData(ControlStyles.FixedWidth, false)]
+        [InlineData(ControlStyles.FixedHeight, false)]
+        [InlineData(ControlStyles.StandardClick, true)]
+        [InlineData(ControlStyles.Selectable, false)]
+        [InlineData(ControlStyles.UserMouse, false)]
+        [InlineData(ControlStyles.SupportsTransparentBackColor, true)]
+        [InlineData(ControlStyles.StandardDoubleClick, true)]
+        [InlineData(ControlStyles.AllPaintingInWmPaint, true)]
+        [InlineData(ControlStyles.CacheText, false)]
+        [InlineData(ControlStyles.EnableNotifyMessage, false)]
+        [InlineData(ControlStyles.DoubleBuffer, false)]
+        [InlineData(ControlStyles.OptimizedDoubleBuffer, true)]
+        [InlineData(ControlStyles.UseTextForAccessibility, true)]
+        [InlineData((ControlStyles)0, true)]
+        [InlineData((ControlStyles)int.MaxValue, false)]
+        [InlineData((ControlStyles)(-1), false)]
+        public void PictureBox_GetStyle_Invoke_ReturnsExpected(ControlStyles flag, bool expected)
+        {
+            using var control = new SubPictureBox();
+            Assert.Equal(expected, control.GetStyle(flag));
+
+            // Call again to test caching.
+            Assert.Equal(expected, control.GetStyle(flag));
+        }
+
         [Theory]
         [InlineData("NoSuchImage")]
         [InlineData("  ")]
@@ -2784,6 +2843,12 @@ namespace System.Windows.Forms.Tests
                 get => base.ResizeRedraw;
                 set => base.ResizeRedraw = value;
             }
+
+            public new bool ShowFocusCues => base.ShowFocusCues;
+
+            public new bool ShowKeyboardCues => base.ShowKeyboardCues;
+
+            public new AutoSizeMode GetAutoSizeMode() => base.GetAutoSizeMode();
 
             public new bool GetStyle(ControlStyles flag) => base.GetStyle(flag);
 

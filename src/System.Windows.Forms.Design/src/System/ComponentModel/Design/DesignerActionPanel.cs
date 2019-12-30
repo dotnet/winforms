@@ -2334,7 +2334,7 @@ namespace System.ComponentModel.Design
                 }
             }
 
-            internal class FlyoutDialog : Form
+            internal class FlyoutDialog : Form, IHandle
             {
                 private readonly Control _hostedControl;
                 private readonly Control _parentControl;
@@ -2419,7 +2419,7 @@ namespace System.ComponentModel.Design
                 {
                     while (hWnd != IntPtr.Zero)
                     {
-                        hWnd = UnsafeNativeMethods.GetWindowLong(new HandleRef(null, hWnd), NativeMethods.GWL_HWNDPARENT);
+                        hWnd = User32.GetWindowLong(hWnd, User32.GWL.HWNDPARENT);
                         if (hWnd == IntPtr.Zero)
                         {
                             return false;
@@ -2449,12 +2449,13 @@ namespace System.ComponentModel.Design
                 {
                     try
                     {
-                        UnsafeNativeMethods.SetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_HWNDPARENT, new HandleRef(parent, parent.Handle));
+                        User32.SetWindowLong(this, User32.GWL.HWNDPARENT, parent.Handle);
+
                         // Lifted directly from Form.ShowDialog()...
                         IntPtr hWndCapture = User32.GetCapture();
                         if (hWndCapture != IntPtr.Zero)
                         {
-                            UnsafeNativeMethods.SendMessage(new HandleRef(null, hWndCapture), WindowMessages.WM_CANCELMODE, 0, 0);
+                            User32.SendMessageW(hWndCapture, User32.WindowMessage.WM_CANCELMODE, IntPtr.Zero, IntPtr.Zero);
                             User32.ReleaseCapture();
                         }
                         Visible = true; // NOTE: Do this AFTER creating handle and setting parent
@@ -2463,8 +2464,7 @@ namespace System.ComponentModel.Design
                     }
                     finally
                     {
-
-                        UnsafeNativeMethods.SetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_HWNDPARENT, new HandleRef(null, IntPtr.Zero));
+                        User32.SetWindowLong(this, User32.GWL.HWNDPARENT, IntPtr.Zero);
                         // sometimes activation goes to LALA land - if our parent control is still  around, remind it to take focus.
                         if (parent != null && parent.Visible)
                         {
@@ -2477,9 +2477,9 @@ namespace System.ComponentModel.Design
                 {
                     if (m.Msg == WindowMessages.WM_ACTIVATE)
                     {
-                        if (Visible && NativeMethods.Util.LOWORD(unchecked((int)(long)m.WParam)) == NativeMethods.WA_INACTIVE)
+                        if (Visible && PARAM.LOWORD(m.WParam) == (int)User32.WA.INACTIVE)
                         {
-                            if (!OwnsWindow((IntPtr)m.LParam))
+                            if (!OwnsWindow(m.LParam))
                             {
                                 Visible = false;
                                 if (m.LParam == IntPtr.Zero)
@@ -2502,38 +2502,6 @@ namespace System.ComponentModel.Design
                     base.WndProc(ref m);
                 }
             }
-
-            #region Interop definitions
-            private static class NativeMethods
-            {
-                public const int WA_INACTIVE = 0;
-                public const int WA_ACTIVE = 1;
-                public const int GWL_HWNDPARENT = (-8);
-
-                internal static class Util
-                {
-                    public static int LOWORD(int n) => n & 0xffff;
-                }
-            }
-
-            private static class SafeNativeMethods
-            {
-                [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
-                public static extern IntPtr SelectObject(HandleRef hDC, HandleRef hObject);
-            }
-
-            private static class UnsafeNativeMethods
-            {
-                [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-                public static extern IntPtr GetWindowLong(HandleRef hWnd, int nIndex);
-
-                [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-                public static extern IntPtr SetWindowLong(HandleRef hWnd, int nIndex, HandleRef dwNewLong);
-
-                [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-                public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, int lParam);
-            }
-            #endregion
 
             // Class that renders either the ellipsis or dropdown button
             internal sealed class EditorButton : Button

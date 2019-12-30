@@ -460,7 +460,7 @@ namespace System.Windows.Forms
             get
             {
                 CreateParams cp = base.CreateParams;
-                cp.ClassName = NativeMethods.WC_DATETIMEPICK;
+                cp.ClassName = ComCtl32.WindowClasses.WC_DATETIMEPICK;
 
                 cp.Style |= style;
 
@@ -1570,7 +1570,7 @@ namespace System.Windows.Forms
                 if (c.hwndFound != IntPtr.Zero)
                 {
                     User32.InvalidateRect(new HandleRef(c, c.hwndFound), null, BOOL.TRUE);
-                    SafeNativeMethods.UpdateWindow(new HandleRef(c, c.hwndFound));
+                    User32.UpdateWindow(c.hwndFound);
                 }
             }
         }

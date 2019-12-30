@@ -4964,10 +4964,10 @@ namespace System.Windows.Forms
                     {
                         // make sure the root window of the otherHwnd is the same as
                         // the root window of thisHwnd.
-                        HandleRef thisHwndRoot = WindowsFormsUtils.GetRootHWnd(this);
-                        HandleRef otherHwndRoot = WindowsFormsUtils.GetRootHWnd(new HandleRef(null, otherHwnd));
+                        IntPtr thisHwndRoot = User32.GetAncestor(this, User32.GA.ROOT);
+                        IntPtr otherHwndRoot = User32.GetAncestor(otherHwnd, User32.GA.ROOT);
 
-                        if (thisHwndRoot.Handle == otherHwndRoot.Handle && (thisHwndRoot.Handle != IntPtr.Zero))
+                        if (thisHwndRoot == otherHwndRoot && (thisHwndRoot != IntPtr.Zero))
                         {
                             Debug.WriteLineIf(SnapFocusDebug.TraceVerbose, "[ToolStrip SnapFocus]: Caching for return focus:" + WindowsFormsUtils.GetControlInformation(otherHwnd));
                             // we know we're in the same window heirarchy.
@@ -5157,16 +5157,14 @@ namespace System.Windows.Forms
 
                     if (!IsDropDown && !IsInDesignMode)
                     {
-
                         // If our root HWND is not the active hwnd,
                         // eat the mouse message and bring the form to the front.
-                        HandleRef rootHwnd = WindowsFormsUtils.GetRootHWnd(this);
-                        if (rootHwnd.Handle != IntPtr.Zero)
+                        IntPtr rootHwnd = User32.GetAncestor(this, User32.GA.ROOT);
+                        if (rootHwnd != IntPtr.Zero)
                         {
-
                             // snap the active window and compare to our root window.
                             IntPtr hwndActive = User32.GetActiveWindow();
-                            if (hwndActive != rootHwnd.Handle)
+                            if (hwndActive != rootHwnd)
                             {
                                 // Activate the window, and discard the mouse message.
                                 // this appears to be the same behavior as office.
@@ -5661,8 +5659,8 @@ namespace System.Windows.Forms
                             // currently have focus, restore it.
                             if (!User32.IsChild(new HandleRef(ownerToolStrip, ownerToolStrip.Handle), m.HWnd).IsTrue())
                             {
-                                HandleRef rootHwnd = WindowsFormsUtils.GetRootHWnd(ownerToolStrip);
-                                if (rootHwnd.Handle == m.HWnd || User32.IsChild(rootHwnd, m.HWnd).IsTrue())
+                                IntPtr rootHwnd = User32.GetAncestor(ownerToolStrip, User32.GA.ROOT);
+                                if (rootHwnd == m.HWnd || User32.IsChild(rootHwnd, m.HWnd).IsTrue())
                                 {
                                     // Only RestoreFocus if the hwnd is a child of the root window and isnt on the toolstrip.
                                     RestoreFocusInternal();

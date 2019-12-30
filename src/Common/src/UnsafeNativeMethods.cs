@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -17,9 +17,6 @@ namespace System.Windows.Forms
 {
     internal static class UnsafeNativeMethods
     {
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern int GetMessageTime();
-
         [DllImport(ExternDll.User32)]
         public static extern int GetClassName(HandleRef hwnd, StringBuilder lpClassName, int nMaxCount);
 
@@ -206,12 +203,6 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.Kernel32, CharSet = CharSet.Auto)]
         public static extern void GetTempFileName(string tempDirName, string prefixName, int unique, StringBuilder sb);
 
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern IntPtr GetAncestor(HandleRef hWnd, int flags);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern bool IsZoomed(HandleRef hWnd);
-
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public static extern IntPtr FindWindow(string className, string windowName);
 
@@ -235,9 +226,6 @@ namespace System.Windows.Forms
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, StringBuilder lParam);
-
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, NativeMethods.LVBKIMAGE lParam);
 
         [DllImport(ExternDll.User32, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
         public static extern IntPtr SendMessage(IntPtr hwnd, int msg, bool wparam, int lparam);
@@ -347,9 +335,6 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public extern static IntPtr SendMessage(HandleRef hWnd, int Msg, IntPtr wParam, NativeMethods.ListViewCompareCallback pfnCompare);
 
-        [DllImport(ExternDll.User32, ExactSpelling = true)]
-        public static extern bool GetWindowRect(HandleRef hWnd, ref RECT rect);
-
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern IntPtr GetDlgItem(HandleRef hWnd, int nIDDlgItem);
 
@@ -367,12 +352,6 @@ namespace System.Windows.Forms
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern IntPtr GetDesktopWindow();
-
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern bool PostMessage(HandleRef hwnd, int msg, IntPtr wparam, IntPtr lparam);
-
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern bool PostMessage(IntPtr hwnd, int msg, IntPtr wparam, IntPtr lparam);
 
         [DllImport(ExternDll.Oleacc, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern IntPtr LresultFromObject(ref Guid refiid, IntPtr wParam, HandleRef pAcc);
@@ -465,19 +444,6 @@ namespace System.Windows.Forms
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern bool IsWindow(HandleRef hWnd);
-
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern IntPtr PostMessage(HandleRef hwnd, int msg, int wparam, int lparam);
-
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern IntPtr PostMessage(HandleRef hwnd, int msg, int wparam, IntPtr lparam);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true)]
-        public static extern IntPtr WindowFromPoint(Point pt);
-
-        // This method is not available until Windows 8.1
-        [DllImport(ExternDll.User32, ExactSpelling = true, SetLastError = true)]
-        public static extern uint GetDpiForWindow(HandleRef hWnd);
 
         //for RegionData
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
@@ -640,95 +606,6 @@ namespace System.Windows.Forms
                 out IComDataObject ppDORet);
         }
 
-        [
-            ComImport(),
-            Guid("CB2F6722-AB3A-11d2-9C40-00C04FA30A3E"),
-            InterfaceType(ComInterfaceType.InterfaceIsIUnknown)
-        ]
-        internal interface ICorRuntimeHost
-        {
-            [PreserveSig()] int CreateLogicalThreadState();
-            [PreserveSig()] int DeleteLogicalThreadState();
-            [PreserveSig()]
-            int SwitchInLogicalThreadState(
-             [In] ref uint pFiberCookie);                 // [in] Cookie that indicates the fiber to use.
-
-            [PreserveSig()]
-            int SwitchOutLogicalThreadState(
-             out uint FiberCookie);               // [out] Cookie that indicates the fiber being switched out.
-
-            [PreserveSig()]
-            int LocksHeldByLogicalThread(           // Return code.
-             out uint pCount                        // [out] Number of locks that the current thread holds.
-                );
-
-            [PreserveSig()]
-            int MapFile(
-             IntPtr hFile,          // [in]  HANDLE for file
-             out IntPtr hMapAddress);   // [out] HINSTANCE for mapped file
-
-            //=================================================================
-            //
-            // New hosting methods
-            //
-            // Returns an object for configuring the runtime prior to
-            // it starting. If the runtime has been initialized this
-            // routine returns an error. See ICorConfiguration.
-            [PreserveSig()] int GetConfiguration([MarshalAs(UnmanagedType.IUnknown)] out object pConfiguration);
-
-            // Starts the runtime. This is equivalent to CoInitializeCor();
-            [PreserveSig()] int Start();
-
-            // Terminates the runtime, This is equivalent CoUninitializeCor();
-            [PreserveSig()] int Stop();
-
-            // Creates a domain in the runtime. The identity array is
-            // a pointer to an array TYPE containing IIdentity objects defining
-            // the security identity.
-            [PreserveSig()]
-            int CreateDomain(string pwzFriendlyName,
-                                 [MarshalAs(UnmanagedType.IUnknown)] object pIdentityArray, // Optional
-                                 [MarshalAs(UnmanagedType.IUnknown)] out object pAppDomain);
-
-            // Returns the default domain.
-            [PreserveSig()] int GetDefaultDomain([MarshalAs(UnmanagedType.IUnknown)] out object pAppDomain);
-
-            // Enumerate currently existing domains.
-            [PreserveSig()] int EnumDomains(out IntPtr hEnum);
-
-            // Returns S_FALSE when there are no more domains. A domain
-            // is passed out only when S_OK is returned.
-            [PreserveSig()]
-            int NextDomain(IntPtr hEnum,
-                               [MarshalAs(UnmanagedType.IUnknown)] out object pAppDomain);
-
-            // Close the enumeration, releasing resources
-            [PreserveSig()] int CloseEnum(IntPtr hEnum);
-
-            [PreserveSig()]
-            int CreateDomainEx(string pwzFriendlyName, // Optional
-                                   [MarshalAs(UnmanagedType.IUnknown)] object pSetup,        // Optional
-                                   [MarshalAs(UnmanagedType.IUnknown)] object pEvidence,     // Optional
-                                   [MarshalAs(UnmanagedType.IUnknown)] out object pAppDomain);
-
-            [PreserveSig()] int CreateDomainSetup([MarshalAs(UnmanagedType.IUnknown)] out object pAppDomainSetup);
-
-            [PreserveSig()] int CreateEvidence([MarshalAs(UnmanagedType.IUnknown)] out object pEvidence);
-
-            [PreserveSig()] int UnloadDomain([MarshalAs(UnmanagedType.IUnknown)] object pAppDomain);
-
-            // Returns the thread's domain.
-            [PreserveSig()] int CurrentDomain([MarshalAs(UnmanagedType.IUnknown)] out object pAppDomain);
-        }
-
-        [
-            ComImport(),
-            Guid("CB2F6723-AB3A-11d2-9C40-00C04FA30A3E")
-        ]
-        internal class CorRuntimeHost
-        {
-        }
-
         [ComImport]
         [Guid("00000112-0000-0000-C000-000000000046")]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
@@ -765,18 +642,15 @@ namespace System.Windows.Forms
                 IntPtr* ppmk);
 
             [PreserveSig]
-            int InitFromData(
-                   [In, MarshalAs(UnmanagedType.Interface)]
-                     IComDataObject pDataObject,
-                    int fCreation,
-                   [In, MarshalAs(UnmanagedType.U4)]
-                     int dwReserved);
+            HRESULT InitFromData(
+                IComDataObject pDataObject,
+                BOOL fCreation,
+                uint dwReserved);
 
             [PreserveSig]
-            int GetClipboardData(
-                   [In, MarshalAs(UnmanagedType.U4)]
-                     int dwReserved,
-                    out IComDataObject data);
+            HRESULT GetClipboardData(
+                uint dwReserved,
+                out IComDataObject ppDataObject);
 
             [PreserveSig]
             HRESULT DoVerb(
@@ -789,25 +663,22 @@ namespace System.Windows.Forms
 
             [PreserveSig]
             HRESULT EnumVerbs(
-                out IEnumOLEVERB e);
+                out Ole32.IEnumOLEVERB ppEnumOleVerb);
 
             [PreserveSig]
-            int OleUpdate();
+            HRESULT OleUpdate();
 
             [PreserveSig]
-            int IsUpToDate();
+            HRESULT IsUpToDate();
 
             [PreserveSig]
-            int GetUserClassID(
-                   [In, Out]
-                      ref Guid pClsid);
+            HRESULT GetUserClassID(
+                Guid* pClsid);
 
             [PreserveSig]
-            int GetUserType(
-                   [In, MarshalAs(UnmanagedType.U4)]
-                     int dwFormOfType,
-                   [Out, MarshalAs(UnmanagedType.LPWStr)]
-                     out string userType);
+            HRESULT GetUserType(
+                Ole32.USERCLASSTYPE dwFormOfType,
+                [MarshalAs(UnmanagedType.LPWStr)] out string userType);
 
             [PreserveSig]
             HRESULT SetExtent(
@@ -820,17 +691,17 @@ namespace System.Windows.Forms
                 Size* pSizel);
 
             [PreserveSig]
-            int Advise(
-                    IAdviseSink pAdvSink,
-                    out int cookie);
+            HRESULT Advise(
+                IAdviseSink pAdvSink,
+                uint* pdwConnection);
 
             [PreserveSig]
-            int Unadvise(
-                   [In, MarshalAs(UnmanagedType.U4)]
-                     int dwConnection);
+            HRESULT Unadvise(
+                uint dwConnection);
 
             [PreserveSig]
-            int EnumAdvise(out IEnumSTATDATA e);
+            HRESULT EnumAdvise(
+                out IEnumSTATDATA e);
 
             [PreserveSig]
             HRESULT GetMiscStatus(
@@ -878,18 +749,15 @@ namespace System.Windows.Forms
                 IntPtr* ppmk);
 
             [PreserveSig]
-            int InitFromData(
-                   [In, MarshalAs(UnmanagedType.Interface)]
-                     IComDataObject pDataObject,
-                    int fCreation,
-                   [In, MarshalAs(UnmanagedType.U4)]
-                     int dwReserved);
+            HRESULT InitFromData(
+                IComDataObject pDataObject,
+                BOOL fCreation,
+                uint dwReserved);
 
             [PreserveSig]
-            int GetClipboardData(
-                   [In, MarshalAs(UnmanagedType.U4)]
-                     int dwReserved,
-                    out IComDataObject data);
+            HRESULT GetClipboardData(
+                uint dwReserved,
+                out IComDataObject ppDataObject);
 
             [PreserveSig]
             HRESULT DoVerb(
@@ -902,25 +770,22 @@ namespace System.Windows.Forms
 
             [PreserveSig]
             HRESULT EnumVerbs(
-                out IEnumOLEVERB e);
+                out Ole32.IEnumOLEVERB ppEnumOleVerb);
 
             [PreserveSig]
-            int OleUpdate();
+            HRESULT OleUpdate();
 
             [PreserveSig]
-            int IsUpToDate();
+            HRESULT IsUpToDate();
 
             [PreserveSig]
-            int GetUserClassID(
-                   [In, Out]
-                      ref Guid pClsid);
+            HRESULT GetUserClassID(
+                Guid* pClsid);
 
             [PreserveSig]
-            int GetUserType(
-                   [In, MarshalAs(UnmanagedType.U4)]
-                     int dwFormOfType,
-                   [Out, MarshalAs(UnmanagedType.LPWStr)]
-                     out string userType);
+            HRESULT GetUserType(
+                Ole32.USERCLASSTYPE dwFormOfType,
+                [MarshalAs(UnmanagedType.LPWStr)] out string pszUserType);
 
             [PreserveSig]
             HRESULT SetExtent(
@@ -933,18 +798,17 @@ namespace System.Windows.Forms
                 Size* pSizel);
 
             [PreserveSig]
-            int Advise(
-                   [In, MarshalAs(UnmanagedType.Interface)]
-                     IAdviseSink pAdvSink,
-                    out int cookie);
+            HRESULT Advise(
+                IAdviseSink pAdvSink,
+                uint* pdwConnection);
 
             [PreserveSig]
-            int Unadvise(
-                   [In, MarshalAs(UnmanagedType.U4)]
-                     int dwConnection);
+            HRESULT Unadvise(
+                uint dwConnection);
 
             [PreserveSig]
-            int EnumAdvise(out IEnumSTATDATA e);
+            HRESULT EnumAdvise(
+                out IEnumSTATDATA e);
 
             [PreserveSig]
             HRESULT GetMiscStatus(
@@ -965,128 +829,6 @@ namespace System.Windows.Forms
             [PreserveSig]
             int GetDropTarget(
                [Out, MarshalAs(UnmanagedType.Interface)] object ppDropTarget);
-        };
-
-        [ComImport]
-        [Guid("0000010d-0000-0000-C000-000000000046")]
-        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public unsafe interface IViewObject
-        {
-            [PreserveSig]
-            HRESULT Draw(
-                Ole32.DVASPECT dwDrawAspect,
-                int lindex,
-                IntPtr pvAspect,
-                Ole32.DVTARGETDEVICE* ptd,
-                IntPtr hdcTargetDev,
-                IntPtr hdcDraw,
-                [In]
-                NativeMethods.COMRECT lprcBounds,
-                [In]
-                NativeMethods.COMRECT lprcWBounds,
-                IntPtr pfnContinue,
-                [In]
-                int dwContinue);
-
-            [PreserveSig]
-            HRESULT GetColorSet(
-                Ole32.DVASPECT dwDrawAspect,
-                int lindex,
-                IntPtr pvAspect,
-                Ole32.DVTARGETDEVICE* ptd,
-                IntPtr hicTargetDev,
-                Gdi32.LOGPALETTE* ppColorSet);
-
-            [PreserveSig]
-            int Freeze(
-                Ole32.DVASPECT dwDrawAspect,
-                int lindex,
-                IntPtr pvAspect,
-                [Out]
-                IntPtr pdwFreeze);
-
-            [PreserveSig]
-            int Unfreeze(
-                [In, MarshalAs(UnmanagedType.U4)]
-                int dwFreeze);
-
-            [PreserveSig]
-            HRESULT SetAdvise(
-                Ole32.DVASPECT aspects,
-                Ole32.ADVF advf,
-                IAdviseSink pAdvSink);
-
-            [PreserveSig]
-            HRESULT GetAdvise(
-                Ole32.DVASPECT* pAspects,
-                Ole32.ADVF* pAdvf,
-                // These can be NULL if caller doesn't want them
-                [In, Out, MarshalAs(UnmanagedType.LPArray)]
-                IAdviseSink[] ppAdvSink);
-        }
-
-        [ComImport]
-        [Guid("00000127-0000-0000-C000-000000000046")]
-        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public unsafe interface IViewObject2 /* : IViewObject */
-        {
-            void Draw(
-                Ole32.DVASPECT dwDrawAspect,
-                int lindex,
-                IntPtr pvAspect,
-                Ole32.DVTARGETDEVICE* ptd,
-                IntPtr hdcTargetDev,
-                IntPtr hdcDraw,
-                [In]
-                NativeMethods.COMRECT lprcBounds,
-                [In]
-                NativeMethods.COMRECT lprcWBounds,
-                IntPtr pfnContinue,
-                [In]
-                int dwContinue);
-
-            [PreserveSig]
-            HRESULT GetColorSet(
-                Ole32.DVASPECT dwDrawAspect,
-                int lindex,
-                IntPtr pvAspect,
-                Ole32.DVTARGETDEVICE* ptd,
-                IntPtr hicTargetDev,
-                Gdi32.LOGPALETTE* ppColorSet);
-
-            [PreserveSig]
-            int Freeze(
-                Ole32.DVASPECT dwDrawAspect,
-                int lindex,
-                IntPtr pvAspect,
-                [Out]
-                IntPtr pdwFreeze);
-
-            [PreserveSig]
-            int Unfreeze(
-                [In, MarshalAs(UnmanagedType.U4)]
-                int dwFreeze);
-
-            [PreserveSig]
-            HRESULT SetAdvise(
-                Ole32.DVASPECT aspects,
-                Ole32.ADVF advf,
-                IAdviseSink pAdvSink);
-
-            [PreserveSig]
-            HRESULT GetAdvise(
-                Ole32.DVASPECT* pAspects,
-                Ole32.ADVF* pAdvf,
-                // These can be NULL if caller doesn't want them
-                [In, Out, MarshalAs(UnmanagedType.LPArray)]
-                IAdviseSink[] ppAdvSink);
-
-            [PreserveSig]
-            HRESULT GetExtent(
-                Ole32.DVASPECT dwDrawAspect,
-                int lindex,
-                Ole32.DVTARGETDEVICE* ptd,
-                Size* lpsizel);
         }
 
         [ComImport(), Guid("0000010C-0000-0000-C000-000000000046"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
@@ -1114,29 +856,6 @@ namespace System.Windows.Forms
                 Ole32.IPropertyBag pPropBag,
                 BOOL fClearDirty,
                 BOOL fSaveAllProperties);
-        }
-
-        [ComImport]
-        [Guid("00000104-0000-0000-C000-000000000046")]
-        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public unsafe interface IEnumOLEVERB
-        {
-            [PreserveSig]
-            HRESULT Next(
-                uint celt,
-                Ole32.OLEVERB rgelt,
-                uint* pceltFetched);
-
-            [PreserveSig]
-            HRESULT Skip(
-                uint celt);
-
-            [PreserveSig]
-            HRESULT Reset();
-
-            [PreserveSig]
-            HRESULT Clone(
-               out IEnumOLEVERB ppenum);
         }
 
         public abstract class CharBuffer

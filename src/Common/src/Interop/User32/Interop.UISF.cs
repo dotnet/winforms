@@ -6,19 +6,14 @@ using System;
 
 internal static partial class Interop
 {
-    internal static partial class ComCtl32
+    internal static partial class User32
     {
         [Flags]
-        public enum TBSTATE : byte
+        public enum UISF : uint
         {
-            CHECKED = 0x01,
-            PRESSED = 0x02,
-            ENABLED = 0x04,
-            HIDDEN = 0x08,
-            INDETERMINATE = 0x10,
-            WRAP = 0x20,
-            ELLIPSES = 0x40,
-            MARKED = 0x80,
+            HIDEFOCUS = 0x1,
+            HIDEACCEL = 0x2,
+            ACTIVE = 0x4,
         }
     }
 }

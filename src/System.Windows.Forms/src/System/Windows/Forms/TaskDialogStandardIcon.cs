@@ -34,31 +34,31 @@ namespace System.Windows.Forms
         /// <summary>
         ///   The task dialog contains an icon consisting of an user account control (UAC) shield.
         /// </summary>
-        SecurityShield = ushort.MaxValue - 3, // TD_SHIELD_ICON
+        Shield = ushort.MaxValue - 3, // TD_SHIELD_ICON
 
         /// <summary>
         ///   The task dialog contains an icon consisting of an user account control (UAC) shield and shows a blue bar around the icon.
         /// </summary>
-        SecurityShieldBlueBar = ushort.MaxValue - 4,
+        ShieldBlueBar = ushort.MaxValue - 4,
 
         /// <summary>
         ///   The task dialog contains an icon consisting of an user account control (UAC) shield and shows a gray bar around the icon.
         /// </summary>
-        SecurityShieldGrayBar = ushort.MaxValue - 8,
+        ShieldGrayBar = ushort.MaxValue - 8,
 
         /// <summary>
         ///   The task dialog contains an icon consisting of an exclamation point in a yellow shield and shows a yellow bar around the icon.
         /// </summary>
-        SecurityWarningYellowBar = ushort.MaxValue - 5,
+        ShieldWarningYellowBar = ushort.MaxValue - 5,
 
         /// <summary>
         ///   The task dialog contains an icon consisting of white X in a red shield and shows a red bar around the icon.
         /// </summary>
-        SecurityErrorRedBar = ushort.MaxValue - 6,
+        ShieldErrorRedBar = ushort.MaxValue - 6,
 
         /// <summary>
         ///   The task dialog contains an icon consisting of white tick in a green shield and shows a green bar around the icon.
         /// </summary>
-        SecuritySuccessGreenBar = ushort.MaxValue - 7,
+        ShieldSuccessGreenBar = ushort.MaxValue - 7,
     }
 }

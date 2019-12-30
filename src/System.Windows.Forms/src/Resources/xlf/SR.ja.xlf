@@ -4224,6 +4224,21 @@ To replace this default dialog please handle the DataError event.</source>
         <target state="translated">編集</target>
         <note />
       </trans-unit>
+      <trans-unit id="DefaultDomainUpDownAccessibleName">
+        <source>DomainUpDown</source>
+        <target state="new">DomainUpDown</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DefaultNumericUpDownAccessibleName">
+        <source>NumericUpDown</source>
+        <target state="new">NumericUpDown</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DefaultUpDownButtonsAccessibleName">
+        <source>UpDown</source>
+        <target state="new">UpDown</target>
+        <note />
+      </trans-unit>
       <trans-unit id="DescriptionBindingNavigator">
         <source>Provides a user interface for navigation and manipulation of data bound to controls on a form.</source>
         <target state="translated">フォーム上のコントロールにバインドされたデータのナビゲートおよび操作に使用するユーザー インターフェイスを提供します。</target>
@@ -4577,6 +4592,11 @@ To replace this default dialog please handle the DataError event.</source>
       <trans-unit id="ErrorProviderDataSourceDescr">
         <source>Indicates the source of data to bind errors against.</source>
         <target state="translated">エラーをバインドする、データのソースを示します。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ErrorProviderDefaultAccessibleName">
+        <source>Error provider</source>
+        <target state="new">Error provider</target>
         <note />
       </trans-unit>
       <trans-unit id="ErrorProviderErrorDescr">
@@ -10994,6 +11014,11 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="WidthGreaterThanMinWidth">
         <source>Width must be greater than MinWidth.</source>
         <target state="translated">幅は MinWidth より大きくなければなりません。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="Win32SetParentFailed">
+        <source>Failed to set Win32 parent window of the Control.</source>
+        <target state="new">Failed to set Win32 parent window of the Control.</target>
         <note />
       </trans-unit>
       <trans-unit id="Win32WindowAlreadyCreated">

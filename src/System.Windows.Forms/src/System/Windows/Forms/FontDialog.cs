@@ -28,7 +28,7 @@ namespace System.Windows.Forms
         private const int defaultMinSize = 0;
         private const int defaultMaxSize = 0;
 
-        private int options;
+        private Comdlg32.CF options;
         private Font font;
         private Color color;
         private int minSize = defaultMinSize;
@@ -56,15 +56,8 @@ namespace System.Windows.Forms
         ]
         public bool AllowSimulations
         {
-            get
-            {
-                return !GetOption(NativeMethods.CF_NOSIMULATIONS);
-            }
-
-            set
-            {
-                SetOption(NativeMethods.CF_NOSIMULATIONS, !value);
-            }
+            get => !GetOption(Comdlg32.CF.NOSIMULATIONS);
+            set => SetOption(Comdlg32.CF.NOSIMULATIONS, !value);
         }
 
         /// <summary>
@@ -77,15 +70,8 @@ namespace System.Windows.Forms
         ]
         public bool AllowVectorFonts
         {
-            get
-            {
-                return !GetOption(NativeMethods.CF_NOVECTORFONTS);
-            }
-
-            set
-            {
-                SetOption(NativeMethods.CF_NOVECTORFONTS, !value);
-            }
+            get => !GetOption(Comdlg32.CF.NOVECTORFONTS);
+            set => SetOption(Comdlg32.CF.NOVECTORFONTS, !value);
         }
 
         /// <summary>
@@ -100,15 +86,8 @@ namespace System.Windows.Forms
         ]
         public bool AllowVerticalFonts
         {
-            get
-            {
-                return !GetOption(NativeMethods.CF_NOVERTFONTS);
-            }
-
-            set
-            {
-                SetOption(NativeMethods.CF_NOVERTFONTS, !value);
-            }
+            get => !GetOption(Comdlg32.CF.NOVERTFONTS);
+            set => SetOption(Comdlg32.CF.NOVERTFONTS, !value);
         }
 
         /// <summary>
@@ -124,15 +103,8 @@ namespace System.Windows.Forms
         ]
         public bool AllowScriptChange
         {
-            get
-            {
-                return !GetOption(NativeMethods.CF_SELECTSCRIPT);
-            }
-
-            set
-            {
-                SetOption(NativeMethods.CF_SELECTSCRIPT, !value);
-            }
+            get => !GetOption(Comdlg32.CF.SELECTSCRIPT);
+            set => SetOption(Comdlg32.CF.SELECTSCRIPT, !value);
         }
 
         /// <summary>
@@ -181,15 +153,8 @@ namespace System.Windows.Forms
         ]
         public bool FixedPitchOnly
         {
-            get
-            {
-                return GetOption(NativeMethods.CF_FIXEDPITCHONLY);
-            }
-
-            set
-            {
-                SetOption(NativeMethods.CF_FIXEDPITCHONLY, value);
-            }
+            get => GetOption(Comdlg32.CF.FIXEDPITCHONLY);
+            set => SetOption(Comdlg32.CF.FIXEDPITCHONLY, value);
         }
 
         /// <summary>
@@ -239,14 +204,10 @@ namespace System.Windows.Forms
         ]
         public bool FontMustExist
         {
-            get
-            {
-                return GetOption(NativeMethods.CF_FORCEFONTEXIST);
-            }
-
+            get => GetOption(Comdlg32.CF.FORCEFONTEXIST);
             set
             {
-                SetOption(NativeMethods.CF_FORCEFONTEXIST, value);
+                SetOption(Comdlg32.CF.FORCEFONTEXIST, value);
             }
         }
 
@@ -312,13 +273,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets the value passed to CHOOSEFONT.Flags.
         /// </summary>
-        protected int Options
-        {
-            get
-            {
-                return options;
-            }
-        }
+        protected int Options => (int)options;
 
         /// <summary>
         ///  Gets or sets a
@@ -332,14 +287,8 @@ namespace System.Windows.Forms
         ]
         public bool ScriptsOnly
         {
-            get
-            {
-                return GetOption(NativeMethods.CF_SCRIPTSONLY);
-            }
-            set
-            {
-                SetOption(NativeMethods.CF_SCRIPTSONLY, value);
-            }
+            get => GetOption(Comdlg32.CF.SCRIPTSONLY);
+            set => SetOption(Comdlg32.CF.SCRIPTSONLY, value);
         }
 
         /// <summary>
@@ -352,14 +301,8 @@ namespace System.Windows.Forms
         ]
         public bool ShowApply
         {
-            get
-            {
-                return GetOption(NativeMethods.CF_APPLY);
-            }
-            set
-            {
-                SetOption(NativeMethods.CF_APPLY, value);
-            }
+            get => GetOption(Comdlg32.CF.APPLY);
+            set => SetOption(Comdlg32.CF.APPLY, value);
         }
 
         /// <summary>
@@ -393,14 +336,8 @@ namespace System.Windows.Forms
         ]
         public bool ShowEffects
         {
-            get
-            {
-                return GetOption(NativeMethods.CF_EFFECTS);
-            }
-            set
-            {
-                SetOption(NativeMethods.CF_EFFECTS, value);
-            }
+            get => GetOption(Comdlg32.CF.EFFECTS);
+            set => SetOption(Comdlg32.CF.EFFECTS, value);
         }
 
         /// <summary>
@@ -413,14 +350,8 @@ namespace System.Windows.Forms
         ]
         public bool ShowHelp
         {
-            get
-            {
-                return GetOption(NativeMethods.CF_SHOWHELP);
-            }
-            set
-            {
-                SetOption(NativeMethods.CF_SHOWHELP, value);
-            }
+            get => GetOption(Comdlg32.CF.SHOWHELP);
+            set => SetOption(Comdlg32.CF.SHOWHELP, value);
         }
 
         /// <summary>
@@ -437,7 +368,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Returns the state of the given option flag.
         /// </summary>
-        internal bool GetOption(int option)
+        internal bool GetOption(Comdlg32.CF option)
         {
             return (options & option) != 0;
         }
@@ -506,14 +437,14 @@ namespace System.Windows.Forms
         /// </summary>
         public override void Reset()
         {
-            options = NativeMethods.CF_SCREENFONTS | NativeMethods.CF_EFFECTS;
+            options = Comdlg32.CF.SCREENFONTS | Comdlg32.CF.EFFECTS;
             font = null;
             color = SystemColors.ControlText;
             usingDefaultIndirectColor = true;
             showColor = false;
             minSize = defaultMinSize;
             maxSize = defaultMaxSize;
-            SetOption(NativeMethods.CF_TTONLY, true);
+            SetOption(Comdlg32.CF.TTONLY, true);
         }
 
         private void ResetFont()
@@ -541,7 +472,7 @@ namespace System.Windows.Forms
                 hwndOwner = hWndOwner,
                 hDC = IntPtr.Zero,
                 lpLogFont = new IntPtr(&logFont),
-                Flags = Options | NativeMethods.CF_INITTOLOGFONTSTRUCT | NativeMethods.CF_ENABLEHOOK,
+                Flags = (Comdlg32.CF)Options | Comdlg32.CF.INITTOLOGFONTSTRUCT | Comdlg32.CF.ENABLEHOOK,
                 lpfnHook = hookProcPtr,
                 hInstance = Kernel32.GetModuleHandleW(null),
                 nSizeMin = minSize,
@@ -553,7 +484,7 @@ namespace System.Windows.Forms
 
             if (minSize > 0 || maxSize > 0)
             {
-                cf.Flags |= NativeMethods.CF_LIMITSIZE;
+                cf.Flags |= Comdlg32.CF.LIMITSIZE;
             }
 
             // if ShowColor=true then try to draw the sample text in color,
@@ -578,7 +509,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Sets the given option to the given boolean value.
         /// </summary>
-        internal void SetOption(int option, bool value)
+        internal void SetOption(Comdlg32.CF option, bool value)
         {
             if (value)
             {

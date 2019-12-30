@@ -10,7 +10,7 @@ using static Interop;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Represents a progress bar control of a task dialog.
+    ///   Represents a progress bar control of a task dialog.
     /// </summary>
     public sealed class TaskDialogProgressBar : TaskDialogControl
     {
@@ -25,15 +25,15 @@ namespace System.Windows.Forms
         private int _marqueeSpeed;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TaskDialogProgressBar"/> class.
+        ///   Initializes a new instance of the <see cref="TaskDialogProgressBar"/> class.
         /// </summary>
         public TaskDialogProgressBar()
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TaskDialogProgressBar"/> class
-        /// using the given <paramref name="state"/>.
+        ///   Initializes a new instance of the <see cref="TaskDialogProgressBar"/> class
+        ///   using the given <paramref name="state"/>.
         /// </summary>
         /// <param name="state">The state of the progress bar.</param>
         public TaskDialogProgressBar(TaskDialogProgressBarState state)
@@ -44,21 +44,24 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets the state of the progress bar.
+        ///   Gets or sets the state of the progress bar.
         /// </summary>
         /// <value>
-        /// The state of the progress bar. The default is <see cref="TaskDialogProgressBarState.Normal"/>,
-        /// except if this instance is the default instance created by a <see cref="TaskDialogPage"/>,
-        /// where the default value is <see cref="TaskDialogProgressBarState.None"/>.
+        ///   The state of the progress bar. The default is <see cref="TaskDialogProgressBarState.Normal"/>,
+        ///   except if this instance is the default instance created by a <see cref="TaskDialogPage"/>,
+        ///   where the default value is <see cref="TaskDialogProgressBarState.None"/>.
         /// </value>
         /// <remarks>
-        /// This control will only be shown if this property is not
-        /// <see cref="TaskDialogProgressBarState.None"/>.
-        /// 
-        /// This property can be set while the dialog is shown. However, while the dialog is
-        /// shown, it is not possible to change the state from
-        /// <see cref="TaskDialogProgressBarState.None"/> to any other state,
-        /// and vice versa.
+        /// <para>
+        ///   This control will only be shown if this property is not
+        ///   <see cref="TaskDialogProgressBarState.None"/>.
+        /// </para>
+        /// <para>
+        ///   This property can be set while the dialog is shown. However, while the dialog is
+        ///   shown, it is not possible to change the state from
+        ///   <see cref="TaskDialogProgressBarState.None"/> to any other state,
+        ///   and vice versa.
+        /// </para>
         /// </remarks>
         public TaskDialogProgressBarState State
         {
@@ -97,7 +100,7 @@ namespace System.Windows.Forms
                         return;
                     }
 
-                    TaskDialog taskDialog = BoundPage.BoundTaskDialog!;
+                    TaskDialog taskDialog = BoundPage.BoundDialog!;
 
                     // Check if we need to switch between a marquee and a
                     // non-marquee bar.
@@ -161,16 +164,19 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets the minimum value of the range of the control.
+        ///   Gets or sets the minimum value of the range of the control.
         /// </summary>
         /// <value>
-        /// The minimum value of the range. The default is <c>0</c>.
+        ///   The minimum value of the range. The default is <c>0</c>.
         /// </value>
         /// <remarks>
-        /// This value is only used if the progress bar is not a marquee progress bar (as defined
-        /// by the <see cref="State"/> property).
-        /// 
-        /// This property can be set while the dialog is shown.
+        /// <para>
+        ///   This value is only used if the progress bar is not a marquee progress bar (as defined
+        ///   by the <see cref="State"/> property).
+        /// </para>
+        /// <para>
+        ///   This property can be set while the dialog is shown.
+        /// </para>
         /// </remarks>
         public int Minimum
         {
@@ -190,7 +196,7 @@ namespace System.Windows.Forms
                 // non-marquee progress bar.
                 if (BoundPage != null && !ProgressBarStateIsMarquee(_state))
                 {
-                    BoundPage.BoundTaskDialog!.SetProgressBarRange(value, _maximum);
+                    BoundPage.BoundDialog!.SetProgressBarRange(value, _maximum);
                 }
 
                 _minimum = value;
@@ -198,16 +204,19 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets the maximum value of the range of the control.
+        ///   Gets or sets the maximum value of the range of the control.
         /// </summary>
         /// <value>
-        /// The maximum value of the range. The default is <c>100</c>.
+        ///   The maximum value of the range. The default is <c>100</c>.
         /// </value>
         /// <remarks>
-        /// This value is only used if the progress bar is not a marquee progress bar (as defined
-        /// by the <see cref="State"/> property).
-        /// 
-        /// This property can be set while the dialog is shown.
+        /// <para>
+        ///   This value is only used if the progress bar is not a marquee progress bar (as defined
+        ///   by the <see cref="State"/> property).
+        /// </para>
+        /// <para>
+        ///   This property can be set while the dialog is shown.
+        /// </para>
         /// </remarks>
         public int Maximum
         {
@@ -227,7 +236,7 @@ namespace System.Windows.Forms
                 // non-marquee progress bar.
                 if (BoundPage != null && !ProgressBarStateIsMarquee(_state))
                 {
-                    BoundPage.BoundTaskDialog!.SetProgressBarRange(_minimum, value);
+                    BoundPage.BoundDialog!.SetProgressBarRange(_minimum, value);
                 }
 
                 _maximum = value;
@@ -235,16 +244,19 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets the current position of the progress bar.
+        ///   Gets or sets the current position of the progress bar.
         /// </summary>
         /// <value>
-        /// The position within the range of the progress bar. The default is <c>0</c>.
+        ///   The position within the range of the progress bar. The default is <c>0</c>.
         /// </value>
         /// <remarks>
-        /// This value is only used if the progress bar is not a marquee progress bar (as defined
-        /// by the <see cref="State"/> property).
-        /// 
-        /// This property can be set while the dialog is shown.
+        /// <para>
+        ///   This value is only used if the progress bar is not a marquee progress bar (as defined
+        ///   by the <see cref="State"/> property).
+        /// </para>
+        /// <para>
+        ///   This property can be set while the dialog is shown.
+        /// </para>
         /// </remarks>
         public int Value
         {
@@ -264,7 +276,7 @@ namespace System.Windows.Forms
                 // non-marquee progress bar.
                 if (BoundPage != null && !ProgressBarStateIsMarquee(_state))
                 {
-                    BoundPage.BoundTaskDialog!.SetProgressBarPosition(value);
+                    BoundPage.BoundDialog!.SetProgressBarPosition(value);
                 }
 
                 _value = value;
@@ -272,18 +284,21 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets or sets the speed of the marquee display of a progress bar.
+        ///   Gets or sets the speed of the marquee display of a progress bar.
         /// </summary>
         /// <value>
-        /// The speed of the marquee display which is the time, in milliseconds, between marquee
-        /// animation updates. If this value is <c>0</c>, the marquee animation is updated every
-        /// 30 milliseconds. The default value is <c>0</c>.
+        ///   The speed of the marquee display which is the time, in milliseconds, between marquee
+        ///   animation updates. If this value is <c>0</c>, the marquee animation is updated every
+        ///   30 milliseconds. The default value is <c>0</c>.
         /// </value>
         /// <remarks>
-        /// This value is only used if the progress bar is a marquee progress bar (as defined
-        /// by the <see cref="State"/> property).
-        /// 
-        /// This property can be set while the dialog is shown.
+        /// <para>
+        ///   This value is only used if the progress bar is a marquee progress bar (as defined
+        ///   by the <see cref="State"/> property).
+        /// </para>
+        /// <para>
+        ///   This property can be set while the dialog is shown.
+        /// </para>
         /// </remarks>
         public int MarqueeSpeed
         {
@@ -351,14 +366,14 @@ namespace System.Windows.Forms
             else if (_state != TaskDialogProgressBarState.MarqueePaused)
             {
                 State = _state;
-                BoundPage!.BoundTaskDialog!.SetProgressBarRange(_minimum, _maximum);
-                BoundPage.BoundTaskDialog.SetProgressBarPosition(_value);
+                BoundPage!.BoundDialog!.SetProgressBarRange(_minimum, _maximum);
+                BoundPage.BoundDialog.SetProgressBarPosition(_value);
 
                 // See comment in property "State" for why we need to set
                 // the position it twice.
                 if (_state != TaskDialogProgressBarState.Normal)
                 {
-                    BoundPage.BoundTaskDialog.SetProgressBarPosition(_value);
+                    BoundPage.BoundDialog.SetProgressBarPosition(_value);
                 }
             }
         }

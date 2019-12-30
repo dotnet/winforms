@@ -327,6 +327,10 @@ namespace System.Windows.Forms
         ///   Gets or sets the <see cref="TaskDialogPage"/> instance that contains 
         ///   the contents which this task dialog will display.
         /// </summary>
+        /// <value>
+        ///   The page instance that contains the contents which this task dialog will
+        ///   display.
+        /// </value>
         /// <remarks>
         /// <para>
         ///   When setting this property while the task dialog is displayed, its contents
@@ -385,8 +389,8 @@ namespace System.Windows.Forms
         ///   Gets or sets the position of the task dialog when it is shown.
         /// </summary>
         /// <value>
-        ///   The position of the task dialog
-        ///   when it is shown. The default value is <see cref="TaskDialogStartupLocation.CenterParent"/>.
+        ///   The position of the task dialog when it is shown. The default value is
+        ///   <see cref="TaskDialogStartupLocation.CenterParent"/>.
         /// </value>
         public TaskDialogStartupLocation StartupLocation
         {
@@ -601,8 +605,8 @@ namespace System.Windows.Forms
         /// </summary>
         /// <remarks>
         /// <para>
-        ///   Showing the dialog will bind the <see cref="Page"/> and its
-        ///   controls until this method returns.
+        ///   Showing the dialog will bind the <see cref="Page"/> and its controls until
+        ///   this method returns or the dialog is navigated to a different page.
         /// </para>
         /// </remarks>
         /// <returns>The <see cref="TaskDialogButton"/> which was clicked by the
@@ -614,8 +618,8 @@ namespace System.Windows.Forms
         /// </summary>
         /// <remarks>
         /// <para>
-        ///   Showing the dialog will bind the <see cref="Page"/> and its
-        ///   controls until this method returns.
+        ///   Showing the dialog will bind the <see cref="Page"/> and its controls until
+        ///   this method returns or the dialog is navigated to a different page.
         /// </para>
         /// </remarks>
         /// <param name="owner">The owner window, or <see langword="null"/> to show a modeless dialog.</param>
@@ -629,8 +633,8 @@ namespace System.Windows.Forms
         /// </summary>
         /// <remarks>
         /// <para>
-        ///   Showing the dialog will bind the <see cref="Page"/> and its
-        ///   controls until this method returns.
+        ///   Showing the dialog will bind the <see cref="Page"/> and its controls until
+        ///   this method returns or the dialog is navigated to a different page.
         /// </para>
         /// </remarks>
         /// <param name="hwndOwner">
@@ -797,8 +801,8 @@ namespace System.Windows.Forms
                     // where a 'this' pointer isn't considered live in an instance method
                     // unless you read a value from the instance.
                     //
-                    // Note: As this is a static field, in theory we would not need to
-                    // call GC.KeepAlive() here, but we still do it to be safe.
+                    // Note: As this is a static field, the call to GC.KeepAlive() might be
+                    // superfluous here, but we still do it to be safe.
                     GC.KeepAlive(s_callbackProcDelegate);
                 }
             }
@@ -897,7 +901,7 @@ namespace System.Windows.Forms
                 throw new ArgumentOutOfRangeException(nameof(max));
             }
 
-            // Note: The MAKELPARAM macro converts the value to an unsigned int
+            // The MAKELPARAM macro converts the value to an unsigned int
             // before converting it to a pointer, so we should do the same.
             // However, this means we cannot convert the value directly to an
             // IntPtr; instead we need to first convert it to a pointer type
@@ -989,25 +993,22 @@ namespace System.Windows.Forms
             radioButtonID,
             IntPtr.Zero);
 
-        internal void UpdateTextElement(ComCtl32.TDE element, string? text)
+        internal unsafe void UpdateTextElement(ComCtl32.TDE element, string? text)
         {
             DenyIfDialogNotUpdatable();
 
-            // Note: Instead of null, we must specify the empty string; otherwise
-            // the update would be ignored.
-            IntPtr textPtr = Marshal.StringToHGlobalUni(text ?? string.Empty);
-            try
+            // Instead of null, we must specify the empty string; otherwise the update
+            // would be ignored.
+            text ??= string.Empty;
+
+            // We can just pin the string because sending the message should take
+            // a very short time only and the string will not be modified.
+            fixed (char* textPtr = text)
             {
                 // Note: SetElementText will resize the dialog while UpdateElementText
                 // will not (which would lead to clipped controls), so we use the
                 // former.
-                SendTaskDialogMessage(ComCtl32.TDM.SET_ELEMENT_TEXT, (int)element, textPtr);
-            }
-            finally
-            {
-                // We can now free the memory because SendMessage does not return
-                // until the message has been processed.
-                Marshal.FreeHGlobal(textPtr);
+                SendTaskDialogMessage(ComCtl32.TDM.SET_ELEMENT_TEXT, (int)element, (IntPtr)textPtr);
             }
         }
 
@@ -1028,7 +1029,7 @@ namespace System.Windows.Forms
 
         internal void UpdateCaption(string? caption)
         {
-            // Note: We must not allow to change the caption if we are currently
+            // We must not allow to change the caption if we are currently
             // waiting for a TDN_NAVIGATED notification, because in that case
             // the task dialog will already have set the caption from the new page.
             DenyIfDialogNotUpdatable();
@@ -1410,7 +1411,7 @@ namespace System.Windows.Forms
                     SR.TaskDialogCannotNavigateWithinNavigationEventHandler);
             }
 
-            // Don't allow navigation of the dialog window is already closed (and
+            // Don't allow navigation if the dialog window is already closed (and
             // therefore has set a result button), because that would result in
             // weird/undefined behavior (e.g. returning IDCANCEL (2) as button
             // result even though a different button has already been set as result).

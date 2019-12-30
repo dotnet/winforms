@@ -73,7 +73,7 @@ namespace System.Windows.Forms
                 // Check if we can update the button.
                 if (CanUpdate())
                 {
-                    BoundPage!.BoundTaskDialog!.SetRadioButtonEnabled(_radioButtonID, value);
+                    BoundPage!.BoundDialog!.SetRadioButtonEnabled(_radioButtonID, value);
                 }
 
                 _enabled = value;
@@ -201,7 +201,7 @@ namespace System.Windows.Forms
                 //
                 // See also:
                 // /Documentation/src/System/Windows/Forms/TaskDialog/Issue_RadioButton_WeirdBehavior.md
-                if (BoundPage.BoundTaskDialog!.RadioButtonClickedStackCount > 0)
+                if (BoundPage.BoundDialog!.RadioButtonClickedStackCount > 0)
                 {
                     throw new InvalidOperationException(string.Format(
                         SR.TaskDialogCannotSetRadioButtonCheckedWithinCheckedChangedEvent,
@@ -216,7 +216,7 @@ namespace System.Windows.Forms
                 _ignoreRadioButtonClickedNotification = true;
                 try
                 {
-                    BoundPage.BoundTaskDialog.ClickRadioButton(_radioButtonID);
+                    BoundPage.BoundDialog.ClickRadioButton(_radioButtonID);
                 }
                 finally
                 {
@@ -232,10 +232,10 @@ namespace System.Windows.Forms
                 // raising two events (Unchecked+Checked), and when the
                 // second event is called, the dialog might already be
                 // navigated or another radio button may have been checked.
-                TaskDialog boundTaskDialog = BoundPage.BoundTaskDialog;
+                TaskDialog boundDialog = BoundPage.BoundDialog;
                 checked
                 {
-                    boundTaskDialog.RadioButtonClickedStackCount++;
+                    boundDialog.RadioButtonClickedStackCount++;
                 }
                 try
                 {
@@ -243,7 +243,7 @@ namespace System.Windows.Forms
                 }
                 finally
                 {
-                    boundTaskDialog.RadioButtonClickedStackCount--;
+                    boundDialog.RadioButtonClickedStackCount--;
                 }
             }
         }

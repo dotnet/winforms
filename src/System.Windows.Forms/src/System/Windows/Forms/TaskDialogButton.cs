@@ -85,7 +85,7 @@ namespace System.Windows.Forms
                 // Check if we can update the button.
                 if (CanUpdate())
                 {
-                    BoundPage!.BoundTaskDialog!.SetButtonEnabled(ButtonID, value);
+                    BoundPage!.BoundDialog!.SetButtonEnabled(ButtonID, value);
                 }
 
                 _enabled = value;
@@ -116,7 +116,7 @@ namespace System.Windows.Forms
 
                 if (CanUpdate())
                 {
-                    BoundPage!.BoundTaskDialog!.SetButtonElevationRequiredState(ButtonID, value);
+                    BoundPage!.BoundDialog!.SetButtonElevationRequiredState(ButtonID, value);
                 }
 
                 _elevationRequired = value;
@@ -178,7 +178,7 @@ namespace System.Windows.Forms
             // Note: We allow a click even if the button is not visible/created.
             DenyIfNotBoundOrWaitingForInitialization();
 
-            BoundPage!.BoundTaskDialog!.ClickButton(ButtonID);
+            BoundPage!.BoundDialog!.ClickButton(ButtonID);
         }
 
         internal bool HandleButtonClicked()

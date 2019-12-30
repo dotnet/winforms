@@ -1847,7 +1847,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                             else
                             {
                                 Rectangle r = GetRectangle(row, rowValue ? ROWVALUE : ROWLABEL);
-                                return (r.Y << 16 | (r.X & 0xFFFF));
+                                return PARAM.ToInt(r.X, r.Y);
                             }
                         }
                         else
@@ -3234,7 +3234,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     Math.Abs(screenPoint.Y - rowSelectPos.Y) < SystemInformation.DoubleClickSize.Height)
                 {
                     DoubleClickRow(selectedRow, false, ROWVALUE);
-                    Edit.SendMessage(WindowMessages.WM_LBUTTONUP, 0, (int)(me.Y << 16 | (me.X & 0xFFFF)));
+                    Edit.SendMessage(WindowMessages.WM_LBUTTONUP, 0, PARAM.FromLowHigh(me.X, me.Y));
                     Edit.SelectAll();
                 }
                 rowSelectPos = Point.Empty;
@@ -4183,8 +4183,8 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 Point editPoint = PointToScreen(lastMouseDown);
                 editPoint = Edit.PointToClient(editPoint);
-                Edit.SendMessage(WindowMessages.WM_LBUTTONDOWN, 0, (int)(editPoint.Y << 16 | (editPoint.X & 0xFFFF)));
-                Edit.SendMessage(WindowMessages.WM_LBUTTONUP, 0, (int)(editPoint.Y << 16 | (editPoint.X & 0xFFFF)));
+                Edit.SendMessage(WindowMessages.WM_LBUTTONDOWN, 0, PARAM.FromLowHigh(editPoint.X, editPoint.Y));
+                Edit.SendMessage(WindowMessages.WM_LBUTTONUP, 0, PARAM.FromLowHigh(editPoint.X, editPoint.Y));
             }
 
             if (setSelectTime)
@@ -4551,7 +4551,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             RECT rect = itemRect;
 
-            ToolTip.SendMessage((int)User32.WindowMessage.TTM_ADJUSTRECT, 1, ref rect);
+            User32.SendMessageW(ToolTip, User32.WindowMessage.TTM_ADJUSTRECT, (IntPtr)1, ref rect);
 
             // now offset it back to screen coords
             Point locPoint = parent.PointToScreen(new Point(rect.left, rect.top));
@@ -5778,7 +5778,8 @@ namespace System.Windows.Forms.PropertyGridInternal
             while (User32.PeekMessageW(ref mouseMsg,
                 IntPtr.Zero,
                 (User32.WindowMessage)WindowMessages.WM_MOUSEFIRST,
-                (User32.WindowMessage)WindowMessages.WM_MOUSELAST).IsTrue())
+                (User32.WindowMessage)WindowMessages.WM_MOUSELAST,
+                User32.PM.REMOVE).IsTrue())
             {
                 // No-op.
             }
@@ -5860,7 +5861,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             // which usually discards the message by returning 1 to GetMessage(). But this won't occur until after the
             // error dialog gets closed, which is much too late.
             var mouseMsg = new User32.MSG();
-            while (User32.PeekMessageW(ref mouseMsg, msgMin: User32.WM_MOUSEFIRST, msgMax: User32.WM_MOUSELAST).IsTrue())
+            while (User32.PeekMessageW(ref mouseMsg, IntPtr.Zero, User32.WM_MOUSEFIRST, User32.WM_MOUSELAST, User32.PM.REMOVE).IsTrue())
             {
                 // No-op.
             }
@@ -6208,12 +6209,12 @@ namespace System.Windows.Forms.PropertyGridInternal
                 case WindowMessages.WM_IME_STARTCOMPOSITION:
                     Edit.Focus();
                     Edit.Clear();
-                    UnsafeNativeMethods.PostMessage(new HandleRef(Edit, Edit.Handle), WindowMessages.WM_IME_STARTCOMPOSITION, 0, 0);
+                    User32.PostMessageW(Edit, User32.WindowMessage.WM_IME_STARTCOMPOSITION);
                     return;
 
                 case WindowMessages.WM_IME_COMPOSITION:
                     Edit.Focus();
-                    UnsafeNativeMethods.PostMessage(new HandleRef(Edit, Edit.Handle), WindowMessages.WM_IME_COMPOSITION, m.WParam, m.LParam);
+                    User32.PostMessageW(Edit, User32.WindowMessage.WM_IME_COMPOSITION, m.WParam, m.LParam);
                     return;
 
                 case WindowMessages.WM_GETDLGCODE:
@@ -7017,14 +7018,14 @@ namespace System.Windows.Forms.PropertyGridInternal
                     SetState(States.Modal, true);
                     Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "DropDownHolder:WM_ACTIVATE()");
                     IntPtr activatedWindow = (IntPtr)m.LParam;
-                    if (Visible && NativeMethods.Util.LOWORD(m.WParam) == NativeMethods.WA_INACTIVE && !OwnsWindow(activatedWindow))
+                    if (Visible && PARAM.LOWORD(m.WParam) == (int)User32.WA.INACTIVE && !OwnsWindow(activatedWindow))
                     {
                         gridView.CloseDropDownInternal(false);
                         return;
                     }
 
                     // prevent the IMsoComponentManager active code from getting fired.
-                    //Active = ((int)m.WParam & 0x0000FFFF) != NativeMethods.WA_INACTIVE;
+                    //Active = ((int)m.WParam & 0x0000FFFF) != User32.WA.INACTIVE;
                     //return;
                 }
                 else if (m.Msg == WindowMessages.WM_CLOSE)
@@ -7624,7 +7625,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     Focus();
                     SelectAll();
-                    UnsafeNativeMethods.PostMessage(new HandleRef(this, Handle), WindowMessages.WM_CHAR, (IntPtr)keyChar, IntPtr.Zero);
+                    User32.PostMessageW(this, User32.WindowMessage.WM_CHAR, (IntPtr)keyChar);
                 }
             }
 

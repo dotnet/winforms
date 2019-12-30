@@ -295,10 +295,10 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Implements IOleObject::Advise
             /// </summary>
-            internal int Advise(IAdviseSink pAdvSink)
+            internal uint Advise(IAdviseSink pAdvSink)
             {
                 _adviseList.Add(pAdvSink);
-                return _adviseList.Count;
+                return (uint)_adviseList.Count;
             }
 
             /// <summary>
@@ -357,8 +357,8 @@ namespace System.Windows.Forms
                                 IntPtr hwndMap = lpmsg->hwnd == IntPtr.Zero ? hwndParent : lpmsg->hwnd;
                                 var pt = new Point
                                 {
-                                    X = NativeMethods.Util.LOWORD(lpmsg->lParam),
-                                    Y = NativeMethods.Util.HIWORD(lpmsg->lParam)
+                                    X = PARAM.LOWORD(lpmsg->lParam),
+                                    Y = PARAM.HIWORD(lpmsg->lParam)
                                 };
                                 User32.MapWindowPoints(hwndMap, new HandleRef(_control, _control.Handle), ref pt, 1);
 
@@ -372,7 +372,7 @@ namespace System.Windows.Forms
                                     target = realTarget;
                                 }
 
-                                lpmsg->lParam = NativeMethods.Util.MAKELPARAM(pt.X, pt.Y);
+                                lpmsg->lParam = PARAM.FromLowHigh(pt.X, pt.Y);
                             }
 
 #if DEBUG
@@ -418,21 +418,19 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Implements IViewObject2::Draw.
             /// </summary>
-            internal unsafe void Draw(
+            internal unsafe HRESULT Draw(
                 Ole32.DVASPECT dwDrawAspect,
                 int lindex,
                 IntPtr pvAspect,
                 Ole32.DVTARGETDEVICE* ptd,
                 IntPtr hdcTargetDev,
                 IntPtr hdcDraw,
-                NativeMethods.COMRECT prcBounds,
-                NativeMethods.COMRECT lprcWBounds,
+                RECT* prcBounds,
+                RECT* lprcWBounds,
                 IntPtr pfnContinue,
-                int dwContinue)
+                uint dwContinue)
             {
-
                 // support the aspects required for multi-pass drawing
-                //
                 switch (dwDrawAspect)
                 {
                     case Ole32.DVASPECT.CONTENT:
@@ -440,8 +438,7 @@ namespace System.Windows.Forms
                     case Ole32.DVASPECT.TRANSPARENT:
                         break;
                     default:
-                        ThrowHr(HRESULT.DV_E_DVASPECT);
-                        break;
+                        return HRESULT.DV_E_DVASPECT;
                 }
 
                 // We can paint to an enhanced metafile, but not all GDI / GDI+ is
@@ -451,10 +448,9 @@ namespace System.Windows.Forms
                 Gdi32.ObjectType hdcType = Gdi32.GetObjectType(hdcDraw);
                 if (hdcType == Gdi32.ObjectType.OBJ_METADC)
                 {
-                    ThrowHr(HRESULT.VIEW_E_DRAW);
+                    return HRESULT.VIEW_E_DRAW;
                 }
 
-                RECT rc;
                 var pVp = new Point();
                 var pW = new Point();
                 var sWindowExt = new Size();
@@ -469,7 +465,7 @@ namespace System.Windows.Forms
                 // if they didn't give us a rectangle, just copy over ours
                 if (prcBounds != null)
                 {
-                    rc = new RECT(prcBounds.left, prcBounds.top, prcBounds.right, prcBounds.bottom);
+                    RECT rc = *prcBounds;
 
                     // To draw to a given rect, we scale the DC in such a way as to
                     // make the values it takes match our own happy MM_TEXT.  Then,
@@ -514,12 +510,14 @@ namespace System.Windows.Forms
                         Gdi32.SetMapMode(hdcDraw, iMode);
                     }
                 }
+
+                return HRESULT.S_OK;
             }
 
             /// <summary>
             ///  Returns a new verb enumerator.
             /// </summary>
-            internal static HRESULT EnumVerbs(out UnsafeNativeMethods.IEnumOLEVERB e)
+            internal static HRESULT EnumVerbs(out Ole32.IEnumOLEVERB ppEnumOleVerb)
             {
                 if (s_axVerbs == null)
                 {
@@ -549,7 +547,7 @@ namespace System.Windows.Forms
                     };
                 }
 
-                e = new ActiveXVerbEnum(s_axVerbs);
+                ppEnumOleVerb = new ActiveXVerbEnum(s_axVerbs);
                 return HRESULT.S_OK;
             }
 
@@ -920,7 +918,10 @@ namespace System.Windows.Forms
                     // If it doesn't, that means that the host
                     // won't reflect messages back to us.
                     HWNDParent = hwndParent;
-                    User32.SetParent(new HandleRef(_control, _control.Handle), hwndParent);
+                    if (User32.SetParent(new HandleRef(_control, _control.Handle), hwndParent) == IntPtr.Zero)
+                    {
+                        throw new Win32Exception(Marshal.GetLastWin32Error(), SR.Win32SetParentFailed);
+                    }
 
                     // Now create our handle if it hasn't already been done.
                     _control.CreateControl();
@@ -2392,19 +2393,21 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Implements IOleObject::Unadvise
             /// </summary>
-            internal void Unadvise(int dwConnection)
+            internal HRESULT Unadvise(uint dwConnection)
             {
-                if (dwConnection > _adviseList.Count || _adviseList[dwConnection - 1] == null)
+                if (dwConnection > _adviseList.Count || _adviseList[(int)dwConnection - 1] == null)
                 {
-                    ThrowHr(HRESULT.OLE_E_NOCONNECTION);
+                    return HRESULT.OLE_E_NOCONNECTION;
                 }
 
-                IAdviseSink sink = (IAdviseSink)_adviseList[dwConnection - 1];
-                _adviseList.RemoveAt(dwConnection - 1);
+                IAdviseSink sink = (IAdviseSink)_adviseList[(int)dwConnection - 1];
+                _adviseList.RemoveAt((int)dwConnection - 1);
                 if (sink != null && Marshal.IsComObject(sink))
                 {
                     Marshal.ReleaseComObject(sink);
                 }
+
+                return HRESULT.S_OK;
             }
 
             /// <summary>

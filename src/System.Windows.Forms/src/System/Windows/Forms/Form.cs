@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -1063,11 +1063,6 @@ namespace System.Windows.Forms
 
                 dialogResult = value;
             }
-        }
-
-        internal override bool HasMenu
-        {
-            get => false;
         }
 
         /// <summary>
@@ -3167,7 +3162,7 @@ namespace System.Windows.Forms
         private Size ComputeWindowSize(Size clientSize, int style, int exStyle)
         {
             RECT result = new RECT(0, 0, clientSize.Width, clientSize.Height);
-            AdjustWindowRectEx(ref result, style, HasMenu, exStyle);
+            AdjustWindowRectEx(ref result, style, false, exStyle);
             return new Size(result.right - result.left, result.bottom - result.top);
         }
 
@@ -3851,9 +3846,8 @@ namespace System.Windows.Forms
                 {
                     Screen desktop = Screen.FromHandle(ownerHandle);
                     Rectangle screenRect = desktop.WorkingArea;
-                    RECT ownerRect = new RECT();
-
-                    UnsafeNativeMethods.GetWindowRect(new HandleRef(null, ownerHandle), ref ownerRect);
+                    var ownerRect = new RECT();
+                    User32.GetWindowRect(ownerHandle, ref ownerRect);
 
                     p.X = (ownerRect.left + ownerRect.right - s.Width) / 2;
                     if (p.X < screenRect.X)
@@ -4475,9 +4469,9 @@ namespace System.Windows.Forms
             DefWndProc(ref m);
 
             Size desiredSize = new Size();
-            if (OnGetDpiScaledSize(_deviceDpi, NativeMethods.Util.SignedLOWORD(m.WParam), ref desiredSize))
+            if (OnGetDpiScaledSize(_deviceDpi, PARAM.SignedLOWORD(m.WParam), ref desiredSize))
             {
-                m.Result = (IntPtr)(unchecked((Size.Height & 0xFFFF) << 16) | (Size.Width & 0xFFFF));
+                m.Result = PARAM.FromLowHigh(Size.Width, Size.Height);
             }
             else
             {
@@ -4807,21 +4801,18 @@ namespace System.Windows.Forms
             }
 
             EnumThreadWindowsCallback etwcb = null;
-            SafeNativeMethods.EnumThreadWindowsCallback callback = null;
+            User32.EnumThreadWindowsCallback callback = null;
             if (IsHandleCreated)
             {
                 // First put all the owned windows into a list
                 etwcb = new EnumThreadWindowsCallback();
-                if (etwcb != null)
-                {
-                    callback = new SafeNativeMethods.EnumThreadWindowsCallback(etwcb.Callback);
-                    User32.EnumThreadWindows(
-                        Kernel32.GetCurrentThreadId(),
-                        new User32.EnumThreadWindowsCallback(callback),
-                        this);
-                    // Reset the owner of the windows in the list
-                    etwcb.ResetOwners();
-                }
+                callback = etwcb.Callback;
+                User32.EnumThreadWindows(
+                    Kernel32.GetCurrentThreadId(),
+                    callback,
+                    this);
+                // Reset the owner of the windows in the list
+                etwcb.ResetOwners();
             }
 
             base.RecreateHandleCore();
@@ -6205,7 +6196,7 @@ namespace System.Windows.Forms
         private void WmActivate(ref Message m)
         {
             Application.FormActivated(Modal, true); // inform MsoComponentManager we're active
-            Active = NativeMethods.Util.LOWORD(m.WParam) != NativeMethods.WA_INACTIVE;
+            Active = PARAM.LOWORD(m.WParam) != (int)User32.WA.INACTIVE;
             Application.FormActivated(Modal, Active); // inform MsoComponentManager we're active
         }
 
@@ -6579,8 +6570,8 @@ namespace System.Windows.Forms
         {
             if (formState[FormStateRenderSizeGrip] != 0)
             {
-                int x = NativeMethods.Util.SignedLOWORD(m.LParam);
-                int y = NativeMethods.Util.SignedHIWORD(m.LParam);
+                int x = PARAM.SignedLOWORD(m.LParam);
+                int y = PARAM.SignedHIWORD(m.LParam);
 
                 // Convert to client coordinates
                 var pt = new Point(x, y);
@@ -6633,7 +6624,7 @@ namespace System.Windows.Forms
         {
             bool callDefault = true;
 
-            User32.SC sc = (User32.SC)(NativeMethods.Util.LOWORD(m.WParam) & 0xFFF0);
+            User32.SC sc = (User32.SC)(PARAM.LOWORD(m.WParam) & 0xFFF0);
             switch (sc)
             {
                 case User32.SC.CLOSE:
@@ -6664,7 +6655,7 @@ namespace System.Windows.Forms
                     break;
             }
 
-            if (Command.DispatchID(NativeMethods.Util.LOWORD(m.WParam)))
+            if (Command.DispatchID(PARAM.LOWORD(m.WParam)))
             {
                 callDefault = false;
             }
@@ -6803,7 +6794,7 @@ namespace System.Windows.Forms
                     }
                     break;
                 case WindowMessages.WM_GETDPISCALEDSIZE:
-                    Debug.Assert(NativeMethods.Util.SignedLOWORD(m.WParam) == NativeMethods.Util.SignedHIWORD(m.WParam), "Non-square pixels!");
+                    Debug.Assert(PARAM.SignedLOWORD(m.WParam) == PARAM.SignedHIWORD(m.WParam), "Non-square pixels!");
                     WmGetDpiScaledSize(ref m);
                     break;
                 case WindowMessages.WM_DPICHANGED:

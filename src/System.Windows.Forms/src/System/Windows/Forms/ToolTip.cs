@@ -203,7 +203,7 @@ namespace System.Windows.Forms
                 {
                     cp.Parent = TopLevelControl.Handle;
                 }
-                cp.ClassName = NativeMethods.TOOLTIPS_CLASS;
+                cp.ClassName = ComCtl32.WindowClasses.TOOLTIPS_CLASS;
                 if (_showAlways)
                 {
                     cp.Style = NativeMethods.TTS_ALWAYSTIP;
@@ -304,7 +304,7 @@ namespace System.Windows.Forms
                 (windowControl.ShowParams & (User32.SW)0xF) != User32.SW.SHOWNOACTIVATE)
             {
                 IntPtr hWnd = User32.GetActiveWindow();
-                IntPtr rootHwnd = UnsafeNativeMethods.GetAncestor(new HandleRef(window, window.Handle), NativeMethods.GA_ROOT);
+                IntPtr rootHwnd = User32.GetAncestor(windowControl, User32.GA.ROOT);
                 if (hWnd != rootHwnd)
                 {
                     TipInfo tt = (TipInfo)_tools[windowControl];
@@ -767,7 +767,7 @@ namespace System.Windows.Forms
 
                 if (SystemInformation.HighContrast)
                 {
-                    SafeNativeMethods.SetWindowTheme(Handle, "", "");
+                    UxTheme.SetWindowTheme(Handle, string.Empty, string.Empty);
                 }
             }
             finally
@@ -1060,7 +1060,7 @@ namespace System.Windows.Forms
             if (baseVar != null && baseVar.IsActiveX)
             {
                 // Find the matching HWnd matching the ScreenCoord and find if the Control has a Tooltip.
-                IntPtr hwndControl = UnsafeNativeMethods.WindowFromPoint(screenCoords);
+                IntPtr hwndControl = User32.WindowFromPoint(screenCoords);
                 if (hwndControl != IntPtr.Zero)
                 {
                     Control currentControl = Control.FromHandle(hwndControl);
@@ -1318,7 +1318,7 @@ namespace System.Windows.Forms
             if (window is Control associatedControl)
             {
                 var r = new RECT();
-                UnsafeNativeMethods.GetWindowRect(new HandleRef(associatedControl, associatedControl.Handle), ref r);
+                User32.GetWindowRect(associatedControl, ref r);
 
                 Cursor currentCursor = Cursor.Current;
                 Point cursorLocation = Cursor.Position;
@@ -1427,7 +1427,7 @@ namespace System.Windows.Forms
             {
                 // Set the ToolTips.
                 var r = new RECT();
-                UnsafeNativeMethods.GetWindowRect(new HandleRef(window, Control.GetSafeHandle(window)), ref r);
+                User32.GetWindowRect(new HandleRef(window, Control.GetSafeHandle(window)), ref r);
                 int pointX = r.left + point.X;
                 int pointY = r.top + point.Y;
 
@@ -1454,7 +1454,7 @@ namespace System.Windows.Forms
             {
                 // Set the ToolTips.
                 var r = new RECT();
-                UnsafeNativeMethods.GetWindowRect(new HandleRef(window, Control.GetSafeHandle(window)), ref r);
+                User32.GetWindowRect(new HandleRef(window, Control.GetSafeHandle(window)), ref r);
                 int pointX = r.left + point.X;
                 int pointY = r.top + point.Y;
                 SetTrackPosition(pointX, pointY);
@@ -1476,7 +1476,7 @@ namespace System.Windows.Forms
             if (IsWindowActive(window))
             {
                 var r = new RECT();
-                UnsafeNativeMethods.GetWindowRect(new HandleRef(window, Control.GetSafeHandle(window)), ref r);
+                User32.GetWindowRect(new HandleRef(window, Control.GetSafeHandle(window)), ref r);
                 int pointX = r.left + x;
                 int pointY = r.top + y;
                 SetTrackPosition(pointX, pointY);
@@ -1501,7 +1501,7 @@ namespace System.Windows.Forms
             if (IsWindowActive(window))
             {
                 var r = new RECT();
-                UnsafeNativeMethods.GetWindowRect(new HandleRef(window, Control.GetSafeHandle(window)), ref r);
+                User32.GetWindowRect(new HandleRef(window, Control.GetSafeHandle(window)), ref r);
                 int pointX = r.left + x;
                 int pointY = r.top + y;
                 SetTrackPosition(pointX, pointY);
@@ -1566,8 +1566,8 @@ namespace System.Windows.Forms
                 return false;
             }
 
-            int width = NativeMethods.Util.LOWORD(result);
-            int height = NativeMethods.Util.HIWORD(result);
+            int width = PARAM.LOWORD(result);
+            int height = PARAM.HIWORD(result);
             bubbleSize = new Size(width, height);
             return true;
         }
@@ -2011,10 +2011,8 @@ namespace System.Windows.Forms
 
             // Reposition the tooltip when its about to be shown since the tooltip can go out of screen
             // working area bounds Reposition would check the bounds for us.
-
             var r = new RECT();
-            UnsafeNativeMethods.GetWindowRect(new HandleRef(this, Handle), ref r);
-
+            User32.GetWindowRect(this, ref r);
             if (tt.Position != Point.Empty)
             {
                 Reposition(tt.Position, r.Size);
@@ -2031,7 +2029,7 @@ namespace System.Windows.Forms
                 return;
 
             var r = new RECT();
-            UnsafeNativeMethods.GetWindowRect(new HandleRef(window, Control.GetSafeHandle(window)), ref r);
+            User32.GetWindowRect(new HandleRef(window, Control.GetSafeHandle(window)), ref r);
             Point cursorLocation = Cursor.Position;
 
             // Do not activate the mouse if its within the bounds of the
@@ -2064,7 +2062,7 @@ namespace System.Windows.Forms
 
             // Get the bounds.
             var r = new RECT();
-            UnsafeNativeMethods.GetWindowRect(new HandleRef(this, Handle), ref r);
+            User32.GetWindowRect(this, ref r);
 
             Control toolControl = window as Control;
 
@@ -2087,7 +2085,7 @@ namespace System.Windows.Forms
             // any of the tooltip attributes/properties could have been updated
             // during the popup event; in which case the size of the tooltip is
             // affected. e.ToolTipSize is respected over r.Size
-            UnsafeNativeMethods.GetWindowRect(new HandleRef(this, Handle), ref r);
+            User32.GetWindowRect(this, ref r);
             currentTooltipSize = (e.ToolTipSize == currentTooltipSize) ? r.Size : e.ToolTipSize;
 
             if (IsBalloon)

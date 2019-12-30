@@ -297,44 +297,6 @@ namespace System.Windows.Forms.Tests
             Assert.True(cont.CanProcessMnemonic());
         }
 
-        [Fact]
-        public void Control_CanSelectCore()
-        {
-            var cont = new Control();
-
-            // act and assert
-            Assert.True(cont.CanSelectCore());
-        }
-
-        [Fact]
-        public void Control_CanSelectCoreNotEnabled()
-        {
-            var cont = new Control
-            {
-                Enabled = false
-            };
-
-            // act and assert
-            Assert.False(cont.CanSelectCore());
-        }
-
-        [Fact]
-        public void Control_CanSelectCoreParentNotEnabled()
-        {
-            var cont = new Control
-            {
-                Enabled = true
-            };
-            var parent = new Control
-            {
-                Enabled = false
-            };
-            cont.AssignParent(parent);
-
-            // act and assert
-            Assert.False(cont.CanSelectCore());
-        }
-
         /// <summary>
         ///  Data for the CreateControlInternal test
         /// </summary>

@@ -869,7 +869,7 @@ namespace System.Windows.Forms.Design
                     int oldTextColor = Gdi32.SetTextColor(dc, ColorTranslator.ToWin32(SystemColors.ControlLightLight));
                     int oldBackColor = Gdi32.SetBkColor(dc, ColorTranslator.ToWin32(SystemColors.Control));
 
-                    SafeNativeMethods.PatBlt(new HandleRef(null, dc), rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top, NativeMethods.PATCOPY);
+                    Gdi32.PatBlt(dc, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top, Gdi32.ROP.PATCOPY);
                     Gdi32.SetTextColor(dc, oldTextColor);
                     Gdi32.SetBkColor(dc, oldBackColor);
                 }
