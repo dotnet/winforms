@@ -34,7 +34,6 @@ namespace System.Windows.Forms
         public const int cmb4 = 0x0473;
 
         public const int CW_USEDEFAULT = (unchecked((int)0x80000000)),
-        CWP_SKIPINVISIBLE = 0x0001,
         COLOR_WINDOW = 5,
         CB_ERR = (-1),
         CBN_SELCHANGE = 1,
