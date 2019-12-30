@@ -605,8 +605,8 @@ namespace System.Windows.Forms
         /// </summary>
         /// <remarks>
         /// <para>
-        ///   Showing the dialog will bind the <see cref="Page"/> and its
-        ///   controls until this method returns.
+        ///   Showing the dialog will bind the <see cref="Page"/> and its controls until
+        ///   this method returns or the dialog is navigated to a different page.
         /// </para>
         /// </remarks>
         /// <returns>The <see cref="TaskDialogButton"/> which was clicked by the
@@ -618,8 +618,8 @@ namespace System.Windows.Forms
         /// </summary>
         /// <remarks>
         /// <para>
-        ///   Showing the dialog will bind the <see cref="Page"/> and its
-        ///   controls until this method returns.
+        ///   Showing the dialog will bind the <see cref="Page"/> and its controls until
+        ///   this method returns or the dialog is navigated to a different page.
         /// </para>
         /// </remarks>
         /// <param name="owner">The owner window, or <see langword="null"/> to show a modeless dialog.</param>
@@ -633,8 +633,8 @@ namespace System.Windows.Forms
         /// </summary>
         /// <remarks>
         /// <para>
-        ///   Showing the dialog will bind the <see cref="Page"/> and its
-        ///   controls until this method returns.
+        ///   Showing the dialog will bind the <see cref="Page"/> and its controls until
+        ///   this method returns or the dialog is navigated to a different page.
         /// </para>
         /// </remarks>
         /// <param name="hwndOwner">
