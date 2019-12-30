@@ -34,7 +34,7 @@ namespace System.Windows.Forms
         ///   which also allows you to prevent the dialog from closing.
         /// </para>
         /// </remarks>
-        public event EventHandler<EventArgs>? Click;
+        public event EventHandler? Click;
 
         // Disallow inheritance by specifying a private protected constructor.
         private protected TaskDialogButton()
