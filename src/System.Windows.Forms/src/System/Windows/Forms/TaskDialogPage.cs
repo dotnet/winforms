@@ -70,6 +70,10 @@ namespace System.Windows.Forms
         /// <para>
         ///   This will happen after showing or navigating the dialog.
         /// </para>
+        /// <para>
+        ///   When this event occurs, the <see cref="BoundDialog"/> property will return
+        ///   the <see cref="TaskDialog"/> instance which this page is bound to.
+        /// </para>
         /// </remarks>
         public event EventHandler? Created;
 
@@ -81,6 +85,10 @@ namespace System.Windows.Forms
         /// <remarks>
         /// <para>
         ///   This will happen when closing or navigating the dialog.
+        /// </para>
+        /// <para>
+        ///   After this event occurs, the <see cref="BoundDialog"/> property will return
+        ///   <see langword="null"/>.
         /// </para>
         /// </remarks>
         public event EventHandler? Destroyed;
@@ -290,7 +298,7 @@ namespace System.Windows.Forms
 
                 // Note: We set the field values after calling the method to ensure
                 // it still has the previous value it the method throws.
-                BoundTaskDialog?.UpdateCaption(value);
+                BoundDialog?.UpdateCaption(value);
 
                 _caption = value;
             }
@@ -312,7 +320,7 @@ namespace System.Windows.Forms
             {
                 DenyIfWaitingForInitialization();
 
-                BoundTaskDialog?.UpdateTextElement(ComCtl32.TDE.MAIN_INSTRUCTION, value);
+                BoundDialog?.UpdateTextElement(ComCtl32.TDE.MAIN_INSTRUCTION, value);
 
                 _mainInstruction = value;
             }
@@ -334,7 +342,7 @@ namespace System.Windows.Forms
             {
                 DenyIfWaitingForInitialization();
 
-                BoundTaskDialog?.UpdateTextElement(ComCtl32.TDE.CONTENT, value);
+                BoundDialog?.UpdateTextElement(ComCtl32.TDE.CONTENT, value);
 
                 _text = value;
             }
@@ -364,13 +372,13 @@ namespace System.Windows.Forms
                 // The native task dialog icon cannot be updated from a handle
                 // type to a non-handle type and vice versa, so we need to throw
                 // throw in such a case.
-                if (BoundTaskDialog != null && iconIsFromHandle != null &&
+                if (BoundDialog != null && iconIsFromHandle != null &&
                     iconIsFromHandle != _boundIconIsFromHandle)
                 {
                     throw new InvalidOperationException(SR.TaskDialogCannotUpdateIconType);
                 }
 
-                BoundTaskDialog?.UpdateIconElement(ComCtl32.TDIE.ICON_MAIN, iconValue);
+                BoundDialog?.UpdateIconElement(ComCtl32.TDIE.ICON_MAIN, iconValue);
 
                 _icon = value;
             }
@@ -548,14 +556,32 @@ namespace System.Windows.Forms
             set => SetFlag(ComCtl32.TDF.SIZE_TO_CONTENT, value);
         }
 
-        internal TaskDialog? BoundTaskDialog { get; private set; }
+        /// <summary>
+        ///   Gets the <see cref="TaskDialog"/> instance which this page
+        ///   is currently bound to.
+        /// </summary>
+        /// <value>
+        ///   The <see cref="TaskDialog"/> instance which this page is bound to, or <see langword="null"/>
+        ///   if this page is not currently bound.
+        /// </value>
+        /// <remarks>
+        /// <para>
+        ///   A page will be bound while it is being displayed, which is indicated by the events
+        ///   <see cref="Created"/> and <see cref="Destroyed"/>.
+        /// </para>
+        /// <para>
+        ///   While a page is bound to a task dialog, you cannot show that page instance using a
+        ///   different <see cref="TaskDialog"/> instance at the same time.
+        /// </para>
+        /// </remarks>
+        public TaskDialog? BoundDialog { get; private set; }
 
         /// <summary>
-        ///   Gets a value that indicates if the <see cref="BoundTaskDialog"/>
+        ///   Gets a value that indicates if the <see cref="BoundDialog"/>
         ///   started navigation to this page but navigation did not yet complete
         ///   (in which case we cannot modify the dialog even though we are bound).
         /// </summary>
-        internal bool WaitingForInitialization => BoundTaskDialog != null && !_appliedInitialization;
+        internal bool WaitingForInitialization => BoundDialog != null && !_appliedInitialization;
 
         internal static bool IsNativeStringNullOrEmpty(string? str)
         {
@@ -588,7 +614,7 @@ namespace System.Windows.Forms
 
         internal void DenyIfBound()
         {
-            if (BoundTaskDialog != null)
+            if (BoundDialog != null)
             {
                 throw new InvalidOperationException(SR.TaskDialogCannotSetPropertyOfBoundPage);
             }
@@ -606,7 +632,7 @@ namespace System.Windows.Forms
 
         internal TaskDialogButton? GetBoundButtonByID(int buttonID)
         {
-            if (BoundTaskDialog == null)
+            if (BoundDialog == null)
             {
                 throw new InvalidOperationException();
             }
@@ -639,7 +665,7 @@ namespace System.Windows.Forms
 
         internal TaskDialogRadioButton? GetBoundRadioButtonByID(int buttonID)
         {
-            if (BoundTaskDialog == null)
+            if (BoundDialog == null)
             {
                 throw new InvalidOperationException();
             }
@@ -650,7 +676,7 @@ namespace System.Windows.Forms
         internal void Validate()
         {
             // Check that this page instance is not already bound to a TaskDialog instance.
-            if (BoundTaskDialog != null)
+            if (BoundDialog != null)
             {
                 throw new InvalidOperationException(string.Format(
                     SR.TaskDialogPageIsAlreadyBound,
@@ -721,14 +747,14 @@ namespace System.Windows.Forms
             out int defaultButtonID,
             out int defaultRadioButtonID)
         {
-            if (BoundTaskDialog != null)
+            if (BoundDialog != null)
             {
                 throw new InvalidOperationException();
             }
 
             // This method assumes Validate() has already been called.
 
-            BoundTaskDialog = owner;
+            BoundDialog = owner;
             flags = _flags;
 
             (IntPtr localIconValue, bool? iconIsFromHandle) = GetIconValue(_icon);
@@ -846,7 +872,7 @@ namespace System.Windows.Forms
 
         internal void Unbind()
         {
-            if (BoundTaskDialog == null)
+            if (BoundDialog == null)
             {
                 throw new InvalidOperationException();
             }
@@ -879,7 +905,7 @@ namespace System.Windows.Forms
             _footer?.Unbind();
             _progressBar?.Unbind();
 
-            BoundTaskDialog = null;
+            BoundDialog = null;
             _appliedInitialization = false;
         }
 

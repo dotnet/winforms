@@ -79,7 +79,7 @@ namespace System.Windows.Forms
                 DenyIfWaitingForInitialization();
 
                 // Update the text if we are bound.
-                BoundTaskDialog?.UpdateTextElement(
+                BoundPage?.BoundDialog?.UpdateTextElement(
                     ComCtl32.TDE.EXPANDED_INFORMATION, value);
 
                 _text = value;

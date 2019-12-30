@@ -96,7 +96,7 @@ namespace System.Windows.Forms
                     // Click the checkbox which should cause a call to
                     // HandleCheckBoxClicked(), where we will update the checked
                     // state.
-                    BoundPage.BoundTaskDialog!.ClickCheckBox(value);
+                    BoundPage.BoundDialog!.ClickCheckBox(value);
                 }
             }
         }
@@ -111,7 +111,7 @@ namespace System.Windows.Forms
             DenyIfNotBoundOrWaitingForInitialization();
             DenyIfBoundAndNotCreated();
 
-            BoundPage!.BoundTaskDialog!.ClickCheckBox(_checked, true);
+            BoundPage!.BoundDialog!.ClickCheckBox(_checked, true);
         }
 
         /// <summary>

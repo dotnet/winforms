@@ -327,6 +327,10 @@ namespace System.Windows.Forms
         ///   Gets or sets the <see cref="TaskDialogPage"/> instance that contains 
         ///   the contents which this task dialog will display.
         /// </summary>
+        /// <value>
+        ///   The page instance that contains the contents which this task dialog will
+        ///   display.
+        /// </value>
         /// <remarks>
         /// <para>
         ///   When setting this property while the task dialog is displayed, its contents
@@ -385,8 +389,8 @@ namespace System.Windows.Forms
         ///   Gets or sets the position of the task dialog when it is shown.
         /// </summary>
         /// <value>
-        ///   The position of the task dialog
-        ///   when it is shown. The default value is <see cref="TaskDialogStartupLocation.CenterParent"/>.
+        ///   The position of the task dialog when it is shown. The default value is
+        ///   <see cref="TaskDialogStartupLocation.CenterParent"/>.
         /// </value>
         public TaskDialogStartupLocation StartupLocation
         {

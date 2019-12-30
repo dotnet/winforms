@@ -31,16 +31,29 @@ namespace System.Windows.Forms
             set;
         }
 
-        internal TaskDialogPage? BoundPage
+        /// <summary>
+        ///   Gets the <see cref="TaskDialogPage"/> instance which this control
+        ///   is currently bound to.
+        /// </summary>
+        /// <value>
+        ///   The <see cref="TaskDialogPage"/> instance which this control is bound to, or 
+        ///   <see langword="null"/> if this control is not currently bound.
+        /// </value>
+        /// <remarks>
+        /// <para>
+        ///   A control will be bound to a page while it is being displayed, for exactly the
+        ///   same time as the returned page is bound to a dialog that can be retrieved by
+        ///   <see cref="TaskDialogPage.BoundDialog"/>.
+        /// </para>
+        /// <para>
+        ///   While a control is bound to a page, you cannot show that control instance using a
+        ///   different <see cref="TaskDialogPage"/> instance at the same time.
+        /// </para>
+        /// </remarks>
+        public TaskDialogPage? BoundPage
         {
             get;
             private set;
-        }
-
-        internal TaskDialog? BoundTaskDialog
-        {
-            // Note: When BoundPage is not null, BoundTaskDialog is also not null.
-            get => BoundPage?.BoundTaskDialog;
         }
 
         /// <summary>

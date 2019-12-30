@@ -62,7 +62,7 @@ namespace System.Windows.Forms
                 DenyIfWaitingForInitialization();
 
                 // Update the text if we are bound.
-                BoundTaskDialog?.UpdateTextElement(
+                BoundPage?.BoundDialog?.UpdateTextElement(
                     ComCtl32.TDE.FOOTER, value);
 
                 _text = value;
@@ -99,7 +99,7 @@ namespace System.Windows.Forms
                     throw new InvalidOperationException(SR.TaskDialogCannotUpdateIconType);
                 }
 
-                BoundTaskDialog?.UpdateIconElement(
+                BoundPage?.BoundDialog?.UpdateIconElement(
                     ComCtl32.TDIE.ICON_FOOTER, iconValue);
 
                 _icon = value;
