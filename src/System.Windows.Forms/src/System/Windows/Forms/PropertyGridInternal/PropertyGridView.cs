@@ -6377,10 +6377,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     CreateParams cp = base.CreateParams;
                     cp.Style |= unchecked((int)(User32.WS.POPUP | User32.WS.BORDER));
                     cp.ExStyle |= (int)User32.WS_EX.TOOLWINDOW;
-                    if (OSFeature.IsPresent(SystemParameter.DropShadow))
-                    {
-                        cp.ClassStyle |= (int)User32.CS.DROPSHADOW;
-                    }
+                    cp.ClassStyle |= (int)User32.CS.DROPSHADOW;
                     if (gridView != null)
                     {
                         cp.Parent = gridView.ParentInternal.Handle;
