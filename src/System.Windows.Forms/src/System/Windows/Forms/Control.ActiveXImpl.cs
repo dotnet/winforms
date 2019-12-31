@@ -1463,7 +1463,7 @@ namespace System.Windows.Forms
                 }
 
                 Ole32.OLEMISC status = 0;
-                ((UnsafeNativeMethods.IOleObject)_control).GetMiscStatus(Ole32.DVASPECT.CONTENT, &status);
+                ((Ole32.IOleObject)_control).GetMiscStatus(Ole32.DVASPECT.CONTENT, &status);
                 pQaControl->dwMiscStatus = status;
 
                 // Advise the event sink so VB6 can catch events raised from UserControls.

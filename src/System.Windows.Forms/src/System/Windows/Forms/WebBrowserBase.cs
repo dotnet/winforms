@@ -47,7 +47,7 @@ namespace System.Windows.Forms
         private EventHandler selectionChangeHandler;
         private Guid clsid;
         // Pointers to the ActiveX object: Interface pointers are cached for perf.
-        private UnsafeNativeMethods.IOleObject axOleObject;
+        private Ole32.IOleObject axOleObject;
         private Ole32.IOleInPlaceObject axOleInPlaceObject;
         private Ole32.IOleInPlaceActiveObject axOleInPlaceActiveObject;
         private Ole32.IOleControl axOleControl;
@@ -1112,7 +1112,7 @@ namespace System.Windows.Forms
         private void AttachInterfacesInternal()
         {
             Debug.Assert(activeXInstance != null, "The native control is null");
-            axOleObject = (UnsafeNativeMethods.IOleObject)activeXInstance;
+            axOleObject = (Ole32.IOleObject)activeXInstance;
             axOleInPlaceObject = (Ole32.IOleInPlaceObject)activeXInstance;
             axOleInPlaceActiveObject = (Ole32.IOleInPlaceActiveObject)activeXInstance;
             axOleControl = (Ole32.IOleControl)activeXInstance;
