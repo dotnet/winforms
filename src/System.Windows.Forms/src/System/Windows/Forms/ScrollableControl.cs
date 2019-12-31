@@ -1214,10 +1214,11 @@ namespace System.Windows.Forms
         {
             if (!IsMirrored)
             {
-                SendMessage(
-                    WindowMessages.WM_HSCROLL,
+                User32.SendMessageW(
+                    this,
+                    User32.WindowMessage.WM_HSCROLL,
                     PARAM.FromLowHigh((RightToLeft == RightToLeft.Yes) ? (int)User32.SBH.RIGHT : (int)User32.SBH.LEFT, 0),
-                    0);
+                    IntPtr.Zero);
             }
         }
 
