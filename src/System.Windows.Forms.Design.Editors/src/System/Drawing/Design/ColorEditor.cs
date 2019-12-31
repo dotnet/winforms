@@ -1125,7 +1125,7 @@ namespace System.Drawing.Design
                             hwndCtl,
                             User32.HWND_TOP,
                             flags: User32.SWP.HIDEWINDOW);
-                        hwndCtl = NativeMethods.GetDlgItem(hwnd, NativeMethods.IDOK);
+                        hwndCtl = NativeMethods.GetDlgItem(hwnd, (int)User32.ID.OK);
                         User32.EnableWindow(hwndCtl, BOOL.FALSE);
                         User32.SetWindowPos(
                             hwndCtl,
@@ -1146,7 +1146,7 @@ namespace System.Drawing.Design
                                 blue = (byte)NativeMethods.GetDlgItemInt(hwnd, COLOR_BLUE, err, false);
                                 Debug.Assert(!err[0], "Couldn't find dialog member COLOR_BLUE");
                                 this.Color = Color.FromArgb(red, green, blue);
-                                User32.PostMessageW(hwnd, User32.WindowMessage.WM_COMMAND, PARAM.FromLowHigh(NativeMethods.IDOK, 0), NativeMethods.GetDlgItem(hwnd, NativeMethods.IDOK));
+                                User32.PostMessageW(hwnd, User32.WindowMessage.WM_COMMAND, PARAM.FromLowHigh((int)User32.ID.OK, 0), NativeMethods.GetDlgItem(hwnd, (int)User32.ID.OK));
                                 break;
                         }
                         break;

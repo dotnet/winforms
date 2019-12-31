@@ -113,6 +113,7 @@
     <Compile Include="..\..\Common\src\Interop\User32\Interop.GetDC.cs" Link="Interop\User32\Interop.GetDC.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.GetFocus.cs" Link="Interop\User32\Interop.GetFocus.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.GetWindowText.cs" Link="Interop\User32\Interop.GetWindowText.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.ID.cs" Link="Interop\User32\Interop.ID.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.IsProcessDPIAware.cs" Link="Interop\User32\Interop.IsProcessDPIAware.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.IsValidDpiAwarenessContext.cs" Link="Interop\User32\Interop.IsValidDpiAwarenessContext.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.MK.cs" Link="Interop\User32\Interop.MK.cs" />

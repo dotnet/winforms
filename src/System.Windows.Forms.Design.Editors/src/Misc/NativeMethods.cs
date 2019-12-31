@@ -14,7 +14,6 @@ namespace System.Windows.Forms.Design
         public const int NM_CLICK = 0 - 0 - 2;
         public const int EC_LEFTMARGIN = 0x0001;
         public const int EC_RIGHTMARGIN = 0x0002;
-        public const int IDOK = 1;
 
         public const int VK_PROCESSKEY = 0xE5;
 
