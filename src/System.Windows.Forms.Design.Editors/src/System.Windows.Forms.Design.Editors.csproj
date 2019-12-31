@@ -124,6 +124,7 @@
     <Compile Include="..\..\Common\src\Interop\User32\Interop.RegisterWindowMessageW.cs" Link="Interop\User32\Interop.RegisterWindowMessageW.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.ReleaseDC.cs" Link="Interop\User32\Interop.ReleaseDC.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.ScreenToClient.cs" Link="Interop\User32\Interop.ScreenToClient.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.SendMessageW.cs" Link="Interop\User32\Interop.SendMessageW.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.SetFocus.cs" Link="Interop\User32\Interop.SetFocus.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.SetProcessDPIAware.cs" Link="Interop\User32\Interop.SetProcessDPIAware.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.SetProcessDpiAwarenessContext.cs" Link="Interop\User32\Interop.SetProcessDpiAwarenessContext.cs" />

@@ -92,12 +92,12 @@ namespace System.ComponentModel.Design
         }
         private static ComCtl32.TVS_EX TreeView_GetExtendedStyle(IntPtr handle)
         {
-            return (ComCtl32.TVS_EX)NativeMethods.SendMessage(handle, NativeMethods.TVM_GETEXTENDEDSTYLE, IntPtr.Zero, IntPtr.Zero);
+            return (ComCtl32.TVS_EX)User32.SendMessageW(handle, (User32.WindowMessage)NativeMethods.TVM_GETEXTENDEDSTYLE, IntPtr.Zero, IntPtr.Zero);
         }
 
         private static void TreeView_SetExtendedStyle(IntPtr handle, ComCtl32.TVS_EX extendedStyle, int mask)
         {
-            NativeMethods.SendMessage(handle, NativeMethods.TVM_SETEXTENDEDSTYLE, (IntPtr)mask, (IntPtr)extendedStyle);
+            User32.SendMessageW(handle, (User32.WindowMessage)NativeMethods.TVM_SETEXTENDEDSTYLE, (IntPtr)mask, (IntPtr)extendedStyle);
         }
 
         public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
