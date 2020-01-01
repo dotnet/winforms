@@ -831,6 +831,21 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
+        [InlineData(0, true)]
+        [InlineData(SubPanel.ScrollStateAutoScrolling, false)]
+        [InlineData(SubPanel.ScrollStateFullDrag, false)]
+        [InlineData(SubPanel.ScrollStateHScrollVisible, false)]
+        [InlineData(SubPanel.ScrollStateUserHasScrolled, false)]
+        [InlineData(SubPanel.ScrollStateVScrollVisible, false)]
+        [InlineData(int.MaxValue, false)]
+        [InlineData((-1), false)]
+        public void Panel_GetScrollState_Invoke_ReturnsExpected(int bit, bool expected)
+        {
+            using var control = new SubPanel();
+            Assert.Equal(expected, control.GetScrollState(bit));
+        }
+
+        [WinFormsTheory]
         [InlineData(ControlStyles.ContainerControl, true)]
         [InlineData(ControlStyles.UserPaint, true)]
         [InlineData(ControlStyles.Opaque, false)]
@@ -1104,6 +1119,16 @@ namespace System.Windows.Forms.Tests
 
         private class SubPanel : Panel
         {
+            public new const int ScrollStateAutoScrolling = Panel.ScrollStateAutoScrolling;
+
+            public new const int ScrollStateHScrollVisible = Panel.ScrollStateHScrollVisible;
+
+            public new const int ScrollStateVScrollVisible = Panel.ScrollStateVScrollVisible;
+
+            public new const int ScrollStateUserHasScrolled = Panel.ScrollStateUserHasScrolled;
+
+            public new const int ScrollStateFullDrag = Panel.ScrollStateFullDrag;
+
             public new bool CanEnableIme => base.CanEnableIme;
 
             public new bool CanRaiseEvents => base.CanRaiseEvents;
@@ -1169,6 +1194,8 @@ namespace System.Windows.Forms.Tests
             }
 
             public new AutoSizeMode GetAutoSizeMode() => base.GetAutoSizeMode();
+
+            public new bool GetScrollState(int bit) => base.GetScrollState(bit);
 
             public new bool GetStyle(ControlStyles flag) => base.GetStyle(flag);
 
