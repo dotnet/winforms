@@ -1121,7 +1121,7 @@ namespace System.Windows.Forms
                         // previous events, so eventually the TDN_NAVIGATED notification
                         // will occur where we will raise the Created event for the new
                         // page.
-                        if (!_raisedPageCreated && _waitingNavigationPages.Count == 0)
+                        if (_waitingNavigationPages.Count == 0 && !_raisedPageCreated)
                         {
                             _raisedPageCreated = true;
                             _boundPage.OnCreated(EventArgs.Empty);
@@ -1138,17 +1138,26 @@ namespace System.Windows.Forms
                         _boundPage.Unbind();
                         _boundPage = _waitingNavigationPages.Dequeue();
 
-                        _boundPage.ApplyInitialization();
-
-                        // Only raise the event if we don't wait for yet another
-                        // navigation (this is the same as we do in the TDN_CREATED
-                        // handler).
-                        Debug.Assert(!_raisedPageCreated);
-                        if (!_raisedPageCreated && _waitingNavigationPages.Count == 0)
+                        if (_waitingNavigationPages.Count == 0)
                         {
-                            _raisedPageCreated = true;
-                            _boundPage.OnCreated(EventArgs.Empty);
+                            // Apply the initialization only if there are no further outstanding
+                            // navigations. Otherwise, this might throw an InvalidOperationException,
+                            // because the update methods would deny updating the dialog when there
+                            // are further outstanding navigations, as that could cause the layout
+                            // of the dialog to be changed erroneously (see comment in
+                            // DenyIfDialogNotUpdatable).
+                            _boundPage.ApplyInitialization();
+
+                            // Also, raise the event only if we don't wait for yet another navigation
+                            // (this is the same as we do in the TDN_CREATED handler).
+                            Debug.Assert(!_raisedPageCreated);
+                            if (!_raisedPageCreated)
+                            {
+                                _raisedPageCreated = true;
+                                _boundPage.OnCreated(EventArgs.Empty);
+                            }
                         }
+
                         break;
 
                     case ComCtl32.TDN.DESTROYED:

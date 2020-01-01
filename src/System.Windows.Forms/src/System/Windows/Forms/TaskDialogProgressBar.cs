@@ -155,8 +155,8 @@ namespace System.Windows.Forms
                 catch
                 {
                     // Revert to the previous state. This could happen if the dialog's
-                    // DenyIfDialogNotShownOrWaitingForNavigatedEvent() (called by
-                    // one of the Set...() methods) throws.
+                    // DenyIfDialogNotUpdatable() (called by one of the Set...() methods)
+                    // throws.
                     _state = previousState;
                     throw;
                 }
