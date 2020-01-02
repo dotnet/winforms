@@ -374,35 +374,7 @@ namespace System.Windows.Forms
         NM_CUSTOMDRAW = ((0 - 0) - 12),
         NM_RELEASEDCAPTURE = ((0 - 0) - 16);
 
-        public const int PD_ALLPAGES = 0x00000000,
-        PD_SELECTION = 0x00000001,
-        PD_PAGENUMS = 0x00000002,
-        PD_NOSELECTION = 0x00000004,
-        PD_NOPAGENUMS = 0x00000008,
-        PD_COLLATE = 0x00000010,
-        PD_PRINTTOFILE = 0x00000020,
-        PD_PRINTSETUP = 0x00000040,
-        PD_NOWARNING = 0x00000080,
-        PD_RETURNDC = 0x00000100,
-        PD_RETURNIC = 0x00000200,
-        PD_RETURNDEFAULT = 0x00000400,
-        PD_SHOWHELP = 0x00000800,
-        PD_ENABLEPRINTHOOK = 0x00001000,
-        PD_ENABLESETUPHOOK = 0x00002000,
-        PD_ENABLEPRINTTEMPLATE = 0x00004000,
-        PD_ENABLESETUPTEMPLATE = 0x00008000,
-        PD_ENABLEPRINTTEMPLATEHANDLE = 0x00010000,
-        PD_ENABLESETUPTEMPLATEHANDLE = 0x00020000,
-        PD_USEDEVMODECOPIES = 0x00040000,
-        PD_USEDEVMODECOPIESANDCOLLATE = 0x00040000,
-        PD_DISABLEPRINTTOFILE = 0x00080000,
-        PD_HIDEPRINTTOFILE = 0x00100000,
-        PD_NONETWORKBUTTON = 0x00200000,
-        PD_CURRENTPAGE = 0x00400000,
-        PD_NOCURRENTPAGE = 0x00800000,
-        PD_EXCLUSIONFLAGS = 0x01000000,
-        PD_USELARGETEMPLATE = 0x10000000,
-        PRF_CHECKVISIBLE = 0x00000001,
+        public const int PRF_CHECKVISIBLE = 0x00000001,
         PRF_NONCLIENT = 0x00000002,
         PRF_CLIENT = 0x00000004,
         PRF_ERASEBKGND = 0x00000008,
@@ -565,11 +537,6 @@ namespace System.Windows.Forms
 
         public static int START_PAGE_GENERAL = unchecked((int)0xffffffff);
 
-        //  Result action ids for PrintDlgEx.
-        public const int PD_RESULT_CANCEL = 0;
-        public const int PD_RESULT_PRINT = 1;
-        public const int PD_RESULT_APPLY = 2;
-
         private static uint wmMouseEnterMessage = uint.MaxValue;
 
         public static User32.WindowMessage WM_MOUSEENTER
@@ -724,7 +691,7 @@ namespace System.Windows.Forms
             IntPtr hDevNames { get; set; }
             IntPtr hDC { get; set; }
 
-            int Flags { get; set; }
+            Comdlg32.PD Flags { get; set; }
 
             short nFromPage { get; set; }
             short nToPage { get; set; }
@@ -757,8 +724,6 @@ namespace System.Windows.Forms
             IntPtr m_hDevNames;
             IntPtr m_hDC;
 
-            int m_Flags;
-
             short m_nFromPage;
             short m_nToPage;
             short m_nMinPage;
@@ -784,7 +749,7 @@ namespace System.Windows.Forms
             public IntPtr hDevNames { get { return m_hDevNames; } set { m_hDevNames = value; } }
             public IntPtr hDC { get { return m_hDC; } set { m_hDC = value; } }
 
-            public int Flags { get { return m_Flags; } set { m_Flags = value; } }
+            public Comdlg32.PD Flags { get; set; }
 
             public short nFromPage { get { return m_nFromPage; } set { m_nFromPage = value; } }
             public short nToPage { get { return m_nToPage; } set { m_nToPage = value; } }
@@ -817,8 +782,6 @@ namespace System.Windows.Forms
             IntPtr m_hDevNames;
             IntPtr m_hDC;
 
-            int m_Flags;
-
             short m_nFromPage;
             short m_nToPage;
             short m_nMinPage;
@@ -844,7 +807,7 @@ namespace System.Windows.Forms
             public IntPtr hDevNames { get { return m_hDevNames; } set { m_hDevNames = value; } }
             public IntPtr hDC { get { return m_hDC; } set { m_hDC = value; } }
 
-            public int Flags { get { return m_Flags; } set { m_Flags = value; } }
+            public Comdlg32.PD Flags { get; set; }
 
             public short nFromPage { get { return m_nFromPage; } set { m_nFromPage = value; } }
             public short nToPage { get { return m_nToPage; } set { m_nToPage = value; } }
@@ -875,7 +838,7 @@ namespace System.Windows.Forms
             public IntPtr hDevNames;
             public IntPtr hDC;
 
-            public int Flags;
+            public Comdlg32.PD Flags;
             public int Flags2;
 
             public int ExclusionFlags;
@@ -900,8 +863,7 @@ namespace System.Windows.Forms
             public IntPtr lphPropertyPages;
 
             public int nStartPage;
-            public int dwResultAction;
-
+            public Comdlg32.PD_RESULT dwResultAction;
         }
 
         // x86 requires EXPLICIT packing of 1.
