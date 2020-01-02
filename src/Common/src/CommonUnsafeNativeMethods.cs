@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Runtime.InteropServices;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -16,12 +17,6 @@ namespace System.Windows.Forms
 
         [DllImport(ExternDll.User32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
         internal static extern DpiAwarenessContext SetThreadDpiAwarenessContext(DpiAwarenessContext dpiContext);
-
-        [DllImport(ExternDll.User32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
-        internal static extern IntPtr GetWindowDpiAwarenessContext(IntPtr hWnd);
-
-        [DllImport(ExternDll.User32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
-        internal static extern DPI_AWARENESS GetAwarenessFromDpiAwarenessContext(IntPtr dpiAwarenessContext);
 
         [DllImport(ExternDll.User32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
         internal static extern bool AreDpiAwarenessContextsEqual(DpiAwarenessContext dpiContextA, DpiAwarenessContext dpiContextB);
@@ -56,11 +51,9 @@ namespace System.Windows.Forms
             {
                 return GetThreadDpiAwarenessContext();
             }
-            else
-            {
-                // legacy OS that does not have this API available.
-                return DpiAwarenessContext.DPI_AWARENESS_CONTEXT_UNSPECIFIED;
-            }
+
+            // legacy OS that does not have this API available.
+            return DpiAwarenessContext.DPI_AWARENESS_CONTEXT_UNSPECIFIED;
         }
 
         /// <summary>
@@ -75,13 +68,12 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentException(nameof(dpiContext), dpiContext.ToString());
                 }
+
                 return SetThreadDpiAwarenessContext(dpiContext);
             }
-            else
-            {
-                // legacy OS that does not have this API available.
-                return DpiAwarenessContext.DPI_AWARENESS_CONTEXT_UNSPECIFIED;
-            }
+
+            // legacy OS that does not have this API available.
+            return DpiAwarenessContext.DPI_AWARENESS_CONTEXT_UNSPECIFIED;
         }
         /*
                 // Dpi awareness context values. Matching windows values.
@@ -98,8 +90,8 @@ namespace System.Windows.Forms
             if (OsVersion.IsWindows10_1607OrGreater)
             {
                 // Works only >= Windows 10/1607
-                IntPtr awarenessContext = GetWindowDpiAwarenessContext(hWnd);
-                DPI_AWARENESS awareness = GetAwarenessFromDpiAwarenessContext(awarenessContext);
+                IntPtr awarenessContext = User32.GetWindowDpiAwarenessContext(hWnd);
+                User32.DPI_AWARENESS awareness = User32.GetAwarenessFromDpiAwarenessContext(awarenessContext);
                 dpiAwarenessContext = ConvertToDpiAwarenessContext(awareness);
             }
 
@@ -110,34 +102,21 @@ namespace System.Windows.Forms
 
         #region Private Methods
 
-        private static DpiAwarenessContext ConvertToDpiAwarenessContext(DPI_AWARENESS dpiAwareness)
+        private static DpiAwarenessContext ConvertToDpiAwarenessContext(User32.DPI_AWARENESS dpiAwareness)
         {
             switch (dpiAwareness)
             {
-                case DPI_AWARENESS.DPI_AWARENESS_UNAWARE:
+                case User32.DPI_AWARENESS.UNAWARE:
                     return DpiAwarenessContext.DPI_AWARENESS_CONTEXT_UNAWARE;
-
-                case DPI_AWARENESS.DPI_AWARENESS_SYSTEM_AWARE:
+                case User32.DPI_AWARENESS.SYSTEM_AWARE:
                     return DpiAwarenessContext.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE;
-
-                case DPI_AWARENESS.DPI_AWARENESS_PER_MONITOR_AWARE:
+                case User32.DPI_AWARENESS.PER_MONITOR_AWARE:
                     return DpiAwarenessContext.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2;
-
                 default:
                     return DpiAwarenessContext.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE;
             }
         }
 
         #endregion
-
-#pragma warning disable CA1712 // Do not prefix enum values with type name
-        internal enum DPI_AWARENESS
-        {
-            DPI_AWARENESS_INVALID = -1,
-            DPI_AWARENESS_UNAWARE = 0,
-            DPI_AWARENESS_SYSTEM_AWARE = 1,
-            DPI_AWARENESS_PER_MONITOR_AWARE = 2
-        }
-#pragma warning restore CA1712 // Do not prefix enum values with type name
     }
 }

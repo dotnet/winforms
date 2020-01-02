@@ -177,9 +177,11 @@
     <Compile Include="..\..\Common\src\Interop\User32\Interop.ClientToScreen.cs" Link="Interop\User32\Interop.ClientToScreen.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.CS.cs" Link="Interop\User32\Interop.CS.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.DefWindowProcW.cs" Link="Interop\User32\Interop.DefWindowProcW.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.DPI_AWARENESS.cs" Link="Interop\User32\Interop.DPI_AWARENESS.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.DPI_AWARENESS_CONTEXT.cs" Link="Interop\User32\Interop.DPI_AWARENESS_CONTEXT.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.EndPaint.cs" Link="Interop\User32\Interop.EndPaint.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.GetActiveWindow.cs" Link="Interop\User32\Interop.GetActiveWindow.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.GetAwarenessFromDpiAwarenessContext.cs" Link="Interop\User32\Interop.GetAwarenessFromDpiAwarenessContext.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.GetCapture.cs" Link="Interop\User32\Interop.GetCapture.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.GetCursor.cs" Link="Interop\User32\Interop.GetCursor.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.GetCursorPos.cs" Link="Interop\User32\Interop.GetCursorPos.cs" />
@@ -190,6 +192,7 @@
     <Compile Include="..\..\Common\src\Interop\User32\Interop.GetMessageTime.cs" Link="Interop\User32\Interop.GetMessageTime.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.GetUpdateRgn.cs" Link="Interop\User32\Interop.GetUpdateRgn.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.GetWindow.cs" Link="Interop\User32\Interop.GetWindow.cs" />
+    <Compile Include="..\..\Common\src\Interop\User32\Interop.GetWindowDpiAwarenessContext.cs" Link="Interop\User32\Interop.GetWindowDpiAwarenessContext.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.GetWindowLong.cs" Link="Interop\User32\Interop.GetWindowLong.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.GetWindowText.cs" Link="Interop\User32\Interop.GetWindowText.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.GetWindowThreadProcessId.cs" Link="Interop\User32\Interop.GetWindowThreadProcessId.cs" />
