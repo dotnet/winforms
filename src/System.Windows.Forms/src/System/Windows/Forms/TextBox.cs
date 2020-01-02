@@ -302,10 +302,10 @@ namespace System.Windows.Forms
                 switch (characterCasing)
                 {
                     case CharacterCasing.Lower:
-                        cp.Style |= NativeMethods.ES_LOWERCASE;
+                        cp.Style |= (int)User32.ES.LOWERCASE;
                         break;
                     case CharacterCasing.Upper:
-                        cp.Style |= NativeMethods.ES_UPPERCASE;
+                        cp.Style |= (int)User32.ES.UPPERCASE;
                         break;
                 }
 
@@ -316,13 +316,13 @@ namespace System.Windows.Forms
                 switch (align)
                 {
                     case HorizontalAlignment.Left:
-                        cp.Style |= NativeMethods.ES_LEFT;
+                        cp.Style |= (int)User32.ES.LEFT;
                         break;
                     case HorizontalAlignment.Center:
-                        cp.Style |= NativeMethods.ES_CENTER;
+                        cp.Style |= (int)User32.ES.CENTER;
                         break;
                     case HorizontalAlignment.Right:
-                        cp.Style |= NativeMethods.ES_RIGHT;
+                        cp.Style |= (int)User32.ES.RIGHT;
                         break;
                 }
 
@@ -343,7 +343,7 @@ namespace System.Windows.Forms
 
                 if (useSystemPasswordChar)
                 {
-                    cp.Style |= NativeMethods.ES_PASSWORD;
+                    cp.Style |= (int)User32.ES.PASSWORD;
                 }
 
                 return cp;

@@ -458,15 +458,15 @@ namespace System.Windows.Forms
             {
                 CreateParams cp = base.CreateParams;
                 cp.ClassName = ComCtl32.WindowClasses.WC_EDIT;
-                cp.Style |= NativeMethods.ES_AUTOHSCROLL | NativeMethods.ES_AUTOVSCROLL;
+                cp.Style |= (int)(User32.ES.AUTOHSCROLL | User32.ES.AUTOVSCROLL);
                 if (!textBoxFlags[hideSelection])
                 {
-                    cp.Style |= NativeMethods.ES_NOHIDESEL;
+                    cp.Style |= (int)User32.ES.NOHIDESEL;
                 }
 
                 if (textBoxFlags[readOnly])
                 {
-                    cp.Style |= NativeMethods.ES_READONLY;
+                    cp.Style |= (int)User32.ES.READONLY;
                 }
 
                 cp.Style &= ~(int)User32.WS.BORDER;
@@ -483,10 +483,10 @@ namespace System.Windows.Forms
                 }
                 if (textBoxFlags[multiline])
                 {
-                    cp.Style |= NativeMethods.ES_MULTILINE;
+                    cp.Style |= (int)User32.ES.MULTILINE;
                     if (textBoxFlags[wordWrap])
                     {
-                        cp.Style &= ~NativeMethods.ES_AUTOHSCROLL;
+                        cp.Style &= ~(int)User32.ES.AUTOHSCROLL;
                     }
                 }
 
@@ -2168,11 +2168,12 @@ namespace System.Windows.Forms
         {
             if (!textBoxFlags[codeUpdateText] && !textBoxFlags[creatingHandle])
             {
-                if (PARAM.HIWORD(m.WParam) == NativeMethods.EN_CHANGE && CanRaiseTextChangedEvent)
+                User32.EN wParamAsEN = (User32.EN)PARAM.HIWORD(m.WParam);
+                if (wParamAsEN == User32.EN.CHANGE && CanRaiseTextChangedEvent)
                 {
                     OnTextChanged(EventArgs.Empty);
                 }
-                else if (PARAM.HIWORD(m.WParam) == NativeMethods.EN_UPDATE)
+                else if (wParamAsEN == User32.EN.UPDATE)
                 {
                     // Force update to the Modified property, which will trigger
                     // ModifiedChanged event handlers
@@ -2186,7 +2187,7 @@ namespace System.Windows.Forms
             base.WndProc(ref m);
             if (!textBoxFlags[multiline])
             {
-                SendMessage(EditMessages.EM_SETMARGINS, NativeMethods.EC_LEFTMARGIN | NativeMethods.EC_RIGHTMARGIN, 0);
+                SendMessage(EditMessages.EM_SETMARGINS, (int)(User32.EC.LEFTMARGIN | User32.EC.RIGHTMARGIN), 0);
             }
         }
 

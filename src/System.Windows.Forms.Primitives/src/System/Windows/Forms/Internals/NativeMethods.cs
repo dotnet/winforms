@@ -113,27 +113,6 @@ namespace System.Windows.Forms
         DTN_DROPDOWN = ((0 - 760) + 6),
         DTN_CLOSEUP = ((0 - 760) + 7);
 
-        public const int EMR_POLYTEXTOUT = 97,
-        ES_LEFT = 0x0000,
-        ES_CENTER = 0x0001,
-        ES_RIGHT = 0x0002,
-        ES_MULTILINE = 0x0004,
-        ES_UPPERCASE = 0x0008,
-        ES_LOWERCASE = 0x0010,
-        ES_AUTOVSCROLL = 0x0040,
-        ES_AUTOHSCROLL = 0x0080,
-        ES_NOHIDESEL = 0x0100,
-        ES_READONLY = 0x0800,
-        ES_PASSWORD = 0x0020,
-        EN_CHANGE = 0x0300,
-        EN_UPDATE = 0x0400,
-        EN_HSCROLL = 0x0601,
-        EN_VSCROLL = 0x0602,
-        EN_ALIGN_LTR_EC = 0x0700,
-        EN_ALIGN_RTL_EC = 0x0701,
-        EC_LEFTMARGIN = 0x0001,
-        EC_RIGHTMARGIN = 0x0002;
-
         public const int FRERR_BUFFERLENGTHZERO = 0x4001;
         public const int FADF_BSTR = (0x100);
         public const int FADF_UNKNOWN = (0x200);

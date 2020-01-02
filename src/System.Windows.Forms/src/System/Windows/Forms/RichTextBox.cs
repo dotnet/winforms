@@ -3529,17 +3529,14 @@ namespace System.Windows.Forms
             //
             if (m.LParam == Handle && !GetState(States.CreatingHandle))
             {
-                switch (PARAM.HIWORD(m.WParam))
+                switch ((User32.EN)PARAM.HIWORD(m.WParam))
                 {
-
-                    case NativeMethods.EN_HSCROLL:
+                    case User32.EN.HSCROLL:
                         OnHScroll(EventArgs.Empty);
                         break;
-
-                    case NativeMethods.EN_VSCROLL:
+                    case User32.EN.VSCROLL:
                         OnVScroll(EventArgs.Empty);
                         break;
-
                     default:
                         base.WndProc(ref m);
                         break;
