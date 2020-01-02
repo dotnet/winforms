@@ -17,6 +17,7 @@ internal static partial class Interop
             string lpParameters,
             string lpDirectory,
             User32.SW nShowCmd);
+
         public static IntPtr ShellExecuteW(
             HandleRef hwnd,
             string lpOperation,

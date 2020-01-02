@@ -313,9 +313,6 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.User32, EntryPoint = "SendMessage", CharSet = CharSet.Auto)]
         public extern static IntPtr SendCallbackMessage(HandleRef hWnd, int Msg, IntPtr wParam, IntPtr lParam);
 
-        [DllImport(ExternDll.Shell32, ExactSpelling = true, CharSet = CharSet.Ansi)]
-        public static extern void DragAcceptFiles(HandleRef hWnd, bool fAccept);
-
         //GetWindowLong won't work correctly for 64-bit: we should use GetWindowLongPtr instead.  On
         //32-bit, GetWindowLongPtr is just #defined as GetWindowLong.  GetWindowLong really should
         //take/return int instead of IntPtr/HandleRef, but since we're running this only for 32-bit
