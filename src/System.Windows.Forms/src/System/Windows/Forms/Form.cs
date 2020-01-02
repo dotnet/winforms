@@ -5703,27 +5703,26 @@ namespace System.Windows.Forms
         {
             if ((formState[FormStateLayered] != 0) && IsHandleCreated && TopLevel)
             {
-                bool result;
+                BOOL result;
 
                 Color transparencyKey = TransparencyKey;
 
                 if (transparencyKey.IsEmpty)
                 {
 
-                    result = UnsafeNativeMethods.SetLayeredWindowAttributes(new HandleRef(this, Handle), 0, OpacityAsByte, NativeMethods.LWA_ALPHA);
+                    result = User32.SetLayeredWindowAttributes(this, 0, OpacityAsByte, User32.LWA.ALPHA);
                 }
                 else if (OpacityAsByte == 255)
                 {
                     // Windows doesn't do so well setting colorkey and alpha, so avoid it if we can
-                    result = UnsafeNativeMethods.SetLayeredWindowAttributes(new HandleRef(this, Handle), ColorTranslator.ToWin32(transparencyKey), 0, NativeMethods.LWA_COLORKEY);
+                    result = User32.SetLayeredWindowAttributes(this, ColorTranslator.ToWin32(transparencyKey), 0, User32.LWA.COLORKEY);
                 }
                 else
                 {
-                    result = UnsafeNativeMethods.SetLayeredWindowAttributes(new HandleRef(this, Handle), ColorTranslator.ToWin32(transparencyKey),
-                                                                OpacityAsByte, NativeMethods.LWA_ALPHA | NativeMethods.LWA_COLORKEY);
+                    result = User32.SetLayeredWindowAttributes(this, ColorTranslator.ToWin32(transparencyKey), OpacityAsByte, User32.LWA.ALPHA | User32.LWA.COLORKEY);
                 }
 
-                if (!result)
+                if (result.IsFalse())
                 {
                     throw new Win32Exception();
                 }

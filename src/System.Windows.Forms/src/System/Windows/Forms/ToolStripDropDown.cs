@@ -2074,11 +2074,9 @@ namespace System.Windows.Forms
         {
             if (state[stateLayered] && IsHandleCreated && TopLevel)
             {
-                bool result;
+                BOOL result = User32.SetLayeredWindowAttributes(this, 0, OpacityAsByte, User32.LWA.ALPHA);
 
-                result = UnsafeNativeMethods.SetLayeredWindowAttributes(new HandleRef(this, Handle), 0, OpacityAsByte, NativeMethods.LWA_ALPHA);
-
-                if (!result)
+                if (result.IsFalse())
                 {
                     throw new Win32Exception();
                 }
