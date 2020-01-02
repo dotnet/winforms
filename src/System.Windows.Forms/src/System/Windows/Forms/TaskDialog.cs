@@ -995,8 +995,6 @@ namespace System.Windows.Forms
 
         internal unsafe void UpdateTextElement(ComCtl32.TDE element, string? text)
         {
-            DenyIfDialogNotUpdatable();
-
             // Instead of null, we must specify the empty string; otherwise the update
             // would be ignored.
             text ??= string.Empty;
@@ -1195,7 +1193,7 @@ namespace System.Windows.Forms
                             // Clear the dialog handle, because according to the docs, we
                             // must not continue to send any notifications to the dialog
                             // after the callback function has returned from being called
-                            // with the 'Destroyed' notification.                    
+                            // with the 'Destroyed' notification.
                             Handle = IntPtr.Zero;
                         }
                         break;
@@ -1230,7 +1228,7 @@ namespace System.Windows.Forms
                             ContinueButtonClickHandlingMessage).IsTrue())
                         {
                             _ignoreButtonClickedNotifications = true;
-                        }                        
+                        }
 
                         int buttonID = (int)wParam;
                         TaskDialogButton? button = _boundPage.GetBoundButtonByID(buttonID);
