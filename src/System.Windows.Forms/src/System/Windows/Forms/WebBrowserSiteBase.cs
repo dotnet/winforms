@@ -203,7 +203,7 @@ namespace System.Windows.Forms
                         }
                     }
                 }
-                else if (Host.AXInPlaceObject is UnsafeNativeMethods.IOleInPlaceObjectWindowless)
+                else if (Host.AXInPlaceObject is Ole32.IOleInPlaceObjectWindowless)
                 {
                     throw new InvalidOperationException(SR.AXWindowlessControl);
                 }

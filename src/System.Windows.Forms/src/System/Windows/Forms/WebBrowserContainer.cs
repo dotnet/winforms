@@ -109,7 +109,7 @@ namespace System.Windows.Forms
                 return HRESULT.S_OK;
             }
             WebBrowserBase ctl = null;
-            if (pActiveObject is UnsafeNativeMethods.IOleObject oleObject)
+            if (pActiveObject is Ole32.IOleObject oleObject)
             {
                 oleObject.GetClientSite(out Ole32.IOleClientSite clientSite);
                 if (clientSite is WebBrowserSiteBase webBrowserSiteBase)

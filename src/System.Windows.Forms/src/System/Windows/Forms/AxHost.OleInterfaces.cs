@@ -417,7 +417,7 @@ namespace System.Windows.Forms
                         }
                     }
                 }
-                else if (host.GetInPlaceObject() is UnsafeNativeMethods.IOleInPlaceObjectWindowless)
+                else if (host.GetInPlaceObject() is Ole32.IOleInPlaceObjectWindowless)
                 {
                     Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "Windowless control.");
                     throw new InvalidOperationException(SR.AXWindowlessControl);
