@@ -345,7 +345,7 @@ namespace System.Windows.Forms
 
                 if (!Scrollable)
                 {
-                    cp.Style |= NativeMethods.LVS_NOSCROLL;
+                    cp.Style |= (int)ComCtl32.LVS.NOSCROLL;
                 }
 
                 if (!HideSelection)

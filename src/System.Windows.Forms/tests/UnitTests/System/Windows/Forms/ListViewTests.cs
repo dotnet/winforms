@@ -1484,15 +1484,15 @@ namespace System.Windows.Forms.Tests
                 yield return new object[] { showGroups, null, HorizontalAlignment.Left, string.Empty, 0x00000001 };
                 yield return new object[] { showGroups, null, HorizontalAlignment.Center, string.Empty, 0x00000002 };
                 yield return new object[] { showGroups, null, HorizontalAlignment.Right, string.Empty, 0x00000004 };
-                    
+
                 yield return new object[] { showGroups, string.Empty, HorizontalAlignment.Left, string.Empty, 0x00000001 };
                 yield return new object[] { showGroups, string.Empty, HorizontalAlignment.Center, string.Empty, 0x00000002 };
                 yield return new object[] { showGroups, string.Empty, HorizontalAlignment.Right, string.Empty, 0x00000004 };
-                    
+
                 yield return new object[] { showGroups, "text", HorizontalAlignment.Left, "text", 0x00000001 };
                 yield return new object[] { showGroups, "text", HorizontalAlignment.Center, "text", 0x00000002 };
                 yield return new object[] { showGroups, "text", HorizontalAlignment.Right, "text", 0x00000004 };
-                    
+
                 yield return new object[] { showGroups, "te\0xt", HorizontalAlignment.Left, "te", 0x00000001 };
                 yield return new object[] { showGroups, "te\0xt", HorizontalAlignment.Center, "te", 0x00000002 };
                 yield return new object[] { showGroups, "te\0xt", HorizontalAlignment.Right, "te", 0x00000004 };
@@ -1541,7 +1541,7 @@ namespace System.Windows.Forms.Tests
                     Assert.Equal("ListViewGroup", new string(lvgroup1.pszHeader));
                     Assert.True(lvgroup1.iGroupId >= 0);
                     Assert.Equal(0x00000001, (int)lvgroup1.uAlign);
-                    
+
                     var lvgroup2 = new ComCtl32.LVGROUPW
                     {
                         cbSize = (uint)Marshal.SizeOf<ComCtl32.LVGROUPW>(),

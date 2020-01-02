@@ -933,11 +933,6 @@ namespace System.Windows.Forms.Design
             return (ComCtl32.TVS_EX)User32.SendMessageW(handle, (User32.WindowMessage)NativeMethods.TVM_GETEXTENDEDSTYLE, IntPtr.Zero, IntPtr.Zero);
         }
 
-        private static void TreeView_SetExtendedStyle(IntPtr handle, ComCtl32.TVS_EX extendedStyle, int mask)
-        {
-            User32.SendMessageW(handle, (User32.WindowMessage)NativeMethods.TVM_SETEXTENDEDSTYLE, (IntPtr)mask, (IntPtr)extendedStyle);
-        }
-
         /// <summary>
         ///  Modify a WinForms TreeView control to use the new Explorer style theme
         /// </summary>
@@ -954,12 +949,7 @@ namespace System.Windows.Forms.Design
             UxTheme.SetWindowTheme(hwnd, "Explorer", null);
             ComCtl32.TVS_EX exstyle = TreeView_GetExtendedStyle(hwnd);
             exstyle |= ComCtl32.TVS_EX.DOUBLEBUFFER | ComCtl32.TVS_EX.FADEINOUTEXPANDOS;
-            TreeView_SetExtendedStyle(hwnd, exstyle, 0);
-        }
-
-        private static void ListView_SetExtendedListViewStyleEx(IntPtr handle, int mask, int extendedStyle)
-        {
-            User32.SendMessageW(handle, (User32.WindowMessage)ComCtl32.LVM.SETEXTENDEDLISTVIEWSTYLE, (IntPtr)mask, (IntPtr)extendedStyle);
+            User32.SendMessageW(hwnd, (User32.WindowMessage)NativeMethods.TVM_SETEXTENDEDSTYLE, IntPtr.Zero, (IntPtr)exstyle);
         }
 
         /// <summary>
@@ -974,7 +964,7 @@ namespace System.Windows.Forms.Design
             }
             IntPtr hwnd = listView.Handle;
             UxTheme.SetWindowTheme(hwnd, "Explorer", null);
-            ListView_SetExtendedListViewStyleEx(hwnd, NativeMethods.LVS_EX_DOUBLEBUFFER, NativeMethods.LVS_EX_DOUBLEBUFFER);
+            User32.SendMessageW(hwnd, (User32.WindowMessage)ComCtl32.LVM.SETEXTENDEDLISTVIEWSTYLE, (IntPtr)ComCtl32.LVS_EX.DOUBLEBUFFER, (IntPtr)ComCtl32.LVS_EX.DOUBLEBUFFER);
         }
     }
 }
