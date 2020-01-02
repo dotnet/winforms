@@ -889,9 +889,9 @@ namespace System.Windows.Forms.Design
                     if (_designerHost != null)
                     {
                         baseComponent = (Control)_designerHost.RootComponent;
-                        NativeMethods.SendMessage(baseComponent.Handle, WindowMessages.WM_SETREDRAW, 0, 0);
+                        User32.SendMessageW(baseComponent.Handle, User32.WindowMessage.WM_SETREDRAW, IntPtr.Zero, IntPtr.Zero);
                         tb.Focus();
-                        NativeMethods.SendMessage(baseComponent.Handle, WindowMessages.WM_SETREDRAW, 1, 0);
+                        User32.SendMessageW(baseComponent.Handle, User32.WindowMessage.WM_SETREDRAW, (IntPtr)1, IntPtr.Zero);
                     }
                 }
                 finally
@@ -973,9 +973,9 @@ namespace System.Windows.Forms.Design
                 if (_designerHost != null)
                 {
                     Control baseComponent = (Control)_designerHost.RootComponent;
-                    NativeMethods.SendMessage(baseComponent.Handle, WindowMessages.WM_SETREDRAW, 0, 0);
+                    User32.SendMessageW(baseComponent.Handle, User32.WindowMessage.WM_SETREDRAW, IntPtr.Zero, IntPtr.Zero);
                     designerFrame.Focus();
-                    NativeMethods.SendMessage(baseComponent.Handle, WindowMessages.WM_SETREDRAW, 1, 0);
+                    User32.SendMessageW(baseComponent.Handle, User32.WindowMessage.WM_SETREDRAW, (IntPtr)1, IntPtr.Zero);
                 }
             }
         }

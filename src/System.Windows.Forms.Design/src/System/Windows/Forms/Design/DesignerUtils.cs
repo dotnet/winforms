@@ -515,7 +515,7 @@ namespace System.Windows.Forms.Design
             {
                 IntPtr hDc = g.GetHdc();
                 //send the actual wm_print message
-                NativeMethods.SendMessage(hWnd, WindowMessages.WM_PRINT, hDc, (IntPtr)(NativeMethods.PRF_CHILDREN | NativeMethods.PRF_CLIENT | NativeMethods.PRF_ERASEBKGND | NativeMethods.PRF_NONCLIENT));
+                User32.SendMessageW(hWnd, User32.WindowMessage.WM_PRINT, hDc, (IntPtr)(NativeMethods.PRF_CHILDREN | NativeMethods.PRF_CLIENT | NativeMethods.PRF_ERASEBKGND | NativeMethods.PRF_NONCLIENT));
                 g.ReleaseHdc(hDc);
             }
 
@@ -930,12 +930,12 @@ namespace System.Windows.Forms.Design
 
         private static ComCtl32.TVS_EX TreeView_GetExtendedStyle(IntPtr handle)
         {
-            return (ComCtl32.TVS_EX)NativeMethods.SendMessage(handle, NativeMethods.TVM_GETEXTENDEDSTYLE, IntPtr.Zero, IntPtr.Zero);
+            return (ComCtl32.TVS_EX)User32.SendMessageW(handle, (User32.WindowMessage)NativeMethods.TVM_GETEXTENDEDSTYLE, IntPtr.Zero, IntPtr.Zero);
         }
 
         private static void TreeView_SetExtendedStyle(IntPtr handle, ComCtl32.TVS_EX extendedStyle, int mask)
         {
-            NativeMethods.SendMessage(handle, NativeMethods.TVM_SETEXTENDEDSTYLE, (IntPtr)mask, (IntPtr)extendedStyle);
+            User32.SendMessageW(handle, (User32.WindowMessage)NativeMethods.TVM_SETEXTENDEDSTYLE, (IntPtr)mask, (IntPtr)extendedStyle);
         }
 
         /// <summary>
@@ -959,7 +959,7 @@ namespace System.Windows.Forms.Design
 
         private static void ListView_SetExtendedListViewStyleEx(IntPtr handle, int mask, int extendedStyle)
         {
-            NativeMethods.SendMessage(handle, (int)ComCtl32.LVM.SETEXTENDEDLISTVIEWSTYLE, new IntPtr(mask), new IntPtr(extendedStyle));
+            User32.SendMessageW(handle, (User32.WindowMessage)ComCtl32.LVM.SETEXTENDEDLISTVIEWSTYLE, (IntPtr)mask, (IntPtr)extendedStyle);
         }
 
         /// <summary>

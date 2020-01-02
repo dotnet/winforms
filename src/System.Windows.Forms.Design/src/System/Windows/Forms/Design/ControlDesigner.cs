@@ -1837,7 +1837,7 @@ namespace System.Windows.Forms.Design
                         button = MouseButtons.Left;
                     }
                     // We don't really want the focus, but we want to focus the designer. Below we handle WM_SETFOCUS and do the right thing.
-                    NativeMethods.SendMessage(Control.Handle, WindowMessages.WM_SETFOCUS, 0, 0);
+                    User32.SendMessageW(Control.Handle, User32.WindowMessage.WM_SETFOCUS, IntPtr.Zero, IntPtr.Zero);
                     // We simulate doubleclick for things that don't...
                     if (button == MouseButtons.Left && IsDoubleClick(x, y))
                     {
@@ -1873,7 +1873,7 @@ namespace System.Windows.Forms.Design
 
                         if (_toolPassThrough)
                         {
-                            NativeMethods.SendMessage(Control.Parent.Handle, m.Msg, m.WParam, (IntPtr)GetParentPointFromLparam(m.LParam));
+                            User32.SendMessageW(Control.Parent.Handle, (User32.WindowMessage)m.Msg, m.WParam, (IntPtr)GetParentPointFromLparam(m.LParam));
                             return;
                         }
 
@@ -1919,7 +1919,7 @@ namespace System.Windows.Forms.Design
                     {
                         if (_toolPassThrough)
                         {
-                            NativeMethods.SendMessage(Control.Parent.Handle, m.Msg, m.WParam, (IntPtr)GetParentPointFromLparam(m.LParam));
+                            User32.SendMessageW(Control.Parent.Handle, (User32.WindowMessage)m.Msg, m.WParam, (IntPtr)GetParentPointFromLparam(m.LParam));
                             return;
                         }
 
@@ -1964,7 +1964,7 @@ namespace System.Windows.Forms.Design
                     {
                         if (_toolPassThrough)
                         {
-                            NativeMethods.SendMessage(Control.Parent.Handle, m.Msg, m.WParam, (IntPtr)GetParentPointFromLparam(m.LParam));
+                            User32.SendMessageW(Control.Parent.Handle, (User32.WindowMessage)m.Msg, m.WParam, (IntPtr)GetParentPointFromLparam(m.LParam));
                             _toolPassThrough = false;
                             return;
                         }
