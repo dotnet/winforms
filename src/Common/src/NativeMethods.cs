@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -342,42 +342,12 @@ namespace System.Windows.Forms
         MDITILE_VERTICAL = 0x0000,
         MDITILE_HORIZONTAL = 0x0001,
         MDITILE_SKIPDISABLED = 0x0002,
-        MCM_SETMAXSELCOUNT = (0x1000 + 4),
-        MCM_SETSELRANGE = (0x1000 + 6),
-        MCM_GETMONTHRANGE = (0x1000 + 7),
-        MCM_GETMINREQRECT = (0x1000 + 9),
-        MCM_SETCOLOR = (0x1000 + 10),
-        MCM_HITTEST = (0x1000 + 14),
-        MCM_SETFIRSTDAYOFWEEK = (0x1000 + 15),
-        MCM_SETRANGE = (0x1000 + 18),
-        MCM_SETMONTHDELTA = (0x1000 + 20),
-        MCM_GETMAXTODAYWIDTH = (0x1000 + 21),
-        MCHT_TITLE = 0x00010000,
-        MCHT_CALENDAR = 0x00020000,
-        MCHT_TODAYLINK = 0x00030000,
-        MCHT_TITLEBK = (0x00010000),
-        MCHT_TITLEMONTH = (0x00010000 | 0x0001),
-        MCHT_TITLEYEAR = (0x00010000 | 0x0002),
-        MCHT_TITLEBTNNEXT = (0x00010000 | 0x01000000 | 0x0003),
-        MCHT_TITLEBTNPREV = (0x00010000 | 0x02000000 | 0x0003),
-        MCHT_CALENDARBK = (0x00020000),
-        MCHT_CALENDARDATE = (0x00020000 | 0x0001),
-        MCHT_CALENDARDATENEXT = ((0x00020000 | 0x0001) | 0x01000000),
-        MCHT_CALENDARDATEPREV = ((0x00020000 | 0x0001) | 0x02000000),
-        MCHT_CALENDARDAY = (0x00020000 | 0x0002),
-        MCHT_CALENDARWEEKNUM = (0x00020000 | 0x0003),
-        MCSC_TEXT = 1,
-        MCSC_TITLEBK = 2,
-        MCSC_TITLETEXT = 3,
-        MCSC_MONTHBK = 4,
-        MCSC_TRAILINGTEXT = 5,
         MCN_VIEWCHANGE = (0 - 750), // MCN_SELECT -4  - give state of calendar view
         MCN_SELCHANGE = ((0 - 750) + 1),
         MCN_GETDAYSTATE = ((0 - 750) + 3),
         MCN_SELECT = ((0 - 750) + 4),
 
         MSAA_MENU_SIG = (unchecked((int)0xAA0DF00D));
-
 
         public const int NIM_ADD = 0x00000000,
         NIM_MODIFY = 0x00000001,
