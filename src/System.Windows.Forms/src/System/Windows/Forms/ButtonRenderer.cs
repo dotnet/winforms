@@ -11,18 +11,13 @@ namespace System.Windows.Forms
     ///  This is a rendering class for the Button control. It works downlevel too (obviously
     ///  without visual styles applied.)
     /// </summary>
-    public sealed class ButtonRenderer
+    public static class ButtonRenderer
     {
         //Make this per-thread, so that different threads can safely use these methods.
         [ThreadStatic]
         private static VisualStyleRenderer visualStyleRenderer = null;
         private static readonly VisualStyleElement ButtonElement = VisualStyleElement.Button.PushButton.Normal;
         private static bool renderMatchingApplicationState = true;
-
-        //cannot instantiate
-        private ButtonRenderer()
-        {
-        }
 
         /// <summary>
         ///  If this property is true, then the renderer will use the setting from Application.RenderWithVisualStyles to

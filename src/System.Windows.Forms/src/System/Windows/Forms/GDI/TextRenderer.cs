@@ -11,13 +11,8 @@ namespace System.Windows.Forms
     /// <summary>
     ///  This class provides API for drawing GDI text.
     /// </summary>
-    public sealed class TextRenderer
+    public static class TextRenderer
     {
-        //cannot instantiate
-        private TextRenderer()
-        {
-        }
-
         public static void DrawText(IDeviceContext dc, string text, Font font, Point pt, Color foreColor)
         {
             if (dc == null)

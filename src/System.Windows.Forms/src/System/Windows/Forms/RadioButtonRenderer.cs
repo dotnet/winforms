@@ -11,18 +11,13 @@ namespace System.Windows.Forms
     ///  This is a rendering class for the RadioButton control. It works downlevel too (obviously
     ///  without visual styles applied.)
     /// </summary>
-    public sealed class RadioButtonRenderer
+    public static class RadioButtonRenderer
     {
         //Make this per-thread, so that different threads can safely use these methods.
         [ThreadStatic]
         private static VisualStyleRenderer visualStyleRenderer = null;
         private static readonly VisualStyleElement RadioElement = VisualStyleElement.Button.RadioButton.UncheckedNormal;
         private static bool renderMatchingApplicationState = true;
-
-        //cannot instantiate
-        private RadioButtonRenderer()
-        {
-        }
 
         /// <summary>
         ///  If this property is true, then the renderer will use the setting from Application.RenderWithVisualStyles to

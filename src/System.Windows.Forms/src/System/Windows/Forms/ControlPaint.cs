@@ -20,7 +20,7 @@ namespace System.Windows.Forms
     ///  paint common Windows UI pieces. Many windows forms controls use this class to paint
     ///  their UI elements.
     /// </summary>
-    public sealed class ControlPaint
+    public static class ControlPaint
     {
         [ThreadStatic]
         private static Bitmap checkImage;         // image used to render checkmarks
@@ -54,12 +54,6 @@ namespace System.Windows.Forms
         private static readonly ContentAlignment anyBottom = ContentAlignment.BottomLeft | ContentAlignment.BottomCenter | ContentAlignment.BottomRight;
         private static readonly ContentAlignment anyCenter = ContentAlignment.TopCenter | ContentAlignment.MiddleCenter | ContentAlignment.BottomCenter;
         private static readonly ContentAlignment anyMiddle = ContentAlignment.MiddleLeft | ContentAlignment.MiddleCenter | ContentAlignment.MiddleRight;
-
-        // not creatable...
-        //
-        private ControlPaint()
-        {
-        }
 
         internal static Rectangle CalculateBackgroundImageRectangle(Rectangle bounds, Image backgroundImage, ImageLayout imageLayout)
         {
