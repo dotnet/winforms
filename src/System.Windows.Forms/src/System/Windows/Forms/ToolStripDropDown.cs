@@ -118,8 +118,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (value != (state[stateAllowTransparency]) &&
-                    OSFeature.Feature.IsPresent(OSFeature.LayeredWindows))
+                if (value != (state[stateAllowTransparency]))
                 {
                     state[stateAllowTransparency] = value;
 
@@ -714,7 +713,7 @@ namespace System.Windows.Forms
                 Properties.SetObject(PropOpacity, value);
 
                 bool oldLayered = (state[stateLayered]);
-                if (OpacityAsByte < 255 && OSFeature.Feature.IsPresent(OSFeature.LayeredWindows))
+                if (OpacityAsByte < 255)
                 {
                     AllowTransparency = true;
                     state[stateLayered] = true;
@@ -2073,7 +2072,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void UpdateLayered()
         {
-            if (state[stateLayered] && IsHandleCreated && TopLevel && OSFeature.Feature.IsPresent(OSFeature.LayeredWindows))
+            if (state[stateLayered] && IsHandleCreated && TopLevel)
             {
                 bool result;
 
