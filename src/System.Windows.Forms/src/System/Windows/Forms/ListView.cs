@@ -599,11 +599,11 @@ namespace System.Windows.Forms
                         {
                             if (CheckBoxes)
                             { // we want custom checkboxes
-                                SendMessage((int)LVM.SETIMAGELIST, NativeMethods.LVSIL_STATE, imageListState.Handle);
+                                User32.SendMessageW(this, (User32.WindowMessage)LVM.SETIMAGELIST, (IntPtr)LVSIL.STATE, imageListState.Handle);
                             }
                             else
                             {
-                                SendMessage((int)LVM.SETIMAGELIST, NativeMethods.LVSIL_STATE, IntPtr.Zero);
+                                User32.SendMessageW(this, (User32.WindowMessage)LVM.SETIMAGELIST, (IntPtr)LVSIL.STATE, IntPtr.Zero);
                             }
                         }
 
@@ -1276,7 +1276,7 @@ namespace System.Windows.Forms
 
                     if (IsHandleCreated)
                     {
-                        SendMessage((int)LVM.SETIMAGELIST, (IntPtr)NativeMethods.LVSIL_NORMAL, value == null ? IntPtr.Zero : value.Handle);
+                        User32.SendMessageW(this, (User32.WindowMessage)LVM.SETIMAGELIST, (IntPtr)LVSIL.NORMAL, value == null ? IntPtr.Zero : value.Handle);
                         if (AutoArrange && !listViewState1[LISTVIEWSTATE1_disposingImageLists])
                         {
                             UpdateListViewItemsLocations();
@@ -1543,7 +1543,7 @@ namespace System.Windows.Forms
 
                     if (IsHandleCreated)
                     {
-                        SendMessage((int)LVM.SETIMAGELIST, (IntPtr)NativeMethods.LVSIL_SMALL, value == null ? IntPtr.Zero : value.Handle);
+                        User32.SendMessageW(this, (User32.WindowMessage)LVM.SETIMAGELIST, (IntPtr)LVSIL.SMALL, value == null ? IntPtr.Zero : value.Handle);
 
                         if (View == View.SmallIcon)
                         {
@@ -1670,7 +1670,7 @@ namespace System.Windows.Forms
 
                         if (IsHandleCreated)
                         {
-                            SendMessage((int)LVM.SETIMAGELIST, NativeMethods.LVSIL_STATE, value == null ? IntPtr.Zero : value.Handle);
+                            User32.SendMessageW(this, (User32.WindowMessage)LVM.SETIMAGELIST, (IntPtr)LVSIL.STATE, value == null ? IntPtr.Zero : value.Handle);
                         }
                     }
                 }
@@ -1695,7 +1695,7 @@ namespace System.Windows.Forms
                             // the state imageList.
                             // (Yes, it does exactly that even though our wrapper sets LVS_SHAREIMAGELISTS on the native listView.)
                             // So we make the native listView forget about its StateImageList just before we recreate the handle.
-                            SendMessage((int)LVM.SETIMAGELIST, NativeMethods.LVSIL_STATE, IntPtr.Zero);
+                            User32.SendMessageW(this, (User32.WindowMessage)LVM.SETIMAGELIST, (IntPtr)LVSIL.STATE, IntPtr.Zero);
                         }
 
                         imageListState = value;
@@ -1715,7 +1715,7 @@ namespace System.Windows.Forms
                             }
                             else
                             {
-                                SendMessage((int)LVM.SETIMAGELIST, NativeMethods.LVSIL_STATE, (imageListState == null || imageListState.Images.Count == 0) ? IntPtr.Zero : imageListState.Handle);
+                                User32.SendMessageW(this, (User32.WindowMessage)LVM.SETIMAGELIST, (IntPtr)LVSIL.STATE, (imageListState == null || imageListState.Images.Count == 0) ? IntPtr.Zero : imageListState.Handle);
                             }
 
                             // Comctl should handle auto-arrange for us, but doesn't
@@ -4220,7 +4220,7 @@ namespace System.Windows.Forms
             if (IsHandleCreated)
             {
                 IntPtr handle = (LargeImageList == null) ? IntPtr.Zero : LargeImageList.Handle;
-                SendMessage((int)LVM.SETIMAGELIST, (IntPtr)NativeMethods.LVSIL_NORMAL, handle);
+                User32.SendMessageW(this, (User32.WindowMessage)LVM.SETIMAGELIST, (IntPtr)LVSIL.NORMAL, handle);
 
                 ForceCheckBoxUpdate();
             }
@@ -4791,17 +4791,17 @@ namespace System.Windows.Forms
 
             if (null != imageListLarge)
             {
-                SendMessage((int)LVM.SETIMAGELIST, NativeMethods.LVSIL_NORMAL, imageListLarge.Handle);
+                User32.SendMessageW(this, (User32.WindowMessage)LVM.SETIMAGELIST, (IntPtr)LVSIL.NORMAL, imageListLarge.Handle);
             }
 
             if (null != imageListSmall)
             {
-                SendMessage((int)LVM.SETIMAGELIST, NativeMethods.LVSIL_SMALL, imageListSmall.Handle);
+                User32.SendMessageW(this, (User32.WindowMessage)LVM.SETIMAGELIST, (IntPtr)LVSIL.SMALL, imageListSmall.Handle);
             }
 
             if (null != imageListState)
             {
-                SendMessage((int)LVM.SETIMAGELIST, NativeMethods.LVSIL_STATE, imageListState.Handle);
+                User32.SendMessageW(this, (User32.WindowMessage)LVM.SETIMAGELIST, (IntPtr)LVSIL.STATE, imageListState.Handle);
             }
         }
 
@@ -5321,7 +5321,7 @@ namespace System.Windows.Forms
             if (IsHandleCreated)
             {
                 IntPtr handle = (SmallImageList == null) ? IntPtr.Zero : SmallImageList.Handle;
-                SendMessage((int)LVM.SETIMAGELIST, (IntPtr)NativeMethods.LVSIL_SMALL, handle);
+                User32.SendMessageW(this, (User32.WindowMessage)LVM.SETIMAGELIST, (IntPtr)LVSIL.SMALL, handle);
 
                 ForceCheckBoxUpdate();
             }
@@ -5354,7 +5354,7 @@ namespace System.Windows.Forms
                 {
                     handle = imageListState.Handle;
                 }
-                SendMessage((int)LVM.SETIMAGELIST, (IntPtr)NativeMethods.LVSIL_STATE, handle);
+                User32.SendMessageW(this, (User32.WindowMessage)LVM.SETIMAGELIST, (IntPtr)LVSIL.STATE, handle);
             }
         }
 
@@ -6043,7 +6043,7 @@ namespace System.Windows.Forms
             // (Yes, it does exactly that even though our wrapper sets LVS_SHAREIMAGELISTS on the native listView.)
             if (IsHandleCreated && StateImageList != null)
             {
-                SendMessage((int)LVM.SETIMAGELIST, NativeMethods.LVSIL_STATE, IntPtr.Zero);
+                User32.SendMessageW(this, (User32.WindowMessage)LVM.SETIMAGELIST, (IntPtr)LVSIL.STATE, IntPtr.Zero);
             }
 
             RecreateHandle();

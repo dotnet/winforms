@@ -179,9 +179,6 @@ namespace System.Windows.Forms
         LOCK_ONLYONCE = 0x4,
         LV_VIEW_TILE = 0x0004,
 
-        LVSIL_NORMAL = 0,
-        LVSIL_SMALL = 1,
-        LVSIL_STATE = 2,
         LVNI_FOCUSED = 0x0001,
         LVNI_SELECTED = 0x0002,
         LVIR_BOUNDS = 0,
