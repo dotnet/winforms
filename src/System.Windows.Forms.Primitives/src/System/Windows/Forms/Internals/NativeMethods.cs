@@ -179,9 +179,6 @@ namespace System.Windows.Forms
         LOCK_ONLYONCE = 0x4,
         LV_VIEW_TILE = 0x0004,
 
-        LVSCW_AUTOSIZE = -1,
-        LVSCW_AUTOSIZE_USEHEADER = -2,
-
         LVSIL_NORMAL = 0,
         LVSIL_SMALL = 1,
         LVSIL_STATE = 2,

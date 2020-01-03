@@ -5084,11 +5084,11 @@ namespace System.Windows.Forms
 
                 // If the width maps to a LVCSW_ const, then native control will autoresize.
                 // We may need to compensate for that.
-                if (width == NativeMethods.LVSCW_AUTOSIZE_USEHEADER)
+                if (width == (int)LVSCW.AUTOSIZE_USEHEADER)
                 {
                     headerAutoResize = ColumnHeaderAutoResizeStyle.HeaderSize;
                 }
-                else if (width == NativeMethods.LVSCW_AUTOSIZE)
+                else if (width == (int)LVSCW.AUTOSIZE)
                 {
                     headerAutoResize = ColumnHeaderAutoResizeStyle.ColumnContent;
                 }
@@ -5096,13 +5096,13 @@ namespace System.Windows.Forms
 
             if (headerAutoResize == ColumnHeaderAutoResizeStyle.HeaderSize)
             {
-                compensate = CompensateColumnHeaderResize(columnIndex, false /*columnHeaderResizeCancelled*/);
-                width = NativeMethods.LVSCW_AUTOSIZE_USEHEADER;
+                compensate = CompensateColumnHeaderResize(columnIndex, columnResizeCancelled: false);
+                width = (int)LVSCW.AUTOSIZE_USEHEADER;
             }
             else if (headerAutoResize == ColumnHeaderAutoResizeStyle.ColumnContent)
             {
-                compensate = CompensateColumnHeaderResize(columnIndex, false /*columnHeaderResizeCancelled*/);
-                width = NativeMethods.LVSCW_AUTOSIZE;
+                compensate = CompensateColumnHeaderResize(columnIndex, columnResizeCancelled: false);
+                width = (int)LVSCW.AUTOSIZE;
             }
 
             if (IsHandleCreated)
