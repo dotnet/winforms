@@ -2297,12 +2297,12 @@ namespace System.Windows.Forms
                 return;
             }
 
-            switch ((int)value)
+            switch ((LVA)value)
             {
-                case NativeMethods.LVA_DEFAULT:
-                case NativeMethods.LVA_ALIGNLEFT:
-                case NativeMethods.LVA_ALIGNTOP:
-                case NativeMethods.LVA_SNAPTOGRID:
+                case LVA.DEFAULT:
+                case LVA.ALIGNLEFT:
+                case LVA.ALIGNTOP:
+                case LVA.SNAPTOGRID:
                     if (IsHandleCreated)
                     {
                         User32.PostMessageW(this, (User32.WindowMessage)LVM.ARRANGE, (IntPtr)value, IntPtr.Zero);
@@ -2323,10 +2323,7 @@ namespace System.Windows.Forms
         ///  In Large Icon or Small Icon view, arranges items according to the ListView's
         ///  current alignment style.
         /// </summary>
-        public void ArrangeIcons()
-        {
-            ArrangeIcons((ListViewAlignment)NativeMethods.LVA_DEFAULT);
-        }
+        public void ArrangeIcons() => ArrangeIcons((ListViewAlignment)LVA.DEFAULT);
 
         public void AutoResizeColumns(ColumnHeaderAutoResizeStyle headerAutoResize)
         {

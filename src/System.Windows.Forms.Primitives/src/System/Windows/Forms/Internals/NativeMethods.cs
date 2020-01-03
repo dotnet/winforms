@@ -178,11 +178,6 @@ namespace System.Windows.Forms
         LOCK_EXCLUSIVE = 0x2,
         LOCK_ONLYONCE = 0x4,
         LV_VIEW_TILE = 0x0004,
-
-        LVA_DEFAULT = 0x0000,
-        LVA_ALIGNLEFT = 0x0001,
-        LVA_ALIGNTOP = 0x0002,
-        LVA_SNAPTOGRID = 0x0005,
         LVN_ITEMCHANGING = ((0 - 100) - 0),
         LVN_ITEMCHANGED = ((0 - 100) - 1),
         LVN_BEGINLABELEDIT = ((0 - 100) - 75),
