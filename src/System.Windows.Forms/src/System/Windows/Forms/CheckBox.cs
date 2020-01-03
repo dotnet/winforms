@@ -303,14 +303,14 @@ namespace System.Windows.Forms
                 cp.ClassName = ComCtl32.WindowClasses.WC_BUTTON;
                 if (OwnerDraw)
                 {
-                    cp.Style |= NativeMethods.BS_OWNERDRAW;
+                    cp.Style |= (int)User32.BS.OWNERDRAW;
                 }
                 else
                 {
-                    cp.Style |= NativeMethods.BS_3STATE;
+                    cp.Style |= (int)User32.BS.THREE_STATE;
                     if (Appearance == Appearance.Button)
                     {
-                        cp.Style |= NativeMethods.BS_PUSHLIKE;
+                        cp.Style |= (int)User32.BS.PUSHLIKE;
                     }
 
                     // Determine the alignment of the check box
@@ -318,7 +318,7 @@ namespace System.Windows.Forms
                     ContentAlignment align = RtlTranslateContent(CheckAlign);
                     if ((int)(align & anyRight) != 0)
                     {
-                        cp.Style |= NativeMethods.BS_RIGHTBUTTON;
+                        cp.Style |= (int)User32.BS.RIGHTBUTTON;
                     }
 
                 }

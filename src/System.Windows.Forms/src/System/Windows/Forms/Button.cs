@@ -147,14 +147,14 @@ namespace System.Windows.Forms
                 cp.ClassName = ComCtl32.WindowClasses.WC_BUTTON;
                 if (GetStyle(ControlStyles.UserPaint))
                 {
-                    cp.Style |= NativeMethods.BS_OWNERDRAW;
+                    cp.Style |= (int)User32.BS.OWNERDRAW;
                 }
                 else
                 {
-                    cp.Style |= NativeMethods.BS_PUSHBUTTON;
+                    cp.Style |= (int)User32.BS.PUSHBUTTON;
                     if (IsDefault)
                     {
-                        cp.Style |= NativeMethods.BS_DEFPUSHBUTTON;
+                        cp.Style |= (int)User32.BS.DEFPUSHBUTTON;
                     }
                 }
                 return cp;

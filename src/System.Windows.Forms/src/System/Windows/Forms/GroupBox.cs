@@ -139,14 +139,14 @@ namespace System.Windows.Forms
                 if (!OwnerDraw)
                 {
                     cp.ClassName = ComCtl32.WindowClasses.WC_BUTTON;
-                    cp.Style |= NativeMethods.BS_GROUPBOX;
+                    cp.Style |= (int)User32.BS.GROUPBOX;
                 }
                 else
                 {
                     // if we swap back to a different flat style
                     // we need to reset these guys.
                     cp.ClassName = null;
-                    cp.Style &= ~NativeMethods.BS_GROUPBOX;
+                    cp.Style &= ~(int)User32.BS.GROUPBOX;
                 }
                 cp.ExStyle |= (int)User32.WS_EX.CONTROLPARENT;
 
