@@ -33,9 +33,9 @@ namespace System.Windows.Forms
         ///  on the stack even if one is already present. In such cases, this method helps - you get to manage
         ///  the cookie yourself though.
         /// </summary>
-        public static IntPtr Activate()
+        public static IntPtr Activate(bool useVisualStyles)
         {
-            if (IsContextActiveButNotCreated() && Kernel32.ActivateActCtx(s_hActCtx, out IntPtr userCookie))
+            if (IsContextActiveButNotCreated(useVisualStyles) && Kernel32.ActivateActCtx(s_hActCtx, out IntPtr userCookie))
             {
                 return userCookie;
             }
@@ -43,8 +43,8 @@ namespace System.Windows.Forms
             return IntPtr.Zero;
         }
 
-        private static bool IsContextActiveButNotCreated()
-            => Application.UseVisualStyles && s_contextCreationSucceeded && !IsContextActive();        
+        private static bool IsContextActiveButNotCreated(bool useVisualStyles)
+            => useVisualStyles && s_contextCreationSucceeded && !IsContextActive();
 
         /// <summary>
         ///  Use this to deactivate a context activated by calling ExplicitActivate.

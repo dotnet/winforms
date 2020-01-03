@@ -406,7 +406,7 @@ namespace System.Windows.Forms
 
                 // Activate theming scope to get theming for controls at design time and when hosted in browser.
                 // NOTE: If a theming context is already active, this call is very fast, so shouldn't be a perf issue.
-                userCookie = ThemingScope.Activate();
+                userCookie = ThemingScope.Activate(Application.UseVisualStyles);
             }
 
             Application.BeginModalMessageLoop();

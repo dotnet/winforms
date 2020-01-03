@@ -4,8 +4,9 @@
 
 using Xunit;
 using static Interop;
+using static Interop.User32;
 
-namespace System.Windows.Forms.Tests.InteropTests
+namespace System.Windows.Forms.Primitives.Tests.Interop.User32
 {
     public class GetWindowTextTests
     {
@@ -43,7 +44,7 @@ namespace System.Windows.Forms.Tests.InteropTests
                 form.BeforeGetTextLengthCallback = () => shortText;
             }
 
-            string result = User32.GetWindowText(formHandle);
+            string result = GetWindowText(formHandle);
             Assert.Equal(longText, result);
         }
 
@@ -67,13 +68,17 @@ namespace System.Windows.Forms.Tests.InteropTests
                 {
                     string text = BeforeGetTextLengthCallback?.Invoke();
                     if (text != null)
-                        User32.SetWindowTextW(m.HWnd, text);
+                    {
+                        SetWindowTextW(m.HWnd, text);
+                    }
                 }
                 else if (m.Msg == WindowMessages.WM_GETTEXT)
                 {
                     string text = BeforeGetTextCallback?.Invoke();
                     if (text != null)
-                        User32.SetWindowTextW(m.HWnd, text);
+                    {
+                        SetWindowTextW(m.HWnd, text);
+                    }
                 }
 
                 base.WndProc(ref m);

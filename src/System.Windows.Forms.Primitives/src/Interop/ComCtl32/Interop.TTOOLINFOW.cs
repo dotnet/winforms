@@ -4,7 +4,6 @@
 
 using System;
 using System.Runtime.InteropServices;
-using System.Windows.Forms;
 
 internal static partial class Interop
 {
@@ -38,30 +37,30 @@ internal static partial class Interop
             DI_SETITEM = 0x8000
         }
 
-        public struct ToolInfoWrapper
+        public struct ToolInfoWrapper<T>
+            where T : IHandle
         {
             public TTOOLINFOW Info;
             public string Text { get; set; }
-            private readonly object _handle;
+            private readonly T _handle;
 
-            public unsafe ToolInfoWrapper(object handle, TTF flags = default, string text = null)
+            public unsafe ToolInfoWrapper(T handle, TTF flags = default, string text = null)
             {
-                IntPtr hwnd = GetHWND(handle);
                 Info = new TTOOLINFOW
                 {
-                    hwnd = hwnd,
-                    uId = hwnd,
+                    hwnd = handle.Handle,
+                    uId = handle.Handle,
                     uFlags = flags | TTF.IDISHWND
                 };
                 Text = text;
                 _handle = handle;
             }
 
-            public unsafe ToolInfoWrapper(object handle, IntPtr id, TTF flags = default, string text = null, RECT rect = default)
+            public unsafe ToolInfoWrapper(T handle, IntPtr id, TTF flags = default, string text = null, RECT rect = default)
             {
                 Info = new TTOOLINFOW
                 {
-                    hwnd = GetHWND(handle),
+                    hwnd = handle.Handle,
                     uId = id,
                     uFlags = flags,
                     rect = rect
@@ -69,15 +68,6 @@ internal static partial class Interop
                 Text = text;
                 _handle = handle;
             }
-
-            private static IntPtr GetHWND(object handle)
-                => handle switch
-                {
-                    IHandle iHandle => iHandle.Handle,
-                    IWin32Window window => Control.GetSafeHandle(window),
-                    _ => throw new InvalidOperationException("Unexpected handle type.")
-                };
-
 
             public unsafe IntPtr SendMessage(IHandle sender, User32.WindowMessage message, BOOL state = BOOL.FALSE)
             {

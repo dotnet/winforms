@@ -74,7 +74,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            return FileDialog.GetShellItemForPath(filePathString);
+            return FileDialogNative.GetShellItemForPath(filePathString);
         }
     }
 }

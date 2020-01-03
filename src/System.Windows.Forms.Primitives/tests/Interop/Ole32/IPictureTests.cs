@@ -2,14 +2,11 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.ComponentModel;
 using System.Drawing;
-using System.Reflection;
-using System.Windows.Forms.ComponentModel.Com2Interop;
 using Xunit;
 using static Interop.Ole32;
 
-namespace System.Windows.Forms.Tests.InteropTests
+namespace System.Windows.Forms.Primitives.Tests.Interop.Ole32
 {
     public class IPictureTests
     {

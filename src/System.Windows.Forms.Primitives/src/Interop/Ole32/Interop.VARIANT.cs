@@ -4,6 +4,7 @@
 
 using System;
 using System.Runtime.InteropServices;
+using System.Windows.Forms.Primitives.Resources;
 
 internal static partial class Interop
 {

@@ -2,12 +2,33 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.IO;
 using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms
 {
     internal static class FileDialogNative
     {
+        internal static IShellItem GetShellItemForPath(string path)
+        {
+            IShellItem ret = null;
+            IntPtr pidl = IntPtr.Zero;
+            uint zero = 0;
+            if (UnsafeNativeMethods.Shell32.SHILCreateFromPath(path, out pidl, ref zero) >= 0)
+            {
+                if (UnsafeNativeMethods.Shell32.SHCreateShellItem(
+                    IntPtr.Zero, // No parent specified
+                    IntPtr.Zero,
+                    pidl,
+                    out ret) >= 0)
+                {
+                    return ret;
+                }
+            }
+
+            throw new FileNotFoundException();
+        }
+
         [ComImport]
         [Guid(IIDGuid.IFileOpenDialog)]
         [CoClass(typeof(FileOpenDialogRCW))]
@@ -78,7 +99,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Multiple items or the attributes together.
             /// </summary>
-            SIATTRIBFLAGS_OR = 0x00000002, 
+            SIATTRIBFLAGS_OR = 0x00000002,
 
             /// <summary>
             ///  Call GetAttributes directly on the ShellFolder for multiple attributes

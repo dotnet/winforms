@@ -235,6 +235,20 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
+        ///  Returns a new Padding with the input's
+        ///  dimensions converted from logical units to device units.
+        /// </summary>
+        /// <param name="logicalPadding">Padding in logical units</param>
+        /// <returns>Padding in device units</returns>
+        public static Padding LogicalToDeviceUnits(Padding logicalPadding, int deviceDpi = 0)
+        {
+            return new Padding(LogicalToDeviceUnits(logicalPadding.Left, deviceDpi),
+                               LogicalToDeviceUnits(logicalPadding.Top, deviceDpi),
+                               LogicalToDeviceUnits(logicalPadding.Right, deviceDpi),
+                               LogicalToDeviceUnits(logicalPadding.Bottom, deviceDpi));
+        }
+
+        /// <summary>
         ///  Transforms a horizontal integer coordinate from logical to device units
         ///  by scaling it up  for current DPI and rounding to nearest integer value
         /// </summary>

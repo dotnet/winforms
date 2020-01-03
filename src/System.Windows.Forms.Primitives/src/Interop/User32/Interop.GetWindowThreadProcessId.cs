@@ -4,7 +4,6 @@
 
 using System;
 using System.Runtime.InteropServices;
-using System.Windows.Forms;
 
 internal static partial class Interop
 {
@@ -13,7 +12,7 @@ internal static partial class Interop
         [DllImport(Libraries.User32, ExactSpelling = true)]
         public static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
 
-        public static uint GetWindowThreadProcessId(Control hWnd, out uint lpdwProcessId)
+        public static uint GetWindowThreadProcessId(IHandle hWnd, out uint lpdwProcessId)
         {
             uint result = GetWindowThreadProcessId(hWnd.Handle, out lpdwProcessId);
             GC.KeepAlive(hWnd);
