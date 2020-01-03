@@ -12,7 +12,10 @@ using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
-    public class MonthCalendarTests
+    using Point = System.Drawing.Point;
+    using Size = System.Drawing.Size;
+
+    public class MonthCalendarTests : IClassFixture<ThreadExceptionFixture>
     {
         [WinFormsFact]
         public void MonthCalendar_Ctor_Default()
@@ -2343,16 +2346,93 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createdCallCount);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void MonthCalendar_SingleMonthSize_GetWithHandle_ReturnsExpected()
         {
             using var control = new MonthCalendar();
             Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
 
             Size size = control.SingleMonthSize;
-            Assert.True(size.Width > 0);
-            Assert.True(size.Height > 0);
+            Assert.True(size.Width >= 176);
+            Assert.True(size.Height >= 153);
             Assert.Equal(size, control.SingleMonthSize);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        public static IEnumerable<object[]> SingleMonthSize_GetCustomGetMinReqRect_TestData()
+        {
+            yield return new object[] { new RECT(0, 0, 0, 0), Size.Empty };
+            yield return new object[] { new RECT(1, 2, 3, 4), new Size(3, 4) };
+            yield return new object[] { new RECT(1, 2, 1, 6), new Size(1, 6) };
+            yield return new object[] { new RECT(1, 2, 6, 1), new Size(6, 1) };
+            yield return new object[] { new RECT(1, 2, 6, 6), new Size(6, 6) };
+            yield return new object[] { new RECT(1, 2, 30, 40), new Size(30, 40) };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(SingleMonthSize_GetCustomGetMinReqRect_TestData))]
+        public void MonthCalendar_SingleMonthSize_GetCustomGetMinReqRect_ReturnsExpected(object getMinReqRectResult, Size expected)
+        {
+            using var control = new CustomGetMinReqRectMonthCalendar
+            {
+                GetMinReqRectResult = (RECT)getMinReqRectResult
+            };
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+
+            Assert.Equal(expected, control.SingleMonthSize);
+        }
+
+        private class CustomGetMinReqRectMonthCalendar : MonthCalendar
+        {
+            public RECT GetMinReqRectResult { get; set; }
+
+            protected unsafe override void WndProc(ref Message m)
+            {
+                if (m.Msg == (int)ComCtl32.MCM.GETMINREQRECT)
+                {
+                    RECT* pRect = (RECT*)m.LParam;
+                    *pRect = GetMinReqRectResult;
+                    m.Result = (IntPtr)1;
+                    return;
+                }
+
+                base.WndProc(ref m);
+            }
+        }
+
+        [WinFormsFact]
+        public void MonthCalendar_SingleMonthSize_GetInvalidGetMinReqRect_ThrowsInvalidOperationException()
+        {
+            using var control = new InvalidGetMinReqRectMonthCalendar();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+
+            control.MakeInvalid = true;
+            Assert.Throws<InvalidOperationException>(() => control.SingleMonthSize);
+        }
+
+        private class InvalidGetMinReqRectMonthCalendar : MonthCalendar
+        {
+            public bool MakeInvalid { get; set; }
+
+            protected override void WndProc(ref Message m)
+            {
+                if (MakeInvalid && m.Msg == (int)ComCtl32.MCM.GETMINREQRECT)
+                {
+                    m.Result = IntPtr.Zero;
+                    return;
+                }
+
+                base.WndProc(ref m);
+            }
         }
 
         public static IEnumerable<object[]> Size_Set_TestData()
