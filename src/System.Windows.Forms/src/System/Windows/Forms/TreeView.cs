@@ -3112,7 +3112,7 @@ namespace System.Windows.Forms
                             else
                             {
                                 treeViewState[TREEVIEWSTATE_showTreeViewContextMenu] = true;
-                                SendMessage(WindowMessages.WM_CONTEXTMENU, Handle, (int)User32.GetMessagePos());
+                                User32.SendMessageW(this, User32.WindowMessage.WM_CONTEXTMENU, Handle, (IntPtr)User32.GetMessagePos());
                             }
                             m.Result = (IntPtr)1;
 

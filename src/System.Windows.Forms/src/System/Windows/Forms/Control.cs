@@ -7905,7 +7905,7 @@ namespace System.Windows.Forms
                 if (User32.GetScrollInfo(this, User32.SB.HORZ, ref si).IsTrue())
                 {
                     si.nPos = (RightToLeft == RightToLeft.Yes) ? si.nMax : si.nMin;
-                    SendMessage(WindowMessages.WM_HSCROLL, PARAM.FromLowHigh((int)User32.SBH.THUMBPOSITION, si.nPos), 0);
+                    User32.SendMessageW(this, User32.WindowMessage.WM_HSCROLL, PARAM.FromLowHigh((int)User32.SBH.THUMBPOSITION, si.nPos), IntPtr.Zero);
                 }
             }
         }
@@ -10640,12 +10640,6 @@ namespace System.Windows.Forms
             return UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), msg, wparam, lparam);
         }
 
-        internal IntPtr SendMessage(int msg, IntPtr wparam, int lparam)
-        {
-            Debug.Assert(IsHandleCreated, "Performance alert!  Calling Control::SendMessage and forcing handle creation.  Re-work control so handle creation is not required to set properties.  If there is no work around, wrap the call in an IsHandleCreated check.");
-            return UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), msg, wparam, (IntPtr)lparam);
-        }
-
         /// <summary>
         ///  Sends a Win32 message to this control.  If the control does not yet
         ///  have a handle, it will be created.
@@ -11333,7 +11327,7 @@ namespace System.Windows.Forms
 
         private void SetWindowFont()
         {
-            SendMessage(WindowMessages.WM_SETFONT, FontHandle, 0 /*redraw = false*/);
+            User32.SendMessageW(this, User32.WindowMessage.WM_SETFONT, FontHandle, PARAM.FromBool(false));
         }
 
         private void SetWindowStyle(int flag, bool value)
