@@ -34,7 +34,7 @@ namespace System.Windows.Forms
         private string _filter;
         private bool _ignoreSecondFileOkNotification;
         private int _okNotificationCount;
-        private UnsafeNativeMethods.CharBuffer _charBuffer;
+        private UnicodeCharBuffer _charBuffer;
         private IntPtr _dialogHWnd;
 
         /// <summary>
@@ -433,7 +433,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Extracts the filename(s) returned by the file dialog.
         /// </summary>
-        private string[] GetMultiselectFiles(UnsafeNativeMethods.CharBuffer charBuffer)
+        private string[] GetMultiselectFiles(UnicodeCharBuffer charBuffer)
         {
             string directory = charBuffer.GetString();
             string fileName = charBuffer.GetString();
@@ -498,7 +498,7 @@ namespace System.Windows.Forms
                                 {
                                     int newBufferSize = sizeNeeded + (FileBufferSize / 4);
                                     // Allocate new buffer
-                                    UnsafeNativeMethods.CharBuffer charBufferTmp = UnsafeNativeMethods.CharBuffer.CreateBuffer(newBufferSize);
+                                    var charBufferTmp = new UnicodeCharBuffer(newBufferSize);
                                     IntPtr newBuffer = charBufferTmp.AllocCoTaskMem();
                                     // Free old buffer
                                     Marshal.FreeCoTaskMem(ofn.lpstrFile);
@@ -746,7 +746,7 @@ namespace System.Windows.Forms
             var ofn = new NativeMethods.OPENFILENAME_I();
             try
             {
-                _charBuffer = UnsafeNativeMethods.CharBuffer.CreateBuffer(FileBufferSize);
+                _charBuffer = new UnicodeCharBuffer(FileBufferSize);
                 if (_fileNames != null)
                 {
                     _charBuffer.PutString(_fileNames[0]);
