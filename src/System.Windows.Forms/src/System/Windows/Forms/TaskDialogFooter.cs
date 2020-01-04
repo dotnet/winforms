@@ -73,7 +73,7 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        BoundPage?.BoundDialog?.UpdateTextElement(
+                        BoundPage.BoundDialog!.UpdateTextElement(
                             ComCtl32.TDE.FOOTER, value);
                     }
                 }                
@@ -106,7 +106,7 @@ namespace System.Windows.Forms
 
                 // The native task dialog icon cannot be updated from a handle
                 // type to a non-handle type and vice versa, so we need to throw
-                // throw in such a case.
+                // in such a case.
                 if (BoundPage != null && iconIsFromHandle != null && iconIsFromHandle != _boundIconIsFromHandle)
                 {
                     throw new InvalidOperationException(SR.TaskDialogCannotUpdateIconType);
