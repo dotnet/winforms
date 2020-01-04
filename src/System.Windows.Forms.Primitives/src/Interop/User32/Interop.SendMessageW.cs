@@ -13,14 +13,14 @@ internal static partial class Interop
         public static extern IntPtr SendMessageW(
             IntPtr hWnd,
             WindowMessage Msg,
-            IntPtr wParam,
-            IntPtr lParam);
+            IntPtr wParam = default,
+            IntPtr lParam = default);
 
         public static IntPtr SendMessageW(
             HandleRef hWnd,
             WindowMessage Msg,
-            IntPtr wParam,
-            IntPtr lParam)
+            IntPtr wParam = default,
+            IntPtr lParam = default)
         {
             IntPtr result = SendMessageW(hWnd.Handle, Msg, wParam, lParam);
             GC.KeepAlive(hWnd.Wrapper);

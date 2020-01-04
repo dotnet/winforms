@@ -4820,7 +4820,7 @@ namespace System.Windows.Forms
                 };
 
                 // get the layout information
-                User32.SendMessageW(hdrHWND, User32.WindowMessage.HDM_LAYOUT, IntPtr.Zero, ref hd);
+                User32.SendMessageW(hdrHWND, (User32.WindowMessage)HDM.LAYOUT, IntPtr.Zero, ref hd);
 
                 // position the header control
                 User32.SetWindowPos(
