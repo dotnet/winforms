@@ -15,14 +15,12 @@ namespace System.Windows.Forms
     public sealed class TaskDialogExpander : TaskDialogControl
     {
         private string? _text;
-
         private string? _expandedButtonText;
-
         private string? _collapsedButtonText;
-
         private TaskDialogExpanderPosition _expanderPosition;
-
         private bool _expanded;
+
+        private bool _updateTextOnInitialization;
 
         /// <summary>
         ///   Occurs when the value of the <see cref="Expanded"/> property changes while
@@ -76,12 +74,23 @@ namespace System.Windows.Forms
             set
             {
                 DenyIfBoundAndNotCreated();
-                DenyIfWaitingForInitialization();
-
-                // Update the text if we are bound.
-                BoundPage?.BoundDialog?.UpdateTextElement(
-                    ComCtl32.TDE.EXPANDED_INFORMATION, value);
-
+                
+                if (BoundPage != null)
+                {
+                    // If we are bound but waiting for initialization (e.g. immediately after
+                    // starting a navigation), we buffer the change until we apply the
+                    // initialization (when navigation is finished).
+                    if (BoundPage.WaitingForInitialization)
+                    {
+                        _updateTextOnInitialization = true;
+                    }
+                    else
+                    {
+                        BoundPage.BoundDialog!.UpdateTextElement(
+                            ComCtl32.TDE.EXPANDED_INFORMATION, value);
+                    }
+                }
+                
                 _text = value;
             }
         }
@@ -192,6 +201,8 @@ namespace System.Windows.Forms
         {
             ComCtl32.TDF flags = base.BindCore();
 
+            _updateTextOnInitialization = false;
+
             if (_expanded)
             {
                 flags |= ComCtl32.TDF.EXPANDED_BY_DEFAULT;
@@ -202,6 +213,17 @@ namespace System.Windows.Forms
             }
 
             return flags;
+        }
+
+        private protected override void ApplyInitializationCore()
+        {
+            base.ApplyInitializationCore();
+
+            if (_updateTextOnInitialization)
+            {
+                Text = _text;
+                _updateTextOnInitialization = false;
+            }
         }
 
         private void OnExpandedChanged(EventArgs e) => ExpandedChanged?.Invoke(this, e);

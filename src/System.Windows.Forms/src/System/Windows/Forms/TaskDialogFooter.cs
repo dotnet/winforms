@@ -17,6 +17,8 @@ namespace System.Windows.Forms
         private TaskDialogIcon? _icon;
         private bool _boundIconIsFromHandle;
 
+        private bool _updateTextOnInitialization;
+
         /// <summary>
         ///   Initializes a new instance of the <see cref="TaskDialogFooter"/> class.
         /// </summary>
@@ -59,11 +61,22 @@ namespace System.Windows.Forms
             set
             {
                 DenyIfBoundAndNotCreated();
-                DenyIfWaitingForInitialization();
 
-                // Update the text if we are bound.
-                BoundPage?.BoundDialog?.UpdateTextElement(
-                    ComCtl32.TDE.FOOTER, value);
+                if (BoundPage != null)
+                {
+                    // If we are bound but waiting for initialization (e.g. immediately after
+                    // starting a navigation), we buffer the change until we apply the
+                    // initialization (when navigation is finished).
+                    if (BoundPage.WaitingForInitialization)
+                    {
+                        _updateTextOnInitialization = true;
+                    }
+                    else
+                    {
+                        BoundPage?.BoundDialog?.UpdateTextElement(
+                            ComCtl32.TDE.FOOTER, value);
+                    }
+                }                
 
                 _text = value;
             }
@@ -130,6 +143,7 @@ namespace System.Windows.Forms
         {
             ComCtl32.TDF flags = base.BindCore();
 
+            _updateTextOnInitialization = false;
             _boundIconIsFromHandle = TaskDialogPage.GetIconValue(_icon).iconIsFromHandle ?? false;
 
             if (_boundIconIsFromHandle)
@@ -138,6 +152,17 @@ namespace System.Windows.Forms
             }
 
             return flags;
+        }
+
+        private protected override void ApplyInitializationCore()
+        {
+            base.ApplyInitializationCore();
+
+            if (_updateTextOnInitialization)
+            {
+                Text = _text;
+                _updateTextOnInitialization = false;
+            }
         }
 
         private protected override void UnbindCore()

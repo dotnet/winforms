@@ -60,7 +60,10 @@ namespace System.Windows.Forms
         private string? _text;
         private int _width;
         private bool _boundIconIsFromHandle;
+
         private bool _appliedInitialization;
+        private bool _updateMainInstructionOnInitialization;
+        private bool _updateTextOnInitialization;
 
         /// <summary>
         ///   Occurs after this instance is bound to a task dialog and the task dialog
@@ -318,9 +321,20 @@ namespace System.Windows.Forms
 
             set
             {
-                DenyIfWaitingForInitialization();
-
-                BoundDialog?.UpdateTextElement(ComCtl32.TDE.MAIN_INSTRUCTION, value);
+                if (BoundDialog != null)
+                {
+                    // If we are bound but waiting for initialization (e.g. immediately after
+                    // starting a navigation), we buffer the change until we apply the
+                    // initialization (when navigation is finished).
+                    if (WaitingForInitialization)
+                    {
+                        _updateMainInstructionOnInitialization = true;
+                    }
+                    else
+                    {
+                        BoundDialog.UpdateTextElement(ComCtl32.TDE.MAIN_INSTRUCTION, value);
+                    }
+                }
 
                 _mainInstruction = value;
             }
@@ -340,9 +354,17 @@ namespace System.Windows.Forms
 
             set
             {
-                DenyIfWaitingForInitialization();
-
-                BoundDialog?.UpdateTextElement(ComCtl32.TDE.CONTENT, value);
+                if (BoundDialog != null)
+                {
+                    if (WaitingForInitialization)
+                    {
+                        _updateTextOnInitialization = true;
+                    }
+                    else
+                    {
+                        BoundDialog.UpdateTextElement(ComCtl32.TDE.CONTENT, value);
+                    }
+                }
 
                 _text = value;
             }
@@ -365,6 +387,11 @@ namespace System.Windows.Forms
 
             set
             {
+                // We currently don't support to buffer changes while waiting for the
+                // initialization like it is done for string properties (Text, MainInstruction),
+                // because for handle icons, this would mean that the previous icon cannot
+                // yet be disposed (until initialization is applied) even though the property
+                // has been updated to a different icon.
                 DenyIfWaitingForInitialization();
 
                 (IntPtr iconValue, bool? iconIsFromHandle) = GetIconValue(value);
@@ -379,7 +406,7 @@ namespace System.Windows.Forms
                 }
 
                 BoundDialog?.UpdateIconElement(ComCtl32.TDIE.ICON_MAIN, iconValue);
-
+                
                 _icon = value;
             }
         }
@@ -451,7 +478,7 @@ namespace System.Windows.Forms
         /// </value>
         /// <remarks>
         /// <para>
-        ///   Note: The Task Dialog will not actually execute any hyperlinks.
+        ///   The Task Dialog will not actually execute any hyperlinks.
         ///   Hyperlink execution must be handled in the <see cref="HyperlinkClicked"/> event.
         /// </para>
         /// <para>
@@ -460,7 +487,7 @@ namespace System.Windows.Forms
         ///   one link is used.
         /// </para>
         /// <para>
-        ///   Note: When you enable this setting and you want to display a text
+        ///   When you enable this setting and you want to display a text
         ///   without interpreting links, you must replace the strings <c>"&lt;a"</c>
         ///   and <c>"&lt;A"</c> with something like <c>"&lt;\u200Ba"</c>.
         /// </para>
@@ -757,6 +784,9 @@ namespace System.Windows.Forms
             BoundDialog = owner;
             flags = _flags;
 
+            _updateTextOnInitialization = false;
+            _updateMainInstructionOnInitialization = false;
+
             (IntPtr localIconValue, bool? iconIsFromHandle) = GetIconValue(_icon);
             (iconValue, _boundIconIsFromHandle) = (localIconValue, iconIsFromHandle ?? false);
 
@@ -917,6 +947,20 @@ namespace System.Windows.Forms
             }
 
             _appliedInitialization = true;
+
+            // Check if we need to update some of our elements (if they have been modified
+            // after starting navigation, but before navigation was finished).
+            if (_updateMainInstructionOnInitialization)
+            {
+                MainInstruction = _mainInstruction;
+                _updateMainInstructionOnInitialization = false;
+            }
+
+            if (_updateTextOnInitialization)
+            {
+                Text = _text;
+                _updateTextOnInitialization = false;
+            }
 
             TaskDialogStandardButtonCollection standardButtons = _standardButtons;
             TaskDialogCustomButtonCollection customButtons = _customButtons;
