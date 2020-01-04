@@ -95,7 +95,10 @@ namespace System.Windows.Forms
                 _state = value;
                 try
                 {
-                    UpdateState(previousState);
+                    if (BoundPage != null)
+                    {
+                        UpdateState(previousState);
+                    }
                 }
                 catch
                 {
@@ -137,7 +140,7 @@ namespace System.Windows.Forms
                 DenyIfBoundAndNotCreated();
                 DenyIfWaitingForInitialization();
 
-                // We only update the TaskDialog if the current state is a
+                // We only update the task dialog if the current state is a
                 // non-marquee progress bar.
                 if (BoundPage != null && !ProgressBarStateIsMarquee(_state))
                 {
@@ -177,7 +180,7 @@ namespace System.Windows.Forms
                 DenyIfBoundAndNotCreated();
                 DenyIfWaitingForInitialization();
 
-                // We only update the TaskDialog if the current state is a
+                // We only update the task dialog if the current state is a
                 // non-marquee progress bar.
                 if (BoundPage != null && !ProgressBarStateIsMarquee(_state))
                 {
@@ -217,11 +220,24 @@ namespace System.Windows.Forms
                 DenyIfBoundAndNotCreated();
                 DenyIfWaitingForInitialization();
 
-                // We only update the TaskDialog if the current state is a
+                // We only update the task dialog if the current state is a
                 // non-marquee progress bar.
                 if (BoundPage != null && !ProgressBarStateIsMarquee(_state))
                 {
                     BoundPage.BoundDialog!.SetProgressBarPosition(value);
+
+                    // We need to set the position a second time to work
+                    // reliably if the state is not 'Normal'.
+                    // See this comment in the TaskDialog implementation
+                    // of the Windows API Code Pack 1.1:
+                    // "Due to a bug that wasn't fixed in time for RTM of
+                    // Vista, second SendMessage is required if the state
+                    // is non-Normal."
+                    // Apparently, this bug is still present in Win10 V1909.
+                    if (_state != TaskDialogProgressBarState.Normal)
+                    {
+                        BoundPage.BoundDialog!.SetProgressBarPosition(value);
+                    }
                 }
 
                 _value = value;
@@ -258,11 +274,12 @@ namespace System.Windows.Forms
                 _marqueeSpeed = value;
                 try
                 {
-                    // We only update the TaskDialog if the current state is a
+                    // We only update the task dialog if the current state is a
                     // marquee progress bar.
                     if (BoundPage != null && ProgressBarStateIsMarquee(_state))
                     {
-                        State = _state;
+                        // Update the state which will also update the marquee speed.
+                        UpdateState();
                     }
                 }
                 catch
@@ -305,17 +322,12 @@ namespace System.Windows.Forms
 
         private protected override void ApplyInitializationCore()
         {
-            UpdateState(null);
+            UpdateState();
         }
 
-        private void UpdateState(TaskDialogProgressBarState? previousState)
+        private void UpdateState(TaskDialogProgressBarState? previousState = null)
         {
-            if (BoundPage == null)
-            {
-                return;
-            }
-
-            TaskDialog taskDialog = BoundPage.BoundDialog!;
+            TaskDialog taskDialog = BoundPage!.BoundDialog!;
 
             // Check if we need to switch between a marquee and a
             // non-marquee bar.
@@ -350,22 +362,9 @@ namespace System.Windows.Forms
                 if (previousState == null || switchMode)
                 {
                     // Also need to set the other properties after switching
-                    // the mode.
+                    // the mode or when applying the initialization.
                     taskDialog.SetProgressBarRange(_minimum, _maximum);
-                    taskDialog.SetProgressBarPosition(_value);
-
-                    // We need to set the position a second time to work
-                    // reliably if the state is not "Normal".
-                    // See this comment in the TaskDialog implementation
-                    // of the Windows API Code Pack 1.1:
-                    // "Due to a bug that wasn't fixed in time for RTM of
-                    // Vista, second SendMessage is required if the state
-                    // is non-Normal."
-                    // Apparently, this bug is still present in Win10 V1803.
-                    if (_state != TaskDialogProgressBarState.Normal)
-                    {
-                        taskDialog.SetProgressBarPosition(_value);
-                    }
+                    Value = _value;
                 }
             }
         }
