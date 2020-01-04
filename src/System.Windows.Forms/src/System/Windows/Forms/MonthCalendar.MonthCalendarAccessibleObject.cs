@@ -320,20 +320,18 @@ namespace System.Windows.Forms
 
             public override AccessibleObject GetFocused() => _focused;
 
-            public MCHITTESTINFO GetHitTestInfo(int xScreen, int yScreen)
+            public unsafe MCHITTESTINFO GetHitTestInfo(int xScreen, int yScreen)
             {
-                MCHITTESTINFO hitTestInfo = new MCHITTESTINFO();
-                hitTestInfo.cbSize = (int)Marshal.SizeOf(hitTestInfo);
-                hitTestInfo.pt = new POINT();
-                hitTestInfo.st = new Kernel32.SYSTEMTIME();
-
                 Point point = new Point(xScreen, yScreen);
                 User32.MapWindowPoints(IntPtr.Zero, Handle, ref point, 1);
-                hitTestInfo.pt.x = point.X;
-                hitTestInfo.pt.y = point.Y;
+                var hitTestInfo = new MCHITTESTINFO
+                {
+                    cbSize = (uint)sizeof(MCHITTESTINFO),
+                    pt = point,
+                    st = new Kernel32.SYSTEMTIME()
+                };
 
-                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)MCM.HITTEST, 0, ref hitTestInfo);
-
+                User32.SendMessageW(_owner, (User32.WM)MCM.HITTEST, IntPtr.Zero, ref hitTestInfo);
                 return hitTestInfo;
             }
 
@@ -505,7 +503,7 @@ namespace System.Windows.Forms
 
                 gridInfo.dwFlags &= ~MCGIF.NAME;
 
-                return User32.SendMessageW(_owner, (User32.WindowMessage)MCM.GETCALENDARGRIDINFO, IntPtr.Zero, ref gridInfo) != IntPtr.Zero;
+                return User32.SendMessageW(_owner, (User32.WM)MCM.GETCALENDARGRIDINFO, IntPtr.Zero, ref gridInfo) != IntPtr.Zero;
             }
 
             private unsafe bool GetCalendarGridInfoText(MCGIP dwPart, int calendarIndex, int row, int column, out string text)
@@ -528,7 +526,7 @@ namespace System.Windows.Forms
                         cchName = (uint)name.Length - 1
                     };
 
-                    result = User32.SendMessageW(_owner, (User32.WindowMessage)MCM.GETCALENDARGRIDINFO, IntPtr.Zero, ref gridInfo) != IntPtr.Zero;
+                    result = User32.SendMessageW(_owner, (User32.WM)MCM.GETCALENDARGRIDINFO, IntPtr.Zero, ref gridInfo) != IntPtr.Zero;
                 }
 
                 text = name.SliceAtFirstNull().ToString();
