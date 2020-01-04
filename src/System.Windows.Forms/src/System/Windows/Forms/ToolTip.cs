@@ -2306,11 +2306,11 @@ namespace System.Windows.Forms
             {
                 case WindowMessages.WM_REFLECT + WindowMessages.WM_NOTIFY:
                     User32.NMHDR nmhdr = (User32.NMHDR)msg.GetLParam(typeof(User32.NMHDR));
-                    if (nmhdr.code == NativeMethods.TTN_SHOW && !_trackPosition)
+                    if (nmhdr.code == (int)ComCtl32.TTN.SHOW && !_trackPosition)
                     {
                         WmShow();
                     }
-                    else if (nmhdr.code == NativeMethods.TTN_POP)
+                    else if (nmhdr.code == (int)ComCtl32.TTN.POP)
                     {
                         WmPop();
                         _window?.DefWndProc(ref msg);

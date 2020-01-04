@@ -3232,13 +3232,13 @@ namespace System.Windows.Forms
                     User32.NMHDR* nmhdr = (User32.NMHDR*)m.LParam;
                     switch (nmhdr->code)
                     {
-                        case NativeMethods.TTN_GETDISPINFO:
+                        case (int)ComCtl32.TTN.GETDISPINFOW:
                             // Setting the max width has the added benefit of enabling multiline tool tips
                             User32.SendMessageW(nmhdr->hwndFrom, User32.WindowMessage.TTM_SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
                             WmNeedText(ref m);
                             m.Result = (IntPtr)1;
                             return;
-                        case NativeMethods.TTN_SHOW:
+                        case (int)ComCtl32.TTN.SHOW:
                             if (WmShowToolTip(ref m))
                             {
                                 m.Result = (IntPtr)1;
