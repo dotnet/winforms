@@ -303,7 +303,7 @@ namespace System.ComponentModel.Design
                 _edSvc = null;
             }
 
-            protected override void WndProc(ref Message m)
+            protected unsafe override void WndProc(ref Message m)
             {
                 switch (m.Msg)
                 {
@@ -317,8 +317,8 @@ namespace System.ComponentModel.Design
                         }
                         break;
                     case WindowMessages.WM_REFLECT + WindowMessages.WM_NOTIFY:
-                        ComCtl32.NMTREEVIEW nmtv = Marshal.PtrToStructure<ComCtl32.NMTREEVIEW>(m.LParam);
-                        if (nmtv.nmhdr.code == NativeMethods.NM_CLICK)
+                        User32.NMHDR* nmtv = (User32.NMHDR*)m.LParam;
+                        if (nmtv->code == (int)ComCtl32.NM.CLICK)
                         {
                             clickSeen = true;
                         }

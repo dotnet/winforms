@@ -875,12 +875,12 @@ namespace System.Windows.Forms.Design
                 }
             }
 
-            protected override void WndProc(ref Message m)
+            protected unsafe override void WndProc(ref Message m)
             {
                 if (m.Msg == WindowMessages.WM_REFLECT + WindowMessages.WM_NOTIFY)
                 {
-                    User32.NMHDR nmh = (User32.NMHDR)m.GetLParam(typeof(User32.NMHDR));
-                    if (nmh.code == NativeMethods.NM_CUSTOMDRAW)
+                    User32.NMHDR* nmhdr = (User32.NMHDR*)m.LParam;
+                    if (nmhdr->code == (int)ComCtl32.NM.CUSTOMDRAW)
                     {
                         OnCustomDraw(ref m);
                         return;
