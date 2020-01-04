@@ -453,22 +453,17 @@ namespace System.Windows.Forms
             }
         }
 
-        [ComImport(), Guid("0000010C-0000-0000-C000-000000000046"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IPersist
-        {
-            void GetClassID(
-                           [Out]
-                           out Guid pClassID);
-        }
-
         [ComImport]
         [Guid("37D84F60-42CB-11CE-8135-00AA004BB851")]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IPersistPropertyBag /* : IPersist */
+        public unsafe interface IPersistPropertyBag /* : IPersist */
         {
-            void GetClassID(out Guid pClassID);
+            [PreserveSig]
+            HRESULT GetClassID(
+                Guid* pClassID);
 
-            void InitNew();
+            [PreserveSig]
+            HRESULT InitNew();
 
             void Load(
                 Ole32.IPropertyBag pPropBag,
