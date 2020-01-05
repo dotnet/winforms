@@ -15,7 +15,7 @@ using static Interop;
 
 namespace System.Windows.Forms
 {
-    public sealed class ToolStripManager
+    public static class ToolStripManager
     {
         // WARNING: ThreadStatic initialization happens only on the first thread at class CTOR time.
         // use InitializeThread mechanism to initialize ThreadStatic members
@@ -46,9 +46,6 @@ namespace System.Windows.Forms
                 initialized = true;
                 currentRendererType = ProfessionalRendererType;
             }
-        }
-        private ToolStripManager()
-        {
         }
 
         static ToolStripManager()
@@ -1959,7 +1956,7 @@ namespace System.Windows.Forms
 
                         // if we've alt-tabbed away dont snap/restore focus.
                         IntPtr topmostParentOfMenu = User32.GetAncestor(menuStripToActivate, User32.GA.ROOT);
-                        IntPtr foregroundWindow = UnsafeNativeMethods.GetForegroundWindow();
+                        IntPtr foregroundWindow = User32.GetForegroundWindow();
 
                         if (topmostParentOfMenu == foregroundWindow)
                         {

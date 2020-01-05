@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Runtime.InteropServices;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms.Layout;
 using Moq;
@@ -178,37 +180,9 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.IsHandleCreated);
         }
 
-        [Fact]
-        public void Control_AllowDrop_SetWithHandleNonSTAThread_ThrowsInvalidOperationException()
-        {
-            using var control = new Control();
-            Assert.NotEqual(IntPtr.Zero, control.Handle);
-            int invalidatedCallCount = 0;
-            control.Invalidated += (sender, e) => invalidatedCallCount++;
-            int styleChangedCallCount = 0;
-            control.StyleChanged += (sender, e) => styleChangedCallCount++;
-            int createdCallCount = 0;
-            control.HandleCreated += (sender, e) => createdCallCount++;
-
-            Assert.Throws<InvalidOperationException>(() => control.AllowDrop = true);
-            Assert.False(control.AllowDrop);
-            Assert.True(control.IsHandleCreated);
-            Assert.Equal(0, invalidatedCallCount);
-            Assert.Equal(0, styleChangedCallCount);
-            Assert.Equal(0, createdCallCount);
-
-            // Can set to false.
-            control.AllowDrop = false;
-            Assert.False(control.AllowDrop);
-            Assert.True(control.IsHandleCreated);
-            Assert.Equal(0, invalidatedCallCount);
-            Assert.Equal(0, styleChangedCallCount);
-            Assert.Equal(0, createdCallCount);
-        }
-
         [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
-        public void Control_AllowDrop_SetWithHandleSTA_GetReturnsExpected(bool value)
+        public void Control_AllowDrop_SetWithHandle_GetReturnsExpected(bool value)
         {
             using var control = new Control();
             Assert.NotEqual(IntPtr.Zero, control.Handle);
@@ -237,6 +211,98 @@ namespace System.Windows.Forms.Tests
             // Set different.
             control.AllowDrop = value;
             Assert.Equal(value, control.AllowDrop);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        public void Control_AllowDrop_SetWithHandleAlreadyRegistered_GetReturnsExpected(bool value)
+        {
+            using var control = new Control();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            var dropTarget = new CustomDropTarget();
+            Assert.Equal(ApartmentState.STA, Application.OleRequired());
+            Assert.Equal(HRESULT.S_OK, Ole32.RegisterDragDrop(control.Handle, dropTarget));
+
+            control.AllowDrop = value;
+            Assert.Equal(value, control.AllowDrop);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set same.
+            control.AllowDrop = value;
+            Assert.Equal(value, control.AllowDrop);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set different.
+            control.AllowDrop = value;
+            Assert.Equal(value, control.AllowDrop);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+        
+        private class CustomDropTarget : Ole32.IDropTarget
+        {
+            public HRESULT DragEnter([MarshalAs(UnmanagedType.Interface)] object pDataObj, uint grfKeyState, Point pt, ref uint pdwEffect)
+            {
+                throw new NotImplementedException();
+            }
+
+            public HRESULT DragOver(uint grfKeyState, Point pt, ref uint pdwEffect)
+            {
+                throw new NotImplementedException();
+            }
+
+            public HRESULT DragLeave()
+            {
+                throw new NotImplementedException();
+            }
+
+            public HRESULT Drop([MarshalAs(UnmanagedType.Interface)] object pDataObj, uint grfKeyState, Point pt, ref uint pdwEffect)
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        [Fact]
+        public void Control_AllowDrop_SetWithHandleNonSTAThread_ThrowsInvalidOperationException()
+        {
+            using var control = new Control();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            Assert.Throws<InvalidOperationException>(() => control.AllowDrop = true);
+            Assert.False(control.AllowDrop);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Can set to false.
+            control.AllowDrop = false;
+            Assert.False(control.AllowDrop);
             Assert.True(control.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
@@ -4382,6 +4448,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
         }
+
         [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void Control_Enabled_Set_GetReturnsExpected(bool value)
@@ -4642,6 +4709,38 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(2, callCount);
             Assert.Equal(0, childCallCount1);
             Assert.Equal(0, childCallCount2);
+        }
+
+        [WinFormsFact]
+        public void Control_Enabled_ResetValue_Success()
+        {
+            PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(Control))[nameof(Control.Enabled)];
+            using var control = new Control();
+            Assert.False(property.CanResetValue(control));
+
+            control.Enabled = false;
+            Assert.False(control.Enabled);
+            Assert.True(property.CanResetValue(control));
+
+            property.ResetValue(control);
+            Assert.True(control.Enabled);
+            Assert.False(property.CanResetValue(control));
+        }
+
+        [WinFormsFact]
+        public void Control_Enabled_ShouldSerializeValue_Success()
+        {
+            PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(Control))[nameof(Control.Enabled)];
+            using var control = new Control();
+            Assert.False(property.ShouldSerializeValue(control));
+
+            control.Enabled = false;
+            Assert.False(control.Enabled);
+            Assert.True(property.ShouldSerializeValue(control));
+
+            property.ResetValue(control);
+            Assert.True(control.Enabled);
+            Assert.False(property.ShouldSerializeValue(control));
         }
 
         [WinFormsFact]
@@ -5089,6 +5188,56 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, childCallCount2);
         }
 
+        [WinFormsFact]
+        public void Control_Font_ResetValue_Success()
+        {
+            PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(Control))[nameof(Control.Font)];
+            using var control = new Control();
+            Assert.False(property.CanResetValue(control));
+
+            using var font = new Font("Arial", 8.25f);
+            control.Font = font;
+            Assert.Same(font, control.Font);
+            Assert.True(property.CanResetValue(control));
+
+            control.Font = null;
+            Assert.Equal(Control.DefaultFont, control.Font);
+            Assert.False(property.CanResetValue(control));
+
+            control.Font = font;
+            Assert.Same(font, control.Font);
+            Assert.True(property.CanResetValue(control));
+
+            property.ResetValue(control);
+            Assert.Equal(Control.DefaultFont, control.Font);
+            Assert.False(property.CanResetValue(control));
+        }
+
+        [WinFormsFact]
+        public void Control_Font_ShouldSerializeValue_Success()
+        {
+            PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(Control))[nameof(Control.Font)];
+            using var control = new Control();
+            Assert.False(property.ShouldSerializeValue(control));
+
+            using var font = new Font("Arial", 8.25f);
+            control.Font = font;
+            Assert.Same(font, control.Font);
+            Assert.True(property.ShouldSerializeValue(control));
+
+            control.Font = null;
+            Assert.Equal(Control.DefaultFont, control.Font);
+            Assert.False(property.ShouldSerializeValue(control));
+
+            control.Font = font;
+            Assert.Same(font, control.Font);
+            Assert.True(property.ShouldSerializeValue(control));
+
+            property.ResetValue(control);
+            Assert.Equal(Control.DefaultFont, control.Font);
+            Assert.False(property.ShouldSerializeValue(control));
+        }
+
         [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetForeColorTheoryData))]
         public void Control_ForeColor_Set_GetReturnsExpected(Color value, Color expected)
@@ -5476,6 +5625,7 @@ namespace System.Windows.Forms.Tests
 
             Assert.NotEqual(IntPtr.Zero, intptr);
         }
+
         [WinFormsTheory]
         [InlineData(-4, 1)]
         [InlineData(0, 0)]
@@ -9044,6 +9194,30 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
+        [InlineData(0, 0, 0, 0, 0, MouseButtons.None)]
+        [InlineData(1, 2, 3, 4, 5, MouseButtons.None)]
+        [InlineData(byte.MaxValue, 0, 0, 0, 0, MouseButtons.Left)]
+        [InlineData(0, byte.MaxValue, 0, 0, 0, MouseButtons.Middle)]
+        [InlineData(0, 0, byte.MaxValue, 0, 0, MouseButtons.Right)]
+        [InlineData(0, 0, 0, byte.MaxValue, 0, MouseButtons.XButton1)]
+        [InlineData(0, 0, 0, 0, byte.MaxValue, MouseButtons.XButton2)]
+        [InlineData(byte.MaxValue, byte.MaxValue, byte.MaxValue, byte.MaxValue, byte.MaxValue, MouseButtons.Left | MouseButtons.Middle | MouseButtons.Right | MouseButtons.XButton1 | MouseButtons.XButton2)]
+        public void MouseButtons_Get_ReturnsExpected(byte lState, byte mState, byte rState, byte xState1, byte xState2, MouseButtons expected)
+        {
+            using var control = new SubControl();
+            var keyState = new byte[256];
+            Assert.True(User32.GetKeyboardState(keyState).IsTrue());
+            keyState[(int)Keys.LButton] = lState;
+            keyState[(int)Keys.MButton] = mState;
+            keyState[(int)Keys.RButton] = rState;
+            keyState[(int)Keys.XButton1] = xState1;
+            keyState[(int)Keys.XButton2] = xState2;
+            User32.SetKeyboardState(keyState);
+
+            Assert.Equal(expected, Control.MouseButtons);
+        }
+
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void Control_Name_GetWithSite_ReturnsExpected(string siteName, string expected)
         {
@@ -9850,6 +10024,62 @@ namespace System.Windows.Forms.Tests
         {
             var control = new Control();
             Assert.Throws<InvalidEnumArgumentException>("value", () => control.RightToLeft = value);
+        }
+
+        [WinFormsFact]
+        public void Control_RightToLeft_ResetValue_Success()
+        {
+            PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(Control))[nameof(Control.RightToLeft)];
+            using var control = new Control();
+            Assert.False(property.CanResetValue(control));
+
+            control.RightToLeft = RightToLeft.Yes;
+            Assert.Equal(RightToLeft.Yes, control.RightToLeft);
+            Assert.True(property.CanResetValue(control));
+
+            control.RightToLeft = RightToLeft.No;
+            Assert.Equal(RightToLeft.No, control.RightToLeft);
+            Assert.True(property.CanResetValue(control));
+
+            control.RightToLeft = RightToLeft.Inherit;
+            Assert.Equal(RightToLeft.No, control.RightToLeft);
+            Assert.False(property.CanResetValue(control));
+            
+            control.RightToLeft = RightToLeft.No;
+            Assert.Equal(RightToLeft.No, control.RightToLeft);
+            Assert.True(property.CanResetValue(control));
+
+            property.ResetValue(control);
+            Assert.Equal(RightToLeft.No, control.RightToLeft);
+            Assert.False(property.CanResetValue(control));
+        }
+
+        [WinFormsFact]
+        public void Control_RightToLeft_ShouldSerializeValue_Success()
+        {
+            PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(Control))[nameof(Control.RightToLeft)];
+            using var control = new Control();
+            Assert.False(property.ShouldSerializeValue(control));
+
+            control.RightToLeft = RightToLeft.Yes;
+            Assert.Equal(RightToLeft.Yes, control.RightToLeft);
+            Assert.True(property.ShouldSerializeValue(control));
+
+            control.RightToLeft = RightToLeft.No;
+            Assert.Equal(RightToLeft.No, control.RightToLeft);
+            Assert.True(property.ShouldSerializeValue(control));
+
+            control.RightToLeft = RightToLeft.Inherit;
+            Assert.Equal(RightToLeft.No, control.RightToLeft);
+            Assert.False(property.ShouldSerializeValue(control));
+            
+            control.RightToLeft = RightToLeft.No;
+            Assert.Equal(RightToLeft.No, control.RightToLeft);
+            Assert.True(property.ShouldSerializeValue(control));
+
+            property.ResetValue(control);
+            Assert.Equal(RightToLeft.No, control.RightToLeft);
+            Assert.False(property.ShouldSerializeValue(control));
         }
 
         [WinFormsFact]
@@ -11331,6 +11561,60 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(2, callCount);
         }
 
+        [WinFormsFact]
+        public void Control_Text_ResetValue_Success()
+        {
+            PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(Control))[nameof(Control.Text)];
+            using var control = new Control();
+            Assert.False(property.CanResetValue(control));
+
+            // Set null.
+            control.Text = null;
+            Assert.Empty(control.Text);
+            Assert.False(property.CanResetValue(control));
+            
+            // Set empty.
+            control.Text = string.Empty;
+            Assert.Empty(control.Text);
+            Assert.False(property.CanResetValue(control));
+
+            // Set custom
+            control.Text = "text";
+            Assert.Equal("text", control.Text);
+            Assert.True(property.CanResetValue(control));
+
+            property.ResetValue(control);
+            Assert.Empty(control.Text);
+            Assert.False(property.CanResetValue(control));
+        }
+
+        [WinFormsFact]
+        public void Control_Text_ShouldSerializeValue_Success()
+        {
+            PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(Control))[nameof(Control.Text)];
+            using var control = new Control();
+            Assert.False(property.ShouldSerializeValue(control));
+
+            // Set null.
+            control.Text = null;
+            Assert.Empty(control.Text);
+            Assert.False(property.ShouldSerializeValue(control));
+            
+            // Set empty.
+            control.Text = string.Empty;
+            Assert.Empty(control.Text);
+            Assert.False(property.ShouldSerializeValue(control));
+
+            // Set custom
+            control.Text = "text";
+            Assert.Equal("text", control.Text);
+            Assert.True(property.ShouldSerializeValue(control));
+
+            property.ResetValue(control);
+            Assert.Empty(control.Text);
+            Assert.False(property.ShouldSerializeValue(control));
+        }
+
         [WinFormsTheory]
         [InlineData(0, 0)]
         [InlineData(-1, 1)]
@@ -11925,6 +12209,28 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
+        [InlineData(true, true, true)]
+        [InlineData(true, false, false)]
+        [InlineData(false, true, false)]
+        [InlineData(false, false, false)]
+        public void Control_Visible_GetWithParent_ReturnsExpected(bool parentVisible, bool visible, bool expected)
+        {
+            using var parent = new Control
+            {
+                Visible = parentVisible
+            };
+            using var item = new Control
+            {
+                Parent = parent
+            };
+            Assert.Equal(parentVisible, item.Visible);
+
+            // Set custom.
+            item.Visible = visible;
+            Assert.Equal(expected, item.Visible);
+        }
+
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void Control_Visible_Set_GetReturnsExpected(bool value)
         {
@@ -12275,6 +12581,38 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(2, callCount);
             Assert.Equal(0, childCallCount1);
             Assert.Equal(0, childCallCount2);
+        }
+
+        [WinFormsFact]
+        public void Control_Visible_ResetValue_Success()
+        {
+            PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(Control))[nameof(Control.Visible)];
+            using var control = new Control();
+            Assert.False(property.CanResetValue(control));
+
+            control.Visible = false;
+            Assert.False(control.Visible);
+            Assert.True(property.CanResetValue(control));
+
+            property.ResetValue(control);
+            Assert.True(control.Visible);
+            Assert.False(property.CanResetValue(control));
+        }
+
+        [WinFormsFact]
+        public void Control_Visible_ShouldSerializeValue_Success()
+        {
+            PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(Control))[nameof(Control.Visible)];
+            using var control = new Control();
+            Assert.False(property.ShouldSerializeValue(control));
+
+            control.Visible = false;
+            Assert.False(control.Visible);
+            Assert.True(property.ShouldSerializeValue(control));
+
+            property.ResetValue(control);
+            Assert.True(control.Visible);
+            Assert.False(property.ShouldSerializeValue(control));
         }
 
         [WinFormsTheory]

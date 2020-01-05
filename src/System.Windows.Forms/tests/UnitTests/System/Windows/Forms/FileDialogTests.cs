@@ -546,7 +546,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Null(o.lpTemplateName);
                 Assert.Equal(IntPtr.Zero, o.pvReserved);
                 Assert.Equal(0, o.dwReserved);
-                Assert.Equal(16777216, o.FlagsEx);
+                Assert.Equal(0, o.FlagsEx);
                 return result;
             };
             Assert.Equal(result, dialog.RunDialog((IntPtr)1));
@@ -598,7 +598,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Null(o.lpTemplateName);
                 Assert.Equal(IntPtr.Zero, o.pvReserved);
                 Assert.Equal(0, o.dwReserved);
-                Assert.Equal(16777216, o.FlagsEx);
+                Assert.Equal(0, o.FlagsEx);
                 return result;
             };
             Assert.Equal(result, dialog.RunDialog((IntPtr)1));
@@ -636,7 +636,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Null(o.lpTemplateName);
                 Assert.Equal(IntPtr.Zero, o.pvReserved);
                 Assert.Equal(0, o.dwReserved);
-                Assert.Equal(16777216, o.FlagsEx);
+                Assert.Equal(0, o.FlagsEx);
                 return result;
             };
             Assert.Equal(result, dialog.RunDialog((IntPtr)1));

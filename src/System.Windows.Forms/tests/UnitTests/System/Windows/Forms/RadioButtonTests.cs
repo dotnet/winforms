@@ -12,13 +12,8 @@ namespace System.Windows.Forms.Tests
     using Point = System.Drawing.Point;
     using Size = System.Drawing.Size;
 
-    public class RadioButtonTests
+    public class RadioButtonTests : IClassFixture<ThreadExceptionFixture>
     {
-        public RadioButtonTests()
-        {
-            Application.ThreadException += (sender, e) => throw new Exception(e.Exception.StackTrace.ToString());
-        }
-
         [WinFormsFact]
         public void RadioButton_Ctor_Default()
         {

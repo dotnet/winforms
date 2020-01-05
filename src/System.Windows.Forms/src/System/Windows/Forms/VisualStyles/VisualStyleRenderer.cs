@@ -464,7 +464,7 @@ namespace System.Windows.Forms.VisualStyles
                 return;
             }
 
-            if (childControl.Handle != IntPtr.Zero)
+            if (childControl.IsHandleCreated)
             {
                 using var wgr = new WindowsGraphicsWrapper(dc, AllGraphicsProperties);
                 var hdc = new HandleRef(wgr, wgr.WindowsGraphics.DeviceContext.Hdc);
@@ -614,9 +614,9 @@ namespace System.Windows.Forms.VisualStyles
                 throw new InvalidEnumArgumentException(nameof(prop), (int)prop, typeof(BooleanProperty));
             }
 
-            bool val = false;
-            lastHResult = SafeNativeMethods.GetThemeBool(new HandleRef(this, Handle), part, state, (int)prop, ref val);
-            return val;
+            BOOL val = BOOL.FALSE;
+            lastHResult = (int)UxTheme.GetThemeBool(this, part, state, (int)prop, ref val);
+            return val.IsTrue();
         }
 
         /// <summary>
@@ -631,7 +631,7 @@ namespace System.Windows.Forms.VisualStyles
             }
 
             int color = 0;
-            lastHResult = SafeNativeMethods.GetThemeColor(new HandleRef(this, Handle), part, state, (int)prop, ref color);
+            lastHResult = (int)UxTheme.GetThemeColor(this, part, state, (int)prop, ref color);
             return ColorTranslator.FromWin32(color);
         }
 
@@ -647,7 +647,7 @@ namespace System.Windows.Forms.VisualStyles
             }
 
             int val = 0;
-            lastHResult = SafeNativeMethods.GetThemeEnumValue(new HandleRef(this, Handle), part, state, (int)prop, ref val);
+            lastHResult = (int)UxTheme.GetThemeEnumValue(this, part, state, (int)prop, ref val);
             return val;
         }
 
@@ -728,7 +728,7 @@ namespace System.Windows.Forms.VisualStyles
             }
 
             int val = 0;
-            lastHResult = SafeNativeMethods.GetThemeInt(new HandleRef(this, Handle), part, state, (int)prop, ref val);
+            lastHResult = (int)UxTheme.GetThemeInt(this, part, state, (int)prop, ref val);
             return val;
         }
 

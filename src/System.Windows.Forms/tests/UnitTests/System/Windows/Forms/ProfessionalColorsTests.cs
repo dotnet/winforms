@@ -8,13 +8,8 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ProfessionalColorsTests
+    public class ProfessionalColorsTests : IClassFixture<ThreadExceptionFixture>
     {
-        public ProfessionalColorsTests()
-        {
-            Application.ThreadException += (sender, e) => throw new Exception(e.Exception.StackTrace.ToString());
-        }
-
         public static IEnumerable<object[]> Properties_TestData()
         {
             Func<T> I<T>(Func<T> t) => t;

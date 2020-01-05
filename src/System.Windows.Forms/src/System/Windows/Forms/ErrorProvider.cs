@@ -849,7 +849,7 @@ namespace System.Windows.Forms
                 get
                 {
                     AccessibleObject accessibleObject = (AccessibleObject)Properties.GetObject(s_accessibilityProperty);
-                    
+
                     if (accessibleObject == null)
                     {
                         accessibleObject = CreateAccessibilityInstance();
@@ -871,7 +871,7 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                var toolInfo = new ComCtl32.ToolInfoWrapper(this, item.Id, ComCtl32.TTF.SUBCLASS, item.Error);
+                var toolInfo = new ComCtl32.ToolInfoWrapper<ErrorWindow>(this, item.Id, ComCtl32.TTF.SUBCLASS, item.Error);
                 toolInfo.SendMessage(_tipWindow, User32.WindowMessage.TTM_ADDTOOLW);
 
                 Update(timerCaused: false);
@@ -1118,7 +1118,7 @@ namespace System.Windows.Forms
 
                 if (_tipWindow != null)
                 {
-                    var info = new ComCtl32.ToolInfoWrapper(this, item.Id);
+                    var info = new ComCtl32.ToolInfoWrapper<ErrorWindow>(this, item.Id);
                     info.SendMessage(_tipWindow, User32.WindowMessage.TTM_DELTOOLW);
                 }
 
@@ -1224,7 +1224,7 @@ namespace System.Windows.Forms
                                 flags |= ComCtl32.TTF.RTLREADING;
                             }
 
-                            var toolInfo = new ComCtl32.ToolInfoWrapper(this, item.Id, flags, item.Error, iconBounds);
+                            var toolInfo = new ComCtl32.ToolInfoWrapper<ErrorWindow>(this, item.Id, flags, item.Error, iconBounds);
                             toolInfo.SendMessage(_tipWindow, User32.WindowMessage.TTM_SETTOOLINFOW);
                         }
 
@@ -1389,7 +1389,7 @@ namespace System.Windows.Forms
                 get
                 {
                     AccessibleObject accessibleObject = (AccessibleObject)Properties.GetObject(s_accessibilityProperty);
-                    
+
                     if (accessibleObject == null)
                     {
                         accessibleObject = CreateAccessibilityInstance();

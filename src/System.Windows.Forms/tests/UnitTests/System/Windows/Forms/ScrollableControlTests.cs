@@ -13,13 +13,8 @@ namespace System.Windows.Forms.Tests
     using Point = System.Drawing.Point;
     using Size = System.Drawing.Size;
 
-    public class ScrollableControlTests
+    public class ScrollableControlTests : IClassFixture<ThreadExceptionFixture>
     {
-        public ScrollableControlTests()
-        {
-            Application.ThreadException += (sender, e) => throw new Exception(e.Exception.StackTrace.ToString());
-        }
-
         [WinFormsFact]
         public void ScrollableControl_Ctor_Default()
         {
@@ -799,7 +794,13 @@ namespace System.Windows.Forms.Tests
         {
             using var control = new ScrollableControl();
             int layoutCallCount = 0;
-            control.Layout += (sender, e) => layoutCallCount++;
+            control.Layout += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(control, e.AffectedControl);
+                Assert.Equal("Padding", e.AffectedProperty);
+                layoutCallCount++;
+            };
 
             control.Padding = value;
             Assert.Equal(expected, control.Padding);
@@ -811,6 +812,43 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, control.Padding);
             Assert.Equal(expectedLayoutCallCount2, layoutCallCount);
             Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void ScrollableControl_Padding_SetWithHandler_CallsPaddingChanged()
+        {
+            using var control = new ScrollableControl();
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Equal(control, sender);
+                Assert.Equal(EventArgs.Empty, e);
+                callCount++;
+            };
+            control.PaddingChanged += handler;
+
+            // Set different.
+            var padding1 = new Padding(1);
+            control.Padding = padding1;
+            Assert.Equal(padding1, control.Padding);
+            Assert.Equal(1, callCount);
+
+            // Set same.
+            control.Padding = padding1;
+            Assert.Equal(padding1, control.Padding);
+            Assert.Equal(1, callCount);
+
+            // Set different.
+            var padding2 = new Padding(2);
+            control.Padding = padding2;
+            Assert.Equal(padding2, control.Padding);
+            Assert.Equal(2, callCount);
+
+            // Remove handler.
+            control.PaddingChanged -= handler;
+            control.Padding = padding1;
+            Assert.Equal(padding1, control.Padding);
+            Assert.Equal(2, callCount);
         }
 
         [WinFormsTheory]

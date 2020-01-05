@@ -13,13 +13,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 {
     internal class Com2IManagedPerPropertyBrowsingHandler : Com2ExtendedBrowsingHandler
     {
-        public override Type Interface
-        {
-            get
-            {
-                return typeof(NativeMethods.IManagedPerPropertyBrowsing);
-            }
-        }
+        public override Type Interface => typeof(VSSDK.IVSMDPerPropertyBrowsing);
 
         public override void SetupPropertyHandlers(Com2PropertyDescriptor[] propDesc)
         {
@@ -41,9 +35,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         {
             object target = sender.TargetObject;
 
-            if (target is NativeMethods.IManagedPerPropertyBrowsing)
+            if (target is VSSDK.IVSMDPerPropertyBrowsing)
             {
-                Attribute[] attrs = GetComponentAttributes((NativeMethods.IManagedPerPropertyBrowsing)target, sender.DISPID);
+                Attribute[] attrs = GetComponentAttributes((VSSDK.IVSMDPerPropertyBrowsing)target, sender.DISPID);
                 if (attrs != null)
                 {
                     for (int i = 0; i < attrs.Length; i++)
@@ -54,13 +48,13 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
         }
 
-        internal static Attribute[] GetComponentAttributes(NativeMethods.IManagedPerPropertyBrowsing target, Ole32.DispatchID dispid)
+        internal unsafe static Attribute[] GetComponentAttributes(VSSDK.IVSMDPerPropertyBrowsing target, Ole32.DispatchID dispid)
         {
-            int cItems = 0;
+            uint cItems = 0;
             IntPtr pbstrs = IntPtr.Zero;
             IntPtr pvars = IntPtr.Zero;
 
-            HRESULT hr = target.GetPropertyAttributes(dispid, ref cItems, ref pbstrs, ref pvars);
+            HRESULT hr = target.GetPropertyAttributes(dispid, &cItems, &pbstrs, &pvars);
             if (hr != HRESULT.S_OK || cItems == 0)
             {
                 return Array.Empty<Attribute>();
@@ -222,7 +216,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             return temp;
         }
 
-        private static string[] GetStringsFromPtr(IntPtr ptr, int cStrings)
+        private static string[] GetStringsFromPtr(IntPtr ptr, uint cStrings)
         {
             if (ptr != IntPtr.Zero)
             {
@@ -264,7 +258,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
         }
 
-        private static object[] GetVariantsFromPtr(IntPtr ptr, int cVariants)
+        private static object[] GetVariantsFromPtr(IntPtr ptr, uint cVariants)
         {
             if (ptr != IntPtr.Zero)
             {

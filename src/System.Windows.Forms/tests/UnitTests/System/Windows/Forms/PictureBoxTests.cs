@@ -14,15 +14,10 @@ namespace System.Windows.Forms.Tests
     using Point = System.Drawing.Point;
     using Size = System.Drawing.Size;
 
-    public class PictureBoxTests
+    public class PictureBoxTests : IClassFixture<ThreadExceptionFixture>
     {
         private const string PathImageLocation = "bitmaps/nature24bits.jpg";
         private const string UrlImageLocation = "https://github.com/dotnet/corefx-testdata/raw/master/System.Drawing.Common.TestData/bitmaps/nature24bits.jpg";
-
-        public PictureBoxTests()
-        {
-            Application.ThreadException += (sender, e) => throw new Exception(e.Exception.StackTrace.ToString());
-        }
 
         [WinFormsFact]
         public void PictureBox_Ctor_Default()

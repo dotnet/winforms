@@ -12,13 +12,16 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ToolStripItemTests
+    using Size = System.Drawing.Size;
+
+    public class ToolStripItemTests : IClassFixture<ThreadExceptionFixture>
     {
-        [Fact]
+        [WinFormsFact]
         public void ToolStripItem_Ctor_Default()
         {
-            var item = new SubToolStripItem();
+            using var item = new SubToolStripItem();
             Assert.NotNull(item.AccessibilityObject);
+            Assert.Same(item.AccessibilityObject, item.AccessibilityObject);
             Assert.Null(item.AccessibleDefaultActionDescription);
             Assert.Null(item.AccessibleDescription);
             Assert.Null(item.AccessibleName);
@@ -29,20 +32,31 @@ namespace System.Windows.Forms.Tests
             Assert.True(item.AutoSize);
             Assert.False(item.AutoToolTip);
             Assert.True(item.Available);
+            Assert.Equal(Control.DefaultBackColor, item.BackColor);
             Assert.Null(item.BackgroundImage);
             Assert.Equal(ImageLayout.Tile, item.BackgroundImageLayout);
             Assert.Equal(new Rectangle(0, 0, 23, 23), item.Bounds);
             Assert.True(item.CanSelect);
+            Assert.True(item.CanRaiseEvents);
+            Assert.Null(item.Container);
             Assert.Equal(new Rectangle(2, 2, 19, 19), item.ContentRectangle);
             Assert.False(item.DefaultAutoToolTip);
             Assert.Equal(ToolStripItemDisplayStyle.ImageAndText, item.DefaultDisplayStyle);
+            Assert.Equal(new Padding(0, 1, 0, 2), item.DefaultMargin);
             Assert.Equal(Padding.Empty, item.DefaultPadding);
             Assert.Equal(new Size(23, 23), item.DefaultSize);
+            Assert.False(item.DesignMode);
             Assert.True(item.DismissWhenClicked);
             Assert.Equal(ToolStripItemDisplayStyle.ImageAndText, item.DisplayStyle);
             Assert.Equal(DockStyle.None, item.Dock);
             Assert.False(item.DoubleClickEnabled);
             Assert.True(item.Enabled);
+            Assert.NotNull(item.Events);
+            Assert.Same(item.Events, item.Events);
+            Assert.NotNull(item.Font);
+            Assert.NotSame(Control.DefaultFont, item.Font);
+            Assert.Same(item.Font, item.Font);
+            Assert.Equal(Control.DefaultForeColor, item.ForeColor);
             Assert.Equal(23, item.Height);
             Assert.Null(item.Image);
             Assert.Equal(ContentAlignment.MiddleCenter, item.ImageAlign);
@@ -51,22 +65,31 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(ToolStripItemImageScaling.SizeToFit, item.ImageScaling);
             Assert.Equal(Color.Empty, item.ImageTransparentColor);
             Assert.False(item.IsDisposed);
+            Assert.False(item.IsOnDropDown);
             Assert.False(item.IsOnOverflow);
             Assert.Equal(new Padding(0, 1, 0, 2), item.Margin);
             Assert.Equal(MergeAction.Append, item.MergeAction);
             Assert.Equal(-1, item.MergeIndex);
             Assert.Empty(item.Name);
             Assert.Equal(ToolStripItemOverflow.AsNeeded, item.Overflow);
+            Assert.Null(item.OwnerItem);
             Assert.Equal(Padding.Empty, item.Padding);
             Assert.Null(item.Parent);
             Assert.Equal(ToolStripItemPlacement.None, item.Placement);
             Assert.False(item.Pressed);
+            Assert.Equal(RightToLeft.Inherit, item.RightToLeft);
             Assert.False(item.RightToLeftAutoMirrorImage);
+            Assert.False(item.Selected);
+            Assert.False(item.ShowKeyboardCues);
+            Assert.Null(item.Site);
             Assert.Equal(new Size(23, 23), item.Size);
             Assert.Null(item.Tag);
             Assert.Empty(item.Text);
             Assert.Equal(ContentAlignment.MiddleCenter, item.TextAlign);
+            Assert.Equal(ToolStripTextDirection.Horizontal, item.TextDirection);
             Assert.Equal(TextImageRelation.ImageBeforeText, item.TextImageRelation);
+            Assert.Null(item.ToolTipText);
+            Assert.False(item.Visible);
             Assert.Equal(23, item.Width);
         }
 
@@ -79,11 +102,11 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { "text", new Bitmap(10, 10), onClick };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(Ctor_String_Image_EventHandler_TestData))]
         public void ToolStripItem_Ctor_String_Image_EventHandler(string text, Image image, EventHandler onClick)
         {
-            var item = new SubToolStripItem(text, image, onClick);
+            using var item = new SubToolStripItem(text, image, onClick);
             Assert.NotNull(item.AccessibilityObject);
             Assert.Null(item.AccessibleDefaultActionDescription);
             Assert.Null(item.AccessibleDescription);
@@ -99,16 +122,26 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(ImageLayout.Tile, item.BackgroundImageLayout);
             Assert.Equal(new Rectangle(0, 0, 23, 23), item.Bounds);
             Assert.True(item.CanSelect);
+            Assert.True(item.CanRaiseEvents);
+            Assert.Null(item.Container);
             Assert.Equal(new Rectangle(2, 2, 19, 19), item.ContentRectangle);
             Assert.False(item.DefaultAutoToolTip);
             Assert.Equal(ToolStripItemDisplayStyle.ImageAndText, item.DefaultDisplayStyle);
+            Assert.Equal(new Padding(0, 1, 0, 2), item.DefaultMargin);
             Assert.Equal(Padding.Empty, item.DefaultPadding);
             Assert.Equal(new Size(23, 23), item.DefaultSize);
+            Assert.False(item.DesignMode);
             Assert.True(item.DismissWhenClicked);
             Assert.Equal(ToolStripItemDisplayStyle.ImageAndText, item.DisplayStyle);
             Assert.Equal(DockStyle.None, item.Dock);
             Assert.False(item.DoubleClickEnabled);
             Assert.True(item.Enabled);
+            Assert.NotNull(item.Events);
+            Assert.Same(item.Events, item.Events);
+            Assert.NotNull(item.Font);
+            Assert.NotSame(Control.DefaultFont, item.Font);
+            Assert.Same(item.Font, item.Font);
+            Assert.Equal(Control.DefaultForeColor, item.ForeColor);
             Assert.Equal(23, item.Height);
             Assert.Equal(image, item.Image);
             Assert.Equal(ContentAlignment.MiddleCenter, item.ImageAlign);
@@ -117,23 +150,42 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(ToolStripItemImageScaling.SizeToFit, item.ImageScaling);
             Assert.Equal(Color.Empty, item.ImageTransparentColor);
             Assert.False(item.IsDisposed);
+            Assert.False(item.IsOnDropDown);
             Assert.False(item.IsOnOverflow);
             Assert.Equal(new Padding(0, 1, 0, 2), item.Margin);
             Assert.Equal(MergeAction.Append, item.MergeAction);
             Assert.Equal(-1, item.MergeIndex);
             Assert.Empty(item.Name);
             Assert.Equal(ToolStripItemOverflow.AsNeeded, item.Overflow);
+            Assert.Null(item.OwnerItem);
             Assert.Equal(Padding.Empty, item.Padding);
             Assert.Null(item.Parent);
             Assert.Equal(ToolStripItemPlacement.None, item.Placement);
             Assert.False(item.Pressed);
+            Assert.Equal(RightToLeft.Inherit, item.RightToLeft);
             Assert.False(item.RightToLeftAutoMirrorImage);
+            Assert.False(item.Selected);
+            Assert.False(item.ShowKeyboardCues);
+            Assert.Null(item.Site);
             Assert.Equal(new Size(23, 23), item.Size);
             Assert.Null(item.Tag);
             Assert.Equal(text, item.Text);
             Assert.Equal(ContentAlignment.MiddleCenter, item.TextAlign);
+            Assert.Equal(ToolStripTextDirection.Horizontal, item.TextDirection);
             Assert.Equal(TextImageRelation.ImageBeforeText, item.TextImageRelation);
+            Assert.Null(item.ToolTipText);
+            Assert.False(item.Visible);
             Assert.Equal(23, item.Width);
+        }
+
+        [WinFormsFact]
+        public void ToolStripItem_Ctor_String_Image_EventHandler_InvokeClick_CallsOnClick()
+        {
+            int callCount = 0;
+            EventHandler onClick = (sender, e) => callCount++;
+            using var item = new SubToolStripItem("text", null, onClick);
+            item.PerformClick();
+            Assert.Equal(1, callCount);
         }
 
         public static IEnumerable<object[]> Ctor_String_Image_EventHandler_String_TestData()
@@ -145,11 +197,11 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { "text", new Bitmap(10, 10), onClick, "name", "name" };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(Ctor_String_Image_EventHandler_String_TestData))]
         public void ToolStripItem_Ctor_String_Image_EventHandler_String(string text, Image image, EventHandler onClick, string name, string expectedName)
         {
-            var item = new SubToolStripItem(text, image, onClick, name);
+            using var item = new SubToolStripItem(text, image, onClick, name);
             Assert.NotNull(item.AccessibilityObject);
             Assert.Null(item.AccessibleDefaultActionDescription);
             Assert.Null(item.AccessibleDescription);
@@ -165,16 +217,26 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(ImageLayout.Tile, item.BackgroundImageLayout);
             Assert.Equal(new Rectangle(0, 0, 23, 23), item.Bounds);
             Assert.True(item.CanSelect);
+            Assert.True(item.CanRaiseEvents);
+            Assert.Null(item.Container);
             Assert.Equal(new Rectangle(2, 2, 19, 19), item.ContentRectangle);
             Assert.False(item.DefaultAutoToolTip);
             Assert.Equal(ToolStripItemDisplayStyle.ImageAndText, item.DefaultDisplayStyle);
+            Assert.Equal(new Padding(0, 1, 0, 2), item.DefaultMargin);
             Assert.Equal(Padding.Empty, item.DefaultPadding);
             Assert.Equal(new Size(23, 23), item.DefaultSize);
+            Assert.False(item.DesignMode);
             Assert.True(item.DismissWhenClicked);
             Assert.Equal(ToolStripItemDisplayStyle.ImageAndText, item.DisplayStyle);
             Assert.Equal(DockStyle.None, item.Dock);
             Assert.False(item.DoubleClickEnabled);
             Assert.True(item.Enabled);
+            Assert.NotNull(item.Events);
+            Assert.Same(item.Events, item.Events);
+            Assert.NotNull(item.Font);
+            Assert.NotSame(Control.DefaultFont, item.Font);
+            Assert.Same(item.Font, item.Font);
+            Assert.Equal(Control.DefaultForeColor, item.ForeColor);
             Assert.Equal(23, item.Height);
             Assert.Equal(image, item.Image);
             Assert.Equal(ContentAlignment.MiddleCenter, item.ImageAlign);
@@ -183,37 +245,75 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(ToolStripItemImageScaling.SizeToFit, item.ImageScaling);
             Assert.Equal(Color.Empty, item.ImageTransparentColor);
             Assert.False(item.IsDisposed);
+            Assert.False(item.IsOnDropDown);
             Assert.False(item.IsOnOverflow);
             Assert.Equal(new Padding(0, 1, 0, 2), item.Margin);
             Assert.Equal(MergeAction.Append, item.MergeAction);
             Assert.Equal(-1, item.MergeIndex);
             Assert.Equal(expectedName, item.Name);
             Assert.Equal(ToolStripItemOverflow.AsNeeded, item.Overflow);
+            Assert.Null(item.OwnerItem);
             Assert.Equal(Padding.Empty, item.Padding);
             Assert.Null(item.Parent);
             Assert.Equal(ToolStripItemPlacement.None, item.Placement);
             Assert.False(item.Pressed);
+            Assert.Equal(RightToLeft.Inherit, item.RightToLeft);
             Assert.False(item.RightToLeftAutoMirrorImage);
+            Assert.False(item.Selected);
+            Assert.False(item.ShowKeyboardCues);
+            Assert.Null(item.Site);
             Assert.Equal(new Size(23, 23), item.Size);
             Assert.Null(item.Tag);
             Assert.Equal(text, item.Text);
             Assert.Equal(ContentAlignment.MiddleCenter, item.TextAlign);
+            Assert.Equal(ToolStripTextDirection.Horizontal, item.TextDirection);
             Assert.Equal(TextImageRelation.ImageBeforeText, item.TextImageRelation);
+            Assert.Null(item.ToolTipText);
+            Assert.False(item.Visible);
             Assert.Equal(23, item.Width);
         }
 
-        [Fact]
-        public void ToolStripItem_AccessibilityObject_GetNullCreatedInstance_ReturnsNull()
+        [WinFormsFact]
+        public void ToolStripItem_Ctor_String_Image_EventHandler_String_InvokeClick_CallsOnClick()
         {
-            var item = new NullCreateAccessibilityInstanceToolStripItem();
-            Assert.Null(item.AccessibilityObject);
+            int callCount = 0;
+            EventHandler onClick = (sender, e) => callCount++;
+            using var item = new SubToolStripItem("text", null, onClick, "name");
+            item.PerformClick();
+            Assert.Equal(1, callCount);
         }
 
-        [Theory]
+        public static IEnumerable<object[]> AccessibilityObject_Get_TestData()
+        {
+            yield return new object[] { null };
+            yield return new object[] { new AccessibleObject() };
+            yield return new object[] { new SubToolStripItem.ToolStripItemAccessibleObject(new SubToolStripItem()) };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(AccessibilityObject_Get_TestData))]
+        public void ToolStripItem_AccessibilityObject_GetCustomCreateAccessibilityInstance_ReturnsExpected(AccessibleObject result)
+        {
+            using var item = new CustomCreateAccessibilityInstanceToolStripItem
+            {
+                CreateAccessibilityInstanceResult = result
+            };
+            Assert.Same(result, item.AccessibilityObject);
+            Assert.Same(item.AccessibilityObject, item.AccessibilityObject);
+        }
+
+        private class CustomCreateAccessibilityInstanceToolStripItem : ToolStripItem
+        {
+            public AccessibleObject CreateAccessibilityInstanceResult { get; set; }
+
+            protected override AccessibleObject CreateAccessibilityInstance() => CreateAccessibilityInstanceResult;
+        }
+
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetStringTheoryData))]
         public void ToolStripItem_AccessibleDefaultActionDescription_Set_GetReturnsExpected(string value)
         {
-            var item = new SubToolStripItem
+            using var item = new SubToolStripItem
             {
                 AccessibleDefaultActionDescription = value
             };
@@ -224,11 +324,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, item.AccessibleDefaultActionDescription);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetStringTheoryData))]
         public void ToolStripItem_AccessibleDescription_Set_GetReturnsExpected(string value)
         {
-            var item = new SubToolStripItem
+            using var item = new SubToolStripItem
             {
                 AccessibleDescription = value
             };
@@ -239,11 +339,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, item.AccessibleDescription);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetStringTheoryData))]
         public void ToolStripItem_AccessibleName_Set_GetReturnsExpected(string value)
         {
-            var item = new SubToolStripItem
+            using var item = new SubToolStripItem
             {
                 AccessibleName = value
             };
@@ -254,11 +354,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, item.AccessibleName);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(AccessibleRole))]
         public void ToolStripItem_AccessibleRole_Set_GetReturnsExpected(AccessibleRole value)
         {
-            var item = new SubToolStripItem
+            using var item = new SubToolStripItem
             {
                 AccessibleRole = value
             };
@@ -269,22 +369,21 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, item.AccessibleRole);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(AccessibleRole))]
         public void ToolStripItem_AccessibleRole_SetInvalid_ThrowsInvalidEnumArgumentException(AccessibleRole value)
         {
-            var item = new SubToolStripItem();
+            using var item = new SubToolStripItem();
             Assert.Throws<InvalidEnumArgumentException>("value", () => item.AccessibleRole = value);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ToolStripItemAlignment))]
         public void ToolStripItem_Alignment_Set_GetReturnsExpected(ToolStripItemAlignment value)
         {
-            var item = new SubToolStripItem
-            {
-                Alignment = value
-            };
+            using var item = new SubToolStripItem();
+
+            item.Alignment = value;
             Assert.Equal(value, item.Alignment);
 
             // Set same.
@@ -292,48 +391,164 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, item.Alignment);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ToolStripItemAlignment))]
         public void ToolStripItem_Alignment_SetWithParent_GetReturnsExpected(ToolStripItemAlignment value)
         {
-            var parent = new ToolStrip();
-            var item = new SubToolStripItem
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
             {
-                Parent = parent,
-
-                Alignment = value
+                Parent = parent
             };
+            int parentLayoutCallCount = 0;
+            parent.Layout += (sender, e) => parentLayoutCallCount++;
+
+            item.Alignment = value;
             Assert.Equal(value, item.Alignment);
+            Assert.Equal(0, parentLayoutCallCount);
+            Assert.False(parent.IsHandleCreated);
 
             // Set same.
             item.Alignment = value;
             Assert.Equal(value, item.Alignment);
+            Assert.Equal(0, parentLayoutCallCount);
+            Assert.False(parent.IsHandleCreated);
         }
 
-        [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ToolStripItemAlignment))]
-        public void ToolStripItem_Alignment_SetWithCreatedParent_GetReturnsExpected(ToolStripItemAlignment value)
+        [WinFormsTheory]
+        [InlineData(ToolStripItemAlignment.Left, 0)]
+        [InlineData(ToolStripItemAlignment.Right, 1)]
+        public void ToolStripItem_Alignment_SetWithParentWithHandle_GetReturnsExpected(ToolStripItemAlignment value, int expectedParentLayoutCallCount)
         {
-            var parent = new ToolStrip();
-            var item = new SubToolStripItem
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
             {
                 Parent = parent
             };
             Assert.NotEqual(IntPtr.Zero, parent.Handle);
+            int invalidatedCallCount = 0;
+            parent.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            parent.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            parent.HandleCreated += (sender, e) => createdCallCount++;
+            int parentLayoutCallCount = 0;
+            void parentHandler(object sender, LayoutEventArgs e)
+            {
+                Assert.Same(parent, sender);
+                Assert.Null(e.AffectedComponent);
+                Assert.Null(e.AffectedProperty);
+                parentLayoutCallCount++;
+            }
+            parent.Layout += parentHandler;
 
-            item.Alignment = value;
-            Assert.Equal(value, item.Alignment);
+            try
+            {
+                item.Alignment = value;
+                Assert.Equal(value, item.Alignment);
+                Assert.Equal(expectedParentLayoutCallCount, parentLayoutCallCount);
+                Assert.True(parent.IsHandleCreated);
+                Assert.Equal(expectedParentLayoutCallCount, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
 
-            // Set same.
-            item.Alignment = value;
-            Assert.Equal(value, item.Alignment);
+                // Set same.
+                item.Alignment = value;
+                Assert.Equal(value, item.Alignment);
+                Assert.Equal(expectedParentLayoutCallCount, parentLayoutCallCount);
+                Assert.True(parent.IsHandleCreated);
+                Assert.Equal(expectedParentLayoutCallCount, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+            }
+            finally
+            {
+                parent.Layout -= parentHandler;
+            }
         }
 
-        [Theory]
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ToolStripItemAlignment))]
+        public void ToolStripItem_Alignment_SetWithOwner_GetReturnsExpected(ToolStripItemAlignment value)
+        {
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Owner = owner
+            };
+            int ownerLayoutCallCount = 0;
+            void ownerHandler(object sender, LayoutEventArgs e) => ownerLayoutCallCount++;
+            owner.Layout += ownerHandler;
+
+            try
+            {
+                item.Alignment = value;
+                Assert.Equal(value, item.Alignment);
+                Assert.Equal(0, ownerLayoutCallCount);
+                Assert.False(owner.IsHandleCreated);
+
+                // Set same.
+                item.Alignment = value;
+                Assert.Equal(value, item.Alignment);
+                Assert.Equal(0, ownerLayoutCallCount);
+                Assert.False(owner.IsHandleCreated);
+            }
+            finally
+            {
+                owner.Layout -= ownerHandler;
+            }
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ToolStripItemAlignment))]
+        public void ToolStripItem_Alignment_SetWithOwnerWithHandle_GetReturnsExpected(ToolStripItemAlignment value)
+        {
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Owner = owner
+            };
+            Assert.NotEqual(IntPtr.Zero, owner.Handle);
+            int invalidatedCallCount = 0;
+            owner.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            owner.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            owner.HandleCreated += (sender, e) => createdCallCount++;
+            int ownerLayoutCallCount = 0;
+            void ownerHandler(object sender, LayoutEventArgs e) => ownerLayoutCallCount++;
+            owner.Layout += ownerHandler;
+
+            try
+            {
+                item.Alignment = value;
+                Assert.Equal(value, item.Alignment);
+                Assert.Equal(0, ownerLayoutCallCount);
+                Assert.True(owner.IsHandleCreated);
+                Assert.Equal(0, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+
+                // Set same.
+                item.Alignment = value;
+                Assert.Equal(value, item.Alignment);
+                Assert.Equal(0, ownerLayoutCallCount);
+                Assert.True(owner.IsHandleCreated);
+                Assert.Equal(0, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+            }
+            finally
+            {
+                owner.Layout -= ownerHandler;
+            }
+        }
+
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ToolStripItemAlignment))]
         public void ToolStripItem_Alignment_SetInvalid_ThrowsInvalidEnumArgumentException(ToolStripItemAlignment value)
         {
-            var item = new SubToolStripItem();
+            using var item = new SubToolStripItem();
             Assert.Throws<InvalidEnumArgumentException>("value", () => item.Alignment = value);
         }
 
@@ -358,9 +573,154 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        public void ToolStripItem_AllowDrop_SetWithOwner_GetReturnsExpected(bool value)
+        {
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Owner = owner,
+                AllowDrop = value
+            };
+            Assert.Equal(value, item.AllowDrop);
+            Assert.False(owner.AllowDrop);
+            Assert.False(owner.IsHandleCreated);
+
+            // Set same.
+            item.AllowDrop = value;
+            Assert.Equal(value, item.AllowDrop);
+            Assert.False(owner.AllowDrop);
+            Assert.False(owner.IsHandleCreated);
+
+            // Set different.
+            item.AllowDrop = !value;
+            Assert.Equal(!value, item.AllowDrop);
+            Assert.False(owner.AllowDrop);
+            Assert.False(owner.IsHandleCreated);
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        public void ToolStripItem_AllowDrop_SetWithOwnerWithHandle_GetReturnsExpected(bool value)
+        {
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Owner = owner
+            };
+            Assert.NotEqual(IntPtr.Zero, owner.Handle);
+            int invalidatedCallCount = 0;
+            owner.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            owner.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            owner.HandleCreated += (sender, e) => createdCallCount++;
+
+            item.AllowDrop = value;
+            Assert.Equal(value, item.AllowDrop);
+            Assert.False(owner.AllowDrop);
+            Assert.True(owner.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set same.
+            item.AllowDrop = value;
+            Assert.Equal(value, item.AllowDrop);
+            Assert.False(owner.AllowDrop);
+            Assert.True(owner.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set different.
+            item.AllowDrop = !value;
+            Assert.Equal(!value, item.AllowDrop);
+            Assert.False(owner.AllowDrop);
+            Assert.True(owner.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ToolStripItem_AllowDrop_SetWithParent_GetReturnsExpected(bool value)
         {
             using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Parent = parent,
+                AllowDrop = value
+            };
+            Assert.Equal(value, item.AllowDrop);
+            Assert.False(parent.AllowDrop);
+            Assert.False(parent.IsHandleCreated);
+
+            // Set same.
+            item.AllowDrop = value;
+            Assert.Equal(value, item.AllowDrop);
+            Assert.False(parent.AllowDrop);
+            Assert.False(parent.IsHandleCreated);
+
+            // Set different.
+            item.AllowDrop = !value;
+            Assert.Equal(!value, item.AllowDrop);
+            Assert.False(parent.AllowDrop);
+            Assert.False(parent.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        public void ToolStripItem_AllowDrop_SetWithParentWithHandle_GetReturnsExpected(bool value)
+        {
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Parent = parent
+            };
+            Assert.NotEqual(IntPtr.Zero, parent.Handle);
+            int invalidatedCallCount = 0;
+            parent.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            parent.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            parent.HandleCreated += (sender, e) => createdCallCount++;
+
+            item.AllowDrop = value;
+            Assert.Equal(value, item.AllowDrop);
+            Assert.False(parent.AllowDrop);
+            Assert.True(parent.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set same.
+            item.AllowDrop = value;
+            Assert.Equal(value, item.AllowDrop);
+            Assert.False(parent.AllowDrop);
+            Assert.True(parent.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set different.
+            item.AllowDrop = !value;
+            Assert.Equal(!value, item.AllowDrop);
+            Assert.False(parent.AllowDrop);
+            Assert.True(parent.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        public void ToolStripItem_AllowDrop_SetWithParentWithHandleAlreadyRegistered_GetReturnsExpected(bool value)
+        {
+            using var parent = new ToolStrip
+            {
+                AllowDrop = true
+            };
             using var item = new SubToolStripItem
             {
                 Parent = parent,
@@ -377,7 +737,39 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(!value, item.AllowDrop);
         }
 
-        public static IEnumerable<object[]> Anchor_TestData()
+        [Fact]
+        public void Control_AllowDrop_SetWithParentWithHandleNonSTAThread_ThrowsInvalidOperationException()
+        {
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Parent = parent
+            };
+            Assert.NotEqual(IntPtr.Zero, parent.Handle);
+            int invalidatedCallCount = 0;
+            parent.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            parent.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            parent.HandleCreated += (sender, e) => createdCallCount++;
+
+            Assert.Throws<InvalidOperationException>(() => item.AllowDrop = true);
+            Assert.False(item.AllowDrop);
+            Assert.True(parent.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Can set to false.
+            item.AllowDrop = false;
+            Assert.False(item.AllowDrop);
+            Assert.True(parent.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        public static IEnumerable<object[]> Anchor_Set_TestData()
         {
             yield return new object[] { AnchorStyles.Top | AnchorStyles.Left, AnchorStyles.Top | AnchorStyles.Left };
             yield return new object[] { AnchorStyles.Top, AnchorStyles.Top };
@@ -387,11 +779,11 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { (AnchorStyles)0x10, AnchorStyles.Top | AnchorStyles.Left };
         }
 
-        [Theory]
-        [MemberData(nameof(Anchor_TestData))]
+        [WinFormsTheory]
+        [MemberData(nameof(Anchor_Set_TestData))]
         public void ToolStripItem_Anchor_Set_GetReturnsExpected(AnchorStyles value, AnchorStyles expected)
         {
-            var item = new SubToolStripItem
+            using var item = new SubToolStripItem
             {
                 Anchor = value
             };
@@ -402,29 +794,75 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, item.Anchor);
         }
 
-        [Theory]
-        [MemberData(nameof(Anchor_TestData))]
+        [WinFormsTheory]
+        [MemberData(nameof(Anchor_Set_TestData))]
+        public void ToolStripItem_Anchor_SetWithOwner_GetReturnsExpected(AnchorStyles value, AnchorStyles expected)
+        {
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Owner = owner
+            };
+            int ownerLayoutCallCount = 0;
+            void ownerHandler(object sender, LayoutEventArgs e) => ownerLayoutCallCount++;
+            owner.Layout += ownerHandler;
+
+            try
+            {
+                item.Anchor = value;
+                Assert.Equal(expected, item.Anchor);
+                Assert.Equal(0, ownerLayoutCallCount);
+                Assert.False(owner.IsHandleCreated);
+
+                // Set same.
+                item.Anchor = value;
+                Assert.Equal(expected, item.Anchor);
+                Assert.Equal(0, ownerLayoutCallCount);
+                Assert.False(owner.IsHandleCreated);
+            }
+            finally
+            {
+                owner.Layout -= ownerHandler;
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(Anchor_Set_TestData))]
         public void ToolStripItem_Anchor_SetWithParent_GetReturnsExpected(AnchorStyles value, AnchorStyles expected)
         {
-            var parent = new ToolStrip();
-            var item = new SubToolStripItem
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
             {
-                Parent = parent,
-
-                Anchor = value
+                Parent = parent
             };
-            Assert.Equal(expected, item.Anchor);
+            int parentLayoutCallCount = 0;
+            void parentHandler(object sender, LayoutEventArgs e) => parentLayoutCallCount++;
+            parent.Layout += parentHandler;
 
-            // Set same.
-            item.Anchor = value;
-            Assert.Equal(expected, item.Anchor);
+            try
+            {
+                item.Anchor = value;
+                Assert.Equal(expected, item.Anchor);
+                Assert.Equal(0, parentLayoutCallCount);
+                Assert.False(parent.IsHandleCreated);
+
+                // Set same.
+                item.Anchor = value;
+                Assert.Equal(expected, item.Anchor);
+                Assert.Equal(0, parentLayoutCallCount);
+                Assert.False(parent.IsHandleCreated);
+            }
+            finally
+            {
+                parent.Layout -= parentHandler;
+            }
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ToolStripItem_AutoSize_Set_GetReturnsExpected(bool value)
         {
-            var item = new SubToolStripItem
+            using var item = new SubToolStripItem
             {
                 AutoSize = value
             };
@@ -439,31 +877,221 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(!value, item.AutoSize);
         }
 
-        [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
-        public void ToolStripItem_AutoSize_SetWithOwner_GetReturnsExpected(bool value)
+        [WinFormsTheory]
+        [InlineData(true, 0)]
+        [InlineData(false, 1)]
+        public void ToolStripItem_AutoSize_SetWithOwner_GetReturnsExpected(bool value, int expectedParentLayoutCallCount)
         {
-            var owner = new ToolStrip();
-            var item = new SubToolStripItem();
-            owner.Items.Add(item);
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Owner = owner
+            };
+            int ownerLayoutCallCount = 0;
+            void ownerHandler(object sender, LayoutEventArgs e)
+            {
+                Assert.Same(owner, sender);
+                Assert.Same(item, e.AffectedComponent);
+                Assert.Equal("AutoSize", e.AffectedProperty);
+                ownerLayoutCallCount++;
+            };
+            owner.Layout += ownerHandler;
 
-            item.AutoSize = value;
-            Assert.Equal(value, item.AutoSize);
+            try
+            {
+                item.AutoSize = value;
+                Assert.Equal(value, item.AutoSize);
+                Assert.Equal(expectedParentLayoutCallCount, ownerLayoutCallCount);
+                Assert.False(owner.IsHandleCreated);
 
-            // Set same.
-            item.AutoSize = value;
-            Assert.Equal(value, item.AutoSize);
+                // Set same.
+                item.AutoSize = value;
+                Assert.Equal(value, item.AutoSize);
+                Assert.Equal(expectedParentLayoutCallCount, ownerLayoutCallCount);
+                Assert.False(owner.IsHandleCreated);
 
-            // Set different.
-            item.AutoSize = !value;
-            Assert.Equal(!value, item.AutoSize);
+                // Set different.
+                item.AutoSize = !value;
+                Assert.Equal(!value, item.AutoSize);
+                Assert.Equal(expectedParentLayoutCallCount + 1, ownerLayoutCallCount);
+                Assert.False(owner.IsHandleCreated);
+            }
+            finally
+            {
+                owner.Layout -= ownerHandler;
+            }
         }
 
-        [Theory]
+        [WinFormsTheory]
+        [InlineData(true, 0)]
+        [InlineData(false, 1)]
+        public void ToolStripItem_AutoSize_SetWithOwnerWithHandle_GetReturnsExpected(bool value, int expectedParentLayoutCallCount)
+        {
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Owner = owner
+            };
+            Assert.NotEqual(IntPtr.Zero, owner.Handle);
+            int invalidatedCallCount = 0;
+            owner.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            owner.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            owner.HandleCreated += (sender, e) => createdCallCount++;
+            int ownerLayoutCallCount = 0;
+            void ownerHandler(object sender, LayoutEventArgs e)
+            {
+                Assert.Same(owner, sender);
+                Assert.Same(item, e.AffectedComponent);
+                Assert.Equal("AutoSize", e.AffectedProperty);
+                ownerLayoutCallCount++;
+            };
+            owner.Layout += ownerHandler;
+
+            try
+            {
+                item.AutoSize = value;
+                Assert.Equal(value, item.AutoSize);
+                Assert.Equal(expectedParentLayoutCallCount, ownerLayoutCallCount);
+                Assert.True(owner.IsHandleCreated);
+                Assert.Equal(expectedParentLayoutCallCount * 2, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+
+                // Set same.
+                item.AutoSize = value;
+                Assert.Equal(value, item.AutoSize);
+                Assert.Equal(expectedParentLayoutCallCount, ownerLayoutCallCount);
+                Assert.True(owner.IsHandleCreated);
+                Assert.Equal(expectedParentLayoutCallCount * 2, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+
+                // Set different.
+                item.AutoSize = !value;
+                Assert.Equal(!value, item.AutoSize);
+                Assert.Equal(expectedParentLayoutCallCount + 1, ownerLayoutCallCount);
+                Assert.True(owner.IsHandleCreated);
+                Assert.Equal(expectedParentLayoutCallCount * 2 + 2, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+            }
+            finally
+            {
+                owner.Layout -= ownerHandler;
+            }
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        public void ToolStripItem_AutoSize_SetWithParent_GetReturnsExpected(bool value)
+        {
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Parent = parent
+            };
+            int parentLayoutCallCount = 0;
+            void parentHandler(object sender, LayoutEventArgs e) => parentLayoutCallCount++;
+            parent.Layout += parentHandler;
+
+            try
+            {
+                item.AutoSize = value;
+                Assert.Equal(value, item.AutoSize);
+                Assert.Equal(0, parentLayoutCallCount);
+                Assert.False(parent.IsHandleCreated);
+
+                // Set same.
+                item.AutoSize = value;
+                Assert.Equal(value, item.AutoSize);
+                Assert.Equal(0, parentLayoutCallCount);
+                Assert.False(parent.IsHandleCreated);
+
+                // Set different.
+                item.AutoSize = !value;
+                Assert.Equal(!value, item.AutoSize);
+                Assert.Equal(0, parentLayoutCallCount);
+                Assert.False(parent.IsHandleCreated);
+            }
+            finally
+            {
+                parent.Layout -= parentHandler;
+            }
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        public void ToolStripItem_AutoSize_SetWithParentWithHandle_GetReturnsExpected(bool value)
+        {
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Parent = parent
+            };
+            Assert.NotEqual(IntPtr.Zero, parent.Handle);
+            int invalidatedCallCount = 0;
+            parent.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            parent.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            parent.HandleCreated += (sender, e) => createdCallCount++;
+            int parentLayoutCallCount = 0;
+            void parentHandler(object sender, LayoutEventArgs e) => parentLayoutCallCount++;
+            parent.Layout += parentHandler;
+
+            try
+            {
+                item.AutoSize = value;
+                Assert.Equal(value, item.AutoSize);
+                Assert.Equal(0, parentLayoutCallCount);
+                Assert.True(parent.IsHandleCreated);
+                Assert.Equal(0, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+
+                // Set same.
+                item.AutoSize = value;
+                Assert.Equal(value, item.AutoSize);
+                Assert.Equal(0, parentLayoutCallCount);
+                Assert.True(parent.IsHandleCreated);
+                Assert.Equal(0, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+
+                // Set different.
+                item.AutoSize = !value;
+                Assert.Equal(!value, item.AutoSize);
+                Assert.Equal(0, parentLayoutCallCount);
+                Assert.True(parent.IsHandleCreated);
+                Assert.Equal(0, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+            }
+            finally
+            {
+                parent.Layout -= parentHandler;
+            }
+        }
+
+        [WinFormsFact]
+        public void ToolStripItem_AutoToolTip_GetWithDefaultAutoToolTip_ReturnsExpected()
+        {
+            using var item = new CustomDefaultAutoToolTipToolStripItem();
+            Assert.True(item.AutoToolTip);
+        }
+
+        private class CustomDefaultAutoToolTipToolStripItem : ToolStripItem
+        {
+            protected override bool DefaultAutoToolTip => true;
+        }
+
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ToolStripItem_AutoToolTip_Set_GetReturnsExpected(bool value)
         {
-            var item = new SubToolStripItem
+            using var item = new SubToolStripItem
             {
                 AutoToolTip = value
             };
@@ -478,29 +1106,365 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(!value, item.AutoToolTip);
         }
 
-        [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
-        public void ToolStripItem_Available_Set_GetReturnsExpected(bool value)
+        [WinFormsTheory]
+        [MemberData(nameof(SetVisibleCore_TestData))]
+        public void ToolStripItem_Available_Set_GetReturnsExpected(bool enabled, Image image, bool value)
         {
-            var item = new SubToolStripItem
+            using var item = new SubToolStripItem
             {
+                Enabled = enabled,
+                Image = image,
                 Available = value
             };
             Assert.Equal(value, item.Available);
+            Assert.False(item.Visible);
+            Assert.False(item.Selected);
 
             // Set same.
             item.Available = value;
             Assert.Equal(value, item.Available);
+            Assert.False(item.Visible);
+            Assert.False(item.Selected);
 
             // Set different.
             item.Available = !value;
             Assert.Equal(!value, item.Available);
+            Assert.False(item.Visible);
+            Assert.False(item.Selected);
         }
 
-        [Fact]
+        [WinFormsTheory]
+        [MemberData(nameof(SetVisibleCore_TestData))]
+        public void ToolStripItem_Available_SetDesignMode_GetReturnsExpected(bool enabled, Image image, bool value)
+        {
+            var mockSite = new Mock<ISite>(MockBehavior.Strict);
+            mockSite
+                .Setup(s => s.Name)
+                .Returns("Name");
+            mockSite
+                .Setup(s => s.DesignMode)
+                .Returns(true);
+            mockSite
+                .Setup(s => s.Container)
+                .Returns((IContainer)null);
+            using var item = new SubToolStripItem
+            {
+                Enabled = enabled,
+                Image = image,
+                Site = mockSite.Object,
+                Available = value
+            };
+            Assert.Equal(value, item.Available);
+            Assert.False(item.Visible);
+            Assert.False(item.Selected);
+
+            // Set same.
+            item.Available = value;
+            Assert.Equal(value, item.Available);
+            Assert.False(item.Visible);
+            Assert.False(item.Selected);
+
+            // Set different.
+            item.Available = !value;
+            Assert.Equal(!value, item.Available);
+            Assert.False(item.Visible);
+            Assert.False(item.Selected);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        public void ToolStripItem_Available_SetSelected_GetReturnsExpected(bool value)
+        {
+            using var item = new SubToolStripItem();
+            item.Select();
+            Assert.True(item.Selected);
+
+            item.Available = value;
+            Assert.Equal(value, item.Available);
+            Assert.False(item.Visible);
+            Assert.Equal(value, item.Selected);
+
+            // Set same.
+            item.Available = value;
+            Assert.Equal(value, item.Available);
+            Assert.False(item.Visible);
+            Assert.Equal(value, item.Selected);
+
+            // Set different.
+            item.Available = !value;
+            Assert.Equal(!value, item.Available);
+            Assert.False(item.Visible);
+            Assert.False(item.Selected);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(SetVisibleCore_TestData))]
+        public void ToolStripItem_Available_SetWithOwner_GetReturnsExpected(bool enabled, Image image, bool value)
+        {
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Enabled = enabled,
+                Image = image,
+                Owner = owner
+            };
+
+            item.Available = value;
+            Assert.Equal(value, item.Available);
+            Assert.False(item.Visible);
+            Assert.False(item.Selected);
+            Assert.False(owner.IsHandleCreated);
+
+            // Set same.
+            item.Available = value;
+            Assert.Equal(value, item.Available);
+            Assert.False(item.Visible);
+            Assert.False(item.Selected);
+            Assert.False(owner.IsHandleCreated);
+
+            // Set different.
+            item.Available = !value;
+            Assert.Equal(!value, item.Available);
+            Assert.False(item.Visible);
+            Assert.False(item.Selected);
+            Assert.False(owner.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(SetVisibleCore_TestData))]
+        public void ToolStripItem_Available_SetDesignModeWithOwner_GetReturnsExpected(bool enabled, Image image, bool value)
+        {
+            var mockSite = new Mock<ISite>(MockBehavior.Strict);
+            mockSite
+                .Setup(s => s.Name)
+                .Returns("Name");
+            mockSite
+                .Setup(s => s.DesignMode)
+                .Returns(true);
+            mockSite
+                .Setup(s => s.Container)
+                .Returns((IContainer)null);
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Enabled = enabled,
+                Image = image,
+                Site = mockSite.Object,
+                Owner = owner,
+            };
+
+            item.Available = value;
+            Assert.Equal(value, item.Available);
+            Assert.False(item.Visible);
+            Assert.False(item.Selected);
+            Assert.False(owner.IsHandleCreated);
+
+            // Set same.
+            item.Available = value;
+            Assert.Equal(value, item.Available);
+            Assert.False(item.Visible);
+            Assert.False(item.Selected);
+            Assert.False(owner.IsHandleCreated);
+
+            // Set different.
+            item.Available = !value;
+            Assert.Equal(!value, item.Available);
+            Assert.False(item.Visible);
+            Assert.False(item.Selected);
+            Assert.False(owner.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> Available_SetWithOwnerWithHandle_TestData()
+        {
+            foreach (bool enabled in new bool[] { true, false })
+            {
+                foreach (Image image in new Image[] { null, new Bitmap(10, 10) })
+                {
+                    yield return new object[] { enabled, image, true, 0 };
+                    yield return new object[] { enabled, image, false, 2 };
+                }
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(Available_SetWithOwnerWithHandle_TestData))]
+        public void ToolStripItem_Available_SetWithOwnerWithHandle_GetReturnsExpected(bool enabled, Image image, bool value, int expectedInvalidatedCallCount)
+        {
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Enabled = enabled,
+                Image = image,
+                Owner = owner
+            };
+            Assert.NotEqual(IntPtr.Zero, owner.Handle);
+            int invalidatedCallCount = 0;
+            owner.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            owner.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            owner.HandleCreated += (sender, e) => createdCallCount++;
+
+            item.Available = value;
+            Assert.Equal(value, item.Available);
+            Assert.False(item.Visible);
+            Assert.False(item.Selected);
+            Assert.True(owner.IsHandleCreated);
+            Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set same.
+            item.Available = value;
+            Assert.Equal(value, item.Available);
+            Assert.False(item.Visible);
+            Assert.False(item.Selected);
+            Assert.True(owner.IsHandleCreated);
+            Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set different.
+            item.Available = !value;
+            Assert.Equal(!value, item.Available);
+            Assert.Equal(!value, item.Visible);
+            Assert.False(item.Selected);
+            Assert.True(owner.IsHandleCreated);
+            Assert.Equal(expectedInvalidatedCallCount + 2, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(SetVisibleCore_TestData))]
+        public void ToolStripItem_Available_SetWithParent_GetReturnsExpected(bool enabled, Image image, bool value)
+        {
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Enabled = enabled,
+                Image = image,
+                Parent = parent
+            };
+
+            item.Available = value;
+            Assert.Equal(value, item.Available);
+            Assert.Equal(value, item.Visible);
+            Assert.False(item.Selected);
+            Assert.False(parent.IsHandleCreated);
+
+            // Set same.
+            item.Available = value;
+            Assert.Equal(value, item.Available);
+            Assert.Equal(value, item.Visible);
+            Assert.False(item.Selected);
+            Assert.False(parent.IsHandleCreated);
+
+            // Set different.
+            item.Available = !value;
+            Assert.Equal(!value, item.Available);
+            Assert.Equal(!value, item.Visible);
+            Assert.False(item.Selected);
+            Assert.False(parent.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(SetVisibleCore_TestData))]
+        public void ToolStripItem_Available_SetDesignModeWithParent_GetReturnsExpected(bool enabled, Image image, bool value)
+        {
+            var mockSite = new Mock<ISite>(MockBehavior.Strict);
+            mockSite
+                .Setup(s => s.Name)
+                .Returns("Name");
+            mockSite
+                .Setup(s => s.DesignMode)
+                .Returns(true);
+            mockSite
+                .Setup(s => s.Container)
+                .Returns((IContainer)null);
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Enabled = enabled,
+                Image = image,
+                Site = mockSite.Object,
+                Parent = parent
+            };
+
+            item.Available = value;
+            Assert.Equal(value, item.Available);
+            Assert.Equal(value, item.Visible);
+            Assert.False(item.Selected);
+            Assert.False(parent.IsHandleCreated);
+
+            // Set same.
+            item.Available = value;
+            Assert.Equal(value, item.Available);
+            Assert.Equal(value, item.Visible);
+            Assert.False(item.Selected);
+            Assert.False(parent.IsHandleCreated);
+
+            // Set different.
+            item.Available = !value;
+            Assert.Equal(!value, item.Available);
+            Assert.Equal(!value, item.Visible);
+            Assert.False(item.Selected);
+            Assert.False(parent.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(SetVisibleCore_TestData))]
+        public void ToolStripItem_Available_SetWithParentWithHandle_GetReturnsExpected(bool enabled, Image image, bool value)
+        {
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Enabled = enabled,
+                Image = image,
+                Parent = parent
+            };
+            Assert.NotEqual(IntPtr.Zero, parent.Handle);
+            int invalidatedCallCount = 0;
+            parent.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            parent.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            parent.HandleCreated += (sender, e) => createdCallCount++;
+
+            item.Available = value;
+            Assert.Equal(value, item.Available);
+            Assert.Equal(value, item.Visible);
+            Assert.False(item.Selected);
+            Assert.True(parent.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set same.
+            item.Available = value;
+            Assert.Equal(value, item.Available);
+            Assert.Equal(value, item.Visible);
+            Assert.False(item.Selected);
+            Assert.True(parent.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set different.
+            item.Available = !value;
+            Assert.Equal(!value, item.Available);
+            Assert.Equal(!value, item.Visible);
+            Assert.False(item.Selected);
+            Assert.True(parent.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsFact]
         public void ToolStripItem_Available_SetWithHandler_CallsAvailableChanged()
         {
-            var item = new SubToolStripItem();
+            using var item = new SubToolStripItem();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -532,10 +1496,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(2, callCount);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ToolStripItem_Available_SetWithHandler_CallsVisibleChanged()
         {
-            var item = new SubToolStripItem();
+            using var item = new SubToolStripItem();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -567,43 +1531,39 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(2, callCount);
         }
 
-        public static IEnumerable<object[]> BackColor_Get_TestData()
+        [WinFormsFact]
+        public void ToolStripItem_BackColor_GetWithOwner_ReturnsExpected()
         {
-            yield return new object[] { new SubToolStripItem(), Control.DefaultBackColor };
-            yield return new object[] { new SubToolStripItem("text", null, null), Control.DefaultBackColor };
-            yield return new object[] { new SubToolStripItem("text", null, null, "name"), Control.DefaultBackColor };
-
-            var toolStrip = new ToolStrip
+            using var owner = new ToolStrip
             {
                 BackColor = Color.Red
             };
-            var toolStripItem = new SubToolStripItem();
-            toolStrip.Items.Add(toolStripItem);
-            yield return new object[] { toolStripItem, Control.DefaultBackColor };
+            using var item = new SubToolStripItem
+            {
+                Owner = owner
+            };
+            Assert.Equal(Control.DefaultBackColor, item.BackColor);
+        }
 
-            var toolStripParent = new ToolStrip
+        [WinFormsFact]
+        public void ToolStripItem_BackColor_GetWithParent_ReturnsExpected()
+        {
+            using var parent = new ToolStrip
             {
                 BackColor = Color.Red
             };
-            var toolStripParentItem = new SubToolStripItem
+            using var item = new SubToolStripItem
             {
-                Parent = toolStripParent
+                Parent = parent
             };
-            yield return new object[] { toolStripParentItem, Color.Red };
+            Assert.Equal(Color.Red, item.BackColor);
         }
 
-        [Theory]
-        [MemberData(nameof(BackColor_Get_TestData))]
-        public void ToolStripItem_BackColor_Get_ReturnsExpected(ToolStripItem item, Color expected)
-        {
-            Assert.Equal(expected, item.BackColor);
-        }
-
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBackColorTheoryData))]
         public void ToolStripItem_BackColor_Set_GetReturnsExpected(Color value, Color expected)
         {
-            var item = new SubToolStripItem
+            using var item = new SubToolStripItem
             {
                 BackColor = value
             };
@@ -614,28 +1574,122 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, item.BackColor);
         }
 
-        [Theory]
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetBackColorTheoryData))]
+        public void ToolStripItem_BackColor_SetWithOwner_GetReturnsExpected(Color value, Color expected)
+        {
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Owner = owner
+            };
+
+            item.BackColor = value;
+            Assert.Equal(expected, item.BackColor);
+            Assert.False(owner.IsHandleCreated);
+
+            // Set same.
+            item.BackColor = value;
+            Assert.Equal(expected, item.BackColor);
+            Assert.False(owner.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetBackColorTheoryData))]
+        public void ToolStripItem_BackColor_SetWithOwnerWithHandle_GetReturnsExpected(Color value, Color expected)
+        {
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Owner = owner
+            };
+            Assert.NotEqual(IntPtr.Zero, owner.Handle);
+            int invalidatedCallCount = 0;
+            owner.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            owner.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            owner.HandleCreated += (sender, e) => createdCallCount++;
+
+            item.BackColor = value;
+            Assert.Equal(expected, item.BackColor);
+            Assert.True(owner.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set same.
+            item.BackColor = value;
+            Assert.Equal(expected, item.BackColor);
+            Assert.True(owner.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBackColorTheoryData))]
         public void ToolStripItem_BackColor_SetWithParent_GetReturnsExpected(Color value, Color expected)
         {
-            var parent = new ToolStrip();
-            var item = new SubToolStripItem
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
             {
                 Parent = parent
             };
 
             item.BackColor = value;
             Assert.Equal(expected, item.BackColor);
+            Assert.False(parent.IsHandleCreated);
 
             // Set same.
             item.BackColor = value;
             Assert.Equal(expected, item.BackColor);
+            Assert.False(parent.IsHandleCreated);
         }
 
-        [Fact]
+        public static IEnumerable<object[]> BackColor_SetWithParentWithHandle_TestData()
+        {
+            yield return new object[] { Color.Empty, Control.DefaultBackColor, 0 };
+            yield return new object[] { Color.Red, Color.Red, 1 };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(BackColor_SetWithParentWithHandle_TestData))]
+        public void ToolStripItem_BackColor_SetWithParentWithHandle_GetReturnsExpected(Color value, Color expected, int expectedInvalidatedCallCount)
+        {
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Parent = parent
+            };
+            Assert.NotEqual(IntPtr.Zero, parent.Handle);
+            int invalidatedCallCount = 0;
+            parent.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            parent.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            parent.HandleCreated += (sender, e) => createdCallCount++;
+
+            item.BackColor = value;
+            Assert.Equal(expected, item.BackColor);
+            Assert.True(parent.IsHandleCreated);
+            Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set same.
+            item.BackColor = value;
+            Assert.Equal(expected, item.BackColor);
+            Assert.True(parent.IsHandleCreated);
+            Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsFact]
         public void ToolStripItem_BackColor_SetWithHandler_CallsBackColorChanged()
         {
-            var item = new SubToolStripItem();
+            using var item = new SubToolStripItem();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -667,7 +1721,39 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(2, callCount);
         }
 
-        public static IEnumerable<object[]> BackgroundImage_TestData()
+        [WinFormsFact]
+        public void ToolStripItem_BackColor_ResetValue_Success()
+        {
+            PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ToolStripItem))[nameof(ToolStripItem.BackColor)];
+            using var item = new SubToolStripItem();
+            Assert.False(property.CanResetValue(item));
+
+            item.BackColor = Color.Red;
+            Assert.Equal(Color.Red, item.BackColor);
+            Assert.True(property.CanResetValue(item));
+
+            property.ResetValue(item);
+            Assert.Equal(Control.DefaultBackColor, item.BackColor);
+            Assert.False(property.CanResetValue(item));
+        }
+
+        [WinFormsFact]
+        public void ToolStripItem_BackColor_ShouldSerializeValue_Success()
+        {
+            PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ToolStripItem))[nameof(ToolStripItem.BackColor)];
+            using var item = new SubToolStripItem();
+            Assert.False(property.ShouldSerializeValue(item));
+
+            item.BackColor = Color.Red;
+            Assert.Equal(Color.Red, item.BackColor);
+            Assert.True(property.ShouldSerializeValue(item));
+
+            property.ResetValue(item);
+            Assert.Equal(Control.DefaultBackColor, item.BackColor);
+            Assert.False(property.ShouldSerializeValue(item));
+        }
+
+        public static IEnumerable<object[]> BackgroundImage_Set_TestData()
         {
             yield return new object[] { null };
             yield return new object[] { new Bitmap(10, 10) };
@@ -675,11 +1761,11 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { Image.FromFile(Path.Combine("bitmaps", "10x16_one_entry_32bit.ico")) };
         }
 
-        [Theory]
-        [MemberData(nameof(BackgroundImage_TestData))]
+        [WinFormsTheory]
+        [MemberData(nameof(BackgroundImage_Set_TestData))]
         public void ToolStripItem_BackgroundImage_Set_GetReturnsExpected(Image value)
         {
-            var item = new SubToolStripItem
+            using var item = new SubToolStripItem
             {
                 BackgroundImage = value
             };
@@ -690,29 +1776,125 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, item.BackgroundImage);
         }
 
-        [Theory]
-        [MemberData(nameof(BackgroundImage_TestData))]
+        [WinFormsTheory]
+        [MemberData(nameof(BackgroundImage_Set_TestData))]
+        public void ToolStripItem_BackgroundImage_SetWithOwner_GetReturnsExpected(Image value)
+        {
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Owner = owner
+            };
+
+            item.BackgroundImage = value;
+            Assert.Equal(value, item.BackgroundImage);
+            Assert.False(owner.IsHandleCreated);
+
+            // Set same.
+            item.BackgroundImage = value;
+            Assert.Equal(value, item.BackgroundImage);
+            Assert.False(owner.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(BackgroundImage_Set_TestData))]
+        public void ToolStripItem_BackgroundImage_SetWithOwnerWithHandle_GetReturnsExpected(Image value)
+        {
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Owner = owner
+            };
+            Assert.NotEqual(IntPtr.Zero, owner.Handle);
+            int invalidatedCallCount = 0;
+            owner.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            owner.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            owner.HandleCreated += (sender, e) => createdCallCount++;
+
+            item.BackgroundImage = value;
+            Assert.Equal(value, item.BackgroundImage);
+            Assert.True(owner.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set same.
+            item.BackgroundImage = value;
+            Assert.Equal(value, item.BackgroundImage);
+            Assert.True(owner.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(BackgroundImage_Set_TestData))]
         public void ToolStripItem_BackgroundImage_SetWithParent_GetReturnsExpected(Image value)
         {
-            var parent = new ToolStrip();
-            var item = new SubToolStripItem
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
             {
                 Parent = parent
             };
 
             item.BackgroundImage = value;
             Assert.Equal(value, item.BackgroundImage);
+            Assert.False(parent.IsHandleCreated);
 
             // Set same.
             item.BackgroundImage = value;
             Assert.Equal(value, item.BackgroundImage);
+            Assert.False(parent.IsHandleCreated);
         }
 
-        [Theory]
+        public static IEnumerable<object[]> BackgroundImage_SetWithParentWithHandle_TestData()
+        {
+            yield return new object[] { null, 0 };
+            yield return new object[] { new Bitmap(10, 10), 1 };
+            yield return new object[] { Image.FromFile(Path.Combine("bitmaps", "nature24bits.gif")), 1 };
+            yield return new object[] { Image.FromFile(Path.Combine("bitmaps", "10x16_one_entry_32bit.ico")), 1 };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(BackgroundImage_SetWithParentWithHandle_TestData))]
+        public void ToolStripItem_BackgroundImage_SetWithParentWithHandle_GetReturnsExpected(Image value, int expectedInvalidatedCallCount)
+        {
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Parent = parent
+            };
+            Assert.NotEqual(IntPtr.Zero, parent.Handle);
+            int invalidatedCallCount = 0;
+            parent.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            parent.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            parent.HandleCreated += (sender, e) => createdCallCount++;
+
+            item.BackgroundImage = value;
+            Assert.Equal(value, item.BackgroundImage);
+            Assert.True(parent.IsHandleCreated);
+            Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set same.
+            item.BackgroundImage = value;
+            Assert.Equal(value, item.BackgroundImage);
+            Assert.True(parent.IsHandleCreated);
+            Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ImageLayout))]
         public void ToolStripItem_BackgroundImageLayout_Set_GetReturnsExpected(ImageLayout value)
         {
-            var item = new SubToolStripItem
+            using var item = new SubToolStripItem
             {
                 BackgroundImageLayout = value
             };
@@ -723,94 +1905,205 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, item.BackgroundImageLayout);
         }
 
-        [Theory]
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ImageLayout))]
+        public void ToolStripItem_BackgroundImageLayout_SetWithOwner_GetReturnsExpected(ImageLayout value)
+        {
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Owner = owner
+            };
+
+            item.BackgroundImageLayout = value;
+            Assert.Equal(value, item.BackgroundImageLayout);
+            Assert.False(owner.IsHandleCreated);
+
+            // Set same.
+            item.BackgroundImageLayout = value;
+            Assert.Equal(value, item.BackgroundImageLayout);
+            Assert.False(owner.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ImageLayout))]
+        public void ToolStripItem_BackgroundImageLayout_SetWithOwnerWithHandle_GetReturnsExpected(ImageLayout value)
+        {
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Owner = owner
+            };
+            Assert.NotEqual(IntPtr.Zero, owner.Handle);
+            int invalidatedCallCount = 0;
+            owner.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            owner.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            owner.HandleCreated += (sender, e) => createdCallCount++;
+
+            item.BackgroundImageLayout = value;
+            Assert.Equal(value, item.BackgroundImageLayout);
+            Assert.True(owner.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set same.
+            item.BackgroundImageLayout = value;
+            Assert.Equal(value, item.BackgroundImageLayout);
+            Assert.True(owner.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ImageLayout))]
         public void ToolStripItem_BackgroundImageLayout_SetWithParent_GetReturnsExpected(ImageLayout value)
         {
-            var parent = new ToolStrip();
-            var item = new SubToolStripItem
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
             {
                 Parent = parent
             };
 
             item.BackgroundImageLayout = value;
             Assert.Equal(value, item.BackgroundImageLayout);
+            Assert.False(parent.IsHandleCreated);
 
             // Set same.
             item.BackgroundImageLayout = value;
             Assert.Equal(value, item.BackgroundImageLayout);
+            Assert.False(parent.IsHandleCreated);
         }
 
-        [Theory]
+        [WinFormsTheory]
+        [InlineData(ImageLayout.None, 1)]
+        [InlineData(ImageLayout.Tile, 0)]
+        [InlineData(ImageLayout.Center, 1)]
+        [InlineData(ImageLayout.Stretch, 1)]
+        [InlineData(ImageLayout.Zoom, 1)]
+        public void ToolStripItem_BackgroundImageLayout_SetWithParentWithHandle_GetReturnsExpected(ImageLayout value, int expectedInvalidatedCallCount)
+        {
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Parent = parent
+            };
+            Assert.NotEqual(IntPtr.Zero, parent.Handle);
+            int invalidatedCallCount = 0;
+            parent.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            parent.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            parent.HandleCreated += (sender, e) => createdCallCount++;
+
+            item.BackgroundImageLayout = value;
+            Assert.Equal(value, item.BackgroundImageLayout);
+            Assert.True(parent.IsHandleCreated);
+            Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set same.
+            item.BackgroundImageLayout = value;
+            Assert.Equal(value, item.BackgroundImageLayout);
+            Assert.True(parent.IsHandleCreated);
+            Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ImageLayout))]
         public void ToolStripItem_BackgroundImageLayout_SetInvalid_ThrowsInvalidEnumArgumentException(ImageLayout value)
         {
-            var item = new SubToolStripItem();
+            using var item = new SubToolStripItem();
             Assert.Throws<InvalidEnumArgumentException>("value", () => item.BackgroundImageLayout = value);
         }
 
-        [Fact]
-        public void ToolStripItem_DefaultAutoToolTip_Custom_AutoToolTipReturnsExpected()
+        public static IEnumerable<object[]> ContentRectangle_GetWithPadding_ReturnsExpected()
         {
-            var item = new CustomToolStripItem();
-            Assert.True(item.AutoToolTip);
+            yield return new object[] { new Padding(-23), new Rectangle(2, 2, 19, 19) };
+            yield return new object[] { new Padding(-24), new Rectangle(2, 2, 19, 19) };
+            yield return new object[] { new Padding(2), new Rectangle(0, 0, 23, 23) };
+            yield return new object[] { new Padding(23), new Rectangle(-21, -21, 65, 65) };
+            yield return new object[] { new Padding(24), new Rectangle(-22, -22, 67, 67) };
         }
 
-        [Fact]
-        public void ToolStripItem_DefaultDisplayStyle_Custom_DisplayStyleReturnsExpected()
+        [WinFormsTheory]
+        [MemberData(nameof(ContentRectangle_GetWithPadding_ReturnsExpected))]
+        public void ToolStripItem_ContentRectangle_GetWithLargePadding_ReturnsExpected(Padding padding, Rectangle expected)
         {
-            var item = new CustomToolStripItem();
+            using var item = new SubToolStripItem
+            {
+                Padding = padding
+            };
+            Assert.Equal(expected, item.ContentRectangle);
+        }
+
+        [WinFormsFact]
+        public void ToolStripItem_DefaultMargin_GetWithToolStripOwner_ReturnsExpected()
+        {
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Owner = owner
+            };
+            Assert.Equal(new Padding(0, 1, 0, 2), item.DefaultMargin);
+        }
+
+        [WinFormsFact]
+        public void ToolStripItem_DefaultMargin_GetWithToolStripParent_ReturnsExpected()
+        {
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Parent = parent
+            };
+            Assert.Equal(new Padding(0, 1, 0, 2), item.DefaultMargin);
+        }
+
+        [WinFormsFact]
+        public void ToolStripItem_DefaultMargin_GetWithStatusStripOwner_ReturnsExpected()
+        {
+            using var owner = new StatusStrip();
+            using var item = new SubToolStripItem
+            {
+                Owner = owner
+            };
+            Assert.Equal(new Padding(0, 2, 0, 0), item.DefaultMargin);
+        }
+
+        [WinFormsFact]
+        public void ToolStripItem_DefaultMargin_GetWithStatusStripParent_ReturnsExpected()
+        {
+            using var parent = new StatusStrip();
+            using var item = new SubToolStripItem
+            {
+                Parent = parent
+            };
+            Assert.Equal(new Padding(0, 1, 0, 2), item.DefaultMargin);
+        }
+
+        [WinFormsFact]
+        public void ToolStripItem_DisplayStyle_GetWithCustomDisplayStyle_ReturnsExpected()
+        {
+            using var item = new CustomDefaultDisplayStyleToolStripItem();
             Assert.Equal(ToolStripItemDisplayStyle.Text, item.DisplayStyle);
         }
 
-        public static IEnumerable<object[]> DefaultMargin_TestData()
+        private class CustomDefaultDisplayStyleToolStripItem : ToolStripItem
         {
-            yield return new object[] { new SubToolStripItem(), new Padding(0, 1, 0, 2) };
-
-            var strip = new ToolStrip();
-            var stripItem = new SubToolStripItem();
-            strip.Items.Add(stripItem);
-            yield return new object[] { stripItem, new Padding(0, 1, 0, 2) };
-
-            var statusStrip = new StatusStrip();
-            var statusStripItem = new SubToolStripItem();
-            statusStrip.Items.Add(statusStripItem);
-            yield return new object[] { statusStripItem, new Padding(0, 2, 0, 0) };
+            protected override ToolStripItemDisplayStyle DefaultDisplayStyle => ToolStripItemDisplayStyle.Text;
         }
 
-        [Theory]
-        [MemberData(nameof(DefaultMargin_TestData))]
-        public void ToolStripItem_DefaultMargin_Set_GetReturnsExpected(ToolStripItem item, Padding expected)
-        {
-            Assert.Equal(expected, item.DefaultMargin);
-        }
-
-        [Fact]
-        public void ToolStripItem_DefaultMargin_Custom_MarginReturnsExpected()
-        {
-            var item = new CustomToolStripItem();
-            Assert.Equal(new Padding(1, 2, 3, 4), item.Margin);
-        }
-
-        [Fact]
-        public void ToolStripItem_DefaultPadding_Custom_PaddingReturnsExpected()
-        {
-            var item = new CustomToolStripItem();
-            Assert.Equal(new Padding(2, 3, 4, 5), item.Padding);
-        }
-
-        [Fact]
-        public void ToolStripItem_DefaultSize_Custom_SizeReturnsExpected()
-        {
-            var item = new CustomToolStripItem();
-            Assert.Equal(new Size(10, 11), item.Size);
-        }
-
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ToolStripItemDisplayStyle))]
         public void ToolStripItem_DisplayStyle_Set_GetReturnsExpected(ToolStripItemDisplayStyle value)
         {
-            var item = new SubToolStripItem
+            using var item = new SubToolStripItem
             {
                 DisplayStyle = value
             };
@@ -821,34 +2114,166 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, item.DisplayStyle);
         }
 
-        [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ToolStripItemDisplayStyle))]
-        public void ToolStripItem_DisplayStyle_SetWithOwner_GetReturnsExpected(ToolStripItemDisplayStyle value)
+        [WinFormsTheory]
+        [InlineData(ToolStripItemDisplayStyle.None, 1)]
+        [InlineData(ToolStripItemDisplayStyle.Text, 1)]
+        [InlineData(ToolStripItemDisplayStyle.Image, 1)]
+        [InlineData(ToolStripItemDisplayStyle.ImageAndText, 0)]
+        public void ToolStripItem_DisplayStyle_SetWithOwner_GetReturnsExpected(ToolStripItemDisplayStyle value, int expectedOwnerLayoutCallCount)
         {
-            var owner = new ToolStrip();
-            var item = new SubToolStripItem();
-            owner.Items.Add(item);
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Owner = owner
+            };
+            int ownerLayoutCallCount = 0;
+            void ownerHandler(object sender, LayoutEventArgs e)
+            {
+                Assert.Same(owner, sender);
+                Assert.Same(item, e.AffectedComponent);
+                Assert.Equal("DisplayStyle", e.AffectedProperty);
+                ownerLayoutCallCount++;
+            };
+            owner.Layout += ownerHandler;
+
+            try
+            {
+                item.DisplayStyle = value;
+                Assert.Equal(value, item.DisplayStyle);
+                Assert.Equal(expectedOwnerLayoutCallCount, ownerLayoutCallCount);
+                Assert.False(owner.IsHandleCreated);
+
+                // Set same.
+                item.DisplayStyle = value;
+                Assert.Equal(value, item.DisplayStyle);
+                Assert.False(owner.IsHandleCreated);
+            }
+            finally
+            {
+                owner.Layout -= ownerHandler;
+            }
+        }
+
+        [WinFormsTheory]
+        [InlineData(ToolStripItemDisplayStyle.None, 1)]
+        [InlineData(ToolStripItemDisplayStyle.Text, 1)]
+        [InlineData(ToolStripItemDisplayStyle.Image, 1)]
+        [InlineData(ToolStripItemDisplayStyle.ImageAndText, 0)]
+        public void ToolStripItem_DisplayStyle_SetWithOwnerWithHandle_GetReturnsExpected(ToolStripItemDisplayStyle value, int expectedOwnerLayoutCallCount)
+        {
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Owner = owner
+            };
+            Assert.NotEqual(IntPtr.Zero, owner.Handle);
+            int invalidatedCallCount = 0;
+            owner.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            owner.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            owner.HandleCreated += (sender, e) => createdCallCount++;
+            int ownerLayoutCallCount = 0;
+            void ownerHandler(object sender, LayoutEventArgs e)
+            {
+                Assert.Same(owner, sender);
+                Assert.Same(item, e.AffectedComponent);
+                Assert.Equal("DisplayStyle", e.AffectedProperty);
+                ownerLayoutCallCount++;
+            };
+            owner.Layout += ownerHandler;
+
+            try
+            {
+                item.DisplayStyle = value;
+                Assert.Equal(value, item.DisplayStyle);
+                Assert.Equal(expectedOwnerLayoutCallCount, ownerLayoutCallCount);
+                Assert.True(owner.IsHandleCreated);
+                Assert.Equal(expectedOwnerLayoutCallCount * 2, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+
+                // Set same.
+                item.DisplayStyle = value;
+                Assert.Equal(value, item.DisplayStyle);
+                Assert.Equal(expectedOwnerLayoutCallCount, ownerLayoutCallCount);
+                Assert.True(owner.IsHandleCreated);
+                Assert.Equal(expectedOwnerLayoutCallCount * 2, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+            }
+            finally
+            {
+                owner.Layout -= ownerHandler;
+            }
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ToolStripItemDisplayStyle))]
+        public void ToolStripItem_DisplayStyle_SetWithParent_GetReturnsExpected(ToolStripItemDisplayStyle value)
+        {
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Parent = parent
+            };
+            int parentLayoutCallCount = 0;
+            void parentHandler(object sender, LayoutEventArgs e) => parentLayoutCallCount++;
+            parent.Layout += parentHandler;
 
             item.DisplayStyle = value;
             Assert.Equal(value, item.DisplayStyle);
+            Assert.Equal(0, parentLayoutCallCount);
+            Assert.False(parent.IsHandleCreated);
 
             // Set same.
             item.DisplayStyle = value;
             Assert.Equal(value, item.DisplayStyle);
+            Assert.False(parent.IsHandleCreated);
         }
 
-        [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ToolStripItemDisplayStyle))]
-        public void ToolStripItem_DisplayStyle_SetInvalid_ThrowsInvalidEnumArgumentException(ToolStripItemDisplayStyle value)
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ToolStripItemDisplayStyle))]
+        public void ToolStripItem_DisplayStyle_SetWithParentWithHandle_GetReturnsExpected(ToolStripItemDisplayStyle value)
         {
-            var item = new SubToolStripItem();
-            Assert.Throws<InvalidEnumArgumentException>("value", () => item.DisplayStyle = value);
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Parent = parent
+            };
+            Assert.NotEqual(IntPtr.Zero, parent.Handle);
+            int invalidatedCallCount = 0;
+            parent.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            parent.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            parent.HandleCreated += (sender, e) => createdCallCount++;
+            int parentLayoutCallCount = 0;
+            void parentHandler(object sender, LayoutEventArgs e) => parentLayoutCallCount++;
+            parent.Layout += parentHandler;
+
+            item.DisplayStyle = value;
+            Assert.Equal(value, item.DisplayStyle);
+            Assert.Equal(0, parentLayoutCallCount);
+            Assert.True(parent.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set same.
+            item.DisplayStyle = value;
+            Assert.Equal(value, item.DisplayStyle);
+            Assert.Equal(0, parentLayoutCallCount);
+            Assert.True(parent.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ToolStripItem_DisplayStyle_SetWithHandler_CallsDisplayStyleChanged()
         {
-            var item = new SubToolStripItem();
+            using var item = new SubToolStripItem();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -879,11 +2304,51 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(2, callCount);
         }
 
-        [Theory]
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ToolStripItemDisplayStyle))]
+        public void ToolStripItem_DisplayStyle_SetInvalid_ThrowsInvalidEnumArgumentException(ToolStripItemDisplayStyle value)
+        {
+            using var item = new SubToolStripItem();
+            Assert.Throws<InvalidEnumArgumentException>("value", () => item.DisplayStyle = value);
+        }
+
+        [WinFormsFact]
+        public void ToolStripItem_DisplayStyle_ResetValue_Success()
+        {
+            PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ToolStripItem))[nameof(ToolStripItem.DisplayStyle)];
+            using var item = new SubToolStripItem();
+            Assert.False(property.CanResetValue(item));
+
+            item.DisplayStyle = ToolStripItemDisplayStyle.Text;
+            Assert.Equal(ToolStripItemDisplayStyle.Text, item.DisplayStyle);
+            Assert.True(property.CanResetValue(item));
+
+            property.ResetValue(item);
+            Assert.Equal(ToolStripItemDisplayStyle.ImageAndText, item.DisplayStyle);
+            Assert.False(property.CanResetValue(item));
+        }
+
+        [WinFormsFact]
+        public void ToolStripItem_DisplayStyle_ShouldSerializeValue_Success()
+        {
+            PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ToolStripItem))[nameof(ToolStripItem.DisplayStyle)];
+            using var item = new SubToolStripItem();
+            Assert.False(property.ShouldSerializeValue(item));
+
+            item.DisplayStyle = ToolStripItemDisplayStyle.Text;
+            Assert.Equal(ToolStripItemDisplayStyle.Text, item.DisplayStyle);
+            Assert.True(property.ShouldSerializeValue(item));
+
+            property.ResetValue(item);
+            Assert.Equal(ToolStripItemDisplayStyle.ImageAndText, item.DisplayStyle);
+            Assert.False(property.ShouldSerializeValue(item));
+        }
+
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(DockStyle))]
         public void ToolStripItem_Dock_Set_GetReturnsExpected(DockStyle value)
         {
-            var item = new SubToolStripItem
+            using var item = new SubToolStripItem
             {
                 Dock = value
             };
@@ -894,37 +2359,85 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, item.Dock);
         }
 
-        [Theory]
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(DockStyle))]
+        public void ToolStripItem_Dock_SetWithOwner_GetReturnsExpected(DockStyle value)
+        {
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Owner = owner
+            };
+
+            int ownerLayoutCallCount = 0;
+            void ownerHandler(object sender, LayoutEventArgs e) => ownerLayoutCallCount++;
+            owner.Layout += ownerHandler;
+
+            try
+            {
+                item.Dock = value;
+                Assert.Equal(value, item.Dock);
+                Assert.Equal(0, ownerLayoutCallCount);
+                Assert.False(owner.IsHandleCreated);
+
+                // Set same.
+                item.Dock = value;
+                Assert.Equal(value, item.Dock);
+                Assert.Equal(0, ownerLayoutCallCount);
+                Assert.False(owner.IsHandleCreated);
+            }
+            finally
+            {
+                owner.Layout -= ownerHandler;
+            }
+        }
+
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(DockStyle))]
         public void ToolStripItem_Dock_SetWithParent_GetReturnsExpected(DockStyle value)
         {
-            var parent = new ToolStrip();
-            var item = new SubToolStripItem
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
             {
                 Parent = parent
             };
 
-            item.Dock = value;
-            Assert.Equal(value, item.Dock);
+            int parentLayoutCallCount = 0;
+            void parentHandler(object sender, LayoutEventArgs e) => parentLayoutCallCount++;
+            parent.Layout += parentHandler;
 
-            // Set same.
-            item.Dock = value;
-            Assert.Equal(value, item.Dock);
+            try
+            {
+                item.Dock = value;
+                Assert.Equal(value, item.Dock);
+                Assert.Equal(0, parentLayoutCallCount);
+                Assert.False(parent.IsHandleCreated);
+
+                // Set same.
+                item.Dock = value;
+                Assert.Equal(value, item.Dock);
+                Assert.Equal(0, parentLayoutCallCount);
+                Assert.False(parent.IsHandleCreated);
+            }
+            finally
+            {
+                parent.Layout -= parentHandler;
+            }
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(DockStyle))]
         public void ToolStripItem_Dock_SetInvalid_ThrowsInvalidEnumArgumentException(DockStyle value)
         {
-            var item = new SubToolStripItem();
+            using var item = new SubToolStripItem();
             Assert.Throws<InvalidEnumArgumentException>("value", () => item.Dock = value);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ToolStripItem_DoubleClickEnabled_Set_GetReturnsExpected(bool value)
         {
-            var item = new SubToolStripItem
+            using var item = new SubToolStripItem
             {
                 DoubleClickEnabled = value
             };
@@ -935,63 +2448,110 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, item.DoubleClickEnabled);
         }
 
-        [Fact]
-        public void ToolStripItem_Enabled_Set_GetReturnsExpected()
+        [WinFormsTheory]
+        [InlineData(true, true, true)]
+        [InlineData(true, false, false)]
+        [InlineData(false, true, false)]
+        [InlineData(false, false, false)]
+        public void ToolStripItem_Enabled_GetWithOwner_ReturnsExpected(bool ownerEnabled, bool enabled, bool expected)
         {
-            var item = new SubToolStripItem
+            using var owner = new ToolStrip
             {
-                Enabled = false
+                Enabled = ownerEnabled
             };
-            Assert.False(item.Enabled);
+            using var item = new SubToolStripItem
+            {
+                Owner = owner
+            };
+            Assert.Equal(ownerEnabled, item.Enabled);
 
-            item.Enabled = true;
-            Assert.True(item.Enabled);
-
-            // Set same.
-            item.Enabled = true;
-            Assert.True(item.Enabled);
+            // Set custom.
+            item.Enabled = enabled;
+            Assert.Equal(expected, item.Enabled);
         }
 
-        [Fact]
-        public void ToolStripItem_Enabled_SetWithParent_GetReturnsExpected()
+        [WinFormsTheory]
+        [InlineData(true, true, true)]
+        [InlineData(true, false, false)]
+        [InlineData(false, true, true)]
+        [InlineData(false, false, false)]
+        public void ToolStripItem_Enabled_GetWithParent_ReturnsExpected(bool parentEnabled, bool enabled, bool expected)
         {
-            var parent = new ToolStrip();
-            var item = new SubToolStripItem
+            using var parent = new ToolStrip
+            {
+                Enabled = parentEnabled
+            };
+            using var item = new SubToolStripItem
             {
                 Parent = parent
             };
-
-            item.Enabled = false;
-            Assert.False(item.Enabled);
-
-            item.Enabled = true;
             Assert.True(item.Enabled);
 
-            // Set same.
-            item.Enabled = true;
-            Assert.True(item.Enabled);
+            // Set custom.
+            item.Enabled = enabled;
+            Assert.Equal(expected, item.Enabled);
         }
 
-        [Fact]
-        public void ToolStripItem_Enabled_SetSelected_GetReturnsExpected()
+        public static IEnumerable<object[]> Enabled_Set_TestData()
         {
-            var item = new SubToolStripItem();
+            foreach (bool visible in new bool[] { true, false })
+            {
+                foreach (Image image in new Image[] { null, new Bitmap(10, 10) })
+                {
+                    yield return new object[] { visible, image, true };
+                    yield return new object[] { visible, image, false };
+                }
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(Enabled_Set_TestData))]
+        public void ToolStripItem_Enabled_Set_GetReturnsExpected(bool visible, Image image, bool value)
+        {
+            using var item = new SubToolStripItem
+            {
+                Visible = visible,
+                Image = image,
+                Enabled = value
+            };
+            Assert.Equal(value, item.Enabled);
+
+            // Set same.
+            item.Enabled = value;
+            Assert.Equal(value, item.Enabled);
+
+            // Set different.
+            item.Enabled = !value;
+            Assert.Equal(!value, item.Enabled);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        public void ToolStripItem_Enabled_SetSelected_GetReturnsExpected(bool value)
+        {
+            using var item = new SubToolStripItem();
             item.Select();
             Assert.True(item.Selected);
 
-            item.Enabled = false;
-            Assert.False(item.Enabled);
-            Assert.False(item.Selected);
+            item.Enabled = value;
+            Assert.Equal(value, item.Enabled);
+            Assert.Equal(value, item.Selected);
 
-            item.Enabled = true;
-            Assert.True(item.Enabled);
+            // Set same.
+            item.Enabled = value;
+            Assert.Equal(value, item.Enabled);
+            Assert.Equal(value, item.Selected);
+
+            // Set different.
+            item.Enabled = !value;
+            Assert.Equal(!value, item.Enabled);
             Assert.False(item.Selected);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ToolStripItem_Enabled_SetPressed_GetReturnsExpected()
         {
-            var item = new SubToolStripItem();
+            using var item = new SubToolStripItem();
 
             int callCount = 0;
             EventHandler handler = (sender, e) =>
@@ -1007,10 +2567,324 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
         }
 
-        [Fact]
+        [WinFormsTheory]
+        [MemberData(nameof(Enabled_Set_TestData))]
+        public void ToolStripItem_Enabled_SetDesignMode_GetReturnsExpected(bool visible, Image image, bool value)
+        {
+            var mockSite = new Mock<ISite>(MockBehavior.Strict);
+            mockSite
+                .Setup(s => s.Name)
+                .Returns("Name");
+            mockSite
+                .Setup(s => s.DesignMode)
+                .Returns(true);
+            mockSite
+                .Setup(s => s.Container)
+                .Returns((IContainer)null);
+            using var item = new SubToolStripItem
+            {
+                Visible = visible,
+                Image = image,
+                Site = mockSite.Object,
+                Enabled = value
+            };
+            Assert.Equal(value, item.Enabled);
+
+            // Set same.
+            item.Enabled = value;
+            Assert.Equal(value, item.Enabled);
+
+            // Set different.
+            item.Enabled = !value;
+            Assert.Equal(!value, item.Enabled);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(Enabled_Set_TestData))]
+        public void ToolStripItem_Enabled_SetWithOwner_GetReturnsExpected(bool visible, Image image, bool value)
+        {
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Visible = visible,
+                Image = image,
+                Owner = owner
+            };
+
+            item.Enabled = value;
+            Assert.Equal(value, item.Enabled);
+            Assert.False(owner.IsHandleCreated);
+
+            // Set same.
+            item.Enabled = value;
+            Assert.Equal(value, item.Enabled);
+            Assert.False(owner.IsHandleCreated);
+
+            // Set different.
+            item.Enabled = !value;
+            Assert.Equal(!value, item.Enabled);
+            Assert.False(owner.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(Enabled_Set_TestData))]
+        public void ToolStripItem_Enabled_SetWithImageWithOwner_GetReturnsExpected(bool visible, Image image, bool value)
+        {
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Visible = visible,
+                Image = image,
+                Owner = owner
+            };
+
+            item.Enabled = value;
+            Assert.Equal(value, item.Enabled);
+            Assert.False(owner.IsHandleCreated);
+
+            // Set same.
+            item.Enabled = value;
+            Assert.Equal(value, item.Enabled);
+            Assert.False(owner.IsHandleCreated);
+
+            // Set different.
+            item.Enabled = !value;
+            Assert.Equal(!value, item.Enabled);
+            Assert.False(owner.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(Enabled_Set_TestData))]
+        public void ToolStripItem_Enabled_SetDesignModeWithOwner_GetReturnsExpected(bool visible, Image image, bool value)
+        {
+            var mockSite = new Mock<ISite>(MockBehavior.Strict);
+            mockSite
+                .Setup(s => s.Name)
+                .Returns("Name");
+            mockSite
+                .Setup(s => s.DesignMode)
+                .Returns(true);
+            mockSite
+                .Setup(s => s.Container)
+                .Returns((IContainer)null);
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Visible = visible,
+                Image = image,
+                Site = mockSite.Object,
+                Owner = owner
+            };
+
+            item.Enabled = value;
+            Assert.Equal(value, item.Enabled);
+            Assert.False(owner.IsHandleCreated);
+
+            // Set same.
+            item.Enabled = value;
+            Assert.Equal(value, item.Enabled);
+            Assert.False(owner.IsHandleCreated);
+
+            // Set different.
+            item.Enabled = !value;
+            Assert.Equal(!value, item.Enabled);
+            Assert.False(owner.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(Enabled_Set_TestData))]
+        public void ToolStripItem_Enabled_SetWithOwnerWithHandle_GetReturnsExpected(bool visible, Image image, bool value)
+        {
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Visible = visible,
+                Image = image,
+                Owner = owner
+            };
+            Assert.NotEqual(IntPtr.Zero, owner.Handle);
+            int invalidatedCallCount = 0;
+            owner.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            owner.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            owner.HandleCreated += (sender, e) => createdCallCount++;
+
+            item.Enabled = value;
+            Assert.Equal(value, item.Enabled);
+            Assert.True(owner.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set same.
+            item.Enabled = value;
+            Assert.Equal(value, item.Enabled);
+            Assert.True(owner.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set different.
+            item.Enabled = !value;
+            Assert.Equal(!value, item.Enabled);
+            Assert.True(owner.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(Enabled_Set_TestData))]
+        public void ToolStripItem_Enabled_SetWithParent_GetReturnsExpected(bool visible, Image image, bool value)
+        {
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Visible = visible,
+                Image = image,
+                Parent = parent
+            };
+
+            item.Enabled = value;
+            Assert.Equal(value, item.Enabled);
+            Assert.False(parent.IsHandleCreated);
+
+            // Set same.
+            item.Enabled = value;
+            Assert.Equal(value, item.Enabled);
+            Assert.False(parent.IsHandleCreated);
+
+            // Set different.
+            item.Enabled = !value;
+            Assert.Equal(!value, item.Enabled);
+            Assert.False(parent.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(Enabled_Set_TestData))]
+        public void ToolStripItem_Enabled_SetWithImageWithParent_GetReturnsExpected(bool visible, Image image, bool value)
+        {
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Visible = visible,
+                Image = image,
+                Parent = parent
+            };
+
+            item.Enabled = value;
+            Assert.Equal(value, item.Enabled);
+            Assert.False(parent.IsHandleCreated);
+
+            // Set same.
+            item.Enabled = value;
+            Assert.Equal(value, item.Enabled);
+            Assert.False(parent.IsHandleCreated);
+
+            // Set different.
+            item.Enabled = !value;
+            Assert.Equal(!value, item.Enabled);
+            Assert.False(parent.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(Enabled_Set_TestData))]
+        public void ToolStripItem_Enabled_SetDesignModeWithParent_GetReturnsExpected(bool visible, Image image, bool value)
+        {
+            var mockSite = new Mock<ISite>(MockBehavior.Strict);
+            mockSite
+                .Setup(s => s.Name)
+                .Returns("Name");
+            mockSite
+                .Setup(s => s.DesignMode)
+                .Returns(true);
+            mockSite
+                .Setup(s => s.Container)
+                .Returns((IContainer)null);
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Visible = visible,
+                Image = image,
+                Site = mockSite.Object,
+                Parent = parent
+            };
+
+            item.Enabled = value;
+            Assert.Equal(value, item.Enabled);
+            Assert.False(parent.IsHandleCreated);
+
+            // Set same.
+            item.Enabled = value;
+            Assert.Equal(value, item.Enabled);
+            Assert.False(parent.IsHandleCreated);
+
+            // Set different.
+            item.Enabled = !value;
+            Assert.Equal(!value, item.Enabled);
+            Assert.False(parent.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> Enabled_SetWithParentWithHandle_TestData()
+        {
+            foreach (bool visible in new bool[] { true, false })
+            {
+                foreach (Image image in new Image[] { null, new Bitmap(10, 10) })
+                {
+                    yield return new object[] { visible, image, true, 0 };
+                    yield return new object[] { visible, image, false, 1 };
+                }
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(Enabled_SetWithParentWithHandle_TestData))]
+        public void ToolStripItem_Enabled_SetWithParentWithHandle_GetReturnsExpected(bool visible, Image image, bool value, int expectedInvalidatedCallCount)
+        {
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Visible = visible,
+                Image = image,
+                Parent = parent
+            };
+            Assert.NotEqual(IntPtr.Zero, parent.Handle);
+            int invalidatedCallCount = 0;
+            parent.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            parent.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            parent.HandleCreated += (sender, e) => createdCallCount++;
+
+            item.Enabled = value;
+            Assert.Equal(value, item.Enabled);
+            Assert.True(parent.IsHandleCreated);
+            Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set same.
+            item.Enabled = value;
+            Assert.Equal(value, item.Enabled);
+            Assert.True(parent.IsHandleCreated);
+            Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set different.
+            item.Enabled = !value;
+            Assert.Equal(!value, item.Enabled);
+            Assert.True(parent.IsHandleCreated);
+            Assert.Equal(expectedInvalidatedCallCount + 1, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsFact]
         public void ToolStripItem_Enabled_SetWithHandler_CallsEnabledChanged()
         {
-            var item = new SubToolStripItem();
+            using var item = new SubToolStripItem();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -1041,40 +2915,37 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(2, callCount);
         }
 
-        public static IEnumerable<object[]> Font_GetDefault_TestData()
-        {
-            yield return new object[] { new SubToolStripItem() };
-            yield return new object[] { new SubToolStripItem("text", null, null) };
-            yield return new object[] { new SubToolStripItem("text", null, null, "name") };
-
-            var toolStripParent = new ToolStrip
-            {
-                Font = SystemFonts.MenuFont
-            };
-            var toolStripParentItem = new SubToolStripItem
-            {
-                Parent = toolStripParent
-            };
-            yield return new object[] { toolStripParentItem };
-        }
-
-        [Theory]
-        [MemberData(nameof(Font_GetDefault_TestData))]
-        public void ToolStripItem_Font_GetDefault_ReturnsExpected(ToolStripItem item)
-        {
-            Assert.Equal(ToolStripManager.DefaultFont, item.Font);
-        }
-
-        [Fact]
+        [WinFormsFact]
         public void ToolStripItem_Font_GetWithParent_ReturnsExpected()
         {
-            var toolStrip = new ToolStrip
+            using var font = new Font("Arial", 8.25f);
+            using var parent = new ToolStrip
             {
-                Font = SystemFonts.MenuFont
+                Font = font
             };
-            var toolStripItem = new SubToolStripItem();
-            toolStrip.Items.Add(toolStripItem);
-            Assert.Equal(SystemFonts.MenuFont, toolStripItem.Font);
+            using var item = new SubToolStripItem
+            {
+                Parent = parent
+            };
+            Assert.NotNull(item.Font);
+            Assert.NotSame(font, item.Font);
+            Assert.NotSame(Control.DefaultFont, item.Font);
+            Assert.Same(item.Font, item.Font);
+        }
+
+        [WinFormsFact]
+        public void ToolStripItem_Font_GetWithOwner_ReturnsExpected()
+        {
+            using var font = new Font("Arial", 8.25f);
+            using var owner = new ToolStrip
+            {
+                Font = font
+            };
+            using var item = new SubToolStripItem
+            {
+                Owner = owner
+            };
+            Assert.Same(font, item.Font);
         }
 
         public static IEnumerable<object[]> Font_Set_TestData()
@@ -1082,64 +2953,303 @@ namespace System.Windows.Forms.Tests
             foreach (Enum displayStyle in Enum.GetValues(typeof(ToolStripItemDisplayStyle)))
             {
                 yield return new object[] { displayStyle, null };
-                yield return new object[] { displayStyle, SystemFonts.MenuFont };
+                yield return new object[] { displayStyle, new Font("Arial", 8.25f) };
             }
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(Font_Set_TestData))]
         public void ToolStripItem_Font_Set_GetReturnsExpected(ToolStripItemDisplayStyle displayStyle, Font value)
         {
-            var item = new SubToolStripItem
+            using var item = new SubToolStripItem
             {
                 DisplayStyle = displayStyle
             };
 
             item.Font = value;
-            Assert.Equal(value ?? ToolStripManager.DefaultFont, item.Font);
+            Assert.Equal(value ?? new SubToolStripItem().Font, item.Font);
 
             // Set same.
             item.Font = value;
-            Assert.Equal(value ?? ToolStripManager.DefaultFont, item.Font);
+            Assert.Equal(value ?? new SubToolStripItem().Font, item.Font);
         }
 
-        public static IEnumerable<object[]> ForeColor_Get_TestData()
+        public static IEnumerable<object[]> Font_SetWithOwner_TestData()
         {
-            yield return new object[] { new SubToolStripItem(), Control.DefaultForeColor };
-            yield return new object[] { new SubToolStripItem("text", null, null), Control.DefaultForeColor };
-            yield return new object[] { new SubToolStripItem("text", null, null, "name"), Control.DefaultForeColor };
+            foreach (Enum displayStyle in Enum.GetValues(typeof(ToolStripItemDisplayStyle)))
+            {
+                yield return new object[] { displayStyle, null, 0 };
+            }
 
-            var toolStrip = new ToolStrip
+            yield return new object[] { ToolStripItemDisplayStyle.None, new Font("Arial", 8.25f), 0 };
+            yield return new object[] { ToolStripItemDisplayStyle.Text, new Font("Arial", 8.25f), 1 };
+            yield return new object[] { ToolStripItemDisplayStyle.Image, new Font("Arial", 8.25f), 0 };
+            yield return new object[] { ToolStripItemDisplayStyle.ImageAndText, new Font("Arial", 8.25f), 1 };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(Font_SetWithOwner_TestData))]
+        public void ToolStripItem_Font_SetWithOwner_GetReturnsExpected(ToolStripItemDisplayStyle displayStyle, Font value, int expectedOwnerLayoutCallCount)
+        {
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Owner = owner,
+                DisplayStyle = displayStyle
+            };
+
+            int ownerLayoutCallCount = 0;
+            void ownerHandler(object sender, LayoutEventArgs e)
+            {
+                Assert.Same(owner, sender);
+                Assert.Same(item, e.AffectedComponent);
+                Assert.Equal("Font", e.AffectedProperty);
+                ownerLayoutCallCount++;
+            };
+            owner.Layout += ownerHandler;
+
+            try
+            {
+                item.Font = value;
+                Assert.Equal(value ?? new SubToolStripItem().Font, item.Font);
+                Assert.Equal(expectedOwnerLayoutCallCount, ownerLayoutCallCount);
+                Assert.False(owner.IsHandleCreated);
+
+                // Set same.
+                item.Font = value;
+                Assert.Equal(value ?? new SubToolStripItem().Font, item.Font);
+                Assert.Equal(expectedOwnerLayoutCallCount, ownerLayoutCallCount);
+                Assert.False(owner.IsHandleCreated);
+            }
+            finally
+            {
+                owner.Layout -= ownerHandler;
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(Font_SetWithOwner_TestData))]
+        public void ToolStripItem_Font_SetWithOwnerWithHandle_GetReturnsExpected(ToolStripItemDisplayStyle displayStyle, Font value, int expectedOwnerLayoutCallCount)
+        {
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Owner = owner,
+                DisplayStyle = displayStyle
+            };
+            Assert.NotEqual(IntPtr.Zero, owner.Handle);
+            int invalidatedCallCount = 0;
+            owner.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            owner.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            owner.HandleCreated += (sender, e) => createdCallCount++;
+            int ownerLayoutCallCount = 0;
+            void ownerHandler(object sender, LayoutEventArgs e)
+            {
+                Assert.Same(owner, sender);
+                Assert.Same(item, e.AffectedComponent);
+                Assert.Equal("Font", e.AffectedProperty);
+                ownerLayoutCallCount++;
+            };
+            owner.Layout += ownerHandler;
+
+            try
+            {
+                item.Font = value;
+                Assert.Equal(value ?? new SubToolStripItem().Font, item.Font);
+                Assert.Equal(expectedOwnerLayoutCallCount, ownerLayoutCallCount);
+                Assert.True(owner.IsHandleCreated);
+                Assert.Equal(expectedOwnerLayoutCallCount * 2, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+
+                // Set same.
+                item.Font = value;
+                Assert.Equal(value ?? new SubToolStripItem().Font, item.Font);
+                Assert.Equal(expectedOwnerLayoutCallCount, ownerLayoutCallCount);
+                Assert.True(owner.IsHandleCreated);
+                Assert.Equal(expectedOwnerLayoutCallCount * 2, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+            }
+            finally
+            {
+                owner.Layout -= ownerHandler;
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(Font_Set_TestData))]
+        public void ToolStripItem_Font_SetWithParent_GetReturnsExpected(ToolStripItemDisplayStyle displayStyle, Font value)
+        {
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Parent = parent,
+                DisplayStyle = displayStyle
+            };
+
+            int parentLayoutCallCount = 0;
+            void parentHandler(object sender, LayoutEventArgs e) => parentLayoutCallCount++;
+            parent.Layout += parentHandler;
+
+            try
+            {
+                item.Font = value;
+                Assert.Equal(value ?? new SubToolStripItem().Font, item.Font);
+                Assert.Equal(0, parentLayoutCallCount);
+                Assert.False(parent.IsHandleCreated);
+
+                // Set same.
+                item.Font = value;
+                Assert.Equal(value ?? new SubToolStripItem().Font, item.Font);
+                Assert.Equal(0, parentLayoutCallCount);
+                Assert.False(parent.IsHandleCreated);
+            }
+            finally
+            {
+                parent.Layout -= parentHandler;
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(Font_Set_TestData))]
+        public void ToolStripItem_Font_SetWithParentWithHandle_GetReturnsExpected(ToolStripItemDisplayStyle displayStyle, Font value)
+        {
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Parent = parent,
+                DisplayStyle = displayStyle
+            };
+            Assert.NotEqual(IntPtr.Zero, parent.Handle);
+            int invalidatedCallCount = 0;
+            parent.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            parent.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            parent.HandleCreated += (sender, e) => createdCallCount++;
+            int parentLayoutCallCount = 0;
+            void parentHandler(object sender, LayoutEventArgs e) => parentLayoutCallCount++;
+            parent.Layout += parentHandler;
+
+            try
+            {
+                item.Font = value;
+                Assert.Equal(value ?? new SubToolStripItem().Font, item.Font);
+                Assert.Equal(0, parentLayoutCallCount);
+                Assert.True(parent.IsHandleCreated);
+                Assert.Equal(0, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+
+                // Set same.
+                item.Font = value;
+                Assert.Equal(value ?? new SubToolStripItem().Font, item.Font);
+                Assert.Equal(0, parentLayoutCallCount);
+                Assert.True(parent.IsHandleCreated);
+                Assert.Equal(0, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+            }
+            finally
+            {
+                parent.Layout -= parentHandler;
+            }
+        }
+
+        [WinFormsFact]
+        public void ToolStripItem_Font_ResetValue_Success()
+        {
+            PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ToolStripItem))[nameof(ToolStripItem.Font)];
+            using var item = new SubToolStripItem();
+            Assert.False(property.CanResetValue(item));
+
+            using var font = new Font("Arial", 8.25f);
+            item.Font = font;
+            Assert.Same(font, item.Font);
+            Assert.True(property.CanResetValue(item));
+
+            item.Font = null;
+            Assert.NotNull(item.Font);
+            Assert.NotSame(Control.DefaultFont, item.Font);
+            Assert.Same(item.Font, item.Font);
+            Assert.False(property.CanResetValue(item));
+
+            item.Font = font;
+            Assert.Same(font, item.Font);
+            Assert.True(property.CanResetValue(item));
+
+            property.ResetValue(item);
+            Assert.NotNull(item.Font);
+            Assert.NotSame(Control.DefaultFont, item.Font);
+            Assert.Same(item.Font, item.Font);
+            Assert.False(property.CanResetValue(item));
+        }
+
+        [WinFormsFact]
+        public void ToolStripItem_Font_ShouldSerializeValue_Success()
+        {
+            PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ToolStripItem))[nameof(ToolStripItem.Font)];
+            using var item = new SubToolStripItem();
+            Assert.False(property.ShouldSerializeValue(item));
+
+            using var font = new Font("Arial", 8.25f);
+            item.Font = font;
+            Assert.Same(font, item.Font);
+            Assert.True(property.ShouldSerializeValue(item));
+
+            item.Font = null;
+            Assert.NotNull(item.Font);
+            Assert.NotSame(Control.DefaultFont, item.Font);
+            Assert.Same(item.Font, item.Font);
+            Assert.False(property.ShouldSerializeValue(item));
+
+            item.Font = font;
+            Assert.Same(font, item.Font);
+            Assert.True(property.ShouldSerializeValue(item));
+
+            property.ResetValue(item);
+            Assert.NotNull(item.Font);
+            Assert.NotSame(Control.DefaultFont, item.Font);
+            Assert.Same(item.Font, item.Font);
+            Assert.False(property.ShouldSerializeValue(item));
+        }
+
+        [WinFormsFact]
+        public void ToolStripItem_ForeColor_GetWithOwner_ReturnsExpected()
+        {
+            using var owner = new ToolStrip
             {
                 ForeColor = Color.Red
             };
-            var toolStripItem = new SubToolStripItem();
-            toolStrip.Items.Add(toolStripItem);
-            yield return new object[] { toolStripItem, Control.DefaultForeColor };
+            using var item = new SubToolStripItem
+            {
+                Owner = owner
+            };
+            Assert.Equal(Control.DefaultForeColor, item.ForeColor);
+        }
 
-            var toolStripParent = new ToolStrip
+        [WinFormsFact]
+        public void ToolStripItem_ForeColor_GetWithParent_ReturnsExpected()
+        {
+            using var parent = new ToolStrip
             {
                 ForeColor = Color.Red
             };
-            var toolStripParentItem = new SubToolStripItem
+            using var item = new SubToolStripItem
             {
-                Parent = toolStripParent
+                Parent = parent
             };
-            yield return new object[] { toolStripParentItem, Color.Red };
+            Assert.Equal(Color.Red, item.ForeColor);
         }
 
-        [Theory]
-        [MemberData(nameof(ForeColor_Get_TestData))]
-        public void ToolStripItem_ForeColor_Get_ReturnsExpected(ToolStripItem item, Color expected)
-        {
-            Assert.Equal(expected, item.ForeColor);
-        }
-
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetForeColorTheoryData))]
         public void ToolStripItem_ForeColor_Set_GetReturnsExpected(Color value, Color expected)
         {
-            var item = new SubToolStripItem
+            using var item = new SubToolStripItem
             {
                 ForeColor = value
             };
@@ -1150,28 +3260,125 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, item.ForeColor);
         }
 
-        [Theory]
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetForeColorTheoryData))]
+        public void ToolStripItem_ForeColor_SetWithOwner_GetReturnsExpected(Color value, Color expected)
+        {
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Owner = owner
+            };
+
+            item.ForeColor = value;
+            Assert.Equal(expected, item.ForeColor);
+            Assert.False(owner.IsHandleCreated);
+
+            // Set same.
+            item.ForeColor = value;
+            Assert.Equal(expected, item.ForeColor);
+            Assert.False(owner.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetForeColorTheoryData))]
+        public void ToolStripItem_ForeColor_SetWithOwnerWithHandle_GetReturnsExpected(Color value, Color expected)
+        {
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Owner = owner
+            };
+            Assert.NotEqual(IntPtr.Zero, owner.Handle);
+            int invalidatedCallCount = 0;
+            owner.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            owner.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            owner.HandleCreated += (sender, e) => createdCallCount++;
+
+            item.ForeColor = value;
+            Assert.Equal(expected, item.ForeColor);
+            Assert.True(owner.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set same.
+            item.ForeColor = value;
+            Assert.Equal(expected, item.ForeColor);
+            Assert.True(owner.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetForeColorTheoryData))]
         public void ToolStripItem_ForeColor_SetWithParent_GetReturnsExpected(Color value, Color expected)
         {
-            var parent = new ToolStrip();
-            var item = new SubToolStripItem
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
             {
                 Parent = parent
             };
 
             item.ForeColor = value;
             Assert.Equal(expected, item.ForeColor);
+            Assert.False(parent.IsHandleCreated);
 
             // Set same.
             item.ForeColor = value;
             Assert.Equal(expected, item.ForeColor);
+            Assert.False(parent.IsHandleCreated);
         }
 
-        [Fact]
+        public static IEnumerable<object[]> ForeColor_SetWithParentWithHandle_TestData()
+        {
+            yield return new object[] { Color.Empty, Control.DefaultForeColor, 0 };
+            yield return new object[] { Color.FromArgb(254, 1, 2, 3), Color.FromArgb(254, 1, 2, 3), 1 };
+            yield return new object[] { Color.White, Color.White, 1 };
+            yield return new object[] { Color.Black, Color.Black, 1 };
+            yield return new object[] { Color.Red, Color.Red, 1 };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(ForeColor_SetWithParentWithHandle_TestData))]
+        public void ToolStripItem_ForeColor_SetWithParentWithHandle_GetReturnsExpected(Color value, Color expected, int expectedInvalidatedCallCount)
+        {
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Parent = parent
+            };
+            Assert.NotEqual(IntPtr.Zero, parent.Handle);
+            int invalidatedCallCount = 0;
+            parent.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            parent.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            parent.HandleCreated += (sender, e) => createdCallCount++;
+
+            item.ForeColor = value;
+            Assert.Equal(expected, item.ForeColor);
+            Assert.True(parent.IsHandleCreated);
+            Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set same.
+            item.ForeColor = value;
+            Assert.Equal(expected, item.ForeColor);
+            Assert.True(parent.IsHandleCreated);
+            Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsFact]
         public void ToolStripItem_ForeColor_SetWithHandler_CallsForeColorChanged()
         {
-            var item = new SubToolStripItem();
+            using var item = new SubToolStripItem();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -1203,22 +3410,358 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(2, callCount);
         }
 
-        [Theory]
+        [WinFormsFact]
+        public void ToolStripItem_ForeColor_ResetValue_Success()
+        {
+            PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ToolStripItem))[nameof(ToolStripItem.ForeColor)];
+            using var item = new SubToolStripItem();
+            Assert.False(property.CanResetValue(item));
+
+            item.ForeColor = Color.Red;
+            Assert.Equal(Color.Red, item.ForeColor);
+            Assert.True(property.CanResetValue(item));
+
+            property.ResetValue(item);
+            Assert.Equal(Control.DefaultForeColor, item.ForeColor);
+            Assert.False(property.CanResetValue(item));
+        }
+
+        [WinFormsFact]
+        public void ToolStripItem_ForeColor_ShouldSerializeValue_Success()
+        {
+            PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ToolStripItem))[nameof(ToolStripItem.ForeColor)];
+            using var item = new SubToolStripItem();
+            Assert.False(property.ShouldSerializeValue(item));
+
+            item.ForeColor = Color.Red;
+            Assert.Equal(Color.Red, item.ForeColor);
+            Assert.True(property.ShouldSerializeValue(item));
+
+            property.ResetValue(item);
+            Assert.Equal(Control.DefaultForeColor, item.ForeColor);
+            Assert.False(property.ShouldSerializeValue(item));
+        }
+
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetIntTheoryData))]
         public void ToolStripItem_Height_Set_GetReturnsExpected(int value)
         {
-            var item = new SubToolStripItem
-            {
-                Height = value
-            };
+            using var item = new SubToolStripItem();
+            int locationChangedCallCount = 0;
+            item.LocationChanged += (sender, e) => locationChangedCallCount++;
+
+            item.Height = value;
             Assert.Equal(value, item.Height);
+            Assert.Equal(0, locationChangedCallCount);
 
             // Set same.
             item.Height = value;
             Assert.Equal(value, item.Height);
+            Assert.Equal(0, locationChangedCallCount);
         }
 
-        public static IEnumerable<object[]> Image_TestData()
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetIntTheoryData))]
+        public void ToolStripItem_Height_SetWithOwner_GetReturnsExpected(int value)
+        {
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Owner = owner
+            };
+            int ownerLayoutCallCount = 0;
+            void ownerHandler(object sender, LayoutEventArgs e) => ownerLayoutCallCount++;
+            owner.Layout += ownerHandler;
+            int locationChangedCallCount = 0;
+            item.LocationChanged += (sender, e) => locationChangedCallCount++;
+
+            try
+            {
+                item.Height = value;
+                Assert.Equal(value, item.Height);
+                Assert.Equal(0, locationChangedCallCount);
+                Assert.Equal(0, ownerLayoutCallCount);
+                Assert.False(owner.IsHandleCreated);
+
+                // Set same.
+                item.Height = value;
+                Assert.Equal(value, item.Height);
+                Assert.Equal(0, locationChangedCallCount);
+                Assert.Equal(0, ownerLayoutCallCount);
+                Assert.False(owner.IsHandleCreated);
+            }
+            finally
+            {
+                owner.Layout -= ownerHandler;
+            }
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetIntTheoryData))]
+        public void ToolStripItem_Height_SetWithOwnerWithHandle_GetReturnsExpected(int value)
+        {
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Owner = owner
+            };
+            Assert.NotEqual(IntPtr.Zero, owner.Handle);
+            int invalidatedCallCount = 0;
+            owner.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            owner.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            owner.HandleCreated += (sender, e) => createdCallCount++;
+            int ownerLayoutCallCount = 0;
+            void ownerHandler(object sender, LayoutEventArgs e) => ownerLayoutCallCount++;
+            owner.Layout += ownerHandler;
+            int locationChangedCallCount = 0;
+            item.LocationChanged += (sender, e) => locationChangedCallCount++;
+
+            try
+            {
+                item.Height = value;
+                Assert.Equal(value, item.Height);
+                Assert.Equal(0, locationChangedCallCount);
+                Assert.Equal(0, ownerLayoutCallCount);
+                Assert.True(owner.IsHandleCreated);
+                Assert.Equal(0, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+
+                // Set same.
+                item.Height = value;
+                Assert.Equal(value, item.Height);
+                Assert.Equal(0, locationChangedCallCount);
+                Assert.Equal(0, ownerLayoutCallCount);
+                Assert.True(owner.IsHandleCreated);
+                Assert.Equal(0, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+            }
+            finally
+            {
+                owner.Layout -= ownerHandler;
+            }
+        }
+
+        [WinFormsTheory]
+        [InlineData(-1, 1)]
+        [InlineData(0, 1)]
+        [InlineData(1, 1)]
+        [InlineData(23, 0)]
+        public void ToolStripItem_Height_SetWithParent_GetReturnsExpected(int value, int expectedParentLayoutCallCount)
+        {
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Parent = parent
+            };
+            int parentLayoutCallCount = 0;
+            void parentHandler(object sender, LayoutEventArgs e)
+            {
+                Assert.Same(parent, sender);
+                Assert.Same(item, e.AffectedComponent);
+                Assert.Equal("Bounds", e.AffectedProperty);
+                parentLayoutCallCount++;
+            };
+            parent.Layout += parentHandler;
+            int locationChangedCallCount = 0;
+            item.LocationChanged += (sender, e) => locationChangedCallCount++;
+
+            try
+            {
+                item.Height = value;
+                Assert.Equal(value, item.Height);
+                Assert.Equal(0, locationChangedCallCount);
+                Assert.Equal(expectedParentLayoutCallCount, parentLayoutCallCount);
+                Assert.False(parent.IsHandleCreated);
+
+                // Set same.
+                item.Height = value;
+                Assert.Equal(value, item.Height);
+                Assert.Equal(0, locationChangedCallCount);
+                Assert.Equal(expectedParentLayoutCallCount, parentLayoutCallCount);
+                Assert.False(parent.IsHandleCreated);
+            }
+            finally
+            {
+                parent.Layout -= parentHandler;
+            }
+        }
+
+        [WinFormsTheory]
+        [InlineData(-1, 1)]
+        [InlineData(0, 1)]
+        [InlineData(1, 1)]
+        [InlineData(23, 0)]
+        public void ToolStripItem_Height_SetWithParentWithHandle_GetReturnsExpected(int value, int expectedParentLayoutCallCount)
+        {
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Parent = parent
+            };
+            Assert.NotEqual(IntPtr.Zero, parent.Handle);
+            int invalidatedCallCount = 0;
+            parent.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            parent.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            parent.HandleCreated += (sender, e) => createdCallCount++;
+            int parentLayoutCallCount = 0;
+            void parentHandler(object sender, LayoutEventArgs e)
+            {
+                Assert.Same(parent, sender);
+                Assert.Same(item, e.AffectedComponent);
+                Assert.Equal("Bounds", e.AffectedProperty);
+                parentLayoutCallCount++;
+            };
+            parent.Layout += parentHandler;
+            int locationChangedCallCount = 0;
+            item.LocationChanged += (sender, e) => locationChangedCallCount++;
+
+            try
+            {
+                item.Height = value;
+                Assert.Equal(value, item.Height);
+                Assert.Equal(0, locationChangedCallCount);
+                Assert.Equal(expectedParentLayoutCallCount, parentLayoutCallCount);
+                Assert.True(parent.IsHandleCreated);
+                Assert.Equal(expectedParentLayoutCallCount, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+
+                // Set same.
+                item.Height = value;
+                Assert.Equal(value, item.Height);
+                Assert.Equal(0, locationChangedCallCount);
+                Assert.Equal(expectedParentLayoutCallCount, parentLayoutCallCount);
+                Assert.True(parent.IsHandleCreated);
+                Assert.Equal(expectedParentLayoutCallCount, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+            }
+            finally
+            {
+                parent.Layout -= parentHandler;
+            }
+        }
+
+        public static IEnumerable<object[]> Image_GetWithOwner_TestData()
+        {
+            yield return new object[] { null };
+            yield return new object[] { new ImageList() };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(Image_GetWithOwner_TestData))]
+        public void ToolStripItem_Image_GetWithOwner_ReturnsNull(ImageList imageList)
+        {
+            using var owner = new ToolStrip
+            {
+                ImageList = imageList
+            };
+            using var item = new SubToolStripItem
+            {
+                Owner = owner
+            };
+            Assert.Null(item.Image);
+
+            // Get again to test caching behavior.
+            Assert.Null(item.Image);
+        }
+
+        [WinFormsFact]
+        public void ToolStripItem_Image_GetWithValidImageIndexWithOwner_ReturnsExpected()
+        {
+            using var image = new Bitmap(10, 10);
+            using var imageList = new ImageList();
+            imageList.Images.Add(image);
+            using var owner = new ToolStrip
+            {
+                ImageList = imageList
+            };
+            using var item = new SubToolStripItem
+            {
+                ImageIndex = 0,
+                Owner = owner
+            };
+            Assert.NotNull(item.Image);
+
+            // Get again to test caching behavior.
+            Assert.Same(item.Image, item.Image);
+        }
+
+        [WinFormsFact]
+        public void ToolStripItem_Image_GetWithInvalidImageIndexWithOwner_ReturnsExpected()
+        {
+            using var image = new Bitmap(10, 10);
+            using var imageList = new ImageList();
+            imageList.Images.Add(image);
+            using var owner = new ToolStrip
+            {
+                ImageList = imageList
+            };
+            using var item = new SubToolStripItem
+            {
+                ImageIndex = 1,
+                Owner = owner
+            };
+            Assert.Null(item.Image);
+
+            // Get again to test caching behavior.
+            Assert.Null(item.Image);
+        }
+
+        public static IEnumerable<object[]> Image_GetWithParent_TestData()
+        {
+            yield return new object[] { null };
+            yield return new object[] { new ImageList() };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(Image_GetWithParent_TestData))]
+        public void ToolStripItem_Image_GetWithParent_ReturnsNull(ImageList imageList)
+        {
+            using var parent = new ToolStrip
+            {
+                ImageList = imageList
+            };
+            using var item = new SubToolStripItem
+            {
+                Parent = parent
+            };
+            Assert.Null(item.Image);
+
+            // Get again to test caching behavior.
+            Assert.Null(item.Image);
+        }
+
+        [WinFormsTheory]
+        [InlineData(0)]
+        [InlineData(1)]
+        public void ToolStripItem_Image_GetWithImageIndexWithParent_ReturnsExpected(int imageIndex)
+        {
+            using var image = new Bitmap(10, 10);
+            using var imageList = new ImageList();
+            imageList.Images.Add(image);
+            using var parent = new ToolStrip
+            {
+                ImageList = imageList
+            };
+            using var item = new SubToolStripItem
+            {
+                ImageIndex = imageIndex,
+                Parent = parent
+            };
+            Assert.Null(item.Image);
+
+            // Get again to test caching behavior.
+            Assert.Null(item.Image);
+        }
+
+        public static IEnumerable<object[]> Image_Set_TestData()
         {
             foreach (Color imageTransparentColor in new Color[] { Color.Empty, Color.Red })
             {
@@ -1229,46 +3772,389 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [Theory]
-        [MemberData(nameof(Image_TestData))]
+        [WinFormsTheory]
+        [MemberData(nameof(Image_Set_TestData))]
         public void ToolStripItem_Image_Set_GetReturnsExpected(Color imageTransparentColor, Image value)
         {
-            var item = new SubToolStripItem
+            using var item = new SubToolStripItem
             {
                 ImageTransparentColor = imageTransparentColor
             };
 
             item.Image = value;
             Assert.Equal(value, item.Image);
+            Assert.Equal(-1, item.ImageIndex);
 
             // Set same.
             item.Image = value;
             Assert.Equal(value, item.Image);
+            Assert.Equal(-1, item.ImageIndex);
         }
 
-        [Theory]
-        [MemberData(nameof(Image_TestData))]
-        public void ToolStripItem_Image_SetAlreadyWithImage_GetReturnsExpected(Color imageTransparentColor, Image value)
+        public static IEnumerable<object[]> Image_SetWithImageIndex_TestData()
         {
-            var item = new SubToolStripItem
+            foreach (Color imageTransparentColor in new Color[] { Color.Empty, Color.Red })
             {
-                Image = new Bitmap(10, 10),
+                yield return new object[] { imageTransparentColor, null, 1 };
+                yield return new object[] { imageTransparentColor, new Bitmap(10, 10), -1 };
+                yield return new object[] { imageTransparentColor, Image.FromFile(Path.Combine("bitmaps", "nature24bits.gif")), -1 };
+                yield return new object[] { imageTransparentColor, Image.FromFile(Path.Combine("bitmaps", "10x16_one_entry_32bit.ico")), -1 };
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(Image_SetWithImageIndex_TestData))]
+        public void ToolStripItem_Image_SetWithImageIndex_GetReturnsExpected(Color imageTransparentColor, Image value, int expectedImageIndex)
+        {
+            using var item = new SubToolStripItem
+            {
+                ImageTransparentColor = imageTransparentColor,
+                ImageIndex = 1
+            };
+
+            item.Image = value;
+            Assert.Equal(value, item.Image);
+            Assert.Equal(expectedImageIndex, item.ImageIndex);
+
+            // Set same.
+            item.Image = value;
+            Assert.Equal(value, item.Image);
+            Assert.Equal(expectedImageIndex, item.ImageIndex);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(Image_Set_TestData))]
+        public void ToolStripItem_Image_SetWithNonNullOldValue_GetReturnsExpected(Color imageTransparentColor, Image value)
+        {
+            using var oldValue = new Bitmap(10, 10);
+            using var item = new SubToolStripItem
+            {
+                Image = oldValue,
                 ImageTransparentColor = imageTransparentColor
             };
 
             item.Image = value;
             Assert.Equal(value, item.Image);
+            Assert.Equal(-1, item.ImageIndex);
 
             // Set same.
             item.Image = value;
             Assert.Equal(value, item.Image);
+            Assert.Equal(-1, item.ImageIndex);
         }
 
-        [Theory]
+        [WinFormsTheory]
+        [MemberData(nameof(Image_SetWithImageIndex_TestData))]
+        public void ToolStripItem_Image_SetWithNonNullOldValueWithImageIndex_GetReturnsExpected(Color imageTransparentColor, Image value, int expectedImageIndex)
+        {
+            using var oldValue = new Bitmap(10, 10);
+            using var item = new SubToolStripItem
+            {
+                Image = oldValue,
+                ImageTransparentColor = imageTransparentColor,
+                ImageIndex = 1
+            };
+
+            item.Image = value;
+            Assert.Equal(value, item.Image);
+            Assert.Equal(expectedImageIndex, item.ImageIndex);
+
+            // Set same.
+            item.Image = value;
+            Assert.Equal(value, item.Image);
+            Assert.Equal(expectedImageIndex, item.ImageIndex);
+        }
+
+        public static IEnumerable<object[]> Image_SetWithOwner_TestData()
+        {
+            foreach (Color imageTransparentColor in new Color[] { Color.Empty, Color.Red })
+            {
+                yield return new object[] { imageTransparentColor, null, 0 };
+                yield return new object[] { imageTransparentColor, new Bitmap(10, 10), 1 };
+                yield return new object[] { imageTransparentColor, Image.FromFile(Path.Combine("bitmaps", "nature24bits.gif")), 1 };
+                yield return new object[] { imageTransparentColor, Image.FromFile(Path.Combine("bitmaps", "10x16_one_entry_32bit.ico")), 1 };
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(Image_SetWithOwner_TestData))]
+        public void ToolStripItem_Image_SetWithOwner_GetReturnsExpected(Color imageTransparentColor, Image value, int expectedOwnerLayoutCallCount)
+        {
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                ImageTransparentColor = imageTransparentColor,
+                Owner = owner
+            };
+            int ownerLayoutCallCount = 0;
+            void ownerHandler(object sender, LayoutEventArgs e)
+            {
+                if (e.AffectedProperty != "ImageIndex")
+                {
+                    Assert.Same(owner, sender);
+                    Assert.Same(item, e.AffectedComponent);
+                    Assert.Equal("Image", e.AffectedProperty);
+                    ownerLayoutCallCount++;
+                }
+            };
+            owner.Layout += ownerHandler;
+
+            try
+            {
+                item.Image = value;
+                Assert.Equal(value, item.Image);
+                Assert.Equal(-1, item.ImageIndex);
+                Assert.Equal(expectedOwnerLayoutCallCount, ownerLayoutCallCount);
+                Assert.False(owner.IsHandleCreated);
+
+                // Set same.
+                item.Image = value;
+                Assert.Equal(value, item.Image);
+                Assert.Equal(-1, item.ImageIndex);
+                Assert.Equal(expectedOwnerLayoutCallCount, ownerLayoutCallCount);
+                Assert.False(owner.IsHandleCreated);
+            }
+            finally
+            {
+                owner.Layout -= ownerHandler;
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(Image_SetWithOwner_TestData))]
+        public void ToolStripItem_Image_SetWithOwnerWithHandle_GetReturnsExpected(Color imageTransparentColor, Image value, int expectedOwnerLayoutCallCount)
+        {
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                ImageTransparentColor = imageTransparentColor,
+                Owner = owner
+            };
+            Assert.NotEqual(IntPtr.Zero, owner.Handle);
+            int invalidatedCallCount = 0;
+            owner.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            owner.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            owner.HandleCreated += (sender, e) => createdCallCount++;
+            int ownerLayoutCallCount = 0;
+            void ownerHandler(object sender, LayoutEventArgs e)
+            {
+                if (e.AffectedProperty != "ImageIndex")
+                {
+                    Assert.Same(owner, sender);
+                    Assert.Same(item, e.AffectedComponent);
+                    Assert.Equal("Image", e.AffectedProperty);
+                    ownerLayoutCallCount++;
+                }
+            };
+            owner.Layout += ownerHandler;
+
+            try
+            {
+                item.Image = value;
+                Assert.Equal(value, item.Image);
+                Assert.Equal(-1, item.ImageIndex);
+                Assert.Equal(expectedOwnerLayoutCallCount, ownerLayoutCallCount);
+                Assert.True(owner.IsHandleCreated);
+                Assert.Equal(expectedOwnerLayoutCallCount * 4, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+
+                // Set same.
+                item.Image = value;
+                Assert.Equal(value, item.Image);
+                Assert.Equal(-1, item.ImageIndex);
+                Assert.Equal(expectedOwnerLayoutCallCount, ownerLayoutCallCount);
+                Assert.True(owner.IsHandleCreated);
+                Assert.Equal(expectedOwnerLayoutCallCount * 4, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+            }
+            finally
+            {
+                owner.Layout -= ownerHandler;
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(Image_Set_TestData))]
+        public void ToolStripItem_Image_SetWithParent_GetReturnsExpected(Color imageTransparentColor, Image value)
+        {
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                ImageTransparentColor = imageTransparentColor,
+                Parent = parent
+            };
+            int parentLayoutCallCount = 0;
+            void parentHandler(object sender, LayoutEventArgs e) => parentLayoutCallCount++;
+            parent.Layout += parentHandler;
+
+            try
+            {
+                item.Image = value;
+                Assert.Equal(value, item.Image);
+                Assert.Equal(-1, item.ImageIndex);
+                Assert.Equal(0, parentLayoutCallCount);
+                Assert.False(parent.IsHandleCreated);
+
+                // Set same.
+                item.Image = value;
+                Assert.Equal(value, item.Image);
+                Assert.Equal(-1, item.ImageIndex);
+                Assert.Equal(0, parentLayoutCallCount);
+                Assert.False(parent.IsHandleCreated);
+            }
+            finally
+            {
+                parent.Layout -= parentHandler;
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(Image_Set_TestData))]
+        public void ToolStripItem_Image_SetWithParentWithHandle_GetReturnsExpected(Color imageTransparentColor, Image value)
+        {
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                ImageTransparentColor = imageTransparentColor,
+                Parent = parent
+            };
+            Assert.NotEqual(IntPtr.Zero, parent.Handle);
+            int invalidatedCallCount = 0;
+            parent.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            parent.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            parent.HandleCreated += (sender, e) => createdCallCount++;
+            int parentLayoutCallCount = 0;
+            void parentHandler(object sender, LayoutEventArgs e) => parentLayoutCallCount++;
+            parent.Layout += parentHandler;
+
+            try
+            {
+                item.Image = value;
+                Assert.Equal(value, item.Image);
+                Assert.Equal(-1, item.ImageIndex);
+                Assert.Equal(0, parentLayoutCallCount);
+                Assert.True(parent.IsHandleCreated);
+                Assert.Equal(0, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+
+                // Set same.
+                item.Image = value;
+                Assert.Equal(value, item.Image);
+                Assert.Equal(-1, item.ImageIndex);
+                Assert.Equal(0, parentLayoutCallCount);
+                Assert.True(parent.IsHandleCreated);
+                Assert.Equal(0, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+            }
+            finally
+            {
+                parent.Layout -= parentHandler;
+            }
+        }
+
+        [WinFormsFact]
+        public void ToolStripItem_Image_ResetValue_Success()
+        {
+            PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ToolStripItem))[nameof(ToolStripItem.Image)];
+            using var item = new SubToolStripItem();
+            Assert.False(property.CanResetValue(item));
+
+            using var image = new Bitmap(10, 10);
+            item.Image = image;
+            Assert.Same(image, item.Image);
+            Assert.True(property.CanResetValue(item));
+
+            property.ResetValue(item);
+            Assert.Null(item.Image);
+            Assert.False(property.CanResetValue(item));
+        }
+
+        [WinFormsFact]
+        public void ToolStripItem_Image_ResetValueWithOwnerWithImageList_Success()
+        {
+            PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ToolStripItem))[nameof(ToolStripItem.Image)];
+            using var image = new Bitmap(10, 10);
+            using var imageList = new ImageList();
+            imageList.Images.Add(image);
+            using var owner = new ToolStrip
+            {
+                ImageList = imageList
+            };
+            using var item = new SubToolStripItem
+            {
+                ImageIndex = 0,
+                Owner = owner
+            };
+            Assert.False(property.CanResetValue(item));
+
+            using var otherImage = new Bitmap(10, 10);
+            item.Image = otherImage;
+            Assert.Same(otherImage, item.Image);
+            Assert.True(property.CanResetValue(item));
+            
+            property.ResetValue(item);
+            Assert.Null(item.Image);
+            Assert.False(property.CanResetValue(item));
+        }
+
+        [WinFormsFact]
+        public void ToolStripItem_Image_ShouldSerializeValue_Success()
+        {
+            PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ToolStripItem))[nameof(ToolStripItem.Image)];
+            using var item = new SubToolStripItem();
+            Assert.False(property.ShouldSerializeValue(item));
+
+            using var image = new Bitmap(10, 10);
+            item.Image = image;
+            Assert.Same(image, item.Image);
+            Assert.True(property.ShouldSerializeValue(item));
+
+            property.ResetValue(item);
+            Assert.Null(item.Image);
+            Assert.False(property.ShouldSerializeValue(item));
+        }
+
+        [WinFormsFact]
+        public void ToolStripItem_Image_ShouldSerializeValueWithOwnerWithImageList_Success()
+        {
+            PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ToolStripItem))[nameof(ToolStripItem.Image)];
+            using var image = new Bitmap(10, 10);
+            using var imageList = new ImageList();
+            imageList.Images.Add(image);
+            using var owner = new ToolStrip
+            {
+                ImageList = imageList
+            };
+            using var item = new SubToolStripItem
+            {
+                ImageIndex = 0,
+                Owner = owner
+            };
+            Assert.False(property.ShouldSerializeValue(item));
+
+            using var otherImage = new Bitmap(10, 10);
+            item.Image = otherImage;
+            Assert.Same(otherImage, item.Image);
+            Assert.True(property.ShouldSerializeValue(item));
+
+            property.ResetValue(item);
+            Assert.Null(item.Image);
+            Assert.False(property.ShouldSerializeValue(item));
+        }
+
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ContentAlignment))]
         public void ToolStripItem_ImageAlign_Set_GetReturnsExpected(ContentAlignment value)
         {
-            var item = new SubToolStripItem
+            using var item = new SubToolStripItem
             {
                 ImageAlign = value
             };
@@ -1279,145 +4165,1222 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, item.ImageAlign);
         }
 
-        [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ContentAlignment))]
-        public void ToolStripItem_ImageAlign_SetWithOwner_GetReturnsExpected(ContentAlignment value)
+        [WinFormsTheory]
+        [InlineData(ContentAlignment.TopLeft, 1)]
+        [InlineData(ContentAlignment.TopCenter, 1)]
+        [InlineData(ContentAlignment.TopRight, 1)]
+        [InlineData(ContentAlignment.MiddleLeft, 1)]
+        [InlineData(ContentAlignment.MiddleCenter, 0)]
+        [InlineData(ContentAlignment.MiddleRight, 1)]
+        [InlineData(ContentAlignment.BottomLeft, 1)]
+        [InlineData(ContentAlignment.BottomCenter, 1)]
+        [InlineData(ContentAlignment.BottomRight, 1)]
+        public void ToolStripItem_ImageAlign_SetWithOwner_GetReturnsExpected(ContentAlignment value, int expectedParentLayoutCallCount)
         {
-            var owner = new ToolStrip();
-            var item = new SubToolStripItem();
-            owner.Items.Add(item);
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Owner = owner
+            };
+            int ownerLayoutCallCount = 0;
+            void ownerHandler(object sender, LayoutEventArgs e)
+            {
+                Assert.Same(owner, sender);
+                Assert.Same(item, e.AffectedComponent);
+                Assert.Equal("ImageAlign", e.AffectedProperty);
+                ownerLayoutCallCount++;
+            };
+            owner.Layout += ownerHandler;
 
-            item.ImageAlign = value;
-            Assert.Equal(value, item.ImageAlign);
+            try
+            {
+                item.ImageAlign = value;
+                Assert.Equal(value, item.ImageAlign);
+                Assert.Equal(expectedParentLayoutCallCount, ownerLayoutCallCount);
+                Assert.False(owner.IsHandleCreated);
 
-            // Set same.
-            item.ImageAlign = value;
-            Assert.Equal(value, item.ImageAlign);
+                // Set same.
+                item.ImageAlign = value;
+                Assert.Equal(value, item.ImageAlign);
+                Assert.Equal(expectedParentLayoutCallCount, ownerLayoutCallCount);
+                Assert.False(owner.IsHandleCreated);
+            }
+            finally
+            {
+                owner.Layout -= ownerHandler;
+            }
         }
 
-        [Theory]
+        [WinFormsTheory]
+        [InlineData(ContentAlignment.TopLeft, 1)]
+        [InlineData(ContentAlignment.TopCenter, 1)]
+        [InlineData(ContentAlignment.TopRight, 1)]
+        [InlineData(ContentAlignment.MiddleLeft, 1)]
+        [InlineData(ContentAlignment.MiddleCenter, 0)]
+        [InlineData(ContentAlignment.MiddleRight, 1)]
+        [InlineData(ContentAlignment.BottomLeft, 1)]
+        [InlineData(ContentAlignment.BottomCenter, 1)]
+        [InlineData(ContentAlignment.BottomRight, 1)]
+        public void ToolStripItem_ImageAlign_SetWithOwnerWithHandle_GetReturnsExpected(ContentAlignment value, int expectedParentLayoutCallCount)
+        {
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Owner = owner
+            };
+            Assert.NotEqual(IntPtr.Zero, owner.Handle);
+            int invalidatedCallCount = 0;
+            owner.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            owner.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            owner.HandleCreated += (sender, e) => createdCallCount++;
+            int ownerLayoutCallCount = 0;
+            void ownerHandler(object sender, LayoutEventArgs e)
+            {
+                Assert.Same(owner, sender);
+                Assert.Same(item, e.AffectedComponent);
+                Assert.Equal("ImageAlign", e.AffectedProperty);
+                ownerLayoutCallCount++;
+            };
+            owner.Layout += ownerHandler;
+
+            try
+            {
+                item.ImageAlign = value;
+                Assert.Equal(value, item.ImageAlign);
+                Assert.Equal(expectedParentLayoutCallCount, ownerLayoutCallCount);
+                Assert.True(owner.IsHandleCreated);
+                Assert.Equal(expectedParentLayoutCallCount * 2, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+
+                // Set same.
+                item.ImageAlign = value;
+                Assert.Equal(value, item.ImageAlign);
+                Assert.Equal(expectedParentLayoutCallCount, ownerLayoutCallCount);
+                Assert.True(owner.IsHandleCreated);
+                Assert.Equal(expectedParentLayoutCallCount * 2, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+            }
+            finally
+            {
+                owner.Layout -= ownerHandler;
+            }
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ContentAlignment))]
+        public void ToolStripItem_ImageAlign_SetWithParent_GetReturnsExpected(ContentAlignment value)
+        {
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Parent = parent
+            };
+            int parentLayoutCallCount = 0;
+            void parentHandler(object sender, LayoutEventArgs e) => parentLayoutCallCount++;
+            parent.Layout += parentHandler;
+
+            try
+            {
+                item.ImageAlign = value;
+                Assert.Equal(value, item.ImageAlign);
+                Assert.Equal(0, parentLayoutCallCount);
+                Assert.False(parent.IsHandleCreated);
+
+                // Set same.
+                item.ImageAlign = value;
+                Assert.Equal(value, item.ImageAlign);
+                Assert.Equal(0, parentLayoutCallCount);
+                Assert.False(parent.IsHandleCreated);
+            }
+            finally
+            {
+                parent.Layout -= parentHandler;
+            }
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ContentAlignment))]
+        public void ToolStripItem_ImageAlign_SetWithParentWithHandle_GetReturnsExpected(ContentAlignment value)
+        {
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Parent = parent
+            };
+            Assert.NotEqual(IntPtr.Zero, parent.Handle);
+            int invalidatedCallCount = 0;
+            parent.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            parent.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            parent.HandleCreated += (sender, e) => createdCallCount++;
+            int parentLayoutCallCount = 0;
+            void parentHandler(object sender, LayoutEventArgs e) => parentLayoutCallCount++;
+            parent.Layout += parentHandler;
+
+            try
+            {
+                item.ImageAlign = value;
+                Assert.Equal(value, item.ImageAlign);
+                Assert.Equal(0, parentLayoutCallCount);
+                Assert.True(parent.IsHandleCreated);
+                Assert.Equal(0, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+
+                // Set same.
+                item.ImageAlign = value;
+                Assert.Equal(value, item.ImageAlign);
+                Assert.Equal(0, parentLayoutCallCount);
+                Assert.True(parent.IsHandleCreated);
+                Assert.Equal(0, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+            }
+            finally
+            {
+                parent.Layout -= parentHandler;
+            }
+        }
+
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ContentAlignment))]
+        [InlineData((ContentAlignment)int.MaxValue)]
+        [InlineData((ContentAlignment)int.MinValue)]
         public void ToolStripItem_ImageAlign_SetInvalid_ThrowsInvalidEnumArgumentException(ContentAlignment value)
         {
-            var item = new SubToolStripItem();
+            using var item = new SubToolStripItem();
             Assert.Throws<InvalidEnumArgumentException>("value", () => item.ImageAlign = value);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(-1)]
         [InlineData(0)]
         [InlineData(1)]
         public void ToolStripItem_ImageIndex_Set_GetReturnsExpected(int value)
         {
-            var item = new SubToolStripItem
+            using var item = new SubToolStripItem
             {
                 ImageIndex = value
             };
             Assert.Equal(value, item.ImageIndex);
+            Assert.Empty(item.ImageKey);
             Assert.Null(item.Image);
 
             // Set same.
             item.ImageIndex = value;
             Assert.Equal(value, item.ImageIndex);
+            Assert.Empty(item.ImageKey);
             Assert.Null(item.Image);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(-1)]
         [InlineData(0)]
         [InlineData(1)]
         public void ToolStripItem_ImageIndex_SetWithImage_GetReturnsExpected(int value)
         {
-            using (var image = new Bitmap(10, 10))
+            using var image = new Bitmap(10, 10);
+            using var item = new SubToolStripItem
             {
-                var item = new SubToolStripItem
-                {
-                    Image = image
-                };
+                Image = image,
+                ImageIndex = value
+            };
+            Assert.Equal(value, item.ImageIndex);
+            Assert.Empty(item.ImageKey);
+            Assert.Empty(item.ImageKey);
+            Assert.Null(item.Image);
 
-                item.ImageIndex = value;
-                Assert.Null(item.Image);
-            }
-        }
-
-        [Theory]
-        [InlineData(-1)]
-        [InlineData(0)]
-        [InlineData(1)]
-        public void ToolStripItem_ImageIndex_SetWithOwnerWithoutImageList_ReturnsExpected(int value)
-        {
-            var owner = new ToolStrip();
-            var item = new SubToolStripItem();
-            owner.Items.Add(item);
-
+            // Set same.
             item.ImageIndex = value;
             Assert.Equal(value, item.ImageIndex);
+            Assert.Empty(item.ImageKey);
+            Assert.Empty(item.ImageKey);
             Assert.Null(item.Image);
         }
 
-        [Theory]
-        [InlineData(-1, -1)]
-        [InlineData(0, 0)]
-        [InlineData(1, 0)]
-        public void ToolStripItem_ImageIndex_SetWithOwnerWithImageList_ReturnsExpected(int value, int expected)
+        [WinFormsTheory]
+        [InlineData(-1)]
+        [InlineData(0)]
+        [InlineData(1)]
+        public void ToolStripItem_ImageIndex_SetWithImageKey_GetReturnsExpected(int value)
         {
-            var owner = new ToolStrip
+            using var item = new SubToolStripItem
             {
-                ImageList = new ImageList()
+                ImageKey = "ImageKey",
+                ImageIndex = value
             };
-            owner.ImageList.Images.Add(new Bitmap(10, 10));
-
-            var item = new SubToolStripItem();
-            owner.Items.Add(item);
-
-            item.ImageIndex = value;
-            Assert.Equal(expected, item.ImageIndex);
-            Assert.Equal(value == 0, item.Image != null);
-        }
-
-        [Fact]
-        public void ToolStripItem_ImageIndex_SetInvalid_ThrowsArgumentOutOfRangeException()
-        {
-            var item = new SubToolStripItem();
-            Assert.Throws<ArgumentOutOfRangeException>("value", () => item.ImageIndex = -2);
-        }
-
-        [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringTheoryData))]
-        public void ToolStripItem_ImageKey_Set_GetReturnsExpected(string value)
-        {
-            var item = new SubToolStripItem
-            {
-                ImageKey = value
-            };
-            Assert.Equal(value, item.ImageKey);
+            Assert.Equal(value, item.ImageIndex);
+            Assert.Empty(item.ImageKey);
+            Assert.Empty(item.ImageKey);
+            Assert.Null(item.Image);
 
             // Set same.
-            item.ImageKey = value;
-            Assert.Equal(value, item.ImageKey);
+            item.ImageIndex = value;
+            Assert.Equal(value, item.ImageIndex);
+            Assert.Empty(item.ImageKey);
+            Assert.Empty(item.ImageKey);
+            Assert.Null(item.Image);
         }
 
-        [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringTheoryData))]
-        public void ToolStripItem_ImageKey_SetWithImage_GetReturnsExpected(string value)
+        [WinFormsTheory]
+        [InlineData(-1)]
+        [InlineData(0)]
+        [InlineData(1)]
+        public void ToolStripItem_ImageIndex_SetWithOwner_GetReturnsExpected(int value)
         {
-            using (var image = new Bitmap(10, 10))
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
             {
-                var item = new SubToolStripItem
-                {
-                    Image = image
-                };
+                Owner = owner
+            };
+            int ownerLayoutCallCount = 0;
+            void ownerHandler(object sender, LayoutEventArgs e)
+            {
+                Assert.Same(owner, sender);
+                Assert.Same(item, e.AffectedComponent);
+                Assert.Equal("ImageIndex", e.AffectedProperty);
+                ownerLayoutCallCount++;
+            };
+            owner.Layout += ownerHandler;
 
-                item.ImageKey = value;
+            try
+            {
+                item.ImageIndex = value;
+                Assert.Equal(value, item.ImageIndex);
                 Assert.Null(item.Image);
+                Assert.Equal(1, ownerLayoutCallCount);
+                Assert.False(owner.IsHandleCreated);
+
+                // Set same.
+                item.ImageIndex = value;
+                Assert.Equal(value, item.ImageIndex);
+                Assert.Null(item.Image);
+                Assert.Equal(2, ownerLayoutCallCount);
+                Assert.False(owner.IsHandleCreated);
+            }
+            finally
+            {
+                owner.Layout -= ownerHandler;
             }
         }
 
-        [Theory]
+        [WinFormsTheory]
+        [InlineData(-1, -1, false)]
+        [InlineData(0, 0, true)]
+        [InlineData(1, 0, false)]
+        public void ToolStripItem_ImageIndex_SetWithOwnerWithImageList_GetReturnsExpected(int value, int expected, bool expectedHasImage)
+        {
+            using var image = new Bitmap(10, 10);
+            using var imageList = new ImageList();
+            imageList.Images.Add(image);
+            using var owner = new ToolStrip
+            {
+                ImageList = imageList
+            };
+            using var item = new SubToolStripItem
+            {
+                Owner = owner
+            };
+            int ownerLayoutCallCount = 0;
+            void ownerHandler(object sender, LayoutEventArgs e)
+            {
+                Assert.Same(owner, sender);
+                Assert.Same(item, e.AffectedComponent);
+                Assert.Equal("ImageIndex", e.AffectedProperty);
+                ownerLayoutCallCount++;
+            };
+            owner.Layout += ownerHandler;
+
+            try
+            {
+                item.ImageIndex = value;
+                Assert.Equal(expected, item.ImageIndex);
+                Assert.Empty(item.ImageKey);
+                Assert.Equal(expectedHasImage, item.Image != null);
+                Assert.Equal(1, ownerLayoutCallCount);
+                Assert.False(owner.IsHandleCreated);
+
+                // Set same.
+                item.ImageIndex = value;
+                Assert.Equal(expected, item.ImageIndex);
+                Assert.Empty(item.ImageKey);
+                Assert.Equal(expectedHasImage, item.Image != null);
+                Assert.Equal(2, ownerLayoutCallCount);
+                Assert.False(owner.IsHandleCreated);
+            }
+            finally
+            {
+                owner.Layout -= ownerHandler;
+            }
+        }
+
+        [WinFormsTheory]
+        [InlineData(-1)]
+        [InlineData(0)]
+        [InlineData(1)]
+        public void ToolStripItem_ImageIndex_SetWithOwnerWithHandle_GetReturnsExpected(int value)
+        {
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Owner = owner
+            };
+            Assert.NotEqual(IntPtr.Zero, owner.Handle);
+            int invalidatedCallCount = 0;
+            owner.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            owner.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            owner.HandleCreated += (sender, e) => createdCallCount++;
+            int ownerLayoutCallCount = 0;
+            void ownerHandler(object sender, LayoutEventArgs e)
+            {
+                Assert.Same(owner, sender);
+                Assert.Same(item, e.AffectedComponent);
+                Assert.Equal("ImageIndex", e.AffectedProperty);
+                ownerLayoutCallCount++;
+            };
+            owner.Layout += ownerHandler;
+
+            try
+            {
+                item.ImageIndex = value;
+                Assert.Equal(value, item.ImageIndex);
+                Assert.Null(item.Image);
+                Assert.Equal(1, ownerLayoutCallCount);
+                Assert.True(owner.IsHandleCreated);
+                Assert.Equal(2, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+
+                // Set same.
+                item.ImageIndex = value;
+                Assert.Equal(value, item.ImageIndex);
+                Assert.Null(item.Image);
+                Assert.Equal(2, ownerLayoutCallCount);
+                Assert.True(owner.IsHandleCreated);
+                Assert.Equal(4, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+            }
+            finally
+            {
+                owner.Layout -= ownerHandler;
+            }
+        }
+
+        [WinFormsTheory]
+        [InlineData(-1)]
+        [InlineData(0)]
+        [InlineData(1)]
+        public void ToolStripItem_ImageIndex_SetWithParent_GetReturnsExpected(int value)
+        {
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Parent = parent
+            };
+            int parentLayoutCallCount = 0;
+            void parentHandler(object sender, LayoutEventArgs e) => parentLayoutCallCount++;
+            parent.Layout += parentHandler;
+
+            try
+            {
+                item.ImageIndex = value;
+                Assert.Equal(value, item.ImageIndex);
+                Assert.Null(item.Image);
+                Assert.Equal(0, parentLayoutCallCount);
+                Assert.False(parent.IsHandleCreated);
+
+                // Set same.
+                item.ImageIndex = value;
+                Assert.Equal(value, item.ImageIndex);
+                Assert.Null(item.Image);
+                Assert.Equal(0, parentLayoutCallCount);
+                Assert.False(parent.IsHandleCreated);
+            }
+            finally
+            {
+                parent.Layout -= parentHandler;
+            }
+        }
+
+        [WinFormsTheory]
+        [InlineData(-1)]
+        [InlineData(0)]
+        [InlineData(1)]
+        public void ToolStripItem_ImageIndex_SetWithParentWithImageList_GetReturnsExpected(int value)
+        {
+            using var image = new Bitmap(10, 10);
+            using var imageList = new ImageList();
+            imageList.Images.Add(image);
+            using var parent = new ToolStrip
+            {
+                ImageList = imageList
+            };
+            using var item = new SubToolStripItem
+            {
+                Parent = parent
+            };
+            int parentLayoutCallCount = 0;
+            void parentHandler(object sender, LayoutEventArgs e) => parentLayoutCallCount++;
+            parent.Layout += parentHandler;
+
+            try
+            {
+                item.ImageIndex = value;
+                Assert.Equal(value, item.ImageIndex);
+                Assert.Null(item.Image);
+                Assert.Equal(0, parentLayoutCallCount);
+                Assert.False(parent.IsHandleCreated);
+
+                // Set same.
+                item.ImageIndex = value;
+                Assert.Equal(value, item.ImageIndex);
+                Assert.Null(item.Image);
+                Assert.Equal(0, parentLayoutCallCount);
+                Assert.False(parent.IsHandleCreated);
+            }
+            finally
+            {
+                parent.Layout -= parentHandler;
+            }
+        }
+
+        [WinFormsTheory]
+        [InlineData(-1)]
+        [InlineData(0)]
+        [InlineData(1)]
+        public void ToolStripItem_ImageIndex_SetWithParentWithHandle_GetReturnsExpected(int value)
+        {
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Parent = parent
+            };
+            Assert.NotEqual(IntPtr.Zero, parent.Handle);
+            int invalidatedCallCount = 0;
+            parent.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            parent.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            parent.HandleCreated += (sender, e) => createdCallCount++;
+            int parentLayoutCallCount = 0;
+            void parentHandler(object sender, LayoutEventArgs e) => parentLayoutCallCount++;
+            parent.Layout += parentHandler;
+
+            try
+            {
+                item.ImageIndex = value;
+                Assert.Equal(value, item.ImageIndex);
+                Assert.Null(item.Image);
+                Assert.Equal(0, parentLayoutCallCount);
+                Assert.True(parent.IsHandleCreated);
+                Assert.Equal(0, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+
+                // Set same.
+                item.ImageIndex = value;
+                Assert.Equal(value, item.ImageIndex);
+                Assert.Null(item.Image);
+                Assert.Equal(0, parentLayoutCallCount);
+                Assert.True(parent.IsHandleCreated);
+                Assert.Equal(0, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+            }
+            finally
+            {
+                parent.Layout -= parentHandler;
+            }
+        }
+
+        [WinFormsFact]
+        public void ToolStripItem_ImageIndex_SetInvalid_ThrowsArgumentOutOfRangeException()
+        {
+            using var item = new SubToolStripItem();
+            Assert.Throws<ArgumentOutOfRangeException>("value", () => item.ImageIndex = -2);
+        }
+
+        [WinFormsFact]
+        public void ToolStripItem_ImageIndex_ResetValue_Success()
+        {
+            PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ToolStripItem))[nameof(ToolStripItem.ImageIndex)];
+            using var item = new SubToolStripItem();
+            Assert.False(property.CanResetValue(item));
+
+            item.ImageIndex = -1;
+            Assert.Equal(-1, item.ImageIndex);
+            Assert.False(property.CanResetValue(item));
+
+            // Set custom
+            item.ImageIndex = 0;
+            Assert.Equal(0, item.ImageIndex);
+            Assert.False(property.CanResetValue(item));
+
+            property.ResetValue(item);
+            Assert.Equal(0, item.ImageIndex);
+            Assert.False(property.CanResetValue(item));
+        }
+
+        [WinFormsFact]
+        public void ToolStripItem_ImageIndex_ResetValueWithImage_Success()
+        {
+            PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ToolStripItem))[nameof(ToolStripItem.ImageIndex)];
+            using var image = new Bitmap(10, 10);
+            using var item = new SubToolStripItem
+            {
+                Image = image
+            };
+            Assert.False(property.CanResetValue(item));
+
+            item.ImageIndex = -1;
+            Assert.Equal(-1, item.ImageIndex);
+            Assert.False(property.CanResetValue(item));
+
+            // Set custom
+            item.ImageIndex = 0;
+            Assert.Equal(0, item.ImageIndex);
+            Assert.False(property.CanResetValue(item));
+
+            property.ResetValue(item);
+            Assert.Equal(0, item.ImageIndex);
+            Assert.False(property.CanResetValue(item));
+        }
+
+        [WinFormsFact]
+        public void ToolStripItem_ImageIndex_ResetValueWithOwnerWithImageList_Success()
+        {
+            PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ToolStripItem))[nameof(ToolStripItem.ImageIndex)];
+            using var image = new Bitmap(10, 10);
+            using var imageList = new ImageList();
+            imageList.Images.Add(image);
+            using var owner = new ToolStrip
+            {
+                ImageList = imageList
+            };
+            using var item = new SubToolStripItem
+            {
+                Owner = owner
+            };
+            Assert.False(property.CanResetValue(item));
+
+            item.ImageIndex = 0;
+            Assert.Equal(0, item.ImageIndex);
+            Assert.False(property.CanResetValue(item));
+            
+            item.ImageIndex = 0;
+            Assert.Equal(0, item.ImageIndex);
+            Assert.False(property.CanResetValue(item));
+            
+            item.ImageIndex = -1;
+            Assert.Equal(-1, item.ImageIndex);
+            Assert.False(property.CanResetValue(item));
+
+            property.ResetValue(item);
+            Assert.Equal(-1, item.ImageIndex);
+            Assert.False(property.CanResetValue(item));
+        }
+
+        [WinFormsFact]
+        public void ToolStripItem_ImageIndex_ShouldSerializeValue_Success()
+        {
+            PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ToolStripItem))[nameof(ToolStripItem.ImageIndex)];
+            using var item = new SubToolStripItem();
+            Assert.False(property.ShouldSerializeValue(item));
+            item.ImageIndex = -1;
+            Assert.Equal(-1, item.ImageIndex);
+            Assert.False(property.ShouldSerializeValue(item));
+
+            // Set custom
+            item.ImageIndex = 0;
+            Assert.Equal(0, item.ImageIndex);
+            Assert.False(property.ShouldSerializeValue(item));
+
+            property.ResetValue(item);
+            Assert.Equal(0, item.ImageIndex);
+            Assert.False(property.ShouldSerializeValue(item));
+        }
+
+        [WinFormsFact]
+        public void ToolStripItem_ImageIndex_ShouldSerializeValueWithImage_Success()
+        {
+            PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ToolStripItem))[nameof(ToolStripItem.ImageIndex)];
+            using var image = new Bitmap(10, 10);
+            using var item = new SubToolStripItem
+            {
+                Image = image
+            };
+            Assert.False(property.ShouldSerializeValue(item));
+            item.ImageIndex = -1;
+            Assert.Equal(-1, item.ImageIndex);
+            Assert.False(property.ShouldSerializeValue(item));
+
+            // Set custom
+            item.ImageIndex = 0;
+            Assert.Equal(0, item.ImageIndex);
+            Assert.False(property.ShouldSerializeValue(item));
+
+            property.ResetValue(item);
+            Assert.Equal(0, item.ImageIndex);
+            Assert.False(property.ShouldSerializeValue(item));
+        }
+
+        [WinFormsFact]
+        public void ToolStripItem_ImageIndex_ShouldSerializeValueWithOwnerWithImageList_Success()
+        {
+            PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ToolStripItem))[nameof(ToolStripItem.ImageIndex)];
+            using var image = new Bitmap(10, 10);
+            using var imageList = new ImageList();
+            imageList.Images.Add(image);
+            using var owner = new ToolStrip
+            {
+                ImageList = imageList
+            };
+            using var item = new SubToolStripItem
+            {
+                Owner = owner
+            };
+            Assert.False(property.ShouldSerializeValue(item));
+
+            item.ImageIndex = 0;
+            Assert.Equal(0, item.ImageIndex);
+            Assert.True(property.ShouldSerializeValue(item));
+            
+            item.ImageIndex = 0;
+            Assert.Equal(0, item.ImageIndex);
+            Assert.True(property.ShouldSerializeValue(item));
+            
+            item.ImageIndex = -1;
+            Assert.Equal(-1, item.ImageIndex);
+            Assert.False(property.ShouldSerializeValue(item));
+
+            property.ResetValue(item);
+            Assert.Equal(-1, item.ImageIndex);
+            Assert.False(property.ShouldSerializeValue(item));
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        public void ToolStripItem_ImageKey_Set_GetReturnsExpected(string value, string expected)
+        {
+            using var item = new SubToolStripItem
+            {
+                ImageKey = value
+            };
+            Assert.Equal(expected, item.ImageKey);
+            Assert.Equal(-1, item.ImageIndex);
+            Assert.Null(item.Image);
+
+            // Set same.
+            item.ImageKey = value;
+            Assert.Equal(expected, item.ImageKey);
+            Assert.Equal(-1, item.ImageIndex);
+            Assert.Null(item.Image);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        public void ToolStripItem_ImageKey_SetWithImage_GetReturnsExpected(string value, string expected)
+        {
+            using var image = new Bitmap(10, 10);
+            using var item = new SubToolStripItem
+            {
+                Image = image,
+                ImageKey = value
+            };
+            Assert.Equal(expected, item.ImageKey);
+            Assert.Equal(-1, item.ImageIndex);
+            Assert.Null(item.Image);
+
+            // Set same.
+            item.ImageKey = value;
+            Assert.Equal(expected, item.ImageKey);
+            Assert.Equal(-1, item.ImageIndex);
+            Assert.Null(item.Image);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        public void ToolStripItem_ImageKey_SetWithImageIndex_GetReturnsExpected(string value, string expected)
+        {
+            using var item = new SubToolStripItem
+            {
+                ImageIndex = 1,
+                ImageKey = value
+            };
+            Assert.Equal(expected, item.ImageKey);
+            Assert.Equal(-1, item.ImageIndex);
+            Assert.Null(item.Image);
+
+            // Set same.
+            item.ImageKey = value;
+            Assert.Equal(expected, item.ImageKey);
+            Assert.Equal(-1, item.ImageIndex);
+            Assert.Null(item.Image);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        public void ToolStripItem_ImageKey_SetWithOwner_GetReturnsExpected(string value, string expected)
+        {
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Owner = owner
+            };
+            int ownerLayoutCallCount = 0;
+            void ownerHandler(object sender, LayoutEventArgs e)
+            {
+                Assert.Same(owner, sender);
+                Assert.Same(item, e.AffectedComponent);
+                Assert.Equal("ImageKey", e.AffectedProperty);
+                ownerLayoutCallCount++;
+            };
+            owner.Layout += ownerHandler;
+
+            try
+            {
+                item.ImageKey = value;
+                Assert.Equal(expected, item.ImageKey);
+                Assert.Null(item.Image);
+                Assert.Equal(1, ownerLayoutCallCount);
+                Assert.False(owner.IsHandleCreated);
+
+                // Set same.
+                item.ImageKey = value;
+                Assert.Equal(expected, item.ImageKey);
+                Assert.Null(item.Image);
+                Assert.Equal(2, ownerLayoutCallCount);
+                Assert.False(owner.IsHandleCreated);
+            }
+            finally
+            {
+                owner.Layout -= ownerHandler;
+            }
+        }
+
+        [WinFormsTheory]
+        [InlineData(null, "", false)]
+        [InlineData("", "", false)]
+        [InlineData("Image", "Image", true)]
+        [InlineData("image", "image", true)]
+        [InlineData("OtherImage", "OtherImage", false)]
+        public void ToolStripItem_ImageKey_SetWithOwnerWithImageList_GetReturnsExpected(string value, string expected, bool expectedHasImage)
+        {
+            using var image = new Bitmap(10, 10);
+            using var imageList = new ImageList();
+            imageList.Images.Add("Image", image);
+            using var owner = new ToolStrip
+            {
+                ImageList = imageList
+            };
+            using var item = new SubToolStripItem
+            {
+                Owner = owner
+            };
+            int ownerLayoutCallCount = 0;
+            void ownerHandler(object sender, LayoutEventArgs e)
+            {
+                Assert.Same(owner, sender);
+                Assert.Same(item, e.AffectedComponent);
+                Assert.Equal("ImageKey", e.AffectedProperty);
+                ownerLayoutCallCount++;
+            };
+            owner.Layout += ownerHandler;
+
+            try
+            {
+                item.ImageKey = value;
+                Assert.Equal(expected, item.ImageKey);
+                Assert.Equal(-1, item.ImageIndex);
+                Assert.Equal(expectedHasImage, item.Image != null);
+                Assert.Equal(1, ownerLayoutCallCount);
+                Assert.False(owner.IsHandleCreated);
+
+                // Set same.
+                item.ImageKey = value;
+                Assert.Equal(expected, item.ImageKey);
+                Assert.Equal(-1, item.ImageIndex);
+                Assert.Equal(expectedHasImage, item.Image != null);
+                Assert.Equal(2, ownerLayoutCallCount);
+                Assert.False(owner.IsHandleCreated);
+            }
+            finally
+            {
+                owner.Layout -= ownerHandler;
+            }
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        public void ToolStripItem_ImageKey_SetWithOwnerWithHandle_GetReturnsExpected(string value, string expected)
+        {
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Owner = owner
+            };
+            Assert.NotEqual(IntPtr.Zero, owner.Handle);
+            int invalidatedCallCount = 0;
+            owner.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            owner.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            owner.HandleCreated += (sender, e) => createdCallCount++;
+            int ownerLayoutCallCount = 0;
+            void ownerHandler(object sender, LayoutEventArgs e)
+            {
+                Assert.Same(owner, sender);
+                Assert.Same(item, e.AffectedComponent);
+                Assert.Equal("ImageKey", e.AffectedProperty);
+                ownerLayoutCallCount++;
+            };
+            owner.Layout += ownerHandler;
+
+            try
+            {
+                item.ImageKey = value;
+                Assert.Equal(expected, item.ImageKey);
+                Assert.Null(item.Image);
+                Assert.Equal(1, ownerLayoutCallCount);
+                Assert.True(owner.IsHandleCreated);
+                Assert.Equal(2, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+
+                // Set same.
+                item.ImageKey = value;
+                Assert.Equal(expected, item.ImageKey);
+                Assert.Null(item.Image);
+                Assert.Equal(2, ownerLayoutCallCount);
+                Assert.True(owner.IsHandleCreated);
+                Assert.Equal(4, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+            }
+            finally
+            {
+                owner.Layout -= ownerHandler;
+            }
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        public void ToolStripItem_ImageKey_SetWithParent_GetReturnsExpected(string value, string expected)
+        {
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Parent = parent
+            };
+            int parentLayoutCallCount = 0;
+            void parentHandler(object sender, LayoutEventArgs e) => parentLayoutCallCount++;
+            parent.Layout += parentHandler;
+
+            try
+            {
+                item.ImageKey = value;
+                Assert.Equal(expected, item.ImageKey);
+                Assert.Null(item.Image);
+                Assert.Equal(0, parentLayoutCallCount);
+                Assert.False(parent.IsHandleCreated);
+
+                // Set same.
+                item.ImageKey = value;
+                Assert.Equal(expected, item.ImageKey);
+                Assert.Null(item.Image);
+                Assert.Equal(0, parentLayoutCallCount);
+                Assert.False(parent.IsHandleCreated);
+            }
+            finally
+            {
+                parent.Layout -= parentHandler;
+            }
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        public void ToolStripItem_ImageKey_SetWithParentWithImageList_GetReturnsExpected(string value, string expected)
+        {
+            using var image = new Bitmap(10, 10);
+            using var imageList = new ImageList();
+            imageList.Images.Add(image);
+            using var parent = new ToolStrip
+            {
+                ImageList = imageList
+            };
+            using var item = new SubToolStripItem
+            {
+                Parent = parent
+            };
+            int parentLayoutCallCount = 0;
+            void parentHandler(object sender, LayoutEventArgs e) => parentLayoutCallCount++;
+            parent.Layout += parentHandler;
+
+            try
+            {
+                item.ImageKey = value;
+                Assert.Equal(expected, item.ImageKey);
+                Assert.Null(item.Image);
+                Assert.Equal(0, parentLayoutCallCount);
+                Assert.False(parent.IsHandleCreated);
+
+                // Set same.
+                item.ImageKey = value;
+                Assert.Equal(expected, item.ImageKey);
+                Assert.Null(item.Image);
+                Assert.Equal(0, parentLayoutCallCount);
+                Assert.False(parent.IsHandleCreated);
+            }
+            finally
+            {
+                parent.Layout -= parentHandler;
+            }
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        public void ToolStripItem_ImageKey_SetWithParentWithHandle_GetReturnsExpected(string value, string expected)
+        {
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Parent = parent
+            };
+            Assert.NotEqual(IntPtr.Zero, parent.Handle);
+            int invalidatedCallCount = 0;
+            parent.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            parent.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            parent.HandleCreated += (sender, e) => createdCallCount++;
+            int parentLayoutCallCount = 0;
+            void parentHandler(object sender, LayoutEventArgs e) => parentLayoutCallCount++;
+            parent.Layout += parentHandler;
+
+            try
+            {
+                item.ImageKey = value;
+                Assert.Equal(expected, item.ImageKey);
+                Assert.Null(item.Image);
+                Assert.Equal(0, parentLayoutCallCount);
+                Assert.True(parent.IsHandleCreated);
+                Assert.Equal(0, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+
+                // Set same.
+                item.ImageKey = value;
+                Assert.Equal(expected, item.ImageKey);
+                Assert.Null(item.Image);
+                Assert.Equal(0, parentLayoutCallCount);
+                Assert.True(parent.IsHandleCreated);
+                Assert.Equal(0, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+            }
+            finally
+            {
+                parent.Layout -= parentHandler;
+            }
+        }
+
+        [WinFormsFact]
+        public void ToolStripItem_ImageKey_ResetValue_Success()
+        {
+            PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ToolStripItem))[nameof(ToolStripItem.ImageKey)];
+            using var item = new SubToolStripItem();
+            Assert.False(property.CanResetValue(item));
+
+            // Set null.
+            item.ImageKey = null;
+            Assert.Empty(item.ImageKey);
+            Assert.False(property.CanResetValue(item));
+            
+            // Set empty.
+            item.ImageKey = string.Empty;
+            Assert.Empty(item.ImageKey);
+            Assert.False(property.CanResetValue(item));
+
+            // Set custom
+            item.ImageKey = "text";
+            Assert.Equal("text", item.ImageKey);
+            Assert.False(property.CanResetValue(item));
+
+            property.ResetValue(item);
+            Assert.Equal("text", item.ImageKey);
+            Assert.False(property.CanResetValue(item));
+        }
+
+        [WinFormsFact]
+        public void ToolStripItem_ImageKey_ResetValueWithImage_Success()
+        {
+            PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ToolStripItem))[nameof(ToolStripItem.ImageKey)];
+            using var image = new Bitmap(10, 10);
+            using var item = new SubToolStripItem
+            {
+                Image = image
+            };
+            Assert.False(property.CanResetValue(item));
+
+            // Set null.
+            item.ImageKey = null;
+            Assert.Empty(item.ImageKey);
+            Assert.False(property.CanResetValue(item));
+            
+            // Set empty.
+            item.ImageKey = string.Empty;
+            Assert.Empty(item.ImageKey);
+            Assert.False(property.CanResetValue(item));
+
+            // Set custom
+            item.ImageKey = "text";
+            Assert.Equal("text", item.ImageKey);
+            Assert.False(property.CanResetValue(item));
+
+            property.ResetValue(item);
+            Assert.Equal("text", item.ImageKey);
+            Assert.False(property.CanResetValue(item));
+        }
+
+        [WinFormsFact]
+        public void ToolStripItem_ImageKey_ResetValueWithOwnerWithImageList_Success()
+        {
+            PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ToolStripItem))[nameof(ToolStripItem.ImageKey)];
+            using var image = new Bitmap(10, 10);
+            using var imageList = new ImageList();
+            imageList.Images.Add("Image", image);
+            using var owner = new ToolStrip
+            {
+                ImageList = imageList
+            };
+            using var item = new SubToolStripItem
+            {
+                Owner = owner
+            };
+            Assert.False(property.CanResetValue(item));
+
+            item.ImageKey = "Image";
+            Assert.Equal("Image", item.ImageKey);
+            Assert.False(property.CanResetValue(item));
+            
+            item.ImageKey = "NoSuchImage";
+            Assert.Equal("NoSuchImage", item.ImageKey);
+            Assert.False(property.CanResetValue(item));
+            
+            item.ImageKey = string.Empty;
+            Assert.Empty(item.ImageKey);
+            Assert.False(property.CanResetValue(item));
+
+            property.ResetValue(item);
+            Assert.Empty(item.ImageKey);
+            Assert.False(property.CanResetValue(item));
+        }
+
+        [WinFormsFact]
+        public void ToolStripItem_ImageKey_ShouldSerializeValue_Success()
+        {
+            PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ToolStripItem))[nameof(ToolStripItem.ImageKey)];
+            using var item = new SubToolStripItem();
+            Assert.False(property.ShouldSerializeValue(item));
+
+            // Set null.
+            item.ImageKey = null;
+            Assert.Empty(item.ImageKey);
+            Assert.False(property.ShouldSerializeValue(item));
+            
+            // Set empty.
+            item.ImageKey = string.Empty;
+            Assert.Empty(item.ImageKey);
+            Assert.False(property.ShouldSerializeValue(item));
+
+            // Set custom
+            item.ImageKey = "text";
+            Assert.Equal("text", item.ImageKey);
+            Assert.False(property.ShouldSerializeValue(item));
+
+            property.ResetValue(item);
+            Assert.Equal("text", item.ImageKey);
+            Assert.False(property.ShouldSerializeValue(item));
+        }
+
+        [WinFormsFact]
+        public void ToolStripItem_ImageKey_ShouldSerializeValueWithImage_Success()
+        {
+            PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ToolStripItem))[nameof(ToolStripItem.ImageKey)];
+            using var image = new Bitmap(10, 10);
+            using var item = new SubToolStripItem
+            {
+                Image = image
+            };
+            Assert.False(property.ShouldSerializeValue(item));
+
+            // Set null.
+            item.ImageKey = null;
+            Assert.Empty(item.ImageKey);
+            Assert.False(property.ShouldSerializeValue(item));
+            
+            // Set empty.
+            item.ImageKey = string.Empty;
+            Assert.Empty(item.ImageKey);
+            Assert.False(property.ShouldSerializeValue(item));
+
+            // Set custom
+            item.ImageKey = "text";
+            Assert.Equal("text", item.ImageKey);
+            Assert.False(property.ShouldSerializeValue(item));
+
+            property.ResetValue(item);
+            Assert.Equal("text", item.ImageKey);
+            Assert.False(property.ShouldSerializeValue(item));
+        }
+
+        [WinFormsFact]
+        public void ToolStripItem_ImageKey_ShouldSerializeValueWithOwnerWithImageList_Success()
+        {
+            PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ToolStripItem))[nameof(ToolStripItem.ImageKey)];
+            using var image = new Bitmap(10, 10);
+            using var imageList = new ImageList();
+            imageList.Images.Add("Image", image);
+            using var owner = new ToolStrip
+            {
+                ImageList = imageList
+            };
+            using var item = new SubToolStripItem
+            {
+                Owner = owner
+            };
+            Assert.False(property.ShouldSerializeValue(item));
+
+            item.ImageKey = "Image";
+            Assert.Equal("Image", item.ImageKey);
+            Assert.True(property.ShouldSerializeValue(item));
+            
+            item.ImageKey = "NoSuchImage";
+            Assert.Equal("NoSuchImage", item.ImageKey);
+            Assert.False(property.ShouldSerializeValue(item));
+            
+            item.ImageKey = string.Empty;
+            Assert.Empty(item.ImageKey);
+            Assert.False(property.ShouldSerializeValue(item));
+
+            property.ResetValue(item);
+            Assert.Empty(item.ImageKey);
+            Assert.False(property.ShouldSerializeValue(item));
+        }
+
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ToolStripItemImageScaling))]
         public void ToolStripItem_ImageScaling_Set_GetReturnsExpected(ToolStripItemImageScaling value)
         {
-            var item = new SubToolStripItem
+            using var item = new SubToolStripItem
             {
                 ImageScaling = value
             };
@@ -1428,31 +5391,183 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, item.ImageScaling);
         }
 
-        [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ToolStripItemImageScaling))]
-        public void ToolStripItem_ImageScaling_SetWithOwner_GetReturnsExpected(ToolStripItemImageScaling value)
+        [WinFormsTheory]
+        [InlineData(ToolStripItemImageScaling.None, 1)]
+        [InlineData(ToolStripItemImageScaling.SizeToFit, 0)]
+        public void ToolStripItem_ImageScaling_SetWithOwner_GetReturnsExpected(ToolStripItemImageScaling value, int expectedParentLayoutCallCount)
         {
-            var owner = new ToolStrip();
-            var item = new SubToolStripItem();
-            owner.Items.Add(item);
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Owner = owner
+            };
+            int ownerLayoutCallCount = 0;
+            void ownerHandler(object sender, LayoutEventArgs e)
+            {
+                Assert.Same(owner, sender);
+                Assert.Same(item, e.AffectedComponent);
+                Assert.Equal("ImageScaling", e.AffectedProperty);
+                ownerLayoutCallCount++;
+            };
+            owner.Layout += ownerHandler;
 
-            item.ImageScaling = value;
-            Assert.Equal(value, item.ImageScaling);
+            try
+            {
+                item.ImageScaling = value;
+                Assert.Equal(value, item.ImageScaling);
+                Assert.Equal(expectedParentLayoutCallCount, ownerLayoutCallCount);
+                Assert.False(owner.IsHandleCreated);
 
-            // Set same.
-            item.ImageScaling = value;
-            Assert.Equal(value, item.ImageScaling);
+                // Set same.
+                item.ImageScaling = value;
+                Assert.Equal(value, item.ImageScaling);
+                Assert.Equal(expectedParentLayoutCallCount, ownerLayoutCallCount);
+                Assert.False(owner.IsHandleCreated);
+            }
+            finally
+            {
+                owner.Layout -= ownerHandler;
+            }
         }
 
-        [Theory]
+        [WinFormsTheory]
+        [InlineData(ToolStripItemImageScaling.None, 1)]
+        [InlineData(ToolStripItemImageScaling.SizeToFit, 0)]
+        public void ToolStripItem_ImageScaling_SetWithOwnerWithHandle_GetReturnsExpected(ToolStripItemImageScaling value, int expectedParentLayoutCallCount)
+        {
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Owner = owner
+            };
+            Assert.NotEqual(IntPtr.Zero, owner.Handle);
+            int invalidatedCallCount = 0;
+            owner.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            owner.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            owner.HandleCreated += (sender, e) => createdCallCount++;
+            int ownerLayoutCallCount = 0;
+            void ownerHandler(object sender, LayoutEventArgs e)
+            {
+                Assert.Same(owner, sender);
+                Assert.Same(item, e.AffectedComponent);
+                Assert.Equal("ImageScaling", e.AffectedProperty);
+                ownerLayoutCallCount++;
+            };
+            owner.Layout += ownerHandler;
+
+            try
+            {
+                item.ImageScaling = value;
+                Assert.Equal(value, item.ImageScaling);
+                Assert.Equal(expectedParentLayoutCallCount, ownerLayoutCallCount);
+                Assert.True(owner.IsHandleCreated);
+                Assert.Equal(expectedParentLayoutCallCount * 2, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+
+                // Set same.
+                item.ImageScaling = value;
+                Assert.Equal(value, item.ImageScaling);
+                Assert.Equal(expectedParentLayoutCallCount, ownerLayoutCallCount);
+                Assert.True(owner.IsHandleCreated);
+                Assert.Equal(expectedParentLayoutCallCount * 2, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+            }
+            finally
+            {
+                owner.Layout -= ownerHandler;
+            }
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ToolStripItemImageScaling))]
+        public void ToolStripItem_ImageScaling_SetWithParent_GetReturnsExpected(ToolStripItemImageScaling value)
+        {
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Parent = parent
+            };
+            int parentLayoutCallCount = 0;
+            void parentHandler(object sender, LayoutEventArgs e) => parentLayoutCallCount++;
+            parent.Layout += parentHandler;
+
+            try
+            {
+                item.ImageScaling = value;
+                Assert.Equal(value, item.ImageScaling);
+                Assert.Equal(0, parentLayoutCallCount);
+                Assert.False(parent.IsHandleCreated);
+
+                // Set same.
+                item.ImageScaling = value;
+                Assert.Equal(value, item.ImageScaling);
+                Assert.Equal(0, parentLayoutCallCount);
+                Assert.False(parent.IsHandleCreated);
+            }
+            finally
+            {
+                parent.Layout -= parentHandler;
+            }
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ToolStripItemImageScaling))]
+        public void ToolStripItem_ImageScaling_SetWithParentWithHandle_GetReturnsExpected(ToolStripItemImageScaling value)
+        {
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Parent = parent
+            };
+            Assert.NotEqual(IntPtr.Zero, parent.Handle);
+            int invalidatedCallCount = 0;
+            parent.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            parent.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            parent.HandleCreated += (sender, e) => createdCallCount++;
+            int parentLayoutCallCount = 0;
+            void parentHandler(object sender, LayoutEventArgs e) => parentLayoutCallCount++;
+            parent.Layout += parentHandler;
+
+            try
+            {
+                item.ImageScaling = value;
+                Assert.Equal(value, item.ImageScaling);
+                Assert.Equal(0, parentLayoutCallCount);
+                Assert.True(parent.IsHandleCreated);
+                Assert.Equal(0, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+
+                // Set same.
+                item.ImageScaling = value;
+                Assert.Equal(value, item.ImageScaling);
+                Assert.Equal(0, parentLayoutCallCount);
+                Assert.True(parent.IsHandleCreated);
+                Assert.Equal(0, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+            }
+            finally
+            {
+                parent.Layout -= parentHandler;
+            }
+        }
+
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ToolStripItemImageScaling))]
         public void ToolStripItem_ImageScaling_SetInvalid_ThrowsInvalidEnumArgumentException(ToolStripItemImageScaling value)
         {
-            var item = new SubToolStripItem();
+            using var item = new SubToolStripItem();
             Assert.Throws<InvalidEnumArgumentException>("value", () => item.ImageScaling = value);
         }
 
-        public static IEnumerable<object[]> ImageTransparentColor_TestData()
+        public static IEnumerable<object[]> ImageTransparentColor_Set_TestData()
         {
             foreach (Color color in new Color[] { Color.Empty, Color.Red })
             {
@@ -1463,11 +5578,11 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [Theory]
-        [MemberData(nameof(ImageTransparentColor_TestData))]
+        [WinFormsTheory]
+        [MemberData(nameof(ImageTransparentColor_Set_TestData))]
         public void ToolStripItem_ImageTransparentColor_Set_GetReturnsExpected(Image image, Color value)
         {
-            var item = new SubToolStripItem
+            using var item = new SubToolStripItem
             {
                 Image = image
             };
@@ -1480,12 +5595,97 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, item.ImageTransparentColor);
         }
 
-        [Theory]
-        [MemberData(nameof(ImageTransparentColor_TestData))]
+        [WinFormsTheory]
+        [MemberData(nameof(ImageTransparentColor_Set_TestData))]
+        public void ToolStripItem_ImageTransparentColor_SetWithCustomOldValue_GetReturnsExpected(Image image, Color value)
+        {
+            using var item = new SubToolStripItem
+            {
+                Image = image,
+                ImageTransparentColor = Color.Red
+            };
+
+            item.ImageTransparentColor = value;
+            Assert.Equal(value, item.ImageTransparentColor);
+
+            // Set same.
+            item.ImageTransparentColor = value;
+            Assert.Equal(value, item.ImageTransparentColor);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(ImageTransparentColor_Set_TestData))]
+        public void ToolStripItem_ImageTransparentColor_SetWithOwner_GetReturnsExpected(Image image, Color value)
+        {
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Owner = owner,
+                Image = image
+            };
+
+            item.ImageTransparentColor = value;
+            Assert.Equal(value, item.ImageTransparentColor);
+            Assert.False(owner.IsHandleCreated);
+
+            // Set same.
+            item.ImageTransparentColor = value;
+            Assert.Equal(value, item.ImageTransparentColor);
+            Assert.False(owner.IsHandleCreated);
+        }
+        
+        public static IEnumerable<object[]> ImageTransparentColor_SetWithOwnerWithHandle_TestData()
+        {
+            yield return new object[] { null, Color.Empty, 0 };
+            yield return new object[] { null, Color.Red, 0 };
+            yield return new object[] { new Bitmap(10, 10), Color.Empty, 0 };
+            yield return new object[] { new Bitmap(10, 10), Color.Red, 1 };
+            yield return new object[] { Image.FromFile(Path.Combine("bitmaps", "nature24bits.gif")), Color.Empty, 0 };
+            yield return new object[] { Image.FromFile(Path.Combine("bitmaps", "nature24bits.gif")), Color.Red, 1 };
+            yield return new object[] { Image.FromFile(Path.Combine("bitmaps", "10x16_one_entry_32bit.ico")), Color.Empty, 0 };
+            yield return new object[] { Image.FromFile(Path.Combine("bitmaps", "10x16_one_entry_32bit.ico")), Color.Red, 1 };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(ImageTransparentColor_SetWithOwnerWithHandle_TestData))]
+        public void ToolStripItem_ImageTransparentColor_SetWithOwnerWithHandle_GetReturnsExpected(Image image, Color value, int expectedInvalidatedCallCount)
+        {
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Owner = owner,
+                Image = image
+            };
+            Assert.NotEqual(IntPtr.Zero, owner.Handle);
+            int invalidatedCallCount = 0;
+            owner.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            owner.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            owner.HandleCreated += (sender, e) => createdCallCount++;
+
+            item.ImageTransparentColor = value;
+            Assert.Equal(value, item.ImageTransparentColor);
+            Assert.True(owner.IsHandleCreated);
+            Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set same.
+            item.ImageTransparentColor = value;
+            Assert.Equal(value, item.ImageTransparentColor);
+            Assert.True(owner.IsHandleCreated);
+            Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(ImageTransparentColor_Set_TestData))]
         public void ToolStripItem_ImageTransparentColor_SetWithParent_GetReturnsExpected(Image image, Color value)
         {
-            var parent = new ToolStrip();
-            var item = new SubToolStripItem
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
             {
                 Parent = parent,
                 Image = image
@@ -1493,89 +5693,185 @@ namespace System.Windows.Forms.Tests
 
             item.ImageTransparentColor = value;
             Assert.Equal(value, item.ImageTransparentColor);
+            Assert.False(parent.IsHandleCreated);
 
             // Set same.
             item.ImageTransparentColor = value;
             Assert.Equal(value, item.ImageTransparentColor);
+            Assert.False(parent.IsHandleCreated);
+        }
+        
+        public static IEnumerable<object[]> ImageTransparentColor_SetWithParentWithHandle_TestData()
+        {
+            yield return new object[] { null, Color.Empty, 0 };
+            yield return new object[] { null, Color.Red, 1 };
+            yield return new object[] { new Bitmap(10, 10), Color.Empty, 0 };
+            yield return new object[] { new Bitmap(10, 10), Color.Red, 1 };
+            yield return new object[] { Image.FromFile(Path.Combine("bitmaps", "nature24bits.gif")), Color.Empty, 0 };
+            yield return new object[] { Image.FromFile(Path.Combine("bitmaps", "nature24bits.gif")), Color.Red, 1 };
+            yield return new object[] { Image.FromFile(Path.Combine("bitmaps", "10x16_one_entry_32bit.ico")), Color.Empty, 0 };
+            yield return new object[] { Image.FromFile(Path.Combine("bitmaps", "10x16_one_entry_32bit.ico")), Color.Red, 1 };
         }
 
-        public static IEnumerable<object[]> IsOnDropDown_TestData()
+        [WinFormsTheory]
+        [MemberData(nameof(ImageTransparentColor_SetWithParentWithHandle_TestData))]
+        public void ToolStripItem_ImageTransparentColor_SetWithParentWithHandle_GetReturnsExpected(Image image, Color value, int expectedParentInvalidatedCallCount)
         {
-            yield return new object[] { new SubToolStripItem(), false };
-            yield return new object[] { new SubToolStripItem("text", null, null), false };
-            yield return new object[] { new SubToolStripItem("text", null, null, "name"), false };
-
-            var toolStrip = new ToolStrip();
-            var toolStripItem = new SubToolStripItem();
-            toolStrip.Items.Add(toolStripItem);
-            yield return new object[] { toolStripItem, false };
-
-            var toolStripDropDown = new ToolStripDropDown();
-            var toolStripDropDownItem = new SubToolStripItem();
-            toolStripDropDown.Items.Add(toolStripDropDownItem);
-            yield return new object[] { toolStripDropDownItem, true };
-
-            var toolStripParentItem = new SubToolStripItem
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
             {
-                Parent = toolStrip
+                Parent = parent,
+                Image = image
             };
-            yield return new object[] { toolStripParentItem, false };
+            Assert.NotEqual(IntPtr.Zero, parent.Handle);
+            int invalidatedCallCount = 0;
+            parent.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            parent.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            parent.HandleCreated += (sender, e) => createdCallCount++;
 
-            var toolStripDropDownParentItem = new SubToolStripItem
+            item.ImageTransparentColor = value;
+            Assert.Equal(value, item.ImageTransparentColor);
+            Assert.True(parent.IsHandleCreated);
+            Assert.Equal(expectedParentInvalidatedCallCount, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set same.
+            item.ImageTransparentColor = value;
+            Assert.Equal(value, item.ImageTransparentColor);
+            Assert.True(parent.IsHandleCreated);
+            Assert.Equal(expectedParentInvalidatedCallCount, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsFact]
+        public void ToolStripItem_ImageTransparentColor_ResetValue_Success()
+        {
+            PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ToolStripItem))[nameof(ToolStripItem.ImageTransparentColor)];
+            using var item = new SubToolStripItem();
+            Assert.False(property.CanResetValue(item));
+
+            item.ImageTransparentColor = Color.Red;
+            Assert.Equal(Color.Red, item.ImageTransparentColor);
+            Assert.True(property.CanResetValue(item));
+
+            property.ResetValue(item);
+            Assert.Equal(Color.Empty, item.ImageTransparentColor);
+            Assert.False(property.CanResetValue(item));
+        }
+
+        [WinFormsFact]
+        public void ToolStripItem_ImageTransparentColor_ShouldSerializeValue_Success()
+        {
+            PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ToolStripItem))[nameof(ToolStripItem.ImageTransparentColor)];
+            using var item = new SubToolStripItem();
+            Assert.False(property.ShouldSerializeValue(item));
+
+            item.ImageTransparentColor = Color.Red;
+            Assert.Equal(Color.Red, item.ImageTransparentColor);
+            Assert.True(property.ShouldSerializeValue(item));
+
+            property.ResetValue(item);
+            Assert.Equal(Color.Empty, item.ImageTransparentColor);
+            Assert.False(property.ShouldSerializeValue(item));
+        }
+
+        [WinFormsFact]
+        public void ToolStripItem_IsOnDropDown_GetWithOwner_ReturnsFalse()
+        {
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
             {
-                Parent = toolStripDropDown
+                Owner = owner
             };
-            yield return new object[] { toolStripDropDownParentItem, true };
+            Assert.False(item.IsOnDropDown);
         }
 
-        [Theory]
-        [MemberData(nameof(IsOnDropDown_TestData))]
-        public void ToolStripItem_IsOnDropDown_Get_ReturnsExpected(ToolStripItem item, bool expected)
+        [WinFormsFact]
+        public void ToolStripItem_IsOnDropDown_GetWithDropDownOwner_ReturnsTrue()
         {
-            Assert.Equal(expected, item.IsOnDropDown);
+            using var owner = new ToolStripDropDown();
+            using var item = new SubToolStripItem
+            {
+                Owner = owner
+            };
+            Assert.True(item.IsOnDropDown);
         }
 
-        public static IEnumerable<object[]> IsOnOverflow_TestData()
+        [WinFormsFact]
+        public void ToolStripItem_IsOnDropDown_GetWithOverflowingOwner_ReturnsTrue()
         {
-            yield return new object[] { new SubToolStripItem(), false };
-            yield return new object[] { new SubToolStripItem("text", null, null), false };
-            yield return new object[] { new SubToolStripItem("text", null, null, "name"), false };
-
-            var toolStrip = new ToolStrip();
-            var toolStripItem = new SubToolStripItem();
-            toolStrip.Items.Add(toolStripItem);
-            yield return new object[] { toolStripItem, false };
-
-            var toolStripOverflowParent = new SubToolStripItem();
-            var toolStripOverflow = new ToolStripOverflow(toolStripOverflowParent);
-            yield return new object[] { toolStripOverflowParent, false };
-
-            var overflowingToolStrip = new ToolStrip
+            using var owner = new ToolStrip
             {
                 Size = new Size(1, 2)
             };
-            var overflowingToolStripItem = new SubToolStripItem();
-            overflowingToolStrip.Items.Add(overflowingToolStripItem);
-            overflowingToolStrip.LayoutEngine.Layout(overflowingToolStrip, null);
-            yield return new object[] { overflowingToolStripItem, true };
-
-            var noLayoutOverflowingToolStripItem = new SubToolStripItem();
-            overflowingToolStrip.Items.Add(noLayoutOverflowingToolStripItem);
-            yield return new object[] { noLayoutOverflowingToolStripItem, true };
+            using var item = new SubToolStripItem
+            {
+                Owner = owner
+            };
+            Assert.False(item.IsOnDropDown);
+            owner.LayoutEngine.Layout(owner, null);
+            Assert.True(item.IsOnDropDown);
         }
 
-        [Theory]
-        [MemberData(nameof(IsOnOverflow_TestData))]
-        public void ToolStripItem_IsOnOverflow_Get_ReturnsExpected(ToolStripItem item, bool expected)
+        [WinFormsFact]
+        public void ToolStripItem_IsOnDropDown_GetWithParent_ReturnsFalse()
         {
-            Assert.Equal(expected, item.IsOnOverflow);
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Parent = parent
+            };
+            Assert.False(item.IsOnDropDown);
         }
 
-        [Theory]
+        [WinFormsFact]
+        public void ToolStripItem_IsOnDropDown_GetWithDropDownParent_ReturnsTrue()
+        {
+            using var parent = new ToolStripDropDown();
+            using var item = new SubToolStripItem
+            {
+                Parent = parent
+            };
+            Assert.True(item.IsOnDropDown);
+        }
+
+        [WinFormsFact]
+        public void ToolStripItem_IsOnDropDown_GetWithOverflowingParent_ReturnsFalse()
+        {
+            using var parent = new ToolStrip
+            {
+                Size = new Size(1, 2)
+            };
+            using var item = new SubToolStripItem
+            {
+                Parent = parent
+            };
+            Assert.False(item.IsOnDropDown);
+            parent.LayoutEngine.Layout(parent, null);
+            Assert.False(item.IsOnDropDown);
+        }
+
+        [WinFormsFact]
+        public void ToolStripItem_Margin_GetWithDefaultMargin_ReturnsExpected()
+        {
+            using var item = new CustomDefaultMarginToolStripItem();
+            Assert.Equal(new Padding(1, 2, 3, 4), item.Margin);
+        }
+
+        private class CustomDefaultMarginToolStripItem : ToolStripItem
+        {
+            protected internal override Padding DefaultMargin => new Padding(1, 2, 3, 4);
+        }
+
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetPaddingTheoryData))]
         public void ToolStripItem_Margin_Set_GetReturnsExpected(Padding value)
         {
-            var item = new SubToolStripItem
+            using var item = new SubToolStripItem
             {
                 Margin = value
             };
@@ -1586,11 +5882,221 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, item.Margin);
         }
 
-        [Theory]
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetPaddingTheoryData))]
+        public void ToolStripItem_Margin_SetWithOwner_GetReturnsExpected(Padding value)
+        {
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Owner = owner
+            };
+            int ownerLayoutCallCount = 0;
+            void ownerHandler(object sender, LayoutEventArgs e)
+            {
+                Assert.Same(owner, sender);
+                Assert.Same(item, e.AffectedComponent);
+                Assert.Equal("Margin", e.AffectedProperty);
+                ownerLayoutCallCount++;
+            };
+            owner.Layout += ownerHandler;
+
+            try
+            {
+                item.Margin = value;
+                Assert.Equal(value, item.Margin);
+                Assert.Equal(1, ownerLayoutCallCount);
+                Assert.False(owner.IsHandleCreated);
+
+                // Set same.
+                item.Margin = value;
+                Assert.Equal(value, item.Margin);
+                Assert.Equal(1, ownerLayoutCallCount);
+                Assert.False(owner.IsHandleCreated);
+            }
+            finally
+            {
+                owner.Layout -= ownerHandler;
+            }
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetPaddingTheoryData))]
+        public void ToolStripItem_Margin_SetWithOwnerWithHandle_GetReturnsExpected(Padding value)
+        {
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Owner = owner
+            };
+            Assert.NotEqual(IntPtr.Zero, owner.Handle);
+            int invalidatedCallCount = 0;
+            owner.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            owner.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            owner.HandleCreated += (sender, e) => createdCallCount++;
+            int ownerLayoutCallCount = 0;
+            void ownerHandler(object sender, LayoutEventArgs e)
+            {
+                Assert.Same(owner, sender);
+                Assert.Same(item, e.AffectedComponent);
+                Assert.Equal("Margin", e.AffectedProperty);
+                ownerLayoutCallCount++;
+            };
+            owner.Layout += ownerHandler;
+
+            try
+            {
+                item.Margin = value;
+                Assert.Equal(value, item.Margin);
+                Assert.Equal(1, ownerLayoutCallCount);
+                Assert.True(owner.IsHandleCreated);
+                Assert.Equal(1, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+
+                // Set same.
+                item.Margin = value;
+                Assert.Equal(value, item.Margin);
+                Assert.Equal(1, ownerLayoutCallCount);
+                Assert.True(owner.IsHandleCreated);
+                Assert.Equal(1, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+            }
+            finally
+            {
+                owner.Layout -= ownerHandler;
+            }
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetPaddingTheoryData))]
+        public void ToolStripItem_Margin_SetWithParent_GetReturnsExpected(Padding value)
+        {
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Parent = parent
+            };
+            int parentLayoutCallCount = 0;
+            void parentHandler(object sender, LayoutEventArgs e)
+            {
+                Assert.Same(parent, sender);
+                Assert.Same(item, e.AffectedComponent);
+                Assert.Equal("Margin", e.AffectedProperty);
+                parentLayoutCallCount++;
+            };
+            parent.Layout += parentHandler;
+
+            try
+            {
+                item.Margin = value;
+                Assert.Equal(value, item.Margin);
+                Assert.Equal(1, parentLayoutCallCount);
+                Assert.False(parent.IsHandleCreated);
+
+                // Set same.
+                item.Margin = value;
+                Assert.Equal(value, item.Margin);
+                Assert.Equal(1, parentLayoutCallCount);
+                Assert.False(parent.IsHandleCreated);
+            }
+            finally
+            {
+                parent.Layout -= parentHandler;
+            }
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetPaddingTheoryData))]
+        public void ToolStripItem_Margin_SetWithParentWithHandle_GetReturnsExpected(Padding value)
+        {
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Parent = parent
+            };
+            Assert.NotEqual(IntPtr.Zero, parent.Handle);
+            int invalidatedCallCount = 0;
+            parent.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            parent.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            parent.HandleCreated += (sender, e) => createdCallCount++;
+            int parentLayoutCallCount = 0;
+            void parentHandler(object sender, LayoutEventArgs e)
+            {
+                Assert.Same(parent, sender);
+                Assert.Same(item, e.AffectedComponent);
+                Assert.Equal("Margin", e.AffectedProperty);
+                parentLayoutCallCount++;
+            };
+            parent.Layout += parentHandler;
+
+            try
+            {
+                item.Margin = value;
+                Assert.Equal(value, item.Margin);
+                Assert.Equal(1, parentLayoutCallCount);
+                Assert.True(parent.IsHandleCreated);
+                Assert.Equal(1, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+
+                // Set same.
+                item.Margin = value;
+                Assert.Equal(value, item.Margin);
+                Assert.Equal(1, parentLayoutCallCount);
+                Assert.True(parent.IsHandleCreated);
+                Assert.Equal(1, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+            }
+            finally
+            {
+                parent.Layout -= parentHandler;
+            }
+        }
+
+        [WinFormsFact]
+        public void ToolStripItem_Margin_ResetValue_Success()
+        {
+            PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ToolStripItem))[nameof(ToolStripItem.Margin)];
+            using var item = new SubToolStripItem();
+            Assert.False(property.CanResetValue(item));
+
+            item.Margin = new Padding(1, 2, 3, 4);
+            Assert.Equal(new Padding(1, 2, 3, 4), item.Margin);
+            Assert.True(property.CanResetValue(item));
+
+            property.ResetValue(item);
+            Assert.Equal(new Padding(0, 1, 0, 2), item.Margin);
+            Assert.False(property.CanResetValue(item));
+        }
+
+        [WinFormsFact]
+        public void ToolStripItem_Margin_ShouldSerializeValue_Success()
+        {
+            PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ToolStripItem))[nameof(ToolStripItem.Margin)];
+            using var item = new SubToolStripItem();
+            Assert.False(property.ShouldSerializeValue(item));
+
+            item.Margin = new Padding(1, 2, 3, 4);
+            Assert.Equal(new Padding(1, 2, 3, 4), item.Margin);
+            Assert.True(property.ShouldSerializeValue(item));
+
+            property.ResetValue(item);
+            Assert.Equal(new Padding(0, 1, 0, 2), item.Margin);
+            Assert.False(property.ShouldSerializeValue(item));
+        }
+
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(MergeAction))]
         public void ToolStripItem_MergeAction_Set_GetReturnsExpected(MergeAction value)
         {
-            var item = new SubToolStripItem
+            using var item = new SubToolStripItem
             {
                 MergeAction = value
             };
@@ -1601,19 +6107,19 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, item.MergeAction);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(MergeAction))]
         public void ToolStripItem_MergeAction_SetInvalid_ThrowsInvalidEnumArgumentException(MergeAction value)
         {
-            var item = new SubToolStripItem();
+            using var item = new SubToolStripItem();
             Assert.Throws<InvalidEnumArgumentException>("value", () => item.MergeAction = value);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetIntTheoryData))]
         public void ToolStripItem_MergeIndex_Set_GetReturnsExpected(int value)
         {
-            var item = new SubToolStripItem
+            using var item = new SubToolStripItem
             {
                 MergeIndex = value
             };
@@ -1624,11 +6130,34 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, item.MergeIndex);
         }
 
-        [Theory]
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        public void ToolStripItem_Name_GetWithSite_ReturnsExpected(string siteName, string expected)
+        {
+            var mockSite = new Mock<ISite>(MockBehavior.Strict);
+            mockSite
+                .Setup(s => s.Name)
+                .Returns(siteName);
+            mockSite
+                .Setup(s => s.Container)
+                .Returns((IContainer)null);
+            using var item = new SubToolStripItem
+            {
+                Site = mockSite.Object
+            };
+            Assert.Equal(expected, item.Name);
+            mockSite.Verify(s => s.Name, Times.Once());
+
+            // Get again.
+            Assert.Equal(expected, item.Name);
+            mockSite.Verify(s => s.Name, Times.Exactly(2));
+        }
+
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetStringTheoryData))]
         public void ToolStripItem_Name_Set_GetReturnsExpected(string value)
         {
-            var item = new SubToolStripItem
+            using var item = new SubToolStripItem
             {
                 Name = value
             };
@@ -1639,162 +6168,525 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, item.Name);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetStringTheoryData))]
-        public void ToolStripItem_Name_SetInDesignMode_Nop(string value)
+        public void ToolStripItem_Name_SetDesignMode_Nop(string value)
         {
-            var mockSite = new Mock<ISite>();
-            mockSite.Setup(s => s.DesignMode).Returns(true);
-            var item = new SubToolStripItem
+            var mockSite = new Mock<ISite>(MockBehavior.Strict);
+            mockSite
+                .Setup(s => s.Name)
+                .Returns("name");
+            mockSite
+                .Setup(s => s.DesignMode)
+                .Returns(true);
+            mockSite
+                .Setup(s => s.Container)
+                .Returns((IContainer)null);
+            using var item = new SubToolStripItem
             {
                 Site = mockSite.Object
             };
 
             item.Name = value;
-            Assert.Empty(item.Name);
+            Assert.Equal("name", item.Name);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ToolStripItemOverflow))]
         public void ToolStripItem_Overflow_Set_GetReturnsExpected(ToolStripItemOverflow value)
         {
-            var item = new SubToolStripItem
+            using var item = new SubToolStripItem
             {
                 Overflow = value
             };
             Assert.Equal(value, item.Overflow);
+            Assert.False(item.IsOnOverflow);
 
             // Set same.
             item.Overflow = value;
             Assert.Equal(value, item.Overflow);
+            Assert.False(item.IsOnOverflow);
         }
 
-        [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ToolStripItemOverflow))]
-        public void ToolStripItem_Overflow_SetWithOwner_GetReturnsExpected(ToolStripItemOverflow value)
+        [WinFormsTheory]
+        [InlineData(ToolStripItemOverflow.Never, ToolStripItemPlacement.Main, 1)]
+        [InlineData(ToolStripItemOverflow.Always, ToolStripItemPlacement.Overflow, 1)]
+        [InlineData(ToolStripItemOverflow.AsNeeded, ToolStripItemPlacement.None, 0)]
+        public void ToolStripItem_Overflow_SetWithOwner_GetReturnsExpected(ToolStripItemOverflow value, ToolStripItemPlacement expectedPlacement, int expectedOwnerLayoutCallCount)
         {
-            var owner = new ToolStrip();
-            var item = new SubToolStripItem();
-            owner.Items.Add(item);
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Owner = owner
+            };
+            int ownerLayoutCallCount = 0;
+            void ownerHandler(object sender, LayoutEventArgs e)
+            {
+                Assert.Same(owner, sender);
+                Assert.Same(owner, e.AffectedComponent);
+                Assert.Equal("Overflow", e.AffectedProperty);
+                ownerLayoutCallCount++;
+            };
+            owner.Layout += ownerHandler;
 
-            item.Overflow = value;
-            Assert.Equal(value, item.Overflow);
+            try
+            {
+                item.Overflow = value;
+                Assert.Equal(value, item.Overflow);
+                Assert.Equal(value == ToolStripItemOverflow.Always, item.IsOnOverflow);
+                Assert.Equal(expectedPlacement, item.Placement);
+                Assert.Equal(expectedOwnerLayoutCallCount, ownerLayoutCallCount);
+                Assert.False(owner.IsHandleCreated);
 
-            // Set same.
-            item.Overflow = value;
-            Assert.Equal(value, item.Overflow);
+                // Set same.
+                item.Overflow = value;
+                Assert.Equal(value, item.Overflow);
+                Assert.Equal(value == ToolStripItemOverflow.Always, item.IsOnOverflow);
+                Assert.Equal(expectedPlacement, item.Placement);
+                Assert.Equal(expectedOwnerLayoutCallCount, ownerLayoutCallCount);
+                Assert.False(owner.IsHandleCreated);
+            }
+            finally
+            {
+                owner.Layout -= ownerHandler;
+            }
         }
 
-        [Theory]
+        [WinFormsTheory]
+        [InlineData(ToolStripItemOverflow.Never, ToolStripItemPlacement.Main, 1)]
+        [InlineData(ToolStripItemOverflow.Always, ToolStripItemPlacement.Overflow, 1)]
+        [InlineData(ToolStripItemOverflow.AsNeeded, ToolStripItemPlacement.None, 0)]
+        public void ToolStripItem_Overflow_SetWithOwnerWithHandle_GetReturnsExpected(ToolStripItemOverflow value, ToolStripItemPlacement expectedPlacement, int expectedOwnerLayoutCallCount)
+        {
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Owner = owner
+            };
+            Assert.NotEqual(IntPtr.Zero, owner.Handle);
+            int invalidatedCallCount = 0;
+            owner.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            owner.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            owner.HandleCreated += (sender, e) => createdCallCount++;
+            int ownerLayoutCallCount = 0;
+            void ownerHandler(object sender, LayoutEventArgs e)
+            {
+                Assert.Same(owner, sender);
+                Assert.Same(owner, e.AffectedComponent);
+                Assert.Equal("Overflow", e.AffectedProperty);
+                ownerLayoutCallCount++;
+            };
+            owner.Layout += ownerHandler;
+
+            try
+            {
+                item.Overflow = value;
+                Assert.Equal(value, item.Overflow);
+                Assert.Equal(value == ToolStripItemOverflow.Always, item.IsOnOverflow);
+                Assert.Equal(expectedPlacement, item.Placement);
+                Assert.Equal(expectedOwnerLayoutCallCount, ownerLayoutCallCount);
+                Assert.True(owner.IsHandleCreated);
+                Assert.Equal(expectedOwnerLayoutCallCount, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+
+                // Set same.
+                item.Overflow = value;
+                Assert.Equal(value, item.Overflow);
+                Assert.Equal(value == ToolStripItemOverflow.Always, item.IsOnOverflow);
+                Assert.Equal(expectedPlacement, item.Placement);
+                Assert.Equal(expectedOwnerLayoutCallCount, ownerLayoutCallCount);
+                Assert.True(owner.IsHandleCreated);
+                Assert.Equal(expectedOwnerLayoutCallCount, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+            }
+            finally
+            {
+                owner.Layout -= ownerHandler;
+            }
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ToolStripItemOverflow))]
+        public void ToolStripItem_Overflow_SetWithParent_GetReturnsExpected(ToolStripItemOverflow value)
+        {
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Parent = parent
+            };
+            int parentLayoutCallCount = 0;
+            void parentHandler(object sender, LayoutEventArgs e) => parentLayoutCallCount++;
+            parent.Layout += parentHandler;
+
+            try
+            {
+                item.Overflow = value;
+                Assert.Equal(value, item.Overflow);
+                Assert.False(item.IsOnOverflow);
+                Assert.Equal(ToolStripItemPlacement.None, item.Placement);
+                Assert.Equal(0, parentLayoutCallCount);
+                Assert.False(parent.IsHandleCreated);
+
+                // Set same.
+                item.Overflow = value;
+                Assert.Equal(value, item.Overflow);
+                Assert.False(item.IsOnOverflow);
+                Assert.Equal(ToolStripItemPlacement.None, item.Placement);
+                Assert.Equal(0, parentLayoutCallCount);
+                Assert.False(parent.IsHandleCreated);
+            }
+            finally
+            {
+                parent.Layout -= parentHandler;
+            }
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ToolStripItemOverflow))]
+        public void ToolStripItem_Overflow_SetWithParentWithHandle_GetReturnsExpected(ToolStripItemOverflow value)
+        {
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Parent = parent
+            };
+            Assert.NotEqual(IntPtr.Zero, parent.Handle);
+            int invalidatedCallCount = 0;
+            parent.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            parent.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            parent.HandleCreated += (sender, e) => createdCallCount++;
+            int parentLayoutCallCount = 0;
+            void parentHandler(object sender, LayoutEventArgs e) => parentLayoutCallCount++;
+            parent.Layout += parentHandler;
+
+            try
+            {
+                item.Overflow = value;
+                Assert.Equal(value, item.Overflow);
+                Assert.False(item.IsOnOverflow);
+                Assert.Equal(ToolStripItemPlacement.None, item.Placement);
+                Assert.Equal(0, parentLayoutCallCount);
+                Assert.True(parent.IsHandleCreated);
+                Assert.Equal(0, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+
+                // Set same.
+                item.Overflow = value;
+                Assert.Equal(value, item.Overflow);
+                Assert.False(item.IsOnOverflow);
+                Assert.Equal(ToolStripItemPlacement.None, item.Placement);
+                Assert.Equal(0, parentLayoutCallCount);
+                Assert.True(parent.IsHandleCreated);
+                Assert.Equal(0, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+            }
+            finally
+            {
+                parent.Layout -= parentHandler;
+            }
+        }
+
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ToolStripItemOverflow))]
         public void ToolStripItem_Overflow_SetInvalid_ThrowsInvalidEnumArgumentException(ToolStripItemOverflow value)
         {
-            var item = new SubToolStripItem();
+            using var item = new SubToolStripItem();
             Assert.Throws<InvalidEnumArgumentException>("value", () => item.Overflow = value);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ToolStripItem_Owner_Set_GetReturnsExpected()
         {
-            var owner = new ToolStrip();
-            var otherOwner = new ToolStrip();
-            var item = new SubToolStripItem
+            using var owner = new ToolStrip();
+            using var otherOwner = new ToolStrip();
+            using var statusOwner = new StatusStrip();
+            using var item = new SubToolStripItem
             {
                 Owner = owner
             };
             Assert.Same(owner, item.Owner);
+            Assert.Null(item.Parent);
             Assert.Same(item, Assert.Single(owner.Items));
+            Assert.Equal(new Padding(0, 1, 0, 2), item.Margin);
+
+            // Set same.
+            item.Owner = owner;
+            Assert.Same(owner, item.Owner);
+            Assert.Null(item.Parent);
+            Assert.Same(item, Assert.Single(owner.Items));
+            Assert.Empty(otherOwner.Items);
+            Assert.Equal(new Padding(0, 1, 0, 2), item.Margin);
+
+            // Set different.
+            item.Owner = otherOwner;
+            Assert.Same(otherOwner, item.Owner);
+            Assert.Null(item.Parent);
+            Assert.Empty(owner.Items);
+            Assert.Same(item, Assert.Single(otherOwner.Items));
+            Assert.Equal(new Padding(0, 1, 0, 2), item.Margin);
+
+            // Set null.
+            item.Owner = null;
+            Assert.Null(item.Owner);
+            Assert.Null(item.Parent);
+            Assert.Empty(owner.Items);
+            Assert.Empty(otherOwner.Items);
+            Assert.Equal(new Padding(0, 1, 0, 2), item.Margin);
+
+            // Set status strip.
+            item.Owner = statusOwner;
+            Assert.Same(statusOwner, item.Owner);
+            Assert.Null(item.Parent);
+            Assert.Empty(owner.Items);
+            Assert.Empty(otherOwner.Items);
+            Assert.Same(item, Assert.Single(statusOwner.Items));
+            Assert.Equal(new Padding(0, 2, 0, 0), item.Margin);
+        }
+
+        [WinFormsFact]
+        public void ToolStripItem_Owner_SetWithMargin_GetReturnsExpected()
+        {
+            using var owner = new ToolStrip();
+            using var otherOwner = new ToolStrip();
+            using var statusOwner = new StatusStrip();
+            using var item = new SubToolStripItem
+            {
+                Margin = new Padding(1, 2, 3, 4),
+                Owner = owner
+            };
+            Assert.Same(owner, item.Owner);
+            Assert.Null(item.Parent);
+            Assert.Same(item, Assert.Single(owner.Items));
+            Assert.Equal(new Padding(1, 2, 3, 4), item.Margin);
+
+            // Set same.
+            item.Owner = owner;
+            Assert.Same(owner, item.Owner);
+            Assert.Null(item.Parent);
+            Assert.Same(item, Assert.Single(owner.Items));
+            Assert.Empty(otherOwner.Items);
+            Assert.Equal(new Padding(1, 2, 3, 4), item.Margin);
+
+            // Set different.
+            item.Owner = otherOwner;
+            Assert.Same(otherOwner, item.Owner);
+            Assert.Null(item.Parent);
+            Assert.Empty(owner.Items);
+            Assert.Same(item, Assert.Single(otherOwner.Items));
+            Assert.Equal(new Padding(1, 2, 3, 4), item.Margin);
+
+            // Set null.
+            item.Owner = null;
+            Assert.Null(item.Owner);
+            Assert.Null(item.Parent);
+            Assert.Empty(owner.Items);
+            Assert.Empty(otherOwner.Items);
+            Assert.Equal(new Padding(1, 2, 3, 4), item.Margin);
+
+            // Set status strip.
+            item.Owner = statusOwner;
+            Assert.Same(statusOwner, item.Owner);
+            Assert.Null(item.Parent);
+            Assert.Empty(owner.Items);
+            Assert.Empty(otherOwner.Items);
+            Assert.Same(item, Assert.Single(statusOwner.Items));
+            Assert.Equal(new Padding(1, 2, 3, 4), item.Margin);
+        }
+
+        [WinFormsTheory]
+        [InlineData(RightToLeft.Yes, RightToLeft.Yes, RightToLeft.Yes, 0)]
+        [InlineData(RightToLeft.Yes, RightToLeft.No, RightToLeft.No, 0)]
+        [InlineData(RightToLeft.Yes, RightToLeft.Inherit, RightToLeft.Yes, 1)]
+        [InlineData(RightToLeft.No, RightToLeft.Yes, RightToLeft.Yes, 0)]
+        [InlineData(RightToLeft.No, RightToLeft.No, RightToLeft.No, 0)]
+        [InlineData(RightToLeft.No, RightToLeft.Inherit, RightToLeft.No, 1)]
+        [InlineData(RightToLeft.Inherit, RightToLeft.Yes, RightToLeft.Yes, 0)]
+        [InlineData(RightToLeft.Inherit, RightToLeft.No, RightToLeft.No, 0)]
+        [InlineData(RightToLeft.Inherit, RightToLeft.Inherit, RightToLeft.No, 1)]
+        public void ToolStripItem_Owner_SetWithRightToLeft_CallsRightToLeftChanged(RightToLeft ownerRightToLeft, RightToLeft rightToLeft, RightToLeft expectedRightToLeft, int expectedRightToLeftChangedCallCount)
+        {
+            using var owner = new ToolStrip
+            {
+                RightToLeft = ownerRightToLeft
+            };
+            using var item = new SubToolStripItem
+            {
+                RightToLeft = rightToLeft
+            };
+            int rightToLeftChangedCallCount = 0;
+            item.RightToLeftChanged += (sender, e) =>
+            {
+                Assert.Same(item, sender);
+                Assert.Same(EventArgs.Empty, e);
+                rightToLeftChangedCallCount++;
+            };
+
+            item.Owner = owner;
+            Assert.Same(owner, item.Owner);
+            Assert.Equal(expectedRightToLeft, item.RightToLeft);
+            Assert.Equal(expectedRightToLeftChangedCallCount, rightToLeftChangedCallCount);
+
+            // Set same.
+            item.Owner = owner;
+            Assert.Same(owner, item.Owner);
+            Assert.Equal(expectedRightToLeft, item.RightToLeft);
+            Assert.Equal(expectedRightToLeftChangedCallCount, rightToLeftChangedCallCount);
+        }
+
+        [WinFormsFact]
+        public void ToolStripItem_Owner_SetWithHandler_CallsOwnerChanged()
+        {
+            using var owner = new ToolStrip();
+            using var otherOwner = new ToolStrip();
+            using var item = new SubToolStripItem();
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(item, sender);
+                Assert.Same(EventArgs.Empty, e);
+                callCount++;
+            };
+
+            item.OwnerChanged += handler;
+            item.Owner = owner;
+            Assert.Same(owner, item.Owner);
+            Assert.Same(item, Assert.Single(owner.Items));
+            Assert.Equal(1, callCount);
 
             // Set same.
             item.Owner = owner;
             Assert.Same(owner, item.Owner);
             Assert.Same(item, Assert.Single(owner.Items));
             Assert.Empty(otherOwner.Items);
+            Assert.Equal(1, callCount);
 
             // Set different.
             item.Owner = otherOwner;
             Assert.Same(otherOwner, item.Owner);
             Assert.Empty(owner.Items);
             Assert.Same(item, Assert.Single(otherOwner.Items));
+            Assert.Equal(3, callCount);
 
             // Set null.
             item.Owner = null;
             Assert.Null(item.Owner);
             Assert.Empty(owner.Items);
             Assert.Empty(otherOwner.Items);
+            Assert.Equal(4, callCount);
+
+            // Remove handler.
+            item.OwnerChanged -= handler;
+            item.Owner = owner;
+            Assert.Same(owner, item.Owner);
+            Assert.Same(item, Assert.Single(owner.Items));
+            Assert.Empty(otherOwner.Items);
+            Assert.Equal(4, callCount);
         }
 
-        public static IEnumerable<object[]> OwnerItem_TestData()
+        [WinFormsFact]
+        public void ToolStripItem_OwnerItem_GetWithOwner_ReturnsNull()
         {
-            yield return new object[] { new SubToolStripItem(), null };
-            yield return new object[] { new SubToolStripItem("text", null, null), null };
-            yield return new object[] { new SubToolStripItem("text", null, null, "name"), null };
-
-            var toolStrip = new ToolStrip();
-            var toolStripItem = new SubToolStripItem();
-            toolStrip.Items.Add(toolStripItem);
-            yield return new object[] { toolStripItem, null };
-
-            var toolStripDropDown = new ToolStripDropDown();
-            var toolStripDropDownItem = new SubToolStripItem();
-            toolStripDropDown.Items.Add(toolStripDropDownItem);
-            yield return new object[] { toolStripDropDownItem, null };
-
-            var toolStripDropDownWithOwnerItemOwnerItem = new SubToolStripItem();
-            var toolStripDropDownWithOwnerItem = new ToolStripDropDown
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
             {
-                OwnerItem = toolStripDropDownWithOwnerItemOwnerItem
+                Owner = owner
             };
-            var toolStripDropDownWithOwnerItemItem = new SubToolStripItem();
-            toolStripDropDownWithOwnerItem.Items.Add(toolStripDropDownWithOwnerItemItem);
-            yield return new object[] { toolStripDropDownWithOwnerItemItem, toolStripDropDownWithOwnerItemOwnerItem };
-
-            var toolStripParent = new ToolStrip();
-            var toolStripParentItem = new SubToolStripItem
-            {
-                Parent = toolStripParent
-            };
-            yield return new object[] { toolStripParentItem, null };
-
-            var toolStripDropDownParent = new ToolStripDropDown();
-            var toolStripDropDownParentItem = new SubToolStripItem
-            {
-                Parent = toolStripDropDownParent
-            };
-            yield return new object[] { toolStripDropDownParentItem, null };
-
-            var toolStripDropDownWithOwnerItemParentOwnerItem = new SubToolStripItem();
-            var toolStripDropDownWithOwnerItemParent = new ToolStripDropDown
-            {
-                OwnerItem = toolStripDropDownWithOwnerItemParentOwnerItem
-            };
-            var toolStripDropDownWithOwnerItemParentItem = new SubToolStripItem
-            {
-                Parent = toolStripDropDownWithOwnerItemParent
-            };
-            yield return new object[] { toolStripDropDownWithOwnerItemParentItem, toolStripDropDownWithOwnerItemParentOwnerItem };
+            Assert.Null(item.OwnerItem);
         }
 
-        [Theory]
-        [MemberData(nameof(OwnerItem_TestData))]
-        public void ToolStripItem_OwnerItem_Get_ReturnsExpected(ToolStripItem item, ToolStripItem expected)
+        public static IEnumerable<object[]> OwnerItem_GetWithDropDown_TestData()
         {
-            Assert.Equal(expected, item.OwnerItem);
+            yield return new object[] { null };
+            yield return new object[] { new SubToolStripItem() };
         }
 
-        public static IEnumerable<object[]> Padding_TestData()
+        [WinFormsTheory]
+        [MemberData(nameof(OwnerItem_GetWithDropDown_TestData))]
+        public void ToolStripItem_OwnerItem_GetWithDropDownOwner_ReturnsExpected(ToolStripItem result)
         {
-            yield return new object[] { new Padding(), new Padding() };
-            yield return new object[] { new Padding(1, 2, 3, 4), new Padding(1, 2, 3, 4) };
-            yield return new object[] { new Padding(1), new Padding(1) };
-            yield return new object[] { new Padding(-1, -2, -3, -4), new Padding(0, 0, 0, 0) };
+            using var owner = new ToolStripDropDown
+            {
+                OwnerItem = result
+            };
+            using var item = new SubToolStripItem
+            {
+                Owner = owner
+            };
+            Assert.Same(result, item.OwnerItem);
         }
 
-        [Theory]
-        [MemberData(nameof(Padding_TestData))]
+        [WinFormsFact]
+        public void ToolStripItem_OwnerItem_GetWithParent_ReturnsNull()
+        {
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Parent = parent
+            };
+            Assert.Null(item.OwnerItem);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(OwnerItem_GetWithDropDown_TestData))]
+        public void ToolStripItem_OwnerItem_GetWithDropDownParent_ReturnsExpected(ToolStripItem result)
+        {
+            using var parent = new ToolStripDropDown
+            {
+                OwnerItem = result
+            };
+            using var item = new SubToolStripItem
+            {
+                Parent = parent
+            };
+            Assert.Same(result, item.OwnerItem);
+        }
+
+        [WinFormsFact]
+        public void ToolStripItem_OwnerItem_GetWithOwnerAndParent_ReturnsExpected()
+        {
+            using var ownerItem = new SubToolStripItem();
+            using var owner = new ToolStripDropDown
+            {
+                OwnerItem = ownerItem
+            };
+            using var parentItem = new SubToolStripItem();
+            using var parent = new ToolStripDropDown
+            {
+                OwnerItem = parentItem
+            };
+            using var item = new SubToolStripItem
+            {
+                Owner = owner,
+                Parent = parent
+            };
+            Assert.Same(parentItem, item.OwnerItem);
+        }
+
+        [WinFormsFact]
+        public void ToolStripItem_Padding_GetWithDefaultPadding_ReturnsExpected()
+        {
+            using var item = new CustomDefaultPaddingToolStripItem();
+            Assert.Equal(new Padding(2, 3, 4, 5), item.Padding);
+        }
+
+        private class CustomDefaultPaddingToolStripItem : ToolStripItem
+        {
+            protected override Padding DefaultPadding => new Padding(2, 3, 4, 5);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetPaddingNormalizedTheoryData))]
         public void ToolStripItem_Padding_Set_GetReturnsExpected(Padding value, Padding expected)
         {
-            var item = new SubToolStripItem
+            using var item = new SubToolStripItem
             {
                 Padding = value
             };
@@ -1805,92 +6697,401 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, item.Padding);
         }
 
-        public static IEnumerable<object[]> Parent_TestData()
+        public static IEnumerable<object[]> Padding_SetWithOwner_TestData()
         {
-            yield return new object[] { null };
-            yield return new object[] { new ToolStrip() };
+            yield return new object[] { new Padding(), new Padding(), 0, 0 };
+            yield return new object[] { new Padding(1, 2, 3, 4), new Padding(1, 2, 3, 4), 1, 1 };
+            yield return new object[] { new Padding(1), new Padding(1), 1, 1 };
+            yield return new object[] { new Padding(-1, -2, -3, -4), Padding.Empty, 1, 2 };
         }
 
-        [Theory]
-        [MemberData(nameof(Parent_TestData))]
-        public void ToolStripItem_Parent_Set_GetReturnsExpected(ToolStrip value)
+        [WinFormsTheory]
+        [MemberData(nameof(Padding_SetWithOwner_TestData))]
+        public void ToolStripItem_Padding_SetWithOwner_GetReturnsExpected(Padding value, Padding expected, int expectedOwnerLayoutCallCount1, int expectedOwnerLayoutCallCount2)
         {
-            var item = new SubToolStripItem
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
             {
-                Parent = value
+                Owner = owner
             };
-            Assert.Same(value, item.Parent);
-            if (value != null)
+            int ownerLayoutCallCount = 0;
+            void ownerHandler(object sender, LayoutEventArgs e)
             {
-                Assert.Empty(value.Items);
+                Assert.Same(owner, sender);
+                Assert.Same(item, e.AffectedComponent);
+                Assert.Equal("Padding", e.AffectedProperty);
+                ownerLayoutCallCount++;
+            };
+            owner.Layout += ownerHandler;
+
+            try
+            {
+                item.Padding = value;
+                Assert.Equal(expected, item.Padding);
+                Assert.Equal(expectedOwnerLayoutCallCount1, ownerLayoutCallCount);
+                Assert.False(owner.IsHandleCreated);
+
+                // Set same.
+                item.Padding = value;
+                Assert.Equal(expected, item.Padding);
+                Assert.Equal(expectedOwnerLayoutCallCount2, ownerLayoutCallCount);
+                Assert.False(owner.IsHandleCreated);
             }
+            finally
+            {
+                owner.Layout -= ownerHandler;
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(Padding_SetWithOwner_TestData))]
+        public void ToolStripItem_Padding_SetWithOwnerWithHandle_GetReturnsExpected(Padding value, Padding expected, int expectedOwnerLayoutCallCount1, int expectedOwnerLayoutCallCount2)
+        {
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Owner = owner
+            };
+            Assert.NotEqual(IntPtr.Zero, owner.Handle);
+            int invalidatedCallCount = 0;
+            owner.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            owner.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            owner.HandleCreated += (sender, e) => createdCallCount++;
+            int ownerLayoutCallCount = 0;
+            void ownerHandler(object sender, LayoutEventArgs e)
+            {
+                Assert.Same(owner, sender);
+                Assert.Same(item, e.AffectedComponent);
+                Assert.Equal("Padding", e.AffectedProperty);
+                ownerLayoutCallCount++;
+            };
+            owner.Layout += ownerHandler;
+
+            try
+            {
+                item.Padding = value;
+                Assert.Equal(expected, item.Padding);
+                Assert.Equal(expectedOwnerLayoutCallCount1, ownerLayoutCallCount);
+                Assert.True(owner.IsHandleCreated);
+                Assert.Equal(expectedOwnerLayoutCallCount1 * 2, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+
+                // Set same.
+                item.Padding = value;
+                Assert.Equal(expected, item.Padding);
+                Assert.Equal(expectedOwnerLayoutCallCount2, ownerLayoutCallCount);
+                Assert.True(owner.IsHandleCreated);
+                Assert.Equal(expectedOwnerLayoutCallCount2 * 2, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+            }
+            finally
+            {
+                owner.Layout -= ownerHandler;
+            }
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetPaddingNormalizedTheoryData))]
+        public void ToolStripItem_Padding_SetWithParent_GetReturnsExpected(Padding value, Padding expected)
+        {
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Parent = parent
+            };
+            int parentLayoutCallCount = 0;
+            void parentHandler(object sender, LayoutEventArgs e) => parentLayoutCallCount++;
+            parent.Layout += parentHandler;
+
+            try
+            {
+                item.Padding = value;
+                Assert.Equal(expected, item.Padding);
+                Assert.Equal(0, parentLayoutCallCount);
+                Assert.False(parent.IsHandleCreated);
+
+                // Set same.
+                item.Padding = value;
+                Assert.Equal(expected, item.Padding);
+                Assert.Equal(0, parentLayoutCallCount);
+                Assert.False(parent.IsHandleCreated);
+            }
+            finally
+            {
+                parent.Layout -= parentHandler;
+            }
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetPaddingNormalizedTheoryData))]
+        public void ToolStripItem_Padding_SetWithParentWithHandle_GetReturnsExpected(Padding value, Padding expected)
+        {
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Parent = parent
+            };
+            Assert.NotEqual(IntPtr.Zero, parent.Handle);
+            int invalidatedCallCount = 0;
+            parent.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            parent.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            parent.HandleCreated += (sender, e) => createdCallCount++;
+            int parentLayoutCallCount = 0;
+            void parentHandler(object sender, LayoutEventArgs e) => parentLayoutCallCount++;
+            parent.Layout += parentHandler;
+
+            try
+            {
+                item.Padding = value;
+                Assert.Equal(expected, item.Padding);
+                Assert.Equal(0, parentLayoutCallCount);
+                Assert.True(parent.IsHandleCreated);
+                Assert.Equal(0, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+
+                // Set same.
+                item.Padding = value;
+                Assert.Equal(expected, item.Padding);
+                Assert.Equal(0, parentLayoutCallCount);
+                Assert.True(parent.IsHandleCreated);
+                Assert.Equal(0, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+            }
+            finally
+            {
+                parent.Layout -= parentHandler;
+            }
+        }
+
+        [WinFormsFact]
+        public void ToolStripItem_Padding_ResetValue_Success()
+        {
+            PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ToolStripItem))[nameof(ToolStripItem.Padding)];
+            using var item = new SubToolStripItem();
+            Assert.False(property.CanResetValue(item));
+
+            item.Padding = new Padding(1, 2, 3, 4);
+            Assert.Equal(new Padding(1, 2, 3, 4), item.Padding);
+            Assert.True(property.CanResetValue(item));
+
+            property.ResetValue(item);
+            Assert.Equal(Padding.Empty, item.Padding);
+            Assert.False(property.CanResetValue(item));
+        }
+
+        [WinFormsFact]
+        public void ToolStripItem_Padding_ShouldSerializeValue_Success()
+        {
+            PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ToolStripItem))[nameof(ToolStripItem.Padding)];
+            using var item = new SubToolStripItem();
+            Assert.False(property.ShouldSerializeValue(item));
+
+            item.Padding = new Padding(1, 2, 3, 4);
+            Assert.Equal(new Padding(1, 2, 3, 4), item.Padding);
+            Assert.True(property.ShouldSerializeValue(item));
+
+            property.ResetValue(item);
+            Assert.Equal(Padding.Empty, item.Padding);
+            Assert.False(property.ShouldSerializeValue(item));
+        }
+
+        public static IEnumerable<object[]> Parent_Set_TestData()
+        {
+            foreach (bool enabled in new bool[] { true, false })
+            {
+                foreach (bool visible in new bool[] { true, false })
+                {
+                    foreach (Image image in new Image[] { null, new Bitmap(10, 10) })
+                    {
+                        foreach (bool allowDrop in new bool[] { true, false })
+                        {
+                            yield return new object[] { enabled, visible, image, allowDrop };
+                            yield return new object[] { enabled, visible, image, allowDrop };
+                        }
+                    }
+                }
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(Parent_Set_TestData))]
+        public void ToolStripItem_Parent_Set_GetReturnsExpected(bool enabled, bool visible, Image image, bool allowDrop)
+        {
+            using var parent = new ToolStrip();
+            using var otherParent = new ToolStrip();
+            using var statusParent = new StatusStrip();
+            using var item = new SubToolStripItem
+            {
+                Enabled = enabled,
+                Visible = visible,
+                Image = image,
+                AllowDrop = allowDrop,
+                Parent = parent
+            };
+            Assert.Same(parent, item.Parent);
+            Assert.Same(parent, item.GetCurrentParent());
+            Assert.Null(item.Owner);
+            Assert.Empty(parent.Items);
+            Assert.Equal(new Padding(0, 1, 0, 2), item.Margin);
 
             // Set same.
-            item.Parent = value;
-            Assert.Same(value, item.Parent);
-            if (value != null)
-            {
-                Assert.Empty(value.Items);
-            }
+            item.Parent = parent;
+            Assert.Same(parent, item.Parent);
+            Assert.Same(parent, item.GetCurrentParent());
+            Assert.Null(item.Owner);
+            Assert.Empty(parent.Items);
+            Assert.Empty(otherParent.Items);
+            Assert.Equal(new Padding(0, 1, 0, 2), item.Margin);
+
+            // Set different.
+            item.Parent = otherParent;
+            Assert.Same(otherParent, item.Parent);
+            Assert.Null(item.Owner);
+            Assert.Empty(parent.Items);
+            Assert.Empty(otherParent.Items);
+            Assert.Equal(new Padding(0, 1, 0, 2), item.Margin);
+
+            // Set null.
+            item.Parent = null;
+            Assert.Null(item.Parent);
+            Assert.Null(item.Owner);
+            Assert.Empty(parent.Items);
+            Assert.Empty(otherParent.Items);
+            Assert.Equal(new Padding(0, 1, 0, 2), item.Margin);
+
+            // Set status strip.
+            item.Parent = statusParent;
+            Assert.Same(statusParent, item.Parent);
+            Assert.Null(item.Owner);
+            Assert.Empty(parent.Items);
+            Assert.Empty(otherParent.Items);
+            Assert.Empty(statusParent.Items);
+            Assert.Equal(new Padding(0, 1, 0, 2), item.Margin);
         }
 
-        public static IEnumerable<object[]> RightToLeft_TestData()
+        [WinFormsTheory]
+        [MemberData(nameof(Parent_Set_TestData))]
+        public void ToolStripItem_Parent_SetWithMargin_GetReturnsExpected(bool enabled, bool visible, Image image, bool allowDrop)
         {
-            yield return new object[] { new SubToolStripItem(), RightToLeft.Inherit };
-            yield return new object[] { new SubToolStripItem("text", null, null), RightToLeft.Inherit };
-            yield return new object[] { new SubToolStripItem("text", null, null, "name"), RightToLeft.Inherit };
-
-            foreach (RightToLeft rightToLeft in Enum.GetValues(typeof(RightToLeft)))
+            using var parent = new ToolStrip();
+            using var otherParent = new ToolStrip();
+            using var statusParent = new StatusStrip();
+            using var item = new SubToolStripItem
             {
-                RightToLeft expected = rightToLeft == RightToLeft.Inherit ? RightToLeft.No : rightToLeft;
-
-                var toolStrip = new ToolStrip
-                {
-                    RightToLeft = rightToLeft
-                };
-                var toolStripItem = new SubToolStripItem();
-                toolStrip.Items.Add(toolStripItem);
-                yield return new object[] { toolStripItem, expected };
-
-                var toolStripParent = new ToolStrip
-                {
-                    RightToLeft = rightToLeft
-                };
-                var toolStripParentItem = new SubToolStripItem
-                {
-                    Parent = toolStripParent
-                };
-                yield return new object[] { toolStripParentItem, expected };
-            }
-
-            var toolStripRightToLeft = new ToolStrip
-            {
-                RightToLeft = RightToLeft.Yes
+                Enabled = enabled,
+                Visible = visible,
+                Image = image,
+                AllowDrop = allowDrop,
+                Margin = new Padding(1, 2, 3, 4),
+                Parent = parent
             };
-            var toolStripLeftToRight = new ToolStrip
-            {
-                RightToLeft = RightToLeft.No
-            };
-            var item = new SubToolStripItem
-            {
-                Owner = toolStripRightToLeft
-            };
-            toolStripLeftToRight.Items.Add(item);
-            yield return new object[] { item, RightToLeft.No };
+            Assert.Same(parent, item.Parent);
+            Assert.Same(parent, item.GetCurrentParent());
+            Assert.Null(item.Owner);
+            Assert.Empty(parent.Items);
+            Assert.Equal(new Padding(1, 2, 3, 4), item.Margin);
+
+            // Set same.
+            item.Parent = parent;
+            Assert.Same(parent, item.Parent);
+            Assert.Same(parent, item.GetCurrentParent());
+            Assert.Null(item.Owner);
+            Assert.Empty(parent.Items);
+            Assert.Empty(otherParent.Items);
+            Assert.Equal(new Padding(1, 2, 3, 4), item.Margin);
+
+            // Set different.
+            item.Parent = otherParent;
+            Assert.Same(otherParent, item.Parent);
+            Assert.Null(item.Owner);
+            Assert.Empty(parent.Items);
+            Assert.Empty(otherParent.Items);
+            Assert.Equal(new Padding(1, 2, 3, 4), item.Margin);
+
+            // Set null.
+            item.Parent = null;
+            Assert.Null(item.Parent);
+            Assert.Null(item.Owner);
+            Assert.Empty(parent.Items);
+            Assert.Empty(otherParent.Items);
+            Assert.Equal(new Padding(1, 2, 3, 4), item.Margin);
+
+            // Set status strip.
+            item.Parent = statusParent;
+            Assert.Same(statusParent, item.Parent);
+            Assert.Null(item.Owner);
+            Assert.Empty(parent.Items);
+            Assert.Empty(otherParent.Items);
+            Assert.Empty(statusParent.Items);
+            Assert.Equal(new Padding(1, 2, 3, 4), item.Margin);
         }
 
-        [Theory]
-        [MemberData(nameof(RightToLeft_TestData))]
-        public void ToolStripItem_RightToLeft_Get_ReturnsExpected(ToolStripItem item, RightToLeft expected)
+        [WinFormsTheory]
+        [InlineData(RightToLeft.Inherit, RightToLeft.No)]
+        [InlineData(RightToLeft.Yes, RightToLeft.Yes)]
+        [InlineData(RightToLeft.No, RightToLeft.No)]
+        public void ToolStripItem_RightToLeft_GetWithOwner_ReturnsExpected(RightToLeft ownerRightToLeft, RightToLeft expected)
         {
+            using var owner = new ToolStrip
+            {
+                RightToLeft = ownerRightToLeft
+            };
+            using var item = new SubToolStripItem
+            {
+                Owner = owner
+            };
             Assert.Equal(expected, item.RightToLeft);
         }
 
-        [Theory]
+        [WinFormsTheory]
+        [InlineData(RightToLeft.Inherit, RightToLeft.No)]
+        [InlineData(RightToLeft.Yes, RightToLeft.Yes)]
+        [InlineData(RightToLeft.No, RightToLeft.No)]
+        public void ToolStripItem_RightToLeft_GetWithParent_ReturnsExpected(RightToLeft parentRightToLeft, RightToLeft expected)
+        {
+            using var parent = new ToolStrip
+            {
+                RightToLeft = parentRightToLeft
+            };
+            using var item = new SubToolStripItem
+            {
+                Parent = parent
+            };
+            Assert.Equal(expected, item.RightToLeft);
+        }
+
+        [WinFormsFact]
+        public void ToolStripItem_RightToLeft_GetWithOwnerAndParent_ReturnsExpected()
+        {
+            using var owner = new ToolStrip
+            {
+                RightToLeft = RightToLeft.Yes
+            };
+            using var parent = new ToolStrip
+            {
+                RightToLeft = RightToLeft.No
+            };
+            using var item = new SubToolStripItem
+            {
+                Owner = owner,
+                Parent = parent
+            };
+            Assert.Equal(RightToLeft.Yes, item.RightToLeft);
+        }
+
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(RightToLeft))]
         public void ToolStripItem_RightToLeft_Set_GetReturnsExpected(RightToLeft value)
         {
-            var item = new SubToolStripItem
+            using var item = new SubToolStripItem
             {
                 RightToLeft = value
             };
@@ -1901,10 +7102,214 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, item.RightToLeft);
         }
 
-        [Fact]
+        public static IEnumerable<object[]> RightToLeft_SetWithOwner_TestData()
+        {
+            yield return new object[] { RightToLeft.Yes, RightToLeft.Yes, RightToLeft.Yes, 0 };
+            yield return new object[] { RightToLeft.Yes, RightToLeft.No, RightToLeft.No, 1 };
+            yield return new object[] { RightToLeft.Yes, RightToLeft.Inherit, RightToLeft.Yes, 0 };
+            yield return new object[] { RightToLeft.No, RightToLeft.Yes, RightToLeft.Yes, 1 };
+            yield return new object[] { RightToLeft.No, RightToLeft.No, RightToLeft.No, 0 };
+            yield return new object[] { RightToLeft.No, RightToLeft.Inherit, RightToLeft.No, 0 };
+            yield return new object[] { RightToLeft.Inherit, RightToLeft.Yes, RightToLeft.Yes, 1 };
+            yield return new object[] { RightToLeft.Inherit, RightToLeft.No, RightToLeft.No, 0 };
+            yield return new object[] { RightToLeft.Inherit, RightToLeft.Inherit, RightToLeft.No, 0 };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(RightToLeft_SetWithOwner_TestData))]
+        public void ToolStripItem_RightToLeft_SetWithOwner_GetReturnsExpected(RightToLeft ownerRightToLeft, RightToLeft value, RightToLeft expected, int expectedOwnerLayoutCallCount)
+        {
+            using var owner = new ToolStrip
+            {
+                RightToLeft = ownerRightToLeft
+            };
+            using var item = new SubToolStripItem
+            {
+                Owner = owner
+            };
+            int ownerLayoutCallCount = 0;
+            void ownerHandler(object sender, LayoutEventArgs e)
+            {
+                Assert.Same(owner, sender);
+                Assert.Same(item, e.AffectedComponent);
+                Assert.Equal("RightToLeft", e.AffectedProperty);
+                ownerLayoutCallCount++;
+            };
+            owner.Layout += ownerHandler;
+
+            try
+            {
+                item.RightToLeft = value;
+                Assert.Equal(expected, item.RightToLeft);
+                Assert.Equal(expectedOwnerLayoutCallCount, ownerLayoutCallCount);
+                Assert.False(owner.IsHandleCreated);
+
+                // Set same.
+                item.RightToLeft = value;
+                Assert.Equal(expected, item.RightToLeft);
+                Assert.Equal(expectedOwnerLayoutCallCount, ownerLayoutCallCount);
+                Assert.False(owner.IsHandleCreated);
+            }
+            finally
+            {
+                owner.Layout -= ownerHandler;
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(RightToLeft_SetWithOwner_TestData))]
+        public void ToolStripItem_RightToLeft_SetWithOwnerWithHandle_GetReturnsExpected(RightToLeft ownerRightToLeft, RightToLeft value, RightToLeft expected, int expectedOwnerLayoutCallCount)
+        {
+            using var owner = new ToolStrip
+            {
+                RightToLeft = ownerRightToLeft
+            };
+            using var item = new SubToolStripItem
+            {
+                Owner = owner
+            };
+            Assert.NotEqual(IntPtr.Zero, owner.Handle);
+            int invalidatedCallCount = 0;
+            owner.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            owner.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            owner.HandleCreated += (sender, e) => createdCallCount++;
+            int ownerLayoutCallCount = 0;
+            void ownerHandler(object sender, LayoutEventArgs e)
+            {
+                Assert.Same(owner, sender);
+                Assert.Same(item, e.AffectedComponent);
+                Assert.Equal("RightToLeft", e.AffectedProperty);
+                ownerLayoutCallCount++;
+            };
+            owner.Layout += ownerHandler;
+
+            try
+            {
+                item.RightToLeft = value;
+                Assert.Equal(expected, item.RightToLeft);
+                Assert.Equal(expectedOwnerLayoutCallCount, ownerLayoutCallCount);
+                Assert.True(owner.IsHandleCreated);
+                Assert.Equal(expectedOwnerLayoutCallCount * 2, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+
+                // Set same.
+                item.RightToLeft = value;
+                Assert.Equal(expected, item.RightToLeft);
+                Assert.Equal(expectedOwnerLayoutCallCount, ownerLayoutCallCount);
+                Assert.True(owner.IsHandleCreated);
+                Assert.Equal(expectedOwnerLayoutCallCount * 2, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+            }
+            finally
+            {
+                owner.Layout -= ownerHandler;
+            }
+        }
+
+        public static IEnumerable<object[]> RightToLeft_SetWithParent_TestData()
+        {
+            yield return new object[] { RightToLeft.Yes, RightToLeft.Yes, RightToLeft.Yes };
+            yield return new object[] { RightToLeft.Yes, RightToLeft.No, RightToLeft.No };
+            yield return new object[] { RightToLeft.Yes, RightToLeft.Inherit, RightToLeft.Yes };
+            yield return new object[] { RightToLeft.No, RightToLeft.Yes, RightToLeft.Yes };
+            yield return new object[] { RightToLeft.No, RightToLeft.No, RightToLeft.No };
+            yield return new object[] { RightToLeft.No, RightToLeft.Inherit, RightToLeft.No };
+            yield return new object[] { RightToLeft.Inherit, RightToLeft.Yes, RightToLeft.Yes };
+            yield return new object[] { RightToLeft.Inherit, RightToLeft.No, RightToLeft.No };
+            yield return new object[] { RightToLeft.Inherit, RightToLeft.Inherit, RightToLeft.No };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(RightToLeft_SetWithParent_TestData))]
+        public void ToolStripItem_RightToLeft_SetWithParent_GetReturnsExpected(RightToLeft parentRightToLeft, RightToLeft value, RightToLeft expected)
+        {
+            using var parent = new ToolStrip
+            {
+                RightToLeft = parentRightToLeft
+            };
+            using var item = new SubToolStripItem
+            {
+                Parent = parent
+            };
+            int parentLayoutCallCount = 0;
+            void parentHandler(object sender, LayoutEventArgs e) => parentLayoutCallCount++;
+            parent.Layout += parentHandler;
+
+            try
+            {
+                item.RightToLeft = value;
+                Assert.Equal(expected, item.RightToLeft);
+                Assert.Equal(0, parentLayoutCallCount);
+                Assert.False(parent.IsHandleCreated);
+
+                // Set same.
+                item.RightToLeft = value;
+                Assert.Equal(expected, item.RightToLeft);
+                Assert.Equal(0, parentLayoutCallCount);
+                Assert.False(parent.IsHandleCreated);
+            }
+            finally
+            {
+                parent.Layout -= parentHandler;
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(RightToLeft_SetWithParent_TestData))]
+        public void ToolStripItem_RightToLeft_SetWithParentWithHandle_GetReturnsExpected(RightToLeft parentRightToLeft, RightToLeft value, RightToLeft expected)
+        {
+            using var parent = new ToolStrip
+            {
+                RightToLeft = parentRightToLeft
+            };
+            using var item = new SubToolStripItem
+            {
+                Parent = parent
+            };
+            Assert.NotEqual(IntPtr.Zero, parent.Handle);
+            int invalidatedCallCount = 0;
+            parent.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            parent.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            parent.HandleCreated += (sender, e) => createdCallCount++;
+            int parentLayoutCallCount = 0;
+            void parentHandler(object sender, LayoutEventArgs e) => parentLayoutCallCount++;
+            parent.Layout += parentHandler;
+
+            try
+            {
+                item.RightToLeft = value;
+                Assert.Equal(expected, item.RightToLeft);
+                Assert.Equal(0, parentLayoutCallCount);
+                Assert.True(parent.IsHandleCreated);
+                Assert.Equal(0, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+
+                // Set same.
+                item.RightToLeft = value;
+                Assert.Equal(expected, item.RightToLeft);
+                Assert.Equal(0, parentLayoutCallCount);
+                Assert.True(parent.IsHandleCreated);
+                Assert.Equal(0, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+            }
+            finally
+            {
+                parent.Layout -= parentHandler;
+            }
+        }
+
+        [WinFormsFact]
         public void ToolStripItem_RightToLeft_SetWithHandler_CallsRightToLeftChanged()
         {
-            var item = new SubToolStripItem();
+            using var item = new SubToolStripItem();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -1936,19 +7341,75 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(2, callCount);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(RightToLeft))]
         public void ToolStripItem_RightToLeft_SetInvalid_ThrowsInvalidEnumArgumentException(RightToLeft value)
         {
-            var item = new SubToolStripItem();
+            using var item = new SubToolStripItem();
             Assert.Throws<InvalidEnumArgumentException>("value", () => item.RightToLeft = value);
         }
 
-        [Theory]
+        [WinFormsFact]
+        public void ToolStripItem_RightToLeft_ResetValue_Success()
+        {
+            PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ToolStripItem))[nameof(ToolStripItem.RightToLeft)];
+            using var item = new SubToolStripItem();
+            Assert.False(property.CanResetValue(item));
+
+            item.RightToLeft = RightToLeft.Yes;
+            Assert.Equal(RightToLeft.Yes, item.RightToLeft);
+            Assert.True(property.CanResetValue(item));
+
+            item.RightToLeft = RightToLeft.No;
+            Assert.Equal(RightToLeft.No, item.RightToLeft);
+            Assert.True(property.CanResetValue(item));
+
+            item.RightToLeft = RightToLeft.Inherit;
+            Assert.Equal(RightToLeft.Inherit, item.RightToLeft);
+            Assert.False(property.CanResetValue(item));
+            
+            item.RightToLeft = RightToLeft.No;
+            Assert.Equal(RightToLeft.No, item.RightToLeft);
+            Assert.True(property.CanResetValue(item));
+
+            property.ResetValue(item);
+            Assert.Equal(RightToLeft.Inherit, item.RightToLeft);
+            Assert.False(property.CanResetValue(item));
+        }
+
+        [WinFormsFact]
+        public void ToolStripItem_RightToLeft_ShouldSerializeValue_Success()
+        {
+            PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ToolStripItem))[nameof(ToolStripItem.RightToLeft)];
+            using var item = new SubToolStripItem();
+            Assert.False(property.ShouldSerializeValue(item));
+
+            item.RightToLeft = RightToLeft.Yes;
+            Assert.Equal(RightToLeft.Yes, item.RightToLeft);
+            Assert.True(property.ShouldSerializeValue(item));
+
+            item.RightToLeft = RightToLeft.No;
+            Assert.Equal(RightToLeft.No, item.RightToLeft);
+            Assert.True(property.ShouldSerializeValue(item));
+
+            item.RightToLeft = RightToLeft.Inherit;
+            Assert.Equal(RightToLeft.Inherit, item.RightToLeft);
+            Assert.False(property.ShouldSerializeValue(item));
+            
+            item.RightToLeft = RightToLeft.No;
+            Assert.Equal(RightToLeft.No, item.RightToLeft);
+            Assert.True(property.ShouldSerializeValue(item));
+
+            property.ResetValue(item);
+            Assert.Equal(RightToLeft.Inherit, item.RightToLeft);
+            Assert.False(property.ShouldSerializeValue(item));
+        }
+
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ToolStripItem_RightToLeftAutoMirrorImage_Set_GetReturnsExpected(bool value)
         {
-            var item = new SubToolStripItem
+            using var item = new SubToolStripItem
             {
                 RightToLeftAutoMirrorImage = value
             };
@@ -1957,91 +7418,503 @@ namespace System.Windows.Forms.Tests
             // Set same.
             item.RightToLeftAutoMirrorImage = value;
             Assert.Equal(value, item.RightToLeftAutoMirrorImage);
+
+            // Set different.
+            item.RightToLeftAutoMirrorImage = !value;
+            Assert.Equal(!value, item.RightToLeftAutoMirrorImage);
         }
 
-        [Theory]
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        public void ToolStripItem_RightToLeftAutoMirrorImage_SetWithOwner_GetReturnsExpected(bool value)
+        {
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Owner = owner
+            };
+            int ownerLayoutCallCount = 0;
+            void ownerHandler(object sender, LayoutEventArgs e) => ownerLayoutCallCount++;
+            owner.Layout += ownerHandler;
+
+            try
+            {
+                item.RightToLeftAutoMirrorImage = value;
+                Assert.Equal(value, item.RightToLeftAutoMirrorImage);
+                Assert.Equal(0, ownerLayoutCallCount);
+                Assert.False(owner.IsHandleCreated);
+
+                // Set same.
+                item.RightToLeftAutoMirrorImage = value;
+                Assert.Equal(value, item.RightToLeftAutoMirrorImage);
+                Assert.Equal(0, ownerLayoutCallCount);
+                Assert.False(owner.IsHandleCreated);
+
+                // Set different.
+                item.RightToLeftAutoMirrorImage = !value;
+                Assert.Equal(!value, item.RightToLeftAutoMirrorImage);
+                Assert.Equal(0, ownerLayoutCallCount);
+                Assert.False(owner.IsHandleCreated);
+            }
+            finally
+            {
+                owner.Layout -= ownerHandler;
+            }
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        public void ToolStripItem_RightToLeftAutoMirrorImage_SetWithOwnerWithHandle_GetReturnsExpected(bool value)
+        {
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Owner = owner
+            };
+            Assert.NotEqual(IntPtr.Zero, owner.Handle);
+            int invalidatedCallCount = 0;
+            owner.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            owner.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            owner.HandleCreated += (sender, e) => createdCallCount++;
+            int ownerLayoutCallCount = 0;
+            void ownerHandler(object sender, LayoutEventArgs e)
+            {
+                Assert.Same(owner, sender);
+                Assert.Same(item, e.AffectedComponent);
+                Assert.Equal("RightToLeftAutoMirrorImage", e.AffectedProperty);
+                ownerLayoutCallCount++;
+            };
+            owner.Layout += ownerHandler;
+
+            try
+            {
+                item.RightToLeftAutoMirrorImage = value;
+                Assert.Equal(value, item.RightToLeftAutoMirrorImage);
+                Assert.Equal(0, ownerLayoutCallCount);
+                Assert.True(owner.IsHandleCreated);
+                Assert.Equal(0, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+
+                // Set same.
+                item.RightToLeftAutoMirrorImage = value;
+                Assert.Equal(value, item.RightToLeftAutoMirrorImage);
+                Assert.Equal(0, ownerLayoutCallCount);
+                Assert.True(owner.IsHandleCreated);
+                Assert.Equal(0, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+
+                // Set different.
+                item.RightToLeftAutoMirrorImage = !value;
+                Assert.Equal(!value, item.RightToLeftAutoMirrorImage);
+                Assert.Equal(0, ownerLayoutCallCount);
+                Assert.True(owner.IsHandleCreated);
+                Assert.Equal(0, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+            }
+            finally
+            {
+                owner.Layout -= ownerHandler;
+            }
+        }
+
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ToolStripItem_RightToLeftAutoMirrorImage_SetWithParent_GetReturnsExpected(bool value)
         {
-            var parent = new ToolStrip();
-            var item = new SubToolStripItem
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
             {
                 Parent = parent
             };
+            int parentLayoutCallCount = 0;
+            void parentHandler(object sender, LayoutEventArgs e) => parentLayoutCallCount++;
+            parent.Layout += parentHandler;
 
-            item.RightToLeftAutoMirrorImage = value;
-            Assert.Equal(value, item.RightToLeftAutoMirrorImage);
-
-            // Set same.
-            item.RightToLeftAutoMirrorImage = value;
-            Assert.Equal(value, item.RightToLeftAutoMirrorImage);
-        }
-
-        public static IEnumerable<object[]> Selected_Get_TestData()
-        {
-            yield return new object[] { new SubToolStripItem(), false };
-            yield return new object[] { new SubToolStripItem("text", null, null), false };
-            yield return new object[] { new SubToolStripItem("text", null, null, "name"), false };
-
-            yield return new object[] { new CannotSelectToolStripItem(), false };
-
-            var mockSite = new Mock<ISite>();
-            mockSite.Setup(s => s.DesignMode).Returns(true);
-            yield return new object[] { new SubToolStripItem { Site = mockSite.Object }, false };
-
-            var toolStripParent = new ToolStrip();
-            var toolStripParentItem = new SubToolStripItem
+            try
             {
-                Parent = toolStripParent
+                item.RightToLeftAutoMirrorImage = value;
+                Assert.Equal(value, item.RightToLeftAutoMirrorImage);
+                Assert.Equal(0, parentLayoutCallCount);
+                Assert.False(parent.IsHandleCreated);
+
+                // Set same.
+                item.RightToLeftAutoMirrorImage = value;
+                Assert.Equal(value, item.RightToLeftAutoMirrorImage);
+                Assert.Equal(0, parentLayoutCallCount);
+                Assert.False(parent.IsHandleCreated);
+
+                // Set different.
+                item.RightToLeftAutoMirrorImage = !value;
+                Assert.Equal(!value, item.RightToLeftAutoMirrorImage);
+                Assert.Equal(0, parentLayoutCallCount);
+                Assert.False(parent.IsHandleCreated);
+            }
+            finally
+            {
+                parent.Layout -= parentHandler;
+            }
+        }
+
+        [WinFormsTheory]
+        [InlineData(true, 1)]
+        [InlineData(false, 0)]
+        public void ToolStripItem_RightToLeftAutoMirrorImage_SetWithParentWithHandle_GetReturnsExpected(bool value, int expectedParentInvalidatedCallCount)
+        {
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Parent = parent
             };
-            yield return new object[] { toolStripParentItem, false };
+            Assert.NotEqual(IntPtr.Zero, parent.Handle);
+            int invalidatedCallCount = 0;
+            parent.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            parent.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            parent.HandleCreated += (sender, e) => createdCallCount++;
+            int parentLayoutCallCount = 0;
+            void parentHandler(object sender, LayoutEventArgs e) => parentLayoutCallCount++;
+            parent.Layout += parentHandler;
+
+            try
+            {
+                item.RightToLeftAutoMirrorImage = value;
+                Assert.Equal(value, item.RightToLeftAutoMirrorImage);
+                Assert.Equal(0, parentLayoutCallCount);
+                Assert.True(parent.IsHandleCreated);
+                Assert.Equal(expectedParentInvalidatedCallCount, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+
+                // Set same.
+                item.RightToLeftAutoMirrorImage = value;
+                Assert.Equal(value, item.RightToLeftAutoMirrorImage);
+                Assert.Equal(0, parentLayoutCallCount);
+                Assert.True(parent.IsHandleCreated);
+                Assert.Equal(expectedParentInvalidatedCallCount, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+
+                // Set different.
+                item.RightToLeftAutoMirrorImage = !value;
+                Assert.Equal(!value, item.RightToLeftAutoMirrorImage);
+                Assert.Equal(0, parentLayoutCallCount);
+                Assert.True(parent.IsHandleCreated);
+                Assert.Equal(expectedParentInvalidatedCallCount + 1, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+            }
+            finally
+            {
+                parent.Layout -= parentHandler;
+            }
         }
 
-        [Theory]
-        [MemberData(nameof(Selected_Get_TestData))]
-        public void ToolStripItem_Selected_Get_ReturnsExpected(ToolStripItem item, bool expected)
+        [WinFormsFact]
+        public void ToolStripItem_Selected_GetCantSelect_ReturnsFalse()
         {
-            Assert.Equal(expected, item.Selected);
+            using var item = new CannotSelectToolStripItem();
+            Assert.False(item.Selected);
         }
 
-        public static IEnumerable<object[]> ShowKeyboardCues_TestData()
+        [WinFormsFact]
+        public void ToolStripItem_Selected_GetDesignMode_ReturnsFalse()
         {
-            yield return new object[] { new SubToolStripItem(), false };
-            yield return new object[] { new SubToolStripItem("text", null, null), false };
-            yield return new object[] { new SubToolStripItem("text", null, null, "name"), false };
+            var mockSite = new Mock<ISite>(MockBehavior.Strict);
+            mockSite
+                .Setup(s => s.Name)
+                .Returns("Name");
+            mockSite
+                .Setup(s => s.DesignMode)
+                .Returns(true);
+            mockSite
+                .Setup(s => s.Container)
+                .Returns((IContainer)null);
+            using var item = new SubToolStripItem
+            {
+                Site = mockSite.Object
+            };
+            Assert.False(item.Selected);
+        }
 
+        [WinFormsFact]
+        public void Selected_GetWithOwner_ReturnsFalse()
+        {
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Owner = owner
+            };
+            Assert.False(item.Selected);
+        }
+
+        [WinFormsFact]
+        public void Selected_GetWithParent_ReturnsFalse()
+        {
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Parent = parent
+            };
+            Assert.False(item.Selected);
+        }
+
+        [WinFormsFact]
+        public void ToolStripItem_ShowKeyboardCues_GetDesignMode_ReturnsTrue()
+        {
             var mockSite = new Mock<ISite>();
-            mockSite.Setup(s => s.DesignMode).Returns(true);
-            yield return new object[] { new SubToolStripItem { Site = mockSite.Object }, true };
+            mockSite
+            .Setup(s => s.DesignMode)
+            .Returns(true);
+            using var item = new SubToolStripItem
+            {
+                Site = mockSite.Object
+            };
+            Assert.True(item.ShowKeyboardCues);
         }
 
-        [Theory]
-        [MemberData(nameof(ShowKeyboardCues_TestData))]
-        public void ToolStripItem_ShowKeyboardCues_Get_ReturnsExpected(ToolStripItem item, bool expected)
+        [WinFormsFact]
+        public void ToolStripItem_Size_GetWithDefaultSize_ReturnsExpected()
         {
-            Assert.Equal(expected, item.ShowKeyboardCues);
+            using var item = new CustomDefaultSizeToolStripItem();
+            Assert.Equal(new Size(10, 11), item.Size);
         }
 
-        [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetSizeTheoryData))]
+        private class CustomDefaultSizeToolStripItem : ToolStripItem
+        {
+            protected override Size DefaultSize => new Size(10, 11);
+        }
+
+        public static IEnumerable<object[]> Size_Set_TestData()
+        {
+            yield return new object[] { new Size(-1, -2) };
+            yield return new object[] { new Size(0, 0) };
+            yield return new object[] { new Size(1, 2) };
+            yield return new object[] { new Size(22, 23) };
+            yield return new object[] { new Size(23, 22) };
+            yield return new object[] { new Size(23, 23) };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(Size_Set_TestData))]
         public void ToolStripItem_Size_Set_GetReturnsExpected(Size value)
         {
-            var item = new SubToolStripItem
-            {
-                Size = value
-            };
+            using var item = new SubToolStripItem();
+            int locationChangedCallCount = 0;
+            item.LocationChanged += (sender, e) => locationChangedCallCount++;
+
+            item.Size = value;
             Assert.Equal(value, item.Size);
+            Assert.Equal(0, locationChangedCallCount);
 
             // Set same.
             item.Size = value;
             Assert.Equal(value, item.Size);
+            Assert.Equal(0, locationChangedCallCount);
         }
 
-        [Theory]
+        [WinFormsTheory]
+        [MemberData(nameof(Size_Set_TestData))]
+        public void ToolStripItem_Size_SetWithOwner_GetReturnsExpected(Size value)
+        {
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Owner = owner
+            };
+            int ownerLayoutCallCount = 0;
+            void ownerHandler(object sender, LayoutEventArgs e) => ownerLayoutCallCount++;
+            owner.Layout += ownerHandler;
+            int locationChangedCallCount = 0;
+            item.LocationChanged += (sender, e) => locationChangedCallCount++;
+
+            try
+            {
+                item.Size = value;
+                Assert.Equal(value, item.Size);
+                Assert.Equal(0, locationChangedCallCount);
+                Assert.Equal(0, ownerLayoutCallCount);
+                Assert.False(owner.IsHandleCreated);
+
+                // Set same.
+                item.Size = value;
+                Assert.Equal(value, item.Size);
+                Assert.Equal(0, locationChangedCallCount);
+                Assert.Equal(0, ownerLayoutCallCount);
+                Assert.False(owner.IsHandleCreated);
+            }
+            finally
+            {
+                owner.Layout -= ownerHandler;
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(Size_Set_TestData))]
+        public void ToolStripItem_Size_SetWithOwnerWithHandle_GetReturnsExpected(Size value)
+        {
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Owner = owner
+            };
+            Assert.NotEqual(IntPtr.Zero, owner.Handle);
+            int invalidatedCallCount = 0;
+            owner.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            owner.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            owner.HandleCreated += (sender, e) => createdCallCount++;
+            int ownerLayoutCallCount = 0;
+            void ownerHandler(object sender, LayoutEventArgs e) => ownerLayoutCallCount++;
+            owner.Layout += ownerHandler;
+            int locationChangedCallCount = 0;
+            item.LocationChanged += (sender, e) => locationChangedCallCount++;
+
+            try
+            {
+                item.Size = value;
+                Assert.Equal(value, item.Size);
+                Assert.Equal(0, locationChangedCallCount);
+                Assert.Equal(0, ownerLayoutCallCount);
+                Assert.True(owner.IsHandleCreated);
+                Assert.Equal(0, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+
+                // Set same.
+                item.Size = value;
+                Assert.Equal(value, item.Size);
+                Assert.Equal(0, locationChangedCallCount);
+                Assert.Equal(0, ownerLayoutCallCount);
+                Assert.True(owner.IsHandleCreated);
+                Assert.Equal(0, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+            }
+            finally
+            {
+                owner.Layout -= ownerHandler;
+            }
+        }
+
+        public static IEnumerable<object[]> Size_SetWithParent_TestData()
+        {
+            yield return new object[] { new Size(-1, -2), 1 };
+            yield return new object[] { new Size(0, 0), 1 };
+            yield return new object[] { new Size(1, 2), 1 };
+            yield return new object[] { new Size(22, 23), 1 };
+            yield return new object[] { new Size(23, 22), 1 };
+            yield return new object[] { new Size(23, 23), 0 };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(Size_SetWithParent_TestData))]
+        public void ToolStripItem_Size_SetWithParent_GetReturnsExpected(Size value, int expectedParentLayoutCallCount)
+        {
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Parent = parent
+            };
+            int parentLayoutCallCount = 0;
+            void parentHandler(object sender, LayoutEventArgs e)
+            {
+                Assert.Same(parent, sender);
+                Assert.Same(item, e.AffectedComponent);
+                Assert.Equal("Bounds", e.AffectedProperty);
+                parentLayoutCallCount++;
+            };
+            parent.Layout += parentHandler;
+            int locationChangedCallCount = 0;
+            item.LocationChanged += (sender, e) => locationChangedCallCount++;
+
+            try
+            {
+                item.Size = value;
+                Assert.Equal(value, item.Size);
+                Assert.Equal(0, locationChangedCallCount);
+                Assert.Equal(expectedParentLayoutCallCount, parentLayoutCallCount);
+                Assert.False(parent.IsHandleCreated);
+
+                // Set same.
+                item.Size = value;
+                Assert.Equal(value, item.Size);
+                Assert.Equal(0, locationChangedCallCount);
+                Assert.Equal(expectedParentLayoutCallCount, parentLayoutCallCount);
+                Assert.False(parent.IsHandleCreated);
+            }
+            finally
+            {
+                parent.Layout -= parentHandler;
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(Size_SetWithParent_TestData))]
+        public void ToolStripItem_Size_SetWithParentWithHandle_GetReturnsExpected(Size value, int expectedParentLayoutCallCount)
+        {
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Parent = parent
+            };
+            Assert.NotEqual(IntPtr.Zero, parent.Handle);
+            int invalidatedCallCount = 0;
+            parent.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            parent.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            parent.HandleCreated += (sender, e) => createdCallCount++;
+            int parentLayoutCallCount = 0;
+            void parentHandler(object sender, LayoutEventArgs e)
+            {
+                Assert.Same(parent, sender);
+                Assert.Same(item, e.AffectedComponent);
+                Assert.Equal("Bounds", e.AffectedProperty);
+                parentLayoutCallCount++;
+            };
+            parent.Layout += parentHandler;
+            int locationChangedCallCount = 0;
+            item.LocationChanged += (sender, e) => locationChangedCallCount++;
+
+            try
+            {
+                item.Size = value;
+                Assert.Equal(value, item.Size);
+                Assert.Equal(0, locationChangedCallCount);
+                Assert.Equal(expectedParentLayoutCallCount, parentLayoutCallCount);
+                Assert.True(parent.IsHandleCreated);
+                Assert.Equal(expectedParentLayoutCallCount, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+
+                // Set same.
+                item.Size = value;
+                Assert.Equal(value, item.Size);
+                Assert.Equal(0, locationChangedCallCount);
+                Assert.Equal(expectedParentLayoutCallCount, parentLayoutCallCount);
+                Assert.True(parent.IsHandleCreated);
+                Assert.Equal(expectedParentLayoutCallCount, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+            }
+            finally
+            {
+                parent.Layout -= parentHandler;
+            }
+        }
+
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void ToolStripItem_Tag_Set_GetReturnsExpected(string value)
         {
-            var item = new SubToolStripItem
+            using var item = new SubToolStripItem
             {
                 Tag = value
             };
@@ -2052,41 +7925,197 @@ namespace System.Windows.Forms.Tests
             Assert.Same(value, item.Tag);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void ToolStripItem_Text_Set_GetReturnsExpected(string value)
         {
-            var item = new SubToolStripItem
+            using var item = new SubToolStripItem
             {
                 Text = value
             };
-            Assert.Same(value, item.Text);
+            Assert.Equal(value, item.Text);
 
             // Set same.
             item.Text = value;
-            Assert.Same(value, item.Text);
+            Assert.Equal(value, item.Text);
         }
 
-        [Theory]
+        [WinFormsTheory]
+        [InlineData(null, 1)]
+        [InlineData("", 0)]
+        [InlineData("text", 1)]
+        public void ToolStripItem_Text_SetWithOwner_GetReturnsExpected(string value, int expectedOwnerLayoutCallCount)
+        {
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Owner = owner
+            };
+            int ownerLayoutCallCount = 0;
+            void ownerHandler(object sender, LayoutEventArgs e)
+            {
+                Assert.Same(owner, sender);
+                Assert.Same(item, e.AffectedComponent);
+                Assert.Equal("Text", e.AffectedProperty);
+                ownerLayoutCallCount++;
+            };
+            owner.Layout += ownerHandler;
+
+            try
+            {
+                item.Text = value;
+                Assert.Equal(value, item.Text);
+                Assert.Equal(expectedOwnerLayoutCallCount, ownerLayoutCallCount);
+                Assert.False(owner.IsHandleCreated);
+
+                // Set same.
+                item.Text = value;
+                Assert.Equal(value, item.Text);
+                Assert.False(owner.IsHandleCreated);
+                Assert.Equal(expectedOwnerLayoutCallCount, ownerLayoutCallCount);
+                Assert.False(owner.IsHandleCreated);
+            }
+            finally
+            {
+                owner.Layout -= ownerHandler;
+            }
+        }
+
+        [WinFormsTheory]
+        [InlineData(null, 1)]
+        [InlineData("", 0)]
+        [InlineData("text", 1)]
+        public void ToolStripItem_Text_SetWithOwnerWithHandle_GetReturnsExpected(string value, int expectedOwnerLayoutCallCount)
+        {
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Owner = owner
+            };
+            Assert.NotEqual(IntPtr.Zero, owner.Handle);
+            int invalidatedCallCount = 0;
+            owner.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            owner.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            owner.HandleCreated += (sender, e) => createdCallCount++;
+            int ownerLayoutCallCount = 0;
+            void ownerHandler(object sender, LayoutEventArgs e)
+            {
+                Assert.Same(owner, sender);
+                Assert.Same(item, e.AffectedComponent);
+                Assert.Equal("Text", e.AffectedProperty);
+                ownerLayoutCallCount++;
+            };
+            owner.Layout += ownerHandler;
+
+            try
+            {
+                item.Text = value;
+                Assert.Equal(value, item.Text);
+                Assert.Equal(expectedOwnerLayoutCallCount, ownerLayoutCallCount);
+                Assert.True(owner.IsHandleCreated);
+                Assert.Equal(expectedOwnerLayoutCallCount * 2, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+
+                // Set same.
+                item.Text = value;
+                Assert.Equal(value, item.Text);
+                Assert.Equal(expectedOwnerLayoutCallCount, ownerLayoutCallCount);
+                Assert.True(owner.IsHandleCreated);
+                Assert.Equal(expectedOwnerLayoutCallCount * 2, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+            }
+            finally
+            {
+                owner.Layout -= ownerHandler;
+            }
+        }
+
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
-        public void ToolStripItem_Text_SetWithOwner_GetReturnsExpected(string value)
+        public void ToolStripItem_Text_SetWithParent_GetReturnsExpected(string value)
         {
-            var owner = new ToolStrip();
-            var item = new SubToolStripItem();
-            owner.Items.Add(item);
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Parent = parent
+            };
+            int parentLayoutCallCount = 0;
+            void parentHandler(object sender, LayoutEventArgs e) => parentLayoutCallCount++;
+            parent.Layout += parentHandler;
 
-            item.Text = value;
-            Assert.Same(value, item.Text);
+            try
+            {
+                item.Text = value;
+                Assert.Equal(value, item.Text);
+                Assert.Equal(0, parentLayoutCallCount);
+                Assert.False(parent.IsHandleCreated);
 
-            // Set same.
-            item.Text = value;
-            Assert.Same(value, item.Text);
+                // Set same.
+                item.Text = value;
+                Assert.Equal(value, item.Text);
+                Assert.False(parent.IsHandleCreated);
+                Assert.Equal(0, parentLayoutCallCount);
+                Assert.False(parent.IsHandleCreated);
+            }
+            finally
+            {
+                parent.Layout -= parentHandler;
+            }
         }
 
-        [Fact]
-        public void ToolStripItem_Text_SetWithHandler_CallsForeColorChanged()
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        public void ToolStripItem_Text_SetWithParentWithHandle_GetReturnsExpected(string value)
         {
-            var item = new SubToolStripItem();
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Parent = parent
+            };
+            Assert.NotEqual(IntPtr.Zero, parent.Handle);
+            int invalidatedCallCount = 0;
+            parent.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            parent.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            parent.HandleCreated += (sender, e) => createdCallCount++;
+            int parentLayoutCallCount = 0;
+            void parentHandler(object sender, LayoutEventArgs e) => parentLayoutCallCount++;
+            parent.Layout += parentHandler;
+
+            try
+            {
+                item.Text = value;
+                Assert.Equal(value, item.Text);
+                Assert.Equal(0, parentLayoutCallCount);
+                Assert.True(parent.IsHandleCreated);
+                Assert.Equal(0, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+
+                // Set same.
+                item.Text = value;
+                Assert.Equal(value, item.Text);
+                Assert.Equal(0, parentLayoutCallCount);
+                Assert.True(parent.IsHandleCreated);
+                Assert.Equal(0, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+            }
+            finally
+            {
+                parent.Layout -= parentHandler;
+            }
+        }
+
+        [WinFormsFact]
+        public void ToolStripItem_Text_SetWithHandler_CallsTextChanged()
+        {
+            using var item = new SubToolStripItem();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -2118,11 +8147,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(2, callCount);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ContentAlignment))]
         public void ToolStripItem_TextAlign_Set_GetReturnsExpected(ContentAlignment value)
         {
-            var item = new SubToolStripItem
+            using var item = new SubToolStripItem
             {
                 TextAlign = value
             };
@@ -2133,65 +8162,251 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, item.TextAlign);
         }
 
-        [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ContentAlignment))]
-        public void ToolStripItem_TextAlign_SetWithOwner_GetReturnsExpected(ContentAlignment value)
+        [WinFormsTheory]
+        [InlineData(ContentAlignment.TopLeft, 1)]
+        [InlineData(ContentAlignment.TopCenter, 1)]
+        [InlineData(ContentAlignment.TopRight, 1)]
+        [InlineData(ContentAlignment.MiddleLeft, 1)]
+        [InlineData(ContentAlignment.MiddleCenter, 0)]
+        [InlineData(ContentAlignment.MiddleRight, 1)]
+        [InlineData(ContentAlignment.BottomLeft, 1)]
+        [InlineData(ContentAlignment.BottomCenter, 1)]
+        [InlineData(ContentAlignment.BottomRight, 1)]
+        public void ToolStripItem_TextAlign_SetWithOwner_GetReturnsExpected(ContentAlignment value, int expectedParentLayoutCallCount)
         {
-            var owner = new ToolStrip();
-            var item = new SubToolStripItem();
-            owner.Items.Add(item);
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Owner = owner
+            };
+            int ownerLayoutCallCount = 0;
+            void ownerHandler(object sender, LayoutEventArgs e)
+            {
+                Assert.Same(owner, sender);
+                Assert.Same(item, e.AffectedComponent);
+                Assert.Equal("TextAlign", e.AffectedProperty);
+                ownerLayoutCallCount++;
+            };
+            owner.Layout += ownerHandler;
 
-            item.TextAlign = value;
-            Assert.Equal(value, item.TextAlign);
+            try
+            {
+                item.TextAlign = value;
+                Assert.Equal(value, item.TextAlign);
+                Assert.Equal(expectedParentLayoutCallCount, ownerLayoutCallCount);
+                Assert.False(owner.IsHandleCreated);
 
-            // Set same.
-            item.TextAlign = value;
-            Assert.Equal(value, item.TextAlign);
+                // Set same.
+                item.TextAlign = value;
+                Assert.Equal(value, item.TextAlign);
+                Assert.Equal(expectedParentLayoutCallCount, ownerLayoutCallCount);
+                Assert.False(owner.IsHandleCreated);
+            }
+            finally
+            {
+                owner.Layout -= ownerHandler;
+            }
         }
 
-        [Theory]
+        [WinFormsTheory]
+        [InlineData(ContentAlignment.TopLeft, 1)]
+        [InlineData(ContentAlignment.TopCenter, 1)]
+        [InlineData(ContentAlignment.TopRight, 1)]
+        [InlineData(ContentAlignment.MiddleLeft, 1)]
+        [InlineData(ContentAlignment.MiddleCenter, 0)]
+        [InlineData(ContentAlignment.MiddleRight, 1)]
+        [InlineData(ContentAlignment.BottomLeft, 1)]
+        [InlineData(ContentAlignment.BottomCenter, 1)]
+        [InlineData(ContentAlignment.BottomRight, 1)]
+        public void ToolStripItem_TextAlign_SetWithOwnerWithHandle_GetReturnsExpected(ContentAlignment value, int expectedParentLayoutCallCount)
+        {
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Owner = owner
+            };
+            Assert.NotEqual(IntPtr.Zero, owner.Handle);
+            int invalidatedCallCount = 0;
+            owner.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            owner.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            owner.HandleCreated += (sender, e) => createdCallCount++;
+            int ownerLayoutCallCount = 0;
+            void ownerHandler(object sender, LayoutEventArgs e)
+            {
+                Assert.Same(owner, sender);
+                Assert.Same(item, e.AffectedComponent);
+                Assert.Equal("TextAlign", e.AffectedProperty);
+                ownerLayoutCallCount++;
+            };
+            owner.Layout += ownerHandler;
+
+            try
+            {
+                item.TextAlign = value;
+                Assert.Equal(value, item.TextAlign);
+                Assert.Equal(expectedParentLayoutCallCount, ownerLayoutCallCount);
+                Assert.True(owner.IsHandleCreated);
+                Assert.Equal(expectedParentLayoutCallCount * 2, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+
+                // Set same.
+                item.TextAlign = value;
+                Assert.Equal(value, item.TextAlign);
+                Assert.Equal(expectedParentLayoutCallCount, ownerLayoutCallCount);
+                Assert.True(owner.IsHandleCreated);
+                Assert.Equal(expectedParentLayoutCallCount * 2, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+            }
+            finally
+            {
+                owner.Layout -= ownerHandler;
+            }
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ContentAlignment))]
+        public void ToolStripItem_TextAlign_SetWithParent_GetReturnsExpected(ContentAlignment value)
+        {
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Parent = parent
+            };
+            int parentLayoutCallCount = 0;
+            void parentHandler(object sender, LayoutEventArgs e) => parentLayoutCallCount++;
+            parent.Layout += parentHandler;
+
+            try
+            {
+                item.TextAlign = value;
+                Assert.Equal(value, item.TextAlign);
+                Assert.Equal(0, parentLayoutCallCount);
+                Assert.False(parent.IsHandleCreated);
+
+                // Set same.
+                item.TextAlign = value;
+                Assert.Equal(value, item.TextAlign);
+                Assert.Equal(0, parentLayoutCallCount);
+                Assert.False(parent.IsHandleCreated);
+            }
+            finally
+            {
+                parent.Layout -= parentHandler;
+            }
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ContentAlignment))]
+        public void ToolStripItem_TextAlign_SetWithParentWithHandle_GetReturnsExpected(ContentAlignment value)
+        {
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Parent = parent
+            };
+            Assert.NotEqual(IntPtr.Zero, parent.Handle);
+            int invalidatedCallCount = 0;
+            parent.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            parent.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            parent.HandleCreated += (sender, e) => createdCallCount++;
+            int parentLayoutCallCount = 0;
+            void parentHandler(object sender, LayoutEventArgs e) => parentLayoutCallCount++;
+            parent.Layout += parentHandler;
+
+            try
+            {
+                item.TextAlign = value;
+                Assert.Equal(value, item.TextAlign);
+                Assert.Equal(0, parentLayoutCallCount);
+                Assert.True(parent.IsHandleCreated);
+                Assert.Equal(0, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+
+                // Set same.
+                item.TextAlign = value;
+                Assert.Equal(value, item.TextAlign);
+                Assert.Equal(0, parentLayoutCallCount);
+                Assert.True(parent.IsHandleCreated);
+                Assert.Equal(0, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+            }
+            finally
+            {
+                parent.Layout -= parentHandler;
+            }
+        }
+
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ContentAlignment))]
+        [InlineData((ContentAlignment)int.MaxValue)]
+        [InlineData((ContentAlignment)int.MinValue)]
         public void ToolStripItem_TextAlign_SetInvalid_ThrowsInvalidEnumArgumentException(ContentAlignment value)
         {
-            var item = new SubToolStripItem();
+            using var item = new SubToolStripItem();
             Assert.Throws<InvalidEnumArgumentException>("value", () => item.TextAlign = value);
         }
 
-        public static IEnumerable<object[]> TextDirection_Get_TestData()
+        [WinFormsTheory]
+        [InlineData(ToolStripTextDirection.Inherit, ToolStripTextDirection.Horizontal)]
+        [InlineData(ToolStripTextDirection.Horizontal, ToolStripTextDirection.Horizontal)]
+        [InlineData(ToolStripTextDirection.Vertical90, ToolStripTextDirection.Vertical90)]
+        [InlineData(ToolStripTextDirection.Vertical270, ToolStripTextDirection.Vertical270)]
+        public void ToolStripItem_TextDirection_GetWithOwner_ReturnsExpected(ToolStripTextDirection ownerTextDirection, ToolStripTextDirection expected)
         {
-            yield return new object[] { new SubToolStripItem(), ToolStripTextDirection.Horizontal };
-            yield return new object[] { new SubToolStripItem("text", null, null), ToolStripTextDirection.Horizontal };
-            yield return new object[] { new SubToolStripItem("text", null, null, "name"), ToolStripTextDirection.Horizontal };
-
-            var toolStrip = new ToolStrip
+            using var owner = new ToolStrip
             {
-                TextDirection = ToolStripTextDirection.Vertical270
+                TextDirection = ownerTextDirection
             };
-            var toolStripItem = new SubToolStripItem();
-            toolStrip.Items.Add(toolStripItem);
-            yield return new object[] { toolStripItem, ToolStripTextDirection.Vertical270 };
+            using var item = new SubToolStripItem
+            {
+                Owner = owner
+            };
+            Assert.Equal(expected, item.TextDirection);
+        }
 
-            var toolStripParent = new ToolStrip
+        [WinFormsTheory]
+        [InlineData(ToolStripTextDirection.Inherit, ToolStripTextDirection.Horizontal)]
+        [InlineData(ToolStripTextDirection.Horizontal, ToolStripTextDirection.Horizontal)]
+        [InlineData(ToolStripTextDirection.Vertical90, ToolStripTextDirection.Vertical90)]
+        [InlineData(ToolStripTextDirection.Vertical270, ToolStripTextDirection.Vertical270)]
+        public void ToolStripItem_TextDirection_GetWithParent_ReturnsExpected(ToolStripTextDirection parentTextDirection, ToolStripTextDirection expected)
+        {
+            using var parent = new ToolStrip
+            {
+                TextDirection = parentTextDirection
+            };
+            using var item = new SubToolStripItem
+            {
+                Parent = parent
+            };
+            Assert.Equal(expected, item.TextDirection);
+        }
+
+        [WinFormsFact]
+        public void ToolStripItem_TextDirection_GetWithOwnerAndParent_ReturnsExpected()
+        {
+            using var owner = new ToolStrip
             {
                 TextDirection = ToolStripTextDirection.Vertical90
             };
-            var toolStripParentItem = new SubToolStripItem
+            using var parent = new ToolStrip
             {
-                Parent = toolStripParent
+                TextDirection = ToolStripTextDirection.Vertical270
             };
-            yield return new object[] { toolStripParentItem, ToolStripTextDirection.Vertical90 };
-
-            var toolStripOwnerParentItem = new SubToolStripItem();
-            toolStrip.Items.Add(toolStripOwnerParentItem);
-            toolStripOwnerParentItem.Parent = toolStripParent;
-            yield return new object[] { toolStripOwnerParentItem, ToolStripTextDirection.Vertical90 };
-        }
-
-        [Theory]
-        [MemberData(nameof(TextDirection_Get_TestData))]
-        public void ToolStripItem_TextDirection_Get_ReturnsExpected(ToolStripItem item, ToolStripTextDirection expected)
-        {
-            Assert.Equal(expected, item.TextDirection);
+            using var item = new SubToolStripItem
+            {
+                Owner = owner,
+                Parent = parent
+            };
+            Assert.Equal(ToolStripTextDirection.Vertical270, item.TextDirection);
         }
 
         public static IEnumerable<object[]> TextDirection_Set_TestData()
@@ -2202,11 +8417,11 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { ToolStripTextDirection.Vertical270, ToolStripTextDirection.Vertical270 };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(TextDirection_Set_TestData))]
         public void ToolStripItem_TextDirection_Set_GetReturnsExpected(ToolStripTextDirection value, ToolStripTextDirection expected)
         {
-            var item = new SubToolStripItem
+            using var item = new SubToolStripItem
             {
                 TextDirection = value
             };
@@ -2217,35 +8432,253 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, item.TextDirection);
         }
 
-        [Theory]
-        [MemberData(nameof(TextDirection_Set_TestData))]
-        public void ToolStripItem_TextDirection_SetWithOwner_GetReturnsExpected(ToolStripTextDirection value, ToolStripTextDirection expected)
+        public static IEnumerable<object[]> TextDirection_SetWithOwner_TestData()
         {
-            var owner = new ToolStrip();
-            var item = new SubToolStripItem();
-            owner.Items.Add(item);
-
-            item.TextDirection = value;
-            Assert.Equal(expected, item.TextDirection);
-
-            // Set same.
-            item.TextDirection = value;
-            Assert.Equal(expected, item.TextDirection);
+            yield return new object[] { ToolStripTextDirection.Horizontal, ToolStripTextDirection.Inherit, ToolStripTextDirection.Horizontal };
+            yield return new object[] { ToolStripTextDirection.Horizontal, ToolStripTextDirection.Horizontal, ToolStripTextDirection.Horizontal };
+            yield return new object[] { ToolStripTextDirection.Horizontal, ToolStripTextDirection.Vertical90, ToolStripTextDirection.Vertical90 };
+            yield return new object[] { ToolStripTextDirection.Horizontal, ToolStripTextDirection.Vertical270, ToolStripTextDirection.Vertical270 };
         }
 
-        [Theory]
+        [WinFormsTheory]
+        [MemberData(nameof(TextDirection_SetWithOwner_TestData))]
+        public void ToolStripItem_TextDirection_SetWithOwner_GetReturnsExpected(ToolStripTextDirection ownerTextDirection, ToolStripTextDirection value, ToolStripTextDirection expected)
+        {
+            using var owner = new ToolStrip
+            {
+                TextDirection = ownerTextDirection
+            };
+            using var item = new SubToolStripItem
+            {
+                Owner = owner
+            };
+            int ownerLayoutCallCount = 0;
+            void ownerHandler(object sender, LayoutEventArgs e)
+            {
+                Assert.Same(owner, sender);
+                Assert.Same(item, e.AffectedComponent);
+                Assert.Equal("TextDirection", e.AffectedProperty);
+                ownerLayoutCallCount++;
+            };
+            owner.Layout += ownerHandler;
+
+            try
+            {
+                item.TextDirection = value;
+                Assert.Equal(expected, item.TextDirection);
+                Assert.Equal(1, ownerLayoutCallCount);
+                Assert.False(owner.IsHandleCreated);
+
+                // Set same.
+                item.TextDirection = value;
+                Assert.Equal(expected, item.TextDirection);
+                Assert.Equal(2, ownerLayoutCallCount);
+                Assert.False(owner.IsHandleCreated);
+            }
+            finally
+            {
+                owner.Layout -= ownerHandler;
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(TextDirection_SetWithOwner_TestData))]
+        public void ToolStripItem_TextDirection_SetWithOwnerWithHandle_GetReturnsExpected(ToolStripTextDirection ownerTextDirection, ToolStripTextDirection value, ToolStripTextDirection expected)
+        {
+            using var owner = new ToolStrip
+            {
+                TextDirection = ownerTextDirection
+            };
+            using var item = new SubToolStripItem
+            {
+                Owner = owner
+            };
+            Assert.NotEqual(IntPtr.Zero, owner.Handle);
+            int invalidatedCallCount = 0;
+            owner.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            owner.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            owner.HandleCreated += (sender, e) => createdCallCount++;
+            int ownerLayoutCallCount = 0;
+            void ownerHandler(object sender, LayoutEventArgs e)
+            {
+                Assert.Same(owner, sender);
+                Assert.Same(item, e.AffectedComponent);
+                Assert.Equal("TextDirection", e.AffectedProperty);
+                ownerLayoutCallCount++;
+            };
+            owner.Layout += ownerHandler;
+
+            try
+            {
+                item.TextDirection = value;
+                Assert.Equal(expected, item.TextDirection);
+                Assert.Equal(1, ownerLayoutCallCount);
+                Assert.True(owner.IsHandleCreated);
+                Assert.Equal(2, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+
+                // Set same.
+                item.TextDirection = value;
+                Assert.Equal(expected, item.TextDirection);
+                Assert.Equal(2, ownerLayoutCallCount);
+                Assert.True(owner.IsHandleCreated);
+                Assert.Equal(4, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+            }
+            finally
+            {
+                owner.Layout -= ownerHandler;
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(TextDirection_SetWithOwner_TestData))]
+        public void ToolStripItem_TextDirection_SetWithParent_GetReturnsExpected(ToolStripTextDirection parentTextDirection, ToolStripTextDirection value, ToolStripTextDirection expected)
+        {
+            using var parent = new ToolStrip
+            {
+                TextDirection = parentTextDirection
+            };
+            using var item = new SubToolStripItem
+            {
+                Parent = parent
+            };
+            int parentLayoutCallCount = 0;
+            void parentHandler(object sender, LayoutEventArgs e) => parentLayoutCallCount++;
+            parent.Layout += parentHandler;
+
+            try
+            {
+                item.TextDirection = value;
+                Assert.Equal(expected, item.TextDirection);
+                Assert.Equal(0, parentLayoutCallCount);
+                Assert.False(parent.IsHandleCreated);
+
+                // Set same.
+                item.TextDirection = value;
+                Assert.Equal(expected, item.TextDirection);
+                Assert.Equal(0, parentLayoutCallCount);
+                Assert.False(parent.IsHandleCreated);
+            }
+            finally
+            {
+                parent.Layout -= parentHandler;
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(TextDirection_SetWithOwner_TestData))]
+        public void ToolStripItem_TextDirection_SetWithParentWithHandle_GetReturnsExpected(ToolStripTextDirection parentTextDirection, ToolStripTextDirection value, ToolStripTextDirection expected)
+        {
+            using var parent = new ToolStrip
+            {
+                TextDirection = parentTextDirection
+            };
+            using var item = new SubToolStripItem
+            {
+                Parent = parent
+            };
+            Assert.NotEqual(IntPtr.Zero, parent.Handle);
+            int invalidatedCallCount = 0;
+            parent.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            parent.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            parent.HandleCreated += (sender, e) => createdCallCount++;
+            int parentLayoutCallCount = 0;
+            void parentHandler(object sender, LayoutEventArgs e) => parentLayoutCallCount++;
+            parent.Layout += parentHandler;
+
+            try
+            {
+                item.TextDirection = value;
+                Assert.Equal(expected, item.TextDirection);
+                Assert.Equal(0, parentLayoutCallCount);
+                Assert.True(parent.IsHandleCreated);
+                Assert.Equal(0, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+
+                // Set same.
+                item.TextDirection = value;
+                Assert.Equal(expected, item.TextDirection);
+                Assert.Equal(0, parentLayoutCallCount);
+                Assert.True(parent.IsHandleCreated);
+                Assert.Equal(0, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+            }
+            finally
+            {
+                parent.Layout -= parentHandler;
+            }
+        }
+
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ToolStripTextDirection))]
         public void ToolStripItem_TextDirection_SetInvalid_ThrowsInvalidEnumArgumentException(ToolStripTextDirection value)
         {
-            var item = new SubToolStripItem();
+            using var item = new SubToolStripItem();
             Assert.Throws<InvalidEnumArgumentException>("value", () => item.TextDirection = value);
         }
 
-        [Theory]
+        [WinFormsFact]
+        public void ToolStripItem_TextDirection_ResetValue_Success()
+        {
+            PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ToolStripItem))[nameof(ToolStripItem.TextDirection)];
+            using var item = new SubToolStripItem();
+            Assert.False(property.CanResetValue(item));
+
+            item.TextDirection = ToolStripTextDirection.Vertical270;
+            Assert.Equal(ToolStripTextDirection.Vertical270, item.TextDirection);
+            Assert.True(property.CanResetValue(item));
+
+            item.TextDirection = ToolStripTextDirection.Vertical90;
+            Assert.Equal(ToolStripTextDirection.Vertical90, item.TextDirection);
+            Assert.True(property.CanResetValue(item));
+
+            item.TextDirection = ToolStripTextDirection.Horizontal;
+            Assert.Equal(ToolStripTextDirection.Horizontal, item.TextDirection);
+            Assert.True(property.CanResetValue(item));
+
+            property.ResetValue(item);
+            Assert.Equal(ToolStripTextDirection.Horizontal, item.TextDirection);
+            Assert.False(property.CanResetValue(item));
+        }
+
+        [WinFormsFact]
+        public void ToolStripItem_TextDirection_ShouldSerializeValue_Success()
+        {
+            PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ToolStripItem))[nameof(ToolStripItem.TextDirection)];
+            using var item = new SubToolStripItem();
+            Assert.False(property.ShouldSerializeValue(item));
+
+            item.TextDirection = ToolStripTextDirection.Vertical270;
+            Assert.Equal(ToolStripTextDirection.Vertical270, item.TextDirection);
+            Assert.True(property.ShouldSerializeValue(item));
+
+            item.TextDirection = ToolStripTextDirection.Vertical90;
+            Assert.Equal(ToolStripTextDirection.Vertical90, item.TextDirection);
+            Assert.True(property.ShouldSerializeValue(item));
+
+            item.TextDirection = ToolStripTextDirection.Horizontal;
+            Assert.Equal(ToolStripTextDirection.Horizontal, item.TextDirection);
+            Assert.True(property.ShouldSerializeValue(item));
+
+            property.ResetValue(item);
+            Assert.Equal(ToolStripTextDirection.Horizontal, item.TextDirection);
+            Assert.False(property.ShouldSerializeValue(item));
+        }
+
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(TextImageRelation))]
         public void ToolStripItem_TextImageRelation_Set_GetReturnsExpected(TextImageRelation value)
         {
-            var item = new SubToolStripItem
+            using var item = new SubToolStripItem
             {
                 TextImageRelation = value
             };
@@ -2256,23 +8689,181 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, item.TextImageRelation);
         }
 
-        [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(TextImageRelation))]
-        public void ToolStripItem_TextImageRelation_SetWithOwner_GetReturnsExpected(TextImageRelation value)
+        [WinFormsTheory]
+        [InlineData(TextImageRelation.Overlay, 1)]
+        [InlineData(TextImageRelation.ImageBeforeText, 0)]
+        [InlineData(TextImageRelation.TextBeforeImage, 1)]
+        [InlineData(TextImageRelation.ImageAboveText, 1)]
+        [InlineData(TextImageRelation.TextAboveImage, 1)]
+        public void ToolStripItem_TextImageRelation_SetWithOwner_GetReturnsExpected(TextImageRelation value, int expectedParentLayoutCallCount)
         {
-            var owner = new ToolStrip();
-            var item = new SubToolStripItem();
-            owner.Items.Add(item);
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Owner = owner
+            };
+            int ownerLayoutCallCount = 0;
+            void ownerHandler(object sender, LayoutEventArgs e)
+            {
+                Assert.Same(owner, sender);
+                Assert.Same(item, e.AffectedComponent);
+                Assert.Equal("TextImageRelation", e.AffectedProperty);
+                ownerLayoutCallCount++;
+            };
+            owner.Layout += ownerHandler;
 
-            item.TextImageRelation = value;
-            Assert.Equal(value, item.TextImageRelation);
+            try
+            {
+                item.TextImageRelation = value;
+                Assert.Equal(value, item.TextImageRelation);
+                Assert.Equal(expectedParentLayoutCallCount, ownerLayoutCallCount);
+                Assert.False(owner.IsHandleCreated);
 
-            // Set same.
-            item.TextImageRelation = value;
-            Assert.Equal(value, item.TextImageRelation);
+                // Set same.
+                item.TextImageRelation = value;
+                Assert.Equal(value, item.TextImageRelation);
+                Assert.Equal(expectedParentLayoutCallCount, ownerLayoutCallCount);
+                Assert.False(owner.IsHandleCreated);
+            }
+            finally
+            {
+                owner.Layout -= ownerHandler;
+            }
         }
 
-        [Theory]
+        [WinFormsTheory]
+        [InlineData(TextImageRelation.Overlay, 1)]
+        [InlineData(TextImageRelation.ImageBeforeText, 0)]
+        [InlineData(TextImageRelation.TextBeforeImage, 1)]
+        [InlineData(TextImageRelation.ImageAboveText, 1)]
+        [InlineData(TextImageRelation.TextAboveImage, 1)]
+        public void ToolStripItem_TextImageRelation_SetWithOwnerWithHandle_GetReturnsExpected(TextImageRelation value, int expectedParentLayoutCallCount)
+        {
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Owner = owner
+            };
+            Assert.NotEqual(IntPtr.Zero, owner.Handle);
+            int invalidatedCallCount = 0;
+            owner.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            owner.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            owner.HandleCreated += (sender, e) => createdCallCount++;
+            int ownerLayoutCallCount = 0;
+            void ownerHandler(object sender, LayoutEventArgs e)
+            {
+                Assert.Same(owner, sender);
+                Assert.Same(item, e.AffectedComponent);
+                Assert.Equal("TextImageRelation", e.AffectedProperty);
+                ownerLayoutCallCount++;
+            };
+            owner.Layout += ownerHandler;
+
+            try
+            {
+                item.TextImageRelation = value;
+                Assert.Equal(value, item.TextImageRelation);
+                Assert.Equal(expectedParentLayoutCallCount, ownerLayoutCallCount);
+                Assert.True(owner.IsHandleCreated);
+                Assert.Equal(expectedParentLayoutCallCount * 2, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+
+                // Set same.
+                item.TextImageRelation = value;
+                Assert.Equal(value, item.TextImageRelation);
+                Assert.Equal(expectedParentLayoutCallCount, ownerLayoutCallCount);
+                Assert.True(owner.IsHandleCreated);
+                Assert.Equal(expectedParentLayoutCallCount * 2, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+            }
+            finally
+            {
+                owner.Layout -= ownerHandler;
+            }
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(TextImageRelation))]
+        public void ToolStripItem_TextImageRelation_SetWithParent_GetReturnsExpected(TextImageRelation value)
+        {
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Parent = parent
+            };
+            int parentLayoutCallCount = 0;
+            void parentHandler(object sender, LayoutEventArgs e) => parentLayoutCallCount++;
+            parent.Layout += parentHandler;
+
+            try
+            {
+                item.TextImageRelation = value;
+                Assert.Equal(value, item.TextImageRelation);
+                Assert.Equal(0, parentLayoutCallCount);
+                Assert.False(parent.IsHandleCreated);
+
+                // Set same.
+                item.TextImageRelation = value;
+                Assert.Equal(value, item.TextImageRelation);
+                Assert.Equal(0, parentLayoutCallCount);
+                Assert.False(parent.IsHandleCreated);
+            }
+            finally
+            {
+                parent.Layout -= parentHandler;
+            }
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(TextImageRelation))]
+        public void ToolStripItem_TextImageRelation_SetWithParentWithHandle_GetReturnsExpected(TextImageRelation value)
+        {
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Parent = parent
+            };
+            Assert.NotEqual(IntPtr.Zero, parent.Handle);
+            int invalidatedCallCount = 0;
+            parent.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            parent.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            parent.HandleCreated += (sender, e) => createdCallCount++;
+            int parentLayoutCallCount = 0;
+            void parentHandler(object sender, LayoutEventArgs e) => parentLayoutCallCount++;
+            parent.Layout += parentHandler;
+
+            try
+            {
+                item.TextImageRelation = value;
+                Assert.Equal(value, item.TextImageRelation);
+                Assert.Equal(0, parentLayoutCallCount);
+                Assert.True(parent.IsHandleCreated);
+                Assert.Equal(0, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+
+                // Set same.
+                item.TextImageRelation = value;
+                Assert.Equal(value, item.TextImageRelation);
+                Assert.Equal(0, parentLayoutCallCount);
+                Assert.True(parent.IsHandleCreated);
+                Assert.Equal(0, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+            }
+            finally
+            {
+                parent.Layout -= parentHandler;
+            }
+        }
+
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(TextImageRelation))]
         [InlineData((TextImageRelation)3)]
         [InlineData((TextImageRelation)5)]
@@ -2280,41 +8871,50 @@ namespace System.Windows.Forms.Tests
         [InlineData((TextImageRelation)7)]
         public void ToolStripItem_TextImageRelation_SetInvalid_ThrowsInvalidEnumArgumentException(TextImageRelation value)
         {
-            var item = new SubToolStripItem();
+            using var item = new SubToolStripItem();
             Assert.Throws<InvalidEnumArgumentException>("value", () => item.TextImageRelation = value);
         }
 
         public static IEnumerable<object[]> ToolTipText_Get_TestData()
         {
-            yield return new object[] { new SubToolStripItem(), null };
-            yield return new object[] { new SubToolStripItem("text", null, null), null };
-            yield return new object[] { new SubToolStripItem("text", null, null, "name"), null };
-            yield return new object[] { new SubToolStripItem { AutoToolTip = false, Text = "reasonable" }, null };
+            yield return new object[] { true, null, null };
+            yield return new object[] { true, "", "" };
+            yield return new object[] { true, "text", "text" };
+            yield return new object[] { true, "&", "&" };
+            yield return new object[] { true, "&&", "&&" };
+            yield return new object[] { true, "&T", "T" };
+            yield return new object[] { true, "&Text", "Text" };
+            yield return new object[] { true, "&Text1&Text2", "&Text1&Text2" };
+            yield return new object[] { true, "Text1&Text2", "Text1Text2" };
 
-            yield return new object[] { new SubToolStripItem { AutoToolTip = true, Text = null }, null };
-            yield return new object[] { new SubToolStripItem { AutoToolTip = true, Text = string.Empty }, string.Empty };
-            yield return new object[] { new SubToolStripItem { AutoToolTip = true, Text = "reasonable" }, "reasonable" };
-            yield return new object[] { new SubToolStripItem { AutoToolTip = true, Text = "&" }, "&" };
-            yield return new object[] { new SubToolStripItem { AutoToolTip = true, Text = "&&" }, "&&" };
-
-            yield return new object[] { new SubToolStripItem { AutoToolTip = true, Text = "&" }, "&" };
-            yield return new object[] { new SubToolStripItem { AutoToolTip = true, Text = "&T" }, "T" };
-            yield return new object[] { new SubToolStripItem { AutoToolTip = true, Text = "&Text" }, "Text" };
-            yield return new object[] { new SubToolStripItem { AutoToolTip = true, Text = "&Text&Text2" }, "&Text&Text2" };
+            yield return new object[] { false, null, null };
+            yield return new object[] { false, "", null };
+            yield return new object[] { false, "text", null };
+            yield return new object[] { false, "&", null };
+            yield return new object[] { false, "&&", null };
+            yield return new object[] { false, "&T", null };
+            yield return new object[] { false, "&Text", null };
+            yield return new object[] { false, "&Text1&Text2", null };
+            yield return new object[] { false, "Text1&Text2", null };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(ToolTipText_Get_TestData))]
-        public void ToolStripItem_ToolTipText_Get_ReturnsExpected(ToolStripItem item, string expected)
+        public void ToolStripItem_ToolTipText_Get_ReturnsExpected(bool autoToolTip, string text, string expected)
         {
+            using var item = new SubToolStripItem
+            {
+                AutoToolTip = autoToolTip,
+                Text = text
+            };
             Assert.Equal(expected, item.ToolTipText);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetStringTheoryData))]
         public void ToolStripItem_ToolTipText_Set_GetReturnsExpected(string value)
         {
-            var item = new SubToolStripItem
+            using var item = new SubToolStripItem
             {
                 ToolTipText = value
             };
@@ -2325,89 +8925,463 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, item.ToolTipText);
         }
 
-        public static IEnumerable<object[]> Visible_Get_TestData()
+        [WinFormsFact]
+        public void ToolStripItem_ToolTipText_ResetValue_Success()
         {
-            yield return new object[] { new SubToolStripItem(), false };
-            yield return new object[] { new SubToolStripItem("text", null, null), false };
-            yield return new object[] { new SubToolStripItem("text", null, null, "name"), false };
+            PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ToolStripItem))[nameof(ToolStripItem.ToolTipText)];
+            using var item = new SubToolStripItem();
+            Assert.False(property.CanResetValue(item));
 
-            yield return new object[] { new SubToolStripItem { Available = true }, false };
+            // Set null.
+            item.ToolTipText = null;
+            Assert.Null(item.ToolTipText);
+            Assert.False(property.CanResetValue(item));
+            
+            // Set empty.
+            item.ToolTipText = string.Empty;
+            Assert.Empty(item.ToolTipText);
+            Assert.False(property.CanResetValue(item));
 
-            foreach (bool visible in new bool[] { true, false })
-            {
-                var toolStripParentVisible = new ToolStrip
-                {
-                    Visible = visible
-                };
-                var toolStripParentVisibleItem = new SubToolStripItem
-                {
-                    Available = true,
-                    Parent = toolStripParentVisible
-                };
-                yield return new object[] { toolStripParentVisibleItem, visible };
+            // Set custom
+            item.ToolTipText = "text";
+            Assert.Equal("text", item.ToolTipText);
+            Assert.True(property.CanResetValue(item));
 
-                var toolStripParentNotVisibleItem = new SubToolStripItem
-                {
-                    Available = false,
-                    Parent = toolStripParentVisible
-                };
-                yield return new object[] { toolStripParentNotVisibleItem, false };
-            }
+            property.ResetValue(item);
+            Assert.Null(item.ToolTipText);
+            Assert.False(property.CanResetValue(item));
         }
 
-        [Theory]
-        [MemberData(nameof(Visible_Get_TestData))]
-        public void ToolStripItem_Visible_Get_ReturnsExpected(ToolStripItem item, bool expected)
+        [WinFormsFact]
+        public void ToolStripItem_ToolTipText_ShouldSerializeValue_Success()
         {
+            PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ToolStripItem))[nameof(ToolStripItem.ToolTipText)];
+            using var item = new SubToolStripItem();
+            Assert.False(property.ShouldSerializeValue(item));
+
+            // Set null.
+            item.ToolTipText = null;
+            Assert.Null(item.ToolTipText);
+            Assert.False(property.ShouldSerializeValue(item));
+            
+            // Set empty.
+            item.ToolTipText = string.Empty;
+            Assert.Empty(item.ToolTipText);
+            Assert.False(property.ShouldSerializeValue(item));
+
+            // Set custom
+            item.ToolTipText = "text";
+            Assert.Equal("text", item.ToolTipText);
+            Assert.True(property.ShouldSerializeValue(item));
+
+            property.ResetValue(item);
+            Assert.Null(item.ToolTipText);
+            Assert.False(property.ShouldSerializeValue(item));
+        }
+
+        [WinFormsTheory]
+        [InlineData(true, true)]
+        [InlineData(true, false)]
+        [InlineData(false, true)]
+        [InlineData(false, false)]
+        public void ToolStripItem_Visible_GetWithOwner_ReturnsExpected(bool ownerVisible, bool visible)
+        {
+            using var owner = new ToolStrip
+            {
+                Visible = ownerVisible
+            };
+            using var item = new SubToolStripItem
+            {
+                Owner = owner
+            };
+            Assert.False(item.Visible);
+
+            // Set custom.
+            item.Visible = visible;
+            Assert.False(item.Visible);
+        }
+
+        [WinFormsTheory]
+        [InlineData(true, true, true)]
+        [InlineData(true, false, false)]
+        [InlineData(false, true, false)]
+        [InlineData(false, false, false)]
+        public void ToolStripItem_Visible_GetWithParent_ReturnsExpected(bool parentVisible, bool visible, bool expected)
+        {
+            using var parent = new ToolStrip
+            {
+                Visible = parentVisible
+            };
+            using var item = new SubToolStripItem
+            {
+                Parent = parent
+            };
+            Assert.Equal(parentVisible, item.Visible);
+
+            // Set custom.
+            item.Visible = visible;
             Assert.Equal(expected, item.Visible);
         }
 
-        public static IEnumerable<object[]> Visible_Set_TestData()
+        [WinFormsTheory]
+        [MemberData(nameof(SetVisibleCore_TestData))]
+        public void ToolStripItem_Visible_Set_GetReturnsExpected(bool enabled, Image image, bool value)
         {
-            yield return new object[] { true, true };
-            yield return new object[] { true, false };
-            yield return new object[] { false, true };
-            yield return new object[] { false, false };
-        }
-
-        [Theory]
-        [MemberData(nameof(Visible_Set_TestData))]
-        public void ToolStripItem_Visible_Set_GetReturnsExpected(bool available, bool value)
-        {
-            var item = new SubToolStripItem
+            using var item = new SubToolStripItem
             {
-                Available = available,
+                Enabled = enabled,
+                Image = image,
                 Visible = value
             };
             Assert.False(item.Visible);
+            Assert.Equal(value, item.Available);
+            Assert.False(item.Selected);
 
             // Set same.
             item.Visible = value;
             Assert.False(item.Visible);
+            Assert.Equal(value, item.Available);
+            Assert.False(item.Selected);
+
+            // Set different.
+            item.Available = !value;
+            Assert.False(item.Visible);
+            Assert.Equal(!value, item.Available);
+            Assert.False(item.Selected);
         }
 
-        [Theory]
+        [WinFormsTheory]
+        [MemberData(nameof(SetVisibleCore_TestData))]
+        public void ToolStripItem_Visible_SetDesignMode_GetReturnsExpected(bool enabled, Image image, bool value)
+        {
+            var mockSite = new Mock<ISite>(MockBehavior.Strict);
+            mockSite
+                .Setup(s => s.Name)
+                .Returns("Name");
+            mockSite
+                .Setup(s => s.DesignMode)
+                .Returns(true);
+            mockSite
+                .Setup(s => s.Container)
+                .Returns((IContainer)null);
+            using var item = new SubToolStripItem
+            {
+                Enabled = enabled,
+                Image = image,
+                Site = mockSite.Object,
+                Visible = value
+            };
+            Assert.False(item.Visible);
+            Assert.Equal(value, item.Available);
+            Assert.False(item.Selected);
+
+            // Set same.
+            item.Visible = value;
+            Assert.False(item.Visible);
+            Assert.Equal(value, item.Available);
+            Assert.False(item.Selected);
+
+            // Set different.
+            item.Available = !value;
+            Assert.False(item.Visible);
+            Assert.Equal(!value, item.Available);
+            Assert.False(item.Selected);
+        }
+
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
-        public void ToolStripItem_Visible_SetWithParent_GetReturnsExpected(bool value)
+        public void ToolStripItem_Visible_SetSelected_GetReturnsExpected(bool value)
         {
-            var parent = new ToolStrip();
-            var item = new SubToolStripItem
-            {
-                Parent = parent,
+            using var item = new SubToolStripItem();
+            item.Select();
+            Assert.True(item.Selected);
 
-                Visible = value
+            item.Visible = value;
+            Assert.False(item.Visible);
+            Assert.Equal(value, item.Available);
+            Assert.Equal(value, item.Selected);
+
+            // Set same.
+            item.Visible = value;
+            Assert.False(item.Visible);
+            Assert.Equal(value, item.Available);
+            Assert.Equal(value, item.Selected);
+
+            // Set different.
+            item.Available = !value;
+            Assert.False(item.Visible);
+            Assert.Equal(!value, item.Available);
+            Assert.False(item.Selected);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(SetVisibleCore_TestData))]
+        public void ToolStripItem_Visible_SetWithOwner_GetReturnsExpected(bool enabled, Image image, bool value)
+        {
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Enabled = enabled,
+                Image = image,
+                Owner = owner
             };
+
+            item.Visible = value;
+            Assert.False(item.Visible);
+            Assert.Equal(value, item.Available);
+            Assert.False(item.Selected);
+            Assert.False(owner.IsHandleCreated);
+
+            // Set same.
+            item.Visible = value;
+            Assert.False(item.Visible);
+            Assert.Equal(value, item.Available);
+            Assert.False(item.Selected);
+            Assert.False(owner.IsHandleCreated);
+
+            // Set different.
+            item.Available = !value;
+            Assert.False(item.Visible);
+            Assert.Equal(!value, item.Available);
+            Assert.False(item.Selected);
+            Assert.False(owner.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(SetVisibleCore_TestData))]
+        public void ToolStripItem_Visible_SetDesignModeWithOwner_GetReturnsExpected(bool enabled, Image image, bool value)
+        {
+            var mockSite = new Mock<ISite>(MockBehavior.Strict);
+            mockSite
+                .Setup(s => s.Name)
+                .Returns("Name");
+            mockSite
+                .Setup(s => s.DesignMode)
+                .Returns(true);
+            mockSite
+                .Setup(s => s.Container)
+                .Returns((IContainer)null);
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Enabled = enabled,
+                Image = image,
+                Site = mockSite.Object,
+                Owner = owner,
+            };
+
+            item.Visible = value;
+            Assert.False(item.Visible);
+            Assert.Equal(value, item.Available);
+            Assert.False(item.Selected);
+            Assert.False(owner.IsHandleCreated);
+
+            // Set same.
+            item.Visible = value;
+            Assert.False(item.Visible);
+            Assert.Equal(value, item.Available);
+            Assert.False(item.Selected);
+            Assert.False(owner.IsHandleCreated);
+
+            // Set different.
+            item.Available = !value;
+            Assert.False(item.Visible);
+            Assert.Equal(!value, item.Available);
+            Assert.False(item.Selected);
+            Assert.False(owner.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> Visible_SetWithOwnerWithHandle_TestData()
+        {
+            foreach (bool enabled in new bool[] { true, false })
+            {
+                foreach (Image image in new Image[] { null, new Bitmap(10, 10) })
+                {
+                    yield return new object[] { enabled, image, true, 0 };
+                    yield return new object[] { enabled, image, false, 2 };
+                }
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(Visible_SetWithOwnerWithHandle_TestData))]
+        public void ToolStripItem_Visible_SetWithOwnerWithHandle_GetReturnsExpected(bool enabled, Image image, bool value, int expectedInvalidatedCallCount)
+        {
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Enabled = enabled,
+                Image = image,
+                Owner = owner
+            };
+            Assert.NotEqual(IntPtr.Zero, owner.Handle);
+            int invalidatedCallCount = 0;
+            owner.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            owner.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            owner.HandleCreated += (sender, e) => createdCallCount++;
+
+            item.Visible = value;
+            Assert.False(item.Visible);
+            Assert.Equal(value, item.Available);
+            Assert.False(item.Selected);
+            Assert.True(owner.IsHandleCreated);
+            Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set same.
+            item.Visible = value;
+            Assert.False(item.Visible);
+            Assert.Equal(value, item.Available);
+            Assert.False(item.Selected);
+            Assert.True(owner.IsHandleCreated);
+            Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set different.
+            item.Available = !value;
+            Assert.Equal(!value, item.Visible);
+            Assert.Equal(!value, item.Available);
+            Assert.False(item.Selected);
+            Assert.True(owner.IsHandleCreated);
+            Assert.Equal(expectedInvalidatedCallCount + 2, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(SetVisibleCore_TestData))]
+        public void ToolStripItem_Visible_SetWithParent_GetReturnsExpected(bool enabled, Image image, bool value)
+        {
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Enabled = enabled,
+                Image = image,
+                Parent = parent
+            };
+
+            item.Visible = value;
             Assert.Equal(value, item.Visible);
+            Assert.Equal(value, item.Available);
+            Assert.False(item.Selected);
+            Assert.False(parent.IsHandleCreated);
 
             // Set same.
             item.Visible = value;
             Assert.Equal(value, item.Visible);
+            Assert.Equal(value, item.Available);
+            Assert.False(item.Selected);
+            Assert.False(parent.IsHandleCreated);
+
+            // Set different.
+            item.Available = !value;
+            Assert.Equal(!value, item.Visible);
+            Assert.Equal(!value, item.Available);
+            Assert.False(item.Selected);
+            Assert.False(parent.IsHandleCreated);
         }
 
-        [Fact]
+        [WinFormsTheory]
+        [MemberData(nameof(SetVisibleCore_TestData))]
+        public void ToolStripItem_Visible_SetDesignModeWithParent_GetReturnsExpected(bool enabled, Image image, bool value)
+        {
+            var mockSite = new Mock<ISite>(MockBehavior.Strict);
+            mockSite
+                .Setup(s => s.Name)
+                .Returns("Name");
+            mockSite
+                .Setup(s => s.DesignMode)
+                .Returns(true);
+            mockSite
+                .Setup(s => s.Container)
+                .Returns((IContainer)null);
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Enabled = enabled,
+                Image = image,
+                Site = mockSite.Object,
+                Parent = parent
+            };
+
+            item.Visible = value;
+            Assert.Equal(value, item.Visible);
+            Assert.Equal(value, item.Available);
+            Assert.False(item.Selected);
+            Assert.False(parent.IsHandleCreated);
+
+            // Set same.
+            item.Visible = value;
+            Assert.Equal(value, item.Visible);
+            Assert.Equal(value, item.Available);
+            Assert.False(item.Selected);
+            Assert.False(parent.IsHandleCreated);
+
+            // Set different.
+            item.Available = !value;
+            Assert.Equal(!value, item.Visible);
+            Assert.Equal(!value, item.Available);
+            Assert.False(item.Selected);
+            Assert.False(parent.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(SetVisibleCore_TestData))]
+        public void ToolStripItem_Visible_SetWithParentWithHandle_GetReturnsExpected(bool enabled, Image image, bool value)
+        {
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Enabled = enabled,
+                Image = image,
+                Parent = parent
+            };
+            Assert.NotEqual(IntPtr.Zero, parent.Handle);
+            int invalidatedCallCount = 0;
+            parent.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            parent.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            parent.HandleCreated += (sender, e) => createdCallCount++;
+
+            item.Visible = value;
+            Assert.Equal(value, item.Visible);
+            Assert.Equal(value, item.Available);
+            Assert.False(item.Selected);
+            Assert.True(parent.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set same.
+            item.Visible = value;
+            Assert.Equal(value, item.Visible);
+            Assert.Equal(value, item.Available);
+            Assert.False(item.Selected);
+            Assert.True(parent.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set different.
+            item.Available = !value;
+            Assert.Equal(!value, item.Visible);
+            Assert.Equal(!value, item.Available);
+            Assert.False(item.Selected);
+            Assert.True(parent.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsFact]
         public void ToolStripItem_Visible_SetWithHandler_CallsAvailableChanged()
         {
-            var item = new SubToolStripItem();
+            using var item = new SubToolStripItem();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -2418,31 +9392,31 @@ namespace System.Windows.Forms.Tests
             item.AvailableChanged += handler;
 
             // Set different.
-            item.Visible = false;
-            Assert.False(item.Visible);
+            item.Available = false;
+            Assert.False(item.Available);
             Assert.Equal(1, callCount);
 
             // Set same.
-            item.Visible = false;
-            Assert.False(item.Visible);
+            item.Available = false;
+            Assert.False(item.Available);
             Assert.Equal(1, callCount);
 
             // Set different.
-            item.Visible = true;
-            Assert.False(item.Visible);
+            item.Available = true;
+            Assert.True(item.Available);
             Assert.Equal(2, callCount);
 
             // Remove handler.
             item.AvailableChanged -= handler;
-            item.Visible = false;
-            Assert.False(item.Visible);
+            item.Available = false;
+            Assert.False(item.Available);
             Assert.Equal(2, callCount);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ToolStripItem_Visible_SetWithHandler_CallsVisibleChanged()
         {
-            var item = new SubToolStripItem();
+            using var item = new SubToolStripItem();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -2453,79 +9427,364 @@ namespace System.Windows.Forms.Tests
             item.VisibleChanged += handler;
 
             // Set different.
-            item.Visible = false;
-            Assert.False(item.Visible);
+            item.Available = false;
+            Assert.False(item.Available);
             Assert.Equal(1, callCount);
 
             // Set same.
-            item.Visible = false;
-            Assert.False(item.Visible);
+            item.Available = false;
+            Assert.False(item.Available);
             Assert.Equal(1, callCount);
 
             // Set different.
-            item.Visible = true;
-            Assert.False(item.Visible);
+            item.Available = true;
+            Assert.True(item.Available);
             Assert.Equal(2, callCount);
 
             // Remove handler.
             item.VisibleChanged -= handler;
-            item.Visible = false;
-            Assert.False(item.Visible);
+            item.Available = false;
+            Assert.False(item.Available);
             Assert.Equal(2, callCount);
         }
 
-        [Theory]
+        [WinFormsFact]
+        public void ToolStripItem_Visible_ResetValue_Success()
+        {
+            PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ToolStripItem))[nameof(ToolStripItem.Visible)];
+            using var item = new SubToolStripItem();
+            Assert.False(property.CanResetValue(item));
+
+            item.Visible = false;
+            Assert.False(item.Visible);
+            Assert.False(property.CanResetValue(item));
+
+            property.ResetValue(item);
+            Assert.False(item.Visible);
+            Assert.False(property.CanResetValue(item));
+        }
+
+        [WinFormsFact]
+        public void ToolStripItem_Visible_ShouldSerializeValue_Success()
+        {
+            PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ToolStripItem))[nameof(ToolStripItem.Visible)];
+            using var item = new SubToolStripItem();
+            Assert.False(property.ShouldSerializeValue(item));
+
+            item.Visible = false;
+            Assert.False(item.Visible);
+            Assert.True(property.ShouldSerializeValue(item));
+
+            property.ResetValue(item);
+            Assert.False(item.Visible);
+            Assert.True(property.ShouldSerializeValue(item));
+        }
+
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetIntTheoryData))]
         public void ToolStripItem_Width_Set_GetReturnsExpected(int value)
         {
-            var item = new SubToolStripItem
-            {
-                Width = value
-            };
+            using var item = new SubToolStripItem();
+            int locationChangedCallCount = 0;
+            item.LocationChanged += (sender, e) => locationChangedCallCount++;
+
+            item.Width = value;
             Assert.Equal(value, item.Width);
+            Assert.Equal(0, locationChangedCallCount);
 
             // Set same.
             item.Width = value;
             Assert.Equal(value, item.Width);
+            Assert.Equal(0, locationChangedCallCount);
         }
 
-        [Fact]
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetIntTheoryData))]
+        public void ToolStripItem_Width_SetWithOwner_GetReturnsExpected(int value)
+        {
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Owner = owner
+            };
+            int ownerLayoutCallCount = 0;
+            void ownerHandler(object sender, LayoutEventArgs e) => ownerLayoutCallCount++;
+            owner.Layout += ownerHandler;
+            int locationChangedCallCount = 0;
+            item.LocationChanged += (sender, e) => locationChangedCallCount++;
+
+            try
+            {
+                item.Width = value;
+                Assert.Equal(value, item.Width);
+                Assert.Equal(0, locationChangedCallCount);
+                Assert.Equal(0, ownerLayoutCallCount);
+                Assert.False(owner.IsHandleCreated);
+
+                // Set same.
+                item.Width = value;
+                Assert.Equal(value, item.Width);
+                Assert.Equal(0, locationChangedCallCount);
+                Assert.Equal(0, ownerLayoutCallCount);
+                Assert.False(owner.IsHandleCreated);
+            }
+            finally
+            {
+                owner.Layout -= ownerHandler;
+            }
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetIntTheoryData))]
+        public void ToolStripItem_Width_SetWithOwnerWithHandle_GetReturnsExpected(int value)
+        {
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Owner = owner
+            };
+            Assert.NotEqual(IntPtr.Zero, owner.Handle);
+            int invalidatedCallCount = 0;
+            owner.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            owner.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            owner.HandleCreated += (sender, e) => createdCallCount++;
+            int ownerLayoutCallCount = 0;
+            void ownerHandler(object sender, LayoutEventArgs e) => ownerLayoutCallCount++;
+            owner.Layout += ownerHandler;
+            int locationChangedCallCount = 0;
+            item.LocationChanged += (sender, e) => locationChangedCallCount++;
+
+            try
+            {
+                item.Width = value;
+                Assert.Equal(value, item.Width);
+                Assert.Equal(0, locationChangedCallCount);
+                Assert.Equal(0, ownerLayoutCallCount);
+                Assert.True(owner.IsHandleCreated);
+                Assert.Equal(0, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+
+                // Set same.
+                item.Width = value;
+                Assert.Equal(value, item.Width);
+                Assert.Equal(0, locationChangedCallCount);
+                Assert.Equal(0, ownerLayoutCallCount);
+                Assert.True(owner.IsHandleCreated);
+                Assert.Equal(0, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+            }
+            finally
+            {
+                owner.Layout -= ownerHandler;
+            }
+        }
+
+        [WinFormsTheory]
+        [InlineData(-1, 1)]
+        [InlineData(0, 1)]
+        [InlineData(1, 1)]
+        [InlineData(23, 0)]
+        public void ToolStripItem_Width_SetWithParent_GetReturnsExpected(int value, int expectedParentLayoutCallCount)
+        {
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Parent = parent
+            };
+            int parentLayoutCallCount = 0;
+            void parentHandler(object sender, LayoutEventArgs e)
+            {
+                Assert.Same(parent, sender);
+                Assert.Same(item, e.AffectedComponent);
+                Assert.Equal("Bounds", e.AffectedProperty);
+                parentLayoutCallCount++;
+            };
+            parent.Layout += parentHandler;
+            int locationChangedCallCount = 0;
+            item.LocationChanged += (sender, e) => locationChangedCallCount++;
+
+            try
+            {
+                item.Width = value;
+                Assert.Equal(value, item.Width);
+                Assert.Equal(0, locationChangedCallCount);
+                Assert.Equal(expectedParentLayoutCallCount, parentLayoutCallCount);
+                Assert.False(parent.IsHandleCreated);
+
+                // Set same.
+                item.Width = value;
+                Assert.Equal(value, item.Width);
+                Assert.Equal(0, locationChangedCallCount);
+                Assert.Equal(expectedParentLayoutCallCount, parentLayoutCallCount);
+                Assert.False(parent.IsHandleCreated);
+            }
+            finally
+            {
+                parent.Layout -= parentHandler;
+            }
+        }
+
+        [WinFormsTheory]
+        [InlineData(-1, 1)]
+        [InlineData(0, 1)]
+        [InlineData(1, 1)]
+        [InlineData(23, 0)]
+        public void ToolStripItem_Width_SetWithParentWithHandle_GetReturnsExpected(int value, int expectedParentLayoutCallCount)
+        {
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Parent = parent
+            };
+            Assert.NotEqual(IntPtr.Zero, parent.Handle);
+            int invalidatedCallCount = 0;
+            parent.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            parent.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            parent.HandleCreated += (sender, e) => createdCallCount++;
+            int parentLayoutCallCount = 0;
+            void parentHandler(object sender, LayoutEventArgs e)
+            {
+                Assert.Same(parent, sender);
+                Assert.Same(item, e.AffectedComponent);
+                Assert.Equal("Bounds", e.AffectedProperty);
+                parentLayoutCallCount++;
+            };
+            parent.Layout += parentHandler;
+            int locationChangedCallCount = 0;
+            item.LocationChanged += (sender, e) => locationChangedCallCount++;
+
+            try
+            {
+                item.Width = value;
+                Assert.Equal(value, item.Width);
+                Assert.Equal(0, locationChangedCallCount);
+                Assert.Equal(expectedParentLayoutCallCount, parentLayoutCallCount);
+                Assert.True(parent.IsHandleCreated);
+                Assert.Equal(expectedParentLayoutCallCount, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+
+                // Set same.
+                item.Width = value;
+                Assert.Equal(value, item.Width);
+                Assert.Equal(0, locationChangedCallCount);
+                Assert.Equal(expectedParentLayoutCallCount, parentLayoutCallCount);
+                Assert.True(parent.IsHandleCreated);
+                Assert.Equal(expectedParentLayoutCallCount, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+            }
+            finally
+            {
+                parent.Layout -= parentHandler;
+            }
+        }
+
+        [WinFormsFact]
+        public void ToolStripItem_CreateAccessibilityInstance_Invoke_ReturnsExpected()
+        {
+            using var item = new SubToolStripItem();
+            ToolStripItem.ToolStripItemAccessibleObject accessibleObject = Assert.IsAssignableFrom<ToolStripItem.ToolStripItemAccessibleObject>(item.CreateAccessibilityInstance());
+            Assert.Equal(AccessibleRole.PushButton, accessibleObject.Role);
+            Assert.Equal(AccessibleStates.Focusable, accessibleObject.State);
+            Assert.NotSame(accessibleObject, item.CreateAccessibilityInstance());
+            Assert.NotSame(accessibleObject, item.AccessibilityObject);
+        }
+
+        [WinFormsFact]
         public void ToolStripItem_Dispose_Invoke_Success()
         {
-            using (var image = new Bitmap(10, 10))
+            using var item = new SubToolStripItem();
+            int callCount = 0;
+            void handler(object sender, EventArgs e) => callCount++;
+            item.Disposed += handler;
+
+            try
             {
-                var item = new SubToolStripItem
-                {
-                    Image = image
-                };
                 item.Dispose();
                 Assert.False(item.IsDisposed);
                 Assert.Null(item.Image);
+                Assert.Equal(1, callCount);
 
                 // Dispose multiple times.
                 item.Dispose();
                 Assert.False(item.IsDisposed);
                 Assert.Null(item.Image);
+                Assert.Equal(2, callCount);
+            }
+            finally
+            {
+                item.Disposed -= handler;
             }
         }
 
-        [Fact]
+        [WinFormsFact]
+        public void ToolStripItem_Dispose_InvokeWithImage_Success()
+        {
+            using var image = new Bitmap(10, 10);
+            using var item = new SubToolStripItem
+            {
+                Image = image
+            };
+            int callCount = 0;
+            void handler(object sender, EventArgs e)
+            {
+                Assert.Equal(callCount > 0, item.Image == null);
+                callCount++;
+            };
+            item.Disposed += handler;
+
+            try
+            {
+                item.Dispose();
+                Assert.False(item.IsDisposed);
+                Assert.Null(item.Image);
+                Assert.Equal(1, callCount);
+
+                // Dispose multiple times.
+                item.Dispose();
+                Assert.False(item.IsDisposed);
+                Assert.Null(item.Image);
+                Assert.Equal(2, callCount);
+            }
+            finally
+            {
+                item.Disposed -= handler;
+            }
+        }
+
+        [WinFormsFact]
         public void ToolStripItem_Dispose_InvokeWithOwner_Success()
         {
-            using (var image = new Bitmap(10, 10))
+            using var image = new Bitmap(10, 10);
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
             {
-                var owner = new ToolStrip();
-                var item = new SubToolStripItem
-                {
-                    Image = image
-                };
-                owner.Items.Add(item);
+                Image = image,
+                Owner = owner
+            };
+            int callCount = 0;
+            void handler(object sender, EventArgs e)
+            {
+                Assert.Equal(callCount > 0, item.Image == null);
+                callCount++;
+            };
+            item.Disposed += handler;
 
+            try
+            {
                 item.Dispose();
                 Assert.True(item.IsDisposed);
                 Assert.Null(item.Image);
                 Assert.Null(item.Owner);
                 Assert.Empty(owner.Items);
+                Assert.Equal(1, callCount);
 
                 // Dispose multiple times.
                 item.Dispose();
@@ -2533,64 +9792,527 @@ namespace System.Windows.Forms.Tests
                 Assert.Null(item.Image);
                 Assert.Null(item.Owner);
                 Assert.Empty(owner.Items);
+                Assert.Equal(2, callCount);
+            }
+            finally
+            {
+                item.Disposed -= handler;
             }
         }
 
-        public static IEnumerable<object[]> GetCurrentParent_TestData()
+        [WinFormsFact]
+        public void ToolStripItem_Dispose_InvokeWithParent_Success()
         {
-            yield return new object[] { new SubToolStripItem(), null };
+            using var image = new Bitmap(10, 10);
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Image = image,
+                Parent = parent
+            };
+            int callCount = 0;
+            void handler(object sender, EventArgs e)
+            {
+                Assert.Equal(callCount > 0, item.Image == null);
+                callCount++;
+            };
+            item.Disposed += handler;
 
-            var parent = new ToolStrip();
-            yield return new object[] { new SubToolStripItem { Parent = parent }, parent };
+            try
+            {
+                item.Dispose();
+                Assert.False(item.IsDisposed);
+                Assert.Null(item.Image);
+                Assert.Same(parent, item.Parent);
+                Assert.Empty(parent.Items);
+                Assert.Equal(1, callCount);
+
+                // Dispose multiple times.
+                item.Dispose();
+                Assert.False(item.IsDisposed);
+                Assert.Null(item.Image);
+                Assert.Same(parent, item.Parent);
+                Assert.Empty(parent.Items);
+                Assert.Equal(2, callCount);
+            }
+            finally
+            {
+                item.Disposed -= handler;
+            }
         }
 
-        [Theory]
-        [MemberData(nameof(GetCurrentParent_TestData))]
-        public void ToolStripItem_GetCurrentParent_Invoke_ReturnsExpected(ToolStripItem item, ToolStrip expected)
+        [WinFormsTheory]
+        [InlineData(true, 1)]
+        [InlineData(false, 0)]
+        public void ToolStripItem_Dispose_InvokeBool_Success(bool disposing, int expectedCallCount)
         {
-            Assert.Equal(expected, item.GetCurrentParent());
+            using var item = new SubToolStripItem();
+            int callCount = 0;
+            void handler(object sender, EventArgs e) => callCount++;
+            item.Disposed += handler;
+
+            try
+            {
+                item.Dispose(disposing);
+                Assert.False(item.IsDisposed);
+                Assert.Null(item.Image);
+                Assert.Equal(expectedCallCount, callCount);
+
+                // Dispose multiple times.
+                item.Dispose(disposing);
+                Assert.False(item.IsDisposed);
+                Assert.Null(item.Image);
+                Assert.Equal(expectedCallCount * 2, callCount);
+            }
+            finally
+            {
+                item.Disposed -= handler;
+            }
         }
 
-        [Theory]
+        [WinFormsTheory]
+        [InlineData(true, 1)]
+        [InlineData(false, 0)]
+        public void ToolStripItem_Dispose_InvokeBoolWithImage_Success(bool disposing, int expectedCallCount)
+        {
+            using var image = new Bitmap(10, 10);
+            using var item = new SubToolStripItem
+            {
+                Image = image
+            };
+            int callCount = 0;
+            void handler(object sender, EventArgs e)
+            {
+                Assert.Equal(callCount > 0, item.Image == null);
+                callCount++;
+            };
+            item.Disposed += handler;
+
+            try
+            {
+                item.Dispose(disposing);
+                Assert.False(item.IsDisposed);
+                Assert.Equal(disposing, item.Image == null);
+                Assert.Equal(expectedCallCount, callCount);
+
+                // Dispose multiple times.
+                item.Dispose(disposing);
+                Assert.False(item.IsDisposed);
+                Assert.Equal(disposing, item.Image == null);
+                Assert.Equal(expectedCallCount * 2, callCount);
+            }
+            finally
+            {
+                item.Disposed -= handler;
+            }
+        }
+
+        [WinFormsTheory]
+        [InlineData(true, 1)]
+        [InlineData(false, 0)]
+        public void ToolStripItem_Dispose_InvokeBoolWithOwner_Success(bool disposing, int expectedCallCount)
+        {
+            using var image = new Bitmap(10, 10);
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Image = image,
+                Owner = owner
+            };
+            int callCount = 0;
+            void handler(object sender, EventArgs e)
+            {
+                Assert.Equal(callCount > 0, item.Image == null);
+                callCount++;
+            };
+            item.Disposed += handler;
+
+            try
+            {
+                item.Dispose(disposing);
+                Assert.Equal(disposing, item.IsDisposed);
+                Assert.Equal(disposing, item.Image == null);
+                Assert.Equal(disposing, item.Owner == null);
+                Assert.Equal(!disposing, owner.Items.Contains(item));
+                Assert.Equal(expectedCallCount, callCount);
+
+                // Dispose multiple times.
+                item.Dispose(disposing);
+                Assert.Equal(disposing, item.IsDisposed);
+                Assert.Equal(disposing, item.Image == null);
+                Assert.Equal(disposing, item.Owner == null);
+                Assert.Equal(!disposing, owner.Items.Contains(item));
+                Assert.Equal(expectedCallCount * 2, callCount);
+            }
+            finally
+            {
+                item.Disposed -= handler;
+            }
+        }
+
+        [WinFormsTheory]
+        [InlineData(true, 1)]
+        [InlineData(false, 0)]
+        public void ToolStripItem_Dispose_InvokeBoolWithParent_Success(bool disposing, int expectedCallCount)
+        {
+            using var image = new Bitmap(10, 10);
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Image = image,
+                Parent = parent
+            };
+            int callCount = 0;
+            void handler(object sender, EventArgs e)
+            {
+                Assert.Equal(callCount > 0, item.Image == null);
+                callCount++;
+            };
+            item.Disposed += handler;
+
+            try
+            {
+                item.Dispose(disposing);
+                Assert.False(item.IsDisposed);
+                Assert.Equal(disposing, item.Image == null);
+                Assert.Same(parent, item.Parent);
+                Assert.Empty(parent.Items);
+                Assert.Equal(expectedCallCount, callCount);
+
+                // Dispose multiple times.
+                item.Dispose(disposing);
+                Assert.False(item.IsDisposed);
+                Assert.Equal(disposing, item.Image == null);
+                Assert.Same(parent, item.Parent);
+                Assert.Empty(parent.Items);
+                Assert.Equal(expectedCallCount * 2, callCount);
+            }
+            finally
+            {
+                item.Disposed -= handler;
+            }
+        }
+
+        [WinFormsFact]
+        public void ToolStripItem_GetCurrentParent_InvokeWithoutParent_ReturnsNull()
+        {
+            using var item = new SubToolStripItem();
+            Assert.Null(item.GetCurrentParent());
+        }
+
+        [WinFormsFact]
+        public void ToolStripItem_GetCurrentParent_InvokeWithOwner_ReturnsNull()
+        {
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Parent = parent
+            };
+            Assert.Same(parent, item.GetCurrentParent());
+        }
+
+        [WinFormsFact]
+        public void ToolStripItem_GetCurrentParent_InvokeWithParent_ReturnsExpected()
+        {
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Owner = owner
+            };
+            Assert.Null(item.GetCurrentParent());
+        }
+
+        public static IEnumerable<object[]> GetPreferredSize_TestData()
+        {
+            yield return new object[] { Size.Empty };
+            yield return new object[] { new Size(-1, -2) };
+            yield return new object[] { new Size(10, 20) };
+            yield return new object[] { new Size(30, 40) };
+            yield return new object[] { new Size(int.MaxValue, int.MaxValue) };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(GetPreferredSize_TestData))]
+        public void ToolStripItem_GetPreferredSize_Invoke_ReturnsExpected(Size proposedSize)
+        {
+            using var item = new SubToolStripItem();
+            Assert.Equal(new Size(4, 4), item.GetPreferredSize(proposedSize));
+
+            // Call again.
+            Assert.Equal(new Size(4, 4), item.GetPreferredSize(proposedSize));
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(GetPreferredSize_TestData))]
+        public void ToolStripItem_GetPreferredSize_InvokeWithOwner_ReturnsExpected(Size proposedSize)
+        {
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Owner = owner
+            };
+            Assert.Equal(new Size(4, 4), item.GetPreferredSize(proposedSize));
+
+            // Call again.
+            Assert.Equal(new Size(4, 4), item.GetPreferredSize(proposedSize));
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(GetPreferredSize_TestData))]
+        public void ToolStripItem_GetPreferredSize_InvokeWithParent_ReturnsExpected(Size proposedSize)
+        {
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Parent = parent
+            };
+            Assert.Equal(new Size(4, 4), item.GetPreferredSize(proposedSize));
+
+            // Call again.
+            Assert.Equal(new Size(4, 4), item.GetPreferredSize(proposedSize));
+        }
+
+        [WinFormsTheory]
         [InlineData('a')]
         [InlineData('\0')]
         public void ToolStripItem_IsInputChar_Invoke_ReturnsFalse(char charCode)
         {
-            var item = new SubToolStripItem();
+            using var item = new SubToolStripItem();
             Assert.False(item.IsInputChar(charCode));
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(Keys.None)]
+        [InlineData(Keys.A)]
+        [InlineData(Keys.Enter)]
+        [InlineData(Keys.Space)]
         [InlineData((Keys)(Keys.None - 1))]
         public void ToolStripItem_IsInputKey_Invoke_ReturnsFalse(Keys keyData)
         {
-            var item = new SubToolStripItem();
+            using var item = new SubToolStripItem();
             Assert.False(item.IsInputKey(keyData));
         }
 
-        public static IEnumerable<object[]> Invalidate_TestData()
+        [WinFormsFact]
+        public void ToolStripItem_Invalidate_Invoke_Nop()
         {
-            yield return new object[] { null };
-            yield return new object[] { new ToolStrip() };
+            using var item = new SubToolStripItem();
+            item.Invalidate();
+
+            // Call again.
+            item.Invalidate();
         }
 
-        [Theory]
-        [MemberData(nameof(Invalidate_TestData))]
-        public void ToolStripItem_Invalidate_Invoke_Success(ToolStrip parent)
+        [WinFormsFact]
+        public void ToolStripItem_Invalidate_InvokeWithOwner_Nop()
         {
-            var item = new SubToolStripItem
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Owner = owner
+            };
+            item.Invalidate();
+            Assert.False(owner.IsHandleCreated);
+
+            // Call again.
+            item.Invalidate();
+            Assert.False(owner.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void ToolStripItem_Invalidate_InvokeWithOwnerWithHandler_Nop()
+        {
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Owner = owner
+            };
+            Assert.NotEqual(IntPtr.Zero, owner.Handle);
+            int invalidatedCallCount = 0;
+            owner.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            owner.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            owner.HandleCreated += (sender, e) => createdCallCount++;
+
+            item.Invalidate();
+            Assert.True(owner.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Call again.
+            item.Invalidate();
+            Assert.True(owner.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsFact]
+        public void ToolStripItem_Invalidate_InvokeWithParent_Nop()
+        {
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
             {
                 Parent = parent
             };
             item.Invalidate();
+            Assert.False(parent.IsHandleCreated);
+
+            // Call again.
+            item.Invalidate();
+            Assert.False(parent.IsHandleCreated);
         }
 
-        [Fact]
-        public void ToolStripItem_OnAvailableChanged_Invoke_CallsHandler()
+        [WinFormsFact]
+        public void ToolStripItem_Invalidate_InvokeWithParentWithHandler_CallsInvalidate()
         {
-            var item = new SubToolStripItem();
-            var eventArgs = new EventArgs();
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Parent = parent
+            };
+            Assert.NotEqual(IntPtr.Zero, parent.Handle);
+            int invalidatedCallCount = 0;
+            parent.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            parent.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            parent.HandleCreated += (sender, e) => createdCallCount++;
+
+            item.Invalidate();
+            Assert.True(parent.IsHandleCreated);
+            Assert.Equal(1, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Call again.
+            item.Invalidate();
+            Assert.True(parent.IsHandleCreated);
+            Assert.Equal(2, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        public static IEnumerable<object[]> Invalidate_Rectangle_TestData()
+        {
+            yield return new object[] { Rectangle.Empty };
+            yield return new object[] { new Rectangle(1, 2, 3, 4) };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(Invalidate_Rectangle_TestData))]
+        public void ToolStripItem_Invalidate_InvokeRectangle_Nop(Rectangle r)
+        {
+            using var item = new SubToolStripItem();
+            item.Invalidate(r);
+
+            // Call again.
+            item.Invalidate(r);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(Invalidate_Rectangle_TestData))]
+        public void ToolStripItem_Invalidate_InvokeRectangleWithOwner_Nop(Rectangle r)
+        {
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Owner = owner
+            };
+            item.Invalidate(r);
+            Assert.False(owner.IsHandleCreated);
+
+            // Call again.
+            item.Invalidate(r);
+            Assert.False(owner.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(Invalidate_Rectangle_TestData))]
+        public void ToolStripItem_Invalidate_InvokeRectangleWithOwnerWithHandler_Nop(Rectangle r)
+        {
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Owner = owner
+            };
+            Assert.NotEqual(IntPtr.Zero, owner.Handle);
+            int invalidatedCallCount = 0;
+            owner.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            owner.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            owner.HandleCreated += (sender, e) => createdCallCount++;
+
+            item.Invalidate(r);
+            Assert.True(owner.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Call again.
+            item.Invalidate(r);
+            Assert.True(owner.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(Invalidate_Rectangle_TestData))]
+        public void ToolStripItem_Invalidate_InvokeRectangleWithParent_Nop(Rectangle r)
+        {
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Parent = parent
+            };
+            item.Invalidate(r);
+            Assert.False(parent.IsHandleCreated);
+
+            // Call again.
+            item.Invalidate(r);
+            Assert.False(parent.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(Invalidate_Rectangle_TestData))]
+        public void ToolStripItem_Invalidate_InvokeRectangleWithParentWithHandler_CallsInvalidate(Rectangle r)
+        {
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Parent = parent
+            };
+            Assert.NotEqual(IntPtr.Zero, parent.Handle);
+            int invalidatedCallCount = 0;
+            parent.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            parent.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            parent.HandleCreated += (sender, e) => createdCallCount++;
+
+            item.Invalidate(r);
+            Assert.True(parent.IsHandleCreated);
+            Assert.Equal(1, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Call again.
+            item.Invalidate(r);
+            Assert.True(parent.IsHandleCreated);
+            Assert.Equal(2, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void ToolStripItem_OnAvailableChanged_Invoke_CallsAvailableChanged(EventArgs eventArgs)
+        {
+            using var item = new SubToolStripItem();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -2610,21 +10332,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
         }
 
-        public static IEnumerable<object[]> OnBackColorChanged_TestData()
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void ToolStripItem_OnBackColorChanged_Invoke_CallsBackColorChanged(EventArgs eventArgs)
         {
-            yield return new object[] { null };
-            yield return new object[] { new ToolStrip() };
-        }
-
-        [Theory]
-        [MemberData(nameof(OnBackColorChanged_TestData))]
-        public void ToolStripItem_OnBackColorChanged_Invoke_CallsHandler(ToolStrip parent)
-        {
-            var item = new SubToolStripItem
-            {
-                Parent = parent
-            };
-            var eventArgs = new EventArgs();
+            using var item = new SubToolStripItem();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -2644,23 +10356,300 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
         }
 
-        [Fact]
-        public void ToolStripItem_OnBoundsChanged_Invoke_Success()
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void ToolStripItem_OnBackColorChanged_InvokeWithOwner_CallsBackColorChanged(EventArgs eventArgs)
         {
-            var item = new SubToolStripItem();
-            item.OnBoundsChanged();
-        }
-
-        [Fact]
-        public void ToolStripItem_OnClick_Invoke_CallsHandler()
-        {
-            var item = new SubToolStripItem();
-            var eventArgs = new EventArgs();
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Owner = owner
+            };
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
                 Assert.Same(item, sender);
                 Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            item.BackColorChanged += handler;
+            item.OnBackColorChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.False(owner.IsHandleCreated);
+
+            // Remove handler.
+            item.BackColorChanged -= handler;
+            item.OnBackColorChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.False(owner.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void ToolStripItem_OnBackColorChanged_InvokeWithOwnerWithHandle_CallsBackColorChanged(EventArgs eventArgs)
+        {
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Owner = owner
+            };
+            Assert.NotEqual(IntPtr.Zero, owner.Handle);
+            int invalidatedCallCount = 0;
+            owner.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            owner.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            owner.HandleCreated += (sender, e) => createdCallCount++;
+
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(item, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            item.BackColorChanged += handler;
+            item.OnBackColorChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.True(owner.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Remove handler.
+            item.BackColorChanged -= handler;
+            item.OnBackColorChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.True(owner.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void ToolStripItem_OnBackColorChanged_InvokeWithParent_CallsBackColorChanged(EventArgs eventArgs)
+        {
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Parent = parent
+            };
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(item, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            item.BackColorChanged += handler;
+            item.OnBackColorChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.False(parent.IsHandleCreated);
+
+            // Remove handler.
+            item.BackColorChanged -= handler;
+            item.OnBackColorChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.False(parent.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void ToolStripItem_OnBackColorChanged_InvokeWithParentWithHandle_CallsBackColorChanged(EventArgs eventArgs)
+        {
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Parent = parent
+            };
+            Assert.NotEqual(IntPtr.Zero, parent.Handle);
+            int invalidatedCallCount = 0;
+            parent.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            parent.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            parent.HandleCreated += (sender, e) => createdCallCount++;
+
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(item, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            item.BackColorChanged += handler;
+            item.OnBackColorChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.True(parent.IsHandleCreated);
+            Assert.Equal(1, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Remove handler.
+            item.BackColorChanged -= handler;
+            item.OnBackColorChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.True(parent.IsHandleCreated);
+            Assert.Equal(2, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsFact]
+        public void ToolStripItem_OnBoundsChanged_Invoke_Success()
+        {
+            using var item = new SubToolStripItem();
+            item.OnBoundsChanged();
+        }
+
+        [WinFormsFact]
+        public void ToolStripItem_OnBoundsChanged_InvokeWithOwner_Success()
+        {
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Owner = owner
+            };
+            int ownerLayoutCallCount = 0;
+            void ownerHandler(object sender, LayoutEventArgs e) => ownerLayoutCallCount++;
+            owner.Layout += ownerHandler;
+
+            try
+            {
+                item.OnBoundsChanged();
+                Assert.Equal(0, ownerLayoutCallCount);
+                Assert.False(owner.IsHandleCreated);
+            }
+            finally
+            {
+                owner.Layout -= ownerHandler;
+            }
+        }
+
+        [WinFormsFact]
+        public void ToolStripItem_OnBoundsChanged_InvokeWithOwnerWithHandle_Success()
+        {
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Owner = owner
+            };
+            Assert.NotEqual(IntPtr.Zero, owner.Handle);
+            int invalidatedCallCount = 0;
+            owner.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            owner.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            owner.HandleCreated += (sender, e) => createdCallCount++;
+            int ownerLayoutCallCount = 0;
+            void ownerHandler(object sender, LayoutEventArgs e) => ownerLayoutCallCount++;
+            owner.Layout += ownerHandler;
+
+            try
+            {
+                item.OnBoundsChanged();
+                Assert.Equal(0, ownerLayoutCallCount);
+                Assert.True(owner.IsHandleCreated);
+                Assert.Equal(0, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+            }
+            finally
+            {
+                owner.Layout -= ownerHandler;
+            }
+        }
+
+        [WinFormsFact]
+        public void ToolStripItem_OnBoundsChanged_InvokeWithParent_Success()
+        {
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Parent = parent
+            };
+            int parentLayoutCallCount = 0;
+            void parentHandler(object sender, LayoutEventArgs e)
+            {
+                Assert.Same(parent, sender);
+                Assert.Same(item, e.AffectedComponent);
+                Assert.Equal("Bounds", e.AffectedProperty);
+                parentLayoutCallCount++;
+            };
+            parent.Layout += parentHandler;
+
+            try
+            {
+                item.OnBoundsChanged();
+                Assert.Equal(1, parentLayoutCallCount);
+                Assert.False(parent.IsHandleCreated);
+            }
+            finally
+            {
+                parent.Layout -= parentHandler;
+            }
+        }
+
+        [WinFormsFact]
+        public void ToolStripItem_OnBoundsChanged_InvokeWithParentWithHandle_Success()
+        {
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Parent = parent
+            };
+            Assert.NotEqual(IntPtr.Zero, parent.Handle);
+            int invalidatedCallCount = 0;
+            parent.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            parent.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            parent.HandleCreated += (sender, e) => createdCallCount++;
+            int parentLayoutCallCount = 0;
+            void parentHandler(object sender, LayoutEventArgs e)
+            {
+                Assert.Same(parent, sender);
+                Assert.Same(item, e.AffectedComponent);
+                Assert.Equal("Bounds", e.AffectedProperty);
+                parentLayoutCallCount++;
+            };
+            parent.Layout += parentHandler;
+
+            try
+            {
+                item.OnBoundsChanged();
+                Assert.Equal(1, parentLayoutCallCount);
+                Assert.True(parent.IsHandleCreated);
+                Assert.Equal(1, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+            }
+            finally
+            {
+                parent.Layout -= parentHandler;
+            }
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void ToolStripItem_OnClick_Invoke_CallsClick(EventArgs eventArgs)
+        {
+            using var item = new SubToolStripItem();
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(item, sender);
+                Assert.Same(eventArgs, e);
+                Assert.False(item.Pressed);
                 callCount++;
             };
 
@@ -2675,11 +10664,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
         }
 
-        [Fact]
-        public void ToolStripItem_OnDisplayStyleChanged_Invoke_CallsHandler()
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void ToolStripItem_OnDisplayStyleChanged_Invoke_CallsDisplayStyleChanged(EventArgs eventArgs)
         {
-            var item = new SubToolStripItem();
-            var eventArgs = new EventArgs();
+            using var item = new SubToolStripItem();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -2699,11 +10688,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
         }
 
-        [Fact]
-        public void ToolStripItem_OnDoubleClick_Invoke_CallsHandler()
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void ToolStripItem_OnDoubleClick_Invoke_CallsDoubleClick(EventArgs eventArgs)
         {
-            var item = new SubToolStripItem();
-            var eventArgs = new EventArgs();
+            using var item = new SubToolStripItem();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -2723,11 +10712,17 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
         }
 
-        [Fact]
-        public void ToolStripItem_OnDragDrop_Invoke_CallsHandler()
+        public static IEnumerable<object[]> DragEventArgs_TestData()
         {
-            var item = new SubToolStripItem();
-            var eventArgs = new DragEventArgs(null, 0, 0, 0, DragDropEffects.None, DragDropEffects.None);
+            yield return new object[] { null };
+            yield return new object[] { new DragEventArgs(null, 0, 0, 0, DragDropEffects.None, DragDropEffects.None) };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(DragEventArgs_TestData))]
+        public void ToolStripItem_OnDragDrop_Invoke_CallsDragDrop(DragEventArgs eventArgs)
+        {
+            using var item = new SubToolStripItem();
             int callCount = 0;
             DragEventHandler handler = (sender, e) =>
             {
@@ -2747,35 +10742,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
         }
 
-        [Fact]
-        public void ToolStripItem_OnDragDrop_InvokeOnInterface_CallsHandler()
+        [WinFormsTheory]
+        [MemberData(nameof(DragEventArgs_TestData))]
+        public void ToolStripItem_OnDragEnter_Invoke_CallsDragEnter(DragEventArgs eventArgs)
         {
-            var item = new SubToolStripItem();
-            var eventArgs = new DragEventArgs(null, 0, 0, 0, DragDropEffects.None, DragDropEffects.None);
-            int callCount = 0;
-            DragEventHandler handler = (sender, e) =>
-            {
-                Assert.Same(item, sender);
-                Assert.Same(eventArgs, e);
-                callCount++;
-            };
-
-            // Call with handler.
-            item.DragDrop += handler;
-            ((IDropTarget)item).OnDragDrop(eventArgs);
-            Assert.Equal(1, callCount);
-
-            // Remove handler.
-            item.DragDrop -= handler;
-            ((IDropTarget)item).OnDragDrop(eventArgs);
-            Assert.Equal(1, callCount);
-        }
-
-        [Fact]
-        public void ToolStripItem_OnDragEnter_Invoke_CallsHandler()
-        {
-            var item = new SubToolStripItem();
-            var eventArgs = new DragEventArgs(null, 0, 0, 0, DragDropEffects.None, DragDropEffects.None);
+            using var item = new SubToolStripItem();
             int callCount = 0;
             DragEventHandler handler = (sender, e) =>
             {
@@ -2795,35 +10766,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
         }
 
-        [Fact]
-        public void ToolStripItem_OnDragEnter_InvokeOnInterface_CallsHandler()
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void ToolStripItem_OnDragLeave_Invoke_CallsDragLeave(EventArgs eventArgs)
         {
-            var item = new SubToolStripItem();
-            var eventArgs = new DragEventArgs(null, 0, 0, 0, DragDropEffects.None, DragDropEffects.None);
-            int callCount = 0;
-            DragEventHandler handler = (sender, e) =>
-            {
-                Assert.Same(item, sender);
-                Assert.Same(eventArgs, e);
-                callCount++;
-            };
-
-            // Call with handler.
-            item.DragEnter += handler;
-            ((IDropTarget)item).OnDragEnter(eventArgs);
-            Assert.Equal(1, callCount);
-
-            // Remove handler.
-            item.DragEnter -= handler;
-            ((IDropTarget)item).OnDragEnter(eventArgs);
-            Assert.Equal(1, callCount);
-        }
-
-        [Fact]
-        public void ToolStripItem_OnDragLeave_Invoke_CallsHandler()
-        {
-            var item = new SubToolStripItem();
-            var eventArgs = new EventArgs();
+            using var item = new SubToolStripItem();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -2843,35 +10790,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
         }
 
-        [Fact]
-        public void ToolStripItem_OnDragLeave_InvokeOnInterface_CallsHandler()
+        [WinFormsTheory]
+        [MemberData(nameof(DragEventArgs_TestData))]
+        public void ToolStripItem_OnDragOver_Invoke_CallsDragOver(DragEventArgs eventArgs)
         {
-            var item = new SubToolStripItem();
-            var eventArgs = new EventArgs();
-            int callCount = 0;
-            EventHandler handler = (sender, e) =>
-            {
-                Assert.Same(item, sender);
-                Assert.Same(eventArgs, e);
-                callCount++;
-            };
-
-            // Call with handler.
-            item.DragLeave += handler;
-            ((IDropTarget)item).OnDragLeave(eventArgs);
-            Assert.Equal(1, callCount);
-
-            // Remove handler.
-            item.DragLeave -= handler;
-            ((IDropTarget)item).OnDragLeave(eventArgs);
-            Assert.Equal(1, callCount);
-        }
-
-        [Fact]
-        public void ToolStripItem_OnDragOver_Invoke_CallsHandler()
-        {
-            var item = new SubToolStripItem();
-            var eventArgs = new DragEventArgs(null, 0, 0, 0, DragDropEffects.None, DragDropEffects.None);
+            using var item = new SubToolStripItem();
             int callCount = 0;
             DragEventHandler handler = (sender, e) =>
             {
@@ -2891,35 +10814,31 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
         }
 
-        [Fact]
-        public void ToolStripItem_OnDragOver_InvokeOnInterface_CallsHandler()
+        public static IEnumerable<object[]> OnEnabledChanged_TestData()
         {
-            var item = new SubToolStripItem();
-            var eventArgs = new DragEventArgs(null, 0, 0, 0, DragDropEffects.None, DragDropEffects.None);
-            int callCount = 0;
-            DragEventHandler handler = (sender, e) =>
+            foreach (bool enabled in new bool[] { true, false })
             {
-                Assert.Same(item, sender);
-                Assert.Same(eventArgs, e);
-                callCount++;
-            };
-
-            // Call with handler.
-            item.DragOver += handler;
-            ((IDropTarget)item).OnDragOver(eventArgs);
-            Assert.Equal(1, callCount);
-
-            // Remove handler.
-            item.DragOver -= handler;
-            ((IDropTarget)item).OnDragOver(eventArgs);
-            Assert.Equal(1, callCount);
+                foreach (bool visible in new bool[] { true, false })
+                {
+                    foreach (Image image in new Image[] { null, new Bitmap(10, 10) })
+                    {
+                        yield return new object[] { enabled, visible, image, null };
+                        yield return new object[] { enabled, visible, image, new EventArgs() };
+                    }
+                }
+            }
         }
 
-        [Fact]
-        public void ToolStripItem_OnEnabledChanged_Invoke_CallsHandler()
+        [WinFormsTheory]
+        [MemberData(nameof(OnEnabledChanged_TestData))]
+        public void ToolStripItem_OnEnabledChanged_Invoke_CallsEnabledChanged(bool enabled, bool visible, Image image, EventArgs eventArgs)
         {
-            var item = new SubToolStripItem();
-            var eventArgs = new EventArgs();
+            using var item = new SubToolStripItem
+            {
+                Enabled = enabled,
+                Visible = visible,
+                Image = image
+            };
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -2939,29 +10858,396 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
         }
 
-        [Fact]
-        public void ToolStripItem_OnFontChanged_Invoke_Success()
+        [WinFormsTheory]
+        [MemberData(nameof(OnEnabledChanged_TestData))]
+        public void ToolStripItem_OnEnabledChanged_InvokeDesignMode_CallsEnabledChanged(bool enabled, bool visible, Image image, EventArgs eventArgs)
         {
-            var item = new SubToolStripItem();
-            var eventArgs = new EventArgs();
+            using var item = new SubToolStripItem
+            {
+                Enabled = enabled,
+                Visible = visible,
+                Image = image
+            };
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(item, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            item.EnabledChanged += handler;
+            item.OnEnabledChanged(eventArgs);
+            Assert.Equal(1, callCount);
+
+            // Remove handler.
+            item.EnabledChanged -= handler;
+            item.OnEnabledChanged(eventArgs);
+            Assert.Equal(1, callCount);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(OnEnabledChanged_TestData))]
+        public void ToolStripItem_OnEnabledChanged_InvokeWithOwner_CallsEnabledChanged(bool enabled, bool visible, Image image, EventArgs eventArgs)
+        {
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Enabled = enabled,
+                Visible = visible,
+                Image = image,
+                Owner = owner
+            };
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(item, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            item.EnabledChanged += handler;
+            item.OnEnabledChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.False(owner.IsHandleCreated);
+
+            // Remove handler.
+            item.EnabledChanged -= handler;
+            item.OnEnabledChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.False(owner.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(OnEnabledChanged_TestData))]
+        public void ToolStripItem_OnEnabledChanged_InvokeWithOwnerWithHandle_CallsEnabledChanged(bool enabled, bool visible, Image image, EventArgs eventArgs)
+        {
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Enabled = enabled,
+                Visible = visible,
+                Image = image,
+                Owner = owner
+            };
+            Assert.NotEqual(IntPtr.Zero, owner.Handle);
+            int invalidatedCallCount = 0;
+            owner.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            owner.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            owner.HandleCreated += (sender, e) => createdCallCount++;
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(item, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            item.EnabledChanged += handler;
+            item.OnEnabledChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.True(owner.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Remove handler.
+            item.EnabledChanged -= handler;
+            item.OnEnabledChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.True(owner.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(OnEnabledChanged_TestData))]
+        public void ToolStripItem_OnEnabledChanged_InvokeWithParent_CallsEnabledChanged(bool enabled, bool visible, Image image, EventArgs eventArgs)
+        {
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Enabled = enabled,
+                Visible = visible,
+                Image = image,
+                Parent = parent
+            };
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(item, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            item.EnabledChanged += handler;
+            item.OnEnabledChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.False(parent.IsHandleCreated);
+
+            // Remove handler.
+            item.EnabledChanged -= handler;
+            item.OnEnabledChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.False(parent.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(OnEnabledChanged_TestData))]
+        public void ToolStripItem_OnEnabledChanged_InvokeWithParentWithHandle_CallsEnabledChanged(bool enabled, bool visible, Image image, EventArgs eventArgs)
+        {
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Enabled = enabled,
+                Visible = visible,
+                Image = image,
+                Parent = parent
+            };
+            Assert.NotEqual(IntPtr.Zero, parent.Handle);
+            int invalidatedCallCount = 0;
+            parent.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            parent.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            parent.HandleCreated += (sender, e) => createdCallCount++;
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(item, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            item.EnabledChanged += handler;
+            item.OnEnabledChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.True(parent.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Remove handler.
+            item.EnabledChanged -= handler;
+            item.OnEnabledChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.True(parent.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        public static IEnumerable<object[]> OnFontChanged_TestData()
+        {
+            foreach (ToolStripItemDisplayStyle displayStyle in Enum.GetValues(typeof(ToolStripItemDisplayStyle)))
+            {
+                yield return new object[] { displayStyle, null };
+                yield return new object[] { displayStyle, new EventArgs() };
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(OnFontChanged_TestData))]
+        public void ToolStripItem_OnFontChanged_Invoke_Success(ToolStripItemDisplayStyle displayStyle, EventArgs eventArgs)
+        {
+            using var item = new SubToolStripItem
+            {
+                DisplayStyle = displayStyle
+            };
+
+            item.OnFontChanged(eventArgs);
+
+            // Call again.
             item.OnFontChanged(eventArgs);
         }
 
-        public static IEnumerable<object[]> OnForeColorChanged_TestData()
+        public static IEnumerable<object[]> OnFontChanged_WithOwner_TestData()
         {
-            yield return new object[] { null };
-            yield return new object[] { new ToolStrip() };
+            yield return new object[] { ToolStripItemDisplayStyle.None, null, 0 };
+            yield return new object[] { ToolStripItemDisplayStyle.None, new EventArgs(), 0 };
+            yield return new object[] { ToolStripItemDisplayStyle.Text, null, 1 };
+            yield return new object[] { ToolStripItemDisplayStyle.Text, new EventArgs(), 1 };
+            yield return new object[] { ToolStripItemDisplayStyle.Image, null, 0 };
+            yield return new object[] { ToolStripItemDisplayStyle.Image, new EventArgs(), 0 };
+            yield return new object[] { ToolStripItemDisplayStyle.ImageAndText, null, 1 };
+            yield return new object[] { ToolStripItemDisplayStyle.ImageAndText, new EventArgs(), 1 };
         }
 
-        [Theory]
-        [MemberData(nameof(OnForeColorChanged_TestData))]
-        public void ToolStripItem_OnForeColorChanged_Invoke_CallsHandler(ToolStrip parent)
+        [WinFormsTheory]
+        [MemberData(nameof(OnFontChanged_WithOwner_TestData))]
+        public void ToolStripItem_OnFontChanged_InvokeWithOwner_Success(ToolStripItemDisplayStyle displayStyle, EventArgs eventArgs, int expectedOwnerLayoutCallCount)
         {
-            var item = new SubToolStripItem
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
             {
-                Parent = parent
+                Owner = owner,
+                DisplayStyle = displayStyle
             };
-            var eventArgs = new EventArgs();
+            int ownerLayoutCallCount = 0;
+            void ownerHandler(object sender, LayoutEventArgs e)
+            {
+                Assert.Same(owner, sender);
+                Assert.Same(item, e.AffectedComponent);
+                Assert.Equal("Font", e.AffectedProperty);
+                ownerLayoutCallCount++;
+            }
+            owner.Layout += ownerHandler;
+
+            try
+            {
+                item.OnFontChanged(eventArgs);
+                Assert.Equal(expectedOwnerLayoutCallCount, ownerLayoutCallCount);
+                Assert.False(owner.IsHandleCreated);
+
+                // Call again.
+                item.OnFontChanged(eventArgs);
+                Assert.Equal(expectedOwnerLayoutCallCount * 2, ownerLayoutCallCount);
+                Assert.False(owner.IsHandleCreated);
+            }
+            finally
+            {
+                owner.Layout -= ownerHandler;
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(OnFontChanged_WithOwner_TestData))]
+        public void ToolStripItem_OnFontChanged_InvokeWithOwnerWithHandle_Success(ToolStripItemDisplayStyle displayStyle, EventArgs eventArgs, int expectedParentLayoutCallCount)
+        {
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Owner = owner,
+                DisplayStyle = displayStyle
+            };
+            Assert.NotEqual(IntPtr.Zero, owner.Handle);
+            int invalidatedCallCount = 0;
+            owner.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            owner.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            owner.HandleCreated += (sender, e) => createdCallCount++;
+            int ownerLayoutCallCount = 0;
+            void ownerHandler(object sender, LayoutEventArgs e)
+            {
+                Assert.Same(owner, sender);
+                Assert.Same(item, e.AffectedComponent);
+                Assert.Equal("Font", e.AffectedProperty);
+                ownerLayoutCallCount++;
+            }
+            owner.Layout += ownerHandler;
+
+            try
+            {
+                item.OnFontChanged(eventArgs);
+                Assert.Equal(expectedParentLayoutCallCount, ownerLayoutCallCount);
+                Assert.True(owner.IsHandleCreated);
+                Assert.Equal(expectedParentLayoutCallCount * 2, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+
+                // Call again.
+                item.OnFontChanged(eventArgs);
+                Assert.Equal(expectedParentLayoutCallCount * 2, ownerLayoutCallCount);
+                Assert.True(owner.IsHandleCreated);
+                Assert.Equal(expectedParentLayoutCallCount * 4, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+            }
+            finally
+            {
+                owner.Layout -= ownerHandler;
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(OnFontChanged_TestData))]
+        public void ToolStripItem_OnFontChanged_InvokeWithParent_Success(ToolStripItemDisplayStyle displayStyle, EventArgs eventArgs)
+        {
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Parent = parent,
+                DisplayStyle = displayStyle
+            };
+            int parentLayoutCallCount = 0;
+            void parentHandler(object sender, LayoutEventArgs e) => parentLayoutCallCount++;
+            parent.Layout += parentHandler;
+
+            try
+            {
+                item.OnFontChanged(eventArgs);
+                Assert.Equal(0, parentLayoutCallCount);
+                Assert.False(parent.IsHandleCreated);
+
+                // Call again.
+                item.OnFontChanged(eventArgs);
+                Assert.Equal(0, parentLayoutCallCount);
+                Assert.False(parent.IsHandleCreated);
+            }
+            finally
+            {
+                parent.Layout -= parentHandler;
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(OnFontChanged_TestData))]
+        public void ToolStripItem_OnFontChanged_InvokeWithParentWithHandle_Success(ToolStripItemDisplayStyle displayStyle, EventArgs eventArgs)
+        {
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Parent = parent,
+                DisplayStyle = displayStyle
+            };
+            Assert.NotEqual(IntPtr.Zero, parent.Handle);
+            int invalidatedCallCount = 0;
+            parent.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            parent.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            parent.HandleCreated += (sender, e) => createdCallCount++;
+            int parentLayoutCallCount = 0;
+            void parentHandler(object sender, LayoutEventArgs e) => parentLayoutCallCount++;
+            parent.Layout += parentHandler;
+
+            try
+            {
+                item.OnFontChanged(eventArgs);
+                Assert.Equal(0, parentLayoutCallCount);
+                Assert.True(parent.IsHandleCreated);
+                Assert.Equal(0, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+
+                // Call again.
+                item.OnFontChanged(eventArgs);
+                Assert.Equal(0, parentLayoutCallCount);
+                Assert.True(parent.IsHandleCreated);
+                Assert.Equal(0, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+            }
+            finally
+            {
+                parent.Layout -= parentHandler;
+            }
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void ToolStripItem_OnForeColorChanged_Invoke_CallsForeColorChanged(EventArgs eventArgs)
+        {
+            using var item = new SubToolStripItem();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -2981,11 +11267,165 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
         }
 
-        [Fact]
-        public void ToolStripItem_OnGiveFeedback_Invoke_CallsHandler()
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void ToolStripItem_OnForeColorChanged_InvokeWithOwner_CallsForeColorChanged(EventArgs eventArgs)
         {
-            var item = new SubToolStripItem();
-            var eventArgs = new GiveFeedbackEventArgs(DragDropEffects.None, useDefaultCursors: true);
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Owner = owner
+            };
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(item, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            item.ForeColorChanged += handler;
+            item.OnForeColorChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.False(owner.IsHandleCreated);
+
+            // Remove handler.
+            item.ForeColorChanged -= handler;
+            item.OnForeColorChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.False(owner.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void ToolStripItem_OnForeColorChanged_InvokeWithOwnerWithHandle_CallsForeColorChanged(EventArgs eventArgs)
+        {
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Owner = owner
+            };
+            Assert.NotEqual(IntPtr.Zero, owner.Handle);
+            int invalidatedCallCount = 0;
+            owner.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            owner.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            owner.HandleCreated += (sender, e) => createdCallCount++;
+
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(item, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            item.ForeColorChanged += handler;
+            item.OnForeColorChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.True(owner.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Remove handler.
+            item.ForeColorChanged -= handler;
+            item.OnForeColorChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.True(owner.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void ToolStripItem_OnForeColorChanged_InvokeWithParent_CallsForeColorChanged(EventArgs eventArgs)
+        {
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Parent = parent
+            };
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(item, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            item.ForeColorChanged += handler;
+            item.OnForeColorChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.False(parent.IsHandleCreated);
+
+            // Remove handler.
+            item.ForeColorChanged -= handler;
+            item.OnForeColorChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.False(parent.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void ToolStripItem_OnForeColorChanged_InvokeWithParentWithHandle_CallsForeColorChanged(EventArgs eventArgs)
+        {
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Parent = parent
+            };
+            Assert.NotEqual(IntPtr.Zero, parent.Handle);
+            int invalidatedCallCount = 0;
+            parent.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            parent.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            parent.HandleCreated += (sender, e) => createdCallCount++;
+
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(item, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            item.ForeColorChanged += handler;
+            item.OnForeColorChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.True(parent.IsHandleCreated);
+            Assert.Equal(1, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Remove handler.
+            item.ForeColorChanged -= handler;
+            item.OnForeColorChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.True(parent.IsHandleCreated);
+            Assert.Equal(2, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        public static IEnumerable<object[]> OnGiveFeedback_TestData()
+        {
+            yield return new object[] { null };
+            yield return new object[] { new GiveFeedbackEventArgs(DragDropEffects.None, true) };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(OnGiveFeedback_TestData))]
+        public void ToolStripItem_OnGiveFeedback_Invoke_CallsGiveFeedback(GiveFeedbackEventArgs eventArgs)
+        {
+            using var item = new SubToolStripItem();
             int callCount = 0;
             GiveFeedbackEventHandler handler = (sender, e) =>
             {
@@ -3005,19 +11445,23 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
         }
 
-        [Fact]
-        public void ToolStripItem_OnLayout_Invoke_Success()
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetLayoutEventArgsTheoryData))]
+        public void ToolStripItem_OnLayout_Invoke_Nop(LayoutEventArgs eventArgs)
         {
-            var item = new SubToolStripItem();
-            var eventArgs = new LayoutEventArgs(item, "property");
+            using var item = new SubToolStripItem();
+
+            item.OnLayout(eventArgs);
+
+            // Call again.
             item.OnLayout(eventArgs);
         }
 
-        [Fact]
-        public void ToolStripItem_OnLocationChanged_Invoke_CallsHandler()
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void ToolStripItem_OnLocationChanged_Invoke_CallsLocationChanged(EventArgs eventArgs)
         {
-            var item = new SubToolStripItem();
-            var eventArgs = new EventArgs();
+            using var item = new SubToolStripItem();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -3037,11 +11481,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
         }
 
-        [Fact]
-        public void ToolStripItem_OnMouseDown_Invoke_Nop()
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetMouseEventArgsTheoryData))]
+        public void ToolStripItem_OnMouseDown_Invoke_Nop(MouseEventArgs eventArgs)
         {
-            var item = new SubToolStripItem();
-            var eventArgs = new MouseEventArgs(MouseButtons.Left, 0, 0, 0, 0);
+            using var item = new SubToolStripItem();
             int callCount = 0;
             MouseEventHandler handler = (sender, e) =>
             {
@@ -3061,18 +11505,13 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, callCount);
         }
 
-        [Fact]
-        public void ToolStripItem_OnMouseEnter_Invoke_Nop()
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void ToolStripItem_OnMouseEnter_Invoke_DoesNotCallMouseEnter(EventArgs eventArgs)
         {
-            var item = new SubToolStripItem();
-            var eventArgs = new EventArgs();
+            using var item = new SubToolStripItem();
             int callCount = 0;
-            EventHandler handler = (sender, e) =>
-            {
-                Assert.Same(item, sender);
-                Assert.Same(eventArgs, e);
-                callCount++;
-            };
+            EventHandler handler = (sender, e) => callCount++;
 
             // Call with handler.
             item.MouseEnter += handler;
@@ -3085,11 +11524,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, callCount);
         }
 
-        [Fact]
-        public void ToolStripItem_OnMouseHover_Invoke_Nop()
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void ToolStripItem_OnMouseHover_Invoke_DoesNotCallMouseHover(EventArgs eventArgs)
         {
-            var item = new SubToolStripItem();
-            var eventArgs = new EventArgs();
+            using var item = new SubToolStripItem();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -3109,17 +11548,31 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, callCount);
         }
 
-        [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringTheoryData))]
-        public void ToolStripItem_OnMouseHover_InvokeWithParent_Nop(string toolTipText)
+        public static IEnumerable<object[]> OnMouseHover_WithOwner_TestData()
         {
-            var parent = new ToolStrip();
-            var item = new SubToolStripItem
+            foreach (string toolTipText in new string[] { null, string.Empty, "ToolTipText" })
+            {
+                foreach (bool showItemToolTips in new bool[] { true, false })
+                {
+                    yield return new object[] { toolTipText, showItemToolTips, null };
+                    yield return new object[] { toolTipText, showItemToolTips, new EventArgs() };
+                }
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(OnMouseHover_WithOwner_TestData))]
+        public void ToolStripItem_OnMouseHover_InvokeWithOwner_Nop(string toolTipText, bool showItemToolTips, EventArgs eventArgs)
+        {
+            using var owner = new ToolStrip
+            {
+                ShowItemToolTips = showItemToolTips
+            };
+            using var item = new SubToolStripItem
             {
                 ToolTipText = toolTipText,
-                Parent = parent
+                Owner = owner
             };
-            var eventArgs = new EventArgs();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -3139,41 +11592,43 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, callCount);
         }
 
-        [Fact]
-        public void ToolStripItem_OnMouseLeave_Invoke_Nop()
+        [WinFormsTheory]
+        [MemberData(nameof(OnMouseHover_WithOwner_TestData))]
+        public void ToolStripItem_OnMouseHover_InvokeWithParent_Nop(string toolTipText, bool showItemToolTips, EventArgs eventArgs)
         {
-            var item = new SubToolStripItem();
-            var eventArgs = new EventArgs();
-            int callCount = 0;
-            EventHandler handler = (sender, e) =>
+            using var parent = new ToolStrip
             {
-                Assert.Same(item, sender);
-                Assert.Same(eventArgs, e);
-                callCount++;
+                ShowItemToolTips = showItemToolTips
             };
-
-            // Call with handler.
-            item.MouseLeave += handler;
-            item.OnMouseLeave(eventArgs);
-            Assert.Equal(0, callCount);
-
-            // Remove handler.
-            item.MouseLeave -= handler;
-            item.OnMouseLeave(eventArgs);
-            Assert.Equal(0, callCount);
-        }
-
-        [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringTheoryData))]
-        public void ToolStripItem_OnMouseLeave_InvokeWithParent_Nop(string toolTipText)
-        {
-            var parent = new ToolStrip();
-            var item = new SubToolStripItem
+            using var item = new SubToolStripItem
             {
                 ToolTipText = toolTipText,
                 Parent = parent
             };
-            var eventArgs = new EventArgs();
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(item, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            item.MouseHover += handler;
+            item.OnMouseHover(eventArgs);
+            Assert.Equal(0, callCount);
+
+            // Remove handler.
+            item.MouseHover -= handler;
+            item.OnMouseHover(eventArgs);
+            Assert.Equal(0, callCount);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void ToolStripItem_OnMouseLeave_Invoke_Nop(EventArgs eventArgs)
+        {
+            using var item = new SubToolStripItem();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -3193,11 +11648,153 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, callCount);
         }
 
-        [Fact]
-        public void ToolStripItem_OnMouseMove_Invoke_Nop()
+        public static IEnumerable<object[]> OnMouseLeave_WithOwner_TestData()
         {
-            var item = new SubToolStripItem();
-            var eventArgs = new MouseEventArgs(MouseButtons.Left, 0, 0, 0, 0);
+            foreach (string toolTipText in new string[] { null, string.Empty, "ToolTipText" })
+            {
+                foreach (bool showItemToolTips in new bool[] { true, false })
+                {
+                    yield return new object[] { toolTipText, showItemToolTips, null };
+                    yield return new object[] { toolTipText, showItemToolTips, new EventArgs() };
+                }
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(OnMouseLeave_WithOwner_TestData))]
+        public void ToolStripItem_OnMouseLeave_InvokeWithOwner_Nop(string toolTipText, bool showItemToolTips, EventArgs eventArgs)
+        {
+            using var owner = new ToolStrip
+            {
+                ShowItemToolTips = showItemToolTips
+            };
+            using var item = new SubToolStripItem
+            {
+                ToolTipText = toolTipText,
+                Owner = owner
+            };
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(item, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            item.MouseLeave += handler;
+            item.OnMouseLeave(eventArgs);
+            Assert.Equal(0, callCount);
+
+            // Remove handler.
+            item.MouseLeave -= handler;
+            item.OnMouseLeave(eventArgs);
+            Assert.Equal(0, callCount);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(OnMouseLeave_WithOwner_TestData))]
+        public void ToolStripItem_OnMouseLeave_InvokeWithOwnerAfterHover_Nop(string toolTipText, bool showItemToolTips, EventArgs eventArgs)
+        {
+            using var owner = new ToolStrip
+            {
+                ShowItemToolTips = showItemToolTips
+            };
+            using var item = new SubToolStripItem
+            {
+                ToolTipText = toolTipText,
+                Owner = owner
+            };
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(item, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+            item.OnMouseHover(eventArgs);
+
+            // Call with handler.
+            item.MouseLeave += handler;
+            item.OnMouseLeave(eventArgs);
+            Assert.Equal(0, callCount);
+
+            // Remove handler.
+            item.MouseLeave -= handler;
+            item.OnMouseLeave(eventArgs);
+            Assert.Equal(0, callCount);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(OnMouseLeave_WithOwner_TestData))]
+        public void ToolStripItem_OnMouseLeave_InvokeWithParent_Nop(string toolTipText, bool showItemToolTips, EventArgs eventArgs)
+        {
+            using var parent = new ToolStrip
+            {
+                ShowItemToolTips = showItemToolTips
+            };
+            using var item = new SubToolStripItem
+            {
+                ToolTipText = toolTipText,
+                Parent = parent
+            };
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(item, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            item.MouseLeave += handler;
+            item.OnMouseLeave(eventArgs);
+            Assert.Equal(0, callCount);
+
+            // Remove handler.
+            item.MouseLeave -= handler;
+            item.OnMouseLeave(eventArgs);
+            Assert.Equal(0, callCount);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(OnMouseLeave_WithOwner_TestData))]
+        public void ToolStripItem_OnMouseLeave_InvokeWithParentAfterHover_Nop(string toolTipText, bool showItemToolTips, EventArgs eventArgs)
+        {
+            using var parent = new ToolStrip
+            {
+                ShowItemToolTips = showItemToolTips
+            };
+            using var item = new SubToolStripItem
+            {
+                ToolTipText = toolTipText,
+                Parent = parent
+            };
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(item, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+            item.OnMouseHover(eventArgs);
+
+            // Call with handler.
+            item.MouseLeave += handler;
+            item.OnMouseLeave(eventArgs);
+            Assert.Equal(0, callCount);
+
+            // Remove handler.
+            item.MouseLeave -= handler;
+            item.OnMouseLeave(eventArgs);
+            Assert.Equal(0, callCount);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetMouseEventArgsTheoryData))]
+        public void ToolStripItem_OnMouseMove_Invoke_Nop(MouseEventArgs eventArgs)
+        {
+            using var item = new SubToolStripItem();
             int callCount = 0;
             MouseEventHandler handler = (sender, e) =>
             {
@@ -3217,11 +11814,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, callCount);
         }
 
-        [Fact]
-        public void ToolStripItem_OnMouseUp_Invoke_Nop()
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetMouseEventArgsTheoryData))]
+        public void ToolStripItem_OnMouseUp_Invoke_Nop(MouseEventArgs eventArgs)
         {
-            var item = new SubToolStripItem();
-            var eventArgs = new MouseEventArgs(MouseButtons.Left, 0, 0, 0, 0);
+            using var item = new SubToolStripItem();
             int callCount = 0;
             MouseEventHandler handler = (sender, e) =>
             {
@@ -3241,29 +11838,106 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, callCount);
         }
 
-        [Theory]
-        [InlineData(RightToLeft.Inherit, RightToLeft.Inherit, 1)]
-        [InlineData(RightToLeft.Inherit, RightToLeft.Yes, 0)]
-        [InlineData(RightToLeft.Inherit, RightToLeft.No, 0)]
-        [InlineData(RightToLeft.Yes, RightToLeft.Inherit, 1)]
-        [InlineData(RightToLeft.Yes, RightToLeft.Yes, 0)]
-        [InlineData(RightToLeft.Yes, RightToLeft.No, 0)]
-        [InlineData(RightToLeft.No, RightToLeft.Inherit, 1)]
-        [InlineData(RightToLeft.No, RightToLeft.Yes, 0)]
-        [InlineData(RightToLeft.No, RightToLeft.No, 0)]
-        public void ToolStripItem_OnOwnerChanged_InvokeWithOwner_CallsHandler(RightToLeft ownerRightToLeft, RightToLeft itemRightToLeft, int expectedRightToLeftChangedCallCount)
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void ToolStripItem_OnOwnerChanged_Invoke_CallsOwnerChanged(EventArgs eventArgs)
         {
-            var owner = new ToolStrip
+            using var item = new SubToolStripItem();
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(item, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            item.OwnerChanged += handler;
+            item.OnOwnerChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(new Padding(0, 1, 0, 2), item.Margin);
+
+            // Remove handler.
+            item.OwnerChanged -= handler;
+            item.OnOwnerChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(new Padding(0, 1, 0, 2), item.Margin);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void ToolStripItem_OnOwnerChanged_InvokeWithMargin_CallsOwnerChanged(EventArgs eventArgs)
+        {
+            using var item = new SubToolStripItem
+            {
+                Margin = new Padding(1, 2, 3, 4)
+            };
+
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(item, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            item.OwnerChanged += handler;
+            item.OnOwnerChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(new Padding(1, 2, 3, 4), item.Margin);
+
+            // Remove handler.
+            item.OwnerChanged -= handler;
+            item.OnOwnerChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(new Padding(1, 2, 3, 4), item.Margin);
+        }
+
+        public static IEnumerable<object[]> OnOwnerChanged_TestData()
+        {
+            yield return new object[] { RightToLeft.Yes, RightToLeft.Yes, null, RightToLeft.Yes, 0 };
+            yield return new object[] { RightToLeft.Yes, RightToLeft.Yes, new EventArgs(), RightToLeft.Yes, 0 };
+
+            yield return new object[] { RightToLeft.Yes, RightToLeft.No, null, RightToLeft.No, 0 };
+            yield return new object[] { RightToLeft.Yes, RightToLeft.No, new EventArgs(), RightToLeft.No, 0 };
+
+            yield return new object[] { RightToLeft.Yes, RightToLeft.Inherit, null, RightToLeft.Yes, 1 };
+            yield return new object[] { RightToLeft.Yes, RightToLeft.Inherit, new EventArgs(), RightToLeft.Yes, 1 };
+
+            yield return new object[] { RightToLeft.No, RightToLeft.Yes, null, RightToLeft.Yes, 0 };
+            yield return new object[] { RightToLeft.No, RightToLeft.Yes, new EventArgs(), RightToLeft.Yes, 0 };
+
+            yield return new object[] { RightToLeft.No, RightToLeft.No, null, RightToLeft.No, 0 };
+            yield return new object[] { RightToLeft.No, RightToLeft.No, new EventArgs(), RightToLeft.No, 0 };
+
+            yield return new object[] { RightToLeft.No, RightToLeft.Inherit, null, RightToLeft.No, 1 };
+            yield return new object[] { RightToLeft.No, RightToLeft.Inherit, new EventArgs(), RightToLeft.No, 1 };
+
+            yield return new object[] { RightToLeft.Inherit, RightToLeft.Yes, null, RightToLeft.Yes, 0 };
+            yield return new object[] { RightToLeft.Inherit, RightToLeft.Yes, new EventArgs(), RightToLeft.Yes, 0 };
+
+            yield return new object[] { RightToLeft.Inherit, RightToLeft.No, null, RightToLeft.No, 0 };
+            yield return new object[] { RightToLeft.Inherit, RightToLeft.No, new EventArgs(), RightToLeft.No, 0 };
+
+            yield return new object[] { RightToLeft.Inherit, RightToLeft.Inherit, null, RightToLeft.No, 1 };
+            yield return new object[] { RightToLeft.Inherit, RightToLeft.Inherit, new EventArgs(), RightToLeft.No, 1 };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(OnOwnerChanged_TestData))]
+        public void ToolStripItem_OnOwnerChanged_InvokeWithRightToLeft_CallsHandler(RightToLeft ownerRightToLeft, RightToLeft rightToLeft, EventArgs eventArgs, RightToLeft expectedRightToLeft, int expectedRightToLeftChangedCallCount)
+        {
+            using var owner = new ToolStrip
             {
                 RightToLeft = ownerRightToLeft
             };
-            var item = new SubToolStripItem
+            using var item = new SubToolStripItem
             {
-                RightToLeft = itemRightToLeft
+                Owner = owner,
+                RightToLeft = rightToLeft
             };
-            owner.Items.Add(item);
 
-            var eventArgs = new EventArgs();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -3272,60 +11946,272 @@ namespace System.Windows.Forms.Tests
                 callCount++;
             };
             int rightToLeftChangedCallCount = 0;
-            EventHandler rightToLeftChangedHandler = (sender, e) =>
+            item.RightToLeftChanged += (sender, e) =>
             {
                 Assert.Same(item, sender);
-                Assert.NotSame(eventArgs, e);
+                Assert.Same(EventArgs.Empty, e);
                 rightToLeftChangedCallCount++;
             };
-            item.RightToLeftChanged += rightToLeftChangedHandler;
 
             // Call with handler.
             item.OwnerChanged += handler;
             item.OnOwnerChanged(eventArgs);
             Assert.Equal(1, callCount);
+            Assert.Equal(expectedRightToLeft, item.RightToLeft);
             Assert.Equal(expectedRightToLeftChangedCallCount, rightToLeftChangedCallCount);
+            Assert.Equal(new Padding(0, 1, 0, 2), item.Margin);
 
             // Remove handler.
             item.OwnerChanged -= handler;
-            item.RightToLeftChanged -= rightToLeftChangedHandler;
             item.OnOwnerChanged(eventArgs);
             Assert.Equal(1, callCount);
-            Assert.Equal(expectedRightToLeftChangedCallCount, rightToLeftChangedCallCount);
+            Assert.Equal(expectedRightToLeft, item.RightToLeft);
+            Assert.Equal(expectedRightToLeftChangedCallCount * 2, rightToLeftChangedCallCount);
+            Assert.Equal(new Padding(0, 1, 0, 2), item.Margin);
         }
 
-        [Fact]
-        public void ToolStripItem_OnOwnerFontChanged_Invoke_Success()
+        [WinFormsTheory]
+        [MemberData(nameof(OnFontChanged_TestData))]
+        public void ToolStripItem_OnOwnerFontChanged_Invoke_Success(ToolStripItemDisplayStyle displayStyle, EventArgs eventArgs)
         {
-            var item = new SubToolStripItem();
-            var eventArgs = new EventArgs();
-
-            // Call without font.
-            item.OnOwnerFontChanged(eventArgs);
-
-            // Call with font.
-            item.Font = SystemFonts.MenuFont;
-            item.OnOwnerFontChanged(eventArgs);
-        }
-
-        [Fact]
-        public void ToolStripItem_OnPaint_Invoke_Success()
-        {
-            using (var image = new Bitmap(10, 10))
-            using (Graphics graphics = Graphics.FromImage(image))
+            using var item = new SubToolStripItem
             {
-                var item = new SubToolStripItem();
-                var eventArgs = new PaintEventArgs(graphics, Rectangle.Empty);
+                DisplayStyle = displayStyle
+            };
 
-                item.OnPaint(eventArgs);
+            item.OnOwnerFontChanged(eventArgs);
+
+            // Call again.
+            item.OnOwnerFontChanged(eventArgs);
+            
+            // Call with font.
+            item.Font = new Font("Arial", 8.25f);
+            item.OnOwnerFontChanged(eventArgs);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(OnFontChanged_WithOwner_TestData))]
+        public void ToolStripItem_OnOwnerFontChanged_InvokeWithOwner_Success(ToolStripItemDisplayStyle displayStyle, EventArgs eventArgs, int expectedOwnerLayoutCallCount)
+        {
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Owner = owner,
+                DisplayStyle = displayStyle
+            };
+            int ownerLayoutCallCount = 0;
+            void ownerHandler(object sender, LayoutEventArgs e)
+            {
+                Assert.Same(owner, sender);
+                Assert.Same(item, e.AffectedComponent);
+                Assert.Equal("Font", e.AffectedProperty);
+                ownerLayoutCallCount++;
+            }
+            owner.Layout += ownerHandler;
+
+            try
+            {
+                item.OnOwnerFontChanged(eventArgs);
+                Assert.Equal(expectedOwnerLayoutCallCount, ownerLayoutCallCount);
+                Assert.False(owner.IsHandleCreated);
+
+                // Call again.
+                item.OnOwnerFontChanged(eventArgs);
+                Assert.Equal(expectedOwnerLayoutCallCount * 2, ownerLayoutCallCount);
+                Assert.False(owner.IsHandleCreated);
+                
+                // Call with font.
+                owner.Layout -= ownerHandler;
+                item.Font = new Font("Arial", 8.25f);
+                owner.Layout += ownerHandler;
+                item.OnOwnerFontChanged(eventArgs);
+                Assert.Equal(expectedOwnerLayoutCallCount * 2, ownerLayoutCallCount);
+                Assert.False(owner.IsHandleCreated);
+            }
+            finally
+            {
+                owner.Layout -= ownerHandler;
             }
         }
 
-        [Fact]
-        public void ToolStripItem_OnParentBackColorChanged_Invoke_CallsHandler()
+        [WinFormsTheory]
+        [MemberData(nameof(OnFontChanged_WithOwner_TestData))]
+        public void ToolStripItem_OnOwnerFontChanged_InvokeWithOwnerWithHandle_Success(ToolStripItemDisplayStyle displayStyle, EventArgs eventArgs, int expectedParentLayoutCallCount)
         {
-            var item = new SubToolStripItem();
-            var eventArgs = new EventArgs();
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Owner = owner,
+                DisplayStyle = displayStyle
+            };
+            Assert.NotEqual(IntPtr.Zero, owner.Handle);
+            int invalidatedCallCount = 0;
+            void invalidatedHandler(object sender, EventArgs e) => invalidatedCallCount++;
+            owner.Invalidated += invalidatedHandler;
+            int styleChangedCallCount = 0;
+            owner.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            owner.HandleCreated += (sender, e) => createdCallCount++;
+            int ownerLayoutCallCount = 0;
+            void ownerHandler(object sender, LayoutEventArgs e)
+            {
+                Assert.Same(owner, sender);
+                Assert.Same(item, e.AffectedComponent);
+                Assert.Equal("Font", e.AffectedProperty);
+                ownerLayoutCallCount++;
+            }
+            owner.Layout += ownerHandler;
+
+            try
+            {
+                item.OnOwnerFontChanged(eventArgs);
+                Assert.Equal(expectedParentLayoutCallCount, ownerLayoutCallCount);
+                Assert.True(owner.IsHandleCreated);
+                Assert.Equal(expectedParentLayoutCallCount * 2, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+
+                // Call again.
+                item.OnOwnerFontChanged(eventArgs);
+                Assert.Equal(expectedParentLayoutCallCount * 2, ownerLayoutCallCount);
+                Assert.True(owner.IsHandleCreated);
+                Assert.Equal(expectedParentLayoutCallCount * 4, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+
+                // Call with font.
+                owner.Layout -= ownerHandler;
+                owner.Invalidated -= invalidatedHandler;
+                item.Font = new Font("Arial", 8.25f);
+                owner.Layout += ownerHandler;
+                owner.Invalidated += invalidatedHandler;
+                item.OnOwnerFontChanged(eventArgs);
+                Assert.Equal(expectedParentLayoutCallCount * 2, ownerLayoutCallCount);
+                Assert.True(owner.IsHandleCreated);
+                Assert.Equal(expectedParentLayoutCallCount * 4, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+            }
+            finally
+            {
+                owner.Layout -= ownerHandler;
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(OnFontChanged_TestData))]
+        public void ToolStripItem_OnOwnerFontChanged_InvokeWithParent_Success(ToolStripItemDisplayStyle displayStyle, EventArgs eventArgs)
+        {
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Parent = parent,
+                DisplayStyle = displayStyle
+            };
+            int parentLayoutCallCount = 0;
+            void parentHandler(object sender, LayoutEventArgs e) => parentLayoutCallCount++;
+            parent.Layout += parentHandler;
+
+            try
+            {
+                item.OnOwnerFontChanged(eventArgs);
+                Assert.Equal(0, parentLayoutCallCount);
+                Assert.False(parent.IsHandleCreated);
+
+                // Call again.
+                item.OnOwnerFontChanged(eventArgs);
+                Assert.Equal(0, parentLayoutCallCount);
+                Assert.False(parent.IsHandleCreated);
+
+                // Call with font.
+                item.Font = new Font("Arial", 8.25f);
+                item.OnOwnerFontChanged(eventArgs);
+                Assert.Equal(0, parentLayoutCallCount);
+                Assert.False(parent.IsHandleCreated);
+            }
+            finally
+            {
+                parent.Layout -= parentHandler;
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(OnFontChanged_TestData))]
+        public void ToolStripItem_OnOwnerFontChanged_InvokeWithParentWithHandle_Success(ToolStripItemDisplayStyle displayStyle, EventArgs eventArgs)
+        {
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Parent = parent,
+                DisplayStyle = displayStyle
+            };
+            Assert.NotEqual(IntPtr.Zero, parent.Handle);
+            int invalidatedCallCount = 0;
+            parent.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            parent.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            parent.HandleCreated += (sender, e) => createdCallCount++;
+            int parentLayoutCallCount = 0;
+            void parentHandler(object sender, LayoutEventArgs e) => parentLayoutCallCount++;
+            parent.Layout += parentHandler;
+
+            try
+            {
+                item.OnOwnerFontChanged(eventArgs);
+                Assert.Equal(0, parentLayoutCallCount);
+                Assert.True(parent.IsHandleCreated);
+                Assert.Equal(0, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+
+                // Call again.
+                item.OnOwnerFontChanged(eventArgs);
+                Assert.Equal(0, parentLayoutCallCount);
+                Assert.True(parent.IsHandleCreated);
+                Assert.Equal(0, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+
+                // Call with font.
+                item.Font = new Font("Arial", 8.25f);
+                item.OnOwnerFontChanged(eventArgs);
+                Assert.Equal(0, parentLayoutCallCount);
+                Assert.True(parent.IsHandleCreated);
+                Assert.Equal(0, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+            }
+            finally
+            {
+                parent.Layout -= parentHandler;
+            }
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetPaintEventArgsTheoryData))]
+        public void ToolStripItem_OnPaint_Invoke_DoesNotCallPaint(PaintEventArgs eventArgs)
+        {
+            using var item = new SubToolStripItem();
+            int callCount = 0;
+            PaintEventHandler handler = (sender, e) => callCount++;
+
+            // Call with handler.
+            item.Paint += handler;
+            item.OnPaint(eventArgs);
+            Assert.Equal(0, callCount);
+
+            // Remove handler.
+            item.Paint -= handler;
+            item.OnPaint(eventArgs);
+            Assert.Equal(0, callCount);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void ToolStripItem_OnParentBackColorChanged_Invoke_CallsBackColorChanged(EventArgs eventArgs)
+        {
+            using var item = new SubToolStripItem();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -3353,31 +12239,48 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> OnParentChanged_TestData()
         {
-            foreach (bool allowDrop in new bool[] { true, false })
+            foreach (bool enabled in new bool[] { true, false })
             {
-                yield return new object[] { allowDrop, null, null };
-                yield return new object[] { allowDrop, null, new ToolStrip() };
-                yield return new object[] { allowDrop, new ToolStrip(), null };
-                yield return new object[] { allowDrop, new ToolStrip(), new ToolStrip() };
+                foreach (bool visible in new bool[] { true, false })
+                {
+                    foreach (Image image in new Image[] { null, new Bitmap(10, 10) })
+                    {
+                        foreach (bool allowDrop in new bool[] { true, false })
+                        {
+                            yield return new object[] { enabled, visible, image, allowDrop, null, null };
+                            yield return new object[] { enabled, visible, image, allowDrop, null, new ToolStrip() };
+                            yield return new object[] { enabled, visible, image, allowDrop, new ToolStrip(), null };
+                            yield return new object[] { enabled, visible, image, allowDrop, new ToolStrip(), new ToolStrip() };
+                        }
+                    }
+                }
             }
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(OnParentChanged_TestData))]
-        public void ToolStripItem_OnParentChanged_Invoke_Success(bool allowDrop, ToolStrip oldParent, ToolStrip newParent)
+        public void ToolStripItem_OnParentChanged_Invoke_Success(bool enabled, bool visible, Image image, bool allowDrop, ToolStrip oldParent, ToolStrip newParent)
         {
-            var item = new SubToolStripItem
+            using var item = new SubToolStripItem
             {
+                Enabled = enabled,
+                Visible = visible,
+                Image = image,
                 AllowDrop = allowDrop
             };
             item.OnParentChanged(oldParent, newParent);
         }
 
-        [Fact]
-        public void ToolStripItem_OnParentEnabledChanged_Invoke_CallsHandler()
+        [WinFormsTheory]
+        [MemberData(nameof(OnEnabledChanged_TestData))]
+        public void ToolStripItem_OnParentEnabledChanged_Invoke_CallsEnabledChanged(bool enabled, bool visible, Image image, EventArgs eventArgs)
         {
-            var item = new SubToolStripItem();
-            var eventArgs = new EventArgs();
+            using var item = new SubToolStripItem
+            {
+                Enabled = enabled,
+                Visible = visible,
+                Image = image
+            };
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -3398,10 +12301,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ToolStripItem_OnParentForeColorChanged_Invoke_CallsHandler()
         {
-            var item = new SubToolStripItem();
+            using var item = new SubToolStripItem();
             var eventArgs = new EventArgs();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
@@ -3428,11 +12331,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
         }
 
-        [Fact]
-        public void ToolStripItem_OnRightToLeftChanged_Invoke_CallsHandler()
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void ToolStripItem_OnParentRightToLeftChanged_Invoke_CallsParentRightToLeftChanged(EventArgs eventArgs)
         {
-            var item = new SubToolStripItem();
-            var eventArgs = new EventArgs();
+            using var item = new SubToolStripItem();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -3440,29 +12343,36 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-
+        
             // Call with handler.
             item.RightToLeftChanged += handler;
-            item.OnRightToLeftChanged(eventArgs);
+            item.OnParentRightToLeftChanged(eventArgs);
             Assert.Equal(1, callCount);
-
+        
             // Remove handler.
             item.RightToLeftChanged -= handler;
-            item.OnRightToLeftChanged(eventArgs);
+            item.OnParentRightToLeftChanged(eventArgs);
             Assert.Equal(1, callCount);
         }
 
-        [Theory]
-        [InlineData(RightToLeft.Inherit, 1)]
-        [InlineData(RightToLeft.Yes, 0)]
-        [InlineData(RightToLeft.No, 0)]
-        public void ToolStripItem_OnParentRightToLeftChanged_InvokeWithRightToLeft_CallsHandler(RightToLeft rightToLeft, int expectedCallCount)
+        public static IEnumerable<object[]> OnParentRightToLeftChanged_TestData()
         {
-            var item = new SubToolStripItem
+            yield return new object[] { RightToLeft.Inherit, null, 1 };
+            yield return new object[] { RightToLeft.Inherit, new EventArgs(), 1 };
+            yield return new object[] { RightToLeft.Yes, null, 0 };
+            yield return new object[] { RightToLeft.Yes, new EventArgs(), 0 };
+            yield return new object[] { RightToLeft.No, null, 0 };
+            yield return new object[] { RightToLeft.No, new EventArgs(), 0 };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(OnParentRightToLeftChanged_TestData))]
+        public void ToolStripItem_OnParentRightToLeftChanged_InvokeWithRightToLeft_CallsRightToLeftChange(RightToLeft rightToLeft, EventArgs eventArgs, int expectedCallCount)
+        {
+            using var item = new SubToolStripItem
             {
                 RightToLeft = rightToLeft
             };
-            var eventArgs = new EventArgs();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -3482,38 +12392,17 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expectedCallCount, callCount);
         }
 
-        [Fact]
-        public void ToolStripItem_OnParentRightToLeftChanged_InvokeWithoutRightToLeft_CallsHandler()
+        public static IEnumerable<object[]> OnQueryContinueDrag_TestData()
         {
-            var item = new SubToolStripItem();
-            var eventArgs = new EventArgs();
-            int callCount = 0;
-            EventHandler handler = (sender, e) =>
-            {
-                Assert.Same(item, sender);
-                Assert.Same(eventArgs, e);
-                callCount++;
-            };
-
-            // Call with handler.
-            item.RightToLeftChanged += handler;
-            item.OnParentRightToLeftChanged(eventArgs);
-            Assert.Equal(1, callCount);
-
-            // Remove handler.
-            item.RightToLeftChanged -= handler;
-            item.OnParentRightToLeftChanged(eventArgs);
-            Assert.Equal(1, callCount);
+            yield return new object[] { null };
+            yield return new object[] { new QueryContinueDragEventArgs(0, true, DragAction.Drop) };
         }
 
-        [Fact]
-        public void ToolStripItem_OnQueryContinueDrag_InvokeWithOwner_CallsHandler()
+        [WinFormsTheory]
+        [MemberData(nameof(OnQueryContinueDrag_TestData))]
+        public void ToolStripItem_OnQueryContinueDrag_Invoke_CallsQueryContinueDrag(QueryContinueDragEventArgs eventArgs)
         {
-            var owner = new ToolStrip();
-            var item = new SubToolStripItem();
-            owner.Items.Add(item);
-
-            var eventArgs = new QueryContinueDragEventArgs(0, true, DragAction.Cancel);
+            using var item = new SubToolStripItem();
             int callCount = 0;
             QueryContinueDragEventHandler handler = (sender, e) =>
             {
@@ -3533,14 +12422,20 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
         }
 
-        [Fact]
-        public void ToolStripItem_OnRightToLeftChanged_InvokeWithOwner_CallsHandler()
+        [WinFormsFact]
+        public void ToolStripItem_QueryAccessibilityHelp_AddRemove_Success()
         {
-            var owner = new ToolStrip();
-            var item = new SubToolStripItem();
-            owner.Items.Add(item);
+            using var item = new SubToolStripItem();
+            QueryAccessibilityHelpEventHandler handler = (sender, e) => {};
+            item.QueryAccessibilityHelp += handler;
+            item.QueryAccessibilityHelp -= handler;
+        }
 
-            var eventArgs = new EventArgs();
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void ToolStripItem_OnRightToLeftChanged_Invoke_CallsRightToLeftChanged(EventArgs eventArgs)
+        {
+            using var item = new SubToolStripItem();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -3560,11 +12455,221 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
         }
 
-        [Fact]
-        public void ToolStripItem_OnTextChanged_Invoke_CallsHandler()
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void ToolStripItem_OnRightToLeftChanged_InvokeWithOwner_CallsRightToLeftChanged(EventArgs eventArgs)
         {
-            var item = new SubToolStripItem();
-            var eventArgs = new EventArgs();
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Owner = owner
+            };
+            int ownerLayoutCallCount = 0;
+            void ownerHandler(object sender, LayoutEventArgs e)
+            {
+                Assert.Same(owner, sender);
+                Assert.Same(item, e.AffectedComponent);
+                Assert.Equal("RightToLeft", e.AffectedProperty);
+                ownerLayoutCallCount++;
+            };
+            owner.Layout += ownerHandler;
+
+            try
+            {
+                int callCount = 0;
+                EventHandler handler = (sender, e) =>
+                {
+                    Assert.Same(item, sender);
+                    Assert.Same(eventArgs, e);
+                    callCount++;
+                };
+
+                // Call with handler.
+                item.RightToLeftChanged += handler;
+                item.OnRightToLeftChanged(eventArgs);
+                Assert.Equal(1, callCount);
+                Assert.Equal(1, ownerLayoutCallCount);
+                Assert.False(owner.IsHandleCreated);
+
+                // Remove handler.
+                item.RightToLeftChanged -= handler;
+                item.OnRightToLeftChanged(eventArgs);
+                Assert.Equal(1, callCount);
+                Assert.Equal(2, ownerLayoutCallCount);
+                Assert.False(owner.IsHandleCreated);
+            }
+            finally
+            {
+                owner.Layout -= ownerHandler;
+            }
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void ToolStripItem_OnRightToLeftChanged_InvokeWithOwnerWithHandle_CallsRightToLeftChanged(EventArgs eventArgs)
+        {
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Owner = owner
+            };
+            Assert.NotEqual(IntPtr.Zero, owner.Handle);
+            int invalidatedCallCount = 0;
+            owner.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            owner.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            owner.HandleCreated += (sender, e) => createdCallCount++;
+            int ownerLayoutCallCount = 0;
+            void ownerHandler(object sender, LayoutEventArgs e)
+            {
+                Assert.Same(owner, sender);
+                Assert.Same(item, e.AffectedComponent);
+                Assert.Equal("RightToLeft", e.AffectedProperty);
+                ownerLayoutCallCount++;
+            };
+            owner.Layout += ownerHandler;
+
+            try
+            {
+                int callCount = 0;
+                EventHandler handler = (sender, e) =>
+                {
+                    Assert.Same(item, sender);
+                    Assert.Same(eventArgs, e);
+                    callCount++;
+                };
+
+                // Call with handler.
+                item.RightToLeftChanged += handler;
+                item.OnRightToLeftChanged(eventArgs);
+                Assert.Equal(1, callCount);
+                Assert.Equal(1, ownerLayoutCallCount);
+                Assert.True(owner.IsHandleCreated);
+                Assert.Equal(2, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+
+                // Remove handler.
+                item.RightToLeftChanged -= handler;
+                item.OnRightToLeftChanged(eventArgs);
+                Assert.Equal(1, callCount);
+                Assert.Equal(2, ownerLayoutCallCount);
+                Assert.True(owner.IsHandleCreated);
+                Assert.Equal(4, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+            }
+            finally
+            {
+                owner.Layout -= ownerHandler;
+            }
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void ToolStripItem_OnRightToLeftChanged_InvokeWithParent_CallsRightToLeftChanged(EventArgs eventArgs)
+        {
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Parent = parent
+            };
+            int parentLayoutCallCount = 0;
+            void parentHandler(object sender, LayoutEventArgs e) => parentLayoutCallCount++;
+            parent.Layout += parentHandler;
+
+            try
+            {
+                int callCount = 0;
+                EventHandler handler = (sender, e) =>
+                {
+                    Assert.Same(item, sender);
+                    Assert.Same(eventArgs, e);
+                    callCount++;
+                };
+
+                // Call with handler.
+                item.RightToLeftChanged += handler;
+                item.OnRightToLeftChanged(eventArgs);
+                Assert.Equal(1, callCount);
+                Assert.Equal(0, parentLayoutCallCount);
+                Assert.False(parent.IsHandleCreated);
+
+                // Remove handler.
+                item.RightToLeftChanged -= handler;
+                item.OnRightToLeftChanged(eventArgs);
+                Assert.Equal(1, callCount);
+                Assert.Equal(0, parentLayoutCallCount);
+                Assert.False(parent.IsHandleCreated);
+            }
+            finally
+            {
+                parent.Layout -= parentHandler;
+            }
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void ToolStripItem_OnRightToLeftChanged_InvokeWithParentWithHandle_CallsRightToLeftChanged(EventArgs eventArgs)
+        {
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Parent = parent
+            };
+            Assert.NotEqual(IntPtr.Zero, parent.Handle);
+            int invalidatedCallCount = 0;
+            parent.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            parent.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            parent.HandleCreated += (sender, e) => createdCallCount++;
+            int parentLayoutCallCount = 0;
+            void parentHandler(object sender, LayoutEventArgs e) => parentLayoutCallCount++;
+            parent.Layout += parentHandler;
+
+            try
+            {
+                int callCount = 0;
+                EventHandler handler = (sender, e) =>
+                {
+                    Assert.Same(item, sender);
+                    Assert.Same(eventArgs, e);
+                    callCount++;
+                };
+
+                // Call with handler.
+                item.RightToLeftChanged += handler;
+                item.OnRightToLeftChanged(eventArgs);
+                Assert.Equal(1, callCount);
+                Assert.Equal(0, parentLayoutCallCount);
+                Assert.True(parent.IsHandleCreated);
+                Assert.Equal(0, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+
+                // Remove handler.
+                item.RightToLeftChanged -= handler;
+                item.OnRightToLeftChanged(eventArgs);
+                Assert.Equal(1, callCount);
+                Assert.Equal(0, parentLayoutCallCount);
+                Assert.True(parent.IsHandleCreated);
+                Assert.Equal(0, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+            }
+            finally
+            {
+                parent.Layout -= parentHandler;
+            }
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void ToolStripItem_OnTextChanged_Invoke_CallsTextChanged(EventArgs eventArgs)
+        {
+            using var item = new SubToolStripItem();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -3584,37 +12689,241 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
         }
 
-        [Fact]
-        public void ToolStripItem_OnTextChanged_InvokeWithOwner_CallsHandler()
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void ToolStripItem_OnTextChanged_InvokeWithOwner_CallsTextChanged(EventArgs eventArgs)
         {
-            var owner = new ToolStrip();
-            var item = new SubToolStripItem();
-            owner.Items.Add(item);
-            var eventArgs = new EventArgs();
-            int callCount = 0;
-            EventHandler handler = (sender, e) =>
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
             {
-                Assert.Same(item, sender);
-                Assert.Same(eventArgs, e);
-                callCount++;
+                Owner = owner
             };
+            int ownerLayoutCallCount = 0;
+            void ownerHandler(object sender, LayoutEventArgs e)
+            {
+                Assert.Same(owner, sender);
+                Assert.Same(item, e.AffectedComponent);
+                Assert.Equal("Text", e.AffectedProperty);
+                ownerLayoutCallCount++;
+            };
+            owner.Layout += ownerHandler;
 
-            // Call with handler.
-            item.TextChanged += handler;
-            item.OnTextChanged(eventArgs);
-            Assert.Equal(1, callCount);
+            try
+            {
+                int callCount = 0;
+                EventHandler handler = (sender, e) =>
+                {
+                    Assert.Same(item, sender);
+                    Assert.Same(eventArgs, e);
+                    callCount++;
+                };
 
-            // Remove handler.
-            item.TextChanged -= handler;
-            item.OnTextChanged(eventArgs);
-            Assert.Equal(1, callCount);
+                // Call with handler.
+                item.TextChanged += handler;
+                item.OnTextChanged(eventArgs);
+                Assert.Equal(1, callCount);
+                Assert.Equal(1, ownerLayoutCallCount);
+                Assert.False(owner.IsHandleCreated);
+
+                // Remove handler.
+                item.TextChanged -= handler;
+                item.OnTextChanged(eventArgs);
+                Assert.Equal(1, callCount);
+                Assert.Equal(2, ownerLayoutCallCount);
+                Assert.False(owner.IsHandleCreated);
+            }
+            finally
+            {
+                owner.Layout -= ownerHandler;
+            }
         }
 
-        [Fact]
-        public void ToolStripItem_OnVisibleChanged_Invoke_CallsHandler()
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void ToolStripItem_OnTextChanged_InvokeWithOwnerWithHandle_CallsTextChanged(EventArgs eventArgs)
         {
-            var item = new SubToolStripItem();
-            var eventArgs = new EventArgs();
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Owner = owner
+            };
+            Assert.NotEqual(IntPtr.Zero, owner.Handle);
+            int invalidatedCallCount = 0;
+            owner.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            owner.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            owner.HandleCreated += (sender, e) => createdCallCount++;
+            int ownerLayoutCallCount = 0;
+            void ownerHandler(object sender, LayoutEventArgs e)
+            {
+                Assert.Same(owner, sender);
+                Assert.Same(item, e.AffectedComponent);
+                Assert.Equal("Text", e.AffectedProperty);
+                ownerLayoutCallCount++;
+            };
+            owner.Layout += ownerHandler;
+
+            try
+            {
+                int callCount = 0;
+                EventHandler handler = (sender, e) =>
+                {
+                    Assert.Same(item, sender);
+                    Assert.Same(eventArgs, e);
+                    callCount++;
+                };
+
+                // Call with handler.
+                item.TextChanged += handler;
+                item.OnTextChanged(eventArgs);
+                Assert.Equal(1, callCount);
+                Assert.Equal(1, ownerLayoutCallCount);
+                Assert.True(owner.IsHandleCreated);
+                Assert.Equal(2, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+
+                // Remove handler.
+                item.TextChanged -= handler;
+                item.OnTextChanged(eventArgs);
+                Assert.Equal(1, callCount);
+                Assert.Equal(2, ownerLayoutCallCount);
+                Assert.True(owner.IsHandleCreated);
+                Assert.Equal(4, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+            }
+            finally
+            {
+                owner.Layout -= ownerHandler;
+            }
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void ToolStripItem_OnTextChanged_InvokeWithParent_CallsTextChanged(EventArgs eventArgs)
+        {
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Parent = parent
+            };
+            int parentLayoutCallCount = 0;
+            void parentHandler(object sender, LayoutEventArgs e) => parentLayoutCallCount++;
+            parent.Layout += parentHandler;
+
+            try
+            {
+                int callCount = 0;
+                EventHandler handler = (sender, e) =>
+                {
+                    Assert.Same(item, sender);
+                    Assert.Same(eventArgs, e);
+                    callCount++;
+                };
+
+                // Call with handler.
+                item.TextChanged += handler;
+                item.OnTextChanged(eventArgs);
+                Assert.Equal(1, callCount);
+                Assert.Equal(0, parentLayoutCallCount);
+                Assert.False(parent.IsHandleCreated);
+
+                // Remove handler.
+                item.TextChanged -= handler;
+                item.OnTextChanged(eventArgs);
+                Assert.Equal(1, callCount);
+                Assert.Equal(0, parentLayoutCallCount);
+                Assert.False(parent.IsHandleCreated);
+            }
+            finally
+            {
+                parent.Layout -= parentHandler;
+            }
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void ToolStripItem_OnTextChanged_InvokeWithParentWithHandle_CallsTextChanged(EventArgs eventArgs)
+        {
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Parent = parent
+            };
+            Assert.NotEqual(IntPtr.Zero, parent.Handle);
+            int invalidatedCallCount = 0;
+            parent.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            parent.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            parent.HandleCreated += (sender, e) => createdCallCount++;
+            int parentLayoutCallCount = 0;
+            void parentHandler(object sender, LayoutEventArgs e) => parentLayoutCallCount++;
+            parent.Layout += parentHandler;
+
+            try
+            {
+                int callCount = 0;
+                EventHandler handler = (sender, e) =>
+                {
+                    Assert.Same(item, sender);
+                    Assert.Same(eventArgs, e);
+                    callCount++;
+                };
+
+                // Call with handler.
+                item.TextChanged += handler;
+                item.OnTextChanged(eventArgs);
+                Assert.Equal(1, callCount);
+                Assert.Equal(0, parentLayoutCallCount);
+                Assert.True(parent.IsHandleCreated);
+                Assert.Equal(0, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+
+                // Remove handler.
+                item.TextChanged -= handler;
+                item.OnTextChanged(eventArgs);
+                Assert.Equal(1, callCount);
+                Assert.Equal(0, parentLayoutCallCount);
+                Assert.True(parent.IsHandleCreated);
+                Assert.Equal(0, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+            }
+            finally
+            {
+                parent.Layout -= parentHandler;
+            }
+        }
+
+        public static IEnumerable<object[]> OnVisibleChanged_TestData()
+        {
+            foreach (bool enabled in new bool[] { true, false })
+            {
+                foreach (bool visible in new bool[] { true, false })
+                {
+                    foreach (Image image in new Image[] { null, new Bitmap(10, 10) })
+                    {
+                        yield return new object[] { enabled, visible, image, null };
+                        yield return new object[] { enabled, visible, image, new EventArgs() };
+                    }
+                }
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(OnVisibleChanged_TestData))]
+        public void ToolStripItem_OnVisibleChanged_Invoke_CallsVisibleChanged(bool enabled, bool visible, Image image, EventArgs eventArgs)
+        {
+            using var item = new SubToolStripItem
+            {
+                Enabled = enabled,
+                Visible = visible,
+                Image = image
+            };
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -3634,14 +12943,16 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
         }
 
-        [Fact]
-        public void ToolStripItem_OnVisibleChanged_InvokeWithOwner_CallsHandler()
+        [WinFormsTheory]
+        [MemberData(nameof(OnVisibleChanged_TestData))]
+        public void ToolStripItem_OnVisibleChanged_InvokeDesignMode_CallsVisibleChanged(bool enabled, bool visible, Image image, EventArgs eventArgs)
         {
-            var owner = new ToolStrip();
-            var item = new SubToolStripItem();
-            owner.Items.Add(item);
-
-            var eventArgs = new EventArgs();
+            using var item = new SubToolStripItem
+            {
+                Enabled = enabled,
+                Visible = visible,
+                Image = image
+            };
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -3661,32 +12972,274 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
         }
 
-        [Fact]
-        public void ToolStripItem_OnVisibleChanged_InvokeWithDisposedOwner_CallsHandler()
+        [WinFormsTheory]
+        [MemberData(nameof(OnVisibleChanged_TestData))]
+        public void ToolStripItem_OnVisibleChanged_InvokeWithOwner_CallsVisibleChanged(bool enabled, bool visible, Image image, EventArgs eventArgs)
         {
-            var owner = new ToolStrip();
-            var item = new SubToolStripItem();
-            owner.Items.Add(item);
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Enabled = enabled,
+                Visible = visible,
+                Image = image,
+                Owner = owner
+            };
+            int ownerLayoutCallCount = 0;
+            void ownerHandler(object sender, LayoutEventArgs e) => ownerLayoutCallCount++;
+            owner.Layout += ownerHandler;
+
+            try
+            {
+                int callCount = 0;
+                EventHandler handler = (sender, e) =>
+                {
+                    Assert.Same(item, sender);
+                    Assert.Same(eventArgs, e);
+                    callCount++;
+                };
+
+                // Call with handler.
+                item.VisibleChanged += handler;
+                item.OnVisibleChanged(eventArgs);
+                Assert.Equal(1, callCount);
+                Assert.False(owner.IsHandleCreated);
+
+                // Remove handler.
+                item.VisibleChanged -= handler;
+                item.OnVisibleChanged(eventArgs);
+                Assert.Equal(1, callCount);
+                Assert.False(owner.IsHandleCreated);
+            }
+            finally
+            {
+                owner.Layout -= ownerHandler;
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(OnVisibleChanged_TestData))]
+        public void ToolStripItem_OnVisibleChanged_InvokeWithOwnerWithHandle_CallsVisibleChanged(bool enabled, bool visible, Image image, EventArgs eventArgs)
+        {
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Enabled = enabled,
+                Visible = visible,
+                Image = image,
+                Owner = owner
+            };
+            Assert.NotEqual(IntPtr.Zero, owner.Handle);
+            int invalidatedCallCount = 0;
+            owner.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            owner.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            owner.HandleCreated += (sender, e) => createdCallCount++;
+            int ownerLayoutCallCount = 0;
+            void ownerHandler(object sender, LayoutEventArgs e)
+            {
+                Assert.Same(owner, sender);
+                Assert.Same(item, e.AffectedComponent);
+                Assert.Equal("Items", e.AffectedProperty);
+                ownerLayoutCallCount++;
+            };
+            owner.Layout += ownerHandler;
+
+            try
+            {
+                int callCount = 0;
+                EventHandler handler = (sender, e) =>
+                {
+                    Assert.Same(item, sender);
+                    Assert.Same(eventArgs, e);
+                    callCount++;
+                };
+
+                // Call with handler.
+                item.VisibleChanged += handler;
+                item.OnVisibleChanged(eventArgs);
+                Assert.Equal(1, callCount);
+                Assert.Equal(1, ownerLayoutCallCount);
+                Assert.True(owner.IsHandleCreated);
+                Assert.Equal(2, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+
+                // Remove handler.
+                item.VisibleChanged -= handler;
+                item.OnVisibleChanged(eventArgs);
+                Assert.Equal(1, callCount);
+                Assert.Equal(2, ownerLayoutCallCount);
+                Assert.True(owner.IsHandleCreated);
+                Assert.Equal(4, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+            }
+            finally
+            {
+                owner.Layout -= ownerHandler;
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(OnVisibleChanged_TestData))]
+        public void ToolStripItem_OnVisibleChanged_InvokeWithDisposedOwner_CallsVisibleChanged(bool enabled, bool visible, Image image, EventArgs eventArgs)
+        {
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Enabled = enabled,
+                Visible = visible,
+                Image = image,
+                Owner = owner
+            };
+            Assert.NotEqual(IntPtr.Zero, owner.Handle);
+            int invalidatedCallCount = 0;
+            owner.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            owner.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            owner.HandleCreated += (sender, e) => createdCallCount++;
+            int ownerLayoutCallCount = 0;
+            void ownerHandler(object sender, LayoutEventArgs e) => ownerLayoutCallCount++;
+            owner.Layout += ownerHandler;
             owner.Dispose();
 
-            var eventArgs = new EventArgs();
-            int callCount = 0;
-            EventHandler handler = (sender, e) =>
+            try
             {
-                Assert.Same(item, sender);
-                Assert.Same(eventArgs, e);
-                callCount++;
+                int callCount = 0;
+                EventHandler handler = (sender, e) =>
+                {
+                    Assert.Same(item, sender);
+                    Assert.Same(eventArgs, e);
+                    callCount++;
+                };
+
+                // Call with handler.
+                item.VisibleChanged += handler;
+                item.OnVisibleChanged(eventArgs);
+                Assert.Equal(1, callCount);
+                Assert.Equal(0, ownerLayoutCallCount);
+                Assert.False(owner.IsHandleCreated);
+                Assert.Equal(0, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+
+                // Remove handler.
+                item.VisibleChanged -= handler;
+                item.OnVisibleChanged(eventArgs);
+                Assert.Equal(1, callCount);
+                Assert.Equal(0, ownerLayoutCallCount);
+                Assert.False(owner.IsHandleCreated);
+                Assert.Equal(0, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+            }
+            finally
+            {
+                owner.Layout -= ownerHandler;
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(OnVisibleChanged_TestData))]
+        public void ToolStripItem_OnVisibleChanged_InvokeWithParent_CallsVisibleChanged(bool enabled, bool visible, Image image, EventArgs eventArgs)
+        {
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Enabled = enabled,
+                Visible = visible,
+                Image = image,
+                Parent = parent
             };
+            int parentLayoutCallCount = 0;
+            void parentHandler(object sender, LayoutEventArgs e) => parentLayoutCallCount++;
+            parent.Layout += parentHandler;
 
-            // Call with handler.
-            item.VisibleChanged += handler;
-            item.OnVisibleChanged(eventArgs);
-            Assert.Equal(1, callCount);
+            try
+            {
+                int callCount = 0;
+                EventHandler handler = (sender, e) =>
+                {
+                    Assert.Same(item, sender);
+                    Assert.Same(eventArgs, e);
+                    callCount++;
+                };
 
-            // Remove handler.
-            item.VisibleChanged -= handler;
-            item.OnVisibleChanged(eventArgs);
-            Assert.Equal(1, callCount);
+                // Call with handler.
+                item.VisibleChanged += handler;
+                item.OnVisibleChanged(eventArgs);
+                Assert.Equal(1, callCount);
+                Assert.False(parent.IsHandleCreated);
+
+                // Remove handler.
+                item.VisibleChanged -= handler;
+                item.OnVisibleChanged(eventArgs);
+                Assert.Equal(1, callCount);
+                Assert.False(parent.IsHandleCreated);
+            }
+            finally
+            {
+                parent.Layout -= parentHandler;
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(OnVisibleChanged_TestData))]
+        public void ToolStripItem_OnVisibleChanged_InvokeWithParentWithHandle_CallsVisibleChanged(bool enabled, bool visible, Image image, EventArgs eventArgs)
+        {
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Enabled = enabled,
+                Visible = visible,
+                Image = image,
+                Parent = parent
+            };
+            Assert.NotEqual(IntPtr.Zero, parent.Handle);
+            int invalidatedCallCount = 0;
+            parent.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            parent.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            parent.HandleCreated += (sender, e) => createdCallCount++;
+            int parentLayoutCallCount = 0;
+            void parentHandler(object sender, LayoutEventArgs e) => parentLayoutCallCount++;
+            parent.Layout += parentHandler;
+
+            try
+            {
+                int callCount = 0;
+                EventHandler handler = (sender, e) =>
+                {
+                    Assert.Same(item, sender);
+                    Assert.Same(eventArgs, e);
+                    callCount++;
+                };
+
+                // Call with handler.
+                item.VisibleChanged += handler;
+                item.OnVisibleChanged(eventArgs);
+                Assert.Equal(1, callCount);
+                Assert.True(parent.IsHandleCreated);
+                Assert.Equal(0, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+
+                // Remove handler.
+                item.VisibleChanged -= handler;
+                item.OnVisibleChanged(eventArgs);
+                Assert.Equal(1, callCount);
+                Assert.True(parent.IsHandleCreated);
+                Assert.Equal(0, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+            }
+            finally
+            {
+                parent.Layout -= parentHandler;
+            }
         }
 
         public static IEnumerable<object[]> PerformClick_TestData()
@@ -3697,11 +13250,11 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { false, false, 0 };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(PerformClick_TestData))]
         public void ToolStripItem_PerformClick_Invoke_Success(bool enabled, bool available, int expectedClickCount)
         {
-            var item = new SubToolStripItem
+            using var item = new SubToolStripItem
             {
                 Enabled = enabled,
                 Available = available
@@ -3728,12 +13281,14 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expectedClickCount, callCount);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ToolStripItem_PerformClick_InvokeDesignMode_Success()
         {
             var mockSite = new Mock<ISite>();
-            mockSite.Setup(s => s.DesignMode).Returns(true);
-            var item = new SubToolStripItem
+            mockSite
+                .Setup(s => s.DesignMode)
+                .Returns(true);
+            using var item = new SubToolStripItem
             {
                 Site = mockSite.Object
             };
@@ -3759,12 +13314,45 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
         }
 
-        [Fact]
+        [WinFormsTheory]
+        [MemberData(nameof(PerformClick_TestData))]
+        public void ToolStripItem_PerformClick_InvokeCantSelect_Success(bool enabled, bool available, int expectedClickCount)
+        {
+            using var item = new CannotSelectToolStripItem
+            {
+                Enabled = enabled,
+                Available = available
+            };
+
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(item, sender);
+                Assert.Same(EventArgs.Empty, e);
+                Assert.False(item.Pressed);
+                callCount++;
+            };
+
+            // Call with handler.
+            item.Click += handler;
+            item.PerformClick();
+            Assert.Equal(expectedClickCount, callCount);
+            Assert.False(item.Pressed);
+
+            // Remove handler.
+            item.Click -= handler;
+            item.PerformClick();
+            Assert.Equal(expectedClickCount, callCount);
+        }
+
+        [WinFormsFact]
         public void ToolStripItem_PerformClick_InvokeWithOwner_Success()
         {
-            var owner = new ToolStrip();
-            var item = new SubToolStripItem();
-            owner.Items.Add(item);
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Owner = owner
+            };
 
             int callCount = 0;
             int itemClickedCallCount = 0;
@@ -3789,28 +13377,98 @@ namespace System.Windows.Forms.Tests
             item.PerformClick();
             Assert.Equal(1, callCount);
             Assert.Equal(1, itemClickedCallCount);
+            Assert.False(owner.IsHandleCreated);
 
             // Remove handler.
             item.Click -= handler;
             item.PerformClick();
             Assert.Equal(1, callCount);
             Assert.Equal(2, itemClickedCallCount);
+            Assert.False(owner.IsHandleCreated);
 
             // Remove other handler.
             owner.ItemClicked -= itemClickedHandler;
             item.PerformClick();
             Assert.Equal(1, callCount);
             Assert.Equal(2, itemClickedCallCount);
+            Assert.False(owner.IsHandleCreated);
         }
 
-        [Fact]
+        [WinFormsFact]
+        public void ToolStripItem_PerformClick_InvokeWithOwnerWithHandle_Success()
+        {
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Owner = owner
+            };
+            Assert.NotEqual(IntPtr.Zero, owner.Handle);
+            int invalidatedCallCount = 0;
+            owner.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            owner.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            owner.HandleCreated += (sender, e) => createdCallCount++;
+
+            int callCount = 0;
+            int itemClickedCallCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(item, sender);
+                Assert.Same(EventArgs.Empty, e);
+                Assert.True(item.Pressed);
+                callCount++;
+            };
+            ToolStripItemClickedEventHandler itemClickedHandler = (sender, e) =>
+            {
+                Assert.Same(owner, sender);
+                Assert.Same(item, e.ClickedItem);
+                itemClickedCallCount++;
+                Assert.True(itemClickedCallCount > callCount);
+            };
+            owner.ItemClicked += itemClickedHandler;
+
+            // Call with handler.
+            item.Click += handler;
+            item.PerformClick();
+            Assert.Equal(1, callCount);
+            Assert.Equal(1, itemClickedCallCount);
+            Assert.True(owner.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Remove handler.
+            item.Click -= handler;
+            item.PerformClick();
+            Assert.Equal(1, callCount);
+            Assert.Equal(2, itemClickedCallCount);
+            Assert.True(owner.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Remove other handler.
+            owner.ItemClicked -= itemClickedHandler;
+            item.PerformClick();
+            Assert.Equal(1, callCount);
+            Assert.Equal(2, itemClickedCallCount);
+            Assert.True(owner.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsFact]
         public void ToolStripItem_PerformClick_InvokeWithParent_Success()
         {
-            var parent = new ToolStrip();
-            var item = new SubToolStripItem
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
             {
                 Parent = parent
             };
+            int itemClickedCallCount = 0;
+            parent.ItemClicked += (sender, e) => itemClickedCallCount++;
 
             int callCount = 0;
             EventHandler handler = (sender, e) =>
@@ -3825,23 +13483,41 @@ namespace System.Windows.Forms.Tests
             item.Click += handler;
             item.PerformClick();
             Assert.Equal(1, callCount);
+            Assert.Equal(0, itemClickedCallCount);
+            Assert.False(parent.IsHandleCreated);
 
             // Remove handler.
             item.Click -= handler;
             item.PerformClick();
             Assert.Equal(1, callCount);
+            Assert.Equal(0, itemClickedCallCount);
+            Assert.False(parent.IsHandleCreated);
         }
 
-        [Fact]
-        public void ToolStripItem_PerformClick_EnabledChangesInMiddle_Success()
+        [WinFormsFact]
+        public void ToolStripItem_PerformClick_InvokeWithParentWithHandle_Success()
         {
-            var item = new FlippingEnabledToolStripItem();
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Parent = parent
+            };
+            Assert.NotEqual(IntPtr.Zero, parent.Handle);
+            int invalidatedCallCount = 0;
+            parent.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            parent.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            parent.HandleCreated += (sender, e) => createdCallCount++;
+            int itemClickedCallCount = 0;
+            parent.ItemClicked += (sender, e) => itemClickedCallCount++;
 
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
                 Assert.Same(item, sender);
                 Assert.Same(EventArgs.Empty, e);
+                Assert.True(item.Pressed);
                 callCount++;
             };
 
@@ -3849,27 +13525,42 @@ namespace System.Windows.Forms.Tests
             item.Click += handler;
             item.PerformClick();
             Assert.Equal(1, callCount);
+            Assert.Equal(0, itemClickedCallCount);
+            Assert.True(parent.IsHandleCreated);
+            Assert.Equal(2, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
 
             // Remove handler.
             item.Click -= handler;
             item.PerformClick();
             Assert.Equal(1, callCount);
+            Assert.Equal(0, itemClickedCallCount);
+            Assert.True(parent.IsHandleCreated);
+            Assert.Equal(4, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
         }
 
-        [Fact]
-        public void ToolStripItem_ProcessCmdKey_Invoke_ReturnsFalse()
+        [WinFormsTheory]
+        [InlineData(Keys.None)]
+        [InlineData(Keys.A)]
+        [InlineData(Keys.Enter)]
+        [InlineData(Keys.Space)]
+        [InlineData((Keys)(Keys.None - 1))]
+        public void ToolStripItem_ProcessCmdKey_Invoke_ReturnsFalse(Keys keyData)
         {
-            var item = new SubToolStripItem();
+            using var item = new SubToolStripItem();
             var message = new Message();
-            Assert.False(item.ProcessCmdKey(ref message, Keys.Enter));
+            Assert.False(item.ProcessCmdKey(ref message, keyData));
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(true, 1)]
         [InlineData(false, 0)]
         public void ToolStripItem_ProcessDialogKey_EnterKey_PerformsClick(bool enabled, int expectedCallCount)
         {
-            var item = new SubToolStripItem
+            using var item = new SubToolStripItem
             {
                 Enabled = enabled
             };
@@ -3889,38 +13580,13 @@ namespace System.Windows.Forms.Tests
             Assert.False(item.Pressed);
         }
 
-        [Theory]
-        [InlineData(true, 1)]
-        [InlineData(false, 0)]
-        public void ToolStripItem_ProcessDialogKey_SpaceKey_PerformsClick(bool enabled, int expectedCallCount)
-        {
-            var item = new ToolStripButton
-            {
-                Enabled = enabled
-            };
-
-            int callCount = 0;
-            EventHandler handler = (sender, e) =>
-            {
-                Assert.Same(item, sender);
-                Assert.Same(EventArgs.Empty, e);
-                Assert.True(item.Pressed);
-                callCount++;
-            };
-
-            item.Click += handler;
-            Assert.True(item.ProcessDialogKey(Keys.Enter));
-            Assert.Equal(expectedCallCount, callCount);
-            Assert.False(item.Pressed);
-        }
-
-        [Theory]
+        [WinFormsTheory]
         [InlineData(true, 1)]
         [InlineData(false, 0)]
         public void ToolStripItem_ProcessDialogKey_EnterKeyWithParent_PerformsClick(bool enabled, int expectedCallCount)
         {
-            var parent = new ToolStrip();
-            var item = new SubToolStripItem
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
             {
                 Parent = parent,
                 Enabled = enabled
@@ -3941,13 +13607,13 @@ namespace System.Windows.Forms.Tests
             Assert.False(item.Pressed);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(true, 1)]
         [InlineData(false, 0)]
         public void ToolStripItem_ProcessDialogKey_EnterKeyWithDropDownParent_PerformsClick(bool enabled, int expectedCallCount)
         {
             var parent = new ToolStripDropDown();
-            var item = new SubToolStripItem
+            using var item = new SubToolStripItem
             {
                 Parent = parent,
                 Enabled = enabled
@@ -3968,57 +13634,27 @@ namespace System.Windows.Forms.Tests
             Assert.False(item.Pressed);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(Keys.Space)]
         [InlineData(Keys.A)]
         [InlineData(Keys.None)]
         [InlineData((Keys)(Keys.None - 1))]
         public void ToolStripItem_ProcessDialogKey_UnknownKey_ReturnsFalse(Keys keyData)
         {
-            var item = new SubToolStripItem();
+            using var item = new SubToolStripItem();
             int callCount = 0;
-            EventHandler handler = (sender, e) =>
-            {
-                Assert.Same(item, sender);
-                Assert.Same(EventArgs.Empty, e);
-                Assert.True(item.Pressed);
-                callCount++;
-            };
-
-            item.Click += handler;
+            item.Click += (sender, e) => callCount++;
             Assert.False(item.ProcessDialogKey(keyData));
             Assert.Equal(0, callCount);
             Assert.False(item.Pressed);
         }
 
-        [Theory]
-        [InlineData(Keys.A)]
-        [InlineData(Keys.None)]
-        [InlineData((Keys)(Keys.None - 1))]
-        public void ToolStripItem_ProcessDialogKey_UnknownKeySpace_ReturnsFalse(Keys keyData)
-        {
-            var item = new ToolStripButton();
-            int callCount = 0;
-            EventHandler handler = (sender, e) =>
-            {
-                Assert.Same(item, sender);
-                Assert.Same(EventArgs.Empty, e);
-                Assert.True(item.Pressed);
-                callCount++;
-            };
-
-            item.Click += handler;
-            Assert.False(item.ProcessDialogKey(keyData));
-            Assert.Equal(0, callCount);
-            Assert.False(item.Pressed);
-        }
-
-        [Theory]
+        [WinFormsTheory]
         [InlineData(true, 1)]
         [InlineData(false, 0)]
-        public void ToolStripItem_ProcessMnemonic_EnterKey_PerformsClick(bool enabled, int expectedCallCount)
+        public void ToolStripItem_ProcessMnemonic_Invoke_PerformsClick(bool enabled, int expectedCallCount)
         {
-            var item = new SubToolStripItem
+            using var item = new SubToolStripItem
             {
                 Enabled = enabled
             };
@@ -4038,287 +13674,1041 @@ namespace System.Windows.Forms.Tests
             Assert.False(item.Pressed);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ToolStripItem_ResetBackColor_Invoke_Success()
         {
-            var item = new SubToolStripItem
-            {
-                BackColor = Color.Red
-            };
+            using var item = new SubToolStripItem();
+
+            // Reset without value.
+            item.ResetBackColor();
+            Assert.Equal(Control.DefaultBackColor, item.BackColor);
+
+            // Reset with value.
+            item.BackColor = Color.Black;
+            item.ResetBackColor();
+            Assert.Equal(Control.DefaultBackColor, item.BackColor);
+
+            // Reset again.
             item.ResetBackColor();
             Assert.Equal(Control.DefaultBackColor, item.BackColor);
         }
 
-        [Fact]
-        public void ToolStripItem_ResetDisplay_Invoke_Success()
+        [WinFormsFact]
+        public void ToolStripItem_ResetDisplayStyle_Invoke_Success()
         {
-            var item = new SubToolStripItem
-            {
-                DisplayStyle = ToolStripItemDisplayStyle.Text
-            };
+            using var item = new SubToolStripItem();
+            
+            // Reset without value.
+            item.ResetDisplayStyle();
+            Assert.Equal(ToolStripItemDisplayStyle.ImageAndText, item.DisplayStyle);
+
+            // Reset with value.
+            item.DisplayStyle = ToolStripItemDisplayStyle.Text;
+            item.ResetDisplayStyle();
+            Assert.Equal(ToolStripItemDisplayStyle.ImageAndText, item.DisplayStyle);
+
+            // Reset again.
             item.ResetDisplayStyle();
             Assert.Equal(ToolStripItemDisplayStyle.ImageAndText, item.DisplayStyle);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ToolStripItem_ResetFont_Invoke_Success()
         {
-            var item = new SubToolStripItem
-            {
-                Font = SystemFonts.MenuFont
-            };
+            using var font = new Font("Arial", 8.25f);
+            using var item = new SubToolStripItem();
+            
+            // Reset without value.
+            Assert.NotSame(font, item.Font);
+            Assert.NotSame(Control.DefaultFont, item.Font);
+            Assert.Same(item.Font, item.Font);
+            
+            // Reset with value.
+            item.Font = font;
             item.ResetFont();
-            Assert.Equal(ToolStripManager.DefaultFont, item.Font);
+            Assert.NotSame(font, item.Font);
+            Assert.NotSame(Control.DefaultFont, item.Font);
+            Assert.Same(item.Font, item.Font);
+            
+            // Reset again.
+            item.ResetFont();
+            Assert.NotSame(font, item.Font);
+            Assert.NotSame(Control.DefaultFont, item.Font);
+            Assert.Same(item.Font, item.Font);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ToolStripItem_ResetForeColor_Invoke_Success()
         {
-            var item = new SubToolStripItem
-            {
-                ForeColor = Color.Red
-            };
+            using var item = new SubToolStripItem();
+
+            // Reset without value.
+            item.ResetForeColor();
+            Assert.Equal(Control.DefaultForeColor, item.ForeColor);
+
+            // Reset with value.
+            item.ForeColor = Color.Black;
+            item.ResetForeColor();
+            Assert.Equal(Control.DefaultForeColor, item.ForeColor);
+
+            // Reset again.
             item.ResetForeColor();
             Assert.Equal(Control.DefaultForeColor, item.ForeColor);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ToolStripItem_ResetImage_Invoke_Success()
         {
-            var item = new SubToolStripItem
-            {
-                Image = new Bitmap(10, 10)
-            };
+            using var item = new SubToolStripItem();
+            
+            // Reset without value.
+            item.ResetImage();
+            Assert.Null(item.Image);
+
+            // Reset with value.
+            item.Image = new Bitmap(10, 10);
+            item.ResetImage();
+            Assert.Null(item.Image);
+
+            // Reset again.
             item.ResetImage();
             Assert.Null(item.Image);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ToolStripItem_ResetMargin_Invoke_Success()
         {
-            var item = new SubToolStripItem
-            {
-                Margin = new Padding(1, 2, 3, 4)
-            };
+            using var item = new SubToolStripItem();
+
+            // Reset without value.
+            item.ResetMargin();
+            Assert.Equal(new Padding(0, 1, 0, 2), item.Margin);
+
+            // Reset with value.
+            item.Margin = new Padding(1, 2, 3, 4);
+            item.ResetMargin();
+            Assert.Equal(new Padding(0, 1, 0, 2), item.Margin);
+            
+            // Reset again.
             item.ResetMargin();
             Assert.Equal(new Padding(0, 1, 0, 2), item.Margin);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ToolStripItem_ResetPadding_Invoke_Success()
         {
-            var item = new SubToolStripItem
-            {
-                Padding = new Padding(1, 2, 3, 4)
-            };
+            using var item = new SubToolStripItem();
+
+            // Reset without value.
+            item.ResetPadding();
+            Assert.Equal(Padding.Empty, item.Padding);
+
+            // Reset with value.
+            item.Padding = new Padding(1, 2, 3, 4);
+            item.ResetPadding();
+            Assert.Equal(Padding.Empty, item.Padding);
+            
+            // Reset again.
             item.ResetPadding();
             Assert.Equal(Padding.Empty, item.Padding);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ToolStripItem_ResetRightToLeft_Invoke_Success()
         {
-            var item = new SubToolStripItem
-            {
-                RightToLeft = RightToLeft.Yes
-            };
+            using var item = new SubToolStripItem();
+            
+            // Reset without value.
+            item.ResetRightToLeft();
+            Assert.Equal(RightToLeft.Inherit, item.RightToLeft);
+
+            // Reset with value.
+            item.RightToLeft = RightToLeft.Yes;
+            item.ResetRightToLeft();
+            Assert.Equal(RightToLeft.Inherit, item.RightToLeft);
+            
+            // Reset again.
             item.ResetRightToLeft();
             Assert.Equal(RightToLeft.Inherit, item.RightToLeft);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ToolStripItem_ResetTextDirection_Invoke_Success()
         {
-            var item = new SubToolStripItem
-            {
-                TextDirection = ToolStripTextDirection.Vertical90
-            };
+            using var item = new SubToolStripItem();
+
+            // Reset without value.
+            item.ResetTextDirection();
+            Assert.Equal(ToolStripTextDirection.Horizontal, item.TextDirection);
+
+            // Reset with value.
+            item.TextDirection = ToolStripTextDirection.Vertical90;
+            item.ResetTextDirection();
+            Assert.Equal(ToolStripTextDirection.Horizontal, item.TextDirection);
+
+            // Reset again.
             item.ResetTextDirection();
             Assert.Equal(ToolStripTextDirection.Horizontal, item.TextDirection);
         }
 
-        public static IEnumerable<object[]> Select_TestData()
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        public void ToolStripItem_Select_Invoke_Success(bool enabled)
         {
-            yield return new object[] { new SubToolStripItem(), true };
-            yield return new object[] { new CannotSelectToolStripItem(), false };
-
-            var toolStrip = new ToolStrip();
-            var toolStripItem = new SubToolStripItem();
-            toolStrip.Items.Add(toolStripItem);
-            yield return new object[] { toolStripItem, true };
-
-            var toolStripDropDown = new ToolStripDropDown();
-            var toolStripDropDownItem = new SubToolStripItem();
-            toolStripDropDown.Items.Add(toolStripDropDownItem);
-            yield return new object[] { toolStripDropDownItem, true };
-
-            var toolStripParent = new ToolStrip();
-            var toolStripParentItem = new SubToolStripItem
+            using var item = new SubToolStripItem
             {
-                Parent = toolStripParent
+                Enabled = enabled
             };
-            yield return new object[] { toolStripParentItem, true };
 
-            var toolStripDropDownParentItem = new SubToolStripItem
-            {
-                Parent = toolStripDropDown
-            };
-            yield return new object[] { toolStripDropDownParentItem, true };
-
-            var toolStripDropDownWithOwnerItemOwnerItem = new SubToolStripItem();
-            var toolStripDropDownWithOwnerItem = new ToolStripDropDown
-            {
-                OwnerItem = toolStripDropDownWithOwnerItemOwnerItem
-            };
-            var toolStripDropDownWithOwnerItemItem = new SubToolStripItem();
-            toolStripDropDownWithOwnerItem.Items.Add(toolStripDropDownWithOwnerItemItem);
-            yield return new object[] { toolStripDropDownWithOwnerItemItem, true };
-
-        }
-
-        [Theory]
-        [MemberData(nameof(Select_TestData))]
-        public void ToolStripItem_Select_Invoke_Success(ToolStripItem item, bool expected)
-        {
             item.Select();
-            Assert.Equal(expected, item.Selected);
+            Assert.True(item.Selected);
 
             // Select again.
             item.Select();
-            Assert.Equal(expected, item.Selected);
+            Assert.True(item.Selected);
+        }
+        
+        public static IEnumerable<object[]> Select_WithoutToolStripItemAccessibleObject_TestData()
+        {
+            yield return new object[] { null };
+            yield return new object[] { new AccessibleObject() };
+        }
+        
+        [WinFormsTheory]
+        [MemberData(nameof(Select_WithoutToolStripItemAccessibleObject_TestData))]
+        public void ToolStripItem_Select_InvokeWithoutToolStripItemAccessibleObject_Success(AccessibleObject result)
+        {
+            using var item = new CustomCreateAccessibilityInstanceToolStripItem
+            {
+                CreateAccessibilityInstanceResult = result
+            };
+
+            item.Select();
+            Assert.True(item.Selected);
+
+            // Select again.
+            item.Select();
+            Assert.True(item.Selected);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ToolStripItem_Select_CantSelect_Success()
         {
-            var item = new CannotSelectToolStripItem();
+            using var item = new CannotSelectToolStripItem();
+            item.Select();
+            Assert.False(item.Selected);
+
+            // Select again.
             item.Select();
             Assert.False(item.Selected);
         }
 
-        [Fact]
-        public void ToolStripItem_Select_InvokeWithParent_Success()
+        [WinFormsFact]
+        public void ToolStripItem_Select_InvokeWithOwnerItemOnDropdown_Success()
         {
-            var parent = new ToolStrip();
-            var item = new SubToolStripItem();
+            using var ownerItemOwner = new ToolStripDropDown();
+            using var ownerItem = new SubToolStripItem
+            {
+                Owner = ownerItemOwner
+            };
+            using var owner = new ToolStripDropDown
+            {
+                OwnerItem = ownerItem
+            };
+            using var item = new SubToolStripItem
+            {
+                Owner = owner
+            };
             item.Select();
             Assert.True(item.Selected);
+            Assert.True(ownerItem.Selected);
 
             // Select again.
             item.Select();
             Assert.True(item.Selected);
+            Assert.True(ownerItem.Selected);
         }
 
-        [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetRectangleTheoryData))]
-        public void ToolStripItem_SetBounds_Invoke_Success(Rectangle bounds)
+        [WinFormsFact]
+        public void ToolStripItem_Select_InvokeWithOwnerItemNotOnDropDown_Success()
         {
-            var item = new SubToolStripItem();
-            item.SetBounds(bounds);
-            Assert.Equal(bounds, item.Bounds);
-            Assert.Equal(bounds.Width, item.Width);
-            Assert.Equal(bounds.Height, item.Height);
-            Assert.Equal(bounds.Size, item.Bounds.Size);
+            using var ownerItem = new SubToolStripItem();
+            using var owner = new ToolStripDropDown
+            {
+                OwnerItem = ownerItem
+            };
+            using var item = new SubToolStripItem
+            {
+                Owner = owner
+            };
+            item.Select();
+            Assert.True(item.Selected);
+            Assert.False(ownerItem.Selected);
 
-            // Set same.
-            item.SetBounds(bounds);
-            Assert.Equal(bounds, item.Bounds);
-            Assert.Equal(bounds.Width, item.Width);
-            Assert.Equal(bounds.Height, item.Height);
-            Assert.Equal(bounds.Size, item.Bounds.Size);
+            // Select again.
+            item.Select();
+            Assert.True(item.Selected);
+            Assert.False(ownerItem.Selected);
         }
 
-        [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetRectangleTheoryData))]
-        public void ToolStripItem_SetBounds_InvokeWithParent_Success(Rectangle bounds)
+        [WinFormsFact]
+        public void ToolStripItem_Select_InvokeWithOwner_Success()
         {
-            var parent = new ToolStrip();
-            var item = new SubToolStripItem
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Owner = owner
+            };
+
+            item.Select();
+            Assert.True(item.Selected);
+            Assert.False(owner.IsHandleCreated);
+
+            // Select again.
+            item.Select();
+            Assert.True(item.Selected);
+            Assert.False(owner.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void ToolStripItem_Select_InvokeWithOwnerWithHandle_Success()
+        {
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Owner = owner
+            };
+            Assert.NotEqual(IntPtr.Zero, owner.Handle);
+            int invalidatedCallCount = 0;
+            owner.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            owner.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            owner.HandleCreated += (sender, e) => createdCallCount++;
+
+            item.Select();
+            Assert.True(item.Selected);
+            Assert.True(owner.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Select again.
+            item.Select();
+            Assert.True(item.Selected);
+            Assert.True(owner.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsFact]
+        public void ToolStripItem_Select_InvokeWithParent_Success()
+        {
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
             {
                 Parent = parent
             };
 
-            item.SetBounds(bounds);
-            Assert.Equal(bounds, item.Bounds);
-            Assert.Equal(bounds.Width, item.Width);
-            Assert.Equal(bounds.Height, item.Height);
-            Assert.Equal(bounds.Size, item.Bounds.Size);
+            item.Select();
+            Assert.True(item.Selected);
+            Assert.False(parent.IsHandleCreated);
 
-            // Set same.
-            item.SetBounds(bounds);
-            Assert.Equal(bounds, item.Bounds);
-            Assert.Equal(bounds.Width, item.Width);
-            Assert.Equal(bounds.Height, item.Height);
-            Assert.Equal(bounds.Size, item.Bounds.Size);
+            // Select again.
+            item.Select();
+            Assert.True(item.Selected);
+            Assert.False(parent.IsHandleCreated);
         }
 
-        [Fact]
-        public void ToolStripItem_SetBounds_SetWithHandler_CallsAvailableChanged()
+        [WinFormsFact]
+        public void ToolStripItem_Select_InvokeWithParentWithHandle_Success()
         {
-            var item = new SubToolStripItem();
-            int callCount = 0;
-            EventHandler handler = (sender, e) =>
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Parent = parent
+            };
+            Assert.NotEqual(IntPtr.Zero, parent.Handle);
+            int invalidatedCallCount = 0;
+            parent.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            parent.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            parent.HandleCreated += (sender, e) => createdCallCount++;
+
+            item.Select();
+            Assert.True(item.Selected);
+            Assert.True(parent.IsHandleCreated);
+            Assert.Equal(1, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Select again.
+            item.Select();
+            Assert.True(item.Selected);
+            Assert.True(parent.IsHandleCreated);
+            Assert.Equal(1, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        public static IEnumerable<object[]> SetBounds_TestData()
+        {
+            yield return new object[] { new Rectangle(1, 0, 23, 23), 1 };
+            yield return new object[] { new Rectangle(0, 2, 23, 23), 1 };
+            yield return new object[] { new Rectangle(1, 2, 23, 23), 1 };
+            yield return new object[] { new Rectangle(0, 0, -1, -2), 0 };
+            yield return new object[] { new Rectangle(0, 0, 0, 0), 0 };
+            yield return new object[] { new Rectangle(0, 0, 1, 2), 0 };
+            yield return new object[] { new Rectangle(0, 0, 22, 23), 0 };
+            yield return new object[] { new Rectangle(0, 0, 23, 22), 0 };
+            yield return new object[] { new Rectangle(0, 0, 23, 23), 0 };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), 1 };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(SetBounds_TestData))]
+        public void ToolStripItem_SetBounds_Invoke_GetReturnsExpected(Rectangle bounds, int expectedLocationChangedCallCount)
+        {
+            using var item = new SubToolStripItem();
+            int locationChangedCallCount = 0;
+            item.LocationChanged += (sender, e) =>
             {
                 Assert.Same(item, sender);
                 Assert.Same(EventArgs.Empty, e);
-                callCount++;
+                locationChangedCallCount++;
             };
-            item.LocationChanged += handler;
+
+            item.SetBounds(bounds);
+            Assert.Equal(bounds, item.Bounds);
+            Assert.Equal(bounds.Size, item.Size);
+            Assert.Equal(bounds.Width, item.Width);
+            Assert.Equal(bounds.Height, item.Height);
+            Assert.Equal(expectedLocationChangedCallCount, locationChangedCallCount);
+
+            // Set same.
+            item.SetBounds(bounds);
+            Assert.Equal(bounds, item.Bounds);
+            Assert.Equal(bounds.Size, item.Size);
+            Assert.Equal(bounds.Width, item.Width);
+            Assert.Equal(bounds.Height, item.Height);
+            Assert.Equal(expectedLocationChangedCallCount, locationChangedCallCount);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(SetBounds_TestData))]
+        public void ToolStripItem_SetBounds_InvokeWithOwner_GetReturnsExpected(Rectangle bounds, int expectedLocationChangedCallCount)
+        {
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Owner = owner
+            };
+            int ownerLayoutCallCount = 0;
+            void ownerHandler(object sender, LayoutEventArgs e) => ownerLayoutCallCount++;
+            owner.Layout += ownerHandler;
+            int locationChangedCallCount = 0;
+            item.LocationChanged += (sender, e) =>
+            {
+                Assert.Same(item, sender);
+                Assert.Same(EventArgs.Empty, e);
+                locationChangedCallCount++;
+            };
+
+            try
+            {
+                item.SetBounds(bounds);
+                Assert.Equal(bounds, item.Bounds);
+                Assert.Equal(bounds.Size, item.Size);
+                Assert.Equal(bounds.Width, item.Width);
+                Assert.Equal(bounds.Height, item.Height);
+                Assert.Equal(expectedLocationChangedCallCount, locationChangedCallCount);
+                Assert.Equal(0, ownerLayoutCallCount);
+                Assert.False(owner.IsHandleCreated);
+
+                // Set same.
+                item.SetBounds(bounds);
+                Assert.Equal(bounds, item.Bounds);
+                Assert.Equal(bounds.Size, item.Size);
+                Assert.Equal(bounds.Width, item.Width);
+                Assert.Equal(bounds.Height, item.Height);
+                Assert.Equal(expectedLocationChangedCallCount, locationChangedCallCount);
+                Assert.Equal(0, ownerLayoutCallCount);
+                Assert.False(owner.IsHandleCreated);
+            }
+            finally
+            {
+                owner.Layout -= ownerHandler;
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(SetBounds_TestData))]
+        public void ToolStripItem_SetBounds_InvokeWithOwnerWithHandle_GetReturnsExpected(Rectangle bounds, int expectedLocationChangedCallCount)
+        {
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Owner = owner
+            };
+            Assert.NotEqual(IntPtr.Zero, owner.Handle);
+            int invalidatedCallCount = 0;
+            owner.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            owner.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            owner.HandleCreated += (sender, e) => createdCallCount++;
+            int ownerLayoutCallCount = 0;
+            void ownerHandler(object sender, LayoutEventArgs e) => ownerLayoutCallCount++;
+            owner.Layout += ownerHandler;
+            int locationChangedCallCount = 0;
+            item.LocationChanged += (sender, e) =>
+            {
+                Assert.Same(item, sender);
+                Assert.Same(EventArgs.Empty, e);
+                locationChangedCallCount++;
+            };
+
+            try
+            {
+                item.SetBounds(bounds);
+                Assert.Equal(bounds, item.Bounds);
+                Assert.Equal(bounds.Size, item.Size);
+                Assert.Equal(bounds.Width, item.Width);
+                Assert.Equal(bounds.Height, item.Height);
+                Assert.Equal(expectedLocationChangedCallCount, locationChangedCallCount);
+                Assert.Equal(0, ownerLayoutCallCount);
+                Assert.True(owner.IsHandleCreated);
+                Assert.Equal(0, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+
+                // Set same.
+                item.SetBounds(bounds);
+                Assert.Equal(bounds, item.Bounds);
+                Assert.Equal(bounds.Size, item.Size);
+                Assert.Equal(bounds.Width, item.Width);
+                Assert.Equal(bounds.Height, item.Height);
+                Assert.Equal(expectedLocationChangedCallCount, locationChangedCallCount);
+                Assert.Equal(0, ownerLayoutCallCount);
+                Assert.True(owner.IsHandleCreated);
+                Assert.Equal(0, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+            }
+            finally
+            {
+                owner.Layout -= ownerHandler;
+            }
+        }
+
+        public static IEnumerable<object[]> SetBounds_WithParent_TestData()
+        {
+            yield return new object[] { new Rectangle(1, 0, 23, 23), 1, 1 };
+            yield return new object[] { new Rectangle(0, 2, 23, 23), 1, 1 };
+            yield return new object[] { new Rectangle(1, 2, 23, 23), 1, 1 };
+            yield return new object[] { new Rectangle(0, 0, -1, -2), 0, 1 };
+            yield return new object[] { new Rectangle(0, 0, 0, 0), 0, 1 };
+            yield return new object[] { new Rectangle(0, 0, 1, 2), 0, 1 };
+            yield return new object[] { new Rectangle(0, 0, 22, 23), 0, 1 };
+            yield return new object[] { new Rectangle(0, 0, 23, 22), 0, 1 };
+            yield return new object[] { new Rectangle(0, 0, 23, 23), 0, 0 };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), 1, 1 };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(SetBounds_WithParent_TestData))]
+        public void ToolStripItem_SetBounds_InvokeWithParent_GetReturnsExpected(Rectangle bounds, int expectedLocationChangedCallCount, int expectedParentLayoutCallCount)
+        {
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Parent = parent
+            };
+            int parentLayoutCallCount = 0;
+            void parentHandler(object sender, LayoutEventArgs e)
+            {
+                Assert.Same(parent, sender);
+                Assert.Same(item, e.AffectedComponent);
+                Assert.Equal("Bounds", e.AffectedProperty);
+                parentLayoutCallCount++;
+            };
+            parent.Layout += parentHandler;
+            int locationChangedCallCount = 0;
+            item.LocationChanged += (sender, e) =>
+            {
+                Assert.Same(item, sender);
+                Assert.Same(EventArgs.Empty, e);
+                locationChangedCallCount++;
+            };
+
+            try
+            {
+                item.SetBounds(bounds);
+                Assert.Equal(bounds, item.Bounds);
+                Assert.Equal(bounds.Size, item.Size);
+                Assert.Equal(bounds.Width, item.Width);
+                Assert.Equal(bounds.Height, item.Height);
+                Assert.Equal(expectedLocationChangedCallCount, locationChangedCallCount);
+                Assert.Equal(expectedParentLayoutCallCount, parentLayoutCallCount);
+                Assert.False(parent.IsHandleCreated);
+
+                // Set same.
+                item.SetBounds(bounds);
+                Assert.Equal(bounds, item.Bounds);
+                Assert.Equal(bounds.Size, item.Size);
+                Assert.Equal(bounds.Width, item.Width);
+                Assert.Equal(bounds.Height, item.Height);
+                Assert.Equal(expectedLocationChangedCallCount, locationChangedCallCount);
+                Assert.Equal(expectedParentLayoutCallCount, parentLayoutCallCount);
+                Assert.False(parent.IsHandleCreated);
+            }
+            finally
+            {
+                parent.Layout -= parentHandler;
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(SetBounds_WithParent_TestData))]
+        public void ToolStripItem_SetBounds_InvokeWithParentWithHandle_GetReturnsExpected(Rectangle bounds, int expectedLocationChangedCallCount, int expectedParentLayoutCallCount)
+        {
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Parent = parent
+            };
+            Assert.NotEqual(IntPtr.Zero, parent.Handle);
+            int invalidatedCallCount = 0;
+            parent.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            parent.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            parent.HandleCreated += (sender, e) => createdCallCount++;
+            int parentLayoutCallCount = 0;
+            void parentHandler(object sender, LayoutEventArgs e)
+            {
+                Assert.Same(parent, sender);
+                Assert.Same(item, e.AffectedComponent);
+                Assert.Equal("Bounds", e.AffectedProperty);
+                parentLayoutCallCount++;
+            };
+            parent.Layout += parentHandler;
+            int locationChangedCallCount = 0;
+            item.LocationChanged += (sender, e) =>
+            {
+                Assert.Same(item, sender);
+                Assert.Same(EventArgs.Empty, e);
+                locationChangedCallCount++;
+            };
+
+            try
+            {
+                item.SetBounds(bounds);
+                Assert.Equal(bounds, item.Bounds);
+                Assert.Equal(bounds.Size, item.Size);
+                Assert.Equal(bounds.Width, item.Width);
+                Assert.Equal(bounds.Height, item.Height);
+                Assert.Equal(expectedLocationChangedCallCount, locationChangedCallCount);
+                Assert.Equal(expectedParentLayoutCallCount, parentLayoutCallCount);
+                Assert.True(parent.IsHandleCreated);
+                Assert.Equal(expectedParentLayoutCallCount, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+
+                // Set same.
+                item.SetBounds(bounds);
+                Assert.Equal(bounds, item.Bounds);
+                Assert.Equal(bounds.Size, item.Size);
+                Assert.Equal(bounds.Width, item.Width);
+                Assert.Equal(bounds.Height, item.Height);
+                Assert.Equal(expectedLocationChangedCallCount, locationChangedCallCount);
+                Assert.Equal(expectedParentLayoutCallCount, parentLayoutCallCount);
+                Assert.True(parent.IsHandleCreated);
+                Assert.Equal(expectedParentLayoutCallCount, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+            }
+            finally
+            {
+                parent.Layout -= parentHandler;
+            }
+        }
+
+        public static IEnumerable<object[]> SetVisibleCore_TestData()
+        {
+            foreach (bool enabled in new bool[] { true, false })
+            {
+                foreach (Image image in new Image[] { null, new Bitmap(10, 10) })
+                {
+                    yield return new object[] { enabled, image, true };
+                    yield return new object[] { enabled, image, false };
+                }
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(SetVisibleCore_TestData))]
+        public void ToolStripItem_SetVisibleCore_Invoke_GetReturnsExpected(bool enabled, Image image, bool value)
+        {
+            using var item = new SubToolStripItem
+            {
+                Enabled = enabled,
+                Image = image
+            };
+
+            item.SetVisibleCore(value);
+            Assert.False(item.Visible);
+            Assert.Equal(value, item.Available);
+            Assert.False(item.Selected);
+
+            // Set same.
+            item.SetVisibleCore(value);
+            Assert.False(item.Visible);
+            Assert.Equal(value, item.Available);
+            Assert.False(item.Selected);
 
             // Set different.
-            item.SetBounds(new Rectangle(1, 2, 3, 4));
-            Assert.Equal(new Rectangle(1, 2, 3, 4), item.Bounds);
-            Assert.Equal(1, callCount);
-
-            // Set same.
-            item.SetBounds(new Rectangle(1, 2, 3, 4));
-            Assert.Equal(new Rectangle(1, 2, 3, 4), item.Bounds);
-            Assert.Equal(1, callCount);
-
-            // Set different x.
-            item.SetBounds(new Rectangle(2, 2, 3, 4));
-            Assert.Equal(new Rectangle(2, 2, 3, 4), item.Bounds);
-            Assert.Equal(2, callCount);
-
-            // Set different y.
-            item.SetBounds(new Rectangle(2, 3, 3, 4));
-            Assert.Equal(new Rectangle(2, 3, 3, 4), item.Bounds);
-            Assert.Equal(3, callCount);
-
-            // Set different width.
-            item.SetBounds(new Rectangle(2, 3, 4, 4));
-            Assert.Equal(new Rectangle(2, 3, 4, 4), item.Bounds);
-            Assert.Equal(3, callCount);
-
-            // Set different height.
-            item.SetBounds(new Rectangle(2, 3, 4, 5));
-            Assert.Equal(new Rectangle(2, 3, 4, 5), item.Bounds);
-            Assert.Equal(3, callCount);
-
-            // Remove handler.
-            item.LocationChanged -= handler;
-            item.SetBounds(new Rectangle(1, 2, 3, 4));
-            Assert.Equal(new Rectangle(1, 2, 3, 4), item.Bounds);
-            Assert.Equal(3, callCount);
+            item.Available = !value;
+            Assert.False(item.Visible);
+            Assert.Equal(!value, item.Available);
+            Assert.False(item.Selected);
         }
 
-        [Theory]
+        [WinFormsTheory]
+        [MemberData(nameof(SetVisibleCore_TestData))]
+        public void ToolStripItem_SetVisibleCore_InvokeDesignMode_GetReturnsExpected(bool enabled, Image image, bool value)
+        {
+            var mockSite = new Mock<ISite>(MockBehavior.Strict);
+            mockSite
+                .Setup(s => s.Name)
+                .Returns("Name");
+            mockSite
+                .Setup(s => s.DesignMode)
+                .Returns(true);
+            mockSite
+                .Setup(s => s.Container)
+                .Returns((IContainer)null);
+            using var item = new SubToolStripItem
+            {
+                Enabled = enabled,
+                Image = image,
+                Site = mockSite.Object
+            };
+
+            item.SetVisibleCore(value);
+            Assert.False(item.Visible);
+            Assert.Equal(value, item.Available);
+            Assert.False(item.Selected);
+
+            // Set same.
+            item.SetVisibleCore(value);
+            Assert.False(item.Visible);
+            Assert.Equal(value, item.Available);
+            Assert.False(item.Selected);
+
+            // Set different.
+            item.Available = !value;
+            Assert.False(item.Visible);
+            Assert.Equal(!value, item.Available);
+            Assert.False(item.Selected);
+        }
+
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
-        public void ToolStripItem_SetVisibleCore_Set_GetReturnsExpected(bool visible)
+        public void ToolStripItem_SetVisibleCore_InvokeSelected_GetReturnsExpected(bool value)
         {
-            var item = new SubToolStripItem();
-            item.SetVisibleCore(visible);
-            Assert.Equal(visible, item.Available);
+            using var item = new SubToolStripItem();
+            item.Select();
+            Assert.True(item.Selected);
+
+            item.SetVisibleCore(value);
+            Assert.False(item.Visible);
+            Assert.Equal(value, item.Available);
+            Assert.Equal(value, item.Selected);
 
             // Set same.
-            item.SetVisibleCore(visible);
-            Assert.Equal(visible, item.Available);
+            item.SetVisibleCore(value);
+            Assert.False(item.Visible);
+            Assert.Equal(value, item.Available);
+            Assert.Equal(value, item.Selected);
+
+            // Set different.
+            item.Available = !value;
+            Assert.False(item.Visible);
+            Assert.Equal(!value, item.Available);
+            Assert.False(item.Selected);
         }
 
-        [Fact]
-        public void ToolStripItem_SetVisibleCore_SetWithHandler_CallsAvailableChanged()
+        [WinFormsTheory]
+        [MemberData(nameof(SetVisibleCore_TestData))]
+        public void ToolStripItem_SetVisibleCore_InvokeWithOwner_GetReturnsExpected(bool enabled, Image image, bool value)
         {
-            var item = new SubToolStripItem();
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Enabled = enabled,
+                Image = image,
+                Owner = owner
+            };
+
+            item.SetVisibleCore(value);
+            Assert.False(item.Visible);
+            Assert.Equal(value, item.Available);
+            Assert.False(item.Selected);
+            Assert.False(owner.IsHandleCreated);
+
+            // Set same.
+            item.SetVisibleCore(value);
+            Assert.False(item.Visible);
+            Assert.Equal(value, item.Available);
+            Assert.False(item.Selected);
+            Assert.False(owner.IsHandleCreated);
+
+            // Set different.
+            item.Available = !value;
+            Assert.False(item.Visible);
+            Assert.Equal(!value, item.Available);
+            Assert.False(item.Selected);
+            Assert.False(owner.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(SetVisibleCore_TestData))]
+        public void ToolStripItem_SetVisibleCore_InvokeDesignModeWithOwner_GetReturnsExpected(bool enabled, Image image, bool value)
+        {
+            var mockSite = new Mock<ISite>(MockBehavior.Strict);
+            mockSite
+                .Setup(s => s.Name)
+                .Returns("Name");
+            mockSite
+                .Setup(s => s.DesignMode)
+                .Returns(true);
+            mockSite
+                .Setup(s => s.Container)
+                .Returns((IContainer)null);
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Enabled = enabled,
+                Image = image,
+                Site = mockSite.Object,
+                Owner = owner,
+            };
+
+            item.SetVisibleCore(value);
+            Assert.False(item.Visible);
+            Assert.Equal(value, item.Available);
+            Assert.False(item.Selected);
+            Assert.False(owner.IsHandleCreated);
+
+            // Set same.
+            item.SetVisibleCore(value);
+            Assert.False(item.Visible);
+            Assert.Equal(value, item.Available);
+            Assert.False(item.Selected);
+            Assert.False(owner.IsHandleCreated);
+
+            // Set different.
+            item.Available = !value;
+            Assert.False(item.Visible);
+            Assert.Equal(!value, item.Available);
+            Assert.False(item.Selected);
+            Assert.False(owner.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> SetVisibleCore_InvokeWithOwnerWithHandle_TestData()
+        {
+            foreach (bool enabled in new bool[] { true, false })
+            {
+                foreach (Image image in new Image[] { null, new Bitmap(10, 10) })
+                {
+                    yield return new object[] { enabled, image, true, 0 };
+                    yield return new object[] { enabled, image, false, 2 };
+                }
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(SetVisibleCore_InvokeWithOwnerWithHandle_TestData))]
+        public void ToolStripItem_SetVisibleCore_InvokeWithOwnerWithHandle_GetReturnsExpected(bool enabled, Image image, bool value, int expectedInvalidatedCallCount)
+        {
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Enabled = enabled,
+                Image = image,
+                Owner = owner
+            };
+            Assert.NotEqual(IntPtr.Zero, owner.Handle);
+            int invalidatedCallCount = 0;
+            owner.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            owner.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            owner.HandleCreated += (sender, e) => createdCallCount++;
+
+            item.SetVisibleCore(value);
+            Assert.False(item.Visible);
+            Assert.Equal(value, item.Available);
+            Assert.False(item.Selected);
+            Assert.True(owner.IsHandleCreated);
+            Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set same.
+            item.SetVisibleCore(value);
+            Assert.False(item.Visible);
+            Assert.Equal(value, item.Available);
+            Assert.False(item.Selected);
+            Assert.True(owner.IsHandleCreated);
+            Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set different.
+            item.Available = !value;
+            Assert.Equal(!value, item.Visible);
+            Assert.Equal(!value, item.Available);
+            Assert.False(item.Selected);
+            Assert.True(owner.IsHandleCreated);
+            Assert.Equal(expectedInvalidatedCallCount + 2, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(SetVisibleCore_TestData))]
+        public void ToolStripItem_SetVisibleCore_InvokeWithParent_GetReturnsExpected(bool enabled, Image image, bool value)
+        {
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Enabled = enabled,
+                Image = image,
+                Parent = parent
+            };
+
+            item.SetVisibleCore(value);
+            Assert.Equal(value, item.Visible);
+            Assert.Equal(value, item.Available);
+            Assert.False(item.Selected);
+            Assert.False(parent.IsHandleCreated);
+
+            // Set same.
+            item.SetVisibleCore(value);
+            Assert.Equal(value, item.Visible);
+            Assert.Equal(value, item.Available);
+            Assert.False(item.Selected);
+            Assert.False(parent.IsHandleCreated);
+
+            // Set different.
+            item.Available = !value;
+            Assert.Equal(!value, item.Visible);
+            Assert.Equal(!value, item.Available);
+            Assert.False(item.Selected);
+            Assert.False(parent.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(SetVisibleCore_TestData))]
+        public void ToolStripItem_SetVisibleCore_InvokeDesignModeWithParent_GetReturnsExpected(bool enabled, Image image, bool value)
+        {
+            var mockSite = new Mock<ISite>(MockBehavior.Strict);
+            mockSite
+                .Setup(s => s.Name)
+                .Returns("Name");
+            mockSite
+                .Setup(s => s.DesignMode)
+                .Returns(true);
+            mockSite
+                .Setup(s => s.Container)
+                .Returns((IContainer)null);
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Enabled = enabled,
+                Image = image,
+                Site = mockSite.Object,
+                Parent = parent
+            };
+
+            item.SetVisibleCore(value);
+            Assert.Equal(value, item.Visible);
+            Assert.Equal(value, item.Available);
+            Assert.False(item.Selected);
+            Assert.False(parent.IsHandleCreated);
+
+            // Set same.
+            item.SetVisibleCore(value);
+            Assert.Equal(value, item.Visible);
+            Assert.Equal(value, item.Available);
+            Assert.False(item.Selected);
+            Assert.False(parent.IsHandleCreated);
+
+            // Set different.
+            item.Available = !value;
+            Assert.Equal(!value, item.Visible);
+            Assert.Equal(!value, item.Available);
+            Assert.False(item.Selected);
+            Assert.False(parent.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(SetVisibleCore_TestData))]
+        public void ToolStripItem_SetVisibleCore_InvokeWithParentWithHandle_GetReturnsExpected(bool enabled, Image image, bool value)
+        {
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Enabled = enabled,
+                Image = image,
+                Parent = parent
+            };
+            Assert.NotEqual(IntPtr.Zero, parent.Handle);
+            int invalidatedCallCount = 0;
+            parent.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            parent.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            parent.HandleCreated += (sender, e) => createdCallCount++;
+
+            item.SetVisibleCore(value);
+            Assert.Equal(value, item.Visible);
+            Assert.Equal(value, item.Available);
+            Assert.False(item.Selected);
+            Assert.True(parent.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set same.
+            item.SetVisibleCore(value);
+            Assert.Equal(value, item.Visible);
+            Assert.Equal(value, item.Available);
+            Assert.False(item.Selected);
+            Assert.True(parent.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set different.
+            item.Available = !value;
+            Assert.Equal(!value, item.Visible);
+            Assert.Equal(!value, item.Available);
+            Assert.False(item.Selected);
+            Assert.True(parent.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsFact]
+        public void ToolStripItem_SetVisibleCore_InvokeWithHandler_CallsAvailableChanged()
+        {
+            using var item = new SubToolStripItem();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -4329,31 +14719,31 @@ namespace System.Windows.Forms.Tests
             item.AvailableChanged += handler;
 
             // Set different.
-            item.SetVisibleCore(false);
+            item.Available = false;
             Assert.False(item.Available);
             Assert.Equal(1, callCount);
 
             // Set same.
-            item.SetVisibleCore(false);
+            item.Available = false;
             Assert.False(item.Available);
             Assert.Equal(1, callCount);
 
             // Set different.
-            item.SetVisibleCore(true);
+            item.Available = true;
             Assert.True(item.Available);
             Assert.Equal(2, callCount);
 
             // Remove handler.
             item.AvailableChanged -= handler;
-            item.SetVisibleCore(false);
+            item.Available = false;
             Assert.False(item.Available);
             Assert.Equal(2, callCount);
         }
 
-        [Fact]
-        public void ToolStripItem_SetVisibleCore_SetWithHandler_CallsVisibleChanged()
+        [WinFormsFact]
+        public void ToolStripItem_SetVisibleCore_InvokeWithHandler_CallsVisibleChanged()
         {
-            var item = new SubToolStripItem();
+            using var item = new SubToolStripItem();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -4364,38 +14754,161 @@ namespace System.Windows.Forms.Tests
             item.VisibleChanged += handler;
 
             // Set different.
-            item.SetVisibleCore(false);
+            item.Available = false;
             Assert.False(item.Available);
             Assert.Equal(1, callCount);
 
             // Set same.
-            item.SetVisibleCore(false);
+            item.Available = false;
             Assert.False(item.Available);
             Assert.Equal(1, callCount);
 
             // Set different.
-            item.SetVisibleCore(true);
+            item.Available = true;
             Assert.True(item.Available);
             Assert.Equal(2, callCount);
 
             // Remove handler.
             item.VisibleChanged -= handler;
-            item.SetVisibleCore(false);
+            item.Available = false;
             Assert.False(item.Available);
             Assert.Equal(2, callCount);
         }
 
-        public static IEnumerable<object[]> ToString_TestData()
+        [WinFormsFact]
+        public void ToolStripItem_ToString_InvokeWithoutText_ReturnsExpected()
         {
-            yield return new object[] { new SubToolStripItem(), "System.Windows.Forms.Tests.ToolStripItemTests+SubToolStripItem" };
-            yield return new object[] { new SubToolStripItem { Text = "text" }, "text" };
+            using var item = new SubToolStripItem();
+            Assert.Equal("System.Windows.Forms.Tests.ToolStripItemTests+SubToolStripItem", item.ToString());
         }
 
-        [Theory]
-        [MemberData(nameof(ToString_TestData))]
-        public void ToolStripItem_ToString_Invoke_ReturnsExpected(ToolStripItem item, string expected)
+        [WinFormsTheory]
+        [InlineData(null, "System.Windows.Forms.Tests.ToolStripItemTests+SubToolStripItem")]
+        [InlineData("", "System.Windows.Forms.Tests.ToolStripItemTests+SubToolStripItem")]
+        [InlineData("text", "text")]
+        public void ToolStripItem_ToString_InvokeWithText_ReturnsExpected(string text, string expected)
         {
+            using var item = new SubToolStripItem
+            {
+                Text = text
+            };
             Assert.Equal(expected, item.ToString());
+        }
+
+        [WinFormsFact]
+        public void ToolStripItem_ToString_InvokeWithNullText_ReturnsExpected()
+        {
+            using var item = new NullTextToolStripItem();
+            Assert.Equal("System.Windows.Forms.Tests.ToolStripItemTests+NullTextToolStripItem", item.ToString());
+        }
+        
+        private class NullTextToolStripItem : ToolStripItem
+        {
+            public override string Text
+            {
+                get => null;
+                set { }
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(DragEventArgs_TestData))]
+        public void ToolStripItem_IDropTargetOnDragDrop_Invoke_CallsDragDrop(DragEventArgs eventArgs)
+        {
+            using var item = new SubToolStripItem();
+            IDropTarget dropTarget = item;
+            int callCount = 0;
+            DragEventHandler handler = (sender, e) =>
+            {
+                Assert.Same(item, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            item.DragDrop += handler;
+            dropTarget.OnDragDrop(eventArgs);
+            Assert.Equal(1, callCount);
+
+            // Remove handler.
+            item.DragDrop -= handler;
+            dropTarget.OnDragDrop(eventArgs);
+            Assert.Equal(1, callCount);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(DragEventArgs_TestData))]
+        public void ToolStripItem_IDropTargetOnDragEnter_Invoke_CallsDragEnter(DragEventArgs eventArgs)
+        {
+            using var item = new SubToolStripItem();
+            IDropTarget dropTarget = item;
+            int callCount = 0;
+            DragEventHandler handler = (sender, e) =>
+            {
+                Assert.Same(item, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            item.DragEnter += handler;
+            dropTarget.OnDragEnter(eventArgs);
+            Assert.Equal(1, callCount);
+
+            // Remove handler.
+            item.DragEnter -= handler;
+            dropTarget.OnDragEnter(eventArgs);
+            Assert.Equal(1, callCount);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void ToolStripItem_IDropTargetOnDragLeave_Invoke_CallsDragLeave(EventArgs eventArgs)
+        {
+            using var item = new SubToolStripItem();
+            IDropTarget dropTarget = item;
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(item, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            item.DragLeave += handler;
+            dropTarget.OnDragLeave(eventArgs);
+            Assert.Equal(1, callCount);
+
+            // Remove handler.
+            item.DragLeave -= handler;
+            dropTarget.OnDragLeave(eventArgs);
+            Assert.Equal(1, callCount);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(DragEventArgs_TestData))]
+        public void ToolStripItem_IDropTargetOnDragOver_Invoke_CallsDragOver(DragEventArgs eventArgs)
+        {
+            using var item = new SubToolStripItem();
+            IDropTarget dropTarget = item;
+            int callCount = 0;
+            DragEventHandler handler = (sender, e) =>
+            {
+                Assert.Same(item, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            item.DragOver += handler;
+            dropTarget.OnDragOver(eventArgs);
+            Assert.Equal(1, callCount);
+
+            // Remove handler.
+            item.DragOver -= handler;
+            dropTarget.OnDragOver(eventArgs);
+            Assert.Equal(1, callCount);
         }
 
         private class FlippingEnabledToolStripItem : ToolStripItem
@@ -4422,31 +14935,14 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        private class CustomToolStripItem : ToolStripItem
-        {
-            protected override bool DefaultAutoToolTip => true;
-
-            protected override ToolStripItemDisplayStyle DefaultDisplayStyle => ToolStripItemDisplayStyle.Text;
-
-            protected internal override Padding DefaultMargin => new Padding(1, 2, 3, 4);
-
-            protected override Padding DefaultPadding => new Padding(2, 3, 4, 5);
-
-            protected override Size DefaultSize => new Size(10, 11);
-        }
-
         private class CannotSelectToolStripItem : ToolStripItem
         {
             public override bool CanSelect => false;
         }
 
-        private class NullCreateAccessibilityInstanceToolStripItem : ToolStripItem
+        private class SubToolStripButton : ToolStripButton
         {
-            public NullCreateAccessibilityInstanceToolStripItem() : base()
-            {
-            }
-
-            protected override AccessibleObject CreateAccessibilityInstance() => null;
+            public new bool ProcessDialogKey(Keys keyData) => base.ProcessDialogKey(keyData);
         }
 
         private class SubToolStripItem : ToolStripItem
@@ -4463,13 +14959,39 @@ namespace System.Windows.Forms.Tests
             {
             }
 
+            public new bool CanRaiseEvents => base.CanRaiseEvents;
+
             public new bool DefaultAutoToolTip => base.DefaultAutoToolTip;
 
             public new ToolStripItemDisplayStyle DefaultDisplayStyle => base.DefaultDisplayStyle;
 
+            public new Padding DefaultMargin => base.DefaultMargin;
+
             public new Padding DefaultPadding => base.DefaultPadding;
 
             public new Size DefaultSize => base.DefaultSize;
+
+            public new bool DesignMode => base.DesignMode;
+
+            public new bool DismissWhenClicked => base.DismissWhenClicked;
+
+            public new EventHandlerList Events => base.Events;
+
+            public new ToolStrip Parent
+            {
+                get => base.Parent;
+                set => base.Parent = value;
+            }
+
+            public new bool ShowKeyboardCues => base.ShowKeyboardCues;
+
+            public new AccessibleObject CreateAccessibilityInstance() => base.CreateAccessibilityInstance();
+
+            public new void Dispose(bool disposing) => base.Dispose(disposing);
+
+            public new bool IsInputChar(char charCode) => base.IsInputChar(charCode);
+
+            public new bool IsInputKey(Keys keyData) => base.IsInputKey(keyData);
 
             public new void OnAvailableChanged(EventArgs e) => base.OnAvailableChanged(e);
 
@@ -4499,6 +15021,8 @@ namespace System.Windows.Forms.Tests
 
             public new void OnGiveFeedback(GiveFeedbackEventArgs giveFeedbackEvent) => base.OnGiveFeedback(giveFeedbackEvent);
 
+            public new void OnLayout(LayoutEventArgs e) => base.OnLayout(e);
+
             public new void OnLocationChanged(EventArgs e) => base.OnLocationChanged(e);
 
             public new void OnMouseDown(MouseEventArgs e) => base.OnMouseDown(e);
@@ -4515,6 +15039,8 @@ namespace System.Windows.Forms.Tests
 
             public new void OnOwnerChanged(EventArgs e) => base.OnOwnerChanged(e);
 
+            public new void OnOwnerFontChanged(EventArgs e) => base.OnOwnerFontChanged(e);
+
             public new void OnPaint(PaintEventArgs e) => base.OnPaint(e);
 
             public new void OnParentBackColorChanged(EventArgs e) => base.OnParentBackColorChanged(e);
@@ -4525,6 +15051,8 @@ namespace System.Windows.Forms.Tests
 
             public new void OnParentForeColorChanged(EventArgs e) => base.OnParentForeColorChanged(e);
 
+            public new void OnParentRightToLeftChanged(EventArgs e) => base.OnParentRightToLeftChanged(e);
+
             public new void OnQueryContinueDrag(QueryContinueDragEventArgs e) => base.OnQueryContinueDrag(e);
 
             public new void OnRightToLeftChanged(EventArgs e) => base.OnRightToLeftChanged(e);
@@ -4532,6 +15060,14 @@ namespace System.Windows.Forms.Tests
             public new void OnTextChanged(EventArgs e) => base.OnTextChanged(e);
 
             public new void OnVisibleChanged(EventArgs e) => base.OnVisibleChanged(e);
+
+            public new bool ProcessCmdKey(ref Message m, Keys keyData) => base.ProcessCmdKey(ref m, keyData);
+
+            public new bool ProcessDialogKey(Keys keyData) => base.ProcessDialogKey(keyData);
+
+            public new bool ProcessMnemonic(char charCode) => base.ProcessMnemonic(charCode);
+
+            public new void SetBounds(Rectangle bounds) => base.SetBounds(bounds);
 
             public new void SetVisibleCore(bool visible) => base.SetVisibleCore(visible);
         }

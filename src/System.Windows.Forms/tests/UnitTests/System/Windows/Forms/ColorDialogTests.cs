@@ -10,13 +10,8 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ColorDialogTests
+    public class ColorDialogTests : IClassFixture<ThreadExceptionFixture>
     {
-        public ColorDialogTests()
-        {
-            Application.ThreadException += (sender, e) => throw new Exception(e.Exception.StackTrace.ToString());
-        }
-
         [WinFormsFact]
         public void ColorDialog_Ctor_Default()
         {

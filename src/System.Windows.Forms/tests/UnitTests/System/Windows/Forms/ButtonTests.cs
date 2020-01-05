@@ -13,13 +13,8 @@ namespace System.Windows.Forms.Tests
     using Point = System.Drawing.Point;
     using Size = System.Drawing.Size;
 
-    public class ButtonTests
+    public class ButtonTests : IClassFixture<ThreadExceptionFixture>
     {
-        public ButtonTests()
-        {
-            Application.ThreadException += (sender, e) => throw new Exception(e.Exception.StackTrace.ToString());
-        }
-
         [WinFormsFact]
         public void Button_Ctor_Default()
         {

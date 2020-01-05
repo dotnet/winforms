@@ -8,13 +8,8 @@ using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
-    public class AxHostConnectionPointCookieTests
+    public class AxHostConnectionPointCookieTests : IClassFixture<ThreadExceptionFixture>
     {
-        public AxHostConnectionPointCookieTests()
-        {
-            Application.ThreadException += (sender, e) => throw new Exception(e.Exception.StackTrace.ToString());
-        }
-
         private static readonly Guid CLSID_WebBrowser = new Guid("8856f961-340a-11d0-a96b-00c04fd705a2");
 
         [WinFormsFact]

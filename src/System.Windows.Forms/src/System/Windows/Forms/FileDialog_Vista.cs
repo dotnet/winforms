@@ -6,7 +6,9 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Threading;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -32,15 +34,28 @@ namespace System.Windows.Forms
 
         private protected abstract FileDialogNative.IFileDialog CreateVistaDialog();
 
-        private bool RunDialogVista(IntPtr hWndOwner)
+        private bool TryRunDialogVista(IntPtr hWndOwner, out bool returnValue)
         {
-            FileDialogNative.IFileDialog dialog = CreateVistaDialog();
+            FileDialogNative.IFileDialog dialog;
+            try
+            {
+                // Creating the Vista dialog can fail on Windows Server Core, even if the
+                // Server Core App Compatibility FOD is installed.
+                dialog = CreateVistaDialog();
+            }
+            catch (COMException)
+            {
+                returnValue = false;
+                return false;
+            }
+
             OnBeforeVistaDialog(dialog);
             var events = new VistaDialogEvents(this);
             dialog.Advise(events, out uint eventCookie);
             try
             {
-                return dialog.Show(hWndOwner) == 0;
+                returnValue = dialog.Show(hWndOwner) == 0;
+                return true;
             }
             finally
             {
@@ -59,7 +74,7 @@ namespace System.Windows.Forms
             {
                 try
                 {
-                    FileDialogNative.IShellItem initialDirectory = GetShellItemForPath(InitialDirectory);
+                    FileDialogNative.IShellItem initialDirectory = FileDialogNative.GetShellItemForPath(InitialDirectory);
 
                     dialog.SetDefaultFolder(initialDirectory);
                     dialog.SetFolder(initialDirectory);
@@ -89,12 +104,11 @@ namespace System.Windows.Forms
               | FileDialogNative.FOS.FOS_NODEREFERENCELINKS
             ;
             const int UnexpectedOptions =
-                NativeMethods.OFN_USESHELLITEM // This is totally bogus (only used in FileDialog by accident to ensure that places are shown
-              | NativeMethods.OFN_SHOWHELP // If ShowHelp is true, we don't use the Vista Dialog
-              | NativeMethods.OFN_ENABLEHOOK // These shouldn't be set in options (only set in the flags for the legacy dialog)
-              | NativeMethods.OFN_ENABLESIZING // These shouldn't be set in options (only set in the flags for the legacy dialog)
-              | NativeMethods.OFN_EXPLORER // These shouldn't be set in options (only set in the flags for the legacy dialog)
-            ;
+                (int)(Comdlg32.OFN.SHOWHELP // If ShowHelp is true, we don't use the Vista Dialog
+                | Comdlg32.OFN.ENABLEHOOK // These shouldn't be set in options (only set in the flags for the legacy dialog)
+                | Comdlg32.OFN.ENABLESIZING // These shouldn't be set in options (only set in the flags for the legacy dialog)
+                | Comdlg32.OFN.EXPLORER); // These shouldn't be set in options (only set in the flags for the legacy dialog)
+
             Debug.Assert((UnexpectedOptions & _options) == 0, "Unexpected FileDialog options");
 
             FileDialogNative.FOS ret = (FileDialogNative.FOS)_options & BlittableOptions;
@@ -163,12 +177,12 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    if ((_options & NativeMethods.OFN_HIDEREADONLY) != 0)
+                    if ((_options & (int)Comdlg32.OFN.HIDEREADONLY) != 0)
                     {
                         // When the dialog is dismissed OK, the Readonly bit can't
                         // be left on if ShowReadOnly was false
                         // Downlevel this happens automatically, on Vista mode, we need to watch out for it.
-                        _options &= ~NativeMethods.OFN_READONLY;
+                        _options &= ~(int)Comdlg32.OFN.READONLY;
                     }
                 }
             }
@@ -186,12 +200,12 @@ namespace System.Windows.Forms
 
             public int OnFileOk(FileDialogNative.IFileDialog pfd)
             {
-                return _dialog.HandleVistaFileOk(pfd) ? NativeMethods.S_OK : NativeMethods.S_FALSE;
+                return _dialog.HandleVistaFileOk(pfd) ? (int)HRESULT.S_OK : (int)HRESULT.S_FALSE;
             }
 
             public int OnFolderChanging(FileDialogNative.IFileDialog pfd, FileDialogNative.IShellItem psiFolder)
             {
-                return NativeMethods.S_OK;
+                return (int)HRESULT.S_OK;
             }
 
             public void OnFolderChange(FileDialogNative.IFileDialog pfd)
@@ -252,26 +266,6 @@ namespace System.Windows.Forms
                 }
             }
             return extensions.ToArray();
-        }
-
-        internal static FileDialogNative.IShellItem GetShellItemForPath(string path)
-        {
-            FileDialogNative.IShellItem ret = null;
-            IntPtr pidl = IntPtr.Zero;
-            uint zero = 0;
-            if (UnsafeNativeMethods.Shell32.SHILCreateFromPath(path, out pidl, ref zero) >= 0)
-            {
-                if (UnsafeNativeMethods.Shell32.SHCreateShellItem(
-                    IntPtr.Zero, // No parent specified
-                    IntPtr.Zero,
-                    pidl,
-                    out ret) >= 0)
-                {
-                    return ret;
-                }
-            }
-
-            throw new FileNotFoundException();
         }
 
         private protected static string GetFilePathFromShellItem(FileDialogNative.IShellItem item)

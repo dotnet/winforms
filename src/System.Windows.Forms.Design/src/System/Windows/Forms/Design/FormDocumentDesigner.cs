@@ -368,7 +368,7 @@ namespace System.Windows.Forms.Design
             Control control = Control;
             if (control != null && control.IsHandleCreated)
             {
-                NativeMethods.SendMessage(control.Handle, WindowMessages.WM_NCACTIVATE, 1, 0);
+                User32.SendMessageW(control.Handle, User32.WindowMessage.WM_NCACTIVATE, (IntPtr)1, IntPtr.Zero);
                 User32.RedrawWindow(control.Handle, null, IntPtr.Zero, User32.RDW.FRAME);
             }
         }
@@ -381,7 +381,7 @@ namespace System.Windows.Forms.Design
             Control control = Control;
             if (control != null && control.IsHandleCreated)
             {
-                NativeMethods.SendMessage(control.Handle, WindowMessages.WM_NCACTIVATE, 0, 0);
+                User32.SendMessageW(control.Handle, User32.WindowMessage.WM_NCACTIVATE, IntPtr.Zero, IntPtr.Zero);
                 User32.RedrawWindow(control.Handle, null, IntPtr.Zero, User32.RDW.FRAME);
             }
         }

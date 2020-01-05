@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -1102,9 +1102,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-            ///  Constructs the new instance of the accessibility object for this control. Subclasses
+        ///  Constructs the new instance of the accessibility object for this control. Subclasses
         ///  should not call base.CreateAccessibilityObject.
-            /// </summary>
+        /// </summary>
         protected override AccessibleObject CreateAccessibilityInstance()
         {
             return new DateTimePickerAccessibleObject(this);
@@ -1117,7 +1117,7 @@ namespace System.Windows.Forms
         {
             if (!RecreatingHandle)
             {
-                IntPtr userCookie = ThemingScope.Activate();
+                IntPtr userCookie = ThemingScope.Activate(Application.UseVisualStyles);
 
                 try
                 {

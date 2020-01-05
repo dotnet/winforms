@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -47,7 +47,7 @@ namespace System.Windows.Forms
     public partial class Control :
         Component,
         Ole32.IOleControl,
-        UnsafeNativeMethods.IOleObject,
+        Ole32.IOleObject,
         Ole32.IOleInPlaceObject,
         Ole32.IOleInPlaceActiveObject,
         Ole32.IOleWindow,
@@ -3868,14 +3868,26 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Indicates whether the control is visible.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        Localizable(true),
-        SRDescription(nameof(SR.ControlVisibleDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [Localizable(true)]
+        [SRDescription(nameof(SR.ControlVisibleDescr))]
         public bool Visible
         {
-            get => GetVisibleCore();
+            get
+            {
+                if (!DesiredVisibility)
+                {
+                    return false;
+                }
+
+                // We are only visible if our parent is visible
+                if (ParentInternal == null)
+                {
+                    return true;
+                }
+                
+                return ParentInternal.Visible;
+            }
             set => SetVisibleCore(value);
         }
 
@@ -4932,7 +4944,7 @@ namespace System.Windows.Forms
                 {
                     // Activate theming scope to get theming for controls at design time and when hosted in browser.
                     // NOTE: If a theming context is already active, this call is very fast, so shouldn't be a perf issue.
-                    userCookie = ThemingScope.Activate();
+                    userCookie = ThemingScope.Activate(Application.UseVisualStyles);
                 }
 
                 CreateParams cp = CreateParams;
@@ -5805,28 +5817,11 @@ namespace System.Windows.Forms
                 case NativeMethods.XBUTTON2:
                     return MouseButtons.XButton2;
             }
-            Debug.Fail("Unknown XButton: " + wparam);
+
             return MouseButtons.None;
         }
 
         internal bool DesiredVisibility => GetState(States.Visible);
-
-        internal virtual bool GetVisibleCore()
-        {
-            // We are only visible if our parent is visible
-            if (!DesiredVisibility)
-            {
-                return false;
-            }
-            else if (ParentInternal == null)
-            {
-                return true;
-            }
-            else
-            {
-                return ParentInternal.GetVisibleCore();
-            }
-        }
 
         internal bool GetAnyDisposingInHierarchy()
         {
@@ -7910,7 +7905,7 @@ namespace System.Windows.Forms
                 if (User32.GetScrollInfo(this, User32.SB.HORZ, ref si).IsTrue())
                 {
                     si.nPos = (RightToLeft == RightToLeft.Yes) ? si.nMax : si.nMin;
-                    SendMessage(WindowMessages.WM_HSCROLL, PARAM.FromLowHigh((int)User32.SBH.THUMBPOSITION, si.nPos), 0);
+                    User32.SendMessageW(this, User32.WindowMessage.WM_HSCROLL, PARAM.FromLowHigh((int)User32.SBH.THUMBPOSITION, si.nPos), IntPtr.Zero);
                 }
             }
         }
@@ -10645,22 +10640,6 @@ namespace System.Windows.Forms
             return UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), msg, wparam, lparam);
         }
 
-        internal IntPtr SendMessage(int msg, IntPtr wparam, int lparam)
-        {
-            Debug.Assert(IsHandleCreated, "Performance alert!  Calling Control::SendMessage and forcing handle creation.  Re-work control so handle creation is not required to set properties.  If there is no work around, wrap the call in an IsHandleCreated check.");
-            return UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), msg, wparam, (IntPtr)lparam);
-        }
-
-        /// <summary>
-        ///  Sends a Win32 message to this control.  If the control does not yet
-        ///  have a handle, it will be created.
-        /// </summary>
-        internal IntPtr SendMessage(int msg, bool wparam, int lparam)
-        {
-            Debug.Assert(IsHandleCreated, "Performance alert!  Calling Control::SendMessage and forcing handle creation.  Re-work control so handle creation is not required to set properties.  If there is no work around, wrap the call in an IsHandleCreated check.");
-            return UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), msg, wparam, lparam);
-        }
-
         /// <summary>
         ///  Sends a Win32 message to this control.  If the control does not yet
         ///  have a handle, it will be created.
@@ -11049,7 +11028,7 @@ namespace System.Windows.Forms
 
         protected virtual void SetVisibleCore(bool value)
         {
-            if (GetVisibleCore() != value)
+            if (value != Visible)
             {
                 if (!value)
                 {
@@ -11098,7 +11077,7 @@ namespace System.Windows.Forms
                     }
                 }
 
-                if (GetVisibleCore() != value)
+                if (value != Visible)
                 {
                     SetState(States.Visible, value);
                     fireChange = true;
@@ -11348,7 +11327,7 @@ namespace System.Windows.Forms
 
         private void SetWindowFont()
         {
-            SendMessage(WindowMessages.WM_SETFONT, FontHandle, 0 /*redraw = false*/);
+            User32.SendMessageW(this, User32.WindowMessage.WM_SETFONT, FontHandle, PARAM.FromBool(false));
         }
 
         private void SetWindowStyle(int flag, bool value)
@@ -13665,42 +13644,42 @@ namespace System.Windows.Forms
             return HRESULT.S_OK;
         }
 
-        HRESULT UnsafeNativeMethods.IOleObject.SetClientSite(Ole32.IOleClientSite pClientSite)
+        HRESULT Ole32.IOleObject.SetClientSite(Ole32.IOleClientSite pClientSite)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:SetClientSite");
             ActiveXInstance.SetClientSite(pClientSite);
             return HRESULT.S_OK;
         }
 
-        HRESULT UnsafeNativeMethods.IOleObject.GetClientSite(out Ole32.IOleClientSite ppClientSite)
+        HRESULT Ole32.IOleObject.GetClientSite(out Ole32.IOleClientSite ppClientSite)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetClientSite");
             ppClientSite = ActiveXInstance.GetClientSite();
             return HRESULT.S_OK;
         }
 
-        int UnsafeNativeMethods.IOleObject.SetHostNames(string szContainerApp, string szContainerObj)
+        HRESULT Ole32.IOleObject.SetHostNames(string szContainerApp, string szContainerObj)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:SetHostNames");
             // Since ActiveX controls never "open" for editing, we shouldn't need
             // to store these.
-            return NativeMethods.S_OK;
+            return HRESULT.S_OK;
         }
 
-        HRESULT UnsafeNativeMethods.IOleObject.Close(Ole32.OLECLOSE dwSaveOption)
+        HRESULT Ole32.IOleObject.Close(Ole32.OLECLOSE dwSaveOption)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:Close. Save option: " + dwSaveOption);
             ActiveXInstance.Close(dwSaveOption);
             return HRESULT.S_OK;
         }
 
-        HRESULT UnsafeNativeMethods.IOleObject.SetMoniker(Ole32.OLEWHICHMK dwWhichMoniker, object pmk)
+        HRESULT Ole32.IOleObject.SetMoniker(Ole32.OLEWHICHMK dwWhichMoniker, object pmk)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:SetMoniker");
             return HRESULT.E_NOTIMPL;
         }
 
-        unsafe HRESULT UnsafeNativeMethods.IOleObject.GetMoniker(Ole32.OLEGETMONIKER dwAssign, Ole32.OLEWHICHMK dwWhichMoniker, IntPtr* ppmk)
+        unsafe HRESULT Ole32.IOleObject.GetMoniker(Ole32.OLEGETMONIKER dwAssign, Ole32.OLEWHICHMK dwWhichMoniker, IntPtr* ppmk)
         {
             if (ppmk == null)
             {
@@ -13712,20 +13691,20 @@ namespace System.Windows.Forms
             return HRESULT.E_NOTIMPL;
         }
 
-        HRESULT UnsafeNativeMethods.IOleObject.InitFromData(IComDataObject pDataObject, BOOL fCreation, uint dwReserved)
+        HRESULT Ole32.IOleObject.InitFromData(IComDataObject pDataObject, BOOL fCreation, uint dwReserved)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:InitFromData");
             return HRESULT.E_NOTIMPL;
         }
 
-        HRESULT UnsafeNativeMethods.IOleObject.GetClipboardData(uint dwReserved, out IComDataObject ppDataObject)
+        HRESULT Ole32.IOleObject.GetClipboardData(uint dwReserved, out IComDataObject ppDataObject)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetClipboardData");
             ppDataObject = null;
             return HRESULT.E_NOTIMPL;
         }
 
-        unsafe HRESULT UnsafeNativeMethods.IOleObject.DoVerb(
+        unsafe HRESULT Ole32.IOleObject.DoVerb(
             Ole32.OLEIVERB iVerb,
             User32.MSG* lpmsg,
             Ole32.IOleClientSite pActiveSite,
@@ -13763,25 +13742,25 @@ namespace System.Windows.Forms
             }
         }
 
-        HRESULT UnsafeNativeMethods.IOleObject.EnumVerbs(out Ole32.IEnumOLEVERB ppEnumOleVerb)
+        HRESULT Ole32.IOleObject.EnumVerbs(out Ole32.IEnumOLEVERB ppEnumOleVerb)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:EnumVerbs");
             return ActiveXImpl.EnumVerbs(out ppEnumOleVerb);
         }
 
-        HRESULT UnsafeNativeMethods.IOleObject.OleUpdate()
+        HRESULT Ole32.IOleObject.OleUpdate()
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:OleUpdate");
             return HRESULT.S_OK;
         }
 
-        HRESULT UnsafeNativeMethods.IOleObject.IsUpToDate()
+        HRESULT Ole32.IOleObject.IsUpToDate()
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IsUpToDate");
             return HRESULT.S_OK;
         }
 
-        unsafe HRESULT UnsafeNativeMethods.IOleObject.GetUserClassID(Guid* pClsid)
+        unsafe HRESULT Ole32.IOleObject.GetUserClassID(Guid* pClsid)
         {
             if (pClsid == null)
             {
@@ -13793,7 +13772,7 @@ namespace System.Windows.Forms
             return HRESULT.S_OK;
         }
 
-        HRESULT UnsafeNativeMethods.IOleObject.GetUserType(Ole32.USERCLASSTYPE dwFormOfType, out string pszUserType)
+        HRESULT Ole32.IOleObject.GetUserType(Ole32.USERCLASSTYPE dwFormOfType, out string pszUserType)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetUserType");
             if (dwFormOfType == Ole32.USERCLASSTYPE.FULL)
@@ -13808,7 +13787,7 @@ namespace System.Windows.Forms
             return HRESULT.S_OK;
         }
 
-        unsafe Interop.HRESULT UnsafeNativeMethods.IOleObject.SetExtent(Ole32.DVASPECT dwDrawAspect, Size* pSizel)
+        unsafe Interop.HRESULT Ole32.IOleObject.SetExtent(Ole32.DVASPECT dwDrawAspect, Size* pSizel)
         {
             if (pSizel == null)
             {
@@ -13822,7 +13801,7 @@ namespace System.Windows.Forms
             return Interop.HRESULT.S_OK;
         }
 
-        unsafe Interop.HRESULT UnsafeNativeMethods.IOleObject.GetExtent(Ole32.DVASPECT dwDrawAspect, Size* pSizel)
+        unsafe Interop.HRESULT Ole32.IOleObject.GetExtent(Ole32.DVASPECT dwDrawAspect, Size* pSizel)
         {
             if (pSizel == null)
             {
@@ -13837,7 +13816,7 @@ namespace System.Windows.Forms
             return Interop.HRESULT.S_OK;
         }
 
-        unsafe HRESULT UnsafeNativeMethods.IOleObject.Advise(IAdviseSink pAdvSink, uint* pdwConnection)
+        unsafe HRESULT Ole32.IOleObject.Advise(IAdviseSink pAdvSink, uint* pdwConnection)
         {
             if (pdwConnection == null)
             {
@@ -13849,7 +13828,7 @@ namespace System.Windows.Forms
             return HRESULT.S_OK;
         }
 
-        HRESULT UnsafeNativeMethods.IOleObject.Unadvise(uint dwConnection)
+        HRESULT Ole32.IOleObject.Unadvise(uint dwConnection)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:Unadvise");
             Debug.Indent();
@@ -13858,14 +13837,14 @@ namespace System.Windows.Forms
             return hr;
         }
 
-        HRESULT UnsafeNativeMethods.IOleObject.EnumAdvise(out IEnumSTATDATA e)
+        HRESULT Ole32.IOleObject.EnumAdvise(out IEnumSTATDATA e)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:EnumAdvise");
             e = null;
             return HRESULT.E_NOTIMPL;
         }
 
-        unsafe HRESULT UnsafeNativeMethods.IOleObject.GetMiscStatus(Ole32.DVASPECT dwAspect, Ole32.OLEMISC* pdwStatus)
+        unsafe HRESULT Ole32.IOleObject.GetMiscStatus(Ole32.DVASPECT dwAspect, Ole32.OLEMISC* pdwStatus)
         {
             if (pdwStatus == null)
             {
@@ -13895,7 +13874,7 @@ namespace System.Windows.Forms
             return HRESULT.S_OK;
         }
 
-        unsafe HRESULT UnsafeNativeMethods.IOleObject.SetColorScheme(Gdi32.LOGPALETTE* pLogpal)
+        unsafe HRESULT Ole32.IOleObject.SetColorScheme(Gdi32.LOGPALETTE* pLogpal)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:SetColorScheme");
             return HRESULT.S_OK;
@@ -14202,7 +14181,7 @@ namespace System.Windows.Forms
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetExtent (IViewObject2)");
             // we already have an implementation of this [from IOleObject]
-            return ((UnsafeNativeMethods.IOleObject)this).GetExtent(dwDrawAspect, lpsizel);
+            return ((Ole32.IOleObject)this).GetExtent(dwDrawAspect, lpsizel);
         }
 
         #region IKeyboardToolTip implementation

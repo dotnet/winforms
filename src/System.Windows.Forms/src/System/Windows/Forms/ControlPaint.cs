@@ -20,7 +20,7 @@ namespace System.Windows.Forms
     ///  paint common Windows UI pieces. Many windows forms controls use this class to paint
     ///  their UI elements.
     /// </summary>
-    public sealed class ControlPaint
+    public static class ControlPaint
     {
         [ThreadStatic]
         private static Bitmap checkImage;         // image used to render checkmarks
@@ -54,12 +54,6 @@ namespace System.Windows.Forms
         private static readonly ContentAlignment anyBottom = ContentAlignment.BottomLeft | ContentAlignment.BottomCenter | ContentAlignment.BottomRight;
         private static readonly ContentAlignment anyCenter = ContentAlignment.TopCenter | ContentAlignment.MiddleCenter | ContentAlignment.BottomCenter;
         private static readonly ContentAlignment anyMiddle = ContentAlignment.MiddleLeft | ContentAlignment.MiddleCenter | ContentAlignment.MiddleRight;
-
-        // not creatable...
-        //
-        private ControlPaint()
-        {
-        }
 
         internal static Rectangle CalculateBackgroundImageRectangle(Rectangle bounds, Image backgroundImage, ImageLayout imageLayout)
         {
@@ -1998,7 +1992,7 @@ namespace System.Windows.Forms
                 graphicsColor = Color.Black;
             }
 
-            IntPtr dc = User32.GetDCEx(UnsafeNativeMethods.GetDesktopWindow(), IntPtr.Zero, User32.DCX.WINDOW | User32.DCX.LOCKWINDOWUPDATE | User32.DCX.CACHE);
+            IntPtr dc = User32.GetDCEx(User32.GetDesktopWindow(), IntPtr.Zero, User32.DCX.WINDOW | User32.DCX.LOCKWINDOWUPDATE | User32.DCX.CACHE);
             IntPtr pen;
 
             switch (style)
@@ -2039,7 +2033,7 @@ namespace System.Windows.Forms
         {
             Gdi32.R2 rop2 = (Gdi32.R2)GetColorRop(backColor, (int)Gdi32.R2.NOTXORPEN, (int)Gdi32.R2.XORPEN);
 
-            IntPtr dc = User32.GetDCEx(UnsafeNativeMethods.GetDesktopWindow(), IntPtr.Zero, User32.DCX.WINDOW | User32.DCX.LOCKWINDOWUPDATE | User32.DCX.CACHE);
+            IntPtr dc = User32.GetDCEx(User32.GetDesktopWindow(), IntPtr.Zero, User32.DCX.WINDOW | User32.DCX.LOCKWINDOWUPDATE | User32.DCX.CACHE);
             IntPtr pen = Gdi32.CreatePen(Gdi32.PS.SOLID, 1, ColorTranslator.ToWin32(backColor));
 
             Gdi32.R2 prevRop2 = Gdi32.SetROP2(dc, rop2);
@@ -2229,7 +2223,7 @@ namespace System.Windows.Forms
                                    0x5a0049); // RasterOp.BRUSH.XorWith(RasterOp.TARGET));
             Gdi32.R2 rop2 = Gdi32.R2.NOT;
 
-            IntPtr dc = User32.GetDCEx(UnsafeNativeMethods.GetDesktopWindow(), IntPtr.Zero, User32.DCX.WINDOW | User32.DCX.LOCKWINDOWUPDATE | User32.DCX.CACHE);
+            IntPtr dc = User32.GetDCEx(User32.GetDesktopWindow(), IntPtr.Zero, User32.DCX.WINDOW | User32.DCX.LOCKWINDOWUPDATE | User32.DCX.CACHE);
             IntPtr brush = Gdi32.CreateSolidBrush(ColorTranslator.ToWin32(backColor));
 
             Gdi32.R2 prevRop2 = Gdi32.SetROP2(dc, rop2);

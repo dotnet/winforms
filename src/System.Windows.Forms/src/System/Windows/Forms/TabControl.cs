@@ -12,6 +12,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms.Layout;
 using static Interop;
+using static Interop.ComCtl32;
 
 namespace System.Windows.Forms
 {
@@ -1055,7 +1056,7 @@ namespace System.Windows.Forms
         {
             if (!RecreatingHandle)
             {
-                IntPtr userCookie = ThemingScope.Activate();
+                IntPtr userCookie = ThemingScope.Activate(Application.UseVisualStyles);
                 try
                 {
                     var icc = new ComCtl32.INITCOMMONCONTROLSEX
@@ -1666,7 +1667,11 @@ namespace System.Windows.Forms
         {
             Controls.Clear();
 
-            SendMessage((int)ComCtl32.TCM.DELETEALLITEMS, 0, 0);
+            if (IsHandleCreated)
+            {
+                User32.SendMessageW(this, ((User32.WindowMessage)TCM.DELETEALLITEMS), IntPtr.Zero, IntPtr.Zero);
+            }
+
             _tabPages = null;
             _tabPageCount = 0;
         }

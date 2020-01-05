@@ -117,6 +117,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VisualBasicRuntimeTest", "s
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MauiLabelTests", "src\System.Windows.Forms\tests\IntegrationTests\MauiTests\MauiLabelTests\MauiLabelTests.csproj", "{D49B43AE-F6CC-43BA-91B6-1B248F22BCDD}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Windows.Forms.Primitives", "src\System.Windows.Forms.Primitives\src\System.Windows.Forms.Primitives.csproj", "{90B27178-F535-43F7-886E-0AB75203F246}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Windows.Forms.Primitives.Tests", "src\System.Windows.Forms.Primitives\tests\System.Windows.Forms.Primitives.Tests.csproj", "{9BFDE7F2-C8F3-40D6-9A16-8DCD1A37E900}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4AA2764C-B013-40B5-9E5B-9459EF976C8B}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -231,6 +240,14 @@ Global
 		{D49B43AE-F6CC-43BA-91B6-1B248F22BCDD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D49B43AE-F6CC-43BA-91B6-1B248F22BCDD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D49B43AE-F6CC-43BA-91B6-1B248F22BCDD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{90B27178-F535-43F7-886E-0AB75203F246}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{90B27178-F535-43F7-886E-0AB75203F246}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{90B27178-F535-43F7-886E-0AB75203F246}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{90B27178-F535-43F7-886E-0AB75203F246}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9BFDE7F2-C8F3-40D6-9A16-8DCD1A37E900}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9BFDE7F2-C8F3-40D6-9A16-8DCD1A37E900}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9BFDE7F2-C8F3-40D6-9A16-8DCD1A37E900}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9BFDE7F2-C8F3-40D6-9A16-8DCD1A37E900}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -268,6 +285,8 @@ Global
 		{1C6F6ADA-97B1-4EB9-934D-0071BB618729} = {680FB14C-7B0C-4D63-9F1A-18ACCDB0F52A}
 		{EC7608D1-1857-432E-930F-0F89B98979FB} = {680FB14C-7B0C-4D63-9F1A-18ACCDB0F52A}
 		{D49B43AE-F6CC-43BA-91B6-1B248F22BCDD} = {8F20A905-BD37-4D80-B8DF-FA45276FC23F}
+		{90B27178-F535-43F7-886E-0AB75203F246} = {77FEDB47-F7F6-490D-AF7C-ABB4A9E0B9D7}
+		{9BFDE7F2-C8F3-40D6-9A16-8DCD1A37E900} = {583F1292-AE8D-4511-B8D8-A81FE4642DDC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7B1B0433-F612-4E5A-BE7E-FCF5B9F6E136}

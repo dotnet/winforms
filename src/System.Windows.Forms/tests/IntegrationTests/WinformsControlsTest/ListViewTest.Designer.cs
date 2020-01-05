@@ -48,6 +48,14 @@ namespace WinformsControlsTest
             this.imageList1.Images.SetKeyName(0, "SmallA.bmp");
             this.imageList1.Images.SetKeyName(1, "SmallABlue.bmp");
             // 
+            // columnHeader1
+            // 
+            this.columnHeader1.ImageIndex = 0;
+            // 
+            // columnHeader2
+            // 
+            this.columnHeader2.ImageIndex = 1;
+            // 
             // listView1
             // 
             this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {

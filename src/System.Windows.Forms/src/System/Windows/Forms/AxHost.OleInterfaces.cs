@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -385,7 +385,7 @@ namespace System.Windows.Forms
                 if (host.GetAxState(AxHost.fOwnWindow))
                 {
                     Debug.Fail("we can't be in showobject if we own our window...");
-                    return NativeMethods.S_OK;
+                    return HRESULT.S_OK;
                 }
                 if (host.GetAxState(AxHost.fFakingWindow))
                 {
@@ -402,7 +402,7 @@ namespace System.Windows.Forms
                 }
                 if (host.GetOcState() < OC_INPLACE)
                 {
-                    return NativeMethods.S_OK;
+                    return HRESULT.S_OK;
                 }
 
                 IntPtr hwnd = IntPtr.Zero;
@@ -417,7 +417,7 @@ namespace System.Windows.Forms
                         }
                     }
                 }
-                else if (host.GetInPlaceObject() is UnsafeNativeMethods.IOleInPlaceObjectWindowless)
+                else if (host.GetInPlaceObject() is Ole32.IOleInPlaceObjectWindowless)
                 {
                     Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "Windowless control.");
                     throw new InvalidOperationException(SR.AXWindowlessControl);

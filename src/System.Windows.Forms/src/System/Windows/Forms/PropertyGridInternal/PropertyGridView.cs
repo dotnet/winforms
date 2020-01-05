@@ -3170,7 +3170,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             if (dropDownHolder != null && dropDownHolder.Visible)
             {
                 bool found = false;
-                for (IntPtr hwnd = UnsafeNativeMethods.GetForegroundWindow();
+                for (IntPtr hwnd = User32.GetForegroundWindow();
                     hwnd != IntPtr.Zero; hwnd = User32.GetParent(hwnd))
                 {
                     if (hwnd == dropDownHolder.Handle)
@@ -3772,7 +3772,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 // Ensure that tooltips don't display when host application is not foreground app.
                 // Assume that we don't want to display the tooltips
-                IntPtr foregroundWindow = UnsafeNativeMethods.GetForegroundWindow();
+                IntPtr foregroundWindow = User32.GetForegroundWindow();
                 if (User32.IsChild(foregroundWindow, new HandleRef(this, Handle)).IsTrue())
                 {
                     // Don't show the tips if a dropdown is showing
@@ -6377,10 +6377,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     CreateParams cp = base.CreateParams;
                     cp.Style |= unchecked((int)(User32.WS.POPUP | User32.WS.BORDER));
                     cp.ExStyle |= (int)User32.WS_EX.TOOLWINDOW;
-                    if (OSFeature.IsPresent(SystemParameter.DropShadow))
-                    {
-                        cp.ClassStyle |= (int)User32.CS.DROPSHADOW;
-                    }
+                    cp.ClassStyle |= (int)User32.CS.DROPSHADOW;
                     if (gridView != null)
                     {
                         cp.Parent = gridView.ParentInternal.Handle;

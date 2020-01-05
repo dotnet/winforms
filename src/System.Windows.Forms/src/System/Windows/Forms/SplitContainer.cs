@@ -582,7 +582,7 @@ namespace System.Windows.Forms
                         User32.GetWindowRect(this, ref r);
                         if ((r.left <= p.X && p.X < r.right && r.top <= p.Y && p.Y < r.bottom) || User32.GetCapture() == Handle)
                         {
-                            SendMessage(WindowMessages.WM_SETCURSOR, Handle, NativeMethods.HTCLIENT);
+                            User32.SendMessageW(this, User32.WindowMessage.WM_SETCURSOR, Handle, (IntPtr)NativeMethods.HTCLIENT);
                         }
                     }
                 }

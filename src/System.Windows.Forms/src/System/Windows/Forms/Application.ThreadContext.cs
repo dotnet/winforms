@@ -846,7 +846,7 @@ namespace System.Windows.Forms
             ///  A method of determining whether we are handling messages that does not demand register
             ///  the componentmanager
             /// </summary>
-            internal bool IsValidComponentId() =>_componentID != s_invalidId;
+            internal bool IsValidComponentId() => _componentID != s_invalidId;
 
             internal ApartmentState OleRequired()
             {
@@ -979,7 +979,7 @@ namespace System.Windows.Forms
                 IntPtr userCookie = IntPtr.Zero;
                 if (UseVisualStyles)
                 {
-                    userCookie = ThemingScope.Activate();
+                    userCookie = ThemingScope.Activate(Application.UseVisualStyles);
                 }
 
                 try

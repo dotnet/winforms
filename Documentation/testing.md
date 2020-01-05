@@ -101,12 +101,11 @@ Tests are built and executed by file name convention
 ### Throw unhandled exceptions
 
 We have been observed unexplainable hanging tests. To get better handle on the situation we have started trapping `ThreadException`s.
-Each test class must add a handler to its constructor similar to the one below:
+Each test class must implement the `IClassFixture<ThreadExceptionFixture>` interface similar to the one below:
   ```cs
-    public ButtonBaseTests()
+    public class ButtonBaseTests : IClassFixture<ThreadExceptionFixture>
     {
-        Application.ThreadException += (sender, e) => throw new Exception(e.Exception.StackTrace.ToString());
-    } 
+    }
   ```
 
 #### Strategy
@@ -189,3 +188,7 @@ Functional tests are built and executed by file name convention
   * For example, if I wanted to test the `Button` class in System.Windows.Forms.dll, I would look for a Button.cs under src\System.Windows.Forms\tests
 * If the file exists, add your tests there. If it doesn't exist, feel free to create it.
   * **Note that you don't have to modify the csproj at all.** Since the project is a Microsoft.NET.Sdk project, all source files next to it are automatically included
+  
+## Testing for Accessibility
+
+Our goal is to make writing accessible WinForms applications easy. Specifically, all default property values should yield accessible experience. To test that controls are accessible, find or add the changed control to [AccessibilityTests application](https://github.com/dotnet/winforms/tree/master/src/System.Windows.Forms/tests/AccessibilityTests) and run [Accessibility Insights for Windows](https://accessibilityinsights.io/docs/en/windows/overview) on it. 

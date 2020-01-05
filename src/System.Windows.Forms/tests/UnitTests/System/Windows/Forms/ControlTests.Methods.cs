@@ -394,9 +394,12 @@ namespace System.Windows.Forms.Tests
         public void Control_CreateAccessibilityInstance_Invoke_ReturnsExpected()
         {
             using var control = new SubControl();
-            Control.ControlAccessibleObject accessibleObject = Assert.IsType<Control.ControlAccessibleObject>(control.CreateAccessibilityInstance());
-            Assert.Same(control, accessibleObject.Owner);
-            Assert.NotSame(accessibleObject, control.CreateAccessibilityInstance());
+            Control.ControlAccessibleObject instance = Assert.IsAssignableFrom<Control.ControlAccessibleObject>(control.CreateAccessibilityInstance());
+            Assert.NotNull(instance);
+            Assert.Same(control, instance.Owner);
+            Assert.Equal(AccessibleRole.Client, instance.Role);
+            Assert.NotSame(control.CreateAccessibilityInstance(), instance);
+            Assert.NotSame(control.AccessibilityObject, instance);
         }
 
         [Fact]
@@ -1202,14 +1205,13 @@ namespace System.Windows.Forms.Tests
         }
 
         // TODO: create a focus test that returns true when a handle has been created
-        [Fact]
-        public void Control_FocusHandleNotCreated()
+        [WinFormsFact]
+        public void Control_Focus_InvokeWithoutHandle_Nop()
         {
-            var cont = new Control();
-
-            var ret = cont.Focus();
-
-            Assert.False(ret);
+            using var control = new Control();
+            Assert.False(control.Focus());
+            Assert.False(control.Focused);
+            Assert.False(control.IsHandleCreated);
         }
 
         [WinFormsFact]
@@ -1488,7 +1490,7 @@ namespace System.Windows.Forms.Tests
             using var control = new Control();
             Assert.Equal(Size.Empty, control.GetPreferredSize(proposedSize));
             Assert.False(control.IsHandleCreated);
-            
+
             // Call again.
             Assert.Equal(Size.Empty, control.GetPreferredSize(proposedSize));
             Assert.False(control.IsHandleCreated);
@@ -1504,7 +1506,7 @@ namespace System.Windows.Forms.Tests
             };
             Assert.Equal(new Size(30, 40), control.GetPreferredSize(proposedSize));
             Assert.False(control.IsHandleCreated);
-            
+
             // Call again.
             Assert.Equal(new Size(30, 40), control.GetPreferredSize(proposedSize));
             Assert.False(control.IsHandleCreated);
@@ -1544,7 +1546,7 @@ namespace System.Windows.Forms.Tests
             };
             Assert.Equal(expected, control.GetPreferredSize(proposedSize));
             Assert.False(control.IsHandleCreated);
-            
+
             // Call again.
             Assert.Equal(expected, control.GetPreferredSize(proposedSize));
             Assert.False(control.IsHandleCreated);
@@ -2503,7 +2505,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
         }
-        
+
         [WinFormsFact]
         public void Control_InvokeDelegateThrowsExceptionSameThread_Success()
         {
@@ -2529,7 +2531,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
         }
-        
+
         [WinFormsFact]
         public async Task Control_InvokeDelegateThrowsExceptionDifferentThread_Success()
         {
@@ -2558,7 +2560,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
         }
-        
+
         [WinFormsFact]
         public void Control_InvokeDelegateObjectSameThread_Success()
         {
@@ -2584,7 +2586,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
         }
-        
+
         [WinFormsFact]
         public void Control_InvokeDelegateObjectThrowsExceptionSameThread_Success()
         {
@@ -2611,7 +2613,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
         }
-        
+
         [WinFormsFact]
         public async Task Control_InvokeDelegateObjectThrowsExceptionDifferentThread_Success()
         {
@@ -4794,7 +4796,7 @@ namespace System.Windows.Forms.Tests
             using var control = new Control();
             control.Refresh();
             Assert.False(control.IsHandleCreated);
-            
+
             // Call again.
             control.Refresh();
             Assert.False(control.IsHandleCreated);
@@ -4817,7 +4819,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            
+
             // Call again.
             control.Refresh();
             Assert.True(control.IsHandleCreated);
@@ -5377,7 +5379,7 @@ namespace System.Windows.Forms.Tests
                 yield return new object[] { RightToLeft.No, align, align };
                 yield return new object[] { RightToLeft.Inherit, align, align };
             }
-            
+
             yield return new object[] { RightToLeft.Yes, ContentAlignment.BottomCenter, ContentAlignment.BottomCenter };
             yield return new object[] { RightToLeft.Yes, ContentAlignment.BottomLeft, ContentAlignment.BottomRight };
             yield return new object[] { RightToLeft.Yes, ContentAlignment.BottomRight, ContentAlignment.BottomLeft };
@@ -5412,7 +5414,7 @@ namespace System.Windows.Forms.Tests
                 yield return new object[] { RightToLeft.No, align, align };
                 yield return new object[] { RightToLeft.Inherit, align, align };
             }
-            
+
             yield return new object[] { RightToLeft.Yes, LeftRightAlignment.Left, LeftRightAlignment.Right };
             yield return new object[] { RightToLeft.Yes, LeftRightAlignment.Right, LeftRightAlignment.Left };
         }
@@ -5440,7 +5442,7 @@ namespace System.Windows.Forms.Tests
                 yield return new object[] { RightToLeft.No, align, align };
                 yield return new object[] { RightToLeft.Inherit, align, align };
             }
-            
+
             yield return new object[] { RightToLeft.Yes, HorizontalAlignment.Center, HorizontalAlignment.Center };
             yield return new object[] { RightToLeft.Yes, HorizontalAlignment.Left, HorizontalAlignment.Right };
             yield return new object[] { RightToLeft.Yes, HorizontalAlignment.Right, HorizontalAlignment.Left };
@@ -8666,6 +8668,57 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
         }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        public void Control_Show_Invoke_Success(bool visible)
+        {
+            using var control = new Control
+            {
+                Visible = visible
+            };
+            control.Show();
+            Assert.True(control.Visible);
+            Assert.False(control.IsHandleCreated);
+
+            // Call again.
+            control.Show();
+            Assert.True(control.Visible);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        public void Control_Show_InvokeWithHandle_Success(bool visible)
+        {
+            using var control = new Control
+            {
+                Visible = visible
+            };
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            control.Show();
+            Assert.True(control.Visible);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Call again.
+            control.Show();
+            Assert.True(control.Visible);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
         [WinFormsFact]
         public void Control_SuspendLayout_Invoke_Success()
         {
@@ -8726,7 +8779,7 @@ namespace System.Windows.Forms.Tests
             using var control = new Control();
             control.Update();
             Assert.False(control.IsHandleCreated);
-            
+
             // Call again.
             control.Update();
             Assert.False(control.IsHandleCreated);
@@ -8749,7 +8802,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            
+
             // Call again.
             control.Update();
             Assert.True(control.IsHandleCreated);
@@ -10994,7 +11047,7 @@ namespace System.Windows.Forms.Tests
                     graphics.ReleaseHdc();
                 }
             }
-        }       
+        }
 
         public static IEnumerable<object[]> WndProc_EraseBkgndWithHandleWithoutWParam_TestData()
         {
@@ -11092,7 +11145,7 @@ namespace System.Windows.Forms.Tests
                 graphics.ReleaseHdc();
             }
         }
-        
+
         [WinFormsFact]
         public void Control_WndProc_InvokeKillFocusWithoutHandle_Success()
         {
@@ -11364,6 +11417,325 @@ namespace System.Windows.Forms.Tests
             {
                 graphics.ReleaseHdc();
             }
+        }
+
+        public static IEnumerable<object[]> WndProc_MouseDown_TestData()
+        {
+            yield return new object[] { true, (int)User32.WindowMessage.WM_LBUTTONDOWN, IntPtr.Zero, IntPtr.Zero, (IntPtr)250, MouseButtons.Left, 1, 0, 0 };
+            yield return new object[] { true, (int)User32.WindowMessage.WM_LBUTTONDOWN, PARAM.FromLowHigh(1, 2), IntPtr.Zero, (IntPtr)250, MouseButtons.Left, 1, 1, 2 };
+            yield return new object[] { true, (int)User32.WindowMessage.WM_LBUTTONDOWN, PARAM.FromLowHigh(-1, -2), IntPtr.Zero, (IntPtr)250, MouseButtons.Left, 1, -1, -2 };
+            yield return new object[] { false, (int)User32.WindowMessage.WM_LBUTTONDOWN, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, MouseButtons.Left, 1, 0, 0 };
+            yield return new object[] { false, (int)User32.WindowMessage.WM_LBUTTONDOWN, PARAM.FromLowHigh(1, 2), IntPtr.Zero, IntPtr.Zero, MouseButtons.Left, 1, 1, 2 };
+            yield return new object[] { false, (int)User32.WindowMessage.WM_LBUTTONDOWN, PARAM.FromLowHigh(-1, -2), IntPtr.Zero, IntPtr.Zero, MouseButtons.Left, 1, -1, -2 };
+
+            yield return new object[] { true, (int)User32.WindowMessage.WM_LBUTTONDBLCLK, IntPtr.Zero, IntPtr.Zero, (IntPtr)250, MouseButtons.Left, 2, 0, 0 };
+            yield return new object[] { true, (int)User32.WindowMessage.WM_LBUTTONDBLCLK, PARAM.FromLowHigh(1, 2), IntPtr.Zero, (IntPtr)250, MouseButtons.Left, 2, 1, 2 };
+            yield return new object[] { true, (int)User32.WindowMessage.WM_LBUTTONDBLCLK, PARAM.FromLowHigh(-1, -2), IntPtr.Zero, (IntPtr)250, MouseButtons.Left, 2, -1, -2 };
+            yield return new object[] { false, (int)User32.WindowMessage.WM_LBUTTONDBLCLK, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, MouseButtons.Left, 2, 0, 0 };
+            yield return new object[] { false, (int)User32.WindowMessage.WM_LBUTTONDBLCLK, PARAM.FromLowHigh(1, 2), IntPtr.Zero, IntPtr.Zero, MouseButtons.Left, 2, 1, 2 };
+            yield return new object[] { false, (int)User32.WindowMessage.WM_LBUTTONDBLCLK, PARAM.FromLowHigh(-1, -2), IntPtr.Zero, IntPtr.Zero, MouseButtons.Left, 2, -1, -2 };
+
+            yield return new object[] { true, (int)User32.WindowMessage.WM_MBUTTONDOWN, IntPtr.Zero, IntPtr.Zero, (IntPtr)250, MouseButtons.Middle, 1, 0, 0 };
+            yield return new object[] { true, (int)User32.WindowMessage.WM_MBUTTONDOWN, PARAM.FromLowHigh(1, 2), IntPtr.Zero, (IntPtr)250, MouseButtons.Middle, 1, 1, 2 };
+            yield return new object[] { true, (int)User32.WindowMessage.WM_MBUTTONDOWN, PARAM.FromLowHigh(-1, -2), IntPtr.Zero, (IntPtr)250, MouseButtons.Middle, 1, -1, -2 };
+            yield return new object[] { false, (int)User32.WindowMessage.WM_MBUTTONDOWN, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, MouseButtons.Middle, 1, 0, 0 };
+            yield return new object[] { false, (int)User32.WindowMessage.WM_MBUTTONDOWN, PARAM.FromLowHigh(1, 2), IntPtr.Zero, IntPtr.Zero, MouseButtons.Middle, 1, 1, 2 };
+            yield return new object[] { false, (int)User32.WindowMessage.WM_MBUTTONDOWN, PARAM.FromLowHigh(-1, -2), IntPtr.Zero, IntPtr.Zero, MouseButtons.Middle, 1, -1, -2 };
+
+            yield return new object[] { true, (int)User32.WindowMessage.WM_MBUTTONDBLCLK, IntPtr.Zero, IntPtr.Zero, (IntPtr)250, MouseButtons.Middle, 2, 0, 0 };
+            yield return new object[] { true, (int)User32.WindowMessage.WM_MBUTTONDBLCLK, PARAM.FromLowHigh(1, 2), IntPtr.Zero, (IntPtr)250, MouseButtons.Middle, 2, 1, 2 };
+            yield return new object[] { true, (int)User32.WindowMessage.WM_MBUTTONDBLCLK, PARAM.FromLowHigh(-1, -2), IntPtr.Zero, (IntPtr)250, MouseButtons.Middle, 2, -1, -2 };
+            yield return new object[] { false, (int)User32.WindowMessage.WM_MBUTTONDBLCLK, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, MouseButtons.Middle, 2, 0, 0 };
+            yield return new object[] { false, (int)User32.WindowMessage.WM_MBUTTONDBLCLK, PARAM.FromLowHigh(1, 2), IntPtr.Zero, IntPtr.Zero, MouseButtons.Middle, 2, 1, 2 };
+            yield return new object[] { false, (int)User32.WindowMessage.WM_MBUTTONDBLCLK, PARAM.FromLowHigh(-1, -2), IntPtr.Zero, IntPtr.Zero, MouseButtons.Middle, 2, -1, -2 };
+
+            yield return new object[] { true, (int)User32.WindowMessage.WM_RBUTTONDOWN, IntPtr.Zero, IntPtr.Zero, (IntPtr)250, MouseButtons.Right, 1, 0, 0 };
+            yield return new object[] { true, (int)User32.WindowMessage.WM_RBUTTONDOWN, PARAM.FromLowHigh(1, 2), IntPtr.Zero, (IntPtr)250, MouseButtons.Right, 1, 1, 2 };
+            yield return new object[] { true, (int)User32.WindowMessage.WM_RBUTTONDOWN, PARAM.FromLowHigh(-1, -2), IntPtr.Zero, (IntPtr)250, MouseButtons.Right, 1, -1, -2 };
+            yield return new object[] { false, (int)User32.WindowMessage.WM_RBUTTONDOWN, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, MouseButtons.Right, 1, 0, 0 };
+            yield return new object[] { false, (int)User32.WindowMessage.WM_RBUTTONDOWN, PARAM.FromLowHigh(1, 2), IntPtr.Zero, IntPtr.Zero, MouseButtons.Right, 1, 1, 2 };
+            yield return new object[] { false, (int)User32.WindowMessage.WM_RBUTTONDOWN, PARAM.FromLowHigh(-1, -2), IntPtr.Zero, IntPtr.Zero, MouseButtons.Right, 1, -1, -2 };
+
+            yield return new object[] { true, (int)User32.WindowMessage.WM_RBUTTONDBLCLK, IntPtr.Zero, IntPtr.Zero, (IntPtr)250, MouseButtons.Right, 2, 0, 0 };
+            yield return new object[] { true, (int)User32.WindowMessage.WM_RBUTTONDBLCLK, PARAM.FromLowHigh(1, 2), IntPtr.Zero, (IntPtr)250, MouseButtons.Right, 2, 1, 2 };
+            yield return new object[] { true, (int)User32.WindowMessage.WM_RBUTTONDBLCLK, PARAM.FromLowHigh(-1, -2), IntPtr.Zero, (IntPtr)250, MouseButtons.Right, 2, -1, -2 };
+            yield return new object[] { false, (int)User32.WindowMessage.WM_RBUTTONDBLCLK, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, MouseButtons.Right, 2, 0, 0 };
+            yield return new object[] { false, (int)User32.WindowMessage.WM_RBUTTONDBLCLK, PARAM.FromLowHigh(1, 2), IntPtr.Zero, IntPtr.Zero, MouseButtons.Right, 2, 1, 2 };
+            yield return new object[] { false, (int)User32.WindowMessage.WM_RBUTTONDBLCLK, PARAM.FromLowHigh(-1, -2), IntPtr.Zero, IntPtr.Zero, MouseButtons.Right, 2, -1, -2 };
+
+            yield return new object[] { true, (int)User32.WindowMessage.WM_XBUTTONDOWN, IntPtr.Zero, IntPtr.Zero, (IntPtr)250, MouseButtons.None, 1, 0, 0 };
+            yield return new object[] { true, (int)User32.WindowMessage.WM_XBUTTONDOWN, PARAM.FromLowHigh(1, 2), IntPtr.Zero, (IntPtr)250, MouseButtons.None, 1, 1, 2 };
+            yield return new object[] { true, (int)User32.WindowMessage.WM_XBUTTONDOWN, PARAM.FromLowHigh(-1, -2), IntPtr.Zero, (IntPtr)250, MouseButtons.None, 1, -1, -2 };
+            yield return new object[] { false, (int)User32.WindowMessage.WM_XBUTTONDOWN, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, MouseButtons.None, 1, 0, 0 };
+            yield return new object[] { false, (int)User32.WindowMessage.WM_XBUTTONDOWN, PARAM.FromLowHigh(1, 2), IntPtr.Zero, IntPtr.Zero, MouseButtons.None, 1, 1, 2 };
+            yield return new object[] { false, (int)User32.WindowMessage.WM_XBUTTONDOWN, PARAM.FromLowHigh(-1, -2), IntPtr.Zero, IntPtr.Zero, MouseButtons.None, 1, -1, -2 };
+
+            yield return new object[] { true, (int)User32.WindowMessage.WM_XBUTTONDOWN, IntPtr.Zero, PARAM.FromLowHigh(2, 1), (IntPtr)250, MouseButtons.XButton1, 1, 0, 0 };
+            yield return new object[] { true, (int)User32.WindowMessage.WM_XBUTTONDOWN, PARAM.FromLowHigh(1, 2), PARAM.FromLowHigh(2, 1), (IntPtr)250, MouseButtons.XButton1, 1, 1, 2 };
+            yield return new object[] { true, (int)User32.WindowMessage.WM_XBUTTONDOWN, PARAM.FromLowHigh(-1, -2), PARAM.FromLowHigh(2, 1), (IntPtr)250, MouseButtons.XButton1, 1, -1, -2 };
+            yield return new object[] { false, (int)User32.WindowMessage.WM_XBUTTONDOWN, IntPtr.Zero, PARAM.FromLowHigh(2, 1), IntPtr.Zero, MouseButtons.XButton1, 1, 0, 0 };
+            yield return new object[] { false, (int)User32.WindowMessage.WM_XBUTTONDOWN, PARAM.FromLowHigh(1, 2), PARAM.FromLowHigh(2, 1), IntPtr.Zero, MouseButtons.XButton1, 1, 1, 2 };
+            yield return new object[] { false, (int)User32.WindowMessage.WM_XBUTTONDOWN, PARAM.FromLowHigh(-1, -2), PARAM.FromLowHigh(2, 1), IntPtr.Zero, MouseButtons.XButton1, 1, -1, -2 };
+
+            yield return new object[] { true, (int)User32.WindowMessage.WM_XBUTTONDOWN, IntPtr.Zero, PARAM.FromLowHigh(1, 2), (IntPtr)250, MouseButtons.XButton2, 1, 0, 0 };
+            yield return new object[] { true, (int)User32.WindowMessage.WM_XBUTTONDOWN, PARAM.FromLowHigh(1, 2), PARAM.FromLowHigh(1, 2), (IntPtr)250, MouseButtons.XButton2, 1, 1, 2 };
+            yield return new object[] { true, (int)User32.WindowMessage.WM_XBUTTONDOWN, PARAM.FromLowHigh(-1, -2), PARAM.FromLowHigh(1, 2), (IntPtr)250, MouseButtons.XButton2, 1, -1, -2 };
+            yield return new object[] { false, (int)User32.WindowMessage.WM_XBUTTONDOWN, IntPtr.Zero, PARAM.FromLowHigh(1, 2), IntPtr.Zero, MouseButtons.XButton2, 1, 0, 0 };
+            yield return new object[] { false, (int)User32.WindowMessage.WM_XBUTTONDOWN, PARAM.FromLowHigh(1, 2), PARAM.FromLowHigh(1, 2), IntPtr.Zero, MouseButtons.XButton2, 1, 1, 2 };
+            yield return new object[] { false, (int)User32.WindowMessage.WM_XBUTTONDOWN, PARAM.FromLowHigh(-1, -2), PARAM.FromLowHigh(1, 2), IntPtr.Zero, MouseButtons.XButton2, 1, -1, -2 };
+
+            yield return new object[] { true, (int)User32.WindowMessage.WM_XBUTTONDBLCLK, IntPtr.Zero, IntPtr.Zero, (IntPtr)250, MouseButtons.None, 2, 0, 0 };
+            yield return new object[] { true, (int)User32.WindowMessage.WM_XBUTTONDBLCLK, PARAM.FromLowHigh(1, 2), IntPtr.Zero, (IntPtr)250, MouseButtons.None, 2, 1, 2 };
+            yield return new object[] { true, (int)User32.WindowMessage.WM_XBUTTONDBLCLK, PARAM.FromLowHigh(-1, -2), IntPtr.Zero, (IntPtr)250, MouseButtons.None, 2, -1, -2 };
+            yield return new object[] { false, (int)User32.WindowMessage.WM_XBUTTONDBLCLK, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, MouseButtons.None, 2, 0, 0 };
+            yield return new object[] { false, (int)User32.WindowMessage.WM_XBUTTONDBLCLK, PARAM.FromLowHigh(1, 2), IntPtr.Zero, IntPtr.Zero, MouseButtons.None, 2, 1, 2 };
+            yield return new object[] { false, (int)User32.WindowMessage.WM_XBUTTONDBLCLK, PARAM.FromLowHigh(-1, -2), IntPtr.Zero, IntPtr.Zero, MouseButtons.None, 2, -1, -2 };
+
+            yield return new object[] { true, (int)User32.WindowMessage.WM_XBUTTONDBLCLK, IntPtr.Zero, PARAM.FromLowHigh(2, 1), (IntPtr)250, MouseButtons.XButton1, 2, 0, 0 };
+            yield return new object[] { true, (int)User32.WindowMessage.WM_XBUTTONDBLCLK, PARAM.FromLowHigh(1, 2), PARAM.FromLowHigh(2, 1), (IntPtr)250, MouseButtons.XButton1, 2, 1, 2 };
+            yield return new object[] { true, (int)User32.WindowMessage.WM_XBUTTONDBLCLK, PARAM.FromLowHigh(-1, -2), PARAM.FromLowHigh(2, 1), (IntPtr)250, MouseButtons.XButton1, 2, -1, -2 };
+            yield return new object[] { false, (int)User32.WindowMessage.WM_XBUTTONDBLCLK, IntPtr.Zero, PARAM.FromLowHigh(2, 1), IntPtr.Zero, MouseButtons.XButton1, 2, 0, 0 };
+            yield return new object[] { false, (int)User32.WindowMessage.WM_XBUTTONDBLCLK, PARAM.FromLowHigh(1, 2), PARAM.FromLowHigh(2, 1), IntPtr.Zero, MouseButtons.XButton1, 2, 1, 2 };
+            yield return new object[] { false, (int)User32.WindowMessage.WM_XBUTTONDBLCLK, PARAM.FromLowHigh(-1, -2), PARAM.FromLowHigh(2, 1), IntPtr.Zero, MouseButtons.XButton1, 2, -1, -2 };
+
+            yield return new object[] { true, (int)User32.WindowMessage.WM_XBUTTONDBLCLK, IntPtr.Zero, PARAM.FromLowHigh(1, 2), (IntPtr)250, MouseButtons.XButton2, 2, 0, 0 };
+            yield return new object[] { true, (int)User32.WindowMessage.WM_XBUTTONDBLCLK, PARAM.FromLowHigh(1, 2), PARAM.FromLowHigh(1, 2), (IntPtr)250, MouseButtons.XButton2, 2, 1, 2 };
+            yield return new object[] { true, (int)User32.WindowMessage.WM_XBUTTONDBLCLK, PARAM.FromLowHigh(-1, -2), PARAM.FromLowHigh(1, 2), (IntPtr)250, MouseButtons.XButton2, 2, -1, -2 };
+            yield return new object[] { false, (int)User32.WindowMessage.WM_XBUTTONDBLCLK, IntPtr.Zero, PARAM.FromLowHigh(1, 2), IntPtr.Zero, MouseButtons.XButton2, 2, 0, 0 };
+            yield return new object[] { false, (int)User32.WindowMessage.WM_XBUTTONDBLCLK, PARAM.FromLowHigh(1, 2), PARAM.FromLowHigh(1, 2), IntPtr.Zero, MouseButtons.XButton2, 2, 1, 2 };
+            yield return new object[] { false, (int)User32.WindowMessage.WM_XBUTTONDBLCLK, PARAM.FromLowHigh(-1, -2), PARAM.FromLowHigh(1, 2), IntPtr.Zero, MouseButtons.XButton2, 2, -1, -2 };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(WndProc_MouseDown_TestData))]
+        public void Control_WndProc_InvokeMouseDownWithoutHandle_Success(bool userMouse, int msg, IntPtr lParam, IntPtr wParam, IntPtr expectedResult, MouseButtons expectedButton, int expectedClicks, int expectedX, int expectedY)
+        {
+            using (new NoAssertContext())
+            {
+                using var control = new SubControl();
+                control.SetStyle(ControlStyles.UserMouse, userMouse);
+                int callCount = 0;
+                control.MouseDown += (sender, e) =>
+                {
+                    Assert.Same(control, sender);
+                    Assert.Equal(expectedButton, e.Button);
+                    Assert.Equal(expectedClicks, e.Clicks);
+                    Assert.Equal(expectedX, e.X);
+                    Assert.Equal(expectedY, e.Y);
+                    Assert.Equal(0, e.Delta);
+                    callCount++;
+                };
+                var m = new Message
+                {
+                    Msg = msg,
+                    LParam = lParam,
+                    WParam = wParam,
+                    Result = (IntPtr)250
+                };
+                control.WndProc(ref m);
+                Assert.Equal(expectedResult, m.Result);
+                Assert.Equal(1, callCount);
+                Assert.True(control.Capture);
+                Assert.False(control.Focused);
+                Assert.True(control.IsHandleCreated);
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(WndProc_MouseDown_TestData))]
+        public void Control_WndProc_InvokeMouseDownWithoutHandleNotSelectable_Success(bool userMouse, int msg, IntPtr lParam, IntPtr wParam, IntPtr expectedResult, MouseButtons expectedButton, int expectedClicks, int expectedX, int expectedY)
+        {
+            using (new NoAssertContext())
+            {
+                using var control = new SubControl();
+                control.SetStyle(ControlStyles.UserMouse, userMouse);
+                control.SetStyle(ControlStyles.Selectable, false);
+                int callCount = 0;
+                control.MouseDown += (sender, e) =>
+                {
+                    Assert.Same(control, sender);
+                    Assert.Equal(expectedButton, e.Button);
+                    Assert.Equal(expectedClicks, e.Clicks);
+                    Assert.Equal(expectedX, e.X);
+                    Assert.Equal(expectedY, e.Y);
+                    Assert.Equal(0, e.Delta);
+                    callCount++;
+                };
+                var m = new Message
+                {
+                    Msg = msg,
+                    LParam = lParam,
+                    WParam = wParam,
+                    Result = (IntPtr)250
+                };
+                control.WndProc(ref m);
+                Assert.Equal(expectedResult, m.Result);
+                Assert.Equal(1, callCount);
+                Assert.True(control.Capture);
+                Assert.False(control.Focused);
+                Assert.True(control.IsHandleCreated);
+            }
+        }
+
+        [WinFormsTheory]
+        [InlineData((int)User32.WindowMessage.WM_LBUTTONDOWN)]
+        [InlineData((int)User32.WindowMessage.WM_LBUTTONDBLCLK)]
+        [InlineData((int)User32.WindowMessage.WM_MBUTTONDOWN)]
+        [InlineData((int)User32.WindowMessage.WM_MBUTTONDBLCLK)]
+        [InlineData((int)User32.WindowMessage.WM_RBUTTONDOWN)]
+        [InlineData((int)User32.WindowMessage.WM_RBUTTONDBLCLK)]
+        [InlineData((int)User32.WindowMessage.WM_XBUTTONDOWN)]
+        [InlineData((int)User32.WindowMessage.WM_XBUTTONDBLCLK)]
+        public void Control_WndProc_InvokeMouseDownWithoutHandleNotEnabled_DoesNotCallMouseDown(int msg)
+        {
+            using (new NoAssertContext())
+            {
+                using var control = new SubControl
+                {
+                    Enabled = false
+                };
+                int callCount = 0;
+                control.MouseDown += (sender, e) => callCount++;
+                var m = new Message
+                {
+                    Msg = msg,
+                    Result = (IntPtr)250
+                };
+                control.WndProc(ref m);
+                Assert.Equal(IntPtr.Zero, m.Result);
+                Assert.Equal(0, callCount);
+                Assert.True(control.Capture);
+                Assert.False(control.Focused);
+                Assert.True(control.IsHandleCreated);
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(WndProc_MouseDown_TestData))]
+        public void Control_WndProc_InvokeMouseDownWithHandle_Success(bool userMouse, int msg, IntPtr lParam, IntPtr wParam, IntPtr expectedResult, MouseButtons expectedButton, int expectedClicks, int expectedX, int expectedY)
+        {
+            using var control = new SubControl();
+            control.SetStyle(ControlStyles.UserMouse, userMouse);
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            int callCount = 0;
+            control.MouseDown += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Equal(expectedButton, e.Button);
+                Assert.Equal(expectedClicks, e.Clicks);
+                Assert.Equal(expectedX, e.X);
+                Assert.Equal(expectedY, e.Y);
+                Assert.Equal(0, e.Delta);
+                callCount++;
+            };
+            var m = new Message
+            {
+                Msg = msg,
+                LParam = lParam,
+                WParam = wParam,
+                Result = (IntPtr)250
+            };
+            control.WndProc(ref m);
+            Assert.Equal(expectedResult, m.Result);
+            Assert.Equal(1, callCount);
+            Assert.True(control.Capture);
+            Assert.False(control.Focused);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(WndProc_MouseDown_TestData))]
+        public void Control_WndProc_InvokeMouseDownWithHandleNotSelectable_DoesNotCallMouseDown(bool userMouse, int msg, IntPtr lParam, IntPtr wParam, IntPtr expectedResult, MouseButtons expectedButton, int expectedClicks, int expectedX, int expectedY)
+        {
+            using var control = new SubControl();
+            control.SetStyle(ControlStyles.UserMouse, userMouse);
+            control.SetStyle(ControlStyles.Selectable, false);
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            int callCount = 0;
+            control.MouseDown += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Equal(expectedButton, e.Button);
+                Assert.Equal(expectedClicks, e.Clicks);
+                Assert.Equal(expectedX, e.X);
+                Assert.Equal(expectedY, e.Y);
+                Assert.Equal(0, e.Delta);
+                callCount++;
+            };
+            var m = new Message
+            {
+                Msg = msg,
+                LParam = lParam,
+                WParam = wParam,
+                Result = (IntPtr)250
+            };
+            control.WndProc(ref m);
+            Assert.Equal(expectedResult, m.Result);
+            Assert.Equal(1, callCount);
+            Assert.True(control.Capture);
+            Assert.False(control.Focused);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsTheory]
+        [InlineData((int)User32.WindowMessage.WM_LBUTTONDOWN)]
+        [InlineData((int)User32.WindowMessage.WM_LBUTTONDBLCLK)]
+        [InlineData((int)User32.WindowMessage.WM_MBUTTONDOWN)]
+        [InlineData((int)User32.WindowMessage.WM_MBUTTONDBLCLK)]
+        [InlineData((int)User32.WindowMessage.WM_RBUTTONDOWN)]
+        [InlineData((int)User32.WindowMessage.WM_RBUTTONDBLCLK)]
+        [InlineData((int)User32.WindowMessage.WM_XBUTTONDOWN)]
+        [InlineData((int)User32.WindowMessage.WM_XBUTTONDBLCLK)]
+        public void Control_WndProc_InvokeMouseDownWithHandleNotEnabled_DoesNotCallMouseDown(int msg)
+        {
+            using var control = new SubControl
+            {
+                Enabled = false
+            };
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            int callCount = 0;
+            control.MouseDown += (sender, e) => callCount++;
+            var m = new Message
+            {
+                Msg = msg,
+                Result = (IntPtr)250
+            };
+            control.WndProc(ref m);
+            Assert.Equal(IntPtr.Zero, m.Result);
+            Assert.Equal(0, callCount);
+            Assert.True(control.Capture);
+            Assert.False(control.Focused);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
         }
 
         [WinFormsFact]

@@ -16,13 +16,8 @@ namespace System.Windows.Forms.Tests
     using Point = System.Drawing.Point;
     using Size = System.Drawing.Size;
 
-    public class TabControlTests
+    public class TabControlTests : IClassFixture<ThreadExceptionFixture>
     {
-        public TabControlTests()
-        {
-            Application.ThreadException += (sender, e) => throw new Exception(e.Exception.StackTrace.ToString());
-        }
-
         [WinFormsFact]
         public void TabControl_Ctor_Default()
         {
@@ -4733,28 +4728,6 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void TabControl_RecreateHandle_InvokeWithHandle_Success()
-        {
-            using var control = new SubTabControl();
-            IntPtr handle1 = control.Handle;
-            Assert.NotEqual(IntPtr.Zero, handle1);
-            Assert.True(control.IsHandleCreated);
-
-            control.RecreateHandle();
-            IntPtr handle2 = control.Handle;
-            Assert.NotEqual(IntPtr.Zero, handle2);
-            Assert.NotEqual(handle1, handle2);
-            Assert.True(control.IsHandleCreated);
-
-            // Invoke again.
-            control.RecreateHandle();
-            IntPtr handle3 = control.Handle;
-            Assert.NotEqual(IntPtr.Zero, handle3);
-            Assert.NotEqual(handle2, handle3);
-            Assert.True(control.IsHandleCreated);
-        }
-
-        [WinFormsFact]
         public void TabControl_RecreateHandle_InvokeWithoutHandle_Nop()
         {
             using var control = new SubTabControl();
@@ -4764,6 +4737,345 @@ namespace System.Windows.Forms.Tests
             // Invoke again.
             control.RecreateHandle();
             Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void TabControl_RecreateHandle_InvokeEmptyWithHandle_Success()
+        {
+            using var control = new SubTabControl();
+            IntPtr handle1 = control.Handle;
+            Assert.NotEqual(IntPtr.Zero, handle1);
+            Assert.Empty(control.Controls);
+            Assert.Empty(control.TabPages);
+            Assert.True(control.IsHandleCreated);
+
+            control.RecreateHandle();
+            IntPtr handle2 = control.Handle;
+            Assert.NotEqual(IntPtr.Zero, handle2);
+            Assert.NotEqual(handle1, handle2);
+            Assert.Empty(control.Controls);
+            Assert.Empty(control.TabPages);
+            Assert.True(control.IsHandleCreated);
+
+            // Invoke again.
+            control.RecreateHandle();
+            IntPtr handle3 = control.Handle;
+            Assert.NotEqual(IntPtr.Zero, handle3);
+            Assert.NotEqual(handle2, handle3);
+            Assert.Empty(control.Controls);
+            Assert.Empty(control.TabPages);
+            Assert.True(control.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void TabControl_RecreateHandle_InvokeNotEmptyWithHandle_Success()
+        {
+            using var page1 = new TabPage();
+            using var page2 = new TabPage();
+            using var control = new SubTabControl();
+            control.TabPages.Add(page1);
+            control.TabPages.Add(page2);
+
+            IntPtr handle1 = control.Handle;
+            Assert.NotEqual(IntPtr.Zero, handle1);
+            Assert.Equal(new Control[] { page1, page2 }, control.Controls.Cast<Control>());
+            Assert.Equal(new TabPage[] { page1, page2 }, control.TabPages.Cast<TabPage>());
+            Assert.True(control.IsHandleCreated);
+
+            control.RecreateHandle();
+            IntPtr handle2 = control.Handle;
+            Assert.NotEqual(IntPtr.Zero, handle2);
+            Assert.NotEqual(handle1, handle2);
+            Assert.Equal(new Control[] { page1, page2 }, control.Controls.Cast<Control>());
+            Assert.Equal(new TabPage[] { page1, page2 }, control.TabPages.Cast<TabPage>());
+            Assert.True(control.IsHandleCreated);
+
+            // Invoke again.
+            control.RecreateHandle();
+            IntPtr handle3 = control.Handle;
+            Assert.NotEqual(IntPtr.Zero, handle3);
+            Assert.NotEqual(handle2, handle3);
+            Assert.Equal(new Control[] { page1, page2 }, control.Controls.Cast<Control>());
+            Assert.Equal(new TabPage[] { page1, page2 }, control.TabPages.Cast<TabPage>());
+            Assert.True(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData("Text", "Text")]
+        [InlineData("&&Text", "&&Text")]
+        [InlineData("&", "&&")]
+        [InlineData("&Text", "&&Text")]
+        public unsafe void TabControl_RecreateHandle_GetItemsWithHandle_Success(string text, string expectedText)
+        {
+            using var control = new SubTabControl();
+            using var page1 = new TabPage();
+            using var page2 = new TabPage
+            {
+                Text = text,
+                ImageIndex = 1
+            };
+            using var page3 = new NullTextTabPage();
+            control.TabPages.Add(page1);
+            control.TabPages.Add(page2);
+            control.TabPages.Add(page3);
+
+            control.RecreateHandle();
+            Assert.Equal((IntPtr)3, User32.SendMessageW(control.Handle, (User32.WindowMessage)ComCtl32.TCM.GETITEMCOUNT, IntPtr.Zero, IntPtr.Zero));
+
+            char* buffer = stackalloc char[256];
+            ComCtl32.TCITEMW item = default;
+            item.cchTextMax = int.MaxValue;
+            item.pszText = buffer;
+            item.dwStateMask = (ComCtl32.TCIS)uint.MaxValue;
+            item.mask = (ComCtl32.TCIF)uint.MaxValue;
+
+            // Get item 0.
+            Assert.Equal((IntPtr)1, User32.SendMessageW(control.Handle, (User32.WindowMessage)ComCtl32.TCM.GETITEMW, (IntPtr)0, ref item));
+            Assert.Equal(ComCtl32.TCIS.BUTTONPRESSED, item.dwState);
+            Assert.Equal(IntPtr.Zero, item.lParam);
+            Assert.Equal(int.MaxValue, item.cchTextMax);
+            Assert.Empty(new string(item.pszText));
+            Assert.Equal(-1, item.iImage);
+
+            // Get item 1.
+            Assert.Equal((IntPtr)1, User32.SendMessageW(control.Handle, (User32.WindowMessage)ComCtl32.TCM.GETITEMW, (IntPtr)1, ref item));
+            Assert.Equal((ComCtl32.TCIS)0, item.dwState);
+            Assert.Equal(IntPtr.Zero, item.lParam);
+            Assert.Equal(int.MaxValue, item.cchTextMax);
+            Assert.Equal(expectedText, new string(item.pszText));
+            Assert.Equal(1, item.iImage);
+            
+            // Get item 2.
+            Assert.Equal((IntPtr)1, User32.SendMessageW(control.Handle, (User32.WindowMessage)ComCtl32.TCM.GETITEMW, (IntPtr)2, ref item));
+            Assert.Equal((ComCtl32.TCIS)0, item.dwState);
+            Assert.Equal(IntPtr.Zero, item.lParam);
+            Assert.Equal(int.MaxValue, item.cchTextMax);
+            Assert.Empty(new string(item.pszText));
+            Assert.Equal(-1, item.iImage);
+        }
+
+        [WinFormsFact]
+        public void TabControl_RemoveAll_InvokeEmpty_Success()
+        {
+            using var control = new SubTabControl();
+            int layoutCallCount = 0;
+            void layoutHandler(object sender, LayoutEventArgs e) => layoutCallCount++;
+            control.Layout += layoutHandler;
+            int controlRemovedCallCount = 0;
+            control.ControlRemoved += (sender, e) => controlRemovedCallCount++;
+
+            try
+            {
+                control.RemoveAll();
+                Assert.Empty(control.TabPages);
+                Assert.Empty(control.Controls);
+                Assert.Equal(0, layoutCallCount);
+                Assert.Equal(0, controlRemovedCallCount);
+                Assert.False(control.IsHandleCreated);
+                
+                // RemoveAll again.
+                control.RemoveAll();
+                Assert.Empty(control.TabPages);
+                Assert.Empty(control.Controls);
+                Assert.Equal(0, layoutCallCount);
+                Assert.Equal(0, controlRemovedCallCount);
+                Assert.False(control.IsHandleCreated);
+            }
+            finally
+            {
+                control.Layout -= layoutHandler;
+            }
+        }
+
+        [WinFormsFact]
+        public void TabControl_RemoveAll_InvokeNotEmpty_Success()
+        {
+            using var control = new SubTabControl();
+            using var child1 = new TabPage();
+            using var child2 = new TabPage();
+            using var child3 = new TabPage();
+            control.TabPages.Add(child1);
+            control.TabPages.Add(child2);
+            control.TabPages.Add(child3);
+            int layoutCallCount = 0;
+            void layoutHandler(object sender, LayoutEventArgs e)
+            {
+                Assert.Same(control, sender);
+                Assert.Same(child3, e.AffectedControl);
+                Assert.Equal("Parent", e.AffectedProperty);
+                layoutCallCount++;
+            }
+            control.Layout += layoutHandler;
+            int controlRemovedCallCount = 0;
+            control.ControlRemoved += (sender, e) => controlRemovedCallCount++;
+
+            try
+            {
+                control.RemoveAll();
+                Assert.Empty(control.TabPages);
+                Assert.Empty(control.Controls);
+                Assert.Null(child1.Parent);
+                Assert.Null(child2.Parent);
+                Assert.Null(child3.Parent);
+                Assert.Equal(1, layoutCallCount);
+                Assert.Equal(3, controlRemovedCallCount);
+                Assert.False(control.IsHandleCreated);
+                Assert.False(child1.IsHandleCreated);
+                Assert.False(child2.IsHandleCreated);
+                Assert.False(child3.IsHandleCreated);
+                
+                // RemoveAll again.
+                control.RemoveAll();
+                Assert.Empty(control.TabPages);
+                Assert.Empty(control.Controls);
+                Assert.Null(child1.Parent);
+                Assert.Null(child2.Parent);
+                Assert.Null(child3.Parent);
+                Assert.Equal(1, layoutCallCount);
+                Assert.Equal(3, controlRemovedCallCount);
+                Assert.False(control.IsHandleCreated);
+                Assert.False(child1.IsHandleCreated);
+                Assert.False(child2.IsHandleCreated);
+                Assert.False(child3.IsHandleCreated);
+            }
+            finally
+            {
+                control.Layout -= layoutHandler;
+            }
+        }
+
+        [WinFormsFact]
+        public void TabControl_RemoveAll_InvokeEmptyWithHandle_Success()
+        {
+            using var control = new SubTabControl();
+
+            int controlRemovedCallCount = 0;
+            control.ControlRemoved += (sender, e) => controlRemovedCallCount++;
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int parentInvalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => parentInvalidatedCallCount++;
+            int parentStyleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => parentStyleChangedCallCount++;
+            int parentCreatedCallCount = 0;
+            control.HandleCreated += (sender, e) => parentCreatedCallCount++;
+            int layoutCallCount = 0;
+            void layoutHandler(object sender, LayoutEventArgs e) => layoutCallCount++;
+            control.Layout += layoutHandler;
+
+            try
+            {
+                control.RemoveAll();
+                Assert.Empty(control.TabPages);
+                Assert.Empty(control.Controls);
+                Assert.Equal(0, layoutCallCount);
+                Assert.Equal(0, controlRemovedCallCount);
+                Assert.True(control.IsHandleCreated);
+                Assert.Equal(0, parentInvalidatedCallCount);
+                Assert.Equal(0, parentStyleChangedCallCount);
+                Assert.Equal(0, parentCreatedCallCount);
+                
+                // RemoveAll again.
+                control.RemoveAll();
+                Assert.Empty(control.TabPages);
+                Assert.Empty(control.Controls);
+                Assert.Equal(0, layoutCallCount);
+                Assert.Equal(0, controlRemovedCallCount);
+                Assert.True(control.IsHandleCreated);
+                Assert.Equal(0, parentInvalidatedCallCount);
+                Assert.Equal(0, parentStyleChangedCallCount);
+                Assert.Equal(0, parentCreatedCallCount);
+            }
+            finally
+            {
+                control.Layout -= layoutHandler;
+            }
+        }
+
+        [WinFormsFact]
+        public void TabControl_RemoveAll_InvokeNotEmptyWithHandle_Success()
+        {
+            using var control = new SubTabControl();
+            using var child1 = new TabPage();
+            using var child2 = new TabPage();
+            using var child3 = new TabPage();
+            control.TabPages.Add(child1);
+            control.TabPages.Add(child2);
+            control.TabPages.Add(child3);
+
+            int controlRemovedCallCount = 0;
+            control.ControlRemoved += (sender, e) => controlRemovedCallCount++;
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int parentInvalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => parentInvalidatedCallCount++;
+            int parentStyleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => parentStyleChangedCallCount++;
+            int parentCreatedCallCount = 0;
+            control.HandleCreated += (sender, e) => parentCreatedCallCount++;
+            int layoutCallCount = 0;
+            void layoutHandler(object sender, LayoutEventArgs e)
+            {
+                Assert.Same(control, sender);
+                Assert.Same(child3, e.AffectedControl);
+                Assert.Equal("Parent", e.AffectedProperty);
+                layoutCallCount++;
+            };
+            control.Layout += layoutHandler;
+
+            try
+            {
+                control.RemoveAll();
+                Assert.Empty(control.TabPages);
+                Assert.Empty(control.Controls);
+                Assert.Null(child1.Parent);
+                Assert.Null(child2.Parent);
+                Assert.Null(child3.Parent);
+                Assert.Equal(1, layoutCallCount);
+                Assert.Equal(3, controlRemovedCallCount);
+                Assert.True(control.IsHandleCreated);
+                Assert.Equal(0, parentInvalidatedCallCount);
+                Assert.Equal(0, parentStyleChangedCallCount);
+                Assert.Equal(0, parentCreatedCallCount);
+                Assert.True(child1.IsHandleCreated);
+                Assert.False(child2.IsHandleCreated);
+                Assert.False(child3.IsHandleCreated);
+                
+                // RemoveAll again.
+                control.RemoveAll();
+                Assert.Empty(control.TabPages);
+                Assert.Empty(control.Controls);
+                Assert.Null(child1.Parent);
+                Assert.Null(child2.Parent);
+                Assert.Null(child3.Parent);
+                Assert.Equal(1, layoutCallCount);
+                Assert.Equal(3, controlRemovedCallCount);
+                Assert.True(control.IsHandleCreated);
+                Assert.Equal(0, parentInvalidatedCallCount);
+                Assert.Equal(0, parentStyleChangedCallCount);
+                Assert.Equal(0, parentCreatedCallCount);
+                Assert.True(child1.IsHandleCreated);
+                Assert.False(child2.IsHandleCreated);
+                Assert.False(child3.IsHandleCreated);
+            }
+            finally
+            {
+                control.Layout -= layoutHandler;
+            }
+        }
+
+        [WinFormsFact]
+        public void TabControl_RemoveAll_GetItemsWithHandle_Success()
+        {
+            using var control = new SubTabControl();
+            using var child1 = new TabPage();
+            using var child2 = new TabPage();
+            using var child3 = new TabPage();
+            control.TabPages.Add(child1);
+            control.TabPages.Add(child2);
+            control.TabPages.Add(child3);
+
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            control.RemoveAll();
+            Assert.Equal((IntPtr)0, User32.SendMessageW(control.Handle, (User32.WindowMessage)ComCtl32.TCM.GETITEMCOUNT, IntPtr.Zero, IntPtr.Zero));
         }
 
         [WinFormsFact]
@@ -5365,6 +5677,8 @@ namespace System.Windows.Forms.Tests
             public new void OnSelecting(TabControlCancelEventArgs e) => base.OnSelecting(e);
 
             public new void RecreateHandle() => base.RecreateHandle();
+
+            public new void RemoveAll() => base.RemoveAll();
 
             public new void SetStyle(ControlStyles flag, bool value) => base.SetStyle(flag, value);
         }

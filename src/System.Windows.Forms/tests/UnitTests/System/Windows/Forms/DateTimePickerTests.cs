@@ -13,13 +13,8 @@ namespace System.Windows.Forms.Tests
     using Point = System.Drawing.Point;
     using Size = System.Drawing.Size;
 
-    public class DateTimePickerTests
+    public class DateTimePickerTests : IClassFixture<ThreadExceptionFixture>
     {
-        public DateTimePickerTests()
-        {
-            Application.ThreadException += (sender, e) => throw new Exception(e.Exception.StackTrace.ToString());
-        }
-
         [WinFormsFact]
         public void DateTimePicker_Ctor_Default()
         {

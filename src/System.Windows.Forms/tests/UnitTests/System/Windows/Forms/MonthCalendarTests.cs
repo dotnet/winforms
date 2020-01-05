@@ -5,12 +5,17 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using System.Globalization;
 using WinForms.Common.Tests;
 using Xunit;
+using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
-    public class MonthCalendarTests
+    using Point = System.Drawing.Point;
+    using Size = System.Drawing.Size;
+
+    public class MonthCalendarTests : IClassFixture<ThreadExceptionFixture>
     {
         [WinFormsFact]
         public void MonthCalendar_Ctor_Default()
@@ -945,6 +950,189 @@ namespace System.Windows.Forms.Tests
             control.ForeColor = Color.Red;
             Assert.Equal(Color.Red, control.ForeColor);
             Assert.Equal(2, callCount);
+        }
+
+        [WinFormsFact]
+        public void MonthCalendar_Handle_GetWithSelectionRange_Success()
+        {
+            var lower = new DateTime(2019, 1, 30, 3, 4, 5, 6);
+            var upper = new DateTime(2019, 2, 3, 4, 5, 6, 7);
+            using var control = new SubMonthCalendar
+            {
+                SelectionRange = new SelectionRange(lower, upper)
+            };
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            Span<Kernel32.SYSTEMTIME> range = stackalloc Kernel32.SYSTEMTIME[2];
+            Assert.Equal((IntPtr)1, User32.SendMessageW(control.Handle, (User32.WindowMessage)ComCtl32.MCM.GETSELRANGE, IntPtr.Zero, ref range[0]));
+            Assert.Equal(2019, range[0].wYear);
+            Assert.Equal(1, range[0].wMonth);
+            Assert.Equal(30, range[0].wDay);
+            Assert.Equal(3, range[0].wDayOfWeek);
+            Assert.True(range[0].wHour >= 0);
+            Assert.True(range[0].wMinute >= 0);
+            Assert.True(range[0].wSecond >= 0);
+            Assert.True(range[0].wMilliseconds >= 0);
+            Assert.Equal(2019, range[1].wYear);
+            Assert.Equal(2, range[1].wMonth);
+            Assert.Equal(3, range[1].wDay);
+            Assert.Equal(0, range[1].wDayOfWeek);
+            Assert.True(range[1].wHour >= 0);
+            Assert.True(range[1].wMinute >= 0);
+            Assert.True(range[1].wSecond >= 0);
+            Assert.True(range[1].wMilliseconds >= 0);
+        }
+        
+        [WinFormsFact]
+        public void MonthCalendar_Handle_GetWithMaxSelectionCount_Success()
+        {
+            using var control = new SubMonthCalendar
+            {
+                MaxSelectionCount = 10
+            };
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            Assert.Equal((IntPtr)10, User32.SendMessageW(control.Handle, (User32.WindowMessage)ComCtl32.MCM.GETMAXSELCOUNT, IntPtr.Zero, IntPtr.Zero));
+        }
+
+        [WinFormsFact]
+        public void MonthCalendar_Handle_GetWithTodayDate_Success()
+        {
+            using var control = new SubMonthCalendar
+            {
+                TodayDate = new DateTime(2019, 1, 30, 3, 4, 5, 6)
+            };
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            Kernel32.SYSTEMTIME date = default;
+            Assert.Equal((IntPtr)1, User32.SendMessageW(control.Handle, (User32.WindowMessage)ComCtl32.MCM.GETTODAY, IntPtr.Zero, ref date));
+            Assert.Equal(2019, date.wYear);
+            Assert.Equal(1, date.wMonth);
+            Assert.Equal(30, date.wDay);
+            Assert.Equal(3, date.wDayOfWeek);
+            Assert.Equal(0, date.wHour);
+            Assert.Equal(0, date.wMinute);
+            Assert.Equal(0, date.wSecond);
+            Assert.Equal(0, date.wMilliseconds);
+        }
+        
+        [WinFormsFact]
+        public void MonthCalendar_Handle_GetWithForeColor_Success()
+        {
+            using var control = new SubMonthCalendar
+            {
+                ForeColor = Color.FromArgb(0x12, 0x34, 0x56, 0x78)
+            };
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            Assert.Equal((IntPtr)0x785634, User32.SendMessageW(control.Handle, (User32.WindowMessage)ComCtl32.MCM.GETCOLOR, (IntPtr)ComCtl32.MCSC.TEXT, IntPtr.Zero));
+        }
+        
+        [WinFormsFact]
+        public void MonthCalendar_Handle_GetWithBackColor_Success()
+        {
+            using var control = new SubMonthCalendar
+            {
+                BackColor = Color.FromArgb(0xFF, 0x12, 0x34, 0x56)
+            };
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            Assert.Equal((IntPtr)0x563412, User32.SendMessageW(control.Handle, (User32.WindowMessage)ComCtl32.MCM.GETCOLOR, (IntPtr)ComCtl32.MCSC.MONTHBK, IntPtr.Zero));
+        }
+        
+        [WinFormsFact]
+        public void MonthCalendar_Handle_GetWithTitleBackColor_Success()
+        {
+            using var control = new SubMonthCalendar
+            {
+                TitleBackColor = Color.FromArgb(0x12, 0x34, 0x56, 0x78)
+            };
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            Assert.Equal((IntPtr)0x785634, User32.SendMessageW(control.Handle, (User32.WindowMessage)ComCtl32.MCM.GETCOLOR, (IntPtr)ComCtl32.MCSC.TITLEBK, IntPtr.Zero));
+        }
+        
+        [WinFormsFact]
+        public void MonthCalendar_Handle_GetWithTitleForeColor_Success()
+        {
+            using var control = new SubMonthCalendar
+            {
+                TitleForeColor = Color.FromArgb(0x12, 0x34, 0x56, 0x78)
+            };
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            Assert.Equal((IntPtr)0x785634, User32.SendMessageW(control.Handle, (User32.WindowMessage)ComCtl32.MCM.GETCOLOR, (IntPtr)ComCtl32.MCSC.TITLETEXT, IntPtr.Zero));
+        }
+        
+        [WinFormsFact]
+        public void MonthCalendar_Handle_GetWithTrailingForeColor_Success()
+        {
+            using var control = new SubMonthCalendar
+            {
+                TrailingForeColor = Color.FromArgb(0x12, 0x34, 0x56, 0x78)
+            };
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            Assert.Equal((IntPtr)0x785634, User32.SendMessageW(control.Handle, (User32.WindowMessage)ComCtl32.MCM.GETCOLOR, (IntPtr)ComCtl32.MCSC.TRAILINGTEXT, IntPtr.Zero));
+        }
+        
+        [WinFormsFact]
+        public void MonthCalendar_Handle_GetWithDefaultFirstDayOfWeek_Success()
+        {
+            using var control = new SubMonthCalendar
+            {
+                FirstDayOfWeek = Day.Default
+            };
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int expected = (int)CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek + 6;
+            while (expected > 6)
+            {
+                expected -= 7;
+            }
+            Assert.Equal((IntPtr)expected, User32.SendMessageW(control.Handle, (User32.WindowMessage)ComCtl32.MCM.GETFIRSTDAYOFWEEK, IntPtr.Zero, IntPtr.Zero));
+        }
+        
+        [WinFormsFact]
+        public void MonthCalendar_Handle_GetWithFirstDayOfWeek_Success()
+        {
+            using var control = new SubMonthCalendar
+            {
+                FirstDayOfWeek = Day.Tuesday
+            };
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            Assert.Equal((IntPtr)0x10001, User32.SendMessageW(control.Handle, (User32.WindowMessage)ComCtl32.MCM.GETFIRSTDAYOFWEEK, IntPtr.Zero, IntPtr.Zero));
+        }
+        
+        [WinFormsFact]
+        public void MonthCalendar_Handle_GetWithRange_Success()
+        {
+            using var control = new SubMonthCalendar
+            {
+                MinDate = new DateTime(2019, 1, 2, 3, 4, 5, 6),
+                MaxDate = new DateTime(2020, 2, 3, 4, 5, 6, 7)
+            };
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            Span<Kernel32.SYSTEMTIME> range = stackalloc Kernel32.SYSTEMTIME[2];
+            Assert.Equal((IntPtr)3, User32.SendMessageW(control.Handle, (User32.WindowMessage)ComCtl32.MCM.GETRANGE, IntPtr.Zero, ref range[0]));
+            Assert.Equal(2019, range[0].wYear);
+            Assert.Equal(1, range[0].wMonth);
+            Assert.Equal(2, range[0].wDay);
+            Assert.Equal(3, range[0].wDayOfWeek);
+            Assert.Equal(3, range[0].wHour);
+            Assert.Equal(4, range[0].wMinute);
+            Assert.Equal(5, range[0].wSecond);
+            Assert.Equal(0, range[0].wMilliseconds);
+            Assert.Equal(2020, range[1].wYear);
+            Assert.Equal(2, range[1].wMonth);
+            Assert.Equal(3, range[1].wDay);
+            Assert.Equal(1, range[1].wDayOfWeek);
+            Assert.Equal(4, range[1].wHour);
+            Assert.Equal(5, range[1].wMinute);
+            Assert.Equal(6, range[1].wSecond);
+            Assert.Equal(0, range[1].wMilliseconds);
+        }
+        
+        [WinFormsFact]
+        public void MonthCalendar_Handle_GetWithScrollChange_Success()
+        {
+            using var control = new SubMonthCalendar
+            {
+                ScrollChange = 10
+            };
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            Assert.Equal((IntPtr)10, User32.SendMessageW(control.Handle, (User32.WindowMessage)ComCtl32.MCM.GETMONTHDELTA, IntPtr.Zero, IntPtr.Zero));
         }
 
         public static IEnumerable<object[]> ImeMode_Set_TestData()
@@ -2026,12 +2214,14 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createdCallCount);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void MonthCalendar_CreateAccessibilityInstance_Invoke_ReturnsExpected()
         {
             using var control = new SubMonthCalendar();
-            AccessibleObject instance = control.CreateAccessibilityInstance();
+            Control.ControlAccessibleObject instance = Assert.IsAssignableFrom<Control.ControlAccessibleObject>(control.CreateAccessibilityInstance());
             Assert.NotNull(instance);
+            Assert.Same(control, instance.Owner);
+            Assert.Equal(AccessibleRole.Table, instance.Role);
             Assert.NotSame(control.CreateAccessibilityInstance(), instance);
             Assert.NotSame(control.AccessibilityObject, instance);
         }
@@ -2156,16 +2346,93 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createdCallCount);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void MonthCalendar_SingleMonthSize_GetWithHandle_ReturnsExpected()
         {
             using var control = new MonthCalendar();
             Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
 
             Size size = control.SingleMonthSize;
-            Assert.True(size.Width > 0);
-            Assert.True(size.Height > 0);
+            Assert.True(size.Width >= 176);
+            Assert.True(size.Height >= 153);
             Assert.Equal(size, control.SingleMonthSize);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        public static IEnumerable<object[]> SingleMonthSize_GetCustomGetMinReqRect_TestData()
+        {
+            yield return new object[] { new RECT(0, 0, 0, 0), Size.Empty };
+            yield return new object[] { new RECT(1, 2, 3, 4), new Size(3, 4) };
+            yield return new object[] { new RECT(1, 2, 1, 6), new Size(1, 6) };
+            yield return new object[] { new RECT(1, 2, 6, 1), new Size(6, 1) };
+            yield return new object[] { new RECT(1, 2, 6, 6), new Size(6, 6) };
+            yield return new object[] { new RECT(1, 2, 30, 40), new Size(30, 40) };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(SingleMonthSize_GetCustomGetMinReqRect_TestData))]
+        public void MonthCalendar_SingleMonthSize_GetCustomGetMinReqRect_ReturnsExpected(object getMinReqRectResult, Size expected)
+        {
+            using var control = new CustomGetMinReqRectMonthCalendar
+            {
+                GetMinReqRectResult = (RECT)getMinReqRectResult
+            };
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+
+            Assert.Equal(expected, control.SingleMonthSize);
+        }
+
+        private class CustomGetMinReqRectMonthCalendar : MonthCalendar
+        {
+            public RECT GetMinReqRectResult { get; set; }
+
+            protected unsafe override void WndProc(ref Message m)
+            {
+                if (m.Msg == (int)ComCtl32.MCM.GETMINREQRECT)
+                {
+                    RECT* pRect = (RECT*)m.LParam;
+                    *pRect = GetMinReqRectResult;
+                    m.Result = (IntPtr)1;
+                    return;
+                }
+
+                base.WndProc(ref m);
+            }
+        }
+
+        [WinFormsFact]
+        public void MonthCalendar_SingleMonthSize_GetInvalidGetMinReqRect_ThrowsInvalidOperationException()
+        {
+            using var control = new InvalidGetMinReqRectMonthCalendar();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+
+            control.MakeInvalid = true;
+            Assert.Throws<InvalidOperationException>(() => control.SingleMonthSize);
+        }
+
+        private class InvalidGetMinReqRectMonthCalendar : MonthCalendar
+        {
+            public bool MakeInvalid { get; set; }
+
+            protected override void WndProc(ref Message m)
+            {
+                if (MakeInvalid && m.Msg == (int)ComCtl32.MCM.GETMINREQRECT)
+                {
+                    m.Result = IntPtr.Zero;
+                    return;
+                }
+
+                base.WndProc(ref m);
+            }
         }
 
         public static IEnumerable<object[]> Size_Set_TestData()
@@ -3215,6 +3482,112 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
+            Assert.True(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void MonthCalendar_OnHandleCreated_Invoke_CallsHandleCreated(EventArgs eventArgs)
+        {
+            using var control = new SubMonthCalendar();
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+        
+            // Call with handler.
+            control.HandleCreated += handler;
+            control.OnHandleCreated(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.False(control.IsHandleCreated);
+        
+            // Remove handler.
+            control.HandleCreated -= handler;
+            control.OnHandleCreated(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void MonthCalendar_OnHandleCreated_InvokeWithHandle_CallsHandleCreated(EventArgs eventArgs)
+        {
+            using var control = new SubMonthCalendar();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+        
+            // Call with handler.
+            control.HandleCreated += handler;
+            control.OnHandleCreated(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.True(control.IsHandleCreated);
+        
+            // Remove handler.
+            control.HandleCreated -= handler;
+            control.OnHandleCreated(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.True(control.IsHandleCreated);
+        }
+        
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void MonthCalendar_OnHandleDestroyed_Invoke_CallsHandleDestroyed(EventArgs eventArgs)
+        {
+            using var control = new SubMonthCalendar();
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+        
+            // Call with handler.
+            control.HandleDestroyed += handler;
+            control.OnHandleDestroyed(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.False(control.IsHandleCreated);
+        
+            // Remove handler.
+            control.HandleDestroyed -= handler;
+            control.OnHandleDestroyed(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.False(control.IsHandleCreated);
+        }
+        
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void MonthCalendar_OnHandleDestroyed_InvokeWithHandle_CallsHandleDestroyed(EventArgs eventArgs)
+        {
+            using var control = new SubMonthCalendar();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+        
+            // Call with handler.
+            control.HandleDestroyed += handler;
+            control.OnHandleDestroyed(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.True(control.IsHandleCreated);
+        
+            // Remove handler.
+            control.HandleDestroyed -= handler;
+            control.OnHandleDestroyed(eventArgs);
+            Assert.Equal(1, callCount);
             Assert.True(control.IsHandleCreated);
         }
 

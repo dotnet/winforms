@@ -2,11 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
 using System.Collections;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
@@ -1113,19 +1111,19 @@ namespace System.Drawing.Design
                 switch (msg)
                 {
                     case WindowMessages.WM_INITDIALOG:
-                        NativeMethods.SendDlgItemMessage(hwnd, COLOR_HUE, EditMessages.EM_SETMARGINS, (IntPtr)(NativeMethods.EC_LEFTMARGIN | NativeMethods.EC_RIGHTMARGIN), IntPtr.Zero);
-                        NativeMethods.SendDlgItemMessage(hwnd, COLOR_SAT, EditMessages.EM_SETMARGINS, (IntPtr)(NativeMethods.EC_LEFTMARGIN | NativeMethods.EC_RIGHTMARGIN), IntPtr.Zero);
-                        NativeMethods.SendDlgItemMessage(hwnd, COLOR_LUM, EditMessages.EM_SETMARGINS, (IntPtr)(NativeMethods.EC_LEFTMARGIN | NativeMethods.EC_RIGHTMARGIN), IntPtr.Zero);
-                        NativeMethods.SendDlgItemMessage(hwnd, COLOR_RED, EditMessages.EM_SETMARGINS, (IntPtr)(NativeMethods.EC_LEFTMARGIN | NativeMethods.EC_RIGHTMARGIN), IntPtr.Zero);
-                        NativeMethods.SendDlgItemMessage(hwnd, COLOR_GREEN, EditMessages.EM_SETMARGINS, (IntPtr)(NativeMethods.EC_LEFTMARGIN | NativeMethods.EC_RIGHTMARGIN), IntPtr.Zero);
-                        NativeMethods.SendDlgItemMessage(hwnd, COLOR_BLUE, EditMessages.EM_SETMARGINS, (IntPtr)(NativeMethods.EC_LEFTMARGIN | NativeMethods.EC_RIGHTMARGIN), IntPtr.Zero);
-                        IntPtr hwndCtl = NativeMethods.GetDlgItem(hwnd, COLOR_MIX);
+                        UnsafeNativeMethods.SendDlgItemMessage(hwnd, COLOR_HUE, EditMessages.EM_SETMARGINS, (IntPtr)(NativeMethods.EC_LEFTMARGIN | NativeMethods.EC_RIGHTMARGIN), IntPtr.Zero);
+                        UnsafeNativeMethods.SendDlgItemMessage(hwnd, COLOR_SAT, EditMessages.EM_SETMARGINS, (IntPtr)(NativeMethods.EC_LEFTMARGIN | NativeMethods.EC_RIGHTMARGIN), IntPtr.Zero);
+                        UnsafeNativeMethods.SendDlgItemMessage(hwnd, COLOR_LUM, EditMessages.EM_SETMARGINS, (IntPtr)(NativeMethods.EC_LEFTMARGIN | NativeMethods.EC_RIGHTMARGIN), IntPtr.Zero);
+                        UnsafeNativeMethods.SendDlgItemMessage(hwnd, COLOR_RED, EditMessages.EM_SETMARGINS, (IntPtr)(NativeMethods.EC_LEFTMARGIN | NativeMethods.EC_RIGHTMARGIN), IntPtr.Zero);
+                        UnsafeNativeMethods.SendDlgItemMessage(hwnd, COLOR_GREEN, EditMessages.EM_SETMARGINS, (IntPtr)(NativeMethods.EC_LEFTMARGIN | NativeMethods.EC_RIGHTMARGIN), IntPtr.Zero);
+                        UnsafeNativeMethods.SendDlgItemMessage(hwnd, COLOR_BLUE, EditMessages.EM_SETMARGINS, (IntPtr)(NativeMethods.EC_LEFTMARGIN | NativeMethods.EC_RIGHTMARGIN), IntPtr.Zero);
+                        IntPtr hwndCtl = UnsafeNativeMethods.GetDlgItem(hwnd, COLOR_MIX);
                         User32.EnableWindow(hwndCtl, BOOL.FALSE);
                         User32.SetWindowPos(
                             hwndCtl,
                             User32.HWND_TOP,
                             flags: User32.SWP.HIDEWINDOW);
-                        hwndCtl = NativeMethods.GetDlgItem(hwnd, NativeMethods.IDOK);
+                        hwndCtl = UnsafeNativeMethods.GetDlgItem(hwnd, (int)User32.ID.OK);
                         User32.EnableWindow(hwndCtl, BOOL.FALSE);
                         User32.SetWindowPos(
                             hwndCtl,
@@ -1133,24 +1131,26 @@ namespace System.Drawing.Design
                             flags: User32.SWP.HIDEWINDOW);
                         this.Color = Color.Empty;
                         break;
+
                     case WindowMessages.WM_COMMAND:
                         switch (PARAM.LOWORD(wParam))
                         {
                             case COLOR_ADD:
                                 byte red, green, blue;
                                 bool[] err = new bool[1];
-                                red = (byte)NativeMethods.GetDlgItemInt(hwnd, COLOR_RED, err, false);
+                                red = (byte)UnsafeNativeMethods.GetDlgItemInt(hwnd, COLOR_RED, err, false);
                                 Debug.Assert(!err[0], "Couldn't find dialog member COLOR_RED");
-                                green = (byte)NativeMethods.GetDlgItemInt(hwnd, COLOR_GREEN, err, false);
+                                green = (byte)UnsafeNativeMethods.GetDlgItemInt(hwnd, COLOR_GREEN, err, false);
                                 Debug.Assert(!err[0], "Couldn't find dialog member COLOR_GREEN");
-                                blue = (byte)NativeMethods.GetDlgItemInt(hwnd, COLOR_BLUE, err, false);
+                                blue = (byte)UnsafeNativeMethods.GetDlgItemInt(hwnd, COLOR_BLUE, err, false);
                                 Debug.Assert(!err[0], "Couldn't find dialog member COLOR_BLUE");
                                 this.Color = Color.FromArgb(red, green, blue);
-                                User32.PostMessageW(hwnd, User32.WindowMessage.WM_COMMAND, PARAM.FromLowHigh(NativeMethods.IDOK, 0), NativeMethods.GetDlgItem(hwnd, NativeMethods.IDOK));
+                                User32.PostMessageW(hwnd, User32.WindowMessage.WM_COMMAND, PARAM.FromLowHigh((int)User32.ID.OK, 0), UnsafeNativeMethods.GetDlgItem(hwnd, (int)User32.ID.OK));
                                 break;
                         }
                         break;
                 }
+
                 return base.HookProc(hwnd, msg, wParam, lParam);
             }
         }

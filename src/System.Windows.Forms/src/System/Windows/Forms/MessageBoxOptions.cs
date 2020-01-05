@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using static Interop.User32;
+
 namespace System.Windows.Forms
 {
     [Flags]
@@ -10,21 +12,21 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Specifies that the message box is displayed on the active desktop.
         /// </summary>
-        ServiceNotification = 0x00200000,
+        ServiceNotification = (int)MB.SERVICE_NOTIFICATION,
 
         /// <summary>
         ///  Specifies that the message box is displayed on the active desktop.
         /// </summary>
-        DefaultDesktopOnly = 0x00020000,
+        DefaultDesktopOnly = (int)MB.DEFAULT_DESKTOP_ONLY,
 
         /// <summary>
         ///  Specifies that the message box text is right-aligned.
         /// </summary>
-        RightAlign = 0x00080000,
+        RightAlign = (int)MB.RIGHT,
 
         /// <summary>
         ///  Specifies that the message box text is displayed with Rtl reading order.
         /// </summary>
-        RtlReading = 0x00100000,
+        RtlReading = (int)MB.RTLREADING,
     }
 }

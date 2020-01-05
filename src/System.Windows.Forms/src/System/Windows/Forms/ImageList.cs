@@ -583,7 +583,7 @@ namespace System.Windows.Forms
             }
 
             // We enclose the imagelist handle create in a theming scope.
-            IntPtr userCookie = ThemingScope.Activate();
+            IntPtr userCookie = ThemingScope.Activate(Application.UseVisualStyles);
 
             try
             {
@@ -1043,7 +1043,6 @@ namespace System.Windows.Forms
 
             internal Original(object image, OriginalOptions options, Color customTransparentColor)
             {
-                Debug.Assert(image != null, "image is null");
                 if (!(image is Icon) && !(image is Image))
                 {
                     throw new InvalidOperationException(SR.ImageListEntryType);

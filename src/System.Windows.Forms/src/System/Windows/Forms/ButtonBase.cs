@@ -197,39 +197,39 @@ namespace System.Windows.Forms
                 {
                     cp.ExStyle &= ~(int)User32.WS_EX.RIGHT;   // WS_EX_RIGHT overrides the BS_XXXX alignment styles
 
-                    cp.Style |= NativeMethods.BS_MULTILINE;
+                    cp.Style |= (int)User32.BS.MULTILINE;
 
                     if (IsDefault)
                     {
-                        cp.Style |= NativeMethods.BS_DEFPUSHBUTTON;
+                        cp.Style |= (int)User32.BS.DEFPUSHBUTTON;
                     }
 
                     ContentAlignment align = RtlTranslateContent(TextAlign);
 
                     if ((int)(align & WindowsFormsUtils.AnyLeftAlign) != 0)
                     {
-                        cp.Style |= NativeMethods.BS_LEFT;
+                        cp.Style |= (int)User32.BS.LEFT;
                     }
                     else if ((int)(align & WindowsFormsUtils.AnyRightAlign) != 0)
                     {
-                        cp.Style |= NativeMethods.BS_RIGHT;
+                        cp.Style |= (int)User32.BS.RIGHT;
                     }
                     else
                     {
-                        cp.Style |= NativeMethods.BS_CENTER;
+                        cp.Style |= (int)User32.BS.CENTER;
 
                     }
                     if ((int)(align & WindowsFormsUtils.AnyTopAlign) != 0)
                     {
-                        cp.Style |= NativeMethods.BS_TOP;
+                        cp.Style |= (int)User32.BS.TOP;
                     }
                     else if ((int)(align & WindowsFormsUtils.AnyBottomAlign) != 0)
                     {
-                        cp.Style |= NativeMethods.BS_BOTTOM;
+                        cp.Style |= (int)User32.BS.BOTTOM;
                     }
                     else
                     {
-                        cp.Style |= NativeMethods.BS_VCENTER;
+                        cp.Style |= (int)User32.BS.VCENTER;
                     }
                 }
                 return cp;

@@ -118,8 +118,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (value != (state[stateAllowTransparency]) &&
-                    OSFeature.Feature.IsPresent(OSFeature.LayeredWindows))
+                if (value != (state[stateAllowTransparency]))
                 {
                     state[stateAllowTransparency] = value;
 
@@ -714,7 +713,7 @@ namespace System.Windows.Forms
                 Properties.SetObject(PropOpacity, value);
 
                 bool oldLayered = (state[stateLayered]);
-                if (OpacityAsByte < 255 && OSFeature.Feature.IsPresent(OSFeature.LayeredWindows))
+                if (OpacityAsByte < 255)
                 {
                     AllowTransparency = true;
                     state[stateLayered] = true;
@@ -1849,7 +1848,7 @@ namespace System.Windows.Forms
                         // Snap the foreground window BEFORE calling any user events so they
                         // dont have a chance to activate something else. This covers the case
                         // where someone handles the opening event and throws up a messagebox.
-                        IntPtr foregroundWindow = UnsafeNativeMethods.GetForegroundWindow();
+                        IntPtr foregroundWindow = User32.GetForegroundWindow();
 
                         // Fire Opening event
                         // Cancellable event in which default value of e.Cancel depends on
@@ -1907,7 +1906,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    if (GetVisibleCore())
+                    if (Visible)
                     {
                         ToolStripDropDownCloseReason reason = closeReason;
                         ResetCloseReason();
@@ -2073,7 +2072,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void UpdateLayered()
         {
-            if (state[stateLayered] && IsHandleCreated && TopLevel && OSFeature.Feature.IsPresent(OSFeature.LayeredWindows))
+            if (state[stateLayered] && IsHandleCreated && TopLevel)
             {
                 bool result;
 

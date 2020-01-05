@@ -13,13 +13,8 @@ namespace System.Windows.Forms.Tests
     using Size = System.Drawing.Size;
     using Point = System.Drawing.Point;
 
-    public partial class ControlTests
+    public partial class ControlTests : IClassFixture<ThreadExceptionFixture>
     {
-        public ControlTests()
-        {
-            Application.ThreadException += (sender, e) => throw new Exception(e.Exception.StackTrace.ToString());
-        }
-
         [WinFormsFact]
         public void Control_Ctor_Default()
         {
@@ -980,6 +975,10 @@ namespace System.Windows.Forms.Tests
             public new void OnTabStopChanged(EventArgs e) => base.OnTabStopChanged(e);
 
             public new void OnTextChanged(EventArgs e) => base.OnTextChanged(e);
+
+            public new void OnValidated(EventArgs e) => base.OnValidated(e);
+
+            public new void OnValidating(CancelEventArgs e) => base.OnValidating(e);
 
             public new void OnVisibleChanged(EventArgs e) => base.OnVisibleChanged(e);
 

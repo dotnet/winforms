@@ -14,13 +14,8 @@ namespace System.Windows.Forms.Design.Tests
     using Point = System.Drawing.Point;
     using Size = System.Drawing.Size;
 
-    public class ComponentEditorPageTests
+    public class ComponentEditorPageTests : IClassFixture<ThreadExceptionFixture>
     {
-        public ComponentEditorPageTests()
-        {
-            Application.ThreadException += (sender, e) => throw new Exception(e.Exception.StackTrace.ToString());
-        }
-
         [WinFormsFact]
         public void ComponentEditorPagePanel_Ctor_Default()
         {
@@ -156,29 +151,32 @@ namespace System.Windows.Forms.Design.Tests
             Assert.False(control.IsHandleCreated);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ComponentEditorPage_AutoSize_Set_GetReturnsExpected(bool value)
         {
-            var control = new SubComponentEditorPage
+            using var control = new SubComponentEditorPage
             {
                 AutoSize = value
             };
             Assert.Equal(value, control.AutoSize);
+            Assert.False(control.IsHandleCreated);
 
             // Set same.
             control.AutoSize = value;
             Assert.Equal(value, control.AutoSize);
+            Assert.False(control.IsHandleCreated);
 
             // Set different.
             control.AutoSize = !value;
             Assert.Equal(!value, control.AutoSize);
+            Assert.False(control.IsHandleCreated);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ComponentEditorPage_AutoSize_SetWithHandler_CallsAutoSizeChanged()
         {
-            var control = new SubComponentEditorPage
+            using var control = new SubComponentEditorPage
             {
                 AutoSize = true
             };
@@ -213,23 +211,26 @@ namespace System.Windows.Forms.Design.Tests
             Assert.Equal(2, callCount);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ComponentEditorPage_CommitOnDeactivate_Set_GetReturnsExpected(bool value)
         {
-            var page = new SubComponentEditorPage
+            using var control = new SubComponentEditorPage
             {
                 CommitOnDeactivate = value
             };
-            Assert.Equal(value, page.CommitOnDeactivate);
+            Assert.Equal(value, control.CommitOnDeactivate);
+            Assert.False(control.IsHandleCreated);
 
             // Set same.
-            page.CommitOnDeactivate = value;
-            Assert.Equal(value, page.CommitOnDeactivate);
+            control.CommitOnDeactivate = value;
+            Assert.Equal(value, control.CommitOnDeactivate);
+            Assert.False(control.IsHandleCreated);
 
             // Set different.
-            page.CommitOnDeactivate = value;
-            Assert.Equal(value, page.CommitOnDeactivate);
+            control.CommitOnDeactivate = value;
+            Assert.Equal(value, control.CommitOnDeactivate);
+            Assert.False(control.IsHandleCreated);
         }
 
         public static IEnumerable<object[]> Component_Set_TestData()
@@ -241,163 +242,194 @@ namespace System.Windows.Forms.Design.Tests
             yield return new object[] { mockComponent.Object };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(Component_Set_TestData))]
         public void ComponentEditorPage_Component_Set_GetReturnsExpected(IComponent value)
         {
-            var page = new SubComponentEditorPage
+            using var control = new SubComponentEditorPage
             {
                 Component = value
             };
-            Assert.Same(value, page.Component);
-            Assert.Same(value, page.GetSelectedComponent());
+            Assert.Same(value, control.Component);
+            Assert.Same(value, control.GetSelectedComponent());
+            Assert.False(control.IsHandleCreated);
 
             // Set same.
-            page.Component = value;
-            Assert.Same(value, page.Component);
-            Assert.Same(value, page.GetSelectedComponent());
+            control.Component = value;
+            Assert.Same(value, control.Component);
+            Assert.Same(value, control.GetSelectedComponent());
+            Assert.False(control.IsHandleCreated);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ComponentEditorPage_FirstActivate_Set_GetReturnsExpected(bool value)
         {
-            var page = new SubComponentEditorPage
+            using var control = new SubComponentEditorPage
             {
                 FirstActivate = value
             };
-            Assert.Equal(value, page.FirstActivate);
+            Assert.Equal(value, control.FirstActivate);
+            Assert.False(control.IsHandleCreated);
 
             // Set same.
-            page.FirstActivate = value;
-            Assert.Equal(value, page.FirstActivate);
+            control.FirstActivate = value;
+            Assert.Equal(value, control.FirstActivate);
+            Assert.False(control.IsHandleCreated);
 
             // Set different.
-            page.FirstActivate = value;
-            Assert.Equal(value, page.FirstActivate);
+            control.FirstActivate = value;
+            Assert.Equal(value, control.FirstActivate);
+            Assert.False(control.IsHandleCreated);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ComponentEditorPage_Icon_Set_GetReturnsExpected()
         {
             using (var value = Icon.FromHandle(new Bitmap(10, 10).GetHicon()))
             {
-                var page = new SubComponentEditorPage
+                using var control = new SubComponentEditorPage
                 {
                     Icon = value
                 };
-                Assert.Same(value, page.Icon);
+                Assert.Same(value, control.Icon);
+                Assert.False(control.IsHandleCreated);
 
                 // Set same.
-                page.Icon = value;
-                Assert.Same(value, page.Icon);
+                control.Icon = value;
+                Assert.Same(value, control.Icon);
+                Assert.False(control.IsHandleCreated);
 
                 // Set null.
-                page.Icon = null;
-                Assert.NotSame(value, page.Icon);
-                Assert.NotNull(page.Icon);
-                Assert.Same(page.Icon, page.Icon);
+                control.Icon = null;
+                Assert.NotSame(value, control.Icon);
+                Assert.NotNull(control.Icon);
+                Assert.Same(control.Icon, control.Icon);
+                Assert.False(control.IsHandleCreated);
             }
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(-1, true)]
         [InlineData(0, false)]
         [InlineData(1, true)]
         public void ComponentEditorPage_Loading_Set_GetReturnsExpected(int value, bool expectedIsLoading)
         {
-            var page = new SubComponentEditorPage
+            using var control = new SubComponentEditorPage
             {
                 Loading = value
             };
-            Assert.Equal(value, page.Loading);
-            Assert.Equal(expectedIsLoading, page.IsLoading());
+            Assert.Equal(value, control.Loading);
+            Assert.Equal(expectedIsLoading, control.IsLoading());
+            Assert.False(control.IsHandleCreated);
 
             // Set same.
-            page.Loading = value;
-            Assert.Equal(value, page.Loading);
-            Assert.Equal(expectedIsLoading, page.IsLoading());
+            control.Loading = value;
+            Assert.Equal(value, control.Loading);
+            Assert.Equal(expectedIsLoading, control.IsLoading());
+            Assert.False(control.IsHandleCreated);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ComponentEditorPage_LoadRequired_Set_GetReturnsExpected(bool value)
         {
-            var page = new SubComponentEditorPage
+            using var control = new SubComponentEditorPage
             {
                 LoadRequired = value
             };
-            Assert.Equal(value, page.LoadRequired);
+            Assert.Equal(value, control.LoadRequired);
+            Assert.False(control.IsHandleCreated);
 
             // Set same.
-            page.LoadRequired = value;
-            Assert.Equal(value, page.LoadRequired);
+            control.LoadRequired = value;
+            Assert.Equal(value, control.LoadRequired);
+            Assert.False(control.IsHandleCreated);
 
             // Set different.
-            page.LoadRequired = value;
-            Assert.Equal(value, page.LoadRequired);
+            control.LoadRequired = value;
+            Assert.Equal(value, control.LoadRequired);
+            Assert.False(control.IsHandleCreated);
         }
 
-        public static IEnumerable<object[]> PageSite_TestData()
+        public static IEnumerable<object[]> PageSite_Set_TestData()
         {
             yield return new object[] { null };
             var mockComponentEditorPageSite = new Mock<IComponentEditorPageSite>(MockBehavior.Strict);
             yield return new object[] { mockComponentEditorPageSite.Object };
         }
 
-        [Theory]
-        [MemberData(nameof(PageSite_TestData))]
+        [WinFormsTheory]
+        [MemberData(nameof(PageSite_Set_TestData))]
         public void ComponentEditorPage_PageSite_Set_GetReturnsExpected(IComponentEditorPageSite value)
         {
-            var page = new SubComponentEditorPage
+            using var control = new SubComponentEditorPage
             {
                 PageSite = value
             };
-            Assert.Same(value, page.PageSite);
+            Assert.Same(value, control.PageSite);
+            Assert.False(control.IsHandleCreated);
 
             // Set same.
-            page.PageSite = value;
-            Assert.Same(value, page.PageSite);
+            control.PageSite = value;
+            Assert.Same(value, control.PageSite);
+            Assert.False(control.IsHandleCreated);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void ComponentEditorPage_Text_Set_GetReturnsExpected(string value, string expected)
         {
-            var control = new SubComponentEditorPage
+            using var control = new SubComponentEditorPage
             {
                 Text = value
             };
             Assert.Equal(expected, control.Text);
             Assert.Equal(expected, control.Title);
+            Assert.False(control.IsHandleCreated);
 
             // Set same.
             control.Text = value;
             Assert.Equal(expected, control.Text);
             Assert.Equal(expected, control.Title);
+            Assert.False(control.IsHandleCreated);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void ComponentEditorPage_Text_SetWithHandle_GetReturnsExpected(string value, string expected)
         {
-            var control = new SubComponentEditorPage();
+            using var control = new SubComponentEditorPage();
             Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
 
             control.Text = value;
             Assert.Equal(expected, control.Text);
             Assert.Equal(expected, control.Title);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
 
             // Set same.
             control.Text = value;
             Assert.Equal(expected, control.Text);
             Assert.Equal(expected, control.Title);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ComponentEditorPage_Text_SetWithHandler_CallsTextChanged()
         {
-            var control = new SubComponentEditorPage();
+            using var control = new SubComponentEditorPage();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -409,14 +441,14 @@ namespace System.Windows.Forms.Design.Tests
 
             // Set different.
             control.Text = "text";
-            Assert.Same("text", control.Text);
-            Assert.Same("text", control.Title);
+            Assert.Equal("text", control.Text);
+            Assert.Equal("text", control.Title);
             Assert.Equal(1, callCount);
 
             // Set same.
             control.Text = "text";
-            Assert.Same("text", control.Text);
-            Assert.Same("text", control.Title);
+            Assert.Equal("text", control.Text);
+            Assert.Equal("text", control.Title);
             Assert.Equal(1, callCount);
 
             // Set different.
@@ -428,186 +460,183 @@ namespace System.Windows.Forms.Design.Tests
             // Remove handler.
             control.TextChanged -= handler;
             control.Text = "text";
-            Assert.Same("text", control.Text);
-            Assert.Same("text", control.Title);
+            Assert.Equal("text", control.Text);
+            Assert.Equal("text", control.Title);
             Assert.Equal(2, callCount);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(true, 1)]
         [InlineData(false, 0)]
         public void ComponentEditorPage_Activate_Invoke_SetsVisible(bool loadRequired, int expectedLoadComponentCallCount)
         {
-            var page = new SubComponentEditorPage
+            using var control = new SubComponentEditorPage
             {
                 LoadRequired = loadRequired
             };
-            page.Activate();
-            Assert.Equal(expectedLoadComponentCallCount, page.LoadComponentCallCount);
-            Assert.Equal(0, page.Loading);
-            Assert.False(page.LoadRequired);
-            Assert.True(page.Visible);
+            control.Activate();
+            Assert.Equal(expectedLoadComponentCallCount, control.LoadComponentCallCount);
+            Assert.Equal(0, control.Loading);
+            Assert.False(control.LoadRequired);
+            Assert.True(control.Visible);
+            Assert.False(control.IsHandleCreated);
 
             // Call again.
-            page.Activate();
-            Assert.Equal(expectedLoadComponentCallCount, page.LoadComponentCallCount);
-            Assert.Equal(0, page.Loading);
-            Assert.False(page.LoadRequired);
-            Assert.True(page.Visible);
+            control.Activate();
+            Assert.Equal(expectedLoadComponentCallCount, control.LoadComponentCallCount);
+            Assert.Equal(0, control.Loading);
+            Assert.False(control.LoadRequired);
+            Assert.True(control.Visible);
+            Assert.False(control.IsHandleCreated);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ComponentEditorPage_ApplyChanges_Invoke_CallsSaveComponent(bool loadRequired)
         {
-            var page = new SubComponentEditorPage
+            using var control = new SubComponentEditorPage
             {
                 LoadRequired = loadRequired
             };
-            page.ApplyChanges();
-            Assert.Equal(1, page.SaveComponentCallCount);
-            Assert.Equal(0, page.Loading);
-            Assert.Equal(loadRequired, page.LoadRequired);
+            control.ApplyChanges();
+            Assert.Equal(1, control.SaveComponentCallCount);
+            Assert.Equal(0, control.Loading);
+            Assert.Equal(loadRequired, control.LoadRequired);
+            Assert.False(control.IsHandleCreated);
 
             // Call again.
-            page.ApplyChanges();
-            Assert.Equal(2, page.SaveComponentCallCount);
-            Assert.Equal(0, page.Loading);
-            Assert.Equal(loadRequired, page.LoadRequired);
+            control.ApplyChanges();
+            Assert.Equal(2, control.SaveComponentCallCount);
+            Assert.Equal(0, control.Loading);
+            Assert.Equal(loadRequired, control.LoadRequired);
+            Assert.False(control.IsHandleCreated);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(true, 1)]
         [InlineData(false, 0)]
         public void ComponentEditorPage_Deactivate_InvokeActivated_SetsInvisible(bool loadRequired, int expectedLoadComponentCallCount)
         {
-            var page = new SubComponentEditorPage
+            using var control = new SubComponentEditorPage
             {
                 LoadRequired = loadRequired
             };
-            page.Activate();
-            Assert.Equal(expectedLoadComponentCallCount, page.LoadComponentCallCount);
-            Assert.Equal(0, page.Loading);
-            Assert.False(page.LoadRequired);
-            Assert.True(page.Visible);
+            control.Activate();
+            Assert.Equal(expectedLoadComponentCallCount, control.LoadComponentCallCount);
+            Assert.Equal(0, control.Loading);
+            Assert.False(control.LoadRequired);
+            Assert.True(control.Visible);
+            Assert.False(control.IsHandleCreated);
 
-            page.Deactivate();
-            Assert.Equal(expectedLoadComponentCallCount, page.LoadComponentCallCount);
-            Assert.Equal(0, page.Loading);
-            Assert.False(page.LoadRequired);
-            Assert.False(page.Visible);
+            control.Deactivate();
+            Assert.Equal(expectedLoadComponentCallCount, control.LoadComponentCallCount);
+            Assert.Equal(0, control.Loading);
+            Assert.False(control.LoadRequired);
+            Assert.False(control.Visible);
+            Assert.False(control.IsHandleCreated);
 
             // Call again.
-            page.Deactivate();
-            Assert.Equal(expectedLoadComponentCallCount, page.LoadComponentCallCount);
-            Assert.Equal(0, page.Loading);
-            Assert.False(page.LoadRequired);
-            Assert.False(page.Visible);
+            control.Deactivate();
+            Assert.Equal(expectedLoadComponentCallCount, control.LoadComponentCallCount);
+            Assert.Equal(0, control.Loading);
+            Assert.False(control.LoadRequired);
+            Assert.False(control.Visible);
+            Assert.False(control.IsHandleCreated);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ComponentEditorPage_Deactivate_InvokeNotActivated_SetsInvisible(bool loadRequired)
         {
-            var page = new SubComponentEditorPage
+            using var control = new SubComponentEditorPage
             {
                 LoadRequired = loadRequired
             };
-            page.Deactivate();
-            Assert.Equal(0, page.LoadComponentCallCount);
-            Assert.Equal(0, page.Loading);
-            Assert.Equal(loadRequired, page.LoadRequired);
-            Assert.False(page.Visible);
+            control.Deactivate();
+            Assert.Equal(0, control.LoadComponentCallCount);
+            Assert.Equal(0, control.Loading);
+            Assert.Equal(loadRequired, control.LoadRequired);
+            Assert.False(control.Visible);
+            Assert.False(control.IsHandleCreated);
 
             // Call again.
-            page.Deactivate();
-            Assert.Equal(0, page.LoadComponentCallCount);
-            Assert.Equal(0, page.Loading);
-            Assert.Equal(loadRequired, page.LoadRequired);
-            Assert.False(page.Visible);
+            control.Deactivate();
+            Assert.Equal(0, control.LoadComponentCallCount);
+            Assert.Equal(0, control.Loading);
+            Assert.Equal(loadRequired, control.LoadRequired);
+            Assert.False(control.Visible);
+            Assert.False(control.IsHandleCreated);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ComponentEditorPage_EnterLoadingMode_Invoke_IncrementsLoading()
         {
-            var page = new SubComponentEditorPage();
-            page.EnterLoadingMode();
-            Assert.Equal(1, page.Loading);
+            using var control = new SubComponentEditorPage();
+            control.EnterLoadingMode();
+            Assert.Equal(1, control.Loading);
 
             // Call again.
-            page.EnterLoadingMode();
-            Assert.Equal(2, page.Loading);
+            control.EnterLoadingMode();
+            Assert.Equal(2, control.Loading);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ComponentEditorPage_EnterLoadingMode_ExitLoadingMode_Resets()
         {
-            var page = new SubComponentEditorPage();
-            page.EnterLoadingMode();
-            Assert.Equal(1, page.Loading);
+            using var control = new SubComponentEditorPage();
+            control.EnterLoadingMode();
+            Assert.Equal(1, control.Loading);
 
-            page.ExitLoadingMode();
-            Assert.Equal(0, page.Loading);
+            control.ExitLoadingMode();
+            Assert.Equal(0, control.Loading);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ComponentEditorPage_ExitLoadingMode_Invoke_DoesNotDecrementLoading()
         {
-            var page = new SubComponentEditorPage();
-            page.ExitLoadingMode();
-            Assert.Equal(0, page.Loading);
+            using var control = new SubComponentEditorPage();
+            control.ExitLoadingMode();
+            Assert.Equal(0, control.Loading);
 
             // Call again.
-            page.ExitLoadingMode();
-            Assert.Equal(0, page.Loading);
+            control.ExitLoadingMode();
+            Assert.Equal(0, control.Loading);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ComponentEditorPage_ExitLoadingMode_EnterLoadingMode_IncrementsLoading()
         {
-            var page = new SubComponentEditorPage();
-            page.ExitLoadingMode();
-            Assert.Equal(0, page.Loading);
+            using var control = new SubComponentEditorPage();
+            control.ExitLoadingMode();
+            Assert.Equal(0, control.Loading);
 
-            page.EnterLoadingMode();
-            Assert.Equal(1, page.Loading);
+            control.EnterLoadingMode();
+            Assert.Equal(1, control.Loading);
         }
 
-        [Fact]
-        public void ComponentEditorPage_GetControl_InvokeDefault_ReturnsSame()
-        {
-            var page = new SubComponentEditorPage();
-            Assert.Same(page, page.GetControl());
-        }
-
-        [Fact]
-        public void ComponentEditorPage_GetSelectedComponent_InvokeDefault_ReturnsNull()
-        {
-            var page = new SubComponentEditorPage();
-            Assert.Null(page.GetSelectedComponent());
-        }
-
-        [Fact]
+        [WinFormsFact]
         public void ComponentEditorPage_IsFirstActivate_Invoke_ReturnsTrue()
         {
-            var page = new SubComponentEditorPage();
-            Assert.True(page.IsFirstActivate());
+            using var control = new SubComponentEditorPage();
+            Assert.True(control.IsFirstActivate());
+            Assert.False(control.IsHandleCreated);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ComponentEditorPage_IsLoading_Invoke_ReturnsFalse()
         {
-            var page = new SubComponentEditorPage();
-            Assert.False(page.IsLoading());
+            using var control = new SubComponentEditorPage();
+            Assert.False(control.IsLoading());
+            Assert.False(control.IsHandleCreated);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ComponentEditorPage_IsPageMessage_Invoke_ReturnsExpected()
         {
-            var page = new SubComponentEditorPage();
+            using var control = new SubComponentEditorPage();
             var message = new Message();
-            Assert.True(page.IsPageMessage(ref message));
-            Assert.Equal(1, page.PreProcessMessageCallCount);
+            Assert.True(control.IsPageMessage(ref message));
+            Assert.Equal(1, control.PreProcessMessageCallCount);
         }
 
         [WinFormsFact]
@@ -615,6 +644,35 @@ namespace System.Windows.Forms.Design.Tests
         {
             using var control = new SubComponentEditorPage();
             Assert.Equal(AutoSizeMode.GrowOnly, control.GetAutoSizeMode());
+        }
+
+        [WinFormsFact]
+        public void ComponentEditorPage_GetControl_InvokeDefault_ReturnsSame()
+        {
+            using var control = new SubComponentEditorPage();
+            Assert.Same(control, control.GetControl());
+        }
+
+        [WinFormsFact]
+        public void ComponentEditorPage_GetSelectedComponent_InvokeDefault_ReturnsNull()
+        {
+            using var control = new SubComponentEditorPage();
+            Assert.Null(control.GetSelectedComponent());
+        }
+
+        [WinFormsTheory]
+        [InlineData(0, true)]
+        [InlineData(SubComponentEditorPage.ScrollStateAutoScrolling, false)]
+        [InlineData(SubComponentEditorPage.ScrollStateFullDrag, false)]
+        [InlineData(SubComponentEditorPage.ScrollStateHScrollVisible, false)]
+        [InlineData(SubComponentEditorPage.ScrollStateUserHasScrolled, false)]
+        [InlineData(SubComponentEditorPage.ScrollStateVScrollVisible, false)]
+        [InlineData(int.MaxValue, false)]
+        [InlineData((-1), false)]
+        public void ComponentEditorPage_GetScrollState_Invoke_ReturnsExpected(int bit, bool expected)
+        {
+            using var control = new SubComponentEditorPage();
+            Assert.Equal(expected, control.GetScrollState(bit));
         }
 
         [WinFormsTheory]
@@ -647,58 +705,58 @@ namespace System.Windows.Forms.Design.Tests
             Assert.Equal(expected, control.GetStyle(flag));
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(true, false)]
         [InlineData(false, true)]
         public void ComponentEditorPage_OnApplyComplete_Invoke_SetsLoadRequired(bool visible, bool expectedLoadRequired)
         {
-            var page = new SubComponentEditorPage
+            using var control = new SubComponentEditorPage
             {
                 Visible = visible
             };
-            Assert.Equal(visible, page.Visible);
-            page.OnApplyComplete();
-            Assert.Equal(0, page.LoadComponentCallCount);
-            Assert.Equal(0, page.Loading);
-            Assert.Equal(expectedLoadRequired, page.LoadRequired);
+            Assert.Equal(visible, control.Visible);
+            control.OnApplyComplete();
+            Assert.Equal(0, control.LoadComponentCallCount);
+            Assert.Equal(0, control.Loading);
+            Assert.Equal(expectedLoadRequired, control.LoadRequired);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(true, false)]
         [InlineData(false, true)]
         public void ComponentEditorPage_ReloadComponent_Invoke_SetsLoadRequired(bool visible, bool expectedLoadRequired)
         {
-            var page = new SubComponentEditorPage
+            using var control = new SubComponentEditorPage
             {
                 Visible = visible
             };
-            Assert.Equal(visible, page.Visible);
-            page.ReloadComponent();
-            Assert.Equal(0, page.LoadComponentCallCount);
-            Assert.Equal(0, page.Loading);
-            Assert.Equal(expectedLoadRequired, page.LoadRequired);
+            Assert.Equal(visible, control.Visible);
+            control.ReloadComponent();
+            Assert.Equal(0, control.LoadComponentCallCount);
+            Assert.Equal(0, control.Loading);
+            Assert.Equal(expectedLoadRequired, control.LoadRequired);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(Component_Set_TestData))]
         public void ComponentEditorPage_SetComponent_Invoke_SetsComponent(IComponent component)
         {
-            var page = new SubComponentEditorPage();
-            page.SetComponent(component);
-            Assert.Same(component, page.Component);
-            Assert.Equal(0, page.LoadComponentCallCount);
-            Assert.Equal(0, page.Loading);
-            Assert.True(page.LoadRequired);
+            using var control = new SubComponentEditorPage();
+            control.SetComponent(component);
+            Assert.Same(component, control.Component);
+            Assert.Equal(0, control.LoadComponentCallCount);
+            Assert.Equal(0, control.Loading);
+            Assert.True(control.LoadRequired);
 
             // Set same.
-            page.SetComponent(component);
-            Assert.Same(component, page.Component);
-            Assert.Equal(0, page.LoadComponentCallCount);
-            Assert.Equal(0, page.Loading);
-            Assert.True(page.LoadRequired);
+            control.SetComponent(component);
+            Assert.Same(component, control.Component);
+            Assert.Equal(0, control.LoadComponentCallCount);
+            Assert.Equal(0, control.Loading);
+            Assert.True(control.LoadRequired);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(-1, 0)]
         [InlineData(0, 1)]
         [InlineData(1, 0)]
@@ -708,98 +766,112 @@ namespace System.Windows.Forms.Design.Tests
             mockComponentEditorPageSite
                 .Setup(s => s.SetDirty())
                 .Verifiable();
-            var page = new SubComponentEditorPage
+            using var control = new SubComponentEditorPage
             {
                 PageSite = mockComponentEditorPageSite.Object,
                 Loading = loading
             };
-            page.SetDirty();
+            control.SetDirty();
             mockComponentEditorPageSite.Verify(s => s.SetDirty(), Times.Exactly(expectedSetDirtyCallCount));
 
             // Call again.
-            page.SetDirty();
+            control.SetDirty();
             mockComponentEditorPageSite.Verify(s => s.SetDirty(), Times.Exactly(expectedSetDirtyCallCount * 2));
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(-1)]
         [InlineData(0)]
         [InlineData(1)]
         public void ComponentEditorPage_SetDirty_InvokeWithoutPageSite_Nop(int loading)
         {
-            var page = new SubComponentEditorPage
+            using var control = new SubComponentEditorPage
             {
                 Loading = loading
             };
-            page.SetDirty();
-            page.SetDirty();
+            control.SetDirty();
+            control.SetDirty();
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ComponentEditorPage_SetSite_Invoke_SetsPageSite()
         {
-            var control = new Control();
+            using var result = new Control();
             var controlSite = new Mock<IComponentEditorPageSite>(MockBehavior.Strict);
             controlSite
                 .Setup(s => s.GetControl())
-                .Returns(control)
+                .Returns(result)
                 .Verifiable();
             var noControlSite = new Mock<IComponentEditorPageSite>(MockBehavior.Strict);
             noControlSite
                 .Setup(s => s.GetControl())
                 .Returns<Control>(null)
                 .Verifiable();
-            var page = new SubComponentEditorPage();
-            page.SetSite(controlSite.Object);
-            Assert.Same(controlSite.Object, page.PageSite);
-            Assert.Same(page, Assert.Single(control.Controls));
-            Assert.Equal(0, page.LoadComponentCallCount);
-            Assert.Equal(0, page.Loading);
-            Assert.False(page.LoadRequired);
+            using var control = new SubComponentEditorPage();
+            control.SetSite(controlSite.Object);
+            Assert.Same(controlSite.Object, control.PageSite);
+            Assert.Same(control, Assert.Single(result.Controls));
+            Assert.Equal(0, control.LoadComponentCallCount);
+            Assert.Equal(0, control.Loading);
+            Assert.False(control.LoadRequired);
 
             // Set same.
-            page.SetSite(controlSite.Object);
-            Assert.Same(controlSite.Object, page.PageSite);
-            Assert.Same(page, Assert.Single(control.Controls));
-            Assert.Equal(0, page.LoadComponentCallCount);
-            Assert.Equal(0, page.Loading);
-            Assert.False(page.LoadRequired);
+            control.SetSite(controlSite.Object);
+            Assert.Same(controlSite.Object, control.PageSite);
+            Assert.Same(control, Assert.Single(result.Controls));
+            Assert.Equal(0, control.LoadComponentCallCount);
+            Assert.Equal(0, control.Loading);
+            Assert.False(control.LoadRequired);
 
             // Set different.
-            page.SetSite(noControlSite.Object);
-            Assert.Same(noControlSite.Object, page.PageSite);
-            Assert.Same(page, Assert.Single(control.Controls));
-            Assert.Equal(0, page.LoadComponentCallCount);
-            Assert.Equal(0, page.Loading);
-            Assert.False(page.LoadRequired);
+            control.SetSite(noControlSite.Object);
+            Assert.Same(noControlSite.Object, control.PageSite);
+            Assert.Same(control, Assert.Single(result.Controls));
+            Assert.Equal(0, control.LoadComponentCallCount);
+            Assert.Equal(0, control.Loading);
+            Assert.False(control.LoadRequired);
 
             // Set null.
-            page.SetSite(null);
-            Assert.Null(page.PageSite);
-            Assert.Same(page, Assert.Single(control.Controls));
-            Assert.Equal(0, page.LoadComponentCallCount);
-            Assert.Equal(0, page.Loading);
-            Assert.False(page.LoadRequired);
+            control.SetSite(null);
+            Assert.Null(control.PageSite);
+            Assert.Same(control, Assert.Single(result.Controls));
+            Assert.Equal(0, control.LoadComponentCallCount);
+            Assert.Equal(0, control.Loading);
+            Assert.False(control.LoadRequired);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ComponentEditorPage_ShowHelp_Invoke_Nop()
         {
-            var page = new SubComponentEditorPage();
-            page.ShowHelp();
-            page.ShowHelp();
+            using var control = new SubComponentEditorPage();
+            control.ShowHelp();
+
+            // Call again.
+            control.ShowHelp();
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ComponentEditorPage_SupportsHelp_Invoke_ReturnsFalse()
         {
-            var page = new SubComponentEditorPage();
-            Assert.False(page.SupportsHelp());
-            Assert.False(page.SupportsHelp());
+            using var control = new SubComponentEditorPage();
+            Assert.False(control.SupportsHelp());
+            
+            // Call again.
+            Assert.False(control.SupportsHelp());
         }
 
         private class SubComponentEditorPage : ComponentEditorPage
         {
+            public new const int ScrollStateAutoScrolling = ComponentEditorPage.ScrollStateAutoScrolling;
+
+            public new const int ScrollStateHScrollVisible = ComponentEditorPage.ScrollStateHScrollVisible;
+
+            public new const int ScrollStateVScrollVisible = ComponentEditorPage.ScrollStateVScrollVisible;
+
+            public new const int ScrollStateUserHasScrolled = ComponentEditorPage.ScrollStateUserHasScrolled;
+
+            public new const int ScrollStateFullDrag = ComponentEditorPage.ScrollStateFullDrag;
+
             public new bool CanEnableIme => base.CanEnableIme;
 
             public new bool CanRaiseEvents => base.CanRaiseEvents;
@@ -901,6 +973,8 @@ namespace System.Windows.Forms.Design.Tests
             public new AutoSizeMode GetAutoSizeMode() => base.GetAutoSizeMode();
 
             public new Control GetControl() => base.GetControl();
+
+            public new bool GetScrollState(int bit) => base.GetScrollState(bit);
 
             public new IComponent GetSelectedComponent() => base.GetSelectedComponent();
 

@@ -3560,9 +3560,6 @@ namespace System.Windows.Forms
         protected virtual void OnBeginDrag(EventArgs e)
         {
             SetToolStripState(STATE_DRAGGING, true);
-            Debug.Assert(ToolStripPanelRow != null, "Why is toolstrippanel row null?");
-            Debug.Assert(ParentInternal as ToolStripPanel != null, "Why is our parent not a toolstrip panel?");
-
             ClearAllSelections();
             UpdateToolTip(null); // supress the tooltip.
             ((EventHandler)Events[EventBeginDrag])?.Invoke(this, e);
@@ -3571,10 +3568,6 @@ namespace System.Windows.Forms
         protected virtual void OnEndDrag(EventArgs e)
         {
             SetToolStripState(STATE_DRAGGING, false);
-            Debug.Assert(ToolStripPanelRow != null, "Why is toolstrippanel row null?");
-            Debug.Assert(ParentInternal as ToolStripPanel != null, "Why is our parent not a toolstrip panel?");
-            Debug.Assert(ToolStripPanelRow == null || ToolStripPanelRow.ToolStripPanel.RowsInternal.Contains(ToolStripPanelRow), "Why are we in an orphaned row?");
-
             ((EventHandler)Events[EventEndDrag])?.Invoke(this, e);
         }
 
@@ -4285,7 +4278,6 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Resets the scaling (only in PerMonitorV2 scenarios).
-        ///  Do only call from code which is quirked with PerMonitorV2 quirks for the ToolStrip.
         /// </summary>
         /// <param name="newDpi">The new DPI passed by WmDpiChangedBeforeParent.</param>
         internal virtual void ResetScaling(int newDpi)

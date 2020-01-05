@@ -2216,10 +2216,11 @@ namespace System.Windows.Forms
                     cpMin = chrg.cpMin,
                     cpMax = chrg.cpMax
                 }
-            }; // Characters we have slurped into memory in order to search
-            UnsafeNativeMethods.CharBuffer charBuffer;
-            charBuffer = UnsafeNativeMethods.CharBuffer.CreateBuffer(CHAR_BUFFER_LEN + 1);
 
+            };
+            
+            // Characters we have slurped into memory in order to search
+            var charBuffer = new UnicodeCharBuffer(CHAR_BUFFER_LEN + 1);
             txrg.lpstrText = charBuffer.AllocCoTaskMem();
             if (txrg.lpstrText == IntPtr.Zero)
             {
@@ -3402,7 +3403,8 @@ namespace System.Windows.Forms
                         Marshal.Release(punk);
                     }
                 }
-                UnsafeNativeMethods.DragAcceptFiles(new HandleRef(this, Handle), false);
+
+                Shell32.DragAcceptFiles(this, BOOL.FALSE);
             }
         }
 
@@ -3492,7 +3494,7 @@ namespace System.Windows.Forms
             }
 
             int characters = (c.cpMax - c.cpMin) + 1; // +1 for null termination
-            UnsafeNativeMethods.CharBuffer charBuffer = UnsafeNativeMethods.CharBuffer.CreateBuffer(characters);
+            var charBuffer = new UnicodeCharBuffer(characters);
             IntPtr unmanagedBuffer = charBuffer.AllocCoTaskMem();
             if (unmanagedBuffer == IntPtr.Zero)
             {

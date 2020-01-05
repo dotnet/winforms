@@ -13,13 +13,8 @@ namespace System.Windows.Forms.Tests
     using Point = System.Drawing.Point;
     using Size = System.Drawing.Size;
 
-    public class TrackBarTests
+    public class TrackBarTests : IClassFixture<ThreadExceptionFixture>
     {
-        public TrackBarTests()
-        {
-            Application.ThreadException += (sender, e) => throw new Exception(e.Exception.StackTrace.ToString());
-        }
-
         [WinFormsFact]
         public void TrackBar_Ctor_Default()
         {

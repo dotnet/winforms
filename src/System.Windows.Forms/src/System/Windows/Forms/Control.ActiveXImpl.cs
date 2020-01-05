@@ -1463,7 +1463,7 @@ namespace System.Windows.Forms
                 }
 
                 Ole32.OLEMISC status = 0;
-                ((UnsafeNativeMethods.IOleObject)_control).GetMiscStatus(Ole32.DVASPECT.CONTENT, &status);
+                ((Ole32.IOleObject)_control).GetMiscStatus(Ole32.DVASPECT.CONTENT, &status);
                 pQaControl->dwMiscStatus = status;
 
                 // Advise the event sink so VB6 can catch events raised from UserControls.
@@ -2313,7 +2313,7 @@ namespace System.Windows.Forms
                                 lpmsg->message = (User32.WindowMessage)msg.Msg;
                                 lpmsg->wParam = msg.WParam;
                                 lpmsg->lParam = msg.LParam;
-                                return NativeMethods.S_OK;
+                                return HRESULT.S_OK;
                             case PreProcessControlState.MessageNeeded:
                                 // Here we need to dispatch the message ourselves
                                 // otherwise the host may never send the key to our wndproc.

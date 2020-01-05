@@ -101,7 +101,7 @@ namespace System.Windows.Forms
         private static Guid ipicture_Guid = typeof(Ole32.IPicture).GUID;
         private static Guid ipictureDisp_Guid = typeof(Ole32.IPictureDisp).GUID;
         private static Guid ivbformat_Guid = typeof(Ole32.IVBFormat).GUID;
-        private static Guid ioleobject_Guid = typeof(UnsafeNativeMethods.IOleObject).GUID;
+        private static Guid ioleobject_Guid = typeof(Ole32.IOleObject).GUID;
         private static Guid dataSource_Guid = new Guid("{7C0FFAB3-CD84-11D0-949A-00A0C91110ED}");
         private static Guid windowsMediaPlayer_Clsid = new Guid("{22d6f312-b0f6-11d0-94ab-0080c74c7e95}");
         private static Guid comctlImageCombo_Clsid = new Guid("{a98a24c0-b06f-3684-8c12-c52ae341e0bc}");
@@ -180,7 +180,7 @@ namespace System.Windows.Forms
         //
         private object instance;
         private Ole32.IOleInPlaceObject iOleInPlaceObject;
-        private UnsafeNativeMethods.IOleObject iOleObject;
+        private Ole32.IOleObject iOleObject;
         private Ole32.IOleControl iOleControl;
         private Ole32.IOleInPlaceActiveObject iOleInPlaceActiveObject;
         private Ole32.IOleInPlaceActiveObject iOleInPlaceActiveObjectExternal;
@@ -3914,7 +3914,7 @@ namespace System.Windows.Forms
             return iOleInPlaceActiveObject;
         }
 
-        private UnsafeNativeMethods.IOleObject GetOleObject() => iOleObject ??= (UnsafeNativeMethods.IOleObject)instance;
+        private Ole32.IOleObject GetOleObject() => iOleObject ??= (Ole32.IOleObject)instance;
 
         private Ole32.IOleInPlaceObject GetInPlaceObject()
         {
@@ -3924,7 +3924,7 @@ namespace System.Windows.Forms
                 iOleInPlaceObject = (Ole32.IOleInPlaceObject)instance;
 
 #if DEBUG
-                if (iOleInPlaceObject is UnsafeNativeMethods.IOleInPlaceObjectWindowless)
+                if (iOleInPlaceObject is Ole32.IOleInPlaceObjectWindowless)
                 {
                     Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, GetType().FullName + " Can also be a Windowless control.");
                 }

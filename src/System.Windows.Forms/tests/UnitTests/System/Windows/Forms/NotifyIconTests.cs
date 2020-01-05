@@ -11,13 +11,8 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class NotifyIconTests
+    public class NotifyIconTests : IClassFixture<ThreadExceptionFixture>
     {
-        public NotifyIconTests()
-        {
-            Application.ThreadException += (sender, e) => throw new Exception(e.Exception.StackTrace.ToString());
-        }
-
         [WinFormsFact]
         public void NotifyIcon_Ctor_Default()
         {

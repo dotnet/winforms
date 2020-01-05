@@ -11,13 +11,8 @@ using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
-    public class NativeWindowTests
+    public class NativeWindowTests : IClassFixture<ThreadExceptionFixture>
     {
-        public NativeWindowTests()
-        {
-            Application.ThreadException += (sender, e) => throw new Exception(e.Exception.StackTrace.ToString());
-        }
-
         [WinFormsFact]
         public void NativeWindow_Ctor_Default()
         {

@@ -13,13 +13,8 @@ namespace System.Windows.Forms.Tests
     using Point = System.Drawing.Point;
     using Size = System.Drawing.Size;
 
-    public class LabelTests
+    public class LabelTests : IClassFixture<ThreadExceptionFixture>
     {
-        public LabelTests()
-        {
-            Application.ThreadException += (sender, e) => throw new Exception(e.Exception.StackTrace.ToString());
-        }
-
         [WinFormsFact]
         public void Label_Ctor_Default()
         {

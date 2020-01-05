@@ -14,13 +14,8 @@ namespace System.Windows.Forms.Tests
     using Point = System.Drawing.Point;
     using Size = System.Drawing.Size;
 
-    public class TextBoxTests
+    public class TextBoxTests : IClassFixture<ThreadExceptionFixture>
     {
-        public TextBoxTests()
-        {
-            Application.ThreadException += (sender, e) => throw new Exception(e.Exception.StackTrace.ToString());
-        }
-
         [WinFormsFact]
         public void TextBox_Ctor_Default()
         {

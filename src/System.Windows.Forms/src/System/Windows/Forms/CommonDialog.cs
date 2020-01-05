@@ -210,7 +210,7 @@ namespace System.Windows.Forms
 
                     if (Application.UseVisualStyles)
                     {
-                        userCookie = ThemingScope.Activate();
+                        userCookie = ThemingScope.Activate(Application.UseVisualStyles);
                     }
 
                     Application.BeginModalMessageLoop();

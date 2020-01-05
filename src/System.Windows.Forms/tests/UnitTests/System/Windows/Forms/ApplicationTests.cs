@@ -3,18 +3,23 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Windows.Forms.VisualStyles;
-using Xunit;
+using Microsoft.DotNet.RemoteExecutor;
 using WinForms.Common.Tests;
+using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
     public class ApplicationTests
     {
-        [Fact]
-        public void Application_EnableVisualStyles_GetUseVisualStyles_ReturnsTrue()
+        [WinFormsFact]
+        public void Application_EnableVisualStyles_InvokeBeforeGettingRenderWithVisualStyles_Success()
         {
-            Application.EnableVisualStyles();
-            Assert.True(Application.UseVisualStyles, "New Visual Styles will not be applied on Winforms app. This is a high priority bug and must be looked into");
+            RemoteExecutor.Invoke(() =>
+            {
+                Application.EnableVisualStyles();
+                Assert.True(Application.UseVisualStyles);
+                Assert.True(Application.RenderWithVisualStyles);
+            }).Dispose();
         }
 
         [Fact]

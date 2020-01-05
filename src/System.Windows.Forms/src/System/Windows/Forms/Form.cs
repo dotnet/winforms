@@ -297,7 +297,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                IntPtr hwnd = UnsafeNativeMethods.GetForegroundWindow();
+                IntPtr hwnd = User32.GetForegroundWindow();
                 Control c = Control.FromHandle(hwnd);
                 if (c != null && c is Form)
                 {
@@ -396,8 +396,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (value != (formState[FormStateAllowTransparency] != 0) &&
-                    OSFeature.Feature.IsPresent(OSFeature.LayeredWindows))
+                if (value != (formState[FormStateAllowTransparency] != 0))
                 {
                     formState[FormStateAllowTransparency] = (value ? 1 : 0);
 
@@ -1788,7 +1787,7 @@ namespace System.Windows.Forms
 
                 bool oldLayered = (formState[FormStateLayered] != 0);
 
-                if (OpacityAsByte < 255 && OSFeature.Feature.IsPresent(OSFeature.LayeredWindows))
+                if (OpacityAsByte < 255)
                 {
                     AllowTransparency = true;
                     if (formState[FormStateLayered] != 1)
@@ -2325,17 +2324,17 @@ namespace System.Windows.Forms
         {
             Debug.WriteLineIf(s_focusTracing.TraceVerbose, "Form::SetVisibleCore(" + value.ToString() + ") - " + Name);
 
-            // If DialogResult.OK and the value == GetVisibleCore() then this code has been called either through
+            // If DialogResult.OK and the value == Visible then this code has been called either through
             // ShowDialog( ) or explicit Hide( ) by the user. So dont go through this function again.
             // This will avoid flashing during closing the dialog;
-            if (GetVisibleCore() == value && dialogResult == DialogResult.OK)
+            if (value == Visible && dialogResult == DialogResult.OK)
             {
                 return;
             }
 
             // (!value || calledMakeVisible) is to make sure that we fall
             // through and execute the code below atleast once.
-            if (GetVisibleCore() == value && (!value || CalledMakeVisible))
+            if (value == Visible && (!value || CalledMakeVisible))
             {
                 base.SetVisibleCore(value);
                 return;
@@ -2688,7 +2687,7 @@ namespace System.Windows.Forms
             {
                 if (IsMdiChild)
                 {
-                    MdiParentInternal.MdiClient.SendMessage(WindowMessages.WM_MDIACTIVATE, Handle, 0);
+                    User32.SendMessageW(MdiParentInternal.MdiClient, User32.WindowMessage.WM_MDIACTIVATE, Handle, IntPtr.Zero);
                 }
                 else
                 {
@@ -3652,7 +3651,7 @@ namespace System.Windows.Forms
             // If this form is a MdiChild, then we need to set the focus differently.
             if (IsMdiChild)
             {
-                MdiParentInternal.MdiClient.SendMessage(WindowMessages.WM_MDIACTIVATE, Handle, 0);
+                User32.SendMessageW(MdiParentInternal.MdiClient, User32.WindowMessage.WM_MDIACTIVATE, Handle, IntPtr.Zero);
                 return Focused;
             }
 
@@ -5005,7 +5004,7 @@ namespace System.Windows.Forms
             else if (IsMdiChild)
             {
                 User32.SetActiveWindow(new HandleRef(MdiParentInternal, MdiParentInternal.Handle));
-                MdiParentInternal.MdiClient.SendMessage(WindowMessages.WM_MDIACTIVATE, Handle, 0);
+                User32.SendMessageW(MdiParentInternal.MdiClient, User32.WindowMessage.WM_MDIACTIVATE, Handle, IntPtr.Zero);
             }
             else
             {
@@ -5702,7 +5701,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void UpdateLayered()
         {
-            if ((formState[FormStateLayered] != 0) && IsHandleCreated && TopLevel && OSFeature.Feature.IsPresent(OSFeature.LayeredWindows))
+            if ((formState[FormStateLayered] != 0) && IsHandleCreated && TopLevel)
             {
                 bool result;
 

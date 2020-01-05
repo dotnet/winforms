@@ -788,7 +788,7 @@ namespace System.Windows.Forms
                     return HRESULT.S_OK;
                 }
                 AxHost ctl = null;
-                if (pActiveObject is UnsafeNativeMethods.IOleObject oleObject)
+                if (pActiveObject is Ole32.IOleObject oleObject)
                 {
                     HRESULT hr = oleObject.GetClientSite(out Ole32.IOleClientSite clientSite);
                     Debug.Assert(hr.Succeeded());

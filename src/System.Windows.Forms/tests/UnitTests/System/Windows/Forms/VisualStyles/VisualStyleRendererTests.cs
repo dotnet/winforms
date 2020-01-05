@@ -337,32 +337,34 @@ namespace System.Windows.Forms.VisualStyles.Tests
             imageList.Images.Add(image);
             Assert.Throws<ArgumentOutOfRangeException>("imageIndex", () => renderer.DrawImage(graphics, new Rectangle(1, 2, 3, 4), imageList, imageIndex));
         }
+
         public static IEnumerable<object[]> DrawParentBackground_TestData()
         {
-            yield return new object[] { new Rectangle(1, 2, 3, 4), true };
-            yield return new object[] { new Rectangle(0, 0, 3, 4), true };
-            yield return new object[] { new Rectangle(0, 0, 0, 4), true };
-            yield return new object[] { new Rectangle(0, 0, -1, 4), false };
-            yield return new object[] { new Rectangle(0, 0, 3, 0), true };
-            yield return new object[] { new Rectangle(0, 0, 3, -1), false };
-            yield return new object[] { new Rectangle(0, 0, 0, 0), true };
-            yield return new object[] { new Rectangle(0, 0, -1, -1), false };
-            yield return new object[] { new Rectangle(-1, -2, 3, 4), true };
+            yield return new object[] { new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(0, 0, 3, 4) };
+            yield return new object[] { new Rectangle(0, 0, 0, 4) };
+            yield return new object[] { new Rectangle(0, 0, -1, 4) };
+            yield return new object[] { new Rectangle(0, 0, 3, 0) };
+            yield return new object[] { new Rectangle(0, 0, 3, -1) };
+            yield return new object[] { new Rectangle(0, 0, 0, 0) };
+            yield return new object[] { new Rectangle(0, 0, -1, -1) };
+            yield return new object[] { new Rectangle(-1, -2, 3, 4) };
         }
 
         [Theory]
         [MemberData(nameof(DrawParentBackground_TestData))]
-        public void VisualStyleRenderer_DrawParentBackgroundInvokeIDeviceContextRectangleChildWithoutHandle_Success(Rectangle bounds, bool expectedIsHandleCreated)
+        public void VisualStyleRenderer_DrawParentBackgroundInvokeIDeviceContextRectangleChildWithoutHandle_Success(Rectangle bounds)
         {
             // Don't verify anything, just make sure the interop call succeeds.
             var renderer = new VisualStyleRenderer(VisualStyleElement.Button.PushButton.Normal);
             using var bitmap = new Bitmap(10, 10);
             using Graphics graphics = Graphics.FromImage(bitmap);
-            var childControl = new Control();
+            using var childControl = new Control();
             renderer.DrawParentBackground(graphics, bounds, childControl);
-            Assert.Equal(expectedIsHandleCreated, childControl.IsHandleCreated);
+            Assert.False(childControl.IsHandleCreated);
             Assert.Equal(0, renderer.LastHResult);
         }
+
         public static IEnumerable<object[]> DrawParentBackground_WithHandle_TestData()
         {
             yield return new object[] { new Rectangle(1, 2, 3, 4) };
