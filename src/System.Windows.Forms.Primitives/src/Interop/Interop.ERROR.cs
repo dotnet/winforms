@@ -7,6 +7,7 @@ internal partial class Interop
     internal static class ERROR
     {
         public const int ACCESS_DENIED = 0x0005;
+        public const int INVALID_HANDLE = 0x0006;
         public const int INVALID_PARAMETER = 0x0057;
     }
 }

@@ -3928,7 +3928,7 @@ namespace System.Windows.Forms
                 //If we didn't find the thread, or if GetExitCodeThread failed, we don't know the thread's state:
                 //if we don't know, we shouldn't throw.
                 if ((returnValue.IsTrue() && exitCode != NativeMethods.STILL_ACTIVE) ||
-                    (returnValue.IsFalse() && Marshal.GetLastWin32Error() == NativeMethods.ERROR_INVALID_HANDLE) ||
+                    (returnValue.IsFalse() && Marshal.GetLastWin32Error() == ERROR.INVALID_HANDLE) ||
                     AppDomain.CurrentDomain.IsFinalizingForUnload())
                 {
                     if (waitHandle.WaitOne(1, false))
@@ -6176,7 +6176,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    throw new Win32Exception(NativeMethods.ERROR_INVALID_HANDLE);
+                    throw new Win32Exception(ERROR.INVALID_HANDLE);
                 }
             }
         }
