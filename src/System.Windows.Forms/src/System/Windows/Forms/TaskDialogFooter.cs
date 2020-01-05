@@ -100,6 +100,9 @@ namespace System.Windows.Forms
             set
             {
                 DenyIfBoundAndNotCreated();
+
+                // See comment in TaskDialogPage.Icon for why we don't allow to buffer changes
+                // while waiting for the initialization.
                 DenyIfWaitingForInitialization();
 
                 (IntPtr iconValue, bool? iconIsFromHandle) = TaskDialogPage.GetIconValue(value);

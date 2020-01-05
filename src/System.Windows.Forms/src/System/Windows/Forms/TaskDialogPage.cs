@@ -392,6 +392,9 @@ namespace System.Windows.Forms
                 // because for handle icons, this would mean that the previous icon cannot
                 // yet be disposed (until initialization is applied) even though the property
                 // has been updated to a different icon.
+                // It would be possible to initially specify a NULL icon in the TASKDIALOFCONFIG
+                // and then update to the actual icon in ApplyInitialization() to avoid this, but
+                // that seems like an overkill.
                 DenyIfWaitingForInitialization();
 
                 (IntPtr iconValue, bool? iconIsFromHandle) = GetIconValue(value);

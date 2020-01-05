@@ -15,13 +15,11 @@ namespace System.Windows.Forms
     public sealed class TaskDialogProgressBar : TaskDialogControl
     {
         private TaskDialogProgressBarState _state;
+        private TaskDialogProgressBarState _stateWhenBound;
 
         private int _minimum = 0;
-
         private int _maximum = 100;
-
         private int _value;
-
         private int _marqueeSpeed;
 
         /// <summary>
@@ -70,7 +68,6 @@ namespace System.Windows.Forms
             set
             {
                 DenyIfBoundAndNotCreated();
-                DenyIfWaitingForInitialization();
 
                 if (BoundPage != null && value == TaskDialogProgressBarState.None)
                 {
@@ -95,7 +92,7 @@ namespace System.Windows.Forms
                 _state = value;
                 try
                 {
-                    if (BoundPage != null)
+                    if (BoundPage?.WaitingForInitialization == false)
                     {
                         UpdateState(previousState);
                     }
@@ -138,11 +135,10 @@ namespace System.Windows.Forms
                 }
 
                 DenyIfBoundAndNotCreated();
-                DenyIfWaitingForInitialization();
 
                 // We only update the task dialog if the current state is a
                 // non-marquee progress bar.
-                if (BoundPage != null && !ProgressBarStateIsMarquee(_state))
+                if (BoundPage?.WaitingForInitialization == false && !ProgressBarStateIsMarquee(_state))
                 {
                     BoundPage.BoundDialog!.SetProgressBarRange(value, _maximum);
                 }
@@ -178,11 +174,10 @@ namespace System.Windows.Forms
                 }
 
                 DenyIfBoundAndNotCreated();
-                DenyIfWaitingForInitialization();
 
                 // We only update the task dialog if the current state is a
                 // non-marquee progress bar.
-                if (BoundPage != null && !ProgressBarStateIsMarquee(_state))
+                if (BoundPage?.WaitingForInitialization == false && !ProgressBarStateIsMarquee(_state))
                 {
                     BoundPage.BoundDialog!.SetProgressBarRange(_minimum, value);
                 }
@@ -218,11 +213,10 @@ namespace System.Windows.Forms
                 }
 
                 DenyIfBoundAndNotCreated();
-                DenyIfWaitingForInitialization();
 
                 // We only update the task dialog if the current state is a
                 // non-marquee progress bar.
-                if (BoundPage != null && !ProgressBarStateIsMarquee(_state))
+                if (BoundPage?.WaitingForInitialization == false && !ProgressBarStateIsMarquee(_state))
                 {
                     BoundPage.BoundDialog!.SetProgressBarPosition(value);
 
@@ -268,7 +262,6 @@ namespace System.Windows.Forms
             set
             {
                 DenyIfBoundAndNotCreated();
-                DenyIfWaitingForInitialization();
 
                 int previousMarqueeSpeed = _marqueeSpeed;
                 _marqueeSpeed = value;
@@ -276,10 +269,10 @@ namespace System.Windows.Forms
                 {
                     // We only update the task dialog if the current state is a
                     // marquee progress bar.
-                    if (BoundPage != null && ProgressBarStateIsMarquee(_state))
+                    if (BoundPage?.WaitingForInitialization == false && ProgressBarStateIsMarquee(_state))
                     {
                         // Update the state which will also update the marquee speed.
-                        UpdateState();
+                        UpdateState(_state);
                     }
                 }
                 catch
@@ -308,32 +301,32 @@ namespace System.Windows.Forms
         {
             ComCtl32.TDF flags = base.BindCore();
 
-            if (ProgressBarStateIsMarquee(_state))
-            {
-                flags |= ComCtl32.TDF.SHOW_MARQUEE_PROGRESS_BAR;
-            }
-            else
-            {
-                flags |= ComCtl32.TDF.SHOW_PROGRESS_BAR;
-            }
+            // When specifying the flags for the page creation, the state of the initial progress bar
+            // shown in the dialog will either be equivalent to the 'MarqueePaused' or 'Normal' state.
+            // Other states will need to wait for the initialization.
+            bool initialStateIsMarquee = ProgressBarStateIsMarquee(_state);
+            _stateWhenBound = initialStateIsMarquee ?
+                TaskDialogProgressBarState.MarqueePaused : TaskDialogProgressBarState.Normal;
+
+            flags |= initialStateIsMarquee ?
+                ComCtl32.TDF.SHOW_MARQUEE_PROGRESS_BAR : ComCtl32.TDF.SHOW_PROGRESS_BAR;
 
             return flags;
         }
 
         private protected override void ApplyInitializationCore()
         {
-            UpdateState();
+            UpdateState(_stateWhenBound, true);
         }
 
-        private void UpdateState(TaskDialogProgressBarState? previousState = null)
+        private void UpdateState(TaskDialogProgressBarState previousState, bool isInitialization = false)
         {
             TaskDialog taskDialog = BoundPage!.BoundDialog!;
 
             // Check if we need to switch between a marquee and a
             // non-marquee bar.
             bool newStateIsMarquee = ProgressBarStateIsMarquee(_state);
-            bool switchMode = previousState != null &&
-                ProgressBarStateIsMarquee(previousState.Value) != newStateIsMarquee;
+            bool switchMode = ProgressBarStateIsMarquee(previousState) != newStateIsMarquee;
 
             if (switchMode)
             {
@@ -359,7 +352,7 @@ namespace System.Windows.Forms
             {
                 taskDialog.SetProgressBarState(GetNativeProgressBarState(_state));
 
-                if (previousState == null || switchMode)
+                if (isInitialization || switchMode)
                 {
                     // Also need to set the other properties after switching
                     // the mode or when applying the initialization.
