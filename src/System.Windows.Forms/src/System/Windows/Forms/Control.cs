@@ -55,7 +55,7 @@ namespace System.Windows.Forms
         Ole32.IViewObject2,
         Ole32.IPersist,
         Ole32.IPersistStreamInit,
-        UnsafeNativeMethods.IPersistPropertyBag,
+        Ole32.IPersistPropertyBag,
         Ole32.IPersistStorage,
         Ole32.IQuickActivate,
         ISupportOleDropSource,
@@ -13902,13 +13902,13 @@ namespace System.Windows.Forms
             return HRESULT.S_OK;
         }
 
-        HRESULT UnsafeNativeMethods.IPersistPropertyBag.InitNew()
+        HRESULT Ole32.IPersistPropertyBag.InitNew()
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistPropertyBag.InitNew");
             return HRESULT.S_OK;
         }
 
-        unsafe HRESULT UnsafeNativeMethods.IPersistPropertyBag.GetClassID(Guid* pClassID)
+        unsafe HRESULT Ole32.IPersistPropertyBag.GetClassID(Guid* pClassID)
         {
             if (pClassID == null)
             {
@@ -13920,7 +13920,7 @@ namespace System.Windows.Forms
             return HRESULT.S_OK;
         }
 
-        void UnsafeNativeMethods.IPersistPropertyBag.Load(Ole32.IPropertyBag pPropBag, Ole32.IErrorLog pErrorLog)
+        void Ole32.IPersistPropertyBag.Load(Ole32.IPropertyBag pPropBag, Ole32.IErrorLog pErrorLog)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:Load (IPersistPropertyBag)");
             Debug.Indent();
@@ -13928,7 +13928,7 @@ namespace System.Windows.Forms
             Debug.Unindent();
         }
 
-        void UnsafeNativeMethods.IPersistPropertyBag.Save(Ole32.IPropertyBag pPropBag, BOOL fClearDirty, BOOL fSaveAllProperties)
+        void Ole32.IPersistPropertyBag.Save(Ole32.IPropertyBag pPropBag, BOOL fClearDirty, BOOL fSaveAllProperties)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:Save (IPersistPropertyBag)");
             Debug.Indent();
