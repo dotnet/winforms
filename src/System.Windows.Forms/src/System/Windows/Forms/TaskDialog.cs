@@ -703,7 +703,7 @@ namespace System.Windows.Forms
                     // v6 (provided that Application.EnableVisualStyles() was called
                     // earlier). Otherwise, the "TaskDialogIndirect" entry point will
                     // not be available in comctl32.dll.
-                    IntPtr themingCookie = ThemingScope.Activate();
+                    IntPtr themingCookie = ThemingScope.Activate(Application.UseVisualStyles);
                     HRESULT returnValue;
                     int resultButtonID;
                     try
