@@ -91,12 +91,6 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.Shell32, CharSet = CharSet.Auto)]
         public static extern int Shell_NotifyIcon(int message, NativeMethods.NOTIFYICONDATA pnid);
 
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public extern static bool InsertMenuItem(HandleRef hMenu, int uItem, bool fByPosition, NativeMethods.MENUITEMINFO_T lpmii);
-
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern IntPtr GetMenu(HandleRef hWnd);
-
         [DllImport(Libraries.User32, CharSet = CharSet.Auto)]
         public static extern BOOL GetMenuItemInfo(IntPtr hMenu, int uItem, bool fByPosition, [In, Out] NativeMethods.MENUITEMINFO_T lpmii);
 
@@ -116,9 +110,6 @@ namespace System.Windows.Forms
             GC.KeepAlive(hMenu.Wrapper);
             return result;
         }
-
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public extern static bool SetMenuItemInfo(HandleRef hMenu, int uItem, bool fByPosition, NativeMethods.MENUITEMINFO_T lpmii);
 
         [DllImport(ExternDll.Comdlg32, SetLastError = true, CharSet = CharSet.Auto)]
         public static extern bool GetOpenFileName([In, Out] NativeMethods.OPENFILENAME_I ofn);

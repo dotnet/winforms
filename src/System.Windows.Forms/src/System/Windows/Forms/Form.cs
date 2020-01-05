@@ -5932,7 +5932,7 @@ namespace System.Windows.Forms
 
                         // determine if we need to add control gadgets into the MenuStrip
                         // double check GetMenu incase someone is using interop
-                        IntPtr hMenu = UnsafeNativeMethods.GetMenu(new HandleRef(this, Handle));
+                        IntPtr hMenu = User32.GetMenu(this);
                         if (hMenu == IntPtr.Zero)
                         {
                             MenuStrip sourceMenuStrip = ToolStripManager.GetMainMenuStrip(this);
