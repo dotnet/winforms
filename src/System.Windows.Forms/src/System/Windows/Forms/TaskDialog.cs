@@ -219,6 +219,12 @@ namespace System.Windows.Forms
         private bool _ignoreButtonClickedNotifications;
 
         /// <summary>
+        ///   Specifies if the currently showing task dialog already received the
+        ///   <see cref="ComCtl32.TDN.DESTROYED"/> notification.
+        /// </summary>
+        private bool _receivedDestroyedNotification;
+
+        /// <summary>
         ///   Occurs after the task dialog has been created but before it is displayed.
         /// </summary>
         /// <remarks>
@@ -775,6 +781,7 @@ namespace System.Windows.Forms
                     // Clear cached objects and other fields.
                     _resultButton = null;
                     _ignoreButtonClickedNotifications = false;
+                    _receivedDestroyedNotification = false;
 
                     // Unbind the page. The 'Destroyed' event of the TaskDialogPage
                     // will already have been called from the callback.
@@ -1159,6 +1166,8 @@ namespace System.Windows.Forms
                         break;
 
                     case ComCtl32.TDN.DESTROYED:
+                        _receivedDestroyedNotification = true;
+
                         // Note: When multiple dialogs are shown (so Show() will occur
                         // multiple times in the call stack) and a previously opened
                         // dialog is closed, the Destroyed notification for the closed
@@ -1420,9 +1429,13 @@ namespace System.Windows.Forms
 
             // Don't allow navigation if the dialog window is already closed (and
             // therefore has set a result button), because that would result in
-            // weird/undefined behavior (e.g. returning IDCANCEL (2) as button
-            // result even though a different button has already been set as result).
-            if (_resultButton != null)
+            // weird/undefined behavior (e.g. returning IDCANCEL (2) as button result
+            // even though a different button has already been set as result).
+            // Additionally, we check if we received the TDN_DESTROYED notification, in case
+            // the dialog was closed abnormally without a prior TDN_BUTTON_CLICKED
+            // notification (e.g. when closing the main application window while a modeless
+            // task dialog is showing).
+            if (_resultButton != null || _receivedDestroyedNotification)
             {
                 throw new InvalidOperationException(SR.TaskDialogCannotNavigateClosedDialog);
             }
