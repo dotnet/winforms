@@ -74,7 +74,7 @@ namespace System.Windows.Forms
             {
                 try
                 {
-                    FileDialogNative.IShellItem initialDirectory = GetShellItemForPath(InitialDirectory);
+                    FileDialogNative.IShellItem initialDirectory = FileDialogNative.GetShellItemForPath(InitialDirectory);
 
                     dialog.SetDefaultFolder(initialDirectory);
                     dialog.SetFolder(initialDirectory);
@@ -266,26 +266,6 @@ namespace System.Windows.Forms
                 }
             }
             return extensions.ToArray();
-        }
-
-        internal static FileDialogNative.IShellItem GetShellItemForPath(string path)
-        {
-            FileDialogNative.IShellItem ret = null;
-            IntPtr pidl = IntPtr.Zero;
-            uint zero = 0;
-            if (UnsafeNativeMethods.Shell32.SHILCreateFromPath(path, out pidl, ref zero) >= 0)
-            {
-                if (UnsafeNativeMethods.Shell32.SHCreateShellItem(
-                    IntPtr.Zero, // No parent specified
-                    IntPtr.Zero,
-                    pidl,
-                    out ret) >= 0)
-                {
-                    return ret;
-                }
-            }
-
-            throw new FileNotFoundException();
         }
 
         private protected static string GetFilePathFromShellItem(FileDialogNative.IShellItem item)

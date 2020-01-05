@@ -590,7 +590,7 @@ namespace System.Windows.Forms
         {
             if (!RecreatingHandle)
             {
-                IntPtr userCookie = ThemingScope.Activate();
+                IntPtr userCookie = ThemingScope.Activate(Application.UseVisualStyles);
 
                 try
                 {
@@ -1773,7 +1773,7 @@ namespace System.Windows.Forms
                 {
                     StatusBar p = (StatusBar)parent;
 
-                    ComCtl32.ToolInfoWrapper info = GetTOOLINFO(tool);
+                    ComCtl32.ToolInfoWrapper<Control> info = GetTOOLINFO(tool);
                     if (info.SendMessage(p.ToolTipSet ? (IHandle)p.mainToolTip : this, User32.WindowMessage.TTM_ADDTOOLW) == IntPtr.Zero)
                     {
                         throw new InvalidOperationException(SR.StatusBarAddFailed);
@@ -1785,7 +1785,7 @@ namespace System.Windows.Forms
             {
                 if (tool != null && tool.text != null && tool.text.Length > 0 && (int)tool.id >= 0)
                 {
-                    ComCtl32.ToolInfoWrapper info = GetMinTOOLINFO(tool);
+                    ComCtl32.ToolInfoWrapper<Control> info = GetMinTOOLINFO(tool);
                     info.SendMessage(this, User32.WindowMessage.TTM_DELTOOLW);
                 }
             }
@@ -1794,7 +1794,7 @@ namespace System.Windows.Forms
             {
                 if (tool != null && tool.text != null && tool.text.Length > 0 && (int)tool.id >= 0)
                 {
-                    ComCtl32.ToolInfoWrapper info = GetTOOLINFO(tool);
+                    ComCtl32.ToolInfoWrapper<Control> info = GetTOOLINFO(tool);
                     info.SendMessage(this, User32.WindowMessage.TTM_SETTOOLINFOW);
                 }
             }
@@ -1846,14 +1846,14 @@ namespace System.Windows.Forms
             ///  required data to uniquely identify a region. This is used primarily
             ///  for delete operations. NOTE: This cannot force the creation of a handle.
             /// </summary>
-            private ComCtl32.ToolInfoWrapper GetMinTOOLINFO(Tool tool)
+            private ComCtl32.ToolInfoWrapper<Control> GetMinTOOLINFO(Tool tool)
             {
                 if ((int)tool.id < 0)
                 {
                     AssignId(tool);
                 }
 
-                return new ComCtl32.ToolInfoWrapper(
+                return new ComCtl32.ToolInfoWrapper<Control>(
                     parent,
                     id: parent is StatusBar sb ? sb.Handle : tool.id);
             }
@@ -1862,9 +1862,9 @@ namespace System.Windows.Forms
             ///  Returns a detailed TOOLINFO_T structure that represents the specified
             ///  region. NOTE: This may force the creation of a handle.
             /// </summary>
-            private ComCtl32.ToolInfoWrapper GetTOOLINFO(Tool tool)
+            private ComCtl32.ToolInfoWrapper<Control> GetTOOLINFO(Tool tool)
             {
-                ComCtl32.ToolInfoWrapper ti = GetMinTOOLINFO(tool);
+                ComCtl32.ToolInfoWrapper<Control> ti = GetMinTOOLINFO(tool);
                 ti.Info.uFlags |= ComCtl32.TTF.TRANSPARENT | ComCtl32.TTF.SUBCLASS;
 
                 // RightToLeft reading order

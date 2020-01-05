@@ -747,7 +747,7 @@ namespace System.Windows.Forms
                 return;
             }
 
-            IntPtr userCookie = ThemingScope.Activate();
+            IntPtr userCookie = ThemingScope.Activate(Application.UseVisualStyles);
             try
             {
 
@@ -929,7 +929,7 @@ namespace System.Windows.Forms
 
             if (_created.ContainsKey(ctl) && handlesCreated && !DesignMode)
             {
-                new ComCtl32.ToolInfoWrapper(ctl).SendMessage(this, User32.WindowMessage.TTM_DELTOOLW);
+                new ComCtl32.ToolInfoWrapper<Control>(ctl).SendMessage(this, User32.WindowMessage.TTM_DELTOOLW);
                 _created.Remove(ctl);
             }
         }
@@ -987,7 +987,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Returns a detailed TOOLINFO_TOOLTIP structure that represents the specified region.
         /// </summary>
-        private unsafe ComCtl32.ToolInfoWrapper GetTOOLINFO(Control control, string caption)
+        private unsafe ComCtl32.ToolInfoWrapper<Control> GetTOOLINFO(Control control, string caption)
         {
             ComCtl32.TTF flags = ComCtl32.TTF.TRANSPARENT | ComCtl32.TTF.SUBCLASS;
 
@@ -1002,14 +1002,14 @@ namespace System.Windows.Forms
             bool noText = (control is TreeView tv && tv.ShowNodeToolTips)
                 || (control is ListView lv && lv.ShowItemToolTips);
 
-            var info = new ComCtl32.ToolInfoWrapper(control, flags, noText ? null : caption);
+            var info = new ComCtl32.ToolInfoWrapper<Control>(control, flags, noText ? null : caption);
             if (noText)
                 info.Info.lpszText = (char*)(-1);
 
             return info;
         }
 
-        private ComCtl32.ToolInfoWrapper GetWinTOOLINFO(IWin32Window hWnd)
+        private ComCtl32.ToolInfoWrapper<IWin32WindowAdapter> GetWinTOOLINFO(IWin32Window hWnd)
         {
             ComCtl32.TTF flags = ComCtl32.TTF.TRANSPARENT | ComCtl32.TTF.SUBCLASS;
 
@@ -1027,7 +1027,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            return new ComCtl32.ToolInfoWrapper(hWnd, flags);
+            return new ComCtl32.ToolInfoWrapper<IWin32WindowAdapter>(new IWin32WindowAdapter(hWnd), flags);
         }
 
         /// <summary>
@@ -1265,7 +1265,7 @@ namespace System.Windows.Forms
 
                 if (exists && !empty && handlesCreated && !DesignMode)
                 {
-                    ComCtl32.ToolInfoWrapper toolInfo = GetTOOLINFO(control, info.Caption);
+                    ComCtl32.ToolInfoWrapper<Control> toolInfo = GetTOOLINFO(control, info.Caption);
                     toolInfo.SendMessage(this, User32.WindowMessage.TTM_SETTOOLINFOW);
                     CheckNativeToolTip(control);
                     CheckCompositeControls(control);
@@ -1557,8 +1557,12 @@ namespace System.Windows.Forms
             // Get bubble size to use it for optimal position calculation. Requesting the bubble
             // size will AV if there isn't a current tool window.
 
-            IntPtr result = GetCurrentToolHwnd() == IntPtr.Zero ? IntPtr.Zero
-                 : new ComCtl32.ToolInfoWrapper(tool.GetOwnerWindow()).SendMessage(this, User32.WindowMessage.TTM_GETBUBBLESIZE);
+            IntPtr result = GetCurrentToolHwnd();
+            if (result != IntPtr.Zero)
+            {
+                var info = new ComCtl32.ToolInfoWrapper<IWin32WindowAdapter>(new IWin32WindowAdapter(tool.GetOwnerWindow()));
+                result = info.SendMessage(this, User32.WindowMessage.TTM_GETBUBBLESIZE);
+            }
 
             if (result == IntPtr.Zero)
             {
@@ -1752,7 +1756,7 @@ namespace System.Windows.Forms
 
             if (GetHandleCreated())
             {
-                var info = new ComCtl32.ToolInfoWrapper(win);
+                var info = new ComCtl32.ToolInfoWrapper<IWin32WindowAdapter>(new IWin32WindowAdapter(win));
                 info.SendMessage(this, User32.WindowMessage.TTM_TRACKACTIVATE);
                 info.SendMessage(this, User32.WindowMessage.TTM_DELTOOLW);
             }
@@ -1810,7 +1814,7 @@ namespace System.Windows.Forms
             Control tool = win as Control;
             if (tool != null && _tools.ContainsKey(tool))
             {
-                var toolInfo = new ComCtl32.ToolInfoWrapper(tool);
+                var toolInfo = new ComCtl32.ToolInfoWrapper<Control>(tool);
                 if (toolInfo.SendMessage(this, User32.WindowMessage.TTM_GETTOOLINFOW) != IntPtr.Zero)
                 {
                     ComCtl32.TTF flags = ComCtl32.TTF.TRACK;
@@ -1971,7 +1975,7 @@ namespace System.Windows.Forms
 
         private IntPtr GetCurrentToolHwnd()
         {
-            var toolInfo = new ComCtl32.ToolInfoWrapper();
+            var toolInfo = new ComCtl32.ToolInfoWrapper<Control>();
             if (toolInfo.SendMessage(this, User32.WindowMessage.TTM_GETCURRENTTOOLW) != IntPtr.Zero)
             {
                 return toolInfo.Info.hwnd;

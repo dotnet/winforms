@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading;
+using static System.Windows.Forms.UnsafeNativeMethods;
 using static Interop;
 
 namespace System.Windows.Forms

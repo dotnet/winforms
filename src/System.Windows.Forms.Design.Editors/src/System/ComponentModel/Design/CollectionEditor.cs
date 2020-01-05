@@ -4,7 +4,6 @@
 
 using System.Collections;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Drawing.Design;
 using System.Globalization;
@@ -2111,6 +2110,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         internal class FilterListBox : ListBox
         {
+            private const int VK_PROCESSKEY = 0xE5;
             private PropertyGrid _grid;
             private Message _lastKeyDown;
 
@@ -2148,7 +2148,7 @@ namespace System.ComponentModel.Design
                         _lastKeyDown = m;
 
                         // the first thing the ime does on a key it cares about is send a VK_PROCESSKEY, so we use that to sling focus to the grid.
-                        if (unchecked((int)(long)m.WParam) == NativeMethods.VK_PROCESSKEY)
+                        if (unchecked((int)(long)m.WParam) == VK_PROCESSKEY)
                         {
                             if (PropertyGrid != null)
                             {

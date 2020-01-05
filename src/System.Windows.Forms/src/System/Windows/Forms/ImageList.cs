@@ -583,7 +583,7 @@ namespace System.Windows.Forms
             }
 
             // We enclose the imagelist handle create in a theming scope.
-            IntPtr userCookie = ThemingScope.Activate();
+            IntPtr userCookie = ThemingScope.Activate(Application.UseVisualStyles);
 
             try
             {
