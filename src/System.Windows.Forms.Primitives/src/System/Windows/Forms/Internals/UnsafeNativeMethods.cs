@@ -85,9 +85,6 @@ namespace System.Windows.Forms
             }
         }
 
-        [DllImport(ExternDll.User32, ExactSpelling = true)]
-        public static extern bool EnumChildWindows(HandleRef hwndParent, NativeMethods.EnumChildrenCallback lpEnumFunc, HandleRef lParam);
-
         [DllImport(ExternDll.Shell32, CharSet = CharSet.Auto)]
         public static extern int Shell_NotifyIcon(int message, NativeMethods.NOTIFYICONDATA pnid);
 

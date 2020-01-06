@@ -9,9 +9,34 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        public delegate bool EnumWindowsCallback(IntPtr hWnd, IntPtr lParam);
+        public delegate BOOL EnumWindowsCallback(IntPtr hWnd);
+
+        private delegate BOOL EnumWindowsNativeCallback(IntPtr hWnd, IntPtr lParam);
+
+        private static readonly EnumWindowsNativeCallback s_enumWindowsNativeCallback = HandleEnumWindowsNativeCallback;
 
         [DllImport(Libraries.User32, ExactSpelling = true, SetLastError = true)]
-        public static extern BOOL EnumWindows(EnumWindowsCallback callback, IntPtr extraData);
+        private static extern BOOL EnumWindows(EnumWindowsNativeCallback lpEnumFunc, IntPtr lParam);
+
+        public static BOOL EnumWindows(EnumWindowsCallback lpEnumFunc)
+        {
+            // We pass a static delegate to the native function and supply the callback as
+            // reference data, so that the CLR doesn't need to generate a native code block for
+            // each callback delegate instance (for storing the closure pointer).
+            var gcHandle = GCHandle.Alloc(lpEnumFunc);
+            try
+            {
+                return EnumWindows(s_enumWindowsNativeCallback, GCHandle.ToIntPtr(gcHandle));
+            }
+            finally
+            {
+                gcHandle.Free();
+            }
+        }
+
+        private static BOOL HandleEnumWindowsNativeCallback(IntPtr hWnd, IntPtr lParam)
+        {
+            return ((EnumWindowsCallback)GCHandle.FromIntPtr(lParam).Target)(hWnd);
+        }
     }
 }
