@@ -342,13 +342,13 @@ namespace System.Windows.Forms
                 switch (align)
                 {
                     case HorizontalAlignment.Left:
-                        cp.Style |= NativeMethods.ES_LEFT;
+                        cp.Style |= (int)User32.ES.LEFT;
                         break;
                     case HorizontalAlignment.Center:
-                        cp.Style |= NativeMethods.ES_CENTER;
+                        cp.Style |= (int)User32.ES.CENTER;
                         break;
                     case HorizontalAlignment.Right:
-                        cp.Style |= NativeMethods.ES_RIGHT;
+                        cp.Style |= (int)User32.ES.RIGHT;
                         break;
                 }
 

@@ -1848,7 +1848,7 @@ namespace System.Windows.Forms
                         UnsafeNativeMethods.SendMessage(
                             new HandleRef(this, childEdit.Handle),
                             EditMessages.EM_SETMARGINS,
-                            NativeMethods.EC_LEFTMARGIN | NativeMethods.EC_RIGHTMARGIN,
+                            (int)(User32.EC.LEFTMARGIN | User32.EC.RIGHTMARGIN),
                             0);
                     }
                     break;
@@ -2556,7 +2556,7 @@ namespace System.Windows.Forms
                     // set the initial margin for combobox to be zero (this is also done whenever the font is changed).
                     //
                     UnsafeNativeMethods.SendMessage(new HandleRef(this, childEdit.Handle), EditMessages.EM_SETMARGINS,
-                                              NativeMethods.EC_LEFTMARGIN | NativeMethods.EC_RIGHTMARGIN, 0);
+                        (int)(User32.EC.LEFTMARGIN | User32.EC.RIGHTMARGIN), 0);
                 }
             }
 
