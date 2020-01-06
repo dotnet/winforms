@@ -59,5 +59,13 @@ namespace System.ComponentModel.Design
 
             _methodInfo.Invoke(_actionList, null);
         }
+
+        // this is only use for verbs so that a designer action method item can
+        // be converted to a verb. Verbs use an EventHandler to call their invoke
+        // so we need a way to translate the EventHandler Invoke into ou own Invoke
+        internal void Invoke(object sender, EventArgs args)
+        {
+            Invoke();
+        }
     }
 }
