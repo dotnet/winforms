@@ -8245,12 +8245,12 @@ namespace System.Windows.Forms.PropertyGridInternal
             /// <summary>
             ///  HookProc used for catch mouse messages.
             /// </summary>
-            private IntPtr MouseHookProc(User32.HC nCode, IntPtr wparam, IntPtr lparam)
+            private unsafe IntPtr MouseHookProc(User32.HC nCode, IntPtr wparam, IntPtr lparam)
             {
                 GC.KeepAlive(this);
                 if (nCode == User32.HC.ACTION)
                 {
-                    NativeMethods.MOUSEHOOKSTRUCT mhs = Marshal.PtrToStructure<NativeMethods.MOUSEHOOKSTRUCT>(lparam);
+                    User32.MOUSEHOOKSTRUCT* mhs = (User32.MOUSEHOOKSTRUCT*)lparam;
                     if (mhs != null)
                     {
                         switch (unchecked((int)(long)wparam))
@@ -8262,7 +8262,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                             case WindowMessages.WM_NCMBUTTONDOWN:
                             case WindowMessages.WM_NCRBUTTONDOWN:
                             case WindowMessages.WM_MOUSEACTIVATE:
-                                if (ProcessMouseDown(mhs.hWnd, mhs.pt.X, mhs.pt.Y))
+                                if (ProcessMouseDown(mhs->hWnd, mhs->pt.X, mhs->pt.Y))
                                 {
                                     return (IntPtr)1;
                                 }
