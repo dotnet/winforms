@@ -1533,7 +1533,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(2, createdCallCount);
         }
-        [Theory]
+
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetPaddingNormalizedTheoryData))]
         public void MonthCalendar_Padding_Set_GetReturnsExpected(Padding value, Padding expected)
         {
@@ -1550,7 +1551,7 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.IsHandleCreated);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetPaddingNormalizedTheoryData))]
         public void MonthCalendar_Padding_SetWithHandle_GetReturnsExpected(Padding value, Padding expected)
         {
@@ -1579,7 +1580,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createdCallCount);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void MonthCalendar_Padding_SetWithHandler_CallsPaddingChanged()
         {
             using var control = new MonthCalendar();
@@ -1616,96 +1617,58 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(2, callCount);
         }
 
-        [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
-        public void MonthCalendar_RightToLeftLayout_Set_GetReturnsExpected(bool value)
+        [WinFormsTheory]
+        [InlineData(RightToLeft.Yes, true, 1)]
+        [InlineData(RightToLeft.Yes, false, 0)]
+        [InlineData(RightToLeft.No, true, 1)]
+        [InlineData(RightToLeft.No, false, 0)]
+        [InlineData(RightToLeft.Inherit, true, 1)]
+        [InlineData(RightToLeft.Inherit, false, 0)]
+        public void MonthCalendar_RightToLeftLayout_Set_GetReturnsExpected(RightToLeft rightToLeft, bool value, int expectedLayoutCallCount)
         {
-            using var control = new SubMonthCalendar
+            using var control = new MonthCalendar
             {
-                RightToLeftLayout = value
+                RightToLeft = rightToLeft
             };
-            Assert.Equal(value, control.RightToLeftLayout);
-            Assert.False(control.IsHandleCreated);
-
-            // Set same.
-            control.RightToLeftLayout = value;
-            Assert.Equal(value, control.RightToLeftLayout);
-            Assert.False(control.IsHandleCreated);
-
-            // Set different.
-            control.RightToLeftLayout = !value;
-            Assert.Equal(!value, control.RightToLeftLayout);
-            Assert.False(control.IsHandleCreated);
-        }
-
-        [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
-        public void MonthCalendar_RightToLeftLayout_SetWithRightToLeftYes_GetReturnsExpected(bool value)
-        {
-            using var control = new SubMonthCalendar
+            int layoutCallCount = 0;
+            control.Layout += (sender, e) =>
             {
-                RightToLeft = RightToLeft.Yes,
-                RightToLeftLayout = value
+                Assert.Same(control, sender);
+                Assert.Same(control, e.AffectedControl);
+                Assert.Equal("RightToLeftLayout", e.AffectedProperty);
+                layoutCallCount++;
             };
+            
+            control.RightToLeftLayout = value;
             Assert.Equal(value, control.RightToLeftLayout);
+            Assert.Equal(expectedLayoutCallCount, layoutCallCount);
             Assert.False(control.IsHandleCreated);
 
             // Set same.
             control.RightToLeftLayout = value;
             Assert.Equal(value, control.RightToLeftLayout);
+            Assert.Equal(expectedLayoutCallCount, layoutCallCount);
             Assert.False(control.IsHandleCreated);
 
             // Set different.
             control.RightToLeftLayout = !value;
             Assert.Equal(!value, control.RightToLeftLayout);
+            Assert.Equal(expectedLayoutCallCount + 1, layoutCallCount);
             Assert.False(control.IsHandleCreated);
         }
 
-        [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
-        public void MonthCalendar_RightToLeftLayout_SetWithHandle_GetReturnsExpected(bool value)
+        [WinFormsTheory]
+        [InlineData(RightToLeft.Yes, true, 1, 1, 2)]
+        [InlineData(RightToLeft.Yes, false, 0, 0, 1)]
+        [InlineData(RightToLeft.No, true, 1, 0, 0)]
+        [InlineData(RightToLeft.No, false, 0, 0, 0)]
+        [InlineData(RightToLeft.Inherit, true, 1, 0, 0)]
+        [InlineData(RightToLeft.Inherit, false, 0, 0, 0)]
+        public void MonthCalendar_RightToLeftLayout_SetWithHandle_GetReturnsExpected(RightToLeft rightToLeft, bool value, int expectedLayoutCallCount, int expectedCreatedCallCount1, int expectedCreatedCallCount2)
         {
-            using var control = new SubMonthCalendar();
-            Assert.NotEqual(IntPtr.Zero, control.Handle);
-            int invalidatedCallCount = 0;
-            control.Invalidated += (sender, e) => invalidatedCallCount++;
-            int styleChangedCallCount = 0;
-            control.StyleChanged += (sender, e) => styleChangedCallCount++;
-            int createdCallCount = 0;
-            control.HandleCreated += (sender, e) => createdCallCount++;
-
-            control.RightToLeftLayout = value;
-            Assert.Equal(value, control.RightToLeftLayout);
-            Assert.True(control.IsHandleCreated);
-            Assert.Equal(0, invalidatedCallCount);
-            Assert.Equal(0, styleChangedCallCount);
-            Assert.Equal(0, createdCallCount);
-
-            // Set same.
-            control.RightToLeftLayout = value;
-            Assert.Equal(value, control.RightToLeftLayout);
-            Assert.True(control.IsHandleCreated);
-            Assert.Equal(0, invalidatedCallCount);
-            Assert.Equal(0, styleChangedCallCount);
-            Assert.Equal(0, createdCallCount);
-
-            // Set different.
-            control.RightToLeftLayout = !value;
-            Assert.Equal(!value, control.RightToLeftLayout);
-            Assert.True(control.IsHandleCreated);
-            Assert.Equal(0, invalidatedCallCount);
-            Assert.Equal(0, styleChangedCallCount);
-            Assert.Equal(0, createdCallCount);
-        }
-
-        [Theory]
-        [InlineData(true, 1)]
-        [InlineData(false, 0)]
-        public void MonthCalendar_RightToLeftLayout_SetWithHandleWithRightToLeftYes_GetReturnsExpected(bool value, int expectedCreatedCallCount)
-        {
-            using var control = new SubMonthCalendar
+            using var control = new MonthCalendar
             {
-                RightToLeft = RightToLeft.Yes
+                RightToLeft = rightToLeft
             };
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             int invalidatedCallCount = 0;
@@ -1714,70 +1677,81 @@ namespace System.Windows.Forms.Tests
             control.StyleChanged += (sender, e) => styleChangedCallCount++;
             int createdCallCount = 0;
             control.HandleCreated += (sender, e) => createdCallCount++;
+            int layoutCallCount = 0;
+            control.Layout += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(control, e.AffectedControl);
+                Assert.Equal("RightToLeftLayout", e.AffectedProperty);
+                layoutCallCount++;
+            };
 
             control.RightToLeftLayout = value;
             Assert.Equal(value, control.RightToLeftLayout);
+            Assert.Equal(expectedLayoutCallCount, layoutCallCount);
             Assert.True(control.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
-            Assert.Equal(expectedCreatedCallCount, createdCallCount);
+            Assert.Equal(expectedCreatedCallCount1, createdCallCount);
 
             // Set same.
             control.RightToLeftLayout = value;
             Assert.Equal(value, control.RightToLeftLayout);
+            Assert.Equal(expectedLayoutCallCount, layoutCallCount);
             Assert.True(control.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
-            Assert.Equal(expectedCreatedCallCount, createdCallCount);
+            Assert.Equal(expectedCreatedCallCount1, createdCallCount);
 
             // Set different.
             control.RightToLeftLayout = !value;
             Assert.Equal(!value, control.RightToLeftLayout);
+            Assert.Equal(expectedLayoutCallCount + 1, layoutCallCount);
             Assert.True(control.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
-            Assert.Equal(expectedCreatedCallCount + 1, createdCallCount);
+            Assert.Equal(expectedCreatedCallCount2, createdCallCount);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void MonthCalendar_RightToLeftLayout_SetWithHandler_CallsRightToLeftLayoutChanged()
         {
-            var calendar = new MonthCalendar
+            using var control = new MonthCalendar
             {
                 RightToLeftLayout = true
             };
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
-                Assert.Same(calendar, sender);
+                Assert.Same(control, sender);
                 Assert.Same(EventArgs.Empty, e);
                 callCount++;
             };
-            calendar.RightToLeftLayoutChanged += handler;
+            control.RightToLeftLayoutChanged += handler;
 
             // Set different.
-            calendar.RightToLeftLayout = false;
-            Assert.False(calendar.RightToLeftLayout);
+            control.RightToLeftLayout = false;
+            Assert.False(control.RightToLeftLayout);
             Assert.Equal(1, callCount);
 
             // Set same.
-            calendar.RightToLeftLayout = false;
-            Assert.False(calendar.RightToLeftLayout);
+            control.RightToLeftLayout = false;
+            Assert.False(control.RightToLeftLayout);
             Assert.Equal(1, callCount);
 
             // Set different.
-            calendar.RightToLeftLayout = true;
-            Assert.True(calendar.RightToLeftLayout);
+            control.RightToLeftLayout = true;
+            Assert.True(control.RightToLeftLayout);
             Assert.Equal(2, callCount);
 
             // Remove handler.
-            calendar.RightToLeftLayoutChanged -= handler;
-            calendar.RightToLeftLayout = false;
-            Assert.False(calendar.RightToLeftLayout);
+            control.RightToLeftLayoutChanged -= handler;
+            control.RightToLeftLayout = false;
+            Assert.False(control.RightToLeftLayout);
             Assert.Equal(2, callCount);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void MonthCalendar_RightToLeftLayout_SetWithHandlerInDisposing_DoesNotRightToLeftLayoutChanged()
         {
             using var control = new MonthCalendar
@@ -2557,7 +2531,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, clientSizeChangedCallCount);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void MonthCalendar_Text_Set_GetReturnsExpected(string value, string expected)
         {
@@ -2574,7 +2548,7 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.IsHandleCreated);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void MonthCalendar_Text_SetWithHandle_GetReturnsExpected(string value, string expected)
         {
@@ -2603,7 +2577,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createdCallCount);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void MonthCalendar_Text_SetWithHandler_CallsTextChanged()
         {
             using var control = new MonthCalendar();
@@ -3231,7 +3205,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createdCallCount);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void MonthCalendar_CreateHandle_Invoke_Success()
         {
             using var control = new SubMonthCalendar();
@@ -3591,7 +3565,7 @@ namespace System.Windows.Forms.Tests
             Assert.True(control.IsHandleCreated);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetMouseEventArgsTheoryData))]
         public void MonthCalendar_OnMouseClick_Invoke_CallsMouseClick(MouseEventArgs eventArgs)
         {
@@ -3615,7 +3589,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetMouseEventArgsTheoryData))]
         public void MonthCalendar_OnMouseDoubleClick_Invoke_CallsMouseDoubleClick(MouseEventArgs eventArgs)
         {
@@ -3663,39 +3637,23 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
         }
 
-        [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
-        public void MonthCalendar_OnRightToLeftLayoutChanged_Invoke_CallsRightToLeftLayoutChanged(EventArgs eventArgs)
+        public static IEnumerable<object[]> OnRightToLeftLayoutChanged_TestData()
         {
-            using var control = new SubMonthCalendar();
-            int callCount = 0;
-            EventHandler handler = (sender, e) =>
-            {
-                Assert.Same(control, sender);
-                Assert.Same(eventArgs, e);
-                callCount++;
-            };
-
-            // Call with handler.
-            control.RightToLeftLayoutChanged += handler;
-            control.OnRightToLeftLayoutChanged(eventArgs);
-            Assert.Equal(1, callCount);
-            Assert.False(control.IsHandleCreated);
-
-            // Remove handler.
-            control.RightToLeftLayoutChanged -= handler;
-            control.OnRightToLeftLayoutChanged(eventArgs);
-            Assert.Equal(1, callCount);
-            Assert.False(control.IsHandleCreated);
+            yield return new object[] { RightToLeft.Yes, null };
+            yield return new object[] { RightToLeft.Yes, new EventArgs() };
+            yield return new object[] { RightToLeft.No, null };
+            yield return new object[] { RightToLeft.No, new EventArgs() };
+            yield return new object[] { RightToLeft.Inherit, null };
+            yield return new object[] { RightToLeft.Inherit, new EventArgs() };
         }
 
-        [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
-        public void MonthCalendar_OnRightToLeftLayoutChanged_InvokeWithRightToLeftYes_CallsRightToLeftLayoutChanged(EventArgs eventArgs)
+        [WinFormsTheory]
+        [MemberData(nameof(OnRightToLeftLayoutChanged_TestData))]
+        public void MonthCalendar_OnRightToLeftLayoutChanged_Invoke_CallsRightToLeftLayoutChanged(RightToLeft rightToLeft, EventArgs eventArgs)
         {
             using var control = new SubMonthCalendar
             {
-                RightToLeft = RightToLeft.Yes
+                RightToLeft = rightToLeft
             };
             int callCount = 0;
             EventHandler handler = (sender, e) =>
@@ -3717,61 +3675,32 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
             Assert.False(control.IsHandleCreated);
         }
-
-        [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
-        public void MonthCalendar_OnRightToLeftLayoutChanged_InvokeWithHandle_CallsRightToLeftLayoutChanged(EventArgs eventArgs)
+        
+        public static IEnumerable<object[]> OnRightToLeftLayoutChanged_WithHandle_TestData()
         {
-            using var control = new SubMonthCalendar();
-            Assert.NotEqual(IntPtr.Zero, control.Handle);
-
-            int callCount = 0;
-            EventHandler handler = (sender, e) =>
-            {
-                Assert.Same(control, sender);
-                Assert.Same(eventArgs, e);
-                callCount++;
-            };
-            int invalidatedCallCount = 0;
-            InvalidateEventHandler invalidatedHandler = (sender, e) => invalidatedCallCount++;
-            int styleChangedCallCount = 0;
-            EventHandler styleChangedHandler = (sender, e) => styleChangedCallCount++;
-            int createdCallCount = 0;
-            EventHandler createdHandler = (sender, e) => createdCallCount++;
-
-            // Call with handler.
-            control.RightToLeftLayoutChanged += handler;
-            control.Invalidated += invalidatedHandler;
-            control.StyleChanged += styleChangedHandler;
-            control.HandleCreated += createdHandler;
-            control.OnRightToLeftLayoutChanged(eventArgs);
-            Assert.Equal(1, callCount);
-            Assert.True(control.IsHandleCreated);
-            Assert.Equal(0, invalidatedCallCount);
-            Assert.Equal(0, styleChangedCallCount);
-            Assert.Equal(0, createdCallCount);
-
-            // Remove handler.
-            control.RightToLeftLayoutChanged -= handler;
-            control.Invalidated -= invalidatedHandler;
-            control.StyleChanged -= styleChangedHandler;
-            control.HandleCreated -= createdHandler;
-            control.OnRightToLeftLayoutChanged(eventArgs);
-            Assert.True(control.IsHandleCreated);
-            Assert.Equal(0, invalidatedCallCount);
-            Assert.Equal(0, styleChangedCallCount);
-            Assert.Equal(0, createdCallCount);
+            yield return new object[] { RightToLeft.Yes, null, 1 };
+            yield return new object[] { RightToLeft.Yes, new EventArgs(), 1 };
+            yield return new object[] { RightToLeft.No, null, 0 };
+            yield return new object[] { RightToLeft.No, new EventArgs(), 0 };
+            yield return new object[] { RightToLeft.Inherit, null, 0 };
+            yield return new object[] { RightToLeft.Inherit, new EventArgs(), 0 };
         }
 
-        [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
-        public void MonthCalendar_OnRightToLeftLayoutChanged_InvokeWithHandleWithRightToLeftYes_CallsRightToLeftLayoutChanged(EventArgs eventArgs)
+        [WinFormsTheory]
+        [MemberData(nameof(OnRightToLeftLayoutChanged_WithHandle_TestData))]
+        public void MonthCalendar_OnRightToLeftLayoutChanged_InvokeWithHandle_CallsRightToLeftLayoutChanged(RightToLeft rightToLeft, EventArgs eventArgs, int expectedCreatedCallCount)
         {
             using var control = new SubMonthCalendar
             {
-                RightToLeft = RightToLeft.Yes
+                RightToLeft = rightToLeft
             };
             Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
 
             int callCount = 0;
             EventHandler handler = (sender, e) =>
@@ -3780,38 +3709,26 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-            int invalidatedCallCount = 0;
-            InvalidateEventHandler invalidatedHandler = (sender, e) => invalidatedCallCount++;
-            int styleChangedCallCount = 0;
-            EventHandler styleChangedHandler = (sender, e) => styleChangedCallCount++;
-            int createdCallCount = 0;
-            EventHandler createdHandler = (sender, e) => createdCallCount++;
 
             // Call with handler.
             control.RightToLeftLayoutChanged += handler;
-            control.Invalidated += invalidatedHandler;
-            control.StyleChanged += styleChangedHandler;
-            control.HandleCreated += createdHandler;
             control.OnRightToLeftLayoutChanged(eventArgs);
             Assert.Equal(1, callCount);
             Assert.True(control.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
-            Assert.Equal(1, createdCallCount);
+            Assert.Equal(expectedCreatedCallCount, createdCallCount);
 
             // Remove handler.
             control.RightToLeftLayoutChanged -= handler;
-            control.Invalidated -= invalidatedHandler;
-            control.StyleChanged -= styleChangedHandler;
-            control.HandleCreated -= createdHandler;
             control.OnRightToLeftLayoutChanged(eventArgs);
             Assert.True(control.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
-            Assert.Equal(1, createdCallCount);
+            Assert.Equal(expectedCreatedCallCount * 2, createdCallCount);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void MonthCalendar_OnRightToLeftLayoutChanged_InvokeInDisposing_DoesNotCallRightToLeftLayoutChanged()
         {
             using var control = new SubMonthCalendar

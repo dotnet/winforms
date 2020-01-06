@@ -50,7 +50,7 @@ namespace System.Windows.Forms.Tests
             Assert.Null(control.ContextMenuStrip);
             Assert.Empty(control.Controls);
             Assert.Same(control.Controls, control.Controls);
-            Assert.False(control.Created);
+            Assert.False(control.IsHandleCreated);
             Assert.Same(Cursors.Default, control.Cursor);
             Assert.Same(Cursors.Default, control.DefaultCursor);
             Assert.Equal(ImeMode.Disable, control.DefaultImeMode);
@@ -468,27 +468,29 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(2, callCount);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetFontTheoryData))]
         public void PictureBox_Font_Set_GetReturnsExpected(Font value)
         {
-            var control = new SubPictureBox
+            using var control = new SubPictureBox
             {
                 Font = value
             };
             Assert.Equal(value ?? Control.DefaultFont, control.Font);
             Assert.Equal(control.Font.Height, control.FontHeight);
+            Assert.False(control.IsHandleCreated);
 
             // Set same.
             control.Font = value;
             Assert.Equal(value ?? Control.DefaultFont, control.Font);
             Assert.Equal(control.Font.Height, control.FontHeight);
+            Assert.False(control.IsHandleCreated);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void PictureBox_Font_SetWithHandler_CallsFontChanged()
         {
-            var control = new PictureBox();
+            using var control = new PictureBox();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -499,7 +501,7 @@ namespace System.Windows.Forms.Tests
             control.FontChanged += handler;
 
             // Set different.
-            Font font1 = new Font("Arial", 8.25f);
+            using var font1 = new Font("Arial", 8.25f);
             control.Font = font1;
             Assert.Same(font1, control.Font);
             Assert.Equal(1, callCount);
@@ -510,7 +512,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
 
             // Set different.
-            Font font2 = SystemFonts.DialogFont;
+            using var font2 = SystemFonts.DialogFont;
             control.Font = font2;
             Assert.Same(font2, control.Font);
             Assert.Equal(2, callCount);
@@ -1552,40 +1554,56 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(2, callCount);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void PictureBox_Text_Set_GetReturnsExpected(string value, string expected)
         {
-            var control = new PictureBox
+            using var control = new PictureBox
             {
                 Text = value
             };
             Assert.Equal(expected, control.Text);
+            Assert.False(control.IsHandleCreated);
 
             // Set same.
             control.Text = value;
             Assert.Equal(expected, control.Text);
+            Assert.False(control.IsHandleCreated);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void PictureBox_Text_SetWithHandle_GetReturnsExpected(string value, string expected)
         {
-            var control = new PictureBox();
+            using var control = new PictureBox();
             Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
 
             control.Text = value;
             Assert.Equal(expected, control.Text);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
 
             // Set same.
             control.Text = value;
             Assert.Equal(expected, control.Text);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void PictureBox_Text_SetWithHandler_CallsTextChanged()
         {
-            var control = new PictureBox();
+            using var control = new PictureBox();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -2164,14 +2182,14 @@ namespace System.Windows.Forms.Tests
             control.HandleCreated += handler;
             control.OnHandleCreated(eventArgs);
             Assert.Equal(1, callCount);
-            Assert.False(control.Created);
+            Assert.False(control.IsHandleCreated);
             Assert.False(control.IsHandleCreated);
 
             // Remove handler.
             control.HandleCreated -= handler;
             control.OnHandleCreated(eventArgs);
             Assert.Equal(1, callCount);
-            Assert.False(control.Created);
+            Assert.False(control.IsHandleCreated);
             Assert.False(control.IsHandleCreated);
         }
 
@@ -2195,14 +2213,14 @@ namespace System.Windows.Forms.Tests
             control.HandleCreated += handler;
             control.OnHandleCreated(eventArgs);
             Assert.Equal(1, callCount);
-            Assert.True(control.Created);
+            Assert.True(control.IsHandleCreated);
             Assert.True(control.IsHandleCreated);
 
             // Remove handler.
             control.HandleCreated -= handler;
             control.OnHandleCreated(eventArgs);
             Assert.Equal(1, callCount);
-            Assert.True(control.Created);
+            Assert.True(control.IsHandleCreated);
             Assert.True(control.IsHandleCreated);
         }
 
@@ -2223,14 +2241,14 @@ namespace System.Windows.Forms.Tests
             control.HandleDestroyed += handler;
             control.OnHandleDestroyed(eventArgs);
             Assert.Equal(1, callCount);
-            Assert.False(control.Created);
+            Assert.False(control.IsHandleCreated);
             Assert.False(control.IsHandleCreated);
 
             // Remove handler.
             control.HandleDestroyed -= handler;
             control.OnHandleDestroyed(eventArgs);
             Assert.Equal(1, callCount);
-            Assert.False(control.Created);
+            Assert.False(control.IsHandleCreated);
             Assert.False(control.IsHandleCreated);
         }
 
@@ -2253,14 +2271,14 @@ namespace System.Windows.Forms.Tests
             control.HandleDestroyed += handler;
             control.OnHandleDestroyed(eventArgs);
             Assert.Equal(1, callCount);
-            Assert.True(control.Created);
+            Assert.True(control.IsHandleCreated);
             Assert.True(control.IsHandleCreated);
 
             // Remove handler.
             control.HandleDestroyed -= handler;
             control.OnHandleDestroyed(eventArgs);
             Assert.Equal(1, callCount);
-            Assert.True(control.Created);
+            Assert.True(control.IsHandleCreated);
             Assert.True(control.IsHandleCreated);
         }
 

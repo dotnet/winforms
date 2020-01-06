@@ -482,11 +482,13 @@ namespace System.Windows.Forms.Tests
             };
             Assert.Equal(value ?? Control.DefaultFont, control.Font);
             Assert.Equal(control.Font.Height, control.FontHeight);
+            Assert.False(control.IsHandleCreated);
 
             // Set same.
             control.Font = value;
             Assert.Equal(value ?? Control.DefaultFont, control.Font);
             Assert.Equal(control.Font.Height, control.FontHeight);
+            Assert.False(control.IsHandleCreated);
         }
 
         [WinFormsFact]
@@ -503,7 +505,7 @@ namespace System.Windows.Forms.Tests
             control.FontChanged += handler;
 
             // Set different.
-            Font font1 = new Font("Arial", 8.25f);
+            using var font1 = new Font("Arial", 8.25f);
             control.Font = font1;
             Assert.Same(font1, control.Font);
             Assert.Equal(1, callCount);
@@ -514,7 +516,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
 
             // Set different.
-            Font font2 = SystemFonts.DialogFont;
+            using var font2 = SystemFonts.DialogFont;
             control.Font = font2;
             Assert.Same(font2, control.Font);
             Assert.Equal(2, callCount);
@@ -1180,45 +1182,56 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(2, callCount);
         }
 
-
         [WinFormsTheory]
-        [InlineData(RightToLeft.Yes, true)]
-        [InlineData(RightToLeft.Yes, false)]
-        [InlineData(RightToLeft.No, true)]
-        [InlineData(RightToLeft.No, false)]
-        [InlineData(RightToLeft.Inherit, true)]
-        [InlineData(RightToLeft.Inherit, false)]
-        public void ProgressBar_RightToLeftLayout_Set_GetReturnsExpected(RightToLeft rightToLeft, bool value)
+        [InlineData(RightToLeft.Yes, true, 1)]
+        [InlineData(RightToLeft.Yes, false, 0)]
+        [InlineData(RightToLeft.No, true, 1)]
+        [InlineData(RightToLeft.No, false, 0)]
+        [InlineData(RightToLeft.Inherit, true, 1)]
+        [InlineData(RightToLeft.Inherit, false, 0)]
+        public void ProgressBar_RightToLeftLayout_Set_GetReturnsExpected(RightToLeft rightToLeft, bool value, int expectedLayoutCallCount)
         {
-            using var control = new SubProgressBar
+            using var control = new ProgressBar
             {
-                RightToLeft = rightToLeft,
-                RightToLeftLayout = value
+                RightToLeft = rightToLeft
             };
+            int layoutCallCount = 0;
+            control.Layout += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(control, e.AffectedControl);
+                Assert.Equal("RightToLeftLayout", e.AffectedProperty);
+                layoutCallCount++;
+            };
+            
+            control.RightToLeftLayout = value;
             Assert.Equal(value, control.RightToLeftLayout);
+            Assert.Equal(expectedLayoutCallCount, layoutCallCount);
             Assert.False(control.IsHandleCreated);
 
             // Set same.
             control.RightToLeftLayout = value;
             Assert.Equal(value, control.RightToLeftLayout);
+            Assert.Equal(expectedLayoutCallCount, layoutCallCount);
             Assert.False(control.IsHandleCreated);
 
             // Set different.
             control.RightToLeftLayout = !value;
             Assert.Equal(!value, control.RightToLeftLayout);
+            Assert.Equal(expectedLayoutCallCount + 1, layoutCallCount);
             Assert.False(control.IsHandleCreated);
         }
 
         [WinFormsTheory]
-        [InlineData(RightToLeft.Yes, true, 1, 2)]
-        [InlineData(RightToLeft.Yes, false, 0, 1)]
-        [InlineData(RightToLeft.No, true, 0, 0)]
-        [InlineData(RightToLeft.No, false, 0, 0)]
-        [InlineData(RightToLeft.Inherit, true, 0, 0)]
-        [InlineData(RightToLeft.Inherit, false, 0, 0)]
-        public void ProgressBar_RightToLeftLayout_SetWithHandle_GetReturnsExpected(RightToLeft rightToLeft, bool value, int expectedCreatedCallCount1, int expectedCreatedCallCount2)
+        [InlineData(RightToLeft.Yes, true, 1, 1, 2)]
+        [InlineData(RightToLeft.Yes, false, 0, 0, 1)]
+        [InlineData(RightToLeft.No, true, 1, 0, 0)]
+        [InlineData(RightToLeft.No, false, 0, 0, 0)]
+        [InlineData(RightToLeft.Inherit, true, 1, 0, 0)]
+        [InlineData(RightToLeft.Inherit, false, 0, 0, 0)]
+        public void ProgressBar_RightToLeftLayout_SetWithHandle_GetReturnsExpected(RightToLeft rightToLeft, bool value, int expectedLayoutCallCount, int expectedCreatedCallCount1, int expectedCreatedCallCount2)
         {
-            using var control = new SubProgressBar
+            using var control = new ProgressBar
             {
                 RightToLeft = rightToLeft
             };
@@ -1229,9 +1242,18 @@ namespace System.Windows.Forms.Tests
             control.StyleChanged += (sender, e) => styleChangedCallCount++;
             int createdCallCount = 0;
             control.HandleCreated += (sender, e) => createdCallCount++;
+            int layoutCallCount = 0;
+            control.Layout += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(control, e.AffectedControl);
+                Assert.Equal("RightToLeftLayout", e.AffectedProperty);
+                layoutCallCount++;
+            };
 
             control.RightToLeftLayout = value;
             Assert.Equal(value, control.RightToLeftLayout);
+            Assert.Equal(expectedLayoutCallCount, layoutCallCount);
             Assert.True(control.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
@@ -1240,6 +1262,7 @@ namespace System.Windows.Forms.Tests
             // Set same.
             control.RightToLeftLayout = value;
             Assert.Equal(value, control.RightToLeftLayout);
+            Assert.Equal(expectedLayoutCallCount, layoutCallCount);
             Assert.True(control.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
@@ -1248,6 +1271,7 @@ namespace System.Windows.Forms.Tests
             // Set different.
             control.RightToLeftLayout = !value;
             Assert.Equal(!value, control.RightToLeftLayout);
+            Assert.Equal(expectedLayoutCallCount + 1, layoutCallCount);
             Assert.True(control.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
@@ -1290,6 +1314,34 @@ namespace System.Windows.Forms.Tests
             control.RightToLeftLayout = false;
             Assert.False(control.RightToLeftLayout);
             Assert.Equal(2, callCount);
+        }
+
+        [WinFormsFact]
+        public void ProgressBar_RightToLeftLayout_SetWithHandlerInDisposing_DoesNotRightToLeftLayoutChanged()
+        {
+            using var control = new ProgressBar
+            {
+                RightToLeft = RightToLeft.Yes
+            };
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+
+            int callCount = 0;
+            control.RightToLeftLayoutChanged += (sender, e) => callCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            int disposedCallCount = 0;
+            control.Disposed += (sender, e) =>
+            {
+                control.RightToLeftLayout = true;
+                Assert.True(control.RightToLeftLayout);
+                Assert.Equal(0, callCount);
+                Assert.Equal(0, createdCallCount);
+                disposedCallCount++;
+            };
+
+            control.Dispose();
+            Assert.Equal(1, disposedCallCount);
         }
 
         public static IEnumerable<object[]> Step_Set_TestData()
@@ -2301,47 +2353,31 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
         }
 
-        [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
-        public void ProgressBar_OnRightToLeftLayoutChanged_Invoke_CallsRightToLeftLayoutChanged(EventArgs eventArgs)
+        public static IEnumerable<object[]> OnRightToLeftLayoutChanged_TestData()
         {
-            using var control = new SubProgressBar();
-            int callCount = 0;
-            void handler(object sender, EventArgs e)
-            {
-                Assert.Same(control, sender);
-                Assert.Same(eventArgs, e);
-                callCount++;
-            }
-
-            // Call with handler.
-            control.RightToLeftLayoutChanged += handler;
-            control.OnRightToLeftLayoutChanged(eventArgs);
-            Assert.Equal(1, callCount);
-            Assert.False(control.IsHandleCreated);
-
-            // Remove handler.
-            control.RightToLeftLayoutChanged -= handler;
-            control.OnRightToLeftLayoutChanged(eventArgs);
-            Assert.Equal(1, callCount);
-            Assert.False(control.IsHandleCreated);
+            yield return new object[] { RightToLeft.Yes, null };
+            yield return new object[] { RightToLeft.Yes, new EventArgs() };
+            yield return new object[] { RightToLeft.No, null };
+            yield return new object[] { RightToLeft.No, new EventArgs() };
+            yield return new object[] { RightToLeft.Inherit, null };
+            yield return new object[] { RightToLeft.Inherit, new EventArgs() };
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
-        public void ProgressBar_OnRightToLeftLayoutChanged_InvokeRightToLeft_CallsRightToLeftLayoutChanged(EventArgs eventArgs)
+        [MemberData(nameof(OnRightToLeftLayoutChanged_TestData))]
+        public void ProgressBar_OnRightToLeftLayoutChanged_Invoke_CallsRightToLeftLayoutChanged(RightToLeft rightToLeft, EventArgs eventArgs)
         {
             using var control = new SubProgressBar
             {
-                RightToLeft = RightToLeft.Yes
+                RightToLeft = rightToLeft
             };
             int callCount = 0;
-            void handler(object sender, EventArgs e)
+            EventHandler handler = (sender, e) =>
             {
                 Assert.Same(control, sender);
                 Assert.Same(eventArgs, e);
                 callCount++;
-            }
+            };
 
             // Call with handler.
             control.RightToLeftLayoutChanged += handler;
@@ -2355,117 +2391,79 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
             Assert.False(control.IsHandleCreated);
         }
-
-        [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
-        public void ProgressBar_OnRightToLeftLayoutChanged_InvokeWithHandle_CallsRightToLeftLayoutChanged(EventArgs eventArgs)
+        
+        public static IEnumerable<object[]> OnRightToLeftLayoutChanged_WithHandle_TestData()
         {
-            using var control = new SubProgressBar();
-            Assert.NotEqual(IntPtr.Zero, control.Handle);
-
-            int callCount = 0;
-            void handler(object sender, EventArgs e)
-            {
-                Assert.Same(control, sender);
-                Assert.Same(eventArgs, e);
-                callCount++;
-            }
-            int invalidatedCallCount = 0;
-            void invalidatedHandler(object sender, InvalidateEventArgs e) => invalidatedCallCount++;
-            int styleChangedCallCount = 0;
-            void styleChangedHandler(object sender, EventArgs e) => styleChangedCallCount++;
-            int createdCallCount = 0;
-            void createdHandler(object sender, EventArgs e) => createdCallCount++;
-
-            // Call with handler.
-            control.RightToLeftLayoutChanged += handler;
-            control.Invalidated += invalidatedHandler;
-            control.StyleChanged += styleChangedHandler;
-            control.HandleCreated += createdHandler;
-            control.OnRightToLeftLayoutChanged(eventArgs);
-            Assert.Equal(1, callCount);
-            Assert.Equal(0, invalidatedCallCount);
-            Assert.Equal(0, styleChangedCallCount);
-            Assert.Equal(0, createdCallCount);
-            Assert.True(control.IsHandleCreated);
-
-            // Remove handler.
-            control.RightToLeftLayoutChanged -= handler;
-            control.Invalidated -= invalidatedHandler;
-            control.StyleChanged -= styleChangedHandler;
-            control.HandleCreated -= createdHandler;
-            control.OnRightToLeftLayoutChanged(eventArgs);
-            Assert.Equal(0, invalidatedCallCount);
-            Assert.Equal(0, styleChangedCallCount);
-            Assert.Equal(0, createdCallCount);
-            Assert.True(control.IsHandleCreated);
+            yield return new object[] { RightToLeft.Yes, null, 1 };
+            yield return new object[] { RightToLeft.Yes, new EventArgs(), 1 };
+            yield return new object[] { RightToLeft.No, null, 0 };
+            yield return new object[] { RightToLeft.No, new EventArgs(), 0 };
+            yield return new object[] { RightToLeft.Inherit, null, 0 };
+            yield return new object[] { RightToLeft.Inherit, new EventArgs(), 0 };
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
-        public void ProgressBar_OnRightToLeftLayoutChanged_InvokeWithRightToLeftWithHandle_CallsRightToLeftLayoutChanged(EventArgs eventArgs)
+        [MemberData(nameof(OnRightToLeftLayoutChanged_WithHandle_TestData))]
+        public void ProgressBar_OnRightToLeftLayoutChanged_InvokeWithHandle_CallsRightToLeftLayoutChanged(RightToLeft rightToLeft, EventArgs eventArgs, int expectedCreatedCallCount)
         {
             using var control = new SubProgressBar
             {
-                RightToLeft = RightToLeft.Yes
+                RightToLeft = rightToLeft
             };
             Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
 
             int callCount = 0;
-            void handler(object sender, EventArgs e)
+            EventHandler handler = (sender, e) =>
             {
                 Assert.Same(control, sender);
                 Assert.Same(eventArgs, e);
                 callCount++;
-            }
-            int invalidatedCallCount = 0;
-            void invalidatedHandler(object sender, InvalidateEventArgs e) => invalidatedCallCount++;
-            int styleChangedCallCount = 0;
-            void styleChangedHandler(object sender, EventArgs e) => styleChangedCallCount++;
-            int createdCallCount = 0;
-            void createdHandler(object sender, EventArgs e) => createdCallCount++;
+            };
 
             // Call with handler.
             control.RightToLeftLayoutChanged += handler;
-            control.Invalidated += invalidatedHandler;
-            control.StyleChanged += styleChangedHandler;
-            control.HandleCreated += createdHandler;
             control.OnRightToLeftLayoutChanged(eventArgs);
             Assert.Equal(1, callCount);
+            Assert.True(control.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
-            Assert.Equal(1, createdCallCount);
-            Assert.True(control.IsHandleCreated);
+            Assert.Equal(expectedCreatedCallCount, createdCallCount);
 
             // Remove handler.
             control.RightToLeftLayoutChanged -= handler;
-            control.Invalidated -= invalidatedHandler;
-            control.StyleChanged -= styleChangedHandler;
-            control.HandleCreated -= createdHandler;
             control.OnRightToLeftLayoutChanged(eventArgs);
+            Assert.True(control.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
-            Assert.Equal(1, createdCallCount);
-            Assert.True(control.IsHandleCreated);
+            Assert.Equal(expectedCreatedCallCount * 2, createdCallCount);
         }
 
         [WinFormsFact]
         public void ProgressBar_OnRightToLeftLayoutChanged_InvokeInDisposing_DoesNotCallRightToLeftLayoutChanged()
         {
-            using var control = new SubProgressBar();
+            using var control = new SubProgressBar
+            {
+                RightToLeft = RightToLeft.Yes
+            };
             Assert.NotEqual(IntPtr.Zero, control.Handle);
 
             int callCount = 0;
             control.RightToLeftLayoutChanged += (sender, e) => callCount++;
-            int invalidatedCallCount = 0;
-            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
 
             int disposedCallCount = 0;
             control.Disposed += (sender, e) =>
             {
                 control.OnRightToLeftLayoutChanged(EventArgs.Empty);
                 Assert.Equal(0, callCount);
-                Assert.Equal(0, invalidatedCallCount);
+                Assert.Equal(0, createdCallCount);
                 disposedCallCount++;
             };
 

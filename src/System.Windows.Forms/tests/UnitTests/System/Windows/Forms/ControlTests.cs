@@ -808,6 +808,8 @@ namespace System.Windows.Forms.Tests
 
             public new void DestroyHandle() => base.DestroyHandle();
 
+            public new void Dispose(bool disposing) => base.Dispose(disposing);
+
             public new AutoSizeMode GetAutoSizeMode() => base.GetAutoSizeMode();
 
             public new bool GetStyle(ControlStyles flag) => base.GetStyle(flag);
@@ -970,6 +972,8 @@ namespace System.Windows.Forms.Tests
 
             public new void OnStyleChanged(EventArgs e) => base.OnStyleChanged(e);
 
+            public new void OnSystemColorsChanged(EventArgs e) => base.OnSystemColorsChanged(e);
+
             public new void OnTabIndexChanged(EventArgs e) => base.OnTabIndexChanged(e);
 
             public new void OnTabStopChanged(EventArgs e) => base.OnTabStopChanged(e);
@@ -1011,7 +1015,7 @@ namespace System.Windows.Forms.Tests
             public new ContentAlignment RtlTranslateContent(ContentAlignment align) => base.RtlTranslateContent(align);
 
             public new HorizontalAlignment RtlTranslateHorizontal(HorizontalAlignment align) => base.RtlTranslateHorizontal(align);
-            
+
             public new LeftRightAlignment RtlTranslateLeftRight(LeftRightAlignment align) => base.RtlTranslateLeftRight(align);
 
             public new void SetAutoSizeMode(AutoSizeMode mode) => base.SetAutoSizeMode(mode);

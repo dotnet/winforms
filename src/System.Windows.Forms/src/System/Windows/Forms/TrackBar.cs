@@ -326,7 +326,7 @@ namespace System.Windows.Forms
             {
                 if (value < 0)
                 {
-                    throw new ArgumentOutOfRangeException(nameof(LargeChange), string.Format(SR.TrackBarLargeChangeError, value));
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.TrackBarLargeChangeError, value));
                 }
 
                 if (largeChange != value)
@@ -551,7 +551,7 @@ namespace System.Windows.Forms
             {
                 if (value < 0)
                 {
-                    throw new ArgumentOutOfRangeException(nameof(SmallChange), string.Format(SR.TrackBarSmallChangeError, value));
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.TrackBarSmallChangeError, value));
                 }
                 if (smallChange != value)
                 {
