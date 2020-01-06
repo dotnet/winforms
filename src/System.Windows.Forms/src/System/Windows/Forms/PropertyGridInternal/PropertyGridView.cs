@@ -6124,11 +6124,11 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 if (nmhdr->hwndFrom == ToolTip.Handle)
                 {
-                    switch (nmhdr->code)
+                    switch ((ComCtl32.TTN)nmhdr->code)
                     {
-                        case NativeMethods.TTN_POP:
+                        case ComCtl32.TTN.POP:
                             break;
-                        case NativeMethods.TTN_SHOW:
+                        case ComCtl32.TTN.SHOW:
                             // we want to move the tooltip over where our text would be
                             Point mouseLoc = Cursor.Position;
 
@@ -7854,9 +7854,9 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                     if (nmhdr->hwndFrom == psheet.ToolTip.Handle)
                     {
-                        switch (nmhdr->code)
+                        switch ((ComCtl32.TTN)nmhdr->code)
                         {
-                            case NativeMethods.TTN_SHOW:
+                            case ComCtl32.TTN.SHOW:
                                 PropertyGridView.PositionTooltip(this, psheet.ToolTip, ClientRectangle);
                                 m.Result = (IntPtr)1;
                                 return true;

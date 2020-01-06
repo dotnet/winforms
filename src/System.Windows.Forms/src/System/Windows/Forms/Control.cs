@@ -12410,14 +12410,14 @@ namespace System.Windows.Forms
             User32.NMHDR* nmhdr = (User32.NMHDR*)m.LParam;
             if (!ReflectMessage(nmhdr->hwndFrom, ref m))
             {
-                if (nmhdr->code == NativeMethods.TTN_SHOW)
+                switch ((ComCtl32.TTN)nmhdr->code)
                 {
-                    m.Result = UnsafeNativeMethods.SendMessage(new HandleRef(null, nmhdr->hwndFrom), WindowMessages.WM_REFLECT + m.Msg, m.WParam, m.LParam);
-                    return;
-                }
-                if (nmhdr->code == NativeMethods.TTN_POP)
-                {
-                    UnsafeNativeMethods.SendMessage(new HandleRef(null, nmhdr->hwndFrom), WindowMessages.WM_REFLECT + m.Msg, m.WParam, m.LParam);
+                    case ComCtl32.TTN.SHOW:
+                        m.Result = User32.SendMessageW(nmhdr->hwndFrom, (User32.WindowMessage)(User32.WM_REFLECT + m.Msg), m.WParam, m.LParam);
+                        return;
+                    case ComCtl32.TTN.POP:
+                        User32.SendMessageW(nmhdr->hwndFrom, (User32.WindowMessage)(User32.WM_REFLECT + m.Msg), m.WParam, m.LParam);
+                        break;
                 }
 
                 DefWndProc(ref m);

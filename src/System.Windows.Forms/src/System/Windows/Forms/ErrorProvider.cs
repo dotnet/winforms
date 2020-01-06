@@ -1328,9 +1328,9 @@ namespace System.Windows.Forms
                         break;
                     case WindowMessages.WM_NOTIFY:
                         User32.NMHDR* nmhdr = (User32.NMHDR*)m.LParam;
-                        if (nmhdr->code == NativeMethods.TTN_SHOW || nmhdr->code == NativeMethods.TTN_POP)
+                        if (nmhdr->code == (int)ComCtl32.TTN.SHOW || nmhdr->code == (int)ComCtl32.TTN.POP)
                         {
-                            OnToolTipVisibilityChanging(nmhdr->idFrom, nmhdr->code == NativeMethods.TTN_SHOW);
+                            OnToolTipVisibilityChanging(nmhdr->idFrom, nmhdr->code == (int)ComCtl32.TTN.SHOW);
                         }
                         break;
                     case WindowMessages.WM_ERASEBKGND:
