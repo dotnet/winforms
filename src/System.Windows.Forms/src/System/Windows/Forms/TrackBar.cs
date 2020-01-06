@@ -9,6 +9,7 @@ using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
 using static Interop;
+using static Interop.ComCtl32;
 
 namespace System.Windows.Forms
 {
@@ -171,7 +172,7 @@ namespace System.Windows.Forms
             get
             {
                 CreateParams cp = base.CreateParams;
-                cp.ClassName = ComCtl32.WindowClasses.WC_TRACKBAR;
+                cp.ClassName = WindowClasses.WC_TRACKBAR;
 
                 switch (tickStyle)
                 {
@@ -334,7 +335,7 @@ namespace System.Windows.Forms
                     largeChange = value;
                     if (IsHandleCreated)
                     {
-                        SendMessage(NativeMethods.TBM_SETPAGESIZE, 0, value);
+                        User32.SendMessageW(this, (User32.WindowMessage)TBM.SETPAGESIZE, IntPtr.Zero, (IntPtr)value);
                     }
                 }
             }
@@ -492,9 +493,7 @@ namespace System.Windows.Forms
         {
             if (IsHandleCreated)
             {
-                //The '1' in the call to SendMessage below indicates that the
-                //trackbar should be redrawn (see TBM_SETRANGEMAX in MSDN)
-                SendMessage(NativeMethods.TBM_SETRANGEMAX, 1, maximum);
+                User32.SendMessageW(this, (User32.WindowMessage)TBM.SETRANGEMAX, PARAM.FromBool(true), (IntPtr)maximum);
                 Invalidate();
             }
         }
@@ -558,7 +557,7 @@ namespace System.Windows.Forms
                     smallChange = value;
                     if (IsHandleCreated)
                     {
-                        SendMessage(NativeMethods.TBM_SETLINESIZE, 0, value);
+                        User32.SendMessageW(this, (User32.WindowMessage)TBM.SETLINESIZE, IntPtr.Zero, (IntPtr)value);
                     }
                 }
             }
@@ -643,7 +642,7 @@ namespace System.Windows.Forms
                     tickFrequency = value;
                     if (IsHandleCreated)
                     {
-                        SendMessage(NativeMethods.TBM_SETTICFREQ, value, 0);
+                        User32.SendMessageW(this, (User32.WindowMessage)TBM.SETTICFREQ, (IntPtr)value);
                         Invalidate();
                     }
                 }
@@ -812,11 +811,11 @@ namespace System.Windows.Forms
                 IntPtr userCookie = ThemingScope.Activate(Application.UseVisualStyles);
                 try
                 {
-                    var icc = new ComCtl32.INITCOMMONCONTROLSEX
+                    var icc = new INITCOMMONCONTROLSEX
                     {
-                        dwICC = ComCtl32.ICC.BAR_CLASSES
+                        dwICC = ICC.BAR_CLASSES
                     };
-                    ComCtl32.InitCommonControlsEx(ref icc);
+                    InitCommonControlsEx(ref icc);
                 }
                 finally
                 {
@@ -841,11 +840,9 @@ namespace System.Windows.Forms
         {
             if (IsHandleCreated)
             {
-                value = unchecked((int)(long)SendMessage(NativeMethods.TBM_GETPOS, 0, 0));
+                value = PARAM.ToInt(User32.SendMessageW(this, (User32.WindowMessage)TBM.GETPOS));
 
                 // See SetTrackBarValue() for a description of why we sometimes reflect the trackbar value
-                //
-
                 if (orientation == Orientation.Vertical)
                 {
                     // Reflect value
@@ -885,11 +882,11 @@ namespace System.Windows.Forms
         protected override void OnHandleCreated(EventArgs e)
         {
             base.OnHandleCreated(e);
-            SendMessage(NativeMethods.TBM_SETRANGEMIN, 0, minimum);
-            SendMessage(NativeMethods.TBM_SETRANGEMAX, 0, maximum);
-            SendMessage(NativeMethods.TBM_SETTICFREQ, tickFrequency, 0);
-            SendMessage(NativeMethods.TBM_SETPAGESIZE, 0, largeChange);
-            SendMessage(NativeMethods.TBM_SETLINESIZE, 0, smallChange);
+            User32.SendMessageW(this, (User32.WindowMessage)TBM.SETRANGEMIN, PARAM.FromBool(false), (IntPtr)minimum);
+            User32.SendMessageW(this, (User32.WindowMessage)TBM.SETRANGEMAX, PARAM.FromBool(false), (IntPtr)maximum);
+            User32.SendMessageW(this, (User32.WindowMessage)TBM.SETTICFREQ, (IntPtr)tickFrequency);
+            User32.SendMessageW(this, (User32.WindowMessage)TBM.SETPAGESIZE, IntPtr.Zero, (IntPtr)largeChange);
+            User32.SendMessageW(this, (User32.WindowMessage)TBM.SETLINESIZE, IntPtr.Zero, (IntPtr)smallChange);
             SetTrackBarPosition();
             AdjustSize();
         }
@@ -1074,13 +1071,10 @@ namespace System.Windows.Forms
 
                 if (IsHandleCreated)
                 {
-                    SendMessage(NativeMethods.TBM_SETRANGEMIN, 0, minimum);
+                    User32.SendMessageW(this, (User32.WindowMessage)TBM.SETRANGEMIN, PARAM.FromBool(false), (IntPtr)minimum);
 
-                    // We must repaint the trackbar after changing
-                    // the range. The '1' in the call to
-                    // SendMessage below indicates that the trackbar
-                    // should be redrawn (see TBM_SETRANGEMAX in MSDN)
-                    SendMessage(NativeMethods.TBM_SETRANGEMAX, 1, maximum);
+                    // We must repaint the trackbar after changing the range.
+                    User32.SendMessageW(this, (User32.WindowMessage)TBM.SETRANGEMAX, PARAM.FromBool(true), (IntPtr)maximum);
 
                     Invalidate();
                 }
@@ -1129,7 +1123,7 @@ namespace System.Windows.Forms
                     reflectedValue = Minimum + Maximum - value;
                 }
 
-                SendMessage(NativeMethods.TBM_SETPOS, 1, reflectedValue);
+                User32.SendMessageW(this, (User32.WindowMessage)TBM.SETPOS, PARAM.FromBool(true), (IntPtr)reflectedValue);
             }
         }
 
