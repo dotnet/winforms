@@ -177,22 +177,22 @@ namespace System.Windows.Forms
                 switch (tickStyle)
                 {
                     case TickStyle.None:
-                        cp.Style |= NativeMethods.TBS_NOTICKS;
+                        cp.Style |= (int)TBS.NOTICKS;
                         break;
                     case TickStyle.TopLeft:
-                        cp.Style |= (NativeMethods.TBS_AUTOTICKS | NativeMethods.TBS_TOP);
+                        cp.Style |= (int)(TBS.AUTOTICKS | TBS.TOP);
                         break;
                     case TickStyle.BottomRight:
-                        cp.Style |= (NativeMethods.TBS_AUTOTICKS | NativeMethods.TBS_BOTTOM);
+                        cp.Style |= (int)(TBS.AUTOTICKS | TBS.BOTTOM);
                         break;
                     case TickStyle.Both:
-                        cp.Style |= (NativeMethods.TBS_AUTOTICKS | NativeMethods.TBS_BOTH);
+                        cp.Style |= (int)(TBS.AUTOTICKS | TBS.BOTH);
                         break;
                 }
 
                 if (orientation == Orientation.Vertical)
                 {
-                    cp.Style |= NativeMethods.TBS_VERT; // HORIZ == 0
+                    cp.Style |= (int)TBS.VERT; // HORIZ == 0
                 }
 
                 if (RightToLeft == RightToLeft.Yes && RightToLeftLayout)
