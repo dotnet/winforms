@@ -186,7 +186,7 @@ namespace System.Windows.Forms
         private Ole32.IOleInPlaceActiveObject iOleInPlaceActiveObjectExternal;
         private Ole32.IPerPropertyBrowsing iPerPropertyBrowsing;
         private VSSDK.ICategorizeProperties iCategorizeProperties;
-        private UnsafeNativeMethods.IPersistPropertyBag iPersistPropBag;
+        private Ole32.IPersistPropertyBag iPersistPropBag;
         private Ole32.IPersistStream iPersistStream;
         private Ole32.IPersistStreamInit iPersistStreamInit;
         private Ole32.IPersistStorage iPersistStorage;
@@ -3057,10 +3057,10 @@ namespace System.Windows.Forms
                     }
                     return;
                 }
-                if (instance is UnsafeNativeMethods.IPersistPropertyBag)
+                if (instance is Ole32.IPersistPropertyBag)
                 {
                     Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, this + " supports IPersistPropertyBag.");
-                    iPersistPropBag = (UnsafeNativeMethods.IPersistPropertyBag)instance;
+                    iPersistPropBag = (Ole32.IPersistPropertyBag)instance;
                     try
                     {
                         iPersistPropBag.InitNew();
@@ -3130,7 +3130,7 @@ namespace System.Windows.Forms
             {
                 try
                 {
-                    iPersistPropBag = (UnsafeNativeMethods.IPersistPropertyBag)instance;
+                    iPersistPropBag = (Ole32.IPersistPropertyBag)instance;
                     DepersistFromIPropertyBag(ocxState.GetPropBag());
                 }
                 catch (Exception e)

@@ -53,9 +53,9 @@ namespace System.Windows.Forms
         Ole32.IOleWindow,
         Ole32.IViewObject,
         Ole32.IViewObject2,
-        UnsafeNativeMethods.IPersist,
+        Ole32.IPersist,
         Ole32.IPersistStreamInit,
-        UnsafeNativeMethods.IPersistPropertyBag,
+        Ole32.IPersistPropertyBag,
         Ole32.IPersistStorage,
         Ole32.IQuickActivate,
         ISupportOleDropSource,
@@ -13890,24 +13890,37 @@ namespace System.Windows.Forms
             return ((Ole32.IOleInPlaceObject)this).ContextSensitiveHelp(fEnterMode);
         }
 
-        void UnsafeNativeMethods.IPersist.GetClassID(out Guid pClassID)
+        unsafe HRESULT Ole32.IPersist.GetClassID(Guid* pClassID)
         {
-            pClassID = GetType().GUID;
-            Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersist.GetClassID.  ClassID: " + pClassID.ToString());
+            if (pClassID == null)
+            {
+                return HRESULT.E_POINTER;
+            }
+
+            *pClassID = GetType().GUID;
+            Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersist.GetClassID.  ClassID: " + pClassID->ToString());
+            return HRESULT.S_OK;
         }
 
-        void UnsafeNativeMethods.IPersistPropertyBag.InitNew()
+        HRESULT Ole32.IPersistPropertyBag.InitNew()
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistPropertyBag.InitNew");
+            return HRESULT.S_OK;
         }
 
-        void UnsafeNativeMethods.IPersistPropertyBag.GetClassID(out Guid pClassID)
+        unsafe HRESULT Ole32.IPersistPropertyBag.GetClassID(Guid* pClassID)
         {
-            pClassID = GetType().GUID;
-            Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistPropertyBag.GetClassID.  ClassID: " + pClassID.ToString());
+            if (pClassID == null)
+            {
+                return HRESULT.E_POINTER;
+            }
+
+            *pClassID = GetType().GUID;
+            Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistPropertyBag.GetClassID.  ClassID: " + pClassID->ToString());
+            return HRESULT.S_OK;
         }
 
-        void UnsafeNativeMethods.IPersistPropertyBag.Load(Ole32.IPropertyBag pPropBag, Ole32.IErrorLog pErrorLog)
+        void Ole32.IPersistPropertyBag.Load(Ole32.IPropertyBag pPropBag, Ole32.IErrorLog pErrorLog)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:Load (IPersistPropertyBag)");
             Debug.Indent();
@@ -13915,7 +13928,7 @@ namespace System.Windows.Forms
             Debug.Unindent();
         }
 
-        void UnsafeNativeMethods.IPersistPropertyBag.Save(Ole32.IPropertyBag pPropBag, BOOL fClearDirty, BOOL fSaveAllProperties)
+        void Ole32.IPersistPropertyBag.Save(Ole32.IPropertyBag pPropBag, BOOL fClearDirty, BOOL fSaveAllProperties)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:Save (IPersistPropertyBag)");
             Debug.Indent();
@@ -13923,10 +13936,16 @@ namespace System.Windows.Forms
             Debug.Unindent();
         }
 
-        void Ole32.IPersistStorage.GetClassID(out Guid pClassID)
+        unsafe HRESULT Ole32.IPersistStorage.GetClassID(Guid* pClassID)
         {
-            pClassID = GetType().GUID;
-            Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistStorage.GetClassID.  ClassID: " + pClassID.ToString());
+            if (pClassID == null)
+            {
+                return HRESULT.E_POINTER;
+            }
+
+            *pClassID = GetType().GUID;
+            Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistStorage.GetClassID.  ClassID: " + pClassID->ToString());
+            return HRESULT.S_OK;
         }
 
         HRESULT Ole32.IPersistStorage.IsDirty()
@@ -13967,10 +13986,16 @@ namespace System.Windows.Forms
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistStorage.HandsOffStorage");
         }
 
-        void Ole32.IPersistStreamInit.GetClassID(out Guid pClassID)
+        unsafe HRESULT Ole32.IPersistStreamInit.GetClassID(Guid* pClassID)
         {
-            pClassID = GetType().GUID;
-            Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistStreamInit.GetClassID.  ClassID: " + pClassID.ToString());
+            if (pClassID == null)
+            {
+                return HRESULT.E_POINTER;
+            }
+
+            *pClassID = GetType().GUID;
+            Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistStreamInit.GetClassID.  ClassID: " + pClassID->ToString());
+            return HRESULT.S_OK;
         }
 
         HRESULT Ole32.IPersistStreamInit.IsDirty()

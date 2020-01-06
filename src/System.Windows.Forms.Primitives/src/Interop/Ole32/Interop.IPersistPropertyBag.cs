@@ -10,27 +10,25 @@ internal partial class Interop
     internal static partial class Ole32
     {
         [ComImport]
-        [Guid("0000010A-0000-0000-C000-000000000046")]
+        [Guid("37D84F60-42CB-11CE-8135-00AA004BB851")]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public unsafe interface IPersistStorage /* : IPersist */
+        public unsafe interface IPersistPropertyBag /* : IPersist */
         {
             [PreserveSig]
             HRESULT GetClassID(
                 Guid* pClassID);
 
             [PreserveSig]
-            HRESULT IsDirty();
+            HRESULT InitNew();
 
-            void InitNew(IStorage pstg);
+            void Load(
+                IPropertyBag pPropBag,
+                IErrorLog pErrorLog);
 
-            [PreserveSig]
-            HRESULT Load(IStorage pstg);
-
-            void Save(IStorage pStgSave, Interop.BOOL fSameAsLoad);
-
-            void SaveCompleted(IStorage pStgNew);
-
-            void HandsOffStorage();
+            void Save(
+                IPropertyBag pPropBag,
+                BOOL fClearDirty,
+                BOOL fSaveAllProperties);
         }
     }
 }

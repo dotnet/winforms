@@ -14,7 +14,9 @@ internal static partial class Interop
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
         public unsafe interface IPersistStreamInit /* : IPersist */
         {
-            void GetClassID(out Guid pClassID);
+            [PreserveSig]
+            HRESULT GetClassID(
+                Guid* pClassID);
 
             [PreserveSig]
             HRESULT IsDirty();
