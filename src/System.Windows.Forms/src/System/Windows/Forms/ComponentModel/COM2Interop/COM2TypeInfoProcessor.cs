@@ -763,7 +763,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                         hr = enumTypeInfo.GetVarDesc(i, ref pVarDesc);
                         if (!hr.Succeeded() || pVarDesc == IntPtr.Zero)
                         {
-                            Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "ProcessTypeInfoEnum: ignoring item 0x{0:X} because ITypeInfo::GetVarDesc returned hr=0x{1:X} or NULL", hr));
+                            Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "ProcessTypeInfoEnum: ignoring item 0x{0:X} because ITypeInfo::GetVarDesc returned hr=0x{1:X} or NULL", i, hr));
                             continue;
                         }
 
@@ -782,7 +782,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                             hr = enumTypeInfo.GetDocumentation(varDesc.memid, ref name, ref helpstr, null, null);
                             if (!hr.Succeeded())
                             {
-                                Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "ProcessTypeInfoEnum: ignoring item 0x{0:X} because ITypeInfo::GetDocumentation returned hr=0x{1:X} or NULL", hr));
+                                Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "ProcessTypeInfoEnum: ignoring item 0x{0:X} because ITypeInfo::GetDocumentation returned hr=0x{1:X} or NULL", i, hr));
                                 continue;
                             }
 
@@ -901,7 +901,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     hr = typeInfo.GetVarDesc(i, ref pVarDesc);
                     if (!hr.Succeeded() || pVarDesc == IntPtr.Zero)
                     {
-                        Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "ProcessTypeInfoEnum: ignoring variable item 0x{0:X} because ITypeInfo::GetFuncDesc returned hr=0x{1:X} or NULL", hr));
+                        Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "ProcessTypeInfoEnum: ignoring variable item 0x{0:X} because ITypeInfo::GetFuncDesc returned hr=0x{1:X} or NULL", i, hr));
                         continue;
                     }
 
