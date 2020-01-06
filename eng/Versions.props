@@ -27,8 +27,8 @@
   </PropertyGroup>
   <!-- CoreCLR via Core Setup -->
   <PropertyGroup>
-    <MicrosoftNETCoreILPackageVersion>3.0.0-preview5-27616-73</MicrosoftNETCoreILPackageVersion>
-    <MicrosoftNETCoreILAsmPackageVersion>5.0.0-alpha.1.20055.4</MicrosoftNETCoreILAsmPackageVersion>
+    <MicrosoftNETCoreILVersion>3.0.0-preview5-27616-73</MicrosoftNETCoreILVersion>
+    <MicrosoftNETCoreILAsmVersion>5.0.0-alpha.1.20055.4</MicrosoftNETCoreILAsmVersion>
   </PropertyGroup>
   <!-- Arcade -->
   <PropertyGroup>
