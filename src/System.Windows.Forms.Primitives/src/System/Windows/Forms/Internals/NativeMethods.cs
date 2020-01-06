@@ -259,10 +259,7 @@ namespace System.Windows.Forms
         LVN_ODSTATECHANGED = ((0 - 100) - 15),
         LVN_SETDISPINFO = ((0 - 100) - 78),
         LVN_GETINFOTIP = ((0 - 100) - 58),
-        LVN_KEYDOWN = ((0 - 100) - 55),
-
-        LWA_COLORKEY = 0x00000001,
-        LWA_ALPHA = 0x00000002;
+        LVN_KEYDOWN = ((0 - 100) - 55);
 
         public const int LANG_NEUTRAL = 0x00,
                          LOCALE_IFIRSTDAYOFWEEK = 0x0000100C;   /* first day of week specifier */
