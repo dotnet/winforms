@@ -486,8 +486,6 @@ namespace System.Windows.Forms
         TVN_BEGINRDRAG = ((0 - 400) - 57),
         TVN_BEGINLABELEDIT = ((0 - 400) - 59),
         TVN_ENDLABELEDIT = ((0 - 400) - 60),
-        TCN_SELCHANGE = ((0 - 550) - 1),
-        TCN_SELCHANGING = ((0 - 550) - 2),
         TVM_SETBKCOLOR = (TV_FIRST + 29),
         TVM_SETTEXTCOLOR = (TV_FIRST + 30),
         TYMED_NULL = 0,

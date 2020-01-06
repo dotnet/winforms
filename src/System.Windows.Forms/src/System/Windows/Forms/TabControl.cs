@@ -2148,7 +2148,7 @@ namespace System.Windows.Forms
                         //If validation not cancelled then tabControlState[State.UISelection] is turned ON to set the focus on to the ...
                         //next TabPage..
 
-                        case NativeMethods.TCN_SELCHANGING:
+                        case (int)TCN.SELCHANGING:
                             if (WmSelChanging())
                             {
                                 m.Result = (IntPtr)1;
@@ -2167,7 +2167,7 @@ namespace System.Windows.Forms
                                 SetState(State.UISelection, true);
                             }
                             break;
-                        case NativeMethods.TCN_SELCHANGE:
+                        case (int)TCN.SELCHANGE:
                             if (WmSelChange())
                             {
                                 m.Result = (IntPtr)1;
