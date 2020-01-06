@@ -239,7 +239,6 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<ArgumentOutOfRangeException>("DisplayIndex", () => header.DisplayIndex = value);
         }
 
-
         [WinFormsFact]
         public void ColumnHeader_DisplayIndex_ShouldSerializeValue_Success()
         {
@@ -652,7 +651,6 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createdCallCount);
         }
 
-
         [WinFormsTheory]
         [InlineData(null)]
         [InlineData("")]
@@ -859,7 +857,6 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, header.Name);
             Assert.Equal(value, header.Site.Name);
         }
-
 
         [WinFormsFact]
         public void ColumnHeader_Name_ResetValue_Success()

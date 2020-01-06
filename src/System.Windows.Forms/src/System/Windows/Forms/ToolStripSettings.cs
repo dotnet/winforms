@@ -465,7 +465,6 @@ namespace System.Windows.Forms
                 Location = toolStrip.Location;
                 Name = toolStrip.Name;
                 ItemOrder = GetItemOrder(toolStrip);
-
             }
             public SettingsStub(ToolStripSettings toolStripSettings)
             {

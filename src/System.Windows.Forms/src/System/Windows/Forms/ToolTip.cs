@@ -750,7 +750,6 @@ namespace System.Windows.Forms
             IntPtr userCookie = ThemingScope.Activate(Application.UseVisualStyles);
             try
             {
-
                 var icc = new ComCtl32.INITCOMMONCONTROLSEX
                 {
                     dwICC = ComCtl32.ICC.TAB_CLASSES
@@ -891,7 +890,6 @@ namespace System.Windows.Forms
             Control ctl = (Control)sender;
             if (!_created.ContainsKey(ctl) && ctl.IsHandleCreated && TopLevelControl != null)
             {
-
                 CreateRegion(ctl);
             }
 
@@ -1880,7 +1878,6 @@ namespace System.Windows.Forms
 
             if (tool != null)
             {
-
                 // Lets find the Form for associated Control .
                 // and hook up to the Deactivated event to Hide the Shown tooltip
                 Form baseFrom = tool.FindForm();
@@ -2206,7 +2203,6 @@ namespace System.Windows.Forms
 
                 if (((tt.TipType & TipInfo.Type.SemiAbsolute) != 0) && tt.Position == Point.Empty)
                 {
-
                     Screen screen = Screen.FromPoint(cursorPos);
                     if (currentCursor != null)
                     {
@@ -2229,7 +2225,6 @@ namespace System.Windows.Forms
                 }
                 else if ((tt.TipType & TipInfo.Type.SemiAbsolute) != 0 && tt.Position != Point.Empty)
                 {
-
                     Screen screen = Screen.FromPoint(tt.Position);
                     wp->x = tt.Position.X;
                     if (wp->x + wp->cx > screen.WorkingArea.Right)

@@ -43,7 +43,6 @@ namespace System.Windows.Forms.Design
                         toolItem.Enabled = false;
                     }
                 }
-
             }
             foreach (ToolStripItem item in ToolStripDesignerUtils.GetCustomItemMenuItems(_component, _onClick, _convertTo, _serviceProvider))
             {

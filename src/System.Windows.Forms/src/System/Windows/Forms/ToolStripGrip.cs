@@ -123,9 +123,7 @@ namespace System.Windows.Forms
                 else
                 {
                     preferredSize = new Size(gripThickness, ParentInternal.Height);
-
                 }
-
             }
             // Constrain ourselves
             if (preferredSize.Width > constrainingSize.Width)
@@ -169,7 +167,6 @@ namespace System.Windows.Forms
             bool leftMouseButtonDown = LeftMouseButtonIsDown();
             if (!MovingToolStrip && leftMouseButtonDown)
             {
-
                 // determine if we've moved far enough such that the toolstrip
                 // can be considered as moving.
                 Point currentLocation = TranslatePoint(mea.Location, ToolStripPointType.ToolStripItemCoords, ToolStripPointType.ScreenCoords);
@@ -195,7 +192,6 @@ namespace System.Windows.Forms
                         MovingToolStrip = true;
                     }
                 }
-
             }
             if (MovingToolStrip)
             {
@@ -235,7 +231,6 @@ namespace System.Windows.Forms
                 oldCursor = null;
             }
             base.OnMouseEnter(e);
-
         }
 
         /// <summary>

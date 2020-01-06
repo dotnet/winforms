@@ -276,7 +276,6 @@ namespace System.Windows.Forms
                         return true;
                     }
                     break;
-
             }
             return base.ProcessKeyEventArgs(ref m);
         }

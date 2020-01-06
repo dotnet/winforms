@@ -696,7 +696,6 @@ namespace System.Windows.Forms
                 //unparse this string list...
                 if (value != null && value.Length > 0)
                 {
-
                     // Using a StringBuilder instead of a String
                     // speeds things up approx 150 times
                     StringBuilder text = new StringBuilder(value[0]);
@@ -774,7 +773,6 @@ namespace System.Windows.Forms
                 {
                     return textBoxFlags[modified];
                 }
-
             }
 
             set
@@ -1129,7 +1127,6 @@ namespace System.Windows.Forms
         {
             get
             {
-
                 GetSelectionStartAndLength(out int start, out int length);
 
                 return length;
@@ -1166,7 +1163,6 @@ namespace System.Windows.Forms
         {
             get
             {
-
                 GetSelectionStartAndLength(out int selStart, out int selLength);
 
                 return selStart;
@@ -1341,7 +1337,6 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-
                     int curHeight = Height;
 
                     // Changing the font of a multi-line textbox can sometimes cause a painting problem
@@ -1377,7 +1372,6 @@ namespace System.Windows.Forms
         {
             if (text.Length > 0)
             {
-
                 GetSelectionStartAndLength(out int selStart, out int selLength);
 
                 try
@@ -1773,7 +1767,6 @@ namespace System.Windows.Forms
                 {
                     if (UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), RichEditMessages.EM_GETOLEINTERFACE, 0, out editOle) != 0)
                     {
-
                         editOlePtr = Marshal.GetIUnknownForObject(editOle);
 
                         if (editOlePtr != IntPtr.Zero)
@@ -1787,7 +1780,6 @@ namespace System.Windows.Forms
 
                                 if (Marshal.GetObjectForIUnknown(iTextDocument) is Richedit.ITextDocument textDocument)
                                 {
-
                                     // When the user calls RichTextBox::ScrollToCaret we want the RichTextBox to show as
                                     // much text as possible.
                                     // Here is how we do that:
@@ -1906,7 +1898,6 @@ namespace System.Windows.Forms
 
                 SendMessage(EditMessages.EM_SETSEL, s, e);
                 //
-
             }
             else
             {

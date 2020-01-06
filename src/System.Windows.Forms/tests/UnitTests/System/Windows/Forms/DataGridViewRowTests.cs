@@ -3471,7 +3471,6 @@ namespace System.Windows.Forms.Tests
             row.Cells.Add(new CantSetDataGridViewCell());
             Assert.False(row.SetValues(new object[] { 1 }));
             Assert.Null(Assert.Single(row.Cells.Cast<DataGridViewCell>()).Value);
-
         }
 
         private class CantSetDataGridViewCell : DataGridViewCell

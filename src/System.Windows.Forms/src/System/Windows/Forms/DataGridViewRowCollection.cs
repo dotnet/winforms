@@ -2826,7 +2826,6 @@ namespace System.Windows.Forms
             /// </summary>
             bool IEnumerator.MoveNext()
             {
-
                 if (current < owner.Count - 1)
                 {
                     current++;

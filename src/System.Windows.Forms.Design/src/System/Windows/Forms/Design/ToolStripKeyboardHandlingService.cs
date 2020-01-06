@@ -559,7 +559,6 @@ namespace System.Windows.Forms.Design
             {
                 CutOrDeleteInProgress = false;
             }
-
         }
 
         // Handler for Paste Command
@@ -704,7 +703,6 @@ namespace System.Windows.Forms.Design
                 // Process Keys only if we are a ToolStripItem and the TemplateNode is not in Insitu Mode.
                 if (item != null)
                 {
-
                     //only select the last item only if there is an Item added in addition to the TemplateNode...
                     ToolStrip parent = item.GetCurrentParent();
                     int count = parent.Items.Count;
@@ -1243,7 +1241,6 @@ namespace System.Windows.Forms.Design
                                         if (host.GetDesigner(dropDownItem) is ToolStripMenuItemDesigner designer)
                                         {
                                             designer.InitializeDropDown();
-
                                         }
                                     }
                                     return true;
@@ -1257,7 +1254,6 @@ namespace System.Windows.Forms.Design
                             {
                                 ToolStrip mainTool = owner.GetCurrentParent();
                                 targetSelection = GetNextItem(mainTool, owner, ArrowDirection.Left);
-
                             }
                             else
                             {
@@ -1722,7 +1718,6 @@ namespace System.Windows.Forms.Design
                             owner.OverflowButton.HideDropDown();
                         }
                         next = toolStripItem.Owner;
-
                     }
                     else
                     {

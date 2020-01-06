@@ -161,7 +161,6 @@ namespace System.Windows.Forms.Internal
                     // beteween the original DC clip region and the GDI+ one - for display Graphics it is the same as
                     // Graphics.VisibleClipBounds.
                     wg.DeviceContext.IntersectClip(wr);
-
                 }
             }
 
@@ -212,7 +211,6 @@ namespace System.Windows.Forms.Internal
                         _graphics.ReleaseHdcInternal(DeviceContext.Hdc);
                         _graphics = null;
                     }
-
                 }
                 catch (Exception ex)
                 {

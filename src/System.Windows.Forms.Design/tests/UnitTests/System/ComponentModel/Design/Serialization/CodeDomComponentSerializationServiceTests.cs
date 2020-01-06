@@ -277,7 +277,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
             Assert.Null(info.GetValue("Resources", typeof(Hashtable)));
             Assert.Empty(Assert.IsType<List<string>>(info.GetValue("Shim", typeof(List<string>))));
         }
-    
+
         public static IEnumerable<object[]> CreateStore_CloseSerializeWithValidProvider_TestData()
         {
             yield return new object[] { null, null };

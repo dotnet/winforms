@@ -600,7 +600,7 @@ namespace System.Windows.Forms.Tests
         {
             using var control = new SubGroupBox();
             control.SetStyle(ControlStyles.ContainerControl, false);
-            
+
             control.FlatStyle = value;
             Assert.Equal(value, control.FlatStyle);
             Assert.Equal(containerControl, control.GetStyle(ControlStyles.ContainerControl));
@@ -609,7 +609,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(ownerDraw, control.GetStyle(ControlStyles.ResizeRedraw));
             Assert.Equal(userMouse, control.GetStyle(ControlStyles.UserMouse));
             Assert.False(control.IsHandleCreated);
-            
+
             // Set same.
             control.FlatStyle = value;
             Assert.Equal(value, control.FlatStyle);
@@ -654,7 +654,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(ownerDraw, control.GetStyle(ControlStyles.ResizeRedraw));
             Assert.Equal(userMouse, control.GetStyle(ControlStyles.UserMouse));
             Assert.False(control.IsHandleCreated);
-            
+
             // Set same.
             control.FlatStyle = value;
             Assert.Equal(containerControl, control.GetStyle(ControlStyles.ContainerControl));
@@ -694,7 +694,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(expectedCreatedCallCount, createdCallCount);
-            
+
             // Set same.
             control.FlatStyle = value;
             Assert.Equal(value, control.FlatStyle);
@@ -751,7 +751,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
                 Assert.Equal(0, styleChangedCallCount);
                 Assert.Equal(expectedCreatedCallCount, createdCallCount);
-                
+
                 // Set same.
                 control.FlatStyle = value;
                 Assert.Equal(value, control.FlatStyle);
@@ -1177,12 +1177,12 @@ namespace System.Windows.Forms.Tests
             };
             Assert.Equal(value, control.UseCompatibleTextRendering);
             Assert.False(control.IsHandleCreated);
-            
+
             // Set same.
             control.UseCompatibleTextRendering = value;
             Assert.Equal(value, control.UseCompatibleTextRendering);
             Assert.False(control.IsHandleCreated);
-            
+
             // Set different.
             control.UseCompatibleTextRendering = !value;
             Assert.Equal(!value, control.UseCompatibleTextRendering);
@@ -1221,14 +1221,14 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(0, layoutCallCount);
                 Assert.Equal(expectedParentLayoutCallCount1, parentLayoutCallCount);
                 Assert.False(control.IsHandleCreated);
-                
+
                 // Set same.
                 control.UseCompatibleTextRendering = value;
                 Assert.Equal(value, control.UseCompatibleTextRendering);
                 Assert.Equal(0, layoutCallCount);
                 Assert.Equal(expectedParentLayoutCallCount1, parentLayoutCallCount);
                 Assert.False(control.IsHandleCreated);
-                
+
                 // Set different.
                 control.UseCompatibleTextRendering = !value;
                 Assert.Equal(!value, control.UseCompatibleTextRendering);
@@ -1267,7 +1267,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            
+
             // Set same.
             control.UseCompatibleTextRendering = value;
             Assert.Equal(value, control.UseCompatibleTextRendering);
@@ -1275,7 +1275,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-    
+
             // Set different.
             control.UseCompatibleTextRendering = !value;
             Assert.Equal(!value, control.UseCompatibleTextRendering);
@@ -1327,7 +1327,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
                 Assert.Equal(0, styleChangedCallCount);
                 Assert.Equal(0, createdCallCount);
-    
+
                 // Set same.
                 control.UseCompatibleTextRendering = value;
                 Assert.Equal(value, control.UseCompatibleTextRendering);
@@ -1337,7 +1337,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
                 Assert.Equal(0, styleChangedCallCount);
                 Assert.Equal(0, createdCallCount);
-                
+
                 // Set different.
                 control.UseCompatibleTextRendering = !value;
                 Assert.Equal(!value, control.UseCompatibleTextRendering);
@@ -2320,7 +2320,7 @@ namespace System.Windows.Forms.Tests
             public new void OnKeyUp(KeyEventArgs e) => base.OnKeyUp(e);
 
             public new void OnMouseClick(MouseEventArgs e) => base.OnMouseClick(e);
-            
+
             public new void OnMouseDoubleClick(MouseEventArgs e) => base.OnMouseDoubleClick(e);
 
             public new void OnMouseDown(MouseEventArgs e) => base.OnMouseDown(e);

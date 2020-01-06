@@ -37,7 +37,7 @@ namespace System.Windows.Forms
                         && _toolStripControlHost != null // ToolStripControlHost is a container for ToolStripControl.
                         && _toolStripControlHost.Owner != null) // Owner is the ToolStrip.
                     {
-                        return _toolStripControlHost.Owner.AccessibilityObject; 
+                        return _toolStripControlHost.Owner.AccessibilityObject;
                     }
 
                     return base.FragmentRoot;

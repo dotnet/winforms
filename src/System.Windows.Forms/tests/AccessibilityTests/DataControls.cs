@@ -41,7 +41,7 @@ namespace AccessibilityTests
             dataGridView1.BeginEdit(false);
             DataGridViewComboBoxEditingControl cbox = dataGridView1.EditingControl as DataGridViewComboBoxEditingControl;
             if (cbox != null)
-                cbox.DroppedDown = true;    
+                cbox.DroppedDown = true;
         }
     }
 }

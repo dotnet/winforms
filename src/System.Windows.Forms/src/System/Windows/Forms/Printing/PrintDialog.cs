@@ -154,7 +154,6 @@ namespace System.Windows.Forms
         {
             get
             {
-
                 if (settings == null)
                 {
                     settings = new PrinterSettings();
@@ -599,7 +598,6 @@ namespace System.Windows.Forms
 
             settings.PrintRange = (PrintRange)(flags & printRangeMask);
         }
-
     }
 }
 

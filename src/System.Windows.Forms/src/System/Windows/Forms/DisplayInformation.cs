@@ -38,7 +38,6 @@ namespace System.Windows.Forms
                     // setting of an unused screen.
                     // According to EnumDisplayMonitors, a primary screen check should be sufficient
                     bitsPerPixel = (short)Screen.PrimaryScreen.BitsPerPixel;
-
                 }
                 return bitsPerPixel;
             }
@@ -51,7 +50,6 @@ namespace System.Windows.Forms
         {
             get
             {
-
                 if (lowResSettingValid && !lowRes)
                 {
                     return lowRes;
@@ -136,7 +134,6 @@ namespace System.Windows.Forms
             terminalSettingValid = false;
             dropShadowSettingValid = false;
             menuAccessKeysUnderlinedValid = false;
-
         }
 
         ///<summary>

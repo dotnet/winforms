@@ -1124,7 +1124,6 @@ namespace System.Drawing.Design.Tests
         public void ToolboxItem_Equals_Invoke_ReturnsExpected(ToolboxItem item, object other, bool expected)
         {
             Assert.Equal(expected, item.Equals(other));
-
         }
 
         public static IEnumerable<object[]> FilterPropertyValue_TestData()

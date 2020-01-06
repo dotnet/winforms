@@ -39,6 +39,5 @@ namespace System.Windows.Forms.Design.Behavior
         {
             DesignerUtils.DrawSelectionBorder(pe.Graphics, bounds);
         }
-
     }
 }

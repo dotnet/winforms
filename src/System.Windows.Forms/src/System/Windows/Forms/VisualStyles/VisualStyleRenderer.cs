@@ -71,7 +71,6 @@ namespace System.Windows.Forms.VisualStyles
                 }
 
                 return supported;
-
             }
         }
 
@@ -601,7 +600,6 @@ namespace System.Windows.Forms.VisualStyles
             Region region = Region.FromHrgn(hRegion);
             Gdi32.DeleteObject(hRegion);
             return region;
-
         }
 
         /// <summary>
@@ -1132,7 +1130,7 @@ namespace System.Windows.Forms.VisualStyles
                     {
                         throw new InvalidOperationException(SR.VisualStyleHandleCreationFailed, e);
                     }
-                    
+
                     return null;
                 }
 
@@ -1142,7 +1140,7 @@ namespace System.Windows.Forms.VisualStyles
                     {
                         throw new InvalidOperationException(SR.VisualStyleHandleCreationFailed);
                     }
-                    
+
                     return null;
                 }
 

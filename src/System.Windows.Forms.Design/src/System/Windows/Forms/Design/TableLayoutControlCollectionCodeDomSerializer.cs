@@ -11,11 +11,11 @@ namespace System.Windows.Forms.Design
 {
     //This is the serializer for TableLayoutControlCollection. It uses the Add(control, col, row)
     //syntax to add a control to the specific cell of the table whenever appropriate.
-    //most of the code is copied from CollectionCodeDomSerializer. 
+    //most of the code is copied from CollectionCodeDomSerializer.
     internal class TableLayoutControlCollectionCodeDomSerializer : CollectionCodeDomSerializer
     {
         /// <summary>
-        ///  Serializes the given collection.  targetExpression will refer to the expression used to rever to the 
+        ///  Serializes the given collection.  targetExpression will refer to the expression used to rever to the
         ///  collection, but it can be null.
         /// </summary>
         protected override object SerializeCollection(IDesignerSerializationManager manager, CodeExpression targetExpression, Type targetType, ICollection originalCollection, ICollection valuesToSerialize)

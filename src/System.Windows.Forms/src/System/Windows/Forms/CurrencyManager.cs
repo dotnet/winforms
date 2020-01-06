@@ -223,7 +223,6 @@ namespace System.Windows.Forms
                     }
                     throw new ArgumentException(string.Format(SR.ListManagerSetDataSource, tempList.GetType().FullName), "dataSource");
                 }
-
             }
         }
 
@@ -799,7 +798,6 @@ namespace System.Windows.Forms
                             // in the currencyManager, so controls will use the actual position
                             OnItemChanged(resetEvent);
                             break;
-
                         }
                         if (dbe.NewIndex < listposition)
                         {

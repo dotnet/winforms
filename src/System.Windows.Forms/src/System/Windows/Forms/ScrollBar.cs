@@ -219,7 +219,6 @@ namespace System.Windows.Forms
             {
                 if (_largeChange != value)
                 {
-
                     if (value < 0)
                     {
                         throw new ArgumentOutOfRangeException(nameof(value), string.Format(SR.InvalidLowBoundArgumentEx, nameof(LargeChange), value, 0));

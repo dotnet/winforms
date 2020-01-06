@@ -453,7 +453,6 @@ namespace System.Windows.Forms
                         // force the new property back to none so they
                         // don't compete.
                         AutoScaleMode = AutoScaleMode.None;
-
                     }
                     else
                     {
@@ -580,7 +579,6 @@ namespace System.Windows.Forms
             }
             set
             {
-
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)AutoSizeMode.GrowAndShrink, (int)AutoSizeMode.GrowOnly))
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(AutoSizeMode));
@@ -1362,7 +1360,6 @@ namespace System.Windows.Forms
             {
                 if (!value.Equals(MaximumSize))
                 {
-
                     if (value.Width < 0 || value.Height < 0)
                     {
                         throw new ArgumentOutOfRangeException(nameof(MaximumSize));
@@ -1375,7 +1372,6 @@ namespace System.Windows.Forms
                     //
                     if (!MinimumSize.IsEmpty && !value.IsEmpty)
                     {
-
                         if (Properties.GetInteger(PropMinTrackSizeWidth) > value.Width)
                         {
                             Properties.SetInteger(PropMinTrackSizeWidth, value.Width);
@@ -1949,7 +1945,6 @@ namespace System.Windows.Forms
         {
             get
             {
-
                 return rightToLeftLayout;
             }
 
@@ -2397,7 +2392,6 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-
                     // The ordering is important here... Force handle creation
                     // (getHandle) then show the window (ShowWindow) then finish
                     // creating children using createControl...
@@ -2942,7 +2936,6 @@ namespace System.Windows.Forms
                 AutoScaleBaseSize = newVar;
             }
             Debug.Unindent();
-
         }
 
         /// <summary>
@@ -3028,7 +3021,6 @@ namespace System.Windows.Forms
             //
             if (correctClientSize.Height != currentClient.Height)
             {
-
                 int delta = correctClientSize.Height - currentClient.Height;
                 bounds.Height += delta;
                 Bounds = bounds;
@@ -3239,7 +3231,6 @@ namespace System.Windows.Forms
                 if (IsMdiChild
                     && (FormWindowState)formState[FormStateWindowState] == FormWindowState.Maximized)
                 {
-
                     // This is the reason why we see the blue borders
                     // when creating a maximized mdi child, unfortunately we cannot fix this now...
                     formState[FormStateWindowState] = (int)FormWindowState.Normal;
@@ -3293,7 +3284,6 @@ namespace System.Windows.Forms
                 {
                     TopMost = true;
                 }
-
             }
             finally
             {
@@ -4504,7 +4494,6 @@ namespace System.Windows.Forms
                     c.RecreateHandleCore();
                 }
             }
-
         }
 
         /// <summary>
@@ -4864,7 +4853,6 @@ namespace System.Windows.Forms
                 {
                     if (ownedForm.Equals(ownedForms[i]))
                     {
-
                         // clear out the reference.
                         //
                         ownedForms[i] = null;
@@ -5086,7 +5074,6 @@ namespace System.Windows.Forms
             formStateEx[FormStateExInScale] = 1;
             try
             {
-
                 // don't scale the location of MDI child forms
                 if (MdiParentInternal != null)
                 {
@@ -5275,7 +5262,7 @@ namespace System.Windows.Forms
             {
                 throw new InvalidOperationException(string.Format(SR.OwnsSelfOrOwner, "Show"));
             }
-            
+
             if (Visible)
             {
                 throw new InvalidOperationException(string.Format(SR.ShowDialogOnVisible, "Show"));
@@ -5326,7 +5313,6 @@ namespace System.Windows.Forms
                 // Set the new owner.
                 hWndOldOwner = UnsafeNativeMethods.GetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_HWNDPARENT);
                 UnsafeNativeMethods.SetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_HWNDPARENT, new HandleRef(owner, hWndOwner));
-
             }
             Visible = true;
         }
@@ -5348,32 +5334,32 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentException(string.Format(SR.OwnsSelfOrOwner, "showDialog"), nameof(owner));
             }
-            
+
             if (Visible)
             {
                 throw new InvalidOperationException(string.Format(SR.ShowDialogOnVisible, "showDialog"));
             }
-            
+
             if (!Enabled)
             {
                 throw new InvalidOperationException(string.Format(SR.ShowDialogOnDisabled, "showDialog"));
             }
-            
+
             if (!TopLevel)
             {
                 throw new InvalidOperationException(string.Format(SR.ShowDialogOnNonTopLevel, "showDialog"));
             }
-            
+
             if (Modal)
             {
                 throw new InvalidOperationException(string.Format(SR.ShowDialogOnModal, "showDialog"));
             }
-           
+
             if (!SystemInformation.UserInteractive)
             {
                 throw new InvalidOperationException(SR.CantShowModalOnNonInteractive);
             }
-           
+
             if ((owner != null) && ((int)UnsafeNativeMethods.GetWindowLong(new HandleRef(owner, GetSafeHandle(owner)), NativeMethods.GWL_EXSTYLE)
                      & (int)User32.WS_EX.TOPMOST) == 0)
             {   // It's not the top-most window
@@ -5475,7 +5461,6 @@ namespace System.Windows.Forms
                     SetVisibleCore(false);
                     if (IsHandleCreated)
                     {
-
                         // If this is a dialog opened from an MDI Container, then invalidate
                         // so that child windows will be properly updated.
                         if (OwnerInternal != null &&
@@ -5709,7 +5694,6 @@ namespace System.Windows.Forms
 
                 if (transparencyKey.IsEmpty)
                 {
-
                     result = User32.SetLayeredWindowAttributes(this, 0, OpacityAsByte, User32.LWA.ALPHA);
                 }
                 else if (OpacityAsByte == 255)
@@ -5856,7 +5840,6 @@ namespace System.Windows.Forms
 
             if (ActiveMdiChildInternal != null)
             {
-
                 // do the new merging
                 foreach (ToolStrip sourceToolStrip in childrenToolStrips)
                 {
@@ -5983,7 +5966,6 @@ namespace System.Windows.Forms
                     //MERGEDEBUG Debug.WriteLineIf(ToolStrip.MDIMergeDebug.TraceVerbose, "UpdateMdiWindowListStrip: mdiwindowlist dd item count after:  " + sourceMenuStrip.MdiWindowListItem.DropDownItems.Count.ToString());
                     MdiWindowListStrip.MergedMenu = sourceMenuStrip;
                 }
-
             }
         }
 
@@ -6660,7 +6642,6 @@ namespace System.Windows.Forms
 
             if (callDefault)
             {
-
                 base.WndProc(ref m);
             }
         }
@@ -6785,7 +6766,7 @@ namespace System.Windows.Forms
                     // This is a work-around for the Win32 scroll bar; it doesn't release
                     // it's capture in response to a CAPTURECHANGED message, so we force
                     // capture away if no button is down.
-                    
+
                     if (Capture && MouseButtons == MouseButtons.None)
                     {
                         Capture = false;

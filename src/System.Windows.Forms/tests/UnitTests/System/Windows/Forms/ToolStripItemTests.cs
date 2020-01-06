@@ -4099,7 +4099,7 @@ namespace System.Windows.Forms.Tests
             item.Image = otherImage;
             Assert.Same(otherImage, item.Image);
             Assert.True(property.CanResetValue(item));
-            
+
             property.ResetValue(item);
             Assert.Null(item.Image);
             Assert.False(property.CanResetValue(item));
@@ -4774,11 +4774,11 @@ namespace System.Windows.Forms.Tests
             item.ImageIndex = 0;
             Assert.Equal(0, item.ImageIndex);
             Assert.False(property.CanResetValue(item));
-            
+
             item.ImageIndex = 0;
             Assert.Equal(0, item.ImageIndex);
             Assert.False(property.CanResetValue(item));
-            
+
             item.ImageIndex = -1;
             Assert.Equal(-1, item.ImageIndex);
             Assert.False(property.CanResetValue(item));
@@ -4852,11 +4852,11 @@ namespace System.Windows.Forms.Tests
             item.ImageIndex = 0;
             Assert.Equal(0, item.ImageIndex);
             Assert.True(property.ShouldSerializeValue(item));
-            
+
             item.ImageIndex = 0;
             Assert.Equal(0, item.ImageIndex);
             Assert.True(property.ShouldSerializeValue(item));
-            
+
             item.ImageIndex = -1;
             Assert.Equal(-1, item.ImageIndex);
             Assert.False(property.ShouldSerializeValue(item));
@@ -5203,7 +5203,7 @@ namespace System.Windows.Forms.Tests
             item.ImageKey = null;
             Assert.Empty(item.ImageKey);
             Assert.False(property.CanResetValue(item));
-            
+
             // Set empty.
             item.ImageKey = string.Empty;
             Assert.Empty(item.ImageKey);
@@ -5234,7 +5234,7 @@ namespace System.Windows.Forms.Tests
             item.ImageKey = null;
             Assert.Empty(item.ImageKey);
             Assert.False(property.CanResetValue(item));
-            
+
             // Set empty.
             item.ImageKey = string.Empty;
             Assert.Empty(item.ImageKey);
@@ -5270,11 +5270,11 @@ namespace System.Windows.Forms.Tests
             item.ImageKey = "Image";
             Assert.Equal("Image", item.ImageKey);
             Assert.False(property.CanResetValue(item));
-            
+
             item.ImageKey = "NoSuchImage";
             Assert.Equal("NoSuchImage", item.ImageKey);
             Assert.False(property.CanResetValue(item));
-            
+
             item.ImageKey = string.Empty;
             Assert.Empty(item.ImageKey);
             Assert.False(property.CanResetValue(item));
@@ -5295,7 +5295,7 @@ namespace System.Windows.Forms.Tests
             item.ImageKey = null;
             Assert.Empty(item.ImageKey);
             Assert.False(property.ShouldSerializeValue(item));
-            
+
             // Set empty.
             item.ImageKey = string.Empty;
             Assert.Empty(item.ImageKey);
@@ -5326,7 +5326,7 @@ namespace System.Windows.Forms.Tests
             item.ImageKey = null;
             Assert.Empty(item.ImageKey);
             Assert.False(property.ShouldSerializeValue(item));
-            
+
             // Set empty.
             item.ImageKey = string.Empty;
             Assert.Empty(item.ImageKey);
@@ -5362,11 +5362,11 @@ namespace System.Windows.Forms.Tests
             item.ImageKey = "Image";
             Assert.Equal("Image", item.ImageKey);
             Assert.True(property.ShouldSerializeValue(item));
-            
+
             item.ImageKey = "NoSuchImage";
             Assert.Equal("NoSuchImage", item.ImageKey);
             Assert.False(property.ShouldSerializeValue(item));
-            
+
             item.ImageKey = string.Empty;
             Assert.Empty(item.ImageKey);
             Assert.False(property.ShouldSerializeValue(item));
@@ -5633,7 +5633,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, item.ImageTransparentColor);
             Assert.False(owner.IsHandleCreated);
         }
-        
+
         public static IEnumerable<object[]> ImageTransparentColor_SetWithOwnerWithHandle_TestData()
         {
             yield return new object[] { null, Color.Empty, 0 };
@@ -5700,7 +5700,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, item.ImageTransparentColor);
             Assert.False(parent.IsHandleCreated);
         }
-        
+
         public static IEnumerable<object[]> ImageTransparentColor_SetWithParentWithHandle_TestData()
         {
             yield return new object[] { null, Color.Empty, 0 };
@@ -7367,7 +7367,7 @@ namespace System.Windows.Forms.Tests
             item.RightToLeft = RightToLeft.Inherit;
             Assert.Equal(RightToLeft.Inherit, item.RightToLeft);
             Assert.False(property.CanResetValue(item));
-            
+
             item.RightToLeft = RightToLeft.No;
             Assert.Equal(RightToLeft.No, item.RightToLeft);
             Assert.True(property.CanResetValue(item));
@@ -7395,7 +7395,7 @@ namespace System.Windows.Forms.Tests
             item.RightToLeft = RightToLeft.Inherit;
             Assert.Equal(RightToLeft.Inherit, item.RightToLeft);
             Assert.False(property.ShouldSerializeValue(item));
-            
+
             item.RightToLeft = RightToLeft.No;
             Assert.Equal(RightToLeft.No, item.RightToLeft);
             Assert.True(property.ShouldSerializeValue(item));
@@ -8936,7 +8936,7 @@ namespace System.Windows.Forms.Tests
             item.ToolTipText = null;
             Assert.Null(item.ToolTipText);
             Assert.False(property.CanResetValue(item));
-            
+
             // Set empty.
             item.ToolTipText = string.Empty;
             Assert.Empty(item.ToolTipText);
@@ -8963,7 +8963,7 @@ namespace System.Windows.Forms.Tests
             item.ToolTipText = null;
             Assert.Null(item.ToolTipText);
             Assert.False(property.ShouldSerializeValue(item));
-            
+
             // Set empty.
             item.ToolTipText = string.Empty;
             Assert.Empty(item.ToolTipText);
@@ -11983,7 +11983,7 @@ namespace System.Windows.Forms.Tests
 
             // Call again.
             item.OnOwnerFontChanged(eventArgs);
-            
+
             // Call with font.
             item.Font = new Font("Arial", 8.25f);
             item.OnOwnerFontChanged(eventArgs);
@@ -12019,7 +12019,7 @@ namespace System.Windows.Forms.Tests
                 item.OnOwnerFontChanged(eventArgs);
                 Assert.Equal(expectedOwnerLayoutCallCount * 2, ownerLayoutCallCount);
                 Assert.False(owner.IsHandleCreated);
-                
+
                 // Call with font.
                 owner.Layout -= ownerHandler;
                 item.Font = new Font("Arial", 8.25f);
@@ -12343,12 +12343,12 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-        
+
             // Call with handler.
             item.RightToLeftChanged += handler;
             item.OnParentRightToLeftChanged(eventArgs);
             Assert.Equal(1, callCount);
-        
+
             // Remove handler.
             item.RightToLeftChanged -= handler;
             item.OnParentRightToLeftChanged(eventArgs);
@@ -13697,7 +13697,7 @@ namespace System.Windows.Forms.Tests
         public void ToolStripItem_ResetDisplayStyle_Invoke_Success()
         {
             using var item = new SubToolStripItem();
-            
+
             // Reset without value.
             item.ResetDisplayStyle();
             Assert.Equal(ToolStripItemDisplayStyle.ImageAndText, item.DisplayStyle);
@@ -13717,19 +13717,19 @@ namespace System.Windows.Forms.Tests
         {
             using var font = new Font("Arial", 8.25f);
             using var item = new SubToolStripItem();
-            
+
             // Reset without value.
             Assert.NotSame(font, item.Font);
             Assert.NotSame(Control.DefaultFont, item.Font);
             Assert.Same(item.Font, item.Font);
-            
+
             // Reset with value.
             item.Font = font;
             item.ResetFont();
             Assert.NotSame(font, item.Font);
             Assert.NotSame(Control.DefaultFont, item.Font);
             Assert.Same(item.Font, item.Font);
-            
+
             // Reset again.
             item.ResetFont();
             Assert.NotSame(font, item.Font);
@@ -13760,7 +13760,7 @@ namespace System.Windows.Forms.Tests
         public void ToolStripItem_ResetImage_Invoke_Success()
         {
             using var item = new SubToolStripItem();
-            
+
             // Reset without value.
             item.ResetImage();
             Assert.Null(item.Image);
@@ -13788,7 +13788,7 @@ namespace System.Windows.Forms.Tests
             item.Margin = new Padding(1, 2, 3, 4);
             item.ResetMargin();
             Assert.Equal(new Padding(0, 1, 0, 2), item.Margin);
-            
+
             // Reset again.
             item.ResetMargin();
             Assert.Equal(new Padding(0, 1, 0, 2), item.Margin);
@@ -13807,7 +13807,7 @@ namespace System.Windows.Forms.Tests
             item.Padding = new Padding(1, 2, 3, 4);
             item.ResetPadding();
             Assert.Equal(Padding.Empty, item.Padding);
-            
+
             // Reset again.
             item.ResetPadding();
             Assert.Equal(Padding.Empty, item.Padding);
@@ -13817,7 +13817,7 @@ namespace System.Windows.Forms.Tests
         public void ToolStripItem_ResetRightToLeft_Invoke_Success()
         {
             using var item = new SubToolStripItem();
-            
+
             // Reset without value.
             item.ResetRightToLeft();
             Assert.Equal(RightToLeft.Inherit, item.RightToLeft);
@@ -13826,7 +13826,7 @@ namespace System.Windows.Forms.Tests
             item.RightToLeft = RightToLeft.Yes;
             item.ResetRightToLeft();
             Assert.Equal(RightToLeft.Inherit, item.RightToLeft);
-            
+
             // Reset again.
             item.ResetRightToLeft();
             Assert.Equal(RightToLeft.Inherit, item.RightToLeft);
@@ -13867,13 +13867,13 @@ namespace System.Windows.Forms.Tests
             item.Select();
             Assert.True(item.Selected);
         }
-        
+
         public static IEnumerable<object[]> Select_WithoutToolStripItemAccessibleObject_TestData()
         {
             yield return new object[] { null };
             yield return new object[] { new AccessibleObject() };
         }
-        
+
         [WinFormsTheory]
         [MemberData(nameof(Select_WithoutToolStripItemAccessibleObject_TestData))]
         public void ToolStripItem_Select_InvokeWithoutToolStripItemAccessibleObject_Success(AccessibleObject result)
@@ -14801,7 +14801,7 @@ namespace System.Windows.Forms.Tests
             using var item = new NullTextToolStripItem();
             Assert.Equal("System.Windows.Forms.Tests.ToolStripItemTests+NullTextToolStripItem", item.ToString());
         }
-        
+
         private class NullTextToolStripItem : ToolStripItem
         {
             public override string Text

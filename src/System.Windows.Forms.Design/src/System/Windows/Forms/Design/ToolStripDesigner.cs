@@ -247,7 +247,6 @@ namespace System.Windows.Forms.Design
                 {
                     _editingCollection--;
                 }
-
             }
         }
 
@@ -783,7 +782,6 @@ namespace System.Windows.Forms.Design
                 }
                 else
                 {
-
                     if (!ItemParentIsOverflow(item))
                     {
                         if (ToolStrip.OverflowButton.DropDown.Visible)
@@ -933,7 +931,6 @@ namespace System.Windows.Forms.Design
                                     int indexToInsert = ToolStrip.Items.IndexOf(selectedItem);
                                     ToolStrip.Items.Insert(indexToInsert, newItem);
                                 }
-
                             }
                             else if (count > 0)
                             {
@@ -1108,7 +1105,6 @@ namespace System.Windows.Forms.Design
                                 KeyboardHandlingService.SelectedDesignerControl = targetSelection;
                             }
                             SelectionService.SetSelectedComponents(null, SelectionTypes.Replace);
-
                         }
                         else
                         {
@@ -1233,7 +1229,6 @@ namespace System.Windows.Forms.Design
                     {
                         selectedItem = (IComponent)KeyboardHandlingService.SelectedDesignerControl;
                     }
-
                 }
                 // if one of the sub-items is selected, delegate to it.
                 if (selectedItem is ToolStripItem)
@@ -1282,7 +1277,6 @@ namespace System.Windows.Forms.Design
                                 itemDesigner != null &&
                                 itemDesigner.IsEditorActive)
                             {
-
                                 itemDesigner.Editor.Commit(false, false);
                             }
                         }
@@ -1396,7 +1390,6 @@ namespace System.Windows.Forms.Design
                 return true;
             }
             return base.GetHitTest(point);
-
         }
 
         /// <summary>
@@ -1928,7 +1921,6 @@ namespace System.Windows.Forms.Design
                             changeParent.Cancel();
                             changeParent = null;
                         }
-
                     }
                     finally
                     {

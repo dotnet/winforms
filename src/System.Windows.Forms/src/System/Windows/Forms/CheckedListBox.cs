@@ -90,7 +90,6 @@ namespace System.Windows.Forms
             // If a long item is drawn with ellipsis, we must redraw the ellipsed part
             // as well as the newly uncovered region.
             SetStyle(ControlStyles.ResizeRedraw, true);
-
         }
 
         /// <summary>
@@ -569,7 +568,6 @@ namespace System.Windows.Forms
         {
             base.OnHandleCreated(e);
             SendMessage((int)User32.LB.SETITEMHEIGHT, 0, ItemHeight);
-
         }
 
         /// <summary>
@@ -922,7 +920,6 @@ namespace System.Windows.Forms
         {
             base.OnSelectedIndexChanged(e);
             lastSelected = SelectedIndex;
-
         }
 
         /// <summary>
@@ -1112,7 +1109,6 @@ namespace System.Windows.Forms
             /// </summary>
             public int Add(object item, CheckState check)
             {
-
                 //validate the enum that's passed in here
                 //
                 // Valid values are 0-2 inclusive.
@@ -1296,7 +1292,6 @@ namespace System.Windows.Forms
                     return -1;
                 }
             }
-
         }
 
         public class CheckedItemCollection : IList
@@ -1562,7 +1557,6 @@ namespace System.Windows.Forms
 
             public override AccessibleObject HitTest(int x, int y)
             {
-
                 // Within a child element?
                 //
                 int count = GetChildCount();
@@ -1728,7 +1722,6 @@ namespace System.Windows.Forms
                     }
 
                     return state;
-
                 }
             }
 
@@ -1789,6 +1782,5 @@ namespace System.Windows.Forms
                 }
             }
         }
-
     }
 }

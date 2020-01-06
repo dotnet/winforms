@@ -90,7 +90,6 @@ namespace System.Windows.Forms
                     DetachEventHandler(proxy.EventName, eh);
                 }
             }
-
         }
 
         ///  return the sender for events, usually the HtmlWindow, HtmlElement, HtmlDocument
@@ -177,7 +176,6 @@ namespace System.Windows.Forms
             return null;
         }
     }
-
 }
 
 

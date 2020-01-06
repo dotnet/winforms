@@ -91,7 +91,6 @@ namespace System.Resources
                 if ((path1[i] != path2[i]) && (compareCase || (char.ToLower(path1[i], CultureInfo.InvariantCulture) != char.ToLower(path2[i], CultureInfo.InvariantCulture))))
                 {
                     break;
-
                 }
                 if (path1[i] == Path.DirectorySeparatorChar)
                 {

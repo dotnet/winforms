@@ -191,7 +191,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(RightToLeft.No, control.RightToLeft);
             Assert.Equal(0, callCount);
         }
-        
+
         [WinFormsFact]
         public void VScrollBar_GetAutoSizeMode_Invoke_ReturnsExpected()
         {

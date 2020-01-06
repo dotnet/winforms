@@ -53,7 +53,6 @@ namespace System.Windows.Forms
                     {
                         id = new InstanceDescriptor(ctor, new object[] { col.ImageIndex }, false);
                     }
-
                 }
 
                 if (id == null && !string.IsNullOrEmpty(col.ImageKey))

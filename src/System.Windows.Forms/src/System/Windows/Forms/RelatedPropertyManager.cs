@@ -104,6 +104,5 @@ namespace System.Windows.Forms
             bool anyCurrent = (parentManager.Position >= 0 && parentManager.Position < parentManager.Count);
             return anyCurrent ? parentManager.Current : null;
         }
-
     }
 }

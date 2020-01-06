@@ -115,7 +115,6 @@ namespace System.Windows.Forms.Design
                     changeParent.Cancel();
                     changeParent = null;
                 }
-
             }
             finally
             {

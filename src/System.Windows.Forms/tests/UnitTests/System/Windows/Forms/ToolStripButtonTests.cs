@@ -654,7 +654,7 @@ namespace System.Windows.Forms.Tests
             owner.StyleChanged += (sender, e) => styleChangedCallCount++;
             int createdCallCount = 0;
             owner.HandleCreated += (sender, e) => createdCallCount++;
-            
+
             item.Checked = value;
             Assert.Equal(value, item.Checked);
             Assert.Equal(expectedCheckState1, item.CheckState);
@@ -727,7 +727,7 @@ namespace System.Windows.Forms.Tests
             parent.StyleChanged += (sender, e) => styleChangedCallCount++;
             int createdCallCount = 0;
             parent.HandleCreated += (sender, e) => createdCallCount++;
-            
+
             item.Checked = value;
             Assert.Equal(value, item.Checked);
             Assert.Equal(expectedCheckState1, item.CheckState);
@@ -778,32 +778,32 @@ namespace System.Windows.Forms.Tests
                 checkStateCallCount++;
             };
             item.CheckStateChanged += checkStateHandler;
-        
+
             // Set different.
             item.Checked = false;
             Assert.False(item.Checked);
             Assert.Equal(1, callCount);
             Assert.Equal(1, checkStateCallCount);
-        
+
             // Set same.
             item.Checked = false;
             Assert.False(item.Checked);
             Assert.Equal(1, callCount);
             Assert.Equal(1, checkStateCallCount);
-        
+
             // Set different.
             item.Checked = true;
             Assert.True(item.Checked);
             Assert.Equal(2, callCount);
             Assert.Equal(2, checkStateCallCount);
-        
+
             // Remove handler.
             item.CheckedChanged -= handler;
             item.Checked = false;
             Assert.False(item.Checked);
             Assert.Equal(2, callCount);
             Assert.Equal(3, checkStateCallCount);
-            
+
             // Remove other handler.
             item.CheckStateChanged -= checkStateHandler;
             item.Checked = true;
@@ -822,7 +822,7 @@ namespace System.Windows.Forms.Tests
             };
             Assert.Equal(value, item.CheckState);
             Assert.Equal(value != CheckState.Unchecked, item.Checked);
-            
+
             // Set same.
             item.CheckState = value;
             Assert.Equal(value, item.CheckState);
@@ -842,7 +842,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, item.CheckState);
             Assert.Equal(value != CheckState.Unchecked, item.Checked);
             Assert.False(owner.IsHandleCreated);
-            
+
             // Set same.
             item.CheckState = value;
             Assert.Equal(value, item.CheckState);
@@ -866,7 +866,7 @@ namespace System.Windows.Forms.Tests
             owner.StyleChanged += (sender, e) => styleChangedCallCount++;
             int createdCallCount = 0;
             owner.HandleCreated += (sender, e) => createdCallCount++;
-            
+
             item.CheckState = value;
             Assert.Equal(value, item.CheckState);
             Assert.Equal(value != CheckState.Unchecked, item.Checked);
@@ -874,7 +874,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            
+
             // Set same.
             item.CheckState = value;
             Assert.Equal(value, item.CheckState);
@@ -908,32 +908,32 @@ namespace System.Windows.Forms.Tests
                 checkStateCallCount++;
             };
             item.CheckStateChanged += checkStateHandler;
-        
+
             // Set different.
             item.CheckState = CheckState.Unchecked;
             Assert.Equal(CheckState.Unchecked, item.CheckState);
             Assert.Equal(1, callCount);
             Assert.Equal(1, checkStateCallCount);
-        
+
             // Set same.
             item.CheckState = CheckState.Unchecked;
             Assert.Equal(CheckState.Unchecked, item.CheckState);
             Assert.Equal(1, callCount);
             Assert.Equal(1, checkStateCallCount);
-        
+
             // Set different.
             item.CheckState = CheckState.Indeterminate;
             Assert.Equal(CheckState.Indeterminate, item.CheckState);
             Assert.Equal(2, callCount);
             Assert.Equal(2, checkStateCallCount);
-        
+
             // Remove handler.
             item.CheckedChanged -= handler;
             item.CheckState = CheckState.Unchecked;
             Assert.Equal(CheckState.Unchecked, item.CheckState);
             Assert.Equal(2, callCount);
             Assert.Equal(3, checkStateCallCount);
-            
+
             // Remove other handler.
             item.CheckStateChanged -= checkStateHandler;
             item.CheckState = CheckState.Indeterminate;
@@ -1076,12 +1076,12 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-        
+
             // Call with handler.
             item.CheckedChanged += handler;
             item.OnCheckedChanged(eventArgs);
             Assert.Equal(1, callCount);
-        
+
             // Remove handler.
             item.CheckedChanged -= handler;
             item.OnCheckedChanged(eventArgs);
@@ -1100,12 +1100,12 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-        
+
             // Call with handler.
             item.CheckStateChanged += handler;
             item.OnCheckStateChanged(eventArgs);
             Assert.Equal(1, callCount);
-        
+
             // Remove handler.
             item.CheckStateChanged -= handler;
             item.OnCheckStateChanged(eventArgs);
@@ -1124,13 +1124,13 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-        
+
             // Call with handler.
             item.Click += handler;
             item.OnClick(eventArgs);
             Assert.Equal(1, callCount);
             Assert.False(item.Checked);
-        
+
             // Remove handler.
             item.Click -= handler;
             item.OnClick(eventArgs);
@@ -1153,13 +1153,13 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-        
+
             // Call with handler.
             item.Click += handler;
             item.OnClick(eventArgs);
             Assert.Equal(1, callCount);
             Assert.True(item.Checked);
-        
+
             // Remove handler.
             item.Click -= handler;
             item.OnClick(eventArgs);
@@ -1196,7 +1196,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { ContentAlignment.MiddleCenter, RightToLeft.No, ToolStripItemDisplayStyle.None, 0, 0, TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.HidePrefix };
             yield return new object[] { ContentAlignment.MiddleCenter, RightToLeft.No, ToolStripItemDisplayStyle.Image, 1, 0, TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.HidePrefix };
             yield return new object[] { ContentAlignment.MiddleCenter, RightToLeft.No, ToolStripItemDisplayStyle.ImageAndText, 1, 1, TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.HidePrefix };
-            
+
             yield return new object[] { ContentAlignment.TopLeft, RightToLeft.Yes, ToolStripItemDisplayStyle.Text, 0, 1, TextFormatFlags.Left | TextFormatFlags.Top | TextFormatFlags.HidePrefix | TextFormatFlags.RightToLeft };
             yield return new object[] { ContentAlignment.TopLeft, RightToLeft.Inherit, ToolStripItemDisplayStyle.Text, 0, 1, TextFormatFlags.Left | TextFormatFlags.Top | TextFormatFlags.HidePrefix };
             yield return new object[] { ContentAlignment.TopLeft, RightToLeft.No, ToolStripItemDisplayStyle.Text, 0, 1, TextFormatFlags.Left | TextFormatFlags.Top | TextFormatFlags.HidePrefix };
@@ -1206,7 +1206,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { ContentAlignment.TopRight, RightToLeft.Yes, ToolStripItemDisplayStyle.Text, 0, 1, TextFormatFlags.Right | TextFormatFlags.Top | TextFormatFlags.HidePrefix | TextFormatFlags.RightToLeft };
             yield return new object[] { ContentAlignment.TopRight, RightToLeft.Inherit, ToolStripItemDisplayStyle.Text, 0, 1, TextFormatFlags.Right | TextFormatFlags.Top | TextFormatFlags.HidePrefix };
             yield return new object[] { ContentAlignment.TopRight, RightToLeft.No, ToolStripItemDisplayStyle.Text, 0, 1, TextFormatFlags.Right | TextFormatFlags.Top | TextFormatFlags.HidePrefix };
-            
+
             yield return new object[] { ContentAlignment.MiddleLeft, RightToLeft.Yes, ToolStripItemDisplayStyle.Text, 0, 1, TextFormatFlags.Left | TextFormatFlags.VerticalCenter | TextFormatFlags.HidePrefix | TextFormatFlags.RightToLeft };
             yield return new object[] { ContentAlignment.MiddleLeft, RightToLeft.Inherit, ToolStripItemDisplayStyle.Text, 0, 1, TextFormatFlags.Left | TextFormatFlags.VerticalCenter | TextFormatFlags.HidePrefix };
             yield return new object[] { ContentAlignment.MiddleLeft, RightToLeft.No, ToolStripItemDisplayStyle.Text, 0, 1, TextFormatFlags.Left | TextFormatFlags.VerticalCenter | TextFormatFlags.HidePrefix };
@@ -1216,7 +1216,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { ContentAlignment.MiddleRight, RightToLeft.Yes, ToolStripItemDisplayStyle.Text, 0, 1, TextFormatFlags.Right | TextFormatFlags.VerticalCenter | TextFormatFlags.HidePrefix | TextFormatFlags.RightToLeft };
             yield return new object[] { ContentAlignment.MiddleRight, RightToLeft.Inherit, ToolStripItemDisplayStyle.Text, 0, 1, TextFormatFlags.Right | TextFormatFlags.VerticalCenter | TextFormatFlags.HidePrefix };
             yield return new object[] { ContentAlignment.MiddleRight, RightToLeft.No, ToolStripItemDisplayStyle.Text, 0, 1, TextFormatFlags.Right | TextFormatFlags.VerticalCenter | TextFormatFlags.HidePrefix };
-            
+
             yield return new object[] { ContentAlignment.BottomLeft, RightToLeft.Yes, ToolStripItemDisplayStyle.Text, 0, 1, TextFormatFlags.Left | TextFormatFlags.Bottom | TextFormatFlags.HidePrefix | TextFormatFlags.RightToLeft };
             yield return new object[] { ContentAlignment.BottomLeft, RightToLeft.Inherit, ToolStripItemDisplayStyle.Text, 0, 1, TextFormatFlags.Left | TextFormatFlags.Bottom | TextFormatFlags.HidePrefix };
             yield return new object[] { ContentAlignment.BottomLeft, RightToLeft.No, ToolStripItemDisplayStyle.Text, 0, 1, TextFormatFlags.Left | TextFormatFlags.Bottom | TextFormatFlags.HidePrefix };
@@ -1253,7 +1253,7 @@ namespace System.Windows.Forms.Tests
                 TextDirection = ToolStripTextDirection.Vertical270,
                 Owner = owner
             };
-            
+
             int renderButtonBackgroundCallCount = 0;
             renderer.RenderButtonBackground += (sender, e) =>
             {
@@ -1344,7 +1344,7 @@ namespace System.Windows.Forms.Tests
                 TextDirection = ToolStripTextDirection.Vertical270,
                 Owner = owner
             };
-            
+
             int renderButtonBackgroundCallCount = 0;
             renderer.RenderButtonBackground += (sender, e) =>
             {
@@ -1441,7 +1441,7 @@ namespace System.Windows.Forms.Tests
                 TextDirection = ToolStripTextDirection.Vertical270,
                 Parent = parent
             };
-            
+
             int renderButtonBackgroundCallCount = 0;
             renderer.RenderButtonBackground += (sender, e) => renderButtonBackgroundCallCount++;
             int renderItemImageCallCount = 0;
@@ -1667,15 +1667,15 @@ namespace System.Windows.Forms.Tests
             public SubToolStripButton() : base()
             {
             }
-            
+
             public SubToolStripButton(string text) : base(text)
             {
             }
-            
+
             public SubToolStripButton(Image image) : base(image)
             {
             }
-            
+
             public SubToolStripButton(string text, Image image) : base(text, image)
             {
             }
@@ -1721,7 +1721,7 @@ namespace System.Windows.Forms.Tests
             public new void OnCheckStateChanged(EventArgs e) => base.OnCheckStateChanged(e);
 
             public new void OnClick(EventArgs e) => base.OnClick(e);
-            
+
             public new void OnPaint(PaintEventArgs e) => base.OnPaint(e);
 
             public new bool ProcessDialogKey(Keys keyData) => base.ProcessDialogKey(keyData);

@@ -159,7 +159,6 @@ namespace System.Windows.Forms.Design
                     _dropDownCollection = new ArrayList();
                 }
             }
-
         }
 
         /// <summary>
@@ -228,7 +227,6 @@ namespace System.Windows.Forms.Design
                     {
                         _designerFrame = null;
                     }
-
                 }
                 base.Dispose(disposing);
             }

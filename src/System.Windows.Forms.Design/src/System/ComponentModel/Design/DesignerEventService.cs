@@ -48,7 +48,7 @@ namespace System.ComponentModel.Design
                 Debug.Assert(host != null, "Design surface did not provide us with a designer host");
             }
 
-            // If the designer host is not in our collection, add it.  
+            // If the designer host is not in our collection, add it.
             if (host != null && (_designerList == null || !_designerList.Contains(host)))
             {
                 OnCreateDesigner(surface);
@@ -161,7 +161,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///  Called by DesignSurface when it is about to be disposed.  
+        ///  Called by DesignSurface when it is about to be disposed.
         /// </summary>
         private void OnDesignerDisposed(object sender, EventArgs e)
         {
@@ -264,7 +264,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///  Sinks or unsinks selection and component change events from the 
+        ///  Sinks or unsinks selection and component change events from the
         ///  provided service provider.  We need to raise global selection change
         ///  notifications.  A global selection change should be raised whenever
         ///  the selection of the active designer changes, whenever a component

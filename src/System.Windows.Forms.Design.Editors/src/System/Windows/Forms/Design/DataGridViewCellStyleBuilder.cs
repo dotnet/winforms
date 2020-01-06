@@ -7,7 +7,6 @@ using System.ComponentModel.Design;
 using System.Diagnostics;
 
 namespace System.Windows.Forms.Design
-
 {
     internal class DataGridViewCellStyleBuilder : Form
     {

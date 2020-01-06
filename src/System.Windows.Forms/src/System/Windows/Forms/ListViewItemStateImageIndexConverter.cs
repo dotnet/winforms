@@ -4,7 +4,6 @@
 
 using System.ComponentModel;
 
-
 namespace System.Windows.Forms
 {
     /// <summary>
@@ -33,7 +32,7 @@ namespace System.Windows.Forms
         /// </summary>
         /// <param name="context">
         ///  An object that provides a format context, which can be used to extract additional
-        ///  information about the environment this type converter is being invoked from. 
+        ///  information about the environment this type converter is being invoked from.
         ///  This parameter or its properties can be <see langword="null" />.
         /// </param>
         /// <returns>
@@ -71,7 +70,6 @@ namespace System.Windows.Forms
 
                 if (imageList != null)
                 {
-
                     // Create array to contain standard values
                     //
                     object[] values;
@@ -95,7 +93,6 @@ namespace System.Windows.Forms
 
                     return new StandardValuesCollection(values);
                 }
-
             }
             if (IncludeNoneAsStandardValue)
             {
@@ -105,8 +102,6 @@ namespace System.Windows.Forms
             {
                 return new StandardValuesCollection(Array.Empty<object>());
             }
-
         }
-
     }
 }

@@ -135,7 +135,6 @@ namespace System.Windows.Forms
                 }
             }
             base.OnLayout(e);
-
         }
 
         protected override void SetDisplayedItems()
@@ -173,7 +172,5 @@ namespace System.Windows.Forms
                 return ((ToolStripOverflow)Owner).DisplayedItems.Count;
             }
         }
-
     }
-
 }

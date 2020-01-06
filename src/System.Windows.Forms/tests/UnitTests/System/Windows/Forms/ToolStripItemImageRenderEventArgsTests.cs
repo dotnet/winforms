@@ -86,7 +86,6 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { null, null, null, Rectangle.Empty };
             yield return new object[] { graphics, new ToolStripButton(), otherImage, new Rectangle(1, 2, 3, 4) };
             yield return new object[] { graphics, new ToolStripButton() { Image = image }, otherImage, new Rectangle(1, 2, 3, 4) };
-
         }
 
         [Theory]

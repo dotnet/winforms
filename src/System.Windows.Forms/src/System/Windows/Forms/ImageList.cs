@@ -134,7 +134,6 @@ namespace System.Windows.Forms
                     index = value;
                     useIntegerIndex = true;
                 }
-
             }
 
             public virtual int ActualIndex
@@ -498,7 +497,6 @@ namespace System.Windows.Forms
                 ownsBitmap = true;
             }
             return bitmap;
-
         }
 
         private int AddIconToHandle(Original original, Icon icon)
@@ -857,7 +855,6 @@ namespace System.Windows.Forms
                             ComCtl32.CLR.NONE,
                             ComCtl32.CLR.NONE,
                             ComCtl32.ILD.TRANSPARENT);
-
                     }
                     finally
                     {
@@ -1018,7 +1015,6 @@ namespace System.Windows.Forms
             {
                 Dispose(false);
             }
-
         }
 
         // An image before we add it to the image list, along with a few details about how to add it.
@@ -1134,7 +1130,6 @@ namespace System.Windows.Forms
             [Browsable(false)]
             public int Count
             {
-
                 get
                 {
                     Debug.Assert(owner != null, "ImageCollection has no owner (ImageList)");
@@ -1204,7 +1199,6 @@ namespace System.Windows.Forms
             [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
             public Image this[int index]
             {
-
                 get
                 {
                     if (index < 0 || index >= Count)
@@ -1277,7 +1271,6 @@ namespace System.Windows.Forms
 
             object IList.this[int index]
             {
-
                 get
                 {
                     return this[index];
@@ -1300,7 +1293,6 @@ namespace System.Windows.Forms
             /// </summary>
             public Image this[string key]
             {
-
                 get
                 {
                     // We do not support null and empty string as valid keys.
@@ -1319,7 +1311,6 @@ namespace System.Windows.Forms
                     {
                         return null;
                     }
-
                 }
             }
 
@@ -1339,7 +1330,6 @@ namespace System.Windows.Forms
                 // Add the image to the IList
                 Original original = new Original(image, OriginalOptions.Default);
                 Add(original, imageInfo);
-
             }
 
             /// <summary>
@@ -1358,7 +1348,6 @@ namespace System.Windows.Forms
                 // Add the image to the IList
                 Original original = new Original(icon, OriginalOptions.Default);
                 Add(original, imageInfo);
-
             }
 
             int IList.Add(object value)
@@ -1507,7 +1496,6 @@ namespace System.Windows.Forms
             /// </summary>
             public int AddStrip(Image value)
             {
-
                 if (value == null)
                 {
                     throw new ArgumentNullException(nameof(value));
@@ -1752,7 +1740,6 @@ namespace System.Windows.Forms
                     set { name = value; }
                 }
             }
-
         } // end class ImageCollection
     }
 

@@ -84,7 +84,6 @@ namespace System.Windows.Forms
                     ToolStripMenuItem menuItem = item as ToolStripMenuItem;
                     contextMenuStrip.Items.Add(menuItem.Clone());
                 }
-
             }
             return contextMenuStrip;
         }

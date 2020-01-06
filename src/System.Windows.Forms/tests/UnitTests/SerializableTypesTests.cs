@@ -221,7 +221,6 @@ namespace System.Windows.Forms.Tests.Serialization
                 netBlob = BinarySerialization.ToBase64String(listViewSubItem);
             }
 
-
             // ensure we can deserialise NET serialised data and continue to match the payload
             ValidateResult(netBlob);
             // ensure we can deserialise NET Fx serialised data and continue to match the payload

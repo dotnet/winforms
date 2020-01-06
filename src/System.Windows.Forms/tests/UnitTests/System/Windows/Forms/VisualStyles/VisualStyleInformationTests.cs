@@ -151,7 +151,6 @@ namespace System.Windows.Forms.VisualStyles.Tests
             Assert.NotNull(url);
             Assert.Equal(url, VisualStyleInformation.Url);
             Assert.DoesNotContain('\0', url);
-
         }
 
         [Fact]

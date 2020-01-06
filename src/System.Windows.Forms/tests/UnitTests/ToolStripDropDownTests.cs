@@ -529,13 +529,13 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-        
+
             // Call with handler.
             control.HandleCreated += handler;
             control.OnHandleCreated(eventArgs);
             Assert.Equal(1, callCount);
             Assert.False(control.IsHandleCreated);
-        
+
             // Remove handler.
             control.HandleCreated -= handler;
             control.OnHandleCreated(eventArgs);
@@ -556,13 +556,13 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-        
+
             // Call with handler.
             control.HandleCreated += handler;
             control.OnHandleCreated(eventArgs);
             Assert.Equal(1, callCount);
             Assert.True(control.IsHandleCreated);
-        
+
             // Remove handler.
             control.HandleCreated -= handler;
             control.OnHandleCreated(eventArgs);
@@ -582,13 +582,13 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-        
+
             // Call with handler.
             control.HandleDestroyed += handler;
             control.OnHandleDestroyed(eventArgs);
             Assert.Equal(1, callCount);
             Assert.False(control.IsHandleCreated);
-        
+
             // Remove handler.
             control.HandleDestroyed -= handler;
             control.OnHandleDestroyed(eventArgs);
@@ -609,13 +609,13 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-        
+
             // Call with handler.
             control.HandleDestroyed += handler;
             control.OnHandleDestroyed(eventArgs);
             Assert.Equal(1, callCount);
             Assert.True(control.IsHandleCreated);
-        
+
             // Remove handler.
             control.HandleDestroyed -= handler;
             control.OnHandleDestroyed(eventArgs);
@@ -629,8 +629,8 @@ namespace System.Windows.Forms.Tests
             TestForm testForm = new TestForm();
             Application.Run(testForm); //it needs for correct work of ToolStripDropDown.CanProcessMnemonic method
 
-            //TestResult property is made as separate for the reason that 
-            //when the Assert is inside FormLoaded method and it fails, 
+            //TestResult property is made as separate for the reason that
+            //when the Assert is inside FormLoaded method and it fails,
             //the Application doesn't exit and the process freezes.
             Assert.True(testForm.TestResult);
         }
@@ -651,7 +651,7 @@ namespace System.Windows.Forms.Tests
             private void FormLoaded(object sender, EventArgs e)
             {
                 toolStrip.Enabled = true; // it needs for correct work of Control.CanProcessMnemonic method
-                toolStrip.Visible = true; // 
+                toolStrip.Visible = true; //
 
                 _result &= !(toolStrip.ProcessDialogCharTest('F'));
 

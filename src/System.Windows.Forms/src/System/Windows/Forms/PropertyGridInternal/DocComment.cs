@@ -233,7 +233,6 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             if (IsHandleCreated && needUpdateUIWithFont)
             {
-
                 // Some fonts throw because Bold is not a valid option
                 // for them.  Fail gracefully.
                 try

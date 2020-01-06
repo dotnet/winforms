@@ -644,7 +644,6 @@ namespace System.Windows.Forms
         {
             lock (syncObj)
             {
-
                 // Bail if in design mode...
                 //
                 if (DesignMode)

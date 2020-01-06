@@ -9,8 +9,8 @@ namespace System.Windows.Forms.VisualStyles
         None = 0,
         ImageGlyph = 1,
         FontGlyph = 2,
-        //		TM_ENUM(0, GT, NONE)
-        //		TM_ENUM(1, GT, IMAGEGLYPH)
-        //		TM_ENUM(2, GT, FONTGLYPH)
+        //      TM_ENUM(0, GT, NONE)
+        //      TM_ENUM(1, GT, IMAGEGLYPH)
+        //      TM_ENUM(2, GT, FONTGLYPH)
     }
 }

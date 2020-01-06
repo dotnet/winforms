@@ -116,7 +116,6 @@ namespace System.Windows.Forms
                 containerInfo.MaxColumns = value;
                 LayoutTransaction.DoLayout(Owner, Owner, PropertyNames.Columns);
                 Debug.Assert(ColumnCount == value, "the max columns should equal to the value we set it to");
-
             }
         }
 
@@ -146,7 +145,6 @@ namespace System.Windows.Forms
                 containerInfo.MaxRows = value;
                 LayoutTransaction.DoLayout(Owner, Owner, PropertyNames.Rows);
                 Debug.Assert(RowCount == value, "the max rows should equal to the value we set it to");
-
             }
         }
 
@@ -247,7 +245,6 @@ namespace System.Windows.Forms
                     _stub = settings._stub;
                 }
             }
-
         }
 
         #region Extended Properties
@@ -296,7 +293,6 @@ namespace System.Windows.Forms
                 LayoutTransaction.DoLayout(element.Container, element, PropertyNames.ColumnSpan);
                 Debug.Assert(GetColumnSpan(element) == value, "column span should equal to the value we set");
             }
-
         }
 
         public int GetRowSpan(object control)
@@ -563,7 +559,6 @@ namespace System.Windows.Forms
                         controlInfo.ColumnSpan = GetColumnSpan(c);
                         controlsInfo.Add(controlInfo);
                     }
-
                 }
                 return controlsInfo;
             }

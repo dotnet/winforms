@@ -186,7 +186,6 @@ namespace System.Windows.Forms
                     {
                         LayoutTransaction.DoLayout(ParentInternal, this, PropertyNames.Spring);
                     }
-
                 }
             }
         }
@@ -313,9 +312,7 @@ namespace System.Windows.Forms
                 return layoutOptions;
             }
         }
-
     }
-
 }
 
 

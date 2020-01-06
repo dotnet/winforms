@@ -465,7 +465,6 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(2, callCount);
         }
 
-
         [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(AutoSizeMode))]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(AutoSizeMode))]
@@ -1117,7 +1116,7 @@ namespace System.Windows.Forms.Tests
             };
             Assert.IsType<ToolStripSystemRenderer>(control.Renderer);
             Assert.Equal(1, rendererChangedCallCount);
-            
+
             Assert.Same(control.Renderer, control.Renderer);
             Assert.Equal(1, rendererChangedCallCount);
         }
@@ -1150,7 +1149,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(ToolStripRenderMode.Custom, control.RenderMode);
             Assert.Equal(expectedDoubleBuffered, control.GetStyle(ControlStyles.OptimizedDoubleBuffer));
             Assert.False(control.IsHandleCreated);
-            
+
             // Set same.
             control.Renderer = value;
             Assert.Same(value, control.Renderer);
@@ -1167,7 +1166,7 @@ namespace System.Windows.Forms.Tests
             Assert.True(control.GetStyle(ControlStyles.OptimizedDoubleBuffer));
             Assert.False(control.IsHandleCreated);
         }
-        
+
         [WinFormsTheory]
         [MemberData(nameof(Renderer_Set_TestData))]
         public void ToolStripContentPanel_Renderer_SetWithHandle_ReturnsExpected(bool visible, bool doubleBuffered, ToolStripRenderer value, bool expectedDoubleBuffered)
@@ -1193,7 +1192,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(2, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            
+
             // Set same.
             control.Renderer = value;
             Assert.Same(value, control.Renderer);
@@ -1229,7 +1228,7 @@ namespace System.Windows.Forms.Tests
             control.Renderer = mockToolStripRenderer.Object;
             Assert.Same(mockToolStripRenderer.Object, control.Renderer);
             mockToolStripRenderer.Protected().Verify("InitializeContentPanel", Times.Once(), control);
-            
+
             // Call again.
             control.Renderer = mockToolStripRenderer.Object;
             Assert.Same(mockToolStripRenderer.Object, control.Renderer);
@@ -1254,7 +1253,7 @@ namespace System.Windows.Forms.Tests
             control.Renderer = renderer;
             Assert.Same(renderer, control.Renderer);
             Assert.Equal(2, callCount);
-            
+
             // Set same.
             control.Renderer = renderer;
             Assert.Same(renderer, control.Renderer);
@@ -1292,7 +1291,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(EventArgs.Empty, e);
                 rendererChangedCallCount++;
             };
-            
+
             // Set same.
             control.RenderMode = ToolStripRenderMode.System;
             Assert.Equal(ToolStripRenderMode.System, control.RenderMode);
@@ -1301,14 +1300,14 @@ namespace System.Windows.Forms.Tests
             Assert.IsType<ToolStripSystemRenderer>(control.Renderer);
             Assert.Equal(2, rendererChangedCallCount);
             Assert.False(control.IsHandleCreated);
-            
+
             // Set different.
             control.RenderMode = value;
             Assert.Equal(value, control.RenderMode);
             Assert.IsType(expectedRendererType, control.Renderer);
             Assert.Equal(3, rendererChangedCallCount);
             Assert.False(control.IsHandleCreated);
-            
+
             // Set same.
             control.RenderMode = value;
             Assert.Equal(value, control.RenderMode);
@@ -1333,20 +1332,20 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(EventArgs.Empty, e);
                 rendererChangedCallCount++;
             };
-            
+
             control.RenderMode = value;
             Assert.Equal(value, control.RenderMode);
             Assert.IsType(expectedRendererType, control.Renderer);
             Assert.Equal(1, rendererChangedCallCount);
             Assert.False(control.IsHandleCreated);
-            
+
             // Set same.
             control.RenderMode = value;
             Assert.Equal(value, control.RenderMode);
             Assert.IsType(expectedRendererType, control.Renderer);
             Assert.Equal(2, rendererChangedCallCount);
             Assert.False(control.IsHandleCreated);
-            
+
             // Set ManagerRenderMode.
             control.RenderMode = ToolStripRenderMode.ManagerRenderMode;
             Assert.Equal(ToolStripRenderMode.ManagerRenderMode, control.RenderMode);
@@ -1378,7 +1377,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(EventArgs.Empty, e);
                 rendererChangedCallCount++;
             };
-            
+
             // Set same.
             control.RenderMode = ToolStripRenderMode.System;
             Assert.Equal(ToolStripRenderMode.System, control.RenderMode);
@@ -1390,7 +1389,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(2, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            
+
             // Set different.
             control.RenderMode = value;
             Assert.Equal(value, control.RenderMode);
@@ -1400,7 +1399,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(3, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            
+
             // Set same.
             control.RenderMode = value;
             Assert.Equal(value, control.RenderMode);
@@ -1724,7 +1723,7 @@ namespace System.Windows.Forms.Tests
         {
             using var control = new ToolStripContentPanel();
             Assert.NotNull(control.Renderer);
-            
+
             control.Visible = value;
             Assert.Equal(value, control.Visible);
             Assert.False(control.IsHandleCreated);
@@ -1739,7 +1738,6 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(!value, control.Visible);
             Assert.False(control.IsHandleCreated);
         }
-
 
         [WinFormsFact]
         public void ToolStripContentPanel_Visible_SetWithHandler_CallsVisibleChanged()
@@ -1798,14 +1796,14 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-        
+
             // Call with handler.
             control.HandleCreated += handler;
             control.OnHandleCreated(eventArgs);
             Assert.Equal(1, callCount);
             Assert.Equal(1, loadCallCount);
             Assert.False(control.IsHandleCreated);
-        
+
             // Remove handler.
             control.HandleCreated -= handler;
             control.OnHandleCreated(eventArgs);
@@ -1826,18 +1824,18 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-        
+
             // Call with handler.
             control.Load += handler;
             control.OnLoad(eventArgs);
             Assert.Equal(1, callCount);
-        
+
             // Remove handler.
             control.Load -= handler;
             control.OnLoad(eventArgs);
             Assert.Equal(1, callCount);
         }
-        
+
         [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ToolStripContentPanel_OnPaintBackground_Invoke_CallsRenderToolStripContentPanelBackground(bool handled)
@@ -1866,7 +1864,7 @@ namespace System.Windows.Forms.Tests
 
             control.OnPaintBackground(eventArgs);
             Assert.Equal(1, callCount);
-            
+
             // Call again.
             control.OnPaintBackground(eventArgs);
             Assert.Equal(2, callCount);
@@ -1910,14 +1908,14 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-        
+
             // Call with handler.
             control.RendererChanged += handler;
             control.OnRendererChanged(eventArgs);
             Assert.Equal(1, callCount);
             Assert.Equal(expectedDoubleBuffered, control.GetStyle(ControlStyles.OptimizedDoubleBuffer));
             Assert.False(control.IsHandleCreated);
-        
+
             // Remove handler.
             control.RendererChanged -= handler;
             control.OnRendererChanged(eventArgs);
@@ -1925,7 +1923,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expectedDoubleBuffered, control.GetStyle(ControlStyles.OptimizedDoubleBuffer));
             Assert.False(control.IsHandleCreated);
         }
-        
+
         [WinFormsTheory]
         [MemberData(nameof(OnRendererChanged_TestData))]
         public void ToolStripContentPanel_OnRendererChanged_InvokeWithHandle_CallsRendererChanged(bool doubleBuffered, ToolStripRenderer renderer, EventArgs eventArgs, bool expectedDoubleBuffered)
@@ -1949,7 +1947,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-        
+
             // Call with handler.
             control.RendererChanged += handler;
             control.OnRendererChanged(eventArgs);
@@ -1959,7 +1957,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-        
+
             // Remove handler.
             control.RendererChanged -= handler;
             control.OnRendererChanged(eventArgs);
@@ -1984,10 +1982,10 @@ namespace System.Windows.Forms.Tests
             control.Renderer = mockToolStripRenderer.Object;
             Assert.Same(mockToolStripRenderer.Object, control.Renderer);
             mockToolStripRenderer.Protected().Verify("InitializeContentPanel", Times.Once(), control);
-            
+
             control.OnRendererChanged(eventArgs);
             mockToolStripRenderer.Protected().Verify("InitializeContentPanel", Times.Exactly(2), control);
-            
+
             // Call again.
             control.OnRendererChanged(eventArgs);
             mockToolStripRenderer.Protected().Verify("InitializeContentPanel", Times.Exactly(3), control);

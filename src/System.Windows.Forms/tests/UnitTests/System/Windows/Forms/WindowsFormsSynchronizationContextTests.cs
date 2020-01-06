@@ -28,7 +28,7 @@ namespace System.Windows.Forms.Tests
             };
             copy.Send(callback, state);
             Assert.Equal(1, callCount);
-            
+
             // Call again.
             copy.Send(callback, state);
             Assert.Equal(2, callCount);
@@ -43,7 +43,7 @@ namespace System.Windows.Forms.Tests
             context.Dispose();
             context.Send(callback, new object());
             Assert.Equal(0, callCount);
-            
+
             // Call again.
             context.Dispose();
             context.Send(callback, new object());
@@ -69,7 +69,7 @@ namespace System.Windows.Forms.Tests
             var context = new WindowsFormsSynchronizationContext();
             context.Send(callback, state);
             Assert.Equal(1, callCount);
-            
+
             // Call again.
             context.Send(callback, state);
             Assert.Equal(2, callCount);
@@ -102,7 +102,7 @@ namespace System.Windows.Forms.Tests
 
             context.Send(callback, state);
             Assert.Equal(0, callCount);
-            
+
             // Call again.
             context.Send(callback, state);
             Assert.Equal(0, callCount);
@@ -127,7 +127,7 @@ namespace System.Windows.Forms.Tests
             var context = new WindowsFormsSynchronizationContext();
             context.Post(callback, state);
             Assert.Equal(0, callCount);
-            
+
             // Call again.
             context.Post(callback, state);
             Assert.Equal(0, callCount);
@@ -144,7 +144,7 @@ namespace System.Windows.Forms.Tests
 
             context.Post(callback, state);
             Assert.Equal(0, callCount);
-            
+
             // Call again.
             context.Post(callback, state);
             Assert.Equal(0, callCount);

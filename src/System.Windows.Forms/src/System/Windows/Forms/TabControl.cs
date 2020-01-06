@@ -661,7 +661,6 @@ namespace System.Windows.Forms
         {
             get
             {
-
                 return _rightToLeftLayout;
             }
 
@@ -1021,7 +1020,6 @@ namespace System.Windows.Forms
             if (index >= 0)
             {
                 Insert(index, tabPage);
-
             }
             return index;
         }
@@ -1105,7 +1103,6 @@ namespace System.Windows.Forms
             if (tabPage == null)
             {
                 throw new ArgumentNullException(nameof(tabPage));
-
             }
             int index = FindTabPage(tabPage);
             DeselectTab(index);
@@ -1119,7 +1116,6 @@ namespace System.Windows.Forms
             if (tabPageName == null)
             {
                 throw new ArgumentNullException(nameof(tabPageName));
-
             }
             TabPage tabPage = TabPages[tabPageName];
             DeselectTab(tabPage);
@@ -1436,7 +1432,6 @@ namespace System.Windows.Forms
             {
                 SelectedTab.FireEnter(e);
             }
-
         }
 
         /// <summary>
@@ -1562,7 +1557,6 @@ namespace System.Windows.Forms
             {
                 SelectedTab.FireEnter(EventArgs.Empty);
             }
-
         }
 
         /// <summary>
@@ -1704,7 +1698,6 @@ namespace System.Windows.Forms
         private void ResetPadding()
         {
             Padding = DefaultPaddingPoint;
-
         }
 
         private void ResizePages()
@@ -1724,7 +1717,6 @@ namespace System.Windows.Forms
         {
             UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)ComCtl32.TCM.SETTOOLTIPS, new HandleRef(toolTip, toolTip.Handle), 0);
             _controlTipText = controlToolTipText;
-
         }
 
         private void SetTabPage(int index, TabPage value)
@@ -1771,7 +1763,6 @@ namespace System.Windows.Forms
             if (tabPage == null)
             {
                 throw new ArgumentNullException(nameof(tabPage));
-
             }
             int index = FindTabPage(tabPage);
             SelectTab(index);
@@ -1785,7 +1776,6 @@ namespace System.Windows.Forms
             if (tabPageName == null)
             {
                 throw new ArgumentNullException(nameof(tabPageName));
-
             }
             TabPage tabPage = TabPages[tabPageName];
             SelectTab(tabPage);
@@ -1818,7 +1808,6 @@ namespace System.Windows.Forms
             }
             else
             {
-
                 int sel = SelectedIndex;
                 if (sel != -1)
                 {
@@ -1847,7 +1836,6 @@ namespace System.Windows.Forms
                         SetState(State.SelectFirstControl, !focused);
                         // Fire Selecting .. Selected on newly selected TabPage...
                         WmSelChange();
-
                     }
                     finally
                     {
@@ -1856,7 +1844,6 @@ namespace System.Windows.Forms
                         SetState(State.SelectFirstControl, false);
                         ke.Handled = true;
                     }
-
                 }
             }
         }
@@ -2034,7 +2021,6 @@ namespace System.Windows.Forms
             }
 
             Marshal.StructureToPtr(ttt, m.LParam, false);
-
         }
 
         private unsafe void WmReflectDrawItem(ref Message m)
@@ -2101,7 +2087,6 @@ namespace System.Windows.Forms
                 OnDeselected(new TabControlEventArgs(SelectedTab, SelectedIndex, TabControlAction.Deselected));
             }
             return tcc.Cancel;
-
         }
 
         private void WmTabBaseReLayout(ref Message m)

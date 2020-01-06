@@ -81,7 +81,6 @@ namespace System.Windows.Forms
 
             public void Add(TabPage value)
             {
-
                 if (value == null)
                 {
                     throw new ArgumentNullException(nameof(value));
@@ -344,7 +343,7 @@ namespace System.Windows.Forms
                 {
                     return Array.Empty<TabPage>().GetEnumerator();
                 }
-            
+
                 return tabPages.GetEnumerator();
             }
 

@@ -551,6 +551,5 @@ namespace System.Windows.Forms
         {
             return (type != null && !type.IsValueType) ? null : defaultDataSourceNullValue;
         }
-
     }
 }

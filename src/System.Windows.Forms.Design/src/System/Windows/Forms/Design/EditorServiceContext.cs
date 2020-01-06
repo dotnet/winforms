@@ -67,7 +67,6 @@ namespace System.Windows.Forms.Design
                 }
                 catch (CheckoutException)
                 {
-
                 }
             }
             return newValue;

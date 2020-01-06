@@ -266,7 +266,6 @@ namespace System.Windows.Forms
 
             set
             {
-
                 if (value < 0)
                 {
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(BulletIndent), value));
@@ -807,7 +806,6 @@ namespace System.Windows.Forms
                     (int)RichTextBoxScrollBars.ForcedVertical,
                     (int)RichTextBoxScrollBars.ForcedBoth))
                 {
-
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(RichTextBoxScrollBars));
                 }
 
@@ -882,7 +880,6 @@ namespace System.Windows.Forms
                 };
                 switch (value)
                 {
-
                     case HorizontalAlignment.Left:
                         pf.wAlignment = RichTextBoxConstants.PFA_LEFT;
                         break;
@@ -1252,7 +1249,6 @@ namespace System.Windows.Forms
         {
             get
             {
-
                 if (!IsHandleCreated)
                 {
                     return base.SelectionLength;
@@ -2137,7 +2133,6 @@ namespace System.Windows.Forms
 
                 UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), RichEditMessages.EM_EXSETSEL, 0, ref chrg);
                 SendMessage(EditMessages.EM_SCROLLCARET, 0, 0);
-
             }
 
             return position;
@@ -2216,9 +2211,8 @@ namespace System.Windows.Forms
                     cpMin = chrg.cpMin,
                     cpMax = chrg.cpMax
                 }
-
             };
-            
+
             // Characters we have slurped into memory in order to search
             var charBuffer = new UnicodeCharBuffer(CHAR_BUFFER_LEN + 1);
             txrg.lpstrText = charBuffer.AllocCoTaskMem();
@@ -2344,7 +2338,6 @@ namespace System.Windows.Forms
             if ((cf.dwMask & RichTextBoxConstants.CFM_COLOR) != 0
                 && ColorTranslator.ToWin32(value) == cf.crTextColor)
             {
-
                 return true;
             }
 
@@ -3192,7 +3185,6 @@ namespace System.Windows.Forms
 
                 // EM_GETLINECOUNT will cause the RichTextBox to recalculate its line indexes
                 SendMessage(EditMessages.EM_GETLINECOUNT, 0, 0);
-
             }
             finally
             {
@@ -3476,7 +3468,7 @@ namespace System.Windows.Forms
         ///  Converts a CHARRANGE to a string.
         /// </summary>
         /// <remarks>
-        ///  The behavior of this is dependent on the current window class name being used. 
+        ///  The behavior of this is dependent on the current window class name being used.
         ///  We have to create a CharBuffer of the type of RichTextBox DLL we're using,
         ///  not based on the SystemCharWidth.
         /// </remarks>
@@ -3746,16 +3738,13 @@ namespace System.Windows.Forms
             // Is either the Hangul or HangulFull IME currently in use?
             if (ImeMode == ImeMode.Hangul || ImeMode == ImeMode.HangulFull)
             {
-
                 // Is the IME CompositionWindow open?
                 int compMode = unchecked((int)(long)SendMessage(RichEditMessages.EM_GETIMECOMPMODE, 0, 0));
                 if (RichTextBoxConstants.ICM_NOTOPEN != compMode)
                 {
-
                     int textLength = User32.GetWindowTextLengthW(new HandleRef(this, Handle));
                     if (selStart == selEnd && textLength == MaxLength)
                     {
-
                         SendMessage(WindowMessages.WM_KILLFOCUS, 0, 0);
                         SendMessage(WindowMessages.WM_SETFOCUS, 0, 0);
                         User32.PostMessageW(this, (User32.WindowMessage)EditMessages.EM_SETSEL, (IntPtr)(selEnd - 1), (IntPtr)selEnd);
@@ -3964,14 +3953,12 @@ namespace System.Windows.Forms
 
             public HRESULT QueryAcceptData(IComDataObject lpdataobj, IntPtr lpcfFormat, uint reco, BOOL fReally, IntPtr hMetaPict)
             {
-
                 Debug.WriteLineIf(RichTextDbg.TraceVerbose, "IRichEditOleCallback::QueryAcceptData(reco=" + reco + ")");
 
                 if (reco == NativeMethods.RECO_DROP)
                 {
                     if (owner.AllowDrop || owner.EnableAutoDragDrop)
                     {
-
                         MouseButtons b = Control.MouseButtons;
                         Keys k = Control.ModifierKeys;
 

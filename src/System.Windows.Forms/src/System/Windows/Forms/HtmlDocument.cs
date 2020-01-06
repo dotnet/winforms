@@ -34,7 +34,6 @@ namespace System.Windows.Forms
             Debug.Assert(NativeHtmlDocument2 != null, "The document should implement IHtmlDocument2");
 
             this.shimManager = shimManager;
-
         }
 
         internal IHTMLDocument2 NativeHtmlDocument2
@@ -547,7 +546,6 @@ namespace System.Windows.Forms
         {
             add => DocumentShim.AddHandler(EventMouseOver, value);
             remove => DocumentShim.RemoveHandler(EventMouseOver, value);
-
         }
 
         public event HtmlElementEventHandler MouseUp
@@ -573,7 +571,7 @@ namespace System.Windows.Forms
             public byte b;
         }
         private static readonly int VariantSize = (int)Marshal.OffsetOf(typeof(FindSizeOfVariant), "b");
-        
+
         /// <summary>
         ///  Convert a object[] into an array of VARIANT, allocated with CoTask allocators.
         /// </summary>
@@ -588,7 +586,7 @@ namespace System.Windows.Forms
             }
             return mem;
         }
-        
+
         /// <summary>
         ///  Free a Variant array created with the above function
         /// </summary>
@@ -691,7 +689,6 @@ namespace System.Windows.Forms
             ///  Support IHtmlDocument3.AttachHandler
             public override void AttachEventHandler(string eventName, EventHandler eventHandler)
             {
-
                 // IE likes to call back on an IDispatch of DISPID=0 when it has an event,
                 // the HtmlToClrEventProxy helps us fake out the CLR so that we can call back on
                 // our EventHandler properly.
@@ -709,7 +706,6 @@ namespace System.Windows.Forms
                 {
                     ((IHTMLDocument3)NativeHtmlDocument2).DetachEvent(eventName, proxy);
                 }
-
             }
 
             //
@@ -753,7 +749,6 @@ namespace System.Windows.Forms
                     }
                     htmlDocument = null;
                 }
-
             }
 
             protected override object GetEventSender()

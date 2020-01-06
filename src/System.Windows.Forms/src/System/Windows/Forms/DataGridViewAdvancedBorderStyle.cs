@@ -53,7 +53,6 @@ namespace System.Windows.Forms
             }
             set
             {
-
                 // Sequential enum.  Valid values are 0x0 to 0x7
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)DataGridViewAdvancedCellBorderStyle.NotSet, (int)DataGridViewAdvancedCellBorderStyle.OutsetPartial))
                 {
@@ -199,7 +198,6 @@ namespace System.Windows.Forms
             }
             set
             {
-
                 // Sequential enum.  Valid values are 0x0 to 0x7
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)DataGridViewAdvancedCellBorderStyle.NotSet, (int)DataGridViewAdvancedCellBorderStyle.OutsetPartial))
                 {

@@ -574,7 +574,6 @@ namespace System.Windows.Forms
                             OnClick(mevent);
                             OnMouseClick(mevent);
                         }
-
                     }
                 }
             }
@@ -597,7 +596,6 @@ namespace System.Windows.Forms
                     OnClick(EventArgs.Empty);
                 }
             }
-
         }
 
         protected internal override bool ProcessMnemonic(char charCode)
@@ -677,6 +675,5 @@ namespace System.Windows.Forms
                 ((RadioButton)Owner).PerformClick();
             }
         }
-
     }
 }

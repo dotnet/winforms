@@ -34,6 +34,5 @@ namespace System.Windows.Forms.Design.Behavior
         {
             DesignerUtils.DrawLockedHandle(pe.Graphics, bounds, _isPrimary, this);
         }
-
     }
 }

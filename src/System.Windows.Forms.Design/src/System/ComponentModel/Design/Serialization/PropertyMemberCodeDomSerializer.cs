@@ -95,7 +95,6 @@ namespace System.ComponentModel.Design.Serialization
             }
 
             return propertyValue;
-
         }
 
         /// <summary>
@@ -452,7 +451,6 @@ namespace System.ComponentModel.Design.Serialization
 
                 if (absolute != null && absolute.ShouldSerialize(propertyToSerialize))
                 {
-
                     // For ReadOnly properties, we only want to override the value returned from
                     // ShouldSerializeValue() if the property is marked with DesignerSerializationVisibilityAttribute(Content).
                     // Consider the case of a property with just a getter - we only want to serialize those

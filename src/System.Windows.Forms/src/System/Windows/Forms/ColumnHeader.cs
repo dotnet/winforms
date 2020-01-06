@@ -112,7 +112,6 @@ namespace System.Windows.Forms
 
             set
             {
-
                 // When the list is being deserialized we need
                 // to take the display index as is. ListView
                 // does correctly synchronize the indices.
@@ -137,7 +136,6 @@ namespace System.Windows.Forms
                 ColumnHeader movedHdr = null;
                 for (int i = 0; i < listview.Columns.Count; i++)
                 {
-
                     ColumnHeader hdr = listview.Columns[i];
                     if (hdr.DisplayIndex == DisplayIndexInternal)
                     {
@@ -303,7 +301,6 @@ namespace System.Windows.Forms
                     Site.Name = value;
                 }
             }
-
         }
 
         /// <summary>
@@ -334,7 +331,6 @@ namespace System.Windows.Forms
                     listview.SetColumnInfo(LVCF.TEXT, this);
                 }
             }
-
         }
 
         /// <summary>

@@ -315,7 +315,6 @@ namespace System.Windows.Forms
                      dwSaveOption == Ole32.OLECLOSE.PROMPTSAVE) &&
                     _activeXState[s_isDirty])
                 {
-
                     if (_clientSite != null)
                     {
                         _clientSite.SaveObject();
@@ -645,7 +644,7 @@ namespace System.Windows.Forms
                         Debug.Unindent();
                         return true;
                     }
-                    
+
                     Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "IDispatch::Invoke failed. HR: 0x" + string.Format(CultureInfo.CurrentCulture, "{0:X}", hr));
                 }
 
@@ -1042,7 +1041,7 @@ namespace System.Windows.Forms
                 {
                     return HRESULT.S_OK;
                 }
-                
+
                 return HRESULT.S_FALSE;
             }
 
@@ -1769,7 +1768,6 @@ namespace System.Windows.Forms
                     [UnmanagedFunctionPointer(CallingConvention.StdCall)]
                     private delegate int AdviseD(IntPtr This, IntPtr punkEventSink, out uint pdwCookie);
                 }
-
             }
 
             /// <summary>

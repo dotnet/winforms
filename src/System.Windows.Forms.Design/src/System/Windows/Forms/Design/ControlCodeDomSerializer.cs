@@ -57,7 +57,7 @@ namespace System.Windows.Forms.Design
 
             try
             {
-                // Find our base class's serializer.  
+                // Find our base class's serializer.
                 CodeDomSerializer serializer = (CodeDomSerializer)manager.GetSerializer(typeof(Component), typeof(CodeDomSerializer));
 
                 if (serializer == null)
@@ -162,7 +162,7 @@ namespace System.Windows.Forms.Design
                 throw new ArgumentNullException(manager == null ? "manager" : "value");
             }
 
-            // Find our base class's serializer.  
+            // Find our base class's serializer.
             CodeDomSerializer serializer = (CodeDomSerializer)manager.GetSerializer(typeof(Component), typeof(CodeDomSerializer));
 
             if (serializer == null)
@@ -204,7 +204,7 @@ namespace System.Windows.Forms.Design
                 }
 
                 CodeStatementCollection csCollection = retVal as CodeStatementCollection;
-                
+
                 if (csCollection != null)
                 {
                     Control control = (Control)value;
@@ -216,14 +216,14 @@ namespace System.Windows.Forms.Design
                         SerializeSuspendLayout(manager, csCollection, value);
                         SerializeResumeLayout(manager, csCollection, value);
                         ControlDesigner controlDesigner = host.GetDesigner(control) as ControlDesigner;
-                        
+
                         if (HasAutoSizedChildren(control) || (controlDesigner != null && controlDesigner.SerializePerformLayout))
                         {
                             SerializePerformLayout(manager, csCollection, value);
                         }
                     }
 
-                    // And now serialize the correct z-order relationships for the controls.  We only need to 
+                    // And now serialize the correct z-order relationships for the controls.  We only need to
                     // do this if there are controls in the collection that are inherited.
                     if (HasMixedInheritedChildren(control))
                     {
@@ -298,7 +298,7 @@ namespace System.Windows.Forms.Design
 
                 // Parent
                 Control parent = control.Parent;
-                
+
                 if (parent != null && parent.Site != null)
                 {
                     string parentName;
@@ -344,11 +344,10 @@ namespace System.Windows.Forms.Design
         private static Type[] ToTargetTypes(object context, Type[] runtimeTypes)
         {
             Type[] types = new Type[runtimeTypes.Length];
-            
+
             for (int i = 0; i < runtimeTypes.Length; i++)
             {
                 types[i] = ToTargetType(context, runtimeTypes[i]);
-            
             }
 
             return types;
@@ -364,24 +363,24 @@ namespace System.Windows.Forms.Design
                 string name = manager.GetName(control);
                 Trace(name + "." + methodName);
 
-                // Use IReflect to see if this method name exists on the control.  
+                // Use IReflect to see if this method name exists on the control.
                 paramTypes = ToTargetTypes(control, paramTypes);
                 MethodInfo mi = TypeDescriptor.GetReflectionType(control).GetMethod(methodName, BindingFlags.Public | BindingFlags.Instance, null, paramTypes, null);
-                
+
                 if (mi != null)
                 {
                     CodeExpression field = SerializeToExpression(manager, control);
                     CodeMethodReferenceExpression method = new CodeMethodReferenceExpression(field, methodName);
                     CodeMethodInvokeExpression methodInvoke = new CodeMethodInvokeExpression();
                     methodInvoke.Method = method;
-                    
+
                     if (parameters != null)
                     {
                         methodInvoke.Parameters.AddRange(parameters);
                     }
 
                     CodeExpressionStatement statement = new CodeExpressionStatement(methodInvoke);
-                    
+
                     switch (ordering)
                     {
                         case StatementOrdering.Prepend:
@@ -440,7 +439,7 @@ namespace System.Windows.Forms.Design
                     }
 
                     InheritanceAttribute attr = (InheritanceAttribute)TypeDescriptor.GetAttributes(child)[typeof(InheritanceAttribute)];
-                    
+
                     if (attr.InheritanceLevel == InheritanceLevel.InheritedReadOnly)
                     {
                         continue;

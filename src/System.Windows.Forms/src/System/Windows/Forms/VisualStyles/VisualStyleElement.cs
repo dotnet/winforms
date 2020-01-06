@@ -796,7 +796,6 @@ namespace System.Windows.Forms.VisualStyles
                 private static VisualStyleElement disabled;
 
                 public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 4);
-
             }
 
             public static class TopTabItemLeftEdge
@@ -839,7 +838,6 @@ namespace System.Windows.Forms.VisualStyles
                 private static VisualStyleElement disabled;
 
                 public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 4);
-
             }
 
             public static class TopTabItemBothEdges
@@ -858,7 +856,6 @@ namespace System.Windows.Forms.VisualStyles
                 private static VisualStyleElement normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
-
             }
 
             public static class Body
@@ -868,7 +865,6 @@ namespace System.Windows.Forms.VisualStyles
                 private static VisualStyleElement normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
-
             }
         } // END TAB
 
@@ -883,7 +879,6 @@ namespace System.Windows.Forms.VisualStyles
                 private static VisualStyleElement normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
-
             }
 
             public static class HeaderClose
@@ -956,7 +951,6 @@ namespace System.Windows.Forms.VisualStyles
                 private static VisualStyleElement normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
-
             }
 
             public static class NormalGroupCollapse
@@ -1009,7 +1003,6 @@ namespace System.Windows.Forms.VisualStyles
                 private static VisualStyleElement normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
-
             }
 
             public static class SpecialGroupCollapse
@@ -1053,7 +1046,6 @@ namespace System.Windows.Forms.VisualStyles
                 private static VisualStyleElement normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
-
             }
         } // END EXPLORERBAR
 
@@ -1189,7 +1181,6 @@ namespace System.Windows.Forms.VisualStyles
                 private static VisualStyleElement normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
-
             }
         } // END LISTVIEW
 
@@ -1373,7 +1364,6 @@ namespace System.Windows.Forms.VisualStyles
                 private static VisualStyleElement normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
-
             }
 
             public static class Chevron
@@ -1840,7 +1830,6 @@ namespace System.Windows.Forms.VisualStyles
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
-
         } // END TOOLBAR
 
         public static class ToolTip

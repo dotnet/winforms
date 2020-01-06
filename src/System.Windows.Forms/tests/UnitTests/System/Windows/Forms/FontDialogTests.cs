@@ -735,12 +735,12 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-        
+
             // Call with handler.
             dialog.Apply += handler;
             dialog.OnApply(eventArgs);
             Assert.Equal(1, callCount);
-        
+
             // Remove handler.
             dialog.Apply -= handler;
             dialog.OnApply(eventArgs);

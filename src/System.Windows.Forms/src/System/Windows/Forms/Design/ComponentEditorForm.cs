@@ -837,7 +837,6 @@ namespace System.Windows.Forms.Design
                                          state, ColorTranslator.ToWin32(SystemColors.Control), ColorTranslator.ToWin32(SystemColors.ControlText));
                             }
                             m.Result = (IntPtr)ComCtl32.CDRF.SKIPDEFAULT;
-
                         }
                         break;
                     case ComCtl32.CDDS.POSTPAINT:

@@ -131,7 +131,6 @@ namespace System.Windows.Forms
 
             for (; lastItem >= 0; lastItem--)
             {
-
                 // null means no prop is available, we quit here.
                 //
                 if (ConstructorParameterProperties[lastItem] == null)

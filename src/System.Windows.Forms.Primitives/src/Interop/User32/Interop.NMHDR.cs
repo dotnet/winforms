@@ -10,7 +10,7 @@ internal static partial class Interop
     {
         /// <remarks>
         /// NMHDR is defined in winuser.h and richedit.h. idFrom is a pointer in winuser.h but is an int
-        /// in richedit.h. The definition in richedit.h is inactive and we use the definition in winuser.h. 
+        /// in richedit.h. The definition in richedit.h is inactive and we use the definition in winuser.h.
         /// </remarks>
         public struct NMHDR
         {

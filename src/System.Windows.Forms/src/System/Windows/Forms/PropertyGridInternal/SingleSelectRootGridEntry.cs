@@ -201,7 +201,6 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             get
             {
-
                 HelpKeywordAttribute helpAttribute = (HelpKeywordAttribute)TypeDescriptor.GetAttributes(objValue)[typeof(HelpKeywordAttribute)];
 
                 if (helpAttribute != null && !helpAttribute.IsDefaultAttribute())
@@ -309,7 +308,6 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             if (((PropertySort &= PropertySort.Categorized) != 0) != fCategories)
             {
-
                 if (fCategories)
                 {
                     PropertySort |= PropertySort.Categorized;
@@ -331,13 +329,11 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             if (Children.Count > 0)
             {
-
                 GridEntry[] childEntries = new GridEntry[Children.Count];
                 Children.CopyTo(childEntries, 0);
 
                 if ((PropertySort & PropertySort.Categorized) != 0)
                 {
-
                     // first, walk through all the entires and
                     // group them by their category by adding
                     // them to a hashtable of arraylists.

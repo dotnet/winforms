@@ -652,7 +652,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                         if (funcDesc.invkind == Ole32.INVOKEKIND.FUNC ||
                             (dispidToGet != Ole32.DispatchID.MEMBERID_NIL && funcDesc.memid != dispidToGet))
                         {
-
                             if (funcDesc.memid == Ole32.DispatchID.ABOUTBOX)
                             {
                                 addAboutBox = true;
@@ -667,10 +666,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
                         if (isPropGet)
                         {
-
                             if (funcDesc.cParams != 0)
                             {
-
                                 continue;
                             }
 
@@ -684,7 +681,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                             Debug.Assert(funcDesc.lprgelemdescParam != null, "ELEMDESC param is null!");
                             if (funcDesc.lprgelemdescParam == null || funcDesc.cParams != 1)
                             {
-
                                 continue;
                             }
 
@@ -829,7 +825,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     // just build our enumerator
                     if (strs.Count > 0)
                     {
-
                         // get the IUnknown value of the ITypeInfo
                         IntPtr pTypeInfoUnk = Marshal.GetIUnknownForObject(enumTypeInfo);
 
@@ -870,7 +865,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                             }
                         }
                     }
-
                 }
                 finally
                 {

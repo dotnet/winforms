@@ -159,7 +159,7 @@ namespace System.Windows.Forms.Layout
             return element.Bounds;
         }
 
-        ///  ResetPadding	
+        ///  ResetPadding
         ///  clears out the padding from the property store
         internal static void ResetPadding(IArrangedElement element)
         {
@@ -199,7 +199,6 @@ namespace System.Windows.Forms.Layout
             Debug.Assert(GetMargin(element) == value, "Error detected setting Margin.");
 
             LayoutTransaction.DoLayout(element.Container, element, PropertyNames.Margin);
-
         }
 
         ///  SetMaximumSize
@@ -310,7 +309,6 @@ namespace System.Windows.Forms.Layout
                 }
 
                 element.Properties.SetRectangle(_specifiedBoundsProperty, originalBounds);
-
             }
             else
             {
@@ -738,7 +736,6 @@ namespace System.Windows.Forms.Layout
                 diff = "For more info, try enabling PreferredSize trace switch";
             }
             return diff;
-
         }
 
         internal static void Debug_SnapProperties(IArrangedElement element)
@@ -757,7 +754,6 @@ namespace System.Windows.Forms.Layout
             Hashtable propertyHash = new Hashtable();
             if (PreferredSize.TraceVerbose)
             {
-
                 foreach (PropertyDescriptor pd in TypeDescriptor.GetProperties(obj))
                 {
                     if (pd.Name == "PreferredSize")
@@ -777,7 +773,6 @@ namespace System.Windows.Forms.Layout
                 }
             }
             return propertyHash;
-
         }
 
 #endif

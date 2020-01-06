@@ -44,6 +44,5 @@ namespace System.Windows.Forms.Design.Behavior
         {
             pe.Graphics.FillRectangle(new SolidBrush(SystemColors.ControlText), bounds);
         }
-
     }
 }

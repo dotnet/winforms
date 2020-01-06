@@ -52,7 +52,6 @@ namespace System.Windows.Forms
                     controlCollection.AddInternal(bottomPanel);
                 }
                 // else consider throw new exception
-
             }
             finally
             {
@@ -433,7 +432,6 @@ namespace System.Windows.Forms
             {
                 c.ResumeLayout();
             }
-
         }
 
         internal override void RecreateHandleCore()
@@ -447,7 +445,6 @@ namespace System.Windows.Forms
                 }
             }
             base.RecreateHandleCore();
-
         }
 
         internal override bool AllowsKeyboardToolTip()
@@ -519,9 +516,6 @@ namespace System.Windows.Forms
                 }
                 base.SetChildIndexInternal(child, newIndex);
             }
-
         }
-
     }
-
 }

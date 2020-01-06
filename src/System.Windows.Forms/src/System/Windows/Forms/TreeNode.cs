@@ -96,7 +96,6 @@ namespace System.Windows.Forms
                 }
                 set { Debug.Assert(false, "We should never set the image list"); }
             }
-
         }
 
         internal TreeNodeImageIndexer ImageIndexer
@@ -123,7 +122,6 @@ namespace System.Windows.Forms
                 }
 
                 return selectedImageIndexer;
-
             }
         }
 
@@ -370,7 +368,7 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <summary>	
+        /// <summary>
         ///  Indicates whether the node's checkbox is checked.
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
@@ -1343,7 +1341,6 @@ namespace System.Windows.Forms
                         newOrder[i].SortChildren(parentTreeView);
                     }
                     children = newOrder;
-
                 }
             }
         }
@@ -1385,7 +1382,6 @@ namespace System.Windows.Forms
 
             try
             {
-
                 if (tv != null)
                 {
                     tv.nodesCollectionClear = true;
@@ -1527,7 +1523,6 @@ namespace System.Windows.Forms
 
             tv.Invalidate();
             collapseOnRealization = false;
-
         }
 
         /// <summary>
@@ -1717,7 +1712,6 @@ namespace System.Windows.Forms
 
             if (treeView.CheckBoxes && treeView.StateImageList != null)
             {
-
                 if (!string.IsNullOrEmpty(StateImageKey))
                 {
                     StateImageIndex = (Checked) ? 1 : 0;
@@ -1774,7 +1768,6 @@ namespace System.Windows.Forms
             {
                 children[i].ExpandAll();
             }
-
         }
         /// <summary>
         ///  Locate this tree node's containing tree view control by scanning
@@ -1978,7 +1971,6 @@ namespace System.Windows.Forms
                     UnsafeNativeMethods.SendMessage(new HandleRef(tv, tv.Handle), WindowMessages.WM_SETREDRAW, 1, 0);
                     nodesCleared = false;
                 }
-
             }
 
             for (int i = childCount - 1; i >= 0; i--)

@@ -753,7 +753,6 @@ namespace System.Windows.Forms
                 control.VisibleChanged += new EventHandler(HandleControlVisibleChanged);
                 control.Validating += new CancelEventHandler(HandleValidating);
                 control.Validated += new EventHandler(HandleValidated);
-
             }
         }
 

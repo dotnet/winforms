@@ -97,6 +97,5 @@ namespace System.Windows.Forms.Design.Behavior
         {
             DesignerUtils.DrawGrabHandle(pe.Graphics, bounds, _isPrimary, this);
         }
-
     }
 }

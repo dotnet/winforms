@@ -79,12 +79,10 @@ namespace System.Windows.Forms
             get { return CommonProperties.GetMargin(this); }
             set
             {
-
                 Debug.Assert((value.Right >= 0 && value.Left >= 0 && value.Top >= 0 && value.Bottom >= 0), "who's setting margin negative?");
                 value = LayoutUtils.ClampNegativePaddingToZero(value);
                 if (Margin != value)
                 { CommonProperties.SetMargin(this, value); }
-
             }
         }
 
@@ -201,9 +199,7 @@ namespace System.Windows.Forms
                 OnBoundsChanged(oldBounds, bounds);
             }
         }
-
     }
-
 }
 
 

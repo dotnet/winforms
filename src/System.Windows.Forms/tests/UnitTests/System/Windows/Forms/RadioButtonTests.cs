@@ -181,7 +181,6 @@ namespace System.Windows.Forms.Tests
 
         public class SubRadioButton : RadioButton
         {
-
             public new bool CanEnableIme => base.CanEnableIme;
 
             public new bool CanRaiseEvents => base.CanRaiseEvents;

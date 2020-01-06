@@ -29,7 +29,6 @@ namespace System.Windows.Forms.Design.Behavior
             // The handle is always upperleft
             bounds = new Rectangle(controlBounds.X - DesignerUtils.NORESIZEHANDLESIZE, controlBounds.Y - DesignerUtils.NORESIZEHANDLESIZE, DesignerUtils.NORESIZEHANDLESIZE, DesignerUtils.NORESIZEHANDLESIZE);
             hitBounds = bounds;
-
         }
 
         /// <summary>
@@ -39,6 +38,5 @@ namespace System.Windows.Forms.Design.Behavior
         {
             DesignerUtils.DrawNoResizeHandle(pe.Graphics, bounds, _isPrimary, this);
         }
-
     }
 }

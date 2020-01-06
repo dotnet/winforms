@@ -36,18 +36,18 @@ namespace System.Windows.Forms.Tests
             insertionMark.AppearsAfterItem = value;
             Assert.Equal(value, insertionMark.AppearsAfterItem);
             Assert.False(control.IsHandleCreated);
-            
+
             // Set same.
             insertionMark.AppearsAfterItem = value;
             Assert.Equal(value, insertionMark.AppearsAfterItem);
             Assert.False(control.IsHandleCreated);
-            
+
             // Set different.
             insertionMark.AppearsAfterItem = !value;
             Assert.Equal(!value, insertionMark.AppearsAfterItem);
             Assert.False(control.IsHandleCreated);
         }
-        
+
         [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ListViewInsertionMark_AppearsAfterItem_SetWithHandle_GetReturnsExpected(bool value)
@@ -68,7 +68,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            
+
             // Set same.
             insertionMark.AppearsAfterItem = value;
             Assert.Equal(value, insertionMark.AppearsAfterItem);
@@ -76,7 +76,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            
+
             // Set different.
             insertionMark.AppearsAfterItem = !value;
             Assert.Equal(!value, insertionMark.AppearsAfterItem);
@@ -482,7 +482,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(-1, insertMark.iItem);
                 Assert.Equal(0u, insertMark.dwReserved);
                 Assert.Equal((IntPtr)0, User32.SendMessageW(control.Handle, (User32.WindowMessage)ComCtl32.LVM.GETINSERTMARKCOLOR, IntPtr.Zero, IntPtr.Zero));
-                
+
                 // Set negative one.
                 Assert.NotEqual(IntPtr.Zero, control.Handle);
                 control.InsertionMark.Index = -1;
@@ -537,7 +537,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(-1, insertMark.iItem);
                 Assert.Equal(0u, insertMark.dwReserved);
                 Assert.Equal((IntPtr)0, User32.SendMessageW(control.Handle, (User32.WindowMessage)ComCtl32.LVM.GETINSERTMARKCOLOR, IntPtr.Zero, IntPtr.Zero));
-                
+
                 // Set negative one.
                 Assert.NotEqual(IntPtr.Zero, control.Handle);
                 control.InsertionMark.Index = -1;
@@ -609,7 +609,7 @@ namespace System.Windows.Forms.Tests
 
             Assert.Equal(result, insertionMark.NearestIndex(new Point(1, 2)));
         }
-        
+
         private class CustomInsertMarkHitTestListView : ListView
         {
             public int InsertMarkHitTestResult { get; set; }

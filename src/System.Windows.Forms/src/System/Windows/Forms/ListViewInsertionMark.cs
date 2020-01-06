@@ -28,10 +28,10 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Specifies whether the insertion mark appears
-    	///  after the item - otherwise it appears
-    	///  before the item (the default).
+        ///  after the item - otherwise it appears
+        ///  before the item (the default).
         /// </summary>
-    	public bool AppearsAfterItem
+        public bool AppearsAfterItem
         {
             get
             {

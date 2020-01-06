@@ -484,7 +484,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(EventArgs.Empty, e);
                 rendererChangedCallCount++;
             };
-            
+
             // Set same.
             control.RenderMode = ToolStripRenderMode.System;
             Assert.Equal(ToolStripRenderMode.System, control.RenderMode);
@@ -492,19 +492,19 @@ namespace System.Windows.Forms.Tests
             Assert.Same(control.Renderer, control.Renderer);
             Assert.IsType<ToolStripSystemRenderer>(control.Renderer);
             Assert.Equal(1, rendererChangedCallCount);
-            
+
             // Set different.
             control.RenderMode = value;
             Assert.Equal(value, control.RenderMode);
             Assert.IsType(expectedRendererType, control.Renderer);
             Assert.Equal(2, rendererChangedCallCount);
-            
+
             // Set same.
             control.RenderMode = value;
             Assert.Equal(value, control.RenderMode);
             Assert.IsType(expectedRendererType, control.Renderer);
             Assert.Equal(expectedSameRendererChangedCallCount, rendererChangedCallCount);
-            
+
             // Set System.
             control.RenderMode = ToolStripRenderMode.System;
             Assert.Equal(ToolStripRenderMode.System, control.RenderMode);
@@ -530,18 +530,18 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(EventArgs.Empty, e);
                 rendererChangedCallCount++;
             };
-            
+
             control.RenderMode = value;
             Assert.Equal(value, control.RenderMode);
             Assert.IsType(expectedRendererType, control.Renderer);
             Assert.Equal(1, rendererChangedCallCount);
-            
+
             // Set same.
             control.RenderMode = value;
             Assert.Equal(value, control.RenderMode);
             Assert.IsType(expectedRendererType, control.Renderer);
             Assert.Equal(expectedSameRendererChangedCallCount, rendererChangedCallCount);
-            
+
             // Set System.
             control.RenderMode = ToolStripRenderMode.System;
             Assert.Equal(ToolStripRenderMode.System, control.RenderMode);
@@ -732,7 +732,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { RightToLeft.Yes, true, 1, 0 };
             yield return new object[] { RightToLeft.No, true, 0, 0 };
             yield return new object[] { RightToLeft.Inherit, true, 0, 0 };
-            
+
             yield return new object[] { RightToLeft.Yes, false, 0, 1 };
             yield return new object[] { RightToLeft.No, false, 0, 0 };
             yield return new object[] { RightToLeft.Inherit, false, 0, 0 };
@@ -1013,7 +1013,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { RightToLeft.Yes, true, 1 };
             yield return new object[] { RightToLeft.No, true, 0 };
             yield return new object[] { RightToLeft.Inherit, true, 0 };
-            
+
             yield return new object[] { RightToLeft.Yes, false, 0 };
             yield return new object[] { RightToLeft.No, false, 0 };
             yield return new object[] { RightToLeft.Inherit, false, 0 };

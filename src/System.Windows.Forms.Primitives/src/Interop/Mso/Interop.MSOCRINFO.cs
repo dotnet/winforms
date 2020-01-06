@@ -19,7 +19,7 @@ internal static partial class Interop
             /// <summary>
             ///  The interval time, in milliseconds, of when a periodic idle phase
             ///  should occur. During the idle phase, the component needs to perform
-            ///  idle-time tasks. This member applies only if the msocrfNeedPeriodicIdleTime 
+            ///  idle-time tasks. This member applies only if the msocrfNeedPeriodicIdleTime
             ///  bit flag is registered in the <see cref="grfcrf" /> member.
             /// </summary>
             public uint uIdleTimeInterval;

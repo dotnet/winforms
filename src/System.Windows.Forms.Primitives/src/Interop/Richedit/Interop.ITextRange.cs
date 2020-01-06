@@ -85,47 +85,47 @@ internal partial class Interop
             void Select();
 
             int StartOf(
-                int unit, 
+                int unit,
                 int extend);
 
             int EndOf(
-                int unit, 
+                int unit,
                 int extend);
 
             int Move(
-                int unit, 
+                int unit,
                 int count);
 
             int MoveStart(
-                int unit, 
+                int unit,
                 int count);
 
             int MoveEnd(
-                int unit, 
+                int unit,
                 int count);
 
             int MoveWhile(
-                object cset, 
+                object cset,
                 int count);
 
             int MoveStartWhile(
-                object cset, 
+                object cset,
                 int count);
 
             int MoveEndWhile(
-                object cset, 
+                object cset,
                 int count);
 
             int MoveUntil(
-                object cset, 
+                object cset,
                 int count);
 
             int MoveStartUntil(
-                object cset, 
+                object cset,
                 int count);
 
             int MoveEndUntil(
-                object cset, 
+                object cset,
                 int count);
 
             int FindText(

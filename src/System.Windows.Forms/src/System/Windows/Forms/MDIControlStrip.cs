@@ -212,7 +212,6 @@ namespace System.Windows.Forms
                 }
                 target = null;
             }
-
         }
 
         // when the system menu item shortcut is evaluated - pop the dropdown
@@ -251,7 +250,6 @@ namespace System.Windows.Forms
                 }
                 base.OnOwnerChanged(e);
             }
-
         }
     }
 }

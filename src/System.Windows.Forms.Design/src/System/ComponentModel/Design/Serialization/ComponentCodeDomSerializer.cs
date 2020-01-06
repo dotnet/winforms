@@ -60,7 +60,7 @@ namespace System.ComponentModel.Design.Serialization
         /// <summary>
         ///  Determines if we can cache the results of serializing a component.
         /// </summary>
-		private bool CanCacheComponent(IDesignerSerializationManager manager, object value, PropertyDescriptorCollection props)
+        private bool CanCacheComponent(IDesignerSerializationManager manager, object value, PropertyDescriptorCollection props)
         {
             if (value is IComponent comp)
             {
@@ -230,7 +230,6 @@ namespace System.ComponentModel.Design.Serialization
 
                     try
                     {
-
                         string name = manager.GetName(value);
 
                         string typeName = TypeDescriptor.GetClassName(value);
@@ -240,7 +239,6 @@ namespace System.ComponentModel.Design.Serialization
                         {
                             if (generateField)
                             {
-
                                 if (inheritanceLevel == InheritanceLevel.NotInherited)
                                 {
                                     // We need to generate the field declaration.  See if there is a modifiers property on
@@ -438,7 +436,6 @@ namespace System.ComponentModel.Design.Serialization
                                             entry.AddDependency(dependency);
                                         }
                                     }
-
                                 }
                                 entry.Component = value;
                                 // we need to link the cached entry with its corresponding component right away, before it's put in the context

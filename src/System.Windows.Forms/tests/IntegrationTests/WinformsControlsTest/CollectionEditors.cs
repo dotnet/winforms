@@ -27,7 +27,6 @@ namespace WinformsControlsTest.UserControls
         {
             InitializeComponent();
 
-
             var imageList = new ImageList();
             imageList.Images.Add("SmallA", Image.FromFile("Images\\SmallA.bmp"));
             imageList.Images.Add(Image.FromFile("Images\\SmallABlue.bmp"));

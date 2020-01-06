@@ -46,7 +46,6 @@ namespace System.Windows.Forms
             {
                 OnShimAdded(shim);
             }
-
         }
 
         /// <summary> AddWindowShim - adds a HtmlWindowShim to list of shims to manage
@@ -95,7 +94,6 @@ namespace System.Windows.Forms
             {
                 OnShimAdded(shim);
             }
-
         }
 
         internal HtmlDocument.HtmlDocumentShim GetDocumentShim(HtmlDocument document)
@@ -220,7 +218,6 @@ namespace System.Windows.Forms
         {
             if (disposing)
             {
-
                 if (htmlElementShims != null)
                 {
                     foreach (HtmlElement.HtmlElementShim shim in htmlElementShims.Values)
@@ -246,13 +243,11 @@ namespace System.Windows.Forms
                 htmlWindowShims = null;
                 htmlDocumentShims = null;
                 htmlWindowShims = null;
-
             }
         }
         ~HtmlShimManager()
         {
             Dispose(false);
         }
-
     }
 }

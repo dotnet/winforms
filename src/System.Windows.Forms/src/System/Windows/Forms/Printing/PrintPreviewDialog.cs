@@ -116,7 +116,6 @@ namespace System.Windows.Forms
         {
             get
             {
-
                 return base.AutoScroll;
             }
             set
@@ -903,7 +902,6 @@ namespace System.Windows.Forms
         {
             get
             {
-
                 return base.RightToLeftLayout;
             }
 
@@ -1209,7 +1207,7 @@ namespace System.Windows.Forms
             closeToolStripButton});
             toolStrip1.Name = "toolStrip1";
 
-            // in High Contrast mode the color scheme provided by ToolStripSystemRenderer 
+            // in High Contrast mode the color scheme provided by ToolStripSystemRenderer
             // is not sufficiently contrast; so disable it in High Contrast mode.
             if (!SystemInformation.HighContrast)
             {
@@ -1434,7 +1432,6 @@ namespace System.Windows.Forms
                 menu.ShowCheckMargin = true;
                 menu.ShowImageMargin = false;
                 menu.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-
             }
 
             //Create the ToolStripControlHost
@@ -1458,7 +1455,6 @@ namespace System.Windows.Forms
             toolStrip1.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
-
         }
 
         /// <summary>

@@ -9,8 +9,8 @@ namespace System.Windows.Forms.VisualStyles
         Left = 0,
         Center = 1,
         Right = 2,
-        //		TM_ENUM(0, HA, LEFT)
-        //		TM_ENUM(1, HA, CENTER)
-        //		TM_ENUM(2, HA, RIGHT)
+        //      TM_ENUM(0, HA, LEFT)
+        //      TM_ENUM(1, HA, CENTER)
+        //      TM_ENUM(2, HA, RIGHT)
     }
 }

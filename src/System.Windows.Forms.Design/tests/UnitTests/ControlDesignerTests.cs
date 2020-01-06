@@ -132,7 +132,6 @@ namespace System.Windows.Forms.Design.Tests
             controlDesigner.Initialize(new Button());
             try
             {
-
                 controlDesigner.HookChildControlsMethod(new Control());
             }
             catch (Exception ex)

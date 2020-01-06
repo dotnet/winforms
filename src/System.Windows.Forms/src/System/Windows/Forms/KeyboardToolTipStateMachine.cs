@@ -20,7 +20,7 @@ namespace System.Windows.Forms
     ///  the keyboard ToolTip appear. <see cref="https://docs.microsoft.com/windows/win32/controls/ttm-getdelaytime">
     ///
     ///  Once visible, the keyboard ToolTip will be demonstrated for an amount of time specified with TTDT_AUTOPOP
-    ///  flag. The ToolTip will disappear afterwards. If the keyboard ToolTip is visible and the focus moves from 
+    ///  flag. The ToolTip will disappear afterwards. If the keyboard ToolTip is visible and the focus moves from
     ///  one ToolTip-enabled control to another, the keyboard ToolTip will be shown after a time interval specified
     ///  with TTDT_RESHOW flag has passed.
     /// </remarks>

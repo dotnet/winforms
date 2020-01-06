@@ -75,7 +75,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             Type[] types = new Type[attrTypeNames.Length];
             for (int i = 0; i < attrTypeNames.Length; i++)
             {
-
                 string attrName = attrTypeNames[i];
 
                 // try the name first
@@ -89,7 +88,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
                 if (t == null)
                 {
-
                     // check for an assembly name.
                     //
                     string assemblyName = string.Empty;

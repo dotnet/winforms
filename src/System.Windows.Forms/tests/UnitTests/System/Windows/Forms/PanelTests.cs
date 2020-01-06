@@ -628,7 +628,6 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(new Size(26, 31), control.PreferredSize);
         }
 
-
         private class BorderedPanel : Panel
         {
             protected override CreateParams CreateParams

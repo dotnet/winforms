@@ -135,7 +135,6 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Mso
             Assert.Equal(BOOL.FALSE, manager.FSetTrackingComponent(default, BOOL.FALSE));
         }
 
-
         [Fact]
         public void FSetTrackingComponent()
         {
@@ -187,7 +186,6 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Mso
             manager.OnComponentEnterState(default, msocstate.Modal, msoccontext.Mine, 0, null, 0);
             mock.Verify(m => m.OnEnterState(msocstate.Modal, BOOL.TRUE), Times.Exactly(2));
         }
-
 
         [Fact]
         public void FOnComponentExitState_HandlesNull()

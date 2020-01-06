@@ -988,7 +988,7 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatAction))]
         [SRDescription(nameof(SR.WebBrowserNavigatedDescr))]
         public event WebBrowserNavigatedEventHandler Navigated;
-        
+
         /// <summary>
         ///  Occurs before browser control navigation occurs.
         ///  Fires before browser navigation occurs. Allows navigation to be canceled if
@@ -997,7 +997,7 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatAction))]
         [SRDescription(nameof(SR.WebBrowserNavigatingDescr))]
         public event WebBrowserNavigatingEventHandler Navigating;
-        
+
         /// <summary>
         ///  Occurs when a new browser window is created.
         ///  Can be used to cancel the creation of the new browser window. Maps to DWebBrowserEvents2:NewWindow2.
@@ -1005,7 +1005,7 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatAction))]
         [SRDescription(nameof(SR.WebBrowserNewWindowDescr))]
         public event CancelEventHandler NewWindow;
-        
+
         /// <summary>
         ///  Occurs when an update to the progress of a download occurs.
         ///  Fires whenever the browser control has updated info on the download. Can be
@@ -1015,7 +1015,7 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatAction))]
         [SRDescription(nameof(SR.WebBrowserProgressChangedDescr))]
         public event WebBrowserProgressChangedEventHandler ProgressChanged;
-        
+
         /// <summary>
         ///  Occurs whenever the status text changes.
         ///  Can be used to keep a status bar populated with uptodate text.
@@ -1478,7 +1478,7 @@ namespace System.Windows.Forms
                 {
                     return HRESULT.E_INVALIDARG;
                 }
-                
+
                 if (pt->X == 0 && pt->Y == 0)
                 {
                     // IDocHostUIHandler::ShowContextMenu sends (0,0) when the context menu is invoked via the keyboard

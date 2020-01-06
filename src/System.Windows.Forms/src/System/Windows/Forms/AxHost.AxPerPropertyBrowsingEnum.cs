@@ -70,7 +70,6 @@ namespace System.Windows.Forms
 
                 try
                 {
-
                     // marshal the items.
                     object[] nameItems = nameMarshaller.Items;
                     object[] cookieItems = valueMarshaller.Items;

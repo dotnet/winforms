@@ -246,7 +246,6 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
             }
         }
-
     }
 
     /// <summary>

@@ -31,7 +31,6 @@ namespace System.Windows.Forms
 
             if (key != null)
             {
-
                 // Since this comes from the registry, be very careful about its contents.
                 //
                 string s = (string)key.GetValue(name);
@@ -70,7 +69,6 @@ namespace System.Windows.Forms
             {
                 return Color.Red;
             }
-
         }
 
         public static Color IELinkColor

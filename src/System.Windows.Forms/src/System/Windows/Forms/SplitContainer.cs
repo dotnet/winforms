@@ -144,7 +144,6 @@ namespace System.Windows.Forms
             ((WindowsFormsUtils.TypedControlCollection)Controls).AddInternal(panel1);
             ((WindowsFormsUtils.TypedControlCollection)Controls).AddInternal(panel2);
             UpdateSplitter();
-
         }
 
         /////////////////////////////////////////////////////////////////////////////////////////////
@@ -519,7 +518,6 @@ namespace System.Windows.Forms
                 {
                     return (Height >= Panel1MinSize + SplitterWidthInternal + Panel2MinSize);
                 }
-
             }
         }
 
@@ -626,7 +624,6 @@ namespace System.Windows.Forms
             if (collapsing)
             {
                 p.Visible = false;
-
             }
             else
             {
@@ -811,7 +808,6 @@ namespace System.Windows.Forms
 
                         if (Orientation == Orientation.Vertical)
                         {
-
                             if (value < Panel1MinSize)
                             {
                                 value = Panel1MinSize;
@@ -827,11 +823,9 @@ namespace System.Windows.Forms
                             splitDistance = value;
                             splitterDistance = value;
                             panel1.WidthInternal = SplitterDistance;
-
                         }
                         else
                         {
-
                             if (value < Panel1MinSize)
                             {
                                 value = Panel1MinSize;
@@ -906,7 +900,6 @@ namespace System.Windows.Forms
             }
             set
             {
-
                 if (value < 1)
                 {
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(SplitterIncrement), value, 1));
@@ -1111,7 +1104,6 @@ namespace System.Windows.Forms
         {
             base.OnGotFocus(e);
             Invalidate();
-
         }
 
         /// <summary>
@@ -1157,7 +1149,6 @@ namespace System.Windows.Forms
                         {
                             splitterDistance = (splitterDistance + SplitterWidth > Height - Panel2MinSize - BORDERSIZE) ? splitterDistance - SplitterIncrement : splitterDistance;
                         }
-
                     }
 
                     if (!splitBegin)
@@ -1224,7 +1215,6 @@ namespace System.Windows.Forms
                 }
                 DrawFocus(g, SplitterRectangle);
             }
-
         }
 
         /// <summary>
@@ -1259,7 +1249,6 @@ namespace System.Windows.Forms
             base.OnMouseMove(e);
             if (!IsSplitterFixed && IsSplitterMovable)
             {
-
                 //change cursor if default and user hasnt changed the cursor.
                 if (Cursor == DefaultCursor && SplitterRectangle.Contains(e.Location))
                 {
@@ -1302,7 +1291,6 @@ namespace System.Windows.Forms
                     if (se.Cancel)
                     {
                         SplitEnd(false);
-
                     }
                 }
             }
@@ -1381,7 +1369,6 @@ namespace System.Windows.Forms
                 else
                 {
                     SplitEnd(false);
-
                 }
                 splitterClick = false;
                 splitterDrag = false;
@@ -1497,7 +1484,6 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(Panel2MinSize), value.ToString()));
                 }
-
             }
             else if (Orientation == Orientation.Horizontal)
             {
@@ -1528,7 +1514,6 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(SplitterWidth), value));
                 }
-
             }
             else if (Orientation == Orientation.Horizontal)
             {
@@ -1561,7 +1546,6 @@ namespace System.Windows.Forms
 
             if (Orientation == Orientation.Vertical)
             {
-
                 if (RightToLeft == RightToLeft.No)
                 {
                     splitterRect.X = Location.X + SplitterDistanceInternal;
@@ -1648,7 +1632,6 @@ namespace System.Windows.Forms
                     DrawSplitHelper(splitterDistance);
                     lastDrawSplit = splitterDistance;
                 }
-
             }
             else
             {
@@ -1755,7 +1738,6 @@ namespace System.Windows.Forms
                 Graphics g = CreateGraphicsInternal();
                 if (BackgroundImage != null)
                 {
-
                     using (TextureBrush textureBrush = new TextureBrush(BackgroundImage, WrapMode.Tile))
                     {
                         g.FillRectangle(textureBrush, ClientRectangle);
@@ -1866,7 +1848,6 @@ namespace System.Windows.Forms
                             panel1.Location = new Point(0, 0);
                         }
                     }
-
                 }
                 else if (Orientation == Orientation.Horizontal)
                 {
@@ -1875,7 +1856,6 @@ namespace System.Windows.Forms
                     {
                         if (FixedPanel == FixedPanel.Panel1)
                         {
-
                             //Default splitter distance from left or top.
                             panel1.Size = new Size(Width, panelSize);
                             int panel2Start = panelSize + SplitterWidthInternal;
@@ -1884,7 +1864,6 @@ namespace System.Windows.Forms
                         }
                         if (FixedPanel == FixedPanel.Panel2)
                         {
-
                             panel2.Size = new Size(Width, panelSize);
                             splitterDistance = Math.Max(Height - Panel2.Height - SplitterWidthInternal, Panel1MinSize);
                             panel1.HeightInternal = splitterDistance;
@@ -1904,7 +1883,6 @@ namespace System.Windows.Forms
                             int panel2Start = splitterDistance + SplitterWidthInternal;
                             panel2.Size = new Size(Width, Math.Max(Height - panel2Start, Panel2MinSize));
                             panel2.Location = new Point(0, panel2Start);
-
                         }
                         RepaintSplitterRect();
                         SetSplitterRect(false);
@@ -2146,7 +2124,6 @@ namespace System.Windows.Forms
             if (ctl == null || (ctl is SplitterPanel && !ctl.Visible))
             {
                 callBaseVersion = true;
-
             }
             //IF the CTL == typeof(SpliterPanel) find the NEXT Control... so that we know
             // we can focus the NEXT control within this SPLITCONTAINER....
@@ -2325,7 +2302,6 @@ namespace System.Windows.Forms
             if (accept)
             {
                 ApplySplitterDistance();
-
             }
             else if (splitterDistance != initialSplitterDistance)
             {
@@ -2333,7 +2309,6 @@ namespace System.Windows.Forms
                 splitterDistance = SplitterDistanceInternal = initialSplitterDistance;
             }
             anchor = Point.Empty;
-
         }
 
         /// <summary>
@@ -2354,7 +2329,6 @@ namespace System.Windows.Forms
                 //NO PANEL FIXED !!
                 if (!CollapsedMode)
                 {
-
                     panel1.HeightInternal = Height;
                     panel1.WidthInternal = splitterDistance; //Default splitter distance from left or top.
                     panel2.Size = new Size(Width - splitterDistance - SplitterWidthInternal, Height);
@@ -2376,7 +2350,6 @@ namespace System.Windows.Forms
                     {
                         ratioWidth = ((double)(Width) / (double)(panel1.Width) > 0) ? (double)(Width) / (double)(panel1.Width) : ratioWidth;
                     }
-
                 }
                 else
                 {
@@ -2465,7 +2438,6 @@ namespace System.Windows.Forms
             {
                 DefWndProc(ref m);
             }
-
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2493,7 +2465,6 @@ namespace System.Windows.Forms
             {
                 SetInnerMostBorder(this);
             }
-
         }
 
         /// <summary>
@@ -2540,7 +2511,6 @@ namespace System.Windows.Forms
                         }
 
                         break;
-
                 }
             }
             return base.ProcessDialogKey(keyData);
@@ -2720,8 +2690,6 @@ namespace System.Windows.Forms
                 }
                 base.SetChildIndexInternal(child, newIndex);
             }
-
         }
-
     }
 }

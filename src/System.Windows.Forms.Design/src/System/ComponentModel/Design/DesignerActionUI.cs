@@ -919,7 +919,6 @@ namespace System.ComponentModel.Design
             {
                 CheckFocusIsRight();
             }
-
         }
 
         private void PanelResized(object sender, System.EventArgs e)

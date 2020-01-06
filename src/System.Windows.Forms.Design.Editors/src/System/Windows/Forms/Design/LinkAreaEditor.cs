@@ -132,37 +132,37 @@ namespace System.Windows.Forms.Design
                 _okCancelTableLayoutPanel.SuspendLayout();
                 SuspendLayout();
                 _okButton.Click += new EventHandler(okButton_click);
-                // 
+                //
                 // caption
-                // 
+                //
                 resources.ApplyResources(_caption, "caption");
                 _caption.Margin = new Padding(3, 1, 3, 0);
                 _caption.Name = "caption";
-                // 
+                //
                 // sampleEdit
-                // 
+                //
                 resources.ApplyResources(_sampleEdit, "sampleEdit");
                 _sampleEdit.Margin = new Padding(3, 2, 3, 3);
                 _sampleEdit.Name = "sampleEdit";
                 _sampleEdit.HideSelection = false;
                 _sampleEdit.ScrollBars = ScrollBars.Vertical;
-                // 
+                //
                 // okButton
-                // 
+                //
                 resources.ApplyResources(_okButton, "okButton");
                 _okButton.DialogResult = DialogResult.OK;
                 _okButton.Margin = new Padding(0, 0, 2, 0);
                 _okButton.Name = "okButton";
-                // 
+                //
                 // cancelButton
-                // 
+                //
                 resources.ApplyResources(_cancelButton, "cancelButton");
                 _cancelButton.DialogResult = DialogResult.Cancel;
                 _cancelButton.Margin = new Padding(3, 0, 0, 0);
                 _cancelButton.Name = "cancelButton";
-                // 
+                //
                 // okCancelTableLayoutPanel
-                // 
+                //
                 resources.ApplyResources(_okCancelTableLayoutPanel, "okCancelTableLayoutPanel");
                 _okCancelTableLayoutPanel.ColumnCount = 2;
                 _okCancelTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
@@ -174,9 +174,9 @@ namespace System.Windows.Forms.Design
                 _okCancelTableLayoutPanel.RowCount = 1;
                 _okCancelTableLayoutPanel.RowStyles.Add(new RowStyle());
                 _okCancelTableLayoutPanel.RowStyles.Add(new RowStyle());
-                // 
+                //
                 // LinkAreaEditor
-                // 
+                //
                 resources.ApplyResources(this, "$this");
                 AutoScaleMode = AutoScaleMode.Font;
                 CancelButton = _cancelButton;

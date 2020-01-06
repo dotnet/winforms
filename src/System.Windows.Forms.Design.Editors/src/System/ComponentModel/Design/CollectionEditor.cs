@@ -987,7 +987,6 @@ namespace System.ComponentModel.Design
                     {
                         Items = Array.Empty<object>();
                     }
-
                 }
                 catch (Exception ex)
                 {
@@ -1486,7 +1485,6 @@ namespace System.ComponentModel.Design
 
                 AdjustListBoxItemHeight();
                 UpdateItemWidths(null);
-
             }
 
             protected override void OnFontChanged(EventArgs e)
@@ -1550,7 +1548,6 @@ namespace System.ComponentModel.Design
             /// </summary>
             private void PropertyGrid_propertyValueChanged(object sender, PropertyValueChangedEventArgs e)
             {
-
                 _dirty = true;
 
                 // Refresh selected listbox item so that it picks up any name change
@@ -1731,7 +1728,6 @@ namespace System.ComponentModel.Design
                 {
                     ResumeEnabledUpdates(true);
                 }
-
             }
 
             /// <summary>
@@ -1907,7 +1903,7 @@ namespace System.ComponentModel.Design
                 public override Type PropertyType { get; }
 
                 /// <summary>
-                ///  When overridden in a derived class, indicates whether resetting the <paramref name="component"/> 
+                ///  When overridden in a derived class, indicates whether resetting the <paramref name="component"/>
                 ///  will change the value of the <paramref name="component"/>.
                 /// </summary>
                 public override bool CanResetValue(object component) => false;
@@ -2132,7 +2128,6 @@ namespace System.ComponentModel.Design
 
                     return _grid;
                 }
-
             }
 
             /// <summary>
@@ -2196,11 +2191,9 @@ namespace System.ComponentModel.Design
                             return;
                         }
                         break;
-
                 }
                 base.WndProc(ref m);
             }
-
         }
 
         /// <summary>

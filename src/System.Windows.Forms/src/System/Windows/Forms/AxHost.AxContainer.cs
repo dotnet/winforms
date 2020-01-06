@@ -103,7 +103,6 @@ namespace System.Windows.Forms
             object IReflect.InvokeMember(string name, BindingFlags invokeAttr, Binder binder,
                                                     object target, object[] args, ParameterModifier[] modifiers, CultureInfo culture, string[] namedParameters)
             {
-
                 foreach (DictionaryEntry e in containerCache)
                 {
                     string ctlName = GetNameForControl((Control)e.Key);

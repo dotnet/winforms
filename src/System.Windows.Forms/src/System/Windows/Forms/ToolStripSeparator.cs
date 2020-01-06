@@ -72,7 +72,6 @@ namespace System.Windows.Forms
         {
             get => base.Enabled;
             set => base.Enabled = value;
-
         }
 
         [Browsable(false)]
@@ -272,7 +271,7 @@ namespace System.Windows.Forms
             {
                 return new Size(parent.Width - (parent.Padding.Horizontal - dropDownMenu.ImageMargin.Width), SeparatorThickness);
             }
-            
+
             if (parent.LayoutStyle != ToolStripLayoutStyle.HorizontalStackWithOverflow || parent.LayoutStyle != ToolStripLayoutStyle.VerticalStackWithOverflow)
             {
                 // we dont actually know what size to make it, so just keep it a stock size.
@@ -283,7 +282,7 @@ namespace System.Windows.Forms
             {
                 return new Size(SeparatorThickness, constrainingSize.Height);
             }
-            
+
             return new Size(constrainingSize.Width, SeparatorThickness);
         }
 

@@ -216,7 +216,6 @@ namespace System.Windows.Forms
 
                 if (value != null && value.Length > 0)
                 {
-
                     //add each boldeddate to our ArrayList...
                     for (int i = 0; i < value.Length; i++)
                     {
@@ -227,7 +226,6 @@ namespace System.Windows.Forms
                     {
                         monthsOfYear[value[i].Month - 1] |= 0x00000001 << (value[i].Day - 1);
                     }
-
                 }
                 RecreateHandle();
             }
@@ -318,13 +316,11 @@ namespace System.Windows.Forms
                 arrayOfDates.Clear();
                 if (value != null && value.Length > 0)
                 {
-
                     //add each boldeddate to our ArrayList...
                     for (int i = 0; i < value.Length; i++)
                     {
                         arrayOfDates.Add(value[i]);
                     }
-
                 }
                 RecreateHandle();
             }
@@ -645,7 +641,6 @@ namespace System.Windows.Forms
 
                 if (value != null && value.Length > 0)
                 {
-
                     //add each boldeddate to our ArrayList...
                     for (int i = 0; i < value.Length; i++)
                     {
@@ -656,7 +651,6 @@ namespace System.Windows.Forms
                     {
                         datesToBoldMonthly |= 0x00000001 << (value[i].Day - 1);
                     }
-
                 }
                 RecreateHandle();
             }
@@ -707,7 +701,6 @@ namespace System.Windows.Forms
         {
             get
             {
-
                 return rightToLeftLayout;
             }
 
@@ -746,7 +739,6 @@ namespace System.Windows.Forms
             {
                 if (scrollChange != value)
                 {
-
                     if (value < 0)
                     {
                         throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(ScrollChange), value.ToString("D"), 0));
@@ -784,7 +776,6 @@ namespace System.Windows.Forms
             {
                 if (selectionEnd != value)
                 {
-
                     // Keep SelectionEnd within min and max
                     if (value < MinDate)
                     {
@@ -833,7 +824,6 @@ namespace System.Windows.Forms
             {
                 if (selectionStart != value)
                 {
-
                     // Keep SelectionStart within min and max
                     //
                     if (value < minDate)
@@ -1071,7 +1061,6 @@ namespace System.Windows.Forms
             {
                 if (!(todayDateSet) || (DateTime.Compare(value, todayDate) != 0))
                 {
-
                     // throw if trying to set the TodayDate to a value greater than MaxDate
                     if (DateTime.Compare(value, maxDate) > 0)
                     {
@@ -2146,7 +2135,6 @@ namespace System.Windows.Forms
             //
             if ((date2 - date1).Days >= maxSelectionCount)
             {
-
                 if (date1.Ticks == selectionStart.Ticks)
                 {
                     // Bring start date forward
@@ -2406,7 +2394,6 @@ namespace System.Windows.Forms
 
             //end subhag
             OnDateSelected(new DateRangeEventArgs(start, end));
-
         }
 
         /// <summary>

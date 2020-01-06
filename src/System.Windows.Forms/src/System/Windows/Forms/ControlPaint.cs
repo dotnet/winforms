@@ -561,7 +561,6 @@ namespace System.Windows.Forms
                     imageAttrib.SetWrapMode(WrapMode.TileFlipXY);
                     g.DrawImage(backgroundImage, imageRectangle, 0, 0, backgroundImage.Width, backgroundImage.Height, GraphicsUnit.Pixel, imageAttrib);
                     imageAttrib.Dispose();
-
                 }
             }
         }
@@ -1425,7 +1424,6 @@ namespace System.Windows.Forms
             {
                 if (checkImage == null || checkImage.Width != rectangle.Width || checkImage.Height != rectangle.Height)
                 {
-
                     if (checkImage != null)
                     {
                         checkImage.Dispose();
@@ -1539,7 +1537,7 @@ namespace System.Windows.Forms
                     g2.Clear(Color.Transparent);
 
                     using (WindowsGraphics wg = WindowsGraphics.FromGraphics(g2))
-                    { 
+                    {
                         // Get Win32 dc with Graphics properties applied to it.
                         User32.DrawFrameControl(new HandleRef(wg, wg.DeviceContext.Hdc), ref rcFrame, kind, state);
                     }
@@ -1654,7 +1652,6 @@ namespace System.Windows.Forms
             if (gridBrush == null || gridSize.Width != pixelsBetweenDots.Width
                 || gridSize.Height != pixelsBetweenDots.Height || invert != gridInvert)
             {
-
                 if (gridBrush != null)
                 {
                     gridBrush.Dispose();
@@ -2119,7 +2116,6 @@ namespace System.Windows.Forms
             {
                 using (Pen dark = new Pen(Dark(backColor)))
                 {
-
                     int minDim = Math.Min(width, height);
                     int right = x + width - 1;
                     int bottom = y + height - 2;
@@ -2369,7 +2365,6 @@ namespace System.Windows.Forms
             if (frameBrushActive == null ||
                 !frameColorActive.Equals(brushColor))
             {
-
                 if (frameBrushActive != null)
                 {
                     frameBrushActive.Dispose();
@@ -2421,7 +2416,6 @@ namespace System.Windows.Forms
                 focusPenColor.ToArgb() != baseColor.ToArgb() ||
                 hcFocusPen != highContrast)
             {
-
                 if (focusPen != null)
                 {
                     focusPen.Dispose();
@@ -2500,7 +2494,6 @@ namespace System.Windows.Forms
             if (frameBrushSelected == null ||
                 !frameColorSelected.Equals(brushColor))
             {
-
                 if (frameBrushSelected != null)
                 {
                     frameBrushSelected.Dispose();
@@ -2654,7 +2647,6 @@ namespace System.Windows.Forms
             }
 
             return new ColorMatrix(result);
-
         }
         //paint the border of the table
         internal static void PaintTableControlBorder(TableLayoutPanelCellBorderStyle borderStyle, Graphics g, Rectangle bound)

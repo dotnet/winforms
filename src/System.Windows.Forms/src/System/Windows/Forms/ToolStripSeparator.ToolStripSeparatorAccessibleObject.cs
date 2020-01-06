@@ -30,7 +30,7 @@ namespace System.Windows.Forms
                     {
                         return role;
                     }
-                    
+
                     return AccessibleRole.Separator;
                 }
             }

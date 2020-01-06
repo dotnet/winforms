@@ -73,7 +73,7 @@ namespace System.Windows.Forms.Tests
             Type eventInterface = typeof(Ole32.IPropertyNotifySink);
             Assert.Throws<InvalidCastException>(() => new AxHost.ConnectionPointCookie(source, sink, eventInterface));
         }
-        
+
         [WinFormsFact]
         public void ConnectionPointCookie_Disconnect_InvokeMultipleTimes_Success()
         {

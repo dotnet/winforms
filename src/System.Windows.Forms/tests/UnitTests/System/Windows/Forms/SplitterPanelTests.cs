@@ -186,7 +186,6 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(2, callCount);
         }
 
-
         [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(AutoSizeMode))]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(AutoSizeMode))]

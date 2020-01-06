@@ -126,7 +126,6 @@ namespace System.Windows.Forms.Design
                     {
                         selectionMenuItem.DropDown.ForeColor = (Color)uis.Styles["VsColorPanelText"];
                     }
-
                 }
 
                 selectionMenuItem.Text = SR.ContextMenuSelect;

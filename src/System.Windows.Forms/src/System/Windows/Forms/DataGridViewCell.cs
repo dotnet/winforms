@@ -53,7 +53,7 @@ namespace System.Windows.Forms
         private readonly PropertyStore propertyStore;          // Contains all properties that are not always set.
 
         /// <summary>
-        /// Contains non-empty neighboring cells around the current cell. 
+        /// Contains non-empty neighboring cells around the current cell.
         /// Used in <see cref='IKeyboardToolTip.GetNeighboringToolsRectangles'/> method.
         /// </summary>
         private readonly List<Rectangle> _nonEmptyNeighbors;
@@ -61,7 +61,7 @@ namespace System.Windows.Forms
         private static readonly Type stringType = typeof(string);        // cache the string type for performance
 
         private byte flags;  // see DATAGRIDVIEWCELL_flag* consts above
-        
+
         private bool _useDefaultToolTipText;  //  The tooltip text of this cell has not been set by a customer yet.
 
         /// <summary>
@@ -418,9 +418,9 @@ namespace System.Windows.Forms
         Rectangle IKeyboardToolTip.GetNativeScreenRectangle() => AccessibilityObject.Bounds;
 
         /// <summary>
-        ///  The method looks for 8 cells around the current cell 
+        ///  The method looks for 8 cells around the current cell
         ///  to find the optimal tooltip position in <see cref='ToolTip.GetOptimalToolTipPosition'/> method.
-        ///  The optimal tooltip position is the position outside DataGridView or on top of an empty cell. 
+        ///  The optimal tooltip position is the position outside DataGridView or on top of an empty cell.
         ///  This is done so that tooltips do not overlap the text of other cells whenever possible.
         /// </summary>
         /// <returns>
@@ -2620,10 +2620,10 @@ namespace System.Windows.Forms
         private string GetToolTipText(int rowIndex)
         {
             string toolTipText = GetInternalToolTipText(rowIndex);
-                                   
+
             if (ColumnIndex < 0 || RowIndex < 0)
             {
-                return toolTipText;  //  Cells in the Unit tests have ColumnIndex & RowIndex < 0 and 
+                return toolTipText;  //  Cells in the Unit tests have ColumnIndex & RowIndex < 0 and
                                      //  we should return an expected result. It doesn't have an impact on UI cells.
             }
 
@@ -2639,7 +2639,7 @@ namespace System.Windows.Forms
 
             return toolTipText;
         }
-        
+
         private protected string GetToolTipTextWithoutMnemonic(string toolTipText)
         {
             if (WindowsFormsUtils.ContainsMnemonic(toolTipText))
@@ -5187,7 +5187,6 @@ namespace System.Windows.Forms
                 if (owner.OwningColumn == owner.DataGridView.Columns.GetLastColumn(DataGridViewElementStates.Visible,
                                                                                              DataGridViewElementStates.None))
                 {
-
                     if (wrapAround)
                     {
                         // Return the first cell in the next visible row.
@@ -5208,7 +5207,6 @@ namespace System.Windows.Forms
                         {
                             return null;
                         }
-
                     }
                     else
                     {

@@ -9,7 +9,6 @@ using System.Diagnostics;
 using System.Drawing;
 using static Interop;
 
-
 namespace System.Windows.Forms
 {
     /// <summary>

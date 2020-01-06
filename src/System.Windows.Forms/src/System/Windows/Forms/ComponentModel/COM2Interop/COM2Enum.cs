@@ -147,7 +147,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         {
             if (v != null)
             {
-
                 // in case this is a real enum...try to convert it.
                 //
                 if (values.Length > 0 && v.GetType() != values[0].GetType())

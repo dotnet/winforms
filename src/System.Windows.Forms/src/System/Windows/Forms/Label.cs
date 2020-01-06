@@ -487,7 +487,6 @@ namespace System.Windows.Forms
         {
             get
             {
-
                 if (ImageIndexer != null)
                 {
                     int index = ImageIndexer.Index;
@@ -497,7 +496,6 @@ namespace System.Windows.Forms
                         return ImageList.Images.Count - 1;
                     }
                     return index;
-
                 }
                 return -1;
             }
@@ -523,7 +521,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Gets or sets the key accessor for the image list.  This specifies the image
-        ///	  from the image list to display on
+        ///   from the image list to display on
         ///  <see cref='Label'/>.
         /// </summary>
         [
@@ -539,7 +537,6 @@ namespace System.Windows.Forms
         {
             get
             {
-
                 if (ImageIndexer != null)
                 {
                     return ImageIndexer.Key;
@@ -550,7 +547,6 @@ namespace System.Windows.Forms
             {
                 if (ImageKey != value)
                 {
-
                     // Image.set calls ImageIndex = -1
                     Properties.SetObject(PropImage, null);
 
@@ -577,7 +573,6 @@ namespace System.Windows.Forms
             {
                 Properties.SetObject(PropImageIndex, value);
             }
-
         }
 
         /// <summary>
@@ -599,7 +594,6 @@ namespace System.Windows.Forms
             {
                 if (ImageList != value)
                 {
-
                     EventHandler recreateHandler = new EventHandler(ImageListRecreateHandle);
                     EventHandler disposedHandler = new EventHandler(DetachImageList);
 
@@ -862,7 +856,6 @@ namespace System.Windows.Forms
             }
             set
             {
-
                 if (!WindowsFormsUtils.EnumValidator.IsValidContentAlignment(value))
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ContentAlignment));
@@ -878,7 +871,6 @@ namespace System.Windows.Forms
                         RecreateHandle();
                     }
                     OnTextAlignChanged(EventArgs.Empty);
-
                 }
             }
         }
@@ -972,7 +964,6 @@ namespace System.Windows.Forms
 
             set
             {
-
                 if (UseMnemonic != value)
                 {
                     labelState[StateUseMnemonic] = value ? 1 : 0;
@@ -992,7 +983,6 @@ namespace System.Windows.Forms
                         int style = WindowStyle;
                         if (!UseMnemonic)
                         {
-
                             style |= NativeMethods.SS_NOPREFIX;
                         }
                         else
@@ -1231,7 +1221,6 @@ namespace System.Windows.Forms
                 }
             }
             return bordersAndPadding;
-
         }
 
         public override Size GetPreferredSize(Size proposedSize)
@@ -1298,7 +1287,6 @@ namespace System.Windows.Forms
                         requiredSize = Size.Ceiling(measurementGraphics.MeasureString(Text, Font, bounds, stringFormat));
                     }
                 }
-
             }
 
             requiredSize += bordersAndPadding;
@@ -1380,7 +1368,6 @@ namespace System.Windows.Forms
         {
             if (!controlToolTip && !DesignMode && AutoEllipsis && showToolTip && textToolTip != null)
             {
-
                 try
                 {
                     controlToolTip = true;
@@ -1390,7 +1377,6 @@ namespace System.Windows.Forms
                 {
                     controlToolTip = false;
                 }
-
             }
             base.OnMouseEnter(e);
         }
@@ -1782,7 +1768,6 @@ namespace System.Windows.Forms
                 base.Index = value;
                 useIntegerIndex = true;
             }
-
         }
 
         public override int ActualIndex
@@ -1803,7 +1788,5 @@ namespace System.Windows.Forms
                 return -1;
             }
         }
-
     }
-
 }

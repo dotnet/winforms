@@ -62,7 +62,6 @@ namespace System.Windows.Forms
                 FlipXPThemesBitmap.Dispose();
             }
             base.Dispose(disposing);
-
         }
 
         [

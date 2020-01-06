@@ -411,8 +411,6 @@ namespace System.Windows.Forms
                 colorScheme = null;
             }
         }
-
     }
-
 }
 

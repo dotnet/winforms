@@ -221,7 +221,6 @@ namespace System.Windows.Forms
                     }
                     SetAutoComplete(false);
                 }
-
             }
         }
 
@@ -265,7 +264,6 @@ namespace System.Windows.Forms
             }
             set
             {
-
                 if (Multiline != value)
                 {
                     base.Multiline = value;
@@ -786,7 +784,6 @@ namespace System.Windows.Forms
                             }
                         }
                     }
-
                 }
                 else
                 {
@@ -999,6 +996,5 @@ namespace System.Windows.Forms
 
             public bool ShouldRenderPlaceHolderText(in Message m) => _textBox.ShouldRenderPlaceHolderText(m);
         }
-
     }
 }

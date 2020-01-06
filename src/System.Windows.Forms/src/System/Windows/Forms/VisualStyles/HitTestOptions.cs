@@ -43,7 +43,7 @@ namespace System.Windows.Forms.VisualStyles
         //#define HTTB_RESIZINGBORDER_BOTTOM  0x0080  // Hit test bottom resizing border
 
         //#define HTTB_RESIZINGBORDER         (HTTB_RESIZINGBORDER_LEFT|HTTB_RESIZINGBORDER_TOP|\
-        //		HTTB_RESIZINGBORDER_RIGHT|HTTB_RESIZINGBORDER_BOTTOM)
+        //      HTTB_RESIZINGBORDER_RIGHT|HTTB_RESIZINGBORDER_BOTTOM)
 
         // Resizing border is specified as a template, not just window edges.
         // This option is mutually exclusive with HTTB_SYSTEMSIZINGWIDTH; HTTB_SIZINGTEMPLATE takes precedence

@@ -152,7 +152,7 @@ namespace System.Windows.Forms.Tests
             using var control = new SubTextBox();
             Assert.True(control.CanEnableIme);
             Assert.True(control.IsHandleCreated);
-            
+
             // Get again.
             Assert.True(control.CanEnableIme);
             Assert.True(control.IsHandleCreated);
@@ -175,7 +175,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            
+
             // Get again.
             Assert.True(control.CanEnableIme);
             Assert.True(control.IsHandleCreated);
@@ -190,7 +190,7 @@ namespace System.Windows.Forms.Tests
             using var control = new SubTextBox();
             Assert.Equal(ImeMode.NoControl, control.ImeMode);
             Assert.True(control.IsHandleCreated);
-            
+
             // Get again.
             Assert.Equal(ImeMode.NoControl, control.ImeMode);
             Assert.True(control.IsHandleCreated);
@@ -213,7 +213,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            
+
             // Get again.
             Assert.Equal(ImeMode.NoControl, control.ImeMode);
             Assert.True(control.IsHandleCreated);
@@ -228,7 +228,7 @@ namespace System.Windows.Forms.Tests
             using var control = new SubTextBox();
             Assert.Equal(ImeMode.NoControl, control.ImeModeBase);
             Assert.True(control.IsHandleCreated);
-            
+
             // Get again.
             Assert.Equal(ImeMode.NoControl, control.ImeModeBase);
             Assert.True(control.IsHandleCreated);
@@ -251,7 +251,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            
+
             // Get again.
             Assert.Equal(ImeMode.NoControl, control.ImeModeBase);
             Assert.True(control.IsHandleCreated);
@@ -266,7 +266,7 @@ namespace System.Windows.Forms.Tests
             using var control = new SubTextBox();
             Assert.Equal('\0', control.PasswordChar);
             Assert.True(control.IsHandleCreated);
-            
+
             // Get again.
             Assert.Equal('\0', control.PasswordChar);
             Assert.True(control.IsHandleCreated);
@@ -289,7 +289,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            
+
             // Get again.
             Assert.Equal('\0', control.PasswordChar);
             Assert.True(control.IsHandleCreated);

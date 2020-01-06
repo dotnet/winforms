@@ -122,7 +122,6 @@ namespace System.Windows.Forms
                 Rectangle rect = base.DisplayRectangle;
                 if (GetToolStripState(STATE_SCROLLBUTTONS))
                 {
-
                     rect.Y += UpScrollButton.Height + UpScrollButton.Margin.Vertical;
                     rect.Height -= UpScrollButton.Height + UpScrollButton.Margin.Vertical + DownScrollButton.Height + DownScrollButton.Margin.Vertical;
                     // Because we're going to draw the scroll buttons on top of the padding, we need to add it back in here.
@@ -424,7 +423,6 @@ namespace System.Windows.Forms
                 nextPoint.X = checkRectangle.Right + scaledCheckPadding.Right + scaledImagePadding.Left;
                 nextPoint.Y = scaledImagePadding.Top;
                 imageRectangle = LayoutUtils.Align(maxImageSize, new Rectangle(nextPoint.X, nextPoint.Y, maxImageSize.Width, maxItemSize.Height), ContentAlignment.MiddleCenter);
-
             }
             else if (ShowCheckMargin)
             {
@@ -438,7 +436,6 @@ namespace System.Windows.Forms
                 checkRectangle = LayoutUtils.Align(maxCheckSize, new Rectangle(nextPoint.X, nextPoint.Y, checkAndImageMarginWidth, maxItemSize.Height), ContentAlignment.MiddleCenter);
 
                 imageRectangle = Rectangle.Empty;
-
             }
             else if (ShowImageMargin)
             {
@@ -499,7 +496,6 @@ namespace System.Windows.Forms
                 textRectangle.X = width - textRectangle.Right;
                 arrowRectangle.X = width - arrowRectangle.Right;
                 imageMarginBounds.X = width - imageMarginBounds.Right;
-
             }
             else
             {
@@ -526,7 +522,6 @@ namespace System.Windows.Forms
                 if (!displayRect.Contains(displayRect.X, nextItem.Bounds.Top)
                     || !displayRect.Contains(displayRect.X, nextItem.Bounds.Bottom))
                 {
-
                     int delta;
                     if (displayRect.Y > nextItem.Bounds.Top)
                     {
@@ -613,7 +608,6 @@ namespace System.Windows.Forms
         {
             tabWidth = -1;
             base.OnFontChanged(e);
-
         }
         protected override void OnPaintBackground(PaintEventArgs e)
         {
@@ -804,7 +798,6 @@ namespace System.Windows.Forms
             base.SetDisplayedItems();
             if (RequiresScrollButtons)
             {
-
                 DisplayedItems.Add(UpScrollButton);
                 DisplayedItems.Add(DownScrollButton);
                 UpdateScrollButtonLocations();

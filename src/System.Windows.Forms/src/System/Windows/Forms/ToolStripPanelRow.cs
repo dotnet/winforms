@@ -72,7 +72,6 @@ namespace System.Windows.Forms
                 Margin = DefaultMargin;
                 CommonProperties.SetAutoSize(this, true);
             }
-
         }
 
         public Rectangle Bounds
@@ -174,7 +173,6 @@ namespace System.Windows.Forms
                     }
                 }
                 return ToolStripPanel.RowMargin;
-
             }
         }
 
@@ -313,7 +311,6 @@ namespace System.Windows.Forms
             {
                 if (disposing)
                 {
-
                     Debug.WriteLineIf(ToolStripPanelRowCreationDebug.TraceVerbose, "Disposed ToolStripPanelRow");
                     state[stateDisposing] = true;
                     ControlsInternal.Clear();
@@ -430,7 +427,6 @@ namespace System.Windows.Forms
                     {
                         OnLayoutVerticalPostFix();
                     }
-
                 }
                 finally
                 {
@@ -532,7 +528,6 @@ namespace System.Windows.Forms
             }
 
             ApplyCachedBounds();
-
         }
 
         private void OnLayoutVerticalPostFix()
@@ -623,7 +618,6 @@ namespace System.Windows.Forms
             }
 
             ApplyCachedBounds();
-
         }
 
 #if DEBUG_PAINT
@@ -930,10 +924,8 @@ namespace System.Windows.Forms
                             return cell;
                         }
                     }
-
                 }
                 return null;
-
             }
 
             /// <summary>
@@ -1044,14 +1036,12 @@ namespace System.Windows.Forms
 
                         if ((!ToolStripPanel.Visible || LayoutUtils.IsZeroWidthOrHeight(raftingDisplayRectangle)) && (ToolStripPanel.ParentInternal != null))
                         {
-
                             // if were layed out before we're visible we have the wrong display rectangle, so we need to calculate it.
                             displayRect.Width = ToolStripPanel.ParentInternal.DisplayRectangle.Width - (ToolStripPanel.Margin.Horizontal + ToolStripPanel.Padding.Horizontal) - Row.Margin.Horizontal;
                         }
                         else
                         {
                             displayRect.Width = raftingDisplayRectangle.Width - Row.Margin.Horizontal;
-
                         }
                     }
 
@@ -1094,7 +1084,6 @@ namespace System.Windows.Forms
             /// </summary>
             public override bool CanMove(ToolStrip toolStripToDrag)
             {
-
                 if (base.CanMove(toolStripToDrag))
                 {
                     Size totalSize = Size.Empty;
@@ -1134,7 +1123,6 @@ namespace System.Windows.Forms
                         cellMargin.Left -= spaceToFree;
                         cellMargin.Right = 0;
                         spaceToFree = 0;
-
                     }
                     else
                     {
@@ -1185,7 +1173,6 @@ namespace System.Windows.Forms
 
             private int MoveLeft(int index, int spaceToFree)
             {
-
                 Debug.WriteLineIf(ToolStripPanelMouseDebug.TraceVerbose, "MoveLeft: " + spaceToFree.ToString(CultureInfo.InvariantCulture));
                 int freedSpace = 0;
 
@@ -1217,7 +1204,6 @@ namespace System.Windows.Forms
                             cellMargin.Left -= requiredSpace;
                             cellMargin.Right = 0;
                             cell.Margin = cellMargin;
-
                         }
                         else
                         {
@@ -1257,13 +1243,11 @@ namespace System.Windows.Forms
 
             private int MoveRight(int index, int spaceToFree)
             {
-
                 Debug.WriteLineIf(ToolStripPanelMouseDebug.TraceVerbose, "MoveRight: " + spaceToFree.ToString(CultureInfo.InvariantCulture));
                 int freedSpace = 0;
                 Row.SuspendLayout();
                 try
                 {
-
                     if (spaceToFree == 0 || index < 0 || index >= Row.ControlsInternal.Count)
                     {
                         Debug.WriteLineIf(ToolStripPanelMouseDebug.TraceVerbose, "MoveRight Early EXIT - 0 ");
@@ -1292,7 +1276,6 @@ namespace System.Windows.Forms
                             cellMargin.Left -= requiredSpace;
                             cellMargin.Right = 0;
                             cell.Margin = cellMargin;
-
                         }
                         else
                         {
@@ -1317,7 +1300,6 @@ namespace System.Windows.Forms
                         {
                             freedSpace += DisplayRectangle.Width;
                         }
-
                     }
 
                     // set the margin of the control that's moving.
@@ -1358,7 +1340,6 @@ namespace System.Windows.Forms
                             Row.ResumeLayout(true);
                             return spaceToFree;
                         }
-
                     }
 
                     if (Row.Cells.Count == 1)
@@ -1371,7 +1352,6 @@ namespace System.Windows.Forms
                             cell.Margin = cellMargin;
                         }
                     }
-
                 }
                 finally
                 {
@@ -1424,7 +1404,6 @@ namespace System.Windows.Forms
 
             public override void JoinRow(ToolStrip toolStripToDrag, Point locationToDrag)
             {
-
                 Debug.WriteLineIf(ToolStripPanelMouseDebug.TraceVerbose, "Horizontal JoinRow called ");
                 int index;
 
@@ -1436,7 +1415,6 @@ namespace System.Windows.Forms
                     {
                         if (Row.ControlsInternal.Count > 0)
                         {
-
                             // walk through the columns and determine which column you want to insert into.
                             for (index = 0; index < Row.Cells.Count; index++)
                             {
@@ -1459,7 +1437,6 @@ namespace System.Windows.Forms
                                 {
                                     break;
                                 }
-
                             }
 
                             Control controlToPushAside = Row.ControlsInternal[index];
@@ -1519,9 +1496,7 @@ namespace System.Windows.Forms
                                         nextCellMargin.Left = Math.Max(0, nextCellMargin.Left - freedSpace);
                                         nextCell.Margin = nextCellMargin;
                                     }
-
                                 }
-
                             }
                             else
                             {
@@ -1558,11 +1533,9 @@ namespace System.Windows.Forms
                                     newCell.Margin = newCellMargin;
                                 }
                             }
-
                         }
                         else
                         {
-
                             // we're adding to the beginning.
                             Row.ControlsInternal.Add(toolStripToDrag);
 
@@ -1587,7 +1560,6 @@ namespace System.Windows.Forms
                                     cell.Margin = cellMargin;
                                 }
                             }
-
                         }
                     }
                     finally
@@ -1601,7 +1573,6 @@ namespace System.Windows.Forms
             {
                 base.OnBoundsChanged(oldBounds, newBounds);
             }
-
         }
 
         private class VerticalRowManager : ToolStripPanelRowManager
@@ -1677,7 +1648,6 @@ namespace System.Windows.Forms
             /// </summary>
             public override bool CanMove(ToolStrip toolStripToDrag)
             {
-
                 if (base.CanMove(toolStripToDrag))
                 {
                     Size totalSize = Size.Empty;
@@ -1717,7 +1687,6 @@ namespace System.Windows.Forms
                         cellMargin.Top -= spaceToFree;
                         cellMargin.Bottom = 0;
                         spaceToFree = 0;
-
                     }
                     else
                     {
@@ -1740,7 +1709,6 @@ namespace System.Windows.Forms
 
             public override void MoveControl(ToolStrip movingControl, Point clientStartLocation, Point clientEndLocation)
             {
-
                 if (Row.Locked)
                 {
                     return;
@@ -1799,7 +1767,6 @@ namespace System.Windows.Forms
                             cellMargin.Top -= requiredSpace;
                             cellMargin.Bottom = 0;
                             cell.Margin = cellMargin;
-
                         }
                         else
                         {
@@ -1840,13 +1807,11 @@ namespace System.Windows.Forms
 
             private int MoveDown(int index, int spaceToFree)
             {
-
                 Debug.WriteLineIf(ToolStripPanelMouseDebug.TraceVerbose, "MoveDown: " + spaceToFree.ToString(CultureInfo.InvariantCulture));
                 int freedSpace = 0;
                 Row.SuspendLayout();
                 try
                 {
-
                     if (spaceToFree == 0 || index < 0 || index >= Row.ControlsInternal.Count)
                     {
                         Debug.WriteLineIf(ToolStripPanelMouseDebug.TraceVerbose, "MoveDown Early EXIT - 0 ");
@@ -1876,7 +1841,6 @@ namespace System.Windows.Forms
                             cellMargin.Top -= requiredSpace;
                             cellMargin.Bottom = 0;
                             cell.Margin = cellMargin;
-
                         }
                         else
                         {
@@ -1933,7 +1897,6 @@ namespace System.Windows.Forms
                             Row.ResumeLayout(true);
                             return spaceToFree;
                         }
-
                     }
 
                     if (Row.Cells.Count == 1)
@@ -1946,7 +1909,6 @@ namespace System.Windows.Forms
                             cell.Margin = cellMargin;
                         }
                     }
-
                 }
                 finally
                 {
@@ -1961,13 +1923,11 @@ namespace System.Windows.Forms
 
             protected internal override void OnBoundsChanged(Rectangle oldBounds, Rectangle newBounds)
             {
-
                 base.OnBoundsChanged(oldBounds, newBounds);
 
                 // if our bounds have changed - we should shove the toolbars up so they're in view.
                 if (Row.Cells.Count > 0)
                 {
-
                     // take a look at the last guy.  if his right edge exceeds
                     // the new bounds, then we should go ahead and push him into view.
                     ToolStripPanelCell lastCell = GetNextVisibleCell(Row.Cells.Count - 1, /*forward=*/false);
@@ -1984,12 +1944,10 @@ namespace System.Windows.Forms
                         // the toolstrip into view. (space after the fact doesnt count).
                         if (cellMargin.Top >= spaceToFree)
                         {
-
                             cellMargin.Top -= spaceToFree;
                             cellMargin.Bottom = 0;
                             lastCellOnRow.Margin = cellMargin;
                             spaceToFree = 0;
-
                         }
                         else
                         {
@@ -2002,24 +1960,19 @@ namespace System.Windows.Forms
                         // start moving the toolstrips before this guy.
                         MoveUp(Row.Cells.Count - 1, spaceToFree);
                     }
-
                 }
-
             }
 
             protected internal override void OnControlRemoved(Control c, int index)
             {
-
             }
 
             protected internal override void OnControlAdded(Control control, int index)
             {
-
             }
 
             public override void JoinRow(ToolStrip toolStripToDrag, Point locationToDrag)
             {
-
                 Debug.WriteLineIf(ToolStripPanelMouseDebug.TraceVerbose, "Vertical JoinRow called ");
                 int index;
 
@@ -2030,7 +1983,6 @@ namespace System.Windows.Forms
                     {
                         if (Row.ControlsInternal.Count > 0)
                         {
-
                             // walk through the columns and determine which column you want to insert into.
                             for (index = 0; index < Row.Cells.Count; index++)
                             {
@@ -2052,7 +2004,6 @@ namespace System.Windows.Forms
                                 {
                                     break;
                                 }
-
                             }
 
                             Control controlToPushAside = Row.ControlsInternal[index];
@@ -2085,7 +2036,6 @@ namespace System.Windows.Forms
 
                             if (index < Row.ControlsInternal.Count - 1)
                             {
-
                                 ToolStripPanelCell nextCell = GetNextVisibleCell(index + 1,  /*forward*/true);
                                 if (nextCell != null)
                                 {
@@ -2116,10 +2066,8 @@ namespace System.Windows.Forms
                                             nextCellMargin.Top -= freedSpace;
                                             nextCell.Margin = nextCellMargin;
                                         }
-
                                     }
                                 }
-
                             }
                             else
                             {
@@ -2135,7 +2083,6 @@ namespace System.Windows.Forms
                                     lastCell.Margin = lastCellMargin;
                                     freedSpace = requiredSpace;
                                 }
-
                             }
 
                             // If we still need more space, then...
@@ -2157,11 +2104,9 @@ namespace System.Windows.Forms
                                     newCell.Margin = newCellMargin;
                                 }
                             }
-
                         }
                         else
                         {
-
                             // we're adding to the beginning.
                             Row.ControlsInternal.Add(toolStripToDrag);
 
@@ -2199,7 +2144,6 @@ namespace System.Windows.Forms
                 {
                     if (index < Row.ControlsInternal.Count - 1 /*not the last one in the row*/)
                     {
-
                         ToolStripPanelCell cell = (ToolStripPanelCell)Row.Cells[index];
                         if (cell.Visible)
                         {
@@ -2380,7 +2324,6 @@ namespace System.Windows.Forms
                     control = cell?.Control;
                 }
                 return control;
-
             }
             private int IndexOfControl(Control c)
             {
@@ -2393,7 +2336,6 @@ namespace System.Windows.Forms
                     }
                 }
                 return -1;
-
             }
 
             void IList.Clear() { Clear(); }
@@ -2468,11 +2410,9 @@ namespace System.Windows.Forms
                     if (ToolStripPanel != null && ToolStripPanel.ParentInternal != null)
                     {
                         layoutTransaction = new LayoutTransaction(ToolStripPanel, ToolStripPanel.ParentInternal, PropertyNames.Parent);
-
                     }
                     try
                     {
-
                         if (controlToBeDragged != null)
                         {
                             controlToBeDragged.ToolStripPanelRow = owner;
@@ -2483,7 +2423,6 @@ namespace System.Windows.Forms
                                 owner.OnControlAdded(control, index);
                             }
                         }
-
                     }
                     finally
                     {
@@ -2492,7 +2431,6 @@ namespace System.Windows.Forms
                             layoutTransaction.Dispose();
                         }
                     }
-
                 }
             }
 

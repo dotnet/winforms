@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Drawing;
@@ -12,7 +11,6 @@ using static Interop;
 
 namespace System.Windows.Forms
 {
-
     /// <summary>
     ///  Represents an empty control that can be used in the Forms Designer to create other  controls.   By extending form, UserControl inherits all of
     ///  the standard positioning and mnemonic handling code that is necessary
@@ -346,7 +344,6 @@ namespace System.Windows.Forms
             {
                 base.WndProc(ref m);
             }
-
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]

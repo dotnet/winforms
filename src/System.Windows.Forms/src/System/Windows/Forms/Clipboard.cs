@@ -35,7 +35,6 @@ namespace System.Windows.Forms
                             break;
                         default:
                             return false;
-
                     }
                 }
                 return true;
@@ -185,7 +184,7 @@ namespace System.Windows.Forms
                 {
                     throw new ThreadStateException(SR.ThreadMustBeSTA);
                 }
-                
+
                 return null;
             }
 
@@ -223,7 +222,7 @@ namespace System.Windows.Forms
                 {
                     return ido;
                 }
-                
+
                 return new DataObject(dataObject);
             }
 

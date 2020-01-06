@@ -775,7 +775,6 @@ namespace System.Windows.Forms
             }
             set
             {
-
                 if (value && IsHandleCreated && Visible)
                 {
                     if (0 == paintFrozen++)
@@ -795,7 +794,6 @@ namespace System.Windows.Forms
                         SendMessage(WindowMessages.WM_SETREDRAW, 1, 0);
                         Invalidate(true);
                     }
-
                 }
             }
         }
@@ -1160,7 +1158,6 @@ namespace System.Windows.Forms
                         // the grid with no selected row.
                     }
                 }
-
             }
         }
 
@@ -1293,7 +1290,6 @@ namespace System.Windows.Forms
 
                     if (!isSame)
                     {
-
                         EnsureDesignerEventService();
 
                         showEvents = showEvents && GetFlag(GotDesignerEventService);
@@ -1340,7 +1336,6 @@ namespace System.Windows.Forms
                         // throw away any extra component only tabs
                         if (!classesSame && !GetFlag(TabsChanging) && selectedViewTab < viewTabButtons.Length)
                         {
-
                             Type tabType = selectedViewTab == -1 ? null : viewTabs[selectedViewTab].GetType();
                             ToolStripButton viewTabButton = null;
                             RefreshTabs(PropertyTabScope.Component);
@@ -1426,7 +1421,6 @@ namespace System.Windows.Forms
                     if (propertiesChanged) {*/
                     if (!GetFlag(TabsChanging))
                     {
-
                         // ReInitTab means that we should set the tab back to what is used to be for a given designer.
                         // Basically, if you select an events tab for your designer and double click to go to code, it should
                         // be the events tab when you get back to the designer.
@@ -1538,7 +1532,6 @@ namespace System.Windows.Forms
             }
             set
             {
-
                 // Perf - the base class is possibly going to change the font via ambient properties service
                 SuspendAllLayout(this);
 
@@ -1555,7 +1548,6 @@ namespace System.Windows.Forms
                 }
 
                 ResumeAllLayout(this, true);
-
             }
         }
 
@@ -1725,7 +1717,6 @@ namespace System.Windows.Forms
             {
                 gridView.ForeColor = value;
                 gridView.Invalidate();
-
             }
         }
 
@@ -1946,7 +1937,6 @@ namespace System.Windows.Forms
                         // start after that
                         for (int i = 1; i < viewTabs.Length; i++)
                         {
-
                             // skip the event tab
                             if (viewTabs[i] is EventsTab)
                             {
@@ -2095,7 +2085,6 @@ namespace System.Windows.Forms
                 object param = null;
                 if (constructor == null)
                 {
-
                     // try a IDesignerHost ctor
                     constructor = tabType.GetConstructor(new Type[] { typeof(IDesignerHost) });
 
@@ -2220,11 +2209,9 @@ namespace System.Windows.Forms
 
                     if (site != null)
                     {
-
                         IMenuCommandService mcs = (IMenuCommandService)site.GetService(typeof(IMenuCommandService));
                         if (mcs != null)
                         {
-
                             // Got the menu command service.  Let it deal with the set of verbs for
                             // this component.
                             //
@@ -2233,14 +2220,12 @@ namespace System.Windows.Forms
                         }
                         else
                         {
-
                             // No menu command service.  Go straight to the component's designer.  We
                             // can only do this if the Object count is 1, because desginers do not
                             // support verbs across a multi-selection.
                             //
                             if (currentObjects.Length == 1 && GetUnwrappedObject(0) is IComponent)
                             {
-
                                 IDesignerHost designerHost = (IDesignerHost)site.GetService(typeof(IDesignerHost));
                                 if (designerHost != null)
                                 {
@@ -2260,7 +2245,6 @@ namespace System.Windows.Forms
             // don't show verbs if a prop grid is on the form at design time.
             if (!DesignMode)
             {
-
                 if (verbs != null && verbs.Length > 0)
                 {
                     hotcommands.SetVerbs(component, verbs);
@@ -2566,7 +2550,6 @@ namespace System.Windows.Forms
         {
             if (imageList[LARGE_BUTTONS] == null)
             {
-
                 imageList[LARGE_BUTTONS] = new ImageList
                 {
                     ImageSize = largeButtonSize
@@ -2629,7 +2612,6 @@ namespace System.Windows.Forms
 
             try
             {
-
                 if (designerHost != null)
                 {
                     designerHost.TransactionOpened -= new EventHandler(OnTransactionOpened);
@@ -2696,7 +2678,6 @@ namespace System.Windows.Forms
 
             for (i = 1; i < objs.Length && types > 0; i++)
             {
-
                 // get the tab attribute
                 tabAttr = (PropertyTabAttribute)TypeDescriptor.GetAttributes(objs[i])[typeof(PropertyTabAttribute)];
 
@@ -3001,7 +2982,6 @@ namespace System.Windows.Forms
             if (batchMode || GetFlag(InternalChange) || gridView.GetInPropertySet() ||
                (currentObjects == null) || (currentObjects.Length == 0))
             {
-
                 if (batchMode && !gridView.GetInPropertySet())
                 {
                     SetFlag(BatchModeChange, true);
@@ -3042,7 +3022,6 @@ namespace System.Windows.Forms
             {
                 if (e.Component == currentObjects[i])
                 {
-
                     object[] newObjects = new object[currentObjects.Length - 1];
                     Array.Copy(currentObjects, 0, newObjects, 0, i);
                     if (i < newObjects.Length)
@@ -3068,7 +3047,6 @@ namespace System.Windows.Forms
             }
 
             SetupToolbar();
-
         }
 
         //
@@ -3150,7 +3128,6 @@ namespace System.Windows.Forms
 
             try
             {
-
                 FreezePainting = true;
 
                 if (!dividerOnly)
@@ -3166,7 +3143,6 @@ namespace System.Windows.Forms
 
                     if (toolStrip.Visible)
                     {
-
                         int toolStripWidth = Width;
                         int toolStripHeight = ((LargeButtons) ? largeButtonSize : normalButtonSize).Height + toolStripButtonPaddingY;
                         Rectangle toolStripBounds = new Rectangle(0, 1, toolStripWidth, toolStripHeight);
@@ -3253,7 +3229,6 @@ namespace System.Windows.Forms
                 // place the help comment window
                 if (dcRequestedHeight > 0)
                 {
-
                     maxSpace -= cyDivider;
 
                     if (hcRequestedHeight == 0 || (dcRequestedHeight + hcRequestedHeight) < maxSpace)
@@ -3638,7 +3613,6 @@ namespace System.Windows.Forms
         {
             try
             {
-
                 FreezePainting = true;
 
                 // is this tab selected? If so, do nothing.
@@ -3687,14 +3661,12 @@ namespace System.Windows.Forms
                 FreezePainting = false;
             }
             OnButtonClick(sender, e);
-
         }
 
         private void OnViewTabButtonClick(object sender, EventArgs e)
         {
             try
             {
-
                 FreezePainting = true;
                 SelectViewTabButton((ToolStripButton)sender, true);
                 OnLayoutInternal(false);
@@ -3705,7 +3677,6 @@ namespace System.Windows.Forms
                 FreezePainting = false;
             }
             OnButtonClick(sender, e);
-
         }
 
         private void OnViewButtonClickPP(object sender, EventArgs e)
@@ -3751,11 +3722,9 @@ namespace System.Windows.Forms
 
                     if (success)
                     {
-
                         if (baseObject is IComponent &&
                             connectionPointCookies[0] == null)
                         {
-
                             ISite site = ((IComponent)baseObject).Site;
                             if (site != null)
                             {
@@ -3787,12 +3756,10 @@ namespace System.Windows.Forms
                                     {
                                         SetFlag(InternalChange, false);
                                     }
-
                                 }
                             }
                         }
                         gridView.Refresh();
-
                     }
                 }
                 catch (Exception ex)
@@ -3946,7 +3913,6 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-
                         bool passToParent = false;
 
                         // this is forward
@@ -3974,7 +3940,6 @@ namespace System.Windows.Forms
                             {
                                 passToParent = true;
                             }
-
                         }
                         else if (hotcommands.ContainsFocus)
                         {
@@ -4027,7 +3992,6 @@ namespace System.Windows.Forms
                         }
                         break;
                     */
-
             }
             return base.ProcessDialogKey(keyData);
         }
@@ -4237,7 +4201,6 @@ namespace System.Windows.Forms
             {
                 if (viewTabScopes[i] >= classification)
                 {
-
                     // adjust the selected view tab because we're deleting.
                     if (selectedViewTab == i)
                     {
@@ -4560,7 +4523,6 @@ namespace System.Windows.Forms
 
             if (viewTypes > 0)
             {
-
                 int tab = state / viewTypes;
                 int view = state % viewTypes;
 
@@ -4794,7 +4756,6 @@ namespace System.Windows.Forms
         {
             if (viewTabs != null && viewTabs.Length > EVENTS && (viewTabs[EVENTS] is EventsTab))
             {
-
                 Debug.Assert(viewTabButtons != null && viewTabButtons.Length > EVENTS && viewTabButtons[EVENTS] != null, "Events button is not at EVENTS position");
                 viewTabButtons[EVENTS].Visible = value;
                 if (!value && selectedViewTab == EVENTS)
@@ -5507,7 +5468,6 @@ namespace System.Windows.Forms
                 }
                 owner.RemoveTab(propertyTabType);
             }
-
         }
 
         /// <summary>

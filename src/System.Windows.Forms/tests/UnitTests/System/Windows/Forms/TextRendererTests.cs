@@ -38,11 +38,11 @@ namespace System.Windows.Forms.Tests
             using Graphics graphics = Graphics.FromImage(image);
             graphics.TextRenderingHint = textRenderingHint;
             TextRenderer.DrawText(graphics, text, font, pt, foreColor);
-            
+
             // Call again to test caching.
             TextRenderer.DrawText(graphics, text, font, pt, foreColor);
         }
-        
+
         public static IEnumerable<object[]> DrawText_IDeviceContext_String_Font_Point_Color_Color_TestData()
         {
             foreach (TextRenderingHint hint in Enum.GetValues(typeof(TextRenderingHint)))
@@ -72,11 +72,11 @@ namespace System.Windows.Forms.Tests
             using Graphics graphics = Graphics.FromImage(image);
             graphics.TextRenderingHint = textRenderingHint;
             TextRenderer.DrawText(graphics, text, font, pt, foreColor, backColor);
-            
+
             // Call again to test caching.
             TextRenderer.DrawText(graphics, text, font, pt, foreColor, backColor);
         }
-        
+
         public static IEnumerable<object[]> DrawText_IDeviceContext_String_Font_Point_Color_TextFormatFlags_TestData()
         {
             foreach (TextRenderingHint hint in Enum.GetValues(typeof(TextRenderingHint)))
@@ -109,11 +109,11 @@ namespace System.Windows.Forms.Tests
             using Graphics graphics = Graphics.FromImage(image);
             graphics.TextRenderingHint = textRenderingHint;
             TextRenderer.DrawText(graphics, text, font, pt, foreColor, flags);
-            
+
             // Call again to test caching.
             TextRenderer.DrawText(graphics, text, font, pt, foreColor, flags);
         }
-        
+
         public static IEnumerable<object[]> DrawText_IDeviceContext_String_Font_Point_Color_Color_TextFormatFlags_TestData()
         {
             foreach (TextRenderingHint hint in Enum.GetValues(typeof(TextRenderingHint)))
@@ -150,7 +150,7 @@ namespace System.Windows.Forms.Tests
             using Graphics graphics = Graphics.FromImage(image);
             graphics.TextRenderingHint = textRenderingHint;
             TextRenderer.DrawText(graphics, text, font, pt, foreColor, backColor, flags);
-            
+
             // Call again to test caching.
             TextRenderer.DrawText(graphics, text, font, pt, foreColor, backColor, flags);
         }
@@ -182,11 +182,11 @@ namespace System.Windows.Forms.Tests
             using Graphics graphics = Graphics.FromImage(image);
             graphics.TextRenderingHint = textRenderingHint;
             TextRenderer.DrawText(graphics, text, font, bounds, foreColor);
-            
+
             // Call again to test caching.
             TextRenderer.DrawText(graphics, text, font, bounds, foreColor);
         }
-        
+
         public static IEnumerable<object[]> DrawText_IDeviceContext_String_Font_Rectangle_Color_Color_TestData()
         {
             foreach (TextRenderingHint hint in Enum.GetValues(typeof(TextRenderingHint)))
@@ -218,11 +218,11 @@ namespace System.Windows.Forms.Tests
             using Graphics graphics = Graphics.FromImage(image);
             graphics.TextRenderingHint = textRenderingHint;
             TextRenderer.DrawText(graphics, text, font, rectangle, foreColor, backColor);
-            
+
             // Call again to test caching.
             TextRenderer.DrawText(graphics, text, font, rectangle, foreColor, backColor);
         }
-        
+
         public static IEnumerable<object[]> DrawText_IDeviceContext_String_Font_Rectangle_Color_TextFormatFlags_TestData()
         {
             foreach (TextRenderingHint hint in Enum.GetValues(typeof(TextRenderingHint)))
@@ -258,11 +258,11 @@ namespace System.Windows.Forms.Tests
             using Graphics graphics = Graphics.FromImage(image);
             graphics.TextRenderingHint = textRenderingHint;
             TextRenderer.DrawText(graphics, text, font, rectangle, foreColor, flags);
-            
+
             // Call again to test caching.
             TextRenderer.DrawText(graphics, text, font, rectangle, foreColor, flags);
         }
-        
+
         public static IEnumerable<object[]> DrawText_IDeviceContext_String_Font_Rectangle_Color_Color_TextFormatFlags_TestData()
         {
             foreach (TextRenderingHint hint in Enum.GetValues(typeof(TextRenderingHint)))
@@ -302,7 +302,7 @@ namespace System.Windows.Forms.Tests
             using Graphics graphics = Graphics.FromImage(image);
             graphics.TextRenderingHint = textRenderingHint;
             TextRenderer.DrawText(graphics, text, font, rectangle, foreColor, backColor, flags);
-            
+
             // Call again to test caching.
             TextRenderer.DrawText(graphics, text, font, rectangle, foreColor, backColor, flags);
         }
@@ -465,7 +465,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { "string", SystemFonts.MenuFont, new Size(1, 2), TextFormatFlags.Default };
             yield return new object[] { "string", SystemFonts.MenuFont, new Size(100, 200), TextFormatFlags.Default };
             yield return new object[] { "string", SystemFonts.MenuFont, new Size(int.MaxValue, int.MaxValue), TextFormatFlags.Default };
-            
+
             yield return new object[] { "string", SystemFonts.MenuFont, new Size(100, 200), TextFormatFlags.VerticalCenter | TextFormatFlags.HorizontalCenter };
             yield return new object[] { "string", SystemFonts.MenuFont, new Size(100, 200), TextFormatFlags.Bottom | TextFormatFlags.Right };
             yield return new object[] { "string", SystemFonts.MenuFont, new Size(100, 200), TextFormatFlags.SingleLine };

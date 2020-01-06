@@ -1408,7 +1408,7 @@ namespace System.Windows.Forms.Tests
             Assert.Same("text", control.Text);
             Assert.Equal(2, callCount);
         }
-        
+
         [WinFormsTheory]
         [InlineData(0)]
         [InlineData(5)]
@@ -1572,7 +1572,7 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<ArgumentOutOfRangeException>("value", () => control.Value = value);
             Assert.Equal(0, control.Value);
         }
-        
+
         [WinFormsFact]
         public void ScrollBar_GetAutoSizeMode_Invoke_ReturnsExpected()
         {

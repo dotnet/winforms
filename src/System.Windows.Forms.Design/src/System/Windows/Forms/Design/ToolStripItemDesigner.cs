@@ -851,7 +851,6 @@ namespace System.Windows.Forms.Design
                         {
                             imageTransProperty.SetValue(newItem, Color.Magenta);
                         }
-
                     }
 
                     parent.Items.Insert(dummyIndex, newItem);
@@ -953,7 +952,6 @@ namespace System.Windows.Forms.Design
                             //this will allow any Glyphs to re-paint
                             //after this control and its designer has painted
                             behaviorService.ProcessPaintMessage(r);
-
                         }
                     }
                 }

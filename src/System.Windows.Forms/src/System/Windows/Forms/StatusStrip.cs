@@ -42,7 +42,6 @@ namespace System.Windows.Forms
             Stretch = true;
             state[stateSizingGrip] = true;
             ResumeLayout(true);
-
         }
 
         [
@@ -101,7 +100,6 @@ namespace System.Windows.Forms
                     // was before, so the DisplayRectangle needs to shrink up by its height.
                     return new Padding(1, 3, 1, DefaultSize.Height);
                 }
-
             }
         }
 
@@ -333,16 +331,13 @@ namespace System.Windows.Forms
                     rtlLayoutGrip.Dispose();
                     rtlLayoutGrip = null;
                 }
-
             }
-
         }
 
         internal override Size GetPreferredSizeCore(Size proposedSize)
         {
             if (LayoutStyle == ToolStripLayoutStyle.Table)
             {
-
                 if (proposedSize.Width == 1)
                 {
                     proposedSize.Width = int.MaxValue;
@@ -401,11 +396,9 @@ namespace System.Windows.Forms
                     OnSpringTableLayoutCore();
                     base.OnLayout(levent);
                 }
-
             }
 
             EnsureRightToLeftGrip();
-
         }
 
         internal override bool SupportsUiaProviders => true;
@@ -433,7 +426,6 @@ namespace System.Windows.Forms
                     // visible.
                     if (overflow || ((IArrangedElement)item).ParticipatesInLayout)
                     {
-
                         if (overflow || (SizingGrip && item.Bounds.IntersectsWith(SizeGripBounds)))
                         {
                             // if the item collides with the size grip, set the location to nomansland.
@@ -513,7 +505,6 @@ namespace System.Windows.Forms
 
                 if (Orientation == Orientation.Horizontal)
                 {
-
                     //
                     // Horizontal layout
                     //
@@ -604,7 +595,6 @@ namespace System.Windows.Forms
                     {
                         TableLayoutSettings.RowStyles[i].SizeType = SizeType.AutoSize;
                     }
-
                 }
 
                 ResumeLayout(false);
@@ -657,9 +647,7 @@ namespace System.Windows.Forms
                                 return;
                             }
                         }
-
                     }
-
                 }
             }
             base.WndProc(ref m);
@@ -694,7 +682,6 @@ namespace System.Windows.Forms
                         m.Result = (IntPtr)NativeMethods.HTBOTTOMLEFT;
                         return;
                     }
-
                 }
                 base.WndProc(ref m);
             }
@@ -777,6 +764,5 @@ namespace System.Windows.Forms
                 return GetFocused();
             }
         }
-
     }
 }

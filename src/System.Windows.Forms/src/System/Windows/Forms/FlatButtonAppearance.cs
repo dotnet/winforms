@@ -180,7 +180,6 @@ namespace System.Windows.Forms
                 }
             }
         }
-
     }
 
     internal sealed class ApplicableToButtonAttribute : Attribute

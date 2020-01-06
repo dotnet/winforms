@@ -634,7 +634,6 @@ namespace System.Windows.Forms
                     ReadBlockSize,
                     new AsyncCallback(ReadCallBack),
                     responseStream);
-
             }
             catch (Exception error)
             {

@@ -416,7 +416,6 @@ namespace System.Windows.Forms.Design
 
                 form.PerformLayout();
             }
-
         }
 
         /// <summary>

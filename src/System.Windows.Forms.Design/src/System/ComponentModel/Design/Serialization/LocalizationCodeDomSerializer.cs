@@ -19,7 +19,7 @@ namespace System.ComponentModel.Design.Serialization
     ///  Instead of letting resource manager maintain resource
     ///  sets, it uses the designer host's IResourceService
     ///  for this purpose.
-    ///  
+    ///
     ///  During serialization, this class will also create
     ///  a SerializationResourceManager.  This will be added
     ///  to the serialization manager as a service so other
@@ -80,8 +80,8 @@ namespace System.ComponentModel.Design.Serialization
             // since we cannot push this into resources.
             bool callExistingSerializer = !isSerializable;
 
-            // Compat: If we are serializing content, we need to skip property reflection to preserve compatibility, 
-            //         since tools like WinRes expect items in collections (like TreeNodes and ListViewItems) 
+            // Compat: If we are serializing content, we need to skip property reflection to preserve compatibility,
+            //         since tools like WinRes expect items in collections (like TreeNodes and ListViewItems)
             //         to be serialized as binary blobs.
             bool serializingContent = (desc != null && desc.Attributes.Contains(DesignerSerializationVisibilityAttribute.Content));
 

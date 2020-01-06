@@ -387,5 +387,4 @@ namespace System.Windows.Forms.PropertyGridInternal
             internal override int Column => 0; // Category is in the first column.
         }
     }
-
 }

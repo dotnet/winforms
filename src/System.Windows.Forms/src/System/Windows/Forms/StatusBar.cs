@@ -78,7 +78,6 @@ namespace System.Windows.Forms
                 }
                 return renderer;
             }
-
         }
 
         private int SizeGripWidth
@@ -767,7 +766,6 @@ namespace System.Windows.Forms
                 ApplyPanelWidths();
                 ForcePanelUpdate();
             }
-
         }
 
         /// <summary>
@@ -802,7 +800,6 @@ namespace System.Windows.Forms
         {
             if (!showPanels && IsHandleCreated)
             {
-
                 int wparam = SIMPLE_INDEX + NativeMethods.SBT_NOBORDERS;
                 if (RightToLeft == RightToLeft.Yes)
                 {
@@ -851,7 +848,6 @@ namespace System.Windows.Forms
                 int copyOfLeftoverWidth = unchecked((int)0x80000000);
                 while (springPanelsLeft > 0)
                 {
-
                     int widthOfSpringPanel = (leftoverWidth) / springPanelsLeft;
                     if (leftoverWidth == copyOfLeftoverWidth)
                     {
@@ -937,7 +933,6 @@ namespace System.Windows.Forms
         {
             mainToolTip = t;
             toolTipSet = true;
-
         }
 
         internal void UpdateTooltip(StatusBarPanel panel)
@@ -1083,7 +1078,6 @@ namespace System.Windows.Forms
                     if (!((Form)parent).TopLevel
                         || Dock != DockStyle.Bottom)
                     {
-
                         callSuper = false;
                     }
 
@@ -1192,7 +1186,6 @@ namespace System.Windows.Forms
                 }
                 set
                 {
-
                     if (value == null)
                     {
                         throw new ArgumentNullException(nameof(StatusBarPanel));
@@ -1272,7 +1265,6 @@ namespace System.Windows.Forms
                     {
                         return null;
                     }
-
                 }
             }
 
@@ -1457,7 +1449,6 @@ namespace System.Windows.Forms
             /// </summary>
             public virtual void Insert(int index, StatusBarPanel value)
             {
-
                 //check for the value not to be null
                 if (value == null)
                 {
@@ -1523,7 +1514,6 @@ namespace System.Windows.Forms
             {
                 owner.RemoveAllPanelsWithoutUpdate();
                 owner.PerformLayout();
-
             }
 
             /// <summary>
@@ -1531,7 +1521,6 @@ namespace System.Windows.Forms
             /// </summary>
             public virtual void Remove(StatusBarPanel value)
             {
-
                 //check for the value not to be null
                 if (value == null)
                 {
@@ -1755,7 +1744,6 @@ namespace System.Windows.Forms
                 {
                     tools.Remove(key);
                 }
-
             }
 
             /// <summary>

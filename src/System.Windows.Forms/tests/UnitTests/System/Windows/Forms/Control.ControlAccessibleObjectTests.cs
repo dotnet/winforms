@@ -928,7 +928,7 @@ namespace System.Windows.Forms.Tests
             IAccessible iAccessible = accessibleObject;
             Assert.Null(iAccessible.accFocus);
         }
-        
+
         [WinFormsTheory]
         [InlineData(-1, -2)]
         [InlineData(0, 0)]

@@ -150,7 +150,6 @@ namespace System.Windows.Forms
             {
                 Marshal.FreeCoTaskMem(pszText);
             }
-
         }
 
         /// <summary>

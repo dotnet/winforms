@@ -29,7 +29,6 @@ internal static partial class Interop
         public const uint WM_REFLECT = WM_USER + 0x1C00;
         public const uint OCM__BASE  = WM_USER + 0x1C00;
 
-
         public static class RegisteredMessage
         {
             private static uint s_wmUnSubclass = uint.MaxValue;

@@ -157,7 +157,7 @@ namespace System.Windows.Forms.Tests
             using var control = new RichTextBox();
             Assert.Empty(control.SelectedText);
             Assert.True(control.IsHandleCreated);
-            
+
             // Get again.
             Assert.Empty(control.SelectedText);
             Assert.True(control.IsHandleCreated);
@@ -180,7 +180,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            
+
             // Get again.
             Assert.Empty(control.SelectedText);
             Assert.True(control.IsHandleCreated);
@@ -188,14 +188,14 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
         }
-        
+
         [WinFormsFact]
         public void RichTextBox_SelectedRtf_GetWithoutHandle_ReturnsExpected()
         {
             using var control = new RichTextBox();
             Assert.NotNull(control.SelectedRtf);
             Assert.True(control.IsHandleCreated);
-            
+
             // Call again.
             Assert.NotNull(control.SelectedRtf);
             Assert.True(control.IsHandleCreated);
@@ -218,7 +218,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            
+
             // Call again.
             Assert.NotNull(control.SelectedRtf);
             Assert.True(control.IsHandleCreated);
@@ -233,7 +233,7 @@ namespace System.Windows.Forms.Tests
             using var control = new RichTextBox();
             Assert.Equal(HorizontalAlignment.Left, control.SelectionAlignment);
             Assert.True(control.IsHandleCreated);
-            
+
             // Call again.
             Assert.Equal(HorizontalAlignment.Left, control.SelectionAlignment);
             Assert.True(control.IsHandleCreated);
@@ -256,7 +256,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            
+
             // Call again.
             Assert.Equal(HorizontalAlignment.Left, control.SelectionAlignment);
             Assert.True(control.IsHandleCreated);
@@ -271,7 +271,7 @@ namespace System.Windows.Forms.Tests
             using var control = new RichTextBox();
             Assert.False(control.SelectionBullet);
             Assert.True(control.IsHandleCreated);
-            
+
             // Call again.
             Assert.False(control.SelectionBullet);
             Assert.True(control.IsHandleCreated);
@@ -294,7 +294,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            
+
             // Call again.
             Assert.False(control.SelectionBullet);
             Assert.True(control.IsHandleCreated);
@@ -309,7 +309,7 @@ namespace System.Windows.Forms.Tests
             using var control = new RichTextBox();
             Assert.Equal(0, control.SelectionCharOffset);
             Assert.True(control.IsHandleCreated);
-            
+
             // Call again.
             Assert.Equal(0, control.SelectionCharOffset);
             Assert.True(control.IsHandleCreated);
@@ -332,7 +332,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            
+
             // Call again.
             Assert.Equal(0, control.SelectionCharOffset);
             Assert.True(control.IsHandleCreated);
@@ -340,14 +340,14 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
         }
-        
+
         [WinFormsFact]
         public void RichTextBox_SelectionColor_GetWithoutHandle_ReturnsExpected()
         {
             using var control = new RichTextBox();
             Assert.Equal(Color.Black, control.SelectionColor);
             Assert.True(control.IsHandleCreated);
-            
+
             // Call again.
             Assert.Equal(Color.Black, control.SelectionColor);
             Assert.True(control.IsHandleCreated);
@@ -370,7 +370,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            
+
             // Call again.
             Assert.Equal(Color.Black, control.SelectionColor);
             Assert.True(control.IsHandleCreated);
@@ -386,14 +386,14 @@ namespace System.Windows.Forms.Tests
             Font result1 = control.SelectionFont;
             Assert.NotNull(result1);
             Assert.True(control.IsHandleCreated);
-            
+
             // Call again.
             Font result2 = control.SelectionFont;
             Assert.NotNull(result2);
             Assert.NotSame(result1, result2);
             Assert.True(control.IsHandleCreated);
         }
-        
+
         [WinFormsFact]
         public void RichTextBox_SelectionFont_GetWithHandle_ReturnsExpected()
         {
@@ -412,7 +412,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            
+
             // Call again.
             Font result2 = control.SelectionFont;
             Assert.NotNull(result2);
@@ -422,14 +422,14 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
         }
-        
+
         [WinFormsFact]
         public void RichTextBox_SelectionHangingIndent_GetWithoutHandle_ReturnsExpected()
         {
             using var control = new RichTextBox();
             Assert.Equal(0, control.SelectionHangingIndent);
             Assert.True(control.IsHandleCreated);
-            
+
             // Call again.
             Assert.Equal(0, control.SelectionHangingIndent);
             Assert.True(control.IsHandleCreated);
@@ -452,7 +452,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            
+
             // Call again.
             Assert.Equal(0, control.SelectionHangingIndent);
             Assert.True(control.IsHandleCreated);
@@ -460,14 +460,14 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
         }
-        
+
         [WinFormsFact]
         public void RichTextBox_SelectionIndent_GetWithoutHandle_ReturnsExpected()
         {
             using var control = new RichTextBox();
             Assert.Equal(0, control.SelectionIndent);
             Assert.True(control.IsHandleCreated);
-            
+
             // Call again.
             Assert.Equal(0, control.SelectionIndent);
             Assert.True(control.IsHandleCreated);
@@ -490,7 +490,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            
+
             // Call again.
             Assert.Equal(0, control.SelectionIndent);
             Assert.True(control.IsHandleCreated);
@@ -505,7 +505,7 @@ namespace System.Windows.Forms.Tests
             using var control = new RichTextBox();
             Assert.Equal(0, control.SelectionLength);
             Assert.True(control.IsHandleCreated);
-            
+
             // Get again.
             Assert.Equal(0, control.SelectionLength);
             Assert.True(control.IsHandleCreated);
@@ -528,7 +528,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            
+
             // Get again.
             Assert.Equal(0, control.SelectionLength);
             Assert.True(control.IsHandleCreated);
@@ -536,14 +536,14 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
         }
-        
+
         [WinFormsFact]
         public void RichTextBox_SelectionProtected_GetWithoutHandle_ReturnsExpected()
         {
             using var control = new RichTextBox();
             Assert.False(control.SelectionProtected);
             Assert.True(control.IsHandleCreated);
-            
+
             // Call again.
             Assert.False(control.SelectionProtected);
             Assert.True(control.IsHandleCreated);
@@ -566,7 +566,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            
+
             // Call again.
             Assert.False(control.SelectionProtected);
             Assert.True(control.IsHandleCreated);
@@ -574,14 +574,14 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
         }
-        
+
         [WinFormsFact]
         public void RichTextBox_SelectionRightIndent_GetWithoutHandle_ReturnsExpected()
         {
             using var control = new RichTextBox();
             Assert.Equal(0, control.SelectionRightIndent);
             Assert.True(control.IsHandleCreated);
-            
+
             // Call again.
             Assert.Equal(0, control.SelectionRightIndent);
             Assert.True(control.IsHandleCreated);
@@ -604,7 +604,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            
+
             // Call again.
             Assert.Equal(0, control.SelectionRightIndent);
             Assert.True(control.IsHandleCreated);
@@ -619,7 +619,7 @@ namespace System.Windows.Forms.Tests
             using var control = new RichTextBox();
             Assert.Equal(0, control.SelectionStart);
             Assert.True(control.IsHandleCreated);
-            
+
             // Get again.
             Assert.Equal(0, control.SelectionStart);
             Assert.True(control.IsHandleCreated);
@@ -642,7 +642,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            
+
             // Get again.
             Assert.Equal(0, control.SelectionStart);
             Assert.True(control.IsHandleCreated);
@@ -650,14 +650,14 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
         }
-        
+
         [WinFormsFact]
         public void RichTextBox_SelectionTabs_GetWithoutHandle_ReturnsExpected()
         {
             using var control = new RichTextBox();
             Assert.Empty(control.SelectionTabs);
             Assert.True(control.IsHandleCreated);
-            
+
             // Call again.
             Assert.Empty(control.SelectionTabs);
             Assert.True(control.IsHandleCreated);
@@ -680,7 +680,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            
+
             // Call again.
             Assert.Empty(control.SelectionTabs);
             Assert.True(control.IsHandleCreated);
@@ -688,14 +688,14 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
         }
-        
+
         [WinFormsFact]
         public void RichTextBox_SelectionType_GetWithoutHandle_ReturnsExpected()
         {
             using var control = new RichTextBox();
             Assert.Equal(RichTextBoxSelectionTypes.Empty, control.SelectionType);
             Assert.True(control.IsHandleCreated);
-            
+
             // Call again.
             Assert.Equal(RichTextBoxSelectionTypes.Empty, control.SelectionType);
             Assert.True(control.IsHandleCreated);
@@ -718,7 +718,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            
+
             // Call again.
             Assert.Equal(RichTextBoxSelectionTypes.Empty, control.SelectionType);
             Assert.True(control.IsHandleCreated);
@@ -733,7 +733,7 @@ namespace System.Windows.Forms.Tests
             using var control = new RichTextBox();
             Assert.Equal(0, control.TextLength);
             Assert.True(control.IsHandleCreated);
-            
+
             // Call again.
             Assert.Equal(0, control.TextLength);
             Assert.True(control.IsHandleCreated);
@@ -756,7 +756,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            
+
             // Call again.
             Assert.Equal(0, control.TextLength);
             Assert.True(control.IsHandleCreated);

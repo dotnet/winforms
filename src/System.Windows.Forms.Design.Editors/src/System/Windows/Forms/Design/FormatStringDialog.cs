@@ -145,7 +145,7 @@ namespace System.Windows.Forms.Design
             }
             else
             {
-                // make General format type the default 
+                // make General format type the default
                 _formatControl1.FormatType = SR.BindingFormattingDialogFormatTypeNoFormatting;
             }
 
@@ -195,9 +195,9 @@ namespace System.Windows.Forms.Design
             _okButton.Text = SR.DataGridView_OK;
             _okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
             _okButton.Click += new EventHandler(okButton_Click);
-            // 
+            //
             // Form1
-            // 
+            //
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             AutoScaleDimensions = new Drawing.SizeF(6, 13);
             ClientSize = new Drawing.Size(396, 295);

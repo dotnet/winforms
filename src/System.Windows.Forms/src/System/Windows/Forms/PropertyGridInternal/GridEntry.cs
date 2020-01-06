@@ -146,7 +146,6 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     flags |= FLAG_FORCE_READONLY;
                 }
-
             }
             else
             {
@@ -299,7 +298,6 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 return parentPE.ComponentChangeService;
             }
-
         }
 
         /// <summary>
@@ -629,7 +627,6 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
 
                 return flags;
-
             }
             set
             {
@@ -648,7 +645,6 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
             set
             {
-
                 if (Disposed)
                 {
                     return;
@@ -1424,7 +1420,6 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     InternalExpanded = false;
                 }
-
             }
             else
             {
@@ -1750,7 +1745,6 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             try
             {
-
                 bool forceReadOnly = ForceReadOnly;
 
                 if (!forceReadOnly)
@@ -1763,7 +1757,6 @@ namespace System.Windows.Forms.PropertyGridInternal
                 //
                 if (TypeConverter.GetPropertiesSupported(this) || AlwaysAllowExpand)
                 {
-
                     // ask the tab if we have one.
                     //
                     PropertyDescriptorCollection props = null;
@@ -1807,7 +1800,6 @@ namespace System.Windows.Forms.PropertyGridInternal
                     //
                     if ((props == null || props.Count == 0) && objType != null && objType.IsArray && obj != null)
                     {
-
                         Array objArray = (Array)obj;
 
                         entries = new GridEntry[objArray.Length];
@@ -2132,7 +2124,6 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
             else
             { // Normal case -- no pseudo-tooltip for the label
-
 #if PBRS_PAINT_DEBUG
                 blank = Brushes.Red;
 #endif
@@ -2214,7 +2205,6 @@ namespace System.Windows.Forms.PropertyGridInternal
             // when Vistual style is enabled
             if (GridEntryHost.IsExplorerTreeSupported)
             {
-
                 // size of Explorer Tree style glyph (triangle) is different from +/- glyph,
                 // so when we change the visual style (such as changing Windows theme),
                 // we need to recaculate outlineRect
@@ -2228,7 +2218,6 @@ namespace System.Windows.Forms.PropertyGridInternal
             // draw tree-view glyphs as +/-
             else
             {
-
                 // size of Explorer Tree style glyph (triangle) is different from +/- glyph,
                 // so when we change the visual style (such as changing Windows theme),
                 // we need to recaculate outlineRect
@@ -2436,7 +2425,6 @@ namespace System.Windows.Forms.PropertyGridInternal
             // If we have text to paint, paint it
             if (strValue != null && strValue.Length > 0)
             {
-
                 Font f = GetFont(valueModified);
 
                 if (strValue.Length > maximumLengthOfPropertyString)
@@ -2603,7 +2591,6 @@ namespace System.Windows.Forms.PropertyGridInternal
             // are we in the label?
             if (x >= 0 && x <= labelWidth)
             {
-
                 // are we on the outline?
                 if (Expandable)
                 {
@@ -2886,7 +2873,6 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             if (childCollection != null)
             {
-
                 // check to see if the value has changed.
                 //
                 if (InternalExpanded && cacheItems != null && cacheItems.lastValue != null && cacheItems.lastValue != PropertyValue)
@@ -3458,7 +3444,6 @@ namespace System.Windows.Forms.PropertyGridInternal
             /// </summary>
             public override AccessibleObject GetFocused()
             {
-
                 if (owner.Focus)
                 {
                     return this;
@@ -3474,7 +3459,6 @@ namespace System.Windows.Forms.PropertyGridInternal
             /// </summary>
             public override AccessibleObject Navigate(AccessibleNavigation navdir)
             {
-
                 PropertyGridView.PropertyGridViewAccessibleObject parent =
                 (PropertyGridView.PropertyGridViewAccessibleObject)Parent;
 
@@ -3498,12 +3482,10 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
 
                 return null;
-
             }
 
             public override void Select(AccessibleSelection flags)
             {
-
                 // make sure we're on the right thread.
                 //
                 if (PropertyGridView.InvokeRequired)
@@ -3654,5 +3636,4 @@ namespace System.Windows.Forms.PropertyGridInternal
             NewChildCount = newCount;
         }
     }
-
 }

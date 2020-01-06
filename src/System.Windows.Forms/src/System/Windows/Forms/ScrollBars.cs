@@ -28,6 +28,5 @@ namespace System.Windows.Forms
         ///  Both horizontal and vertical scroll bars are shown.
         /// </summary>
         Both = 3,
-
     }
 }

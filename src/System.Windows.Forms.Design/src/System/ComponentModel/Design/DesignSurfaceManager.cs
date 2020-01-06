@@ -7,7 +7,7 @@ using System.Diagnostics;
 namespace System.ComponentModel.Design
 {
     /// <summary>
-    ///  A service container that supports "fixed" services.  Fixed 
+    ///  A service container that supports "fixed" services.  Fixed
     ///  services cannot be removed.
     /// </summary>
     public class DesignSurfaceManager : IServiceProvider, IDisposable
@@ -68,9 +68,9 @@ namespace System.ComponentModel.Design
             }
             set
             {
-                // If we are providing IDesignerEventService, then we are responsible for 
-                // notifying it of new designers coming into place.  If we aren't 
-                // the ones providing the event service, then whoever is providing 
+                // If we are providing IDesignerEventService, then we are responsible for
+                // notifying it of new designers coming into place.  If we aren't
+                // the ones providing the event service, then whoever is providing
                 // it will be responsible for updating it when new designers
                 // are created.
                 if (EventService is DesignerEventService eventService)
@@ -104,8 +104,8 @@ namespace System.ComponentModel.Design
         private IDesignerEventService EventService => GetService(typeof(IDesignerEventService)) as IDesignerEventService;
 
         /// <summary>
-        ///  Provides access to the designer application's 
-        ///  ServiceContainer. This property allows 
+        ///  Provides access to the designer application's
+        ///  ServiceContainer. This property allows
         ///  inheritors to add their own services.
         /// </summary>
         protected ServiceContainer ServiceContainer
@@ -269,9 +269,9 @@ namespace System.ComponentModel.Design
         {
             DesignSurface surface = CreateDesignSurfaceCore(this);
 
-            // If we are providing IDesignerEventService, then we are responsible for 
-            // notifying it of new designers coming into place.  If we aren't 
-            // the ones providing the event service, then whoever is providing 
+            // If we are providing IDesignerEventService, then we are responsible for
+            // notifying it of new designers coming into place.  If we aren't
+            // the ones providing the event service, then whoever is providing
             // it will be responsible for updating it when new designers are created.
             if (GetService(typeof(IDesignerEventService)) is DesignerEventService eventService)
             {
@@ -283,8 +283,8 @@ namespace System.ComponentModel.Design
 
         /// <summary>
         ///  Public method to create a design surface.  This method
-        ///  takes an additional service provider.  This service 
-        ///  provider will be combined with the service provider 
+        ///  takes an additional service provider.  This service
+        ///  provider will be combined with the service provider
         ///  already contained within DesignSurfaceManager.  Service
         ///  requests will go to this provider first, and then bubble
         ///  up to the service provider owned by DesignSurfaceManager.
@@ -301,9 +301,9 @@ namespace System.ComponentModel.Design
 
             DesignSurface surface = CreateDesignSurfaceCore(mergedProvider);
 
-            // If we are providing IDesignerEventService, then we are responsible for 
-            // notifying it of new designers coming into place.  If we aren't 
-            // the ones providing the event service, then whoever is providing 
+            // If we are providing IDesignerEventService, then we are responsible for
+            // notifying it of new designers coming into place.  If we aren't
+            // the ones providing the event service, then whoever is providing
             // it will be responsible for updating it when new designers are created.
             DesignerEventService eventService = GetService(typeof(IDesignerEventService)) as DesignerEventService;
             if (eventService != null)
@@ -315,7 +315,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///  Creates an instance of a design surface.  This can be 
+        ///  Creates an instance of a design surface.  This can be
         ///  overridden to provide a derived version of DesignSurface.
         /// </summary>
         protected virtual DesignSurface CreateDesignSurfaceCore(IServiceProvider parentProvider) => new DesignSurface(parentProvider);
@@ -363,7 +363,6 @@ namespace System.ComponentModel.Design
         /// </returns>
         private object OnCreateService(IServiceContainer container, Type serviceType)
         {
-
             if (serviceType == typeof(IDesignerEventService))
             {
                 return new DesignerEventService();
@@ -382,7 +381,6 @@ namespace System.ComponentModel.Design
             Debug.Assert(_activeDesignSurfaceChanged != null, "Should have detached this event handler.");
             if (_activeDesignSurfaceChanged != null)
             {
-
                 DesignSurface newSurface = null;
                 DesignSurface oldSurface = null;
 
@@ -447,7 +445,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///  Simple service provider that merges two providers together.  
+        ///  Simple service provider that merges two providers together.
         /// </summary>
         private sealed class MergedServiceProvider : IServiceProvider
         {
