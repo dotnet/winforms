@@ -344,13 +344,7 @@ namespace System.Windows.Forms
         NIN_BALLOONTIMEOUT = (WindowMessages.WM_USER + 4),
         NIN_BALLOONUSERCLICK = (WindowMessages.WM_USER + 5),
         NFR_ANSI = 1,
-        NFR_UNICODE = 2,
-        NM_CLICK = ((0 - 0) - 2),
-        NM_DBLCLK = ((0 - 0) - 3),
-        NM_RCLICK = ((0 - 0) - 5),
-        NM_RDBLCLK = ((0 - 0) - 6),
-        NM_CUSTOMDRAW = ((0 - 0) - 12),
-        NM_RELEASEDCAPTURE = ((0 - 0) - 16);
+        NFR_UNICODE = 2;
 
         public const int PRF_CHECKVISIBLE = 0x00000001,
         PRF_NONCLIENT = 0x00000002,

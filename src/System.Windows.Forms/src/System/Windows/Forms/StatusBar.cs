@@ -1002,7 +1002,7 @@ namespace System.Windows.Forms
             OnDrawItem(new StatusBarDrawItemEventArgs(g, Font, dis->rcItem, (int)dis->itemID, DrawItemState.None, panel, ForeColor, BackColor));
         }
 
-        private void WmNotifyNMClick(User32.NMHDR note)
+        private unsafe void WmNotifyNMClick(User32.NMHDR* note)
         {
             if (!showPanels)
             {
@@ -1027,21 +1027,21 @@ namespace System.Windows.Forms
             {
                 MouseButtons button = MouseButtons.Left;
                 int clicks = 0;
-                switch (note.code)
+                switch ((ComCtl32.NM)note->code)
                 {
-                    case NativeMethods.NM_CLICK:
+                    case ComCtl32.NM.CLICK:
                         button = MouseButtons.Left;
                         clicks = 1;
                         break;
-                    case NativeMethods.NM_RCLICK:
+                    case ComCtl32.NM.RCLICK:
                         button = MouseButtons.Right;
                         clicks = 1;
                         break;
-                    case NativeMethods.NM_DBLCLK:
+                    case ComCtl32.NM.DBLCLK:
                         button = MouseButtons.Left;
                         clicks = 2;
                         break;
-                    case NativeMethods.NM_RDBLCLK:
+                    case ComCtl32.NM.RDBLCLK:
                         button = MouseButtons.Right;
                         clicks = 2;
                         break;
@@ -1126,7 +1126,7 @@ namespace System.Windows.Forms
         ///  the preProcessMessage function. Inheriting controls should call base.wndProc
         ///  for any messages that they don't handle.
         /// </summary>
-        protected override void WndProc(ref Message m)
+        protected unsafe override void WndProc(ref Message m)
         {
             switch (m.Msg)
             {
@@ -1138,13 +1138,13 @@ namespace System.Windows.Forms
                     break;
                 case WindowMessages.WM_NOTIFY:
                 case WindowMessages.WM_NOTIFY + WindowMessages.WM_REFLECT:
-                    User32.NMHDR note = (User32.NMHDR)m.GetLParam(typeof(User32.NMHDR));
-                    switch (note.code)
+                    User32.NMHDR* note = (User32.NMHDR*)m.LParam;
+                    switch ((ComCtl32.NM)note->code)
                     {
-                        case NativeMethods.NM_CLICK:
-                        case NativeMethods.NM_RCLICK:
-                        case NativeMethods.NM_DBLCLK:
-                        case NativeMethods.NM_RDBLCLK:
+                        case ComCtl32.NM.CLICK:
+                        case ComCtl32.NM.RCLICK:
+                        case ComCtl32.NM.DBLCLK:
+                        case ComCtl32.NM.RDBLCLK:
                             WmNotifyNMClick(note);
                             break;
                         default:

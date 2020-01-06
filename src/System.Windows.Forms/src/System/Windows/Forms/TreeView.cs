@@ -3038,7 +3038,7 @@ namespace System.Windows.Forms
             User32.NMHDR* nmhdr = (User32.NMHDR*)m.LParam;
 
             // Custom draw code is handled separately.
-            if ((nmhdr->code == NativeMethods.NM_CUSTOMDRAW))
+            if ((nmhdr->code == (int)ComCtl32.NM.CUSTOMDRAW))
             {
                 CustomDraw(ref m);
             }
@@ -3072,8 +3072,8 @@ namespace System.Windows.Forms
                     case NativeMethods.TVN_ENDLABELEDIT:
                         m.Result = TvnEndLabelEdit(*(ComCtl32.NMTVDISPINFOW*)m.LParam);
                         break;
-                    case NativeMethods.NM_CLICK:
-                    case NativeMethods.NM_RCLICK:
+                    case (int)ComCtl32.NM.CLICK:
+                    case (int)ComCtl32.NM.RCLICK:
                         MouseButtons button = MouseButtons.Left;
                         Point pos = PointToClient(Cursor.Position);
                         var tvhip = new ComCtl32.TVHITTESTINFO
@@ -3081,17 +3081,17 @@ namespace System.Windows.Forms
                             pt = pos
                         };
                         IntPtr hnode = User32.SendMessageW(this, (User32.WindowMessage)NativeMethods.TVM_HITTEST, IntPtr.Zero, ref tvhip);
-                        if (nmtv->nmhdr.code != NativeMethods.NM_CLICK
+                        if (nmtv->nmhdr.code != (int)ComCtl32.NM.CLICK
                                     || (tvhip.flags & ComCtl32.TVHT.ONITEM) != 0)
                         {
-                            button = nmtv->nmhdr.code == NativeMethods.NM_CLICK
+                            button = nmtv->nmhdr.code == (int)ComCtl32.NM.CLICK
                                 ? MouseButtons.Left : MouseButtons.Right;
                         }
 
                         // The treeview's WndProc doesn't get the WM_LBUTTONUP messages when
                         // LBUTTONUP happens on TVHT_ONITEM. This is a comctl quirk.
                         // We work around that by calling OnMouseUp here.
-                        if (nmtv->nmhdr.code != NativeMethods.NM_CLICK
+                        if (nmtv->nmhdr.code != (int)ComCtl32.NM.CLICK
                             || (tvhip.flags & ComCtl32.TVHT.ONITEM) != 0 || FullRowSelect)
                         {
                             if (hnode != IntPtr.Zero && !ValidationCancelled)
@@ -3102,7 +3102,7 @@ namespace System.Windows.Forms
 
                             }
                         }
-                        if (nmtv->nmhdr.code == NativeMethods.NM_RCLICK)
+                        if (nmtv->nmhdr.code == (int)ComCtl32.NM.RCLICK)
                         {
                             TreeNode treeNode = NodeFromHandle(hnode);
                             if (treeNode != null && treeNode.ContextMenuStrip != null)
@@ -3120,7 +3120,7 @@ namespace System.Windows.Forms
 
                         if (!treeViewState[TREEVIEWSTATE_mouseUpFired])
                         {
-                            if (nmtv->nmhdr.code != NativeMethods.NM_CLICK
+                            if (nmtv->nmhdr.code != (int)ComCtl32.NM.CLICK
                             || (tvhip.flags & ComCtl32.TVHT.ONITEM) != 0)
                             {
                                 // The treeview's WndProc doesn't get the WM_LBUTTONUP messages when

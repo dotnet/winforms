@@ -5734,7 +5734,7 @@ namespace System.Windows.Forms
             User32.NMHDR* nmhdr = (User32.NMHDR*)m.LParam;
 
             // column header custom draw message handling
-            if (nmhdr->code == NativeMethods.NM_CUSTOMDRAW && OwnerDraw)
+            if (nmhdr->code == (int)ComCtl32.NM.CUSTOMDRAW && OwnerDraw)
             {
                 try
                 {
@@ -5790,7 +5790,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            if (nmhdr->code == NativeMethods.NM_RELEASEDCAPTURE && listViewState[LISTVIEWSTATE_columnClicked])
+            if (nmhdr->code == (int)ComCtl32.NM.RELEASEDCAPTURE && listViewState[LISTVIEWSTATE_columnClicked])
             {
                 listViewState[LISTVIEWSTATE_columnClicked] = false;
                 OnColumnClick(new ColumnClickEventArgs(columnIndex));
@@ -6121,7 +6121,7 @@ namespace System.Windows.Forms
 
             switch (nmhdr->code)
             {
-                case NativeMethods.NM_CUSTOMDRAW:
+                case (int)ComCtl32.NM.CUSTOMDRAW:
                     CustomDraw(ref m);
                     break;
 
@@ -6285,15 +6285,15 @@ namespace System.Windows.Forms
                         break;
                     }
 
-                case NativeMethods.NM_CLICK:
+                case (int)ComCtl32.NM.CLICK:
                     WmNmClick(ref m);
                     // FALL THROUGH //
-                    goto case NativeMethods.NM_RCLICK;
+                    goto case (int)ComCtl32.NM.RCLICK;
 
-                case NativeMethods.NM_RCLICK:
+                case (int)ComCtl32.NM.RCLICK:
                     int displayIndex = GetIndexOfClickedItem();
 
-                    MouseButtons button = nmhdr->code == NativeMethods.NM_CLICK ? MouseButtons.Left : MouseButtons.Right;
+                    MouseButtons button = nmhdr->code == (int)ComCtl32.NM.CLICK ? MouseButtons.Left : MouseButtons.Right;
                     Point pos = Cursor.Position;
                     pos = PointToClient(pos);
 
@@ -6309,12 +6309,12 @@ namespace System.Windows.Forms
                     }
                     break;
 
-                case NativeMethods.NM_DBLCLK:
+                case (int)ComCtl32.NM.DBLCLK:
                     WmNmDblClick(ref m);
                     // FALL THROUGH //
-                    goto case NativeMethods.NM_RDBLCLK;
+                    goto case (int)ComCtl32.NM.RDBLCLK;
 
-                case NativeMethods.NM_RDBLCLK:
+                case (int)ComCtl32.NM.RDBLCLK:
                     int index = GetIndexOfClickedItem();
                     if (index != -1)
                     {
