@@ -931,15 +931,6 @@ namespace System.Windows.Forms
             public IntPtr lpData = IntPtr.Zero;
         }
 
-        [StructLayout(LayoutKind.Sequential)]
-        public class NMHEADER
-        {
-            public User32.NMHDR nmhdr;
-            public int iItem = 0;
-            public int iButton = 0;
-            public IntPtr pItem = IntPtr.Zero;    // HDITEM*
-        }
-
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
         public unsafe struct CHARFORMATW
         {

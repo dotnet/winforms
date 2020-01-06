@@ -2459,16 +2459,15 @@ namespace System.Windows.Forms
             }
         }
 
-        private int CompensateColumnHeaderResize(Message m, bool columnResizeCancelled)
+        private unsafe int CompensateColumnHeaderResize(Message m, bool columnResizeCancelled)
         {
             if (ComctlSupportsVisualStyles &&
                 View == View.Details &&
                 !columnResizeCancelled &&
                 Items.Count > 0)
             {
-                NativeMethods.NMHEADER header = (NativeMethods.NMHEADER)m.GetLParam(typeof(NativeMethods.NMHEADER));
-
-                return CompensateColumnHeaderResize(header.iItem, columnResizeCancelled);
+                NMHEADERW* header = (NMHEADERW*)m.LParam;
+                return CompensateColumnHeaderResize(header->iItem, columnResizeCancelled);
             }
             else
             {
@@ -5745,10 +5744,10 @@ namespace System.Windows.Forms
                 newWidthForColumnWidthChangingCancelled = -1;
                 listViewState1[LISTVIEWSTATE1_cancelledColumnWidthChanging] = false;
 
-                NativeMethods.NMHEADER nmheader = (NativeMethods.NMHEADER)m.GetLParam(typeof(NativeMethods.NMHEADER));
-                if (columnHeaders != null && columnHeaders.Length > nmheader.iItem)
+                NMHEADERW* nmheader = (NMHEADERW*)m.LParam;
+                if (columnHeaders != null && columnHeaders.Length > nmheader->iItem)
                 {
-                    columnHeaderClicked = columnHeaders[nmheader.iItem];
+                    columnHeaderClicked = columnHeaders[nmheader->iItem];
                     columnHeaderClickedWidth = columnHeaderClicked.Width;
                 }
                 else
@@ -5760,21 +5759,18 @@ namespace System.Windows.Forms
 
             if (nmhdr->code == NativeMethods.HDN_ITEMCHANGING)
             {
-                NativeMethods.NMHEADER nmheader = (NativeMethods.NMHEADER)m.GetLParam(typeof(NativeMethods.NMHEADER));
+                NMHEADERW* nmheader = (NMHEADERW*)m.LParam;
 
-                if (columnHeaders != null && nmheader.iItem < columnHeaders.Length &&
+                if (columnHeaders != null && nmheader->iItem < columnHeaders.Length &&
                     (listViewState[LISTVIEWSTATE_headerControlTracking] || listViewState[LISTVIEWSTATE_headerDividerDblClick]))
                 {
-                    //
-
-                    HDITEMW hdItem = Marshal.PtrToStructure<HDITEMW>(nmheader.pItem);
-                    int newColumnWidth = ((hdItem.mask & HDI.WIDTH) != 0) ? hdItem.cxy : -1;
-                    ColumnWidthChangingEventArgs colWidthChanging = new ColumnWidthChangingEventArgs(nmheader.iItem, newColumnWidth);
+                    int newColumnWidth = ((nmheader->pitem->mask & HDI.WIDTH) != 0) ? nmheader->pitem->cxy : -1;
+                    ColumnWidthChangingEventArgs colWidthChanging = new ColumnWidthChangingEventArgs(nmheader->iItem, newColumnWidth);
                     OnColumnWidthChanging(colWidthChanging);
                     m.Result = (IntPtr)(colWidthChanging.Cancel ? 1 : 0);
                     if (colWidthChanging.Cancel)
                     {
-                        hdItem.cxy = colWidthChanging.NewWidth;
+                        nmheader->pitem->cxy = colWidthChanging.NewWidth;
 
                         // We are called inside HDN_DIVIDERDBLCLICK.
                         // Turn off the compensation that our processing of HDN_DIVIDERDBLCLICK would otherwise add.
@@ -5799,13 +5795,13 @@ namespace System.Windows.Forms
             if ((nmhdr->code == NativeMethods.HDN_ITEMCHANGED) &&
                 !listViewState[LISTVIEWSTATE_headerControlTracking])
             {
-                NativeMethods.NMHEADER nmheader = (NativeMethods.NMHEADER)m.GetLParam(typeof(NativeMethods.NMHEADER));
-                if (columnHeaders != null && nmheader.iItem < columnHeaders.Length)
+                NMHEADERW* nmheader = (NMHEADERW*)m.LParam;
+                if (columnHeaders != null && nmheader->iItem < columnHeaders.Length)
                 {
-                    int w = columnHeaders[nmheader.iItem].Width;
+                    int w = columnHeaders[nmheader->iItem].Width;
 
                     if (columnHeaderClicked == null ||
-                        (columnHeaderClicked == columnHeaders[nmheader.iItem] &&
+                        (columnHeaderClicked == columnHeaders[nmheader->iItem] &&
                          columnHeaderClickedWidth != -1 &&
                          columnHeaderClickedWidth != w))
                     {
@@ -5817,12 +5813,12 @@ namespace System.Windows.Forms
                         {
                             if (CompensateColumnHeaderResize(m, listViewState[LISTVIEWSTATE_columnResizeCancelled]) == 0)
                             {
-                                OnColumnWidthChanged(new ColumnWidthChangedEventArgs(nmheader.iItem));
+                                OnColumnWidthChanged(new ColumnWidthChangedEventArgs(nmheader->iItem));
                             }
                         }
                         else
                         {
-                            OnColumnWidthChanged(new ColumnWidthChangedEventArgs(nmheader.iItem));
+                            OnColumnWidthChanged(new ColumnWidthChangedEventArgs(nmheader->iItem));
                         }
                     }
                 }
@@ -5862,10 +5858,10 @@ namespace System.Windows.Forms
                     m.Result = (IntPtr)1;
                     if (newWidthForColumnWidthChangingCancelled != -1)
                     {
-                        NativeMethods.NMHEADER nmheader = (NativeMethods.NMHEADER)m.GetLParam(typeof(NativeMethods.NMHEADER));
-                        if (columnHeaders != null && columnHeaders.Length > nmheader.iItem)
+                        NMHEADERW* nmheader = (NMHEADERW*)m.LParam;
+                        if (columnHeaders != null && columnHeaders.Length > nmheader->iItem)
                         {
-                            columnHeaders[nmheader.iItem].Width = newWidthForColumnWidthChangingCancelled;
+                            columnHeaders[nmheader->iItem].Width = newWidthForColumnWidthChangingCancelled;
                         }
                     }
 
@@ -5883,14 +5879,14 @@ namespace System.Windows.Forms
 
             if (nmhdr->code == NativeMethods.HDN_ENDDRAG)
             {
-                NativeMethods.NMHEADER header = (NativeMethods.NMHEADER)m.GetLParam(typeof(NativeMethods.NMHEADER));
-                if (header.pItem != IntPtr.Zero)
+                NMHEADERW* header = (NMHEADERW*)m.LParam;
+                if (header->pitem != null)
                 {
-                    HDITEMW hdItem = Marshal.PtrToStructure<HDITEMW>(header.pItem);
-                    if ((hdItem.mask & HDI.ORDER) == HDI.ORDER)
+                    if ((header->pitem->mask & HDI.ORDER) == HDI.ORDER)
                     {
-                        int from = Columns[header.iItem].DisplayIndex;
-                        int to = hdItem.iOrder;
+                        int from = Columns[header->iItem].DisplayIndex;
+                        int to = header->pitem->iOrder;
+
                         // check this
                         if (from == to)
                         {
@@ -5902,9 +5898,10 @@ namespace System.Windows.Forms
                         {
                             return false;
                         }
-                        ColumnReorderedEventArgs chrevent = new ColumnReorderedEventArgs(from,
-                                                                                         to,
-                                                                                         Columns[header.iItem]);
+                        ColumnReorderedEventArgs chrevent = new ColumnReorderedEventArgs(
+                            from,
+                            to,
+                            Columns[header->iItem]);
                         OnColumnReordered(chrevent);
                         if (chrevent.Cancel)
                         {
@@ -5981,10 +5978,10 @@ namespace System.Windows.Forms
                     // If the column resize was cancelled then apply the NewWidth supplied by the user.
                     if (newWidthForColumnWidthChangingCancelled != -1)
                     {
-                        NativeMethods.NMHEADER nmheader = (NativeMethods.NMHEADER)m.GetLParam(typeof(NativeMethods.NMHEADER));
-                        if (columnHeaders != null && columnHeaders.Length > nmheader.iItem)
+                        NMHEADERW* nmheader = (NMHEADERW*)m.LParam;
+                        if (columnHeaders != null && columnHeaders.Length > nmheader->iItem)
                         {
-                            columnHeaders[nmheader.iItem].Width = newWidthForColumnWidthChangingCancelled;
+                            columnHeaders[nmheader->iItem].Width = newWidthForColumnWidthChangingCancelled;
                         }
                     }
 
@@ -5998,8 +5995,8 @@ namespace System.Windows.Forms
                     if (compensateForColumnResize != 0)
                     {
 #if DEBUG
-                        NativeMethods.NMHEADER header = (NativeMethods.NMHEADER)m.GetLParam(typeof(NativeMethods.NMHEADER));
-                        Debug.Assert(header.iItem == 0, "we only need to compensate for the first column resize");
+                        NMHEADERW* header = (NMHEADERW*)m.LParam;
+                        Debug.Assert(header->iItem == 0, "we only need to compensate for the first column resize");
                         Debug.Assert(columnHeaders.Length > 0, "there should be a column that we need to compensate for");
 #endif
 
