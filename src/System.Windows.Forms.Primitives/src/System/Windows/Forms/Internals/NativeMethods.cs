@@ -134,9 +134,6 @@ namespace System.Windows.Forms
         EC_LEFTMARGIN = 0x0001,
         EC_RIGHTMARGIN = 0x0002;
 
-        public const int ERROR_INVALID_HANDLE = 6;
-        public const int ERROR_CLASS_ALREADY_EXISTS = 1410;
-
         public const int FRERR_BUFFERLENGTHZERO = 0x4001;
         public const int FADF_BSTR = (0x100);
         public const int FADF_UNKNOWN = (0x200);
