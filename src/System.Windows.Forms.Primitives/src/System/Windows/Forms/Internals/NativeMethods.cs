@@ -142,19 +142,6 @@ namespace System.Windows.Forms
 
         public const int MEMBERID_NIL = (-1),
         ERROR_INSUFFICIENT_BUFFER = 122, //https://msdn.microsoft.com/en-us/library/windows/desktop/ms681382(v=vs.85).aspx
-        MIIM_STATE = 0x00000001,
-        MIIM_ID = 0x00000002,
-        MIIM_SUBMENU = 0x00000004,
-        MIIM_TYPE = 0x00000010,
-        MIIM_DATA = 0x00000020,
-        MIIM_STRING = 0x00000040,
-        MIIM_BITMAP = 0x00000080,
-        MIIM_FTYPE = 0x00000100,
-        MFS_DISABLED = 0x00000003,
-        MFT_MENUBREAK = 0x00000040,
-        MFT_SEPARATOR = 0x00000800,
-        MFT_RIGHTORDER = 0x00002000,
-        MFT_RIGHTJUSTIFY = 0x00004000,
         MDIS_ALLCHILDSTYLES = 0x0001,
         MDITILE_VERTICAL = 0x0000,
         MDITILE_HORIZONTAL = 0x0001,
@@ -597,42 +584,6 @@ namespace System.Windows.Forms
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
             public string szInfoTitle;
             public int dwInfoFlags;
-        }
-
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-        public class MENUITEMINFO_T
-        {
-            public int cbSize = Marshal.SizeOf<MENUITEMINFO_T>();
-            public int fMask;
-            public int fType;
-            public int fState;
-            public int wID;
-            public IntPtr hSubMenu;
-            public IntPtr hbmpChecked;
-            public IntPtr hbmpUnchecked;
-            public IntPtr dwItemData;
-            public string dwTypeData;
-            public int cch;
-        }
-
-        // This version allows you to read the string that's stuffed
-        // in the native menu item.  You have to do the marshaling on
-        // your own though.
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-        public class MENUITEMINFO_T_RW
-        {
-            public int cbSize = Marshal.SizeOf<MENUITEMINFO_T_RW>();
-            public int fMask = 0;
-            public int fType = 0;
-            public int fState = 0;
-            public int wID = 0;
-            public IntPtr hSubMenu = IntPtr.Zero;
-            public IntPtr hbmpChecked = IntPtr.Zero;
-            public IntPtr hbmpUnchecked = IntPtr.Zero;
-            public IntPtr dwItemData = IntPtr.Zero;
-            public IntPtr dwTypeData = IntPtr.Zero;
-            public int cch = 0;
-            public IntPtr hbmpItem = IntPtr.Zero;  // requires WINVER > 5
         }
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]

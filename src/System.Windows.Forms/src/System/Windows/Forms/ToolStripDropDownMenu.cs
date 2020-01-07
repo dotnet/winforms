@@ -257,7 +257,7 @@ namespace System.Windows.Forms
         ///  targetWindow is the window to send WM_COMMAND, WM_SYSCOMMAND to
         ///  hmenu is a handle to the native menu.
         /// </summary>
-        internal static ToolStripDropDownMenu FromHMenu(IntPtr hmenu, IWin32Window targetWindow)
+        internal unsafe static ToolStripDropDownMenu FromHMenu(IntPtr hmenu, IWin32Window targetWindow)
         {
             ToolStripDropDownMenu managedDropDown = new ToolStripDropDownMenu();
             managedDropDown.SuspendLayout();
@@ -271,15 +271,14 @@ namespace System.Windows.Forms
             for (int i = 0; i < count; i++)
             {
                 // peek at the i'th item.
-                NativeMethods.MENUITEMINFO_T_RW info = new NativeMethods.MENUITEMINFO_T_RW
+                var info = new User32.MENUITEMINFOW
                 {
-                    cbSize = Marshal.SizeOf<NativeMethods.MENUITEMINFO_T_RW>(),
-                    fMask = NativeMethods.MIIM_FTYPE,
-                    fType = NativeMethods.MIIM_FTYPE
+                    cbSize = (uint)sizeof(User32.MENUITEMINFOW),
+                    fMask = User32.MIIM.FTYPE
                 };
-                UnsafeNativeMethods.GetMenuItemInfo(hmenu, i, /*fByPosition=*/ true, info);
+                User32.GetMenuItemInfoW(hmenu, i, /*fByPosition=*/ BOOL.TRUE, ref info);
 
-                if (info.fType == NativeMethods.MFT_SEPARATOR)
+                if (info.fType == User32.MFT.SEPARATOR)
                 {
                     // its a separator.
                     itemToAdd = new ToolStripSeparator();
@@ -287,27 +286,25 @@ namespace System.Windows.Forms
                 else
                 {
                     // its a menu item... lets fish out the command id
-                    info = new NativeMethods.MENUITEMINFO_T_RW
+                    info = new User32.MENUITEMINFOW
                     {
-                        cbSize = Marshal.SizeOf<NativeMethods.MENUITEMINFO_T_RW>(),
-                        fMask = NativeMethods.MIIM_ID,
-                        fType = NativeMethods.MIIM_ID
+                        cbSize = (uint)sizeof(User32.MENUITEMINFOW),
+                        fMask = User32.MIIM.ID
                     };
 
-                    UnsafeNativeMethods.GetMenuItemInfo(hmenu, i, /*fByPosition=*/ true, info);
+                    User32.GetMenuItemInfoW(hmenu, i, /*fByPosition=*/ BOOL.TRUE, ref info);
 
                     // create the managed object - toolstripmenu item knows how to grok hmenu for information.
                     itemToAdd = new ToolStripMenuItem(hmenu, info.wID, targetWindow);
 
                     // if there is a submenu fetch it.
-                    info = new NativeMethods.MENUITEMINFO_T_RW
+                    info = new User32.MENUITEMINFOW
                     {
-                        cbSize = Marshal.SizeOf<NativeMethods.MENUITEMINFO_T_RW>(),
-                        fMask = NativeMethods.MIIM_SUBMENU,
-                        fType = NativeMethods.MIIM_SUBMENU
+                        cbSize = (uint)sizeof(User32.MENUITEMINFOW),
+                        fMask = User32.MIIM.SUBMENU
                     };
 
-                    UnsafeNativeMethods.GetMenuItemInfo(hmenu, i, /*fByPosition=*/ true, info);
+                    User32.GetMenuItemInfoW(hmenu, i, /*fByPosition=*/ BOOL.TRUE, ref info);
 
                     if (info.hSubMenu != IntPtr.Zero)
                     {
