@@ -1678,7 +1678,6 @@ namespace System.Windows.Forms.Design
                         // terminate the drag. TabControl loses shortcut menu options after adding ActiveX control.
                         OnMouseDragEnd(true);
                     }
-
                 }
                 return;
             }
@@ -1884,7 +1883,6 @@ namespace System.Windows.Forms.Design
                         else if (button == MouseButtons.Left)
                         {
                             OnMouseDragBegin(x, y);
-
                         }
                         else if (button == MouseButtons.Right)
                         {

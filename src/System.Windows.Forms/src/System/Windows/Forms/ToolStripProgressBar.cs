@@ -178,7 +178,6 @@ namespace System.Windows.Forms
         {
             get
             {
-
                 return ProgressBar.RightToLeftLayout;
             }
 
@@ -312,7 +311,6 @@ namespace System.Windows.Forms
                 bar.RightToLeftLayoutChanged -= new EventHandler(HandleRightToLeftLayoutChanged);
             }
             base.OnUnsubscribeControlEvents(control);
-
         }
 
         /// <summary>

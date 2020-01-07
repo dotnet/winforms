@@ -78,7 +78,6 @@ namespace System.Windows.Forms
                 {
                     return null;
                 }
-
             }
         }
 
@@ -113,7 +112,6 @@ namespace System.Windows.Forms
                 owner.OnItemAdded(new ToolStripItemEventArgs(value));
             }
             return retVal;
-
         }
 
         public void AddRange(ToolStripItem[] toolStripItems)
@@ -159,7 +157,6 @@ namespace System.Windows.Forms
                     Add(toolStripItems[i]);
                 }
             }
-
         }
 
         public bool Contains(ToolStripItem value)
@@ -237,7 +234,6 @@ namespace System.Windows.Forms
                     throw new NotSupportedException(SR.ToolStripItemCircularReference);
                 }
             }
-
         }
 
         /// <summary>
@@ -351,7 +347,6 @@ namespace System.Windows.Forms
                 owner.OnItemAddedInternal(value);
                 owner.OnItemAdded(new ToolStripItemEventArgs(value));
             }
-
         }
 
         public int IndexOf(ToolStripItem value)
@@ -494,7 +489,6 @@ namespace System.Windows.Forms
                 }
             }
             Add(value);
-
         }
 
         internal void MoveItem(int index, ToolStripItem value)
@@ -521,14 +515,12 @@ namespace System.Windows.Forms
                 }
             }
             Insert(index, value);
-
         }
 
         private void SetOwner(ToolStripItem item)
         {
             if (itemsCollection)
             {
-
                 if (item != null)
                 {
                     if (item.Owner != null)
@@ -544,8 +536,6 @@ namespace System.Windows.Forms
                 }
             }
         }
-
     }
-
 }
 

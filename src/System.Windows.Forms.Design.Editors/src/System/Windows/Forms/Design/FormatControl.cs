@@ -456,7 +456,6 @@ namespace System.Windows.Forms.Design
             {
                 fsd.FormatControlFinishedLoading();
             }
-
         }
 
         private class DateTimeFormatsListBoxItem
@@ -1273,7 +1272,6 @@ namespace System.Windows.Forms.Design
             {
                 return SR.BindingFormattingDialogFormatTypeCustom;
             }
-
         }
 
         private void nullValueTextBox_TextChanged(object sender, EventArgs e)

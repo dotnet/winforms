@@ -104,7 +104,6 @@ namespace System.Windows.Forms
             get
             {
                 return SplitButtonButton.Pressed;
-
             }
         }
 
@@ -195,7 +194,6 @@ namespace System.Windows.Forms
             {
                 return DropDown.Visible != true;
             }
-
         }
 
         internal override Rectangle DropDownButtonArea
@@ -213,7 +211,6 @@ namespace System.Windows.Forms
             {
                 return dropDownButtonBounds;
             }
-
         }
         /// <summary>
         ///  Summary of DropDownButtonBounds.
@@ -313,7 +310,7 @@ namespace System.Windows.Forms
         }
         /// <summary>
         ///  Summary of SplitButtonButtonLayout.
-        /// </summary>	
+        /// </summary>
         internal ToolStripItemInternalLayout SplitButtonButtonLayout
         {
             get
@@ -372,7 +369,7 @@ namespace System.Windows.Forms
         }
         /// <summary>
         ///  Summary of CalculateLayout.
-        /// </summary>	
+        /// </summary>
         private void CalculateLayout()
         {
             // Figure out where the DropDown image goes.
@@ -401,12 +398,10 @@ namespace System.Windows.Forms
                 // the split button goes on the right.
                 splitButtonButtonBounds.Offset(DropDownButtonWidth + splitterWidth, 0);
                 splitterBounds = new Rectangle(dropDownButtonBounds.Right, dropDownButtonBounds.Top, splitterWidth, dropDownButtonBounds.Height);
-
             }
 
             SplitButtonButton.SetBounds(splitButtonButtonBounds);
             SetDropDownButtonBounds(dropDownButtonBounds);
-
         }
 
         protected override AccessibleObject CreateAccessibilityInstance()
@@ -425,7 +420,6 @@ namespace System.Windows.Forms
             // whenever the master layout is invalidated - invalidate the splitbuttonbutton layout.
             splitButtonButtonLayout = null;
             return new ToolStripItemInternalLayout(this);
-
         }
 
         public override Size GetPreferredSize(Size constrainingSize)
@@ -437,7 +431,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Summary of InvalidateSplitButtonLayout.
-        /// </summary>	
+        /// </summary>
         private void InvalidateSplitButtonLayout()
         {
             splitButtonButtonLayout = null;
@@ -501,7 +495,6 @@ namespace System.Windows.Forms
                     eh(this, e);
                 }
             }
-
         }
 
         /// <summary>
@@ -513,7 +506,6 @@ namespace System.Windows.Forms
             {
                 if (e.Button == MouseButtons.Left)
                 {
-
                     if (!DropDown.Visible)
                     {
                         Debug.Assert(ParentInternal != null, "Parent is null here, not going to get accurate ID");
@@ -526,7 +518,6 @@ namespace System.Windows.Forms
             {
                 SplitButtonButton.Push(true);
             }
-
         }
 
         /// <summary>
@@ -587,7 +578,6 @@ namespace System.Windows.Forms
                     OnButtonClick(EventArgs.Empty);
                 }
             }
-
         }
         protected override void OnMouseLeave(EventArgs e)
         {
@@ -727,7 +717,6 @@ namespace System.Windows.Forms
 
             public override Image Image
             {
-
                 get
                 {
                     if ((owner.DisplayStyle & ToolStripItemDisplayStyle.Image) == ToolStripItemDisplayStyle.Image)
@@ -749,7 +738,6 @@ namespace System.Windows.Forms
             {
                 get
                 {
-
                     if (owner != null)
                     {
                         return owner.Selected;
@@ -776,7 +764,6 @@ namespace System.Windows.Forms
                     // do nothing
                 }
             }
-
         }
 
         /// <summary>

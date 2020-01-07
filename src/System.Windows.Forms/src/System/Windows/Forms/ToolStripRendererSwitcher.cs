@@ -36,7 +36,6 @@ namespace System.Windows.Forms
             {
                 OnControlVisibleChanged(owner, EventArgs.Empty);
             }
-
         }
 
         public ToolStripRenderer Renderer
@@ -56,7 +55,6 @@ namespace System.Windows.Forms
                     Renderer = ToolStripManager.CreateRenderer(RenderMode);
                 }
                 return renderer;
-
             }
             set
             {
@@ -96,7 +94,6 @@ namespace System.Windows.Forms
                     return ToolStripRenderMode.System;
                 }
                 return ToolStripRenderMode.Custom;
-
             }
             set
             {
@@ -181,6 +178,5 @@ namespace System.Windows.Forms
         {
             RenderMode = defaultRenderMode;
         }
-
     }
 }

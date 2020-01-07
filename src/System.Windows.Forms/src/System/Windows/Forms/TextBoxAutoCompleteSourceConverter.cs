@@ -31,7 +31,6 @@ namespace System.Windows.Forms
                 }
             }
             return new StandardValuesCollection(list);
-
         }
     }
 }

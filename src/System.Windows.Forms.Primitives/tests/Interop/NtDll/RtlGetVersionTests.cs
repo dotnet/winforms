@@ -5,7 +5,6 @@
 using Xunit;
 using static Interop.NtDll;
 
-
 namespace System.Windows.Forms.Primitives.Tests.Interop.NtDll
 {
     public class RtlGetVersionTests

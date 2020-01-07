@@ -981,7 +981,7 @@ namespace System.Windows.Forms.Tests
             Assert.True(range[1].wSecond >= 0);
             Assert.True(range[1].wMilliseconds >= 0);
         }
-        
+
         [WinFormsFact]
         public void MonthCalendar_Handle_GetWithMaxSelectionCount_Success()
         {
@@ -1012,7 +1012,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, date.wSecond);
             Assert.Equal(0, date.wMilliseconds);
         }
-        
+
         [WinFormsFact]
         public void MonthCalendar_Handle_GetWithForeColor_Success()
         {
@@ -1023,7 +1023,7 @@ namespace System.Windows.Forms.Tests
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             Assert.Equal((IntPtr)0x785634, User32.SendMessageW(control.Handle, (User32.WindowMessage)ComCtl32.MCM.GETCOLOR, (IntPtr)ComCtl32.MCSC.TEXT, IntPtr.Zero));
         }
-        
+
         [WinFormsFact]
         public void MonthCalendar_Handle_GetWithBackColor_Success()
         {
@@ -1034,7 +1034,7 @@ namespace System.Windows.Forms.Tests
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             Assert.Equal((IntPtr)0x563412, User32.SendMessageW(control.Handle, (User32.WindowMessage)ComCtl32.MCM.GETCOLOR, (IntPtr)ComCtl32.MCSC.MONTHBK, IntPtr.Zero));
         }
-        
+
         [WinFormsFact]
         public void MonthCalendar_Handle_GetWithTitleBackColor_Success()
         {
@@ -1045,7 +1045,7 @@ namespace System.Windows.Forms.Tests
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             Assert.Equal((IntPtr)0x785634, User32.SendMessageW(control.Handle, (User32.WindowMessage)ComCtl32.MCM.GETCOLOR, (IntPtr)ComCtl32.MCSC.TITLEBK, IntPtr.Zero));
         }
-        
+
         [WinFormsFact]
         public void MonthCalendar_Handle_GetWithTitleForeColor_Success()
         {
@@ -1056,7 +1056,7 @@ namespace System.Windows.Forms.Tests
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             Assert.Equal((IntPtr)0x785634, User32.SendMessageW(control.Handle, (User32.WindowMessage)ComCtl32.MCM.GETCOLOR, (IntPtr)ComCtl32.MCSC.TITLETEXT, IntPtr.Zero));
         }
-        
+
         [WinFormsFact]
         public void MonthCalendar_Handle_GetWithTrailingForeColor_Success()
         {
@@ -1067,7 +1067,7 @@ namespace System.Windows.Forms.Tests
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             Assert.Equal((IntPtr)0x785634, User32.SendMessageW(control.Handle, (User32.WindowMessage)ComCtl32.MCM.GETCOLOR, (IntPtr)ComCtl32.MCSC.TRAILINGTEXT, IntPtr.Zero));
         }
-        
+
         [WinFormsFact]
         public void MonthCalendar_Handle_GetWithDefaultFirstDayOfWeek_Success()
         {
@@ -1083,7 +1083,7 @@ namespace System.Windows.Forms.Tests
             }
             Assert.Equal((IntPtr)expected, User32.SendMessageW(control.Handle, (User32.WindowMessage)ComCtl32.MCM.GETFIRSTDAYOFWEEK, IntPtr.Zero, IntPtr.Zero));
         }
-        
+
         [WinFormsFact]
         public void MonthCalendar_Handle_GetWithFirstDayOfWeek_Success()
         {
@@ -1094,7 +1094,7 @@ namespace System.Windows.Forms.Tests
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             Assert.Equal((IntPtr)0x10001, User32.SendMessageW(control.Handle, (User32.WindowMessage)ComCtl32.MCM.GETFIRSTDAYOFWEEK, IntPtr.Zero, IntPtr.Zero));
         }
-        
+
         [WinFormsFact]
         public void MonthCalendar_Handle_GetWithRange_Success()
         {
@@ -1123,7 +1123,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(6, range[1].wSecond);
             Assert.Equal(0, range[1].wMilliseconds);
         }
-        
+
         [WinFormsFact]
         public void MonthCalendar_Handle_GetWithScrollChange_Success()
         {
@@ -1638,7 +1638,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal("RightToLeftLayout", e.AffectedProperty);
                 layoutCallCount++;
             };
-            
+
             control.RightToLeftLayout = value;
             Assert.Equal(value, control.RightToLeftLayout);
             Assert.Equal(expectedLayoutCallCount, layoutCallCount);
@@ -3471,13 +3471,13 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-        
+
             // Call with handler.
             control.HandleCreated += handler;
             control.OnHandleCreated(eventArgs);
             Assert.Equal(1, callCount);
             Assert.False(control.IsHandleCreated);
-        
+
             // Remove handler.
             control.HandleCreated -= handler;
             control.OnHandleCreated(eventArgs);
@@ -3498,20 +3498,20 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-        
+
             // Call with handler.
             control.HandleCreated += handler;
             control.OnHandleCreated(eventArgs);
             Assert.Equal(1, callCount);
             Assert.True(control.IsHandleCreated);
-        
+
             // Remove handler.
             control.HandleCreated -= handler;
             control.OnHandleCreated(eventArgs);
             Assert.Equal(1, callCount);
             Assert.True(control.IsHandleCreated);
         }
-        
+
         [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void MonthCalendar_OnHandleDestroyed_Invoke_CallsHandleDestroyed(EventArgs eventArgs)
@@ -3524,20 +3524,20 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-        
+
             // Call with handler.
             control.HandleDestroyed += handler;
             control.OnHandleDestroyed(eventArgs);
             Assert.Equal(1, callCount);
             Assert.False(control.IsHandleCreated);
-        
+
             // Remove handler.
             control.HandleDestroyed -= handler;
             control.OnHandleDestroyed(eventArgs);
             Assert.Equal(1, callCount);
             Assert.False(control.IsHandleCreated);
         }
-        
+
         [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void MonthCalendar_OnHandleDestroyed_InvokeWithHandle_CallsHandleDestroyed(EventArgs eventArgs)
@@ -3551,13 +3551,13 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-        
+
             // Call with handler.
             control.HandleDestroyed += handler;
             control.OnHandleDestroyed(eventArgs);
             Assert.Equal(1, callCount);
             Assert.True(control.IsHandleCreated);
-        
+
             // Remove handler.
             control.HandleDestroyed -= handler;
             control.OnHandleDestroyed(eventArgs);
@@ -3675,7 +3675,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
             Assert.False(control.IsHandleCreated);
         }
-        
+
         public static IEnumerable<object[]> OnRightToLeftLayoutChanged_WithHandle_TestData()
         {
             yield return new object[] { RightToLeft.Yes, null, 1 };

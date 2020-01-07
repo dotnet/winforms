@@ -1131,7 +1131,7 @@ namespace System.Windows.Forms.Tests
                 control.Disposed -= handler;
             }
         }
-        
+
         [WinFormsFact]
         public void Control_Dispose_InvokeWithBindings_Success()
         {
@@ -1299,7 +1299,7 @@ namespace System.Windows.Forms.Tests
                 control.Disposed -= handler;
             }
         }
-        
+
         [WinFormsFact]
         public void Control_Dispose_InvokeNotDisposing_Success()
         {
@@ -1506,7 +1506,7 @@ namespace System.Windows.Forms.Tests
                 control.Disposed -= handler;
             }
         }
-        
+
         [WinFormsFact]
         public void Control_Dispose_InvokeNotDisposingWithChildren_Success()
         {
@@ -1620,7 +1620,7 @@ namespace System.Windows.Forms.Tests
                 control.Disposed -= handler;
             }
         }
-        
+
         [WinFormsFact]
         public void Control_Dispose_InvokeNotDisposingWithBindings_Success()
         {

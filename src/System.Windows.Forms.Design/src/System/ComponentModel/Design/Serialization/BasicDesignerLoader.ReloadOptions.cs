@@ -7,7 +7,7 @@ namespace System.ComponentModel.Design.Serialization
     public abstract partial class BasicDesignerLoader
     {
         /// <summary>
-        ///  A list of flags that indicate rules to apply when requesting 
+        ///  A list of flags that indicate rules to apply when requesting
         ///  that the designer reload itself.
         /// </summary>
         [Flags]

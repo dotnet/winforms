@@ -175,7 +175,6 @@ namespace System.Windows.Forms
 
             set
             {
-
                 if (value != null && (((Icon)value).Height > SystemInformation.SmallIconSize.Height || ((Icon)value).Width > SystemInformation.SmallIconSize.Width))
                 {
                     icon = new Icon(value, SystemInformation.SmallIconSize);
@@ -189,7 +188,6 @@ namespace System.Windows.Forms
                 {
                     IntPtr handle = (icon == null) ? IntPtr.Zero : icon.Handle;
                     parent.SendMessage(NativeMethods.SB_SETICON, (IntPtr)GetIndex(), handle);
-
                 }
                 UpdateSize();
                 if (Created)
@@ -395,7 +393,6 @@ namespace System.Windows.Forms
 
                 if (!Text.Equals(value))
                 {
-
                     if (value.Length == 0)
                     {
                         text = null;
@@ -442,7 +439,6 @@ namespace System.Windows.Forms
 
                 if (!ToolTipText.Equals(value))
                 {
-
                     if (value.Length == 0)
                     {
                         toolTipText = null;

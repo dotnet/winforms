@@ -721,7 +721,7 @@ namespace System.ComponentModel.Design.Serialization
                                 if (rhs is IConvertible ic)
                                 {
                                     // f.FieldType is a type from the reflection (or project target) universe, while rhs is a runtime type (exists in the Visual Studio framework)
-                                    // they need to be converted to the same universe for comparison to work. 
+                                    // they need to be converted to the same universe for comparison to work.
                                     // If TargetFrameworkProvider is not available, then we are working with runtime types.
                                     Type fieldType = f.FieldType;
                                     TypeDescriptionProvider tdp = GetTargetFrameworkProviderForType(manager, fieldType);
@@ -2080,7 +2080,6 @@ namespace System.ComponentModel.Design.Serialization
             // Now check IReferenceService.
             if (expression == null)
             {
-
                 // perf: first try to retrieve objectName from DesignerSerializationManager
                 // only then involve reference service if needed
                 // this is done to avoid unnecessary ensuring\creating references
@@ -2291,7 +2290,6 @@ namespace System.ComponentModel.Design.Serialization
             }
             Trace("IsSerialized called for object {0} : {1}", value, hasExpression);
             return hasExpression;
-
         }
 
         /// <summary>

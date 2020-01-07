@@ -235,7 +235,6 @@ namespace System.Windows.Forms
             // the focus would be changed to the next control on the form! We don't want
             // that
 
-
             // If the ActiveX control doesn't want to handle the key, it calls back into
             // WebBrowserSiteBase's IOleControlSite.TranslateAccelerator implementation. There, we
             // set a flag and call back into this method. In this method, we first check
@@ -1361,7 +1360,6 @@ namespace System.Windows.Forms
                 }
                 axReloadingState = WebBrowserHelper.AXState.Passive;
             }
-
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never),

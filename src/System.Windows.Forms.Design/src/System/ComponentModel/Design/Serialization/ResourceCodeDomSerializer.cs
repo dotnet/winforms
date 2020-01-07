@@ -655,7 +655,6 @@ namespace System.ComponentModel.Design.Serialization
             /// </summary>
             public override void ApplyResources(object value, string objectName, CultureInfo culture)
             {
-
                 if (culture == null)
                 {
                     culture = ReadCulture;
@@ -925,7 +924,6 @@ namespace System.ComponentModel.Design.Serialization
                         }
                         else
                         {
-
                             // Provide a sentinel so we don't repeatedly ask for the same resource.  If this is the invariant culture, always provide one.
                             if (culture.Equals(CultureInfo.InvariantCulture))
                             {
@@ -966,7 +964,6 @@ namespace System.ComponentModel.Design.Serialization
                 {
                     lastCulture = culture;
                     culture = culture.Parent;
-
                 } while (tryParents && !lastCulture.Equals(culture));
 
                 if (createIfNotExists)

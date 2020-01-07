@@ -1162,7 +1162,6 @@ namespace System.Windows.Forms
                     {
                         DataGridViewColumn dataGridViewColumn = (DataGridViewColumn)autoFillColumns[columnEntry];
                         weightSumDbg += dataGridViewColumn.UsedFillWeight;
-
                     }
                     Debug.Assert(Math.Abs(weightSum - weightSumDbg) < 1.0F);
 #endif

@@ -402,7 +402,6 @@ namespace System.Windows.Forms
             bool defaultLayoutEngine = (LayoutEngine == DefaultLayout.Instance);
             if (!defaultLayoutEngine && CommonProperties.HasLayoutBounds(this))
             {
-
                 Size layoutBounds = CommonProperties.GetLayoutBounds(this);
 
                 if (layoutBounds.Width > maxX)
@@ -979,7 +978,6 @@ namespace System.Windows.Forms
                 || (!vert && VScroll)
                 || (vert && !VScroll))
             {
-
                 needLayout = true;
             }
 
@@ -1042,7 +1040,6 @@ namespace System.Windows.Forms
             bool needLayout = false;
             if (_displayRect.Width != width || _displayRect.Height != height)
             {
-
                 _displayRect.Width = width;
                 _displayRect.Height = height;
                 needLayout = true;

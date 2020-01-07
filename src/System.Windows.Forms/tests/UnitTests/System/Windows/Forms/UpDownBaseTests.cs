@@ -194,7 +194,7 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.GetScrollState(SubUpDownBase.ScrollStateAutoScrolling));
             Assert.Equal(0, layoutCallCount);
             Assert.False(control.IsHandleCreated);
-            
+
             // Set different.
             control.AutoScroll = !value;
             Assert.False(control.AutoScroll);
@@ -236,7 +236,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            
+
             // Set different.
             control.AutoScroll = !value;
             Assert.False(control.AutoScroll);
@@ -276,7 +276,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Null(e.AffectedProperty);
                 layoutCallCount++;
             };
-            
+
             control.AutoScrollMargin = value;
             Assert.Equal(value, control.AutoScrollMargin);
             Assert.False(control.AutoScroll);
@@ -314,7 +314,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Null(e.AffectedProperty);
                 layoutCallCount++;
             };
-            
+
             control.AutoScrollMargin = value;
             Assert.Equal(value, control.AutoScrollMargin);
             Assert.False(control.AutoScroll);
@@ -770,12 +770,12 @@ namespace System.Windows.Forms.Tests
             };
             Assert.Equal(value, control.ChangingText);
             Assert.False(control.IsHandleCreated);
-            
+
             // Set same.
             control.ChangingText = value;
             Assert.Equal(value, control.ChangingText);
             Assert.False(control.IsHandleCreated);
-            
+
             // Set different.
             control.ChangingText = !value;
             Assert.Equal(!value, control.ChangingText);
@@ -801,7 +801,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            
+
             // Set same.
             control.ChangingText = value;
             Assert.Equal(value, control.ChangingText);
@@ -809,7 +809,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            
+
             // Set different.
             control.ChangingText = !value;
             Assert.Equal(!value, control.ChangingText);
@@ -984,12 +984,12 @@ namespace System.Windows.Forms.Tests
             };
             Assert.Equal(value, control.InterceptArrowKeys);
             Assert.False(control.IsHandleCreated);
-            
+
             // Set same.
             control.InterceptArrowKeys = value;
             Assert.Equal(value, control.InterceptArrowKeys);
             Assert.False(control.IsHandleCreated);
-            
+
             // Set different.
             control.InterceptArrowKeys = !value;
             Assert.Equal(!value, control.InterceptArrowKeys);
@@ -1015,7 +1015,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            
+
             // Set same.
             control.InterceptArrowKeys = value;
             Assert.Equal(value, control.InterceptArrowKeys);
@@ -1023,7 +1023,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            
+
             // Set different.
             control.InterceptArrowKeys = !value;
             Assert.Equal(!value, control.InterceptArrowKeys);
@@ -1131,12 +1131,12 @@ namespace System.Windows.Forms.Tests
             };
             Assert.Equal(value, control.ReadOnly);
             Assert.False(control.IsHandleCreated);
-            
+
             // Set same.
             control.ReadOnly = value;
             Assert.Equal(value, control.ReadOnly);
             Assert.False(control.IsHandleCreated);
-            
+
             // Set different.
             control.ReadOnly = !value;
             Assert.Equal(!value, control.ReadOnly);
@@ -1162,7 +1162,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            
+
             // Set same.
             control.ReadOnly = value;
             Assert.Equal(value, control.ReadOnly);
@@ -1170,7 +1170,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            
+
             // Set different.
             control.ReadOnly = !value;
             Assert.Equal(!value, control.ReadOnly);
@@ -1189,7 +1189,7 @@ namespace System.Windows.Forms.Tests
                 yield return new object[] { changingText, true, string.Empty, string.Empty, 1, 0, true };
                 yield return new object[] { changingText, false, string.Empty, string.Empty, 0, 0, false };
             }
-            
+
             yield return new object[] { true, true, "text", "text", 1, 1, true };
             yield return new object[] { false, true, "text", "text", 1, 1, true };
             yield return new object[] { true, false, "text", "text", 0, 1, false };
@@ -1353,7 +1353,7 @@ namespace System.Windows.Forms.Tests
             control.StyleChanged += (sender, e) => styleChangedCallCount++;
             int createdCallCount = 0;
             control.HandleCreated += (sender, e) => createdCallCount++;
-            
+
             control.TextAlign = value;
             Assert.Equal(value, control.TextAlign);
             Assert.True(control.IsHandleCreated);
@@ -1437,7 +1437,7 @@ namespace System.Windows.Forms.Tests
             control.StyleChanged += (sender, e) => styleChangedCallCount++;
             int createdCallCount = 0;
             control.HandleCreated += (sender, e) => createdCallCount++;
-            
+
             control.UpDownAlign = value;
             Assert.Equal(value, control.UpDownAlign);
             Assert.True(control.IsHandleCreated);
@@ -1472,12 +1472,12 @@ namespace System.Windows.Forms.Tests
             };
             Assert.Equal(value, control.UserEdit);
             Assert.False(control.IsHandleCreated);
-            
+
             // Set same.
             control.UserEdit = value;
             Assert.Equal(value, control.UserEdit);
             Assert.False(control.IsHandleCreated);
-            
+
             // Set different.
             control.UserEdit = !value;
             Assert.Equal(!value, control.UserEdit);
@@ -1503,7 +1503,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            
+
             // Set same.
             control.UserEdit = value;
             Assert.Equal(value, control.UserEdit);
@@ -1511,7 +1511,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            
+
             // Set different.
             control.UserEdit = !value;
             Assert.Equal(!value, control.UserEdit);
@@ -1544,7 +1544,7 @@ namespace System.Windows.Forms.Tests
             using var control = new SubUpDownBase();
             Assert.Equal(new Size(123, control.PreferredHeight), control.GetPreferredSize(proposedSize));
             Assert.False(control.IsHandleCreated);
-            
+
             // Call again.
             Assert.Equal(new Size(123, control.PreferredHeight), control.GetPreferredSize(proposedSize));
             Assert.False(control.IsHandleCreated);
@@ -1560,7 +1560,7 @@ namespace System.Windows.Forms.Tests
             };
             Assert.Equal(new Size(33, control.PreferredHeight), control.GetPreferredSize(proposedSize));
             Assert.False(control.IsHandleCreated);
-            
+
             // Call again.
             Assert.Equal(new Size(33, control.PreferredHeight), control.GetPreferredSize(proposedSize));
             Assert.False(control.IsHandleCreated);
@@ -1600,7 +1600,7 @@ namespace System.Windows.Forms.Tests
             };
             Assert.Equal(new Size(expectedWidth, control.PreferredHeight), control.GetPreferredSize(proposedSize));
             Assert.False(control.IsHandleCreated);
-            
+
             // Call again.
             Assert.Equal(new Size(expectedWidth, control.PreferredHeight), control.GetPreferredSize(proposedSize));
             Assert.False(control.IsHandleCreated);
@@ -1857,7 +1857,6 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.Created);
             Assert.False(control.IsHandleCreated);
         }
-
 
         [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
@@ -2542,7 +2541,7 @@ namespace System.Windows.Forms.Tests
             };
             control.Select(start, length);
             Assert.False(control.IsHandleCreated);
-            
+
             // Call again.
             control.Select(start, length);
             Assert.False(control.IsHandleCreated);
@@ -2572,7 +2571,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            
+
             // Call again.
             control.Select(start, length);
             Assert.True(control.IsHandleCreated);
@@ -2717,7 +2716,7 @@ namespace System.Windows.Forms.Tests
             using var control = new SubUpDownBase();
             control.ValidateEditText();
             Assert.False(control.IsHandleCreated);
-            
+
             // Call again.
             control.ValidateEditText();
             Assert.False(control.IsHandleCreated);
@@ -2740,7 +2739,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            
+
             // Call again.
             control.ValidateEditText();
             Assert.True(control.IsHandleCreated);
@@ -2748,7 +2747,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
         }
-        
+
         [WinFormsFact]
         public void UpDownBase_WndProc_InvokeKillFocusWithoutHandle_Success()
         {
@@ -2945,7 +2944,7 @@ namespace System.Windows.Forms.Tests
                 get => base.UserEdit;
                 set => base.UserEdit = value;
             }
-            
+
             public Action ValidateEditTextAction { get; set; }
 
             protected override void ValidateEditText() => ValidateEditTextAction();
@@ -2968,7 +2967,7 @@ namespace System.Windows.Forms.Tests
             public new bool CanEnableIme => base.CanEnableIme;
 
             public new bool CanRaiseEvents => base.CanRaiseEvents;
-            
+
             public new bool ChangingText
             {
                 get => base.ChangingText;
@@ -3028,7 +3027,7 @@ namespace System.Windows.Forms.Tests
             public new bool ShowFocusCues => base.ShowFocusCues;
 
             public new bool ShowKeyboardCues => base.ShowKeyboardCues;
-            
+
             public new bool UserEdit
             {
                 get => base.UserEdit;
@@ -3065,11 +3064,11 @@ namespace System.Windows.Forms.Tests
             public new void OnMouseDown(MouseEventArgs e) => base.OnMouseDown(e);
 
             public new void OnMouseEnter(EventArgs e) => base.OnMouseEnter(e);
-            
+
             public new void OnMouseHover(EventArgs e) => base.OnMouseHover(e);
-            
+
             public new void OnMouseLeave(EventArgs e) => base.OnMouseLeave(e);
-            
+
             public new void OnMouseMove(MouseEventArgs e) => base.OnMouseMove(e);
 
             public new void OnMouseUp(MouseEventArgs mevent) => base.OnMouseUp(mevent);

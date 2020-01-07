@@ -79,7 +79,6 @@ namespace System.Windows.Forms
             if (helpInfoTable == null)
             {
                 Debug.Fail("Why are we being called when there's nothing to pop?");
-
             }
             else
             {
@@ -93,10 +92,8 @@ namespace System.Windows.Forms
                     HelpInfo[] newTable = new HelpInfo[newCount];
                     Array.Copy(helpInfoTable, newTable, newCount);
                     helpInfoTable = newTable;
-
                 }
             }
-
         }
         private static void PushHelpInfo(HelpInfo hpi)
         {
@@ -121,7 +118,6 @@ namespace System.Windows.Forms
             }
             newTable[lastCount] = hpi;
             helpInfoTable = newTable;
-
         }
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -336,7 +332,6 @@ namespace System.Windows.Forms
                 PopHelpInfo();
             }
             return result;
-
         }
 
         private static DialogResult ShowCore(IWin32Window owner, string text, string caption,
@@ -428,7 +423,6 @@ namespace System.Windows.Forms
             UnsafeNativeMethods.SendMessage(new HandleRef(owner, handle), WindowMessages.WM_SETFOCUS, 0, 0);
             return result;
         }
-
     }
 }
 

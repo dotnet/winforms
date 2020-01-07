@@ -47,7 +47,7 @@ namespace System.Windows.Forms.Internal
         ///  be able to keep the GDI+ and GDI HDCs in sync.
         ///
         ///  A few other persisting properties have been implemented in DeviceContext2, among them:
-        ///  
+        ///
         ///   1. Window origin.
         ///   2. Bounding rectangle.
         ///   3. DC origin.

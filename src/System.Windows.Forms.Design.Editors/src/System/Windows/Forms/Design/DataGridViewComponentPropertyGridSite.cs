@@ -8,7 +8,6 @@ namespace System.Windows.Forms.Design
 {
     internal class DataGridViewComponentPropertyGridSite : ISite
     {
-
         private readonly IServiceProvider _sp;
         private readonly IComponent _comp;
         private bool _inGetService = false;

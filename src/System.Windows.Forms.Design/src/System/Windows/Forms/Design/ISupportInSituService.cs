@@ -25,6 +25,5 @@ namespace System.Windows.Forms.Design
         ///  Returns the Window Handle that gets all the Keyboarf messages once in InSitu.
         /// </summary>
         IntPtr GetEditWindow();
-
     }
 }

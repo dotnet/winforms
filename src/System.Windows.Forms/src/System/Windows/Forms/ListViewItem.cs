@@ -1987,7 +1987,6 @@ namespace System.Windows.Forms
                 {
                     return Array.Empty<ListViewSubItem>().GetEnumerator();
                 }
-
             }
         }
     }

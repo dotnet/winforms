@@ -3688,7 +3688,7 @@ namespace System.Windows.Forms
             qaContainer.dwAmbientFlags = Ole32.QACONTAINERFLAGS.AUTOCLIP | Ole32.QACONTAINERFLAGS.MESSAGEREFLECT | Ole32.QACONTAINERFLAGS.SUPPORTSMNEMONICS;
             if (IsUserMode())
             {
-                // In design mode we'd ideally set QACONTAINER_UIDEAD on dwAmbientFlags 
+                // In design mode we'd ideally set QACONTAINER_UIDEAD on dwAmbientFlags
                 // so controls don't take keyboard input, but MFC controls return NOWHERE on
                 // NCHITTEST, which messes up the designer.
                 qaContainer.dwAmbientFlags |= Ole32.QACONTAINERFLAGS.USERMODE;

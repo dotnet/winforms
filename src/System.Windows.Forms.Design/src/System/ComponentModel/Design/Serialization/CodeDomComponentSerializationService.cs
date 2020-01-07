@@ -221,7 +221,7 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        ///  The SerializationStore class is an implementation-specific class that stores serialization data for the component serialization service.  
+        ///  The SerializationStore class is an implementation-specific class that stores serialization data for the component serialization service.
         ///  The service adds state to this serialization store.  Once the store is closed it can be saved to a stream.  A serialization store can
         ///  be deserialized at a later date by the same type of serialization service. SerializationStore implements the IDisposable interface such
         ///  that Dispose  simply calls the Close method.  Dispose is implemented as a private interface to avoid confusion.
@@ -589,7 +589,6 @@ namespace System.ComponentModel.Design.Serialization
 #if DEBUG
             internal static void TraceCode(string name, object code)
             {
-
                 if (code == null || !s_trace.TraceVerbose)
                 {
                     return;
@@ -1496,7 +1495,6 @@ namespace System.ComponentModel.Design.Serialization
             /// </summary>
             private class LocalServices : IServiceProvider, IResourceService
             {
-
                 private readonly CodeDomSerializationStore _store;
                 private readonly IServiceProvider _provider;
 
@@ -1632,7 +1630,6 @@ namespace System.ComponentModel.Design.Serialization
                 {
                     return ((IDesignerSerializationManager)_manager).GetService(serviceType);
                 }
-
             }
 
             /// <summary>

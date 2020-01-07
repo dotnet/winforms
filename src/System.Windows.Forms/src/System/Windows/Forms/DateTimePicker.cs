@@ -514,7 +514,6 @@ namespace System.Windows.Forms
                 if ((value != null && !value.Equals(customFormat)) ||
                     (value == null && customFormat != null))
                 {
-
                     customFormat = value;
 
                     if (IsHandleCreated)
@@ -651,7 +650,6 @@ namespace System.Windows.Forms
 
                 if (format != value)
                 {
-
                     format = value;
                     RecreateHandle();
 
@@ -906,7 +904,6 @@ namespace System.Windows.Forms
         {
             get
             {
-
                 return rightToLeftLayout;
             }
 

@@ -199,7 +199,7 @@ namespace System.Windows.Forms.Tests
             var control = new SubHScrollBar();
             Assert.Throws<InvalidEnumArgumentException>("value", () => control.RightToLeft = value);
         }
-        
+
         [WinFormsFact]
         public void HScrollBar_GetAutoSizeMode_Invoke_ReturnsExpected()
         {

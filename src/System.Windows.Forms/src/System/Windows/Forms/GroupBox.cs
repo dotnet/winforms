@@ -230,7 +230,6 @@ namespace System.Windows.Forms
 
                 if (flatStyle != value)
                 {
-
                     bool originalOwnerDraw = OwnerDraw;
                     flatStyle = value;
 
@@ -253,7 +252,6 @@ namespace System.Windows.Forms
                     {
                         Refresh();
                     }
-
                 }
             }
         }
@@ -809,5 +807,4 @@ namespace System.Windows.Forms
             }
         }
     }
-
 }

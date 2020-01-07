@@ -118,7 +118,6 @@ namespace System.Windows.Forms
 
             set
             {
-
                 // To support transparency on ToolStripContainer, we need this check
                 // to ensure that background color of the container reflects the
                 // ContentPanel
@@ -378,7 +377,6 @@ namespace System.Windows.Forms
             {
                 base.OnPaintBackground(e);
             }
-
         }
 
         protected virtual void OnRendererChanged(EventArgs e)

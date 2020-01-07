@@ -221,12 +221,10 @@ namespace System.Windows.Forms
         {
             get
             {
-
                 //if the static Screen class has a different desktop change count
                 //than this instance then update the count and recalculate our working area
                 if (currentDesktopChangedCount != Screen.DesktopChangedCount)
                 {
-
                     Interlocked.Exchange(ref currentDesktopChangedCount, Screen.DesktopChangedCount);
 
                     if (!multiMonitorSupport || hmonitor == (IntPtr)PRIMARY_MONITOR)
@@ -261,10 +259,8 @@ namespace System.Windows.Forms
             {
                 if (desktopChangedCount == -1)
                 {
-
                     lock (syncLock)
                     {
-
                         //now that we have a lock, verify (again) our changecount...
                         if (desktopChangedCount == -1)
                         {

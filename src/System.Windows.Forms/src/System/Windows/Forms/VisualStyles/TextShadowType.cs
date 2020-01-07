@@ -9,8 +9,8 @@ namespace System.Windows.Forms.VisualStyles
         None = 0,
         Single = 1,
         Continuous = 2,
-        //		TM_ENUM(0, TST, NONE)
-        //		TM_ENUM(1, TST, SINGLE)
-        //		TM_ENUM(2, TST, CONTINUOUS)
+        //      TM_ENUM(0, TST, NONE)
+        //      TM_ENUM(1, TST, SINGLE)
+        //      TM_ENUM(2, TST, CONTINUOUS)
     }
 }

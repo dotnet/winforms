@@ -217,7 +217,6 @@ namespace System.Windows.Forms
                     else
                     {
                         cp.Style |= (int)User32.BS.CENTER;
-
                     }
                     if ((int)(align & WindowsFormsUtils.AnyTopAlign) != 0)
                     {
@@ -1150,7 +1149,6 @@ namespace System.Windows.Forms
             // call base last, so if it invokes any listeners that disable the button, we
             // don't have to recheck
             base.OnKeyUp(kevent);
-
         }
 
         /// <summary>
@@ -1277,7 +1275,6 @@ namespace System.Windows.Forms
                 {
                     return false;
                 }
-
             }
             set
             {
@@ -1406,7 +1403,6 @@ namespace System.Windows.Forms
                     return state;
                 }
             }
-
         }
     }
 }

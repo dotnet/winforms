@@ -335,7 +335,6 @@ namespace System.Windows.Forms
             {
                 PruneToolStripList();
             }
-
         }
 
         /// <summary> removes dead entries from the toolstrip weak reference collection. </summary>
@@ -453,9 +452,7 @@ namespace System.Windows.Forms
                     else
                     {
                         Debug.WriteLineIf(ToolStrip.ControlTabDebug.TraceVerbose, "\tREVERSE skipping wrap candidate " + toolStrip.Name + toolStrip.TabIndex.ToString(CultureInfo.CurrentCulture));
-
                     }
-
                 }
                 if (nextControl != null
                     && Math.Abs(nextControl.TabIndex - startTabIndex) <= 1)
@@ -469,7 +466,6 @@ namespace System.Windows.Forms
             {
                 Debug.WriteLineIf(ToolStrip.ControlTabDebug.TraceVerbose, "SELECTING " + nextControl.Name);
                 return ChangeSelection(start, nextControl);
-
             }
             else if (wrappedControl != null)
             {
@@ -549,7 +545,6 @@ namespace System.Windows.Forms
                     defaultRenderer = value;
 
                     ((EventHandler)GetEventHandler(staticEventDefaultRendererChanged))?.Invoke(null, EventArgs.Empty);
-
                 }
             }
         }
@@ -591,7 +586,6 @@ namespace System.Windows.Forms
             }
             set
             {
-
                 ///
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)ToolStripManagerRenderMode.Custom, (int)ToolStripManagerRenderMode.Professional))
                 {
@@ -892,7 +886,6 @@ namespace System.Windows.Forms
                             control.HandleCreated += new EventHandler(OnActiveHwndHandleCreated);
                         }
                     }
-
                 }
             }
 
@@ -913,7 +906,6 @@ namespace System.Windows.Forms
                     if (Instance.menuKeyToggle != value)
                     {
                         Instance.menuKeyToggle = value;
-
                     }
                 }
             }
@@ -968,7 +960,6 @@ namespace System.Windows.Forms
                     // fire timer messages to force our filter to get evaluated.
                     ProcessMessages(true);
                 }
-
             }
 
             internal void NotifyLastLastFocusedToolAboutFocusLoss()
@@ -989,7 +980,6 @@ namespace System.Windows.Forms
             // ToolStrip analog to WM_EXITMENULOOP
             private void ExitMenuModeCore()
             {
-
                 // ensure we've cleaned up the timer.
                 ProcessMessages(false);
 
@@ -1046,9 +1036,7 @@ namespace System.Windows.Forms
                         bool textStyleChanged = _showUnderlines;
                         _showUnderlines = false;
                         ToolStripManager.NotifyMenuModeChange(/*textStyleChanged*/textStyleChanged, /*activationChanged*/true);
-
                     }
-
                 }
             }
 
@@ -1109,12 +1097,10 @@ namespace System.Windows.Forms
                         ModalMenuFilter.Instance.ShowUnderlines = true;
                     }
                 }
-
             }
 
             internal static void CloseActiveDropDown(ToolStripDropDown activeToolStripDropDown, ToolStripDropDownCloseReason reason)
             {
-
                 activeToolStripDropDown.SetCloseReason(reason);
                 activeToolStripDropDown.Visible = false;
 
@@ -1130,7 +1116,6 @@ namespace System.Windows.Forms
                         activeToolStripDropDown.OwnerItem.Unselect();
                     }
                 }
-
             }
 
             // fire a timer event to ensure we have a message in the queue every 500ms
@@ -1170,7 +1155,6 @@ namespace System.Windows.Forms
                         {
                             if (activeToolStrip is ToolStripDropDown activeToolStripDropDown)
                             {
-
                                 if (!(activeToolStripDropDown.OwnerToolStrip != null
                                     && activeToolStripDropDown.OwnerToolStrip.Handle == hwndMouseMessageIsFrom
                                     && activeToolStripDropDown.OwnerDropDownItem != null
@@ -1203,7 +1187,6 @@ namespace System.Windows.Forms
                         break;
                     }
                 }
-
             }
             private bool ProcessActivationChange()
             {
@@ -1220,7 +1203,6 @@ namespace System.Windows.Forms
                 return true;
                 //}
                 //return false;
-
             }
 
             internal static void SetActiveToolStrip(ToolStrip toolStrip, bool menuKeyPressed)
@@ -1240,7 +1222,6 @@ namespace System.Windows.Forms
 
             private void SetActiveToolStripCore(ToolStrip toolStrip)
             {
-
                 if (toolStrip == null)
                 {
                     return;
@@ -1285,7 +1266,6 @@ namespace System.Windows.Forms
                                   && (ToolStripDropDown.GetFirstDropDown(toolStrip)
                                   != ToolStripDropDown.GetFirstDropDown(currentActiveToolStrip)))
                         {
-
                             Debug.WriteLineIf(ToolStrip.SnapFocusDebug.TraceVerbose, "[ModalMenuFilter.SetActiveToolStripCore] Detected a new dropdown not in this chain opened, Dismissing everything in the old chain. ");
                             _inputFilterQueue.Remove(currentActiveToolStrip);
 
@@ -1438,7 +1418,6 @@ namespace System.Windows.Forms
                                 // double check it's not a child control of the active toolstrip.
                                 if (!IsChildOrSameWindow(hwndActiveToolStrip, new HandleRef(null, m.HWnd)))
                                 {
-
                                     // it is NOT a child of the current active toolstrip.
 
                                     ToolStrip toplevelToolStrip = GetCurrentToplevelToolStrip();
@@ -1513,7 +1492,6 @@ namespace System.Windows.Forms
                                 Debug.WriteLineIf(ToolStrip.SnapFocusDebug.TraceVerbose, "[ModalMenuFilter.PreFilterMessage] got Keyboard message " + m.ToString());
                             }
                             break;
-
                     }
                 }
 
@@ -1528,7 +1506,6 @@ namespace System.Windows.Forms
 
                 public HostedWindowsFormsMessageHook()
                 {
-
 #if DEBUG
                     try
                     {
@@ -1627,9 +1604,7 @@ namespace System.Windows.Forms
                         }
                     }
                 }
-
             }
-
         }
 
         internal static bool ShowMenuFocusCues
@@ -1797,7 +1772,6 @@ namespace System.Windows.Forms
                     }
                     else if (toolStrip.Shortcuts.ContainsKey(shortcut))
                     {
-
                         if (toolStrip.IsDropDown)
                         {
                             // we dont want to process someone else's context menu (e.g. button1 and button2 have context menus)
@@ -1853,7 +1827,6 @@ namespace System.Windows.Forms
                                             rootWindowsMatch = (toolStripForm == mainForm.ActiveMdiChildInternal);
                                         }
                                     }
-
                                 }
                             }
                         }
@@ -1876,10 +1849,8 @@ namespace System.Windows.Forms
                     PruneToolStripList();
                 }
                 return retVal;
-
             }
             return false;
-
         }
 
         /// <summary> this function handles when Alt is pressed.
@@ -1918,7 +1889,6 @@ namespace System.Windows.Forms
                         menuStripToActivate = GetMainMenuStrip(toplevelControl);
                     }
                     Debug.WriteLineIf(ToolStrip.SnapFocusDebug.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "[ProcessMenuKey] MenuStripToActivate is: {0}", menuStripToActivate));
-
                 }
             }
             // the data that comes into the LParam is the ASCII code, not the VK_* code.
@@ -1971,7 +1941,6 @@ namespace System.Windows.Forms
                         return true;
                     }
                 }
-
             }
             return false;
         }
@@ -2200,7 +2169,6 @@ namespace System.Windows.Forms
                             case MergeAction.MatchOnly:
                                 if (item is ToolStripDropDownItem tsddownDest && source is ToolStripDropDownItem tsddownSrc && tsddownSrc.DropDownItems.Count != 0)
                                 {
-
                                     int originalCount = tsddownSrc.DropDownItems.Count;
 
                                     if (originalCount > 0)
@@ -2214,7 +2182,6 @@ namespace System.Windows.Forms
                                             // the dropdown.
                                             for (int i = 0, itemToLookAt = 0; i < originalCount; i++)
                                             {
-
                                                 MergeRecursive(tsddownSrc.DropDownItems[itemToLookAt], tsddownDest.DropDownItems, history);
 
                                                 int numberOfItemsMerged = lastCount - tsddownSrc.DropDownItems.Count;

@@ -116,7 +116,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  Paints a representative value of the given object to the provided canvas. 
+        ///  Paints a representative value of the given object to the provided canvas.
         ///  Painting should be done within the boundaries of the provided rectangle.
         /// </summary>
         public override void PaintValue(PaintValueEventArgs e)

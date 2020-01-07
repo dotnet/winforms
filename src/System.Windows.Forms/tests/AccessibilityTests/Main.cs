@@ -61,6 +61,5 @@ namespace AccessibilityTests
             ContainersTesting containerControl = new ContainersTesting();
             containerControl.Show();
         }
-
     }
 }

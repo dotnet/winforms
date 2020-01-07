@@ -12,7 +12,7 @@ internal static partial class Interop
         ///  <see cref="IMsoComponentManager.FCreateSubComponentManager" /> allows one to create a hierarchical
         ///  tree of component managers. This tree is used to maintain multiple contexts with regard to
         ///  <see cref="msocstate"/> states. These contexts are referred to as 'state contexts'
-        /// 
+        ///
         ///  Each component manager in the tree defines a state context.  The components registered with a
         ///  particular component manager or any of its descendents live within that component manager's
         ///  state context.  Calls to <see cref="IMsoComponentManager.OnComponentEnterState"/>

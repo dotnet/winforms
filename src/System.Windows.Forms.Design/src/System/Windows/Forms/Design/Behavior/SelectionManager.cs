@@ -171,7 +171,6 @@ namespace System.Windows.Forms.Design.Behavior
             {
                 curCompIndex++;
             }
-
         }
 
         /// <summary>

@@ -83,7 +83,6 @@ namespace System.Windows.Forms.ButtonInternal
                 }
             }
             DrawCheckOnly(e, layout, colors, checkColor, checkBackground);
-
         }
 
         // used by DataGridViewCheckBoxCell
@@ -199,12 +198,10 @@ namespace System.Windows.Forms.ButtonInternal
         {
             using (WindowsGraphics wg = WindowsGraphics.FromGraphics(g))
             {
-
                 using (WindowsPen high = new WindowsPen(wg.DeviceContext, colors.highlight),
                    shadow = new WindowsPen(wg.DeviceContext, colors.buttonShadow),
                    face = new WindowsPen(wg.DeviceContext, colors.buttonFace))
                 {
-
                     wg.DrawLine(high, r.Right - 1, r.Top, r.Right - 1, r.Bottom);
                     wg.DrawLine(high, r.Left, r.Bottom - 1, r.Right, r.Bottom - 1);
 

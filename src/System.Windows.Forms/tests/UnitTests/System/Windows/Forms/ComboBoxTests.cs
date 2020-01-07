@@ -803,7 +803,7 @@ namespace System.Windows.Forms.Tests
             using var control = new ComboBox();
             Assert.Empty(control.SelectedText);
             Assert.True(control.IsHandleCreated);
-            
+
             // Get again.
             Assert.Empty(control.SelectedText);
             Assert.True(control.IsHandleCreated);
@@ -817,7 +817,7 @@ namespace System.Windows.Forms.Tests
 
             Assert.Empty(control.SelectedText);
             Assert.True(control.IsHandleCreated);
-            
+
             // Get again.
             Assert.Empty(control.SelectedText);
             Assert.True(control.IsHandleCreated);
@@ -829,7 +829,7 @@ namespace System.Windows.Forms.Tests
             using var control = new ComboBox();
             Assert.Equal(0, control.SelectionLength);
             Assert.True(control.IsHandleCreated);
-            
+
             // Get again.
             Assert.Equal(0, control.SelectionLength);
             Assert.True(control.IsHandleCreated);
@@ -843,7 +843,7 @@ namespace System.Windows.Forms.Tests
 
             Assert.Equal(0, control.SelectionLength);
             Assert.True(control.IsHandleCreated);
-            
+
             // Get again.
             Assert.Equal(0, control.SelectionLength);
             Assert.True(control.IsHandleCreated);
@@ -855,7 +855,7 @@ namespace System.Windows.Forms.Tests
             using var control = new ComboBox();
             Assert.Equal(0, control.SelectionStart);
             Assert.True(control.IsHandleCreated);
-            
+
             // Get again.
             Assert.Equal(0, control.SelectionStart);
             Assert.True(control.IsHandleCreated);
@@ -869,12 +869,12 @@ namespace System.Windows.Forms.Tests
 
             Assert.Equal(0, control.SelectionStart);
             Assert.True(control.IsHandleCreated);
-            
+
             // Get again.
             Assert.Equal(0, control.SelectionStart);
             Assert.True(control.IsHandleCreated);
         }
-        
+
         [WinFormsFact]
         public void ComboBox_GetAutoSizeMode_Invoke_ReturnsExpected()
         {

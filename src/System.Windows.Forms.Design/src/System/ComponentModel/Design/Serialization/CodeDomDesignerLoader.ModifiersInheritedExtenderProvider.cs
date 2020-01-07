@@ -105,7 +105,7 @@ namespace System.ComponentModel.Design.Serialization
                 }
 
                 FieldInfo field = TypeDescriptor.GetReflectionType(baseType).GetField(name, BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static);
-                
+
                 if (field != null)
                 {
                     if (field.IsPrivate)
@@ -127,7 +127,7 @@ namespace System.ComponentModel.Design.Serialization
                         return MemberAttributes.FamilyAndAssembly;
                 }
 
-                // Visual Basic uses a property called Foo and generates a field called _Foo. We need to check the 
+                // Visual Basic uses a property called Foo and generates a field called _Foo. We need to check the
                 // visibility of this accessor to fix the modifiers up.
                 PropertyInfo prop = TypeDescriptor.GetReflectionType(baseType).GetProperty(name, BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static);
                 MethodInfo[] accessors = prop?.GetAccessors(true);
@@ -137,7 +137,7 @@ namespace System.ComponentModel.Design.Serialization
                 }
 
                 MethodInfo mi = accessors[0];
-                
+
                 if (mi.IsPrivate)
                     return MemberAttributes.Private;
 

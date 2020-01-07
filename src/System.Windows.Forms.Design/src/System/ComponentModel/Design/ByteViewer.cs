@@ -77,7 +77,7 @@ namespace System.ComponentModel.Design
             SetStyle(ControlStyles.ResizeRedraw, true);
         }
 
-        // Stole this code from  XmlSanner       
+        // Stole this code from  XmlSanner
         private static int AnalizeByteOrderMark(byte[] buffer, int index)
         {
             int c1 = buffer[index + 0] << 8 | buffer[index + 1];
@@ -86,17 +86,17 @@ namespace System.ComponentModel.Design
 
             //Assign an index (label) value for first two bytes
             c4 = GetEncodingIndex(c1);
-            //Assign an index (label) value for 3rd and 4th byte            
+            //Assign an index (label) value for 3rd and 4th byte
             c5 = GetEncodingIndex(c2);
 
             //Bellow table is to identify Encoding type based on
-            //first four bytes, those we have converted in index 
+            //first four bytes, those we have converted in index
             //values for this look up table
             //values on column are first two bytes and
-            //values on rows are 3rd and 4th byte 
+            //values on rows are 3rd and 4th byte
 
             int[,] encodings = {
-                   //Unknown 0000 feff fffe efbb  3c00 003c 3f00 003f  3c3f 786d  4c6f  a794 
+                   //Unknown 0000 feff fffe efbb  3c00 003c 3f00 003f  3c3f 786d  4c6f  a794
            /*Unknown*/ {1   ,5   ,1   ,1    ,1   ,1   ,1   ,1   ,1    ,1    ,1    ,1    ,1   },
               /*0000*/ {1   ,1   ,1   ,11   ,1   ,10  ,4   ,1   ,1    ,1    ,1    ,1    ,1   },
               /*feff*/ {2   ,9   ,5   ,2    ,2   ,2   ,2   ,2   ,2    ,2    ,2    ,2    ,2   },
@@ -303,11 +303,11 @@ namespace System.ComponentModel.Design
                     return DisplayMode.Unicode;
                 case 4:
                 case 5:
-                    //_Encoding = Ucs4Encoding.UCS4_Bigendian; 
+                    //_Encoding = Ucs4Encoding.UCS4_Bigendian;
                     return DisplayMode.Hexdump;
                 case 6:
                 case 7:
-                    //_Encoding = Ucs4Encoding.UCS4_Littleendian; 
+                    //_Encoding = Ucs4Encoding.UCS4_Littleendian;
                     return DisplayMode.Hexdump;
                 case 8:
                 case 9:
@@ -320,7 +320,7 @@ namespace System.ComponentModel.Design
                 case 12:
                     //8 ebcdic
                     return DisplayMode.Hexdump;
-                case 13: //9                    
+                case 13: //9
                          //_Encoding = new UTF8Encoding(false);
                     return DisplayMode.Ansi;
                 case 14:
@@ -384,7 +384,7 @@ namespace System.ComponentModel.Design
             return _displayMode;
         }
 
-        // Stole this code from  XmlSanner       
+        // Stole this code from  XmlSanner
         private static int GetEncodingIndex(int c1)
         {
             switch (c1)
@@ -600,7 +600,6 @@ namespace System.ComponentModel.Design
             }
 
             _displayLinesCount = (_startLine + _rowCount < _linesCount) ? _rowCount : _linesCount - _startLine;
-
         }
 
         /// <summary>

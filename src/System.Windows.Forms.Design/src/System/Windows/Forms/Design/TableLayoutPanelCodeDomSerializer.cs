@@ -11,7 +11,7 @@ namespace System.Windows.Forms.Design
 {
     /// <summary>
     ///  Custom serializer for the TableLayoutPanel. We need this so we can push the TableLayoutSettings object
-    ///  into the resx in localization mode. This is used by loc tools like WinRes to correctly setup the 
+    ///  into the resx in localization mode. This is used by loc tools like WinRes to correctly setup the
     ///  TableLayoutPanel with all its settings. Note that we don't serialize code to access the settings.
     /// </summary>
     internal class TableLayoutPanelCodeDomSerializer : CodeDomSerializer
@@ -38,7 +38,7 @@ namespace System.Windows.Forms.Design
             // First call the base serializer to serialize the object.
             object codeObject = GetBaseSerializer(manager).Serialize(manager, value);
 
-            // Now push our layout settings stuff into the resx if we are not inherited read only and 
+            // Now push our layout settings stuff into the resx if we are not inherited read only and
             // are in a localizable Form.
             TableLayoutPanel tlp = value as TableLayoutPanel;
             Debug.Assert(tlp != null, "Huh? We were expecting to be serializing a TableLayoutPanel here.");

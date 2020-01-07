@@ -16,15 +16,15 @@ namespace System.Windows.Forms.VisualStyles
         TopRight = 14,
         BottomLeft = 16,
         BottomRight = 17
-        //		#define HTNOWHERE           0
-        //		#define HTCLIENT            1
-        //		#define HTLEFT              10
-        //		#define HTRIGHT             11
-        //		#define HTTOP               12
-        //		#define HTTOPLEFT           13
-        //		#define HTTOPRIGHT          14
-        //		#define HTBOTTOM            15
-        //		#define HTBOTTOMLEFT        16
-        //		#define HTBOTTOMRIGHT       17
+        //      #define HTNOWHERE           0
+        //      #define HTCLIENT            1
+        //      #define HTLEFT              10
+        //      #define HTRIGHT             11
+        //      #define HTTOP               12
+        //      #define HTTOPLEFT           13
+        //      #define HTTOPRIGHT          14
+        //      #define HTBOTTOM            15
+        //      #define HTBOTTOMLEFT        16
+        //      #define HTBOTTOMRIGHT       17
     }
 }

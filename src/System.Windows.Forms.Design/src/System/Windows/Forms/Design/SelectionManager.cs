@@ -132,7 +132,6 @@ namespace System.Windows.Forms.Design
                     if (selType == GlyphSelectionType.SelectedPrimary ||
                         selType == GlyphSelectionType.Selected)
                     {
-
                         if (_curSelectionBounds[_curCompIndex] == Rectangle.Empty)
                         {
                             _curSelectionBounds[_curCompIndex] = bodyGlyph.Bounds;

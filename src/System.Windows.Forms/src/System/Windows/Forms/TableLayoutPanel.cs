@@ -66,7 +66,6 @@ namespace System.Windows.Forms
                 {
                     throw new NotSupportedException(SR.TableLayoutSettingSettingsIsNotSupported);
                 }
-
             }
         }
 
@@ -485,7 +484,6 @@ namespace System.Windows.Forms
             {
                 ControlPaint.PaintTableControlBorder(cellBorderStyle, g, displayRect);
             }
-
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -561,7 +559,6 @@ namespace System.Windows.Forms
                     }
                 }
             }
-
         }
 
         #endregion

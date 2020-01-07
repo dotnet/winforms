@@ -11,7 +11,6 @@ using WinForms.Common.Tests;
 using Xunit;
 using static Interop;
 
-
 namespace System.Windows.Forms.Tests
 {
     public class CommonDialogTests
@@ -132,7 +131,7 @@ namespace System.Windows.Forms.Tests
             {
                 bool runDialogResult = bool.Parse(runDialogResultString);
                 DialogResult expectedDialogResult = (DialogResult)Enum.Parse(typeof(DialogResult), expectedDialogResultString);
-                
+
                 Application.EnableVisualStyles();
 
                 using var dialog = new SubCommonDialog

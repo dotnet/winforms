@@ -930,7 +930,6 @@ namespace System.Windows.Forms
                     {
                         return c;
                     }
-
                 }
 
                 if (IsActiveX)
@@ -1462,7 +1461,6 @@ namespace System.Windows.Forms
                     OnContextMenuStripChanged(EventArgs.Empty);
                 }
             }
-
         }
 
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlContextMenuStripChangedDescr))]
@@ -2264,7 +2262,6 @@ namespace System.Windows.Forms
 
                 if (ambient != null && ambient.Font != null)
                 {
-
                     FontHandleWrapper fontHandle = null;
 
                     Font currentAmbient = (Font)Properties.GetObject(s_currentAmbientFontProperty);
@@ -3765,7 +3762,6 @@ namespace System.Windows.Forms
                                 WindowMessages.WM_CHANGEUISTATE,
                                 (IntPtr)(actionMask | (int)User32.UIS.SET),
                                 IntPtr.Zero);
-
                     }
                 }
                 return (_uiCuesState & UICuesStates.FocusMask) == UICuesStates.FocusShow;
@@ -3885,7 +3881,7 @@ namespace System.Windows.Forms
                 {
                     return true;
                 }
-                
+
                 return ParentInternal.Visible;
             }
             set => SetVisibleCore(value);
@@ -4978,7 +4974,6 @@ namespace System.Windows.Forms
                 _window.CreateHandle(cp);
 
                 UpdateReflectParent(true);
-
             }
             finally
             {
@@ -5211,7 +5206,6 @@ namespace System.Windows.Forms
 
                     if (controlsCollection != null)
                     {
-
                         // PERFNOTE: This is more efficient than using Foreach.  Foreach
                         // forces the creation of an array subset enum each time we
                         // enumerate
@@ -5235,7 +5229,6 @@ namespace System.Windows.Forms
             }
             else
             {
-
 #if FINALIZATION_WATCH
                 if (!GetState(States.DISPOSED)) {
                     Debug.Fail("Control of type '" + GetType().FullName +"' is being finalized that wasn't disposed\n" + allocationSite);
@@ -5438,7 +5431,6 @@ namespace System.Windows.Forms
                     {
                         Invalidate();
                     }
-
                 }
                 return true;
             }
@@ -8998,7 +8990,6 @@ namespace System.Windows.Forms
             // For every child control of this container control...
             foreach (Control c in Controls)
             {
-
                 // First, if the control is a container, recurse into its descendants.
                 if ((validationConstraints & ValidationConstraints.ImmediateChildren) != ValidationConstraints.ImmediateChildren &&
                     c.ShouldPerformContainerValidation() &&
@@ -10047,7 +10038,6 @@ namespace System.Windows.Forms
             */
             if (!performLayout)
             {
-
                 CommonProperties.xClearPreferredSizeCache(this);
                 ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
 
@@ -10063,7 +10053,6 @@ namespace System.Windows.Forms
                     }
                 }
             }
-
         }
 
         /// <summary>
@@ -10177,7 +10166,6 @@ namespace System.Windows.Forms
             }
 
             LayoutTransaction.DoLayout(this, this, PropertyNames.Bounds);
-
         }
 
         /// <summary>
@@ -10578,7 +10566,6 @@ namespace System.Windows.Forms
                         && (!tabStopOnly || ctl.TabStop)
                         && (nested || ctl._parent == this))
                     {
-
                         if (ctl._parent is ToolStrip)
                         {
                             continue;
@@ -10817,7 +10804,6 @@ namespace System.Windows.Forms
             }
             finally
             {
-
                 // Initialize the scaling engine.
                 InitScaling(specified);
 
@@ -11104,7 +11090,7 @@ namespace System.Windows.Forms
                 if (!DesiredVisibility && !value && IsHandleCreated)
                 {
                     // PERF - setting Visible=false twice can get us into this else block
-                    // which makes us process WM_WINDOWPOS* messages - make sure we've already 
+                    // which makes us process WM_WINDOWPOS* messages - make sure we've already
                     // visible=false - if not, make it so.
                     if (!User32.IsWindowVisible(this).IsTrue())
                     {
@@ -11289,7 +11275,6 @@ namespace System.Windows.Forms
         {
             if (RightToLeft.Yes == RightToLeft)
             {
-
                 if ((align & WindowsFormsUtils.AnyTopAlign) != 0)
                 {
                     switch (align)
@@ -11759,7 +11744,6 @@ namespace System.Windows.Forms
                     {
                         break;
                     }
-
                 }
 
                 if (lastParentHandle != IntPtr.Zero)
@@ -11778,7 +11762,6 @@ namespace System.Windows.Forms
         {
             OnMouseCaptureChanged(EventArgs.Empty);
             DefWndProc(ref m);
-
         }
 
         /// <summary>
@@ -12342,7 +12325,6 @@ namespace System.Windows.Forms
                         //In Whidbey .. if the click in by MOUSE then pass the MouseEventArgs...
                         OnClick(new MouseEventArgs(button, clicks, PARAM.SignedLOWORD(m.LParam), PARAM.SignedHIWORD(m.LParam), 0));
                         OnMouseClick(new MouseEventArgs(button, clicks, PARAM.SignedLOWORD(m.LParam), PARAM.SignedHIWORD(m.LParam), 0));
-
                     }
 
                     else
@@ -12351,7 +12333,6 @@ namespace System.Windows.Forms
                         OnDoubleClick(new MouseEventArgs(button, 2, PARAM.SignedLOWORD(m.LParam), PARAM.SignedHIWORD(m.LParam), 0));
                         OnMouseDoubleClick(new MouseEventArgs(button, 2, PARAM.SignedLOWORD(m.LParam), PARAM.SignedHIWORD(m.LParam), 0));
                     }
-
                 }
 
                 //call the MouseUp Finally...
@@ -12598,7 +12579,6 @@ namespace System.Windows.Forms
                                     PaintWithErrorHandling(pevent, PaintLayerBackground);
                                     // Consider: This condition could be elimiated,
                                     //           do we have to save/restore the state of the buffered graphics?
-
                                 }
                             }
                             finally
@@ -12685,7 +12665,6 @@ namespace System.Windows.Forms
             {
                 DefWndProc(ref m);
             }
-
         }
 
         /// <summary>
@@ -12795,7 +12774,6 @@ namespace System.Windows.Forms
 
             if ((_state & States.Recreate) == 0)
             {
-
                 bool visible = m.WParam != IntPtr.Zero;
                 bool oldVisibleProperty = Visible;
 
@@ -12894,14 +12872,12 @@ namespace System.Windows.Forms
             UICues UIcues = UICues.None;
             if (((User32.UISF)PARAM.HIWORD(m.WParam) & User32.UISF.HIDEACCEL) != 0)
             {
-
                 // yes, clear means show.  nice api, guys.
                 //
                 bool showKeyboard = (cmd == User32.UIS.CLEAR);
 
                 if (showKeyboard != keyboard || !keyboardInitialized)
                 {
-
                     UIcues |= UICues.ChangeKeyboard;
 
                     // clear the old state.
@@ -12956,7 +12932,6 @@ namespace System.Windows.Forms
             if (_parent != null && User32.GetParent(new HandleRef(_window, InternalHandle)) == _parent.InternalHandle &&
                 (_state & States.NoZOrder) == 0)
             {
-
                 User32.WINDOWPOS* wp = (User32.WINDOWPOS*)m.LParam;
                 if ((wp->flags & User32.SWP.NOZORDER) == 0)
                 {
@@ -13454,7 +13429,6 @@ namespace System.Windows.Forms
                 return false;
             }
         }
-
 
         ///
         ///  Explicit support of DropTarget

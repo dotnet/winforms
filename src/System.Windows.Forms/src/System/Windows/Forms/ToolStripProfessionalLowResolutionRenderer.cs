@@ -87,7 +87,6 @@ namespace System.Windows.Forms
                 {
                     // bottom left
                     g.FillRectangle(SystemBrushes.ButtonShadow, new Rectangle(1, bounds.Height - 2, 1, 1));
-
                 }
 
                 // top and bottom right conntecting pixel - drawn only if height and width are odd
@@ -96,7 +95,6 @@ namespace System.Windows.Forms
                     // bottom right
                     g.FillRectangle(SystemBrushes.ButtonShadow, new Rectangle(bounds.Width - 2, bounds.Height - 2, 1, 1));
                 }
-
             }
         }
     }

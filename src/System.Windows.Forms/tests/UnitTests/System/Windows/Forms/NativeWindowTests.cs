@@ -56,7 +56,7 @@ namespace System.Windows.Forms.Tests
             var window = new NativeWindow();
             window.AssignHandle(control.Handle);
             Assert.Equal(control.Handle, window.Handle);
-            
+
             window.ReleaseHandle();
             Assert.Equal(IntPtr.Zero, window.Handle);
 
@@ -211,7 +211,7 @@ namespace System.Windows.Forms.Tests
             try
             {
                 Assert.NotEqual(IntPtr.Zero, window1.Handle);
-                
+
                 var window2 = new NativeWindow();
                 var cp2 = new CreateParams
                 {
@@ -299,7 +299,7 @@ namespace System.Windows.Forms.Tests
             using var control = new Control();
             var window = new WndProcTrackingNativeWindow();
             window.AssignHandle(control.Handle);
-            
+
             try
             {
                 var m = new Message

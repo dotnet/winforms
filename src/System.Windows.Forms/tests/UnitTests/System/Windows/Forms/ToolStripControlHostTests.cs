@@ -3080,7 +3080,7 @@ namespace System.Windows.Forms.Tests
             Assert.Empty(c.Controls);
             Assert.False(c.IsHandleCreated);
         }
-        
+
         [WinFormsTheory]
         [MemberData(nameof(Parent_Set_TestData))]
         public void ToolStripControlHost_OnParentChanged_InvokeControlWithoutParent_Success(bool enabled, bool visible, Image image, bool allowDrop)
@@ -3149,7 +3149,7 @@ namespace System.Windows.Forms.Tests
             Assert.Empty(otherParent.Controls);
             Assert.Equal(new Padding(0, 1, 0, 2), item.Margin);
         }
-        
+
         [WinFormsTheory]
         [MemberData(nameof(Parent_Set_TestData))]
         public void ToolStripControlHost_OnParentChanged_InvokeControlWithParent_Success(bool enabled, bool visible, Image image, bool allowDrop)

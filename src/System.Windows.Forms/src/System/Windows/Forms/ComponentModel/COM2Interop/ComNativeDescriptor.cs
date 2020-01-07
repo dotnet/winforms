@@ -261,7 +261,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             // walk the list every so many calls
             if ((++clearCount % CLEAR_INTERVAL) == 0)
             {
-
                 lock (nativeProps)
                 {
                     clearCount = 0;
@@ -274,7 +273,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     //
                     foreach (DictionaryEntry de in nativeProps)
                     {
-
                         entry = de.Value as Com2Properties;
 
                         if (entry != null && entry.TooOld)
@@ -439,20 +437,17 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
                 lock (nativeProps)
                 {
-
                     // find the key
                     object key = propsInfo.TargetObject;
 
                     if (key == null && nativeProps.ContainsValue(propsInfo))
                     {
-
                         // need to find it - the target object has probably been cleaned out
                         // of the Com2Properties object already, so we run through the
                         // hashtable looking for the value, so we know what key to remove.
                         //
                         foreach (DictionaryEntry de in nativeProps)
                         {
-
                             if (de.Value == propsInfo)
                             {
                                 key = de.Key;

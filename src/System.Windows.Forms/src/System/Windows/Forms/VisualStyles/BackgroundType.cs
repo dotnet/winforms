@@ -9,8 +9,8 @@ namespace System.Windows.Forms.VisualStyles
         ImageFile = 0,
         BorderFill = 1,
         None = 2,
-        //		TM_ENUM(0, BT, IMAGEFILE)
-        //		TM_ENUM(1, BT, BORDERFILL)
-        //		TM_ENUM(2, BT, NONE)
+        //      TM_ENUM(0, BT, IMAGEFILE)
+        //      TM_ENUM(1, BT, BORDERFILL)
+        //      TM_ENUM(2, BT, NONE)
     }
 }

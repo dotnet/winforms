@@ -99,6 +99,5 @@ namespace System.Windows.Forms.ButtonInternal
 
             return g.DpiX / 96;
         }
-
     }
 }

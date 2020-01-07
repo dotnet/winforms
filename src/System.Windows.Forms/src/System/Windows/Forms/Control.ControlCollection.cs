@@ -427,7 +427,6 @@ namespace System.Windows.Forms
                     {
                         return null;
                     }
-
                 }
             }
 
@@ -512,7 +511,6 @@ namespace System.Windows.Forms
                 child.UpdateZOrder();
 
                 LayoutTransaction.DoLayout(Owner, child, PropertyNames.ChildIndex);
-
             }
 
             /// <summary>

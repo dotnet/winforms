@@ -100,7 +100,6 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
 
             actual = _controlItem2.Error;
             Assert.Equal(expected, actual);
-
         }
 
         [WinFormsFact]

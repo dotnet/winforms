@@ -32,5 +32,4 @@ namespace System.Drawing.Design
         /// <summary>Resets the UI item.</summary>
         public virtual void Reset() { }
     }
-
 }

@@ -66,7 +66,6 @@ namespace System.Windows.Forms
 
             autoCheck = true;
             TextAlign = ContentAlignment.MiddleLeft;
-
         }
 
         private bool AccObjDoDefaultAction
@@ -255,7 +254,6 @@ namespace System.Windows.Forms
 
                 if (checkState != value)
                 {
-
                     bool oldChecked = Checked;
 
                     checkState = value;
@@ -320,7 +318,6 @@ namespace System.Windows.Forms
                     {
                         cp.Style |= (int)User32.BS.RIGHTBUTTON;
                     }
-
                 }
 
                 return cp;
@@ -518,7 +515,7 @@ namespace System.Windows.Forms
             {
                 AccessibilityNotifyClients(AccessibleEvents.SystemCaptureEnd, -1);
             }
-            
+
             ((EventHandler)Events[EVENT_CHECKEDCHANGED])?.Invoke(this, e);
         }
 
@@ -531,7 +528,7 @@ namespace System.Windows.Forms
             {
                 Refresh();
             }
-            
+
             ((EventHandler)Events[EVENT_CHECKSTATECHANGED])?.Invoke(this, e);
         }
 
@@ -673,7 +670,6 @@ namespace System.Windows.Forms
                     {
                         OnClick(EventArgs.Empty);
                     }
-
                 }
                 return true;
             }
@@ -769,7 +765,6 @@ namespace System.Windows.Forms
                         cb.AccObjDoDefaultAction = false;
                     }
                 }
-
             }
         }
     }

@@ -819,7 +819,6 @@ namespace System.Windows.Forms.Design.Behavior
                     User32.GetCursorPos(out Point pt);
                     User32.MapWindowPoints(IntPtr.Zero, Handle, ref pt, 1);
                     _behaviorService.PropagateHitTest(pt);
-
                 }
                 _behaviorService.OnDragEnter(null, e);
             }
@@ -1201,7 +1200,6 @@ namespace System.Windows.Forms.Design.Behavior
                                     // we did the work, stop the message propogation
                                     return true;
                                 }
-
                             }
                             finally
                             {

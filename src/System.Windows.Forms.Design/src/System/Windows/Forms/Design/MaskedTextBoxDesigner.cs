@@ -121,7 +121,6 @@ namespace System.Windows.Forms.Design
                 default:
                     Debug.Fail("Unknown RejectionHint, defaulting to InvalidInput...");
                     goto case MaskedTextResultHint.InvalidInput;
-
             }
 
             return string.Format(CultureInfo.CurrentCulture, SR.MaskedTextBoxTextEditorErrorFormatString, e.Position, rejectionHint);
@@ -196,7 +195,7 @@ namespace System.Windows.Forms.Design
 
         /// <summary>
         ///  Shadows the PasswordChar.  UseSystemPasswordChar overrides PasswordChar so independent on the value
-        ///  of PasswordChar it will return the systemp password char.  However, the value of PasswordChar is 
+        ///  of PasswordChar it will return the systemp password char.  However, the value of PasswordChar is
         ///  cached so if UseSystemPasswordChar is reset at design time the PasswordChar value can be restored.
         ///  So in the case both properties are set, we need to serialize the real PasswordChar value as well.
         /// </summary>

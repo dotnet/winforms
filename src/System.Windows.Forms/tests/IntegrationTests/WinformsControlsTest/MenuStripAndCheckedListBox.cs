@@ -44,7 +44,6 @@ namespace WinformsControlsTest
             menuStrip1.Font = new Font(f.FontFamily, f.Size * factor, f.Style);
 
             menuStrip1.ResumeLayout();
-
         }
     }
 }

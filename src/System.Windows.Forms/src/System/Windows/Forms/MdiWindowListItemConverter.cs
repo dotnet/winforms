@@ -32,7 +32,6 @@ namespace System.Windows.Forms
                     }
                 }
                 return new StandardValuesCollection(list);
-
             }
             return base.GetStandardValues(context);
         }

@@ -38,7 +38,7 @@ namespace System.Windows.Forms.Tests
                 Name = value
             };
             Assert.Null(accessibleObject.Name);
-            
+
             // Set same.
             accessibleObject.Name = value;
             Assert.Null(accessibleObject.Name);
@@ -53,7 +53,7 @@ namespace System.Windows.Forms.Tests
                 Value = value
             };
             Assert.Empty(accessibleObject.Value);
-            
+
             // Set same.
             accessibleObject.Value = value;
             Assert.Empty(accessibleObject.Value);
@@ -534,7 +534,7 @@ namespace System.Windows.Forms.Tests
             var accessibleObject = new AccessibleObject();
             accessibleObject.Select(flags);
         }
-        
+
         public static IEnumerable<object[]> UseStdAccessibleObjects_IntPtr_InvalidHandle_TestData()
         {
             yield return new object[] { IntPtr.Zero };
@@ -598,7 +598,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(AccessibleStates.ReadOnly, accessibleObject.State);
             Assert.Null(accessibleObject.Value);
         }
-        
+
         public static IEnumerable<object[]> UseStdAccessibleObjects_IntPtr_Int_InvalidHandle_TestData()
         {
             yield return new object[] { IntPtr.Zero, 0 };
@@ -862,7 +862,7 @@ namespace System.Windows.Forms.Tests
             Assert.Same(result, iAccessible.accFocus);
             mockAccessibleObject.Verify(a => a.GetFocused(), Times.Once());
         }
-        
+
         [WinFormsFact]
         public void AccessibleObject_IAccessiblaccFocus_InvokeDefaultSelf_ReturnsExpected()
         {
@@ -1327,7 +1327,7 @@ namespace System.Windows.Forms.Tests
             Assert.Same(result, iAccessible.accSelection);
             mockAccessibleObject.Verify(a => a.GetSelected(), Times.Once());
         }
-        
+
         [WinFormsFact]
         public void AccessibleObject_IAccessiblaccSelection_InvokeDefaultSelf_ReturnsExpected()
         {

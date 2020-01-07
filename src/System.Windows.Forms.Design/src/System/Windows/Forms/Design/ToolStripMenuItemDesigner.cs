@@ -286,7 +286,6 @@ namespace System.Windows.Forms.Design
                     {
                         return true;
                     }
-
                 }
                 return false;
             }
@@ -2487,7 +2486,6 @@ namespace System.Windows.Forms.Design
                 minIndex++;
             }
             selSvc.SetSelectedComponents(selectedItems);
-
         }
 
         /// <summary>

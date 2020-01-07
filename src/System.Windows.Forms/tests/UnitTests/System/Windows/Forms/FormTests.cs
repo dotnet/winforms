@@ -1870,13 +1870,13 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-        
+
             // Call with handler.
             control.HandleCreated += handler;
             control.OnHandleCreated(eventArgs);
             Assert.Equal(1, callCount);
             Assert.False(control.IsHandleCreated);
-        
+
             // Remove handler.
             control.HandleCreated -= handler;
             control.OnHandleCreated(eventArgs);
@@ -1897,13 +1897,13 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-        
+
             // Call with handler.
             control.HandleCreated += handler;
             control.OnHandleCreated(eventArgs);
             Assert.Equal(1, callCount);
             Assert.True(control.IsHandleCreated);
-        
+
             // Remove handler.
             control.HandleCreated -= handler;
             control.OnHandleCreated(eventArgs);
@@ -1922,13 +1922,13 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-        
+
             // Call with handler.
             control.HandleDestroyed += handler;
             control.OnHandleDestroyed(eventArgs);
             Assert.Equal(1, callCount);
             Assert.False(control.IsHandleCreated);
-        
+
             // Remove handler.
             control.HandleDestroyed -= handler;
             control.OnHandleDestroyed(eventArgs);
@@ -1949,13 +1949,13 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-        
+
             // Call with handler.
             control.HandleDestroyed += handler;
             control.OnHandleDestroyed(eventArgs);
             Assert.Equal(1, callCount);
             Assert.True(control.IsHandleCreated);
-        
+
             // Remove handler.
             control.HandleDestroyed -= handler;
             control.OnHandleDestroyed(eventArgs);
@@ -1966,7 +1966,7 @@ namespace System.Windows.Forms.Tests
         private class SubForm : Form
         {
             public new void OnHandleCreated(EventArgs e) => base.OnHandleCreated(e);
-            
+
             public new void OnHandleDestroyed(EventArgs e) => base.OnHandleDestroyed(e);
         }
     }

@@ -83,7 +83,6 @@ namespace System.Windows.Forms
                 Form[] forms = mdiParent.MdiChildren;
                 if (forms != null && forms.Length != 0)
                 {
-
                     if (includeSeparator)
                     {
                         ToolStripSeparator separator = new ToolStripSeparator
@@ -173,7 +172,6 @@ namespace System.Windows.Forms
                     DialogResult result = dialog.ShowDialog();
                     if (result == DialogResult.OK)
                     {
-
                         // AllWindows Assert above allows this...
                         //
                         dialog.ActiveChildForm.Activate();

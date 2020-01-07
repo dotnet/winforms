@@ -28,7 +28,6 @@ namespace System.Windows.Forms
         {
             if (value is string strValue)
             {
-
                 if (string.Compare(strValue, SR.toStringDefault, true, culture) == 0)
                 {
                     return -1;

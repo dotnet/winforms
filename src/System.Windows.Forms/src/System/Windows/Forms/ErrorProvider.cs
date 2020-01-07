@@ -1269,7 +1269,6 @@ namespace System.Windows.Forms
                             dc.Dispose();
                         }
                     }
-
                 }
                 finally
                 {
@@ -1738,7 +1737,6 @@ namespace System.Windows.Forms
                             {
                                 for (int x = 0; x < size.Width; x++)
                                 {
-
                                     // see if bit is set in mask. bits in byte are reversed. 0 is black (set).
                                     if ((bits[y * widthInBytes + x / 8] & (1 << (7 - (x % 8)))) == 0)
                                     {

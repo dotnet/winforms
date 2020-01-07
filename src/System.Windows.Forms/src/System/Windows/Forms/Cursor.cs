@@ -70,7 +70,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Initializes a new instance of the <see cref='Cursor'/> class from the specified resource.
         /// </summary>
-        public Cursor(Type type, string resource) 
+        public Cursor(Type type, string resource)
             : this((type?? throw new ArgumentNullException(nameof(type))).Module.Assembly.GetManifestResourceStream(type, resource))
         {
         }

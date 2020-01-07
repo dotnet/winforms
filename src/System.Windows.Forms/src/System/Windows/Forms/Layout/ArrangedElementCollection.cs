@@ -54,7 +54,7 @@ namespace System.Windows.Forms.Layout
             {
                 hash.Add(o);
             }
-            
+
             return hash.ToHashCode();
         }
 

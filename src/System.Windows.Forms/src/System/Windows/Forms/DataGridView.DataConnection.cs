@@ -1394,7 +1394,6 @@ namespace System.Windows.Forms
                     {
                         editableObject.BeginEdit();
                     }
-
                 }
                 finally
                 {

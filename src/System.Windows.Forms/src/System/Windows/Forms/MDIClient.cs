@@ -11,12 +11,12 @@ using static Interop;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Represents the container for multiple-document interface (MDI) child forms. 
+    /// Represents the container for multiple-document interface (MDI) child forms.
     /// This class cannot be inherited.
     /// </summary>
     /// <remarks>
     ///  Don't create an <see cref="MdiClient"/> control.
-    ///  A form creates and uses the <see cref="MdiClient"/> when you set the <see cref="Form.IsMdiContainer"/> property to <see langword="true"/>.  
+    ///  A form creates and uses the <see cref="MdiClient"/> when you set the <see cref="Form.IsMdiContainer"/> property to <see langword="true"/>.
     /// </remarks>
     [
     ComVisible(true),
@@ -221,7 +221,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Scales this form's location, size, padding, and margin. The <see cref="MdiClient" /> overrides 
+        ///  Scales this form's location, size, padding, and margin. The <see cref="MdiClient" /> overrides
         ///  <see cref="ScaleControl(SizeF,BoundsSpecified)" /> to enforce a minimum and maximum size.
         /// </summary>
         /// <param name="factor">The factor by which the height and width of the control will be scaled.</param>
@@ -378,7 +378,6 @@ namespace System.Windows.Forms
         {
             switch (m.Msg)
             {
-
                 case WindowMessages.WM_CREATE:
                     if (ParentInternal != null && ParentInternal.Site != null && ParentInternal.Site.DesignMode && Handle != IntPtr.Zero)
                     {

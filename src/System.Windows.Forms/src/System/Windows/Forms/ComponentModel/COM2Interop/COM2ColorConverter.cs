@@ -64,12 +64,10 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             if (managedValue is Color)
             {
                 return ColorTranslator.ToOle(((Color)managedValue));
-
             }
             Debug.Fail("Don't know how to set type:" + managedValue.GetType().Name);
             return 0;
         }
-
     }
 }
 

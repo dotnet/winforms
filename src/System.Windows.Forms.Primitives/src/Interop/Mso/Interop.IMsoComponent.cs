@@ -16,7 +16,7 @@ internal static partial class Interop
 
         /// <remarks>
         ///  WM_MOUSEACTIVATE Note (for top level compoenents and host)
-        ///  
+        ///
         ///  If the active (or tracking) comp's reg info indicates that it wants mouse
         ///  messages, then no MA_xxxANDEAT value should be returned  from WM_MOUSEACTIVATE,
         ///  so that the active (or tracking) comp will be able to process the resulting mouse
@@ -87,7 +87,7 @@ internal static partial class Interop
             /// <param name="fActive">
             ///  If <see cref="BOOL.TRUE"/>, the host app is being activated and <paramref name="dwOtherThreadID"/>
             ///  is the ID of the thread owning the window being deactivated.
-            ///  
+            ///
             ///  If <see cref="BOOL.FALSE"/>, the host app is being deactivated and <paramref name="dwOtherThreadID"/>
             ///  is the ID of the thread owning the window being activated.
             /// </param>
@@ -119,11 +119,11 @@ internal static partial class Interop
             ///  bit set, then <paramref name="pic"/> is being activated in "ExclusiveActive" mode.
             ///  Component should retrieve the top frame window that is hosting <paramref name="pic"/>
             ///  (via <see cref="HwndGetWindow"/> with <see cref="msocWindow.FrameToplevel"/>).
-            ///  
+            ///
             ///  If this window is different from component's own top frame window, component should
             ///  disable its windows and do other things it would do when receiving
             ///  <see cref="OnEnterState"/> with <see cref="msocstate.Modal" /> notification.
-            ///  
+            ///
             ///  Otherwise, if component is top-level, it should refuse to have its window activated
             ///  by appropriately processing WM_MOUSEACTIVATE (but see WM_MOUSEACTIVATE NOTE, above).
             ///  Component should remain in one of these states until the exclusive active mode ends,
@@ -136,10 +136,10 @@ internal static partial class Interop
             ///  <paramref name="fSameComponent"/> is TRUE if <paramref name="pic"/> is the same
             ///  component as the callee of this method, and <paramref name="pcrinfo"/> is the
             ///  reg info of <paramref name="pic"/>.
-            ///  
+            ///
             ///  If null and <paramref name="fHostIsActivating"/> is TRUE, then the host is the
             ///  object being activated, and <paramref name="pchostinfo"/> is its host info.
-            ///  
+            ///
             ///  If null and <paramref name="fHostIsActivating"/> is FALSE, then there is no
             ///  current active object.
             /// </param>
@@ -161,11 +161,11 @@ internal static partial class Interop
             ///  Component may periodically call <see cref="IMsoComponentManager.FContinueIdle"/>;
             ///  if this method returns FALSE, component should terminate its idle time
             ///  processing and return.
-            ///  
+            ///
             ///  Note: If a component reaches a point where it has no idle tasks and does not
             ///  need <see cref="FDoIdle"/> calls, it should remove its idle task registration
             ///  via <see cref="IMsoComponentManager.FUpdateComponentRegistration"/>.
-            ///  
+            ///
             ///  Note: If this method is called on while component is performing a tracking
             ///  operation, component should only perform idle time tasks that it deems are
             ///  appropriate to perform during tracking.
@@ -185,7 +185,7 @@ internal static partial class Interop
             ///  This method is called after peeking the next message in the queue (via PeekMessage)
             ///  but before the message is removed from the queue. The peeked message is passed in
             ///  the <paramref name="pMsgPeeked"/> param (null if no message is in the queue).
-            ///  
+            ///
             ///  This method may be additionally called when the next message has already been removed
             ///  from the queue, in which case <paramref name="pMsgPeeked"/> is passed as null.
             /// </remarks>
@@ -198,7 +198,7 @@ internal static partial class Interop
             /// <returns>
             ///  <see cref="BOOL.TRUE"/> if the message loop should continue,
             ///  <see cref="BOOL.FALSE"/> otherwise.
-            ///  
+            ///
             ///  If <see cref="BOOL.FALSE"/> is returned, the component manager terminates the
             ///  loop without removing <paramref name="pMsgPeeked"/> from the queue.
             /// </returns>
@@ -215,7 +215,7 @@ internal static partial class Interop
             /// <remarks>
             ///  If <paramref name="fPromptUser"/> is FALSE, component should simply return
             ///  TRUE if it can terminate, FALSE otherwise.
-            ///  
+            ///
             ///  If <paramref name="fPromptUser"/> is TRUE, component should return TRUE if
             ///  it can terminate without prompting the user; otherwise it should prompt the
             ///  user, either 1.) asking user if it can terminate and returning TRUE or FALSE

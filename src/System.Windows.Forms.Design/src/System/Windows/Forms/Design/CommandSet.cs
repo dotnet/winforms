@@ -973,7 +973,6 @@ namespace System.Windows.Forms.Design
                                 return;
                             }
                         }
-
                     }
                     bool firstTry = true;
                     // for each component, we round to the nearest snap offset for x and y
@@ -1776,7 +1775,6 @@ namespace System.Windows.Forms.Design
 
                         foreach (object obj in components)
                         {
-
                             name = null;
                             curComp = obj as IComponent;
                             // see if we can fish out the original name. When we serialized, we serialized an array of names at the head of the list.  This array matches the components that were created.
@@ -2331,7 +2329,6 @@ namespace System.Windows.Forms.Design
                     }
                 }
             }
-
         }
 
         /// <summary>
@@ -2644,7 +2641,6 @@ namespace System.Windows.Forms.Design
                         {
                             curLoc.X -= grid.Width * (primaryIndex - n);
                         }
-
                     }
                     else if (cmdID == MenuCommands.HorizSpaceMakeEqual && n > 0)
                     {

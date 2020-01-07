@@ -66,7 +66,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 propDesc[i].QueryResetValue += new Com2EventHandler(OnResetPropertyValue);
 
                 propDesc[i].QueryGetTypeConverterAndTypeEditor += new GetTypeConverterAndTypeEditorEventHandler(OnGetTypeConverterAndTypeEditor);
-
             }
         }
 
@@ -147,7 +146,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         {
             if (sender.TargetObject is VSSDK.IVsPerPropertyBrowsing vsObj)
             {
-
                 // get the localized name, if applicable
                 string[] pNameString = new string[1];
                 HRESULT hr = vsObj.GetLocalizedPropertyInfo(sender.DISPID, CultureInfo.CurrentCulture.LCID, pNameString, null);

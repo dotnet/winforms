@@ -23,20 +23,17 @@ namespace AccessibilityTests
             {
                 e.Graphics.DrawString(this.txtPrint.Text.ToString(), font, bru, i * 20, i * 20);
             }
-
         }
 
         private void BtnSetting_Click(object sender, EventArgs e)
         {
             pageSetupDialog1.Document = printDocument1;
             this.pageSetupDialog1.ShowDialog();
-
         }
 
         private void BtnPreView_Click(object sender, EventArgs e)
         {
             this.printPreviewDialog1.ShowDialog();
-           
         }
 
         private void BtnPrint_Click(object sender, EventArgs e)

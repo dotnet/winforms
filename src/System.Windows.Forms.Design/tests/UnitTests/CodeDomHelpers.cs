@@ -113,7 +113,7 @@ namespace WinForms.Common.Tests
                 {
                     return "string.Empty";
                 }
-                
+
                 return $"\"{s}\"";
             }
 

@@ -99,6 +99,5 @@ namespace System.Windows.Forms.PropertyGridInternal
         public override bool CanSetReadOnlyPropertyValue() {
            return this.ParentGridEntry.CanSetReadOnlyPropertyValue();
         }*/
-
     }
 }

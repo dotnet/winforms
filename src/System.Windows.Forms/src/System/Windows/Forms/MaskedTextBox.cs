@@ -2019,7 +2019,6 @@ namespace System.Windows.Forms
             {
                 if (!ReadOnly)
                 {
-
                     base.GetSelectionStartAndLength(out int startPosition, out int selectionLen);
 
                     switch (e.Modifiers)

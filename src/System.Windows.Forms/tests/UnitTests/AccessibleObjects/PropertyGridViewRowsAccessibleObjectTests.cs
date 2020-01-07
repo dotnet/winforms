@@ -86,7 +86,5 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
             Controls.Add(domainUpDown);
             Load += TestForm_Load;
         }
-
     }
-
 }

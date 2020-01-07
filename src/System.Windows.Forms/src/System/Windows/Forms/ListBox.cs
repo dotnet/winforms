@@ -723,7 +723,6 @@ namespace System.Windows.Forms
         {
             get
             {
-
                 if (horizontalExtent > 0)
                 {
                     return horizontalExtent;
@@ -904,7 +903,6 @@ namespace System.Windows.Forms
         {
             get
             {
-
                 SelectionMode current = (selectionModeChanging) ? cachedSelectionMode : selectionMode;
 
                 if (current == SelectionMode.None)
@@ -926,7 +924,6 @@ namespace System.Windows.Forms
             }
             set
             {
-
                 int itemCount = (itemsCollection == null) ? 0 : itemsCollection.Count;
 
                 if (value < -1 || value >= itemCount)
@@ -941,7 +938,6 @@ namespace System.Windows.Forms
 
                 if (selectionMode == SelectionMode.One && value != -1)
                 {
-
                     // Single select an individual value.
                     int currentIndex = SelectedIndex;
 
@@ -973,7 +969,6 @@ namespace System.Windows.Forms
                 {
                     if (!SelectedItems.GetSelected(value))
                     {
-
                         // Select this item while keeping any previously selected items selected.
                         //
                         SelectedItems.SetSelected(value, true);
@@ -1184,7 +1179,6 @@ namespace System.Windows.Forms
                 //
                 if (SelectionMode != SelectionMode.None && value != null && (SelectedItem == null || !value.Equals(GetItemText(SelectedItem))))
                 {
-
                     int cnt = Items.Count;
                     for (int index = 0; index < cnt; ++index)
                     {
@@ -1772,7 +1766,6 @@ namespace System.Windows.Forms
 
             switch (selectionMode)
             {
-
                 case SelectionMode.One:
                     int index = unchecked((int)(long)SendMessage((int)User32.LB.GETCURSEL, 0, 0));
                     if (index >= 0)
@@ -1885,7 +1878,6 @@ namespace System.Windows.Forms
 
             if (itemsCollection != null)
             {
-
                 int count = itemsCollection.Count;
 
                 for (int i = 0; i < count; i++)
@@ -1968,7 +1960,6 @@ namespace System.Windows.Forms
             {
                 Invalidate();
             }
-
         }
 
         /// <summary>
@@ -2074,7 +2065,6 @@ namespace System.Windows.Forms
                 {
                     graphics.Dispose();
                 }
-
             }
             base.Refresh();
         }
@@ -2147,7 +2137,6 @@ namespace System.Windows.Forms
                     }
                 }
             }
-
         }
 
         /// <summary>
@@ -2336,7 +2325,6 @@ namespace System.Windows.Forms
             UpdateHorizontalExtent();
             // clear the preferred size cache.
             CommonProperties.xClearPreferredSizeCache(this);
-
         }
 
         private void UpdateHorizontalExtent()
@@ -2369,7 +2357,6 @@ namespace System.Windows.Forms
             //
             if (maxWidth > -1)
             {
-
                 // Compute item width
                 //
                 int width;
@@ -2851,7 +2838,6 @@ namespace System.Windows.Forms
             /// </summary>
             public int IndexOf(object item, int stateMask)
             {
-
                 int virtualIndex = -1;
 
                 for (int i = 0; i < count; i++)
@@ -3379,7 +3365,6 @@ namespace System.Windows.Forms
             /// </summary>
             internal void ClearInternal()
             {
-
                 //update the width.. to reset Scrollbars..
                 // Clear the selection state.
                 //
@@ -3487,7 +3472,6 @@ namespace System.Windows.Forms
                     InnerArray.Insert(index, item);
                     if (owner.IsHandleCreated)
                     {
-
                         bool successful = false;
 
                         try
@@ -3514,7 +3498,6 @@ namespace System.Windows.Forms
             /// </summary>
             public void Remove(object value)
             {
-
                 int index = InnerArray.IndexOf(value, 0);
 
                 if (index != -1)
@@ -3713,7 +3696,6 @@ namespace System.Windows.Forms
             /// </summary>
             private int AddInternal(int item)
             {
-
                 EnsureSpace(1);
 
                 int index = IndexOf(item);
@@ -3839,7 +3821,6 @@ namespace System.Windows.Forms
             /// </summary>
             public void Remove(int item)
             {
-
                 int index = IndexOf(item);
 
                 if (index != -1)
@@ -3876,14 +3857,12 @@ namespace System.Windows.Forms
                 }
                 set
                 {
-
                     if (index < 0 || index >= count)
                     {
                         throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                     }
                     innerArray[index] = (int)value;
                     owner.UpdateCustomTabOffsets();
-
                 }
             }
 
@@ -3903,7 +3882,6 @@ namespace System.Windows.Forms
                     {
                         this[index] = (int)value;
                     }
-
                 }
             }
 
@@ -3944,7 +3922,6 @@ namespace System.Windows.Forms
                 /// </summary>
                 bool IEnumerator.MoveNext()
                 {
-
                     if (current < items.Count - 1)
                     {
                         current++;
@@ -4059,7 +4036,6 @@ namespace System.Windows.Forms
 
             public int IndexOf(int selectedIndex)
             {
-
                 // Just what does this do?  The selectedIndex parameter above is the index into the
                 // main object collection.  We look at the state of that item, and if the state indicates
                 // that it is selected, we get back the virtualized index into this collection.  Indexes on
@@ -4068,7 +4044,6 @@ namespace System.Windows.Forms
                     selectedIndex < InnerArray.GetCount(0) &&
                     InnerArray.GetState(selectedIndex, SelectedObjectCollection.SelectedObjectMask))
                 {
-
                     return InnerArray.IndexOf(InnerArray.GetItem(selectedIndex, 0), SelectedObjectCollection.SelectedObjectMask);
                 }
 
@@ -4224,7 +4199,6 @@ namespace System.Windows.Forms
                 /// </summary>
                 bool IEnumerator.MoveNext()
                 {
-
                     if (current < items.Count - 1)
                     {
                         current++;
@@ -4294,7 +4268,6 @@ namespace System.Windows.Forms
                         SelectionMode current = (owner.selectionModeChanging) ? owner.cachedSelectionMode : owner.selectionMode;
                         switch (current)
                         {
-
                             case SelectionMode.None:
                                 return 0;
 

@@ -106,7 +106,6 @@ namespace System.Windows.Forms
 
             return htmlWindows.GetEnumerator();
         }
-
     }
 }
 

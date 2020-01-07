@@ -15,7 +15,7 @@ using System.Runtime.InteropServices;
 ///  of the classes (such as <see cref="System.Windows.Forms.Control"/>) that
 ///  meet this common pattern in interop and encourages correct alignment
 ///  with the proper owner.
-///  
+///
 ///  Note that keeping objects alive is necessary ONLY when the object has
 ///  a finalizer that will explicitly close the handle.
 /// </remarks>

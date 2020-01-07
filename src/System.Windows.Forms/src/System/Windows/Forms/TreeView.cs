@@ -675,7 +675,6 @@ namespace System.Windows.Forms
             {
                 if (value != imageList)
                 {
-
                     DetachImageListHandlers();
 
                     imageList = value;
@@ -758,7 +757,6 @@ namespace System.Windows.Forms
             {
                 if (value != stateImageList)
                 {
-
                     DetachStateImageListHandlers();
                     stateImageList = value;
                     AttachStateImageListHandlers();
@@ -786,7 +784,6 @@ namespace System.Windows.Forms
                             RefreshNodes();
                         }
                     }
-
                 }
             }
         }
@@ -957,7 +954,6 @@ namespace System.Windows.Forms
                     if (IsHandleCreated)
                     {
                         SendMessage(NativeMethods.TVM_SETLINECOLOR, 0, ColorTranslator.ToWin32(lineColor));
-
                     }
                 }
             }
@@ -1078,7 +1074,6 @@ namespace System.Windows.Forms
         {
             get
             {
-
                 return rightToLeftLayout;
             }
 
@@ -1482,7 +1477,6 @@ namespace System.Windows.Forms
                 {
                     topNode = value;
                 }
-
             }
         }
 
@@ -1694,7 +1688,6 @@ namespace System.Windows.Forms
         {
             internalStateImageList = null;
             StateImageList = null;
-
         }
 
         protected override void Dispose(bool disposing)
@@ -1708,7 +1701,6 @@ namespace System.Windows.Forms
                     DetachStateImageListHandlers();
                     stateImageList = null;
                 }
-
             }
 
             base.Dispose(disposing);
@@ -2062,7 +2054,6 @@ namespace System.Windows.Forms
             int oldSize = 0;
             try
             {
-
                 treeViewState[TREEVIEWSTATE_stopResizeWindowMsgs] = true;
                 oldSize = Width;
                 User32.SWP flags = User32.SWP.NOZORDER | User32.SWP.NOACTIVATE | User32.SWP.NOMOVE;
@@ -2214,7 +2205,6 @@ namespace System.Windows.Forms
             }
 
             ResetMouseEventArgs();
-
         }
 
         /// <summary>
@@ -2690,7 +2680,6 @@ namespace System.Windows.Forms
                     {
                         SetStateImageList(internalStateImageList.Handle);
                     }
-
                 }
             }
         }
@@ -2738,7 +2727,6 @@ namespace System.Windows.Forms
             {
                 DefWndProc(ref m);
             }
-
         }
 
         /// <summary>
@@ -3099,7 +3087,6 @@ namespace System.Windows.Forms
                                 OnNodeMouseClick(new TreeNodeMouseClickEventArgs(NodeFromHandle(hnode), button, 1, pos.X, pos.Y));
                                 OnClick(new MouseEventArgs(button, 1, pos.X, pos.Y, 0));
                                 OnMouseClick(new MouseEventArgs(button, 1, pos.X, pos.Y, 0));
-
                             }
                         }
                         if (nmtv->nmhdr.code == (int)ComCtl32.NM.RCLICK)
@@ -3115,7 +3102,6 @@ namespace System.Windows.Forms
                                 User32.SendMessageW(this, User32.WindowMessage.WM_CONTEXTMENU, Handle, (IntPtr)User32.GetMessagePos());
                             }
                             m.Result = (IntPtr)1;
-
                         }
 
                         if (!treeViewState[TREEVIEWSTATE_mouseUpFired])
@@ -3129,7 +3115,6 @@ namespace System.Windows.Forms
                                 OnMouseUp(new MouseEventArgs(button, 1, pos.X, pos.Y, 0));
                                 treeViewState[TREEVIEWSTATE_mouseUpFired] = true;
                             }
-
                         }
                         break;
                 }

@@ -783,7 +783,6 @@ namespace System.Windows.Forms
                                     {
                                         using (WindowsGraphics wg = WindowsGraphics.FromHdc(hdc))
                                         {
-
                                             WindowsBrush windowsBrush;
                                             if (colors.options.highContrast)
                                             {

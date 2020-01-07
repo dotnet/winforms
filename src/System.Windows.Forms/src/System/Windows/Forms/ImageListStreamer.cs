@@ -93,7 +93,6 @@ namespace System.Windows.Forms
 
             while (idx < input.Length)
             {
-
                 byte current = input[idx++];
                 byte runLength = 1;
 
@@ -114,7 +113,6 @@ namespace System.Windows.Forms
 
             while (idx < input.Length)
             {
-
                 byte current = input[idx++];
                 byte runLength = 1;
 
@@ -271,6 +269,5 @@ namespace System.Windows.Forms
                 }
             }
         }
-
     }
 }

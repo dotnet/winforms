@@ -102,7 +102,6 @@ namespace System.Windows.Forms.Internal
 
 #endif
                         return font;
-
                     }
                 }
 #endif

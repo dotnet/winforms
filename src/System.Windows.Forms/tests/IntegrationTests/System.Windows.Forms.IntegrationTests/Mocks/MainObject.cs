@@ -34,6 +34,5 @@ namespace System.Windows.Forms.IntegrationTests.Mocks
         }
 
         public bool IsPropertyChangedAssigned { get { return _propertyChanged != null; } }
-
     }
 }

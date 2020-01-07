@@ -12,7 +12,6 @@ using System.Text;
 using System.Windows.Forms.Internal;
 using static Interop;
 
-
 namespace System.Windows.Forms
 {
     internal sealed class WindowsFormsUtils
@@ -626,7 +625,6 @@ namespace System.Windows.Forms
                     Debug.Assert((selectResult == RegionType.SIMPLEREGION ||
                                   selectResult == RegionType.NULLREGION),
                                   "SIMPLEREGION or NULLLREGION expected.");
-
                 }
                 catch (Exception ex) when (!ClientUtils.IsSecurityOrCriticalException(ex))
                 {

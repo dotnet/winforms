@@ -322,6 +322,5 @@ namespace System.Windows.Forms.Tests
 
             Assert.Equal(expected, box.GetItemCheckState(0));
         }
-
     }
 }

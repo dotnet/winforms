@@ -41,7 +41,6 @@ namespace System.Windows.Forms
             Debug.Assert(NativeHtmlElement != null, "The element object should implement IHTMLElement");
 
             this.shimManager = shimManager;
-
         }
 
         public HtmlElementCollection All
@@ -527,7 +526,6 @@ namespace System.Windows.Forms
         {
             add => ElementShim.AddHandler(EventClick, value);
             remove => ElementShim.RemoveHandler(EventClick, value);
-
         }
 
         public event HtmlElementEventHandler DoubleClick
@@ -552,7 +550,6 @@ namespace System.Windows.Forms
         {
             add => ElementShim.AddHandler(EventDragLeave, value);
             remove => ElementShim.RemoveHandler(EventDragLeave, value);
-
         }
 
         public event HtmlElementEventHandler DragOver
@@ -571,7 +568,6 @@ namespace System.Windows.Forms
         {
             add => ElementShim.AddHandler(EventGotFocus, value);
             remove => ElementShim.RemoveHandler(EventGotFocus, value);
-
         }
 
         public event HtmlElementEventHandler LosingFocus
@@ -595,7 +591,6 @@ namespace System.Windows.Forms
         {
             add => ElementShim.AddHandler(EventKeyPress, value);
             remove => ElementShim.RemoveHandler(EventKeyPress, value);
-
         }
         public event HtmlElementEventHandler KeyUp
         {
@@ -1081,7 +1076,6 @@ namespace System.Windows.Forms
             ///  Support IHTMLElement2.AttachEventHandler
             public override void AttachEventHandler(string eventName, EventHandler eventHandler)
             {
-
                 // IE likes to call back on an IDispatch of DISPID=0 when it has an event,
                 // the HtmlToClrEventProxy helps us fake out the CLR so that we can call back on
                 // our EventHandler properly.
@@ -1126,7 +1120,6 @@ namespace System.Windows.Forms
                     cookie.Disconnect();
                     cookie = null;
                 }
-
             }
             protected override void Dispose(bool disposing)
             {
@@ -1142,7 +1135,6 @@ namespace System.Windows.Forms
             {
                 return htmlElement;
             }
-
         }
 
         #region operators

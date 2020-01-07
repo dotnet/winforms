@@ -201,6 +201,5 @@ namespace System.Windows.Forms
             OnCurrentChanged(EventArgs.Empty);
             OnCurrentItemChanged(EventArgs.Empty);
         }
-
     }
 }

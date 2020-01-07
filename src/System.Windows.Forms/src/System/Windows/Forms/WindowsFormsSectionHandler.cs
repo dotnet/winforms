@@ -8,14 +8,14 @@ namespace System.Windows.Forms
     // Keeping the skeleton to unblock compile scenarios, if any.
     // And to receive feedback if there are any users  of this class that we do not know
     public sealed class WindowsFormsSection
-	{
+    {
         internal static WindowsFormsSection GetSection()
-		{
+        {
             throw new NotImplementedException();
         }
 
         public WindowsFormsSection()
-		{
+        {
             throw new NotImplementedException();
         }
 

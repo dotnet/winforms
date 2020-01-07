@@ -140,7 +140,6 @@ namespace System.ComponentModel.Design.Serialization
                     {
                         foreach (CodeStatement statement in method.Statements)
                         {
-
                             if (statement is CodeVariableDeclarationStatement local)
                             {
                                 _nameTable[local.Name] = statement;

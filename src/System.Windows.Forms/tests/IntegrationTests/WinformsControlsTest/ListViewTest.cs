@@ -29,7 +29,6 @@ namespace WinformsControlsTest
             listView1.Items[2].ImageIndex = 2;
             listView1.Click += (s, e) =>
             {
-
                 //listView1.TileSize = new Size(random.Next(100, 300), random.Next(25, 50));
 
                 Point pos = Cursor.Position;

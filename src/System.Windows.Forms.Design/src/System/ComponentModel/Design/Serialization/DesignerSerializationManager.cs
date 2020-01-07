@@ -205,7 +205,6 @@ namespace System.ComponentModel.Design.Serialization
             // If we have been asked to recycle instances, look in our nametable and container first for an object matching this name and type.  If we find it, we will use it.
             if (RecycleInstances && name != null)
             {
-
                 if (instancesByName != null)
                 {
                     instance = instancesByName[name];
@@ -344,7 +343,6 @@ namespace System.ComponentModel.Design.Serialization
                         {
                             argTypes.Append("null");
                         }
-
                     }
                     Exception ex = new SerializationException(string.Format(SR.SerializationManagerNoMatchingCtor, type.FullName, argTypes.ToString()))
                     {
@@ -380,7 +378,7 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        ///  Creates a new serialization session.  Most data within the serialization manager is transient and only lives for the life of a serialization session.  When a session is disposed, serialization is considered to be complete and this transient state is cleared.  This allows a single instance of a serialization manager to be used to serialize multiple object trees.  Some state, including the service provider and any custom serialization providers that were added to the serialization manager, span sessions.	
+        ///  Creates a new serialization session.  Most data within the serialization manager is transient and only lives for the life of a serialization session.  When a session is disposed, serialization is considered to be complete and this transient state is cleared.  This allows a single instance of a serialization manager to be used to serialize multiple object trees.  Some state, including the service provider and any custom serialization providers that were added to the serialization manager, span sessions.
         /// </summary>
         public IDisposable CreateSession()
         {
@@ -656,7 +654,6 @@ namespace System.ComponentModel.Design.Serialization
                         {
                             propArray[i] = WrapProperty(props[i], propObject);
                         }
-
                     }
                     properties = new PropertyDescriptorCollection(propArray);
                 }

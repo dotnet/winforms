@@ -234,7 +234,6 @@ namespace System.Windows.Forms
 
             internal StatusDialog(BackgroundThread backgroundThread, string dialogTitle)
             {
-
                 InitializeComponent();
                 this.backgroundThread = backgroundThread;
                 Text = dialogTitle;

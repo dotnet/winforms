@@ -345,7 +345,6 @@ namespace System.Windows.Forms
                         lastRight = x - itemMargin.Left;
                         alignedRightItems = (alignedRightItems == Rectangle.Empty) ? new Rectangle(x, y, itemSize.Width, itemSize.Height)
                                                 : Rectangle.Union(alignedRightItems, new Rectangle(x, y, itemSize.Width, itemSize.Height));
-
                     }
                     else
                     {
@@ -359,7 +358,6 @@ namespace System.Windows.Forms
                         lastLeft = x + itemSize.Width + itemMargin.Right;
                         alignedLeftItems = (alignedLeftItems == Rectangle.Empty) ? new Rectangle(x, y, itemSize.Width, itemSize.Height)
                                                 : Rectangle.Union(alignedLeftItems, new Rectangle(x, y, itemSize.Width, itemSize.Height));
-
                     }
 
                     item.ParentInternal = ToolStrip;
@@ -471,7 +469,6 @@ namespace System.Windows.Forms
 
                     // since we havent parented the item yet - the auto size wont have reset the size yet.
                     itemSize = item.AutoSize ? item.GetPreferredSize(Size.Empty) : item.Size;
-
                 }
 
                 // if it turns out we dont need the overflow (because there are no Overflow.Always items and the height of everything
@@ -582,7 +579,6 @@ namespace System.Windows.Forms
                         itemLocation = noMansLand;
                         item.SetPlacement(ToolStripItemPlacement.None);
                     }
-
                 }
                 else
                 {

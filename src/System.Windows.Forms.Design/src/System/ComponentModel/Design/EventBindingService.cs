@@ -66,7 +66,7 @@ namespace System.ComponentModel.Design
         /// <summary>
         ///  Shows the user code.  This method does not show any
         ///  particular code; generally it shows the last code the
-        ///  user typed.  This returns true if it was possible to 
+        ///  user typed.  This returns true if it was possible to
         ///  show the code, or false if not.
         /// </summary>
         protected abstract bool ShowCode();
@@ -264,7 +264,7 @@ namespace System.ComponentModel.Design
 
             PropertyDescriptor prop = ((IEventBindingService)this).GetEventProperty(e);
             string methodName = (string)prop.GetValue(component);
-            
+
             if (methodName == null)
             {
                 return false;   // the event is not bound to a method.

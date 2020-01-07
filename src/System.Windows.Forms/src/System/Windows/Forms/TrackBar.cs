@@ -514,7 +514,6 @@ namespace System.Windows.Forms
         {
             get
             {
-
                 return rightToLeftLayout;
             }
 
@@ -1058,7 +1057,6 @@ namespace System.Windows.Forms
         {
             if (minimum != minValue || maximum != maxValue)
             {
-
                 // The Minimum and Maximum properties contain the logic for
                 // ensuring that minValue <= maxValue. It is possible, however,
                 // that this function will be called somewhere other than from
@@ -1105,7 +1103,6 @@ namespace System.Windows.Forms
         {
             if (IsHandleCreated)
             {
-
                 // There are two situations where we want to reflect the track bar position:
                 //
                 // 1. For a vertical trackbar, it seems to make more sense for the trackbar to increase in value

@@ -21,7 +21,6 @@ namespace System.Windows.Forms.Tests.ComponentModel.Com2Interop
             default,
             default));
 
-
         [Fact]
         public void ConvertNativeToManaged_Null()
         {

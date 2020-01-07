@@ -61,7 +61,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-            
+
             // Call with handler.
             renderer.RenderArrow += handler;
             renderer.DrawArrow(eventArgs);
@@ -92,7 +92,7 @@ namespace System.Windows.Forms.Tests
         {
             yield return new object[] { null };
             yield return new object[] { new ToolStripItemRenderEventArgs(null, null) };
-            
+
             using var image = new Bitmap(10, 10);
             using Graphics graphics = Graphics.FromImage(image);
             yield return new object[] { new ToolStripItemRenderEventArgs(graphics, new SubToolStripItem()) };
@@ -110,7 +110,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-            
+
             // Call with handler.
             renderer.RenderButtonBackground += handler;
             renderer.DrawButtonBackground(eventArgs);
@@ -134,7 +134,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-            
+
             // Call with handler.
             renderer.RenderDropDownButtonBackground += handler;
             renderer.DrawDropDownButtonBackground(eventArgs);
@@ -150,7 +150,7 @@ namespace System.Windows.Forms.Tests
         {
             yield return new object[] { null };
             yield return new object[] { new ToolStripGripRenderEventArgs(null, new ToolStrip()) };
-            
+
             using var image = new Bitmap(10, 10);
             using Graphics graphics = Graphics.FromImage(image);
             yield return new object[] { new ToolStripGripRenderEventArgs(graphics, new ToolStrip()) };
@@ -168,7 +168,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-            
+
             // Call with handler.
             renderer.RenderGrip += handler;
             renderer.DrawGrip(eventArgs);
@@ -192,7 +192,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-            
+
             // Call with handler.
             renderer.RenderItemBackground += handler;
             renderer.DrawItemBackground(eventArgs);
@@ -209,7 +209,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { null, null, null, Rectangle.Empty };
             yield return new object[] { null, null, null, new Rectangle(1, 2, 3, 4) };
             yield return new object[] { null, null, new Bitmap(10, 10), Rectangle.Empty };
-            
+
             var image = new Bitmap(10, 10);
             Graphics graphics = Graphics.FromImage(image);
             yield return new object[] { graphics, new SubToolStripItem(), new Bitmap(10, 10), new Rectangle(1, 2, 3, 4) };
@@ -235,7 +235,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-            
+
             // Call with handler.
             renderer.RenderItemCheck += handler;
             renderer.DrawItemCheck(eventArgs);
@@ -278,7 +278,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-            
+
             // Call with handler.
             renderer.RenderItemImage += handler;
             renderer.DrawItemImage(eventArgs);
@@ -319,7 +319,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-            
+
             // Call with handler.
             renderer.RenderImageMargin += handler;
             renderer.DrawImageMargin(eventArgs);
@@ -363,7 +363,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-            
+
             // Call with handler.
             renderer.RenderItemText += handler;
             renderer.DrawItemText(eventArgs);
@@ -403,7 +403,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-            
+
             // Call with handler.
             renderer.RenderLabelBackground += handler;
             renderer.DrawLabelBackground(eventArgs);
@@ -427,7 +427,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-            
+
             // Call with handler.
             renderer.RenderMenuItemBackground += handler;
             renderer.DrawMenuItemBackground(eventArgs);
@@ -451,7 +451,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-            
+
             // Call with handler.
             renderer.RenderOverflowButtonBackground += handler;
             renderer.DrawOverflowButtonBackground(eventArgs);
@@ -462,7 +462,7 @@ namespace System.Windows.Forms.Tests
             renderer.DrawOverflowButtonBackground(eventArgs);
             Assert.Equal(1, callCount);
         }
-        
+
         public static IEnumerable<object[]> ToolStripSeparatorRenderEventArgs_TestData()
         {
             yield return new object[] { null };
@@ -489,7 +489,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-            
+
             // Call with handler.
             renderer.RenderSeparator += handler;
             renderer.DrawSeparator(eventArgs);
@@ -513,7 +513,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-            
+
             // Call with handler.
             renderer.RenderSplitButtonBackground += handler;
             renderer.DrawSplitButton(eventArgs);
@@ -549,7 +549,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-            
+
             // Call with handler.
             renderer.RenderStatusStripSizingGrip += handler;
             renderer.DrawStatusStripSizingGrip(eventArgs);
@@ -584,7 +584,7 @@ namespace System.Windows.Forms.Tests
             using var image = new Bitmap(10, 10);
             using Graphics graphics = Graphics.FromImage(image);
             yield return new object[] { new ToolStripRenderEventArgs(graphics, new ToolStrip()) };
-            
+
             yield return new object[] { new ToolStripRenderEventArgs(graphics, new StatusStrip()) };
         }
 
@@ -600,7 +600,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-            
+
             // Call with handler.
             renderer.RenderToolStripBackground += handler;
             renderer.DrawToolStripBackground(eventArgs);
@@ -624,7 +624,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-            
+
             // Call with handler.
             renderer.RenderToolStripBorder += handler;
             renderer.DrawToolStripBorder(eventArgs);
@@ -648,7 +648,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-            
+
             // Call with handler.
             renderer.RenderToolStripContentPanelBackground += handler;
             renderer.DrawToolStripContentPanelBackground(eventArgs);
@@ -659,7 +659,7 @@ namespace System.Windows.Forms.Tests
             renderer.DrawToolStripContentPanelBackground(eventArgs);
             Assert.Equal(1, callCount);
         }
-        
+
         public static IEnumerable<object[]> ToolStripPanelRenderEventArgs_TestData()
         {
             yield return new object[] { null };
@@ -683,7 +683,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-            
+
             // Call with handler.
             renderer.RenderToolStripPanelBackground += handler;
             renderer.DrawToolStripPanelBackground(eventArgs);
@@ -707,7 +707,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-            
+
             // Call with handler.
             renderer.RenderToolStripStatusLabelBackground += handler;
             renderer.DrawToolStripStatusLabelBackground(eventArgs);
@@ -718,7 +718,7 @@ namespace System.Windows.Forms.Tests
             renderer.DrawToolStripStatusLabelBackground(eventArgs);
             Assert.Equal(1, callCount);
         }
-        
+
         public static IEnumerable<object[]> ToolStripContentPanelRenderEventArgs_TestData()
         {
             yield return new object[] { null };
@@ -1026,7 +1026,7 @@ namespace System.Windows.Forms.Tests
             renderer.OnRenderSplitButtonBackground(e);
             Assert.Equal(0, callCount);
         }
-        
+
         [WinFormsTheory]
         [MemberData(nameof(StatusStripSizingGrip_TestData))]
         public void ToolStripRenderer_OnRenderStatusStripSizingGrip_Invoke_Nop(ToolStrip toolStrip)
@@ -1141,9 +1141,9 @@ namespace System.Windows.Forms.Tests
         private class SubToolStripRenderer : ToolStripRenderer
         {
             public new void Initialize(ToolStrip toolStrip) => base.Initialize(toolStrip);
-            
+
             public new void InitializeContentPanel(ToolStripContentPanel contentPanel) => base.InitializeContentPanel(contentPanel);
-            
+
             public new void InitializeItem(ToolStripItem item) => base.InitializeItem(item);
 
             public new void InitializePanel(ToolStripPanel toolStripPanel) => base.InitializePanel(toolStripPanel);
@@ -1159,11 +1159,11 @@ namespace System.Windows.Forms.Tests
             public new void OnRenderImageMargin(ToolStripRenderEventArgs e) => base.OnRenderImageMargin(e);
 
             public new void OnRenderItemBackground(ToolStripItemRenderEventArgs e) => base.OnRenderItemBackground(e);
-            
+
             public new void OnRenderItemCheck(ToolStripItemImageRenderEventArgs e) => base.OnRenderItemCheck(e);
 
             public new void OnRenderItemImage(ToolStripItemImageRenderEventArgs e) => base.OnRenderItemImage(e);
-            
+
             public new void OnRenderItemText(ToolStripItemTextRenderEventArgs e) => base.OnRenderItemText(e);
 
             public new void OnRenderLabelBackground(ToolStripItemRenderEventArgs e) => base.OnRenderLabelBackground(e);
@@ -1176,18 +1176,18 @@ namespace System.Windows.Forms.Tests
 
             public new void OnRenderSplitButtonBackground(ToolStripItemRenderEventArgs e) => base.OnRenderSplitButtonBackground(e);
 
-            public new void OnRenderStatusStripSizingGrip(ToolStripRenderEventArgs e) => base.OnRenderStatusStripSizingGrip(e);            
+            public new void OnRenderStatusStripSizingGrip(ToolStripRenderEventArgs e) => base.OnRenderStatusStripSizingGrip(e);
 
             public new void OnRenderToolStripBackground(ToolStripRenderEventArgs e) => base.OnRenderToolStripBackground(e);
-            
+
             public new void OnRenderToolStripBorder(ToolStripRenderEventArgs e) => base.OnRenderToolStripBorder(e);
 
             public new void OnRenderToolStripContentPanelBackground(ToolStripContentPanelRenderEventArgs e) => base.OnRenderToolStripContentPanelBackground(e);
 
             public new void OnRenderToolStripPanelBackground(ToolStripPanelRenderEventArgs e) => base.OnRenderToolStripPanelBackground(e);
-            
+
             public new void OnRenderToolStripStatusLabelBackground(ToolStripItemRenderEventArgs e) => base.OnRenderToolStripStatusLabelBackground(e);
-            
+
             public static new void ScaleArrowOffsetsIfNeeded() => ToolStripRenderer.ScaleArrowOffsetsIfNeeded();
 
             public static new void ScaleArrowOffsetsIfNeeded(int dpi) => ToolStripRenderer.ScaleArrowOffsetsIfNeeded(dpi);

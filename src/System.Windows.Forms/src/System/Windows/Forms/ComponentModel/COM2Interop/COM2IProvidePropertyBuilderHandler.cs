@@ -43,7 +43,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 propDesc[i].QueryGetBaseAttributes += new GetAttributesEventHandler(OnGetBaseAttributes);
 
                 propDesc[i].QueryGetTypeConverterAndTypeEditor += new GetTypeConverterAndTypeEditorEventHandler(OnGetTypeConverterAndTypeEditor);
-
             }
         }
 

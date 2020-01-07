@@ -111,7 +111,6 @@ namespace System.Windows.Forms
                                 // Create the timer window if needed.
                                 if (_timerWindow == null)
                                 {
-
                                     _timerWindow = new TimerNativeWindow(this);
                                 }
 

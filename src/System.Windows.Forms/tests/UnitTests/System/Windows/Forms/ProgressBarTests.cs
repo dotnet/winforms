@@ -908,7 +908,6 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { int.MaxValue };
         }
 
-
         [WinFormsTheory]
         [MemberData(nameof(Maximum_Set_TestData))]
         public void ProgressBar_Maximum_Set_GetReturnsExpected(int value)
@@ -1203,7 +1202,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal("RightToLeftLayout", e.AffectedProperty);
                 layoutCallCount++;
             };
-            
+
             control.RightToLeftLayout = value;
             Assert.Equal(value, control.RightToLeftLayout);
             Assert.Equal(expectedLayoutCallCount, layoutCallCount);
@@ -2391,7 +2390,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
             Assert.False(control.IsHandleCreated);
         }
-        
+
         public static IEnumerable<object[]> OnRightToLeftLayoutChanged_WithHandle_TestData()
         {
             yield return new object[] { RightToLeft.Yes, null, 1 };

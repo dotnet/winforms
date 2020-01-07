@@ -24,7 +24,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             {
                 return null;
             }
-    
+
             switch (categoryID)
             {
                 case VSSDK.PROPCAT.Nil:

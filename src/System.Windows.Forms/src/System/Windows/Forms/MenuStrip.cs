@@ -26,7 +26,6 @@ namespace System.Windows.Forms
             CanOverflow = false;
             GripStyle = ToolStripGripStyle.Hidden;
             Stretch = true;
-
         }
 
         internal override bool KeyboardActive
@@ -177,7 +176,7 @@ namespace System.Windows.Forms
             {
                 AccessibilityNotifyClients(AccessibleEvents.SystemMenuStart, -1);
             }
-            
+
             ((EventHandler)Events[EventMenuActivate])?.Invoke(this, e);
         }
 
@@ -187,7 +186,7 @@ namespace System.Windows.Forms
             {
                 AccessibilityNotifyClients(AccessibleEvents.SystemMenuEnd, -1);
             }
-            
+
             ((EventHandler)Events[EventMenuDeactivate])?.Invoke(this, e);
         }
 
@@ -242,7 +241,6 @@ namespace System.Windows.Forms
                 }
             }
             return base.ProcessCmdKey(ref m, keyData);
-
         }
         /// <summary>
         ///  Summary of WndProc.

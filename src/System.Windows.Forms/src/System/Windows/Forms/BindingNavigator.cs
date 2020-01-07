@@ -297,7 +297,6 @@ namespace System.Windows.Forms
         {
             get
             {
-
                 if (movePreviousItem != null && movePreviousItem.IsDisposed)
                 {
                     movePreviousItem = null;
@@ -419,7 +418,6 @@ namespace System.Windows.Forms
                     deleteItemUserEnabled = value.Enabled;
                 }
                 WireUpButton(ref deleteItem, value, new EventHandler(OnDelete));
-
             }
         }
 
@@ -938,7 +936,5 @@ namespace System.Windows.Forms
                 RefreshItemsInternal();
             }
         }
-
     }
-
 }

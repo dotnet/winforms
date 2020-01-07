@@ -196,7 +196,6 @@ namespace System.Windows.Forms.Design.Behavior
         {
             if (dragImageRect != Rectangle.Empty)
             {
-
                 Rectangle rect = dragImageRect;
                 rect.Location = MapPointFromSourceToTarget(rect.Location);
 
@@ -488,7 +487,6 @@ namespace System.Windows.Forms.Design.Behavior
                             {
                                 selSvc.SetSelectedComponents(new object[] { dragComponents[i].dragComponent }, SelectionTypes.Add);
                             }
-
                         }
 
                         if ((!localDrag || performCopy) && componentChangeSvcSource != null && componentChangeSvcTarget != null)
@@ -1024,7 +1022,6 @@ namespace System.Windows.Forms.Design.Behavior
                                     GraphicsUnit.Pixel);
                     }
                 }
-
             }
 
             originalDragImageLocation = new Point(dragImageRect.X, dragImageRect.Y);

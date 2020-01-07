@@ -838,7 +838,6 @@ namespace System.ComponentModel.Design
             /// </summary>
             public virtual void ComponentRemoved(ComponentEventArgs e)
             {
-
                 // We should gather undo state in ComponentRemoved, but by this time the component's designer has been destroyed so it's too late.  Instead, we captured state in the Removing method.  But, it is possible for there to be component changes to other objects that happen between removing and removed,  so we need to reorder the removing event so it's positioned after any changes.
                 if (_events != null && e != null)
                 {
@@ -1250,7 +1249,6 @@ namespace System.ComponentModel.Design
                 /// </summary>
                 public bool ContainsChange(MemberDescriptor desc)
                 {
-
                     if (_member == null)
                     {
                         return true;

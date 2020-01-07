@@ -338,7 +338,6 @@ namespace System.Windows.Forms
                     return checkedImage;
                 }
                 return null;
-
             }
         }
 
@@ -534,7 +533,6 @@ namespace System.Windows.Forms
                     }
                 }
             }
-
         }
 
         [
@@ -594,7 +592,6 @@ namespace System.Windows.Forms
                     {
                         LayoutTransaction.DoLayout(parent, this, "ShortcutKeys");
                         parent.AdjustSize();
-
                     }
                 }
             }
@@ -639,7 +636,6 @@ namespace System.Windows.Forms
                     return Properties.GetObject(PropMdiForm) as Form;
                 }
                 return null;
-
             }
         }
 
@@ -735,7 +731,6 @@ namespace System.Windows.Forms
                     {
                         Properties.SetObject(PropMdiForm, null);
                     }
-
                 }
             }
             base.Dispose(disposing);
@@ -878,7 +873,7 @@ namespace System.Windows.Forms
                 image.MakeTransparent(SystemColors.Control);
                 return image;
             }
-            
+
             return null;
         }
 
@@ -949,7 +944,6 @@ namespace System.Windows.Forms
                 }
                 Invalidate();
             }
-
         }
 
         /// <summary>
@@ -1010,7 +1004,6 @@ namespace System.Windows.Forms
             Debug.WriteLineIf(ToolStrip.MenuAutoExpandDebug.TraceVerbose, "[ToolStripMenuItem.OnMouseDown] MenuTimer.Cancel called");
             MenuTimer.Cancel(this);
             OnMouseButtonStateChange(e, /*isMouseDown=*/true);
-
         }
 
         protected override void OnMouseUp(MouseEventArgs e)
@@ -1039,14 +1032,12 @@ namespace System.Windows.Forms
             if (e.Button == MouseButtons.Left ||
               (e.Button == MouseButtons.Right && SupportsRightClick))
             {
-
                 if (isMouseDown && showDropDown)
                 {
                     // opening should happen on mouse down.
                     Debug.Assert(ParentInternal != null, "Parent is null here, not going to get accurate ID");
                     openMouseId = (ParentInternal == null) ? (byte)0 : ParentInternal.GetMouseId();
                     ShowDropDown(/*mousePush =*/true);
-
                 }
                 else if (!isMouseDown && !showDropDown)
                 {
@@ -1061,9 +1052,7 @@ namespace System.Windows.Forms
                         ToolStripManager.ModalMenuFilter.CloseActiveDropDown(DropDown, ToolStripDropDownCloseReason.AppClicked);
                         Select();
                     }
-
                 }
-
             }
         }
 
@@ -1072,7 +1061,7 @@ namespace System.Windows.Forms
         {
             Debug.Assert(ParentInternal != null, "Why is parent null");
 
-            // If we are in a submenu pop down the submenu.		
+            // If we are in a submenu pop down the submenu.
             if (ParentInternal != null && ParentInternal.MenuAutoExpand && Selected)
             {
                 Debug.WriteLineIf(ToolStripItem.MouseDebugging.TraceVerbose, "received mouse enter - calling drop down");
@@ -1081,7 +1070,6 @@ namespace System.Windows.Forms
 
                 MenuTimer.Cancel(this);
                 MenuTimer.Start(this);
-
             }
             base.OnMouseEnter(e);
         }
@@ -1152,7 +1140,6 @@ namespace System.Windows.Forms
 
                 if (InternalLayout is ToolStripMenuItemInternalLayout menuItemInternalLayout && menuItemInternalLayout.UseMenuLayout)
                 {
-
                     // Support for special DropDownMenu layout
 #if DEBUG_PAINT
                         g.DrawRectangle(Pens.Green, menuItemInternalLayout.TextRectangle);
@@ -1176,7 +1163,6 @@ namespace System.Windows.Forms
 
                     if ((DisplayStyle & ToolStripItemDisplayStyle.Text) == ToolStripItemDisplayStyle.Text)
                     {
-
                         // render text AND shortcut
                         renderer.DrawItemText(new ToolStripItemTextRenderEventArgs(g, this, Text, InternalLayout.TextRectangle, textColor, Font, (rightToLeft) ? ContentAlignment.MiddleRight : ContentAlignment.MiddleLeft));
                         bool showShortCut = ShowShortcutKeys;
@@ -1193,7 +1179,6 @@ namespace System.Windows.Forms
 
                     if (HasDropDownItems)
                     {
-
                         ArrowDirection arrowDir = (rightToLeft) ? ArrowDirection.Left : ArrowDirection.Right;
                         Color arrowColor = (Selected || Pressed) ? SystemColors.HighlightText : SystemColors.MenuText;
                         arrowColor = (Enabled) ? arrowColor : SystemColors.ControlDark;
@@ -1204,11 +1189,9 @@ namespace System.Windows.Forms
                     {
                         renderer.DrawItemImage(new ToolStripItemImageRenderEventArgs(g, this, InternalLayout.ImageRectangle));
                     }
-
                 }
                 else
                 {
-
                     // Toplevel item support, menu items hosted on a plain ToolStrip dropdown
                     if ((DisplayStyle & ToolStripItemDisplayStyle.Text) == ToolStripItemDisplayStyle.Text)
                     {
@@ -1220,9 +1203,7 @@ namespace System.Windows.Forms
                         renderer.DrawItemImage(new ToolStripItemImageRenderEventArgs(g, this, InternalLayout.ImageRectangle));
                     }
                 }
-
             }
-
         }
 
         /// <summary>
@@ -1393,7 +1374,6 @@ namespace System.Windows.Forms
             // since MenuShowDelay is registry tweakable we've gotta make sure we've got some sort
             // of interval
             slowShow = Math.Max(quickShow, SystemInformation.MenuShowDelay);
-
         }
         // the current item to autoexpand.
         private ToolStripMenuItem CurrentItem
@@ -1460,7 +1440,6 @@ namespace System.Windows.Forms
             // set up the current item to be the toItem so it will be auto expanded when complete.
             CurrentItem = toItem;
             InTransition = true;
-
         }
 
         public void Cancel()
@@ -1470,7 +1449,6 @@ namespace System.Windows.Forms
                 return;
             }
             CancelCore();
-
         }
         ///<summary> cancels if and only if this item was the one that
         ///  requested the timer
@@ -1506,9 +1484,7 @@ namespace System.Windows.Forms
                 {
                     lastSelected.HideDropDown();
                 }
-
             }
-
         }
         internal void HandleToolStripMouseLeave(ToolStrip toolStrip)
         {
@@ -1525,7 +1501,6 @@ namespace System.Windows.Forms
             }
             else
             {
-
                 // because we've split up selected/pressed, we need to make sure
                 // that onmouseleave we make sure there's a selected menu item.
                 if (toolStrip.IsDropDown && toolStrip.ActiveDropDowns.Count > 0)
@@ -1554,7 +1529,6 @@ namespace System.Windows.Forms
                 CurrentItem.OnMenuAutoExpand();
             }
         }
-
     }
 
     internal class ToolStripMenuItemInternalLayout : ToolStripItemInternalLayout
@@ -1652,7 +1626,6 @@ namespace System.Windows.Forms
                 {
                     if (ownerItem.Owner is ToolStripDropDownMenu menu)
                     {
-
                         // since menuItem.Padding isnt taken into consideration, we've got to recalc the centering of
                         // the image rect per item
                         Rectangle imageRect = menu.ImageRectangle;
@@ -1709,5 +1682,4 @@ namespace System.Windows.Forms
             return base.GetPreferredSize(constrainingSize);
         }
     }
-
 }

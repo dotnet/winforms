@@ -147,7 +147,7 @@ namespace System.ComponentModel.Design
                         case Keys.Enter:
                             return true;
                     }
-                    
+
                     return base.IsInputKey(keyData);
                 }
             }

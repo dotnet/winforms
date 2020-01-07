@@ -129,7 +129,7 @@ namespace System.Windows.Forms.Tests
             };
             Assert.Equal(value, provider.BlinkStyle);
             Assert.Equal(250, provider.BlinkRate);
-            
+
             // Set same.
             provider.BlinkStyle = value;
             Assert.Equal(value, provider.BlinkStyle);
@@ -148,7 +148,7 @@ namespace System.Windows.Forms.Tests
             provider.BlinkStyle = value;
             Assert.Equal(value, provider.BlinkStyle);
             Assert.Equal(250, provider.BlinkRate);
-            
+
             // Set same.
             provider.BlinkStyle = value;
             Assert.Equal(value, provider.BlinkStyle);
@@ -166,7 +166,7 @@ namespace System.Windows.Forms.Tests
             };
             Assert.Equal(ErrorBlinkStyle.NeverBlink, provider.BlinkStyle);
             Assert.Equal(0, provider.BlinkRate);
-            
+
             // Set same.
             provider.BlinkStyle = value;
             Assert.Equal(ErrorBlinkStyle.NeverBlink, provider.BlinkStyle);
@@ -229,7 +229,7 @@ namespace System.Windows.Forms.Tests
                 DataMember = value
             };
             Assert.Equal(expected, provider.DataMember);
-            
+
             // Set same.
             provider.DataMember = value;
             Assert.Equal(expected, provider.DataMember);
@@ -246,7 +246,7 @@ namespace System.Windows.Forms.Tests
 
             provider.DataMember = value;
             Assert.Equal(expected, provider.DataMember);
-            
+
             // Set same.
             provider.DataMember = value;
             Assert.Equal(expected, provider.DataMember);
@@ -593,11 +593,11 @@ namespace System.Windows.Forms.Tests
                 RightToLeft = value
             };
             Assert.Equal(value, provider.RightToLeft);
-            
+
             // Set same.
             provider.RightToLeft = value;
             Assert.Equal(value, provider.RightToLeft);
-            
+
             // Set different.
             provider.RightToLeft = !value;
             Assert.Equal(!value, provider.RightToLeft);
@@ -618,22 +618,22 @@ namespace System.Windows.Forms.Tests
                 callCount++;
             };
             provider.RightToLeftChanged += handler;
-        
+
             // Set different.
             provider.RightToLeft = false;
             Assert.False(provider.RightToLeft);
             Assert.Equal(1, callCount);
-        
+
             // Set same.
             provider.RightToLeft = false;
             Assert.False(provider.RightToLeft);
             Assert.Equal(1, callCount);
-        
+
             // Set different.
             provider.RightToLeft = true;
             Assert.True(provider.RightToLeft);
             Assert.Equal(2, callCount);
-        
+
             // Remove handler.
             provider.RightToLeftChanged -= handler;
             provider.RightToLeft = false;
@@ -671,7 +671,7 @@ namespace System.Windows.Forms.Tests
                 Site = value
             };
             Assert.Same(value, provider.Site);
-            
+
             // Set same.
             provider.Site = value;
             Assert.Same(value, provider.Site);
@@ -692,7 +692,7 @@ namespace System.Windows.Forms.Tests
 
             provider.Site = value;
             Assert.Same(value, provider.Site);
-            
+
             // Set same.
             provider.Site = value;
             Assert.Same(value, provider.Site);
@@ -741,7 +741,7 @@ namespace System.Windows.Forms.Tests
                 Tag = value
             };
             Assert.Same(value, provider.Tag);
-            
+
             // Set same.
             provider.Tag = value;
             Assert.Same(value, provider.Tag);
@@ -777,7 +777,7 @@ namespace System.Windows.Forms.Tests
             Assert.Same(newDataSource, provider.DataSource);
             Assert.Same(newDataMember, provider.DataMember);
         }
-        
+
         public static IEnumerable<object[]> BindToDataAndErrors_WithBindingContext_TestData()
         {
             foreach (string dataMember in new string[] { null, string.Empty })
@@ -996,12 +996,12 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-        
+
             // Call with handler.
             provider.RightToLeftChanged += handler;
             provider.OnRightToLeftChanged(eventArgs);
             Assert.Equal(1, callCount);
-        
+
            // Remove handler.
            provider.RightToLeftChanged -= handler;
            provider.OnRightToLeftChanged(eventArgs);
@@ -1135,7 +1135,7 @@ namespace System.Windows.Forms.Tests
                 // Call event properties - without handle.
                 control.Location = new Point(1, 2);
                 Assert.Equal(new Point(1, 2), control.Location);
-                
+
                 control.Size = new Size(2, 3);
                 Assert.Equal(new Size(2, 3), control.Size);
 
@@ -1167,7 +1167,7 @@ namespace System.Windows.Forms.Tests
 
                 control.Location = new Point(2, 3);
                 Assert.Equal(new Point(2, 3), control.Location);
-                
+
                 control.Size = new Size(4, 5);
                 Assert.Equal(new Size(4, 5), control.Size);
 

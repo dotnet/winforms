@@ -626,7 +626,7 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.UseVisualStyleBackColor);
             Assert.False(control.IsHandleCreated);
         }
-        
+
         [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBackColorTheoryData))]
         public void TabPage_BackColor_SetDesignModeWithUseVisualStyleBackColor_GetReturnsExpected(Color value, Color expected)
@@ -669,7 +669,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value.IsEmpty, control.UseVisualStyleBackColor);
             Assert.False(control.IsHandleCreated);
         }
-        
+
         [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBackColorTheoryData))]
         public void TabPage_BackColor_SetDesignModeWithInvalidDescriptor_GetReturnsExpected(Color value, Color expected)
@@ -824,7 +824,7 @@ namespace System.Windows.Forms.Tests
             {
                 Dock = DockStyle.Top
             };
-             
+
             control.Dock = value;
             Assert.Equal(value, control.Dock);
             Assert.Equal(AnchorStyles.Top | AnchorStyles.Left, control.Anchor);
@@ -843,7 +843,7 @@ namespace System.Windows.Forms.Tests
             {
                 Anchor = anchor
             };
-             
+
             control.Dock = value;
             Assert.Equal(value, control.Dock);
             Assert.Equal(expectedAnchor, control.Anchor);
@@ -1175,7 +1175,7 @@ namespace System.Windows.Forms.Tests
             parent.StyleChanged += (sender, e) => parentStyleChangedCallCount++;
             int parentCreatedCallCount = 0;
             parent.HandleCreated += (sender, e) => parentCreatedCallCount++;
-            
+
             control.ImageIndex = value;
             Assert.Equal(value, control.ImageIndex);
             Assert.Empty(control.ImageKey);
@@ -1241,7 +1241,7 @@ namespace System.Windows.Forms.Tests
             parent.StyleChanged += (sender, e) => parentStyleChangedCallCount++;
             int parentCreatedCallCount = 0;
             parent.HandleCreated += (sender, e) => parentCreatedCallCount++;
-            
+
             control.ImageIndex = value;
             Assert.Equal(value, control.ImageIndex);
             Assert.Empty(control.ImageKey);
@@ -1314,7 +1314,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(int.MaxValue, item.cchTextMax);
             Assert.Equal("Text", new string(item.pszText));
             Assert.Equal(imageIndex, item.iImage);
-            
+
             // Get item 2.
             Assert.Equal((IntPtr)1, User32.SendMessageW(owner.Handle, (User32.WindowMessage)ComCtl32.TCM.GETITEMW, (IntPtr)2, ref item));
             Assert.Equal((ComCtl32.TCIS)0, item.dwState);
@@ -1381,7 +1381,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(int.MaxValue, item.cchTextMax);
             Assert.Equal("Text", new string(item.pszText));
             Assert.Equal(imageIndex, item.iImage);
-            
+
             // Get item 2.
             Assert.Equal((IntPtr)1, User32.SendMessageW(owner.Handle, (User32.WindowMessage)ComCtl32.TCM.GETITEMW, (IntPtr)2, ref item));
             Assert.Equal((ComCtl32.TCIS)0, item.dwState);
@@ -1555,7 +1555,7 @@ namespace System.Windows.Forms.Tests
             parent.StyleChanged += (sender, e) => parentStyleChangedCallCount++;
             int parentCreatedCallCount = 0;
             parent.HandleCreated += (sender, e) => parentCreatedCallCount++;
-            
+
             control.ImageKey = value;
             Assert.Equal(-1, control.ImageIndex);
             Assert.Equal(value, control.ImageKey);
@@ -1619,7 +1619,7 @@ namespace System.Windows.Forms.Tests
             parent.StyleChanged += (sender, e) => parentStyleChangedCallCount++;
             int parentCreatedCallCount = 0;
             parent.HandleCreated += (sender, e) => parentCreatedCallCount++;
-            
+
             control.ImageKey = value;
             Assert.Equal(-1, control.ImageIndex);
             Assert.Equal(value, control.ImageKey);
@@ -1689,7 +1689,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(int.MaxValue, item.cchTextMax);
             Assert.Equal("Text", new string(item.pszText));
             Assert.Equal(-1, item.iImage);
-            
+
             // Get item 2.
             Assert.Equal((IntPtr)1, User32.SendMessageW(owner.Handle, (User32.WindowMessage)ComCtl32.TCM.GETITEMW, (IntPtr)2, ref item));
             Assert.Equal((ComCtl32.TCIS)0, item.dwState);
@@ -1753,7 +1753,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(int.MaxValue, item.cchTextMax);
             Assert.Equal("Text", new string(item.pszText));
             Assert.Equal(-1, item.iImage);
-            
+
             // Get item 2.
             Assert.Equal((IntPtr)1, User32.SendMessageW(owner.Handle, (User32.WindowMessage)ComCtl32.TCM.GETITEMW, (IntPtr)2, ref item));
             Assert.Equal((ComCtl32.TCIS)0, item.dwState);
@@ -2286,7 +2286,7 @@ namespace System.Windows.Forms.Tests
             property.ResetValue(control);
             Assert.Equal(new Point(1, 2), control.Location);
             Assert.False(property.CanResetValue(control));
-            
+
             control.Location = Point.Empty;
             Assert.Equal(Point.Empty, control.Location);
             Assert.False(property.CanResetValue(control));
@@ -2314,7 +2314,7 @@ namespace System.Windows.Forms.Tests
             property.ResetValue(control);
             Assert.Equal(new Point(1, 2), control.Location);
             Assert.True(property.ShouldSerializeValue(control));
-            
+
             control.Location = Point.Empty;
             Assert.Equal(Point.Empty, control.Location);
             Assert.False(property.ShouldSerializeValue(control));
@@ -2408,7 +2408,7 @@ namespace System.Windows.Forms.Tests
             {
                 Parent = oldParent
             };
-            
+
             control.Parent = value;
             Assert.Same(value, control.Parent);
             Assert.Empty(oldParent.Controls);
@@ -2682,7 +2682,7 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.TabStop);
             Assert.Equal(2, callCount);
         }
-        
+
         [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void TabPage_Text_Set_GetReturnsExpected(string value, string expected)
@@ -2943,7 +2943,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(int.MaxValue, item.cchTextMax);
             Assert.Equal(expectedText, new string(item.pszText));
             Assert.Equal(1, item.iImage);
-            
+
             // Get item 2.
             Assert.Equal((IntPtr)1, User32.SendMessageW(owner.Handle, (User32.WindowMessage)ComCtl32.TCM.GETITEMW, (IntPtr)2, ref item));
             Assert.Equal((ComCtl32.TCIS)0, item.dwState);
@@ -3010,7 +3010,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(int.MaxValue, item.cchTextMax);
             Assert.Equal(expectedText, new string(item.pszText));
             Assert.Equal(1, item.iImage);
-            
+
             // Get item 2.
             Assert.Equal((IntPtr)1, User32.SendMessageW(owner.Handle, (User32.WindowMessage)ComCtl32.TCM.GETITEMW, (IntPtr)2, ref item));
             Assert.Equal((ComCtl32.TCIS)0, item.dwState);
@@ -3054,7 +3054,7 @@ namespace System.Windows.Forms.Tests
             Assert.Same("text", control.Text);
             Assert.Equal(2, callCount);
         }
-        
+
         [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void TabPage_ToolTipText_Set_GetReturnsExpected(string value, string expected)
@@ -3094,7 +3094,7 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.IsHandleCreated);
             Assert.False(parent.IsHandleCreated);
         }
-        
+
         [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void TabPage_ToolTipText_SetWithDesignModeParent_GetReturnsExpected(string value, string expected)
@@ -3316,7 +3316,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(int.MaxValue, item.cchTextMax);
             Assert.Equal("Text", new string(item.pszText));
             Assert.Equal(1, item.iImage);
-            
+
             // Get item 2.
             Assert.Equal((IntPtr)1, User32.SendMessageW(owner.Handle, (User32.WindowMessage)ComCtl32.TCM.GETITEMW, (IntPtr)2, ref item));
             Assert.Equal((ComCtl32.TCIS)0, item.dwState);
@@ -3380,7 +3380,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(int.MaxValue, item.cchTextMax);
             Assert.Equal("Text", new string(item.pszText));
             Assert.Equal(1, item.iImage);
-            
+
             // Get item 2.
             Assert.Equal((IntPtr)1, User32.SendMessageW(owner.Handle, (User32.WindowMessage)ComCtl32.TCM.GETITEMW, (IntPtr)2, ref item));
             Assert.Equal((ComCtl32.TCIS)0, item.dwState);
@@ -3400,12 +3400,12 @@ namespace System.Windows.Forms.Tests
             };
             Assert.Equal(value, control.UseVisualStyleBackColor);
             Assert.False(control.IsHandleCreated);
-            
+
             // Set same.
             control.UseVisualStyleBackColor = value;
             Assert.Equal(value, control.UseVisualStyleBackColor);
             Assert.False(control.IsHandleCreated);
-            
+
             // Set different.
             control.UseVisualStyleBackColor = !value;
             Assert.Equal(!value, control.UseVisualStyleBackColor);
@@ -3432,7 +3432,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            
+
             // Set same.
             control.UseVisualStyleBackColor = value;
             Assert.Equal(value, control.UseVisualStyleBackColor);
@@ -3760,12 +3760,12 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-        
+
             // Call with handler.
             control.Enter += handler;
             control.OnEnter(eventArgs);
             Assert.Equal(0, callCount);
-        
+
             // Remove handler.
             control.Enter -= handler;
             control.OnEnter(eventArgs);
@@ -3788,12 +3788,12 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-        
+
             // Call with handler.
             control.Enter += handler;
             control.OnEnter(eventArgs);
             Assert.Equal(0, callCount);
-        
+
             // Remove handler.
             control.Enter -= handler;
             control.OnEnter(eventArgs);
@@ -3812,12 +3812,12 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-        
+
             // Call with handler.
             control.Leave += handler;
             control.OnLeave(eventArgs);
             Assert.Equal(0, callCount);
-        
+
             // Remove handler.
             control.Leave -= handler;
             control.OnLeave(eventArgs);
@@ -3840,18 +3840,18 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-        
+
             // Call with handler.
             control.Leave += handler;
             control.OnLeave(eventArgs);
             Assert.Equal(0, callCount);
-        
+
             // Remove handler.
             control.Leave -= handler;
             control.OnLeave(eventArgs);
             Assert.Equal(0, callCount);
         }
-        
+
         public static IEnumerable<object[]> OnPaintBackground_TestData()
         {
             foreach (Image backgroundImage in new Image[] { null, new Bitmap(10, 10, PixelFormat.Format32bppRgb), new Bitmap(10, 10, PixelFormat.Format32bppArgb) })
@@ -3867,7 +3867,7 @@ namespace System.Windows.Forms.Tests
                 }
             }
         }
-        
+
         [WinFormsTheory]
         [MemberData(nameof(OnPaintBackground_TestData))]
         public void TabPage_OnPaintBackground_Invoke_Success(bool supportsTransparentBackColor, Color backColor, Image backgroundImage, ImageLayout backgroundImageLayout)
@@ -3937,7 +3937,7 @@ namespace System.Windows.Forms.Tests
                 }
             }
         }
-        
+
         [WinFormsTheory]
         [MemberData(nameof(OnPaintBackground_WithParent_TestData))]
         public void TabPage_OnPaintBackground_InvokeWithParent_CallsPaint(TabAppearance appearance, bool useVisualStyleBackColor, bool supportsTransparentBackColor, Color backColor, Image backgroundImage, ImageLayout backgroundImageLayout, int expectedPaintCallCount)
@@ -3993,7 +3993,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expectedPaintCallCount, parentCallCount);
             Assert.False(control.IsHandleCreated);
         }
-        
+
         [WinFormsTheory]
         [MemberData(nameof(OnPaintBackground_TestData))]
         public void TabPage_OnPaintBackground_InvokeWithHandle_Success(bool supportsTransparentBackColor, Color backColor, Image backgroundImage, ImageLayout backgroundImageLayout)
@@ -4076,7 +4076,7 @@ namespace System.Windows.Forms.Tests
                 }
             }
         }
-        
+
         [WinFormsTheory]
         [MemberData(nameof(OnPaintBackground_WithParentWithHandle_TestData))]
         public void TabPage_OnPaintBackground_InvokeWithParentWithHandle_CallsPaint(TabAppearance appearance, bool useVisualStyleBackColor, bool supportsTransparentBackColor, Color backColor, Image backgroundImage, ImageLayout backgroundImageLayout, int expectedPaintCallCount)
@@ -4818,7 +4818,7 @@ namespace System.Windows.Forms.Tests
             public SubTabPage() : base()
             {
             }
-            
+
             public SubTabPage(string text) : base(text)
             {
             }
@@ -4900,9 +4900,9 @@ namespace System.Windows.Forms.Tests
             public new void SetStyle(ControlStyles flag, bool value) => base.SetStyle(flag, value);
 
             public new void OnEnter(EventArgs e) => base.OnEnter(e);
-            
+
             public new void OnLeave(EventArgs e) => base.OnLeave(e);
-            
+
             public new void OnPaintBackground(PaintEventArgs e) => base.OnPaintBackground(e);
         }
     }

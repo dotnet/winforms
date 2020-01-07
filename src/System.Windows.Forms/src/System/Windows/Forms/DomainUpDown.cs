@@ -161,7 +161,6 @@ namespace System.Windows.Forms
             }
             set
             {
-
                 // Treat null as selecting no item
                 //
                 if (value == null)
@@ -299,7 +298,6 @@ namespace System.Windows.Forms
                     SelectIndex(0);
                 }
             }
-
         }
 
         /// <summary>
@@ -375,7 +373,6 @@ namespace System.Windows.Forms
                 {
                     index = 0;
                 }
-
             } while (!found && index != startPosition);
 
             return matchIndex;
@@ -411,12 +408,10 @@ namespace System.Windows.Forms
                     || uc == UnicodeCategory.OtherNumber
                     || uc == UnicodeCategory.UppercaseLetter)
                 {
-
                     // Attempt to match the character to a domain item
                     int matchIndex = MatchIndex(new string(character), false, domainIndex + 1);
                     if (matchIndex != -1)
                     {
-
                         // Select the matching domain item
                         SelectIndex(matchIndex);
                     }
@@ -490,7 +485,6 @@ namespace System.Windows.Forms
 
                 if (domainItems != null)
                 {
-
                     // Sort the domain values
                     ArrayList.Adapter(domainItems).Sort(new DomainUpDownItemCompare());
 
@@ -887,7 +881,6 @@ namespace System.Windows.Forms
 
             public override AccessibleObject GetChild(int index)
             {
-
                 if (index >= 0 && index < GetChildCount())
                 {
                     return new DomainItemAccessibleObject(((DomainUpDown)parent.Owner).Items[index].ToString(), this);
@@ -900,7 +893,6 @@ namespace System.Windows.Forms
             {
                 return ((DomainUpDown)parent.Owner).Items.Count;
             }
-
         }
 
         [ComVisible(true)]
@@ -959,6 +951,5 @@ namespace System.Windows.Forms
                 }
             }
         }
-
     }
 }

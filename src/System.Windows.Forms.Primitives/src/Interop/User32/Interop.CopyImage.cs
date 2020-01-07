@@ -20,7 +20,6 @@ internal static partial class Interop
             return result;
         }
 
-
         public enum IMAGE : uint
         {
             BITMAP       = 0,

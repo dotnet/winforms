@@ -9,7 +9,6 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using static Interop;
 
-
 namespace WinformsControlsTest
 {
     public partial class ScalingBeforeChanges : Form
@@ -102,7 +101,6 @@ namespace WinformsControlsTest
                     }
                     m.Result = IntPtr.Zero;
                     break;
-
             }
         }
     }

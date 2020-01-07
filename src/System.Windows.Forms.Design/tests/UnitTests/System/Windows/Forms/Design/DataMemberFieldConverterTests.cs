@@ -14,13 +14,13 @@ namespace System.Windows.Forms.Design.Tests
         private static DataMemberFieldConverter s_converter = new DataMemberFieldConverter();
         private static ITypeDescriptorContext s_context = new MyTypeDescriptorContext();
 
-        [Fact]    
+        [Fact]
         public static void CanConvertFrom()
         {
             Assert.True(s_converter.CanConvertFrom(s_context, typeof(string)));
             Assert.True(s_converter.CanConvertFrom(s_context, typeof(InstanceDescriptor)));
         }
-       
+
         [Theory]
         [InlineData("", "")]
         [InlineData(null, null)]

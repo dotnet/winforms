@@ -25,7 +25,7 @@ namespace System.Windows.Forms
         /// <remarks>
         ///  The current focused control. Do not directly edit this value.
         /// </remarks>
-        private Control _focusedControl; 
+        private Control _focusedControl;
 
         /// <remarks>
         ///  The last control that requires validation. Do not directly edit this value.
@@ -694,7 +694,7 @@ namespace System.Windows.Forms
                 User32.ClientToScreen(new HandleRef(this, Handle), ref topLeftPoint);
                 return new Rectangle(topLeftPoint.X, topLeftPoint.Y, clientRectangle.right, clientRectangle.bottom);
             }
-            
+
             return base.GetToolNativeScreenRectangle();
         }
 
@@ -1313,7 +1313,7 @@ namespace System.Windows.Forms
             {
                 current = current.ParentInternal;
             }
-            
+
             return (ScrollableControl)current;
         }
 

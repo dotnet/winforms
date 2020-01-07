@@ -396,7 +396,6 @@ namespace System.Windows.Forms.Design
                 SelectionManager selMgr = (SelectionManager)_provider.GetService(typeof(SelectionManager));
                 selMgr.Refresh();
             }
-
         }
 
         /// <summary>

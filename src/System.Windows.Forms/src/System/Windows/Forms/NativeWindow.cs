@@ -127,7 +127,6 @@ namespace System.Windows.Forms
                                 100,
                                 out _) == IntPtr.Zero)
                             {
-
                                 //Debug.Fail("unable to ping HWND:" + handle.ToString() + " during finalization");
                             }
                         }
@@ -321,7 +320,6 @@ namespace System.Windows.Forms
 
                 _priorWindowProcHandle = User32.GetWindowLong(this, User32.GWL.WNDPROC);
                 Debug.Assert(_priorWindowProcHandle != IntPtr.Zero);
-
 
                 Debug.WriteLineIf(
                     WndProcChoice.TraceVerbose,

@@ -143,7 +143,6 @@ namespace System.Windows.Forms
             {
                 if (focusLink != value)
                 {
-
                     if (focusLink != null)
                     {
                         InvalidateLink(focusLink);
@@ -156,7 +155,6 @@ namespace System.Windows.Forms
                         InvalidateLink(focusLink);
 
                         UpdateAccessibilityLink(focusLink);
-
                     }
                 }
             }
@@ -685,7 +683,6 @@ namespace System.Windows.Forms
             string text = Text;
             try
             {
-
                 Font alwaysUnderlined = new Font(Font, Font.Style | FontStyle.Underline);
                 Graphics created = null;
 
@@ -744,7 +741,6 @@ namespace System.Windows.Forms
                                 iLeftMargin = dtParams.iLeftMargin;
                                 iRightMargin = dtParams.iRightMargin;
                             }
-
                         }
 
                         Rectangle visualRectangle = new Rectangle(clientRectWithPadding.X + iLeftMargin,
@@ -1037,7 +1033,6 @@ namespace System.Windows.Forms
                 if ((link.State & LinkState.Hover) == LinkState.Hover
                     || (link.State & LinkState.Active) == LinkState.Active)
                 {
-
                     bool activeChanged = (link.State & LinkState.Active) == LinkState.Active;
                     link.State &= ~(LinkState.Hover | LinkState.Active);
 
@@ -1411,7 +1406,6 @@ namespace System.Windows.Forms
             {
                 base.OnPaintBackground(e);
             }
-
         }
 
         protected override void OnFontChanged(EventArgs e)
@@ -1779,7 +1773,6 @@ namespace System.Windows.Forms
                     {
                         test = null;
                     }
-
                 } while (test != null
                          && !test.Enabled
                          && LinkInText(charStart, charEnd - charStart));
@@ -1856,7 +1849,6 @@ namespace System.Windows.Forms
                 // focused link, otherwise, we set the focus to the next link.
                 if (links.Count > 0)
                 {
-
                     // Find which link is currently focused
                     //
                     int focusIndex = -1;
@@ -1920,7 +1912,6 @@ namespace System.Windows.Forms
                 return Links[0].Start != 0 || Links[0]._length != -1;
             }
             return true;
-
         }
 
         /// <summary>
@@ -1956,7 +1947,6 @@ namespace System.Windows.Forms
         {
             if (!IsHandleCreated)
             {
-
                 return;
             }
 
@@ -1979,7 +1969,6 @@ namespace System.Windows.Forms
         {
             for (int x = 0; x < links.Count; x++)
             {
-
                 Link left = (Link)links[x];
                 if (left.Length < 0)
                 {
@@ -2086,7 +2075,6 @@ namespace System.Windows.Forms
             {
                 DefWndProc(ref m);
             }
-
         }
 
         protected override void WndProc(ref Message msg)
@@ -2177,7 +2165,6 @@ namespace System.Windows.Forms
                     {
                         return null;
                     }
-
                 }
             }
 
@@ -2256,7 +2243,6 @@ namespace System.Windows.Forms
                     && this[0].Start == 0
                     && this[0]._length == -1)
                 {
-
                     owner.links.Clear();
                     owner.FocusLink = null;
                 }
@@ -2285,7 +2271,6 @@ namespace System.Windows.Forms
                     && this[0].Start == 0
                     && this[0]._length == -1)
                 {
-
                     owner.links.Clear();
                     owner.FocusLink = null;
                 }
@@ -2470,7 +2455,6 @@ namespace System.Windows.Forms
 
             public void Remove(Link value)
             {
-
                 if (value.Owner != owner)
                 {
                     return;
@@ -2880,7 +2864,6 @@ namespace System.Windows.Forms
                     }
 
                     return state;
-
                 }
             }
 

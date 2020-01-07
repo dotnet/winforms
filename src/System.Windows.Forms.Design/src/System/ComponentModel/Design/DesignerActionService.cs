@@ -113,7 +113,6 @@ namespace System.ComponentModel.Design
             {
                 OnDesignerActionListsChanged(new DesignerActionListsChangedEventArgs(comp, DesignerActionListsChangedType.ActionListsRemoved, GetComponentActions(comp)));
             }
-
         }
 
         /// <summary>

@@ -18,7 +18,6 @@ namespace AccessibilityTests
         {
             propertyGrid1.SelectedObject = domainUpDown1;
             propertyGrid2.SelectedObject = trackBar1;
-          
         }
     }
 }

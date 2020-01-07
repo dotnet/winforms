@@ -58,7 +58,6 @@ namespace System.Windows.Forms
             Size = new Size(100, 100);
             SetStyle(ControlStyles.ResizeRedraw, false);
             SetStyle(ControlStyles.Opaque | ControlStyles.OptimizedDoubleBuffer, true);
-
         }
 
         [
@@ -189,7 +188,6 @@ namespace System.Windows.Forms
             get { return rows; }
             set
             {
-
                 if (value < 1)
                 {
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(Rows), value, 1));
@@ -447,7 +445,6 @@ namespace System.Windows.Forms
             }
             else
             {
-
                 PrintController oldController = document.PrintController;
                 PreviewPrintController previewController = new PreviewPrintController
                 {
@@ -614,7 +611,6 @@ namespace System.Windows.Forms
                                 int imageIndex = StartPage + column + row * columns;
                                 if (imageIndex < pageInfo.Length)
                                 {
-
                                     Size pageSize = pageInfo[imageIndex].PhysicalSize;
                                     if (autoZoom)
                                     {

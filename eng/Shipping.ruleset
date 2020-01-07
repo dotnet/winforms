@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <RuleSet Name="Common diagnostic rules to run during build for all shipping projects" Description="This file contains diagnostic settings used by all projects. Projects that need specific settings should have their own rule set files that Include this one, and then make the necessary adjustments." ToolsVersion="15.0">
   <Rules AnalyzerId="StyleCop.Analyzers" RuleNamespace="StyleCop.Analyzers">
     <!--
@@ -36,8 +36,8 @@
     <Rule Id="SA1024" Action="None" />
     <Rule Id="SA1025" Action="None" />
     <Rule Id="SA1026" Action="None" />
-    <Rule Id="SA1027" Action="None" />
-    <Rule Id="SA1028" Action="None" />
+    <Rule Id="SA1027" Action="Warning" />
+    <Rule Id="SA1028" Action="Warning" />
     <Rule Id="SA1100" Action="None" />
     <Rule Id="SA1101" Action="None" />
     <Rule Id="SA1102" Action="None" />
@@ -123,11 +123,11 @@
     <Rule Id="SA1502" Action="None" />
     <Rule Id="SA1503" Action="None" />
     <Rule Id="SA1504" Action="None" />
-    <Rule Id="SA1505" Action="None" />
+    <Rule Id="SA1505" Action="Warning" />
     <Rule Id="SA1506" Action="None" />
-    <Rule Id="SA1507" Action="None" />
-    <Rule Id="SA1508" Action="None" />
-    <Rule Id="SA1509" Action="None" />
+    <Rule Id="SA1507" Action="Warning" />
+    <Rule Id="SA1508" Action="Warning" />
+    <Rule Id="SA1509" Action="Warning" />
     <Rule Id="SA1510" Action="None" />
     <Rule Id="SA1511" Action="None" />
     <Rule Id="SA1512" Action="None" />
@@ -135,7 +135,7 @@
     <Rule Id="SA1514" Action="None" />
     <Rule Id="SA1515" Action="None" />
     <Rule Id="SA1516" Action="None" />
-    <Rule Id="SA1517" Action="None" />
+    <Rule Id="SA1517" Action="Warning" />
     <Rule Id="SA1518" Action="None" />
     <Rule Id="SA1519" Action="None" />
     <Rule Id="SA1520" Action="None" />

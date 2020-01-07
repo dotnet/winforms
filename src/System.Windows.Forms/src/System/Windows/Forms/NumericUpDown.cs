@@ -361,7 +361,6 @@ namespace System.Windows.Forms
             {
                 if (value != currentValue)
                 {
-
                     if (!initializing && ((value < minimum) || (value > maximum)))
                     {
                         throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidBoundArgument, nameof(Value), value, $"'{nameof(Minimum)}'", $"'{nameof(Maximum)}'"));
@@ -793,7 +792,6 @@ namespace System.Windows.Forms
             if (currentValueChanged || (!string.IsNullOrEmpty(Text) &&
                 !(Text.Length == 1 && Text == "-")))
             {
-
                 currentValueChanged = false;
                 ChangingText = true;
 

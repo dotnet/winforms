@@ -203,7 +203,7 @@ namespace System.Windows.Forms.Tests
                 RightToLeft = rightToLeft,
                 RightToLeftLayout = rightToLeftLayout
             };
-            
+
             CreateParams createParams = control.CreateParams;
             Assert.Null(createParams.Caption);
             Assert.Equal("msctls_trackbar32", createParams.ClassName);
@@ -1530,7 +1530,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal("RightToLeftLayout", e.AffectedProperty);
                 layoutCallCount++;
             };
-            
+
             control.RightToLeftLayout = value;
             Assert.Equal(value, control.RightToLeftLayout);
             Assert.Equal(expectedLayoutCallCount, layoutCallCount);
@@ -1828,7 +1828,7 @@ namespace System.Windows.Forms.Tests
             };
             Assert.Equal(value, control.TickFrequency);
             Assert.False(control.IsHandleCreated);
-            
+
             // Set same.
             control.TickFrequency = value;
             Assert.Equal(value, control.TickFrequency);
@@ -1851,14 +1851,14 @@ namespace System.Windows.Forms.Tests
             control.StyleChanged += (sender, e) => styleChangedCallCount++;
             int createdCallCount = 0;
             control.HandleCreated += (sender, e) => createdCallCount++;
-            
+
             control.TickFrequency = value;
             Assert.Equal(value, control.TickFrequency);
             Assert.True(control.IsHandleCreated);
             Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            
+
             // Set same.
             control.TickFrequency = value;
             Assert.Equal(value, control.TickFrequency);
@@ -1878,7 +1878,7 @@ namespace System.Windows.Forms.Tests
             };
             Assert.Equal(value, control.TickStyle);
             Assert.False(control.IsHandleCreated);
-            
+
             // Set same.
             control.TickStyle = value;
             Assert.Equal(value, control.TickStyle);
@@ -1900,14 +1900,14 @@ namespace System.Windows.Forms.Tests
             control.StyleChanged += (sender, e) => styleChangedCallCount++;
             int createdCallCount = 0;
             control.HandleCreated += (sender, e) => createdCallCount++;
-            
+
             control.TickStyle = value;
             Assert.Equal(value, control.TickStyle);
             Assert.True(control.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(expectedCreatedCallCount, createdCallCount);
-            
+
             // Set same.
             control.TickStyle = value;
             Assert.Equal(value, control.TickStyle);
@@ -1983,7 +1983,7 @@ namespace System.Windows.Forms.Tests
         {
             using var control = new TrackBar();
             control.BeginInit();
-            
+
             control.Value = value;
             Assert.Equal(10, control.Maximum);
             Assert.Equal(0, control.Minimum);
@@ -2016,7 +2016,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { Orientation.Vertical, RightToLeft.No, false, 0, 10 };
             yield return new object[] { Orientation.Vertical, RightToLeft.Inherit, true, 0, 10 };
             yield return new object[] { Orientation.Vertical, RightToLeft.Inherit, false, 0, 10 };
-            
+
             yield return new object[] { Orientation.Horizontal, RightToLeft.Yes, true, 1, 1 };
             yield return new object[] { Orientation.Horizontal, RightToLeft.Yes, false, 1, 9 };
             yield return new object[] { Orientation.Horizontal, RightToLeft.No, true, 1, 1 };
@@ -2029,7 +2029,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { Orientation.Vertical, RightToLeft.No, false, 1, 9 };
             yield return new object[] { Orientation.Vertical, RightToLeft.Inherit, true, 1, 9 };
             yield return new object[] { Orientation.Vertical, RightToLeft.Inherit, false, 1, 9 };
-            
+
             yield return new object[] { Orientation.Horizontal, RightToLeft.Yes, true, 5, 5 };
             yield return new object[] { Orientation.Horizontal, RightToLeft.Yes, false, 5, 5 };
             yield return new object[] { Orientation.Horizontal, RightToLeft.No, true, 5, 5 };
@@ -2042,7 +2042,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { Orientation.Vertical, RightToLeft.No, false, 5, 5 };
             yield return new object[] { Orientation.Vertical, RightToLeft.Inherit, true, 5, 5 };
             yield return new object[] { Orientation.Vertical, RightToLeft.Inherit, false, 5, 5 };
-            
+
             yield return new object[] { Orientation.Horizontal, RightToLeft.Yes, true, 9, 9 };
             yield return new object[] { Orientation.Horizontal, RightToLeft.Yes, false, 9, 1 };
             yield return new object[] { Orientation.Horizontal, RightToLeft.No, true, 9, 9 };
@@ -2055,7 +2055,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { Orientation.Vertical, RightToLeft.No, false, 9, 1 };
             yield return new object[] { Orientation.Vertical, RightToLeft.Inherit, true, 9, 1 };
             yield return new object[] { Orientation.Vertical, RightToLeft.Inherit, false, 9, 1 };
-            
+
             yield return new object[] { Orientation.Horizontal, RightToLeft.Yes, true, 10, 10 };
             yield return new object[] { Orientation.Horizontal, RightToLeft.Yes, false, 10, 0 };
             yield return new object[] { Orientation.Horizontal, RightToLeft.No, true, 10, 10 };
@@ -2129,7 +2129,7 @@ namespace System.Windows.Forms.Tests
         {
             using var control = new TrackBar();
             control.BeginInit();
-            
+
             // Call again.
             control.BeginInit();
         }
@@ -2321,12 +2321,12 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-        
+
             // Call with handler.
             control.Click += handler;
             control.OnClick(eventArgs);
             Assert.Equal(1, callCount);
-        
+
             // Remove handler.
             control.Click -= handler;
             control.OnClick(eventArgs);
@@ -2345,12 +2345,12 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-        
+
             // Call with handler.
             control.DoubleClick += handler;
             control.OnDoubleClick(eventArgs);
             Assert.Equal(1, callCount);
-        
+
             // Remove handler.
             control.DoubleClick -= handler;
             control.OnDoubleClick(eventArgs);
@@ -2435,7 +2435,6 @@ namespace System.Windows.Forms.Tests
             control.OnMouseClick(eventArgs);
             Assert.Equal(1, callCount);
         }
-
 
         [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetMouseEventArgsTheoryData))]
@@ -2564,7 +2563,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
             Assert.False(control.IsHandleCreated);
         }
-        
+
         public static IEnumerable<object[]> OnRightToLeftLayoutChanged_WithHandle_TestData()
         {
             yield return new object[] { RightToLeft.Yes, null, 1 };
@@ -2656,12 +2655,12 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-        
+
             // Call with handler.
             control.Scroll += handler;
             control.OnScroll(eventArgs);
             Assert.Equal(1, callCount);
-        
+
             // Remove handler.
             control.Scroll -= handler;
             control.OnScroll(eventArgs);
@@ -2744,12 +2743,12 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-        
+
             // Call with handler.
             control.ValueChanged += handler;
             control.OnValueChanged(eventArgs);
             Assert.Equal(1, callCount);
-        
+
             // Remove handler.
             control.ValueChanged -= handler;
             control.OnValueChanged(eventArgs);
@@ -3069,7 +3068,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
         }
-        
+
         public static IEnumerable<object[]> WndProc_Scroll_TestData()
         {
             yield return new object[] { User32.WM_REFLECT + WindowMessages.WM_HSCROLL, IntPtr.Zero };
@@ -3084,7 +3083,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { User32.WM_REFLECT + WindowMessages.WM_HSCROLL, PARAM.FromLowHigh(7, int.MaxValue) };
             yield return new object[] { User32.WM_REFLECT + WindowMessages.WM_HSCROLL, PARAM.FromLowHigh(8, int.MaxValue) };
             yield return new object[] { User32.WM_REFLECT + WindowMessages.WM_HSCROLL, PARAM.FromLowHigh(9, int.MaxValue) };
-            
+
             yield return new object[] { User32.WM_REFLECT + WindowMessages.WM_VSCROLL, IntPtr.Zero };
             yield return new object[] { User32.WM_REFLECT + WindowMessages.WM_VSCROLL, PARAM.FromLowHigh(-1, int.MaxValue) };
             yield return new object[] { User32.WM_REFLECT + WindowMessages.WM_VSCROLL, PARAM.FromLowHigh(0, int.MaxValue) };
@@ -3199,19 +3198,19 @@ namespace System.Windows.Forms.Tests
             public new bool IsInputKey(Keys keyData) => base.IsInputKey(keyData);
 
             public new void OnBackColorChanged(EventArgs e) => base.OnBackColorChanged(e);
-            
+
             public new void OnClick(EventArgs e) => base.OnClick(e);
-            
+
             public new void OnDoubleClick(EventArgs e) => base.OnDoubleClick(e);
 
             public new void OnForeColorChanged(EventArgs e) => base.OnForeColorChanged(e);
 
             public new void OnHandleCreated(EventArgs e) => base.OnHandleCreated(e);
-            
+
             public new void OnHandleDestroyed(EventArgs e) => base.OnHandleDestroyed(e);
 
             public new void OnMouseClick(MouseEventArgs e) => base.OnMouseClick(e);
-            
+
             public new void OnMouseDoubleClick(MouseEventArgs e) => base.OnMouseDoubleClick(e);
 
             public new void OnMouseWheel(MouseEventArgs e) => base.OnMouseWheel(e);

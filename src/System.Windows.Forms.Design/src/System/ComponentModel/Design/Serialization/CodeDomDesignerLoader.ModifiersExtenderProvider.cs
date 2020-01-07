@@ -59,7 +59,7 @@ namespace System.ComponentModel.Design.Serialization
                 if (_host == null)
                 {
                     ISite site = c.Site;
-                    
+
                     if (site != null)
                     {
                         _host = (IDesignerHost)site.GetService(typeof(IDesignerHost));
@@ -89,7 +89,6 @@ namespace System.ComponentModel.Design.Serialization
                 if (site == null)
                 {
                     return true;
-
                 }
 
                 IDictionaryService dictionary = (IDictionaryService)site.GetService(typeof(IDictionaryService));
@@ -212,7 +211,7 @@ namespace System.ComponentModel.Design.Serialization
                 }
 
                 IDictionaryService dictionary = (IDictionaryService)site.GetService(typeof(IDictionaryService));
-                
+
                 if (dictionary != null)
                 {
                     dictionary.SetValue("Modifiers", modifiers);

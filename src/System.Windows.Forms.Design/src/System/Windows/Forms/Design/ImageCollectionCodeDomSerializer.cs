@@ -27,9 +27,9 @@ namespace System.Windows.Forms.Design
                 throw new ArgumentNullException(manager == null ? "manager" : "codeObject");
             }
 
-            // Find our base class's serializer.  
+            // Find our base class's serializer.
             CodeDomSerializer serializer = (CodeDomSerializer)manager.GetSerializer(typeof(Component), typeof(CodeDomSerializer));
-            
+
             if (serializer == null)
             {
                 Debug.Fail("Unable to find a CodeDom serializer for 'Component'.  Has someone tampered with the serialization providers?");
@@ -48,7 +48,7 @@ namespace System.Windows.Forms.Design
             CodeDomSerializer baseSerializer = (CodeDomSerializer)manager.GetSerializer(typeof(ImageList).BaseType, typeof(CodeDomSerializer));
             object codeObject = baseSerializer.Serialize(manager, value);
             ImageList imageList = value as ImageList;
-            
+
             if (imageList != null)
             {
                 StringCollection imageKeys = imageList.Images.Keys;
@@ -56,7 +56,7 @@ namespace System.Windows.Forms.Design
                 if (codeObject is CodeStatementCollection)
                 {
                     CodeExpression imageListObject = GetExpression(manager, value);
-                    
+
                     if (imageListObject != null)
                     {
                         CodeExpression imageListImagesProperty = new CodePropertyReferenceExpression(imageListObject, "Images");

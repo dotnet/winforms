@@ -20,19 +20,19 @@ namespace System.Windows.Forms.VisualStyles
         RightOfLastButton = 11,
         AboveLastButton = 12,
         BelowLastButton = 13,
-        //		TM_ENUM(0, OT, TOPLEFT)
-        //		TM_ENUM(1, OT, TOPRIGHT)
-        //		TM_ENUM(2, OT, TOPMIDDLE)
-        //		TM_ENUM(3, OT, BOTTOMLEFT)
-        //		TM_ENUM(4, OT, BOTTOMRIGHT)
-        //		TM_ENUM(5, OT, BOTTOMMIDDLE)
-        //		TM_ENUM(6, OT, MIDDLELEFT)
-        //		TM_ENUM(7, OT, MIDDLERIGHT)
-        //		TM_ENUM(8, OT, LEFTOFCAPTION)
-        //		TM_ENUM(9, OT, RIGHTOFCAPTION)
-        //		TM_ENUM(10, OT, LEFTOFLASTBUTTON)
-        //		TM_ENUM(11, OT, RIGHTOFLASTBUTTON)
-        //		TM_ENUM(12, OT, ABOVELASTBUTTON)
-        //		TM_ENUM(13, OT, BELOWLASTBUTTON)
+        //      TM_ENUM(0, OT, TOPLEFT)
+        //      TM_ENUM(1, OT, TOPRIGHT)
+        //      TM_ENUM(2, OT, TOPMIDDLE)
+        //      TM_ENUM(3, OT, BOTTOMLEFT)
+        //      TM_ENUM(4, OT, BOTTOMRIGHT)
+        //      TM_ENUM(5, OT, BOTTOMMIDDLE)
+        //      TM_ENUM(6, OT, MIDDLELEFT)
+        //      TM_ENUM(7, OT, MIDDLERIGHT)
+        //      TM_ENUM(8, OT, LEFTOFCAPTION)
+        //      TM_ENUM(9, OT, RIGHTOFCAPTION)
+        //      TM_ENUM(10, OT, LEFTOFLASTBUTTON)
+        //      TM_ENUM(11, OT, RIGHTOFLASTBUTTON)
+        //      TM_ENUM(12, OT, ABOVELASTBUTTON)
+        //      TM_ENUM(13, OT, BELOWLASTBUTTON)
     }
 }

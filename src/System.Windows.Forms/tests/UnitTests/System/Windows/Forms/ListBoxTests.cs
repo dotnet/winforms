@@ -44,7 +44,7 @@ namespace System.Windows.Forms.Tests
             Assert.True(control.CausesValidation);
             Assert.Equal(new Size(116, 92), control.ClientSize);
             Assert.Equal(new Rectangle(0, 0, 116, 92), control.ClientRectangle);
-            Assert.Equal(0, control.ColumnWidth); 
+            Assert.Equal(0, control.ColumnWidth);
             Assert.Null(control.Container);
             Assert.False(control.ContainsFocus);
             Assert.Null(control.ContextMenuStrip);
@@ -754,7 +754,7 @@ namespace System.Windows.Forms.Tests
             var control = new ListBox();
             Assert.Throws<InvalidEnumArgumentException>("value", () => control.RightToLeft = value);
         }
-        
+
         [WinFormsFact]
         public void ListBox_GetAutoSizeMode_Invoke_ReturnsExpected()
         {

@@ -79,7 +79,6 @@ namespace System.Windows.Forms
             {
                 if (dropDown != value)
                 {
-
                     if (dropDown != null)
                     {
                         dropDown.Opened -= new EventHandler(DropDown_Opened);
@@ -96,9 +95,7 @@ namespace System.Windows.Forms
                         dropDown.ItemClicked += new ToolStripItemClickedEventHandler(DropDown_ItemClicked);
                         dropDown.AssignToDropDownItem();
                     }
-
                 }
-
             }
         }
 
@@ -146,16 +143,13 @@ namespace System.Windows.Forms
                                     dropDownDirection = newDropDownDirection;
                                 }
                             }
-
                         }
                         return dropDownDirection;
-
                     }
                 }
 
                 // someone has set a custom override
                 return toolStripDropDownDirection;
-
             }
             set
             {
@@ -202,7 +196,6 @@ namespace System.Windows.Forms
         {
             get
             {
-
                 if (ParentInternal == null || !HasDropDownItems)
                 {
                     return Point.Empty;
@@ -377,7 +370,6 @@ namespace System.Windows.Forms
 
             if (Rectangle.Intersect(dropDownBounds, itemScreenBounds).Height > 1)
             {
-
                 bool rtl = (RightToLeft == RightToLeft.Yes);
 
                 // try positioning to the left
@@ -394,7 +386,6 @@ namespace System.Windows.Forms
             }
 
             return dropDownBounds;
-
         }
 
         /// <summary>
@@ -538,7 +529,6 @@ namespace System.Windows.Forms
 
             if (HasDropDownItems)
             {
-
                 // Items on the overflow should have the same kind of keyboard handling as a toplevel
                 bool isToplevel = (!IsOnDropDown || IsOnOverflow);
 
@@ -554,11 +544,9 @@ namespace System.Windows.Forms
                         DropDown.SelectNextToolStripItem(null, true);
                     }// else eat the key
                     return true;
-
                 }
                 else if (!isToplevel)
                 {
-
                     // if we're on a DropDown - then cascade out.
                     bool menusCascadeRight = (((int)DropDownDirection & 0x0001) == 0);
                     bool forward = ((keyCode == Keys.Enter) || (SupportsSpaceKey && keyCode == Keys.Space));
@@ -576,7 +564,6 @@ namespace System.Windows.Forms
                         } // else eat the key
                         return true;
                     }
-
                 }
             }
 
@@ -603,7 +590,6 @@ namespace System.Windows.Forms
                     // else if (parent.IsFirstDropDown)
                     //    the base handling (ToolStripDropDown.ProcessArrowKey) will perform auto-expansion of
                     //    the previous item in the menu.
-
                 }
             }
 

@@ -57,7 +57,7 @@ namespace System.Windows.Forms.Tests
                 Height = value
             };
             Assert.Equal(value, style.Height);
-            
+
             // Set same.
             style.Height = value;
             Assert.Equal(value, style.Height);
@@ -85,7 +85,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, style.Height);
             Assert.Equal(expectedLayoutCallCount, layoutCallCount);
             Assert.False(control.IsHandleCreated);
-            
+
             // Set same.
             style.Height = value;
             Assert.Equal(value, style.Height);
@@ -125,7 +125,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expectedLayoutCallCount * 2, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            
+
             // Set same.
             style.Height = value;
             Assert.Equal(value, style.Height);

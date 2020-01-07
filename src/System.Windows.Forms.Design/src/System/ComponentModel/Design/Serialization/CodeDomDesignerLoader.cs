@@ -16,19 +16,19 @@ using System.Windows.Forms.Design;
 namespace System.ComponentModel.Design.Serialization
 {
     /// <summary>
-    ///  DesignerLoader.  This class is responsible for loading a designer document.  
+    ///  DesignerLoader.  This class is responsible for loading a designer document.
     ///  Where and how this load occurs is a private matter for the designer loader.
-    ///  The designer loader will be handed to an IDesignerHost instance.  This instance, 
+    ///  The designer loader will be handed to an IDesignerHost instance.  This instance,
     ///  when it is ready to load the document, will call BeginLoad, passing an instance
     ///  of IDesignerLoaderHost.  The designer loader will load up the design surface
     ///  using the host interface, and call EndLoad on the interface when it is done.
     ///  The error collection passed into EndLoad should be empty or null to indicate a
-    ///  successful load, or it should contain a collection of exceptions that 
+    ///  successful load, or it should contain a collection of exceptions that
     ///  describe the error.
     ///
     ///  Once a document is loaded, the designer loader is also responsible for
     ///  writing any changes made to the document back whatever storage the
-    ///  loader used when loading the document.  
+    ///  loader used when loading the document.
     /// </summary>
     public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, INameCreationService, IDesignerSerializationService
     {
@@ -60,10 +60,10 @@ namespace System.ComponentModel.Design.Serialization
         protected abstract CodeDomProvider CodeDomProvider { get; }
 
         /// <summary>
-        ///  The TypeResolutionService property returns a type resolution service that the code dom 
-        ///  serializers will use when resolving types.  The CodeDomDesignerLoader automatically 
+        ///  The TypeResolutionService property returns a type resolution service that the code dom
+        ///  serializers will use when resolving types.  The CodeDomDesignerLoader automatically
         ///  adds this type resolver as a service to the service container during Initialize if it
-        ///  is non-null.  While the type resolution service is optional in many scenarios, it is required for 
+        ///  is non-null.  While the type resolution service is optional in many scenarios, it is required for
         ///  code interpretation because source code contains type names, but no assembly references.
         /// </summary>
         protected abstract ITypeResolutionService TypeResolutionService { get; }
@@ -86,8 +86,8 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        ///  Disposes this designer loader.  The designer host will call 
-        ///  this method when the design document itself is being destroyed.  
+        ///  Disposes this designer loader.  The designer host will call
+        ///  this method when the design document itself is being destroyed.
         ///  Once called, the designer loader will never be called again.
         ///  This implementation flushes any changes and removes any
         ///  previously added services.
@@ -183,10 +183,10 @@ namespace System.ComponentModel.Design.Serialization
         /// <summary>
         ///  This ensures that we can load the code dom elements into a
         ///  document.  It ensures that there is a code dom provider, that
-        ///  the provider can parse the code, and that the returned 
+        ///  the provider can parse the code, and that the returned
         ///  code compile unit contains a class that can be deserialized
         ///  through a code dom serializer.  During all of this checking
-        ///  it establishes state in our member variables so that 
+        ///  it establishes state in our member variables so that
         ///  calls after it can assume that the variables are set.  This
         ///  will throw a human readable exception if any part of the
         ///  process fails.
@@ -357,7 +357,7 @@ namespace System.ComponentModel.Design.Serialization
                 // If we did not get a document type, throw, because we're unable to continue.
                 if (_documentType == null)
                 {
-                    // The entire compile unit needs to be thrown away so 
+                    // The entire compile unit needs to be thrown away so
                     // we can later reparse.
                     _documentCompileUnit = null;
 
@@ -751,7 +751,7 @@ namespace System.ComponentModel.Design.Serialization
 
         /// <summary>
         ///  This method is called immediately before the document is unloaded.
-        ///  The document may be unloaded in preparation for reload, or 
+        ///  The document may be unloaded in preparation for reload, or
         ///  if the document failed the load.  If you added document-specific
         ///  services in OnBeginLoad or OnEndLoad, you should remove them
         ///  here.
@@ -929,7 +929,7 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        ///  This virtual method gets override in the VsCodeDomDesignerLoader to call the RenameElement on the 
+        ///  This virtual method gets override in the VsCodeDomDesignerLoader to call the RenameElement on the
         ///  ChangeNotificationService to rename the component name through out the project scope.
         /// </summary>
         protected virtual void OnComponentRename(object component, string oldName, string newName)
@@ -1082,7 +1082,7 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        ///  Serializes the given collection of objects and 
+        ///  Serializes the given collection of objects and
         ///  stores them in an opaque serialization data object.
         ///  The returning object fully supports runtime serialization.
         /// </summary>
@@ -1186,7 +1186,6 @@ namespace System.ComponentModel.Design.Serialization
                     {
                         conflict = true;
                     }
-
                 } while (conflict);
             }
             else
@@ -1217,7 +1216,7 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        ///  Determines if the given name is valid.  A name 
+        ///  Determines if the given name is valid.  A name
         ///  creation service may have rules defining a valid
         ///  name, and this method allows the sevice to enforce
         ///  those rules.
@@ -1260,7 +1259,7 @@ namespace System.ComponentModel.Design.Serialization
             }
 
             // We don't validate against the type members if we're loading,
-            // because during load these members are being added by the 
+            // because during load these members are being added by the
             // parser, so of course there will be duplicates.
             if (!Loading)
             {
@@ -1291,7 +1290,7 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        ///  Determines if the given name is valid.  A name 
+        ///  Determines if the given name is valid.  A name
         ///  creation service may have rules defining a valid
         ///  name, and this method allows the sevice to enforce
         ///  those rules.  It is similar to IsValidName, except
@@ -1354,7 +1353,7 @@ namespace System.ComponentModel.Design.Serialization
             }
 
             // We don't validate against the type members if we're loading,
-            // because during load these members are being added by the 
+            // because during load these members are being added by the
             // parser, so of course there will be duplicates.
             bool dup = false;
             CodeTypeDeclaration type = _documentType;

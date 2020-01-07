@@ -501,7 +501,6 @@ namespace System.Windows.Forms.Design
                     }
                     _contextMenu = null;
                     ShowDropDownMenu();
-
                 }
                 else
                 {
@@ -1051,7 +1050,6 @@ namespace System.Windows.Forms.Design
             }
             switch (e.KeyCode)
             {
-
                 case Keys.Up:
                     Commit(false, true);
                     if (KeyboardService != null)
@@ -1638,7 +1636,6 @@ namespace System.Windows.Forms.Design
                 ToolStripItem item = GetSelectedItem();
                 if (item is ToolStripControlHost)
                 {
-
                     CommitAndSelectNext(forward);
                     return true;
                 }

@@ -83,7 +83,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  Gets images from the given array. 
+        ///  Gets images from the given array.
         /// </summary>
         /// <param name="array">The input is an <see cref="ArrayList"/> as an object.</param>
         /// <returns>An <see cref="ArrayList"/> which contains individual images that need to be created.</returns>
