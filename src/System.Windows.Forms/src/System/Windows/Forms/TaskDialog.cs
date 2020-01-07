@@ -1370,7 +1370,7 @@ namespace System.Windows.Forms
             catch (Exception ex) when (CanCatchCallbackException())
             {
                 // When an exception occurs, handle it by calling the application's
-                // ThreadException handler. 
+                // ThreadException handler.
                 // It is important that we don't let such exception fall through
                 // the native -> managed transition, as otherwise the CLR would
                 // unwind the stack even though the task dialog is still shown,
