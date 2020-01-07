@@ -5,6 +5,7 @@
 using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.InteropServices;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -23,7 +24,7 @@ namespace System.Windows.Forms
             get
             {
                 CreateParams cp = base.CreateParams;
-                cp.Style |= NativeMethods.SBS_VERT;
+                cp.Style |= (int)User32.SBS.VERT;
                 return cp;
             }
         }

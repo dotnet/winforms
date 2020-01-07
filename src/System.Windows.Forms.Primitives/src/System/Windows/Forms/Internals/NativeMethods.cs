@@ -351,29 +351,7 @@ namespace System.Windows.Forms
         HLP_NAVIGATOR = 3,
         HLP_OBJECT = 4;
 
-        public const int
-        SS_LEFT = 0x00000000,
-        SS_CENTER = 0x00000001,
-        SS_RIGHT = 0x00000002,
-        SS_OWNERDRAW = 0x0000000D,
-        SS_NOPREFIX = 0x00000080,
-        SS_SUNKEN = 0x00001000,
-        SBS_HORZ = 0x0000,
-        SBS_VERT = 0x0001,
-        SBARS_SIZEGRIP = 0x0100,
-        SB_SETTEXT = (0x0400 + 11),
-        SB_GETTEXT = (0x0400 + 13),
-        SB_GETTEXTLENGTH = (0x0400 + 12),
-        SB_SETPARTS = (0x0400 + 4),
-        SB_SIMPLE = (0x0400 + 9),
-        SB_GETRECT = (0x0400 + 10),
-        SB_SETICON = (0x0400 + 15),
-        SB_SETTIPTEXT = (0x0400 + 17),
-        SB_GETTIPTEXT = (0x0400 + 19),
-        SBT_OWNERDRAW = 0x1000,
-        SBT_NOBORDERS = 0x0100,
-        SBT_POPOUT = 0x0200,
-        SBT_RTLREADING = 0x0400;
+        public const int SBARS_SIZEGRIP = 0x0100;
 
         public static bool Succeeded(int hr)
         {
