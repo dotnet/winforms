@@ -907,4 +907,7 @@
   <data name="MaskedTextBoxHintInvalidInput" xml:space="preserve">
     <value>Invalid input character</value>
   </data>
+  <data name="MenuCommandService_DuplicateCommand" xml:space="preserve">
+    <value>There is already a command handler for the menu command '{0}'.</value>
+  </data>
 </root>
