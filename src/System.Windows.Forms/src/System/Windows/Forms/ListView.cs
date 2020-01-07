@@ -708,21 +708,21 @@ namespace System.Windows.Forms
                     cp.Style |= currentStyle & (int)(User32.WS.HSCROLL | User32.WS.VSCROLL);
                 }
 
-                cp.Style |= NativeMethods.LVS_SHAREIMAGELISTS;
+                cp.Style |= (int)LVS.SHAREIMAGELISTS;
 
                 switch (alignStyle)
                 {
                     case ListViewAlignment.Top:
-                        cp.Style |= NativeMethods.LVS_ALIGNTOP;
+                        cp.Style |= (int)LVS.ALIGNTOP;
                         break;
                     case ListViewAlignment.Left:
-                        cp.Style |= NativeMethods.LVS_ALIGNLEFT;
+                        cp.Style |= (int)LVS.ALIGNLEFT;
                         break;
                 }
 
                 if (AutoArrange)
                 {
-                    cp.Style |= NativeMethods.LVS_AUTOARRANGE;
+                    cp.Style |= (int)LVS.AUTOARRANGE;
                 }
 
                 switch (borderStyle)
@@ -738,31 +738,31 @@ namespace System.Windows.Forms
                 switch (headerStyle)
                 {
                     case ColumnHeaderStyle.None:
-                        cp.Style |= NativeMethods.LVS_NOCOLUMNHEADER;
+                        cp.Style |= (int)LVS.NOCOLUMNHEADER;
                         break;
                     case ColumnHeaderStyle.Nonclickable:
-                        cp.Style |= NativeMethods.LVS_NOSORTHEADER;
+                        cp.Style |= (int)LVS.NOSORTHEADER;
                         break;
                 }
 
                 if (LabelEdit)
                 {
-                    cp.Style |= NativeMethods.LVS_EDITLABELS;
+                    cp.Style |= (int)LVS.EDITLABELS;
                 }
 
                 if (!LabelWrap)
                 {
-                    cp.Style |= NativeMethods.LVS_NOLABELWRAP;
+                    cp.Style |= (int)LVS.NOLABELWRAP;
                 }
 
                 if (!HideSelection)
                 {
-                    cp.Style |= NativeMethods.LVS_SHOWSELALWAYS;
+                    cp.Style |= (int)LVS.SHOWSELALWAYS;
                 }
 
                 if (!MultiSelect)
                 {
-                    cp.Style |= NativeMethods.LVS_SINGLESEL;
+                    cp.Style |= (int)LVS.SINGLESEL;
                 }
 
                 if (listItemSorter == null)
@@ -770,17 +770,17 @@ namespace System.Windows.Forms
                     switch (sorting)
                     {
                         case SortOrder.Ascending:
-                            cp.Style |= NativeMethods.LVS_SORTASCENDING;
+                            cp.Style |= (int)LVS.SORTASCENDING;
                             break;
                         case SortOrder.Descending:
-                            cp.Style |= NativeMethods.LVS_SORTDESCENDING;
+                            cp.Style |= (int)LVS.SORTDESCENDING;
                             break;
                     }
                 }
 
                 if (VirtualMode)
                 {
-                    cp.Style |= NativeMethods.LVS_OWNERDATA;
+                    cp.Style |= (int)LVS.OWNERDATA;
                 }
 
                 // We can do this 'cuz the viewStyle enums are the same values as the actual LVS styles
@@ -3324,8 +3324,8 @@ namespace System.Windows.Forms
             //
             if (CheckBoxes && IsHandleCreated)
             {
-                SendMessage((int)LVM.SETEXTENDEDLISTVIEWSTYLE, NativeMethods.LVS_EX_CHECKBOXES, 0);
-                SendMessage((int)LVM.SETEXTENDEDLISTVIEWSTYLE, NativeMethods.LVS_EX_CHECKBOXES, NativeMethods.LVS_EX_CHECKBOXES);
+                User32.SendMessageW(this, (User32.WindowMessage)LVM.SETEXTENDEDLISTVIEWSTYLE, (IntPtr)LVS_EX.CHECKBOXES, IntPtr.Zero);
+                User32.SendMessageW(this, (User32.WindowMessage)LVM.SETEXTENDEDLISTVIEWSTYLE, (IntPtr)LVS_EX.CHECKBOXES, (IntPtr)LVS_EX.CHECKBOXES);
 
                 // Comctl should handle auto-arrange for us, but doesn't
                 if (AutoArrange)
@@ -4448,7 +4448,7 @@ namespace System.Windows.Forms
             if (!Scrollable)
             {
                 int style = unchecked((int)(long)UnsafeNativeMethods.GetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_STYLE));
-                style |= NativeMethods.LVS_NOSCROLL;
+                style |= (int)LVS.NOSCROLL;
                 UnsafeNativeMethods.SetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_STYLE, new HandleRef(null, (IntPtr)style));
             }
 
@@ -5421,64 +5421,64 @@ namespace System.Windows.Forms
         {
             if (IsHandleCreated)
             {
-                int exStyle = 0;
-                int exMask = NativeMethods.LVS_EX_ONECLICKACTIVATE | NativeMethods.LVS_EX_TWOCLICKACTIVATE |
-                             NativeMethods.LVS_EX_TRACKSELECT | NativeMethods.LVS_EX_UNDERLINEHOT | NativeMethods.LVS_EX_ONECLICKACTIVATE |
-                             NativeMethods.LVS_EX_HEADERDRAGDROP | NativeMethods.LVS_EX_CHECKBOXES |
-                             NativeMethods.LVS_EX_FULLROWSELECT | NativeMethods.LVS_EX_GRIDLINES |
-                             NativeMethods.LVS_EX_INFOTIP | NativeMethods.LVS_EX_DOUBLEBUFFER;
+                LVS_EX exStyle = 0;
+                LVS_EX exMask = LVS_EX.ONECLICKACTIVATE | LVS_EX.TWOCLICKACTIVATE |
+                                LVS_EX.TRACKSELECT | LVS_EX.UNDERLINEHOT |
+                                LVS_EX.ONECLICKACTIVATE | LVS_EX.HEADERDRAGDROP |
+                                LVS_EX.CHECKBOXES | LVS_EX.FULLROWSELECT |
+                                LVS_EX.GRIDLINES | LVS_EX.INFOTIP | LVS_EX.DOUBLEBUFFER;
 
                 switch (activation)
                 {
                     case ItemActivation.OneClick:
-                        exStyle |= NativeMethods.LVS_EX_ONECLICKACTIVATE;
+                        exStyle |= LVS_EX.ONECLICKACTIVATE;
                         break;
                     case ItemActivation.TwoClick:
-                        exStyle |= NativeMethods.LVS_EX_TWOCLICKACTIVATE;
+                        exStyle |= LVS_EX.TWOCLICKACTIVATE;
                         break;
                 }
 
                 if (AllowColumnReorder)
                 {
-                    exStyle |= NativeMethods.LVS_EX_HEADERDRAGDROP;
+                    exStyle |= LVS_EX.HEADERDRAGDROP;
                 }
 
                 if (CheckBoxes)
                 {
-                    exStyle |= NativeMethods.LVS_EX_CHECKBOXES;
+                    exStyle |= LVS_EX.CHECKBOXES;
                 }
 
                 if (DoubleBuffered)
                 {
-                    exStyle |= NativeMethods.LVS_EX_DOUBLEBUFFER;
+                    exStyle |= LVS_EX.DOUBLEBUFFER;
                 }
 
                 if (FullRowSelect)
                 {
-                    exStyle |= NativeMethods.LVS_EX_FULLROWSELECT;
+                    exStyle |= LVS_EX.FULLROWSELECT;
                 }
 
                 if (GridLines)
                 {
-                    exStyle |= NativeMethods.LVS_EX_GRIDLINES;
+                    exStyle |= LVS_EX.GRIDLINES;
                 }
 
                 if (HoverSelection)
                 {
-                    exStyle |= NativeMethods.LVS_EX_TRACKSELECT;
+                    exStyle |= LVS_EX.TRACKSELECT;
                 }
 
                 if (HotTracking)
                 {
-                    exStyle |= NativeMethods.LVS_EX_UNDERLINEHOT;
+                    exStyle |= LVS_EX.UNDERLINEHOT;
                 }
 
                 if (ShowItemToolTips)
                 {
-                    exStyle |= NativeMethods.LVS_EX_INFOTIP;
+                    exStyle |= LVS_EX.INFOTIP;
                 }
 
-                SendMessage((int)LVM.SETEXTENDEDLISTVIEWSTYLE, exMask, exStyle);
+                User32.SendMessageW(this, (User32.WindowMessage)LVM.SETEXTENDEDLISTVIEWSTYLE, (IntPtr)exMask, (IntPtr)exStyle);
                 Invalidate();
             }
         }
