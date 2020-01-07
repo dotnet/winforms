@@ -134,6 +134,10 @@ namespace WinformsControlsTest
             // Add the ListView to the control collection.
             Controls.Add(listView2);
             listView2.Dock = DockStyle.Bottom;
+
+            // Change a ListViewGroup's header.
+            listView2.Groups[0].HeaderAlignment = HorizontalAlignment.Center;
+            listView2.Groups[0].Header = "NewText";
         }
 
         private void listView2_Click(object sender, System.EventArgs e)

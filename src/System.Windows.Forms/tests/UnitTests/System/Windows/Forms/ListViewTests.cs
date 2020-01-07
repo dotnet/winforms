@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.InteropServices;
+using Microsoft.DotNet.RemoteExecutor;
 using WinForms.Common.Tests;
 using Xunit;
 using static Interop;
@@ -1462,6 +1464,98 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expectedInvalidatedCallCount + 1, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        public void ListView_Handle_GetWithoutGroups_Success(bool showGroups)
+        {
+            using var listView = new ListView
+            {
+                ShowGroups = showGroups
+            };
+            Assert.Equal((IntPtr)0, User32.SendMessageW(listView.Handle, (User32.WindowMessage)LVM.GETGROUPCOUNT, IntPtr.Zero, IntPtr.Zero));
+        }
+
+        public static IEnumerable<object[]> Handle_GetWithGroups_TestData()
+        {
+            foreach (bool showGroups in new bool[] { true, false })
+            {
+                yield return new object[] { showGroups, null, HorizontalAlignment.Left, string.Empty, 0x00000001 };
+                yield return new object[] { showGroups, null, HorizontalAlignment.Center, string.Empty, 0x00000002 };
+                yield return new object[] { showGroups, null, HorizontalAlignment.Right, string.Empty, 0x00000004 };
+                    
+                yield return new object[] { showGroups, string.Empty, HorizontalAlignment.Left, string.Empty, 0x00000001 };
+                yield return new object[] { showGroups, string.Empty, HorizontalAlignment.Center, string.Empty, 0x00000002 };
+                yield return new object[] { showGroups, string.Empty, HorizontalAlignment.Right, string.Empty, 0x00000004 };
+                    
+                yield return new object[] { showGroups, "text", HorizontalAlignment.Left, "text", 0x00000001 };
+                yield return new object[] { showGroups, "text", HorizontalAlignment.Center, "text", 0x00000002 };
+                yield return new object[] { showGroups, "text", HorizontalAlignment.Right, "text", 0x00000004 };
+                    
+                yield return new object[] { showGroups, "te\0xt", HorizontalAlignment.Left, "te", 0x00000001 };
+                yield return new object[] { showGroups, "te\0xt", HorizontalAlignment.Center, "te", 0x00000002 };
+                yield return new object[] { showGroups, "te\0xt", HorizontalAlignment.Right, "te", 0x00000004 };
+            }
+        }
+
+        [WinFormsFact]
+        public unsafe void ListView_Handle_GetWithGroups_Success()
+        {
+            // Run this from another thread as we call Application.EnableVisualStyles.
+            RemoteExecutor.Invoke(() =>
+            {
+                foreach (object[] data in Handle_GetWithGroups_TestData())
+                {
+                    bool showGroups = (bool)data[0];
+                    string header = (string)data[1];
+                    HorizontalAlignment headerAlignment = (HorizontalAlignment)data[2];
+                    string expectedHeaderText = (string)data[3];
+                    int expectedAlign = (int)data[4];
+
+                    Application.EnableVisualStyles();
+
+                    using var listView = new ListView
+                    {
+                        ShowGroups = showGroups
+                    };
+                    var group1 = new ListViewGroup();
+                    var group2 = new ListViewGroup
+                    {
+                        Header = header,
+                        HeaderAlignment = headerAlignment
+                    };
+                    listView.Groups.Add(group1);
+                    listView.Groups.Add(group2);
+
+                    Assert.Equal((IntPtr)2, User32.SendMessageW(listView.Handle, (User32.WindowMessage)LVM.GETGROUPCOUNT, IntPtr.Zero, IntPtr.Zero));
+                    char* buffer = stackalloc char[256];
+                    var lvgroup1 = new ComCtl32.LVGROUPW
+                    {
+                        cbSize = (uint)Marshal.SizeOf<ComCtl32.LVGROUPW>(),
+                        mask = ComCtl32.LVGF.HEADER | ComCtl32.LVGF.GROUPID | ComCtl32.LVGF.ALIGN,
+                        pszHeader = buffer,
+                        cchHeader = 256
+                    };
+                    Assert.Equal((IntPtr)1, User32.SendMessageW(listView.Handle, (User32.WindowMessage)LVM.GETGROUPINFOBYINDEX, (IntPtr)0, ref lvgroup1));
+                    Assert.Equal("ListViewGroup", new string(lvgroup1.pszHeader));
+                    Assert.True(lvgroup1.iGroupId >= 0);
+                    Assert.Equal(0x00000001, (int)lvgroup1.uAlign);
+                    
+                    var lvgroup2 = new ComCtl32.LVGROUPW
+                    {
+                        cbSize = (uint)Marshal.SizeOf<ComCtl32.LVGROUPW>(),
+                        mask = ComCtl32.LVGF.HEADER | ComCtl32.LVGF.GROUPID | ComCtl32.LVGF.ALIGN,
+                        pszHeader = buffer,
+                        cchHeader = 256
+                    };
+                    Assert.Equal((IntPtr)1, User32.SendMessageW(listView.Handle, (User32.WindowMessage)LVM.GETGROUPINFOBYINDEX, (IntPtr)1, ref lvgroup2));
+                    Assert.Equal(expectedHeaderText, new string(lvgroup2.pszHeader));
+                    Assert.True(lvgroup2.iGroupId > 0);
+                    Assert.Equal(expectedAlign, (int)lvgroup2.uAlign);
+                    Assert.True(lvgroup2.iGroupId > lvgroup1.iGroupId);
+                }
+            }).Dispose();
         }
 
         [WinFormsTheory]

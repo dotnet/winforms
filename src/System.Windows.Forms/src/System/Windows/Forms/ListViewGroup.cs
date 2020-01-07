@@ -80,7 +80,7 @@ namespace System.Windows.Forms
                 if (_header != value)
                 {
                     _header = value;
-                    ListView?.RecreateHandleInternal();
+                    UpdateListView();
                 }
             }
         }

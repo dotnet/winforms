@@ -3,21 +3,23 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Runtime.InteropServices;
 
 internal static partial class Interop
 {
     internal static partial class ComCtl32
     {
-        public struct LVGROUP
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
+        public unsafe struct LVGROUPW
         {
             public uint cbSize;
             public LVGF mask;
-            public IntPtr pszHeader;
+            public char* pszHeader;
             public int cchHeader;
-            public IntPtr pszFooter;
+            public char* pszFooter;
             public int cchFooter;
             public int iGroupId;
-            public uint stateMask;
+            public LVGS stateMask;
             public LVGS state;
             public LVGA uAlign;
         }

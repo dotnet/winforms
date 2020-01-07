@@ -2976,14 +2976,6 @@ namespace System.Windows.Forms
             }
         }
 
-        private void DestroyLVGROUP(LVGROUP lvgroup)
-        {
-            if (lvgroup.pszHeader != IntPtr.Zero)
-            {
-                Marshal.FreeHGlobal(lvgroup.pszHeader);
-            }
-        }
-
         /// <summary>
         ///  Resets the imageList to null.  We wire this method up to the imageList's
         ///  Dispose event, so that we don't hang onto an imageList that's gone away.
@@ -3612,38 +3604,6 @@ namespace System.Windows.Forms
             return Rectangle.FromLTRB(itemrect.left, itemrect.top, itemrect.right, itemrect.bottom);
         }
 
-        private unsafe LVGROUP GetLVGROUP(ListViewGroup group)
-        {
-            var lvgroup = new LVGROUP
-            {
-                cbSize = (uint)sizeof(LVGROUP),
-                mask = LVGF.HEADER | LVGF.GROUPID | LVGF.ALIGN
-            };
-
-            // Header
-            string header = group.Header;
-            lvgroup.pszHeader = Marshal.StringToHGlobalAuto(header);
-            lvgroup.cchHeader = header.Length;
-
-            // Group ID
-            lvgroup.iGroupId = group.ID;
-
-            // Alignment
-            switch (group.HeaderAlignment)
-            {
-                case HorizontalAlignment.Left:
-                    lvgroup.uAlign = LVGA.HEADER_LEFT;
-                    break;
-                case HorizontalAlignment.Right:
-                    lvgroup.uAlign = LVGA.HEADER_RIGHT;
-                    break;
-                case HorizontalAlignment.Center:
-                    lvgroup.uAlign = LVGA.HEADER_CENTER;
-                    break;
-            }
-            return lvgroup;
-        }
-
         /// <summary>
         ///  Returns a listview sub-item's bounding rectangle.
         /// </summary>
@@ -3941,22 +3901,13 @@ namespace System.Windows.Forms
         }
 
         // does the Win32 part of the job of inserting the group
-        private void InsertGroupNative(int index, ListViewGroup group)
+        private unsafe void InsertGroupNative(int index, ListViewGroup group)
         {
             Debug.Assert(IsHandleCreated, "InsertGroupNative precondition: list-view handle must be created");
             Debug.Assert(group == DefaultGroup || Groups.Contains(group), "Make sure ListView.Groups contains this group before adding the native LVGROUP. Otherwise, custom-drawing may break.");
 
-            var lvgroup = new LVGROUP();
-            try
-            {
-                lvgroup = GetLVGROUP(group);
-                int retval = (int)User32.SendMessageW(this, (User32.WindowMessage)LVM.INSERTGROUP, (IntPtr)index, ref lvgroup);
-                Debug.Assert(retval != -1, "Failed to insert group");
-            }
-            finally
-            {
-                DestroyLVGROUP(lvgroup);
-            }
+            IntPtr result = SendGroupMessage(group, LVM.INSERTGROUP, (IntPtr)index, LVGF.GROUPID);
+            Debug.Assert(result != (IntPtr)(-1), "Failed to insert group");
         }
 
         /// <summary>
@@ -5536,19 +5487,39 @@ namespace System.Windows.Forms
         {
             Debug.Assert(IsHandleCreated, "UpdateGroupNative precondition: list-view handle must be created");
 
-            var lvgroup = new LVGROUP();
-            try
-            {
-                lvgroup = GetLVGROUP(group);
-                int retval = (int)User32.SendMessageW(this, (User32.WindowMessage)LVM.SETGROUPINFO, (IntPtr)group.ID, ref lvgroup);
-            }
-            finally
-            {
-                DestroyLVGROUP(lvgroup);
-            }
+            IntPtr result = SendGroupMessage(group, LVM.SETGROUPINFO, (IntPtr)group.ID, (LVGF)0);
+            Debug.Assert(result != (IntPtr)(-1));
+        }
 
-            // The comctl32 ListView does not correctly invalidate itself, so we need to invalidate the entire ListView
-            Invalidate();
+        private unsafe IntPtr SendGroupMessage(ListViewGroup group, LVM msg, IntPtr lParam, LVGF additionalMask)
+        {
+            string header = group.Header;
+            var lvgroup = new LVGROUPW
+            {
+                cbSize = (uint)sizeof(LVGROUPW),
+                mask = LVGF.HEADER | LVGF.ALIGN | additionalMask,
+                cchHeader = header.Length,
+                iGroupId = group.ID
+            };
+
+            switch (group.HeaderAlignment)
+            {
+                case HorizontalAlignment.Left:
+                    lvgroup.uAlign = LVGA.HEADER_LEFT;
+                    break;
+                case HorizontalAlignment.Right:
+                    lvgroup.uAlign = LVGA.HEADER_RIGHT;
+                    break;
+                case HorizontalAlignment.Center:
+                    lvgroup.uAlign = LVGA.HEADER_CENTER;
+                    break;
+            }
+            
+            fixed (char* pHeader = header)
+            {
+                lvgroup.pszHeader = pHeader;
+                return User32.SendMessageW(this, (User32.WindowMessage)msg, lParam, ref lvgroup);
+            }
         }
 
         // ListViewGroupCollection::Clear needs to remove the items from the Default group
