@@ -1105,13 +1105,14 @@ namespace System.Windows.Forms.Tests
         {
             yield return new object[] { null };
             yield return new object[] { new Control() };
+            yield return new object[] { new Form() };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(Parent_Set_TestData))]
         public void PictureBox_Parent_Set_GetReturnsExpected(Control value)
         {
-            var control = new PictureBox
+            using var control = new PictureBox
             {
                 Parent = value
             };
@@ -1122,12 +1123,12 @@ namespace System.Windows.Forms.Tests
             Assert.Same(value, control.Parent);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(Parent_Set_TestData))]
         public void PictureBox_Parent_SetWithNonNullOldParent_GetReturnsExpected(Control value)
         {
-            var oldParent = new Control();
-            var control = new PictureBox
+            using var oldParent = new Control();
+            using var control = new PictureBox
             {
                 Parent = oldParent
             };
@@ -1142,11 +1143,11 @@ namespace System.Windows.Forms.Tests
             Assert.Empty(oldParent.Controls);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void PictureBox_Parent_SetNonNull_AddsToControls()
         {
-            var parent = new Control();
-            var control = new PictureBox
+            using var parent = new Control();
+            using var control = new PictureBox
             {
                 Parent = parent
             };
@@ -1159,11 +1160,11 @@ namespace System.Windows.Forms.Tests
             Assert.Same(control, Assert.Single(parent.Controls));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void PictureBox_Parent_SetWithHandler_CallsParentChanged()
         {
-            var parent = new Control();
-            var control = new PictureBox();
+            using var parent = new Control();
+            using var control = new PictureBox();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -1195,10 +1196,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(2, callCount);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void PictureBox_Parent_SetSame_ThrowsArgumentException()
         {
-            var control = new PictureBox();
+            using var control = new PictureBox();
             Assert.Throws<ArgumentException>(null, () => control.Parent = control);
             Assert.Null(control.Parent);
         }
