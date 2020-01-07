@@ -1081,7 +1081,7 @@ namespace System.Windows.Forms
                     pt = baseVar.PointToClient(screenCoords);
                 }
 
-                IntPtr found = UnsafeNativeMethods.ChildWindowFromPointEx(baseHwnd, pt, NativeMethods.CWP_SKIPINVISIBLE);
+                IntPtr found = User32.ChildWindowFromPointEx(baseHwnd, pt, User32.CWP.SKIPINVISIBLE);
                 if (found == baseHwnd)
                 {
                     hwnd = found;
