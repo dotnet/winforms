@@ -290,9 +290,7 @@ namespace System.Windows.Forms
             // code for the function pointer, we only do this once by using a static
             // function, and then identify the actual TaskDialog instance by using a
             // GCHandle in the reference data field (like an object pointer).
-            s_callbackProcDelegate = (hWnd, notification, wParam, lParam, referenceData) =>
-                ((TaskDialog)GCHandle.FromIntPtr(referenceData).Target!).HandleTaskDialogCallback(hWnd, notification, wParam, lParam);
-
+            s_callbackProcDelegate = HandleTaskDialogNativeCallback;
             s_callbackProcDelegatePtr = Marshal.GetFunctionPointerForDelegate(s_callbackProcDelegate);
         }
 
@@ -581,6 +579,19 @@ namespace System.Windows.Forms
         }
 
         private static void FreeConfig(IntPtr ptrToFree) => Marshal.FreeHGlobal(ptrToFree);
+
+        private static HRESULT HandleTaskDialogNativeCallback(
+            IntPtr hwnd,
+            ComCtl32.TDN msg,
+            IntPtr wParam,
+            IntPtr lParam,
+            IntPtr lpRefData) => 
+            // Call the instance method by dereferencing the GC handle.
+            (((GCHandle)lpRefData).Target as TaskDialog)!.HandleTaskDialogCallback(
+                hwnd,
+                msg,
+                wParam,
+                lParam);
 
         private static bool IsTaskDialogButtonCommitting(TaskDialogButton? button)
         {
