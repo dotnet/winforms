@@ -599,11 +599,11 @@ namespace System.Windows.Forms
                         {
                             if (CheckBoxes)
                             { // we want custom checkboxes
-                                SendMessage((int)LVM.SETIMAGELIST, NativeMethods.LVSIL_STATE, imageListState.Handle);
+                                User32.SendMessageW(this, (User32.WindowMessage)LVM.SETIMAGELIST, (IntPtr)LVSIL.STATE, imageListState.Handle);
                             }
                             else
                             {
-                                SendMessage((int)LVM.SETIMAGELIST, NativeMethods.LVSIL_STATE, IntPtr.Zero);
+                                User32.SendMessageW(this, (User32.WindowMessage)LVM.SETIMAGELIST, (IntPtr)LVSIL.STATE, IntPtr.Zero);
                             }
                         }
 
@@ -867,7 +867,7 @@ namespace System.Windows.Forms
             {
                 if (IsHandleCreated)
                 {
-                    int displayIndex = unchecked((int)(long)SendMessage((int)LVM.GETNEXTITEM, -1, NativeMethods.LVNI_FOCUSED));
+                    int displayIndex = PARAM.ToInt(User32.SendMessageW(this, (User32.WindowMessage)LVM.GETNEXTITEM, (IntPtr)(-1), (IntPtr)LVNI.FOCUSED));
                     if (displayIndex > -1)
                     {
                         return Items[displayIndex];
@@ -1276,7 +1276,7 @@ namespace System.Windows.Forms
 
                     if (IsHandleCreated)
                     {
-                        SendMessage((int)LVM.SETIMAGELIST, (IntPtr)NativeMethods.LVSIL_NORMAL, value == null ? IntPtr.Zero : value.Handle);
+                        User32.SendMessageW(this, (User32.WindowMessage)LVM.SETIMAGELIST, (IntPtr)LVSIL.NORMAL, value == null ? IntPtr.Zero : value.Handle);
                         if (AutoArrange && !listViewState1[LISTVIEWSTATE1_disposingImageLists])
                         {
                             UpdateListViewItemsLocations();
@@ -1543,7 +1543,7 @@ namespace System.Windows.Forms
 
                     if (IsHandleCreated)
                     {
-                        SendMessage((int)LVM.SETIMAGELIST, (IntPtr)NativeMethods.LVSIL_SMALL, value == null ? IntPtr.Zero : value.Handle);
+                        User32.SendMessageW(this, (User32.WindowMessage)LVM.SETIMAGELIST, (IntPtr)LVSIL.SMALL, value == null ? IntPtr.Zero : value.Handle);
 
                         if (View == View.SmallIcon)
                         {
@@ -1670,7 +1670,7 @@ namespace System.Windows.Forms
 
                         if (IsHandleCreated)
                         {
-                            SendMessage((int)LVM.SETIMAGELIST, NativeMethods.LVSIL_STATE, value == null ? IntPtr.Zero : value.Handle);
+                            User32.SendMessageW(this, (User32.WindowMessage)LVM.SETIMAGELIST, (IntPtr)LVSIL.STATE, value == null ? IntPtr.Zero : value.Handle);
                         }
                     }
                 }
@@ -1695,7 +1695,7 @@ namespace System.Windows.Forms
                             // the state imageList.
                             // (Yes, it does exactly that even though our wrapper sets LVS_SHAREIMAGELISTS on the native listView.)
                             // So we make the native listView forget about its StateImageList just before we recreate the handle.
-                            SendMessage((int)LVM.SETIMAGELIST, NativeMethods.LVSIL_STATE, IntPtr.Zero);
+                            User32.SendMessageW(this, (User32.WindowMessage)LVM.SETIMAGELIST, (IntPtr)LVSIL.STATE, IntPtr.Zero);
                         }
 
                         imageListState = value;
@@ -1715,7 +1715,7 @@ namespace System.Windows.Forms
                             }
                             else
                             {
-                                SendMessage((int)LVM.SETIMAGELIST, NativeMethods.LVSIL_STATE, (imageListState == null || imageListState.Images.Count == 0) ? IntPtr.Zero : imageListState.Handle);
+                                User32.SendMessageW(this, (User32.WindowMessage)LVM.SETIMAGELIST, (IntPtr)LVSIL.STATE, (imageListState == null || imageListState.Images.Count == 0) ? IntPtr.Zero : imageListState.Handle);
                             }
 
                             // Comctl should handle auto-arrange for us, but doesn't
@@ -2297,12 +2297,12 @@ namespace System.Windows.Forms
                 return;
             }
 
-            switch ((int)value)
+            switch ((LVA)value)
             {
-                case NativeMethods.LVA_DEFAULT:
-                case NativeMethods.LVA_ALIGNLEFT:
-                case NativeMethods.LVA_ALIGNTOP:
-                case NativeMethods.LVA_SNAPTOGRID:
+                case LVA.DEFAULT:
+                case LVA.ALIGNLEFT:
+                case LVA.ALIGNTOP:
+                case LVA.SNAPTOGRID:
                     if (IsHandleCreated)
                     {
                         User32.PostMessageW(this, (User32.WindowMessage)LVM.ARRANGE, (IntPtr)value, IntPtr.Zero);
@@ -2323,10 +2323,7 @@ namespace System.Windows.Forms
         ///  In Large Icon or Small Icon view, arranges items according to the ListView's
         ///  current alignment style.
         /// </summary>
-        public void ArrangeIcons()
-        {
-            ArrangeIcons((ListViewAlignment)NativeMethods.LVA_DEFAULT);
-        }
+        public void ArrangeIcons() => ArrangeIcons((ListViewAlignment)LVA.DEFAULT);
 
         public void AutoResizeColumns(ColumnHeaderAutoResizeStyle headerAutoResize)
         {
@@ -4220,7 +4217,7 @@ namespace System.Windows.Forms
             if (IsHandleCreated)
             {
                 IntPtr handle = (LargeImageList == null) ? IntPtr.Zero : LargeImageList.Handle;
-                SendMessage((int)LVM.SETIMAGELIST, (IntPtr)NativeMethods.LVSIL_NORMAL, handle);
+                User32.SendMessageW(this, (User32.WindowMessage)LVM.SETIMAGELIST, (IntPtr)LVSIL.NORMAL, handle);
 
                 ForceCheckBoxUpdate();
             }
@@ -4791,17 +4788,17 @@ namespace System.Windows.Forms
 
             if (null != imageListLarge)
             {
-                SendMessage((int)LVM.SETIMAGELIST, NativeMethods.LVSIL_NORMAL, imageListLarge.Handle);
+                User32.SendMessageW(this, (User32.WindowMessage)LVM.SETIMAGELIST, (IntPtr)LVSIL.NORMAL, imageListLarge.Handle);
             }
 
             if (null != imageListSmall)
             {
-                SendMessage((int)LVM.SETIMAGELIST, NativeMethods.LVSIL_SMALL, imageListSmall.Handle);
+                User32.SendMessageW(this, (User32.WindowMessage)LVM.SETIMAGELIST, (IntPtr)LVSIL.SMALL, imageListSmall.Handle);
             }
 
             if (null != imageListState)
             {
-                SendMessage((int)LVM.SETIMAGELIST, NativeMethods.LVSIL_STATE, imageListState.Handle);
+                User32.SendMessageW(this, (User32.WindowMessage)LVM.SETIMAGELIST, (IntPtr)LVSIL.STATE, imageListState.Handle);
             }
         }
 
@@ -5084,11 +5081,11 @@ namespace System.Windows.Forms
 
                 // If the width maps to a LVCSW_ const, then native control will autoresize.
                 // We may need to compensate for that.
-                if (width == NativeMethods.LVSCW_AUTOSIZE_USEHEADER)
+                if (width == (int)LVSCW.AUTOSIZE_USEHEADER)
                 {
                     headerAutoResize = ColumnHeaderAutoResizeStyle.HeaderSize;
                 }
-                else if (width == NativeMethods.LVSCW_AUTOSIZE)
+                else if (width == (int)LVSCW.AUTOSIZE)
                 {
                     headerAutoResize = ColumnHeaderAutoResizeStyle.ColumnContent;
                 }
@@ -5096,13 +5093,13 @@ namespace System.Windows.Forms
 
             if (headerAutoResize == ColumnHeaderAutoResizeStyle.HeaderSize)
             {
-                compensate = CompensateColumnHeaderResize(columnIndex, false /*columnHeaderResizeCancelled*/);
-                width = NativeMethods.LVSCW_AUTOSIZE_USEHEADER;
+                compensate = CompensateColumnHeaderResize(columnIndex, columnResizeCancelled: false);
+                width = (int)LVSCW.AUTOSIZE_USEHEADER;
             }
             else if (headerAutoResize == ColumnHeaderAutoResizeStyle.ColumnContent)
             {
-                compensate = CompensateColumnHeaderResize(columnIndex, false /*columnHeaderResizeCancelled*/);
-                width = NativeMethods.LVSCW_AUTOSIZE;
+                compensate = CompensateColumnHeaderResize(columnIndex, columnResizeCancelled: false);
+                width = (int)LVSCW.AUTOSIZE;
             }
 
             if (IsHandleCreated)
@@ -5321,7 +5318,7 @@ namespace System.Windows.Forms
             if (IsHandleCreated)
             {
                 IntPtr handle = (SmallImageList == null) ? IntPtr.Zero : SmallImageList.Handle;
-                SendMessage((int)LVM.SETIMAGELIST, (IntPtr)NativeMethods.LVSIL_SMALL, handle);
+                User32.SendMessageW(this, (User32.WindowMessage)LVM.SETIMAGELIST, (IntPtr)LVSIL.SMALL, handle);
 
                 ForceCheckBoxUpdate();
             }
@@ -5354,7 +5351,7 @@ namespace System.Windows.Forms
                 {
                     handle = imageListState.Handle;
                 }
-                SendMessage((int)LVM.SETIMAGELIST, (IntPtr)NativeMethods.LVSIL_STATE, handle);
+                User32.SendMessageW(this, (User32.WindowMessage)LVM.SETIMAGELIST, (IntPtr)LVSIL.STATE, handle);
             }
         }
 
@@ -6043,7 +6040,7 @@ namespace System.Windows.Forms
             // (Yes, it does exactly that even though our wrapper sets LVS_SHAREIMAGELISTS on the native listView.)
             if (IsHandleCreated && StateImageList != null)
             {
-                SendMessage((int)LVM.SETIMAGELIST, NativeMethods.LVSIL_STATE, IntPtr.Zero);
+                User32.SendMessageW(this, (User32.WindowMessage)LVM.SETIMAGELIST, (IntPtr)LVSIL.STATE, IntPtr.Zero);
             }
 
             RecreateHandle();
@@ -7248,8 +7245,7 @@ namespace System.Windows.Forms
                         int displayIndex = -1;
                         for (int i = 0; i < count; i++)
                         {
-                            int fidx = unchecked((int)(long)owner.SendMessage((int)LVM.GETNEXTITEM, displayIndex, NativeMethods.LVNI_SELECTED));
-
+                            int fidx = unchecked((int)(long)User32.SendMessageW(owner, (User32.WindowMessage)LVM.GETNEXTITEM, (IntPtr)displayIndex, (IntPtr)LVNI.SELECTED));
                             if (fidx > -1)
                             {
                                 indices[i] = fidx;
@@ -7294,7 +7290,7 @@ namespace System.Windows.Forms
                         int fidx = -1;
                         for (int count = 0; count <= index; count++)
                         {
-                            fidx = unchecked((int)(long)owner.SendMessage((int)LVM.GETNEXTITEM, fidx, NativeMethods.LVNI_SELECTED));
+                            fidx = unchecked((int)(long)User32.SendMessageW(owner, (User32.WindowMessage)LVM.GETNEXTITEM, (IntPtr)fidx, (IntPtr)LVNI.SELECTED));
                             Debug.Assert(fidx != -1, "Invalid index returned from LVM_GETNEXTITEM");
                         }
 
@@ -7549,8 +7545,7 @@ namespace System.Windows.Forms
 
                         for (int i = 0; i < cnt; i++)
                         {
-                            int fidx = unchecked((int)(long)owner.SendMessage((int)LVM.GETNEXTITEM, displayIndex, NativeMethods.LVNI_SELECTED));
-
+                            int fidx = unchecked((int)(long)User32.SendMessageW(owner, (User32.WindowMessage)LVM.GETNEXTITEM, (IntPtr)displayIndex, (IntPtr)LVNI.SELECTED));
                             if (fidx > -1)
                             {
                                 lvitems[i] = owner.Items[fidx];
@@ -7636,7 +7631,7 @@ namespace System.Windows.Forms
                         int fidx = -1;
                         for (int count = 0; count <= index; count++)
                         {
-                            fidx = unchecked((int)(long)owner.SendMessage((int)LVM.GETNEXTITEM, fidx, NativeMethods.LVNI_SELECTED));
+                            fidx = unchecked((int)(long)User32.SendMessageW(owner, (User32.WindowMessage)LVM.GETNEXTITEM, (IntPtr)fidx, (IntPtr)LVNI.SELECTED));
                             Debug.Assert(fidx != -1, "Invalid index returned from LVM_GETNEXTITEM");
                         }
 
@@ -9304,7 +9299,7 @@ namespace System.Windows.Forms
                         // so we can avoid checking selection for each one.
                         //
                         int count = owner.Items.Count;
-                        int nextSelected = (int)UnsafeNativeMethods.SendMessage(new HandleRef(owner, owner.Handle), (int)LVM.GETNEXTITEM, -1, NativeMethods.LVNI_SELECTED);
+                        int nextSelected = (int)User32.SendMessageW(owner, (User32.WindowMessage)LVM.GETNEXTITEM, (IntPtr)(-1), (IntPtr)LVNI.SELECTED);
                         for (int i = 0; i < count; i++)
                         {
                             ListViewItem item = owner.Items[i];
@@ -9316,7 +9311,7 @@ namespace System.Windows.Forms
                                 if (i == nextSelected)
                                 {
                                     item.StateSelected = true;
-                                    nextSelected = (int)UnsafeNativeMethods.SendMessage(new HandleRef(owner, owner.Handle), (int)LVM.GETNEXTITEM, nextSelected, NativeMethods.LVNI_SELECTED);
+                                    nextSelected = (int)User32.SendMessageW(owner, (User32.WindowMessage)LVM.GETNEXTITEM, (IntPtr)nextSelected, (IntPtr)LVNI.SELECTED);
                                 }
                                 else
                                 {
