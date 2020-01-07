@@ -71,22 +71,22 @@ namespace System.Windows.Forms
             (User32.WindowMessage)(User32.WM_APP + 0x3FFF);
 
         /// <summary>
-        ///   The delegate for the callback handler (that calls
-        ///   <see cref="HandleTaskDialogCallback"/>) from which the native function
-        ///   pointer <see cref="s_callbackProcDelegatePtr"/> is created. 
+        ///   The delegate for <see cref="HandleTaskDialogNativeCallback"/> which is
+        ///   marshaled as native callback.
         /// </summary>
         /// <remarks>
         /// <para>
-        ///   We must store this delegate (and prevent it from being garbage-collected)
-        ///   to ensure the function pointer doesn't become invalid.
+        ///   This delegate must be kept alive (protecting it from garbage collection)
+        ///   to ensure the native function pointer doesn't become invalid.
         /// </para>
         /// </remarks>
-        private static readonly ComCtl32.PFTASKDIALOGCALLBACK s_callbackProcDelegate;
-
-        /// <summary>
-        ///   The function pointer created from <see cref="s_callbackProcDelegate"/>.
-        /// </summary>
-        private static readonly IntPtr s_callbackProcDelegatePtr;
+        // Because marshaling a delegate this will allocate some memory required
+        // to store the native code for the function pointer, we only do this
+        // once by using a static function, and then identify the actual TaskDialog
+        // instance by using a GCHandle in the reference data field (like an
+        // object pointer).
+        private static readonly ComCtl32.PFTASKDIALOGCALLBACK s_callbackProcDelegate =
+            HandleTaskDialogNativeCallback;
 
         private TaskDialogStartupLocation _startupLocation;
         private bool _setToForeground;
@@ -117,7 +117,7 @@ namespace System.Windows.Forms
         /// </summary>
         /// <remarks>
         /// <para>
-        ///   This is used to prevent raising the 
+        ///   This is used to prevent raising the
         ///   <see cref="Closed"/> event without raising the
         ///   <see cref="Opened"/> event first (e.g. if the dialog cannot be shown
         ///   due to an invalid icon).
@@ -133,7 +133,7 @@ namespace System.Windows.Forms
         /// </summary>
         /// <remarks>
         /// <para>
-        ///   This is used to prevent raising the 
+        ///   This is used to prevent raising the
         ///   <see cref="TaskDialogPage.Destroyed"/> event without raising the
         ///   <see cref="TaskDialogPage.Created"/> event first (e.g. if navigation
         ///   fails).
@@ -182,7 +182,7 @@ namespace System.Windows.Forms
         ///   so that <see cref="ShowDialog(IntPtr)"/> can then return it.
         /// </para>
         /// <para>
-        ///   Additionally, this is used to check if there was already a 
+        ///   Additionally, this is used to check if there was already a
         ///   <see cref="TaskDialogNotification.TDN_BUTTON_CLICKED"/> handler that
         ///   returned <see cref="TaskDialogNativeMethods.S_OK"/>, so that further
         ///   handles will return <see cref="TaskDialogNativeMethods.S_FALSE"/> to
@@ -258,7 +258,7 @@ namespace System.Windows.Forms
         /// <para>
         ///   Note: The <see cref="Closed"/> event might not be called immediately
         ///   after the <see cref="Closing"/> event (even though the dialog window
-        ///   has already closed). This can happen, for example, when showing multiple 
+        ///   has already closed). This can happen, for example, when showing multiple
         ///   (modeless) dialogs at the same time and then closing the one that
         ///   was shown first. In that case, the <see cref="Closed"/> event for
         ///   that dialog will be called only after the second dialog is also closed.
@@ -282,17 +282,6 @@ namespace System.Windows.Forms
         /// </para>
         /// </remarks>
         public event EventHandler? Closed;
-
-        static TaskDialog()
-        {
-            // Create a delegate for the callback, and get a function pointer for it.
-            // Because this will allocate some memory required to store the native
-            // code for the function pointer, we only do this once by using a static
-            // function, and then identify the actual TaskDialog instance by using a
-            // GCHandle in the reference data field (like an object pointer).
-            s_callbackProcDelegate = HandleTaskDialogNativeCallback;
-            s_callbackProcDelegatePtr = Marshal.GetFunctionPointerForDelegate(s_callbackProcDelegate);
-        }
 
         /// <summary>
         ///   Initializes a new instance of the <see cref="TaskDialog"/> class.
@@ -328,7 +317,7 @@ namespace System.Windows.Forms
         public IntPtr Handle { get; private set; }
 
         /// <summary>
-        ///   Gets or sets the <see cref="TaskDialogPage"/> instance that contains 
+        ///   Gets or sets the <see cref="TaskDialogPage"/> instance that contains
         ///   the contents which this task dialog will display.
         /// </summary>
         /// <value>
@@ -585,7 +574,7 @@ namespace System.Windows.Forms
             ComCtl32.TDN msg,
             IntPtr wParam,
             IntPtr lParam,
-            IntPtr lpRefData) => 
+            IntPtr lpRefData) =>
             // Call the instance method by dereferencing the GC handle.
             (((GCHandle)lpRefData).Target as TaskDialog)!.HandleTaskDialogCallback(
                 hwnd,
@@ -675,7 +664,7 @@ namespace System.Windows.Forms
             var instanceHandle = GCHandle.Alloc(this);
             try
             {
-                _instanceHandlePtr = GCHandle.ToIntPtr(instanceHandle);
+                _instanceHandlePtr = (IntPtr)instanceHandle;
 
                 // Bind the page and allocate the memory.
                 BindPageAndAllocateConfig(
@@ -811,10 +800,10 @@ namespace System.Windows.Forms
                     // We need to ensure the callback delegate is not garbage-collected
                     // as long as TaskDialogIndirect doesn't return, by calling
                     // GC.KeepAlive().
-                    // 
+                    //
                     // This is not an exaggeration, as the comment for GC.KeepAlive()
                     // says the following:
-                    // The JIT is very aggressive about keeping an 
+                    // The JIT is very aggressive about keeping an
                     // object's lifetime to as small a window as possible, to the point
                     // where a 'this' pointer isn't considered live in an instance method
                     // unless you read a value from the instance.
@@ -834,7 +823,7 @@ namespace System.Windows.Forms
         // Messages that can be sent to the dialog while it is being shown.
 
         /// <summary>
-        ///   Closes the shown task dialog with a 
+        ///   Closes the shown task dialog with a
         ///   <see cref="TaskDialogResult.Cancel"/> result.
         /// </summary>
         /// <remarks>
@@ -1033,10 +1022,10 @@ namespace System.Windows.Forms
             // Note: Updating the icon doesn't cause the task dialog to update
             // its size; in contrast to the text updates where we use a
             // TDM_SET_... message.
-            // 
+            //
             // For example, if you initially didn't specify an icon but later want to
             // set one, the dialog contents might get clipped.
-            // 
+            //
             // To fix this, we call UpdateWindowSize() after updating the icon, to
             // force the task dialog to update its size.
             SendTaskDialogMessage(ComCtl32.TDM.UPDATE_ICON, (int)element, icon);
@@ -1234,7 +1223,7 @@ namespace System.Windows.Forms
                         // notifications, and we post a message to the task dialog
                         // that, when we process it, causes us to reset the flag.
                         // This is used to work-around the access key bug in the
-                        // native task dialog - see the remarks of the 
+                        // native task dialog - see the remarks of the
                         // "ContinueButtonClickHandlingMessage" for more information.
                         if (_ignoreButtonClickedNotifications)
                         {
@@ -1267,10 +1256,10 @@ namespace System.Windows.Forms
                             // navigation; these would also be set as result of the dialog),
                             // probably because this scenario isn't an expected usage of
                             // the native TaskDialog.
-                            // 
+                            //
                             // See documentation/repro in
                             // /Documentation/src/System/Windows/Forms/TaskDialog/Issue_AccessViolation_NavigationInButtonClicked.md
-                            // 
+                            //
                             // To fix the memory access problems, we simply always return
                             // S_FALSE when the callback received a TDN_NAVIGATED
                             // notification within the Button.Click event handler.
@@ -1691,7 +1680,7 @@ namespace System.Windows.Forms
                             pszFooter = MarshalString(page.Footer?.Text),
                             nDefaultButton = defaultButtonID,
                             nDefaultRadioButton = defaultRadioButtonID,
-                            pfCallback = s_callbackProcDelegatePtr,
+                            pfCallback = Marshal.GetFunctionPointerForDelegate(s_callbackProcDelegate),
                             lpCallbackData = _instanceHandlePtr,
                             cxWidth = checked((uint)page.Width)
                         };
