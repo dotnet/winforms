@@ -76,23 +76,7 @@ namespace System.Windows.Forms
 
             // Create a delegate for our window procedure, and get a function
             // pointer for it.
-            _windowProcDelegate = (hWnd, msg, wParam, lParam) =>
-            {
-                Debug.Assert(hWnd == _handle);
-
-                var m = Message.Create(hWnd, msg, wParam, lParam);
-                try
-                {
-                    WndProc(ref m);
-                }
-                catch (Exception ex) when (CanCatchWndProcException(ex))
-                {
-                    HandleWndProcException(ex);
-                }
-
-                return m.Result;
-            };
-
+            _windowProcDelegate = NativeWndProc;
             _windowProcDelegatePtr = Marshal.GetFunctionPointerForDelegate(
                     _windowProcDelegate);
         }
@@ -283,6 +267,27 @@ namespace System.Windows.Forms
         {
             // Simply rethrow the exception here.
             ExceptionDispatchInfo.Throw(exception);
+        }
+
+        private IntPtr NativeWndProc(
+            IntPtr hWnd,
+            User32.WindowMessage msg,
+            IntPtr wParam,
+            IntPtr lParam)
+        {
+            Debug.Assert(hWnd == _handle);
+
+            Message m = Message.Create(hWnd, msg, wParam, lParam);
+            try
+            {
+                WndProc(ref m);
+            }
+            catch (Exception ex) when (CanCatchWndProcException(ex))
+            {
+                HandleWndProcException(ex);
+            }
+
+            return m.Result;
         }
     }
 }
