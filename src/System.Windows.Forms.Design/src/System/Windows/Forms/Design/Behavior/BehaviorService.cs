@@ -1096,12 +1096,12 @@ namespace System.Windows.Forms.Design.Behavior
                 {
                     if (_isHooked && nCode == User32.HC.ACTION)
                     {
-                        NativeMethods.MOUSEHOOKSTRUCT mhs = Marshal.PtrToStructure<NativeMethods.MOUSEHOOKSTRUCT>(lparam);
+                        User32.MOUSEHOOKSTRUCT* mhs = (User32.MOUSEHOOKSTRUCT*)lparam;
                         if (mhs != null)
                         {
                             try
                             {
-                                if (ProcessMouseMessage(mhs.hWnd, unchecked((int)(long)wparam), mhs.pt.X, mhs.pt.Y))
+                                if (ProcessMouseMessage(mhs->hWnd, unchecked((int)(long)wparam), mhs->pt.X, mhs->pt.Y))
                                 {
                                     return (IntPtr)1;
                                 }

@@ -1006,15 +1006,6 @@ namespace System.Windows.Forms
             public IntPtr pItem = IntPtr.Zero;    // HDITEM*
         }
 
-        [StructLayout(LayoutKind.Sequential)]
-        public class MOUSEHOOKSTRUCT
-        {
-            public Point pt;
-            public IntPtr hWnd = IntPtr.Zero;
-            public int wHitTestCode = 0;
-            public int dwExtraInfo = 0;
-        }
-
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
         public unsafe struct CHARFORMATW
         {
