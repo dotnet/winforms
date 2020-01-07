@@ -47,7 +47,7 @@ namespace System.Windows.Forms
         ///   Initializes a new instance of the <see cref="TaskDialogStandardButton"/> class
         ///   using the specified result.
         /// </summary>
-        /// <param name="result">The <see cref="TaskDialogResult"/> that is represent by this 
+        /// <param name="result">The <see cref="TaskDialogResult"/> that is represent by this
         ///   <see cref="TaskDialogStandardButton"/> and which defines the text of the button.
         /// </param>
         /// <param name="enabled">A value indicating whether the button can respond to user interaction.</param>

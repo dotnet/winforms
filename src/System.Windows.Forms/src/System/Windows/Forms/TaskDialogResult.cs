@@ -14,17 +14,17 @@ namespace System.Windows.Forms
     public enum TaskDialogResult : int
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         None = 0,
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         OK = User32.IDOK,
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <remarks>
         /// <para>
@@ -37,37 +37,37 @@ namespace System.Windows.Forms
         Cancel = User32.IDCANCEL,
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         Abort = User32.IDABORT,
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         Retry = User32.IDRETRY,
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         Ignore = User32.IDIGNORE,
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         Yes = User32.IDYES,
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         No = User32.IDNO,
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         Close = User32.IDCLOSE,
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <remarks>
         /// <para>
@@ -78,12 +78,12 @@ namespace System.Windows.Forms
         Help = User32.IDHELP,
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         TryAgain = User32.IDTRYAGAIN,
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         Continue = User32.IDCONTINUE
     }

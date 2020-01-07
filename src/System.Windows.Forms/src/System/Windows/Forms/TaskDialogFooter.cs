@@ -76,7 +76,7 @@ namespace System.Windows.Forms
                         BoundPage.BoundDialog!.UpdateTextElement(
                             ComCtl32.TDE.FOOTER, value);
                     }
-                }                
+                }
 
                 _text = value;
             }

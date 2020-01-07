@@ -74,7 +74,7 @@ namespace System.Windows.Forms
             set
             {
                 DenyIfBoundAndNotCreated();
-                
+
                 if (BoundPage != null)
                 {
                     // If we are bound but waiting for initialization (e.g. immediately after
@@ -90,7 +90,7 @@ namespace System.Windows.Forms
                             ComCtl32.TDE.EXPANDED_INFORMATION, value);
                     }
                 }
-                
+
                 _text = value;
             }
         }

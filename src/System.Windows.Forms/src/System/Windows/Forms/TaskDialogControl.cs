@@ -36,7 +36,7 @@ namespace System.Windows.Forms
         ///   is currently bound to.
         /// </summary>
         /// <value>
-        ///   The <see cref="TaskDialogPage"/> instance which this control is bound to, or 
+        ///   The <see cref="TaskDialogPage"/> instance which this control is bound to, or
         ///   <see langword="null"/> if this control is not currently bound.
         /// </value>
         /// <remarks>
@@ -123,7 +123,7 @@ namespace System.Windows.Forms
         private protected virtual ComCtl32.TDF BindCore() => default;
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <remarks>
         /// <para>

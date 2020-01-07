@@ -409,7 +409,7 @@ namespace System.Windows.Forms
                 }
 
                 BoundDialog?.UpdateIconElement(ComCtl32.TDIE.ICON_MAIN, iconValue);
-                
+
                 _icon = value;
             }
         }
@@ -476,7 +476,7 @@ namespace System.Windows.Forms
         /// </para>
         /// </summary>
         /// <value>
-        ///   <see langword="true"/> to enable hyperlinks; otherwise, <see langword="false"/>. 
+        ///   <see langword="true"/> to enable hyperlinks; otherwise, <see langword="false"/>.
         ///   The default value is <see langword="false"/>.
         /// </value>
         /// <remarks>
@@ -527,7 +527,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///   Gets or sets a value that indicates whether text and controls are displayed
-        ///   reading right to left. 
+        ///   reading right to left.
         /// </summary>
         /// <value>
         ///   <see langword="true"/> to display text and controls reading right to left; <see langword="false"/>

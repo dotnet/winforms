@@ -39,7 +39,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///   The delegate for the callback handler (that calls
         ///   <see cref="WndProc(int, IntPtr, IntPtr)"/> from which the native function
-        ///   pointer <see cref="_windowProcDelegatePtr"/> is created. 
+        ///   pointer <see cref="_windowProcDelegatePtr"/> is created.
         /// </summary>
         /// <remarks>
         /// <para>
@@ -152,7 +152,7 @@ namespace System.Windows.Forms
         /// <remarks>
         /// <para>
         ///   When subclassing a window, a native function pointer is created from a managed
-        ///   callback delegate which is then set as the window procedure. The callback is 
+        ///   callback delegate which is then set as the window procedure. The callback is
         ///   automatically kept alive until <see cref="Dispose"/> is called to undo the
         ///   subclassing.
         /// </para>

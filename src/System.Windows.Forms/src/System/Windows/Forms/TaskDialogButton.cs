@@ -22,7 +22,7 @@ namespace System.Windows.Forms
         /// </summary>
         /// <remarks>
         /// <para>
-        ///   By default, the dialog will be closed after the event handler returns 
+        ///   By default, the dialog will be closed after the event handler returns
         ///   (except for the <see cref="TaskDialogResult.Help"/> button, which instead
         ///   will raise the <see cref="TaskDialogPage.HelpRequest"/> event afterwards).
         ///   To prevent the dialog from closing when this button is clicked, set the

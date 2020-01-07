@@ -18,7 +18,7 @@ namespace System.Windows.Forms
         private bool _checked;
 
         /// <summary>
-        ///   Occurs when the value of the <see cref="Checked"/> property changes while 
+        ///   Occurs when the value of the <see cref="Checked"/> property changes while
         ///   this control is shown in a task dialog.
         /// </summary>
         public event EventHandler? CheckedChanged;

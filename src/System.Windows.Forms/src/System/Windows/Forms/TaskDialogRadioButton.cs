@@ -169,7 +169,7 @@ namespace System.Windows.Forms
                 // TDN_RADIO_BUTTON_CLICKED notification code. After the
                 // callback function returns, the radio button will be
                 // selected."
-                // 
+                //
                 // While we handle this by ignoring the
                 // TDN_RADIO_BUTTON_CLICKED notification when it is caused by
                 // sending a TDM_CLICK_RADIO_BUTTON message, and then raising
@@ -177,7 +177,7 @@ namespace System.Windows.Forms
                 // still seems to cause problems for TDN_RADIO_BUTTON_CLICKED
                 // notifications initially caused by the user clicking the radio
                 // button in the UI.
-                // 
+                //
                 // For example, consider a scenario with two radio buttons
                 // [ID 1 and 2], and the user added an event handler to
                 // automatically select the first radio button (ID 1) when the
