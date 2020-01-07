@@ -41,6 +41,11 @@ internal static partial class Interop
             SETTOOLTIPS = WM_USER + 29,
             GETTOOLTIPS = WM_USER + 30,
             SETTIPSIDE = WM_USER + 31,
+            SETBUDDY = WM_USER + 32,
+            GETBUDDY = WM_USER + 33,
+            SETPOSNOTIFY = WM_USER + 34,
+            SETUNICODEFORMAT = CCM.SETUNICODEFORMAT,
+            GETUNICODEFORMAT = CCM.GETUNICODEFORMAT,
         }
     }
 }
