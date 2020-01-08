@@ -777,9 +777,9 @@ namespace System.Windows.Forms
             // If in OwnerDraw mode, we don't want the default border.
             if (OwnerDraw)
             {
-                int style = unchecked((int)((long)UnsafeNativeMethods.GetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_STYLE)));
+                int style = unchecked((int)((long)User32.GetWindowLong(this, User32.GWL.STYLE)));
                 style &= ~(int)User32.WS.BORDER;
-                UnsafeNativeMethods.SetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_STYLE, new HandleRef(null, (IntPtr)style));
+                User32.SetWindowLong(this, User32.GWL.STYLE, (IntPtr)style);
             }
 
             // Setting the max width has the added benefit of enabling multiline tool tips.
@@ -1014,8 +1014,8 @@ namespace System.Windows.Forms
             // RightToLeft reading order
             if (TopLevelControl?.RightToLeft == RightToLeft.Yes)
             {
-                bool isWindowMirrored = ((unchecked((int)(long)UnsafeNativeMethods.GetWindowLong(
-                    new HandleRef(this, Control.GetSafeHandle(hWnd)), NativeMethods.GWL_STYLE)) & (int)User32.WS_EX.LAYOUTRTL) == (int)User32.WS_EX.LAYOUTRTL);
+                bool isWindowMirrored = ((unchecked((int)(long)User32.GetWindowLong(
+                    new HandleRef(this, Control.GetSafeHandle(hWnd)), User32.GWL.STYLE)) & (int)User32.WS_EX.LAYOUTRTL) == (int)User32.WS_EX.LAYOUTRTL);
 
                 // Indicates that the ToolTip text will be displayed in the opposite direction
                 // to the text in the parent window.

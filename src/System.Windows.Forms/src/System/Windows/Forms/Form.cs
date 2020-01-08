@@ -1800,11 +1800,11 @@ namespace System.Windows.Forms
                     formState[FormStateLayered] = (TransparencyKey != Color.Empty) ? 1 : 0;
                     if (oldLayered != (formState[FormStateLayered] != 0))
                     {
-                        int exStyle = unchecked((int)(long)UnsafeNativeMethods.GetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_EXSTYLE));
+                        int exStyle = unchecked((int)(long)User32.GetWindowLong(this, User32.GWL.EXSTYLE));
                         CreateParams cp = CreateParams;
                         if (exStyle != cp.ExStyle)
                         {
-                            UnsafeNativeMethods.SetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_EXSTYLE, new HandleRef(null, (IntPtr)cp.ExStyle));
+                            User32.SetWindowLong(this, User32.GWL.EXSTYLE, (IntPtr)cp.ExStyle);
                         }
                     }
                 }
@@ -3269,7 +3269,7 @@ namespace System.Windows.Forms
                 //
                 if (!ShowInTaskbar && OwnerInternal == null && TopLevel)
                 {
-                    UnsafeNativeMethods.SetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_HWNDPARENT, TaskbarOwner);
+                    User32.SetWindowLong(this, User32.GWL.HWNDPARENT, TaskbarOwner);
 
                     // Make sure the large icon is set so the ALT+TAB icon
                     // reflects the real icon of the application
@@ -3830,7 +3830,7 @@ namespace System.Windows.Forms
                 Size s = Size;
                 IntPtr ownerHandle = IntPtr.Zero;
 
-                ownerHandle = UnsafeNativeMethods.GetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_HWNDPARENT);
+                ownerHandle = User32.GetWindowLong(this, User32.GWL.HWNDPARENT);
                 if (ownerHandle != IntPtr.Zero)
                 {
                     Screen desktop = Screen.FromHandle(ownerHandle);
@@ -3886,7 +3886,7 @@ namespace System.Windows.Forms
                 IntPtr hWndOwner = IntPtr.Zero;
                 if (TopLevel)
                 {
-                    hWndOwner = UnsafeNativeMethods.GetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_HWNDPARENT);
+                    hWndOwner = User32.GetWindowLong(this, User32.GWL.HWNDPARENT);
                 }
                 if (hWndOwner != IntPtr.Zero)
                 {
@@ -5283,7 +5283,7 @@ namespace System.Windows.Forms
                 throw new InvalidOperationException(SR.CantShowModalOnNonInteractive);
             }
 
-            if ((owner != null) && ((int)UnsafeNativeMethods.GetWindowLong(new HandleRef(owner, Control.GetSafeHandle(owner)), NativeMethods.GWL_EXSTYLE)
+            if ((owner != null) && ((int)User32.GetWindowLong(new HandleRef(owner, Control.GetSafeHandle(owner)), User32.GWL.EXSTYLE)
                      & (int)User32.WS_EX.TOPMOST) == 0)
             {   // It's not the top-most window
                 if (owner is Control ownerControl)
@@ -5304,15 +5304,15 @@ namespace System.Windows.Forms
             if (hWndOwner != IntPtr.Zero && hWndOwner != Handle)
             {
                 // Catch the case of a window trying to own its owner
-                if (UnsafeNativeMethods.GetWindowLong(new HandleRef(owner, hWndOwner), NativeMethods.GWL_HWNDPARENT) == Handle)
+                if (User32.GetWindowLong(new HandleRef(owner, hWndOwner), User32.GWL.HWNDPARENT) == Handle)
                 {
                     throw new ArgumentException(string.Format(SR.OwnsSelfOrOwner,
                                                       "show"), "owner");
                 }
 
                 // Set the new owner.
-                hWndOldOwner = UnsafeNativeMethods.GetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_HWNDPARENT);
-                UnsafeNativeMethods.SetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_HWNDPARENT, new HandleRef(owner, hWndOwner));
+                hWndOldOwner = User32.GetWindowLong(this, User32.GWL.HWNDPARENT);
+                User32.SetWindowLong(this, User32.GWL.HWNDPARENT, new HandleRef(owner, hWndOwner));
             }
             Visible = true;
         }
@@ -5360,7 +5360,7 @@ namespace System.Windows.Forms
                 throw new InvalidOperationException(SR.CantShowModalOnNonInteractive);
             }
 
-            if ((owner != null) && ((int)UnsafeNativeMethods.GetWindowLong(new HandleRef(owner, GetSafeHandle(owner)), NativeMethods.GWL_EXSTYLE)
+            if ((owner != null) && ((int)User32.GetWindowLong(new HandleRef(owner, GetSafeHandle(owner)), User32.GWL.EXSTYLE)
                      & (int)User32.WS_EX.TOPMOST) == 0)
             {   // It's not the top-most window
                 if (owner is Control ownerControl)
@@ -5417,15 +5417,15 @@ namespace System.Windows.Forms
                 if (hWndOwner != IntPtr.Zero && hWndOwner != Handle)
                 {
                     // Catch the case of a window trying to own its owner
-                    if (UnsafeNativeMethods.GetWindowLong(new HandleRef(owner, hWndOwner), NativeMethods.GWL_HWNDPARENT) == Handle)
+                    if (User32.GetWindowLong(new HandleRef(owner, hWndOwner), User32.GWL.HWNDPARENT) == Handle)
                     {
                         throw new ArgumentException(string.Format(SR.OwnsSelfOrOwner,
                                                           "showDialog"), "owner");
                     }
 
                     // Set the new owner.
-                    hWndOldOwner = UnsafeNativeMethods.GetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_HWNDPARENT);
-                    UnsafeNativeMethods.SetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_HWNDPARENT, new HandleRef(owner, hWndOwner));
+                    hWndOldOwner = User32.GetWindowLong(new HandleRef(this, Handle), User32.GWL.HWNDPARENT);
+                    User32.SetWindowLong(this, User32.GWL.HWNDPARENT, new HandleRef(owner, hWndOwner));
                 }
 
                 try
@@ -5676,7 +5676,7 @@ namespace System.Windows.Forms
                     }
                 }
 
-                UnsafeNativeMethods.SetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_HWNDPARENT, ownerHwnd);
+                User32.SetWindowLong(this, User32.GWL.HWNDPARENT, ownerHwnd);
             }
         }
 
@@ -6867,7 +6867,7 @@ namespace System.Windows.Forms
             {
                 Debug.Assert(lParam != IntPtr.Zero);
                 HandleRef hRef = new HandleRef(null, hWnd);
-                IntPtr parent = UnsafeNativeMethods.GetWindowLong(hRef, NativeMethods.GWL_HWNDPARENT);
+                IntPtr parent = User32.GetWindowLong(hRef, User32.GWL.HWNDPARENT);
                 if (parent == lParam)
                 {
                     // Enumerated window is owned by this Form.
@@ -6888,7 +6888,7 @@ namespace System.Windows.Forms
                 {
                     foreach (HandleRef hRef in ownedWindows)
                     {
-                        UnsafeNativeMethods.SetWindowLong(hRef, NativeMethods.GWL_HWNDPARENT, NativeMethods.NullHandleRef);
+                        User32.SetWindowLong(hRef, User32.GWL.HWNDPARENT, NativeMethods.NullHandleRef);
                     }
                 }
             }
@@ -6900,7 +6900,7 @@ namespace System.Windows.Forms
                 {
                     foreach (HandleRef hRef in ownedWindows)
                     {
-                        UnsafeNativeMethods.SetWindowLong(hRef, NativeMethods.GWL_HWNDPARENT, hRefOwner);
+                        User32.SetWindowLong(hRef, User32.GWL.HWNDPARENT, hRefOwner);
                     }
                 }
             }

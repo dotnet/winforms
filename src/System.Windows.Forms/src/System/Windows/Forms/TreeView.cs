@@ -330,7 +330,7 @@ namespace System.Windows.Forms
                 //
                 if (IsHandleCreated)
                 {
-                    int currentStyle = unchecked((int)((long)UnsafeNativeMethods.GetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_STYLE)));
+                    int currentStyle = unchecked((int)((long)User32.GetWindowLong(this, User32.GWL.STYLE)));
                     cp.Style |= currentStyle & (int)(User32.WS.HSCROLL | User32.WS.VSCROLL);
                 }
                 switch (borderStyle)
@@ -1994,20 +1994,19 @@ namespace System.Windows.Forms
             // This seems to make the Treeview happy.
             if (CheckBoxes)
             {
-                int style = unchecked((int)(UnsafeNativeMethods.GetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_STYLE)));
+                int style = unchecked((int)User32.GetWindowLong(this, User32.GWL.STYLE));
                 style |= (int)ComCtl32.TVS.CHECKBOXES;
-                UnsafeNativeMethods.SetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_STYLE, new HandleRef(null, (IntPtr)style));
+                User32.SetWindowLong(this, User32.GWL.STYLE, (IntPtr)style);
             }
 
             if (ShowNodeToolTips && !DesignMode)
             {
-                int style = unchecked((int)(UnsafeNativeMethods.GetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_STYLE)));
+                int style = unchecked((int)User32.GetWindowLong(this, User32.GWL.STYLE));
                 style |= (int)ComCtl32.TVS.INFOTIP;
-                UnsafeNativeMethods.SetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_STYLE, new HandleRef(null, (IntPtr)style));
+                User32.SetWindowLong(this, User32.GWL.STYLE, (IntPtr)style);
             }
 
-            Color c;
-            c = BackColor;
+            Color c = BackColor;
             if (c != SystemColors.Window)
             {
                 SendMessage(NativeMethods.TVM_SETBKCOLOR, 0, ColorTranslator.ToWin32(c));

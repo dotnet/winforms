@@ -2465,6 +2465,7 @@ namespace System.ComponentModel.Design
                     finally
                     {
                         User32.SetWindowLong(this, User32.GWL.HWNDPARENT, IntPtr.Zero);
+
                         // sometimes activation goes to LALA land - if our parent control is still  around, remind it to take focus.
                         if (parent != null && parent.Visible)
                         {

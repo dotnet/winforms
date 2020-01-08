@@ -120,11 +120,6 @@ namespace System.Windows.Forms
 
         public const int
         GCL_WNDPROC = (-24),
-        GWL_WNDPROC = (-4),
-        GWL_HWNDPARENT = (-8),
-        GWL_STYLE = (-16),
-        GWL_EXSTYLE = (-20),
-        GWL_ID = (-12),
         GMR_VISIBLE = 0,
         GMR_DAYSTATE = 1,
         GDI_ERROR = (unchecked((int)0xFFFFFFFF)),

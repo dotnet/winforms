@@ -1636,10 +1636,10 @@ namespace System.Windows.Forms
                 IntPtr handle = SendMessage(NativeMethods.DTM_GETMONTHCAL, 0, 0);
                 if (handle != IntPtr.Zero)
                 {
-                    int style = unchecked((int)((long)UnsafeNativeMethods.GetWindowLong(new HandleRef(this, handle), NativeMethods.GWL_EXSTYLE)));
+                    int style = unchecked((int)((long)User32.GetWindowLong(new HandleRef(this, handle), User32.GWL.EXSTYLE)));
                     style |= (int)(User32.WS_EX.LAYOUTRTL | User32.WS_EX.NOINHERITLAYOUT);
                     style &= ~(int)(User32.WS_EX.RIGHT | User32.WS_EX.RTLREADING);
-                    UnsafeNativeMethods.SetWindowLong(new HandleRef(this, handle), NativeMethods.GWL_EXSTYLE, new HandleRef(this, (IntPtr)style));
+                    User32.SetWindowLong(new HandleRef(this, handle), User32.GWL.EXSTYLE, new HandleRef(this, (IntPtr)style));
                 }
             }
             OnDropDown(EventArgs.Empty);
