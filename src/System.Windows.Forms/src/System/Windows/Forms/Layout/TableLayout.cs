@@ -1624,13 +1624,6 @@ namespace System.Windows.Forms.Layout
                 get { return _container; }
             }
 
-            /* Unused
-            //indicates whether the user has only specified the row number of the table
-            public bool IsRowDefined {
-                get { return (_maxRows != 0 && _maxColumns == 0); }
-            }
-            */
-
             public int CellBorderWidth
             {
                 get { return _cellBorderWidth; }
@@ -2141,7 +2134,6 @@ namespace System.Windows.Forms.Layout
                 {
                     _rows.Add(new BitArray(_numColumns));
                 }
-                //Debug.Assert(_numColumns == ((BitArray)_rows[rowOffset]).Length, "length doesn't match");
                 //increase the length of the _rows[rowOffset] if necessary
                 if (column >= ((BitArray)_rows[rowOffset]).Length)
                 {

@@ -1413,12 +1413,8 @@ namespace System.Windows.Forms
                         OnSelectedObjectsChanged(EventArgs.Empty);
                     }
 
-                    /*
-
-                    Microsoft, hopefully this won't be a big perf problem, but it looks like we
-                           need to refresh even if we didn't change the selected objects.
-
-                    if (propertiesChanged) {*/
+                    // This won't be a big perf problem, but it looks like we need to refresh
+                    // even if we didn't change the selected objects.
                     if (!GetFlag(TabsChanging))
                     {
                         // ReInitTab means that we should set the tab back to what is used to be for a given designer.
@@ -1461,10 +1457,6 @@ namespace System.Windows.Forms
                             SaveTabSelection();
                         }
                     }
-                    /*}else {
-                        Invalidate();
-                        gridView.Invalidate();
-                    //}*/
                 }
                 finally
                 {
@@ -2140,20 +2132,6 @@ namespace System.Windows.Forms
             }
             return tab;
         }
-
-        /*
-        private ToolStripButton CreateToggleButton(string toolTipText, int imageIndex, EventHandler eventHandler) {
-            ToolStripButton button = new ToolStripButton();
-            button.Text = toolTipText;
-            button.AutoToolTip = true;
-            button.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            button.ImageIndex = imageIndex;
-            button.Click += eventHandler;
-            button.CheckOnClick = true;
-            button.ImageScaling = ToolStripItemImageScaling.None;
-            return button;
-        }
-        */
 
         private ToolStripButton CreatePushButton(string toolTipText, int imageIndex, EventHandler eventHandler, bool useCheckButtonRole = false)
         {
@@ -3150,16 +3128,6 @@ namespace System.Windows.Forms
 
                         int oldY = gridView.Location.Y;
                         gridView.Location = new Point(0, toolStrip.Height + toolStrip.Top);
-                        /*if (oldY < gridView.Location.Y) {
-                            // since the toolbar doesn't erase it's
-                            // background, we'll have to force it to happen here.
-                            Brush b = new SolidBrush(BackColor);
-                            Graphics g = toolbar.CreateGraphicsInternal();
-                            g.FillRectangle(b, toolbar.ClientRectangle);
-                            b.Dispose();
-                            g.Dispose();
-                            toolbar.Invalidate();
-                        }*/
                     }
                     else
                     {
@@ -3789,55 +3757,6 @@ namespace System.Windows.Forms
                 SetupToolbar();
             }
         }
-
-        /*
-
-        /// <summary>
-        ///  Returns the first child control that can take focus
-        /// </summary>
-        /// <retval>
-        ///  Returns null if no control is able to take focus
-        /// </retval>
-        private Control FirstFocusableChild {
-            get {
-                if (toolbar.Visible) {
-                    return toolbar;
-                }
-                else if (peMain != null) {
-                    return gridView;
-                }
-                else if (hotcommands.Visible) {
-                    return hotcommands;
-                }
-                else if (doccomment.Visible) {
-                    return doccomment;
-                }
-                return null;
-            }
-        }
-
-
-        private Control LastFocusableChild {
-            get {
-                if (doccomment.Visible) {
-                    return doccomment;
-                }
-                else if (hotcommands.Visible) {
-                    return hotcommands;
-                }
-                else if (peMain != null) {
-                    return gridView;
-                }
-                else if (toolbar.Visible) {
-                    return toolbar;
-                }
-                return null;
-            }
-        }
-
-        //
-
-*/
 
         /// <summary>
         ///  Returns the last child control that can take focus
@@ -5312,16 +5231,7 @@ namespace System.Windows.Forms
 
             protected override void OnControlAdded(ControlEventArgs ce)
             {
-                //ce.Control.MouseEnter += new EventHandler(this.OnChildMouseEnter);
             }
-
-            /*
-            private void OnChildMouseEnter(object sender, EventArgs e) {
-                if (sender is Control) {
-                    ((Control)sender).Cursor = Cursors.Default;
-                }
-            }
-            */
 
             public Color BorderColor
             {

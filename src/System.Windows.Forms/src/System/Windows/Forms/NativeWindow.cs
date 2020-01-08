@@ -118,17 +118,14 @@ namespace System.Windows.Forms
                         Kernel32.GetExitCodeThread(threadHandle, out uint exitCode);
                         if (!AppDomain.CurrentDomain.IsFinalizingForUnload() && (NTSTATUS)exitCode == NTSTATUS.STATUS_PENDING)
                         {
-                            if (User32.SendMessageTimeoutW(
+                            User32.SendMessageTimeoutW(
                                 handle,
                                 User32.RegisteredMessage.WM_UIUNSUBCLASS,
                                 IntPtr.Zero,
                                 IntPtr.Zero,
                                 User32.SMTO.ABORTIFHUNG,
                                 100,
-                                out _) == IntPtr.Zero)
-                            {
-                                //Debug.Fail("unable to ping HWND:" + handle.ToString() + " during finalization");
-                            }
+                                out _);
                         }
                     }
                 }

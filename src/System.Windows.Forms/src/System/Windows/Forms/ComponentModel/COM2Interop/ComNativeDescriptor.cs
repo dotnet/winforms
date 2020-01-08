@@ -93,7 +93,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
             if (pTypeInfo == null)
             {
-                //Debug.Fail("The current component failed to return an ITypeInfo");
                 return "";
             }
 
@@ -415,10 +414,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             try
             {
                 propsInfo.AlwaysValid = true;
-                PropertyDescriptor[] props = propsInfo.Properties;
-
-                //Debug.Assert(propDescList.Count > 0, "Didn't add any properties! (propInfos=0)");
-                return new PropertyDescriptorCollection(props);
+                return new PropertyDescriptorCollection(propsInfo.Properties);
             }
             finally
             {

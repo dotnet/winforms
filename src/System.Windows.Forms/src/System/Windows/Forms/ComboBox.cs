@@ -3721,7 +3721,6 @@ namespace System.Windows.Forms
             switch (PARAM.HIWORD(m.WParam))
             {
                 case NativeMethods.CBN_DBLCLK:
-                    //OnDoubleClick(EventArgs.Empty);
                     break;
                 case NativeMethods.CBN_EDITUPDATE:
                     OnTextUpdate(EventArgs.Empty);

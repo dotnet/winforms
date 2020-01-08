@@ -221,14 +221,6 @@ namespace System.Windows.Forms
                 {
                     Properties.SetObject(PropAcceptButton, value);
                     UpdateDefaultButton();
-
-                    // this was removed as it breaks any accept button that isn't
-                    // an OK, like in the case of wizards 'next' button.
-                    /*
-                    if (acceptButton != null && acceptButton.DialogResult == DialogResult.None) {
-                        acceptButton.DialogResult = DialogResult.OK;
-                    }
-                    */
                 }
             }
         }
@@ -3337,8 +3329,7 @@ namespace System.Windows.Forms
                 ActiveMdiChildInternal = null;
 
                 // Note: WM_MDIACTIVATE message is sent to the form being activated and to the form being deactivated, ideally
-                // we would raise the event here accordingly but it would constitute a breaking change.
-                //OnMdiChildActivate(EventArgs.Empty);
+                // we would raise the MdiChildActivate event here accordingly but it would constitute a breaking change.
 
                 // undo merge
                 UpdateMenuHandles();
@@ -4109,7 +4100,7 @@ namespace System.Windows.Forms
         {
             // Typically forms are either top level or parented to an MDIClient area.
             // In either case, forms a responsible for managing their own size.
-            if (AutoSize /*&& DesignMode*/)
+            if (AutoSize)
             {
                 // If AutoSized, set the Form to the maximum of its preferredSize or the user
                 // specified size.
@@ -4156,10 +4147,6 @@ namespace System.Windows.Forms
 #pragma warning restore 618
 
             }
-
-            /*
-                        ///
-            */
 
             // Also, at this time we can now locate the form the the correct
             // area of the screen.  We must do this after applying any
@@ -4688,18 +4675,6 @@ namespace System.Windows.Forms
         {
             if (!Modal)
             {
-                /* This is not required because Application.ExitPrivate() loops through all forms in the Application.OpenForms collection
-                // Fire FormClosed event on all MDI children
-                if (IsMdiContainer) {
-                    FormClosedEventArgs fce = new FormClosedEventArgs(CloseReason.MdiFormClosing);
-                    foreach(Form mdiChild in MdiChildren) {
-                        if (mdiChild.IsHandleCreated) {
-                            mdiChild.OnFormClosed(fce);
-                        }
-                    }
-                }
-                */
-
                 // Fire FormClosed event on all the forms that this form owns and are not in the Application.OpenForms collection
                 // This is to be consistent with what WmClose does.
                 int ownedFormsCount = Properties.GetInteger(PropOwnedFormsCount);
@@ -4729,22 +4704,6 @@ namespace System.Windows.Forms
             // e.Cancel = !Validate(true);    This would cause a breaking change between v2.0 and v1.0/v1.1 in case validation fails.
             if (!Modal)
             {
-                /* This is not required because Application.ExitPrivate() loops through all forms in the Application.OpenForms collection
-                // Fire FormClosing event on all MDI children
-                if (IsMdiContainer) {
-                    FormClosingEventArgs fce = new FormClosingEventArgs(CloseReason.MdiFormClosing, e.Cancel);
-                    foreach(Form mdiChild in MdiChildren) {
-                        if (mdiChild.IsHandleCreated) {
-                            mdiChild.OnFormClosing(fce);
-                            if (fce.Cancel) {
-                                e.Cancel = true;
-                                break;
-                            }
-                        }
-                    }
-                }
-                */
-
                 // Fire FormClosing event on all the forms that this form owns and are not in the Application.OpenForms collection
                 // This is to be consistent with what WmClose does.
                 int ownedFormsCount = Properties.GetInteger(PropOwnedFormsCount);
@@ -5816,21 +5775,14 @@ namespace System.Windows.Forms
         ///<summary> ToolStrip MDI Merging support </summary>
         private void UpdateToolStrip()
         {
-            //MERGEDEBUG Debug.WriteLineIf(ToolStrip.MDIMergeDebug.TraceVerbose, "\r\n============");
-            //MERGEDEBUG Debug.WriteLineIf(ToolStrip.MergeDebug.TraceVerbose, "ToolStripMerging: starting merge operation");
-
             // try to merge each one of the MDI Child toolstrip with the first toolstrip
             // in the parent form that has the same type NOTE: THESE LISTS ARE ORDERED (See ToolstripManager)
             ToolStrip thisToolstrip = MainMenuStrip;
             ArrayList childrenToolStrips = ToolStripManager.FindMergeableToolStrips(ActiveMdiChildInternal);
 
-            //MERGEDEBUG Debug.WriteLineIf(ToolStrip.MergeDebug.TraceVerbose, "ToolStripMerging: found "+ thisToolStrips.Count +" mergeable toolstrip in this");
-            //MERGEDEBUG Debug.WriteLineIf(ToolStrip.MergeDebug.TraceVerbose, "ToolStripMerging: found "+childrenToolStrips.Count+" mergeable toolstrip in children");
-
             // revert any previous merge
             if (thisToolstrip != null)
             {
-                //MERGEDEBUG Debug.WriteLineIf(ToolStrip.MergeDebug.TraceVerbose, "ToolStripMerging: reverting merge in " + destinationToolStrip.Name);
                 ToolStripManager.RevertMerge(thisToolstrip);
             }
 
@@ -5867,7 +5819,6 @@ namespace System.Windows.Forms
         {
             if (formStateEx[FormStateExInUpdateMdiControlStrip] != 0)
             {
-                //MERGEDEBUG Debug.WriteLineIf(ToolStrip.MDIMergeDebug.TraceVerbose, "UpdateMdiControlStrip: Detected re-entrant call to UpdateMdiControlStrip, returning.");
                 return;
             }
 
@@ -5883,7 +5834,6 @@ namespace System.Windows.Forms
                     if (mdiControlStrip.MergedMenu != null)
                     {
 #if DEBUG
-                        //MERGEDEBUG Debug.WriteLineIf(ToolStrip.MDIMergeDebug.TraceVerbose, "UpdateMdiControlStrip: Calling RevertMerge on MDIControl strip.");
                         int numWindowListItems = 0;
                         if (MdiWindowListStrip != null && MdiWindowListStrip.MergedMenu != null && MdiWindowListStrip.MergedMenu.MdiWindowListItem != null)
                         {
@@ -5943,10 +5893,7 @@ namespace System.Windows.Forms
             {
                 if (MdiWindowListStrip != null && MdiWindowListStrip.MergedMenu != null)
                 {
-                    //MERGEDEBUG Debug.WriteLineIf(ToolStrip.MDIMergeDebug.TraceVerbose, "UpdateMdiWindowListStrip: Calling RevertMerge on MDIWindowList strip.");
-                    //MERGEDEBUG Debug.WriteLineIf(ToolStrip.MDIMergeDebug.TraceVerbose && MdiWindowListStrip.MergedMenu.MdiWindowListItem != null, "UpdateMdiWindowListStrip: MdiWindowListItem  dropdown item count before: " + MdiWindowListStrip.MergedMenu.MdiWindowListItem.DropDownItems.Count.ToString());
                     ToolStripManager.RevertMergeInternal(MdiWindowListStrip.MergedMenu, MdiWindowListStrip,/*revertMdiStuff*/true);
-                    //MERGEDEBUG Debug.WriteLineIf(ToolStrip.MDIMergeDebug.TraceVerbose && MdiWindowListStrip.MergedMenu.MdiWindowListItem != null, "UpdateMdiWindowListStrip: MdiWindowListItem  dropdown item count after:  " + MdiWindowListStrip.MergedMenu.MdiWindowListItem.DropDownItems.Count.ToString());
                 }
 
                 MenuStrip sourceMenuStrip = ToolStripManager.GetMainMenuStrip(this);
@@ -5959,11 +5906,8 @@ namespace System.Windows.Forms
                     int nSubItems = sourceMenuStrip.MdiWindowListItem.DropDownItems.Count;
                     bool shouldIncludeSeparator = (nSubItems > 0 &&
                         !(sourceMenuStrip.MdiWindowListItem.DropDownItems[nSubItems - 1] is ToolStripSeparator));
-                    //MERGEDEBUG Debug.WriteLineIf(ToolStrip.MDIMergeDebug.TraceVerbose, "UpdateMdiWindowListStrip: Calling populate items.");
                     MdiWindowListStrip.PopulateItems(this, sourceMenuStrip.MdiWindowListItem, shouldIncludeSeparator);
-                    //MERGEDEBUG Debug.WriteLineIf(ToolStrip.MDIMergeDebug.TraceVerbose, "UpdateMdiWindowListStrip: mdiwindowlist dd item count before: " + sourceMenuStrip.MdiWindowListItem.DropDownItems.Count.ToString());
                     ToolStripManager.Merge(MdiWindowListStrip, sourceMenuStrip);
-                    //MERGEDEBUG Debug.WriteLineIf(ToolStrip.MDIMergeDebug.TraceVerbose, "UpdateMdiWindowListStrip: mdiwindowlist dd item count after:  " + sourceMenuStrip.MdiWindowListItem.DropDownItems.Count.ToString());
                     MdiWindowListStrip.MergedMenu = sourceMenuStrip;
                 }
             }

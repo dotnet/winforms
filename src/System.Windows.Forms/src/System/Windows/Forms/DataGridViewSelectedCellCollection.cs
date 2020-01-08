@@ -122,28 +122,6 @@ namespace System.Windows.Forms
             return items.Add(dataGridViewCell);
         }
 
-        /* Not used for now
-        internal void AddRange(DataGridViewCell[] dataGridViewCells)
-        {
-            Debug.Assert(dataGridViewCells != null);
-            foreach(DataGridViewCell dataGridViewCell in dataGridViewCells)
-            {
-                Debug.Assert(!Contains(dataGridViewCell));
-                this.items.Add(dataGridViewCell);
-            }
-        }
-
-        internal void AddCellCollection(DataGridViewSelectedCellCollection dataGridViewCells)
-        {
-            Debug.Assert(dataGridViewCells != null);
-            foreach(DataGridViewCell dataGridViewCell in dataGridViewCells)
-            {
-                Debug.Assert(!Contains(dataGridViewCell));
-                this.items.Add(dataGridViewCell);
-            }
-        }
-        */
-
         /// <summary>
         ///  Adds all the <see cref='DataGridViewCell'/> objects from the provided linked list to this collection.
         /// </summary>

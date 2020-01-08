@@ -3708,7 +3708,7 @@ namespace System.Windows.Forms
                 case DataGridViewAdvancedCellBorderStyle.OutsetPartial:
                     x1 = bounds.X;
                     x2 = bounds.Right - 1;
-                    if (advancedBorderStyle.Left != DataGridViewAdvancedCellBorderStyle.None /* && advancedBorderStyle.Left != DataGridViewAdvancedCellBorderStyle.OutsetPartial*/)
+                    if (advancedBorderStyle.Left != DataGridViewAdvancedCellBorderStyle.None)
                     {
                         x1++;
                         if (advancedBorderStyle.Left == DataGridViewAdvancedCellBorderStyle.OutsetDouble ||
@@ -3717,7 +3717,7 @@ namespace System.Windows.Forms
                             x1++;
                         }
                     }
-                    if (advancedBorderStyle.Right != DataGridViewAdvancedCellBorderStyle.None /* && advancedBorderStyle.Right != DataGridViewAdvancedCellBorderStyle.OutsetPartial*/)
+                    if (advancedBorderStyle.Right != DataGridViewAdvancedCellBorderStyle.None)
                     {
                         x2--;
                         if (advancedBorderStyle.Right == DataGridViewAdvancedCellBorderStyle.OutsetDouble ||
@@ -3794,7 +3794,7 @@ namespace System.Windows.Forms
                 case DataGridViewAdvancedCellBorderStyle.OutsetPartial:
                     x1 = bounds.X;
                     x2 = bounds.Right - 1;
-                    if (advancedBorderStyle.Left != DataGridViewAdvancedCellBorderStyle.None /* && advancedBorderStyle.Left != DataGridViewAdvancedCellBorderStyle.OutsetPartial*/)
+                    if (advancedBorderStyle.Left != DataGridViewAdvancedCellBorderStyle.None)
                     {
                         x1++;
                         if (advancedBorderStyle.Left == DataGridViewAdvancedCellBorderStyle.OutsetDouble ||
@@ -3803,7 +3803,7 @@ namespace System.Windows.Forms
                             x1++;
                         }
                     }
-                    if (advancedBorderStyle.Right != DataGridViewAdvancedCellBorderStyle.None /* && advancedBorderStyle.Right != DataGridViewAdvancedCellBorderStyle.OutsetPartial*/)
+                    if (advancedBorderStyle.Right != DataGridViewAdvancedCellBorderStyle.None)
                     {
                         x2--;
                         if (advancedBorderStyle.Right == DataGridViewAdvancedCellBorderStyle.OutsetDouble ||
@@ -4071,7 +4071,7 @@ namespace System.Windows.Forms
                     case DataGridViewAdvancedCellBorderStyle.OutsetPartial:
                         x1 = bounds.X;
                         x2 = bounds.Right - 1;
-                        if (advancedBorderStyle.Left != DataGridViewAdvancedCellBorderStyle.None /* && advancedBorderStyle.Left != DataGridViewAdvancedCellBorderStyle.OutsetPartial*/)
+                        if (advancedBorderStyle.Left != DataGridViewAdvancedCellBorderStyle.None)
                         {
                             x1++;
                             if (advancedBorderStyle.Left == DataGridViewAdvancedCellBorderStyle.OutsetDouble ||
@@ -4080,7 +4080,7 @@ namespace System.Windows.Forms
                                 x1++;
                             }
                         }
-                        if (advancedBorderStyle.Right != DataGridViewAdvancedCellBorderStyle.None /* && advancedBorderStyle.Right != DataGridViewAdvancedCellBorderStyle.OutsetPartial*/)
+                        if (advancedBorderStyle.Right != DataGridViewAdvancedCellBorderStyle.None)
                         {
                             x2--;
                             if (advancedBorderStyle.Right == DataGridViewAdvancedCellBorderStyle.OutsetDouble ||
@@ -4157,7 +4157,7 @@ namespace System.Windows.Forms
                     case DataGridViewAdvancedCellBorderStyle.OutsetPartial:
                         x1 = bounds.X;
                         x2 = bounds.Right - 1;
-                        if (advancedBorderStyle.Left != DataGridViewAdvancedCellBorderStyle.None /* && advancedBorderStyle.Left != DataGridViewAdvancedCellBorderStyle.OutsetPartial*/)
+                        if (advancedBorderStyle.Left != DataGridViewAdvancedCellBorderStyle.None)
                         {
                             x1++;
                             if (advancedBorderStyle.Left == DataGridViewAdvancedCellBorderStyle.OutsetDouble ||
@@ -4166,7 +4166,7 @@ namespace System.Windows.Forms
                                 x1++;
                             }
                         }
-                        if (advancedBorderStyle.Right != DataGridViewAdvancedCellBorderStyle.None /* && advancedBorderStyle.Right != DataGridViewAdvancedCellBorderStyle.OutsetPartial*/)
+                        if (advancedBorderStyle.Right != DataGridViewAdvancedCellBorderStyle.None)
                         {
                             x2--;
                             if (advancedBorderStyle.Right == DataGridViewAdvancedCellBorderStyle.OutsetDouble ||
@@ -4503,12 +4503,6 @@ namespace System.Windows.Forms
             hEditingControl = cellBounds.Height - borderAndPaddingWidths.Y - borderAndPaddingWidths.Height;
             DataGridView.EditingPanel.Location = new Point(xEditingPanel, yEditingPanel);
             DataGridView.EditingPanel.Size = new Size(wEditingPanel, hEditingPanel);
-            /*
-            if (this.DataGridView.RightToLeftInternal)
-            {
-                xEditingControl = wEditingPanel - xEditingControl - wEditingControl;
-            }
-            */
             return new Rectangle(xEditingControl, yEditingControl, wEditingControl, hEditingControl);
         }
 

@@ -1425,7 +1425,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Overriden by LinkLabel.
         /// </summary>
-        internal override void OnAutoEllipsisChanged(/*EventArgs e*/)
+        internal override void OnAutoEllipsisChanged()
         {
             base.OnAutoEllipsisChanged(/*e*/);
             InvalidateTextLayout();
@@ -1825,16 +1825,6 @@ namespace System.Windows.Forms
             // to always relayout here... If we want to resurect this code in the future,
             // remember that we need to handle a word wrapped top aligned text that
             // will become newly exposed (and therefore layed out) when we resize...
-            //
-            /*
-            ContentAlignment anyTop = ContentAlignment.TopLeft | ContentAlignment.TopCenter | ContentAlignment.TopRight;
-
-            if ((TextAlign & anyTop) == 0 || Width != width || (Image != null && (ImageAlign & anyTop) == 0)) {
-                InvalidateTextLayout();
-                Invalidate();
-            }
-            */
-
             InvalidateTextLayout();
             Invalidate();
 

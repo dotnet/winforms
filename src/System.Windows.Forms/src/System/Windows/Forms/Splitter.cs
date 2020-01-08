@@ -429,8 +429,6 @@ namespace System.Windows.Forms
                     value = minSize;
                 }
 
-                // if (value == splitSize) return;  -- do we need this check?
-
                 splitSize = value;
                 DrawSplitBar(DRAW_END);
 

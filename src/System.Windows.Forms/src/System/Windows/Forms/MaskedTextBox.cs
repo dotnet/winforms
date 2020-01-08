@@ -1051,16 +1051,6 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Designe time support for resetting the Culture property.
-        /// </summary>
-        /* No longer needed since Culture has been removed from the property browser - Left here for documentation.
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        private void ResetCulture()
-        {
-            this.Culture = CultureInfo.CurrentCulture;
-        }*/
-
-        /// <summary>
         ///  Specifies whether to reset and skip the current position if editable, when the input character
         ///  has the same value as the prompt.  This property takes precedence over AllowPromptAsInput.
         /// </summary>
@@ -1272,7 +1262,6 @@ namespace System.Windows.Forms
                         string oldText = TextOutput;
                         if (maskedTextProvider.Set(value, out caretTestPos, out MaskedTextResultHint hint))
                         {
-                            //if( hint == MaskedTextResultHint.Success || hint == MaskedTextResultHint.SideEffect )
                             if (TextOutput != oldText)
                             {
                                 SetText();
@@ -1657,7 +1646,6 @@ namespace System.Windows.Forms
             string oldText = TextOutput;
             if (maskedTextProvider.RemoveAt(startPosition, endPos, out int tempPos, out MaskedTextResultHint hint))
             {
-                //if( hint == MaskedTextResultHint.Success || hint == MaskedTextResultHint.SideEffect) // Text was changed.
                 if (TextOutput != oldText)
                 {
                     SetText();
@@ -2102,7 +2090,6 @@ namespace System.Windows.Forms
                 string oldText = TextOutput;
                 if (PlaceChar(e.KeyChar, selectionStart, selectionLen, IsOverwriteMode, out MaskedTextResultHint hint))
                 {
-                    //if( hint == MaskedTextResultHint.Success || hint == MaskedTextResultHint.SideEffect )
                     if (TextOutput != oldText)
                     {
                         SetText(); // Now set the text in the display.

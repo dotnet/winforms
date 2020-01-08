@@ -30,7 +30,6 @@ namespace System.Windows.Forms.Design
                 dlg.DiscoverMaskDescriptors(discoverySvc);  // fine if service is null.
 
                 // Show dialog from VS.
-                // Debug.Assert( uiSvc != null, "Expected IUIService, defaulting to an intrusive way to show the dialog..." );
                 DialogResult dlgResult = uiSvc != null ? uiSvc.ShowDialog(dlg) : dlg.ShowDialog();
                 if (dlgResult == DialogResult.OK)
                 {

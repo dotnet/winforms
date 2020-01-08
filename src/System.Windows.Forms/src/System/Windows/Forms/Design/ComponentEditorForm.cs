@@ -155,13 +155,6 @@ namespace System.Windows.Forms.Design
             remove => base.AutoSizeChanged -= value;
         }
 
-        /*
-        private void CreateNewTransaction() {
-            IDesignerHost host = component.Site.GetService(typeof(IDesignerHost)) as IDesignerHost;
-            transaction = host.CreateTransaction(string.Format(SR.ComponentEditorFormEditTransaction, component.Site.Name));
-        }
-        */
-
         /// <summary>
         ///  Handles ok/cancel/apply/help button click events
         /// </summary>
@@ -488,25 +481,7 @@ namespace System.Windows.Forms.Design
         public virtual DialogResult ShowForm(IWin32Window owner, int page)
         {
             initialActivePage = page;
-
-            // CreateNewTransaction();
-            try
-            {
-                ShowDialog(owner);
-            }
-            finally
-            {
-                /*
-                if (DialogResult == DialogResult.OK) {
-                    transaction.Commit();
-                }
-                else
-                {
-                    transaction.Cancel();
-                }
-                */
-            }
-
+            ShowDialog(owner);
             return DialogResult;
         }
 

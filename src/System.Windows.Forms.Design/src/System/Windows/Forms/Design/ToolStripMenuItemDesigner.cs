@@ -697,7 +697,6 @@ namespace System.Windows.Forms.Design
         /// </summary>
         private void CreatetypeHereNode()
         {
-            //Debug.Assert(typeHereNode == null, "Why is our dummy node valid?");
             if (typeHereNode == null)
             {
                 AddNewTemplateNode(MenuItem.DropDown);

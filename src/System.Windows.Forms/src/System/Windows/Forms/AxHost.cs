@@ -1597,7 +1597,6 @@ namespace System.Windows.Forms
                                 }
                             }
 
-                            //Debug.Assert(GetOcState() == OC_INPLACE, " failed transition");
                             if (GetOcState() < OC_INPLACE)
                             {
                                 SetOcState(OC_INPLACE);
@@ -2510,9 +2509,6 @@ namespace System.Windows.Forms
         private void CreateInstance()
         {
             Debug.Assert(instance == null, "instance must be null");
-            //Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "before created "+Windows.GetCurrentThreadId());
-            //Debug.WriteStackTraceIf("AxHTrace");
-            //checkThreadingModel();
             try
             {
                 instance = CreateInstanceCore(clsid);

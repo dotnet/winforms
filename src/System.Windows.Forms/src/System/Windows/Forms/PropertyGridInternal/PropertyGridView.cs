@@ -664,93 +664,6 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-        /*
-        public PropertyDescriptor SelectedPropertyDescriptor {
-            get {
-                if (selectedGridEntry != null && (selectedGridEntry is PropertyDescriptorGridEntry)) {
-                    return ((PropertyDescriptorGridEntry) selectedGridEntry).PropertyDescriptor;
-                }
-                else {
-                    return null;
-                }
-            }
-        }
-        */
-
-        /*
-        /// <summary>
-        ///  Returns the currently selected property name.
-        ///  If no property or a category name is selected, "" is returned.
-        ///  If the category is a sub property, it is concatenated onto its
-        ///  parent property name with a ".".
-        /// </summary>
-        public string SelectedPropertyName {
-            get {
-                if (selectedGridEntry == null) {
-                    return "";
-                }
-                GridEntry gridEntry = selectedGridEntry;
-                string name = string.Empty;
-                while (gridEntry != null && gridEntry.PropertyDepth >= 0) {
-                    if (name.Length > 0) {
-                        name = gridEntry.PropertyName + "." + name;
-                    }
-                    else {
-                        name = gridEntry.PropertyName;
-                    }
-                    gridEntry = gridEntry.ParentGridEntry;
-                }
-                return name;
-            }
-            set{
-                if (value==null){
-                    return;
-                }
-                if (value.Equals(selectedGridEntry.PropertyLabel)){
-                    return;
-                }
-
-                string curName;
-                string remain = value;
-
-                int dot = remain.IndexOf('.');
-                GridEntry[] ipes = GetAllGridEntries();
-                int pos = 0;
-
-                while (dot != -1){
-                    curName = remain.Substring(0, dot);
-                    Debug.WriteLine("Looking for: " + curName);
-                    for (int i = pos; i < ipes.Length ; i++){
-                        Debug.WriteLine("Checking : " + ipes[i].PropertyLabel);
-                        if (ipes[i].PropertyLabel.Equals(curName)){
-                            if (ipes[i].Expandable){
-                                pos = i;
-                                remain = remain.Substring(dot + 1);
-                                dot = remain.IndexOf('.');
-                                if (dot != -1){
-                                    Debug.WriteLine("Expanding: " + ipes[i].PropertyLabel);
-                                    ipes[i].SetPropertyExpand(true);
-                                    ipes = GetAllGridEntries();
-                                    break;
-                                }
-                                else{
-                                    SelectGridEntry(ipes[i], true);
-                                    return;
-                                }
-                            }
-                        }
-                    }
-                    // uh oh
-                    dot = -1;
-                }
-                // oops, didn't find it
-                SelectRow(0);
-                return;
-
-            }
-        }
-        */
-
         /// <summary>
         ///  Returns or sets the IServiceProvider the PropertyGridView will use to obtain
         ///  services.  This may be null.
@@ -1014,7 +927,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             ClearGridEntryEvents(allGridEntries, 0, -1);
             allGridEntries = null;
             selectedRow = -1;
-            //selectedGridEntry = null; // we don't wanna clear this because then we can't save where we were on a Refresh()
+            // Don't clear selectedGridEntry because then we can't save where we were on a Refresh()
             tipInfo = -1;
         }
 
@@ -1435,7 +1348,6 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         private int GetIPELabelIndent(GridEntry gridEntry)
         {
-            //return OUTLINE_INDENT*(gridEntry.PropertyDepth + 1);
             return gridEntry.PropertyLabelIndent + 1;
         }
 
@@ -2296,7 +2208,6 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         public virtual int GetScrollOffset()
         {
-            //Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose,  "PropertyGridView:GetScrollOffset");
             if (scrollBar == null)
             {
                 return 0;
@@ -2370,9 +2281,6 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
 
                 GridEntry ipeCur = rgipe.GetEntry(cLocal);
-
-                //Debug.Assert(ipeCur != null, "Null IPE at position " + cLocal.ToString());
-
                 if (cCur >= cTarget)
                 {
                     rgipeTarget[cCur - cTarget] = ipeCur;
@@ -2381,7 +2289,6 @@ namespace System.Windows.Forms.PropertyGridInternal
                 if (ipeCur.InternalExpanded)
                 {
                     GridEntryCollection subGridEntry = ipeCur.Children;
-                    //Debug.Assert(subGridEntry != null && subGridEntry.Length > 0 && subGridEntry[0] != null, "Expanded property " + ipeCur.PropertyLabel + " has no children!");
                     if (subGridEntry != null && subGridEntry.Count > 0)
                     {
                         cCur = GetGridEntriesFromOutline(subGridEntry,
@@ -2804,42 +2711,6 @@ namespace System.Windows.Forms.PropertyGridInternal
             base.OnHandleDestroyed(e);
         }
 
-        /*
-        public bool OnHelp() {
-            GridEntry gridEntry = GetGridEntryFromRow(selectedRow);
-            if (gridEntry == null || !(Focused || Edit.Focused)) {
-                return false;
-            }
-
-            string keyword = gridEntry.HelpKeyword;
-            if (keyword != null && keyword.Length != 0) {
-                try {
-                    IHelpService hsvc = GetHelpService();
-                    if (hsvc != null) {
-                        hsvc.ShowHelpFromKeyword(keyword);
-                    }
-                }
-                catch (Exception) {
-                }
-            }
-            return true;
-        }
-
-        // This has no effect.
-        protected override void OnImeModeChanged(EventArgs e) {
-
-            // Only update edit box mode if actually out of sync with grid's mode (to avoid re-entrancy issues)
-            //
-            if (edit != null && edit.ImeMode != this.ImeMode) {
-
-                // Keep the ImeMode of the property grid and edit box in step
-                //
-                edit.ImeMode = this.ImeMode;
-            }
-            base.OnImeModeChanged(e);
-        }
-       */
-
         private void OnListChange(object sender, EventArgs e)
         {
             Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:OnListChange");
@@ -3031,19 +2902,6 @@ namespace System.Windows.Forms.PropertyGridInternal
                 SelectRow(0);
             }
         }
-        /*
-                private void OnEditImeModeChanged(object sender, EventArgs e) {
-
-                    // The property grid ImeMode tracks the ImeMode of the edit control.
-                    // We require this because the first character the goes into the edit control
-                    // is composed while the PropertyGrid still has focus - so the ImeMode
-                    // of the grid and the edit need to be the same or we get inconsistent IME composition.
-                    //
-                    if (this.ImeMode != edit.ImeMode) {
-                        this.ImeMode = edit.ImeMode;
-                    }
-                }
-        */
 
         private bool ProcessEnumUpAndDown(GridEntry gridEntry, Keys keyCode, bool closeDropDown = true)
         {
@@ -6966,10 +6824,6 @@ namespace System.Windows.Forms.PropertyGridInternal
                         gridView.CloseDropDownInternal(false);
                         return;
                     }
-
-                    // prevent the IMsoComponentManager active code from getting fired.
-                    //Active = ((int)m.WParam & 0x0000FFFF) != User32.WA.INACTIVE;
-                    //return;
                 }
                 else if (m.Msg == WindowMessages.WM_CLOSE)
                 {
@@ -7842,19 +7696,6 @@ namespace System.Windows.Forms.PropertyGridInternal
                         }
                         break;
                     case WindowMessages.WM_PASTE:
-                        /*if (!this.ReadOnly) {
-                            IDataObject dataObject = Clipboard.GetDataObject();
-                            Debug.Assert(dataObject != null, "Failed to get dataObject from clipboard");
-                            if (dataObject != null) {
-                                object data = dataObject.GetData(typeof(string));
-                                if (data != null) {
-                                    string clipboardText = data.ToString();
-                                    SelectedText = clipboardText;
-                                    m.result = 1;
-                                    return;
-                                }
-                            }
-                        }*/
                         if (ReadOnly)
                         {
                             return;
@@ -8275,17 +8116,6 @@ namespace System.Windows.Forms.PropertyGridInternal
                             {
                                 return true; // there was an error, so eat the mouse
                             }
-                            /* This breaks all sorts of stuff.  Need to find a better way to do this but we can't figure
-                               out the scenario this addressed.
-                            else {
-                                // Returning false lets the message go to its destination.  Only
-                                // return false if there is still a mouse button down.  That might not be the
-                                // case if committing the entry opened a modal dialog.
-                                //
-                                MouseButtons state = Control.MouseButtons;
-                                return (int)state == 0;
-                            }
-                            */
                         }
                     }
                     finally

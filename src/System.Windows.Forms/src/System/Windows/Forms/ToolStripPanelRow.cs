@@ -789,28 +789,6 @@ namespace System.Windows.Forms
             }
         }
 
-        [Conditional("DEBUG")]
-        private void PrintPlacements(int index)
-        {
-            /*  Debug.WriteLineIf(ToolStripPanelMouseDebug.TraceVerbose, "Results:\r\n\t-------");
-              Debug.Indent();
-              Debug.WriteLineIf(ToolStripPanelMouseDebug.TraceVerbose, "ToolStripPanelRow: " + this.Bounds.ToString());
-
-              float sumColWidths = 0F;
-              int sumWidths = 0;
-
-              for (int i = 0; i < this.Controls.Count - 1; i++) {
-                  string indicator = (i == index) ? "*" : " ";
-
-                  Debug.WriteLineIf(ToolStripPanelMouseDebug.TraceVerbose, String.Format("{0} {1} Column Width {2} Control Size {3}", indicator, this.Controls[i].Name, TableLayoutSettings.ColumnStyles[i].Width, this.Controls[i].Bounds));
-                  sumColWidths += TableLayoutSettings.ColumnStyles[i].Width;
-                  sumWidths += this.Controls[i].Width;
-              }
-
-              Debug.WriteLineIf(ToolStripPanelMouseDebug.TraceVerbose, "Total Column Width " + sumColWidths.ToString() + " Total control widths " + sumWidths.ToString());
-              Debug.Unindent();
-              */
-        }
         #endregion
 
         private abstract class ToolStripPanelRowManager

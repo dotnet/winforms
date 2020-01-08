@@ -12321,7 +12321,6 @@ namespace System.Windows.Forms
                 {
                     if (!GetState(States.DoubleClickFired))
                     {
-                        //OnClick(EventArgs.Empty);
                         //In Whidbey .. if the click in by MOUSE then pass the MouseEventArgs...
                         OnClick(new MouseEventArgs(button, clicks, PARAM.SignedLOWORD(m.LParam), PARAM.SignedHIWORD(m.LParam), 0));
                         OnMouseClick(new MouseEventArgs(button, clicks, PARAM.SignedLOWORD(m.LParam), PARAM.SignedHIWORD(m.LParam), 0));
@@ -12329,7 +12328,6 @@ namespace System.Windows.Forms
 
                     else
                     {
-                        //OnDoubleClick(EventArgs.Empty);
                         OnDoubleClick(new MouseEventArgs(button, 2, PARAM.SignedLOWORD(m.LParam), PARAM.SignedHIWORD(m.LParam), 0));
                         OnMouseDoubleClick(new MouseEventArgs(button, 2, PARAM.SignedLOWORD(m.LParam), PARAM.SignedHIWORD(m.LParam), 0));
                     }
