@@ -9606,6 +9606,7 @@ namespace System.Windows.Forms.Tests
         {
             yield return new object[] { null };
             yield return new object[] { new Control() };
+            yield return new object[] { new Form() };
         }
 
         [WinFormsTheory]
