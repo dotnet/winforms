@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 #if WGCM_TEST_SUITE // Enable tracking when built for the test suites.
 #define TRACK_HDC
 #define GDI_FONT_CACHE_TRACK

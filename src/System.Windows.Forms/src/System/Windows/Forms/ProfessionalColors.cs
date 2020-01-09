@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Drawing;
 using System.Windows.Forms.VisualStyles;
 using Microsoft.Win32;
@@ -413,4 +415,3 @@ namespace System.Windows.Forms
         }
     }
 }
-

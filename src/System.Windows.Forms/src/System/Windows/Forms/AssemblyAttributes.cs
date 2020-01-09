@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 // Always hard bind to System.dll and System.Drawing.dll
 
 using System.Runtime.CompilerServices;
@@ -16,4 +18,3 @@ using System.Runtime.CompilerServices;
 
 // Opts into the VS loading icons from the Icon Satellite assembly: System.Windows.Forms.VisualStudio.<version>.0.dll
 [assembly: System.Drawing.BitmapSuffixInSatelliteAssembly()]
-
