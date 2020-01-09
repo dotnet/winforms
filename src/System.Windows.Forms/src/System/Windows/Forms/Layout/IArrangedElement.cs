@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Drawing;
 
@@ -60,7 +58,7 @@ namespace System.Windows.Forms.Layout
         /// <summary>
         ///  Returns the element's parent container (on a control, this forwands to Parent)
         /// </summary>
-        IArrangedElement Container { get; }
+        IArrangedElement? Container { get; }
 
         /// <summary>
         ///  Returns the element's childern (on a control, this forwands to Controls)
