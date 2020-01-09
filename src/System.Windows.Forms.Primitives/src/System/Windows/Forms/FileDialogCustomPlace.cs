@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Diagnostics.CodeAnalysis;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -18,7 +19,7 @@ namespace System.Windows.Forms
         private string _path = string.Empty;
         private Guid _knownFolderGuid = Guid.Empty;
 
-        public FileDialogCustomPlace(string path)
+        public FileDialogCustomPlace(string? path)
         {
             Path = path;
         }
@@ -28,6 +29,7 @@ namespace System.Windows.Forms
             KnownFolderGuid = knownFolderGuid;
         }
 
+        [AllowNull]
         public string Path
         {
             get => _path ?? string.Empty;

@@ -32,7 +32,7 @@ namespace System.Windows.Forms
             }
         }
 
-        public void Add(string path) => Add(new FileDialogCustomPlace(path));
+        public void Add(string? path) => Add(new FileDialogCustomPlace(path));
 
         public void Add(Guid knownFolderGuid) => Add(new FileDialogCustomPlace(knownFolderGuid));
     }
