@@ -16,6 +16,7 @@ using System.Windows.Forms.Internal;
 using System.Windows.Forms.Layout;
 using Accessibility;
 using static Interop;
+using static Interop.User32;
 
 namespace System.Windows.Forms
 {
@@ -544,7 +545,7 @@ namespace System.Windows.Forms
                     Properties.SetInteger(PropDropDownWidth, value);
                     if (IsHandleCreated)
                     {
-                        SendMessage(NativeMethods.CB_SETDROPPEDWIDTH, value, 0);
+                        SendMessageW(this, (User32.WindowMessage)CB.SETDROPPEDWIDTH, (IntPtr)value);
                     }
                 }
             }
@@ -604,14 +605,11 @@ namespace System.Windows.Forms
             {
                 if (IsHandleCreated)
                 {
-                    return unchecked((int)(long)SendMessage(NativeMethods.CB_GETDROPPEDSTATE, 0, 0)) != 0;
+                    return unchecked((int)(long)SendMessageW(this, (User32.WindowMessage)CB.GETDROPPEDSTATE)) != 0;
                 }
-                else
-                {
-                    return false;
-                }
-            }
 
+                return false;
+            }
             set
             {
                 if (!IsHandleCreated)
@@ -619,7 +617,7 @@ namespace System.Windows.Forms
                     CreateHandle();
                 }
 
-                SendMessage(NativeMethods.CB_SHOWDROPDOWN, value ? -1 : 0, 0);
+                SendMessageW(this, (User32.WindowMessage)CB.SHOWDROPDOWN, (IntPtr)(value ? -1 : 0));
             }
         }
 
@@ -755,7 +753,7 @@ namespace System.Windows.Forms
                 // Note that the above if clause deals with the case when the handle has not yet been created
                 Debug.Assert(IsHandleCreated, "Handle should be created at this point");
 
-                int h = unchecked((int)(long)SendMessage(NativeMethods.CB_GETITEMHEIGHT, 0, 0));
+                int h = unchecked((int)(long)SendMessageW(this, (User32.WindowMessage)CB.GETITEMHEIGHT));
                 if (h == -1)
                 {
                     throw new Win32Exception();
@@ -896,7 +894,7 @@ namespace System.Windows.Forms
                     Properties.SetInteger(PropMaxLength, value);
                     if (IsHandleCreated)
                     {
-                        SendMessage(NativeMethods.CB_LIMITTEXT, value, 0);
+                        SendMessageW(this, (User32.WindowMessage)CB.LIMITTEXT, (IntPtr)value);
                     }
                 }
             }
@@ -1083,12 +1081,10 @@ namespace System.Windows.Forms
             {
                 if (IsHandleCreated)
                 {
-                    return unchecked((int)(long)SendMessage(NativeMethods.CB_GETCURSEL, 0, 0));
+                    return unchecked((int)(long)SendMessageW(this, (User32.WindowMessage)CB.GETCURSEL));
                 }
-                else
-                {
-                    return selectedIndex;
-                }
+
+                return selectedIndex;
             }
             set
             {
@@ -1107,7 +1103,7 @@ namespace System.Windows.Forms
 
                     if (IsHandleCreated)
                     {
-                        SendMessage(NativeMethods.CB_SETCURSEL, value, 0);
+                        SendMessageW(this, (User32.WindowMessage)CB.SETCURSEL, (IntPtr)value);
                     }
                     else
                     {
@@ -1217,14 +1213,14 @@ namespace System.Windows.Forms
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
         SRDescription(nameof(SR.ComboBoxSelectionLengthDescr))
         ]
-        public int SelectionLength
+        public unsafe int SelectionLength
         {
             get
             {
-                int[] end = new int[] { 0 };
-                int[] start = new int[] { 0 };
-                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.CB_GETEDITSEL, start, end);
-                return end[0] - start[0];
+                int end = 0;
+                int start = 0;
+                SendMessageW(this, (User32.WindowMessage)CB.GETEDITSEL, (IntPtr)(&start), (IntPtr)(&end));
+                return end - start;
             }
             set
             {
@@ -1241,13 +1237,13 @@ namespace System.Windows.Forms
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
         SRDescription(nameof(SR.ComboBoxSelectionStartDescr))
         ]
-        public int SelectionStart
+        public unsafe int SelectionStart
         {
             get
             {
-                int[] value = new int[] { 0 };
-                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.CB_GETEDITSEL, value, (int[])null);
-                return value[0];
+                int value = 0;
+                SendMessageW(this, (User32.WindowMessage)CB.GETEDITSEL, (IntPtr)(&value), IntPtr.Zero);
+                return value;
             }
             set
             {
@@ -2220,7 +2216,7 @@ namespace System.Windows.Forms
 
             if (IsHandleCreated)
             {
-                int h = unchecked((int)(long)SendMessage(NativeMethods.CB_GETITEMHEIGHT, index, 0));
+                int h = unchecked((int)(long)SendMessageW(this, (User32.WindowMessage)CB.GETITEMHEIGHT, (IntPtr)index));
                 if (h == -1)
                 {
                     throw new Win32Exception();
@@ -2401,7 +2397,7 @@ namespace System.Windows.Forms
         private int NativeAdd(object item)
         {
             Debug.Assert(IsHandleCreated, "Shouldn't be calling Native methods before the handle is created.");
-            int insertIndex = unchecked((int)(long)SendMessage(NativeMethods.CB_ADDSTRING, 0, GetItemText(item)));
+            int insertIndex = unchecked((int)(long)SendMessageW(this, (User32.WindowMessage)CB.ADDSTRING, IntPtr.Zero, GetItemText(item)));
             if (insertIndex < 0)
             {
                 throw new OutOfMemoryException(SR.ComboBoxItemOverflow);
@@ -2420,7 +2416,8 @@ namespace System.Windows.Forms
             {
                 saved = WindowText;
             }
-            SendMessage(NativeMethods.CB_RESETCONTENT, 0, 0);
+
+            SendMessageW(this, (User32.WindowMessage)CB.RESETCONTENT);
             if (saved != null)
             {
                 WindowText = saved;
@@ -2432,9 +2429,9 @@ namespace System.Windows.Forms
         /// </summary>
         private string NativeGetItemText(int index)
         {
-            int len = unchecked((int)(long)SendMessage(NativeMethods.CB_GETLBTEXTLEN, index, 0));
+            int len = unchecked((int)(long)SendMessageW(this, (User32.WindowMessage)CB.GETLBTEXTLEN, (IntPtr)index));
             StringBuilder sb = new StringBuilder(len + 1);
-            UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.CB_GETLBTEXT, index, sb);
+            UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)CB.GETLBTEXT, index, sb);
             return sb.ToString();
         }
 
@@ -2445,7 +2442,7 @@ namespace System.Windows.Forms
         private int NativeInsert(int index, object item)
         {
             Debug.Assert(IsHandleCreated, "Shouldn't be calling Native methods before the handle is created.");
-            int insertIndex = unchecked((int)(long)SendMessage(NativeMethods.CB_INSERTSTRING, index, GetItemText(item)));
+            int insertIndex = unchecked((int)(long)SendMessageW(this, (User32.WindowMessage)CB.INSERTSTRING, (IntPtr)index, GetItemText(item)));
             if (insertIndex < 0)
             {
                 throw new OutOfMemoryException(SR.ComboBoxItemOverflow);
@@ -2471,7 +2468,7 @@ namespace System.Windows.Forms
                 Invalidate();
             }
 
-            SendMessage(NativeMethods.CB_DELETESTRING, index, 0);
+            SendMessageW(this, (User32.WindowMessage)CB.DELETESTRING, (IntPtr)index);
         }
 
         internal override void RecreateHandleCore()
@@ -2505,7 +2502,7 @@ namespace System.Windows.Forms
 
             if (MaxLength > 0)
             {
-                SendMessage(NativeMethods.CB_LIMITTEXT, MaxLength, 0);
+                SendMessageW(this, (User32.WindowMessage)CB.LIMITTEXT, (IntPtr)MaxLength);
             }
 
             // Get the handles and wndprocs of the ComboBox's child windows
@@ -2545,7 +2542,7 @@ namespace System.Windows.Forms
             int dropDownWidth = Properties.GetInteger(PropDropDownWidth, out bool found);
             if (found)
             {
-                SendMessage(NativeMethods.CB_SETDROPPEDWIDTH, dropDownWidth, 0);
+                SendMessageW(this, (User32.WindowMessage)CB.SETDROPPEDWIDTH, (IntPtr)dropDownWidth);
             }
 
             found = false;
@@ -2586,7 +2583,7 @@ namespace System.Windows.Forms
                 //
                 if (selectedIndex >= 0)
                 {
-                    SendMessage(NativeMethods.CB_SETCURSEL, selectedIndex, 0);
+                    SendMessageW(this, (User32.WindowMessage)CB.SETCURSEL, (IntPtr)selectedIndex);
                     UpdateText();
                     selectedIndex = -1;
                 }
@@ -3400,7 +3397,7 @@ namespace System.Windows.Forms
                 throw new ArgumentOutOfRangeException(nameof(length), length, string.Format(SR.InvalidArgument, nameof(length), length));
             }
 
-            SendMessage(NativeMethods.CB_SETEDITSEL, 0, PARAM.FromLowHigh(start, end));
+            SendMessageW(this, (User32.WindowMessage)CB.SETEDITSEL, IntPtr.Zero, PARAM.FromLowHigh(start, end));
         }
 
         /// <summary>
@@ -3445,7 +3442,7 @@ namespace System.Windows.Forms
 
                 if (IsHandleCreated)
                 {
-                    SendMessage(NativeMethods.CB_SETCURSEL, DataManager.Position, 0);
+                    SendMessageW(this, (User32.WindowMessage)CB.SETCURSEL, (IntPtr)DataManager.Position);
                 }
                 else
                 {
@@ -3541,21 +3538,21 @@ namespace System.Windows.Forms
             }
             if (DrawMode == DrawMode.OwnerDrawFixed)
             {
-                SendMessage(NativeMethods.CB_SETITEMHEIGHT, -1, ItemHeight);
-                SendMessage(NativeMethods.CB_SETITEMHEIGHT, 0, ItemHeight);
+                SendMessageW(this, (User32.WindowMessage)CB.SETITEMHEIGHT, (IntPtr)(-1), (IntPtr)ItemHeight);
+                SendMessageW(this, (User32.WindowMessage)CB.SETITEMHEIGHT, IntPtr.Zero, (IntPtr)ItemHeight);
             }
             else if (DrawMode == DrawMode.OwnerDrawVariable)
             {
-                SendMessage(NativeMethods.CB_SETITEMHEIGHT, -1, ItemHeight);
+                SendMessageW(this, (User32.WindowMessage)CB.SETITEMHEIGHT, (IntPtr)(-1), (IntPtr)ItemHeight);
                 Graphics graphics = CreateGraphicsInternal();
                 for (int i = 0; i < Items.Count; i++)
                 {
-                    int original = unchecked((int)(long)SendMessage(NativeMethods.CB_GETITEMHEIGHT, i, 0));
+                    int original = unchecked((int)(long)SendMessageW(this, (User32.WindowMessage)CB.GETITEMHEIGHT, (IntPtr)i));
                     MeasureItemEventArgs mievent = new MeasureItemEventArgs(graphics, i, original);
                     OnMeasureItem(mievent);
                     if (mievent.ItemHeight != original)
                     {
-                        SendMessage(NativeMethods.CB_SETITEMHEIGHT, i, mievent.ItemHeight);
+                        SendMessageW(this, (User32.WindowMessage)CB.SETITEMHEIGHT, (IntPtr)i, (IntPtr)mievent.ItemHeight);
                     }
                 }
                 graphics.Dispose();
