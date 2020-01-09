@@ -19,7 +19,7 @@ namespace System.Windows.Forms
         public const int ACM_OPENA = (0x0400 + 100);
         public const int ACM_OPENW = (0x0400 + 103);
 
-        public const int BCM_GETIDEALSIZE = 0x1601,
+        public const int
         BFFM_INITIALIZED = 1,
         BFFM_SELCHANGED = 2,
         BFFM_SETSELECTION = 0x400 + 103,
@@ -34,10 +34,6 @@ namespace System.Windows.Forms
         CCS_NORESIZE = 0x00000004,
         CCS_NOPARENTALIGN = 0x00000008,
         CCS_NODIVIDER = 0x00000040,
-        CBEM_INSERTITEM = (0x0400 + 11),
-        CBEM_SETITEM = (0x0400 + 12),
-        CBEM_GETITEM = (0x0400 + 13),
-        CBEN_ENDEDIT = ((0 - 800) - 6),
         CONNECT_E_NOCONNECTION = unchecked((int)0x80040200),
         CONNECT_E_CANNOTCONNECT = unchecked((int)0x80040202);
 
@@ -975,7 +971,6 @@ namespace System.Windows.Forms
 
         public class ActiveX
         {
-            public const int OCM__BASE = 0x2000;
             public const int ALIGN_MIN = 0x0;
             public const int ALIGN_NO_CHANGE = 0x0;
             public const int ALIGN_TOP = 0x1;
