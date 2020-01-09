@@ -83,7 +83,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                return DragQueryFile(hDrop, iFile, lpszFile, lpszFile.Capacity);
+                return DragQueryFile(hDrop, iFile, lpszFile, lpszFile?.Capacity ?? 0);
             }
         }
 

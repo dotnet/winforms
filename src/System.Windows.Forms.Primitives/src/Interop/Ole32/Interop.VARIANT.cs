@@ -168,7 +168,7 @@ internal static partial class Interop
 
                     case VARENUM.VARIANT:
                         VARIANT varStruct = Marshal.PtrToStructure<VARIANT>(val);
-                        return varStruct.ToObject();
+                        return varStruct?.ToObject();
 
                     case VARENUM.CLSID:
                         Guid guid = Marshal.PtrToStructure<Guid>(val);
