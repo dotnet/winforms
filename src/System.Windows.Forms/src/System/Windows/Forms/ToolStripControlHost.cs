@@ -695,7 +695,7 @@ namespace System.Windows.Forms
             {
                 // if we've really been removed from the item collection,
                 // politely remove ourselves from the control collection
-                WindowsFormsUtils.ReadOnlyControlCollection oldControlCollection
+                ReadOnlyControlCollection oldControlCollection
                                 = GetControlCollection(Control.ParentInternal as ToolStrip);
                 if (oldControlCollection != null)
                 {
@@ -805,19 +805,15 @@ namespace System.Windows.Forms
 
         protected virtual void OnValidated(EventArgs e) => RaiseEvent(s_validatedEvent, e);
 
-        private static WindowsFormsUtils.ReadOnlyControlCollection GetControlCollection(ToolStrip toolStrip)
-        {
-            WindowsFormsUtils.ReadOnlyControlCollection newControls =
-                   toolStrip != null ? (WindowsFormsUtils.ReadOnlyControlCollection)toolStrip.Controls : null;
-            return newControls;
-        }
+        private static ReadOnlyControlCollection GetControlCollection(ToolStrip toolStrip)
+            => (ReadOnlyControlCollection)toolStrip?.Controls;
 
         /// <remarks>
         ///  Ensures the hosted Control is parented to the ToolStrip hosting this ToolStripItem.
         /// </remarks>
         private void SyncControlParent()
         {
-            WindowsFormsUtils.ReadOnlyControlCollection newControls = GetControlCollection(ParentInternal);
+            ReadOnlyControlCollection newControls = GetControlCollection(ParentInternal);
             if (newControls != null)
             {
                 newControls.AddInternal(Control);

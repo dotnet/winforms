@@ -314,7 +314,7 @@ namespace System.Windows.Forms
                 RTLGrip.Bounds = SizeGripBounds;
                 if (!Controls.Contains(RTLGrip))
                 {
-                    if (Controls is WindowsFormsUtils.ReadOnlyControlCollection controlCollection)
+                    if (Controls is ReadOnlyControlCollection controlCollection)
                     {
                         controlCollection.AddInternal(RTLGrip);
                     }
@@ -324,7 +324,7 @@ namespace System.Windows.Forms
             {
                 if (Controls.Contains(rtlLayoutGrip))
                 {
-                    if (Controls is WindowsFormsUtils.ReadOnlyControlCollection controlCollection)
+                    if (Controls is ReadOnlyControlCollection controlCollection)
                     {
                         controlCollection.RemoveInternal(rtlLayoutGrip);
                     }

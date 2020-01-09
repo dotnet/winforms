@@ -9279,7 +9279,7 @@ namespace System.Windows.Forms
         {
             // We assume the target does not want us to offset the root control in the metafile.
 
-            using (WindowsFormsUtils.DCMapping mapping = new WindowsFormsUtils.DCMapping(hDC, bounds))
+            using (DCMapping mapping = new DCMapping(hDC, bounds))
             {
                 // print the non-client area
                 PrintToMetaFile_SendPrintMessage(hDC, (IntPtr)((long)lParam & ~NativeMethods.PRF_CLIENT));
@@ -9292,7 +9292,7 @@ namespace System.Windows.Forms
                 clientOffset = new Point(clientOffset.X - windowRect.left, clientOffset.Y - windowRect.top);
                 Rectangle clientBounds = new Rectangle(clientOffset, ClientSize);
 
-                using (WindowsFormsUtils.DCMapping clientMapping = new WindowsFormsUtils.DCMapping(hDC, clientBounds))
+                using (DCMapping clientMapping = new DCMapping(hDC, clientBounds))
                 {
                     // print the client area
                     PrintToMetaFile_SendPrintMessage(hDC, (IntPtr)((long)lParam & ~NativeMethods.PRF_NONCLIENT));

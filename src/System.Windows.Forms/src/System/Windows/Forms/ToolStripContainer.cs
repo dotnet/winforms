@@ -452,7 +452,7 @@ namespace System.Windows.Forms
             return false;
         }
 
-        internal class ToolStripContainerTypedControlCollection : WindowsFormsUtils.ReadOnlyControlCollection
+        internal class ToolStripContainerTypedControlCollection : ReadOnlyControlCollection
         {
             readonly ToolStripContainer owner;
             readonly Type contentPanelType = typeof(ToolStripContentPanel);

@@ -141,8 +141,8 @@ namespace System.Windows.Forms
             SetStyle(ControlStyles.SupportsTransparentBackColor, true);
             SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
 
-            ((WindowsFormsUtils.TypedControlCollection)Controls).AddInternal(panel1);
-            ((WindowsFormsUtils.TypedControlCollection)Controls).AddInternal(panel2);
+            ((TypedControlCollection)Controls).AddInternal(panel1);
+            ((TypedControlCollection)Controls).AddInternal(panel2);
             UpdateSplitter();
         }
 
@@ -2647,7 +2647,7 @@ namespace System.Windows.Forms
         ///  This control collection only allows a specific type of control
         ///  into the controls collection.  It optionally supports readonlyness.
         /// </summary>
-        internal class SplitContainerTypedControlCollection : WindowsFormsUtils.TypedControlCollection
+        internal class SplitContainerTypedControlCollection : TypedControlCollection
         {
             readonly SplitContainer owner;
 

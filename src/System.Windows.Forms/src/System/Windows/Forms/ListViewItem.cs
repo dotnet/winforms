@@ -1981,7 +1981,7 @@ namespace System.Windows.Forms
             {
                 if (_owner.subItems != null)
                 {
-                    return new WindowsFormsUtils.ArraySubsetEnumerator(_owner.subItems, _owner.SubItemCount);
+                    return new ArraySubsetEnumerator(_owner.subItems, _owner.SubItemCount);
                 }
                 else
                 {
