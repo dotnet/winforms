@@ -122,32 +122,35 @@ namespace System.Windows.Forms
 
         public override object CreateInstance(ITypeDescriptorContext context, IDictionary propertyValues)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
             if (propertyValues == null)
             {
                 throw new ArgumentNullException(nameof(propertyValues));
             }
 
-            Padding original = (Padding)context.PropertyDescriptor.GetValue(context.Instance);
+            var original = context?.PropertyDescriptor?.GetValue(context.Instance);
             try
             {
-                int all = (int)propertyValues[nameof(Padding.All)];
-                if (original.All != all)
+                // When incrementally changing an existing Padding instance e.g. through a PropertyGrid
+                // the expected behavior is that a change of Padding.All will override the now outdated
+                // other properties of the original padding.
+                //
+                // If we are not incrementally changing an existing instance (i.e. have no original value)
+                // then we can just select the individual components passed in the full set of properties
+                // and the Padding constructor will determine whether they are all the same or not.
+
+                if (original is Padding originalPadding)
                 {
-                    return new Padding(all);
+                    int all = (int)propertyValues[nameof(Padding.All)];
+                    if (originalPadding.All != all)
+                        return new Padding(all);
                 }
-                else
-                {
-                    return new Padding(
-                        (int)propertyValues[nameof(Padding.Left)],
-                        (int)propertyValues[nameof(Padding.Top)],
-                        (int)propertyValues[nameof(Padding.Right)],
-                        (int)propertyValues[nameof(Padding.Bottom)]
-                    );
-                }
+
+                return new Padding(
+                    (int)propertyValues[nameof(Padding.Left)],
+                    (int)propertyValues[nameof(Padding.Top)],
+                    (int)propertyValues[nameof(Padding.Right)],
+                    (int)propertyValues[nameof(Padding.Bottom)]
+                );
             }
             catch (InvalidCastException invalidCast)
             {
