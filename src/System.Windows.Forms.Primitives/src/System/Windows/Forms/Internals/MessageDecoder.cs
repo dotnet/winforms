@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using static Interop;
 using static Interop.User32;
 
@@ -19,9 +17,9 @@ namespace System.Windows.Forms
         ///  Returns the symbolic name of the msg value, or null if it isn't one of the
         ///  existing constants.
         /// </summary>
-        private static string MsgToString(int msg)
+        private static string? MsgToString(int msg)
         {
-            string text;
+            string? text;
             switch (msg)
             {
                 case (int)WM.NULL:
@@ -841,7 +839,7 @@ namespace System.Windows.Forms
             return text;
         }
 
-        private static string Parenthesize(string input)
+        private static string Parenthesize(string? input)
         {
             if (input == null)
             {

@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Primitives.Resources;
@@ -47,7 +45,7 @@ internal static partial class Interop
 
             public void Dispose() => Clear();
 
-            public object ToObject()
+            public object? ToObject()
             {
                 IntPtr val = data1;
                 long longVal;

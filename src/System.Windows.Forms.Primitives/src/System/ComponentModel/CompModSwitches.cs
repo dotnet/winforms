@@ -2,47 +2,45 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Diagnostics;
 
 namespace System.ComponentModel
 {
     internal static class CompModSwitches
     {
-        private static TraceSwitch activeX;
-        private static TraceSwitch flowLayout;
-        private static TraceSwitch dataCursor;
-        private static TraceSwitch dataGridCursor;
-        private static TraceSwitch dataGridEditing;
-        private static TraceSwitch dataGridKeys;
-        private static TraceSwitch dataGridLayout;
-        private static TraceSwitch dataGridPainting;
-        private static TraceSwitch dataGridParents;
-        private static TraceSwitch dataGridScrolling;
-        private static TraceSwitch dataGridSelection;
-        private static TraceSwitch dataObject;
-        private static TraceSwitch dataView;
-        private static TraceSwitch debugGridView;
-        private static TraceSwitch dgCaptionPaint;
-        private static TraceSwitch dgEditColumnEditing;
-        private static TraceSwitch dgRelationShpRowLayout;
-        private static TraceSwitch dgRelationShpRowPaint;
-        private static TraceSwitch dgRowPaint;
-        private static TraceSwitch dragDrop;
-        private static TraceSwitch imeMode;
-        private static TraceSwitch msaa;
-        private static TraceSwitch msoComponentManager;
-        private static TraceSwitch layoutPerformance;
-        private static TraceSwitch layoutSuspendResume;
-        private static TraceSwitch richLayout;
-        private static TraceSwitch setBounds;
+        private static TraceSwitch? activeX;
+        private static TraceSwitch? flowLayout;
+        private static TraceSwitch? dataCursor;
+        private static TraceSwitch? dataGridCursor;
+        private static TraceSwitch? dataGridEditing;
+        private static TraceSwitch? dataGridKeys;
+        private static TraceSwitch? dataGridLayout;
+        private static TraceSwitch? dataGridPainting;
+        private static TraceSwitch? dataGridParents;
+        private static TraceSwitch? dataGridScrolling;
+        private static TraceSwitch? dataGridSelection;
+        private static TraceSwitch? dataObject;
+        private static TraceSwitch? dataView;
+        private static TraceSwitch? debugGridView;
+        private static TraceSwitch? dgCaptionPaint;
+        private static TraceSwitch? dgEditColumnEditing;
+        private static TraceSwitch? dgRelationShpRowLayout;
+        private static TraceSwitch? dgRelationShpRowPaint;
+        private static TraceSwitch? dgRowPaint;
+        private static TraceSwitch? dragDrop;
+        private static TraceSwitch? imeMode;
+        private static TraceSwitch? msaa;
+        private static TraceSwitch? msoComponentManager;
+        private static TraceSwitch? layoutPerformance;
+        private static TraceSwitch? layoutSuspendResume;
+        private static TraceSwitch? richLayout;
+        private static TraceSwitch? setBounds;
 
-        private static BooleanSwitch lifetimeTracing;
+        private static BooleanSwitch? lifetimeTracing;
 
-        private static TraceSwitch s_handleLeak;
-        private static BooleanSwitch s_traceCollect;
-        private static BooleanSwitch s_commonDesignerServices;
+        private static TraceSwitch? s_handleLeak;
+        private static BooleanSwitch? s_traceCollect;
+        private static BooleanSwitch? s_commonDesignerServices;
 
         public static TraceSwitch ActiveX
         {

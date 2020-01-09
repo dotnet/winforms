@@ -1,8 +1,6 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
-
-#nullable disable
 
 using System.Collections;
 using System.ComponentModel;
@@ -41,7 +39,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Converts the given object to the converter's native type.
         /// </summary>
-        public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
+        public override object? ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
         {
             if (value is string stringValue)
             {
@@ -124,7 +122,7 @@ namespace System.Windows.Forms
 
         public override object CreateInstance(ITypeDescriptorContext context, IDictionary propertyValues)
         {
-            if (propertyValues == null)
+            if (propertyValues is null)
             {
                 throw new ArgumentNullException(nameof(propertyValues));
             }
@@ -142,16 +140,18 @@ namespace System.Windows.Forms
 
                 if (original is Padding originalPadding)
                 {
-                    int all = (int)propertyValues[nameof(Padding.All)];
+                    int all = (int)propertyValues[nameof(Padding.All)]!;
                     if (originalPadding.All != all)
+                    {
                         return new Padding(all);
+                    }
                 }
 
                 return new Padding(
-                    (int)propertyValues[nameof(Padding.Left)],
-                    (int)propertyValues[nameof(Padding.Top)],
-                    (int)propertyValues[nameof(Padding.Right)],
-                    (int)propertyValues[nameof(Padding.Bottom)]
+                    (int)propertyValues[nameof(Padding.Left)]!,
+                    (int)propertyValues[nameof(Padding.Top)]!,
+                    (int)propertyValues[nameof(Padding.Right)]!,
+                    (int)propertyValues[nameof(Padding.Bottom)]!
                 );
             }
             catch (InvalidCastException invalidCast)

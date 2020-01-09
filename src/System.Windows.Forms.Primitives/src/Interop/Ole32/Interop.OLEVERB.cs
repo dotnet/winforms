@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Runtime.InteropServices;
 
 internal static partial class Interop
@@ -15,7 +13,7 @@ internal static partial class Interop
         {
             public OLEIVERB lVerb;
             [MarshalAs(UnmanagedType.LPWStr)]
-            public string lpszVerbName;
+            public string? lpszVerbName;
             public User32.MF fuFlags;
             public OLEVERBATTRIB grfAttribs;
         }

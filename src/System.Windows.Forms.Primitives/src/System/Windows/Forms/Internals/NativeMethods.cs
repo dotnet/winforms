@@ -1,8 +1,6 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
-
-#nullable disable
 
 using System.Drawing;
 using System.Runtime.InteropServices;
@@ -100,11 +98,11 @@ namespace System.Windows.Forms
         {
             internal int cbStruct = Marshal.SizeOf<HH_AKLINK>();
             internal bool fReserved = false;
-            internal string pszKeywords = null;
-            internal string pszUrl = null;
-            internal string pszMsgText = null;
-            internal string pszMsgTitle = null;
-            internal string pszWindow = null;
+            internal string? pszKeywords = null;
+            internal string? pszUrl = null;
+            internal string? pszMsgText = null;
+            internal string? pszMsgTitle = null;
+            internal string? pszWindow = null;
             internal bool fIndexOnFail = false;
         }
 
@@ -119,7 +117,7 @@ namespace System.Windows.Forms
             internal int clrForeground = -1;
             internal int clrBackground = -1;
             internal RECT rcMargins = new RECT(-1, -1, -1, -1);     // amount of space between edges of window and text, -1 for each member to ignore
-            internal string pszFont = null;
+            internal string? pszFont = null;
         }
 
         public const int HH_FTS_DEFAULT_PROXIMITY = -1;
@@ -130,13 +128,13 @@ namespace System.Windows.Forms
             internal int cbStruct = Marshal.SizeOf<HH_FTS_QUERY>();
             internal bool fUniCodeStrings = false;
             [MarshalAs(UnmanagedType.LPStr)]
-            internal string pszSearchQuery = null;
+            internal string? pszSearchQuery = null;
             internal int iProximity = NativeMethods.HH_FTS_DEFAULT_PROXIMITY;
             internal bool fStemmedSearch = false;
             internal bool fTitleOnly = false;
             internal bool fExecute = true;
             [MarshalAs(UnmanagedType.LPStr)]
-            internal string pszWindow = null;
+            internal string? pszWindow = null;
         }
 
         public delegate IntPtr WndProc(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam);
@@ -171,9 +169,9 @@ namespace System.Windows.Forms
 
             public IntPtr hInstance;
             [MarshalAs(UnmanagedType.LPStr)]
-            public string lpPrintTemplateName;
+            public string? lpPrintTemplateName;
 
-            public WndProc lpCallback = null;
+            public WndProc? lpCallback = null;
 
             public int nPropertyPages;
 
@@ -197,7 +195,7 @@ namespace System.Windows.Forms
             public int lStructSize = Marshal.SizeOf<OPENFILENAME_I>(); //ndirect.DllLib.sizeOf(this);
             public IntPtr hwndOwner;
             public IntPtr hInstance;
-            public string lpstrFilter;   // use embedded nulls to separate filters
+            public string? lpstrFilter;   // use embedded nulls to separate filters
             public IntPtr lpstrCustomFilter = IntPtr.Zero;
             public int nMaxCustFilter = 0;
             public int nFilterIndex;
@@ -205,15 +203,15 @@ namespace System.Windows.Forms
             public int nMaxFile = Kernel32.MAX_PATH;
             public IntPtr lpstrFileTitle = IntPtr.Zero;
             public int nMaxFileTitle = Kernel32.MAX_PATH;
-            public string lpstrInitialDir;
-            public string lpstrTitle;
+            public string? lpstrInitialDir;
+            public string? lpstrTitle;
             public int Flags;
             public short nFileOffset = 0;
             public short nFileExtension = 0;
-            public string lpstrDefExt;
+            public string? lpstrDefExt;
             public IntPtr lCustData = IntPtr.Zero;
-            public WndProc lpfnHook;
-            public string lpTemplateName = null;
+            public WndProc? lpfnHook;
+            public string? lpTemplateName = null;
             public IntPtr pvReserved = IntPtr.Zero;
             public int dwReserved = 0;
             public int FlagsEx;
