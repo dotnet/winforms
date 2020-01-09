@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using Xunit;
 using static Interop;
 using static Interop.User32;
@@ -52,13 +50,13 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.User32
 
         private class ChangeWindowTextForm : Form
         {
-            public Func<string> BeforeGetTextLengthCallback
+            public Func<string>? BeforeGetTextLengthCallback
             {
                 get;
                 set;
             }
 
-            public Func<string> BeforeGetTextCallback
+            public Func<string>? BeforeGetTextCallback
             {
                 get;
                 set;
@@ -68,7 +66,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.User32
             {
                 if (m.Msg == WindowMessages.WM_GETTEXTLENGTH)
                 {
-                    string text = BeforeGetTextLengthCallback?.Invoke();
+                    string? text = BeforeGetTextLengthCallback?.Invoke();
                     if (text != null)
                     {
                         SetWindowTextW(m.HWnd, text);
@@ -76,7 +74,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.User32
                 }
                 else if (m.Msg == WindowMessages.WM_GETTEXT)
                 {
-                    string text = BeforeGetTextCallback?.Invoke();
+                    string? text = BeforeGetTextCallback?.Invoke();
                     if (text != null)
                     {
                         SetWindowTextW(m.HWnd, text);

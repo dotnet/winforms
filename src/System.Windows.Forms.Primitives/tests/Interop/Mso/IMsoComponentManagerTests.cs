@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Runtime.InteropServices;
 using Moq;
 using Xunit;
@@ -16,8 +14,8 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Mso
     {
         private IMsoComponentManager CreateComponentManager()
             => (IMsoComponentManager)Activator.CreateInstance(
-                typeof(Application).Assembly.GetType("System.Windows.Forms.Application+ComponentManager"),
-                nonPublic: true);
+                typeof(Application).Assembly.GetType("System.Windows.Forms.Application+ComponentManager")!,
+                nonPublic: true)!;
 
         [Fact]
         public void FDebugMessage_ReturnsTrue()
