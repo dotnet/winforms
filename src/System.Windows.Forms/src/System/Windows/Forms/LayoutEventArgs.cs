@@ -2,28 +2,26 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 
 namespace System.Windows.Forms
 {
     public sealed class LayoutEventArgs : EventArgs
     {
-        public LayoutEventArgs(IComponent affectedComponent, string affectedProperty)
+        public LayoutEventArgs(IComponent? affectedComponent, string? affectedProperty)
         {
             AffectedComponent = affectedComponent;
             AffectedProperty = affectedProperty;
         }
 
-        public LayoutEventArgs(Control affectedControl, string affectedProperty) : this((IComponent)affectedControl, affectedProperty)
+        public LayoutEventArgs(Control? affectedControl, string? affectedProperty) : this(affectedControl as IComponent, affectedProperty)
         {
         }
 
-        public IComponent AffectedComponent { get; }
+        public IComponent? AffectedComponent { get; }
 
-        public Control AffectedControl => AffectedComponent as Control;
+        public Control? AffectedControl => AffectedComponent as Control;
 
-        public string AffectedProperty { get; }
+        public string? AffectedProperty { get; }
     }
 }
