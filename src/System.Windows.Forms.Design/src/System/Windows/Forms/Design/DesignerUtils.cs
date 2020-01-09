@@ -929,7 +929,7 @@ namespace System.Windows.Forms.Design
 
         private static ComCtl32.TVS_EX TreeView_GetExtendedStyle(IntPtr handle)
         {
-            return (ComCtl32.TVS_EX)User32.SendMessageW(handle, (User32.WindowMessage)NativeMethods.TVM_GETEXTENDEDSTYLE, IntPtr.Zero, IntPtr.Zero);
+            return (ComCtl32.TVS_EX)User32.SendMessageW(handle, (User32.WindowMessage)ComCtl32.TVM.GETEXTENDEDSTYLE);
         }
 
         /// <summary>
@@ -948,7 +948,7 @@ namespace System.Windows.Forms.Design
             UxTheme.SetWindowTheme(hwnd, "Explorer", null);
             ComCtl32.TVS_EX exstyle = TreeView_GetExtendedStyle(hwnd);
             exstyle |= ComCtl32.TVS_EX.DOUBLEBUFFER | ComCtl32.TVS_EX.FADEINOUTEXPANDOS;
-            User32.SendMessageW(hwnd, (User32.WindowMessage)NativeMethods.TVM_SETEXTENDEDSTYLE, IntPtr.Zero, (IntPtr)exstyle);
+            User32.SendMessageW(hwnd, (User32.WindowMessage)ComCtl32.TVM.SETEXTENDEDSTYLE, IntPtr.Zero, (IntPtr)exstyle);
         }
 
         /// <summary>
