@@ -1193,13 +1193,9 @@ namespace System.Windows.Forms
                     //AccessViolation exception, which is bad
                     string str = (value ?? "");
                     CreateControl();
-                    if (IsHandleCreated)
+                    if (IsHandleCreated && childEdit != null)
                     {
-                        Debug.Assert(childEdit != null);
-                        if (childEdit != null)
-                        {
-                            UnsafeNativeMethods.SendMessage(new HandleRef(this, childEdit.Handle), EditMessages.EM_REPLACESEL, NativeMethods.InvalidIntPtr, str);
-                        }
+                        SendMessageW(new HandleRef(this, childEdit.Handle), (WindowMessage)EM.REPLACESEL, (IntPtr)(-1), str);
                     }
                 }
             }
@@ -1826,11 +1822,7 @@ namespace System.Windows.Forms
                     DefChildWndProc(ref m);
                     if (childEdit != null && m.HWnd == childEdit.Handle)
                     {
-                        UnsafeNativeMethods.SendMessage(
-                            new HandleRef(this, childEdit.Handle),
-                            EditMessages.EM_SETMARGINS,
-                            (int)(User32.EC.LEFTMARGIN | User32.EC.RIGHTMARGIN),
-                            0);
+                        SendMessageW(new HandleRef(this, childEdit.Handle), (WindowMessage)EM.SETMARGINS, (IntPtr)(EC.LEFTMARGIN | EC.RIGHTMARGIN));
                     }
                     break;
                 case WindowMessages.WM_LBUTTONDBLCLK:
@@ -2533,9 +2525,7 @@ namespace System.Windows.Forms
                     childEdit.AssignHandle(hwnd);
 
                     // set the initial margin for combobox to be zero (this is also done whenever the font is changed).
-                    //
-                    UnsafeNativeMethods.SendMessage(new HandleRef(this, childEdit.Handle), EditMessages.EM_SETMARGINS,
-                        (int)(User32.EC.LEFTMARGIN | User32.EC.RIGHTMARGIN), 0);
+                    SendMessageW(new HandleRef(this, childEdit.Handle), (WindowMessage)EM.SETMARGINS, (IntPtr)(EC.LEFTMARGIN | EC.RIGHTMARGIN));
                 }
             }
 

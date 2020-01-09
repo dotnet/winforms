@@ -11,6 +11,7 @@ using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.VisualStyles;
 using static Interop;
+using static Interop.User32;
 
 namespace System.Windows.Forms
 {
@@ -338,17 +339,17 @@ namespace System.Windows.Forms
                 // Translate for Rtl if necessary
                 //
                 HorizontalAlignment align = RtlTranslateHorizontal(textAlign);
-                cp.ExStyle &= ~(int)User32.WS_EX.RIGHT;   // WS_EX_RIGHT overrides the ES_XXXX alignment styles
+                cp.ExStyle &= ~(int)WS_EX.RIGHT;   // WS_EX_RIGHT overrides the ES_XXXX alignment styles
                 switch (align)
                 {
                     case HorizontalAlignment.Left:
-                        cp.Style |= (int)User32.ES.LEFT;
+                        cp.Style |= (int)ES.LEFT;
                         break;
                     case HorizontalAlignment.Center:
-                        cp.Style |= (int)User32.ES.CENTER;
+                        cp.Style |= (int)ES.CENTER;
                         break;
                     case HorizontalAlignment.Right:
-                        cp.Style |= (int)User32.ES.RIGHT;
+                        cp.Style |= (int)ES.RIGHT;
                         break;
                 }
 
@@ -1186,7 +1187,7 @@ namespace System.Windows.Forms
             if (IsHandleCreated)
             {
                 // This message does not return a value.
-                SendMessage(EditMessages.EM_SETPASSWORDCHAR, pwdChar, 0);
+                SendMessage((int)EM.SETPASSWORDCHAR, pwdChar, 0);
                 Invalidate();
             }
         }
@@ -1908,11 +1909,11 @@ namespace System.Windows.Forms
             // Force repainting of the entire window frame
             if (Application.RenderWithVisualStyles && IsHandleCreated && BorderStyle == BorderStyle.Fixed3D)
             {
-                User32.RedrawWindow(
+                RedrawWindow(
                     new HandleRef(this, Handle),
                     null,
                     IntPtr.Zero,
-                    User32.RDW.INVALIDATE | User32.RDW.FRAME);
+                    RDW.INVALIDATE | RDW.FRAME);
             }
         }
 
@@ -3056,14 +3057,14 @@ namespace System.Windows.Forms
                     WmPrint(ref m);
                     return;
                 case WindowMessages.WM_CONTEXTMENU:
-                case EditMessages.EM_CANUNDO:
+                case (int)EM.CANUNDO:
                     base.ClearUndo(); // resets undo buffer.
                     base.WndProc(ref m);
                     return;
 
-                case EditMessages.EM_SCROLLCARET:  // No scroll for single-line control.
-                case EditMessages.EM_LIMITTEXT:    // Max/Min text is defined by the mask.
-                case EditMessages.EM_UNDO:
+                case (int)EM.SCROLLCARET:  // No scroll for single-line control.
+                case (int)EM.LIMITTEXT:    // Max/Min text is defined by the mask.
+                case (int)EM.UNDO:
                 case WindowMessages.WM_UNDO:
                     return;
 

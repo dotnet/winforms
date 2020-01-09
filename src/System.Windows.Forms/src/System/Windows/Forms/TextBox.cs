@@ -8,6 +8,7 @@ using System.Drawing.Design;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.VisualStyles;
 using static Interop;
+using static Interop.User32;
 
 namespace System.Windows.Forms
 {
@@ -300,27 +301,27 @@ namespace System.Windows.Forms
                 switch (characterCasing)
                 {
                     case CharacterCasing.Lower:
-                        cp.Style |= (int)User32.ES.LOWERCASE;
+                        cp.Style |= (int)ES.LOWERCASE;
                         break;
                     case CharacterCasing.Upper:
-                        cp.Style |= (int)User32.ES.UPPERCASE;
+                        cp.Style |= (int)ES.UPPERCASE;
                         break;
                 }
 
                 // Translate for Rtl if necessary
                 //
                 HorizontalAlignment align = RtlTranslateHorizontal(textAlign);
-                cp.ExStyle &= ~(int)User32.WS_EX.RIGHT;   // WS_EX_RIGHT overrides the ES_XXXX alignment styles
+                cp.ExStyle &= ~(int)WS_EX.RIGHT;   // WS_EX_RIGHT overrides the ES_XXXX alignment styles
                 switch (align)
                 {
                     case HorizontalAlignment.Left:
-                        cp.Style |= (int)User32.ES.LEFT;
+                        cp.Style |= (int)ES.LEFT;
                         break;
                     case HorizontalAlignment.Center:
-                        cp.Style |= (int)User32.ES.CENTER;
+                        cp.Style |= (int)ES.CENTER;
                         break;
                     case HorizontalAlignment.Right:
-                        cp.Style |= (int)User32.ES.RIGHT;
+                        cp.Style |= (int)ES.RIGHT;
                         break;
                 }
 
@@ -331,17 +332,17 @@ namespace System.Windows.Forms
                         && textAlign == HorizontalAlignment.Left
                         && !WordWrap)
                     {
-                        cp.Style |= (int)User32.WS.HSCROLL;
+                        cp.Style |= (int)WS.HSCROLL;
                     }
                     if ((scrollBars & ScrollBars.Vertical) == ScrollBars.Vertical)
                     {
-                        cp.Style |= (int)User32.WS.VSCROLL;
+                        cp.Style |= (int)WS.VSCROLL;
                     }
                 }
 
                 if (useSystemPasswordChar)
                 {
-                    cp.Style |= (int)User32.ES.PASSWORD;
+                    cp.Style |= (int)ES.PASSWORD;
                 }
 
                 return cp;
@@ -367,7 +368,8 @@ namespace System.Windows.Forms
                 {
                     CreateHandle();
                 }
-                return (char)SendMessage(EditMessages.EM_GETPASSWORDCHAR, 0, 0);
+
+                return (char)SendMessageW(this, (WindowMessage)EM.GETPASSWORDCHAR);
             }
             set
             {
@@ -379,7 +381,7 @@ namespace System.Windows.Forms
                         if (PasswordChar != value)
                         {
                             // Set the password mode.
-                            SendMessage(EditMessages.EM_SETPASSWORDCHAR, value, 0);
+                            SendMessageW(this, (WindowMessage)EM.SETPASSWORDCHAR, (IntPtr)value);
 
                             // Disable IME if setting the control to password mode.
                             VerifyImeRestrictedModeChanged();
@@ -596,11 +598,11 @@ namespace System.Windows.Forms
             // Force repainting of the entire window frame
             if (Application.RenderWithVisualStyles && IsHandleCreated && BorderStyle == BorderStyle.Fixed3D)
             {
-                User32.RedrawWindow(
+                RedrawWindow(
                     new HandleRef(this, Handle),
                     null,
                     IntPtr.Zero,
-                    User32.RDW.INVALIDATE | User32.RDW.FRAME);
+                    RDW.INVALIDATE | RDW.FRAME);
             }
         }
 
@@ -647,7 +649,7 @@ namespace System.Windows.Forms
             {
                 if (!useSystemPasswordChar)
                 {
-                    SendMessage(EditMessages.EM_SETPASSWORDCHAR, passwordChar, 0);
+                    SendMessageW(this, (WindowMessage)EM.SETPASSWORDCHAR, (IntPtr)passwordChar);
                 }
             }
 

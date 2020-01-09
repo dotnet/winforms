@@ -256,7 +256,8 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     return false;
                 }
-                return (0 != (int)Edit.SendMessage(EditMessages.EM_CANUNDO, 0, 0));
+
+                return User32.SendMessageW(Edit, (User32.WindowMessage)User32.EM.CANUNDO) != IntPtr.Zero;
             }
         }
 

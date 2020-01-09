@@ -1581,7 +1581,7 @@ namespace System.Windows.Forms
                         }
                         StreamIn(value, RichTextBoxConstants.SF_TEXT | RichTextBoxConstants.SF_UNICODE);
                         // reset Modified
-                        SendMessage(EditMessages.EM_SETMODIFY, 0, 0);
+                        User32.SendMessageW(this, (User32.WindowMessage)User32.EM.SETMODIFY);
                     }
                 }
             }
@@ -2132,7 +2132,7 @@ namespace System.Windows.Forms
                 }
 
                 UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), RichEditMessages.EM_EXSETSEL, 0, ref chrg);
-                SendMessage(EditMessages.EM_SCROLLCARET, 0, 0);
+                User32.SendMessageW(this, (User32.WindowMessage)User32.EM.SCROLLCARET);
             }
 
             return position;
@@ -2448,7 +2448,7 @@ namespace System.Windows.Forms
         public override int GetCharIndexFromPosition(Point pt)
         {
             var wpt = new Point(pt.X, pt.Y);
-            int index = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), EditMessages.EM_CHARFROMPOS, 0, ref wpt);
+            int index = (int)User32.SendMessageW(this, (User32.WindowMessage)User32.EM.CHARFROMPOS, IntPtr.Zero, ref wpt);
 
             string t = Text;
             // EM_CHARFROMPOS will return an invalid number if the last character in the RichEdit
@@ -2491,7 +2491,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Returns the location of the character at the given index.
         /// </summary>
-        public override Point GetPositionFromCharIndex(int index)
+        public unsafe override Point GetPositionFromCharIndex(int index)
         {
             if (richEditMajorVersion == 2)
             {
@@ -2504,7 +2504,7 @@ namespace System.Windows.Forms
             }
 
             var pt = new Point();
-            UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), EditMessages.EM_POSFROMCHAR, ref pt, index);
+            User32.SendMessageW(this, (User32.WindowMessage)User32.EM.POSFROMCHAR, (IntPtr)(&pt), (IntPtr)index);
             return pt;
         }
 
@@ -3181,10 +3181,10 @@ namespace System.Windows.Forms
                 }
 
                 // set the modify tag on the control
-                SendMessage(EditMessages.EM_SETMODIFY, -1, 0);
+                User32.SendMessageW(this, (User32.WindowMessage)User32.EM.SETMODIFY, (IntPtr)(-1));
 
                 // EM_GETLINECOUNT will cause the RichTextBox to recalculate its line indexes
-                SendMessage(EditMessages.EM_GETLINECOUNT, 0, 0);
+                User32.SendMessageW(this, (User32.WindowMessage)User32.EM.GETLINECOUNT);
             }
             finally
             {
@@ -3590,7 +3590,7 @@ namespace System.Windows.Forms
                                 // Throw an exception for the following
                                 //
                                 case RichEditMessages.EM_SETPARAFORMAT:
-                                case EditMessages.EM_REPLACESEL:
+                                case (int)User32.EM.REPLACESEL:
                                     break;
 
                                 case RichEditMessages.EM_STREAMIN:
@@ -3711,7 +3711,7 @@ namespace System.Windows.Forms
                     {
                         SendMessage(WindowMessages.WM_KILLFOCUS, 0, 0);
                         SendMessage(WindowMessages.WM_SETFOCUS, 0, 0);
-                        User32.PostMessageW(this, (User32.WindowMessage)EditMessages.EM_SETSEL, (IntPtr)(selEnd - 1), (IntPtr)selEnd);
+                        User32.PostMessageW(this, (User32.WindowMessage)User32.EM.SETSEL, (IntPtr)(selEnd - 1), (IntPtr)selEnd);
                     }
                 }
             }

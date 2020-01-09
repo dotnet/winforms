@@ -1110,12 +1110,12 @@ namespace System.Drawing.Design
                 switch (msg)
                 {
                     case WindowMessages.WM_INITDIALOG:
-                        UnsafeNativeMethods.SendDlgItemMessage(hwnd, COLOR_HUE, EditMessages.EM_SETMARGINS, (IntPtr)(User32.EC.LEFTMARGIN | User32.EC.RIGHTMARGIN), IntPtr.Zero);
-                        UnsafeNativeMethods.SendDlgItemMessage(hwnd, COLOR_SAT, EditMessages.EM_SETMARGINS, (IntPtr)(User32.EC.LEFTMARGIN | User32.EC.RIGHTMARGIN), IntPtr.Zero);
-                        UnsafeNativeMethods.SendDlgItemMessage(hwnd, COLOR_LUM, EditMessages.EM_SETMARGINS, (IntPtr)(User32.EC.LEFTMARGIN | User32.EC.RIGHTMARGIN), IntPtr.Zero);
-                        UnsafeNativeMethods.SendDlgItemMessage(hwnd, COLOR_RED, EditMessages.EM_SETMARGINS, (IntPtr)(User32.EC.LEFTMARGIN | User32.EC.RIGHTMARGIN), IntPtr.Zero);
-                        UnsafeNativeMethods.SendDlgItemMessage(hwnd, COLOR_GREEN, EditMessages.EM_SETMARGINS, (IntPtr)(User32.EC.LEFTMARGIN | User32.EC.RIGHTMARGIN), IntPtr.Zero);
-                        UnsafeNativeMethods.SendDlgItemMessage(hwnd, COLOR_BLUE, EditMessages.EM_SETMARGINS, (IntPtr)(User32.EC.LEFTMARGIN | User32.EC.RIGHTMARGIN), IntPtr.Zero);
+                        UnsafeNativeMethods.SendDlgItemMessage(hwnd, COLOR_HUE, (int)User32.EM.SETMARGINS, (IntPtr)(User32.EC.LEFTMARGIN | User32.EC.RIGHTMARGIN), IntPtr.Zero);
+                        UnsafeNativeMethods.SendDlgItemMessage(hwnd, COLOR_SAT, (int)User32.EM.SETMARGINS, (IntPtr)(User32.EC.LEFTMARGIN | User32.EC.RIGHTMARGIN), IntPtr.Zero);
+                        UnsafeNativeMethods.SendDlgItemMessage(hwnd, COLOR_LUM, (int)User32.EM.SETMARGINS, (IntPtr)(User32.EC.LEFTMARGIN | User32.EC.RIGHTMARGIN), IntPtr.Zero);
+                        UnsafeNativeMethods.SendDlgItemMessage(hwnd, COLOR_RED, (int)User32.EM.SETMARGINS, (IntPtr)(User32.EC.LEFTMARGIN | User32.EC.RIGHTMARGIN), IntPtr.Zero);
+                        UnsafeNativeMethods.SendDlgItemMessage(hwnd, COLOR_GREEN, (int)User32.EM.SETMARGINS, (IntPtr)(User32.EC.LEFTMARGIN | User32.EC.RIGHTMARGIN), IntPtr.Zero);
+                        UnsafeNativeMethods.SendDlgItemMessage(hwnd, COLOR_BLUE, (int)User32.EM.SETMARGINS, (IntPtr)(User32.EC.LEFTMARGIN | User32.EC.RIGHTMARGIN), IntPtr.Zero);
                         IntPtr hwndCtl = UnsafeNativeMethods.GetDlgItem(hwnd, COLOR_MIX);
                         User32.EnableWindow(hwndCtl, BOOL.FALSE);
                         User32.SetWindowPos(
