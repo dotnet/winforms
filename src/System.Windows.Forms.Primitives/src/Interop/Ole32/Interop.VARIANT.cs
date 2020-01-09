@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Primitives.Resources;
@@ -44,7 +42,7 @@ internal static partial class Interop
 
             ~VARIANT() => Clear();
 
-            public object ToObject()
+            public object? ToObject()
             {
                 IntPtr val = data1;
                 long longVal;
@@ -167,7 +165,7 @@ internal static partial class Interop
                         return (val != IntPtr.Zero);
 
                     case VARENUM.VARIANT:
-                        VARIANT varStruct = Marshal.PtrToStructure<VARIANT>(val);
+                        VARIANT? varStruct = Marshal.PtrToStructure<VARIANT>(val);
                         return varStruct?.ToObject();
 
                     case VARENUM.CLSID:

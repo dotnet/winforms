@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.IO;
 using System.Runtime.InteropServices;
 
@@ -13,7 +11,7 @@ namespace System.Windows.Forms
     {
         internal static IShellItem GetShellItemForPath(string path)
         {
-            IShellItem ret = null;
+            IShellItem? ret = null;
             IntPtr pidl = IntPtr.Zero;
             uint zero = 0;
             if (UnsafeNativeMethods.Shell32.SHILCreateFromPath(path, out pidl, ref zero) >= 0)

@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Drawing;
 using System.Runtime.InteropServices;
 using static Interop;
@@ -432,11 +430,11 @@ namespace System.Windows.Forms
         {
             internal int cbStruct = Marshal.SizeOf<HH_AKLINK>();
             internal bool fReserved = false;
-            internal string pszKeywords = null;
-            internal string pszUrl = null;
-            internal string pszMsgText = null;
-            internal string pszMsgTitle = null;
-            internal string pszWindow = null;
+            internal string? pszKeywords = null;
+            internal string? pszUrl = null;
+            internal string? pszMsgText = null;
+            internal string? pszMsgTitle = null;
+            internal string? pszWindow = null;
             internal bool fIndexOnFail = false;
         }
 
@@ -451,7 +449,7 @@ namespace System.Windows.Forms
             internal int clrForeground = -1;
             internal int clrBackground = -1;
             internal RECT rcMargins = new RECT(-1, -1, -1, -1);     // amount of space between edges of window and text, -1 for each member to ignore
-            internal string pszFont = null;
+            internal string? pszFont = null;
         }
 
         public const int HH_FTS_DEFAULT_PROXIMITY = -1;
@@ -462,13 +460,13 @@ namespace System.Windows.Forms
             internal int cbStruct = Marshal.SizeOf<HH_FTS_QUERY>();
             internal bool fUniCodeStrings = false;
             [MarshalAs(UnmanagedType.LPStr)]
-            internal string pszSearchQuery = null;
+            internal string? pszSearchQuery = null;
             internal int iProximity = NativeMethods.HH_FTS_DEFAULT_PROXIMITY;
             internal bool fStemmedSearch = false;
             internal bool fTitleOnly = false;
             internal bool fExecute = true;
             [MarshalAs(UnmanagedType.LPStr)]
-            internal string pszWindow = null;
+            internal string? pszWindow = null;
         }
 
         public delegate int EditStreamCallback(IntPtr dwCookie, IntPtr buf, int cb, out int transferred);
@@ -478,7 +476,7 @@ namespace System.Windows.Forms
         {
             public IntPtr dwCookie = IntPtr.Zero;
             public int dwError = 0;
-            public EditStreamCallback pfnCallback = null;
+            public EditStreamCallback? pfnCallback = null;
         }
 
         [StructLayout(LayoutKind.Sequential)]
@@ -538,11 +536,11 @@ namespace System.Windows.Forms
             IntPtr hInstance { get; set; }
             IntPtr lCustData { get; set; }
 
-            WndProc lpfnPrintHook { get; set; }
-            WndProc lpfnSetupHook { get; set; }
+            WndProc? lpfnPrintHook { get; set; }
+            WndProc? lpfnSetupHook { get; set; }
 
-            string lpPrintTemplateName { get; set; }
-            string lpSetupTemplateName { get; set; }
+            string? lpPrintTemplateName { get; set; }
+            string? lpSetupTemplateName { get; set; }
 
             IntPtr hPrintTemplate { get; set; }
             IntPtr hSetupTemplate { get; set; }
@@ -569,11 +567,11 @@ namespace System.Windows.Forms
             IntPtr m_hInstance;
             IntPtr m_lCustData;
 
-            WndProc m_lpfnPrintHook;
-            WndProc m_lpfnSetupHook;
+            WndProc? m_lpfnPrintHook;
+            WndProc? m_lpfnSetupHook;
 
-            string m_lpPrintTemplateName;
-            string m_lpSetupTemplateName;
+            string? m_lpPrintTemplateName;
+            string? m_lpSetupTemplateName;
 
             IntPtr m_hPrintTemplate;
             IntPtr m_hSetupTemplate;
@@ -596,11 +594,11 @@ namespace System.Windows.Forms
             public IntPtr hInstance { get { return m_hInstance; } set { m_hInstance = value; } }
             public IntPtr lCustData { get { return m_lCustData; } set { m_lCustData = value; } }
 
-            public WndProc lpfnPrintHook { get { return m_lpfnPrintHook; } set { m_lpfnPrintHook = value; } }
-            public WndProc lpfnSetupHook { get { return m_lpfnSetupHook; } set { m_lpfnSetupHook = value; } }
+            public WndProc? lpfnPrintHook { get { return m_lpfnPrintHook; } set { m_lpfnPrintHook = value; } }
+            public WndProc? lpfnSetupHook { get { return m_lpfnSetupHook; } set { m_lpfnSetupHook = value; } }
 
-            public string lpPrintTemplateName { get { return m_lpPrintTemplateName; } set { m_lpPrintTemplateName = value; } }
-            public string lpSetupTemplateName { get { return m_lpSetupTemplateName; } set { m_lpSetupTemplateName = value; } }
+            public string? lpPrintTemplateName { get { return m_lpPrintTemplateName; } set { m_lpPrintTemplateName = value; } }
+            public string? lpSetupTemplateName { get { return m_lpSetupTemplateName; } set { m_lpSetupTemplateName = value; } }
 
             public IntPtr hPrintTemplate { get { return m_hPrintTemplate; } set { m_hPrintTemplate = value; } }
             public IntPtr hSetupTemplate { get { return m_hSetupTemplate; } set { m_hSetupTemplate = value; } }
@@ -627,11 +625,11 @@ namespace System.Windows.Forms
             IntPtr m_hInstance;
             IntPtr m_lCustData;
 
-            WndProc m_lpfnPrintHook;
-            WndProc m_lpfnSetupHook;
+            WndProc? m_lpfnPrintHook;
+            WndProc? m_lpfnSetupHook;
 
-            string m_lpPrintTemplateName;
-            string m_lpSetupTemplateName;
+            string? m_lpPrintTemplateName;
+            string? m_lpSetupTemplateName;
 
             IntPtr m_hPrintTemplate;
             IntPtr m_hSetupTemplate;
@@ -654,11 +652,11 @@ namespace System.Windows.Forms
             public IntPtr hInstance { get { return m_hInstance; } set { m_hInstance = value; } }
             public IntPtr lCustData { get { return m_lCustData; } set { m_lCustData = value; } }
 
-            public WndProc lpfnPrintHook { get { return m_lpfnPrintHook; } set { m_lpfnPrintHook = value; } }
-            public WndProc lpfnSetupHook { get { return m_lpfnSetupHook; } set { m_lpfnSetupHook = value; } }
+            public WndProc? lpfnPrintHook { get { return m_lpfnPrintHook; } set { m_lpfnPrintHook = value; } }
+            public WndProc? lpfnSetupHook { get { return m_lpfnSetupHook; } set { m_lpfnSetupHook = value; } }
 
-            public string lpPrintTemplateName { get { return m_lpPrintTemplateName; } set { m_lpPrintTemplateName = value; } }
-            public string lpSetupTemplateName { get { return m_lpSetupTemplateName; } set { m_lpSetupTemplateName = value; } }
+            public string? lpPrintTemplateName { get { return m_lpPrintTemplateName; } set { m_lpPrintTemplateName = value; } }
+            public string? lpSetupTemplateName { get { return m_lpSetupTemplateName; } set { m_lpSetupTemplateName = value; } }
 
             public IntPtr hPrintTemplate { get { return m_hPrintTemplate; } set { m_hPrintTemplate = value; } }
             public IntPtr hSetupTemplate { get { return m_hSetupTemplate; } set { m_hSetupTemplate = value; } }
@@ -690,9 +688,9 @@ namespace System.Windows.Forms
 
             public IntPtr hInstance;
             [MarshalAs(UnmanagedType.LPStr)]
-            public string lpPrintTemplateName;
+            public string? lpPrintTemplateName;
 
-            public WndProc lpCallback = null;
+            public WndProc? lpCallback = null;
 
             public int nPropertyPages;
 
@@ -720,14 +718,14 @@ namespace System.Windows.Forms
             public int uCallbackMessage;
             public IntPtr hIcon;
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)]
-            public string szTip;
+            public string? szTip;
             public int dwState = 0;
             public int dwStateMask = 0;
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 256)]
-            public string szInfo;
+            public string? szInfo;
             public int uTimeoutOrVersion;
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
-            public string szInfoTitle;
+            public string? szInfoTitle;
             public int dwInfoFlags;
         }
 
@@ -743,7 +741,7 @@ namespace System.Windows.Forms
             public IntPtr hbmpChecked;
             public IntPtr hbmpUnchecked;
             public IntPtr dwItemData;
-            public string dwTypeData;
+            public string? dwTypeData;
             public int cch;
         }
 
@@ -788,7 +786,7 @@ namespace System.Windows.Forms
             public int lStructSize = Marshal.SizeOf<OPENFILENAME_I>(); //ndirect.DllLib.sizeOf(this);
             public IntPtr hwndOwner;
             public IntPtr hInstance;
-            public string lpstrFilter;   // use embedded nulls to separate filters
+            public string? lpstrFilter;   // use embedded nulls to separate filters
             public IntPtr lpstrCustomFilter = IntPtr.Zero;
             public int nMaxCustFilter = 0;
             public int nFilterIndex;
@@ -796,15 +794,15 @@ namespace System.Windows.Forms
             public int nMaxFile = Kernel32.MAX_PATH;
             public IntPtr lpstrFileTitle = IntPtr.Zero;
             public int nMaxFileTitle = Kernel32.MAX_PATH;
-            public string lpstrInitialDir;
-            public string lpstrTitle;
+            public string? lpstrInitialDir;
+            public string? lpstrTitle;
             public int Flags;
             public short nFileOffset = 0;
             public short nFileExtension = 0;
-            public string lpstrDefExt;
+            public string? lpstrDefExt;
             public IntPtr lCustData = IntPtr.Zero;
-            public WndProc lpfnHook;
-            public string lpTemplateName = null;
+            public WndProc? lpfnHook;
+            public string? lpTemplateName = null;
             public IntPtr pvReserved = IntPtr.Zero;
             public int dwReserved = 0;
             public int FlagsEx;
@@ -821,10 +819,10 @@ namespace System.Windows.Forms
             public Comdlg32.CF Flags;
             public int rgbColors;
             public IntPtr lCustData = IntPtr.Zero;
-            public WndProc lpfnHook;
-            public string lpTemplateName = null;
+            public WndProc? lpfnHook;
+            public string? lpTemplateName = null;
             public IntPtr hInstance;
-            public string lpszStyle = null;
+            public string? lpszStyle = null;
             public short nFontType = 0;
             public short ___MISSING_ALIGNMENT__ = 0;
             public int nSizeMin;
@@ -861,10 +859,10 @@ namespace System.Windows.Forms
         public class TOOLTIPTEXT
         {
             public User32.NMHDR hdr;
-            public string lpszText;
+            public string? lpszText;
 
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 80)]
-            public string szText = null;
+            public string? szText = null;
 
             public IntPtr hinst;
             public int uFlags;
@@ -979,14 +977,14 @@ namespace System.Windows.Forms
             public short cTabCount;
 
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 32)]
-            public int[] rgxTabs;
+            public int[]? rgxTabs;
         }
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
         public class FINDTEXT
         {
             public Richedit.CHARRANGE chrg;
-            public string lpstrText;
+            public string? lpstrText;
         }
 
         [StructLayout(LayoutKind.Sequential)]

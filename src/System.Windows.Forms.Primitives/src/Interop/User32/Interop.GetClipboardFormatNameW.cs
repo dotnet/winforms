@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
@@ -15,7 +13,7 @@ internal static partial class Interop
         [DllImport(Libraries.User32, ExactSpelling = true)]
         private static unsafe extern int GetClipboardFormatNameW(uint format, char* lpszFormatName, int cchMaxCount);
 
-        public static unsafe string GetClipboardFormatNameW(uint format)
+        public static unsafe string? GetClipboardFormatNameW(uint format)
         {
             // The max length of the name of clipboard formats is equal to the max length
             // of a Win32 Atom of 255 chars. An additional null terminator character is added,

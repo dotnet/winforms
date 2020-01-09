@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using static Interop;
@@ -38,7 +36,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets the <see cref='Message.lparam'/> value, and converts the value to an object.
         /// </summary>
-        public object GetLParam(Type cls) => Marshal.PtrToStructure(LParam, cls);
+        public object? GetLParam(Type cls) => Marshal.PtrToStructure(LParam, cls);
 
         internal static Message Create(IntPtr hWnd, User32.WindowMessage msg, IntPtr wparam, IntPtr lparam)
             => Create(hWnd, (int)msg, wparam, lparam);
@@ -66,7 +64,7 @@ namespace System.Windows.Forms
             return m;
         }
 
-        public override bool Equals(object o)
+        public override bool Equals(object? o)
         {
             if (!(o is Message m))
             {

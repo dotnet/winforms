@@ -2,10 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 
 namespace System.Windows.Forms
@@ -158,7 +157,7 @@ namespace System.Windows.Forms
 
 #if DEBUG
         [ThreadStatic]
-        private static Hashtable enumValueInfo;
+        private static Hashtable? enumValueInfo;
         public const int MAXCACHE = 300;  // we think we're going to get O(100) of these, put in a tripwire if it gets larger.
 
         private class SequentialEnumInfo
@@ -169,7 +168,9 @@ namespace System.Windows.Forms
                 int actualMaximum = int.MinValue;
                 int countEnumVals = 0;
 
+#pragma warning disable CS8605 // Unboxing a possibly null value.
                 foreach (int iVal in Enum.GetValues(t))
+#pragma warning restore CS8605 // Unboxing a possibly null value.
                 {
                     actualMinimum = Math.Min(actualMinimum, iVal);
                     actualMaximum = Math.Max(actualMaximum, iVal);
@@ -196,7 +197,7 @@ namespace System.Windows.Forms
                 enumValueInfo = new Hashtable();
             }
 
-            SequentialEnumInfo sequentialEnumInfo = null;
+            SequentialEnumInfo? sequentialEnumInfo = null;
 
             if (enumValueInfo.ContainsKey(t))
             {
@@ -230,7 +231,9 @@ namespace System.Windows.Forms
         {
             Type t = value.GetType();
             uint newmask = 0;
+#pragma warning disable CS8605 // Unboxing a possibly null value.
             foreach (int iVal in Enum.GetValues(t))
+#pragma warning restore CS8605 // Unboxing a possibly null value.
             {
                 newmask |= (uint)iVal;
             }
@@ -244,7 +247,9 @@ namespace System.Windows.Forms
                int checkedValue = Convert.ToInt32(value, CultureInfo.InvariantCulture);
                int maxBitsFound = 0;
                bool foundValue = false;
+#pragma warning disable CS8605 // Unboxing a possibly null value.
                foreach (int iVal in Enum.GetValues(t)){
+#pragma warning restore CS8605 // Unboxing a possibly null value.
                    actualMinimum = Math.Min(actualMinimum, iVal);
                    actualMaximum = Math.Max(actualMaximum, iVal);
                    maxBitsFound = Math.Max(maxBitsFound, GetBitCount((uint)iVal));
@@ -307,7 +312,7 @@ namespace System.Windows.Forms
             /// </summary>
             public int RefCheckThreshold { get; set; } = int.MaxValue; // this means this is disabled by default.
 
-            public object this[int index]
+            public object? this[int index]
             {
                 get
                 {
@@ -327,7 +332,7 @@ namespace System.Windows.Forms
                 int currentCount = Count;
                 for (int i = 0; i < currentCount; i++)
                 {
-                    object item = this[currentIndex];
+                    object? item = this[currentIndex];
 
                     if (item == null)
                     {
@@ -341,9 +346,9 @@ namespace System.Windows.Forms
                 }
             }
 
-            public override bool Equals(object obj)
+            public override bool Equals(object? obj)
             {
-                WeakRefCollection other = obj as WeakRefCollection;
+                WeakRefCollection? other = obj as WeakRefCollection;
                 if (other == this)
                 {
                     return true;
@@ -358,7 +363,7 @@ namespace System.Windows.Forms
                 {
                     if (InnerList[i] != other.InnerList[i])
                     {
-                        if (InnerList[i] == null || !InnerList[i].Equals(other.InnerList[i]))
+                        if (InnerList[i] == null || !InnerList[i]!.Equals(other.InnerList[i]))
                         {
                             return false;
                         }
@@ -371,7 +376,7 @@ namespace System.Windows.Forms
             public override int GetHashCode()
             {
                 var hash = new HashCode();
-                foreach (object o in InnerList)
+                foreach (object? o in InnerList)
                 {
                     hash.Add(o);
                 }
@@ -379,7 +384,8 @@ namespace System.Windows.Forms
                 return hash.ToHashCode();
             }
 
-            private WeakRefObject CreateWeakRefObject(object value)
+            [return: NotNullIfNotNull("value")]
+            private WeakRefObject? CreateWeakRefObject(object? value)
             {
                 if (value == null)
                 {
@@ -428,7 +434,7 @@ namespace System.Windows.Forms
                 int hash = value.GetHashCode();
                 for (int idx = 0; idx < InnerList.Count; idx++)
                 {
-                    if (InnerList[idx] != null && InnerList[idx].GetHashCode() == hash)
+                    if (InnerList[idx] != null && InnerList[idx]!.GetHashCode() == hash)
                     {
                         RemoveAt(idx);
                         return;
@@ -440,17 +446,17 @@ namespace System.Windows.Forms
 
             public bool IsFixedSize => InnerList.IsFixedSize;
 
-            public bool Contains(object value) => InnerList.Contains(CreateWeakRefObject(value));
+            public bool Contains(object? value) => InnerList.Contains(CreateWeakRefObject(value));
 
             public void RemoveAt(int index) => InnerList.RemoveAt(index);
 
-            public void Remove(object value) => InnerList.Remove(CreateWeakRefObject(value));
+            public void Remove(object? value) => InnerList.Remove(CreateWeakRefObject(value));
 
-            public int IndexOf(object value) => InnerList.IndexOf(CreateWeakRefObject(value));
+            public int IndexOf(object? value) => InnerList.IndexOf(CreateWeakRefObject(value));
 
-            public void Insert(int index, object value) => InnerList.Insert(index, CreateWeakRefObject(value));
+            public void Insert(int index, object? value) => InnerList.Insert(index, CreateWeakRefObject(value));
 
-            public int Add(object value)
+            public int Add(object? value)
             {
                 if (Count > RefCheckThreshold)
                 {
@@ -495,7 +501,7 @@ namespace System.Windows.Forms
                     get { return weakHolder.IsAlive; }
                 }
 
-                internal object Target
+                internal object? Target
                 {
                     get
                     {
@@ -505,9 +511,9 @@ namespace System.Windows.Forms
 
                 public override int GetHashCode() => hash;
 
-                public override bool Equals(object obj)
+                public override bool Equals(object? obj)
                 {
-                    WeakRefObject other = obj as WeakRefObject;
+                    WeakRefObject? other = obj as WeakRefObject;
 
                     if (other == this)
                     {

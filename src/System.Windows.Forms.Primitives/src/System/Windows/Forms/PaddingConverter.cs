@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
@@ -41,7 +39,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Converts the given object to the converter's native type.
         /// </summary>
-        public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
+        public override object? ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
         {
             if (value is string stringValue)
             {
@@ -136,7 +134,7 @@ namespace System.Windows.Forms
             Padding original = (Padding)context.PropertyDescriptor.GetValue(context.Instance);
             try
             {
-                int all = (int)propertyValues[nameof(Padding.All)];
+                int all = (int)propertyValues[nameof(Padding.All)]!;
                 if (original.All != all)
                 {
                     return new Padding(all);
@@ -144,10 +142,10 @@ namespace System.Windows.Forms
                 else
                 {
                     return new Padding(
-                        (int)propertyValues[nameof(Padding.Left)],
-                        (int)propertyValues[nameof(Padding.Top)],
-                        (int)propertyValues[nameof(Padding.Right)],
-                        (int)propertyValues[nameof(Padding.Bottom)]
+                        (int)propertyValues[nameof(Padding.Left)]!,
+                        (int)propertyValues[nameof(Padding.Top)]!,
+                        (int)propertyValues[nameof(Padding.Right)]!,
+                        (int)propertyValues[nameof(Padding.Bottom)]!
                     );
                 }
             }

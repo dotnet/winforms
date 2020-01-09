@@ -2,8 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using static Interop;
@@ -289,7 +288,8 @@ namespace System.Windows.Forms
         /// </summary>
         /// <param name="logicalImage">The image to scale from logical units to device units</param>
         /// <param name="targetImageSize">The size to scale image to</param>
-        public static Bitmap CreateResizedBitmap(Bitmap logicalImage, Size targetImageSize)
+        [return: NotNullIfNotNull("logicalImage")]
+        public static Bitmap? CreateResizedBitmap(Bitmap? logicalImage, Size targetImageSize)
         {
             if (logicalImage == null)
             {

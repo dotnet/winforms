@@ -18,7 +18,7 @@ namespace System.Windows.Forms
 
                 try
                 {
-                    FileDialogNative.IShellItem shellItem = customPlace.GetNativePath();
+                    FileDialogNative.IShellItem? shellItem = customPlace.GetNativePath();
                     if (null != shellItem)
                     {
                         dialog.AddPlace(shellItem, 0);

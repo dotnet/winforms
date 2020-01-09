@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.CompilerServices;
@@ -52,7 +50,7 @@ namespace System.Windows.Forms
         public static extern int PrintDlgEx([In, Out] NativeMethods.PRINTDLGEX lppdex);
 
         [DllImport(ExternDll.Shell32, CharSet = CharSet.Auto)]
-        public static extern int DragQueryFile(HandleRef hDrop, int iFile, StringBuilder lpszFile, int cch);
+        public static extern int DragQueryFile(HandleRef hDrop, int iFile, StringBuilder? lpszFile, int cch);
 
         public static int DragQueryFileLongPath(HandleRef hDrop, int iFile, StringBuilder lpszFile)
         {
@@ -333,9 +331,9 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
         public static extern int GetRegionData(HandleRef hRgn, int size, IntPtr lpRgnData);
 
-        public unsafe static RECT[] GetRectsFromRegion(IntPtr hRgn)
+        public unsafe static RECT[]? GetRectsFromRegion(IntPtr hRgn)
         {
-            RECT[] regionRects = null;
+            RECT[]? regionRects = null;
             IntPtr pBytes = IntPtr.Zero;
             try
             {
