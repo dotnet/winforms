@@ -345,9 +345,9 @@ namespace System.Windows.Forms
         public struct COMDLG_FILTERSPEC
         {
             [MarshalAs(UnmanagedType.LPWStr)]
-            public string pszName;
+            public string? pszName;
             [MarshalAs(UnmanagedType.LPWStr)]
-            public string pszSpec;
+            public string? pszSpec;
         }
     }
 }
