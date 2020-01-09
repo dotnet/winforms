@@ -27,7 +27,7 @@ internal static partial class Interop
             public Kernel32.SYSTEMTIME stStart;
             public Kernel32.SYSTEMTIME stEnd;
             public RECT rc;
-            public string pszName;
+            public string? pszName;
             public uint cchName;
         }
 

@@ -770,7 +770,7 @@ namespace System.Windows.Forms
         {
             public int dwMSAASignature;
             public int cchWText;
-            public string pszWText;
+            public string? pszWText;
 
             public MSAAMENUINFO(string text)
             {

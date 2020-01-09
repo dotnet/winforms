@@ -13,7 +13,7 @@ internal partial class Interop
         public struct FONTDESC
         {
             public uint cbSizeOfStruct;
-            public string lpstrName;
+            public string? lpstrName;
             public long cySize;
             public short sWeight;
             public short sCharset;

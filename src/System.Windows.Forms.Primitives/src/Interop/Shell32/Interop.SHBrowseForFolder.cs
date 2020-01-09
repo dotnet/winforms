@@ -34,15 +34,15 @@ internal static partial class Interop
         {
             public IntPtr hwndOwner;
 
-            public CoTaskMemSafeHandle pidlRoot;
+            public CoTaskMemSafeHandle? pidlRoot;
 
             public char* pszDisplayName;
 
-            public string lpszTitle;
+            public string? lpszTitle;
 
             public uint ulFlags;
 
-            public BrowseCallbackProc lpfn;
+            public BrowseCallbackProc? lpfn;
 
             public IntPtr lParam;
 
