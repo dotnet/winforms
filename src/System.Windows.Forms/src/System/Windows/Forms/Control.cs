@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -129,8 +129,10 @@ namespace System.Windows.Forms
             }
         }
 #else
+#pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
         internal static readonly TraceSwitch s_paletteTracing;
         internal static readonly TraceSwitch s_controlKeyboardRouting;
+#pragma warning restore CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
         private protected readonly TraceSwitch s_focusTracing;
 #endif
 
@@ -368,7 +370,9 @@ namespace System.Windows.Forms
         {
         }
 
+#pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
         internal Control(bool autoInstallSyncContext) : base()
+#pragma warning restore CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
         {
 #if DEBUG
             if (s_assertOnControlCreateSwitch.Enabled)
