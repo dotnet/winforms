@@ -174,9 +174,6 @@ namespace System.Windows.Forms
 
         public const int LOCALE_IMEASURE = 0x0000000D;   // 0 = metric, 1 = US
 
-        public const int TVM_SETEXTENDEDSTYLE = TV_FIRST + 44;
-        public const int TVM_GETEXTENDEDSTYLE = TV_FIRST + 45;
-
         public static readonly uint LOCALE_USER_DEFAULT = MAKELCID(LANG_USER_DEFAULT);
         public static readonly uint LANG_USER_DEFAULT = MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT);
 
@@ -315,17 +312,8 @@ namespace System.Windows.Forms
         TB_ENDTRACK = 8,
         TVI_ROOT = (unchecked((int)0xFFFF0000)),
         TVI_FIRST = (unchecked((int)0xFFFF0001)),
-        TVM_INSERTITEM = (0x1100 + 50),
-        TVM_DELETEITEM = (0x1100 + 1),
-        TVM_EXPAND = (0x1100 + 2),
         TVE_COLLAPSE = 0x0001,
         TVE_EXPAND = 0x0002,
-        TVM_GETITEMRECT = (0x1100 + 4),
-        TVM_GETINDENT = (0x1100 + 6),
-        TVM_SETINDENT = (0x1100 + 7),
-        TVM_GETIMAGELIST = (0x1100 + 8),
-        TVM_SETIMAGELIST = (0x1100 + 9),
-        TVM_GETNEXTITEM = (0x1100 + 10),
         TVGN_NEXT = 0x0001,
         TVGN_PREVIOUS = 0x0002,
         TVGN_FIRSTVISIBLE = 0x0005,
@@ -333,16 +321,6 @@ namespace System.Windows.Forms
         TVGN_PREVIOUSVISIBLE = 0x0007,
         TVGN_DROPHILITE = 0x0008,
         TVGN_CARET = 0x0009,
-        TVM_SELECTITEM = (0x1100 + 11),
-        TVM_EDITLABEL = (0x1100 + 65),
-        TVM_GETEDITCONTROL = (0x1100 + 15),
-        TVM_GETVISIBLECOUNT = (0x1100 + 16),
-        TVM_HITTEST = (0x1100 + 17),
-        TVM_ENSUREVISIBLE = (0x1100 + 20),
-        TVM_ENDEDITLABELNOW = (0x1100 + 22),
-        TVM_GETISEARCHSTRING = (0x1100 + 64),
-        TVM_SETITEMHEIGHT = (0x1100 + 27),
-        TVM_GETITEMHEIGHT = (0x1100 + 28),
         TVN_SELCHANGING = ((0 - 400) - 50),
         TVN_GETINFOTIP = ((0 - 400) - 14),
         TVN_SELCHANGED = ((0 - 400) - 51);
@@ -354,14 +332,8 @@ namespace System.Windows.Forms
         TVN_BEGINRDRAG = ((0 - 400) - 57),
         TVN_BEGINLABELEDIT = ((0 - 400) - 59),
         TVN_ENDLABELEDIT = ((0 - 400) - 60),
-        TVM_SETBKCOLOR = (TV_FIRST + 29),
-        TVM_SETTEXTCOLOR = (TV_FIRST + 30),
         TYMED_NULL = 0,
-        TVM_GETLINECOLOR = (TV_FIRST + 41),
-        TVM_SETLINECOLOR = (TV_FIRST + 40),
-        TVM_SETTOOLTIPS = (TV_FIRST + 24),
-        TVSIL_STATE = 2,
-        TVM_SORTCHILDRENCB = (TV_FIRST + 21);
+        TVSIL_STATE = 2;
 
         public const int UOI_FLAGS = 1;
 
