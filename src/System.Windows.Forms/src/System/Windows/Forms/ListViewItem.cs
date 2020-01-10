@@ -850,7 +850,7 @@ namespace System.Windows.Forms
                     lv.Focus();
                 }
 
-                UnsafeNativeMethods.SendMessage(new HandleRef(lv, lv.Handle), (int)LVM.EDITLABEL, Index, 0);
+                User32.SendMessageW(lv, (User32.WindowMessage)LVM.EDITLABELW, (IntPtr)Index);
             }
         }
 
@@ -1060,7 +1060,7 @@ namespace System.Windows.Forms
 
             if (updateOwner)
             {
-                User32.SendMessageW(listView, (User32.WindowMessage)LVM.SETITEM, IntPtr.Zero, ref lvItem);
+                User32.SendMessageW(listView, (User32.WindowMessage)LVM.SETITEMW, IntPtr.Zero, ref lvItem);
             }
         }
 
@@ -1089,7 +1089,7 @@ namespace System.Windows.Forms
                 }
 
                 lvItem.iItem = displayIndex;
-                User32.SendMessageW(listView, (User32.WindowMessage)LVM.GETITEM, IntPtr.Zero, ref lvItem);
+                User32.SendMessageW(listView, (User32.WindowMessage)LVM.GETITEMW, IntPtr.Zero, ref lvItem);
 
                 // Update this class' information
                 if (checkSelection)

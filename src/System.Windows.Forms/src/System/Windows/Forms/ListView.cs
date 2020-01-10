@@ -435,7 +435,7 @@ namespace System.Windows.Forms
                             lvbkImage.pszImage = pBackgroundImageFileName;
                             lvbkImage.cchImageMax = (uint)(backgroundImageFileName.Length + 1);
 
-                            User32.SendMessageW(this, (User32.WindowMessage)LVM.SETBKIMAGE, IntPtr.Zero, ref lvbkImage);
+                            User32.SendMessageW(this, (User32.WindowMessage)LVM.SETBKIMAGEW, IntPtr.Zero, ref lvbkImage);
                         }
                     }
                 }
@@ -3271,7 +3271,7 @@ namespace System.Windows.Forms
                     lvFindInfo.lParam = IntPtr.Zero;
                     int index = (int)User32.SendMessageW(
                         this,
-                        User32.WindowMessage.LVM_FINDITEMW,
+                        (User32.WindowMessage)LVM.FINDITEMW,
                         (IntPtr)(startIndex - 1), // decrement startIndex so that the search is 0-based
                         ref lvFindInfo);
                     if (index >= 0)
@@ -3398,12 +3398,12 @@ namespace System.Windows.Forms
 
                 if (lastIndex != -1)
                 {
-                    displayIndex = (int)User32.SendMessageW(this, User32.WindowMessage.LVM_FINDITEMW, (IntPtr)(lastIndex - 1), ref info);
+                    displayIndex = (int)User32.SendMessageW(this, (User32.WindowMessage)LVM.FINDITEMW, (IntPtr)(lastIndex - 1), ref info);
                 }
 
                 if (displayIndex == -1)
                 {
-                    displayIndex = (int)User32.SendMessageW(this, User32.WindowMessage.LVM_FINDITEMW, (IntPtr)(-1) /* beginning */, ref info);
+                    displayIndex = (int)User32.SendMessageW(this, (User32.WindowMessage)LVM.FINDITEMW, (IntPtr)(-1) /* beginning */, ref info);
                 }
                 Debug.Assert(displayIndex != -1, "This item is in the list view -- why can't we find a display index for it?");
                 return displayIndex;
@@ -3845,7 +3845,7 @@ namespace System.Windows.Forms
             {
                 lvColumn.pszText = columnHeaderText;
 
-                return (int)User32.SendMessageW(this, (User32.WindowMessage)LVM.INSERTCOLUMN, (IntPtr)index, ref lvColumn);
+                return (int)User32.SendMessageW(this, (User32.WindowMessage)LVM.INSERTCOLUMNW, (IntPtr)index, ref lvColumn);
             }
         }
 
@@ -3889,7 +3889,7 @@ namespace System.Windows.Forms
                         iItem = item.Index,
                         mask = LVIF.GROUPID
                     };
-                    User32.SendMessageW(this, (User32.WindowMessage)LVM.GETITEM, IntPtr.Zero, ref lvItem);
+                    User32.SendMessageW(this, (User32.WindowMessage)LVM.GETITEMW, IntPtr.Zero, ref lvItem);
                     Debug.Assert(lvItem.iGroupId != -1, "there is a list view item which is not parented");
                 }
             }
@@ -4109,7 +4109,7 @@ namespace System.Windows.Forms
                         {
                             lvItem.pszText = pText;
 
-                            insertIndex = (int)User32.SendMessageW(this, (User32.WindowMessage)LVM.INSERTITEM, IntPtr.Zero, ref lvItem);
+                            insertIndex = (int)User32.SendMessageW(this, (User32.WindowMessage)LVM.INSERTITEMW, IntPtr.Zero, ref lvItem);
                         }
 
                         if (actualIndex == -1)
@@ -4957,7 +4957,7 @@ namespace System.Windows.Forms
             fixed (char* pBackgroundImageFileName = backgroundImageFileName)
             {
                 lvbkImage.pszImage = pBackgroundImageFileName;
-                User32.SendMessageW(this, (User32.WindowMessage)LVM.SETBKIMAGE, IntPtr.Zero, ref lvbkImage);
+                User32.SendMessageW(this, (User32.WindowMessage)LVM.SETBKIMAGEW, IntPtr.Zero, ref lvbkImage);
             }
 
             if (string.IsNullOrEmpty(fileNameToDelete))
@@ -5039,7 +5039,7 @@ namespace System.Windows.Forms
                     lvColumn.pszText = columnHeaderText;
                 }
 
-                result = User32.SendMessageW(this, (User32.WindowMessage)LVM.SETCOLUMN, (IntPtr)ch.Index, ref lvColumn);
+                result = User32.SendMessageW(this, (User32.WindowMessage)LVM.SETCOLUMNW, (IntPtr)ch.Index, ref lvColumn);
             }
 
             if (result == IntPtr.Zero)
@@ -5195,7 +5195,7 @@ namespace System.Windows.Forms
                 iItem = index,
                 iImage = image
             };
-            User32.SendMessageW(this, (User32.WindowMessage)LVM.SETITEM, IntPtr.Zero, ref lvItem);
+            User32.SendMessageW(this, (User32.WindowMessage)LVM.SETITEMW, IntPtr.Zero, ref lvItem);
         }
 
         internal void SetItemIndentCount(int index, int indentCount)
@@ -5216,7 +5216,7 @@ namespace System.Windows.Forms
                 iItem = index,
                 iIndent = indentCount
             };
-            User32.SendMessageW(this, (User32.WindowMessage)LVM.SETITEM, IntPtr.Zero, ref lvItem);
+            User32.SendMessageW(this, (User32.WindowMessage)LVM.SETITEMW, IntPtr.Zero, ref lvItem);
         }
 
         internal void SetItemPosition(int index, int x, int y)
@@ -5292,7 +5292,7 @@ namespace System.Windows.Forms
             {
                 lvItem.pszText = pText;
 
-                User32.SendMessageW(this, (User32.WindowMessage)LVM.SETITEMTEXT, (IntPtr)itemIndex, ref lvItem);
+                User32.SendMessageW(this, (User32.WindowMessage)LVM.SETITEMTEXTW, (IntPtr)itemIndex, ref lvItem);
             }
         }
 
@@ -9273,7 +9273,7 @@ namespace System.Windows.Forms
                         mask = LVIF.PARAM,
                         iItem = displayIndex
                     };
-                    User32.SendMessageW(owner, (User32.WindowMessage)LVM.GETITEM, IntPtr.Zero, ref lvItem);
+                    User32.SendMessageW(owner, (User32.WindowMessage)LVM.GETITEMW, IntPtr.Zero, ref lvItem);
                     return (int)lvItem.lParam;
                 }
                 else
