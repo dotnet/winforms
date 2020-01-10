@@ -8,7 +8,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Design.Tests
 {
-    public class DataGridViewCellStyleEditorTest
+    public class DataGridViewCellStyleEditorTests : IClassFixture<ThreadExceptionFixture>
     {
         [Fact]
         public void DataGridViewCellStyleEditor_Ctor_Default()

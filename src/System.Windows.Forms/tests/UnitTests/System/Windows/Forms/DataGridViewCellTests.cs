@@ -11,7 +11,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class DataGridViewCellTests
+    public class DataGridViewCellTests : IClassFixture<ThreadExceptionFixture>
     {
         [Fact]
         public void DataGridViewCell_Ctor_Default()

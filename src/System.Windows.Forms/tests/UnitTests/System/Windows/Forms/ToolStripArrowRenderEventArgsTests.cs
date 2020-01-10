@@ -8,7 +8,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ToolStripArrowRenderEventArgsTests
+    public class ToolStripArrowRenderEventArgsTests : IClassFixture<ThreadExceptionFixture>
     {
         public static IEnumerable<object[]> Ctor_Graphics_ToolStripItem_Rectangle_Color_ArrowDirection_TestData()
         {

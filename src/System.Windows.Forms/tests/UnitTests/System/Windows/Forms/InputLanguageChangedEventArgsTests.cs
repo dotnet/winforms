@@ -8,7 +8,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class InputLanguageChangedEventArgsTests
+    public class InputLanguageChangedEventArgsTests : IClassFixture<ThreadExceptionFixture>
     {
         public static IEnumerable<object[]> Ctor_CultureInfo_Byte_TestData()
         {

@@ -12,7 +12,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class TableLayoutPanelCellPositionTests
+    public class TableLayoutPanelCellPositionTests : IClassFixture<ThreadExceptionFixture>
     {
         [Fact]
         public void TableLayoutPanelCellPosition_Ctor_Default()

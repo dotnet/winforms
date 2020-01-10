@@ -6,7 +6,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ToolStripDropDownClosingEventArgsTests
+    public class ToolStripDropDownClosingEventArgsTests : IClassFixture<ThreadExceptionFixture>
     {
         [Theory]
         [InlineData(ToolStripDropDownCloseReason.AppClicked)]

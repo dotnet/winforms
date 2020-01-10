@@ -6,7 +6,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class DataGridViewRowHeightInfoNeededEventArgsTests
+    public class DataGridViewRowHeightInfoNeededEventArgsTests : IClassFixture<ThreadExceptionFixture>
     {
         [Theory]
         [InlineData(-1, 3)]

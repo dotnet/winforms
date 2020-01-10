@@ -10,7 +10,7 @@ using static Interop.Ole32;
 
 namespace System.Windows.Forms.Tests.ComponentModel.Com2Interop
 {
-    public class COM2PictureConverterTests
+    public class COM2PictureConverterTests : IClassFixture<ThreadExceptionFixture>
     {
         private static Com2PictureConverter Instance { get; } = new Com2PictureConverter(new Com2PropertyDescriptor(
             default,

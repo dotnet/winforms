@@ -6,7 +6,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class SplitterTests
+    public class SplitterTests : IClassFixture<ThreadExceptionFixture>
     {
         [Fact]
         public void SplitterTest_Constructor()

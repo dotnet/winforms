@@ -9,7 +9,7 @@ using WinForms.Common.Tests;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ToolStripDropDownTests
+    public class ToolStripDropDownTests : IClassFixture<ThreadExceptionFixture>
     {
         [Fact]
         public void ToolStripDropDown_Constructor()

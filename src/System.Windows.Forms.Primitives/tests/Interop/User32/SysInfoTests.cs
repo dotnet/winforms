@@ -7,7 +7,7 @@ using static Interop.User32;
 
 namespace System.Windows.Forms.Primitives.Tests.Interop.User32
 {
-    public class SysInfoTests
+    public class SysInfoTests : IClassFixture<ThreadExceptionFixture>
     {
         [Fact]
         public unsafe void NonClientMetrics_Size()

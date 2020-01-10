@@ -7,7 +7,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class TableLayoutColumnStyleCollectionTests
+    public class TableLayoutColumnStyleCollectionTests : IClassFixture<ThreadExceptionFixture>
     {
         [Fact]
         public void TableLayoutColumnStyleCollection_Add_ColumnStyle_Success()

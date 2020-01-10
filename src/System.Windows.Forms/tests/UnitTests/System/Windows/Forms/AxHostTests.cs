@@ -14,7 +14,7 @@ using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
-    public class AxHostTests
+    public class AxHostTests : IClassFixture<ThreadExceptionFixture>
     {
         [StaTheory]
         [InlineData("00000000-0000-0000-0000-000000000000")]

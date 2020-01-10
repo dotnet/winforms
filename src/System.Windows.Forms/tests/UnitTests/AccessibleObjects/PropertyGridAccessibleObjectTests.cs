@@ -6,7 +6,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects
 {
-    public class PropertyGridAccessibleObjectTests
+    public class PropertyGridAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
     {
         [Fact]
         public void PropertyGridAccessibleObject_Ctor_Default()

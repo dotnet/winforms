@@ -8,7 +8,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class PropertyValueChangedEventArgsTests
+    public class PropertyValueChangedEventArgsTests : IClassFixture<ThreadExceptionFixture>
     {
         public static IEnumerable<object[]> Ctor_GridItem_Object_TestData()
         {

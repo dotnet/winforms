@@ -17,7 +17,7 @@ namespace System.Windows.Forms.Tests
     using Point = System.Drawing.Point;
     using Size = System.Drawing.Size;
 
-    public class ImageListTests
+    public class ImageListTests : IClassFixture<ThreadExceptionFixture>
     {
         [WinFormsFact]
         public void ImageList_Ctor_Default()

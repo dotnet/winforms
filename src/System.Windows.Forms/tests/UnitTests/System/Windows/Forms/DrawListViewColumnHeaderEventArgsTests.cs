@@ -9,7 +9,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class DrawListViewColumnHeaderEventArgsTests
+    public class DrawListViewColumnHeaderEventArgsTests : IClassFixture<ThreadExceptionFixture>
     {
         public static IEnumerable<object[]> Ctor_Graphics_Rectangle_Int_ColumnHeader_ListViewItemStates_Color_Color_Font_TestData()
         {

@@ -7,7 +7,7 @@ using static Interop;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects
 {
-    public class DataGridViewComboBoxCellAccessibleObjectTests
+    public class DataGridViewComboBoxCellAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
     {
         [Theory]
         [InlineData((int)UiaCore.UIA.IsExpandCollapsePatternAvailablePropertyId, true)]

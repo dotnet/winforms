@@ -8,7 +8,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class AmbientPropertiesTests
+    public class AmbientPropertiesTests : IClassFixture<ThreadExceptionFixture>
     {
         [Fact]
         public void Ctor_Default()

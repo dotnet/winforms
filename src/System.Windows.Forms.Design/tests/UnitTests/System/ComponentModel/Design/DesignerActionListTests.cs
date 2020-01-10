@@ -12,7 +12,7 @@ using Xunit;
 
 namespace System.ComponentModel.Design.Tests
 {
-    public class DesignerActionListTests
+    public class DesignerActionListTests : IClassFixture<ThreadExceptionFixture>
     {
         public static IEnumerable<object[]> Ctor_IComponent_TestDat()
         {

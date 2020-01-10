@@ -16,7 +16,7 @@ using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ControlControlCollectionTests
+    public class ControlControlCollectionTests : IClassFixture<ThreadExceptionFixture>
     {
         public static IEnumerable<object[]> Ctor_Control_TestData()
         {

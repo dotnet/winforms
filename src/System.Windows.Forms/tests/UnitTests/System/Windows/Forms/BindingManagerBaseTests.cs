@@ -7,7 +7,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class BindingManagerBaseTests
+    public class BindingManagerBaseTests : IClassFixture<ThreadExceptionFixture>
     {
         [Fact]
         public void Bindings_Get_ReturnsExpected()

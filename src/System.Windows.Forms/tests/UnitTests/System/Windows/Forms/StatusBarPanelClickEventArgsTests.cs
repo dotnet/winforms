@@ -8,7 +8,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class StatusBarPanelClickEventArgsTests
+    public class StatusBarPanelClickEventArgsTests : IClassFixture<ThreadExceptionFixture>
     {
         public static IEnumerable<object[]> Ctor_StatusBarPanel_MouseButtons_Int_Int_Int_Int_TestData()
         {

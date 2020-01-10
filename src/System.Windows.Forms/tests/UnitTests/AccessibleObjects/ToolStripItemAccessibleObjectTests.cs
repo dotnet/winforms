@@ -8,7 +8,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ToolStripItemAccessibleObjectTests
+    public class ToolStripItemAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
     {
         [Fact]
         public void ToolStripItemAccessibleObject_Ctor_ToolStripItem()

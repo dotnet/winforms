@@ -12,7 +12,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Layout.Tests
 {
-    public class TableLayoutSettingsTests
+    public class TableLayoutSettingsTests : IClassFixture<ThreadExceptionFixture>
     {
         [Fact]
         public void TableLayoutSettings_Properties_GetWithOwner_ReturnsExpected()

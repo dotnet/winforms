@@ -8,7 +8,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ScreenTests
+    public class ScreenTests : IClassFixture<ThreadExceptionFixture>
     {
         [Fact]
         public void Screen_AllScreens_Get_ReturnsExpected()

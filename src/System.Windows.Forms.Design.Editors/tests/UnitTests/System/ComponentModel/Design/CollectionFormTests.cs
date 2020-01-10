@@ -11,7 +11,7 @@ using Xunit;
 
 namespace System.ComponentModel.Design.Tests
 {
-    public class CollectionFormTests : CollectionEditor
+    public class CollectionFormTests : CollectionEditor, IClassFixture<ThreadExceptionFixture>
     {
         public CollectionFormTests() : base(typeof(List<int>))
         {

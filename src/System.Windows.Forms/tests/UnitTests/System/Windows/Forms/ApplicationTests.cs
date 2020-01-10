@@ -9,7 +9,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ApplicationTests
+    public class ApplicationTests : IClassFixture<ThreadExceptionFixture>
     {
         [WinFormsFact]
         public void Application_EnableVisualStyles_InvokeBeforeGettingRenderWithVisualStyles_Success()

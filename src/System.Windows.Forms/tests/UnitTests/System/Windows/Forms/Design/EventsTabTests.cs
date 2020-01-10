@@ -12,7 +12,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Design.Tests
 {
-    public class EventsTabTests
+    public class EventsTabTests : IClassFixture<ThreadExceptionFixture>
     {
         [Fact]
         public void EventsTab_Ctor_IServiceProvider()

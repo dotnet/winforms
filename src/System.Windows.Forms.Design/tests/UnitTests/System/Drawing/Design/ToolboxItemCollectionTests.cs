@@ -6,7 +6,7 @@ using Xunit;
 
 namespace System.Drawing.Design.Tests
 {
-    public class ToolboxItemCollectionTests
+    public class ToolboxItemCollectionTests : IClassFixture<ThreadExceptionFixture>
     {
         [Fact]
         public void ToolboxItemCollection_Ctor_ToolboxItemArray()

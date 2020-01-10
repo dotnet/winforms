@@ -13,7 +13,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Design.Tests
 {
-    public class BorderSidesEditorTests
+    public class BorderSidesEditorTests : IClassFixture<ThreadExceptionFixture>
     {
         [Fact]
         public void BorderSidesEditor_Ctor_Default()
