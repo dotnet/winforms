@@ -5144,7 +5144,7 @@ namespace System.Windows.Forms
 
         protected override ControlCollection CreateControlsInstance()
         {
-            return new WindowsFormsUtils.ReadOnlyControlCollection(this, /* isReadOnly = */ !DesignMode);
+            return new ReadOnlyControlCollection(this, /* isReadOnly = */ !DesignMode);
         }
 
         internal void OnItemAddedInternal(ToolStripItem item)

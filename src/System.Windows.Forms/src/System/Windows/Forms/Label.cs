@@ -1580,7 +1580,7 @@ namespace System.Windows.Forms
         {
             base.PrintToMetaFileRecursive(hDC, lParam, bounds);
 
-            using var mapping = new WindowsFormsUtils.DCMapping(hDC, bounds);
+            using var mapping = new DCMapping(hDC, bounds);
             using Graphics g = Graphics.FromHdcInternal(hDC);
             ControlPaint.PrintBorder(g, new Rectangle(Point.Empty, Size), BorderStyle, Border3DStyle.SunkenOuter);
         }

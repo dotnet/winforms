@@ -1609,7 +1609,7 @@ namespace System.Windows.Forms
             }
         }
 
-        internal class ToolStripPanelControlCollection : WindowsFormsUtils.TypedControlCollection
+        internal class ToolStripPanelControlCollection : TypedControlCollection
         {
             private readonly ToolStripPanel owner;
 
