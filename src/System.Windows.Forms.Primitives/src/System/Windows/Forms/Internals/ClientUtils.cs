@@ -5,6 +5,7 @@
 using System.Collections;
 using System.Diagnostics;
 using System.Globalization;
+using System.Numerics;
 
 namespace System.Windows.Forms
 {
@@ -34,17 +35,6 @@ namespace System.Windows.Forms
             return (ex is Security.SecurityException) || IsCriticalException(ex);
         }
 
-        public static int GetBitCount(uint x)
-        {
-            int count = 0;
-            while (x > 0)
-            {
-                x &= x - 1;
-                count++;
-            }
-            return count;
-        }
-
         // Sequential version
         // assumes sequential enum members 0,1,2,3,4 -etc.
         //
@@ -68,7 +58,7 @@ namespace System.Windows.Forms
 
             bool valid = (value >= minValue) && (value <= maxValue);
             //Note: if it's 0, it'll have no bits on.  If it's a power of 2, it'll have 1.
-            valid = (valid && GetBitCount((uint)value) <= maxNumberOfBitsOn);
+            valid = (valid && BitOperations.PopCount((uint)value) <= maxNumberOfBitsOn);
 #if DEBUG
             Debug_NonSequentialEnumIsDefinedCheck(enumValue, minValue, maxValue, maxNumberOfBitsOn, valid);
 #endif
@@ -245,7 +235,7 @@ namespace System.Windows.Forms
                foreach (int iVal in Enum.GetValues(t)){
                    actualMinimum = Math.Min(actualMinimum, iVal);
                    actualMaximum = Math.Max(actualMaximum, iVal);
-                   maxBitsFound = Math.Max(maxBitsFound, GetBitCount((uint)iVal));
+                   maxBitsFound = Math.Max(maxBitsFound, BitOperations.PopCount((uint)iVal));
                    if (checkedValue == iVal) {
                        foundValue = true;
                    }

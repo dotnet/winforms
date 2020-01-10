@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
+using System.Numerics;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms.Internal;
@@ -349,7 +350,7 @@ namespace System.Windows.Forms
             /// </summary>
             public static bool IsValidContentAlignment(ContentAlignment contentAlign)
             {
-                if (ClientUtils.GetBitCount((uint)contentAlign) != 1)
+                if (BitOperations.PopCount((uint)contentAlign) != 1)
                 {
                     return false;
                 }
