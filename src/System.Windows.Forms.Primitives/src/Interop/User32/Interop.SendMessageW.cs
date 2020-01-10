@@ -50,6 +50,18 @@ internal static partial class Interop
             }
         }
 
+        public unsafe static IntPtr SendMessageW(
+            HandleRef hWnd,
+            WindowMessage Msg,
+            IntPtr wParam,
+            string lParam)
+        {
+            fixed (char* c = lParam)
+            {
+                return SendMessageW(hWnd, Msg, wParam, (IntPtr)(void*)c);
+            }
+        }
+
         public unsafe static IntPtr SendMessageW<T>(
             IntPtr hWnd,
             WindowMessage Msg,
