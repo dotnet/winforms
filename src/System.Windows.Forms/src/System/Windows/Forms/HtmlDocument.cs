@@ -448,7 +448,7 @@ namespace System.Windows.Forms
                             dispid,
                             &g,
                             Kernel32.GetThreadLocale(),
-                            NativeMethods.DISPATCH_METHOD,
+                            Oleaut32.DISPATCH.METHOD,
                             &dispParams,
                             retVals,
                             &pExcepInfo,

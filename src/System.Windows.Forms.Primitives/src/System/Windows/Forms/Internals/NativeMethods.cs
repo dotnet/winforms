@@ -61,12 +61,7 @@ namespace System.Windows.Forms
         CONNECT_E_NOCONNECTION = unchecked((int)0x80040200),
         CONNECT_E_CANNOTCONNECT = unchecked((int)0x80040202);
 
-        public const uint DISPATCH_METHOD = 0x1;
-        public const uint DISPATCH_PROPERTYGET = 0x2;
-        public const uint DISPATCH_PROPERTYPUT = 0x4;
         public const int
-        DISP_E_MEMBERNOTFOUND = unchecked((int)0x80020003),
-        DISP_E_PARAMNOTFOUND = unchecked((int)0x80020004),
         DI_NORMAL = 0x0003,
         DLGC_WANTARROWS = 0x0001,
         DLGC_WANTTAB = 0x0002,

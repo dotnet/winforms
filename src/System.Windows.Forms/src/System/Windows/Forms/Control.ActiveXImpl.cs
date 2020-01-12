@@ -632,7 +632,7 @@ namespace System.Windows.Forms
                         dispid,
                         &g,
                         NativeMethods.LOCALE_USER_DEFAULT,
-                        NativeMethods.DISPATCH_PROPERTYGET,
+                        Oleaut32.DISPATCH.PROPERTYGET,
                         &dispParams,
                         pvt,
                         null,
