@@ -1110,7 +1110,7 @@ namespace System.Windows.Forms
                     //
                     if (!OwnerDraw)
                     {
-                        SendMessage(NativeMethods.BM_SETSTATE, 1, 0);
+                        User32.SendMessageW(this, (User32.WindowMessage)User32.BM.SETSTATE, PARAM.FromBool(true));
                     }
                     Invalidate(DownChangeRectangle);
                 }
@@ -1136,7 +1136,7 @@ namespace System.Windows.Forms
                 {
                     SetFlag(FlagMousePressed, false);
                     SetFlag(FlagMouseDown, false);
-                    SendMessage(NativeMethods.BM_SETSTATE, 0, 0);
+                    User32.SendMessageW(this, (User32.WindowMessage)User32.BM.SETSTATE, PARAM.FromBool(false));
                 }
                 // Breaking change: specifically filter out Keys.Enter and Keys.Space as the only
                 // two keystrokes to execute OnClick.
@@ -1300,10 +1300,9 @@ namespace System.Windows.Forms
         {
             switch (m.Msg)
             {
-                // we don't respect this because the code below eats BM_SETSTATE.
-                // so we just invoke the click.
-                //
-                case NativeMethods.BM_CLICK:
+                // We don't respect this because the code below eats BM_SETSTATE.
+                // So we just invoke the click.
+                case (int)User32.BM.CLICK:
                     if (this is IButtonControl)
                     {
                         ((IButtonControl)this).PerformClick();
@@ -1319,9 +1318,9 @@ namespace System.Windows.Forms
             {
                 switch (m.Msg)
                 {
-                    case NativeMethods.BM_SETSTATE:
-                        // Ignore BM_SETSTATE -- Windows gets confused and paints
-                        // things, even though we are ownerdraw.
+                    case (int)User32.BM.SETSTATE:
+                        // Ignore BM_SETSTATE - Windows gets confused and paints things,
+                        // even though we are ownerdraw.
                         break;
 
                     case WindowMessages.WM_KILLFOCUS:
@@ -1364,7 +1363,7 @@ namespace System.Windows.Forms
                 switch (m.Msg)
                 {
                     case WindowMessages.WM_REFLECT + WindowMessages.WM_COMMAND:
-                        if (PARAM.HIWORD(m.WParam) == NativeMethods.BN_CLICKED && !ValidationCancelled)
+                        if (PARAM.HIWORD(m.WParam) == (int)User32.BN.CLICKED && !ValidationCancelled)
                         {
                             OnClick(EventArgs.Empty);
                         }

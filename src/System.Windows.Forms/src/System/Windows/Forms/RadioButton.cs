@@ -209,7 +209,7 @@ namespace System.Windows.Forms
 
                     if (IsHandleCreated)
                     {
-                        SendMessage(NativeMethods.BM_SETCHECK, value ? 1 : 0, 0);
+                        User32.SendMessageW(this, (User32.WindowMessage)User32.BM.SETCHECK, PARAM.FromBool(value));
                     }
 
                     Invalidate();
@@ -408,12 +408,10 @@ namespace System.Windows.Forms
         protected override void OnHandleCreated(EventArgs e)
         {
             base.OnHandleCreated(e);
-            //Since this is protected override, this can be called directly in a overriden class
-            //and the handle doesn't need to be created.
-            //So check for the handle to improve performance
+
             if (IsHandleCreated)
             {
-                SendMessage(NativeMethods.BM_SETCHECK, isChecked ? 1 : 0, 0);
+                User32.SendMessageW(this, (User32.WindowMessage)User32.BM.SETCHECK, PARAM.FromBool(isChecked));
             }
         }
 

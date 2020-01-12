@@ -260,7 +260,7 @@ namespace System.Windows.Forms
 
                     if (IsHandleCreated)
                     {
-                        SendMessage(NativeMethods.BM_SETCHECK, (int)checkState, 0);
+                        User32.SendMessageW(this, (User32.WindowMessage)User32.BM.SETCHECK, (IntPtr)checkState);
                     }
 
                     if (oldChecked != Checked)
@@ -581,13 +581,9 @@ namespace System.Windows.Forms
         {
             base.OnHandleCreated(e);
 
-            // Since this is a protected override...
-            // this can be directly called in by a overriden class..
-            // and the Handle need not be created...
-            // So Check for the handle
             if (IsHandleCreated)
             {
-                SendMessage(NativeMethods.BM_SETCHECK, (int)checkState, 0);
+                User32.SendMessageW(this, (User32.WindowMessage)User32.BM.SETCHECK, (IntPtr)checkState);
             }
         }
 
