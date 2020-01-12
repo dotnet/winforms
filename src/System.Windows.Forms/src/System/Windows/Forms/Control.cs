@@ -6162,7 +6162,7 @@ namespace System.Windows.Forms
             else
             {
                 IntPtr hWnd = window.Handle;
-                if (hWnd == IntPtr.Zero || UnsafeNativeMethods.IsWindow(new HandleRef(null, hWnd)))
+                if (hWnd == IntPtr.Zero || User32.IsWindow(hWnd).IsTrue())
                 {
                     return hWnd;
                 }
@@ -9869,7 +9869,7 @@ namespace System.Windows.Forms
                     // But the parent is not a managed WinForm Control, or this.Parent == null
                     && (FromHandle(parentHandle.Handle) == null || _parent == null)
                     // Still, parentHandle is a valid native Win32 window handle, e.g. the desktop window.
-                    && UnsafeNativeMethods.IsWindow(parentHandle))
+                    && User32.IsWindow(parentHandle).IsTrue())
                 {
                     // correctly parent back up to where we were before.
                     // if we were parented to a proper windows forms control, CreateControl would have properly parented
