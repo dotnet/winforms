@@ -2002,7 +2002,7 @@ namespace System.Windows.Forms.Design
                     RECT clip = new RECT();
                     IntPtr hrgn = Gdi32.CreateRectRgn(0, 0, 0, 0);
                     User32.GetUpdateRgn(m.HWnd, hrgn, BOOL.FALSE);
-                    NativeMethods.GetUpdateRect(m.HWnd, ref clip, false);
+                    User32.GetUpdateRect(m.HWnd, ref clip, BOOL.FALSE);
                     Region r = Region.FromHrgn(hrgn);
                     Rectangle paintRect = Rectangle.Empty;
                     try
