@@ -5069,7 +5069,7 @@ namespace System.Windows.Forms
                 if (hwndClicked == Handle)
                 {
                     lastMouseDownedItem = null;
-                    m.Result = (IntPtr)NativeMethods.MA_NOACTIVATE;
+                    m.Result = (IntPtr)User32.MA.NOACTIVATE;
 
                     if (!IsDropDown && !IsInDesignMode)
                     {
@@ -5084,7 +5084,7 @@ namespace System.Windows.Forms
                             {
                                 // Activate the window, and discard the mouse message.
                                 // this appears to be the same behavior as office.
-                                m.Result = (IntPtr)NativeMethods.MA_ACTIVATEANDEAT;
+                                m.Result = (IntPtr)User32.MA.ACTIVATEANDEAT;
                             }
                         }
                     }

@@ -2038,7 +2038,7 @@ namespace System.Windows.Forms
             if (cursorLocation.X >= r.left && cursorLocation.X <= r.right &&
                 cursorLocation.Y >= r.top && cursorLocation.Y <= r.bottom)
             {
-                msg.Result = (IntPtr)NativeMethods.MA_NOACTIVATE;
+                msg.Result = (IntPtr)User32.MA.NOACTIVATE;
             }
         }
 

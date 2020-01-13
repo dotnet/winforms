@@ -189,10 +189,6 @@ namespace System.Windows.Forms
 
         public const int MEMBERID_NIL = (-1),
         ERROR_INSUFFICIENT_BUFFER = 122, //https://msdn.microsoft.com/en-us/library/windows/desktop/ms681382(v=vs.85).aspx
-        MA_ACTIVATE = 0x0001,
-        MA_ACTIVATEANDEAT = 0x0002,
-        MA_NOACTIVATE = 0x0003,
-        MA_NOACTIVATEANDEAT = 0x0004,
         MIIM_STATE = 0x00000001,
         MIIM_ID = 0x00000002,
         MIIM_SUBMENU = 0x00000004,
