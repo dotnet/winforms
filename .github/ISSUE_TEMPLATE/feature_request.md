@@ -31,7 +31,7 @@ assignees: ''
 
     If yes, please describe the following:
 
-        - Will VS Designer need to support the feature? If yes, describe how you expect it to funtion.
+        - Will VS Designer need to support the feature? If yes, describe how you expect it to funсtion.
         - What impact will it have on accessibility?
         - Will this feature need to be localized or be localizable?
   -->
