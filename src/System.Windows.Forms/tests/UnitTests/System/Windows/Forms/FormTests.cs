@@ -11,7 +11,7 @@ using WinForms.Common.Tests;
 
 namespace System.Windows.Forms.Tests
 {
-    public class FormTests
+    public class FormTests : IClassFixture<ThreadExceptionFixture>
     {
         [Fact]
         public void Form_Ctor_Default()

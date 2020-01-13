@@ -7,7 +7,7 @@ using Xunit;
 
 namespace System.Windows.Forms.VisualStyles.Tests
 {
-    public class VisualStyleInformationTests
+    public class VisualStyleInformationTests : IClassFixture<ThreadExceptionFixture>
     {
         [Fact]
         public void VisualStyleInformation_Author_Get_ReturnsExpected()

@@ -12,7 +12,7 @@ using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
-    public class TextRendererTests
+    public class TextRendererTests : IClassFixture<ThreadExceptionFixture>
     {
         public static IEnumerable<object[]> DrawText_IDeviceContext_String_Font_Point_Color_TestData()
         {

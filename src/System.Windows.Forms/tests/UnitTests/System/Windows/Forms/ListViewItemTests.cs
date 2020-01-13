@@ -14,7 +14,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ListViewItemTests
+    public class ListViewItemTests : IClassFixture<ThreadExceptionFixture>
     {
         [Fact]
         public void ListViewItem_Ctor_Default()

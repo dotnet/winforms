@@ -10,7 +10,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class HelpProviderTests
+    public class HelpProviderTests : IClassFixture<ThreadExceptionFixture>
     {
         [Fact]
         public void HelpProvider_Ctor_Default()

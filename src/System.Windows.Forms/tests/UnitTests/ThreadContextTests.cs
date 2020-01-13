@@ -9,7 +9,7 @@ using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ThreadContextTests
+    public class ThreadContextTests : IClassFixture<ThreadExceptionFixture>
     {
         private delegate bool MessageCallback(ref Message m);
 

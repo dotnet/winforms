@@ -8,7 +8,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ContextMenuStripTests
+    public class ContextMenuStripTests : IClassFixture<ThreadExceptionFixture>
     {
         [Fact]
         public void ContextMenuStrip_Constructor()

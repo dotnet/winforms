@@ -6,7 +6,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ToolStripDropDownMenuTests
+    public class ToolStripDropDownMenuTests : IClassFixture<ThreadExceptionFixture>
     {
         [Fact]
         public void ToolStripDropDownMenu_Constructor()

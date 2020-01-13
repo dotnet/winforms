@@ -11,7 +11,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Layout.Tests
 {
-    public class TableLayoutSettingsTypeConverterTests
+    public class TableLayoutSettingsTypeConverterTests : IClassFixture<ThreadExceptionFixture>
     {
         public static TheoryData<Type, bool> CanConvertFromData =>
             CommonTestHelper.GetConvertFromTheoryData();

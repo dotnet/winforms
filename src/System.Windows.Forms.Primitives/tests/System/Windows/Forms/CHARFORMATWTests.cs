@@ -6,7 +6,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests.InteropTests
 {
-    public class CHARFORMATWTests
+    public class CHARFORMATWTests : IClassFixture<ThreadExceptionFixture>
     {
         [Fact]
         public unsafe void CharFormat_Size()

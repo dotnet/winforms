@@ -13,7 +13,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Design.Tests
 {
-    public class ShortcutKeysEditorTests
+    public class ShortcutKeysEditorTests : IClassFixture<ThreadExceptionFixture>
     {
         [Fact]
         public void ShortcutKeysEditor_Ctor_Default()

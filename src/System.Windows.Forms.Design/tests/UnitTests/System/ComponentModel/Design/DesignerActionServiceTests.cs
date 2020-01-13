@@ -13,7 +13,7 @@ using Xunit;
 
 namespace System.ComponentModel.Design.Tests
 {
-    public class DesignerActionServiceTests
+    public class DesignerActionServiceTests : IClassFixture<ThreadExceptionFixture>
     {
         [Fact]
         public void Ctor_IServiceProvider()

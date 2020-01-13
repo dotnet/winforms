@@ -9,7 +9,7 @@ using Xunit;
 
 namespace System.Drawing.Design.Tests
 {
-    public class PaintValueEventArgsTests
+    public class PaintValueEventArgsTests : IClassFixture<ThreadExceptionFixture>
     {
         public static IEnumerable<object[]> Ctor_ITypeDescriptorContext_Object_Graphics_Rectangle_TestData()
         {

@@ -15,7 +15,7 @@ using static Interop;
 
 namespace System.Windows.Forms.Tests.Serialization
 {
-    public class SerializableTypesTests
+    public class SerializableTypesTests : IClassFixture<ThreadExceptionFixture>
     {
         [Fact]
         public void AxHostState_RoundTripAndExchangeWithNet()

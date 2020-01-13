@@ -8,7 +8,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class DrawTreeNodeEventArgsTests
+    public class DrawTreeNodeEventArgsTests : IClassFixture<ThreadExceptionFixture>
     {
         public static IEnumerable<object[]> Ctor_Graphics_TreeNode_Rectangle_TreeNodeStates_TestData()
         {

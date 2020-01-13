@@ -6,7 +6,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ListViewVirtualItemsSelectionRangeChangedEventArgsTests
+    public class ListViewVirtualItemsSelectionRangeChangedEventArgsTests : IClassFixture<ThreadExceptionFixture>
     {
         [Theory]
         [InlineData(-2, -2, true)]

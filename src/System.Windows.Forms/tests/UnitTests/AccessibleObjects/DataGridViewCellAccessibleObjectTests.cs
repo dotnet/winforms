@@ -8,7 +8,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects
 {
-    public class DataGridViewCellsAccessibleObjectTests
+    public class DataGridViewCellsAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
     {
         [Theory]
         [InlineData(RightToLeft.No)]

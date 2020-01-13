@@ -6,7 +6,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class TypeValidationEventArgsTests
+    public class TypeValidationEventArgsTests : IClassFixture<ThreadExceptionFixture>
     {
         [Theory]
         [InlineData(typeof(int), true, "returnValue", "message")]

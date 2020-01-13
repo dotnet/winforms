@@ -8,7 +8,7 @@ using static Interop.Ole32;
 
 namespace System.Windows.Forms.Primitives.Tests.Interop.Ole32
 {
-    public class IPictureTests
+    public class IPictureTests : IClassFixture<ThreadExceptionFixture>
     {
         [Fact]
         public void GetIPictureFromCursor()

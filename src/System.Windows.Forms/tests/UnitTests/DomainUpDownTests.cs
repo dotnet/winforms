@@ -6,7 +6,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class DomainUpDownTests
+    public class DomainUpDownTests : IClassFixture<ThreadExceptionFixture>
     {
         [Fact]
         public void DomainUpDown_Constructor()

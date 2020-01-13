@@ -8,7 +8,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class SearchForVirtualItemEventArgsTests
+    public class SearchForVirtualItemEventArgsTests : IClassFixture<ThreadExceptionFixture>
     {
         public static IEnumerable<object[]> Ctor_Bool_Bool_Bool_String_Point_SearchDirectionHint_Int_TestData()
         {

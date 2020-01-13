@@ -6,7 +6,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class GiveFeedbackEventArgsTests
+    public class GiveFeedbackEventArgsTests : IClassFixture<ThreadExceptionFixture>
     {
         [Theory]
         [InlineData(DragDropEffects.None, true)]

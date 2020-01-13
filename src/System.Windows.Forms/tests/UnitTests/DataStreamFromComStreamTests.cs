@@ -9,7 +9,7 @@ using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
-    public class DataStreamFromComStreamTests
+    public class DataStreamFromComStreamTests : IClassFixture<ThreadExceptionFixture>
     {
         [Theory,
             InlineData(0, 0, 1),

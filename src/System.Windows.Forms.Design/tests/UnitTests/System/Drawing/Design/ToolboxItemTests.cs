@@ -17,7 +17,7 @@ using Xunit;
 
 namespace System.Drawing.Design.Tests
 {
-    public class ToolboxItemTests
+    public class ToolboxItemTests : IClassFixture<ThreadExceptionFixture>
     {
         [Fact]
         public void ToolboxItem_Ctor_Default()

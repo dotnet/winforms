@@ -8,7 +8,7 @@ using static Interop;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects
 {
-    public class DataGridViewAccessibleObjectTests
+    public class DataGridViewAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
     {
         [Fact]
         public void PropertyGridAccessibleObject_Ctor_Default()

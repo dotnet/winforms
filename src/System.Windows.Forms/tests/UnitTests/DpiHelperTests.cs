@@ -8,7 +8,7 @@ using WinForms.Common.Tests;
 
 namespace System.Windows.Forms.Tests
 {
-    public class DpiHelperTests
+    public class DpiHelperTests : IClassFixture<ThreadExceptionFixture>
     {
         /// <summary>
         ///  Data for the LogicalToDeviceUnits test

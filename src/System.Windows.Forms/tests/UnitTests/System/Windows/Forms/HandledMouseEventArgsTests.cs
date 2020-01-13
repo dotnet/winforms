@@ -7,7 +7,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class HandledMouseEventArgsTests
+    public class HandledMouseEventArgsTests : IClassFixture<ThreadExceptionFixture>
     {
         [Theory]
         [InlineData(MouseButtons.Left, 1, 2, 3, 4)]

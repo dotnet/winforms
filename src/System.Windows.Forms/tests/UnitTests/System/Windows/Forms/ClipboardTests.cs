@@ -16,7 +16,7 @@ using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ClipboardTests
+    public class ClipboardTests : IClassFixture<ThreadExceptionFixture>
     {
         [StaFact]
         public void Clipboard_Clear_InvokeMultipleTimes_Success()

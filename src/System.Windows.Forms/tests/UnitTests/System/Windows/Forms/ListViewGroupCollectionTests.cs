@@ -11,7 +11,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ListViewGroupCollectionTests
+    public class ListViewGroupCollectionTests : IClassFixture<ThreadExceptionFixture>
     {
         [Fact]
         public void ListViewGroupCollection_IList_GetProperties_ReturnsExpected()

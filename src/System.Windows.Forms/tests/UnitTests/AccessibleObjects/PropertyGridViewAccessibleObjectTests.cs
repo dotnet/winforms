@@ -7,7 +7,7 @@ using static Interop;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects
 {
-    public class PropertyGridViewAccessibleObjectTests
+    public class PropertyGridViewAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
     {
         [Theory]
         [InlineData((int)UiaCore.UIA.GridPatternId)]

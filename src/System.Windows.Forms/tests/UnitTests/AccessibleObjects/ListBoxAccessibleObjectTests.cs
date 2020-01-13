@@ -7,7 +7,7 @@ using static Interop;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects
 {
-    public class ListBoxAccessibleObjectTests
+    public class ListBoxAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
     {
         [StaFact]
         public void ListBoxAccessibleObjectTests_Ctor_Default()

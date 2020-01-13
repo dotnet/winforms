@@ -9,7 +9,7 @@ using Xunit;
 
 namespace System.Resources.Tests
 {
-    public class ResXResourceWriterTests
+    public class ResXResourceWriterTests : IClassFixture<ThreadExceptionFixture>
     {
         [Fact]
         public void TestRoundTrip()

@@ -6,7 +6,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects
 {
-    public class DataGridViewRowsAccessibleObjectTests
+    public class DataGridViewRowsAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
     {
         [Fact]
         public void DataGridViewRowsAccessibleObject_Ctor_Default()

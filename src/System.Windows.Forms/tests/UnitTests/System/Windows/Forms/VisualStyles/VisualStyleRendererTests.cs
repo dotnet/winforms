@@ -10,7 +10,7 @@ using Xunit;
 
 namespace System.Windows.Forms.VisualStyles.Tests
 {
-    public class VisualStyleRendererTests
+    public class VisualStyleRendererTests : IClassFixture<ThreadExceptionFixture>
     {
         public static IEnumerable<object[]> Ctor_VisualStyleEement_TestData()
         {
