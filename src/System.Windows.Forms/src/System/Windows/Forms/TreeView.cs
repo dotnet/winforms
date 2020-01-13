@@ -1760,7 +1760,7 @@ namespace System.Windows.Forms
         {
             if (toolTip != null)
             {
-                User32.SendMessageW(toolTip, User32.WindowMessage.TTM_SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
+                User32.SendMessageW(toolTip, (User32.WindowMessage)TTM.SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
                 User32.SendMessageW(this, (User32.WindowMessage)TVM.SETTOOLTIPS, toolTip.Handle);
                 controlToolTipText = toolTipText;
             }
@@ -2970,7 +2970,7 @@ namespace System.Windows.Forms
                         Rectangle bounds = tn.Bounds;
                         bounds.Location = PointToScreen(bounds.Location);
 
-                        User32.SendMessageW(tooltipHandle, User32.WindowMessage.TTM_ADJUSTRECT, PARAM.FromBool(true), ref bounds);
+                        User32.SendMessageW(tooltipHandle, (User32.WindowMessage)TTM.ADJUSTRECT, PARAM.FromBool(true), ref bounds);
                         User32.SetWindowPos(
                             new HandleRef(this, tooltipHandle),
                             User32.HWND_TOPMOST,
@@ -3218,7 +3218,7 @@ namespace System.Windows.Forms
                     {
                         case (int)TTN.GETDISPINFOW:
                             // Setting the max width has the added benefit of enabling multiline tool tips
-                            User32.SendMessageW(nmhdr->hwndFrom, User32.WindowMessage.TTM_SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
+                            User32.SendMessageW(nmhdr->hwndFrom, (User32.WindowMessage)TTM.SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
                             WmNeedText(ref m);
                             m.Result = (IntPtr)1;
                             return;

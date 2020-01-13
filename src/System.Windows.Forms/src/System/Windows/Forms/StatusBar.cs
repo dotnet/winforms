@@ -1763,7 +1763,7 @@ namespace System.Windows.Forms
                     StatusBar p = (StatusBar)parent;
 
                     ToolInfoWrapper<Control> info = GetTOOLINFO(tool);
-                    if (info.SendMessage(p.ToolTipSet ? (IHandle)p.mainToolTip : this, User32.WindowMessage.TTM_ADDTOOLW) == IntPtr.Zero)
+                    if (info.SendMessage(p.ToolTipSet ? (IHandle)p.mainToolTip : this, (User32.WindowMessage)TTM.ADDTOOLW) == IntPtr.Zero)
                     {
                         throw new InvalidOperationException(SR.StatusBarAddFailed);
                     }
@@ -1775,7 +1775,7 @@ namespace System.Windows.Forms
                 if (tool != null && tool.text != null && tool.text.Length > 0 && (int)tool.id >= 0)
                 {
                     ToolInfoWrapper<Control> info = GetMinTOOLINFO(tool);
-                    info.SendMessage(this, User32.WindowMessage.TTM_DELTOOLW);
+                    info.SendMessage(this, (User32.WindowMessage)TTM.DELTOOLW);
                 }
             }
 
@@ -1784,7 +1784,7 @@ namespace System.Windows.Forms
                 if (tool != null && tool.text != null && tool.text.Length > 0 && (int)tool.id >= 0)
                 {
                     ToolInfoWrapper<Control> info = GetTOOLINFO(tool);
-                    info.SendMessage(this, User32.WindowMessage.TTM_SETTOOLINFOW);
+                    info.SendMessage(this, (User32.WindowMessage)TTM.SETTOOLINFOW);
                 }
             }
 
@@ -1805,7 +1805,7 @@ namespace System.Windows.Forms
                     flags: User32.SWP.NOMOVE | User32.SWP.NOSIZE | User32.SWP.NOACTIVATE);
 
                 // Setting the max width has the added benefit of enabling multiline tool tips
-                User32.SendMessageW(this, User32.WindowMessage.TTM_SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
+                User32.SendMessageW(this, (User32.WindowMessage)TTM.SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
             }
 
             /// <summary>
