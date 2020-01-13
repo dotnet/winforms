@@ -77,7 +77,7 @@ namespace System.Windows.Forms
                 for (int i = 0; i < _windowCount; i++)
                 {
                     IntPtr hWnd = _windows[i];
-                    if (UnsafeNativeMethods.IsWindow(new HandleRef(null, hWnd)))
+                    if (User32.IsWindow(hWnd).IsTrue())
                     {
                         Control c = Control.FromHandle(hWnd);
                         if (c != null)
@@ -109,7 +109,7 @@ namespace System.Windows.Forms
                 {
                     IntPtr hWnd = _windows[i];
                     Debug.WriteLineIf(CompModSwitches.MSOComponentManager.TraceInfo, "ComponentManager : Changing enabled on window: " + hWnd.ToString() + " : " + state.ToString());
-                    if (UnsafeNativeMethods.IsWindow(new HandleRef(null, hWnd)))
+                    if (User32.IsWindow(hWnd).IsTrue())
                     {
                         User32.EnableWindow(hWnd, state.ToBOOL());
                     }
@@ -125,12 +125,12 @@ namespace System.Windows.Forms
                 // we are created with a TRUE for onlyWinForms.
                 if (!_onlyWinForms && state)
                 {
-                    if (_activeHwnd != IntPtr.Zero && UnsafeNativeMethods.IsWindow(new HandleRef(null, _activeHwnd)))
+                    if (_activeHwnd != IntPtr.Zero && User32.IsWindow(_activeHwnd).IsTrue())
                     {
                         User32.SetActiveWindow(_activeHwnd);
                     }
 
-                    if (_focusedHwnd != IntPtr.Zero && UnsafeNativeMethods.IsWindow(new HandleRef(null, _focusedHwnd)))
+                    if (_focusedHwnd != IntPtr.Zero && User32.IsWindow(_focusedHwnd).IsTrue())
                     {
                         User32.SetFocus(_focusedHwnd);
                     }
