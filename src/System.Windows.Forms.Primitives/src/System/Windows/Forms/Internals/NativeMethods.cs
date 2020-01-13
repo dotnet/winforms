@@ -23,11 +23,7 @@ namespace System.Windows.Forms
         BFFM_INITIALIZED = 1,
         BFFM_SELCHANGED = 2,
         BFFM_SETSELECTION = 0x400 + 103,
-        BFFM_ENABLEOK = 0x400 + 101,
-        BN_CLICKED = 0,
-        BM_SETCHECK = 0x00F1,
-        BM_SETSTATE = 0x00F3,
-        BM_CLICK = 0x00F5;
+        BFFM_ENABLEOK = 0x400 + 101;
 
         public const int CP_WINANSI = 1004;
 
