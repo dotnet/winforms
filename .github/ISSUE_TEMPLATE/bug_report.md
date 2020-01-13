@@ -18,7 +18,7 @@ assignees: ''
 **Problem description:**
 
 <!--
-    Describe the current behaviour, what is wrong or not working as expected.
+    Describe the current behavior, what is wrong or not working as expected.
     Provide as much information as possible, including callstack for crashes/exceptions, screenshots or animations.
   -->
 
