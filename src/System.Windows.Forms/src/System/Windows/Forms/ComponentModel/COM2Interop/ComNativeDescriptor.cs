@@ -214,7 +214,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                         dispid,
                         &g,
                         Kernel32.GetThreadLocale(),
-                        NativeMethods.DISPATCH_PROPERTYGET,
+                        Oleaut32.DISPATCH.PROPERTYGET,
                         &dispParams,
                         retval,
                         &pExcepInfo,

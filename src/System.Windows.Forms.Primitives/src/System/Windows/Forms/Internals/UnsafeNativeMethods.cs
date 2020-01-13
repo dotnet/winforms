@@ -410,7 +410,7 @@ namespace System.Windows.Forms
                 Ole32.DispatchID dispIdMember,
                 Guid* riid,
                 uint lcid,
-                uint dwFlags,
+                Oleaut32.DISPATCH dwFlags,
                 Ole32.DISPPARAMS* pDispParams,
                 [Out, MarshalAs(UnmanagedType.LPArray)] object[] pVarResult,
                 Ole32.EXCEPINFO* pExcepInfo,

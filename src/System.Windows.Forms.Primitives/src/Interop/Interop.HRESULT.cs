@@ -14,6 +14,8 @@ internal static partial class Interop
         DRAGDROP_S_CANCEL = 0x00040101,
         DRAGDROP_S_USEDEFAULTCURSORS = 0x00040102,
         DISP_E_EXCEPTION = unchecked((int)0x80020009),
+        DISP_E_MEMBERNOTFOUND = unchecked((int)0x80020003),
+        DISP_E_PARAMNOTFOUND = unchecked((int)0x80020004),
         E_NOTIMPL = unchecked((int)0x80004001),
         E_NOINTERFACE = unchecked((int)0x80004002),
         E_POINTER = unchecked((int)0x80004003),
