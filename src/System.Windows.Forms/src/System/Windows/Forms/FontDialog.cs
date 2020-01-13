@@ -388,7 +388,7 @@ namespace System.Windows.Forms
                         User32.SendMessageW(hWnd, User32.WindowMessage.WM_CHOOSEFONT_GETLOGFONT, IntPtr.Zero, ref logFont);
                         UpdateFont(ref logFont);
                         int index = (int)UnsafeNativeMethods.SendDlgItemMessage(hWnd, 0x473, (int)User32.CB.GETCURSEL, IntPtr.Zero, IntPtr.Zero);
-                        if (index != NativeMethods.CB_ERR)
+                        if (index != User32.CB_ERR)
                         {
                             UpdateColor((int)UnsafeNativeMethods.SendDlgItemMessage(hWnd, 0x473, (int)User32.CB.GETITEMDATA, (IntPtr)index, IntPtr.Zero));
                         }
