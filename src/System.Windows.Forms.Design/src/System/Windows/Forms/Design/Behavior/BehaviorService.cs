@@ -904,7 +904,7 @@ namespace System.Windows.Forms.Design.Behavior
                         User32.GetUpdateRgn(m.HWnd, hrgn, BOOL.TRUE);
                         // The region we have to update in terms of the smallest rectangle that completely encloses the update region of the window gives us the clip rectangle
                         RECT clip = new RECT();
-                        NativeMethods.GetUpdateRect(m.HWnd, ref clip, true);
+                        User32.GetUpdateRect(m.HWnd, ref clip, BOOL.TRUE);
                         Rectangle paintRect = new Rectangle(clip.left, clip.top, clip.right - clip.left, clip.bottom - clip.top);
 
                         try

@@ -1070,8 +1070,5 @@ namespace System.Windows.Forms
 
         // Threading stuff
         public const uint STILL_ACTIVE = 259;
-
-        [DllImport(ExternDll.User32, ExactSpelling = true)]
-        public static extern bool GetUpdateRect(IntPtr hwnd, ref RECT rc, bool fErase);
     }
 }
