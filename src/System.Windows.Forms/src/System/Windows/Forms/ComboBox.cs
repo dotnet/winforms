@@ -6078,18 +6078,17 @@ namespace System.Windows.Forms
                 Debug.Assert(!ACWindows.ContainsKey(acHandle));
                 AssignHandle(acHandle);
                 ACWindows.Add(acHandle, this);
-                UnsafeNativeMethods.EnumChildWindows(new HandleRef(this, acHandle),
-                    new NativeMethods.EnumChildrenCallback(ACNativeWindow.RegisterACWindowRecursive),
-                    NativeMethods.NullHandleRef);
+                EnumChildWindows(new HandleRef(this, acHandle),
+                    ACNativeWindow.RegisterACWindowRecursive);
             }
 
-            private static bool RegisterACWindowRecursive(IntPtr handle, IntPtr lparam)
+            private static BOOL RegisterACWindowRecursive(IntPtr handle)
             {
                 if (!ACWindows.ContainsKey(handle))
                 {
                     ACNativeWindow newAC = new ACNativeWindow(handle);
                 }
-                return true;
+                return BOOL.TRUE;
             }
 
             internal bool Visible => IsWindowVisible(this).IsTrue();
@@ -6200,15 +6199,12 @@ namespace System.Windows.Forms
 
                 // Look for a popped up dropdown
                 shouldSubClass = subclass;
-                var callback = new EnumThreadWindowsCallback(Callback);
                 EnumThreadWindows(
                     Kernel32.GetCurrentThreadId(),
-                    callback,
-                    IntPtr.Zero);
-                GC.KeepAlive(callback);
+                    Callback);
             }
 
-            private bool Callback(IntPtr hWnd, IntPtr lParam)
+            private BOOL Callback(IntPtr hWnd)
             {
                 HandleRef hRef = new HandleRef(null, hWnd);
 
@@ -6218,7 +6214,7 @@ namespace System.Windows.Forms
                     ACNativeWindow.RegisterACWindow(hRef.Handle, shouldSubClass);
                 }
 
-                return true;
+                return BOOL.TRUE;
             }
 
             static string GetClassName(HandleRef hRef)

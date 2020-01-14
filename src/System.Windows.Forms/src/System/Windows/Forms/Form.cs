@@ -4748,16 +4748,14 @@ namespace System.Windows.Forms
             }
 
             EnumThreadWindowsCallback etwcb = null;
-            User32.EnumThreadWindowsCallback callback = null;
             if (IsHandleCreated)
             {
                 // First put all the owned windows into a list
-                etwcb = new EnumThreadWindowsCallback();
-                callback = etwcb.Callback;
+                etwcb = new EnumThreadWindowsCallback(Handle);
                 User32.EnumThreadWindows(
                     Kernel32.GetCurrentThreadId(),
-                    callback,
-                    this);
+                    etwcb.Callback);
+                GC.KeepAlive(this);
                 // Reset the owner of the windows in the list
                 etwcb.ResetOwners();
             }
@@ -4778,11 +4776,6 @@ namespace System.Windows.Forms
             if (wp.length > 0)
             {
                 User32.SetWindowPlacement(this, ref wp);
-            }
-
-            if (callback != null)
-            {
-                GC.KeepAlive(callback);
             }
         }
 
@@ -6803,16 +6796,18 @@ namespace System.Windows.Forms
         {
             private List<HandleRef> ownedWindows;
 
-            internal EnumThreadWindowsCallback()
+            private readonly IntPtr _formHandle;
+
+            internal EnumThreadWindowsCallback(IntPtr formHandle)
             {
+                this._formHandle = formHandle;
             }
 
-            internal bool Callback(IntPtr hWnd, IntPtr lParam)
+            internal BOOL Callback(IntPtr hWnd)
             {
-                Debug.Assert(lParam != IntPtr.Zero);
                 HandleRef hRef = new HandleRef(null, hWnd);
                 IntPtr parent = User32.GetWindowLong(hRef, User32.GWL.HWNDPARENT);
-                if (parent == lParam)
+                if (parent == _formHandle)
                 {
                     // Enumerated window is owned by this Form.
                     // Store it in a list for further treatment.
@@ -6822,7 +6817,7 @@ namespace System.Windows.Forms
                     }
                     ownedWindows.Add(hRef);
                 }
-                return true;
+                return BOOL.TRUE;
             }
 
             // Resets the owner of all the windows owned by this Form before handle recreation.

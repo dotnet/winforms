@@ -351,8 +351,6 @@ namespace System.Windows.Forms
             public int dwFlags;
         }
 
-        public delegate bool EnumChildrenCallback(IntPtr hwnd, IntPtr lParam);
-
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
         public class HH_AKLINK
         {

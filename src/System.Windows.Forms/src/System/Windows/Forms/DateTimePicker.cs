@@ -1562,8 +1562,7 @@ namespace System.Windows.Forms
             if (ShowUpDown)
             {
                 EnumChildren c = new EnumChildren();
-                NativeMethods.EnumChildrenCallback cb = new NativeMethods.EnumChildrenCallback(c.enumChildren);
-                UnsafeNativeMethods.EnumChildWindows(new HandleRef(this, Handle), cb, NativeMethods.NullHandleRef);
+                User32.EnumChildWindows(this, c.enumChildren);
                 if (c.hwndFound != IntPtr.Zero)
                 {
                     User32.InvalidateRect(new HandleRef(c, c.hwndFound), null, BOOL.TRUE);
@@ -1738,10 +1737,10 @@ namespace System.Windows.Forms
         {
             public IntPtr hwndFound = IntPtr.Zero;
 
-            public bool enumChildren(IntPtr hwnd, IntPtr lparam)
+            public BOOL enumChildren(IntPtr hwnd)
             {
                 hwndFound = hwnd;
-                return true;
+                return BOOL.TRUE;
             }
         }
 
