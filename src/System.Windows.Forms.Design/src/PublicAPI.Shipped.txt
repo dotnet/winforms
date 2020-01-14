@@ -170,7 +170,6 @@ System.ComponentModel.Design.DisplayMode.Auto = 4 -> System.ComponentModel.Desig
 System.ComponentModel.Design.DisplayMode.Hexdump = 1 -> System.ComponentModel.Design.DisplayMode
 System.ComponentModel.Design.DisplayMode.Unicode = 3 -> System.ComponentModel.Design.DisplayMode
 System.ComponentModel.Design.EventBindingService
-System.ComponentModel.Design.EventBindingService
 System.ComponentModel.Design.EventBindingService.EventBindingService(System.IServiceProvider provider) -> void
 System.ComponentModel.Design.EventBindingService.GetService(System.Type serviceType) -> object
 System.ComponentModel.Design.ExceptionCollection
@@ -210,7 +209,6 @@ System.ComponentModel.Design.ProjectTargetFrameworkAttribute
 System.ComponentModel.Design.ProjectTargetFrameworkAttribute.ProjectTargetFrameworkAttribute(string targetFrameworkMoniker) -> void
 System.ComponentModel.Design.ProjectTargetFrameworkAttribute.TargetFrameworkMoniker.get -> string
 System.ComponentModel.Design.Serialization.BasicDesignerLoader
-System.ComponentModel.Design.Serialization.BasicDesignerLoader
 System.ComponentModel.Design.Serialization.BasicDesignerLoader.BasicDesignerLoader() -> void
 System.ComponentModel.Design.Serialization.BasicDesignerLoader.GetService(System.Type serviceType) -> object
 System.ComponentModel.Design.Serialization.BasicDesignerLoader.LoaderHost.get -> System.ComponentModel.Design.Serialization.IDesignerLoaderHost
@@ -228,12 +226,6 @@ System.ComponentModel.Design.Serialization.CodeDomComponentSerializationService
 System.ComponentModel.Design.Serialization.CodeDomComponentSerializationService.CodeDomComponentSerializationService() -> void
 System.ComponentModel.Design.Serialization.CodeDomComponentSerializationService.CodeDomComponentSerializationService(System.IServiceProvider provider) -> void
 System.ComponentModel.Design.Serialization.CodeDomDesignerLoader
-System.ComponentModel.Design.Serialization.CodeDomDesignerLoader
-System.ComponentModel.Design.Serialization.CodeDomDesignerLoader
-System.ComponentModel.Design.Serialization.CodeDomDesignerLoader
-System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.CodeDomDesignerLoader() -> void
-System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.CodeDomDesignerLoader() -> void
-System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.CodeDomDesignerLoader() -> void
 System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.CodeDomDesignerLoader() -> void
 System.ComponentModel.Design.Serialization.CodeDomLocalizationModel
 System.ComponentModel.Design.Serialization.CodeDomLocalizationModel.None = 0 -> System.ComponentModel.Design.Serialization.CodeDomLocalizationModel

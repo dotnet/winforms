@@ -273,12 +273,6 @@ System.Windows.Forms.Appearance
 System.Windows.Forms.Appearance.Button = 1 -> System.Windows.Forms.Appearance
 System.Windows.Forms.Appearance.Normal = 0 -> System.Windows.Forms.Appearance
 System.Windows.Forms.Application
-System.Windows.Forms.Application
-System.Windows.Forms.Application
-System.Windows.Forms.Application
-System.Windows.Forms.Application
-System.Windows.Forms.Application
-System.Windows.Forms.Application
 System.Windows.Forms.Application.MessageLoopCallback
 System.Windows.Forms.ApplicationContext
 System.Windows.Forms.ApplicationContext.ApplicationContext() -> void
@@ -379,21 +373,6 @@ System.Windows.Forms.Automation.AutomationNotificationProcessing.MostRecent = 3 
 System.Windows.Forms.Automation.IAutomationLiveRegion
 System.Windows.Forms.Automation.IAutomationLiveRegion.LiveSetting.get -> System.Windows.Forms.Automation.AutomationLiveSetting
 System.Windows.Forms.Automation.IAutomationLiveRegion.LiveSetting.set -> void
-System.Windows.Forms.AxHost
-System.Windows.Forms.AxHost
-System.Windows.Forms.AxHost
-System.Windows.Forms.AxHost
-System.Windows.Forms.AxHost
-System.Windows.Forms.AxHost
-System.Windows.Forms.AxHost
-System.Windows.Forms.AxHost
-System.Windows.Forms.AxHost
-System.Windows.Forms.AxHost
-System.Windows.Forms.AxHost
-System.Windows.Forms.AxHost
-System.Windows.Forms.AxHost
-System.Windows.Forms.AxHost
-System.Windows.Forms.AxHost
 System.Windows.Forms.AxHost
 System.Windows.Forms.AxHost.AboutBoxDelegate
 System.Windows.Forms.AxHost.ActiveXInvokeKind
@@ -1058,25 +1037,6 @@ System.Windows.Forms.ContextMenuStrip.ContextMenuStrip() -> void
 System.Windows.Forms.ContextMenuStrip.ContextMenuStrip(System.ComponentModel.IContainer container) -> void
 System.Windows.Forms.ContextMenuStrip.SourceControl.get -> System.Windows.Forms.Control
 System.Windows.Forms.Control
-System.Windows.Forms.Control
-System.Windows.Forms.Control
-System.Windows.Forms.Control
-System.Windows.Forms.Control
-System.Windows.Forms.Control
-System.Windows.Forms.Control
-System.Windows.Forms.Control
-System.Windows.Forms.Control
-System.Windows.Forms.Control
-System.Windows.Forms.Control
-System.Windows.Forms.Control
-System.Windows.Forms.Control
-System.Windows.Forms.Control
-System.Windows.Forms.Control
-System.Windows.Forms.Control
-System.Windows.Forms.Control
-System.Windows.Forms.Control
-System.Windows.Forms.Control
-System.Windows.Forms.Control
 System.Windows.Forms.Control.AccessibilityNotifyClients(System.Windows.Forms.AccessibleEvents accEvent, int childID) -> void
 System.Windows.Forms.Control.AccessibilityNotifyClients(System.Windows.Forms.AccessibleEvents accEvent, int objectID, int childID) -> void
 System.Windows.Forms.Control.AccessibilityObject.get -> System.Windows.Forms.AccessibleObject
@@ -1432,16 +1392,6 @@ System.Windows.Forms.DataFormats.Format
 System.Windows.Forms.DataFormats.Format.Format(string name, int id) -> void
 System.Windows.Forms.DataFormats.Format.Id.get -> int
 System.Windows.Forms.DataFormats.Format.Name.get -> string
-System.Windows.Forms.DataGridView
-System.Windows.Forms.DataGridView
-System.Windows.Forms.DataGridView
-System.Windows.Forms.DataGridView
-System.Windows.Forms.DataGridView
-System.Windows.Forms.DataGridView
-System.Windows.Forms.DataGridView
-System.Windows.Forms.DataGridView
-System.Windows.Forms.DataGridView
-System.Windows.Forms.DataGridView
 System.Windows.Forms.DataGridView
 System.Windows.Forms.DataGridView.AdvancedCellBorderStyle.get -> System.Windows.Forms.DataGridViewAdvancedBorderStyle
 System.Windows.Forms.DataGridView.AdvancedColumnHeadersBorderStyle.get -> System.Windows.Forms.DataGridViewAdvancedBorderStyle
@@ -2903,8 +2853,6 @@ System.Windows.Forms.ErrorIconAlignment.MiddleRight = 3 -> System.Windows.Forms.
 System.Windows.Forms.ErrorIconAlignment.TopLeft = 0 -> System.Windows.Forms.ErrorIconAlignment
 System.Windows.Forms.ErrorIconAlignment.TopRight = 1 -> System.Windows.Forms.ErrorIconAlignment
 System.Windows.Forms.ErrorProvider
-System.Windows.Forms.ErrorProvider
-System.Windows.Forms.ErrorProvider
 System.Windows.Forms.ErrorProvider.BindToDataAndErrors(object newDataSource, string newDataMember) -> void
 System.Windows.Forms.ErrorProvider.BlinkRate.get -> int
 System.Windows.Forms.ErrorProvider.BlinkRate.set -> void
@@ -2935,7 +2883,6 @@ System.Windows.Forms.ErrorProvider.Tag.set -> void
 System.Windows.Forms.ErrorProvider.UpdateBinding() -> void
 System.Windows.Forms.FeatureSupport
 System.Windows.Forms.FeatureSupport.FeatureSupport() -> void
-System.Windows.Forms.FileDialog
 System.Windows.Forms.FileDialog
 System.Windows.Forms.FileDialog.AddExtension.get -> bool
 System.Windows.Forms.FileDialog.AddExtension.set -> void
@@ -3068,7 +3015,6 @@ System.Windows.Forms.FontDialog.ShowEffects.get -> bool
 System.Windows.Forms.FontDialog.ShowEffects.set -> void
 System.Windows.Forms.FontDialog.ShowHelp.get -> bool
 System.Windows.Forms.FontDialog.ShowHelp.set -> void
-System.Windows.Forms.Form
 System.Windows.Forms.Form
 System.Windows.Forms.Form.AcceptButton.get -> System.Windows.Forms.IButtonControl
 System.Windows.Forms.Form.AcceptButton.set -> void
@@ -4108,8 +4054,6 @@ System.Windows.Forms.ListBindingConverter
 System.Windows.Forms.ListBindingConverter.ListBindingConverter() -> void
 System.Windows.Forms.ListBindingHelper
 System.Windows.Forms.ListBox
-System.Windows.Forms.ListBox
-System.Windows.Forms.ListBox
 System.Windows.Forms.ListBox.BackgroundImageChanged -> System.EventHandler
 System.Windows.Forms.ListBox.BackgroundImageLayoutChanged -> System.EventHandler
 System.Windows.Forms.ListBox.BeginUpdate() -> void
@@ -4806,19 +4750,6 @@ System.Windows.Forms.MessageBoxOptions.RtlReading = 1048576 -> System.Windows.Fo
 System.Windows.Forms.MessageBoxOptions.ServiceNotification = 2097152 -> System.Windows.Forms.MessageBoxOptions
 System.Windows.Forms.MethodInvoker
 System.Windows.Forms.MonthCalendar
-System.Windows.Forms.MonthCalendar
-System.Windows.Forms.MonthCalendar
-System.Windows.Forms.MonthCalendar
-System.Windows.Forms.MonthCalendar
-System.Windows.Forms.MonthCalendar
-System.Windows.Forms.MonthCalendar
-System.Windows.Forms.MonthCalendar
-System.Windows.Forms.MonthCalendar
-System.Windows.Forms.MonthCalendar
-System.Windows.Forms.MonthCalendar
-System.Windows.Forms.MonthCalendar
-System.Windows.Forms.MonthCalendar
-System.Windows.Forms.MonthCalendar
 System.Windows.Forms.MonthCalendar.AddAnnuallyBoldedDate(System.DateTime date) -> void
 System.Windows.Forms.MonthCalendar.AddBoldedDate(System.DateTime date) -> void
 System.Windows.Forms.MonthCalendar.AddMonthlyBoldedDate(System.DateTime date) -> void
@@ -4929,7 +4860,6 @@ System.Windows.Forms.MouseEventArgs.MouseEventArgs(System.Windows.Forms.MouseBut
 System.Windows.Forms.MouseEventArgs.X.get -> int
 System.Windows.Forms.MouseEventArgs.Y.get -> int
 System.Windows.Forms.MouseEventHandler
-System.Windows.Forms.NativeWindow
 System.Windows.Forms.NativeWindow
 System.Windows.Forms.NativeWindow.AssignHandle(System.IntPtr handle) -> void
 System.Windows.Forms.NativeWindow.DefWndProc(ref System.Windows.Forms.Message m) -> void
@@ -6321,9 +6251,6 @@ System.Windows.Forms.TabAppearance.Buttons = 1 -> System.Windows.Forms.TabAppear
 System.Windows.Forms.TabAppearance.FlatButtons = 2 -> System.Windows.Forms.TabAppearance
 System.Windows.Forms.TabAppearance.Normal = 0 -> System.Windows.Forms.TabAppearance
 System.Windows.Forms.TabControl
-System.Windows.Forms.TabControl
-System.Windows.Forms.TabControl
-System.Windows.Forms.TabControl
 System.Windows.Forms.TabControl.Alignment.get -> System.Windows.Forms.TabAlignment
 System.Windows.Forms.TabControl.Alignment.set -> void
 System.Windows.Forms.TabControl.Appearance.get -> System.Windows.Forms.TabAppearance
@@ -6530,9 +6457,6 @@ System.Windows.Forms.TableLayoutRowStyleCollection.Insert(int index, System.Wind
 System.Windows.Forms.TableLayoutRowStyleCollection.Remove(System.Windows.Forms.RowStyle rowStyle) -> void
 System.Windows.Forms.TableLayoutRowStyleCollection.this[int index].get -> System.Windows.Forms.RowStyle
 System.Windows.Forms.TableLayoutRowStyleCollection.this[int index].set -> void
-System.Windows.Forms.TableLayoutSettings
-System.Windows.Forms.TableLayoutSettings
-System.Windows.Forms.TableLayoutSettings
 System.Windows.Forms.TableLayoutSettings
 System.Windows.Forms.TableLayoutSettings.ColumnCount.get -> int
 System.Windows.Forms.TableLayoutSettings.ColumnCount.set -> void
@@ -6782,7 +6706,6 @@ System.Windows.Forms.ToolStripArrowRenderEventArgs.Item.get -> System.Windows.Fo
 System.Windows.Forms.ToolStripArrowRenderEventArgs.ToolStripArrowRenderEventArgs(System.Drawing.Graphics g, System.Windows.Forms.ToolStripItem toolStripItem, System.Drawing.Rectangle arrowRectangle, System.Drawing.Color arrowColor, System.Windows.Forms.ArrowDirection arrowDirection) -> void
 System.Windows.Forms.ToolStripArrowRenderEventHandler
 System.Windows.Forms.ToolStripButton
-System.Windows.Forms.ToolStripButton
 System.Windows.Forms.ToolStripButton.AutoToolTip.get -> bool
 System.Windows.Forms.ToolStripButton.AutoToolTip.set -> void
 System.Windows.Forms.ToolStripButton.CheckOnClick.get -> bool
@@ -6926,9 +6849,6 @@ System.Windows.Forms.ToolStripContentPanelRenderEventArgs.Handled.set -> void
 System.Windows.Forms.ToolStripContentPanelRenderEventArgs.ToolStripContentPanel.get -> System.Windows.Forms.ToolStripContentPanel
 System.Windows.Forms.ToolStripContentPanelRenderEventArgs.ToolStripContentPanelRenderEventArgs(System.Drawing.Graphics g, System.Windows.Forms.ToolStripContentPanel contentPanel) -> void
 System.Windows.Forms.ToolStripContentPanelRenderEventHandler
-System.Windows.Forms.ToolStripControlHost
-System.Windows.Forms.ToolStripControlHost
-System.Windows.Forms.ToolStripControlHost
 System.Windows.Forms.ToolStripControlHost
 System.Windows.Forms.ToolStripControlHost.CausesValidation.get -> bool
 System.Windows.Forms.ToolStripControlHost.CausesValidation.set -> void
@@ -7510,7 +7430,6 @@ System.Windows.Forms.ToolStripRenderer.RenderToolStripContentPanelBackground -> 
 System.Windows.Forms.ToolStripRenderer.RenderToolStripPanelBackground -> System.Windows.Forms.ToolStripPanelRenderEventHandler
 System.Windows.Forms.ToolStripRenderer.RenderToolStripStatusLabelBackground -> System.Windows.Forms.ToolStripItemRenderEventHandler
 System.Windows.Forms.ToolStripRenderer.ToolStripRenderer() -> void
-System.Windows.Forms.ToolStripSeparator
 System.Windows.Forms.ToolStripSeparator
 System.Windows.Forms.ToolStripSeparator.AutoToolTip.get -> bool
 System.Windows.Forms.ToolStripSeparator.AutoToolTip.set -> void

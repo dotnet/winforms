@@ -48,8 +48,6 @@ System.Drawing.Design.BitmapEditor.BitmapEditor() -> void
 System.Drawing.Design.ColorEditor
 System.Drawing.Design.ColorEditor.ColorEditor() -> void
 System.Drawing.Design.ContentAlignmentEditor
-System.Drawing.Design.ContentAlignmentEditor
-System.Drawing.Design.ContentAlignmentEditor.ContentAlignmentEditor() -> void
 System.Drawing.Design.ContentAlignmentEditor.ContentAlignmentEditor() -> void
 System.Drawing.Design.CursorEditor
 System.Drawing.Design.CursorEditor.CursorEditor() -> void
