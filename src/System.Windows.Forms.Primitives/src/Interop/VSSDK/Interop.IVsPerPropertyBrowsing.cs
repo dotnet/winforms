@@ -66,6 +66,7 @@ internal partial class Interop
             ///  that appears in the properties window selection combo.  If this method returns
             ///  a non-S_OK return code, the default will be used. The default is the name
             ///  string from a call to ITypeInfo::GetDocumentation(MEMID_NIL, ...);
+            /// </summary>
             [PreserveSig]
             HRESULT GetClassName(
                 ref string pbstrClassName);

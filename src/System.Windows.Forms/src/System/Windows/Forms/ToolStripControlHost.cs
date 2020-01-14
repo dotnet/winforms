@@ -173,7 +173,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        //  For control hosts, this property has no effect
+        ///  For control hosts, this property has no effect
         ///  as they get their own clicks.  Use ControlStyles.StandardClick
         ///  instead.
         /// </summary>

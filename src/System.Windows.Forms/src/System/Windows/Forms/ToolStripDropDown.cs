@@ -14,9 +14,6 @@ using static Interop;
 
 namespace System.Windows.Forms
 {
-    /// <summary>
-    ///  Summary of ToolStripDropDown.
-    /// </summary>
     [Designer("System.Windows.Forms.Design.ToolStripDropDownDesigner, " + AssemblyRef.SystemDesign)]
     [ComVisible(true)]
     [ClassInterface(ClassInterfaceType.AutoDispatch)]
@@ -748,9 +745,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <summary>
-        ///  Summary of OwnerItem.
-        /// </summary>
         [DefaultValue(null), Browsable(false)]
         public ToolStripItem OwnerItem
         {
@@ -1180,10 +1174,6 @@ namespace System.Windows.Forms
             Visible = false;
         }
 
-        /// <summary>
-        ///  Summary of GetBaseDropDownBounds.
-        /// </summary>
-        // called by ToolStripDropDownMenu,
         internal Rectangle GetDropDownBounds(Rectangle suggestedBounds)
         {
             Rectangle dropDownBounds;
@@ -1383,10 +1373,6 @@ namespace System.Windows.Forms
             ((CancelEventHandler)Events[EventOpening])?.Invoke(this, e);
         }
 
-        /// <summary>
-        ///  Summary of OnLayout.
-        /// </summary>
-        /// <param name=e></param>
         protected virtual void OnOpened(EventArgs e)
         {
             if (IsHandleCreated)
@@ -1704,9 +1690,9 @@ namespace System.Windows.Forms
             scaledDefaultPadding = DpiHelper.LogicalToDeviceUnits(defaultPadding, newDpi);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     VERY similar to Form.ScaleCore
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         protected override void ScaleCore(float dx, float dy)
         {

@@ -663,9 +663,6 @@ namespace System.Windows.Forms.Design.Behavior
                 base.Dispose(disposing);
             }
 
-            /// <summary>
-            ///  Returns true if the DesignerFrame is created & not being disposed.
-            /// </summary>
             internal Control DesignerFrame
             {
                 get => _designerFrame;
@@ -690,7 +687,7 @@ namespace System.Windows.Forms.Design.Behavior
             }
 
             /// <summary>
-            ///  Returns true if the DesignerFrame is created & not being disposed.
+            ///  Returns true if the DesignerFrame is created and not being disposed.
             /// </summary>
             internal bool DesignerFrameValid
             {

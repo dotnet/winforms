@@ -311,7 +311,7 @@ namespace System.Resources
         }
 
         /// <summary>
-        ///  Returns a dictionary enumerator that can be used to enumerate the <metadata> elements in the .resx file.
+        ///  Returns a dictionary enumerator that can be used to enumerate the &lt;metadata&gt; elements in the .resx file.
         /// </summary>
         public IDictionaryEnumerator GetMetadataEnumerator()
         {

@@ -15,7 +15,7 @@ namespace System.Windows.Forms
     /// </summary>
     public sealed class DpiChangedEventArgs : CancelEventArgs
     {
-        /// <devdov>
+        /// <summary>
         ///  Parameter units are pixels(dots) per inch.
         /// </summary>
         internal DpiChangedEventArgs(int old, Message m)

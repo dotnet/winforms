@@ -157,10 +157,6 @@ namespace System.Windows.Forms
         private int deviceDpi = DpiHelper.DeviceDpi;
         internal Font defaultFont = ToolStripManager.DefaultFont;
 
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.ToolStripItem"]/*' />
-        /// <devdoc>
-        ///  Constructor
-        /// </summary>
         protected ToolStripItem()
         {
             if (DpiHelper.IsScalingRequirementMet)
@@ -409,7 +405,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  !!!!This property ONLY works when toolStrip.ShowItemToolTips = true!!!!
         ///  if AutoToolTip is set to true we use the Text, if false, we use ToolTipText.
-        ///</summary>
+        /// </summary>
         [DefaultValue(false)]
         [SRDescription(nameof(SR.ToolStripItemAutoToolTipDescr))]
         [SRCategory(nameof(SR.CatBehavior))]
@@ -428,7 +424,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  as opposed to Visible, which returns whether or not the item and its parent are Visible
         ///  Available returns whether or not the item will be shown.  Setting Available sets Visible and Vice/Versa
-        ///</summary>
+        /// </summary>
         [
         Browsable(false),
         SRDescription(nameof(SR.ToolStripItemAvailableDescr)),
@@ -750,7 +746,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Deriving classes can override this to configure a default size for their control.
         ///  This is more efficient than setting the size in the control's constructor.
-        /// </devdoc>
+        /// </summary>
         protected virtual Size DefaultSize
         {
             get
@@ -2063,12 +2059,12 @@ namespace System.Windows.Forms
             }
         }
 
-        ///<summary>
+        /// <summary>
         ///  Mirrors the image when RTL.Yes.
         ///  Note we do not change what is returned back from the Image property as this would cause problems with serialization.
         ///  Instead we only change what is painted - there's an internal MirroredImage property which fills in as
         ///  e.Image in the ToolStripItemImageRenderEventArgs if the item is RTL.Yes and AutoMirrorImage is turned on.
-        ///</summary>
+        /// </summary>
         [
         DefaultValue(false),
         SRCategory(nameof(SR.CatAppearance)),
@@ -3578,10 +3574,6 @@ namespace System.Windows.Forms
             scaledDefaultStatusStripMargin = DpiHelper.LogicalToDeviceUnits(defaultStatusStripMargin, deviceDpi);
         }
 
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.Select"]/*' />
-        /// <devdoc>
-        ///  Selects the item
-        /// </summary>
         public void Select()
         {
 #if DEBUG

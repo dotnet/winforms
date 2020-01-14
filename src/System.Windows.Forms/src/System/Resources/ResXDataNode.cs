@@ -49,15 +49,10 @@ namespace System.Resources
         // 2. once the object is constructed the delegate should not be changed to avoid getting inconsistent results.
         private Func<Type, string> typeNameConverter;
 
-        // constructors
-
         private ResXDataNode()
         {
         }
 
-        // <summary>
-        // this is a deep clone
-        //</summary>
         internal ResXDataNode DeepClone()
         {
             return new ResXDataNode

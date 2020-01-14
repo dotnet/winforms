@@ -2338,7 +2338,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///  Skips the next <paramref name="celt"> child accessible objects.
+            ///  Skips the next <paramref name="celt"/> child accessible objects.
             /// </summary>
             HRESULT OleAut32.IEnumVariant.Skip(uint celt)
             {

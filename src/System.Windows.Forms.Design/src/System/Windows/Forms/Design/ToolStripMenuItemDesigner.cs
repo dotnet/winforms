@@ -233,7 +233,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  This property is true when the OwnerItem is selected during COPY & PASTE operations.
+        ///  This property is true when the OwnerItem is selected during COPY and PASTE operations.
         /// </summary>
         private bool MenuItemSelected
         {
@@ -809,7 +809,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  Asks the host to create a new DropDownItem, inserts the item into the collection & selects it.
+        ///  Asks the host to create a new DropDownItem, inserts the item into the collection and selects it.
         /// </summary>
         private ToolStripItem CreateNewItem(Type t, int dummyIndex, string newText)
         {
@@ -1349,7 +1349,7 @@ namespace System.Windows.Forms.Design
 
         /// <summary>
         ///  Get the Insertion Index to drop the current drag-drop item.
-        /// </summary)
+        /// </summary>
         private int GetItemInsertionIndex(ToolStripDropDown wb, Point ownerClientAreaRelativeDropPoint)
         {
             for (int i = 0; i < wb.Items.Count; i++)
@@ -2230,34 +2230,34 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        // <summary>
-        // Resets the ToolStripMenuItem DoubleClickEnabled to be the default visible
-        // <summary/>
+        /// <summary>
+        /// Resets the ToolStripMenuItem DoubleClickEnabled to be the default visible
+        /// </summary>
         private void ResetDoubleClickEnabled() => DoubleClickEnabled = false;
 
-        // <summary>
-        // Resets the ToolStripMenuItem CheckOnClick to be the default visible
-        // <summary/>
+        /// <summary>
+        /// Resets the ToolStripMenuItem CheckOnClick to be the default visible
+        /// </summary>
         private void ResetCheckOnClick() => CheckOnClick = false;
 
-        // <summary>
-        // Resets the ToolStripMenuItem CheckOnClick to be the default visible
-        // <summary/>
+        /// <summary>
+        /// Resets the ToolStripMenuItem CheckOnClick to be the default visible
+        /// </summary>
         private void ResetDropDown() => DropDown = null;
 
-        // <summary>
-        // Resets the ToolStripMenuItem Visible to be the default visible
-        // <summary/>
+        /// <summary>
+        /// Resets the ToolStripMenuItem Visible to be the default visible
+        /// </summary>
         private void ResetVisible() => Visible = true;
 
-        // <summary>
-        // Restores the ToolStripMenuItem Visible to be the value set in the property grid.
-        // <summary/>
+        /// <summary>
+        /// Restores the ToolStripMenuItem Visible to be the value set in the property grid.
+        /// </summary>
         private void RestoreVisible() => MenuItem.Visible = Visible;
 
-        // <summary>
-        //  Removes the TypeHere node when the DropDownCloses.
-        // <summary/>
+        /// <summary>
+        ///  Removes the TypeHere node when the DropDownCloses.
+        /// </summary>
         internal void RemoveTypeHereNode(ToolStripDropDownItem ownerItem)
         {
             //This will cause the DropDown to Relayout  so that during the DropDownClosed event we wont have proper Bounds to Invalidate the ToolStripAdorner... So for this case do it here...

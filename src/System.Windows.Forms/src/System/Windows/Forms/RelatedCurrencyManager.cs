@@ -102,9 +102,9 @@ namespace System.Windows.Forms
             return GetItemProperties(null);
         }
 
-        // <summary>
-        //    Gets the name of the list.
-        // </summary>
+        /// <summary>
+        ///    Gets the name of the list.
+        /// </summary>
         internal override string GetListName()
         {
             string name = GetListName(new ArrayList());

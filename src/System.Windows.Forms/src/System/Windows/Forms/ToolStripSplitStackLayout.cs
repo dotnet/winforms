@@ -30,7 +30,7 @@ namespace System.Windows.Forms
         protected int BackwardsWalkingIndex { get; set; }
 
         /// <summary>
-        // This is the index we use to walk the items and make  decisions if there is enough room.
+        ///  This is the index we use to walk the items and make  decisions if there is enough room.
         /// </summary>
         protected int ForwardsWalkingIndex { get; set; }
 

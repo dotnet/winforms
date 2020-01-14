@@ -17,14 +17,14 @@ namespace System.Windows.Forms
         private static readonly object defaultDataSourceNullValue = System.DBNull.Value;
 
         /// <summary>
-        ///
         ///  Converts a binary value into a format suitable for display to the end user.
         ///  Used when pushing a value from a back-end data source into a data-bound property on a control.
         ///
         ///  The real conversion work happens inside FormatObjectInternal(). Before calling FormatObjectInternal(),
-        ///  we check for any use of nullable types or values (eg. Nullable<T>) and 'unwrap' them to get at the real
-        ///  types and values, which are then used in the actual conversion. If the caller is expecting a nullable
-        ///  value back, we must also re-wrap the final result inside a nullable value before returning.
+        ///  we check for any use of nullable types or values (eg. <see cref="Nullable{T}"/>) and 'unwrap'
+        ///  them to get at the real types and values, which are then used in the actual conversion.
+        ///  If the caller is expecting a nullable value back, we must also re-wrap the final result
+        ///  inside a nullable value before returning.
         /// </summary>
         public static object FormatObject(object value,
                                           Type targetType,
@@ -208,14 +208,14 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///
         ///  Converts a value entered by the end user (through UI) into the corresponding binary value.
         ///  Used when pulling input from a data-bound property on a control to store in a back-end data source.
         ///
         ///  The real conversion work happens inside ParseObjectInternal(). Before calling ParseObjectInternal(),
-        ///  we check for any use of nullable types or values (eg. Nullable<T>) and 'unwrap' them to get at the real
-        ///  types and values, which are then used in the actual conversion. If the caller is expecting a nullable
-        ///  value back, we must also re-wrap the final result inside a nullable value before returning.
+        ///  we check for any use of nullable types or values (eg. <see cref="Nullable{T}"/>) and 'unwrap'
+        ///  them to get at the real types and values, which are then used in the actual conversion.
+        ///  If the caller is expecting a nullable value back, we must also re-wrap the final result
+        ///  inside a nullable value before returning.
         /// </summary>
         public static object ParseObject(object value,
                                          Type targetType,

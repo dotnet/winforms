@@ -687,9 +687,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        // If it's necessary to throw up a "This file exists, are you sure?" kind of
-        // MessageBox, here's where we do it
-        // Return value is whether or not the user hit "okay".
+        /// If it's necessary to throw up a "This file exists, are you sure?" kind of MessageBox,
+        /// here's where we do it. Return value is whether or not the user hit "okay".
         /// </summary>
         private protected virtual bool PromptUserIfAppropriate(string fileName)
         {

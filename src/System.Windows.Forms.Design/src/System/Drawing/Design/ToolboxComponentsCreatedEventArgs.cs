@@ -15,7 +15,7 @@ namespace System.Drawing.Design
         private readonly IComponent[] _components;
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref='System.Drawing.Design.ToolboxComponentsCreatedEventArgs'
+        ///  Initializes a new instance of the <see cref='System.Drawing.Design.ToolboxComponentsCreatedEventArgs'/>
         /// </summary>
         public ToolboxComponentsCreatedEventArgs(IComponent[] components)
         {

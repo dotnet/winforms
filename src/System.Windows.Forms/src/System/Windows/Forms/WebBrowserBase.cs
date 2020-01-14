@@ -21,7 +21,7 @@ namespace System.Windows.Forms
     ///  for ActiveX controls are blocked here (by setting Browsable attributes on some and
     ///  throwing exceptions from others), to make life easy for the inheritors.
     ///
-    ///  Inheritors of this class simply need to concentrate on defining & implementing the
+    ///  Inheritors of this class simply need to concentrate on defining and implementing the
     ///  properties/methods/events of the specific ActiveX control they are wrapping, the
     ///  default properties etc and the code to implement the activation etc. are
     ///  encapsulated in the class below.

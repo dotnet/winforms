@@ -95,7 +95,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Specifies whether the ImeMode property value can be changed to an active value.
-        ///  Added to support Password & ReadOnly (and maybe other) properties, which when set, should force disabling
+        ///  Added to support Password &amp; ReadOnly (and maybe other) properties, which when set, should force disabling
         ///  the IME if using one.
         /// </summary>
         protected virtual bool CanEnableIme

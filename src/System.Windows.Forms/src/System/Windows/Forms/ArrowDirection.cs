@@ -5,8 +5,8 @@
 namespace System.Windows.Forms
 {
     /// <summary>
-    // This enum is tightly coupled to Orientation so you can determine quickly
-    // an orientation from a direction. (direction & Orientation.Vertical == Orientation.Vertical)
+    ///  This enum is tightly coupled to Orientation so you can determine quickly an orientation
+    ///  from a direction. (direction &amp; Orientation.Vertical == Orientation.Vertical)
     /// </summary>
     public enum ArrowDirection
     {

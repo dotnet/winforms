@@ -1921,11 +1921,11 @@ namespace System.Windows.Forms
                 return restoreBounds;
             }
         }
+
         /// <summary>
-        ///  This is used for international applications where the language
-        ///  is written from RightToLeft. When this property is true,
-        //      and the RightToLeft is true, mirroring will be turned on on the form, and
-        ///  control placement and text will be from right to left.
+        ///  This is used for international applications where the language is written from RightToLeft.
+        ///  When this property is true, and the RightToLeft is true, mirroring will be turned on on
+        ///  the form, and control placement and text will be from right to left.
         /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
@@ -5772,7 +5772,7 @@ namespace System.Windows.Forms
             return null;
         }
 
-        ///<summary> ToolStrip MDI Merging support </summary>
+        /// <summary> ToolStrip MDI Merging support </summary>
         private void UpdateToolStrip()
         {
             // try to merge each one of the MDI Child toolstrip with the first toolstrip

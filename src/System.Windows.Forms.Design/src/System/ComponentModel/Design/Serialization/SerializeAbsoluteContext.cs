@@ -7,7 +7,7 @@ namespace System.ComponentModel.Design.Serialization
     /// <summary>
     ///  The ComponentSerializationService supports "absolute" serialization,
     ///  where instead of just serializing values that differ from an object's
-    // default values, all values are serialized in such a way as to be able
+    ///  default values, all values are serialized in such a way as to be able
     ///  to reset values to their defaults for objects that may have already
     ///  been initialized. When a component serialization service wishes to
     ///  indicate this to CodeDomSerializer objects, it will place a

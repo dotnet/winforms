@@ -1199,7 +1199,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  Called to cleanup a D&D operation
+        ///  Called to cleanup a drag and drop operation.
         /// </summary>
         protected virtual void OnDragComplete(DragEventArgs de)
         {

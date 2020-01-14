@@ -587,9 +587,9 @@ namespace System.Windows.Forms
             }
         }
 
-        ///<summary>
+        /// <summary>
         ///  Indicates if either panel is collapsed
-        ///</summary>
+        /// </summary>
         private bool CollapsedMode
         {
             get
@@ -615,9 +615,9 @@ namespace System.Windows.Forms
             }
         }
 
-        ///<summary>
+        /// <summary>
         ///  Collapses or restores the given panel
-        ///</summary>
+        /// </summary>
         private void CollapsePanel(SplitterPanel p, bool collapsing)
         {
             p.Collapsed = collapsing;

@@ -594,7 +594,6 @@ namespace System.Windows.Forms
             offset4Y = DpiHelper.LogicalToDeviceUnits(OFFSET_4PIXELS, dpi);
         }
 
-        /// <include file='doc\WinBarRenderer.uex' path='docs/doc[@for="ToolStripRenderer.OnRenderArrow"]/*' />
         protected virtual void OnRenderArrow(ToolStripArrowRenderEventArgs e){
             if (RendererOverride != null)
             {

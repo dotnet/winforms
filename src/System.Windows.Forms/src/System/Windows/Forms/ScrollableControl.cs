@@ -254,7 +254,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        // Gets the Horizontal Scroll bar for this ScrollableControl.
+        /// Gets the Horizontal Scroll bar for this ScrollableControl.
         /// </summary>
         [SRCategory(nameof(SR.CatLayout))]
         [SRDescription(nameof(SR.ScrollableControlHorizontalScrollDescr))]

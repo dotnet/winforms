@@ -154,7 +154,7 @@ namespace System.Windows.Forms
             }
         }
 
-        ///<summary>Static events only!!!</summary>
+        /// <summary>Static events only!!!</summary>
         private static void AddEventHandler(int key, Delegate value)
         {
             lock (internalSyncObject)
@@ -549,12 +549,11 @@ namespace System.Windows.Forms
             }
         }
 
-        // <summary>
-        // occurs when toolstripmanager.Renderer property has changed
-        //
-        // WARNING: When subscribing to static event handlers - make sure you unhook from them
-        // otherwise you can leak USER objects on process shutdown.
-        // </summary>
+        /// <summary>
+        ///  Occurs when toolstripmanager.Renderer property has changed
+        ///  WARNING: When subscribing to static event handlers - make sure you unhook from them
+        ///  otherwise you can leak USER objects on process shutdown.
+        /// </summary>
         public static event EventHandler RendererChanged
         {
             add => AddEventHandler(staticEventDefaultRendererChanged, value);

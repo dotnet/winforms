@@ -137,7 +137,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Gets a value indicating whether this editor supports the painting of a representation of an object's value.</para>
+        /// Gets a value indicating whether this editor supports the painting of a representation of an object's value.
         /// </summary>
         public override bool GetPaintValueSupported(ITypeDescriptorContext context)
             => imageEditor != null ? imageEditor.GetPaintValueSupported(context) : false;

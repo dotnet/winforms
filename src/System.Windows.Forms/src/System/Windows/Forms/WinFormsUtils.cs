@@ -45,8 +45,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  If you want to know if a piece of text contains one and only one &
-        ///  this is your function. If you have a character "t" and want match it to &Text
+        ///  If you want to know if a piece of text contains one and only one &amp;
+        ///  this is your function. If you have a character "t" and want match it to &amp;Text
         ///  Control.IsMnemonic is a better bet.
         /// </summary>
         public static bool ContainsMnemonic(string text)
@@ -127,9 +127,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Adds an extra & to to the text so that "Fish & Chips" can be displayed on a menu item
+        ///  Adds an extra &amp; to to the text so that "Fish &amp; Chips" can be displayed on a menu item
         ///  without underlining anything.
-        ///  Fish & Chips --> Fish && Chips
+        ///  Fish &amp; Chips --> Fish &amp;&amp; Chips
         /// </summary>
         internal static string EscapeTextWithAmpersands(string text)
         {
@@ -215,7 +215,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Retrieves the mnemonic from a given string, or zero if no mnemonic.
         ///  As used by the Control.Mnemonic to get mnemonic from Control.Text.
-        /// <summary>
+        /// </summary>
         public static char GetMnemonic(string text, bool convertToUpperCase)
         {
             char mnemonic = '\0';
@@ -249,11 +249,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Strips all keyboard mnemonic prefixes from a given string, eg. turning "He&lp" into "Help".
+        ///  Strips all keyboard mnemonic prefixes from a given string, eg. turning "He&amp;lp" into "Help".
         /// </summary>
         /// <remarks>
         ///  Note: Be careful not to call this multiple times on the same string, otherwise you'll turn
-        ///  something like "Fi&sh && Chips" into "Fish & Chips" on the first call, and then "Fish Chips"
+        ///  something like "Fi&amp;sh &amp;&amp; Chips" into "Fish &amp; Chips" on the first call, and then "Fish Chips"
         ///  on the second call.
         /// </remarks>
         public static string TextWithoutMnemonics(string text)
@@ -368,7 +368,7 @@ namespace System.Windows.Forms
             ///
             ///  EXAMPLE:
             ///  MessageBoxIcon. Valid values are 0x0, 0x10, 0x20, 0x30, 0x40
-            ///  Method for verifying: chop off the last 0 by shifting right 4 bits, verify resulting number is between 0 & 4.
+            ///  Method for verifying: chop off the last 0 by shifting right 4 bits, verify resulting number is between 0 &amp; 4.
             ///
             ///  WindowsFormsUtils.EnumValidator.IsEnumWithinShiftedRange(icon, /*numBitsToShift*/4, /*min*/0x0,/*max*/0x4)
             /// </summary>
