@@ -18,13 +18,9 @@ internal static partial class Interop
         public const uint WM_APP            = 0x8000;
 
         public const uint DTM_FIRST         = 0x1000;      // DateTimePicker messages
-        public const uint PGM_FIRST         = 0x1400;      // Pager control messages
-        public const uint BCM_FIRST         = 0x1600;      // Button control messages
-        public const uint CBM_FIRST         = 0x1700;      // Combobox control messages
 
         // https://docs.microsoft.com/en-us/cpp/mfc/tn062-message-reflection-for-windows-controls?view=vs-2019
         public const uint WM_REFLECT = WM_USER + 0x1C00;
-        public const uint OCM__BASE  = WM_USER + 0x1C00;
 
         public static class RegisteredMessage
         {
@@ -289,21 +285,6 @@ internal static partial class Interop
             WM_DWMSENDICONICLIVEPREVIEWBITMAP   = 0x0326,
             WM_GETTITLEBARINFOEX                = 0x033F,
             WM_CHOOSEFONT_GETLOGFONT            = WM_USER + 1,
-            CBEM_INSERTITEMA                    = WM_USER + 1,
-            CBEM_SETIMAGELIST                   = WM_USER + 2,
-            CBEM_GETIMAGELIST                   = WM_USER + 3,
-            CBEM_GETITEMA                       = WM_USER + 4,
-            CBEM_SETITEMA                       = WM_USER + 5,
-            CBEM_GETCOMBOCONTROL                = WM_USER + 6,
-            CBEM_GETEDITCONTROL                 = WM_USER + 7,
-            CBEM_SETEXSTYLE                     = WM_USER + 8,
-            CBEM_GETEXSTYLE                     = WM_USER + 9,
-            CBEM_GETEXTENDEDSTYLE               = WM_USER + 9,
-            CBEM_HASEDITCHANGED                 = WM_USER + 10,
-            CBEM_INSERTITEMW                    = WM_USER + 11,
-            CBEM_SETITEMW                       = WM_USER + 12,
-            CBEM_GETITEMW                       = WM_USER + 13,
-            CBEM_SETEXTENDEDSTYLE               = WM_USER + 14,
             DTM_GETSYSTEMTIME                   = DTM_FIRST + 1,
             DTM_SETSYSTEMTIME                   = DTM_FIRST + 2,
             DTM_SETRANGE                        = DTM_FIRST + 4,
@@ -312,24 +293,6 @@ internal static partial class Interop
             DTM_SETMCFONT                       = DTM_FIRST + 9,
             DTM_SETFORMATW                      = DTM_FIRST + 50,
             WM_REFLECT_NOTIFY                   = WM_REFLECT + WM_NOTIFY,
-            OCM_COMMAND                         = OCM__BASE + WM_COMMAND,
-            OCM_CTLCOLORBTN                     = OCM__BASE + WM_CTLCOLORBTN,
-            OCM_CTLCOLOREDIT                    = OCM__BASE + WM_CTLCOLOREDIT,
-            OCM_CTLCOLORDLG                     = OCM__BASE + WM_CTLCOLORDLG,
-            OCM_CTLCOLORLISTBOX                 = OCM__BASE + WM_CTLCOLORLISTBOX,
-            OCM_CTLCOLORMSGBOX                  = OCM__BASE + WM_CTLCOLORMSGBOX,
-            OCM_CTLCOLORSCROLLBAR               = OCM__BASE + WM_CTLCOLORSCROLLBAR,
-            OCM_CTLCOLORSTATIC                  = OCM__BASE + WM_CTLCOLORSTATIC,
-            OCM_DRAWITEM                        = OCM__BASE + WM_DRAWITEM,
-            OCM_MEASUREITEM                     = OCM__BASE + WM_MEASUREITEM,
-            OCM_DELETEITEM                      = OCM__BASE + WM_DELETEITEM,
-            OCM_VKEYTOITEM                      = OCM__BASE + WM_VKEYTOITEM,
-            OCM_CHARTOITEM                      = OCM__BASE + WM_CHARTOITEM,
-            OCM_COMPAREITEM                     = OCM__BASE + WM_COMPAREITEM,
-            OCM_HSCROLL                         = OCM__BASE + WM_HSCROLL,
-            OCM_VSCROLL                         = OCM__BASE + WM_VSCROLL,
-            OCM_PARENTNOTIFY                    = OCM__BASE + WM_PARENTNOTIFY
-            // OCM_NOTIFY            (OCM__BASE + WM_NOTIFY)
         }
     }
 }
