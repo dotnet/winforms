@@ -28,7 +28,7 @@ internal partial class Interop
             [PreserveSig]
             HRESULT GetIDsOfNames(
                 Guid* riid,
-                [MarshalAs(UnmanagedType.LPArray)] string[] rgszNames,
+                [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.LPWStr)] string[] rgszNames,
                 uint cNames,
                 uint lcid,
                 Ole32.DispatchID* rgDispId);

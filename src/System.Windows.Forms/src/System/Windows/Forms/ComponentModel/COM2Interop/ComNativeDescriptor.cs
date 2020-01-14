@@ -95,28 +95,12 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
             if (pTypeInfo == null)
             {
-                return "";
+                return string.Empty;
             }
 
-            if (pTypeInfo != null)
-            {
-                string desc = null;
-                try
-                {
-                    pTypeInfo.GetDocumentation(Ole32.DispatchID.MEMBERID_NIL, ref name, ref desc, null, null);
-
-                    // strip the leading underscores
-                    while (name != null && name.Length > 0 && name[0] == '_')
-                    {
-                        name = name.Substring(1);
-                    }
-                    return name;
-                }
-                catch
-                {
-                }
-            }
-            return "";
+            using var nameBstr = new BSTR();
+            pTypeInfo.GetDocumentation(Ole32.DispatchID.MEMBERID_NIL, &nameBstr, null, null, null);
+            return nameBstr.String.TrimStart('_').ToString();
         }
 
         internal TypeConverter GetConverter(object component)

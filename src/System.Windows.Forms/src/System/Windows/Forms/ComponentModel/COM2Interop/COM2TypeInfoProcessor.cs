@@ -507,25 +507,25 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
         private unsafe static PropInfo ProcessDataCore(Oleaut32.ITypeInfo typeInfo, IDictionary propInfoList, Ole32.DispatchID dispid, Ole32.DispatchID nameDispID, in Ole32.TYPEDESC typeDesc, Ole32.VARFLAGS flags)
         {
-            string pPropName = null;
-            string pPropDesc = null;
-
             // get the name and the helpstring
-            HRESULT hr = typeInfo.GetDocumentation(dispid, ref pPropName, ref pPropDesc, null, null);
+            using var nameBstr = new BSTR();
+            using var helpStringBstr = new BSTR();
+            HRESULT hr = typeInfo.GetDocumentation(dispid, &nameBstr, &helpStringBstr, null, null);
             ComNativeDescriptor cnd = ComNativeDescriptor.Instance;
             if (!hr.Succeeded())
             {
                 throw new COMException(string.Format(SR.TYPEINFOPROCESSORGetDocumentationFailed, dispid, hr, cnd.GetClassName(typeInfo)), (int)hr);
             }
 
-            if (pPropName == null)
+            string name = nameBstr.String.ToString();
+            if (string.IsNullOrEmpty(name))
             {
                 Debug.Fail(string.Format(CultureInfo.CurrentCulture, "ITypeInfo::GetDocumentation didn't return a name for DISPID 0x{0:X} but returned SUCEEDED(hr),  Component=" + cnd.GetClassName(typeInfo), dispid));
                 return null;
             }
 
             // now we can create our struct... make sure we don't already have one
-            PropInfo pi = (PropInfo)propInfoList[pPropName];
+            PropInfo pi = (PropInfo)propInfoList[name];
 
             if (pi == null)
             {
@@ -533,15 +533,16 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 {
                     Index = propInfoList.Count
                 };
-                propInfoList[pPropName] = pi;
-                pi.Name = pPropName;
+                propInfoList[name] = pi;
+                pi.Name = name;
                 pi.DispId = dispid;
                 pi.Attributes.Add(new DispIdAttribute((int)pi.DispId));
             }
 
-            if (pPropDesc != null)
+            string helpString = helpStringBstr.String.ToString();
+            if (!string.IsNullOrEmpty(helpString))
             {
-                pi.Attributes.Add(new DescriptionAttribute(pPropDesc));
+                pi.Attributes.Add(new DescriptionAttribute(helpString));
             }
 
             // figure out the value type
@@ -733,11 +734,10 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     ArrayList vars = new ArrayList();
 
                     object varValue = null;
-                    string enumName = null;
-                    string name = null;
-                    string helpstr = null;
 
-                    enumTypeInfo.GetDocumentation(Ole32.DispatchID.MEMBERID_NIL, ref enumName, ref helpstr, null, null);
+                    using var enumNameBstr = new BSTR();
+                    using var enumHelpStringBstr = new BSTR();
+                    enumTypeInfo.GetDocumentation(Ole32.DispatchID.MEMBERID_NIL, &enumNameBstr, &enumHelpStringBstr, null, null);
 
                     // For each item in the enum type info, we just need it's name and value and
                     // helpstring if it's there.
@@ -758,18 +758,21 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                                 continue;
                             }
 
-                            name = helpstr = null;
                             varValue = null;
 
                             // get the name and the helpstring
-                            hr = enumTypeInfo.GetDocumentation(pVarDesc->memid, ref name, ref helpstr, null, null);
+                            using var nameBstr = new BSTR();
+                            using var helpBstr = new BSTR();
+                            hr = enumTypeInfo.GetDocumentation(pVarDesc->memid, &nameBstr, &helpBstr, null, null);
                             if (!hr.Succeeded())
                             {
                                 Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "ProcessTypeInfoEnum: ignoring item 0x{0:X} because ITypeInfo::GetDocumentation returned hr=0x{1:X} or NULL", i, hr));
                                 continue;
                             }
 
-                            Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, "ProcessTypeInfoEnum got name=" + (name ?? "(null)") + ", helpstring=" + (helpstr ?? "(null)"));
+                            string name = nameBstr.String.ToString();
+                            string helpString = helpBstr.String.ToString();
+                            Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, "ProcessTypeInfoEnum got name=" + (name ?? "(null)") + ", helpstring=" + (helpString ?? "(null)"));
 
                             // get the value
                             try
@@ -786,9 +789,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
                             // if we have a helpstring, use it, otherwise use name
                             string nameString;
-                            if (helpstr != null)
+                            if (!string.IsNullOrEmpty(helpString))
                             {
-                                nameString = helpstr;
+                                nameString = helpString;
                             }
                             else
                             {
@@ -814,7 +817,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
                         try
                         {
-                            enumName = pTypeInfoUnk.ToString() + "_" + enumName;
+                            string enumName = pTypeInfoUnk.ToString() + "_" + enumNameBstr.String.ToString();
 
                             if (builtEnums == null)
                             {

@@ -39,7 +39,7 @@ internal static partial class Interop
             [PreserveSig]
             HRESULT GetNames(
                 Ole32.DispatchID memid,
-                [Out, MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.BStr)] string[] rgBstrNames,
+                BSTR* rgBstrNames,
                 uint cMaxNames,
                 uint* pcNames);
 
@@ -55,7 +55,7 @@ internal static partial class Interop
 
             [PreserveSig]
             HRESULT GetIDsOfNames(
-                [MarshalAs(UnmanagedType.LPArray)] string[] rgszNames,
+                [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.LPWStr)] string[] rgszNames,
                 uint cNames,
                 Ole32.DispatchID* pMemId);
 
@@ -72,17 +72,17 @@ internal static partial class Interop
             [PreserveSig]
             HRESULT GetDocumentation(
                 Ole32.DispatchID memid,
-                ref string pBstrName,
-                ref string pBstrDocString,
+                BSTR* pBstrName,
+                BSTR* pBstrDocString,
                 uint* pdwHelpContext,
-                [Out, MarshalAs(UnmanagedType.LPArray)] string[] pBstrHelpFile);
+                BSTR* pBstrHelpFile);
 
             [PreserveSig]
             HRESULT GetDllEntry(
                 Ole32.DispatchID memid,
                 Ole32.INVOKEKIND invkind,
-                [Out, MarshalAs(UnmanagedType.LPArray)] string[] pBstrDllName,
-                [Out, MarshalAs(UnmanagedType.LPArray)] string[] pBstrName,
+                BSTR* pBstrDllName,
+                BSTR* pBstrName,
                 ushort* pwOrdinal);
 
             [PreserveSig]
@@ -105,7 +105,7 @@ internal static partial class Interop
             [PreserveSig]
             HRESULT GetMops(
                 Ole32.DispatchID memid,
-                [Out, MarshalAs(UnmanagedType.LPArray)] string[] pBstrMops);
+                BSTR* pBstrMops);
 
             /// <remarks>
             /// This method is unused so we do not define the interface ITypeLib

@@ -348,8 +348,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         }
 
         /// <summary>
-        ///  Gets a list of version longs for each type info in the COM object
-        ///  representing hte current version stamp, function and variable count.
+        ///  Gets a list of version longs for each type info in the COM object representing the
+        ///  current version stamp, function and variable count.
         ///  If any of these things change, we'll re-fetch the properties.
         /// </summary>
         private (ushort, ushort, ushort, ushort)[] GetTypeInfoVersions(object comObject)
