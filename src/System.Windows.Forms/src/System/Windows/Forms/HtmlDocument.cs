@@ -425,7 +425,7 @@ namespace System.Windows.Forms
             };
             try
             {
-                if (NativeHtmlDocument2.GetScript() is UnsafeNativeMethods.IDispatch scriptObject)
+                if (NativeHtmlDocument2.GetScript() is Oleaut32.IDispatch scriptObject)
                 {
                     Guid g = Guid.Empty;
                     string[] names = new string[] { scriptName };

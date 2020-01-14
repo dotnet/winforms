@@ -747,7 +747,7 @@ namespace System.Windows.Forms
             [PreserveSig]
             HRESULT GetInfoOfIndex(int iti, int dwFlags,
                                 [In, Out]
-                                ref UnsafeNativeMethods.ITypeInfo pTypeInfo,
+                                ref Oleaut32.ITypeInfo pTypeInfo,
                                 int pTIFlags,
                                 int pcdispidReserved,
                                 IntPtr piidPrimary,
@@ -760,7 +760,7 @@ namespace System.Windows.Forms
         public interface IProvideClassInfo
         {
             [PreserveSig]
-            HRESULT GetClassInfo(out UnsafeNativeMethods.ITypeInfo ppTI);
+            HRESULT GetClassInfo(out Oleaut32.ITypeInfo ppTI);
         }
 
         /// <summary>

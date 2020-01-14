@@ -78,7 +78,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
                 if (sender.CanShow && validPropPage)
                 {
-                    if (typeof(UnsafeNativeMethods.IDispatch).IsAssignableFrom(sender.PropertyType))
+                    if (typeof(Oleaut32.IDispatch).IsAssignableFrom(sender.PropertyType))
                     {
                         attrEvent.Add(BrowsableAttribute.Yes);
                     }

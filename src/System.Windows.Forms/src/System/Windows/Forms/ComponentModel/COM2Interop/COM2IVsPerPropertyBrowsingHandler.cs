@@ -113,7 +113,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 }
 
                 // should we show this
-                if (typeof(UnsafeNativeMethods.IDispatch).IsAssignableFrom(sender.PropertyType) && sender.CanShow)
+                if (typeof(Oleaut32.IDispatch).IsAssignableFrom(sender.PropertyType) && sender.CanShow)
                 {
                     BOOL pfDisplay = BOOL.FALSE;
                     hr = vsObj.DisplayChildProperties(sender.DISPID, &pfDisplay);
@@ -185,7 +185,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             if (sender.TargetObject is VSSDK.IVsPerPropertyBrowsing)
             {
                 // we only do this for IDispatch types
-                if (sender.CanShow && typeof(UnsafeNativeMethods.IDispatch).IsAssignableFrom(sender.PropertyType))
+                if (sender.CanShow && typeof(Oleaut32.IDispatch).IsAssignableFrom(sender.PropertyType))
                 {
                     VSSDK.IVsPerPropertyBrowsing vsObj = (VSSDK.IVsPerPropertyBrowsing)sender.TargetObject;
 

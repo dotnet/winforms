@@ -76,7 +76,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             return new ComTypeDescriptor(this, instance);
         }
 
-        internal string GetClassName(object component)
+        internal unsafe string GetClassName(object component)
         {
             string name = null;
 
@@ -91,7 +91,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 // otherwise fall through...
             }
 
-            UnsafeNativeMethods.ITypeInfo pTypeInfo = Com2TypeInfoProcessor.FindTypeInfo(component, true);
+            Oleaut32.ITypeInfo pTypeInfo = Com2TypeInfoProcessor.FindTypeInfo(component, true);
 
             if (pTypeInfo == null)
             {
@@ -131,12 +131,12 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
         internal string GetName(object component)
         {
-            if (!(component is UnsafeNativeMethods.IDispatch))
+            if (!(component is Oleaut32.IDispatch))
             {
                 return "";
             }
 
-            Ole32.DispatchID dispid = Com2TypeInfoProcessor.GetNameDispId((UnsafeNativeMethods.IDispatch)component);
+            Ole32.DispatchID dispid = Com2TypeInfoProcessor.GetNameDispId((Oleaut32.IDispatch)component);
             if (dispid != Ole32.DispatchID.UNKNOWN)
             {
                 bool success = false;
@@ -153,12 +153,11 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
         internal unsafe object GetPropertyValue(object component, string propertyName, ref bool succeeded)
         {
-            if (!(component is UnsafeNativeMethods.IDispatch))
+            if (!(component is Oleaut32.IDispatch iDispatch))
             {
                 return null;
             }
 
-            UnsafeNativeMethods.IDispatch iDispatch = (UnsafeNativeMethods.IDispatch)component;
             string[] names = new string[] { propertyName };
             Ole32.DispatchID dispid = Ole32.DispatchID.UNKNOWN;
             Guid g = Guid.Empty;
@@ -180,7 +179,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
         internal object GetPropertyValue(object component, Ole32.DispatchID dispid, ref bool succeeded)
         {
-            if (!(component is UnsafeNativeMethods.IDispatch))
+            if (!(component is Oleaut32.IDispatch))
             {
                 return null;
             }
@@ -199,12 +198,11 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
         internal unsafe HRESULT GetPropertyValue(object component, Ole32.DispatchID dispid, object[] retval)
         {
-            if (!(component is UnsafeNativeMethods.IDispatch))
+            if (!(component is Oleaut32.IDispatch iDispatch))
             {
                 return HRESULT.E_NOINTERFACE;
             }
 
-            UnsafeNativeMethods.IDispatch iDispatch = (UnsafeNativeMethods.IDispatch)component;
             try
             {
                 Guid g = Guid.Empty;
@@ -251,7 +249,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 return false;
             }
 
-            return dispid == Com2TypeInfoProcessor.GetNameDispId((UnsafeNativeMethods.IDispatch)obj);
+            return dispid == Com2TypeInfoProcessor.GetNameDispId((Oleaut32.IDispatch)obj);
         }
 
         /// <summary>

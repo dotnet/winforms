@@ -193,7 +193,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 }
             }
 
-            if (canShow && (propType == typeof(object) || (valueConverter == null && propType == typeof(UnsafeNativeMethods.IDispatch))))
+            if (canShow && (propType == typeof(object) || (valueConverter == null && propType == typeof(Oleaut32.IDispatch))))
             {
                 typeHide = true;
             }
@@ -366,13 +366,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// <summary>
         ///  Retrieves the type of the component this PropertyDescriptor is bound to.
         /// </summary>
-        public override Type ComponentType
-        {
-            get
-            {
-                return typeof(UnsafeNativeMethods.IDispatch);
-            }
-        }
+        public override Type ComponentType => typeof(Oleaut32.IDispatch);
 
         /// <summary>
         ///  Retrieves the type converter for this property.
@@ -774,7 +768,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 // we don't want to create the value editor for the IDispatch props because
                 // that will create the reference editor.  We don't want that guy!
                 //
-                if (!typeof(UnsafeNativeMethods.IDispatch).IsAssignableFrom(PropertyType))
+                if (!typeof(Oleaut32.IDispatch).IsAssignableFrom(PropertyType))
                 {
                     localConverter = base.Converter;
                 }
@@ -899,12 +893,12 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 component = ((ICustomTypeDescriptor)component).GetPropertyOwner(this);
             }
 
-            if (component == null || !Marshal.IsComObject(component) || !(component is UnsafeNativeMethods.IDispatch))
+            if (component == null || !Marshal.IsComObject(component) || !(component is Oleaut32.IDispatch))
             {
                 return null;
             }
 
-            UnsafeNativeMethods.IDispatch pDisp = (UnsafeNativeMethods.IDispatch)component;
+            Oleaut32.IDispatch pDisp = (Oleaut32.IDispatch)component;
             object[] pVarResult = new object[1];
             var pExcepInfo = new Ole32.EXCEPINFO();
             var dispParams = new Ole32.DISPPARAMS();
@@ -1268,7 +1262,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 owner = ((ICustomTypeDescriptor)owner).GetPropertyOwner(this);
             }
 
-            if (owner == null || !Marshal.IsComObject(owner) || !(owner is UnsafeNativeMethods.IDispatch))
+            if (owner == null || !Marshal.IsComObject(owner) || !(owner is Oleaut32.IDispatch))
             {
                 return;
             }
@@ -1284,7 +1278,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 }
             }
 
-            UnsafeNativeMethods.IDispatch pDisp = (UnsafeNativeMethods.IDispatch)owner;
+            Oleaut32.IDispatch pDisp = (Oleaut32.IDispatch)owner;
 
             var excepInfo = new Ole32.EXCEPINFO();
             var dispParams = new Ole32.DISPPARAMS();
@@ -1305,7 +1299,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 try
                 {
                     Guid g = Guid.Empty;
-                    IntPtr pArgError = IntPtr.Zero;
+                    uint pArgError = 0;
                     HRESULT hr = pDisp.Invoke(
                         dispid,
                         &g,
@@ -1340,7 +1334,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                         default:
                             if (pDisp is Oleaut32.ISupportErrorInfo iSupportErrorInfo)
                             {
-                                g = typeof(UnsafeNativeMethods.IDispatch).GUID;
+                                g = typeof(Oleaut32.IDispatch).GUID;
                                 if (iSupportErrorInfo.InterfaceSupportsErrorInfo(&g) == HRESULT.S_OK)
                                 {
                                     Oleaut32.IErrorInfo pErrorInfo = null;
