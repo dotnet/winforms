@@ -2179,7 +2179,7 @@ namespace System.Windows.Forms.Design
                     }
                     break;
                 default:
-                    if (m.Msg == (int)NativeMethods.WM_MOUSEENTER)
+                    if (m.Msg == (int)User32.RegisteredMessage.WM_MOUSEENTER)
                     {
                         OnMouseEnter();
                         BaseWndProc(ref m);

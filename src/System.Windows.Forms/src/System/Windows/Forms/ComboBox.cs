@@ -4001,7 +4001,7 @@ namespace System.Windows.Forms
                     break;
 
                 default:
-                    if (m.Msg == (int)NativeMethods.WM_MOUSEENTER)
+                    if (m.Msg == (int)User32.RegisteredMessage.WM_MOUSEENTER)
                     {
                         DefWndProc(ref m);
                         OnMouseEnterInternal(EventArgs.Empty);
