@@ -6078,7 +6078,7 @@ namespace System.Windows.Forms
                 Debug.Assert(!ACWindows.ContainsKey(acHandle));
                 AssignHandle(acHandle);
                 ACWindows.Add(acHandle, this);
-                EnumChildWindows(new HandleRef(this, acHandle), 
+                EnumChildWindows(new HandleRef(this, acHandle),
                     ACNativeWindow.RegisterACWindowRecursive);
             }
 
