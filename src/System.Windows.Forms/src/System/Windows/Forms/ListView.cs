@@ -79,8 +79,6 @@ namespace System.Windows.Forms
         private const int LISTVIEWSTATE_doubleclickFired = 0x00040000;
         private const int LISTVIEWSTATE_mouseUpFired = 0x00080000;
         private const int LISTVIEWSTATE_expectingMouseUp = 0x00100000;
-        private const int LISTVIEWSTATE_comctlSupportsVisualStyles = 0x00200000;
-        private const int LISTVIEWSTATE_comctlSupportsVisualStylesTested = 0x00400000;
         private const int LISTVIEWSTATE_showGroups = 0x00800000;
         private const int LISTVIEWSTATE_handleDestroyed = 0x01000000; // while we are recreating the handle we want to know if we can still get data from the handle
         private const int LISTVIEWSTATE_virtualMode = 0x02000000;
@@ -669,24 +667,6 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Actually we are using this to indicate whether ComCtl supports
-        ///  the new listview features. This is true for ComCtl 6 and above, same as
-        ///  the versions that support visual styles.
-        /// </summary>
-        private bool ComctlSupportsVisualStyles
-        {
-            get
-            {
-                if (!listViewState[LISTVIEWSTATE_comctlSupportsVisualStylesTested])
-                {
-                    listViewState[LISTVIEWSTATE_comctlSupportsVisualStylesTested] = true;
-                    listViewState[LISTVIEWSTATE_comctlSupportsVisualStyles] = Application.ComCtlSupportsVisualStyles;
-                }
-                return listViewState[LISTVIEWSTATE_comctlSupportsVisualStyles];
-            }
-        }
-
-        /// <summary>
         ///  Computes the handle creation parameters for the ListView control.
         /// </summary>
         protected override CreateParams CreateParams
@@ -910,7 +890,7 @@ namespace System.Windows.Forms
             {
                 // it never hurts to check that our house is in order
                 Debug.Assert(!listViewState[LISTVIEWSTATE_flipViewToLargeIconAndSmallIcon] || View == View.SmallIcon, "we need this bit only in SmallIcon view");
-                Debug.Assert(!listViewState[LISTVIEWSTATE_flipViewToLargeIconAndSmallIcon] || ComctlSupportsVisualStyles, "we need this bit only when loading ComCtl 6.0");
+                Debug.Assert(!listViewState[LISTVIEWSTATE_flipViewToLargeIconAndSmallIcon] || Application.ComCtlSupportsVisualStyles, "we need this bit only when loading ComCtl 6.0");
 
                 return listViewState[LISTVIEWSTATE_flipViewToLargeIconAndSmallIcon];
             }
@@ -918,7 +898,7 @@ namespace System.Windows.Forms
             {
                 // it never hurts to check that our house is in order
                 Debug.Assert(!value || View == View.SmallIcon, "we need this bit only in SmallIcon view");
-                Debug.Assert(!value || ComctlSupportsVisualStyles, "we need this bit only when loading ComCtl 6.0");
+                Debug.Assert(!value || Application.ComCtlSupportsVisualStyles, "we need this bit only when loading ComCtl 6.0");
 
                 listViewState[LISTVIEWSTATE_flipViewToLargeIconAndSmallIcon] = value;
             }
@@ -1005,7 +985,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return ShowGroups && groups != null && groups.Count > 0 && ComctlSupportsVisualStyles && !VirtualMode;
+                return ShowGroups && groups != null && groups.Count > 0 && Application.ComCtlSupportsVisualStyles && !VirtualMode;
             }
         }
 
@@ -1948,7 +1928,7 @@ namespace System.Windows.Forms
                 if (viewStyle != value)
                 {
                     viewStyle = value;
-                    if (IsHandleCreated && ComctlSupportsVisualStyles)
+                    if (IsHandleCreated && Application.ComCtlSupportsVisualStyles)
                     {
                         SendMessage((int)LVM.SETVIEW, (int)viewStyle, 0);
                         UpdateGroupView();
@@ -2454,7 +2434,7 @@ namespace System.Windows.Forms
 
         private unsafe int CompensateColumnHeaderResize(Message m, bool columnResizeCancelled)
         {
-            if (ComctlSupportsVisualStyles &&
+            if (Application.ComCtlSupportsVisualStyles &&
                 View == View.Details &&
                 !columnResizeCancelled &&
                 Items.Count > 0)
@@ -2480,7 +2460,7 @@ namespace System.Windows.Forms
             //  2. Otherwise, we need to add 18 pixels.
             // If the list view does not have a small image list then we need to add 2 pixels.
 
-            if (ComctlSupportsVisualStyles &&
+            if (Application.ComCtlSupportsVisualStyles &&
                 View == View.Details &&
                 !columnResizeCancelled &&
                 Items.Count > 0)
@@ -3112,7 +3092,7 @@ namespace System.Windows.Forms
 
         private void EnsureDefaultGroup()
         {
-            if (IsHandleCreated && ComctlSupportsVisualStyles && GroupsEnabled)
+            if (IsHandleCreated && Application.ComCtlSupportsVisualStyles && GroupsEnabled)
             {
                 if (SendMessage((int)LVM.HASGROUP, DefaultGroup.ID, 0) == IntPtr.Zero)
                 {
@@ -3914,7 +3894,7 @@ namespace System.Windows.Forms
                 return;
             }
 
-            if (IsHandleCreated && Items.Count == 0 && View == View.SmallIcon && ComctlSupportsVisualStyles)
+            if (IsHandleCreated && Items.Count == 0 && View == View.SmallIcon && Application.ComCtlSupportsVisualStyles)
             {
                 FlipViewToLargeIconAndSmallIcon = true;
             }
@@ -4407,9 +4387,6 @@ namespace System.Windows.Forms
 
         protected override void OnHandleCreated(EventArgs e)
         {
-            // uncache the "ComctlSupportsVisualStyles" property on a handle creation
-            listViewState[LISTVIEWSTATE_comctlSupportsVisualStylesTested] = false;
-
             // don't persist flipViewToLargeIconAndSmallIcon accross handle recreations...
             FlipViewToLargeIconAndSmallIcon = false;
 
@@ -4450,7 +4427,7 @@ namespace System.Windows.Forms
                 UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)LVM.SETCALLBACKMASK, (int)callbackMask, 0);
             }
 
-            if (ComctlSupportsVisualStyles)
+            if (Application.ComCtlSupportsVisualStyles)
             {
                 SendMessage((int)LVM.SETVIEW, (int)viewStyle, 0);
                 UpdateGroupView();
@@ -4521,7 +4498,7 @@ namespace System.Windows.Forms
             {
                 Sort();
             }
-            if (ComctlSupportsVisualStyles && (InsertionMark.Index > 0))
+            if (Application.ComCtlSupportsVisualStyles && (InsertionMark.Index > 0))
             {
                 InsertionMark.UpdateListView();
             }
@@ -5515,7 +5492,7 @@ namespace System.Windows.Forms
         //
         internal void UpdateGroupView()
         {
-            if (IsHandleCreated && ComctlSupportsVisualStyles && !VirtualMode)
+            if (IsHandleCreated && Application.ComCtlSupportsVisualStyles && !VirtualMode)
             {
                 int retval = unchecked((int)(long)SendMessage((int)LVM.ENABLEGROUPVIEW, GroupsEnabled ? 1 : 0, 0));
                 Debug.Assert(retval != -1, "Error enabling group view");
@@ -5525,7 +5502,7 @@ namespace System.Windows.Forms
         // updates the win32 list view w/ our tile info - columns + tile size
         private unsafe void UpdateTileView()
         {
-            Debug.Assert(ComctlSupportsVisualStyles, "this function works only when ComCtl 6.0 and higher is loaded");
+            Debug.Assert(Application.ComCtlSupportsVisualStyles, "this function works only when ComCtl 6.0 and higher is loaded");
             Debug.Assert(viewStyle == View.Tile, "this function should be called only in Tile view");
 
             var tileViewInfo = new LVTILEVIEWINFO
@@ -6578,7 +6555,7 @@ namespace System.Windows.Forms
                     WmPrint(ref m);
                     break;
                 case WindowMessages.WM_TIMER:
-                    if (unchecked((int)(long)m.WParam) != LVTOOLTIPTRACKING || !ComctlSupportsVisualStyles)
+                    if (unchecked((int)(long)m.WParam) != LVTOOLTIPTRACKING || !Application.ComCtlSupportsVisualStyles)
                     {
                         base.WndProc(ref m);
                     }
@@ -9321,7 +9298,7 @@ namespace System.Windows.Forms
                         //
                         if (owner.View == View.SmallIcon)
                         {
-                            if (owner.ComctlSupportsVisualStyles)
+                            if (Application.ComCtlSupportsVisualStyles)
                             {
                                 owner.FlipViewToLargeIconAndSmallIcon = true;
                             }
