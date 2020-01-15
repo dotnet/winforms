@@ -400,7 +400,6 @@ namespace System.Windows.Forms
             }
         }
 
-
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         public new bool Visible
@@ -570,7 +569,6 @@ namespace System.Windows.Forms
                 }
 
                 KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(this);
-                // ToolTip.Hide(this);
                 _leaveFired = false;
             }
         }
