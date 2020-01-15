@@ -17,9 +17,8 @@
       Disable warnings for XML comments with outright errors.
 
       CS0419: Ambiguous reference in cref attribute
-      CS1734: XML comment on 'type_or_member' has a paramref tag for 'parameter', but there is no parameter by that name
     -->
-    <NoWarn>$(NoWarn),419,1734</NoWarn>
+    <NoWarn>$(NoWarn),419</NoWarn>
   </PropertyGroup>
 
 </Project>

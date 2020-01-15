@@ -147,7 +147,7 @@ namespace System.Windows.Forms.Design.Behavior
         /// </exception>
         /// <exception cref='ArgumentNullException'><paramref name='array' /> is <see langword='null' />. </exception>
         /// <exception cref='ArgumentOutOfRangeException'>
-        ///  <paramref name='arrayIndex' /> is less than
+        ///  <paramref name='index' /> is less than
         ///  <paramref name='array' />'s lowbound.
         /// </exception>
         /// <seealso cref='Array' />
