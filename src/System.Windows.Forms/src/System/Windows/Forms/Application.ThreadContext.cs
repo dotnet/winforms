@@ -107,7 +107,11 @@ namespace System.Windows.Forms
                 _id = Kernel32.GetCurrentThreadId();
                 _messageLoopCount = 0;
                 t_currentThreadContext = this;
-                s_contextHash[_id] = this;
+
+                lock (s_tcInternalSyncObject)
+                {
+                    s_contextHash[_id] = this;
+                }
             }
 
             public ApplicationContext ApplicationContext { get; private set; }
