@@ -1381,6 +1381,11 @@ namespace System.Windows.Forms
             {
                 SelectedTab.FireEnter(e);
             }
+
+            if (TabPages.Count == 0 && Enabled)
+            {
+                KeyboardToolTipStateMachine.Instance.NotifyAboutGotFocus(this);
+            }
         }
 
         /// <summary>
@@ -1403,6 +1408,8 @@ namespace System.Windows.Forms
             {
                 SelectedTab.FireLeave(e);
             }
+
+            KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(this);
             base.OnLeave(e);
         }
 

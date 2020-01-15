@@ -10,6 +10,7 @@ using System.Drawing;
 using System.Drawing.Design;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -365,6 +366,9 @@ namespace System.Windows.Forms
                     value = string.Empty;
                 }
 
+                ToolTip.SetToolTip(this, value);
+                SetToolTipNative(ToolTip, ToolTipText);
+
                 if (value == _toolTipText)
                 {
                     return;
@@ -372,8 +376,30 @@ namespace System.Windows.Forms
 
                 _toolTipText = value;
                 UpdateParent();
+
+                KeyboardToolTipStateMachine.Instance.Hook(this, ToolTip);
             }
         }
+
+        private protected override bool IsHoveredWithMouse
+        {
+            get
+            {
+                if (Parent is TabControl tabControl)
+                {
+                    for (int i = 0; i < tabControl.TabCount; i++)
+                    {
+                        if (GetItemRectangle(i).Contains(MousePosition))
+                        {
+                            return true;
+                        }
+                    }
+                }
+
+                return ParentInternal.RectangleToScreen(ClientRectangle).Contains(MousePosition);
+            }
+        }
+
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -461,6 +487,66 @@ namespace System.Windows.Forms
                 }
 
                 _enterFired = false;
+                KeyboardToolTipStateMachine.Instance.NotifyAboutGotFocus(this);
+            }
+        }
+
+        internal override Rectangle GetToolNativeScreenRectangle()
+        {
+            if (ParentInternal is TabControl tabControl)
+            {
+                return GetItemRectangle(tabControl.SelectedIndex);
+            }
+
+            return Rectangle.Empty;
+        }
+
+        private Rectangle GetItemRectangle(int index)
+        {
+            if (index < 0)
+            {
+                return Rectangle.Empty;
+            }
+
+            RECT rectangle = new RECT();
+            UnsafeNativeMethods.SendMessage(new HandleRef(Parent, Parent.Handle), (int)ComCtl32.TCM.GETITEMRECT, index, ref rectangle);
+            return ParentInternal.RectangleToScreen(rectangle);
+        }
+
+        /// <summary>
+        ///  Called by ToolTip to poke in that Tooltip into this ComCtl so that the Native ChildToolTip is not exposed.
+        /// </summary>
+        internal void SetToolTipNative(ToolTip toolTip)
+        {
+            UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)ComCtl32.TCM.SETTOOLTIPS, new HandleRef(toolTip, toolTip.Handle), 0);
+        }
+
+        internal void SetToolTip(ToolTip tooltip, string text)
+        {
+            if (ToolTip != tooltip)
+            {
+                ToolTip.SetToolTip(this, null);
+                ToolTip = tooltip;
+                ToolTipText = text;
+            }
+        }
+
+        ToolTip _toolTip;
+
+        internal ToolTip ToolTip
+        {
+            get
+            {
+                if (_toolTip == null)
+                {
+                    _toolTip = new ToolTip();
+                }
+
+                return _toolTip;
+            }
+            set
+            {
+                _toolTip = value;
             }
         }
 
@@ -483,6 +569,8 @@ namespace System.Windows.Forms
                     base.OnLeave(e);
                 }
 
+                KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(this);
+                // ToolTip.Hide(this);
                 _leaveFired = false;
             }
         }

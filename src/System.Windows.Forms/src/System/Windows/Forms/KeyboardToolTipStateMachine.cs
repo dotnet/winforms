@@ -57,29 +57,47 @@ namespace System.Windows.Forms
         }
 
         private SmState Transition(IKeyboardToolTip tool, ToolTip tooltip, SmEvent @event)
-            => (_currentState, @event) switch
+        {
+            switch (_currentState, @event)
             {
-                (SmState.Hidden, SmEvent.FocusedTool) => SetupInitShowTimer(tool, tooltip),
-                (SmState.Hidden, SmEvent.LeftTool) => _currentState, // OK
-                (SmState.ReadyForInitShow, SmEvent.FocusedTool) => _currentState, // unlikely: focus without leave
-                (SmState.ReadyForInitShow, SmEvent.LeftTool) => FullFsmReset(),
-                (SmState.ReadyForInitShow, SmEvent.InitialDelayTimerExpired) => ShowToolTip(tool, tooltip),
+                case (SmState.Hidden, SmEvent.FocusedTool):
+                    return SetupInitShowTimer(tool, tooltip);
+                case (SmState.Hidden, SmEvent.LeftTool):
+                    return _currentState; // OK
 
-                (SmState.Shown, SmEvent.FocusedTool) => _currentState, // unlikely: focus without leave
-                (SmState.Shown, SmEvent.LeftTool) => HideAndStartWaitingForRefocus(tool, tooltip),
-                (SmState.Shown, SmEvent.AutoPopupDelayTimerExpired) => FullFsmReset(),
+                case (SmState.ReadyForInitShow, SmEvent.FocusedTool):
+                    return _currentState; // unlikely: focus without leave
+                case (SmState.ReadyForInitShow, SmEvent.LeftTool):
+                    return FullFsmReset();
+                case (SmState.ReadyForInitShow, SmEvent.InitialDelayTimerExpired):
+                    return ShowToolTip(tool, tooltip);
 
-                (SmState.WaitForRefocus, SmEvent.FocusedTool) => SetupReshowTimer(tool, tooltip),
-                (SmState.WaitForRefocus, SmEvent.LeftTool) => _currentState, // OK
-                (SmState.WaitForRefocus, SmEvent.RefocusWaitDelayExpired) => FullFsmReset(),
+                case (SmState.Shown, SmEvent.FocusedTool):
+                    return _currentState; // unlikely: focus without leave
+                case (SmState.Shown, SmEvent.LeftTool):
+                    return HideAndStartWaitingForRefocus(tool, tooltip);
+                case (SmState.Shown, SmEvent.AutoPopupDelayTimerExpired):
+                    return FullFsmReset();
 
-                (SmState.ReadyForReshow, SmEvent.FocusedTool) => _currentState, // unlikely: focus without leave
-                (SmState.ReadyForReshow, SmEvent.LeftTool) => StartWaitingForRefocus(tool),
-                (SmState.ReadyForReshow, SmEvent.ReshowDelayTimerExpired) => ShowToolTip(tool, tooltip),
+                case (SmState.WaitForRefocus, SmEvent.FocusedTool):
+                    return SetupReshowTimer(tool, tooltip);
+                case (SmState.WaitForRefocus, SmEvent.LeftTool):
+                    return _currentState; // OK
+                case (SmState.WaitForRefocus, SmEvent.RefocusWaitDelayExpired):
+                    return FullFsmReset();
+
+                case (SmState.ReadyForReshow, SmEvent.FocusedTool):
+                    return _currentState; // unlikely: focus without leave
+                case (SmState.ReadyForReshow, SmEvent.LeftTool):
+                    return StartWaitingForRefocus(tool);
+                case (SmState.ReadyForReshow, SmEvent.ReshowDelayTimerExpired):
+                    return ShowToolTip(tool, tooltip);
 
                 // This is what we would have thrown historically
-                (_, _) => throw new KeyNotFoundException()
-            };
+                default:
+                    throw new KeyNotFoundException();
+            }
+        }
 
         public void ResetStateMachine(ToolTip toolTip)
         {

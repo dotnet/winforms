@@ -132,5 +132,10 @@ namespace WinformsControlsTest
         {
             new FormBorderStyles().Show();
         }
+
+        private void tabControlButton_Click(object sender, EventArgs e)
+        {
+            new TabControlTest().Show();
+        }
     }
 }

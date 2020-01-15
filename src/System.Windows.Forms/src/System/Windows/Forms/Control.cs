@@ -14149,8 +14149,10 @@ namespace System.Windows.Forms
 
         bool IKeyboardToolTip.IsHoveredWithMouse()
         {
-            return ClientRectangle.Contains(PointToClient(MousePosition));
+            return IsHoveredWithMouse;
         }
+
+        private protected virtual bool IsHoveredWithMouse => ClientRectangle.Contains(PointToClient(MousePosition));
 
         bool IKeyboardToolTip.HasRtlModeEnabled()
         {

@@ -682,6 +682,14 @@ namespace System.Windows.Forms
             }
         }
 
+        private void CheckNativeCompositeControls(Control associatedControl, string text)
+        {
+            if (associatedControl is TabPage tabPage && this != tabPage.ToolTip)
+            {
+                tabPage.SetToolTip(this, GetCaptionForTool(tabPage));
+            }
+        }
+
         private void CheckCompositeControls(Control associatedControl)
         {
             if (associatedControl is UpDownBase upDownBase)
@@ -1252,6 +1260,8 @@ namespace System.Windows.Forms
                 {
                     HandleCreated(control, EventArgs.Empty);
                 }
+
+                CheckNativeCompositeControls(control, info.Caption);
             }
             else
             {
@@ -1265,6 +1275,7 @@ namespace System.Windows.Forms
                     toolInfo.SendMessage(this, (User32.WM)TTM.SETTOOLINFOW);
                     CheckNativeToolTip(control);
                     CheckCompositeControls(control);
+                    CheckNativeCompositeControls(control, toolInfo.Text);
                 }
                 else if (empty && exists && !DesignMode)
                 {
