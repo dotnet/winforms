@@ -17,7 +17,7 @@ namespace System.Windows.Forms
     /// </summary>
     /// <remarks>
     ///  The control should be focused with keyboard for an amount of time specified with TTDT_INITIAL flag to make
-    ///  the keyboard ToolTip appear. See https://docs.microsoft.com/windows/win32/controls/ttm-getdelaytime
+    ///  the keyboard ToolTip appear. <see href="https://docs.microsoft.com/windows/win32/controls/ttm-getdelaytime">TTM_GETDELAYTIME message (Microsoft Docs)</see>
     ///
     ///  Once visible, the keyboard ToolTip will be demonstrated for an amount of time specified with TTDT_AUTOPOP
     ///  flag. The ToolTip will disappear afterwards. If the keyboard ToolTip is visible and the focus moves from

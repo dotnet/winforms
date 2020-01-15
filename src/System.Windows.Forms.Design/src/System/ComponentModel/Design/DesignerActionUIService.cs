@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Diagnostics;
+using System.Windows.Forms.Design.Behavior;
 
 namespace System.ComponentModel.Design
 {
@@ -60,7 +61,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///  Refreshes the <see cref="System.Windows.Forms.Design.Behavior.DesignerActionGlyph">designer action glyph</see> as well as <see cref="DesignerActionPanel">designer action panels</see>.
+        ///  Refreshes the <see cref="DesignerActionGlyph">designer action glyph</see> as well as <see cref="DesignerActionPanel">designer action panels</see>.
         /// </summary>
         public void Refresh(IComponent component)
         {

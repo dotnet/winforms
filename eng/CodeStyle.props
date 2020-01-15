@@ -13,12 +13,6 @@
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <NoWarn>$(NoWarn),1573,1591,1712</NoWarn>
 
-    <!--
-      Disable warnings for XML comments with outright errors.
-
-      CS0419: Ambiguous reference in cref attribute
-    -->
-    <NoWarn>$(NoWarn),419</NoWarn>
   </PropertyGroup>
 
 </Project>

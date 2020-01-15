@@ -17,7 +17,7 @@ internal static partial class Interop
         /// <remarks>
         ///  As the name conflicts with <see cref="System.IServiceProvider"/> this is sometimes
         ///  called IOleServiceProvider, even though the name is actually IServiceProvider.
-        ///  See https://docs.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/cc678966(v=vs.85)
+        ///  <see href="https://docs.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/cc678966(v=vs.85)">QueryService method (Microsoft Docs)</see>
         /// </remarks>
         [ComImport]
         [Guid(ComponentIds.IID_IServiceProvider)]

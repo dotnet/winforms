@@ -11,7 +11,8 @@ internal static partial class Interop
     internal static partial class User32
     {
         /// <summary>
-        ///  Window long values for <see cref="SetWindowLong"/> and <see cref="GetWindowLong"/>.
+        ///  Window long values for <see cref="SetWindowLong(IntPtr, GWL, IntPtr)"/> and
+        ///  <see cref="GetWindowLong(IntPtr, GWL)"/>.
         /// </summary>
         public enum GWL : int
         {

@@ -28,7 +28,7 @@ namespace System.Windows.Forms
         public IntPtr Result { get; set; }
 
         /// <summary>
-        ///  Gets the <see cref='Message.LParam'/> value, and converts the value to an object.
+        ///  Gets the <see cref='LParam'/> value, and converts the value to an object.
         /// </summary>
         public object GetLParam(Type cls) => Marshal.PtrToStructure(LParam, cls);
 

@@ -67,7 +67,7 @@ namespace System.Windows.Forms.Design.Behavior
         /// <returns>
         ///  The index at which the new element was inserted.
         /// </returns>
-        /// <seealso cref='BehaviorServiceAdornerCollection.AddRange' />
+        /// <seealso cref='BehaviorServiceAdornerCollection.AddRange(Adorner[])' />
         public int Add(Adorner value)
         {
             throw new NotImplementedException(SR.NotImplementedByDesign);
