@@ -5420,11 +5420,6 @@ namespace System.Windows.Forms
             private readonly ComboBox _owningComboBox;
             private readonly IntPtr _childListControlhandle;
 
-            /// <summary>
-            ///  Initializes new instance of ComboBoxChildListUiaProvider.
-            /// </summary>
-            /// <param name="childListControlhandle"></param>
-            /// <param name="owner"></param>
             public ComboBoxChildListUiaProvider(ComboBox owningComboBox, IntPtr childListControlhandle) : base(owningComboBox, childListControlhandle)
             {
                 _owningComboBox = owningComboBox;
