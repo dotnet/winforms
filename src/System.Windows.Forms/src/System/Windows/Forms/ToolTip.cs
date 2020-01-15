@@ -1777,8 +1777,8 @@ namespace System.Windows.Forms
                     _owners.Remove(win.Handle);
                 }
 
-                // Find the Form for associated Control and hook up to the Deactivated event to
-                ///  hide the shown tooltip
+                // Find the Form for associated Control and hook up to the Deactivated event
+                // to hide the shown tooltip
                 Form baseFrom = tool.FindForm();
                 if (baseFrom != null)
                 {

@@ -1240,9 +1240,6 @@ namespace System.Windows.Forms
             Invalidate();
         }
 
-        /// <summary>
-        ///  Raises the <see cref='SplitContainer.MouseMove'/> event.
-        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void OnMouseMove(MouseEventArgs e)
         {
@@ -1432,11 +1429,6 @@ namespace System.Windows.Forms
             UpdateSplitter();
         }
 
-        ////////////////////////////////////////////////////////////////////////////////////////////////
-        //                                                                                            //
-        ///START PRIVATE FUNCTIONS                                                                    //
-        //                                                                                            //
-        ////////////////////////////////////////////////////////////////////////////////////////////////
         /// <summary>
         ///  Validate and set the minimum size for Panel1.
         /// </summary>

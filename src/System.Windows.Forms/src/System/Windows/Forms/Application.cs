@@ -832,7 +832,7 @@ namespace System.Windows.Forms
             => ThreadContext.FromCurrent().RunMessageLoop(Interop.Mso.msoloop.DoEventsModal, null);
 
         /// <summary>
-        ///  Enables visual styles for all subsequent <see cref="Application.Run"/> and <see cref="CreateHandle"/> calls.
+        ///  Enables visual styles for all subsequent <see cref="Application.Run()"/> and <see cref="Control.CreateHandle"/> calls.
         ///  Uses the default theming manifest file shipped with the redist.
         /// </summary>
         public static void EnableVisualStyles()
@@ -1081,7 +1081,7 @@ namespace System.Windows.Forms
         ///  Park control handle on a parkingwindow that has matching DpiAwareness.
         /// </summary>
         /// <param name="cp"> create params for control handle</param>
-        /// <param name="dpiContext"> dpi awareness</param>
+        /// <param name="dpiAwarenessContext"> dpi awareness</param>
         internal static void ParkHandle(CreateParams cp, DpiAwarenessContext dpiAwarenessContext = DpiAwarenessContext.DPI_AWARENESS_CONTEXT_UNSPECIFIED)
         {
             ThreadContext cxt = ThreadContext.FromCurrent();

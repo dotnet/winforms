@@ -515,7 +515,8 @@ namespace System.Windows.Forms
             finally
             {
                 if ((original.options & OriginalOptions.OwnsImage) != 0)
-                { ///  this is to handle the case were we clone the icon (see WHY WHY WHY below)
+                {
+                    // This is to handle the case were we clone the icon (see why below)
                     icon.Dispose();
                 }
             }

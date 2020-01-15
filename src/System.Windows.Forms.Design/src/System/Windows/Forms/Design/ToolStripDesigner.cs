@@ -1473,7 +1473,7 @@ namespace System.Windows.Forms.Design
                 }
             }
 
-            ///  set up parenting and all the base stuff...
+            // Set up parenting and all the base functionality.
             if (parentPanel == null || ToolStrip is MenuStrip)
             {
                 base.InitializeNewComponent(defaultValues);
@@ -2109,7 +2109,6 @@ namespace System.Windows.Forms.Design
         /// </summary>
         private void OnUndone(object source, EventArgs e)
         {
-            ///  IMPORTANT : The Undo Unit .. Clears of the ITems....
             if (_editorNode != null && (ToolStrip.Items.IndexOf(_editorNode) == -1))
             {
                 ToolStrip.Items.Add(_editorNode);

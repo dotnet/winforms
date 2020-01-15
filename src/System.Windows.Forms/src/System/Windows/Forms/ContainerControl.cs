@@ -1758,7 +1758,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Validates all the child controls in the container. Exactly which controls are
-        ///  validated and which controls are skipped is determined by <paramref name="flags"/>.
+        ///  validated and which controls are skipped is determined by <paramref name="validationConstraints"/>.
         /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]

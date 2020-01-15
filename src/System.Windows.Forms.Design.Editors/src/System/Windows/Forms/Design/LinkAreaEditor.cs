@@ -16,10 +16,6 @@ namespace System.Windows.Forms.Design
     {
         private LinkAreaUI _linkAreaUI;
 
-        /// <summary>
-        /// Edits the given object value using the editor style provided by
-        /// GetEditorStyle.
-        /// </summary>
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
             if (provider == null)

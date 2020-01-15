@@ -5,8 +5,7 @@
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///  Represents a method that will handle the <see cref='ListView.LabelEdit'/>
-    ///  event of a <see cref='ListView'/>.
+    /// Represents a method that will handle the <see cref='ListView.LabelEdit'/> event.
     /// </summary>
     public delegate void LabelEditEventHandler(object sender, LabelEditEventArgs e);
 }

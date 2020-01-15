@@ -10,31 +10,18 @@ namespace System.Windows.Forms
     [AttributeUsage(AttributeTargets.Class)]
     public sealed class DockingAttribute : Attribute
     {
-        /// <summary>
-        ///  Default constructor.
-        /// </summary>
         public DockingAttribute()
         {
             DockingBehavior = DockingBehavior.Never;
         }
 
-        /// <summary>
-        ///  Constructor.
-        /// </summary>
         public DockingAttribute(DockingBehavior dockingBehavior)
         {
             DockingBehavior = dockingBehavior;
         }
 
-        /// <summary>
-        ///  Specifies the default value for the <see cref='System.ComponentModel.DockingAttribute'/>.
-        ///  This <see langword='static'/> field is read-only.
-        /// </summary>
         public static readonly DockingAttribute Default = new DockingAttribute();
 
-        /// <summary>
-        ///  DockingBehavior property.
-        /// </summary>
         public DockingBehavior DockingBehavior { get; }
 
         public override bool Equals(object obj)

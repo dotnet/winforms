@@ -1596,7 +1596,6 @@ namespace System.Windows.Forms
                     Rectangle dragBounds = Row.Bounds;
                     int index = ToolStripPanel.RowsInternal.IndexOf(Row);
 
-                    ///
                     if (index > 0)
                     {
                         Rectangle previousRowBounds = ToolStripPanel.RowsInternal[index - 1].Bounds;

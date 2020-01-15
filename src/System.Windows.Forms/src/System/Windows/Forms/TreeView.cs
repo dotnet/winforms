@@ -2019,7 +2019,7 @@ namespace System.Windows.Forms
                 User32.SendMessageW(this, (User32.WindowMessage)TVM.SETTEXTCOLOR, IntPtr.Zero, PARAM.FromColor(c));
             }
 
-            ///  put the linecolor into the native control only if Set ...
+            // Put the linecolor into the native control only if set.
             if (lineColor != Color.Empty)
             {
                 User32.SendMessageW(this, (User32.WindowMessage)TVM.SETLINECOLOR, IntPtr.Zero, PARAM.FromColor(lineColor));
@@ -2177,10 +2177,8 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void OnMouseHover(EventArgs e)
         {
-            ///  Hover events need to be caught for each node
-            ///  within the TreeView so the appropriate
-            ///  NodeHovered event can be raised.
-
+            // Hover events need to be caught for each node within the TreeView so
+            // the appropriate NodeHovered event can be raised.
             var tvhip = new TVHITTESTINFO
             {
                 pt = PointToClient(Cursor.Position)

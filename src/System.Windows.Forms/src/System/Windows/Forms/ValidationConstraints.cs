@@ -6,7 +6,7 @@ namespace System.Windows.Forms
 {
     /// <summary>
     ///  Determines which child controls in a ContainerControl will be validated
-    ///  by the <see cref='ContainerControl.ValidateChildren'/> method.
+    ///  by the <see cref='ContainerControl.ValidateChildren(ValidationConstraints)'/> method.
     /// </summary>
     [Flags]
     public enum ValidationConstraints
