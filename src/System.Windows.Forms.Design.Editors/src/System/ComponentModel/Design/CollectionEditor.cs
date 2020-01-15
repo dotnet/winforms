@@ -2033,9 +2033,8 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            ///  ListItem class. This is a single entry in our list box.
-            ///  It contains the value we're editing as well as accessors for the type
-            // converter and UI editor.
+            ///  This is a single entry in our list box. It contains the value we're editing as well
+            ///  as accessors for the type converter and UI editor.
             /// </summary>
             private class ListItem
             {

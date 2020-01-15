@@ -457,7 +457,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Indicates whether to use the WebBrowser context menu.
-        ///  It's technically possible to have both the WebBrowser & Windows Forms context
+        ///  It's technically possible to have both the WebBrowser &amp; Windows Forms context
         ///  menu enabled, but making this property effect the behavior of the Windows Form
         ///  context menu does not lead to a clean OM.  Maps to sinking the
         ///  IDocHostUIHandler:ShowContextMenu
@@ -571,7 +571,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The url of the HtmlDocument for page hosted in the html page.
         ///  Get Maps to IWebBrowser2:LocationUrl.  Set is the equivalent of calling Navigate(Url).
-        ///  Note this means that setting the Url property & then reading it immediately may not
+        ///  Note this means that setting the Url property &amp; then reading it immediately may not
         ///  return the result that you just set (since the get always returns the url you are currently at).
         /// </summary>
         [
@@ -777,7 +777,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Prints the html document to the default printer w/ no print dialog.
-        ///  Maps to IWebBrowser2:ExecWB w/ IDM_PRINT flag & LECMDEXECOPT_DONTPROMPTUSER.
+        ///  Maps to IWebBrowser2:ExecWB w/ IDM_PRINT flag &amp; LECMDEXECOPT_DONTPROMPTUSER.
         /// </summary>
         public void Print()
         {
@@ -864,7 +864,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Opens the IE page setup dialog for the current page.
-        ///  Maps to IWebBrowser2:ExecWebBrowser w/ IDM_PAGESETUP flag & LECMDEXECOPT_PROMPTUSER.
+        ///  Maps to IWebBrowser2:ExecWebBrowser w/ IDM_PAGESETUP flag &amp; LECMDEXECOPT_PROMPTUSER.
         /// </summary>
         public void ShowPageSetupDialog()
         {
@@ -873,7 +873,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Opens the IE print dialog.
-        ///  Maps to IWebBrowser2:ExecWebBrowser w/ IDM_PRINT flag & OLECMDEXECOPT_PROMPTUSER.
+        ///  Maps to IWebBrowser2:ExecWebBrowser w/ IDM_PRINT flag &amp; OLECMDEXECOPT_PROMPTUSER.
         /// </summary>
         public void ShowPrintDialog()
         {
@@ -890,7 +890,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Opens the properties dialog for the current html page.
-        ///  Maps to IWebBrowser2:ExecWebBrowser w/ IDM_PROPERTIES flag & LECMDEXECOPT_PROMPTUSER.
+        ///  Maps to IWebBrowser2:ExecWebBrowser w/ IDM_PROPERTIES flag &amp; LECMDEXECOPT_PROMPTUSER.
         /// </summary>
         public void ShowPropertiesDialog()
         {
@@ -899,7 +899,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Opens the IE File-Save dialog.
-        ///  Maps to IWebBrowser2:ExecWebBrowser w/ IDM_SAVEAS flag & LECMDEXECOPT_PROMPTUSER.
+        ///  Maps to IWebBrowser2:ExecWebBrowser w/ IDM_SAVEAS flag &amp; LECMDEXECOPT_PROMPTUSER.
         /// </summary>
         public void ShowSaveAsDialog()
         {

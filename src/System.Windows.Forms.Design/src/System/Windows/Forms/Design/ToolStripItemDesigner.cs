@@ -247,8 +247,10 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  This method adds the Parent Hierarchy to arraylist and returns that arraylist to the Base ContextMenu provider. This way the ToolStripItem can show the right parents in the contextMenu
-        /// <summary>
+        ///  This method adds the Parent Hierarchy to arraylist and returns that arraylist to the
+        ///  Base ContextMenu provider. This way the ToolStripItem can show the right parents in
+        ///  the contextMenu.
+        /// </summary>
         internal ArrayList AddParentTree()
         {
             ArrayList parentControls = new ArrayList();
@@ -1102,39 +1104,39 @@ namespace System.Windows.Forms.Design
             host.DestroyComponent(ToolStripItem);
         }
 
-        // <summary>
-        // Resets the ToolStripItemAutoSize to be the default autosize
-        // <summary/>
+        /// <summary>
+        /// Resets the ToolStripItemAutoSize to be the default autosize
+        /// </summary>
         private void ResetAutoSize() => ShadowProperties["AutoSize"] = false;
 
-        // <summary>
-        //      Restores the AutoSize to be the value set in the property grid.
-        // <summary/>
+        /// <summary>
+        ///      Restores the AutoSize to be the value set in the property grid.
+        /// </summary>
         private void RestoreAutoSize() => ToolStripItem.AutoSize = (bool)ShadowProperties["AutoSize"];
 
-        // <summary>
-        // Resets the ToolStrip Visible to be the default value
-        // <summary/>
+        /// <summary>
+        /// Resets the ToolStrip Visible to be the default value
+        /// </summary>
         private void ResetVisible() => Visible = true;
 
-        // <summary>
-        //  Restore Overflow
-        // <summary/>
+        /// <summary>
+        ///  Restore Overflow
+        /// </summary>
         private void RestoreOverflow() => ToolStripItem.Overflow = (ToolStripItemOverflow)ShadowProperties["Overflow"];
 
-        // <summary>
-        //  Resets Overflow
-        // <summary/>
+        /// <summary>
+        ///  Resets Overflow
+        /// </summary>
         private void ResetOverflow() => ToolStripItem.Overflow = ToolStripItemOverflow.AsNeeded;
 
-        // <summary>
-        // Resets the ToolStripItem AccessibleName to the default
-        // <summary/>
+        /// <summary>
+        /// Resets the ToolStripItem AccessibleName to the default
+        /// </summary>
         private void ResetAccessibleName() => ShadowProperties["AccessibleName"] = null;
 
-        // <summary>
-        //      Restores the AutoSize to be the value set in the property grid.
-        // <summary/>
+        /// <summary>
+        ///      Restores the AutoSize to be the value set in the property grid.
+        /// </summary>
         private void RestoreAccessibleName() => ToolStripItem.AccessibleName = (string)ShadowProperties["AccessibleName"];
 
         // internal method called to select the next item from the current item.
@@ -1215,19 +1217,19 @@ namespace System.Windows.Forms.Design
 
         private bool ShouldSerializeVisible() => !Visible;
 
-        // <summary>
-        // Since we're shadowing autosize, we get called here to determine whether or not to serialize
-        // <summary/>
+        /// <summary>
+        /// Since we're shadowing autosize, we get called here to determine whether or not to serialize
+        /// </summary>
         private bool ShouldSerializeAutoSize() => (ShadowProperties.Contains("AutoSize"));
 
-        // <summary>
-        // Since we're shadowing autosize, we get called here to determine whether or not to serialize
-        // <summary/>
+        /// <summary>
+        /// Since we're shadowing autosize, we get called here to determine whether or not to serialize
+        /// </summary>
         private bool ShouldSerializeAccessibleName() => (ShadowProperties["AccessibleName"] != null);
 
-        // <summary>
-        // Since we're Overflow Size, we get called here to determine whether or not to serialize
-        // <summary/>
+        /// <summary>
+        /// Since we're Overflow Size, we get called here to determine whether or not to serialize
+        /// </summary>
         private bool ShouldSerializeOverflow() => (ShadowProperties["Overflow"] != null);
 
         /// <summary>

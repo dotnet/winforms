@@ -17,7 +17,7 @@ namespace System.Windows.Forms
 
             /// <summary>
             ///  Creates a new, empty ambient property.
-            ///</summary>
+            /// </summary>
             internal AmbientProperty(string name, Ole32.DispatchID dispID)
             {
                 Name = name;

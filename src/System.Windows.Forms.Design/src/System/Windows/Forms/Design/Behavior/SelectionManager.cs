@@ -294,7 +294,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        ///  When a component is removed - we remove the key & value from our hashtable.
+        ///  When a component is removed - we remove the key and value from our hashtable.
         /// </summary>
         private void OnComponentRemoved(object source, ComponentEventArgs ce)
         {

@@ -145,7 +145,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Indicates whether a window handle was created & is being tracked.
+        ///  Indicates whether a window handle was created &amp; is being tracked.
         /// </summary>
         internal static bool AnyHandleCreated => t_anyHandleCreated;
 
@@ -647,12 +647,12 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Releases the handle associated with this window.
         /// </summary>
-        /// <remarks></remarks>
+        /// <remarks>
         ///  If <paramref name="handleValid"/> is true, this will unsubclass the window as
         ///  well. <paramref name="handleValid"/> should be false if we are releasing in
         ///  response to a WM_DESTROY. Unsubclassing during this message can cause problems
         ///  with Windows theme manager and it's not needed anyway.
-        /// </summary>
+        /// </remarks>
         private void ReleaseHandle(bool handleValid)
         {
             if (Handle == IntPtr.Zero)

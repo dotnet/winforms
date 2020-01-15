@@ -651,14 +651,10 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  Called by the ParentControlDesigner when creating a new
-        ///  control - this will update the new control's bounds with the
-        ///  proper toolbox/snapline information that has been stored
-        ///  off
-        //
-        ///  isMirrored - Is the ParentControlDesigner mirrored? If so, we need
-        ///  to offset for that. This is because all snapline stuff is done
-        ///  using a LTR coordinate system
+        ///  Called by the ParentControlDesigner when creating a new control - this will update the
+        ///  new control's bounds with the proper toolbox/snapline information that has been stored
+        ///  off. If the ParentControlDesigner is so, we need to offset for that. This is because
+        ///  all snapline stuff is done using a LTR coordinate system
         /// </summary>
         public static Rectangle GetBoundsFromToolboxSnapDragDropInfo(ToolboxSnapDragDropEventArgs e, Rectangle originalBounds, bool isMirrored)
         {

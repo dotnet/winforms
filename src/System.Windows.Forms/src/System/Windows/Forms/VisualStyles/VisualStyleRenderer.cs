@@ -430,21 +430,12 @@ namespace System.Windows.Forms.VisualStyles
 
             // DrawThemeIcon currently seems to do nothing, but still return S_OK. As a workaround,
             // we call DrawImage on the graphics object itself for now.
-
-            //int returnVal = NativeMethods.S_FALSE;
-            //using( WindowsGraphicsWrapper wgr = new WindowsGraphicsWrapper( dc, AllGraphicsProperties ) ) {
-            //    HandleRef hdc = new HandleRef( wgr, wgr.WindowsGraphics.DeviceContext.Hdc );
-            //    returnVal = SafeNativeMethods.DrawThemeIcon( new HandleRef( this, Handle ), hdc, part, state, new NativeMethods.COMRECT( bounds ), new HandleRef( this, imageList.Handle ), imageIndex );
-            //}
-
-            //if (returnVal != NativeMethods.S_OK) {
             g.DrawImage(imageList.Images[imageIndex], bounds);
-            //}
         }
 
         /// <summary>
         ///  Given a graphics object and bounds to draw in, this method effectively asks the passed in
-        ///  control's parent to draw itself in there (it sends WM_ERASEBKGND & WM_PRINTCLIENT messages
+        ///  control's parent to draw itself in there (it sends WM_ERASEBKGND &amp; WM_PRINTCLIENT messages
         ///  to the parent).
         /// </summary>
         public void DrawParentBackground(IDeviceContext dc, Rectangle bounds, Control childControl)

@@ -249,7 +249,7 @@ namespace System.Windows.Forms
 
             /// <summary>
             ///  Changes the interval of the timer without destroying the HWND.
-            /// <summary>
+            /// </summary>
             public void RestartTimer(int newInterval)
             {
                 StopTimer(IntPtr.Zero, destroyHwnd: false);

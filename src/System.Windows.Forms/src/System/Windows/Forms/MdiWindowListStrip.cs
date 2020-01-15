@@ -68,7 +68,7 @@ namespace System.Windows.Forms
         ///  Based on similar code in MenuItem.cs::PopulateMdiList(), which is unfortunately just different
         ///  enough in its working environment that we can't readily combine the two.
         ///  But if you're fixing something here, chances are that the same issue will need scrutiny over there.
-        ///</summary>
+        /// </summary>
         public void PopulateItems(Form mdiParent, ToolStripMenuItem mdiMergeItem, bool includeSeparator)
         {
             this.mdiParent = mdiParent;

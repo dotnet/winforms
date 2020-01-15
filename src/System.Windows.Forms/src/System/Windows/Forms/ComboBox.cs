@@ -1545,7 +1545,6 @@ namespace System.Windows.Forms
         /// <summary>
         ///  This will fire the TextUpdate Event on the ComboBox. This events fires when the Combobox gets the
         ///  CBN_EDITUPDATE notification.
-        //
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ComboBoxOnTextUpdateDescr))]
         public event EventHandler TextUpdate
@@ -1557,7 +1556,6 @@ namespace System.Windows.Forms
         /// <summary>
         ///  This will fire the DropDownClosed Event on the ComboBox. This events fires when the Combobox gets the
         ///  CBN_CLOSEUP notification. This happens when the DropDown closes.
-        //
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ComboBoxOnDropDownClosedDescr))]
         public event EventHandler DropDownClosed
@@ -3702,7 +3700,7 @@ namespace System.Windows.Forms
         ///  currentText is never changed outside this method.
         ///  This internal version can be called from anywhere we might suspect text has changed
         ///  it's fairly safe to call anywhere.
-
+        /// </summary>
         private void WmReflectCommand(ref Message m)
         {
             switch ((CBN)PARAM.HIWORD(m.WParam))

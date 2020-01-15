@@ -499,9 +499,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  This is used for international applications where the language
-        ///  is written from RightToLeft. When this property is true,
-        //      and the RightToLeft property is true, mirroring will be turned on on the trackbar.
+        ///  This is used for international applications where the language is written from RightToLeft.
+        ///  When this property is true, and the RightToLeft property is true, mirroring will be turned
+        ///  on on the trackbar.
         /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),

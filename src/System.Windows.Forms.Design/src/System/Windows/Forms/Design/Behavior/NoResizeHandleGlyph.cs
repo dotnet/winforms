@@ -14,7 +14,8 @@ namespace System.Windows.Forms.Design.Behavior
         private readonly bool _isPrimary = false;
 
         /// <summary>
-        ///  NoResizeHandleGlyph's constructor takes additional parameters: 'type' and 'primary selection'. Also, we create/cache our pen & brush here to avoid this action with every paint message.
+        ///  NoResizeHandleGlyph's constructor takes additional parameters: 'type' and 'primary selection'.
+        ///  Also, we create/cache our pen and brush here to avoid this action with every paint message.
         /// </summary>
         internal NoResizeHandleGlyph(Rectangle controlBounds, SelectionRules selRules, bool primarySelection, Behavior behavior) : base(behavior)
         {

@@ -77,6 +77,7 @@ namespace System.Windows.Forms
         /// </summary>
         LineFeed = 0x0A,
 
+        /// <summary>
         ///  The CLEAR key.
         /// </summary>
         Clear = 0x0C,

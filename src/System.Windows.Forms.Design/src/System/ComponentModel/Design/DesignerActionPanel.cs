@@ -818,8 +818,8 @@ namespace System.ComponentModel.Design
 
         /// <summary>
         ///  Strips out ampersands used for mnemonics so that they don't show up in the rendering.
-        ///  - Convert "&&" to "&"
-        ///  - Convert "&x" to "x"
+        ///  - Convert "&amp;&amp;" to "&amp;"
+        ///  - Convert "&amp;x" to "x"
         ///  - An ampersand by itself at the end of a string is displayed as-is
         /// </summary>
         private static string StripAmpersands(string s)

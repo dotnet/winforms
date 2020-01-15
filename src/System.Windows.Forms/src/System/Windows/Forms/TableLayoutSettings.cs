@@ -503,9 +503,9 @@ namespace System.Windows.Forms
             }
         }
 
-        ///<summary>
+        /// <summary>
         ///  Get the element which covers the specified row and column. return null if we can't find one
-        ///</summary>
+        /// </summary>
         internal IArrangedElement GetControlFromPosition(int column, int row)
         {
             return TableLayout.GetControlFromPosition(Owner, column, row);

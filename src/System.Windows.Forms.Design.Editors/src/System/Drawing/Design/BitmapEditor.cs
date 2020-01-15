@@ -10,7 +10,7 @@ namespace System.Drawing.Design
     /// <summary>
     ///  Provides an editor that can perform default file searching for bitmap (.bmp)
     ///  files.
-    ///</summary>
+    /// </summary>
     [CLSCompliant(false)]
     public class BitmapEditor : ImageEditor
     {

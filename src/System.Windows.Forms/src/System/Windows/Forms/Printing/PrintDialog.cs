@@ -214,9 +214,9 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  UseEXDialog = true means to use the EX versions of the dialogs and to ignore the
-        ///  ShowHelp & ShowNetwork properties.
+        ///  ShowHelp &amp; ShowNetwork properties.
         ///  UseEXDialog = false means to never use the EX versions of the dialog.
-        ///  ShowHelp & ShowNetwork will work in this case.
+        ///  ShowHelp &amp; ShowNetwork will work in this case.
         /// </summary>
         [DefaultValue(false)]
         [SRDescription(nameof(SR.PDuseEXDialog))]

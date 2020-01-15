@@ -29,7 +29,7 @@ namespace System.Windows.Forms
 
         /// <remarks>
         ///  The last control that requires validation. Do not directly edit this value.
-        /// <remarks>
+        /// </remarks>
         private Control _unvalidatedControl;
 
         /// <summary>
@@ -1693,6 +1693,7 @@ namespace System.Windows.Forms
         ///  Validates the last unvalidated control and its ancestors up through, but not including the current control.
         ///  This version will skip validation if checkAutoValidate is true and the effective AutoValidate setting, as
         ///  determined by the control's parent, is AutoValidate.Disable.
+        /// </summary>
         public bool Validate(bool checkAutoValidate)
         {
             return ValidateInternal(checkAutoValidate, out bool validatedControlAllowsFocusChange);

@@ -5303,13 +5303,6 @@ namespace System.Windows.Forms
             return (DragDropEffects)finalEffect;
         }
 
-        /// <summary>
-        //   Trinity are currently calling IViewObject::Draw in order to render controls on Word & Excel
-        //   before they are in place active. However this method is private and they need a public way to do this.
-        //   This means that we will need to add a public method to control that supports rendering to a Bitmap:
-        //   public virtual void DrawToBitmap(Bitmap bmp, RectangleF targetBounds)
-        //   where target bounds is the bounds within which the control should render.
-        /// </summary>
         public void DrawToBitmap(Bitmap bitmap, Rectangle targetBounds)
         {
             if (bitmap == null)

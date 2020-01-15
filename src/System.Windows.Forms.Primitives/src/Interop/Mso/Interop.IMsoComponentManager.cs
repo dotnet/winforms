@@ -203,7 +203,7 @@ internal static partial class Interop
             ///
             ///  Component manager should notify all appropriate interested components (taking into account
             ///  <paramref name="uContext"/>, <paramref name="cpicmExclude"/>, <paramref name="rgpicmExclude"/>)
-            ///  via <see cref="IMsoComponent.OnEnterState" (see "Comments on State Contexts", above).
+            ///  via <see cref="IMsoComponent.OnEnterState"/> (see "Comments on State Contexts", above).
             ///
             ///  Component manager should also take appropriate action depending on the value of <paramref name="uStateID"/>.
             ///

@@ -71,7 +71,6 @@ namespace System.Windows.Forms
                        DpiHelper.LogicalToDeviceUnits(new Padding(2, 2, 0, 2), DeviceDpi) :
                        new Padding(2, 2, 0, 2);
 
-        /// <include file='doc\MenuStrip.uex' path='docs/doc[@for="MenuStrip.DefaultSize"]/*' />
         protected override Size DefaultSize
             => DpiHelper.IsPerMonitorV2Awareness ?
                DpiHelper.LogicalToDeviceUnits(new Size(200, 24), DeviceDpi) :
@@ -242,10 +241,7 @@ namespace System.Windows.Forms
             }
             return base.ProcessCmdKey(ref m, keyData);
         }
-        /// <summary>
-        ///  Summary of WndProc.
-        /// </summary>
-        /// <param name=m></param>
+
         protected override void WndProc(ref Message m)
         {
             if (m.Msg == WindowMessages.WM_MOUSEACTIVATE && (ActiveDropDowns.Count == 0))

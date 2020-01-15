@@ -121,9 +121,9 @@ namespace System.Windows.Forms
             return !(component is Control control) || control.Created;
         }
 
-        // <summary>
+        /// <summary>
         ///  Instance-specific property equivalent to the static method above
-        // </summary>
+        /// </summary>
         internal bool ComponentCreated => IsComponentCreated(_control);
 
         private void FormLoaded(object sender, EventArgs e)

@@ -638,7 +638,7 @@ namespace System.Windows.Forms
             return Color.Empty;
         }
 
-        ///<summary>
+        /// <summary>
         ///  HtmlDocumentShim - this is the glue between the DOM eventing mechanisms
         ///          and our CLR callbacks.
         ///
@@ -650,7 +650,7 @@ namespace System.Windows.Forms
         ///                       for a method named DISPID=0.  For each event that's subscribed, we create
         ///                       a new HtmlToClrEventProxy, detect the callback and fire the corresponding
         ///                       CLR event.
-        ///</summary>
+        /// </summary>
         internal class HtmlDocumentShim : HtmlShim
         {
             private AxHost.ConnectionPointCookie cookie;

@@ -29,7 +29,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ////  Activates the advanced UI used to edit the component.
+        ///  Activates the advanced UI used to edit the component.
         /// </summary>
         public virtual bool EditComponent(ITypeDescriptorContext context, object component, IWin32Window owner)
         {

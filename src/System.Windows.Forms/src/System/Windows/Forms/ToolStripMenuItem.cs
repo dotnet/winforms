@@ -198,7 +198,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Deriving classes can override this to configure a default size for their control.
         ///  This is more efficient than setting the size in the control's constructor.
-        /// </devdoc>
+        /// </summary>
         protected override Size DefaultSize {
             get {
                 return DpiHelper.IsPerMonitorV2Awareness ?
@@ -989,13 +989,12 @@ namespace System.Windows.Forms
             ClearShortcutCache();
             base.OnFontChanged(e);
         }
-        /// <devdoc/>
+
         internal void OnMenuAutoExpand()
         {
             ShowDropDown();
         }
 
-        /// <devdoc/>
         protected override void OnMouseDown(MouseEventArgs e)
         {
             // Opening should happen on mouse down
@@ -1056,7 +1055,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc/>
         protected override void OnMouseEnter(EventArgs e)
         {
             Debug.Assert(ParentInternal != null, "Why is parent null");
@@ -1074,7 +1072,6 @@ namespace System.Windows.Forms
             base.OnMouseEnter(e);
         }
 
-        /// <devdoc/>
         protected override void OnMouseLeave(EventArgs e)
         {
             Debug.WriteLineIf(ToolStrip.MenuAutoExpandDebug.TraceVerbose, "[ToolStripMenuItem.OnMouseLeave] MenuTimer.Cancel called");
@@ -1110,7 +1107,6 @@ namespace System.Windows.Forms
             base.OnOwnerChanged(e);
         }
 
-        /// <devdoc/>
         protected override void OnPaint(PaintEventArgs e)
         {
             if (Owner != null)
@@ -1450,9 +1446,9 @@ namespace System.Windows.Forms
             }
             CancelCore();
         }
-        ///<summary> cancels if and only if this item was the one that
+        /// <summary> cancels if and only if this item was the one that
         ///  requested the timer
-        ///</summary>
+        /// </summary>
         public void Cancel(ToolStripMenuItem item)
         {
             if (InTransition)

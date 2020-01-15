@@ -843,7 +843,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Unsupported method/property.
-        ///  WndProc ignores EM_LIMITTEXT & this is a virtual method.
+        ///  WndProc ignores EM_LIMITTEXT &amp; this is a virtual method.
         /// </summary>
         [
         Browsable(false),
@@ -2521,27 +2521,6 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  <From Control.cs>:
-        ///  Processes a command key. This method is called during message
-        ///  pre-processing to handle command keys. Command keys are keys that always
-        ///  take precedence over regular input keys. Examples of command keys
-        ///  include accelerators and menu shortcuts. The method must return true to
-        ///  indicate that it has processed the command key, or false to indicate
-        ///  that the key is not a command key.
-        ///
-        ///  processCmdKey() first checks if the control has a context menu, and if
-        ///  so calls the menu's processCmdKey() to check for menu shortcuts. If the
-        ///  command key isn't a menu shortcut, and if the control has a parent, the
-        ///  key is passed to the parent's processCmdKey() method. The net effect is
-        ///  that command keys are "bubbled" up the control hierarchy.
-        ///
-        ///  When overriding processCmdKey(), a control should return true to
-        ///  indicate that it has processed the key. For keys that aren't processed by
-        ///  the control, the result of "base.processCmdKey()" should be returned.
-        ///
-        ///  Controls will seldom, if ever, need to override this method.
-        ///  </From Control.cs>
-        ///
         ///  Implements the handling of Ctrl+A (select all). Note: Code copied from TextBox.
         /// </summary>
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)

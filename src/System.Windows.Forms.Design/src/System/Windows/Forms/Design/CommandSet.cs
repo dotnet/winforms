@@ -3266,7 +3266,7 @@ namespace System.Windows.Forms.Design
 
             /// <summary>
             ///  Applys the cached status to this item.
-            /// </devdco>
+            /// </summary>
             private void ApplyCachedStatus()
             {
                 if (_commandSet != null && s_commandStatusHash.Contains(_statusHandler))
@@ -3317,9 +3317,9 @@ namespace System.Windows.Forms.Design
                 }
             }
 
-            ///<summary>
+            /// <summary>
             ///  Only pass this down to the base when we're not doing the cached update.
-            ///</summary>
+            /// </summary>
             protected override void OnCommandChanged(EventArgs e)
             {
                 if (!_updatingCommand)
@@ -3328,9 +3328,9 @@ namespace System.Windows.Forms.Design
                 }
             }
 
-            ///<summary>
+            /// <summary>
             ///  Saves the status for this command to the statusstate that's stored in the hashtable based on our status handler delegate.
-            ///</summary>
+            /// </summary>
             private void SaveCommandStatus()
             {
                 if (_commandSet != null)

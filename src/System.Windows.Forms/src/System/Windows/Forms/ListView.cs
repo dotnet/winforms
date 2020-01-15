@@ -1382,10 +1382,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  This is used for international applications where the language
-        ///  is written from RightToLeft. When this property is true,
-        //      and the RightToLeft is true, mirroring will be turned on on the form, and
-        ///  control placement and text will be from right to left.
+        ///  This is used for international applications where the language is written from RightToLeft.
+        ///  When this property is true, and the RightToLeft is true, mirroring will be turned on on
+        ///  the form, and control placement and text will be from right to left.
         /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
@@ -5264,9 +5263,9 @@ namespace System.Windows.Forms
             SetItemText(itemIndex, subItemIndex, text, ref lvItem);
         }
 
-        ///<summary>
+        /// <summary>
         ///  For perf, allow a LVITEM to be passed in so we can reuse in tight loops.
-        ///</summary>
+        /// </summary>
         private unsafe void SetItemText(int itemIndex, int subItemIndex, string text, ref LVITEMW lvItem)
         {
             Debug.Assert(IsHandleCreated, "SetItemText with no handle");
