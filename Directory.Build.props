@@ -20,6 +20,16 @@
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
   </PropertyGroup>
 
+  <!-- Public API Analyzer -->
+  <ItemGroup Condition="'$(UsePublicApiAnalyzers)' == 'true' And '$(Configuration)' == 'Release'">
+    <PackageReference Include="Microsoft.CodeAnalysis.PublicApiAnalyzers" Version="$(MicrosoftCodeAnalysisPublicApiAnalyzers)">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <AdditionalFiles Include="PublicAPI.Shipped.txt" />
+    <AdditionalFiles Include="PublicAPI.Unshipped.txt" />
+  </ItemGroup>
+
   <!-- For the purposes of generating code coverage as part of the build -->
   <PropertyGroup Condition="'$(Coverage)' == 'true'">
     <!-- Coverlet's PDB check cannot handle deterministic source paths https://github.com/tonerdo/coverlet/issues/363 -->
