@@ -9,7 +9,7 @@ internal static partial class Interop
     internal static partial class ComCtl32
     {
         /// <summary>
-        /// <see cref="https://docs.microsoft.com/en-us/windows/win32/api/commctrl/ns-commctrl-mchittestinfo"/>
+        /// See https://docs.microsoft.com/en-us/windows/win32/api/commctrl/ns-commctrl-mchittestinfo
         /// </summary>
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
         public struct MCHITTESTINFO
