@@ -220,15 +220,13 @@ namespace System.Windows.Forms.ButtonInternal
                     false,
                     Control.FlatAppearance.BorderSize).Layout();
 
-                //Paint with the BorderColor if Set.
-                ///
+                // Paint with the BorderColor if Set.
                 if (!Control.FlatAppearance.BorderColor.IsEmpty)
                 {
                     colors.windowFrame = Control.FlatAppearance.BorderColor;
                 }
 
                 Graphics g = e.Graphics;
-                //Region original = g.Clip;
 
                 Rectangle r = Control.ClientRectangle;
 

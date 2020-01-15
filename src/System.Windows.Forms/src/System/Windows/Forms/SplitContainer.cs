@@ -1432,11 +1432,6 @@ namespace System.Windows.Forms
             UpdateSplitter();
         }
 
-        ////////////////////////////////////////////////////////////////////////////////////////////////
-        //                                                                                            //
-        ///START PRIVATE FUNCTIONS                                                                    //
-        //                                                                                            //
-        ////////////////////////////////////////////////////////////////////////////////////////////////
         /// <summary>
         ///  Validate and set the minimum size for Panel1.
         /// </summary>

@@ -563,14 +563,11 @@ namespace System.Windows.Forms
                             // we have to recreate the handle when we are going from CheckBoxes == true to CheckBoxes == false
                             // if we want to have the bitmaps from the StateImageList on the items.
 
-                            /**
-                            ***  there are a LOT of issues with setting CheckBoxes to TRUE when in View.List, View.SmallIcon or View.LargeIcon:
-                            ***
-                            ***
-                            ***  these are caused by the fact that the win32 ListView control does not resize its column width
-                            ***  when CheckBoxes changes from FALSE to TRUE.
-                            ***  we need to recreate the handle when we set CheckBoxes to TRUE
-                            **/
+                            // There are a LOT of issues with setting CheckBoxes to true when in View.List,
+                            // View.SmallIcon or View.LargeIcon:
+                            // these are caused by the fact that the win32 ListView control does not
+                            // resize its column width when CheckBoxes changes from false to true.
+                            // we need to recreate the handle when we set CheckBoxes to TRUE
                             RecreateHandleInternal();
                         }
                         else
@@ -4282,10 +4279,8 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void OnMouseHover(EventArgs e)
         {
-            ///  Hover events need to be caught for each node
-            ///  within the TreeView so the appropriate
-            ///  NodeHovered event can be raised.
-
+            // Hover events need to be caught for each node within the TreeView so
+            // the appropriate NodeHovered event can be raised.
             ListViewItem item = null;
 
             if (Items.Count > 0)

@@ -476,21 +476,11 @@ namespace System.Windows.Forms
             return false;
         }
 
-        ///  ============================================================================
-        ///  BEGIN task specific functions.  Since ToolStripManager is used
-        ///  for Painting, Merging and Rafting, and who knows what else in the future
-        ///  the following properties/methods/events are organized in regions
-        ///  alphabetically by task
-        ///  ----------------------------------------------------------------------------
-
-        ///
-        ///  ToolStripManager Default Renderer
-        ///
-        #region DefaultRenderer
-
-        ///  These are thread static because we want separate instances
-        ///  for each thread.  We dont want to guarantee thread safety
-        ///  and dont want to have to take locks in painting code.
+        /// <remarks>
+        ///  This is thread static because we want separate instances for each thread.
+        ///  We dont want to guarantee thread safety and dont want to have to take
+        ///  locks in painting code.
+        /// </remarks>
         [ThreadStatic]
         private static ToolStripRenderer defaultRenderer;
 
@@ -523,8 +513,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <summary> the default renderer for the thread.  When ToolStrip.RenderMode is set to manager - this
-        ///  is the property used.
+        /// <summary>
+        ///  The default renderer for the thread. When ToolStrip.RenderMode is set
+        ///  to manager - this is the property used.
         /// </summary>
         public static ToolStripRenderer Renderer
         {
@@ -538,7 +529,6 @@ namespace System.Windows.Forms
             }
             set
             {
-                ///
                 if (defaultRenderer != value)
                 {
                     CurrentRendererType = (value == null) ? DefaultRendererType : value.GetType();
@@ -585,7 +575,6 @@ namespace System.Windows.Forms
             }
             set
             {
-                ///
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)ToolStripManagerRenderMode.Custom, (int)ToolStripManagerRenderMode.Professional))
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ToolStripManagerRenderMode));
@@ -652,10 +641,6 @@ namespace System.Windows.Forms
             }
         }
 
-        #endregion DefaultRenderer
-
-        #region ToolStripPanel
-
         internal static ClientUtils.WeakRefCollection ToolStripPanels
         {
             get
@@ -697,10 +682,6 @@ namespace System.Windows.Forms
             }
             return null;
         }
-
-        #endregion
-
-        #region ToolStripSettings
 
         /// <summary>
         ///  Loads settings for the given Form using the form type's fullname as settings key.
@@ -769,14 +750,7 @@ namespace System.Windows.Forms
             settingsManager.Save();
         }
 
-        #endregion
-
-        ///
-        ///  ToolStripManager ALT key PreProcessing
-        ///
-        #region MenuKeyAndShortcutProcessing
-
-        ///  ModalMenuFilter
+        ///  <remarks>
         ///  - this installs a message filter when a dropdown becomes active.
         ///  - the message filter
         ///  a. eats WM_MOUSEMOVEs so that the window that's underneath
@@ -791,6 +765,7 @@ namespace System.Windows.Forms
         ///  the last dropdown has gone away
         ///  This is not part of ToolStripManager because it's DropDown specific and
         ///  we dont want to publicly expose this message filter.
+        ///  </remarks>
         internal class ModalMenuFilter : IMessageModifyAndFilter
         {
             private HandleRef _activeHwnd = NativeMethods.NullHandleRef; // the window that was active when we showed the dropdown
@@ -2011,13 +1986,6 @@ namespace System.Windows.Forms
             return null;
         }
 
-        #endregion MenuKeyAndShortcutProcessing
-
-        ///
-        ///  ToolStripManager MenuMerging functions
-        ///
-        #region MenuMerging
-
         private static ToolStripItem FindMatch(ToolStripItem source, ToolStripItemCollection destinationItems)
         {
             // based on MergeAction:
@@ -2414,9 +2382,6 @@ namespace System.Windows.Forms
                 return RevertMerge(target);
             }
         }
-
-        #endregion MenuMerging
-
     }
 
     internal class ToolStripCustomIComparer : IComparer
