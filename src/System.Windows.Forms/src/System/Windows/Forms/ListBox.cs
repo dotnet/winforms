@@ -1814,17 +1814,20 @@ namespace System.Windows.Forms
 
         protected override void OnGotFocus(EventArgs e)
         {
-            AccessibleObject item = AccessibilityObject.GetFocused();
+            if (IsHandleCreated)
+            {
+                AccessibleObject item = AccessibilityObject.GetFocused();
 
-            if (item != null)
-            {
-                HasKeyboardFocus = false;
-                item.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
-            }
-            else
-            {
-                HasKeyboardFocus = true;
-                AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
+                if (item != null)
+                {
+                    HasKeyboardFocus = false;
+                    item.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
+                }
+                else
+                {
+                    HasKeyboardFocus = true;
+                    AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
+                }
             }
 
             base.OnGotFocus(e);
@@ -1972,18 +1975,21 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void OnSelectedIndexChanged(EventArgs e)
         {
-            if (Focused && FocusedItemIsChanged())
+            if (IsHandleCreated)
             {
-                var focused = AccessibilityObject.GetFocused();
-                if (focused == AccessibilityObject.GetSelected())
+                if (Focused && FocusedItemIsChanged())
                 {
-                    focused?.RaiseAutomationEvent(UiaCore.UIA.SelectionItem_ElementSelectedEventId);
+                    var focused = AccessibilityObject.GetFocused();
+                    if (focused == AccessibilityObject.GetSelected())
+                    {
+                        focused?.RaiseAutomationEvent(UiaCore.UIA.SelectionItem_ElementSelectedEventId);
+                    }
+                    focused?.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
                 }
-                focused?.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
-            }
-            else if (ItemsCountIsChanged())
-            {
-                AccessibilityObject?.GetChild(Items.Count - 1)?.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
+                else if (ItemsCountIsChanged())
+                {
+                    AccessibilityObject?.GetChild(Items.Count - 1)?.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
+                }
             }
 
             base.OnSelectedIndexChanged(e);
