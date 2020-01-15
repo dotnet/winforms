@@ -159,8 +159,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets a value indicating whether access to the
-        ///  <see cref='Collections.Specialized.AutoCompleteStringCollection'/>
+        ///  Gets a value indicating whether access to the <see cref='AutoCompleteStringCollection'/>
         ///  is synchronized (thread-safe).
         /// </summary>
         public bool IsSynchronized

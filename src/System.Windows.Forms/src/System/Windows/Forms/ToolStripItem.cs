@@ -3138,7 +3138,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='ToolStripItem.Enter'/> event.
+        ///  Raises the <see cref='ToolStripItem.DragEnter'/> event.
         ///  Inheriting classes should override this method to handle this event.
         ///  Call base.onEnter to send this event to any registered event listeners.
         /// </summary>

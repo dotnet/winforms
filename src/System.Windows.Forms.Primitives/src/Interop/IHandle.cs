@@ -12,7 +12,7 @@ using System.Runtime.InteropServices;
 ///  The key benefit of this is that we can keep the owning class from being
 ///  collected during interop calls. <see cref="HandleRef"/> wraps arbitrary
 ///  owners with target handles. Having this interface allows implicit use
-///  of the classes (such as <see cref="System.Windows.Forms.Control"/>) that
+///  of the classes (such as Control) that
 ///  meet this common pattern in interop and encourages correct alignment
 ///  with the proper owner.
 ///

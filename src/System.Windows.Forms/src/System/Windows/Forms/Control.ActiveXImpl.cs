@@ -1556,7 +1556,6 @@ namespace System.Windows.Forms
 
                 /// <summary>
                 ///  Wraps a native IUnknown in a SafeHandle.
-                ///  See similar implementaton in the <see cref='Transactions.SafeIUnknown'/> class.
                 /// </summary>
                 internal class SafeIUnknown : SafeHandle
                 {

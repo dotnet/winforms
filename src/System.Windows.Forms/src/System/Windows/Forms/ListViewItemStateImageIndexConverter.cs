@@ -12,11 +12,11 @@ namespace System.Windows.Forms
     public class ListViewItemStateImageIndexConverter : ImageIndexConverter
     {
         /// <summary>
-        ///  Gets a value that indicates whether a <see cref="none" /> or <see langword="null" /> value
+        ///  Gets a value that indicates whether a none or <see langword="null" /> value
         ///  is valid in the <see cref="TypeConverter.StandardValuesCollection" /> collection.
         /// </summary>
         /// <value>
-        ///  Always returns <see langword="false" /> to indicate that a <see cref="none" /> or
+        ///  Always returns <see langword="false" /> to indicate that a none or
         ///  <see langword="null" /> value isn't valid in the standard values collection.
         /// </value>
         protected override bool IncludeNoneAsStandardValue

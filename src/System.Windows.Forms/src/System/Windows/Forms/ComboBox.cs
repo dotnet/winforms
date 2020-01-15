@@ -2639,9 +2639,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <summary>
-        ///  Raises the <see cref='ComboBox.KeyDown'/> event.
-        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void OnKeyDown(KeyEventArgs e)
         {
@@ -2957,10 +2954,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <summary>
-        ///  Raises the <see cref='ComboBox.Validating'/>
-        ///  event.
-        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void OnValidating(CancelEventArgs e)
         {

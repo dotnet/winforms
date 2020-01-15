@@ -12,8 +12,8 @@ using System.Drawing;
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///  Represents a collection of <see cref='DataGridViewRow'/> objects in the <see cref='DataGrid'/>
-    ///  control.
+    ///  Represents a collection of <see cref='DataGridViewRow'/> objects in the
+    ///  <see cref='DataGridView'/> control.
     /// </summary>
     [
         ListBindable(false),
