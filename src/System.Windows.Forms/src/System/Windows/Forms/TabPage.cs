@@ -367,7 +367,7 @@ namespace System.Windows.Forms
                 }
 
                 ToolTip.SetToolTip(this, value);
-                SetToolTipNative(ToolTip, ToolTipText);
+                SetToolTipNative(ToolTip);
 
                 if (value == _toolTipText)
                 {
