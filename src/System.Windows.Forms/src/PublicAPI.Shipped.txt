@@ -10439,7 +10439,6 @@ override System.Windows.Forms.ToolStrip.OnEnabledChanged(System.EventArgs e) -> 
 override System.Windows.Forms.ToolStrip.OnFontChanged(System.EventArgs e) -> void
 override System.Windows.Forms.ToolStrip.OnHandleCreated(System.EventArgs e) -> void
 override System.Windows.Forms.ToolStrip.OnHandleDestroyed(System.EventArgs e) -> void
-override System.Windows.Forms.ToolStrip.OnInvalidated(System.Windows.Forms.InvalidateEventArgs e) -> void
 override System.Windows.Forms.ToolStrip.OnLayout(System.Windows.Forms.LayoutEventArgs e) -> void
 override System.Windows.Forms.ToolStrip.OnLeave(System.EventArgs e) -> void
 override System.Windows.Forms.ToolStrip.OnLostFocus(System.EventArgs e) -> void
