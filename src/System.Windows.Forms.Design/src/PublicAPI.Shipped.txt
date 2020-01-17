@@ -862,3 +862,134 @@ virtual System.Windows.Forms.Design.ParentControlDesigner.DrawGrid.get -> bool
 virtual System.Windows.Forms.Design.ParentControlDesigner.DrawGrid.set -> void
 virtual System.Windows.Forms.Design.ParentControlDesigner.GetParentForComponent(System.ComponentModel.IComponent component) -> System.Windows.Forms.Control
 virtual System.Windows.Forms.Design.WindowsFormsDesignerOptionService.CompatibilityOptions.get -> System.Windows.Forms.Design.DesignerOptions
+System.ComponentModel.Design.ActiveDesignSurfaceChangedEventArgs
+System.ComponentModel.Design.ActiveDesignSurfaceChangedEventArgs.ActiveDesignSurfaceChangedEventArgs(System.ComponentModel.Design.DesignSurface oldSurface, System.ComponentModel.Design.DesignSurface newSurface) -> void
+System.ComponentModel.Design.ActiveDesignSurfaceChangedEventArgs.NewSurface.get -> System.ComponentModel.Design.DesignSurface
+System.ComponentModel.Design.ActiveDesignSurfaceChangedEventArgs.OldSurface.get -> System.ComponentModel.Design.DesignSurface
+System.ComponentModel.Design.ActiveDesignSurfaceChangedEventHandler
+System.ComponentModel.Design.BinaryEditor
+System.ComponentModel.Design.BinaryEditor.BinaryEditor() -> void
+System.ComponentModel.Design.ByteViewer
+System.ComponentModel.Design.ByteViewer.ByteViewer() -> void
+System.ComponentModel.Design.DesignSurfaceCollection
+System.ComponentModel.Design.DesignSurfaceCollection.CopyTo(System.ComponentModel.Design.DesignSurface[] array, int index) -> void
+System.ComponentModel.Design.DesignSurfaceCollection.Count.get -> int
+System.ComponentModel.Design.DesignSurfaceCollection.GetEnumerator() -> System.Collections.IEnumerator
+System.ComponentModel.Design.DesignSurfaceCollection.this[int index].get -> System.ComponentModel.Design.DesignSurface
+System.ComponentModel.Design.DesignSurfaceEventArgs
+System.ComponentModel.Design.DesignSurfaceEventArgs.DesignSurfaceEventArgs(System.ComponentModel.Design.DesignSurface surface) -> void
+System.ComponentModel.Design.DesignSurfaceEventArgs.Surface.get -> System.ComponentModel.Design.DesignSurface
+System.ComponentModel.Design.DesignSurfaceEventHandler
+System.ComponentModel.Design.DesignSurfaceManager
+System.ComponentModel.Design.DesignSurfaceManager.ActiveDesignSurfaceChanged -> System.ComponentModel.Design.ActiveDesignSurfaceChangedEventHandler
+System.ComponentModel.Design.DesignSurfaceManager.CreateDesignSurface() -> System.ComponentModel.Design.DesignSurface
+System.ComponentModel.Design.DesignSurfaceManager.CreateDesignSurface(System.IServiceProvider parentProvider) -> System.ComponentModel.Design.DesignSurface
+System.ComponentModel.Design.DesignSurfaceManager.DesignSurfaceCreated -> System.ComponentModel.Design.DesignSurfaceEventHandler
+System.ComponentModel.Design.DesignSurfaceManager.DesignSurfaceDisposed -> System.ComponentModel.Design.DesignSurfaceEventHandler
+System.ComponentModel.Design.DesignSurfaceManager.DesignSurfaceManager() -> void
+System.ComponentModel.Design.DesignSurfaceManager.DesignSurfaceManager(System.IServiceProvider parentProvider) -> void
+System.ComponentModel.Design.DesignSurfaceManager.DesignSurfaces.get -> System.ComponentModel.Design.DesignSurfaceCollection
+System.ComponentModel.Design.DesignSurfaceManager.Dispose() -> void
+System.ComponentModel.Design.DesignSurfaceManager.GetService(System.Type serviceType) -> object
+System.ComponentModel.Design.DesignSurfaceManager.SelectionChanged -> System.EventHandler
+System.ComponentModel.Design.DesignSurfaceManager.ServiceContainer.get -> System.ComponentModel.Design.ServiceContainer
+System.ComponentModel.Design.DisplayMode
+System.ComponentModel.Design.DisplayMode.Ansi = 2 -> System.ComponentModel.Design.DisplayMode
+System.ComponentModel.Design.DisplayMode.Auto = 4 -> System.ComponentModel.Design.DisplayMode
+System.ComponentModel.Design.DisplayMode.Hexdump = 1 -> System.ComponentModel.Design.DisplayMode
+System.ComponentModel.Design.DisplayMode.Unicode = 3 -> System.ComponentModel.Design.DisplayMode
+System.ComponentModel.Design.EventBindingService
+System.ComponentModel.Design.EventBindingService.EventBindingService(System.IServiceProvider provider) -> void
+System.ComponentModel.Design.EventBindingService.GetService(System.Type serviceType) -> object
+System.ComponentModel.Design.Serialization.BasicDesignerLoader
+System.ComponentModel.Design.Serialization.BasicDesignerLoader.BasicDesignerLoader() -> void
+System.ComponentModel.Design.Serialization.BasicDesignerLoader.GetService(System.Type serviceType) -> object
+System.ComponentModel.Design.Serialization.BasicDesignerLoader.LoaderHost.get -> System.ComponentModel.Design.Serialization.IDesignerLoaderHost
+System.ComponentModel.Design.Serialization.BasicDesignerLoader.PropertyProvider.get -> object
+System.ComponentModel.Design.Serialization.BasicDesignerLoader.PropertyProvider.set -> void
+System.ComponentModel.Design.Serialization.BasicDesignerLoader.Reload(System.ComponentModel.Design.Serialization.BasicDesignerLoader.ReloadOptions flags) -> void
+System.ComponentModel.Design.Serialization.BasicDesignerLoader.ReloadOptions
+System.ComponentModel.Design.Serialization.BasicDesignerLoader.ReloadOptions.Default = 0 -> System.ComponentModel.Design.Serialization.BasicDesignerLoader.ReloadOptions
+System.ComponentModel.Design.Serialization.BasicDesignerLoader.ReloadOptions.Force = 2 -> System.ComponentModel.Design.Serialization.BasicDesignerLoader.ReloadOptions
+System.ComponentModel.Design.Serialization.BasicDesignerLoader.ReloadOptions.ModifyOnError = 1 -> System.ComponentModel.Design.Serialization.BasicDesignerLoader.ReloadOptions
+System.ComponentModel.Design.Serialization.BasicDesignerLoader.ReloadOptions.NoFlush = 4 -> System.ComponentModel.Design.Serialization.BasicDesignerLoader.ReloadOptions
+System.ComponentModel.Design.Serialization.BasicDesignerLoader.ReloadPending.get -> bool
+System.ComponentModel.Design.Serialization.BasicDesignerLoader.SetBaseComponentClassName(string name) -> void
+System.ComponentModel.Design.Serialization.CodeDomDesignerLoader
+System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.CodeDomDesignerLoader() -> void
+System.ComponentModel.Design.Serialization.CodeDomLocalizationModel
+System.ComponentModel.Design.Serialization.CodeDomLocalizationModel.None = 0 -> System.ComponentModel.Design.Serialization.CodeDomLocalizationModel
+System.ComponentModel.Design.Serialization.CodeDomLocalizationModel.PropertyAssignment = 1 -> System.ComponentModel.Design.Serialization.CodeDomLocalizationModel
+System.ComponentModel.Design.Serialization.CodeDomLocalizationModel.PropertyReflection = 2 -> System.ComponentModel.Design.Serialization.CodeDomLocalizationModel
+System.ComponentModel.Design.Serialization.CodeDomLocalizationProvider
+System.ComponentModel.Design.Serialization.CodeDomLocalizationProvider.CodeDomLocalizationProvider(System.IServiceProvider provider, System.ComponentModel.Design.Serialization.CodeDomLocalizationModel model) -> void
+System.ComponentModel.Design.Serialization.CodeDomLocalizationProvider.CodeDomLocalizationProvider(System.IServiceProvider provider, System.ComponentModel.Design.Serialization.CodeDomLocalizationModel model, System.Globalization.CultureInfo[] supportedCultures) -> void
+System.ComponentModel.Design.Serialization.CodeDomLocalizationProvider.Dispose() -> void
+System.ComponentModel.Design.Serialization.ICodeDomDesignerReload
+System.ComponentModel.Design.Serialization.ICodeDomDesignerReload.ShouldReloadDesigner(System.CodeDom.CodeCompileUnit newTree) -> bool
+System.Windows.Forms.Design.MaskDescriptor
+System.Windows.Forms.Design.MaskDescriptor.MaskDescriptor() -> void
+abstract System.ComponentModel.Design.EventBindingService.CreateUniqueMethodName(System.ComponentModel.IComponent component, System.ComponentModel.EventDescriptor e) -> string
+abstract System.ComponentModel.Design.EventBindingService.GetCompatibleMethods(System.ComponentModel.EventDescriptor e) -> System.Collections.ICollection
+abstract System.ComponentModel.Design.EventBindingService.ShowCode() -> bool
+abstract System.ComponentModel.Design.EventBindingService.ShowCode(System.ComponentModel.IComponent component, System.ComponentModel.EventDescriptor e, string methodName) -> bool
+abstract System.ComponentModel.Design.EventBindingService.ShowCode(int lineNumber) -> bool
+abstract System.ComponentModel.Design.Serialization.BasicDesignerLoader.PerformFlush(System.ComponentModel.Design.Serialization.IDesignerSerializationManager serializationManager) -> void
+abstract System.ComponentModel.Design.Serialization.BasicDesignerLoader.PerformLoad(System.ComponentModel.Design.Serialization.IDesignerSerializationManager serializationManager) -> void
+abstract System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.CodeDomProvider.get -> System.CodeDom.Compiler.CodeDomProvider
+abstract System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.Parse() -> System.CodeDom.CodeCompileUnit
+abstract System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.TypeResolutionService.get -> System.ComponentModel.Design.ITypeResolutionService
+abstract System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.Write(System.CodeDom.CodeCompileUnit unit) -> void
+abstract System.Windows.Forms.Design.MaskDescriptor.Mask.get -> string
+abstract System.Windows.Forms.Design.MaskDescriptor.Name.get -> string
+abstract System.Windows.Forms.Design.MaskDescriptor.Sample.get -> string
+abstract System.Windows.Forms.Design.MaskDescriptor.ValidatingType.get -> System.Type
+override System.ComponentModel.Design.BinaryEditor.EditValue(System.ComponentModel.ITypeDescriptorContext context, System.IServiceProvider provider, object value) -> object
+override System.ComponentModel.Design.BinaryEditor.GetEditStyle(System.ComponentModel.ITypeDescriptorContext context) -> System.Drawing.Design.UITypeEditorEditStyle
+override System.ComponentModel.Design.ByteViewer.OnKeyDown(System.Windows.Forms.KeyEventArgs e) -> void
+override System.ComponentModel.Design.ByteViewer.OnLayout(System.Windows.Forms.LayoutEventArgs e) -> void
+override System.ComponentModel.Design.ByteViewer.OnPaint(System.Windows.Forms.PaintEventArgs e) -> void
+override System.ComponentModel.Design.Serialization.BasicDesignerLoader.BeginLoad(System.ComponentModel.Design.Serialization.IDesignerLoaderHost host) -> void
+override System.ComponentModel.Design.Serialization.BasicDesignerLoader.Dispose() -> void
+override System.ComponentModel.Design.Serialization.BasicDesignerLoader.Flush() -> void
+override System.ComponentModel.Design.Serialization.BasicDesignerLoader.Loading.get -> bool
+override System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.Dispose() -> void
+override System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.Initialize() -> void
+override System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.IsReloadNeeded() -> bool
+override System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.OnBeginLoad() -> void
+override System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.OnBeginUnload() -> void
+override System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.OnEndLoad(bool successful, System.Collections.ICollection errors) -> void
+override System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.PerformFlush(System.ComponentModel.Design.Serialization.IDesignerSerializationManager manager) -> void
+override System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.PerformLoad(System.ComponentModel.Design.Serialization.IDesignerSerializationManager manager) -> void
+override System.Windows.Forms.Design.MaskDescriptor.Equals(object maskDescriptor) -> bool
+override System.Windows.Forms.Design.MaskDescriptor.GetHashCode() -> int
+override System.Windows.Forms.Design.MaskDescriptor.ToString() -> string
+static System.Windows.Forms.Design.MaskDescriptor.IsValidMaskDescriptor(System.Windows.Forms.Design.MaskDescriptor maskDescriptor) -> bool
+static System.Windows.Forms.Design.MaskDescriptor.IsValidMaskDescriptor(System.Windows.Forms.Design.MaskDescriptor maskDescriptor, out string validationErrorDescription) -> bool
+virtual System.ComponentModel.Design.ByteViewer.GetBytes() -> byte[]
+virtual System.ComponentModel.Design.ByteViewer.GetDisplayMode() -> System.ComponentModel.Design.DisplayMode
+virtual System.ComponentModel.Design.ByteViewer.SaveToFile(string path) -> void
+virtual System.ComponentModel.Design.ByteViewer.ScrollChanged(object source, System.EventArgs e) -> void
+virtual System.ComponentModel.Design.ByteViewer.SetBytes(byte[] bytes) -> void
+virtual System.ComponentModel.Design.ByteViewer.SetDisplayMode(System.ComponentModel.Design.DisplayMode mode) -> void
+virtual System.ComponentModel.Design.ByteViewer.SetFile(string path) -> void
+virtual System.ComponentModel.Design.ByteViewer.SetStartLine(int line) -> void
+virtual System.ComponentModel.Design.DesignSurfaceManager.ActiveDesignSurface.get -> System.ComponentModel.Design.DesignSurface
+virtual System.ComponentModel.Design.DesignSurfaceManager.ActiveDesignSurface.set -> void
+virtual System.ComponentModel.Design.DesignSurfaceManager.CreateDesignSurfaceCore(System.IServiceProvider parentProvider) -> System.ComponentModel.Design.DesignSurface
+virtual System.ComponentModel.Design.DesignSurfaceManager.Dispose(bool disposing) -> void
+virtual System.ComponentModel.Design.EventBindingService.FreeMethod(System.ComponentModel.IComponent component, System.ComponentModel.EventDescriptor e, string methodName) -> void
+virtual System.ComponentModel.Design.EventBindingService.UseMethod(System.ComponentModel.IComponent component, System.ComponentModel.EventDescriptor e, string methodName) -> void
+virtual System.ComponentModel.Design.EventBindingService.ValidateMethodName(string methodName) -> void
+virtual System.ComponentModel.Design.Serialization.BasicDesignerLoader.EnableComponentNotification(bool enable) -> bool
+virtual System.ComponentModel.Design.Serialization.BasicDesignerLoader.Initialize() -> void
+virtual System.ComponentModel.Design.Serialization.BasicDesignerLoader.IsReloadNeeded() -> bool
+virtual System.ComponentModel.Design.Serialization.BasicDesignerLoader.Modified.get -> bool
+virtual System.ComponentModel.Design.Serialization.BasicDesignerLoader.Modified.set -> void
+virtual System.ComponentModel.Design.Serialization.BasicDesignerLoader.OnBeginLoad() -> void
+virtual System.ComponentModel.Design.Serialization.BasicDesignerLoader.OnBeginUnload() -> void
+virtual System.ComponentModel.Design.Serialization.BasicDesignerLoader.OnEndLoad(bool successful, System.Collections.ICollection errors) -> void
+virtual System.ComponentModel.Design.Serialization.BasicDesignerLoader.OnModifying() -> void
+virtual System.ComponentModel.Design.Serialization.BasicDesignerLoader.ReportFlushErrors(System.Collections.ICollection errors) -> void
+virtual System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.OnComponentRename(object component, string oldName, string newName) -> void
+virtual System.Windows.Forms.Design.MaskDescriptor.Culture.get -> System.Globalization.CultureInfo
