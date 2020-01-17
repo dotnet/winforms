@@ -54,6 +54,10 @@
     <CodecovVersion>1.1.1</CodecovVersion>
     <ReportGeneratorVersion>4.0.9</ReportGeneratorVersion>
   </PropertyGroup>
+  <!-- External Analyzers -->
+  <PropertyGroup>
+    <MicrosoftCodeAnalysisPublicApiAnalyzers>2.9.8</MicrosoftCodeAnalysisPublicApiAnalyzers>
+  </PropertyGroup>
   <!-- Additional unchanging dependencies -->
   <PropertyGroup>
     <MoqPackageVersion>4.10.0</MoqPackageVersion>

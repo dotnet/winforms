@@ -504,7 +504,6 @@ System.Windows.Forms.Design.DesignerOptions
 System.Windows.Forms.Design.DesignerOptions.DesignerOptions() -> void
 System.Windows.Forms.Design.DocumentDesigner
 System.Windows.Forms.Design.DocumentDesigner.DocumentDesigner() -> void
-System.Windows.Forms.Design.DocumentDesigner.menuEditorService -> System.Windows.Forms.Design.IMenuEditorService
 System.Windows.Forms.Design.EventHandlerService
 System.Windows.Forms.Design.EventHandlerService.EventHandlerChanged -> System.EventHandler
 System.Windows.Forms.Design.EventHandlerService.EventHandlerService(System.Windows.Forms.Control focusWnd) -> void
@@ -514,12 +513,6 @@ System.Windows.Forms.Design.EventHandlerService.PopHandler(object handler) -> vo
 System.Windows.Forms.Design.EventHandlerService.PushHandler(object handler) -> void
 System.Windows.Forms.Design.IContainsThemedScrollbarWindows
 System.Windows.Forms.Design.IContainsThemedScrollbarWindows.ThemedScrollbarWindows() -> System.Collections.IEnumerable
-System.Windows.Forms.Design.IMenuEditorService
-System.Windows.Forms.Design.IMenuEditorService.GetMenu() -> System.Windows.Forms.Menu
-System.Windows.Forms.Design.IMenuEditorService.IsActive() -> bool
-System.Windows.Forms.Design.IMenuEditorService.MessageFilter(ref System.Windows.Forms.Message m) -> bool
-System.Windows.Forms.Design.IMenuEditorService.SetMenu(System.Windows.Forms.Menu menu) -> void
-System.Windows.Forms.Design.IMenuEditorService.SetSelection(System.Windows.Forms.MenuItem item) -> void
 System.Windows.Forms.Design.ImageListCodeDomSerializer
 System.Windows.Forms.Design.ImageListCodeDomSerializer.ImageListCodeDomSerializer() -> void
 System.Windows.Forms.Design.MenuCommands

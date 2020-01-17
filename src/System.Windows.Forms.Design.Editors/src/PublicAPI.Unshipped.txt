@@ -1,0 +1,19 @@
+System.ComponentModel.Design.DateTimeEditor
+System.ComponentModel.Design.DateTimeEditor.DateTimeEditor() -> void
+System.Drawing.Design.ContentAlignmentEditor
+System.Drawing.Design.ContentAlignmentEditor.ContentAlignmentEditor() -> void
+System.Drawing.Design.IconEditor
+System.Drawing.Design.IconEditor.IconEditor() -> void
+override System.ComponentModel.Design.DateTimeEditor.EditValue(System.ComponentModel.ITypeDescriptorContext context, System.IServiceProvider provider, object value) -> object
+override System.ComponentModel.Design.DateTimeEditor.GetEditStyle(System.ComponentModel.ITypeDescriptorContext context) -> System.Drawing.Design.UITypeEditorEditStyle
+override System.Drawing.Design.ContentAlignmentEditor.EditValue(System.ComponentModel.ITypeDescriptorContext context, System.IServiceProvider provider, object value) -> object
+override System.Drawing.Design.ContentAlignmentEditor.GetEditStyle(System.ComponentModel.ITypeDescriptorContext context) -> System.Drawing.Design.UITypeEditorEditStyle
+override System.Drawing.Design.IconEditor.EditValue(System.ComponentModel.ITypeDescriptorContext context, System.IServiceProvider provider, object value) -> object
+override System.Drawing.Design.IconEditor.GetEditStyle(System.ComponentModel.ITypeDescriptorContext context) -> System.Drawing.Design.UITypeEditorEditStyle
+override System.Drawing.Design.IconEditor.GetPaintValueSupported(System.ComponentModel.ITypeDescriptorContext context) -> bool
+override System.Drawing.Design.IconEditor.PaintValue(System.Drawing.Design.PaintValueEventArgs e) -> void
+static System.Drawing.Design.IconEditor.CreateExtensionsString(string[] extensions, string sep) -> string
+static System.Drawing.Design.IconEditor.CreateFilterEntry(System.Drawing.Design.IconEditor editor) -> string
+virtual System.Drawing.Design.IconEditor.GetExtensions() -> string[]
+virtual System.Drawing.Design.IconEditor.GetFileDialogDescription() -> string
+virtual System.Drawing.Design.IconEditor.LoadFromStream(System.IO.Stream stream) -> System.Drawing.Icon

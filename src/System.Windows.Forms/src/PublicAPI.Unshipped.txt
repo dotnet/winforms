@@ -1,0 +1,3 @@
+System.Windows.Forms.DataGridView.ProcessControlShiftF10Keys(System.Windows.Forms.Keys keyData) -> bool
+override System.Windows.Forms.Form.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
+override System.Windows.Forms.MonthCalendar.OnGotFocus(System.EventArgs e) -> void
