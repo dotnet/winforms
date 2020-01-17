@@ -1,10 +1,6 @@
 {
   "tools": {
     "dotnet": "5.0.100-alpha1-015536",
-    "vs": {
-      "version": "16.0"
-    },
-    "xcopy-msbuild": "16.0.0-rc1-alpha",
     "runtimes": {
       "dotnet": [
         "$(MicrosoftNETCoreAppPackageVersion)"
