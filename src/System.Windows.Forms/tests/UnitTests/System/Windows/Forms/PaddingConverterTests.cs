@@ -157,10 +157,21 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void PaddingConverter_CreateInstance_NullContext_ThrowsArgumentNullException()
+        public void PaddingConverter_CreateInstance_ValidPropertyValuesNullContext_ReturnsExpected()
         {
             var converter = new PaddingConverter();
-            Assert.Throws<ArgumentNullException>("context", () => converter.CreateInstance(null, new Dictionary<string, object>()));
+            Padding expected = new Padding(1, 2, 3, 4);
+            Padding padding = Assert.IsType<Padding>(converter.CreateInstance(
+                null, new Dictionary<string, object>
+                {
+                    {nameof(Padding.All), expected.All},
+                    {nameof(Padding.Left), expected.Left},
+                    {nameof(Padding.Top), expected.Top},
+                    {nameof(Padding.Right), expected.Right},
+                    {nameof(Padding.Bottom), expected.Bottom}
+                })
+            );
+            Assert.Equal(expected, padding);
         }
 
         [Fact]
@@ -355,7 +366,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void PaddingConverter_CreateInstance_InvalidInstanceType_ThrowsInvalidCastException()
+        public void PaddingConverter_CreateInstance_UnknownInstanceType_ReturnsExpected()
         {
             var converter = new PaddingConverter();
             var mockContext = new Mock<ITypeDescriptorContext>(MockBehavior.Strict);
@@ -374,7 +385,10 @@ namespace System.Windows.Forms.Tests
                 {nameof(Padding.Right), 3},
                 {nameof(Padding.Bottom), 4},
             };
-            Assert.Throws<InvalidCastException>(() => converter.CreateInstance(mockContext.Object, propertyValues));
+
+            Padding expected = new Padding(2, 2, 3, 4);
+            Padding padding = Assert.IsType<Padding>(converter.CreateInstance(mockContext.Object, propertyValues));
+            Assert.Equal(expected, padding);
         }
 
         [Fact]
