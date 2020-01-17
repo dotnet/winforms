@@ -5,8 +5,9 @@
     <TargetFramework>netcoreapp3.0</TargetFramework>    
     <CLSCompliant>true</CLSCompliant>
     <Deterministic>true</Deterministic>
-    <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
+    <UsePublicApiAnalyzers>true</UsePublicApiAnalyzers>
   </PropertyGroup>
 
   <ItemGroup>
