@@ -299,35 +299,6 @@ namespace System.Windows.Forms
 
         public static int START_PAGE_GENERAL = unchecked((int)0xffffffff);
 
-        private static uint wmMouseEnterMessage = uint.MaxValue;
-
-        public static User32.WindowMessage WM_MOUSEENTER
-        {
-            get
-            {
-                if (wmMouseEnterMessage == uint.MaxValue)
-                {
-                    wmMouseEnterMessage = (uint)User32.RegisterWindowMessageW("WinFormsMouseEnter");
-                }
-
-                return (User32.WindowMessage)wmMouseEnterMessage;
-            }
-        }
-
-        private static uint wmUnSubclass = uint.MaxValue;
-        public static User32.WindowMessage WM_UIUNSUBCLASS
-        {
-            get
-            {
-                if (wmUnSubclass == uint.MaxValue)
-                {
-                    wmUnSubclass = (uint)User32.RegisterWindowMessageW("WinFormsUnSubclass");
-                }
-
-                return (User32.WindowMessage)wmUnSubclass;
-            }
-        }
-
         public const int XBUTTON1 = 0x0001;
         public const int XBUTTON2 = 0x0002;
 

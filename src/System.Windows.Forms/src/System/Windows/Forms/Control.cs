@@ -13280,7 +13280,7 @@ namespace System.Windows.Forms
                         return;
                     }
 
-                    if (m.Msg == (int)NativeMethods.WM_MOUSEENTER)
+                    if (m.Msg == (int)User32.RegisteredMessage.WM_MOUSEENTER)
                     {
                         WmMouseEnter(ref m);
                         break;

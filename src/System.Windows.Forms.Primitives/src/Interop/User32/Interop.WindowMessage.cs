@@ -22,23 +22,6 @@ internal static partial class Interop
         // https://docs.microsoft.com/en-us/cpp/mfc/tn062-message-reflection-for-windows-controls?view=vs-2019
         public const uint WM_REFLECT = WM_USER + 0x1C00;
 
-        public static class RegisteredMessage
-        {
-            private static uint s_wmUnSubclass = uint.MaxValue;
-            public static WindowMessage WM_UIUNSUBCLASS
-            {
-                get
-                {
-                    if (s_wmUnSubclass == uint.MaxValue)
-                    {
-                        s_wmUnSubclass = (uint)RegisterWindowMessageW("WinFormsUnSubclass");
-                    }
-
-                    return (WindowMessage)s_wmUnSubclass;
-                }
-            }
-        }
-
         public enum WindowMessage : uint
         {
             WM_NULL                             = 0x0000,
