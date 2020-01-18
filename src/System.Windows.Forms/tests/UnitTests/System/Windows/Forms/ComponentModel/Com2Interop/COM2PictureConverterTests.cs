@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Windows.Forms.ComponentModel.Com2Interop;
 using Moq;
 using Xunit;
+using static Interop;
 using static Interop.Ole32;
 
 namespace System.Windows.Forms.Tests.ComponentModel.Com2Interop
@@ -31,7 +32,7 @@ namespace System.Windows.Forms.Tests.ComponentModel.Com2Interop
         public void ConvertNativeToManaged_NullHandle()
         {
             var mock = new Mock<IPicture>(MockBehavior.Strict);
-            mock.Setup(m => m.Handle).Returns(0u);
+            mock.Setup(m => m.Handle).Returns(0);
             Assert.Null(Instance.ConvertNativeToManaged(mock.Object, null));
         }
 
@@ -41,7 +42,7 @@ namespace System.Windows.Forms.Tests.ComponentModel.Com2Interop
             Icon errorIcon = SystemIcons.Error;
 
             var mock = new Mock<IPicture>(MockBehavior.Strict);
-            mock.Setup(m => m.Handle).Returns((uint)errorIcon.Handle);
+            mock.Setup(m => m.Handle).Returns((int)errorIcon.Handle);
             mock.Setup(m => m.Type).Returns((short)PICTYPE.ICON);
 
             using Icon icon = (Icon)Instance.ConvertNativeToManaged(mock.Object, null);
@@ -59,26 +60,33 @@ namespace System.Windows.Forms.Tests.ComponentModel.Com2Interop
         {
             Icon errorIcon = SystemIcons.Error;
             using Bitmap errorBitmap = errorIcon.ToBitmap();
+            IntPtr hBitmap = errorBitmap.GetHbitmap();
+            try
+            {
+                var mock = new Mock<IPicture>(MockBehavior.Strict);
+                mock.Setup(m => m.Handle).Returns((int)hBitmap);
+                mock.Setup(m => m.Type).Returns((short)PICTYPE.BITMAP);
 
-            var mock = new Mock<IPicture>(MockBehavior.Strict);
-            mock.Setup(m => m.Handle).Returns((uint)errorBitmap.GetHbitmap());
-            mock.Setup(m => m.Type).Returns((short)PICTYPE.BITMAP);
+                using Bitmap bitmap = (Bitmap)Instance.ConvertNativeToManaged(mock.Object, null);
 
-            using Bitmap bitmap = (Bitmap)Instance.ConvertNativeToManaged(mock.Object, null);
+                Assert.Equal(bitmap.Height, errorIcon.Height);
+                Assert.Equal(bitmap.Width, errorIcon.Width);
+                Assert.Equal(typeof(Bitmap), Instance.ManagedType);
 
-            Assert.Equal(bitmap.Height, errorIcon.Height);
-            Assert.Equal(bitmap.Width, errorIcon.Width);
-            Assert.Equal(typeof(Bitmap), Instance.ManagedType);
-
-            // We should get the cached object if the handle didn't change
-            Assert.Same(bitmap, (Bitmap)Instance.ConvertNativeToManaged(mock.Object, null));
+                // We should get the cached object if the handle didn't change
+                Assert.Same(bitmap, (Bitmap)Instance.ConvertNativeToManaged(mock.Object, null));
+            }
+            finally
+            {
+                Gdi32.DeleteObject(hBitmap);
+            }
         }
 
         [Fact]
         public void ConvertNativeToManaged_UnsupportedPICTYPE()
         {
             var mock = new Mock<IPicture>(MockBehavior.Strict);
-            mock.Setup(m => m.Handle).Returns(1u);
+            mock.Setup(m => m.Handle).Returns(1);
             mock.Setup(m => m.Type).Returns((short)PICTYPE.METAFILE);
 
             // The converter asserts, but doesn't throw. Suppress asserts so

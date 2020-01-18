@@ -4027,7 +4027,7 @@ namespace System.Windows.Forms
                 return null;
             }
 
-            uint hPal = default;
+            int hPal = default;
             Ole32.IPicture pict = (Ole32.IPicture)picture;
             Ole32.PICTYPE type = (Ole32.PICTYPE)pict.Type;
             if (type == Ole32.PICTYPE.BITMAP)
@@ -4055,7 +4055,7 @@ namespace System.Windows.Forms
                 return null;
             }
 
-            uint hPal = default;
+            int hPal = default;
             Ole32.IPictureDisp pict = (Ole32.IPictureDisp)picture;
             Ole32.PICTYPE type = (Ole32.PICTYPE)pict.Type;
             if (type == Ole32.PICTYPE.BITMAP)
@@ -4075,9 +4075,9 @@ namespace System.Windows.Forms
         }
 
         private static Image GetPictureFromParams(
-            uint handle,
+            int handle,
             Ole32.PICTYPE type,
-            uint paletteHandle,
+            int paletteHandle,
             int width,
             int height)
         {
