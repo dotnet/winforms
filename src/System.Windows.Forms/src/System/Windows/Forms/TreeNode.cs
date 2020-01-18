@@ -287,7 +287,7 @@ namespace System.Windows.Forms
                 unsafe
                 { *((IntPtr*)&rc.left) = Handle; }
                 // wparam: 1=include only text, 0=include entire line
-                if ((int)User32.SendMessageW(tv, (User32.WindowMessage)TVM.GETITEMRECT, (IntPtr)1, ref rc) == 0)
+                if ((int)User32.SendMessageW(tv, (User32.WM)TVM.GETITEMRECT, (IntPtr)1, ref rc) == 0)
                 {
                     // This means the node is not visible
                     //
@@ -314,7 +314,7 @@ namespace System.Windows.Forms
                 {
                     return Rectangle.Empty;
                 }
-                if ((int)User32.SendMessageW(tv, (User32.WindowMessage)TVM.GETITEMRECT, IntPtr.Zero, ref rc) == 0)
+                if ((int)User32.SendMessageW(tv, (User32.WM)TVM.GETITEMRECT, IntPtr.Zero, ref rc) == 0)
                 {
                     // This means the node is not visible
                     //
@@ -365,7 +365,7 @@ namespace System.Windows.Forms
                     stateMask = TVIS.STATEIMAGEMASK
                 };
                 item.state |= value ? CHECKED : UNCHECKED;
-                User32.SendMessageW(tv, (User32.WindowMessage)TVM.SETITEMW, IntPtr.Zero, ref item);
+                User32.SendMessageW(tv, (User32.WM)TVM.SETITEMW, IntPtr.Zero, ref item);
             }
         }
 
@@ -389,7 +389,7 @@ namespace System.Windows.Forms
                         hItem = handle,
                         stateMask = TVIS.STATEIMAGEMASK
                     };
-                    User32.SendMessageW(tv, (User32.WindowMessage)TVM.GETITEMW, IntPtr.Zero, ref item);
+                    User32.SendMessageW(tv, (User32.WM)TVM.GETITEMW, IntPtr.Zero, ref item);
                     Debug.Assert(!tv.CheckBoxes || (((int)item.state >> SHIFTVAL) > 1) == CheckedInternal,
                         "isChecked on node '" + Name + "' did not match the state in TVM_GETITEM.");
                 }
@@ -697,7 +697,7 @@ namespace System.Windows.Forms
                 unsafe
                 { *((IntPtr*)&rc.left) = Handle; }
 
-                bool visible = ((int)User32.SendMessageW(tv, (User32.WindowMessage)TVM.GETITEMRECT, (IntPtr)1, ref rc) != 0);
+                bool visible = ((int)User32.SendMessageW(tv, (User32.WM)TVM.GETITEMRECT, (IntPtr)1, ref rc) != 0);
                 if (visible)
                 {
                     Size size = tv.ClientSize;
@@ -784,7 +784,7 @@ namespace System.Windows.Forms
 
                 if (node != null)
                 {
-                    IntPtr next = User32.SendMessageW(tv, (User32.WindowMessage)TVM.GETNEXTITEM, (IntPtr)NativeMethods.TVGN_NEXTVISIBLE, node.Handle);
+                    IntPtr next = User32.SendMessageW(tv, (User32.WM)TVM.GETNEXTITEM, (IntPtr)NativeMethods.TVGN_NEXTVISIBLE, node.Handle);
                     if (next != IntPtr.Zero)
                     {
                         return tv.NodeFromHandle(next);
@@ -944,7 +944,7 @@ namespace System.Windows.Forms
                     {
                         return null;
                     }
-                    IntPtr prev = User32.SendMessageW(tv, (User32.WindowMessage)TVM.GETNEXTITEM, (IntPtr)NativeMethods.TVGN_PREVIOUSVISIBLE, node.Handle);
+                    IntPtr prev = User32.SendMessageW(tv, (User32.WM)TVM.GETNEXTITEM, (IntPtr)NativeMethods.TVGN_PREVIOUSVISIBLE, node.Handle);
                     if (prev != IntPtr.Zero)
                     {
                         return tv.NodeFromHandle(prev);
@@ -1033,7 +1033,7 @@ namespace System.Windows.Forms
                     mask = TVIF.HANDLE | TVIF.STATE,
                     stateMask = TVIS.SELECTED | TVIS.EXPANDED
                 };
-                User32.SendMessageW(tv, (User32.WindowMessage)TVM.GETITEMW, IntPtr.Zero, ref item);
+                User32.SendMessageW(tv, (User32.WM)TVM.GETITEMW, IntPtr.Zero, ref item);
                 return item.state;
             }
         }
@@ -1362,7 +1362,7 @@ namespace System.Windows.Forms
                     tv.Focus();
                 }
 
-                User32.SendMessageW(tv, (User32.WindowMessage)TVM.EDITLABELW, (IntPtr)0, handle);
+                User32.SendMessageW(tv, (User32.WM)TVM.EDITLABELW, (IntPtr)0, handle);
             }
         }
 
@@ -1550,7 +1550,7 @@ namespace System.Windows.Forms
                 tv.OnBeforeCollapse(e);
                 if (!e.Cancel)
                 {
-                    User32.SendMessageW(tv, (User32.WindowMessage)TVM.EXPAND, (IntPtr)NativeMethods.TVE_COLLAPSE, (IntPtr)Handle);
+                    User32.SendMessageW(tv, (User32.WM)TVM.EXPAND, (IntPtr)NativeMethods.TVE_COLLAPSE, (IntPtr)Handle);
                     tv.OnAfterCollapse(new TreeViewEventArgs(this));
                 }
             }
@@ -1667,7 +1667,7 @@ namespace System.Windows.Forms
             {
                 return;
             }
-            User32.SendMessageW(tv, (User32.WindowMessage)TVM.ENDEDITLABELNOW, PARAM.FromBool(cancel));
+            User32.SendMessageW(tv, (User32.WM)TVM.ENDEDITLABELNOW, PARAM.FromBool(cancel));
         }
 
         /// <summary>
@@ -1734,7 +1734,7 @@ namespace System.Windows.Forms
                 return;
             }
 
-            User32.SendMessageW(tv, (User32.WindowMessage)TVM.ENSUREVISIBLE, IntPtr.Zero, Handle);
+            User32.SendMessageW(tv, (User32.WM)TVM.ENSUREVISIBLE, IntPtr.Zero, Handle);
         }
 
         /// <summary>
@@ -1752,7 +1752,7 @@ namespace System.Windows.Forms
             ResetExpandedState(tv);
             if (!IsExpanded)
             {
-                User32.SendMessageW(tv, (User32.WindowMessage)TVM.EXPAND, (IntPtr)NativeMethods.TVE_EXPAND, Handle);
+                User32.SendMessageW(tv, (User32.WM)TVM.EXPAND, (IntPtr)NativeMethods.TVE_EXPAND, Handle);
             }
             expandOnRealization = false;
         }
@@ -1936,16 +1936,16 @@ namespace System.Windows.Forms
                 // to get the expected behavior.
                 //
                 bool editing = false;
-                IntPtr editHandle = User32.SendMessageW(tv, (User32.WindowMessage)TVM.GETEDITCONTROL);
+                IntPtr editHandle = User32.SendMessageW(tv, (User32.WM)TVM.GETEDITCONTROL);
                 if (editHandle != IntPtr.Zero)
                 {
                     // currently editing...
                     //
                     editing = true;
-                    User32.SendMessageW(tv, (User32.WindowMessage)TVM.ENDEDITLABELNOW, PARAM.FromBool(false));
+                    User32.SendMessageW(tv, (User32.WM)TVM.ENDEDITLABELNOW, PARAM.FromBool(false));
                 }
 
-                handle = User32.SendMessageW(tv, (User32.WindowMessage)TVM.INSERTITEMW, IntPtr.Zero, ref tvis);
+                handle = User32.SendMessageW(tv, (User32.WM)TVM.INSERTITEMW, IntPtr.Zero, ref tvis);
                 tv.nodeTable[handle] = this;
 
                 // Lets update the Lparam to the Handle ....
@@ -1955,7 +1955,7 @@ namespace System.Windows.Forms
 
                 if (editing)
                 {
-                    User32.PostMessageW(tv, (User32.WindowMessage)TVM.EDITLABELW, IntPtr.Zero, handle);
+                    User32.PostMessageW(tv, (User32.WM)TVM.EDITLABELW, IntPtr.Zero, handle);
                 }
 
                 User32.InvalidateRect(new HandleRef(tv, tv.Handle), null, BOOL.FALSE);
@@ -2039,7 +2039,7 @@ namespace System.Windows.Forms
             {
                 if (notify && tv.IsHandleCreated)
                 {
-                    User32.SendMessageW(tv, (User32.WindowMessage)TVM.DELETEITEM, IntPtr.Zero, handle);
+                    User32.SendMessageW(tv, (User32.WM)TVM.DELETEITEM, IntPtr.Zero, handle);
                 }
 
                 treeView.nodeTable.Remove(handle);
@@ -2077,7 +2077,7 @@ namespace System.Windows.Forms
                 stateMask = TVIS.EXPANDEDONCE,
                 state = 0
             };
-            User32.SendMessageW(tv, (User32.WindowMessage)TVM.SETITEMW, IntPtr.Zero, ref item);
+            User32.SendMessageW(tv, (User32.WM)TVM.SETITEMW, IntPtr.Zero, ref item);
         }
 
         private bool ShouldSerializeBackColor()
@@ -2213,7 +2213,7 @@ namespace System.Windows.Forms
                 item.lParam = handle;
             }
 
-            User32.SendMessageW(tv, (User32.WindowMessage)TVM.SETITEMW, IntPtr.Zero, ref item);
+            User32.SendMessageW(tv, (User32.WM)TVM.SETITEMW, IntPtr.Zero, ref item);
             if ((mask & TVIF.TEXT) != 0)
             {
                 Marshal.FreeHGlobal(item.pszText);
@@ -2238,7 +2238,7 @@ namespace System.Windows.Forms
                 hItem = Handle,
                 iImage = Math.Max(0, ((ImageIndexer.ActualIndex >= tv.ImageList.Images.Count) ? tv.ImageList.Images.Count - 1 : ImageIndexer.ActualIndex))
             };
-            User32.SendMessageW(tv, (User32.WindowMessage)TVM.SETITEMW, IntPtr.Zero, ref item);
+            User32.SendMessageW(tv, (User32.WM)TVM.SETITEMW, IntPtr.Zero, ref item);
         }
 
         /// <summary>

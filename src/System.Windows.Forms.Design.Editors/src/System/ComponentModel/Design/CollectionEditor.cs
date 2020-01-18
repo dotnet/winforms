@@ -2158,7 +2158,7 @@ namespace System.ComponentModel.Design
                             if (PropertyGrid.Focused || PropertyGrid.ContainsFocus)
                             {
                                 // recreate the keystroke to the newly activated window
-                                User32.SendMessageW(User32.GetFocus(), User32.WindowMessage.WM_KEYDOWN, _lastKeyDown.WParam, _lastKeyDown.LParam);
+                                User32.SendMessageW(User32.GetFocus(), User32.WM.KEYDOWN, _lastKeyDown.WParam, _lastKeyDown.LParam);
                             }
                         }
                         break;
@@ -2185,8 +2185,8 @@ namespace System.ComponentModel.Design
                         if (PropertyGrid.Focused || PropertyGrid.ContainsFocus)
                         {
                             IntPtr hWnd = User32.GetFocus();
-                            User32.SendMessageW(hWnd, User32.WindowMessage.WM_KEYDOWN, _lastKeyDown.WParam, _lastKeyDown.LParam);
-                            User32.SendMessageW(hWnd, User32.WindowMessage.WM_CHAR, m.WParam, m.LParam);
+                            User32.SendMessageW(hWnd, User32.WM.KEYDOWN, _lastKeyDown.WParam, _lastKeyDown.LParam);
+                            User32.SendMessageW(hWnd, User32.WM.CHAR, m.WParam, m.LParam);
                             return;
                         }
                         break;

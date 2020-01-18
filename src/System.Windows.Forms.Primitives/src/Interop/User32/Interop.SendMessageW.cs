@@ -12,13 +12,13 @@ internal static partial class Interop
         [DllImport(Libraries.User32, ExactSpelling = true)]
         public static extern IntPtr SendMessageW(
             IntPtr hWnd,
-            WindowMessage Msg,
+            WM Msg,
             IntPtr wParam = default,
             IntPtr lParam = default);
 
         public static IntPtr SendMessageW(
             HandleRef hWnd,
-            WindowMessage Msg,
+            WM Msg,
             IntPtr wParam = default,
             IntPtr lParam = default)
         {
@@ -29,7 +29,7 @@ internal static partial class Interop
 
         public static IntPtr SendMessageW(
             IHandle hWnd,
-            WindowMessage Msg,
+            WM Msg,
             IntPtr wParam = default,
             IntPtr lParam = default)
         {
@@ -40,7 +40,7 @@ internal static partial class Interop
 
         public unsafe static IntPtr SendMessageW(
             IHandle hWnd,
-            WindowMessage Msg,
+            WM Msg,
             IntPtr wParam,
             string lParam)
         {
@@ -52,7 +52,7 @@ internal static partial class Interop
 
         public unsafe static IntPtr SendMessageW(
             HandleRef hWnd,
-            WindowMessage Msg,
+            WM Msg,
             IntPtr wParam,
             string lParam)
         {
@@ -64,7 +64,7 @@ internal static partial class Interop
 
         public unsafe static IntPtr SendMessageW<T>(
             IntPtr hWnd,
-            WindowMessage Msg,
+            WM Msg,
             IntPtr wParam,
             ref T lParam) where T : unmanaged
         {
@@ -76,7 +76,7 @@ internal static partial class Interop
 
         public unsafe static IntPtr SendMessageW<T>(
             IHandle hWnd,
-            WindowMessage Msg,
+            WM Msg,
             IntPtr wParam,
             ref T lParam) where T : unmanaged
         {

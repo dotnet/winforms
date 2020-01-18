@@ -957,7 +957,7 @@ namespace System.Windows.Forms.Tests
             };
 
             Assert.NotEqual(IntPtr.Zero, control.Handle);
-            Assert.Equal((IntPtr)expected, User32.SendMessageW(control.Handle, (User32.WindowMessage)User32.EM.GETMODIFY, IntPtr.Zero, IntPtr.Zero));
+            Assert.Equal((IntPtr)expected, User32.SendMessageW(control.Handle, (User32.WM)User32.EM.GETMODIFY, IntPtr.Zero, IntPtr.Zero));
         }
 
         [WinFormsTheory]
@@ -1327,7 +1327,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createdCallCount);
 
             // Call EM_SETMODIFY.
-            User32.SendMessageW(control.Handle, (User32.WindowMessage)User32.EM.LIMITTEXT, (IntPtr)1, IntPtr.Zero);
+            User32.SendMessageW(control.Handle, (User32.WM)User32.EM.LIMITTEXT, (IntPtr)1, IntPtr.Zero);
             Assert.Equal(0x7FFF, control.MaxLength);
             Assert.True(control.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
@@ -1436,7 +1436,7 @@ namespace System.Windows.Forms.Tests
 
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             control.MaxLength = value;
-            Assert.Equal((IntPtr)expected, User32.SendMessageW(control.Handle, (User32.WindowMessage)User32.EM.GETLIMITTEXT, IntPtr.Zero, IntPtr.Zero));
+            Assert.Equal((IntPtr)expected, User32.SendMessageW(control.Handle, (User32.WM)User32.EM.GETLIMITTEXT, IntPtr.Zero, IntPtr.Zero));
         }
 
         [WinFormsFact]
@@ -1474,7 +1474,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createdCallCount);
 
             // Call EM_SETMODIFY.
-            User32.SendMessageW(control.Handle, (User32.WindowMessage)User32.EM.SETMODIFY, (IntPtr)1, IntPtr.Zero);
+            User32.SendMessageW(control.Handle, (User32.WM)User32.EM.SETMODIFY, (IntPtr)1, IntPtr.Zero);
             Assert.Equal(0, modifiedChangedCallCount);
 
             Assert.True(control.Modified);
@@ -1552,7 +1552,7 @@ namespace System.Windows.Forms.Tests
 
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             control.Modified = value;
-            Assert.Equal((IntPtr)expected, User32.SendMessageW(control.Handle, (User32.WindowMessage)User32.EM.GETMODIFY, IntPtr.Zero, IntPtr.Zero));
+            Assert.Equal((IntPtr)expected, User32.SendMessageW(control.Handle, (User32.WM)User32.EM.GETMODIFY, IntPtr.Zero, IntPtr.Zero));
         }
 
         [WinFormsFact]
@@ -1975,7 +1975,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createdCallCount);
 
             // Call EM_SETMODIFY.
-            User32.SendMessageW(control.Handle, (User32.WindowMessage)User32.EM.SETREADONLY, (IntPtr)1, IntPtr.Zero);
+            User32.SendMessageW(control.Handle, (User32.WM)User32.EM.SETREADONLY, (IntPtr)1, IntPtr.Zero);
             Assert.Equal(0, readOnlyChangedCallCount);
 
             Assert.False(control.ReadOnly);
@@ -2460,7 +2460,7 @@ namespace System.Windows.Forms.Tests
             control.SelectionLength = value;
             int selectionStart = 0;
             int selectionEnd = 0;
-            IntPtr result = User32.SendMessageW(control.Handle, (User32.WindowMessage)User32.EM.GETSEL, (IntPtr)(&selectionStart), (IntPtr)(&selectionEnd));
+            IntPtr result = User32.SendMessageW(control.Handle, (User32.WM)User32.EM.GETSEL, (IntPtr)(&selectionStart), (IntPtr)(&selectionEnd));
             Assert.Equal(1, PARAM.LOWORD(result));
             Assert.Equal(expected, PARAM.HIWORD(result));
             Assert.Equal(1, selectionStart);
@@ -2591,7 +2591,7 @@ namespace System.Windows.Forms.Tests
             control.SelectionStart = value;
             int selectionStart = 0;
             int selectionEnd = 0;
-            IntPtr result = User32.SendMessageW(control.Handle, (User32.WindowMessage)User32.EM.GETSEL, (IntPtr)(&selectionStart), (IntPtr)(&selectionEnd));
+            IntPtr result = User32.SendMessageW(control.Handle, (User32.WM)User32.EM.GETSEL, (IntPtr)(&selectionStart), (IntPtr)(&selectionEnd));
             Assert.Equal(expectedSelectionStart, PARAM.LOWORD(result));
             Assert.Equal(expectedEnd, PARAM.HIWORD(result));
             Assert.Equal(expectedSelectionStart, selectionStart);
@@ -3582,7 +3582,7 @@ namespace System.Windows.Forms.Tests
             control.CreateHandle();
             int selectionStart = 0;
             int selectionEnd = 0;
-            IntPtr result = User32.SendMessageW(control.Handle, (User32.WindowMessage)User32.EM.GETSEL, (IntPtr)(&selectionStart), (IntPtr)(&selectionEnd));
+            IntPtr result = User32.SendMessageW(control.Handle, (User32.WM)User32.EM.GETSEL, (IntPtr)(&selectionStart), (IntPtr)(&selectionEnd));
             Assert.Equal(1, PARAM.LOWORD(result));
             Assert.Equal(3, PARAM.HIWORD(result));
             Assert.Equal(1, selectionStart);
@@ -5829,7 +5829,7 @@ namespace System.Windows.Forms.Tests
             control.Select(start, length);
             int selectionStart = 0;
             int selectionEnd = 0;
-            IntPtr result = User32.SendMessageW(control.Handle, (User32.WindowMessage)User32.EM.GETSEL, (IntPtr)(&selectionStart), (IntPtr)(&selectionEnd));
+            IntPtr result = User32.SendMessageW(control.Handle, (User32.WM)User32.EM.GETSEL, (IntPtr)(&selectionStart), (IntPtr)(&selectionEnd));
             Assert.Equal(expectedSelectionStart, PARAM.LOWORD(result));
             Assert.Equal(expectedEnd, PARAM.HIWORD(result));
             Assert.Equal(expectedSelectionStart, selectionStart);
@@ -5961,7 +5961,7 @@ namespace System.Windows.Forms.Tests
             control.SelectAll();
             int selectionStart = 0;
             int selectionEnd = 0;
-            IntPtr result = User32.SendMessageW(control.Handle, (User32.WindowMessage)User32.EM.GETSEL, (IntPtr)(&selectionStart), (IntPtr)(&selectionEnd));
+            IntPtr result = User32.SendMessageW(control.Handle, (User32.WM)User32.EM.GETSEL, (IntPtr)(&selectionStart), (IntPtr)(&selectionEnd));
             Assert.Equal(0, PARAM.LOWORD(result));
             Assert.Equal(4, PARAM.HIWORD(result));
             Assert.Equal(0, selectionStart);

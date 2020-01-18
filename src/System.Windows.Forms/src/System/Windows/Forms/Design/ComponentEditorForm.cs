@@ -770,9 +770,9 @@ namespace System.Windows.Forms.Design
             {
                 base.OnHandleCreated(e);
 
-                int itemHeight = (int)User32.SendMessageW(this, (User32.WindowMessage)ComCtl32.TVM.GETITEMHEIGHT);
+                int itemHeight = (int)User32.SendMessageW(this, (User32.WM)ComCtl32.TVM.GETITEMHEIGHT);
                 itemHeight += 2 * PADDING_VERT;
-                User32.SendMessageW(this, (User32.WindowMessage)ComCtl32.TVM.SETITEMHEIGHT, (IntPtr)itemHeight);
+                User32.SendMessageW(this, (User32.WM)ComCtl32.TVM.SETITEMHEIGHT, (IntPtr)itemHeight);
 
                 if (_hbrushDither == IntPtr.Zero)
                 {

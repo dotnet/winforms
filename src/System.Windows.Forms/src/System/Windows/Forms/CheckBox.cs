@@ -260,7 +260,7 @@ namespace System.Windows.Forms
 
                     if (IsHandleCreated)
                     {
-                        User32.SendMessageW(this, (User32.WindowMessage)User32.BM.SETCHECK, (IntPtr)checkState);
+                        User32.SendMessageW(this, (User32.WM)User32.BM.SETCHECK, (IntPtr)checkState);
                     }
 
                     if (oldChecked != Checked)
@@ -583,7 +583,7 @@ namespace System.Windows.Forms
 
             if (IsHandleCreated)
             {
-                User32.SendMessageW(this, (User32.WindowMessage)User32.BM.SETCHECK, (IntPtr)checkState);
+                User32.SendMessageW(this, (User32.WM)User32.BM.SETCHECK, (IntPtr)checkState);
             }
         }
 

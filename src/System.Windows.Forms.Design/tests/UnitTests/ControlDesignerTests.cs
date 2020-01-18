@@ -224,7 +224,7 @@ namespace System.Windows.Forms.Design.Tests
             var designer = new SubControlDesigner();
             var m = new Message
             {
-                Msg = (int)User32.WindowMessage.WM_PAINT
+                Msg = (int)User32.WM.PAINT
             };
             designer.WndProc(ref m);
         }

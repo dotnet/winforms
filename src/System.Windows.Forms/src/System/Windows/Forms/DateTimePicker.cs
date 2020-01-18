@@ -410,7 +410,7 @@ namespace System.Windows.Forms
                 if (ShowCheckBox && IsHandleCreated)
                 {
                     var sys = new Kernel32.SYSTEMTIME();
-                    GDT gdt = (GDT)User32.SendMessageW(this, (User32.WindowMessage)DTM.GETSYSTEMTIME, IntPtr.Zero, ref sys);
+                    GDT gdt = (GDT)User32.SendMessageW(this, (User32.WM)DTM.GETSYSTEMTIME, IntPtr.Zero, ref sys);
                     return gdt == GDT.VALID;
                 }
                 else
@@ -428,11 +428,11 @@ namespace System.Windows.Forms
                         if (value)
                         {
                             Kernel32.SYSTEMTIME sys = DateTimePicker.DateTimeToSysTime(Value);
-                            User32.SendMessageW(this, (User32.WindowMessage)DTM.SETSYSTEMTIME, (IntPtr)GDT.VALID, ref sys);
+                            User32.SendMessageW(this, (User32.WM)DTM.SETSYSTEMTIME, (IntPtr)GDT.VALID, ref sys);
                         }
                         else
                         {
-                            User32.SendMessageW(this, (User32.WindowMessage)DTM.SETSYSTEMTIME, (IntPtr)GDT.NONE);
+                            User32.SendMessageW(this, (User32.WM)DTM.SETSYSTEMTIME, (IntPtr)GDT.NONE);
                         }
                     }
                     // this.validTime is used when the DateTimePicker receives date time change notification
@@ -521,7 +521,7 @@ namespace System.Windows.Forms
                     {
                         if (format == DateTimePickerFormat.Custom)
                         {
-                            User32.SendMessageW(this, (User32.WindowMessage)DTM.SETFORMATW, IntPtr.Zero, customFormat);
+                            User32.SendMessageW(this, (User32.WM)DTM.SETFORMATW, IntPtr.Zero, customFormat);
                         }
                     }
                 }
@@ -1045,7 +1045,7 @@ namespace System.Windows.Forms
                     {
                         // Make sure any changes to this code get propagated to createHandle
                         Kernel32.SYSTEMTIME sys = DateTimePicker.DateTimeToSysTime(value);
-                        User32.SendMessageW(this, (User32.WindowMessage)DTM.SETSYSTEMTIME, (IntPtr)GDT.VALID, ref sys);
+                        User32.SendMessageW(this, (User32.WM)DTM.SETSYSTEMTIME, (IntPtr)GDT.VALID, ref sys);
                     }
 
                     if (valueChanged)
@@ -1138,16 +1138,16 @@ namespace System.Windows.Forms
             {
                 // Make sure any changes to this code get propagated to setValue
                 Kernel32.SYSTEMTIME sys = DateTimePicker.DateTimeToSysTime(Value);
-                User32.SendMessageW(this, (User32.WindowMessage)DTM.SETSYSTEMTIME, (IntPtr)GDT.VALID, ref sys);
+                User32.SendMessageW(this, (User32.WM)DTM.SETSYSTEMTIME, (IntPtr)GDT.VALID, ref sys);
             }
             else if (!validTime)
             {
-                User32.SendMessageW(this, (User32.WindowMessage)DTM.SETSYSTEMTIME, (IntPtr)GDT.NONE);
+                User32.SendMessageW(this, (User32.WM)DTM.SETSYSTEMTIME, (IntPtr)GDT.NONE);
             }
 
             if (format == DateTimePickerFormat.Custom)
             {
-                User32.SendMessageW(this, (User32.WindowMessage)DTM.SETFORMATW, IntPtr.Zero, customFormat);
+                User32.SendMessageW(this, (User32.WM)DTM.SETFORMATW, IntPtr.Zero, customFormat);
             }
 
             UpdateUpDown();
@@ -1370,7 +1370,7 @@ namespace System.Windows.Forms
             if (IsHandleCreated)
             {
                 Kernel32.SYSTEMTIME sys = DateTimePicker.DateTimeToSysTime(value);
-                User32.SendMessageW(this, (User32.WindowMessage)DTM.SETSYSTEMTIME, (IntPtr)GDT.VALID, ref sys);
+                User32.SendMessageW(this, (User32.WM)DTM.SETSYSTEMTIME, (IntPtr)GDT.VALID, ref sys);
             }
 
             // Updating Checked to false will set the control to "no date",
@@ -1388,7 +1388,7 @@ namespace System.Windows.Forms
         {
             if (IsHandleCreated)
             {
-                User32.SendMessageW(this, (User32.WindowMessage)DTM.SETMCCOLOR, (IntPtr)colorIndex, PARAM.FromColor(value));
+                User32.SendMessageW(this, (User32.WM)DTM.SETMCCOLOR, (IntPtr)colorIndex, PARAM.FromColor(value));
             }
         }
 
@@ -1399,7 +1399,7 @@ namespace System.Windows.Forms
         {
             if (IsHandleCreated)
             {
-                User32.SendMessageW(this, (User32.WindowMessage)DTM.SETMCFONT, CalendarFontHandle, NativeMethods.InvalidIntPtr);
+                User32.SendMessageW(this, (User32.WM)DTM.SETMCFONT, CalendarFontHandle, NativeMethods.InvalidIntPtr);
             }
         }
 
@@ -1432,7 +1432,7 @@ namespace System.Windows.Forms
                 sa[0] = DateTimeToSysTime(min);
                 sa[1] = DateTimeToSysTime(max);
                 int flags = NativeMethods.GDTR_MIN | NativeMethods.GDTR_MAX;
-                User32.SendMessageW(this, (User32.WindowMessage)DTM.SETRANGE, (IntPtr)flags, ref sa[0]);
+                User32.SendMessageW(this, (User32.WM)DTM.SETRANGE, (IntPtr)flags, ref sa[0]);
             }
         }
 
@@ -1632,7 +1632,7 @@ namespace System.Windows.Forms
         {
             if (RightToLeftLayout == true && RightToLeft == RightToLeft.Yes)
             {
-                IntPtr handle = User32.SendMessageW(this, (User32.WindowMessage)DTM.GETMONTHCAL);
+                IntPtr handle = User32.SendMessageW(this, (User32.WM)DTM.GETMONTHCAL);
                 if (handle != IntPtr.Zero)
                 {
                     int style = unchecked((int)((long)User32.GetWindowLong(new HandleRef(this, handle), User32.GWL.EXSTYLE)));

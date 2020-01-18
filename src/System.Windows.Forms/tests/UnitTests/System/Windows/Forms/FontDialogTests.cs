@@ -635,11 +635,11 @@ namespace System.Windows.Forms.Tests
         {
             foreach (bool showColor in new bool[] { true, false })
             {
-                yield return new object[] { showColor, (int)User32.WindowMessage.WM_INITDIALOG, IntPtr.Zero };
-                yield return new object[] { showColor, (int)User32.WindowMessage.WM_SETFOCUS, IntPtr.Zero };
-                yield return new object[] { showColor, (int)User32.WindowMessage.WM_COMMAND, IntPtr.Zero };
+                yield return new object[] { showColor, (int)User32.WM.INITDIALOG, IntPtr.Zero };
+                yield return new object[] { showColor, (int)User32.WM.SETFOCUS, IntPtr.Zero };
+                yield return new object[] { showColor, (int)User32.WM.COMMAND, IntPtr.Zero };
 
-                const uint CDM_SETDEFAULTFOCUS = User32.WM_USER + 0x51;
+                const uint CDM_SETDEFAULTFOCUS = (int)User32.WM.USER + 0x51;
                 yield return new object[] { showColor, (int)CDM_SETDEFAULTFOCUS, IntPtr.Zero };
 
                 yield return new object[] { showColor, 0, IntPtr.Zero };
@@ -665,12 +665,12 @@ namespace System.Windows.Forms.Tests
         {
             foreach (bool showColor in new bool[] { true, false })
             {
-                yield return new object[] { showColor, (int)User32.WindowMessage.WM_INITDIALOG, IntPtr.Zero, 0 };
-                yield return new object[] { showColor, (int)User32.WindowMessage.WM_SETFOCUS, IntPtr.Zero, 0 };
-                yield return new object[] { showColor, (int)User32.WindowMessage.WM_COMMAND, IntPtr.Zero, 0 };
-                yield return new object[] { showColor, (int)User32.WindowMessage.WM_COMMAND, (IntPtr)0x402, 1 };
+                yield return new object[] { showColor, (int)User32.WM.INITDIALOG, IntPtr.Zero, 0 };
+                yield return new object[] { showColor, (int)User32.WM.SETFOCUS, IntPtr.Zero, 0 };
+                yield return new object[] { showColor, (int)User32.WM.COMMAND, IntPtr.Zero, 0 };
+                yield return new object[] { showColor, (int)User32.WM.COMMAND, (IntPtr)0x402, 1 };
 
-                const uint CDM_SETDEFAULTFOCUS = User32.WM_USER + 0x51;
+                const uint CDM_SETDEFAULTFOCUS = (int)User32.WM.USER + 0x51;
                 yield return new object[] { showColor, (int)CDM_SETDEFAULTFOCUS, IntPtr.Zero, 0 };
 
                 yield return new object[] { showColor, 0, IntPtr.Zero, 0 };
@@ -697,7 +697,7 @@ namespace System.Windows.Forms.Tests
         {
             protected unsafe override void WndProc(ref Message m)
             {
-                if (m.Msg == (int)User32.WindowMessage.WM_CHOOSEFONT_GETLOGFONT)
+                if (m.Msg == (int)User32.WM.CHOOSEFONT_GETLOGFONT)
                 {
                     using var font = new Font("Arial", 8.25f);
                     User32.LOGFONTW* pLogfont = (User32.LOGFONTW*)m.LParam;
@@ -720,7 +720,7 @@ namespace System.Windows.Forms.Tests
             };
             int applyCallCount = 0;
             dialog.Apply += (sender, e) => applyCallCount++;
-            Assert.Throws<ArgumentException>(null, () => dialog.HookProc(IntPtr.Zero, (int)User32.WindowMessage.WM_COMMAND, (IntPtr)0x402, IntPtr.Zero));
+            Assert.Throws<ArgumentException>(null, () => dialog.HookProc(IntPtr.Zero, (int)User32.WM.COMMAND, (IntPtr)0x402, IntPtr.Zero));
         }
 
         [WinFormsTheory]

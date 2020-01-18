@@ -2026,13 +2026,13 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> WndProc_EraseBkgnd_TestData()
         {
-            yield return new object[] { User32.WindowMessage.WM_ERASEBKGND };
-            yield return new object[] { User32.WindowMessage.WM_PRINTCLIENT };
+            yield return new object[] { User32.WM.ERASEBKGND };
+            yield return new object[] { User32.WM.PRINTCLIENT };
         }
 
         [WinFormsTheory]
-        [InlineData((int)User32.WindowMessage.WM_ERASEBKGND)]
-        [InlineData((int)User32.WindowMessage.WM_PRINTCLIENT)]
+        [InlineData((int)User32.WM.ERASEBKGND)]
+        [InlineData((int)User32.WM.PRINTCLIENT)]
         public void GroupBox_WndProc_InvokeEraseBkgndNotOwnerDrawWithoutHandle_Success(int msg)
         {
             using var control = new SubGroupBox
@@ -2061,8 +2061,8 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [InlineData((int)User32.WindowMessage.WM_ERASEBKGND)]
-        [InlineData((int)User32.WindowMessage.WM_PRINTCLIENT)]
+        [InlineData((int)User32.WM.ERASEBKGND)]
+        [InlineData((int)User32.WM.PRINTCLIENT)]
         public void GroupBox_WndProc_InvokeEraseBkgndNotOwnerDrawWithHandle_Success(int msg)
         {
             using var control = new SubGroupBox
@@ -2102,8 +2102,8 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [InlineData((int)User32.WindowMessage.WM_ERASEBKGND)]
-        [InlineData((int)User32.WindowMessage.WM_PRINTCLIENT)]
+        [InlineData((int)User32.WM.ERASEBKGND)]
+        [InlineData((int)User32.WM.PRINTCLIENT)]
         public void GroupBox_WndProc_InvokeEraseBkgndNotOwnerDrawZeroWParam_ThrowsOutOfMemoryException(int msg)
         {
             using var control = new SubGroupBox
@@ -2147,7 +2147,7 @@ namespace System.Windows.Forms.Tests
             {
                 var m = new Message
                 {
-                    Msg = (int)User32.WindowMessage.WM_ERASEBKGND,
+                    Msg = (int)User32.WM.ERASEBKGND,
                     WParam = hdc,
                     Result = (IntPtr)250
                 };
@@ -2192,7 +2192,7 @@ namespace System.Windows.Forms.Tests
             {
                 var m = new Message
                 {
-                    Msg = (int)User32.WindowMessage.WM_PRINTCLIENT,
+                    Msg = (int)User32.WM.PRINTCLIENT,
                     WParam = hdc,
                     Result = (IntPtr)250
                 };
@@ -2235,7 +2235,7 @@ namespace System.Windows.Forms.Tests
             };
             var m = new Message
             {
-                Msg = (int)User32.WindowMessage.WM_MOUSEHOVER,
+                Msg = (int)User32.WM.MOUSEHOVER,
                 Result = (IntPtr)250
             };
             control.WndProc(ref m);

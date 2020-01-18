@@ -32,7 +32,7 @@ namespace System.Windows.Forms
         /// </summary>
         public object GetLParam(Type cls) => Marshal.PtrToStructure(LParam, cls);
 
-        internal static Message Create(IntPtr hWnd, User32.WindowMessage msg, IntPtr wparam, IntPtr lparam)
+        internal static Message Create(IntPtr hWnd, User32.WM msg, IntPtr wparam, IntPtr lparam)
             => Create(hWnd, (int)msg, wparam, lparam);
 
         public static Message Create(IntPtr hWnd, int msg, IntPtr wparam, IntPtr lparam)

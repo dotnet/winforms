@@ -369,7 +369,7 @@ namespace System.Windows.Forms
                     CreateHandle();
                 }
 
-                return (char)SendMessageW(this, (WindowMessage)EM.GETPASSWORDCHAR);
+                return (char)SendMessageW(this, (WM)EM.GETPASSWORDCHAR);
             }
             set
             {
@@ -381,7 +381,7 @@ namespace System.Windows.Forms
                         if (PasswordChar != value)
                         {
                             // Set the password mode.
-                            SendMessageW(this, (WindowMessage)EM.SETPASSWORDCHAR, (IntPtr)value);
+                            SendMessageW(this, (WM)EM.SETPASSWORDCHAR, (IntPtr)value);
 
                             // Disable IME if setting the control to password mode.
                             VerifyImeRestrictedModeChanged();
@@ -649,7 +649,7 @@ namespace System.Windows.Forms
             {
                 if (!useSystemPasswordChar)
                 {
-                    SendMessageW(this, (WindowMessage)EM.SETPASSWORDCHAR, (IntPtr)passwordChar);
+                    SendMessageW(this, (WM)EM.SETPASSWORDCHAR, (IntPtr)passwordChar);
                 }
             }
 

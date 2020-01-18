@@ -382,7 +382,7 @@ namespace System.Windows.Forms
                             }
 #endif
 
-                            if (lpmsg->message == User32.WindowMessage.WM_KEYDOWN && lpmsg->wParam == (IntPtr)User32.VK.TAB)
+                            if (lpmsg->message == User32.WM.KEYDOWN && lpmsg->wParam == (IntPtr)User32.VK.TAB)
                             {
                                 target.SelectNextControl(null, Control.ModifierKeys != Keys.Shift, true, true, true);
                             }
@@ -2287,10 +2287,10 @@ namespace System.Windows.Forms
                 bool needPreProcess = false;
                 switch (lpmsg->message)
                 {
-                    case User32.WindowMessage.WM_KEYDOWN:
-                    case User32.WindowMessage.WM_SYSKEYDOWN:
-                    case User32.WindowMessage.WM_CHAR:
-                    case User32.WindowMessage.WM_SYSCHAR:
+                    case User32.WM.KEYDOWN:
+                    case User32.WM.SYSKEYDOWN:
+                    case User32.WM.CHAR:
+                    case User32.WM.SYSCHAR:
                         needPreProcess = true;
                         break;
                 }
@@ -2307,7 +2307,7 @@ namespace System.Windows.Forms
                             case PreProcessControlState.MessageProcessed:
                                 // someone returned true from PreProcessMessage
                                 // no need to dispatch the message, its already been coped with.
-                                lpmsg->message = (User32.WindowMessage)msg.Msg;
+                                lpmsg->message = (User32.WM)msg.Msg;
                                 lpmsg->wParam = msg.WParam;
                                 lpmsg->lParam = msg.LParam;
                                 return HRESULT.S_OK;

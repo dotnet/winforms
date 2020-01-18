@@ -70,8 +70,8 @@ namespace System.Windows.Forms
         private CheckedItemCollection checkedItemCollection = null;
         private CheckedIndexCollection checkedIndexCollection = null;
 
-        private static readonly WindowMessage LBC_GETCHECKSTATE;
-        private static readonly WindowMessage LBC_SETCHECKSTATE;
+        private static readonly WM LBC_GETCHECKSTATE;
+        private static readonly WM LBC_SETCHECKSTATE;
 
         static CheckedListBox()
         {
@@ -496,7 +496,7 @@ namespace System.Windows.Forms
             if (IsHandleCreated)
             {
                 var rect = new RECT();
-                SendMessageW(this, (WindowMessage)LB.GETITEMRECT, (IntPtr)index, ref rect);
+                SendMessageW(this, (WM)LB.GETITEMRECT, (IntPtr)index, ref rect);
                 InvalidateRect(new HandleRef(this, Handle), &rect, BOOL.FALSE);
             }
         }

@@ -2758,7 +2758,7 @@ namespace System.Windows.Forms.Tests
                 control.LostFocus += (sender, e) => callCount++;
                 var m = new Message
                 {
-                    Msg = (int)User32.WindowMessage.WM_KILLFOCUS,
+                    Msg = (int)User32.WM.KILLFOCUS,
                     Result = (IntPtr)250
                 };
                 control.WndProc(ref m);
@@ -2784,7 +2784,7 @@ namespace System.Windows.Forms.Tests
             control.LostFocus += (sender, e) => callCount++;
             var m = new Message
             {
-                Msg = (int)User32.WindowMessage.WM_KILLFOCUS,
+                Msg = (int)User32.WM.KILLFOCUS,
                 Result = (IntPtr)250
             };
             control.WndProc(ref m);
@@ -2811,7 +2811,7 @@ namespace System.Windows.Forms.Tests
                 };
                 var m = new Message
                 {
-                    Msg = (int)User32.WindowMessage.WM_MOUSEHOVER,
+                    Msg = (int)User32.WM.MOUSEHOVER,
                     Result = (IntPtr)250
                 };
                 control.WndProc(ref m);
@@ -2842,7 +2842,7 @@ namespace System.Windows.Forms.Tests
             };
             var m = new Message
             {
-                Msg = (int)User32.WindowMessage.WM_MOUSEHOVER,
+                Msg = (int)User32.WM.MOUSEHOVER,
                 Result = (IntPtr)250
             };
             control.WndProc(ref m);
@@ -2867,7 +2867,7 @@ namespace System.Windows.Forms.Tests
             };
             var m = new Message
             {
-                Msg = (int)User32.WindowMessage.WM_SETFOCUS,
+                Msg = (int)User32.WM.SETFOCUS,
                 Result = (IntPtr)250
             };
             control.WndProc(ref m);
@@ -2897,7 +2897,7 @@ namespace System.Windows.Forms.Tests
             };
             var m = new Message
             {
-                Msg = (int)User32.WindowMessage.WM_SETFOCUS,
+                Msg = (int)User32.WM.SETFOCUS,
                 Result = (IntPtr)250
             };
             control.WndProc(ref m);

@@ -1581,7 +1581,7 @@ namespace System.Windows.Forms
                         }
                         StreamIn(value, RichTextBoxConstants.SF_TEXT | RichTextBoxConstants.SF_UNICODE);
                         // reset Modified
-                        User32.SendMessageW(this, (User32.WindowMessage)User32.EM.SETMODIFY);
+                        User32.SendMessageW(this, (User32.WM)User32.EM.SETMODIFY);
                     }
                 }
             }
@@ -2132,7 +2132,7 @@ namespace System.Windows.Forms
                 }
 
                 UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), RichEditMessages.EM_EXSETSEL, 0, ref chrg);
-                User32.SendMessageW(this, (User32.WindowMessage)User32.EM.SCROLLCARET);
+                User32.SendMessageW(this, (User32.WM)User32.EM.SCROLLCARET);
             }
 
             return position;
@@ -2260,7 +2260,7 @@ namespace System.Windows.Forms
 
                     // go get the text in this range, if we didn't get any text then punt
                     int len;
-                    len = (int)User32.SendMessageW(this, (User32.WindowMessage)RichEditMessages.EM_GETTEXTRANGE, IntPtr.Zero, ref txrg);
+                    len = (int)User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_GETTEXTRANGE, IntPtr.Zero, ref txrg);
                     if (len == 0)
                     {
                         chrg.cpMax = chrg.cpMin = -1; // Hit end of control without finding what we wanted
@@ -2448,7 +2448,7 @@ namespace System.Windows.Forms
         public override int GetCharIndexFromPosition(Point pt)
         {
             var wpt = new Point(pt.X, pt.Y);
-            int index = (int)User32.SendMessageW(this, (User32.WindowMessage)User32.EM.CHARFROMPOS, IntPtr.Zero, ref wpt);
+            int index = (int)User32.SendMessageW(this, (User32.WM)User32.EM.CHARFROMPOS, IntPtr.Zero, ref wpt);
 
             string t = Text;
             // EM_CHARFROMPOS will return an invalid number if the last character in the RichEdit
@@ -2504,7 +2504,7 @@ namespace System.Windows.Forms
             }
 
             var pt = new Point();
-            User32.SendMessageW(this, (User32.WindowMessage)User32.EM.POSFROMCHAR, (IntPtr)(&pt), (IntPtr)index);
+            User32.SendMessageW(this, (User32.WM)User32.EM.POSFROMCHAR, (IntPtr)(&pt), (IntPtr)index);
             return pt;
         }
 
@@ -2716,7 +2716,7 @@ namespace System.Windows.Forms
                 // will resize itself to the size of the parent's client area.  Don't know why...
                 User32.PostMessageW(
                     this,
-                    (User32.WindowMessage)RichEditMessages.EM_SETOPTIONS,
+                    (User32.WM)RichEditMessages.EM_SETOPTIONS,
                     (IntPtr)RichTextBoxConstants.ECOOP_OR,
                     (IntPtr)RichTextBoxConstants.ECO_SELECTIONBAR);
             }
@@ -3181,10 +3181,10 @@ namespace System.Windows.Forms
                 }
 
                 // set the modify tag on the control
-                User32.SendMessageW(this, (User32.WindowMessage)User32.EM.SETMODIFY, (IntPtr)(-1));
+                User32.SendMessageW(this, (User32.WM)User32.EM.SETMODIFY, (IntPtr)(-1));
 
                 // EM_GETLINECOUNT will cause the RichTextBox to recalculate its line indexes
-                User32.SendMessageW(this, (User32.WindowMessage)User32.EM.GETLINECOUNT);
+                User32.SendMessageW(this, (User32.WM)User32.EM.GETLINECOUNT);
             }
             finally
             {
@@ -3458,7 +3458,7 @@ namespace System.Windows.Forms
             }
 
             txrg.lpstrText = unmanagedBuffer;
-            int len = (int)User32.SendMessageW(this, (User32.WindowMessage)RichEditMessages.EM_GETTEXTRANGE, IntPtr.Zero, ref txrg);
+            int len = (int)User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_GETTEXTRANGE, IntPtr.Zero, ref txrg);
             Debug.Assert(len != 0, "CHARRANGE from RichTextBox was bad! - impossible?");
             charBuffer.PutCoTaskMem(unmanagedBuffer);
             if (txrg.lpstrText != IntPtr.Zero)
@@ -3711,7 +3711,7 @@ namespace System.Windows.Forms
                     {
                         SendMessage(WindowMessages.WM_KILLFOCUS, 0, 0);
                         SendMessage(WindowMessages.WM_SETFOCUS, 0, 0);
-                        User32.PostMessageW(this, (User32.WindowMessage)User32.EM.SETSEL, (IntPtr)(selEnd - 1), (IntPtr)selEnd);
+                        User32.PostMessageW(this, (User32.WM)User32.EM.SETSEL, (IntPtr)(selEnd - 1), (IntPtr)selEnd);
                     }
                 }
             }

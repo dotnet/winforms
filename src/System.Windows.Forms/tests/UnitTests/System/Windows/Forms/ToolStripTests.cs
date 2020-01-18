@@ -4429,14 +4429,14 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [InlineData((int)User32.WindowMessage.WM_LBUTTONDOWN)]
-        [InlineData((int)User32.WindowMessage.WM_LBUTTONDBLCLK)]
-        [InlineData((int)User32.WindowMessage.WM_MBUTTONDOWN)]
-        [InlineData((int)User32.WindowMessage.WM_MBUTTONDBLCLK)]
-        [InlineData((int)User32.WindowMessage.WM_RBUTTONDOWN)]
-        [InlineData((int)User32.WindowMessage.WM_RBUTTONDBLCLK)]
-        [InlineData((int)User32.WindowMessage.WM_XBUTTONDOWN)]
-        [InlineData((int)User32.WindowMessage.WM_XBUTTONDBLCLK)]
+        [InlineData((int)User32.WM.LBUTTONDOWN)]
+        [InlineData((int)User32.WM.LBUTTONDBLCLK)]
+        [InlineData((int)User32.WM.MBUTTONDOWN)]
+        [InlineData((int)User32.WM.MBUTTONDBLCLK)]
+        [InlineData((int)User32.WM.RBUTTONDOWN)]
+        [InlineData((int)User32.WM.RBUTTONDBLCLK)]
+        [InlineData((int)User32.WM.XBUTTONDOWN)]
+        [InlineData((int)User32.WM.XBUTTONDBLCLK)]
         public void ToolStrip_WndProc_InvokeMouseDownWithHandle_Success(int msg)
         {
             using var control = new SubToolStrip();

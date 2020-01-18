@@ -1474,7 +1474,7 @@ namespace System.Windows.Forms.Tests
             {
                 ShowGroups = showGroups
             };
-            Assert.Equal((IntPtr)0, User32.SendMessageW(listView.Handle, (User32.WindowMessage)LVM.GETGROUPCOUNT, IntPtr.Zero, IntPtr.Zero));
+            Assert.Equal((IntPtr)0, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPCOUNT, IntPtr.Zero, IntPtr.Zero));
         }
 
         public static IEnumerable<object[]> Handle_GetWithGroups_TestData()
@@ -1528,7 +1528,7 @@ namespace System.Windows.Forms.Tests
                     listView.Groups.Add(group1);
                     listView.Groups.Add(group2);
 
-                    Assert.Equal((IntPtr)2, User32.SendMessageW(listView.Handle, (User32.WindowMessage)LVM.GETGROUPCOUNT, IntPtr.Zero, IntPtr.Zero));
+                    Assert.Equal((IntPtr)2, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPCOUNT, IntPtr.Zero, IntPtr.Zero));
                     char* buffer = stackalloc char[256];
                     var lvgroup1 = new ComCtl32.LVGROUPW
                     {
@@ -1537,7 +1537,7 @@ namespace System.Windows.Forms.Tests
                         pszHeader = buffer,
                         cchHeader = 256
                     };
-                    Assert.Equal((IntPtr)1, User32.SendMessageW(listView.Handle, (User32.WindowMessage)LVM.GETGROUPINFOBYINDEX, (IntPtr)0, ref lvgroup1));
+                    Assert.Equal((IntPtr)1, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPINFOBYINDEX, (IntPtr)0, ref lvgroup1));
                     Assert.Equal("ListViewGroup", new string(lvgroup1.pszHeader));
                     Assert.True(lvgroup1.iGroupId >= 0);
                     Assert.Equal(0x00000001, (int)lvgroup1.uAlign);
@@ -1549,7 +1549,7 @@ namespace System.Windows.Forms.Tests
                         pszHeader = buffer,
                         cchHeader = 256
                     };
-                    Assert.Equal((IntPtr)1, User32.SendMessageW(listView.Handle, (User32.WindowMessage)LVM.GETGROUPINFOBYINDEX, (IntPtr)1, ref lvgroup2));
+                    Assert.Equal((IntPtr)1, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPINFOBYINDEX, (IntPtr)1, ref lvgroup2));
                     Assert.Equal(expectedHeaderText, new string(lvgroup2.pszHeader));
                     Assert.True(lvgroup2.iGroupId > 0);
                     Assert.Equal(expectedAlign, (int)lvgroup2.uAlign);

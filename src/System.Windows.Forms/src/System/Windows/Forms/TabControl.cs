@@ -70,7 +70,7 @@ namespace System.Windows.Forms
         ///  display rectangle.  When the message is received, the control calls
         ///  updateTabSelection() to layout the TabPages correctly.
         /// </summary>
-        private readonly User32.WindowMessage _tabBaseReLayoutMessage = User32.RegisterWindowMessageW(Application.WindowMessagesVersion + TabBaseReLayoutMessageName);
+        private readonly User32.WM _tabBaseReLayoutMessage = User32.RegisterWindowMessageW(Application.WindowMessagesVersion + TabBaseReLayoutMessageName);
 
         // State
         private TabPage[] _tabPages;
@@ -408,7 +408,7 @@ namespace System.Windows.Forms
                     }
                     if (IsHandleCreated)
                     {
-                        User32.SendMessageW(this, (User32.WindowMessage)ComCtl32.TCM.ADJUSTRECT, IntPtr.Zero, ref rect);
+                        User32.SendMessageW(this, (User32.WM)ComCtl32.TCM.ADJUSTRECT, IntPtr.Zero, ref rect);
                     }
                 }
 
@@ -1224,7 +1224,7 @@ namespace System.Windows.Forms
                 CreateHandle();
             }
 
-            User32.SendMessageW(this, (User32.WindowMessage)ComCtl32.TCM.GETITEMRECT, (IntPtr)index, ref rect);
+            User32.SendMessageW(this, (User32.WM)ComCtl32.TCM.GETITEMRECT, (IntPtr)index, ref rect);
             return Rectangle.FromLTRB(rect.left, rect.top, rect.right, rect.bottom);
         }
 
@@ -1668,7 +1668,7 @@ namespace System.Windows.Forms
 
             if (IsHandleCreated)
             {
-                User32.SendMessageW(this, ((User32.WindowMessage)TCM.DELETEALLITEMS), IntPtr.Zero, IntPtr.Zero);
+                User32.SendMessageW(this, ((User32.WM)TCM.DELETEALLITEMS), IntPtr.Zero, IntPtr.Zero);
             }
 
             _tabPages = null;
@@ -1743,7 +1743,7 @@ namespace System.Windows.Forms
             // Make the Updated tab page the currently selected tab page
             if (DesignMode && IsHandleCreated)
             {
-                User32.SendMessageW(this, (User32.WindowMessage)ComCtl32.TCM.SETCURSEL, (IntPtr)index, IntPtr.Zero);
+                User32.SendMessageW(this, (User32.WM)ComCtl32.TCM.SETCURSEL, (IntPtr)index, IntPtr.Zero);
             }
             _tabPages[index] = value;
         }
@@ -2171,7 +2171,7 @@ namespace System.Windows.Forms
                             break;
                         case (int)ComCtl32.TTN.GETDISPINFOW:
                             // Setting the max width has the added benefit of enabling Multiline tool tips
-                            User32.SendMessageW(nmhdr->hwndFrom, (User32.WindowMessage)TTM.SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
+                            User32.SendMessageW(nmhdr->hwndFrom, (User32.WM)TTM.SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
                             WmNeedText(ref m);
                             m.Result = (IntPtr)1;
                             return;
@@ -2208,7 +2208,7 @@ namespace System.Windows.Forms
             fixed (char* pText = text)
             {
                 tcitem.pszText = pText;
-                return User32.SendMessageW(this, (User32.WindowMessage)msg, wParam, ref tcitem);
+                return User32.SendMessageW(this, (User32.WM)msg, wParam, ref tcitem);
             }
         }
 

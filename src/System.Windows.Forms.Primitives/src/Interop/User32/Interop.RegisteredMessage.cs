@@ -11,7 +11,7 @@ internal static partial class Interop
             private static uint s_wmMouseEnterMessage;
             private static uint s_wmUnSubclass;
 
-            public static WindowMessage WM_MOUSEENTER
+            public static WM WM_MOUSEENTER
             {
                 get
                 {
@@ -20,11 +20,11 @@ internal static partial class Interop
                         s_wmMouseEnterMessage = (uint)RegisterWindowMessageW("WinFormsMouseEnter");
                     }
 
-                    return (WindowMessage)s_wmMouseEnterMessage;
+                    return (WM)s_wmMouseEnterMessage;
                 }
             }
 
-            public static WindowMessage WM_UIUNSUBCLASS
+            public static WM WM_UIUNSUBCLASS
             {
                 get
                 {
@@ -33,7 +33,7 @@ internal static partial class Interop
                         s_wmUnSubclass = (uint)RegisterWindowMessageW("WinFormsUnSubclass");
                     }
 
-                    return (WindowMessage)s_wmUnSubclass;
+                    return (WM)s_wmUnSubclass;
                 }
             }
         }

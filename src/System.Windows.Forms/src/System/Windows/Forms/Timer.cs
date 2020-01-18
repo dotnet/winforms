@@ -283,7 +283,7 @@ namespace System.Windows.Forms
                 // Fire a message across threads to destroy the timer and HWND on the thread that created it.
                 if (GetInvokeRequired(hWnd))
                 {
-                    User32.PostMessageW(new HandleRef(this, hWnd), User32.WindowMessage.WM_CLOSE);
+                    User32.PostMessageW(new HandleRef(this, hWnd), User32.WM.CLOSE);
                     return;
                 }
 

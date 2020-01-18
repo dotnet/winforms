@@ -83,7 +83,7 @@ namespace System.Windows.Forms
                 // handling a window message.
                 if (context == null || !ReferenceEquals(context, ThreadContext.FromCurrent()))
                 {
-                    User32.PostMessageW(this, (User32.WindowMessage)WM_CHECKDESTROY);
+                    User32.PostMessageW(this, (User32.WM)WM_CHECKDESTROY);
                 }
                 else
                 {
@@ -156,7 +156,7 @@ namespace System.Windows.Forms
                     case WindowMessages.WM_PARENTNOTIFY:
                         if (PARAM.LOWORD(m.WParam) == WindowMessages.WM_DESTROY)
                         {
-                            User32.PostMessageW(this, (User32.WindowMessage)WM_CHECKDESTROY);
+                            User32.PostMessageW(this, (User32.WM)WM_CHECKDESTROY);
                         }
 
                         break;

@@ -257,7 +257,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     return false;
                 }
 
-                return User32.SendMessageW(Edit, (User32.WindowMessage)User32.EM.CANUNDO) != IntPtr.Zero;
+                return User32.SendMessageW(Edit, (User32.WM)User32.EM.CANUNDO) != IntPtr.Zero;
             }
         }
 
@@ -4378,7 +4378,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             RECT rect = itemRect;
 
-            User32.SendMessageW(ToolTip, (User32.WindowMessage)ComCtl32.TTM.ADJUSTRECT, (IntPtr)1, ref rect);
+            User32.SendMessageW(ToolTip, (User32.WM)ComCtl32.TTM.ADJUSTRECT, (IntPtr)1, ref rect);
 
             // now offset it back to screen coords
             Point locPoint = parent.PointToScreen(new Point(rect.left, rect.top));
@@ -5598,8 +5598,8 @@ namespace System.Windows.Forms.PropertyGridInternal
             var mouseMsg = new User32.MSG();
             while (User32.PeekMessageW(ref mouseMsg,
                 IntPtr.Zero,
-                (User32.WindowMessage)WindowMessages.WM_MOUSEFIRST,
-                (User32.WindowMessage)WindowMessages.WM_MOUSELAST,
+                (User32.WM)WindowMessages.WM_MOUSEFIRST,
+                (User32.WM)WindowMessages.WM_MOUSELAST,
                 User32.PM.REMOVE).IsTrue())
             {
                 // No-op.
@@ -5682,7 +5682,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             // which usually discards the message by returning 1 to GetMessage(). But this won't occur until after the
             // error dialog gets closed, which is much too late.
             var mouseMsg = new User32.MSG();
-            while (User32.PeekMessageW(ref mouseMsg, IntPtr.Zero, User32.WM_MOUSEFIRST, User32.WM_MOUSELAST, User32.PM.REMOVE).IsTrue())
+            while (User32.PeekMessageW(ref mouseMsg, IntPtr.Zero, User32.WM.MOUSEFIRST, User32.WM.MOUSELAST, User32.PM.REMOVE).IsTrue())
             {
                 // No-op.
             }
@@ -6027,12 +6027,12 @@ namespace System.Windows.Forms.PropertyGridInternal
                 case WindowMessages.WM_IME_STARTCOMPOSITION:
                     Edit.Focus();
                     Edit.Clear();
-                    User32.PostMessageW(Edit, User32.WindowMessage.WM_IME_STARTCOMPOSITION);
+                    User32.PostMessageW(Edit, User32.WM.IME_STARTCOMPOSITION);
                     return;
 
                 case WindowMessages.WM_IME_COMPOSITION:
                     Edit.Focus();
-                    User32.PostMessageW(Edit, User32.WindowMessage.WM_IME_COMPOSITION, m.WParam, m.LParam);
+                    User32.PostMessageW(Edit, User32.WM.IME_COMPOSITION, m.WParam, m.LParam);
                     return;
 
                 case WindowMessages.WM_GETDLGCODE:
@@ -7420,7 +7420,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     Focus();
                     SelectAll();
-                    User32.PostMessageW(this, User32.WindowMessage.WM_CHAR, (IntPtr)keyChar);
+                    User32.PostMessageW(this, User32.WM.CHAR, (IntPtr)keyChar);
                 }
             }
 
