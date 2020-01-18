@@ -5,6 +5,7 @@
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Design;
+using static Interop;
 
 namespace System.Windows.Forms.Design
 {
@@ -27,7 +28,7 @@ namespace System.Windows.Forms.Design
 
             IUIService uiService = (IUIService)provider.GetService(typeof(IUIService));
             IComponent comp = context.Instance as IComponent;
-            using (DpiHelper.EnterDpiAwarenessScope(DpiAwarenessContext.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE))
+            using (DpiHelper.EnterDpiAwarenessScope(User32.DPI_AWARENESS_CONTEXT.SYSTEM_AWARE))
             {
                 _builderDialog ??= new DataGridViewCellStyleBuilder(provider, comp);
                 if (uiService != null)

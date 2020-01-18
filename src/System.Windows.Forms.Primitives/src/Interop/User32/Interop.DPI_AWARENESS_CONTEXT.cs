@@ -10,6 +10,7 @@ internal static partial class Interop
     {
         public static class DPI_AWARENESS_CONTEXT
         {
+            public static readonly IntPtr UNSPECIFIED = IntPtr.Zero;
             public static readonly IntPtr UNAWARE = (IntPtr)(-1);
             public static readonly IntPtr SYSTEM_AWARE = (IntPtr)(-2);
             public static readonly IntPtr PER_MONITOR_AWARE = (IntPtr)(-3);

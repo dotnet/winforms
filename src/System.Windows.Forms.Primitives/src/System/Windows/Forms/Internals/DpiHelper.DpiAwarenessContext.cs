@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using static Interop.User32;
+
 namespace System.Windows.Forms
 {
     /// <summary>
@@ -16,7 +18,7 @@ namespace System.Windows.Forms
         /// <param name="awareness">The new DPI awareness for the current thread</param>
         /// <returns>An object that, when disposed, will reset the current thread's
         ///  DPI awareness to the value it had when the object was created.</returns>
-        public static IDisposable EnterDpiAwarenessScope(DpiAwarenessContext awareness)
+        public static IDisposable EnterDpiAwarenessScope(IntPtr awareness)
         {
             return new DpiAwarenessScope(awareness);
         }
@@ -30,7 +32,7 @@ namespace System.Windows.Forms
         /// <returns> returns object created in system aware mode</returns>
         public static T CreateInstanceInSystemAwareContext<T>(Func<T> createInstance)
         {
-            using (EnterDpiAwarenessScope(DpiAwarenessContext.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE))
+            using (EnterDpiAwarenessScope(DPI_AWARENESS_CONTEXT.SYSTEM_AWARE))
             {
                 return createInstance();
             }
@@ -44,22 +46,22 @@ namespace System.Windows.Forms
         private class DpiAwarenessScope : IDisposable
         {
             private bool dpiAwarenessScopeIsSet = false;
-            private readonly DpiAwarenessContext originalAwareness = DpiAwarenessContext.DPI_AWARENESS_CONTEXT_UNSPECIFIED;
+            private readonly IntPtr originalAwareness = DPI_AWARENESS_CONTEXT.UNSPECIFIED;
 
             /// <summary>
             ///  Enters given Dpi awareness scope
             /// </summary>
-            public DpiAwarenessScope(DpiAwarenessContext awareness)
+            public DpiAwarenessScope(IntPtr awareness)
             {
                 try
                 {
-                    if (!CommonUnsafeNativeMethods.TryFindDpiAwarenessContextsEqual(awareness, DpiAwarenessContext.DPI_AWARENESS_CONTEXT_UNSPECIFIED))
+                    if (!CommonUnsafeNativeMethods.TryFindDpiAwarenessContextsEqual(awareness, DPI_AWARENESS_CONTEXT.UNSPECIFIED))
                     {
                         originalAwareness = CommonUnsafeNativeMethods.GetThreadDpiAwarenessContext();
 
                         // If current process dpiawareness is SYSTEM_UNAWARE or SYSTEM_AWARE (must be equal to awareness), calling this method will be a no-op.
                         if (!CommonUnsafeNativeMethods.TryFindDpiAwarenessContextsEqual(originalAwareness, awareness) &&
-                            !CommonUnsafeNativeMethods.TryFindDpiAwarenessContextsEqual(originalAwareness, DpiAwarenessContext.DPI_AWARENESS_CONTEXT_UNAWARE))
+                            !CommonUnsafeNativeMethods.TryFindDpiAwarenessContextsEqual(originalAwareness, DPI_AWARENESS_CONTEXT.UNAWARE))
                         {
                             originalAwareness = CommonUnsafeNativeMethods.SetThreadDpiAwarenessContext(awareness);
                             dpiAwarenessScopeIsSet = true;

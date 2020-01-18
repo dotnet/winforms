@@ -1375,7 +1375,7 @@ namespace System.Windows.Forms
                     return false;
                 }
 
-                DpiAwarenessContext context = CommonUnsafeNativeMethods.GetDpiAwarenessContextForWindow(m.HWnd);
+                IntPtr context = CommonUnsafeNativeMethods.GetDpiAwarenessContextForWindow(m.HWnd);
 
                 using (DpiHelper.EnterDpiAwarenessScope(context))
                 {

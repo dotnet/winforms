@@ -4,31 +4,30 @@
 
 using System.Runtime.InteropServices;
 using static Interop;
+using static Interop.User32;
 
 namespace System.Windows.Forms
 {
     internal class CommonUnsafeNativeMethods
     {
-        #region PInvoke DpiRelated
-        // This section could go to Nativemethods.cs or Safenativemethods.cs but we have separate copies of them in each library (System.winforms, System.Design and System.Drawing).
         // These APIs are available starting Windows 10, version 1607 only.
-        [DllImport(ExternDll.User32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
-        internal static extern DpiAwarenessContext GetThreadDpiAwarenessContext();
+        [DllImport(Libraries.User32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
+        internal static extern IntPtr GetThreadDpiAwarenessContext();
 
-        [DllImport(ExternDll.User32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
-        internal static extern DpiAwarenessContext SetThreadDpiAwarenessContext(DpiAwarenessContext dpiContext);
+        [DllImport(Libraries.User32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
+        internal static extern IntPtr SetThreadDpiAwarenessContext(IntPtr dpiContext);
 
-        [DllImport(ExternDll.User32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
-        internal static extern bool AreDpiAwarenessContextsEqual(DpiAwarenessContext dpiContextA, DpiAwarenessContext dpiContextB);
+        [DllImport(Libraries.User32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
+        internal static extern bool AreDpiAwarenessContextsEqual(IntPtr dpiContextA, IntPtr dpiContextB);
 
         /// <summary>
         ///  Tries to compare two DPIawareness context values. Return true if they were equal.
         ///  Return false when they are not equal or underlying OS does not support this API.
         /// </summary>
         /// <returns>true/false</returns>
-        public static bool TryFindDpiAwarenessContextsEqual(DpiAwarenessContext dpiContextA, DpiAwarenessContext dpiContextB)
+        public static bool TryFindDpiAwarenessContextsEqual(IntPtr dpiContextA, IntPtr dpiContextB)
         {
-            if (dpiContextA == DpiAwarenessContext.DPI_AWARENESS_CONTEXT_UNSPECIFIED && dpiContextB == DpiAwarenessContext.DPI_AWARENESS_CONTEXT_UNSPECIFIED)
+            if (dpiContextA == DPI_AWARENESS_CONTEXT.UNSPECIFIED && dpiContextB == DPI_AWARENESS_CONTEXT.UNSPECIFIED)
             {
                 return true;
             }
@@ -45,7 +44,7 @@ namespace System.Windows.Forms
         ///  Tries to get thread dpi awareness context
         /// </summary>
         /// <returns> returns thread dpi awareness context if API is available in this version of OS. otherwise, return IntPtr.Zero.</returns>
-        public static DpiAwarenessContext TryGetThreadDpiAwarenessContext()
+        public static IntPtr TryGetThreadDpiAwarenessContext()
         {
             if (OsVersion.IsWindows10_1607OrGreater)
             {
@@ -53,18 +52,18 @@ namespace System.Windows.Forms
             }
 
             // legacy OS that does not have this API available.
-            return DpiAwarenessContext.DPI_AWARENESS_CONTEXT_UNSPECIFIED;
+            return DPI_AWARENESS_CONTEXT.UNSPECIFIED;
         }
 
         /// <summary>
         ///  Tries to set thread dpi awareness context
         /// </summary>
         /// <returns> returns old thread dpi awareness context if API is available in this version of OS. otherwise, return IntPtr.Zero.</returns>
-        public static DpiAwarenessContext TrySetThreadDpiAwarenessContext(DpiAwarenessContext dpiContext)
+        public static IntPtr TrySetThreadDpiAwarenessContext(IntPtr dpiContext)
         {
             if (OsVersion.IsWindows10_1607OrGreater)
             {
-                if (dpiContext == DpiAwarenessContext.DPI_AWARENESS_CONTEXT_UNSPECIFIED)
+                if (dpiContext == DPI_AWARENESS_CONTEXT.UNSPECIFIED)
                 {
                     throw new ArgumentException(nameof(dpiContext), dpiContext.ToString());
                 }
@@ -73,50 +72,37 @@ namespace System.Windows.Forms
             }
 
             // legacy OS that does not have this API available.
-            return DpiAwarenessContext.DPI_AWARENESS_CONTEXT_UNSPECIFIED;
+            return DPI_AWARENESS_CONTEXT.UNSPECIFIED;
         }
-        /*
-                // Dpi awareness context values. Matching windows values.
-                public static readonly DPI_AWARENESS_CONTEXT DPI_AWARENESS_CONTEXT_UNAWARE = (-1);
-                public static readonly DPI_AWARENESS_CONTEXT DPI_AWARENESS_CONTEXT_SYSTEM_AWARE = (-2);
-                public static readonly DPI_AWARENESS_CONTEXT DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE = (-3);
-                public static readonly DPI_AWARENESS_CONTEXT DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2 = (-4);
-                public static readonly DPI_AWARENESS_CONTEXT DPI_AWARENESS_CONTEXT_UNSPECIFIED = (0);*/
 
-        internal static DpiAwarenessContext GetDpiAwarenessContextForWindow(IntPtr hWnd)
+        internal static IntPtr GetDpiAwarenessContextForWindow(IntPtr hWnd)
         {
-            DpiAwarenessContext dpiAwarenessContext = DpiAwarenessContext.DPI_AWARENESS_CONTEXT_UNSPECIFIED;
+            IntPtr dpiAwarenessContext = DPI_AWARENESS_CONTEXT.UNSPECIFIED;
 
             if (OsVersion.IsWindows10_1607OrGreater)
             {
                 // Works only >= Windows 10/1607
-                IntPtr awarenessContext = User32.GetWindowDpiAwarenessContext(hWnd);
-                User32.DPI_AWARENESS awareness = User32.GetAwarenessFromDpiAwarenessContext(awarenessContext);
+                IntPtr awarenessContext = GetWindowDpiAwarenessContext(hWnd);
+                DPI_AWARENESS awareness = GetAwarenessFromDpiAwarenessContext(awarenessContext);
                 dpiAwarenessContext = ConvertToDpiAwarenessContext(awareness);
             }
 
             return dpiAwarenessContext;
         }
 
-        #endregion
-
-        #region Private Methods
-
-        private static DpiAwarenessContext ConvertToDpiAwarenessContext(User32.DPI_AWARENESS dpiAwareness)
+        private static IntPtr ConvertToDpiAwarenessContext(DPI_AWARENESS dpiAwareness)
         {
             switch (dpiAwareness)
             {
-                case User32.DPI_AWARENESS.UNAWARE:
-                    return DpiAwarenessContext.DPI_AWARENESS_CONTEXT_UNAWARE;
-                case User32.DPI_AWARENESS.SYSTEM_AWARE:
-                    return DpiAwarenessContext.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE;
-                case User32.DPI_AWARENESS.PER_MONITOR_AWARE:
-                    return DpiAwarenessContext.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2;
+                case DPI_AWARENESS.UNAWARE:
+                    return DPI_AWARENESS_CONTEXT.UNAWARE;
+                case DPI_AWARENESS.SYSTEM_AWARE:
+                    return DPI_AWARENESS_CONTEXT.SYSTEM_AWARE;
+                case DPI_AWARENESS.PER_MONITOR_AWARE:
+                    return DPI_AWARENESS_CONTEXT.PER_MONITOR_AWARE_V2;
                 default:
-                    return DpiAwarenessContext.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE;
+                    return DPI_AWARENESS_CONTEXT.SYSTEM_AWARE;
             }
         }
-
-        #endregion
     }
 }
