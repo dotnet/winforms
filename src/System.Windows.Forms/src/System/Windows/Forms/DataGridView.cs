@@ -393,6 +393,8 @@ namespace System.Windows.Forms
         // Last Mouse Click Info
         private MouseClickInfo lastMouseClickInfo;
 
+        private ToolTipBuffer _toolTipBuffer;
+
 #if DEBUG
         // set to false when the grid is not in sync with the underlying data store
         // in virtual mode, and OnCellValueNeeded cannot be called.
