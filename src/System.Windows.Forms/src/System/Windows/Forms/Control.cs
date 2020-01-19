@@ -12415,7 +12415,7 @@ namespace System.Windows.Forms
             bool reflectCalled = false;
 
             int ctrlId = unchecked((int)(long)m.WParam);
-            IntPtr p = UnsafeNativeMethods.GetDlgItem(new HandleRef(null, m.HWnd), ctrlId);
+            IntPtr p = User32.GetDlgItem(m.HWnd, ctrlId);
             if (p == IntPtr.Zero)
             {
                 // On 64-bit platforms wParam is already 64 bit but the control ID stored in it is only 32-bit
@@ -12707,7 +12707,7 @@ namespace System.Windows.Forms
                 case WindowMessages.WM_DESTROY:
                     break;
                 default:
-                    hWnd = UnsafeNativeMethods.GetDlgItem(new HandleRef(this, Handle), PARAM.HIWORD(m.WParam));
+                    hWnd = User32.GetDlgItem(this, PARAM.HIWORD(m.WParam));
                     break;
             }
             if (hWnd == IntPtr.Zero || !ReflectMessage(hWnd, ref m))
