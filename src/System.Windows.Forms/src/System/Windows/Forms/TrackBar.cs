@@ -881,6 +881,12 @@ namespace System.Windows.Forms
         protected override void OnHandleCreated(EventArgs e)
         {
             base.OnHandleCreated(e);
+
+            if (!IsHandleCreated)
+            {
+                return;
+            }
+
             User32.SendMessageW(this, (User32.WindowMessage)TBM.SETRANGEMIN, PARAM.FromBool(false), (IntPtr)minimum);
             User32.SendMessageW(this, (User32.WindowMessage)TBM.SETRANGEMAX, PARAM.FromBool(false), (IntPtr)maximum);
             User32.SendMessageW(this, (User32.WindowMessage)TBM.SETTICFREQ, (IntPtr)tickFrequency);
