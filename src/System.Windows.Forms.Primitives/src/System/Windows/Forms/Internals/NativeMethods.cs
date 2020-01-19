@@ -195,16 +195,6 @@ namespace System.Windows.Forms
         HLP_NAVIGATOR = 3,
         HLP_OBJECT = 4;
 
-        public static bool Succeeded(int hr)
-        {
-            return (hr >= 0);
-        }
-
-        public static bool Failed(int hr)
-        {
-            return (hr < 0);
-        }
-
         public const int
         TV_FIRST = 0x1100,
         TTS_ALWAYSTIP = 0x01,
@@ -857,11 +847,11 @@ namespace System.Windows.Forms
             int GetGUID(int dwGuidKind, [In, Out] ref Guid pGuid);
 
             [PreserveSig]
-            int GetMultiTypeInfoCount([In, Out] ref int pcti);
+            HRESULT GetMultiTypeInfoCount([In, Out] ref int pcti);
 
             // we use arrays for most of these since we never use them anyway.
             [PreserveSig]
-            int GetInfoOfIndex(int iti, int dwFlags,
+            HRESULT GetInfoOfIndex(int iti, int dwFlags,
                                 [In, Out]
                                 ref UnsafeNativeMethods.ITypeInfo pTypeInfo,
                                 int pTIFlags,

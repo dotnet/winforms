@@ -55,7 +55,7 @@ namespace System.Windows.Forms
 
                 Marshal.Release(pFont);
 
-                if (NativeMethods.Failed(hr))
+                if (((HRESULT)hr).Failed())
                 {
                     Marshal.ThrowExceptionForHR(hr);
                 }

@@ -100,7 +100,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
             if (obj is NativeMethods.IProvideMultipleClassInfo pCI)
             {
-                if (!NativeMethods.Succeeded(pCI.GetMultiTypeInfoCount(ref n)) || n == 0)
+                if (!pCI.GetMultiTypeInfoCount(ref n).Succeeded() || n == 0)
                 {
                     n = 0;
                 }
@@ -111,7 +111,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
                     for (int i = 0; i < n; i++)
                     {
-                        if (NativeMethods.Failed(pCI.GetInfoOfIndex(i, 1 /*MULTICLASSINFO_GETTYPEINFO*/, ref temp, 0, 0, IntPtr.Zero, IntPtr.Zero)))
+                        if (pCI.GetInfoOfIndex(i, 1 /*MULTICLASSINFO_GETTYPEINFO*/, ref temp, 0, 0, IntPtr.Zero, IntPtr.Zero).Failed())
                         {
                             continue;
                         }

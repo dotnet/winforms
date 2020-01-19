@@ -58,37 +58,37 @@ namespace System.Windows.Forms
         public static extern bool DrawEdge(HandleRef hDC, ref RECT rect, int edge, int flags);
 
         // Theming/Visual Styles
-        [DllImport(ExternDll.Uxtheme, CharSet = CharSet.Auto)]
-        public static extern int GetThemeBackgroundContentRect(HandleRef hTheme, HandleRef hdc, int iPartId, int iStateId, [In] NativeMethods.COMRECT pBoundingRect, [Out] NativeMethods.COMRECT pContentRect);
+        [DllImport(Libraries.UxTheme, CharSet = CharSet.Auto)]
+        public static extern HRESULT GetThemeBackgroundContentRect(HandleRef hTheme, HandleRef hdc, int iPartId, int iStateId, [In] NativeMethods.COMRECT pBoundingRect, [Out] NativeMethods.COMRECT pContentRect);
 
-        [DllImport(ExternDll.Uxtheme, CharSet = CharSet.Auto)]
-        public static extern int GetThemeBackgroundExtent(HandleRef hTheme, HandleRef hdc, int iPartId, int iStateId, [In] NativeMethods.COMRECT pContentRect, [Out] NativeMethods.COMRECT pExtentRect);
+        [DllImport(Libraries.UxTheme, CharSet = CharSet.Auto)]
+        public static extern HRESULT GetThemeBackgroundExtent(HandleRef hTheme, HandleRef hdc, int iPartId, int iStateId, [In] NativeMethods.COMRECT pContentRect, [Out] NativeMethods.COMRECT pExtentRect);
 
-        [DllImport(ExternDll.Uxtheme, CharSet = CharSet.Auto)]
-        public static extern int GetThemeBackgroundRegion(HandleRef hTheme, HandleRef hdc, int iPartId, int iStateId, [In] NativeMethods.COMRECT pRect, ref IntPtr pRegion);
+        [DllImport(Libraries.UxTheme, CharSet = CharSet.Auto)]
+        public static extern HRESULT GetThemeBackgroundRegion(HandleRef hTheme, HandleRef hdc, int iPartId, int iStateId, [In] NativeMethods.COMRECT pRect, ref IntPtr pRegion);
 
-        [DllImport(ExternDll.Uxtheme, CharSet = CharSet.Auto)]
-        public static extern int GetThemeFilename(HandleRef hTheme, int iPartId, int iStateId, int iPropId, StringBuilder pszThemeFilename, int cchMaxBuffChars);
+        [DllImport(Libraries.UxTheme, CharSet = CharSet.Auto)]
+        public static extern HRESULT GetThemeFilename(HandleRef hTheme, int iPartId, int iStateId, int iPropId, StringBuilder pszThemeFilename, int cchMaxBuffChars);
 
-        [DllImport(ExternDll.Uxtheme, CharSet = CharSet.Auto)]
-        public static extern int GetThemePartSize(HandleRef hTheme, HandleRef hdc, int iPartId, int iStateId, [In] NativeMethods.COMRECT prc, VisualStyles.ThemeSizeType eSize, out Size psz);
+        [DllImport(Libraries.UxTheme, CharSet = CharSet.Auto)]
+        public static extern HRESULT GetThemePartSize(HandleRef hTheme, HandleRef hdc, int iPartId, int iStateId, [In] NativeMethods.COMRECT prc, VisualStyles.ThemeSizeType eSize, out Size psz);
 
-        [DllImport(ExternDll.Uxtheme, CharSet = CharSet.Auto)]
-        public static extern int GetThemePosition(HandleRef hTheme, int iPartId, int iStateId, int iPropId, out Point pPoint);
+        [DllImport(Libraries.UxTheme, CharSet = CharSet.Auto)]
+        public static extern HRESULT GetThemePosition(HandleRef hTheme, int iPartId, int iStateId, int iPropId, out Point pPoint);
 
-        [DllImport(ExternDll.Uxtheme, CharSet = CharSet.Auto)]
-        public static extern int GetThemeMargins(HandleRef hTheme, HandleRef hDC, int iPartId, int iStateId, int iPropId, NativeMethods.COMRECT prc, ref MARGINS margins);
+        [DllImport(Libraries.UxTheme, CharSet = CharSet.Auto)]
+        public static extern HRESULT GetThemeMargins(HandleRef hTheme, HandleRef hDC, int iPartId, int iStateId, int iPropId, NativeMethods.COMRECT prc, ref MARGINS margins);
 
-        [DllImport(ExternDll.Uxtheme, CharSet = CharSet.Auto)]
-        public static extern int GetThemeString(HandleRef hTheme, int iPartId, int iStateId, int iPropId, StringBuilder pszBuff, int cchMaxBuffChars);
+        [DllImport(Libraries.UxTheme, CharSet = CharSet.Auto)]
+        public static extern HRESULT GetThemeString(HandleRef hTheme, int iPartId, int iStateId, int iPropId, StringBuilder pszBuff, int cchMaxBuffChars);
 
-        [DllImport(ExternDll.Uxtheme, CharSet = CharSet.Auto)]
-        public static extern int GetThemeTextExtent(HandleRef hTheme, HandleRef hdc, int iPartId, int iStateId, [MarshalAs(UnmanagedType.LPWStr)] string pszText, int iCharCount, int dwTextFlags, [In] NativeMethods.COMRECT pBoundingRect, [Out] NativeMethods.COMRECT pExtentRect);
+        [DllImport(Libraries.UxTheme, CharSet = CharSet.Auto)]
+        public static extern HRESULT GetThemeTextExtent(HandleRef hTheme, HandleRef hdc, int iPartId, int iStateId, [MarshalAs(UnmanagedType.LPWStr)] string pszText, int iCharCount, int dwTextFlags, [In] NativeMethods.COMRECT pBoundingRect, [Out] NativeMethods.COMRECT pExtentRect);
 
-        [DllImport(ExternDll.Uxtheme, CharSet = CharSet.Auto)]
-        public static extern int GetThemeTextMetrics(HandleRef hTheme, HandleRef hdc, int iPartId, int iStateId, ref VisualStyles.TextMetrics ptm);
+        [DllImport(Libraries.UxTheme, CharSet = CharSet.Auto)]
+        public static extern HRESULT GetThemeTextMetrics(HandleRef hTheme, HandleRef hdc, int iPartId, int iStateId, ref VisualStyles.TextMetrics ptm);
 
-        [DllImport(ExternDll.Uxtheme, CharSet = CharSet.Auto)]
-        public static extern int HitTestThemeBackground(HandleRef hTheme, HandleRef hdc, int iPartId, int iStateId, int dwOptions, [In] NativeMethods.COMRECT pRect, HandleRef hrgn, Point ptTest, ref ushort pwHitTestCode);
+        [DllImport(Libraries.UxTheme, CharSet = CharSet.Auto)]
+        public static extern HRESULT HitTestThemeBackground(HandleRef hTheme, HandleRef hdc, int iPartId, int iStateId, int dwOptions, [In] NativeMethods.COMRECT pRect, HandleRef hrgn, Point ptTest, ref ushort pwHitTestCode);
     }
 }
