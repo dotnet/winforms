@@ -45,11 +45,6 @@ namespace System.Windows.Forms
         DLGC_WANTCHARS = 0x0080,
         DLGC_WANTMESSAGE = 0x0004,      /* Pass message to control          */
         DLGC_HASSETSEL = 0x0008,      /* Understands EM_SETSEL message    */
-        DTM_SETRANGE = (0x1000 + 4),
-        DTM_SETFORMAT = (0x1000 + 50),
-        DTM_SETMCCOLOR = (0x1000 + 6),
-        DTM_GETMONTHCAL = (0x1000 + 8),
-        DTM_SETMCFONT = (0x1000 + 9),
         DTS_UPDOWN = 0x0001,
         DTS_SHOWNONE = 0x0002,
         DTS_LONGDATEFORMAT = 0x0004,

@@ -17,8 +17,6 @@ internal static partial class Interop
         public const uint WM_USER           = 0x0400;
         public const uint WM_APP            = 0x8000;
 
-        public const uint DTM_FIRST         = 0x1000;      // DateTimePicker messages
-
         // https://docs.microsoft.com/en-us/cpp/mfc/tn062-message-reflection-for-windows-controls?view=vs-2019
         public const uint WM_REFLECT = WM_USER + 0x1C00;
 
@@ -268,13 +266,6 @@ internal static partial class Interop
             WM_DWMSENDICONICLIVEPREVIEWBITMAP   = 0x0326,
             WM_GETTITLEBARINFOEX                = 0x033F,
             WM_CHOOSEFONT_GETLOGFONT            = WM_USER + 1,
-            DTM_GETSYSTEMTIME                   = DTM_FIRST + 1,
-            DTM_SETSYSTEMTIME                   = DTM_FIRST + 2,
-            DTM_SETRANGE                        = DTM_FIRST + 4,
-            DTM_SETMCCOLOR                      = DTM_FIRST + 6,
-            DTM_GETMONTHCAL                     = DTM_FIRST + 8,
-            DTM_SETMCFONT                       = DTM_FIRST + 9,
-            DTM_SETFORMATW                      = DTM_FIRST + 50,
             WM_REFLECT_NOTIFY                   = WM_REFLECT + WM_NOTIFY,
         }
     }
