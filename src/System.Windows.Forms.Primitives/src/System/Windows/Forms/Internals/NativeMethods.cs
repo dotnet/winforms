@@ -16,16 +16,11 @@ namespace System.Windows.Forms
 
         public const int STATUS_PENDING = 0x103; //259 = STILL_ALIVE
 
-        public const int ACM_OPENA = (0x0400 + 100);
-        public const int ACM_OPENW = (0x0400 + 103);
-
         public const int
         BFFM_INITIALIZED = 1,
         BFFM_SELCHANGED = 2,
         BFFM_SETSELECTION = 0x400 + 103,
         BFFM_ENABLEOK = 0x400 + 101;
-
-        public const int CP_WINANSI = 1004;
 
         public const int cmb4 = 0x0473;
 
@@ -33,9 +28,7 @@ namespace System.Windows.Forms
         COLOR_WINDOW = 5,
         CCS_NORESIZE = 0x00000004,
         CCS_NOPARENTALIGN = 0x00000008,
-        CCS_NODIVIDER = 0x00000040,
-        CONNECT_E_NOCONNECTION = unchecked((int)0x80040200),
-        CONNECT_E_CANNOTCONNECT = unchecked((int)0x80040202);
+        CCS_NODIVIDER = 0x00000040;
 
         public const int
         DI_NORMAL = 0x0003,
@@ -65,7 +58,6 @@ namespace System.Windows.Forms
         public const int FADF_VARIANT = (unchecked((int)0x800));
 
         public const int
-        GCL_WNDPROC = (-24),
         GMR_VISIBLE = 0,
         GMR_DAYSTATE = 1,
         GDI_ERROR = (unchecked((int)0xFFFFFFFF)),
@@ -99,14 +91,9 @@ namespace System.Windows.Forms
 
         public const int
         ICON_SMALL = 0,
-        ICON_BIG = 1,
-        IMAGE_ICON = 1,
-        IMAGE_CURSOR = 2;
+        ICON_BIG = 1;
 
         public const int
-        LOCK_WRITE = 0x1,
-        LOCK_EXCLUSIVE = 0x2,
-        LOCK_ONLYONCE = 0x4,
         LV_VIEW_TILE = 0x0004,
         LVN_ITEMCHANGING = ((0 - 100) - 0),
         LVN_ITEMCHANGED = ((0 - 100) - 1),
@@ -163,7 +150,6 @@ namespace System.Windows.Forms
         MIIM_STRING = 0x00000040,
         MIIM_BITMAP = 0x00000080,
         MIIM_FTYPE = 0x00000100,
-        MB_OK = 0x00000000,
         MFS_DISABLED = 0x00000003,
         MFT_MENUBREAK = 0x00000040,
         MFT_SEPARATOR = 0x00000800,
@@ -204,10 +190,6 @@ namespace System.Windows.Forms
         PRF_CLIENT = 0x00000004,
         PRF_ERASEBKGND = 0x00000008,
         PRF_CHILDREN = 0x00000010,
-        PSM_SETTITLEA = (0x0400 + 111),
-        PSM_SETTITLEW = (0x0400 + 120),
-        PSM_SETFINISHTEXTA = (0x0400 + 115),
-        PSM_SETFINISHTEXTW = (0x0400 + 121),
         PATCOPY = 0x00F00021,
         PATINVERT = 0x005A0049;
 
@@ -296,10 +278,6 @@ namespace System.Windows.Forms
 
         public const int XBUTTON1 = 0x0001;
         public const int XBUTTON2 = 0x0002;
-
-        public const string
-        MSH_MOUSEWHEEL = "MSWHEEL_ROLLMSG",
-        MSH_SCROLL_LINES = "MSH_SCROLL_LINES_MSG";
 
         public const int CHILDID_SELF = 0;
 
