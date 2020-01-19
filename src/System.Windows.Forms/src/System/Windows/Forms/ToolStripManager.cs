@@ -1375,7 +1375,7 @@ namespace System.Windows.Forms
                     return false;
                 }
 
-                IntPtr context = CommonUnsafeNativeMethods.GetDpiAwarenessContextForWindow(m.HWnd);
+                IntPtr context = GetDpiAwarenessContextForWindow(m.HWnd);
 
                 using (DpiHelper.EnterDpiAwarenessScope(context))
                 {
@@ -1470,6 +1470,36 @@ namespace System.Windows.Forms
                 }
 
                 return false;
+            }
+
+            internal static IntPtr GetDpiAwarenessContextForWindow(IntPtr hWnd)
+            {
+                IntPtr dpiAwarenessContext = User32.UNSPECIFIED_DPI_AWARENESS_CONTEXT;
+
+                if (OsVersion.IsWindows10_1607OrGreater)
+                {
+                    // Works only >= Windows 10/1607
+                    IntPtr awarenessContext = User32.GetWindowDpiAwarenessContext(hWnd);
+                    User32.DPI_AWARENESS awareness = User32.GetAwarenessFromDpiAwarenessContext(awarenessContext);
+                    dpiAwarenessContext = ConvertToDpiAwarenessContext(awareness);
+                }
+
+                return dpiAwarenessContext;
+            }
+
+            private static IntPtr ConvertToDpiAwarenessContext(User32.DPI_AWARENESS dpiAwareness)
+            {
+                switch (dpiAwareness)
+                {
+                    case User32.DPI_AWARENESS.UNAWARE:
+                        return User32.DPI_AWARENESS_CONTEXT.UNAWARE;
+                    case User32.DPI_AWARENESS.SYSTEM_AWARE:
+                        return User32.DPI_AWARENESS_CONTEXT.SYSTEM_AWARE;
+                    case User32.DPI_AWARENESS.PER_MONITOR_AWARE:
+                        return User32.DPI_AWARENESS_CONTEXT.PER_MONITOR_AWARE_V2;
+                    default:
+                        return User32.DPI_AWARENESS_CONTEXT.SYSTEM_AWARE;
+                }
             }
 
             private class HostedWindowsFormsMessageHook

@@ -91,8 +91,8 @@ namespace System.Windows.Forms
                 {
                     // We can't cache this value because different top level windows can have different DPI awareness context
                     // for mixed mode applications.
-                    IntPtr dpiAwareness = CommonUnsafeNativeMethods.GetThreadDpiAwarenessContext();
-                    return CommonUnsafeNativeMethods.TryFindDpiAwarenessContextsEqual(dpiAwareness, DPI_AWARENESS_CONTEXT.PER_MONITOR_AWARE_V2);
+                    IntPtr dpiAwareness = GetThreadDpiAwarenessContext();
+                    return AreDpiAwarenessContextsEqual(dpiAwareness, DPI_AWARENESS_CONTEXT.PER_MONITOR_AWARE_V2);
                 }
                 else
                 {
@@ -343,29 +343,29 @@ namespace System.Windows.Forms
             // For Windows 10 RS2 and above
             if (OsVersion.IsWindows10_1607OrGreater)
             {
-                IntPtr dpiAwareness = CommonUnsafeNativeMethods.GetThreadDpiAwarenessContext();
+                IntPtr dpiAwareness = GetThreadDpiAwarenessContext();
 
-                if (CommonUnsafeNativeMethods.TryFindDpiAwarenessContextsEqual(dpiAwareness, DPI_AWARENESS_CONTEXT.SYSTEM_AWARE))
+                if (AreDpiAwarenessContextsEqual(dpiAwareness, DPI_AWARENESS_CONTEXT.SYSTEM_AWARE))
                 {
                     return HighDpiMode.SystemAware;
                 }
 
-                if (CommonUnsafeNativeMethods.TryFindDpiAwarenessContextsEqual(dpiAwareness, DPI_AWARENESS_CONTEXT.UNAWARE))
+                if (AreDpiAwarenessContextsEqual(dpiAwareness, DPI_AWARENESS_CONTEXT.UNAWARE))
                 {
                     return HighDpiMode.DpiUnaware;
                 }
 
-                if (CommonUnsafeNativeMethods.TryFindDpiAwarenessContextsEqual(dpiAwareness, DPI_AWARENESS_CONTEXT.PER_MONITOR_AWARE_V2))
+                if (AreDpiAwarenessContextsEqual(dpiAwareness, DPI_AWARENESS_CONTEXT.PER_MONITOR_AWARE_V2))
                 {
                     return HighDpiMode.PerMonitorV2;
                 }
 
-                if (CommonUnsafeNativeMethods.TryFindDpiAwarenessContextsEqual(dpiAwareness, DPI_AWARENESS_CONTEXT.PER_MONITOR_AWARE))
+                if (AreDpiAwarenessContextsEqual(dpiAwareness, DPI_AWARENESS_CONTEXT.PER_MONITOR_AWARE))
                 {
                     return HighDpiMode.PerMonitor;
                 }
 
-                if (CommonUnsafeNativeMethods.TryFindDpiAwarenessContextsEqual(dpiAwareness, DPI_AWARENESS_CONTEXT.UNAWARE_GDISCALED))
+                if (AreDpiAwarenessContextsEqual(dpiAwareness, DPI_AWARENESS_CONTEXT.UNAWARE_GDISCALED))
                 {
                     return HighDpiMode.DpiUnawareGdiScaled;
                 }

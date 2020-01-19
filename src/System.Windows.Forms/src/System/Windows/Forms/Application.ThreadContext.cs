@@ -314,7 +314,7 @@ namespace System.Windows.Forms
                 // Legacy OS/target framework scenario where ControlDpiContext is set to DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_UNSPECIFIED
                 // because of 'ThreadContextDpiAwareness' API unavailability or this feature is not enabled.
 
-                if (!DpiHelper.IsScalingRequirementMet || CommonUnsafeNativeMethods.TryFindDpiAwarenessContextsEqual(context, User32.DPI_AWARENESS_CONTEXT.UNSPECIFIED))
+                if (!DpiHelper.IsScalingRequirementMet || User32.AreDpiAwarenessContextsEqual(context, User32.UNSPECIFIED_DPI_AWARENESS_CONTEXT))
                 {
                     Debug.Assert(_parkingWindows.Count == 1, "parkingWindows count can not be > 1 for legacy OS/target framework versions");
                     return _parkingWindows[0];
@@ -323,7 +323,7 @@ namespace System.Windows.Forms
                 // Supported OS scenario.
                 foreach (ParkingWindow p in _parkingWindows)
                 {
-                    if (CommonUnsafeNativeMethods.TryFindDpiAwarenessContextsEqual(p.DpiAwarenessContext, context))
+                    if (User32.AreDpiAwarenessContextsEqual(p.DpiAwarenessContext, context))
                     {
                         return p;
                     }

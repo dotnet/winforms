@@ -76,8 +76,8 @@ namespace System.Windows.Forms
         ///  Cache window DpiContext awareness information that helps to create handle with right context at the later time.
         /// </summary>
         internal IntPtr DpiAwarenessContext { get; } = DpiHelper.IsScalingRequirementMet
-            ? CommonUnsafeNativeMethods.TryGetThreadDpiAwarenessContext()
-            : User32.DPI_AWARENESS_CONTEXT.UNSPECIFIED;
+            ? User32.GetThreadDpiAwarenessContext()
+            : User32.UNSPECIFIED_DPI_AWARENESS_CONTEXT;
 
         /// <summary>
         ///  Override's the base object's finalize method.
