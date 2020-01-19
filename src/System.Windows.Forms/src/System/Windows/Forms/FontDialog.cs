@@ -412,9 +412,9 @@ namespace System.Windows.Forms
                 case WindowMessages.WM_INITDIALOG:
                     if (!showColor)
                     {
-                        IntPtr hWndCtl = UnsafeNativeMethods.GetDlgItem(new HandleRef(null, hWnd), NativeMethods.cmb4);
+                        IntPtr hWndCtl = User32.GetDlgItem(hWnd, NativeMethods.cmb4);
                         User32.ShowWindow(hWndCtl, User32.SW.HIDE);
-                        hWndCtl = UnsafeNativeMethods.GetDlgItem(new HandleRef(null, hWnd), NativeMethods.stc4);
+                        hWndCtl = User32.GetDlgItem(hWnd, NativeMethods.stc4);
                         User32.ShowWindow(hWndCtl, User32.SW.HIDE);
                     }
                     break;
