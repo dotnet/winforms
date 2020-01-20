@@ -1,0 +1,205 @@
+System.ComponentModel.Design.ArrayEditor
+System.ComponentModel.Design.ArrayEditor.ArrayEditor(System.Type type) -> void
+System.ComponentModel.Design.CollectionEditor
+System.ComponentModel.Design.CollectionEditor.CollectionEditor(System.Type type) -> void
+System.ComponentModel.Design.CollectionEditor.CollectionForm
+System.ComponentModel.Design.CollectionEditor.CollectionForm.CanRemoveInstance(object value) -> bool
+System.ComponentModel.Design.CollectionEditor.CollectionForm.CollectionForm(System.ComponentModel.Design.CollectionEditor editor) -> void
+System.ComponentModel.Design.CollectionEditor.CollectionForm.CollectionItemType.get -> System.Type
+System.ComponentModel.Design.CollectionEditor.CollectionForm.CollectionType.get -> System.Type
+System.ComponentModel.Design.CollectionEditor.CollectionForm.Context.get -> System.ComponentModel.ITypeDescriptorContext
+System.ComponentModel.Design.CollectionEditor.CollectionForm.CreateInstance(System.Type itemType) -> object
+System.ComponentModel.Design.CollectionEditor.CollectionForm.DestroyInstance(object instance) -> void
+System.ComponentModel.Design.CollectionEditor.CollectionForm.EditValue.get -> object
+System.ComponentModel.Design.CollectionEditor.CollectionForm.EditValue.set -> void
+System.ComponentModel.Design.CollectionEditor.CollectionForm.Items.get -> object[]
+System.ComponentModel.Design.CollectionEditor.CollectionForm.Items.set -> void
+System.ComponentModel.Design.CollectionEditor.CollectionForm.NewItemTypes.get -> System.Type[]
+System.ComponentModel.Design.CollectionEditor.CollectionItemType.get -> System.Type
+System.ComponentModel.Design.CollectionEditor.CollectionType.get -> System.Type
+System.ComponentModel.Design.CollectionEditor.Context.get -> System.ComponentModel.ITypeDescriptorContext
+System.ComponentModel.Design.CollectionEditor.GetService(System.Type serviceType) -> object
+System.ComponentModel.Design.CollectionEditor.NewItemTypes.get -> System.Type[]
+System.ComponentModel.Design.MultilineStringEditor
+System.ComponentModel.Design.MultilineStringEditor.MultilineStringEditor() -> void
+System.ComponentModel.Design.ObjectSelectorEditor
+System.ComponentModel.Design.ObjectSelectorEditor.EqualsToValue(object value) -> bool
+System.ComponentModel.Design.ObjectSelectorEditor.ObjectSelectorEditor() -> void
+System.ComponentModel.Design.ObjectSelectorEditor.ObjectSelectorEditor(bool subObjectSelector) -> void
+System.ComponentModel.Design.ObjectSelectorEditor.Selector
+System.ComponentModel.Design.ObjectSelectorEditor.Selector.AddNode(string label, object value, System.ComponentModel.Design.ObjectSelectorEditor.SelectorNode parent) -> System.ComponentModel.Design.ObjectSelectorEditor.SelectorNode
+System.ComponentModel.Design.ObjectSelectorEditor.Selector.Clear() -> void
+System.ComponentModel.Design.ObjectSelectorEditor.Selector.OnAfterSelect(object sender, System.Windows.Forms.TreeViewEventArgs e) -> void
+System.ComponentModel.Design.ObjectSelectorEditor.Selector.Selector(System.ComponentModel.Design.ObjectSelectorEditor editor) -> void
+System.ComponentModel.Design.ObjectSelectorEditor.Selector.SetSelection(object value, System.Windows.Forms.TreeNodeCollection nodes) -> bool
+System.ComponentModel.Design.ObjectSelectorEditor.Selector.Start(System.Windows.Forms.Design.IWindowsFormsEditorService edSvc, object value) -> void
+System.ComponentModel.Design.ObjectSelectorEditor.Selector.Stop() -> void
+System.ComponentModel.Design.ObjectSelectorEditor.Selector.clickSeen -> bool
+System.ComponentModel.Design.ObjectSelectorEditor.SelectorNode
+System.ComponentModel.Design.ObjectSelectorEditor.SelectorNode.SelectorNode(string label, object value) -> void
+System.ComponentModel.Design.ObjectSelectorEditor.SelectorNode.value -> object
+System.ComponentModel.Design.ObjectSelectorEditor.SubObjectSelector -> bool
+System.ComponentModel.Design.ObjectSelectorEditor.currValue -> object
+System.ComponentModel.Design.ObjectSelectorEditor.prevValue -> object
+System.Drawing.Design.BitmapEditor
+System.Drawing.Design.BitmapEditor.BitmapEditor() -> void
+System.Drawing.Design.ColorEditor
+System.Drawing.Design.ColorEditor.ColorEditor() -> void
+System.Drawing.Design.CursorEditor
+System.Drawing.Design.CursorEditor.CursorEditor() -> void
+System.Drawing.Design.FontEditor
+System.Drawing.Design.FontEditor.FontEditor() -> void
+System.Drawing.Design.FontNameEditor
+System.Drawing.Design.FontNameEditor.FontNameEditor() -> void
+System.Drawing.Design.ImageEditor
+System.Drawing.Design.ImageEditor.ImageEditor() -> void
+System.Drawing.Design.MetafileEditor
+System.Drawing.Design.MetafileEditor.MetafileEditor() -> void
+System.Windows.Forms.Design.AnchorEditor
+System.Windows.Forms.Design.AnchorEditor.AnchorEditor() -> void
+System.Windows.Forms.Design.BorderSidesEditor
+System.Windows.Forms.Design.BorderSidesEditor.BorderSidesEditor() -> void
+System.Windows.Forms.Design.DockEditor
+System.Windows.Forms.Design.DockEditor.DockEditor() -> void
+System.Windows.Forms.Design.FileNameEditor
+System.Windows.Forms.Design.FileNameEditor.FileNameEditor() -> void
+System.Windows.Forms.Design.FolderNameEditor
+System.Windows.Forms.Design.FolderNameEditor.FolderBrowser
+System.Windows.Forms.Design.FolderNameEditor.FolderBrowser.Description.get -> string
+System.Windows.Forms.Design.FolderNameEditor.FolderBrowser.Description.set -> void
+System.Windows.Forms.Design.FolderNameEditor.FolderBrowser.DirectoryPath.get -> string
+System.Windows.Forms.Design.FolderNameEditor.FolderBrowser.FolderBrowser() -> void
+System.Windows.Forms.Design.FolderNameEditor.FolderBrowser.ShowDialog() -> System.Windows.Forms.DialogResult
+System.Windows.Forms.Design.FolderNameEditor.FolderBrowser.ShowDialog(System.Windows.Forms.IWin32Window owner) -> System.Windows.Forms.DialogResult
+System.Windows.Forms.Design.FolderNameEditor.FolderBrowser.StartLocation.get -> System.Windows.Forms.Design.FolderNameEditor.FolderBrowserFolder
+System.Windows.Forms.Design.FolderNameEditor.FolderBrowser.StartLocation.set -> void
+System.Windows.Forms.Design.FolderNameEditor.FolderBrowser.Style.get -> System.Windows.Forms.Design.FolderNameEditor.FolderBrowserStyles
+System.Windows.Forms.Design.FolderNameEditor.FolderBrowser.Style.set -> void
+System.Windows.Forms.Design.FolderNameEditor.FolderBrowserFolder
+System.Windows.Forms.Design.FolderNameEditor.FolderBrowserFolder.Desktop = 0 -> System.Windows.Forms.Design.FolderNameEditor.FolderBrowserFolder
+System.Windows.Forms.Design.FolderNameEditor.FolderBrowserFolder.Favorites = 6 -> System.Windows.Forms.Design.FolderNameEditor.FolderBrowserFolder
+System.Windows.Forms.Design.FolderNameEditor.FolderBrowserFolder.MyComputer = 17 -> System.Windows.Forms.Design.FolderNameEditor.FolderBrowserFolder
+System.Windows.Forms.Design.FolderNameEditor.FolderBrowserFolder.MyDocuments = 5 -> System.Windows.Forms.Design.FolderNameEditor.FolderBrowserFolder
+System.Windows.Forms.Design.FolderNameEditor.FolderBrowserFolder.MyPictures = 39 -> System.Windows.Forms.Design.FolderNameEditor.FolderBrowserFolder
+System.Windows.Forms.Design.FolderNameEditor.FolderBrowserFolder.NetAndDialUpConnections = 49 -> System.Windows.Forms.Design.FolderNameEditor.FolderBrowserFolder
+System.Windows.Forms.Design.FolderNameEditor.FolderBrowserFolder.NetworkNeighborhood = 18 -> System.Windows.Forms.Design.FolderNameEditor.FolderBrowserFolder
+System.Windows.Forms.Design.FolderNameEditor.FolderBrowserFolder.Printers = 4 -> System.Windows.Forms.Design.FolderNameEditor.FolderBrowserFolder
+System.Windows.Forms.Design.FolderNameEditor.FolderBrowserFolder.Recent = 8 -> System.Windows.Forms.Design.FolderNameEditor.FolderBrowserFolder
+System.Windows.Forms.Design.FolderNameEditor.FolderBrowserFolder.SendTo = 9 -> System.Windows.Forms.Design.FolderNameEditor.FolderBrowserFolder
+System.Windows.Forms.Design.FolderNameEditor.FolderBrowserFolder.StartMenu = 11 -> System.Windows.Forms.Design.FolderNameEditor.FolderBrowserFolder
+System.Windows.Forms.Design.FolderNameEditor.FolderBrowserFolder.Templates = 21 -> System.Windows.Forms.Design.FolderNameEditor.FolderBrowserFolder
+System.Windows.Forms.Design.FolderNameEditor.FolderBrowserStyles
+System.Windows.Forms.Design.FolderNameEditor.FolderBrowserStyles.BrowseForComputer = 4096 -> System.Windows.Forms.Design.FolderNameEditor.FolderBrowserStyles
+System.Windows.Forms.Design.FolderNameEditor.FolderBrowserStyles.BrowseForEverything = 16384 -> System.Windows.Forms.Design.FolderNameEditor.FolderBrowserStyles
+System.Windows.Forms.Design.FolderNameEditor.FolderBrowserStyles.BrowseForPrinter = 8192 -> System.Windows.Forms.Design.FolderNameEditor.FolderBrowserStyles
+System.Windows.Forms.Design.FolderNameEditor.FolderBrowserStyles.RestrictToDomain = 2 -> System.Windows.Forms.Design.FolderNameEditor.FolderBrowserStyles
+System.Windows.Forms.Design.FolderNameEditor.FolderBrowserStyles.RestrictToFilesystem = 1 -> System.Windows.Forms.Design.FolderNameEditor.FolderBrowserStyles
+System.Windows.Forms.Design.FolderNameEditor.FolderBrowserStyles.RestrictToSubfolders = 8 -> System.Windows.Forms.Design.FolderNameEditor.FolderBrowserStyles
+System.Windows.Forms.Design.FolderNameEditor.FolderBrowserStyles.ShowTextBox = 16 -> System.Windows.Forms.Design.FolderNameEditor.FolderBrowserStyles
+System.Windows.Forms.Design.FolderNameEditor.FolderNameEditor() -> void
+System.Windows.Forms.Design.ImageListImageEditor
+System.Windows.Forms.Design.ImageListImageEditor.ImageListImageEditor() -> void
+System.Windows.Forms.Design.ShortcutKeysEditor
+System.Windows.Forms.Design.ShortcutKeysEditor.ShortcutKeysEditor() -> void
+abstract System.ComponentModel.Design.CollectionEditor.CollectionForm.OnEditValueChanged() -> void
+override System.ComponentModel.Design.ArrayEditor.CreateCollectionItemType() -> System.Type
+override System.ComponentModel.Design.ArrayEditor.GetItems(object editValue) -> object[]
+override System.ComponentModel.Design.ArrayEditor.SetItems(object editValue, object[] value) -> object
+override System.ComponentModel.Design.CollectionEditor.CollectionForm.GetService(System.Type serviceType) -> object
+override System.ComponentModel.Design.CollectionEditor.EditValue(System.ComponentModel.ITypeDescriptorContext context, System.IServiceProvider provider, object value) -> object
+override System.ComponentModel.Design.CollectionEditor.GetEditStyle(System.ComponentModel.ITypeDescriptorContext context) -> System.Drawing.Design.UITypeEditorEditStyle
+override System.ComponentModel.Design.MultilineStringEditor.EditValue(System.ComponentModel.ITypeDescriptorContext context, System.IServiceProvider provider, object value) -> object
+override System.ComponentModel.Design.MultilineStringEditor.GetEditStyle(System.ComponentModel.ITypeDescriptorContext context) -> System.Drawing.Design.UITypeEditorEditStyle
+override System.ComponentModel.Design.MultilineStringEditor.GetPaintValueSupported(System.ComponentModel.ITypeDescriptorContext context) -> bool
+override System.ComponentModel.Design.ObjectSelectorEditor.EditValue(System.ComponentModel.ITypeDescriptorContext context, System.IServiceProvider provider, object value) -> object
+override System.ComponentModel.Design.ObjectSelectorEditor.GetEditStyle(System.ComponentModel.ITypeDescriptorContext context) -> System.Drawing.Design.UITypeEditorEditStyle
+override System.ComponentModel.Design.ObjectSelectorEditor.Selector.OnKeyDown(System.Windows.Forms.KeyEventArgs e) -> void
+override System.ComponentModel.Design.ObjectSelectorEditor.Selector.OnKeyPress(System.Windows.Forms.KeyPressEventArgs e) -> void
+override System.ComponentModel.Design.ObjectSelectorEditor.Selector.OnNodeMouseClick(System.Windows.Forms.TreeNodeMouseClickEventArgs e) -> void
+override System.ComponentModel.Design.ObjectSelectorEditor.Selector.WndProc(ref System.Windows.Forms.Message m) -> void
+override System.Drawing.Design.BitmapEditor.GetExtensions() -> string[]
+override System.Drawing.Design.BitmapEditor.GetFileDialogDescription() -> string
+override System.Drawing.Design.BitmapEditor.LoadFromStream(System.IO.Stream stream) -> System.Drawing.Image
+override System.Drawing.Design.ColorEditor.EditValue(System.ComponentModel.ITypeDescriptorContext context, System.IServiceProvider provider, object value) -> object
+override System.Drawing.Design.ColorEditor.GetEditStyle(System.ComponentModel.ITypeDescriptorContext context) -> System.Drawing.Design.UITypeEditorEditStyle
+override System.Drawing.Design.ColorEditor.GetPaintValueSupported(System.ComponentModel.ITypeDescriptorContext context) -> bool
+override System.Drawing.Design.ColorEditor.PaintValue(System.Drawing.Design.PaintValueEventArgs e) -> void
+override System.Drawing.Design.CursorEditor.EditValue(System.ComponentModel.ITypeDescriptorContext context, System.IServiceProvider provider, object value) -> object
+override System.Drawing.Design.CursorEditor.GetEditStyle(System.ComponentModel.ITypeDescriptorContext context) -> System.Drawing.Design.UITypeEditorEditStyle
+override System.Drawing.Design.CursorEditor.IsDropDownResizable.get -> bool
+override System.Drawing.Design.FontEditor.EditValue(System.ComponentModel.ITypeDescriptorContext context, System.IServiceProvider provider, object value) -> object
+override System.Drawing.Design.FontEditor.GetEditStyle(System.ComponentModel.ITypeDescriptorContext context) -> System.Drawing.Design.UITypeEditorEditStyle
+override System.Drawing.Design.FontNameEditor.GetPaintValueSupported(System.ComponentModel.ITypeDescriptorContext context) -> bool
+override System.Drawing.Design.FontNameEditor.PaintValue(System.Drawing.Design.PaintValueEventArgs e) -> void
+override System.Drawing.Design.ImageEditor.EditValue(System.ComponentModel.ITypeDescriptorContext context, System.IServiceProvider provider, object value) -> object
+override System.Drawing.Design.ImageEditor.GetEditStyle(System.ComponentModel.ITypeDescriptorContext context) -> System.Drawing.Design.UITypeEditorEditStyle
+override System.Drawing.Design.ImageEditor.GetPaintValueSupported(System.ComponentModel.ITypeDescriptorContext context) -> bool
+override System.Drawing.Design.ImageEditor.PaintValue(System.Drawing.Design.PaintValueEventArgs e) -> void
+override System.Drawing.Design.MetafileEditor.GetExtensions() -> string[]
+override System.Drawing.Design.MetafileEditor.GetFileDialogDescription() -> string
+override System.Drawing.Design.MetafileEditor.LoadFromStream(System.IO.Stream stream) -> System.Drawing.Image
+override System.Windows.Forms.Design.AnchorEditor.EditValue(System.ComponentModel.ITypeDescriptorContext context, System.IServiceProvider provider, object value) -> object
+override System.Windows.Forms.Design.AnchorEditor.GetEditStyle(System.ComponentModel.ITypeDescriptorContext context) -> System.Drawing.Design.UITypeEditorEditStyle
+override System.Windows.Forms.Design.BorderSidesEditor.EditValue(System.ComponentModel.ITypeDescriptorContext context, System.IServiceProvider provider, object value) -> object
+override System.Windows.Forms.Design.BorderSidesEditor.GetEditStyle(System.ComponentModel.ITypeDescriptorContext context) -> System.Drawing.Design.UITypeEditorEditStyle
+override System.Windows.Forms.Design.DockEditor.EditValue(System.ComponentModel.ITypeDescriptorContext context, System.IServiceProvider provider, object value) -> object
+override System.Windows.Forms.Design.DockEditor.GetEditStyle(System.ComponentModel.ITypeDescriptorContext context) -> System.Drawing.Design.UITypeEditorEditStyle
+override System.Windows.Forms.Design.FileNameEditor.EditValue(System.ComponentModel.ITypeDescriptorContext context, System.IServiceProvider provider, object value) -> object
+override System.Windows.Forms.Design.FileNameEditor.GetEditStyle(System.ComponentModel.ITypeDescriptorContext context) -> System.Drawing.Design.UITypeEditorEditStyle
+override System.Windows.Forms.Design.FolderNameEditor.EditValue(System.ComponentModel.ITypeDescriptorContext context, System.IServiceProvider provider, object value) -> object
+override System.Windows.Forms.Design.FolderNameEditor.GetEditStyle(System.ComponentModel.ITypeDescriptorContext context) -> System.Drawing.Design.UITypeEditorEditStyle
+override System.Windows.Forms.Design.ImageListImageEditor.EditValue(System.ComponentModel.ITypeDescriptorContext context, System.IServiceProvider provider, object value) -> object
+override System.Windows.Forms.Design.ImageListImageEditor.GetFileDialogDescription() -> string
+override System.Windows.Forms.Design.ImageListImageEditor.GetImageExtenders() -> System.Type[]
+override System.Windows.Forms.Design.ImageListImageEditor.GetPaintValueSupported(System.ComponentModel.ITypeDescriptorContext context) -> bool
+override System.Windows.Forms.Design.ImageListImageEditor.PaintValue(System.Drawing.Design.PaintValueEventArgs e) -> void
+override System.Windows.Forms.Design.ShortcutKeysEditor.EditValue(System.ComponentModel.ITypeDescriptorContext context, System.IServiceProvider provider, object value) -> object
+override System.Windows.Forms.Design.ShortcutKeysEditor.GetEditStyle(System.ComponentModel.ITypeDescriptorContext context) -> System.Drawing.Design.UITypeEditorEditStyle
+static System.ComponentModel.Design.ObjectSelectorEditor.ApplyTreeViewThemeStyles(System.Windows.Forms.TreeView treeView) -> void
+static System.Drawing.Design.BitmapEditor.BitmapExtensions -> System.Collections.Generic.List<string>
+static System.Drawing.Design.ImageEditor.CreateExtensionsString(string[] extensions, string sep) -> string
+static System.Drawing.Design.ImageEditor.CreateFilterEntry(System.Drawing.Design.ImageEditor e) -> string
+virtual System.ComponentModel.Design.CollectionEditor.CanRemoveInstance(object value) -> bool
+virtual System.ComponentModel.Design.CollectionEditor.CanSelectMultipleInstances() -> bool
+virtual System.ComponentModel.Design.CollectionEditor.CancelChanges() -> void
+virtual System.ComponentModel.Design.CollectionEditor.CollectionForm.CanSelectMultipleInstances() -> bool
+virtual System.ComponentModel.Design.CollectionEditor.CollectionForm.DisplayError(System.Exception e) -> void
+virtual System.ComponentModel.Design.CollectionEditor.CollectionForm.ShowEditorDialog(System.Windows.Forms.Design.IWindowsFormsEditorService edSvc) -> System.Windows.Forms.DialogResult
+virtual System.ComponentModel.Design.CollectionEditor.CreateCollectionForm() -> System.ComponentModel.Design.CollectionEditor.CollectionForm
+virtual System.ComponentModel.Design.CollectionEditor.CreateCollectionItemType() -> System.Type
+virtual System.ComponentModel.Design.CollectionEditor.CreateInstance(System.Type itemType) -> object
+virtual System.ComponentModel.Design.CollectionEditor.CreateNewItemTypes() -> System.Type[]
+virtual System.ComponentModel.Design.CollectionEditor.DestroyInstance(object instance) -> void
+virtual System.ComponentModel.Design.CollectionEditor.GetDisplayText(object value) -> string
+virtual System.ComponentModel.Design.CollectionEditor.GetItems(object editValue) -> object[]
+virtual System.ComponentModel.Design.CollectionEditor.GetObjectsFromInstance(object instance) -> System.Collections.IList
+virtual System.ComponentModel.Design.CollectionEditor.HelpTopic.get -> string
+virtual System.ComponentModel.Design.CollectionEditor.SetItems(object editValue, object[] value) -> object
+virtual System.ComponentModel.Design.CollectionEditor.ShowHelp() -> void
+virtual System.ComponentModel.Design.ObjectSelectorEditor.FillTreeWithData(System.ComponentModel.Design.ObjectSelectorEditor.Selector selector, System.ComponentModel.ITypeDescriptorContext context, System.IServiceProvider provider) -> void
+virtual System.ComponentModel.Design.ObjectSelectorEditor.SetValue(object value) -> void
+virtual System.Drawing.Design.ImageEditor.GetExtensions() -> string[]
+virtual System.Drawing.Design.ImageEditor.GetFileDialogDescription() -> string
+virtual System.Drawing.Design.ImageEditor.GetImageExtenders() -> System.Type[]
+virtual System.Drawing.Design.ImageEditor.LoadFromStream(System.IO.Stream stream) -> System.Drawing.Image
+virtual System.Windows.Forms.Design.FileNameEditor.InitializeDialog(System.Windows.Forms.OpenFileDialog openFileDialog) -> void
+virtual System.Windows.Forms.Design.FolderNameEditor.InitializeDialog(System.Windows.Forms.Design.FolderNameEditor.FolderBrowser folderBrowser) -> void
+System.ComponentModel.Design.DateTimeEditor
+System.ComponentModel.Design.DateTimeEditor.DateTimeEditor() -> void
+System.Drawing.Design.ContentAlignmentEditor
+System.Drawing.Design.ContentAlignmentEditor.ContentAlignmentEditor() -> void
+System.Drawing.Design.IconEditor
+System.Drawing.Design.IconEditor.IconEditor() -> void
+override System.ComponentModel.Design.DateTimeEditor.EditValue(System.ComponentModel.ITypeDescriptorContext context, System.IServiceProvider provider, object value) -> object
+override System.ComponentModel.Design.DateTimeEditor.GetEditStyle(System.ComponentModel.ITypeDescriptorContext context) -> System.Drawing.Design.UITypeEditorEditStyle
+override System.Drawing.Design.ContentAlignmentEditor.EditValue(System.ComponentModel.ITypeDescriptorContext context, System.IServiceProvider provider, object value) -> object
+override System.Drawing.Design.ContentAlignmentEditor.GetEditStyle(System.ComponentModel.ITypeDescriptorContext context) -> System.Drawing.Design.UITypeEditorEditStyle
+override System.Drawing.Design.IconEditor.EditValue(System.ComponentModel.ITypeDescriptorContext context, System.IServiceProvider provider, object value) -> object
+override System.Drawing.Design.IconEditor.GetEditStyle(System.ComponentModel.ITypeDescriptorContext context) -> System.Drawing.Design.UITypeEditorEditStyle
+override System.Drawing.Design.IconEditor.GetPaintValueSupported(System.ComponentModel.ITypeDescriptorContext context) -> bool
+override System.Drawing.Design.IconEditor.PaintValue(System.Drawing.Design.PaintValueEventArgs e) -> void
+static System.Drawing.Design.IconEditor.CreateExtensionsString(string[] extensions, string sep) -> string
+static System.Drawing.Design.IconEditor.CreateFilterEntry(System.Drawing.Design.IconEditor editor) -> string
+virtual System.Drawing.Design.IconEditor.GetExtensions() -> string[]
+virtual System.Drawing.Design.IconEditor.GetFileDialogDescription() -> string
+virtual System.Drawing.Design.IconEditor.LoadFromStream(System.IO.Stream stream) -> System.Drawing.Icon
