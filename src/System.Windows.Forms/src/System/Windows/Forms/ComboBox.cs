@@ -1982,7 +1982,7 @@ namespace System.Windows.Forms
                     // Forward context menu messages to the parent control
                     if (ContextMenuStrip != null)
                     {
-                        UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), WindowMessages.WM_CONTEXTMENU, m.WParam, m.LParam);
+                        SendMessageW(this, WindowMessage.WM_CONTEXTMENU, m.WParam, m.LParam);
                     }
                     else
                     {
@@ -3575,7 +3575,7 @@ namespace System.Windows.Forms
             {
                 if (childEdit != null && childEdit.Handle != IntPtr.Zero)
                 {
-                    UnsafeNativeMethods.SendMessage(new HandleRef(this, childEdit.Handle), WindowMessages.WM_SETTEXT, IntPtr.Zero, s);
+                    SendMessageW(new HandleRef(this, childEdit.Handle), WindowMessage.WM_SETTEXT, IntPtr.Zero, s);
                 }
             }
         }
