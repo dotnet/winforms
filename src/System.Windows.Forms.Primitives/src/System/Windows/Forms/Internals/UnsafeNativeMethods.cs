@@ -88,26 +88,6 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.Shell32, CharSet = CharSet.Auto)]
         public static extern int Shell_NotifyIcon(int message, NativeMethods.NOTIFYICONDATA pnid);
 
-        [DllImport(Libraries.User32, CharSet = CharSet.Auto)]
-        public static extern BOOL GetMenuItemInfo(IntPtr hMenu, int uItem, bool fByPosition, [In, Out] NativeMethods.MENUITEMINFO_T lpmii);
-
-        public static BOOL GetMenuItemInfo(HandleRef hMenu, int uItem, bool fByPosition, NativeMethods.MENUITEMINFO_T lpmii)
-        {
-            BOOL result = GetMenuItemInfo(hMenu.Handle, uItem, fByPosition, lpmii);
-            GC.KeepAlive(hMenu.Wrapper);
-            return result;
-        }
-
-        [DllImport(Libraries.User32, CharSet = CharSet.Auto)]
-        public static extern BOOL GetMenuItemInfo(IntPtr hMenu, int uItem, bool fByPosition, [In, Out] NativeMethods.MENUITEMINFO_T_RW lpmii);
-
-        public static BOOL GetMenuItemInfo(HandleRef hMenu, int uItem, bool fByPosition, NativeMethods.MENUITEMINFO_T_RW lpmii)
-        {
-            BOOL result = GetMenuItemInfo(hMenu.Handle, uItem, fByPosition, lpmii);
-            GC.KeepAlive(hMenu.Wrapper);
-            return result;
-        }
-
         [DllImport(ExternDll.Comdlg32, SetLastError = true, CharSet = CharSet.Auto)]
         public static extern bool GetOpenFileName([In, Out] NativeMethods.OPENFILENAME_I ofn);
 

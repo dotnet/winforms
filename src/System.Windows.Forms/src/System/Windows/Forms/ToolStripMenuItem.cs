@@ -736,27 +736,26 @@ namespace System.Windows.Forms
             base.Dispose(disposing);
         }
 
-        private bool GetNativeMenuItemEnabled()
+        private unsafe bool GetNativeMenuItemEnabled()
         {
             if (nativeMenuCommandID == -1 || nativeMenuHandle == IntPtr.Zero)
             {
                 Debug.Fail("why were we called to fetch native menu item info with nothing assigned?");
                 return false;
             }
-            NativeMethods.MENUITEMINFO_T_RW info = new NativeMethods.MENUITEMINFO_T_RW
+
+            var info = new User32.MENUITEMINFOW
             {
-                cbSize = Marshal.SizeOf<NativeMethods.MENUITEMINFO_T_RW>(),
-                fMask = NativeMethods.MIIM_STATE,
-                fType = NativeMethods.MIIM_STATE,
+                cbSize = (uint)sizeof(User32.MENUITEMINFOW),
+                fMask = User32.MIIM.STATE,
                 wID = nativeMenuCommandID
             };
-            UnsafeNativeMethods.GetMenuItemInfo(new HandleRef(this, nativeMenuHandle), nativeMenuCommandID, /*fByPosition instead of ID=*/ false, info);
-
-            return ((info.fState & NativeMethods.MFS_DISABLED) == 0);
+            User32.GetMenuItemInfoW(new HandleRef(this, nativeMenuHandle), nativeMenuCommandID, /*fByPosition instead of ID=*/ BOOL.FALSE, ref info);
+            return (info.fState & User32.MFS.DISABLED) == 0;
         }
 
         // returns text and shortcut separated by tab.
-        private string GetNativeMenuItemTextAndShortcut()
+        private unsafe string GetNativeMenuItemTextAndShortcut()
         {
             if (nativeMenuCommandID == -1 || nativeMenuHandle == IntPtr.Zero)
             {
@@ -766,14 +765,13 @@ namespace System.Windows.Forms
             string text = null;
 
             // fetch the string length
-            NativeMethods.MENUITEMINFO_T_RW info = new NativeMethods.MENUITEMINFO_T_RW
+            var info = new User32.MENUITEMINFOW
             {
-                fMask = NativeMethods.MIIM_STRING,
-                fType = NativeMethods.MIIM_STRING,
-                wID = nativeMenuCommandID,
-                dwTypeData = IntPtr.Zero
+                cbSize = (uint)sizeof(User32.MENUITEMINFOW),
+                fMask = User32.MIIM.STRING,
+                wID = nativeMenuCommandID
             };
-            UnsafeNativeMethods.GetMenuItemInfo(new HandleRef(this, nativeMenuHandle), nativeMenuCommandID, /*fByPosition instead of ID=*/  false, info);
+            User32.GetMenuItemInfoW(new HandleRef(this, nativeMenuHandle), nativeMenuCommandID, /*fByPosition instead of ID=*/  BOOL.FALSE, ref info);
 
             if (info.cch > 0)
             {
@@ -781,18 +779,16 @@ namespace System.Windows.Forms
                 info.cch += 1;  // according to MSDN we need to increment the count we receive by 1.
                 info.wID = nativeMenuCommandID;
                 IntPtr allocatedStringBuffer = Marshal.AllocCoTaskMem(info.cch * sizeof(char));
-                info.dwTypeData = allocatedStringBuffer;
+                info.dwTypeData = (char*)allocatedStringBuffer;
 
                 try
                 {
-                    UnsafeNativeMethods.GetMenuItemInfo(new HandleRef(this, nativeMenuHandle), nativeMenuCommandID, /*fByPosition instead of ID=*/  false, info);
+                    User32.GetMenuItemInfoW(new HandleRef(this, nativeMenuHandle), nativeMenuCommandID, /*fByPosition instead of ID=*/  BOOL.FALSE, ref info);
 
                     // convert the string into managed data.
-                    if (info.dwTypeData != IntPtr.Zero)
+                    if (info.dwTypeData != null)
                     {
-                        // we have to use PtrToStringAuto as we can't use Marshal.SizeOf to determine
-                        // the size of the struct with a StringBuilder member.
-                        text = Marshal.PtrToStringAuto(info.dwTypeData, info.cch);
+                        text = new string(info.dwTypeData, 0, info.cch);
                     }
                 }
                 finally
@@ -816,13 +812,12 @@ namespace System.Windows.Forms
                 return null;
             }
 
-            NativeMethods.MENUITEMINFO_T_RW info = new NativeMethods.MENUITEMINFO_T_RW
+            var info = new User32.MENUITEMINFOW
             {
-                fMask = NativeMethods.MIIM_BITMAP,
-                fType = NativeMethods.MIIM_BITMAP,
+                fMask = User32.MIIM.BITMAP,
                 wID = nativeMenuCommandID
             };
-            UnsafeNativeMethods.GetMenuItemInfo(new HandleRef(this, nativeMenuHandle), nativeMenuCommandID, /*fByPosition instead of ID=*/ false, info);
+            User32.GetMenuItemInfoW(new HandleRef(this, nativeMenuHandle), nativeMenuCommandID, /*fByPosition instead of ID=*/ BOOL.FALSE, ref info);
 
             if (info.hbmpItem != IntPtr.Zero && info.hbmpItem.ToInt32() > (int)User32.HBMMENU.POPUP_MINIMIZE)
             {
