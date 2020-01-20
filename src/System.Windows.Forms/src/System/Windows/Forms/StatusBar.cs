@@ -201,13 +201,13 @@ namespace System.Windows.Forms
 
                 if (sizeGrip)
                 {
-                    cp.Style |= NativeMethods.SBARS_SIZEGRIP;
+                    cp.Style |= (int)SBARS.SIZEGRIP;
                 }
                 else
                 {
-                    cp.Style &= ~NativeMethods.SBARS_SIZEGRIP;
+                    cp.Style &= ~(int)SBARS.SIZEGRIP;
                 }
-                cp.Style |= NativeMethods.CCS_NOPARENTALIGN | NativeMethods.CCS_NORESIZE;
+                cp.Style |= (int)(CCS.NOPARENTALIGN | CCS.NORESIZE);
 
                 return cp;
             }
@@ -409,9 +409,7 @@ namespace System.Windows.Forms
                     layoutDirty = true;
                     if (IsHandleCreated)
                     {
-                        int bShowPanels = (!showPanels) ? 1 : 0;
-
-                        SendMessage((int)SB.SIMPLE, bShowPanels, 0);
+                        User32.SendMessageW(this, (User32.WindowMessage)SB.SIMPLE, PARAM.FromBool(!showPanels), IntPtr.Zero);
 
                         if (showPanels)
                         {
@@ -538,7 +536,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Makes the panel according to the sizes in the panel list.
         /// </summary>
-        private void ApplyPanelWidths()
+        private unsafe void ApplyPanelWidths()
         {
             // This forces handle creation every time any time the StatusBar
             // has to be re-laidout.
@@ -553,14 +551,14 @@ namespace System.Windows.Forms
             if (length == 0)
             {
                 Size sz = Size;
-                int[] offsets = new int[1];
+                Span<int> offsets = stackalloc int[1];
                 offsets[0] = sz.Width;
                 if (sizeGrip)
                 {
                     offsets[0] -= SizeGripWidth;
                 }
-                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)SB.SETPARTS, 1, offsets);
-                SendMessage((int)SB.SETICON, 0, IntPtr.Zero);
+                User32.SendMessageW(this, (User32.WindowMessage)SB.SETPARTS, (IntPtr)1, ref offsets[0]);
+                User32.SendMessageW(this, (User32.WindowMessage)SB.SETICON, IntPtr.Zero, IntPtr.Zero);
 
                 return;
             }
@@ -574,7 +572,11 @@ namespace System.Windows.Forms
                 offsets2[i] = currentOffset;
                 panel.Right = offsets2[i];
             }
-            UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)SB.SETPARTS, length, offsets2);
+
+            fixed (int* pOffsets = offsets2)
+            {
+                User32.SendMessageW(this, (User32.WindowMessage)SB.SETPARTS, (IntPtr)length, (IntPtr)pOffsets);
+            }
 
             // Tooltip setup...
             for (int i = 0; i < length; i++)
@@ -659,7 +661,7 @@ namespace System.Windows.Forms
 
             if (!showPanels)
             {
-                SendMessage((int)SB.SIMPLE, 1, 0);
+                User32.SendMessageW(this, (User32.WindowMessage)SB.SIMPLE, (IntPtr)1, IntPtr.Zero);
                 SetSimpleText(simpleText);
             }
             else
@@ -726,7 +728,7 @@ namespace System.Windows.Forms
 
             if (length == 0)
             {
-                SendMessage((int)SB.SETTEXT, 0, string.Empty);
+                User32.SendMessageW(this, (User32.WindowMessage)SB.SETTEXT, IntPtr.Zero, string.Empty);
             }
 
             int i;
@@ -744,7 +746,7 @@ namespace System.Windows.Forms
             }
             for (; i < old; i++)
             {
-                SendMessage((int)SB.SETTEXT, 0, null);
+                User32.SendMessageW(this, (User32.WindowMessage)SB.SETTEXT, IntPtr.Zero, null);
             }
         }
 
@@ -807,7 +809,7 @@ namespace System.Windows.Forms
                     wparam |= (int)SBT.RTLREADING;
                 }
 
-                SendMessage((int)SB.SETTEXT, wparam, simpleText);
+                User32.SendMessageW(this, (User32.WindowMessage)SB.SETTEXT, (IntPtr)wparam, simpleText);
             }
         }
 

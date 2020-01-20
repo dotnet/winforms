@@ -25,10 +25,7 @@ namespace System.Windows.Forms
         public const int cmb4 = 0x0473;
 
         public const int CW_USEDEFAULT = (unchecked((int)0x80000000)),
-        COLOR_WINDOW = 5,
-        CCS_NORESIZE = 0x00000004,
-        CCS_NOPARENTALIGN = 0x00000008,
-        CCS_NODIVIDER = 0x00000040;
+        COLOR_WINDOW = 5;
 
         public const int
         DI_NORMAL = 0x0003,
@@ -197,8 +194,6 @@ namespace System.Windows.Forms
         HLP_KEYWORD = 2,
         HLP_NAVIGATOR = 3,
         HLP_OBJECT = 4;
-
-        public const int SBARS_SIZEGRIP = 0x0100;
 
         public static bool Succeeded(int hr)
         {
