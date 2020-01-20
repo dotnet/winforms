@@ -3,7 +3,8 @@
   <Import Project="Sdk.props" Sdk="Microsoft.DotNet.Arcade.Sdk" />
   <Import Project="$(RepositoryEngineeringDir)CodeStyle.props" />  
   <Import Project="$(RepositoryEngineeringDir)FacadeAssemblies.props" />
-  <Import Project="$(RepositoryEngineeringDir)ApiCompatability\DesktopApiCompat.props" />
+  <Import Project="$(RepositoryEngineeringDir)ApiCompatibility\DesktopApiCompat.props" />
+  <Import Project="$(RepositoryEngineeringDir)ApiCompatibility\PublicApiAnalyzer.props" />
 
   <PropertyGroup>
     <Product>Microsoft&#xAE; .NET</Product>

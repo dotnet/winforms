@@ -22,6 +22,6 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <ApiCompatExcludeAttributeList>$(RepositoryEngineeringDir)/ApiCompatability/DesktopAttributeTypeExclusions.txt</ApiCompatExcludeAttributeList>
+    <ApiCompatExcludeAttributeList>$(RepositoryEngineeringDir)/ApiCompatibility/DesktopAttributeTypeExclusions.txt</ApiCompatExcludeAttributeList>
   </PropertyGroup>
 </Project>
