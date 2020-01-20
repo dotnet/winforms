@@ -458,19 +458,17 @@ namespace System.Windows.Forms
         /// </summary>
         protected unsafe override bool RunDialog(IntPtr hWndOwner)
         {
-            NativeMethods.WndProc hookProcPtr = new NativeMethods.WndProc(HookProc);
-            User32.LOGFONTW logFont;
-
+            var hookProcPtr = new User32.WNDPROCINT(HookProc);
             using ScreenDC dc = ScreenDC.Create();
             using Graphics graphics = Graphics.FromHdcInternal(dc);
-            logFont = User32.LOGFONTW.FromFont(Font, graphics);
+            User32.LOGFONTW logFont = User32.LOGFONTW.FromFont(Font, graphics);
 
-            NativeMethods.CHOOSEFONT cf = new NativeMethods.CHOOSEFONT
+            var cf = new Comdlg32.CHOOSEFONTW
             {
-                lStructSize = Marshal.SizeOf<NativeMethods.CHOOSEFONT>(),
+                lStructSize = (uint)Marshal.SizeOf<Comdlg32.CHOOSEFONTW>(),
                 hwndOwner = hWndOwner,
                 hDC = IntPtr.Zero,
-                lpLogFont = new IntPtr(&logFont),
+                lpLogFont = &logFont,
                 Flags = (Comdlg32.CF)Options | Comdlg32.CF.INITTOLOGFONTSTRUCT | Comdlg32.CF.ENABLEHOOK,
                 lpfnHook = hookProcPtr,
                 hInstance = Kernel32.GetModuleHandleW(null),
@@ -491,7 +489,7 @@ namespace System.Windows.Forms
             // (limitation of windows control)
 
             Debug.Assert(cf.nSizeMin <= cf.nSizeMax, "min and max font sizes are the wrong way around");
-            if (!SafeNativeMethods.ChooseFont(cf))
+            if (Comdlg32.ChooseFontW(ref cf).IsFalse())
             {
                 return false;
             }

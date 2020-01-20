@@ -624,27 +624,6 @@ namespace System.Windows.Forms
             public int FlagsEx;
         }
 
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-        public class CHOOSEFONT
-        {
-            public int lStructSize = Marshal.SizeOf<CHOOSEFONT>();
-            public IntPtr hwndOwner;
-            public IntPtr hDC;
-            public IntPtr lpLogFont;
-            public int iPointSize = 0;
-            public Comdlg32.CF Flags;
-            public int rgbColors;
-            public IntPtr lCustData = IntPtr.Zero;
-            public WndProc lpfnHook;
-            public string lpTemplateName = null;
-            public IntPtr hInstance;
-            public string lpszStyle = null;
-            public short nFontType = 0;
-            public short ___MISSING_ALIGNMENT__ = 0;
-            public int nSizeMin;
-            public int nSizeMax;
-        }
-
         [StructLayout(LayoutKind.Sequential)]
         public class COMRECT
         {

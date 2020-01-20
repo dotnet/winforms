@@ -15,9 +15,6 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.Gdi32)]
         public static extern int GetSystemPaletteEntries(IntPtr hdc, int iStartIndex, int nEntries, byte[] lppe);
 
-        [DllImport(ExternDll.Comdlg32, SetLastError = true, CharSet = CharSet.Auto)]
-        public static extern bool ChooseFont([In, Out] NativeMethods.CHOOSEFONT cf);
-
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern int GetBitmapBits(HandleRef hbmp, int cbBuffer, byte[] lpvBits);
 
