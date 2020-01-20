@@ -2357,7 +2357,6 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
         }
 
-        /*
         [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void TrackBar_OnHandleCreated_Invoke_CallsHandleCreated(EventArgs eventArgs)
@@ -2383,7 +2382,6 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
             Assert.False(control.IsHandleCreated);
         }
-        */
 
         [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
