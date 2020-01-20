@@ -2,7 +2,8 @@
 <Project>
   <Import Project="Sdk.props" Sdk="Microsoft.DotNet.Arcade.Sdk" />
   <Import Project="$(RepositoryEngineeringDir)CodeStyle.props" />  
-  <Import Project="eng\FacadeAssemblies.props" />
+  <Import Project="$(RepositoryEngineeringDir)FacadeAssemblies.props" />
+  <Import Project="$(RepositoryEngineeringDir)ApiCompatibility\PublicApiAnalyzer.props" />
 
   <PropertyGroup>
     <TargetFrameworkName>netcoreapp</TargetFrameworkName>
