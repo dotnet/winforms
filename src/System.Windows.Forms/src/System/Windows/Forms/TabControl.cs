@@ -1320,6 +1320,12 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void OnHandleCreated(EventArgs e)
         {
+            if (!IsHandleCreated)
+            {
+                base.OnHandleCreated(e);
+                return;
+            }
+
             //Add the handle to hashtable for Ids ..
             _windowId = NativeWindow.CreateWindowId(this);
             _handleInTable = true;
