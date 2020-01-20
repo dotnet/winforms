@@ -394,7 +394,7 @@ namespace System.Windows.Forms.Design
         /// <summary>
         ///  Default processing for messages.  This method causes the message to get processed by windows, skipping the control.  This is useful if you want to block this message from getting to the control, but you do not want to block it from getting to Windows itself because it causes other messages to be generated.
         /// </summary>
-        protected void BaseWndProc(ref Message m) => m.Result = User32.DefWindowProcW(m.HWnd, m.WindowMessage(), m.WParam, m.LParam);
+        protected void BaseWndProc(ref Message m) => m.Result = User32.DefWindowProcW(m.HWnd, (User32.WM)m.Msg, m.WParam, m.LParam);
 
         /// <summary>
         ///  Determines if the this designer can be parented to the specified desinger -- generally this means if the control for this designer can be parented into the given ParentControlDesigner's designer.
@@ -1836,7 +1836,7 @@ namespace System.Windows.Forms.Design
                         button = MouseButtons.Left;
                     }
                     // We don't really want the focus, but we want to focus the designer. Below we handle WM_SETFOCUS and do the right thing.
-                    User32.SendMessageW(Control.Handle, User32.WindowMessage.WM_SETFOCUS, IntPtr.Zero, IntPtr.Zero);
+                    User32.SendMessageW(Control.Handle, User32.WM.SETFOCUS, IntPtr.Zero, IntPtr.Zero);
                     // We simulate doubleclick for things that don't...
                     if (button == MouseButtons.Left && IsDoubleClick(x, y))
                     {
@@ -1872,7 +1872,7 @@ namespace System.Windows.Forms.Design
 
                         if (_toolPassThrough)
                         {
-                            User32.SendMessageW(Control.Parent.Handle, (User32.WindowMessage)m.Msg, m.WParam, (IntPtr)GetParentPointFromLparam(m.LParam));
+                            User32.SendMessageW(Control.Parent.Handle, (User32.WM)m.Msg, m.WParam, (IntPtr)GetParentPointFromLparam(m.LParam));
                             return;
                         }
 
@@ -1917,7 +1917,7 @@ namespace System.Windows.Forms.Design
                     {
                         if (_toolPassThrough)
                         {
-                            User32.SendMessageW(Control.Parent.Handle, (User32.WindowMessage)m.Msg, m.WParam, (IntPtr)GetParentPointFromLparam(m.LParam));
+                            User32.SendMessageW(Control.Parent.Handle, (User32.WM)m.Msg, m.WParam, (IntPtr)GetParentPointFromLparam(m.LParam));
                             return;
                         }
 
@@ -1962,7 +1962,7 @@ namespace System.Windows.Forms.Design
                     {
                         if (_toolPassThrough)
                         {
-                            User32.SendMessageW(Control.Parent.Handle, (User32.WindowMessage)m.Msg, m.WParam, (IntPtr)GetParentPointFromLparam(m.LParam));
+                            User32.SendMessageW(Control.Parent.Handle, (User32.WM)m.Msg, m.WParam, (IntPtr)GetParentPointFromLparam(m.LParam));
                             _toolPassThrough = false;
                             return;
                         }

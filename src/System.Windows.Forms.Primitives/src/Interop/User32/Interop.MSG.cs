@@ -15,7 +15,7 @@ internal static partial class Interop
         public struct MSG
         {
             public IntPtr hwnd;
-            public WindowMessage message;
+            public WM message;
             public IntPtr wParam;
             public IntPtr lParam;
             public uint time;
@@ -25,7 +25,7 @@ internal static partial class Interop
                 => new Message { HWnd = msg.hwnd, Msg = (int)msg.message, WParam = msg.wParam, LParam = msg.lParam };
 
             public static implicit operator MSG(Message message)
-                => new MSG { hwnd = message.HWnd, message = (WindowMessage)message.Msg, wParam = message.WParam, lParam = message.LParam };
+                => new MSG { hwnd = message.HWnd, message = (WM)message.Msg, wParam = message.WParam, lParam = message.LParam };
         }
     }
 }

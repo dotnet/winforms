@@ -1598,7 +1598,7 @@ namespace System.Windows.Forms
                 if (!wb.WebBrowserShortcutsEnabled)
                 {
                     int keyCode = (int)lpMsg->wParam | (int)Control.ModifierKeys;
-                    if (lpMsg->message != User32.WindowMessage.WM_CHAR && Enum.IsDefined(typeof(Shortcut), (Shortcut)keyCode))
+                    if (lpMsg->message != User32.WM.CHAR && Enum.IsDefined(typeof(Shortcut), (Shortcut)keyCode))
                     {
                         return HRESULT.S_OK;
                     }

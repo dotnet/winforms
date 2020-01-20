@@ -43,7 +43,7 @@ namespace System.Windows.Forms
                 RegisterClass();
             }
 
-            public IntPtr Callback(IntPtr hWnd, User32.WindowMessage msg, IntPtr wparam, IntPtr lparam)
+            public IntPtr Callback(IntPtr hWnd, User32.WM msg, IntPtr wparam, IntPtr lparam)
             {
                 Debug.Assert(hWnd != IntPtr.Zero, "Windows called us with an HWND of 0");
 

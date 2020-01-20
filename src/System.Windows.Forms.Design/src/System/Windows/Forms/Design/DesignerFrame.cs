@@ -101,7 +101,7 @@ namespace System.Windows.Forms.Design
         {
             if (_designer != null && _designer.IsHandleCreated)
             {
-                User32.SendMessageW(_designer.Handle, User32.WindowMessage.WM_NCACTIVATE, PARAM.FromBool(focus), IntPtr.Zero);
+                User32.SendMessageW(_designer.Handle, User32.WM.NCACTIVATE, PARAM.FromBool(focus), IntPtr.Zero);
                 User32.RedrawWindow(_designer.Handle, null, IntPtr.Zero, User32.RDW.FRAME);
             }
         }
@@ -202,7 +202,7 @@ namespace System.Windows.Forms.Design
                     if (!_designerRegion._messageMouseWheelProcessed)
                     {
                         _designerRegion._messageMouseWheelProcessed = true;
-                        User32.SendMessageW(_designerRegion.Handle, User32.WindowMessage.WM_MOUSEWHEEL, m.WParam, m.LParam);
+                        User32.SendMessageW(_designerRegion.Handle, User32.WM.MOUSEWHEEL, m.WParam, m.LParam);
                         return;
                     }
                     break;
@@ -250,12 +250,12 @@ namespace System.Windows.Forms.Design
                         || (msg == WindowMessages.WM_HSCROLL))
                     {
                         // Send a message to ourselves to scroll
-                        User32.SendMessageW(_designerRegion.Handle, (User32.WindowMessage)msg, (IntPtr)PARAM.ToInt((int)wScrollNotify, 0), IntPtr.Zero);
+                        User32.SendMessageW(_designerRegion.Handle, (User32.WM)msg, (IntPtr)PARAM.ToInt((int)wScrollNotify, 0), IntPtr.Zero);
                         return;
                     }
                     break;
                 case WindowMessages.WM_CONTEXTMENU:
-                    User32.SendMessageW(_designer.Handle, (User32.WindowMessage)m.Msg, m.WParam, m.LParam);
+                    User32.SendMessageW(_designer.Handle, (User32.WM)m.Msg, m.WParam, m.LParam);
                     return;
             }
             base.WndProc(ref m);

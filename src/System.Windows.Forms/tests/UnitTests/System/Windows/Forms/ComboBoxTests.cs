@@ -1467,7 +1467,7 @@ namespace System.Windows.Forms.Tests
 
                 var m = new Message
                 {
-                    Msg = (int)User32.WindowMessage.WM_PAINT
+                    Msg = (int)User32.WM.PAINT
                 };
                 control.WndProc(ref m);
                 Assert.Equal(expectedIsHandleCreated, control.IsHandleCreated);
@@ -1494,7 +1494,7 @@ namespace System.Windows.Forms.Tests
 
                 var m = new Message
                 {
-                    Msg = (int)User32.WindowMessage.WM_PAINT
+                    Msg = (int)User32.WM.PAINT
                 };
                 control.WndProc(ref m);
                 Assert.Equal(expectedIsHandleCreated, control.IsHandleCreated);
@@ -1549,7 +1549,7 @@ namespace System.Windows.Forms.Tests
 
             var m = new Message
             {
-                Msg = (int)User32.WindowMessage.WM_PAINT
+                Msg = (int)User32.WM.PAINT
             };
             control.WndProc(ref m);
             Assert.True(control.IsHandleCreated);
@@ -1583,7 +1583,7 @@ namespace System.Windows.Forms.Tests
 
             var m = new Message
             {
-                Msg = (int)User32.WindowMessage.WM_PAINT
+                Msg = (int)User32.WM.PAINT
             };
             control.WndProc(ref m);
             Assert.True(control.IsHandleCreated);
@@ -1640,7 +1640,7 @@ namespace System.Windows.Forms.Tests
 
                     var m = new Message
                     {
-                        Msg = (int)User32.WindowMessage.WM_PAINT,
+                        Msg = (int)User32.WM.PAINT,
                         WParam = hdc
                     };
                     control.WndProc(ref m);
@@ -1678,7 +1678,7 @@ namespace System.Windows.Forms.Tests
 
                     var m = new Message
                     {
-                        Msg = (int)User32.WindowMessage.WM_PAINT,
+                        Msg = (int)User32.WM.PAINT,
                         WParam = hdc
                     };
                     control.WndProc(ref m);
@@ -1744,7 +1744,7 @@ namespace System.Windows.Forms.Tests
 
                 var m = new Message
                 {
-                    Msg = (int)User32.WindowMessage.WM_PAINT,
+                    Msg = (int)User32.WM.PAINT,
                     WParam = hdc
                 };
                 control.WndProc(ref m);
@@ -1789,7 +1789,7 @@ namespace System.Windows.Forms.Tests
 
                 var m = new Message
                 {
-                    Msg = (int)User32.WindowMessage.WM_PAINT,
+                    Msg = (int)User32.WM.PAINT,
                     WParam = hdc
                 };
                 control.WndProc(ref m);

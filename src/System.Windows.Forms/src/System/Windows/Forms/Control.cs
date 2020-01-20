@@ -138,8 +138,8 @@ namespace System.Windows.Forms
         private static readonly BooleanSwitch s_bufferDisabled = new BooleanSwitch("BufferDisabled", "Makes double buffered controls non-double buffered");
 #endif
 
-        private static readonly User32.WindowMessage WM_GETCONTROLNAME = User32.RegisterWindowMessageW("WM_GETCONTROLNAME");
-        private static readonly User32.WindowMessage WM_GETCONTROLTYPE = User32.RegisterWindowMessageW("WM_GETCONTROLTYPE");
+        private static readonly User32.WM WM_GETCONTROLNAME = User32.RegisterWindowMessageW("WM_GETCONTROLNAME");
+        private static readonly User32.WM WM_GETCONTROLTYPE = User32.RegisterWindowMessageW("WM_GETCONTROLTYPE");
 
         private static readonly object s_autoSizeChangedEvent = new object();
         private static readonly object s_keyDownEvent = new object();
@@ -213,7 +213,7 @@ namespace System.Windows.Forms
         private protected static readonly object s_paddingChangedEvent = new object();
         private static readonly object s_previewKeyDownEvent = new object();
 
-        private static User32.WindowMessage s_threadCallbackMessage;
+        private static User32.WM s_threadCallbackMessage;
         private static ContextCallback s_invokeMarshaledCallbackHelperDelegate;
 
 #pragma warning disable IDE1006 // Naming Styles
@@ -6938,7 +6938,7 @@ namespace System.Windows.Forms
 
             lock (_threadCallbackList)
             {
-                if (s_threadCallbackMessage == (User32.WindowMessage)0)
+                if (s_threadCallbackMessage == User32.WM.NULL)
                 {
                     s_threadCallbackMessage = User32.RegisterWindowMessageW(Application.WindowMessagesVersion + "_ThreadCallbackMessage");
                 }
@@ -7890,7 +7890,7 @@ namespace System.Windows.Forms
                 if (User32.GetScrollInfo(this, User32.SB.HORZ, ref si).IsTrue())
                 {
                     si.nPos = (RightToLeft == RightToLeft.Yes) ? si.nMax : si.nMin;
-                    User32.SendMessageW(this, User32.WindowMessage.WM_HSCROLL, PARAM.FromLowHigh((int)User32.SBH.THUMBPOSITION, si.nPos), IntPtr.Zero);
+                    User32.SendMessageW(this, User32.WM.HSCROLL, PARAM.FromLowHigh((int)User32.SBH.THUMBPOSITION, si.nPos), IntPtr.Zero);
                 }
             }
         }
@@ -9457,9 +9457,9 @@ namespace System.Windows.Forms
                 Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "    processkeyeventarg returning: " + ke.Handled);
                 if (ke.SuppressKeyPress)
                 {
-                    RemovePendingMessages(User32.WindowMessage.WM_CHAR, User32.WindowMessage.WM_CHAR);
-                    RemovePendingMessages(User32.WindowMessage.WM_SYSCHAR, User32.WindowMessage.WM_SYSCHAR);
-                    RemovePendingMessages(User32.WindowMessage.WM_IME_CHAR, User32.WindowMessage.WM_IME_CHAR);
+                    RemovePendingMessages(User32.WM.CHAR, User32.WM.CHAR);
+                    RemovePendingMessages(User32.WM.SYSCHAR, User32.WM.SYSCHAR);
+                    RemovePendingMessages(User32.WM.IME_CHAR, User32.WM.IME_CHAR);
                 }
                 return ke.Handled;
             }
@@ -9635,7 +9635,7 @@ namespace System.Windows.Forms
             ((PaintEventHandler)Events[s_paintEvent])?.Invoke(this, e);
         }
 
-        private void RemovePendingMessages(User32.WindowMessage msgMin, User32.WindowMessage msgMax)
+        private void RemovePendingMessages(User32.WM msgMin, User32.WM msgMax)
         {
             if (!IsDisposed)
             {
@@ -11305,7 +11305,7 @@ namespace System.Windows.Forms
 
         private void SetWindowFont()
         {
-            User32.SendMessageW(this, User32.WindowMessage.WM_SETFONT, FontHandle, PARAM.FromBool(false));
+            User32.SendMessageW(this, User32.WM.SETFONT, FontHandle, PARAM.FromBool(false));
         }
 
         private void SetWindowStyle(int flag, bool value)
@@ -11741,7 +11741,7 @@ namespace System.Windows.Forms
 
                 if (lastParentHandle != IntPtr.Zero)
                 {
-                    User32.PostMessageW(lastParentHandle, User32.WindowMessage.WM_CLOSE);
+                    User32.PostMessageW(lastParentHandle, User32.WM.CLOSE);
                 }
             }
 
@@ -12385,10 +12385,10 @@ namespace System.Windows.Forms
                 switch ((ComCtl32.TTN)nmhdr->code)
                 {
                     case ComCtl32.TTN.SHOW:
-                        m.Result = User32.SendMessageW(nmhdr->hwndFrom, (User32.WindowMessage)(User32.WM_REFLECT + m.Msg), m.WParam, m.LParam);
+                        m.Result = User32.SendMessageW(nmhdr->hwndFrom, (User32.WM)((int)User32.WM.REFLECT + m.Msg), m.WParam, m.LParam);
                         return;
                     case ComCtl32.TTN.POP:
-                        User32.SendMessageW(nmhdr->hwndFrom, (User32.WindowMessage)(User32.WM_REFLECT + m.Msg), m.WParam, m.LParam);
+                        User32.SendMessageW(nmhdr->hwndFrom, (User32.WM)((int)User32.WM.REFLECT + m.Msg), m.WParam, m.LParam);
                         break;
                 }
 

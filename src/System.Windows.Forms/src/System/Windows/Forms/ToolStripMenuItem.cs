@@ -928,14 +928,14 @@ namespace System.Windows.Forms
                     // use PostMessage instead of SendMessage so that the DefWndProc can appropriately handle
                     // the system message... if we use SendMessage the dismissal of our window
                     // breaks things like the modal sizing loop.
-                    User32.PostMessageW(new HandleRef(this, targetWindowHandle), User32.WindowMessage.WM_SYSCOMMAND, (IntPtr)nativeMenuCommandID);
+                    User32.PostMessageW(new HandleRef(this, targetWindowHandle), User32.WM.SYSCOMMAND, (IntPtr)nativeMenuCommandID);
                 }
                 else
                 {
                     // These are user added items like ".Net Window..."
 
                     // be consistent with sending a WM_SYSCOMMAND, use POST not SEND.
-                    User32.PostMessageW(new HandleRef(this, targetWindowHandle), User32.WindowMessage.WM_COMMAND, (IntPtr)nativeMenuCommandID);
+                    User32.PostMessageW(new HandleRef(this, targetWindowHandle), User32.WM.COMMAND, (IntPtr)nativeMenuCommandID);
                 }
                 Invalidate();
             }

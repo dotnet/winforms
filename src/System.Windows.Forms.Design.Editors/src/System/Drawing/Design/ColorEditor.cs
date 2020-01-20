@@ -1144,7 +1144,7 @@ namespace System.Drawing.Design
                                 blue = (byte)UnsafeNativeMethods.GetDlgItemInt(hwnd, COLOR_BLUE, err, false);
                                 Debug.Assert(!err[0], "Couldn't find dialog member COLOR_BLUE");
                                 this.Color = Color.FromArgb(red, green, blue);
-                                User32.PostMessageW(hwnd, User32.WindowMessage.WM_COMMAND, PARAM.FromLowHigh((int)User32.ID.OK, 0), User32.GetDlgItem(hwnd, (int)User32.ID.OK));
+                                User32.PostMessageW(hwnd, User32.WM.COMMAND, PARAM.FromLowHigh((int)User32.ID.OK, 0), User32.GetDlgItem(hwnd, (int)User32.ID.OK));
                                 break;
                         }
                         break;

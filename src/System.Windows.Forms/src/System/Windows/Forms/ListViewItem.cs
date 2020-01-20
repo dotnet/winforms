@@ -850,7 +850,7 @@ namespace System.Windows.Forms
                     lv.Focus();
                 }
 
-                User32.SendMessageW(lv, (User32.WindowMessage)LVM.EDITLABELW, (IntPtr)Index);
+                User32.SendMessageW(lv, (User32.WM)LVM.EDITLABELW, (IntPtr)Index);
             }
         }
 
@@ -1052,15 +1052,15 @@ namespace System.Windows.Forms
                 lvItem.mask |= LVIF.GROUPID;
                 lvItem.iGroupId = listView.GetNativeGroupId(this);
 
-                IntPtr result = User32.SendMessageW(listView, (User32.WindowMessage)LVM.ISGROUPVIEWENABLED);
+                IntPtr result = User32.SendMessageW(listView, (User32.WM)LVM.ISGROUPVIEWENABLED);
                 Debug.Assert(!updateOwner || result != IntPtr.Zero, "Groups not enabled");
-                result = User32.SendMessageW(listView, (User32.WindowMessage)LVM.HASGROUP, (IntPtr)lvItem.iGroupId);
+                result = User32.SendMessageW(listView, (User32.WM)LVM.HASGROUP, (IntPtr)lvItem.iGroupId);
                 Debug.Assert(!updateOwner || result != IntPtr.Zero, "Doesn't contain group id: " + lvItem.iGroupId.ToString(CultureInfo.InvariantCulture));
             }
 
             if (updateOwner)
             {
-                User32.SendMessageW(listView, (User32.WindowMessage)LVM.SETITEMW, IntPtr.Zero, ref lvItem);
+                User32.SendMessageW(listView, (User32.WM)LVM.SETITEMW, IntPtr.Zero, ref lvItem);
             }
         }
 
@@ -1089,7 +1089,7 @@ namespace System.Windows.Forms
                 }
 
                 lvItem.iItem = displayIndex;
-                User32.SendMessageW(listView, (User32.WindowMessage)LVM.GETITEMW, IntPtr.Zero, ref lvItem);
+                User32.SendMessageW(listView, (User32.WM)LVM.GETITEMW, IntPtr.Zero, ref lvItem);
 
                 // Update this class' information
                 if (checkSelection)

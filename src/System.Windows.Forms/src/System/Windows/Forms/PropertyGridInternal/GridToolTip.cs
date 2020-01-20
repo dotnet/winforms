@@ -70,7 +70,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     for (int i = 0; i < controls.Length; i++)
                     {
                         ComCtl32.ToolInfoWrapper<Control> info = GetTOOLINFO(controls[i]);
-                        info.SendMessage(this, (User32.WindowMessage)ComCtl32.TTM.UPDATETIPTEXTW);
+                        info.SendMessage(this, (User32.WM)ComCtl32.TTM.UPDATETIPTEXTW);
                     }
 
                     if (visible && !dontShow)
@@ -118,7 +118,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             if (IsHandleCreated)
             {
-                GetTOOLINFO((Control)sender).SendMessage(this, (User32.WindowMessage)ComCtl32.TTM.DELTOOLW);
+                GetTOOLINFO((Control)sender).SendMessage(this, (User32.WM)ComCtl32.TTM.DELTOOLW);
             }
         }
 
@@ -144,13 +144,13 @@ namespace System.Windows.Forms.PropertyGridInternal
                     flags: User32.SWP.NOMOVE | User32.SWP.NOSIZE | User32.SWP.NOACTIVATE);
 
                 ComCtl32.ToolInfoWrapper<Control> info = GetTOOLINFO(control);
-                if (info.SendMessage(this, (User32.WindowMessage)ComCtl32.TTM.ADDTOOLW) == IntPtr.Zero)
+                if (info.SendMessage(this, (User32.WM)ComCtl32.TTM.ADDTOOLW) == IntPtr.Zero)
                 {
                     Debug.Fail($"TTM_ADDTOOL failed for {control.GetType().Name}");
                 }
 
                 // Setting the max width has the added benefit of enabling multiline tool tips
-                User32.SendMessageW(this, (User32.WindowMessage)ComCtl32.TTM.SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
+                User32.SendMessageW(this, (User32.WM)ComCtl32.TTM.SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
             }
         }
 
@@ -166,11 +166,11 @@ namespace System.Windows.Forms.PropertyGridInternal
             for (int i = 0; i < controls.Length; i++)
             {
                 ComCtl32.ToolInfoWrapper<Control> info = GetTOOLINFO(controls[i]);
-                info.SendMessage(this, (User32.WindowMessage)ComCtl32.TTM.UPDATETIPTEXTW);
+                info.SendMessage(this, (User32.WM)ComCtl32.TTM.UPDATETIPTEXTW);
             }
 
             toolTipText = oldText;
-            User32.SendMessageW(this, (User32.WindowMessage)ComCtl32.TTM.UPDATE);
+            User32.SendMessageW(this, (User32.WM)ComCtl32.TTM.UPDATE);
         }
 
         protected override void WndProc(ref Message msg)

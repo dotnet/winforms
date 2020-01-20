@@ -385,7 +385,7 @@ namespace System.Windows.Forms
                     if ((int)wparam == 0x402)
                     {
                         var logFont = new User32.LOGFONTW();
-                        User32.SendMessageW(hWnd, User32.WindowMessage.WM_CHOOSEFONT_GETLOGFONT, IntPtr.Zero, ref logFont);
+                        User32.SendMessageW(hWnd, User32.WM.CHOOSEFONT_GETLOGFONT, IntPtr.Zero, ref logFont);
                         UpdateFont(ref logFont);
                         int index = (int)UnsafeNativeMethods.SendDlgItemMessage(hWnd, 0x473, (int)User32.CB.GETCURSEL, IntPtr.Zero, IntPtr.Zero);
                         if (index != User32.CB_ERR)

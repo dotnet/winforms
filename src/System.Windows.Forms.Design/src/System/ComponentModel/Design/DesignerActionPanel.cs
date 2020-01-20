@@ -2455,7 +2455,7 @@ namespace System.ComponentModel.Design
                         IntPtr hWndCapture = User32.GetCapture();
                         if (hWndCapture != IntPtr.Zero)
                         {
-                            User32.SendMessageW(hWndCapture, User32.WindowMessage.WM_CANCELMODE, IntPtr.Zero, IntPtr.Zero);
+                            User32.SendMessageW(hWndCapture, User32.WM.CANCELMODE, IntPtr.Zero, IntPtr.Zero);
                             User32.ReleaseCapture();
                         }
                         Visible = true; // NOTE: Do this AFTER creating handle and setting parent

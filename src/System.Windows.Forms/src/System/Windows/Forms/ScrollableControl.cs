@@ -1213,7 +1213,7 @@ namespace System.Windows.Forms
             {
                 User32.SendMessageW(
                     this,
-                    User32.WindowMessage.WM_HSCROLL,
+                    User32.WM.HSCROLL,
                     PARAM.FromLowHigh((RightToLeft == RightToLeft.Yes) ? (int)User32.SBH.RIGHT : (int)User32.SBH.LEFT, 0),
                     IntPtr.Zero);
             }

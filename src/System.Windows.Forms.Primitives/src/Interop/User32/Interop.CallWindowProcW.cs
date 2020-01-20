@@ -13,7 +13,7 @@ internal static partial class Interop
         public static extern IntPtr CallWindowProcW(
             IntPtr wndProc,
             IntPtr hWnd,
-            WindowMessage msg,
+            WM msg,
             IntPtr wParam,
             IntPtr lParam);
     }

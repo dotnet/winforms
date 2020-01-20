@@ -545,7 +545,7 @@ namespace System.Windows.Forms.Design
                     IntPtr hwnd = User32.WindowFromPoint(p);
                     if (hwnd != IntPtr.Zero)
                     {
-                        User32.SendMessageW(hwnd, User32.WindowMessage.WM_SETCURSOR, hwnd, (IntPtr)NativeMethods.HTCLIENT);
+                        User32.SendMessageW(hwnd, User32.WM.SETCURSOR, hwnd, (IntPtr)NativeMethods.HTCLIENT);
                     }
                     else
                     {

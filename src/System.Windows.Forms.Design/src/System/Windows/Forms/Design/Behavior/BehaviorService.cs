@@ -58,8 +58,8 @@ namespace System.Windows.Forms.Design.Behavior
         private readonly int _adornerWindowIndex = -1;
 
         //test hooks for SnapLines
-        private static User32.WindowMessage WM_GETALLSNAPLINES;
-        private static User32.WindowMessage WM_GETRECENTSNAPLINES;
+        private static User32.WM WM_GETALLSNAPLINES;
+        private static User32.WM WM_GETRECENTSNAPLINES;
 
         private DesignerActionUI _actionPointer; // pointer to the designer action service so we can supply mouse over notifications
 

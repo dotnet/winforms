@@ -339,7 +339,7 @@ namespace System.Windows.Forms
                         var msg = new User32.MSG
                         {
                             hwnd = IntPtr.Zero,
-                            message = User32.WindowMessage.WM_SYSKEYDOWN,
+                            message = User32.WM.SYSKEYDOWN,
                             wParam = (IntPtr)char.ToUpper(charCode, CultureInfo.CurrentCulture),
                             lParam = (IntPtr)0x20180001,
                             time = Kernel32.GetTickCount()

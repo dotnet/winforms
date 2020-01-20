@@ -13,7 +13,7 @@ internal static partial class Interop
         [DllImport(Libraries.User32, ExactSpelling = true)]
         public static extern IntPtr SendMessageTimeoutW(
             IntPtr hWnd,
-            WindowMessage Msg,
+            WM Msg,
             IntPtr wParam,
             IntPtr lParam,
             SMTO flags,

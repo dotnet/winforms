@@ -234,7 +234,7 @@ namespace System.Windows.Forms
                         ToolStripManager.ModalMenuFilter.ExitMenuMode();
                         // send a WM_SYSCOMMAND SC_KEYMENU + Space to activate the system menu.
                         IntPtr ancestor = User32.GetAncestor(this, User32.GA.ROOT);
-                        User32.PostMessageW(ancestor, User32.WindowMessage.WM_SYSCOMMAND, (IntPtr)User32.SC.KEYMENU, (IntPtr)Keys.Space);
+                        User32.PostMessageW(ancestor, User32.WM.SYSCOMMAND, (IntPtr)User32.SC.KEYMENU, (IntPtr)Keys.Space);
                         return true;
                     }
                 }

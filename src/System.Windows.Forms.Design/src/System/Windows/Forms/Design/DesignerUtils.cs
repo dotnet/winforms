@@ -514,7 +514,7 @@ namespace System.Windows.Forms.Design
             {
                 IntPtr hDc = g.GetHdc();
                 //send the actual wm_print message
-                User32.SendMessageW(hWnd, User32.WindowMessage.WM_PRINT, hDc, (IntPtr)(NativeMethods.PRF_CHILDREN | NativeMethods.PRF_CLIENT | NativeMethods.PRF_ERASEBKGND | NativeMethods.PRF_NONCLIENT));
+                User32.SendMessageW(hWnd, User32.WM.PRINT, hDc, (IntPtr)(NativeMethods.PRF_CHILDREN | NativeMethods.PRF_CLIENT | NativeMethods.PRF_ERASEBKGND | NativeMethods.PRF_NONCLIENT));
                 g.ReleaseHdc(hDc);
             }
 
@@ -925,7 +925,7 @@ namespace System.Windows.Forms.Design
 
         private static ComCtl32.TVS_EX TreeView_GetExtendedStyle(IntPtr handle)
         {
-            return (ComCtl32.TVS_EX)User32.SendMessageW(handle, (User32.WindowMessage)ComCtl32.TVM.GETEXTENDEDSTYLE);
+            return (ComCtl32.TVS_EX)User32.SendMessageW(handle, (User32.WM)ComCtl32.TVM.GETEXTENDEDSTYLE);
         }
 
         /// <summary>
@@ -944,7 +944,7 @@ namespace System.Windows.Forms.Design
             UxTheme.SetWindowTheme(hwnd, "Explorer", null);
             ComCtl32.TVS_EX exstyle = TreeView_GetExtendedStyle(hwnd);
             exstyle |= ComCtl32.TVS_EX.DOUBLEBUFFER | ComCtl32.TVS_EX.FADEINOUTEXPANDOS;
-            User32.SendMessageW(hwnd, (User32.WindowMessage)ComCtl32.TVM.SETEXTENDEDSTYLE, IntPtr.Zero, (IntPtr)exstyle);
+            User32.SendMessageW(hwnd, (User32.WM)ComCtl32.TVM.SETEXTENDEDSTYLE, IntPtr.Zero, (IntPtr)exstyle);
         }
 
         /// <summary>
@@ -959,7 +959,7 @@ namespace System.Windows.Forms.Design
             }
             IntPtr hwnd = listView.Handle;
             UxTheme.SetWindowTheme(hwnd, "Explorer", null);
-            User32.SendMessageW(hwnd, (User32.WindowMessage)ComCtl32.LVM.SETEXTENDEDLISTVIEWSTYLE, (IntPtr)ComCtl32.LVS_EX.DOUBLEBUFFER, (IntPtr)ComCtl32.LVS_EX.DOUBLEBUFFER);
+            User32.SendMessageW(hwnd, (User32.WM)ComCtl32.LVM.SETEXTENDEDLISTVIEWSTYLE, (IntPtr)ComCtl32.LVS_EX.DOUBLEBUFFER, (IntPtr)ComCtl32.LVS_EX.DOUBLEBUFFER);
         }
     }
 }
