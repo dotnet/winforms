@@ -4,6 +4,8 @@
 
 #nullable enable
 
+using System.ComponentModel;
+
 namespace System.Windows.Forms
 {
     /// <summary>
@@ -59,6 +61,18 @@ namespace System.Windows.Forms
         /// </param>
         public TaskDialogStandardButton(TaskDialogResult result, bool enabled = true, bool defaultButton = false, bool allowCloseDialog = true)
         {
+            if (!ClientUtils.IsEnumValid(
+                    result,
+                    (int)result,
+                    (int)TaskDialogResult.None,
+                    (int)TaskDialogResult.Continue))
+            {
+                throw new InvalidEnumArgumentException(
+                    nameof(result),
+                    (int)result,
+                    typeof(TaskDialogResult));
+            }
+
             if (!IsValidStandardButtonResult(result))
             {
                 throw new ArgumentOutOfRangeException(nameof(result));

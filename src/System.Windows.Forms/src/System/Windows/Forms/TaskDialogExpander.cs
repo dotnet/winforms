@@ -4,6 +4,7 @@
 
 #nullable enable
 
+using System.ComponentModel;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -177,6 +178,18 @@ namespace System.Windows.Forms
 
             set
             {
+                if (!ClientUtils.IsEnumValid(
+                    value,
+                    (int)value,
+                    (int)TaskDialogExpanderPosition.AfterText,
+                    (int)TaskDialogExpanderPosition.AfterFooter))
+                {
+                    throw new InvalidEnumArgumentException(
+                        nameof(value),
+                        (int)value,
+                        typeof(TaskDialogExpanderPosition));
+                }
+
                 DenyIfBound();
 
                 _expanderPosition = value;

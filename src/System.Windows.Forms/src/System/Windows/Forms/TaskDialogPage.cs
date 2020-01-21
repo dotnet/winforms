@@ -4,6 +4,7 @@
 
 #nullable enable
 
+using System.ComponentModel;
 using System.Linq;
 using static Interop;
 
@@ -454,6 +455,18 @@ namespace System.Windows.Forms
 
             set
             {
+                if (!ClientUtils.IsEnumValid(
+                    value,
+                    (int)value,
+                    (int)TaskDialogCustomButtonStyle.Default,
+                    (int)TaskDialogCustomButtonStyle.CommandLinksNoIcon))
+                {
+                    throw new InvalidEnumArgumentException(
+                        nameof(value),
+                        (int)value,
+                        typeof(TaskDialogCustomButtonStyle));
+                }
+
                 DenyIfBound();
 
                 _customButtonStyle = value;

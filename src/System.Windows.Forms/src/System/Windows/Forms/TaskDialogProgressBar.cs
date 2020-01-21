@@ -68,15 +68,6 @@ namespace System.Windows.Forms
 
             set
             {
-                DenyIfBoundAndNotCreated();
-
-                if (BoundPage != null && value == TaskDialogProgressBarState.None)
-                {
-                    throw new InvalidOperationException(
-                        SR.TaskDialogCannotRemoveProgressBarWhileDialogIsShown);
-                }
-
-                // Verify that the enum value is actually valid.
                 if (!ClientUtils.IsEnumValid(
                     value,
                     (int)value,
@@ -87,6 +78,14 @@ namespace System.Windows.Forms
                         nameof(value),
                         (int)value,
                         typeof(TaskDialogProgressBarState));
+                }
+
+                DenyIfBoundAndNotCreated();
+
+                if (BoundPage != null && value == TaskDialogProgressBarState.None)
+                {
+                    throw new InvalidOperationException(
+                        SR.TaskDialogCannotRemoveProgressBarWhileDialogIsShown);
                 }
 
                 TaskDialogProgressBarState previousState = _state;

@@ -391,6 +391,18 @@ namespace System.Windows.Forms
 
             set
             {
+                if (!ClientUtils.IsEnumValid(
+                    value,
+                    (int)value,
+                    (int)TaskDialogStartupLocation.CenterScreen,
+                    (int)TaskDialogStartupLocation.CenterParent))
+                {
+                    throw new InvalidEnumArgumentException(
+                        nameof(value),
+                        (int)value,
+                        typeof(TaskDialogStartupLocation));
+                }
+
                 DenyIfBound();
 
                 _startupLocation = value;
