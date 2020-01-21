@@ -26,7 +26,7 @@ namespace System.Windows.Forms.Tests
         {
             ICollection context = new BindingContext();
             Assert.False(context.IsSynchronized);
-            Assert.Null(context.SyncRoot);
+            Assert.Same(context, context.SyncRoot);
             Assert.Empty(context);
         }
 
