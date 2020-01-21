@@ -1371,7 +1371,7 @@ namespace System.Windows.Forms
             {
                 // When an exception occurs, handle it by calling the application's
                 // ThreadException handler.
-                // It is important that we don't let such exception fall through
+                // It is important that we don't let such exception bubble up to
                 // the native -> managed transition, as otherwise the CLR would
                 // unwind the stack even though the task dialog is still shown,
                 // which means invalid memory access may occur if the callback
@@ -1445,8 +1445,6 @@ namespace System.Windows.Forms
             {
                 page.Validate();
 
-                // After validation passed, we can now unbind the current page and
-                // bind the new one.
                 // Need to raise the "Destroyed" event for the current page. The
                 // "Created" event for the new page will occur from the callback.
                 // Note: "this.raisedPageCreated" should always be true here.
