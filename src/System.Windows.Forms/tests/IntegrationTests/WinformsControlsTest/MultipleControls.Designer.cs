@@ -136,6 +136,7 @@ namespace WinformsControlsTest
             this.tabPage1.Size = new System.Drawing.Size(192, 74);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "tabPage1";
+            this.tabPage1.ToolTipText = "I am tabPage1!";
             this.tabPage1.UseVisualStyleBackColor = true;
             //
             // comboBox1
@@ -155,7 +156,8 @@ namespace WinformsControlsTest
             this.tabPage2.Size = new System.Drawing.Size(192, 74);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "tabPage2";
-            this.tabPage2.UseVisualStyleBackColor = true;
+            this.tabPage2.ToolTipText = "I am tabPage2!\r\nI am multiline tooltip!";
+             this.tabPage2.UseVisualStyleBackColor = true;
             //
             // checkBox1
             //

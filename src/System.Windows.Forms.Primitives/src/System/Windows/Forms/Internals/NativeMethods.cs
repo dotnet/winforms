@@ -650,19 +650,6 @@ namespace System.Windows.Forms
             }
         }
 
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-        public class TOOLTIPTEXT
-        {
-            public User32.NMHDR hdr;
-            public string lpszText;
-
-            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 80)]
-            public string szText = null;
-
-            public IntPtr hinst;
-            public int uFlags;
-        }
-
         [StructLayout(LayoutKind.Sequential)]
         public class CLIENTCREATESTRUCT
         {

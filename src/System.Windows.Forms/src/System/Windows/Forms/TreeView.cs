@@ -155,6 +155,8 @@ namespace System.Windows.Forms
         private TreeNodeMouseClickEventHandler onNodeMouseClick;
         private TreeNodeMouseClickEventHandler onNodeMouseDoubleClick;
 
+        private ToolTipBuffer _toolTipBuffer;
+
         /// <summary>
         ///  Creates a TreeView control
         /// </summary>
@@ -1703,6 +1705,9 @@ namespace System.Windows.Forms
                 }
             }
 
+            // Dispose unmanaged resources.
+            _toolTipBuffer.Dispose();
+
             base.Dispose(disposing);
         }
 
@@ -2981,9 +2986,9 @@ namespace System.Windows.Forms
             return false;
         }
 
-        private void WmNeedText(ref Message m)
+        private unsafe void WmNeedText(ref Message m)
         {
-            NativeMethods.TOOLTIPTEXT ttt = (NativeMethods.TOOLTIPTEXT)m.GetLParam(typeof(NativeMethods.TOOLTIPTEXT));
+            NMTTDISPINFOW* ttt = (NMTTDISPINFOW*)m.LParam;
             string tipText = controlToolTipText;
 
             var tvhip = new TVHITTESTINFO
@@ -3007,15 +3012,16 @@ namespace System.Windows.Forms
                     tipText = null;
                 }
             }
-            ttt.lpszText = tipText;
-            ttt.hinst = IntPtr.Zero;
+
+            _toolTipBuffer.SetText(tipText);
+            ttt->lpszText = _toolTipBuffer.Buffer;
+            ttt->hinst = IntPtr.Zero;
 
             // RightToLeft reading order
             if (RightToLeft == RightToLeft.Yes)
             {
-                ttt.uFlags |= (int)TTF.RTLREADING;
+                ttt->uFlags |= TTF.RTLREADING;
             }
-            Marshal.StructureToPtr(ttt, m.LParam, false);
         }
 
         private unsafe void WmNotify(ref Message m)
