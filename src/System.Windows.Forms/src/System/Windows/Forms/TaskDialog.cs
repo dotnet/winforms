@@ -505,7 +505,9 @@ namespace System.Windows.Forms
         /// in the task dialog.</param>
         /// <param name="icon">The icon to display in the main area of the task dialog.</param>
         /// <returns>One of the enumeration values that indicates the return value of the task dialog.</returns>
+#pragma warning disable RS0026 // Do not add multiple public overloads with optional parameters
         public static TaskDialogResult ShowDialog(
+#pragma warning restore RS0026 // Do not add multiple public overloads with optional parameters
             string? text,
             string? mainInstruction = null,
             string? caption = null,
@@ -530,7 +532,9 @@ namespace System.Windows.Forms
         /// in the task dialog.</param>
         /// <param name="icon">The icon to display in the main area of the task dialog.</param>
         /// <returns>One of the <see cref="TaskDialogResult"/> values.</returns>
+#pragma warning disable RS0026 // Do not add multiple public overloads with optional parameters
         public static TaskDialogResult ShowDialog(
+#pragma warning restore RS0026 // Do not add multiple public overloads with optional parameters
             IWin32Window owner,
             string? text,
             string? mainInstruction = null,
@@ -559,7 +563,9 @@ namespace System.Windows.Forms
         /// in the task dialog.</param>
         /// <param name="icon">The icon to display in the main area of the task dialog.</param>
         /// <returns>One of the <see cref="TaskDialogResult"/> values.</returns>
+#pragma warning disable RS0026 // Do not add multiple public overloads with optional parameters
         public static TaskDialogResult ShowDialog(
+#pragma warning restore RS0026 // Do not add multiple public overloads with optional parameters
             IntPtr hwndOwner,
             string? text,
             string? mainInstruction = null,
