@@ -5,6 +5,7 @@
 #nullable enable
 
 using System.ComponentModel;
+using System.Diagnostics;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -321,7 +322,9 @@ namespace System.Windows.Forms
 
         private void UpdateState(TaskDialogProgressBarState previousState, bool isInitialization = false)
         {
-            TaskDialog taskDialog = BoundPage!.BoundDialog!;
+            Debug.Assert(BoundPage != null);
+
+            TaskDialog taskDialog = BoundPage.BoundDialog!;
 
             // Check if we need to switch between a marquee and a
             // non-marquee bar.
