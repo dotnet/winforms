@@ -23,9 +23,9 @@ namespace System.Windows.Forms
 
             protected override unsafe void WndProc(ref Message m)
             {
-                switch ((User32.WindowMessage)m.Msg)
+                switch ((User32.WM)m.Msg)
                 {
-                    case User32.WindowMessage.WM_WINDOWPOSCHANGED:
+                    case User32.WM.WINDOWPOSCHANGED:
                         base.WndProc(ref m);
 
                         ref User32.WINDOWPOS windowPos = ref *(User32.WINDOWPOS*)m.LParam;

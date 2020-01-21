@@ -67,8 +67,8 @@ namespace System.Windows.Forms
         ///   that should be unlikely.
         /// </para>
         /// </remarks>
-        private const User32.WindowMessage ContinueButtonClickHandlingMessage =
-            (User32.WindowMessage)(User32.WM_APP + 0x3FFF);
+        private const User32.WM ContinueButtonClickHandlingMessage =
+            User32.WM.APP + 0x3FFF;
 
         /// <summary>
         ///   The delegate for <see cref="HandleTaskDialogNativeCallback"/> which is
@@ -1888,7 +1888,7 @@ namespace System.Windows.Forms
 
             User32.SendMessageW(
                 Handle,
-                (User32.WindowMessage)message,
+                (User32.WM)message,
                 // Note: When a negative 32-bit integer is converted to a
                 // 64-bit pointer, the high dword will be set to 0xFFFFFFFF.
                 // This is consistent with the conversion from int to

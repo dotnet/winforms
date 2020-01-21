@@ -239,7 +239,7 @@ namespace System.Windows.Forms
                 m.Result = User32.CallWindowProcW(
                     _originalWindowProc,
                     m.HWnd,
-                    m.WindowMessage(),
+                    (User32.WM)m.Msg,
                     m.WParam,
                     m.LParam);
             }
@@ -271,7 +271,7 @@ namespace System.Windows.Forms
 
         private IntPtr NativeWndProc(
             IntPtr hWnd,
-            User32.WindowMessage msg,
+            User32.WM msg,
             IntPtr wParam,
             IntPtr lParam)
         {
