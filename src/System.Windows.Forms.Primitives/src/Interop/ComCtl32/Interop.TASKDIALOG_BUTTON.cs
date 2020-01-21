@@ -13,10 +13,10 @@ internal static partial class Interop
     {
         // Packing is defined as 1 in CommCtrl.h ("pack(1)").
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
-        public struct TASKDIALOG_BUTTON
+        public unsafe struct TASKDIALOG_BUTTON
         {
             public int nButtonID;
-            public IntPtr pszButtonText;
+            public char* pszButtonText;
         }
     }
 }

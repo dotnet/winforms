@@ -1690,7 +1690,7 @@ namespace System.Windows.Forms
                         {
                             Align(ref currentPtr);
                             var customButtonStructs = (ComCtl32.TASKDIALOG_BUTTON*)currentPtr;
-                            taskDialogConfig.pButtons = (IntPtr)customButtonStructs;
+                            taskDialogConfig.pButtons = customButtonStructs;
                             taskDialogConfig.cButtons = (uint)page.CustomButtons.Count;
                             currentPtr += sizeof(ComCtl32.TASKDIALOG_BUTTON) * page.CustomButtons.Count;
 
@@ -1711,7 +1711,7 @@ namespace System.Windows.Forms
                         {
                             Align(ref currentPtr);
                             var customRadioButtonStructs = (ComCtl32.TASKDIALOG_BUTTON*)currentPtr;
-                            taskDialogConfig.pRadioButtons = (IntPtr)customRadioButtonStructs;
+                            taskDialogConfig.pRadioButtons = customRadioButtonStructs;
                             taskDialogConfig.cRadioButtons = (uint)page.RadioButtons.Count;
                             currentPtr += sizeof(ComCtl32.TASKDIALOG_BUTTON) * page.RadioButtons.Count;
 
@@ -1729,11 +1729,11 @@ namespace System.Windows.Forms
 
                         Debug.Assert(currentPtr == (long)ptrTaskDialogConfig + sizeToAllocate);
 
-                        IntPtr MarshalString(string? str)
+                        char* MarshalString(string? str)
                         {
                             if (str == null)
                             {
-                                return IntPtr.Zero;
+                                return null;
                             }
 
                             fixed (char* strPtr = str)
@@ -1748,7 +1748,7 @@ namespace System.Windows.Forms
 
                                 var ptrToReturn = currentPtr;
                                 currentPtr += bytesToCopy;
-                                return (IntPtr)ptrToReturn;
+                                return (char*)ptrToReturn;
                             }
                         }
                     }
