@@ -58,8 +58,8 @@ namespace System.Windows.Forms.Design.Behavior
         private readonly int _adornerWindowIndex = -1;
 
         //test hooks for SnapLines
-        private static User32.WindowMessage WM_GETALLSNAPLINES;
-        private static User32.WindowMessage WM_GETRECENTSNAPLINES;
+        private static User32.WM WM_GETALLSNAPLINES;
+        private static User32.WM WM_GETRECENTSNAPLINES;
 
         private DesignerActionUI _actionPointer; // pointer to the designer action service so we can supply mouse over notifications
 
@@ -663,9 +663,6 @@ namespace System.Windows.Forms.Design.Behavior
                 base.Dispose(disposing);
             }
 
-            /// <summary>
-            ///  Returns true if the DesignerFrame is created & not being disposed.
-            /// </summary>
             internal Control DesignerFrame
             {
                 get => _designerFrame;
@@ -690,7 +687,7 @@ namespace System.Windows.Forms.Design.Behavior
             }
 
             /// <summary>
-            ///  Returns true if the DesignerFrame is created & not being disposed.
+            ///  Returns true if the DesignerFrame is created and not being disposed.
             /// </summary>
             internal bool DesignerFrameValid
             {
@@ -819,7 +816,6 @@ namespace System.Windows.Forms.Design.Behavior
                     User32.GetCursorPos(out Point pt);
                     User32.MapWindowPoints(IntPtr.Zero, Handle, ref pt, 1);
                     _behaviorService.PropagateHitTest(pt);
-
                 }
                 _behaviorService.OnDragEnter(null, e);
             }
@@ -905,7 +901,7 @@ namespace System.Windows.Forms.Design.Behavior
                         User32.GetUpdateRgn(m.HWnd, hrgn, BOOL.TRUE);
                         // The region we have to update in terms of the smallest rectangle that completely encloses the update region of the window gives us the clip rectangle
                         RECT clip = new RECT();
-                        NativeMethods.GetUpdateRect(m.HWnd, ref clip, true);
+                        User32.GetUpdateRect(m.HWnd, ref clip, BOOL.TRUE);
                         Rectangle paintRect = new Rectangle(clip.left, clip.top, clip.right - clip.left, clip.bottom - clip.top);
 
                         try
@@ -1097,12 +1093,12 @@ namespace System.Windows.Forms.Design.Behavior
                 {
                     if (_isHooked && nCode == User32.HC.ACTION)
                     {
-                        NativeMethods.MOUSEHOOKSTRUCT mhs = Marshal.PtrToStructure<NativeMethods.MOUSEHOOKSTRUCT>(lparam);
+                        User32.MOUSEHOOKSTRUCT* mhs = (User32.MOUSEHOOKSTRUCT*)lparam;
                         if (mhs != null)
                         {
                             try
                             {
-                                if (ProcessMouseMessage(mhs.hWnd, unchecked((int)(long)wparam), mhs.pt.X, mhs.pt.Y))
+                                if (ProcessMouseMessage(mhs->hWnd, unchecked((int)(long)wparam), mhs->pt.X, mhs->pt.Y))
                                 {
                                     return (IntPtr)1;
                                 }
@@ -1201,7 +1197,6 @@ namespace System.Windows.Forms.Design.Behavior
                                     // we did the work, stop the message propogation
                                     return true;
                                 }
-
                             }
                             finally
                             {

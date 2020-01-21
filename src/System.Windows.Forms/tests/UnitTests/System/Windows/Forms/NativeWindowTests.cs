@@ -56,7 +56,7 @@ namespace System.Windows.Forms.Tests
             var window = new NativeWindow();
             window.AssignHandle(control.Handle);
             Assert.Equal(control.Handle, window.Handle);
-            
+
             window.ReleaseHandle();
             Assert.Equal(IntPtr.Zero, window.Handle);
 
@@ -211,7 +211,7 @@ namespace System.Windows.Forms.Tests
             try
             {
                 Assert.NotEqual(IntPtr.Zero, window1.Handle);
-                
+
                 var window2 = new NativeWindow();
                 var cp2 = new CreateParams
                 {
@@ -269,7 +269,7 @@ namespace System.Windows.Forms.Tests
         [WinFormsTheory]
         [InlineData(0)]
         [InlineData(1234)]
-        [InlineData((int)User32.WindowMessage.WM_NCDESTROY)]
+        [InlineData((int)User32.WM.NCDESTROY)]
         public void NativeWindow_DefWndProc_InvokeWithCreatedHandle_Nop(int msg)
         {
             var window = new WndProcTrackingNativeWindow();
@@ -299,7 +299,7 @@ namespace System.Windows.Forms.Tests
             using var control = new Control();
             var window = new WndProcTrackingNativeWindow();
             window.AssignHandle(control.Handle);
-            
+
             try
             {
                 var m = new Message
@@ -320,7 +320,7 @@ namespace System.Windows.Forms.Tests
         [WinFormsTheory]
         [InlineData(0)]
         [InlineData(1234)]
-        [InlineData((int)User32.WindowMessage.WM_NCDESTROY)]
+        [InlineData((int)User32.WM.NCDESTROY)]
         public void NativeWindow_DefWndProc_InvokeWithInvalidHandle_Nop(int msg)
         {
             using (new NoAssertContext())
@@ -387,7 +387,7 @@ namespace System.Windows.Forms.Tests
         [WinFormsTheory]
         [InlineData(0)]
         [InlineData(1234)]
-        [InlineData((int)User32.WindowMessage.WM_NCDESTROY)]
+        [InlineData((int)User32.WM.NCDESTROY)]
         public void NativeWindow_DefWndProc_InvokeWithoutHandle_Nop(int msg)
         {
             using (new NoAssertContext())
@@ -448,7 +448,7 @@ namespace System.Windows.Forms.Tests
         [WinFormsTheory]
         [InlineData(0)]
         [InlineData(1234)]
-        [InlineData((int)User32.WindowMessage.WM_NCDESTROY)]
+        [InlineData((int)User32.WM.NCDESTROY)]
         public void NativeWindow_WndProc_InvokeWithCreatedHandle_Success(int msg)
         {
             var window = new SubNativeWindow();
@@ -499,7 +499,7 @@ namespace System.Windows.Forms.Tests
         [WinFormsTheory]
         [InlineData(0)]
         [InlineData(1234)]
-        [InlineData((int)User32.WindowMessage.WM_NCDESTROY)]
+        [InlineData((int)User32.WM.NCDESTROY)]
         public void NativeWindow_WndProc_InvokeWithInvalidAssignedHandle_Nop(int msg)
         {
             using (new NoAssertContext())
@@ -520,7 +520,7 @@ namespace System.Windows.Forms.Tests
         [WinFormsTheory]
         [InlineData(0)]
         [InlineData(1234)]
-        [InlineData((int)User32.WindowMessage.WM_NCDESTROY)]
+        [InlineData((int)User32.WM.NCDESTROY)]
         public void NativeWindow_WndProc_InvokeWithoutHandle_Nop(int msg)
         {
             using (new NoAssertContext())

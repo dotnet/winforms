@@ -409,6 +409,5 @@ namespace System.Windows.Forms.IntegrationTests.Common
                 return false;
             }
         }
-
     }
 }

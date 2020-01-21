@@ -265,7 +265,6 @@ namespace System.Windows.Forms
                 }
             }
             base.OnMouseEnter(e);
-
         }
 
         protected override void OnMouseLeave(EventArgs e)
@@ -279,7 +278,6 @@ namespace System.Windows.Forms
                 }
             }
             base.OnMouseLeave(e);
-
         }
 
         private void ResetActiveLinkColor()
@@ -397,7 +395,6 @@ namespace System.Windows.Forms
                     FireEvent(ToolStripItemEventType.Click);
                 }
                 return true;
-
             }
             return false;
         }
@@ -491,9 +488,7 @@ namespace System.Windows.Forms
                 return layoutOptions;
             }
         }
-
     }
-
 }
 
 

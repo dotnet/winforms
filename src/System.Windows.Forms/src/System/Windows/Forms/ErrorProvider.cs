@@ -872,7 +872,7 @@ namespace System.Windows.Forms
                 }
 
                 var toolInfo = new ComCtl32.ToolInfoWrapper<ErrorWindow>(this, item.Id, ComCtl32.TTF.SUBCLASS, item.Error);
-                toolInfo.SendMessage(_tipWindow, User32.WindowMessage.TTM_ADDTOOLW);
+                toolInfo.SendMessage(_tipWindow, (User32.WM)ComCtl32.TTM.ADDTOOLW);
 
                 Update(timerCaused: false);
             }
@@ -933,12 +933,12 @@ namespace System.Windows.Forms
                     _tipWindow = new NativeWindow();
                     _tipWindow.CreateHandle(cparams);
 
-                    User32.SendMessageW(_tipWindow, User32.WindowMessage.TTM_SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
+                    User32.SendMessageW(_tipWindow, (User32.WM)ComCtl32.TTM.SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
                     User32.SetWindowPos(
                         new HandleRef(_tipWindow, _tipWindow.Handle),
                         User32.HWND_TOP,
                         flags: User32.SWP.NOSIZE | User32.SWP.NOMOVE | User32.SWP.NOACTIVATE);
-                    User32.SendMessageW(_tipWindow, User32.WindowMessage.TTM_SETDELAYTIME, (IntPtr)ComCtl32.TTDT.INITIAL, (IntPtr)0);
+                    User32.SendMessageW(_tipWindow, (User32.WM)ComCtl32.TTM.SETDELAYTIME, (IntPtr)ComCtl32.TTDT.INITIAL, (IntPtr)0);
                 }
 
                 return true;
@@ -1119,7 +1119,7 @@ namespace System.Windows.Forms
                 if (_tipWindow != null)
                 {
                     var info = new ComCtl32.ToolInfoWrapper<ErrorWindow>(this, item.Id);
-                    info.SendMessage(_tipWindow, User32.WindowMessage.TTM_DELTOOLW);
+                    info.SendMessage(_tipWindow, (User32.WM)ComCtl32.TTM.DELTOOLW);
                 }
 
                 if (_items.Count == 0)
@@ -1225,7 +1225,7 @@ namespace System.Windows.Forms
                             }
 
                             var toolInfo = new ComCtl32.ToolInfoWrapper<ErrorWindow>(this, item.Id, flags, item.Error, iconBounds);
-                            toolInfo.SendMessage(_tipWindow, User32.WindowMessage.TTM_SETTOOLINFOW);
+                            toolInfo.SendMessage(_tipWindow, (User32.WM)ComCtl32.TTM.SETTOOLINFOW);
                         }
 
                         if (timerCaused && item.BlinkPhase > 0)
@@ -1269,7 +1269,6 @@ namespace System.Windows.Forms
                             dc.Dispose();
                         }
                     }
-
                 }
                 finally
                 {
@@ -1328,9 +1327,9 @@ namespace System.Windows.Forms
                         break;
                     case WindowMessages.WM_NOTIFY:
                         User32.NMHDR* nmhdr = (User32.NMHDR*)m.LParam;
-                        if (nmhdr->code == NativeMethods.TTN_SHOW || nmhdr->code == NativeMethods.TTN_POP)
+                        if (nmhdr->code == (int)ComCtl32.TTN.SHOW || nmhdr->code == (int)ComCtl32.TTN.POP)
                         {
-                            OnToolTipVisibilityChanging(nmhdr->idFrom, nmhdr->code == NativeMethods.TTN_SHOW);
+                            OnToolTipVisibilityChanging(nmhdr->idFrom, nmhdr->code == (int)ComCtl32.TTN.SHOW);
                         }
                         break;
                     case WindowMessages.WM_ERASEBKGND:
@@ -1738,7 +1737,6 @@ namespace System.Windows.Forms
                             {
                                 for (int x = 0; x < size.Width; x++)
                                 {
-
                                     // see if bit is set in mask. bits in byte are reversed. 0 is black (set).
                                     if ((bits[y * widthInBytes + x / 8] & (1 << (7 - (x % 8)))) == 0)
                                     {

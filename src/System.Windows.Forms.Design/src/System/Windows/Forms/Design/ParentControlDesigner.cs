@@ -180,7 +180,6 @@ namespace System.Windows.Forms.Design
                         bounds.X = selectedControl.Location.X + GridSize.Width;
                         bounds.Y = selectedControl.Location.Y + GridSize.Height;
                     }
-
                 }
                 // If we were not given a size, ask the control for its default.  We also update the location here so the control is in the middle of the user's point, rather than at the edge.
                 if (hasSize)

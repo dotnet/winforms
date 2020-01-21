@@ -151,10 +151,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
         public class AboutBoxUITypeEditor : UITypeEditor
         {
-            /// <summary>
-            ///  Edits the given object value using the editor style provided by GetEditorStyle.
-            ///  A service provider is provided so that any required editing services can be obtained.
-            /// </summary>
             public unsafe override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
             {
                 object component = context.Instance;
@@ -169,7 +165,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                         Ole32.DispatchID.ABOUTBOX,
                         &g,
                         Kernel32.GetThreadLocale(),
-                        NativeMethods.DISPATCH_METHOD,
+                        Oleaut32.DISPATCH.METHOD,
                         &dispParams,
                         null,
                         &pExcepInfo,
@@ -188,7 +184,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             {
                 return UITypeEditorEditStyle.Modal;
             }
-
         }
     }
 }

@@ -116,7 +116,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             typeInfoVersions = GetTypeInfoVersions(obj);
 
             touchedTime = DateTime.Now.Ticks;
-
         }
 
         internal bool AlwaysValid
@@ -279,7 +278,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 //
                 if (t.IsInstanceOfType(target))
                 {
-
                     // since handlers must be stateless, check to see if we've already
                     // created one of this type
                     //
@@ -323,7 +321,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
             if (props != null)
             {
-
                 Disposed?.Invoke(this, EventArgs.Empty);
 
                 weakObjRef = null;
@@ -426,7 +423,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 }
                 return versionOffset;
             }
-
         }
 
         private unsafe long GetTypeInfoVersion(UnsafeNativeMethods.ITypeInfo pTypeInfo)
@@ -449,7 +445,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 }
                 catch
                 {
-
                     return 0;
                 }
 
@@ -500,7 +495,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             //
             if (valid && checkVersions)
             {
-
                 //
                 long[] newTypeInfoVersions = GetTypeInfoVersions(weakObjRef.Target);
 
@@ -514,7 +508,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     //
                     for (int i = 0; i < newTypeInfoVersions.Length; i++)
                     {
-
                         if (newTypeInfoVersions[i] != typeInfoVersions[i])
                         {
                             valid = false;
@@ -525,7 +518,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
                 if (!valid)
                 {
-
                     // update to the new version list we have.
                     //
                     typeInfoVersions = newTypeInfoVersions;

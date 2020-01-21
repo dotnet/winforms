@@ -95,7 +95,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Specifies whether the ImeMode property value can be changed to an active value.
-        ///  Added to support Password & ReadOnly (and maybe other) properties, which when set, should force disabling
+        ///  Added to support Password &amp; ReadOnly (and maybe other) properties, which when set, should force disabling
         ///  the IME if using one.
         /// </summary>
         protected virtual bool CanEnableIme
@@ -553,8 +553,6 @@ namespace System.Windows.Forms
         /// </summary>
         internal void VerifyImeRestrictedModeChanged()
         {
-            Debug.Assert(ImeSupported, "This method should not be called from controls that don't support IME input.");
-
             Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Info, "Inside VerifyImeRestrictedModeChanged(), this = " + this);
             Debug.Indent();
 
@@ -1231,7 +1229,6 @@ namespace System.Windows.Forms
                 default:
                     if (ImeModeConversion.ImeModeConversionBits.ContainsKey(imeMode))
                     {
-
                         // Update the conversion status
                         //
                         ImeModeConversion conversionEntry = (ImeModeConversion)ImeModeConversion.ImeModeConversionBits[imeMode];
@@ -1320,9 +1317,9 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Supported input language ImeMode tables.
-        ///  	WARNING: Do not try to map 'active' IME modes from one table to another since they can have a different
-        ///  			 meaning depending on the language; for instance ImeMode.Off means 'disable' or 'alpha' to Chinese
-        ///  			 but to Japanese it is 'alpha' and to Korean it has no meaning.
+        ///     WARNING: Do not try to map 'active' IME modes from one table to another since they can have a different
+        ///              meaning depending on the language; for instance ImeMode.Off means 'disable' or 'alpha' to Chinese
+        ///              but to Japanese it is 'alpha' and to Korean it has no meaning.
         /// </summary>
         private static readonly ImeMode[] japaneseTable = {
             ImeMode.Inherit,
@@ -1445,7 +1442,6 @@ namespace System.Windows.Forms
             {
                 if (imeModeConversionBits == null)
                 {
-
                     // Create ImeModeConversionBits dictionary
                     imeModeConversionBits = new Dictionary<ImeMode, ImeModeConversion>(7);
                     ImeModeConversion conversion;

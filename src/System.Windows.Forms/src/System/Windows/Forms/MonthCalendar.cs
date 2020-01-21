@@ -216,7 +216,6 @@ namespace System.Windows.Forms
 
                 if (value != null && value.Length > 0)
                 {
-
                     //add each boldeddate to our ArrayList...
                     for (int i = 0; i < value.Length; i++)
                     {
@@ -227,7 +226,6 @@ namespace System.Windows.Forms
                     {
                         monthsOfYear[value[i].Month - 1] |= 0x00000001 << (value[i].Day - 1);
                     }
-
                 }
                 RecreateHandle();
             }
@@ -318,13 +316,11 @@ namespace System.Windows.Forms
                 arrayOfDates.Clear();
                 if (value != null && value.Length > 0)
                 {
-
                     //add each boldeddate to our ArrayList...
                     for (int i = 0; i < value.Length; i++)
                     {
                         arrayOfDates.Add(value[i]);
                     }
-
                 }
                 RecreateHandle();
             }
@@ -645,7 +641,6 @@ namespace System.Windows.Forms
 
                 if (value != null && value.Length > 0)
                 {
-
                     //add each boldeddate to our ArrayList...
                     for (int i = 0; i < value.Length; i++)
                     {
@@ -656,7 +651,6 @@ namespace System.Windows.Forms
                     {
                         datesToBoldMonthly |= 0x00000001 << (value[i].Day - 1);
                     }
-
                 }
                 RecreateHandle();
             }
@@ -692,10 +686,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  This is used for international applications where the language
-        ///  is written from RightToLeft. When this property is true,
-        //      and the RightToLeft is true, mirroring will be turned on on the form, and
-        ///  control placement and text will be from right to left.
+        ///  This is used for international applications where the language is written from RightToLeft.
+        ///  When this property is true, and the RightToLeft is true, mirroring will be turned on on
+        ///  the form, and control placement and text will be from right to left.
         /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
@@ -707,7 +700,6 @@ namespace System.Windows.Forms
         {
             get
             {
-
                 return rightToLeftLayout;
             }
 
@@ -746,7 +738,6 @@ namespace System.Windows.Forms
             {
                 if (scrollChange != value)
                 {
-
                     if (value < 0)
                     {
                         throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(ScrollChange), value.ToString("D"), 0));
@@ -784,7 +775,6 @@ namespace System.Windows.Forms
             {
                 if (selectionEnd != value)
                 {
-
                     // Keep SelectionEnd within min and max
                     if (value < MinDate)
                     {
@@ -833,7 +823,6 @@ namespace System.Windows.Forms
             {
                 if (selectionStart != value)
                 {
-
                     // Keep SelectionStart within min and max
                     //
                     if (value < minDate)
@@ -982,7 +971,7 @@ namespace System.Windows.Forms
 
                 if (IsHandleCreated)
                 {
-                    if (User32.SendMessageW(this, (User32.WindowMessage)ComCtl32.MCM.GETMINREQRECT, IntPtr.Zero, ref rect) == IntPtr.Zero)
+                    if (User32.SendMessageW(this, (User32.WM)ComCtl32.MCM.GETMINREQRECT, IntPtr.Zero, ref rect) == IntPtr.Zero)
                     {
                         throw new InvalidOperationException(SR.InvalidSingleMonthSize);
                     }
@@ -1058,7 +1047,7 @@ namespace System.Windows.Forms
                 if (IsHandleCreated)
                 {
                     var st = new Kernel32.SYSTEMTIME();
-                    int res = (int)User32.SendMessageW(this, (User32.WindowMessage)User32.MCM.GETTODAY, IntPtr.Zero, ref st);
+                    int res = (int)User32.SendMessageW(this, (User32.WM)User32.MCM.GETTODAY, IntPtr.Zero, ref st);
                     Debug.Assert(res != 0, "MCM_GETTODAY failed");
                     return DateTimePicker.SysTimeToDateTime(st).Date;
                 }
@@ -1071,7 +1060,6 @@ namespace System.Windows.Forms
             {
                 if (!(todayDateSet) || (DateTime.Compare(value, todayDate) != 0))
                 {
-
                     // throw if trying to set the TodayDate to a value greater than MaxDate
                     if (DateTime.Compare(value, maxDate) > 0)
                     {
@@ -1519,7 +1507,7 @@ namespace System.Windows.Forms
         private SelectionRange GetMonthRange(int flag)
         {
             Span<Kernel32.SYSTEMTIME> sa = stackalloc Kernel32.SYSTEMTIME[2];
-            User32.SendMessageW(this, (User32.WindowMessage)ComCtl32.MCM.GETMONTHRANGE, (IntPtr)flag, ref sa[0]);
+            User32.SendMessageW(this, (User32.WM)ComCtl32.MCM.GETMONTHRANGE, (IntPtr)flag, ref sa[0]);
             return new SelectionRange
             {
                 Start = DateTimePicker.SysTimeToDateTime(sa[0]),
@@ -1641,7 +1629,7 @@ namespace System.Windows.Forms
             if (todayDateSet)
             {
                 Kernel32.SYSTEMTIME st = DateTimePicker.DateTimeToSysTime(todayDate);
-                User32.SendMessageW(this, (User32.WindowMessage)User32.MCM.SETTODAY, IntPtr.Zero, ref st);
+                User32.SendMessageW(this, (User32.WM)User32.MCM.SETTODAY, IntPtr.Zero, ref st);
             }
 
             SetControlColor(ComCtl32.MCSC.TEXT, ForeColor);
@@ -2045,7 +2033,7 @@ namespace System.Windows.Forms
                 sa[0] = DateTimePicker.DateTimeToSysTime(minDate);
                 sa[1] = DateTimePicker.DateTimeToSysTime(maxDate);
                 int flag = NativeMethods.GDTR_MIN | NativeMethods.GDTR_MAX;
-                if ((int)User32.SendMessageW(this, (User32.WindowMessage)ComCtl32.MCM.SETRANGE, (IntPtr)flag, ref sa[0]) == 0)
+                if ((int)User32.SendMessageW(this, (User32.WM)ComCtl32.MCM.SETRANGE, (IntPtr)flag, ref sa[0]) == 0)
                 {
                     throw new InvalidOperationException(string.Format(SR.MonthCalendarRange, minDate.ToShortDateString(), maxDate.ToShortDateString()));
                 }
@@ -2146,7 +2134,6 @@ namespace System.Windows.Forms
             //
             if ((date2 - date1).Days >= maxSelectionCount)
             {
-
                 if (date1.Ticks == selectionStart.Ticks)
                 {
                     // Bring start date forward
@@ -2186,7 +2173,7 @@ namespace System.Windows.Forms
                 Span<Kernel32.SYSTEMTIME> sa = stackalloc Kernel32.SYSTEMTIME[2];
                 sa[0] = DateTimePicker.DateTimeToSysTime(lower);
                 sa[1] = DateTimePicker.DateTimeToSysTime(upper);
-                User32.SendMessageW(this, (User32.WindowMessage)ComCtl32.MCM.SETSELRANGE, IntPtr.Zero, ref sa[0]);
+                User32.SendMessageW(this, (User32.WM)ComCtl32.MCM.SETSELRANGE, IntPtr.Zero, ref sa[0]);
             }
 
             if (changed)
@@ -2292,11 +2279,11 @@ namespace System.Windows.Forms
                 if (todayDateSet)
                 {
                     Kernel32.SYSTEMTIME st = DateTimePicker.DateTimeToSysTime(todayDate);
-                    User32.SendMessageW(this, (User32.WindowMessage)User32.MCM.SETTODAY, IntPtr.Zero, ref st);
+                    User32.SendMessageW(this, (User32.WM)User32.MCM.SETTODAY, IntPtr.Zero, ref st);
                 }
                 else
                 {
-                    User32.SendMessageW(this, (User32.WindowMessage)User32.MCM.SETTODAY, IntPtr.Zero, IntPtr.Zero);
+                    User32.SendMessageW(this, (User32.WM)User32.MCM.SETTODAY, IntPtr.Zero, IntPtr.Zero);
                 }
             }
         }
@@ -2406,7 +2393,6 @@ namespace System.Windows.Forms
 
             //end subhag
             OnDateSelected(new DateRangeEventArgs(start, end));
-
         }
 
         /// <summary>

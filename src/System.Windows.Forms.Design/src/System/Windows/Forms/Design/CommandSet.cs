@@ -545,7 +545,7 @@ namespace System.Windows.Forms.Design
                     IntPtr hwnd = User32.WindowFromPoint(p);
                     if (hwnd != IntPtr.Zero)
                     {
-                        User32.SendMessageW(hwnd, User32.WindowMessage.WM_SETCURSOR, hwnd, (IntPtr)NativeMethods.HTCLIENT);
+                        User32.SendMessageW(hwnd, User32.WM.SETCURSOR, hwnd, (IntPtr)NativeMethods.HTCLIENT);
                     }
                     else
                     {
@@ -973,7 +973,6 @@ namespace System.Windows.Forms.Design
                                 return;
                             }
                         }
-
                     }
                     bool firstTry = true;
                     // for each component, we round to the nearest snap offset for x and y
@@ -1776,7 +1775,6 @@ namespace System.Windows.Forms.Design
 
                         foreach (object obj in components)
                         {
-
                             name = null;
                             curComp = obj as IComponent;
                             // see if we can fish out the original name. When we serialized, we serialized an array of names at the head of the list.  This array matches the components that were created.
@@ -2331,7 +2329,6 @@ namespace System.Windows.Forms.Design
                     }
                 }
             }
-
         }
 
         /// <summary>
@@ -2644,7 +2641,6 @@ namespace System.Windows.Forms.Design
                         {
                             curLoc.X -= grid.Width * (primaryIndex - n);
                         }
-
                     }
                     else if (cmdID == MenuCommands.HorizSpaceMakeEqual && n > 0)
                     {
@@ -3270,7 +3266,7 @@ namespace System.Windows.Forms.Design
 
             /// <summary>
             ///  Applys the cached status to this item.
-            /// </devdco>
+            /// </summary>
             private void ApplyCachedStatus()
             {
                 if (_commandSet != null && s_commandStatusHash.Contains(_statusHandler))
@@ -3321,9 +3317,9 @@ namespace System.Windows.Forms.Design
                 }
             }
 
-            ///<summary>
+            /// <summary>
             ///  Only pass this down to the base when we're not doing the cached update.
-            ///</summary>
+            /// </summary>
             protected override void OnCommandChanged(EventArgs e)
             {
                 if (!_updatingCommand)
@@ -3332,9 +3328,9 @@ namespace System.Windows.Forms.Design
                 }
             }
 
-            ///<summary>
+            /// <summary>
             ///  Saves the status for this command to the statusstate that's stored in the hashtable based on our status handler delegate.
-            ///</summary>
+            /// </summary>
             private void SaveCommandStatus()
             {
                 if (_commandSet != null)

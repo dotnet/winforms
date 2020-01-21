@@ -315,7 +315,6 @@ namespace System.Windows.Forms
                      dwSaveOption == Ole32.OLECLOSE.PROMPTSAVE) &&
                     _activeXState[s_isDirty])
                 {
-
                     if (_clientSite != null)
                     {
                         _clientSite.SaveObject();
@@ -383,7 +382,7 @@ namespace System.Windows.Forms
                             }
 #endif
 
-                            if (lpmsg->message == User32.WindowMessage.WM_KEYDOWN && lpmsg->wParam == (IntPtr)User32.VK.TAB)
+                            if (lpmsg->message == User32.WM.KEYDOWN && lpmsg->wParam == (IntPtr)User32.VK.TAB)
                             {
                                 target.SelectNextControl(null, Control.ModifierKeys != Keys.Shift, true, true, true);
                             }
@@ -633,7 +632,7 @@ namespace System.Windows.Forms
                         dispid,
                         &g,
                         NativeMethods.LOCALE_USER_DEFAULT,
-                        NativeMethods.DISPATCH_PROPERTYGET,
+                        Oleaut32.DISPATCH.PROPERTYGET,
                         &dispParams,
                         pvt,
                         null,
@@ -645,7 +644,7 @@ namespace System.Windows.Forms
                         Debug.Unindent();
                         return true;
                     }
-                    
+
                     Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "IDispatch::Invoke failed. HR: 0x" + string.Format(CultureInfo.CurrentCulture, "{0:X}", hr));
                 }
 
@@ -1042,7 +1041,7 @@ namespace System.Windows.Forms
                 {
                     return HRESULT.S_OK;
                 }
-                
+
                 return HRESULT.S_FALSE;
             }
 
@@ -1557,7 +1556,6 @@ namespace System.Windows.Forms
 
                 /// <summary>
                 ///  Wraps a native IUnknown in a SafeHandle.
-                ///  See similar implementaton in the <see cref='Transactions.SafeIUnknown'/> class.
                 /// </summary>
                 internal class SafeIUnknown : SafeHandle
                 {
@@ -1769,7 +1767,6 @@ namespace System.Windows.Forms
                     [UnmanagedFunctionPointer(CallingConvention.StdCall)]
                     private delegate int AdviseD(IntPtr This, IntPtr punkEventSink, out uint pdwCookie);
                 }
-
             }
 
             /// <summary>
@@ -2290,10 +2287,10 @@ namespace System.Windows.Forms
                 bool needPreProcess = false;
                 switch (lpmsg->message)
                 {
-                    case User32.WindowMessage.WM_KEYDOWN:
-                    case User32.WindowMessage.WM_SYSKEYDOWN:
-                    case User32.WindowMessage.WM_CHAR:
-                    case User32.WindowMessage.WM_SYSCHAR:
+                    case User32.WM.KEYDOWN:
+                    case User32.WM.SYSKEYDOWN:
+                    case User32.WM.CHAR:
+                    case User32.WM.SYSCHAR:
                         needPreProcess = true;
                         break;
                 }
@@ -2310,7 +2307,7 @@ namespace System.Windows.Forms
                             case PreProcessControlState.MessageProcessed:
                                 // someone returned true from PreProcessMessage
                                 // no need to dispatch the message, its already been coped with.
-                                lpmsg->message = (User32.WindowMessage)msg.Msg;
+                                lpmsg->message = (User32.WM)msg.Msg;
                                 lpmsg->wParam = msg.WParam;
                                 lpmsg->lParam = msg.LParam;
                                 return HRESULT.S_OK;

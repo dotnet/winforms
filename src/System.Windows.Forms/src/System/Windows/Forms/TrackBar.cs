@@ -9,6 +9,7 @@ using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
 using static Interop;
+using static Interop.ComCtl32;
 
 namespace System.Windows.Forms
 {
@@ -171,27 +172,27 @@ namespace System.Windows.Forms
             get
             {
                 CreateParams cp = base.CreateParams;
-                cp.ClassName = ComCtl32.WindowClasses.WC_TRACKBAR;
+                cp.ClassName = WindowClasses.WC_TRACKBAR;
 
                 switch (tickStyle)
                 {
                     case TickStyle.None:
-                        cp.Style |= NativeMethods.TBS_NOTICKS;
+                        cp.Style |= (int)TBS.NOTICKS;
                         break;
                     case TickStyle.TopLeft:
-                        cp.Style |= (NativeMethods.TBS_AUTOTICKS | NativeMethods.TBS_TOP);
+                        cp.Style |= (int)(TBS.AUTOTICKS | TBS.TOP);
                         break;
                     case TickStyle.BottomRight:
-                        cp.Style |= (NativeMethods.TBS_AUTOTICKS | NativeMethods.TBS_BOTTOM);
+                        cp.Style |= (int)(TBS.AUTOTICKS | TBS.BOTTOM);
                         break;
                     case TickStyle.Both:
-                        cp.Style |= (NativeMethods.TBS_AUTOTICKS | NativeMethods.TBS_BOTH);
+                        cp.Style |= (int)(TBS.AUTOTICKS | TBS.BOTH);
                         break;
                 }
 
                 if (orientation == Orientation.Vertical)
                 {
-                    cp.Style |= NativeMethods.TBS_VERT; // HORIZ == 0
+                    cp.Style |= (int)TBS.VERT; // HORIZ == 0
                 }
 
                 if (RightToLeft == RightToLeft.Yes && RightToLeftLayout)
@@ -326,7 +327,7 @@ namespace System.Windows.Forms
             {
                 if (value < 0)
                 {
-                    throw new ArgumentOutOfRangeException(nameof(LargeChange), string.Format(SR.TrackBarLargeChangeError, value));
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.TrackBarLargeChangeError, value));
                 }
 
                 if (largeChange != value)
@@ -334,7 +335,7 @@ namespace System.Windows.Forms
                     largeChange = value;
                     if (IsHandleCreated)
                     {
-                        SendMessage(NativeMethods.TBM_SETPAGESIZE, 0, value);
+                        User32.SendMessageW(this, (User32.WM)TBM.SETPAGESIZE, IntPtr.Zero, (IntPtr)value);
                     }
                 }
             }
@@ -492,17 +493,15 @@ namespace System.Windows.Forms
         {
             if (IsHandleCreated)
             {
-                //The '1' in the call to SendMessage below indicates that the
-                //trackbar should be redrawn (see TBM_SETRANGEMAX in MSDN)
-                SendMessage(NativeMethods.TBM_SETRANGEMAX, 1, maximum);
+                User32.SendMessageW(this, (User32.WM)TBM.SETRANGEMAX, PARAM.FromBool(true), (IntPtr)maximum);
                 Invalidate();
             }
         }
 
         /// <summary>
-        ///  This is used for international applications where the language
-        ///  is written from RightToLeft. When this property is true,
-        //      and the RightToLeft property is true, mirroring will be turned on on the trackbar.
+        ///  This is used for international applications where the language is written from RightToLeft.
+        ///  When this property is true, and the RightToLeft property is true, mirroring will be turned
+        ///  on on the trackbar.
         /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
@@ -514,7 +513,6 @@ namespace System.Windows.Forms
         {
             get
             {
-
                 return rightToLeftLayout;
             }
 
@@ -551,14 +549,14 @@ namespace System.Windows.Forms
             {
                 if (value < 0)
                 {
-                    throw new ArgumentOutOfRangeException(nameof(SmallChange), string.Format(SR.TrackBarSmallChangeError, value));
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.TrackBarSmallChangeError, value));
                 }
                 if (smallChange != value)
                 {
                     smallChange = value;
                     if (IsHandleCreated)
                     {
-                        SendMessage(NativeMethods.TBM_SETLINESIZE, 0, value);
+                        User32.SendMessageW(this, (User32.WM)TBM.SETLINESIZE, IntPtr.Zero, (IntPtr)value);
                     }
                 }
             }
@@ -643,7 +641,7 @@ namespace System.Windows.Forms
                     tickFrequency = value;
                     if (IsHandleCreated)
                     {
-                        SendMessage(NativeMethods.TBM_SETTICFREQ, value, 0);
+                        User32.SendMessageW(this, (User32.WM)TBM.SETTICFREQ, (IntPtr)value);
                         Invalidate();
                     }
                 }
@@ -812,11 +810,11 @@ namespace System.Windows.Forms
                 IntPtr userCookie = ThemingScope.Activate(Application.UseVisualStyles);
                 try
                 {
-                    var icc = new ComCtl32.INITCOMMONCONTROLSEX
+                    var icc = new INITCOMMONCONTROLSEX
                     {
-                        dwICC = ComCtl32.ICC.BAR_CLASSES
+                        dwICC = ICC.BAR_CLASSES
                     };
-                    ComCtl32.InitCommonControlsEx(ref icc);
+                    InitCommonControlsEx(ref icc);
                 }
                 finally
                 {
@@ -841,11 +839,9 @@ namespace System.Windows.Forms
         {
             if (IsHandleCreated)
             {
-                value = unchecked((int)(long)SendMessage(NativeMethods.TBM_GETPOS, 0, 0));
+                value = PARAM.ToInt(User32.SendMessageW(this, (User32.WM)TBM.GETPOS));
 
                 // See SetTrackBarValue() for a description of why we sometimes reflect the trackbar value
-                //
-
                 if (orientation == Orientation.Vertical)
                 {
                     // Reflect value
@@ -885,11 +881,17 @@ namespace System.Windows.Forms
         protected override void OnHandleCreated(EventArgs e)
         {
             base.OnHandleCreated(e);
-            SendMessage(NativeMethods.TBM_SETRANGEMIN, 0, minimum);
-            SendMessage(NativeMethods.TBM_SETRANGEMAX, 0, maximum);
-            SendMessage(NativeMethods.TBM_SETTICFREQ, tickFrequency, 0);
-            SendMessage(NativeMethods.TBM_SETPAGESIZE, 0, largeChange);
-            SendMessage(NativeMethods.TBM_SETLINESIZE, 0, smallChange);
+
+            if (!IsHandleCreated)
+            {
+                return;
+            }
+
+            User32.SendMessageW(this, (User32.WM)TBM.SETRANGEMIN, PARAM.FromBool(false), (IntPtr)minimum);
+            User32.SendMessageW(this, (User32.WM)TBM.SETRANGEMAX, PARAM.FromBool(false), (IntPtr)maximum);
+            User32.SendMessageW(this, (User32.WM)TBM.SETTICFREQ, (IntPtr)tickFrequency);
+            User32.SendMessageW(this, (User32.WM)TBM.SETPAGESIZE, IntPtr.Zero, (IntPtr)largeChange);
+            User32.SendMessageW(this, (User32.WM)TBM.SETLINESIZE, IntPtr.Zero, (IntPtr)smallChange);
             SetTrackBarPosition();
             AdjustSize();
         }
@@ -1058,7 +1060,6 @@ namespace System.Windows.Forms
         {
             if (minimum != minValue || maximum != maxValue)
             {
-
                 // The Minimum and Maximum properties contain the logic for
                 // ensuring that minValue <= maxValue. It is possible, however,
                 // that this function will be called somewhere other than from
@@ -1074,13 +1075,10 @@ namespace System.Windows.Forms
 
                 if (IsHandleCreated)
                 {
-                    SendMessage(NativeMethods.TBM_SETRANGEMIN, 0, minimum);
+                    User32.SendMessageW(this, (User32.WM)TBM.SETRANGEMIN, PARAM.FromBool(false), (IntPtr)minimum);
 
-                    // We must repaint the trackbar after changing
-                    // the range. The '1' in the call to
-                    // SendMessage below indicates that the trackbar
-                    // should be redrawn (see TBM_SETRANGEMAX in MSDN)
-                    SendMessage(NativeMethods.TBM_SETRANGEMAX, 1, maximum);
+                    // We must repaint the trackbar after changing the range.
+                    User32.SendMessageW(this, (User32.WM)TBM.SETRANGEMAX, PARAM.FromBool(true), (IntPtr)maximum);
 
                     Invalidate();
                 }
@@ -1105,7 +1103,6 @@ namespace System.Windows.Forms
         {
             if (IsHandleCreated)
             {
-
                 // There are two situations where we want to reflect the track bar position:
                 //
                 // 1. For a vertical trackbar, it seems to make more sense for the trackbar to increase in value
@@ -1129,7 +1126,7 @@ namespace System.Windows.Forms
                     reflectedValue = Minimum + Maximum - value;
                 }
 
-                SendMessage(NativeMethods.TBM_SETPOS, 1, reflectedValue);
+                User32.SendMessageW(this, (User32.WM)TBM.SETPOS, PARAM.FromBool(true), (IntPtr)reflectedValue);
             }
         }
 

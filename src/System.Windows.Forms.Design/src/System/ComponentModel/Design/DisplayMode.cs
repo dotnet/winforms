@@ -28,6 +28,5 @@ namespace System.ComponentModel.Design
         ///  Indicates using automatic format selection.
         /// </summary>
         Auto = 4,
-
     }
 }

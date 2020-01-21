@@ -56,7 +56,7 @@ namespace System.Windows.Forms
             IsActiveX = 0x00000400,
 
             UserPreferredSizeCache = 0x00000800,
-    
+
             TopMDIWindowClosing = 0x00001000,
 
             /// <summary>

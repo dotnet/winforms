@@ -274,7 +274,6 @@ namespace System.Windows.Forms
 
             set
             {
-
                 if (!(value == DockStyle.Top || value == DockStyle.Bottom || value == DockStyle.Left || value == DockStyle.Right))
                 {
                     throw new ArgumentException(SR.SplitterInvalidDockEnum);
@@ -430,8 +429,6 @@ namespace System.Windows.Forms
                     value = minSize;
                 }
 
-                // if (value == splitSize) return;  -- do we need this check?
-
                 splitSize = value;
                 DrawSplitBar(DRAW_END);
 
@@ -462,7 +459,6 @@ namespace System.Windows.Forms
                 spd.target.Bounds = bounds;
                 Application.DoEvents();
                 OnSplitterMoved(new SplitterEventArgs(Left, Top, (Left + bounds.Width / 2), (Top + bounds.Height / 2)));
-
             }
         }
 

@@ -7,7 +7,7 @@ using Xunit;
 
 namespace System.Windows.Forms.VisualStyles.Tests
 {
-    public class TextMetricsTests
+    public class TextMetricsTests : IClassFixture<ThreadExceptionFixture>
     {
         [Fact]
         public void TextMetrics_Ctor_Default()

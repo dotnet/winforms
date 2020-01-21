@@ -337,7 +337,7 @@ namespace System.Windows.Forms
             base.OnBackColorChanged(e);
             if (IsHandleCreated)
             {
-                User32.SendMessageW(this, (User32.WindowMessage)ComCtl32.PBM.SETBKCOLOR, IntPtr.Zero, (IntPtr)ColorTranslator.ToWin32(BackColor));
+                User32.SendMessageW(this, (User32.WM)ComCtl32.PBM.SETBKCOLOR, IntPtr.Zero, (IntPtr)ColorTranslator.ToWin32(BackColor));
             }
         }
 
@@ -346,7 +346,7 @@ namespace System.Windows.Forms
             base.OnForeColorChanged(e);
             if (IsHandleCreated)
             {
-                User32.SendMessageW(this, (User32.WindowMessage)ComCtl32.PBM.SETBARCOLOR, IntPtr.Zero, (IntPtr)ColorTranslator.ToWin32(ForeColor));
+                User32.SendMessageW(this, (User32.WM)ComCtl32.PBM.SETBARCOLOR, IntPtr.Zero, (IntPtr)ColorTranslator.ToWin32(ForeColor));
             }
         }
 
@@ -600,8 +600,8 @@ namespace System.Windows.Forms
                 SendMessage((int)ComCtl32.PBM.SETRANGE32, _minimum, _maximum);
                 SendMessage((int)ComCtl32.PBM.SETSTEP, _step, 0);
                 SendMessage((int)ComCtl32.PBM.SETPOS, _value, 0);
-                User32.SendMessageW(this, (User32.WindowMessage)ComCtl32.PBM.SETBKCOLOR, IntPtr.Zero, (IntPtr)ColorTranslator.ToWin32(BackColor));
-                User32.SendMessageW(this, (User32.WindowMessage)ComCtl32.PBM.SETBARCOLOR, IntPtr.Zero, (IntPtr)ColorTranslator.ToWin32(ForeColor));
+                User32.SendMessageW(this, (User32.WM)ComCtl32.PBM.SETBKCOLOR, IntPtr.Zero, (IntPtr)ColorTranslator.ToWin32(BackColor));
+                User32.SendMessageW(this, (User32.WM)ComCtl32.PBM.SETBARCOLOR, IntPtr.Zero, (IntPtr)ColorTranslator.ToWin32(ForeColor));
             }
             StartMarquee();
             SystemEvents.UserPreferenceChanged += new UserPreferenceChangedEventHandler(UserPreferenceChangedHandler);
@@ -692,8 +692,8 @@ namespace System.Windows.Forms
         {
             if (IsHandleCreated)
             {
-                User32.SendMessageW(this, (User32.WindowMessage)ComCtl32.PBM.SETBARCOLOR, IntPtr.Zero, (IntPtr)ColorTranslator.ToWin32(ForeColor));
-                User32.SendMessageW(this, (User32.WindowMessage)ComCtl32.PBM.SETBKCOLOR, IntPtr.Zero, (IntPtr)ColorTranslator.ToWin32(BackColor));
+                User32.SendMessageW(this, (User32.WM)ComCtl32.PBM.SETBARCOLOR, IntPtr.Zero, (IntPtr)ColorTranslator.ToWin32(ForeColor));
+                User32.SendMessageW(this, (User32.WM)ComCtl32.PBM.SETBKCOLOR, IntPtr.Zero, (IntPtr)ColorTranslator.ToWin32(BackColor));
             }
         }
 

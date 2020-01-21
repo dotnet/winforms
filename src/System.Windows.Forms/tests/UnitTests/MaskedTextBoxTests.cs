@@ -7,7 +7,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class MaskedTextBoxTests
+    public class MaskedTextBoxTests : IClassFixture<ThreadExceptionFixture>
     {
         [Fact]
         public void MaskedTextBox_Constructor()

@@ -94,7 +94,7 @@ internal static partial class Interop
                     0,
                     dpi);
             }
-            
+
             return SystemParametersInfoW(ref metrics);
         }
     }

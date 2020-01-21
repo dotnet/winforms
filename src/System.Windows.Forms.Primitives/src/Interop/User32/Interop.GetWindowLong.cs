@@ -4,7 +4,6 @@
 
 using System;
 using System.Runtime.InteropServices;
-using System.Windows.Forms;
 
 internal static partial class Interop
 {
@@ -30,6 +29,13 @@ internal static partial class Interop
         {
             IntPtr result = GetWindowLong(hWnd.Handle, nIndex);
             GC.KeepAlive(hWnd);
+            return result;
+        }
+
+        public static IntPtr GetWindowLong(HandleRef hWnd, GWL nIndex)
+        {
+            IntPtr result = GetWindowLong(hWnd.Handle, nIndex);
+            GC.KeepAlive(hWnd.Wrapper);
             return result;
         }
     }

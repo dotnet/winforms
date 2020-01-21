@@ -385,13 +385,12 @@ namespace System.Windows.Forms
                     if ((int)wparam == 0x402)
                     {
                         var logFont = new User32.LOGFONTW();
-                        User32.SendMessageW(hWnd, User32.WindowMessage.WM_CHOOSEFONT_GETLOGFONT, IntPtr.Zero, ref logFont);
+                        User32.SendMessageW(hWnd, User32.WM.CHOOSEFONT_GETLOGFONT, IntPtr.Zero, ref logFont);
                         UpdateFont(ref logFont);
-                        int index = (int)UnsafeNativeMethods.SendDlgItemMessage(new HandleRef(null, hWnd), 0x473, NativeMethods.CB_GETCURSEL, IntPtr.Zero, IntPtr.Zero);
-                        if (index != NativeMethods.CB_ERR)
+                        int index = (int)UnsafeNativeMethods.SendDlgItemMessage(hWnd, 0x473, (int)User32.CB.GETCURSEL, IntPtr.Zero, IntPtr.Zero);
+                        if (index != User32.CB_ERR)
                         {
-                            UpdateColor((int)UnsafeNativeMethods.SendDlgItemMessage(new HandleRef(null, hWnd), 0x473,
-                                                                         NativeMethods.CB_GETITEMDATA, (IntPtr)index, IntPtr.Zero));
+                            UpdateColor((int)UnsafeNativeMethods.SendDlgItemMessage(hWnd, 0x473, (int)User32.CB.GETITEMDATA, (IntPtr)index, IntPtr.Zero));
                         }
                         if (NativeWindow.WndProcShouldBeDebuggable)
                         {
@@ -413,9 +412,9 @@ namespace System.Windows.Forms
                 case WindowMessages.WM_INITDIALOG:
                     if (!showColor)
                     {
-                        IntPtr hWndCtl = UnsafeNativeMethods.GetDlgItem(new HandleRef(null, hWnd), NativeMethods.cmb4);
+                        IntPtr hWndCtl = User32.GetDlgItem(hWnd, NativeMethods.cmb4);
                         User32.ShowWindow(hWndCtl, User32.SW.HIDE);
-                        hWndCtl = UnsafeNativeMethods.GetDlgItem(new HandleRef(null, hWnd), NativeMethods.stc4);
+                        hWndCtl = User32.GetDlgItem(hWnd, NativeMethods.stc4);
                         User32.ShowWindow(hWndCtl, User32.SW.HIDE);
                     }
                     break;
@@ -459,19 +458,17 @@ namespace System.Windows.Forms
         /// </summary>
         protected unsafe override bool RunDialog(IntPtr hWndOwner)
         {
-            NativeMethods.WndProc hookProcPtr = new NativeMethods.WndProc(HookProc);
-            User32.LOGFONTW logFont;
-
+            var hookProcPtr = new User32.WNDPROCINT(HookProc);
             using ScreenDC dc = ScreenDC.Create();
             using Graphics graphics = Graphics.FromHdcInternal(dc);
-            logFont = User32.LOGFONTW.FromFont(Font, graphics);
+            User32.LOGFONTW logFont = User32.LOGFONTW.FromFont(Font, graphics);
 
-            NativeMethods.CHOOSEFONT cf = new NativeMethods.CHOOSEFONT
+            var cf = new Comdlg32.CHOOSEFONTW
             {
-                lStructSize = Marshal.SizeOf<NativeMethods.CHOOSEFONT>(),
+                lStructSize = (uint)Marshal.SizeOf<Comdlg32.CHOOSEFONTW>(),
                 hwndOwner = hWndOwner,
                 hDC = IntPtr.Zero,
-                lpLogFont = new IntPtr(&logFont),
+                lpLogFont = &logFont,
                 Flags = (Comdlg32.CF)Options | Comdlg32.CF.INITTOLOGFONTSTRUCT | Comdlg32.CF.ENABLEHOOK,
                 lpfnHook = hookProcPtr,
                 hInstance = Kernel32.GetModuleHandleW(null),
@@ -492,7 +489,7 @@ namespace System.Windows.Forms
             // (limitation of windows control)
 
             Debug.Assert(cf.nSizeMin <= cf.nSizeMax, "min and max font sizes are the wrong way around");
-            if (!SafeNativeMethods.ChooseFont(cf))
+            if (Comdlg32.ChooseFontW(ref cf).IsFalse())
             {
                 return false;
             }

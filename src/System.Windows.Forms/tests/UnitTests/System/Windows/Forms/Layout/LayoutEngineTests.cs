@@ -7,7 +7,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Layout.Tests
 {
-    public class LayoutEngineTests
+    public class LayoutEngineTests : IClassFixture<ThreadExceptionFixture>
     {
         [Fact]
         public void LayoutEngine_InitLayout_ValidChild_Nop()

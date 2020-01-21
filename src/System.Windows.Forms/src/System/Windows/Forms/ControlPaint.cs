@@ -561,7 +561,6 @@ namespace System.Windows.Forms
                     imageAttrib.SetWrapMode(WrapMode.TileFlipXY);
                     g.DrawImage(backgroundImage, imageRectangle, 0, 0, backgroundImage.Width, backgroundImage.Height, GraphicsUnit.Pixel, imageAttrib);
                     imageAttrib.Dispose();
-
                 }
             }
         }
@@ -1425,7 +1424,6 @@ namespace System.Windows.Forms
             {
                 if (checkImage == null || checkImage.Width != rectangle.Width || checkImage.Height != rectangle.Height)
                 {
-
                     if (checkImage != null)
                     {
                         checkImage.Dispose();
@@ -1539,7 +1537,7 @@ namespace System.Windows.Forms
                     g2.Clear(Color.Transparent);
 
                     using (WindowsGraphics wg = WindowsGraphics.FromGraphics(g2))
-                    { 
+                    {
                         // Get Win32 dc with Graphics properties applied to it.
                         User32.DrawFrameControl(new HandleRef(wg, wg.DeviceContext.Hdc), ref rcFrame, kind, state);
                     }
@@ -1654,7 +1652,6 @@ namespace System.Windows.Forms
             if (gridBrush == null || gridSize.Width != pixelsBetweenDots.Width
                 || gridSize.Height != pixelsBetweenDots.Height || invert != gridInvert)
             {
-
                 if (gridBrush != null)
                 {
                     gridBrush.Dispose();
@@ -1687,15 +1684,6 @@ namespace System.Windows.Forms
 
             graphics.FillRectangle(gridBrush, area);
         }
-
-        /* Unused
-        // Takes a black and white image, and paints it in color
-        internal static void DrawImageColorized(Graphics graphics, Image image, Rectangle destination,
-                                                Color replaceBlack, Color replaceWhite) {
-            DrawImageColorized(graphics, image, destination,
-                               RemapBlackAndWhiteAndTransparentMatrix(replaceBlack, replaceWhite));
-        }
-        */
 
         // Takes a black and transparent image, turns black pixels into some other color, and leaves transparent pixels alone
         internal static void DrawImageColorized(Graphics graphics, Image image, Rectangle destination,
@@ -2119,7 +2107,6 @@ namespace System.Windows.Forms
             {
                 using (Pen dark = new Pen(Dark(backColor)))
                 {
-
                     int minDim = Math.Min(width, height);
                     int right = x + width - 1;
                     int bottom = y + height - 2;
@@ -2369,7 +2356,6 @@ namespace System.Windows.Forms
             if (frameBrushActive == null ||
                 !frameColorActive.Equals(brushColor))
             {
-
                 if (frameBrushActive != null)
                 {
                     frameBrushActive.Dispose();
@@ -2421,7 +2407,6 @@ namespace System.Windows.Forms
                 focusPenColor.ToArgb() != baseColor.ToArgb() ||
                 hcFocusPen != highContrast)
             {
-
                 if (focusPen != null)
                 {
                     focusPen.Dispose();
@@ -2500,7 +2485,6 @@ namespace System.Windows.Forms
             if (frameBrushSelected == null ||
                 !frameColorSelected.Equals(brushColor))
             {
-
                 if (frameBrushSelected != null)
                 {
                     frameBrushSelected.Dispose();
@@ -2654,7 +2638,6 @@ namespace System.Windows.Forms
             }
 
             return new ColorMatrix(result);
-
         }
         //paint the border of the table
         internal static void PaintTableControlBorder(TableLayoutPanelCellBorderStyle borderStyle, Graphics g, Rectangle bound)
@@ -2763,63 +2746,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /* Unused
-        // Takes a black and white image, and replaces those colors with the colors of your choice.
-        // The Alpha channel of the source bitmap will be ignored, meaning pixels with Color.Transparent
-        // (really transparent black) will be mapped to the replaceBlack color.
-        private static ColorMatrix RemapBlackAndWhiteAndTransparentMatrix(Color replaceBlack, Color replaceWhite) {
-            // Normalize the colors to 1.0.
-
-            float normBlackRed   = ((float)replaceBlack.R)/(float)255.0;
-            float normBlackGreen = ((float)replaceBlack.G)/(float)255.0;
-            float normBlackBlue  = ((float)replaceBlack.B)/(float)255.0;
-            float normBlackAlpha = ((float)replaceBlack.A)/(float)255.0;
-
-            float normWhiteRed   = ((float)replaceWhite.R)/(float)255.0;
-            float normWhiteGreen = ((float)replaceWhite.G)/(float)255.0;
-            float normWhiteBlue  = ((float)replaceWhite.B)/(float)255.0;
-            float normWhiteAlpha = ((float)replaceWhite.A)/(float)255.0;
-
-            // Set up a matrix that will map white to replaceWhite and
-            // black and transparent black to replaceBlack.
-            //
-            //                | -B  -B  -B  -B   0 |
-            //                |   r   g   b   a    |
-            //                |                    |
-            //                |  W   W   W   W   0 |
-            //                |   r   g   b   a    |
-            //                |                    |
-            //  [ R G B A ] * |  0   0   0   0   0 | = [ R' G' B' A' ]
-            //                |                    |
-            //                |                    |
-            //                |  0   0   0   0   0 |
-            //                |                    |
-            //                |                    |
-            //                |  B   B   B   B   1 |
-            //                |   r   g   b   a    |
-
-            ColorMatrix matrix = new ColorMatrix();
-
-            matrix.Matrix00 = -normBlackRed;
-            matrix.Matrix01 = -normBlackGreen;
-            matrix.Matrix02 = -normBlackBlue;
-            matrix.Matrix03 = -normBlackAlpha;
-
-            matrix.Matrix10 =  normWhiteRed;
-            matrix.Matrix11 =  normWhiteGreen;
-            matrix.Matrix12 =  normWhiteBlue;
-            matrix.Matrix13 =  normWhiteAlpha;
-
-            matrix.Matrix40 =  normBlackRed;
-            matrix.Matrix41 =  normBlackGreen;
-            matrix.Matrix42 =  normBlackBlue;
-            matrix.Matrix43 =  normBlackAlpha;
-            matrix.Matrix44 =  1.0f;
-
-            return matrix;
-        }
-        */
-
         // Takes a black and white image, and replaces those colors with the colors of your choice.
         // The replaceBlack and replaceWhite colors must have alpha = 255, because the alpha value
         // of the bitmap is preserved.
@@ -2878,26 +2804,6 @@ namespace System.Windows.Forms
 
             return matrix;
         }
-
-        /* Unused
-        internal static StringAlignment TranslateAlignment(HorizontalAlignment align) {
-            StringAlignment result;
-            switch (align) {
-                case HorizontalAlignment.Right:
-                    result = StringAlignment.Far;
-                    break;
-                case HorizontalAlignment.Center:
-                    result = StringAlignment.Center;
-                    break;
-                case HorizontalAlignment.Left:
-                default:
-                    result = StringAlignment.Near;
-                    break;
-            }
-
-            return result;
-        }
-        */
 
         internal static TextFormatFlags TextFormatFlagsForAlignmentGDI(ContentAlignment align)
         {
@@ -2991,14 +2897,6 @@ namespace System.Windows.Forms
             };
             return output;
         }
-
-        /* Unused
-        internal static StringFormat StringFormatForAlignment(HorizontalAlignment align) {
-            StringFormat output = new StringFormat();
-            output.Alignment = TranslateAlignment(align);
-            return output;
-        }
-        */
 
         /// <summary>
         ///  Get StringFormat object for rendering text using GDI+ (Graphics).
@@ -3168,16 +3066,6 @@ namespace System.Windows.Forms
                 }
             }
 
-            /* Unused
-            /// <summary>
-            /// </summary>
-            public int Hue {
-                get {
-                    return hue;
-                }
-            }
-            */
-
             /// <summary>
             /// </summary>
             public int Luminosity
@@ -3187,16 +3075,6 @@ namespace System.Windows.Forms
                     return luminosity;
                 }
             }
-
-            /* Unused
-            /// <summary>
-            /// </summary>
-            public int Saturation {
-                get {
-                    return saturation;
-                }
-            }
-            */
 
             /// <summary>
             /// </summary>
@@ -3230,19 +3108,8 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    int oneLum = 0;
                     int zeroLum = NewLuma(ShadowAdj, true);
-
-                    /*
-                    if (luminosity < 40) {
-                        zeroLum = NewLuma(120, ShadowAdj, true);
-                    }
-                    else {
-                        zeroLum = NewLuma(ShadowAdj, true);
-                    }
-                    */
-
-                    return ColorFromHLS(hue, zeroLum - (int)((zeroLum - oneLum) * percDarker), saturation);
+                    return ColorFromHLS(hue, zeroLum - (int)(zeroLum * percDarker), saturation);
                 }
             }
 
@@ -3306,18 +3173,6 @@ namespace System.Windows.Forms
                 {
                     int zeroLum = luminosity;
                     int oneLum = NewLuma(HilightAdj, true);
-
-                    /*
-                    if (luminosity < 40) {
-                        zeroLum = 120;
-                        oneLum = NewLuma(120, HilightAdj, true);
-                    }
-                    else {
-                        zeroLum = luminosity;
-                        oneLum = NewLuma(HilightAdj, true);
-                    }
-                    */
-
                     return ColorFromHLS(hue, zeroLum + (int)((oneLum - zeroLum) * percLighter), saturation);
                 }
             }

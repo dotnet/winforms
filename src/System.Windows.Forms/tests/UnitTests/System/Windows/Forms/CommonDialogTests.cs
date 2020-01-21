@@ -11,10 +11,9 @@ using WinForms.Common.Tests;
 using Xunit;
 using static Interop;
 
-
 namespace System.Windows.Forms.Tests
 {
-    public class CommonDialogTests
+    public class CommonDialogTests : IClassFixture<ThreadExceptionFixture>
     {
         [WinFormsFact]
         public void Ctor_Default()
@@ -132,7 +131,7 @@ namespace System.Windows.Forms.Tests
             {
                 bool runDialogResult = bool.Parse(runDialogResultString);
                 DialogResult expectedDialogResult = (DialogResult)Enum.Parse(typeof(DialogResult), expectedDialogResultString);
-                
+
                 Application.EnableVisualStyles();
 
                 using var dialog = new SubCommonDialog
@@ -246,7 +245,7 @@ namespace System.Windows.Forms.Tests
             };
 
             dialog.HelpRequest += handler;
-            Assert.Equal(IntPtr.Zero, dialog.OwnerWndProc(IntPtr.Zero, (int)(User32.WindowMessage)field.GetValue(null), IntPtr.Zero, IntPtr.Zero));
+            Assert.Equal(IntPtr.Zero, dialog.OwnerWndProc(IntPtr.Zero, (int)(User32.WM)field.GetValue(null), IntPtr.Zero, IntPtr.Zero));
             Assert.Equal(1, callCount);
         }
 
@@ -266,7 +265,7 @@ namespace System.Windows.Forms.Tests
             };
 
             dialog.HelpRequest += handler;
-            Assert.Equal(IntPtr.Zero, dialog.OwnerWndProc(IntPtr.Zero, (int)(User32.WindowMessage)field.GetValue(null) + 1, IntPtr.Zero, IntPtr.Zero));
+            Assert.Equal(IntPtr.Zero, dialog.OwnerWndProc(IntPtr.Zero, (int)(User32.WM)field.GetValue(null) + 1, IntPtr.Zero, IntPtr.Zero));
             Assert.Equal(0, callCount);
         }
 

@@ -32,9 +32,9 @@
   </PropertyGroup>
   <!-- Arcade -->
   <PropertyGroup>
-    <MicrosoftDotNetGenFacadesPackageVersion>5.0.0-beta.20052.1</MicrosoftDotNetGenFacadesPackageVersion>
-    <MicrosoftDotNetRemoteExecutorVersion>5.0.0-beta.20052.1</MicrosoftDotNetRemoteExecutorVersion>
-    <MicrosoftDotNetXUnitExtensionsPackageVersion>5.0.0-beta.20052.1</MicrosoftDotNetXUnitExtensionsPackageVersion>
+    <MicrosoftDotNetGenFacadesPackageVersion>5.0.0-beta.20068.1</MicrosoftDotNetGenFacadesPackageVersion>
+    <MicrosoftDotNetRemoteExecutorVersion>5.0.0-beta.20068.1</MicrosoftDotNetRemoteExecutorVersion>
+    <MicrosoftDotNetXUnitExtensionsPackageVersion>5.0.0-beta.20068.1</MicrosoftDotNetXUnitExtensionsPackageVersion>
   </PropertyGroup>
   <!-- Below have no corresponding entries in Versions.Details.XML because they are not updated via Maestro -->
   <!-- XUnit-related (not extensions) -->
@@ -51,6 +51,10 @@
     <CoverletMSBuildPackageVersion>2.7.0</CoverletMSBuildPackageVersion>
     <CodecovVersion>1.9.0</CodecovVersion>
     <ReportGeneratorVersion>4.0.9</ReportGeneratorVersion>
+  </PropertyGroup>
+  <!-- External Analyzers -->
+  <PropertyGroup>
+    <MicrosoftCodeAnalysisPublicApiAnalyzers>2.9.8</MicrosoftCodeAnalysisPublicApiAnalyzers>
   </PropertyGroup>
   <!-- Additional unchanging dependencies -->
   <PropertyGroup>

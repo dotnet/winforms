@@ -7,7 +7,6 @@ using System.Drawing;
 using System.Globalization;
 using System.Runtime.InteropServices;
 
-///  this is the UBER container for ToolStripPanels.
 namespace System.Windows.Forms
 {
     [ComVisible(true)]
@@ -52,7 +51,6 @@ namespace System.Windows.Forms
                     controlCollection.AddInternal(bottomPanel);
                 }
                 // else consider throw new exception
-
             }
             finally
             {
@@ -433,7 +431,6 @@ namespace System.Windows.Forms
             {
                 c.ResumeLayout();
             }
-
         }
 
         internal override void RecreateHandleCore()
@@ -447,7 +444,6 @@ namespace System.Windows.Forms
                 }
             }
             base.RecreateHandleCore();
-
         }
 
         internal override bool AllowsKeyboardToolTip()
@@ -455,7 +451,7 @@ namespace System.Windows.Forms
             return false;
         }
 
-        internal class ToolStripContainerTypedControlCollection : WindowsFormsUtils.ReadOnlyControlCollection
+        internal class ToolStripContainerTypedControlCollection : ReadOnlyControlCollection
         {
             readonly ToolStripContainer owner;
             readonly Type contentPanelType = typeof(ToolStripContentPanel);
@@ -519,9 +515,6 @@ namespace System.Windows.Forms
                 }
                 base.SetChildIndexInternal(child, newIndex);
             }
-
         }
-
     }
-
 }

@@ -41,7 +41,7 @@ namespace System.Windows.Forms
                     {
                         return AccessibleRole.CheckButton;
                     }
-                    
+
                     return base.Role;
                 }
             }

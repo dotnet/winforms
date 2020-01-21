@@ -88,10 +88,6 @@ namespace System.Windows.Forms
             SetBoundsCore(bounds.X, bounds.Y, bounds.Width, bounds.Height, specified);
         }
 
-        /// <summary>
-        ///  Summary of CreateLayoutEngine.
-        /// </summary>
-        /// <param name=item></param>
         public override LayoutEngine LayoutEngine
         {
             get
@@ -135,7 +131,6 @@ namespace System.Windows.Forms
                 }
             }
             base.OnLayout(e);
-
         }
 
         protected override void SetDisplayedItems()
@@ -173,7 +168,5 @@ namespace System.Windows.Forms
                 return ((ToolStripOverflow)Owner).DisplayedItems.Count;
             }
         }
-
     }
-
 }

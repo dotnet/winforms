@@ -7,7 +7,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ListViewHitTestInfoTests
+    public class ListViewHitTestInfoTests : IClassFixture<ThreadExceptionFixture>
     {
         public static IEnumerable<object[]> Ctor_ListViewItem_ListViewSubItem_ListViewHitTestLocations_TestData()
         {

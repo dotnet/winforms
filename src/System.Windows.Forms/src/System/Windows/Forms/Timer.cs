@@ -111,7 +111,6 @@ namespace System.Windows.Forms
                                 // Create the timer window if needed.
                                 if (_timerWindow == null)
                                 {
-
                                     _timerWindow = new TimerNativeWindow(this);
                                 }
 
@@ -250,7 +249,7 @@ namespace System.Windows.Forms
 
             /// <summary>
             ///  Changes the interval of the timer without destroying the HWND.
-            /// <summary>
+            /// </summary>
             public void RestartTimer(int newInterval)
             {
                 StopTimer(IntPtr.Zero, destroyHwnd: false);
@@ -284,14 +283,14 @@ namespace System.Windows.Forms
                 // Fire a message across threads to destroy the timer and HWND on the thread that created it.
                 if (GetInvokeRequired(hWnd))
                 {
-                    User32.PostMessageW(new HandleRef(this, hWnd), User32.WindowMessage.WM_CLOSE);
+                    User32.PostMessageW(new HandleRef(this, hWnd), User32.WM.CLOSE);
                     return;
                 }
 
                 // Locking 'this' here is ok since this is an internal class.
                 lock (this)
                 {
-                    if (_stoppingTimer || hWnd == IntPtr.Zero || !UnsafeNativeMethods.IsWindow(new HandleRef(this, hWnd)))
+                    if (_stoppingTimer || hWnd == IntPtr.Zero || User32.IsWindow(new HandleRef(this, hWnd)).IsFalse())
                     {
                         return;
                     }

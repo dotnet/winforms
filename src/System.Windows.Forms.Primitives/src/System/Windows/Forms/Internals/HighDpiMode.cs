@@ -1,5 +1,4 @@
-﻿
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -10,7 +9,7 @@ namespace System.Windows.Forms
     /// </summary>
     /// <remarks>
     ///  <para>
-    ///  Specifying the high DPI mode is dependent on the OS version of the machine you're running your application on. 
+    ///  Specifying the high DPI mode is dependent on the OS version of the machine you're running your application on.
     ///  Setting the high DPI mode will work on machines running Windows 10 Creators Update (version 1703) or later versions.
     ///  </para>
     ///  <para>

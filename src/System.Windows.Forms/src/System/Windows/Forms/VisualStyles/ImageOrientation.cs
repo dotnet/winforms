@@ -8,7 +8,7 @@ namespace System.Windows.Forms.VisualStyles
     {
         Vertical = 0,
         Horizontal = 1,
-        //		TM_ENUM(0, IL, VERTICAL)
-        //		TM_ENUM(1, IL, HORIZONTAL)
+        //      TM_ENUM(0, IL, VERTICAL)
+        //      TM_ENUM(1, IL, HORIZONTAL)
     }
 }

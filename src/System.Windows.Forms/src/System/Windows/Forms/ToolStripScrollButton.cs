@@ -198,7 +198,6 @@ namespace System.Windows.Forms
 
             protected override void WndProc(ref Message m)
             {
-
                 if (m.Msg >= WindowMessages.WM_KEYFIRST && m.Msg <= WindowMessages.WM_KEYLAST)
                 {
                     //

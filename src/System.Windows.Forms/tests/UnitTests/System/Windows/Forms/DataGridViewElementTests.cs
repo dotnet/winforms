@@ -6,7 +6,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class DataGridViewElementTests
+    public class DataGridViewElementTests : IClassFixture<ThreadExceptionFixture>
     {
         [Fact]
         public void Ctor_Default()

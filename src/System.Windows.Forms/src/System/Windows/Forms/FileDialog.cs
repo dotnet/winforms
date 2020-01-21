@@ -535,13 +535,13 @@ namespace System.Windows.Forms
                                 {
                                     // This is the second CDN_FILEOK, so we want to ignore it.
                                     _ignoreSecondFileOkNotification = false;
-                                    UnsafeNativeMethods.SetWindowLong(new HandleRef(null, hWnd), 0, new HandleRef(null, NativeMethods.InvalidIntPtr));
+                                    User32.SetWindowLong(hWnd, 0, NativeMethods.InvalidIntPtr);
                                     return NativeMethods.InvalidIntPtr;
                                 }
                             }
                             if (!DoFileOk(notify->lpOFN))
                             {
-                                UnsafeNativeMethods.SetWindowLong(new HandleRef(null, hWnd), 0, new HandleRef(null, NativeMethods.InvalidIntPtr));
+                                User32.SetWindowLong(hWnd, 0, NativeMethods.InvalidIntPtr);
                                 return NativeMethods.InvalidIntPtr;
                             }
                             break;
@@ -687,9 +687,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        // If it's necessary to throw up a "This file exists, are you sure?" kind of
-        // MessageBox, here's where we do it
-        // Return value is whether or not the user hit "okay".
+        /// If it's necessary to throw up a "This file exists, are you sure?" kind of MessageBox,
+        /// here's where we do it. Return value is whether or not the user hit "okay".
         /// </summary>
         private protected virtual bool PromptUserIfAppropriate(string fileName)
         {
@@ -737,7 +736,7 @@ namespace System.Windows.Forms
             {
                 return returnValue;
             }
-            
+
             return RunDialogOld(hWndOwner);
         }
 

@@ -85,40 +85,8 @@ namespace System.Windows.Forms
             }
         }
 
-        [DllImport(ExternDll.User32, ExactSpelling = true)]
-        public static extern bool EnumChildWindows(HandleRef hwndParent, NativeMethods.EnumChildrenCallback lpEnumFunc, HandleRef lParam);
-
         [DllImport(ExternDll.Shell32, CharSet = CharSet.Auto)]
         public static extern int Shell_NotifyIcon(int message, NativeMethods.NOTIFYICONDATA pnid);
-
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public extern static bool InsertMenuItem(HandleRef hMenu, int uItem, bool fByPosition, NativeMethods.MENUITEMINFO_T lpmii);
-
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern IntPtr GetMenu(HandleRef hWnd);
-
-        [DllImport(Libraries.User32, CharSet = CharSet.Auto)]
-        public static extern BOOL GetMenuItemInfo(IntPtr hMenu, int uItem, bool fByPosition, [In, Out] NativeMethods.MENUITEMINFO_T lpmii);
-
-        public static BOOL GetMenuItemInfo(HandleRef hMenu, int uItem, bool fByPosition, NativeMethods.MENUITEMINFO_T lpmii)
-        {
-            BOOL result = GetMenuItemInfo(hMenu.Handle, uItem, fByPosition, lpmii);
-            GC.KeepAlive(hMenu.Wrapper);
-            return result;
-        }
-
-        [DllImport(Libraries.User32, CharSet = CharSet.Auto)]
-        public static extern BOOL GetMenuItemInfo(IntPtr hMenu, int uItem, bool fByPosition, [In, Out] NativeMethods.MENUITEMINFO_T_RW lpmii);
-
-        public static BOOL GetMenuItemInfo(HandleRef hMenu, int uItem, bool fByPosition, NativeMethods.MENUITEMINFO_T_RW lpmii)
-        {
-            BOOL result = GetMenuItemInfo(hMenu.Handle, uItem, fByPosition, lpmii);
-            GC.KeepAlive(hMenu.Wrapper);
-            return result;
-        }
-
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public extern static bool SetMenuItemInfo(HandleRef hMenu, int uItem, bool fByPosition, NativeMethods.MENUITEMINFO_T lpmii);
 
         [DllImport(ExternDll.Comdlg32, SetLastError = true, CharSet = CharSet.Auto)]
         public static extern bool GetOpenFileName([In, Out] NativeMethods.OPENFILENAME_I ofn);
@@ -171,9 +139,6 @@ namespace System.Windows.Forms
 
         [DllImport(ExternDll.Comdlg32, SetLastError = true, CharSet = CharSet.Auto)]
         public static extern bool GetSaveFileName([In, Out] NativeMethods.OPENFILENAME_I ofn);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true)]
-        public static extern IntPtr ChildWindowFromPointEx(IntPtr hwndParent, Point pt, int uFlags);
 
         [DllImport(ExternDll.Kernel32, CharSet = CharSet.Auto)]
         public static extern uint GetShortPathName(string lpszLongPath, StringBuilder lpszShortPath, uint cchBuffer);
@@ -292,12 +257,6 @@ namespace System.Windows.Forms
         public extern static IntPtr SendMessage(HandleRef hWnd, int Msg, IntPtr wParam, NativeMethods.ListViewCompareCallback pfnCompare);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern IntPtr GetDlgItem(HandleRef hWnd, int nIDDlgItem);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern IntPtr GetDlgItem(IntPtr hWnd, int nIDDlgItem);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern int GetDlgItemInt(IntPtr hWnd, int nIDDlgItem, bool[] err, bool signed);
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
@@ -321,67 +280,11 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.User32, EntryPoint = "SendMessage", CharSet = CharSet.Auto)]
         public extern static IntPtr SendCallbackMessage(HandleRef hWnd, int Msg, IntPtr wParam, IntPtr lParam);
 
-        //GetWindowLong won't work correctly for 64-bit: we should use GetWindowLongPtr instead.  On
-        //32-bit, GetWindowLongPtr is just #defined as GetWindowLong.  GetWindowLong really should
-        //take/return int instead of IntPtr/HandleRef, but since we're running this only for 32-bit
-        //it'll be OK.
-        public static IntPtr GetWindowLong(HandleRef hWnd, int nIndex)
-        {
-            if (IntPtr.Size == 4)
-            {
-                return GetWindowLong32(hWnd, nIndex);
-            }
-            return GetWindowLongPtr64(hWnd, nIndex);
-        }
-
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto, EntryPoint = "GetWindowLong")]
-        public static extern IntPtr GetWindowLong32(HandleRef hWnd, int nIndex);
-
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto, EntryPoint = "GetWindowLongPtr")]
-        public static extern IntPtr GetWindowLongPtr64(HandleRef hWnd, int nIndex);
-
-        //SetWindowLong won't work correctly for 64-bit: we should use SetWindowLongPtr instead.  On
-        //32-bit, SetWindowLongPtr is just #defined as SetWindowLong.  SetWindowLong really should
-        //take/return int instead of IntPtr/HandleRef, but since we're running this only for 32-bit
-        //it'll be OK.
-        public static IntPtr SetWindowLong(HandleRef hWnd, int nIndex, HandleRef dwNewLong)
-        {
-            if (IntPtr.Size == 4)
-            {
-                return SetWindowLongPtr32(hWnd, nIndex, dwNewLong);
-            }
-            return SetWindowLongPtr64(hWnd, nIndex, dwNewLong);
-        }
-
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto, EntryPoint = "SetWindowLong")]
-        public static extern IntPtr SetWindowLongPtr32(HandleRef hWnd, int nIndex, HandleRef dwNewLong);
-
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto, EntryPoint = "SetWindowLongPtr")]
-        public static extern IntPtr SetWindowLongPtr64(HandleRef hWnd, int nIndex, HandleRef dwNewLong);
-
-        public static IntPtr SetWindowLong(HandleRef hWnd, int nIndex, NativeMethods.WndProc wndproc)
-        {
-            if (IntPtr.Size == 4)
-            {
-                return SetWindowLongPtr32(hWnd, nIndex, wndproc);
-            }
-            return SetWindowLongPtr64(hWnd, nIndex, wndproc);
-        }
-
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto, EntryPoint = "SetWindowLong")]
-        public static extern IntPtr SetWindowLongPtr32(HandleRef hWnd, int nIndex, NativeMethods.WndProc wndproc);
-
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto, EntryPoint = "SetWindowLongPtr")]
-        public static extern IntPtr SetWindowLongPtr64(HandleRef hWnd, int nIndex, NativeMethods.WndProc wndproc);
-
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern bool SetForegroundWindow(HandleRef hWnd);
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public static extern IntPtr DefFrameProc(IntPtr hWnd, IntPtr hWndClient, int msg, IntPtr wParam, IntPtr lParam);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto, SetLastError = true)]
-        public static extern bool SetLayeredWindowAttributes(HandleRef hwnd, int crKey, byte bAlpha, int dwFlags);
 
         [DllImport(ExternDll.Kernel32, CharSet = CharSet.Auto)]
         public static extern void GetStartupInfo([In, Out] NativeMethods.STARTUPINFO_I startupinfo_i);
@@ -391,9 +294,6 @@ namespace System.Windows.Forms
 
         [DllImport(ExternDll.Gdi32, SetLastError = true, CharSet = CharSet.Unicode)]
         public static extern IntPtr CreateIC(string lpszDriverName, string lpszDeviceName, string lpszOutput, HandleRef /*DEVMODE*/ lpInitData);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern bool IsWindow(HandleRef hWnd);
 
         //for RegionData
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
@@ -453,33 +353,6 @@ namespace System.Windows.Forms
             }
         }
 
-        [ComImport(), Guid("0000010C-0000-0000-C000-000000000046"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IPersist
-        {
-            void GetClassID(
-                           [Out]
-                           out Guid pClassID);
-        }
-
-        [ComImport]
-        [Guid("37D84F60-42CB-11CE-8135-00AA004BB851")]
-        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IPersistPropertyBag /* : IPersist */
-        {
-            void GetClassID(out Guid pClassID);
-
-            void InitNew();
-
-            void Load(
-                Ole32.IPropertyBag pPropBag,
-                Ole32.IErrorLog pErrorLog);
-
-            void Save(
-                Ole32.IPropertyBag pPropBag,
-                BOOL fClearDirty,
-                BOOL fSaveAllProperties);
-        }
-
         [ComImport]
         [Guid("00020400-0000-0000-C000-000000000046")]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
@@ -508,7 +381,7 @@ namespace System.Windows.Forms
                 Ole32.DispatchID dispIdMember,
                 Guid* riid,
                 uint lcid,
-                uint dwFlags,
+                Oleaut32.DISPATCH dwFlags,
                 Ole32.DISPPARAMS* pDispParams,
                 [Out, MarshalAs(UnmanagedType.LPArray)] object[] pVarResult,
                 Ole32.EXCEPINFO* pExcepInfo,

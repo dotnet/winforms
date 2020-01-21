@@ -8,7 +8,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class HelpEventArgsTests
+    public class HelpEventArgsTests : IClassFixture<ThreadExceptionFixture>
     {
         public static IEnumerable<object[]> Ctor_Point_TestData()
         {

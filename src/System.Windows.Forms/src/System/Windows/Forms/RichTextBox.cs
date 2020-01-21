@@ -266,7 +266,6 @@ namespace System.Windows.Forms
 
             set
             {
-
                 if (value < 0)
                 {
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(BulletIndent), value));
@@ -807,7 +806,6 @@ namespace System.Windows.Forms
                     (int)RichTextBoxScrollBars.ForcedVertical,
                     (int)RichTextBoxScrollBars.ForcedBoth))
                 {
-
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(RichTextBoxScrollBars));
                 }
 
@@ -882,7 +880,6 @@ namespace System.Windows.Forms
                 };
                 switch (value)
                 {
-
                     case HorizontalAlignment.Left:
                         pf.wAlignment = RichTextBoxConstants.PFA_LEFT;
                         break;
@@ -1252,7 +1249,6 @@ namespace System.Windows.Forms
         {
             get
             {
-
                 if (!IsHandleCreated)
                 {
                     return base.SelectionLength;
@@ -1585,7 +1581,7 @@ namespace System.Windows.Forms
                         }
                         StreamIn(value, RichTextBoxConstants.SF_TEXT | RichTextBoxConstants.SF_UNICODE);
                         // reset Modified
-                        SendMessage(EditMessages.EM_SETMODIFY, 0, 0);
+                        User32.SendMessageW(this, (User32.WM)User32.EM.SETMODIFY);
                     }
                 }
             }
@@ -2136,8 +2132,7 @@ namespace System.Windows.Forms
                 }
 
                 UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), RichEditMessages.EM_EXSETSEL, 0, ref chrg);
-                SendMessage(EditMessages.EM_SCROLLCARET, 0, 0);
-
+                User32.SendMessageW(this, (User32.WM)User32.EM.SCROLLCARET);
             }
 
             return position;
@@ -2216,9 +2211,8 @@ namespace System.Windows.Forms
                     cpMin = chrg.cpMin,
                     cpMax = chrg.cpMax
                 }
-
             };
-            
+
             // Characters we have slurped into memory in order to search
             var charBuffer = new UnicodeCharBuffer(CHAR_BUFFER_LEN + 1);
             txrg.lpstrText = charBuffer.AllocCoTaskMem();
@@ -2266,7 +2260,7 @@ namespace System.Windows.Forms
 
                     // go get the text in this range, if we didn't get any text then punt
                     int len;
-                    len = (int)User32.SendMessageW(this, (User32.WindowMessage)RichEditMessages.EM_GETTEXTRANGE, IntPtr.Zero, ref txrg);
+                    len = (int)User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_GETTEXTRANGE, IntPtr.Zero, ref txrg);
                     if (len == 0)
                     {
                         chrg.cpMax = chrg.cpMin = -1; // Hit end of control without finding what we wanted
@@ -2344,7 +2338,6 @@ namespace System.Windows.Forms
             if ((cf.dwMask & RichTextBoxConstants.CFM_COLOR) != 0
                 && ColorTranslator.ToWin32(value) == cf.crTextColor)
             {
-
                 return true;
             }
 
@@ -2455,7 +2448,7 @@ namespace System.Windows.Forms
         public override int GetCharIndexFromPosition(Point pt)
         {
             var wpt = new Point(pt.X, pt.Y);
-            int index = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), EditMessages.EM_CHARFROMPOS, 0, ref wpt);
+            int index = (int)User32.SendMessageW(this, (User32.WM)User32.EM.CHARFROMPOS, IntPtr.Zero, ref wpt);
 
             string t = Text;
             // EM_CHARFROMPOS will return an invalid number if the last character in the RichEdit
@@ -2498,7 +2491,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Returns the location of the character at the given index.
         /// </summary>
-        public override Point GetPositionFromCharIndex(int index)
+        public unsafe override Point GetPositionFromCharIndex(int index)
         {
             if (richEditMajorVersion == 2)
             {
@@ -2511,7 +2504,7 @@ namespace System.Windows.Forms
             }
 
             var pt = new Point();
-            UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), EditMessages.EM_POSFROMCHAR, ref pt, index);
+            User32.SendMessageW(this, (User32.WM)User32.EM.POSFROMCHAR, (IntPtr)(&pt), (IntPtr)index);
             return pt;
         }
 
@@ -2723,7 +2716,7 @@ namespace System.Windows.Forms
                 // will resize itself to the size of the parent's client area.  Don't know why...
                 User32.PostMessageW(
                     this,
-                    (User32.WindowMessage)RichEditMessages.EM_SETOPTIONS,
+                    (User32.WM)RichEditMessages.EM_SETOPTIONS,
                     (IntPtr)RichTextBoxConstants.ECOOP_OR,
                     (IntPtr)RichTextBoxConstants.ECO_SELECTIONBAR);
             }
@@ -3188,11 +3181,10 @@ namespace System.Windows.Forms
                 }
 
                 // set the modify tag on the control
-                SendMessage(EditMessages.EM_SETMODIFY, -1, 0);
+                User32.SendMessageW(this, (User32.WM)User32.EM.SETMODIFY, (IntPtr)(-1));
 
                 // EM_GETLINECOUNT will cause the RichTextBox to recalculate its line indexes
-                SendMessage(EditMessages.EM_GETLINECOUNT, 0, 0);
-
+                User32.SendMessageW(this, (User32.WM)User32.EM.GETLINECOUNT);
             }
             finally
             {
@@ -3306,19 +3298,7 @@ namespace System.Windows.Forms
                 byte* bp;
                 long l;
 
-                /*
-                l = (long) es.dwCookie;
-                bp = (byte *) &l;
-                for (int i=0; i < sizeof(long); i++) {
-                    es64.contents[i] = bp[i];
-                }*/
                 *((long*)es64p) = (long)es.dwCookie;
-                /*
-                int il = es.dwError;
-                bp = (byte *) &il;
-                for (int i=0; i < sizeof(int); i++) {
-                    es64.contents[i+8] = bp[i];
-                }*/
                 *((int*)(es64p + 8)) = es.dwError;
 
                 l = (long)Marshal.GetFunctionPointerForDelegate(es.pfnCallback);
@@ -3327,7 +3307,6 @@ namespace System.Windows.Forms
                 {
                     es64.contents[i + 12] = bp[i];
                 }
-                //*((long *)(es64p + 12)) = (long) Marshal.GetFunctionPointerForDelegate(es.pfnCallback);
             }
 
             return es64;
@@ -3344,29 +3323,6 @@ namespace System.Windows.Forms
 
             return errorVal;
         }
-
-        /* FOR 64 BIT DEBUGGING
-                private unsafe string PrintBytes(NativeMethods.EDITSTREAM es) {
-                    StringBuilder sb = new StringBuilder();
-                    fixed (IntPtr *ip = &es.dwCookie) {
-                        byte *bytep = (byte *) ip;
-                        for (int i=0; i < Marshal.SizeOf(es); i++) {
-                            sb.Append(bytep[i].ToString() + " ");
-                        }
-                    }
-                    return sb.ToString();
-                }
-
-                private unsafe string PrintBytes(NativeMethods.EDITSTREAM64 es64) {
-                    StringBuilder sb = new StringBuilder();
-                    fixed (byte *bytep = &es64.contents[0]) {
-                        for (int i=0; i < Marshal.SizeOf(es64); i++) {
-                            sb.Append(bytep[i].ToString() + " ");
-                        }
-                    }
-                    return sb.ToString();
-                }
-        */
 
         private void UpdateOleCallback()
         {
@@ -3476,7 +3432,7 @@ namespace System.Windows.Forms
         ///  Converts a CHARRANGE to a string.
         /// </summary>
         /// <remarks>
-        ///  The behavior of this is dependent on the current window class name being used. 
+        ///  The behavior of this is dependent on the current window class name being used.
         ///  We have to create a CharBuffer of the type of RichTextBox DLL we're using,
         ///  not based on the SystemCharWidth.
         /// </remarks>
@@ -3502,7 +3458,7 @@ namespace System.Windows.Forms
             }
 
             txrg.lpstrText = unmanagedBuffer;
-            int len = (int)User32.SendMessageW(this, (User32.WindowMessage)RichEditMessages.EM_GETTEXTRANGE, IntPtr.Zero, ref txrg);
+            int len = (int)User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_GETTEXTRANGE, IntPtr.Zero, ref txrg);
             Debug.Assert(len != 0, "CHARRANGE from RichTextBox was bad! - impossible?");
             charBuffer.PutCoTaskMem(unmanagedBuffer);
             if (txrg.lpstrText != IntPtr.Zero)
@@ -3529,17 +3485,14 @@ namespace System.Windows.Forms
             //
             if (m.LParam == Handle && !GetState(States.CreatingHandle))
             {
-                switch (PARAM.HIWORD(m.WParam))
+                switch ((User32.EN)PARAM.HIWORD(m.WParam))
                 {
-
-                    case NativeMethods.EN_HSCROLL:
+                    case User32.EN.HSCROLL:
                         OnHScroll(EventArgs.Empty);
                         break;
-
-                    case NativeMethods.EN_VSCROLL:
+                    case User32.EN.VSCROLL:
                         OnVScroll(EventArgs.Empty);
                         break;
-
                     default:
                         base.WndProc(ref m);
                         break;
@@ -3637,7 +3590,7 @@ namespace System.Windows.Forms
                                 // Throw an exception for the following
                                 //
                                 case RichEditMessages.EM_SETPARAFORMAT:
-                                case EditMessages.EM_REPLACESEL:
+                                case (int)User32.EM.REPLACESEL:
                                     break;
 
                                 case RichEditMessages.EM_STREAMIN:
@@ -3749,19 +3702,16 @@ namespace System.Windows.Forms
             // Is either the Hangul or HangulFull IME currently in use?
             if (ImeMode == ImeMode.Hangul || ImeMode == ImeMode.HangulFull)
             {
-
                 // Is the IME CompositionWindow open?
                 int compMode = unchecked((int)(long)SendMessage(RichEditMessages.EM_GETIMECOMPMODE, 0, 0));
                 if (RichTextBoxConstants.ICM_NOTOPEN != compMode)
                 {
-
                     int textLength = User32.GetWindowTextLengthW(new HandleRef(this, Handle));
                     if (selStart == selEnd && textLength == MaxLength)
                     {
-
                         SendMessage(WindowMessages.WM_KILLFOCUS, 0, 0);
                         SendMessage(WindowMessages.WM_SETFOCUS, 0, 0);
-                        User32.PostMessageW(this, (User32.WindowMessage)EditMessages.EM_SETSEL, (IntPtr)(selEnd - 1), (IntPtr)selEnd);
+                        User32.PostMessageW(this, (User32.WM)User32.EM.SETSEL, (IntPtr)(selEnd - 1), (IntPtr)selEnd);
                     }
                 }
             }
@@ -3967,14 +3917,12 @@ namespace System.Windows.Forms
 
             public HRESULT QueryAcceptData(IComDataObject lpdataobj, IntPtr lpcfFormat, uint reco, BOOL fReally, IntPtr hMetaPict)
             {
-
                 Debug.WriteLineIf(RichTextDbg.TraceVerbose, "IRichEditOleCallback::QueryAcceptData(reco=" + reco + ")");
 
                 if (reco == NativeMethods.RECO_DROP)
                 {
                     if (owner.AllowDrop || owner.EnableAutoDragDrop)
                     {
-
                         MouseButtons b = Control.MouseButtons;
                         Keys k = Control.ModifierKeys;
 

@@ -496,7 +496,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
                 Attribute[] temp = new Attribute[pi.Attributes.Count];
                 pi.Attributes.CopyTo(temp, 0);
-                //Debug.Assert(pi.nonbrowsable || pi.valueType != null, "Browsable property '" + pi.name + "' has a null type");
                 props[pi.Index] = new Com2PropertyDescriptor(pi.DispId, pi.Name, temp, pi.ReadOnly != PropInfo.ReadOnlyFalse, pi.ValueType, pi.TypeData, !hr.Succeeded());
                 if (pi.IsDefault)
                 {
@@ -652,7 +651,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                         if (funcDesc.invkind == Ole32.INVOKEKIND.FUNC ||
                             (dispidToGet != Ole32.DispatchID.MEMBERID_NIL && funcDesc.memid != dispidToGet))
                         {
-
                             if (funcDesc.memid == Ole32.DispatchID.ABOUTBOX)
                             {
                                 addAboutBox = true;
@@ -667,10 +665,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
                         if (isPropGet)
                         {
-
                             if (funcDesc.cParams != 0)
                             {
-
                                 continue;
                             }
 
@@ -684,7 +680,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                             Debug.Assert(funcDesc.lprgelemdescParam != null, "ELEMDESC param is null!");
                             if (funcDesc.lprgelemdescParam == null || funcDesc.cParams != 1)
                             {
-
                                 continue;
                             }
 
@@ -763,7 +758,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                         hr = enumTypeInfo.GetVarDesc(i, ref pVarDesc);
                         if (!hr.Succeeded() || pVarDesc == IntPtr.Zero)
                         {
-                            Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "ProcessTypeInfoEnum: ignoring item 0x{0:X} because ITypeInfo::GetVarDesc returned hr=0x{1:X} or NULL", hr));
+                            Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "ProcessTypeInfoEnum: ignoring item 0x{0:X} because ITypeInfo::GetVarDesc returned hr=0x{1:X} or NULL", i, hr));
                             continue;
                         }
 
@@ -782,7 +777,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                             hr = enumTypeInfo.GetDocumentation(varDesc.memid, ref name, ref helpstr, null, null);
                             if (!hr.Succeeded())
                             {
-                                Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "ProcessTypeInfoEnum: ignoring item 0x{0:X} because ITypeInfo::GetDocumentation returned hr=0x{1:X} or NULL", hr));
+                                Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "ProcessTypeInfoEnum: ignoring item 0x{0:X} because ITypeInfo::GetDocumentation returned hr=0x{1:X} or NULL", i, hr));
                                 continue;
                             }
 
@@ -829,7 +824,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     // just build our enumerator
                     if (strs.Count > 0)
                     {
-
                         // get the IUnknown value of the ITypeInfo
                         IntPtr pTypeInfoUnk = Marshal.GetIUnknownForObject(enumTypeInfo);
 
@@ -870,7 +864,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                             }
                         }
                     }
-
                 }
                 finally
                 {
@@ -901,7 +894,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     hr = typeInfo.GetVarDesc(i, ref pVarDesc);
                     if (!hr.Succeeded() || pVarDesc == IntPtr.Zero)
                     {
-                        Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "ProcessTypeInfoEnum: ignoring variable item 0x{0:X} because ITypeInfo::GetFuncDesc returned hr=0x{1:X} or NULL", hr));
+                        Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "ProcessTypeInfoEnum: ignoring variable item 0x{0:X} because ITypeInfo::GetFuncDesc returned hr=0x{1:X} or NULL", i, hr));
                         continue;
                     }
 

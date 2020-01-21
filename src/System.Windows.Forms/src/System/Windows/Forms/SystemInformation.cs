@@ -88,7 +88,7 @@ namespace System.Windows.Forms
             {
                 return GetCurrentSystemMetrics(SystemMetric.SM_CXVSCROLL, (uint)dpi);
             }
-            
+
             return GetSystemMetrics(SystemMetric.SM_CXVSCROLL);
         }
 
@@ -106,7 +106,7 @@ namespace System.Windows.Forms
             {
                 return GetCurrentSystemMetrics(SystemMetric.SM_CYHSCROLL, (uint)dpi);
             }
-            
+
             return GetSystemMetrics(SystemMetric.SM_CYHSCROLL);
         }
 
@@ -137,7 +137,7 @@ namespace System.Windows.Forms
                 return new Size(GetCurrentSystemMetrics(SystemMetric.SM_CXBORDER, (uint)dpi),
                                 GetCurrentSystemMetrics(SystemMetric.SM_CYBORDER, (uint)dpi));
             }
-            
+
             return BorderSize;
         }
 
@@ -281,7 +281,7 @@ namespace System.Windows.Forms
             {
                 return GetCurrentSystemMetrics(SystemMetric.SM_CXHSCROLL, (uint)dpi);
             }
-            
+
             return GetSystemMetrics(SystemMetric.SM_CXHSCROLL);
         }
 

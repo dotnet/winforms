@@ -13,7 +13,7 @@ namespace System.Windows.Forms.Internal
         protected override void CreateBrush()
         {
             IntPtr nativeHandle = Gdi32.CreateSolidBrush(ColorTranslator.ToWin32(Color));
-            
+
             // Don't use Debug.Assert, DbgUtil.GetLastErrorStr would always be evaluated.
             if (nativeHandle == IntPtr.Zero)
             {

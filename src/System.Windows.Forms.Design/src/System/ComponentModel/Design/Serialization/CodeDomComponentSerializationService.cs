@@ -221,7 +221,7 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        ///  The SerializationStore class is an implementation-specific class that stores serialization data for the component serialization service.  
+        ///  The SerializationStore class is an implementation-specific class that stores serialization data for the component serialization service.
         ///  The service adds state to this serialization store.  Once the store is closed it can be saved to a stream.  A serialization store can
         ///  be deserialized at a later date by the same type of serialization service. SerializationStore implements the IDisposable interface such
         ///  that Dispose  simply calls the Close method.  Dispose is implemented as a private interface to avoid confusion.
@@ -589,7 +589,6 @@ namespace System.ComponentModel.Design.Serialization
 #if DEBUG
             internal static void TraceCode(string name, object code)
             {
-
                 if (code == null || !s_trace.TraceVerbose)
                 {
                     return;
@@ -1122,9 +1121,12 @@ namespace System.ComponentModel.Design.Serialization
                     throw new NotSupportedException();
                 }
 
-                // <summary>
-                // For everything in the serialization manager's container, we need a variable ref, just in case something that has changed has a reference to another object. We also must do this for everything that we are serializing that is not marked as EntireObject.  Otherwise reference could leak and cause the entire object to be serialized.
-                // <summary>
+                /// <summary>
+                ///  For everything in the serialization manager's container, we need a variable ref,
+                ///  just in case something that has changed has a reference to another object. We also
+                ///  must do this for everything that we are serializing that is not marked as EntireObject.
+                ///  Otherwise reference could leak and cause the entire object to be serialized.
+                /// </summary>
                 internal void SetupVariableReferences(IDesignerSerializationManager manager, IContainer container, IDictionary objectData, IList shimObjectNames)
                 {
                     foreach (IComponent c in container.Components)
@@ -1496,7 +1498,6 @@ namespace System.ComponentModel.Design.Serialization
             /// </summary>
             private class LocalServices : IServiceProvider, IResourceService
             {
-
                 private readonly CodeDomSerializationStore _store;
                 private readonly IServiceProvider _provider;
 
@@ -1632,7 +1633,6 @@ namespace System.ComponentModel.Design.Serialization
                 {
                     return ((IDesignerSerializationManager)_manager).GetService(serviceType);
                 }
-
             }
 
             /// <summary>

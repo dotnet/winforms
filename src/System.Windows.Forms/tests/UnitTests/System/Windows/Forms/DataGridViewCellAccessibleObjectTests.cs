@@ -8,7 +8,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class DataGridViewCellAccessibleObjectTests : DataGridViewCell
+    public class DataGridViewCellAccessibleObjectTests : DataGridViewCell, IClassFixture<ThreadExceptionFixture>
     {
         [Fact]
         public void DataGridViewCellAccessibleObject_Ctor_Default()

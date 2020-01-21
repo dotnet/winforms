@@ -69,21 +69,21 @@ namespace System.Windows.Forms.Design
             // Add default mask descriptors to the mask description list.
             AddDefaultMaskDescriptors(_maskedTextBox.Culture);
 
-            // 
+            //
             // maskDescriptionHeader
-            // 
+            //
             _maskDescriptionHeader.Text = SR.MaskDesignerDialogMaskDescription;
             _maskDescriptionHeader.Width = _listViewCannedMasks.Width / 3;
-            // 
+            //
             // dataFormatHeader
-            // 
+            //
             _dataFormatHeader.Text = SR.MaskDesignerDialogDataFormat;
             _dataFormatHeader.Width = _listViewCannedMasks.Width / 3;
-            // 
+            //
             // validatingTypeHeader
-            // 
+            //
             _validatingTypeHeader.Text = SR.MaskDesignerDialogValidatingType;
-            _validatingTypeHeader.Width = (_listViewCannedMasks.Width / 3) - SystemInformation.VerticalScrollBarWidth - 4;	// so no h-scrollbar.
+            _validatingTypeHeader.Width = (_listViewCannedMasks.Width / 3) - SystemInformation.VerticalScrollBarWidth - 4;  // so no h-scrollbar.
             ResumeLayout(false);
 
             HookEvents();
@@ -127,21 +127,21 @@ namespace System.Windows.Forms.Design
             _okCancelTableLayoutPanel.SuspendLayout();
             ((ISupportInitialize)(_errorProvider)).BeginInit();
             SuspendLayout();
-            // 
+            //
             // maskedTextBox
-            // 
+            //
             resources.ApplyResources(_maskedTextBox, "maskedTextBox");
             _maskedTextBox.Margin = new Padding(3, 3, 18, 0);
             _maskedTextBox.Name = "maskedTextBox";
-            // 
+            //
             // lblHeader
-            // 
+            //
             resources.ApplyResources(_lblHeader, "lblHeader");
             _lblHeader.Margin = new Padding(0, 0, 0, 3);
             _lblHeader.Name = "lblHeader";
-            // 
+            //
             // listViewCannedMasks
-            // 
+            //
             resources.ApplyResources(_listViewCannedMasks, "listViewCannedMasks");
             _listViewCannedMasks.Columns.AddRange(new ColumnHeader[] {
             _maskDescriptionHeader,
@@ -154,47 +154,47 @@ namespace System.Windows.Forms.Design
             _listViewCannedMasks.Name = "listViewCannedMasks";
             _listViewCannedMasks.Sorting = SortOrder.None; // We'll do the sorting ourselves.
             _listViewCannedMasks.View = View.Details;
-            // 
+            //
             // maskDescriptionHeader
-            // 
+            //
             resources.ApplyResources(_maskDescriptionHeader, "maskDescriptionHeader");
-            // 
+            //
             // dataFormatHeader
-            // 
+            //
             resources.ApplyResources(_dataFormatHeader, "dataFormatHeader");
-            // 
+            //
             // validatingTypeHeader
-            // 
+            //
             resources.ApplyResources(_validatingTypeHeader, "validatingTypeHeader");
-            // 
+            //
             // btnOK
-            // 
+            //
             resources.ApplyResources(_btnOK, "btnOK");
             _btnOK.DialogResult = DialogResult.OK;
             _btnOK.Margin = new Padding(0, 0, 3, 0);
             _btnOK.MinimumSize = new Drawing.Size(75, 23);
             _btnOK.Name = "btnOK";
             _btnOK.Padding = new Padding(10, 0, 10, 0);
-            // 
+            //
             // btnCancel
-            // 
+            //
             resources.ApplyResources(_btnCancel, "btnCancel");
             _btnCancel.DialogResult = DialogResult.Cancel;
             _btnCancel.Margin = new Padding(3, 0, 0, 0);
             _btnCancel.MinimumSize = new Drawing.Size(75, 23);
             _btnCancel.Name = "btnCancel";
             _btnCancel.Padding = new Padding(10, 0, 10, 0);
-            // 
+            //
             // checkBoxUseValidatingType
-            // 
+            //
             resources.ApplyResources(_checkBoxUseValidatingType, "checkBoxUseValidatingType");
             _checkBoxUseValidatingType.Checked = true;
             _checkBoxUseValidatingType.CheckState = CheckState.Checked;
             _checkBoxUseValidatingType.Margin = new Padding(0, 0, 0, 3);
             _checkBoxUseValidatingType.Name = "checkBoxUseValidatingType";
-            // 
+            //
             // maskTryItTable
-            // 
+            //
             resources.ApplyResources(_maskTryItTable, "maskTryItTable");
             _maskTryItTable.ColumnStyles.Add(new ColumnStyle());
             _maskTryItTable.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
@@ -208,27 +208,27 @@ namespace System.Windows.Forms.Design
             _maskTryItTable.Name = "maskTryItTable";
             _maskTryItTable.RowStyles.Add(new RowStyle());
             _maskTryItTable.RowStyles.Add(new RowStyle());
-            // 
+            //
             // lblMask
-            // 
+            //
             resources.ApplyResources(_lblMask, "lblMask");
             _lblMask.Margin = new Padding(0, 0, 3, 3);
             _lblMask.Name = "lblMask";
-            // 
+            //
             // txtBoxMask
-            // 
+            //
             resources.ApplyResources(_txtBoxMask, "txtBoxMask");
             _txtBoxMask.Margin = new Padding(3, 0, 18, 3);
             _txtBoxMask.Name = "txtBoxMask";
-            // 
+            //
             // lblTryIt
-            // 
+            //
             resources.ApplyResources(_lblTryIt, "lblTryIt");
             _lblTryIt.Margin = new Padding(0, 3, 3, 0);
             _lblTryIt.Name = "lblTryIt";
-            // 
+            //
             // overarchingTableLayoutPanel
-            // 
+            //
             resources.ApplyResources(_overarchingTableLayoutPanel, "overarchingTableLayoutPanel");
             _overarchingTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
             _overarchingTableLayoutPanel.Controls.Add(_maskTryItTable, 0, 3);
@@ -241,9 +241,9 @@ namespace System.Windows.Forms.Design
             _overarchingTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
             _overarchingTableLayoutPanel.RowStyles.Add(new RowStyle());
             _overarchingTableLayoutPanel.RowStyles.Add(new RowStyle());
-            // 
+            //
             // okCancelTableLayoutPanel
-            // 
+            //
             resources.ApplyResources(_okCancelTableLayoutPanel, "okCancelTableLayoutPanel");
             _okCancelTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
             _okCancelTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
@@ -252,14 +252,14 @@ namespace System.Windows.Forms.Design
             _okCancelTableLayoutPanel.Margin = new Padding(0, 6, 0, 0);
             _okCancelTableLayoutPanel.Name = "okCancelTableLayoutPanel";
             _okCancelTableLayoutPanel.RowStyles.Add(new RowStyle());
-            // 
+            //
             // errorProvider
-            // 
+            //
             _errorProvider.BlinkStyle = ErrorBlinkStyle.NeverBlink;
             _errorProvider.ContainerControl = this;
-            // 
+            //
             // MaskDesignerDialog
-            // 
+            //
             resources.ApplyResources(this, "$this");
             AcceptButton = _btnOK;
             CancelButton = _btnCancel;
@@ -280,7 +280,6 @@ namespace System.Windows.Forms.Design
             _okCancelTableLayoutPanel.PerformLayout();
             ((ISupportInitialize)(_errorProvider)).EndInit();
             ResumeLayout(false);
-
         }
 
         /// <summary>
@@ -479,12 +478,7 @@ namespace System.Windows.Forms.Design
             // Sort MaskDescriptor collection.
             _maskDescriptors.Sort(new MaskDescriptorComparer(sortType, _listViewSortOrder));
 
-            // Sorting the ListView items forces handle recreation, since we have the items sorted and know what item to select
-            // it is better for us to replace the items ourselves.  This way also avoids problems with the selected item  and 
-            // the custom entry not getting properly added.
-            // this.listViewCannedMasks.Sort();
-
-            // Since we need to pre-process each item before inserting it in the ListView, it is better to remove all items 
+            // Since we need to pre-process each item before inserting it in the ListView, it is better to remove all items
             // from it first and then add the sorted ones back (no replace).  Stop redrawing while we change the list.
 
             UnsafeNativeMethods.SendMessage(_listViewCannedMasks.Handle, Interop.WindowMessages.WM_SETREDRAW, false, /* unused = */ 0);

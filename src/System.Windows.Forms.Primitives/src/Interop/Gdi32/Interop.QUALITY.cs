@@ -51,7 +51,7 @@ internal static partial class Interop
             ///  - The font has tuned embedded bitmaps, for any font sizes that contain the embedded bitmaps.
             ///  For example, this occurs commonly in East Asian fonts.
             ///  If set, text is rendered (when possible) using ClearType antialiasing method.
-            /// <summary>
+            /// </summary>
             CLEARTYPE = 5,
             CLEARTYPE_NATURAL = 6
         }

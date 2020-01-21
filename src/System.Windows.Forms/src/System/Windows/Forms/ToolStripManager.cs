@@ -154,7 +154,7 @@ namespace System.Windows.Forms
             }
         }
 
-        ///<summary>Static events only!!!</summary>
+        /// <summary>Static events only!!!</summary>
         private static void AddEventHandler(int key, Delegate value)
         {
             lock (internalSyncObject)
@@ -335,7 +335,6 @@ namespace System.Windows.Forms
             {
                 PruneToolStripList();
             }
-
         }
 
         /// <summary> removes dead entries from the toolstrip weak reference collection. </summary>
@@ -453,9 +452,7 @@ namespace System.Windows.Forms
                     else
                     {
                         Debug.WriteLineIf(ToolStrip.ControlTabDebug.TraceVerbose, "\tREVERSE skipping wrap candidate " + toolStrip.Name + toolStrip.TabIndex.ToString(CultureInfo.CurrentCulture));
-
                     }
-
                 }
                 if (nextControl != null
                     && Math.Abs(nextControl.TabIndex - startTabIndex) <= 1)
@@ -469,7 +466,6 @@ namespace System.Windows.Forms
             {
                 Debug.WriteLineIf(ToolStrip.ControlTabDebug.TraceVerbose, "SELECTING " + nextControl.Name);
                 return ChangeSelection(start, nextControl);
-
             }
             else if (wrappedControl != null)
             {
@@ -480,21 +476,11 @@ namespace System.Windows.Forms
             return false;
         }
 
-        ///  ============================================================================
-        ///  BEGIN task specific functions.  Since ToolStripManager is used
-        ///  for Painting, Merging and Rafting, and who knows what else in the future
-        ///  the following properties/methods/events are organized in regions
-        ///  alphabetically by task
-        ///  ----------------------------------------------------------------------------
-
-        ///
-        ///  ToolStripManager Default Renderer
-        ///
-        #region DefaultRenderer
-
-        ///  These are thread static because we want separate instances
-        ///  for each thread.  We dont want to guarantee thread safety
-        ///  and dont want to have to take locks in painting code.
+        /// <remarks>
+        ///  This is thread static because we want separate instances for each thread.
+        ///  We dont want to guarantee thread safety and dont want to have to take
+        ///  locks in painting code.
+        /// </remarks>
         [ThreadStatic]
         private static ToolStripRenderer defaultRenderer;
 
@@ -527,8 +513,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <summary> the default renderer for the thread.  When ToolStrip.RenderMode is set to manager - this
-        ///  is the property used.
+        /// <summary>
+        ///  The default renderer for the thread. When ToolStrip.RenderMode is set
+        ///  to manager - this is the property used.
         /// </summary>
         public static ToolStripRenderer Renderer
         {
@@ -542,24 +529,21 @@ namespace System.Windows.Forms
             }
             set
             {
-                ///
                 if (defaultRenderer != value)
                 {
                     CurrentRendererType = (value == null) ? DefaultRendererType : value.GetType();
                     defaultRenderer = value;
 
                     ((EventHandler)GetEventHandler(staticEventDefaultRendererChanged))?.Invoke(null, EventArgs.Empty);
-
                 }
             }
         }
 
-        // <summary>
-        // occurs when toolstripmanager.Renderer property has changed
-        //
-        // WARNING: When subscribing to static event handlers - make sure you unhook from them
-        // otherwise you can leak USER objects on process shutdown.
-        // </summary>
+        /// <summary>
+        ///  Occurs when toolstripmanager.Renderer property has changed
+        ///  WARNING: When subscribing to static event handlers - make sure you unhook from them
+        ///  otherwise you can leak USER objects on process shutdown.
+        /// </summary>
         public static event EventHandler RendererChanged
         {
             add => AddEventHandler(staticEventDefaultRendererChanged, value);
@@ -591,8 +575,6 @@ namespace System.Windows.Forms
             }
             set
             {
-
-                ///
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)ToolStripManagerRenderMode.Custom, (int)ToolStripManagerRenderMode.Professional))
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ToolStripManagerRenderMode));
@@ -659,10 +641,6 @@ namespace System.Windows.Forms
             }
         }
 
-        #endregion DefaultRenderer
-
-        #region ToolStripPanel
-
         internal static ClientUtils.WeakRefCollection ToolStripPanels
         {
             get
@@ -704,10 +682,6 @@ namespace System.Windows.Forms
             }
             return null;
         }
-
-        #endregion
-
-        #region ToolStripSettings
 
         /// <summary>
         ///  Loads settings for the given Form using the form type's fullname as settings key.
@@ -776,14 +750,7 @@ namespace System.Windows.Forms
             settingsManager.Save();
         }
 
-        #endregion
-
-        ///
-        ///  ToolStripManager ALT key PreProcessing
-        ///
-        #region MenuKeyAndShortcutProcessing
-
-        ///  ModalMenuFilter
+        ///  <remarks>
         ///  - this installs a message filter when a dropdown becomes active.
         ///  - the message filter
         ///  a. eats WM_MOUSEMOVEs so that the window that's underneath
@@ -798,6 +765,7 @@ namespace System.Windows.Forms
         ///  the last dropdown has gone away
         ///  This is not part of ToolStripManager because it's DropDown specific and
         ///  we dont want to publicly expose this message filter.
+        ///  </remarks>
         internal class ModalMenuFilter : IMessageModifyAndFilter
         {
             private HandleRef _activeHwnd = NativeMethods.NullHandleRef; // the window that was active when we showed the dropdown
@@ -892,7 +860,6 @@ namespace System.Windows.Forms
                             control.HandleCreated += new EventHandler(OnActiveHwndHandleCreated);
                         }
                     }
-
                 }
             }
 
@@ -913,7 +880,6 @@ namespace System.Windows.Forms
                     if (Instance.menuKeyToggle != value)
                     {
                         Instance.menuKeyToggle = value;
-
                     }
                 }
             }
@@ -968,7 +934,6 @@ namespace System.Windows.Forms
                     // fire timer messages to force our filter to get evaluated.
                     ProcessMessages(true);
                 }
-
             }
 
             internal void NotifyLastLastFocusedToolAboutFocusLoss()
@@ -989,7 +954,6 @@ namespace System.Windows.Forms
             // ToolStrip analog to WM_EXITMENULOOP
             private void ExitMenuModeCore()
             {
-
                 // ensure we've cleaned up the timer.
                 ProcessMessages(false);
 
@@ -1046,9 +1010,7 @@ namespace System.Windows.Forms
                         bool textStyleChanged = _showUnderlines;
                         _showUnderlines = false;
                         ToolStripManager.NotifyMenuModeChange(/*textStyleChanged*/textStyleChanged, /*activationChanged*/true);
-
                     }
-
                 }
             }
 
@@ -1109,12 +1071,10 @@ namespace System.Windows.Forms
                         ModalMenuFilter.Instance.ShowUnderlines = true;
                     }
                 }
-
             }
 
             internal static void CloseActiveDropDown(ToolStripDropDown activeToolStripDropDown, ToolStripDropDownCloseReason reason)
             {
-
                 activeToolStripDropDown.SetCloseReason(reason);
                 activeToolStripDropDown.Visible = false;
 
@@ -1130,7 +1090,6 @@ namespace System.Windows.Forms
                         activeToolStripDropDown.OwnerItem.Unselect();
                     }
                 }
-
             }
 
             // fire a timer event to ensure we have a message in the queue every 500ms
@@ -1170,7 +1129,6 @@ namespace System.Windows.Forms
                         {
                             if (activeToolStrip is ToolStripDropDown activeToolStripDropDown)
                             {
-
                                 if (!(activeToolStripDropDown.OwnerToolStrip != null
                                     && activeToolStripDropDown.OwnerToolStrip.Handle == hwndMouseMessageIsFrom
                                     && activeToolStripDropDown.OwnerDropDownItem != null
@@ -1203,7 +1161,6 @@ namespace System.Windows.Forms
                         break;
                     }
                 }
-
             }
             private bool ProcessActivationChange()
             {
@@ -1215,12 +1172,9 @@ namespace System.Windows.Forms
                         activeDropDown.Visible = false;
                     }
                 }
-                // if (_inputFilterQueue.Count == 0) {
+
                 ExitMenuModeCore();
                 return true;
-                //}
-                //return false;
-
             }
 
             internal static void SetActiveToolStrip(ToolStrip toolStrip, bool menuKeyPressed)
@@ -1240,7 +1194,6 @@ namespace System.Windows.Forms
 
             private void SetActiveToolStripCore(ToolStrip toolStrip)
             {
-
                 if (toolStrip == null)
                 {
                     return;
@@ -1285,7 +1238,6 @@ namespace System.Windows.Forms
                                   && (ToolStripDropDown.GetFirstDropDown(toolStrip)
                                   != ToolStripDropDown.GetFirstDropDown(currentActiveToolStrip)))
                         {
-
                             Debug.WriteLineIf(ToolStrip.SnapFocusDebug.TraceVerbose, "[ModalMenuFilter.SetActiveToolStripCore] Detected a new dropdown not in this chain opened, Dismissing everything in the old chain. ");
                             _inputFilterQueue.Remove(currentActiveToolStrip);
 
@@ -1438,7 +1390,6 @@ namespace System.Windows.Forms
                                 // double check it's not a child control of the active toolstrip.
                                 if (!IsChildOrSameWindow(hwndActiveToolStrip, new HandleRef(null, m.HWnd)))
                                 {
-
                                     // it is NOT a child of the current active toolstrip.
 
                                     ToolStrip toplevelToolStrip = GetCurrentToplevelToolStrip();
@@ -1513,7 +1464,6 @@ namespace System.Windows.Forms
                                 Debug.WriteLineIf(ToolStrip.SnapFocusDebug.TraceVerbose, "[ModalMenuFilter.PreFilterMessage] got Keyboard message " + m.ToString());
                             }
                             break;
-
                     }
                 }
 
@@ -1528,7 +1478,6 @@ namespace System.Windows.Forms
 
                 public HostedWindowsFormsMessageHook()
                 {
-
 #if DEBUG
                     try
                     {
@@ -1627,9 +1576,7 @@ namespace System.Windows.Forms
                         }
                     }
                 }
-
             }
-
         }
 
         internal static bool ShowMenuFocusCues
@@ -1797,7 +1744,6 @@ namespace System.Windows.Forms
                     }
                     else if (toolStrip.Shortcuts.ContainsKey(shortcut))
                     {
-
                         if (toolStrip.IsDropDown)
                         {
                             // we dont want to process someone else's context menu (e.g. button1 and button2 have context menus)
@@ -1853,7 +1799,6 @@ namespace System.Windows.Forms
                                             rootWindowsMatch = (toolStripForm == mainForm.ActiveMdiChildInternal);
                                         }
                                     }
-
                                 }
                             }
                         }
@@ -1876,10 +1821,8 @@ namespace System.Windows.Forms
                     PruneToolStripList();
                 }
                 return retVal;
-
             }
             return false;
-
         }
 
         /// <summary> this function handles when Alt is pressed.
@@ -1918,7 +1861,6 @@ namespace System.Windows.Forms
                         menuStripToActivate = GetMainMenuStrip(toplevelControl);
                     }
                     Debug.WriteLineIf(ToolStrip.SnapFocusDebug.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "[ProcessMenuKey] MenuStripToActivate is: {0}", menuStripToActivate));
-
                 }
             }
             // the data that comes into the LParam is the ASCII code, not the VK_* code.
@@ -1971,7 +1913,6 @@ namespace System.Windows.Forms
                         return true;
                     }
                 }
-
             }
             return false;
         }
@@ -2045,13 +1986,6 @@ namespace System.Windows.Forms
             return null;
         }
 
-        #endregion MenuKeyAndShortcutProcessing
-
-        ///
-        ///  ToolStripManager MenuMerging functions
-        ///
-        #region MenuMerging
-
         private static ToolStripItem FindMatch(ToolStripItem source, ToolStripItemCollection destinationItems)
         {
             // based on MergeAction:
@@ -2086,13 +2020,8 @@ namespace System.Windows.Forms
                 for (int i = 0; i < ToolStrips.Count; i++)
                 {
                     ToolStrip candidateTS = (ToolStrip)ToolStrips[i];
-                    //if(candidateTS != null) {
-                    //    Debug.WriteLine("candidate TS: " + candidateTS.Name + " | " + candidateTS.AllowMerge + " | " + (candidateTS.Parent == null ?  "null" : candidateTS.Parent.Name) +" | " + container.Name);
-                    //}
-                    //Debug.WriteLine(candidateTS == null ? "null" : "not null");
                     if (candidateTS != null && candidateTS.AllowMerge && container == candidateTS.FindForm())
                     {
-                        //Debug.WriteLine("adding");
                         result.Add(candidateTS);
                     }
                 }
@@ -2135,7 +2064,6 @@ namespace System.Windows.Forms
             MergeHistory mergeHistory = null;
             if (canMerge)
             {
-                //Debug.WriteLine("Begin merge between src: " + sourceToolStrip.Name + " and target: " + targetToolStrip.Name);
                 Debug.Indent();
                 mergeHistory = new MergeHistory(sourceToolStrip);
 
@@ -2153,7 +2081,6 @@ namespace System.Windows.Forms
                         for (int i = 0, itemToLookAt = 0; i < originalCount; i++)
                         {
                             ToolStripItem item = sourceToolStrip.Items[itemToLookAt];
-                            //Debug.WriteLine("doing the recursive merge for item " + item.Text);
                             MergeRecursive(item, targetToolStrip.Items, mergeHistory.MergeHistoryItemsStack);
 
                             int numberOfItemsMerged = lastCount - sourceToolStrip.Items.Count;
@@ -2167,7 +2094,6 @@ namespace System.Windows.Forms
                         sourceToolStrip.ResumeLayout();
                         targetToolStrip.ResumeLayout();
                     }
-                    //Debug.WriteLine("pusing mergehistory for toolstrip " + sourceToolStrip.Name + " in target toolstrip MergeHistoryStack property");
                     if (mergeHistory.MergeHistoryItemsStack.Count > 0)
                     {
                         // only push this on the stack if we actually did something
@@ -2200,7 +2126,6 @@ namespace System.Windows.Forms
                             case MergeAction.MatchOnly:
                                 if (item is ToolStripDropDownItem tsddownDest && source is ToolStripDropDownItem tsddownSrc && tsddownSrc.DropDownItems.Count != 0)
                                 {
-
                                     int originalCount = tsddownSrc.DropDownItems.Count;
 
                                     if (originalCount > 0)
@@ -2214,7 +2139,6 @@ namespace System.Windows.Forms
                                             // the dropdown.
                                             for (int i = 0, itemToLookAt = 0; i < originalCount; i++)
                                             {
-
                                                 MergeRecursive(tsddownSrc.DropDownItems[itemToLookAt], tsddownDest.DropDownItems, history);
 
                                                 int numberOfItemsMerged = lastCount - tsddownSrc.DropDownItems.Count;
@@ -2231,7 +2155,6 @@ namespace System.Windows.Forms
                                 break;
                             case MergeAction.Replace:
                             case MergeAction.Remove:
-                                //Debug.WriteLine("remove");
                                 maction = new MergeHistoryItem(MergeAction.Insert)
                                 {
                                     TargetItem = item
@@ -2242,10 +2165,8 @@ namespace System.Windows.Forms
                                 maction.IndexCollection = destinationItems;
                                 maction.TargetItem = item;
                                 history.Push(maction);
-                                //Debug.WriteLine(maction.ToString());
                                 if (source.MergeAction == MergeAction.Replace)
                                 {
-                                    //Debug.WriteLine("replace");
                                     //ToolStripItem clonedItem = source.Clone();
                                     maction = new MergeHistoryItem(MergeAction.Remove)
                                     {
@@ -2257,7 +2178,6 @@ namespace System.Windows.Forms
                                     maction.Index = indexOfDestinationItem;
                                     maction.IndexCollection = destinationItems;
                                     history.Push(maction);
-                                    //Debug.WriteLine(maction.ToString());
                                 }
                                 break;
                         }
@@ -2277,7 +2197,6 @@ namespace System.Windows.Forms
                         maction.IndexCollection = destinationItems;
                         maction.Index = insertIndex;
                         history.Push(maction);
-                        //Debug.WriteLine(maction.ToString());
                     }
                     break;
                 case MergeAction.Append:
@@ -2291,7 +2210,6 @@ namespace System.Windows.Forms
                     maction.Index = index;
                     maction.IndexCollection = destinationItems;
                     history.Push(maction);
-                    //Debug.WriteLine(maction.ToString());
                     break;
             }
             Debug.Unindent();
@@ -2355,7 +2273,6 @@ namespace System.Windows.Forms
                 // PERF: if we dont have the toolstrip in our merge history, bail.
                 if (!foundToolStrip)
                 {
-                    //Debug.WriteLine("source toolstrip not contained within target " + history.MergedToolStrip.Name);
                     return false;
                 }
             }
@@ -2368,7 +2285,6 @@ namespace System.Windows.Forms
 
             try
             {
-                //Debug.WriteLine("Reverting merge, playing back history for all merged toolstrip ");
                 Stack<ToolStrip> reApply = new Stack<ToolStrip>();
                 foundToolStrip = false;
                 while (targetToolStrip.MergeHistoryStack.Count > 0 && !foundToolStrip)
@@ -2391,7 +2307,6 @@ namespace System.Windows.Forms
                     {
                         reApply.Push(history.MergedToolStrip);
                     }
-                    //Debug.WriteLine("unmerging " + history.MergedToolStrip.Name);
                     Debug.Indent();
                     while (history.MergeHistoryItemsStack.Count > 0)
                     {
@@ -2467,9 +2382,6 @@ namespace System.Windows.Forms
                 return RevertMerge(target);
             }
         }
-
-        #endregion MenuMerging
-
     }
 
     internal class ToolStripCustomIComparer : IComparer

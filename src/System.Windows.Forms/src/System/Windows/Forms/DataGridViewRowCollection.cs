@@ -12,8 +12,8 @@ using System.Drawing;
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///  Represents a collection of <see cref='DataGridViewRow'/> objects in the <see cref='DataGrid'/>
-    ///  control.
+    ///  Represents a collection of <see cref='DataGridViewRow'/> objects in the
+    ///  <see cref='DataGridView'/> control.
     /// </summary>
     [
         ListBindable(false),
@@ -366,13 +366,6 @@ namespace System.Windows.Forms
                 throw new ArgumentNullException(nameof(values));
             }
 
-            /* Intentionally not being strict about this. We just take what we get.
-            if (values.Length != this.DataGridView.Columns.Count)
-            {
-                // DataGridView_WrongValueCount=The array of cell values provided does not contain as many items as there are columns.
-                throw new ArgumentException(SR.DataGridView_WrongValueCount, "values");
-            }*/
-
             if (DataGridView.VirtualMode)
             {
                 throw new InvalidOperationException(SR.DataGridView_InvalidOperationInVirtualMode);
@@ -388,14 +381,6 @@ namespace System.Windows.Forms
                 throw new InvalidOperationException(SR.DataGridView_ForbiddenOperationInEventHandler);
             }
 
-            /* Microsoft: Add once databinding is implemented
-            foreach (DataGridViewColumn dataGridViewColumn in this.DataGridView.Columns)
-            {
-                if (dataGridViewColumn.DataBound)
-                {
-                    throw new InvalidOperationException(SR.DataGridView_InvalidOperationInDataBoundMode);
-                }
-            }*/
             return AddInternal(false /*newRow*/, values);
         }
 
@@ -1394,13 +1379,6 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentNullException(nameof(values));
             }
-
-            /* Intentionally not being strict about this. We just take what we get.
-            if (values.Length != this.DataGridView.Columns.Count)
-            {
-                // DataGridView_WrongValueCount=The array of cell values provided does not contain as many items as there are columns.
-                throw new ArgumentException(SR.DataGridView_WrongValueCount, "values");
-            }*/
 
             if (DataGridView.VirtualMode)
             {
@@ -2493,76 +2471,6 @@ namespace System.Windows.Forms
 #endif
         }
 
-        /*#if DEBUG
-                private bool inVerifyRowFrozenStates = false;
-                public void VerifyRowFrozenStates()
-                {
-                    if (inVerifyRowFrozenStates) return;
-
-                    inVerifyRowFrozenStates = true;
-                    try
-                    {
-                        bool previousVisibleRowFrozen = true;
-                        for (int rowIndex = 0; rowIndex < this.items.Count; rowIndex++)
-                        {
-                            DataGridViewElementStates rowStates = GetRowState(rowIndex);
-                            if (!previousVisibleRowFrozen &&
-                                (rowStates & DataGridViewElementStates.Visible) != 0 &&
-                                (rowStates & DataGridViewElementStates.Frozen) != 0)
-                            {
-                                Debug.Fail("VerifyRowFrozenStates - wrong frozen state");
-                            }
-                            if ((rowStates & DataGridViewElementStates.Visible) != 0)
-                            {
-                                previousVisibleRowFrozen = (rowStates & DataGridViewElementStates.Frozen) != 0;
-                            }
-                        }
-                    }
-                    finally
-                    {
-                        inVerifyRowFrozenStates = false;
-                    }
-                }
-        #endif*/
-
-        /* Private classes */
-
-        /*private class DefaultRowComparer : IComparer
-        {
-            private DataGridView dataGridView;
-            private DataGridViewRowCollection dataGridViewRows;
-            private DataGridViewColumn dataGridViewSortedColumn;
-            private int sortedColumnIndex;
-
-            public DefaultRowComparer(DataGridViewRowCollection dataGridViewRows)
-            {
-                this.DataGridView = dataGridViewRows.DataGridView;
-                this.dataGridViewRows = dataGridViewRows;
-                this.dataGridViewSortedColumn = this.dataGridView.SortedColumn;
-                this.sortedColumnIndex = this.dataGridViewSortedColumn.Index;
-            }
-
-            int IComparer.Compare(object x, object y)
-            {
-                DataGridViewRow dataGridViewRow1 = this.dataGridViewRows.SharedRow((int)x);
-                DataGridViewRow dataGridViewRow2 = this.dataGridViewRows.SharedRow((int)y);
-                Debug.Assert(dataGridViewRow1 != null);
-                Debug.Assert(dataGridViewRow2 != null);
-                object value1 = dataGridViewRow1.Cells[this.sortedColumnIndex].GetValueInternal((int)x);
-                object value2 = dataGridViewRow2.Cells[this.sortedColumnIndex].GetValueInternal((int)y);
-                DataGridViewSortEventArgs tsea = new DataGridViewSortEventArgs(this.dataGridViewSortedColumn, value1, value2);
-                this.dataGridView.OnSorting(tsea);
-                if (tsea.Handled)
-                {
-                    return tsea.SortResult;
-                }
-                else
-                {
-                    return Comparer.Default.Compare(value1, value2);
-                }
-            }
-        }*/
-
         private class RowArrayList : ArrayList
         {
             private readonly DataGridViewRowCollection owner;
@@ -2826,7 +2734,6 @@ namespace System.Windows.Forms
             /// </summary>
             bool IEnumerator.MoveNext()
             {
-
                 if (current < owner.Count - 1)
                 {
                     current++;

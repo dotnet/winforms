@@ -14,7 +14,7 @@ namespace System.ComponentModel.Design
     public class DesignerActionListsChangedEventArgs : EventArgs
     {
         /// <summary>
-        ///  Initializes a new instance of the <see cref="DesignerActionListsChangedEventArgs" /> class with the specified related object, 
+        ///  Initializes a new instance of the <see cref="DesignerActionListsChangedEventArgs" /> class with the specified related object,
         ///  the type of change, and the remaining action lists for the related object.
         /// </summary>
         /// <param name="relatedObject">The related object.</param>

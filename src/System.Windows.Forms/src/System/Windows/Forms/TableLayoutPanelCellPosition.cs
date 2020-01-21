@@ -122,7 +122,6 @@ namespace System.Windows.Forms
                     typeof(TableLayoutPanelCellPosition).GetConstructor(new Type[] { typeof(int), typeof(int) }),
                     new object[] { cellPosition.Column, cellPosition.Row }
                 );
-
             }
             return base.ConvertTo(context, culture, value, destinationType);
         }

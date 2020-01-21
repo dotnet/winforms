@@ -56,7 +56,7 @@ internal static partial class Interop
             ALWAYSSHOWSIZINGBAR = 2208,
 
             /// <summary>
-            /// If TRUE, height & width must be uniformly sized.
+            /// If TRUE, height &amp; width must be uniformly sized.
             /// </summary>
             MIRRORIMAGE = 2209,
 
@@ -221,12 +221,12 @@ internal static partial class Interop
             /// </summary>
             IMAGEFILE3 = 3004,
 
-            // <summary>
+            /// <summary>
             /// Multiresolution image file.
             /// </summary>
             IMAGEFILE4 = 3005,
 
-            // <summary>
+            /// <summary>
             /// Multiresolution image file.
             /// </summary>
             IMAGEFILE5 = 3006,

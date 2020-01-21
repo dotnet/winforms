@@ -9121,6 +9121,11 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
         <target state="translated">Bezpośrednie ustawianie elementu TableLayoutSettings nie jest obsługiwane. Użyj zamiast tego indywidualnych właściwości.</target>
         <note />
       </trans-unit>
+      <trans-unit id="TableLayoutSettingsConverterNoName">
+        <source>Cannot convert TableLayoutSettings to string: could not find a 'Name' string property on a control.</source>
+        <target state="new">Cannot convert TableLayoutSettings to string: could not find a 'Name' string property on a control.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="TableLayoutSettingsGetCellPositionDescr">
         <source>Indicates the row and column of the cell.</source>
         <target state="translated">Wskazuje wiersz i kolumnę komórki.</target>

@@ -714,7 +714,7 @@ namespace System.ComponentModel.Design
                 {
                     Debug.WriteLineIf(s_designeActionPanelTraceSwitch.TraceVerbose, "Assigning owner to mainParentWindow");
                     Debug.WriteLineIf(DesignerActionUI.DropDownVisibilityDebug.TraceVerbose, "Assigning owner to mainParentWindow");
-                    UnsafeNativeMethods.SetWindowLong(new HandleRef(designerActionHost, designerActionHost.Handle), NativeMethods.GWL_HWNDPARENT, new HandleRef(_mainParentWindow, _mainParentWindow.Handle));
+                    User32.SetWindowLong(designerActionHost, User32.GWL.HWNDPARENT, new HandleRef(_mainParentWindow, _mainParentWindow.Handle));
                 }
 
                 _cancelClose = true;
@@ -872,7 +872,7 @@ namespace System.ComponentModel.Design
                 }
 
                 // what's the owner of the windows being activated?
-                IntPtr parent = UnsafeNativeMethods.GetWindowLong(new HandleRef(this, hwndActivating), NativeMethods.GWL_HWNDPARENT);
+                IntPtr parent = User32.GetWindowLong(new HandleRef(this, hwndActivating), User32.GWL.HWNDPARENT);
                 // is it currently disabled (ie, the activating windows is in modal mode)
                 if (!IsWindowEnabled(parent))
                 {
@@ -919,7 +919,6 @@ namespace System.ComponentModel.Design
             {
                 CheckFocusIsRight();
             }
-
         }
 
         private void PanelResized(object sender, System.EventArgs e)
@@ -960,7 +959,7 @@ namespace System.ComponentModel.Design
             {
                 Debug.WriteLine("\t\tOWNER: " + GetControlInformation(hWndOwner));
                 Debug.WriteLine("\t\tOWNEE: " + GetControlInformation(hWndDescendant));
-                IntPtr claimedOwnerHwnd = UnsafeNativeMethods.GetWindowLong(new HandleRef(null, hWndDescendant), NativeMethods.GWL_HWNDPARENT);
+                IntPtr claimedOwnerHwnd = User32.GetWindowLong(hWndDescendant, User32.GWL.HWNDPARENT);
                 Debug.WriteLine("OWNEE's CLAIMED OWNER: " + GetControlInformation(claimedOwnerHwnd));
             }
 #endif
@@ -972,7 +971,7 @@ namespace System.ComponentModel.Design
 
             while (hWndDescendant != IntPtr.Zero)
             {
-                hWndDescendant = UnsafeNativeMethods.GetWindowLong(new HandleRef(null, hWndDescendant), NativeMethods.GWL_HWNDPARENT);
+                hWndDescendant = User32.GetWindowLong(hWndDescendant, User32.GWL.HWNDPARENT);
                 if (hWndDescendant == IntPtr.Zero)
                 {
                     Debug.WriteLineIf(DesignerActionUI.DropDownVisibilityDebug.TraceVerbose, "NOPE.");
@@ -1032,7 +1031,7 @@ namespace System.ComponentModel.Design
         }
         private bool IsWindowEnabled(IntPtr handle)
         {
-            int style = (int)UnsafeNativeMethods.GetWindowLong(new HandleRef(this, handle), NativeMethods.GWL_STYLE);
+            int style = (int)User32.GetWindowLong(new HandleRef(this, handle), User32.GWL.STYLE);
             return (style & (int)User32.WS.DISABLED) == 0;
         }
 

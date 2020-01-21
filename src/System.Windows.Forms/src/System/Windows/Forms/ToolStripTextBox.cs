@@ -203,7 +203,6 @@ namespace System.Windows.Forms
                 textBox.MultilineChanged += new EventHandler(HandleMultilineChanged);
                 textBox.ReadOnlyChanged += new EventHandler(HandleReadOnlyChanged);
                 textBox.TextAlignChanged += new EventHandler(HandleTextBoxTextAlignChanged);
-
             }
 
             base.OnSubscribeControlEvents(control);
@@ -224,7 +223,6 @@ namespace System.Windows.Forms
                 textBox.TextAlignChanged -= new EventHandler(HandleTextBoxTextAlignChanged);
             }
             base.OnUnsubscribeControlEvents(control);
-
         }
 
         internal override bool ShouldSerializeFont()
@@ -690,14 +688,12 @@ namespace System.Windows.Forms
             {
                 base.OnLostFocus(e);
                 InvalidateNonClient();
-
             }
 
             protected override void OnMouseEnter(EventArgs e)
             {
                 base.OnMouseEnter(e);
                 MouseIsOver = true;
-
             }
 
             protected override void OnMouseLeave(EventArgs e)
@@ -733,7 +729,6 @@ namespace System.Windows.Forms
                         alreadyHooked = false;
                     }
                 }
-
             }
 
             private void OnUserPreferenceChanged(object sender, UserPreferenceChangedEventArgs e)
@@ -772,7 +767,6 @@ namespace System.Windows.Forms
 
             private void WmNCPaint(ref Message m)
             {
-
                 if (!IsPopupTextBox)
                 {
                     base.WndProc(ref m);
@@ -803,7 +797,6 @@ namespace System.Windows.Forms
                     }
                     using (Graphics g = Graphics.FromHdcInternal(hdc))
                     {
-
                         Rectangle clientRect = AbsoluteClientRectangle;
 
                         // could have set up a clip and fill-rectangled, thought this would be faster.
@@ -820,7 +813,6 @@ namespace System.Windows.Forms
                         {
                             g.DrawRectangle(p, 0, 0, Width - 1, Height - 1);
                         }
-
                     }
                 }
                 finally
@@ -829,7 +821,6 @@ namespace System.Windows.Forms
                 }
                 // we've handled WM_NCPAINT.
                 m.Result = IntPtr.Zero;
-
             }
             protected override void WndProc(ref Message m)
             {
@@ -872,5 +863,4 @@ namespace System.Windows.Forms
             }
         }
     }
-
 }

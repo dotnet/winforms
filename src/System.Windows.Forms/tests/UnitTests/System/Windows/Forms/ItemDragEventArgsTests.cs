@@ -6,7 +6,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ItemDragEventArgsTests
+    public class ItemDragEventArgsTests : IClassFixture<ThreadExceptionFixture>
     {
         [Theory]
         [InlineData(MouseButtons.Left)]

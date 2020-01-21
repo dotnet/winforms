@@ -17,7 +17,7 @@ namespace System.Windows.Forms.Tests
     using Point = System.Drawing.Point;
     using Size = System.Drawing.Size;
 
-    public class ImageListTests
+    public class ImageListTests : IClassFixture<ThreadExceptionFixture>
     {
         [WinFormsFact]
         public void ImageList_Ctor_Default()
@@ -844,7 +844,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, list.Images.Count);
 #pragma warning restore xUnit2013
             Assert.True(list.HandleCreated);
-            
+
             // Call again.
             list.Dispose();
             Assert.False(list.HandleCreated);
@@ -864,7 +864,7 @@ namespace System.Windows.Forms.Tests
             list.Dispose();
             Assert.Equal(2, list.Images.Count);
             Assert.False(list.HandleCreated);
-            
+
             // Call again.
             list.Dispose();
             Assert.Equal(2, list.Images.Count);
@@ -899,7 +899,7 @@ namespace System.Windows.Forms.Tests
             list.Dispose();
             Assert.Empty(list.Images);
             Assert.False(list.HandleCreated);
-            
+
             // Call again.
             list.Dispose();
             Assert.Empty(list.Images);

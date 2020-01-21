@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using static Interop.ComCtl32;
+
 namespace System.Windows.Forms
 {
     /// <summary>
@@ -12,21 +14,21 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Both the icon and label portions. In Report View, this includes subitems.
         /// </summary>
-        Entire = NativeMethods.LVIR_BOUNDS,
+        Entire = (int)LVIR.BOUNDS,
 
         /// <summary>
         ///  Only the icon portion.
         /// </summary>
-        Icon = NativeMethods.LVIR_ICON,
+        Icon = (int)LVIR.ICON,
 
         /// <summary>
         ///  Only the label portion.
         /// </summary>
-        Label = NativeMethods.LVIR_LABEL,
+        Label = (int)LVIR.LABEL,
 
         /// <summary>
         ///  Both the icon and label portions. In Report view, this <see cref='Entire'/>.
         /// </summary>
-        ItemOnly = NativeMethods.LVIR_SELECTBOUNDS,
+        ItemOnly = (int)LVIR.SELECTBOUNDS,
     }
 }

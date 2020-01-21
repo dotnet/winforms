@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using static Interop;
+using static Interop.ComCtl32;
 
 namespace System.Windows.Forms
 {
@@ -175,7 +176,6 @@ namespace System.Windows.Forms
 
             set
             {
-
                 if (value != null && (((Icon)value).Height > SystemInformation.SmallIconSize.Height || ((Icon)value).Width > SystemInformation.SmallIconSize.Width))
                 {
                     icon = new Icon(value, SystemInformation.SmallIconSize);
@@ -188,8 +188,7 @@ namespace System.Windows.Forms
                 if (Created)
                 {
                     IntPtr handle = (icon == null) ? IntPtr.Zero : icon.Handle;
-                    parent.SendMessage(NativeMethods.SB_SETICON, (IntPtr)GetIndex(), handle);
-
+                    parent.SendMessage((int)SB.SETICON, (IntPtr)GetIndex(), handle);
                 }
                 UpdateSize();
                 if (Created)
@@ -395,7 +394,6 @@ namespace System.Windows.Forms
 
                 if (!Text.Equals(value))
                 {
-
                     if (value.Length == 0)
                     {
                         text = null;
@@ -442,7 +440,6 @@ namespace System.Windows.Forms
 
                 if (!ToolTipText.Equals(value))
                 {
-
                     if (value.Length == 0)
                     {
                         toolTipText = null;
@@ -575,18 +572,10 @@ namespace System.Windows.Forms
         {
             if (Created)
             {
-                string text;
                 string sendText;
-                int border = 0;
+                SBT border = 0;
 
-                if (this.text == null)
-                {
-                    text = string.Empty;
-                }
-                else
-                {
-                    text = this.text;
-                }
+                string text = this.text ?? string.Empty;
 
                 HorizontalAlignment align = alignment;
                 // Translate the alignment for Rtl apps
@@ -619,12 +608,12 @@ namespace System.Windows.Forms
                 switch (borderStyle)
                 {
                     case StatusBarPanelBorderStyle.None:
-                        border |= NativeMethods.SBT_NOBORDERS;
+                        border |= SBT.NOBORDERS;
                         break;
                     case StatusBarPanelBorderStyle.Sunken:
                         break;
                     case StatusBarPanelBorderStyle.Raised:
-                        border |= NativeMethods.SBT_POPOUT;
+                        border |= SBT.POPOUT;
                         break;
                 }
                 switch (style)
@@ -632,17 +621,17 @@ namespace System.Windows.Forms
                     case StatusBarPanelStyle.Text:
                         break;
                     case StatusBarPanelStyle.OwnerDraw:
-                        border |= NativeMethods.SBT_OWNERDRAW;
+                        border |= SBT.OWNERDRAW;
                         break;
                 }
 
-                int wparam = GetIndex() | border;
+                int wparam = GetIndex() | (int)border;
                 if (parent.RightToLeft == RightToLeft.Yes)
                 {
-                    wparam |= NativeMethods.SBT_RTLREADING;
+                    wparam |= (int)SBT.RTLREADING;
                 }
 
-                int result = (int)UnsafeNativeMethods.SendMessage(new HandleRef(parent, parent.Handle), NativeMethods.SB_SETTEXT, (IntPtr)wparam, sendText);
+                int result = (int)UnsafeNativeMethods.SendMessage(new HandleRef(parent, parent.Handle), (int)SB.SETTEXT, (IntPtr)wparam, sendText);
 
                 if (result == 0)
                 {
@@ -651,17 +640,17 @@ namespace System.Windows.Forms
 
                 if (icon != null && style != StatusBarPanelStyle.OwnerDraw)
                 {
-                    parent.SendMessage(NativeMethods.SB_SETICON, (IntPtr)GetIndex(), icon.Handle);
+                    parent.SendMessage((int)SB.SETICON, (IntPtr)GetIndex(), icon.Handle);
                 }
                 else
                 {
-                    parent.SendMessage(NativeMethods.SB_SETICON, (IntPtr)GetIndex(), IntPtr.Zero);
+                    parent.SendMessage((int)SB.SETICON, (IntPtr)GetIndex(), IntPtr.Zero);
                 }
 
                 if (style == StatusBarPanelStyle.OwnerDraw)
                 {
                     RECT rect = new RECT();
-                    result = (int)UnsafeNativeMethods.SendMessage(new HandleRef(parent, parent.Handle), NativeMethods.SB_GETRECT, (IntPtr)GetIndex(), ref rect);
+                    result = (int)UnsafeNativeMethods.SendMessage(new HandleRef(parent, parent.Handle), (int)SB.GETRECT, (IntPtr)GetIndex(), ref rect);
 
                     if (result != 0)
                     {

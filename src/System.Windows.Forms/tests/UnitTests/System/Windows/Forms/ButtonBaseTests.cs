@@ -207,7 +207,6 @@ namespace System.Windows.Forms.Tests
 
         public class SubButtonBase : ButtonBase
         {
-
             public new bool CanEnableIme => base.CanEnableIme;
 
             public new bool CanRaiseEvents => base.CanRaiseEvents;

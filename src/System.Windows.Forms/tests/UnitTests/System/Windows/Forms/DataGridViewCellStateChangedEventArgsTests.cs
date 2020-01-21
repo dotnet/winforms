@@ -6,7 +6,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class DataGridViewCellStateChangedEventArgsTests
+    public class DataGridViewCellStateChangedEventArgsTests : IClassFixture<ThreadExceptionFixture>
     {
         [Theory]
         [InlineData(DataGridViewElementStates.Displayed)]

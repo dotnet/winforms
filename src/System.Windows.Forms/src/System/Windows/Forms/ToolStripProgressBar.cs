@@ -163,10 +163,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  This is used for international applications where the language
-        ///  is written from RightToLeft. When this property is true,
-        //      and the RightToLeft is true, mirroring will be turned on on the form, and
-        ///  control placement and text will be from right to left.
+        ///  This is used for international applications where the language is written from RightToLeft.
+        ///  When this property is true, and the RightToLeft is true, mirroring will be turned on on
+        ///  the form, and control placement and text will be from right to left.
         /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
@@ -178,7 +177,6 @@ namespace System.Windows.Forms
         {
             get
             {
-
                 return ProgressBar.RightToLeftLayout;
             }
 
@@ -312,7 +310,6 @@ namespace System.Windows.Forms
                 bar.RightToLeftLayoutChanged -= new EventHandler(HandleRightToLeftLayoutChanged);
             }
             base.OnUnsubscribeControlEvents(control);
-
         }
 
         /// <summary>

@@ -67,7 +67,7 @@ namespace System.ComponentModel.Design
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
         /// <summary>
-        ///  Enumerator that performs the conversion from designer host 
+        ///  Enumerator that performs the conversion from designer host
         ///  to design surface.
         /// </summary>
         private class DesignSurfaceEnumerator : IEnumerator

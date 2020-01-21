@@ -101,7 +101,6 @@ namespace System.Windows.Forms
                             {
                                 InitializeFromStream(new MemoryStream(dat));
                             }
-
                         }
                         catch (Exception e)
                         {
@@ -119,7 +118,6 @@ namespace System.Windows.Forms
                                 PropertyBagBinary = new PropertyBagStream();
                                 PropertyBagBinary.Read(new MemoryStream(dat));
                             }
-
                         }
                         catch (Exception e)
                         {

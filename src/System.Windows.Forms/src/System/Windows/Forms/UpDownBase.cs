@@ -458,7 +458,6 @@ namespace System.Windows.Forms
         {
             get
             {
-
                 int height = FontHeight;
 
                 // Adjust for the border style
@@ -603,7 +602,6 @@ namespace System.Windows.Forms
 
                 if (upDownAlign != value)
                 {
-
                     upDownAlign = value;
                     PositionControls();
                     Invalidate();
@@ -789,7 +787,6 @@ namespace System.Windows.Forms
             OnKeyDown(e);
             if (interceptArrowKeys)
             {
-
                 // Intercept up arrow
                 if (e.KeyData == Keys.Up)
                 {
@@ -820,7 +817,6 @@ namespace System.Windows.Forms
         protected virtual void OnTextBoxKeyPress(object source, KeyPressEventArgs e)
         {
             OnKeyPress(e);
-
         }
 
         /// <summary>
@@ -1085,7 +1081,6 @@ namespace System.Windows.Forms
                 upDownButtons.Bounds = upDownButtonsBounds;
                 upDownButtons.Invalidate();
             }
-
         }
 
         /// <summary>
@@ -1200,7 +1195,6 @@ namespace System.Windows.Forms
             internal UpDownEdit(UpDownBase parent)
             : base()
             {
-
                 SetStyle(ControlStyles.FixedHeight |
                          ControlStyles.FixedWidth, true);
 
@@ -1247,7 +1241,6 @@ namespace System.Windows.Forms
             /// </summary>
             protected override void OnMouseUp(MouseEventArgs e)
             {
-
                 Point pt = new Point(e.X, e.Y);
                 pt = PointToScreen(pt);
 
@@ -1385,7 +1378,6 @@ namespace System.Windows.Forms
 
             : base()
             {
-
                 SetStyle(ControlStyles.Opaque | ControlStyles.FixedHeight |
                          ControlStyles.FixedWidth, true);
 
@@ -1500,7 +1492,6 @@ namespace System.Windows.Forms
             /// </summary>
             protected override void OnMouseMove(MouseEventArgs e)
             {
-
                 // If the mouse is captured by the buttons (i.e. an updown button
                 // was pushed, and the mouse button has not yet been released),
                 // determine the new state of the buttons depending on where
@@ -1508,7 +1499,6 @@ namespace System.Windows.Forms
 
                 if (Capture)
                 {
-
                     // Determine button area
 
                     Rectangle rect = ClientRectangle;
@@ -1523,24 +1513,20 @@ namespace System.Windows.Forms
 
                     if (rect.Contains(e.X, e.Y))
                     {
-
                         // Inside button
                         // Repush the button if necessary
 
                         if (pushed != captured)
                         {
-
                             // Restart the timer
                             StartTimer();
 
                             pushed = captured;
                             Invalidate();
                         }
-
                     }
                     else
                     {
-
                         // Outside button
                         // Retain the capture, but pop the button up whilst
                         // the mouse remains outside the button and the
@@ -1548,7 +1534,6 @@ namespace System.Windows.Forms
 
                         if (pushed != ButtonID.None)
                         {
-
                             // Stop the timer for updown events
                             StopTimer();
 
@@ -1590,7 +1575,6 @@ namespace System.Windows.Forms
             /// </summary>
             protected override void OnMouseUp(MouseEventArgs e)
             {
-
                 if (!parent.ValidationCancelled && e.Button == MouseButtons.Left)
                 {
                     EndButtonPress();
@@ -1753,7 +1737,6 @@ namespace System.Windows.Forms
             /// </summary>
             private void TimerHandler(object source, EventArgs args)
             {
-
                 // Make sure we've got mouse capture
                 if (!Capture)
                 {
@@ -1912,7 +1895,6 @@ namespace System.Windows.Forms
                     }
                 }
 
-
                 public override string Name
                 {
                     get
@@ -1939,7 +1921,7 @@ namespace System.Windows.Forms
                     get
                     {
                         AccessibleRole role = Owner.AccessibleRole;
-                        
+
                         if (role != AccessibleRole.Default)
                         {
                             return role;
@@ -2092,7 +2074,6 @@ namespace System.Windows.Forms
                     }
                 }
             }
-
         } // end class UpDownButtons
 
         // Button identifiers

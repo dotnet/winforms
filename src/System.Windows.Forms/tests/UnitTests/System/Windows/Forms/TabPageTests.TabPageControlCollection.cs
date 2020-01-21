@@ -26,7 +26,6 @@ namespace System.Windows.Forms.Tests
             Assert.Same(owner, collection.Owner);
         }
 
-
         [WinFormsFact]
         public void TabPageControlCollection_Add_ControlExistingCollection_Success()
         {

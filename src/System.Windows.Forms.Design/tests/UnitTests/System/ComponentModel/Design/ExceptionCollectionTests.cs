@@ -11,7 +11,7 @@ using Xunit;
 
 namespace System.ComponentModel.Design.Tests
 {
-    public class ExceptionCollectionTests
+    public class ExceptionCollectionTests : IClassFixture<ThreadExceptionFixture>
     {
         public static IEnumerable<object[]> Ctor_ArrayList_TestData()
         {

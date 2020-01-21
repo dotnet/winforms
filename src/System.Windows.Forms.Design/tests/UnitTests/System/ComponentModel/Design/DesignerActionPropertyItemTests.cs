@@ -10,7 +10,7 @@ using Xunit;
 
 namespace System.ComponentModel.Design.Tests
 {
-    public class DesignerActionPropertyItemTests
+    public class DesignerActionPropertyItemTests : IClassFixture<ThreadExceptionFixture>
     {
         [Theory]
         [InlineData("memberName", "displayName", "category", "description", "displayName")]

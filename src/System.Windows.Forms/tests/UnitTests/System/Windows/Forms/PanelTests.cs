@@ -628,7 +628,6 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(new Size(26, 31), control.PreferredSize);
         }
 
-
         private class BorderedPanel : Panel
         {
             protected override CreateParams CreateParams
@@ -742,7 +741,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(2, callCount);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void Panel_Text_Set_GetReturnsExpected(string value, string expected)
         {
@@ -759,7 +758,7 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.IsHandleCreated);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void Panel_Text_SetWithHandle_GetReturnsExpected(string value, string expected)
         {

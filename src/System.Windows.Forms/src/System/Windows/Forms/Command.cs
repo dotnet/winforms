@@ -177,7 +177,7 @@ namespace System.Windows.Forms
             {
                 return false;
             }
-            
+
             executor.Execute();
             return true;
         }

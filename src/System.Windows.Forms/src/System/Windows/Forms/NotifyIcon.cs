@@ -35,7 +35,7 @@ namespace System.Windows.Forms
         private static readonly object EVENT_BALLOONTIPCLOSED = new object();
 
         private const int WM_TRAYMOUSEMESSAGE = WindowMessages.WM_USER + 1024;
-        private static readonly User32.WindowMessage WM_TASKBARCREATED = User32.RegisterWindowMessageW("TaskbarCreated");
+        private static readonly User32.WM WM_TASKBARCREATED = User32.RegisterWindowMessageW("TaskbarCreated");
 
         private readonly object syncObj = new object();
 
@@ -423,7 +423,7 @@ namespace System.Windows.Forms
                 //
                 if (window != null && window.Handle != IntPtr.Zero)
                 {
-                    User32.PostMessageW(window, User32.WindowMessage.WM_CLOSE);
+                    User32.PostMessageW(window, User32.WM.CLOSE);
                     window.ReleaseHandle();
                 }
             }
@@ -644,7 +644,6 @@ namespace System.Windows.Forms
         {
             lock (syncObj)
             {
-
                 // Bail if in design mode...
                 //
                 if (DesignMode)
@@ -850,7 +849,7 @@ namespace System.Windows.Forms
                 //
                 if (Handle != IntPtr.Zero)
                 {
-                    User32.PostMessageW(this, User32.WindowMessage.WM_CLOSE);
+                    User32.PostMessageW(this, User32.WM.CLOSE);
                 }
 
                 // This releases the handle from our window proc, re-routing it back to

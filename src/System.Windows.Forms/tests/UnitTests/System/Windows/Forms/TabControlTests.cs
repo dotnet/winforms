@@ -1013,9 +1013,9 @@ namespace System.Windows.Forms.Tests
         {
             using var control = new TabControl();
             Assert.NotEqual(IntPtr.Zero, control.Handle);
-            Assert.Equal(IntPtr.Zero, User32.SendMessageW(control.Handle, (User32.WindowMessage)ComCtl32.TCM.GETIMAGELIST, IntPtr.Zero, IntPtr.Zero));
+            Assert.Equal(IntPtr.Zero, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.TCM.GETIMAGELIST, IntPtr.Zero, IntPtr.Zero));
         }
-        
+
         [WinFormsFact]
         public void TabControl_Handle_GetWithImageList_Success()
         {
@@ -1025,7 +1025,7 @@ namespace System.Windows.Forms.Tests
                 ImageList = imageList
             };
             Assert.NotEqual(IntPtr.Zero, control.Handle);
-            Assert.Equal(imageList.Handle, User32.SendMessageW(control.Handle, (User32.WindowMessage)ComCtl32.TCM.GETIMAGELIST, IntPtr.Zero, IntPtr.Zero));
+            Assert.Equal(imageList.Handle, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.TCM.GETIMAGELIST, IntPtr.Zero, IntPtr.Zero));
         }
 
         [WinFormsFact]
@@ -1033,7 +1033,7 @@ namespace System.Windows.Forms.Tests
         {
             using var control = new TabControl();
             Assert.NotEqual(IntPtr.Zero, control.Handle);
-            Assert.Equal(IntPtr.Zero, User32.SendMessageW(control.Handle, (User32.WindowMessage)ComCtl32.TCM.GETITEMCOUNT, IntPtr.Zero, IntPtr.Zero));
+            Assert.Equal(IntPtr.Zero, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.TCM.GETITEMCOUNT, IntPtr.Zero, IntPtr.Zero));
         }
 
         [WinFormsTheory]
@@ -1055,7 +1055,7 @@ namespace System.Windows.Forms.Tests
             control.TabPages.Add(page2);
             control.TabPages.Add(page3);
             Assert.NotEqual(IntPtr.Zero, control.Handle);
-            Assert.Equal((IntPtr)3, User32.SendMessageW(control.Handle, (User32.WindowMessage)ComCtl32.TCM.GETITEMCOUNT, IntPtr.Zero, IntPtr.Zero));
+            Assert.Equal((IntPtr)3, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.TCM.GETITEMCOUNT, IntPtr.Zero, IntPtr.Zero));
 
             char* buffer = stackalloc char[256];
             ComCtl32.TCITEMW item = default;
@@ -1065,7 +1065,7 @@ namespace System.Windows.Forms.Tests
             item.mask = (ComCtl32.TCIF)uint.MaxValue;
 
             // Get item 0.
-            Assert.Equal((IntPtr)1, User32.SendMessageW(control.Handle, (User32.WindowMessage)ComCtl32.TCM.GETITEMW, (IntPtr)0, ref item));
+            Assert.Equal((IntPtr)1, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.TCM.GETITEMW, (IntPtr)0, ref item));
             Assert.Equal(ComCtl32.TCIS.BUTTONPRESSED, item.dwState);
             Assert.Equal(IntPtr.Zero, item.lParam);
             Assert.Equal(int.MaxValue, item.cchTextMax);
@@ -1073,15 +1073,15 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(-1, item.iImage);
 
             // Get item 1.
-            Assert.Equal((IntPtr)1, User32.SendMessageW(control.Handle, (User32.WindowMessage)ComCtl32.TCM.GETITEMW, (IntPtr)1, ref item));
+            Assert.Equal((IntPtr)1, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.TCM.GETITEMW, (IntPtr)1, ref item));
             Assert.Equal((ComCtl32.TCIS)0, item.dwState);
             Assert.Equal(IntPtr.Zero, item.lParam);
             Assert.Equal(int.MaxValue, item.cchTextMax);
             Assert.Equal(expectedText, new string(item.pszText));
             Assert.Equal(1, item.iImage);
-            
+
             // Get item 2.
-            Assert.Equal((IntPtr)1, User32.SendMessageW(control.Handle, (User32.WindowMessage)ComCtl32.TCM.GETITEMW, (IntPtr)2, ref item));
+            Assert.Equal((IntPtr)1, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.TCM.GETITEMW, (IntPtr)2, ref item));
             Assert.Equal((ComCtl32.TCIS)0, item.dwState);
             Assert.Equal(IntPtr.Zero, item.lParam);
             Assert.Equal(int.MaxValue, item.cchTextMax);
@@ -1300,11 +1300,11 @@ namespace System.Windows.Forms.Tests
             using var imageList =  new ImageList();
             control.ImageList = imageList;
             Assert.True(imageList.HandleCreated);
-            Assert.Equal(imageList.Handle, User32.SendMessageW(control.Handle, (User32.WindowMessage)ComCtl32.TCM.GETIMAGELIST, IntPtr.Zero, IntPtr.Zero));
+            Assert.Equal(imageList.Handle, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.TCM.GETIMAGELIST, IntPtr.Zero, IntPtr.Zero));
 
             // Set null.
             control.ImageList = null;
-            Assert.Equal(IntPtr.Zero, User32.SendMessageW(control.Handle, (User32.WindowMessage)ComCtl32.TCM.GETIMAGELIST, IntPtr.Zero, IntPtr.Zero));
+            Assert.Equal(IntPtr.Zero, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.TCM.GETIMAGELIST, IntPtr.Zero, IntPtr.Zero));
         }
 
         [WinFormsFact]
@@ -1421,7 +1421,7 @@ namespace System.Windows.Forms.Tests
             imageList1.ImageSize = new Size(1, 2);
             Assert.Equal(1, recreateCallCount1);
             Assert.Same(imageList1, control.ImageList);
-            Assert.Equal(imageList1.Handle, User32.SendMessageW(control.Handle, (User32.WindowMessage)ComCtl32.TCM.GETIMAGELIST, IntPtr.Zero, IntPtr.Zero));
+            Assert.Equal(imageList1.Handle, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.TCM.GETIMAGELIST, IntPtr.Zero, IntPtr.Zero));
             Assert.True(control.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
@@ -1432,7 +1432,7 @@ namespace System.Windows.Forms.Tests
             imageList1.ImageSize = new Size(2, 3);
             Assert.Equal(2, recreateCallCount1);
             Assert.Same(imageList2, control.ImageList);
-            Assert.Equal(imageList2.Handle, User32.SendMessageW(control.Handle, (User32.WindowMessage)ComCtl32.TCM.GETIMAGELIST, IntPtr.Zero, IntPtr.Zero));
+            Assert.Equal(imageList2.Handle, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.TCM.GETIMAGELIST, IntPtr.Zero, IntPtr.Zero));
             Assert.True(control.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
@@ -1824,7 +1824,6 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<ArgumentOutOfRangeException>("value", () => control.Padding = new Point(1, -1));
         }
 
-
         [WinFormsTheory]
         [InlineData(RightToLeft.Yes, true, 1)]
         [InlineData(RightToLeft.Yes, false, 0)]
@@ -1843,7 +1842,7 @@ namespace System.Windows.Forms.Tests
             {
                 Assert.Same(control, sender);
                 Assert.Same(control, e.AffectedControl);
-                Assert.Same("RightToLeftLayout", e.AffectedProperty);
+                Assert.Equal("RightToLeftLayout", e.AffectedProperty);
                 layoutCallCount++;
             };
 
@@ -1878,14 +1877,6 @@ namespace System.Windows.Forms.Tests
             {
                 RightToLeft = rightToLeft
             };
-            int layoutCallCount = 0;
-            control.Layout += (sender, e) =>
-            {
-                Assert.Same(control, sender);
-                Assert.Same(control, e.AffectedControl);
-                Assert.Same("RightToLeftLayout", e.AffectedProperty);
-                layoutCallCount++;
-            };
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             int invalidatedCallCount = 0;
             control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -1893,6 +1884,14 @@ namespace System.Windows.Forms.Tests
             control.StyleChanged += (sender, e) => styleChangedCallCount++;
             int createdCallCount = 0;
             control.HandleCreated += (sender, e) => createdCallCount++;
+            int layoutCallCount = 0;
+            control.Layout += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(control, e.AffectedControl);
+                Assert.Equal("RightToLeftLayout", e.AffectedProperty);
+                layoutCallCount++;
+            };
 
             control.RightToLeftLayout = value;
             Assert.Equal(value, control.RightToLeftLayout);
@@ -1957,6 +1956,34 @@ namespace System.Windows.Forms.Tests
             control.RightToLeftLayout = false;
             Assert.False(control.RightToLeftLayout);
             Assert.Equal(2, callCount);
+        }
+
+        [WinFormsFact]
+        public void TabControl_RightToLeftLayout_SetWithHandlerInDisposing_DoesNotRightToLeftLayoutChanged()
+        {
+            using var control = new TabControl
+            {
+                RightToLeft = RightToLeft.Yes
+            };
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+
+            int callCount = 0;
+            control.RightToLeftLayoutChanged += (sender, e) => callCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            int disposedCallCount = 0;
+            control.Disposed += (sender, e) =>
+            {
+                control.RightToLeftLayout = true;
+                Assert.True(control.RightToLeftLayout);
+                Assert.Equal(0, callCount);
+                Assert.Equal(0, createdCallCount);
+                disposedCallCount++;
+            };
+
+            control.Dispose();
+            Assert.Equal(1, disposedCallCount);
         }
 
         [WinFormsFact]
@@ -3548,7 +3575,7 @@ namespace System.Windows.Forms.Tests
             imageList.Dispose();
             Assert.Same(imageList, control.ImageList);
         }
-        
+
         [WinFormsFact]
         public void TabControl_Dispose_InvokeDisposingWithImageList_DetachesImageList()
         {
@@ -3561,7 +3588,7 @@ namespace System.Windows.Forms.Tests
             imageList.Dispose();
             Assert.Same(imageList, control.ImageList);
         }
-        
+
         [WinFormsFact]
         public void TabControl_Dispose_InvokeNotDisposingWithImageList_DoesNotDetachImageList()
         {
@@ -4204,12 +4231,12 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-        
+
             // Call with handler.
             control.Enter += handler;
             control.OnEnter(eventArgs);
             Assert.Equal(1, callCount);
-        
+
             // Remove handler.
             control.Enter -= handler;
             control.OnEnter(eventArgs);
@@ -4245,20 +4272,126 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(0, childCallCount2);
                 callCount++;
             };
-        
+
             // Call with handler.
             control.Enter += handler;
             control.OnEnter(eventArgs);
             Assert.Equal(1, callCount);
             Assert.Equal(0, childCallCount1);
             Assert.Equal(1, childCallCount2);
-        
+
             // Remove handler.
             control.Enter -= handler;
             control.OnEnter(eventArgs);
             Assert.Equal(1, callCount);
             Assert.Equal(0, childCallCount1);
             Assert.Equal(2, childCallCount2);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void TabControl_OnHandleCreated_Invoke_CallsHandleCreated(EventArgs eventArgs)
+        {
+            using var control = new SubTabControl();
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.HandleCreated += handler;
+            control.OnHandleCreated(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.False(control.IsHandleCreated);
+
+            // Remove handler.
+            control.HandleCreated -= handler;
+            control.OnHandleCreated(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void TabControl_OnHandleCreated_InvokeWithHandle_CallsHandleCreated(EventArgs eventArgs)
+        {
+            using var control = new SubTabControl();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.HandleCreated += handler;
+            control.OnHandleCreated(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.True(control.IsHandleCreated);
+
+            // Remove handler.
+            control.HandleCreated -= handler;
+            control.OnHandleCreated(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.True(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void TabControl_OnHandleDestroyed_Invoke_CallsHandleDestroyed(EventArgs eventArgs)
+        {
+            using var control = new SubTabControl();
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.HandleDestroyed += handler;
+            control.OnHandleDestroyed(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.False(control.IsHandleCreated);
+
+            // Remove handler.
+            control.HandleDestroyed -= handler;
+            control.OnHandleDestroyed(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void TabControl_OnHandleDestroyed_InvokeWithHandle_CallsHandleDestroyed(EventArgs eventArgs)
+        {
+            using var control = new SubTabControl();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.HandleDestroyed += handler;
+            control.OnHandleDestroyed(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.True(control.IsHandleCreated);
+
+            // Remove handler.
+            control.HandleDestroyed -= handler;
+            control.OnHandleDestroyed(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.True(control.IsHandleCreated);
         }
 
         [WinFormsTheory]
@@ -4273,12 +4406,12 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-        
+
             // Call with handler.
             control.Leave += handler;
             control.OnLeave(eventArgs);
             Assert.Equal(1, callCount);
-        
+
             // Remove handler.
             control.Leave -= handler;
             control.OnLeave(eventArgs);
@@ -4314,14 +4447,14 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(1, childCallCount2);
                 callCount++;
             };
-        
+
             // Call with handler.
             control.Leave += handler;
             control.OnLeave(eventArgs);
             Assert.Equal(1, callCount);
             Assert.Equal(0, childCallCount1);
             Assert.Equal(1, childCallCount2);
-        
+
             // Remove handler.
             control.Leave -= handler;
             control.OnLeave(eventArgs);
@@ -4330,47 +4463,31 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(2, childCallCount2);
         }
 
-        [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
-        public void TabControl_OnRightToLeftLayoutChanged_Invoke_CallsRightToLeftLayoutChanged(EventArgs eventArgs)
+        public static IEnumerable<object[]> OnRightToLeftLayoutChanged_TestData()
         {
-            using var control = new SubTabControl();
-            int callCount = 0;
-            void handler(object sender, EventArgs e)
-            {
-                Assert.Same(control, sender);
-                Assert.Same(eventArgs, e);
-                callCount++;
-            }
-
-            // Call with handler.
-            control.RightToLeftLayoutChanged += handler;
-            control.OnRightToLeftLayoutChanged(eventArgs);
-            Assert.Equal(1, callCount);
-            Assert.False(control.IsHandleCreated);
-
-            // Remove handler.
-            control.RightToLeftLayoutChanged -= handler;
-            control.OnRightToLeftLayoutChanged(eventArgs);
-            Assert.Equal(1, callCount);
-            Assert.False(control.IsHandleCreated);
+            yield return new object[] { RightToLeft.Yes, null };
+            yield return new object[] { RightToLeft.Yes, new EventArgs() };
+            yield return new object[] { RightToLeft.No, null };
+            yield return new object[] { RightToLeft.No, new EventArgs() };
+            yield return new object[] { RightToLeft.Inherit, null };
+            yield return new object[] { RightToLeft.Inherit, new EventArgs() };
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
-        public void TabControl_OnRightToLeftLayoutChanged_InvokeRightToLeft_CallsRightToLeftLayoutChanged(EventArgs eventArgs)
+        [MemberData(nameof(OnRightToLeftLayoutChanged_TestData))]
+        public void TabControl_OnRightToLeftLayoutChanged_Invoke_CallsRightToLeftLayoutChanged(RightToLeft rightToLeft, EventArgs eventArgs)
         {
             using var control = new SubTabControl
             {
-                RightToLeft = RightToLeft.Yes
+                RightToLeft = rightToLeft
             };
             int callCount = 0;
-            void handler(object sender, EventArgs e)
+            EventHandler handler = (sender, e) =>
             {
                 Assert.Same(control, sender);
                 Assert.Same(eventArgs, e);
                 callCount++;
-            }
+            };
 
             // Call with handler.
             control.RightToLeftLayoutChanged += handler;
@@ -4385,116 +4502,78 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.IsHandleCreated);
         }
 
-        [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
-        public void TabControl_OnRightToLeftLayoutChanged_InvokeWithHandle_CallsRightToLeftLayoutChanged(EventArgs eventArgs)
+        public static IEnumerable<object[]> OnRightToLeftLayoutChanged_WithHandle_TestData()
         {
-            using var control = new SubTabControl();
-            Assert.NotEqual(IntPtr.Zero, control.Handle);
-
-            int callCount = 0;
-            void handler(object sender, EventArgs e)
-            {
-                Assert.Same(control, sender);
-                Assert.Same(eventArgs, e);
-                callCount++;
-            }
-            int invalidatedCallCount = 0;
-            void invalidatedHandler(object sender, InvalidateEventArgs e) => invalidatedCallCount++;
-            int styleChangedCallCount = 0;
-            void styleChangedHandler(object sender, EventArgs e) => styleChangedCallCount++;
-            int createdCallCount = 0;
-            void createdHandler(object sender, EventArgs e) => createdCallCount++;
-
-            // Call with handler.
-            control.RightToLeftLayoutChanged += handler;
-            control.Invalidated += invalidatedHandler;
-            control.StyleChanged += styleChangedHandler;
-            control.HandleCreated += createdHandler;
-            control.OnRightToLeftLayoutChanged(eventArgs);
-            Assert.Equal(1, callCount);
-            Assert.Equal(0, invalidatedCallCount);
-            Assert.Equal(0, styleChangedCallCount);
-            Assert.Equal(0, createdCallCount);
-            Assert.True(control.IsHandleCreated);
-
-            // Remove handler.
-            control.RightToLeftLayoutChanged -= handler;
-            control.Invalidated -= invalidatedHandler;
-            control.StyleChanged -= styleChangedHandler;
-            control.HandleCreated -= createdHandler;
-            control.OnRightToLeftLayoutChanged(eventArgs);
-            Assert.Equal(0, invalidatedCallCount);
-            Assert.Equal(0, styleChangedCallCount);
-            Assert.Equal(0, createdCallCount);
-            Assert.True(control.IsHandleCreated);
+            yield return new object[] { RightToLeft.Yes, null, 1 };
+            yield return new object[] { RightToLeft.Yes, new EventArgs(), 1 };
+            yield return new object[] { RightToLeft.No, null, 0 };
+            yield return new object[] { RightToLeft.No, new EventArgs(), 0 };
+            yield return new object[] { RightToLeft.Inherit, null, 0 };
+            yield return new object[] { RightToLeft.Inherit, new EventArgs(), 0 };
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
-        public void TabControl_OnRightToLeftLayoutChanged_InvokeWithRightToLeftWithHandle_CallsRightToLeftLayoutChanged(EventArgs eventArgs)
+        [MemberData(nameof(OnRightToLeftLayoutChanged_WithHandle_TestData))]
+        public void TabControl_OnRightToLeftLayoutChanged_InvokeWithHandle_CallsRightToLeftLayoutChanged(RightToLeft rightToLeft, EventArgs eventArgs, int expectedCreatedCallCount)
         {
             using var control = new SubTabControl
             {
-                RightToLeft = RightToLeft.Yes
+                RightToLeft = rightToLeft
             };
             Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
 
             int callCount = 0;
-            void handler(object sender, EventArgs e)
+            EventHandler handler = (sender, e) =>
             {
                 Assert.Same(control, sender);
                 Assert.Same(eventArgs, e);
                 callCount++;
-            }
-            int invalidatedCallCount = 0;
-            void invalidatedHandler(object sender, InvalidateEventArgs e) => invalidatedCallCount++;
-            int styleChangedCallCount = 0;
-            void styleChangedHandler(object sender, EventArgs e) => styleChangedCallCount++;
-            int createdCallCount = 0;
-            void createdHandler(object sender, EventArgs e) => createdCallCount++;
+            };
 
             // Call with handler.
             control.RightToLeftLayoutChanged += handler;
-            control.Invalidated += invalidatedHandler;
-            control.StyleChanged += styleChangedHandler;
-            control.HandleCreated += createdHandler;
             control.OnRightToLeftLayoutChanged(eventArgs);
             Assert.Equal(1, callCount);
-            Assert.Equal(1, invalidatedCallCount);
-            Assert.Equal(0, styleChangedCallCount);
-            Assert.Equal(1, createdCallCount);
             Assert.True(control.IsHandleCreated);
+            Assert.Equal(expectedCreatedCallCount, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(expectedCreatedCallCount, createdCallCount);
 
             // Remove handler.
             control.RightToLeftLayoutChanged -= handler;
-            control.Invalidated -= invalidatedHandler;
-            control.StyleChanged -= styleChangedHandler;
-            control.HandleCreated -= createdHandler;
             control.OnRightToLeftLayoutChanged(eventArgs);
-            Assert.Equal(1, invalidatedCallCount);
-            Assert.Equal(0, styleChangedCallCount);
-            Assert.Equal(1, createdCallCount);
             Assert.True(control.IsHandleCreated);
+            Assert.Equal(expectedCreatedCallCount * 2, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(expectedCreatedCallCount * 2, createdCallCount);
         }
 
         [WinFormsFact]
         public void TabControl_OnRightToLeftLayoutChanged_InvokeInDisposing_DoesNotCallRightToLeftLayoutChanged()
         {
-            using var control = new SubTabControl();
+            using var control = new SubTabControl
+            {
+                RightToLeft = RightToLeft.Yes
+            };
             Assert.NotEqual(IntPtr.Zero, control.Handle);
 
             int callCount = 0;
             control.RightToLeftLayoutChanged += (sender, e) => callCount++;
-            int invalidatedCallCount = 0;
-            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
 
             int disposedCallCount = 0;
             control.Disposed += (sender, e) =>
             {
                 control.OnRightToLeftLayoutChanged(EventArgs.Empty);
                 Assert.Equal(0, callCount);
-                Assert.Equal(0, invalidatedCallCount);
+                Assert.Equal(0, createdCallCount);
                 disposedCallCount++;
             };
 
@@ -4820,7 +4899,7 @@ namespace System.Windows.Forms.Tests
             control.TabPages.Add(page3);
 
             control.RecreateHandle();
-            Assert.Equal((IntPtr)3, User32.SendMessageW(control.Handle, (User32.WindowMessage)ComCtl32.TCM.GETITEMCOUNT, IntPtr.Zero, IntPtr.Zero));
+            Assert.Equal((IntPtr)3, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.TCM.GETITEMCOUNT, IntPtr.Zero, IntPtr.Zero));
 
             char* buffer = stackalloc char[256];
             ComCtl32.TCITEMW item = default;
@@ -4830,7 +4909,7 @@ namespace System.Windows.Forms.Tests
             item.mask = (ComCtl32.TCIF)uint.MaxValue;
 
             // Get item 0.
-            Assert.Equal((IntPtr)1, User32.SendMessageW(control.Handle, (User32.WindowMessage)ComCtl32.TCM.GETITEMW, (IntPtr)0, ref item));
+            Assert.Equal((IntPtr)1, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.TCM.GETITEMW, (IntPtr)0, ref item));
             Assert.Equal(ComCtl32.TCIS.BUTTONPRESSED, item.dwState);
             Assert.Equal(IntPtr.Zero, item.lParam);
             Assert.Equal(int.MaxValue, item.cchTextMax);
@@ -4838,15 +4917,15 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(-1, item.iImage);
 
             // Get item 1.
-            Assert.Equal((IntPtr)1, User32.SendMessageW(control.Handle, (User32.WindowMessage)ComCtl32.TCM.GETITEMW, (IntPtr)1, ref item));
+            Assert.Equal((IntPtr)1, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.TCM.GETITEMW, (IntPtr)1, ref item));
             Assert.Equal((ComCtl32.TCIS)0, item.dwState);
             Assert.Equal(IntPtr.Zero, item.lParam);
             Assert.Equal(int.MaxValue, item.cchTextMax);
             Assert.Equal(expectedText, new string(item.pszText));
             Assert.Equal(1, item.iImage);
-            
+
             // Get item 2.
-            Assert.Equal((IntPtr)1, User32.SendMessageW(control.Handle, (User32.WindowMessage)ComCtl32.TCM.GETITEMW, (IntPtr)2, ref item));
+            Assert.Equal((IntPtr)1, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.TCM.GETITEMW, (IntPtr)2, ref item));
             Assert.Equal((ComCtl32.TCIS)0, item.dwState);
             Assert.Equal(IntPtr.Zero, item.lParam);
             Assert.Equal(int.MaxValue, item.cchTextMax);
@@ -4872,7 +4951,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(0, layoutCallCount);
                 Assert.Equal(0, controlRemovedCallCount);
                 Assert.False(control.IsHandleCreated);
-                
+
                 // RemoveAll again.
                 control.RemoveAll();
                 Assert.Empty(control.TabPages);
@@ -4923,7 +5002,7 @@ namespace System.Windows.Forms.Tests
                 Assert.False(child1.IsHandleCreated);
                 Assert.False(child2.IsHandleCreated);
                 Assert.False(child3.IsHandleCreated);
-                
+
                 // RemoveAll again.
                 control.RemoveAll();
                 Assert.Empty(control.TabPages);
@@ -4973,7 +5052,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(0, parentInvalidatedCallCount);
                 Assert.Equal(0, parentStyleChangedCallCount);
                 Assert.Equal(0, parentCreatedCallCount);
-                
+
                 // RemoveAll again.
                 control.RemoveAll();
                 Assert.Empty(control.TabPages);
@@ -5038,7 +5117,7 @@ namespace System.Windows.Forms.Tests
                 Assert.True(child1.IsHandleCreated);
                 Assert.False(child2.IsHandleCreated);
                 Assert.False(child3.IsHandleCreated);
-                
+
                 // RemoveAll again.
                 control.RemoveAll();
                 Assert.Empty(control.TabPages);
@@ -5075,7 +5154,7 @@ namespace System.Windows.Forms.Tests
 
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             control.RemoveAll();
-            Assert.Equal((IntPtr)0, User32.SendMessageW(control.Handle, (User32.WindowMessage)ComCtl32.TCM.GETITEMCOUNT, IntPtr.Zero, IntPtr.Zero));
+            Assert.Equal((IntPtr)0, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.TCM.GETITEMCOUNT, IntPtr.Zero, IntPtr.Zero));
         }
 
         [WinFormsFact]
@@ -5561,7 +5640,7 @@ namespace System.Windows.Forms.Tests
             using var control = new TabControl();
             Assert.Equal("System.Windows.Forms.TabControl, TabPages.Count: 0", control.ToString());
         }
-        
+
         [WinFormsFact]
         public void TabControl_ToString_InvokeNotEmpty_ReturnsExpected()
         {
@@ -5665,6 +5744,10 @@ namespace System.Windows.Forms.Tests
             public new void OnDrawItem(DrawItemEventArgs e) => base.OnDrawItem(e);
 
             public new void OnEnter(EventArgs e) => base.OnEnter(e);
+
+            public new void OnHandleCreated(EventArgs e) => base.OnHandleCreated(e);
+
+            public new void OnHandleDestroyed(EventArgs e) => base.OnHandleDestroyed(e);
 
             public new void OnLeave(EventArgs e) => base.OnLeave(e);
 

@@ -987,7 +987,6 @@ namespace System.ComponentModel.Design
                     {
                         Items = Array.Empty<object>();
                     }
-
                 }
                 catch (Exception ex)
                 {
@@ -1486,7 +1485,6 @@ namespace System.ComponentModel.Design
 
                 AdjustListBoxItemHeight();
                 UpdateItemWidths(null);
-
             }
 
             protected override void OnFontChanged(EventArgs e)
@@ -1550,7 +1548,6 @@ namespace System.ComponentModel.Design
             /// </summary>
             private void PropertyGrid_propertyValueChanged(object sender, PropertyValueChangedEventArgs e)
             {
-
                 _dirty = true;
 
                 // Refresh selected listbox item so that it picks up any name change
@@ -1731,7 +1728,6 @@ namespace System.ComponentModel.Design
                 {
                     ResumeEnabledUpdates(true);
                 }
-
             }
 
             /// <summary>
@@ -1907,7 +1903,7 @@ namespace System.ComponentModel.Design
                 public override Type PropertyType { get; }
 
                 /// <summary>
-                ///  When overridden in a derived class, indicates whether resetting the <paramref name="component"/> 
+                ///  When overridden in a derived class, indicates whether resetting the <paramref name="component"/>
                 ///  will change the value of the <paramref name="component"/>.
                 /// </summary>
                 public override bool CanResetValue(object component) => false;
@@ -2037,9 +2033,8 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            ///  ListItem class. This is a single entry in our list box.
-            ///  It contains the value we're editing as well as accessors for the type
-            // converter and UI editor.
+            ///  This is a single entry in our list box. It contains the value we're editing as well
+            ///  as accessors for the type converter and UI editor.
             /// </summary>
             private class ListItem
             {
@@ -2132,7 +2127,6 @@ namespace System.ComponentModel.Design
 
                     return _grid;
                 }
-
             }
 
             /// <summary>
@@ -2164,7 +2158,7 @@ namespace System.ComponentModel.Design
                             if (PropertyGrid.Focused || PropertyGrid.ContainsFocus)
                             {
                                 // recreate the keystroke to the newly activated window
-                                User32.SendMessageW(User32.GetFocus(), User32.WindowMessage.WM_KEYDOWN, _lastKeyDown.WParam, _lastKeyDown.LParam);
+                                User32.SendMessageW(User32.GetFocus(), User32.WM.KEYDOWN, _lastKeyDown.WParam, _lastKeyDown.LParam);
                             }
                         }
                         break;
@@ -2191,16 +2185,14 @@ namespace System.ComponentModel.Design
                         if (PropertyGrid.Focused || PropertyGrid.ContainsFocus)
                         {
                             IntPtr hWnd = User32.GetFocus();
-                            User32.SendMessageW(hWnd, User32.WindowMessage.WM_KEYDOWN, _lastKeyDown.WParam, _lastKeyDown.LParam);
-                            User32.SendMessageW(hWnd, User32.WindowMessage.WM_CHAR, m.WParam, m.LParam);
+                            User32.SendMessageW(hWnd, User32.WM.KEYDOWN, _lastKeyDown.WParam, _lastKeyDown.LParam);
+                            User32.SendMessageW(hWnd, User32.WM.CHAR, m.WParam, m.LParam);
                             return;
                         }
                         break;
-
                 }
                 base.WndProc(ref m);
             }
-
         }
 
         /// <summary>

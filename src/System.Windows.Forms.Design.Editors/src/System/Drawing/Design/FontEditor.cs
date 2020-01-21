@@ -19,10 +19,6 @@ namespace System.Drawing.Design
     {
         private FontDialog _fontDialog;
 
-        /// <summary>
-        ///  Edits the given object value using the editor style provided by GetEditorStyle.
-        ///  A service provider is provided so that any required editing services can be obtained.
-        /// </summary>
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
             if (provider != null)

@@ -10,6 +10,7 @@ using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.VisualStyles;
 using static Interop;
+using static Interop.ComCtl32;
 
 namespace System.Windows.Forms
 {
@@ -78,7 +79,6 @@ namespace System.Windows.Forms
                 }
                 return renderer;
             }
-
         }
 
         private int SizeGripWidth
@@ -197,17 +197,17 @@ namespace System.Windows.Forms
             get
             {
                 CreateParams cp = base.CreateParams;
-                cp.ClassName = ComCtl32.WindowClasses.WC_STATUSBAR;
+                cp.ClassName = WindowClasses.WC_STATUSBAR;
 
                 if (sizeGrip)
                 {
-                    cp.Style |= NativeMethods.SBARS_SIZEGRIP;
+                    cp.Style |= (int)SBARS.SIZEGRIP;
                 }
                 else
                 {
-                    cp.Style &= (~NativeMethods.SBARS_SIZEGRIP);
+                    cp.Style &= ~(int)SBARS.SIZEGRIP;
                 }
-                cp.Style |= NativeMethods.CCS_NOPARENTALIGN | NativeMethods.CCS_NORESIZE;
+                cp.Style |= (int)(CCS.NOPARENTALIGN | CCS.NORESIZE);
 
                 return cp;
             }
@@ -409,9 +409,7 @@ namespace System.Windows.Forms
                     layoutDirty = true;
                     if (IsHandleCreated)
                     {
-                        int bShowPanels = (!showPanels) ? 1 : 0;
-
-                        SendMessage(NativeMethods.SB_SIMPLE, bShowPanels, 0);
+                        User32.SendMessageW(this, (User32.WM)SB.SIMPLE, PARAM.FromBool(!showPanels), IntPtr.Zero);
 
                         if (showPanels)
                         {
@@ -538,7 +536,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Makes the panel according to the sizes in the panel list.
         /// </summary>
-        private void ApplyPanelWidths()
+        private unsafe void ApplyPanelWidths()
         {
             // This forces handle creation every time any time the StatusBar
             // has to be re-laidout.
@@ -553,14 +551,14 @@ namespace System.Windows.Forms
             if (length == 0)
             {
                 Size sz = Size;
-                int[] offsets = new int[1];
+                Span<int> offsets = stackalloc int[1];
                 offsets[0] = sz.Width;
                 if (sizeGrip)
                 {
                     offsets[0] -= SizeGripWidth;
                 }
-                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.SB_SETPARTS, 1, offsets);
-                SendMessage(NativeMethods.SB_SETICON, 0, IntPtr.Zero);
+                User32.SendMessageW(this, (User32.WM)SB.SETPARTS, (IntPtr)1, ref offsets[0]);
+                User32.SendMessageW(this, (User32.WM)SB.SETICON, IntPtr.Zero, IntPtr.Zero);
 
                 return;
             }
@@ -574,7 +572,11 @@ namespace System.Windows.Forms
                 offsets2[i] = currentOffset;
                 panel.Right = offsets2[i];
             }
-            UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.SB_SETPARTS, length, offsets2);
+
+            fixed (int* pOffsets = offsets2)
+            {
+                User32.SendMessageW(this, (User32.WM)SB.SETPARTS, (IntPtr)length, (IntPtr)pOffsets);
+            }
 
             // Tooltip setup...
             for (int i = 0; i < length; i++)
@@ -594,11 +596,11 @@ namespace System.Windows.Forms
 
                 try
                 {
-                    var icc = new ComCtl32.INITCOMMONCONTROLSEX
+                    var icc = new INITCOMMONCONTROLSEX
                     {
-                        dwICC = ComCtl32.ICC.BAR_CLASSES
+                        dwICC = ICC.BAR_CLASSES
                     };
-                    ComCtl32.InitCommonControlsEx(ref icc);
+                    InitCommonControlsEx(ref icc);
                 }
                 finally
                 {
@@ -659,7 +661,7 @@ namespace System.Windows.Forms
 
             if (!showPanels)
             {
-                SendMessage(NativeMethods.SB_SIMPLE, 1, 0);
+                User32.SendMessageW(this, (User32.WM)SB.SIMPLE, (IntPtr)1, IntPtr.Zero);
                 SetSimpleText(simpleText);
             }
             else
@@ -726,7 +728,7 @@ namespace System.Windows.Forms
 
             if (length == 0)
             {
-                SendMessage(NativeMethods.SB_SETTEXT, 0, "");
+                User32.SendMessageW(this, (User32.WM)SB.SETTEXT, IntPtr.Zero, string.Empty);
             }
 
             int i;
@@ -744,7 +746,7 @@ namespace System.Windows.Forms
             }
             for (; i < old; i++)
             {
-                SendMessage(NativeMethods.SB_SETTEXT, 0, null);
+                User32.SendMessageW(this, (User32.WM)SB.SETTEXT, IntPtr.Zero, null);
             }
         }
 
@@ -767,7 +769,6 @@ namespace System.Windows.Forms
                 ApplyPanelWidths();
                 ForcePanelUpdate();
             }
-
         }
 
         /// <summary>
@@ -802,14 +803,13 @@ namespace System.Windows.Forms
         {
             if (!showPanels && IsHandleCreated)
             {
-
-                int wparam = SIMPLE_INDEX + NativeMethods.SBT_NOBORDERS;
+                int wparam = SIMPLE_INDEX + (int)SBT.NOBORDERS;
                 if (RightToLeft == RightToLeft.Yes)
                 {
-                    wparam |= NativeMethods.SBT_RTLREADING;
+                    wparam |= (int)SBT.RTLREADING;
                 }
 
-                SendMessage(NativeMethods.SB_SETTEXT, wparam, simpleText);
+                User32.SendMessageW(this, (User32.WM)SB.SETTEXT, (IntPtr)wparam, simpleText);
             }
         }
 
@@ -851,7 +851,6 @@ namespace System.Windows.Forms
                 int copyOfLeftoverWidth = unchecked((int)0x80000000);
                 while (springPanelsLeft > 0)
                 {
-
                     int widthOfSpringPanel = (leftoverWidth) / springPanelsLeft;
                     if (leftoverWidth == copyOfLeftoverWidth)
                     {
@@ -937,7 +936,6 @@ namespace System.Windows.Forms
         {
             mainToolTip = t;
             toolTipSet = true;
-
         }
 
         internal void UpdateTooltip(StatusBarPanel panel)
@@ -1002,7 +1000,7 @@ namespace System.Windows.Forms
             OnDrawItem(new StatusBarDrawItemEventArgs(g, Font, dis->rcItem, (int)dis->itemID, DrawItemState.None, panel, ForeColor, BackColor));
         }
 
-        private void WmNotifyNMClick(User32.NMHDR note)
+        private unsafe void WmNotifyNMClick(User32.NMHDR* note)
         {
             if (!showPanels)
             {
@@ -1027,21 +1025,21 @@ namespace System.Windows.Forms
             {
                 MouseButtons button = MouseButtons.Left;
                 int clicks = 0;
-                switch (note.code)
+                switch ((NM)note->code)
                 {
-                    case NativeMethods.NM_CLICK:
+                    case NM.CLICK:
                         button = MouseButtons.Left;
                         clicks = 1;
                         break;
-                    case NativeMethods.NM_RCLICK:
+                    case NM.RCLICK:
                         button = MouseButtons.Right;
                         clicks = 1;
                         break;
-                    case NativeMethods.NM_DBLCLK:
+                    case NM.DBLCLK:
                         button = MouseButtons.Left;
                         clicks = 2;
                         break;
-                    case NativeMethods.NM_RDBLCLK:
+                    case NM.RDBLCLK:
                         button = MouseButtons.Right;
                         clicks = 2;
                         break;
@@ -1083,7 +1081,6 @@ namespace System.Windows.Forms
                     if (!((Form)parent).TopLevel
                         || Dock != DockStyle.Bottom)
                     {
-
                         callSuper = false;
                     }
 
@@ -1126,7 +1123,7 @@ namespace System.Windows.Forms
         ///  the preProcessMessage function. Inheriting controls should call base.wndProc
         ///  for any messages that they don't handle.
         /// </summary>
-        protected override void WndProc(ref Message m)
+        protected unsafe override void WndProc(ref Message m)
         {
             switch (m.Msg)
             {
@@ -1138,13 +1135,13 @@ namespace System.Windows.Forms
                     break;
                 case WindowMessages.WM_NOTIFY:
                 case WindowMessages.WM_NOTIFY + WindowMessages.WM_REFLECT:
-                    User32.NMHDR note = (User32.NMHDR)m.GetLParam(typeof(User32.NMHDR));
-                    switch (note.code)
+                    User32.NMHDR* note = (User32.NMHDR*)m.LParam;
+                    switch ((NM)note->code)
                     {
-                        case NativeMethods.NM_CLICK:
-                        case NativeMethods.NM_RCLICK:
-                        case NativeMethods.NM_DBLCLK:
-                        case NativeMethods.NM_RDBLCLK:
+                        case NM.CLICK:
+                        case NM.RCLICK:
+                        case NM.DBLCLK:
+                        case NM.RDBLCLK:
                             WmNotifyNMClick(note);
                             break;
                         default:
@@ -1192,7 +1189,6 @@ namespace System.Windows.Forms
                 }
                 set
                 {
-
                     if (value == null)
                     {
                         throw new ArgumentNullException(nameof(StatusBarPanel));
@@ -1272,7 +1268,6 @@ namespace System.Windows.Forms
                     {
                         return null;
                     }
-
                 }
             }
 
@@ -1457,7 +1452,6 @@ namespace System.Windows.Forms
             /// </summary>
             public virtual void Insert(int index, StatusBarPanel value)
             {
-
                 //check for the value not to be null
                 if (value == null)
                 {
@@ -1523,7 +1517,6 @@ namespace System.Windows.Forms
             {
                 owner.RemoveAllPanelsWithoutUpdate();
                 owner.PerformLayout();
-
             }
 
             /// <summary>
@@ -1531,7 +1524,6 @@ namespace System.Windows.Forms
             /// </summary>
             public virtual void Remove(StatusBarPanel value)
             {
-
                 //check for the value not to be null
                 if (value == null)
                 {
@@ -1653,16 +1645,16 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    var icc = new ComCtl32.INITCOMMONCONTROLSEX
+                    var icc = new INITCOMMONCONTROLSEX
                     {
-                        dwICC = ComCtl32.ICC.TAB_CLASSES
+                        dwICC = ICC.TAB_CLASSES
                     };
-                    ComCtl32.InitCommonControlsEx(ref icc);
+                    InitCommonControlsEx(ref icc);
 
                     var cp = new CreateParams
                     {
                         Parent = IntPtr.Zero,
-                        ClassName = ComCtl32.WindowClasses.TOOLTIPS_CLASS
+                        ClassName = WindowClasses.TOOLTIPS_CLASS
                     };
                     cp.Style |= NativeMethods.TTS_ALWAYSTIP;
                     cp.ExStyle = 0;
@@ -1755,7 +1747,6 @@ namespace System.Windows.Forms
                 {
                     tools.Remove(key);
                 }
-
             }
 
             /// <summary>
@@ -1773,8 +1764,8 @@ namespace System.Windows.Forms
                 {
                     StatusBar p = (StatusBar)parent;
 
-                    ComCtl32.ToolInfoWrapper<Control> info = GetTOOLINFO(tool);
-                    if (info.SendMessage(p.ToolTipSet ? (IHandle)p.mainToolTip : this, User32.WindowMessage.TTM_ADDTOOLW) == IntPtr.Zero)
+                    ToolInfoWrapper<Control> info = GetTOOLINFO(tool);
+                    if (info.SendMessage(p.ToolTipSet ? (IHandle)p.mainToolTip : this, (User32.WM)TTM.ADDTOOLW) == IntPtr.Zero)
                     {
                         throw new InvalidOperationException(SR.StatusBarAddFailed);
                     }
@@ -1785,8 +1776,8 @@ namespace System.Windows.Forms
             {
                 if (tool != null && tool.text != null && tool.text.Length > 0 && (int)tool.id >= 0)
                 {
-                    ComCtl32.ToolInfoWrapper<Control> info = GetMinTOOLINFO(tool);
-                    info.SendMessage(this, User32.WindowMessage.TTM_DELTOOLW);
+                    ToolInfoWrapper<Control> info = GetMinTOOLINFO(tool);
+                    info.SendMessage(this, (User32.WM)TTM.DELTOOLW);
                 }
             }
 
@@ -1794,8 +1785,8 @@ namespace System.Windows.Forms
             {
                 if (tool != null && tool.text != null && tool.text.Length > 0 && (int)tool.id >= 0)
                 {
-                    ComCtl32.ToolInfoWrapper<Control> info = GetTOOLINFO(tool);
-                    info.SendMessage(this, User32.WindowMessage.TTM_SETTOOLINFOW);
+                    ToolInfoWrapper<Control> info = GetTOOLINFO(tool);
+                    info.SendMessage(this, (User32.WM)TTM.SETTOOLINFOW);
                 }
             }
 
@@ -1816,7 +1807,7 @@ namespace System.Windows.Forms
                     flags: User32.SWP.NOMOVE | User32.SWP.NOSIZE | User32.SWP.NOACTIVATE);
 
                 // Setting the max width has the added benefit of enabling multiline tool tips
-                User32.SendMessageW(this, User32.WindowMessage.TTM_SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
+                User32.SendMessageW(this, (User32.WM)TTM.SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
             }
 
             /// <summary>
@@ -1846,14 +1837,14 @@ namespace System.Windows.Forms
             ///  required data to uniquely identify a region. This is used primarily
             ///  for delete operations. NOTE: This cannot force the creation of a handle.
             /// </summary>
-            private ComCtl32.ToolInfoWrapper<Control> GetMinTOOLINFO(Tool tool)
+            private ToolInfoWrapper<Control> GetMinTOOLINFO(Tool tool)
             {
                 if ((int)tool.id < 0)
                 {
                     AssignId(tool);
                 }
 
-                return new ComCtl32.ToolInfoWrapper<Control>(
+                return new ToolInfoWrapper<Control>(
                     parent,
                     id: parent is StatusBar sb ? sb.Handle : tool.id);
             }
@@ -1862,16 +1853,16 @@ namespace System.Windows.Forms
             ///  Returns a detailed TOOLINFO_T structure that represents the specified
             ///  region. NOTE: This may force the creation of a handle.
             /// </summary>
-            private ComCtl32.ToolInfoWrapper<Control> GetTOOLINFO(Tool tool)
+            private ToolInfoWrapper<Control> GetTOOLINFO(Tool tool)
             {
-                ComCtl32.ToolInfoWrapper<Control> ti = GetMinTOOLINFO(tool);
-                ti.Info.uFlags |= ComCtl32.TTF.TRANSPARENT | ComCtl32.TTF.SUBCLASS;
+                ToolInfoWrapper<Control> ti = GetMinTOOLINFO(tool);
+                ti.Info.uFlags |= TTF.TRANSPARENT | TTF.SUBCLASS;
 
                 // RightToLeft reading order
                 Control richParent = parent;
                 if (richParent != null && richParent.RightToLeft == RightToLeft.Yes)
                 {
-                    ti.Info.uFlags |= ComCtl32.TTF.RTLREADING;
+                    ti.Info.uFlags |= TTF.RTLREADING;
                 }
 
                 ti.Text = tool.text;

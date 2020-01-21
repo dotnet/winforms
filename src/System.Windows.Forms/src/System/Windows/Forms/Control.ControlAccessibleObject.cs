@@ -339,7 +339,6 @@ namespace System.Windows.Forms
                          previous != null;
                          previous = container.GetNextControl(previous, false))
                     {
-
                         // Stop when we hit a Label (whether visible or invisible)
                         if (previous is Label label)
                         {

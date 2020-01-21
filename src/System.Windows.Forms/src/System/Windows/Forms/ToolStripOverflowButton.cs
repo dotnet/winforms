@@ -126,7 +126,6 @@ namespace System.Windows.Forms
         {
             if (ParentInternal != null && ParentInternal.LayoutEngine is ToolStripSplitStackLayout)
             {
-
                 if (ParentInternal.Orientation == Orientation.Horizontal)
                 {
                     bounds.Height = ParentInternal.Height;
@@ -188,8 +187,6 @@ namespace System.Windows.Forms
 
                 return base.GetPropertyValue(propertyID);
             }
-
         }
-
     }
 }

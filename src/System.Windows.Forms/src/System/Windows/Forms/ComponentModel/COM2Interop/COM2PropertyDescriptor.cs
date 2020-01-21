@@ -201,7 +201,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         {
             get
             {
-
                 if (GetNeedsRefresh(Com2PropertyDescriptorRefresh.BaseAttributes))
                 {
                     SetNeedsRefresh(Com2PropertyDescriptorRefresh.BaseAttributes, false);
@@ -291,7 +290,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 inAttrQuery = true;
                 try
                 {
-
                     // demand get any extended attributes
                     ArrayList attrList = new ArrayList();
 
@@ -330,7 +328,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
                 return base.Attributes;
             }
-
         }
 
         /// <summary>
@@ -881,7 +878,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 editor = base.GetEditor(editorBaseType);
             }
             return editor;
-
         }
 
         /// <summary>
@@ -916,7 +912,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 dispid,
                 &g,
                 Kernel32.GetThreadLocale(),
-                NativeMethods.DISPATCH_PROPERTYGET,
+                Oleaut32.DISPATCH.PROPERTYGET,
                 &dispParams,
                 pVarResult,
                 &pExcepInfo,
@@ -1312,7 +1308,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                         dispid,
                         &g,
                         Kernel32.GetThreadLocale(),
-                        NativeMethods.DISPATCH_PROPERTYPUT,
+                        Oleaut32.DISPATCH.PROPERTYPUT,
                         &dispParams,
                         null,
                         &excepInfo,
@@ -1514,7 +1510,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         public GetAttributesEvent(ArrayList attrList)
         {
             this.attrList = attrList;
-
         }
 
         public void Add(Attribute attribute)
@@ -1634,5 +1629,4 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
         }
     }
-
 }

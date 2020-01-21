@@ -84,7 +84,6 @@ namespace System.Windows.Forms
             {
                 get
                 {
-
                     if (dispid != null)
                     {
                         UpdateTypeConverterAndTypeEditorInternal(false, Dispid);
@@ -319,7 +318,6 @@ namespace System.Windows.Forms
             /// </summary>
             internal unsafe void UpdateTypeConverterAndTypeEditorInternal(bool force, Ole32.DispatchID dispid)
             {
-
                 // check to see if we're being forced here or if the work really
                 // needs to be done.
                 //
@@ -391,9 +389,7 @@ namespace System.Windows.Forms
                                     {
                                         axEnum.RefreshArrays(stringMarshaler, intMarshaler);
                                     }
-
                                 }
-
                             }
                             else
                             {
@@ -503,14 +499,12 @@ namespace System.Windows.Forms
 
             public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext context)
             {
-
                 // make sure the converter has been properly refreshed -- calling
                 // the Converter property does this.
                 //
                 TypeConverter tc = this;
                 tc = target.Converter;
                 return base.GetStandardValues(context);
-
             }
         }
     }

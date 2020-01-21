@@ -9121,6 +9121,11 @@ Cette opération non conforme s'est produite sur la trace de la pile :
         <target state="translated">La définition directe de TableLayoutSettings n'est pas prise en charge. Utilisez des propriétés individuelles à la place.</target>
         <note />
       </trans-unit>
+      <trans-unit id="TableLayoutSettingsConverterNoName">
+        <source>Cannot convert TableLayoutSettings to string: could not find a 'Name' string property on a control.</source>
+        <target state="new">Cannot convert TableLayoutSettings to string: could not find a 'Name' string property on a control.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="TableLayoutSettingsGetCellPositionDescr">
         <source>Indicates the row and column of the cell.</source>
         <target state="translated">Indique la ligne et la colonne de la cellule.</target>

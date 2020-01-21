@@ -132,7 +132,6 @@ namespace System.Drawing.Design
 
             public ColorPalette(ColorUI colorUI, Color[] customColors)
             {
-
                 if (!isScalingInitialized)
                 {
                     if (DpiHelper.IsScalingRequired)
@@ -1111,19 +1110,19 @@ namespace System.Drawing.Design
                 switch (msg)
                 {
                     case WindowMessages.WM_INITDIALOG:
-                        UnsafeNativeMethods.SendDlgItemMessage(hwnd, COLOR_HUE, EditMessages.EM_SETMARGINS, (IntPtr)(NativeMethods.EC_LEFTMARGIN | NativeMethods.EC_RIGHTMARGIN), IntPtr.Zero);
-                        UnsafeNativeMethods.SendDlgItemMessage(hwnd, COLOR_SAT, EditMessages.EM_SETMARGINS, (IntPtr)(NativeMethods.EC_LEFTMARGIN | NativeMethods.EC_RIGHTMARGIN), IntPtr.Zero);
-                        UnsafeNativeMethods.SendDlgItemMessage(hwnd, COLOR_LUM, EditMessages.EM_SETMARGINS, (IntPtr)(NativeMethods.EC_LEFTMARGIN | NativeMethods.EC_RIGHTMARGIN), IntPtr.Zero);
-                        UnsafeNativeMethods.SendDlgItemMessage(hwnd, COLOR_RED, EditMessages.EM_SETMARGINS, (IntPtr)(NativeMethods.EC_LEFTMARGIN | NativeMethods.EC_RIGHTMARGIN), IntPtr.Zero);
-                        UnsafeNativeMethods.SendDlgItemMessage(hwnd, COLOR_GREEN, EditMessages.EM_SETMARGINS, (IntPtr)(NativeMethods.EC_LEFTMARGIN | NativeMethods.EC_RIGHTMARGIN), IntPtr.Zero);
-                        UnsafeNativeMethods.SendDlgItemMessage(hwnd, COLOR_BLUE, EditMessages.EM_SETMARGINS, (IntPtr)(NativeMethods.EC_LEFTMARGIN | NativeMethods.EC_RIGHTMARGIN), IntPtr.Zero);
-                        IntPtr hwndCtl = UnsafeNativeMethods.GetDlgItem(hwnd, COLOR_MIX);
+                        UnsafeNativeMethods.SendDlgItemMessage(hwnd, COLOR_HUE, (int)User32.EM.SETMARGINS, (IntPtr)(User32.EC.LEFTMARGIN | User32.EC.RIGHTMARGIN), IntPtr.Zero);
+                        UnsafeNativeMethods.SendDlgItemMessage(hwnd, COLOR_SAT, (int)User32.EM.SETMARGINS, (IntPtr)(User32.EC.LEFTMARGIN | User32.EC.RIGHTMARGIN), IntPtr.Zero);
+                        UnsafeNativeMethods.SendDlgItemMessage(hwnd, COLOR_LUM, (int)User32.EM.SETMARGINS, (IntPtr)(User32.EC.LEFTMARGIN | User32.EC.RIGHTMARGIN), IntPtr.Zero);
+                        UnsafeNativeMethods.SendDlgItemMessage(hwnd, COLOR_RED, (int)User32.EM.SETMARGINS, (IntPtr)(User32.EC.LEFTMARGIN | User32.EC.RIGHTMARGIN), IntPtr.Zero);
+                        UnsafeNativeMethods.SendDlgItemMessage(hwnd, COLOR_GREEN, (int)User32.EM.SETMARGINS, (IntPtr)(User32.EC.LEFTMARGIN | User32.EC.RIGHTMARGIN), IntPtr.Zero);
+                        UnsafeNativeMethods.SendDlgItemMessage(hwnd, COLOR_BLUE, (int)User32.EM.SETMARGINS, (IntPtr)(User32.EC.LEFTMARGIN | User32.EC.RIGHTMARGIN), IntPtr.Zero);
+                        IntPtr hwndCtl = User32.GetDlgItem(hwnd, COLOR_MIX);
                         User32.EnableWindow(hwndCtl, BOOL.FALSE);
                         User32.SetWindowPos(
                             hwndCtl,
                             User32.HWND_TOP,
                             flags: User32.SWP.HIDEWINDOW);
-                        hwndCtl = UnsafeNativeMethods.GetDlgItem(hwnd, (int)User32.ID.OK);
+                        hwndCtl = User32.GetDlgItem(hwnd, (int)User32.ID.OK);
                         User32.EnableWindow(hwndCtl, BOOL.FALSE);
                         User32.SetWindowPos(
                             hwndCtl,
@@ -1145,7 +1144,7 @@ namespace System.Drawing.Design
                                 blue = (byte)UnsafeNativeMethods.GetDlgItemInt(hwnd, COLOR_BLUE, err, false);
                                 Debug.Assert(!err[0], "Couldn't find dialog member COLOR_BLUE");
                                 this.Color = Color.FromArgb(red, green, blue);
-                                User32.PostMessageW(hwnd, User32.WindowMessage.WM_COMMAND, PARAM.FromLowHigh((int)User32.ID.OK, 0), UnsafeNativeMethods.GetDlgItem(hwnd, (int)User32.ID.OK));
+                                User32.PostMessageW(hwnd, User32.WM.COMMAND, PARAM.FromLowHigh((int)User32.ID.OK, 0), User32.GetDlgItem(hwnd, (int)User32.ID.OK));
                                 break;
                         }
                         break;

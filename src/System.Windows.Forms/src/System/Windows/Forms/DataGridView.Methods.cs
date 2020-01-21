@@ -451,7 +451,6 @@ namespace System.Windows.Forms
                                 }
                                 else
                                 {
-                                    //Debug.Assert(columnIndex == -1);
                                     Debug.Assert((((DataGridViewAutoSizeRowsModeInternal)autoSizeRowsMode) & DataGridViewAutoSizeRowsModeInternal.Header) != 0);
                                     dataGridViewCell = Rows.SharedRow(rowIndex).HeaderCell;
                                     if (fixedWidth)
@@ -910,8 +909,7 @@ namespace System.Windows.Forms
                     // Assuming no vertical scrollbar has been accounted for yet
                     Debug.Assert(layout.Data.Width == layout.Inside.Width - layout.RowHeaders.Width - (SingleVerticalBorderAdded ? 1 : 0));
                     int availableWidth = layout.Data.Width - imposedWidthSum;
-                    if ((scrollBars == ScrollBars.Both || scrollBars == ScrollBars.Vertical) /*&&
-                        (availableWidth > requiredWidthSum || this.dataGridViewState2[DATAGRIDVIEWSTATE2_usedFillWeightsDirty])*/)
+                    if ((scrollBars == ScrollBars.Both || scrollBars == ScrollBars.Vertical))
                     {
                         int totalVisibleRowCount = Rows.GetRowCount(DataGridViewElementStates.Visible);
                         int totalVisibleHeight = Rows.GetRowsHeight(DataGridViewElementStates.Visible);
@@ -1162,7 +1160,6 @@ namespace System.Windows.Forms
                     {
                         DataGridViewColumn dataGridViewColumn = (DataGridViewColumn)autoFillColumns[columnEntry];
                         weightSumDbg += dataGridViewColumn.UsedFillWeight;
-
                     }
                     Debug.Assert(Math.Abs(weightSum - weightSumDbg) < 1.0F);
 #endif
@@ -3141,7 +3138,7 @@ namespace System.Windows.Forms
             return true;
         }
 
-        private DataGridViewDataErrorEventArgs CancelEditPrivate(/*ref DataGridViewCell dataGridViewCurrentCell, DataGridViewDataErrorContexts context*/)
+        private DataGridViewDataErrorEventArgs CancelEditPrivate()
         {
             bool currentCellDirty = IsCurrentCellDirty;
             bool currentRowDirty = IsCurrentRowDirty;
@@ -3947,8 +3944,9 @@ namespace System.Windows.Forms
                 {
                     return false;
                 }
-                dgvdee = CancelEditPrivate(/*ref dataGridViewCurrentCell,
-                                           DataGridViewDataErrorContexts.Parsing | DataGridViewDataErrorContexts.Commit | DataGridViewDataErrorContexts.Scroll*/);    // restore old value
+
+                // Restore old value
+                dgvdee = CancelEditPrivate();
                 if (null != dgvdee)
                 {
                     if (dgvdee.ThrowException)
@@ -4460,33 +4458,6 @@ namespace System.Windows.Forms
                 Debug.Assert(verticalOffset == vertScrollBar.Value);
             }
         }
-
-        /* Unused for now
-        private int ComputeScrolledOffRowCount(int scrolledOffRowsHeight)
-        {
-            int rowIndex = this.Rows.GetFirstRow(DataGridViewElementStates.Visible, DataGridViewElementStates.Frozen);
-            if (rowIndex == -1)
-            {
-                // No scrolling rows
-                return 0;
-            }
-            else
-            {
-                int height = 0;
-                int rowCount = 0;
-                while (rowIndex != -1 && height < scrolledOffRowsHeight)
-                {
-                    height += this.Rows.SharedRow(rowIndex).GetHeight(rowIndex);
-                    if (height <= scrolledOffRowsHeight)
-                    {
-                        rowCount++;
-                    }
-                    rowIndex = this.Rows.GetNextRow(rowIndex, DataGridViewElementStates.Visible);
-                }
-                return rowCount;
-            }
-        }
-        */
 
         private void ComputeVisibleColumns()
         {
@@ -5149,7 +5120,6 @@ namespace System.Windows.Forms
             if ((!onlyIfGridHasFocus || Focused) && editingControl != null)
             {
                 Debug.Assert(CurrentCellInternal != null);
-                //Debug.Assert(this.editingControl.CanFocus);
                 editingControl.Focus();
             }
         }
@@ -6136,7 +6106,9 @@ namespace System.Windows.Forms
                     {
                         return false;
                     }
-                    dgvdee = CancelEditPrivate(/*ref dataGridViewCurrentCell, context*/);    // restore old value
+
+                    // Restore old value
+                    dgvdee = CancelEditPrivate();
                     if (null != dgvdee)
                     {
                         if (dgvdee.ThrowException)
@@ -6191,7 +6163,6 @@ namespace System.Windows.Forms
                     }
                     if (keepFocus)
                     {
-                        // Debug.Assert(this.CanFocus || this.Focused); // Invalid assertion
                         Focus();
                     }
                     ImeMode = editingControlImeMode;
@@ -7146,14 +7117,6 @@ namespace System.Windows.Forms
 
                     foreach (string format in formats)
                     {
-                        /* if (!String.Equals(format, DataFormats.Html, StringComparison.OrdinalIgnoreCase) &&
-                            !String.Equals(format, DataFormats.Text, StringComparison.OrdinalIgnoreCase) &&
-                            !String.Equals(format, DataFormats.UnicodeText, StringComparison.OrdinalIgnoreCase) &&
-                            !String.Equals(format, DataFormats.CommaSeparatedValue, StringComparison.OrdinalIgnoreCase))
-                        {
-                            continue;
-                        }*/
-
                         if (sbContent == null)
                         {
                             sbContent = new StringBuilder(1024);
@@ -7409,14 +7372,6 @@ namespace System.Windows.Forms
 
                     foreach (string format in formats)
                     {
-                        /* if (!String.Equals(format, DataFormats.Html, StringComparison.OrdinalIgnoreCase) &&
-                            !String.Equals(format, DataFormats.Text, StringComparison.OrdinalIgnoreCase) &&
-                            !String.Equals(format, DataFormats.UnicodeText, StringComparison.OrdinalIgnoreCase) &&
-                            !String.Equals(format, DataFormats.CommaSeparatedValue, StringComparison.OrdinalIgnoreCase))
-                        {
-                            continue;
-                        }*/
-
                         if (sbContent == null)
                         {
                             sbContent = new StringBuilder(1024);
@@ -7707,34 +7662,6 @@ namespace System.Windows.Forms
                                 {
                                     includeColumnHeaders = true;
                                 }
-                                /* Use this code if column headers should be included when all cells are selected in a visible column.
-                                else
-                                {
-                                    // Include column headers if there is a column where all visible cells are selected
-                                    DataGridViewColumn dataGridViewColumn = this.Columns.GetFirstColumn(DataGridViewElementStates.Visible);
-                                    Debug.Assert(dataGridViewColumn != null);
-                                    while (dataGridViewColumn != null)
-                                    {
-                                        // Cycle through the visible rows, see if the cell in that column is selected
-                                        int rowIndex = this.Rows.GetFirstRow(DataGridViewElementStates.Visible);
-                                        while (rowIndex != -1)
-                                        {
-                                            if (!this.Rows.SharedRow(rowIndex).Cells[dataGridViewColumn.Index].Selected)
-                                            {
-                                                break;
-                                            }
-                                            rowIndex = this.Rows.GetNextRow(rowIndex, DataGridViewElementStates.Visible);
-                                        }
-                                        if (rowIndex == -1)
-                                        {
-                                            // All visible cells in column are selected
-                                            includeColumnHeaders = true;
-                                            break;
-                                        }
-                                        dataGridViewColumn = this.Columns.GetNextColumn(dataGridViewColumn, DataGridViewElementStates.Visible, DataGridViewElementStates.None);
-                                    }
-                                }
-                                */
                             }
                             else
                             {
@@ -7750,35 +7677,6 @@ namespace System.Windows.Forms
                                 {
                                     includeRowHeaders = true;
                                 }
-                                /* Use this code if row headers should be included when all cells are selected in a visible row.
-                                else
-                                {
-                                    // Include row headers if there is a row where all visible cells are selected
-                                    int rowIndex = this.Rows.GetFirstRow(DataGridViewElementStates.Visible);
-                                    Debug.Assert(rowIndex != -1);
-                                    while (rowIndex != -1)
-                                    {
-                                        // Cycle through the visible columns, see if the cell in that row is selected
-                                        DataGridViewColumn dataGridViewColumn = this.Columns.GetFirstColumn(DataGridViewElementStates.Visible);
-                                        Debug.Assert(dataGridViewColumn != null);
-                                        while (dataGridViewColumn != null)
-                                        {
-                                            if (!this.Rows.SharedRow(rowIndex).Cells[dataGridViewColumn.Index].Selected)
-                                            {
-                                                break;
-                                            }
-                                            dataGridViewColumn = this.Columns.GetNextColumn(dataGridViewColumn, DataGridViewElementStates.Visible, DataGridViewElementStates.None);
-                                        }
-                                        if (dataGridViewColumn == null)
-                                        {
-                                            // All visible cells in row are selected
-                                            includeRowHeaders = true;
-                                            break;
-                                        }
-                                        rowIndex = this.Rows.GetNextRow(rowIndex, DataGridViewElementStates.Visible);
-                                    }
-                                }
-                                */
                             }
                             else
                             {
@@ -7873,14 +7771,6 @@ namespace System.Windows.Forms
 
                     foreach (string format in formats)
                     {
-                        /* if (!String.Equals(format, DataFormats.Html, StringComparison.OrdinalIgnoreCase) &&
-                            !String.Equals(format, DataFormats.Text, StringComparison.OrdinalIgnoreCase) &&
-                            !String.Equals(format, DataFormats.UnicodeText, StringComparison.OrdinalIgnoreCase) &&
-                            !String.Equals(format, DataFormats.CommaSeparatedValue, StringComparison.OrdinalIgnoreCase))
-                        {
-                            continue;
-                        }*/
-
                         if (sbContent == null)
                         {
                             sbContent = new StringBuilder(1024);
@@ -8537,10 +8427,6 @@ namespace System.Windows.Forms
             Debug.Assert(!vertScrollBar.Enabled ||
                          !vertScrollBar.Visible ||
                          vertScrollBar.Maximum == visibleRowsHeight - frozenVisibleRowsHeight);
-
-            //Debug.Assert(!this.vertScrollBar.Enabled ||
-            //             !this.vertScrollBar.Visible ||
-            //             this.vertScrollBar.Value >= this.verticalOffset);
 
             if (dataGridViewOper[DATAGRIDVIEWOPER_trackRowSelect])
             {
@@ -12442,7 +12328,6 @@ namespace System.Windows.Forms
                                 }
                                 else
                                 {
-                                    // this.MultiSelect == true
                                     if (!isControlDown && !isShiftDown)
                                     {
                                         bool switchedToBulkPaint = false;
@@ -12622,7 +12507,6 @@ namespace System.Windows.Forms
                                 }
                                 else
                                 {
-                                    // this.MultiSelect == true
                                     if (!isControlDown && !isShiftDown)
                                     {
                                         bool switchedToBulkPaint = false;
@@ -12687,11 +12571,8 @@ namespace System.Windows.Forms
                                     SetSelectedCellCore(hti.col, hti.row, false);
                                 }
                             }
-                            bool success = SetCurrentCellAddressCore(hti.col, hti.row, !isShiftDown, false, true);
 
-                            // Microsoft: SetCurrentCellAddressCore can fail if by navigating to a cell the list under the
-                            // DataGridView changes.
-                            // Debug.Assert(success);
+                            SetCurrentCellAddressCore(hti.col, hti.row, !isShiftDown, false, true);
                             break;
                         }
                 }
@@ -13334,11 +13215,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException("e.RowIndex");
             }
-            //#if DEBUG
-            // Some customer scenarios may result in accessing cell values while this.dataStoreAccessAllowed is false. This is bad practice,
-            // but since we're late in Whidbey, throwing an exception would be destabilizing our internal customers.
-            // Debug.Assert(this.dataStoreAccessAllowed);
-            //#endif
+
             if (Events[EVENT_DATAGRIDVIEWCELLVALUENEEDED] is DataGridViewCellValueEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
@@ -19244,8 +19121,6 @@ namespace System.Windows.Forms
 
         private void OnVisibleChangedPrivate()
         {
-            // Debug.Assert(!this.displayedBandsInfo.Dirty);   Not valid because EnsureDirtyState can potentially be called
-            //                                                 for example when RowHeadersVisible is changed while the control is invisible.
             int rowIndexTmp;
 
             if (Visible)
@@ -20276,7 +20151,7 @@ namespace System.Windows.Forms
                                     success = SetCurrentCellAddressCore(firstVisibleColumnIndex, lastVisibleRowIndex, true, false, false);
                                     if (!success)
                                     {
-                                        // Microsoft: SetCurrentCellAddressCore can fail if by navigating to a cell
+                                        // SetCurrentCellAddressCore can fail if by navigating to a cell
                                         // the list under the DataGridView changes.
                                         // In this case set moved to false so the users that call ProcessDownKey
                                         // will commit the data.
@@ -20291,9 +20166,7 @@ namespace System.Windows.Forms
                                         {
                                             return true;
                                         }
-                                        //ClearSelection();
                                         Debug.Assert(ptAnchorCell.Y >= 0);
-                                        //SelectCellRange(this.ptCurrentCell.X, this.ptAnchorCell.Y, this.ptCurrentCell.X, lastVisibleRowIndex, true);
                                         int oldEdgeColumnIndex = ptCurrentCell.X;
                                         int oldEdgeRowIndex = ptCurrentCell.Y;
                                         if (ptCurrentCell.X == -1 || ptAnchorCell.X == -1 ||
@@ -20321,7 +20194,6 @@ namespace System.Windows.Forms
                                             moved = false;
                                             return true;
                                         }
-                                        //SetSelectedCellCore(this.ptCurrentCell.X, this.ptCurrentCell.Y, false);
                                         ClearSelection();
                                         SetSelectedCellCore(ptCurrentCell.X, lastVisibleRowIndex, true);
                                         success = SetCurrentCellAddressCore(ptCurrentCell.X, lastVisibleRowIndex, true, false, false);
@@ -20411,7 +20283,6 @@ namespace System.Windows.Forms
                                     }
                                     if (MultiSelect)
                                     {
-                                        //SelectCellUnorderedRange(this.ptCurrentCell.X, this.ptAnchorCell.Y, this.ptCurrentCell.X, nextVisibleRowIndex, true);
                                         int oldEdgeColumnIndex = ptCurrentCell.X;
                                         int oldEdgeRowIndex = ptCurrentCell.Y;
                                         if (ptAnchorCell.X == -1)
@@ -20747,8 +20618,6 @@ namespace System.Windows.Forms
                                         }
                                         else
                                         {
-                                            //ClearSelection();
-                                            //SelectCellRange(this.ptCurrentCell.X, this.ptAnchorCell.Y, this.ptCurrentCell.X, lastVisibleRowIndex, true);
                                             int oldEdgeColumnIndex = ptCurrentCell.X;
                                             int oldEdgeRowIndex = ptCurrentCell.Y;
                                             UpdateSelectedCellsBlock(ptAnchorCell.X, ref oldEdgeColumnIndex, oldEdgeColumnIndex,
@@ -20902,7 +20771,6 @@ namespace System.Windows.Forms
                                     {
                                         if (MultiSelect)
                                         {
-                                            //SelectCellUnorderedRange(this.ptCurrentCell.X, this.ptAnchorCell.Y, this.ptCurrentCell.X, nextVisibleRowIndex, true);
                                             int oldEdgeColumnIndex = ptCurrentCell.X;
                                             int oldEdgeRowIndex = ptCurrentCell.Y;
                                             if (ptAnchorCell.X == -1)
@@ -21073,7 +20941,6 @@ namespace System.Windows.Forms
 
         protected bool ProcessEndKey(Keys keyData)
         {
-            bool success;
             DataGridViewColumn dataGridViewColumn = Columns.GetLastColumn(DataGridViewElementStates.Visible,
                 DataGridViewElementStates.None);
             int lastVisibleColumnIndex = (dataGridViewColumn == null) ? -1 : dataGridViewColumn.Index;
@@ -21118,17 +20985,14 @@ namespace System.Windows.Forms
                                     ClearSelection();
                                     SetSelectedCellCore(lastVisibleColumnIndex, lastVisibleRowIndex, true);
                                 }
-                                success = SetCurrentCellAddressCore(lastVisibleColumnIndex, lastVisibleRowIndex, !MultiSelect, false, false);
+                                SetCurrentCellAddressCore(lastVisibleColumnIndex, lastVisibleRowIndex, !MultiSelect, false, false);
                             }
                             else
                             {
                                 ClearSelection();
                                 SetSelectedCellCore(lastVisibleColumnIndex, lastVisibleRowIndex, true);
-                                success = SetCurrentCellAddressCore(lastVisibleColumnIndex, lastVisibleRowIndex, true, false, false);
+                                SetCurrentCellAddressCore(lastVisibleColumnIndex, lastVisibleRowIndex, true, false, false);
                             }
-                            // Microsoft: SetCurrentCellAddressCore can fail if by navigating to a cell the list under the
-                            // DataGridView changes.
-                            // Debug.Assert(success);
                         }
                         return true;
 
@@ -21179,7 +21043,7 @@ namespace System.Windows.Forms
                                         SetSelectedCellCore(lastVisibleColumnIndex, lastVisibleRowIndex, true);
                                     }
                                 }
-                                success = SetCurrentCellAddressCore(lastVisibleColumnIndex, lastVisibleRowIndex, !MultiSelect, false, false);
+                                SetCurrentCellAddressCore(lastVisibleColumnIndex, lastVisibleRowIndex, !MultiSelect, false, false);
                             }
                             else
                             {
@@ -21194,9 +21058,8 @@ namespace System.Windows.Forms
                                     ClearSelection();
                                     SetSelectedCellCore(lastVisibleColumnIndex, lastVisibleRowIndex, true);
                                 }
-                                success = SetCurrentCellAddressCore(lastVisibleColumnIndex, lastVisibleRowIndex, true, false, false);
+                                SetCurrentCellAddressCore(lastVisibleColumnIndex, lastVisibleRowIndex, true, false, false);
                             }
-                            // Debug.Assert(success);
                         }
                         return true;
 
@@ -21226,14 +21089,13 @@ namespace System.Windows.Forms
                                 {
                                     SetSelectedColumnCore(lastVisibleColumnIndex, true);
                                 }
-                                success = SetCurrentCellAddressCore(lastVisibleColumnIndex, lastVisibleRowIndex, !MultiSelect, false, false);
+                                SetCurrentCellAddressCore(lastVisibleColumnIndex, lastVisibleRowIndex, !MultiSelect, false, false);
                             }
                             else
                             {
                                 SetSelectedColumnCore(lastVisibleColumnIndex, true);
-                                success = SetCurrentCellAddressCore(lastVisibleColumnIndex, lastVisibleRowIndex, true, false, false);
+                                SetCurrentCellAddressCore(lastVisibleColumnIndex, lastVisibleRowIndex, true, false, false);
                             }
-                            // Debug.Assert(success);
                         }
                         return true;
 
@@ -21286,8 +21148,7 @@ namespace System.Windows.Forms
                                         SetSelectedCellCore(lastVisibleColumnIndex, lastVisibleRowIndex, true);
                                     }
                                 }
-                                success = SetCurrentCellAddressCore(lastVisibleColumnIndex, lastVisibleRowIndex, !MultiSelect, false, false);
-                                // Debug.Assert(success);
+                                SetCurrentCellAddressCore(lastVisibleColumnIndex, lastVisibleRowIndex, !MultiSelect, false, false);
                             }
                             else
                             {
@@ -21309,8 +21170,7 @@ namespace System.Windows.Forms
                                     ClearSelection();
                                     SetSelectedCellCore(lastVisibleColumnIndex, lastVisibleRowIndex, true);
                                 }
-                                success = SetCurrentCellAddressCore(lastVisibleColumnIndex, lastVisibleRowIndex, true, false, false);
-                                // Debug.Assert(success);
+                                SetCurrentCellAddressCore(lastVisibleColumnIndex, lastVisibleRowIndex, true, false, false);
                             }
                         }
                         return true;
@@ -21346,14 +21206,13 @@ namespace System.Windows.Forms
                                     SetSelectedRowCore(lastVisibleRowIndex, true);
                                 }
 
-                                success = SetCurrentCellAddressCore(lastVisibleColumnIndex, lastVisibleRowIndex, !MultiSelect, false, false);
+                                SetCurrentCellAddressCore(lastVisibleColumnIndex, lastVisibleRowIndex, !MultiSelect, false, false);
                             }
                             else
                             {
                                 SetSelectedRowCore(lastVisibleRowIndex, true);
-                                success = SetCurrentCellAddressCore(lastVisibleColumnIndex, lastVisibleRowIndex, true, false, false);
+                                SetCurrentCellAddressCore(lastVisibleColumnIndex, lastVisibleRowIndex, true, false, false);
                             }
-                            // Debug.Assert(success);
                         }
                         return true;
                 }
@@ -21506,7 +21365,6 @@ namespace System.Windows.Forms
 
         protected bool ProcessHomeKey(Keys keyData)
         {
-            bool success;
             DataGridViewColumn dataGridViewColumn = Columns.GetFirstColumn(DataGridViewElementStates.Visible);
             int firstVisibleColumnIndex = (dataGridViewColumn == null) ? -1 : dataGridViewColumn.Index;
             int firstVisibleRowIndex = Rows.GetFirstRow(DataGridViewElementStates.Visible);
@@ -21549,17 +21407,14 @@ namespace System.Windows.Forms
                                     ClearSelection();
                                     SetSelectedCellCore(firstVisibleColumnIndex, firstVisibleRowIndex, true);
                                 }
-                                success = SetCurrentCellAddressCore(firstVisibleColumnIndex, firstVisibleRowIndex, !MultiSelect, false, false);
+                                SetCurrentCellAddressCore(firstVisibleColumnIndex, firstVisibleRowIndex, !MultiSelect, false, false);
                             }
                             else
                             {
                                 ClearSelection();
                                 SetSelectedCellCore(firstVisibleColumnIndex, firstVisibleRowIndex, true);
-                                success = SetCurrentCellAddressCore(firstVisibleColumnIndex, firstVisibleRowIndex, true, false, false);
+                                SetCurrentCellAddressCore(firstVisibleColumnIndex, firstVisibleRowIndex, true, false, false);
                             }
-                            // Microsoft: SetCurrentCellAddressCore can fail if by navigating to a cell the list under the
-                            // DataGridView changes.
-                            // Debug.Assert(success);
                         }
                         return true;
 
@@ -21610,7 +21465,7 @@ namespace System.Windows.Forms
                                         SetSelectedCellCore(firstVisibleColumnIndex, firstVisibleRowIndex, true);
                                     }
                                 }
-                                success = SetCurrentCellAddressCore(firstVisibleColumnIndex, firstVisibleRowIndex, !MultiSelect, false, false);
+                                SetCurrentCellAddressCore(firstVisibleColumnIndex, firstVisibleRowIndex, !MultiSelect, false, false);
                             }
                             else
                             {
@@ -21625,9 +21480,8 @@ namespace System.Windows.Forms
                                     ClearSelection();
                                     SetSelectedCellCore(firstVisibleColumnIndex, firstVisibleRowIndex, true);
                                 }
-                                success = SetCurrentCellAddressCore(firstVisibleColumnIndex, firstVisibleRowIndex, true, false, false);
+                                SetCurrentCellAddressCore(firstVisibleColumnIndex, firstVisibleRowIndex, true, false, false);
                             }
-                            // Debug.Assert(success);
                         }
                         return true;
 
@@ -21661,14 +21515,13 @@ namespace System.Windows.Forms
                                 {
                                     SetSelectedColumnCore(firstVisibleColumnIndex, true);
                                 }
-                                success = SetCurrentCellAddressCore(firstVisibleColumnIndex, firstVisibleRowIndex, !MultiSelect, false, false);
+                                SetCurrentCellAddressCore(firstVisibleColumnIndex, firstVisibleRowIndex, !MultiSelect, false, false);
                             }
                             else
                             {
                                 SetSelectedColumnCore(firstVisibleColumnIndex, true);
-                                success = SetCurrentCellAddressCore(firstVisibleColumnIndex, firstVisibleRowIndex, true, false, false);
+                                SetCurrentCellAddressCore(firstVisibleColumnIndex, firstVisibleRowIndex, true, false, false);
                             }
-                            // Debug.Assert(success);
                         }
                         return true;
 
@@ -21721,8 +21574,7 @@ namespace System.Windows.Forms
                                         SetSelectedCellCore(firstVisibleColumnIndex, firstVisibleRowIndex, true);
                                     }
                                 }
-                                success = SetCurrentCellAddressCore(firstVisibleColumnIndex, firstVisibleRowIndex, !MultiSelect, false, false);
-                                // Debug.Assert(success);
+                                SetCurrentCellAddressCore(firstVisibleColumnIndex, firstVisibleRowIndex, !MultiSelect, false, false);
                             }
                             else
                             {
@@ -21744,8 +21596,7 @@ namespace System.Windows.Forms
                                     ClearSelection();
                                     SetSelectedCellCore(firstVisibleColumnIndex, firstVisibleRowIndex, true);
                                 }
-                                success = SetCurrentCellAddressCore(firstVisibleColumnIndex, firstVisibleRowIndex, true, false, false);
-                                // Debug.Assert(success);
+                                SetCurrentCellAddressCore(firstVisibleColumnIndex, firstVisibleRowIndex, true, false, false);
                             }
                         }
                         return true;
@@ -21767,8 +21618,7 @@ namespace System.Windows.Forms
                             }
                             ClearSelection();
                             SetSelectedRowCore(firstVisibleRowIndex, true);
-                            success = SetCurrentCellAddressCore(firstVisibleColumnIndex, firstVisibleRowIndex, true, false, false);
-                            // Debug.Assert(success);
+                            SetCurrentCellAddressCore(firstVisibleColumnIndex, firstVisibleRowIndex, true, false, false);
                         }
                         return true;
                 }
@@ -22079,7 +21929,6 @@ namespace System.Windows.Forms
                                     if (MultiSelect)
                                     {
                                         Debug.Assert(ptAnchorCell.X >= 0);
-                                        //SelectCellUnorderedRange(previousVisibleColumnIndex, this.ptCurrentCell.Y, this.ptAnchorCell.X, this.ptCurrentCell.Y, true);
                                         int oldEdgeColumnIndex = ptCurrentCell.X;
                                         int oldEdgeRowIndex = ptCurrentCell.Y;
                                         if (ptAnchorCell.X == -1)
@@ -22294,7 +22143,6 @@ namespace System.Windows.Forms
                                     {
                                         if (MultiSelect)
                                         {
-                                            //SelectCellUnorderedRange(previousVisibleColumnIndex, this.ptCurrentCell.Y, this.ptAnchorCell.X, this.ptCurrentCell.Y, true);
                                             int oldEdgeColumnIndex = ptCurrentCell.X;
                                             int oldEdgeRowIndex = ptCurrentCell.Y;
                                             if (ptAnchorCell.X == -1)
@@ -22444,9 +22292,7 @@ namespace System.Windows.Forms
                                     {
                                         return true;
                                     }
-                                    //ClearSelection();
                                     Debug.Assert(ptAnchorCell.X >= 0);
-                                    //SelectCellRange(firstVisibleColumnIndex, this.ptCurrentCell.Y, this.ptAnchorCell.X, this.ptCurrentCell.Y, true);
                                     int oldEdgeColumnIndex = ptCurrentCell.X;
                                     int oldEdgeRowIndex = ptCurrentCell.Y;
                                     if (ptAnchorCell.X == -1 || ptCurrentCell.X == -1 ||
@@ -22469,7 +22315,6 @@ namespace System.Windows.Forms
                                     {
                                         return true;
                                     }
-                                    //SetSelectedCellCore(this.ptCurrentCell.X, this.ptCurrentCell.Y, false);
                                     ClearSelection();
                                     SetSelectedCellCore(firstVisibleColumnIndex, ptCurrentCell.Y, true);
                                     success = SetCurrentCellAddressCore(firstVisibleColumnIndex, ptCurrentCell.Y, true, false, false);
@@ -22632,8 +22477,6 @@ namespace System.Windows.Forms
                                     }
                                     else
                                     {
-                                        //ClearSelection();
-                                        //SelectCellRange(firstVisibleColumnIndex, this.ptCurrentCell.Y, this.ptAnchorCell.X, this.ptCurrentCell.Y, true);
                                         int oldEdgeColumnIndex = ptCurrentCell.X;
                                         int oldEdgeRowIndex = ptCurrentCell.Y;
                                         UpdateSelectedCellsBlock(ptAnchorCell.X, ref oldEdgeColumnIndex, firstVisibleColumnIndex,
@@ -22833,10 +22676,8 @@ namespace System.Windows.Forms
                     {
                         return true;
                     }
-                    success = SetCurrentCellAddressCore(firstVisibleColumnIndex, nextScreenVisibleRowIndex, true, false, false);
-                    // Microsoft: SetCurrentCellAddressCore can fail if by navigating to a cell the list under the
-                    // DataGridView changes.
-                    // Debug.Assert(success);
+
+                    SetCurrentCellAddressCore(firstVisibleColumnIndex, nextScreenVisibleRowIndex, true, false, false);
                     return true;
                 }
 
@@ -22904,7 +22745,6 @@ namespace System.Windows.Forms
                             SetSelectedRowCore(nextScreenVisibleRowIndex, true);
                         }
                         success = SetCurrentCellAddressCore(ptCurrentCell.X, nextScreenVisibleRowIndex, false, false, false);
-                        // Debug.Assert(success);
                         return true;
 
                     case DataGridViewSelectionMode.RowHeaderSelect:
@@ -22957,7 +22797,6 @@ namespace System.Windows.Forms
                             }
                         }
                         success = SetCurrentCellAddressCore(ptCurrentCell.X, nextScreenVisibleRowIndex, !MultiSelect, false, false);
-                        // Debug.Assert(success);
                         return true;
 
                     case DataGridViewSelectionMode.FullColumnSelect:
@@ -22970,7 +22809,6 @@ namespace System.Windows.Forms
                             return true;
                         }
                         success = SetCurrentCellAddressCore(ptCurrentCell.X, nextScreenVisibleRowIndex, true, false, false);
-                        // Debug.Assert(success);
                         return true;
                 }
             }
@@ -22983,7 +22821,6 @@ namespace System.Windows.Forms
 
         protected bool ProcessPriorKey(Keys keyData)
         {
-            bool success;
             DataGridViewColumn dataGridViewColumn = Columns.GetFirstColumn(DataGridViewElementStates.Visible);
             int firstVisibleColumnIndex = (dataGridViewColumn == null) ? -1 : dataGridViewColumn.Index;
             if (firstVisibleColumnIndex == -1)
@@ -23064,14 +22901,14 @@ namespace System.Windows.Forms
                             SetSelectedColumnCore(firstVisibleColumnIndex, true);
                             break;
                     }
-                    success = ScrollIntoView(firstVisibleColumnIndex, previousScreenVisibleRowIndex, false);
-                    Debug.Assert(success);
+
+                    ScrollIntoView(firstVisibleColumnIndex, previousScreenVisibleRowIndex, false);
                     if (IsInnerCellOutOfBounds(firstVisibleColumnIndex, previousScreenVisibleRowIndex))
                     {
                         return true;
                     }
-                    success = SetCurrentCellAddressCore(firstVisibleColumnIndex, previousScreenVisibleRowIndex, true, false, false);
-                    // Debug.Assert(success);
+
+                    SetCurrentCellAddressCore(firstVisibleColumnIndex, previousScreenVisibleRowIndex, true, false, false);
                     return true;
                 }
 
@@ -23104,8 +22941,7 @@ namespace System.Windows.Forms
                             ClearSelection();
                             SetSelectedCellCore(ptCurrentCell.X, previousScreenVisibleRowIndex, true);
                         }
-                        success = SetCurrentCellAddressCore(ptCurrentCell.X, previousScreenVisibleRowIndex, false, false, false);
-                        // Debug.Assert(success);
+                        SetCurrentCellAddressCore(ptCurrentCell.X, previousScreenVisibleRowIndex, false, false, false);
                         return true;
 
                     case DataGridViewSelectionMode.FullRowSelect:
@@ -23138,8 +22974,7 @@ namespace System.Windows.Forms
                         {
                             SetSelectedRowCore(previousScreenVisibleRowIndex, true);
                         }
-                        success = SetCurrentCellAddressCore(ptCurrentCell.X, previousScreenVisibleRowIndex, false, false, false);
-                        // Debug.Assert(success);
+                        SetCurrentCellAddressCore(ptCurrentCell.X, previousScreenVisibleRowIndex, false, false, false);
                         return true;
 
                     case DataGridViewSelectionMode.RowHeaderSelect:
@@ -23191,8 +23026,8 @@ namespace System.Windows.Forms
                                 SetSelectedCellCore(ptCurrentCell.X, previousScreenVisibleRowIndex, true);
                             }
                         }
-                        success = SetCurrentCellAddressCore(ptCurrentCell.X, previousScreenVisibleRowIndex, !MultiSelect, false, false);
-                        // Debug.Assert(success);
+
+                        SetCurrentCellAddressCore(ptCurrentCell.X, previousScreenVisibleRowIndex, !MultiSelect, false, false);
                         return true;
 
                     case DataGridViewSelectionMode.FullColumnSelect:
@@ -23204,10 +23039,8 @@ namespace System.Windows.Forms
                         {
                             return true;
                         }
-                        success = SetCurrentCellAddressCore(ptCurrentCell.X, previousScreenVisibleRowIndex, true, false, false);
-                        // Microsoft: SetCurrentCellAddressCore can fail if by navigating to a cell the list under the
-                        // DataGridView changes.
-                        // Debug.Assert(success);
+
+                        SetCurrentCellAddressCore(ptCurrentCell.X, previousScreenVisibleRowIndex, true, false, false);
                         return true;
                 }
             }
@@ -23303,7 +23136,6 @@ namespace System.Windows.Forms
                                     }
                                     if (MultiSelect)
                                     {
-                                        //SelectCellUnorderedRange(this.ptAnchorCell.X, this.ptCurrentCell.Y, nextVisibleColumnIndex, this.ptCurrentCell.Y, true);
                                         int oldEdgeColumnIndex = ptCurrentCell.X;
                                         int oldEdgeRowIndex = ptCurrentCell.Y;
                                         if (ptAnchorCell.X == -1)
@@ -23525,7 +23357,6 @@ namespace System.Windows.Forms
                                             {
                                                 return true;
                                             }
-                                            //SelectCellUnorderedRange(this.ptAnchorCell.X, this.ptCurrentCell.Y, nextVisibleColumnIndex, this.ptCurrentCell.Y, true);
                                             int oldEdgeColumnIndex = ptCurrentCell.X;
                                             int oldEdgeRowIndex = ptCurrentCell.Y;
                                             UpdateSelectedCellsBlock(ptAnchorCell.X, ref oldEdgeColumnIndex, nextVisibleColumnIndex,
@@ -23849,8 +23680,6 @@ namespace System.Windows.Forms
                                     }
                                     else
                                     {
-                                        //ClearSelection();
-                                        //SelectCellRange(this.ptAnchorCell.X, this.ptCurrentCell.Y, lastVisibleColumnIndex, this.ptCurrentCell.Y, true);
                                         int oldEdgeColumnIndex = ptCurrentCell.X;
                                         int oldEdgeRowIndex = ptCurrentCell.Y;
                                         UpdateSelectedCellsBlock(ptAnchorCell.X, ref oldEdgeColumnIndex, lastVisibleColumnIndex,
@@ -24069,16 +23898,6 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    /*
-                    if ((keyData & Keys.Shift) == Keys.Shift)
-                    {
-                        // Goto previous control
-                    }
-                    else
-                    {
-                        // Goto next control
-                    }
-                    */
                     return false;
                 }
             }
@@ -24086,16 +23905,6 @@ namespace System.Windows.Forms
             {
                 if ((keyData & Keys.Control) == Keys.Control)
                 {
-                    /*
-                    if ((keyData & Keys.Shift) == Keys.Shift)
-                    {
-                        // Goto previous control
-                    }
-                    else
-                    {
-                        // Goto next control
-                    }
-                    */
                     return false;
                 }
                 else
@@ -24225,7 +24034,6 @@ namespace System.Windows.Forms
 
         protected bool ProcessUpKey(Keys keyData)
         {
-            bool success;
             DataGridViewColumn dataGridViewColumn = Columns.GetFirstColumn(DataGridViewElementStates.Visible);
             int firstVisibleColumnIndex = (dataGridViewColumn == null) ? -1 : dataGridViewColumn.Index;
             int firstVisibleRowIndex = Rows.GetFirstRow(DataGridViewElementStates.Visible);
@@ -24254,16 +24062,13 @@ namespace System.Windows.Forms
                                 {
                                     ClearSelection();
                                     SetSelectedCellCore(firstVisibleColumnIndex, firstVisibleRowIndex, true);
-                                    success = ScrollIntoView(firstVisibleColumnIndex, firstVisibleRowIndex, false);
-                                    Debug.Assert(success);
+                                    ScrollIntoView(firstVisibleColumnIndex, firstVisibleRowIndex, false);
                                     if (IsInnerCellOutOfBounds(firstVisibleColumnIndex, firstVisibleRowIndex))
                                     {
                                         return true;
                                     }
-                                    success = SetCurrentCellAddressCore(firstVisibleColumnIndex, firstVisibleRowIndex, true, false, false);
-                                    // Microsoft: SetCurrentCellAddressCore can fail if by navigating to a cell the list under the
-                                    // DataGridView changes.
-                                    // Debug.Assert(success);
+
+                                    SetCurrentCellAddressCore(firstVisibleColumnIndex, firstVisibleRowIndex, true, false, false);
                                 }
                                 else
                                 {
@@ -24278,15 +24083,12 @@ namespace System.Windows.Forms
                                         {
                                             return true;
                                         }
-                                        //ClearSelection();
                                         Debug.Assert(ptAnchorCell.Y >= 0);
-                                        //SelectCellRange(this.ptCurrentCell.X, firstVisibleRowIndex, this.ptCurrentCell.X, this.ptAnchorCell.Y, true);
                                         int oldEdgeColumnIndex = ptCurrentCell.X;
                                         int oldEdgeRowIndex = ptCurrentCell.Y;
                                         UpdateSelectedCellsBlock(ptAnchorCell.X, ref oldEdgeColumnIndex, oldEdgeColumnIndex,
                                             ptAnchorCell.Y, ref oldEdgeRowIndex, firstVisibleRowIndex);
-                                        success = SetCurrentCellAddressCore(ptCurrentCell.X, firstVisibleRowIndex, false, false, false);
-                                        // Debug.Assert(success);
+                                        SetCurrentCellAddressCore(ptCurrentCell.X, firstVisibleRowIndex, false, false, false);
                                     }
                                     else
                                     {
@@ -24298,11 +24100,9 @@ namespace System.Windows.Forms
                                         {
                                             return true;
                                         }
-                                        //SetSelectedCellCore(this.ptCurrentCell.X, this.ptCurrentCell.Y, false);
                                         ClearSelection();
                                         SetSelectedCellCore(ptCurrentCell.X, firstVisibleRowIndex, true);
-                                        success = SetCurrentCellAddressCore(ptCurrentCell.X, firstVisibleRowIndex, true, false, false);
-                                        // Debug.Assert(success);
+                                        SetCurrentCellAddressCore(ptCurrentCell.X, firstVisibleRowIndex, true, false, false);
                                     }
                                 }
                             }
@@ -24312,14 +24112,13 @@ namespace System.Windows.Forms
                                 {
                                     ClearSelection();
                                     SetSelectedCellCore(firstVisibleColumnIndex, firstVisibleRowIndex, true);
-                                    success = ScrollIntoView(firstVisibleColumnIndex, firstVisibleRowIndex, false);
-                                    Debug.Assert(success);
+                                    ScrollIntoView(firstVisibleColumnIndex, firstVisibleRowIndex, false);
                                     if (IsInnerCellOutOfBounds(firstVisibleColumnIndex, firstVisibleRowIndex))
                                     {
                                         return true;
                                     }
-                                    success = SetCurrentCellAddressCore(firstVisibleColumnIndex, firstVisibleRowIndex, true, false, false);
-                                    // Debug.Assert(success);
+
+                                    SetCurrentCellAddressCore(firstVisibleColumnIndex, firstVisibleRowIndex, true, false, false);
                                 }
                                 else
                                 {
@@ -24333,8 +24132,7 @@ namespace System.Windows.Forms
                                     }
                                     ClearSelection();
                                     SetSelectedCellCore(ptCurrentCell.X, firstVisibleRowIndex, true);
-                                    success = SetCurrentCellAddressCore(ptCurrentCell.X, firstVisibleRowIndex, true, false, false);
-                                    // Debug.Assert(success);
+                                    SetCurrentCellAddressCore(ptCurrentCell.X, firstVisibleRowIndex, true, false, false);
                                 }
                             }
                         }
@@ -24346,14 +24144,13 @@ namespace System.Windows.Forms
                                 {
                                     ClearSelection();
                                     SetSelectedCellCore(firstVisibleColumnIndex, firstVisibleRowIndex, true);
-                                    success = ScrollIntoView(firstVisibleColumnIndex, firstVisibleRowIndex, false);
-                                    Debug.Assert(success);
+                                    ScrollIntoView(firstVisibleColumnIndex, firstVisibleRowIndex, false);
                                     if (IsInnerCellOutOfBounds(firstVisibleColumnIndex, firstVisibleRowIndex))
                                     {
                                         return true;
                                     }
-                                    success = SetCurrentCellAddressCore(firstVisibleColumnIndex, firstVisibleRowIndex, true, false, false);
-                                    // Debug.Assert(success);
+
+                                    SetCurrentCellAddressCore(firstVisibleColumnIndex, firstVisibleRowIndex, true, false, false);
                                 }
                                 else
                                 {
@@ -24376,7 +24173,6 @@ namespace System.Windows.Forms
                                         {
                                             return true;
                                         }
-                                        //SelectCellUnorderedRange(this.ptCurrentCell.X, previousVisibleRowIndex, this.ptCurrentCell.X, this.ptAnchorCell.Y, true);
                                         int oldEdgeColumnIndex = ptCurrentCell.X;
                                         int oldEdgeRowIndex = ptCurrentCell.Y;
                                         UpdateSelectedCellsBlock(ptAnchorCell.X, ref oldEdgeColumnIndex, oldEdgeColumnIndex,
@@ -24387,8 +24183,8 @@ namespace System.Windows.Forms
                                         ClearSelection();
                                         SetSelectedCellCore(ptCurrentCell.X, previousVisibleRowIndex, true);
                                     }
-                                    success = SetCurrentCellAddressCore(ptCurrentCell.X, previousVisibleRowIndex, !MultiSelect, false, false);
-                                    // Debug.Assert(success);
+
+                                    SetCurrentCellAddressCore(ptCurrentCell.X, previousVisibleRowIndex, !MultiSelect, false, false);
                                 }
                             }
                             else
@@ -24397,14 +24193,13 @@ namespace System.Windows.Forms
                                 {
                                     ClearSelection();
                                     SetSelectedCellCore(firstVisibleColumnIndex, firstVisibleRowIndex, true);
-                                    success = ScrollIntoView(firstVisibleColumnIndex, firstVisibleRowIndex, false);
-                                    Debug.Assert(success);
+                                    ScrollIntoView(firstVisibleColumnIndex, firstVisibleRowIndex, false);
                                     if (IsInnerCellOutOfBounds(firstVisibleColumnIndex, firstVisibleRowIndex))
                                     {
                                         return true;
                                     }
-                                    success = SetCurrentCellAddressCore(firstVisibleColumnIndex, firstVisibleRowIndex, true, false, false);
-                                    // Debug.Assert(success);
+
+                                    SetCurrentCellAddressCore(firstVisibleColumnIndex, firstVisibleRowIndex, true, false, false);
                                 }
                                 else
                                 {
@@ -24422,8 +24217,7 @@ namespace System.Windows.Forms
                                     }
                                     ClearSelection();
                                     SetSelectedCellCore(ptCurrentCell.X, previousVisibleRowIndex, true);
-                                    success = SetCurrentCellAddressCore(ptCurrentCell.X, previousVisibleRowIndex, true, false, false);
-                                    // Debug.Assert(success);
+                                    SetCurrentCellAddressCore(ptCurrentCell.X, previousVisibleRowIndex, true, false, false);
                                 }
                             }
                         }
@@ -24438,14 +24232,13 @@ namespace System.Windows.Forms
                                 {
                                     ClearSelection();
                                     SetSelectedRowCore(firstVisibleRowIndex, true);
-                                    success = ScrollIntoView(firstVisibleColumnIndex, firstVisibleRowIndex, false);
-                                    Debug.Assert(success);
+                                    ScrollIntoView(firstVisibleColumnIndex, firstVisibleRowIndex, false);
                                     if (IsInnerCellOutOfBounds(firstVisibleColumnIndex, firstVisibleRowIndex))
                                     {
                                         return true;
                                     }
-                                    success = SetCurrentCellAddressCore(firstVisibleColumnIndex, firstVisibleRowIndex, true, false, false);
-                                    // Debug.Assert(success);
+
+                                    SetCurrentCellAddressCore(firstVisibleColumnIndex, firstVisibleRowIndex, true, false, false);
                                 }
                                 else
                                 {
@@ -24463,8 +24256,7 @@ namespace System.Windows.Forms
                                         ClearSelection();
                                         Debug.Assert(ptAnchorCell.Y >= 0);
                                         SelectRowRange(firstVisibleRowIndex, ptAnchorCell.Y, true);
-                                        success = SetCurrentCellAddressCore(ptCurrentCell.X, firstVisibleRowIndex, false, false, false);
-                                        // Debug.Assert(success);
+                                        SetCurrentCellAddressCore(ptCurrentCell.X, firstVisibleRowIndex, false, false, false);
                                     }
                                     else
                                     {
@@ -24478,8 +24270,7 @@ namespace System.Windows.Forms
                                         }
                                         SetSelectedRowCore(ptCurrentCell.Y, false);
                                         SetSelectedRowCore(firstVisibleRowIndex, true);
-                                        success = SetCurrentCellAddressCore(ptCurrentCell.X, firstVisibleRowIndex, true, false, false);
-                                        // Debug.Assert(success);
+                                        SetCurrentCellAddressCore(ptCurrentCell.X, firstVisibleRowIndex, true, false, false);
                                     }
                                 }
                             }
@@ -24489,14 +24280,13 @@ namespace System.Windows.Forms
                                 {
                                     ClearSelection();
                                     SetSelectedRowCore(firstVisibleRowIndex, true);
-                                    success = ScrollIntoView(firstVisibleColumnIndex, firstVisibleRowIndex, false);
-                                    Debug.Assert(success);
+                                    ScrollIntoView(firstVisibleColumnIndex, firstVisibleRowIndex, false);
                                     if (IsInnerCellOutOfBounds(firstVisibleColumnIndex, firstVisibleRowIndex))
                                     {
                                         return true;
                                     }
-                                    success = SetCurrentCellAddressCore(firstVisibleColumnIndex, firstVisibleRowIndex, true, false, false);
-                                    // Debug.Assert(success);
+
+                                    SetCurrentCellAddressCore(firstVisibleColumnIndex, firstVisibleRowIndex, true, false, false);
                                 }
                                 else
                                 {
@@ -24510,8 +24300,7 @@ namespace System.Windows.Forms
                                     }
                                     ClearSelection();
                                     SetSelectedRowCore(firstVisibleRowIndex, true);
-                                    success = SetCurrentCellAddressCore(ptCurrentCell.X, firstVisibleRowIndex, true, false, false);
-                                    // Debug.Assert(success);
+                                    SetCurrentCellAddressCore(ptCurrentCell.X, firstVisibleRowIndex, true, false, false);
                                 }
                             }
                         }
@@ -24523,14 +24312,13 @@ namespace System.Windows.Forms
                                 {
                                     ClearSelection();
                                     SetSelectedRowCore(firstVisibleRowIndex, true);
-                                    success = ScrollIntoView(firstVisibleColumnIndex, firstVisibleRowIndex, false);
-                                    Debug.Assert(success);
+                                    ScrollIntoView(firstVisibleColumnIndex, firstVisibleRowIndex, false);
                                     if (IsInnerCellOutOfBounds(firstVisibleColumnIndex, firstVisibleRowIndex))
                                     {
                                         return true;
                                     }
-                                    success = SetCurrentCellAddressCore(firstVisibleColumnIndex, firstVisibleRowIndex, true, false, false);
-                                    // Debug.Assert(success);
+
+                                    SetCurrentCellAddressCore(firstVisibleColumnIndex, firstVisibleRowIndex, true, false, false);
                                 }
                                 else
                                 {
@@ -24566,8 +24354,8 @@ namespace System.Windows.Forms
                                     {
                                         SetSelectedRowCore(previousVisibleRowIndex, true);
                                     }
-                                    success = SetCurrentCellAddressCore(ptCurrentCell.X, previousVisibleRowIndex, !MultiSelect, false, false);
-                                    // Debug.Assert(success);
+
+                                    SetCurrentCellAddressCore(ptCurrentCell.X, previousVisibleRowIndex, !MultiSelect, false, false);
                                 }
                             }
                             else
@@ -24576,14 +24364,13 @@ namespace System.Windows.Forms
                                 {
                                     ClearSelection();
                                     SetSelectedRowCore(firstVisibleRowIndex, true);
-                                    success = ScrollIntoView(firstVisibleColumnIndex, firstVisibleRowIndex, false);
-                                    Debug.Assert(success);
+                                    ScrollIntoView(firstVisibleColumnIndex, firstVisibleRowIndex, false);
                                     if (IsInnerCellOutOfBounds(firstVisibleColumnIndex, firstVisibleRowIndex))
                                     {
                                         return true;
                                     }
-                                    success = SetCurrentCellAddressCore(firstVisibleColumnIndex, firstVisibleRowIndex, true, false, false);
-                                    // Debug.Assert(success);
+
+                                    SetCurrentCellAddressCore(firstVisibleColumnIndex, firstVisibleRowIndex, true, false, false);
                                 }
                                 else
                                 {
@@ -24601,8 +24388,7 @@ namespace System.Windows.Forms
                                     }
                                     ClearSelection();
                                     SetSelectedRowCore(previousVisibleRowIndex, true);
-                                    success = SetCurrentCellAddressCore(ptCurrentCell.X, previousVisibleRowIndex, true, false, false);
-                                    // Debug.Assert(success);
+                                    SetCurrentCellAddressCore(ptCurrentCell.X, previousVisibleRowIndex, true, false, false);
                                 }
                             }
                         }
@@ -24617,14 +24403,13 @@ namespace System.Windows.Forms
                                 {
                                     ClearSelection();
                                     SetSelectedCellCore(firstVisibleColumnIndex, firstVisibleRowIndex, true);
-                                    success = ScrollIntoView(firstVisibleColumnIndex, firstVisibleRowIndex, false);
-                                    Debug.Assert(success);
+                                    ScrollIntoView(firstVisibleColumnIndex, firstVisibleRowIndex, false);
                                     if (IsInnerCellOutOfBounds(firstVisibleColumnIndex, firstVisibleRowIndex))
                                     {
                                         return true;
                                     }
-                                    success = SetCurrentCellAddressCore(firstVisibleColumnIndex, firstVisibleRowIndex, true, false, false);
-                                    // Debug.Assert(success);
+
+                                    SetCurrentCellAddressCore(firstVisibleColumnIndex, firstVisibleRowIndex, true, false, false);
                                 }
                                 else
                                 {
@@ -24647,15 +24432,13 @@ namespace System.Windows.Forms
                                         }
                                         else
                                         {
-                                            //ClearSelection();
-                                            //SelectCellRange(this.ptCurrentCell.X, firstVisibleRowIndex, this.ptCurrentCell.X, this.ptAnchorCell.Y, true);
                                             int oldEdgeColumnIndex = ptCurrentCell.X;
                                             int oldEdgeRowIndex = ptCurrentCell.Y;
                                             UpdateSelectedCellsBlock(ptAnchorCell.X, ref oldEdgeColumnIndex, oldEdgeColumnIndex,
                                                 ptAnchorCell.Y, ref oldEdgeRowIndex, firstVisibleRowIndex);
                                         }
-                                        success = SetCurrentCellAddressCore(ptCurrentCell.X, firstVisibleRowIndex, false, false, false);
-                                        // Debug.Assert(success);
+
+                                        SetCurrentCellAddressCore(ptCurrentCell.X, firstVisibleRowIndex, false, false, false);
                                     }
                                     else
                                     {
@@ -24677,8 +24460,8 @@ namespace System.Windows.Forms
                                             SetSelectedCellCore(ptCurrentCell.X, ptCurrentCell.Y, false);
                                             SetSelectedCellCore(ptCurrentCell.X, firstVisibleRowIndex, true);
                                         }
-                                        success = SetCurrentCellAddressCore(ptCurrentCell.X, firstVisibleRowIndex, true, false, false);
-                                        // Debug.Assert(success);
+
+                                        SetCurrentCellAddressCore(ptCurrentCell.X, firstVisibleRowIndex, true, false, false);
                                     }
                                 }
                             }
@@ -24688,14 +24471,13 @@ namespace System.Windows.Forms
                                 {
                                     ClearSelection();
                                     SetSelectedCellCore(firstVisibleColumnIndex, firstVisibleRowIndex, true);
-                                    success = ScrollIntoView(firstVisibleColumnIndex, firstVisibleRowIndex, false);
-                                    Debug.Assert(success);
+                                    ScrollIntoView(firstVisibleColumnIndex, firstVisibleRowIndex, false);
                                     if (IsInnerCellOutOfBounds(firstVisibleColumnIndex, firstVisibleRowIndex))
                                     {
                                         return true;
                                     }
-                                    success = SetCurrentCellAddressCore(firstVisibleColumnIndex, firstVisibleRowIndex, true, false, false);
-                                    // Debug.Assert(success);
+
+                                    SetCurrentCellAddressCore(firstVisibleColumnIndex, firstVisibleRowIndex, true, false, false);
                                 }
                                 else
                                 {
@@ -24717,8 +24499,8 @@ namespace System.Windows.Forms
                                         ClearSelection();
                                         SetSelectedCellCore(ptCurrentCell.X, firstVisibleRowIndex, true);
                                     }
-                                    success = SetCurrentCellAddressCore(ptCurrentCell.X, firstVisibleRowIndex, true, false, false);
-                                    // Debug.Assert(success);
+
+                                    SetCurrentCellAddressCore(ptCurrentCell.X, firstVisibleRowIndex, true, false, false);
                                 }
                             }
                         }
@@ -24730,14 +24512,13 @@ namespace System.Windows.Forms
                                 {
                                     ClearSelection();
                                     SetSelectedCellCore(firstVisibleColumnIndex, firstVisibleRowIndex, true);
-                                    success = ScrollIntoView(firstVisibleColumnIndex, firstVisibleRowIndex, false);
-                                    Debug.Assert(success);
+                                    ScrollIntoView(firstVisibleColumnIndex, firstVisibleRowIndex, false);
                                     if (IsInnerCellOutOfBounds(firstVisibleColumnIndex, firstVisibleRowIndex))
                                     {
                                         return true;
                                     }
-                                    success = SetCurrentCellAddressCore(firstVisibleColumnIndex, firstVisibleRowIndex, true, false, false);
-                                    // Debug.Assert(success);
+
+                                    SetCurrentCellAddressCore(firstVisibleColumnIndex, firstVisibleRowIndex, true, false, false);
                                 }
                                 else
                                 {
@@ -24777,7 +24558,6 @@ namespace System.Windows.Forms
                                     {
                                         if (MultiSelect)
                                         {
-                                            //SelectCellUnorderedRange(this.ptCurrentCell.X, previousVisibleRowIndex, this.ptCurrentCell.X, this.ptAnchorCell.Y, true);
                                             int oldEdgeColumnIndex = ptCurrentCell.X;
                                             int oldEdgeRowIndex = ptCurrentCell.Y;
                                             if (ptAnchorCell.Y == -1)
@@ -24793,8 +24573,8 @@ namespace System.Windows.Forms
                                             SetSelectedCellCore(ptCurrentCell.X, previousVisibleRowIndex, true);
                                         }
                                     }
-                                    success = SetCurrentCellAddressCore(ptCurrentCell.X, previousVisibleRowIndex, !MultiSelect, false, false);
-                                    // Debug.Assert(success);
+
+                                    SetCurrentCellAddressCore(ptCurrentCell.X, previousVisibleRowIndex, !MultiSelect, false, false);
                                 }
                             }
                             else
@@ -24803,14 +24583,13 @@ namespace System.Windows.Forms
                                 {
                                     ClearSelection();
                                     SetSelectedCellCore(firstVisibleColumnIndex, firstVisibleRowIndex, true);
-                                    success = ScrollIntoView(firstVisibleColumnIndex, firstVisibleRowIndex, false);
-                                    Debug.Assert(success);
+                                    ScrollIntoView(firstVisibleColumnIndex, firstVisibleRowIndex, false);
                                     if (IsInnerCellOutOfBounds(firstVisibleColumnIndex, firstVisibleRowIndex))
                                     {
                                         return true;
                                     }
-                                    success = SetCurrentCellAddressCore(firstVisibleColumnIndex, firstVisibleRowIndex, true, false, false);
-                                    // Debug.Assert(success);
+
+                                    SetCurrentCellAddressCore(firstVisibleColumnIndex, firstVisibleRowIndex, true, false, false);
                                 }
                                 else
                                 {
@@ -24836,8 +24615,8 @@ namespace System.Windows.Forms
                                         ClearSelection();
                                         SetSelectedCellCore(ptCurrentCell.X, previousVisibleRowIndex, true);
                                     }
-                                    success = SetCurrentCellAddressCore(ptCurrentCell.X, previousVisibleRowIndex, true, false, false);
-                                    // Debug.Assert(success);
+
+                                    SetCurrentCellAddressCore(ptCurrentCell.X, previousVisibleRowIndex, true, false, false);
                                 }
                             }
                         }
@@ -24850,14 +24629,13 @@ namespace System.Windows.Forms
                             {
                                 ClearSelection();
                                 SetSelectedColumnCore(firstVisibleColumnIndex, true);
-                                success = ScrollIntoView(firstVisibleColumnIndex, firstVisibleRowIndex, false);
-                                Debug.Assert(success);
+                                ScrollIntoView(firstVisibleColumnIndex, firstVisibleRowIndex, false);
                                 if (IsInnerCellOutOfBounds(firstVisibleColumnIndex, firstVisibleRowIndex))
                                 {
                                     return true;
                                 }
-                                success = SetCurrentCellAddressCore(firstVisibleColumnIndex, firstVisibleRowIndex, true, false, false);
-                                // Debug.Assert(success);
+
+                                SetCurrentCellAddressCore(firstVisibleColumnIndex, firstVisibleRowIndex, true, false, false);
                             }
                             else
                             {
@@ -24869,8 +24647,8 @@ namespace System.Windows.Forms
                                 {
                                     return true;
                                 }
-                                success = SetCurrentCellAddressCore(ptCurrentCell.X, firstVisibleRowIndex, true, false, false);
-                                // Debug.Assert(success);
+
+                                SetCurrentCellAddressCore(ptCurrentCell.X, firstVisibleRowIndex, true, false, false);
                             }
                         }
                         else
@@ -24879,14 +24657,13 @@ namespace System.Windows.Forms
                             {
                                 ClearSelection();
                                 SetSelectedColumnCore(firstVisibleColumnIndex, true);
-                                success = ScrollIntoView(firstVisibleColumnIndex, firstVisibleRowIndex, false);
-                                Debug.Assert(success);
+                                ScrollIntoView(firstVisibleColumnIndex, firstVisibleRowIndex, false);
                                 if (IsInnerCellOutOfBounds(firstVisibleColumnIndex, firstVisibleRowIndex))
                                 {
                                     return true;
                                 }
-                                success = SetCurrentCellAddressCore(firstVisibleColumnIndex, firstVisibleRowIndex, true, false, false);
-                                // Debug.Assert(success);
+
+                                SetCurrentCellAddressCore(firstVisibleColumnIndex, firstVisibleRowIndex, true, false, false);
                             }
                             else
                             {
@@ -24902,8 +24679,8 @@ namespace System.Windows.Forms
                                 {
                                     return true;
                                 }
-                                success = SetCurrentCellAddressCore(ptCurrentCell.X, previousVisibleRowIndex, true, false, false);
-                                // Debug.Assert(success);
+
+                                SetCurrentCellAddressCore(ptCurrentCell.X, previousVisibleRowIndex, true, false, false);
                             }
                         }
                         return true;
@@ -25702,10 +25479,8 @@ namespace System.Windows.Forms
             DataGridViewColumn newFirstVisibleScrollingCol = null;
             DataGridViewColumn dataGridViewColumnTmp;
             int colCount = 0;
-            //ScrollEventType scrollEventType;
             if (columns > 0)
             {
-                //scrollEventType = columns > 1 ? ScrollEventType.LargeIncrement : ScrollEventType.SmallIncrement;
                 if (displayedBandsInfo.LastTotallyDisplayedScrollingCol >= 0)
                 {
                     dataGridViewColumnTmp = Columns[displayedBandsInfo.LastTotallyDisplayedScrollingCol];
@@ -25738,7 +25513,6 @@ namespace System.Windows.Forms
 
             if (columns < 0)
             {
-                //scrollEventType = columns < -1 ? ScrollEventType.LargeDecrement : ScrollEventType.SmallDecrement;
                 Debug.Assert(displayedBandsInfo.FirstDisplayedScrollingCol >= 0);
                 dataGridViewColumnTmp = Columns[displayedBandsInfo.FirstDisplayedScrollingCol];
                 if (negOffset > 0)
@@ -26527,7 +26301,6 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        // this.ptCurrentCell.X == columnIndex && this.ptCurrentCell.Y == rowIndex
                         // Not trying to change the current cell, but may need to edit it.
                         if (setAnchorCellAddress)
                         {
@@ -27958,7 +27731,6 @@ namespace System.Windows.Forms
 
         private bool TabToNextCell()
         {
-            bool success;
             DataGridViewColumn dataGridViewColumn = Columns.GetFirstColumn(DataGridViewElementStates.Visible);
             int firstVisibleColumnIndex = (dataGridViewColumn == null) ? -1 : dataGridViewColumn.Index;
             int firstVisibleRowIndex = Rows.GetFirstRow(DataGridViewElementStates.Visible);
@@ -28084,16 +27856,13 @@ namespace System.Windows.Forms
 
             if (ptCurrentCell.X == -1)
             {
-                success = ScrollIntoView(firstVisibleColumnIndex, firstVisibleRowIndex, false);
-                Debug.Assert(success);
+                ScrollIntoView(firstVisibleColumnIndex, firstVisibleRowIndex, false);
                 if (IsInnerCellOutOfBounds(firstVisibleColumnIndex, firstVisibleRowIndex))
                 {
                     return true;
                 }
-                success = SetCurrentCellAddressCore(firstVisibleColumnIndex, firstVisibleRowIndex, true, false, false);
-                // Microsoft: SetCurrentCellAddressCore can fail if by navigating to a cell the list under the
-                // DataGridView changes.
-                // Debug.Assert(success);
+
+                SetCurrentCellAddressCore(firstVisibleColumnIndex, firstVisibleRowIndex, true, false, false);
             }
             else
             {
@@ -28101,18 +27870,14 @@ namespace System.Windows.Forms
                 {
                     return true;
                 }
-                success = SetCurrentCellAddressCore(targetColumnIndex, targetRowIndex, true, false, false);
-                // Microsoft: SetCurrentCellAddressCore can fail if by navigating to a cell the list under the
-                // DataGridView changes.
-                // Debug.Assert(success);
+
+                SetCurrentCellAddressCore(targetColumnIndex, targetRowIndex, true, false, false);
             }
             return true;
         }
 
         private bool TabToPreviousCell()
         {
-            bool success;
-
             DataGridViewColumn dataGridViewColumn = Columns.GetFirstColumn(DataGridViewElementStates.Visible);
             int firstVisibleColumnIndex = (dataGridViewColumn == null) ? -1 : dataGridViewColumn.Index;
             int firstVisibleRowIndex = Rows.GetFirstRow(DataGridViewElementStates.Visible);
@@ -28248,16 +28013,13 @@ namespace System.Windows.Forms
 
             if (ptCurrentCell.X == -1)
             {
-                success = ScrollIntoView(firstVisibleColumnIndex, firstVisibleRowIndex, false);
-                Debug.Assert(success);
+                ScrollIntoView(firstVisibleColumnIndex, firstVisibleRowIndex, false);
                 if (IsInnerCellOutOfBounds(firstVisibleColumnIndex, firstVisibleRowIndex))
                 {
                     return true;
                 }
-                success = SetCurrentCellAddressCore(firstVisibleColumnIndex, firstVisibleRowIndex, true, false, false);
-                // Microsoft: SetCurrentCellAddressCore can fail if by navigating to a cell the list under the
-                // DataGridView changes.
-                // Debug.Assert(success);
+
+                SetCurrentCellAddressCore(firstVisibleColumnIndex, firstVisibleRowIndex, true, false, false);
             }
             else
             {
@@ -28265,10 +28027,8 @@ namespace System.Windows.Forms
                 {
                     return true;
                 }
-                success = SetCurrentCellAddressCore(targetColumnIndex, targetRowIndex, true, false, false);
-                // Microsoft: SetCurrentCellAddressCore can fail if by navigating to a cell the list under the
-                // DataGridView changes.
-                // Debug.Assert(success);
+
+                SetCurrentCellAddressCore(targetColumnIndex, targetRowIndex, true, false, false);
             }
 
             return true;
@@ -29335,14 +29095,14 @@ namespace System.Windows.Forms
             }
 
             User32.NMHDR* nmhdr = (User32.NMHDR*)m.LParam;
-            if (nmhdr->code == NativeMethods.TTN_GETDISPINFO && !DesignMode)
+            if (nmhdr->code == (int)ComCtl32.TTN.GETDISPINFOW && !DesignMode)
             {
                 string toolTip = ToolTipPrivate;
 
                 if (!string.IsNullOrEmpty(toolTip))
                 {
                     // Setting the max width has the added benefit of enabling multiline tool tips
-                    User32.SendMessageW(nmhdr->hwndFrom, User32.WindowMessage.TTM_SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
+                    User32.SendMessageW(nmhdr->hwndFrom, (User32.WM)ComCtl32.TTM.SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
                     NativeMethods.TOOLTIPTEXT ttt = (NativeMethods.TOOLTIPTEXT)m.GetLParam(typeof(NativeMethods.TOOLTIPTEXT));
 
                     ttt.lpszText = toolTip;

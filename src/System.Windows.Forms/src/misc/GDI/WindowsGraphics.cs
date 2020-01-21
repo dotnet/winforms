@@ -25,7 +25,7 @@ namespace System.Windows.Forms.Internal
     ///  The underlying hdc is always saved and restored on dispose so external HDCs won't
     ///  be modified by WindowsGraphics.  So we don't need to restore previous objects into
     ///  the dc in method calls.
-    ///</summary>
+    /// </summary>
     internal sealed partial class WindowsGraphics : MarshalByRefObject, IDisposable, IDeviceContext
     {
         private bool _disposeDc;
@@ -161,7 +161,6 @@ namespace System.Windows.Forms.Internal
                     // beteween the original DC clip region and the GDI+ one - for display Graphics it is the same as
                     // Graphics.VisibleClipBounds.
                     wg.DeviceContext.IntersectClip(wr);
-
                 }
             }
 
@@ -212,7 +211,6 @@ namespace System.Windows.Forms.Internal
                         _graphics.ReleaseHdcInternal(DeviceContext.Hdc);
                         _graphics = null;
                     }
-
                 }
                 catch (Exception ex)
                 {

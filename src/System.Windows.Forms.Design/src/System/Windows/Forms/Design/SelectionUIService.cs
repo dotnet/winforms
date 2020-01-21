@@ -1011,7 +1011,6 @@ namespace System.Windows.Forms.Design
             }
             finally
             {
-
                 if (!dragging)
                 {
                     _dragComponents = null;

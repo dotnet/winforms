@@ -16,7 +16,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  A caching mechanism for key accessor. We use an index here rather than control so
             ///  that we don't have lifetime issues by holding on to extra references.
-            /// <summary>
+            /// </summary>
             private int _lastAccessedIndex = -1;
 
             public TabPageCollection(TabControl owner)
@@ -81,7 +81,6 @@ namespace System.Windows.Forms
 
             public void Add(TabPage value)
             {
-
                 if (value == null)
                 {
                     throw new ArgumentNullException(nameof(value));
@@ -344,7 +343,7 @@ namespace System.Windows.Forms
                 {
                     return Array.Empty<TabPage>().GetEnumerator();
                 }
-            
+
                 return tabPages.GetEnumerator();
             }
 

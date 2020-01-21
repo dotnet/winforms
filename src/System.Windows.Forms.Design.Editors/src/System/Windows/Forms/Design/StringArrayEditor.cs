@@ -15,13 +15,6 @@ namespace System.Windows.Forms.Design
         {
         }
 
-        /// <summary>
-        ///  Retrieves the data type this collection contains.
-        ///  The default implementation looks inside of the collection for the Item property
-        ///  and returns the returning datatype of the item.
-        ///  Do not call this method directly. Instead, use the <see cref="CollectionItemType"/> property.
-        ///  Use this method to override the default implementation.
-        /// </summary>
         protected override Type CreateCollectionItemType() => CollectionType.GetElementType();
 
         /// <summary>

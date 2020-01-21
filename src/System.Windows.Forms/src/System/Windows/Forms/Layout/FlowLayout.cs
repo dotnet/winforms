@@ -157,18 +157,18 @@ namespace System.Windows.Forms.Layout
             Debug.Assert(dummy == endIndex, "EndIndex / BreakIndex mismatch.");
         }
 
-        // <summary>
+        /// <summary>
         ///  Just forwards to TryCalculatePreferredSizeRow. breakIndex is the index of the first control not to
         ///  fit in the displayRectangle. The returned Size is the size required to layout the
         ///  controls from startIndex up to but not including breakIndex. See the ElementProxy
         ///  class for an explaination of the elementProxy parameter.
-        /// <summary>
+        /// </summary>
         private Size MeasureRow(ContainerProxy containerProxy, ElementProxy elementProxy, int startIndex, Rectangle displayRectangle, out int breakIndex)
         {
             return TryCalculatePreferredSizeRow(containerProxy, elementProxy, startIndex, endIndex: containerProxy.Container.Children.Count, rowBounds: displayRectangle, breakIndex: out breakIndex, measureOnly: true);
         }
 
-        // <summary>
+        /// <summary>
         ///  LayoutRow and MeasureRow both forward to this method. The measureOnly flag
         ///  determines which behavior we get.
         /// </summary>
@@ -406,8 +406,8 @@ namespace System.Windows.Forms.Layout
             protected bool IsContainerRTL =>  _isContainerRTL;
 
             /// <summary>
-            // Returns the display rectangle of the container - this will be flipped if the
-            ///  layout is a vertical layout.
+            ///  Returns the display rectangle of the container - this will be flipped if the layout
+            ///  is a vertical layout.
             /// </summary>
             public Rectangle DisplayRect
             {

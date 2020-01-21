@@ -18,7 +18,7 @@ namespace System.Windows.Forms
     {
         private static readonly object s_helpRequestEvent = new object();
         private const int CDM_SETDEFAULTFOCUS = WindowMessages.WM_USER + 0x51;
-        private static User32.WindowMessage s_helpMsg;
+        private static User32.WM s_helpMsg;
 
         private IntPtr _defOwnerWndProc;
 
@@ -69,7 +69,7 @@ namespace System.Windows.Forms
             }
             else if (msg == WindowMessages.WM_SETFOCUS)
             {
-                User32.PostMessageW(hWnd, (User32.WindowMessage)CDM_SETDEFAULTFOCUS);
+                User32.PostMessageW(hWnd, (User32.WM)CDM_SETDEFAULTFOCUS);
             }
             else if (msg == CDM_SETDEFAULTFOCUS)
             {
@@ -138,7 +138,7 @@ namespace System.Windows.Forms
                 return IntPtr.Zero;
             }
 
-            return User32.CallWindowProcW(_defOwnerWndProc, hWnd, (User32.WindowMessage)msg, wparam, lparam);
+            return User32.CallWindowProcW(_defOwnerWndProc, hWnd, (User32.WM)msg, wparam, lparam);
         }
 
         /// <summary>
@@ -193,12 +193,12 @@ namespace System.Windows.Forms
                     hwndOwner = native.Handle;
                 }
 
-                if (s_helpMsg == (User32.WindowMessage)0)
+                if (s_helpMsg == User32.WM.NULL)
                 {
                     s_helpMsg = User32.RegisterWindowMessageW("commdlg_help");
                 }
 
-                NativeMethods.WndProc ownerProc = new NativeMethods.WndProc(OwnerWndProc);
+                User32.WNDPROCINT ownerProc = new User32.WNDPROCINT(OwnerWndProc);
                 _hookedWndProc = Marshal.GetFunctionPointerForDelegate(ownerProc);
                 Debug.Assert(IntPtr.Zero == _defOwnerWndProc, "The previous subclass wasn't properly cleaned up");
 
@@ -206,7 +206,7 @@ namespace System.Windows.Forms
                 try
                 {
                     // UnsafeNativeMethods.[Get|Set]WindowLong is smart enough to call SetWindowLongPtr on 64-bit OS
-                    _defOwnerWndProc = UnsafeNativeMethods.SetWindowLong(new HandleRef(this, hwndOwner), NativeMethods.GWL_WNDPROC, ownerProc);
+                    _defOwnerWndProc = User32.SetWindowLong(new HandleRef(this, hwndOwner), User32.GWL.WNDPROC, ownerProc);
 
                     if (Application.UseVisualStyles)
                     {
@@ -225,10 +225,10 @@ namespace System.Windows.Forms
                 }
                 finally
                 {
-                    IntPtr currentSubClass = UnsafeNativeMethods.GetWindowLong(new HandleRef(this, hwndOwner), NativeMethods.GWL_WNDPROC);
+                    IntPtr currentSubClass = User32.GetWindowLong(new HandleRef(this, hwndOwner), User32.GWL.WNDPROC);
                     if (_defOwnerWndProc != IntPtr.Zero || currentSubClass != _hookedWndProc)
                     {
-                        UnsafeNativeMethods.SetWindowLong(new HandleRef(this, hwndOwner), NativeMethods.GWL_WNDPROC, new HandleRef(this, _defOwnerWndProc));
+                        User32.SetWindowLong(new HandleRef(this, hwndOwner), User32.GWL.WNDPROC, new HandleRef(this, _defOwnerWndProc));
                     }
 
                     ThemingScope.Deactivate(userCookie);

@@ -155,13 +155,6 @@ namespace System.Windows.Forms.Design
             remove => base.AutoSizeChanged -= value;
         }
 
-        /*
-        private void CreateNewTransaction() {
-            IDesignerHost host = component.Site.GetService(typeof(IDesignerHost)) as IDesignerHost;
-            transaction = host.CreateTransaction(string.Format(SR.ComponentEditorFormEditTransaction, component.Site.Name));
-        }
-        */
-
         /// <summary>
         ///  Handles ok/cancel/apply/help button click events
         /// </summary>
@@ -488,25 +481,7 @@ namespace System.Windows.Forms.Design
         public virtual DialogResult ShowForm(IWin32Window owner, int page)
         {
             initialActivePage = page;
-
-            // CreateNewTransaction();
-            try
-            {
-                ShowDialog(owner);
-            }
-            finally
-            {
-                /*
-                if (DialogResult == DialogResult.OK) {
-                    transaction.Commit();
-                }
-                else
-                {
-                    transaction.Cancel();
-                }
-                */
-            }
-
+            ShowDialog(owner);
             return DialogResult;
         }
 
@@ -795,11 +770,9 @@ namespace System.Windows.Forms.Design
             {
                 base.OnHandleCreated(e);
 
-                int itemHeight;
-
-                itemHeight = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TVM_GETITEMHEIGHT, 0, 0);
+                int itemHeight = (int)User32.SendMessageW(this, (User32.WM)ComCtl32.TVM.GETITEMHEIGHT);
                 itemHeight += 2 * PADDING_VERT;
-                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TVM_SETITEMHEIGHT, itemHeight, 0);
+                User32.SendMessageW(this, (User32.WM)ComCtl32.TVM.SETITEMHEIGHT, (IntPtr)itemHeight);
 
                 if (_hbrushDither == IntPtr.Zero)
                 {
@@ -837,7 +810,6 @@ namespace System.Windows.Forms.Design
                                          state, ColorTranslator.ToWin32(SystemColors.Control), ColorTranslator.ToWin32(SystemColors.ControlText));
                             }
                             m.Result = (IntPtr)ComCtl32.CDRF.SKIPDEFAULT;
-
                         }
                         break;
                     case ComCtl32.CDDS.POSTPAINT:
@@ -875,12 +847,12 @@ namespace System.Windows.Forms.Design
                 }
             }
 
-            protected override void WndProc(ref Message m)
+            protected unsafe override void WndProc(ref Message m)
             {
                 if (m.Msg == WindowMessages.WM_REFLECT + WindowMessages.WM_NOTIFY)
                 {
-                    User32.NMHDR nmh = (User32.NMHDR)m.GetLParam(typeof(User32.NMHDR));
-                    if (nmh.code == NativeMethods.NM_CUSTOMDRAW)
+                    User32.NMHDR* nmhdr = (User32.NMHDR*)m.LParam;
+                    if (nmhdr->code == (int)ComCtl32.NM.CUSTOMDRAW)
                     {
                         OnCustomDraw(ref m);
                         return;

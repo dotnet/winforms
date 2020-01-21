@@ -12,9 +12,11 @@ internal static partial class Interop
         [ComImport]
         [Guid("00000109-0000-0000-C000-000000000046")]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IPersistStream /* : IPersist */
+        public unsafe interface IPersistStream /* : IPersist */
         {
-            void GetClassID(out Guid pClassId);
+            [PreserveSig]
+            HRESULT GetClassID(
+                Guid* pClassID);
 
             [PreserveSig]
             HRESULT IsDirty();

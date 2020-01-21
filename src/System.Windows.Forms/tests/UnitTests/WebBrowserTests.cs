@@ -8,7 +8,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class WebBrowserTests
+    public class WebBrowserTests : IClassFixture<ThreadExceptionFixture>
     {
         [StaFact]
         public void WebBrowser_Constructor()

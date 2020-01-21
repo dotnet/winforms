@@ -11,21 +11,10 @@ namespace System.Windows.Forms.Design
     {
         private bool replaced;
 
-        /// <summary>
-        ///  Constructs a new sys display name.
-        /// </summary>
-        /// <param name='displayName'>
-        ///  description text.
         public SRDisplayNameAttribute(string displayName) : base(displayName)
         {
         }
 
-        /// <summary>
-        ///  Retrieves the description text.
-        /// </summary>
-        /// <returns>
-        ///  description
-        /// </returns>
         public override string DisplayName
         {
             get

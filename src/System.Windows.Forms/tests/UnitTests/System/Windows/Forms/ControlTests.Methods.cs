@@ -959,6 +959,837 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.IsHandleCreated);
         }
 
+        [WinFormsFact]
+        public void Control_Dispose_Invoke_Success()
+        {
+            using var control = new Control();
+            int callCount = 0;
+            void handler(object sender, EventArgs e)
+            {
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.False(control.IsHandleCreated);
+                Assert.True(control.Disposing);
+                Assert.Equal(callCount > 0, control.IsDisposed);
+                callCount++;
+            };
+            control.Disposed += handler;
+
+            try
+            {
+                control.Dispose();
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.True(control.IsDisposed);
+                Assert.False(control.Disposing);
+                Assert.Equal(1, callCount);
+                Assert.False(control.IsHandleCreated);
+
+                // Dispose multiple times.
+                control.Dispose();
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.True(control.IsDisposed);
+                Assert.False(control.Disposing);
+                Assert.Equal(2, callCount);
+                Assert.False(control.IsHandleCreated);
+            }
+            finally
+            {
+                control.Disposed -= handler;
+            }
+        }
+
+        [WinFormsFact]
+        public void Control_Dispose_InvokeWithParent_Success()
+        {
+            using var parent = new Control();
+            int controlRemovedCallCount = 0;
+            parent.ControlRemoved += (sender, e) => controlRemovedCallCount++;
+            using var control = new Control
+            {
+                Parent = parent
+            };
+            int callCount = 0;
+            void handler(object sender, EventArgs e)
+            {
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.False(control.IsHandleCreated);
+                Assert.True(control.Disposing);
+                Assert.Equal(callCount > 0, control.IsDisposed);
+                callCount++;
+            };
+            control.Disposed += handler;
+
+            try
+            {
+                control.Dispose();
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.Equal(1, controlRemovedCallCount);
+                Assert.False(control.Disposing);
+                Assert.True(control.IsDisposed);
+                Assert.Equal(1, callCount);
+                Assert.False(control.IsHandleCreated);
+
+                // Dispose multiple times.
+                control.Dispose();
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.Equal(1, controlRemovedCallCount);
+                Assert.False(control.Disposing);
+                Assert.True(control.IsDisposed);
+                Assert.Equal(2, callCount);
+                Assert.False(control.IsHandleCreated);
+            }
+            finally
+            {
+                control.Disposed -= handler;
+            }
+        }
+
+        [WinFormsFact]
+        public void Control_Dispose_InvokeWithChildren_Success()
+        {
+            using var control = new Control();
+            using var child1 = new Control();
+            using var child2 = new Control();
+            control.Controls.Add(child1);
+            control.Controls.Add(child2);
+            int controlRemovedCallCount = 0;
+            control.ControlRemoved += (sender, e) => controlRemovedCallCount++;
+
+            int callCount = 0;
+            void handler(object sender, EventArgs e)
+            {
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.False(control.IsHandleCreated);
+                Assert.True(control.Disposing);
+                Assert.Equal(callCount > 0, control.IsDisposed);
+                callCount++;
+            };
+            control.Disposed += handler;
+            int child1CallCount = 0;
+            child1.Disposed += (sender, e) => child1CallCount++;
+            int child2CallCount = 0;
+            child2.Disposed += (sender, e) => child2CallCount++;
+
+            try
+            {
+                control.Dispose();
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.Null(child1.Parent);
+                Assert.Null(child2.Parent);
+                Assert.Equal(0, controlRemovedCallCount);
+                Assert.False(control.Disposing);
+                Assert.True(control.IsDisposed);
+                Assert.False(child1.Disposing);
+                Assert.True(child1.IsDisposed);
+                Assert.False(child2.Disposing);
+                Assert.True(child2.IsDisposed);
+                Assert.Equal(1, callCount);
+                Assert.Equal(1, child1CallCount);
+                Assert.Equal(1, child2CallCount);
+                Assert.False(control.IsHandleCreated);
+                Assert.False(child1.IsHandleCreated);
+                Assert.False(child2.IsHandleCreated);
+
+                // Dispose multiple times.
+                control.Dispose();
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.Null(child1.Parent);
+                Assert.Null(child2.Parent);
+                Assert.Equal(0, controlRemovedCallCount);
+                Assert.False(control.Disposing);
+                Assert.True(control.IsDisposed);
+                Assert.False(child1.Disposing);
+                Assert.True(child1.IsDisposed);
+                Assert.False(child2.Disposing);
+                Assert.True(child2.IsDisposed);
+                Assert.Equal(2, callCount);
+                Assert.Equal(1, child1CallCount);
+                Assert.Equal(1, child2CallCount);
+                Assert.False(control.IsHandleCreated);
+                Assert.False(child1.IsHandleCreated);
+                Assert.False(child2.IsHandleCreated);
+            }
+            finally
+            {
+                control.Disposed -= handler;
+            }
+        }
+
+        [WinFormsFact]
+        public void Control_Dispose_InvokeWithBindings_Success()
+        {
+            using var control = new Control();
+            control.DataBindings.Add(new Binding("Text", new object(), "member"));
+
+            int callCount = 0;
+            void handler(object sender, EventArgs e)
+            {
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.False(control.IsHandleCreated);
+                Assert.True(control.Disposing);
+                Assert.Equal(callCount > 0, control.IsDisposed);
+                callCount++;
+            };
+            control.Disposed += handler;
+
+            try
+            {
+                control.Dispose();
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.True(control.IsDisposed);
+                Assert.False(control.Disposing);
+                Assert.Equal(1, callCount);
+                Assert.False(control.IsHandleCreated);
+
+                // Dispose multiple times.
+                control.Dispose();
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.True(control.IsDisposed);
+                Assert.False(control.Disposing);
+                Assert.Equal(2, callCount);
+                Assert.False(control.IsHandleCreated);
+            }
+            finally
+            {
+                control.Disposed -= handler;
+            }
+        }
+
+        [WinFormsFact]
+        public void Control_Dispose_InvokeWithHandle_Success()
+        {
+            using var control = new Control();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+            int destroyedCallCount = 0;
+            control.HandleDestroyed += (sender, e) => destroyedCallCount++;
+
+            int callCount = 0;
+            void handler(object sender, EventArgs e)
+            {
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.False(control.IsHandleCreated);
+                Assert.True(control.Disposing);
+                Assert.Equal(callCount > 0, control.IsDisposed);
+                callCount++;
+            };
+            control.Disposed += handler;
+
+            try
+            {
+                control.Dispose();
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.True(control.IsDisposed);
+                Assert.False(control.Disposing);
+                Assert.Equal(1, callCount);
+                Assert.False(control.IsHandleCreated);
+                Assert.Equal(0, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+                Assert.Equal(1, destroyedCallCount);
+
+                // Dispose multiple times.
+                control.Dispose();
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.True(control.IsDisposed);
+                Assert.False(control.Disposing);
+                Assert.Equal(2, callCount);
+                Assert.False(control.IsHandleCreated);
+                Assert.Equal(0, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+                Assert.Equal(1, destroyedCallCount);
+            }
+            finally
+            {
+                control.Disposed -= handler;
+            }
+        }
+
+        [WinFormsFact]
+        public void Control_Dispose_InvokeInDisposing_Nop()
+        {
+            using var control = new SubControl();
+
+            int disposedCallCount = 0;
+            control.Disposed += (sender, e) =>
+            {
+                control.Dispose();
+                disposedCallCount++;
+            };
+
+            control.Dispose();
+            Assert.Equal(1, disposedCallCount);
+        }
+
+        [WinFormsFact]
+        public void Control_Dispose_InvokeDisposing_Success()
+        {
+            using var control = new SubControl();
+            int callCount = 0;
+            void handler(object sender, EventArgs e)
+            {
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.False(control.IsHandleCreated);
+                Assert.True(control.Disposing);
+                Assert.Equal(callCount > 0, control.IsDisposed);
+                callCount++;
+            };
+            control.Disposed += handler;
+
+            try
+            {
+                control.Dispose(true);
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.True(control.IsDisposed);
+                Assert.False(control.Disposing);
+                Assert.Equal(1, callCount);
+                Assert.False(control.IsHandleCreated);
+
+                // Dispose multiple times.
+                control.Dispose(true);
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.True(control.IsDisposed);
+                Assert.False(control.Disposing);
+                Assert.Equal(2, callCount);
+                Assert.False(control.IsHandleCreated);
+            }
+            finally
+            {
+                control.Disposed -= handler;
+            }
+        }
+
+        [WinFormsFact]
+        public void Control_Dispose_InvokeNotDisposing_Success()
+        {
+            using var control = new SubControl();
+            int callCount = 0;
+            void handler(object sender, EventArgs e) => callCount++;
+            control.Disposed += handler;
+
+            try
+            {
+                control.Dispose(false);
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.False(control.IsDisposed);
+                Assert.False(control.Disposing);
+                Assert.Equal(0, callCount);
+                Assert.False(control.IsHandleCreated);
+
+                // Dispose multiple times.
+                control.Dispose(false);
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.False(control.IsDisposed);
+                Assert.False(control.Disposing);
+                Assert.Equal(0, callCount);
+                Assert.False(control.IsHandleCreated);
+            }
+            finally
+            {
+                control.Disposed -= handler;
+            }
+        }
+
+        [WinFormsFact]
+        public void Control_Dispose_InvokeDisposingWithParent_Success()
+        {
+            using var parent = new SubControl();
+            int controlRemovedCallCount = 0;
+            parent.ControlRemoved += (sender, e) => controlRemovedCallCount++;
+            using var control = new SubControl
+            {
+                Parent = parent
+            };
+            int callCount = 0;
+            void handler(object sender, EventArgs e)
+            {
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.False(control.IsHandleCreated);
+                Assert.True(control.Disposing);
+                Assert.Equal(callCount > 0, control.IsDisposed);
+                callCount++;
+            };
+            control.Disposed += handler;
+
+            try
+            {
+                control.Dispose(true);
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.Equal(1, controlRemovedCallCount);
+                Assert.False(control.Disposing);
+                Assert.True(control.IsDisposed);
+                Assert.Equal(1, callCount);
+                Assert.False(control.IsHandleCreated);
+
+                // Dispose multiple times.
+                control.Dispose(true);
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.Equal(1, controlRemovedCallCount);
+                Assert.False(control.Disposing);
+                Assert.True(control.IsDisposed);
+                Assert.Equal(2, callCount);
+                Assert.False(control.IsHandleCreated);
+            }
+            finally
+            {
+                control.Disposed -= handler;
+            }
+        }
+
+        [WinFormsFact]
+        public void Control_Dispose_InvokeNotDisposingWithParent_Success()
+        {
+            using var parent = new SubControl();
+            int controlRemovedCallCount = 0;
+            parent.ControlRemoved += (sender, e) => controlRemovedCallCount++;
+            using var control = new SubControl
+            {
+                Parent = parent
+            };
+            int callCount = 0;
+            void handler(object sender, EventArgs e) => callCount++;
+            control.Disposed += handler;
+
+            try
+            {
+                control.Dispose(false);
+                Assert.Same(parent, control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.Equal(0, controlRemovedCallCount);
+                Assert.False(control.Disposing);
+                Assert.False(control.IsDisposed);
+                Assert.Equal(0, callCount);
+                Assert.False(control.IsHandleCreated);
+
+                // Dispose multiple times.
+                control.Dispose(false);
+                Assert.Same(parent, control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.Equal(0, controlRemovedCallCount);
+                Assert.False(control.Disposing);
+                Assert.False(control.IsDisposed);
+                Assert.Equal(0, callCount);
+                Assert.False(control.IsHandleCreated);
+            }
+            finally
+            {
+                control.Disposed -= handler;
+            }
+        }
+
+        [WinFormsFact]
+        public void Control_Dispose_InvokeDisposingWithChildren_Success()
+        {
+            using var control = new SubControl();
+            using var child1 = new SubControl();
+            using var child2 = new SubControl();
+            control.Controls.Add(child1);
+            control.Controls.Add(child2);
+            int controlRemovedCallCount = 0;
+            control.ControlRemoved += (sender, e) => controlRemovedCallCount++;
+
+            int callCount = 0;
+            void handler(object sender, EventArgs e)
+            {
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.False(control.IsHandleCreated);
+                Assert.True(control.Disposing);
+                Assert.Equal(callCount > 0, control.IsDisposed);
+                callCount++;
+            };
+            control.Disposed += handler;
+            int child1CallCount = 0;
+            child1.Disposed += (sender, e) => child1CallCount++;
+            int child2CallCount = 0;
+            child2.Disposed += (sender, e) => child2CallCount++;
+
+            try
+            {
+                control.Dispose(true);
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.Null(child1.Parent);
+                Assert.Null(child2.Parent);
+                Assert.Equal(0, controlRemovedCallCount);
+                Assert.False(control.Disposing);
+                Assert.True(control.IsDisposed);
+                Assert.False(child1.Disposing);
+                Assert.True(child1.IsDisposed);
+                Assert.False(child2.Disposing);
+                Assert.True(child2.IsDisposed);
+                Assert.Equal(1, callCount);
+                Assert.Equal(1, child1CallCount);
+                Assert.Equal(1, child2CallCount);
+                Assert.False(control.IsHandleCreated);
+                Assert.False(child1.IsHandleCreated);
+                Assert.False(child2.IsHandleCreated);
+
+                // Dispose multiple times.
+                control.Dispose(true);
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.Null(child1.Parent);
+                Assert.Null(child2.Parent);
+                Assert.Equal(0, controlRemovedCallCount);
+                Assert.False(control.Disposing);
+                Assert.True(control.IsDisposed);
+                Assert.False(child1.Disposing);
+                Assert.True(child1.IsDisposed);
+                Assert.False(child2.Disposing);
+                Assert.True(child2.IsDisposed);
+                Assert.Equal(2, callCount);
+                Assert.Equal(1, child1CallCount);
+                Assert.Equal(1, child2CallCount);
+                Assert.False(control.IsHandleCreated);
+                Assert.False(child1.IsHandleCreated);
+                Assert.False(child2.IsHandleCreated);
+            }
+            finally
+            {
+                control.Disposed -= handler;
+            }
+        }
+
+        [WinFormsFact]
+        public void Control_Dispose_InvokeNotDisposingWithChildren_Success()
+        {
+            using var control = new SubControl();
+            using var child1 = new SubControl();
+            using var child2 = new SubControl();
+            control.Controls.Add(child1);
+            control.Controls.Add(child2);
+            int controlRemovedCallCount = 0;
+            control.ControlRemoved += (sender, e) => controlRemovedCallCount++;
+
+            int callCount = 0;
+            void handler(object sender, EventArgs e) => callCount++;
+            control.Disposed += handler;
+            int child1CallCount = 0;
+            child1.Disposed += (sender, e) => child1CallCount++;
+            int child2CallCount = 0;
+            child2.Disposed += (sender, e) => child2CallCount++;
+
+            try
+            {
+                control.Dispose(false);
+                Assert.Null(control.Parent);
+                Assert.Equal(new Control[] { child1, child2 }, control.Controls.Cast<Control>());
+                Assert.Empty(control.DataBindings);
+                Assert.Same(control, child1.Parent);
+                Assert.Same(control, child2.Parent);
+                Assert.Equal(0, controlRemovedCallCount);
+                Assert.False(control.Disposing);
+                Assert.False(control.IsDisposed);
+                Assert.False(child1.Disposing);
+                Assert.False(child1.IsDisposed);
+                Assert.False(child2.Disposing);
+                Assert.False(child2.IsDisposed);
+                Assert.Equal(0, callCount);
+                Assert.Equal(0, child1CallCount);
+                Assert.Equal(0, child2CallCount);
+                Assert.False(control.IsHandleCreated);
+                Assert.False(child1.IsHandleCreated);
+                Assert.False(child2.IsHandleCreated);
+
+                // Dispose multiple times.
+                control.Dispose(false);
+                Assert.Null(control.Parent);
+                Assert.Equal(new Control[] { child1, child2 }, control.Controls.Cast<Control>());
+                Assert.Empty(control.DataBindings);
+                Assert.Same(control, child1.Parent);
+                Assert.Same(control, child2.Parent);
+                Assert.Equal(0, controlRemovedCallCount);
+                Assert.False(control.Disposing);
+                Assert.False(control.IsDisposed);
+                Assert.False(child1.Disposing);
+                Assert.False(child1.IsDisposed);
+                Assert.False(child2.Disposing);
+                Assert.False(child2.IsDisposed);
+                Assert.Equal(0, callCount);
+                Assert.Equal(0, child1CallCount);
+                Assert.Equal(0, child2CallCount);
+                Assert.False(control.IsHandleCreated);
+                Assert.False(child1.IsHandleCreated);
+                Assert.False(child2.IsHandleCreated);
+            }
+            finally
+            {
+                control.Disposed -= handler;
+            }
+        }
+
+        [WinFormsFact]
+        public void Control_Dispose_InvokeDisposingWithBindings_Success()
+        {
+            using var control = new SubControl();
+            control.DataBindings.Add(new Binding("Text", new object(), "member"));
+
+            int callCount = 0;
+            void handler(object sender, EventArgs e)
+            {
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.False(control.IsHandleCreated);
+                Assert.True(control.Disposing);
+                Assert.Equal(callCount > 0, control.IsDisposed);
+                callCount++;
+            };
+            control.Disposed += handler;
+
+            try
+            {
+                control.Dispose(true);
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.True(control.IsDisposed);
+                Assert.False(control.Disposing);
+                Assert.Equal(1, callCount);
+                Assert.False(control.IsHandleCreated);
+
+                // Dispose multiple times.
+                control.Dispose(true);
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.True(control.IsDisposed);
+                Assert.False(control.Disposing);
+                Assert.Equal(2, callCount);
+                Assert.False(control.IsHandleCreated);
+            }
+            finally
+            {
+                control.Disposed -= handler;
+            }
+        }
+
+        [WinFormsFact]
+        public void Control_Dispose_InvokeNotDisposingWithBindings_Success()
+        {
+            using var control = new SubControl();
+            var binding = new Binding("Text", new object(), "member");
+            control.DataBindings.Add(binding);
+
+            int callCount = 0;
+            void handler(object sender, EventArgs e) => callCount++;
+            control.Disposed += handler;
+
+            try
+            {
+                control.Dispose(false);
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Same(binding, Assert.Single(control.DataBindings));
+                Assert.False(control.IsDisposed);
+                Assert.False(control.Disposing);
+                Assert.Equal(0, callCount);
+                Assert.False(control.IsHandleCreated);
+
+                // Dispose multiple times.
+                control.Dispose(false);
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Same(binding, Assert.Single(control.DataBindings));
+                Assert.False(control.IsDisposed);
+                Assert.False(control.Disposing);
+                Assert.Equal(0, callCount);
+                Assert.False(control.IsHandleCreated);
+            }
+            finally
+            {
+                control.Disposed -= handler;
+            }
+        }
+
+        [WinFormsFact]
+        public void Control_Dispose_InvokeDisposingWithHandle_Success()
+        {
+            using var control = new SubControl();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+            int destroyedCallCount = 0;
+            control.HandleDestroyed += (sender, e) => destroyedCallCount++;
+
+            int callCount = 0;
+            void handler(object sender, EventArgs e)
+            {
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.False(control.IsHandleCreated);
+                Assert.True(control.Disposing);
+                Assert.Equal(callCount > 0, control.IsDisposed);
+                callCount++;
+            };
+            control.Disposed += handler;
+
+            try
+            {
+                control.Dispose(true);
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.True(control.IsDisposed);
+                Assert.False(control.Disposing);
+                Assert.Equal(1, callCount);
+                Assert.False(control.IsHandleCreated);
+                Assert.Equal(0, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+                Assert.Equal(1, destroyedCallCount);
+
+                // Dispose multiple times.
+                control.Dispose(true);
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.True(control.IsDisposed);
+                Assert.False(control.Disposing);
+                Assert.Equal(2, callCount);
+                Assert.False(control.IsHandleCreated);
+                Assert.Equal(0, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+                Assert.Equal(1, destroyedCallCount);
+            }
+            finally
+            {
+                control.Disposed -= handler;
+            }
+        }
+
+        [WinFormsFact]
+        public void Control_Dispose_InvokeNotDisposingWithHandle_Success()
+        {
+            using var control = new SubControl();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+            int destroyedCallCount = 0;
+            control.HandleDestroyed += (sender, e) => destroyedCallCount++;
+
+            int callCount = 0;
+            void handler(object sender, EventArgs e) => callCount++;
+            control.Disposed += handler;
+
+            try
+            {
+                control.Dispose(false);
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.False(control.IsDisposed);
+                Assert.False(control.Disposing);
+                Assert.Equal(0, callCount);
+                Assert.False(control.IsHandleCreated);
+                Assert.Equal(0, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+                Assert.Equal(0, destroyedCallCount);
+
+                // Dispose multiple times.
+                control.Dispose(false);
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.False(control.IsDisposed);
+                Assert.False(control.Disposing);
+                Assert.Equal(0, callCount);
+                Assert.False(control.IsHandleCreated);
+                Assert.Equal(0, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+                Assert.Equal(0, destroyedCallCount);
+            }
+            finally
+            {
+                control.Disposed -= handler;
+            }
+        }
+
+        [WinFormsFact]
+        public void Control_Dispose_InvokeDisposingInDisposing_Nop()
+        {
+            using var control = new SubControl();
+
+            int disposedCallCount = 0;
+            control.Disposed += (sender, e) =>
+            {
+                control.Dispose(true);
+                disposedCallCount++;
+            };
+
+            control.Dispose(true);
+            Assert.Equal(1, disposedCallCount);
+        }
+
         /// <summary>
         ///  Data for the DoDragDrop test
         /// </summary>
@@ -3778,53 +4609,53 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { 0, Keys.Menu, false };
             yield return new object[] { 0, Keys.F10, false };
 
-            yield return new object[] { (int)User32.WindowMessage.WM_KEYDOWN, Keys.None, false };
-            yield return new object[] { (int)User32.WindowMessage.WM_KEYDOWN, Keys.A, false };
-            yield return new object[] { (int)User32.WindowMessage.WM_KEYDOWN, Keys.Tab, true };
-            yield return new object[] { (int)User32.WindowMessage.WM_KEYDOWN, Keys.Menu, true };
-            yield return new object[] { (int)User32.WindowMessage.WM_KEYDOWN, Keys.F10, true };
+            yield return new object[] { (int)User32.WM.KEYDOWN, Keys.None, false };
+            yield return new object[] { (int)User32.WM.KEYDOWN, Keys.A, false };
+            yield return new object[] { (int)User32.WM.KEYDOWN, Keys.Tab, true };
+            yield return new object[] { (int)User32.WM.KEYDOWN, Keys.Menu, true };
+            yield return new object[] { (int)User32.WM.KEYDOWN, Keys.F10, true };
 
-            yield return new object[] { (int)User32.WindowMessage.WM_SYSKEYDOWN, Keys.None, false };
-            yield return new object[] { (int)User32.WindowMessage.WM_SYSKEYDOWN, Keys.A, false };
-            yield return new object[] { (int)User32.WindowMessage.WM_SYSKEYDOWN, Keys.Tab, true };
-            yield return new object[] { (int)User32.WindowMessage.WM_SYSKEYDOWN, Keys.Menu, true };
-            yield return new object[] { (int)User32.WindowMessage.WM_SYSKEYDOWN, Keys.F10, true };
+            yield return new object[] { (int)User32.WM.SYSKEYDOWN, Keys.None, false };
+            yield return new object[] { (int)User32.WM.SYSKEYDOWN, Keys.A, false };
+            yield return new object[] { (int)User32.WM.SYSKEYDOWN, Keys.Tab, true };
+            yield return new object[] { (int)User32.WM.SYSKEYDOWN, Keys.Menu, true };
+            yield return new object[] { (int)User32.WM.SYSKEYDOWN, Keys.F10, true };
 
-            yield return new object[] { (int)User32.WindowMessage.WM_KEYUP, Keys.None, false };
-            yield return new object[] { (int)User32.WindowMessage.WM_KEYUP, Keys.A, false };
-            yield return new object[] { (int)User32.WindowMessage.WM_KEYUP, Keys.Tab, false };
-            yield return new object[] { (int)User32.WindowMessage.WM_KEYUP, Keys.Menu, false };
-            yield return new object[] { (int)User32.WindowMessage.WM_KEYUP, Keys.F10, false };
+            yield return new object[] { (int)User32.WM.KEYUP, Keys.None, false };
+            yield return new object[] { (int)User32.WM.KEYUP, Keys.A, false };
+            yield return new object[] { (int)User32.WM.KEYUP, Keys.Tab, false };
+            yield return new object[] { (int)User32.WM.KEYUP, Keys.Menu, false };
+            yield return new object[] { (int)User32.WM.KEYUP, Keys.F10, false };
 
-            yield return new object[] { (int)User32.WindowMessage.WM_SYSKEYUP, Keys.None, false };
-            yield return new object[] { (int)User32.WindowMessage.WM_SYSKEYUP, Keys.A, false };
-            yield return new object[] { (int)User32.WindowMessage.WM_SYSKEYUP, Keys.Tab, false };
-            yield return new object[] { (int)User32.WindowMessage.WM_SYSKEYUP, Keys.Menu, false };
-            yield return new object[] { (int)User32.WindowMessage.WM_SYSKEYUP, Keys.F10, false };
+            yield return new object[] { (int)User32.WM.SYSKEYUP, Keys.None, false };
+            yield return new object[] { (int)User32.WM.SYSKEYUP, Keys.A, false };
+            yield return new object[] { (int)User32.WM.SYSKEYUP, Keys.Tab, false };
+            yield return new object[] { (int)User32.WM.SYSKEYUP, Keys.Menu, false };
+            yield return new object[] { (int)User32.WM.SYSKEYUP, Keys.F10, false };
 
-            yield return new object[] { (int)User32.WindowMessage.WM_CHAR, Keys.None, true };
-            yield return new object[] { (int)User32.WindowMessage.WM_CHAR, Keys.A, true };
-            yield return new object[] { (int)User32.WindowMessage.WM_CHAR, Keys.Tab, true };
-            yield return new object[] { (int)User32.WindowMessage.WM_CHAR, Keys.Menu, true };
-            yield return new object[] { (int)User32.WindowMessage.WM_CHAR, Keys.F10, true };
+            yield return new object[] { (int)User32.WM.CHAR, Keys.None, true };
+            yield return new object[] { (int)User32.WM.CHAR, Keys.A, true };
+            yield return new object[] { (int)User32.WM.CHAR, Keys.Tab, true };
+            yield return new object[] { (int)User32.WM.CHAR, Keys.Menu, true };
+            yield return new object[] { (int)User32.WM.CHAR, Keys.F10, true };
 
-            yield return new object[] { (int)User32.WindowMessage.WM_SYSCHAR, Keys.None, false };
-            yield return new object[] { (int)User32.WindowMessage.WM_SYSCHAR, Keys.A, false };
-            yield return new object[] { (int)User32.WindowMessage.WM_SYSCHAR, Keys.Tab, false };
-            yield return new object[] { (int)User32.WindowMessage.WM_SYSCHAR, Keys.Menu, false };
-            yield return new object[] { (int)User32.WindowMessage.WM_SYSCHAR, Keys.F10, false };
+            yield return new object[] { (int)User32.WM.SYSCHAR, Keys.None, false };
+            yield return new object[] { (int)User32.WM.SYSCHAR, Keys.A, false };
+            yield return new object[] { (int)User32.WM.SYSCHAR, Keys.Tab, false };
+            yield return new object[] { (int)User32.WM.SYSCHAR, Keys.Menu, false };
+            yield return new object[] { (int)User32.WM.SYSCHAR, Keys.F10, false };
 
-            yield return new object[] { (int)User32.WindowMessage.WM_KEYUP, Keys.None, false };
-            yield return new object[] { (int)User32.WindowMessage.WM_KEYUP, Keys.A, false };
-            yield return new object[] { (int)User32.WindowMessage.WM_KEYUP, Keys.Tab, false };
-            yield return new object[] { (int)User32.WindowMessage.WM_KEYUP, Keys.Menu, false };
-            yield return new object[] { (int)User32.WindowMessage.WM_KEYUP, Keys.F10, false };
+            yield return new object[] { (int)User32.WM.KEYUP, Keys.None, false };
+            yield return new object[] { (int)User32.WM.KEYUP, Keys.A, false };
+            yield return new object[] { (int)User32.WM.KEYUP, Keys.Tab, false };
+            yield return new object[] { (int)User32.WM.KEYUP, Keys.Menu, false };
+            yield return new object[] { (int)User32.WM.KEYUP, Keys.F10, false };
 
-            yield return new object[] { (int)User32.WindowMessage.WM_SYSKEYUP, Keys.None, false };
-            yield return new object[] { (int)User32.WindowMessage.WM_SYSKEYUP, Keys.A, false };
-            yield return new object[] { (int)User32.WindowMessage.WM_SYSKEYUP, Keys.Tab, false };
-            yield return new object[] { (int)User32.WindowMessage.WM_SYSKEYUP, Keys.Menu, false };
-            yield return new object[] { (int)User32.WindowMessage.WM_SYSKEYUP, Keys.F10, false };
+            yield return new object[] { (int)User32.WM.SYSKEYUP, Keys.None, false };
+            yield return new object[] { (int)User32.WM.SYSKEYUP, Keys.A, false };
+            yield return new object[] { (int)User32.WM.SYSKEYUP, Keys.Tab, false };
+            yield return new object[] { (int)User32.WM.SYSKEYUP, Keys.Menu, false };
+            yield return new object[] { (int)User32.WM.SYSKEYUP, Keys.F10, false };
         }
 
         [WinFormsTheory]
@@ -3864,47 +4695,47 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { 0, Keys.None, false, false, false, false, false, false, 0, 0, 0, 0, 0 };
             yield return new object[] { 0, Keys.A, false, false, false, false, false, false, 0, 0, 0, 0, 0 };
 
-            yield return new object[] { (int)User32.WindowMessage.WM_KEYDOWN, Keys.None, true, false, false, false, false, true, 1, 0, 0, 0, 0 };
-            yield return new object[] { (int)User32.WindowMessage.WM_KEYDOWN, Keys.None, false, true, false, false, false, false, 1, 1, 0, 0, 0 };
-            yield return new object[] { (int)User32.WindowMessage.WM_KEYDOWN, Keys.None, false, false, true, false, false, true, 1, 1, 1, 0, 0 };
-            yield return new object[] { (int)User32.WindowMessage.WM_KEYDOWN, Keys.None, false, false, false, false, false, false, 1, 1, 1, 0, 0 };
-            yield return new object[] { (int)User32.WindowMessage.WM_KEYDOWN, Keys.A, true, false, false, false, false, true, 1, 0, 0, 0, 0 };
-            yield return new object[] { (int)User32.WindowMessage.WM_KEYDOWN, Keys.A, false, true, false, false, false, false, 1, 1, 0, 0, 0 };
-            yield return new object[] { (int)User32.WindowMessage.WM_KEYDOWN, Keys.A, false, false, true, false, false, true, 1, 1, 1, 0, 0 };
-            yield return new object[] { (int)User32.WindowMessage.WM_KEYDOWN, Keys.A, false, false, false, false, false, false, 1, 1, 1, 0, 0 };
+            yield return new object[] { (int)User32.WM.KEYDOWN, Keys.None, true, false, false, false, false, true, 1, 0, 0, 0, 0 };
+            yield return new object[] { (int)User32.WM.KEYDOWN, Keys.None, false, true, false, false, false, false, 1, 1, 0, 0, 0 };
+            yield return new object[] { (int)User32.WM.KEYDOWN, Keys.None, false, false, true, false, false, true, 1, 1, 1, 0, 0 };
+            yield return new object[] { (int)User32.WM.KEYDOWN, Keys.None, false, false, false, false, false, false, 1, 1, 1, 0, 0 };
+            yield return new object[] { (int)User32.WM.KEYDOWN, Keys.A, true, false, false, false, false, true, 1, 0, 0, 0, 0 };
+            yield return new object[] { (int)User32.WM.KEYDOWN, Keys.A, false, true, false, false, false, false, 1, 1, 0, 0, 0 };
+            yield return new object[] { (int)User32.WM.KEYDOWN, Keys.A, false, false, true, false, false, true, 1, 1, 1, 0, 0 };
+            yield return new object[] { (int)User32.WM.KEYDOWN, Keys.A, false, false, false, false, false, false, 1, 1, 1, 0, 0 };
 
-            yield return new object[] { (int)User32.WindowMessage.WM_SYSKEYDOWN, Keys.None, true, false, false, false, false, true, 1, 0, 0, 0, 0 };
-            yield return new object[] { (int)User32.WindowMessage.WM_SYSKEYDOWN, Keys.None, false, true, false, false, false, false, 1, 1, 0, 0, 0 };
-            yield return new object[] { (int)User32.WindowMessage.WM_SYSKEYDOWN, Keys.None, false, false, true, false, false, true, 1, 1, 1, 0, 0 };
-            yield return new object[] { (int)User32.WindowMessage.WM_SYSKEYDOWN, Keys.None, false, false, false, false, false, false, 1, 1, 1, 0, 0 };
-            yield return new object[] { (int)User32.WindowMessage.WM_SYSKEYDOWN, Keys.A, true, false, false, false, false, true, 1, 0, 0, 0, 0 };
-            yield return new object[] { (int)User32.WindowMessage.WM_SYSKEYDOWN, Keys.A, false, true, false, false, false, false, 1, 1, 0, 0, 0 };
-            yield return new object[] { (int)User32.WindowMessage.WM_SYSKEYDOWN, Keys.A, false, false, true, false, false, true, 1, 1, 1, 0, 0 };
-            yield return new object[] { (int)User32.WindowMessage.WM_SYSKEYDOWN, Keys.A, false, false, false, false, false, false, 1, 1, 1, 0, 0 };
+            yield return new object[] { (int)User32.WM.SYSKEYDOWN, Keys.None, true, false, false, false, false, true, 1, 0, 0, 0, 0 };
+            yield return new object[] { (int)User32.WM.SYSKEYDOWN, Keys.None, false, true, false, false, false, false, 1, 1, 0, 0, 0 };
+            yield return new object[] { (int)User32.WM.SYSKEYDOWN, Keys.None, false, false, true, false, false, true, 1, 1, 1, 0, 0 };
+            yield return new object[] { (int)User32.WM.SYSKEYDOWN, Keys.None, false, false, false, false, false, false, 1, 1, 1, 0, 0 };
+            yield return new object[] { (int)User32.WM.SYSKEYDOWN, Keys.A, true, false, false, false, false, true, 1, 0, 0, 0, 0 };
+            yield return new object[] { (int)User32.WM.SYSKEYDOWN, Keys.A, false, true, false, false, false, false, 1, 1, 0, 0, 0 };
+            yield return new object[] { (int)User32.WM.SYSKEYDOWN, Keys.A, false, false, true, false, false, true, 1, 1, 1, 0, 0 };
+            yield return new object[] { (int)User32.WM.SYSKEYDOWN, Keys.A, false, false, false, false, false, false, 1, 1, 1, 0, 0 };
 
-            yield return new object[] { (int)User32.WindowMessage.WM_CHAR, Keys.None, false, false, false, true, false, false, 0, 0, 0, 1, 0 };
-            yield return new object[] { (int)User32.WindowMessage.WM_CHAR, Keys.None, false, false, false, true, true, false, 0, 0, 0, 1, 0 };
-            yield return new object[] { (int)User32.WindowMessage.WM_CHAR, Keys.None, false, false, false, false, true, true, 0, 0, 0, 1, 1 };
-            yield return new object[] { (int)User32.WindowMessage.WM_CHAR, Keys.None, false, false, false, false, false, false, 0, 0, 0, 1, 1 };
-            yield return new object[] { (int)User32.WindowMessage.WM_CHAR, Keys.A, false, false, false, true, false, false, 0, 0, 0, 1, 0 };
-            yield return new object[] { (int)User32.WindowMessage.WM_CHAR, Keys.A, false, false, false, true, true, false, 0, 0, 0, 1, 0 };
-            yield return new object[] { (int)User32.WindowMessage.WM_CHAR, Keys.A, false, false, false, false, true, true, 0, 0, 0, 1, 1 };
-            yield return new object[] { (int)User32.WindowMessage.WM_CHAR, Keys.A, false, false, false, false, false, false, 0, 0, 0, 1, 1 };
+            yield return new object[] { (int)User32.WM.CHAR, Keys.None, false, false, false, true, false, false, 0, 0, 0, 1, 0 };
+            yield return new object[] { (int)User32.WM.CHAR, Keys.None, false, false, false, true, true, false, 0, 0, 0, 1, 0 };
+            yield return new object[] { (int)User32.WM.CHAR, Keys.None, false, false, false, false, true, true, 0, 0, 0, 1, 1 };
+            yield return new object[] { (int)User32.WM.CHAR, Keys.None, false, false, false, false, false, false, 0, 0, 0, 1, 1 };
+            yield return new object[] { (int)User32.WM.CHAR, Keys.A, false, false, false, true, false, false, 0, 0, 0, 1, 0 };
+            yield return new object[] { (int)User32.WM.CHAR, Keys.A, false, false, false, true, true, false, 0, 0, 0, 1, 0 };
+            yield return new object[] { (int)User32.WM.CHAR, Keys.A, false, false, false, false, true, true, 0, 0, 0, 1, 1 };
+            yield return new object[] { (int)User32.WM.CHAR, Keys.A, false, false, false, false, false, false, 0, 0, 0, 1, 1 };
 
-            yield return new object[] { (int)User32.WindowMessage.WM_SYSCHAR, Keys.None, false, false, false, true, false, false, 0, 0, 0, 0, 1 };
-            yield return new object[] { (int)User32.WindowMessage.WM_SYSCHAR, Keys.None, false, false, false, true, true, true, 0, 0, 0, 0, 1 };
-            yield return new object[] { (int)User32.WindowMessage.WM_SYSCHAR, Keys.None, false, false, false, false, true, true, 0, 0, 0, 0, 1 };
-            yield return new object[] { (int)User32.WindowMessage.WM_SYSCHAR, Keys.None, false, false, false, false, false, false, 0, 0, 0, 0, 1 };
-            yield return new object[] { (int)User32.WindowMessage.WM_SYSCHAR, Keys.A, false, false, false, true, false, false, 0, 0, 0, 0, 1 };
-            yield return new object[] { (int)User32.WindowMessage.WM_SYSCHAR, Keys.A, false, false, false, true, true, true, 0, 0, 0, 0, 1 };
-            yield return new object[] { (int)User32.WindowMessage.WM_SYSCHAR, Keys.A, false, false, false, false, true, true, 0, 0, 0, 0, 1 };
-            yield return new object[] { (int)User32.WindowMessage.WM_SYSCHAR, Keys.A, false, false, false, false, false, false, 0, 0, 0, 0, 1 };
+            yield return new object[] { (int)User32.WM.SYSCHAR, Keys.None, false, false, false, true, false, false, 0, 0, 0, 0, 1 };
+            yield return new object[] { (int)User32.WM.SYSCHAR, Keys.None, false, false, false, true, true, true, 0, 0, 0, 0, 1 };
+            yield return new object[] { (int)User32.WM.SYSCHAR, Keys.None, false, false, false, false, true, true, 0, 0, 0, 0, 1 };
+            yield return new object[] { (int)User32.WM.SYSCHAR, Keys.None, false, false, false, false, false, false, 0, 0, 0, 0, 1 };
+            yield return new object[] { (int)User32.WM.SYSCHAR, Keys.A, false, false, false, true, false, false, 0, 0, 0, 0, 1 };
+            yield return new object[] { (int)User32.WM.SYSCHAR, Keys.A, false, false, false, true, true, true, 0, 0, 0, 0, 1 };
+            yield return new object[] { (int)User32.WM.SYSCHAR, Keys.A, false, false, false, false, true, true, 0, 0, 0, 0, 1 };
+            yield return new object[] { (int)User32.WM.SYSCHAR, Keys.A, false, false, false, false, false, false, 0, 0, 0, 0, 1 };
 
-            yield return new object[] { (int)User32.WindowMessage.WM_KEYUP, Keys.None, false, false, false, false, false, false, 0, 0, 0, 0, 0 };
-            yield return new object[] { (int)User32.WindowMessage.WM_KEYUP, Keys.A, false, false, false, false, false, false, 0, 0, 0, 0, 0 };
+            yield return new object[] { (int)User32.WM.KEYUP, Keys.None, false, false, false, false, false, false, 0, 0, 0, 0, 0 };
+            yield return new object[] { (int)User32.WM.KEYUP, Keys.A, false, false, false, false, false, false, 0, 0, 0, 0, 0 };
 
-            yield return new object[] { (int)User32.WindowMessage.WM_SYSKEYUP, Keys.None, false, false, false, false, false, false, 0, 0, 0, 0, 0 };
-            yield return new object[] { (int)User32.WindowMessage.WM_SYSKEYUP, Keys.A, false, false, false, false, false, false, 0, 0, 0, 0, 0 };
+            yield return new object[] { (int)User32.WM.SYSKEYUP, Keys.None, false, false, false, false, false, false, 0, 0, 0, 0, 0 };
+            yield return new object[] { (int)User32.WM.SYSKEYUP, Keys.A, false, false, false, false, false, false, 0, 0, 0, 0, 0 };
         }
 
         [WinFormsTheory]
@@ -4154,16 +4985,16 @@ namespace System.Windows.Forms.Tests
         {
             foreach (bool handled in new bool[] { true })
             {
-                yield return new object[] { (int)User32.WindowMessage.WM_CHAR, '2', handled, 1, 0, 0, (IntPtr)50 };
-                yield return new object[] { (int)User32.WindowMessage.WM_CHAR, '1', handled, 1, 0, 0, (IntPtr)49 };
-                yield return new object[] { (int)User32.WindowMessage.WM_SYSCHAR, '2', handled, 1, 0, 0, (IntPtr)50 };
-                yield return new object[] { (int)User32.WindowMessage.WM_SYSCHAR, '1', handled, 1, 0, 0, (IntPtr)49 };
-                yield return new object[] { (int)User32.WindowMessage.WM_IME_CHAR, '2', handled, 1, 0, 0, (IntPtr)50 };
-                yield return new object[] { (int)User32.WindowMessage.WM_IME_CHAR, '1', handled, 1, 0, 0, (IntPtr)49 };
-                yield return new object[] { (int)User32.WindowMessage.WM_KEYDOWN, '2', handled, 0, 1, 0, (IntPtr)2 };
-                yield return new object[] { (int)User32.WindowMessage.WM_SYSKEYDOWN, '2', handled, 0, 1, 0, (IntPtr)2 };
-                yield return new object[] { (int)User32.WindowMessage.WM_KEYUP, '2', handled, 0, 0, 1, (IntPtr)2 };
-                yield return new object[] { (int)User32.WindowMessage.WM_SYSKEYUP, '2', handled, 0, 0, 1, (IntPtr)2 };
+                yield return new object[] { (int)User32.WM.CHAR, '2', handled, 1, 0, 0, (IntPtr)50 };
+                yield return new object[] { (int)User32.WM.CHAR, '1', handled, 1, 0, 0, (IntPtr)49 };
+                yield return new object[] { (int)User32.WM.SYSCHAR, '2', handled, 1, 0, 0, (IntPtr)50 };
+                yield return new object[] { (int)User32.WM.SYSCHAR, '1', handled, 1, 0, 0, (IntPtr)49 };
+                yield return new object[] { (int)User32.WM.IME_CHAR, '2', handled, 1, 0, 0, (IntPtr)50 };
+                yield return new object[] { (int)User32.WM.IME_CHAR, '1', handled, 1, 0, 0, (IntPtr)49 };
+                yield return new object[] { (int)User32.WM.KEYDOWN, '2', handled, 0, 1, 0, (IntPtr)2 };
+                yield return new object[] { (int)User32.WM.SYSKEYDOWN, '2', handled, 0, 1, 0, (IntPtr)2 };
+                yield return new object[] { (int)User32.WM.KEYUP, '2', handled, 0, 0, 1, (IntPtr)2 };
+                yield return new object[] { (int)User32.WM.SYSKEYUP, '2', handled, 0, 0, 1, (IntPtr)2 };
                 yield return new object[] { 0, '2', handled, 0, 0, 1, (IntPtr)2 };
             }
         }
@@ -4316,8 +5147,8 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [InlineData((int)User32.WindowMessage.WM_CHAR)]
-        [InlineData((int)User32.WindowMessage.WM_SYSCHAR)]
+        [InlineData((int)User32.WM.CHAR)]
+        [InlineData((int)User32.WM.SYSCHAR)]
         public void Control_ProcessKeyEventArgs_InvokeCharAfterImeChar_Success(int msg)
         {
             using var control = new SubControl();
@@ -4335,7 +5166,7 @@ namespace System.Windows.Forms.Tests
             };
             var imeM = new Message
             {
-                Msg = (int)User32.WindowMessage.WM_IME_CHAR
+                Msg = (int)User32.WM.IME_CHAR
             };
 
             // Char.
@@ -4373,10 +5204,10 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [InlineData((int)User32.WindowMessage.WM_KEYDOWN)]
-        [InlineData((int)User32.WindowMessage.WM_SYSKEYDOWN)]
-        [InlineData((int)User32.WindowMessage.WM_KEYUP)]
-        [InlineData((int)User32.WindowMessage.WM_SYSKEYUP)]
+        [InlineData((int)User32.WM.KEYDOWN)]
+        [InlineData((int)User32.WM.SYSKEYDOWN)]
+        [InlineData((int)User32.WM.KEYUP)]
+        [InlineData((int)User32.WM.SYSKEYUP)]
         public void Control_ProcessKeyEventArgs_InvokeNonCharAfterImeChar_Success(int msg)
         {
             using var control = new SubControl();
@@ -4403,7 +5234,7 @@ namespace System.Windows.Forms.Tests
             };
             var imeM = new Message
             {
-                Msg = (int)User32.WindowMessage.WM_IME_CHAR
+                Msg = (int)User32.WM.IME_CHAR
             };
 
             // Non-Char.
@@ -10865,7 +11696,7 @@ namespace System.Windows.Forms.Tests
                 };
                 var m = new Message
                 {
-                    Msg = (int)User32.WindowMessage.WM_DPICHANGED_AFTERPARENT,
+                    Msg = (int)User32.WM.DPICHANGED_AFTERPARENT,
                     Result = (IntPtr)250
                 };
                 control.WndProc(ref m);
@@ -10896,7 +11727,7 @@ namespace System.Windows.Forms.Tests
             };
             var m = new Message
             {
-                Msg = (int)User32.WindowMessage.WM_DPICHANGED_AFTERPARENT,
+                Msg = (int)User32.WM.DPICHANGED_AFTERPARENT,
                 Result = (IntPtr)250
             };
             control.WndProc(ref m);
@@ -10923,7 +11754,7 @@ namespace System.Windows.Forms.Tests
                 };
                 var m = new Message
                 {
-                    Msg = (int)User32.WindowMessage.WM_DPICHANGED_BEFOREPARENT,
+                    Msg = (int)User32.WM.DPICHANGED_BEFOREPARENT,
                     Result = (IntPtr)250
                 };
                 control.WndProc(ref m);
@@ -10954,7 +11785,7 @@ namespace System.Windows.Forms.Tests
             };
             var m = new Message
             {
-                Msg = (int)User32.WindowMessage.WM_DPICHANGED_BEFOREPARENT,
+                Msg = (int)User32.WM.DPICHANGED_BEFOREPARENT,
                 Result = (IntPtr)250
             };
             control.WndProc(ref m);
@@ -10992,7 +11823,7 @@ namespace System.Windows.Forms.Tests
 
                 var m = new Message
                 {
-                    Msg = (int)User32.WindowMessage.WM_ERASEBKGND,
+                    Msg = (int)User32.WM.ERASEBKGND,
                     Result = (IntPtr)250
                 };
                 control.WndProc(ref m);
@@ -11033,7 +11864,7 @@ namespace System.Windows.Forms.Tests
                 {
                     var m = new Message
                     {
-                        Msg = (int)User32.WindowMessage.WM_ERASEBKGND,
+                        Msg = (int)User32.WM.ERASEBKGND,
                         WParam = hdc,
                         Result = (IntPtr)250
                     };
@@ -11080,7 +11911,7 @@ namespace System.Windows.Forms.Tests
 
             var m = new Message
             {
-                Msg = (int)User32.WindowMessage.WM_ERASEBKGND,
+                Msg = (int)User32.WM.ERASEBKGND,
                 Result = (IntPtr)250
             };
             control.WndProc(ref m);
@@ -11128,7 +11959,7 @@ namespace System.Windows.Forms.Tests
             {
                 var m = new Message
                 {
-                    Msg = (int)User32.WindowMessage.WM_ERASEBKGND,
+                    Msg = (int)User32.WM.ERASEBKGND,
                     WParam = hdc,
                     Result = (IntPtr)250
                 };
@@ -11161,7 +11992,7 @@ namespace System.Windows.Forms.Tests
                 };
                 var m = new Message
                 {
-                    Msg = (int)User32.WindowMessage.WM_KILLFOCUS,
+                    Msg = (int)User32.WM.KILLFOCUS,
                     Result = (IntPtr)250
                 };
                 control.WndProc(ref m);
@@ -11192,7 +12023,7 @@ namespace System.Windows.Forms.Tests
             };
             var m = new Message
             {
-                Msg = (int)User32.WindowMessage.WM_KILLFOCUS,
+                Msg = (int)User32.WM.KILLFOCUS,
                 Result = (IntPtr)250
             };
             control.WndProc(ref m);
@@ -11225,7 +12056,7 @@ namespace System.Windows.Forms.Tests
 
                 var m = new Message
                 {
-                    Msg = (int)User32.WindowMessage.WM_PRINTCLIENT,
+                    Msg = (int)User32.WM.PRINTCLIENT,
                     Result = (IntPtr)250
                 };
                 control.WndProc(ref m);
@@ -11248,7 +12079,7 @@ namespace System.Windows.Forms.Tests
 
                 var m = new Message
                 {
-                    Msg = (int)User32.WindowMessage.WM_PRINTCLIENT,
+                    Msg = (int)User32.WM.PRINTCLIENT,
                     Result = (IntPtr)250
                 };
                 Assert.Throws<NullReferenceException>(() => control.WndProc(ref m));
@@ -11285,7 +12116,7 @@ namespace System.Windows.Forms.Tests
                 {
                     var m = new Message
                     {
-                        Msg = (int)User32.WindowMessage.WM_PRINTCLIENT,
+                        Msg = (int)User32.WM.PRINTCLIENT,
                         WParam = hdc,
                         Result = (IntPtr)250
                     };
@@ -11327,7 +12158,7 @@ namespace System.Windows.Forms.Tests
 
             var m = new Message
             {
-                Msg = (int)User32.WindowMessage.WM_PRINTCLIENT,
+                Msg = (int)User32.WM.PRINTCLIENT,
                 Result = (IntPtr)250
             };
             control.WndProc(ref m);
@@ -11357,7 +12188,7 @@ namespace System.Windows.Forms.Tests
 
             var m = new Message
             {
-                Msg = (int)User32.WindowMessage.WM_PRINTCLIENT,
+                Msg = (int)User32.WM.PRINTCLIENT,
                 Result = (IntPtr)250
             };
             Assert.Throws<NullReferenceException>(() => control.WndProc(ref m));
@@ -11401,7 +12232,7 @@ namespace System.Windows.Forms.Tests
             {
                 var m = new Message
                 {
-                    Msg = (int)User32.WindowMessage.WM_PRINTCLIENT,
+                    Msg = (int)User32.WM.PRINTCLIENT,
                     WParam = hdc,
                     Result = (IntPtr)250
                 };
@@ -11421,89 +12252,89 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> WndProc_MouseDown_TestData()
         {
-            yield return new object[] { true, (int)User32.WindowMessage.WM_LBUTTONDOWN, IntPtr.Zero, IntPtr.Zero, (IntPtr)250, MouseButtons.Left, 1, 0, 0 };
-            yield return new object[] { true, (int)User32.WindowMessage.WM_LBUTTONDOWN, PARAM.FromLowHigh(1, 2), IntPtr.Zero, (IntPtr)250, MouseButtons.Left, 1, 1, 2 };
-            yield return new object[] { true, (int)User32.WindowMessage.WM_LBUTTONDOWN, PARAM.FromLowHigh(-1, -2), IntPtr.Zero, (IntPtr)250, MouseButtons.Left, 1, -1, -2 };
-            yield return new object[] { false, (int)User32.WindowMessage.WM_LBUTTONDOWN, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, MouseButtons.Left, 1, 0, 0 };
-            yield return new object[] { false, (int)User32.WindowMessage.WM_LBUTTONDOWN, PARAM.FromLowHigh(1, 2), IntPtr.Zero, IntPtr.Zero, MouseButtons.Left, 1, 1, 2 };
-            yield return new object[] { false, (int)User32.WindowMessage.WM_LBUTTONDOWN, PARAM.FromLowHigh(-1, -2), IntPtr.Zero, IntPtr.Zero, MouseButtons.Left, 1, -1, -2 };
+            yield return new object[] { true, (int)User32.WM.LBUTTONDOWN, IntPtr.Zero, IntPtr.Zero, (IntPtr)250, MouseButtons.Left, 1, 0, 0 };
+            yield return new object[] { true, (int)User32.WM.LBUTTONDOWN, PARAM.FromLowHigh(1, 2), IntPtr.Zero, (IntPtr)250, MouseButtons.Left, 1, 1, 2 };
+            yield return new object[] { true, (int)User32.WM.LBUTTONDOWN, PARAM.FromLowHigh(-1, -2), IntPtr.Zero, (IntPtr)250, MouseButtons.Left, 1, -1, -2 };
+            yield return new object[] { false, (int)User32.WM.LBUTTONDOWN, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, MouseButtons.Left, 1, 0, 0 };
+            yield return new object[] { false, (int)User32.WM.LBUTTONDOWN, PARAM.FromLowHigh(1, 2), IntPtr.Zero, IntPtr.Zero, MouseButtons.Left, 1, 1, 2 };
+            yield return new object[] { false, (int)User32.WM.LBUTTONDOWN, PARAM.FromLowHigh(-1, -2), IntPtr.Zero, IntPtr.Zero, MouseButtons.Left, 1, -1, -2 };
 
-            yield return new object[] { true, (int)User32.WindowMessage.WM_LBUTTONDBLCLK, IntPtr.Zero, IntPtr.Zero, (IntPtr)250, MouseButtons.Left, 2, 0, 0 };
-            yield return new object[] { true, (int)User32.WindowMessage.WM_LBUTTONDBLCLK, PARAM.FromLowHigh(1, 2), IntPtr.Zero, (IntPtr)250, MouseButtons.Left, 2, 1, 2 };
-            yield return new object[] { true, (int)User32.WindowMessage.WM_LBUTTONDBLCLK, PARAM.FromLowHigh(-1, -2), IntPtr.Zero, (IntPtr)250, MouseButtons.Left, 2, -1, -2 };
-            yield return new object[] { false, (int)User32.WindowMessage.WM_LBUTTONDBLCLK, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, MouseButtons.Left, 2, 0, 0 };
-            yield return new object[] { false, (int)User32.WindowMessage.WM_LBUTTONDBLCLK, PARAM.FromLowHigh(1, 2), IntPtr.Zero, IntPtr.Zero, MouseButtons.Left, 2, 1, 2 };
-            yield return new object[] { false, (int)User32.WindowMessage.WM_LBUTTONDBLCLK, PARAM.FromLowHigh(-1, -2), IntPtr.Zero, IntPtr.Zero, MouseButtons.Left, 2, -1, -2 };
+            yield return new object[] { true, (int)User32.WM.LBUTTONDBLCLK, IntPtr.Zero, IntPtr.Zero, (IntPtr)250, MouseButtons.Left, 2, 0, 0 };
+            yield return new object[] { true, (int)User32.WM.LBUTTONDBLCLK, PARAM.FromLowHigh(1, 2), IntPtr.Zero, (IntPtr)250, MouseButtons.Left, 2, 1, 2 };
+            yield return new object[] { true, (int)User32.WM.LBUTTONDBLCLK, PARAM.FromLowHigh(-1, -2), IntPtr.Zero, (IntPtr)250, MouseButtons.Left, 2, -1, -2 };
+            yield return new object[] { false, (int)User32.WM.LBUTTONDBLCLK, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, MouseButtons.Left, 2, 0, 0 };
+            yield return new object[] { false, (int)User32.WM.LBUTTONDBLCLK, PARAM.FromLowHigh(1, 2), IntPtr.Zero, IntPtr.Zero, MouseButtons.Left, 2, 1, 2 };
+            yield return new object[] { false, (int)User32.WM.LBUTTONDBLCLK, PARAM.FromLowHigh(-1, -2), IntPtr.Zero, IntPtr.Zero, MouseButtons.Left, 2, -1, -2 };
 
-            yield return new object[] { true, (int)User32.WindowMessage.WM_MBUTTONDOWN, IntPtr.Zero, IntPtr.Zero, (IntPtr)250, MouseButtons.Middle, 1, 0, 0 };
-            yield return new object[] { true, (int)User32.WindowMessage.WM_MBUTTONDOWN, PARAM.FromLowHigh(1, 2), IntPtr.Zero, (IntPtr)250, MouseButtons.Middle, 1, 1, 2 };
-            yield return new object[] { true, (int)User32.WindowMessage.WM_MBUTTONDOWN, PARAM.FromLowHigh(-1, -2), IntPtr.Zero, (IntPtr)250, MouseButtons.Middle, 1, -1, -2 };
-            yield return new object[] { false, (int)User32.WindowMessage.WM_MBUTTONDOWN, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, MouseButtons.Middle, 1, 0, 0 };
-            yield return new object[] { false, (int)User32.WindowMessage.WM_MBUTTONDOWN, PARAM.FromLowHigh(1, 2), IntPtr.Zero, IntPtr.Zero, MouseButtons.Middle, 1, 1, 2 };
-            yield return new object[] { false, (int)User32.WindowMessage.WM_MBUTTONDOWN, PARAM.FromLowHigh(-1, -2), IntPtr.Zero, IntPtr.Zero, MouseButtons.Middle, 1, -1, -2 };
+            yield return new object[] { true, (int)User32.WM.MBUTTONDOWN, IntPtr.Zero, IntPtr.Zero, (IntPtr)250, MouseButtons.Middle, 1, 0, 0 };
+            yield return new object[] { true, (int)User32.WM.MBUTTONDOWN, PARAM.FromLowHigh(1, 2), IntPtr.Zero, (IntPtr)250, MouseButtons.Middle, 1, 1, 2 };
+            yield return new object[] { true, (int)User32.WM.MBUTTONDOWN, PARAM.FromLowHigh(-1, -2), IntPtr.Zero, (IntPtr)250, MouseButtons.Middle, 1, -1, -2 };
+            yield return new object[] { false, (int)User32.WM.MBUTTONDOWN, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, MouseButtons.Middle, 1, 0, 0 };
+            yield return new object[] { false, (int)User32.WM.MBUTTONDOWN, PARAM.FromLowHigh(1, 2), IntPtr.Zero, IntPtr.Zero, MouseButtons.Middle, 1, 1, 2 };
+            yield return new object[] { false, (int)User32.WM.MBUTTONDOWN, PARAM.FromLowHigh(-1, -2), IntPtr.Zero, IntPtr.Zero, MouseButtons.Middle, 1, -1, -2 };
 
-            yield return new object[] { true, (int)User32.WindowMessage.WM_MBUTTONDBLCLK, IntPtr.Zero, IntPtr.Zero, (IntPtr)250, MouseButtons.Middle, 2, 0, 0 };
-            yield return new object[] { true, (int)User32.WindowMessage.WM_MBUTTONDBLCLK, PARAM.FromLowHigh(1, 2), IntPtr.Zero, (IntPtr)250, MouseButtons.Middle, 2, 1, 2 };
-            yield return new object[] { true, (int)User32.WindowMessage.WM_MBUTTONDBLCLK, PARAM.FromLowHigh(-1, -2), IntPtr.Zero, (IntPtr)250, MouseButtons.Middle, 2, -1, -2 };
-            yield return new object[] { false, (int)User32.WindowMessage.WM_MBUTTONDBLCLK, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, MouseButtons.Middle, 2, 0, 0 };
-            yield return new object[] { false, (int)User32.WindowMessage.WM_MBUTTONDBLCLK, PARAM.FromLowHigh(1, 2), IntPtr.Zero, IntPtr.Zero, MouseButtons.Middle, 2, 1, 2 };
-            yield return new object[] { false, (int)User32.WindowMessage.WM_MBUTTONDBLCLK, PARAM.FromLowHigh(-1, -2), IntPtr.Zero, IntPtr.Zero, MouseButtons.Middle, 2, -1, -2 };
+            yield return new object[] { true, (int)User32.WM.MBUTTONDBLCLK, IntPtr.Zero, IntPtr.Zero, (IntPtr)250, MouseButtons.Middle, 2, 0, 0 };
+            yield return new object[] { true, (int)User32.WM.MBUTTONDBLCLK, PARAM.FromLowHigh(1, 2), IntPtr.Zero, (IntPtr)250, MouseButtons.Middle, 2, 1, 2 };
+            yield return new object[] { true, (int)User32.WM.MBUTTONDBLCLK, PARAM.FromLowHigh(-1, -2), IntPtr.Zero, (IntPtr)250, MouseButtons.Middle, 2, -1, -2 };
+            yield return new object[] { false, (int)User32.WM.MBUTTONDBLCLK, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, MouseButtons.Middle, 2, 0, 0 };
+            yield return new object[] { false, (int)User32.WM.MBUTTONDBLCLK, PARAM.FromLowHigh(1, 2), IntPtr.Zero, IntPtr.Zero, MouseButtons.Middle, 2, 1, 2 };
+            yield return new object[] { false, (int)User32.WM.MBUTTONDBLCLK, PARAM.FromLowHigh(-1, -2), IntPtr.Zero, IntPtr.Zero, MouseButtons.Middle, 2, -1, -2 };
 
-            yield return new object[] { true, (int)User32.WindowMessage.WM_RBUTTONDOWN, IntPtr.Zero, IntPtr.Zero, (IntPtr)250, MouseButtons.Right, 1, 0, 0 };
-            yield return new object[] { true, (int)User32.WindowMessage.WM_RBUTTONDOWN, PARAM.FromLowHigh(1, 2), IntPtr.Zero, (IntPtr)250, MouseButtons.Right, 1, 1, 2 };
-            yield return new object[] { true, (int)User32.WindowMessage.WM_RBUTTONDOWN, PARAM.FromLowHigh(-1, -2), IntPtr.Zero, (IntPtr)250, MouseButtons.Right, 1, -1, -2 };
-            yield return new object[] { false, (int)User32.WindowMessage.WM_RBUTTONDOWN, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, MouseButtons.Right, 1, 0, 0 };
-            yield return new object[] { false, (int)User32.WindowMessage.WM_RBUTTONDOWN, PARAM.FromLowHigh(1, 2), IntPtr.Zero, IntPtr.Zero, MouseButtons.Right, 1, 1, 2 };
-            yield return new object[] { false, (int)User32.WindowMessage.WM_RBUTTONDOWN, PARAM.FromLowHigh(-1, -2), IntPtr.Zero, IntPtr.Zero, MouseButtons.Right, 1, -1, -2 };
+            yield return new object[] { true, (int)User32.WM.RBUTTONDOWN, IntPtr.Zero, IntPtr.Zero, (IntPtr)250, MouseButtons.Right, 1, 0, 0 };
+            yield return new object[] { true, (int)User32.WM.RBUTTONDOWN, PARAM.FromLowHigh(1, 2), IntPtr.Zero, (IntPtr)250, MouseButtons.Right, 1, 1, 2 };
+            yield return new object[] { true, (int)User32.WM.RBUTTONDOWN, PARAM.FromLowHigh(-1, -2), IntPtr.Zero, (IntPtr)250, MouseButtons.Right, 1, -1, -2 };
+            yield return new object[] { false, (int)User32.WM.RBUTTONDOWN, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, MouseButtons.Right, 1, 0, 0 };
+            yield return new object[] { false, (int)User32.WM.RBUTTONDOWN, PARAM.FromLowHigh(1, 2), IntPtr.Zero, IntPtr.Zero, MouseButtons.Right, 1, 1, 2 };
+            yield return new object[] { false, (int)User32.WM.RBUTTONDOWN, PARAM.FromLowHigh(-1, -2), IntPtr.Zero, IntPtr.Zero, MouseButtons.Right, 1, -1, -2 };
 
-            yield return new object[] { true, (int)User32.WindowMessage.WM_RBUTTONDBLCLK, IntPtr.Zero, IntPtr.Zero, (IntPtr)250, MouseButtons.Right, 2, 0, 0 };
-            yield return new object[] { true, (int)User32.WindowMessage.WM_RBUTTONDBLCLK, PARAM.FromLowHigh(1, 2), IntPtr.Zero, (IntPtr)250, MouseButtons.Right, 2, 1, 2 };
-            yield return new object[] { true, (int)User32.WindowMessage.WM_RBUTTONDBLCLK, PARAM.FromLowHigh(-1, -2), IntPtr.Zero, (IntPtr)250, MouseButtons.Right, 2, -1, -2 };
-            yield return new object[] { false, (int)User32.WindowMessage.WM_RBUTTONDBLCLK, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, MouseButtons.Right, 2, 0, 0 };
-            yield return new object[] { false, (int)User32.WindowMessage.WM_RBUTTONDBLCLK, PARAM.FromLowHigh(1, 2), IntPtr.Zero, IntPtr.Zero, MouseButtons.Right, 2, 1, 2 };
-            yield return new object[] { false, (int)User32.WindowMessage.WM_RBUTTONDBLCLK, PARAM.FromLowHigh(-1, -2), IntPtr.Zero, IntPtr.Zero, MouseButtons.Right, 2, -1, -2 };
+            yield return new object[] { true, (int)User32.WM.RBUTTONDBLCLK, IntPtr.Zero, IntPtr.Zero, (IntPtr)250, MouseButtons.Right, 2, 0, 0 };
+            yield return new object[] { true, (int)User32.WM.RBUTTONDBLCLK, PARAM.FromLowHigh(1, 2), IntPtr.Zero, (IntPtr)250, MouseButtons.Right, 2, 1, 2 };
+            yield return new object[] { true, (int)User32.WM.RBUTTONDBLCLK, PARAM.FromLowHigh(-1, -2), IntPtr.Zero, (IntPtr)250, MouseButtons.Right, 2, -1, -2 };
+            yield return new object[] { false, (int)User32.WM.RBUTTONDBLCLK, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, MouseButtons.Right, 2, 0, 0 };
+            yield return new object[] { false, (int)User32.WM.RBUTTONDBLCLK, PARAM.FromLowHigh(1, 2), IntPtr.Zero, IntPtr.Zero, MouseButtons.Right, 2, 1, 2 };
+            yield return new object[] { false, (int)User32.WM.RBUTTONDBLCLK, PARAM.FromLowHigh(-1, -2), IntPtr.Zero, IntPtr.Zero, MouseButtons.Right, 2, -1, -2 };
 
-            yield return new object[] { true, (int)User32.WindowMessage.WM_XBUTTONDOWN, IntPtr.Zero, IntPtr.Zero, (IntPtr)250, MouseButtons.None, 1, 0, 0 };
-            yield return new object[] { true, (int)User32.WindowMessage.WM_XBUTTONDOWN, PARAM.FromLowHigh(1, 2), IntPtr.Zero, (IntPtr)250, MouseButtons.None, 1, 1, 2 };
-            yield return new object[] { true, (int)User32.WindowMessage.WM_XBUTTONDOWN, PARAM.FromLowHigh(-1, -2), IntPtr.Zero, (IntPtr)250, MouseButtons.None, 1, -1, -2 };
-            yield return new object[] { false, (int)User32.WindowMessage.WM_XBUTTONDOWN, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, MouseButtons.None, 1, 0, 0 };
-            yield return new object[] { false, (int)User32.WindowMessage.WM_XBUTTONDOWN, PARAM.FromLowHigh(1, 2), IntPtr.Zero, IntPtr.Zero, MouseButtons.None, 1, 1, 2 };
-            yield return new object[] { false, (int)User32.WindowMessage.WM_XBUTTONDOWN, PARAM.FromLowHigh(-1, -2), IntPtr.Zero, IntPtr.Zero, MouseButtons.None, 1, -1, -2 };
+            yield return new object[] { true, (int)User32.WM.XBUTTONDOWN, IntPtr.Zero, IntPtr.Zero, (IntPtr)250, MouseButtons.None, 1, 0, 0 };
+            yield return new object[] { true, (int)User32.WM.XBUTTONDOWN, PARAM.FromLowHigh(1, 2), IntPtr.Zero, (IntPtr)250, MouseButtons.None, 1, 1, 2 };
+            yield return new object[] { true, (int)User32.WM.XBUTTONDOWN, PARAM.FromLowHigh(-1, -2), IntPtr.Zero, (IntPtr)250, MouseButtons.None, 1, -1, -2 };
+            yield return new object[] { false, (int)User32.WM.XBUTTONDOWN, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, MouseButtons.None, 1, 0, 0 };
+            yield return new object[] { false, (int)User32.WM.XBUTTONDOWN, PARAM.FromLowHigh(1, 2), IntPtr.Zero, IntPtr.Zero, MouseButtons.None, 1, 1, 2 };
+            yield return new object[] { false, (int)User32.WM.XBUTTONDOWN, PARAM.FromLowHigh(-1, -2), IntPtr.Zero, IntPtr.Zero, MouseButtons.None, 1, -1, -2 };
 
-            yield return new object[] { true, (int)User32.WindowMessage.WM_XBUTTONDOWN, IntPtr.Zero, PARAM.FromLowHigh(2, 1), (IntPtr)250, MouseButtons.XButton1, 1, 0, 0 };
-            yield return new object[] { true, (int)User32.WindowMessage.WM_XBUTTONDOWN, PARAM.FromLowHigh(1, 2), PARAM.FromLowHigh(2, 1), (IntPtr)250, MouseButtons.XButton1, 1, 1, 2 };
-            yield return new object[] { true, (int)User32.WindowMessage.WM_XBUTTONDOWN, PARAM.FromLowHigh(-1, -2), PARAM.FromLowHigh(2, 1), (IntPtr)250, MouseButtons.XButton1, 1, -1, -2 };
-            yield return new object[] { false, (int)User32.WindowMessage.WM_XBUTTONDOWN, IntPtr.Zero, PARAM.FromLowHigh(2, 1), IntPtr.Zero, MouseButtons.XButton1, 1, 0, 0 };
-            yield return new object[] { false, (int)User32.WindowMessage.WM_XBUTTONDOWN, PARAM.FromLowHigh(1, 2), PARAM.FromLowHigh(2, 1), IntPtr.Zero, MouseButtons.XButton1, 1, 1, 2 };
-            yield return new object[] { false, (int)User32.WindowMessage.WM_XBUTTONDOWN, PARAM.FromLowHigh(-1, -2), PARAM.FromLowHigh(2, 1), IntPtr.Zero, MouseButtons.XButton1, 1, -1, -2 };
+            yield return new object[] { true, (int)User32.WM.XBUTTONDOWN, IntPtr.Zero, PARAM.FromLowHigh(2, 1), (IntPtr)250, MouseButtons.XButton1, 1, 0, 0 };
+            yield return new object[] { true, (int)User32.WM.XBUTTONDOWN, PARAM.FromLowHigh(1, 2), PARAM.FromLowHigh(2, 1), (IntPtr)250, MouseButtons.XButton1, 1, 1, 2 };
+            yield return new object[] { true, (int)User32.WM.XBUTTONDOWN, PARAM.FromLowHigh(-1, -2), PARAM.FromLowHigh(2, 1), (IntPtr)250, MouseButtons.XButton1, 1, -1, -2 };
+            yield return new object[] { false, (int)User32.WM.XBUTTONDOWN, IntPtr.Zero, PARAM.FromLowHigh(2, 1), IntPtr.Zero, MouseButtons.XButton1, 1, 0, 0 };
+            yield return new object[] { false, (int)User32.WM.XBUTTONDOWN, PARAM.FromLowHigh(1, 2), PARAM.FromLowHigh(2, 1), IntPtr.Zero, MouseButtons.XButton1, 1, 1, 2 };
+            yield return new object[] { false, (int)User32.WM.XBUTTONDOWN, PARAM.FromLowHigh(-1, -2), PARAM.FromLowHigh(2, 1), IntPtr.Zero, MouseButtons.XButton1, 1, -1, -2 };
 
-            yield return new object[] { true, (int)User32.WindowMessage.WM_XBUTTONDOWN, IntPtr.Zero, PARAM.FromLowHigh(1, 2), (IntPtr)250, MouseButtons.XButton2, 1, 0, 0 };
-            yield return new object[] { true, (int)User32.WindowMessage.WM_XBUTTONDOWN, PARAM.FromLowHigh(1, 2), PARAM.FromLowHigh(1, 2), (IntPtr)250, MouseButtons.XButton2, 1, 1, 2 };
-            yield return new object[] { true, (int)User32.WindowMessage.WM_XBUTTONDOWN, PARAM.FromLowHigh(-1, -2), PARAM.FromLowHigh(1, 2), (IntPtr)250, MouseButtons.XButton2, 1, -1, -2 };
-            yield return new object[] { false, (int)User32.WindowMessage.WM_XBUTTONDOWN, IntPtr.Zero, PARAM.FromLowHigh(1, 2), IntPtr.Zero, MouseButtons.XButton2, 1, 0, 0 };
-            yield return new object[] { false, (int)User32.WindowMessage.WM_XBUTTONDOWN, PARAM.FromLowHigh(1, 2), PARAM.FromLowHigh(1, 2), IntPtr.Zero, MouseButtons.XButton2, 1, 1, 2 };
-            yield return new object[] { false, (int)User32.WindowMessage.WM_XBUTTONDOWN, PARAM.FromLowHigh(-1, -2), PARAM.FromLowHigh(1, 2), IntPtr.Zero, MouseButtons.XButton2, 1, -1, -2 };
+            yield return new object[] { true, (int)User32.WM.XBUTTONDOWN, IntPtr.Zero, PARAM.FromLowHigh(1, 2), (IntPtr)250, MouseButtons.XButton2, 1, 0, 0 };
+            yield return new object[] { true, (int)User32.WM.XBUTTONDOWN, PARAM.FromLowHigh(1, 2), PARAM.FromLowHigh(1, 2), (IntPtr)250, MouseButtons.XButton2, 1, 1, 2 };
+            yield return new object[] { true, (int)User32.WM.XBUTTONDOWN, PARAM.FromLowHigh(-1, -2), PARAM.FromLowHigh(1, 2), (IntPtr)250, MouseButtons.XButton2, 1, -1, -2 };
+            yield return new object[] { false, (int)User32.WM.XBUTTONDOWN, IntPtr.Zero, PARAM.FromLowHigh(1, 2), IntPtr.Zero, MouseButtons.XButton2, 1, 0, 0 };
+            yield return new object[] { false, (int)User32.WM.XBUTTONDOWN, PARAM.FromLowHigh(1, 2), PARAM.FromLowHigh(1, 2), IntPtr.Zero, MouseButtons.XButton2, 1, 1, 2 };
+            yield return new object[] { false, (int)User32.WM.XBUTTONDOWN, PARAM.FromLowHigh(-1, -2), PARAM.FromLowHigh(1, 2), IntPtr.Zero, MouseButtons.XButton2, 1, -1, -2 };
 
-            yield return new object[] { true, (int)User32.WindowMessage.WM_XBUTTONDBLCLK, IntPtr.Zero, IntPtr.Zero, (IntPtr)250, MouseButtons.None, 2, 0, 0 };
-            yield return new object[] { true, (int)User32.WindowMessage.WM_XBUTTONDBLCLK, PARAM.FromLowHigh(1, 2), IntPtr.Zero, (IntPtr)250, MouseButtons.None, 2, 1, 2 };
-            yield return new object[] { true, (int)User32.WindowMessage.WM_XBUTTONDBLCLK, PARAM.FromLowHigh(-1, -2), IntPtr.Zero, (IntPtr)250, MouseButtons.None, 2, -1, -2 };
-            yield return new object[] { false, (int)User32.WindowMessage.WM_XBUTTONDBLCLK, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, MouseButtons.None, 2, 0, 0 };
-            yield return new object[] { false, (int)User32.WindowMessage.WM_XBUTTONDBLCLK, PARAM.FromLowHigh(1, 2), IntPtr.Zero, IntPtr.Zero, MouseButtons.None, 2, 1, 2 };
-            yield return new object[] { false, (int)User32.WindowMessage.WM_XBUTTONDBLCLK, PARAM.FromLowHigh(-1, -2), IntPtr.Zero, IntPtr.Zero, MouseButtons.None, 2, -1, -2 };
+            yield return new object[] { true, (int)User32.WM.XBUTTONDBLCLK, IntPtr.Zero, IntPtr.Zero, (IntPtr)250, MouseButtons.None, 2, 0, 0 };
+            yield return new object[] { true, (int)User32.WM.XBUTTONDBLCLK, PARAM.FromLowHigh(1, 2), IntPtr.Zero, (IntPtr)250, MouseButtons.None, 2, 1, 2 };
+            yield return new object[] { true, (int)User32.WM.XBUTTONDBLCLK, PARAM.FromLowHigh(-1, -2), IntPtr.Zero, (IntPtr)250, MouseButtons.None, 2, -1, -2 };
+            yield return new object[] { false, (int)User32.WM.XBUTTONDBLCLK, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, MouseButtons.None, 2, 0, 0 };
+            yield return new object[] { false, (int)User32.WM.XBUTTONDBLCLK, PARAM.FromLowHigh(1, 2), IntPtr.Zero, IntPtr.Zero, MouseButtons.None, 2, 1, 2 };
+            yield return new object[] { false, (int)User32.WM.XBUTTONDBLCLK, PARAM.FromLowHigh(-1, -2), IntPtr.Zero, IntPtr.Zero, MouseButtons.None, 2, -1, -2 };
 
-            yield return new object[] { true, (int)User32.WindowMessage.WM_XBUTTONDBLCLK, IntPtr.Zero, PARAM.FromLowHigh(2, 1), (IntPtr)250, MouseButtons.XButton1, 2, 0, 0 };
-            yield return new object[] { true, (int)User32.WindowMessage.WM_XBUTTONDBLCLK, PARAM.FromLowHigh(1, 2), PARAM.FromLowHigh(2, 1), (IntPtr)250, MouseButtons.XButton1, 2, 1, 2 };
-            yield return new object[] { true, (int)User32.WindowMessage.WM_XBUTTONDBLCLK, PARAM.FromLowHigh(-1, -2), PARAM.FromLowHigh(2, 1), (IntPtr)250, MouseButtons.XButton1, 2, -1, -2 };
-            yield return new object[] { false, (int)User32.WindowMessage.WM_XBUTTONDBLCLK, IntPtr.Zero, PARAM.FromLowHigh(2, 1), IntPtr.Zero, MouseButtons.XButton1, 2, 0, 0 };
-            yield return new object[] { false, (int)User32.WindowMessage.WM_XBUTTONDBLCLK, PARAM.FromLowHigh(1, 2), PARAM.FromLowHigh(2, 1), IntPtr.Zero, MouseButtons.XButton1, 2, 1, 2 };
-            yield return new object[] { false, (int)User32.WindowMessage.WM_XBUTTONDBLCLK, PARAM.FromLowHigh(-1, -2), PARAM.FromLowHigh(2, 1), IntPtr.Zero, MouseButtons.XButton1, 2, -1, -2 };
+            yield return new object[] { true, (int)User32.WM.XBUTTONDBLCLK, IntPtr.Zero, PARAM.FromLowHigh(2, 1), (IntPtr)250, MouseButtons.XButton1, 2, 0, 0 };
+            yield return new object[] { true, (int)User32.WM.XBUTTONDBLCLK, PARAM.FromLowHigh(1, 2), PARAM.FromLowHigh(2, 1), (IntPtr)250, MouseButtons.XButton1, 2, 1, 2 };
+            yield return new object[] { true, (int)User32.WM.XBUTTONDBLCLK, PARAM.FromLowHigh(-1, -2), PARAM.FromLowHigh(2, 1), (IntPtr)250, MouseButtons.XButton1, 2, -1, -2 };
+            yield return new object[] { false, (int)User32.WM.XBUTTONDBLCLK, IntPtr.Zero, PARAM.FromLowHigh(2, 1), IntPtr.Zero, MouseButtons.XButton1, 2, 0, 0 };
+            yield return new object[] { false, (int)User32.WM.XBUTTONDBLCLK, PARAM.FromLowHigh(1, 2), PARAM.FromLowHigh(2, 1), IntPtr.Zero, MouseButtons.XButton1, 2, 1, 2 };
+            yield return new object[] { false, (int)User32.WM.XBUTTONDBLCLK, PARAM.FromLowHigh(-1, -2), PARAM.FromLowHigh(2, 1), IntPtr.Zero, MouseButtons.XButton1, 2, -1, -2 };
 
-            yield return new object[] { true, (int)User32.WindowMessage.WM_XBUTTONDBLCLK, IntPtr.Zero, PARAM.FromLowHigh(1, 2), (IntPtr)250, MouseButtons.XButton2, 2, 0, 0 };
-            yield return new object[] { true, (int)User32.WindowMessage.WM_XBUTTONDBLCLK, PARAM.FromLowHigh(1, 2), PARAM.FromLowHigh(1, 2), (IntPtr)250, MouseButtons.XButton2, 2, 1, 2 };
-            yield return new object[] { true, (int)User32.WindowMessage.WM_XBUTTONDBLCLK, PARAM.FromLowHigh(-1, -2), PARAM.FromLowHigh(1, 2), (IntPtr)250, MouseButtons.XButton2, 2, -1, -2 };
-            yield return new object[] { false, (int)User32.WindowMessage.WM_XBUTTONDBLCLK, IntPtr.Zero, PARAM.FromLowHigh(1, 2), IntPtr.Zero, MouseButtons.XButton2, 2, 0, 0 };
-            yield return new object[] { false, (int)User32.WindowMessage.WM_XBUTTONDBLCLK, PARAM.FromLowHigh(1, 2), PARAM.FromLowHigh(1, 2), IntPtr.Zero, MouseButtons.XButton2, 2, 1, 2 };
-            yield return new object[] { false, (int)User32.WindowMessage.WM_XBUTTONDBLCLK, PARAM.FromLowHigh(-1, -2), PARAM.FromLowHigh(1, 2), IntPtr.Zero, MouseButtons.XButton2, 2, -1, -2 };
+            yield return new object[] { true, (int)User32.WM.XBUTTONDBLCLK, IntPtr.Zero, PARAM.FromLowHigh(1, 2), (IntPtr)250, MouseButtons.XButton2, 2, 0, 0 };
+            yield return new object[] { true, (int)User32.WM.XBUTTONDBLCLK, PARAM.FromLowHigh(1, 2), PARAM.FromLowHigh(1, 2), (IntPtr)250, MouseButtons.XButton2, 2, 1, 2 };
+            yield return new object[] { true, (int)User32.WM.XBUTTONDBLCLK, PARAM.FromLowHigh(-1, -2), PARAM.FromLowHigh(1, 2), (IntPtr)250, MouseButtons.XButton2, 2, -1, -2 };
+            yield return new object[] { false, (int)User32.WM.XBUTTONDBLCLK, IntPtr.Zero, PARAM.FromLowHigh(1, 2), IntPtr.Zero, MouseButtons.XButton2, 2, 0, 0 };
+            yield return new object[] { false, (int)User32.WM.XBUTTONDBLCLK, PARAM.FromLowHigh(1, 2), PARAM.FromLowHigh(1, 2), IntPtr.Zero, MouseButtons.XButton2, 2, 1, 2 };
+            yield return new object[] { false, (int)User32.WM.XBUTTONDBLCLK, PARAM.FromLowHigh(-1, -2), PARAM.FromLowHigh(1, 2), IntPtr.Zero, MouseButtons.XButton2, 2, -1, -2 };
         }
 
         [WinFormsTheory]
@@ -11578,14 +12409,14 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [InlineData((int)User32.WindowMessage.WM_LBUTTONDOWN)]
-        [InlineData((int)User32.WindowMessage.WM_LBUTTONDBLCLK)]
-        [InlineData((int)User32.WindowMessage.WM_MBUTTONDOWN)]
-        [InlineData((int)User32.WindowMessage.WM_MBUTTONDBLCLK)]
-        [InlineData((int)User32.WindowMessage.WM_RBUTTONDOWN)]
-        [InlineData((int)User32.WindowMessage.WM_RBUTTONDBLCLK)]
-        [InlineData((int)User32.WindowMessage.WM_XBUTTONDOWN)]
-        [InlineData((int)User32.WindowMessage.WM_XBUTTONDBLCLK)]
+        [InlineData((int)User32.WM.LBUTTONDOWN)]
+        [InlineData((int)User32.WM.LBUTTONDBLCLK)]
+        [InlineData((int)User32.WM.MBUTTONDOWN)]
+        [InlineData((int)User32.WM.MBUTTONDBLCLK)]
+        [InlineData((int)User32.WM.RBUTTONDOWN)]
+        [InlineData((int)User32.WM.RBUTTONDBLCLK)]
+        [InlineData((int)User32.WM.XBUTTONDOWN)]
+        [InlineData((int)User32.WM.XBUTTONDBLCLK)]
         public void Control_WndProc_InvokeMouseDownWithoutHandleNotEnabled_DoesNotCallMouseDown(int msg)
         {
             using (new NoAssertContext())
@@ -11698,14 +12529,14 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [InlineData((int)User32.WindowMessage.WM_LBUTTONDOWN)]
-        [InlineData((int)User32.WindowMessage.WM_LBUTTONDBLCLK)]
-        [InlineData((int)User32.WindowMessage.WM_MBUTTONDOWN)]
-        [InlineData((int)User32.WindowMessage.WM_MBUTTONDBLCLK)]
-        [InlineData((int)User32.WindowMessage.WM_RBUTTONDOWN)]
-        [InlineData((int)User32.WindowMessage.WM_RBUTTONDBLCLK)]
-        [InlineData((int)User32.WindowMessage.WM_XBUTTONDOWN)]
-        [InlineData((int)User32.WindowMessage.WM_XBUTTONDBLCLK)]
+        [InlineData((int)User32.WM.LBUTTONDOWN)]
+        [InlineData((int)User32.WM.LBUTTONDBLCLK)]
+        [InlineData((int)User32.WM.MBUTTONDOWN)]
+        [InlineData((int)User32.WM.MBUTTONDBLCLK)]
+        [InlineData((int)User32.WM.RBUTTONDOWN)]
+        [InlineData((int)User32.WM.RBUTTONDBLCLK)]
+        [InlineData((int)User32.WM.XBUTTONDOWN)]
+        [InlineData((int)User32.WM.XBUTTONDBLCLK)]
         public void Control_WndProc_InvokeMouseDownWithHandleNotEnabled_DoesNotCallMouseDown(int msg)
         {
             using var control = new SubControl
@@ -11753,7 +12584,7 @@ namespace System.Windows.Forms.Tests
                 };
                 var m = new Message
                 {
-                    Msg = (int)User32.WindowMessage.WM_MOUSEHOVER,
+                    Msg = (int)User32.WM.MOUSEHOVER,
                     Result = (IntPtr)250
                 };
                 control.WndProc(ref m);
@@ -11784,7 +12615,7 @@ namespace System.Windows.Forms.Tests
             };
             var m = new Message
             {
-                Msg = (int)User32.WindowMessage.WM_MOUSEHOVER,
+                Msg = (int)User32.WM.MOUSEHOVER,
                 Result = (IntPtr)250
             };
             control.WndProc(ref m);
@@ -11811,7 +12642,7 @@ namespace System.Windows.Forms.Tests
                 };
                 var m = new Message
                 {
-                    Msg = (int)User32.WindowMessage.WM_SETFOCUS,
+                    Msg = (int)User32.WM.SETFOCUS,
                     Result = (IntPtr)250
                 };
                 control.WndProc(ref m);
@@ -11842,7 +12673,7 @@ namespace System.Windows.Forms.Tests
             };
             var m = new Message
             {
-                Msg = (int)User32.WindowMessage.WM_SETFOCUS,
+                Msg = (int)User32.WM.SETFOCUS,
                 Result = (IntPtr)250
             };
             control.WndProc(ref m);
@@ -11880,7 +12711,7 @@ namespace System.Windows.Forms.Tests
             };
             var m = new Message
             {
-                Msg = (int)User32.WindowMessage.WM_SETFOCUS,
+                Msg = (int)User32.WM.SETFOCUS,
                 Result = (IntPtr)250
             };
             control.WndProc(ref m);
@@ -11936,7 +12767,7 @@ namespace System.Windows.Forms.Tests
             };
             var m = new Message
             {
-                Msg = (int)User32.WindowMessage.WM_SETFOCUS,
+                Msg = (int)User32.WM.SETFOCUS,
                 Result = (IntPtr)250
             };
             control.WndProc(ref m);
@@ -11996,7 +12827,7 @@ namespace System.Windows.Forms.Tests
             };
             var m = new Message
             {
-                Msg = (int)User32.WindowMessage.WM_SETFOCUS,
+                Msg = (int)User32.WM.SETFOCUS,
                 Result = (IntPtr)250
             };
             control.WndProc(ref m);
@@ -12040,7 +12871,7 @@ namespace System.Windows.Forms.Tests
             };
             var m = new Message
             {
-                Msg = (int)User32.WindowMessage.WM_SETFOCUS,
+                Msg = (int)User32.WM.SETFOCUS,
                 Result = (IntPtr)250
             };
             control.WndProc(ref m);
@@ -12084,7 +12915,7 @@ namespace System.Windows.Forms.Tests
             };
             var m = new Message
             {
-                Msg = (int)User32.WindowMessage.WM_SETFOCUS,
+                Msg = (int)User32.WM.SETFOCUS,
                 Result = (IntPtr)250
             };
             control.WndProc(ref m);
@@ -12128,7 +12959,7 @@ namespace System.Windows.Forms.Tests
             };
             var m = new Message
             {
-                Msg = (int)User32.WindowMessage.WM_SETFOCUS,
+                Msg = (int)User32.WM.SETFOCUS,
                 Result = (IntPtr)250
             };
             control.WndProc(ref m);
@@ -12145,7 +12976,7 @@ namespace System.Windows.Forms.Tests
         {
             protected override void WndProc(ref Message m)
             {
-                if (m.Msg == (int)User32.WindowMessage.WM_NCCREATE)
+                if (m.Msg == (int)User32.WM.NCCREATE)
                 {
                     m.Result = IntPtr.Zero;
                     return;

@@ -15,7 +15,8 @@ namespace System.Windows.Forms.Design.Behavior
         private readonly bool _isPrimary = false;
 
         /// <summary>
-        ///  GrabHandleGlyph's constructor takes additional parameters: 'type' and 'primary selection'. Also, we create/cache our pen & brush here to avoid this action with every paint message.
+        ///  GrabHandleGlyph's constructor takes additional parameters: 'type' and 'primary selection'.
+        ///  Also, we create/cache our pen and brush here to avoid this action with every paint message.
         /// </summary>
         internal GrabHandleGlyph(Rectangle controlBounds, GrabHandleGlyphType type, Behavior behavior, bool primarySelection) : base(behavior)
         {
@@ -97,6 +98,5 @@ namespace System.Windows.Forms.Design.Behavior
         {
             DesignerUtils.DrawGrabHandle(pe.Graphics, bounds, _isPrimary, this);
         }
-
     }
 }

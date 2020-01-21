@@ -39,7 +39,7 @@ namespace System.Windows.Forms.Internal
 
         /// <summary>
         ///  Creates a WindowsRegion from a region handle, if 'takeOwnership' is true, the handle is added to the HandleCollector
-        ///  and is removed & destroyed on dispose.
+        ///  and is removed &amp; destroyed on dispose.
         /// </summary>
         public static WindowsRegion FromHregion(IntPtr hRegion, bool takeOwnership)
         {
@@ -91,7 +91,7 @@ namespace System.Windows.Forms.Internal
         }
 
         /// <summary>
-        ///  Combines region1 & region2 into this region.   The regions cannot be null.
+        ///  Combines region1 &amp; region2 into this region. The regions cannot be null.
         ///  The three regions need not be distinct. For example, the sourceRgn1 can equal this region.
         /// </summary>
         public RegionType CombineRegion(WindowsRegion region1, WindowsRegion region2, Gdi32.CombineMode mode)

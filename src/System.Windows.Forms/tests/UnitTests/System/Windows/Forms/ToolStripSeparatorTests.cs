@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -14,7 +14,7 @@ namespace System.Windows.Forms.Tests
 {
     using Size = System.Drawing.Size;
 
-    public class ToolStripSeparatorTests
+    public class ToolStripSeparatorTests : IClassFixture<ThreadExceptionFixture>
     {
         [WinFormsFact]
         public void ToolStripSeparator_Ctor_Default()
@@ -778,7 +778,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { ToolStripLayoutStyle.HorizontalStackWithOverflow, new Size(10, 20), new Size(6, 23) };
             yield return new object[] { ToolStripLayoutStyle.HorizontalStackWithOverflow, new Size(30, 40), new Size(6, 23) };
             yield return new object[] { ToolStripLayoutStyle.HorizontalStackWithOverflow, new Size(int.MaxValue, int.MaxValue), new Size(6, 23) };
-            
+
             yield return new object[] { ToolStripLayoutStyle.StackWithOverflow, Size.Empty, new Size(6, 23) };
             yield return new object[] { ToolStripLayoutStyle.StackWithOverflow, new Size(-1, -2), new Size(6, 23) };
             yield return new object[] { ToolStripLayoutStyle.StackWithOverflow, new Size(10, 20), new Size(6, 23) };
@@ -790,7 +790,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { ToolStripLayoutStyle.Table, new Size(10, 20), new Size(6, 23) };
             yield return new object[] { ToolStripLayoutStyle.Table, new Size(30, 40), new Size(6, 23) };
             yield return new object[] { ToolStripLayoutStyle.Table, new Size(int.MaxValue, int.MaxValue), new Size(6, 23) };
-            
+
             yield return new object[] { ToolStripLayoutStyle.VerticalStackWithOverflow, Size.Empty, new Size(23, 6) };
             yield return new object[] { ToolStripLayoutStyle.VerticalStackWithOverflow, new Size(-1, -2), new Size(23, 6) };
             yield return new object[] { ToolStripLayoutStyle.VerticalStackWithOverflow, new Size(10, 20), new Size(23, 6) };
@@ -863,7 +863,7 @@ namespace System.Windows.Forms.Tests
             // Call again.
             Assert.Equal(expected, item.GetPreferredSize(proposedSize));
         }
-        
+
         public static IEnumerable<object[]> GetPreferredSize_WithToolStripDropDownMenuParent_TestData()
         {
             yield return new object[] { ToolStripLayoutStyle.Flow, Size.Empty, new Size(91, 6) };
@@ -877,7 +877,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { ToolStripLayoutStyle.HorizontalStackWithOverflow, new Size(10, 20), new Size(91, 6) };
             yield return new object[] { ToolStripLayoutStyle.HorizontalStackWithOverflow, new Size(30, 40), new Size(91, 6) };
             yield return new object[] { ToolStripLayoutStyle.HorizontalStackWithOverflow, new Size(int.MaxValue, int.MaxValue), new Size(91, 6) };
-            
+
             yield return new object[] { ToolStripLayoutStyle.StackWithOverflow, Size.Empty, new Size(52, 6) };
             yield return new object[] { ToolStripLayoutStyle.StackWithOverflow, new Size(-1, -2), new Size(52, 6) };
             yield return new object[] { ToolStripLayoutStyle.StackWithOverflow, new Size(10, 20), new Size(52, 6) };
@@ -889,7 +889,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { ToolStripLayoutStyle.Table, new Size(10, 20), new Size(91, 6) };
             yield return new object[] { ToolStripLayoutStyle.Table, new Size(30, 40), new Size(91, 6) };
             yield return new object[] { ToolStripLayoutStyle.Table, new Size(int.MaxValue, int.MaxValue), new Size(91, 6) };
-            
+
             yield return new object[] { ToolStripLayoutStyle.VerticalStackWithOverflow, Size.Empty, new Size(52, 6) };
             yield return new object[] { ToolStripLayoutStyle.VerticalStackWithOverflow, new Size(-1, -2), new Size(52, 6) };
             yield return new object[] { ToolStripLayoutStyle.VerticalStackWithOverflow, new Size(10, 20), new Size(52, 6) };
@@ -938,7 +938,6 @@ namespace System.Windows.Forms.Tests
             // Call again.
             item.OnFontChanged(eventArgs);
         }
-
 
         [WinFormsTheory]
         [MemberData(nameof(OnFontChanged_TestData))]
@@ -1113,7 +1112,7 @@ namespace System.Windows.Forms.Tests
             item.OnPaint(eventArgs);
             Assert.Equal(0, callCount);
         }
-        
+
         public static IEnumerable<object[]> OnPaint_WithOwner_TestData()
         {
             foreach (ToolStripLayoutStyle layoutStyle in Enum.GetValues(typeof(ToolStripLayoutStyle)))
@@ -1661,7 +1660,7 @@ namespace System.Windows.Forms.Tests
             public new AccessibleObject CreateAccessibilityInstance() => base.CreateAccessibilityInstance();
 
             public new void OnFontChanged(EventArgs e) => base.OnFontChanged(e);
-            
+
             public new void OnPaint(PaintEventArgs e) => base.OnPaint(e);
 
             public new void SetBounds(Rectangle bounds) => base.SetBounds(bounds);

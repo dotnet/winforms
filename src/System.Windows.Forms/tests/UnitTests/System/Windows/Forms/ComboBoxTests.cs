@@ -106,6 +106,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(Padding.Empty, control.Padding);
             Assert.Null(control.Parent);
             Assert.Equal("Microsoft\u00AE .NET", control.ProductName);
+            Assert.True(control.PreferredHeight > 0);
             Assert.Equal(new Size(121, control.PreferredHeight), control.PreferredSize);
             Assert.False(control.RecreatingHandle);
             Assert.Null(control.Region);
@@ -153,17 +154,25 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.IsHandleCreated);
         }
 
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(AutoCompleteMode))]
+        public void ComboBox_AutoCompleteMode_SetInvalidValue_ThrowsInvalidEnumArgumentException(AutoCompleteMode value)
+        {
+            using var control = new ComboBox();
+            Assert.Throws<InvalidEnumArgumentException>("value", () => control.AutoCompleteMode = value);
+        }
+
         public static IEnumerable<object[]> BackColor_Set_TestData()
         {
             yield return new object[] { Color.Empty, SystemColors.Window };
             yield return new object[] { Color.Red, Color.Red };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(BackColor_Set_TestData))]
         public void ComboBox_BackColor_Set_GetReturnsExpected(Color value, Color expected)
         {
-            var control = new ComboBox
+            using var control = new ComboBox
             {
                 BackColor = value
             };
@@ -182,11 +191,11 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { Color.Red, Color.Red, 1 };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(BackColor_SetWithHandle_TestData))]
         public void ComboBox_BackColor_SetWithHandle_GetReturnsExpected(Color value, Color expected, int expectedInvalidatedCallCount)
         {
-            var control = new ComboBox();
+            using var control = new ComboBox();
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             int invalidatedCallCount = 0;
             control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -211,10 +220,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createdCallCount);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ComboBox_BackColor_SetWithHandler_CallsBackColorChanged()
         {
-            var control = new ComboBox();
+            using var control = new ComboBox();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -246,25 +255,59 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(2, callCount);
         }
 
-        [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetImageTheoryData))]
-        public void BackgroundImage_Set_GetReturnsExpected(Image value)
+        [WinFormsFact]
+        public void ComboBox_BackColor_ResetValue_Success()
         {
-            var control = new ComboBox
+            PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ComboBox))[nameof(ComboBox.BackColor)];
+            using var control = new ComboBox();
+            Assert.False(property.CanResetValue(control));
+
+            control.BackColor = Color.Red;
+            Assert.Equal(Color.Red, control.BackColor);
+            Assert.True(property.CanResetValue(control));
+
+            property.ResetValue(control);
+            Assert.Equal(SystemColors.Window, control.BackColor);
+            Assert.False(property.CanResetValue(control));
+        }
+
+        [WinFormsFact]
+        public void ComboBox_BackColor_ShouldSerializeValue_Success()
+        {
+            PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ComboBox))[nameof(ComboBox.BackColor)];
+            using var control = new ComboBox();
+            Assert.False(property.ShouldSerializeValue(control));
+
+            control.BackColor = Color.Red;
+            Assert.Equal(Color.Red, control.BackColor);
+            Assert.True(property.ShouldSerializeValue(control));
+
+            property.ResetValue(control);
+            Assert.Equal(SystemColors.Window, control.BackColor);
+            Assert.False(property.ShouldSerializeValue(control));
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetImageTheoryData))]
+        public void ComboBox_BackgroundImage_Set_GetReturnsExpected(Image value)
+        {
+            using var control = new ComboBox
             {
                 BackgroundImage = value
             };
             Assert.Equal(value, control.BackgroundImage);
+            Assert.False(control.IsHandleCreated);
 
             // Set same.
             control.BackgroundImage = value;
             Assert.Equal(value, control.BackgroundImage);
+            Assert.False(control.IsHandleCreated);
         }
 
-        [Fact]
-        public void BackgroundImage_SetWithHandler_CallsBackgroundImageChanged()
+        [WinFormsFact]
+        public void ComboBox_BackgroundImage_SetWithHandler_CallsBackgroundImageChanged()
         {
-            var control = new ComboBox();
+            using var control = new ComboBox();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -275,7 +318,7 @@ namespace System.Windows.Forms.Tests
             control.BackgroundImageChanged += handler;
 
             // Set different.
-            var image1 = new Bitmap(10, 10);
+            using var image1 = new Bitmap(10, 10);
             control.BackgroundImage = image1;
             Assert.Same(image1, control.BackgroundImage);
             Assert.Equal(1, callCount);
@@ -286,7 +329,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
 
             // Set different.
-            var image2 = new Bitmap(10, 10);
+            using var image2 = new Bitmap(10, 10);
             control.BackgroundImage = image2;
             Assert.Same(image2, control.BackgroundImage);
             Assert.Equal(2, callCount);
@@ -303,25 +346,27 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(3, callCount);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ImageLayout))]
-        public void BackgroundImageLayout_Set_GetReturnsExpected(ImageLayout value)
+        public void ComboBox_BackgroundImageLayout_Set_GetReturnsExpected(ImageLayout value)
         {
-            var control = new ComboBox
+            using var control = new ComboBox
             {
                 BackgroundImageLayout = value
             };
             Assert.Equal(value, control.BackgroundImageLayout);
+            Assert.False(control.IsHandleCreated);
 
             // Set same.
             control.BackgroundImageLayout = value;
             Assert.Equal(value, control.BackgroundImageLayout);
+            Assert.False(control.IsHandleCreated);
         }
 
-        [Fact]
-        public void BackgroundImageLayout_SetWithHandler_CallsBackgroundImageLayoutChanged()
+        [WinFormsFact]
+        public void ComboBox_BackgroundImageLayout_SetWithHandler_CallsBackgroundImageLayoutChanged()
         {
-            var control = new ComboBox();
+            using var control = new ComboBox();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -353,11 +398,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(2, callCount);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ImageLayout))]
-        public void BackgroundImageLayout_SetInvalid_ThrowsInvalidEnumArgumentException(ImageLayout value)
+        public void ComboBox_BackgroundImageLayout_SetInvalid_ThrowsInvalidEnumArgumentException(ImageLayout value)
         {
-            var control = new ComboBox();
+            using var control = new ComboBox();
             Assert.Throws<InvalidEnumArgumentException>("value", () => control.BackgroundImageLayout = value);
         }
 
@@ -374,29 +419,31 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { mockSource.Object };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(DataSource_Set_TestData))]
-        public void DataSource_Set_GetReturnsExpected(object value)
+        public void ComBox_DataSource_Set_GetReturnsExpected(object value)
         {
-            var control = new SubComboBox
+            using var control = new SubComboBox
             {
                 DataSource = value
             };
             Assert.Same(value, control.DataSource);
             Assert.Empty(control.DisplayMember);
             Assert.Null(control.DataManager);
+            Assert.False(control.IsHandleCreated);
 
             // Set same.
             control.DataSource = value;
             Assert.Same(value, control.DataSource);
             Assert.Empty(control.DisplayMember);
             Assert.Null(control.DataManager);
+            Assert.False(control.IsHandleCreated);
         }
 
-        [Fact]
-        public void DataSource_SetWithHandler_CallsDataSourceChanged()
+        [WinFormsFact]
+        public void ComBox_DataSource_SetWithHandler_CallsDataSourceChanged()
         {
-            var control = new ComboBox();
+            using var control = new ComboBox();
             int dataSourceCallCount = 0;
             int displayMemberCallCount = 0;
             EventHandler dataSourceHandler = (sender, e) =>
@@ -449,27 +496,176 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, displayMemberCallCount);
         }
 
-        [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetFontTheoryData))]
-        public void Font_Set_GetReturnsExpected(Font value)
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ComboBoxStyle))]
+        public void ComboBox_DropDownStyle_Set_GetReturnsExpected(ComboBoxStyle value)
         {
-            var control = new SubComboBox
+            using var control = new ComboBox
+            {
+                DropDownStyle = value
+            };
+            Assert.Equal(value, control.DropDownStyle);
+            Assert.False(control.IsHandleCreated);
+
+            // Set same.
+            control.DropDownStyle = value;
+            Assert.Equal(value, control.DropDownStyle);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> DropDownStyle_Set_TestData()
+        {
+            foreach (AutoCompleteSource source in Enum.GetValues(typeof(AutoCompleteSource)))
+            {
+                foreach (AutoCompleteMode mode in Enum.GetValues(typeof(AutoCompleteMode)))
+                {
+                    yield return new object[] { source, mode, ComboBoxStyle.Simple, mode };
+                    yield return new object[] { source, mode, ComboBoxStyle.DropDown, mode };
+                    yield return new object[] { source, mode, ComboBoxStyle.DropDownList, source != AutoCompleteSource.ListItems ? AutoCompleteMode.None : mode };
+                }
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(DropDownStyle_Set_TestData))]
+        public void ComboBox_DropDownStyle_SetWithSourceAndMode_GetReturnsExpected(AutoCompleteSource source, AutoCompleteMode mode, ComboBoxStyle value, AutoCompleteMode expectedMode)
+        {
+            using var control = new ComboBox
+            {
+                AutoCompleteSource = source,
+                AutoCompleteMode = mode,
+                DropDownStyle = value
+            };
+            Assert.Equal(value, control.DropDownStyle);
+            Assert.Equal(source, control.AutoCompleteSource);
+            Assert.Equal(expectedMode, control.AutoCompleteMode);
+            Assert.False(control.IsHandleCreated);
+
+            // Set same.
+            control.DropDownStyle = value;
+            Assert.Equal(value, control.DropDownStyle);
+            Assert.Equal(source, control.AutoCompleteSource);
+            Assert.Equal(expectedMode, control.AutoCompleteMode);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void ComboBox_DropDownStyle_SetWithPreferredHeight_ResetsPreferredHeight()
+        {
+            using var control = new ComboBox
+            {
+                FormattingEnabled = true
+            };
+            int height1 = control.PreferredHeight;
+
+            control.DropDownStyle = ComboBoxStyle.DropDownList;
+            Assert.Equal(height1, control.PreferredHeight);
+
+            control.DropDownStyle = ComboBoxStyle.Simple;
+            int height2 = control.PreferredHeight;
+            Assert.True(height2 > height1);
+
+            control.DropDownStyle = ComboBoxStyle.DropDownList;
+            Assert.Equal(height1, control.PreferredHeight);
+        }
+
+        [WinFormsTheory]
+        [InlineData(ComboBoxStyle.Simple, 1)]
+        [InlineData(ComboBoxStyle.DropDown, 0)]
+        [InlineData(ComboBoxStyle.DropDownList, 1)]
+        public void ComboBox_DropDownStyle_SetWithHandle_GetReturnsExpected(ComboBoxStyle value, int expectedCreatedCallCount)
+        {
+            using var control = new ComboBox();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            control.DropDownStyle = value;
+            Assert.Equal(value, control.DropDownStyle);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(expectedCreatedCallCount, createdCallCount);
+
+            // Set same.
+            control.DropDownStyle = value;
+            Assert.Equal(value, control.DropDownStyle);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(expectedCreatedCallCount, createdCallCount);
+        }
+
+        [WinFormsFact]
+        public void ComboBox_DropDownStyle_SetWithHandler_CallsDropDownStyleChanged()
+        {
+            using var control = new ComboBox();
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                callCount++;
+            };
+            control.DropDownStyleChanged += handler;
+
+            // Set different.
+            control.DropDownStyle = ComboBoxStyle.DropDownList;
+            Assert.Equal(ComboBoxStyle.DropDownList, control.DropDownStyle);
+            Assert.Equal(1, callCount);
+
+            // Set same.
+            control.DropDownStyle = ComboBoxStyle.DropDownList;
+            Assert.Equal(ComboBoxStyle.DropDownList, control.DropDownStyle);
+            Assert.Equal(1, callCount);
+
+            // Set different.
+            control.DropDownStyle = ComboBoxStyle.Simple;
+            Assert.Equal(ComboBoxStyle.Simple, control.DropDownStyle);
+            Assert.Equal(2, callCount);
+
+            // Remove handler.
+            control.DropDownStyleChanged -= handler;
+            control.DropDownStyle = ComboBoxStyle.DropDownList;
+            Assert.Equal(ComboBoxStyle.DropDownList, control.DropDownStyle);
+            Assert.Equal(2, callCount);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ComboBoxStyle))]
+        public void ComboBox_DropDownStyle_SetInvalidValue_ThrowsInvalidEnumArgumentException(ComboBoxStyle value)
+        {
+            using var control = new ComboBox();
+            Assert.Throws<InvalidEnumArgumentException>("value", () => control.DropDownStyle = value);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetFontTheoryData))]
+        public void ComboBox_Font_Set_GetReturnsExpected(Font value)
+        {
+            using var control = new SubComboBox
             {
                 Font = value
             };
             Assert.Equal(value ?? Control.DefaultFont, control.Font);
             Assert.Equal(control.Font.Height, control.FontHeight);
+            Assert.False(control.IsHandleCreated);
 
             // Set same.
             control.Font = value;
             Assert.Equal(value ?? Control.DefaultFont, control.Font);
             Assert.Equal(control.Font.Height, control.FontHeight);
+            Assert.False(control.IsHandleCreated);
         }
 
-        [Fact]
-        public void Font_SetWithHandler_CallsFontChanged()
+        [WinFormsFact]
+        public void ComboBox_Font_SetWithHandler_CallsFontChanged()
         {
-            var control = new ComboBox();
+            using var control = new ComboBox();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -480,7 +676,7 @@ namespace System.Windows.Forms.Tests
             control.FontChanged += handler;
 
             // Set different.
-            Font font1 = new Font("Arial", 8.25f);
+            using var font1 = new Font("Arial", 8.25f);
             control.Font = font1;
             Assert.Same(font1, control.Font);
             Assert.Equal(1, callCount);
@@ -491,7 +687,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
 
             // Set different.
-            Font font2 = SystemFonts.DialogFont;
+            using var font2 = SystemFonts.DialogFont;
             control.Font = font2;
             Assert.Same(font2, control.Font);
             Assert.Equal(2, callCount);
@@ -517,11 +713,11 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { Color.Red, Color.Red };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(ForeColor_Set_TestData))]
         public void ComboBox_ForeColor_Set_GetReturnsExpected(Color value, Color expected)
         {
-            var control = new ComboBox
+            using var control = new ComboBox
             {
                 ForeColor = value
             };
@@ -543,11 +739,11 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { Color.Red, Color.Red, 1 };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(ForeColor_SetWithHandle_TestData))]
         public void ComboBox_ForeColor_SetWithHandle_GetReturnsExpected(Color value, Color expected, int expectedInvalidatedCallCount)
         {
-            var control = new ComboBox();
+            using var control = new ComboBox();
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             int invalidatedCallCount = 0;
             control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -572,10 +768,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createdCallCount);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ComboBox_ForeColor_SetWithHandler_CallsForeColorChanged()
         {
-            var control = new ComboBox();
+            using var control = new ComboBox();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -607,7 +803,39 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(2, callCount);
         }
 
-        [Theory]
+        [WinFormsFact]
+        public void ComboBox_ForeColor_ResetValue_Success()
+        {
+            PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ComboBox))[nameof(ComboBox.ForeColor)];
+            using var control = new ComboBox();
+            Assert.False(property.CanResetValue(control));
+
+            control.ForeColor = Color.Red;
+            Assert.Equal(Color.Red, control.ForeColor);
+            Assert.True(property.CanResetValue(control));
+
+            property.ResetValue(control);
+            Assert.Equal(SystemColors.WindowText, control.ForeColor);
+            Assert.False(property.CanResetValue(control));
+        }
+
+        [WinFormsFact]
+        public void ComboBox_ForeColor_ShouldSerializeValue_Success()
+        {
+            PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ComboBox))[nameof(ComboBox.ForeColor)];
+            using var control = new ComboBox();
+            Assert.False(property.ShouldSerializeValue(control));
+
+            control.ForeColor = Color.Red;
+            Assert.Equal(Color.Red, control.ForeColor);
+            Assert.True(property.ShouldSerializeValue(control));
+
+            property.ResetValue(control);
+            Assert.Equal(SystemColors.WindowText, control.ForeColor);
+            Assert.False(property.ShouldSerializeValue(control));
+        }
+
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetPaddingNormalizedTheoryData))]
         public void ComboBox_Padding_Set_GetReturnsExpected(Padding value, Padding expected)
         {
@@ -624,7 +852,7 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.IsHandleCreated);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetPaddingNormalizedTheoryData))]
         public void ComboBox_Padding_SetWithHandle_GetReturnsExpected(Padding value, Padding expected)
         {
@@ -653,7 +881,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createdCallCount);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ComboBox_Padding_SetWithHandler_CallsPaddingChanged()
         {
             using var control = new ComboBox();
@@ -690,11 +918,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(2, callCount);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetRightToLeftTheoryData))]
-        public void RightToLeft_Set_GetReturnsExpected(RightToLeft value, RightToLeft expected)
+        public void ComboBox_RightToLeft_Set_GetReturnsExpected(RightToLeft value, RightToLeft expected)
         {
-            var control = new ComboBox
+            using var control = new ComboBox
             {
                 RightToLeft = value
             };
@@ -705,10 +933,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, control.RightToLeft);
         }
 
-        [Fact]
-        public void RightToLeft_SetWithHandler_CallsRightToLeftChanged()
+        [WinFormsFact]
+        public void ComboBox_RightToLeft_SetWithHandler_CallsRightToLeftChanged()
         {
-            var control = new ComboBox();
+            using var control = new ComboBox();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -740,21 +968,21 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(2, callCount);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(RightToLeft))]
-        public void RightToLeft_SetInvalid_ThrowsInvalidEnumArgumentException(RightToLeft value)
+        public void ComboBox_RightToLeft_SetInvalid_ThrowsInvalidEnumArgumentException(RightToLeft value)
         {
-            var control = new ComboBox();
+            using var control = new ComboBox();
             Assert.Throws<InvalidEnumArgumentException>("value", () => control.RightToLeft = value);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(-1, "")]
         [InlineData(0, "System.Windows.Forms.Tests.ComboBoxTests+DataClass")]
         [InlineData(1, "System.Windows.Forms.Tests.ComboBoxTests+DataClass")]
-        public void SelectedIndex_SetWithoutDisplayMember_GetReturnsExpected(int value, string expectedText)
+        public void ComboBox_SelectedIndex_SetWithoutDisplayMember_GetReturnsExpected(int value, string expectedText)
         {
-            var control = new ComboBox();
+            using var control = new ComboBox();
             control.Items.Add(new DataClass { Value = "Value1" });
             control.Items.Add(new DataClass { Value = "Value2" });
 
@@ -770,13 +998,13 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expectedText, control.Text);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(-1, "")]
         [InlineData(0, "Value1")]
         [InlineData(1, "Value2")]
-        public void SelectedIndex_SetWithDisplayMember_GetReturnsExpected(int value, string expectedText)
+        public void ComboBox_SelectedIndex_SetWithDisplayMember_GetReturnsExpected(int value, string expectedText)
         {
-            var control = new ComboBox
+            using var control = new ComboBox
             {
                 DisplayMember = "Value"
             };
@@ -801,7 +1029,7 @@ namespace System.Windows.Forms.Tests
             using var control = new ComboBox();
             Assert.Empty(control.SelectedText);
             Assert.True(control.IsHandleCreated);
-            
+
             // Get again.
             Assert.Empty(control.SelectedText);
             Assert.True(control.IsHandleCreated);
@@ -815,7 +1043,7 @@ namespace System.Windows.Forms.Tests
 
             Assert.Empty(control.SelectedText);
             Assert.True(control.IsHandleCreated);
-            
+
             // Get again.
             Assert.Empty(control.SelectedText);
             Assert.True(control.IsHandleCreated);
@@ -827,7 +1055,7 @@ namespace System.Windows.Forms.Tests
             using var control = new ComboBox();
             Assert.Equal(0, control.SelectionLength);
             Assert.True(control.IsHandleCreated);
-            
+
             // Get again.
             Assert.Equal(0, control.SelectionLength);
             Assert.True(control.IsHandleCreated);
@@ -841,7 +1069,7 @@ namespace System.Windows.Forms.Tests
 
             Assert.Equal(0, control.SelectionLength);
             Assert.True(control.IsHandleCreated);
-            
+
             // Get again.
             Assert.Equal(0, control.SelectionLength);
             Assert.True(control.IsHandleCreated);
@@ -853,7 +1081,7 @@ namespace System.Windows.Forms.Tests
             using var control = new ComboBox();
             Assert.Equal(0, control.SelectionStart);
             Assert.True(control.IsHandleCreated);
-            
+
             // Get again.
             Assert.Equal(0, control.SelectionStart);
             Assert.True(control.IsHandleCreated);
@@ -867,12 +1095,12 @@ namespace System.Windows.Forms.Tests
 
             Assert.Equal(0, control.SelectionStart);
             Assert.True(control.IsHandleCreated);
-            
+
             // Get again.
             Assert.Equal(0, control.SelectionStart);
             Assert.True(control.IsHandleCreated);
         }
-        
+
         [WinFormsFact]
         public void ComboBox_GetAutoSizeMode_Invoke_ReturnsExpected()
         {
@@ -918,14 +1146,14 @@ namespace System.Windows.Forms.Tests
                 yield return new object[] { new ComboBox(), string.Empty, startIndex, -1 };
                 yield return new object[] { new ComboBox(), "s", startIndex, -1 };
 
-                var controlWithNoItems = new ComboBox();
+                using var controlWithNoItems = new ComboBox();
                 Assert.Empty(controlWithNoItems.Items);
                 yield return new object[] { new ComboBox(), null, startIndex, -1 };
                 yield return new object[] { new ComboBox(), string.Empty, startIndex, -1 };
                 yield return new object[] { new ComboBox(), "s", startIndex, -1 };
             }
 
-            var controlWithItems = new ComboBox
+            using var controlWithItems = new ComboBox
             {
                 DisplayMember = "Value"
             };
@@ -991,9 +1219,9 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { controlWithItems, "NoSuchItem", 5, -1 };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(FindString_TestData))]
-        public void FindString_Invoke_ReturnsExpected(ComboBox control, string s, int startIndex, int expected)
+        public void ComboBox_FindString_Invoke_ReturnsExpected(ComboBox control, string s, int startIndex, int expected)
         {
             if (startIndex == -1)
             {
@@ -1003,13 +1231,13 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, control.FindString(s, startIndex));
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(-2)]
         [InlineData(1)]
         [InlineData(2)]
-        public void FindString_InvalidStartIndex_ThrowsArgumentOutOfRangeException(int startIndex)
+        public void ComboBox_FindString_InvalidStartIndex_ThrowsArgumentOutOfRangeException(int startIndex)
         {
-            var control = new ComboBox();
+            using var control = new ComboBox();
             control.Items.Add("item");
             Assert.Throws<ArgumentOutOfRangeException>("startIndex", () => control.FindString("s", startIndex));
         }
@@ -1024,7 +1252,7 @@ namespace System.Windows.Forms.Tests
                     yield return new object[] { new ComboBox(), string.Empty, startIndex, ignoreCase, -1 };
                     yield return new object[] { new ComboBox(), "s", startIndex, ignoreCase, -1 };
 
-                    var controlWithNoItems = new ComboBox();
+                    using var controlWithNoItems = new ComboBox();
                     Assert.Empty(controlWithNoItems.Items);
                     yield return new object[] { new ComboBox(), null, startIndex, ignoreCase, -1 };
                     yield return new object[] { new ComboBox(), string.Empty, startIndex, ignoreCase, -1 };
@@ -1032,7 +1260,7 @@ namespace System.Windows.Forms.Tests
                 }
             }
 
-            var controlWithItems = new ComboBox
+            using var controlWithItems = new ComboBox
             {
                 DisplayMember = "Value"
             };
@@ -1110,9 +1338,9 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(FindStringExact_TestData))]
-        public void FindStringExact_Invoke_ReturnsExpected(ComboBox control, string s, int startIndex, bool ignoreCase, int expected)
+        public void ComboBox_FindStringExact_Invoke_ReturnsExpected(ComboBox control, string s, int startIndex, bool ignoreCase, int expected)
         {
             if (ignoreCase)
             {
@@ -1127,13 +1355,13 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, control.FindStringExact(s, startIndex, ignoreCase));
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(-2)]
         [InlineData(1)]
         [InlineData(2)]
-        public void FindStringExact_InvalidStartIndex_ThrowsArgumentOutOfRangeException(int startIndex)
+        public void ComboBox_FindStringExact_InvalidStartIndex_ThrowsArgumentOutOfRangeException(int startIndex)
         {
-            var control = new ComboBox();
+            using var control = new ComboBox();
             control.Items.Add("item");
             Assert.Throws<ArgumentOutOfRangeException>("startIndex", () => control.FindStringExact("s", startIndex));
             Assert.Throws<ArgumentOutOfRangeException>("startIndex", () => control.FindStringExact("s", startIndex, ignoreCase: true));
@@ -1158,7 +1386,7 @@ namespace System.Windows.Forms.Tests
             tb.ProcessCmdKey(ref message, Keys.Control | Keys.Back);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void CtrlBackspaceTextRemainsEmpty()
         {
             SubComboBox control = CreateControlForCtrlBackspace();
@@ -1166,7 +1394,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal("", control.Text);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetCtrlBackspaceData))]
         public void CtrlBackspaceTextChanged(string value, string expected, int cursorRelativeToEnd)
         {
@@ -1175,7 +1403,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, control.Text);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetCtrlBackspaceRepeatedData))]
         public void CtrlBackspaceRepeatedTextChanged(string value, string expected, int repeats)
         {
@@ -1187,7 +1415,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, control.Text);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void CtrlBackspaceDeletesSelection()
         {
             SubComboBox control = CreateControlForCtrlBackspace("123-5-7-9");
@@ -1239,7 +1467,7 @@ namespace System.Windows.Forms.Tests
 
                 var m = new Message
                 {
-                    Msg = (int)User32.WindowMessage.WM_PAINT
+                    Msg = (int)User32.WM.PAINT
                 };
                 control.WndProc(ref m);
                 Assert.Equal(expectedIsHandleCreated, control.IsHandleCreated);
@@ -1266,7 +1494,7 @@ namespace System.Windows.Forms.Tests
 
                 var m = new Message
                 {
-                    Msg = (int)User32.WindowMessage.WM_PAINT
+                    Msg = (int)User32.WM.PAINT
                 };
                 control.WndProc(ref m);
                 Assert.Equal(expectedIsHandleCreated, control.IsHandleCreated);
@@ -1321,7 +1549,7 @@ namespace System.Windows.Forms.Tests
 
             var m = new Message
             {
-                Msg = (int)User32.WindowMessage.WM_PAINT
+                Msg = (int)User32.WM.PAINT
             };
             control.WndProc(ref m);
             Assert.True(control.IsHandleCreated);
@@ -1355,7 +1583,7 @@ namespace System.Windows.Forms.Tests
 
             var m = new Message
             {
-                Msg = (int)User32.WindowMessage.WM_PAINT
+                Msg = (int)User32.WM.PAINT
             };
             control.WndProc(ref m);
             Assert.True(control.IsHandleCreated);
@@ -1412,7 +1640,7 @@ namespace System.Windows.Forms.Tests
 
                     var m = new Message
                     {
-                        Msg = (int)User32.WindowMessage.WM_PAINT,
+                        Msg = (int)User32.WM.PAINT,
                         WParam = hdc
                     };
                     control.WndProc(ref m);
@@ -1450,7 +1678,7 @@ namespace System.Windows.Forms.Tests
 
                     var m = new Message
                     {
-                        Msg = (int)User32.WindowMessage.WM_PAINT,
+                        Msg = (int)User32.WM.PAINT,
                         WParam = hdc
                     };
                     control.WndProc(ref m);
@@ -1516,7 +1744,7 @@ namespace System.Windows.Forms.Tests
 
                 var m = new Message
                 {
-                    Msg = (int)User32.WindowMessage.WM_PAINT,
+                    Msg = (int)User32.WM.PAINT,
                     WParam = hdc
                 };
                 control.WndProc(ref m);
@@ -1561,7 +1789,7 @@ namespace System.Windows.Forms.Tests
 
                 var m = new Message
                 {
-                    Msg = (int)User32.WindowMessage.WM_PAINT,
+                    Msg = (int)User32.WM.PAINT,
                     WParam = hdc
                 };
                 control.WndProc(ref m);
@@ -1635,11 +1863,57 @@ namespace System.Windows.Forms.Tests
 
             public new bool ShowKeyboardCues => base.ShowKeyboardCues;
 
+#pragma warning disable 0618
+            public new void AddItemsCore(object[] value) => base.AddItemsCore(value);
+#pragma warning restore 0618
+
+            public new AccessibleObject CreateAccessibilityInstance() => base.CreateAccessibilityInstance();
+
+            public new void CreateHandle() => base.CreateHandle();
+
+            public new void Dispose(bool disposing) => base.Dispose(disposing);
+
             public new AutoSizeMode GetAutoSizeMode() => base.GetAutoSizeMode();
 
             public new bool GetStyle(ControlStyles flag) => base.GetStyle(flag);
 
+            public new bool IsInputKey(Keys keyData) => base.IsInputKey(keyData);
+
+            public new void OnDrawItem(DrawItemEventArgs e) => base.OnDrawItem(e);
+
+            public new void OnDropDown(EventArgs e) => base.OnDropDown(e);
+
+            public new void OnDropDownStyleChanged(EventArgs e) => base.OnDropDownStyleChanged(e);
+
+            public new void OnFontChanged(EventArgs e) => base.OnFontChanged(e);
+
+            public new void OnHandleCreated(EventArgs e) => base.OnHandleCreated(e);
+
+            public new void OnHandleDestroyed(EventArgs e) => base.OnHandleDestroyed(e);
+
+            public new void OnKeyDown(KeyEventArgs e) => base.OnKeyDown(e);
+
+            public new void OnKeyPress(KeyPressEventArgs e) => base.OnKeyPress(e);
+
+            public new void OnMeasureItem(MeasureItemEventArgs e) => base.OnMeasureItem(e);
+
+            public new void OnMouseEnter(EventArgs e) => base.OnMouseEnter(e);
+
+            public new void OnMouseLeave(EventArgs e) => base.OnMouseLeave(e);
+
+            public new void OnParentBackColorChanged(EventArgs e) => base.OnParentBackColorChanged(e);
+
+            public new void OnSelectedIndexChanged(EventArgs e) => base.OnSelectedIndexChanged(e);
+
+            public new void OnSelectedItemChanged(EventArgs e) => base.OnSelectedItemChanged(e);
+
+            public new void OnSelectedValueChanged(EventArgs e) => base.OnSelectedValueChanged(e);
+
+            public new void OnSelectionChangeCommitted(EventArgs e) => base.OnSelectionChangeCommitted(e);
+
             public new bool ProcessCmdKey(ref Message msg, Keys keyData) => base.ProcessCmdKey(ref msg, keyData);
+
+            public new void ScaleControl(SizeF factor, BoundsSpecified specified) => base.ScaleControl(factor, specified);
 
             public new void SetStyle(ControlStyles flag, bool value) => base.SetStyle(flag, value);
 
@@ -1651,10 +1925,10 @@ namespace System.Windows.Forms.Tests
             public string Value { get; set; }
         }
 
-        [Fact]
+        [WinFormsFact]
         public void GettingComboBoxItemAccessibleObject_Not_ThrowsException()
         {
-            var control = new ComboBox();
+            using var control = new ComboBox();
 
             var h1 = new HashNotImplementedObject();
             var h2 = new HashNotImplementedObject();

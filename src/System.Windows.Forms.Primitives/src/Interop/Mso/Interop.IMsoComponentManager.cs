@@ -17,13 +17,13 @@ internal static partial class Interop
 
         /// <remarks>
         ///  ** Comments on State Contexts **
-        ///  
+        ///
         ///  <see cref="FCreateSubComponentManager"/> allows one to create a hierarchical tree of component managers.
         ///  This tree is used to maintain multiple contexts with regard to <see cref="msocstate"/> states. These
         ///  contexts are referred to as 'state contexts'. Each component manager in the tree defines a state context.
         ///  The components registered with a particular component manager or any of its descendents live within that
         ///  component manager's state context.
-        ///  
+        ///
         ///  Calls to <see cref="OnComponentEnterState"/> and <see cref="FOnComponentExitState"/> can be used to affect
         ///  all components, only components within the component manager's state context, or only those components
         ///  that are outside of the component manager's state context. <see cref="FInState"/> is used to query the
@@ -156,7 +156,7 @@ internal static partial class Interop
             ///  component manager in <paramref name="rgpicmExclude"/>, via
             ///  <see cref="IMsoComponent.OnEnterState"/> (see "Comments on State Contexts" in
             ///  <see cref="IMsoComponentManager"/> remarks).
-            ///  
+            ///
             ///  Component Manager should also take appropriate action depending on the value of
             ///  <paramref name="uStateID"/>.
             ///
@@ -169,7 +169,7 @@ internal static partial class Interop
             ///
             ///  Note: inplace objects should not call this method with <paramref name="uStateID" />
             ///  of <see cref="msocstate.Modal"/> when entering modal state. Such objects should call
-            ///  <see cref="IOleInPlaceFrame.EnableModeless"/> instead.
+            ///  <see cref="Ole32.IOleInPlaceFrame.EnableModeless"/> instead.
             /// </remarks>
             /// <param name="dwReserved">Reserved for future use. Should be zero.</param>
             /// <param name="cpicmExclude">Count of items in <paramref name="rgpicmExclude"/>.</param>
@@ -200,20 +200,20 @@ internal static partial class Interop
             /// <remarks>
             ///  <paramref name="uContext"/>, <paramref name="cpicmExclude"/>, and <paramref name="rgpicmExclude"/>
             ///  are as they are in <see cref="OnComponentEnterState"/>.
-            ///  
+            ///
             ///  Component manager should notify all appropriate interested components (taking into account
             ///  <paramref name="uContext"/>, <paramref name="cpicmExclude"/>, <paramref name="rgpicmExclude"/>)
-            ///  via <see cref="IMsoComponent.OnEnterState" (see "Comments on State Contexts", above).
-            ///  
+            ///  via <see cref="IMsoComponent.OnEnterState"/> (see "Comments on State Contexts", above).
+            ///
             ///  Component manager should also take appropriate action depending on the value of <paramref name="uStateID"/>.
-            ///  
+            ///
             ///  Note: n calls to this method are symmetric with n calls to <see cref="OnComponentEnterState"/>.
             /// </remarks>
             /// <returns>
             ///  <see cref="BOOL.TRUE"/> if, at the end of this call, the state is still in effect at the root
             ///  of this component manager's state context (because the host or some other component is still in the state),
             ///  otherwise return <see cref="BOOL.FALSE"/> (ie. return what <see cref="FInState"/> would return).
-            ///  
+            ///
             ///  Callers can normally ignore the return value.
             /// </returns>
             [PreserveSig]
@@ -306,7 +306,7 @@ internal static partial class Interop
             ///  Return in <paramref name="ppic"/> an AddRef'ed ptr to the current active
             ///  or tracking component (as indicated by <paramref name="dwgac"/>, and its
             ///  registration information in <paramref name="pcrinfo"/>.
-            ///  
+            ///
             ///  <paramref name="ppic"/> and/or <paramref name="pcrinfo"/> can be
             ///  NULL if caller is not interested these values.  If <paramref name="pcrinfo"/>
             ///  is not <see langword="null" /> caller should set <see cref="MSOCRINFO.cbSize"/>

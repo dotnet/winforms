@@ -7,7 +7,7 @@ using Xunit;
 
 namespace System.ComponentModel.Design.Tests
 {
-    public class ExtenderProviderServiceTests
+    public class ExtenderProviderServiceTests : IClassFixture<ThreadExceptionFixture>
     {
         [Fact]
         public void ExtenderProviderService_GetExtenderProviders_Invoke_ReturnsEmpty()

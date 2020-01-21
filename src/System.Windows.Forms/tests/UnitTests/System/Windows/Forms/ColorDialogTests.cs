@@ -121,7 +121,7 @@ namespace System.Windows.Forms.Tests
                 Color = value
             };
             Assert.Equal(expected, dialog.Color);
-            
+
             // Set same.
             dialog.Color = value;
             Assert.Equal(expected, dialog.Color);
@@ -135,10 +135,10 @@ namespace System.Windows.Forms.Tests
             {
                 Color = Color.Blue
             };
-            
+
             dialog.Color = value;
             Assert.Equal(expected, dialog.Color);
-            
+
             // Set same.
             dialog.Color = value;
             Assert.Equal(expected, dialog.Color);
@@ -211,7 +211,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, dialog.CustomColors);
             Assert.NotSame(value, dialog.CustomColors);
             Assert.NotSame(dialog.CustomColors, dialog.CustomColors);
-            
+
             // Set same.
             dialog.CustomColors = value;
             Assert.Equal(expected, dialog.CustomColors);
@@ -227,12 +227,12 @@ namespace System.Windows.Forms.Tests
             {
                 CustomColors = new int[1]
             };
-            
+
             dialog.CustomColors = value;
             Assert.Equal(expected, dialog.CustomColors);
             Assert.NotSame(value, dialog.CustomColors);
             Assert.NotSame(dialog.CustomColors, dialog.CustomColors);
-            
+
             // Set same.
             dialog.CustomColors = value;
             Assert.Equal(expected, dialog.CustomColors);

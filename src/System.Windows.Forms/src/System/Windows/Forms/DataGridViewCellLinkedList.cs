@@ -150,22 +150,6 @@ namespace System.Windows.Forms
             return false;
         }
 
-        /* Unused for now
-        public DataGridViewCell RemoveHead()
-        {
-            if (this.headElement == null)
-            {
-                return null;
-            }
-            DataGridViewCellLinkedListElement tmp = this.headElement;
-            this.headElement = tmp.Next;
-            this.count--;
-            this.lastAccessedElement = null;
-            this.lastAccessedIndex = -1;
-            return tmp.DataGridViewCell;
-        }
-        */
-
         public int RemoveAllCellsAtBand(bool column, int bandIndex)
         {
             int removedCount = 0;

@@ -11,7 +11,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class BindingContextTests
+    public class BindingContextTests : IClassFixture<ThreadExceptionFixture>
     {
         [Fact]
         public void BindingContext_Ctor_Default()
@@ -26,7 +26,7 @@ namespace System.Windows.Forms.Tests
         {
             ICollection context = new BindingContext();
             Assert.False(context.IsSynchronized);
-            Assert.Null(context.SyncRoot);
+            Assert.Same(context, context.SyncRoot);
             Assert.Empty(context);
         }
 

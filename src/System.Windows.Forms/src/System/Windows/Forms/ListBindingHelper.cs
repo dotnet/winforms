@@ -630,7 +630,6 @@ namespace System.Windows.Forms
                         //         pdc = new PropertyDescriptorCollection(merged.ToArray());
                         //     }
                         // }
-
                     }
                 }
             }
@@ -657,7 +656,6 @@ namespace System.Windows.Forms
                         pdc = TypeDescriptor.GetProperties(enumerable, BrowsableAttributeList);
                     }
                 }
-
             }
 
             // Return results
@@ -706,7 +704,5 @@ namespace System.Windows.Forms
 
             return instance;
         }
-
     }
-
 }

@@ -15,11 +15,6 @@ namespace System.ComponentModel.Design
     /// </summary>
     public class DateTimeEditor : UITypeEditor
     {
-        /// <summary>
-        ///  Edits the given object value using the editor style provided by
-        ///  GetEditorStyle.  A service provider is provided so that any
-        ///  required editing services can be obtained.
-        /// </summary>
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
             if (provider == null)
@@ -147,7 +142,7 @@ namespace System.ComponentModel.Design
                         case Keys.Enter:
                             return true;
                     }
-                    
+
                     return base.IsInputKey(keyData);
                 }
             }

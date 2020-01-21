@@ -144,7 +144,6 @@ namespace System.Windows.Forms
             {
                 base.AutoSize = value;
             }
-
         }
 
         ///  Override base AutoSizeChanged to we can change visibility/browsability attributes
@@ -212,7 +211,6 @@ namespace System.Windows.Forms
             {
                 return DesignMode;
             }
-
         }
 
         public override LayoutEngine LayoutEngine
@@ -446,7 +444,6 @@ namespace System.Windows.Forms
             {
                 state[stateEndInit] = false;
             }
-
         }
 
         #endregion ISupportInitialize
@@ -486,7 +483,6 @@ namespace System.Windows.Forms
                 FlowLayout.SetFlowDirection(this, FlowDirection.LeftToRight);
             }
             FlowLayout.SetWrapContents(this, false);
-
         }
         private Point GetStartLocation(ToolStrip toolStripToDrag)
         {
@@ -543,17 +539,13 @@ namespace System.Windows.Forms
                     BeginInit();
                 }
             }
-
         }
 
         protected override void OnControlRemoved(ControlEventArgs e)
         {
             if (e.Control is ISupportToolStripPanel controlToBeDragged)
             {
-                if (controlToBeDragged.ToolStripPanelRow != null/* && controlToBeDragged.ToolStripPanelRow != owner*/)
-                {
-                    controlToBeDragged.ToolStripPanelRow.ControlsInternal.Remove(e.Control);
-                }
+                controlToBeDragged.ToolStripPanelRow?.ControlsInternal.Remove(e.Control);
             }
             base.OnControlRemoved(e);
         }
@@ -576,7 +568,6 @@ namespace System.Windows.Forms
         {
             base.OnLayoutSuspended();
             state[stateLayoutSuspended] = true;
-
         }
 
         internal override void OnLayoutResuming(bool resumeLayout)
@@ -626,7 +617,6 @@ namespace System.Windows.Forms
             {
                 state[stateRightToLeftChanged] = true;
             }
-
         }
 
         protected virtual void OnRendererChanged(EventArgs e)
@@ -663,7 +653,6 @@ namespace System.Windows.Forms
             {
                 JoinControls(forceLayout);
             }
-
         }
         private void ResetRenderMode()
         {
@@ -731,7 +720,6 @@ namespace System.Windows.Forms
                 }
             }
             state[stateRightToLeftChanged] = false;
-
         }
 
         #region Feedback
@@ -771,7 +759,6 @@ namespace System.Windows.Forms
             {
                 Debug.WriteLineIf(ToolStripPanelFeedbackDebug.TraceVerbose, "FEEDBACK: Moving feedback to " + screenLocation.ToString());
                 CurrentFeedbackRect.Move(screenLocation);
-
             }
         }
 
@@ -789,7 +776,6 @@ namespace System.Windows.Forms
             {
                 oldFeedback.Dispose();
             }
-
         }
 
         private static FeedbackRectangle CurrentFeedbackRect
@@ -814,7 +800,6 @@ namespace System.Windows.Forms
             public FeedbackRectangle(Rectangle bounds)
             {
                 dropDown = new FeedbackDropDown(bounds);
-
             }
             public bool Visible
             {
@@ -869,7 +854,6 @@ namespace System.Windows.Forms
 
             private class FeedbackDropDown : ToolStripDropDown
             {
-
                 private const int MAX_PAINTS_TO_SERVICE = 20;
                 private int _numPaintsServiced = 0; // member variable to protect against re-entrancy
 
@@ -912,7 +896,7 @@ namespace System.Windows.Forms
                             try
                             {
                                 var msg = new User32.MSG();
-                                while (User32.PeekMessageW(ref msg, IntPtr.Zero, User32.WindowMessage.WM_PAINT, User32.WindowMessage.WM_PAINT, User32.PM.REMOVE).IsTrue())
+                                while (User32.PeekMessageW(ref msg, IntPtr.Zero, User32.WM.PAINT, User32.WM.PAINT, User32.PM.REMOVE).IsTrue())
                                 {
                                     User32.UpdateWindow(msg.hwnd);
 
@@ -1003,7 +987,6 @@ namespace System.Windows.Forms
             }
 
             Join(toolStripToDrag, location);
-
         }
 
         public void Join(ToolStrip toolStripToDrag, int x, int y)
@@ -1077,7 +1060,6 @@ namespace System.Windows.Forms
             // In design mode we get bogus values for client location.
             if (toolStripToDrag.Site != null && toolStripToDrag.Site.DesignMode && IsHandleCreated)
             {
-
                 if (clientLocation.X < 0 || clientLocation.Y < 0)
                 {
                     Point currentCursorLoc = PointToClient(WindowsFormsUtils.LastCursorPoint);
@@ -1181,7 +1163,6 @@ namespace System.Windows.Forms
                         Debug.WriteLineIf(ToolStripPanelRow.ToolStripPanelRowCreationDebug.TraceVerbose, "Inserting a new row at " + index.ToString(CultureInfo.InvariantCulture));
                         row = new ToolStripPanelRow(this);
                         RowsInternal.Insert(index, row);
-
                     }
                 }
                 else if (!row.CanMove(toolStripToDrag))
@@ -1252,7 +1233,6 @@ namespace System.Windows.Forms
                         Cursor.Position = cursorLoc;
                     }
                 }
-
             }
 
 #if DEBUG
@@ -1289,7 +1269,6 @@ namespace System.Windows.Forms
             {
                 GiveToolStripPanelFeedback(toolStripToDrag, screenLocation);
             }
-
         }
 
         /// <summary>
@@ -1335,7 +1314,6 @@ namespace System.Windows.Forms
                 ToolStripPanelRow row = RowsInternal[i];
                 foreach (ToolStripPanelCell cell in row.Cells)
                 {
-
                     if (cell.Control != null)
                     {
                         ToolStripPanelRow currentlyAssignedRow = ((ISupportToolStripPanel)cell.Control).ToolStripPanelRow;
@@ -1413,12 +1391,9 @@ namespace System.Windows.Forms
                             !RowsInternal.Contains(draggedToolStrip2.ToolStripPanelRow) ? "unknown" : RowsInternal.IndexOf(draggedToolStrip2.ToolStripPanelRow).ToString(CultureInfo.CurrentCulture),
                             draggedToolStrip2.ToolStripPanelRow.Bounds);
                         Debug.Fail(fail);
-
                     }
                 }
-
             }
-
         }
 
         ArrangedElementCollection IArrangedElement.Children
@@ -1467,7 +1442,6 @@ namespace System.Windows.Forms
                 int retVal = InnerList.Add(value);
                 OnAdd(value, retVal);
                 return retVal;
-
             }
 
             public void AddRange(ToolStripPanelRow[] value)
@@ -1524,7 +1498,6 @@ namespace System.Windows.Forms
                         currentOwner.ResumeLayout();
                     }
                 }
-
             }
 
             public bool Contains(ToolStripPanelRow value)
@@ -1584,7 +1557,6 @@ namespace System.Windows.Forms
 
                 InnerList.Insert(index, value);
                 OnAdd(value, index);
-
             }
 
             private void OnAdd(ToolStripPanelRow value, int index)
@@ -1600,7 +1572,6 @@ namespace System.Windows.Forms
             /// </summary>
             private void OnAfterRemove(ToolStripPanelRow row)
             {
-
 #if DEBUG
                 if (ToolStripPanelMissingRowDebug.TraceVerbose)
                 {
@@ -1636,10 +1607,9 @@ namespace System.Windows.Forms
             {
                 InnerList.CopyTo(array, index);
             }
-
         }
 
-        internal class ToolStripPanelControlCollection : WindowsFormsUtils.TypedControlCollection
+        internal class ToolStripPanelControlCollection : TypedControlCollection
         {
             private readonly ToolStripPanel owner;
 
@@ -1662,7 +1632,6 @@ namespace System.Windows.Forms
                 {
                     base.AddInternal(value);
                 }
-
             }
 
             internal void Sort()
@@ -1700,7 +1669,6 @@ namespace System.Windows.Forms
                         return 1;
                     }
                     return 1;
-
                 }
             }
 
@@ -1727,10 +1695,8 @@ namespace System.Windows.Forms
                         return 1;
                     }
                     return 1;
-
                 }
             }
-
         }
     }
 }

@@ -14,7 +14,7 @@ namespace System.Windows.Forms.Tests
 {
     using Size = System.Drawing.Size;
 
-    public class ImageCollectionTests
+    public class ImageCollectionTests : IClassFixture<ThreadExceptionFixture>
     {
         [WinFormsFact]
         public void ImageCollection_Count_GetEmptyWithHandle_ReturnsExpected()
@@ -845,7 +845,6 @@ namespace System.Windows.Forms.Tests
                 var bitmap = new Bitmap(16, 16);
                 bitmap.SetPixel(0, 0, Color.FromArgb(0x12, 0x34, 0x56, 0x78));
                 yield return new object[] { transparentColor, bitmap, 1 };
-
             }
         }
 
@@ -887,7 +886,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(Enumerable.Repeat(string.Empty, expectedCount), collection.Keys.Cast<string>());
             Assert.True(list.HandleCreated);
         }
-        
+
         [WinFormsFact]
         public void ImageCollection_AddStrip_NullValue_ThrowsArgumentNullException()
         {
@@ -933,7 +932,7 @@ namespace System.Windows.Forms.Tests
             Assert.True(collection.Empty);
 #pragma warning restore xUnit2013
             Assert.False(list.HandleCreated);
-            
+
             // Clear again.
             collection.Clear();
             Assert.Empty(collection);
@@ -959,7 +958,7 @@ namespace System.Windows.Forms.Tests
             Assert.True(collection.Empty);
 #pragma warning restore xUnit2013
             Assert.False(list.HandleCreated);
-            
+
             // Clear again.
             collection.Clear();
             Assert.Empty(collection);
@@ -984,7 +983,7 @@ namespace System.Windows.Forms.Tests
             Assert.True(collection.Empty);
 #pragma warning restore xUnit2013
             Assert.True(list.HandleCreated);
-            
+
             // Clear again.
             collection.Clear();
             Assert.Empty(collection);
@@ -1011,7 +1010,7 @@ namespace System.Windows.Forms.Tests
             Assert.True(collection.Empty);
 #pragma warning restore xUnit2013
             Assert.True(list.HandleCreated);
-            
+
             // Clear again.
             collection.Clear();
             Assert.Empty(collection);
@@ -1094,11 +1093,11 @@ namespace System.Windows.Forms.Tests
 
                 Assert.False(enumerator.MoveNext());
                 Assert.Throws<InvalidOperationException>(() => enumerator.Current);
-                
+
                 enumerator.Reset();
             }
         }
-        
+
         [WinFormsFact]
         public void ImageListCollection_GetEnumerator_InvokeWithHandleEmpty_Success()
         {
@@ -1114,11 +1113,11 @@ namespace System.Windows.Forms.Tests
 
                 Assert.False(enumerator.MoveNext());
                 Assert.Throws<InvalidOperationException>(() => enumerator.Current);
-                
+
                 enumerator.Reset();
             }
         }
-        
+
         [WinFormsFact]
         public void ImageListCollection_GetEnumerator_InvokeWithoutHandleNotEmpty_Success()
         {
@@ -1142,20 +1141,20 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(new Size(16, 16), result1.Size);
                 Assert.Equal(PixelFormat.Format32bppArgb, result1.PixelFormat);
                 Assert.Equal(((Bitmap)collection[0]).GetPixel(0, 0), result1.GetPixel(0, 0));
-                
+
                 Assert.True(enumerator.MoveNext());
                 Bitmap result2 = Assert.IsType<Bitmap>(enumerator.Current);
                 Assert.Equal(new Size(16, 16), result2.Size);
                 Assert.Equal(PixelFormat.Format32bppArgb, result2.PixelFormat);
                 Assert.Equal(((Bitmap)collection[1]).GetPixel(0, 0), result2.GetPixel(0, 0));
-                
+
                 Assert.False(enumerator.MoveNext());
                 Assert.Throws<InvalidOperationException>(() => enumerator.Current);
 
                 enumerator.Reset();
             }
         }
-        
+
         [WinFormsFact]
         public void ImageListCollection_GetEnumerator_InvokeWithHandleNotEmpty_Success()
         {
@@ -1180,13 +1179,13 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(new Size(16, 16), result1.Size);
                 Assert.Equal(PixelFormat.Format32bppArgb, result1.PixelFormat);
                 Assert.Equal(((Bitmap)collection[0]).GetPixel(0, 0), result1.GetPixel(0, 0));
-                
+
                 Assert.True(enumerator.MoveNext());
                 Bitmap result2 = Assert.IsType<Bitmap>(enumerator.Current);
                 Assert.Equal(new Size(16, 16), result2.Size);
                 Assert.Equal(PixelFormat.Format32bppArgb, result2.PixelFormat);
                 Assert.Equal(((Bitmap)collection[1]).GetPixel(0, 0), result2.GetPixel(0, 0));
-                
+
                 Assert.False(enumerator.MoveNext());
                 Assert.Throws<InvalidOperationException>(() => enumerator.Current);
 
@@ -1394,7 +1393,7 @@ namespace System.Windows.Forms.Tests
             Assert.True(list.HandleCreated);
             Assert.Equal(2, collection.Count);
             Assert.False(collection.Empty);
-            
+
             // Call again.
             collection.RemoveByKey("image2");
             Assert.True(list.HandleCreated);
@@ -1444,7 +1443,7 @@ namespace System.Windows.Forms.Tests
             Assert.False(collection.Empty);
             Assert.Equal(color1, ((Bitmap)collection[0]).GetPixel(0, 0));
             Assert.Equal(color3, ((Bitmap)collection[1]).GetPixel(0, 0));
-            
+
             // Call again.
             collection.RemoveByKey("image2");
             Assert.True(list.HandleCreated);
@@ -1500,7 +1499,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(color1, ((Bitmap)collection[0]).GetPixel(0, 0));
             Assert.Equal(color2, ((Bitmap)collection[1]).GetPixel(0, 0));
             Assert.Equal(color3, ((Bitmap)collection[2]).GetPixel(0, 0));
-            
+
             // Call again.
             collection.RemoveByKey(key);
             Assert.True(list.HandleCreated);
@@ -1516,7 +1515,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { 0, null, new string[] { string.Empty, string.Empty } };
             yield return new object[] { 0, string.Empty, new string[] { string.Empty, string.Empty } };
             yield return new object[] { 0, "name", new string[] { "name", string.Empty } };
-            
+
             yield return new object[] { 1, null, new string[] { "KeyName", string.Empty } };
             yield return new object[] { 1, string.Empty, new string[] { "KeyName", string.Empty } };
             yield return new object[] { 1, "name", new string[] { "KeyName", "name" } };
@@ -1536,7 +1535,7 @@ namespace System.Windows.Forms.Tests
             collection.SetKeyName(index, name);
             Assert.Equal(expectedKeys, collection.Keys.Cast<string>());
             Assert.False(list.HandleCreated);
-            
+
             // Set again.
             collection.SetKeyName(index, name);
             Assert.Equal(expectedKeys, collection.Keys.Cast<string>());
@@ -1558,7 +1557,7 @@ namespace System.Windows.Forms.Tests
             collection.SetKeyName(index, name);
             Assert.Equal(expectedKeys, collection.Keys.Cast<string>());
             Assert.True(list.HandleCreated);
-            
+
             // Set again.
             collection.SetKeyName(index, name);
             Assert.Equal(expectedKeys, collection.Keys.Cast<string>());

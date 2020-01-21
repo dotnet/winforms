@@ -47,11 +47,11 @@ internal static partial class Interop
             IMAGE = 0x0020,
 
             /// <summary>
-            /// While handling the message <c>HDM_GETITEM</c>, the header control may not 
-            /// have all the values needed to complete the request. 
-            /// In this case, the control must call the application back for the values 
+            /// While handling the message <c>HDM_GETITEM</c>, the header control may not
+            /// have all the values needed to complete the request.
+            /// In this case, the control must call the application back for the values
             /// via the <c>HDN_GETDISPINFO</c> notification. If <c>DI_SETITEM</c> has been passed
-            /// in the <c>HDM_GETITEM</c> message, the control will cache any values 
+            /// in the <c>HDM_GETITEM</c> message, the control will cache any values
             /// returned from <c>HDN_GETDISPINFO</c> (otherwise the values remain unset.)
             /// </summary>
             DI_SETITEM = 0x0040,
@@ -62,7 +62,7 @@ internal static partial class Interop
             ORDER = 0x0080,
 
             /// <summary>
-            /// The <c>type</c> and <c>pvFilter</c> members are valid. 
+            /// The <c>type</c> and <c>pvFilter</c> members are valid.
             /// This is used to filter out the values specified in the type member.
             /// </summary>
             FILTER = 0x0100,

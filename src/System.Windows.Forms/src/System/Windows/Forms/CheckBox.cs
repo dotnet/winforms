@@ -66,7 +66,6 @@ namespace System.Windows.Forms
 
             autoCheck = true;
             TextAlign = ContentAlignment.MiddleLeft;
-
         }
 
         private bool AccObjDoDefaultAction
@@ -255,14 +254,13 @@ namespace System.Windows.Forms
 
                 if (checkState != value)
                 {
-
                     bool oldChecked = Checked;
 
                     checkState = value;
 
                     if (IsHandleCreated)
                     {
-                        SendMessage(NativeMethods.BM_SETCHECK, (int)checkState, 0);
+                        User32.SendMessageW(this, (User32.WM)User32.BM.SETCHECK, (IntPtr)checkState);
                     }
 
                     if (oldChecked != Checked)
@@ -320,7 +318,6 @@ namespace System.Windows.Forms
                     {
                         cp.Style |= (int)User32.BS.RIGHTBUTTON;
                     }
-
                 }
 
                 return cp;
@@ -518,7 +515,7 @@ namespace System.Windows.Forms
             {
                 AccessibilityNotifyClients(AccessibleEvents.SystemCaptureEnd, -1);
             }
-            
+
             ((EventHandler)Events[EVENT_CHECKEDCHANGED])?.Invoke(this, e);
         }
 
@@ -531,7 +528,7 @@ namespace System.Windows.Forms
             {
                 Refresh();
             }
-            
+
             ((EventHandler)Events[EVENT_CHECKSTATECHANGED])?.Invoke(this, e);
         }
 
@@ -584,33 +581,10 @@ namespace System.Windows.Forms
         {
             base.OnHandleCreated(e);
 
-            // Since this is a protected override...
-            // this can be directly called in by a overriden class..
-            // and the Handle need not be created...
-            // So Check for the handle
             if (IsHandleCreated)
             {
-                SendMessage(NativeMethods.BM_SETCHECK, (int)checkState, 0);
+                User32.SendMessageW(this, (User32.WM)User32.BM.SETCHECK, (IntPtr)checkState);
             }
-        }
-
-        /// <summary>
-        ///  We override this to ensure that press '+' or '=' checks the box,
-        ///  while pressing '-' unchecks the box
-        /// </summary>
-        protected override void OnKeyDown(KeyEventArgs e)
-        {
-            /*
-            if (Enabled) {
-                if (e.KeyCode == Keys.Oemplus || e.KeyCode == Keys.Add) {
-                    CheckState = CheckState.Checked;
-                }
-                if (e.KeyCode == Keys.OemMinus || e.KeyCode == Keys.Subtract) {
-                    CheckState = CheckState.Unchecked;
-                }
-            }
-            */
-            base.OnKeyDown(e);
         }
 
         /// <summary>
@@ -673,7 +647,6 @@ namespace System.Windows.Forms
                     {
                         OnClick(EventArgs.Empty);
                     }
-
                 }
                 return true;
             }
@@ -769,7 +742,6 @@ namespace System.Windows.Forms
                         cb.AccObjDoDefaultAction = false;
                     }
                 }
-
             }
         }
     }

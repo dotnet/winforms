@@ -5441,6 +5441,9 @@ Stack trace where the illegal operation occurred was:
   <data name="TableLayoutPanelSpanDesc" xml:space="preserve">
     <value>TableLayoutPanel cannot expand to contain the control, because the panel's GrowStyle property is set to 'FixedSize'.</value>
   </data>
+  <data name="TableLayoutSettingsConverterNoName" xml:space="preserve">
+    <value>Cannot convert TableLayoutSettings to string: could not find a 'Name' string property on a control.</value>
+  </data>
   <data name="TableLayoutSettingSettingsIsNotSupported" xml:space="preserve">
     <value>Directly setting TableLayoutSettings is not supported.  Use individual properties instead.</value>
   </data>

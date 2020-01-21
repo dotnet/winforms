@@ -103,7 +103,7 @@ namespace System.Windows.Forms
 
             /// <summary>
             ///  Call GetAttributes directly on the ShellFolder for multiple attributes
-            /// <summary>
+            /// </summary>
             SIATTRIBFLAGS_APPCOMPAT = 0x00000003
         }
 

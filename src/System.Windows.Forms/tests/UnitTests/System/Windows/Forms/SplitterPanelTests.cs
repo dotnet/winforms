@@ -186,7 +186,6 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(2, callCount);
         }
 
-
         [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(AutoSizeMode))]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(AutoSizeMode))]
@@ -710,6 +709,7 @@ namespace System.Windows.Forms.Tests
         {
             yield return new object[] { null };
             yield return new object[] { new Control() };
+            yield return new object[] { new Form() };
         }
 
         [WinFormsTheory]
@@ -727,6 +727,42 @@ namespace System.Windows.Forms.Tests
             control.Parent = value;
             Assert.Same(value, control.Parent);
             Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void SplitterPanel_Parent_SetWithHandler_CallsParentChanged()
+        {
+            using var parent = new Control();
+            using var control = new SplitterPanel(null);
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                callCount++;
+            };
+            control.ParentChanged += handler;
+
+            // Set different.
+            control.Parent = parent;
+            Assert.Same(parent, control.Parent);
+            Assert.Equal(1, callCount);
+
+            // Set same.
+            control.Parent = parent;
+            Assert.Same(parent, control.Parent);
+            Assert.Equal(1, callCount);
+
+            // Set null.
+            control.Parent = null;
+            Assert.Null(control.Parent);
+            Assert.Equal(2, callCount);
+
+            // Remove handler.
+            control.ParentChanged -= handler;
+            control.Parent = parent;
+            Assert.Same(parent, control.Parent);
+            Assert.Equal(2, callCount);
         }
 
         public static IEnumerable<object[]> Size_Set_TestData()

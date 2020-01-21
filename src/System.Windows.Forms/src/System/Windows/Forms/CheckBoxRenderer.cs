@@ -104,7 +104,6 @@ namespace System.Windows.Forms
                     ControlPaint.DrawCheckBox(g, glyphBounds, ConvertToButtonState(state));
                 }
             }
-
         }
 
         /// <summary>
@@ -233,7 +232,6 @@ namespace System.Windows.Forms
         {
             switch (state)
             {
-
                 case CheckBoxState.CheckedNormal:
                 case CheckBoxState.CheckedHot:
                     return ButtonState.Checked;
@@ -320,7 +318,6 @@ namespace System.Windows.Forms
         {
             switch (state)
             {
-
                 case CheckBoxState.MixedNormal:
                 case CheckBoxState.MixedHot:
                 case CheckBoxState.MixedPressed:

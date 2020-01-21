@@ -10,7 +10,7 @@ using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
-    public class MessageTests
+    public class MessageTests : IClassFixture<ThreadExceptionFixture>
     {
         [Theory]
         [CommonMemberData(nameof(CommonTestHelper.GetIntPtrTheoryData))]
@@ -416,10 +416,10 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { WindowMessages.WM_CTLCOLOR, " (WM_CTLCOLOR)" };
 
             // RichEdit messages
-            yield return new object[] { EditMessages.EM_GETLIMITTEXT, " (EM_GETLIMITTEXT)" };
-            yield return new object[] { EditMessages.EM_POSFROMCHAR, " (EM_POSFROMCHAR)" };
-            yield return new object[] { EditMessages.EM_CHARFROMPOS, " (EM_CHARFROMPOS)" };
-            yield return new object[] { EditMessages.EM_SCROLLCARET, " (EM_SCROLLCARET)" };
+            yield return new object[] { User32.EM.GETLIMITTEXT, " (EM_GETLIMITTEXT)" };
+            yield return new object[] { User32.EM.POSFROMCHAR, " (EM_POSFROMCHAR)" };
+            yield return new object[] { User32.EM.CHARFROMPOS, " (EM_CHARFROMPOS)" };
+            yield return new object[] { User32.EM.SCROLLCARET, " (EM_SCROLLCARET)" };
             yield return new object[] { RichEditMessages.EM_CANPASTE, " (EM_CANPASTE)" };
             yield return new object[] { RichEditMessages.EM_DISPLAYBAND, " (EM_DISPLAYBAND)" };
             yield return new object[] { RichEditMessages.EM_EXGETSEL, " (EM_EXGETSEL)" };

@@ -9,7 +9,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class GridItemCollectionTests
+    public class GridItemCollectionTests : IClassFixture<ThreadExceptionFixture>
     {
         [Fact]
         public void GridItemCollection_Empty_Get_ReturnsExpected()

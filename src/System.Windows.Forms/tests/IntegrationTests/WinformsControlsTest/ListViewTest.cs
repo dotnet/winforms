@@ -29,7 +29,6 @@ namespace WinformsControlsTest
             listView1.Items[2].ImageIndex = 2;
             listView1.Click += (s, e) =>
             {
-
                 //listView1.TileSize = new Size(random.Next(100, 300), random.Next(25, 50));
 
                 Point pos = Cursor.Position;
@@ -135,6 +134,10 @@ namespace WinformsControlsTest
             // Add the ListView to the control collection.
             Controls.Add(listView2);
             listView2.Dock = DockStyle.Bottom;
+
+            // Change a ListViewGroup's header.
+            listView2.Groups[0].HeaderAlignment = HorizontalAlignment.Center;
+            listView2.Groups[0].Header = "NewText";
         }
 
         private void listView2_Click(object sender, System.EventArgs e)

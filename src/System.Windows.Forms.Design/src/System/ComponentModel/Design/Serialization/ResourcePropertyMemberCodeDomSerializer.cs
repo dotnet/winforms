@@ -12,7 +12,7 @@ namespace System.ComponentModel.Design.Serialization
     ///  This serializer replaces the property serializer for properties when we're
     ///  in localization mode.
     /// </summary>
-	internal class ResourcePropertyMemberCodeDomSerializer : MemberCodeDomSerializer
+    internal class ResourcePropertyMemberCodeDomSerializer : MemberCodeDomSerializer
     {
         private CodeDomLocalizationModel _model;
         private MemberCodeDomSerializer _serializer;
@@ -55,12 +55,12 @@ namespace System.ComponentModel.Design.Serialization
             {
                 // Check to see if our base component's localizable prop is true
                 RootContext rootCxt = manager.Context[typeof(RootContext)] as RootContext;
-                
+
                 if (rootCxt != null)
                 {
                     object comp = rootCxt.Value;
                     PropertyDescriptor prop = TypeDescriptor.GetProperties(comp)["LoadLanguage"];
-                    
+
                     if (prop != null && prop.PropertyType == typeof(CultureInfo))
                     {
                         localizationLanguage = (CultureInfo)prop.GetValue(comp);
@@ -79,7 +79,7 @@ namespace System.ComponentModel.Design.Serialization
             //unhook the event
             IDesignerSerializationManager manager = sender as IDesignerSerializationManager;
             Debug.Assert(manager != null, "manager should not be null!");
-            
+
             if (manager != null)
             {
                 manager.SerializationComplete -= new EventHandler(OnSerializationComplete);

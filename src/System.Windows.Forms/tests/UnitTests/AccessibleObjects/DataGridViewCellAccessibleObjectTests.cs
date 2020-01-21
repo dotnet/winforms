@@ -8,7 +8,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects
 {
-    public class DataGridViewCellsAccessibleObjectTests
+    public class DataGridViewCellsAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
     {
         [Theory]
         [InlineData(RightToLeft.No)]
@@ -45,8 +45,8 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
             DataGridView dataGridView = new DataGridView();
             dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
             dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
-            dataGridView.Rows.Add(new DataGridViewRow()); 
-            dataGridView.Rows.Add(new DataGridViewRow()); 
+            dataGridView.Rows.Add(new DataGridViewRow());
+            dataGridView.Rows.Add(new DataGridViewRow());
 
             dataGridView.Rows[0].Cells[0].ReadOnly = true;
             dataGridView.Rows[1].ReadOnly = true;

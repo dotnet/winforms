@@ -7,7 +7,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class FileDialogCustomPlacesCollectionTests
+    public class FileDialogCustomPlacesCollectionTests : IClassFixture<ThreadExceptionFixture>
     {
         [Theory]
         [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]

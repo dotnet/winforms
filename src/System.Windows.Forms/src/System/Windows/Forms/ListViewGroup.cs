@@ -63,7 +63,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Creates a ListViewGroup.
         /// </summary>
-    	public ListViewGroup(string header, HorizontalAlignment headerAlignment) : this(header)
+        public ListViewGroup(string header, HorizontalAlignment headerAlignment) : this(header)
         {
             _headerAlignment = headerAlignment;
         }
@@ -80,7 +80,7 @@ namespace System.Windows.Forms
                 if (_header != value)
                 {
                     _header = value;
-                    ListView?.RecreateHandleInternal();
+                    UpdateListView();
                 }
             }
         }

@@ -11,7 +11,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Design.Tests
 {
-    public class PropertyTabTests
+    public class PropertyTabTests : IClassFixture<ThreadExceptionFixture>
     {
         [Fact]
         public void PropertyTab_Ctor_Default()

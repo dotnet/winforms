@@ -791,17 +791,17 @@ namespace System.Windows.Forms
                             cachedDropDownWidth = maxPreferredWidth + 2 + SystemInformation.VerticalScrollBarWidth;
                         }
                         Debug.Assert(cachedDropDownWidth >= 1);
-                        UnsafeNativeMethods.SendMessage(new HandleRef(comboBox, comboBox.Handle), NativeMethods.CB_SETDROPPEDWIDTH, cachedDropDownWidth, 0);
+                        User32.SendMessageW(comboBox, (User32.WM)User32.CB.SETDROPPEDWIDTH, (IntPtr)cachedDropDownWidth);
                     }
                 }
                 else
                 {
                     // The dropdown width may have been previously adjusted to the items because of the owning column autosized.
                     // The dropdown width needs to be realigned to the DropDownWidth property value.
-                    int dropDownWidth = unchecked((int)(long)UnsafeNativeMethods.SendMessage(new HandleRef(comboBox, comboBox.Handle), NativeMethods.CB_GETDROPPEDWIDTH, 0, 0));
+                    int dropDownWidth = unchecked((int)(long)User32.SendMessageW(comboBox, (User32.WM)User32.CB.GETDROPPEDWIDTH));
                     if (dropDownWidth != DropDownWidth)
                     {
-                        UnsafeNativeMethods.SendMessage(new HandleRef(comboBox, comboBox.Handle), NativeMethods.CB_SETDROPPEDWIDTH, DropDownWidth, 0);
+                        User32.SendMessageW(comboBox, (User32.WM)User32.CB.SETDROPPEDWIDTH, (IntPtr)DropDownWidth);
                     }
                 }
             }
@@ -1090,9 +1090,8 @@ namespace System.Windows.Forms
             {
                 // Do not raise the DataError event if the value is null and the row is the 'new row'.
 
-                if (value == null /* && ((this.DataGridView != null && rowIndex == this.DataGridView.NewRowIndex) || this.Items.Count == 0)*/)
+                if (value == null)
                 {
-                    // Debug.Assert(rowIndex != -1 || this.Items.Count == 0);
                     return base.GetFormattedValue(null, rowIndex, ref cellStyle, valueTypeConverter, formattedValueTypeConverter, context);
                 }
                 if (DataGridView != null)
@@ -1307,75 +1306,6 @@ namespace System.Windows.Forms
             int borderAndPaddingWidths = borderWidthsRect.Left + borderWidthsRect.Width + cellStyle.Padding.Horizontal;
             int borderAndPaddingHeights = borderWidthsRect.Top + borderWidthsRect.Height + cellStyle.Padding.Vertical;
             TextFormatFlags flags = DataGridViewUtilities.ComputeTextFormatFlagsForCellStyleAlignment(DataGridView.RightToLeftInternal, cellStyle.Alignment, cellStyle.WrapMode);
-
-            /* Changing design of DGVComboBoxCell.GetPreferredSize for performance reasons.
-             * Old design required looking through each combo item
-            string formattedValue;
-            if (freeDimension == DataGridViewFreeDimension.Height)
-            {
-                formattedValue = GetFormattedValue(rowIndex, ref cellStyle, DataGridViewDataErrorContexts.Formatting | DataGridViewDataErrorContexts.PreferredSize) as string;
-                if (formattedValue != null)
-                {
-                    preferredSize = new Size(0,
-                                             DataGridViewCell.MeasureTextSize(graphics, formattedValue, cellStyle.Font, flags).Height);
-                }
-                else
-                {
-                    preferredSize = new Size(DataGridViewCell.MeasureTextSize(graphics, " ", cellStyle.Font, flags).Height,
-                                             0);
-                }
-            }
-            else
-            {
-                if ((this.HasItems || this.CreateItemsFromDataSource) && this.Items.Count > 0)
-                {
-                    int maxPreferredWidth = -1;
-                    try
-                    {
-                        foreach (object item in this.Items)
-                        {
-                            this.valueUsedDuringAutoSize = item;
-                            this.keyUsedDuringAutoSize = GetItemValue(item);
-                            formattedValue = GetFormattedValue(this.keyUsedDuringAutoSize, rowIndex, ref cellStyle, null, null, DataGridViewDataErrorContexts.Formatting | DataGridViewDataErrorContexts.PreferredSize) as string;
-                            if (formattedValue != null)
-                            {
-                                preferredSize = DataGridViewCell.MeasureTextSize(graphics, formattedValue, cellStyle.Font, flags);
-                            }
-                            else
-                            {
-                                preferredSize = DataGridViewCell.MeasureTextSize(graphics, " ", cellStyle.Font, flags);
-                            }
-                            if (preferredSize.Width > maxPreferredWidth)
-                            {
-                                maxPreferredWidth = preferredSize.Width;
-                            }
-                        }
-                    }
-                    finally
-                    {
-                        this.keyUsedDuringAutoSize = null;
-                        this.valueUsedDuringAutoSize = null;
-                    }
-                    preferredSize.Width = maxPreferredWidth;
-                }
-                else
-                {
-                    formattedValue = GetFormattedValue(rowIndex, ref cellStyle, DataGridViewDataErrorContexts.Formatting | DataGridViewDataErrorContexts.PreferredSize) as string;
-                    if (formattedValue != null)
-                    {
-                        preferredSize = DataGridViewCell.MeasureTextSize(graphics, formattedValue, cellStyle.Font, flags);
-                    }
-                    else
-                    {
-                        preferredSize = DataGridViewCell.MeasureTextSize(graphics, " ", cellStyle.Font, flags);
-                    }
-                }
-                if (freeDimension == DataGridViewFreeDimension.Width)
-                {
-                    preferredSize.Height = 0;
-                }
-            }
-            */
 
             string formattedValue = GetFormattedValue(rowIndex, ref cellStyle, DataGridViewDataErrorContexts.Formatting | DataGridViewDataErrorContexts.PreferredSize) as string;
             if (!string.IsNullOrEmpty(formattedValue))

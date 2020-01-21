@@ -67,7 +67,6 @@ namespace System.Windows.Forms
             }
             set
             {
-
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)AutoSizeMode.GrowAndShrink, (int)AutoSizeMode.GrowOnly))
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(AutoSizeMode));
@@ -372,7 +371,7 @@ namespace System.Windows.Forms
             switch (m.Msg)
             {
                 case WindowMessages.WM_REFLECT + WindowMessages.WM_COMMAND:
-                    if (PARAM.HIWORD(m.WParam) == NativeMethods.BN_CLICKED)
+                    if (PARAM.HIWORD(m.WParam) == (int)User32.BN.CLICKED)
                     {
                         Debug.Assert(!GetStyle(ControlStyles.UserPaint), "Shouldn't get BN_CLICKED when UserPaint");
                         if (!ValidationCancelled)

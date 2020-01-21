@@ -11,7 +11,7 @@ using WinForms.Common.Tests;
 
 namespace System.Windows.Forms.Tests
 {
-    public class FormTests
+    public class FormTests : IClassFixture<ThreadExceptionFixture>
     {
         [Fact]
         public void Form_Ctor_Default()
@@ -744,6 +744,220 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expectedStyleChangedCallCount, invalidatedCallCount);
             Assert.Equal(expectedStyleChangedCallCount, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
+        }
+
+        public static IEnumerable<object[]> Parent_Set_TestData()
+        {
+            yield return new object[] { null };
+            yield return new object[] { new Control() };
+            yield return new object[] { new Form() };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(Parent_Set_TestData))]
+        public void Form_Parent_Set_GetReturnsExpected(Control value)
+        {
+            using var control = new Form
+            {
+                TopLevel = false,
+                Parent = value
+            };
+            Assert.Same(value, control.Parent);
+            Assert.Null(control.MdiParent);
+            Assert.False(control.IsHandleCreated);
+
+            // Set same.
+            control.Parent = value;
+            Assert.Same(value, control.Parent);
+            Assert.Null(control.MdiParent);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(Parent_Set_TestData))]
+        public void Form_Parent_SetWithNonNullOldParent_GetReturnsExpected(Control value)
+        {
+            using var oldParent = new Control();
+            using var control = new Form
+            {
+                TopLevel = false,
+                Parent = oldParent
+            };
+
+            control.Parent = value;
+            Assert.Same(value, control.Parent);
+            Assert.Null(control.MdiParent);
+            Assert.Empty(oldParent.Controls);
+            Assert.False(control.IsHandleCreated);
+
+            // Set same.
+            control.Parent = value;
+            Assert.Same(value, control.Parent);
+            Assert.Null(control.MdiParent);
+            Assert.Empty(oldParent.Controls);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> Parent_SetMdiChild_TestData()
+        {
+            yield return new object[] { null };
+            yield return new object[] { new Control() };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(Parent_SetMdiChild_TestData))]
+        public void Form_Parent_SetMdiChild_GetReturnsExpected(Control value)
+        {
+            using var oldParent = new Form
+            {
+                IsMdiContainer = true
+            };
+            using var control = new Form
+            {
+                MdiParent = oldParent,
+                Parent = value
+            };
+
+            control.Parent = value;
+            Assert.Same(value, control.Parent);
+            Assert.Null(control.MdiParent);
+            Assert.False(control.IsHandleCreated);
+
+            // Set same.
+            control.Parent = value;
+            Assert.Same(value, control.Parent);
+            Assert.Null(control.MdiParent);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void Form_Parent_SetNonNull_AddsToControls()
+        {
+            using var parent = new Control();
+            using var control = new Form
+            {
+                TopLevel = false,
+                Parent = parent
+            };
+            Assert.Same(parent, control.Parent);
+            Assert.Same(control, Assert.Single(parent.Controls));
+            Assert.False(control.IsHandleCreated);
+
+            // Set same.
+            control.Parent = parent;
+            Assert.Same(parent, control.Parent);
+            Assert.Same(control, Assert.Single(parent.Controls));
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(Parent_Set_TestData))]
+        public void Form_Parent_SetWithHandle_GetReturnsExpected(Control value)
+        {
+            using var control = new Form
+            {
+                TopLevel = false
+            };
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            control.Parent = value;
+            Assert.Same(value, control.Parent);
+            Assert.Null(control.MdiParent);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set same.
+            control.Parent = value;
+            Assert.Same(value, control.Parent);
+            Assert.Null(control.MdiParent);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsFact]
+        public void Form_Parent_SetWithHandler_CallsParentChanged()
+        {
+            using var parent = new Control();
+            using var control = new Form
+            {
+                TopLevel = false
+            };
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                callCount++;
+            };
+            control.ParentChanged += handler;
+
+            // Set different.
+            control.Parent = parent;
+            Assert.Same(parent, control.Parent);
+            Assert.Equal(1, callCount);
+
+            // Set same.
+            control.Parent = parent;
+            Assert.Same(parent, control.Parent);
+            Assert.Equal(1, callCount);
+
+            // Set null.
+            control.Parent = null;
+            Assert.Null(control.Parent);
+            Assert.Equal(2, callCount);
+
+            // Remove handler.
+            control.ParentChanged -= handler;
+            control.Parent = parent;
+            Assert.Same(parent, control.Parent);
+            Assert.Equal(2, callCount);
+        }
+
+        [WinFormsFact]
+        public void Form_Parent_SetSame_ThrowsArgumentException()
+        {
+            using var control = new Form
+            {
+                TopLevel = false
+            };
+            Assert.Throws<ArgumentException>(null, () => control.Parent = control);
+            Assert.Null(control.Parent);
+        }
+
+        [WinFormsFact]
+        public void Form_Parent_SetTopLevel_ThrowsArgumentException()
+        {
+            using var control = new Form();
+            using var parent = new Control();
+            Assert.Throws<ArgumentException>(null, () => control.Parent = parent);
+            Assert.Null(control.Parent);
+        }
+
+        [WinFormsFact]
+        public void Form_Parent_SetFormWithMdiParent_ThrowsArgumentException()
+        {
+            using var oldParent = new Form
+            {
+                IsMdiContainer = true
+            };
+            using var control = new Form
+            {
+                MdiParent = oldParent
+            };
+            using var parent = new Form();
+            Assert.Throws<ArgumentException>("value", () => control.Parent = parent);
+            Assert.NotNull(control.Parent);
+            Assert.Same(oldParent, control.MdiParent);
         }
 
         public static IEnumerable<object[]> TransparencyKey_Set_TestData()
@@ -1870,13 +2084,13 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-        
+
             // Call with handler.
             control.HandleCreated += handler;
             control.OnHandleCreated(eventArgs);
             Assert.Equal(1, callCount);
             Assert.False(control.IsHandleCreated);
-        
+
             // Remove handler.
             control.HandleCreated -= handler;
             control.OnHandleCreated(eventArgs);
@@ -1897,13 +2111,13 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-        
+
             // Call with handler.
             control.HandleCreated += handler;
             control.OnHandleCreated(eventArgs);
             Assert.Equal(1, callCount);
             Assert.True(control.IsHandleCreated);
-        
+
             // Remove handler.
             control.HandleCreated -= handler;
             control.OnHandleCreated(eventArgs);
@@ -1922,13 +2136,13 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-        
+
             // Call with handler.
             control.HandleDestroyed += handler;
             control.OnHandleDestroyed(eventArgs);
             Assert.Equal(1, callCount);
             Assert.False(control.IsHandleCreated);
-        
+
             // Remove handler.
             control.HandleDestroyed -= handler;
             control.OnHandleDestroyed(eventArgs);
@@ -1949,13 +2163,13 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-        
+
             // Call with handler.
             control.HandleDestroyed += handler;
             control.OnHandleDestroyed(eventArgs);
             Assert.Equal(1, callCount);
             Assert.True(control.IsHandleCreated);
-        
+
             // Remove handler.
             control.HandleDestroyed -= handler;
             control.OnHandleDestroyed(eventArgs);
@@ -1966,7 +2180,7 @@ namespace System.Windows.Forms.Tests
         private class SubForm : Form
         {
             public new void OnHandleCreated(EventArgs e) => base.OnHandleCreated(e);
-            
+
             public new void OnHandleDestroyed(EventArgs e) => base.OnHandleDestroyed(e);
         }
     }

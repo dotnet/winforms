@@ -1282,7 +1282,6 @@ namespace System.Windows.Forms.Design
                             throw;
                         }
                     }
-
                 }
             }
         }
@@ -1960,7 +1959,6 @@ namespace System.Windows.Forms.Design
                 Text = name;
                 _inheritanceAttribute = (InheritanceAttribute)TypeDescriptor.GetAttributes(component)[typeof(InheritanceAttribute)];
                 TabStop = false;
-
             }
 
             /// <summary>
@@ -2438,7 +2436,6 @@ namespace System.Windows.Forms.Design
                     (specified & BoundsSpecified.Width) == BoundsSpecified.Width ||
                     (specified & BoundsSpecified.Height) == BoundsSpecified.Height)
                 {
-
                     base.SetBoundsCore(x, y, width, height, specified);
                 }
                 Rectangle bounds = Bounds;
@@ -2447,7 +2444,6 @@ namespace System.Windows.Forms.Design
                 {
                     base.SetBoundsCore(x, y, width, height, specified);
                 }
-
             }
 
             protected override void SetVisibleCore(bool value)

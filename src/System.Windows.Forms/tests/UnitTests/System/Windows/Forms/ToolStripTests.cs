@@ -2677,7 +2677,7 @@ namespace System.Windows.Forms.Tests
                 yield return new object[] { dock, ToolStripLayoutStyle.VerticalStackWithOverflow, ToolStripLayoutStyle.Table, ToolStripLayoutStyle.Table, Orientation.Horizontal, ToolStripGripDisplayStyle.Horizontal, 1 };
                 yield return new object[] { dock, ToolStripLayoutStyle.VerticalStackWithOverflow, ToolStripLayoutStyle.VerticalStackWithOverflow, ToolStripLayoutStyle.VerticalStackWithOverflow, Orientation.Vertical, ToolStripGripDisplayStyle.Horizontal, 0 };
             }
-            
+
             foreach (DockStyle dock in new DockStyle[] { DockStyle.Right }) //, DockStyle.Left })
             {
                 yield return new object[] { dock, ToolStripLayoutStyle.Flow, ToolStripLayoutStyle.Flow, ToolStripLayoutStyle.Flow, Orientation.Horizontal, ToolStripGripDisplayStyle.Horizontal, 0 };
@@ -2861,7 +2861,7 @@ namespace System.Windows.Forms.Tests
             };
             Assert.Same(value, control.Renderer);
             Assert.Equal(ToolStripRenderMode.Custom, control.RenderMode);
-            
+
             // Set same.
             control.Renderer = value;
             Assert.Same(value, control.Renderer);
@@ -2893,7 +2893,7 @@ namespace System.Windows.Forms.Tests
             control.Renderer = renderer;
             Assert.Same(renderer, control.Renderer);
             Assert.Equal(1, callCount);
-            
+
             // Set same.
             control.Renderer = renderer;
             Assert.Same(renderer, control.Renderer);
@@ -2930,7 +2930,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(EventArgs.Empty, e);
                 rendererChangedCallCount++;
             };
-            
+
             // Set same.
             control.RenderMode = ToolStripRenderMode.ManagerRenderMode;
             Assert.Equal(ToolStripRenderMode.ManagerRenderMode, control.RenderMode);
@@ -2938,19 +2938,19 @@ namespace System.Windows.Forms.Tests
             Assert.Same(control.Renderer, control.Renderer);
             Assert.IsType<ToolStripProfessionalRenderer>(control.Renderer);
             Assert.Equal(0, rendererChangedCallCount);
-            
+
             // Set different.
             control.RenderMode = value;
             Assert.Equal(value, control.RenderMode);
             Assert.IsType(expectedRendererType, control.Renderer);
             Assert.Equal(1, rendererChangedCallCount);
-            
+
             // Set same.
             control.RenderMode = value;
             Assert.Equal(value, control.RenderMode);
             Assert.IsType(expectedRendererType, control.Renderer);
             Assert.Equal(2, rendererChangedCallCount);
-            
+
             // Set ManagerRenderMode.
             control.RenderMode = ToolStripRenderMode.ManagerRenderMode;
             Assert.Equal(ToolStripRenderMode.ManagerRenderMode, control.RenderMode);
@@ -2976,18 +2976,18 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(EventArgs.Empty, e);
                 rendererChangedCallCount++;
             };
-            
+
             control.RenderMode = value;
             Assert.Equal(value, control.RenderMode);
             Assert.IsType(expectedRendererType, control.Renderer);
             Assert.Equal(1, rendererChangedCallCount);
-            
+
             // Set same.
             control.RenderMode = value;
             Assert.Equal(value, control.RenderMode);
             Assert.IsType(expectedRendererType, control.Renderer);
             Assert.Equal(2, rendererChangedCallCount);
-            
+
             // Set ManagerRenderMode.
             control.RenderMode = ToolStripRenderMode.ManagerRenderMode;
             Assert.Equal(ToolStripRenderMode.ManagerRenderMode, control.RenderMode);
@@ -3090,12 +3090,12 @@ namespace System.Windows.Forms.Tests
             };
             Assert.Equal(value, control.ShowItemToolTips);
             Assert.False(control.IsHandleCreated);
-            
+
             // Set same.
             control.ShowItemToolTips = value;
             Assert.Equal(value, control.ShowItemToolTips);
             Assert.False(control.IsHandleCreated);
-            
+
             // Set different.
             control.ShowItemToolTips = !value;
             Assert.Equal(!value, control.ShowItemToolTips);
@@ -3114,12 +3114,12 @@ namespace System.Windows.Forms.Tests
             control.ShowItemToolTips = value;
             Assert.Equal(value, control.ShowItemToolTips);
             Assert.False(control.IsHandleCreated);
-            
+
             // Set same.
             control.ShowItemToolTips = value;
             Assert.Equal(value, control.ShowItemToolTips);
             Assert.False(control.IsHandleCreated);
-            
+
             // Set different.
             control.ShowItemToolTips = !value;
             Assert.Equal(!value, control.ShowItemToolTips);
@@ -3133,18 +3133,18 @@ namespace System.Windows.Forms.Tests
         {
             using var control = new ToolStrip();
             Assert.NotNull(control.OverflowButton);
-            
+
             control.ShowItemToolTips = value;
             Assert.Equal(value, control.ShowItemToolTips);
             Assert.Equal(value, control.OverflowButton.DropDown.ShowItemToolTips);
             Assert.False(control.IsHandleCreated);
-            
+
             // Set same.
             control.ShowItemToolTips = value;
             Assert.Equal(value, control.ShowItemToolTips);
             Assert.Equal(value, control.OverflowButton.DropDown.ShowItemToolTips);
             Assert.False(control.IsHandleCreated);
-            
+
             // Set different.
             control.ShowItemToolTips = !value;
             Assert.Equal(!value, control.ShowItemToolTips);
@@ -3722,7 +3722,7 @@ namespace System.Windows.Forms.Tests
                 control.Disposed -= handler;
             }
         }
-        
+
         [WinFormsFact]
         public void ToolStrip_Dispose_InvokeWithItems_Success()
         {
@@ -3798,7 +3798,7 @@ namespace System.Windows.Forms.Tests
                 control.Disposed -= handler;
             }
         }
-        
+
         [WinFormsFact]
         public void ToolStrip_Dispose_InvokeDisposing_Success()
         {
@@ -3845,7 +3845,7 @@ namespace System.Windows.Forms.Tests
                 control.Disposed -= handler;
             }
         }
-        
+
         [WinFormsFact]
         public void ToolStrip_Dispose_InvokeNotDisposing_Success()
         {
@@ -3882,7 +3882,7 @@ namespace System.Windows.Forms.Tests
                 control.Disposed -= handler;
             }
         }
-        
+
         [WinFormsFact]
         public void ToolStrip_Dispose_InvokeDisposingWithItems_Success()
         {
@@ -3958,7 +3958,7 @@ namespace System.Windows.Forms.Tests
                 control.Disposed -= handler;
             }
         }
-        
+
         [WinFormsFact]
         public void ToolStrip_Dispose_InvokeNotDisposingWithItems_Success()
         {
@@ -4429,14 +4429,14 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [InlineData((int)User32.WindowMessage.WM_LBUTTONDOWN)]
-        [InlineData((int)User32.WindowMessage.WM_LBUTTONDBLCLK)]
-        [InlineData((int)User32.WindowMessage.WM_MBUTTONDOWN)]
-        [InlineData((int)User32.WindowMessage.WM_MBUTTONDBLCLK)]
-        [InlineData((int)User32.WindowMessage.WM_RBUTTONDOWN)]
-        [InlineData((int)User32.WindowMessage.WM_RBUTTONDBLCLK)]
-        [InlineData((int)User32.WindowMessage.WM_XBUTTONDOWN)]
-        [InlineData((int)User32.WindowMessage.WM_XBUTTONDBLCLK)]
+        [InlineData((int)User32.WM.LBUTTONDOWN)]
+        [InlineData((int)User32.WM.LBUTTONDBLCLK)]
+        [InlineData((int)User32.WM.MBUTTONDOWN)]
+        [InlineData((int)User32.WM.MBUTTONDBLCLK)]
+        [InlineData((int)User32.WM.RBUTTONDOWN)]
+        [InlineData((int)User32.WM.RBUTTONDBLCLK)]
+        [InlineData((int)User32.WM.XBUTTONDOWN)]
+        [InlineData((int)User32.WM.XBUTTONDBLCLK)]
         public void ToolStrip_WndProc_InvokeMouseDownWithHandle_Success(int msg)
         {
             using var control = new SubToolStrip();

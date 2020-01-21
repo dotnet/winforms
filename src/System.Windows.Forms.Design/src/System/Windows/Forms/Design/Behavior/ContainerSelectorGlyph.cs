@@ -68,6 +68,5 @@ namespace System.Windows.Forms.Design.Behavior
         {
             pe.Graphics.DrawImage(MoveGlyph, _glyphBounds);
         }
-
     }
 }

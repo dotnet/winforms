@@ -191,7 +191,6 @@ namespace System.Windows.Forms.Layout
                     default:
                         break;
                 }
-
             }
 
             return result;
@@ -620,7 +619,6 @@ namespace System.Windows.Forms.Layout
             ///  InvalidateCache should be made
             public Size GetTextSize(string text, Font font, Size proposedConstraints, TextFormatFlags flags)
             {
-
                 if (!TextRequiresWordBreak(text, font, proposedConstraints, flags))
                 {
                     // Text fits within proposed width
@@ -651,7 +649,6 @@ namespace System.Windows.Forms.Layout
                     // check the existing constraints from previous calls
                     foreach (PreferredSizeCache sizeCache in sizeCacheList)
                     {
-
                         if (sizeCache.ConstrainingSize == proposedConstraints)
                         {
                             return sizeCache.PreferredSize;
@@ -659,7 +656,6 @@ namespace System.Windows.Forms.Layout
                         else if ((sizeCache.ConstrainingSize.Width == proposedConstraints.Width)
                                   && (sizeCache.PreferredSize.Height <= proposedConstraints.Height))
                         {
-
                             // Caching a common case where the width matches perfectly, and the stored preferred height
                             // is smaller or equal to the constraining size.
                             //        prefSize = GetPreferredSize(w,Int32.MaxValue);
@@ -677,16 +673,13 @@ namespace System.Windows.Forms.Layout
                     sizeCacheList[nextCacheEntry] = new PreferredSizeCache(proposedConstraints, prefSize);
 
                     return prefSize;
-
                 }
-
             }
 
             ///  GetUnconstrainedSize
             ///  Gets the unconstrained (Int32.MaxValue, Int32.MaxValue) size for a piece of text
             private Size GetUnconstrainedSize(string text, Font font, TextFormatFlags flags)
             {
-
                 if (unconstrainedPreferredSize == LayoutUtils.InvalidSize)
                 {
                     // we also investigated setting the SingleLine flag, however this did not yield as much benefit as the word break
@@ -705,7 +698,6 @@ namespace System.Windows.Forms.Layout
             ///  the WordBreak flag is not necessary.
             public bool TextRequiresWordBreak(string text, Font font, Size size, TextFormatFlags flags)
             {
-
                 // if the unconstrained size of the string is larger than the proposed width
                 // we need the word break flag, otherwise we dont, its a perf hit to use it.
                 return GetUnconstrainedSize(text, font, flags).Width > size.Width;
@@ -721,9 +713,7 @@ namespace System.Windows.Forms.Layout
                 public Size ConstrainingSize;
                 public Size PreferredSize;
             }
-
         }
-
     }
 
     // Frequently when you need to do a PreformLayout, you also need to invalidate the
@@ -805,7 +795,6 @@ namespace System.Windows.Forms.Layout
             {
                 CommonProperties.xClearPreferredSizeCache(elementCausingLayout);
                 return new NullLayoutTransaction();
-
             }
         }
 
@@ -818,11 +807,9 @@ namespace System.Windows.Forms.Layout
                 {
                     CommonProperties.xClearPreferredSizeCache(elementToLayout);
                     elementToLayout.PerformLayout(elementCausingLayout, property);
-
                 }
             }
             Debug.Assert(elementCausingLayout != null, "LayoutTransaction.DoLayout - elementCausingLayout is null, no layout performed - did you mix up your parameters?");
-
         }
 
         // This overload should be used when a property has changed that affects preferred size,
@@ -842,7 +829,6 @@ namespace System.Windows.Forms.Layout
                 LayoutTransaction.DoLayout(elementToLayout, elementCausingLayout, property);
             }
         }
-
     }
     internal struct NullLayoutTransaction : IDisposable
     {

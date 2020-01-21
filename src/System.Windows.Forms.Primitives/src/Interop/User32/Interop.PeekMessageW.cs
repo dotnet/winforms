@@ -14,23 +14,23 @@ internal static partial class Interop
         public static extern BOOL PeekMessageA(
             ref MSG msg,
             IntPtr hwnd = default,
-            WindowMessage msgMin = (WindowMessage)0,
-            WindowMessage msgMax = (WindowMessage)0,
+            WM msgMin = (WM)0,
+            WM msgMax = (WM)0,
             PM remove = PM.NOREMOVE);
 
         [DllImport(Libraries.User32, ExactSpelling = true)]
         public static extern BOOL PeekMessageW(
             ref MSG msg,
             IntPtr hwnd = default,
-            WindowMessage msgMin = (WindowMessage)0,
-            WindowMessage msgMax = (WindowMessage)0,
+            WM msgMin = (WM)0,
+            WM msgMax = (WM)0,
             PM remove = PM.NOREMOVE);
 
         public static BOOL PeekMessageW(
             ref MSG msg,
             IHandle hwnd,
-            WindowMessage msgMin = (WindowMessage)0,
-            WindowMessage msgMax = (WindowMessage)0,
+            WM msgMin = (WM)0,
+            WM msgMax = (WM)0,
             PM remove = PM.NOREMOVE)
         {
             BOOL result = PeekMessageW(ref msg, hwnd.Handle, msgMin, msgMax, remove);

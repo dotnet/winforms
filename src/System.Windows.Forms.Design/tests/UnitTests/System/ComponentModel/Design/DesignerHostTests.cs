@@ -13,7 +13,7 @@ using Xunit;
 
 namespace System.ComponentModel.Design.Tests
 {
-    public class DesignerHostTests
+    public class DesignerHostTests : IClassFixture<ThreadExceptionFixture>
     {
         [Theory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]

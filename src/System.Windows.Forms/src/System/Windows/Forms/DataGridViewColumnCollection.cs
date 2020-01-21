@@ -11,8 +11,8 @@ using System.Globalization;
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///  Represents a collection of <see cref='DataGridViewColumn'/> objects in the <see cref='DataGrid'/>
-    ///  control.
+    ///  Represents a collection of <see cref='DataGridViewColumn'/> objects in the
+    ///  <see cref='DataGridView'/> control.
     /// </summary>
     [ListBindable(false)]
     public class DataGridViewColumnCollection : BaseCollection, IList

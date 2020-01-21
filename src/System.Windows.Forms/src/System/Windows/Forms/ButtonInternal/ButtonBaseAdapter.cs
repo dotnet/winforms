@@ -179,7 +179,6 @@ namespace System.Windows.Forms.ButtonInternal
 
             using (WindowsGraphics wg = WindowsGraphics.FromGraphics(g))
             {
-
                 // Draw counter-clock-wise.
                 Point p1 = new Point(bounds.X + bounds.Width - 1, bounds.Y);  // upper inner right.
                 Point p2 = new Point(bounds.X, bounds.Y);  // upper left.
@@ -293,7 +292,6 @@ namespace System.Windows.Forms.ButtonInternal
         {
             using (WindowsGraphics wg = WindowsGraphics.FromGraphics(g))
             {
-
                 // Draw counter-clock-wise.
                 Point p1 = new Point(bounds.X + bounds.Width - 1, bounds.Y);  // upper inner right.
                 Point p2 = new Point(bounds.X, bounds.Y);  // upper left.
@@ -375,7 +373,6 @@ namespace System.Windows.Forms.ButtonInternal
 
             using (WindowsGraphics wg = WindowsGraphics.FromGraphics(g))
             {
-
                 // Draw counter-clock-wise.
                 Point p1 = new Point(bounds.X + bounds.Width - 1, bounds.Y);  // upper inner right.
                 Point p2 = new Point(bounds.X, bounds.Y);  // upper left.
@@ -501,7 +498,6 @@ namespace System.Windows.Forms.ButtonInternal
         {
             using (WindowsGraphics wg = WindowsGraphics.FromGraphics(g))
             {
-
                 // Draw counter-clock-wise.
                 Point p1 = new Point(r.Right - 1, r.Top);  // upper inner right.
                 Point p2 = new Point(r.Left, r.Top);  // upper left.
@@ -1325,7 +1321,6 @@ namespace System.Windows.Forms.ButtonInternal
 
             internal ContentAlignment RtlTranslateContent(ContentAlignment align)
             {
-
                 if (layoutRTL)
                 {
                     ContentAlignment[][] mapping = new ContentAlignment[3][];
@@ -1504,7 +1499,6 @@ namespace System.Windows.Forms.ButtonInternal
 
                     layout.imageBounds = LayoutUtils.Align(size, maxBounds, imageAlign);
                     layout.textBounds = LayoutUtils.Align(textSize, maxBounds, textAlign);
-
                 }
                 else
                 {
@@ -1630,7 +1624,6 @@ namespace System.Windows.Forms.ButtonInternal
                 //********** bottom = Math.Min(layout.imageBounds.Bottom, maxBounds.Bottom);
                 //********** layout.imageBounds.Y = Math.Max(layout.imageBounds.Y, maxBounds.Y);
                 //********** layout.imageBounds.Height = bottom - layout.imageBounds.Y;
-
             }
 
             protected virtual Size GetTextSize(Size proposedSize)

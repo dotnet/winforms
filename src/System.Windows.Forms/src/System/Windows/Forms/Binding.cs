@@ -121,9 +121,9 @@ namespace System.Windows.Forms
             return !(component is Control control) || control.Created;
         }
 
-        // <summary>
+        /// <summary>
         ///  Instance-specific property equivalent to the static method above
-        // </summary>
+        /// </summary>
         internal bool ComponentCreated => IsComponentCreated(_control);
 
         private void FormLoaded(object sender, EventArgs e)
@@ -1285,7 +1285,6 @@ namespace System.Windows.Forms
                     _bindingManager.IsBinding &&
                     !(_bindingManager is CurrencyManager))
                 {
-
                     _fieldInfo.RemoveValueChanged(_bindingManager.Current, new EventHandler(PropValueChanged));
                 }
 
@@ -1311,7 +1310,6 @@ namespace System.Windows.Forms
                     if (_fieldInfo != null && _bindingManager.IsBinding &&
                         !(_bindingManager is CurrencyManager))
                     {
-
                         _fieldInfo.AddValueChanged(_bindingManager.Current, new EventHandler(PropValueChanged));
                     }
                 }

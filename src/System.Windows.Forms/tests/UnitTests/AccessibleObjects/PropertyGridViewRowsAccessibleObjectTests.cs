@@ -8,7 +8,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects
 {
-    public class PropertyGridViewRowsAccessibleObjectTests
+    public class PropertyGridViewRowsAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
     {
         [StaFact]
         public void PropertyGridViewRowsAccessibleObject_Ctor_Default()
@@ -86,7 +86,5 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
             Controls.Add(domainUpDown);
             Load += TestForm_Load;
         }
-
     }
-
 }

@@ -596,16 +596,16 @@ namespace System.Windows.Forms
                     break;
 
                 // RichEdit messages
-                case EditMessages.EM_GETLIMITTEXT:
+                case (int)User32.EM.GETLIMITTEXT:
                     text = "EM_GETLIMITTEXT";
                     break;
-                case EditMessages.EM_POSFROMCHAR:
+                case (int)User32.EM.POSFROMCHAR:
                     text = "EM_POSFROMCHAR";
                     break;
-                case EditMessages.EM_CHARFROMPOS:
+                case (int)User32.EM.CHARFROMPOS:
                     text = "EM_CHARFROMPOS";
                     break;
-                case EditMessages.EM_SCROLLCARET:
+                case (int)User32.EM.SCROLLCARET:
                     text = "EM_SCROLLCARET";
                     break;
                 case RichEditMessages.EM_CANPASTE:

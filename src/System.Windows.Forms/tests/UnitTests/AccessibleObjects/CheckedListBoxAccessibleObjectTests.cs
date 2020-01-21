@@ -7,7 +7,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects
 {
-    public class CheckedListBoxAccessibleObjectTests
+    public class CheckedListBoxAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
     {
         [StaFact]
         public void CheckedListBoxAccessibleObject_CheckBounds()

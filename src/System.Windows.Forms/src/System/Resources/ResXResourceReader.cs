@@ -15,7 +15,6 @@ using System.Xml;
 
 namespace System.Resources
 {
-
     /// <summary>
     ///  ResX resource reader.
     /// </summary>
@@ -312,7 +311,7 @@ namespace System.Resources
         }
 
         /// <summary>
-        ///  Returns a dictionary enumerator that can be used to enumerate the <metadata> elements in the .resx file.
+        ///  Returns a dictionary enumerator that can be used to enumerate the &lt;metadata&gt; elements in the .resx file.
         /// </summary>
         public IDictionaryEnumerator GetMetadataEnumerator()
         {
@@ -419,7 +418,6 @@ namespace System.Resources
 
             if (resHeaderMimeType == ResXResourceWriter.ResMimeType)
             {
-
                 Type readerType = typeof(ResXResourceReader);
                 Type writerType = typeof(ResXResourceWriter);
 
@@ -680,14 +678,12 @@ namespace System.Resources
         {
             int indexStart = typeName.IndexOf(',');
             return typeName.Substring(indexStart + 2);
-
         }
 
         private string GetTypeFromTypeName(string typeName)
         {
             int indexStart = typeName.IndexOf(',');
             return typeName.Substring(0, indexStart);
-
         }
 
         private sealed class ReaderAliasResolver : IAliasResolver
@@ -701,7 +697,6 @@ namespace System.Resources
 
             public AssemblyName ResolveAlias(string alias)
             {
-
                 AssemblyName result = null;
                 if (cachedAliases != null)
                 {
@@ -717,7 +712,6 @@ namespace System.Resources
                     cachedAliases[alias] = name;
                 }
             }
-
         }
     }
 }

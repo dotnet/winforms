@@ -372,7 +372,7 @@ namespace System.Windows.Forms.Tests
             Assert.False(iList.Contains(new DataGridViewRow()));
             Assert.False(iList.Contains(null));
         }
-        
+
         [WinFormsFact]
         public void DataGridViewSelectedRowCollection_IListGetEnumerator_InvokeEmpty_Success()
         {
@@ -391,7 +391,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Throws<InvalidOperationException>(() => enumerator.Current);
             }
         }
-        
+
         [WinFormsFact]
         public void DataGridViewSelectedRowCollection_IListGetEnumerator_InvokeNotEmpty_Success()
         {
@@ -413,10 +413,10 @@ namespace System.Windows.Forms.Tests
 
                 Assert.True(enumerator.MoveNext());
                 Assert.Same(control.Rows[2], enumerator.Current);
-                
+
                 Assert.True(enumerator.MoveNext());
                 Assert.Same(control.Rows[0], enumerator.Current);
-    
+
                 Assert.False(enumerator.MoveNext());
                 Assert.Throws<InvalidOperationException>(() => enumerator.Current);
 

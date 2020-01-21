@@ -12,9 +12,11 @@ internal partial class Interop
         [ComImport]
         [Guid("0000010A-0000-0000-C000-000000000046")]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IPersistStorage /* : IPersist */
+        public unsafe interface IPersistStorage /* : IPersist */
         {
-            void GetClassID(out Guid pClassID);
+            [PreserveSig]
+            HRESULT GetClassID(
+                Guid* pClassID);
 
             [PreserveSig]
             HRESULT IsDirty();

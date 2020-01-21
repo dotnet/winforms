@@ -98,7 +98,7 @@ namespace System.Windows.Forms
                             _control.HookMouseEvent();
                             if (!_control.GetState(States.MouseEnterPending))
                             {
-                                _control.SendMessage((int)NativeMethods.WM_MOUSEENTER, 0, 0);
+                                User32.SendMessageW(_control, User32.RegisteredMessage.WM_MOUSEENTER);
                             }
                             else
                             {

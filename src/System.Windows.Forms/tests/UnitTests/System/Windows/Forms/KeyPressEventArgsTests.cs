@@ -6,7 +6,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class KeyPressEventArgsTests
+    public class KeyPressEventArgsTests : IClassFixture<ThreadExceptionFixture>
     {
         [Theory]
         [InlineData('\0')]

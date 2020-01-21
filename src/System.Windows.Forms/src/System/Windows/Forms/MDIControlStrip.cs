@@ -75,28 +75,10 @@ namespace System.Windows.Forms
             ResumeLayout(false);
         }
 
-        #region Buttons
-        /* Unused
-        public ToolStripMenuItem System {
-            get { return system; }
-        }
-        */
-
         public ToolStripMenuItem Close
         {
             get { return close; }
         }
-
-        /* Unused
-        public ToolStripMenuItem Minimize {
-            get { return minimize; }
-        }
-
-        public ToolStripMenuItem Restore {
-            get { return restore; }
-        }
-        */
-        #endregion
 
         internal MenuStrip MergedMenu
         {
@@ -109,18 +91,6 @@ namespace System.Windows.Forms
                 mergedMenu = value;
             }
         }
-
-        /* PERF: consider shutting off layout
-        #region ShutOffLayout
-                    protected override void OnLayout(LayoutEventArgs e) {
-                        return;  // if someone attempts
-                    }
-
-                    protected override Size GetPreferredSize(Size proposedSize) {
-                        return Size.Empty;
-                    }
-        #endregion
-        */
 
         private Image GetTargetWindowIcon()
         {
@@ -212,7 +182,6 @@ namespace System.Windows.Forms
                 }
                 target = null;
             }
-
         }
 
         // when the system menu item shortcut is evaluated - pop the dropdown
@@ -251,7 +220,6 @@ namespace System.Windows.Forms
                 }
                 base.OnOwnerChanged(e);
             }
-
         }
     }
 }

@@ -1,6 +1,6 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.	
-// The .NET Foundation licenses this file to you under the MIT license.	
-// See the LICENSE file in the project root for more information.	
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
 
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -8,7 +8,7 @@ using Xunit;
 
 namespace System.Drawing.Design.Tests
 {
-    public class PropertyValueUIItemTests
+    public class PropertyValueUIItemTests : IClassFixture<ThreadExceptionFixture>
     {
         public static IEnumerable<object[]> Ctor_Image_PropertyValueUIItemInvokeHandler_String_TestData()
         {

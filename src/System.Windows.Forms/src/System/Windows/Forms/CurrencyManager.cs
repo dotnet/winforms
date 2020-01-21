@@ -27,9 +27,6 @@ namespace System.Windows.Forms
 
         private bool inChangeRecordState = false;
         private bool suspendPushDataInCurrentChanged = false;
-        // private bool onItemChangedCalled = false;
-        // private EventHandler onCurrentChanged;
-        // private CurrentChangingEventHandler onCurrentChanging;
         private ItemChangedEventHandler onItemChanged;
         private ListChangedEventHandler onListChanged;
         private readonly ItemChangedEventArgs resetEvent = new ItemChangedEventArgs(-1);
@@ -223,7 +220,6 @@ namespace System.Windows.Forms
                     }
                     throw new ArgumentException(string.Format(SR.ListManagerSetDataSource, tempList.GetType().FullName), "dataSource");
                 }
-
             }
         }
 
@@ -344,8 +340,6 @@ namespace System.Windows.Forms
             if (Count > 0)
             {
                 object item = (Position >= 0 && Position < list.Count) ? list[Position] : null;
-
-                // onItemChangedCalled = false;
 
                 if (item is IEditableObject iEditableItem)
                 {
@@ -799,7 +793,6 @@ namespace System.Windows.Forms
                             // in the currencyManager, so controls will use the actual position
                             OnItemChanged(resetEvent);
                             break;
-
                         }
                         if (dbe.NewIndex < listposition)
                         {
@@ -956,7 +949,6 @@ namespace System.Windows.Forms
             {
                 OnPositionChanged(EventArgs.Empty);
             }
-            // onItemChangedCalled = true;
         }
 
         private void OnListChanged(ListChangedEventArgs e)
@@ -972,7 +964,6 @@ namespace System.Windows.Forms
 
         protected virtual void OnPositionChanged(EventArgs e)
         {
-            // if (!inChangeRecordState) {
             Debug.WriteLineIf(CompModSwitches.DataView.TraceVerbose, "OnPositionChanged(" + listposition.ToString(CultureInfo.InvariantCulture) + ") " + e.ToString());
             try
             {
@@ -982,7 +973,6 @@ namespace System.Windows.Forms
             {
                 OnDataError(ex);
             }
-            // }
         }
 
         /// <summary>
@@ -1052,10 +1042,6 @@ namespace System.Windows.Forms
             if ((list is IBindingList) && ((IBindingList)list).SupportsChangeNotification)
             {
                 ((IBindingList)list).ListChanged -= new ListChangedEventHandler(List_ListChanged);
-                /*
-                ILiveList liveList = (ILiveList) list;
-                liveList.TableChanged -= new TableChangedEventHandler(List_TableChanged);
-                */
             }
         }
 
@@ -1134,10 +1120,6 @@ namespace System.Windows.Forms
             if ((list is IBindingList) && ((IBindingList)list).SupportsChangeNotification)
             {
                 ((IBindingList)list).ListChanged += new ListChangedEventHandler(List_ListChanged);
-                /*
-                ILiveList liveList = (ILiveList) list;
-                liveList.TableChanged += new TableChangedEventHandler(List_TableChanged);
-                */
             }
         }
     }

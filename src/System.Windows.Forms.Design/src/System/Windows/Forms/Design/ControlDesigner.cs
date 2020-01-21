@@ -394,7 +394,7 @@ namespace System.Windows.Forms.Design
         /// <summary>
         ///  Default processing for messages.  This method causes the message to get processed by windows, skipping the control.  This is useful if you want to block this message from getting to the control, but you do not want to block it from getting to Windows itself because it causes other messages to be generated.
         /// </summary>
-        protected void BaseWndProc(ref Message m) => m.Result = User32.DefWindowProcW(m.HWnd, m.WindowMessage(), m.WParam, m.LParam);
+        protected void BaseWndProc(ref Message m) => m.Result = User32.DefWindowProcW(m.HWnd, (User32.WM)m.Msg, m.WParam, m.LParam);
 
         /// <summary>
         ///  Determines if the this designer can be parented to the specified desinger -- generally this means if the control for this designer can be parented into the given ParentControlDesigner's designer.
@@ -1199,7 +1199,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  Called to cleanup a D&D operation
+        ///  Called to cleanup a drag and drop operation.
         /// </summary>
         protected virtual void OnDragComplete(DragEventArgs de)
         {
@@ -1678,7 +1678,6 @@ namespace System.Windows.Forms.Design
                         // terminate the drag. TabControl loses shortcut menu options after adding ActiveX control.
                         OnMouseDragEnd(true);
                     }
-
                 }
                 return;
             }
@@ -1837,7 +1836,7 @@ namespace System.Windows.Forms.Design
                         button = MouseButtons.Left;
                     }
                     // We don't really want the focus, but we want to focus the designer. Below we handle WM_SETFOCUS and do the right thing.
-                    User32.SendMessageW(Control.Handle, User32.WindowMessage.WM_SETFOCUS, IntPtr.Zero, IntPtr.Zero);
+                    User32.SendMessageW(Control.Handle, User32.WM.SETFOCUS, IntPtr.Zero, IntPtr.Zero);
                     // We simulate doubleclick for things that don't...
                     if (button == MouseButtons.Left && IsDoubleClick(x, y))
                     {
@@ -1873,7 +1872,7 @@ namespace System.Windows.Forms.Design
 
                         if (_toolPassThrough)
                         {
-                            User32.SendMessageW(Control.Parent.Handle, (User32.WindowMessage)m.Msg, m.WParam, (IntPtr)GetParentPointFromLparam(m.LParam));
+                            User32.SendMessageW(Control.Parent.Handle, (User32.WM)m.Msg, m.WParam, (IntPtr)GetParentPointFromLparam(m.LParam));
                             return;
                         }
 
@@ -1884,7 +1883,6 @@ namespace System.Windows.Forms.Design
                         else if (button == MouseButtons.Left)
                         {
                             OnMouseDragBegin(x, y);
-
                         }
                         else if (button == MouseButtons.Right)
                         {
@@ -1919,7 +1917,7 @@ namespace System.Windows.Forms.Design
                     {
                         if (_toolPassThrough)
                         {
-                            User32.SendMessageW(Control.Parent.Handle, (User32.WindowMessage)m.Msg, m.WParam, (IntPtr)GetParentPointFromLparam(m.LParam));
+                            User32.SendMessageW(Control.Parent.Handle, (User32.WM)m.Msg, m.WParam, (IntPtr)GetParentPointFromLparam(m.LParam));
                             return;
                         }
 
@@ -1964,7 +1962,7 @@ namespace System.Windows.Forms.Design
                     {
                         if (_toolPassThrough)
                         {
-                            User32.SendMessageW(Control.Parent.Handle, (User32.WindowMessage)m.Msg, m.WParam, (IntPtr)GetParentPointFromLparam(m.LParam));
+                            User32.SendMessageW(Control.Parent.Handle, (User32.WM)m.Msg, m.WParam, (IntPtr)GetParentPointFromLparam(m.LParam));
                             _toolPassThrough = false;
                             return;
                         }
@@ -2004,7 +2002,7 @@ namespace System.Windows.Forms.Design
                     RECT clip = new RECT();
                     IntPtr hrgn = Gdi32.CreateRectRgn(0, 0, 0, 0);
                     User32.GetUpdateRgn(m.HWnd, hrgn, BOOL.FALSE);
-                    NativeMethods.GetUpdateRect(m.HWnd, ref clip, false);
+                    User32.GetUpdateRect(m.HWnd, ref clip, BOOL.FALSE);
                     Region r = Region.FromHrgn(hrgn);
                     Rectangle paintRect = Rectangle.Empty;
                     try
@@ -2181,7 +2179,7 @@ namespace System.Windows.Forms.Design
                     }
                     break;
                 default:
-                    if (m.Msg == (int)NativeMethods.WM_MOUSEENTER)
+                    if (m.Msg == (int)User32.RegisteredMessage.WM_MOUSEENTER)
                     {
                         OnMouseEnter();
                         BaseWndProc(ref m);

@@ -29,5 +29,4 @@ namespace System.Windows.Forms.PropertyGridInternal
         public static readonly CommandID Hide = new CommandID(wfcMenuCommand, 0x3002);
         public static readonly CommandID Commands = new CommandID(wfcMenuCommand, 0x3010);
     }
-
 }

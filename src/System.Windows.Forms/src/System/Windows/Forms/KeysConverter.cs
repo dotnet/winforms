@@ -149,7 +149,6 @@ namespace System.Windows.Forms
         {
             if (value is string)
             {
-
                 string text = ((string)value).Trim();
 
                 if (text.Length == 0)
@@ -158,7 +157,6 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-
                     // Parse an array of key tokens.
                     //
                     string[] tokens = text.Split(new char[] { '+' });
@@ -178,7 +176,6 @@ namespace System.Windows.Forms
 
                         if (obj == null)
                         {
-
                             // Key was not found in our table.  See if it is a valid value in
                             // the Keys enum.
                             //
@@ -191,7 +188,6 @@ namespace System.Windows.Forms
 
                             if ((currentKey & Keys.KeyCode) != 0)
                             {
-
                                 // We found a match.  If we have previously found a
                                 // key code, then check to see that this guy
                                 // isn't a key code (it is illegal to have, say,
@@ -210,11 +206,9 @@ namespace System.Windows.Forms
                         }
                         else
                         {
-
                             // We did not match this key.  Report this as an error too.
                             //
                             throw new FormatException(string.Format(SR.KeysConverterInvalidKeyName, tokens[i]));
-
                         }
                     }
 
@@ -273,7 +267,6 @@ namespace System.Windows.Forms
                         Keys keyValue = (Keys)keyNames[keyString];
                         if (((int)(keyValue) & (int)modifiers) != 0)
                         {
-
                             if (asString)
                             {
                                 if (added)
@@ -309,7 +302,6 @@ namespace System.Windows.Forms
                         Keys keyValue = (Keys)keyNames[keyString];
                         if (keyValue.Equals(keyOnly))
                         {
-
                             if (asString)
                             {
                                 terms.Add((string)keyString);

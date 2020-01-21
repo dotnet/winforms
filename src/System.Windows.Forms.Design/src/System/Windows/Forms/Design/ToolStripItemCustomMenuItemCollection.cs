@@ -379,7 +379,6 @@ namespace System.Windows.Forms.Design
                         dummyIndex++;
                     }
                 }
-
             }
 
             DesignerTransaction newItemTransaction = designerHost.CreateTransaction(SR.ToolStripAddingItem);

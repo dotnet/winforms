@@ -6,7 +6,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ListControlConvertEventArgsTests
+    public class ListControlConvertEventArgsTests : IClassFixture<ThreadExceptionFixture>
     {
         [Theory]
         [InlineData("value", typeof(int), 1)]

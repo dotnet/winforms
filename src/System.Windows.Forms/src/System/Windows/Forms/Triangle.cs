@@ -16,24 +16,6 @@ namespace System.Windows.Forms
         private const double TRI_HEIGHT_RATIO = 2.5;
         private const double TRI_WIDTH_RATIO = 0.8;
 
-        /* Commenting this overload out until someone actually needs it again...
-        public static void Paint(Graphics g, Rectangle bounds, TriangleDirection dir, Brush backBr, Pen backPen) {
-            Paint(g, bounds, dir, backBr, backPen, true);
-        }
-        */
-
-        /* Commenting this overload out until someone actually needs it again...
-        public static void Paint(Graphics g, Rectangle bounds, TriangleDirection dir,
-                                  Brush backBr, Pen backPen, bool opaque) {
-            // build an equilateral triangle centered on the midpoint of the rect.
-            Point[] points = BuildTrianglePoints(dir, bounds);
-
-            if (opaque)
-                g.FillPolygon(backBr, points);
-            g.DrawPolygon(backPen, points);
-        }
-        */
-
         public static void Paint(Graphics g, Rectangle bounds, TriangleDirection dir, Brush backBr,
                                  Pen backPen1, Pen backPen2, Pen backPen3, bool opaque)
         {

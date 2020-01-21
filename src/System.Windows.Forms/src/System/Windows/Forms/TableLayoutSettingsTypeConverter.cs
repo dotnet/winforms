@@ -75,6 +75,10 @@ namespace System.Windows.Forms.Layout
 
                 foreach (TableLayoutSettings.ControlInformation c in tableLayoutSettings.GetControlsInformation())
                 {
+                    if (c.Name == null)
+                    {
+                        throw new InvalidOperationException(SR.TableLayoutSettingsConverterNoName);
+                    }
 
                     xmlWriter.WriteStartElement("Control");
                     xmlWriter.WriteAttributeString("Name", c.Name.ToString());
@@ -85,7 +89,6 @@ namespace System.Windows.Forms.Layout
                     xmlWriter.WriteAttributeString("ColumnSpan", c.ColumnSpan.ToString(CultureInfo.CurrentCulture));
 
                     xmlWriter.WriteEndElement();
-
                 }
                 xmlWriter.WriteEndElement(); // end Controls
 
@@ -125,7 +128,6 @@ namespace System.Windows.Forms.Layout
 
                 xmlWriter.Close();
                 return xmlStringBuilder.ToString();
-
             }
             return base.ConvertTo(context, culture, value, destinationType);
         }
@@ -171,9 +173,7 @@ namespace System.Windows.Forms.Layout
                     settings.SetRowSpan(name, rowSpan);
                     settings.SetColumnSpan(name, columnSpan);
                 }
-
             }
-
         }
 
         private void ParseStyles(TableLayoutSettings settings, XmlNodeList controlXmlFragments, bool columns)
@@ -196,7 +196,6 @@ namespace System.Windows.Forms.Layout
                     int nextIndex;
                     while (currentIndex < styleString.Length)
                     {
-
                         // ---- SizeType Parsing -----------------
                         nextIndex = currentIndex;
                         while (char.IsLetter(styleString[nextIndex]))
@@ -251,9 +250,7 @@ namespace System.Windows.Forms.Layout
                 }
             }
         }
-
     }
-
 }
 
 

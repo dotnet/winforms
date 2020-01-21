@@ -855,7 +855,7 @@ namespace System.Windows.Forms.Design.Tests
         {
             using var control = new SubComponentEditorPage();
             Assert.False(control.SupportsHelp());
-            
+
             // Call again.
             Assert.False(control.SupportsHelp());
         }
@@ -969,7 +969,7 @@ namespace System.Windows.Forms.Design.Tests
             public new void EnterLoadingMode() => base.EnterLoadingMode();
 
             public new void ExitLoadingMode() => base.ExitLoadingMode();
-            
+
             public new AutoSizeMode GetAutoSizeMode() => base.GetAutoSizeMode();
 
             public new Control GetControl() => base.GetControl();

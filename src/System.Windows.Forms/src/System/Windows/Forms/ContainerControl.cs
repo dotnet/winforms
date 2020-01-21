@@ -25,11 +25,11 @@ namespace System.Windows.Forms
         /// <remarks>
         ///  The current focused control. Do not directly edit this value.
         /// </remarks>
-        private Control _focusedControl; 
+        private Control _focusedControl;
 
         /// <remarks>
         ///  The last control that requires validation. Do not directly edit this value.
-        /// <remarks>
+        /// </remarks>
         private Control _unvalidatedControl;
 
         /// <summary>
@@ -694,7 +694,7 @@ namespace System.Windows.Forms
                 User32.ClientToScreen(new HandleRef(this, Handle), ref topLeftPoint);
                 return new Rectangle(topLeftPoint.X, topLeftPoint.Y, clientRectangle.right, clientRectangle.bottom);
             }
-            
+
             return base.GetToolNativeScreenRectangle();
         }
 
@@ -1313,7 +1313,7 @@ namespace System.Windows.Forms
             {
                 current = current.ParentInternal;
             }
-            
+
             return (ScrollableControl)current;
         }
 
@@ -1693,6 +1693,7 @@ namespace System.Windows.Forms
         ///  Validates the last unvalidated control and its ancestors up through, but not including the current control.
         ///  This version will skip validation if checkAutoValidate is true and the effective AutoValidate setting, as
         ///  determined by the control's parent, is AutoValidate.Disable.
+        /// </summary>
         public bool Validate(bool checkAutoValidate)
         {
             return ValidateInternal(checkAutoValidate, out bool validatedControlAllowsFocusChange);
@@ -1757,7 +1758,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Validates all the child controls in the container. Exactly which controls are
-        ///  validated and which controls are skipped is determined by <paramref name="flags"/>.
+        ///  validated and which controls are skipped is determined by <paramref name="validationConstraints"/>.
         /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]

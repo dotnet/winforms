@@ -143,7 +143,6 @@ namespace System.Windows.Forms
             {
                 if (focusLink != value)
                 {
-
                     if (focusLink != null)
                     {
                         InvalidateLink(focusLink);
@@ -156,7 +155,6 @@ namespace System.Windows.Forms
                         InvalidateLink(focusLink);
 
                         UpdateAccessibilityLink(focusLink);
-
                     }
                 }
             }
@@ -425,7 +423,7 @@ namespace System.Windows.Forms
                         User32.GetWindowRect(this, ref r);
                         if ((r.left <= p.X && p.X < r.right && r.top <= p.Y && p.Y < r.bottom) || User32.GetCapture() == Handle)
                         {
-                            User32.SendMessageW(this, User32.WindowMessage.WM_SETCURSOR, Handle, (IntPtr)NativeMethods.HTCLIENT);
+                            User32.SendMessageW(this, User32.WM.SETCURSOR, Handle, (IntPtr)NativeMethods.HTCLIENT);
                         }
                     }
                 }
@@ -685,7 +683,6 @@ namespace System.Windows.Forms
             string text = Text;
             try
             {
-
                 Font alwaysUnderlined = new Font(Font, Font.Style | FontStyle.Underline);
                 Graphics created = null;
 
@@ -744,7 +741,6 @@ namespace System.Windows.Forms
                                 iLeftMargin = dtParams.iLeftMargin;
                                 iRightMargin = dtParams.iRightMargin;
                             }
-
                         }
 
                         Rectangle visualRectangle = new Rectangle(clientRectWithPadding.X + iLeftMargin,
@@ -1037,7 +1033,6 @@ namespace System.Windows.Forms
                 if ((link.State & LinkState.Hover) == LinkState.Hover
                     || (link.State & LinkState.Active) == LinkState.Active)
                 {
-
                     bool activeChanged = (link.State & LinkState.Active) == LinkState.Active;
                     link.State &= ~(LinkState.Hover | LinkState.Active);
 
@@ -1411,7 +1406,6 @@ namespace System.Windows.Forms
             {
                 base.OnPaintBackground(e);
             }
-
         }
 
         protected override void OnFontChanged(EventArgs e)
@@ -1431,7 +1425,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Overriden by LinkLabel.
         /// </summary>
-        internal override void OnAutoEllipsisChanged(/*EventArgs e*/)
+        internal override void OnAutoEllipsisChanged()
         {
             base.OnAutoEllipsisChanged(/*e*/);
             InvalidateTextLayout();
@@ -1779,7 +1773,6 @@ namespace System.Windows.Forms
                     {
                         test = null;
                     }
-
                 } while (test != null
                          && !test.Enabled
                          && LinkInText(charStart, charEnd - charStart));
@@ -1832,16 +1825,6 @@ namespace System.Windows.Forms
             // to always relayout here... If we want to resurect this code in the future,
             // remember that we need to handle a word wrapped top aligned text that
             // will become newly exposed (and therefore layed out) when we resize...
-            //
-            /*
-            ContentAlignment anyTop = ContentAlignment.TopLeft | ContentAlignment.TopCenter | ContentAlignment.TopRight;
-
-            if ((TextAlign & anyTop) == 0 || Width != width || (Image != null && (ImageAlign & anyTop) == 0)) {
-                InvalidateTextLayout();
-                Invalidate();
-            }
-            */
-
             InvalidateTextLayout();
             Invalidate();
 
@@ -1856,7 +1839,6 @@ namespace System.Windows.Forms
                 // focused link, otherwise, we set the focus to the next link.
                 if (links.Count > 0)
                 {
-
                     // Find which link is currently focused
                     //
                     int focusIndex = -1;
@@ -1920,7 +1902,6 @@ namespace System.Windows.Forms
                 return Links[0].Start != 0 || Links[0]._length != -1;
             }
             return true;
-
         }
 
         /// <summary>
@@ -1956,7 +1937,6 @@ namespace System.Windows.Forms
         {
             if (!IsHandleCreated)
             {
-
                 return;
             }
 
@@ -1979,7 +1959,6 @@ namespace System.Windows.Forms
         {
             for (int x = 0; x < links.Count; x++)
             {
-
                 Link left = (Link)links[x];
                 if (left.Length < 0)
                 {
@@ -2086,7 +2065,6 @@ namespace System.Windows.Forms
             {
                 DefWndProc(ref m);
             }
-
         }
 
         protected override void WndProc(ref Message msg)
@@ -2177,7 +2155,6 @@ namespace System.Windows.Forms
                     {
                         return null;
                     }
-
                 }
             }
 
@@ -2256,7 +2233,6 @@ namespace System.Windows.Forms
                     && this[0].Start == 0
                     && this[0]._length == -1)
                 {
-
                     owner.links.Clear();
                     owner.FocusLink = null;
                 }
@@ -2285,7 +2261,6 @@ namespace System.Windows.Forms
                     && this[0].Start == 0
                     && this[0]._length == -1)
                 {
-
                     owner.links.Clear();
                     owner.FocusLink = null;
                 }
@@ -2470,7 +2445,6 @@ namespace System.Windows.Forms
 
             public void Remove(Link value)
             {
-
                 if (value.Owner != owner)
                 {
                     return;
@@ -2880,7 +2854,6 @@ namespace System.Windows.Forms
                     }
 
                     return state;
-
                 }
             }
 

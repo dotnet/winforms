@@ -8,7 +8,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class FolderBrowserDialogTests
+    public class FolderBrowserDialogTests : IClassFixture<ThreadExceptionFixture>
     {
         [Fact]
         public void FolderBrowserDialog_Ctor_Default()

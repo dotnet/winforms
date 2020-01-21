@@ -10,6 +10,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using static Interop;
+using static Interop.ComCtl32;
 
 namespace System.Windows.Forms
 {
@@ -92,7 +93,7 @@ namespace System.Windows.Forms
         {
             _window = new ToolTipNativeWindow(this);
             _auto = true;
-            _delayTimes[(int)ComCtl32.TTDT.AUTOMATIC] = DefaultDelay;
+            _delayTimes[(int)TTDT.AUTOMATIC] = DefaultDelay;
             AdjustBaseFromAuto();
         }
 
@@ -113,7 +114,7 @@ namespace System.Windows.Forms
                     // Don't activate the tooltip if we're in the designer.
                     if (!DesignMode && GetHandleCreated())
                     {
-                        User32.SendMessageW(this, User32.WindowMessage.TTM_ACTIVATE, PARAM.FromBool(value));
+                        User32.SendMessageW(this, (User32.WM)TTM.ACTIVATE, PARAM.FromBool(value));
                     }
                 }
             }
@@ -136,7 +137,7 @@ namespace System.Windows.Forms
         [DefaultValue(DefaultDelay)]
         public int AutomaticDelay
         {
-            get => _delayTimes[(int)ComCtl32.TTDT.AUTOMATIC];
+            get => _delayTimes[(int)TTDT.AUTOMATIC];
             set
             {
                 if (value < 0)
@@ -144,7 +145,7 @@ namespace System.Windows.Forms
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(AutomaticDelay), value, 0));
                 }
 
-                SetDelayTime((int)ComCtl32.TTDT.AUTOMATIC, value);
+                SetDelayTime((int)TTDT.AUTOMATIC, value);
             }
         }
 
@@ -161,7 +162,7 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ToolTipAutoPopDelayDescr))]
         public int AutoPopDelay
         {
-            get => _delayTimes[(int)ComCtl32.TTDT.AUTOPOP];
+            get => _delayTimes[(int)TTDT.AUTOPOP];
             set
             {
                 if (value < 0)
@@ -169,7 +170,7 @@ namespace System.Windows.Forms
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(AutoPopDelay), value, 0));
                 }
 
-                SetDelayTime(ComCtl32.TTDT.AUTOPOP, value);
+                SetDelayTime(TTDT.AUTOPOP, value);
             }
         }
 
@@ -186,7 +187,7 @@ namespace System.Windows.Forms
                 _backColor = value;
                 if (GetHandleCreated())
                 {
-                    User32.SendMessageW(this, User32.WindowMessage.TTM_SETTIPBKCOLOR, PARAM.FromColor(_backColor));
+                    User32.SendMessageW(this, (User32.WM)TTM.SETTIPBKCOLOR, PARAM.FromColor(_backColor));
                 }
             }
         }
@@ -203,7 +204,7 @@ namespace System.Windows.Forms
                 {
                     cp.Parent = TopLevelControl.Handle;
                 }
-                cp.ClassName = ComCtl32.WindowClasses.TOOLTIPS_CLASS;
+                cp.ClassName = WindowClasses.TOOLTIPS_CLASS;
                 if (_showAlways)
                 {
                     cp.Style = NativeMethods.TTS_ALWAYSTIP;
@@ -249,7 +250,7 @@ namespace System.Windows.Forms
                 _foreColor = value;
                 if (GetHandleCreated())
                 {
-                    User32.SendMessageW(this, User32.WindowMessage.TTM_SETTIPTEXTCOLOR, PARAM.FromColor(_foreColor));
+                    User32.SendMessageW(this, (User32.WM)TTM.SETTIPTEXTCOLOR, PARAM.FromColor(_foreColor));
                 }
             }
         }
@@ -328,7 +329,7 @@ namespace System.Windows.Forms
         [Description(nameof(SR.ToolTipInitialDelayDescr))]
         public int InitialDelay
         {
-            get => _delayTimes[(int)ComCtl32.TTDT.INITIAL];
+            get => _delayTimes[(int)TTDT.INITIAL];
             set
             {
                 if (value < 0)
@@ -336,7 +337,7 @@ namespace System.Windows.Forms
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(InitialDelay), value, 0));
                 }
 
-                SetDelayTime(ComCtl32.TTDT.INITIAL, value);
+                SetDelayTime(TTDT.INITIAL, value);
             }
         }
 
@@ -356,7 +357,7 @@ namespace System.Windows.Forms
         [Description(nameof(SR.ToolTipReshowDelayDescr))]
         public int ReshowDelay
         {
-            get => _delayTimes[(int)ComCtl32.TTDT.RESHOW];
+            get => _delayTimes[(int)TTDT.RESHOW];
             set
             {
                 if (value < 0)
@@ -364,7 +365,7 @@ namespace System.Windows.Forms
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(ReshowDelay), value, 0));
                 }
 
-                SetDelayTime(ComCtl32.TTDT.RESHOW, value);
+                SetDelayTime(TTDT.RESHOW, value);
             }
         }
 
@@ -442,11 +443,11 @@ namespace System.Windows.Forms
                     {
                         // If the title is null/empty, the icon won't display.
                         string title = !string.IsNullOrEmpty(_toolTipTitle) ? _toolTipTitle : " ";
-                        User32.SendMessageW(this, User32.WindowMessage.TTM_SETTITLEW, (IntPtr)_toolTipIcon, title);
+                        User32.SendMessageW(this, (User32.WM)TTM.SETTITLEW, (IntPtr)_toolTipIcon, title);
 
                         // Tooltip need to be updated to reflect the changes in the icon because
                         // this operation directly affects the size of the tooltip
-                        User32.SendMessageW(this, User32.WindowMessage.TTM_UPDATE);
+                        User32.SendMessageW(this, (User32.WM)TTM.UPDATE);
                     }
                 }
             }
@@ -472,11 +473,11 @@ namespace System.Windows.Forms
                     _toolTipTitle = value;
                     if (GetHandleCreated())
                     {
-                        User32.SendMessageW(this, User32.WindowMessage.TTM_SETTITLEW, (IntPtr)_toolTipIcon, _toolTipTitle);
+                        User32.SendMessageW(this, (User32.WM)TTM.SETTITLEW, (IntPtr)_toolTipIcon, _toolTipTitle);
 
                         // Tooltip need to be updated to reflect the changes in the titletext because
                         // this operation directly affects the size of the tooltip
-                        User32.SendMessageW(this, User32.WindowMessage.TTM_UPDATE);
+                        User32.SendMessageW(this, (User32.WM)TTM.UPDATE);
                     }
                 }
             }
@@ -616,9 +617,9 @@ namespace System.Windows.Forms
         /// </summary>
         private void AdjustBaseFromAuto()
         {
-            _delayTimes[(int)ComCtl32.TTDT.RESHOW] = _delayTimes[(int)ComCtl32.TTDT.AUTOMATIC] / ReshowRatio;
-            _delayTimes[(int)ComCtl32.TTDT.AUTOPOP] = _delayTimes[(int)ComCtl32.TTDT.AUTOMATIC] * AutoPopRatio;
-            _delayTimes[(int)ComCtl32.TTDT.INITIAL] = _delayTimes[(int)ComCtl32.TTDT.AUTOMATIC];
+            _delayTimes[(int)TTDT.RESHOW] = _delayTimes[(int)TTDT.AUTOMATIC] / ReshowRatio;
+            _delayTimes[(int)TTDT.AUTOPOP] = _delayTimes[(int)TTDT.AUTOMATIC] * AutoPopRatio;
+            _delayTimes[(int)TTDT.INITIAL] = _delayTimes[(int)TTDT.AUTOMATIC];
         }
 
         /// <summary>
@@ -750,12 +751,11 @@ namespace System.Windows.Forms
             IntPtr userCookie = ThemingScope.Activate(Application.UseVisualStyles);
             try
             {
-
-                var icc = new ComCtl32.INITCOMMONCONTROLSEX
+                var icc = new INITCOMMONCONTROLSEX
                 {
-                    dwICC = ComCtl32.ICC.TAB_CLASSES
+                    dwICC = ICC.TAB_CLASSES
                 };
-                ComCtl32.InitCommonControlsEx(ref icc);
+                InitCommonControlsEx(ref icc);
 
                 CreateParams cp = CreateParams; // Avoid reentrant call to CreateHandle
                 if (GetHandleCreated())
@@ -778,20 +778,20 @@ namespace System.Windows.Forms
             // If in OwnerDraw mode, we don't want the default border.
             if (OwnerDraw)
             {
-                int style = unchecked((int)((long)UnsafeNativeMethods.GetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_STYLE)));
+                int style = unchecked((int)((long)User32.GetWindowLong(this, User32.GWL.STYLE)));
                 style &= ~(int)User32.WS.BORDER;
-                UnsafeNativeMethods.SetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_STYLE, new HandleRef(null, (IntPtr)style));
+                User32.SetWindowLong(this, User32.GWL.STYLE, (IntPtr)style);
             }
 
             // Setting the max width has the added benefit of enabling multiline tool tips.
-            User32.SendMessageW(this, User32.WindowMessage.TTM_SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
+            User32.SendMessageW(this, (User32.WM)TTM.SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
 
             if (_auto)
             {
-                SetDelayTime(ComCtl32.TTDT.AUTOMATIC, _delayTimes[(int)ComCtl32.TTDT.AUTOMATIC]);
-                _delayTimes[(int)ComCtl32.TTDT.AUTOPOP] = GetDelayTime(ComCtl32.TTDT.AUTOPOP);
-                _delayTimes[(int)ComCtl32.TTDT.INITIAL] = GetDelayTime(ComCtl32.TTDT.INITIAL);
-                _delayTimes[(int)ComCtl32.TTDT.RESHOW] = GetDelayTime(ComCtl32.TTDT.RESHOW);
+                SetDelayTime(TTDT.AUTOMATIC, _delayTimes[(int)TTDT.AUTOMATIC]);
+                _delayTimes[(int)TTDT.AUTOPOP] = GetDelayTime(TTDT.AUTOPOP);
+                _delayTimes[(int)TTDT.INITIAL] = GetDelayTime(TTDT.INITIAL);
+                _delayTimes[(int)TTDT.RESHOW] = GetDelayTime(TTDT.RESHOW);
             }
             else
             {
@@ -799,27 +799,27 @@ namespace System.Windows.Forms
                 {
                     if (_delayTimes[i] >= 1)
                     {
-                        SetDelayTime((ComCtl32.TTDT)i, _delayTimes[i]);
+                        SetDelayTime((TTDT)i, _delayTimes[i]);
                     }
                 }
             }
 
             // Set active status
-            User32.SendMessageW(this, User32.WindowMessage.TTM_ACTIVATE, PARAM.FromBool(active));
+            User32.SendMessageW(this, (User32.WM)TTM.ACTIVATE, PARAM.FromBool(active));
 
             if (BackColor != SystemColors.Info)
             {
-                User32.SendMessageW(this, User32.WindowMessage.TTM_SETTIPBKCOLOR, PARAM.FromColor(BackColor));
+                User32.SendMessageW(this, (User32.WM)TTM.SETTIPBKCOLOR, PARAM.FromColor(BackColor));
             }
             if (ForeColor != SystemColors.InfoText)
             {
-                User32.SendMessageW(this, User32.WindowMessage.TTM_SETTIPTEXTCOLOR, PARAM.FromColor(ForeColor));
+                User32.SendMessageW(this, (User32.WM)TTM.SETTIPTEXTCOLOR, PARAM.FromColor(ForeColor));
             }
             if (_toolTipIcon > 0 || !string.IsNullOrEmpty(_toolTipTitle))
             {
                 // If the title is null/empty, the icon won't display.
                 string title = !string.IsNullOrEmpty(_toolTipTitle) ? _toolTipTitle : " ";
-                User32.SendMessageW(this, User32.WindowMessage.TTM_SETTITLEW, (IntPtr)_toolTipIcon, title);
+                User32.SendMessageW(this, (User32.WM)TTM.SETTITLEW, (IntPtr)_toolTipIcon, title);
             }
         }
 
@@ -851,7 +851,7 @@ namespace System.Windows.Forms
 
         private void SetToolInfo(Control ctl, string caption)
         {
-            IntPtr result = GetTOOLINFO(ctl, caption).SendMessage(this, User32.WindowMessage.TTM_ADDTOOLW);
+            IntPtr result = GetTOOLINFO(ctl, caption).SendMessage(this, (User32.WM)TTM.ADDTOOLW);
 
             if ((ctl is TreeView tv && tv.ShowNodeToolTips)
                 || (ctl is ListView lv && lv.ShowItemToolTips))
@@ -891,7 +891,6 @@ namespace System.Windows.Forms
             Control ctl = (Control)sender;
             if (!_created.ContainsKey(ctl) && ctl.IsHandleCreated && TopLevelControl != null)
             {
-
                 CreateRegion(ctl);
             }
 
@@ -929,7 +928,7 @@ namespace System.Windows.Forms
 
             if (_created.ContainsKey(ctl) && handlesCreated && !DesignMode)
             {
-                new ComCtl32.ToolInfoWrapper<Control>(ctl).SendMessage(this, User32.WindowMessage.TTM_DELTOOLW);
+                new ToolInfoWrapper<Control>(ctl).SendMessage(this, (User32.WM)TTM.DELTOOLW);
                 _created.Remove(ctl);
             }
         }
@@ -972,14 +971,14 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Returns the delayTime based on the NativeMethods.TTDT_* values.
         /// </summary>
-        internal int GetDelayTime(ComCtl32.TTDT type)
+        internal int GetDelayTime(TTDT type)
         {
             if (!GetHandleCreated())
             {
                 return _delayTimes[(int)type];
             }
 
-            return (int)(long)User32.SendMessageW(this, User32.WindowMessage.TTM_GETDELAYTIME, (IntPtr)type);
+            return (int)(long)User32.SendMessageW(this, (User32.WM)TTM.GETDELAYTIME, (IntPtr)type);
         }
 
         internal bool GetHandleCreated() => _window != null && _window.Handle != IntPtr.Zero;
@@ -987,47 +986,47 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Returns a detailed TOOLINFO_TOOLTIP structure that represents the specified region.
         /// </summary>
-        private unsafe ComCtl32.ToolInfoWrapper<Control> GetTOOLINFO(Control control, string caption)
+        private unsafe ToolInfoWrapper<Control> GetTOOLINFO(Control control, string caption)
         {
-            ComCtl32.TTF flags = ComCtl32.TTF.TRANSPARENT | ComCtl32.TTF.SUBCLASS;
+            TTF flags = TTF.TRANSPARENT | TTF.SUBCLASS;
 
             // RightToLeft reading order
             if (TopLevelControl?.RightToLeft == RightToLeft.Yes && !control.IsMirrored)
             {
                 // Indicates that the ToolTip text will be displayed in the opposite direction
                 // to the text in the parent window.
-                flags |= ComCtl32.TTF.RTLREADING;
+                flags |= TTF.RTLREADING;
             }
 
             bool noText = (control is TreeView tv && tv.ShowNodeToolTips)
                 || (control is ListView lv && lv.ShowItemToolTips);
 
-            var info = new ComCtl32.ToolInfoWrapper<Control>(control, flags, noText ? null : caption);
+            var info = new ToolInfoWrapper<Control>(control, flags, noText ? null : caption);
             if (noText)
                 info.Info.lpszText = (char*)(-1);
 
             return info;
         }
 
-        private ComCtl32.ToolInfoWrapper<IWin32WindowAdapter> GetWinTOOLINFO(IWin32Window hWnd)
+        private ToolInfoWrapper<IWin32WindowAdapter> GetWinTOOLINFO(IWin32Window hWnd)
         {
-            ComCtl32.TTF flags = ComCtl32.TTF.TRANSPARENT | ComCtl32.TTF.SUBCLASS;
+            TTF flags = TTF.TRANSPARENT | TTF.SUBCLASS;
 
             // RightToLeft reading order
             if (TopLevelControl?.RightToLeft == RightToLeft.Yes)
             {
-                bool isWindowMirrored = ((unchecked((int)(long)UnsafeNativeMethods.GetWindowLong(
-                    new HandleRef(this, Control.GetSafeHandle(hWnd)), NativeMethods.GWL_STYLE)) & (int)User32.WS_EX.LAYOUTRTL) == (int)User32.WS_EX.LAYOUTRTL);
+                bool isWindowMirrored = ((unchecked((int)(long)User32.GetWindowLong(
+                    new HandleRef(this, Control.GetSafeHandle(hWnd)), User32.GWL.STYLE)) & (int)User32.WS_EX.LAYOUTRTL) == (int)User32.WS_EX.LAYOUTRTL);
 
                 // Indicates that the ToolTip text will be displayed in the opposite direction
                 // to the text in the parent window.
                 if (!isWindowMirrored)
                 {
-                    flags |= ComCtl32.TTF.RTLREADING;
+                    flags |= TTF.RTLREADING;
                 }
             }
 
-            return new ComCtl32.ToolInfoWrapper<IWin32WindowAdapter>(new IWin32WindowAdapter(hWnd), flags);
+            return new ToolInfoWrapper<IWin32WindowAdapter>(new IWin32WindowAdapter(hWnd), flags);
         }
 
         /// <summary>
@@ -1083,7 +1082,7 @@ namespace System.Windows.Forms
                     pt = baseVar.PointToClient(screenCoords);
                 }
 
-                IntPtr found = UnsafeNativeMethods.ChildWindowFromPointEx(baseHwnd, pt, NativeMethods.CWP_SKIPINVISIBLE);
+                IntPtr found = User32.ChildWindowFromPointEx(baseHwnd, pt, User32.CWP.SKIPINVISIBLE);
                 if (found == baseHwnd)
                 {
                     hwnd = found;
@@ -1193,22 +1192,22 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Sets the delayTime based on the NativeMethods.TTDT_* values.
         /// </summary>
-        private void SetDelayTime(ComCtl32.TTDT type, int time)
+        private void SetDelayTime(TTDT type, int time)
         {
-            _auto = type == ComCtl32.TTDT.AUTOMATIC;
+            _auto = type == TTDT.AUTOMATIC;
             _delayTimes[(int)type] = time;
 
             if (GetHandleCreated() && time >= 0)
             {
-                User32.SendMessageW(this, User32.WindowMessage.TTM_SETDELAYTIME, (IntPtr)type, (IntPtr)time);
+                User32.SendMessageW(this, (User32.WM)TTM.SETDELAYTIME, (IntPtr)type, (IntPtr)time);
 
                 // Update everyone else if automatic is set. we need to do this
                 // to preserve value in case of handle recreation.
                 if (_auto)
                 {
-                    _delayTimes[(int)ComCtl32.TTDT.AUTOPOP] = GetDelayTime(ComCtl32.TTDT.AUTOPOP);
-                    _delayTimes[(int)ComCtl32.TTDT.INITIAL] = GetDelayTime(ComCtl32.TTDT.INITIAL);
-                    _delayTimes[(int)ComCtl32.TTDT.RESHOW] = GetDelayTime(ComCtl32.TTDT.RESHOW);
+                    _delayTimes[(int)TTDT.AUTOPOP] = GetDelayTime(TTDT.AUTOPOP);
+                    _delayTimes[(int)TTDT.INITIAL] = GetDelayTime(TTDT.INITIAL);
+                    _delayTimes[(int)TTDT.RESHOW] = GetDelayTime(TTDT.RESHOW);
                 }
             }
             else if (_auto)
@@ -1265,8 +1264,8 @@ namespace System.Windows.Forms
 
                 if (exists && !empty && handlesCreated && !DesignMode)
                 {
-                    ComCtl32.ToolInfoWrapper<Control> toolInfo = GetTOOLINFO(control, info.Caption);
-                    toolInfo.SendMessage(this, User32.WindowMessage.TTM_SETTOOLINFOW);
+                    ToolInfoWrapper<Control> toolInfo = GetTOOLINFO(control, info.Caption);
+                    toolInfo.SendMessage(this, (User32.WM)TTM.SETTOOLINFOW);
                     CheckNativeToolTip(control);
                     CheckCompositeControls(control);
                 }
@@ -1560,8 +1559,8 @@ namespace System.Windows.Forms
             IntPtr result = GetCurrentToolHwnd();
             if (result != IntPtr.Zero)
             {
-                var info = new ComCtl32.ToolInfoWrapper<IWin32WindowAdapter>(new IWin32WindowAdapter(tool.GetOwnerWindow()));
-                result = info.SendMessage(this, User32.WindowMessage.TTM_GETBUBBLESIZE);
+                var info = new ToolInfoWrapper<IWin32WindowAdapter>(new IWin32WindowAdapter(tool.GetOwnerWindow()));
+                result = info.SendMessage(this, (User32.WM)TTM.GETBUBBLESIZE);
             }
 
             if (result == IntPtr.Zero)
@@ -1731,7 +1730,7 @@ namespace System.Windows.Forms
             try
             {
                 _trackPosition = true;
-                User32.SendMessageW(this, User32.WindowMessage.TTM_TRACKPOSITION, IntPtr.Zero, PARAM.FromLowHigh(pointX, pointY));
+                User32.SendMessageW(this, (User32.WM)TTM.TRACKPOSITION, IntPtr.Zero, PARAM.FromLowHigh(pointX, pointY));
             }
             finally
             {
@@ -1756,9 +1755,9 @@ namespace System.Windows.Forms
 
             if (GetHandleCreated())
             {
-                var info = new ComCtl32.ToolInfoWrapper<IWin32WindowAdapter>(new IWin32WindowAdapter(win));
-                info.SendMessage(this, User32.WindowMessage.TTM_TRACKACTIVATE);
-                info.SendMessage(this, User32.WindowMessage.TTM_DELTOOLW);
+                var info = new ToolInfoWrapper<IWin32WindowAdapter>(new IWin32WindowAdapter(win));
+                info.SendMessage(this, (User32.WM)TTM.TRACKACTIVATE);
+                info.SendMessage(this, (User32.WM)TTM.DELTOOLW);
             }
             StopTimer();
 
@@ -1778,8 +1777,8 @@ namespace System.Windows.Forms
                     _owners.Remove(win.Handle);
                 }
 
-                // Find the Form for associated Control and hook up to the Deactivated event to
-                ///  hide the shown tooltip
+                // Find the Form for associated Control and hook up to the Deactivated event
+                // to hide the shown tooltip
                 Form baseFrom = tool.FindForm();
                 if (baseFrom != null)
                 {
@@ -1814,13 +1813,13 @@ namespace System.Windows.Forms
             Control tool = win as Control;
             if (tool != null && _tools.ContainsKey(tool))
             {
-                var toolInfo = new ComCtl32.ToolInfoWrapper<Control>(tool);
-                if (toolInfo.SendMessage(this, User32.WindowMessage.TTM_GETTOOLINFOW) != IntPtr.Zero)
+                var toolInfo = new ToolInfoWrapper<Control>(tool);
+                if (toolInfo.SendMessage(this, (User32.WM)TTM.GETTOOLINFOW) != IntPtr.Zero)
                 {
-                    ComCtl32.TTF flags = ComCtl32.TTF.TRACK;
+                    TTF flags = TTF.TRACK;
                     if (type == TipInfo.Type.Absolute || type == TipInfo.Type.SemiAbsolute)
                     {
-                        flags |= ComCtl32.TTF.ABSOLUTE;
+                        flags |= TTF.ABSOLUTE;
                     }
                     toolInfo.Info.uFlags |= flags;
                     toolInfo.Text = text;
@@ -1839,8 +1838,8 @@ namespace System.Windows.Forms
                 tt.Position = position;
                 _tools[tool] = tt;
 
-                IntPtr result = toolInfo.SendMessage(this, User32.WindowMessage.TTM_SETTOOLINFOW);
-                result = toolInfo.SendMessage(this, User32.WindowMessage.TTM_TRACKACTIVATE, BOOL.TRUE);
+                IntPtr result = toolInfo.SendMessage(this, (User32.WM)TTM.SETTOOLINFOW);
+                result = toolInfo.SendMessage(this, (User32.WM)TTM.TRACKACTIVATE, BOOL.TRUE);
             }
             else
             {
@@ -1866,21 +1865,20 @@ namespace System.Windows.Forms
                 _owners[hWnd] = win;
 
                 var toolInfo = GetWinTOOLINFO(win);
-                toolInfo.Info.uFlags |= ComCtl32.TTF.TRACK;
+                toolInfo.Info.uFlags |= TTF.TRACK;
 
                 if (type == TipInfo.Type.Absolute || type == TipInfo.Type.SemiAbsolute)
                 {
-                    toolInfo.Info.uFlags |= ComCtl32.TTF.ABSOLUTE;
+                    toolInfo.Info.uFlags |= TTF.ABSOLUTE;
                 }
 
                 toolInfo.Text = text;
-                IntPtr result = toolInfo.SendMessage(this, User32.WindowMessage.TTM_ADDTOOLW);
-                result = toolInfo.SendMessage(this, User32.WindowMessage.TTM_TRACKACTIVATE, BOOL.TRUE);
+                IntPtr result = toolInfo.SendMessage(this, (User32.WM)TTM.ADDTOOLW);
+                result = toolInfo.SendMessage(this, (User32.WM)TTM.TRACKACTIVATE, BOOL.TRUE);
             }
 
             if (tool != null)
             {
-
                 // Lets find the Form for associated Control .
                 // and hook up to the Deactivated event to Hide the Shown tooltip
                 Form baseFrom = tool.FindForm();
@@ -1975,8 +1973,8 @@ namespace System.Windows.Forms
 
         private IntPtr GetCurrentToolHwnd()
         {
-            var toolInfo = new ComCtl32.ToolInfoWrapper<Control>();
-            if (toolInfo.SendMessage(this, User32.WindowMessage.TTM_GETCURRENTTOOLW) != IntPtr.Zero)
+            var toolInfo = new ToolInfoWrapper<Control>();
+            if (toolInfo.SendMessage(this, (User32.WM)TTM.GETCURRENTTOOLW) != IntPtr.Zero)
             {
                 return toolInfo.Info.hwnd;
             }
@@ -2041,7 +2039,7 @@ namespace System.Windows.Forms
             if (cursorLocation.X >= r.left && cursorLocation.X <= r.right &&
                 cursorLocation.Y >= r.top && cursorLocation.Y <= r.bottom)
             {
-                msg.Result = (IntPtr)NativeMethods.MA_NOACTIVATE;
+                msg.Result = (IntPtr)User32.MA.NOACTIVATE;
             }
         }
 
@@ -2095,7 +2093,7 @@ namespace System.Windows.Forms
             if (IsBalloon)
             {
                 // Get the text display rectangle
-                User32.SendMessageW(this, User32.WindowMessage.TTM_ADJUSTRECT, PARAM.FromBool(true), ref r);
+                User32.SendMessageW(this, (User32.WM)TTM.ADJUSTRECT, PARAM.FromBool(true), ref r);
                 if (r.Size.Height > currentTooltipSize.Height)
                 {
                     currentTooltipSize.Height = r.Size.Height;
@@ -2112,7 +2110,7 @@ namespace System.Windows.Forms
                 int maxwidth = (IsBalloon)
                     ? Math.Min(currentTooltipSize.Width - 2 * BalloonOffsetX, screen.WorkingArea.Width)
                     : Math.Min(currentTooltipSize.Width, screen.WorkingArea.Width);
-                User32.SendMessageW(this, User32.WindowMessage.TTM_SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)maxwidth);
+                User32.SendMessageW(this, (User32.WM)TTM.SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)maxwidth);
             }
 
             if (e.Cancel)
@@ -2206,7 +2204,6 @@ namespace System.Windows.Forms
 
                 if (((tt.TipType & TipInfo.Type.SemiAbsolute) != 0) && tt.Position == Point.Empty)
                 {
-
                     Screen screen = Screen.FromPoint(cursorPos);
                     if (currentCursor != null)
                     {
@@ -2229,7 +2226,6 @@ namespace System.Windows.Forms
                 }
                 else if ((tt.TipType & TipInfo.Type.SemiAbsolute) != 0 && tt.Position != Point.Empty)
                 {
-
                     Screen screen = Screen.FromPoint(tt.Position);
                     wp->x = tt.Position.X;
                     if (wp->x + wp->cx > screen.WorkingArea.Right)
@@ -2268,7 +2264,7 @@ namespace System.Windows.Forms
             if ((tt.TipType & TipInfo.Type.Auto) != 0 || (tt.TipType & TipInfo.Type.SemiAbsolute) != 0)
             {
                 Screen screen = Screen.FromPoint(Cursor.Position);
-                User32.SendMessageW(this, User32.WindowMessage.TTM_SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)screen.WorkingArea.Width);
+                User32.SendMessageW(this, (User32.WM)TTM.SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)screen.WorkingArea.Width);
             }
 
             // For non-auto tips (those showned through the show(.) methods, we need to
@@ -2306,11 +2302,11 @@ namespace System.Windows.Forms
             {
                 case WindowMessages.WM_REFLECT + WindowMessages.WM_NOTIFY:
                     User32.NMHDR nmhdr = (User32.NMHDR)msg.GetLParam(typeof(User32.NMHDR));
-                    if (nmhdr.code == NativeMethods.TTN_SHOW && !_trackPosition)
+                    if (nmhdr.code == (int)TTN.SHOW && !_trackPosition)
                     {
                         WmShow();
                     }
-                    else if (nmhdr.code == NativeMethods.TTN_POP)
+                    else if (nmhdr.code == (int)TTN.POP)
                     {
                         WmPop();
                         _window?.DefWndProc(ref msg);
@@ -2336,7 +2332,7 @@ namespace System.Windows.Forms
                     WmMove();
                     break;
 
-                case (int)User32.WindowMessage.TTM_WINDOWFROMPOINT:
+                case (int)(User32.WM)TTM.WINDOWFROMPOINT:
                     WmWindowFromPoint(ref msg);
                     break;
 

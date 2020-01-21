@@ -455,7 +455,6 @@ namespace System.Windows.Forms
                 || format.Equals(DataFormats.UnicodeText)
                 || format.Equals(DataFormats.StringFormat))
             {
-
                 return new string[] {
                     DataFormats.StringFormat,
                     DataFormats.UnicodeText,
@@ -467,7 +466,6 @@ namespace System.Windows.Forms
                 || format.Equals(CF_DEPRECATED_FILENAME)
                 || format.Equals(CF_DEPRECATED_FILENAMEW))
             {
-
                 return new string[] {
                     DataFormats.FileDrop,
                     CF_DEPRECATED_FILENAMEW,
@@ -478,7 +476,6 @@ namespace System.Windows.Forms
             if (format.Equals(DataFormats.Bitmap)
                 || format.Equals((typeof(Bitmap)).FullName))
             {
-
                 return new string[] {
                     (typeof(Bitmap)).FullName,
                     DataFormats.Bitmap,
@@ -551,9 +548,9 @@ namespace System.Windows.Forms
             }
         }
 
-        // <summary>
-        //     Part of IComDataObject, used to interop with OLE.
-        // </summary>
+        /// <summary>
+        ///     Part of IComDataObject, used to interop with OLE.
+        /// </summary>
         int IComDataObject.DAdvise(ref FORMATETC pFormatetc, ADVF advf, IAdviseSink pAdvSink, out int pdwConnection)
         {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "DAdvise");
@@ -565,9 +562,9 @@ namespace System.Windows.Forms
             return (int)HRESULT.E_NOTIMPL;
         }
 
-        // <summary>
-        //     Part of IComDataObject, used to interop with OLE.
-        // </summary>
+        /// <summary>
+        ///     Part of IComDataObject, used to interop with OLE.
+        /// </summary>
         void IComDataObject.DUnadvise(int dwConnection)
         {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "DUnadvise");
@@ -579,9 +576,9 @@ namespace System.Windows.Forms
             Marshal.ThrowExceptionForHR((int)HRESULT.E_NOTIMPL);
         }
 
-        // <summary>
-        //     Part of IComDataObject, used to interop with OLE.
-        // </summary>
+        /// <summary>
+        ///     Part of IComDataObject, used to interop with OLE.
+        /// </summary>
         int IComDataObject.EnumDAdvise(out IEnumSTATDATA enumAdvise)
         {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "EnumDAdvise");
@@ -594,9 +591,9 @@ namespace System.Windows.Forms
             return (int)HRESULT.OLE_E_ADVISENOTSUPPORTED;
         }
 
-        // <summary>
-        //     Part of IComDataObject, used to interop with OLE.
-        // </summary>
+        /// <summary>
+        ///     Part of IComDataObject, used to interop with OLE.
+        /// </summary>
         IEnumFORMATETC IComDataObject.EnumFormatEtc(DATADIR dwDirection)
         {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "EnumFormatEtc: " + dwDirection.ToString());
@@ -612,9 +609,9 @@ namespace System.Windows.Forms
             throw new ExternalException(SR.ExternalException, (int)HRESULT.E_NOTIMPL);
         }
 
-        // <summary>
-        //     Part of IComDataObject, used to interop with OLE.
-        // </summary>
+        /// <summary>
+        ///     Part of IComDataObject, used to interop with OLE.
+        /// </summary>
         int IComDataObject.GetCanonicalFormatEtc(ref FORMATETC pformatetcIn, out FORMATETC pformatetcOut)
         {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "GetCanonicalFormatEtc");
@@ -626,9 +623,9 @@ namespace System.Windows.Forms
             return DATA_S_SAMEFORMATETC;
         }
 
-        // <summary>
-        //     Part of IComDataObject, used to interop with OLE.
-        // </summary>
+        /// <summary>
+        ///     Part of IComDataObject, used to interop with OLE.
+        /// </summary>
         void IComDataObject.GetData(ref FORMATETC formatetc, out STGMEDIUM medium)
         {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "GetData");
@@ -676,9 +673,9 @@ namespace System.Windows.Forms
             }
         }
 
-        // <summary>
-        //     Part of IComDataObject, used to interop with OLE.
-        // </summary>
+        /// <summary>
+        ///     Part of IComDataObject, used to interop with OLE.
+        /// </summary>
         void IComDataObject.GetDataHere(ref FORMATETC formatetc, ref STGMEDIUM medium)
         {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "GetDataHere");
@@ -692,9 +689,9 @@ namespace System.Windows.Forms
             }
         }
 
-        // <summary>
-        //     Part of IComDataObject, used to interop with OLE.
-        // </summary>
+        /// <summary>
+        ///     Part of IComDataObject, used to interop with OLE.
+        /// </summary>
         int IComDataObject.QueryGetData(ref FORMATETC formatetc)
         {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "QueryGetData");
@@ -732,9 +729,9 @@ namespace System.Windows.Forms
             return (int)HRESULT.S_OK;
         }
 
-        // <summary>
-        //     Part of IComDataObject, used to interop with OLE.
-        // </summary>
+        /// <summary>
+        ///     Part of IComDataObject, used to interop with OLE.
+        /// </summary>
         void IComDataObject.SetData(ref FORMATETC pFormatetcIn, ref STGMEDIUM pmedium, bool fRelease)
         {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "SetData");
@@ -975,7 +972,6 @@ namespace System.Windows.Forms
             }
             else
             {
-
                 int pinvokeSize = UnsafeNativeMethods.WideCharToMultiByte(0 /*CP_ACP*/, 0, str, str.Length, null, 0, IntPtr.Zero, IntPtr.Zero);
 
                 byte[] strBytes = new byte[pinvokeSize];
@@ -984,7 +980,7 @@ namespace System.Windows.Forms
                 newHandle = Kernel32.GlobalReAlloc(
                     handle,
                     (uint)pinvokeSize + 1,
-                    
+
                     Kernel32.GMEM.MOVEABLE | Kernel32.GMEM.DDESHARE | Kernel32.GMEM.ZEROINIT);
                 if (newHandle == IntPtr.Zero)
                 {
@@ -1185,7 +1181,6 @@ namespace System.Windows.Forms
                                  || format.Equals(CF_DEPRECATED_FILENAME)
                                  || format.Equals(CF_DEPRECATED_FILENAMEW))
                         {
-
                             temp.tymed = TYMED.TYMED_HGLOBAL;
                         }
                         else
@@ -1206,7 +1201,6 @@ namespace System.Windows.Forms
                 Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "FormatEnumerator: Next");
                 if (this.current < formats.Count && celt > 0)
                 {
-
                     FORMATETC current = (FORMATETC)formats[this.current];
                     rgelt[0].cfFormat = current.cfFormat;
                     rgelt[0].tymed = current.tymed;
@@ -1288,7 +1282,6 @@ namespace System.Windows.Forms
             /// </summary>
             private unsafe object GetDataFromOleIStream(string format)
             {
-
                 FORMATETC formatetc = new FORMATETC();
                 STGMEDIUM medium = new STGMEDIUM();
 
@@ -1586,7 +1579,7 @@ namespace System.Windows.Forms
                 {
                     return ReadObjectFromHandleDeserializer(stream, restrictDeserialization);
                 }
-                
+
                 return stream;
             }
 
@@ -1607,7 +1600,6 @@ namespace System.Windows.Forms
             /// </summary>
             private string[] ReadFileListFromHandle(IntPtr hdrop)
             {
-
                 string[] files = null;
                 StringBuilder sb = new StringBuilder(Kernel32.MAX_PATH);
 
@@ -1874,7 +1866,6 @@ namespace System.Windows.Forms
             {
                 return GetFormats(true);
             }
-
         }
 
         //--------------------------------------------------------------------------
@@ -1922,7 +1913,6 @@ namespace System.Windows.Forms
                     && (dse == null || dse.autoConvert)
                     && (baseVar == null || baseVar is MemoryStream))
                 {
-
                     string[] mappedFormats = GetMappedFormats(format);
                     if (mappedFormats != null)
                     {
@@ -2022,11 +2012,10 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentNullException(nameof(data));
                 }
-    
+
                 if (data is ISerializable
                     && !this.data.ContainsKey(DataFormats.Serializable))
                 {
-
                     SetData(DataFormats.Serializable, data);
                 }
 
@@ -2096,7 +2085,6 @@ namespace System.Windows.Forms
                         Debug.Assert(data[baseVar[i]] != null, "Null item in data collection with key '" + baseVar[i] + "'");
                         if (((DataStoreEntry)data[baseVar[i]]).autoConvert)
                         {
-
                             string[] cur = GetMappedFormats(baseVar[i]);
                             Debug.Assert(cur != null, "GetMappedFormats returned null for '" + baseVar[i] + "'");
                             for (int j = 0; j < cur.Length; j++)

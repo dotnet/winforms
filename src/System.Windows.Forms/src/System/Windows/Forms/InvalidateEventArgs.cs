@@ -7,7 +7,7 @@ using System.Drawing;
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///  Provides data for the <see cref='Control.Invalidate'/> event.
+    ///  Provides data for the <see cref='Control.Invalidate()'/> event.
     /// </summary>
     public class InvalidateEventArgs : EventArgs
     {

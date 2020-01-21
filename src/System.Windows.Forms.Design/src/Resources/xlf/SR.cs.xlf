@@ -770,6 +770,11 @@
         <target state="new">Error at position {0}: {1}.</target>
         <note />
       </trans-unit>
+      <trans-unit id="MenuCommandService_DuplicateCommand">
+        <source>There is already a command handler for the menu command '{0}'.</source>
+        <target state="new">There is already a command handler for the menu command '{0}'.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="None">
         <source>(None)</source>
         <target state="translated">(Žádné)</target>

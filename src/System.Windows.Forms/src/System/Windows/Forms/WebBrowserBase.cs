@@ -21,7 +21,7 @@ namespace System.Windows.Forms
     ///  for ActiveX controls are blocked here (by setting Browsable attributes on some and
     ///  throwing exceptions from others), to make life easy for the inheritors.
     ///
-    ///  Inheritors of this class simply need to concentrate on defining & implementing the
+    ///  Inheritors of this class simply need to concentrate on defining and implementing the
     ///  properties/methods/events of the specific ActiveX control they are wrapping, the
     ///  default properties etc and the code to implement the activation etc. are
     ///  encapsulated in the class below.
@@ -235,7 +235,6 @@ namespace System.Windows.Forms
             // the focus would be changed to the next control on the form! We don't want
             // that
 
-
             // If the ActiveX control doesn't want to handle the key, it calls back into
             // WebBrowserSiteBase's IOleControlSite.TranslateAccelerator implementation. There, we
             // set a flag and call back into this method. In this method, we first check
@@ -340,7 +339,7 @@ namespace System.Windows.Forms
                         var msg = new User32.MSG
                         {
                             hwnd = IntPtr.Zero,
-                            message = User32.WindowMessage.WM_SYSKEYDOWN,
+                            message = User32.WM.SYSKEYDOWN,
                             wParam = (IntPtr)char.ToUpper(charCode, CultureInfo.CurrentCulture),
                             lParam = (IntPtr)0x20180001,
                             time = Kernel32.GetTickCount()
@@ -1361,7 +1360,6 @@ namespace System.Windows.Forms
                 }
                 axReloadingState = WebBrowserHelper.AXState.Passive;
             }
-
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never),

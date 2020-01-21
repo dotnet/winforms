@@ -16,7 +16,7 @@ using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ControlControlCollectionTests
+    public class ControlControlCollectionTests : IClassFixture<ThreadExceptionFixture>
     {
         public static IEnumerable<object[]> Ctor_Control_TestData()
         {
@@ -243,7 +243,7 @@ namespace System.Windows.Forms.Tests
                 .Setup(e => e.InitLayout(control, BoundsSpecified.All))
                 .Verifiable();
             control.SetLayoutEngine(mockLayoutEngine.Object);
-    
+
             try
             {
                 affectedProperty = "Parent";
@@ -256,7 +256,7 @@ namespace System.Windows.Forms.Tests
                 Assert.False(owner.IsHandleCreated);
                 Assert.False(control.IsHandleCreated);
                 mockLayoutEngine.Verify(e => e.InitLayout(control, BoundsSpecified.All), Times.Once());
-                
+
                 // Add existing.
                 affectedProperty = "ChildIndex";
                 collection.Add(control);
@@ -292,7 +292,7 @@ namespace System.Windows.Forms.Tests
             Assert.Same(owner, control1.Parent);
             Assert.Equal(1, control1.TabIndex);
             Assert.Equal(0, tabIndexChangedCallCount1);
-            
+
             // Add another.
             using var control2 = new SubControl();
             int tabIndexChangedCallCount2 = 0;
@@ -305,7 +305,7 @@ namespace System.Windows.Forms.Tests
             Assert.Same(owner, control2.Parent);
             Assert.Equal(2, control2.TabIndex);
             Assert.Equal(0, tabIndexChangedCallCount2);
-            
+
             // Add another.
             control1.TabIndex = 10;
             using var control3 = new SubControl();
@@ -561,7 +561,7 @@ namespace System.Windows.Forms.Tests
             control.BackColorChanged += (sender, e) => backColorChangedCallCount++;
             control.RightToLeftChanged += (sender, e) => rightToLeftChangedCallCount++;
             control.BindingContextChanged += (sender, e) => bindingContextChangedCallCount++;
-            
+
             collection.Add(control);
             Assert.Same(owner, control.Parent);
             Assert.Equal(1, parentChangedCallCount);
@@ -605,7 +605,7 @@ namespace System.Windows.Forms.Tests
             control.BackColorChanged += (sender, e) => backColorChangedCallCount++;
             control.RightToLeftChanged += (sender, e) => rightToLeftChangedCallCount++;
             control.BindingContextChanged += (sender, e) => bindingContextChangedCallCount++;
-            
+
             collection.Add(control);
             Assert.Same(owner, control.Parent);
             Assert.Equal(1, parentChangedCallCount);
@@ -642,7 +642,7 @@ namespace System.Windows.Forms.Tests
             using var owner = new Control();
             using var control = new Control();
             var collection = new Control.ControlCollection(owner);
-            
+
             owner.Enabled = false;
             Assert.True(control.Enabled);
             owner.Visible = false;
@@ -747,7 +747,7 @@ namespace System.Windows.Forms.Tests
                 rightToLeftChangedCallCount++;
             };
             control.BindingContextChanged += (sender, e) => bindingContextChangedCallCount++;
-            
+
             try
             {
                 collection.Add(control);
@@ -905,7 +905,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(backColorChangedCallCount - 1, bindingContextChangedCallCount);
                 bindingContextChangedCallCount++;
             };
-            
+
             try
             {
                 collection.Add(control);
@@ -981,7 +981,7 @@ namespace System.Windows.Forms.Tests
             ((Control)control).BackColorChanged += (sender, e) => backColorChangedCallCount++;
             ((Control)control).RightToLeftChanged += (sender, e) => rightToLeftChangedCallCount++;
             ((Control)control).BindingContextChanged += (sender, e) => bindingContextChangedCallCount++;
-            
+
             collection.Add(control);
             try
             {
@@ -1015,7 +1015,7 @@ namespace System.Windows.Forms.Tests
             using var owner = new Control();
             using var control = new SubAxHost("8856f961-340a-11d0-a96b-00c04fd705a2");
             var collection = new Control.ControlCollection(owner);
-            
+
             owner.Enabled = false;
             Assert.True(control.Enabled);
             owner.Visible = false;
@@ -1060,7 +1060,7 @@ namespace System.Windows.Forms.Tests
             ((Control)control).BackColorChanged += (sender, e) => backColorChangedCallCount++;
             ((Control)control).RightToLeftChanged += (sender, e) => rightToLeftChangedCallCount++;
             ((Control)control).BindingContextChanged += (sender, e) => bindingContextChangedCallCount++;
-            
+
             try
             {
                 collection.Add(control);
@@ -1090,7 +1090,7 @@ namespace System.Windows.Forms.Tests
                 control.ParentChanged -= parentChangedHandler;
             }
         }
-        
+
         private class SubAxHost : AxHost
         {
             public SubAxHost(string clsid) : base(clsid)
@@ -1131,7 +1131,7 @@ namespace System.Windows.Forms.Tests
             });
             thread.Start();
             thread.Join();
-            
+
             var control = new Control();
             var collection = new Control.ControlCollection(owner);
             Assert.Throws<ArgumentException>(null, () => collection.Add(control));
@@ -1148,7 +1148,7 @@ namespace System.Windows.Forms.Tests
             });
             thread.Start();
             thread.Join();
-            
+
             var owner = new Control();
             var collection = new Control.ControlCollection(owner);
             Assert.Throws<ArgumentException>(null, () => collection.Add(control));
@@ -1190,7 +1190,6 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<ArgumentException>(null, () => collection.Add(grandparent));
         }
 
-
         [WinFormsFact]
         public void ControlCollection_AddRange_Invoke_Success()
         {
@@ -1228,7 +1227,7 @@ namespace System.Windows.Forms.Tests
                 Assert.False(child1.IsHandleCreated);
                 Assert.False(child2.IsHandleCreated);
                 Assert.False(child3.IsHandleCreated);
-                
+
                 affectedControl = child1;
                 affectedProperty = "ChildIndex";
                 collection.AddRange(new Control[] { child1, child2, null, child3 });
@@ -1311,7 +1310,7 @@ namespace System.Windows.Forms.Tests
             Assert.False(child1.IsHandleCreated);
             Assert.False(child2.IsHandleCreated);
             Assert.False(child3.IsHandleCreated);
-            
+
             // Clear again.
             collection.Clear();
             Assert.Empty(collection);
@@ -1429,12 +1428,12 @@ namespace System.Windows.Forms.Tests
             collection.Add(child3);
 
             Assert.Equal(expected, collection.ContainsKey(key));
-            
+
             // Call again.
             Assert.Equal(expected, collection.ContainsKey(key));
             Assert.Equal(-1, collection.IndexOfKey("NoSuchKey"));
         }
-        
+
         [WinFormsTheory]
         [InlineData("name2")]
         [InlineData("NAME2")]
@@ -1481,7 +1480,7 @@ namespace System.Windows.Forms.Tests
 
             // Don't search all children.
             Assert.Equal(new Control[] { child2, child3 }, collection.Find(key, searchAllChildren: false));
-            
+
             // Call again..
             Assert.Equal(new Control[] { child2, child3 }, collection.Find(key, searchAllChildren: false));
         }
@@ -1602,11 +1601,11 @@ namespace System.Windows.Forms.Tests
 
                 Assert.False(enumerator.MoveNext());
                 Assert.Null(enumerator.Current);
-                
+
                 // Call again.
                 Assert.False(enumerator.MoveNext());
                 Assert.Null(enumerator.Current);
-            
+
                 enumerator.Reset();
             }
         }
@@ -1630,13 +1629,13 @@ namespace System.Windows.Forms.Tests
 
                 Assert.True(enumerator.MoveNext());
                 Assert.Same(child1, enumerator.Current);
-                
+
                 Assert.True(enumerator.MoveNext());
                 Assert.Same(child2, enumerator.Current);
-                
+
                 Assert.True(enumerator.MoveNext());
                 Assert.Same(child3, enumerator.Current);
-                
+
                 Assert.False(enumerator.MoveNext());
                 Assert.Same(child3, enumerator.Current);
 
@@ -1662,11 +1661,11 @@ namespace System.Windows.Forms.Tests
 
                 Assert.False(enumerator.MoveNext());
                 Assert.Null(enumerator.Current);
-                
+
                 // Call again.
                 Assert.False(enumerator.MoveNext());
                 Assert.Null(enumerator.Current);
-            
+
                 enumerator.Reset();
             }
         }
@@ -1690,7 +1689,7 @@ namespace System.Windows.Forms.Tests
 
             Assert.True(enumerator.MoveNext());
             Assert.Same(child2, enumerator.Current);
-            
+
             Assert.True(enumerator.MoveNext());
             Assert.Same(child3, enumerator.Current);
 
@@ -1719,13 +1718,13 @@ namespace System.Windows.Forms.Tests
 
             Assert.True(enumerator.MoveNext());
             Assert.Same(child1, enumerator.Current);
-            
+
             Assert.True(enumerator.MoveNext());
             Assert.Same(child2, enumerator.Current);
-            
+
             Assert.True(enumerator.MoveNext());
             Assert.Same(child3, enumerator.Current);
-            
+
             collection.Remove(child1);
             Assert.Throws<ArgumentOutOfRangeException>("index", () => enumerator.Current);
 
@@ -1787,7 +1786,7 @@ namespace System.Windows.Forms.Tests
             collection.Add(child3);
 
             Assert.Equal(expected, collection.IndexOfKey(key));
-            
+
             // Call again.
             Assert.Equal(expected, collection.IndexOfKey(key));
             Assert.Equal(-1, collection.IndexOfKey("NoSuchKey"));
@@ -1818,7 +1817,7 @@ namespace System.Windows.Forms.Tests
             collection.Add(child3);
 
             Assert.Equal(collection[expectedIndex], collection[key]);
-            
+
             // Call again.
             Assert.Equal(collection[expectedIndex], collection[key]);
             Assert.Null(collection["NoSuchKey"]);
@@ -1852,7 +1851,7 @@ namespace System.Windows.Forms.Tests
             collection.Add(child3);
 
             Assert.Null(collection[key]);
-            
+
             // Call again.
             Assert.Null(collection[key]);
             Assert.Null(collection["NoSuchKey"]);
@@ -1908,7 +1907,7 @@ namespace System.Windows.Forms.Tests
             var collection = new Control.ControlCollection(owner);
             collection.Add(child1);
             collection.Add(child2);
-            
+
             int layoutCallCount = 0;
             child1.Layout += (sender, e) => layoutCallCount++;
             int parentLayoutCallCount = 0;
@@ -1931,7 +1930,7 @@ namespace System.Windows.Forms.Tests
                 Assert.False(owner.IsHandleCreated);
                 Assert.False(child1.IsHandleCreated);
                 Assert.False(child2.IsHandleCreated);
-                
+
                 // Remove again.
                 collection.Remove(child1);
                 Assert.Equal(new Control[] { child2 }, collection.Cast<Control>());
@@ -1969,7 +1968,7 @@ namespace System.Windows.Forms.Tests
             collection.Add(child2);
             owner.ActiveControl = child1;
             Assert.Same(child1, owner.ActiveControl);
-            
+
             int layoutCallCount = 0;
             child1.Layout += (sender, e) => layoutCallCount++;
             int parentLayoutCallCount = 0;
@@ -1993,7 +1992,7 @@ namespace System.Windows.Forms.Tests
                 Assert.False(owner.IsHandleCreated);
                 Assert.False(child1.IsHandleCreated);
                 Assert.False(child2.IsHandleCreated);
-                
+
                 // Remove again.
                 collection.Remove(child1);
                 Assert.Equal(new Control[] { child2 }, collection.Cast<Control>());
@@ -2004,7 +2003,7 @@ namespace System.Windows.Forms.Tests
                 Assert.False(owner.IsHandleCreated);
                 Assert.False(child1.IsHandleCreated);
                 Assert.False(child2.IsHandleCreated);
-                
+
                 // Remove null.
                 collection.Remove(null);
                 Assert.Equal(new Control[] { child2 }, collection.Cast<Control>());
@@ -2031,7 +2030,7 @@ namespace System.Windows.Forms.Tests
             Control.ControlCollection collection = owner.Controls;
             collection.Add(child1);
             collection.Add(child2);
-            
+
             int layoutCallCount = 0;
             child1.Layout += (sender, e) => layoutCallCount++;
             int parentLayoutCallCount = 0;
@@ -2064,7 +2063,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(0, styleChangedCallCount);
                 Assert.Equal(0, createdCallCount);
                 Assert.False(child2.IsHandleCreated);
-                
+
                 // Remove again.
                 collection.Remove(child1);
                 Assert.Equal(new Control[] { child2 }, collection.Cast<Control>());
@@ -2077,7 +2076,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(0, styleChangedCallCount);
                 Assert.Equal(0, createdCallCount);
                 Assert.False(child2.IsHandleCreated);
-                
+
                 // Remove null.
                 collection.Remove(null);
                 Assert.Equal(new Control[] { child2 }, collection.Cast<Control>());
@@ -2106,7 +2105,7 @@ namespace System.Windows.Forms.Tests
             Control.ControlCollection collection = owner.Controls;
             collection.Add(child1);
             collection.Add(child2);
-            
+
             int layoutCallCount = 0;
             child1.Layout += (sender, e) => layoutCallCount++;
             int parentLayoutCallCount = 0;
@@ -2148,7 +2147,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(0, styleChangedCallCount);
                 Assert.Equal(0, createdCallCount);
                 Assert.True(child2.IsHandleCreated);
-                
+
                 // Remove again.
                 collection.Remove(child1);
                 Assert.Equal(new Control[] { child2 }, collection.Cast<Control>());
@@ -2164,7 +2163,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(0, styleChangedCallCount);
                 Assert.Equal(0, createdCallCount);
                 Assert.True(child2.IsHandleCreated);
-                
+
                 // Remove null.
                 collection.Remove(null);
                 Assert.Equal(new Control[] { child2 }, collection.Cast<Control>());
@@ -2199,14 +2198,14 @@ namespace System.Windows.Forms.Tests
             var collection2 = new Control.ControlCollection(owner2);
             collection1.Add(control1);
             collection2.Add(control2);
-            
+
             // Remove with parent.
             collection1.Remove(control2);
             Assert.Equal(new Control[] { control1 }, collection1.Cast<Control>());
             Assert.Equal(new Control[] { control2 }, collection2.Cast<Control>());
             Assert.Same(owner1, control1.Parent);
             Assert.Same(owner2, control2.Parent);
-            
+
             // Remove without parent.
             collection1.Remove(control3);
             Assert.Equal(new Control[] { control1 }, collection1.Cast<Control>());
@@ -2239,7 +2238,7 @@ namespace System.Windows.Forms.Tests
             control.BackColorChanged += (sender, e) => backColorChangedCallCount++;
             control.RightToLeftChanged += (sender, e) => rightToLeftChangedCallCount++;
             control.BindingContextChanged += (sender, e) => bindingContextChangedCallCount++;
-            
+
             collection.Remove(control);
             Assert.Null(control.Parent);
             Assert.Equal(1, parentChangedCallCount);
@@ -2284,7 +2283,7 @@ namespace System.Windows.Forms.Tests
             control.BackColorChanged += (sender, e) => backColorChangedCallCount++;
             control.RightToLeftChanged += (sender, e) => rightToLeftChangedCallCount++;
             control.BindingContextChanged += (sender, e) => bindingContextChangedCallCount++;
-            
+
             collection.Remove(control);
             Assert.Null(control.Parent);
             Assert.Equal(1, parentChangedCallCount);
@@ -2322,7 +2321,7 @@ namespace System.Windows.Forms.Tests
             using var control = new Control();
             var collection = new Control.ControlCollection(owner);
             collection.Add(control);
-            
+
             owner.Enabled = false;
             Assert.False(control.Enabled);
             owner.Visible = false;
@@ -2426,7 +2425,7 @@ namespace System.Windows.Forms.Tests
                 rightToLeftChangedCallCount++;
             };
             control.BindingContextChanged += (sender, e) => bindingContextChangedCallCount++;
-            
+
             collection.Remove(control);
             Assert.Null(control.Parent);
             Assert.Equal(1, parentChangedCallCount);
@@ -2464,7 +2463,7 @@ namespace System.Windows.Forms.Tests
             using var control = new Control();
             var collection = new Control.ControlCollection(owner);
             collection.Add(control);
-            
+
             owner.Enabled = false;
             Assert.False(control.Enabled);
             owner.Visible = false;
@@ -2554,7 +2553,7 @@ namespace System.Windows.Forms.Tests
                 rightToLeftChangedCallCount++;
             };
             control.BindingContextChanged += (sender, e) => bindingContextChangedCallCount++;
-            
+
             try
             {
                 collection.Remove(control);
@@ -2593,7 +2592,7 @@ namespace System.Windows.Forms.Tests
             using var control = new SubAxHost("8856f961-340a-11d0-a96b-00c04fd705a2");
             var collection = new Control.ControlCollection(owner);
             collection.Add(control);
-            
+
             owner.Enabled = false;
             Assert.False(control.Enabled);
             owner.Visible = false;
@@ -2627,7 +2626,7 @@ namespace System.Windows.Forms.Tests
             ((Control)control).BackColorChanged += (sender, e) => backColorChangedCallCount++;
             ((Control)control).RightToLeftChanged += (sender, e) => rightToLeftChangedCallCount++;
             ((Control)control).BindingContextChanged += (sender, e) => bindingContextChangedCallCount++;
-            
+
             collection.Remove(control);
             Assert.Null(control.Parent);
             Assert.Equal(1, parentChangedCallCount);
@@ -2655,7 +2654,7 @@ namespace System.Windows.Forms.Tests
             using var control = new SubAxHost("8856f961-340a-11d0-a96b-00c04fd705a2");
             var collection = new Control.ControlCollection(owner);
             collection.Add(control);
-            
+
             owner.Enabled = false;
             Assert.False(control.Enabled);
             owner.Visible = false;
@@ -2700,7 +2699,7 @@ namespace System.Windows.Forms.Tests
             ((Control)control).BackColorChanged += (sender, e) => backColorChangedCallCount++;
             ((Control)control).RightToLeftChanged += (sender, e) => rightToLeftChangedCallCount++;
             ((Control)control).BindingContextChanged += (sender, e) => bindingContextChangedCallCount++;
-            
+
             try
             {
                 collection.Remove(control);
@@ -2823,7 +2822,7 @@ namespace System.Windows.Forms.Tests
             var collection = new Control.ControlCollection(owner);
             collection.Add(child1);
             collection.Add(child2);
-            
+
             int layoutCallCount = 0;
             child1.Layout += (sender, e) => layoutCallCount++;
             int parentLayoutCallCount = 0;
@@ -2848,7 +2847,7 @@ namespace System.Windows.Forms.Tests
                 Assert.False(owner.IsHandleCreated);
                 Assert.False(child1.IsHandleCreated);
                 Assert.False(child2.IsHandleCreated);
-                
+
                 // Remove again.
                 affectedControl = child1;
                 collection.RemoveAt(0);
@@ -2912,7 +2911,7 @@ namespace System.Windows.Forms.Tests
             collection.Add(child1);
             collection.Add(child2);
             collection.Add(child3);
-            
+
             int layoutCallCount = 0;
             child2.Layout += (sender, e) => layoutCallCount++;
             int parentLayoutCallCount = 0;
@@ -2939,7 +2938,7 @@ namespace System.Windows.Forms.Tests
                 Assert.False(child1.IsHandleCreated);
                 Assert.False(child2.IsHandleCreated);
                 Assert.False(child3.IsHandleCreated);
-                
+
                 // Remove again.
                 affectedControl = child3;
                 collection.RemoveByKey(key);
@@ -2988,7 +2987,7 @@ namespace System.Windows.Forms.Tests
 
             collection.RemoveByKey(key);
             Assert.Equal(new Control[] { child1, child2, child3 }, collection.Cast<Control>());
-            
+
             // Call again.
             collection.RemoveByKey(key);
             Assert.Equal(new Control[] { child1, child2, child3 }, collection.Cast<Control>());
@@ -3005,7 +3004,7 @@ namespace System.Windows.Forms.Tests
             collection.Add(child1);
             collection.Add(child2);
             collection.Add(child3);
-            
+
             int layoutCallCount = 0;
             child1.Layout += (sender, e) => layoutCallCount++;
             int parentLayoutCallCount = 0;
@@ -3017,7 +3016,7 @@ namespace System.Windows.Forms.Tests
                 parentLayoutCallCount++;
             }
             owner.Layout += parentHandler;
-        
+
             try
             {
                 // Set middle.
@@ -3029,7 +3028,7 @@ namespace System.Windows.Forms.Tests
                 Assert.False(child1.IsHandleCreated);
                 Assert.False(child2.IsHandleCreated);
                 Assert.False(child3.IsHandleCreated);
-                
+
                 // Set same.
                 collection.SetChildIndex(child1, 1);
                 Assert.Equal(new Control[] { child2, child1, child3 }, collection.Cast<Control>());
@@ -3039,7 +3038,7 @@ namespace System.Windows.Forms.Tests
                 Assert.False(child1.IsHandleCreated);
                 Assert.False(child2.IsHandleCreated);
                 Assert.False(child3.IsHandleCreated);
-                
+
                 // Set start.
                 collection.SetChildIndex(child1, 0);
                 Assert.Equal(new Control[] { child1, child2, child3 }, collection.Cast<Control>());
@@ -3070,7 +3069,7 @@ namespace System.Windows.Forms.Tests
             collection.Add(child1);
             collection.Add(child2);
             collection.Add(child3);
-            
+
             int layoutCallCount = 0;
             child1.Layout += (sender, e) => layoutCallCount++;
             int parentLayoutCallCount = 0;
@@ -3094,7 +3093,7 @@ namespace System.Windows.Forms.Tests
                 Assert.False(child1.IsHandleCreated);
                 Assert.False(child2.IsHandleCreated);
                 Assert.False(child3.IsHandleCreated);
-                
+
                 // Set same.
                 collection.SetChildIndex(child1, index);
                 Assert.Equal(new Control[] { child2, child3, child1 }, collection.Cast<Control>());
@@ -3122,7 +3121,7 @@ namespace System.Windows.Forms.Tests
             collection.Add(child1);
             collection.Add(child2);
             collection.Add(child3);
-            
+
             int layoutCallCount = 0;
             child1.Layout += (sender, e) => layoutCallCount++;
             int parentLayoutCallCount = 0;
@@ -3156,7 +3155,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(0, createdCallCount);
                 Assert.False(child2.IsHandleCreated);
                 Assert.False(child3.IsHandleCreated);
-                
+
                 // Set same.
                 collection.SetChildIndex(child1, 1);
                 Assert.Equal(new Control[] { child2, child1, child3 }, collection.Cast<Control>());
@@ -3169,7 +3168,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(0, createdCallCount);
                 Assert.False(child2.IsHandleCreated);
                 Assert.False(child3.IsHandleCreated);
-                
+
                 // Set start.
                 collection.SetChildIndex(child1, 0);
                 Assert.Equal(new Control[] { child1, child2, child3 }, collection.Cast<Control>());
@@ -3200,7 +3199,7 @@ namespace System.Windows.Forms.Tests
             collection.Add(child1);
             collection.Add(child2);
             collection.Add(child3);
-            
+
             int layoutCallCount = 0;
             child1.Layout += (sender, e) => layoutCallCount++;
             int parentLayoutCallCount = 0;
@@ -3243,7 +3242,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(0, createdCallCount);
                 Assert.True(child2.IsHandleCreated);
                 Assert.True(child3.IsHandleCreated);
-                
+
                 // Set same.
                 collection.SetChildIndex(child1, 1);
                 Assert.Equal(new Control[] { child2, child1, child3 }, collection.Cast<Control>());
@@ -3259,7 +3258,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(0, createdCallCount);
                 Assert.True(child2.IsHandleCreated);
                 Assert.True(child3.IsHandleCreated);
-                
+
                 // Set start.
                 collection.SetChildIndex(child1, 0);
                 Assert.Equal(new Control[] { child1, child2, child3 }, collection.Cast<Control>());
@@ -3277,7 +3276,7 @@ namespace System.Windows.Forms.Tests
                 Assert.True(child3.IsHandleCreated);
             }
             finally
-            {    
+            {
                 owner.Layout -= parentHandler;
             }
         }
@@ -3293,7 +3292,7 @@ namespace System.Windows.Forms.Tests
             collection.Add(child1);
             collection.Add(child2);
             collection.Add(child3);
-            
+
             int layoutCallCount = 0;
             child1.Layout += (sender, e) => layoutCallCount++;
             int parentLayoutCallCount = 0;
@@ -3328,7 +3327,7 @@ namespace System.Windows.Forms.Tests
                 Assert.False(child1.IsHandleCreated);
                 Assert.True(child2.IsHandleCreated);
                 Assert.True(child3.IsHandleCreated);
-                
+
                 // Set same.
                 collection.SetChildIndex(child1, 1);
                 Assert.Equal(new Control[] { child2, child1, child3 }, collection.Cast<Control>());
@@ -3341,7 +3340,7 @@ namespace System.Windows.Forms.Tests
                 Assert.False(child1.IsHandleCreated);
                 Assert.True(child2.IsHandleCreated);
                 Assert.True(child3.IsHandleCreated);
-                
+
                 // Set start.
                 collection.SetChildIndex(child1, 0);
                 Assert.Equal(new Control[] { child1, child2, child3 }, collection.Cast<Control>());
@@ -3451,7 +3450,7 @@ namespace System.Windows.Forms.Tests
                 owner.Layout -= parentHandler;
             }
         }
-        
+
         [WinFormsFact]
         public void ControlCollection_IListAdd_NotControl_ThrowsArgumentException()
         {
@@ -3470,7 +3469,7 @@ namespace System.Windows.Forms.Tests
             IList collection = new Control.ControlCollection(owner);
             collection.Add(child1);
             collection.Add(child2);
-            
+
             int layoutCallCount = 0;
             child1.Layout += (sender, e) => layoutCallCount++;
             int parentLayoutCallCount = 0;
@@ -3493,7 +3492,7 @@ namespace System.Windows.Forms.Tests
                 Assert.False(owner.IsHandleCreated);
                 Assert.False(child1.IsHandleCreated);
                 Assert.False(child2.IsHandleCreated);
-                
+
                 // Remove again.
                 collection.Remove(child1);
                 Assert.Equal(new Control[] { child2 }, collection.Cast<Control>());
@@ -3519,7 +3518,7 @@ namespace System.Windows.Forms.Tests
                 owner.Layout -= parentHandler;
             }
         }
-        
+
         [WinFormsFact]
         public void ControlCollection_IListRemove_NotControl_ThrowsArgumentException()
         {
@@ -3528,7 +3527,7 @@ namespace System.Windows.Forms.Tests
             collection.Remove(new object());
             collection.Remove(null);
         }
-        
+
         private class CustomLayoutEngineControl : Control
         {
             private LayoutEngine _layoutEngine;

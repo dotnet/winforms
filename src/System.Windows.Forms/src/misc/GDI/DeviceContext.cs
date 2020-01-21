@@ -47,7 +47,7 @@ namespace System.Windows.Forms.Internal
         ///  be able to keep the GDI+ and GDI HDCs in sync.
         ///
         ///  A few other persisting properties have been implemented in DeviceContext2, among them:
-        ///  
+        ///
         ///   1. Window origin.
         ///   2. Bounding rectangle.
         ///   3. DC origin.
@@ -334,10 +334,10 @@ namespace System.Windows.Forms.Internal
             return _hDC;
         }
 
-        ///<summary>
+        /// <summary>
         ///  If the object was created from a DC, this object doesn't 'own' the dc so we just ignore
         ///  this call.
-        ///</summary>
+        /// </summary>
         void IDeviceContext.ReleaseHdc()
         {
             if (_hDC != IntPtr.Zero && DeviceContextType == DeviceContextType.Display)
@@ -461,10 +461,10 @@ namespace System.Windows.Forms.Internal
             Gdi32.SelectClipRgn(hdc, hRegion);
         }
 
-        ///<summary>
+        /// <summary>
         ///  Creates a new clipping region from the intersection of the current clipping region and
         ///  the specified rectangle.
-        ///</summary>
+        /// </summary>
         public void IntersectClip(WindowsRegion wr)
         {
             //if the incoming windowsregion is infinite, there is no need to do any intersecting.

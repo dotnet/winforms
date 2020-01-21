@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing.Design;
 using System.Runtime.InteropServices;
+using static Interop;
 using static Interop.ComCtl32;
 
 namespace System.Windows.Forms
@@ -111,7 +112,6 @@ namespace System.Windows.Forms
 
             set
             {
-
                 // When the list is being deserialized we need
                 // to take the display index as is. ListView
                 // does correctly synchronize the indices.
@@ -136,7 +136,6 @@ namespace System.Windows.Forms
                 ColumnHeader movedHdr = null;
                 for (int i = 0; i < listview.Columns.Count; i++)
                 {
-
                     ColumnHeader hdr = listview.Columns[i];
                     if (hdr.DisplayIndex == DisplayIndexInternal)
                     {
@@ -302,7 +301,6 @@ namespace System.Windows.Forms
                     Site.Name = value;
                 }
             }
-
         }
 
         /// <summary>
@@ -333,7 +331,6 @@ namespace System.Windows.Forms
                     listview.SetColumnInfo(LVCF.TEXT, this);
                 }
             }
-
         }
 
         /// <summary>
@@ -429,16 +426,14 @@ namespace System.Windows.Forms
                 // The underlying control will only report the correct width if it's in Report view
                 if (listview != null && listview.IsHandleCreated && !listview.Disposing && listview.View == View.Details)
                 {
-
                     // Make sure this column has already been added to the ListView, else just return width
-                    //
-                    IntPtr hwndHdr = UnsafeNativeMethods.SendMessage(new HandleRef(listview, listview.Handle), (int)LVM.GETHEADER, 0, 0);
+                    IntPtr hwndHdr = User32.SendMessageW(listview, (User32.WM)LVM.GETHEADER);
                     if (hwndHdr != IntPtr.Zero)
                     {
-                        int nativeColumnCount = (int)UnsafeNativeMethods.SendMessage(new HandleRef(listview, hwndHdr), NativeMethods.HDM_GETITEMCOUNT, 0, 0);
+                        int nativeColumnCount = (int)User32.SendMessageW(hwndHdr, (User32.WM)HDM.GETITEMCOUNT);
                         if (Index < nativeColumnCount)
                         {
-                            width = (int)UnsafeNativeMethods.SendMessage(new HandleRef(listview, listview.Handle), (int)LVM.GETCOLUMNWIDTH, Index, 0);
+                            width = (int)User32.SendMessageW(listview, (User32.WM)LVM.GETCOLUMNWIDTH, (IntPtr)Index);
                         }
                     }
                 }

@@ -13,7 +13,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class OpacityConverterTests
+    public class OpacityConverterTests : IClassFixture<ThreadExceptionFixture>
     {
         public static TheoryData<Type, bool> CanConvertFromData =>
             CommonTestHelper.GetConvertFromTheoryData();

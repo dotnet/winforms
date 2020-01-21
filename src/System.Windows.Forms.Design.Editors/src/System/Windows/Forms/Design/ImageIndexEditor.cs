@@ -68,7 +68,6 @@ namespace System.Windows.Forms.Design
                     instance != currentInstance ||
                     (currentImageListProp != null && (ImageList)currentImageListProp.GetValue(currentInstance) != currentImageList))
                 {
-
                     currentInstance = instance;
                     // first look for an attribute
                     PropertyDescriptor imageListProp = GetImageListProperty(context.PropertyDescriptor, ref instance);
@@ -89,8 +88,7 @@ namespace System.Windows.Forms.Design
 
                         if (imageListProp == null)
                         {
-
-                            // We didn't find the image list in this component.  See if the 
+                            // We didn't find the image list in this component.  See if the
                             // component has a "parent" property.  If so, walk the tree...
                             PropertyDescriptor parentProp = props[ParentImageListProperty];
                             if (parentProp != null)
@@ -139,7 +137,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Gets a value indicating whether this editor supports the painting of a representation of an object's value.</para>
+        /// Gets a value indicating whether this editor supports the painting of a representation of an object's value.
         /// </summary>
         public override bool GetPaintValueSupported(ITypeDescriptorContext context)
             => imageEditor != null ? imageEditor.GetPaintValueSupported(context) : false;

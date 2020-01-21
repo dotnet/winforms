@@ -159,7 +159,6 @@ namespace System.Windows.Forms.Design
                     _dropDownCollection = new ArrayList();
                 }
             }
-
         }
 
         /// <summary>
@@ -228,13 +227,12 @@ namespace System.Windows.Forms.Design
                     {
                         _designerFrame = null;
                     }
-
                 }
                 base.Dispose(disposing);
             }
 
             /// <summary>
-            ///  Returns true if the DesignerFrame is created & not being disposed.
+            ///  Returns true if the DesignerFrame is created and not being disposed.
             /// </summary>
             private bool DesignerFrameValid
             {

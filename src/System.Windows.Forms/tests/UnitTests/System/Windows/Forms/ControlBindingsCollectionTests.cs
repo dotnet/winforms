@@ -10,7 +10,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ControlBindingsCollectionTests
+    public class ControlBindingsCollectionTests : IClassFixture<ThreadExceptionFixture>
     {
         public static IEnumerable<object[]> Ctor_IBindableComponent_TestData()
         {

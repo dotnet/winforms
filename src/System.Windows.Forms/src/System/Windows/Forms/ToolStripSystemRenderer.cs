@@ -63,7 +63,6 @@ namespace System.Windows.Forms
                 }
                 return renderer;
             }
-
         }
 
         /// <summary>
@@ -247,7 +246,6 @@ namespace System.Windows.Forms
                                                e.BackColor : SystemColors.MenuBar);
                 }
             }
-
         }
 
         /// <summary>
@@ -305,7 +303,6 @@ namespace System.Windows.Forms
 
             if (ToolStripManager.VisualStylesEnabled && VisualStyleRenderer.IsElementDefined(VisualStyleElement.Rebar.Gripper.Normal))
             {
-
                 VisualStyleRenderer vsRenderer = VisualStyleRenderer;
 
                 if (verticalGrip)
@@ -345,7 +342,6 @@ namespace System.Windows.Forms
                 }
 
                 RenderSmall3DBorderInternal(g, bounds, ToolBarState.Hot, (e.ToolStrip.RightToLeft == RightToLeft.Yes));
-
             }
         }
 
@@ -487,9 +483,7 @@ namespace System.Windows.Forms
                         }
                     }
                 }
-
             }
-
         }
 
         /// <summary>
@@ -529,7 +523,6 @@ namespace System.Windows.Forms
                 && VisualStyleRenderer.IsElementDefined(splitButtonDropDownPart)
                 && VisualStyleRenderer.IsElementDefined(splitButtonPart))
             {
-
                 VisualStyleRenderer vsRenderer = VisualStyleRenderer;
 
                 // Draw the SplitButton Button portion of it.
@@ -575,7 +568,6 @@ namespace System.Windows.Forms
             }
             else
             {
-
                 // Draw the split button button
                 Rectangle splitButtonButtonRect = splitButton.ButtonBounds;
 
@@ -614,9 +606,7 @@ namespace System.Windows.Forms
                 }
 
                 DrawArrow(new ToolStripArrowRenderEventArgs(g, splitButton, dropDownRect, arrowColor, ArrowDirection.Down));
-
             }
-
         }
 
         /// <summary>
@@ -639,7 +629,6 @@ namespace System.Windows.Forms
             if (ToolStripManager.VisualStylesEnabled
                 && (VisualStyleRenderer.IsElementDefined(toolBarElement)))
             {
-
                 VisualStyleRenderer vsRenderer = VisualStyleRenderer;
                 vsRenderer.SetParameters(toolBarElement.ClassName, toolBarElement.Part, (int)state);
                 vsRenderer.DrawBackground(g, new Rectangle(Point.Empty, item.Size));
@@ -663,7 +652,6 @@ namespace System.Windows.Forms
                     FillBackground(g, fillRect, item.BackColor);
                 }
             }
-
         }
 
         /// <summary>
@@ -682,7 +670,6 @@ namespace System.Windows.Forms
             }
             else
             {
-
                 Color foreColor = item.ForeColor;
                 Color backColor = item.BackColor;
 
@@ -709,7 +696,6 @@ namespace System.Windows.Forms
                         // Draw highlight one pixel to the right
                         startX++;
                         g.DrawLine(rightPen, startX, bounds.Top, startX, bounds.Bottom);
-
                     }
                     else
                     {
@@ -728,7 +714,6 @@ namespace System.Windows.Forms
                         startY++;
                         g.DrawLine(SystemPens.ButtonHighlight, bounds.Left, startY, bounds.Right, startY);
                     }
-
                 }
                 finally
                 {
@@ -755,7 +740,6 @@ namespace System.Windows.Forms
                 g.DrawLine(leftPen, bounds.Left, bounds.Top, bounds.Left, bounds.Bottom - 1);
                 g.DrawLine(rightPen, bounds.Right - 1, bounds.Top, bounds.Right - 1, bounds.Bottom - 1);
                 g.DrawLine(bottomPen, bounds.Left, bounds.Bottom - 1, bounds.Right - 1, bounds.Bottom - 1);
-
             }
         }
 

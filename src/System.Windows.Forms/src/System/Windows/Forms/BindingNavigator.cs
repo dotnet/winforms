@@ -297,7 +297,6 @@ namespace System.Windows.Forms
         {
             get
             {
-
                 if (movePreviousItem != null && movePreviousItem.IsDisposed)
                 {
                     movePreviousItem = null;
@@ -419,7 +418,6 @@ namespace System.Windows.Forms
                     deleteItemUserEnabled = value.Enabled;
                 }
                 WireUpButton(ref deleteItem, value, new EventHandler(OnDelete));
-
             }
         }
 
@@ -601,7 +599,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Called when the state of the tool strip items needs to be refreshed to reflect the current state of the data.
-        ///  Calls <see cref='RefreshItemsCore'> to refresh the state of the standard items, then raises the RefreshItems event.
+        ///  Calls <see cref='RefreshItemsCore'/> to refresh the state of the standard items, then raises the RefreshItems event.
         /// </summary>
         protected virtual void OnRefreshItems()
         {
@@ -938,7 +936,5 @@ namespace System.Windows.Forms
                 RefreshItemsInternal();
             }
         }
-
     }
-
 }

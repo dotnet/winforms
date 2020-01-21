@@ -11,7 +11,7 @@ using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
-    public class DataFormatsTests
+    public class DataFormatsTests : IClassFixture<ThreadExceptionFixture>
     {
         public static IEnumerable<object[]> KnownFormats_TestData()
         {

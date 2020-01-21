@@ -27,10 +27,6 @@ namespace System.Windows.Forms.Design
         // can implement a different list of supported image types.
         protected override Type[] GetImageExtenders() => s_imageExtenders;
 
-        /// <summary>
-        ///  Edits the given object value using the editor style provided by <see cref="GetEditorStyle"/>.
-        ///  A service provider is provided so that any required editing services can be obtained.
-        /// </summary>
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
             if (provider == null)
@@ -116,7 +112,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  Paints a representative value of the given object to the provided canvas. 
+        ///  Paints a representative value of the given object to the provided canvas.
         ///  Painting should be done within the boundaries of the provided rectangle.
         /// </summary>
         public override void PaintValue(PaintValueEventArgs e)

@@ -109,7 +109,6 @@ namespace System.Windows.Forms
                 {
                     return null;
                 }
-
             }
         }
         // Make this property available to Intellisense. (Removed the EditorBrowsable attribute.)
@@ -663,7 +662,7 @@ namespace System.Windows.Forms
 
         public IEnumerator GetEnumerator()
         {
-            return new WindowsFormsUtils.ArraySubsetEnumerator(owner.children, owner.childCount);
+            return new ArraySubsetEnumerator(owner.children, owner.childCount);
         }
     }
 }

@@ -9,7 +9,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class LinkAreaTests
+    public class LinkAreaTests : IClassFixture<ThreadExceptionFixture>
     {
         [Fact]
         public void LinkArea_Ctor_Default()

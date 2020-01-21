@@ -12,7 +12,7 @@ internal static partial class Interop
         [DllImport(Libraries.User32, ExactSpelling = true)]
         public static extern IntPtr DefWindowProcW(
             IntPtr hWnd,
-            WindowMessage msg,
+            WM msg,
             IntPtr wParam,
             IntPtr lParam);
     }

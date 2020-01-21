@@ -97,7 +97,7 @@ namespace System.Windows.Forms
                         systemIAccessible.accLocation(out int left, out int top, out int width, out int height, NativeMethods.CHILDID_SELF);
                         return new Rectangle(left, top, width, height);
                     }
-                    catch (COMException e) when (e.ErrorCode == NativeMethods.DISP_E_MEMBERNOTFOUND)
+                    catch (COMException e) when (e.ErrorCode == (int)HRESULT.DISP_E_MEMBERNOTFOUND)
                     {
                     }
                 }
@@ -119,7 +119,7 @@ namespace System.Windows.Forms
                     {
                         return systemIAccessible.get_accDefaultAction(NativeMethods.CHILDID_SELF);
                     }
-                    catch (COMException e) when (e.ErrorCode == NativeMethods.DISP_E_MEMBERNOTFOUND)
+                    catch (COMException e) when (e.ErrorCode == (int)HRESULT.DISP_E_MEMBERNOTFOUND)
                     {
                         // Not all objects provide a default action.
                     }
@@ -142,7 +142,7 @@ namespace System.Windows.Forms
                     {
                         return systemIAccessible.get_accDescription(NativeMethods.CHILDID_SELF);
                     }
-                    catch (COMException e) when (e.ErrorCode == NativeMethods.DISP_E_MEMBERNOTFOUND)
+                    catch (COMException e) when (e.ErrorCode == (int)HRESULT.DISP_E_MEMBERNOTFOUND)
                     {
                     }
                 }
@@ -169,7 +169,7 @@ namespace System.Windows.Forms
                     {
                         return systemIAccessible.get_accHelp(NativeMethods.CHILDID_SELF);
                     }
-                    catch (COMException e) when (e.ErrorCode == NativeMethods.DISP_E_MEMBERNOTFOUND)
+                    catch (COMException e) when (e.ErrorCode == (int)HRESULT.DISP_E_MEMBERNOTFOUND)
                     {
                     }
                 }
@@ -191,7 +191,7 @@ namespace System.Windows.Forms
                     {
                         return systemIAccessible.get_accKeyboardShortcut(NativeMethods.CHILDID_SELF);
                     }
-                    catch (COMException e) when (e.ErrorCode == NativeMethods.DISP_E_MEMBERNOTFOUND)
+                    catch (COMException e) when (e.ErrorCode == (int)HRESULT.DISP_E_MEMBERNOTFOUND)
                     {
                     }
                 }
@@ -214,7 +214,7 @@ namespace System.Windows.Forms
                     {
                         return systemIAccessible.get_accName(NativeMethods.CHILDID_SELF);
                     }
-                    catch (COMException e) when (e.ErrorCode == NativeMethods.DISP_E_MEMBERNOTFOUND)
+                    catch (COMException e) when (e.ErrorCode == (int)HRESULT.DISP_E_MEMBERNOTFOUND)
                     {
                     }
                 }
@@ -232,7 +232,7 @@ namespace System.Windows.Forms
                 {
                     systemIAccessible.set_accName(NativeMethods.CHILDID_SELF, value);
                 }
-                catch (COMException e) when (e.ErrorCode == NativeMethods.DISP_E_MEMBERNOTFOUND)
+                catch (COMException e) when (e.ErrorCode == (int)HRESULT.DISP_E_MEMBERNOTFOUND)
                 {
                 }
             }
@@ -307,7 +307,7 @@ namespace System.Windows.Forms
                     {
                         return systemIAccessible.get_accValue(NativeMethods.CHILDID_SELF);
                     }
-                    catch (COMException e) when (e.ErrorCode == NativeMethods.DISP_E_MEMBERNOTFOUND)
+                    catch (COMException e) when (e.ErrorCode == (int)HRESULT.DISP_E_MEMBERNOTFOUND)
                     {
                     }
                 }
@@ -325,7 +325,7 @@ namespace System.Windows.Forms
                 {
                     systemIAccessible.set_accValue(NativeMethods.CHILDID_SELF, value);
                 }
-                catch (COMException e) when (e.ErrorCode == NativeMethods.DISP_E_MEMBERNOTFOUND)
+                catch (COMException e) when (e.ErrorCode == (int)HRESULT.DISP_E_MEMBERNOTFOUND)
                 {
                 }
             }
@@ -409,7 +409,7 @@ namespace System.Windows.Forms
                 {
                     return WrapIAccessible(systemIAccessible.accFocus);
                 }
-                catch (COMException e) when (e.ErrorCode == NativeMethods.DISP_E_MEMBERNOTFOUND)
+                catch (COMException e) when (e.ErrorCode == (int)HRESULT.DISP_E_MEMBERNOTFOUND)
                 {
                 }
             }
@@ -429,7 +429,7 @@ namespace System.Windows.Forms
                 {
                     return systemIAccessible.get_accHelpTopic(out fileName, NativeMethods.CHILDID_SELF);
                 }
-                catch (COMException e) when (e.ErrorCode == NativeMethods.DISP_E_MEMBERNOTFOUND)
+                catch (COMException e) when (e.ErrorCode == (int)HRESULT.DISP_E_MEMBERNOTFOUND)
                 {
                 }
             }
@@ -471,7 +471,7 @@ namespace System.Windows.Forms
                 {
                     return WrapIAccessible(systemIAccessible.accSelection);
                 }
-                catch (COMException e) when (e.ErrorCode == NativeMethods.DISP_E_MEMBERNOTFOUND)
+                catch (COMException e) when (e.ErrorCode == (int)HRESULT.DISP_E_MEMBERNOTFOUND)
                 {
                 }
             }
@@ -507,7 +507,7 @@ namespace System.Windows.Forms
                 {
                     return WrapIAccessible(systemIAccessible.accHitTest(x, y));
                 }
-                catch (COMException e) when (e.ErrorCode == NativeMethods.DISP_E_MEMBERNOTFOUND)
+                catch (COMException e) when (e.ErrorCode == (int)HRESULT.DISP_E_MEMBERNOTFOUND)
                 {
                 }
             }
@@ -933,7 +933,7 @@ namespace System.Windows.Forms
                 {
                     systemIAccessible.accDoDefaultAction(childID);
                 }
-                catch (COMException e) when (e.ErrorCode == NativeMethods.DISP_E_MEMBERNOTFOUND)
+                catch (COMException e) when (e.ErrorCode == (int)HRESULT.DISP_E_MEMBERNOTFOUND)
                 {
                     // Not all objects provide a default action.
                 }
@@ -963,7 +963,7 @@ namespace System.Windows.Forms
                 {
                     return systemIAccessible.accHitTest(xLeft, yTop);
                 }
-                catch (COMException e) when (e.ErrorCode == NativeMethods.DISP_E_MEMBERNOTFOUND)
+                catch (COMException e) when (e.ErrorCode == (int)HRESULT.DISP_E_MEMBERNOTFOUND)
                 {
                 }
             }
@@ -1037,7 +1037,7 @@ namespace System.Windows.Forms
                         pcxWidth.ToString(CultureInfo.InvariantCulture) + ", " +
                         pcyHeight.ToString(CultureInfo.InvariantCulture));
                 }
-                catch (COMException e) when (e.ErrorCode == NativeMethods.DISP_E_MEMBERNOTFOUND)
+                catch (COMException e) when (e.ErrorCode == (int)HRESULT.DISP_E_MEMBERNOTFOUND)
                 {
                 }
 
@@ -1086,7 +1086,7 @@ namespace System.Windows.Forms
 
                     return retObject;
                 }
-                catch (COMException e) when (e.ErrorCode == NativeMethods.DISP_E_MEMBERNOTFOUND)
+                catch (COMException e) when (e.ErrorCode == (int)HRESULT.DISP_E_MEMBERNOTFOUND)
                 {
                 }
             }
@@ -1128,12 +1128,11 @@ namespace System.Windows.Forms
                 {
                     systemIAccessible.accSelect(flagsSelect, childID);
                 }
-                catch (COMException e) when (e.ErrorCode == NativeMethods.DISP_E_MEMBERNOTFOUND)
+                catch (COMException e) when (e.ErrorCode == (int)HRESULT.DISP_E_MEMBERNOTFOUND)
                 {
                 }
                 return;
             }
-
         }
 
         /// <summary>
@@ -1148,7 +1147,7 @@ namespace System.Windows.Forms
                 {
                     systemIAccessible.accDoDefaultAction(0);
                 }
-                catch (COMException e) when (e.ErrorCode == NativeMethods.DISP_E_MEMBERNOTFOUND)
+                catch (COMException e) when (e.ErrorCode == (int)HRESULT.DISP_E_MEMBERNOTFOUND)
                 {
                     // Not all objects provide a default action.
                 }
@@ -1259,7 +1258,7 @@ namespace System.Windows.Forms
                 {
                     return systemIAccessible.get_accDefaultAction(childID);
                 }
-                catch (COMException e) when (e.ErrorCode == NativeMethods.DISP_E_MEMBERNOTFOUND)
+                catch (COMException e) when (e.ErrorCode == (int)HRESULT.DISP_E_MEMBERNOTFOUND)
                 {
                     // Not all objects provide a default action.
                 }
@@ -1297,7 +1296,7 @@ namespace System.Windows.Forms
                 {
                     return systemIAccessible.get_accDescription(childID);
                 }
-                catch (COMException e) when (e.ErrorCode == NativeMethods.DISP_E_MEMBERNOTFOUND)
+                catch (COMException e) when (e.ErrorCode == (int)HRESULT.DISP_E_MEMBERNOTFOUND)
                 {
                 }
             }
@@ -1347,7 +1346,7 @@ namespace System.Windows.Forms
                     {
                         return systemIAccessible.accFocus;
                     }
-                    catch (COMException e) when (e.ErrorCode == NativeMethods.DISP_E_MEMBERNOTFOUND)
+                    catch (COMException e) when (e.ErrorCode == (int)HRESULT.DISP_E_MEMBERNOTFOUND)
                     {
                     }
                 }
@@ -1384,7 +1383,7 @@ namespace System.Windows.Forms
                 {
                     return systemIAccessible.get_accHelp(childID);
                 }
-                catch (COMException e) when (e.ErrorCode == NativeMethods.DISP_E_MEMBERNOTFOUND)
+                catch (COMException e) when (e.ErrorCode == (int)HRESULT.DISP_E_MEMBERNOTFOUND)
                 {
                 }
             }
@@ -1420,7 +1419,7 @@ namespace System.Windows.Forms
                 {
                     return systemIAccessible.get_accHelpTopic(out pszHelpFile, childID);
                 }
-                catch (COMException e) when (e.ErrorCode == NativeMethods.DISP_E_MEMBERNOTFOUND)
+                catch (COMException e) when (e.ErrorCode == (int)HRESULT.DISP_E_MEMBERNOTFOUND)
                 {
                 }
             }
@@ -1462,7 +1461,7 @@ namespace System.Windows.Forms
                 {
                     return systemIAccessible.get_accKeyboardShortcut(childID);
                 }
-                catch (COMException e) when (e.ErrorCode == NativeMethods.DISP_E_MEMBERNOTFOUND)
+                catch (COMException e) when (e.ErrorCode == (int)HRESULT.DISP_E_MEMBERNOTFOUND)
                 {
                 }
             }
@@ -1602,7 +1601,7 @@ namespace System.Windows.Forms
                     {
                         return systemIAccessible.accSelection;
                     }
-                    catch (COMException e) when (e.ErrorCode == NativeMethods.DISP_E_MEMBERNOTFOUND)
+                    catch (COMException e) when (e.ErrorCode == (int)HRESULT.DISP_E_MEMBERNOTFOUND)
                     {
                     }
                 }
@@ -1669,7 +1668,7 @@ namespace System.Windows.Forms
                 {
                     return systemIAccessible.get_accValue(childID);
                 }
-                catch (COMException e) when (e.ErrorCode == NativeMethods.DISP_E_MEMBERNOTFOUND)
+                catch (COMException e) when (e.ErrorCode == (int)HRESULT.DISP_E_MEMBERNOTFOUND)
                 {
                 }
             }
@@ -1738,7 +1737,7 @@ namespace System.Windows.Forms
                 {
                     systemIAccessible.set_accValue(childID, newValue);
                 }
-                catch (COMException e) when (e.ErrorCode == NativeMethods.DISP_E_MEMBERNOTFOUND)
+                catch (COMException e) when (e.ErrorCode == (int)HRESULT.DISP_E_MEMBERNOTFOUND)
                 {
                 }
             }
@@ -1873,7 +1872,7 @@ namespace System.Windows.Forms
 
                     return WrapIAccessible(retObject);
                 }
-                catch (COMException e) when (e.ErrorCode == NativeMethods.DISP_E_MEMBERNOTFOUND)
+                catch (COMException e) when (e.ErrorCode == (int)HRESULT.DISP_E_MEMBERNOTFOUND)
                 {
                 }
             }
@@ -1893,7 +1892,7 @@ namespace System.Windows.Forms
                 {
                     systemIAccessible.accSelect((int)flags, 0);
                 }
-                catch (COMException e) when (e.ErrorCode == NativeMethods.DISP_E_MEMBERNOTFOUND)
+                catch (COMException e) when (e.ErrorCode == (int)HRESULT.DISP_E_MEMBERNOTFOUND)
                 {
                     // Not all objects provide the select function.
                 }
@@ -2027,7 +2026,7 @@ namespace System.Windows.Forms
             {
                 childID = NativeMethods.CHILDID_SELF;
             }
-            else if (childID.Equals(NativeMethods.DISP_E_PARAMNOTFOUND))
+            else if (childID.Equals((int)HRESULT.DISP_E_PARAMNOTFOUND))
             {
                 childID = 0;
             }
@@ -2339,7 +2338,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///  Skips the next <paramref name="celt"> child accessible objects.
+            ///  Skips the next <paramref name="celt"/> child accessible objects.
             /// </summary>
             HRESULT OleAut32.IEnumVariant.Skip(uint celt)
             {

@@ -9122,6 +9122,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">Задание TableLayoutSettings напрямую не поддерживается.  Вместо этого используйте отдельные свойства.</target>
         <note />
       </trans-unit>
+      <trans-unit id="TableLayoutSettingsConverterNoName">
+        <source>Cannot convert TableLayoutSettings to string: could not find a 'Name' string property on a control.</source>
+        <target state="new">Cannot convert TableLayoutSettings to string: could not find a 'Name' string property on a control.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="TableLayoutSettingsGetCellPositionDescr">
         <source>Indicates the row and column of the cell.</source>
         <target state="translated">Указывает строку и столбец данной ячейки.</target>

@@ -106,6 +106,7 @@ namespace System.Windows.Forms.Tests
             Assert.Empty(control.SelectedText);
             Assert.Equal(0, control.SelectionLength);
             Assert.Equal(0, control.SelectionStart);
+            Assert.True(control.ShortcutsEnabled);
             Assert.True(control.ShowFocusCues);
             Assert.True(control.ShowKeyboardCues);
             Assert.Null(control.Site);
@@ -152,7 +153,7 @@ namespace System.Windows.Forms.Tests
             using var control = new SubTextBox();
             Assert.True(control.CanEnableIme);
             Assert.True(control.IsHandleCreated);
-            
+
             // Get again.
             Assert.True(control.CanEnableIme);
             Assert.True(control.IsHandleCreated);
@@ -175,7 +176,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            
+
             // Get again.
             Assert.True(control.CanEnableIme);
             Assert.True(control.IsHandleCreated);
@@ -190,7 +191,7 @@ namespace System.Windows.Forms.Tests
             using var control = new SubTextBox();
             Assert.Equal(ImeMode.NoControl, control.ImeMode);
             Assert.True(control.IsHandleCreated);
-            
+
             // Get again.
             Assert.Equal(ImeMode.NoControl, control.ImeMode);
             Assert.True(control.IsHandleCreated);
@@ -213,7 +214,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            
+
             // Get again.
             Assert.Equal(ImeMode.NoControl, control.ImeMode);
             Assert.True(control.IsHandleCreated);
@@ -228,7 +229,7 @@ namespace System.Windows.Forms.Tests
             using var control = new SubTextBox();
             Assert.Equal(ImeMode.NoControl, control.ImeModeBase);
             Assert.True(control.IsHandleCreated);
-            
+
             // Get again.
             Assert.Equal(ImeMode.NoControl, control.ImeModeBase);
             Assert.True(control.IsHandleCreated);
@@ -251,7 +252,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            
+
             // Get again.
             Assert.Equal(ImeMode.NoControl, control.ImeModeBase);
             Assert.True(control.IsHandleCreated);
@@ -266,7 +267,7 @@ namespace System.Windows.Forms.Tests
             using var control = new SubTextBox();
             Assert.Equal('\0', control.PasswordChar);
             Assert.True(control.IsHandleCreated);
-            
+
             // Get again.
             Assert.Equal('\0', control.PasswordChar);
             Assert.True(control.IsHandleCreated);
@@ -289,7 +290,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            
+
             // Get again.
             Assert.Equal('\0', control.PasswordChar);
             Assert.True(control.IsHandleCreated);
@@ -439,73 +440,6 @@ namespace System.Windows.Forms.Tests
             Assert.False(string.IsNullOrEmpty(tb.PlaceholderText));
         }
 
-        private SubTextBoxBase CreateTextBoxForCtrlBackspace(string text = "", int cursorRelativeToEnd = 0)
-        {
-            var tb = new SubTextBoxBase
-            {
-                Text = text
-            };
-            tb.Focus();
-            tb.SelectionStart = tb.Text.Length + cursorRelativeToEnd;
-            tb.SelectionLength = 0;
-            return tb;
-        }
-
-        private void SendCtrlBackspace(SubTextBoxBase tb)
-        {
-            var message = new Message();
-            tb.ProcessCmdKey(ref message, Keys.Control | Keys.Back);
-        }
-
-        [Fact]
-        public void TextBox_CtrlBackspaceTextRemainsEmpty()
-        {
-            SubTextBoxBase tb = CreateTextBoxForCtrlBackspace();
-            SendCtrlBackspace(tb);
-            Assert.Equal("", tb.Text);
-        }
-
-        [Fact]
-        public void TextBox_CtrlBackspaceReadOnlyTextUnchanged()
-        {
-            string text = "aaa";
-            SubTextBoxBase tb = CreateTextBoxForCtrlBackspace(text);
-            tb.ReadOnly = true;
-            SendCtrlBackspace(tb);
-            Assert.Equal(text, tb.Text);
-        }
-
-        [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetCtrlBackspaceData))]
-        public void TextBox_CtrlBackspaceTextChanged(string value, string expected, int cursorRelativeToEnd)
-        {
-            SubTextBoxBase tb = CreateTextBoxForCtrlBackspace(value, cursorRelativeToEnd);
-            SendCtrlBackspace(tb);
-            Assert.Equal(expected, tb.Text);
-        }
-
-        [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetCtrlBackspaceRepeatedData))]
-        public void TextBox_CtrlBackspaceRepeatedTextChanged(string value, string expected, int repeats)
-        {
-            SubTextBoxBase tb = CreateTextBoxForCtrlBackspace(value);
-            for (int i = 0; i < repeats; i++)
-            {
-                SendCtrlBackspace(tb);
-            }
-            Assert.Equal(expected, tb.Text);
-        }
-
-        [Fact]
-        public void TextBox_CtrlBackspaceDeletesSelection()
-        {
-            SubTextBoxBase tb = CreateTextBoxForCtrlBackspace("123-5-7-9");
-            tb.SelectionStart = 2;
-            tb.SelectionLength = 5;
-            SendCtrlBackspace(tb);
-            Assert.Equal("12-9", tb.Text);
-        }
-
         [WinFormsFact]
         public void TextBox_GetAutoSizeMode_Invoke_ReturnsExpected()
         {
@@ -541,11 +475,6 @@ namespace System.Windows.Forms.Tests
 
             // Call again to test caching.
             Assert.Equal(expected, control.GetStyle(flag));
-        }
-
-        private class SubTextBoxBase : TextBoxBase
-        {
-            public new bool ProcessCmdKey(ref Message msg, Keys keyData) => base.ProcessCmdKey(ref msg, keyData);
         }
 
         private class SubTextBox : TextBox

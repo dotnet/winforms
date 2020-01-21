@@ -246,7 +246,6 @@ namespace System.Windows.Forms
         {
             switch (state)
             {
-
                 case PushButtonState.Pressed:
                     return ButtonState.Pushed;
                 case PushButtonState.Disabled:

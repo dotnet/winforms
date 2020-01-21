@@ -12,15 +12,15 @@ internal static partial class Interop
         [DllImport(Libraries.User32, ExactSpelling = true)]
         public static extern IntPtr SendMessageW(
             IntPtr hWnd,
-            WindowMessage Msg,
-            IntPtr wParam,
-            IntPtr lParam);
+            WM Msg,
+            IntPtr wParam = default,
+            IntPtr lParam = default);
 
         public static IntPtr SendMessageW(
             HandleRef hWnd,
-            WindowMessage Msg,
-            IntPtr wParam,
-            IntPtr lParam)
+            WM Msg,
+            IntPtr wParam = default,
+            IntPtr lParam = default)
         {
             IntPtr result = SendMessageW(hWnd.Handle, Msg, wParam, lParam);
             GC.KeepAlive(hWnd.Wrapper);
@@ -29,7 +29,7 @@ internal static partial class Interop
 
         public static IntPtr SendMessageW(
             IHandle hWnd,
-            WindowMessage Msg,
+            WM Msg,
             IntPtr wParam = default,
             IntPtr lParam = default)
         {
@@ -40,7 +40,19 @@ internal static partial class Interop
 
         public unsafe static IntPtr SendMessageW(
             IHandle hWnd,
-            WindowMessage Msg,
+            WM Msg,
+            IntPtr wParam,
+            string lParam)
+        {
+            fixed (char* c = lParam)
+            {
+                return SendMessageW(hWnd, Msg, wParam, (IntPtr)(void*)c);
+            }
+        }
+
+        public unsafe static IntPtr SendMessageW(
+            HandleRef hWnd,
+            WM Msg,
             IntPtr wParam,
             string lParam)
         {
@@ -52,7 +64,7 @@ internal static partial class Interop
 
         public unsafe static IntPtr SendMessageW<T>(
             IntPtr hWnd,
-            WindowMessage Msg,
+            WM Msg,
             IntPtr wParam,
             ref T lParam) where T : unmanaged
         {
@@ -64,7 +76,7 @@ internal static partial class Interop
 
         public unsafe static IntPtr SendMessageW<T>(
             IHandle hWnd,
-            WindowMessage Msg,
+            WM Msg,
             IntPtr wParam,
             ref T lParam) where T : unmanaged
         {

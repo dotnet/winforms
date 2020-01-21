@@ -450,7 +450,7 @@ namespace System.Windows.Forms
             public void onafterprint(IHTMLEventObj evtObj) { }
         }
 
-        ///<summary>
+        /// <summary>
         ///  HtmlWindowShim - this is the glue between the DOM eventing mechanisms
         ///        and our CLR callbacks.
         ///
@@ -462,7 +462,7 @@ namespace System.Windows.Forms
         ///                       for a method named DISPID=0.  For each event that's subscribed, we create
         ///                       a new HtmlToClrEventProxy, detect the callback and fire the corresponding
         ///                       CLR event.
-        ///</summary>
+        /// </summary>
         internal class HtmlWindowShim : HtmlShim
         {
             private AxHost.ConnectionPointCookie cookie;
@@ -486,7 +486,6 @@ namespace System.Windows.Forms
             ///  Support IHtmlDocument3.AttachHandler
             public override void AttachEventHandler(string eventName, EventHandler eventHandler)
             {
-
                 // IE likes to call back on an IDispatch of DISPID=0 when it has an event,
                 // the HtmlToClrEventProxy helps us fake out the CLR so that we can call back on
                 // our EventHandler properly.

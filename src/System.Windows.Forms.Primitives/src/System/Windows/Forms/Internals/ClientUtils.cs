@@ -5,6 +5,7 @@
 using System.Collections;
 using System.Diagnostics;
 using System.Globalization;
+using System.Numerics;
 
 namespace System.Windows.Forms
 {
@@ -34,17 +35,6 @@ namespace System.Windows.Forms
             return (ex is Security.SecurityException) || IsCriticalException(ex);
         }
 
-        public static int GetBitCount(uint x)
-        {
-            int count = 0;
-            while (x > 0)
-            {
-                x &= x - 1;
-                count++;
-            }
-            return count;
-        }
-
         // Sequential version
         // assumes sequential enum members 0,1,2,3,4 -etc.
         //
@@ -55,7 +45,6 @@ namespace System.Windows.Forms
             Debug_SequentialEnumIsDefinedCheck(enumValue, minValue, maxValue);
 #endif
             return valid;
-
         }
 
         // Useful for sequential enum values which only use powers of two 0,1,2,4,8 etc: IsEnumValid(val, min, max, 1)
@@ -69,7 +58,7 @@ namespace System.Windows.Forms
 
             bool valid = (value >= minValue) && (value <= maxValue);
             //Note: if it's 0, it'll have no bits on.  If it's a power of 2, it'll have 1.
-            valid = (valid && GetBitCount((uint)value) <= maxNumberOfBitsOn);
+            valid = (valid && BitOperations.PopCount((uint)value) <= maxNumberOfBitsOn);
 #if DEBUG
             Debug_NonSequentialEnumIsDefinedCheck(enumValue, minValue, maxValue, maxNumberOfBitsOn, valid);
 #endif
@@ -181,7 +170,6 @@ namespace System.Windows.Forms
                 }
                 MinValue = actualMinimum;
                 MaxValue = actualMaximum;
-
             }
             public int MinValue;
             public int MaxValue;
@@ -213,7 +201,6 @@ namespace System.Windows.Forms
                     enumValueInfo.Clear();
                 }
                 enumValueInfo[t] = sequentialEnumInfo;
-
             }
             if (minVal != sequentialEnumInfo.MinValue)
             {
@@ -225,7 +212,6 @@ namespace System.Windows.Forms
                 // put string allocation in the IF block so the common case doesnt build up the string.
                 Debug.Fail("Maximum passed in is not the actual maximum for the enum.  Consider changing the parameters or using a different function.");
             }
-
         }
 
         private static void Debug_ValidateMask(Enum value, uint mask)
@@ -249,7 +235,7 @@ namespace System.Windows.Forms
                foreach (int iVal in Enum.GetValues(t)){
                    actualMinimum = Math.Min(actualMinimum, iVal);
                    actualMaximum = Math.Max(actualMaximum, iVal);
-                   maxBitsFound = Math.Max(maxBitsFound, GetBitCount((uint)iVal));
+                   maxBitsFound = Math.Max(maxBitsFound, BitOperations.PopCount((uint)iVal));
                    if (checkedValue == iVal) {
                        foundValue = true;
                    }
@@ -269,7 +255,6 @@ namespace System.Windows.Forms
                if (foundValue != isValid) {
                     System.Diagnostics.Debug.Fail(string.Format(CultureInfo.InvariantCulture, "Returning {0} but we actually {1} found the value in the enum! Consider using a different overload to IsValidEnum.", isValid, ((foundValue) ? "have" : "have not")));
                }
-
            }
 #endif
 

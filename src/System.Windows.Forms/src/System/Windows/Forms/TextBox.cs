@@ -8,6 +8,7 @@ using System.Drawing.Design;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.VisualStyles;
 using static Interop;
+using static Interop.User32;
 
 namespace System.Windows.Forms
 {
@@ -221,7 +222,6 @@ namespace System.Windows.Forms
                     }
                     SetAutoComplete(false);
                 }
-
             }
         }
 
@@ -265,7 +265,6 @@ namespace System.Windows.Forms
             }
             set
             {
-
                 if (Multiline != value)
                 {
                     base.Multiline = value;
@@ -302,27 +301,27 @@ namespace System.Windows.Forms
                 switch (characterCasing)
                 {
                     case CharacterCasing.Lower:
-                        cp.Style |= NativeMethods.ES_LOWERCASE;
+                        cp.Style |= (int)ES.LOWERCASE;
                         break;
                     case CharacterCasing.Upper:
-                        cp.Style |= NativeMethods.ES_UPPERCASE;
+                        cp.Style |= (int)ES.UPPERCASE;
                         break;
                 }
 
                 // Translate for Rtl if necessary
                 //
                 HorizontalAlignment align = RtlTranslateHorizontal(textAlign);
-                cp.ExStyle &= ~(int)User32.WS_EX.RIGHT;   // WS_EX_RIGHT overrides the ES_XXXX alignment styles
+                cp.ExStyle &= ~(int)WS_EX.RIGHT;   // WS_EX_RIGHT overrides the ES_XXXX alignment styles
                 switch (align)
                 {
                     case HorizontalAlignment.Left:
-                        cp.Style |= NativeMethods.ES_LEFT;
+                        cp.Style |= (int)ES.LEFT;
                         break;
                     case HorizontalAlignment.Center:
-                        cp.Style |= NativeMethods.ES_CENTER;
+                        cp.Style |= (int)ES.CENTER;
                         break;
                     case HorizontalAlignment.Right:
-                        cp.Style |= NativeMethods.ES_RIGHT;
+                        cp.Style |= (int)ES.RIGHT;
                         break;
                 }
 
@@ -333,17 +332,17 @@ namespace System.Windows.Forms
                         && textAlign == HorizontalAlignment.Left
                         && !WordWrap)
                     {
-                        cp.Style |= (int)User32.WS.HSCROLL;
+                        cp.Style |= (int)WS.HSCROLL;
                     }
                     if ((scrollBars & ScrollBars.Vertical) == ScrollBars.Vertical)
                     {
-                        cp.Style |= (int)User32.WS.VSCROLL;
+                        cp.Style |= (int)WS.VSCROLL;
                     }
                 }
 
                 if (useSystemPasswordChar)
                 {
-                    cp.Style |= NativeMethods.ES_PASSWORD;
+                    cp.Style |= (int)ES.PASSWORD;
                 }
 
                 return cp;
@@ -369,7 +368,8 @@ namespace System.Windows.Forms
                 {
                     CreateHandle();
                 }
-                return (char)SendMessage(EditMessages.EM_GETPASSWORDCHAR, 0, 0);
+
+                return (char)SendMessageW(this, (WM)EM.GETPASSWORDCHAR);
             }
             set
             {
@@ -381,7 +381,7 @@ namespace System.Windows.Forms
                         if (PasswordChar != value)
                         {
                             // Set the password mode.
-                            SendMessage(EditMessages.EM_SETPASSWORDCHAR, value, 0);
+                            SendMessageW(this, (WM)EM.SETPASSWORDCHAR, (IntPtr)value);
 
                             // Disable IME if setting the control to password mode.
                             VerifyImeRestrictedModeChanged();
@@ -598,11 +598,11 @@ namespace System.Windows.Forms
             // Force repainting of the entire window frame
             if (Application.RenderWithVisualStyles && IsHandleCreated && BorderStyle == BorderStyle.Fixed3D)
             {
-                User32.RedrawWindow(
+                RedrawWindow(
                     new HandleRef(this, Handle),
                     null,
                     IntPtr.Zero,
-                    User32.RDW.INVALIDATE | User32.RDW.FRAME);
+                    RDW.INVALIDATE | RDW.FRAME);
             }
         }
 
@@ -649,7 +649,7 @@ namespace System.Windows.Forms
             {
                 if (!useSystemPasswordChar)
                 {
-                    SendMessage(EditMessages.EM_SETPASSWORDCHAR, passwordChar, 0);
+                    SendMessageW(this, (WM)EM.SETPASSWORDCHAR, (IntPtr)passwordChar);
                 }
             }
 
@@ -786,7 +786,6 @@ namespace System.Windows.Forms
                             }
                         }
                     }
-
                 }
                 else
                 {
@@ -999,6 +998,5 @@ namespace System.Windows.Forms
 
             public bool ShouldRenderPlaceHolderText(in Message m) => _textBox.ShouldRenderPlaceHolderText(m);
         }
-
     }
 }

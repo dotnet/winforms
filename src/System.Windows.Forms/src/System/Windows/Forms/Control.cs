@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -53,9 +53,9 @@ namespace System.Windows.Forms
         Ole32.IOleWindow,
         Ole32.IViewObject,
         Ole32.IViewObject2,
-        UnsafeNativeMethods.IPersist,
+        Ole32.IPersist,
         Ole32.IPersistStreamInit,
-        UnsafeNativeMethods.IPersistPropertyBag,
+        Ole32.IPersistPropertyBag,
         Ole32.IPersistStorage,
         Ole32.IQuickActivate,
         ISupportOleDropSource,
@@ -138,8 +138,8 @@ namespace System.Windows.Forms
         private static readonly BooleanSwitch s_bufferDisabled = new BooleanSwitch("BufferDisabled", "Makes double buffered controls non-double buffered");
 #endif
 
-        private static readonly User32.WindowMessage WM_GETCONTROLNAME = User32.RegisterWindowMessageW("WM_GETCONTROLNAME");
-        private static readonly User32.WindowMessage WM_GETCONTROLTYPE = User32.RegisterWindowMessageW("WM_GETCONTROLTYPE");
+        private static readonly User32.WM WM_GETCONTROLNAME = User32.RegisterWindowMessageW("WM_GETCONTROLNAME");
+        private static readonly User32.WM WM_GETCONTROLTYPE = User32.RegisterWindowMessageW("WM_GETCONTROLTYPE");
 
         private static readonly object s_autoSizeChangedEvent = new object();
         private static readonly object s_keyDownEvent = new object();
@@ -213,7 +213,7 @@ namespace System.Windows.Forms
         private protected static readonly object s_paddingChangedEvent = new object();
         private static readonly object s_previewKeyDownEvent = new object();
 
-        private static User32.WindowMessage s_threadCallbackMessage;
+        private static User32.WM s_threadCallbackMessage;
         private static ContextCallback s_invokeMarshaledCallbackHelperDelegate;
 
 #pragma warning disable IDE1006 // Naming Styles
@@ -930,7 +930,6 @@ namespace System.Windows.Forms
                     {
                         return c;
                     }
-
                 }
 
                 if (IsActiveX)
@@ -1462,7 +1461,6 @@ namespace System.Windows.Forms
                     OnContextMenuStripChanged(EventArgs.Empty);
                 }
             }
-
         }
 
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlContextMenuStripChangedDescr))]
@@ -2264,7 +2262,6 @@ namespace System.Windows.Forms
 
                 if (ambient != null && ambient.Font != null)
                 {
-
                     FontHandleWrapper fontHandle = null;
 
                     Font currentAmbient = (Font)Properties.GetObject(s_currentAmbientFontProperty);
@@ -3765,7 +3762,6 @@ namespace System.Windows.Forms
                                 WindowMessages.WM_CHANGEUISTATE,
                                 (IntPtr)(actionMask | (int)User32.UIS.SET),
                                 IntPtr.Zero);
-
                     }
                 }
                 return (_uiCuesState & UICuesStates.FocusMask) == UICuesStates.FocusShow;
@@ -3885,7 +3881,7 @@ namespace System.Windows.Forms
                 {
                     return true;
                 }
-                
+
                 return ParentInternal.Visible;
             }
             set => SetVisibleCore(value);
@@ -3928,7 +3924,7 @@ namespace System.Windows.Forms
                 //If we didn't find the thread, or if GetExitCodeThread failed, we don't know the thread's state:
                 //if we don't know, we shouldn't throw.
                 if ((returnValue.IsTrue() && exitCode != NativeMethods.STILL_ACTIVE) ||
-                    (returnValue.IsFalse() && Marshal.GetLastWin32Error() == NativeMethods.ERROR_INVALID_HANDLE) ||
+                    (returnValue.IsFalse() && Marshal.GetLastWin32Error() == ERROR.INVALID_HANDLE) ||
                     AppDomain.CurrentDomain.IsFinalizingForUnload())
                 {
                     if (waitHandle.WaitOne(1, false))
@@ -3978,11 +3974,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                return unchecked((int)(long)UnsafeNativeMethods.GetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_EXSTYLE));
+                return unchecked((int)(long)User32.GetWindowLong(this, User32.GWL.EXSTYLE));
             }
             set
             {
-                UnsafeNativeMethods.SetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_EXSTYLE, new HandleRef(null, (IntPtr)value));
+                User32.SetWindowLong(this, User32.GWL.EXSTYLE, (IntPtr)value);
             }
         }
 
@@ -3993,11 +3989,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                return unchecked((int)(long)UnsafeNativeMethods.GetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_STYLE));
+                return unchecked((int)(long)User32.GetWindowLong(this, User32.GWL.STYLE));
             }
             set
             {
-                UnsafeNativeMethods.SetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_STYLE, new HandleRef(null, (IntPtr)value));
+                User32.SetWindowLong(this, User32.GWL.STYLE, new HandleRef(null, (IntPtr)value));
             }
         }
 
@@ -4978,7 +4974,6 @@ namespace System.Windows.Forms
                 _window.CreateHandle(cp);
 
                 UpdateReflectParent(true);
-
             }
             finally
             {
@@ -5140,7 +5135,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            if (0 != ((int)User32.WS_EX.MDICHILD & (int)(long)UnsafeNativeMethods.GetWindowLong(new HandleRef(_window, InternalHandle), NativeMethods.GWL_EXSTYLE)))
+            if (0 != ((int)User32.WS_EX.MDICHILD & (int)(long)User32.GetWindowLong(new HandleRef(_window, InternalHandle), User32.GWL.EXSTYLE)))
             {
                 UnsafeNativeMethods.DefMDIChildProc(InternalHandle, WindowMessages.WM_CLOSE, IntPtr.Zero, IntPtr.Zero);
             }
@@ -5211,7 +5206,6 @@ namespace System.Windows.Forms
 
                     if (controlsCollection != null)
                     {
-
                         // PERFNOTE: This is more efficient than using Foreach.  Foreach
                         // forces the creation of an array subset enum each time we
                         // enumerate
@@ -5235,7 +5229,6 @@ namespace System.Windows.Forms
             }
             else
             {
-
 #if FINALIZATION_WATCH
                 if (!GetState(States.DISPOSED)) {
                     Debug.Fail("Control of type '" + GetType().FullName +"' is being finalized that wasn't disposed\n" + allocationSite);
@@ -5310,13 +5303,6 @@ namespace System.Windows.Forms
             return (DragDropEffects)finalEffect;
         }
 
-        /// <summary>
-        //   Trinity are currently calling IViewObject::Draw in order to render controls on Word & Excel
-        //   before they are in place active. However this method is private and they need a public way to do this.
-        //   This means that we will need to add a public method to control that supports rendering to a Bitmap:
-        //   public virtual void DrawToBitmap(Bitmap bmp, RectangleF targetBounds)
-        //   where target bounds is the bounds within which the control should render.
-        /// </summary>
         public void DrawToBitmap(Bitmap bitmap, Rectangle targetBounds)
         {
             if (bitmap == null)
@@ -5438,7 +5424,6 @@ namespace System.Windows.Forms
                     {
                         Invalidate();
                     }
-
                 }
                 return true;
             }
@@ -5666,7 +5651,7 @@ namespace System.Windows.Forms
                 throw new InvalidEnumArgumentException(nameof(skipValue), value, typeof(GetChildAtPointSkip));
             }
 
-            IntPtr hwnd = UnsafeNativeMethods.ChildWindowFromPointEx(Handle, pt, value);
+            IntPtr hwnd = User32.ChildWindowFromPointEx(this, pt, (User32.CWP)value);
             Control ctl = FromChildHandle(hwnd);
 
             return (ctl == this) ? null : ctl;
@@ -6170,13 +6155,13 @@ namespace System.Windows.Forms
             else
             {
                 IntPtr hWnd = window.Handle;
-                if (hWnd == IntPtr.Zero || UnsafeNativeMethods.IsWindow(new HandleRef(null, hWnd)))
+                if (hWnd == IntPtr.Zero || User32.IsWindow(hWnd).IsTrue())
                 {
                     return hWnd;
                 }
                 else
                 {
-                    throw new Win32Exception(NativeMethods.ERROR_INVALID_HANDLE);
+                    throw new Win32Exception(ERROR.INVALID_HANDLE);
                 }
             }
         }
@@ -6953,7 +6938,7 @@ namespace System.Windows.Forms
 
             lock (_threadCallbackList)
             {
-                if (s_threadCallbackMessage == (User32.WindowMessage)0)
+                if (s_threadCallbackMessage == User32.WM.NULL)
                 {
                     s_threadCallbackMessage = User32.RegisterWindowMessageW(Application.WindowMessagesVersion + "_ThreadCallbackMessage");
                 }
@@ -7905,7 +7890,7 @@ namespace System.Windows.Forms
                 if (User32.GetScrollInfo(this, User32.SB.HORZ, ref si).IsTrue())
                 {
                     si.nPos = (RightToLeft == RightToLeft.Yes) ? si.nMax : si.nMin;
-                    User32.SendMessageW(this, User32.WindowMessage.WM_HSCROLL, PARAM.FromLowHigh((int)User32.SBH.THUMBPOSITION, si.nPos), IntPtr.Zero);
+                    User32.SendMessageW(this, User32.WM.HSCROLL, PARAM.FromLowHigh((int)User32.SBH.THUMBPOSITION, si.nPos), IntPtr.Zero);
                 }
             }
         }
@@ -8998,7 +8983,6 @@ namespace System.Windows.Forms
             // For every child control of this container control...
             foreach (Control c in Controls)
             {
-
                 // First, if the control is a container, recurse into its descendants.
                 if ((validationConstraints & ValidationConstraints.ImmediateChildren) != ValidationConstraints.ImmediateChildren &&
                     c.ShouldPerformContainerValidation() &&
@@ -9288,7 +9272,7 @@ namespace System.Windows.Forms
         {
             // We assume the target does not want us to offset the root control in the metafile.
 
-            using (WindowsFormsUtils.DCMapping mapping = new WindowsFormsUtils.DCMapping(hDC, bounds))
+            using (DCMapping mapping = new DCMapping(hDC, bounds))
             {
                 // print the non-client area
                 PrintToMetaFile_SendPrintMessage(hDC, (IntPtr)((long)lParam & ~NativeMethods.PRF_CLIENT));
@@ -9301,7 +9285,7 @@ namespace System.Windows.Forms
                 clientOffset = new Point(clientOffset.X - windowRect.left, clientOffset.Y - windowRect.top);
                 Rectangle clientBounds = new Rectangle(clientOffset, ClientSize);
 
-                using (WindowsFormsUtils.DCMapping clientMapping = new WindowsFormsUtils.DCMapping(hDC, clientBounds))
+                using (DCMapping clientMapping = new DCMapping(hDC, clientBounds))
                 {
                     // print the client area
                     PrintToMetaFile_SendPrintMessage(hDC, (IntPtr)((long)lParam & ~NativeMethods.PRF_NONCLIENT));
@@ -9473,9 +9457,9 @@ namespace System.Windows.Forms
                 Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "    processkeyeventarg returning: " + ke.Handled);
                 if (ke.SuppressKeyPress)
                 {
-                    RemovePendingMessages(User32.WindowMessage.WM_CHAR, User32.WindowMessage.WM_CHAR);
-                    RemovePendingMessages(User32.WindowMessage.WM_SYSCHAR, User32.WindowMessage.WM_SYSCHAR);
-                    RemovePendingMessages(User32.WindowMessage.WM_IME_CHAR, User32.WindowMessage.WM_IME_CHAR);
+                    RemovePendingMessages(User32.WM.CHAR, User32.WM.CHAR);
+                    RemovePendingMessages(User32.WM.SYSCHAR, User32.WM.SYSCHAR);
+                    RemovePendingMessages(User32.WM.IME_CHAR, User32.WM.IME_CHAR);
                 }
                 return ke.Handled;
             }
@@ -9651,7 +9635,7 @@ namespace System.Windows.Forms
             ((PaintEventHandler)Events[s_paintEvent])?.Invoke(this, e);
         }
 
-        private void RemovePendingMessages(User32.WindowMessage msgMin, User32.WindowMessage msgMax)
+        private void RemovePendingMessages(User32.WM msgMin, User32.WM msgMax)
         {
             if (!IsDisposed)
             {
@@ -9878,7 +9862,7 @@ namespace System.Windows.Forms
                     // But the parent is not a managed WinForm Control, or this.Parent == null
                     && (FromHandle(parentHandle.Handle) == null || _parent == null)
                     // Still, parentHandle is a valid native Win32 window handle, e.g. the desktop window.
-                    && UnsafeNativeMethods.IsWindow(parentHandle))
+                    && User32.IsWindow(parentHandle).IsTrue())
                 {
                     // correctly parent back up to where we were before.
                     // if we were parented to a proper windows forms control, CreateControl would have properly parented
@@ -10047,7 +10031,6 @@ namespace System.Windows.Forms
             */
             if (!performLayout)
             {
-
                 CommonProperties.xClearPreferredSizeCache(this);
                 ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
 
@@ -10063,7 +10046,6 @@ namespace System.Windows.Forms
                     }
                 }
             }
-
         }
 
         /// <summary>
@@ -10177,7 +10159,6 @@ namespace System.Windows.Forms
             }
 
             LayoutTransaction.DoLayout(this, this, PropertyNames.Bounds);
-
         }
 
         /// <summary>
@@ -10578,7 +10559,6 @@ namespace System.Windows.Forms
                         && (!tabStopOnly || ctl.TabStop)
                         && (nested || ctl._parent == this))
                     {
-
                         if (ctl._parent is ToolStrip)
                         {
                             continue;
@@ -10817,7 +10797,6 @@ namespace System.Windows.Forms
             }
             finally
             {
-
                 // Initialize the scaling engine.
                 InitScaling(specified);
 
@@ -11104,7 +11083,7 @@ namespace System.Windows.Forms
                 if (!DesiredVisibility && !value && IsHandleCreated)
                 {
                     // PERF - setting Visible=false twice can get us into this else block
-                    // which makes us process WM_WINDOWPOS* messages - make sure we've already 
+                    // which makes us process WM_WINDOWPOS* messages - make sure we've already
                     // visible=false - if not, make it so.
                     if (!User32.IsWindowVisible(this).IsTrue())
                     {
@@ -11289,7 +11268,6 @@ namespace System.Windows.Forms
         {
             if (RightToLeft.Yes == RightToLeft)
             {
-
                 if ((align & WindowsFormsUtils.AnyTopAlign) != 0)
                 {
                     switch (align)
@@ -11327,13 +11305,13 @@ namespace System.Windows.Forms
 
         private void SetWindowFont()
         {
-            User32.SendMessageW(this, User32.WindowMessage.WM_SETFONT, FontHandle, PARAM.FromBool(false));
+            User32.SendMessageW(this, User32.WM.SETFONT, FontHandle, PARAM.FromBool(false));
         }
 
         private void SetWindowStyle(int flag, bool value)
         {
-            int styleFlags = unchecked((int)((long)UnsafeNativeMethods.GetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_STYLE)));
-            UnsafeNativeMethods.SetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_STYLE, new HandleRef(null, (IntPtr)(value ? styleFlags | flag : styleFlags & ~flag)));
+            int styleFlags = unchecked((int)((long)User32.GetWindowLong(this, User32.GWL.STYLE)));
+            User32.SetWindowLong(this, User32.GWL.STYLE, new HandleRef(null, (IntPtr)(value ? styleFlags | flag : styleFlags & ~flag)));
         }
 
         /// <summary>
@@ -11753,18 +11731,17 @@ namespace System.Windows.Forms
                     lastParentHandle = parentHandle;
                     parentHandle = User32.GetParent(parentHandle);
 
-                    int style = unchecked((int)((long)UnsafeNativeMethods.GetWindowLong(new HandleRef(null, lastParentHandle), NativeMethods.GWL_STYLE)));
+                    int style = unchecked((int)((long)User32.GetWindowLong(lastParentHandle, User32.GWL.STYLE)));
 
                     if ((style & (int)User32.WS.CHILD) == 0)
                     {
                         break;
                     }
-
                 }
 
                 if (lastParentHandle != IntPtr.Zero)
                 {
-                    User32.PostMessageW(lastParentHandle, User32.WindowMessage.WM_CLOSE);
+                    User32.PostMessageW(lastParentHandle, User32.WM.CLOSE);
                 }
             }
 
@@ -11778,7 +11755,6 @@ namespace System.Windows.Forms
         {
             OnMouseCaptureChanged(EventArgs.Empty);
             DefWndProc(ref m);
-
         }
 
         /// <summary>
@@ -12338,20 +12314,16 @@ namespace System.Windows.Forms
                 {
                     if (!GetState(States.DoubleClickFired))
                     {
-                        //OnClick(EventArgs.Empty);
                         //In Whidbey .. if the click in by MOUSE then pass the MouseEventArgs...
                         OnClick(new MouseEventArgs(button, clicks, PARAM.SignedLOWORD(m.LParam), PARAM.SignedHIWORD(m.LParam), 0));
                         OnMouseClick(new MouseEventArgs(button, clicks, PARAM.SignedLOWORD(m.LParam), PARAM.SignedHIWORD(m.LParam), 0));
-
                     }
 
                     else
                     {
-                        //OnDoubleClick(EventArgs.Empty);
                         OnDoubleClick(new MouseEventArgs(button, 2, PARAM.SignedLOWORD(m.LParam), PARAM.SignedHIWORD(m.LParam), 0));
                         OnMouseDoubleClick(new MouseEventArgs(button, 2, PARAM.SignedLOWORD(m.LParam), PARAM.SignedHIWORD(m.LParam), 0));
                     }
-
                 }
 
                 //call the MouseUp Finally...
@@ -12410,14 +12382,14 @@ namespace System.Windows.Forms
             User32.NMHDR* nmhdr = (User32.NMHDR*)m.LParam;
             if (!ReflectMessage(nmhdr->hwndFrom, ref m))
             {
-                if (nmhdr->code == NativeMethods.TTN_SHOW)
+                switch ((ComCtl32.TTN)nmhdr->code)
                 {
-                    m.Result = UnsafeNativeMethods.SendMessage(new HandleRef(null, nmhdr->hwndFrom), WindowMessages.WM_REFLECT + m.Msg, m.WParam, m.LParam);
-                    return;
-                }
-                if (nmhdr->code == NativeMethods.TTN_POP)
-                {
-                    UnsafeNativeMethods.SendMessage(new HandleRef(null, nmhdr->hwndFrom), WindowMessages.WM_REFLECT + m.Msg, m.WParam, m.LParam);
+                    case ComCtl32.TTN.SHOW:
+                        m.Result = User32.SendMessageW(nmhdr->hwndFrom, (User32.WM)((int)User32.WM.REFLECT + m.Msg), m.WParam, m.LParam);
+                        return;
+                    case ComCtl32.TTN.POP:
+                        User32.SendMessageW(nmhdr->hwndFrom, (User32.WM)((int)User32.WM.REFLECT + m.Msg), m.WParam, m.LParam);
+                        break;
                 }
 
                 DefWndProc(ref m);
@@ -12443,7 +12415,7 @@ namespace System.Windows.Forms
             bool reflectCalled = false;
 
             int ctrlId = unchecked((int)(long)m.WParam);
-            IntPtr p = UnsafeNativeMethods.GetDlgItem(new HandleRef(null, m.HWnd), ctrlId);
+            IntPtr p = User32.GetDlgItem(m.HWnd, ctrlId);
             if (p == IntPtr.Zero)
             {
                 // On 64-bit platforms wParam is already 64 bit but the control ID stored in it is only 32-bit
@@ -12598,7 +12570,6 @@ namespace System.Windows.Forms
                                     PaintWithErrorHandling(pevent, PaintLayerBackground);
                                     // Consider: This condition could be elimiated,
                                     //           do we have to save/restore the state of the buffered graphics?
-
                                 }
                             }
                             finally
@@ -12685,7 +12656,6 @@ namespace System.Windows.Forms
             {
                 DefWndProc(ref m);
             }
-
         }
 
         /// <summary>
@@ -12737,7 +12707,7 @@ namespace System.Windows.Forms
                 case WindowMessages.WM_DESTROY:
                     break;
                 default:
-                    hWnd = UnsafeNativeMethods.GetDlgItem(new HandleRef(this, Handle), PARAM.HIWORD(m.WParam));
+                    hWnd = User32.GetDlgItem(this, PARAM.HIWORD(m.WParam));
                     break;
             }
             if (hWnd == IntPtr.Zero || !ReflectMessage(hWnd, ref m))
@@ -12795,7 +12765,6 @@ namespace System.Windows.Forms
 
             if ((_state & States.Recreate) == 0)
             {
-
                 bool visible = m.WParam != IntPtr.Zero;
                 bool oldVisibleProperty = Visible;
 
@@ -12894,14 +12863,12 @@ namespace System.Windows.Forms
             UICues UIcues = UICues.None;
             if (((User32.UISF)PARAM.HIWORD(m.WParam) & User32.UISF.HIDEACCEL) != 0)
             {
-
                 // yes, clear means show.  nice api, guys.
                 //
                 bool showKeyboard = (cmd == User32.UIS.CLEAR);
 
                 if (showKeyboard != keyboard || !keyboardInitialized)
                 {
-
                     UIcues |= UICues.ChangeKeyboard;
 
                     // clear the old state.
@@ -12956,7 +12923,6 @@ namespace System.Windows.Forms
             if (_parent != null && User32.GetParent(new HandleRef(_window, InternalHandle)) == _parent.InternalHandle &&
                 (_state & States.NoZOrder) == 0)
             {
-
                 User32.WINDOWPOS* wp = (User32.WINDOWPOS*)m.LParam;
                 if ((wp->flags & User32.SWP.NOZORDER) == 0)
                 {
@@ -13314,7 +13280,7 @@ namespace System.Windows.Forms
                         return;
                     }
 
-                    if (m.Msg == (int)NativeMethods.WM_MOUSEENTER)
+                    if (m.Msg == (int)User32.RegisteredMessage.WM_MOUSEENTER)
                     {
                         WmMouseEnter(ref m);
                         break;
@@ -13454,7 +13420,6 @@ namespace System.Windows.Forms
                 return false;
             }
         }
-
 
         ///
         ///  Explicit support of DropTarget
@@ -13890,24 +13855,37 @@ namespace System.Windows.Forms
             return ((Ole32.IOleInPlaceObject)this).ContextSensitiveHelp(fEnterMode);
         }
 
-        void UnsafeNativeMethods.IPersist.GetClassID(out Guid pClassID)
+        unsafe HRESULT Ole32.IPersist.GetClassID(Guid* pClassID)
         {
-            pClassID = GetType().GUID;
-            Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersist.GetClassID.  ClassID: " + pClassID.ToString());
+            if (pClassID == null)
+            {
+                return HRESULT.E_POINTER;
+            }
+
+            *pClassID = GetType().GUID;
+            Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersist.GetClassID.  ClassID: " + pClassID->ToString());
+            return HRESULT.S_OK;
         }
 
-        void UnsafeNativeMethods.IPersistPropertyBag.InitNew()
+        HRESULT Ole32.IPersistPropertyBag.InitNew()
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistPropertyBag.InitNew");
+            return HRESULT.S_OK;
         }
 
-        void UnsafeNativeMethods.IPersistPropertyBag.GetClassID(out Guid pClassID)
+        unsafe HRESULT Ole32.IPersistPropertyBag.GetClassID(Guid* pClassID)
         {
-            pClassID = GetType().GUID;
-            Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistPropertyBag.GetClassID.  ClassID: " + pClassID.ToString());
+            if (pClassID == null)
+            {
+                return HRESULT.E_POINTER;
+            }
+
+            *pClassID = GetType().GUID;
+            Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistPropertyBag.GetClassID.  ClassID: " + pClassID->ToString());
+            return HRESULT.S_OK;
         }
 
-        void UnsafeNativeMethods.IPersistPropertyBag.Load(Ole32.IPropertyBag pPropBag, Ole32.IErrorLog pErrorLog)
+        void Ole32.IPersistPropertyBag.Load(Ole32.IPropertyBag pPropBag, Ole32.IErrorLog pErrorLog)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:Load (IPersistPropertyBag)");
             Debug.Indent();
@@ -13915,7 +13893,7 @@ namespace System.Windows.Forms
             Debug.Unindent();
         }
 
-        void UnsafeNativeMethods.IPersistPropertyBag.Save(Ole32.IPropertyBag pPropBag, BOOL fClearDirty, BOOL fSaveAllProperties)
+        void Ole32.IPersistPropertyBag.Save(Ole32.IPropertyBag pPropBag, BOOL fClearDirty, BOOL fSaveAllProperties)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:Save (IPersistPropertyBag)");
             Debug.Indent();
@@ -13923,10 +13901,16 @@ namespace System.Windows.Forms
             Debug.Unindent();
         }
 
-        void Ole32.IPersistStorage.GetClassID(out Guid pClassID)
+        unsafe HRESULT Ole32.IPersistStorage.GetClassID(Guid* pClassID)
         {
-            pClassID = GetType().GUID;
-            Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistStorage.GetClassID.  ClassID: " + pClassID.ToString());
+            if (pClassID == null)
+            {
+                return HRESULT.E_POINTER;
+            }
+
+            *pClassID = GetType().GUID;
+            Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistStorage.GetClassID.  ClassID: " + pClassID->ToString());
+            return HRESULT.S_OK;
         }
 
         HRESULT Ole32.IPersistStorage.IsDirty()
@@ -13967,10 +13951,16 @@ namespace System.Windows.Forms
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistStorage.HandsOffStorage");
         }
 
-        void Ole32.IPersistStreamInit.GetClassID(out Guid pClassID)
+        unsafe HRESULT Ole32.IPersistStreamInit.GetClassID(Guid* pClassID)
         {
-            pClassID = GetType().GUID;
-            Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistStreamInit.GetClassID.  ClassID: " + pClassID.ToString());
+            if (pClassID == null)
+            {
+                return HRESULT.E_POINTER;
+            }
+
+            *pClassID = GetType().GUID;
+            Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistStreamInit.GetClassID.  ClassID: " + pClassID->ToString());
+            return HRESULT.S_OK;
         }
 
         HRESULT Ole32.IPersistStreamInit.IsDirty()

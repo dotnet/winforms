@@ -21,29 +21,20 @@ namespace System.Windows.Forms
 
         public int Msg { get; set; }
 
-        /// <summary>
-        ///  Specifies the <see cref='Message.wparam'/> of the message.
-        /// </summary>
         public IntPtr WParam { get; set; }
 
-        /// <summary>
-        ///  Specifies the <see cref='Message.lparam'/> of the message.
-        /// </summary>
         public IntPtr LParam { get; set; }
 
         public IntPtr Result { get; set; }
 
         /// <summary>
-        ///  Gets the <see cref='Message.lparam'/> value, and converts the value to an object.
+        ///  Gets the <see cref='LParam'/> value, and converts the value to an object.
         /// </summary>
         public object GetLParam(Type cls) => Marshal.PtrToStructure(LParam, cls);
 
-        internal static Message Create(IntPtr hWnd, User32.WindowMessage msg, IntPtr wparam, IntPtr lparam)
+        internal static Message Create(IntPtr hWnd, User32.WM msg, IntPtr wparam, IntPtr lparam)
             => Create(hWnd, (int)msg, wparam, lparam);
 
-        /// <summary>
-        ///  Creates a new <see cref='Message'/> object.
-        /// </summary>
         public static Message Create(IntPtr hWnd, int msg, IntPtr wparam, IntPtr lparam)
         {
             var m = new Message

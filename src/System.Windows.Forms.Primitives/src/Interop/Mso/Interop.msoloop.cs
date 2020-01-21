@@ -7,8 +7,8 @@ internal partial class Interop
     internal partial class Mso
     {
         /// <summary>
-        ///  Reasons for pushing a message loop as passed to <see cref="IMsoComponentManager.FPushMessageLoop(uint*, Mso.msoloop, void*)" />.
-        ///  The host should remain in message loop until <see cref="IMsoComponent.FContinueMessageLoop(Mso.msoloop, void*, User32.MSG*)" />
+        ///  Reasons for pushing a message loop as passed to <see cref="IMsoComponentManager.FPushMessageLoop" />.
+        ///  The host should remain in message loop until <see cref="IMsoComponent.FContinueMessageLoop" />
         ///  returns <see cref="BOOL.FALSE" />
         /// </summary>
         public enum msoloop : uint

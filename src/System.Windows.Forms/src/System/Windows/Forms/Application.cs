@@ -19,7 +19,7 @@ namespace System.Windows.Forms
 {
     /// <summary>
     ///  Provides <see langword='static'/> methods and properties to manage an application, such as methods to run and quit an application,
-    ///  to process Windows messages, and properties to get information about an application. 
+    ///  to process Windows messages, and properties to get information about an application.
     ///  This class cannot be inherited.
     /// </summary>
     public sealed partial class Application
@@ -605,10 +605,7 @@ namespace System.Windows.Forms
 
                     // 248887 we need to send a WM_THEMECHANGED to the top level windows of this application.
                     // We do it this way to ensure that we get all top level windows -- whether we created them or not.
-                    User32.EnumWindowsCallback callback = SendThemeChanged;
-                    User32.EnumWindows(callback, IntPtr.Zero);
-
-                    GC.KeepAlive(callback);
+                    User32.EnumWindows(SendThemeChanged);
                 }
             }
         }
@@ -616,20 +613,20 @@ namespace System.Windows.Forms
         /// <summary>
         ///  This helper broadcasts out a WM_THEMECHANGED to appropriate top level windows of this app.
         /// </summary>
-        private unsafe static bool SendThemeChanged(IntPtr handle, IntPtr extraParameter)
+        private unsafe static BOOL SendThemeChanged(IntPtr handle)
         {
             uint thisPID = Kernel32.GetCurrentProcessId();
             User32.GetWindowThreadProcessId(handle, out uint processId);
             if (processId == thisPID && User32.IsWindowVisible(handle).IsTrue())
             {
-                SendThemeChangedRecursive(handle, IntPtr.Zero);
+                SendThemeChangedRecursive(handle);
                 User32.RedrawWindow(
                     handle,
                     null,
                     IntPtr.Zero,
                     User32.RDW.INVALIDATE | User32.RDW.FRAME | User32.RDW.ERASE | User32.RDW.ALLCHILDREN);
             }
-            return true;
+            return BOOL.TRUE;
         }
 
         /// <summary>
@@ -637,17 +634,15 @@ namespace System.Windows.Forms
         ///  It is assumed at this point that the handle belongs to the current process
         ///  and has a visible top level window.
         /// </summary>
-        private static bool SendThemeChangedRecursive(IntPtr handle, IntPtr lparam)
+        private static BOOL SendThemeChangedRecursive(IntPtr handle)
         {
             // First send to all children...
-            UnsafeNativeMethods.EnumChildWindows(new HandleRef(null, handle),
-                new NativeMethods.EnumChildrenCallback(Application.SendThemeChangedRecursive),
-                NativeMethods.NullHandleRef);
+            User32.EnumChildWindows(handle, Application.SendThemeChangedRecursive);
 
             // Then do myself.
             UnsafeNativeMethods.SendMessage(new HandleRef(null, handle), Interop.WindowMessages.WM_THEMECHANGED, 0, 0);
 
-            return true;
+            return BOOL.TRUE;
         }
 
         /// <summary>
@@ -837,7 +832,7 @@ namespace System.Windows.Forms
             => ThreadContext.FromCurrent().RunMessageLoop(Interop.Mso.msoloop.DoEventsModal, null);
 
         /// <summary>
-        ///  Enables visual styles for all subsequent <see cref="Application.Run"/> and <see cref="CreateHandle"/> calls.
+        ///  Enables visual styles for all subsequent <see cref="Application.Run()"/> and <see cref="Control.CreateHandle"/> calls.
         ///  Uses the default theming manifest file shipped with the redist.
         /// </summary>
         public static void EnableVisualStyles()
@@ -849,6 +844,8 @@ namespace System.Windows.Forms
                 // CSC embeds DLL manifests as resource ID 2
                 UseVisualStyles = ThemingScope.CreateActivationContext(assemblyLoc, nativeResourceManifestID: 2);
                 Debug.Assert(UseVisualStyles, "Enable Visual Styles failed");
+
+                s_comCtlSupportsVisualStylesInitialized = false;
             }
         }
 
@@ -1072,8 +1069,8 @@ namespace System.Windows.Forms
         /// </summary>
         internal static void ParkHandle(HandleRef handle, DpiAwarenessContext dpiAwarenessContext = DpiAwarenessContext.DPI_AWARENESS_CONTEXT_UNSPECIFIED)
         {
-            Debug.Assert(UnsafeNativeMethods.IsWindow(handle), "Handle being parked is not a valid window handle");
-            Debug.Assert(((int)UnsafeNativeMethods.GetWindowLong(handle, NativeMethods.GWL_STYLE) & (int)User32.WS.CHILD) != 0, "Only WS_CHILD windows should be parked.");
+            Debug.Assert(User32.IsWindow(handle).IsTrue(), "Handle being parked is not a valid window handle");
+            Debug.Assert(((int)User32.GetWindowLong(handle, User32.GWL.STYLE) & (int)User32.WS.CHILD) != 0, "Only WS_CHILD windows should be parked.");
 
             ThreadContext cxt = GetContextForHandle(handle);
             if (cxt != null)
@@ -1086,7 +1083,7 @@ namespace System.Windows.Forms
         ///  Park control handle on a parkingwindow that has matching DpiAwareness.
         /// </summary>
         /// <param name="cp"> create params for control handle</param>
-        /// <param name="dpiContext"> dpi awareness</param>
+        /// <param name="dpiAwarenessContext"> dpi awareness</param>
         internal static void ParkHandle(CreateParams cp, DpiAwarenessContext dpiAwarenessContext = DpiAwarenessContext.DPI_AWARENESS_CONTEXT_UNSPECIFIED)
         {
             ThreadContext cxt = ThreadContext.FromCurrent();

@@ -136,32 +136,32 @@ internal static partial class Interop
             /// Represents MCM_GETCALENDARGRIDINFO const.
             /// </summary>
             GETCALENDARGRIDINFO = FIRST + 24,
-            
+
             /// <summary>
             /// Represents MCM_GETCALID const.
             /// </summary>
             GETCALID = FIRST + 27,
-            
+
             /// <summary>
             /// Represents MCM_SETCALID const.
             /// </summary>
             SETCALID = FIRST + 28,
-            
+
             /// <summary>
             /// Represents MCM_SIZERECTTOMIN const.
             /// </summary>
             SIZERECTTOMIN = FIRST + 29,
-            
+
             /// <summary>
             /// Represents MCM_SETCALENDARBORDER const.
             /// </summary>
             SETCALENDARBORDER = FIRST + 30,
-            
+
             /// <summary>
             /// Represents MCM_GETCALENDARBORDER const.
             /// </summary>
             GETCALENDARBORDER = FIRST + 31,
-            
+
             /// <summary>
             /// Represents SETCURRENTVIEW const.
             /// </summary>

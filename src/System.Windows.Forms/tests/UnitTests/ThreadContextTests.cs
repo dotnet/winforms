@@ -9,14 +9,14 @@ using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ThreadContextTests
+    public class ThreadContextTests : IClassFixture<ThreadExceptionFixture>
     {
         private delegate bool MessageCallback(ref Message m);
 
         // WM_USER is 0x400, just need to be above that
-        const User32.WindowMessage TestMessageId1 = (User32.WindowMessage)0x441;
-        const User32.WindowMessage TestMessageId2 = (User32.WindowMessage)0x442;
-        const User32.WindowMessage TestMessageId3 = (User32.WindowMessage)0x443;
+        const User32.WM TestMessageId1 = (User32.WM)0x441;
+        const User32.WM TestMessageId2 = (User32.WM)0x442;
+        const User32.WM TestMessageId3 = (User32.WM)0x443;
 
         [Fact]
         public void ThreadContext_EmptyProcessFiltersWorks()
@@ -33,7 +33,7 @@ namespace System.Windows.Forms.Tests
             // Test that a filter for the wrong ID returns false, but does get called
             Application.ThreadContext threadContext = new Application.ThreadContext();
 
-            User32.WindowMessage filterId = TestMessageId2;
+            User32.WM filterId = TestMessageId2;
             var mockContext = new Mock<IMessageFilter>(MockBehavior.Strict);
             mockContext.Setup(c => c.PreFilterMessage(ref It.Ref<Message>.IsAny))
                        .Returns((MessageCallback)((ref Message m) => m.Msg == (int)filterId));
@@ -53,7 +53,7 @@ namespace System.Windows.Forms.Tests
             // Test that a filter with the correct ID returns true
             Application.ThreadContext threadContext = new Application.ThreadContext();
 
-            User32.WindowMessage filterId = TestMessageId2;
+            User32.WM filterId = TestMessageId2;
             var mockContext = new Mock<IMessageFilter>(MockBehavior.Strict);
             mockContext.Setup(c => c.PreFilterMessage(ref It.Ref<Message>.IsAny))
                        .Returns((MessageCallback)((ref Message m) => m.Msg == (int)filterId));
@@ -73,13 +73,13 @@ namespace System.Windows.Forms.Tests
             // Test that multiple filters work
             Application.ThreadContext threadContext = new Application.ThreadContext();
 
-            User32.WindowMessage filterId2 = TestMessageId2;
+            User32.WM filterId2 = TestMessageId2;
             var mockContext2 = new Mock<IMessageFilter>(MockBehavior.Strict);
             mockContext2.Setup(c => c.PreFilterMessage(ref It.Ref<Message>.IsAny))
                        .Returns((MessageCallback)((ref Message m) => m.Msg == (int)filterId2));
             threadContext.AddMessageFilter(mockContext2.Object);
 
-            User32.WindowMessage filterId3 = TestMessageId3;
+            User32.WM filterId3 = TestMessageId3;
             var mockContext3 = new Mock<IMessageFilter>(MockBehavior.Strict);
             mockContext3.Setup(c => c.PreFilterMessage(ref It.Ref<Message>.IsAny))
                        .Returns((MessageCallback)((ref Message m) => m.Msg == (int)filterId3));

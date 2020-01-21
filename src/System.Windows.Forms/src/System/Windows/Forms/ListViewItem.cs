@@ -850,7 +850,7 @@ namespace System.Windows.Forms
                     lv.Focus();
                 }
 
-                UnsafeNativeMethods.SendMessage(new HandleRef(lv, lv.Handle), (int)LVM.EDITLABEL, Index, 0);
+                User32.SendMessageW(lv, (User32.WM)LVM.EDITLABELW, (IntPtr)Index);
             }
         }
 
@@ -1052,15 +1052,15 @@ namespace System.Windows.Forms
                 lvItem.mask |= LVIF.GROUPID;
                 lvItem.iGroupId = listView.GetNativeGroupId(this);
 
-                IntPtr result = User32.SendMessageW(listView, (User32.WindowMessage)LVM.ISGROUPVIEWENABLED);
+                IntPtr result = User32.SendMessageW(listView, (User32.WM)LVM.ISGROUPVIEWENABLED);
                 Debug.Assert(!updateOwner || result != IntPtr.Zero, "Groups not enabled");
-                result = User32.SendMessageW(listView, (User32.WindowMessage)LVM.HASGROUP, (IntPtr)lvItem.iGroupId);
+                result = User32.SendMessageW(listView, (User32.WM)LVM.HASGROUP, (IntPtr)lvItem.iGroupId);
                 Debug.Assert(!updateOwner || result != IntPtr.Zero, "Doesn't contain group id: " + lvItem.iGroupId.ToString(CultureInfo.InvariantCulture));
             }
 
             if (updateOwner)
             {
-                User32.SendMessageW(listView, (User32.WindowMessage)LVM.SETITEM, IntPtr.Zero, ref lvItem);
+                User32.SendMessageW(listView, (User32.WM)LVM.SETITEMW, IntPtr.Zero, ref lvItem);
             }
         }
 
@@ -1089,7 +1089,7 @@ namespace System.Windows.Forms
                 }
 
                 lvItem.iItem = displayIndex;
-                User32.SendMessageW(listView, (User32.WindowMessage)LVM.GETITEM, IntPtr.Zero, ref lvItem);
+                User32.SendMessageW(listView, (User32.WM)LVM.GETITEMW, IntPtr.Zero, ref lvItem);
 
                 // Update this class' information
                 if (checkSelection)
@@ -1981,13 +1981,12 @@ namespace System.Windows.Forms
             {
                 if (_owner.subItems != null)
                 {
-                    return new WindowsFormsUtils.ArraySubsetEnumerator(_owner.subItems, _owner.SubItemCount);
+                    return new ArraySubsetEnumerator(_owner.subItems, _owner.SubItemCount);
                 }
                 else
                 {
                     return Array.Empty<ListViewSubItem>().GetEnumerator();
                 }
-
             }
         }
     }

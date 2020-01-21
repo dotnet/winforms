@@ -32,7 +32,7 @@ internal static partial class Interop
                 // GetWindowTextLengthW returns the length of the text not
                 // including the null terminator.
                 textLength = Math.Max(textLength, GetWindowTextLengthW(hWnd));
-                
+
                 // Use a buffer that has room for at least two additional chars
                 // (one for the null terminator, and one to detect if the text length
                 // has increased).

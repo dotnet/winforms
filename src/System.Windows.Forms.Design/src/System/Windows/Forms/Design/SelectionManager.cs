@@ -132,7 +132,6 @@ namespace System.Windows.Forms.Design
                     if (selType == GlyphSelectionType.SelectedPrimary ||
                         selType == GlyphSelectionType.Selected)
                     {
-
                         if (_curSelectionBounds[_curCompIndex] == Rectangle.Empty)
                         {
                             _curSelectionBounds[_curCompIndex] = bodyGlyph.Bounds;
@@ -275,7 +274,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  When a component is removed - we remove the key & value from our hashtable.
+        ///  When a component is removed - we remove the key and value from our hashtable.
         /// </summary>
         private void OnComponentRemoved(object source, ComponentEventArgs ce)
         {
@@ -289,8 +288,9 @@ namespace System.Windows.Forms.Design
                 _designerActionUI.RemoveActionGlyph(ce.Component);
             }
         }
+
         /// <summary>
-        ///  Computes the region representing the difference between the old  selection and the new selection.
+        ///  Computes the region representing the difference between the old selection and the new selection.
         /// </summary>
         private Region DetermineRegionToRefresh(object primarySelection)
         {

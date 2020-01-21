@@ -107,7 +107,11 @@ namespace System.Windows.Forms
                 _id = Kernel32.GetCurrentThreadId();
                 _messageLoopCount = 0;
                 t_currentThreadContext = this;
-                s_contextHash[_id] = this;
+
+                lock (s_tcInternalSyncObject)
+                {
+                    s_contextHash[_id] = this;
+                }
             }
 
             public ApplicationContext ApplicationContext { get; private set; }
@@ -310,7 +314,6 @@ namespace System.Windows.Forms
 
                 if (!DpiHelper.IsScalingRequirementMet || CommonUnsafeNativeMethods.TryFindDpiAwarenessContextsEqual(context, DpiAwarenessContext.DPI_AWARENESS_CONTEXT_UNSPECIFIED))
                 {
-
                     Debug.Assert(_parkingWindows.Count == 1, "parkingWindows count can not be > 1 for legacy OS/target framework versions");
                     return _parkingWindows[0];
                 }
@@ -944,7 +947,7 @@ namespace System.Windows.Forms
                 //
                 // We can't follow the KB article exactly, becasue we don't have an HWND to PostMessage
                 // to.
-                User32.PostThreadMessageW(_id, User32.WindowMessage.WM_QUIT, IntPtr.Zero, IntPtr.Zero);
+                User32.PostThreadMessageW(_id, User32.WM.QUIT, IntPtr.Zero, IntPtr.Zero);
                 SetState(STATE_POSTEDQUIT, true);
             }
 
@@ -1075,7 +1078,7 @@ namespace System.Windows.Forms
                     // If the owner window of the dialog is still enabled, disable it now.
                     // This can happen if the owner window is from a different thread or
                     // process.
-                    hwndOwner = UnsafeNativeMethods.GetWindowLong(new HandleRef(_currentForm, _currentForm.Handle), NativeMethods.GWL_HWNDPARENT);
+                    hwndOwner = User32.GetWindowLong(_currentForm, User32.GWL.HWNDPARENT);
                     if (hwndOwner != IntPtr.Zero)
                     {
                         if (User32.IsWindowEnabled(hwndOwner).IsTrue())
@@ -1291,7 +1294,7 @@ namespace System.Windows.Forms
                             if (f is IMessageModifyAndFilter)
                             {
                                 msg.hwnd = m.HWnd;
-                                msg.message = (User32.WindowMessage)m.Msg;
+                                msg.message = (User32.WM)m.Msg;
                                 msg.wParam = m.WParam;
                                 msg.lParam = m.LParam;
                                 modified = true;
@@ -1328,7 +1331,7 @@ namespace System.Windows.Forms
 
                 if (msg.IsKeyMessage())
                 {
-                    if (msg.message == User32.WindowMessage.WM_CHAR)
+                    if (msg.message == User32.WM.CHAR)
                     {
                         int breakLParamMask = 0x1460000; // 1 = extended keyboard, 46 = scan code
                         if (unchecked((int)(long)msg.wParam) == 3 && (unchecked((int)(long)msg.lParam) & breakLParamMask) == breakLParamMask) // ctrl-brk

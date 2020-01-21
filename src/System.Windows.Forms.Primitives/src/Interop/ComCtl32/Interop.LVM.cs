@@ -10,11 +10,12 @@ internal static partial class Interop
         ///  Messages that the ListView control will respond to.
         ///  Copied form commctrl.h
         /// </summary>
-        public enum LVM
+        public enum LVM : uint
         {
             FIRST = 0x1000,
             GETBKCOLOR = FIRST + 0,
             SETBKCOLOR = FIRST + 1,
+            GETIMAGELIST = FIRST + 2,
             SETIMAGELIST = FIRST + 3,
             GETITEMCOUNT = FIRST + 4,
             DELETEITEM = FIRST + 8,
@@ -72,24 +73,24 @@ internal static partial class Interop
             GETHOVERTIME = FIRST + 72,
             GETNUMBEROFWORKAREAS = FIRST + 73,
             SETTOOLTIPS = FIRST + 74,
-            GETITEM = FIRST + 75,
-            SETITEM = FIRST + 76,
-            INSERTITEM = FIRST + 77,
+            GETITEMW = FIRST + 75,
+            SETITEMW = FIRST + 76,
+            INSERTITEMW = FIRST + 77,
             GETTOOLTIPS = FIRST + 78,
             SORTITEMSEX = FIRST + 81,
-            FINDITEM = FIRST + 83,
-            GETSTRINGWIDTH = FIRST + 87,
+            FINDITEMW = FIRST + 83,
+            GETSTRINGWIDTHW = FIRST + 87,
             GETGROUPSTATE = FIRST + 92,
             GETFOCUSEDGROUP = FIRST + 93,
-            GETCOLUMN = FIRST + 95,
-            SETCOLUMN = FIRST + 96,
-            INSERTCOLUMN = FIRST + 97,
+            GETCOLUMNW = FIRST + 95,
+            SETCOLUMNW = FIRST + 96,
+            INSERTCOLUMNW = FIRST + 97,
             GETGROUPRECT = FIRST + 98,
-            GETITEMTEXT = FIRST + 115,
-            SETITEMTEXT = FIRST + 116,
-            GETISEARCHSTRING = FIRST + 117,
-            EDITLABEL = FIRST + 118,
-            SETBKIMAGE = FIRST + 138,
+            GETITEMTEXTW = FIRST + 115,
+            SETITEMTEXTW = FIRST + 116,
+            GETISEARCHSTRINGW = FIRST + 117,
+            EDITLABELW = FIRST + 118,
+            SETBKIMAGEW = FIRST + 138,
             GETBKIMAGEW = FIRST + 139,
             SETSELECTEDCOLUMN = FIRST + 140,
             SETVIEW = FIRST + 142,
@@ -136,6 +137,7 @@ internal static partial class Interop
             GETITEMINDEXRECT = FIRST + 209,
             SETITEMINDEXSTATE = FIRST + 210,
             GETNEXTITEMINDEX = FIRST + 211,
+            SETUNICODEFORMAT = CCM.SETUNICODEFORMAT,
         }
     }
 }

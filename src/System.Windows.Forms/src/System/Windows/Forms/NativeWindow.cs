@@ -118,18 +118,14 @@ namespace System.Windows.Forms
                         Kernel32.GetExitCodeThread(threadHandle, out uint exitCode);
                         if (!AppDomain.CurrentDomain.IsFinalizingForUnload() && (NTSTATUS)exitCode == NTSTATUS.STATUS_PENDING)
                         {
-                            if (User32.SendMessageTimeoutW(
+                            User32.SendMessageTimeoutW(
                                 handle,
                                 User32.RegisteredMessage.WM_UIUNSUBCLASS,
                                 IntPtr.Zero,
                                 IntPtr.Zero,
                                 User32.SMTO.ABORTIFHUNG,
                                 100,
-                                out _) == IntPtr.Zero)
-                            {
-
-                                //Debug.Fail("unable to ping HWND:" + handle.ToString() + " during finalization");
-                            }
+                                out _);
                         }
                     }
                 }
@@ -144,12 +140,12 @@ namespace System.Windows.Forms
             if (handle != IntPtr.Zero && ownedHandle)
             {
                 // If we owned the handle, post a WM_CLOSE to get rid of it.
-                User32.PostMessageW(handle, User32.WindowMessage.WM_CLOSE);
+                User32.PostMessageW(handle, User32.WM.CLOSE);
             }
         }
 
         /// <summary>
-        ///  Indicates whether a window handle was created & is being tracked.
+        ///  Indicates whether a window handle was created &amp; is being tracked.
         /// </summary>
         internal static bool AnyHandleCreated => t_anyHandleCreated;
 
@@ -322,7 +318,6 @@ namespace System.Windows.Forms
                 _priorWindowProcHandle = User32.GetWindowLong(this, User32.GWL.WNDPROC);
                 Debug.Assert(_priorWindowProcHandle != IntPtr.Zero);
 
-
                 Debug.WriteLineIf(
                     WndProcChoice.TraceVerbose,
                     WndProcShouldBeDebuggable ? "Using debuggable wndproc" : "Using normal wndproc");
@@ -361,7 +356,7 @@ namespace System.Windows.Forms
         ///  in a Message object and invokes the wndProc() method. A WM_NCDESTROY
         ///  message automatically causes the releaseHandle() method to be called.
         /// </summary>
-        private IntPtr Callback(IntPtr hWnd, User32.WindowMessage msg, IntPtr wparam, IntPtr lparam)
+        private IntPtr Callback(IntPtr hWnd, User32.WM msg, IntPtr wparam, IntPtr lparam)
         {
             // Note: if you change this code be sure to change the
             // corresponding code in DebuggableCallback below!
@@ -389,7 +384,7 @@ namespace System.Windows.Forms
             }
             finally
             {
-                if (msg == User32.WindowMessage.WM_NCDESTROY)
+                if (msg == User32.WM.NCDESTROY)
                 {
                     ReleaseHandle(handleValid: false);
                 }
@@ -504,14 +499,14 @@ namespace System.Windows.Forms
 
                     // At this point, there isn't much we can do.  There's a small chance the following
                     // line will allow the rest of the program to run, but don't get your hopes up.
-                    m.Result = User32.DefWindowProcW(m.HWnd, m.WindowMessage(), m.WParam, m.LParam);
+                    m.Result = User32.DefWindowProcW(m.HWnd, (User32.WM)m.Msg, m.WParam, m.LParam);
                     return;
                 }
-                m.Result = User32.CallWindowProcW(_priorWindowProcHandle, m.HWnd, m.WindowMessage(), m.WParam, m.LParam);
+                m.Result = User32.CallWindowProcW(_priorWindowProcHandle, m.HWnd, (User32.WM)m.Msg, m.WParam, m.LParam);
             }
             else
             {
-                m.Result = PreviousWindow.Callback(m.HWnd, m.WindowMessage(), m.WParam, m.LParam);
+                m.Result = PreviousWindow.Callback(m.HWnd, (User32.WM)m.Msg, m.WParam, m.LParam);
             }
         }
 
@@ -529,7 +524,7 @@ namespace System.Windows.Forms
                         UnSubclass();
 
                         // Now post a close and let it do whatever it needs to do on its own.
-                        User32.PostMessageW(this, User32.WindowMessage.WM_CLOSE);
+                        User32.PostMessageW(this, User32.WM.CLOSE);
                     }
 
                     Handle = IntPtr.Zero;
@@ -614,7 +609,7 @@ namespace System.Windows.Forms
                         {
                             User32.SetWindowLong(handle, User32.GWL.WNDPROC, DefaultWindowProc);
                             User32.SetClassLong(handle, User32.GCL.WNDPROC, DefaultWindowProc);
-                            User32.PostMessageW(handle, User32.WindowMessage.WM_CLOSE);
+                            User32.PostMessageW(handle, User32.WM.CLOSE);
 
                             // Fish out the Window object, if it is valid, and NULL the handle pointer.  This
                             // way the rest of WinForms won't think the handle is still valid here.
@@ -652,12 +647,12 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Releases the handle associated with this window.
         /// </summary>
-        /// <remarks></remarks>
+        /// <remarks>
         ///  If <paramref name="handleValid"/> is true, this will unsubclass the window as
         ///  well. <paramref name="handleValid"/> should be false if we are releasing in
         ///  response to a WM_DESTROY. Unsubclassing during this message can cause problems
         ///  with Windows theme manager and it's not needed anyway.
-        /// </summary>
+        /// </remarks>
         private void ReleaseHandle(bool handleValid)
         {
             if (Handle == IntPtr.Zero)

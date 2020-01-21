@@ -11,7 +11,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Design.Tests
 {
-    public class FolderNameEditorTests
+    public class FolderNameEditorTests : IClassFixture<ThreadExceptionFixture>
     {
         [Fact]
         public void FolderNameEditor_Ctor_Default()

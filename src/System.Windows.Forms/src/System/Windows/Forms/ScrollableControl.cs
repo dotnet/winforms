@@ -254,7 +254,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        // Gets the Horizontal Scroll bar for this ScrollableControl.
+        /// Gets the Horizontal Scroll bar for this ScrollableControl.
         /// </summary>
         [SRCategory(nameof(SR.CatLayout))]
         [SRDescription(nameof(SR.ScrollableControlHorizontalScrollDescr))]
@@ -402,7 +402,6 @@ namespace System.Windows.Forms
             bool defaultLayoutEngine = (LayoutEngine == DefaultLayout.Instance);
             if (!defaultLayoutEngine && CommonProperties.HasLayoutBounds(this))
             {
-
                 Size layoutBounds = CommonProperties.GetLayoutBounds(this);
 
                 if (layoutBounds.Width > maxX)
@@ -979,7 +978,6 @@ namespace System.Windows.Forms
                 || (!vert && VScroll)
                 || (vert && !VScroll))
             {
-
                 needLayout = true;
             }
 
@@ -1042,7 +1040,6 @@ namespace System.Windows.Forms
             bool needLayout = false;
             if (_displayRect.Width != width || _displayRect.Height != height)
             {
-
                 _displayRect.Width = width;
                 _displayRect.Height = height;
                 needLayout = true;
@@ -1216,7 +1213,7 @@ namespace System.Windows.Forms
             {
                 User32.SendMessageW(
                     this,
-                    User32.WindowMessage.WM_HSCROLL,
+                    User32.WM.HSCROLL,
                     PARAM.FromLowHigh((RightToLeft == RightToLeft.Yes) ? (int)User32.SBH.RIGHT : (int)User32.SBH.LEFT, 0),
                     IntPtr.Zero);
             }
