@@ -349,22 +349,6 @@ System.Windows.Forms.AutoValidate.Disable = 0 -> System.Windows.Forms.AutoValida
 System.Windows.Forms.AutoValidate.EnableAllowFocusChange = 2 -> System.Windows.Forms.AutoValidate
 System.Windows.Forms.AutoValidate.EnablePreventFocusChange = 1 -> System.Windows.Forms.AutoValidate
 System.Windows.Forms.AutoValidate.Inherit = -1 -> System.Windows.Forms.AutoValidate
-System.Windows.Forms.Automation.AutomationLiveSetting
-System.Windows.Forms.Automation.AutomationLiveSetting.Assertive = 2 -> System.Windows.Forms.Automation.AutomationLiveSetting
-System.Windows.Forms.Automation.AutomationLiveSetting.Off = 0 -> System.Windows.Forms.Automation.AutomationLiveSetting
-System.Windows.Forms.Automation.AutomationLiveSetting.Polite = 1 -> System.Windows.Forms.Automation.AutomationLiveSetting
-System.Windows.Forms.Automation.AutomationNotificationKind
-System.Windows.Forms.Automation.AutomationNotificationKind.ActionAborted = 3 -> System.Windows.Forms.Automation.AutomationNotificationKind
-System.Windows.Forms.Automation.AutomationNotificationKind.ActionCompleted = 2 -> System.Windows.Forms.Automation.AutomationNotificationKind
-System.Windows.Forms.Automation.AutomationNotificationKind.ItemAdded = 0 -> System.Windows.Forms.Automation.AutomationNotificationKind
-System.Windows.Forms.Automation.AutomationNotificationKind.ItemRemoved = 1 -> System.Windows.Forms.Automation.AutomationNotificationKind
-System.Windows.Forms.Automation.AutomationNotificationKind.Other = 4 -> System.Windows.Forms.Automation.AutomationNotificationKind
-System.Windows.Forms.Automation.AutomationNotificationProcessing
-System.Windows.Forms.Automation.AutomationNotificationProcessing.All = 2 -> System.Windows.Forms.Automation.AutomationNotificationProcessing
-System.Windows.Forms.Automation.AutomationNotificationProcessing.CurrentThenMostRecent = 4 -> System.Windows.Forms.Automation.AutomationNotificationProcessing
-System.Windows.Forms.Automation.AutomationNotificationProcessing.ImportantAll = 0 -> System.Windows.Forms.Automation.AutomationNotificationProcessing
-System.Windows.Forms.Automation.AutomationNotificationProcessing.ImportantMostRecent = 1 -> System.Windows.Forms.Automation.AutomationNotificationProcessing
-System.Windows.Forms.Automation.AutomationNotificationProcessing.MostRecent = 3 -> System.Windows.Forms.Automation.AutomationNotificationProcessing
 System.Windows.Forms.Automation.IAutomationLiveRegion
 System.Windows.Forms.Automation.IAutomationLiveRegion.LiveSetting.get -> System.Windows.Forms.Automation.AutomationLiveSetting
 System.Windows.Forms.Automation.IAutomationLiveRegion.LiveSetting.set -> void
@@ -2696,7 +2680,6 @@ System.Windows.Forms.DomainUpDown.DomainItemAccessibleObject
 System.Windows.Forms.DomainUpDown.DomainItemAccessibleObject.DomainItemAccessibleObject(string name, System.Windows.Forms.AccessibleObject parent) -> void
 System.Windows.Forms.DomainUpDown.DomainUpDown() -> void
 System.Windows.Forms.DomainUpDown.DomainUpDownAccessibleObject
-System.Windows.Forms.DomainUpDown.DomainUpDownAccessibleObject.DomainUpDownAccessibleObject(System.Windows.Forms.Control owner) -> void
 System.Windows.Forms.DomainUpDown.DomainUpDownItemCollection
 System.Windows.Forms.DomainUpDown.Items.get -> System.Windows.Forms.DomainUpDown.DomainUpDownItemCollection
 System.Windows.Forms.DomainUpDown.OnSelectedItemChanged(object source, System.EventArgs e) -> void
@@ -2909,17 +2892,6 @@ System.Windows.Forms.FileDialog.Title.get -> string
 System.Windows.Forms.FileDialog.Title.set -> void
 System.Windows.Forms.FileDialog.ValidateNames.get -> bool
 System.Windows.Forms.FileDialog.ValidateNames.set -> void
-System.Windows.Forms.FileDialogCustomPlace
-System.Windows.Forms.FileDialogCustomPlace.FileDialogCustomPlace(System.Guid knownFolderGuid) -> void
-System.Windows.Forms.FileDialogCustomPlace.FileDialogCustomPlace(string path) -> void
-System.Windows.Forms.FileDialogCustomPlace.KnownFolderGuid.get -> System.Guid
-System.Windows.Forms.FileDialogCustomPlace.KnownFolderGuid.set -> void
-System.Windows.Forms.FileDialogCustomPlace.Path.get -> string
-System.Windows.Forms.FileDialogCustomPlace.Path.set -> void
-System.Windows.Forms.FileDialogCustomPlacesCollection
-System.Windows.Forms.FileDialogCustomPlacesCollection.Add(System.Guid knownFolderGuid) -> void
-System.Windows.Forms.FileDialogCustomPlacesCollection.Add(string path) -> void
-System.Windows.Forms.FileDialogCustomPlacesCollection.FileDialogCustomPlacesCollection() -> void
 System.Windows.Forms.FixedPanel
 System.Windows.Forms.FixedPanel.None = 0 -> System.Windows.Forms.FixedPanel
 System.Windows.Forms.FixedPanel.Panel1 = 1 -> System.Windows.Forms.FixedPanel
@@ -3239,12 +3211,6 @@ System.Windows.Forms.HelpProvider
 System.Windows.Forms.HelpProvider.HelpProvider() -> void
 System.Windows.Forms.HelpProvider.Tag.get -> object
 System.Windows.Forms.HelpProvider.Tag.set -> void
-System.Windows.Forms.HighDpiMode
-System.Windows.Forms.HighDpiMode.DpiUnaware = 0 -> System.Windows.Forms.HighDpiMode
-System.Windows.Forms.HighDpiMode.DpiUnawareGdiScaled = 4 -> System.Windows.Forms.HighDpiMode
-System.Windows.Forms.HighDpiMode.PerMonitor = 2 -> System.Windows.Forms.HighDpiMode
-System.Windows.Forms.HighDpiMode.PerMonitorV2 = 3 -> System.Windows.Forms.HighDpiMode
-System.Windows.Forms.HighDpiMode.SystemAware = 1 -> System.Windows.Forms.HighDpiMode
 System.Windows.Forms.HorizontalAlignment
 System.Windows.Forms.HorizontalAlignment.Center = 2 -> System.Windows.Forms.HorizontalAlignment
 System.Windows.Forms.HorizontalAlignment.Left = 0 -> System.Windows.Forms.HorizontalAlignment
@@ -4688,11 +4654,6 @@ System.Windows.Forms.MenuGlyph.Bullet = 2 -> System.Windows.Forms.MenuGlyph
 System.Windows.Forms.MenuGlyph.Checkmark = 1 -> System.Windows.Forms.MenuGlyph
 System.Windows.Forms.MenuGlyph.Max = 2 -> System.Windows.Forms.MenuGlyph
 System.Windows.Forms.MenuGlyph.Min = 0 -> System.Windows.Forms.MenuGlyph
-System.Windows.Forms.MenuMerge
-System.Windows.Forms.MenuMerge.Add = 0 -> System.Windows.Forms.MenuMerge
-System.Windows.Forms.MenuMerge.MergeItems = 2 -> System.Windows.Forms.MenuMerge
-System.Windows.Forms.MenuMerge.Remove = 3 -> System.Windows.Forms.MenuMerge
-System.Windows.Forms.MenuMerge.Replace = 1 -> System.Windows.Forms.MenuMerge
 System.Windows.Forms.MenuStrip
 System.Windows.Forms.MenuStrip.CanOverflow.get -> bool
 System.Windows.Forms.MenuStrip.CanOverflow.set -> void
@@ -4713,19 +4674,6 @@ System.Windows.Forms.MergeAction.Insert = 1 -> System.Windows.Forms.MergeAction
 System.Windows.Forms.MergeAction.MatchOnly = 4 -> System.Windows.Forms.MergeAction
 System.Windows.Forms.MergeAction.Remove = 3 -> System.Windows.Forms.MergeAction
 System.Windows.Forms.MergeAction.Replace = 2 -> System.Windows.Forms.MergeAction
-System.Windows.Forms.Message
-System.Windows.Forms.Message.GetLParam(System.Type cls) -> object
-System.Windows.Forms.Message.HWnd.get -> System.IntPtr
-System.Windows.Forms.Message.HWnd.set -> void
-System.Windows.Forms.Message.LParam.get -> System.IntPtr
-System.Windows.Forms.Message.LParam.set -> void
-System.Windows.Forms.Message.Message() -> void
-System.Windows.Forms.Message.Msg.get -> int
-System.Windows.Forms.Message.Msg.set -> void
-System.Windows.Forms.Message.Result.get -> System.IntPtr
-System.Windows.Forms.Message.Result.set -> void
-System.Windows.Forms.Message.WParam.get -> System.IntPtr
-System.Windows.Forms.Message.WParam.set -> void
 System.Windows.Forms.MessageBox
 System.Windows.Forms.MessageBoxButtons
 System.Windows.Forms.MessageBoxButtons.AbortRetryIgnore = 2 -> System.Windows.Forms.MessageBoxButtons
@@ -4982,24 +4930,6 @@ System.Windows.Forms.OwnerDrawPropertyBag.Font.set -> void
 System.Windows.Forms.OwnerDrawPropertyBag.ForeColor.get -> System.Drawing.Color
 System.Windows.Forms.OwnerDrawPropertyBag.ForeColor.set -> void
 System.Windows.Forms.OwnerDrawPropertyBag.OwnerDrawPropertyBag(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) -> void
-System.Windows.Forms.Padding
-System.Windows.Forms.Padding.All.get -> int
-System.Windows.Forms.Padding.All.set -> void
-System.Windows.Forms.Padding.Bottom.get -> int
-System.Windows.Forms.Padding.Bottom.set -> void
-System.Windows.Forms.Padding.Horizontal.get -> int
-System.Windows.Forms.Padding.Left.get -> int
-System.Windows.Forms.Padding.Left.set -> void
-System.Windows.Forms.Padding.Padding(int all) -> void
-System.Windows.Forms.Padding.Padding(int left, int top, int right, int bottom) -> void
-System.Windows.Forms.Padding.Right.get -> int
-System.Windows.Forms.Padding.Right.set -> void
-System.Windows.Forms.Padding.Size.get -> System.Drawing.Size
-System.Windows.Forms.Padding.Top.get -> int
-System.Windows.Forms.Padding.Top.set -> void
-System.Windows.Forms.Padding.Vertical.get -> int
-System.Windows.Forms.PaddingConverter
-System.Windows.Forms.PaddingConverter.PaddingConverter() -> void
 System.Windows.Forms.PageSetupDialog
 System.Windows.Forms.PageSetupDialog.AllowMargins.get -> bool
 System.Windows.Forms.PageSetupDialog.AllowMargins.set -> void
@@ -5655,11 +5585,6 @@ System.Windows.Forms.Screen.Bounds.get -> System.Drawing.Rectangle
 System.Windows.Forms.Screen.DeviceName.get -> string
 System.Windows.Forms.Screen.Primary.get -> bool
 System.Windows.Forms.Screen.WorkingArea.get -> System.Drawing.Rectangle
-System.Windows.Forms.ScreenOrientation
-System.Windows.Forms.ScreenOrientation.Angle0 = 0 -> System.Windows.Forms.ScreenOrientation
-System.Windows.Forms.ScreenOrientation.Angle180 = 2 -> System.Windows.Forms.ScreenOrientation
-System.Windows.Forms.ScreenOrientation.Angle270 = 3 -> System.Windows.Forms.ScreenOrientation
-System.Windows.Forms.ScreenOrientation.Angle90 = 1 -> System.Windows.Forms.ScreenOrientation
 System.Windows.Forms.ScrollBar
 System.Windows.Forms.ScrollBar.AutoSizeChanged -> System.EventHandler
 System.Windows.Forms.ScrollBar.BackColorChanged -> System.EventHandler
@@ -8076,10 +8001,8 @@ System.Windows.Forms.VisualStyles.ContentAlignment.Left = 0 -> System.Windows.Fo
 System.Windows.Forms.VisualStyles.ContentAlignment.Right = 2 -> System.Windows.Forms.VisualStyles.ContentAlignment
 System.Windows.Forms.VisualStyles.EdgeEffects
 System.Windows.Forms.VisualStyles.EdgeEffects.FillInterior = 2048 -> System.Windows.Forms.VisualStyles.EdgeEffects
-System.Windows.Forms.VisualStyles.EdgeEffects.Flat = 4096 -> System.Windows.Forms.VisualStyles.EdgeEffects
 System.Windows.Forms.VisualStyles.EdgeEffects.Mono = 32768 -> System.Windows.Forms.VisualStyles.EdgeEffects
 System.Windows.Forms.VisualStyles.EdgeEffects.None = 0 -> System.Windows.Forms.VisualStyles.EdgeEffects
-System.Windows.Forms.VisualStyles.EdgeEffects.Soft = 16384 -> System.Windows.Forms.VisualStyles.EdgeEffects
 System.Windows.Forms.VisualStyles.EdgeStyle
 System.Windows.Forms.VisualStyles.EdgeStyle.Bump = 9 -> System.Windows.Forms.VisualStyles.EdgeStyle
 System.Windows.Forms.VisualStyles.EdgeStyle.Etched = 6 -> System.Windows.Forms.VisualStyles.EdgeStyle
@@ -8285,81 +8208,10 @@ System.Windows.Forms.VisualStyles.TextBoxState.Hot = 2 -> System.Windows.Forms.V
 System.Windows.Forms.VisualStyles.TextBoxState.Normal = 1 -> System.Windows.Forms.VisualStyles.TextBoxState
 System.Windows.Forms.VisualStyles.TextBoxState.Readonly = 6 -> System.Windows.Forms.VisualStyles.TextBoxState
 System.Windows.Forms.VisualStyles.TextBoxState.Selected = 3 -> System.Windows.Forms.VisualStyles.TextBoxState
-System.Windows.Forms.VisualStyles.TextMetrics
-System.Windows.Forms.VisualStyles.TextMetrics.Ascent.get -> int
-System.Windows.Forms.VisualStyles.TextMetrics.Ascent.set -> void
-System.Windows.Forms.VisualStyles.TextMetrics.AverageCharWidth.get -> int
-System.Windows.Forms.VisualStyles.TextMetrics.AverageCharWidth.set -> void
-System.Windows.Forms.VisualStyles.TextMetrics.BreakChar.get -> char
-System.Windows.Forms.VisualStyles.TextMetrics.BreakChar.set -> void
-System.Windows.Forms.VisualStyles.TextMetrics.CharSet.get -> System.Windows.Forms.VisualStyles.TextMetricsCharacterSet
-System.Windows.Forms.VisualStyles.TextMetrics.CharSet.set -> void
-System.Windows.Forms.VisualStyles.TextMetrics.DefaultChar.get -> char
-System.Windows.Forms.VisualStyles.TextMetrics.DefaultChar.set -> void
-System.Windows.Forms.VisualStyles.TextMetrics.Descent.get -> int
-System.Windows.Forms.VisualStyles.TextMetrics.Descent.set -> void
-System.Windows.Forms.VisualStyles.TextMetrics.DigitizedAspectX.get -> int
-System.Windows.Forms.VisualStyles.TextMetrics.DigitizedAspectX.set -> void
-System.Windows.Forms.VisualStyles.TextMetrics.DigitizedAspectY.get -> int
-System.Windows.Forms.VisualStyles.TextMetrics.DigitizedAspectY.set -> void
-System.Windows.Forms.VisualStyles.TextMetrics.ExternalLeading.get -> int
-System.Windows.Forms.VisualStyles.TextMetrics.ExternalLeading.set -> void
-System.Windows.Forms.VisualStyles.TextMetrics.FirstChar.get -> char
-System.Windows.Forms.VisualStyles.TextMetrics.FirstChar.set -> void
-System.Windows.Forms.VisualStyles.TextMetrics.Height.get -> int
-System.Windows.Forms.VisualStyles.TextMetrics.Height.set -> void
-System.Windows.Forms.VisualStyles.TextMetrics.InternalLeading.get -> int
-System.Windows.Forms.VisualStyles.TextMetrics.InternalLeading.set -> void
-System.Windows.Forms.VisualStyles.TextMetrics.Italic.get -> bool
-System.Windows.Forms.VisualStyles.TextMetrics.Italic.set -> void
-System.Windows.Forms.VisualStyles.TextMetrics.LastChar.get -> char
-System.Windows.Forms.VisualStyles.TextMetrics.LastChar.set -> void
-System.Windows.Forms.VisualStyles.TextMetrics.MaxCharWidth.get -> int
-System.Windows.Forms.VisualStyles.TextMetrics.MaxCharWidth.set -> void
-System.Windows.Forms.VisualStyles.TextMetrics.Overhang.get -> int
-System.Windows.Forms.VisualStyles.TextMetrics.Overhang.set -> void
-System.Windows.Forms.VisualStyles.TextMetrics.PitchAndFamily.get -> System.Windows.Forms.VisualStyles.TextMetricsPitchAndFamilyValues
-System.Windows.Forms.VisualStyles.TextMetrics.PitchAndFamily.set -> void
-System.Windows.Forms.VisualStyles.TextMetrics.StruckOut.get -> bool
-System.Windows.Forms.VisualStyles.TextMetrics.StruckOut.set -> void
-System.Windows.Forms.VisualStyles.TextMetrics.TextMetrics() -> void
-System.Windows.Forms.VisualStyles.TextMetrics.Underlined.get -> bool
-System.Windows.Forms.VisualStyles.TextMetrics.Underlined.set -> void
-System.Windows.Forms.VisualStyles.TextMetrics.Weight.get -> int
-System.Windows.Forms.VisualStyles.TextMetrics.Weight.set -> void
-System.Windows.Forms.VisualStyles.TextMetricsCharacterSet
-System.Windows.Forms.VisualStyles.TextMetricsCharacterSet.Ansi = 0 -> System.Windows.Forms.VisualStyles.TextMetricsCharacterSet
-System.Windows.Forms.VisualStyles.TextMetricsCharacterSet.Arabic = 178 -> System.Windows.Forms.VisualStyles.TextMetricsCharacterSet
-System.Windows.Forms.VisualStyles.TextMetricsCharacterSet.Baltic = 186 -> System.Windows.Forms.VisualStyles.TextMetricsCharacterSet
-System.Windows.Forms.VisualStyles.TextMetricsCharacterSet.ChineseBig5 = 136 -> System.Windows.Forms.VisualStyles.TextMetricsCharacterSet
-System.Windows.Forms.VisualStyles.TextMetricsCharacterSet.Default = 1 -> System.Windows.Forms.VisualStyles.TextMetricsCharacterSet
-System.Windows.Forms.VisualStyles.TextMetricsCharacterSet.EastEurope = 238 -> System.Windows.Forms.VisualStyles.TextMetricsCharacterSet
-System.Windows.Forms.VisualStyles.TextMetricsCharacterSet.Gb2312 = 134 -> System.Windows.Forms.VisualStyles.TextMetricsCharacterSet
-System.Windows.Forms.VisualStyles.TextMetricsCharacterSet.Greek = 161 -> System.Windows.Forms.VisualStyles.TextMetricsCharacterSet
-System.Windows.Forms.VisualStyles.TextMetricsCharacterSet.Hangul = 129 -> System.Windows.Forms.VisualStyles.TextMetricsCharacterSet
-System.Windows.Forms.VisualStyles.TextMetricsCharacterSet.Hebrew = 177 -> System.Windows.Forms.VisualStyles.TextMetricsCharacterSet
-System.Windows.Forms.VisualStyles.TextMetricsCharacterSet.Johab = 130 -> System.Windows.Forms.VisualStyles.TextMetricsCharacterSet
-System.Windows.Forms.VisualStyles.TextMetricsCharacterSet.Mac = 77 -> System.Windows.Forms.VisualStyles.TextMetricsCharacterSet
-System.Windows.Forms.VisualStyles.TextMetricsCharacterSet.Oem = 255 -> System.Windows.Forms.VisualStyles.TextMetricsCharacterSet
-System.Windows.Forms.VisualStyles.TextMetricsCharacterSet.Russian = 204 -> System.Windows.Forms.VisualStyles.TextMetricsCharacterSet
-System.Windows.Forms.VisualStyles.TextMetricsCharacterSet.ShiftJis = 128 -> System.Windows.Forms.VisualStyles.TextMetricsCharacterSet
-System.Windows.Forms.VisualStyles.TextMetricsCharacterSet.Symbol = 2 -> System.Windows.Forms.VisualStyles.TextMetricsCharacterSet
-System.Windows.Forms.VisualStyles.TextMetricsCharacterSet.Thai = 222 -> System.Windows.Forms.VisualStyles.TextMetricsCharacterSet
-System.Windows.Forms.VisualStyles.TextMetricsCharacterSet.Turkish = 162 -> System.Windows.Forms.VisualStyles.TextMetricsCharacterSet
-System.Windows.Forms.VisualStyles.TextMetricsCharacterSet.Vietnamese = 163 -> System.Windows.Forms.VisualStyles.TextMetricsCharacterSet
-System.Windows.Forms.VisualStyles.TextMetricsPitchAndFamilyValues
-System.Windows.Forms.VisualStyles.TextMetricsPitchAndFamilyValues.Device = 8 -> System.Windows.Forms.VisualStyles.TextMetricsPitchAndFamilyValues
-System.Windows.Forms.VisualStyles.TextMetricsPitchAndFamilyValues.FixedPitch = 1 -> System.Windows.Forms.VisualStyles.TextMetricsPitchAndFamilyValues
-System.Windows.Forms.VisualStyles.TextMetricsPitchAndFamilyValues.TrueType = 4 -> System.Windows.Forms.VisualStyles.TextMetricsPitchAndFamilyValues
-System.Windows.Forms.VisualStyles.TextMetricsPitchAndFamilyValues.Vector = 2 -> System.Windows.Forms.VisualStyles.TextMetricsPitchAndFamilyValues
 System.Windows.Forms.VisualStyles.TextShadowType
 System.Windows.Forms.VisualStyles.TextShadowType.Continuous = 2 -> System.Windows.Forms.VisualStyles.TextShadowType
 System.Windows.Forms.VisualStyles.TextShadowType.None = 0 -> System.Windows.Forms.VisualStyles.TextShadowType
 System.Windows.Forms.VisualStyles.TextShadowType.Single = 1 -> System.Windows.Forms.VisualStyles.TextShadowType
-System.Windows.Forms.VisualStyles.ThemeSizeType
-System.Windows.Forms.VisualStyles.ThemeSizeType.Draw = 2 -> System.Windows.Forms.VisualStyles.ThemeSizeType
-System.Windows.Forms.VisualStyles.ThemeSizeType.Minimum = 0 -> System.Windows.Forms.VisualStyles.ThemeSizeType
-System.Windows.Forms.VisualStyles.ThemeSizeType.True = 1 -> System.Windows.Forms.VisualStyles.ThemeSizeType
 System.Windows.Forms.VisualStyles.ToolBarState
 System.Windows.Forms.VisualStyles.ToolBarState.Checked = 5 -> System.Windows.Forms.VisualStyles.ToolBarState
 System.Windows.Forms.VisualStyles.ToolBarState.Disabled = 4 -> System.Windows.Forms.VisualStyles.ToolBarState
@@ -8924,7 +8776,6 @@ override System.Windows.Forms.CheckBox.CreateParams.get -> System.Windows.Forms.
 override System.Windows.Forms.CheckBox.DefaultSize.get -> System.Drawing.Size
 override System.Windows.Forms.CheckBox.OnClick(System.EventArgs e) -> void
 override System.Windows.Forms.CheckBox.OnHandleCreated(System.EventArgs e) -> void
-override System.Windows.Forms.CheckBox.OnKeyDown(System.Windows.Forms.KeyEventArgs e) -> void
 override System.Windows.Forms.CheckBox.OnMouseUp(System.Windows.Forms.MouseEventArgs mevent) -> void
 override System.Windows.Forms.CheckBox.ProcessMnemonic(char charCode) -> bool
 override System.Windows.Forms.CheckBox.RescaleConstantsForDpi(int deviceDpiOld, int deviceDpiNew) -> void
@@ -9571,7 +9422,6 @@ override System.Windows.Forms.ErrorProvider.Dispose(bool disposing) -> void
 override System.Windows.Forms.ErrorProvider.Site.set -> void
 override System.Windows.Forms.FileDialog.Reset() -> void
 override System.Windows.Forms.FileDialog.ToString() -> string
-override System.Windows.Forms.FileDialogCustomPlace.ToString() -> string
 override System.Windows.Forms.FlowLayoutPanel.LayoutEngine.get -> System.Windows.Forms.Layout.LayoutEngine
 override System.Windows.Forms.FlowLayoutSettings.LayoutEngine.get -> System.Windows.Forms.Layout.LayoutEngine
 override System.Windows.Forms.FolderBrowserDialog.Reset() -> void
@@ -9880,9 +9730,6 @@ override System.Windows.Forms.MenuStrip.DefaultShowItemToolTips.get -> bool
 override System.Windows.Forms.MenuStrip.DefaultSize.get -> System.Drawing.Size
 override System.Windows.Forms.MenuStrip.ProcessCmdKey(ref System.Windows.Forms.Message m, System.Windows.Forms.Keys keyData) -> bool
 override System.Windows.Forms.MenuStrip.WndProc(ref System.Windows.Forms.Message m) -> void
-override System.Windows.Forms.Message.Equals(object o) -> bool
-override System.Windows.Forms.Message.GetHashCode() -> int
-override System.Windows.Forms.Message.ToString() -> string
 override System.Windows.Forms.MonthCalendar.BackColor.get -> System.Drawing.Color
 override System.Windows.Forms.MonthCalendar.BackColor.set -> void
 override System.Windows.Forms.MonthCalendar.BackgroundImage.get -> System.Drawing.Image
@@ -9931,17 +9778,6 @@ override System.Windows.Forms.OpacityConverter.ConvertTo(System.ComponentModel.I
 override System.Windows.Forms.OpenFileDialog.CheckFileExists.get -> bool
 override System.Windows.Forms.OpenFileDialog.CheckFileExists.set -> void
 override System.Windows.Forms.OpenFileDialog.Reset() -> void
-override System.Windows.Forms.Padding.Equals(object other) -> bool
-override System.Windows.Forms.Padding.GetHashCode() -> int
-override System.Windows.Forms.Padding.ToString() -> string
-override System.Windows.Forms.PaddingConverter.CanConvertFrom(System.ComponentModel.ITypeDescriptorContext context, System.Type sourceType) -> bool
-override System.Windows.Forms.PaddingConverter.CanConvertTo(System.ComponentModel.ITypeDescriptorContext context, System.Type destinationType) -> bool
-override System.Windows.Forms.PaddingConverter.ConvertFrom(System.ComponentModel.ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value) -> object
-override System.Windows.Forms.PaddingConverter.ConvertTo(System.ComponentModel.ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value, System.Type destinationType) -> object
-override System.Windows.Forms.PaddingConverter.CreateInstance(System.ComponentModel.ITypeDescriptorContext context, System.Collections.IDictionary propertyValues) -> object
-override System.Windows.Forms.PaddingConverter.GetCreateInstanceSupported(System.ComponentModel.ITypeDescriptorContext context) -> bool
-override System.Windows.Forms.PaddingConverter.GetProperties(System.ComponentModel.ITypeDescriptorContext context, object value, System.Attribute[] attributes) -> System.ComponentModel.PropertyDescriptorCollection
-override System.Windows.Forms.PaddingConverter.GetPropertiesSupported(System.ComponentModel.ITypeDescriptorContext context) -> bool
 override System.Windows.Forms.PageSetupDialog.Reset() -> void
 override System.Windows.Forms.Panel.AutoSize.get -> bool
 override System.Windows.Forms.Panel.AutoSize.set -> void
@@ -10442,7 +10278,6 @@ override System.Windows.Forms.ToolStrip.OnEnabledChanged(System.EventArgs e) -> 
 override System.Windows.Forms.ToolStrip.OnFontChanged(System.EventArgs e) -> void
 override System.Windows.Forms.ToolStrip.OnHandleCreated(System.EventArgs e) -> void
 override System.Windows.Forms.ToolStrip.OnHandleDestroyed(System.EventArgs e) -> void
-override System.Windows.Forms.ToolStrip.OnInvalidated(System.Windows.Forms.InvalidateEventArgs e) -> void
 override System.Windows.Forms.ToolStrip.OnLayout(System.Windows.Forms.LayoutEventArgs e) -> void
 override System.Windows.Forms.ToolStrip.OnLeave(System.EventArgs e) -> void
 override System.Windows.Forms.ToolStrip.OnLostFocus(System.EventArgs e) -> void
@@ -11224,9 +11059,6 @@ static System.Windows.Forms.ListBindingHelper.GetListItemProperties(object list,
 static System.Windows.Forms.ListBindingHelper.GetListItemType(object dataSource, string dataMember) -> System.Type
 static System.Windows.Forms.ListBindingHelper.GetListItemType(object list) -> System.Type
 static System.Windows.Forms.ListBindingHelper.GetListName(object list, System.ComponentModel.PropertyDescriptor[] listAccessors) -> string
-static System.Windows.Forms.Message.Create(System.IntPtr hWnd, int msg, System.IntPtr wparam, System.IntPtr lparam) -> System.Windows.Forms.Message
-static System.Windows.Forms.Message.operator !=(System.Windows.Forms.Message a, System.Windows.Forms.Message b) -> bool
-static System.Windows.Forms.Message.operator ==(System.Windows.Forms.Message a, System.Windows.Forms.Message b) -> bool
 static System.Windows.Forms.MessageBox.Show(System.Windows.Forms.IWin32Window owner, string text) -> System.Windows.Forms.DialogResult
 static System.Windows.Forms.MessageBox.Show(System.Windows.Forms.IWin32Window owner, string text, string caption) -> System.Windows.Forms.DialogResult
 static System.Windows.Forms.MessageBox.Show(System.Windows.Forms.IWin32Window owner, string text, string caption, System.Windows.Forms.MessageBoxButtons buttons) -> System.Windows.Forms.DialogResult
@@ -11252,12 +11084,6 @@ static System.Windows.Forms.NativeWindow.FromHandle(System.IntPtr handle) -> Sys
 static System.Windows.Forms.OSFeature.Feature.get -> System.Windows.Forms.OSFeature
 static System.Windows.Forms.OSFeature.IsPresent(System.Windows.Forms.SystemParameter enumVal) -> bool
 static System.Windows.Forms.OwnerDrawPropertyBag.Copy(System.Windows.Forms.OwnerDrawPropertyBag value) -> System.Windows.Forms.OwnerDrawPropertyBag
-static System.Windows.Forms.Padding.Add(System.Windows.Forms.Padding p1, System.Windows.Forms.Padding p2) -> System.Windows.Forms.Padding
-static System.Windows.Forms.Padding.Subtract(System.Windows.Forms.Padding p1, System.Windows.Forms.Padding p2) -> System.Windows.Forms.Padding
-static System.Windows.Forms.Padding.operator !=(System.Windows.Forms.Padding p1, System.Windows.Forms.Padding p2) -> bool
-static System.Windows.Forms.Padding.operator +(System.Windows.Forms.Padding p1, System.Windows.Forms.Padding p2) -> System.Windows.Forms.Padding
-static System.Windows.Forms.Padding.operator -(System.Windows.Forms.Padding p1, System.Windows.Forms.Padding p2) -> System.Windows.Forms.Padding
-static System.Windows.Forms.Padding.operator ==(System.Windows.Forms.Padding p1, System.Windows.Forms.Padding p2) -> bool
 static System.Windows.Forms.ProfessionalColors.ButtonCheckedGradientBegin.get -> System.Drawing.Color
 static System.Windows.Forms.ProfessionalColors.ButtonCheckedGradientEnd.get -> System.Drawing.Color
 static System.Windows.Forms.ProfessionalColors.ButtonCheckedGradientMiddle.get -> System.Drawing.Color
@@ -12041,7 +11867,6 @@ static readonly System.Windows.Forms.DockingAttribute.Default -> System.Windows.
 static readonly System.Windows.Forms.FontDialog.EventApply -> object
 static readonly System.Windows.Forms.OSFeature.LayeredWindows -> object
 static readonly System.Windows.Forms.OSFeature.Themes -> object
-static readonly System.Windows.Forms.Padding.Empty -> System.Windows.Forms.Padding
 static readonly System.Windows.Forms.PropertyGridInternal.PropertyGridCommands.Commands -> System.ComponentModel.Design.CommandID
 static readonly System.Windows.Forms.PropertyGridInternal.PropertyGridCommands.Description -> System.ComponentModel.Design.CommandID
 static readonly System.Windows.Forms.PropertyGridInternal.PropertyGridCommands.Hide -> System.ComponentModel.Design.CommandID
