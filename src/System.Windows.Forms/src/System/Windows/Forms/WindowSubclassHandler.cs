@@ -18,7 +18,7 @@ namespace System.Windows.Forms
     /// <remarks>
     /// <para>
     ///   To actually subclass the window, call <see cref="Open"/>. To ensure the
-    ///   subclassing is correctly undone, you must call <see cref="Dispose"/> before the
+    ///   subclassing is correctly undone, you must call <see cref="Dispose()"/> before the
     ///   window is destroyed.
     /// </para>
     /// <para>
@@ -38,7 +38,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///   The delegate for the callback handler (that calls
-        ///   <see cref="WndProc(int, IntPtr, IntPtr)"/> from which the native function
+        ///   <see cref="WndProc(ref Message)"/> from which the native function
         ///   pointer <see cref="_windowProcDelegatePtr"/> is created.
         /// </summary>
         /// <remarks>
@@ -153,11 +153,11 @@ namespace System.Windows.Forms
         /// <para>
         ///   When subclassing a window, a native function pointer is created from a managed
         ///   callback delegate which is then set as the window procedure. The callback is
-        ///   automatically kept alive until <see cref="Dispose"/> is called to undo the
+        ///   automatically kept alive until <see cref="Dispose()"/> is called to undo the
         ///   subclassing.
         /// </para>
         /// <para>
-        ///   However, if <see cref="Dispose"/> fails (indicated by throwing an exception),
+        ///   However, if <see cref="Dispose()"/> fails (indicated by throwing an exception),
         ///   e.g. because the current window procedure pointer is not the expected one,
         ///   you should call this method after the window is actually destroyed, to ensure
         ///   the callback delegate is kept alive up to that time. Failing to do this might

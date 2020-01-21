@@ -32,15 +32,15 @@ namespace System.Windows.Forms
         public event EventHandler? CheckedChanged;
 
         /// <summary>
-        ///   Initializes a new instance of the <see cref="TaskDialogCustomButton"/> class.
+        ///   Initializes a new instance of the <see cref="TaskDialogRadioButton"/> class.
         /// </summary>
         public TaskDialogRadioButton()
         {
         }
 
         /// <summary>
-        ///   Initializes a new instance of the <see cref="TaskDialogCustomButton"/> class
-        ///   using the given <paramref name="text"/> and optionally a <paramref name="descriptionText"/>.
+        ///   Initializes a new instance of the <see cref="TaskDialogRadioButton"/> class
+        ///   using the given <paramref name="text"/>.
         /// </summary>
         public TaskDialogRadioButton(string? text)
             : this()

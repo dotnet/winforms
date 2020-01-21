@@ -34,15 +34,15 @@ namespace System.Windows.Forms
     {
         /// <summary>
         ///   A self-defined window message that we post to the task dialog when
-        ///   handling a <see cref="TaskDialogNotification.TDN_BUTTON_CLICKED"/>
+        ///   handling a <see cref="ComCtl32.TDN.BUTTON_CLICKED"/>
         ///   notification, so that we will ignore further
-        ///   <see cref="TaskDialogNotification.TDN_BUTTON_CLICKED"/> notifications
+        ///   <see cref="ComCtl32.TDN.BUTTON_CLICKED"/> notifications
         ///   until we process the posted message.
         /// </summary>
         /// <remarks>
         /// <para>
         ///   This is used to work-around a bug in the native task dialog, where
-        ///   a <see cref="TaskDialogNotification.TDN_BUTTON_CLICKED"/> notification
+        ///   a <see cref="ComCtl32.TDN.BUTTON_CLICKED"/> notification
         ///   seems to be sent twice to the callback when you "click" a button by
         ///   pressing its access key (mnemonic) and the dialog is still open when
         ///   continuing the message loop.
@@ -52,7 +52,7 @@ namespace System.Windows.Forms
         ///   ignoring a valid button clicked notification when the user presses the
         ///   button multiple times while the GUI thread is hangs - this seems
         ///   to work correctly, as our posted message will be processed before
-        ///   further (valid) <see cref="TaskDialogNotification.TDN_BUTTON_CLICKED"/>
+        ///   further (valid) <see cref="ComCtl32.TDN.BUTTON_CLICKED"/>
         ///   notifications are processed.
         /// </para>
         /// <para>
@@ -97,7 +97,7 @@ namespace System.Windows.Forms
         ///   A qeueue of <see cref="TaskDialogPage"/>s that have been bound by
         ///   navigating the dialog, but don't yet reflect the state of the
         ///   native dialog because the corresponding
-        ///   <see cref="TaskDialogNotification.TDN_NAVIGATED"/> notification was
+        ///   <see cref="ComCtl32.TDN.NAVIGATED"/> notification was
         ///   not yet received.
         /// </summary>
         private readonly Queue<TaskDialogPage> _waitingNavigationPages = new Queue<TaskDialogPage>();
@@ -143,7 +143,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///   A counter which is used to determine whether the dialog has been navigated
-        ///   while being in a <see cref="TaskDialogNotification.TDN_BUTTON_CLICKED"/> handler.
+        ///   while being in a <see cref="ComCtl32.TDN.BUTTON_CLICKED"/> handler.
         /// </summary>
         /// <remarks>
         /// <para>
@@ -171,21 +171,21 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///   The button designated as the dialog result by the handler for the
-        ///   <see cref="TaskDialogNotification.TDN_BUTTON_CLICKED"/>
+        ///   <see cref="ComCtl32.TDN.BUTTON_CLICKED"/>
         ///   notification.
         /// </summary>
         /// <remarks>
         /// <para>
         ///   This will be set the first time the
-        ///   <see cref="TaskDialogNotification.TDN_BUTTON_CLICKED"/> handler returns
-        ///   <see cref="TaskDialogNativeMethods.S_OK"/> to cache the button instance,
+        ///   <see cref="ComCtl32.TDN.BUTTON_CLICKED"/> handler returns
+        ///   <see cref="HRESULT.S_OK"/> to cache the button instance,
         ///   so that <see cref="ShowDialog(IntPtr)"/> can then return it.
         /// </para>
         /// <para>
         ///   Additionally, this is used to check if there was already a
-        ///   <see cref="TaskDialogNotification.TDN_BUTTON_CLICKED"/> handler that
-        ///   returned <see cref="TaskDialogNativeMethods.S_OK"/>, so that further
-        ///   handles will return <see cref="TaskDialogNativeMethods.S_FALSE"/> to
+        ///   <see cref="ComCtl32.TDN.BUTTON_CLICKED"/> handler that
+        ///   returned <see cref="HRESULT.S_OK"/>, so that further
+        ///   handles will return <see cref="HRESULT.S_FALSE"/> to
         ///   not override the previously set result.
         /// </para>
         /// </remarks>
@@ -208,7 +208,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///   Specifies if the <see cref="HandleTaskDialogCallback"/> method should
-        ///   currently ignore <see cref="TaskDialogNotification.TDN_BUTTON_CLICKED"/>
+        ///   currently ignore <see cref="ComCtl32.TDN.BUTTON_CLICKED"/>
         ///   notifications.
         /// </summary>
         /// <remarks>

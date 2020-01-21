@@ -52,7 +52,7 @@ namespace System.Windows.Forms
         /// <param name="index">The zero-based index of the element to get or set.</param>
         /// <returns>The element at the specified index.</returns>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="index"/> is less than zero.</exception>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="index"/> is equal to or greater than <see cref="Count"/>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="index"/> is equal to or greater than <see cref="Collection{TaskDialogStandardButton}.Count"/>.</exception>
         public new TaskDialogStandardButton this[int index]
         {
             get => base[index];
