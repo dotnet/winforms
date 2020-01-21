@@ -49,7 +49,7 @@ namespace System.Windows.Forms
         ///////////////////////////////////////////////////////////////////////
         // Label per instance members
         //
-        // Note: Do not add anything to this list unless absolutely neccessary.
+        // Note: Do not add anything to this list unless absolutely necessary.
         //
         // Begin Members {
 

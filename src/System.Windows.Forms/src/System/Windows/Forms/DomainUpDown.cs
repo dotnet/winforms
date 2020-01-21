@@ -662,7 +662,7 @@ namespace System.Windows.Forms
             /// </summary>
             public override void RemoveAt(int item)
             {
-                // Overridden to update the domain index if neccessary
+                // Overridden to update the domain index if necessary
                 base.RemoveAt(item);
 
                 if (item < owner.domainIndex)

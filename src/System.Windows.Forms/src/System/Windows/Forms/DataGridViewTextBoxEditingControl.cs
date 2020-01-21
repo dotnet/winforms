@@ -137,7 +137,7 @@ namespace System.Windows.Forms
                     break;
 
                 case Keys.Left:
-                    // If the end of the selection is at the begining of the string
+                    // If the end of the selection is at the beginning of the string
                     // or if the entire text is selected and we did not start editing
                     // send this character to the dataGridView, else process the key event
                     if ((RightToLeft == RightToLeft.No && !(SelectionLength == 0 && SelectionStart == 0)) ||

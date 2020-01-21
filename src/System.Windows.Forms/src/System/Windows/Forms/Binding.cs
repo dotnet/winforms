@@ -852,7 +852,7 @@ namespace System.Windows.Forms
             if (FormattingEnabled)
             {
                 // Raise the BindingComplete event, giving listeners a chance to process any
-                // errors that occured and decide whether the operation should be cancelled.
+                // errors that occurred and decide whether the operation should be cancelled.
                 BindingCompleteEventArgs args = CreateBindingCompleteEventArgs(BindingCompleteContext.DataSourceUpdate, lastException);
                 OnBindingComplete(args);
 
@@ -928,7 +928,7 @@ namespace System.Windows.Forms
 
             if (FormattingEnabled)
             {
-                // Raise the BindingComplete event, giving listeners a chance to process any errors that occured, and decide
+                // Raise the BindingComplete event, giving listeners a chance to process any errors that occurred, and decide
                 // whether the operation should be cancelled. But don't emit the event if we didn't actually update the control.
                 BindingCompleteEventArgs args = CreateBindingCompleteEventArgs(BindingCompleteContext.ControlUpdate, lastException);
                 OnBindingComplete(args);

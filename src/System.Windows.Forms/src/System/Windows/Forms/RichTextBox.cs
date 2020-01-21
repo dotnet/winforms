@@ -2274,7 +2274,7 @@ namespace System.Windows.Forms
                     // Loop through our text
                     if (forward)
                     {
-                        // Start at the begining of the buffer
+                        // Start at the beginning of the buffer
                         for (int x = 0; x < len; x++)
                         {
                             // Is it in char set?

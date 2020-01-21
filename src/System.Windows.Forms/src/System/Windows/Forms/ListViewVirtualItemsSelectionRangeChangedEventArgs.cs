@@ -25,7 +25,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Returns the begining of the range where the selection changed
+        ///  Returns the beginning of the range where the selection changed
         /// </summary>
         public int StartIndex { get; }
 

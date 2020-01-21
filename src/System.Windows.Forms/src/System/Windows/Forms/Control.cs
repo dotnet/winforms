@@ -32,7 +32,7 @@ namespace System.Windows.Forms
     ///  Defines the base class for controls, which are components with visual representation.
     /// </summary>
     /// <remarks>
-    /// Do not add instance variables to Control absolutely neccessary. Every control on a form has the overhead of
+    /// Do not add instance variables to Control absolutely necessary. Every control on a form has the overhead of
     /// all of these variables.
     /// </remarks>
     [
@@ -298,7 +298,7 @@ namespace System.Windows.Forms
 
         // Control instance members
         //
-        // Note: Do not add anything to this list unless absolutely neccessary.
+        // Note: Do not add anything to this list unless absolutely necessary.
         //       Every control on a form has the overhead of all of these
         //       variables!
 
@@ -8153,7 +8153,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Core layout logic. Inheriting controls should override this function to do any custom
-        ///  layout logic. It is not neccessary to call base.OnLayout, however for normal docking
+        ///  layout logic. It is not necessary to call base.OnLayout, however for normal docking
         ///  an functions to work, base.OnLayout must be called.
         ///  Raises the <see cref='Layout'/> event.
         /// </summary>
