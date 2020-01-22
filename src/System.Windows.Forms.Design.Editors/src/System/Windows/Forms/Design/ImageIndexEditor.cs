@@ -56,7 +56,7 @@ namespace System.Windows.Forms.Design
                 return null;
             }
 
-            // If the instances are different, then we need to re-aquire our image list.
+            // If the instances are different, then we need to re-acquire our image list.
             if ((index >= 0) || (key != null))
             {
                 PropertyDescriptor currentImageListProp = null;
