@@ -5,7 +5,7 @@
   <!-- 
     (Re)generate the list of transport assemblies by inspecting Microsoft.Private.Winforms nuspec.
     -->
-  <Target Name="UpdateList" AfterTargets="_CalculateInputsOutputsForPack">
+  <Target Name="UpdateList" AfterTargets="GenerateNuspec">
     <ItemGroup>
       <NuspecFile Include="@(NuGetPackOutput)" Condition="'%(Extension)' == '.nuspec'" />
     </ItemGroup>
