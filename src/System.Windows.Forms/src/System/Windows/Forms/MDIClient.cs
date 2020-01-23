@@ -257,7 +257,7 @@ namespace System.Windows.Forms
                 {
                     // NOTE: This logic is to keep minimized MDI children anchored to
                     // the bottom left of the client area, normally they are anchored
-                    // to the top right which just looks wierd!
+                    // to the top right which just looks weird!
                     for (int i = 0; i < Controls.Count; i++)
                     {
                         Control ctl = Controls[i];

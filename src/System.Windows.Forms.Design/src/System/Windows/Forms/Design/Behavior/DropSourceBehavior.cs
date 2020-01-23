@@ -910,7 +910,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        ///  Called when the ContolDesigner starts a drag operation. Here, all adorners are disabled, screen shots of all related controls are taken, and the DragAssistanceManager  (for SnapLines) is created.
+        ///  Called when the ControlDesigner starts a drag operation. Here, all adorners are disabled, screen shots of all related controls are taken, and the DragAssistanceManager  (for SnapLines) is created.
         /// </summary>
         private void InitiateDrag(Point initialMouseLocation, ICollection dragComps)
         {
