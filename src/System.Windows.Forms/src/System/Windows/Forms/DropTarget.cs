@@ -60,7 +60,7 @@ namespace System.Windows.Forms
 
         HRESULT Ole32.IDropTarget.DragEnter(object pDataObj, uint grfKeyState, Point pt, ref uint pdwEffect)
         {
-            Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "OleDragEnter recieved");
+            Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "OleDragEnter received");
             Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "\t" + (pt.X) + "," + (pt.Y));
             Debug.Assert(pDataObj != null, "OleDragEnter didn't give us a valid data object.");
             DragEventArgs drgevent = CreateDragEventArgs(pDataObj, grfKeyState, pt, pdwEffect);
@@ -81,7 +81,7 @@ namespace System.Windows.Forms
 
         HRESULT Ole32.IDropTarget.DragOver(uint grfKeyState, Point pt, ref uint pdwEffect)
         {
-            Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "OleDragOver recieved");
+            Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "OleDragOver received");
             Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "\t" + (pt.X) + "," + (pt.Y));
             DragEventArgs drgevent = CreateDragEventArgs(null, grfKeyState, pt, pdwEffect);
             owner.OnDragOver(drgevent);
@@ -92,14 +92,14 @@ namespace System.Windows.Forms
 
         HRESULT Ole32.IDropTarget.DragLeave()
         {
-            Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "OleDragLeave recieved");
+            Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "OleDragLeave received");
             owner.OnDragLeave(EventArgs.Empty);
             return HRESULT.S_OK;
         }
 
         HRESULT Ole32.IDropTarget.Drop(object pDataObj, uint grfKeyState, Point pt, ref uint pdwEffect)
         {
-            Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "OleDrop recieved");
+            Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "OleDrop received");
             Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "\t" + (pt.X) + "," + (pt.Y));
             DragEventArgs drgevent = CreateDragEventArgs(pDataObj, grfKeyState, pt, pdwEffect);
 

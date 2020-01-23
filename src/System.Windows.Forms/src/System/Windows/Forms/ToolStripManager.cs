@@ -41,7 +41,7 @@ namespace System.Windows.Forms
 
         private static int currentDpi = DpiHelper.DeviceDpi;
 
-        private static void InitalizeThread() {
+        private static void InitializeThread() {
             if (!initialized) {
                 initialized = true;
                 currentRendererType = ProfessionalRendererType;
@@ -175,7 +175,7 @@ namespace System.Windows.Forms
             ToolStrip result = null;
             for (int i = 0; i < ToolStrips.Count; i++)
             {
-                // is this the right string comparaison?
+                // is this the right string comparison?
                 if (ToolStrips[i] != null && string.Equals(((ToolStrip)ToolStrips[i]).Name, toolStripName, StringComparison.Ordinal))
                 {
                     result = (ToolStrip)ToolStrips[i];
@@ -193,7 +193,7 @@ namespace System.Windows.Forms
             ToolStrip result = null;
             for (int i = 0; i < ToolStrips.Count; i++)
             {
-                // is this the right string comparaison?
+                // is this the right string comparison?
                 if (ToolStrips[i] != null && string.Equals(((ToolStrip)ToolStrips[i]).Name, toolStripName, StringComparison.Ordinal))
                 {
                     result = (ToolStrip)ToolStrips[i];
@@ -478,7 +478,7 @@ namespace System.Windows.Forms
 
         /// <remarks>
         ///  This is thread static because we want separate instances for each thread.
-        ///  We dont want to guarantee thread safety and dont want to have to take
+        ///  We don't want to guarantee thread safety and don't want to have to take
         ///  locks in painting code.
         /// </remarks>
         [ThreadStatic]
@@ -496,7 +496,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                InitalizeThread();
+                InitializeThread();
                 return currentRendererType;
             }
             set
@@ -764,7 +764,7 @@ namespace System.Windows.Forms
         ///  - There should be 1 Message Filter per thread and it should be uninstalled once
         ///  the last dropdown has gone away
         ///  This is not part of ToolStripManager because it's DropDown specific and
-        ///  we dont want to publicly expose this message filter.
+        ///  we don't want to publicly expose this message filter.
         ///  </remarks>
         internal class ModalMenuFilter : IMessageModifyAndFilter
         {
@@ -923,7 +923,7 @@ namespace System.Windows.Forms
 
                     if (!Application.ThreadContext.FromCurrent().GetMessageLoop(true))
                     {
-                        // message filter isnt going to help as we dont own the message pump
+                        // message filter isn't going to help as we don't own the message pump
                         // switch over to a MessageHook
                         MessageHook.HookMessages = true;
                     }
@@ -965,7 +965,7 @@ namespace System.Windows.Forms
 
                         if (messageHook != null)
                         {
-                            // message filter isnt going to help as we dont own the message pump
+                            // message filter isn't going to help as we dont own the message pump
                             // switch over to a MessageHook
                             messageHook.HookMessages = false;
                         }
@@ -1227,7 +1227,7 @@ namespace System.Windows.Forms
                     ToolStrip currentActiveToolStrip = GetActiveToolStripInternal();
 
                     // toolstrip dropdowns push/pull their activation based on visibility.
-                    // we have to account for the toolstrips that arent dropdowns
+                    // we have to account for the toolstrips that aren't dropdowns
                     if (currentActiveToolStrip != null)
                     {
                         if (!currentActiveToolStrip.IsDropDown)
@@ -1381,7 +1381,7 @@ namespace System.Windows.Forms
                     {
                         case WindowMessages.WM_MOUSEMOVE:
                         case WindowMessages.WM_NCMOUSEMOVE:
-                            // Mouse move messages should be eaten if they arent for a dropdown.
+                            // Mouse move messages should be eaten if they aren't for a dropdown.
                             // this prevents things like ToolTips and mouse over highlights from
                             // being processed.
                             Control control = Control.FromChildHandle(m.HWnd);
@@ -1397,8 +1397,8 @@ namespace System.Windows.Forms
                                         && (IsChildOrSameWindow(new HandleRef(toplevelToolStrip, toplevelToolStrip.Handle),
                                                                new HandleRef(null, m.HWnd))))
                                     {
-                                        // DONT EAT mouse message.
-                                        // The mouse message is from an HWND that is part of the toplevel toolstrip - let the mosue move through so
+                                        // DON'T EAT mouse message.
+                                        // The mouse message is from an HWND that is part of the toplevel toolstrip - let the mouse move through so
                                         // when you have something like the file menu open and mouse over the edit menu
                                         // the file menu will dismiss.
 
@@ -1406,7 +1406,7 @@ namespace System.Windows.Forms
                                     }
                                     else if (!IsChildOrSameWindow(ActiveHwnd, new HandleRef(null, m.HWnd)))
                                     {
-                                        // DONT EAT mouse message.
+                                        // DON'T EAT mouse message.
                                         // the mouse message is from another toplevel HWND.
                                         return false;
                                     }
@@ -1837,7 +1837,7 @@ namespace System.Windows.Forms
             {
                 return false;
             }
-            // recievedMenuKeyUp = true;
+            // receivedMenuKeyUp = true;
 
             Debug.WriteLineIf(ToolStrip.SnapFocusDebug.TraceVerbose, "[ProcessMenuKey] Determining whether we should send focus to MenuStrip");
 
@@ -1966,7 +1966,7 @@ namespace System.Windows.Forms
 
                     if ((controlsToLookIn[i].Controls != null) && controlsToLookIn[i].Controls.Count > 0)
                     {
-                        // if it has a valid child collecion, append those results to our collection
+                        // if it has a valid child collection, append those results to our collection
                         MenuStrip menuStrip = GetFirstMenuStripRecursive(controlsToLookIn[i].Controls);
                         if (menuStrip != null)
                         {

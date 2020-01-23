@@ -76,7 +76,7 @@ namespace System.Windows.Forms
             TabStop = false;
 
             ToolStripManager.ToolStripPanels.Add(this);
-            // not setting ControlStyles.AllPaintingInWmPaint as we dont do any painting in OnPaint... all
+            // not setting ControlStyles.AllPaintingInWmPaint as we don't do any painting in OnPaint... all
             // is done in OnPaintBackground... so its better to show the rafting container in WM_ERASEBACKGROUND.
             SetStyle(ControlStyles.ResizeRedraw | ControlStyles.OptimizedDoubleBuffer | /*ControlStyles.AllPaintingInWmPaint |*/ControlStyles.SupportsTransparentBackColor, true);
             SetStyle(ControlStyles.Selectable, false);
@@ -711,10 +711,10 @@ namespace System.Windows.Forms
                     Join(controlArray[i] as ToolStrip, controlArray[i].Location);
                     if (numRows < RowsInternal.Count || forceLayout)
                     {
-                        // OK this is wierd but here we're in the midst of a suspend layout.
+                        // OK this is weird but here we're in the midst of a suspend layout.
                         // the only way we can deterministically place these guys is to force a layout
                         // each time we've added a new row.  Otherwise we wont find the correct
-                        // row to add the control to (PointToRow will fail as Row.Bounds isnt set yet)
+                        // row to add the control to (PointToRow will fail as Row.Bounds isn't set yet)
                         OnLayout(new LayoutEventArgs(this, PropertyNames.Rows));
                     }
                 }
@@ -884,7 +884,7 @@ namespace System.Windows.Forms
                 // calls UpdateWindow on the hwnd to force the paint to happen now.
                 //
                 // When we're changing the location of the feedback dropdown, we need to
-                // force WM_PAINTS to happen, as things that dont respond to WM_ERASEBKGND
+                // force WM_PAINTS to happen, as things that don't respond to WM_ERASEBKGND
                 // have bits of the dropdown region drawn all over them.
                 private void ForceSynchronousPaint()
                 {
@@ -934,8 +934,8 @@ namespace System.Windows.Forms
                 public void MoveTo(Point newLocation)
                 {
                     Location = newLocation;
-                    // if we dont force a paint here, we'll only send WM_ERASEBKGNDs right away
-                    // and leave rectangles all over controls that dont respond to that window message.
+                    // if we don't force a paint here, we'll only send WM_ERASEBKGNDs right away
+                    // and leave rectangles all over controls that don't respond to that window message.
                     ForceSynchronousPaint();
                 }
 
@@ -1326,7 +1326,7 @@ namespace System.Windows.Forms
                             }
                             else
                             {
-                                Debug.Fail(string.Format(CultureInfo.CurrentCulture, "Detected orphan cell! {0} is in row {1}. It shouldnt have a cell in {2}! \r\n\r\nTurn on DEBUG_PAINT in ToolStripPanel and ToolStripPanelRow to investigate.", cell.Control.Name, goodRowIndex, i));
+                                Debug.Fail(string.Format(CultureInfo.CurrentCulture, "Detected orphan cell! {0} is in row {1}. It shouldn't have a cell in {2}! \r\n\r\nTurn on DEBUG_PAINT in ToolStripPanel and ToolStripPanelRow to investigate.", cell.Control.Name, goodRowIndex, i));
                             }
                         }
                     }

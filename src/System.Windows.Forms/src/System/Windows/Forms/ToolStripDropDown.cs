@@ -270,7 +270,7 @@ namespace System.Windows.Forms
                     cp.ClassStyle |= (int)User32.CS.DROPSHADOW;
                 }
                 // we're a borderless menuless control with no min/max boxes
-                // we dont want to show in the taskbar either
+                // we don't want to show in the taskbar either
 
                 //HOWTO: Prevent a Window from Appearing on the Taskbar
                 //Give the window the WS_EX_TOOLWINDOW extended style, and remove the WS_EX_APPWINDOW style. As a side effect, the window will have a smaller caption than a normal window.
@@ -316,7 +316,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary> We want this to default to true... This way tooltips on overflows and custom dropdowns will show.
-        ///  Since menu items don't show tooltips by default we can savely leave it on </summary>
+        ///  Since menu items don't show tooltips by default we can safely leave it on </summary>
         protected override bool DefaultShowItemToolTips
         {
             get
@@ -1045,7 +1045,7 @@ namespace System.Windows.Forms
             }
         }
 
-        // internally we use not so we dont have to initialize it.
+        // internally we use not so we don't have to initialize it.
         internal bool WorkingAreaConstrained
         {
             get => true;
@@ -1101,7 +1101,7 @@ namespace System.Windows.Forms
 
         internal override bool CanProcessMnemonic()
         {
-            // Dont let mnemonics act as keyboard input in IE in the internet.
+            // Don't let mnemonics act as keyboard input in IE in the internet.
             if (!Application.MessageLoop)
             {
                 return false;
@@ -1224,8 +1224,8 @@ namespace System.Windows.Forms
             if (!IsHandleCreated)
             {
                 // PERF:
-                // if the handle isnt created yet, then we likely havent performed layout
-                // yet.  force a layout here so that we get the correct size.
+                // if the handle isn't created yet, then we likely haven't performed layout
+                // yet. force a layout here so that we get the correct size.
                 LayoutTransaction.DoLayout(this, this, PropertyNames.PreferredSize);
             }
             Rectangle dropDownBounds = new Rectangle(Point.Empty, GetSuggestedSize());
@@ -1441,7 +1441,7 @@ namespace System.Windows.Forms
                 {
                     if (OwnerItem.Bounds.Contains(WindowsFormsUtils.TranslatePoint(mea.Location, this, OwnerToolStrip)))
                     {
-                        dismiss = false;  // dont dismiss if we clicked on our owner item
+                        dismiss = false;  // don't dismiss if we clicked on our owner item
                     }
                 }
                 if (dismiss)
@@ -1930,9 +1930,9 @@ namespace System.Windows.Forms
                                 }
 
                                 // if this came through via a click event we should actually
-                                // dismiss everyone in the chain. Other windows will recieve a
+                                // dismiss everyone in the chain. Other windows will receive a
                                 // close, closing event with reason AppFocusChange. This is by
-                                // design since the item wasnt clicked on that window.
+                                // design since the item wasn't clicked on that window.
                                 if (reason == ToolStripDropDownCloseReason.ItemClicked)
                                 {
                                     // Preserve the SourceControl value up the chain.
