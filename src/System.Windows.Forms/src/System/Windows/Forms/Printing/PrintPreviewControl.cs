@@ -960,17 +960,17 @@ namespace System.Windows.Forms
 
         protected override void WndProc(ref Message m)
         {
-            switch (m.Msg)
+            switch ((User32.WM)m.Msg)
             {
-                case WindowMessages.WM_VSCROLL:
+                case User32.WM.VSCROLL:
                     WmVScroll(ref m);
                     break;
-                case WindowMessages.WM_HSCROLL:
+                case User32.WM.HSCROLL:
                     WmHScroll(ref m);
                     break;
                 //added case to handle keyboard events
                 //
-                case WindowMessages.WM_KEYDOWN:
+                case User32.WM.KEYDOWN:
                     WmKeyDown(ref m);
                     break;
                 default:

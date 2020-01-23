@@ -332,42 +332,42 @@ namespace System.Windows.Forms.Tests
         {
             // Test PlaceholderText
             var tb = new SubTextBox() { PlaceholderText = "", IsUserPaint = false, IsFocused = false, TextCount = 0 };
-            var msg = new Message() { Msg = WindowMessages.WM_PAINT };
+            var msg = new Message() { Msg = (int)User32.WM.PAINT };
             yield return new object[] { tb, msg, false };
 
             // Test PlaceholderText
             tb = new SubTextBox() { PlaceholderText = null, IsUserPaint = false, IsFocused = false, TextCount = 0 };
-            msg = new Message() { Msg = WindowMessages.WM_PAINT };
+            msg = new Message() { Msg = (int)User32.WM.PAINT };
             yield return new object[] { tb, msg, false };
 
             // Test Message
-            msg.Msg = WindowMessages.WM_USER;
+            msg.Msg = (int)User32.WM.USER;
             tb = new SubTextBox() { PlaceholderText = "Text", IsUserPaint = false, IsFocused = false, TextCount = 0 };
             yield return new object[] { tb, msg, false };
 
             // Test UserPaint
-            msg.Msg = WindowMessages.WM_PAINT;
+            msg.Msg = (int)User32.WM.PAINT;
             tb = new SubTextBox() { PlaceholderText = "Text", IsUserPaint = true, IsFocused = false, TextCount = 0 };
             yield return new object[] { tb, msg, false };
 
             // Test Focused
-            msg.Msg = WindowMessages.WM_PAINT;
+            msg.Msg = (int)User32.WM.PAINT;
             tb = new SubTextBox() { PlaceholderText = "Text", IsUserPaint = false, IsFocused = true, TextCount = 0 };
             yield return new object[] { tb, msg, false };
 
             // Test TextLength
-            msg.Msg = WindowMessages.WM_PAINT;
+            msg.Msg = (int)User32.WM.PAINT;
             tb = new SubTextBox() { PlaceholderText = "Text", IsUserPaint = false, IsFocused = false, TextCount = 1 };
             yield return new object[] { tb, msg, false };
 
             // Test WM_PAINT
             tb = new SubTextBox() { PlaceholderText = "Text", IsUserPaint = false, IsFocused = false, TextCount = 0 };
-            msg.Msg = WindowMessages.WM_PAINT;
+            msg.Msg = (int)User32.WM.PAINT;
             yield return new object[] { tb, msg, true };
 
             // Test WM_KILLFOCUS
             tb = new SubTextBox() { PlaceholderText = "Text", IsUserPaint = false, IsFocused = false, TextCount = 0 };
-            msg.Msg = WindowMessages.WM_KILLFOCUS;
+            msg.Msg = (int)User32.WM.KILLFOCUS;
             yield return new object[] { tb, msg, true };
         }
 
@@ -410,11 +410,11 @@ namespace System.Windows.Forms.Tests
             System.Runtime.InteropServices.HandleRef refHandle = new System.Runtime.InteropServices.HandleRef(tb, tb.Handle);
 
             //Cover the Placeholder draw code path
-            UnsafeNativeMethods.SendMessage(refHandle, WindowMessages.WM_PAINT, false, 0);
+            User32.SendMessageW(refHandle, User32.WM.PAINT, PARAM.FromBool(false));
             tb.TextAlign = HorizontalAlignment.Center;
-            UnsafeNativeMethods.SendMessage(refHandle, WindowMessages.WM_PAINT, false, 0);
+            User32.SendMessageW(refHandle, User32.WM.PAINT, PARAM.FromBool(false));
             tb.TextAlign = HorizontalAlignment.Right;
-            UnsafeNativeMethods.SendMessage(refHandle, WindowMessages.WM_PAINT, false, 0);
+            User32.SendMessageW(refHandle, User32.WM.PAINT, PARAM.FromBool(false));
 
             Assert.False(string.IsNullOrEmpty(tb.PlaceholderText));
         }
@@ -431,11 +431,11 @@ namespace System.Windows.Forms.Tests
             System.Runtime.InteropServices.HandleRef refHandle = new System.Runtime.InteropServices.HandleRef(tb, tb.Handle);
 
             //Cover the Placeholder draw code path in RightToLeft scenario
-            UnsafeNativeMethods.SendMessage(refHandle, WindowMessages.WM_PAINT, false, 0);
+            User32.SendMessageW(refHandle, User32.WM.PAINT, PARAM.FromBool(false));
             tb.TextAlign = HorizontalAlignment.Center;
-            UnsafeNativeMethods.SendMessage(refHandle, WindowMessages.WM_PAINT, false, 0);
+            User32.SendMessageW(refHandle, User32.WM.PAINT, PARAM.FromBool(false));
             tb.TextAlign = HorizontalAlignment.Right;
-            UnsafeNativeMethods.SendMessage(refHandle, WindowMessages.WM_PAINT, false, 0);
+            User32.SendMessageW(refHandle, User32.WM.PAINT, PARAM.FromBool(false));
 
             Assert.False(string.IsNullOrEmpty(tb.PlaceholderText));
         }

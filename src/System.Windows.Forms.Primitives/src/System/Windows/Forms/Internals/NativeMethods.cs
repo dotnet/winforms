@@ -162,10 +162,10 @@ namespace System.Windows.Forms
         NIIF_INFO = 0x00000001,
         NIIF_WARNING = 0x00000002,
         NIIF_ERROR = 0x00000003,
-        NIN_BALLOONSHOW = (WindowMessages.WM_USER + 2),
-        NIN_BALLOONHIDE = (WindowMessages.WM_USER + 3),
-        NIN_BALLOONTIMEOUT = (WindowMessages.WM_USER + 4),
-        NIN_BALLOONUSERCLICK = (WindowMessages.WM_USER + 5),
+        NIN_BALLOONSHOW = ((int)User32.WM.USER + 2),
+        NIN_BALLOONHIDE = ((int)User32.WM.USER + 3),
+        NIN_BALLOONTIMEOUT = ((int)User32.WM.USER + 4),
+        NIN_BALLOONUSERCLICK = ((int)User32.WM.USER + 5),
         NFR_ANSI = 1,
         NFR_UNICODE = 2;
 

@@ -3013,7 +3013,10 @@ namespace System.Windows.Forms
                 try
                 {
                     //send the actual wm_print message
-                    UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), WindowMessages.WM_PRINT, (IntPtr)imageHdc,
+                    User32.SendMessageW(
+                        this,
+                        User32.WM.PRINT,
+                        (IntPtr)imageHdc,
                         (IntPtr)(NativeMethods.PRF_CHILDREN | NativeMethods.PRF_CLIENT | NativeMethods.PRF_ERASEBKGND | NativeMethods.PRF_NONCLIENT));
 
                     // Now BLT the result to the destination bitmap.
@@ -4969,11 +4972,11 @@ namespace System.Windows.Forms
 
         protected override void WndProc(ref Message m)
         {
-            if (m.Msg == WindowMessages.WM_SETFOCUS)
+            if (m.Msg == (int)User32.WM.SETFOCUS)
             {
                 SnapFocus(m.WParam);
             }
-            if (m.Msg == WindowMessages.WM_MOUSEACTIVATE)
+            if (m.Msg == (int)User32.WM.MOUSEACTIVATE)
             {
                 // we want to prevent taking focus if someone clicks on the toolstrip dropdown
                 // itself.  the mouse message will still go through, but focus wont be taken.
@@ -5025,7 +5028,7 @@ namespace System.Windows.Forms
 
             base.WndProc(ref m);
 
-            if (m.Msg == WindowMessages.WM_NCDESTROY)
+            if (m.Msg == (int)User32.WM.NCDESTROY)
             {
                 // Destroy the owner window, if we created one.  We
                 // cannot do this in OnHandleDestroyed, because at
@@ -5475,14 +5478,14 @@ namespace System.Windows.Forms
                 }
                 // if the app has changed activation, restore focus
 
-                switch (m.Msg)
+                switch ((User32.WM)m.Msg)
                 {
-                    case WindowMessages.WM_LBUTTONDOWN:
-                    case WindowMessages.WM_RBUTTONDOWN:
-                    case WindowMessages.WM_MBUTTONDOWN:
-                    case WindowMessages.WM_NCLBUTTONDOWN:
-                    case WindowMessages.WM_NCRBUTTONDOWN:
-                    case WindowMessages.WM_NCMBUTTONDOWN:
+                    case User32.WM.LBUTTONDOWN:
+                    case User32.WM.RBUTTONDOWN:
+                    case User32.WM.MBUTTONDOWN:
+                    case User32.WM.NCLBUTTONDOWN:
+                    case User32.WM.NCRBUTTONDOWN:
+                    case User32.WM.NCMBUTTONDOWN:
                         if (ownerToolStrip.ContainsFocus)
                         {
                             // if we've clicked on something that's not a child of the toolstrip and we

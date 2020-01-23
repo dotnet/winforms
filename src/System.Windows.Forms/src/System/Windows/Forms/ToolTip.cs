@@ -2302,7 +2302,7 @@ namespace System.Windows.Forms
         {
             switch (msg.Msg)
             {
-                case WindowMessages.WM_REFLECT + WindowMessages.WM_NOTIFY:
+                case (int)(User32.WM.REFLECT | User32.WM.NOTIFY):
                     User32.NMHDR nmhdr = (User32.NMHDR)msg.GetLParam(typeof(User32.NMHDR));
                     if (nmhdr.code == (int)TTN.SHOW && !_trackPosition)
                     {
@@ -2315,33 +2315,33 @@ namespace System.Windows.Forms
                     }
                     break;
 
-                case WindowMessages.WM_WINDOWPOSCHANGING:
+                case (int)User32.WM.WINDOWPOSCHANGING:
                     WmWindowPosChanging(ref msg);
                     break;
 
-                case WindowMessages.WM_WINDOWPOSCHANGED:
+                case (int)User32.WM.WINDOWPOSCHANGED:
                     if (!WmWindowPosChanged() && _window != null)
                     {
                         _window.DefWndProc(ref msg);
                     }
                     break;
 
-                case WindowMessages.WM_MOUSEACTIVATE:
+                case (int)User32.WM.MOUSEACTIVATE:
                     WmMouseActivate(ref msg);
                     break;
 
-                case WindowMessages.WM_MOVE:
+                case (int)User32.WM.MOVE:
                     WmMove();
                     break;
 
-                case (int)(User32.WM)TTM.WINDOWFROMPOINT:
+                case (int)TTM.WINDOWFROMPOINT:
                     WmWindowFromPoint(ref msg);
                     break;
 
-                case WindowMessages.WM_PRINTCLIENT:
-                    goto case WindowMessages.WM_PAINT;
+                case (int)User32.WM.PRINTCLIENT:
+                    goto case (int)User32.WM.PAINT;
 
-                case WindowMessages.WM_PAINT:
+                case (int)User32.WM.PAINT:
                     if (OwnerDraw && !_isBalloon && !_trackPosition)
                     {
                         var ps = new User32.PAINTSTRUCT();
@@ -2361,7 +2361,7 @@ namespace System.Windows.Forms
                                 Font font;
                                 try
                                 {
-                                    font = Font.FromHfont(UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), WindowMessages.WM_GETFONT, 0, 0));
+                                    font = Font.FromHfont(User32.SendMessageW(this, User32.WM.GETFONT));
                                 }
                                 catch (ArgumentException)
                                 {

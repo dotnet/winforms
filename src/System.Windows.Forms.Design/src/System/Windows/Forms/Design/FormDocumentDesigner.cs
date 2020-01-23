@@ -474,9 +474,9 @@ namespace System.Windows.Forms.Design
         /// </summary>
         protected override void WndProc(ref Message m)
         {
-            switch (m.Msg)
+            switch ((User32.WM)m.Msg)
             {
-                case WindowMessages.WM_WINDOWPOSCHANGING:
+                case User32.WM.WINDOWPOSCHANGING:
                     WmWindowPosChanging(ref m);
                     break;
             }

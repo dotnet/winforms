@@ -381,9 +381,9 @@ namespace System.Windows.Forms
         /// </summary>
         protected override IntPtr HookProc(IntPtr hWnd, int msg, IntPtr wparam, IntPtr lparam)
         {
-            switch (msg)
+            switch ((User32.WM)msg)
             {
-                case WindowMessages.WM_COMMAND:
+                case User32.WM.COMMAND:
                     if ((int)wparam == 0x402)
                     {
                         var logFont = new User32.LOGFONTW();
@@ -411,7 +411,7 @@ namespace System.Windows.Forms
                         }
                     }
                     break;
-                case WindowMessages.WM_INITDIALOG:
+                case User32.WM.INITDIALOG:
                     if (!showColor)
                     {
                         IntPtr hWndCtl = User32.GetDlgItem(hWnd, NativeMethods.cmb4);

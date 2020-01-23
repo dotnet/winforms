@@ -1406,9 +1406,9 @@ namespace System.Windows.Forms
 
         protected override void WndProc(ref Message m)
         {
-            switch (m.Msg)
+            switch ((User32.WM)m.Msg)
             {
-                case WindowMessages.WM_CONTEXTMENU:
+                case User32.WM.CONTEXTMENU:
                     int x = PARAM.SignedLOWORD(m.LParam);
                     int y = PARAM.SignedHIWORD(m.LParam);
 

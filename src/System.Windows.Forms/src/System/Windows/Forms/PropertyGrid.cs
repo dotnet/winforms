@@ -781,7 +781,7 @@ namespace System.Windows.Forms
                 {
                     if (0 == paintFrozen++)
                     {
-                        SendMessage(WindowMessages.WM_SETREDRAW, 0, 0);
+                        User32.SendMessageW(this, User32.WM.SETREDRAW, PARAM.FromBool(false));
                     }
                 }
                 if (!value)
@@ -793,7 +793,7 @@ namespace System.Windows.Forms
 
                     if (0 == --paintFrozen)
                     {
-                        SendMessage(WindowMessages.WM_SETREDRAW, 1, 0);
+                        User32.SendMessageW(this, User32.WM.SETREDRAW, PARAM.FromBool(true));
                         Invalidate(true);
                     }
                 }
@@ -5034,7 +5034,7 @@ namespace System.Windows.Forms
         {
             switch (m.Msg)
             {
-                case WindowMessages.WM_UNDO:
+                case (int)User32.WM.UNDO:
                     if ((long)m.LParam == 0)
                     {
                         gridView.DoUndoCommand();
@@ -5044,7 +5044,7 @@ namespace System.Windows.Forms
                         m.Result = CanUndo ? (IntPtr)1 : (IntPtr)0;
                     }
                     return;
-                case WindowMessages.WM_CUT:
+                case (int)User32.WM.CUT:
                     if ((long)m.LParam == 0)
                     {
                         gridView.DoCutCommand();
@@ -5055,7 +5055,7 @@ namespace System.Windows.Forms
                     }
                     return;
 
-                case WindowMessages.WM_COPY:
+                case (int)User32.WM.COPY:
                     if ((long)m.LParam == 0)
                     {
                         gridView.DoCopyCommand();
@@ -5066,7 +5066,7 @@ namespace System.Windows.Forms
                     }
                     return;
 
-                case WindowMessages.WM_PASTE:
+                case (int)User32.WM.PASTE:
                     if ((long)m.LParam == 0)
                     {
                         gridView.DoPasteCommand();
@@ -5077,7 +5077,7 @@ namespace System.Windows.Forms
                     }
                     return;
 
-                case WindowMessages.WM_COPYDATA:
+                case (int)User32.WM.COPYDATA:
                     GetDataFromCopyData(m.LParam);
                     m.Result = (IntPtr)1;
                     return;
@@ -5499,16 +5499,16 @@ namespace System.Windows.Forms
 
     internal static class AutomationMessages
     {
-        internal const int PGM_GETBUTTONCOUNT = WindowMessages.WM_USER + 0x50;
-        internal const int PGM_GETBUTTONSTATE = WindowMessages.WM_USER + 0x52;
-        internal const int PGM_SETBUTTONSTATE = WindowMessages.WM_USER + 0x51;
-        internal const int PGM_GETBUTTONTEXT = WindowMessages.WM_USER + 0x53;
-        internal const int PGM_GETBUTTONTOOLTIPTEXT = WindowMessages.WM_USER + 0x54;
-        internal const int PGM_GETROWCOORDS = WindowMessages.WM_USER + 0x55;
-        internal const int PGM_GETVISIBLEROWCOUNT = WindowMessages.WM_USER + 0x56;
-        internal const int PGM_GETSELECTEDROW = WindowMessages.WM_USER + 0x57;
-        internal const int PGM_SETSELECTEDTAB = WindowMessages.WM_USER + 0x58; // DO NOT CHANGE THIS : VC uses it!
-        internal const int PGM_GETTESTINGINFO = WindowMessages.WM_USER + 0x59;
+        internal const int PGM_GETBUTTONCOUNT = (int)User32.WM.USER + 0x50;
+        internal const int PGM_GETBUTTONSTATE = (int)User32.WM.USER + 0x52;
+        internal const int PGM_SETBUTTONSTATE = (int)User32.WM.USER + 0x51;
+        internal const int PGM_GETBUTTONTEXT = (int)User32.WM.USER + 0x53;
+        internal const int PGM_GETBUTTONTOOLTIPTEXT = (int)User32.WM.USER + 0x54;
+        internal const int PGM_GETROWCOORDS = (int)User32.WM.USER + 0x55;
+        internal const int PGM_GETVISIBLEROWCOUNT = (int)User32.WM.USER + 0x56;
+        internal const int PGM_GETSELECTEDROW = (int)User32.WM.USER + 0x57;
+        internal const int PGM_SETSELECTEDTAB = (int)User32.WM.USER + 0x58; // DO NOT CHANGE THIS : VC uses it!
+        internal const int PGM_GETTESTINGINFO = (int)User32.WM.USER + 0x59;
 
         /// <summary>
         ///  Writes the specified text into a temporary file of the form %TEMP%\"Maui.[file id].log", where

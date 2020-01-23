@@ -2140,16 +2140,16 @@ namespace System.Windows.Forms
 
         protected override void WndProc(ref Message m)
         {
-            switch (m.Msg)
+            switch ((User32.WM)m.Msg)
             {
-                case WindowMessages.WM_NCACTIVATE:
+                case User32.WM.NCACTIVATE:
                     // if someone clicks on a child control of the toolstrip dropdown, we want
                     // the title bar to continue appearing active.  Normally we just show without
                     // taking window activation (ShowWindow(SHOWNOACTIVATE)) but we cant stop
                     // child controls from taking focus.
                     WmNCActivate(ref m);
                     return;
-                case WindowMessages.WM_ACTIVATE:
+                case User32.WM.ACTIVATE:
                     // This is the Chrome Panel collection editor scenario
                     // we had focus, then the Chrome panel was activated and we never went away
                     // when we get focus again, we should reactivate our message filter.
@@ -2242,7 +2242,7 @@ namespace System.Windows.Forms
                         // we're activating - notify the previous guy that we're activating.
                         HandleRef activeHwndHandleRef = ToolStripManager.ModalMenuFilter.ActiveHwnd;
 
-                        UnsafeNativeMethods.SendMessage(activeHwndHandleRef, WindowMessages.WM_NCACTIVATE, (IntPtr)1, NativeMethods.InvalidIntPtr);
+                        User32.SendMessageW(activeHwndHandleRef, User32.WM.NCACTIVATE, (IntPtr)1, (IntPtr)(-1));
                         User32.RedrawWindow(
                             activeHwndHandleRef,
                             null,

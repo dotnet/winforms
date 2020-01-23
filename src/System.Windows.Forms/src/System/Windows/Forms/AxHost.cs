@@ -3406,34 +3406,34 @@ namespace System.Windows.Forms
             }
 #pragma warning restore 162, 429
 
-            switch (m.Msg)
+            switch ((User32.WM)m.Msg)
             {
                 // Things we explicitly ignore and pass to the ocx's windproc
-                case WindowMessages.WM_ERASEBKGND:
+                case User32.WM.ERASEBKGND:
 
-                case WindowMessages.WM_REFLECT + WindowMessages.WM_NOTIFYFORMAT:
+                case User32.WM.REFLECT | User32.WM.NOTIFYFORMAT:
 
-                case WindowMessages.WM_SETCURSOR:
-                case WindowMessages.WM_SYSCOLORCHANGE:
+                case User32.WM.SETCURSOR:
+                case User32.WM.SYSCOLORCHANGE:
 
                 // Some of the MSComCtl controls respond to this message
                 // to do some custom painting. So, we should just pass this message
                 // through.
                 //
-                case WindowMessages.WM_DRAWITEM:
+                case User32.WM.DRAWITEM:
 
-                case WindowMessages.WM_LBUTTONDBLCLK:
-                case WindowMessages.WM_LBUTTONUP:
-                case WindowMessages.WM_MBUTTONDBLCLK:
-                case WindowMessages.WM_MBUTTONUP:
-                case WindowMessages.WM_RBUTTONDBLCLK:
-                case WindowMessages.WM_RBUTTONUP:
+                case User32.WM.LBUTTONDBLCLK:
+                case User32.WM.LBUTTONUP:
+                case User32.WM.MBUTTONDBLCLK:
+                case User32.WM.MBUTTONUP:
+                case User32.WM.RBUTTONDBLCLK:
+                case User32.WM.RBUTTONUP:
                     DefWndProc(ref m);
                     break;
 
-                case WindowMessages.WM_LBUTTONDOWN:
-                case WindowMessages.WM_MBUTTONDOWN:
-                case WindowMessages.WM_RBUTTONDOWN:
+                case User32.WM.LBUTTONDOWN:
+                case User32.WM.MBUTTONDOWN:
+                case User32.WM.RBUTTONDOWN:
                     if (IsUserMode())
                     {
                         Focus();
@@ -3441,7 +3441,7 @@ namespace System.Windows.Forms
                     DefWndProc(ref m);
                     break;
 
-                case WindowMessages.WM_KILLFOCUS:
+                case User32.WM.KILLFOCUS:
                     {
                         hwndFocus = m.WParam;
                         try
@@ -3455,18 +3455,18 @@ namespace System.Windows.Forms
                         break;
                     }
 
-                case WindowMessages.WM_COMMAND:
+                case User32.WM.COMMAND:
                     if (!ReflectMessage(m.LParam, ref m))
                     {
                         DefWndProc(ref m);
                     }
                     break;
 
-                case WindowMessages.WM_CONTEXTMENU:
+                case User32.WM.CONTEXTMENU:
                     DefWndProc(ref m);
                     break;
 
-                case WindowMessages.WM_DESTROY:
+                case User32.WM.DESTROY:
 #if DEBUG
                     if (!OwnWindow())
                     {
@@ -3501,13 +3501,13 @@ namespace System.Windows.Forms
                     }
 
                     break;
-                case WindowMessages.WM_HELP:
+                case User32.WM.HELP:
                     // We want to both fire the event, and let the ocx have the message...
                     base.WndProc(ref m);
                     DefWndProc(ref m);
                     break;
 
-                case WindowMessages.WM_KEYUP:
+                case User32.WM.KEYUP:
                     if (axState[processingKeyUp])
                     {
                         break;
@@ -3528,7 +3528,7 @@ namespace System.Windows.Forms
 
                     break;
 
-                case WindowMessages.WM_NCDESTROY:
+                case User32.WM.NCDESTROY:
 #if DEBUG
                     if (!OwnWindow())
                     {

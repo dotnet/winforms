@@ -329,7 +329,7 @@ namespace System.Windows.Forms
                     // If this.MdiClient != null it means this.IsMdiContainer == true.
                     if (ctlClient != null && ctlClient.IsHandleCreated)
                     {
-                        IntPtr hwnd = ctlClient.SendMessage(WindowMessages.WM_MDIGETACTIVE, 0, 0);
+                        IntPtr hwnd = User32.SendMessageW(ctlClient, User32.WM.MDIGETACTIVE);
                         mdiChild = Control.FromHandle(hwnd) as Form;
                     }
                 }
@@ -2368,7 +2368,7 @@ namespace System.Windows.Forms
                 //
                 if (0 == formState[FormStateSWCalled])
                 {
-                    UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), WindowMessages.WM_SHOWWINDOW, value ? 1 : 0, 0);
+                    User32.SendMessageW(this, User32.WM.SHOWWINDOW, PARAM.FromBool(value));
                 }
             }
             else
@@ -3120,7 +3120,7 @@ namespace System.Windows.Forms
             if (IsHandleCreated)
             {
                 closeReason = CloseReason.UserClosing;
-                SendMessage(WindowMessages.WM_CLOSE, 0, 0);
+                User32.SendMessageW(this, User32.WM.CLOSE);
             }
             else
             {
@@ -3270,7 +3270,7 @@ namespace System.Windows.Forms
                     Icon icon = Icon;
                     if (icon != null && TaskbarOwner.Handle != IntPtr.Zero)
                     {
-                        UnsafeNativeMethods.SendMessage(TaskbarOwner, WindowMessages.WM_SETICON, NativeMethods.ICON_BIG, icon.Handle);
+                        User32.SendMessageW(TaskbarOwner, User32.WM.SETICON, (IntPtr)NativeMethods.ICON_BIG, icon.Handle);
                     }
                 }
 
@@ -3356,7 +3356,7 @@ namespace System.Windows.Forms
             }
             else if (0 != formStateEx[FormStateExUseMdiChildProc])
             {
-                m.Result = UnsafeNativeMethods.DefMDIChildProc(m.HWnd, m.Msg, m.WParam, m.LParam);
+                m.Result = UnsafeNativeMethods.DefMDIChildProc(m.HWnd, (User32.WM)m.Msg, m.WParam, m.LParam);
             }
             else
             {
@@ -5332,7 +5332,7 @@ namespace System.Windows.Forms
             IntPtr hWndCapture = User32.GetCapture();
             if (hWndCapture != IntPtr.Zero)
             {
-                UnsafeNativeMethods.SendMessage(new HandleRef(null, hWndCapture), WindowMessages.WM_CANCELMODE, IntPtr.Zero, IntPtr.Zero);
+                User32.SendMessageW(hWndCapture, User32.WM.CANCELMODE);
                 User32.ReleaseCapture();
             }
             IntPtr hWndActive = User32.GetActiveWindow();
@@ -5954,15 +5954,15 @@ namespace System.Windows.Forms
 
                     if (smallIcon != null)
                     {
-                        SendMessage(WindowMessages.WM_SETICON, NativeMethods.ICON_SMALL, smallIcon.Handle);
+                        User32.SendMessageW(this, User32.WM.SETICON, (IntPtr)NativeMethods.ICON_SMALL, smallIcon.Handle);
                     }
 
-                    SendMessage(WindowMessages.WM_SETICON, NativeMethods.ICON_BIG, icon.Handle);
+                    User32.SendMessageW(this, User32.WM.SETICON, (IntPtr)NativeMethods.ICON_BIG, icon.Handle);
                 }
                 else
                 {
-                    SendMessage(WindowMessages.WM_SETICON, NativeMethods.ICON_SMALL, 0);
-                    SendMessage(WindowMessages.WM_SETICON, NativeMethods.ICON_BIG, 0);
+                    User32.SendMessageW(this, User32.WM.SETICON, (IntPtr)NativeMethods.ICON_SMALL, IntPtr.Zero);
+                    User32.SendMessageW(this, User32.WM.SETICON, (IntPtr)NativeMethods.ICON_BIG, IntPtr.Zero);
                 }
 
                 if (redrawFrame)
@@ -6149,8 +6149,7 @@ namespace System.Windows.Forms
             FormClosingEventArgs e = new FormClosingEventArgs(CloseReason, false);
 
             // Pass 1 (WM_CLOSE & WM_QUERYENDSESSION)... Closing
-            //
-            if (m.Msg != WindowMessages.WM_ENDSESSION)
+            if (m.Msg != (int)User32.WM.ENDSESSION)
             {
                 if (Modal)
                 {
@@ -6224,7 +6223,7 @@ namespace System.Windows.Forms
                     OnFormClosing(e);
                 }
 
-                if (m.Msg == WindowMessages.WM_QUERYENDSESSION)
+                if (m.Msg == (int)User32.WM.QUERYENDSESSION)
                 {
                     m.Result = (IntPtr)(e.Cancel ? 0 : 1);
                 }
@@ -6246,8 +6245,7 @@ namespace System.Windows.Forms
 
             // Pass 2 (WM_CLOSE & WM_ENDSESSION)... Fire closed
             // event on all mdi children and ourselves
-            //
-            if (m.Msg != WindowMessages.WM_QUERYENDSESSION)
+            if (m.Msg != (int)User32.WM.QUERYENDSESSION)
             {
                 FormClosedEventArgs fc;
                 if (!e.Cancel)
@@ -6602,24 +6600,24 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void WndProc(ref Message m)
         {
-            switch (m.Msg)
+            switch ((User32.WM)m.Msg)
             {
-                case WindowMessages.WM_NCACTIVATE:
+                case User32.WM.NCACTIVATE:
                     base.WndProc(ref m);
                     break;
-                case WindowMessages.WM_NCLBUTTONDOWN:
-                case WindowMessages.WM_NCRBUTTONDOWN:
-                case WindowMessages.WM_NCMBUTTONDOWN:
-                case WindowMessages.WM_NCXBUTTONDOWN:
+                case User32.WM.NCLBUTTONDOWN:
+                case User32.WM.NCRBUTTONDOWN:
+                case User32.WM.NCMBUTTONDOWN:
+                case User32.WM.NCXBUTTONDOWN:
                     WmNcButtonDown(ref m);
                     break;
-                case WindowMessages.WM_ACTIVATE:
+                case User32.WM.ACTIVATE:
                     WmActivate(ref m);
                     break;
-                case WindowMessages.WM_MDIACTIVATE:
+                case User32.WM.MDIACTIVATE:
                     WmMdiActivate(ref m);
                     break;
-                case WindowMessages.WM_CLOSE:
+                case User32.WM.CLOSE:
                     if (CloseReason == CloseReason.None)
                     {
                         CloseReason = CloseReason.TaskManagerClosing;
@@ -6627,57 +6625,57 @@ namespace System.Windows.Forms
                     WmClose(ref m);
                     break;
 
-                case WindowMessages.WM_QUERYENDSESSION:
-                case WindowMessages.WM_ENDSESSION:
+                case User32.WM.QUERYENDSESSION:
+                case User32.WM.ENDSESSION:
                     CloseReason = CloseReason.WindowsShutDown;
                     WmClose(ref m);
                     break;
-                case WindowMessages.WM_ENTERSIZEMOVE:
+                case User32.WM.ENTERSIZEMOVE:
                     WmEnterSizeMove(ref m);
                     DefWndProc(ref m);
                     break;
-                case WindowMessages.WM_EXITSIZEMOVE:
+                case User32.WM.EXITSIZEMOVE:
                     WmExitSizeMove(ref m);
                     DefWndProc(ref m);
                     break;
-                case WindowMessages.WM_CREATE:
+                case User32.WM.CREATE:
                     WmCreate(ref m);
                     break;
-                case WindowMessages.WM_ERASEBKGND:
+                case User32.WM.ERASEBKGND:
                     WmEraseBkgnd(ref m);
                     break;
 
-                case WindowMessages.WM_NCDESTROY:
+                case User32.WM.NCDESTROY:
                     WmNCDestroy(ref m);
                     break;
-                case WindowMessages.WM_NCHITTEST:
+                case User32.WM.NCHITTEST:
                     WmNCHitTest(ref m);
                     break;
-                case WindowMessages.WM_SHOWWINDOW:
+                case User32.WM.SHOWWINDOW:
                     WmShowWindow(ref m);
                     break;
-                case WindowMessages.WM_SIZE:
+                case User32.WM.SIZE:
                     WmSize(ref m);
                     break;
-                case WindowMessages.WM_SYSCOMMAND:
+                case User32.WM.SYSCOMMAND:
                     WmSysCommand(ref m);
                     break;
-                case WindowMessages.WM_GETMINMAXINFO:
+                case User32.WM.GETMINMAXINFO:
                     WmGetMinMaxInfo(ref m);
                     break;
-                case WindowMessages.WM_WINDOWPOSCHANGED:
+                case User32.WM.WINDOWPOSCHANGED:
                     WmWindowPosChanged(ref m);
                     break;
-                //case WindowMessages.WM_WINDOWPOSCHANGING:
+                //case User32.WM.WINDOWPOSCHANGING:
                 //    WmWindowPosChanging(ref m);
                 //    break;
-                case WindowMessages.WM_ENTERMENULOOP:
+                case User32.WM.ENTERMENULOOP:
                     WmEnterMenuLoop(ref m);
                     break;
-                case WindowMessages.WM_EXITMENULOOP:
+                case User32.WM.EXITMENULOOP:
                     WmExitMenuLoop(ref m);
                     break;
-                case WindowMessages.WM_CAPTURECHANGED:
+                case User32.WM.CAPTURECHANGED:
                     base.WndProc(ref m);
 
                     // This is a work-around for the Win32 scroll bar; it doesn't release
@@ -6689,11 +6687,11 @@ namespace System.Windows.Forms
                         Capture = false;
                     }
                     break;
-                case WindowMessages.WM_GETDPISCALEDSIZE:
+                case User32.WM.GETDPISCALEDSIZE:
                     Debug.Assert(PARAM.SignedLOWORD(m.WParam) == PARAM.SignedHIWORD(m.WParam), "Non-square pixels!");
                     WmGetDpiScaledSize(ref m);
                     break;
-                case WindowMessages.WM_DPICHANGED:
+                case User32.WM.DPICHANGED:
                     WmDpiChanged(ref m);
                     break;
                 default:

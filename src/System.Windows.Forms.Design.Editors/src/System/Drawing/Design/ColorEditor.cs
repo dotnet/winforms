@@ -1107,9 +1107,9 @@ namespace System.Drawing.Design
 
             protected override IntPtr HookProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam)
             {
-                switch (msg)
+                switch ((User32.WM)msg)
                 {
-                    case WindowMessages.WM_INITDIALOG:
+                    case User32.WM.INITDIALOG:
                         UnsafeNativeMethods.SendDlgItemMessage(hwnd, COLOR_HUE, (int)User32.EM.SETMARGINS, (IntPtr)(User32.EC.LEFTMARGIN | User32.EC.RIGHTMARGIN), IntPtr.Zero);
                         UnsafeNativeMethods.SendDlgItemMessage(hwnd, COLOR_SAT, (int)User32.EM.SETMARGINS, (IntPtr)(User32.EC.LEFTMARGIN | User32.EC.RIGHTMARGIN), IntPtr.Zero);
                         UnsafeNativeMethods.SendDlgItemMessage(hwnd, COLOR_LUM, (int)User32.EM.SETMARGINS, (IntPtr)(User32.EC.LEFTMARGIN | User32.EC.RIGHTMARGIN), IntPtr.Zero);
@@ -1131,7 +1131,7 @@ namespace System.Drawing.Design
                         this.Color = Color.Empty;
                         break;
 
-                    case WindowMessages.WM_COMMAND:
+                    case User32.WM.COMMAND:
                         switch (PARAM.LOWORD(wParam))
                         {
                             case COLOR_ADD:

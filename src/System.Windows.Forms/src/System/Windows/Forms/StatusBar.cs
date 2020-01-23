@@ -1127,16 +1127,16 @@ namespace System.Windows.Forms
         /// </summary>
         protected unsafe override void WndProc(ref Message m)
         {
-            switch (m.Msg)
+            switch ((User32.WM)m.Msg)
             {
-                case WindowMessages.WM_NCHITTEST:
+                case User32.WM.NCHITTEST:
                     WmNCHitTest(ref m);
                     break;
-                case WindowMessages.WM_REFLECT + WindowMessages.WM_DRAWITEM:
+                case User32.WM.REFLECT| User32.WM.DRAWITEM:
                     WmDrawItem(ref m);
                     break;
-                case WindowMessages.WM_NOTIFY:
-                case WindowMessages.WM_NOTIFY + WindowMessages.WM_REFLECT:
+                case User32.WM.NOTIFY:
+                case User32.WM.NOTIFY | User32.WM.REFLECT:
                     User32.NMHDR* note = (User32.NMHDR*)m.LParam;
                     switch ((NM)note->code)
                     {
@@ -1879,9 +1879,9 @@ namespace System.Windows.Forms
 
             protected void WndProc(ref Message msg)
             {
-                switch (msg.Msg)
+                switch ((User32.WM)msg.Msg)
                 {
-                    case WindowMessages.WM_SETFOCUS:
+                    case User32.WM.SETFOCUS:
                         return;
                     default:
                         window.DefWndProc(ref msg);

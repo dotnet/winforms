@@ -1650,9 +1650,9 @@ namespace System.Windows.Forms
         /// </summary>
         private void ChildWndProc(ref Message m)
         {
-            switch (m.Msg)
+            switch ((WM)m.Msg)
             {
-                case WindowMessages.WM_CHAR:
+                case WM.CHAR:
                     if (DropDownStyle == ComboBoxStyle.Simple && m.HWnd == childListBox.Handle)
                     {
                         DefChildWndProc(ref m);
@@ -1669,7 +1669,7 @@ namespace System.Windows.Forms
                         }
                     }
                     break;
-                case WindowMessages.WM_SYSCHAR:
+                case WM.SYSCHAR:
                     if (DropDownStyle == ComboBoxStyle.Simple && m.HWnd == childListBox.Handle)
                     {
                         DefChildWndProc(ref m);
@@ -1686,8 +1686,8 @@ namespace System.Windows.Forms
                         }
                     }
                     break;
-                case WindowMessages.WM_KEYDOWN:
-                case WindowMessages.WM_SYSKEYDOWN:
+                case WM.KEYDOWN:
+                case WM.SYSKEYDOWN:
                     if (SystemAutoCompleteEnabled && !ACNativeWindow.AutoCompleteActive)
                     {
                         finder.FindDropDowns(false);
@@ -1725,12 +1725,12 @@ namespace System.Windows.Forms
                     }
                     break;
 
-                case WindowMessages.WM_INPUTLANGCHANGE:
+                case WM.INPUTLANGCHANGE:
                     DefChildWndProc(ref m);
                     break;
 
-                case WindowMessages.WM_KEYUP:
-                case WindowMessages.WM_SYSKEYUP:
+                case WM.KEYUP:
+                case WM.SYSKEYUP:
                     if (DropDownStyle == ComboBoxStyle.Simple && m.HWnd == childListBox.Handle)
                     {
                         DefChildWndProc(ref m);
@@ -1752,7 +1752,7 @@ namespace System.Windows.Forms
                     }
 
                     break;
-                case WindowMessages.WM_KILLFOCUS:
+                case WM.KILLFOCUS:
                     // Consider - If we dont' have a childwndproc, then we don't get here, so we don't
                     // update the cache. Do we need to? This happens when we have a DropDownList.
                     if (!DesignMode)
@@ -1774,7 +1774,7 @@ namespace System.Windows.Forms
                     }
 
                     break;
-                case WindowMessages.WM_SETFOCUS:
+                case WM.SETFOCUS:
 
                     // Consider - If we dont' have a childwndproc, then we don't get here, so we don't
                     // set the status. Do we need to? This happens when we have a DropDownList.
@@ -1818,14 +1818,14 @@ namespace System.Windows.Forms
                     }
                     break;
 
-                case WindowMessages.WM_SETFONT:
+                case WM.SETFONT:
                     DefChildWndProc(ref m);
                     if (childEdit != null && m.HWnd == childEdit.Handle)
                     {
                         SendMessageW(new HandleRef(this, childEdit.Handle), (WM)EM.SETMARGINS, (IntPtr)(EC.LEFTMARGIN | EC.RIGHTMARGIN));
                     }
                     break;
-                case WindowMessages.WM_LBUTTONDBLCLK:
+                case WM.LBUTTONDBLCLK:
                     // The Listbox gets WM_LBUTTONDOWN - WM_LBUTTONUP -WM_LBUTTONDBLCLK - WM_LBUTTONUP
                     // sequence for doubleclick.
 
@@ -1842,7 +1842,7 @@ namespace System.Windows.Forms
                     OnMouseDown(new MouseEventArgs(MouseButtons.Left, 1, Ptlc.X, Ptlc.Y, 0));
                     break;
 
-                case WindowMessages.WM_MBUTTONDBLCLK:
+                case WM.MBUTTONDBLCLK:
                     // The Listbox gets  WM_LBUTTONDOWN - WM_LBUTTONUP -WM_LBUTTONDBLCLK - WM_LBUTTONUP
                     // sequence for doubleclick
 
@@ -1859,7 +1859,7 @@ namespace System.Windows.Forms
                     OnMouseDown(new MouseEventArgs(MouseButtons.Middle, 1, Ptmc.X, Ptmc.Y, 0));
                     break;
 
-                case WindowMessages.WM_RBUTTONDBLCLK:
+                case WM.RBUTTONDBLCLK:
                     // The Listbox gets  WM_LBUTTONDOWN - WM_LBUTTONUP -WM_LBUTTONDBLCLK - WM_LBUTTONUP
                     // sequence for doubleclick
 
@@ -1876,7 +1876,7 @@ namespace System.Windows.Forms
                     OnMouseDown(new MouseEventArgs(MouseButtons.Right, 1, Ptrc.X, Ptrc.Y, 0));
                     break;
 
-                case WindowMessages.WM_LBUTTONDOWN:
+                case WM.LBUTTONDOWN:
                     mousePressed = true;
                     mouseEvents = true;
 
@@ -1889,7 +1889,7 @@ namespace System.Windows.Forms
 
                     OnMouseDown(new MouseEventArgs(MouseButtons.Left, 1, Ptl.X, Ptl.Y, 0));
                     break;
-                case WindowMessages.WM_LBUTTONUP:
+                case WM.LBUTTONUP:
                     // Get the mouse location
                     var rect = new RECT();
                     GetWindowRect(this, ref rect);
@@ -1929,7 +1929,7 @@ namespace System.Windows.Forms
 
                     OnMouseUp(new MouseEventArgs(MouseButtons.Left, 1, pt.X, pt.Y, 0));
                     break;
-                case WindowMessages.WM_MBUTTONDOWN:
+                case WM.MBUTTONDOWN:
                     mousePressed = true;
                     mouseEvents = true;
 
@@ -1942,7 +1942,7 @@ namespace System.Windows.Forms
 
                     OnMouseDown(new MouseEventArgs(MouseButtons.Middle, 1, P.X, P.Y, 0));
                     break;
-                case WindowMessages.WM_RBUTTONDOWN:
+                case WM.RBUTTONDOWN:
                     mousePressed = true;
                     mouseEvents = true;
 
@@ -1959,7 +1959,7 @@ namespace System.Windows.Forms
 
                     OnMouseDown(new MouseEventArgs(MouseButtons.Right, 1, Pt.X, Pt.Y, 0));
                     break;
-                case WindowMessages.WM_MBUTTONUP:
+                case WM.MBUTTONUP:
                     mousePressed = false;
                     mouseEvents = false;
 
@@ -1968,7 +1968,7 @@ namespace System.Windows.Forms
                     DefChildWndProc(ref m);
                     OnMouseUp(new MouseEventArgs(MouseButtons.Middle, 1, PARAM.SignedLOWORD(m.LParam), PARAM.SignedHIWORD(m.LParam), 0));
                     break;
-                case WindowMessages.WM_RBUTTONUP:
+                case WM.RBUTTONUP:
                     mousePressed = false;
                     mouseEvents = false;
 
@@ -1980,7 +1980,7 @@ namespace System.Windows.Forms
                     OnMouseUp(new MouseEventArgs(MouseButtons.Right, 1, ptRBtnUp.X, ptRBtnUp.Y, 0));
                     break;
 
-                case WindowMessages.WM_CONTEXTMENU:
+                case WM.CONTEXTMENU:
                     // Forward context menu messages to the parent control
                     if (ContextMenuStrip != null)
                     {
@@ -1992,7 +1992,7 @@ namespace System.Windows.Forms
                     }
                     break;
 
-                case WindowMessages.WM_MOUSEMOVE:
+                case WM.MOUSEMOVE:
                     Point point = EditToComboboxMapping(m);
 
                     // Call the DefWndProc() so that mousemove messages get to the windows edit control
@@ -2001,7 +2001,7 @@ namespace System.Windows.Forms
                     OnMouseMove(new MouseEventArgs(MouseButtons, 0, point.X, point.Y, 0));
                     break;
 
-                case WindowMessages.WM_SETCURSOR:
+                case WM.SETCURSOR:
                     if (Cursor != DefaultCursor && childEdit != null && m.HWnd == childEdit.Handle && PARAM.LOWORD(m.LParam) == NativeMethods.HTCLIENT)
                     {
                         Cursor.Current = Cursor;
@@ -2012,7 +2012,7 @@ namespace System.Windows.Forms
                     }
                     break;
 
-                case WindowMessages.WM_MOUSELEAVE:
+                case WM.MOUSELEAVE:
                     DefChildWndProc(ref m);
                     OnMouseLeaveInternal(EventArgs.Empty);
                     break;
@@ -2237,14 +2237,14 @@ namespace System.Windows.Forms
 
         internal override IntPtr InitializeDCForWmCtlColor(IntPtr dc, int msg)
         {
-            if ((msg == WindowMessages.WM_CTLCOLORSTATIC) && !ShouldSerializeBackColor())
+            if ((msg == (int)WM.CTLCOLORSTATIC) && !ShouldSerializeBackColor())
             {
                 // Let the Win32 Edit control handle background colors itself.
                 // This is necessary because a disabled edit control will display a different
                 // BackColor than when enabled.
                 return IntPtr.Zero;
             }
-            else if ((msg == WindowMessages.WM_CTLCOLORLISTBOX) && GetStyle(ControlStyles.UserPaint))
+            else if ((msg == (int)WM.CTLCOLORLISTBOX) && GetStyle(ControlStyles.UserPaint))
             {
                 // Base class returns hollow brush when UserPaint style is set, to avoid flicker in
                 // main control. But when returning colors for child dropdown list, return normal ForeColor/BackColor,
@@ -2263,7 +2263,7 @@ namespace System.Windows.Forms
         // auto-completion in DropDownList style.
         private bool InterceptAutoCompleteKeystroke(Message m)
         {
-            if (m.Msg == WindowMessages.WM_KEYDOWN)
+            if (m.Msg == (int)WM.KEYDOWN)
             {
                 Debug.Assert((ModifierKeys & Keys.Alt) == 0);
                 // Keys.Delete only triggers a WM_KEYDOWN and WM_KEYUP, and no WM_CHAR. That's why it's treated separately.
@@ -2279,7 +2279,7 @@ namespace System.Windows.Forms
                     return false;
                 }
             }
-            else if (m.Msg == WindowMessages.WM_CHAR)
+            else if (m.Msg == (int)WM.CHAR)
             {
                 Debug.Assert((ModifierKeys & Keys.Alt) == 0);
                 char keyChar = unchecked((char)(long)m.WParam);
@@ -3612,7 +3612,7 @@ namespace System.Windows.Forms
         private void WmParentNotify(ref Message m)
         {
             base.WndProc(ref m);
-            if (unchecked((int)(long)m.WParam) == (WindowMessages.WM_CREATE | 1000 << 16))
+            if (unchecked((int)(long)m.WParam) == ((int)WM.CREATE | 1000 << 16))
             {
                 dropDownHandle = m.LParam;
 
@@ -3782,11 +3782,11 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void WndProc(ref Message m)
         {
-            switch (m.Msg)
+            switch ((WM)m.Msg)
             {
                 // We don't want to fire the focus events twice -
                 // once in the combobox and once in the ChildWndProc.
-                case WindowMessages.WM_SETFOCUS:
+                case WM.SETFOCUS:
                     try
                     {
                         fireSetFocus = false;
@@ -3798,7 +3798,7 @@ namespace System.Windows.Forms
                         fireSetFocus = true;
                     }
                     break;
-                case WindowMessages.WM_KILLFOCUS:
+                case WM.KILLFOCUS:
                     try
                     {
                         fireLostFocus = false;
@@ -3825,30 +3825,30 @@ namespace System.Windows.Forms
                         fireLostFocus = true;
                     }
                     break;
-                case WindowMessages.WM_CTLCOLOREDIT:
-                case WindowMessages.WM_CTLCOLORLISTBOX:
+                case WM.CTLCOLOREDIT:
+                case WM.CTLCOLORLISTBOX:
                     m.Result = InitializeDCForWmCtlColor(m.WParam, m.Msg);
                     break;
-                case WindowMessages.WM_ERASEBKGND:
+                case WM.ERASEBKGND:
                     WmEraseBkgnd(ref m);
                     break;
-                case WindowMessages.WM_PARENTNOTIFY:
+                case WM.PARENTNOTIFY:
                     WmParentNotify(ref m);
                     break;
-                case WindowMessages.WM_REFLECT + WindowMessages.WM_COMMAND:
+                case WM.REFLECT | WM.COMMAND:
                     WmReflectCommand(ref m);
                     break;
-                case WindowMessages.WM_REFLECT + WindowMessages.WM_DRAWITEM:
+                case WM.REFLECT | WM.DRAWITEM:
                     WmReflectDrawItem(ref m);
                     break;
-                case WindowMessages.WM_REFLECT + WindowMessages.WM_MEASUREITEM:
+                case WM.REFLECT | WM.MEASUREITEM:
                     WmReflectMeasureItem(ref m);
                     break;
-                case WindowMessages.WM_LBUTTONDOWN:
+                case WM.LBUTTONDOWN:
                     mouseEvents = true;
                     base.WndProc(ref m);
                     break;
-                case WindowMessages.WM_LBUTTONUP:
+                case WM.LBUTTONUP:
                     // Get the mouse location
                     var r = new RECT();
                     GetWindowRect(this, ref r);
@@ -3880,12 +3880,12 @@ namespace System.Windows.Forms
                     }
                     break;
 
-                case WindowMessages.WM_MOUSELEAVE:
+                case WM.MOUSELEAVE:
                     DefWndProc(ref m);
                     OnMouseLeaveInternal(EventArgs.Empty);
                     break;
 
-                case WindowMessages.WM_PAINT:
+                case WM.PAINT:
                     if (GetStyle(ControlStyles.UserPaint) == false && (FlatStyle == FlatStyle.Flat || FlatStyle == FlatStyle.Popup))
                     {
                         using (WindowsRegion dr = new WindowsRegion(FlatComboBoxAdapter.dropDownRect))
@@ -3947,7 +3947,7 @@ namespace System.Windows.Forms
                     base.WndProc(ref m);
                     break;
 
-                case WindowMessages.WM_PRINTCLIENT:
+                case WM.PRINTCLIENT:
                     // all the fancy stuff we do in OnPaint has to happen again in OnPrint.
                     if (!GetStyle(ControlStyles.UserPaint) && (FlatStyle == FlatStyle.Flat || FlatStyle == FlatStyle.Popup))
                     {
@@ -3968,11 +3968,11 @@ namespace System.Windows.Forms
                     base.WndProc(ref m);
                     return;
 
-                case WindowMessages.WM_SETCURSOR:
+                case WM.SETCURSOR:
                     base.WndProc(ref m);
                     break;
 
-                case WindowMessages.WM_SETFONT:
+                case WM.SETFONT:
                     if (Width == 0)
                     {
                         suppressNextWindosPos = true;
@@ -3980,7 +3980,7 @@ namespace System.Windows.Forms
                     base.WndProc(ref m);
                     break;
 
-                case WindowMessages.WM_WINDOWPOSCHANGED:
+                case WM.WINDOWPOSCHANGED:
                     if (!suppressNextWindosPos)
                     {
                         base.WndProc(ref m);
@@ -3988,7 +3988,7 @@ namespace System.Windows.Forms
                     suppressNextWindosPos = false;
                     break;
 
-                case WindowMessages.WM_NCDESTROY:
+                case WM.NCDESTROY:
                     base.WndProc(ref m);
                     ReleaseChildWindow();
                     break;
@@ -4020,12 +4020,12 @@ namespace System.Windows.Forms
 
             protected override void WndProc(ref Message m)
             {
-                switch (m.Msg)
+                switch ((User32.WM)m.Msg)
                 {
-                    case WindowMessages.WM_GETOBJECT:
+                    case WM.GETOBJECT:
                         WmGetObject(ref m);
                         return;
-                    case WindowMessages.WM_MOUSEMOVE:
+                    case WM.MOUSEMOVE:
                         if (_childWindowType == ChildWindowType.DropDownList)
                         {
                             // Need to track the selection change via mouse over to
@@ -6112,7 +6112,7 @@ namespace System.Windows.Forms
                     inWndProcCnt--;
                 }
 
-                if (m.Msg == WindowMessages.WM_NCDESTROY)
+                if (m.Msg == (int)WM.NCDESTROY)
                 {
                     Debug.Assert(ACWindows.ContainsKey(Handle));
                     ACWindows.Remove(Handle);   //so we do not leak ac windows.

@@ -1299,7 +1299,7 @@ namespace System.Windows.Forms
             {
                 Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, "In WmGetObject, this = " + GetType().FullName + ", lParam = " + m.LParam.ToString());
 
-                if (m.Msg == WindowMessages.WM_GETOBJECT && m.LParam == (IntPtr)NativeMethods.UiaRootObjectId)
+                if (m.Msg == (int)User32.WM.GETOBJECT && m.LParam == (IntPtr)NativeMethods.UiaRootObjectId)
                 {
                     // If the requested object identifier is UiaRootObjectId,
                     // we should return an UI Automation provider using the UiaReturnRawElementProvider function.
@@ -1322,21 +1322,21 @@ namespace System.Windows.Forms
             /// </summary>
             protected unsafe override void WndProc(ref Message m)
             {
-                switch (m.Msg)
+                switch ((User32.WM)m.Msg)
                 {
-                    case WindowMessages.WM_GETOBJECT:
+                    case User32.WM.GETOBJECT:
                         WmGetObject(ref m);
                         break;
-                    case WindowMessages.WM_NOTIFY:
+                    case User32.WM.NOTIFY:
                         User32.NMHDR* nmhdr = (User32.NMHDR*)m.LParam;
                         if (nmhdr->code == (int)ComCtl32.TTN.SHOW || nmhdr->code == (int)ComCtl32.TTN.POP)
                         {
                             OnToolTipVisibilityChanging(nmhdr->idFrom, nmhdr->code == (int)ComCtl32.TTN.SHOW);
                         }
                         break;
-                    case WindowMessages.WM_ERASEBKGND:
+                    case User32.WM.ERASEBKGND:
                         break;
-                    case WindowMessages.WM_PAINT:
+                    case User32.WM.PAINT:
                         OnPaint(ref m);
                         break;
                     default:

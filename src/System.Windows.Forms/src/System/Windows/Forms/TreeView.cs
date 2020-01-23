@@ -1746,14 +1746,14 @@ namespace System.Windows.Forms
             {
                 if (IsHandleCreated)
                 {
-                    SendMessage(WindowMessages.WM_SETREDRAW, 0, 0);
+                    User32.SendMessageW(this, User32.WM.SETREDRAW, PARAM.FromBool(false));
                     if (delayed)
                     {
                         User32.PostMessageW(this, User32.WM.SETREDRAW, (IntPtr)1, IntPtr.Zero);
                     }
                     else
                     {
-                        SendMessage(WindowMessages.WM_SETREDRAW, 1, 0);
+                        User32.SendMessageW(this, User32.WM.SETREDRAW, PARAM.FromBool(true));
                     }
                 }
             }
@@ -3171,10 +3171,10 @@ namespace System.Windows.Forms
         {
             switch (m.Msg)
             {
-                case WindowMessages.WM_WINDOWPOSCHANGING:
-                case WindowMessages.WM_NCCALCSIZE:
-                case WindowMessages.WM_WINDOWPOSCHANGED:
-                case WindowMessages.WM_SIZE:
+                case (int)User32.WM.WINDOWPOSCHANGING:
+                case (int)User32.WM.NCCALCSIZE:
+                case (int)User32.WM.WINDOWPOSCHANGED:
+                case (int)User32.WM.SIZE:
                     // While we are changing size of treeView to avoid the scrollbar; dont respond to the window-sizing messages.
                     if (treeViewState[TREEVIEWSTATE_stopResizeWindowMsgs])
                     {
@@ -3185,7 +3185,7 @@ namespace System.Windows.Forms
                         base.WndProc(ref m);
                     }
                     break;
-                case WindowMessages.WM_HSCROLL:
+                case (int)User32.WM.HSCROLL:
                     base.WndProc(ref m);
                     if (DrawMode == TreeViewDrawMode.OwnerDrawAll)
                     {
@@ -3193,7 +3193,7 @@ namespace System.Windows.Forms
                     }
                     break;
 
-                case WindowMessages.WM_PRINT:
+                case (int)User32.WM.PRINT:
                     WmPrint(ref m);
                     break;
                 case (int)TVM.SETITEMW:
@@ -3217,7 +3217,7 @@ namespace System.Windows.Forms
                         }
                     }
                     break;
-                case WindowMessages.WM_NOTIFY:
+                case (int)User32.WM.NOTIFY:
                     User32.NMHDR* nmhdr = (User32.NMHDR*)m.LParam;
                     switch (nmhdr->code)
                     {
@@ -3244,10 +3244,10 @@ namespace System.Windows.Forms
                             break;
                     }
                     break;
-                case WindowMessages.WM_REFLECT + WindowMessages.WM_NOTIFY:
+                case (int)(User32.WM.REFLECT | User32.WM.NOTIFY):
                     WmNotify(ref m);
                     break;
-                case WindowMessages.WM_LBUTTONDBLCLK:
+                case (int)User32.WM.LBUTTONDBLCLK:
                     WmMouseDown(ref m, MouseButtons.Left, 2);
 
                     // Just maintain state and fire double click in final mouseUp.
@@ -3259,7 +3259,7 @@ namespace System.Windows.Forms
                     // Make sure we get the mouse up if it happens outside the control.
                     Capture = true;
                     break;
-                case WindowMessages.WM_LBUTTONDOWN:
+                case (int)User32.WM.LBUTTONDOWN:
                     try
                     {
                         treeViewState[TREEVIEWSTATE_ignoreSelects] = true;
@@ -3302,8 +3302,8 @@ namespace System.Windows.Forms
                     }
                     downButton = MouseButtons.Left;
                     break;
-                case WindowMessages.WM_LBUTTONUP:
-                case WindowMessages.WM_RBUTTONUP:
+                case (int)User32.WM.LBUTTONUP:
+                case (int)User32.WM.RBUTTONUP:
                     var tvhi = new TVHITTESTINFO
                     {
                         pt = new Point(PARAM.SignedLOWORD(m.LParam), PARAM.SignedHIWORD(m.LParam))
@@ -3349,24 +3349,24 @@ namespace System.Windows.Forms
                     // Always clear our hit-tested node we cached on mouse down
                     hNodeMouseDown = IntPtr.Zero;
                     break;
-                case WindowMessages.WM_MBUTTONDBLCLK:
+                case (int)User32.WM.MBUTTONDBLCLK:
                     // Fire mouse up in the Wndproc.
                     treeViewState[TREEVIEWSTATE_mouseUpFired] = false;
                     WmMouseDown(ref m, MouseButtons.Middle, 2);
                     break;
-                case WindowMessages.WM_MBUTTONDOWN:
+                case (int)User32.WM.MBUTTONDOWN:
                     // Always reset MouseupFired.
                     treeViewState[TREEVIEWSTATE_mouseUpFired] = false;
                     WmMouseDown(ref m, MouseButtons.Middle, 1);
                     downButton = MouseButtons.Middle;
                     break;
-                case WindowMessages.WM_MOUSELEAVE:
+                case (int)User32.WM.MOUSELEAVE:
                     // if the mouse leaves and then reenters the TreeView
                     // NodeHovered events should be raised.
                     prevHoveredNode = null;
                     base.WndProc(ref m);
                     break;
-                case WindowMessages.WM_RBUTTONDBLCLK:
+                case (int)User32.WM.RBUTTONDBLCLK:
                     WmMouseDown(ref m, MouseButtons.Right, 2);
 
                     // Just maintain state and fire double click in the final mouseUp.
@@ -3378,7 +3378,7 @@ namespace System.Windows.Forms
                     // Make sure we get the mouse up if it happens outside the control.
                     Capture = true;
                     break;
-                case WindowMessages.WM_RBUTTONDOWN:
+                case (int)User32.WM.RBUTTONDOWN:
                     //Always Reset the MouseupFired....
                     treeViewState[TREEVIEWSTATE_mouseUpFired] = false;
                     //Cache the hit-tested node for verification when mouse up is fired
@@ -3391,11 +3391,11 @@ namespace System.Windows.Forms
                     WmMouseDown(ref m, MouseButtons.Right, 1);
                     downButton = MouseButtons.Right;
                     break;
-                case WindowMessages.WM_SYSCOLORCHANGE:
+                case (int)User32.WM.SYSCOLORCHANGE:
                     User32.SendMessageW(this, (User32.WM)TVM.SETINDENT, (IntPtr)Indent);
                     base.WndProc(ref m);
                     break;
-                case WindowMessages.WM_SETFOCUS:
+                case (int)User32.WM.SETFOCUS:
                     // If we get focus through the LBUttonDown .. we might have done the validation...
                     // so skip it..
                     if (treeViewState[TREEVIEWSTATE_lastControlValidated])
@@ -3410,7 +3410,7 @@ namespace System.Windows.Forms
                         base.WndProc(ref m);
                     }
                     break;
-                case WindowMessages.WM_CONTEXTMENU:
+                case (int)User32.WM.CONTEXTMENU:
                     if (treeViewState[TREEVIEWSTATE_showTreeViewContextMenu])
                     {
                         treeViewState[TREEVIEWSTATE_showTreeViewContextMenu] = false;

@@ -1683,20 +1683,20 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void WndProc(ref Message m)
         {
-            switch (m.Msg)
+            switch ((User32.WM)m.Msg)
             {
-                case WindowMessages.WM_LBUTTONDOWN:
+                case User32.WM.LBUTTONDOWN:
                     Focus();
                     if (!ValidationCancelled)
                     {
                         base.WndProc(ref m);
                     }
                     break;
-                case WindowMessages.WM_REFLECT + WindowMessages.WM_NOTIFY:
+                case User32.WM.REFLECT | User32.WM.NOTIFY:
                     WmReflectCommand(ref m);
                     base.WndProc(ref m);
                     break;
-                case WindowMessages.WM_WINDOWPOSCHANGED:
+                case User32.WM.WINDOWPOSCHANGED:
                     base.WndProc(ref m);
                     UpdateUpDown();
                     break;

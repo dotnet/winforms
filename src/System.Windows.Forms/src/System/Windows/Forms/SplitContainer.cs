@@ -2575,16 +2575,16 @@ namespace System.Windows.Forms
 
         protected override void WndProc(ref Message msg)
         {
-            switch (msg.Msg)
+            switch ((User32.WM)msg.Msg)
             {
-                case WindowMessages.WM_SETCURSOR:
+                case User32.WM.SETCURSOR:
                     WmSetCursor(ref msg);
                     break;
-                case WindowMessages.WM_SETFOCUS:
+                case User32.WM.SETFOCUS:
                     splitterFocused = true;
                     base.WndProc(ref msg);
                     break;
-                case WindowMessages.WM_KILLFOCUS:
+                case User32.WM.KILLFOCUS:
                     splitterFocused = false;
                     base.WndProc(ref msg);
                     break;
@@ -2619,10 +2619,10 @@ namespace System.Windows.Forms
             /// </summary>
             bool IMessageFilter.PreFilterMessage(ref Message m)
             {
-                if (m.Msg >= WindowMessages.WM_KEYFIRST && m.Msg <= WindowMessages.WM_KEYLAST)
+                if (m.Msg >= (int)User32.WM.KEYFIRST && m.Msg <=(int) User32.WM.KEYLAST)
                 {
-                    if ((m.Msg == WindowMessages.WM_KEYDOWN && (int)m.WParam == (int)Keys.Escape)
-                        || (m.Msg == WindowMessages.WM_SYSKEYDOWN))
+                    if ((m.Msg == (int)User32.WM.KEYDOWN && (int)m.WParam == (int)Keys.Escape)
+                        || (m.Msg == (int)User32.WM.SYSKEYDOWN))
                     {
                         //Notify that splitMOVE was reverted ..
                         //this is used in ONKEYUP!!

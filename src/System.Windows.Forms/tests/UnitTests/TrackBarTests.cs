@@ -3069,31 +3069,31 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> WndProc_Scroll_TestData()
         {
-            yield return new object[] { (int)User32.WM.REFLECT + (int)User32.WM.HSCROLL, IntPtr.Zero };
-            yield return new object[] { (int)User32.WM.REFLECT + (int)User32.WM.HSCROLL, PARAM.FromLowHigh(-1, int.MaxValue) };
-            yield return new object[] { (int)User32.WM.REFLECT + (int)User32.WM.HSCROLL, PARAM.FromLowHigh(0, int.MaxValue) };
-            yield return new object[] { (int)User32.WM.REFLECT + (int)User32.WM.HSCROLL, PARAM.FromLowHigh(1, int.MaxValue) };
-            yield return new object[] { (int)User32.WM.REFLECT + (int)User32.WM.HSCROLL, PARAM.FromLowHigh(2, int.MaxValue) };
-            yield return new object[] { (int)User32.WM.REFLECT + (int)User32.WM.HSCROLL, PARAM.FromLowHigh(3, int.MaxValue) };
-            yield return new object[] { (int)User32.WM.REFLECT + (int)User32.WM.HSCROLL, PARAM.FromLowHigh(4, int.MaxValue) };
-            yield return new object[] { (int)User32.WM.REFLECT + (int)User32.WM.HSCROLL, PARAM.FromLowHigh(5, int.MaxValue) };
-            yield return new object[] { (int)User32.WM.REFLECT + (int)User32.WM.HSCROLL, PARAM.FromLowHigh(6, int.MaxValue) };
-            yield return new object[] { (int)User32.WM.REFLECT + (int)User32.WM.HSCROLL, PARAM.FromLowHigh(7, int.MaxValue) };
-            yield return new object[] { (int)User32.WM.REFLECT + (int)User32.WM.HSCROLL, PARAM.FromLowHigh(8, int.MaxValue) };
-            yield return new object[] { (int)User32.WM.REFLECT + (int)User32.WM.HSCROLL, PARAM.FromLowHigh(9, int.MaxValue) };
+            yield return new object[] { User32.WM.REFLECT | User32.WM.HSCROLL, IntPtr.Zero };
+            yield return new object[] { User32.WM.REFLECT | User32.WM.HSCROLL, PARAM.FromLowHigh(-1, int.MaxValue) };
+            yield return new object[] { User32.WM.REFLECT | User32.WM.HSCROLL, PARAM.FromLowHigh(0, int.MaxValue) };
+            yield return new object[] { User32.WM.REFLECT | User32.WM.HSCROLL, PARAM.FromLowHigh(1, int.MaxValue) };
+            yield return new object[] { User32.WM.REFLECT | User32.WM.HSCROLL, PARAM.FromLowHigh(2, int.MaxValue) };
+            yield return new object[] { User32.WM.REFLECT | User32.WM.HSCROLL, PARAM.FromLowHigh(3, int.MaxValue) };
+            yield return new object[] { User32.WM.REFLECT | User32.WM.HSCROLL, PARAM.FromLowHigh(4, int.MaxValue) };
+            yield return new object[] { User32.WM.REFLECT | User32.WM.HSCROLL, PARAM.FromLowHigh(5, int.MaxValue) };
+            yield return new object[] { User32.WM.REFLECT | User32.WM.HSCROLL, PARAM.FromLowHigh(6, int.MaxValue) };
+            yield return new object[] { User32.WM.REFLECT | User32.WM.HSCROLL, PARAM.FromLowHigh(7, int.MaxValue) };
+            yield return new object[] { User32.WM.REFLECT | User32.WM.HSCROLL, PARAM.FromLowHigh(8, int.MaxValue) };
+            yield return new object[] { User32.WM.REFLECT | User32.WM.HSCROLL, PARAM.FromLowHigh(9, int.MaxValue) };
 
-            yield return new object[] { (int)User32.WM.REFLECT + (int)User32.WM.VSCROLL, IntPtr.Zero };
-            yield return new object[] { (int)User32.WM.REFLECT + (int)User32.WM.VSCROLL, PARAM.FromLowHigh(-1, int.MaxValue) };
-            yield return new object[] { (int)User32.WM.REFLECT + (int)User32.WM.VSCROLL, PARAM.FromLowHigh(0, int.MaxValue) };
-            yield return new object[] { (int)User32.WM.REFLECT + (int)User32.WM.VSCROLL, PARAM.FromLowHigh(1, int.MaxValue) };
-            yield return new object[] { (int)User32.WM.REFLECT + (int)User32.WM.VSCROLL, PARAM.FromLowHigh(2, int.MaxValue) };
-            yield return new object[] { (int)User32.WM.REFLECT + (int)User32.WM.VSCROLL, PARAM.FromLowHigh(3, int.MaxValue) };
-            yield return new object[] { (int)User32.WM.REFLECT + (int)User32.WM.VSCROLL, PARAM.FromLowHigh(4, int.MaxValue) };
-            yield return new object[] { (int)User32.WM.REFLECT + (int)User32.WM.VSCROLL, PARAM.FromLowHigh(5, int.MaxValue) };
-            yield return new object[] { (int)User32.WM.REFLECT + (int)User32.WM.VSCROLL, PARAM.FromLowHigh(6, int.MaxValue) };
-            yield return new object[] { (int)User32.WM.REFLECT + (int)User32.WM.VSCROLL, PARAM.FromLowHigh(7, int.MaxValue) };
-            yield return new object[] { (int)User32.WM.REFLECT + (int)User32.WM.VSCROLL, PARAM.FromLowHigh(8, int.MaxValue) };
-            yield return new object[] { (int)User32.WM.REFLECT + (int)User32.WM.VSCROLL, PARAM.FromLowHigh(9, int.MaxValue) };
+            yield return new object[] { User32.WM.REFLECT | User32.WM.VSCROLL, IntPtr.Zero };
+            yield return new object[] { User32.WM.REFLECT | User32.WM.VSCROLL, PARAM.FromLowHigh(-1, int.MaxValue) };
+            yield return new object[] { User32.WM.REFLECT | User32.WM.VSCROLL, PARAM.FromLowHigh(0, int.MaxValue) };
+            yield return new object[] { User32.WM.REFLECT | User32.WM.VSCROLL, PARAM.FromLowHigh(1, int.MaxValue) };
+            yield return new object[] { User32.WM.REFLECT | User32.WM.VSCROLL, PARAM.FromLowHigh(2, int.MaxValue) };
+            yield return new object[] { User32.WM.REFLECT | User32.WM.VSCROLL, PARAM.FromLowHigh(3, int.MaxValue) };
+            yield return new object[] { User32.WM.REFLECT | User32.WM.VSCROLL, PARAM.FromLowHigh(4, int.MaxValue) };
+            yield return new object[] { User32.WM.REFLECT | User32.WM.VSCROLL, PARAM.FromLowHigh(5, int.MaxValue) };
+            yield return new object[] { User32.WM.REFLECT | User32.WM.VSCROLL, PARAM.FromLowHigh(6, int.MaxValue) };
+            yield return new object[] { User32.WM.REFLECT | User32.WM.VSCROLL, PARAM.FromLowHigh(7, int.MaxValue) };
+            yield return new object[] { User32.WM.REFLECT | User32.WM.VSCROLL, PARAM.FromLowHigh(8, int.MaxValue) };
+            yield return new object[] { User32.WM.REFLECT | User32.WM.VSCROLL, PARAM.FromLowHigh(9, int.MaxValue) };
         }
 
         [WinFormsTheory]

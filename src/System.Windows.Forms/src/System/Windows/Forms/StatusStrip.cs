@@ -605,7 +605,7 @@ namespace System.Windows.Forms
 
         protected override void WndProc(ref Message m)
         {
-            if ((m.Msg == WindowMessages.WM_NCHITTEST) && SizingGrip)
+            if ((m.Msg == (int)User32.WM.NCHITTEST) && SizingGrip)
             {
                 // if we're within the grip bounds tell windows
                 // that we're the bottom right of the window.
@@ -674,7 +674,7 @@ namespace System.Windows.Forms
             }
             protected override void WndProc(ref Message m)
             {
-                if (m.Msg == WindowMessages.WM_NCHITTEST)
+                if (m.Msg == (int)User32.WM.NCHITTEST)
                 {
                     int x = PARAM.LOWORD(m.LParam);
                     int y = PARAM.HIWORD(m.LParam);

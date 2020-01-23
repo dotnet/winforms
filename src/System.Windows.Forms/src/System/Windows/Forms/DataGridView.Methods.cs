@@ -21654,7 +21654,7 @@ namespace System.Windows.Forms
 
         protected override bool ProcessKeyEventArgs(ref Message m)
         {
-            if (m.Msg == WindowMessages.WM_SYSKEYDOWN || m.Msg == WindowMessages.WM_KEYDOWN)
+            if (m.Msg == (int)User32.WM.SYSKEYDOWN || m.Msg == (int)User32.WM.KEYDOWN)
             {
                 if (ptCurrentCell.X != -1)
                 {
@@ -21699,7 +21699,7 @@ namespace System.Windows.Forms
                 }
             }
             else if (dataGridViewState1[DATAGRIDVIEWSTATE1_forwardCharMessage] &&
-                     (m.Msg == WindowMessages.WM_SYSCHAR || m.Msg == WindowMessages.WM_CHAR || m.Msg == WindowMessages.WM_IME_CHAR))
+                     (m.Msg == (int)User32.WM.SYSCHAR || m.Msg == (int)User32.WM.CHAR || m.Msg == (int)User32.WM.IME_CHAR))
             {
                 dataGridViewState1[DATAGRIDVIEWSTATE1_forwardCharMessage] = false;
                 if (editingControl != null)
@@ -21721,7 +21721,7 @@ namespace System.Windows.Forms
             // 2. Other special keys do not exist in WM_CHAR message, and character code of WM_CHAR may have overlapped
             // w/ some of the key code. (Like character code of lowcase "q" is 0x71, it's overlapped w/ Keys.F2). This
             // may introduce problem when handling them.
-            if (m.Msg == WindowMessages.WM_CHAR)
+            if (m.Msg == (int)User32.WM.CHAR)
             {
                 switch (ke.KeyCode)
                 {
@@ -21763,7 +21763,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            if (editingControl != null && (m.Msg == WindowMessages.WM_KEYDOWN || m.Msg == WindowMessages.WM_SYSKEYDOWN))
+            if (editingControl != null && (m.Msg == (int)User32.WM.KEYDOWN || m.Msg == (int)User32.WM.SYSKEYDOWN))
             {
                 dataGridViewState2[DATAGRIDVIEWSTATE2_currentCellWantsInputKey] = ((IDataGridViewEditingControl)editingControl).EditingControlWantsInputKey(ke.KeyData, dataGridViewWantsInputKey);
             }
@@ -21775,7 +21775,7 @@ namespace System.Windows.Forms
 
             if (dataGridViewWantsInputKey)
             {
-                if (m.Msg == WindowMessages.WM_KEYDOWN || m.Msg == WindowMessages.WM_SYSKEYDOWN)
+                if (m.Msg == (int)User32.WM.KEYDOWN || m.Msg == (int)User32.WM.SYSKEYDOWN)
                 {
                     if (ProcessDataGridViewKey(ke))
                     {
@@ -29129,13 +29129,13 @@ namespace System.Windows.Forms
 
         protected override void WndProc(ref Message m)
         {
-            switch (m.Msg)
+            switch ((User32.WM)m.Msg)
             {
-                case WindowMessages.WM_GETDLGCODE:
+                case User32.WM.GETDLGCODE:
                     WmGetDlgCode(ref m);
                     return;
-                case WindowMessages.WM_LBUTTONDBLCLK:
-                case WindowMessages.WM_LBUTTONDOWN:
+                case User32.WM.LBUTTONDBLCLK:
+                case User32.WM.LBUTTONDOWN:
                     // If the OnEnter procedure is called, it's because of a mouse down event, and not a TAB key.
                     dataGridViewOper[DATAGRIDVIEWOPER_inMouseDown] = true;
                     try
@@ -29147,7 +29147,7 @@ namespace System.Windows.Forms
                         dataGridViewOper[DATAGRIDVIEWOPER_inMouseDown] = false;
                     }
                     return;
-                case WindowMessages.WM_NOTIFY:
+                case User32.WM.NOTIFY:
                     if (WmNotify(ref m))
                     {
                         // we are done - skip default handling
@@ -29155,8 +29155,8 @@ namespace System.Windows.Forms
                     }
                     break;
 
-                case WindowMessages.WM_IME_STARTCOMPOSITION:
-                case WindowMessages.WM_IME_COMPOSITION:
+                case User32.WM.IME_STARTCOMPOSITION:
+                case User32.WM.IME_COMPOSITION:
                     if (editingControl != null)
                     {
                         // Make sure that the first character is forwarded to the editing control.

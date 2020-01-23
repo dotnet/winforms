@@ -260,7 +260,7 @@ namespace System.Windows.Forms
         public static extern int GetDlgItemInt(IntPtr hWnd, int nIDDlgItem, bool[] err, bool signed);
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern IntPtr DefMDIChildProc(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam);
+        public static extern IntPtr DefMDIChildProc(IntPtr hWnd, User32.WM msg, IntPtr wParam, IntPtr lParam);
 
         [DllImport(ExternDll.User32, SetLastError = true)]
         public static extern bool GetUserObjectInformation(HandleRef hObj, int nIndex, ref NativeMethods.USEROBJECTFLAGS pvBuffer, int nLength, ref int lpnLengthNeeded);

@@ -2476,7 +2476,7 @@ namespace System.ComponentModel.Design
 
                 protected override void WndProc(ref Message m)
                 {
-                    if (m.Msg == WindowMessages.WM_ACTIVATE)
+                    if (m.Msg == (int)User32.WM.ACTIVATE)
                     {
                         if (Visible && PARAM.LOWORD(m.WParam) == (int)User32.WA.INACTIVE)
                         {

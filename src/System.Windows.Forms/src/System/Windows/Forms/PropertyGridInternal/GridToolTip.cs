@@ -177,15 +177,15 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         protected override void WndProc(ref Message msg)
         {
-            switch (msg.Msg)
+            switch ((User32.WM)msg.Msg)
             {
-                case WindowMessages.WM_SHOWWINDOW:
+                case User32.WM.SHOWWINDOW:
                     if (unchecked((int)(long)msg.WParam) != 0 && dontShow)
                     {
                         msg.WParam = IntPtr.Zero;
                     }
                     break;
-                case WindowMessages.WM_NCHITTEST:
+                case User32.WM.NCHITTEST:
                     // When using v6 common controls, the native tooltip does not end up returning HTTRANSPARENT
                     // all the time, so its TTF_TRANSPARENT behavior does not work, ie. mouse events do not fall
                     // thru to controls underneath. This is due to a combination of old app-specific code in comctl32,
