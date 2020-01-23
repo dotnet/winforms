@@ -2487,9 +2487,9 @@ namespace System.Windows.Forms.Design
         /// </summary>
         protected override void WndProc(ref Message m)
         {
-            switch (m.Msg)
+            switch ((User32.WM)m.Msg)
             {
-                case WindowMessages.WM_CONTEXTMENU:
+                case User32.WM.CONTEXTMENU:
                     int x = PARAM.SignedLOWORD(m.LParam);
                     int y = PARAM.SignedHIWORD(m.LParam);
                     bool inBounds = GetHitTest(new Point(x, y));
@@ -2499,8 +2499,8 @@ namespace System.Windows.Forms.Design
                     }
                     base.WndProc(ref m);
                     break;
-                case WindowMessages.WM_LBUTTONDOWN:
-                case WindowMessages.WM_RBUTTONDOWN:
+                case User32.WM.LBUTTONDOWN:
+                case User32.WM.RBUTTONDOWN:
                     // commit any insitu if any...
                     Commit();
                     base.WndProc(ref m);

@@ -729,23 +729,23 @@ namespace System.Windows.Forms
 
         protected override void WndProc(ref Message m)
         {
-            switch (m.Msg)
+            switch ((User32.WM)m.Msg)
             {
-                case WindowMessages.WM_REFLECT + WindowMessages.WM_HSCROLL:
-                case WindowMessages.WM_REFLECT + WindowMessages.WM_VSCROLL:
+                case User32.WM.REFLECT | User32.WM.HSCROLL:
+                case User32.WM.REFLECT | User32.WM.VSCROLL:
                     WmReflectScroll(ref m);
                     break;
 
-                case WindowMessages.WM_ERASEBKGND:
+                case User32.WM.ERASEBKGND:
                     break;
 
-                case WindowMessages.WM_SIZE:
+                case User32.WM.SIZE:
                     // Fixes the scrollbar focus rect
                     if (User32.GetFocus() == Handle)
                     {
                         DefWndProc(ref m);
-                        SendMessage(WindowMessages.WM_KILLFOCUS, 0, 0);
-                        SendMessage(WindowMessages.WM_SETFOCUS, 0, 0);
+                        User32.SendMessageW(this, User32.WM.KILLFOCUS);
+                        User32.SendMessageW(this, User32.WM.SETFOCUS);
                     }
                     break;
 

@@ -943,7 +943,7 @@ namespace System.Windows.Forms
 
                 protected override void WndProc(ref Message m)
                 {
-                    if (m.Msg == WindowMessages.WM_NCHITTEST)
+                    if (m.Msg == (int)User32.WM.NCHITTEST)
                     {
                         m.Result = (IntPtr)NativeMethods.HTTRANSPARENT;
                     }

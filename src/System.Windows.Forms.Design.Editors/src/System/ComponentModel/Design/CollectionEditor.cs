@@ -2136,9 +2136,9 @@ namespace System.ComponentModel.Design
 
             protected override void WndProc(ref Message m)
             {
-                switch (m.Msg)
+                switch ((User32.WM)m.Msg)
                 {
-                    case WindowMessages.WM_KEYDOWN:
+                    case User32.WM.KEYDOWN:
                         _lastKeyDown = m;
 
                         // the first thing the ime does on a key it cares about is send a VK_PROCESSKEY, so we use that to sling focus to the grid.
@@ -2163,7 +2163,7 @@ namespace System.ComponentModel.Design
                         }
                         break;
 
-                    case WindowMessages.WM_CHAR:
+                    case User32.WM.CHAR:
 
                         if ((Control.ModifierKeys & (Keys.Control | Keys.Alt)) != 0)
                         {

@@ -2564,8 +2564,7 @@ namespace System.Windows.Forms
 
             // If this WM_CHAR message is sent after WM_IME_CHAR, we ignore it since we already processed
             // the corresponding WM_IME_CHAR message.
-
-            if (m.Msg == WindowMessages.WM_CHAR && base.ImeWmCharsToIgnore > 0)
+            if (m.Msg == (int)WM.CHAR && base.ImeWmCharsToIgnore > 0)
             {
                 return true;    // meaning, we handled the message so it is not passed to the default WndProc.
             }
@@ -3034,10 +3033,10 @@ namespace System.Windows.Forms
             // Handle messages for special cases (unsupported operations or cases where mask doesn not matter).
             switch (m.Msg)
             {
-                case WindowMessages.WM_PRINT:
+                case (int)WM.PRINT:
                     WmPrint(ref m);
                     return;
-                case WindowMessages.WM_CONTEXTMENU:
+                case (int)WM.CONTEXTMENU:
                 case (int)EM.CANUNDO:
                     base.ClearUndo(); // resets undo buffer.
                     base.WndProc(ref m);
@@ -3046,7 +3045,7 @@ namespace System.Windows.Forms
                 case (int)EM.SCROLLCARET:  // No scroll for single-line control.
                 case (int)EM.LIMITTEXT:    // Max/Min text is defined by the mask.
                 case (int)EM.UNDO:
-                case WindowMessages.WM_UNDO:
+                case (int)WM.UNDO:
                     return;
 
                 default:
@@ -3061,49 +3060,49 @@ namespace System.Windows.Forms
 
             switch (m.Msg)
             {
-                case WindowMessages.WM_IME_STARTCOMPOSITION:
+                case (int)WM.IME_STARTCOMPOSITION:
                     if (WmImeStartComposition())
                     {
                         break;
                     }
                     goto default;
 
-                case WindowMessages.WM_IME_ENDCOMPOSITION:
+                case (int)WM.IME_ENDCOMPOSITION:
                     flagState[IME_ENDING_COMPOSITION] = true;
                     goto default;
 
-                case WindowMessages.WM_IME_COMPOSITION:
+                case (int)WM.IME_COMPOSITION:
                     if (WmImeComposition(ref m))
                     {
                         break;
                     }
                     goto default;
 
-                case WindowMessages.WM_CUT:
+                case (int)WM.CUT:
                     if (!ReadOnly && WmCopy())
                     {
                         WmClear();
                     }
                     break;
 
-                case WindowMessages.WM_COPY:
+                case (int)WM.COPY:
                     WmCopy();
                     break;
 
-                case WindowMessages.WM_PASTE:
+                case (int)WM.PASTE:
                     WmPaste();
                     break;
 
-                case WindowMessages.WM_CLEAR:
+                case (int)WM.CLEAR:
                     WmClear();
                     break;
 
-                case WindowMessages.WM_KILLFOCUS:
+                case (int)WM.KILLFOCUS:
                     base.WndProc(ref m);
                     WmKillFocus();
                     break;
 
-                case WindowMessages.WM_SETFOCUS:
+                case (int)WM.SETFOCUS:
                     WmSetFocus();
                     base.WndProc(ref m);
                     break;

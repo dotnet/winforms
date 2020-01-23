@@ -88,13 +88,13 @@ namespace System.Windows.Forms
                 // regardless of what window target we are using.  These
                 // messages cause other messages or state transitions
                 // to occur within control.
-                switch (m.Msg)
+                switch ((User32.WM)m.Msg)
                 {
-                    case WindowMessages.WM_MOUSELEAVE:
+                    case User32.WM.MOUSELEAVE:
                         _control.UnhookMouseEvent();
                         break;
 
-                    case WindowMessages.WM_MOUSEMOVE:
+                    case User32.WM.MOUSEMOVE:
                         if (!_control.GetState(States.TrackingMouseEvent))
                         {
                             _control.HookMouseEvent();
@@ -109,7 +109,7 @@ namespace System.Windows.Forms
                         }
                         break;
 
-                    case WindowMessages.WM_MOUSEWHEEL:
+                    case User32.WM.MOUSEWHEEL:
                         // TrackMouseEvent's mousehover implementation doesn't watch the wheel
                         // correctly...
                         _control.ResetMouseEventArgs();

@@ -1312,7 +1312,7 @@ namespace System.Windows.Forms
                 {
                     filterMessage = true;
                 }
-                else if (m.Msg >= WindowMessages.WM_NCLBUTTONDOWN && m.Msg <= WindowMessages.WM_NCMBUTTONDBLCLK)
+                else if (m.Msg >= (int)User32.WM.NCLBUTTONDOWN && m.Msg <= (int)User32.WM.NCMBUTTONDBLCLK)
                 {
                     filterMessage = true;
                 }
@@ -1379,10 +1379,10 @@ namespace System.Windows.Forms
 
                 using (DpiHelper.EnterDpiAwarenessScope(context))
                 {
-                    switch (m.Msg)
+                    switch ((User32.WM)m.Msg)
                     {
-                        case WindowMessages.WM_MOUSEMOVE:
-                        case WindowMessages.WM_NCMOUSEMOVE:
+                        case User32.WM.MOUSEMOVE:
+                        case User32.WM.NCMOUSEMOVE:
                             // Mouse move messages should be eaten if they aren't for a dropdown.
                             // this prevents things like ToolTips and mouse over highlights from
                             // being processed.
@@ -1421,9 +1421,9 @@ namespace System.Windows.Forms
                                 }
                             }
                             break;
-                        case WindowMessages.WM_LBUTTONDOWN:
-                        case WindowMessages.WM_RBUTTONDOWN:
-                        case WindowMessages.WM_MBUTTONDOWN:
+                        case User32.WM.LBUTTONDOWN:
+                        case User32.WM.RBUTTONDOWN:
+                        case User32.WM.MBUTTONDOWN:
                             //
                             // When a mouse button is pressed, we should determine if it is within the client coordinates
                             // of the active dropdown.  If not, we should dismiss it.
@@ -1433,9 +1433,9 @@ namespace System.Windows.Forms
                                 /*y=*/PARAM.SignedHIWORD(m.LParam));
 
                             break;
-                        case WindowMessages.WM_NCLBUTTONDOWN:
-                        case WindowMessages.WM_NCRBUTTONDOWN:
-                        case WindowMessages.WM_NCMBUTTONDOWN:
+                        case User32.WM.NCLBUTTONDOWN:
+                        case User32.WM.NCRBUTTONDOWN:
+                        case User32.WM.NCMBUTTONDOWN:
                             //
                             // When a mouse button is pressed, we should determine if it is within the client coordinates
                             // of the active dropdown.  If not, we should dismiss it.
@@ -1445,14 +1445,14 @@ namespace System.Windows.Forms
                                 /*y=*/PARAM.SignedHIWORD(m.LParam));
                             break;
 
-                        case WindowMessages.WM_KEYDOWN:
-                        case WindowMessages.WM_KEYUP:
-                        case WindowMessages.WM_CHAR:
-                        case WindowMessages.WM_DEADCHAR:
-                        case WindowMessages.WM_SYSKEYDOWN:
-                        case WindowMessages.WM_SYSKEYUP:
-                        case WindowMessages.WM_SYSCHAR:
-                        case WindowMessages.WM_SYSDEADCHAR:
+                        case User32.WM.KEYDOWN:
+                        case User32.WM.KEYUP:
+                        case User32.WM.CHAR:
+                        case User32.WM.DEADCHAR:
+                        case User32.WM.SYSKEYDOWN:
+                        case User32.WM.SYSKEYUP:
+                        case User32.WM.SYSCHAR:
+                        case User32.WM.SYSDEADCHAR:
 
                             if (!activeToolStrip.ContainsFocus)
                             {
@@ -1556,7 +1556,7 @@ namespace System.Windows.Forms
                                 // the message filters and preprocess message.
                                 if (Application.ThreadContext.FromCurrent().PreTranslateMessage(ref *msg))
                                 {
-                                    msg->message = WindowMessages.WM_NULL;
+                                    msg->message = User32.WM.NULL;
                                 }
                             }
                         }
@@ -1672,7 +1672,7 @@ namespace System.Windows.Forms
 
                 return ToolStripManager.ProcessShortcut(ref m, keyData);
             }
-            if (m.Msg == WindowMessages.WM_SYSKEYDOWN)
+            if (m.Msg == (int)User32.WM.SYSKEYDOWN)
             {
                 Debug.WriteLineIf(Control.s_controlKeyboardRouting.TraceVerbose, "ToolStripManager.ProcessCmdKey - Checking if it's a menu key: [" + keyData.ToString() + "]");
                 ToolStripManager.ModalMenuFilter.ProcessMenuKeyDown(ref m);

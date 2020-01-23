@@ -826,7 +826,7 @@ namespace System.Windows.Forms
             }
             protected override void WndProc(ref Message m)
             {
-                if (m.Msg == WindowMessages.WM_NCPAINT)
+                if (m.Msg == (int)User32.WM.NCPAINT)
                 {
                     WmNCPaint(ref m);
                     return;

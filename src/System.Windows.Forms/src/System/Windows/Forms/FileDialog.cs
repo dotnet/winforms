@@ -478,7 +478,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected unsafe override IntPtr HookProc(IntPtr hWnd, int msg, IntPtr wparam, IntPtr lparam)
         {
-            if (msg == WindowMessages.WM_NOTIFY)
+            if (msg == (int)User32.WM.NOTIFY)
             {
                 _dialogHWnd = User32.GetParent(hWnd);
                 try

@@ -1969,7 +1969,7 @@ namespace System.Windows.Forms
                     // and this is the FIRST NODE to get added..
                     // This is Comctl quirk where it just doesn't draw
                     // the first node after a Clear( ) if Scrollable == false.
-                    UnsafeNativeMethods.SendMessage(new HandleRef(tv, tv.Handle), WindowMessages.WM_SETREDRAW, 1, 0);
+                    User32.SendMessageW(tv, User32.WM.SETREDRAW, PARAM.FromBool(true));
                     nodesCleared = false;
                 }
             }

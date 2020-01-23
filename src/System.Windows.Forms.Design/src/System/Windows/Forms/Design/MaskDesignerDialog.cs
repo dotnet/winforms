@@ -8,6 +8,7 @@ using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Globalization;
+using static Interop;
 
 namespace System.Windows.Forms.Design
 {
@@ -481,7 +482,7 @@ namespace System.Windows.Forms.Design
             // Since we need to pre-process each item before inserting it in the ListView, it is better to remove all items
             // from it first and then add the sorted ones back (no replace).  Stop redrawing while we change the list.
 
-            UnsafeNativeMethods.SendMessage(_listViewCannedMasks.Handle, Interop.WindowMessages.WM_SETREDRAW, false, /* unused = */ 0);
+            User32.SendMessageW(_listViewCannedMasks, User32.WM.SETREDRAW, PARAM.FromBool(false));
 
             try
             {
@@ -515,7 +516,7 @@ namespace System.Windows.Forms.Design
             finally
             {
                 // Resume redraw.
-                UnsafeNativeMethods.SendMessage(_listViewCannedMasks.Handle, Interop.WindowMessages.WM_SETREDRAW, true, /* unused = */ 0);
+                User32.SendMessageW(_listViewCannedMasks, User32.WM.SETREDRAW, PARAM.FromBool(true));
                 _listViewCannedMasks.Invalidate();
             }
         }

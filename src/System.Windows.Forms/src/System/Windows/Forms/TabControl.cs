@@ -2121,18 +2121,18 @@ namespace System.Windows.Forms
         /// </summary>
         protected unsafe override void WndProc(ref Message m)
         {
-            switch (m.Msg)
+            switch ((User32.WM)m.Msg)
             {
-                case WindowMessages.WM_REFLECT + WindowMessages.WM_DRAWITEM:
+                case User32.WM.REFLECT | User32.WM.DRAWITEM:
                     WmReflectDrawItem(ref m);
                     break;
 
-                case WindowMessages.WM_REFLECT + WindowMessages.WM_MEASUREITEM:
+                case User32.WM.REFLECT | User32.WM.MEASUREITEM:
                     // We use TCM_SETITEMSIZE instead
                     break;
 
-                case WindowMessages.WM_NOTIFY:
-                case WindowMessages.WM_REFLECT + WindowMessages.WM_NOTIFY:
+                case User32.WM.NOTIFY:
+                case User32.WM.REFLECT | User32.WM.NOTIFY:
                     User32.NMHDR* nmhdr = (User32.NMHDR*)m.LParam;
                     switch (nmhdr->code)
                     {

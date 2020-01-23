@@ -642,7 +642,7 @@ namespace System.Windows.Forms
             User32.EnumChildWindows(handle, Application.SendThemeChangedRecursive);
 
             // Then do myself.
-            UnsafeNativeMethods.SendMessage(new HandleRef(null, handle), Interop.WindowMessages.WM_THEMECHANGED, 0, 0);
+            User32.SendMessageW(handle, User32.WM.THEMECHANGED);
 
             return BOOL.TRUE;
         }

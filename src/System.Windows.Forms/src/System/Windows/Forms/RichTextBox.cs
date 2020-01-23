@@ -3053,18 +3053,16 @@ namespace System.Windows.Forms
         {
             if (str.Length == 0)
             {
-                // Destroy the selection if callers was setting
-                // selection text
-                //
+                // Destroy the selection if callers was setting selection text
                 if ((RichTextBoxConstants.SFF_SELECTION & flags) != 0)
                 {
-                    SendMessage(WindowMessages.WM_CLEAR, 0, 0);
+                    User32.SendMessageW(this, User32.WM.CLEAR);
                     ProtectedError = false;
                     return;
                 }
+
                 // WM_SETTEXT is allowed even if we have protected text
-                //
-                SendMessage(WindowMessages.WM_SETTEXT, 0, "");
+                User32.SendMessageW(this, User32.WM.SETTEXT, IntPtr.Zero, string.Empty);
                 return;
             }
 
@@ -3410,14 +3408,14 @@ namespace System.Windows.Forms
                 enlink = (NativeMethods.ENLINK)m.GetLParam(typeof(NativeMethods.ENLINK));
             }
 
-            switch (enlink.msg)
+            switch ((User32.WM)enlink.msg)
             {
-                case WindowMessages.WM_SETCURSOR:
+                case User32.WM.SETCURSOR:
                     LinkCursor = true;
                     m.Result = (IntPtr)1;
                     return;
                 // Mouse-down triggers Url; this matches Outlook 2000's behavior.
-                case WindowMessages.WM_LBUTTONDOWN:
+                case User32.WM.LBUTTONDOWN:
                     string linktext = CharRangeToString(enlink.charrange);
                     if (!string.IsNullOrEmpty(linktext))
                     {
@@ -3608,8 +3606,8 @@ namespace System.Windows.Forms
 
                                 // Allow the following
                                 //
-                                case WindowMessages.WM_COPY:
-                                case WindowMessages.WM_SETTEXT:
+                                case (int)User32.WM.COPY:
+                                case (int)User32.WM.SETTEXT:
                                 case RichEditMessages.EM_EXLIMITTEXT:
                                     m.Result = IntPtr.Zero;
                                     return;
@@ -3711,8 +3709,8 @@ namespace System.Windows.Forms
                     int textLength = User32.GetWindowTextLengthW(new HandleRef(this, Handle));
                     if (selStart == selEnd && textLength == MaxLength)
                     {
-                        SendMessage(WindowMessages.WM_KILLFOCUS, 0, 0);
-                        SendMessage(WindowMessages.WM_SETFOCUS, 0, 0);
+                        User32.SendMessageW(this, User32.WM.KILLFOCUS);
+                        User32.SendMessageW(this, User32.WM.SETFOCUS);
                         User32.PostMessageW(this, (User32.WM)User32.EM.SETSEL, (IntPtr)(selEnd - 1), (IntPtr)selEnd);
                     }
                 }
@@ -3746,22 +3744,19 @@ namespace System.Windows.Forms
             InternalSetForeColor(ForeColor);
         }
 
-        //
-        // </doc>
-        //
         protected override void WndProc(ref Message m)
         {
-            switch (m.Msg)
+            switch ((User32.WM)m.Msg)
             {
-                case WindowMessages.WM_REFLECT + WindowMessages.WM_NOTIFY:
+                case User32.WM.REFLECT | User32.WM.NOTIFY:
                     WmReflectNotify(ref m);
                     break;
 
-                case WindowMessages.WM_REFLECT + WindowMessages.WM_COMMAND:
+                case User32.WM.REFLECT | User32.WM.COMMAND:
                     WmReflectCommand(ref m);
                     break;
 
-                case WindowMessages.WM_SETCURSOR:
+                case User32.WM.SETCURSOR:
                     //NOTE: RichTextBox uses the WM_SETCURSOR message over links to allow us to
                     //      change the cursor to a hand. It does this through a synchronous notification
                     //      message. So we have to pass the message to the DefWndProc first, and
@@ -3784,21 +3779,21 @@ namespace System.Windows.Forms
                     }
                     break;
 
-                case WindowMessages.WM_SETFONT:
+                case User32.WM.SETFONT:
                     WmSetFont(ref m);
                     break;
 
-                case WindowMessages.WM_IME_NOTIFY:
+                case User32.WM.IME_NOTIFY:
                     OnImeChange(EventArgs.Empty);
                     base.WndProc(ref m);
                     break;
 
-                case WindowMessages.WM_GETDLGCODE:
+                case User32.WM.GETDLGCODE:
                     base.WndProc(ref m);
                     m.Result = (IntPtr)((AcceptsTab) ? unchecked((int)(long)m.Result) | NativeMethods.DLGC_WANTTAB : unchecked((int)(long)m.Result) & ~NativeMethods.DLGC_WANTTAB);
                     break;
 
-                case WindowMessages.WM_GETOBJECT:
+                case User32.WM.GETOBJECT:
                     base.WndProc(ref m);
 
                     // OLEACC.DLL uses window class names to identify standard control types. But WinForm controls use app-specific window
@@ -3811,7 +3806,7 @@ namespace System.Windows.Forms
                     }
                     break;
 
-                case WindowMessages.WM_RBUTTONUP:
+                case User32.WM.RBUTTONUP:
                     //since RichEdit eats up the WM_CONTEXTMENU message, we need to force DefWndProc
                     //to spit out this message again on receiving WM_RBUTTONUP message. By setting UserMouse
                     //style to true, we effectily let the WmMouseUp method in Control.cs to generate
@@ -3822,7 +3817,7 @@ namespace System.Windows.Forms
                     SetStyle(ControlStyles.UserMouse, oldStyle);
                     break;
 
-                case WindowMessages.WM_VSCROLL:
+                case User32.WM.VSCROLL:
                 {
                     base.WndProc(ref m);
                     User32.SBV loWord = (User32.SBV)PARAM.LOWORD(m.WParam);
@@ -3836,7 +3831,7 @@ namespace System.Windows.Forms
                     }
                     break;
                 }
-                case WindowMessages.WM_HSCROLL:
+                case User32.WM.HSCROLL:
                 {
                     base.WndProc(ref m);
                     User32.SBH loWord = (User32.SBH)PARAM.LOWORD(m.WParam);

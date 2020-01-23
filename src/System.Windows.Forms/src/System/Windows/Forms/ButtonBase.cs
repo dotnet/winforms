@@ -1325,9 +1325,9 @@ namespace System.Windows.Forms
                         // even though we are ownerdraw.
                         break;
 
-                    case WindowMessages.WM_KILLFOCUS:
-                    case WindowMessages.WM_CANCELMODE:
-                    case WindowMessages.WM_CAPTURECHANGED:
+                    case (int)User32.WM.KILLFOCUS:
+                    case (int)User32.WM.CANCELMODE:
+                    case (int)User32.WM.CAPTURECHANGED:
                         if (!GetFlag(FlagInButtonUp) && GetFlag(FlagMousePressed))
                         {
                             SetFlag(FlagMousePressed, false);
@@ -1341,9 +1341,9 @@ namespace System.Windows.Forms
                         base.WndProc(ref m);
                         break;
 
-                    case WindowMessages.WM_LBUTTONUP:
-                    case WindowMessages.WM_MBUTTONUP:
-                    case WindowMessages.WM_RBUTTONUP:
+                    case (int)User32.WM.LBUTTONUP:
+                    case (int)User32.WM.MBUTTONUP:
+                    case (int)User32.WM.RBUTTONUP:
                         try
                         {
                             SetFlag(FlagInButtonUp, true);
@@ -1362,9 +1362,9 @@ namespace System.Windows.Forms
             }
             else
             {
-                switch (m.Msg)
+                switch ((User32.WM)m.Msg)
                 {
-                    case WindowMessages.WM_REFLECT + WindowMessages.WM_COMMAND:
+                    case User32.WM.REFLECT | User32.WM.COMMAND:
                         if (PARAM.HIWORD(m.WParam) == (int)User32.BN.CLICKED && !ValidationCancelled)
                         {
                             OnClick(EventArgs.Empty);

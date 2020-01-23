@@ -1424,10 +1424,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Copies the current selection in the text box to the Clipboard.
         /// </summary>
-        public void Copy()
-        {
-            SendMessage(WindowMessages.WM_COPY, 0, 0);
-        }
+        public void Copy() => SendMessageW(this, WM.COPY);
 
         protected override void CreateHandle()
         {
@@ -1450,10 +1447,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Moves the current selection in the text box to the Clipboard.
         /// </summary>
-        public void Cut()
-        {
-            SendMessage(WindowMessages.WM_CUT, 0, 0);
-        }
+        public void Cut() => SendMessageW(this, WM.CUT);
 
         /// <summary>
         ///  Returns the text end position (one past the last input character).  This property is virtual to allow MaskedTextBox
@@ -1539,10 +1533,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Replaces the current selection in the text box with the contents of the Clipboard.
         /// </summary>
-        public void Paste()
-        {
-            SendMessage(WindowMessages.WM_PASTE, 0, 0);
-        }
+        public void Paste() => SendMessageW(this, WM.PASTE);
 
         protected override bool ProcessDialogKey(Keys keyData)
         {
@@ -2142,7 +2133,7 @@ namespace System.Windows.Forms
 
         internal override IntPtr InitializeDCForWmCtlColor(IntPtr dc, int msg)
         {
-            if ((msg == WindowMessages.WM_CTLCOLORSTATIC) && !ShouldSerializeBackColor())
+            if ((msg == (int)WM.CTLCOLORSTATIC) && !ShouldSerializeBackColor())
             {
                 // Let the Win32 Edit control handle background colors itself.
                 // This is necessary because a disabled edit control will display a different
@@ -2250,22 +2241,22 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void WndProc(ref Message m)
         {
-            switch (m.Msg)
+            switch ((WM)m.Msg)
             {
-                case WindowMessages.WM_LBUTTONDBLCLK:
+                case WM.LBUTTONDBLCLK:
                     doubleClickFired = true;
                     base.WndProc(ref m);
                     break;
-                case WindowMessages.WM_REFLECT + WindowMessages.WM_COMMAND:
+                case WM.REFLECT | WM.COMMAND:
                     WmReflectCommand(ref m);
                     break;
-                case WindowMessages.WM_GETDLGCODE:
+                case WM.GETDLGCODE:
                     WmGetDlgCode(ref m);
                     break;
-                case WindowMessages.WM_SETFONT:
+                case WM.SETFONT:
                     WmSetFont(ref m);
                     break;
-                case WindowMessages.WM_CONTEXTMENU:
+                case WM.CONTEXTMENU:
                     if (ShortcutsEnabled)
                     {
                         //calling base will find ContextMenus in this order:

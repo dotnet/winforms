@@ -36,7 +36,7 @@ namespace System.Windows.Forms
         private static readonly object EVENT_BALLOONTIPCLICKED = new object();
         private static readonly object EVENT_BALLOONTIPCLOSED = new object();
 
-        private const int WM_TRAYMOUSEMESSAGE = WindowMessages.WM_USER + 1024;
+        private const int WM_TRAYMOUSEMESSAGE = (int)User32.WM.USER + 1024;
         private static readonly User32.WM WM_TASKBARCREATED = User32.RegisterWindowMessageW("TaskbarCreated");
 
         private readonly object syncObj = new object();
@@ -744,39 +744,39 @@ namespace System.Windows.Forms
 
         private void WndProc(ref Message msg)
         {
-            switch (msg.Msg)
+            switch ((User32.WM)msg.Msg)
             {
-                case WM_TRAYMOUSEMESSAGE:
+                case (User32.WM)WM_TRAYMOUSEMESSAGE:
                     switch ((int)msg.LParam)
                     {
-                        case WindowMessages.WM_LBUTTONDBLCLK:
+                        case (int)User32.WM.LBUTTONDBLCLK:
                             WmMouseDown(ref msg, MouseButtons.Left, 2);
                             break;
-                        case WindowMessages.WM_LBUTTONDOWN:
+                        case (int)User32.WM.LBUTTONDOWN:
                             WmMouseDown(ref msg, MouseButtons.Left, 1);
                             break;
-                        case WindowMessages.WM_LBUTTONUP:
+                        case (int)User32.WM.LBUTTONUP:
                             WmMouseUp(ref msg, MouseButtons.Left);
                             break;
-                        case WindowMessages.WM_MBUTTONDBLCLK:
+                        case (int)User32.WM.MBUTTONDBLCLK:
                             WmMouseDown(ref msg, MouseButtons.Middle, 2);
                             break;
-                        case WindowMessages.WM_MBUTTONDOWN:
+                        case (int)User32.WM.MBUTTONDOWN:
                             WmMouseDown(ref msg, MouseButtons.Middle, 1);
                             break;
-                        case WindowMessages.WM_MBUTTONUP:
+                        case (int)User32.WM.MBUTTONUP:
                             WmMouseUp(ref msg, MouseButtons.Middle);
                             break;
-                        case WindowMessages.WM_MOUSEMOVE:
+                        case (int)User32.WM.MOUSEMOVE:
                             WmMouseMove(ref msg);
                             break;
-                        case WindowMessages.WM_RBUTTONDBLCLK:
+                        case (int)User32.WM.RBUTTONDBLCLK:
                             WmMouseDown(ref msg, MouseButtons.Right, 2);
                             break;
-                        case WindowMessages.WM_RBUTTONDOWN:
+                        case (int)User32.WM.RBUTTONDOWN:
                             WmMouseDown(ref msg, MouseButtons.Right, 1);
                             break;
-                        case WindowMessages.WM_RBUTTONUP:
+                        case (int)User32.WM.RBUTTONUP:
                             if (contextMenuStrip != null)
                             {
                                 ShowContextMenu();
@@ -797,7 +797,7 @@ namespace System.Windows.Forms
                             break;
                     }
                     break;
-                case WindowMessages.WM_COMMAND:
+                case User32.WM.COMMAND:
                     if (IntPtr.Zero == msg.LParam)
                     {
                         if (Command.DispatchID((int)msg.WParam & 0xFFFF))
@@ -811,12 +811,12 @@ namespace System.Windows.Forms
                     }
                     break;
 
-                case WindowMessages.WM_DESTROY:
+                case User32.WM.DESTROY:
                     // Remove the icon from the taskbar
                     UpdateIcon(false);
                     break;
 
-                case WindowMessages.WM_INITMENUPOPUP:
+                case User32.WM.INITMENUPOPUP:
                 default:
                     if (msg.Msg == (int)WM_TASKBARCREATED)
                     {

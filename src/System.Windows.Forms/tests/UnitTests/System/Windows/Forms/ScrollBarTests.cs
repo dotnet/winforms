@@ -2214,7 +2214,7 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> WndProc_Scroll_TestData()
         {
-            foreach (int msg in new int[] { WindowMessages.WM_REFLECT + WindowMessages.WM_HSCROLL /*, WindowMessages.WM_REFLECT + WindowMessages.WM_VSCROLL  */ })
+            foreach (User32.WM msg in new User32.WM[] { User32.WM.REFLECT | User32.WM.HSCROLL /*, User32.WM.REFLECT | User32.WM.VSCROLL  */ })
             {
                 yield return new object[] { msg, RightToLeft.No, 100, ScrollEventType.SmallIncrement, 91, ScrollEventType.SmallIncrement };
                 yield return new object[] { msg, RightToLeft.No, 99, ScrollEventType.SmallIncrement, 91, ScrollEventType.SmallIncrement };

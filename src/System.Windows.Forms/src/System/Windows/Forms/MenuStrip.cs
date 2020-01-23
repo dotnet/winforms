@@ -246,7 +246,7 @@ namespace System.Windows.Forms
 
         protected override void WndProc(ref Message m)
         {
-            if (m.Msg == WindowMessages.WM_MOUSEACTIVATE && (ActiveDropDowns.Count == 0))
+            if (m.Msg == (int)User32.WM.MOUSEACTIVATE && (ActiveDropDowns.Count == 0))
             {
                 // call menu activate before we actually take focus.
                 Point pt = PointToClient(WindowsFormsUtils.LastCursorPoint);

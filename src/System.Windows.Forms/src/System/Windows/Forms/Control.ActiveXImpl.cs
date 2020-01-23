@@ -492,7 +492,7 @@ namespace System.Windows.Forms
 
                     if (hdcType != Gdi32.ObjectType.OBJ_ENHMETADC)
                     {
-                        _control.SendMessage(WindowMessages.WM_PRINT, hdcDraw, flags);
+                        User32.SendMessageW(_control, User32.WM.PRINT, hdcDraw, flags);
                     }
                     else
                     {
@@ -2535,7 +2535,7 @@ namespace System.Windows.Forms
                     {
                         return;
                     }
-                    if (m.Msg >= WindowMessages.WM_NCLBUTTONDOWN && m.Msg <= WindowMessages.WM_NCMBUTTONDBLCLK)
+                    if (m.Msg >= (int)User32.WM.NCLBUTTONDOWN && m.Msg <= (int)User32.WM.NCMBUTTONDBLCLK)
                     {
                         return;
                     }
