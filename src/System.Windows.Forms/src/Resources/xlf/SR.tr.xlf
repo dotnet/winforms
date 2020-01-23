@@ -8251,6 +8251,11 @@ Geçersiz işlemin gerçekleştiği yığın izi:
         <target state="translated">Kılavuz alanını çevreleyen kenarlığın rengi.</target>
         <note />
       </trans-unit>
+      <trans-unit id="PropertyGridViewDropDownControlHolderAccessibleName">
+        <source>Drop down control holder</source>
+        <target state="new">Drop down control holder</target>
+        <note />
+      </trans-unit>
       <trans-unit id="PropertyGridViewEditorCreatedInvalidObject">
         <source>Editor created an object that is not valid.  The created object must be of type '{0}'.</source>
         <target state="translated">Düzenleyici geçerli olmayan bir nesne oluşturdu. Oluşturulan nesnenin '{0}' türünde olması gerekir.</target>

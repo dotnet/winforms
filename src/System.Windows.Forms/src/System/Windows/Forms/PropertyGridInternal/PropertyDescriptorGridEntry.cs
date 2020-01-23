@@ -1205,6 +1205,11 @@ namespace System.Windows.Forms.PropertyGridInternal
                         return propertyGridView.DropDownListBoxAccessibleObject;
                     }
 
+                    if (propertyGridView.DropDownVisible && propertyGridView.DropDownControlHolder != null)
+                    {
+                        return propertyGridView.DropDownControlHolder.AccessibilityObject;
+                    }
+
                     return propertyGridView.EditAccessibleObject;
                 }
 

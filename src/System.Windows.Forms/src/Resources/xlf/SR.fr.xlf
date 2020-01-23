@@ -8251,6 +8251,11 @@ Cette opération non conforme s'est produite sur la trace de la pile :
         <target state="translated">Couleur des bordures de la grille.</target>
         <note />
       </trans-unit>
+      <trans-unit id="PropertyGridViewDropDownControlHolderAccessibleName">
+        <source>Drop down control holder</source>
+        <target state="new">Drop down control holder</target>
+        <note />
+      </trans-unit>
       <trans-unit id="PropertyGridViewEditorCreatedInvalidObject">
         <source>Editor created an object that is not valid.  The created object must be of type '{0}'.</source>
         <target state="translated">L'Éditeur a créé un objet non valide. L'objet créé doit être de type '{0}'.</target>

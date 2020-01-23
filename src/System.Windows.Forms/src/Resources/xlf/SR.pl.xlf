@@ -8251,6 +8251,11 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
         <target state="translated">Kolor obramowania otaczającego obszar siatki.</target>
         <note />
       </trans-unit>
+      <trans-unit id="PropertyGridViewDropDownControlHolderAccessibleName">
+        <source>Drop down control holder</source>
+        <target state="new">Drop down control holder</target>
+        <note />
+      </trans-unit>
       <trans-unit id="PropertyGridViewEditorCreatedInvalidObject">
         <source>Editor created an object that is not valid.  The created object must be of type '{0}'.</source>
         <target state="translated">Edytor utworzył nieprawidłowy obiekt. Utworzony obiekt musi być typu „{0}”.</target>

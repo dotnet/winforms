@@ -8251,6 +8251,11 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
         <target state="translated">Die Farbe des Rahmens, der den Rasterbereich umgibt.</target>
         <note />
       </trans-unit>
+      <trans-unit id="PropertyGridViewDropDownControlHolderAccessibleName">
+        <source>Drop down control holder</source>
+        <target state="new">Drop down control holder</target>
+        <note />
+      </trans-unit>
       <trans-unit id="PropertyGridViewEditorCreatedInvalidObject">
         <source>Editor created an object that is not valid.  The created object must be of type '{0}'.</source>
         <target state="translated">Der Editor hat ein ungültiges Objekt erstellt. Der erstellte Objekt muss den Typ {0} haben.</target>

@@ -452,6 +452,8 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
+        internal DropDownHolder DropDownControlHolder => dropDownHolder;
+
         internal bool DropDownVisible
         {
             get
@@ -6316,7 +6318,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             return;
         }
 
-        private class DropDownHolder : Form, IMouseHookClient
+        internal class DropDownHolder : Form, IMouseHookClient
         {
             private Control currentControl = null; // the control that is hosted in the holder
             private readonly PropertyGridView gridView;              // the owner gridview
@@ -6367,6 +6369,48 @@ namespace System.Windows.Forms.PropertyGridInternal
                 Visible = false;
                 gridView = psheet;
                 BackColor = gridView.BackColor;
+            }
+
+            protected override AccessibleObject CreateAccessibilityInstance()
+            {
+                return new DropDownHolderAccessibleObject(this);
+            }
+
+            internal override bool SupportsUiaProviders => true;
+
+            internal class DropDownHolderAccessibleObject : ControlAccessibleObject
+            {
+                DropDownHolder _dropDownHolder;
+
+                public DropDownHolderAccessibleObject(DropDownHolder dropDownHolder) : base(dropDownHolder)
+                {
+                    _dropDownHolder = dropDownHolder;
+                }
+
+                internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
+                {
+                    switch (direction)
+                    {
+                        case UiaCore.NavigateDirection.Parent:
+                            return _dropDownHolder.gridView.SelectedGridEntry?.AccessibilityObject;
+                        case UiaCore.NavigateDirection.NextSibling:
+                            return _dropDownHolder.gridView.EditAccessibleObject;
+                        case UiaCore.NavigateDirection.PreviousSibling:
+                            return null;
+                    }
+
+                    return base.FragmentNavigate(direction);
+                }
+
+                internal override object GetPropertyValue(UiaCore.UIA propertyID)
+                {
+                    if (propertyID == UiaCore.UIA.NamePropertyId)
+                    {
+                        return SR.PropertyGridViewDropDownControlHolderAccessibleName;
+                    }
+
+                    return base.GetPropertyValue(propertyID);
+                }
             }
 
             protected override CreateParams CreateParams
@@ -8001,6 +8045,14 @@ namespace System.Windows.Forms.PropertyGridInternal
                         else if (propertyGridView.DialogButton.Visible)
                         {
                             return propertyGridView.DialogButton.AccessibilityObject;
+                        }
+                    }
+                    else if (direction == UiaCore.NavigateDirection.PreviousSibling)
+                    {
+                        var dropDownControlHolder = propertyGridView.DropDownControlHolder;
+                        if (dropDownControlHolder != null)
+                        {
+                            return dropDownControlHolder.AccessibilityObject;
                         }
                     }
 
