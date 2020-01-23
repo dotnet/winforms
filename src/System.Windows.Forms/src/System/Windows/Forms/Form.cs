@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -144,7 +146,7 @@ namespace System.Windows.Forms
         private static readonly int PropTransparencyKey = PropertyStore.CreateKey();
 
         // Form per instance members
-        // Note: Do not add anything to this list unless absolutely neccessary.
+        // Note: Do not add anything to this list unless absolutely necessary.
 
         private BitVector32 formState = new BitVector32(0x21338);   // magic value... all the defaults... see the ctor for details...
         private BitVector32 formStateEx = new BitVector32();
@@ -5667,30 +5669,10 @@ namespace System.Windows.Forms
 
         private void UpdateMenuHandles()
         {
-            if (IsHandleCreated)
+            if (!IsHandleCreated)
             {
-                if (!TopLevel)
-                {
-                    UpdateMenuHandles(true);
-                }
-                else
-                {
-                    Form form = ActiveMdiChildInternal;
-                    if (form != null)
-                    {
-                        UpdateMenuHandles(true);
-                    }
-                    else
-                    {
-                        UpdateMenuHandles(true);
-                    }
-                }
+                return;
             }
-        }
-
-        private void UpdateMenuHandles(bool forceRedraw)
-        {
-            Debug.Assert(IsHandleCreated, "shouldn't call when handle == 0");
 
             if (ctlClient == null || !ctlClient.IsHandleCreated)
             {
@@ -5731,10 +5713,8 @@ namespace System.Windows.Forms
                 }
             }
 
-            if (forceRedraw)
-            {
-                SafeNativeMethods.DrawMenuBar(new HandleRef(this, Handle));
-            }
+            User32.DrawMenuBar(this);
+
             formStateEx[FormStateExUpdateMenuHandlesDeferred] = 0;
         }
 
@@ -6846,4 +6826,3 @@ namespace System.Windows.Forms
         }
     }
 }
-

@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -1139,7 +1141,7 @@ namespace System.Windows.Forms
             ClearTopLevelControlEvents();
             _topLevelControl = null;
 
-            // We must re-aquire this control.  If the existing top level control's handle
+            // We must re-acquire this control.  If the existing top level control's handle
             // was never created, but the new parent has a handle, if we don't re-get
             // the top level control here we won't ever create the tooltip handle.
             _topLevelControl = TopLevelControl;

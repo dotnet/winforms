@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Drawing;
 using System.Runtime.InteropServices;
 using static Interop;
@@ -137,7 +139,7 @@ namespace System.Windows.Forms
                     break;
 
                 case Keys.Left:
-                    // If the end of the selection is at the begining of the string
+                    // If the end of the selection is at the beginning of the string
                     // or if the entire text is selected and we did not start editing
                     // send this character to the dataGridView, else process the key event
                     if ((RightToLeft == RightToLeft.No && !(SelectionLength == 0 && SelectionStart == 0)) ||

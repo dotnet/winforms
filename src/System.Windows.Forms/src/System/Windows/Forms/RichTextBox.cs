@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -2274,7 +2276,7 @@ namespace System.Windows.Forms
                     // Loop through our text
                     if (forward)
                     {
-                        // Start at the begining of the buffer
+                        // Start at the beginning of the buffer
                         for (int x = 0; x < len; x++)
                         {
                             // Is it in char set?
@@ -4109,4 +4111,3 @@ namespace System.Windows.Forms
         }
     }
 }
-

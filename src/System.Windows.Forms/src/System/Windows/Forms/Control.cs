@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 // #define DEBUG_PREFERREDSIZE
 
 using System.Collections;
@@ -32,7 +34,7 @@ namespace System.Windows.Forms
     ///  Defines the base class for controls, which are components with visual representation.
     /// </summary>
     /// <remarks>
-    /// Do not add instance variables to Control absolutely neccessary. Every control on a form has the overhead of
+    /// Do not add instance variables to Control absolutely necessary. Every control on a form has the overhead of
     /// all of these variables.
     /// </remarks>
     [
@@ -298,7 +300,7 @@ namespace System.Windows.Forms
 
         // Control instance members
         //
-        // Note: Do not add anything to this list unless absolutely neccessary.
+        // Note: Do not add anything to this list unless absolutely necessary.
         //       Every control on a form has the overhead of all of these
         //       variables!
 
@@ -534,7 +536,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Returns a specific AccessibleObject associated with this
-        ///  control, based on standard "accessibile object id".
+        ///  control, based on standard "accessible object id".
         /// </summary>
         private AccessibleObject GetAccessibilityObject(int accObjId)
         {
@@ -4394,7 +4396,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Occurs when the DPI resolution of the screen this control is displayed on changes,
         ///  either when the top level window is moved between monitors or when the OS settings are changed.
-        ///  This event is raised before the top level parent window recieves WM_DPICHANGED message.
+        ///  This event is raised before the top level parent window receives WM_DPICHANGED message.
         /// </summary>
         [SRCategory(nameof(SR.CatLayout)), SRDescription(nameof(SR.ControlOnDpiChangedBeforeParentDescr))]
         public event EventHandler DpiChangedBeforeParent
@@ -4406,7 +4408,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Occurs when the DPI resolution of the screen this control is displayed on changes,
         ///  either when the top level window is moved between monitors or when the OS settings are changed.
-        ///  This message is received after the top levet parent window recieves WM_DPICHANGED message.
+        ///  This message is received after the top level parent window receives WM_DPICHANGED message.
         /// </summary>
         [SRCategory(nameof(SR.CatLayout)), SRDescription(nameof(SR.ControlOnDpiChangedAfterParentDescr))]
         public event EventHandler DpiChangedAfterParent
@@ -4416,7 +4418,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Occurs when the mouse pointer hovers over the contro.
+        ///  Occurs when the mouse pointer hovers over the control.
         /// </summary>
         [SRCategory(nameof(SR.CatMouse)), SRDescription(nameof(SR.ControlOnMouseHoverDescr))]
         public event EventHandler MouseHover
@@ -8153,7 +8155,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Core layout logic. Inheriting controls should override this function to do any custom
-        ///  layout logic. It is not neccessary to call base.OnLayout, however for normal docking
+        ///  layout logic. It is not necessary to call base.OnLayout, however for normal docking
         ///  an functions to work, base.OnLayout must be called.
         ///  Raises the <see cref='Layout'/> event.
         /// </summary>
@@ -9243,7 +9245,7 @@ namespace System.Windows.Forms
             // Strip the PRF_CHILDREN flag.  We will manually walk our children and print them.
             lParam = (IntPtr)((long)lParam & ~NativeMethods.PRF_CHILDREN);
 
-            // We're the root contol, so we need to set up our clipping region.  Retrieve the
+            // We're the root control, so we need to set up our clipping region.  Retrieve the
             // x-coordinates and y-coordinates of the viewport origin for the specified device context.
             bool success = Gdi32.GetViewportOrgEx(hDC, out Point viewportOrg).IsTrue();
             Debug.Assert(success, "GetViewportOrgEx() failed.");

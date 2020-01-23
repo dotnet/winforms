@@ -1,13 +1,15 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
+
+#nullable disable
 
 using System.Collections;
 using System.Diagnostics;
 
 namespace System.Windows.Forms
 {
-    public class ArraySubsetEnumerator : IEnumerator
+    internal class ArraySubsetEnumerator : IEnumerator
     {
         private readonly object[] _array;
         private readonly int _total;

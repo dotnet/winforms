@@ -76,7 +76,7 @@ namespace System.Windows.Forms.Design
                 // If text box is empty or contains just whitespace, return 'null' for the NullValue.
                 // Otherwise we end up pushing empty string as the NullValue for every binding, which breaks non-string
                 // bindings. This does mean that setting the NullValue to empty string now becomes a code-only scenario
-                // for users, but that is an acceptible trade-off.
+                // for users, but that is an acceptable trade-off.
                 string nullValue = nullValueTextBox.Text.Trim();
 
                 return (nullValue.Length == 0) ? null : nullValue;
@@ -133,7 +133,7 @@ namespace System.Windows.Forms.Design
             Dirty = true;
         }
 
-        // given a formatString/formatInfo combination, this method suggest the most appropiate user control
+        // given a formatString/formatInfo combination, this method suggest the most appropriate user control
         // the result of the function is one of the strings "Numeric", "Currency", "DateTime", "Percentage", "Scientific", "Custom"
         public static string FormatTypeStringFromFormatString(string formatString)
         {

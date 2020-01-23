@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -80,6 +82,8 @@ namespace System.Windows.Forms
 
         private bool _rightToLeftLayout;
         private bool _skipUpdateSize;
+
+        private ToolTipBuffer _toolTipBuffer;
 
         /// <summary>
         ///  Constructs a TabBase object, usually as the base class for a TabStrip or TabControl.
@@ -1129,6 +1133,10 @@ namespace System.Windows.Forms
                     _imageList.Disposed -= new EventHandler(DetachImageList);
                 }
             }
+
+            // Dispose unmanaged resources.
+            _toolTipBuffer.Dispose();
+
             base.Dispose(disposing);
         }
 
@@ -2001,31 +2009,27 @@ namespace System.Windows.Forms
             UpdateTabSelection(false);
         }
 
-        private void WmNeedText(ref Message m)
+        private unsafe void WmNeedText(ref Message m)
         {
-            NativeMethods.TOOLTIPTEXT ttt = (NativeMethods.TOOLTIPTEXT)m.GetLParam(typeof(NativeMethods.TOOLTIPTEXT));
+            NMTTDISPINFOW* ttt = (NMTTDISPINFOW*)m.LParam;
 
-            int commandID = (int)ttt.hdr.idFrom;
+            int commandID = (int)ttt->hdr.idFrom;
 
             string tipText = GetToolTipText(GetTabPage(commandID));
-            if (!string.IsNullOrEmpty(tipText))
+            if (string.IsNullOrEmpty(tipText))
             {
-                ttt.lpszText = tipText;
-            }
-            else
-            {
-                ttt.lpszText = _controlTipText;
+                tipText = _controlTipText;
             }
 
-            ttt.hinst = IntPtr.Zero;
+            _toolTipBuffer.SetText(tipText);
+            ttt->lpszText = _toolTipBuffer.Buffer;
+            ttt->hinst = IntPtr.Zero;
 
             // RightToLeft reading order
             if (RightToLeft == RightToLeft.Yes)
             {
-                ttt.uFlags |= (int)ComCtl32.TTF.RTLREADING;
+                ttt->uFlags |= TTF.RTLREADING;
             }
-
-            Marshal.StructureToPtr(ttt, m.LParam, false);
         }
 
         private unsafe void WmReflectDrawItem(ref Message m)
