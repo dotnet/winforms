@@ -1139,7 +1139,7 @@ namespace System.Windows.Forms
             ClearTopLevelControlEvents();
             _topLevelControl = null;
 
-            // We must re-aquire this control.  If the existing top level control's handle
+            // We must re-acquire this control.  If the existing top level control's handle
             // was never created, but the new parent has a handle, if we don't re-get
             // the top level control here we won't ever create the tooltip handle.
             _topLevelControl = TopLevelControl;

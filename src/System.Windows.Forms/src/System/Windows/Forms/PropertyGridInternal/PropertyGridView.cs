@@ -1043,7 +1043,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             try
             {
-                // We do this becuase the Focus call above doesn't always stick, so
+                // We do this because the Focus call above doesn't always stick, so
                 // we make the Edit think that it doesn't have focus.  this prevents
                 // ActiveControl code on the containercontrol from moving focus elsewhere
                 // when the dropdown closes.
@@ -2746,7 +2746,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 object value = DropDownListBox.SelectedItem;
 
-                // don't need the commit becuase we're committing anyway.
+                // don't need the commit because we're committing anyway.
                 //
                 SetFlag(FlagDropDownCommit, false);
                 if (value != null && !CommitText((string)value))
@@ -7303,7 +7303,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             private readonly MouseHook mouseHook;
 
-            // We do this becuase the Focus call above doesn't always stick, so
+            // We do this because the Focus call above doesn't always stick, so
             // we make the Edit think that it doesn't have focus.  this prevents
             // ActiveControl code on the containercontrol from moving focus elsewhere
             // when the dropdown closes.

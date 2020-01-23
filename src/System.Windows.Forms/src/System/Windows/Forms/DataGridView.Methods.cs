@@ -5562,6 +5562,10 @@ namespace System.Windows.Forms
                     dataGridViewOper[DATAGRIDVIEWOPER_inDispose] = false;
                 }
             }
+
+            // Dispose unmanaged resources.
+            _toolTipBuffer.Dispose();
+
             base.Dispose(disposing);
         }
 
@@ -29103,15 +29107,17 @@ namespace System.Windows.Forms
                 {
                     // Setting the max width has the added benefit of enabling multiline tool tips
                     User32.SendMessageW(nmhdr->hwndFrom, (User32.WM)ComCtl32.TTM.SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
-                    NativeMethods.TOOLTIPTEXT ttt = (NativeMethods.TOOLTIPTEXT)m.GetLParam(typeof(NativeMethods.TOOLTIPTEXT));
 
-                    ttt.lpszText = toolTip;
+                    ComCtl32.NMTTDISPINFOW* ttt = (ComCtl32.NMTTDISPINFOW*)m.LParam;
+                    _toolTipBuffer.SetText(toolTip);
+                    ttt->lpszText = _toolTipBuffer.Buffer;
+                    ttt->hinst = IntPtr.Zero;
 
                     if (RightToLeft == RightToLeft.Yes)
                     {
-                        ttt.uFlags |= (int)ComCtl32.TTF.RTLREADING;
+                        ttt->uFlags |= ComCtl32.TTF.RTLREADING;
                     }
-                    Marshal.StructureToPtr(ttt, m.LParam, false);
+
                     return true;
                 }
             }

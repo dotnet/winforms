@@ -359,7 +359,7 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            ///  Resets the name of this reference holder.  It will be re-aquired on demand
+            ///  Resets the name of this reference holder.  It will be re-acquired on demand
             /// </summary>
             internal void ResetName()
             {
