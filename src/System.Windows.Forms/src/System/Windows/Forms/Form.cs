@@ -5669,30 +5669,10 @@ namespace System.Windows.Forms
 
         private void UpdateMenuHandles()
         {
-            if (IsHandleCreated)
+            if (!IsHandleCreated)
             {
-                if (!TopLevel)
-                {
-                    UpdateMenuHandles(true);
-                }
-                else
-                {
-                    Form form = ActiveMdiChildInternal;
-                    if (form != null)
-                    {
-                        UpdateMenuHandles(true);
-                    }
-                    else
-                    {
-                        UpdateMenuHandles(true);
-                    }
-                }
+                return;
             }
-        }
-
-        private void UpdateMenuHandles(bool forceRedraw)
-        {
-            Debug.Assert(IsHandleCreated, "shouldn't call when handle == 0");
 
             if (ctlClient == null || !ctlClient.IsHandleCreated)
             {
@@ -5733,10 +5713,8 @@ namespace System.Windows.Forms
                 }
             }
 
-            if (forceRedraw)
-            {
-                SafeNativeMethods.DrawMenuBar(new HandleRef(this, Handle));
-            }
+            User32.DrawMenuBar(this);
+
             formStateEx[FormStateExUpdateMenuHandlesDeferred] = 0;
         }
 
