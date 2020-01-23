@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 namespace System.Windows.Forms.ComponentModel.Com2Interop
 {
     /// <summary>
@@ -36,4 +38,3 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         public abstract object ConvertManagedToNative(object managedValue, Com2PropertyDescriptor pd, ref bool cancelSet);
     }
 }
-
