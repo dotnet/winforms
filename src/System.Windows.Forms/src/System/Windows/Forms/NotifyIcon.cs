@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -631,7 +631,7 @@ namespace System.Windows.Forms
                 // Summary: the current window must be made the foreground window
                 // before calling TrackPopupMenuEx, and a task switch must be
                 // forced after the call.
-                UnsafeNativeMethods.SetForegroundWindow(new HandleRef(window, window.Handle));
+                User32.SetForegroundWindow(window);
 
                 // this will set the context menu strip to be toplevel
                 // and will allow us to overlap the system tray

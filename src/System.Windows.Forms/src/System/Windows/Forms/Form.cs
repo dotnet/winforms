@@ -2679,7 +2679,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    UnsafeNativeMethods.SetForegroundWindow(new HandleRef(this, Handle));
+                    User32.SetForegroundWindow(this);
                 }
             }
         }
