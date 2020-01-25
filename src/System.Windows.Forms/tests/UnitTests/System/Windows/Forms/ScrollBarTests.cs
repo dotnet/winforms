@@ -131,29 +131,32 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.IsHandleCreated);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ScrollBar_AutoSize_Set_GetReturnsExpected(bool value)
         {
-            var control = new SubScrollBar
+            using var control = new SubScrollBar
             {
                 AutoSize = value
             };
             Assert.Equal(value, control.AutoSize);
+            Assert.False(control.IsHandleCreated);
 
             // Set same.
             control.AutoSize = value;
             Assert.Equal(value, control.AutoSize);
+            Assert.False(control.IsHandleCreated);
 
             // Set different.
             control.AutoSize = !value;
             Assert.Equal(!value, control.AutoSize);
+            Assert.False(control.IsHandleCreated);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ScrollBar_AutoSize_SetWithHandler_CallsAutoSizeChanged()
         {
-            var control = new SubScrollBar
+            using var control = new SubScrollBar
             {
                 AutoSize = true
             };
@@ -188,25 +191,27 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(2, callCount);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBackColorTheoryData))]
         public void ScrollBar_BackColor_Set_GetReturnsExpected(Color value, Color expected)
         {
-            var control = new SubScrollBar
+            using var control = new SubScrollBar
             {
                 BackColor = value
             };
             Assert.Equal(expected, control.BackColor);
+            Assert.False(control.IsHandleCreated);
 
             // Set same.
             control.BackColor = value;
             Assert.Equal(expected, control.BackColor);
+            Assert.False(control.IsHandleCreated);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ScrollBar_BackColor_SetWithHandler_CallsBackColorChanged()
         {
-            var control = new SubScrollBar();
+            using var control = new SubScrollBar();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -238,25 +243,27 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(2, callCount);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetImageTheoryData))]
         public void ScrollBar_BackgroundImage_Set_GetReturnsExpected(Image value)
         {
-            var control = new SubScrollBar
+            using var control = new SubScrollBar
             {
                 BackgroundImage = value
             };
             Assert.Equal(value, control.BackgroundImage);
+            Assert.False(control.IsHandleCreated);
 
             // Set same.
             control.BackgroundImage = value;
             Assert.Equal(value, control.BackgroundImage);
+            Assert.False(control.IsHandleCreated);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ScrollBar_BackgroundImage_SetWithHandler_CallsBackgroundImageChanged()
         {
-            var control = new SubScrollBar();
+            using var control = new SubScrollBar();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -267,7 +274,7 @@ namespace System.Windows.Forms.Tests
             control.BackgroundImageChanged += handler;
 
             // Set different.
-            var image1 = new Bitmap(10, 10);
+            using var image1 = new Bitmap(10, 10);
             control.BackgroundImage = image1;
             Assert.Same(image1, control.BackgroundImage);
             Assert.Equal(1, callCount);
@@ -278,7 +285,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
 
             // Set different.
-            var image2 = new Bitmap(10, 10);
+            using var image2 = new Bitmap(10, 10);
             control.BackgroundImage = image2;
             Assert.Same(image2, control.BackgroundImage);
             Assert.Equal(2, callCount);
@@ -295,25 +302,27 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(3, callCount);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ImageLayout))]
         public void ScrollBar_BackgroundImageLayout_Set_GetReturnsExpected(ImageLayout value)
         {
-            var control = new SubScrollBar
+            using var control = new SubScrollBar
             {
                 BackgroundImageLayout = value
             };
             Assert.Equal(value, control.BackgroundImageLayout);
+            Assert.False(control.IsHandleCreated);
 
             // Set same.
             control.BackgroundImageLayout = value;
             Assert.Equal(value, control.BackgroundImageLayout);
+            Assert.False(control.IsHandleCreated);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ScrollBar_BackgroundImageLayout_SetWithHandler_CallsBackgroundImageLayoutChanged()
         {
-            var control = new SubScrollBar();
+            using var control = new SubScrollBar();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -345,56 +354,97 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(2, callCount);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ImageLayout))]
         public void ScrollBar_BackgroundImageLayout_SetInvalid_ThrowsInvalidEnumArgumentException(ImageLayout value)
         {
-            var control = new SubScrollBar();
+            using var control = new SubScrollBar();
             Assert.Throws<InvalidEnumArgumentException>("value", () => control.BackgroundImageLayout = value);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ScrollBar_Enabled_Set_GetReturnsExpected(bool value)
         {
-            var control = new SubScrollBar
+            using var control = new SubScrollBar
             {
                 Enabled = value
             };
             Assert.Equal(value, control.Enabled);
+            Assert.False(control.IsHandleCreated);
 
             // Set same.
             control.Enabled = value;
             Assert.Equal(value, control.Enabled);
+            Assert.False(control.IsHandleCreated);
 
             // Set different.
             control.Enabled = value;
             Assert.Equal(value, control.Enabled);
+            Assert.False(control.IsHandleCreated);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ScrollBar_Enabled_SetWithHandle_GetReturnsExpected(bool value)
         {
-            var control = new SubScrollBar();
+            using var control = new SubScrollBar();
             Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
 
             control.Enabled = value;
             Assert.Equal(value, control.Enabled);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
 
             // Set same.
             control.Enabled = value;
             Assert.Equal(value, control.Enabled);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
 
             // Set different.
             control.Enabled = value;
             Assert.Equal(value, control.Enabled);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
         }
 
-        [Fact]
+        [WinFormsFact]
+        public unsafe void ScrollBar_Enabled_GetScrollInfo_Updates()
+        {
+            using var control = new SubScrollBar
+            {
+                LargeChange = 15
+            };
+
+            // Enable.
+            var si = new User32.SCROLLINFO
+            {
+                cbSize = (uint)sizeof(User32.SCROLLINFO),
+                fMask = User32.SIF.ALL
+            };
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            control.Enabled = true;
+            Assert.True(User32.GetScrollInfo(control.Handle, User32.SB.CTL, ref si).IsTrue());
+            Assert.Equal(15u, si.nPage);
+        }
+
+        [WinFormsFact]
         public void ScrollBar_Enabled_SetWithHandler_CallsEnabledChanged()
         {
-            var control = new SubScrollBar
+            using var control = new SubScrollBar
             {
                 Enabled = true
             };
@@ -433,7 +483,7 @@ namespace System.Windows.Forms.Tests
         [CommonMemberData(nameof(CommonTestHelper.GetFontTheoryData))]
         public void ScrollBar_Font_Set_GetReturnsExpected(Font value)
         {
-            var control = new SubScrollBar
+            using var control = new SubScrollBar
             {
                 Font = value
             };
@@ -490,25 +540,27 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(3, callCount);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetForeColorTheoryData))]
         public void ScrollBar_ForeColor_Set_GetReturnsExpected(Color value, Color expected)
         {
-            var control = new SubScrollBar
+            using var control = new SubScrollBar
             {
                 ForeColor = value
             };
             Assert.Equal(expected, control.ForeColor);
+            Assert.False(control.IsHandleCreated);
 
             // Set same.
             control.ForeColor = value;
             Assert.Equal(expected, control.ForeColor);
+            Assert.False(control.IsHandleCreated);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ScrollBar_ForeColor_SetWithHandler_CallsForeColorChanged()
         {
-            var control = new SubScrollBar();
+            using var control = new SubScrollBar();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -540,25 +592,56 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(2, callCount);
         }
 
-        [Theory]
+        [WinFormsTheory]
+        [InlineData(RightToLeft.Inherit)]
+        [InlineData(RightToLeft.No)]
+        [InlineData(RightToLeft.Yes)]
+        public unsafe void ScrollBar_Handle_GetDefault_ReturnsExpected(RightToLeft rightToLeft)
+        {
+            using var control = new SubScrollBar
+            {
+                RightToLeft = rightToLeft,
+                Minimum = 5,
+                Value = 25,
+                Maximum = 105,
+                LargeChange = 15,
+                SmallChange = 10,
+            };
+
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            var si = new User32.SCROLLINFO
+            {
+                cbSize = (uint)sizeof(User32.SCROLLINFO),
+                fMask = User32.SIF.ALL
+            };
+            Assert.True(User32.GetScrollInfo(control.Handle, User32.SB.CTL, ref si).IsTrue());
+            Assert.Equal(5, si.nMin);
+            Assert.Equal(105, si.nMax);
+            Assert.Equal(25, si.nPos);
+            Assert.Equal(15u, si.nPage);
+        }
+
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ImageLayout))]
         public void ScrollBar_ImeMode_Set_GetReturnsExpected(ImeMode value)
         {
-            var control = new SubScrollBar
+            using var control = new SubScrollBar
             {
                 ImeMode = value
             };
             Assert.Equal(value, control.ImeMode);
+            Assert.False(control.IsHandleCreated);
 
             // Set same.
             control.ImeMode = value;
             Assert.Equal(value, control.ImeMode);
+            Assert.False(control.IsHandleCreated);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ScrollBar_ImeMode_SetWithHandler_CallsImeModeChanged()
         {
-            var control = new SubScrollBar();
+            using var control = new SubScrollBar();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -590,11 +673,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, callCount);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ImeMode))]
         public void ScrollBar_ImeMode_SetInvalid_ThrowsInvalidEnumArgumentException(ImeMode value)
         {
-            var control = new SubScrollBar();
+            using var control = new SubScrollBar();
             Assert.Throws<InvalidEnumArgumentException>("value", () => control.ImeMode = value);
         }
 
@@ -619,13 +702,31 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.IsHandleCreated);
         }
 
+        [WinFormsFact]
+        public void ScrollBar_LargeChange_SetLarge_GetReturnsExpected()
+        {
+            using var control = new SubScrollBar
+            {
+                Minimum = 5,
+                Maximum = 10,
+                LargeChange = 7
+            };
+            Assert.Equal(6, control.LargeChange);
+            Assert.False(control.IsHandleCreated);
+
+            // Change maximum.
+            control.Maximum = 15;
+            Assert.Equal(7, control.LargeChange);
+            Assert.False(control.IsHandleCreated);
+        }
+
         [WinFormsTheory]
         [InlineData(0)]
         [InlineData(1)]
         [InlineData(5)]
         [InlineData(10)]
         [InlineData(11)]
-        public void ScrollBar_LargeChange_SetWithHandle_GetReturnsExpected(int value)
+        public unsafe void ScrollBar_LargeChange_SetWithHandle_GetReturnsExpected(int value)
         {
             using var control = new SubScrollBar();
             Assert.NotEqual(IntPtr.Zero, control.Handle);
@@ -640,7 +741,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, control.LargeChange);
             var si = new User32.SCROLLINFO
             {
-                cbSize = (uint)Marshal.SizeOf<User32.SCROLLINFO>(),
+                cbSize = (uint)sizeof(User32.SCROLLINFO),
                 fMask = User32.SIF.ALL
             };
             Assert.True(User32.GetScrollInfo(control.Handle, User32.SB.CTL, ref si).IsTrue());
@@ -655,7 +756,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, control.LargeChange);
             si = new User32.SCROLLINFO
             {
-                cbSize = (uint)Marshal.SizeOf<User32.SCROLLINFO>(),
+                cbSize = (uint)sizeof(User32.SCROLLINFO),
                 fMask = User32.SIF.ALL
             };
             Assert.True(User32.GetScrollInfo(control.Handle, User32.SB.CTL, ref si).IsTrue());
@@ -672,7 +773,7 @@ namespace System.Windows.Forms.Tests
         [InlineData(5)]
         [InlineData(10)]
         [InlineData(11)]
-        public void ScrollBar_LargeChange_SetWithHandleDisabled_GetReturnsExpected(int value)
+        public unsafe void ScrollBar_LargeChange_SetWithHandleDisabled_GetReturnsExpected(int value)
         {
             using var control = new SubScrollBar
             {
@@ -690,7 +791,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, control.LargeChange);
             var si = new User32.SCROLLINFO
             {
-                cbSize = (uint)Marshal.SizeOf<User32.SCROLLINFO>(),
+                cbSize = (uint)sizeof(User32.SCROLLINFO),
                 fMask = User32.SIF.ALL
             };
             Assert.True(User32.GetScrollInfo(control.Handle, User32.SB.CTL, ref si).IsTrue());
@@ -705,7 +806,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, control.LargeChange);
             si = new User32.SCROLLINFO
             {
-                cbSize = (uint)Marshal.SizeOf<User32.SCROLLINFO>(),
+                cbSize = (uint)sizeof(User32.SCROLLINFO),
                 fMask = User32.SIF.ALL
             };
             Assert.True(User32.GetScrollInfo(control.Handle, User32.SB.CTL, ref si).IsTrue());
@@ -757,7 +858,7 @@ namespace System.Windows.Forms.Tests
         [InlineData(8, 9)]
         [InlineData(10, 10)]
         [InlineData(11, 10)]
-        public void ScrollBar_Maximum_SetWithHandle_GetReturnsExpected(int value, int expectedLargeChange)
+        public unsafe void ScrollBar_Maximum_SetWithHandle_GetReturnsExpected(int value, int expectedLargeChange)
         {
             using var control = new SubScrollBar();
             Assert.NotEqual(IntPtr.Zero, control.Handle);
@@ -776,7 +877,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, control.SmallChange);
             var si = new User32.SCROLLINFO
             {
-                cbSize = (uint)Marshal.SizeOf<User32.SCROLLINFO>(),
+                cbSize = (uint)sizeof(User32.SCROLLINFO),
                 fMask = User32.SIF.ALL
             };
             Assert.True(User32.GetScrollInfo(control.Handle, User32.SB.CTL, ref si).IsTrue());
@@ -798,7 +899,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, control.SmallChange);
             si = new User32.SCROLLINFO
             {
-                cbSize = (uint)Marshal.SizeOf<User32.SCROLLINFO>(),
+                cbSize = (uint)sizeof(User32.SCROLLINFO),
                 fMask = User32.SIF.ALL
             };
             Assert.True(User32.GetScrollInfo(control.Handle, User32.SB.CTL, ref si).IsTrue());
@@ -817,7 +918,7 @@ namespace System.Windows.Forms.Tests
         [InlineData(8, 9)]
         [InlineData(10, 10)]
         [InlineData(11, 10)]
-        public void ScrollBar_Maximum_SetWithHandleDisabled_GetReturnsExpected(int value, int expectedLargeChange)
+        public unsafe void ScrollBar_Maximum_SetWithHandleDisabled_GetReturnsExpected(int value, int expectedLargeChange)
         {
             using var control = new SubScrollBar
             {
@@ -839,7 +940,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, control.SmallChange);
             var si = new User32.SCROLLINFO
             {
-                cbSize = (uint)Marshal.SizeOf<User32.SCROLLINFO>(),
+                cbSize = (uint)sizeof(User32.SCROLLINFO),
                 fMask = User32.SIF.ALL
             };
             Assert.True(User32.GetScrollInfo(control.Handle, User32.SB.CTL, ref si).IsTrue());
@@ -862,7 +963,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createdCallCount);
             si = new User32.SCROLLINFO
             {
-                cbSize = (uint)Marshal.SizeOf<User32.SCROLLINFO>(),
+                cbSize = (uint)sizeof(User32.SCROLLINFO),
                 fMask = User32.SIF.ALL
             };
             Assert.True(User32.GetScrollInfo(control.Handle, User32.SB.CTL, ref si).IsTrue());
@@ -940,7 +1041,7 @@ namespace System.Windows.Forms.Tests
         [InlineData(-1)]
         [InlineData(0)]
         [InlineData(5)]
-        public void ScrollBar_Minimum_SetWithHandle_GetReturnsExpected(int value)
+        public unsafe void ScrollBar_Minimum_SetWithHandle_GetReturnsExpected(int value)
         {
             using var control = new SubScrollBar
             {
@@ -962,7 +1063,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, control.SmallChange);
             var si = new User32.SCROLLINFO
             {
-                cbSize = (uint)Marshal.SizeOf<User32.SCROLLINFO>(),
+                cbSize = (uint)sizeof(User32.SCROLLINFO),
                 fMask = User32.SIF.ALL
             };
             Assert.True(User32.GetScrollInfo(control.Handle, User32.SB.CTL, ref si).IsTrue());
@@ -983,7 +1084,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(10, control.LargeChange);
             Assert.Equal(1, control.SmallChange);si = new User32.SCROLLINFO
             {
-                cbSize = (uint)Marshal.SizeOf<User32.SCROLLINFO>(),
+                cbSize = (uint)sizeof(User32.SCROLLINFO),
                 fMask = User32.SIF.ALL
             };
             Assert.True(User32.GetScrollInfo(control.Handle, User32.SB.CTL, ref si).IsTrue());
@@ -1001,7 +1102,7 @@ namespace System.Windows.Forms.Tests
         [InlineData(-1)]
         [InlineData(0)]
         [InlineData(5)]
-        public void ScrollBar_Minimum_SetWithHandleDisabled_GetReturnsExpected(int value)
+        public unsafe void ScrollBar_Minimum_SetWithHandleDisabled_GetReturnsExpected(int value)
         {
             using var control = new SubScrollBar
             {
@@ -1024,7 +1125,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, control.SmallChange);
             var si = new User32.SCROLLINFO
             {
-                cbSize = (uint)Marshal.SizeOf<User32.SCROLLINFO>(),
+                cbSize = (uint)sizeof(User32.SCROLLINFO),
                 fMask = User32.SIF.ALL
             };
             Assert.True(User32.GetScrollInfo(control.Handle, User32.SB.CTL, ref si).IsTrue());
@@ -1046,7 +1147,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, control.SmallChange);
             si = new User32.SCROLLINFO
             {
-                cbSize = (uint)Marshal.SizeOf<User32.SCROLLINFO>(),
+                cbSize = (uint)sizeof(User32.SCROLLINFO),
                 fMask = User32.SIF.ALL
             };
             Assert.True(User32.GetScrollInfo(control.Handle, User32.SB.CTL, ref si).IsTrue());
@@ -1077,25 +1178,27 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.IsHandleCreated);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetRightToLeftTheoryData))]
         public void ScrollBar_RightToLeft_Set_GetReturnsExpected(RightToLeft value, RightToLeft expected)
         {
-            var control = new SubScrollBar
+            using var control = new SubScrollBar
             {
                 RightToLeft = value
             };
             Assert.Equal(expected, control.RightToLeft);
+            Assert.False(control.IsHandleCreated);
 
             // Set same.
             control.RightToLeft = value;
             Assert.Equal(expected, control.RightToLeft);
+            Assert.False(control.IsHandleCreated);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ScrollBar_RightToLeft_SetWithHandler_CallsRightToLeftChanged()
         {
-            var control = new SubScrollBar();
+            using var control = new SubScrollBar();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -1127,31 +1230,34 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(2, callCount);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(RightToLeft))]
         public void ScrollBar_RightToLeft_SetInvalid_ThrowsInvalidEnumArgumentException(RightToLeft value)
         {
-            var control = new SubScrollBar();
+            using var control = new SubScrollBar();
             Assert.Throws<InvalidEnumArgumentException>("value", () => control.RightToLeft = value);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ScrollBar_ScaleScrollBarForDpiChange_Set_GetReturnsExpected(bool value)
         {
-            var control = new SubScrollBar
+            using var control = new SubScrollBar
             {
                 ScaleScrollBarForDpiChange = value
             };
             Assert.Equal(value, control.ScaleScrollBarForDpiChange);
+            Assert.False(control.IsHandleCreated);
 
             // Set same.
             control.ScaleScrollBarForDpiChange = value;
             Assert.Equal(value, control.ScaleScrollBarForDpiChange);
+            Assert.False(control.IsHandleCreated);
 
             // Set different.
             control.ScaleScrollBarForDpiChange = !value;
             Assert.Equal(!value, control.ScaleScrollBarForDpiChange);
+            Assert.False(control.IsHandleCreated);
         }
 
         [WinFormsTheory]
@@ -1172,6 +1278,23 @@ namespace System.Windows.Forms.Tests
             // Set same.
             control.SmallChange = value;
             Assert.Equal(expected, control.SmallChange);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void ScrollBar_SmallChange_SetLarge_GetReturnsExpected()
+        {
+            using var control = new SubScrollBar
+            {
+                LargeChange = 10,
+                SmallChange = 11
+            };
+            Assert.Equal(10, control.SmallChange);
+            Assert.False(control.IsHandleCreated);
+
+            // Change large change.
+            control.LargeChange = 15;
+            Assert.Equal(11, control.SmallChange);
             Assert.False(control.IsHandleCreated);
         }
 
@@ -1252,48 +1375,69 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, control.SmallChange);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ScrollBar_TabStop_Set_GetReturnsExpected(bool value)
         {
-            var control = new SubScrollBar
+            using var control = new SubScrollBar
             {
                 TabStop = value
             };
             Assert.Equal(value, control.TabStop);
+            Assert.False(control.IsHandleCreated);
 
             // Set same.
             control.TabStop = value;
             Assert.Equal(value, control.TabStop);
+            Assert.False(control.IsHandleCreated);
 
             // Set different.
             control.TabStop = value;
             Assert.Equal(value, control.TabStop);
+            Assert.False(control.IsHandleCreated);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ScrollBar_TabStop_SetWithHandle_GetReturnsExpected(bool value)
         {
-            var control = new SubScrollBar();
+            using var control = new SubScrollBar();
             Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
 
             control.TabStop = value;
             Assert.Equal(value, control.TabStop);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
 
             // Set same.
             control.TabStop = value;
             Assert.Equal(value, control.TabStop);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
 
             // Set different.
             control.TabStop = value;
             Assert.Equal(value, control.TabStop);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ScrollBar_TabStop_SetWithHandler_CallsTabStopChanged()
         {
-            var control = new SubScrollBar
+            using var control = new SubScrollBar
             {
                 TabStop = true
             };
@@ -1444,7 +1588,7 @@ namespace System.Windows.Forms.Tests
         [InlineData(90, 90)]
         [InlineData(91, 91)]
         [InlineData(100, 91)]
-        public void ScrollBar_Value_SetWithHandle_GetReturnsExpected(int value, int expectedPos)
+        public unsafe void ScrollBar_Value_SetWithHandle_GetReturnsExpected(int value, int expectedPos)
         {
             using var control = new SubScrollBar();
             Assert.NotEqual(IntPtr.Zero, control.Handle);
@@ -1463,7 +1607,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, control.SmallChange);
             var si = new User32.SCROLLINFO
             {
-                cbSize = (uint)Marshal.SizeOf<User32.SCROLLINFO>(),
+                cbSize = (uint)sizeof(User32.SCROLLINFO),
                 fMask = User32.SIF.ALL
             };
             Assert.True(User32.GetScrollInfo(control.Handle, User32.SB.CTL, ref si).IsTrue());
@@ -1485,7 +1629,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, control.SmallChange);
             si = new User32.SCROLLINFO
             {
-                cbSize = (uint)Marshal.SizeOf<User32.SCROLLINFO>(),
+                cbSize = (uint)sizeof(User32.SCROLLINFO),
                 fMask = User32.SIF.ALL
             };
             Assert.True(User32.GetScrollInfo(control.Handle, User32.SB.CTL, ref si).IsTrue());
@@ -1505,7 +1649,7 @@ namespace System.Windows.Forms.Tests
         [InlineData(90)]
         [InlineData(91)]
         [InlineData(100)]
-        public void ScrollBar_Value_SetWithHandleDisabled_GetReturnsExpected(int value)
+        public unsafe void ScrollBar_Value_SetWithHandleDisabled_GetReturnsExpected(int value)
         {
             using var control = new SubScrollBar
             {
@@ -1527,7 +1671,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, control.SmallChange);
             var si = new User32.SCROLLINFO
             {
-                cbSize = (uint)Marshal.SizeOf<User32.SCROLLINFO>(),
+                cbSize = (uint)sizeof(User32.SCROLLINFO),
                 fMask = User32.SIF.ALL
             };
             Assert.True(User32.GetScrollInfo(control.Handle, User32.SB.CTL, ref si).IsTrue());
@@ -1549,7 +1693,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, control.SmallChange);
             si = new User32.SCROLLINFO
             {
-                cbSize = (uint)Marshal.SizeOf<User32.SCROLLINFO>(),
+                cbSize = (uint)sizeof(User32.SCROLLINFO),
                 fMask = User32.SIF.ALL
             };
             Assert.True(User32.GetScrollInfo(control.Handle, User32.SB.CTL, ref si).IsTrue());
@@ -1561,6 +1705,41 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsFact]
+        public void ScrollBar_Value_SetWithHandler_CallsValueChanged()
+        {
+            using var control = new SubScrollBar();
+            int callCount = 0;
+            EventHandler valueChangedHandler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                callCount++;
+            };
+            control.ValueChanged += valueChangedHandler;
+
+            // Set different.
+            control.Value = 1;
+            Assert.Equal(1, control.Value);
+            Assert.Equal(1, callCount);
+
+            // Set same.
+            control.Value = 1;
+            Assert.Equal(1, control.Value);
+            Assert.Equal(1, callCount);
+
+            // Set different.
+            control.Value = 2;
+            Assert.Equal(2, control.Value);
+            Assert.Equal(2, callCount);
+
+            // Remove handler.
+            control.ValueChanged -= valueChangedHandler;
+            control.Value = 1;
+            Assert.Equal(1, control.Value);
+            Assert.Equal(2, callCount);
         }
 
         [WinFormsTheory]
@@ -1580,27 +1759,107 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(AutoSizeMode.GrowOnly, control.GetAutoSizeMode());
         }
 
+        public static IEnumerable<object[]> GetScaledBounds_TestData()
+        {
+            foreach (BoundsSpecified specified in Enum.GetValues(typeof(BoundsSpecified)))
+            {
+                yield return new object[] { Rectangle.Empty, new Size(0, 0), specified, Rectangle.Empty };
+                yield return new object[] { Rectangle.Empty, new Size(1, 1), specified, Rectangle.Empty };
+                yield return new object[] { Rectangle.Empty, new Size(2, 3), specified, Rectangle.Empty };
+                yield return new object[] { Rectangle.Empty, new Size(-2, -3), specified, Rectangle.Empty };
+            }
+
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.All, new Rectangle(0, 0, 0, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.X, new Rectangle(0, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.Y, new Rectangle(1, 0, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.Width, new Rectangle(1, 2, 0, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.Height, new Rectangle(1, 2, 3, 4) };
+
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.All, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.X, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.Y, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.Width, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.Height, new Rectangle(1, 2, 3, 4) };
+
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.All, new Rectangle(2, 6, 6, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.X, new Rectangle(2, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.Y, new Rectangle(1, 6, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.Width, new Rectangle(1, 2, 6, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.Height, new Rectangle(1, 2, 3, 4) };
+
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.All, new Rectangle(-2, -6, -6, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.X, new Rectangle(-2, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.Y, new Rectangle(1, -6, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.Width, new Rectangle(1, 2, -6, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.Height, new Rectangle(1, 2, 3, 4) };
+        }
+
         [WinFormsTheory]
-        [InlineData(ControlStyles.ContainerControl, false)]
-        [InlineData(ControlStyles.UserPaint, false)]
-        [InlineData(ControlStyles.Opaque, false)]
-        [InlineData(ControlStyles.ResizeRedraw, false)]
-        [InlineData(ControlStyles.FixedWidth, false)]
-        [InlineData(ControlStyles.FixedHeight, false)]
-        [InlineData(ControlStyles.StandardClick, false)]
+        [MemberData(nameof(GetScaledBounds_TestData))]
+        public void ScrollBar_GetScaledBounds_Invoke_ReturnsExpected(Rectangle bounds, SizeF factor, BoundsSpecified specified, Rectangle expected)
+        {
+            using var control = new SubScrollBar();
+            Assert.Equal(expected, control.GetScaledBounds(bounds, factor, specified));
+            Assert.False(control.IsHandleCreated);
+
+            // Call again.
+            Assert.Equal(expected, control.GetScaledBounds(bounds, factor, specified));
+            Assert.False(control.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> GetScaledBounds_Vertical_TestData()
+        {
+            foreach (BoundsSpecified specified in Enum.GetValues(typeof(BoundsSpecified)))
+            {
+                yield return new object[] { Rectangle.Empty, new Size(0, 0), specified, Rectangle.Empty };
+                yield return new object[] { Rectangle.Empty, new Size(1, 1), specified, Rectangle.Empty };
+                yield return new object[] { Rectangle.Empty, new Size(2, 3), specified, Rectangle.Empty };
+                yield return new object[] { Rectangle.Empty, new Size(-2, -3), specified, Rectangle.Empty };
+            }
+
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.All, new Rectangle(0, 0, 3, 0) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.X, new Rectangle(0, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.Y, new Rectangle(1, 0, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.Width, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.Height, new Rectangle(1, 2, 3, 0) };
+
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.All, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.X, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.Y, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.Width, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.Height, new Rectangle(1, 2, 3, 4) };
+
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.All, new Rectangle(2, 6, 3, 12) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.X, new Rectangle(2, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.Y, new Rectangle(1, 6, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.Width, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.Height, new Rectangle(1, 2, 3, 12) };
+
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.All, new Rectangle(-2, -6, 3, -12) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.X, new Rectangle(-2, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.Y, new Rectangle(1, -6, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.Width, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.Height, new Rectangle(1, 2, 3, -12) };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(GetScaledBounds_Vertical_TestData))]
+        public void ScrollBar_GetScaledBounds_InvokeVertical_ReturnsExpected(Rectangle bounds, SizeF factor, BoundsSpecified specified, Rectangle expected)
+        {
+            using var control = new VerticalScrollBar();
+            Assert.Equal(expected, control.GetScaledBounds(bounds, factor, specified));
+            Assert.False(control.IsHandleCreated);
+
+            // Call again.
+            Assert.Equal(expected, control.GetScaledBounds(bounds, factor, specified));
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
         [InlineData(ControlStyles.Selectable, true)]
-        [InlineData(ControlStyles.UserMouse, false)]
-        [InlineData(ControlStyles.SupportsTransparentBackColor, false)]
         [InlineData(ControlStyles.StandardDoubleClick, true)]
         [InlineData(ControlStyles.AllPaintingInWmPaint, true)]
-        [InlineData(ControlStyles.CacheText, false)]
-        [InlineData(ControlStyles.EnableNotifyMessage, false)]
-        [InlineData(ControlStyles.DoubleBuffer, false)]
-        [InlineData(ControlStyles.OptimizedDoubleBuffer, false)]
-        [InlineData(ControlStyles.UseTextForAccessibility, false)]
         [InlineData((ControlStyles)0, true)]
-        [InlineData((ControlStyles)int.MaxValue, false)]
-        [InlineData((ControlStyles)(-1), false)]
         public void ScrollBar_GetStyle_Invoke_ReturnsExpected(ControlStyles flag, bool expected)
         {
             using var control = new SubScrollBar();
@@ -1610,11 +1869,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, control.GetStyle(flag));
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void ScrollBar_OnClick_Invoke_CallsClick(EventArgs eventArgs)
         {
-            var control = new SubScrollBar();
+            using var control = new SubScrollBar();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -1634,11 +1893,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void ScrollBar_OnDoubleClick_Invoke_CallsDoubleClick(EventArgs eventArgs)
         {
-            var control = new SubScrollBar();
+            using var control = new SubScrollBar();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -1656,6 +1915,124 @@ namespace System.Windows.Forms.Tests
             control.DoubleClick -= handler;
             control.OnDoubleClick(eventArgs);
             Assert.Equal(1, callCount);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void ScrollBar_OnEnabledChanged_Invoke_CallsEnabled(EventArgs eventArgs)
+        {
+            using var control = new SubScrollBar();
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.EnabledChanged += handler;
+            control.OnEnabledChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.False(control.IsHandleCreated);
+
+            // Remove handler.
+            control.EnabledChanged -= handler;
+            control.OnEnabledChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void ScrollBar_OnEnabledChanged_InvokeWithHandle_CallsEnabledChanged(EventArgs eventArgs)
+        {
+            using var control = new SubScrollBar();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.EnabledChanged += handler;
+            control.OnEnabledChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Remove handler.
+            control.EnabledChanged -= handler;
+            control.OnEnabledChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void ScrollBar_OnHandleCreated_Invoke_CallsHandleCreated(EventArgs eventArgs)
+        {
+            using var control = new SubScrollBar();
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.HandleCreated += handler;
+            control.OnHandleCreated(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.False(control.IsHandleCreated);
+
+            // Remove handler.
+            control.HandleCreated -= handler;
+            control.OnHandleCreated(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void ScrollBar_OnHandleCreated_InvokeWithHandle_CallsHandleCreated(EventArgs eventArgs)
+        {
+            using var control = new SubScrollBar();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.HandleCreated += handler;
+            control.OnHandleCreated(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.True(control.IsHandleCreated);
+
+            // Remove handler.
+            control.HandleCreated -= handler;
+            control.OnHandleCreated(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.True(control.IsHandleCreated);
         }
 
         [WinFormsTheory]
@@ -1706,11 +2083,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetMouseEventArgsTheoryData))]
         public void ScrollBar_OnMouseDown_Invoke_CallsMouseDown(MouseEventArgs eventArgs)
         {
-            var control = new SubScrollBar();
+            using var control = new SubScrollBar();
             int callCount = 0;
             MouseEventHandler handler = (sender, e) =>
             {
@@ -1730,11 +2107,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetMouseEventArgsTheoryData))]
         public void ScrollBar_OnMouseMove_Invoke_CallsMouseMove(MouseEventArgs eventArgs)
         {
-            var control = new SubScrollBar();
+            using var control = new SubScrollBar();
             int callCount = 0;
             MouseEventHandler handler = (sender, e) =>
             {
@@ -1754,11 +2131,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetMouseEventArgsTheoryData))]
         public void ScrollBar_OnMouseUp_Invoke_CallsMouseUp(MouseEventArgs eventArgs)
         {
-            var control = new SubScrollBar();
+            using var control = new SubScrollBar();
             int callCount = 0;
             MouseEventHandler handler = (sender, e) =>
             {
@@ -1778,11 +2155,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetMouseEventArgsTheoryData))]
         public void ScrollBar_OnMouseWheel_Invoke_CallsMouseWheel(MouseEventArgs eventArgs)
         {
-            var control = new SubScrollBar();
+            using var control = new SubScrollBar();
             int callCount = 0;
             MouseEventHandler handler = (sender, e) =>
             {
@@ -1802,10 +2179,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ScrollBar_OnMouseWheel_InvokeHandledMouseEventArgs_SetsHandled()
         {
-            var control = new SubScrollBar();
+            using var control = new SubScrollBar();
             var eventArgs = new HandledMouseEventArgs(MouseButtons.Left, 1, 2, 3, 4);
             int callCount = 0;
             MouseEventHandler handler = (sender, e) =>
@@ -2064,11 +2441,11 @@ namespace System.Windows.Forms.Tests
             };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(OnMouseWheel_TestData))]
         public void ScrollBar_OnMouseWheel_InvokeWithScroll_CallsScroll(RightToLeft rightToLeft, int originalValue, int delta, IList<ScrollEventArgs> expected, int expectedValue)
         {
-            var scrollBar = new SubScrollBar
+            using var control = new SubScrollBar
             {
                 RightToLeft = rightToLeft,
                 Value = originalValue
@@ -2077,25 +2454,25 @@ namespace System.Windows.Forms.Tests
             int callCount = 0;
             ScrollEventHandler handler = (sender, e) =>
             {
-                Assert.Same(scrollBar, sender);
+                Assert.Same(control, sender);
                 Assert.Equal(expected[callCount].Type, e.Type);
                 Assert.Equal(expected[callCount].NewValue, e.NewValue);
                 Assert.Equal(expected[callCount].OldValue, e.OldValue);
                 Assert.Equal(ScrollOrientation.HorizontalScroll, e.ScrollOrientation);
                 callCount++;
             };
-            scrollBar.Scroll += handler;
+            control.Scroll += handler;
 
-            scrollBar.OnMouseWheel(eventArgs);
-            Assert.Equal(expectedValue, scrollBar.Value);
+            control.OnMouseWheel(eventArgs);
+            Assert.Equal(expectedValue, control.Value);
             Assert.Equal(expected.Count, callCount);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetPaintEventArgsTheoryData))]
         public void ScrollBar_OnPaint_Invoke_CallsPaint(PaintEventArgs eventArgs)
         {
-            var control = new SubScrollBar();
+            using var control = new SubScrollBar();
             int callCount = 0;
             PaintEventHandler handler = (sender, e) =>
             {
@@ -2121,11 +2498,11 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { new ScrollEventArgs(ScrollEventType.SmallDecrement, 2) };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(OnScroll_TestData))]
         public void ScrollBar_OnScroll_Invoke_CallsScroll(ScrollEventArgs eventArgs)
         {
-            var control = new SubScrollBar();
+            using var control = new SubScrollBar();
             int callCount = 0;
             ScrollEventHandler handler = (sender, e) =>
             {
@@ -2145,11 +2522,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void ScrollBar_OnValueChanged_Invoke_CallsValueChanged(EventArgs eventArgs)
         {
-            var control = new SubScrollBar();
+            using var control = new SubScrollBar();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -2169,52 +2546,172 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
         }
 
-        [Theory]
+        public static IEnumerable<object[]> RescaleConstantsForDpi_TestData()
+        {
+            foreach (bool scaleScrollBarForDpiChange in new bool[] { true, false })
+            {
+                yield return new object[] { scaleScrollBarForDpiChange, 1, 2 };
+                yield return new object[] { scaleScrollBarForDpiChange, 1, 1 };
+                yield return new object[] { scaleScrollBarForDpiChange, 0, 0 };
+                yield return new object[] { scaleScrollBarForDpiChange, -1, -2 };
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(RescaleConstantsForDpi_TestData))]
+        public void ScrollBar_RescaleConstantsForDpi_Invoke_Nop(bool scaleScrollBarForDpiChange, int deviceDpiOld, int deviceDpiNew)
+        {
+            using var control = new SubScrollBar
+            {
+                ScaleScrollBarForDpiChange = scaleScrollBarForDpiChange
+            };
+            control.RescaleConstantsForDpi(deviceDpiOld, deviceDpiNew);
+            Assert.Equal(Size.Empty, control.Size);
+            Assert.False(control.IsHandleCreated);
+
+            // Call again.
+            control.RescaleConstantsForDpi(deviceDpiOld, deviceDpiNew);
+            Assert.Equal(Size.Empty, control.Size);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> RescaleConstantsForDpi_WithSize_TestData()
+        {
+            yield return new object[] { true, 1, 2, new Size(20, 40), new Size(40, 80) };
+            yield return new object[] { true, 1, 1, new Size(10, 20), new Size(10, 20) };
+            yield return new object[] { true, 0, 0, Size.Empty, Size.Empty };
+            yield return new object[] { true, -1, -2, new Size(20, 40), new Size(40, 80) };
+
+            yield return new object[] { false, 1, 2, new Size(20, 40), new Size(40, 80) };
+            yield return new object[] { false, 1, 1, new Size(10, 20), new Size(10, 20) };
+            yield return new object[] { false, 0, 0, Size.Empty, Size.Empty };
+            yield return new object[] { false, -1, -2, new Size(20, 40), new Size(40, 80) };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(RescaleConstantsForDpi_WithSize_TestData))]
+        public void ScrollBar_RescaleConstantsForDpi_InvokeWithSize_Nop(bool scaleScrollBarForDpiChange, int deviceDpiOld, int deviceDpiNew, Size expected1, Size expected2)
+        {
+            using var control = new SubScrollBar
+            {
+                ScaleScrollBarForDpiChange = scaleScrollBarForDpiChange,
+                Size = new Size(10, 20)
+            };
+            control.RescaleConstantsForDpi(deviceDpiOld, deviceDpiNew);
+            Assert.Equal(expected1, control.Size);
+            Assert.False(control.IsHandleCreated);
+
+            // Call again.
+            control.RescaleConstantsForDpi(deviceDpiOld, deviceDpiNew);
+            Assert.Equal(expected2, control.Size);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ScrollBar_UpdateScrollInfo_NoHandle_Success(bool enabled)
         {
-            var scrollBar = new SubScrollBar
+            using var control = new SubScrollBar
             {
                 Enabled = enabled
             };
-            scrollBar.UpdateScrollInfo();
+            control.UpdateScrollInfo();
+            Assert.False(control.IsHandleCreated);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ScrollBar_UpdateScrollInfo_WithHandle_Success(bool enabled)
         {
-            var scrollBar = new SubScrollBar
+            using var control = new SubScrollBar
             {
                 Enabled = enabled
             };
-            Assert.NotEqual(IntPtr.Zero, scrollBar.Handle);
-            scrollBar.UpdateScrollInfo();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            control.UpdateScrollInfo();
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ScrollBar_UpdateScrollInfo_WithHandleRightToLeft_Success(bool enabled)
         {
-            var scrollBar = new SubScrollBar
+            using var control = new SubScrollBar
             {
                 Enabled = enabled,
                 RightToLeft = RightToLeft.Yes
             };
-            Assert.NotEqual(IntPtr.Zero, scrollBar.Handle);
-            scrollBar.UpdateScrollInfo();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            control.UpdateScrollInfo();
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ScrollBar_ToString_Invoke_ReturnsExpected()
         {
-            var control = new SubScrollBar();
+            using var control = new SubScrollBar();
             Assert.Equal("System.Windows.Forms.Tests.ScrollBarTests+SubScrollBar, Minimum: 0, Maximum: 100, Value: 0", control.ToString());
+        }
+
+        public static IEnumerable<object[]> WndProc_EraseBkgnd_TestData()
+        {
+            foreach (bool userPaint in new bool[] { true, false })
+            {
+                foreach (bool allPaintingInWmPaint in new bool[] { true, false })
+                {
+                    foreach (bool opaque in new bool[] { true, false })
+                    {
+                        yield return new object[] { userPaint, allPaintingInWmPaint, opaque };
+                    }
+                }
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(WndProc_EraseBkgnd_TestData))]
+        public void Control_WndProc_InvokeEraseBkgnd_Nop(bool userPaint, bool allPaintingInWmPaint, bool opaque)
+        {
+            using var control = new SubScrollBar();
+            control.SetStyle(ControlStyles.UserPaint, userPaint);
+            control.SetStyle(ControlStyles.AllPaintingInWmPaint, allPaintingInWmPaint);
+            control.SetStyle(ControlStyles.Opaque, opaque);
+            int paintCallCount = 0;
+            control.Paint += (sender, e) => paintCallCount++;
+
+            var m = new Message
+            {
+                Msg = (int)User32.WM.ERASEBKGND,
+                Result = (IntPtr)250
+            };
+            control.WndProc(ref m);
+            Assert.Equal((IntPtr)250, m.Result);
+            Assert.False(control.IsHandleCreated);
+            Assert.Equal(0, paintCallCount);
         }
 
         public static IEnumerable<object[]> WndProc_Scroll_TestData()
         {
-            foreach (User32.WM msg in new User32.WM[] { User32.WM.REFLECT | User32.WM.HSCROLL /*, User32.WM.REFLECT | User32.WM.VSCROLL  */ })
+            foreach (User32.WM msg in new User32.WM[] { User32.WM.REFLECT | User32.WM.HSCROLL, User32.WM.REFLECT | User32.WM.VSCROLL  })
             {
                 yield return new object[] { msg, RightToLeft.No, 100, ScrollEventType.SmallIncrement, 91, ScrollEventType.SmallIncrement };
                 yield return new object[] { msg, RightToLeft.No, 99, ScrollEventType.SmallIncrement, 91, ScrollEventType.SmallIncrement };
@@ -2331,11 +2828,11 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(WndProc_Scroll_TestData))]
         public void ScrollBar_WndProc_InvokeScroll_Success(int msg, RightToLeft rightToLeft, int originalValue, ScrollEventType eventType, int expectedValue, ScrollEventType expectedEventType)
         {
-            var scrollBar = new SubScrollBar
+            using var control = new SubScrollBar
             {
                 RightToLeft = rightToLeft,
                 Value = originalValue
@@ -2343,23 +2840,111 @@ namespace System.Windows.Forms.Tests
             int callCount = 0;
             ScrollEventHandler handler = (sender, e) =>
             {
-                Assert.Same(scrollBar, sender);
+                Assert.Same(control, sender);
                 Assert.Equal(expectedEventType, e.Type);
                 Assert.Equal(expectedValue, e.NewValue);
                 Assert.Equal(originalValue, e.OldValue);
                 Assert.Equal(ScrollOrientation.HorizontalScroll, e.ScrollOrientation);
                 callCount++;
             };
-            scrollBar.Scroll += handler;
+            control.Scroll += handler;
 
             var message = new Message
             {
                 Msg = msg,
                 WParam = (IntPtr)eventType
             };
-            scrollBar.WndProc(ref message);
+            control.WndProc(ref message);
             Assert.Equal(1, callCount);
-            Assert.Equal(expectedValue, scrollBar.Value);
+            Assert.Equal(expectedValue, control.Value);
+        }
+
+        [WinFormsFact]
+        public void Control_WndProc_InvokeSizeWithoutHandle_Success()
+        {
+            using var control = new SubScrollBar();
+
+            var m = new Message
+            {
+                Msg = (int)User32.WM.SIZE,
+                Result = (IntPtr)250
+            };
+            control.WndProc(ref m);
+            Assert.Equal((IntPtr)250, m.Result);
+            Assert.True(control.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void Control_WndProc_InvokeSizeWithHandle_Success()
+        {
+            using var control = new SubScrollBar();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            var m = new Message
+            {
+                Msg = (int)User32.WM.SIZE,
+                Result = (IntPtr)250
+            };
+            control.WndProc(ref m);
+            Assert.Equal((IntPtr)250, m.Result);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsFact]
+        public void ScrollBar_WndProc_InvokeMouseHoverWithHandle_Success()
+        {
+            using var control = new SubScrollBar();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            int callCount = 0;
+            control.MouseHover += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                callCount++;
+            };
+            var m = new Message
+            {
+                Msg = (int)User32.WM.MOUSEHOVER,
+                Result = (IntPtr)250
+            };
+            control.WndProc(ref m);
+            Assert.Equal(IntPtr.Zero, m.Result);
+            Assert.Equal(1, callCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        private class VerticalScrollBar : ScrollBar
+        {
+            protected override CreateParams CreateParams
+            {
+                get
+                {
+                    CreateParams cp = base.CreateParams;
+                    cp.Style |= (int)User32.SBS.VERT;
+                    return cp;
+                }
+            }
+
+            public new Rectangle GetScaledBounds(Rectangle bounds, SizeF factor, BoundsSpecified specified) => base.GetScaledBounds(bounds, factor, specified);
         }
 
         private class SubScrollBar : ScrollBar
@@ -2418,11 +3003,17 @@ namespace System.Windows.Forms.Tests
 
             public new AutoSizeMode GetAutoSizeMode() => base.GetAutoSizeMode();
 
+            public new Rectangle GetScaledBounds(Rectangle bounds, SizeF factor, BoundsSpecified specified) => base.GetScaledBounds(bounds, factor, specified);
+
             public new bool GetStyle(ControlStyles flag) => base.GetStyle(flag);
 
             public new void OnClick(EventArgs e) => base.OnClick(e);
 
             public new void OnDoubleClick(EventArgs e) => base.OnDoubleClick(e);
+
+            public new void OnEnabledChanged(EventArgs e) => base.OnEnabledChanged(e);
+
+            public new void OnHandleCreated(EventArgs e) => base.OnHandleCreated(e);
 
             public new void OnMouseClick(MouseEventArgs e) => base.OnMouseClick(e);
 
@@ -2441,6 +3032,10 @@ namespace System.Windows.Forms.Tests
             public new void OnScroll(ScrollEventArgs se) => base.OnScroll(se);
 
             public new void OnValueChanged(EventArgs e) => base.OnValueChanged(e);
+
+            public new void RescaleConstantsForDpi(int deviceDpiOld, int deviceDpiNew) => base.RescaleConstantsForDpi(deviceDpiOld, deviceDpiNew);
+
+            public new void SetStyle(ControlStyles flag, bool value) => base.SetStyle(flag, value);
 
             public new void UpdateScrollInfo() => base.UpdateScrollInfo();
 

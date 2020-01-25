@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
@@ -2380,6 +2381,435 @@ namespace System.Windows.Forms.Tests
 
             // Call again.
             Assert.Equal(expected, control.GetPreferredSize(proposedSize));
+            Assert.False(control.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> GetScaledBounds_TestData()
+        {
+            foreach (BoundsSpecified specified in Enum.GetValues(typeof(BoundsSpecified)))
+            {
+                yield return new object[] { Rectangle.Empty, new Size(0, 0), specified, Rectangle.Empty };
+                yield return new object[] { Rectangle.Empty, new Size(1, 1), specified, Rectangle.Empty };
+                yield return new object[] { Rectangle.Empty, new Size(2, 3), specified, Rectangle.Empty };
+                yield return new object[] { Rectangle.Empty, new Size(-2, -3), specified, Rectangle.Empty };
+            }
+
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.All, Rectangle.Empty };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.X, new Rectangle(0, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.Y, new Rectangle(1, 0, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.Width, new Rectangle(1, 2, 0, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.Height, new Rectangle(1, 2, 3, 0) };
+
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.All, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.X, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.Y, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.Width, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.Height, new Rectangle(1, 2, 3, 4) };
+
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.All, new Rectangle(2, 6, 6, 12) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.X, new Rectangle(2, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.Y, new Rectangle(1, 6, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.Width, new Rectangle(1, 2, 6, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.Height, new Rectangle(1, 2, 3, 12) };
+
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.All, new Rectangle(-2, -6, -6, -12) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.X, new Rectangle(-2, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.Y, new Rectangle(1, -6, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.Width, new Rectangle(1, 2, -6, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.Height, new Rectangle(1, 2, 3, -12) };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(GetScaledBounds_TestData))]
+        public void Control_GetScaledBounds_Invoke_ReturnsExpected(Rectangle bounds, SizeF factor, BoundsSpecified specified, Rectangle expected)
+        {
+            using var control = new SubControl();
+            Assert.Equal(expected, control.GetScaledBounds(bounds, factor, specified));
+            Assert.False(control.IsHandleCreated);
+
+            // Call again.
+            Assert.Equal(expected, control.GetScaledBounds(bounds, factor, specified));
+            Assert.False(control.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> GetScaledBounds_WithStyles_TestData()
+        {
+            yield return new object[] { Rectangle.Empty, new Size(0, 0), BoundsSpecified.All, new Rectangle(0, 0, 4, 4) };
+            yield return new object[] { Rectangle.Empty, new Size(0, 0), BoundsSpecified.X, Rectangle.Empty };
+            yield return new object[] { Rectangle.Empty, new Size(0, 0), BoundsSpecified.Y, Rectangle.Empty };
+            yield return new object[] { Rectangle.Empty, new Size(0, 0), BoundsSpecified.Width, new Rectangle(0, 0, 4, 0) };
+            yield return new object[] { Rectangle.Empty, new Size(0, 0), BoundsSpecified.Height, new Rectangle(0, 0, 0, 4) };
+
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.All, new Rectangle(0, 0, 4, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.X, new Rectangle(0, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.Y, new Rectangle(1, 0, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.Width, new Rectangle(1, 2, 4, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.Height, new Rectangle(1, 2, 3, 4) };
+
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.All, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.X, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.Y, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.Width, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.Height, new Rectangle(1, 2, 3, 4) };
+
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.All, new Rectangle(2, 6, 2, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.X, new Rectangle(2, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.Y, new Rectangle(1, 6, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.Width, new Rectangle(1, 2, 2, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.Height, new Rectangle(1, 2, 3, 4) };
+
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.All, new Rectangle(-2, -6, 6, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.X, new Rectangle(-2, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.Y, new Rectangle(1, -6, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.Width, new Rectangle(1, 2, 6, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.Height, new Rectangle(1, 2, 3, 4) };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(GetScaledBounds_WithStyles_TestData))]
+        public void Control_GetScaledBounds_InvokeWithStyles_ReturnsExpected(Rectangle bounds, SizeF factor, BoundsSpecified specified, Rectangle expected)
+        {
+            using var control = new BorderedControl();
+            Assert.Equal(expected, control.GetScaledBounds(bounds, factor, specified));
+            Assert.False(control.IsHandleCreated);
+
+            // Call again.
+            Assert.Equal(expected, control.GetScaledBounds(bounds, factor, specified));
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(GetScaledBounds_TestData))]
+        public void Control_GetScaledBounds_InvokeWithSite_ReturnsExpected(Rectangle bounds, SizeF factor, BoundsSpecified specified, Rectangle expected)
+        {
+            var mockSite = new Mock<ISite>(MockBehavior.Strict);
+            mockSite
+                .Setup(s => s.GetService(typeof(AmbientProperties)))
+                .Returns(new AmbientProperties());
+            mockSite
+                .Setup(s => s.DesignMode)
+                .Returns(false);
+            mockSite
+                .Setup(s => s.Container)
+                .Returns((IContainer)null);
+            using var control = new SubControl
+            {
+                Site = mockSite.Object
+            };
+            Assert.Equal(expected, control.GetScaledBounds(bounds, factor, specified));
+            Assert.False(control.IsHandleCreated);
+
+            // Call again.
+            Assert.Equal(expected, control.GetScaledBounds(bounds, factor, specified));
+            Assert.False(control.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> GetScaledBounds_InvalidDesignModeSite_TestData()
+        {
+            foreach (object[] testData in GetScaledBounds_TestData())
+            {
+                yield return new object[] { testData[0], testData[1], testData[2], testData[3], null };
+                yield return new object[] { testData[0], testData[1], testData[2], testData[3], new object() };
+
+                var mockNullDesignerHost = new Mock<IDesignerHost>(MockBehavior.Strict);
+                mockNullDesignerHost
+                    .Setup(s => s.RootComponent)
+                    .Returns((IComponent)null);
+                yield return new object[] { testData[0], testData[1], testData[2], testData[3], mockNullDesignerHost.Object };
+
+                var mockUnknownDesignerHost = new Mock<IDesignerHost>(MockBehavior.Strict);
+                mockUnknownDesignerHost
+                    .Setup(s => s.RootComponent)
+                    .Returns(new Control());
+                yield return new object[] { testData[0], testData[1], testData[2], testData[3], mockUnknownDesignerHost.Object };
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(GetScaledBounds_InvalidDesignModeSite_TestData))]
+        public void Control_GetScaledBounds_InvokeWithInvalidDesignModeSite_ReturnsExpected(Rectangle bounds, SizeF factor, BoundsSpecified specified, Rectangle expected, object designerHost)
+        {
+            var mockSite = new Mock<ISite>(MockBehavior.Strict);
+            mockSite
+                .Setup(s => s.GetService(typeof(AmbientProperties)))
+                .Returns(new AmbientProperties());
+            mockSite
+                .Setup(s => s.GetService(typeof(IDesignerHost)))
+                .Returns(designerHost)
+                .Verifiable();
+            mockSite
+                .Setup(s => s.DesignMode)
+                .Returns(true);
+            mockSite
+                .Setup(s => s.Container)
+                .Returns((IContainer)null);
+            using var control = new SubControl
+            {
+                Site = mockSite.Object
+            };
+            Assert.Equal(expected, control.GetScaledBounds(bounds, factor, specified));
+            mockSite.Verify(s => s.GetService(typeof(IDesignerHost)), Times.Once());
+            Assert.False(control.IsHandleCreated);
+
+            // Call again.
+            Assert.Equal(expected, control.GetScaledBounds(bounds, factor, specified));
+            mockSite.Verify(s => s.GetService(typeof(IDesignerHost)), Times.Exactly(2));
+            Assert.False(control.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> GetScaledBounds_NoScaleLocation_TestData()
+        {
+            foreach (BoundsSpecified specified in Enum.GetValues(typeof(BoundsSpecified)))
+            {
+                yield return new object[] { Rectangle.Empty, new Size(0, 0), specified, Rectangle.Empty };
+                yield return new object[] { Rectangle.Empty, new Size(1, 1), specified, Rectangle.Empty };
+                yield return new object[] { Rectangle.Empty, new Size(2, 3), specified, Rectangle.Empty };
+                yield return new object[] { Rectangle.Empty, new Size(-2, -3), specified, Rectangle.Empty };
+            }
+
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.All, new Rectangle(1, 2, 0, 0) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.X, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.Y, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.Width, new Rectangle(1, 2, 0, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.Height, new Rectangle(1, 2, 3, 0) };
+
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.All, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.X, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.Y, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.Width, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.Height, new Rectangle(1, 2, 3, 4) };
+
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.All, new Rectangle(1, 2, 6, 12) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.X, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.Y, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.Width, new Rectangle(1, 2, 6, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.Height, new Rectangle(1, 2, 3, 12) };
+
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.All, new Rectangle(1, 2, -6, -12) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.X, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.Y, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.Width, new Rectangle(1, 2, -6, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.Height, new Rectangle(1, 2, 3, -12) };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(GetScaledBounds_NoScaleLocation_TestData))]
+        public void Control_GetScaledBounds_InvokeWithValidDesignModeSite_ReturnsExpected(Rectangle bounds, SizeF factor, BoundsSpecified specified, Rectangle expected)
+        {
+            var mockDesignerHost = new Mock<IDesignerHost>(MockBehavior.Strict);
+            var mockSite = new Mock<ISite>(MockBehavior.Strict);
+            mockSite
+                .Setup(s => s.GetService(typeof(AmbientProperties)))
+                .Returns(new AmbientProperties());
+            mockSite
+                .Setup(s => s.GetService(typeof(IDesignerHost)))
+                .Returns(mockDesignerHost.Object)
+                .Verifiable();
+            mockSite
+                .Setup(s => s.DesignMode)
+                .Returns(true);
+            mockSite
+                .Setup(s => s.Container)
+                .Returns((IContainer)null);
+            using var control = new SubControl
+            {
+                Site = mockSite.Object
+            };
+            mockDesignerHost
+                .Setup(h => h.RootComponent)
+                .Returns(control)
+                .Verifiable();
+            Assert.Equal(expected, control.GetScaledBounds(bounds, factor, specified));
+            mockSite.Verify(s => s.GetService(typeof(IDesignerHost)), Times.Once());
+            mockDesignerHost.Verify(h => h.RootComponent, Times.Once());
+            Assert.False(control.IsHandleCreated);
+
+            // Call again.
+            Assert.Equal(expected, control.GetScaledBounds(bounds, factor, specified));
+            mockSite.Verify(s => s.GetService(typeof(IDesignerHost)), Times.Exactly(2));
+            mockDesignerHost.Verify(h => h.RootComponent, Times.Exactly(2));
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(GetScaledBounds_NoScaleLocation_TestData))]
+        public void Control_GetScaledBounds_InvokeTopLevel_ReturnsExpected(Rectangle bounds, SizeF factor, BoundsSpecified specified, Rectangle expected)
+        {
+            using var control = new SubControl();
+            control.SetTopLevel(true);
+
+            Assert.Equal(expected, control.GetScaledBounds(bounds, factor, specified));
+            Assert.True(control.IsHandleCreated);
+
+            // Call again.
+            Assert.Equal(expected, control.GetScaledBounds(bounds, factor, specified));
+            Assert.True(control.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> GetScaledBounds_FixedWidth_TestData()
+        {
+            foreach (BoundsSpecified specified in Enum.GetValues(typeof(BoundsSpecified)))
+            {
+                yield return new object[] { Rectangle.Empty, new Size(0, 0), specified, Rectangle.Empty };
+                yield return new object[] { Rectangle.Empty, new Size(1, 1), specified, Rectangle.Empty };
+                yield return new object[] { Rectangle.Empty, new Size(2, 3), specified, Rectangle.Empty };
+                yield return new object[] { Rectangle.Empty, new Size(-2, -3), specified, Rectangle.Empty };
+            }
+
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.All, new Rectangle(0, 0, 3, 0) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.X, new Rectangle(0, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.Y, new Rectangle(1, 0, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.Width, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.Height, new Rectangle(1, 2, 3, 0) };
+
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.All, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.X, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.Y, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.Width, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.Height, new Rectangle(1, 2, 3, 4) };
+
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.All, new Rectangle(2, 6, 3, 12) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.X, new Rectangle(2, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.Y, new Rectangle(1, 6, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.Width, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.Height, new Rectangle(1, 2, 3, 12) };
+
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.All, new Rectangle(-2, -6, 3, -12) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.X, new Rectangle(-2, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.Y, new Rectangle(1, -6, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.Width, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.Height, new Rectangle(1, 2, 3, -12) };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(GetScaledBounds_FixedWidth_TestData))]
+        public void Control_GetScaledBounds_InvokeFixedWidth_ReturnsExpected(Rectangle bounds, SizeF factor, BoundsSpecified specified, Rectangle expected)
+        {
+            using var control = new SubControl();
+            control.SetStyle(ControlStyles.FixedWidth, true);
+
+            Assert.Equal(expected, control.GetScaledBounds(bounds, factor, specified));
+            Assert.False(control.IsHandleCreated);
+
+            // Call again.
+            Assert.Equal(expected, control.GetScaledBounds(bounds, factor, specified));
+            Assert.False(control.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> GetScaledBounds_FixedHeight_TestData()
+        {
+            foreach (BoundsSpecified specified in Enum.GetValues(typeof(BoundsSpecified)))
+            {
+                yield return new object[] { Rectangle.Empty, new Size(0, 0), specified, Rectangle.Empty };
+                yield return new object[] { Rectangle.Empty, new Size(1, 1), specified, Rectangle.Empty };
+                yield return new object[] { Rectangle.Empty, new Size(2, 3), specified, Rectangle.Empty };
+                yield return new object[] { Rectangle.Empty, new Size(-2, -3), specified, Rectangle.Empty };
+            }
+
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.All, new Rectangle(0, 0, 0, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.X, new Rectangle(0, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.Y, new Rectangle(1, 0, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.Width, new Rectangle(1, 2, 0, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.Height, new Rectangle(1, 2, 3, 4) };
+
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.All, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.X, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.Y, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.Width, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.Height, new Rectangle(1, 2, 3, 4) };
+
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.All, new Rectangle(2, 6, 6, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.X, new Rectangle(2, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.Y, new Rectangle(1, 6, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.Width, new Rectangle(1, 2, 6, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.Height, new Rectangle(1, 2, 3, 4) };
+
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.All, new Rectangle(-2, -6, -6, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.X, new Rectangle(-2, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.Y, new Rectangle(1, -6, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.Width, new Rectangle(1, 2, -6, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.Height, new Rectangle(1, 2, 3, 4) };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(GetScaledBounds_FixedHeight_TestData))]
+        public void Control_GetScaledBounds_InvokeFixedHeight_ReturnsExpected(Rectangle bounds, SizeF factor, BoundsSpecified specified, Rectangle expected)
+        {
+            using var control = new SubControl();
+            control.SetStyle(ControlStyles.FixedHeight, true);
+
+            Assert.Equal(expected, control.GetScaledBounds(bounds, factor, specified));
+            Assert.False(control.IsHandleCreated);
+
+            // Call again.
+            Assert.Equal(expected, control.GetScaledBounds(bounds, factor, specified));
+            Assert.False(control.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> GetScaledBounds_FixedWidthAndHeight_TestData()
+        {
+            foreach (BoundsSpecified specified in Enum.GetValues(typeof(BoundsSpecified)))
+            {
+                yield return new object[] { Rectangle.Empty, new Size(0, 0), specified, Rectangle.Empty };
+                yield return new object[] { Rectangle.Empty, new Size(1, 1), specified, Rectangle.Empty };
+                yield return new object[] { Rectangle.Empty, new Size(2, 3), specified, Rectangle.Empty };
+                yield return new object[] { Rectangle.Empty, new Size(-2, -3), specified, Rectangle.Empty };
+            }
+
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.All, new Rectangle(0, 0, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.X, new Rectangle(0, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.Y, new Rectangle(1, 0, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.Width, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.Height, new Rectangle(1, 2, 3, 4) };
+
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.All, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.X, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.Y, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.Width, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.Height, new Rectangle(1, 2, 3, 4) };
+
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.All, new Rectangle(2, 6, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.X, new Rectangle(2, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.Y, new Rectangle(1, 6, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.Width, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.Height, new Rectangle(1, 2, 3, 4) };
+
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.All, new Rectangle(-2, -6, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.X, new Rectangle(-2, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.Y, new Rectangle(1, -6, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.Width, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.Height, new Rectangle(1, 2, 3, 4) };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(GetScaledBounds_FixedWidthAndHeight_TestData))]
+        public void Control_GetScaledBounds_InvokeFixedWidthAndHeight_ReturnsExpected(Rectangle bounds, SizeF factor, BoundsSpecified specified, Rectangle expected)
+        {
+            using var control = new SubControl();
+            control.SetStyle(ControlStyles.FixedWidth, true);
+            control.SetStyle(ControlStyles.FixedHeight, true);
+
+            Assert.Equal(expected, control.GetScaledBounds(bounds, factor, specified));
+            Assert.False(control.IsHandleCreated);
+
+            // Call again.
+            Assert.Equal(expected, control.GetScaledBounds(bounds, factor, specified));
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(GetScaledBounds_FixedWidthAndHeight_TestData))]
+        public void Control_GetScaledBounds_InvokeFixedWidthAndHeightWithStyles_ReturnsExpected(Rectangle bounds, SizeF factor, BoundsSpecified specified, Rectangle expected)
+        {
+            using var control = new BorderedControl();
+            control.SetStyle(ControlStyles.FixedWidth, true);
+            control.SetStyle(ControlStyles.FixedHeight, true);
+
+            Assert.Equal(expected, control.GetScaledBounds(bounds, factor, specified));
+            Assert.False(control.IsHandleCreated);
+
+            // Call again.
+            Assert.Equal(expected, control.GetScaledBounds(bounds, factor, specified));
             Assert.False(control.IsHandleCreated);
         }
 
@@ -9462,7 +9892,11 @@ namespace System.Windows.Forms.Tests
                 }
             }
 
+            public new Rectangle GetScaledBounds(Rectangle bounds, SizeF factor, BoundsSpecified specified) => base.GetScaledBounds(bounds, factor, specified);
+
             public new void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified) => base.SetBoundsCore(x, y, width, height, specified);            public new void SetClientSizeCore(int width, int height) => base.SetClientSizeCore(width, height);
+
+            public new void SetStyle(ControlStyles flag, bool value) => base.SetStyle(flag, value);
 
             public new Size SizeFromClientSize(Size clientSize) => base.SizeFromClientSize(clientSize);
 
