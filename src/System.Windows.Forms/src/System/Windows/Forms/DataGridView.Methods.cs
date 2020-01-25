@@ -25615,7 +25615,8 @@ namespace System.Windows.Forms
                 for (int r = 0; r < rects.Length; r++)
                 {
                     scroll = rects[r];
-                    SafeNativeMethods.ScrollWindow(new HandleRef(this, Handle),
+                    User32.ScrollWindow(
+                        this,
                         change,
                         0,
                         ref scroll,
@@ -25726,7 +25727,7 @@ namespace System.Windows.Forms
             UpdateMouseEnteredCell(null /*HitTestInfo*/, null /*MouseEventArgs*/);
 
             RECT scrollArea = rowsRect;
-            SafeNativeMethods.ScrollWindow(new HandleRef(this, Handle), 0, deltaY, ref scrollArea, ref scrollArea);
+            User32.ScrollWindow(this, 0, deltaY, ref scrollArea, ref scrollArea);
             if (invalidateTopOfRowHeaders)
             {
                 rowsRect.X = layout.Inside.X;
