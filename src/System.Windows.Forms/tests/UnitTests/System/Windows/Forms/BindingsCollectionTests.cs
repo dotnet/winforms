@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -15,7 +15,7 @@ namespace System.Windows.Forms.Tests
         public void Ctor_Default()
         {
             var collection = new SubBindingsCollection();
-            Assert.Equal(0, collection.Count);
+            Assert.Empty(collection);
             Assert.Empty(collection.List);
             Assert.False(collection.ShouldSerializeMyAll());
         }
@@ -27,7 +27,7 @@ namespace System.Windows.Forms.Tests
             var binding = new Binding(null, new object(), "member");
             collection.Add(binding);
 
-            Assert.Equal(1, collection.Count);
+            Assert.Single(collection);
             Assert.Same(binding, collection[0]);
             Assert.True(collection.ShouldSerializeMyAll());
         }
@@ -62,7 +62,7 @@ namespace System.Windows.Forms.Tests
             collection.Add(binding);
             Assert.Equal(1, changingCallCount);
             Assert.Equal(1, changedCallCount);
-            Assert.Equal(1, collection.Count);
+            Assert.Single(collection);
 
             // Add again.
             collection.Add(binding);
@@ -93,7 +93,7 @@ namespace System.Windows.Forms.Tests
             var binding = new Binding(null, new object(), "member");
             collection.AddCore(binding);
 
-            Assert.Equal(1, collection.Count);
+            Assert.Single(collection);
             Assert.Same(binding, collection[0]);
             Assert.True(collection.ShouldSerializeMyAll());
         }
@@ -128,7 +128,7 @@ namespace System.Windows.Forms.Tests
             collection.AddCore(binding);
             Assert.Equal(0, changingCallCount);
             Assert.Equal(0, changedCallCount);
-            Assert.Equal(1, collection.Count);
+            Assert.Single(collection);
 
             // Add again.
             collection.AddCore(binding);

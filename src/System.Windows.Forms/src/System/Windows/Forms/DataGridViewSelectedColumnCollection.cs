@@ -5,12 +5,14 @@
 #nullable disable
 
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 
 namespace System.Windows.Forms
 {
     [ListBindable(false)]
-    public class DataGridViewSelectedColumnCollection : BaseCollection, IList
+    public class DataGridViewSelectedColumnCollection : BaseCollection, IList, IList<DataGridViewColumn>
     {
         readonly ArrayList items = new ArrayList();
 
@@ -19,7 +21,17 @@ namespace System.Windows.Forms
             throw new NotSupportedException(SR.DataGridView_ReadOnlyCollection);
         }
 
+        void ICollection<DataGridViewColumn>.Add(DataGridViewColumn item)
+        {
+            throw new NotSupportedException(SR.DataGridView_ReadOnlyCollection);
+        }
+
         void IList.Clear()
+        {
+            throw new NotSupportedException(SR.DataGridView_ReadOnlyCollection);
+        }
+
+        void ICollection<DataGridViewColumn>.Clear()
         {
             throw new NotSupportedException(SR.DataGridView_ReadOnlyCollection);
         }
@@ -34,7 +46,17 @@ namespace System.Windows.Forms
             return items.IndexOf(value);
         }
 
+        int IList<DataGridViewColumn>.IndexOf(DataGridViewColumn value)
+        {
+            return items.IndexOf(value);
+        }
+
         void IList.Insert(int index, object value)
+        {
+            throw new NotSupportedException(SR.DataGridView_ReadOnlyCollection);
+        }
+
+        void IList<DataGridViewColumn>.Insert(int index, DataGridViewColumn value)
         {
             throw new NotSupportedException(SR.DataGridView_ReadOnlyCollection);
         }
@@ -44,7 +66,17 @@ namespace System.Windows.Forms
             throw new NotSupportedException(SR.DataGridView_ReadOnlyCollection);
         }
 
+        bool ICollection<DataGridViewColumn>.Remove(DataGridViewColumn value)
+        {
+            throw new NotSupportedException(SR.DataGridView_ReadOnlyCollection);
+        }
+
         void IList.RemoveAt(int index)
+        {
+            throw new NotSupportedException(SR.DataGridView_ReadOnlyCollection);
+        }
+
+        void IList<DataGridViewColumn>.RemoveAt(int index)
         {
             throw new NotSupportedException(SR.DataGridView_ReadOnlyCollection);
         }
@@ -62,6 +94,12 @@ namespace System.Windows.Forms
         object IList.this[int index]
         {
             get { return items[index]; }
+            set { throw new NotSupportedException(SR.DataGridView_ReadOnlyCollection); }
+        }
+
+        DataGridViewColumn IList<DataGridViewColumn>.this[int index]
+        {
+            get { return this[index]; }
             set { throw new NotSupportedException(SR.DataGridView_ReadOnlyCollection); }
         }
 
@@ -88,6 +126,11 @@ namespace System.Windows.Forms
         IEnumerator IEnumerable.GetEnumerator()
         {
             return items.GetEnumerator();
+        }
+
+        IEnumerator<DataGridViewColumn> IEnumerable<DataGridViewColumn>.GetEnumerator()
+        {
+            return items.Cast<DataGridViewColumn>().GetEnumerator();
         }
 
         internal DataGridViewSelectedColumnCollection()

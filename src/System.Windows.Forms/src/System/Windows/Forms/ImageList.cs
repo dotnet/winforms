@@ -5,6 +5,7 @@
 #nullable disable
 
 using System.Collections;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
@@ -1053,7 +1054,7 @@ namespace System.Windows.Forms
 
         // Everything other than set_All, Add, and Clear will force handle creation.
         [Editor("System.Windows.Forms.Design.ImageCollectionEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
-        public sealed class ImageCollection : IList
+        public sealed class ImageCollection : IList, IList<Image>
         {
             private readonly ImageList owner;
             private readonly ArrayList imageInfoCollection = new ArrayList();
@@ -1614,12 +1615,19 @@ namespace System.Windows.Forms
                 throw new NotSupportedException();
             }
 
+            void IList<Image>.Insert(int index, Image value) => throw new NotSupportedException();
+
             /// <summary>
             ///  Determines if the index is valid for the collection.
             /// </summary>
             private bool IsValidIndex(int index)
             {
                 return ((index >= 0) && (index < Count));
+            }
+
+            void ICollection<Image>.CopyTo(Image[] dest, int index)
+            {
+                ((ICollection)this).CopyTo(dest, index);
             }
 
             void ICollection.CopyTo(Array dest, int index)
@@ -1631,7 +1639,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            public IEnumerator GetEnumerator()
+            public IEnumerator<Image> GetEnumerator()
             {
                 // Forces handle creation
 
@@ -1642,11 +1650,18 @@ namespace System.Windows.Forms
                     images[i] = owner.GetBitmap(i);
                 }
 
-                return images.GetEnumerator();
+                return WindowsFormsUtils.GetArrayEnumerator(images);
             }
+
+            IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
             [EditorBrowsable(EditorBrowsableState.Never)]
             public void Remove(Image image)
+            {
+                throw new NotSupportedException();
+            }
+
+            bool ICollection<Image>.Remove(Image image)
             {
                 throw new NotSupportedException();
             }

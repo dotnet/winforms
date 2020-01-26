@@ -20,7 +20,7 @@ namespace System.Windows.Forms
     [ListBindable(false)]
     [DesignerSerializer("System.Windows.Forms.Design.DataGridViewRowCollectionCodeDomSerializer, " + AssemblyRef.SystemDesign,
                         "System.ComponentModel.Design.Serialization.CodeDomSerializer, " + AssemblyRef.SystemDesign)]
-    public class DataGridViewRowCollection : ICollection, IList
+    public class DataGridViewRowCollection : ICollection, IList, IList<DataGridViewRow>
     {
 #if DEBUG
         // set to false when the cached row heights are dirty and should not be accessed.
@@ -43,6 +43,8 @@ namespace System.Windows.Forms
         {
             return Add((DataGridViewRow)value);
         }
+
+        void ICollection<DataGridViewRow>.Add(DataGridViewRow value) => Add(value);
 
         void IList.Clear()
         {
@@ -69,6 +71,14 @@ namespace System.Windows.Forms
             Remove((DataGridViewRow)value);
         }
 
+        bool ICollection<DataGridViewRow>.Remove(DataGridViewRow value)
+        {
+            var wasContained = Contains(value);
+            Remove(value);
+            var isContained = Contains(value);
+            return wasContained && !isContained;
+        }
+
         void IList.RemoveAt(int index)
         {
             RemoveAt(index);
@@ -90,7 +100,21 @@ namespace System.Windows.Forms
             }
         }
 
+        bool ICollection<DataGridViewRow>.IsReadOnly => false;
+
         object IList.this[int index]
+        {
+            get
+            {
+                return this[index];
+            }
+            set
+            {
+                throw new NotSupportedException();
+            }
+        }
+
+        DataGridViewRow IList<DataGridViewRow>.this[int index]
         {
             get
             {
@@ -136,6 +160,11 @@ namespace System.Windows.Forms
         /* IEnumerator interface implementation */
 
         IEnumerator IEnumerable.GetEnumerator()
+        {
+            return new UnsharingRowEnumerator(this);
+        }
+
+        IEnumerator<DataGridViewRow> IEnumerable<DataGridViewRow>.GetEnumerator()
         {
             return new UnsharingRowEnumerator(this);
         }
@@ -2715,7 +2744,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private class UnsharingRowEnumerator : IEnumerator
+        private class UnsharingRowEnumerator : IEnumerator<DataGridViewRow>
         {
             private readonly DataGridViewRowCollection owner;
             private int current;
@@ -2728,6 +2757,8 @@ namespace System.Windows.Forms
                 this.owner = owner;
                 current = -1;
             }
+
+            void IDisposable.Dispose() { }
 
             /// <summary>
             ///  Moves to the next element, or returns false if at the end.
@@ -2757,7 +2788,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Retrieves the current value in the enumerator.
             /// </summary>
-            object IEnumerator.Current
+            private DataGridViewRow Current
             {
                 get
                 {
@@ -2772,6 +2803,10 @@ namespace System.Windows.Forms
                     return owner[current];
                 }
             }
+
+            DataGridViewRow IEnumerator<DataGridViewRow>.Current => Current;
+
+            object IEnumerator.Current => Current;
         }
     }
 }

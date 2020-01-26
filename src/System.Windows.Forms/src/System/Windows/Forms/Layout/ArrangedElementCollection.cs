@@ -159,6 +159,8 @@ namespace System.Windows.Forms.Layout
 
         bool ICollection.IsSynchronized => InnerList.IsSynchronized;
 
-        public virtual IEnumerator GetEnumerator() => InnerList.GetEnumerator();
+        public virtual IEnumerator GetEnumerator() => GetEnumeratorCore();
+
+        protected virtual IEnumerator GetEnumeratorCore() => InnerList.GetEnumerator();
     }
 }

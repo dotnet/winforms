@@ -5,6 +5,7 @@
 #nullable disable
 
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
@@ -4081,7 +4082,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private sealed class ItemComparer : IComparer
+        private sealed class ItemComparer : IComparer, IComparer<object>
         {
             private readonly ComboBox comboBox;
 
@@ -4115,18 +4116,18 @@ namespace System.Windows.Forms
         }
 
         [ListBindable(false)]
-        public class ObjectCollection : IList
+        public class ObjectCollection : IList, IList<object>
         {
             private readonly ComboBox owner;
-            private ArrayList innerList;
-            private IComparer comparer;
+            private List<object> innerList;
+            private ItemComparer comparer;
 
             public ObjectCollection(ComboBox owner)
             {
                 this.owner = owner;
             }
 
-            private IComparer Comparer
+            private ItemComparer Comparer
             {
                 get
                 {
@@ -4138,13 +4139,13 @@ namespace System.Windows.Forms
                 }
             }
 
-            private ArrayList InnerList
+            private List<object> InnerList
             {
                 get
                 {
                     if (innerList == null)
                     {
-                        innerList = new ArrayList();
+                        innerList = new List<object>();
                     }
                     return innerList;
                 }
@@ -4212,6 +4213,8 @@ namespace System.Windows.Forms
                 }
                 return index;
             }
+
+            void ICollection<object>.Add(object item) => Add(item);
 
             private int AddInternal(object item)
             {
@@ -4367,13 +4370,15 @@ namespace System.Windows.Forms
 
             void ICollection.CopyTo(Array destination, int index)
             {
-                InnerList.CopyTo(destination, index);
+                ((ICollection)InnerList).CopyTo(destination, index);
             }
+
+            IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
             /// <summary>
             ///  Returns an enumerator for the ComboBox Items collection.
             /// </summary>
-            public IEnumerator GetEnumerator()
+            public IEnumerator<object> GetEnumerator()
             {
                 return InnerList.GetEnumerator();
             }
@@ -4482,12 +4487,22 @@ namespace System.Windows.Forms
             /// </summary>
             public void Remove(object value)
             {
-                int index = InnerList.IndexOf(value);
+                TryRemove(value);
+            }
 
-                if (index != -1)
-                {
-                    RemoveAt(index);
-                }
+            bool ICollection<object>.Remove(object value)
+            {
+                return TryRemove(value);
+            }
+
+            private bool TryRemove(object value)
+            {
+                int index = InnerList.IndexOf(value);
+                if (index < 0)
+                    return false;
+
+                RemoveAt(index);
+                return true;
             }
 
             internal void SetItemInternal(int index, object value)

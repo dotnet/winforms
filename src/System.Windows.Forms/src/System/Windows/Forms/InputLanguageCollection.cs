@@ -5,13 +5,15 @@
 #nullable disable
 
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace System.Windows.Forms
 {
     /// <summary>
     ///  A collection that stores <see cref='InputLanguage'/> objects.
     /// </summary>
-    public class InputLanguageCollection : ReadOnlyCollectionBase
+    public class InputLanguageCollection : ReadOnlyCollectionBase, IReadOnlyList<InputLanguage>
     {
         /// <summary>
         ///  Initializes a new instance of <see cref='InputLanguageCollection'/> containing any array of <see cref='InputLanguage'/> objects.
@@ -58,5 +60,7 @@ namespace System.Windows.Forms
         {
             return InnerList.IndexOf(value);
         }
+
+        public new IEnumerator<InputLanguage> GetEnumerator() => InnerList.Cast<InputLanguage>().GetEnumerator();
     }
 }

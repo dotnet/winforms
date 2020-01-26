@@ -5,6 +5,7 @@
 #nullable disable
 
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
@@ -1093,7 +1094,7 @@ namespace System.Windows.Forms
             }
         }
 
-        public class CheckedIndexCollection : IList
+        public class CheckedIndexCollection : IList, IList<int>
         {
             private readonly CheckedListBox owner;
 
@@ -1171,7 +1172,23 @@ namespace System.Windows.Forms
                 }
             }
 
+            int IList<int>.this[int index]
+            {
+                get => this[index];
+                set => throw new NotSupportedException(SR.CheckedListBoxCheckedIndexCollectionIsReadOnly);
+            }
+
+            void ICollection<int>.Add(int value)
+            {
+                throw new NotSupportedException(SR.CheckedListBoxCheckedIndexCollectionIsReadOnly);
+            }
+
             int IList.Add(object value)
+            {
+                throw new NotSupportedException(SR.CheckedListBoxCheckedIndexCollectionIsReadOnly);
+            }
+
+            void ICollection<int>.Clear()
             {
                 throw new NotSupportedException(SR.CheckedListBoxCheckedIndexCollectionIsReadOnly);
             }
@@ -1181,12 +1198,27 @@ namespace System.Windows.Forms
                 throw new NotSupportedException(SR.CheckedListBoxCheckedIndexCollectionIsReadOnly);
             }
 
+            void IList<int>.Insert(int index, int value)
+            {
+                throw new NotSupportedException(SR.CheckedListBoxCheckedIndexCollectionIsReadOnly);
+            }
+
             void IList.Insert(int index, object value)
             {
                 throw new NotSupportedException(SR.CheckedListBoxCheckedIndexCollectionIsReadOnly);
             }
 
+            bool ICollection<int>.Remove(int value)
+            {
+                throw new NotSupportedException(SR.CheckedListBoxCheckedIndexCollectionIsReadOnly);
+            }
+
             void IList.Remove(object value)
+            {
+                throw new NotSupportedException(SR.CheckedListBoxCheckedIndexCollectionIsReadOnly);
+            }
+
+            void IList<int>.RemoveAt(int index)
             {
                 throw new NotSupportedException(SR.CheckedListBoxCheckedIndexCollectionIsReadOnly);
             }
@@ -1222,6 +1254,8 @@ namespace System.Windows.Forms
                 }
             }
 
+            void ICollection<int>.CopyTo(int[] array, int index) => CopyTo(array, index);
+
             /// <summary>
             ///  This is the item array that stores our data.  We share this backing store
             ///  with the main object collection.
@@ -1234,11 +1268,13 @@ namespace System.Windows.Forms
                 }
             }
 
-            public IEnumerator GetEnumerator()
+            IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+            public IEnumerator<int> GetEnumerator()
             {
                 int[] indices = new int[Count];
                 CopyTo(indices, 0);
-                return indices.GetEnumerator();
+                return WindowsFormsUtils.GetArrayEnumerator(indices);
             }
 
             public int IndexOf(int index)
@@ -1264,7 +1300,7 @@ namespace System.Windows.Forms
             }
         }
 
-        public class CheckedItemCollection : IList
+        public class CheckedItemCollection : IList, IList<object>
         {
             internal static int CheckedItemMask = ItemArray.CreateMask();
             internal static int IndeterminateItemMask = ItemArray.CreateMask();
@@ -1364,7 +1400,17 @@ namespace System.Windows.Forms
                 return InnerArray.IndexOfIdentifier(item, AnyMask);
             }
 
+            void ICollection<object>.Add(object value)
+            {
+                throw new NotSupportedException(SR.CheckedListBoxCheckedItemCollectionIsReadOnly);
+            }
+
             int IList.Add(object value)
+            {
+                throw new NotSupportedException(SR.CheckedListBoxCheckedItemCollectionIsReadOnly);
+            }
+
+            void ICollection<object>.Clear()
             {
                 throw new NotSupportedException(SR.CheckedListBoxCheckedItemCollectionIsReadOnly);
             }
@@ -1374,12 +1420,27 @@ namespace System.Windows.Forms
                 throw new NotSupportedException(SR.CheckedListBoxCheckedItemCollectionIsReadOnly);
             }
 
+            void IList<object>.Insert(int index, object value)
+            {
+                throw new NotSupportedException(SR.CheckedListBoxCheckedItemCollectionIsReadOnly);
+            }
+
             void IList.Insert(int index, object value)
             {
                 throw new NotSupportedException(SR.CheckedListBoxCheckedItemCollectionIsReadOnly);
             }
 
+            bool ICollection<object>.Remove(object value)
+            {
+                throw new NotSupportedException(SR.CheckedListBoxCheckedItemCollectionIsReadOnly);
+            }
+
             void IList.Remove(object value)
+            {
+                throw new NotSupportedException(SR.CheckedListBoxCheckedItemCollectionIsReadOnly);
+            }
+
+            void IList<object>.RemoveAt(int index)
             {
                 throw new NotSupportedException(SR.CheckedListBoxCheckedItemCollectionIsReadOnly);
             }
@@ -1397,6 +1458,8 @@ namespace System.Windows.Forms
                     dest.SetValue(InnerArray.GetItem(i, AnyMask), i + index);
                 }
             }
+
+            void ICollection<object>.CopyTo(object[] dest, int index) => CopyTo(dest, index);
 
             /// <summary>
             ///  This method returns if the actual item index is checked.  The index is the index to the MAIN
@@ -1419,7 +1482,9 @@ namespace System.Windows.Forms
                 return CheckState.Unchecked;
             }
 
-            public IEnumerator GetEnumerator()
+            IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+            public IEnumerator<object> GetEnumerator()
             {
                 return InnerArray.GetEnumerator(AnyMask, true);
             }

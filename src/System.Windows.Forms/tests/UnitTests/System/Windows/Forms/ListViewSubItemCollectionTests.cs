@@ -453,6 +453,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
+        [Diagnostics.CodeAnalysis.SuppressMessage("Assertions", "xUnit2017:Do not use Contains() to check if a value exists in a collection", Justification = "We are testing the Contains method itself")]
         public void ListViewSubItemCollection_Contains_Invoke_ReturnsExpected()
         {
             var item = new ListViewItem();
@@ -466,6 +467,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
+        [Diagnostics.CodeAnalysis.SuppressMessage("Assertions", "xUnit2017:Do not use Contains() to check if a value exists in a collection", Justification = "We are testing the Contains method itself")]
         public void ListViewSubItemCollection_Contains_Empty_ReturnsFalse()
         {
             var item = new ListViewItem();

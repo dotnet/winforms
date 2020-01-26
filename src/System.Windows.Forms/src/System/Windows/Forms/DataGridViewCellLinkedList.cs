@@ -6,19 +6,25 @@
 
 using System.Diagnostics;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace System.Windows.Forms
 {
     /// <summary>
     ///  Represents a linked list of <see cref='DataGridViewCell'/> objects
     /// </summary>
-    internal class DataGridViewCellLinkedList : IEnumerable
+    internal class DataGridViewCellLinkedList : IReadOnlyList<DataGridViewCell>
     {
         private DataGridViewCellLinkedListElement lastAccessedElement;
         private DataGridViewCellLinkedListElement headElement;
         private int count, lastAccessedIndex;
 
         IEnumerator IEnumerable.GetEnumerator()
+        {
+            return new DataGridViewCellLinkedListEnumerator(headElement);
+        }
+
+        IEnumerator<DataGridViewCell> IEnumerable<DataGridViewCell>.GetEnumerator()
         {
             return new DataGridViewCellLinkedListEnumerator(headElement);
         }
@@ -189,7 +195,7 @@ namespace System.Windows.Forms
     /// <summary>
     ///  Represents an emunerator of elements in a <see cref='DataGridViewCellLinkedList'/>  linked list.
     /// </summary>
-    internal class DataGridViewCellLinkedListEnumerator : IEnumerator
+    internal class DataGridViewCellLinkedListEnumerator : IEnumerator<DataGridViewCell>
     {
         private readonly DataGridViewCellLinkedListElement headElement;
         private DataGridViewCellLinkedListElement current;
@@ -201,7 +207,13 @@ namespace System.Windows.Forms
             reset = true;
         }
 
-        object IEnumerator.Current
+        void IDisposable.Dispose() { }
+
+        object IEnumerator.Current => Current;
+
+        DataGridViewCell IEnumerator<DataGridViewCell>.Current => Current;
+
+        private DataGridViewCell Current
         {
             get
             {

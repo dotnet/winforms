@@ -1663,7 +1663,7 @@ namespace System.Windows.Forms.Tests
 
             // Set different.
             row.Selected = false;
-            Assert.False((dataGridView.SelectedRows).Contains(row));
+            Assert.DoesNotContain(row, dataGridView.SelectedRows);
             Assert.False(row.Selected);
         }
 

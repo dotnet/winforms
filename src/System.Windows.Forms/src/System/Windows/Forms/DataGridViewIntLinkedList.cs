@@ -5,6 +5,7 @@
 #nullable disable
 
 using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace System.Windows.Forms
@@ -12,13 +13,18 @@ namespace System.Windows.Forms
     /// <summary>
     ///  Represents a linked list of integers
     /// </summary>
-    internal class DataGridViewIntLinkedList : IEnumerable
+    internal class DataGridViewIntLinkedList : IReadOnlyList<int>
     {
         private DataGridViewIntLinkedListElement lastAccessedElement;
         private DataGridViewIntLinkedListElement headElement;
         private int count, lastAccessedIndex;
 
         IEnumerator IEnumerable.GetEnumerator()
+        {
+            return new DataGridViewIntLinkedListEnumerator(headElement);
+        }
+
+        IEnumerator<int> IEnumerable<int>.GetEnumerator()
         {
             return new DataGridViewIntLinkedListEnumerator(headElement);
         }
@@ -205,7 +211,7 @@ namespace System.Windows.Forms
     /// <summary>
     ///  Represents an emunerator of elements in a <see cref='DataGridViewIntLinkedList'/>  linked list.
     /// </summary>
-    internal class DataGridViewIntLinkedListEnumerator : IEnumerator
+    internal class DataGridViewIntLinkedListEnumerator : IEnumerator<int>
     {
         private readonly DataGridViewIntLinkedListElement headElement;
         private DataGridViewIntLinkedListElement current;
@@ -217,7 +223,13 @@ namespace System.Windows.Forms
             reset = true;
         }
 
-        object IEnumerator.Current
+        void IDisposable.Dispose() { }
+
+        object IEnumerator.Current => Current;
+
+        int IEnumerator<int>.Current => Current;
+
+        private int Current
         {
             get
             {

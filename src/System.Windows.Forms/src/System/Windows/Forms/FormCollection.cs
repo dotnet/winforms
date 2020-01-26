@@ -5,6 +5,8 @@
 #nullable disable
 
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace System.Windows.Forms
 {
@@ -12,7 +14,7 @@ namespace System.Windows.Forms
     ///  This is a read only collection of Forms exposed as a static property of the
     ///  Application class. This is used to store all the currently loaded forms in an app.
     /// </summary>
-    public class FormCollection : ReadOnlyCollectionBase
+    public class FormCollection : ReadOnlyCollectionBase, IReadOnlyList<Form>
     {
         internal static object CollectionSyncRoot = new object();
 
@@ -92,5 +94,7 @@ namespace System.Windows.Forms
                 InnerList.Remove(form);
             }
         }
+
+        public new IEnumerator<Form> GetEnumerator() => InnerList.Cast<Form>().GetEnumerator();
     }
 }

@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -1457,6 +1457,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
+        [Diagnostics.CodeAnalysis.SuppressMessage("Assertions", "xUnit2017:Do not use Contains() to check if a value exists in a collection", Justification = "We are testing the Contains method itself")]
         public void TabPageCollection_Contains_Invoke_ReturnsExpected()
         {
             using var owner = new TabControl();
@@ -1472,6 +1473,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
+        [Diagnostics.CodeAnalysis.SuppressMessage("Assertions", "xUnit2017:Do not use Contains() to check if a value exists in a collection", Justification = "We are testing the Contains method itself")]
         public void TabPageCollection_Contains_InvokeEmpty_ReturnsExpected()
         {
             using var owner = new TabControl();

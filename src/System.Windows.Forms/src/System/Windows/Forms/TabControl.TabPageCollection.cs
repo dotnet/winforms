@@ -1,17 +1,19 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
 #nullable disable
 
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 
 namespace System.Windows.Forms
 {
     public partial class TabControl
     {
-        public class TabPageCollection : IList
+        public class TabPageCollection : IList, IList<TabPage>
         {
             private readonly TabControl _owner;
 
@@ -330,6 +332,9 @@ namespace System.Windows.Forms
             }
 
             public virtual void Clear() => _owner.RemoveAll();
+
+            void ICollection<TabPage>.CopyTo(TabPage[] dest, int index) => ((ICollection)this).CopyTo(dest, index);
+
             void ICollection.CopyTo(Array dest, int index)
             {
                 if (Count > 0)
@@ -338,25 +343,31 @@ namespace System.Windows.Forms
                 }
             }
 
-            public IEnumerator GetEnumerator()
+            public IEnumerator<TabPage> GetEnumerator()
             {
                 TabPage[] tabPages = _owner.GetTabPages();
                 if (tabPages == null)
                 {
-                    return Array.Empty<TabPage>().GetEnumerator();
+                    return Enumerable.Empty<TabPage>().GetEnumerator();
                 }
 
-                return tabPages.GetEnumerator();
+                return WindowsFormsUtils.GetArrayEnumerator(tabPages);
             }
 
-            public void Remove(TabPage value)
+            IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+            public void Remove(TabPage value) => TryRemove(value);
+
+            bool ICollection<TabPage>.Remove(TabPage value) => TryRemove(value);
+
+            private bool TryRemove(TabPage value)
             {
                 if (value == null)
                 {
                     throw new ArgumentNullException(nameof(value));
                 }
 
-                _owner.Controls.Remove(value);
+                return ((ICollection<Control>)_owner.Controls).Remove(value);
             }
 
             void IList.Remove(object value)

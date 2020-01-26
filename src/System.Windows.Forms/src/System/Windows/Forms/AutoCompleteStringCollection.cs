@@ -5,14 +5,16 @@
 #nullable disable
 
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 
 namespace System.Windows.Forms
 {
     /// <summary>
     ///  Represents a collection of strings.
     /// </summary>
-    public class AutoCompleteStringCollection : IList
+    public class AutoCompleteStringCollection : IList, IList<string>
     {
         CollectionChangeEventHandler onCollectionChanged;
         private readonly ArrayList data = new ArrayList();
@@ -87,6 +89,8 @@ namespace System.Windows.Forms
             OnCollectionChanged(new CollectionChangeEventArgs(CollectionChangeAction.Add, value));
             return index;
         }
+
+        void ICollection<string>.Add(string value) => Add(value);
 
         /// <summary>
         ///  Copies the elements of a string array to the end of the <see cref='AutoCompleteStringCollection'/>.
@@ -175,10 +179,18 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Removes a specific string from the <see cref='AutoCompleteStringCollection'/> .
         /// </summary>
-        public void Remove(string value)
+        public void Remove(string value) => TryRemove(value);
+
+        bool ICollection<string>.Remove(string value) => TryRemove(value);
+
+        private bool TryRemove(string value)
         {
+            if (!data.Contains(value))
+                return false;
+
             data.Remove(value);
             OnCollectionChanged(new CollectionChangeEventArgs(CollectionChangeAction.Remove, value));
+            return true;
         }
 
         /// <summary>
@@ -238,9 +250,11 @@ namespace System.Windows.Forms
             data.CopyTo(array, index);
         }
 
-        public IEnumerator GetEnumerator()
+        public IEnumerator<string> GetEnumerator()
         {
-            return data.GetEnumerator();
+            return data.Cast<string>().GetEnumerator();
         }
+
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 }

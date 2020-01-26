@@ -5,6 +5,7 @@
 #nullable disable
 
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
@@ -13,6 +14,7 @@ using System.Drawing.Design;
 using System.Drawing.Imaging;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.ComponentModel.Com2Interop;
@@ -5165,7 +5167,7 @@ namespace System.Windows.Forms
             }
         }
 
-        public class PropertyTabCollection : ICollection
+        public class PropertyTabCollection : ICollection, IReadOnlyList<PropertyTab>
         {
             internal static PropertyTabCollection Empty = new PropertyTabCollection(null);
 
@@ -5267,15 +5269,17 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Creates and retrieves a new enumerator for this collection.
             /// </summary>
-            public IEnumerator GetEnumerator()
+            public IEnumerator<PropertyTab> GetEnumerator()
             {
                 if (owner == null)
                 {
-                    return Array.Empty<PropertyTab>().GetEnumerator();
+                    return Enumerable.Empty<PropertyTab>().GetEnumerator();
                 }
 
-                return owner.viewTabs.GetEnumerator();
+                return WindowsFormsUtils.GetArrayEnumerator(owner.viewTabs);
             }
+
+            IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
             public void RemoveTabType(Type propertyTabType)
             {

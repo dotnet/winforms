@@ -5,6 +5,7 @@
 #nullable disable
 
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing.Design;
@@ -14,7 +15,7 @@ namespace System.Windows.Forms
     [
     Editor("System.Windows.Forms.Design.TreeNodeCollectionEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))
     ]
-    public class TreeNodeCollection : IList
+    public class TreeNodeCollection : IList, IList<TreeNode>
     {
         private readonly TreeNode owner;
 
@@ -379,6 +380,8 @@ namespace System.Windows.Forms
             return node.index;
         }
 
+        void ICollection<TreeNode>.Add(TreeNode node) => Add(node);
+
         int IList.Add(object node)
         {
             if (node == null)
@@ -632,9 +635,17 @@ namespace System.Windows.Forms
             }
         }
 
-        public void Remove(TreeNode node)
+        void ICollection<TreeNode>.CopyTo(TreeNode[] array, int arrayIndex) => CopyTo(array, arrayIndex);
+
+        public void Remove(TreeNode node) => TryRemove(node);
+
+        bool ICollection<TreeNode>.Remove(TreeNode node) => TryRemove(node);
+
+        private bool TryRemove(TreeNode node)
         {
+            var result = (node.parent == this.owner);
             node.Remove();
+            return result;
         }
 
         void IList.Remove(object node)
@@ -662,9 +673,11 @@ namespace System.Windows.Forms
             }
         }
 
-        public IEnumerator GetEnumerator()
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+        public IEnumerator<TreeNode> GetEnumerator()
         {
-            return new ArraySubsetEnumerator(owner.children, owner.childCount);
+            return new ArraySubsetEnumerator<TreeNode>(owner.children, owner.childCount);
         }
     }
 }

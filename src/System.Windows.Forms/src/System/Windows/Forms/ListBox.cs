@@ -2738,7 +2738,7 @@ namespace System.Windows.Forms
             ///  Retrieves an enumerator that will enumerate based on
             ///  the given mask.
             /// </summary>
-            public IEnumerator GetEnumerator(int stateMask)
+            public IEnumerator<object> GetEnumerator(int stateMask)
             {
                 return GetEnumerator(stateMask, false);
             }
@@ -2747,7 +2747,7 @@ namespace System.Windows.Forms
             ///  Retrieves an enumerator that will enumerate based on
             ///  the given mask.
             /// </summary>
-            public IEnumerator GetEnumerator(int stateMask, bool anyBit)
+            public IEnumerator<object> GetEnumerator(int stateMask, bool anyBit)
             {
                 return new EntryEnumerator(this, stateMask, anyBit);
             }
@@ -2981,7 +2981,7 @@ namespace System.Windows.Forms
             ///  EntryEnumerator is an enumerator that will enumerate over
             ///  a given state mask.
             /// </summary>
-            private class EntryEnumerator : IEnumerator
+            private class EntryEnumerator : IEnumerator<object>
             {
                 private readonly ItemArray items;
                 private readonly bool anyBit;
@@ -3000,6 +3000,8 @@ namespace System.Windows.Forms
                     version = items.version;
                     current = -1;
                 }
+
+                void IDisposable.Dispose() { }
 
                 /// <summary>
                 ///  Moves to the next element, or returns false if at the end.
@@ -3055,7 +3057,7 @@ namespace System.Windows.Forms
                 /// <summary>
                 ///  Retrieves the current value in the enumerator.
                 /// </summary>
-                object IEnumerator.Current
+                public object Current
                 {
                     get
                     {
@@ -3075,7 +3077,7 @@ namespace System.Windows.Forms
             ///  A collection that stores objects.
         /// </summary>
         [ListBindable(false)]
-        public class ObjectCollection : IList
+        public class ObjectCollection : IList, IList<object>
         {
             private readonly ListBox owner;
             private ItemArray items;
@@ -3252,6 +3254,8 @@ namespace System.Windows.Forms
                 return Add(item);
             }
 
+            void ICollection<object>.Add(object item) => Add(item);
+
             public void AddRange(ObjectCollection value)
             {
                 owner.CheckNoDataSource();
@@ -3372,10 +3376,12 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Returns an enumerator for the ListBox Items collection.
             /// </summary>
-            public IEnumerator GetEnumerator()
+            public IEnumerator<object> GetEnumerator()
             {
                 return InnerArray.GetEnumerator(0);
             }
+
+            IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
             public int IndexOf(object value)
             {
@@ -3456,14 +3462,18 @@ namespace System.Windows.Forms
             ///  Removes the given item from the ListBox, provided that it is
             ///  actually in the list.
             /// </summary>
-            public void Remove(object value)
+            public void Remove(object value) => TryRemove(value);
+
+            bool ICollection<object>.Remove(object value) => TryRemove(value);
+
+            private bool TryRemove(object value)
             {
                 int index = InnerArray.IndexOf(value, 0);
+                if (index < 0)
+                    return false;
 
-                if (index != -1)
-                {
-                    RemoveAt(index);
-                }
+                RemoveAt(index);
+                return true;
             }
 
             /// <summary>
@@ -3538,7 +3548,7 @@ namespace System.Windows.Forms
 
         //******************************************************************************************
         // IntegerCollection
-        public class IntegerCollection : IList
+        public class IntegerCollection : IList, IList<int>
         {
             private readonly ListBox owner;
             private int[] innerArray;
@@ -3584,6 +3594,8 @@ namespace System.Windows.Forms
                     return false;
                 }
             }
+
+            bool ICollection<int>.IsReadOnly => false;
 
             bool IList.IsReadOnly
             {
@@ -3681,6 +3693,8 @@ namespace System.Windows.Forms
                 return index;
             }
 
+            void ICollection<int>.Add(int item) => Add(item);
+
             int IList.Add(object item)
             {
                 if (!(item is int))
@@ -3761,6 +3775,8 @@ namespace System.Windows.Forms
                 throw new NotSupportedException(SR.ListBoxCantInsertIntoIntegerCollection);
             }
 
+            void IList<int>.Insert(int index, int item) => throw new NotSupportedException(SR.ListBoxCantInsertIntoIntegerCollection);
+
             void IList.Remove(object value)
             {
                 if (!(value is int))
@@ -3779,14 +3795,18 @@ namespace System.Windows.Forms
             ///  Removes the given item from the array.  If
             ///  the item is not in the array, this does nothing.
             /// </summary>
-            public void Remove(int item)
+            public void Remove(int item) => TryRemove(item);
+
+            bool ICollection<int>.Remove(int item) => TryRemove(item);
+
+            private bool TryRemove(int item)
             {
                 int index = IndexOf(item);
+                if (index < 0)
+                    return false;
 
-                if (index != -1)
-                {
-                    RemoveAt(index);
-                }
+                RemoveAt(index);
+                return true;
             }
 
             /// <summary>
@@ -3854,16 +3874,20 @@ namespace System.Windows.Forms
                 }
             }
 
+            void ICollection<int>.CopyTo(int[] destination, int index) => CopyTo(destination, index);
+
             IEnumerator IEnumerable.GetEnumerator()
             {
                 return new CustomTabOffsetsEnumerator(this);
             }
 
+            IEnumerator<int> IEnumerable<int>.GetEnumerator() => new CustomTabOffsetsEnumerator(this);
+
             /// <summary>
             ///  EntryEnumerator is an enumerator that will enumerate over
             ///  a given state mask.
             /// </summary>
-            private class CustomTabOffsetsEnumerator : IEnumerator
+            private class CustomTabOffsetsEnumerator : IEnumerator<int>
             {
                 private readonly IntegerCollection items;
                 private int current;
@@ -3876,6 +3900,8 @@ namespace System.Windows.Forms
                     this.items = items;
                     current = -1;
                 }
+
+                void IDisposable.Dispose() { }
 
                 /// <summary>
                 ///  Moves to the next element, or returns false if at the end.
@@ -3905,7 +3931,7 @@ namespace System.Windows.Forms
                 /// <summary>
                 ///  Retrieves the current value in the enumerator.
                 /// </summary>
-                object IEnumerator.Current
+                private int Current
                 {
                     get
                     {
@@ -3917,13 +3943,17 @@ namespace System.Windows.Forms
                         return items[current];
                     }
                 }
+
+                object IEnumerator.Current => Current;
+
+                int IEnumerator<int>.Current => Current;
             }
         }
 
         //******************************************************************************************
 
         // SelectedIndices
-        public class SelectedIndexCollection : IList
+        public class SelectedIndexCollection : IList, IList<int>
         {
             private readonly ListBox owner;
 
@@ -4037,7 +4067,17 @@ namespace System.Windows.Forms
                 throw new NotSupportedException(SR.ListBoxSelectedIndexCollectionIsReadOnly);
             }
 
+            void IList<int>.Insert(int index, int value)
+            {
+                throw new NotSupportedException(SR.ListBoxSelectedIndexCollectionIsReadOnly);
+            }
+
             void IList.Remove(object value)
+            {
+                throw new NotSupportedException(SR.ListBoxSelectedIndexCollectionIsReadOnly);
+            }
+
+            void IList<int>.RemoveAt(int index)
             {
                 throw new NotSupportedException(SR.ListBoxSelectedIndexCollectionIsReadOnly);
             }
@@ -4057,6 +4097,12 @@ namespace System.Windows.Forms
                     object identifier = InnerArray.GetEntryObject(index, SelectedObjectCollection.SelectedObjectMask);
                     return InnerArray.IndexOfIdentifier(identifier, 0);
                 }
+            }
+
+            int IList<int>.this[int index]
+            {
+                get => this[index];
+                set => throw new NotSupportedException(SR.ListBoxSelectedIndexCollectionIsReadOnly);
             }
 
             object IList.this[int index]
@@ -4093,6 +4139,8 @@ namespace System.Windows.Forms
                 }
             }
 
+            void ICollection<int>.CopyTo(int[] destination, int index) => CopyTo(destination, index);
+
             public void Clear()
             {
                 if (owner != null)
@@ -4116,7 +4164,11 @@ namespace System.Windows.Forms
                 }
             }
 
-            public void Remove(int index)
+            public void Remove(int index) => TryRemove(index);
+
+            bool ICollection<int>.Remove(int index) => TryRemove(index);
+
+            private bool TryRemove(int index)
             {
                 if (owner != null)
                 {
@@ -4126,21 +4178,26 @@ namespace System.Windows.Forms
                         if (index != -1 && Contains(index))
                         {
                             owner.SetSelected(index, false);
+                            return true;
                         }
                     }
                 }
+
+                return false;
             }
 
-            public IEnumerator GetEnumerator()
+            public IEnumerator<int> GetEnumerator()
             {
                 return new SelectedIndexEnumerator(this);
             }
+
+            IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
             /// <summary>
             ///  EntryEnumerator is an enumerator that will enumerate over
             ///  a given state mask.
             /// </summary>
-            private class SelectedIndexEnumerator : IEnumerator
+            private class SelectedIndexEnumerator : IEnumerator<int>
             {
                 private readonly SelectedIndexCollection items;
                 private int current;
@@ -4153,6 +4210,8 @@ namespace System.Windows.Forms
                     this.items = items;
                     current = -1;
                 }
+
+                void IDisposable.Dispose() { }
 
                 /// <summary>
                 ///  Moves to the next element, or returns false if at the end.
@@ -4182,7 +4241,7 @@ namespace System.Windows.Forms
                 /// <summary>
                 ///  Retrieves the current value in the enumerator.
                 /// </summary>
-                object IEnumerator.Current
+                private int Current
                 {
                     get
                     {
@@ -4194,11 +4253,15 @@ namespace System.Windows.Forms
                         return items[current];
                     }
                 }
+
+                int IEnumerator<int>.Current => Current;
+
+                object IEnumerator.Current => Current;
             }
         }
 
         // Should be "ObjectCollection", except we already have one of those.
-        public class SelectedObjectCollection : IList
+        public class SelectedObjectCollection : IList, IList<object>
         {
             // This is the bitmask used within ItemArray to identify selected objects.
             internal static int SelectedObjectMask = ItemArray.CreateMask();
@@ -4344,7 +4407,17 @@ namespace System.Windows.Forms
                 throw new NotSupportedException(SR.ListBoxSelectedObjectCollectionIsReadOnly);
             }
 
+            void ICollection<object>.Add(object value)
+            {
+                throw new NotSupportedException(SR.ListBoxSelectedObjectCollectionIsReadOnly);
+            }
+
             void IList.Clear()
+            {
+                throw new NotSupportedException(SR.ListBoxSelectedObjectCollectionIsReadOnly);
+            }
+
+            void ICollection<object>.Clear()
             {
                 throw new NotSupportedException(SR.ListBoxSelectedObjectCollectionIsReadOnly);
             }
@@ -4354,12 +4427,27 @@ namespace System.Windows.Forms
                 throw new NotSupportedException(SR.ListBoxSelectedObjectCollectionIsReadOnly);
             }
 
+            void IList<object>.Insert(int index, object value)
+            {
+                throw new NotSupportedException(SR.ListBoxSelectedObjectCollectionIsReadOnly);
+            }
+
             void IList.Remove(object value)
             {
                 throw new NotSupportedException(SR.ListBoxSelectedObjectCollectionIsReadOnly);
             }
 
+            bool ICollection<object>.Remove(object value)
+            {
+                throw new NotSupportedException(SR.ListBoxSelectedObjectCollectionIsReadOnly);
+            }
+
             void IList.RemoveAt(int index)
+            {
+                throw new NotSupportedException(SR.ListBoxSelectedObjectCollectionIsReadOnly);
+            }
+
+            void IList<object>.RemoveAt(int index)
             {
                 throw new NotSupportedException(SR.ListBoxSelectedObjectCollectionIsReadOnly);
             }
@@ -4392,6 +4480,8 @@ namespace System.Windows.Forms
                 }
             }
 
+            void ICollection<object>.CopyTo(object[] destination, int index) => CopyTo(destination, index);
+
             public void CopyTo(Array destination, int index)
             {
                 int cnt = InnerArray.GetCount(SelectedObjectMask);
@@ -4401,10 +4491,12 @@ namespace System.Windows.Forms
                 }
             }
 
-            public IEnumerator GetEnumerator()
+            public IEnumerator<object> GetEnumerator()
             {
                 return InnerArray.GetEnumerator(SelectedObjectMask);
             }
+
+            IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
             /// <summary>
             ///  This method returns if the actual item index is selected.  The index is the index to the MAIN

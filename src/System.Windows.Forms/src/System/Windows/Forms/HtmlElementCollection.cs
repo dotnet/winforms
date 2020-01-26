@@ -5,12 +5,13 @@
 #nullable disable
 
 using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics;
 using static Interop.Mshtml;
 
 namespace System.Windows.Forms
 {
-    public sealed class HtmlElementCollection : ICollection
+    public sealed class HtmlElementCollection : ICollection, IReadOnlyList<HtmlElement>
     {
         private readonly IHTMLElementCollection htmlElementCollection;
         private readonly HtmlElement[] elementsArray;
@@ -178,12 +179,14 @@ namespace System.Windows.Forms
             }
         }
 
-        public IEnumerator GetEnumerator()
+        public IEnumerator<HtmlElement> GetEnumerator()
         {
             HtmlElement[] htmlElements = new HtmlElement[Count];
             ((ICollection)this).CopyTo(htmlElements, 0);
 
-            return htmlElements.GetEnumerator();
+            return WindowsFormsUtils.GetArrayEnumerator(htmlElements);
         }
+
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 }

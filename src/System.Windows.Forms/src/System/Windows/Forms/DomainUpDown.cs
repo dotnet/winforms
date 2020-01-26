@@ -5,6 +5,7 @@
 #nullable disable
 
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
@@ -573,7 +574,7 @@ namespace System.Windows.Forms
         ///  Encapsulates a collection of objects for use by the <see cref='DomainUpDown'/>
         ///  class.
         /// </summary>
-        public class DomainUpDownItemCollection : ArrayList
+        public class DomainUpDownItemCollection : ArrayList, IList<object>
         {
             readonly DomainUpDown owner;
 
@@ -622,6 +623,8 @@ namespace System.Windows.Forms
                 return ret;
             }
 
+            void ICollection<object>.Add(object item) => Add(item);
+
             /// <summary>
             /// </summary>
             public override void Remove(object item)
@@ -636,6 +639,12 @@ namespace System.Windows.Forms
                 {
                     RemoveAt(index);
                 }
+            }
+
+            bool ICollection<object>.Remove(object item)
+            {
+                Remove(item); // throws on failure
+                return true;
             }
 
             /// <summary>
@@ -667,6 +676,15 @@ namespace System.Windows.Forms
                 {
                     owner.SortDomainItems();
                 }
+            }
+
+            void ICollection<object>.CopyTo(object[] array, int arrayIndex) => CopyTo(array, arrayIndex);
+
+            public new IEnumerator<object> GetEnumerator()
+            {
+                var enumerator = base.GetEnumerator();
+                while (enumerator.MoveNext())
+                    yield return enumerator.Current;
             }
         } // end class DomainUpDownItemCollection
 
