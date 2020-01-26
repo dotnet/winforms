@@ -6039,7 +6039,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 case (int)User32.WM.GETDLGCODE:
 
-                    int flags = NativeMethods.DLGC_WANTCHARS | NativeMethods.DLGC_WANTARROWS;
+                    int flags = (int)(User32.DLGC.WANTCHARS | User32.DLGC.WANTARROWS);
 
                     if (selectedGridEntry != null)
                     {
@@ -6050,7 +6050,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                             //
                             if (edit.Visible)
                             {
-                                flags |= NativeMethods.DLGC_WANTTAB;
+                                flags |= (int)User32.DLGC.WANTTAB;
                             }
                         }
                     }
@@ -7707,10 +7707,10 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                     case User32.WM.GETDLGCODE:
 
-                        m.Result = (IntPtr)((long)m.Result | NativeMethods.DLGC_WANTARROWS | NativeMethods.DLGC_WANTCHARS);
+                        m.Result = (IntPtr)((long)m.Result | (int)User32.DLGC.WANTARROWS | (int)User32.DLGC.WANTCHARS);
                         if (psheet.NeedsCommit || WantsTab((ModifierKeys & Keys.Shift) == 0))
                         {
-                            m.Result = (IntPtr)((long)m.Result | NativeMethods.DLGC_WANTALLKEYS | NativeMethods.DLGC_WANTTAB);
+                            m.Result = (IntPtr)((long)m.Result | (int)User32.DLGC.WANTALLKEYS | (int)User32.DLGC.WANTTAB);
                         }
                         return;
 

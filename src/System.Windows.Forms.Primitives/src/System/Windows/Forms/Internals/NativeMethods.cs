@@ -29,12 +29,6 @@ namespace System.Windows.Forms
 
         public const int
         DI_NORMAL = 0x0003,
-        DLGC_WANTARROWS = 0x0001,
-        DLGC_WANTTAB = 0x0002,
-        DLGC_WANTALLKEYS = 0x0004,
-        DLGC_WANTCHARS = 0x0080,
-        DLGC_WANTMESSAGE = 0x0004,      /* Pass message to control          */
-        DLGC_HASSETSEL = 0x0008,      /* Understands EM_SETSEL message    */
         DTS_UPDOWN = 0x0001,
         DTS_SHOWNONE = 0x0002,
         DTS_LONGDATEFORMAT = 0x0004,

@@ -29084,12 +29084,12 @@ namespace System.Windows.Forms
         /// </summary>
         private void WmGetDlgCode(ref Message m)
         {
-            m.Result = (IntPtr)((long)m.Result | NativeMethods.DLGC_WANTARROWS | NativeMethods.DLGC_WANTCHARS);
+            m.Result = (IntPtr)((long)m.Result | (int)User32.DLGC.WANTARROWS | (int)User32.DLGC.WANTCHARS);
 
             Keys modifierKeys = ModifierKeys;
             if (GetTabKeyEffective((modifierKeys & Keys.Shift) == Keys.Shift, (modifierKeys & Keys.Control) == Keys.Control))
             {
-                m.Result = (IntPtr)((long)m.Result | NativeMethods.DLGC_WANTTAB);
+                m.Result = (IntPtr)((long)m.Result | (int)User32.DLGC.WANTTAB);
             }
         }
 

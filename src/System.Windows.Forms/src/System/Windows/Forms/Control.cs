@@ -6712,11 +6712,11 @@ namespace System.Windows.Forms
             int mask = 0;
             if (charCode == (char)(int)Keys.Tab)
             {
-                mask = NativeMethods.DLGC_WANTCHARS | NativeMethods.DLGC_WANTALLKEYS | NativeMethods.DLGC_WANTTAB;
+                mask = (int)(User32.DLGC.WANTCHARS | User32.DLGC.WANTALLKEYS | User32.DLGC.WANTTAB);
             }
             else
             {
-                mask = NativeMethods.DLGC_WANTCHARS | NativeMethods.DLGC_WANTALLKEYS;
+                mask = (int)(User32.DLGC.WANTCHARS | User32.DLGC.WANTALLKEYS);
             }
             return (unchecked((int)(long)User32.SendMessageW(this, User32.WM.GETDLGCODE)) & mask) != 0;
         }
@@ -6740,23 +6740,23 @@ namespace System.Windows.Forms
                 return false;
             }
 
-            int mask = NativeMethods.DLGC_WANTALLKEYS;
+            User32.DLGC mask = User32.DLGC.WANTALLKEYS;
             switch (keyData & Keys.KeyCode)
             {
                 case Keys.Tab:
-                    mask = NativeMethods.DLGC_WANTALLKEYS | NativeMethods.DLGC_WANTTAB;
+                    mask = User32.DLGC.WANTALLKEYS | User32.DLGC.WANTTAB;
                     break;
                 case Keys.Left:
                 case Keys.Right:
                 case Keys.Up:
                 case Keys.Down:
-                    mask = NativeMethods.DLGC_WANTALLKEYS | NativeMethods.DLGC_WANTARROWS;
+                    mask = User32.DLGC.WANTALLKEYS | User32.DLGC.WANTARROWS;
                     break;
             }
 
             if (IsHandleCreated)
             {
-                return (unchecked((int)(long)User32.SendMessageW(this, User32.WM.GETDLGCODE)) & mask) != 0;
+                return (unchecked((int)(long)User32.SendMessageW(this, User32.WM.GETDLGCODE)) & (int)mask) != 0;
             }
             else
             {
