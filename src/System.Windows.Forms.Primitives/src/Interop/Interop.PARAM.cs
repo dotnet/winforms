@@ -15,6 +15,14 @@ internal partial class Interop
         public static IntPtr FromLowHigh(int low, int high)
             => (IntPtr)ToInt(low, high);
 
+        public static unsafe IntPtr FromLowHighUnsigned(int low, int high)
+            // Convert the int to an uint before converting it to a pointer type,
+            // which ensures the high dword being zero for 64-bit pointers.
+            // This corresponds to the logic of the MAKELPARAM/MAKEWPARAM/MAKELRESULT
+            // macros.
+            // TODO: Use nuint instead of void* when it is available.
+            => (IntPtr)(void*)unchecked((uint)ToInt(low, high));
+
         public static int ToInt(int low, int high)
             => (high << 16) | (low & 0xffff);
 

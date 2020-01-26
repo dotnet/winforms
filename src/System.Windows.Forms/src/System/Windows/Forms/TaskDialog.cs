@@ -861,7 +861,12 @@ namespace System.Windows.Forms
             try
             {
                 // Send a click button message with the cancel result.
-                ClickCancelButton();
+                // Note: We allow to click the cancel button even if we are waiting
+                // for the TDN_NAVIGATED notification to occur, as in that case the
+                // dialog will behave as if it still contains the controls of the
+                // previous page, and we can click a standard button without the page
+                // actually having to contain that button.
+                ClickButton((int)TaskDialogResult.Cancel, false);
             }
             finally
             {
@@ -878,7 +883,7 @@ namespace System.Windows.Forms
         /// <param name="marqueeProgressBar"></param>
         internal void SwitchProgressBarMode(bool marqueeProgressBar) => SendTaskDialogMessage(
             ComCtl32.TDM.SET_MARQUEE_PROGRESS_BAR,
-            marqueeProgressBar ? 1 : 0,
+            PARAM.FromBool(marqueeProgressBar),
             IntPtr.Zero);
 
         /// <summary>
@@ -890,7 +895,7 @@ namespace System.Windows.Forms
         /// The time in milliseconds between marquee animation updates. If <c>0</c>, the
         /// animation will be updated every 30 milliseconds.
         /// </param>
-        internal void SetProgressBarMarquee(bool enableMarquee, int animationSpeed = 0)
+        internal unsafe void SetProgressBarMarquee(bool enableMarquee, int animationSpeed = 0)
         {
             if (animationSpeed < 0)
             {
@@ -899,8 +904,8 @@ namespace System.Windows.Forms
 
             SendTaskDialogMessage(
                 ComCtl32.TDM.SET_PROGRESS_BAR_MARQUEE,
-                enableMarquee ? 1 : 0,
-                (IntPtr)animationSpeed);
+                PARAM.FromBool(enableMarquee),
+                (IntPtr)(void*)(uint)animationSpeed);
         }
 
         /// <summary>
@@ -924,18 +929,10 @@ namespace System.Windows.Forms
                 throw new ArgumentOutOfRangeException(nameof(max));
             }
 
-            // The MAKELPARAM macro converts the value to an unsigned int
-            // before converting it to a pointer, so we should do the same.
-            // However, this means we cannot convert the value directly to an
-            // IntPtr; instead we need to first convert it to a pointer type
-            // which requires unsafe code.
-            // TODO: Use nuint instead of void* when it is available.
-            var param = (IntPtr)(void*)unchecked((uint)(min | (max << 0x10)));
-
             SendTaskDialogMessage(
                 ComCtl32.TDM.SET_PROGRESS_BAR_RANGE,
-                0,
-                param);
+                IntPtr.Zero,
+                PARAM.FromLowHighUnsigned(min, max));
         }
 
         /// <summary>
@@ -951,7 +948,7 @@ namespace System.Windows.Forms
 
             SendTaskDialogMessage(
                 ComCtl32.TDM.SET_PROGRESS_BAR_POS,
-                pos,
+                (IntPtr)pos,
                 IntPtr.Zero);
         }
 
@@ -961,7 +958,7 @@ namespace System.Windows.Forms
         /// <param name="state"></param>
         internal void SetProgressBarState(ComCtl32.PBST state) => SendTaskDialogMessage(
             ComCtl32.TDM.SET_PROGRESS_BAR_STATE,
-            (int)state,
+            (IntPtr)state,
             IntPtr.Zero);
 
         /// <summary>
@@ -972,48 +969,33 @@ namespace System.Windows.Forms
         /// <param name="focus"></param>
         internal void ClickCheckBox(bool isChecked, bool focus = false) => SendTaskDialogMessage(
             ComCtl32.TDM.CLICK_VERIFICATION,
-            isChecked ? 1 : 0,
-            (IntPtr)(focus ? 1 : 0));
+            PARAM.FromBool(isChecked),
+            PARAM.FromBool(focus));
 
         internal void SetButtonElevationRequiredState(int buttonID, bool requiresElevation) => SendTaskDialogMessage(
             ComCtl32.TDM.SET_BUTTON_ELEVATION_REQUIRED_STATE,
-            buttonID,
-            (IntPtr)(requiresElevation ? 1 : 0));
+            (IntPtr)buttonID,
+            PARAM.FromBool(requiresElevation));
 
         internal void SetButtonEnabled(int buttonID, bool enable) => SendTaskDialogMessage(
             ComCtl32.TDM.ENABLE_BUTTON,
-            buttonID,
-            (IntPtr)(enable ? 1 : 0));
+            (IntPtr)buttonID,
+            PARAM.FromBool(enable));
 
         internal void SetRadioButtonEnabled(int radioButtonID, bool enable) => SendTaskDialogMessage(
             ComCtl32.TDM.ENABLE_RADIO_BUTTON,
-            radioButtonID,
-            (IntPtr)(enable ? 1 : 0));
+            (IntPtr)radioButtonID,
+            PARAM.FromBool(enable));
 
-        internal void ClickButton(int buttonID) => SendTaskDialogMessage(
+        internal void ClickButton(int buttonID, bool checkWaitingForNavigation = true) => SendTaskDialogMessage(
             ComCtl32.TDM.CLICK_BUTTON,
-            buttonID,
-            IntPtr.Zero);
-
-        internal void ClickCancelButton()
-        {
-            // We allow to simulate a button click (which might close the dialog),
-            // even if we are waiting for the TDN_NAVIGATED notification to occur,
-            // because between sending the TDM_NAVIGATE_PAGE message and receiving
-            // the TDN_NAVIGATED notification, the dialog will behave as if it
-            // still contains the controls of the previous page (though actually
-            // handles for controls of both the previous and new page exist during
-            // that time).
-            SendTaskDialogMessage(
-                ComCtl32.TDM.CLICK_BUTTON,
-                (int)TaskDialogResult.Cancel,
-                IntPtr.Zero,
-                false);
-        }
+            (IntPtr)buttonID,
+            IntPtr.Zero,
+            checkWaitingForNavigation);
 
         internal void ClickRadioButton(int radioButtonID) => SendTaskDialogMessage(
             ComCtl32.TDM.CLICK_RADIO_BUTTON,
-            radioButtonID,
+            (IntPtr)radioButtonID,
             IntPtr.Zero);
 
         internal unsafe void UpdateTextElement(ComCtl32.TDE element, string? text)
@@ -1029,7 +1011,7 @@ namespace System.Windows.Forms
                 // Note: SetElementText will resize the dialog while UpdateElementText
                 // will not (which would lead to clipped controls), so we use the
                 // former.
-                SendTaskDialogMessage(ComCtl32.TDM.SET_ELEMENT_TEXT, (int)element, (IntPtr)textPtr);
+                SendTaskDialogMessage(ComCtl32.TDM.SET_ELEMENT_TEXT, (IntPtr)element, (IntPtr)textPtr);
             }
         }
 
@@ -1044,7 +1026,7 @@ namespace System.Windows.Forms
             //
             // To fix this, we call UpdateWindowSize() after updating the icon, to
             // force the task dialog to update its size.
-            SendTaskDialogMessage(ComCtl32.TDM.UPDATE_ICON, (int)element, icon);
+            SendTaskDialogMessage(ComCtl32.TDM.UPDATE_ICON, (IntPtr)element, icon);
             UpdateWindowSize();
         }
 
@@ -1255,7 +1237,7 @@ namespace System.Windows.Forms
                             _ignoreButtonClickedNotifications = true;
                         }
 
-                        int buttonID = (int)wParam;
+                        int buttonID = PARAM.ToInt(wParam);
                         TaskDialogButton? button = _boundPage.GetBoundButtonByID(buttonID);
 
                         bool applyButtonResult = true;
@@ -1352,7 +1334,7 @@ namespace System.Windows.Forms
                         return applyButtonResult ? HRESULT.S_OK : HRESULT.S_FALSE;
 
                     case ComCtl32.TDN.RADIO_BUTTON_CLICKED:
-                        int radioButtonID = (int)wParam;
+                        int radioButtonID = PARAM.ToInt(wParam);
                         TaskDialogRadioButton radioButton = _boundPage.GetBoundRadioButtonByID(radioButtonID)!;
 
                         checked
@@ -1532,7 +1514,7 @@ namespace System.Windows.Forms
                         // noticeable in the SendMessage() return value.
                         SendTaskDialogMessage(
                             ComCtl32.TDM.NAVIGATE_PAGE,
-                            0,
+                            IntPtr.Zero,
                             (IntPtr)ptrTaskDialogConfig,
                             checkWaitingForNavigation: false);
                     }
@@ -1884,7 +1866,7 @@ namespace System.Windows.Forms
 
         private void SendTaskDialogMessage(
             ComCtl32.TDM message,
-            int wParam,
+            IntPtr wParam,
             IntPtr lParam,
             bool checkWaitingForNavigation = true)
         {
@@ -1893,11 +1875,7 @@ namespace System.Windows.Forms
             User32.SendMessageW(
                 Handle,
                 (User32.WM)message,
-                // Note: When a negative 32-bit integer is converted to a
-                // 64-bit pointer, the high dword will be set to 0xFFFFFFFF.
-                // This is consistent with the conversion from int to
-                // WPARAM (in C) as shown in the Task Dialog documentation.
-                (IntPtr)wParam,
+                wParam,
                 lParam);
         }
 
