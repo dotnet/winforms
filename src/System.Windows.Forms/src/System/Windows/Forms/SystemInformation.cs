@@ -643,10 +643,10 @@ namespace System.Windows.Forms
 
                     int lengthNeeded = 0;
 
-                    NativeMethods.USEROBJECTFLAGS flags = new NativeMethods.USEROBJECTFLAGS();
-                    if (UnsafeNativeMethods.GetUserObjectInformation(new HandleRef(null, hwinsta), NativeMethods.UOI_FLAGS, ref flags, sizeof(NativeMethods.USEROBJECTFLAGS), ref lengthNeeded))
+                    USEROBJECTFLAGS flags = default;
+                    if (GetUserObjectInformationW(hwinsta, UOI.FLAGS, ref flags, sizeof(USEROBJECTFLAGS), ref lengthNeeded).IsTrue())
                     {
-                        if ((flags.dwFlags & NativeMethods.WSF_VISIBLE) == 0)
+                        if ((flags.dwFlags & (int)WSF.VISIBLE) == 0)
                         {
                             s_isUserInteractive = false;
                         }
