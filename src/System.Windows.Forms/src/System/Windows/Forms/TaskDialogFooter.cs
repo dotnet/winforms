@@ -91,7 +91,7 @@ namespace System.Windows.Forms
         ///   and standard icon instances).
         /// </para>
         /// </remarks>
-        public TaskDialogIcon? Icon
+        public unsafe TaskDialogIcon? Icon
         {
             get => _icon;
 
@@ -103,18 +103,23 @@ namespace System.Windows.Forms
                 // while waiting for the initialization.
                 DenyIfWaitingForInitialization();
 
-                (IntPtr iconValue, bool? iconIsFromHandle) = TaskDialogPage.GetIconValue(value);
-
-                // The native task dialog icon cannot be updated from a handle
-                // type to a non-handle type and vice versa, so we need to throw
-                // in such a case.
-                if (BoundPage != null && iconIsFromHandle != null && iconIsFromHandle != _boundIconIsFromHandle)
+                if (BoundPage != null)
                 {
-                    throw new InvalidOperationException(SR.TaskDialogCannotUpdateIconType);
-                }
+                    (ComCtl32.TASKDIALOGCONFIG.IconUnion icon, bool? iconIsFromHandle) =
+                        TaskDialogPage.GetIconValue(value);
 
-                BoundPage?.BoundDialog?.UpdateIconElement(
-                    ComCtl32.TDIE.ICON_FOOTER, iconValue);
+                    // The native task dialog icon cannot be updated from a handle
+                    // type to a non-handle type and vice versa, so we need to throw
+                    // in such a case.
+                    if (iconIsFromHandle != null && iconIsFromHandle != _boundIconIsFromHandle)
+                    {
+                        throw new InvalidOperationException(SR.TaskDialogCannotUpdateIconType);
+                    }
+
+                    BoundPage.BoundDialog!.UpdateIconElement(
+                        ComCtl32.TDIE.ICON_FOOTER,
+                        _boundIconIsFromHandle ? icon.hIcon : (IntPtr)icon.pszIcon);
+                }
 
                 _icon = value;
             }
@@ -131,11 +136,11 @@ namespace System.Windows.Forms
         /// <returns>A string that contains the control text.</returns>
         public override string ToString() => _text ?? base.ToString() ?? string.Empty;
 
-        internal ComCtl32.TDF Bind(TaskDialogPage page, out IntPtr footerIconValue)
+        internal ComCtl32.TDF Bind(TaskDialogPage page, out ComCtl32.TASKDIALOGCONFIG.IconUnion icon)
         {
             ComCtl32.TDF result = base.Bind(page);
 
-            footerIconValue = TaskDialogPage.GetIconValue(_icon).iconValue;
+            icon = TaskDialogPage.GetIconValue(_icon).iconUnion;
 
             return result;
         }

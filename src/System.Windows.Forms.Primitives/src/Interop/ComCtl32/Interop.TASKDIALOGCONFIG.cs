@@ -13,7 +13,7 @@ internal static partial class Interop
     {
         // Packing is defined as 1 in CommCtrl.h ("pack(1)").
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
-        public unsafe struct TASKDIALOGCONFIG
+        public unsafe partial struct TASKDIALOGCONFIG
         {
             public uint cbSize;
             /// <summary>
@@ -27,7 +27,7 @@ internal static partial class Interop
             public TDF dwFlags;
             public TDCBF dwCommonButtons;
             public char* pszWindowTitle;
-            public IntPtr mainIconUnion;
+            public IconUnion mainIcon;
             public char* pszMainInstruction;
             public char* pszContent;
             public uint cButtons;
@@ -40,7 +40,7 @@ internal static partial class Interop
             public char* pszExpandedInformation;
             public char* pszExpandedControlText;
             public char* pszCollapsedControlText;
-            public IntPtr footerIconUnion;
+            public IconUnion footerIcon;
             public char* pszFooter;
             public IntPtr pfCallback;
             public IntPtr lpCallbackData;

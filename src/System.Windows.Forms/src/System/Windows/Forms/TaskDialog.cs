@@ -1585,8 +1585,8 @@ namespace System.Windows.Forms
                 this,
                 out ComCtl32.TDF flags,
                 out TaskDialogButtons standardButtonFlags,
-                out IntPtr iconValue,
-                out IntPtr footerIconValue,
+                out ComCtl32.TASKDIALOGCONFIG.IconUnion mainIcon,
+                out ComCtl32.TASKDIALOGCONFIG.IconUnion footerIcon,
                 out int defaultButtonID,
                 out int defaultRadioButtonID);
 
@@ -1682,8 +1682,8 @@ namespace System.Windows.Forms
                             hwndParent = hwndOwner,
                             dwFlags = flags,
                             dwCommonButtons = (ComCtl32.TDCBF)standardButtonFlags,
-                            mainIconUnion = iconValue,
-                            footerIconUnion = footerIconValue,
+                            mainIcon = mainIcon,
+                            footerIcon = footerIcon,
                             pszWindowTitle = MarshalString(page.Caption),
                             pszMainInstruction = MarshalString(page.MainInstruction),
                             pszContent = MarshalString(page.Text),
