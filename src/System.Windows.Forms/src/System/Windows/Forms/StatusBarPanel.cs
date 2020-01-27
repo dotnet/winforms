@@ -190,7 +190,7 @@ namespace System.Windows.Forms
                 if (Created)
                 {
                     IntPtr handle = (icon == null) ? IntPtr.Zero : icon.Handle;
-                    parent.SendMessage((int)SB.SETICON, (IntPtr)GetIndex(), handle);
+                    User32.SendMessageW(parent, (User32.WM)SB.SETICON, (IntPtr)GetIndex(), handle);
                 }
                 UpdateSize();
                 if (Created)
@@ -642,11 +642,11 @@ namespace System.Windows.Forms
 
                 if (icon != null && style != StatusBarPanelStyle.OwnerDraw)
                 {
-                    parent.SendMessage((int)SB.SETICON, (IntPtr)GetIndex(), icon.Handle);
+                    User32.SendMessageW(parent, (User32.WM)SB.SETICON, (IntPtr)GetIndex(), icon.Handle);
                 }
                 else
                 {
-                    parent.SendMessage((int)SB.SETICON, (IntPtr)GetIndex(), IntPtr.Zero);
+                    User32.SendMessageW(parent, (User32.WM)SB.SETICON, (IntPtr)GetIndex(), IntPtr.Zero);
                 }
 
                 if (style == StatusBarPanelStyle.OwnerDraw)

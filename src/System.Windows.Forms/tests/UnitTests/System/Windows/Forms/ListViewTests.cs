@@ -510,6 +510,16 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
+        public void ListView_BackColor_GetBkColor_Success()
+        {
+            using var control = new ListView();
+
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            control.BackColor = Color.FromArgb(0xFF, 0x12, 0x34, 0x56);
+            Assert.Equal((IntPtr)0x563412, User32.SendMessageW(control.Handle, (User32.WM)LVM.GETBKCOLOR));
+        }
+
+        [WinFormsFact]
         public void ListView_BackColor_SetWithHandler_CallsBackColorChanged()
         {
             var control = new ListView();
@@ -1312,6 +1322,16 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
+        public void ListView_ForeColor_GetTxtColor_Success()
+        {
+            using var control = new ListView();
+
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            control.ForeColor = Color.FromArgb(0x12, 0x34, 0x56, 0x78);
+            Assert.Equal((IntPtr)0x785634, User32.SendMessageW(control.Handle, (User32.WM)LVM.GETTEXTCOLOR));
+        }
+
+        [WinFormsFact]
         public void ListView_ForeColor_SetWithHandler_CallsForeColorChanged()
         {
             var control = new ListView();
@@ -1466,6 +1486,28 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createdCallCount);
         }
 
+        [WinFormsFact]
+        public void ListView_Handle_GetWithBackColor_Success()
+        {
+            using var control = new ListView
+            {
+                BackColor = Color.FromArgb(0xFF, 0x12, 0x34, 0x56)
+            };
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            Assert.Equal((IntPtr)0x563412, User32.SendMessageW(control.Handle, (User32.WM)LVM.GETBKCOLOR));
+        }
+
+        [WinFormsFact]
+        public void ListView_Handle_GetWithForeColor_Success()
+        {
+            using var control = new ListView
+            {
+                ForeColor = Color.FromArgb(0x12, 0x34, 0x56, 0x78)
+            };
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            Assert.Equal((IntPtr)0x785634, User32.SendMessageW(control.Handle, (User32.WM)LVM.GETTEXTCOLOR));
+        }
+
         [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ListView_Handle_GetWithoutGroups_Success(bool showGroups)
@@ -1556,6 +1598,68 @@ namespace System.Windows.Forms.Tests
                     Assert.True(lvgroup2.iGroupId > lvgroup1.iGroupId);
                 }
             }).Dispose();
+        }
+
+        [WinFormsFact]
+        public void ListView_Handle_GetTextBackColor_Success()
+        {
+            using var control = new ListView();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            Assert.Equal((IntPtr)0xFFFFFFFF, User32.SendMessageW(control.Handle, (User32.WM)LVM.GETTEXTBKCOLOR));
+        }
+
+        [WinFormsFact]
+        public void ListView_Handle_GetVersion_ReturnsExpected()
+        {
+            using var control = new ListView();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            Assert.Equal((IntPtr)5, User32.SendMessageW(control.Handle, (User32.WM)CCM.GETVERSION));
+        }
+
+        public static IEnumerable<object[]> Handle_CustomGetVersion_TestData()
+        {
+            yield return new object[] { IntPtr.Zero, 1 };
+            yield return new object[] { (IntPtr)4, 1 };
+            yield return new object[] { (IntPtr)5, 0 };
+            yield return new object[] { (IntPtr)6, 0 };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(Handle_CustomGetVersion_TestData))]
+        public void ListView_Handle_CustomGetVersion_Success(IntPtr getVersionResult, int expectedSetVersionCallCount)
+        {
+            using var control = new CustomGetVersionListView
+            {
+                GetVersionResult = getVersionResult
+            };
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            Assert.Equal(expectedSetVersionCallCount, control.SetVersionCallCount);
+        }
+
+        private class CustomGetVersionListView : ListView
+        {
+            public IntPtr GetVersionResult { get; set; }
+            public int SetVersionCallCount { get; set; }
+
+            protected override void WndProc(ref Message m)
+            {
+                if (m.Msg == (int)CCM.GETVERSION)
+                {
+                    Assert.Equal(IntPtr.Zero, m.WParam);
+                    Assert.Equal(IntPtr.Zero, m.LParam);
+                    m.Result = GetVersionResult;
+                    return;
+                }
+                else if (m.Msg == (int)CCM.SETVERSION)
+                {
+                    Assert.Equal((IntPtr)5, m.WParam);
+                    Assert.Equal(IntPtr.Zero, m.LParam);
+                    SetVersionCallCount++;
+                    return;
+                }
+
+                base.WndProc(ref m);
+            }
         }
 
         [WinFormsTheory]

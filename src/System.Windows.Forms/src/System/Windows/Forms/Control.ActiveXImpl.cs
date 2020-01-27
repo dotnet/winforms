@@ -390,7 +390,7 @@ namespace System.Windows.Forms
                             }
                             else
                             {
-                                target.SendMessage((int)lpmsg->message, lpmsg->wParam, lpmsg->lParam);
+                                User32.SendMessageW(target, (User32.WM)lpmsg->message, lpmsg->wParam, lpmsg->lParam);
                             }
                         }
                         break;
