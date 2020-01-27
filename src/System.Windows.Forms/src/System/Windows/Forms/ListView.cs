@@ -3117,7 +3117,7 @@ namespace System.Windows.Forms
             }
             if (IsHandleCreated)
             {
-                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)LVM.ENSUREVISIBLE, index, 0);
+                User32.SendMessageW(this, (User32.WM)LVM.ENSUREVISIBLE, (IntPtr)index);
             }
         }
 
@@ -3489,7 +3489,7 @@ namespace System.Windows.Forms
         internal Point GetItemPosition(int index)
         {
             var pt = new Point();
-            UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)LVM.GETITEMPOSITION, index, ref pt);
+            User32.SendMessageW(this, (User32.WM)LVM.GETITEMPOSITION, (IntPtr)index, ref pt);
             return pt;
         }
 
@@ -3694,7 +3694,7 @@ namespace System.Windows.Forms
         {
             if (viewStyle == View.Details && IsHandleCreated)
             {
-                IntPtr hwndHdr = UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)LVM.GETHEADER, 0, 0);
+                IntPtr hwndHdr = User32.SendMessageW(this, (User32.WM)LVM.GETHEADER);
                 if (hwndHdr != IntPtr.Zero)
                 {
                     User32.InvalidateRect(new HandleRef(this, hwndHdr), null, BOOL.TRUE);
@@ -4425,9 +4425,9 @@ namespace System.Windows.Forms
             // in VirtualMode we have to tell the list view to ask for the list view item's state image index
             if (VirtualMode)
             {
-                LVIS callbackMask = unchecked((LVIS)(long)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)LVM.GETCALLBACKMASK, 0, 0));
+                LVIS callbackMask = unchecked((LVIS)(long)User32.SendMessageW(this, (User32.WM)LVM.GETCALLBACKMASK));
                 callbackMask |= LVIS.STATEIMAGEMASK;
-                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)LVM.SETCALLBACKMASK, (int)callbackMask, 0);
+                User32.SendMessageW(this, (User32.WM)LVM.SETCALLBACKMASK, (IntPtr)callbackMask);
             }
 
             if (Application.ComCtlSupportsVisualStyles)
@@ -4808,9 +4808,7 @@ namespace System.Windows.Forms
             }
             if (IsHandleCreated)
             {
-                int retval = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle),
-                                                                   (int)LVM.REDRAWITEMS,
-                                                                   startIndex, endIndex);
+                int retval = (int)User32.SendMessageW(this, (User32.WM)LVM.REDRAWITEMS, (IntPtr)startIndex, (IntPtr)endIndex);
                 Debug.Assert(retval != 0);
                 // ListView control seems to be bogus. Items affected need to be invalidated in LargeIcon and SmallIcons views.
                 if (View == View.LargeIcon || View == View.SmallIcon)
@@ -4871,21 +4869,23 @@ namespace System.Windows.Forms
             UpdateGroupView();
         }
 
-        // does the job of telling win32 listView to remove this group
+        /// <summary>
+        /// Does the job of telling win32 listView to remove this group
+        /// </summary>
+        /// <remarks>
+        /// It is the job of whoever deletes this group to also turn off grouping if this was the last
+        /// group deleted
+        /// </remarks>
         private void RemoveGroupNative(ListViewGroup group)
         {
             Debug.Assert(IsHandleCreated, "RemoveGroupNative precondition: list-view handle must be created");
-            int retval = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)LVM.REMOVEGROUP, group.ID, IntPtr.Zero);
-
-            // it is the job of whoever deletes this group to also turn off grouping if this was the last
-            // group deleted
-            return;
+            User32.SendMessageW(this, (User32.WM)LVM.REMOVEGROUP, (IntPtr)group.ID);
         }
 
         private void Scroll(int fromLVItem, int toLVItem)
         {
             int scrollY = GetItemPosition(toLVItem).Y - GetItemPosition(fromLVItem).Y;
-            UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)LVM.SCROLL, 0, scrollY);
+            User32.SendMessageW(this, (User32.WM)LVM.SCROLL, IntPtr.Zero, (IntPtr)scrollY);
         }
 
         private unsafe void SetBackgroundImage()
@@ -5100,7 +5100,7 @@ namespace System.Windows.Forms
         }
 
         // set the display indices of the listview columns
-        private void SetDisplayIndices(int[] indices)
+        private unsafe void SetDisplayIndices(int[] indices)
         {
             int[] orderedColumns = new int[indices.Length];
             for (int i = 0; i < indices.Length; i++)
@@ -5111,7 +5111,10 @@ namespace System.Windows.Forms
 
             if (IsHandleCreated && !Disposing)
             {
-                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)LVM.SETCOLUMNORDERARRAY, orderedColumns.Length, orderedColumns);
+                fixed (int* pOrderedColumns = orderedColumns)
+                {
+                    User32.SendMessageW(this, (User32.WM)LVM.SETCOLUMNORDERARRAY, (IntPtr)orderedColumns.Length, (IntPtr)pOrderedColumns);
+                }
             }
         }
 
@@ -5146,7 +5149,8 @@ namespace System.Windows.Forms
             this.toolTipCaption = toolTipCaption;
 
             // native ListView expects tooltip HWND as a wParam and ignores lParam
-            IntPtr oldHandle = UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)LVM.SETTOOLTIPS, new HandleRef(toolTip, toolTip.Handle), 0);
+            IntPtr oldHandle = User32.SendMessageW(this, (User32.WM)LVM.SETTOOLTIPS, toolTip.Handle, IntPtr.Zero);
+            GC.KeepAlive(toolTip);
             User32.DestroyWindow(oldHandle);
         }
 
@@ -5207,7 +5211,7 @@ namespace System.Windows.Forms
             Debug.Assert(IsHandleCreated, "How did we add items without a handle?");
 
             var pt = new Point(x, y);
-            UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)LVM.SETITEMPOSITION32, index, ref pt);
+            User32.SendMessageW(this, (User32.WM)LVM.SETITEMPOSITION32, (IntPtr)index, ref pt);
         }
 
         internal void SetItemState(int index, LVIS state, LVIS mask)
@@ -5311,7 +5315,8 @@ namespace System.Windows.Forms
             if (IsHandleCreated && listItemSorter != null)
             {
                 NativeMethods.ListViewCompareCallback callback = new NativeMethods.ListViewCompareCallback(CompareFunc);
-                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)LVM.SORTITEMS, IntPtr.Zero, callback);
+                IntPtr callbackPointer = Marshal.GetFunctionPointerForDelegate(callback);
+                User32.SendMessageW(this, (User32.WM)LVM.SORTITEMS, IntPtr.Zero, callbackPointer);
             }
         }
 
@@ -5984,8 +5989,8 @@ namespace System.Windows.Forms
 
         private Font GetListHeaderFont()
         {
-            IntPtr hwndHdr = UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)LVM.GETHEADER, 0, 0);
-            IntPtr hFont = User32.SendMessageW(new HandleRef(this, hwndHdr), User32.WM.GETFONT);
+            IntPtr hwndHdr = User32.SendMessageW(this, (User32.WM)LVM.GETHEADER);
+            IntPtr hFont = User32.SendMessageW(hwndHdr, User32.WM.GETFONT);
             return Font.FromHfont(hFont);
         }
 
@@ -9293,7 +9298,7 @@ namespace System.Windows.Forms
                         }
                         Debug.Assert(owner.listItemsArray == null, "listItemsArray not null, even though handle created");
 
-                        UnsafeNativeMethods.SendMessage(new HandleRef(owner, owner.Handle), (int)LVM.DELETEALLITEMS, 0, 0);
+                        User32.SendMessageW(owner, (User32.WM)LVM.DELETEALLITEMS);
 
                         // There's a problem in the list view that if it's in small icon, it won't pick upo the small icon
                         // sizes until it changes from large icon, so we flip it twice here...

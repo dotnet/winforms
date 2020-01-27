@@ -633,7 +633,7 @@ namespace System.Windows.Forms
                     wparam |= (int)SBT.RTLREADING;
                 }
 
-                int result = (int)UnsafeNativeMethods.SendMessage(new HandleRef(parent, parent.Handle), (int)SB.SETTEXT, (IntPtr)wparam, sendText);
+                int result = (int)User32.SendMessageW(parent, (User32.WM)SB.SETTEXT, (IntPtr)wparam, sendText);
 
                 if (result == 0)
                 {
@@ -652,7 +652,7 @@ namespace System.Windows.Forms
                 if (style == StatusBarPanelStyle.OwnerDraw)
                 {
                     RECT rect = new RECT();
-                    result = (int)UnsafeNativeMethods.SendMessage(new HandleRef(parent, parent.Handle), (int)SB.GETRECT, (IntPtr)GetIndex(), ref rect);
+                    result = (int)User32.SendMessageW(parent, (User32.WM)SB.GETRECT, (IntPtr)GetIndex(), ref rect);
 
                     if (result != 0)
                     {
