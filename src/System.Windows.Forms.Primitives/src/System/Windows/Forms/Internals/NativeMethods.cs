@@ -745,23 +745,6 @@ namespace System.Windows.Forms
             public uint codepage;       // Code page for translation (CP_ACP for default, 1200 for Unicode)
         }
 
-        [StructLayout(LayoutKind.Sequential)]
-        public class PARAFORMAT
-        {
-            public int cbSize = Marshal.SizeOf<PARAFORMAT>();
-            public int dwMask;
-            public short wNumbering;
-            public short wReserved = 0;
-            public int dxStartIndent;
-            public int dxRightIndent;
-            public int dxOffset;
-            public short wAlignment;
-            public short cTabCount;
-
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 32)]
-            public int[] rgxTabs;
-        }
-
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
         public class FINDTEXT
         {
