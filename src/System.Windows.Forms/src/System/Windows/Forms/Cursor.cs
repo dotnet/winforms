@@ -499,19 +499,15 @@ namespace System.Windows.Forms
 
         public static bool operator ==(Cursor left, Cursor right)
         {
-            if (left is null != right is null)
+            if (right is null)
+            {
+                return left is null;
+            }
+            if (left is null)
             {
                 return false;
             }
-
-            if (!(left is null))
-            {
-                return (left._handle == right!._handle);
-            }
-            else
-            {
-                return true;
-            }
+            return left._handle == right._handle;
         }
 
         public static bool operator !=(Cursor left, Cursor right)
