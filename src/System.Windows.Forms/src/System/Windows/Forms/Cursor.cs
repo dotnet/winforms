@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
@@ -26,7 +24,7 @@ namespace System.Windows.Forms
     {
         private static Size s_cursorSize = Size.Empty;
 
-        private readonly byte[] _cursorData;
+        private readonly byte[]? _cursorData;
         private IntPtr _handle = IntPtr.Zero;       // handle to loaded image
         private bool _ownHandle = true;
         private readonly int _resourceId = 0;
@@ -73,7 +71,7 @@ namespace System.Windows.Forms
         ///  Initializes a new instance of the <see cref='Cursor'/> class from the specified resource.
         /// </summary>
         public Cursor(Type type, string resource)
-            : this((type?? throw new ArgumentNullException(nameof(type))).Module.Assembly.GetManifestResourceStream(type, resource))
+            : this((type?? throw new ArgumentNullException(nameof(type))).Module.Assembly.GetManifestResourceStream(type, resource)!)
         {
         }
 
@@ -125,7 +123,7 @@ namespace System.Windows.Forms
         ///  Gets or sets a <see cref='Cursor'/> that represents the current mouse cursor.
         ///  The value is <see langword="null"/> if the current mouse cursor is not visible.
         /// </summary>
-        public static Cursor Current
+        public static Cursor? Current
         {
             get
             {
@@ -205,7 +203,7 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ControlTagDescr))]
         [DefaultValue(null)]
         [TypeConverter(typeof(StringConverter))]
-        public object Tag { get; set; }
+        public object? Tag { get; set; }
 
         /// <summary>
         ///  Duplicates this the Win32 handle of this <see cref='Cursor'/>.
@@ -485,7 +483,7 @@ namespace System.Windows.Forms
         /// </summary>
         public override string ToString()
         {
-            string s = null;
+            string? s = null;
 
             if (!_ownHandle)
             {
@@ -508,7 +506,7 @@ namespace System.Windows.Forms
 
             if (!(left is null))
             {
-                return (left._handle == right._handle);
+                return (left._handle == right!._handle);
             }
             else
             {
@@ -527,7 +525,7 @@ namespace System.Windows.Forms
             return unchecked((int)_handle);
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (!(obj is Cursor))
             {
