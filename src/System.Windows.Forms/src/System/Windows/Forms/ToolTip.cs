@@ -684,7 +684,7 @@ namespace System.Windows.Forms
 
         private void CheckNativeCompositeControls(Control associatedControl, string text)
         {
-            if (associatedControl is TabPage tabPage && this != tabPage.ToolTip)
+            if (associatedControl is TabPage tabPage)
             {
                 tabPage.SetToolTip(this, GetCaptionForTool(tabPage));
             }
