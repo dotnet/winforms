@@ -308,7 +308,7 @@ namespace System.ComponentModel.Design
                 switch ((User32.WM)m.Msg)
                 {
                     case User32.WM.GETDLGCODE:
-                        m.Result = (IntPtr)((long)m.Result | NativeMethods.DLGC_WANTALLKEYS);
+                        m.Result = (IntPtr)((long)m.Result | (int)User32.DLGC.WANTALLKEYS);
                         return;
                     case User32.WM.MOUSEMOVE:
                         if (clickSeen)

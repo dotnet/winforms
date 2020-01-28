@@ -2403,7 +2403,7 @@ namespace System.Windows.Forms
         private void WmGetDlgCode(ref Message m)
         {
             // The MonthCalendar does its own handling of arrow keys
-            m.Result = (IntPtr)NativeMethods.DLGC_WANTARROWS;
+            m.Result = (IntPtr)User32.DLGC.WANTARROWS;
         }
 
         /// <summary>

@@ -2179,12 +2179,12 @@ namespace System.Windows.Forms
             if (AcceptsTab)
             {
                 Debug.WriteLineIf(Control.s_controlKeyboardRouting.TraceVerbose, "TextBox wants tabs");
-                m.Result = (IntPtr)(unchecked((int)(long)m.Result) | NativeMethods.DLGC_WANTTAB);
+                m.Result = (IntPtr)(unchecked((int)(long)m.Result) | (int)DLGC.WANTTAB);
             }
             else
             {
                 Debug.WriteLineIf(Control.s_controlKeyboardRouting.TraceVerbose, "TextBox doesn't want tabs");
-                m.Result = (IntPtr)(unchecked((int)(long)m.Result) & ~(NativeMethods.DLGC_WANTTAB | NativeMethods.DLGC_WANTALLKEYS));
+                m.Result = (IntPtr)(unchecked((int)(long)m.Result) & ~(int)(DLGC.WANTTAB | DLGC.WANTALLKEYS));
             }
         }
 

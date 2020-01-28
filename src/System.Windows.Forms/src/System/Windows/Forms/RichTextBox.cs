@@ -3790,7 +3790,7 @@ namespace System.Windows.Forms
 
                 case User32.WM.GETDLGCODE:
                     base.WndProc(ref m);
-                    m.Result = (IntPtr)((AcceptsTab) ? unchecked((int)(long)m.Result) | NativeMethods.DLGC_WANTTAB : unchecked((int)(long)m.Result) & ~NativeMethods.DLGC_WANTTAB);
+                    m.Result = (IntPtr)(AcceptsTab ? unchecked((int)(long)m.Result) | (int)User32.DLGC.WANTTAB : unchecked((int)(long)m.Result) & ~(int)User32.DLGC.WANTTAB);
                     break;
 
                 case User32.WM.GETOBJECT:
