@@ -16,12 +16,6 @@ namespace System.Windows.Forms
 
         public const int STATUS_PENDING = 0x103; //259 = STILL_ALIVE
 
-        public const int
-        BFFM_INITIALIZED = 1,
-        BFFM_SELCHANGED = 2,
-        BFFM_SETSELECTION = 0x400 + 103,
-        BFFM_ENABLEOK = 0x400 + 101;
-
         public const int cmb4 = 0x0473;
 
         public const int CW_USEDEFAULT = (unchecked((int)0x80000000)),
