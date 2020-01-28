@@ -525,8 +525,8 @@ namespace System.Windows.Forms
                 // PrintDlgEx. So we have to strip them out.
                 data.Flags &= ~(PD.SHOWHELP | PD.NONETWORKBUTTON);
 
-                int hr = UnsafeNativeMethods.PrintDlgEx(data);
-                if (NativeMethods.Failed(hr) || data.dwResultAction == PD_RESULT.CANCEL)
+                HRESULT hr = UnsafeNativeMethods.PrintDlgEx(data);
+                if (hr.Failed() || data.dwResultAction == PD_RESULT.CANCEL)
                 {
                     return false;
                 }
