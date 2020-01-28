@@ -261,40 +261,7 @@ namespace System.Windows.Forms
         internal const int SFF_PLAINRTF = 0x4000;
 
         /* all paragraph measurements are in twips */
-
-        internal const int MAX_TAB_STOPS = 32;
         internal const int lDefaultTab = 720;
-
-        /* PARAFORMAT mask values */
-        internal const int PFM_STARTINDENT = 0x00000001;
-        internal const int PFM_RIGHTINDENT = 0x00000002;
-        internal const int PFM_OFFSET = 0x00000004;
-        internal const int PFM_ALIGNMENT = 0x00000008;
-        internal const int PFM_TABSTOPS = 0x00000010;
-        internal const int PFM_NUMBERING = 0x00000020;
-        internal const int PFM_OFFSETINDENT = unchecked((int)0x80000000);
-
-        /* PARAFORMAT numbering options */
-        internal const int PFN_BULLET = 0x0001;
-
-        /* PARAFORMAT alignment options */
-        internal const int PFA_LEFT = 0x0001;
-        internal const int PFA_RIGHT = 0x0002;
-        internal const int PFA_CENTER = 0x0003;
-
-        /* CHARFORMAT and PARAFORMAT "ALL" masks
-           CFM_COLOR mirrors CFE_AUTOCOLOR, a little
-           code to easily deal with autocolor */
-        internal const int CFM_EFFECTS = (CFM_BOLD | CFM_ITALIC |
-                                                           CFM_UNDERLINE | CFM_COLOR |
-                                                           CFM_STRIKEOUT | CFE_PROTECTED |
-                                                           CFM_LINK);
-        internal const int CFM_ALL = (CFM_EFFECTS | CFM_SIZE |
-                                                           CFM_FACE | CFM_OFFSET | CFM_CHARSET);
-        internal const int PFM_ALL = (PFM_STARTINDENT | PFM_RIGHTINDENT |
-                                                           PFM_OFFSET | PFM_ALIGNMENT |
-                                                           PFM_TABSTOPS | PFM_NUMBERING |
-                                                           PFM_OFFSETINDENT);
 
         /* New masks and effects -- a parenthesized asterisk indicates that
            the data is stored by RichEdit2.0, but not displayed */
@@ -325,21 +292,6 @@ namespace System.Windows.Forms
         internal const int CFM_SUBSCRIPT = (CFE_SUBSCRIPT | CFE_SUPERSCRIPT);
         internal const int CFM_SUPERSCRIPT = CFM_SUBSCRIPT;
 
-        internal const int CFM_EFFECTS2 = (CFM_EFFECTS | CFM_DISABLED |
-                                                           CFM_SMALLCAPS | CFM_ALLCAPS |
-                                                           CFM_HIDDEN | CFM_OUTLINE |
-                                                           CFM_SHADOW | CFM_EMBOSS |
-                                                           CFM_IMPRINT | CFM_DISABLED |
-                                                           CFM_REVISED | CFM_SUBSCRIPT |
-                                                           CFM_SUPERSCRIPT | CFM_BACKCOLOR);
-
-        internal const int CFM_ALL2 = (CFM_ALL | CFM_EFFECTS2 |
-                                                           CFM_BACKCOLOR | CFM_LCID |
-                                                           CFM_UNDERLINETYPE | CFM_WEIGHT |
-                                                           CFM_REVAUTHOR | CFM_SPACING |
-                                                           CFM_KERNING | CFM_STYLE |
-                                                           CFM_ANIMATION);
-
         internal const int CFE_SMALLCAPS = CFM_SMALLCAPS;
         internal const int CFE_ALLCAPS = CFM_ALLCAPS;
         internal const int CFE_HIDDEN = CFM_HIDDEN;
@@ -363,56 +315,6 @@ namespace System.Windows.Forms
         internal const int CFU_UNDERLINE = 0x1;
         internal const int CFU_UNDERLINENONE = 0;
 
-        /* PARAFORMAT 2.0 masks and effects */
-
-        internal const int PFM_SPACEBEFORE = 0x00000040;
-        internal const int PFM_SPACEAFTER = 0x00000080;
-        internal const int PFM_LINESPACING = 0x00000100;
-        internal const int PFM_STYLE = 0x00000400;
-        internal const int PFM_BORDER = 0x00000800;       /* (*)  */
-        internal const int PFM_SHADING = 0x00001000;       /* (*)  */
-        internal const int PFM_NUMBERINGSTYLE = 0x00002000;       /* (*)  */
-        internal const int PFM_NUMBERINGTAB = 0x00004000;       /* (*)  */
-        internal const int PFM_NUMBERINGSTART = 0x00008000;       /* (*)  */
-
-        internal const int PFM_RTLPARA = 0x00010000;
-        internal const int PFM_KEEP = 0x00020000;       /* (*)  */
-        internal const int PFM_KEEPNEXT = 0x00040000;       /* (*)  */
-        internal const int PFM_PAGEBREAKBEFORE = 0x00080000;       /* (*)  */
-        internal const int PFM_NOLINENUMBER = 0x00100000;       /* (*)  */
-        internal const int PFM_NOWIDOWCONTROL = 0x00200000;       /* (*)  */
-        internal const int PFM_DONOTHYPHEN = 0x00400000;       /* (*)  */
-        internal const int PFM_SIDEBYSIDE = 0x00800000;       /* (*)  */
-
-        internal const int PFM_TABLE = unchecked((int)0xc0000000);       /* (*)  */
-
-        /* Note: PARAFORMAT has no effects */
-        internal const int PFM_EFFECTS = (PFM_RTLPARA | PFM_KEEP |
-                                                           PFM_KEEPNEXT | PFM_TABLE |
-                                                           PFM_PAGEBREAKBEFORE | PFM_NOLINENUMBER |
-                                                           PFM_NOWIDOWCONTROL | PFM_DONOTHYPHEN |
-                                                           PFM_SIDEBYSIDE | PFM_TABLE);
-
-        internal const int PFM_ALL2 = (PFM_ALL | PFM_EFFECTS |
-                                                           PFM_SPACEBEFORE | PFM_SPACEAFTER |
-                                                           PFM_LINESPACING | PFM_STYLE |
-                                                           PFM_SHADING | PFM_BORDER |
-                                                           PFM_NUMBERINGTAB | PFM_NUMBERINGSTART |
-                                                           PFM_NUMBERINGSTYLE);
-
-        internal const int PFE_RTLPARA = (PFM_RTLPARA >> 16);
-        internal const int PFE_KEEP = (PFM_KEEP >> 16);        /* (*)  */
-        internal const int PFE_KEEPNEXT = (PFM_KEEPNEXT >> 16);        /* (*)  */
-        internal const int PFE_PAGEBREAKBEFORE = (PFM_PAGEBREAKBEFORE >> 16);      /* (*)  */
-        internal const int PFE_NOLINENUMBER = (PFM_NOLINENUMBER >> 16);        /* (*)  */
-        internal const int PFE_NOWIDOWCONTROL = (PFM_NOWIDOWCONTROL >> 16);       /* (*)  */
-        internal const int PFE_DONOTHYPHEN = (PFM_DONOTHYPHEN >> 16);        /* (*)  */
-        internal const int PFE_SIDEBYSIDE = (PFM_SIDEBYSIDE >> 16);        /* (*)  */
-
-        internal const int PFE_TABLEROW = 0xc000;           /* These 3 options are mutually */
-        internal const int PFE_TABLECELLEND = 0x8000;           /*  exclusive and each imply    */
-        internal const int PFE_TABLECELL = 0x4000;           /*  that para is part of a table*/
-
         /*
          *  PARAFORMAT numbering options (values for wNumbering):
          *
@@ -428,7 +330,6 @@ namespace System.Windows.Forms
          *
          *  Other valid Unicode chars are Unicodes for bullets.
          */
-        internal const int PFA_JUSTIFY = 4;        /* New paragraph-alignment option 2.0 (*) */
 
         internal const int tomTrue = -1,
                             tomFalse = 0,

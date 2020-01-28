@@ -14,6 +14,7 @@ using System.Text;
 using System.Windows.Forms.Layout;
 using Microsoft.Win32;
 using static Interop;
+using static Interop.Richedit;
 using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 
 namespace System.Windows.Forms
@@ -831,35 +832,35 @@ namespace System.Windows.Forms
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
         SRDescription(nameof(SR.RichTextBoxSelAlignment))
         ]
-        public HorizontalAlignment SelectionAlignment
+        public unsafe HorizontalAlignment SelectionAlignment
         {
             get
             {
                 HorizontalAlignment selectionAlignment = HorizontalAlignment.Left;
 
                 ForceHandleCreate();
-                NativeMethods.PARAFORMAT pf = new NativeMethods.PARAFORMAT
+                var pf = new PARAFORMAT
                 {
-                    rgxTabs = new int[RichTextBoxConstants.MAX_TAB_STOPS]
+                    cbSize = (uint)sizeof(PARAFORMAT)
                 };
 
                 // get the format for our currently selected paragraph
-                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), RichEditMessages.EM_GETPARAFORMAT, 0, pf);
+                User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_GETPARAFORMAT, IntPtr.Zero, ref pf);
 
                 // check if alignment has been set yet
-                if ((RichTextBoxConstants.PFM_ALIGNMENT & pf.dwMask) != 0)
+                if ((PFM.ALIGNMENT & pf.dwMask) != 0)
                 {
                     switch (pf.wAlignment)
                     {
-                        case RichTextBoxConstants.PFA_LEFT:
+                        case PFA.LEFT:
                             selectionAlignment = HorizontalAlignment.Left;
                             break;
 
-                        case RichTextBoxConstants.PFA_RIGHT:
+                        case PFA.RIGHT:
                             selectionAlignment = HorizontalAlignment.Right;
                             break;
 
-                        case RichTextBoxConstants.PFA_CENTER:
+                        case PFA.CENTER:
                             selectionAlignment = HorizontalAlignment.Center;
                             break;
                     }
@@ -876,27 +877,28 @@ namespace System.Windows.Forms
                 }
 
                 ForceHandleCreate();
-                NativeMethods.PARAFORMAT pf = new NativeMethods.PARAFORMAT
+                var pf = new PARAFORMAT
                 {
-                    dwMask = RichTextBoxConstants.PFM_ALIGNMENT
+                    cbSize = (uint)sizeof(PARAFORMAT),
+                    dwMask = PFM.ALIGNMENT
                 };
                 switch (value)
                 {
                     case HorizontalAlignment.Left:
-                        pf.wAlignment = RichTextBoxConstants.PFA_LEFT;
+                        pf.wAlignment = PFA.LEFT;
                         break;
 
                     case HorizontalAlignment.Right:
-                        pf.wAlignment = RichTextBoxConstants.PFA_RIGHT;
+                        pf.wAlignment = PFA.RIGHT;
                         break;
 
                     case HorizontalAlignment.Center:
-                        pf.wAlignment = RichTextBoxConstants.PFA_CENTER;
+                        pf.wAlignment = PFA.CENTER;
                         break;
                 }
 
                 // set the format for our current paragraph or selection
-                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), RichEditMessages.EM_SETPARAFORMAT, 0, pf);
+                User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_SETPARAFORMAT, IntPtr.Zero, ref pf);
             }
         }
 
@@ -910,25 +912,25 @@ namespace System.Windows.Forms
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
         SRDescription(nameof(SR.RichTextBoxSelBullet))
         ]
-        public bool SelectionBullet
+        public unsafe bool SelectionBullet
         {
             get
             {
                 RichTextBoxSelectionAttribute selectionBullet = RichTextBoxSelectionAttribute.None;
 
                 ForceHandleCreate();
-                NativeMethods.PARAFORMAT pf = new NativeMethods.PARAFORMAT
+                var pf = new PARAFORMAT
                 {
-                    rgxTabs = new int[RichTextBoxConstants.MAX_TAB_STOPS]
+                    cbSize = (uint)sizeof(PARAFORMAT)
                 };
 
                 // get the format for our currently selected paragraph
-                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), RichEditMessages.EM_GETPARAFORMAT, 0, pf);
+                User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_GETPARAFORMAT, IntPtr.Zero, ref pf);
 
                 // check if alignment has been set yet
-                if ((RichTextBoxConstants.PFM_NUMBERING & pf.dwMask) != 0)
+                if ((PFM.NUMBERING & pf.dwMask) != 0)
                 {
-                    if (RichTextBoxConstants.PFN_BULLET == pf.wNumbering)
+                    if (pf.wNumbering == PFN.BULLET)
                     {
                         selectionBullet = RichTextBoxSelectionAttribute.All;
                     }
@@ -945,9 +947,10 @@ namespace System.Windows.Forms
             {
                 ForceHandleCreate();
 
-                NativeMethods.PARAFORMAT pf = new NativeMethods.PARAFORMAT
+                var pf = new PARAFORMAT
                 {
-                    dwMask = RichTextBoxConstants.PFM_NUMBERING | RichTextBoxConstants.PFM_OFFSET
+                    cbSize = (uint)sizeof(PARAFORMAT),
+                    dwMask = PFM.NUMBERING | PFM.OFFSET
                 };
 
                 if (!value)
@@ -957,11 +960,11 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    pf.wNumbering = RichTextBoxConstants.PFN_BULLET;
+                    pf.wNumbering = PFN.BULLET;
                     pf.dxOffset = Pixel2Twip(IntPtr.Zero, bulletIndent, true);
                 }
                 // set the format for our current paragraph or selection
-                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), RichEditMessages.EM_SETPARAFORMAT, 0, pf);
+                User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_SETPARAFORMAT, IntPtr.Zero, ref pf);
             }
         }
 
@@ -1150,23 +1153,23 @@ namespace System.Windows.Forms
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
         SRDescription(nameof(SR.RichTextBoxSelHangingIndent))
         ]
-        public int SelectionHangingIndent
+        public unsafe int SelectionHangingIndent
         {
             get
             {
                 int selHangingIndent = 0;
 
                 ForceHandleCreate();
-                NativeMethods.PARAFORMAT pf = new NativeMethods.PARAFORMAT
+                var pf = new PARAFORMAT
                 {
-                    rgxTabs = new int[RichTextBoxConstants.MAX_TAB_STOPS]
+                    cbSize = (uint)sizeof(PARAFORMAT)
                 };
 
                 // get the format for our currently selected paragraph
-                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), RichEditMessages.EM_GETPARAFORMAT, 0, pf);
+                User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_GETPARAFORMAT, IntPtr.Zero, ref pf);
 
                 // check if alignment has been set yet
-                if ((RichTextBoxConstants.PFM_OFFSET & pf.dwMask) != 0)
+                if ((PFM.OFFSET & pf.dwMask) != 0)
                 {
                     selHangingIndent = pf.dxOffset;
                 }
@@ -1177,14 +1180,15 @@ namespace System.Windows.Forms
             {
                 ForceHandleCreate();
 
-                NativeMethods.PARAFORMAT pf = new NativeMethods.PARAFORMAT
+                var pf = new PARAFORMAT
                 {
-                    dwMask = RichTextBoxConstants.PFM_OFFSET,
+                    cbSize = (uint)sizeof(PARAFORMAT),
+                    dwMask = PFM.OFFSET,
                     dxOffset = Pixel2Twip(IntPtr.Zero, value, true)
                 };
 
                 // set the format for our current paragraph or selection
-                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), RichEditMessages.EM_SETPARAFORMAT, 0, pf);
+                User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_SETPARAFORMAT, IntPtr.Zero, ref pf);
             }
         }
 
@@ -1199,23 +1203,23 @@ namespace System.Windows.Forms
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
         SRDescription(nameof(SR.RichTextBoxSelIndent))
         ]
-        public int SelectionIndent
+        public unsafe int SelectionIndent
         {
             get
             {
                 int selIndent = 0;
 
                 ForceHandleCreate();
-                NativeMethods.PARAFORMAT pf = new NativeMethods.PARAFORMAT
+                var pf = new PARAFORMAT
                 {
-                    rgxTabs = new int[RichTextBoxConstants.MAX_TAB_STOPS]
+                    cbSize = (uint)sizeof(PARAFORMAT)
                 };
 
                 // get the format for our currently selected paragraph
-                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), RichEditMessages.EM_GETPARAFORMAT, 0, pf);
+                User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_GETPARAFORMAT, IntPtr.Zero, ref pf);
 
                 // check if alignment has been set yet
-                if ((RichTextBoxConstants.PFM_STARTINDENT & pf.dwMask) != 0)
+                if ((PFM.STARTINDENT & pf.dwMask) != 0)
                 {
                     selIndent = pf.dxStartIndent;
                 }
@@ -1226,14 +1230,15 @@ namespace System.Windows.Forms
             {
                 ForceHandleCreate();
 
-                NativeMethods.PARAFORMAT pf = new NativeMethods.PARAFORMAT
+                var pf = new PARAFORMAT
                 {
-                    dwMask = RichTextBoxConstants.PFM_STARTINDENT,
+                    cbSize = (uint)sizeof(PARAFORMAT),
+                    dwMask = PFM.STARTINDENT,
                     dxStartIndent = Pixel2Twip(IntPtr.Zero, value, true)
                 };
 
                 // set the format for our current paragraph or selection
-                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), RichEditMessages.EM_SETPARAFORMAT, 0, pf);
+                User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_SETPARAFORMAT, IntPtr.Zero, ref pf);
             }
         }
 
@@ -1333,7 +1338,7 @@ namespace System.Windows.Forms
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
         SRDescription(nameof(SR.RichTextBoxSelRightIndent))
         ]
-        public int SelectionRightIndent
+        public unsafe int SelectionRightIndent
         {
             get
             {
@@ -1341,16 +1346,16 @@ namespace System.Windows.Forms
 
                 ForceHandleCreate();
 
-                NativeMethods.PARAFORMAT pf = new NativeMethods.PARAFORMAT
+                var pf = new PARAFORMAT
                 {
-                    rgxTabs = new int[RichTextBoxConstants.MAX_TAB_STOPS]
+                    cbSize = (uint)sizeof(PARAFORMAT)
                 };
 
                 // get the format for our currently selected paragraph
-                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), RichEditMessages.EM_GETPARAFORMAT, 0, pf);
+                User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_GETPARAFORMAT, IntPtr.Zero, ref pf);
 
                 // check if alignment has been set yet
-                if ((RichTextBoxConstants.PFM_RIGHTINDENT & pf.dwMask) != 0)
+                if ((PFM.RIGHTINDENT & pf.dwMask) != 0)
                 {
                     selRightIndent = pf.dxRightIndent;
                 }
@@ -1365,14 +1370,15 @@ namespace System.Windows.Forms
                 }
 
                 ForceHandleCreate();
-                NativeMethods.PARAFORMAT pf = new NativeMethods.PARAFORMAT
+                var pf = new PARAFORMAT
                 {
-                    dwMask = RichTextBoxConstants.PFM_RIGHTINDENT,
+                    cbSize = (uint)sizeof(PARAFORMAT),
+                    dwMask = PFM.RIGHTINDENT,
                     dxRightIndent = Pixel2Twip(IntPtr.Zero, value, true)
                 };
 
                 // set the format for our current paragraph or selection
-                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), RichEditMessages.EM_SETPARAFORMAT, 0, pf);
+                User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_SETPARAFORMAT, IntPtr.Zero, ref pf);
             }
         }
 
@@ -1384,23 +1390,23 @@ namespace System.Windows.Forms
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
         SRDescription(nameof(SR.RichTextBoxSelTabs))
         ]
-        public int[] SelectionTabs
+        public unsafe int[] SelectionTabs
         {
             get
             {
                 int[] selTabs = Array.Empty<int>();
 
                 ForceHandleCreate();
-                NativeMethods.PARAFORMAT pf = new NativeMethods.PARAFORMAT
+                var pf = new PARAFORMAT
                 {
-                    rgxTabs = new int[RichTextBoxConstants.MAX_TAB_STOPS]
+                    cbSize = (uint)sizeof(PARAFORMAT)
                 };
 
                 // get the format for our currently selected paragraph
-                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), RichEditMessages.EM_GETPARAFORMAT, 0, pf);
+                User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_GETPARAFORMAT, IntPtr.Zero, ref pf);
 
                 // check if alignment has been set yet
-                if ((RichTextBoxConstants.PFM_TABSTOPS & pf.dwMask) != 0)
+                if ((PFM.TABSTOPS & pf.dwMask) != 0)
                 {
                     selTabs = new int[pf.cTabCount];
                     for (int x = 0; x < pf.cTabCount; x++)
@@ -1414,30 +1420,30 @@ namespace System.Windows.Forms
             set
             {
                 // Verify the argument, and throw an error if is bad
-                if (value != null && value.Length > RichTextBoxConstants.MAX_TAB_STOPS)
+                if (value != null && value.Length > MAX_TAB_STOPS)
                 {
                     throw new ArgumentOutOfRangeException(nameof(SelectionTabs), SR.SelTabCountRange);
                 }
 
                 ForceHandleCreate();
-                NativeMethods.PARAFORMAT pf = new NativeMethods.PARAFORMAT
+                var pf = new PARAFORMAT
                 {
-                    rgxTabs = new int[RichTextBoxConstants.MAX_TAB_STOPS]
+                    cbSize = (uint)sizeof(PARAFORMAT)
                 };
 
                 // get the format for our currently selected paragraph because
                 // we need to get the number of tabstops to copy
-                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), RichEditMessages.EM_GETPARAFORMAT, 0, pf);
+                User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_GETPARAFORMAT, IntPtr.Zero, ref pf);
 
                 pf.cTabCount = (short)((value == null) ? 0 : value.Length);
-                pf.dwMask = RichTextBoxConstants.PFM_TABSTOPS;
+                pf.dwMask = PFM.TABSTOPS;
                 for (int x = 0; x < pf.cTabCount; x++)
                 {
                     pf.rgxTabs[x] = Pixel2Twip(IntPtr.Zero, value[x], true);
                 }
 
                 // set the format for our current paragraph or selection
-                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), RichEditMessages.EM_SETPARAFORMAT, 0, pf);
+                User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_SETPARAFORMAT, IntPtr.Zero, ref pf);
             }
         }
 
