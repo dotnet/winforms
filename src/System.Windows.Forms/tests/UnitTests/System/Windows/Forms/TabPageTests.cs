@@ -3062,6 +3062,42 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(2, callCount);
         }
 
+        [WinFormsFact]
+        public void TabPage_ToolTipText_SetCorrectToolTip()
+        {
+            using TabPage tabPage = new TabPage();
+            tabPage.CreateControl();
+            string expected = "Some text";
+            tabPage.ToolTipText = expected;
+            string actual = tabPage.ToolTip.GetCaptionForTool(tabPage);
+            Assert.Equal(expected, actual);
+        }
+
+        [WinFormsFact]
+        public void TabPage_SetNewToolTip_SetCorrectToolTipText()
+        {
+            using TabPage tabPage = new TabPage();
+            tabPage.CreateControl();
+            string expected = "Some text";
+            using ToolTip toolTip = new ToolTip();
+            toolTip.SetToolTip(tabPage, expected);
+            string actual = tabPage.ToolTipText;
+            Assert.Equal(expected, actual);
+        }
+
+        [WinFormsFact]
+        public void TabPage_ToolTip_IsNotNull()
+        {
+            using TabPage tabPage = new TabPage();
+            Assert.NotNull(tabPage.ToolTip);
+
+            tabPage.ToolTip = new ToolTip();
+            Assert.NotNull(tabPage.ToolTip);
+
+            tabPage.ToolTip = null;
+            Assert.NotNull(tabPage.ToolTip);
+        }
+
         [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void TabPage_ToolTipText_Set_GetReturnsExpected(string value, string expected)

@@ -14,12 +14,18 @@ namespace WinformsControlsTest
             InitializeComponent();
         }
 
-        int i = 0;
+        int i = -2;
 
         private void ButtonClick(object sender, EventArgs e)
         {
             switch (i)
             {
+                case -2:
+                    tabPage1.ToolTipText = "TTT 1 set {}";
+                    break;
+                case -1:
+                    tabPage2.ToolTipText = "TTT 2 set {}";
+                    break;
                 case 0:
                     toolTip.SetToolTip(tabPage1, "tabpage1");
                     break;
