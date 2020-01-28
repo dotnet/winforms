@@ -3232,7 +3232,7 @@ namespace System.Windows.Forms
             {
                 fixed (char* pText = text)
                 {
-                    var lvFindInfo = new ComCtl32.LVFINDINFOW();
+                    var lvFindInfo = new LVFINDINFOW();
                     if (isTextSearch)
                     {
                         lvFindInfo.flags = LVFI.STRING;
@@ -5644,7 +5644,7 @@ namespace System.Windows.Forms
             User32.NMHDR* nmhdr = (User32.NMHDR*)m.LParam;
 
             // column header custom draw message handling
-            if (nmhdr->code == (int)ComCtl32.NM.CUSTOMDRAW && OwnerDraw)
+            if (nmhdr->code == (int)NM.CUSTOMDRAW && OwnerDraw)
             {
                 try
                 {
@@ -5698,7 +5698,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            if (nmhdr->code == (int)ComCtl32.NM.RELEASEDCAPTURE && listViewState[LISTVIEWSTATE_columnClicked])
+            if (nmhdr->code == (int)NM.RELEASEDCAPTURE && listViewState[LISTVIEWSTATE_columnClicked])
             {
                 listViewState[LISTVIEWSTATE_columnClicked] = false;
                 OnColumnClick(new ColumnClickEventArgs(columnIndex));
@@ -6021,11 +6021,11 @@ namespace System.Windows.Forms
 
             switch (nmhdr->code)
             {
-                case (int)ComCtl32.NM.CUSTOMDRAW:
+                case (int)NM.CUSTOMDRAW:
                     CustomDraw(ref m);
                     break;
 
-                case NativeMethods.LVN_BEGINLABELEDIT:
+                case (int)LVN.BEGINLABELEDIT:
                     {
                         NMLVDISPINFO* dispInfo = (NMLVDISPINFO*)m.LParam;
                         LabelEditEventArgs e = new LabelEditEventArgs(dispInfo->item.iItem);
@@ -6035,7 +6035,7 @@ namespace System.Windows.Forms
                         break;
                     }
 
-                case NativeMethods.LVN_COLUMNCLICK:
+                case (int)LVN.COLUMNCLICK:
                     {
                         NMLISTVIEW* nmlv = (NMLISTVIEW*)m.LParam;
                         listViewState[LISTVIEWSTATE_columnClicked] = true;
@@ -6043,7 +6043,7 @@ namespace System.Windows.Forms
                         break;
                     }
 
-                case NativeMethods.LVN_ENDLABELEDIT:
+                case (int)LVN.ENDLABELEDIT:
                     {
                         listViewState[LISTVIEWSTATE_inLabelEdit] = false;
                         NMLVDISPINFO* dispInfo = (NMLVDISPINFO*)m.LParam;
@@ -6062,11 +6062,11 @@ namespace System.Windows.Forms
                         break;
                     }
 
-                case NativeMethods.LVN_ITEMACTIVATE:
+                case (int)LVN.ITEMACTIVATE:
                     OnItemActivate(EventArgs.Empty);
                     break;
 
-                case NativeMethods.LVN_BEGINDRAG:
+                case (int)LVN.BEGINDRAG:
                     {
                         // The items collection was modified while dragging that means that
                         // we can't reliably give the user the item on which the dragging
@@ -6081,7 +6081,7 @@ namespace System.Windows.Forms
                         break;
                     }
 
-                case NativeMethods.LVN_BEGINRDRAG:
+                case (int)LVN.BEGINRDRAG:
                     {
                         // The items collection was modified while dragging. That means that
                         // we can't reliably give the user the item on which the dragging
@@ -6096,7 +6096,7 @@ namespace System.Windows.Forms
                         break;
                     }
 
-                case NativeMethods.LVN_ITEMCHANGING:
+                case (int)LVN.ITEMCHANGING:
                     {
                         NMLISTVIEW* nmlv = (NMLISTVIEW*)m.LParam;
                         if ((nmlv->uChanged & LVIF.STATE) != 0)
@@ -6116,7 +6116,7 @@ namespace System.Windows.Forms
                         break;
                     }
 
-                case NativeMethods.LVN_ITEMCHANGED:
+                case (int)LVN.ITEMCHANGED:
                     {
                         NMLISTVIEW* nmlv = (NMLISTVIEW*)m.LParam;
                         // Check for state changes to the selected state...
@@ -6185,15 +6185,15 @@ namespace System.Windows.Forms
                         break;
                     }
 
-                case (int)ComCtl32.NM.CLICK:
+                case (int)NM.CLICK:
                     WmNmClick(ref m);
                     // FALL THROUGH //
-                    goto case (int)ComCtl32.NM.RCLICK;
+                    goto case (int)NM.RCLICK;
 
-                case (int)ComCtl32.NM.RCLICK:
+                case (int)NM.RCLICK:
                     int displayIndex = GetIndexOfClickedItem();
 
-                    MouseButtons button = nmhdr->code == (int)ComCtl32.NM.CLICK ? MouseButtons.Left : MouseButtons.Right;
+                    MouseButtons button = nmhdr->code == (int)NM.CLICK ? MouseButtons.Left : MouseButtons.Right;
                     Point pos = Cursor.Position;
                     pos = PointToClient(pos);
 
@@ -6209,12 +6209,12 @@ namespace System.Windows.Forms
                     }
                     break;
 
-                case (int)ComCtl32.NM.DBLCLK:
+                case (int)NM.DBLCLK:
                     WmNmDblClick(ref m);
                     // FALL THROUGH //
-                    goto case (int)ComCtl32.NM.RDBLCLK;
+                    goto case (int)NM.RDBLCLK;
 
-                case (int)ComCtl32.NM.RDBLCLK:
+                case (int)NM.RDBLCLK:
                     int index = GetIndexOfClickedItem();
                     if (index != -1)
                     {
@@ -6229,7 +6229,7 @@ namespace System.Windows.Forms
                     Capture = true;
                     break;
 
-                case NativeMethods.LVN_KEYDOWN:
+                case (int)LVN.KEYDOWN:
                     if (CheckBoxes)
                     {
                         NMLVKEYDOWN* lvkd = (NMLVKEYDOWN*)m.LParam;
@@ -6254,14 +6254,14 @@ namespace System.Windows.Forms
                     }
                     break;
 
-                case NativeMethods.LVN_ODCACHEHINT:
+                case (int)LVN.ODCACHEHINT:
                     // tell the user to prepare the cache:
                     NMLVCACHEHINT* cacheHint = (NMLVCACHEHINT*)m.LParam;
                     OnCacheVirtualItems(new CacheVirtualItemsEventArgs(cacheHint->iFrom, cacheHint->iTo));
                     break;
 
                 default:
-                    if (nmhdr->code == NativeMethods.LVN_GETDISPINFO)
+                    if (nmhdr->code == (int)LVN.GETDISPINFO)
                     {
                         // we use the LVN_GETDISPINFO message only in virtual mode
                         if (VirtualMode && m.LParam != IntPtr.Zero)
@@ -6315,7 +6315,7 @@ namespace System.Windows.Forms
                             }
                         }
                     }
-                    else if (nmhdr->code == NativeMethods.LVN_ODSTATECHANGED)
+                    else if (nmhdr->code == (int)LVN.ODSTATECHANGED)
                     {
                         if (VirtualMode && m.LParam != IntPtr.Zero)
                         {
@@ -6330,7 +6330,7 @@ namespace System.Windows.Forms
                             }
                         }
                     }
-                    else if (nmhdr->code == NativeMethods.LVN_GETINFOTIP)
+                    else if (nmhdr->code == (int)LVN.GETINFOTIP)
                     {
                         if (ShowItemToolTips && m.LParam != IntPtr.Zero)
                         {
@@ -6348,7 +6348,7 @@ namespace System.Windows.Forms
                             }
                         }
                     }
-                    else if (nmhdr->code == NativeMethods.LVN_ODFINDITEM)
+                    else if (nmhdr->code == (int)LVN.ODFINDITEM)
                     {
                         if (VirtualMode)
                         {

@@ -78,24 +78,6 @@ namespace System.Windows.Forms
         ICON_SMALL = 0,
         ICON_BIG = 1;
 
-        public const int
-        LV_VIEW_TILE = 0x0004,
-        LVN_ITEMCHANGING = ((0 - 100) - 0),
-        LVN_ITEMCHANGED = ((0 - 100) - 1),
-        LVN_BEGINLABELEDIT = ((0 - 100) - 75),
-        LVN_ENDLABELEDIT = ((0 - 100) - 76),
-        LVN_COLUMNCLICK = ((0 - 100) - 8),
-        LVN_BEGINDRAG = ((0 - 100) - 9),
-        LVN_BEGINRDRAG = ((0 - 100) - 11),
-        LVN_ODFINDITEM = ((0 - 100) - 79),
-        LVN_ITEMACTIVATE = ((0 - 100) - 14),
-        LVN_GETDISPINFO = ((0 - 100) - 77),
-        LVN_ODCACHEHINT = ((0 - 100) - 13),
-        LVN_ODSTATECHANGED = ((0 - 100) - 15),
-        LVN_SETDISPINFO = ((0 - 100) - 78),
-        LVN_GETINFOTIP = ((0 - 100) - 58),
-        LVN_KEYDOWN = ((0 - 100) - 55);
-
         public const int LANG_NEUTRAL = 0x00,
                          LOCALE_IFIRSTDAYOFWEEK = 0x0000100C;   /* first day of week specifier */
 
