@@ -776,15 +776,35 @@ namespace System.Windows.Forms.Tests
             Assert.Equal((IntPtr)11, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.TBM.GETRANGEMIN, IntPtr.Zero, IntPtr.Zero));
         }
 
-        [WinFormsFact]
-        public void TrackBar_Handle_GetWithValue_Success()
+        [WinFormsTheory]
+        [InlineData(RightToLeft.Inherit, true, 5)]
+        [InlineData(RightToLeft.No, true, 5)]
+        [InlineData(RightToLeft.Yes, true, 5)]
+        [InlineData(RightToLeft.Inherit, false, 5)]
+        [InlineData(RightToLeft.No, false, 5)]
+        [InlineData(RightToLeft.Yes, false, 5)]
+        public void TrackBar_Handle_GetWithValue_Success(RightToLeft rightToLeft, bool rightToLeftLayout, int expected)
         {
             using var control = new TrackBar
             {
+                Value = 5,
+                RightToLeft = rightToLeft,
+                RightToLeftLayout = rightToLeftLayout
+            };
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            Assert.Equal((IntPtr)expected, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.TBM.GETPOS));
+        }
+
+        [WinFormsFact]
+        public void TrackBar_Handle_GetWithValueVertical_Success()
+        {
+            using var control = new TrackBar
+            {
+                Orientation = Orientation.Vertical,
                 Value = 5
             };
             Assert.NotEqual(IntPtr.Zero, control.Handle);
-            Assert.Equal((IntPtr)5, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.TBM.GETPOS, IntPtr.Zero, IntPtr.Zero));
+            Assert.Equal((IntPtr)5, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.TBM.GETPOS));
         }
 
         [WinFormsFact]
@@ -2112,6 +2132,41 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsFact]
+        public void TrackBar_Value_SetWithHandler_CallsValueChanged()
+        {
+            using var control = new TrackBar();
+            int callCount = 0;
+            EventHandler valueChangedHandler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                callCount++;
+            };
+            control.ValueChanged += valueChangedHandler;
+
+            // Set different.
+            control.Value = 1;
+            Assert.Equal(1, control.Value);
+            Assert.Equal(1, callCount);
+
+            // Set same.
+            control.Value = 1;
+            Assert.Equal(1, control.Value);
+            Assert.Equal(1, callCount);
+
+            // Set different.
+            control.Value = 2;
+            Assert.Equal(2, control.Value);
+            Assert.Equal(2, callCount);
+
+            // Remove handler.
+            control.ValueChanged -= valueChangedHandler;
+            control.Value = 1;
+            Assert.Equal(1, control.Value);
+            Assert.Equal(2, callCount);
         }
 
         [WinFormsTheory]

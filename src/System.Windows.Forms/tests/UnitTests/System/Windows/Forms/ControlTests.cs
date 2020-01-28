@@ -812,6 +812,8 @@ namespace System.Windows.Forms.Tests
 
             public new AutoSizeMode GetAutoSizeMode() => base.GetAutoSizeMode();
 
+            public new Rectangle GetScaledBounds(Rectangle bounds, SizeF factor, BoundsSpecified specified) => base.GetScaledBounds(bounds, factor, specified);
+
             public new bool GetStyle(ControlStyles flag) => base.GetStyle(flag);
 
             public new bool GetTopLevel() => base.GetTopLevel();
