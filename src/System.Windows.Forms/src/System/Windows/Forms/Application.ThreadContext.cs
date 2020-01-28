@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -107,7 +109,11 @@ namespace System.Windows.Forms
                 _id = Kernel32.GetCurrentThreadId();
                 _messageLoopCount = 0;
                 t_currentThreadContext = this;
-                s_contextHash[_id] = this;
+
+                lock (s_tcInternalSyncObject)
+                {
+                    s_contextHash[_id] = this;
+                }
             }
 
             public ApplicationContext ApplicationContext { get; private set; }
@@ -266,7 +272,7 @@ namespace System.Windows.Forms
             ///  Retrieves the actual parking form.  This will demand create the parking window
             ///  if it needs to.
             /// </summary>
-            internal ParkingWindow GetParkingWindow(DpiAwarenessContext context)
+            internal ParkingWindow GetParkingWindow(IntPtr context)
             {
                 // Locking 'this' here is ok since this is an internal class.
                 lock (this)
@@ -298,7 +304,7 @@ namespace System.Windows.Forms
             ///  Returns parking window that matches dpi awareness context. return null if not found.
             /// </summary>
             /// <returns>return matching parking window from list. returns null if not found</returns>
-            internal ParkingWindow GetParkingWindowForContext(DpiAwarenessContext context)
+            internal ParkingWindow GetParkingWindowForContext(IntPtr context)
             {
                 if (_parkingWindows.Count == 0)
                 {
@@ -308,7 +314,7 @@ namespace System.Windows.Forms
                 // Legacy OS/target framework scenario where ControlDpiContext is set to DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_UNSPECIFIED
                 // because of 'ThreadContextDpiAwareness' API unavailability or this feature is not enabled.
 
-                if (!DpiHelper.IsScalingRequirementMet || CommonUnsafeNativeMethods.TryFindDpiAwarenessContextsEqual(context, DpiAwarenessContext.DPI_AWARENESS_CONTEXT_UNSPECIFIED))
+                if (!DpiHelper.IsScalingRequirementMet || User32.AreDpiAwarenessContextsEqual(context, User32.UNSPECIFIED_DPI_AWARENESS_CONTEXT))
                 {
                     Debug.Assert(_parkingWindows.Count == 1, "parkingWindows count can not be > 1 for legacy OS/target framework versions");
                     return _parkingWindows[0];
@@ -317,7 +323,7 @@ namespace System.Windows.Forms
                 // Supported OS scenario.
                 foreach (ParkingWindow p in _parkingWindows)
                 {
-                    if (CommonUnsafeNativeMethods.TryFindDpiAwarenessContextsEqual(p.DpiAwarenessContext, context))
+                    if (User32.AreDpiAwarenessContextsEqual(p.DpiAwarenessContext, context))
                     {
                         return p;
                     }
@@ -943,7 +949,7 @@ namespace System.Windows.Forms
                 //
                 // We can't follow the KB article exactly, becasue we don't have an HWND to PostMessage
                 // to.
-                User32.PostThreadMessageW(_id, User32.WindowMessage.WM_QUIT, IntPtr.Zero, IntPtr.Zero);
+                User32.PostThreadMessageW(_id, User32.WM.QUIT, IntPtr.Zero, IntPtr.Zero);
                 SetState(STATE_POSTEDQUIT, true);
             }
 
@@ -1290,7 +1296,7 @@ namespace System.Windows.Forms
                             if (f is IMessageModifyAndFilter)
                             {
                                 msg.hwnd = m.HWnd;
-                                msg.message = (User32.WindowMessage)m.Msg;
+                                msg.message = (User32.WM)m.Msg;
                                 msg.wParam = m.WParam;
                                 msg.lParam = m.LParam;
                                 modified = true;
@@ -1327,7 +1333,7 @@ namespace System.Windows.Forms
 
                 if (msg.IsKeyMessage())
                 {
-                    if (msg.message == User32.WindowMessage.WM_CHAR)
+                    if (msg.message == User32.WM.CHAR)
                     {
                         int breakLParamMask = 0x1460000; // 1 = extended keyboard, 46 = scan code
                         if (unchecked((int)(long)msg.wParam) == 3 && (unchecked((int)(long)msg.lParam) & breakLParamMask) == breakLParamMask) // ctrl-brk

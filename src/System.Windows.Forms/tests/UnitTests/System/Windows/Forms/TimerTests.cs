@@ -9,7 +9,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class TimerTests
+    public class TimerTests : IClassFixture<ThreadExceptionFixture>
     {
         [Fact]
         public void Timer_Ctor_Default()

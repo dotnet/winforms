@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
@@ -461,7 +463,7 @@ namespace System.Windows.Forms
                             dispid,
                             &g,
                             Kernel32.GetThreadLocale(),
-                            NativeMethods.DISPATCH_METHOD,
+                            Oleaut32.DISPATCH.METHOD,
                             &dispParams,
                             retVals,
                             &pExcepInfo,
@@ -1003,14 +1005,14 @@ namespace System.Windows.Forms
             public void onstart(IHTMLEventObj evtObj) { }
         }
 
-        ///<summary>
+        /// <summary>
         ///  HtmlElementShim - this is the glue between the DOM eventing mechanisms
         ///          and our CLR callbacks.
         ///
         ///  HTMLElementEvents2: we create an IConnectionPoint (via ConnectionPointCookie) between us and MSHTML and it calls back
         ///              on our an instance of HTMLElementEvents2.  The HTMLElementEvents2 class then fires the event.
         ///
-        ///</summary>
+        /// </summary>
         internal class HtmlElementShim : HtmlShim
         {
             private static readonly Type[] dispInterfaceTypes = {typeof(DHTMLElementEvents2),
@@ -1191,4 +1193,3 @@ namespace System.Windows.Forms
 
     }
 }
-

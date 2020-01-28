@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
@@ -141,8 +143,8 @@ namespace System.Windows.Forms
             SetStyle(ControlStyles.SupportsTransparentBackColor, true);
             SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
 
-            ((WindowsFormsUtils.TypedControlCollection)Controls).AddInternal(panel1);
-            ((WindowsFormsUtils.TypedControlCollection)Controls).AddInternal(panel2);
+            ((TypedControlCollection)Controls).AddInternal(panel1);
+            ((TypedControlCollection)Controls).AddInternal(panel2);
             UpdateSplitter();
         }
 
@@ -580,16 +582,16 @@ namespace System.Windows.Forms
                         User32.GetWindowRect(this, ref r);
                         if ((r.left <= p.X && p.X < r.right && r.top <= p.Y && p.Y < r.bottom) || User32.GetCapture() == Handle)
                         {
-                            User32.SendMessageW(this, User32.WindowMessage.WM_SETCURSOR, Handle, (IntPtr)NativeMethods.HTCLIENT);
+                            User32.SendMessageW(this, User32.WM.SETCURSOR, Handle, (IntPtr)NativeMethods.HTCLIENT);
                         }
                     }
                 }
             }
         }
 
-        ///<summary>
+        /// <summary>
         ///  Indicates if either panel is collapsed
-        ///</summary>
+        /// </summary>
         private bool CollapsedMode
         {
             get
@@ -615,9 +617,9 @@ namespace System.Windows.Forms
             }
         }
 
-        ///<summary>
+        /// <summary>
         ///  Collapses or restores the given panel
-        ///</summary>
+        /// </summary>
         private void CollapsePanel(SplitterPanel p, bool collapsing)
         {
             p.Collapsed = collapsing;
@@ -1240,9 +1242,6 @@ namespace System.Windows.Forms
             Invalidate();
         }
 
-        /// <summary>
-        ///  Raises the <see cref='SplitContainer.MouseMove'/> event.
-        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void OnMouseMove(MouseEventArgs e)
         {
@@ -1432,11 +1431,6 @@ namespace System.Windows.Forms
             UpdateSplitter();
         }
 
-        ////////////////////////////////////////////////////////////////////////////////////////////////
-        //                                                                                            //
-        ///START PRIVATE FUNCTIONS                                                                    //
-        //                                                                                            //
-        ////////////////////////////////////////////////////////////////////////////////////////////////
         /// <summary>
         ///  Validate and set the minimum size for Panel1.
         /// </summary>
@@ -2581,16 +2575,16 @@ namespace System.Windows.Forms
 
         protected override void WndProc(ref Message msg)
         {
-            switch (msg.Msg)
+            switch ((User32.WM)msg.Msg)
             {
-                case WindowMessages.WM_SETCURSOR:
+                case User32.WM.SETCURSOR:
                     WmSetCursor(ref msg);
                     break;
-                case WindowMessages.WM_SETFOCUS:
+                case User32.WM.SETFOCUS:
                     splitterFocused = true;
                     base.WndProc(ref msg);
                     break;
-                case WindowMessages.WM_KILLFOCUS:
+                case User32.WM.KILLFOCUS:
                     splitterFocused = false;
                     base.WndProc(ref msg);
                     break;
@@ -2625,10 +2619,10 @@ namespace System.Windows.Forms
             /// </summary>
             bool IMessageFilter.PreFilterMessage(ref Message m)
             {
-                if (m.Msg >= WindowMessages.WM_KEYFIRST && m.Msg <= WindowMessages.WM_KEYLAST)
+                if (m.Msg >= (int)User32.WM.KEYFIRST && m.Msg <=(int) User32.WM.KEYLAST)
                 {
-                    if ((m.Msg == WindowMessages.WM_KEYDOWN && (int)m.WParam == (int)Keys.Escape)
-                        || (m.Msg == WindowMessages.WM_SYSKEYDOWN))
+                    if ((m.Msg == (int)User32.WM.KEYDOWN && (int)m.WParam == (int)Keys.Escape)
+                        || (m.Msg == (int)User32.WM.SYSKEYDOWN))
                     {
                         //Notify that splitMOVE was reverted ..
                         //this is used in ONKEYUP!!
@@ -2647,7 +2641,7 @@ namespace System.Windows.Forms
         ///  This control collection only allows a specific type of control
         ///  into the controls collection.  It optionally supports readonlyness.
         /// </summary>
-        internal class SplitContainerTypedControlCollection : WindowsFormsUtils.TypedControlCollection
+        internal class SplitContainerTypedControlCollection : TypedControlCollection
         {
             readonly SplitContainer owner;
 

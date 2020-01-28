@@ -7,7 +7,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class DockPaddingEdgesConverterTests
+    public class DockPaddingEdgesConverterTests : IClassFixture<ThreadExceptionFixture>
     {
         [Fact]
         public void DockPaddingEdgesConverter_GetProperties_Invoke_ReturnsExpected()

@@ -9,14 +9,22 @@ internal static partial class Interop
 {
     internal static partial class Ole32
     {
-        [ComImport()]
+        [ComImport]
         [Guid("7BF80980-BF32-101A-8BBB-00AA00300CAB")]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
         public interface IPicture
         {
-            uint Handle { get; }
+            /// <remarks>
+            ///  IPicture handles are sign extended on 64 bit devices. To preserve
+            ///  the sign, handles should be represented as ints, not uints.
+            /// </remarks>
+            int Handle { get; }
 
-            uint hPal { get; }
+            /// <remarks>
+            ///  HPALETTE handles are sign extended on 64 bit devices. To preserve
+            ///  the sign, handles should be represented as ints, not uints.
+            /// </remarks>
+            int hPal { get; }
 
             /// <remarks>
             ///  This is actually <see cref="PICTYPE"/>, but we can't describe it as such.

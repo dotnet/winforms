@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.ComponentModel.Design;
@@ -21,7 +23,7 @@ namespace System.Windows.Forms
     ///  for ActiveX controls are blocked here (by setting Browsable attributes on some and
     ///  throwing exceptions from others), to make life easy for the inheritors.
     ///
-    ///  Inheritors of this class simply need to concentrate on defining & implementing the
+    ///  Inheritors of this class simply need to concentrate on defining and implementing the
     ///  properties/methods/events of the specific ActiveX control they are wrapping, the
     ///  default properties etc and the code to implement the activation etc. are
     ///  encapsulated in the class below.
@@ -339,7 +341,7 @@ namespace System.Windows.Forms
                         var msg = new User32.MSG
                         {
                             hwnd = IntPtr.Zero,
-                            message = User32.WindowMessage.WM_SYSKEYDOWN,
+                            message = User32.WM.SYSKEYDOWN,
                             wParam = (IntPtr)char.ToUpper(charCode, CultureInfo.CurrentCulture),
                             lParam = (IntPtr)0x20180001,
                             time = Kernel32.GetTickCount()
@@ -373,30 +375,28 @@ namespace System.Windows.Forms
         /// </remarks>
         protected unsafe override void WndProc(ref Message m)
         {
-            switch (m.Msg)
+            switch ((User32.WM)m.Msg)
             {
-                //
                 // Things we explicitly ignore and pass to the ActiveX's windproc
-                //
-                case WindowMessages.WM_ERASEBKGND:
-                case WindowMessages.WM_REFLECT + WindowMessages.WM_NOTIFYFORMAT:
-                case WindowMessages.WM_SETCURSOR:
-                case WindowMessages.WM_SYSCOLORCHANGE:
-                case WindowMessages.WM_LBUTTONDBLCLK:
-                case WindowMessages.WM_LBUTTONUP:
-                case WindowMessages.WM_MBUTTONDBLCLK:
-                case WindowMessages.WM_MBUTTONUP:
-                case WindowMessages.WM_RBUTTONDBLCLK:
-                case WindowMessages.WM_RBUTTONUP:
-                case WindowMessages.WM_CONTEXTMENU:
+                case User32.WM.ERASEBKGND:
+                case User32.WM.REFLECT | User32.WM.NOTIFYFORMAT:
+                case User32.WM.SETCURSOR:
+                case User32.WM.SYSCOLORCHANGE:
+                case User32.WM.LBUTTONDBLCLK:
+                case User32.WM.LBUTTONUP:
+                case User32.WM.MBUTTONDBLCLK:
+                case User32.WM.MBUTTONUP:
+                case User32.WM.RBUTTONDBLCLK:
+                case User32.WM.RBUTTONUP:
+                case User32.WM.CONTEXTMENU:
                 //
                 // Some of the MSComCtl controls respond to this message to do some
                 // custom painting. So, we should just pass this message through.
-                case WindowMessages.WM_DRAWITEM:
+                case User32.WM.DRAWITEM:
                     DefWndProc(ref m);
                     break;
 
-                case WindowMessages.WM_COMMAND:
+                case User32.WM.COMMAND:
                     if (!ReflectMessage(m.LParam, ref m))
                     {
                         DefWndProc(ref m);
@@ -404,16 +404,16 @@ namespace System.Windows.Forms
 
                     break;
 
-                case WindowMessages.WM_HELP:
+                case User32.WM.HELP:
                     // We want to both fire the event, and let the ActiveX have the message...
                     base.WndProc(ref m);
                     DefWndProc(ref m);
                     break;
 
-                case WindowMessages.WM_LBUTTONDOWN:
-                case WindowMessages.WM_MBUTTONDOWN:
-                case WindowMessages.WM_RBUTTONDOWN:
-                case WindowMessages.WM_MOUSEACTIVATE:
+                case User32.WM.LBUTTONDOWN:
+                case User32.WM.MBUTTONDOWN:
+                case User32.WM.RBUTTONDOWN:
+                case User32.WM.MOUSEACTIVATE:
                     if (!DesignMode)
                     {
                         if (containingControl != null && containingControl.ActiveControl != this)
@@ -424,7 +424,7 @@ namespace System.Windows.Forms
                     DefWndProc(ref m);
                     break;
 
-                case WindowMessages.WM_KILLFOCUS:
+                case User32.WM.KILLFOCUS:
                     hwndFocus = (IntPtr)m.WParam;
                     try
                     {
@@ -436,7 +436,7 @@ namespace System.Windows.Forms
                     }
                     break;
 
-                case WindowMessages.WM_DESTROY:
+                case User32.WM.DESTROY:
                     //
                     // If we are currently in a state of InPlaceActive or above,
                     // we should first reparent the ActiveX control to our parking
@@ -1842,9 +1842,9 @@ namespace System.Windows.Forms
             /// </summary>
             protected override void WndProc(ref Message m)
             {
-                switch (m.Msg)
+                switch ((User32.WM)m.Msg)
                 {
-                    case WindowMessages.WM_WINDOWPOSCHANGING:
+                    case User32.WM.WINDOWPOSCHANGING:
                         WmWindowPosChanging(ref m);
                         break;
                     default:
@@ -1874,4 +1874,3 @@ namespace System.Windows.Forms
         }
     }
 }
-

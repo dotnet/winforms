@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Buffers;
 using System.ComponentModel;
 using System.Drawing.Design;
@@ -9,6 +11,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using Microsoft.Win32.SafeHandles;
 using static Interop;
+using static Interop.Shell32;
 
 namespace System.Windows.Forms
 {
@@ -225,7 +228,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            dialog.SetOptions(FileDialogNative.FOS.FOS_PICKFOLDERS | FileDialogNative.FOS.FOS_FORCEFILESYSTEM | FileDialogNative.FOS.FOS_FILEMUSTEXIST);
+            dialog.SetOptions(FOS.PICKFOLDERS | FOS.FORCEFILESYSTEM | FOS.FILEMUSTEXIST);
 
             if (!string.IsNullOrEmpty(_selectedPath))
             {
@@ -324,24 +327,24 @@ namespace System.Windows.Forms
         /// </summary>
         private int FolderBrowserDialog_BrowseCallbackProc(IntPtr hwnd, int msg, IntPtr lParam, IntPtr lpData)
         {
-            switch (msg)
+            switch ((BFFM)msg)
             {
-                case NativeMethods.BFFM_INITIALIZED:
+                case BFFM.INITIALIZED:
                     // Indicates the browse dialog box has finished initializing. The lpData value is zero.
                     if (_selectedPath.Length != 0)
                     {
                         // Try to select the folder specified by selectedPath
-                        UnsafeNativeMethods.SendMessage(new HandleRef(null, hwnd), (int)NativeMethods.BFFM_SETSELECTION, 1, _selectedPath);
+                        User32.SendMessageW(hwnd, (User32.WM)BFFM.SETSELECTIONW, PARAM.FromBool(true), _selectedPath);
                     }
                     break;
-                case NativeMethods.BFFM_SELCHANGED:
+                case BFFM.SELCHANGED:
                     // Indicates the selection has changed. The lpData parameter points to the item identifier list for the newly selected item.
                     IntPtr selectedPidl = lParam;
                     if (selectedPidl != IntPtr.Zero)
                     {
                         // Try to retrieve the path from the IDList
                         bool isFileSystemFolder = Shell32.SHGetPathFromIDListLongPath(selectedPidl, out _);
-                        UnsafeNativeMethods.SendMessage(new HandleRef(null, hwnd), (int)NativeMethods.BFFM_ENABLEOK, 0, isFileSystemFolder ? 1 : 0);
+                        User32.SendMessageW(hwnd, (User32.WM)BFFM.ENABLEOK, IntPtr.Zero, PARAM.FromBool(isFileSystemFolder));
                     }
                     break;
             }

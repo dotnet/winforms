@@ -8,7 +8,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class TreeNodeMouseClickEventArgsTests
+    public class TreeNodeMouseClickEventArgsTests : IClassFixture<ThreadExceptionFixture>
     {
         public static IEnumerable<object[]> Ctor_TreeNode_MouseButtons_Int_Int_Int_Int_TestData()
         {

@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Collections;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -662,7 +664,7 @@ namespace System.Windows.Forms
             /// </summary>
             public override void RemoveAt(int item)
             {
-                // Overridden to update the domain index if neccessary
+                // Overridden to update the domain index if necessary
                 base.RemoveAt(item);
 
                 if (item < owner.domainIndex)

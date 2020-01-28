@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -29,7 +31,7 @@ namespace System.Windows.Forms
 
         /// <remarks>
         ///  The last control that requires validation. Do not directly edit this value.
-        /// <remarks>
+        /// </remarks>
         private Control _unvalidatedControl;
 
         /// <summary>
@@ -1693,6 +1695,7 @@ namespace System.Windows.Forms
         ///  Validates the last unvalidated control and its ancestors up through, but not including the current control.
         ///  This version will skip validation if checkAutoValidate is true and the effective AutoValidate setting, as
         ///  determined by the control's parent, is AutoValidate.Disable.
+        /// </summary>
         public bool Validate(bool checkAutoValidate)
         {
             return ValidateInternal(checkAutoValidate, out bool validatedControlAllowsFocusChange);
@@ -1757,7 +1760,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Validates all the child controls in the container. Exactly which controls are
-        ///  validated and which controls are skipped is determined by <paramref name="flags"/>.
+        ///  validated and which controls are skipped is determined by <paramref name="validationConstraints"/>.
         /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -1958,9 +1961,9 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void WndProc(ref Message m)
         {
-            switch (m.Msg)
+            switch ((User32.WM)m.Msg)
             {
-                case WindowMessages.WM_SETFOCUS:
+                case User32.WM.SETFOCUS:
                     WmSetFocus(ref m);
                     break;
                 default:

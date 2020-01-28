@@ -10,7 +10,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class DockPaddingEdgesTests
+    public class DockPaddingEdgesTests : IClassFixture<ThreadExceptionFixture>
     {
         [Theory]
         [InlineData(-2, -2, -2, -2, 0, 0, 0, 0, 0)]

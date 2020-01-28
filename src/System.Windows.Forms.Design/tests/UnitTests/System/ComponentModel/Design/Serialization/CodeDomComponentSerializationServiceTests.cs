@@ -18,7 +18,7 @@ using Xunit;
 
 namespace System.ComponentModel.Design.Serialization.Tests
 {
-    public class CodeDomComponentSerializationServiceTests
+    public class CodeDomComponentSerializationServiceTests : IClassFixture<ThreadExceptionFixture>
     {
         public static IEnumerable<object[]> Ctor_IServiceProvider_TestData()
         {

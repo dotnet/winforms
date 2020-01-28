@@ -10,6 +10,6 @@ internal static partial class Interop
     internal static partial class User32
     {
         [DllImport(Libraries.User32, ExactSpelling = true)]
-        public static extern int PostThreadMessageW(uint id, WindowMessage msg, IntPtr wparam, IntPtr lparam);
+        public static extern int PostThreadMessageW(uint id, WM msg, IntPtr wparam, IntPtr lparam);
     }
 }

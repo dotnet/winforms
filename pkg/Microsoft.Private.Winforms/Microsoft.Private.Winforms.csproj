@@ -51,6 +51,13 @@
       <PrivateAssets>All</PrivateAssets>
     </ProjectReference>
   </ItemDefinitionGroup>
+  
+  <ItemGroup>
+    <None Include="FrameworkListFiles.props">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
 
   <!-- Any projects referenced here will have their outputs automatically put into the package -->
   <!-- If you add a new csproj, and you want the outputs in the package, you must add it here -->

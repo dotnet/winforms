@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -41,7 +43,7 @@ namespace System.Windows.Forms
 
         private static int currentDpi = DpiHelper.DeviceDpi;
 
-        private static void InitalizeThread() {
+        private static void InitializeThread() {
             if (!initialized) {
                 initialized = true;
                 currentRendererType = ProfessionalRendererType;
@@ -154,7 +156,7 @@ namespace System.Windows.Forms
             }
         }
 
-        ///<summary>Static events only!!!</summary>
+        /// <summary>Static events only!!!</summary>
         private static void AddEventHandler(int key, Delegate value)
         {
             lock (internalSyncObject)
@@ -175,7 +177,7 @@ namespace System.Windows.Forms
             ToolStrip result = null;
             for (int i = 0; i < ToolStrips.Count; i++)
             {
-                // is this the right string comparaison?
+                // is this the right string comparison?
                 if (ToolStrips[i] != null && string.Equals(((ToolStrip)ToolStrips[i]).Name, toolStripName, StringComparison.Ordinal))
                 {
                     result = (ToolStrip)ToolStrips[i];
@@ -193,7 +195,7 @@ namespace System.Windows.Forms
             ToolStrip result = null;
             for (int i = 0; i < ToolStrips.Count; i++)
             {
-                // is this the right string comparaison?
+                // is this the right string comparison?
                 if (ToolStrips[i] != null && string.Equals(((ToolStrip)ToolStrips[i]).Name, toolStripName, StringComparison.Ordinal))
                 {
                     result = (ToolStrip)ToolStrips[i];
@@ -476,21 +478,11 @@ namespace System.Windows.Forms
             return false;
         }
 
-        ///  ============================================================================
-        ///  BEGIN task specific functions.  Since ToolStripManager is used
-        ///  for Painting, Merging and Rafting, and who knows what else in the future
-        ///  the following properties/methods/events are organized in regions
-        ///  alphabetically by task
-        ///  ----------------------------------------------------------------------------
-
-        ///
-        ///  ToolStripManager Default Renderer
-        ///
-        #region DefaultRenderer
-
-        ///  These are thread static because we want separate instances
-        ///  for each thread.  We dont want to guarantee thread safety
-        ///  and dont want to have to take locks in painting code.
+        /// <remarks>
+        ///  This is thread static because we want separate instances for each thread.
+        ///  We don't want to guarantee thread safety and don't want to have to take
+        ///  locks in painting code.
+        /// </remarks>
         [ThreadStatic]
         private static ToolStripRenderer defaultRenderer;
 
@@ -506,7 +498,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                InitalizeThread();
+                InitializeThread();
                 return currentRendererType;
             }
             set
@@ -523,8 +515,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <summary> the default renderer for the thread.  When ToolStrip.RenderMode is set to manager - this
-        ///  is the property used.
+        /// <summary>
+        ///  The default renderer for the thread. When ToolStrip.RenderMode is set
+        ///  to manager - this is the property used.
         /// </summary>
         public static ToolStripRenderer Renderer
         {
@@ -538,7 +531,6 @@ namespace System.Windows.Forms
             }
             set
             {
-                ///
                 if (defaultRenderer != value)
                 {
                     CurrentRendererType = (value == null) ? DefaultRendererType : value.GetType();
@@ -549,12 +541,11 @@ namespace System.Windows.Forms
             }
         }
 
-        // <summary>
-        // occurs when toolstripmanager.Renderer property has changed
-        //
-        // WARNING: When subscribing to static event handlers - make sure you unhook from them
-        // otherwise you can leak USER objects on process shutdown.
-        // </summary>
+        /// <summary>
+        ///  Occurs when toolstripmanager.Renderer property has changed
+        ///  WARNING: When subscribing to static event handlers - make sure you unhook from them
+        ///  otherwise you can leak USER objects on process shutdown.
+        /// </summary>
         public static event EventHandler RendererChanged
         {
             add => AddEventHandler(staticEventDefaultRendererChanged, value);
@@ -586,7 +577,6 @@ namespace System.Windows.Forms
             }
             set
             {
-                ///
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)ToolStripManagerRenderMode.Custom, (int)ToolStripManagerRenderMode.Professional))
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ToolStripManagerRenderMode));
@@ -653,10 +643,6 @@ namespace System.Windows.Forms
             }
         }
 
-        #endregion DefaultRenderer
-
-        #region ToolStripPanel
-
         internal static ClientUtils.WeakRefCollection ToolStripPanels
         {
             get
@@ -698,10 +684,6 @@ namespace System.Windows.Forms
             }
             return null;
         }
-
-        #endregion
-
-        #region ToolStripSettings
 
         /// <summary>
         ///  Loads settings for the given Form using the form type's fullname as settings key.
@@ -770,14 +752,7 @@ namespace System.Windows.Forms
             settingsManager.Save();
         }
 
-        #endregion
-
-        ///
-        ///  ToolStripManager ALT key PreProcessing
-        ///
-        #region MenuKeyAndShortcutProcessing
-
-        ///  ModalMenuFilter
+        ///  <remarks>
         ///  - this installs a message filter when a dropdown becomes active.
         ///  - the message filter
         ///  a. eats WM_MOUSEMOVEs so that the window that's underneath
@@ -791,7 +766,8 @@ namespace System.Windows.Forms
         ///  - There should be 1 Message Filter per thread and it should be uninstalled once
         ///  the last dropdown has gone away
         ///  This is not part of ToolStripManager because it's DropDown specific and
-        ///  we dont want to publicly expose this message filter.
+        ///  we don't want to publicly expose this message filter.
+        ///  </remarks>
         internal class ModalMenuFilter : IMessageModifyAndFilter
         {
             private HandleRef _activeHwnd = NativeMethods.NullHandleRef; // the window that was active when we showed the dropdown
@@ -949,7 +925,7 @@ namespace System.Windows.Forms
 
                     if (!Application.ThreadContext.FromCurrent().GetMessageLoop(true))
                     {
-                        // message filter isnt going to help as we dont own the message pump
+                        // message filter isn't going to help as we don't own the message pump
                         // switch over to a MessageHook
                         MessageHook.HookMessages = true;
                     }
@@ -991,7 +967,7 @@ namespace System.Windows.Forms
 
                         if (messageHook != null)
                         {
-                            // message filter isnt going to help as we dont own the message pump
+                            // message filter isn't going to help as we dont own the message pump
                             // switch over to a MessageHook
                             messageHook.HookMessages = false;
                         }
@@ -1253,7 +1229,7 @@ namespace System.Windows.Forms
                     ToolStrip currentActiveToolStrip = GetActiveToolStripInternal();
 
                     // toolstrip dropdowns push/pull their activation based on visibility.
-                    // we have to account for the toolstrips that arent dropdowns
+                    // we have to account for the toolstrips that aren't dropdowns
                     if (currentActiveToolStrip != null)
                     {
                         if (!currentActiveToolStrip.IsDropDown)
@@ -1336,7 +1312,7 @@ namespace System.Windows.Forms
                 {
                     filterMessage = true;
                 }
-                else if (m.Msg >= WindowMessages.WM_NCLBUTTONDOWN && m.Msg <= WindowMessages.WM_NCMBUTTONDBLCLK)
+                else if (m.Msg >= (int)User32.WM.NCLBUTTONDOWN && m.Msg <= (int)User32.WM.NCMBUTTONDBLCLK)
                 {
                     filterMessage = true;
                 }
@@ -1399,15 +1375,15 @@ namespace System.Windows.Forms
                     return false;
                 }
 
-                DpiAwarenessContext context = CommonUnsafeNativeMethods.GetDpiAwarenessContextForWindow(m.HWnd);
+                IntPtr context = GetDpiAwarenessContextForWindow(m.HWnd);
 
                 using (DpiHelper.EnterDpiAwarenessScope(context))
                 {
-                    switch (m.Msg)
+                    switch ((User32.WM)m.Msg)
                     {
-                        case WindowMessages.WM_MOUSEMOVE:
-                        case WindowMessages.WM_NCMOUSEMOVE:
-                            // Mouse move messages should be eaten if they arent for a dropdown.
+                        case User32.WM.MOUSEMOVE:
+                        case User32.WM.NCMOUSEMOVE:
+                            // Mouse move messages should be eaten if they aren't for a dropdown.
                             // this prevents things like ToolTips and mouse over highlights from
                             // being processed.
                             Control control = Control.FromChildHandle(m.HWnd);
@@ -1423,8 +1399,8 @@ namespace System.Windows.Forms
                                         && (IsChildOrSameWindow(new HandleRef(toplevelToolStrip, toplevelToolStrip.Handle),
                                                                new HandleRef(null, m.HWnd))))
                                     {
-                                        // DONT EAT mouse message.
-                                        // The mouse message is from an HWND that is part of the toplevel toolstrip - let the mosue move through so
+                                        // DON'T EAT mouse message.
+                                        // The mouse message is from an HWND that is part of the toplevel toolstrip - let the mouse move through so
                                         // when you have something like the file menu open and mouse over the edit menu
                                         // the file menu will dismiss.
 
@@ -1432,7 +1408,7 @@ namespace System.Windows.Forms
                                     }
                                     else if (!IsChildOrSameWindow(ActiveHwnd, new HandleRef(null, m.HWnd)))
                                     {
-                                        // DONT EAT mouse message.
+                                        // DON'T EAT mouse message.
                                         // the mouse message is from another toplevel HWND.
                                         return false;
                                     }
@@ -1445,9 +1421,9 @@ namespace System.Windows.Forms
                                 }
                             }
                             break;
-                        case WindowMessages.WM_LBUTTONDOWN:
-                        case WindowMessages.WM_RBUTTONDOWN:
-                        case WindowMessages.WM_MBUTTONDOWN:
+                        case User32.WM.LBUTTONDOWN:
+                        case User32.WM.RBUTTONDOWN:
+                        case User32.WM.MBUTTONDOWN:
                             //
                             // When a mouse button is pressed, we should determine if it is within the client coordinates
                             // of the active dropdown.  If not, we should dismiss it.
@@ -1457,9 +1433,9 @@ namespace System.Windows.Forms
                                 /*y=*/PARAM.SignedHIWORD(m.LParam));
 
                             break;
-                        case WindowMessages.WM_NCLBUTTONDOWN:
-                        case WindowMessages.WM_NCRBUTTONDOWN:
-                        case WindowMessages.WM_NCMBUTTONDOWN:
+                        case User32.WM.NCLBUTTONDOWN:
+                        case User32.WM.NCRBUTTONDOWN:
+                        case User32.WM.NCMBUTTONDOWN:
                             //
                             // When a mouse button is pressed, we should determine if it is within the client coordinates
                             // of the active dropdown.  If not, we should dismiss it.
@@ -1469,14 +1445,14 @@ namespace System.Windows.Forms
                                 /*y=*/PARAM.SignedHIWORD(m.LParam));
                             break;
 
-                        case WindowMessages.WM_KEYDOWN:
-                        case WindowMessages.WM_KEYUP:
-                        case WindowMessages.WM_CHAR:
-                        case WindowMessages.WM_DEADCHAR:
-                        case WindowMessages.WM_SYSKEYDOWN:
-                        case WindowMessages.WM_SYSKEYUP:
-                        case WindowMessages.WM_SYSCHAR:
-                        case WindowMessages.WM_SYSDEADCHAR:
+                        case User32.WM.KEYDOWN:
+                        case User32.WM.KEYUP:
+                        case User32.WM.CHAR:
+                        case User32.WM.DEADCHAR:
+                        case User32.WM.SYSKEYDOWN:
+                        case User32.WM.SYSKEYUP:
+                        case User32.WM.SYSCHAR:
+                        case User32.WM.SYSDEADCHAR:
 
                             if (!activeToolStrip.ContainsFocus)
                             {
@@ -1494,6 +1470,36 @@ namespace System.Windows.Forms
                 }
 
                 return false;
+            }
+
+            internal static IntPtr GetDpiAwarenessContextForWindow(IntPtr hWnd)
+            {
+                IntPtr dpiAwarenessContext = User32.UNSPECIFIED_DPI_AWARENESS_CONTEXT;
+
+                if (OsVersion.IsWindows10_1607OrGreater)
+                {
+                    // Works only >= Windows 10/1607
+                    IntPtr awarenessContext = User32.GetWindowDpiAwarenessContext(hWnd);
+                    User32.DPI_AWARENESS awareness = User32.GetAwarenessFromDpiAwarenessContext(awarenessContext);
+                    dpiAwarenessContext = ConvertToDpiAwarenessContext(awareness);
+                }
+
+                return dpiAwarenessContext;
+            }
+
+            private static IntPtr ConvertToDpiAwarenessContext(User32.DPI_AWARENESS dpiAwareness)
+            {
+                switch (dpiAwareness)
+                {
+                    case User32.DPI_AWARENESS.UNAWARE:
+                        return User32.DPI_AWARENESS_CONTEXT.UNAWARE;
+                    case User32.DPI_AWARENESS.SYSTEM_AWARE:
+                        return User32.DPI_AWARENESS_CONTEXT.SYSTEM_AWARE;
+                    case User32.DPI_AWARENESS.PER_MONITOR_AWARE:
+                        return User32.DPI_AWARENESS_CONTEXT.PER_MONITOR_AWARE_V2;
+                    default:
+                        return User32.DPI_AWARENESS_CONTEXT.SYSTEM_AWARE;
+                }
             }
 
             private class HostedWindowsFormsMessageHook
@@ -1580,7 +1586,7 @@ namespace System.Windows.Forms
                                 // the message filters and preprocess message.
                                 if (Application.ThreadContext.FromCurrent().PreTranslateMessage(ref *msg))
                                 {
-                                    msg->message = WindowMessages.WM_NULL;
+                                    msg->message = User32.WM.NULL;
                                 }
                             }
                         }
@@ -1696,7 +1702,7 @@ namespace System.Windows.Forms
 
                 return ToolStripManager.ProcessShortcut(ref m, keyData);
             }
-            if (m.Msg == WindowMessages.WM_SYSKEYDOWN)
+            if (m.Msg == (int)User32.WM.SYSKEYDOWN)
             {
                 Debug.WriteLineIf(Control.s_controlKeyboardRouting.TraceVerbose, "ToolStripManager.ProcessCmdKey - Checking if it's a menu key: [" + keyData.ToString() + "]");
                 ToolStripManager.ModalMenuFilter.ProcessMenuKeyDown(ref m);
@@ -1863,7 +1869,7 @@ namespace System.Windows.Forms
             {
                 return false;
             }
-            // recievedMenuKeyUp = true;
+            // receivedMenuKeyUp = true;
 
             Debug.WriteLineIf(ToolStrip.SnapFocusDebug.TraceVerbose, "[ProcessMenuKey] Determining whether we should send focus to MenuStrip");
 
@@ -1992,7 +1998,7 @@ namespace System.Windows.Forms
 
                     if ((controlsToLookIn[i].Controls != null) && controlsToLookIn[i].Controls.Count > 0)
                     {
-                        // if it has a valid child collecion, append those results to our collection
+                        // if it has a valid child collection, append those results to our collection
                         MenuStrip menuStrip = GetFirstMenuStripRecursive(controlsToLookIn[i].Controls);
                         if (menuStrip != null)
                         {
@@ -2011,13 +2017,6 @@ namespace System.Windows.Forms
             }
             return null;
         }
-
-        #endregion MenuKeyAndShortcutProcessing
-
-        ///
-        ///  ToolStripManager MenuMerging functions
-        ///
-        #region MenuMerging
 
         private static ToolStripItem FindMatch(ToolStripItem source, ToolStripItemCollection destinationItems)
         {
@@ -2415,9 +2414,6 @@ namespace System.Windows.Forms
                 return RevertMerge(target);
             }
         }
-
-        #endregion MenuMerging
-
     }
 
     internal class ToolStripCustomIComparer : IComparer

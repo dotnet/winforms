@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.ComponentModel;
 using System.Drawing.Printing;
 using System.Runtime.InteropServices;
@@ -214,9 +216,9 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  UseEXDialog = true means to use the EX versions of the dialogs and to ignore the
-        ///  ShowHelp & ShowNetwork properties.
+        ///  ShowHelp &amp; ShowNetwork properties.
         ///  UseEXDialog = false means to never use the EX versions of the dialog.
-        ///  ShowHelp & ShowNetwork will work in this case.
+        ///  ShowHelp &amp; ShowNetwork will work in this case.
         /// </summary>
         [DefaultValue(false)]
         [SRDescription(nameof(SR.PDuseEXDialog))]
@@ -523,8 +525,8 @@ namespace System.Windows.Forms
                 // PrintDlgEx. So we have to strip them out.
                 data.Flags &= ~(PD.SHOWHELP | PD.NONETWORKBUTTON);
 
-                int hr = UnsafeNativeMethods.PrintDlgEx(data);
-                if (NativeMethods.Failed(hr) || data.dwResultAction == PD_RESULT.CANCEL)
+                HRESULT hr = UnsafeNativeMethods.PrintDlgEx(data);
+                if (hr.Failed() || data.dwResultAction == PD_RESULT.CANCEL)
                 {
                     return false;
                 }
@@ -600,4 +602,3 @@ namespace System.Windows.Forms
         }
     }
 }
-

@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 //#define GDI_FINALIZATION_WATCH
 
 // THIS PARTIAL CLASS CONTAINS THE BASE METHODS FOR CREATING AND DISPOSING A WINDOWSGRAPHICS AS WELL
@@ -25,7 +27,7 @@ namespace System.Windows.Forms.Internal
     ///  The underlying hdc is always saved and restored on dispose so external HDCs won't
     ///  be modified by WindowsGraphics.  So we don't need to restore previous objects into
     ///  the dc in method calls.
-    ///</summary>
+    /// </summary>
     internal sealed partial class WindowsGraphics : MarshalByRefObject, IDisposable, IDeviceContext
     {
         private bool _disposeDc;

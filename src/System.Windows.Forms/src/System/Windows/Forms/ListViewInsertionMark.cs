@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
@@ -59,7 +61,7 @@ namespace System.Windows.Forms
             get
             {
                 var rect = new RECT();
-                User32.SendMessageW(listView, (User32.WindowMessage)LVM.GETINSERTMARKRECT, IntPtr.Zero, ref rect);
+                User32.SendMessageW(listView, (User32.WM)LVM.GETINSERTMARKRECT, IntPtr.Zero, ref rect);
                 return Rectangle.FromLTRB(rect.left, rect.top, rect.right, rect.bottom);
             }
         }
@@ -122,7 +124,7 @@ namespace System.Windows.Forms
             {
                 cbSize = (uint)sizeof(LVINSERTMARK)
             };
-            User32.SendMessageW(listView, (User32.WindowMessage)LVM.INSERTMARKHITTEST, (IntPtr)(&pt), ref lvInsertMark);
+            User32.SendMessageW(listView, (User32.WM)LVM.INSERTMARKHITTEST, (IntPtr)(&pt), ref lvInsertMark);
 
             return lvInsertMark.iItem;
         }
@@ -136,11 +138,11 @@ namespace System.Windows.Forms
                 dwFlags = appearsAfterItem ? LVIM.AFTER : LVIM.BEFORE,
                 iItem = index
             };
-            User32.SendMessageW(listView, (User32.WindowMessage)LVM.SETINSERTMARK, IntPtr.Zero, ref lvInsertMark);
+            User32.SendMessageW(listView, (User32.WM)LVM.SETINSERTMARK, IntPtr.Zero, ref lvInsertMark);
 
             if (!color.IsEmpty)
             {
-                User32.SendMessageW(listView, (User32.WindowMessage)LVM.SETINSERTMARKCOLOR, IntPtr.Zero, (IntPtr)COLORREF.ColorToCOLORREF(color));
+                User32.SendMessageW(listView, (User32.WM)LVM.SETINSERTMARKCOLOR, IntPtr.Zero, (IntPtr)COLORREF.ColorToCOLORREF(color));
             }
         }
     }

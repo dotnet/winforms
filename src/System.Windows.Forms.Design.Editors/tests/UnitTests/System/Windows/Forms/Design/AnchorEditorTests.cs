@@ -13,7 +13,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Design.Tests
 {
-    public class AnchorEditorTests
+    public class AnchorEditorTests : IClassFixture<ThreadExceptionFixture>
     {
         [Fact]
         public void AnchorEditor_Ctor_Default()

@@ -5,8 +5,8 @@
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///  Provides data for the <see cref='TreeView.TreeNodeMouseClickEventArgs'/>
-    ///  or <see cref='TreeView.OnNodeMouseClick'/> event.
+    ///  Provides data for the <see cref='TreeView.OnNodeMouseClick'/> or
+    ///  <see cref='TreeView.OnNodeMouseDoubleClick'/> event.
     /// </summary>
     public class TreeNodeMouseClickEventArgs : MouseEventArgs
     {

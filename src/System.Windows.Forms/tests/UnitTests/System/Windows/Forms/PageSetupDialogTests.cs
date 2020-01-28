@@ -12,7 +12,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class PageSetupDialogTests
+    public class PageSetupDialogTests : IClassFixture<ThreadExceptionFixture>
     {
         [Fact]
         public void PageSetupDialog_Ctor_Default()

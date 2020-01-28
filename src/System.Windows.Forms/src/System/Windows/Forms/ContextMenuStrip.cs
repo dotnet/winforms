@@ -2,13 +2,17 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc/> this class is just a conceptual wrapper around ToolStripDropDownMenu. </summary>
+    /// <summary>
+    ///  This class is just a conceptual wrapper around ToolStripDropDownMenu.
+    /// </summary>
     [
     ComVisible(true),
     ClassInterface(ClassInterfaceType.AutoDispatch),
@@ -17,9 +21,6 @@ namespace System.Windows.Forms
     ]
     public class ContextMenuStrip : ToolStripDropDownMenu
     {
-        /// <summary>
-        ///  Summary of ContextMenuStrip.
-        /// </summary>
         public ContextMenuStrip(IContainer container) : base()
         {
             // this constructor ensures ContextMenuStrip is disposed properly since its not parented to the form.

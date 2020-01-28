@@ -7,7 +7,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class OsVersionTests
+    public class OsVersionTests : IClassFixture<ThreadExceptionFixture>
     {
         private static Interop.NtDll.RTL_OSVERSIONINFOEX s_realVersionInfo;
         private static FieldInfo s_fiVersionInfo;

@@ -169,7 +169,7 @@ internal static partial class Interop
             ///
             ///  Note: inplace objects should not call this method with <paramref name="uStateID" />
             ///  of <see cref="msocstate.Modal"/> when entering modal state. Such objects should call
-            ///  <see cref="IOleInPlaceFrame.EnableModeless"/> instead.
+            ///  <see cref="Ole32.IOleInPlaceFrame.EnableModeless"/> instead.
             /// </remarks>
             /// <param name="dwReserved">Reserved for future use. Should be zero.</param>
             /// <param name="cpicmExclude">Count of items in <paramref name="rgpicmExclude"/>.</param>
@@ -203,7 +203,7 @@ internal static partial class Interop
             ///
             ///  Component manager should notify all appropriate interested components (taking into account
             ///  <paramref name="uContext"/>, <paramref name="cpicmExclude"/>, <paramref name="rgpicmExclude"/>)
-            ///  via <see cref="IMsoComponent.OnEnterState" (see "Comments on State Contexts", above).
+            ///  via <see cref="IMsoComponent.OnEnterState"/> (see "Comments on State Contexts", above).
             ///
             ///  Component manager should also take appropriate action depending on the value of <paramref name="uStateID"/>.
             ///

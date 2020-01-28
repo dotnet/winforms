@@ -7,7 +7,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class PrintPreviewControlTests
+    public class PrintPreviewControlTests : IClassFixture<ThreadExceptionFixture>
     {
         private const int emptyColorArgb = 0;
         private const int blueColorArgb = -16776961;

@@ -15,7 +15,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class DataObjectTests
+    public class DataObjectTests : IClassFixture<ThreadExceptionFixture>
     {
         private static readonly string[] s_clipboardFormats =
         {

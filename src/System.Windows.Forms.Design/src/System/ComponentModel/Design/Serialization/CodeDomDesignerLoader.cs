@@ -124,10 +124,10 @@ namespace System.ComponentModel.Design.Serialization
             base.Dispose();
         }
 
+#if DEBUG
         /// <summary>
         ///  Internal debug method to dump a code dom tree to text.
         /// </summary>
-#if DEBUG
         internal static void DumpTypeDeclaration(CodeTypeDeclaration typeDecl)
         {
             if (typeDecl == null || !s_traceCDLoader.TraceVerbose)

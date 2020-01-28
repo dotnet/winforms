@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
@@ -36,9 +38,6 @@ namespace System.Windows.Forms
         private static bool isScalingInitialized = false;
         private static int scaledDropDownButtonWidth = DEFAULT_DROPDOWN_WIDTH;
 
-        /// <summary>
-        ///  Summary of ToolStripSplitButton.
-        /// </summary>
         public ToolStripSplitButton()
         {
             Initialize(); // all additional work should be done in Initialize
@@ -81,9 +80,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <summary>
-        ///  Summary of ToolStripSplitButton.
-        /// </summary>
         [Browsable(false)]
         public Rectangle ButtonBounds
         {
@@ -95,9 +91,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <summary>
-        ///  Summary of ButtonPressed.
-        /// </summary>
         [Browsable(false)]
         public bool ButtonPressed
         {
@@ -107,9 +100,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <summary>
-        ///  Summary of ButtonPressed.
-        /// </summary>
         [Browsable(false)]
         public bool ButtonSelected
         {
@@ -152,9 +142,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <summary>
-        ///  Summary of DefaultItem.
-        /// </summary>
         [DefaultValue(null), Browsable(false)]
         public ToolStripItem DefaultItem
         {
@@ -212,9 +199,7 @@ namespace System.Windows.Forms
                 return dropDownButtonBounds;
             }
         }
-        /// <summary>
-        ///  Summary of DropDownButtonBounds.
-        /// </summary>
+
         [Browsable(false)]
         public bool DropDownButtonPressed
         {
@@ -224,9 +209,7 @@ namespace System.Windows.Forms
                 return DropDown.Visible;
             }
         }
-        /// <summary>
-        ///  Summary of DropDownButtonSelected.
-        /// </summary>
+
         [Browsable(false)]
         public bool DropDownButtonSelected
         {
@@ -235,9 +218,7 @@ namespace System.Windows.Forms
                 return Selected;
             }
         }
-        /// <summary>
-        ///  Summary of DropDownButtonWidth.
-        /// </summary>
+
         [
         SRCategory(nameof(SR.CatLayout)),
         SRDescription(nameof(SR.ToolStripSplitButtonDropDownButtonWidthDescr))
@@ -308,9 +289,7 @@ namespace System.Windows.Forms
                 return splitButtonButton;
             }
         }
-        /// <summary>
-        ///  Summary of SplitButtonButtonLayout.
-        /// </summary>
+
         internal ToolStripItemInternalLayout SplitButtonButtonLayout
         {
             get
@@ -367,9 +346,7 @@ namespace System.Windows.Forms
                 return splitterBounds;
             }
         }
-        /// <summary>
-        ///  Summary of CalculateLayout.
-        /// </summary>
+
         private void CalculateLayout()
         {
             // Figure out where the DropDown image goes.
@@ -429,9 +406,6 @@ namespace System.Windows.Forms
             return preferredSize;
         }
 
-        /// <summary>
-        ///  Summary of InvalidateSplitButtonLayout.
-        /// </summary>
         private void InvalidateSplitButtonLayout()
         {
             splitButtonButtonLayout = null;
@@ -497,9 +471,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <summary>
-        ///  Summary of OnMouseDown.
-        /// </summary>
         protected override void OnMouseDown(MouseEventArgs e)
         {
             if (DropDownButtonBounds.Contains(e.Location))
@@ -520,9 +491,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <summary>
-        ///  Summary of OnMouseUp.
-        /// </summary>
         protected override void OnMouseUp(MouseEventArgs e)
         {
             if (!Enabled)
@@ -586,18 +554,12 @@ namespace System.Windows.Forms
             base.OnMouseLeave(e);
         }
 
-        /// <summary>
-        ///  Summary of OnRightToLeftChanged.
-        /// </summary>
         protected override void OnRightToLeftChanged(EventArgs e)
         {
             base.OnRightToLeftChanged(e);
             InvalidateSplitButtonLayout();
         }
-        /// <summary>
-        ///  Summary of OnPaint.
-        /// </summary>
-        /// <param name=e></param>
+
         protected override void OnPaint(PaintEventArgs e)
         {
             ToolStripRenderer renderer = Renderer;
@@ -638,9 +600,6 @@ namespace System.Windows.Forms
             DropDownButtonWidth = DefaultDropDownButtonWidth;
         }
 
-        /// <summary>
-        ///  Summary of SetDropDownBounds.
-        /// </summary>
         private void SetDropDownButtonBounds(Rectangle rect)
         {
             dropDownButtonBounds = rect;
@@ -979,5 +938,3 @@ namespace System.Windows.Forms
         }
     }
 }
-
-

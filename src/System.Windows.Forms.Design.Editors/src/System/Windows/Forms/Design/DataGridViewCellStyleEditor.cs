@@ -5,6 +5,7 @@
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Design;
+using static Interop;
 
 namespace System.Windows.Forms.Design
 {
@@ -12,9 +13,6 @@ namespace System.Windows.Forms.Design
     {
         private DataGridViewCellStyleBuilder _builderDialog;
 
-        /// <summary>
-        /// Edits the given object value using the editor style provided by GetEditorStyle. A service provider is provided so that any required editing services can be obtained.
-        /// </summary>
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
             if (provider == null)
@@ -30,7 +28,7 @@ namespace System.Windows.Forms.Design
 
             IUIService uiService = (IUIService)provider.GetService(typeof(IUIService));
             IComponent comp = context.Instance as IComponent;
-            using (DpiHelper.EnterDpiAwarenessScope(DpiAwarenessContext.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE))
+            using (DpiHelper.EnterDpiAwarenessScope(User32.DPI_AWARENESS_CONTEXT.SYSTEM_AWARE))
             {
                 _builderDialog ??= new DataGridViewCellStyleBuilder(provider, comp);
                 if (uiService != null)

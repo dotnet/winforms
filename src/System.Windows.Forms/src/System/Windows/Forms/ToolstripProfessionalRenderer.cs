@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms.Layout;
@@ -152,7 +154,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\ToolStripProfessionalRenderer.uex' path='docs/doc[@for="ToolStripProfessionalRenderer.OnRenderOverflowButton"]/*' />
         protected override void OnRenderOverflowButtonBackground(ToolStripItemRenderEventArgs e) {
             ScaleObjectSizesIfNeeded(e.ToolStrip.DeviceDpi);
 
@@ -883,11 +884,10 @@ namespace System.Windows.Forms
             return null;
         }
 
-        // </summary>
-        // We want to make sure the overflow button looks like it's the last thing on
-        // the toolbar.  This touches up the few pixels that get clobbered by painting the
-        // border.
-        // </summary>
+        /// <summary>
+        /// We want to make sure the overflow button looks like it's the last thing on the toolbar.
+        /// This touches up the few pixels that get clobbered by painting the border.
+        /// </summary>
         private void RenderOverflowButtonEffectsOverBorder(ToolStripRenderEventArgs e)
         {
             ToolStrip toolStrip = e.ToolStrip;
@@ -931,7 +931,7 @@ namespace System.Windows.Forms
             }
         }
 
-        ///<summary>
+        /// <summary>
         ///  This function paints with three colors, beginning, middle, and end.
         ///  it paints:
         ///  (1)the entire bounds in the middle color
@@ -939,7 +939,7 @@ namespace System.Windows.Forms
         ///  (3)gradient from middle to end of width secondGradientWidth
         ///
         ///  if there isnt enough room to do (2) and (3) it merges into a single gradient from beginning to end.
-        ///</summary>
+        /// </summary>
         private void FillWithDoubleGradient(Color beginColor, Color middleColor, Color endColor, Graphics g, Rectangle bounds, int firstGradientWidth, int secondGradientWidth, LinearGradientMode mode, bool flipHorizontal)
         {
             if ((bounds.Width == 0) || (bounds.Height == 0))

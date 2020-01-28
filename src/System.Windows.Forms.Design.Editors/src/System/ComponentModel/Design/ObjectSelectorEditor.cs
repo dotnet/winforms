@@ -92,12 +92,12 @@ namespace System.ComponentModel.Design
         }
         private static ComCtl32.TVS_EX TreeView_GetExtendedStyle(IntPtr handle)
         {
-            return (ComCtl32.TVS_EX)User32.SendMessageW(handle, (User32.WindowMessage)NativeMethods.TVM_GETEXTENDEDSTYLE, IntPtr.Zero, IntPtr.Zero);
+            return (ComCtl32.TVS_EX)User32.SendMessageW(handle, (User32.WM)ComCtl32.TVM.GETEXTENDEDSTYLE);
         }
 
         private static void TreeView_SetExtendedStyle(IntPtr handle, ComCtl32.TVS_EX extendedStyle, int mask)
         {
-            User32.SendMessageW(handle, (User32.WindowMessage)NativeMethods.TVM_SETEXTENDEDSTYLE, (IntPtr)mask, (IntPtr)extendedStyle);
+            User32.SendMessageW(handle, (User32.WM)ComCtl32.TVM.SETEXTENDEDSTYLE, (IntPtr)mask, (IntPtr)extendedStyle);
         }
 
         public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
@@ -305,18 +305,18 @@ namespace System.ComponentModel.Design
 
             protected unsafe override void WndProc(ref Message m)
             {
-                switch (m.Msg)
+                switch ((User32.WM)m.Msg)
                 {
-                    case WindowMessages.WM_GETDLGCODE:
-                        m.Result = (IntPtr)((long)m.Result | NativeMethods.DLGC_WANTALLKEYS);
+                    case User32.WM.GETDLGCODE:
+                        m.Result = (IntPtr)((long)m.Result | (int)User32.DLGC.WANTALLKEYS);
                         return;
-                    case WindowMessages.WM_MOUSEMOVE:
+                    case User32.WM.MOUSEMOVE:
                         if (clickSeen)
                         {
                             clickSeen = false;
                         }
                         break;
-                    case WindowMessages.WM_REFLECT + WindowMessages.WM_NOTIFY:
+                    case User32.WM.REFLECT | User32.WM.NOTIFY:
                         User32.NMHDR* nmtv = (User32.NMHDR*)m.LParam;
                         if (nmtv->code == (int)ComCtl32.NM.CLICK)
                         {

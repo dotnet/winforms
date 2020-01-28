@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.ComponentModel;
 using System.Drawing;
 using System.Globalization;
@@ -599,7 +601,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Called when the state of the tool strip items needs to be refreshed to reflect the current state of the data.
-        ///  Calls <see cref='RefreshItemsCore'> to refresh the state of the standard items, then raises the RefreshItems event.
+        ///  Calls <see cref='RefreshItemsCore'/> to refresh the state of the standard items, then raises the RefreshItems event.
         /// </summary>
         protected virtual void OnRefreshItems()
         {

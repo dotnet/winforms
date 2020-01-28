@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
@@ -43,7 +45,7 @@ namespace System.Windows.Forms
                 RegisterClass();
             }
 
-            public IntPtr Callback(IntPtr hWnd, User32.WindowMessage msg, IntPtr wparam, IntPtr lparam)
+            public IntPtr Callback(IntPtr hWnd, User32.WM msg, IntPtr wparam, IntPtr lparam)
             {
                 Debug.Assert(hWnd != IntPtr.Zero, "Windows called us with an HWND of 0");
 

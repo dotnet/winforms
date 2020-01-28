@@ -15,7 +15,7 @@ using Xunit;
 
 namespace System.Drawing.Design.Tests
 {
-    public class ImageEditorTests
+    public class ImageEditorTests : IClassFixture<ThreadExceptionFixture>
     {
         [Fact]
         public void ImageEditor_Ctor_Default()

@@ -2033,9 +2033,8 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            ///  ListItem class. This is a single entry in our list box.
-            ///  It contains the value we're editing as well as accessors for the type
-            // converter and UI editor.
+            ///  This is a single entry in our list box. It contains the value we're editing as well
+            ///  as accessors for the type converter and UI editor.
             /// </summary>
             private class ListItem
             {
@@ -2137,9 +2136,9 @@ namespace System.ComponentModel.Design
 
             protected override void WndProc(ref Message m)
             {
-                switch (m.Msg)
+                switch ((User32.WM)m.Msg)
                 {
-                    case WindowMessages.WM_KEYDOWN:
+                    case User32.WM.KEYDOWN:
                         _lastKeyDown = m;
 
                         // the first thing the ime does on a key it cares about is send a VK_PROCESSKEY, so we use that to sling focus to the grid.
@@ -2159,12 +2158,12 @@ namespace System.ComponentModel.Design
                             if (PropertyGrid.Focused || PropertyGrid.ContainsFocus)
                             {
                                 // recreate the keystroke to the newly activated window
-                                User32.SendMessageW(User32.GetFocus(), User32.WindowMessage.WM_KEYDOWN, _lastKeyDown.WParam, _lastKeyDown.LParam);
+                                User32.SendMessageW(User32.GetFocus(), User32.WM.KEYDOWN, _lastKeyDown.WParam, _lastKeyDown.LParam);
                             }
                         }
                         break;
 
-                    case WindowMessages.WM_CHAR:
+                    case User32.WM.CHAR:
 
                         if ((Control.ModifierKeys & (Keys.Control | Keys.Alt)) != 0)
                         {
@@ -2186,8 +2185,8 @@ namespace System.ComponentModel.Design
                         if (PropertyGrid.Focused || PropertyGrid.ContainsFocus)
                         {
                             IntPtr hWnd = User32.GetFocus();
-                            User32.SendMessageW(hWnd, User32.WindowMessage.WM_KEYDOWN, _lastKeyDown.WParam, _lastKeyDown.LParam);
-                            User32.SendMessageW(hWnd, User32.WindowMessage.WM_CHAR, m.WParam, m.LParam);
+                            User32.SendMessageW(hWnd, User32.WM.KEYDOWN, _lastKeyDown.WParam, _lastKeyDown.LParam);
+                            User32.SendMessageW(hWnd, User32.WM.CHAR, m.WParam, m.LParam);
                             return;
                         }
                         break;

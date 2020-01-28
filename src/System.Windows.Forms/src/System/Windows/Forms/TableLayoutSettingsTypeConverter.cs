@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
 using System.Globalization;
@@ -75,6 +77,11 @@ namespace System.Windows.Forms.Layout
 
                 foreach (TableLayoutSettings.ControlInformation c in tableLayoutSettings.GetControlsInformation())
                 {
+                    if (c.Name == null)
+                    {
+                        throw new InvalidOperationException(SR.TableLayoutSettingsConverterNoName);
+                    }
+
                     xmlWriter.WriteStartElement("Control");
                     xmlWriter.WriteAttributeString("Name", c.Name.ToString());
                     xmlWriter.WriteAttributeString("Row", c.Row.ToString(CultureInfo.CurrentCulture));
@@ -247,5 +254,3 @@ namespace System.Windows.Forms.Layout
         }
     }
 }
-
-

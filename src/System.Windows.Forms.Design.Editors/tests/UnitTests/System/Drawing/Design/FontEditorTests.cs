@@ -12,7 +12,7 @@ using Xunit;
 
 namespace System.Drawing.Design.Tests
 {
-    public class FontEditorTests
+    public class FontEditorTests : IClassFixture<ThreadExceptionFixture>
     {
         [Fact]
         public void FontEditor_Ctor_Default()

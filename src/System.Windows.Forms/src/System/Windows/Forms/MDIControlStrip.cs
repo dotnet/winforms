@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Drawing;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
@@ -95,7 +97,7 @@ namespace System.Windows.Forms
         private Image GetTargetWindowIcon()
         {
             Image systemIcon = null;
-            IntPtr hIcon = UnsafeNativeMethods.SendMessage(new HandleRef(this, Control.GetSafeHandle(target)), WindowMessages.WM_GETICON, NativeMethods.ICON_SMALL, 0);
+            IntPtr hIcon = User32.SendMessageW(new HandleRef(this, Control.GetSafeHandle(target)), User32.WM.GETICON, (IntPtr)NativeMethods.ICON_SMALL, IntPtr.Zero);
             Icon icon = (hIcon != IntPtr.Zero) ? Icon.FromHandle(hIcon) : Form.DefaultIcon;
             Icon smallIcon = new Icon(icon, SystemInformation.SmallIconSize);
 

@@ -8,7 +8,7 @@ using Xunit;
 
 namespace System.Drawing.Design.Tests
 {
-    public class PropertyValueUIItemTests
+    public class PropertyValueUIItemTests : IClassFixture<ThreadExceptionFixture>
     {
         public static IEnumerable<object[]> Ctor_Image_PropertyValueUIItemInvokeHandler_String_TestData()
         {

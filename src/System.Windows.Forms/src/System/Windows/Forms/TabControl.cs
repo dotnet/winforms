@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -70,7 +72,7 @@ namespace System.Windows.Forms
         ///  display rectangle.  When the message is received, the control calls
         ///  updateTabSelection() to layout the TabPages correctly.
         /// </summary>
-        private readonly User32.WindowMessage _tabBaseReLayoutMessage = User32.RegisterWindowMessageW(Application.WindowMessagesVersion + TabBaseReLayoutMessageName);
+        private readonly User32.WM _tabBaseReLayoutMessage = User32.RegisterWindowMessageW(Application.WindowMessagesVersion + TabBaseReLayoutMessageName);
 
         // State
         private TabPage[] _tabPages;
@@ -80,6 +82,8 @@ namespace System.Windows.Forms
 
         private bool _rightToLeftLayout;
         private bool _skipUpdateSize;
+
+        private ToolTipBuffer _toolTipBuffer;
 
         /// <summary>
         ///  Constructs a TabBase object, usually as the base class for a TabStrip or TabControl.
@@ -408,7 +412,7 @@ namespace System.Windows.Forms
                     }
                     if (IsHandleCreated)
                     {
-                        User32.SendMessageW(this, (User32.WindowMessage)ComCtl32.TCM.ADJUSTRECT, IntPtr.Zero, ref rect);
+                        User32.SendMessageW(this, (User32.WM)ComCtl32.TCM.ADJUSTRECT, IntPtr.Zero, ref rect);
                     }
                 }
 
@@ -646,10 +650,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  This is used for international applications where the language
-        ///  is written from RightToLeft. When this property is true,
-        //      and the RightToLeft is true, mirroring will be turned on on the form, and
-        ///  control placement and text will be from right to left.
+        ///  This is used for international applications where the language is written from RightToLeft.
+        ///  When this property is true, and the RightToLeft is true, mirroring will be turned on on
+        ///  the form, and control placement and text will be from right to left.
         /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
@@ -1130,6 +1133,10 @@ namespace System.Windows.Forms
                     _imageList.Disposed -= new EventHandler(DetachImageList);
                 }
             }
+
+            // Dispose unmanaged resources.
+            _toolTipBuffer.Dispose();
+
             base.Dispose(disposing);
         }
 
@@ -1225,7 +1232,7 @@ namespace System.Windows.Forms
                 CreateHandle();
             }
 
-            User32.SendMessageW(this, (User32.WindowMessage)ComCtl32.TCM.GETITEMRECT, (IntPtr)index, ref rect);
+            User32.SendMessageW(this, (User32.WM)ComCtl32.TCM.GETITEMRECT, (IntPtr)index, ref rect);
             return Rectangle.FromLTRB(rect.left, rect.top, rect.right, rect.bottom);
         }
 
@@ -1321,6 +1328,12 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void OnHandleCreated(EventArgs e)
         {
+            if (!IsHandleCreated)
+            {
+                base.OnHandleCreated(e);
+                return;
+            }
+
             //Add the handle to hashtable for Ids ..
             _windowId = NativeWindow.CreateWindowId(this);
             _handleInTable = true;
@@ -1663,7 +1676,7 @@ namespace System.Windows.Forms
 
             if (IsHandleCreated)
             {
-                User32.SendMessageW(this, ((User32.WindowMessage)TCM.DELETEALLITEMS), IntPtr.Zero, IntPtr.Zero);
+                User32.SendMessageW(this, ((User32.WM)TCM.DELETEALLITEMS), IntPtr.Zero, IntPtr.Zero);
             }
 
             _tabPages = null;
@@ -1738,7 +1751,7 @@ namespace System.Windows.Forms
             // Make the Updated tab page the currently selected tab page
             if (DesignMode && IsHandleCreated)
             {
-                User32.SendMessageW(this, (User32.WindowMessage)ComCtl32.TCM.SETCURSEL, (IntPtr)index, IntPtr.Zero);
+                User32.SendMessageW(this, (User32.WM)ComCtl32.TCM.SETCURSEL, (IntPtr)index, IntPtr.Zero);
             }
             _tabPages[index] = value;
         }
@@ -1996,31 +2009,27 @@ namespace System.Windows.Forms
             UpdateTabSelection(false);
         }
 
-        private void WmNeedText(ref Message m)
+        private unsafe void WmNeedText(ref Message m)
         {
-            NativeMethods.TOOLTIPTEXT ttt = (NativeMethods.TOOLTIPTEXT)m.GetLParam(typeof(NativeMethods.TOOLTIPTEXT));
+            NMTTDISPINFOW* ttt = (NMTTDISPINFOW*)m.LParam;
 
-            int commandID = (int)ttt.hdr.idFrom;
+            int commandID = (int)ttt->hdr.idFrom;
 
             string tipText = GetToolTipText(GetTabPage(commandID));
-            if (!string.IsNullOrEmpty(tipText))
+            if (string.IsNullOrEmpty(tipText))
             {
-                ttt.lpszText = tipText;
-            }
-            else
-            {
-                ttt.lpszText = _controlTipText;
+                tipText = _controlTipText;
             }
 
-            ttt.hinst = IntPtr.Zero;
+            _toolTipBuffer.SetText(tipText);
+            ttt->lpszText = _toolTipBuffer.Buffer;
+            ttt->hinst = IntPtr.Zero;
 
             // RightToLeft reading order
             if (RightToLeft == RightToLeft.Yes)
             {
-                ttt.uFlags |= (int)ComCtl32.TTF.RTLREADING;
+                ttt->uFlags |= TTF.RTLREADING;
             }
-
-            Marshal.StructureToPtr(ttt, m.LParam, false);
         }
 
         private unsafe void WmReflectDrawItem(ref Message m)
@@ -2112,18 +2121,18 @@ namespace System.Windows.Forms
         /// </summary>
         protected unsafe override void WndProc(ref Message m)
         {
-            switch (m.Msg)
+            switch ((User32.WM)m.Msg)
             {
-                case WindowMessages.WM_REFLECT + WindowMessages.WM_DRAWITEM:
+                case User32.WM.REFLECT | User32.WM.DRAWITEM:
                     WmReflectDrawItem(ref m);
                     break;
 
-                case WindowMessages.WM_REFLECT + WindowMessages.WM_MEASUREITEM:
+                case User32.WM.REFLECT | User32.WM.MEASUREITEM:
                     // We use TCM_SETITEMSIZE instead
                     break;
 
-                case WindowMessages.WM_NOTIFY:
-                case WindowMessages.WM_REFLECT + WindowMessages.WM_NOTIFY:
+                case User32.WM.NOTIFY:
+                case User32.WM.REFLECT | User32.WM.NOTIFY:
                     User32.NMHDR* nmhdr = (User32.NMHDR*)m.LParam;
                     switch (nmhdr->code)
                     {
@@ -2166,7 +2175,7 @@ namespace System.Windows.Forms
                             break;
                         case (int)ComCtl32.TTN.GETDISPINFOW:
                             // Setting the max width has the added benefit of enabling Multiline tool tips
-                            User32.SendMessageW(nmhdr->hwndFrom, User32.WindowMessage.TTM_SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
+                            User32.SendMessageW(nmhdr->hwndFrom, (User32.WM)TTM.SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
                             WmNeedText(ref m);
                             m.Result = (IntPtr)1;
                             return;
@@ -2203,7 +2212,7 @@ namespace System.Windows.Forms
             fixed (char* pText = text)
             {
                 tcitem.pszText = pText;
-                return User32.SendMessageW(this, (User32.WindowMessage)msg, wParam, ref tcitem);
+                return User32.SendMessageW(this, (User32.WM)msg, wParam, ref tcitem);
             }
         }
 

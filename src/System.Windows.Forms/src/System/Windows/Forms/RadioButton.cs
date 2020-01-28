@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.InteropServices;
@@ -209,7 +211,7 @@ namespace System.Windows.Forms
 
                     if (IsHandleCreated)
                     {
-                        SendMessage(NativeMethods.BM_SETCHECK, value ? 1 : 0, 0);
+                        User32.SendMessageW(this, (User32.WM)User32.BM.SETCHECK, PARAM.FromBool(value));
                     }
 
                     Invalidate();
@@ -408,12 +410,10 @@ namespace System.Windows.Forms
         protected override void OnHandleCreated(EventArgs e)
         {
             base.OnHandleCreated(e);
-            //Since this is protected override, this can be called directly in a overriden class
-            //and the handle doesn't need to be created.
-            //So check for the handle to improve performance
+
             if (IsHandleCreated)
             {
-                SendMessage(NativeMethods.BM_SETCHECK, isChecked ? 1 : 0, 0);
+                User32.SendMessageW(this, (User32.WM)User32.BM.SETCHECK, PARAM.FromBool(isChecked));
             }
         }
 

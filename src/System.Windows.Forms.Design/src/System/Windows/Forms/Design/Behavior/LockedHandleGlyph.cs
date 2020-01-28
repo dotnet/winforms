@@ -14,7 +14,8 @@ namespace System.Windows.Forms.Design.Behavior
         private readonly bool _isPrimary = false;
 
         /// <summary>
-        ///  LockedHandleGlyph's constructor takes additional parameters: 'type' and 'primary selection'. Also, we create/cache our pen & brush here to avoid this action with every paint message.
+        ///  LockedHandleGlyph's constructor takes additional parameters: 'type' and 'primary selection'.
+        ///  Also, we create/cache our pen and brush here to avoid this action with every paint message.
         /// </summary>
         internal LockedHandleGlyph(Rectangle controlBounds, bool primarySelection) : base(null)
         {

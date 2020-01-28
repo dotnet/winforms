@@ -8,7 +8,7 @@ using static Interop.User32;
 
 namespace System.Windows.Forms.Primitives.Tests.Interop.User32
 {
-    public class GetWindowTextTests
+    public class GetWindowTextTests : IClassFixture<ThreadExceptionFixture>
     {
         [WinFormsFact]
         public void GetWindowText_DoesNotTruncateText()
@@ -64,7 +64,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.User32
 
             protected override void WndProc(ref Message m)
             {
-                if (m.Msg == WindowMessages.WM_GETTEXTLENGTH)
+                if (m.Msg == (int)WM.GETTEXTLENGTH)
                 {
                     string? text = BeforeGetTextLengthCallback?.Invoke();
                     if (text != null)
@@ -72,7 +72,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.User32
                         SetWindowTextW(m.HWnd, text);
                     }
                 }
-                else if (m.Msg == WindowMessages.WM_GETTEXT)
+                else if (m.Msg == (int)WM.GETTEXT)
                 {
                     string? text = BeforeGetTextCallback?.Invoke();
                     if (text != null)

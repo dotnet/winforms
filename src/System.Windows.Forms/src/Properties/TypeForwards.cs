@@ -4,6 +4,8 @@
 
 using System.Runtime.CompilerServices;
 
+#pragma warning disable RS0016 // Add public types and members to the declared API
+
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.FileDialogCustomPlace))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.FileDialogCustomPlacesCollection))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Message))]
@@ -19,3 +21,5 @@ using System.Runtime.CompilerServices;
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.VisualStyles.TextMetricsCharacterSet))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.VisualStyles.TextMetricsPitchAndFamilyValues))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.VisualStyles.ThemeSizeType))]
+
+#pragma warning restore RS0016 // Add public types and members to the declared API

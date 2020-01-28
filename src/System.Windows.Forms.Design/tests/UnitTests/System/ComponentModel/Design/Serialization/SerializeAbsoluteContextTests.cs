@@ -7,7 +7,7 @@ using Xunit;
 
 namespace System.ComponentModel.Design.Serialization.Tests
 {
-    public class SerializeAbsoluteContextTests
+    public class SerializeAbsoluteContextTests : IClassFixture<ThreadExceptionFixture>
     {
         [Fact]
         public void SerializeAbsoluteContext_Ctor_Default()

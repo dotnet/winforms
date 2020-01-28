@@ -6,7 +6,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class DataGridViewRowEventArgsTests
+    public class DataGridViewRowEventArgsTests : IClassFixture<ThreadExceptionFixture>
     {
         [Fact]
         public void Ctor_DataGridViewRow()

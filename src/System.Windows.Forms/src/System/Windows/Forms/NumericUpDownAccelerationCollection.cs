@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -16,8 +18,6 @@ namespace System.Windows.Forms
     public class NumericUpDownAccelerationCollection : MarshalByRefObject, ICollection<NumericUpDownAcceleration>, IEnumerable<NumericUpDownAcceleration>
     {
         readonly List<NumericUpDownAcceleration> items;
-
-        ///  ICollection<NumericUpDownAcceleration> implementation.
 
         /// <summary>
         ///  Adds an item (NumericUpDownAcceleration object) to the ICollection.
@@ -92,8 +92,6 @@ namespace System.Windows.Forms
         {
             return items.Remove(acceleration);
         }
-
-        ///  IEnumerable<NumericUpDownAcceleration> implementation.
 
         /// <summary>
         ///  Returns an enumerator that can iterate through the collection.

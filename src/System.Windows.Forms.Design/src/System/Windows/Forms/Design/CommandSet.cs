@@ -545,7 +545,7 @@ namespace System.Windows.Forms.Design
                     IntPtr hwnd = User32.WindowFromPoint(p);
                     if (hwnd != IntPtr.Zero)
                     {
-                        User32.SendMessageW(hwnd, User32.WindowMessage.WM_SETCURSOR, hwnd, (IntPtr)NativeMethods.HTCLIENT);
+                        User32.SendMessageW(hwnd, User32.WM.SETCURSOR, hwnd, (IntPtr)NativeMethods.HTCLIENT);
                     }
                     else
                     {
@@ -1111,7 +1111,7 @@ namespace System.Windows.Forms.Design
                                 continue;
                             }
 
-                            // Also, skip all locked componenents...
+                            // Also, skip all locked components...
                             PropertyDescriptor lockProp = props["Locked"];
                             if (lockProp != null && (bool)lockProp.GetValue(comp) == true)
                             {
@@ -1678,7 +1678,7 @@ namespace System.Windows.Forms.Design
             {
                 Cursor.Current = Cursors.WaitCursor;
                 // If a control fails to get pasted; then we should remember its associatedComponents  so that they are not pasted.
-                ICollection associatedCompsOfFailedContol = null;
+                ICollection associatedCompsOfFailedControl = null;
                 IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
                 Debug.Assert(!CompModSwitches.CommonDesignerServices.Enabled || host != null, "IDesignerHost not found");
                 if (host == null)
@@ -1817,10 +1817,10 @@ namespace System.Windows.Forms.Design
                             {
                                 bool foundAssociatedControl = false;
                                 // If we have failed to add a control in this Paste operation ...
-                                if (associatedCompsOfFailedContol != null)
+                                if (associatedCompsOfFailedControl != null)
                                 {
-                                    // then dont add its children controls.
-                                    foreach (Component comp in associatedCompsOfFailedContol)
+                                    // then don't add its children controls.
+                                    foreach (Component comp in associatedCompsOfFailedControl)
                                     {
                                         if (comp == obj as Component)
                                         {
@@ -1832,7 +1832,7 @@ namespace System.Windows.Forms.Design
 
                                 if (foundAssociatedControl)
                                 {
-                                    continue; //continue from here so that we dont add the associted compoenet of a control that failed paste operation.
+                                    continue; //continue from here so that we don't add the associated component of a control that failed paste operation.
                                 }
 
                                 ICollection designerComps = null;
@@ -1877,8 +1877,8 @@ namespace System.Windows.Forms.Design
                                     if (!((IOleDragClient)designer).AddComponent(curComp, name, createdItems))
                                     {
                                         //cache the associatedComponents only for FAILED control.
-                                        associatedCompsOfFailedContol = designerComps;
-                                        // now we will jump out of the using block and call trans.Dispose() which in turn calls trans.Cancel for an uncommited transaction, We want to cancel the transaction because otherwise we'll have  un-parented controls
+                                        associatedCompsOfFailedControl = designerComps;
+                                        // now we will jump out of the using block and call trans.Dispose() which in turn calls trans.Cancel for an uncommitted transaction, We want to cancel the transaction because otherwise we'll have  un-parented controls
                                         return;
                                     }
 
@@ -2716,7 +2716,7 @@ namespace System.Windows.Forms.Design
             selCount = SelectionService.SelectionCount;
             IDesignerHost designerHost = (IDesignerHost)GetService(typeof(IDesignerHost));
             Debug.Assert(designerHost != null, "Failed to get designer host");
-            // if the base component is selected, we'll say that nothing's selected so we don't get wierd behavior
+            // if the base component is selected, we'll say that nothing's selected so we don't get weird behavior
             if (selCount > 0 && designerHost != null)
             {
                 object baseComponent = designerHost.RootComponent;
@@ -3265,8 +3265,8 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            ///  Applys the cached status to this item.
-            /// </devdco>
+            ///  Applies the cached status to this item.
+            /// </summary>
             private void ApplyCachedStatus()
             {
                 if (_commandSet != null && s_commandStatusHash.Contains(_statusHandler))
@@ -3317,9 +3317,9 @@ namespace System.Windows.Forms.Design
                 }
             }
 
-            ///<summary>
+            /// <summary>
             ///  Only pass this down to the base when we're not doing the cached update.
-            ///</summary>
+            /// </summary>
             protected override void OnCommandChanged(EventArgs e)
             {
                 if (!_updatingCommand)
@@ -3328,9 +3328,9 @@ namespace System.Windows.Forms.Design
                 }
             }
 
-            ///<summary>
+            /// <summary>
             ///  Saves the status for this command to the statusstate that's stored in the hashtable based on our status handler delegate.
-            ///</summary>
+            /// </summary>
             private void SaveCommandStatus()
             {
                 if (_commandSet != null)
@@ -3437,7 +3437,7 @@ namespace System.Windows.Forms.Design
                 }
 
                 /// <summary>
-                ///  Updates this status object  with the state from the given item, and saves teh seletion version.
+                ///  Updates this status object  with the state from the given item, and saves teh selection version.
                 /// </summary>
                 internal void SaveState(CommandSetItem item, int version)
                 {

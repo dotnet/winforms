@@ -10,7 +10,13 @@ internal static partial class Interop
     internal static partial class User32
     {
         [DllImport(Libraries.User32, ExactSpelling = true)]
-
         public static extern BOOL IsWindow(IntPtr hWnd);
+
+        public static BOOL IsWindow(HandleRef hWnd)
+        {
+            BOOL result = IsWindow(hWnd.Handle);
+            GC.KeepAlive(hWnd.Wrapper);
+            return result;
+        }
     }
 }

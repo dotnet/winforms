@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms.VisualStyles;
@@ -553,10 +555,9 @@ namespace System.Windows.Forms
 
         private void InitCommonColors(ref Dictionary<KnownColors, Color> rgbTable)
         {
-            ///  we need to calculate our own alpha blended color based on the Higlight and Window
-            ///  colors on the system.  Since terminalserver + alphablending doesnt work we cant just do a
-            ///  FromARGB here.  So we have a simple function which calculates the blending for us.
-
+            // We need to calculate our own alpha blended color based on the Highlight and Window
+            // colors on the system. Since terminalserver + alphablending doesnt work we cant just do a
+            // FromARGB here. So we have a simple function which calculates the blending for us.
             if (!DisplayInformation.LowResolution)
             {
                 using (Graphics g = WindowsFormsUtils.CreateMeasurementGraphics())
@@ -2113,4 +2114,3 @@ namespace System.Windows.Forms
         }
     }
 }
-

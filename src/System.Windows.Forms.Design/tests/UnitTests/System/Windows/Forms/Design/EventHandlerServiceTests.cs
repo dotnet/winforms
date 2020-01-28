@@ -10,7 +10,7 @@ using static System.Windows.Forms.Design.EventHandlerService;
 
 namespace System.Windows.Forms.Design.Tests
 {
-    public class EventHandlerServiceTests
+    public class EventHandlerServiceTests : IClassFixture<ThreadExceptionFixture>
     {
         [Fact]
         public void ctor_should_create_object()

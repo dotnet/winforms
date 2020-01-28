@@ -368,7 +368,7 @@ namespace System.Windows.Forms.Design
             Control control = Control;
             if (control != null && control.IsHandleCreated)
             {
-                User32.SendMessageW(control.Handle, User32.WindowMessage.WM_NCACTIVATE, (IntPtr)1, IntPtr.Zero);
+                User32.SendMessageW(control.Handle, User32.WM.NCACTIVATE, (IntPtr)1, IntPtr.Zero);
                 User32.RedrawWindow(control.Handle, null, IntPtr.Zero, User32.RDW.FRAME);
             }
         }
@@ -381,7 +381,7 @@ namespace System.Windows.Forms.Design
             Control control = Control;
             if (control != null && control.IsHandleCreated)
             {
-                User32.SendMessageW(control.Handle, User32.WindowMessage.WM_NCACTIVATE, IntPtr.Zero, IntPtr.Zero);
+                User32.SendMessageW(control.Handle, User32.WM.NCACTIVATE, IntPtr.Zero, IntPtr.Zero);
                 User32.RedrawWindow(control.Handle, null, IntPtr.Zero, User32.RDW.FRAME);
             }
         }
@@ -474,9 +474,9 @@ namespace System.Windows.Forms.Design
         /// </summary>
         protected override void WndProc(ref Message m)
         {
-            switch (m.Msg)
+            switch ((User32.WM)m.Msg)
             {
-                case WindowMessages.WM_WINDOWPOSCHANGING:
+                case User32.WM.WINDOWPOSCHANGING:
                     WmWindowPosChanging(ref m);
                     break;
             }

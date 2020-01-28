@@ -56,7 +56,7 @@ namespace System.Windows.Forms.Design
                 return null;
             }
 
-            // If the instances are different, then we need to re-aquire our image list.
+            // If the instances are different, then we need to re-acquire our image list.
             if ((index >= 0) || (key != null))
             {
                 PropertyDescriptor currentImageListProp = null;
@@ -137,7 +137,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Gets a value indicating whether this editor supports the painting of a representation of an object's value.</para>
+        /// Gets a value indicating whether this editor supports the painting of a representation of an object's value.
         /// </summary>
         public override bool GetPaintValueSupported(ITypeDescriptorContext context)
             => imageEditor != null ? imageEditor.GetPaintValueSupported(context) : false;

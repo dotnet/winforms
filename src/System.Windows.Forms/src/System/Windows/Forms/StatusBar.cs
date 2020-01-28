@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Collections;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -201,13 +203,13 @@ namespace System.Windows.Forms
 
                 if (sizeGrip)
                 {
-                    cp.Style |= NativeMethods.SBARS_SIZEGRIP;
+                    cp.Style |= (int)SBARS.SIZEGRIP;
                 }
                 else
                 {
-                    cp.Style &= ~NativeMethods.SBARS_SIZEGRIP;
+                    cp.Style &= ~(int)SBARS.SIZEGRIP;
                 }
-                cp.Style |= NativeMethods.CCS_NOPARENTALIGN | NativeMethods.CCS_NORESIZE;
+                cp.Style |= (int)(CCS.NOPARENTALIGN | CCS.NORESIZE);
 
                 return cp;
             }
@@ -409,9 +411,7 @@ namespace System.Windows.Forms
                     layoutDirty = true;
                     if (IsHandleCreated)
                     {
-                        int bShowPanels = (!showPanels) ? 1 : 0;
-
-                        SendMessage((int)SB.SIMPLE, bShowPanels, 0);
+                        User32.SendMessageW(this, (User32.WM)SB.SIMPLE, PARAM.FromBool(!showPanels), IntPtr.Zero);
 
                         if (showPanels)
                         {
@@ -538,7 +538,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Makes the panel according to the sizes in the panel list.
         /// </summary>
-        private void ApplyPanelWidths()
+        private unsafe void ApplyPanelWidths()
         {
             // This forces handle creation every time any time the StatusBar
             // has to be re-laidout.
@@ -553,14 +553,14 @@ namespace System.Windows.Forms
             if (length == 0)
             {
                 Size sz = Size;
-                int[] offsets = new int[1];
+                Span<int> offsets = stackalloc int[1];
                 offsets[0] = sz.Width;
                 if (sizeGrip)
                 {
                     offsets[0] -= SizeGripWidth;
                 }
-                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)SB.SETPARTS, 1, offsets);
-                SendMessage((int)SB.SETICON, 0, IntPtr.Zero);
+                User32.SendMessageW(this, (User32.WM)SB.SETPARTS, (IntPtr)1, ref offsets[0]);
+                User32.SendMessageW(this, (User32.WM)SB.SETICON, IntPtr.Zero, IntPtr.Zero);
 
                 return;
             }
@@ -574,7 +574,11 @@ namespace System.Windows.Forms
                 offsets2[i] = currentOffset;
                 panel.Right = offsets2[i];
             }
-            UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)SB.SETPARTS, length, offsets2);
+
+            fixed (int* pOffsets = offsets2)
+            {
+                User32.SendMessageW(this, (User32.WM)SB.SETPARTS, (IntPtr)length, (IntPtr)pOffsets);
+            }
 
             // Tooltip setup...
             for (int i = 0; i < length; i++)
@@ -659,7 +663,7 @@ namespace System.Windows.Forms
 
             if (!showPanels)
             {
-                SendMessage((int)SB.SIMPLE, 1, 0);
+                User32.SendMessageW(this, (User32.WM)SB.SIMPLE, (IntPtr)1, IntPtr.Zero);
                 SetSimpleText(simpleText);
             }
             else
@@ -726,7 +730,7 @@ namespace System.Windows.Forms
 
             if (length == 0)
             {
-                SendMessage((int)SB.SETTEXT, 0, string.Empty);
+                User32.SendMessageW(this, (User32.WM)SB.SETTEXT, IntPtr.Zero, string.Empty);
             }
 
             int i;
@@ -744,7 +748,7 @@ namespace System.Windows.Forms
             }
             for (; i < old; i++)
             {
-                SendMessage((int)SB.SETTEXT, 0, null);
+                User32.SendMessageW(this, (User32.WM)SB.SETTEXT, IntPtr.Zero, null);
             }
         }
 
@@ -807,7 +811,7 @@ namespace System.Windows.Forms
                     wparam |= (int)SBT.RTLREADING;
                 }
 
-                SendMessage((int)SB.SETTEXT, wparam, simpleText);
+                User32.SendMessageW(this, (User32.WM)SB.SETTEXT, (IntPtr)wparam, simpleText);
             }
         }
 
@@ -1123,16 +1127,16 @@ namespace System.Windows.Forms
         /// </summary>
         protected unsafe override void WndProc(ref Message m)
         {
-            switch (m.Msg)
+            switch ((User32.WM)m.Msg)
             {
-                case WindowMessages.WM_NCHITTEST:
+                case User32.WM.NCHITTEST:
                     WmNCHitTest(ref m);
                     break;
-                case WindowMessages.WM_REFLECT + WindowMessages.WM_DRAWITEM:
+                case User32.WM.REFLECT| User32.WM.DRAWITEM:
                     WmDrawItem(ref m);
                     break;
-                case WindowMessages.WM_NOTIFY:
-                case WindowMessages.WM_NOTIFY + WindowMessages.WM_REFLECT:
+                case User32.WM.NOTIFY:
+                case User32.WM.NOTIFY | User32.WM.REFLECT:
                     User32.NMHDR* note = (User32.NMHDR*)m.LParam;
                     switch ((NM)note->code)
                     {
@@ -1763,7 +1767,7 @@ namespace System.Windows.Forms
                     StatusBar p = (StatusBar)parent;
 
                     ToolInfoWrapper<Control> info = GetTOOLINFO(tool);
-                    if (info.SendMessage(p.ToolTipSet ? (IHandle)p.mainToolTip : this, User32.WindowMessage.TTM_ADDTOOLW) == IntPtr.Zero)
+                    if (info.SendMessage(p.ToolTipSet ? (IHandle)p.mainToolTip : this, (User32.WM)TTM.ADDTOOLW) == IntPtr.Zero)
                     {
                         throw new InvalidOperationException(SR.StatusBarAddFailed);
                     }
@@ -1775,7 +1779,7 @@ namespace System.Windows.Forms
                 if (tool != null && tool.text != null && tool.text.Length > 0 && (int)tool.id >= 0)
                 {
                     ToolInfoWrapper<Control> info = GetMinTOOLINFO(tool);
-                    info.SendMessage(this, User32.WindowMessage.TTM_DELTOOLW);
+                    info.SendMessage(this, (User32.WM)TTM.DELTOOLW);
                 }
             }
 
@@ -1784,7 +1788,7 @@ namespace System.Windows.Forms
                 if (tool != null && tool.text != null && tool.text.Length > 0 && (int)tool.id >= 0)
                 {
                     ToolInfoWrapper<Control> info = GetTOOLINFO(tool);
-                    info.SendMessage(this, User32.WindowMessage.TTM_SETTOOLINFOW);
+                    info.SendMessage(this, (User32.WM)TTM.SETTOOLINFOW);
                 }
             }
 
@@ -1805,7 +1809,7 @@ namespace System.Windows.Forms
                     flags: User32.SWP.NOMOVE | User32.SWP.NOSIZE | User32.SWP.NOACTIVATE);
 
                 // Setting the max width has the added benefit of enabling multiline tool tips
-                User32.SendMessageW(this, User32.WindowMessage.TTM_SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
+                User32.SendMessageW(this, (User32.WM)TTM.SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
             }
 
             /// <summary>
@@ -1875,9 +1879,9 @@ namespace System.Windows.Forms
 
             protected void WndProc(ref Message msg)
             {
-                switch (msg.Msg)
+                switch ((User32.WM)msg.Msg)
                 {
-                    case WindowMessages.WM_SETFOCUS:
+                    case User32.WM.SETFOCUS:
                         return;
                     default:
                         window.DefWndProc(ref msg);
@@ -1905,4 +1909,3 @@ namespace System.Windows.Forms
         }
     }
 }
-

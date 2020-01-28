@@ -11,7 +11,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class CursorTests
+    public class CursorTests : IClassFixture<ThreadExceptionFixture>
     {
         [Fact]
         public void Cursor_Ctor_IntPtr()

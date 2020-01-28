@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
@@ -249,7 +251,7 @@ namespace System.Windows.Forms
 
             /// <summary>
             ///  Changes the interval of the timer without destroying the HWND.
-            /// <summary>
+            /// </summary>
             public void RestartTimer(int newInterval)
             {
                 StopTimer(IntPtr.Zero, destroyHwnd: false);
@@ -283,14 +285,14 @@ namespace System.Windows.Forms
                 // Fire a message across threads to destroy the timer and HWND on the thread that created it.
                 if (GetInvokeRequired(hWnd))
                 {
-                    User32.PostMessageW(new HandleRef(this, hWnd), User32.WindowMessage.WM_CLOSE);
+                    User32.PostMessageW(new HandleRef(this, hWnd), User32.WM.CLOSE);
                     return;
                 }
 
                 // Locking 'this' here is ok since this is an internal class.
                 lock (this)
                 {
-                    if (_stoppingTimer || hWnd == IntPtr.Zero || !UnsafeNativeMethods.IsWindow(new HandleRef(this, hWnd)))
+                    if (_stoppingTimer || hWnd == IntPtr.Zero || User32.IsWindow(new HandleRef(this, hWnd)).IsFalse())
                     {
                         return;
                     }
@@ -345,7 +347,7 @@ namespace System.Windows.Forms
                 Debug.Assert(m.HWnd == Handle && Handle != IntPtr.Zero, "Timer getting messages for other windows?");
 
                 // For timer messages call the timer event.
-                if (m.Msg == WindowMessages.WM_TIMER)
+                if (m.Msg == (int)User32.WM.TIMER)
                 {
                     if (m.WParam == _timerID)
                     {
@@ -353,7 +355,7 @@ namespace System.Windows.Forms
                         return;
                     }
                 }
-                else if (m.Msg == WindowMessages.WM_CLOSE)
+                else if (m.Msg == (int)User32.WM.CLOSE)
                 {
                     // This is a posted method from another thread that tells us we need
                     // to kill the timer. The handle may already be gone, so we specify it here.

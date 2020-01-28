@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -95,7 +97,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Specifies whether the ImeMode property value can be changed to an active value.
-        ///  Added to support Password & ReadOnly (and maybe other) properties, which when set, should force disabling
+        ///  Added to support Password &amp; ReadOnly (and maybe other) properties, which when set, should force disabling
         ///  the IME if using one.
         /// </summary>
         protected virtual bool CanEnableIme
@@ -553,8 +555,6 @@ namespace System.Windows.Forms
         /// </summary>
         internal void VerifyImeRestrictedModeChanged()
         {
-            Debug.Assert(ImeSupported, "This method should not be called from controls that don't support IME input.");
-
             Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Info, "Inside VerifyImeRestrictedModeChanged(), this = " + this);
             Debug.Indent();
 

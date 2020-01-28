@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using static Interop;
@@ -70,7 +72,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     for (int i = 0; i < controls.Length; i++)
                     {
                         ComCtl32.ToolInfoWrapper<Control> info = GetTOOLINFO(controls[i]);
-                        info.SendMessage(this, User32.WindowMessage.TTM_UPDATETIPTEXTW);
+                        info.SendMessage(this, (User32.WM)ComCtl32.TTM.UPDATETIPTEXTW);
                     }
 
                     if (visible && !dontShow)
@@ -118,7 +120,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             if (IsHandleCreated)
             {
-                GetTOOLINFO((Control)sender).SendMessage(this, User32.WindowMessage.TTM_DELTOOLW);
+                GetTOOLINFO((Control)sender).SendMessage(this, (User32.WM)ComCtl32.TTM.DELTOOLW);
             }
         }
 
@@ -144,13 +146,13 @@ namespace System.Windows.Forms.PropertyGridInternal
                     flags: User32.SWP.NOMOVE | User32.SWP.NOSIZE | User32.SWP.NOACTIVATE);
 
                 ComCtl32.ToolInfoWrapper<Control> info = GetTOOLINFO(control);
-                if (info.SendMessage(this, User32.WindowMessage.TTM_ADDTOOLW) == IntPtr.Zero)
+                if (info.SendMessage(this, (User32.WM)ComCtl32.TTM.ADDTOOLW) == IntPtr.Zero)
                 {
                     Debug.Fail($"TTM_ADDTOOL failed for {control.GetType().Name}");
                 }
 
                 // Setting the max width has the added benefit of enabling multiline tool tips
-                User32.SendMessageW(this, User32.WindowMessage.TTM_SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
+                User32.SendMessageW(this, (User32.WM)ComCtl32.TTM.SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
             }
         }
 
@@ -166,24 +168,24 @@ namespace System.Windows.Forms.PropertyGridInternal
             for (int i = 0; i < controls.Length; i++)
             {
                 ComCtl32.ToolInfoWrapper<Control> info = GetTOOLINFO(controls[i]);
-                info.SendMessage(this, User32.WindowMessage.TTM_UPDATETIPTEXTW);
+                info.SendMessage(this, (User32.WM)ComCtl32.TTM.UPDATETIPTEXTW);
             }
 
             toolTipText = oldText;
-            User32.SendMessageW(this, User32.WindowMessage.TTM_UPDATE);
+            User32.SendMessageW(this, (User32.WM)ComCtl32.TTM.UPDATE);
         }
 
         protected override void WndProc(ref Message msg)
         {
-            switch (msg.Msg)
+            switch ((User32.WM)msg.Msg)
             {
-                case WindowMessages.WM_SHOWWINDOW:
+                case User32.WM.SHOWWINDOW:
                     if (unchecked((int)(long)msg.WParam) != 0 && dontShow)
                     {
                         msg.WParam = IntPtr.Zero;
                     }
                     break;
-                case WindowMessages.WM_NCHITTEST:
+                case User32.WM.NCHITTEST:
                     // When using v6 common controls, the native tooltip does not end up returning HTTRANSPARENT
                     // all the time, so its TTF_TRANSPARENT behavior does not work, ie. mouse events do not fall
                     // thru to controls underneath. This is due to a combination of old app-specific code in comctl32,

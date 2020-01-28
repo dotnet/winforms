@@ -10,7 +10,7 @@ internal static partial class Interop
     {
         public struct EVENTMSG
         {
-            public WindowMessage message;
+            public WM message;
             public uint paramL;
             public uint paramH;
             public uint time;

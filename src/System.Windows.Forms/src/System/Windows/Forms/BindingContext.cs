@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Collections;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -70,7 +72,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets an object to use for synchronization (thread safety).
         /// </summary>
-        object ICollection.SyncRoot => null;
+        object ICollection.SyncRoot => this;
 
         /// <summary>
         ///  Gets the System.Windows.Forms.BindingManagerBase associated with the specified

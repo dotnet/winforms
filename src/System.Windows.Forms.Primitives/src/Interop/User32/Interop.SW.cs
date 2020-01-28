@@ -2,12 +2,15 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System;
+
 internal static partial class Interop
 {
     internal static partial class User32
     {
         /// <summary>
-        ///  Show window flags for <see cref="ShowWindow"/> and <see cref="Shell32.ShellExecuteW"/>
+        ///  Show window flags for <see cref="ShowWindow(IntPtr, SW)"/> and
+        ///  <see cref="Shell32.ShellExecuteW(IntPtr, string, string, string, string, User32.SW)"/>
         /// </summary>
         public enum SW : int
         {

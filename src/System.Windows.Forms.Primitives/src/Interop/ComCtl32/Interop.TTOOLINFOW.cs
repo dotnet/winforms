@@ -24,20 +24,6 @@ internal static partial class Interop
             // void *lpReserved;
         }
 
-        [Flags]
-        public enum TTF
-        {
-            IDISHWND = 0x0001,
-            CENTERTIP = 0x0002,
-            RTLREADING = 0x0004,
-            SUBCLASS = 0x0010,
-            TRACK = 0x0020,
-            ABSOLUTE = 0x0080,
-            TRANSPARENT = 0x0100,
-            PARSELINKS = 0x1000,
-            DI_SETITEM = 0x8000
-        }
-
         public struct ToolInfoWrapper<T>
             where T : IHandle
         {
@@ -71,7 +57,7 @@ internal static partial class Interop
                 _handle = handle;
             }
 
-            public unsafe IntPtr SendMessage(IHandle sender, User32.WindowMessage message, BOOL state = BOOL.FALSE)
+            public unsafe IntPtr SendMessage(IHandle sender, User32.WM message, BOOL state = BOOL.FALSE)
             {
                 Info.cbSize = (uint)sizeof(TTOOLINFOW);
                 fixed (char* c = Text)

@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Collections;
 using System.Collections.Specialized;
 using System.ComponentModel;
@@ -548,9 +550,9 @@ namespace System.Windows.Forms
             }
         }
 
-        // <summary>
-        //     Part of IComDataObject, used to interop with OLE.
-        // </summary>
+        /// <summary>
+        ///     Part of IComDataObject, used to interop with OLE.
+        /// </summary>
         int IComDataObject.DAdvise(ref FORMATETC pFormatetc, ADVF advf, IAdviseSink pAdvSink, out int pdwConnection)
         {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "DAdvise");
@@ -562,9 +564,9 @@ namespace System.Windows.Forms
             return (int)HRESULT.E_NOTIMPL;
         }
 
-        // <summary>
-        //     Part of IComDataObject, used to interop with OLE.
-        // </summary>
+        /// <summary>
+        ///     Part of IComDataObject, used to interop with OLE.
+        /// </summary>
         void IComDataObject.DUnadvise(int dwConnection)
         {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "DUnadvise");
@@ -576,9 +578,9 @@ namespace System.Windows.Forms
             Marshal.ThrowExceptionForHR((int)HRESULT.E_NOTIMPL);
         }
 
-        // <summary>
-        //     Part of IComDataObject, used to interop with OLE.
-        // </summary>
+        /// <summary>
+        ///     Part of IComDataObject, used to interop with OLE.
+        /// </summary>
         int IComDataObject.EnumDAdvise(out IEnumSTATDATA enumAdvise)
         {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "EnumDAdvise");
@@ -591,9 +593,9 @@ namespace System.Windows.Forms
             return (int)HRESULT.OLE_E_ADVISENOTSUPPORTED;
         }
 
-        // <summary>
-        //     Part of IComDataObject, used to interop with OLE.
-        // </summary>
+        /// <summary>
+        ///     Part of IComDataObject, used to interop with OLE.
+        /// </summary>
         IEnumFORMATETC IComDataObject.EnumFormatEtc(DATADIR dwDirection)
         {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "EnumFormatEtc: " + dwDirection.ToString());
@@ -609,9 +611,9 @@ namespace System.Windows.Forms
             throw new ExternalException(SR.ExternalException, (int)HRESULT.E_NOTIMPL);
         }
 
-        // <summary>
-        //     Part of IComDataObject, used to interop with OLE.
-        // </summary>
+        /// <summary>
+        ///     Part of IComDataObject, used to interop with OLE.
+        /// </summary>
         int IComDataObject.GetCanonicalFormatEtc(ref FORMATETC pformatetcIn, out FORMATETC pformatetcOut)
         {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "GetCanonicalFormatEtc");
@@ -623,9 +625,9 @@ namespace System.Windows.Forms
             return DATA_S_SAMEFORMATETC;
         }
 
-        // <summary>
-        //     Part of IComDataObject, used to interop with OLE.
-        // </summary>
+        /// <summary>
+        ///     Part of IComDataObject, used to interop with OLE.
+        /// </summary>
         void IComDataObject.GetData(ref FORMATETC formatetc, out STGMEDIUM medium)
         {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "GetData");
@@ -673,9 +675,9 @@ namespace System.Windows.Forms
             }
         }
 
-        // <summary>
-        //     Part of IComDataObject, used to interop with OLE.
-        // </summary>
+        /// <summary>
+        ///     Part of IComDataObject, used to interop with OLE.
+        /// </summary>
         void IComDataObject.GetDataHere(ref FORMATETC formatetc, ref STGMEDIUM medium)
         {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "GetDataHere");
@@ -689,9 +691,9 @@ namespace System.Windows.Forms
             }
         }
 
-        // <summary>
-        //     Part of IComDataObject, used to interop with OLE.
-        // </summary>
+        /// <summary>
+        ///     Part of IComDataObject, used to interop with OLE.
+        /// </summary>
         int IComDataObject.QueryGetData(ref FORMATETC formatetc)
         {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "QueryGetData");
@@ -729,9 +731,9 @@ namespace System.Windows.Forms
             return (int)HRESULT.S_OK;
         }
 
-        // <summary>
-        //     Part of IComDataObject, used to interop with OLE.
-        // </summary>
+        /// <summary>
+        ///     Part of IComDataObject, used to interop with OLE.
+        /// </summary>
         void IComDataObject.SetData(ref FORMATETC pFormatetcIn, ref STGMEDIUM pmedium, bool fRelease)
         {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "SetData");

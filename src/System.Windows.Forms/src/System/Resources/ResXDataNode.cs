@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -49,15 +51,10 @@ namespace System.Resources
         // 2. once the object is constructed the delegate should not be changed to avoid getting inconsistent results.
         private Func<Type, string> typeNameConverter;
 
-        // constructors
-
         private ResXDataNode()
         {
         }
 
-        // <summary>
-        // this is a deep clone
-        //</summary>
         internal ResXDataNode DeepClone()
         {
             return new ResXDataNode

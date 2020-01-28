@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Collections;
 using System.ComponentModel;
 using System.Drawing;
@@ -165,16 +167,16 @@ namespace System.Windows.Forms
             switch (value)
             {
                 case MdiLayout.Cascade:
-                    SendMessage(WindowMessages.WM_MDICASCADE, 0, 0);
+                    User32.SendMessageW(this, User32.WM.MDICASCADE);
                     break;
                 case MdiLayout.TileVertical:
-                    SendMessage(WindowMessages.WM_MDITILE, NativeMethods.MDITILE_VERTICAL, 0);
+                    User32.SendMessageW(this, User32.WM.MDITILE, (IntPtr)NativeMethods.MDITILE_VERTICAL);
                     break;
                 case MdiLayout.TileHorizontal:
-                    SendMessage(WindowMessages.WM_MDITILE, NativeMethods.MDITILE_HORIZONTAL, 0);
+                    User32.SendMessageW(this, User32.WM.MDITILE, (IntPtr)NativeMethods.MDITILE_HORIZONTAL);
                     break;
                 case MdiLayout.ArrangeIcons:
-                    SendMessage(WindowMessages.WM_MDIICONARRANGE, 0, 0);
+                    User32.SendMessageW(this, User32.WM.MDIICONARRANGE);
                     break;
             }
         }
@@ -255,7 +257,7 @@ namespace System.Windows.Forms
                 {
                     // NOTE: This logic is to keep minimized MDI children anchored to
                     // the bottom left of the client area, normally they are anchored
-                    // to the top right which just looks wierd!
+                    // to the top right which just looks weird!
                     for (int i = 0; i < Controls.Count; i++)
                     {
                         Control ctl = Controls[i];
@@ -376,16 +378,16 @@ namespace System.Windows.Forms
         /// <param name="m">The Windows <see cref="Message" /> to process.</param>
         protected override void WndProc(ref Message m)
         {
-            switch (m.Msg)
+            switch ((User32.WM)m.Msg)
             {
-                case WindowMessages.WM_CREATE:
+                case User32.WM.CREATE:
                     if (ParentInternal != null && ParentInternal.Site != null && ParentInternal.Site.DesignMode && Handle != IntPtr.Zero)
                     {
                         SetWindowRgn();
                     }
                     break;
 
-                case WindowMessages.WM_SETFOCUS:
+                case User32.WM.SETFOCUS:
                     InvokeGotFocus(ParentInternal, EventArgs.Empty);
                     Form childForm = null;
                     if (ParentInternal is Form)
@@ -407,7 +409,7 @@ namespace System.Windows.Forms
                     DefWndProc(ref m);
                     InvokeGotFocus(this, EventArgs.Empty);
                     return;
-                case WindowMessages.WM_KILLFOCUS:
+                case User32.WM.KILLFOCUS:
                     InvokeLostFocus(ParentInternal, EventArgs.Empty);
                     break;
             }

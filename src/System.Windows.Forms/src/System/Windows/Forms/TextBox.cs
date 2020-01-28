@@ -2,12 +2,15 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Design;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.VisualStyles;
 using static Interop;
+using static Interop.User32;
 
 namespace System.Windows.Forms
 {
@@ -300,27 +303,27 @@ namespace System.Windows.Forms
                 switch (characterCasing)
                 {
                     case CharacterCasing.Lower:
-                        cp.Style |= (int)User32.ES.LOWERCASE;
+                        cp.Style |= (int)ES.LOWERCASE;
                         break;
                     case CharacterCasing.Upper:
-                        cp.Style |= (int)User32.ES.UPPERCASE;
+                        cp.Style |= (int)ES.UPPERCASE;
                         break;
                 }
 
                 // Translate for Rtl if necessary
                 //
                 HorizontalAlignment align = RtlTranslateHorizontal(textAlign);
-                cp.ExStyle &= ~(int)User32.WS_EX.RIGHT;   // WS_EX_RIGHT overrides the ES_XXXX alignment styles
+                cp.ExStyle &= ~(int)WS_EX.RIGHT;   // WS_EX_RIGHT overrides the ES_XXXX alignment styles
                 switch (align)
                 {
                     case HorizontalAlignment.Left:
-                        cp.Style |= (int)User32.ES.LEFT;
+                        cp.Style |= (int)ES.LEFT;
                         break;
                     case HorizontalAlignment.Center:
-                        cp.Style |= (int)User32.ES.CENTER;
+                        cp.Style |= (int)ES.CENTER;
                         break;
                     case HorizontalAlignment.Right:
-                        cp.Style |= (int)User32.ES.RIGHT;
+                        cp.Style |= (int)ES.RIGHT;
                         break;
                 }
 
@@ -331,17 +334,17 @@ namespace System.Windows.Forms
                         && textAlign == HorizontalAlignment.Left
                         && !WordWrap)
                     {
-                        cp.Style |= (int)User32.WS.HSCROLL;
+                        cp.Style |= (int)WS.HSCROLL;
                     }
                     if ((scrollBars & ScrollBars.Vertical) == ScrollBars.Vertical)
                     {
-                        cp.Style |= (int)User32.WS.VSCROLL;
+                        cp.Style |= (int)WS.VSCROLL;
                     }
                 }
 
                 if (useSystemPasswordChar)
                 {
-                    cp.Style |= (int)User32.ES.PASSWORD;
+                    cp.Style |= (int)ES.PASSWORD;
                 }
 
                 return cp;
@@ -367,7 +370,8 @@ namespace System.Windows.Forms
                 {
                     CreateHandle();
                 }
-                return (char)SendMessage(EditMessages.EM_GETPASSWORDCHAR, 0, 0);
+
+                return (char)SendMessageW(this, (WM)EM.GETPASSWORDCHAR);
             }
             set
             {
@@ -379,7 +383,7 @@ namespace System.Windows.Forms
                         if (PasswordChar != value)
                         {
                             // Set the password mode.
-                            SendMessage(EditMessages.EM_SETPASSWORDCHAR, value, 0);
+                            SendMessageW(this, (WM)EM.SETPASSWORDCHAR, (IntPtr)value);
 
                             // Disable IME if setting the control to password mode.
                             VerifyImeRestrictedModeChanged();
@@ -596,11 +600,11 @@ namespace System.Windows.Forms
             // Force repainting of the entire window frame
             if (Application.RenderWithVisualStyles && IsHandleCreated && BorderStyle == BorderStyle.Fixed3D)
             {
-                User32.RedrawWindow(
+                RedrawWindow(
                     new HandleRef(this, Handle),
                     null,
                     IntPtr.Zero,
-                    User32.RDW.INVALIDATE | User32.RDW.FRAME);
+                    RDW.INVALIDATE | RDW.FRAME);
             }
         }
 
@@ -647,7 +651,7 @@ namespace System.Windows.Forms
             {
                 if (!useSystemPasswordChar)
                 {
-                    SendMessage(EditMessages.EM_SETPASSWORDCHAR, passwordChar, 0);
+                    SendMessageW(this, (WM)EM.SETPASSWORDCHAR, (IntPtr)passwordChar);
                 }
             }
 
@@ -941,10 +945,10 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void WndProc(ref Message m)
         {
-            switch (m.Msg)
+            switch ((User32.WM)m.Msg)
             {
                 // Work around a very obscure Windows issue.
-                case WindowMessages.WM_LBUTTONDOWN:
+                case User32.WM.LBUTTONDOWN:
                     MouseButtons realState = MouseButtons;
                     bool wasValidationCancelled = ValidationCancelled;
                     Focus();
@@ -956,10 +960,10 @@ namespace System.Windows.Forms
                     break;
                 //for readability ... so that we know whats happening ...
                 // case WM_LBUTTONUP is included here eventhough it just calls the base.
-                case WindowMessages.WM_LBUTTONUP:
+                case User32.WM.LBUTTONUP:
                     base.WndProc(ref m);
                     break;
-                case WindowMessages.WM_PRINT:
+                case User32.WM.PRINT:
                     WmPrint(ref m);
                     break;
                 default:
@@ -978,7 +982,7 @@ namespace System.Windows.Forms
 
         private bool ShouldRenderPlaceHolderText(in Message m) =>
                     !string.IsNullOrEmpty(PlaceholderText) &&
-                    (m.Msg == WindowMessages.WM_PAINT || m.Msg == WindowMessages.WM_KILLFOCUS) &&
+                    (m.Msg == (int)User32.WM.PAINT || m.Msg == (int)User32.WM.KILLFOCUS) &&
                     !GetStyle(ControlStyles.UserPaint) &&
                     !Focused &&
                     TextLength == 0;

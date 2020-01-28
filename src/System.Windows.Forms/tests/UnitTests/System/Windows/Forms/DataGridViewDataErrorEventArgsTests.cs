@@ -7,7 +7,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class DataGridViewDataErrorEventArgsTests
+    public class DataGridViewDataErrorEventArgsTests : IClassFixture<ThreadExceptionFixture>
     {
         public static IEnumerable<object[]> Ctor_Exception_Int_Int_DataGridViewDataErrorContexts_TestData()
         {

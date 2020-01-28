@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -309,7 +311,7 @@ namespace System.Windows.Forms
                                     Debug.Assert(msg.hwnd == IntPtr.Zero || User32.IsWindowUnicode(msg.hwnd).IsTrue());
                                 }
 
-                                if (msg.message == User32.WindowMessage.WM_QUIT)
+                                if (msg.message == User32.WM.QUIT)
                                 {
                                     Debug.WriteLineIf(
                                         CompModSwitches.MSOComponentManager.TraceInfo,

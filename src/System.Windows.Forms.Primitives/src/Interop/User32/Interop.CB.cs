@@ -8,6 +8,8 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
+        public const int CB_ERR = -1;
+
         public enum CB : uint
         {
             GETEDITSEL = 0x0140,

@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
@@ -335,7 +337,7 @@ namespace System.Windows.Forms
                     largeChange = value;
                     if (IsHandleCreated)
                     {
-                        User32.SendMessageW(this, (User32.WindowMessage)TBM.SETPAGESIZE, IntPtr.Zero, (IntPtr)value);
+                        User32.SendMessageW(this, (User32.WM)TBM.SETPAGESIZE, IntPtr.Zero, (IntPtr)value);
                     }
                 }
             }
@@ -493,15 +495,15 @@ namespace System.Windows.Forms
         {
             if (IsHandleCreated)
             {
-                User32.SendMessageW(this, (User32.WindowMessage)TBM.SETRANGEMAX, PARAM.FromBool(true), (IntPtr)maximum);
+                User32.SendMessageW(this, (User32.WM)TBM.SETRANGEMAX, PARAM.FromBool(true), (IntPtr)maximum);
                 Invalidate();
             }
         }
 
         /// <summary>
-        ///  This is used for international applications where the language
-        ///  is written from RightToLeft. When this property is true,
-        //      and the RightToLeft property is true, mirroring will be turned on on the trackbar.
+        ///  This is used for international applications where the language is written from RightToLeft.
+        ///  When this property is true, and the RightToLeft property is true, mirroring will be turned
+        ///  on on the trackbar.
         /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
@@ -556,7 +558,7 @@ namespace System.Windows.Forms
                     smallChange = value;
                     if (IsHandleCreated)
                     {
-                        User32.SendMessageW(this, (User32.WindowMessage)TBM.SETLINESIZE, IntPtr.Zero, (IntPtr)value);
+                        User32.SendMessageW(this, (User32.WM)TBM.SETLINESIZE, IntPtr.Zero, (IntPtr)value);
                     }
                 }
             }
@@ -641,7 +643,7 @@ namespace System.Windows.Forms
                     tickFrequency = value;
                     if (IsHandleCreated)
                     {
-                        User32.SendMessageW(this, (User32.WindowMessage)TBM.SETTICFREQ, (IntPtr)value);
+                        User32.SendMessageW(this, (User32.WM)TBM.SETTICFREQ, (IntPtr)value);
                         Invalidate();
                     }
                 }
@@ -839,7 +841,7 @@ namespace System.Windows.Forms
         {
             if (IsHandleCreated)
             {
-                value = PARAM.ToInt(User32.SendMessageW(this, (User32.WindowMessage)TBM.GETPOS));
+                value = PARAM.ToInt(User32.SendMessageW(this, (User32.WM)TBM.GETPOS));
 
                 // See SetTrackBarValue() for a description of why we sometimes reflect the trackbar value
                 if (orientation == Orientation.Vertical)
@@ -881,11 +883,17 @@ namespace System.Windows.Forms
         protected override void OnHandleCreated(EventArgs e)
         {
             base.OnHandleCreated(e);
-            User32.SendMessageW(this, (User32.WindowMessage)TBM.SETRANGEMIN, PARAM.FromBool(false), (IntPtr)minimum);
-            User32.SendMessageW(this, (User32.WindowMessage)TBM.SETRANGEMAX, PARAM.FromBool(false), (IntPtr)maximum);
-            User32.SendMessageW(this, (User32.WindowMessage)TBM.SETTICFREQ, (IntPtr)tickFrequency);
-            User32.SendMessageW(this, (User32.WindowMessage)TBM.SETPAGESIZE, IntPtr.Zero, (IntPtr)largeChange);
-            User32.SendMessageW(this, (User32.WindowMessage)TBM.SETLINESIZE, IntPtr.Zero, (IntPtr)smallChange);
+
+            if (!IsHandleCreated)
+            {
+                return;
+            }
+
+            User32.SendMessageW(this, (User32.WM)TBM.SETRANGEMIN, PARAM.FromBool(false), (IntPtr)minimum);
+            User32.SendMessageW(this, (User32.WM)TBM.SETRANGEMAX, PARAM.FromBool(false), (IntPtr)maximum);
+            User32.SendMessageW(this, (User32.WM)TBM.SETTICFREQ, (IntPtr)tickFrequency);
+            User32.SendMessageW(this, (User32.WM)TBM.SETPAGESIZE, IntPtr.Zero, (IntPtr)largeChange);
+            User32.SendMessageW(this, (User32.WM)TBM.SETLINESIZE, IntPtr.Zero, (IntPtr)smallChange);
             SetTrackBarPosition();
             AdjustSize();
         }
@@ -1069,10 +1077,10 @@ namespace System.Windows.Forms
 
                 if (IsHandleCreated)
                 {
-                    User32.SendMessageW(this, (User32.WindowMessage)TBM.SETRANGEMIN, PARAM.FromBool(false), (IntPtr)minimum);
+                    User32.SendMessageW(this, (User32.WM)TBM.SETRANGEMIN, PARAM.FromBool(false), (IntPtr)minimum);
 
                     // We must repaint the trackbar after changing the range.
-                    User32.SendMessageW(this, (User32.WindowMessage)TBM.SETRANGEMAX, PARAM.FromBool(true), (IntPtr)maximum);
+                    User32.SendMessageW(this, (User32.WM)TBM.SETRANGEMAX, PARAM.FromBool(true), (IntPtr)maximum);
 
                     Invalidate();
                 }
@@ -1120,7 +1128,7 @@ namespace System.Windows.Forms
                     reflectedValue = Minimum + Maximum - value;
                 }
 
-                User32.SendMessageW(this, (User32.WindowMessage)TBM.SETPOS, PARAM.FromBool(true), (IntPtr)reflectedValue);
+                User32.SendMessageW(this, (User32.WM)TBM.SETPOS, PARAM.FromBool(true), (IntPtr)reflectedValue);
             }
         }
 
@@ -1140,10 +1148,10 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void WndProc(ref Message m)
         {
-            switch (m.Msg)
+            switch ((User32.WM)m.Msg)
             {
-                case WindowMessages.WM_REFLECT + WindowMessages.WM_HSCROLL:
-                case WindowMessages.WM_REFLECT + WindowMessages.WM_VSCROLL:
+                case User32.WM.REFLECT | User32.WM.HSCROLL:
+                case User32.WM.REFLECT | User32.WM.VSCROLL:
                     switch (PARAM.LOWORD(m.WParam))
                     {
                         case NativeMethods.TB_LINEUP:

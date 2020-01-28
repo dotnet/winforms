@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 //#define DEBUG_PAINT
 
 using System.Collections;
@@ -1596,7 +1598,6 @@ namespace System.Windows.Forms
                     Rectangle dragBounds = Row.Bounds;
                     int index = ToolStripPanel.RowsInternal.IndexOf(Row);
 
-                    ///
                     if (index > 0)
                     {
                         Rectangle previousRowBounds = ToolStripPanel.RowsInternal[index - 1].Bounds;
@@ -2495,4 +2496,3 @@ namespace System.Windows.Forms
         }
     }
 }
-

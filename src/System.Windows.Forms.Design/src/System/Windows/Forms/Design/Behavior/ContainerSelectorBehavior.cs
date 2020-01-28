@@ -25,7 +25,7 @@ namespace System.Windows.Forms.Design.Behavior
         private readonly bool _setInitialDragPoint;
 
         /// <summary>
-        ///  Constructor, here we cache off all of our member vars and sync location & size changes.
+        ///  Constructor, here we cache off all of our member vars and sync location and size changes.
         /// </summary>
         internal ContainerSelectorBehavior(Control containerControl, IServiceProvider serviceProvider)
         {
@@ -34,7 +34,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        ///  Constructor, here we cache off all of our member vars and sync location & size changes.
+        ///  Constructor, here we cache off all of our member vars and sync location and size changes.
         /// </summary>
         internal ContainerSelectorBehavior(Control containerControl, IServiceProvider serviceProvider, bool setInitialDragPoint)
         {

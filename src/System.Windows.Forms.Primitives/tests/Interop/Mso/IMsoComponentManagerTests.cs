@@ -10,7 +10,7 @@ using static Interop.Mso;
 
 namespace System.Windows.Forms.Primitives.Tests.Interop.Mso
 {
-    public unsafe class IMsoComponentManagerTests
+    public unsafe class IMsoComponentManagerTests : IClassFixture<ThreadExceptionFixture>
     {
         private IMsoComponentManager CreateComponentManager()
             => (IMsoComponentManager)Activator.CreateInstance(

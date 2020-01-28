@@ -7,8 +7,7 @@ using static Interop;
 namespace System.Windows.Forms
 {
     /// <summary>
-    ////  Specifies the type of scroll arrow to create on a scroll bar.
-    ////
+    ///  Specifies the type of scroll arrow to create on a scroll bar.
     /// </summary>
     public enum ScrollButton
     {

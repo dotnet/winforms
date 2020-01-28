@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
@@ -419,10 +421,8 @@ namespace System.Windows.Forms
             // Right after the dialog box is closed, Windows sends WM_SETFOCUS back to the previously active control
             // but since we have disabled this thread main window the message is lost. So we have to send it again after
             // we enable the main window.
-            //
-            UnsafeNativeMethods.SendMessage(new HandleRef(owner, handle), WindowMessages.WM_SETFOCUS, 0, 0);
+            User32.SendMessageW(new HandleRef(owner, handle), User32.WM.SETFOCUS);
             return result;
         }
     }
 }
-

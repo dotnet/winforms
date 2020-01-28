@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
@@ -15,7 +17,7 @@ namespace System.Windows.Forms
     /// </summary>
     public sealed class DpiChangedEventArgs : CancelEventArgs
     {
-        /// <devdov>
+        /// <summary>
         ///  Parameter units are pixels(dots) per inch.
         /// </summary>
         internal DpiChangedEventArgs(int old, Message m)

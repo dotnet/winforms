@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Collections;
 using System.Collections.Specialized;
 using System.Diagnostics;
@@ -215,7 +217,7 @@ namespace System.Windows.Forms.Layout
         ///  (3).  Expand the last row/column to fit the table
         ///  (4).  Set the bounds of the child elements as according to the row/column heights specified in Strip[]
         ///  (a)   Calculate bounds of item
-        ///  (b)   Align and stretch item to fill column/row as according to Dock&Anchor properties.
+        ///  (b)   Align and stretch item to fill column/row as according to Dock and Anchor properties.
         /// </summary>
         private protected override bool LayoutCore(IArrangedElement container, LayoutEventArgs args)
         {
@@ -1103,10 +1105,10 @@ namespace System.Windows.Forms.Layout
             return (index < styles.Count) && ((TableLayoutStyle)styles[index]).SizeType == SizeType.Absolute;
         }
 
-        ///<summary>
+        /// <summary>
         ///  Now that we've allocated minimum and maximum sizes to everyone (the strips), distribute the extra space
         ///  as according to the Row/Column styles.
-        ///</summary>
+        /// </summary>
         private int DistributeStyles(int cellBorderWidth, IList styles, Strip[] strips, int maxSize, bool dontHonorConstraint)
         {
             int usedSpace = 0;
@@ -1463,7 +1465,7 @@ namespace System.Windows.Forms.Layout
             Debug.Assert(GetLayoutInfo(element) == value, "GetLayoutInfo should return the same value as we set it to");
         }
 
-        ///<summary>
+        /// <summary>
         ///  This class contains layout related information pertaining to a child control of the
         ///  container being laid out. It contains Row,column assignments as well as RowSpan/ColumnSpan.
         ///  This class is used from ContainerInfo as a way of caching information about child controls.
@@ -1566,7 +1568,7 @@ namespace System.Windows.Forms.Layout
             return containerInfo;
         }
 
-        ///<summary>
+        /// <summary>
         ///  this class contains layout related information pertaining to the container
         ///  being laid out by this instance of the TableLayout.  It contains references
         ///  to all the information that should be used from the table layout engine,

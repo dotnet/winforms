@@ -10,7 +10,7 @@ internal static partial class Interop
     internal static partial class User32
     {
         /// <summary>
-        ///  <see cref="RedrawWindow"/> flags.
+        ///  <see cref="RedrawWindow(IntPtr, RECT*, IntPtr, RDW)"/> flags.
         /// </summary>
         [Flags]
         public enum RDW : uint

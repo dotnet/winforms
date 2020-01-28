@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Collections;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -10,6 +12,7 @@ using System.Drawing.Design;
 using System.Runtime.InteropServices;
 using Hashtable = System.Collections.Hashtable;
 using static Interop;
+using static Interop.User32;
 
 namespace System.Windows.Forms
 {
@@ -69,13 +72,13 @@ namespace System.Windows.Forms
         private CheckedItemCollection checkedItemCollection = null;
         private CheckedIndexCollection checkedIndexCollection = null;
 
-        private static readonly User32.WindowMessage LBC_GETCHECKSTATE;
-        private static readonly User32.WindowMessage LBC_SETCHECKSTATE;
+        private static readonly WM LBC_GETCHECKSTATE;
+        private static readonly WM LBC_SETCHECKSTATE;
 
         static CheckedListBox()
         {
-            LBC_GETCHECKSTATE = User32.RegisterWindowMessageW("LBC_GETCHECKSTATE");
-            LBC_SETCHECKSTATE = User32.RegisterWindowMessageW("LBC_SETCHECKSTATE");
+            LBC_GETCHECKSTATE = RegisterWindowMessageW("LBC_GETCHECKSTATE");
+            LBC_SETCHECKSTATE = RegisterWindowMessageW("LBC_SETCHECKSTATE");
         }
 
         /// <summary>
@@ -165,7 +168,7 @@ namespace System.Windows.Forms
             get
             {
                 CreateParams cp = base.CreateParams;
-                cp.Style |= NativeMethods.LBS_OWNERDRAWFIXED | NativeMethods.LBS_WANTKEYBOARDINPUT;
+                cp.Style |= (int)(LBS.OWNERDRAWFIXED | LBS.WANTKEYBOARDINPUT);
                 return cp;
             }
         }
@@ -495,8 +498,8 @@ namespace System.Windows.Forms
             if (IsHandleCreated)
             {
                 var rect = new RECT();
-                User32.SendMessageW(this, (User32.WindowMessage)User32.LB.GETITEMRECT, (IntPtr)index, ref rect);
-                User32.InvalidateRect(new HandleRef(this, Handle), &rect, BOOL.FALSE);
+                SendMessageW(this, (WM)LB.GETITEMRECT, (IntPtr)index, ref rect);
+                InvalidateRect(new HandleRef(this, Handle), &rect, BOOL.FALSE);
             }
         }
 
@@ -567,7 +570,7 @@ namespace System.Windows.Forms
         protected override void OnHandleCreated(EventArgs e)
         {
             base.OnHandleCreated(e);
-            SendMessage((int)User32.LB.SETITEMHEIGHT, 0, ItemHeight);
+            SendMessage((int)LB.SETITEMHEIGHT, 0, ItemHeight);
         }
 
         /// <summary>
@@ -849,7 +852,7 @@ namespace System.Windows.Forms
 
             if (IsHandleCreated)
             {
-                User32.InvalidateRect(new HandleRef(this, Handle), null, BOOL.TRUE);
+                InvalidateRect(new HandleRef(this, Handle), null, BOOL.TRUE);
             }
         }
 
@@ -859,7 +862,7 @@ namespace System.Windows.Forms
             //
             if (IsHandleCreated)
             {
-                SendMessage((int)User32.LB.SETITEMHEIGHT, 0, ItemHeight);
+                SendMessage((int)LB.SETITEMHEIGHT, 0, ItemHeight);
             }
 
             // The base OnFontChanged will adjust the height of the CheckedListBox accordingly
@@ -989,13 +992,13 @@ namespace System.Windows.Forms
         {
             switch (PARAM.HIWORD(m.WParam))
             {
-                case (int)User32.LBN.SELCHANGE:
+                case (int)LBN.SELCHANGE:
                     LbnSelChange();
                     // finally, fire the OnSelectionChange event.
                     base.WmReflectCommand(ref m);
                     break;
 
-                case (int)User32.LBN.DBLCLK:
+                case (int)LBN.DBLCLK:
                     // We want double-clicks to change the checkstate on each click - just like the CheckBox control
                     //
                     LbnSelChange();
@@ -1041,12 +1044,12 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void WndProc(ref Message m)
         {
-            switch (m.Msg)
+            switch ((WM)m.Msg)
             {
-                case WindowMessages.WM_REFLECT + WindowMessages.WM_CHARTOITEM:
+                case WM.REFLECT | WM.CHARTOITEM:
                     m.Result = NativeMethods.InvalidIntPtr;
                     break;
-                case WindowMessages.WM_REFLECT + WindowMessages.WM_VKEYTOITEM:
+                case WM.REFLECT | WM.VKEYTOITEM:
                     WmReflectVKeyToItem(ref m);
                     break;
                 default:
@@ -1055,7 +1058,7 @@ namespace System.Windows.Forms
                         int item = unchecked((int)(long)m.WParam);
                         if (item < 0 || item >= Items.Count)
                         {
-                            m.Result = (IntPtr)User32.LB_ERR;
+                            m.Result = (IntPtr)LB_ERR;
                         }
                         else
                         {

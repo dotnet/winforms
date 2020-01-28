@@ -13,7 +13,7 @@ using System.Globalization;
 namespace System.Windows.Forms.Design
 {
     /// <summary>
-    ///  Internal class to provide 'Insert Standard Items" verb for ToolStrips & MenuStrips.
+    ///  Internal class to provide 'Insert Standard Items" verb for ToolStrips and MenuStrips.
     /// </summary>
     internal class StandardMenuStripVerb
     {

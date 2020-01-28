@@ -12,7 +12,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class DataGridViewRowTests
+    public class DataGridViewRowTests : IClassFixture<ThreadExceptionFixture>
     {
         [Fact]
         public void DataGridViewRow_Ctor_Default()

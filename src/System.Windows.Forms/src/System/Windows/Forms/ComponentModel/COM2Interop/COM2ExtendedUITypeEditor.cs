@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.ComponentModel;
 
 namespace System.Drawing.Design
@@ -31,11 +33,6 @@ namespace System.Drawing.Design
             }
         }
 
-        /// <summary>
-        ///  Edits the given object value using the editor style provided by
-        ///  GetEditorStyle.  A service provider is provided so that any
-        ///  required editing services can be obtained.
-        /// </summary>
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
             if (innerEditor != null)
@@ -89,4 +86,3 @@ namespace System.Drawing.Design
         }
     }
 }
-

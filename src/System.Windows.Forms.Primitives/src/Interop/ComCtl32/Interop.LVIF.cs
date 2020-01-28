@@ -38,14 +38,14 @@ internal static partial class Interop
 
             /// <summary>
             /// The control will not generate <see cref="System.Windows.Forms.NativeMethods.LVN_GETDISPINFO"/>
-            /// to retrieve text information if it receives an <see cref="LVM.GETITEM"/> message.
+            /// to retrieve text information if it receives an <see cref="LVM.GETITEMW"/> message.
             /// Instead, the <c>pszText</c> member will contain <c>LPSTR_TEXTCALLBACK</c>.
             /// </summary>
             NORECOMPUTE = 0x00000800,
 
             /// <summary>
             /// The <c>iGroupId</c> member is valid or must be set.
-            /// If this flag is not set when an <see cref="LVM.INSERTITEM"/> message is sent,
+            /// If this flag is not set when an <see cref="LVM.INSERTITEMW"/> message is sent,
             /// the value of <c>iGroupId</c> is assumed to be <c>I_GROUPIDCALLBACK</c>.
             /// </summary>
             GROUPID = 0x00000100,

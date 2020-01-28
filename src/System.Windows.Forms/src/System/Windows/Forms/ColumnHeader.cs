@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing.Design;
@@ -427,13 +429,13 @@ namespace System.Windows.Forms
                 if (listview != null && listview.IsHandleCreated && !listview.Disposing && listview.View == View.Details)
                 {
                     // Make sure this column has already been added to the ListView, else just return width
-                    IntPtr hwndHdr = User32.SendMessageW(listview, (User32.WindowMessage)LVM.GETHEADER);
+                    IntPtr hwndHdr = User32.SendMessageW(listview, (User32.WM)LVM.GETHEADER);
                     if (hwndHdr != IntPtr.Zero)
                     {
-                        int nativeColumnCount = (int)User32.SendMessageW(hwndHdr, (User32.WindowMessage)HDM.GETITEMCOUNT);
+                        int nativeColumnCount = (int)User32.SendMessageW(hwndHdr, (User32.WM)HDM.GETITEMCOUNT);
                         if (Index < nativeColumnCount)
                         {
-                            width = (int)User32.SendMessageW(listview, (User32.WindowMessage)LVM.GETCOLUMNWIDTH, (IntPtr)Index);
+                            width = (int)User32.SendMessageW(listview, (User32.WM)LVM.GETCOLUMNWIDTH, (IntPtr)Index);
                         }
                     }
                 }

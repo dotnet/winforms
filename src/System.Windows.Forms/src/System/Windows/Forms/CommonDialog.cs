@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
@@ -17,8 +19,8 @@ namespace System.Windows.Forms
     public abstract class CommonDialog : Component
     {
         private static readonly object s_helpRequestEvent = new object();
-        private const int CDM_SETDEFAULTFOCUS = WindowMessages.WM_USER + 0x51;
-        private static User32.WindowMessage s_helpMsg;
+        private const int CDM_SETDEFAULTFOCUS = (int)User32.WM.USER + 0x51;
+        private static User32.WM s_helpMsg;
 
         private IntPtr _defOwnerWndProc;
 
@@ -58,7 +60,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual IntPtr HookProc(IntPtr hWnd, int msg, IntPtr wparam, IntPtr lparam)
         {
-            if (msg == WindowMessages.WM_INITDIALOG)
+            if (msg == (int)User32.WM.INITDIALOG)
             {
                 MoveToScreenCenter(hWnd);
 
@@ -67,9 +69,9 @@ namespace System.Windows.Forms
                 _defaultControlHwnd = wparam;
                 User32.SetFocus(wparam);
             }
-            else if (msg == WindowMessages.WM_SETFOCUS)
+            else if (msg == (int)User32.WM.SETFOCUS)
             {
-                User32.PostMessageW(hWnd, (User32.WindowMessage)CDM_SETDEFAULTFOCUS);
+                User32.PostMessageW(hWnd, (User32.WM)CDM_SETDEFAULTFOCUS);
             }
             else if (msg == CDM_SETDEFAULTFOCUS)
             {
@@ -138,7 +140,7 @@ namespace System.Windows.Forms
                 return IntPtr.Zero;
             }
 
-            return User32.CallWindowProcW(_defOwnerWndProc, hWnd, (User32.WindowMessage)msg, wparam, lparam);
+            return User32.CallWindowProcW(_defOwnerWndProc, hWnd, (User32.WM)msg, wparam, lparam);
         }
 
         /// <summary>
@@ -193,7 +195,7 @@ namespace System.Windows.Forms
                     hwndOwner = native.Handle;
                 }
 
-                if (s_helpMsg == (User32.WindowMessage)0)
+                if (s_helpMsg == User32.WM.NULL)
                 {
                     s_helpMsg = User32.RegisterWindowMessageW("commdlg_help");
                 }

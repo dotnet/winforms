@@ -14,7 +14,7 @@ namespace System.Windows.Forms.Tests
 {
     using Size = System.Drawing.Size;
 
-    public class ImageCollectionTests
+    public class ImageCollectionTests : IClassFixture<ThreadExceptionFixture>
     {
         [WinFormsFact]
         public void ImageCollection_Count_GetEmptyWithHandle_ReturnsExpected()

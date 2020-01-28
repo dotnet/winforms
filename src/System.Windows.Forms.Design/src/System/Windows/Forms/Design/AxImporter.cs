@@ -64,7 +64,7 @@ namespace System.Windows.Forms.Design
 
             /// <summary>
             ///  The output directory for all the generated assemblies.
-            /// <summary>
+            /// </summary>
             public string outputDirectory = null;
 
             /// <summary>

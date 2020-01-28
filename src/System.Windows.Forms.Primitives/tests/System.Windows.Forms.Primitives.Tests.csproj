@@ -15,6 +15,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Common\tests\InternalUtilitiesForTests\InternalUtilitiesForTests.csproj" />
     <ProjectReference Include="..\src\System.Windows.Forms.Primitives.csproj" />
+    <Compile Include="..\..\Common\tests\ThreadExceptionFixture.cs" Link="Common\ThreadExceptionFixture.cs" />
   </ItemGroup>
 
 </Project>

@@ -435,9 +435,9 @@ namespace System.ComponentModel.Design
             protected override void WndProc(ref Message m)
             {
                 base.WndProc(ref m);
-                switch (m.Msg)
+                switch ((User32.WM)m.Msg)
                 {
-                    case WindowMessages.WM_PAINT:
+                    case User32.WM.PAINT:
                         {
                             if (ShouldShowWatermark)
                             {

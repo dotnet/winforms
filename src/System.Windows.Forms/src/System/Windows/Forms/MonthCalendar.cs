@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
@@ -686,10 +688,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  This is used for international applications where the language
-        ///  is written from RightToLeft. When this property is true,
-        //      and the RightToLeft is true, mirroring will be turned on on the form, and
-        ///  control placement and text will be from right to left.
+        ///  This is used for international applications where the language is written from RightToLeft.
+        ///  When this property is true, and the RightToLeft is true, mirroring will be turned on on
+        ///  the form, and control placement and text will be from right to left.
         /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)),
@@ -972,7 +973,7 @@ namespace System.Windows.Forms
 
                 if (IsHandleCreated)
                 {
-                    if (User32.SendMessageW(this, (User32.WindowMessage)ComCtl32.MCM.GETMINREQRECT, IntPtr.Zero, ref rect) == IntPtr.Zero)
+                    if (User32.SendMessageW(this, (User32.WM)ComCtl32.MCM.GETMINREQRECT, IntPtr.Zero, ref rect) == IntPtr.Zero)
                     {
                         throw new InvalidOperationException(SR.InvalidSingleMonthSize);
                     }
@@ -1048,7 +1049,7 @@ namespace System.Windows.Forms
                 if (IsHandleCreated)
                 {
                     var st = new Kernel32.SYSTEMTIME();
-                    int res = (int)User32.SendMessageW(this, (User32.WindowMessage)User32.MCM.GETTODAY, IntPtr.Zero, ref st);
+                    int res = (int)User32.SendMessageW(this, (User32.WM)User32.MCM.GETTODAY, IntPtr.Zero, ref st);
                     Debug.Assert(res != 0, "MCM_GETTODAY failed");
                     return DateTimePicker.SysTimeToDateTime(st).Date;
                 }
@@ -1508,7 +1509,7 @@ namespace System.Windows.Forms
         private SelectionRange GetMonthRange(int flag)
         {
             Span<Kernel32.SYSTEMTIME> sa = stackalloc Kernel32.SYSTEMTIME[2];
-            User32.SendMessageW(this, (User32.WindowMessage)ComCtl32.MCM.GETMONTHRANGE, (IntPtr)flag, ref sa[0]);
+            User32.SendMessageW(this, (User32.WM)ComCtl32.MCM.GETMONTHRANGE, (IntPtr)flag, ref sa[0]);
             return new SelectionRange
             {
                 Start = DateTimePicker.SysTimeToDateTime(sa[0]),
@@ -1630,7 +1631,7 @@ namespace System.Windows.Forms
             if (todayDateSet)
             {
                 Kernel32.SYSTEMTIME st = DateTimePicker.DateTimeToSysTime(todayDate);
-                User32.SendMessageW(this, (User32.WindowMessage)User32.MCM.SETTODAY, IntPtr.Zero, ref st);
+                User32.SendMessageW(this, (User32.WM)User32.MCM.SETTODAY, IntPtr.Zero, ref st);
             }
 
             SetControlColor(ComCtl32.MCSC.TEXT, ForeColor);
@@ -2034,7 +2035,7 @@ namespace System.Windows.Forms
                 sa[0] = DateTimePicker.DateTimeToSysTime(minDate);
                 sa[1] = DateTimePicker.DateTimeToSysTime(maxDate);
                 int flag = NativeMethods.GDTR_MIN | NativeMethods.GDTR_MAX;
-                if ((int)User32.SendMessageW(this, (User32.WindowMessage)ComCtl32.MCM.SETRANGE, (IntPtr)flag, ref sa[0]) == 0)
+                if ((int)User32.SendMessageW(this, (User32.WM)ComCtl32.MCM.SETRANGE, (IntPtr)flag, ref sa[0]) == 0)
                 {
                     throw new InvalidOperationException(string.Format(SR.MonthCalendarRange, minDate.ToShortDateString(), maxDate.ToShortDateString()));
                 }
@@ -2174,7 +2175,7 @@ namespace System.Windows.Forms
                 Span<Kernel32.SYSTEMTIME> sa = stackalloc Kernel32.SYSTEMTIME[2];
                 sa[0] = DateTimePicker.DateTimeToSysTime(lower);
                 sa[1] = DateTimePicker.DateTimeToSysTime(upper);
-                User32.SendMessageW(this, (User32.WindowMessage)ComCtl32.MCM.SETSELRANGE, IntPtr.Zero, ref sa[0]);
+                User32.SendMessageW(this, (User32.WM)ComCtl32.MCM.SETSELRANGE, IntPtr.Zero, ref sa[0]);
             }
 
             if (changed)
@@ -2280,11 +2281,11 @@ namespace System.Windows.Forms
                 if (todayDateSet)
                 {
                     Kernel32.SYSTEMTIME st = DateTimePicker.DateTimeToSysTime(todayDate);
-                    User32.SendMessageW(this, (User32.WindowMessage)User32.MCM.SETTODAY, IntPtr.Zero, ref st);
+                    User32.SendMessageW(this, (User32.WM)User32.MCM.SETTODAY, IntPtr.Zero, ref st);
                 }
                 else
                 {
-                    User32.SendMessageW(this, (User32.WindowMessage)User32.MCM.SETTODAY, IntPtr.Zero, IntPtr.Zero);
+                    User32.SendMessageW(this, (User32.WM)User32.MCM.SETTODAY, IntPtr.Zero, IntPtr.Zero);
                 }
             }
         }
@@ -2402,7 +2403,7 @@ namespace System.Windows.Forms
         private void WmGetDlgCode(ref Message m)
         {
             // The MonthCalendar does its own handling of arrow keys
-            m.Result = (IntPtr)NativeMethods.DLGC_WANTARROWS;
+            m.Result = (IntPtr)User32.DLGC.WANTARROWS;
         }
 
         /// <summary>
@@ -2431,28 +2432,25 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <summary>
-        ///  Overrided wndProc
-        /// </summary>
         protected override void WndProc(ref Message m)
         {
-            switch (m.Msg)
+            switch ((User32.WM)m.Msg)
             {
-                case WindowMessages.WM_LBUTTONDOWN:
+                case User32.WM.LBUTTONDOWN:
                     Focus();
                     if (!ValidationCancelled)
                     {
                         base.WndProc(ref m);
                     }
                     break;
-                case WindowMessages.WM_GETDLGCODE:
+                case User32.WM.GETDLGCODE:
                     WmGetDlgCode(ref m);
                     break;
-                case WindowMessages.WM_REFLECT + WindowMessages.WM_NOTIFY:
+                case User32.WM.REFLECT | User32.WM.NOTIFY:
                     WmReflectCommand(ref m);
                     base.WndProc(ref m);
                     break;
-                case WindowMessages.WM_DESTROY:
+                case User32.WM.DESTROY:
                     base.WndProc(ref m);
                     break;
                 default:

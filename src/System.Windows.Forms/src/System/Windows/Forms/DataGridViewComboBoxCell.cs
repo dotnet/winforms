@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Collections;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -791,17 +793,17 @@ namespace System.Windows.Forms
                             cachedDropDownWidth = maxPreferredWidth + 2 + SystemInformation.VerticalScrollBarWidth;
                         }
                         Debug.Assert(cachedDropDownWidth >= 1);
-                        User32.SendMessageW(comboBox, (User32.WindowMessage)User32.CB.SETDROPPEDWIDTH, (IntPtr)cachedDropDownWidth);
+                        User32.SendMessageW(comboBox, (User32.WM)User32.CB.SETDROPPEDWIDTH, (IntPtr)cachedDropDownWidth);
                     }
                 }
                 else
                 {
                     // The dropdown width may have been previously adjusted to the items because of the owning column autosized.
                     // The dropdown width needs to be realigned to the DropDownWidth property value.
-                    int dropDownWidth = unchecked((int)(long)User32.SendMessageW(comboBox, (User32.WindowMessage)User32.CB.GETDROPPEDWIDTH));
+                    int dropDownWidth = unchecked((int)(long)User32.SendMessageW(comboBox, (User32.WM)User32.CB.GETDROPPEDWIDTH));
                     if (dropDownWidth != DropDownWidth)
                     {
-                        User32.SendMessageW(comboBox, (User32.WindowMessage)User32.CB.SETDROPPEDWIDTH, (IntPtr)DropDownWidth);
+                        User32.SendMessageW(comboBox, (User32.WM)User32.CB.SETDROPPEDWIDTH, (IntPtr)DropDownWidth);
                     }
                 }
             }

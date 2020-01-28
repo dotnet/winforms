@@ -5,7 +5,7 @@
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///  Specifies how the <see cref='RichTextBox.Find'/> method works.
+    ///  Specifies how the <see cref='RichTextBox.Find(string, RichTextBoxFinds)'/> method works.
     /// </summary>
     [Flags]
     public enum RichTextBoxFinds

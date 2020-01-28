@@ -10,7 +10,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class InputLanguageTests
+    public class InputLanguageTests : IClassFixture<ThreadExceptionFixture>
     {
         [Fact]
         public void InputLanguage_InstalledInputLanguages_Get_ReturnsExpected()

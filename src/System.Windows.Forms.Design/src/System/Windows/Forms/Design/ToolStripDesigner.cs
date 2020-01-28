@@ -181,7 +181,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        // This boolean indicates whether the Control will allow SnapLines to be shown when any other targetControl is dragged on the design surface. This is true by default.
+        /// This boolean indicates whether the Control will allow SnapLines to be shown when any other targetControl is dragged on the design surface. This is true by default.
         /// </summary>
         internal override bool ControlSupportsSnaplines
         {
@@ -735,9 +735,9 @@ namespace System.Windows.Forms.Design
             return item;
         }
 
-        // <summary>
-        //  Adds the new TemplateNode to the ToolStrip or MenuStrip.
-        // <summary/>
+        /// <summary>
+        ///  Adds the new TemplateNode to the ToolStrip or MenuStrip.
+        /// </summary>
         internal void AddNewTemplateNode(ToolStrip wb)
         {
             // setup the MINIToolStrip host...
@@ -759,9 +759,9 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        // <summary>
-        //  Check if the ToolStripItems are selected.
-        // <summary/>
+        /// <summary>
+        ///  Check if the ToolStripItems are selected.
+        /// </summary>
         private bool CheckIfItemSelected()
         {
             bool showToolStrip = false;
@@ -831,9 +831,9 @@ namespace System.Windows.Forms.Design
             return showToolStrip;
         }
 
-        // <summary>
-        // This is called ToolStripItemGlyph to commit the TemplateNode Edition on the Parent ToolStrip.
-        // <summary/>
+        /// <summary>
+        /// This is called ToolStripItemGlyph to commit the TemplateNode Edition on the Parent ToolStrip.
+        /// </summary>
         internal bool Commit()
         {
             if (_tn != null && _tn.Active)
@@ -1473,7 +1473,7 @@ namespace System.Windows.Forms.Design
                 }
             }
 
-            ///  set up parenting and all the base stuff...
+            // Set up parenting and all the base functionality.
             if (parentPanel == null || ToolStrip is MenuStrip)
             {
                 base.InitializeNewComponent(defaultValues);
@@ -2109,7 +2109,6 @@ namespace System.Windows.Forms.Design
         /// </summary>
         private void OnUndone(object source, EventArgs e)
         {
-            ///  IMPORTANT : The Undo Unit .. Clears of the ITems....
             if (_editorNode != null && (ToolStrip.Items.IndexOf(_editorNode) == -1))
             {
                 ToolStrip.Items.Add(_editorNode);
@@ -2228,10 +2227,9 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        // <summary>
-        // IMPORTANT FUNCTION: THIS IS CALLED FROM THE ToolStripItemGlyph to rollback
-        // the TemplateNode Edition on the Parent ToolStrip.
-        // <summary/>
+        /// <summary>
+        /// Called from the ToolStripItemGlyph to rollback the TemplateNode Edition on the Parent ToolStrip.
+        /// </summary>
         internal void RollBack()
         {
             if (_tn != null)
@@ -2241,9 +2239,9 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        // <summary>
-        //  Resets the ToolStrip Visible to be the default value
-        // <summary/>
+        /// <summary>
+        ///  Resets the ToolStrip Visible to be the default value
+        /// </summary>
         private void ResetVisible()
         {
             Visible = true;
@@ -2373,24 +2371,24 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        // <summary>
-        //  Determines when should the Visible property be serialized.
-        // <summary/>
+        /// <summary>
+        ///  Determines when should the Visible property be serialized.
+        /// </summary>
         private bool ShouldSerializeVisible() => !Visible;
 
-        // <summary>
-        //  Determines when should the AllowDrop property be serialized.
-        // <summary/>
+        /// <summary>
+        ///  Determines when should the AllowDrop property be serialized.
+        /// </summary>
         private bool ShouldSerializeAllowDrop() => (bool)ShadowProperties["AllowDrop"];
 
-        // <summary>
-        //  Determines when should the AllowItemReorder property be serialized.
-        // <summary/>
+        /// <summary>
+        ///  Determines when should the AllowItemReorder property be serialized.
+        /// </summary>
         private bool ShouldSerializeAllowItemReorder() => (bool)ShadowProperties["AllowItemReorder"];
 
-        // <summary>
-        //  This is the method that gets called when the Designer has to show thwe InSitu Edit Node,
-        // <summary/>
+        /// <summary>
+        ///  This is the method that gets called when the Designer has to show thwe InSitu Edit Node,
+        /// </summary>
         internal void ShowEditNode(bool clicked)
         {
             // SPECIAL LOGIC TO MIMIC THE MAINMENU BEHAVIOR.. PUSH THE TEMPLATE NODE and ADD A MENUITEM HERE...
@@ -2489,9 +2487,9 @@ namespace System.Windows.Forms.Design
         /// </summary>
         protected override void WndProc(ref Message m)
         {
-            switch (m.Msg)
+            switch ((User32.WM)m.Msg)
             {
-                case WindowMessages.WM_CONTEXTMENU:
+                case User32.WM.CONTEXTMENU:
                     int x = PARAM.SignedLOWORD(m.LParam);
                     int y = PARAM.SignedHIWORD(m.LParam);
                     bool inBounds = GetHitTest(new Point(x, y));
@@ -2501,8 +2499,8 @@ namespace System.Windows.Forms.Design
                     }
                     base.WndProc(ref m);
                     break;
-                case WindowMessages.WM_LBUTTONDOWN:
-                case WindowMessages.WM_RBUTTONDOWN:
+                case User32.WM.LBUTTONDOWN:
+                case User32.WM.RBUTTONDOWN:
                     // commit any insitu if any...
                     Commit();
                     base.WndProc(ref m);

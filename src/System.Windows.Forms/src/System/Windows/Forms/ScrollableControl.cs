@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
@@ -254,7 +256,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        // Gets the Horizontal Scroll bar for this ScrollableControl.
+        /// Gets the Horizontal Scroll bar for this ScrollableControl.
         /// </summary>
         [SRCategory(nameof(SR.CatLayout))]
         [SRDescription(nameof(SR.ScrollableControlHorizontalScrollDescr))]
@@ -1213,7 +1215,7 @@ namespace System.Windows.Forms
             {
                 User32.SendMessageW(
                     this,
-                    User32.WindowMessage.WM_HSCROLL,
+                    User32.WM.HSCROLL,
                     PARAM.FromLowHigh((RightToLeft == RightToLeft.Yes) ? (int)User32.SBH.RIGHT : (int)User32.SBH.LEFT, 0),
                     IntPtr.Zero);
             }
@@ -1435,15 +1437,15 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void WndProc(ref Message m)
         {
-            switch (m.Msg)
+            switch ((User32.WM)m.Msg)
             {
-                case WindowMessages.WM_VSCROLL:
+                case User32.WM.VSCROLL:
                     WmVScroll(ref m);
                     break;
-                case WindowMessages.WM_HSCROLL:
+                case User32.WM.HSCROLL:
                     WmHScroll(ref m);
                     break;
-                case WindowMessages.WM_SETTINGCHANGE:
+                case User32.WM.SETTINGCHANGE:
                     WmSettingChange(ref m);
                     break;
                 default:

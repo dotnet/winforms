@@ -1121,9 +1121,12 @@ namespace System.ComponentModel.Design.Serialization
                     throw new NotSupportedException();
                 }
 
-                // <summary>
-                // For everything in the serialization manager's container, we need a variable ref, just in case something that has changed has a reference to another object. We also must do this for everything that we are serializing that is not marked as EntireObject.  Otherwise reference could leak and cause the entire object to be serialized.
-                // <summary>
+                /// <summary>
+                ///  For everything in the serialization manager's container, we need a variable ref,
+                ///  just in case something that has changed has a reference to another object. We also
+                ///  must do this for everything that we are serializing that is not marked as EntireObject.
+                ///  Otherwise reference could leak and cause the entire object to be serialized.
+                /// </summary>
                 internal void SetupVariableReferences(IDesignerSerializationManager manager, IContainer container, IDictionary objectData, IList shimObjectNames)
                 {
                     foreach (IComponent c in container.Components)

@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
@@ -1138,9 +1140,9 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void WndProc(ref Message m)
         {
-            switch (m.Msg)
+            switch ((User32.WM)m.Msg)
             {
-                case WindowMessages.WM_SETFOCUS:
+                case User32.WM.SETFOCUS:
                     if (!HostedInWin32DialogManager)
                     {
                         if (ActiveControl == null)
@@ -1161,7 +1163,7 @@ namespace System.Windows.Forms
                         base.WndProc(ref m);
                     }
                     break;
-                case WindowMessages.WM_KILLFOCUS:
+                case User32.WM.KILLFOCUS:
                     DefWndProc(ref m);
                     break;
                 default:
@@ -2086,4 +2088,3 @@ namespace System.Windows.Forms
         }
     } // end class UpDownBase
 }
-

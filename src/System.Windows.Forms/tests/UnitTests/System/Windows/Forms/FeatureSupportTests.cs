@@ -9,7 +9,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class FeatureSupportTests
+    public class FeatureSupportTests : IClassFixture<ThreadExceptionFixture>
     {
         public static IEnumerable<object[]> IsPresent_DefaultMinimumVersion_TestData()
         {

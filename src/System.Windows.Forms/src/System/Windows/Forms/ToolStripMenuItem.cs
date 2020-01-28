@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
 using System.Diagnostics;
@@ -198,7 +200,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Deriving classes can override this to configure a default size for their control.
         ///  This is more efficient than setting the size in the control's constructor.
-        /// </devdoc>
+        /// </summary>
         protected override Size DefaultSize {
             get {
                 return DpiHelper.IsPerMonitorV2Awareness ?
@@ -736,27 +738,26 @@ namespace System.Windows.Forms
             base.Dispose(disposing);
         }
 
-        private bool GetNativeMenuItemEnabled()
+        private unsafe bool GetNativeMenuItemEnabled()
         {
             if (nativeMenuCommandID == -1 || nativeMenuHandle == IntPtr.Zero)
             {
                 Debug.Fail("why were we called to fetch native menu item info with nothing assigned?");
                 return false;
             }
-            NativeMethods.MENUITEMINFO_T_RW info = new NativeMethods.MENUITEMINFO_T_RW
+
+            var info = new User32.MENUITEMINFOW
             {
-                cbSize = Marshal.SizeOf<NativeMethods.MENUITEMINFO_T_RW>(),
-                fMask = NativeMethods.MIIM_STATE,
-                fType = NativeMethods.MIIM_STATE,
+                cbSize = (uint)sizeof(User32.MENUITEMINFOW),
+                fMask = User32.MIIM.STATE,
                 wID = nativeMenuCommandID
             };
-            UnsafeNativeMethods.GetMenuItemInfo(new HandleRef(this, nativeMenuHandle), nativeMenuCommandID, /*fByPosition instead of ID=*/ false, info);
-
-            return ((info.fState & NativeMethods.MFS_DISABLED) == 0);
+            User32.GetMenuItemInfoW(new HandleRef(this, nativeMenuHandle), nativeMenuCommandID, /*fByPosition instead of ID=*/ BOOL.FALSE, ref info);
+            return (info.fState & User32.MFS.DISABLED) == 0;
         }
 
         // returns text and shortcut separated by tab.
-        private string GetNativeMenuItemTextAndShortcut()
+        private unsafe string GetNativeMenuItemTextAndShortcut()
         {
             if (nativeMenuCommandID == -1 || nativeMenuHandle == IntPtr.Zero)
             {
@@ -766,14 +767,13 @@ namespace System.Windows.Forms
             string text = null;
 
             // fetch the string length
-            NativeMethods.MENUITEMINFO_T_RW info = new NativeMethods.MENUITEMINFO_T_RW
+            var info = new User32.MENUITEMINFOW
             {
-                fMask = NativeMethods.MIIM_STRING,
-                fType = NativeMethods.MIIM_STRING,
-                wID = nativeMenuCommandID,
-                dwTypeData = IntPtr.Zero
+                cbSize = (uint)sizeof(User32.MENUITEMINFOW),
+                fMask = User32.MIIM.STRING,
+                wID = nativeMenuCommandID
             };
-            UnsafeNativeMethods.GetMenuItemInfo(new HandleRef(this, nativeMenuHandle), nativeMenuCommandID, /*fByPosition instead of ID=*/  false, info);
+            User32.GetMenuItemInfoW(new HandleRef(this, nativeMenuHandle), nativeMenuCommandID, /*fByPosition instead of ID=*/  BOOL.FALSE, ref info);
 
             if (info.cch > 0)
             {
@@ -781,18 +781,16 @@ namespace System.Windows.Forms
                 info.cch += 1;  // according to MSDN we need to increment the count we receive by 1.
                 info.wID = nativeMenuCommandID;
                 IntPtr allocatedStringBuffer = Marshal.AllocCoTaskMem(info.cch * sizeof(char));
-                info.dwTypeData = allocatedStringBuffer;
+                info.dwTypeData = (char*)allocatedStringBuffer;
 
                 try
                 {
-                    UnsafeNativeMethods.GetMenuItemInfo(new HandleRef(this, nativeMenuHandle), nativeMenuCommandID, /*fByPosition instead of ID=*/  false, info);
+                    User32.GetMenuItemInfoW(new HandleRef(this, nativeMenuHandle), nativeMenuCommandID, /*fByPosition instead of ID=*/  BOOL.FALSE, ref info);
 
                     // convert the string into managed data.
-                    if (info.dwTypeData != IntPtr.Zero)
+                    if (info.dwTypeData != null)
                     {
-                        // we have to use PtrToStringAuto as we can't use Marshal.SizeOf to determine
-                        // the size of the struct with a StringBuilder member.
-                        text = Marshal.PtrToStringAuto(info.dwTypeData, info.cch);
+                        text = new string(info.dwTypeData, 0, info.cch);
                     }
                 }
                 finally
@@ -816,13 +814,12 @@ namespace System.Windows.Forms
                 return null;
             }
 
-            NativeMethods.MENUITEMINFO_T_RW info = new NativeMethods.MENUITEMINFO_T_RW
+            var info = new User32.MENUITEMINFOW
             {
-                fMask = NativeMethods.MIIM_BITMAP,
-                fType = NativeMethods.MIIM_BITMAP,
+                fMask = User32.MIIM.BITMAP,
                 wID = nativeMenuCommandID
             };
-            UnsafeNativeMethods.GetMenuItemInfo(new HandleRef(this, nativeMenuHandle), nativeMenuCommandID, /*fByPosition instead of ID=*/ false, info);
+            User32.GetMenuItemInfoW(new HandleRef(this, nativeMenuHandle), nativeMenuCommandID, /*fByPosition instead of ID=*/ BOOL.FALSE, ref info);
 
             if (info.hbmpItem != IntPtr.Zero && info.hbmpItem.ToInt32() > (int)User32.HBMMENU.POPUP_MINIMIZE)
             {
@@ -933,14 +930,14 @@ namespace System.Windows.Forms
                     // use PostMessage instead of SendMessage so that the DefWndProc can appropriately handle
                     // the system message... if we use SendMessage the dismissal of our window
                     // breaks things like the modal sizing loop.
-                    User32.PostMessageW(new HandleRef(this, targetWindowHandle), User32.WindowMessage.WM_SYSCOMMAND, (IntPtr)nativeMenuCommandID);
+                    User32.PostMessageW(new HandleRef(this, targetWindowHandle), User32.WM.SYSCOMMAND, (IntPtr)nativeMenuCommandID);
                 }
                 else
                 {
                     // These are user added items like ".Net Window..."
 
                     // be consistent with sending a WM_SYSCOMMAND, use POST not SEND.
-                    User32.PostMessageW(new HandleRef(this, targetWindowHandle), User32.WindowMessage.WM_COMMAND, (IntPtr)nativeMenuCommandID);
+                    User32.PostMessageW(new HandleRef(this, targetWindowHandle), User32.WM.COMMAND, (IntPtr)nativeMenuCommandID);
                 }
                 Invalidate();
             }
@@ -989,13 +986,12 @@ namespace System.Windows.Forms
             ClearShortcutCache();
             base.OnFontChanged(e);
         }
-        /// <devdoc/>
+
         internal void OnMenuAutoExpand()
         {
             ShowDropDown();
         }
 
-        /// <devdoc/>
         protected override void OnMouseDown(MouseEventArgs e)
         {
             // Opening should happen on mouse down
@@ -1056,7 +1052,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc/>
         protected override void OnMouseEnter(EventArgs e)
         {
             Debug.Assert(ParentInternal != null, "Why is parent null");
@@ -1074,7 +1069,6 @@ namespace System.Windows.Forms
             base.OnMouseEnter(e);
         }
 
-        /// <devdoc/>
         protected override void OnMouseLeave(EventArgs e)
         {
             Debug.WriteLineIf(ToolStrip.MenuAutoExpandDebug.TraceVerbose, "[ToolStripMenuItem.OnMouseLeave] MenuTimer.Cancel called");
@@ -1110,7 +1104,6 @@ namespace System.Windows.Forms
             base.OnOwnerChanged(e);
         }
 
-        /// <devdoc/>
         protected override void OnPaint(PaintEventArgs e)
         {
             if (Owner != null)
@@ -1450,9 +1443,9 @@ namespace System.Windows.Forms
             }
             CancelCore();
         }
-        ///<summary> cancels if and only if this item was the one that
+        /// <summary> cancels if and only if this item was the one that
         ///  requested the timer
-        ///</summary>
+        /// </summary>
         public void Cancel(ToolStripMenuItem item)
         {
             if (InTransition)

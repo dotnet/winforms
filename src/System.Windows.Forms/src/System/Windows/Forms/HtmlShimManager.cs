@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Collections.Generic;
 using System.Diagnostics;
 
@@ -26,7 +28,7 @@ namespace System.Windows.Forms
 
         /// <summary> AddDocumentShim - adds a HtmlDocumentShim to list of shims to manage
         ///  Can create a WindowShim as a side effect so it knows when to self prune from the list.
-        ///</summary>
+        /// </summary>
         public void AddDocumentShim(HtmlDocument doc)
         {
             HtmlDocument.HtmlDocumentShim shim = null;
@@ -49,7 +51,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary> AddWindowShim - adds a HtmlWindowShim to list of shims to manage
-        ///</summary>
+        /// </summary>
 
         public void AddWindowShim(HtmlWindow window)
         {
@@ -74,7 +76,7 @@ namespace System.Windows.Forms
 
         /// <summary> AddElementShim - adds a HtmlDocumentShim to list of shims to manage
         ///  Can create a WindowShim as a side effect so it knows when to self prune from the list.
-        ///</summary>
+        /// </summary>
         public void AddElementShim(HtmlElement element)
         {
             HtmlElement.HtmlElementShim shim = null;

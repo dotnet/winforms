@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using Microsoft.Win32;
 
 namespace System.Windows.Forms
@@ -43,9 +45,9 @@ namespace System.Windows.Forms
             }
         }
 
-        ///<summary>
-        ///tests to see if the monitor is in low resolution mode (8-bit color depth or less).
-        ///</summary>
+        /// <summary>
+        ///  Tests to see if the monitor is in low resolution mode (8-bit color depth or less).
+        /// </summary>
         public static bool LowResolution
         {
             get
@@ -61,9 +63,9 @@ namespace System.Windows.Forms
             }
         }
 
-        ///<summary>
-        ///tests to see if we are under high contrast mode
-        ///</summary>
+        /// <summary>
+        ///  Tests to see if we are under high contrast mode
+        /// </summary>
         public static bool HighContrast
         {
             get
@@ -91,9 +93,9 @@ namespace System.Windows.Forms
             }
         }
 
-        ///<summary>
+        /// <summary>
         ///test to see if we are under terminal server mode
-        ///</summary>
+        /// </summary>
         public static bool TerminalServer
         {
             get
@@ -124,9 +126,9 @@ namespace System.Windows.Forms
             }
         }
 
-        ///<summary>
+        /// <summary>
         ///event handler for change in display setting
-        ///</summary>
+        /// </summary>
         private static void DisplaySettingsChanging(object obj, EventArgs ea)
         {
             highContrastSettingValid = false;
@@ -136,9 +138,9 @@ namespace System.Windows.Forms
             menuAccessKeysUnderlinedValid = false;
         }
 
-        ///<summary>
+        /// <summary>
         ///event handler for change in user preference
-        ///</summary>
+        /// </summary>
         private static void UserPreferenceChanging(object obj, UserPreferenceChangingEventArgs e)
         {
             highContrastSettingValid = false;

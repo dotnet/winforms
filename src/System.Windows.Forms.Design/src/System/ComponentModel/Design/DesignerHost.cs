@@ -1159,7 +1159,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///  Gets the type instance for the specified fully qualified type name <paramref name="TypeName"/>.
+        ///  Gets the type instance for the specified fully qualified type name <paramref name="typeName"/>.
         /// </summary>
         Type IDesignerHost.GetType(string typeName)
         {

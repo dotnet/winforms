@@ -8,7 +8,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class CursorsTests
+    public class CursorsTests : IClassFixture<ThreadExceptionFixture>
     {
         public static IEnumerable<object[]> Cursors_TestData()
         {

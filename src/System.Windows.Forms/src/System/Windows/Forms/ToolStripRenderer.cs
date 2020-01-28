@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -594,7 +596,6 @@ namespace System.Windows.Forms
             offset4Y = DpiHelper.LogicalToDeviceUnits(OFFSET_4PIXELS, dpi);
         }
 
-        /// <include file='doc\WinBarRenderer.uex' path='docs/doc[@for="ToolStripRenderer.OnRenderArrow"]/*' />
         protected virtual void OnRenderArrow(ToolStripArrowRenderEventArgs e){
             if (RendererOverride != null)
             {

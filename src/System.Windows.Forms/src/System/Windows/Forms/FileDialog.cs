@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Collections;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -476,7 +478,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected unsafe override IntPtr HookProc(IntPtr hWnd, int msg, IntPtr wparam, IntPtr lparam)
         {
-            if (msg == WindowMessages.WM_NOTIFY)
+            if (msg == (int)User32.WM.NOTIFY)
             {
                 _dialogHWnd = User32.GetParent(hWnd);
                 try
@@ -687,9 +689,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        // If it's necessary to throw up a "This file exists, are you sure?" kind of
-        // MessageBox, here's where we do it
-        // Return value is whether or not the user hit "okay".
+        /// If it's necessary to throw up a "This file exists, are you sure?" kind of MessageBox,
+        /// here's where we do it. Return value is whether or not the user hit "okay".
         /// </summary>
         private protected virtual bool PromptUserIfAppropriate(string fileName)
         {

@@ -6,7 +6,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ToolStripContainerTests
+    public class ToolStripContainerTests : IClassFixture<ThreadExceptionFixture>
     {
         [Fact]
         public void ToolStripContainer_Constructor()

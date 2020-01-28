@@ -17,7 +17,7 @@ internal static partial class Interop
         {
             void Toggle();
 
-            ///<summary>
+            /// <summary>
             ///  Indicates an element's current on or off state
             /// </summary>
             ToggleState ToggleState { get; }

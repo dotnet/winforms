@@ -13,13 +13,13 @@ internal static partial class Interop
         [DllImport(Libraries.User32, ExactSpelling = true)]
         public static extern BOOL PostMessageW(
             IntPtr hWnd,
-            WindowMessage Msg,
+            WM Msg,
             IntPtr wParam = default,
             IntPtr lParam = default);
 
         public static BOOL PostMessageW(
             IHandle hWnd,
-            WindowMessage Msg,
+            WM Msg,
             IntPtr wParam = default,
             IntPtr lParam = default)
         {
@@ -30,7 +30,7 @@ internal static partial class Interop
 
         public static BOOL PostMessageW(
             HandleRef hWnd,
-            WindowMessage Msg,
+            WM Msg,
             IntPtr wParam = default,
             IntPtr lParam = default)
         {

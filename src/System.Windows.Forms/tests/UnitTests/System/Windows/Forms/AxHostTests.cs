@@ -14,7 +14,7 @@ using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
-    public class AxHostTests
+    public class AxHostTests : IClassFixture<ThreadExceptionFixture>
     {
         [StaTheory]
         [InlineData("00000000-0000-0000-0000-000000000000")]
@@ -999,22 +999,22 @@ namespace System.Windows.Forms.Tests
             Assert.Null(control.GetOcx());
         }
 
-        [Fact]
+        [WinFormsFact]
         public void AxHost_GetFontFromIFont_NullFont_ReturnsNull()
         {
             Assert.Null(SubAxHost.GetFontFromIFont(null));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void AxHost_GetFontFromIFont_InvalidFont_ThrowsInvalidCastException()
         {
             Assert.Throws<InvalidCastException>(() => SubAxHost.GetFontFromIFont(new object()));
         }
 
-        [Fact(Skip = "Unstable test, see: https://github.com/dotnet/winforms/issues/2002")]
+        [WinFormsFact]
         public void AxHost_GetIFontDispFromFont_InvokeSimpleStyle_Roundtrips()
         {
-            Font font = new Font(SystemFonts.StatusFont.FontFamily, 10);
+            using var font = new Font("Arial", 10);
             object disp = SubAxHost.GetIFontDispFromFont(font);
             Ole32.IFont iFont = (Ole32.IFont)disp;
             Assert.Equal(font.Name, iFont.Name);
@@ -1048,10 +1048,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, result.GdiCharSet);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void AxHost_GetIFontDispFromFont_InvokeComplexStyle_Roundtrips()
         {
-            Font font = new Font(SystemFonts.StatusFont.FontFamily, 10, FontStyle.Bold | FontStyle.Underline | FontStyle.Italic | FontStyle.Strikeout, GraphicsUnit.Point, 10);
+            using var font = new Font("Arial", 10, FontStyle.Bold | FontStyle.Underline | FontStyle.Italic | FontStyle.Strikeout, GraphicsUnit.Point, 10);
             object disp = SubAxHost.GetIFontDispFromFont(font);
 
             Ole32.IFont iFont = (Ole32.IFont)disp;
@@ -1086,7 +1086,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(10, result.GdiCharSet);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(GraphicsUnit.Document)]
         [InlineData(GraphicsUnit.Inch)]
         [InlineData(GraphicsUnit.Millimeter)]
@@ -1094,20 +1094,20 @@ namespace System.Windows.Forms.Tests
         [InlineData(GraphicsUnit.World)]
         public void AxHost_GetIFontDispFromFont_InvalidFontUnit_ThrowsArgumentException(GraphicsUnit unit)
         {
-            var font = new Font(SystemFonts.StatusFont.FontFamily, 10, unit);
+            using var font = new Font("Arial", 10, unit);
             Assert.Throws<ArgumentException>("font", () => SubAxHost.GetIFontDispFromFont(font));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void AxHost_GetIFontDispFromFont_NullFont_ReturnsNull()
         {
             Assert.Null(SubAxHost.GetIFontDispFromFont(null));
         }
 
-        [Fact(Skip = "Unstable test, see: https://github.com/dotnet/winforms/issues/2003")]
+        [WinFormsFact]
         public void AxHost_GetIFontFromFont_InvokeSimpleStyle_Roundtrips()
         {
-            Font font = new Font(SystemFonts.StatusFont.FontFamily, 10);
+            using var font = new Font("Arial", 10);
             Ole32.IFont iFont = (Ole32.IFont)SubAxHost.GetIFontFromFont(font);
             Assert.Equal(font.Name, iFont.Name);
             Assert.Equal(97500, iFont.Size);
@@ -1125,10 +1125,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, result.GdiCharSet);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void AxHost_GetIFontFromFont_InvokeComplexStyle_Roundtrips()
         {
-            Font font = new Font(SystemFonts.StatusFont.FontFamily, 10, FontStyle.Bold | FontStyle.Underline | FontStyle.Italic | FontStyle.Strikeout, GraphicsUnit.Point, 10);
+            using var font = new Font("Arial", 10, FontStyle.Bold | FontStyle.Underline | FontStyle.Italic | FontStyle.Strikeout, GraphicsUnit.Point, 10);
             Ole32.IFont iFont = (Ole32.IFont)SubAxHost.GetIFontFromFont(font);
             Assert.Equal(font.Name, iFont.Name);
             Assert.Equal(97500, iFont.Size);
@@ -1146,7 +1146,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(10, result.GdiCharSet);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(GraphicsUnit.Document)]
         [InlineData(GraphicsUnit.Inch)]
         [InlineData(GraphicsUnit.Millimeter)]
@@ -1154,23 +1154,23 @@ namespace System.Windows.Forms.Tests
         [InlineData(GraphicsUnit.World)]
         public void AxHost_GetIFontFromFont_InvalidFontUnit_ThrowsArgumentException(GraphicsUnit unit)
         {
-            var font = new Font(SystemFonts.StatusFont.FontFamily, 10, unit);
+            using var font = new Font("Arial", 10, unit);
             Assert.Throws<ArgumentException>("font", () => SubAxHost.GetIFontFromFont(font));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void AxHost_GetIFontFromFont_NullFont_ReturnsNull()
         {
             Assert.Null(SubAxHost.GetIFontFromFont(null));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void AxHost_GetIPictureFromCursor_Invoke_Roundtrips()
         {
             var original = new Cursor("bitmaps/cursor.cur");
             IPicture iPicture = (IPicture)SubAxHost.GetIPictureFromCursor(original);
             Assert.NotNull(iPicture);
-            Assert.NotEqual(0u, iPicture.Handle);
+            Assert.NotEqual(0, iPicture.Handle);
             Assert.Throws<COMException>(() => iPicture.hPal);
             Assert.Equal(3, iPicture.Type);
             Assert.Equal(847, iPicture.Width);
@@ -1181,7 +1181,7 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<InvalidCastException>(() => SubAxHost.GetPictureFromIPicture(iPicture));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void AxHost_GetIPictureDispFromPicture_InvokeBitmap_Roundtrips()
         {
             var original = new Bitmap(10, 11);
@@ -1189,18 +1189,18 @@ namespace System.Windows.Forms.Tests
             object disp = SubAxHost.GetIPictureDispFromPicture(original);
             IPicture iPicture = (IPicture)disp;
             Assert.NotNull(iPicture);
-            Assert.NotEqual(0u, iPicture.Handle);
-            Assert.Equal(0u, iPicture.hPal);
+            Assert.NotEqual(0, iPicture.Handle);
+            Assert.Equal(0, iPicture.hPal);
             Assert.Equal(1, iPicture.Type);
             Assert.Equal(265, iPicture.Width);
             Assert.Equal(291, iPicture.Height);
-            Assert.Equal(0u, iPicture.CurDC);
+            Assert.Equal(0, iPicture.CurDC);
             Assert.Equal(0u, iPicture.Attributes);
 
             Ole32.IPictureDisp iPictureDisp = (Ole32.IPictureDisp)disp;
             Assert.NotNull(iPictureDisp);
-            Assert.NotEqual(0u, iPictureDisp.Handle);
-            Assert.Equal(0u, iPictureDisp.hPal);
+            Assert.NotEqual(0, iPictureDisp.Handle);
+            Assert.Equal(0, iPictureDisp.hPal);
             Assert.Equal(1, iPictureDisp.Type);
             Assert.Equal(265, iPictureDisp.Width);
             Assert.Equal(291, iPictureDisp.Height);
@@ -1216,7 +1216,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(Color.FromArgb(unchecked((int)0xFF010203)), original.GetPixel(1, 2));
         }
 
-        [Fact(Skip = "Unstable test, see: https://github.com/dotnet/winforms/issues/2005")]
+        [WinFormsFact]
         public void AxHost_GetIPictureDispFromPicture_InvokeEnhancedMetafile_Roundtrips()
         {
             var original = new Metafile("bitmaps/milkmateya01.emf");
@@ -1224,7 +1224,7 @@ namespace System.Windows.Forms.Tests
 
             IPicture iPicture = (IPicture)disp;
             Assert.NotNull(iPicture);
-            Assert.NotEqual(0u, iPicture.Handle);
+            Assert.NotEqual(0, iPicture.Handle);
             Assert.Throws<COMException>(() => iPicture.hPal);
             Assert.Equal(4, iPicture.Type);
             Assert.Equal(19972, iPicture.Width);
@@ -1234,7 +1234,7 @@ namespace System.Windows.Forms.Tests
 
             Ole32.IPictureDisp iPictureDisp = (Ole32.IPictureDisp)disp;
             Assert.NotNull(iPictureDisp);
-            Assert.NotEqual(0u, iPictureDisp.Handle);
+            Assert.NotEqual(0, iPictureDisp.Handle);
             TargetInvocationException ex = Assert.Throws<TargetInvocationException>(() => iPictureDisp.hPal);
             Assert.IsType<COMException>(ex.InnerException);
             Assert.Equal(4, iPictureDisp.Type);
@@ -1248,32 +1248,32 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(new Size(759, 1073), result.Size);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void AxHost_GetIPictureDispFromPicture_InvokeMetafile_ThrowsCOMException()
         {
             var original = new Metafile("bitmaps/telescope_01.wmf");
             Assert.Throws<COMException>(() => SubAxHost.GetIPictureDispFromPicture(original));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void AxHost_GetIPictureDispFromPicture_NullImage_ReturnsNull()
         {
             Assert.Null(SubAxHost.GetIPictureDispFromPicture(null));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void AxHost_GetIPictureFromPicture_InvokeBitmap_Roundtrips()
         {
             var original = new Bitmap(10, 11);
             original.SetPixel(1, 2, Color.FromArgb(unchecked((int)0xFF010203)));
             IPicture iPicture = (IPicture)SubAxHost.GetIPictureFromPicture(original);
             Assert.NotNull(iPicture);
-            Assert.NotEqual(0u, iPicture.Handle);
-            Assert.Equal(0u, iPicture.hPal);
+            Assert.NotEqual(0, iPicture.Handle);
+            Assert.Equal(0, iPicture.hPal);
             Assert.Equal(1, iPicture.Type);
             Assert.Equal(265, iPicture.Width);
             Assert.Equal(291, iPicture.Height);
-            Assert.Equal(0u, iPicture.CurDC);
+            Assert.Equal(0, iPicture.CurDC);
             Assert.Equal(0u, iPicture.Attributes);
 
             var result = Assert.IsType<Bitmap>(SubAxHost.GetPictureFromIPicture(iPicture));
@@ -1282,13 +1282,13 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(Color.FromArgb(unchecked((int)0xFF010203)), original.GetPixel(1, 2));
         }
 
-        [Fact(Skip = "Unstable test, see: https://github.com/dotnet/winforms/issues/2004")]
+        [WinFormsFact]
         public void AxHost_GetIPictureFromPicture_InvokeEnhancedMetafile_Roundtrips()
         {
             var original = new Metafile("bitmaps/milkmateya01.emf");
             IPicture iPicture = (IPicture)SubAxHost.GetIPictureFromPicture(original);
             Assert.NotNull(iPicture);
-            Assert.NotEqual(0u, iPicture.Handle);
+            Assert.NotEqual(0, iPicture.Handle);
             Assert.Throws<COMException>(() => iPicture.hPal);
             Assert.Equal(4, iPicture.Type);
             Assert.Equal(19972, iPicture.Width);
@@ -1300,26 +1300,26 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(new Size(759, 1073), result.Size);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void AxHost_GetIPictureFromPicture_InvokeMetafile_ThrowsCOMException()
         {
             var original = new Metafile("bitmaps/telescope_01.wmf");
             Assert.Throws<COMException>(() => SubAxHost.GetIPictureFromPicture(original));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void AxHost_GetIPictureFromPicture_NullImage_ReturnsNull()
         {
             Assert.Null(SubAxHost.GetIPictureFromPicture(null));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void AxHost_GetPictureFromIPicture_InvokeInvalid_ThrowsInvalidCastException()
         {
             Assert.Throws<InvalidCastException>(() => SubAxHost.GetPictureFromIPicture(new object()));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void AxHost_GetPictureFromIPicture_NullPicture_ReturnsNull()
         {
             Assert.Null(SubAxHost.GetPictureFromIPicture(null));
@@ -1414,11 +1414,11 @@ namespace System.Windows.Forms.Tests
         [ComImport]
         [Guid("7BF80980-BF32-101A-8BBB-00AA00300CAB")]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        private interface IPicture
+        private unsafe interface IPicture
         {
-            uint Handle { get; }
+            int Handle { get; }
 
-            uint hPal { get; }
+            int hPal { get; }
 
             short Type { get; }
 
@@ -1426,7 +1426,8 @@ namespace System.Windows.Forms.Tests
 
             int Height { get; }
 
-            void Render(
+            [PreserveSig]
+            HRESULT Render(
                 IntPtr hDC,
                 int x,
                 int y,
@@ -1436,23 +1437,28 @@ namespace System.Windows.Forms.Tests
                 long ySrc,
                 long cxSrc,
                 long cySrc,
-                ref RECT pRcWBounds);
+                RECT* pRcWBounds);
 
-            void SetHPal(uint hPal);
+            void SetHPal(int hPal);
 
-            uint CurDC { get; }
+            int CurDC { get; }
 
-            uint SelectPicture(
-                IntPtr hDC,
-                out IntPtr phDCOut);
+            [PreserveSig]
+            HRESULT SelectPicture(
+                IntPtr hDCIn,
+                IntPtr* phDCOut,
+                int* phBmpOut);
 
             BOOL KeepOriginalFormat { get; set; }
 
-            void PictureChanged();
+            [PreserveSig]
+            HRESULT PictureChanged();
 
-            int SaveAsFile(
+            [PreserveSig]
+            HRESULT SaveAsFile(
                 IntPtr pStream,
-                BOOL fSaveMemCopy);
+                BOOL fSaveMemCopy,
+                int* pCbSize);
 
             uint Attributes { get; }
         }

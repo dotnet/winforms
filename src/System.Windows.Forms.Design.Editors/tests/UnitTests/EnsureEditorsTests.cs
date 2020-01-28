@@ -16,7 +16,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Design.Editors.Tests
 {
-    public class EnsureEditorsTests
+    public class EnsureEditorsTests : IClassFixture<ThreadExceptionFixture>
     {
         [WinFormsTheory]
         // In Table

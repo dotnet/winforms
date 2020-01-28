@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Collections;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -912,7 +914,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 dispid,
                 &g,
                 Kernel32.GetThreadLocale(),
-                NativeMethods.DISPATCH_PROPERTYGET,
+                Oleaut32.DISPATCH.PROPERTYGET,
                 &dispParams,
                 pVarResult,
                 &pExcepInfo,
@@ -1308,7 +1310,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                         dispid,
                         &g,
                         Kernel32.GetThreadLocale(),
-                        NativeMethods.DISPATCH_PROPERTYPUT,
+                        Oleaut32.DISPATCH.PROPERTYPUT,
                         &dispParams,
                         null,
                         &excepInfo,

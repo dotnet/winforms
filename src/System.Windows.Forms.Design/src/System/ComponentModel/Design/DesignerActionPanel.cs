@@ -818,8 +818,8 @@ namespace System.ComponentModel.Design
 
         /// <summary>
         ///  Strips out ampersands used for mnemonics so that they don't show up in the rendering.
-        ///  - Convert "&&" to "&"
-        ///  - Convert "&x" to "x"
+        ///  - Convert "&amp;&amp;" to "&amp;"
+        ///  - Convert "&amp;x" to "x"
         ///  - An ampersand by itself at the end of a string is displayed as-is
         /// </summary>
         private static string StripAmpersands(string s)
@@ -2455,7 +2455,7 @@ namespace System.ComponentModel.Design
                         IntPtr hWndCapture = User32.GetCapture();
                         if (hWndCapture != IntPtr.Zero)
                         {
-                            User32.SendMessageW(hWndCapture, User32.WindowMessage.WM_CANCELMODE, IntPtr.Zero, IntPtr.Zero);
+                            User32.SendMessageW(hWndCapture, User32.WM.CANCELMODE, IntPtr.Zero, IntPtr.Zero);
                             User32.ReleaseCapture();
                         }
                         Visible = true; // NOTE: Do this AFTER creating handle and setting parent
@@ -2476,7 +2476,7 @@ namespace System.ComponentModel.Design
 
                 protected override void WndProc(ref Message m)
                 {
-                    if (m.Msg == WindowMessages.WM_ACTIVATE)
+                    if (m.Msg == (int)User32.WM.ACTIVATE)
                     {
                         if (Visible && PARAM.LOWORD(m.WParam) == (int)User32.WA.INACTIVE)
                         {

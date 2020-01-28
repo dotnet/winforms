@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+  <Import Project="..\..\Directory.Build.targets" />
+
+  <!-- 
+    (Re)generate the list of transport assemblies by inspecting Microsoft.Private.Winforms nuspec.
+    -->
+  <Target Name="UpdateList" AfterTargets="GenerateNuspec">
+    <ItemGroup>
+      <NuspecFile Include="@(NuGetPackOutput)" Condition="'%(Extension)' == '.nuspec'" />
+    </ItemGroup>
+
+    <PropertyGroup>
+      <PowerShellExe Condition="'$(PowerShellExe)' == ''">C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe</PowerShellExe>
+      <ScriptLocation Condition="'$(ScriptLocation)' == ''">$(MSBuildProjectDirectory)\GenerateFrameworkListFiles.ps1</ScriptLocation>
+      <TargetFile>$(MSBuildProjectDirectory)\FrameworkListFiles.props</TargetFile>
+    </PropertyGroup>
+    <Exec Command="$(PowerShellExe) -NonInteractive -ExecutionPolicy Unrestricted -Command &quot;&amp; { &amp;&apos;$(ScriptLocation)&apos; &apos;@(NuspecFile)&apos; &apos;$(TargetFile)&apos; } &quot;" />
+ 
+  </Target>
+
+</Project>

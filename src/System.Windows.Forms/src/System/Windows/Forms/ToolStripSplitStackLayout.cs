@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
@@ -30,7 +32,7 @@ namespace System.Windows.Forms
         protected int BackwardsWalkingIndex { get; set; }
 
         /// <summary>
-        // This is the index we use to walk the items and make  decisions if there is enough room.
+        ///  This is the index we use to walk the items and make  decisions if there is enough room.
         /// </summary>
         protected int ForwardsWalkingIndex { get; set; }
 

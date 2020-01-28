@@ -8,7 +8,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Design.Editors.Tests.Serialization
 {
-    public class SerializableAttributeTests
+    public class SerializableAttributeTests : IClassFixture<ThreadExceptionFixture>
     {
         [Fact]
         public void EnsureSerializableAttribute()

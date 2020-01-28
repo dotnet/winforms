@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Collections;
 using System.Diagnostics;
 using System.IO;
@@ -271,7 +273,7 @@ namespace System.Resources
 
         /// <summary>
         ///  Adds the given value to the collection of metadata.  These name/value pairs
-        ///  will be emitted to the <metadata> elements in the .resx file.
+        ///  will be emitted to the &lt;metadata&gt; elements in the .resx file.
         /// </summary>
         public void AddMetadata(string name, byte[] value)
         {
@@ -280,7 +282,7 @@ namespace System.Resources
 
         /// <summary>
         ///  Adds the given value to the collection of metadata.  These name/value pairs
-        ///  will be emitted to the <metadata> elements in the .resx file.
+        ///  will be emitted to the &lt;metadata&gt; elements in the .resx file.
         /// </summary>
         public void AddMetadata(string name, string value)
         {
@@ -289,7 +291,7 @@ namespace System.Resources
 
         /// <summary>
         ///  Adds the given value to the collection of metadata.  These name/value pairs
-        ///  will be emitted to the <metadata> elements in the .resx file.
+        ///  will be emitted to the &lt;metadata&gt; elements in the .resx file.
         /// </summary>
         public void AddMetadata(string name, object value)
         {
@@ -649,5 +651,3 @@ namespace System.Resources
         }
     }
 }
-
-

@@ -577,41 +577,41 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        // <summary>
-        // Resets the ToolStripDropDown AutoClose to be the default padding
-        // <summary/>
+        /// <summary>
+        /// Resets the ToolStripDropDown AutoClose to be the default padding
+        /// </summary>
         private void ResetAutoClose()
         {
             ShadowProperties["AutoClose"] = true;
         }
 
-        // <summary>
-        // Restores the ToolStripDropDown AutoClose to be the value set in the property grid.
-        // <summary/>
+        /// <summary>
+        /// Restores the ToolStripDropDown AutoClose to be the value set in the property grid.
+        /// </summary>
         private void RestoreAutoClose()
         {
             dropDown.AutoClose = (bool)ShadowProperties["AutoClose"];
         }
 
-        // <summary>
-        // Resets the ToolStripDropDown AllowDrop to be the default padding
-        // <summary/>
+        /// <summary>
+        /// Resets the ToolStripDropDown AllowDrop to be the default padding
+        /// </summary>
         private void ResetAllowDrop()
         {
             ShadowProperties["AllowDrop"] = false;
         }
 
-        // <summary>
-        // Restores the ToolStripDropDown AllowDrop to be the value set in the property grid.
-        // <summary/>
+        /// <summary>
+        /// Restores the ToolStripDropDown AllowDrop to be the value set in the property grid.
+        /// </summary>
         private void RestoreAllowDrop()
         {
             dropDown.AutoClose = (bool)ShadowProperties["AllowDrop"];
         }
 
-        // <summary>
-        // Resets the ToolStripDropDown RightToLeft to be the default RightToLeft
-        // <summary/>
+        /// <summary>
+        /// Resets the ToolStripDropDown RightToLeft to be the default RightToLeft
+        /// </summary>
         private void ResetRightToLeft()
         {
             RightToLeft = RightToLeft.No;
@@ -721,19 +721,19 @@ namespace System.Windows.Forms.Design
         // Should the designer serialize the settings?
         private bool ShouldSerializeSettingsKey() => (Component is IPersistComponentSettings persistableComponent && persistableComponent.SaveSettings && SettingsKey != null);
 
-        // <summary>
-        // Since we're shadowing ToolStripDropDown AutoClose, we get called here to determine whether or not to serialize
-        // <summary/>
+        /// <summary>
+        /// Since we're shadowing ToolStripDropDown AutoClose, we get called here to determine whether or not to serialize
+        /// </summary>
         private bool ShouldSerializeAutoClose() => (!(bool)ShadowProperties["AutoClose"]);
 
-        // <summary>
-        // Since we're shadowing ToolStripDropDown AllowDrop, we get called here to determine whether or not to serialize
-        // <summary/>
+        /// <summary>
+        /// Since we're shadowing ToolStripDropDown AllowDrop, we get called here to determine whether or not to serialize
+        /// </summary>
         private bool ShouldSerializeAllowDrop() => AllowDrop;
 
-        // <summary>
-        // Since we're shadowing ToolStripDropDown RightToLeft, we get called here to determine whether or not to serialize
-        // <summary/>
+        /// <summary>
+        /// Since we're shadowing ToolStripDropDown RightToLeft, we get called here to determine whether or not to serialize
+        /// </summary>
         private bool ShouldSerializeRightToLeft() => RightToLeft != RightToLeft.No;
 
         /// <summary>

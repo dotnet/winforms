@@ -3661,6 +3661,46 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
+        public void Control_Controls_ResetValue_Success()
+        {
+            PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(Control))[nameof(Control.Controls)];
+            using var control = new Control();
+            Assert.False(property.CanResetValue(control));
+
+            Assert.Empty(control.Controls);
+            Assert.False(property.CanResetValue(control));
+
+            using var child = new Control();
+            control.Controls.Add(child);
+            Assert.Same(child, Assert.Single(control.Controls));
+            Assert.False(property.CanResetValue(control));
+
+            property.ResetValue(control);
+            Assert.Same(child, Assert.Single(control.Controls));
+            Assert.False(property.CanResetValue(control));
+        }
+
+        [WinFormsFact]
+        public void Control_Controls_ShouldSerializeValue_Success()
+        {
+            PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(Control))[nameof(Control.Controls)];
+            using var control = new Control();
+            Assert.True(property.ShouldSerializeValue(control));
+
+            Assert.Empty(control.Controls);
+            Assert.True(property.ShouldSerializeValue(control));
+
+            using var child = new Control();
+            control.Controls.Add(child);
+            Assert.Same(child, Assert.Single(control.Controls));
+            Assert.True(property.ShouldSerializeValue(control));
+
+            property.ResetValue(control);
+            Assert.Same(child, Assert.Single(control.Controls));
+            Assert.True(property.ShouldSerializeValue(control));
+        }
+
+        [WinFormsFact]
         public void Control_Cursor_GetUseWaitCursor_ReturnsExpected()
         {
             using var cursor = new Cursor((IntPtr)1);
@@ -10107,7 +10147,7 @@ namespace System.Windows.Forms.Tests
         {
             using var control = new SubControl();
             Assert.NotEqual(IntPtr.Zero, control.Handle);
-            User32.SendMessageW(control.Handle, User32.WindowMessage.WM_UPDATEUISTATE, (IntPtr)wParam, IntPtr.Zero);
+            User32.SendMessageW(control.Handle, User32.WM.UPDATEUISTATE, (IntPtr)wParam, IntPtr.Zero);
             Assert.Equal(expected, control.ShowFocusCues);
         }
 
@@ -10158,7 +10198,7 @@ namespace System.Windows.Forms.Tests
         {
             using var control = new SubControl();
             Assert.NotEqual(IntPtr.Zero, control.Handle);
-            User32.SendMessageW(control.Handle, User32.WindowMessage.WM_UPDATEUISTATE, (IntPtr)wParam, IntPtr.Zero);
+            User32.SendMessageW(control.Handle, User32.WM.UPDATEUISTATE, (IntPtr)wParam, IntPtr.Zero);
             Assert.Equal(expected, control.ShowKeyboardCues);
         }
 

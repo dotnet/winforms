@@ -207,10 +207,10 @@ namespace System.Windows.Forms.Design
                 Items = values;
             }
 
-            // <summary>
-            //  This is called when the value property in the CollectionForm has changed.
-            //  In it you should update your user interface to reflect the current value.
-            // </summary>
+            /// <summary>
+            ///  This is called when the value property in the CollectionForm has changed.
+            ///  In it you should update your user interface to reflect the current value.
+            /// </summary>
             protected override void OnEditValueChanged()
             {
                 object[] items = Items;

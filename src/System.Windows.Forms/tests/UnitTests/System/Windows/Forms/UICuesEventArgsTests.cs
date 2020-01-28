@@ -6,7 +6,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class UICuesEventArgsTests
+    public class UICuesEventArgsTests : IClassFixture<ThreadExceptionFixture>
     {
         [Theory]
         [InlineData((UICues)(-1))]

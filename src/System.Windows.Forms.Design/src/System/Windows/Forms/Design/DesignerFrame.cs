@@ -101,7 +101,7 @@ namespace System.Windows.Forms.Design
         {
             if (_designer != null && _designer.IsHandleCreated)
             {
-                User32.SendMessageW(_designer.Handle, User32.WindowMessage.WM_NCACTIVATE, PARAM.FromBool(focus), IntPtr.Zero);
+                User32.SendMessageW(_designer.Handle, User32.WM.NCACTIVATE, PARAM.FromBool(focus), IntPtr.Zero);
                 User32.RedrawWindow(_designer.Handle, null, IntPtr.Zero, User32.RDW.FRAME);
             }
         }
@@ -194,68 +194,67 @@ namespace System.Windows.Forms.Design
         /// </summary>
         protected override void WndProc(ref Message m)
         {
-            switch (m.Msg)
+            switch ((User32.WM)m.Msg)
             {
                 // Provide MouseWheel access for scrolling
-                case WindowMessages.WM_MOUSEWHEEL:
+                case User32.WM.MOUSEWHEEL:
                     // Send a message to ourselves to scroll
                     if (!_designerRegion._messageMouseWheelProcessed)
                     {
                         _designerRegion._messageMouseWheelProcessed = true;
-                        User32.SendMessageW(_designerRegion.Handle, User32.WindowMessage.WM_MOUSEWHEEL, m.WParam, m.LParam);
+                        User32.SendMessageW(_designerRegion.Handle, User32.WM.MOUSEWHEEL, m.WParam, m.LParam);
                         return;
                     }
                     break;
                 // Provide keyboard access for scrolling
-                case WindowMessages.WM_KEYDOWN:
+                case User32.WM.KEYDOWN:
                     User32.SBV wScrollNotify = 0;
-                    int msg = 0;
+                    User32.WM msg = User32.WM.NULL;
                     int keycode = unchecked((int)(long)m.WParam) & 0xFFFF;
                     switch ((Keys)keycode)
                     {
                         case Keys.Up:
                             wScrollNotify = User32.SBV.LINEUP;
-                            msg = WindowMessages.WM_VSCROLL;
+                            msg = User32.WM.VSCROLL;
                             break;
                         case Keys.Down:
                             wScrollNotify = User32.SBV.LINEDOWN;
-                            msg = WindowMessages.WM_VSCROLL;
+                            msg = User32.WM.VSCROLL;
                             break;
                         case Keys.PageUp:
                             wScrollNotify = User32.SBV.PAGEUP;
-                            msg = WindowMessages.WM_VSCROLL;
+                            msg = User32.WM.VSCROLL;
                             break;
                         case Keys.PageDown:
                             wScrollNotify = User32.SBV.PAGEDOWN;
-                            msg = WindowMessages.WM_VSCROLL;
+                            msg = User32.WM.VSCROLL;
                             break;
                         case Keys.Home:
                             wScrollNotify = User32.SBV.TOP;
-                            msg = WindowMessages.WM_VSCROLL;
+                            msg = User32.WM.VSCROLL;
                             break;
                         case Keys.End:
                             wScrollNotify = User32.SBV.BOTTOM;
-                            msg = WindowMessages.WM_VSCROLL;
+                            msg = User32.WM.VSCROLL;
                             break;
                         case Keys.Left:
                             wScrollNotify = User32.SBV.LINEUP;
-                            msg = WindowMessages.WM_HSCROLL;
+                            msg = User32.WM.HSCROLL;
                             break;
                         case Keys.Right:
                             wScrollNotify = User32.SBV.LINEDOWN;
-                            msg = WindowMessages.WM_HSCROLL;
+                            msg = User32.WM.HSCROLL;
                             break;
                     }
-                    if ((msg == WindowMessages.WM_VSCROLL)
-                        || (msg == WindowMessages.WM_HSCROLL))
+                    if ((msg == User32.WM.VSCROLL) || (msg == User32.WM.HSCROLL))
                     {
                         // Send a message to ourselves to scroll
-                        User32.SendMessageW(_designerRegion.Handle, (User32.WindowMessage)msg, (IntPtr)PARAM.ToInt((int)wScrollNotify, 0), IntPtr.Zero);
+                        User32.SendMessageW(_designerRegion.Handle, (User32.WM)msg, (IntPtr)PARAM.ToInt((int)wScrollNotify, 0), IntPtr.Zero);
                         return;
                     }
                     break;
-                case WindowMessages.WM_CONTEXTMENU:
-                    User32.SendMessageW(_designer.Handle, (User32.WindowMessage)m.Msg, m.WParam, m.LParam);
+                case User32.WM.CONTEXTMENU:
+                    User32.SendMessageW(_designer.Handle, (User32.WM)m.Msg, m.WParam, m.LParam);
                     return;
             }
             base.WndProc(ref m);
@@ -546,7 +545,7 @@ namespace System.Windows.Forms.Design
             protected override void WndProc(ref Message m)
             {
                 base.WndProc(ref m);
-                if (m.Msg == WindowMessages.WM_PARENTNOTIFY && PARAM.LOWORD(m.WParam) == (short)WindowMessages.WM_CREATE)
+                if (m.Msg == (int)User32.WM.PARENTNOTIFY && PARAM.LOWORD(m.WParam) == (short)User32.WM.CREATE)
                 {
                     if (_overlayList != null)
                     {
@@ -572,11 +571,11 @@ namespace System.Windows.Forms.Design
                         }
                     }
                 }
-                else if ((m.Msg == WindowMessages.WM_VSCROLL || m.Msg == WindowMessages.WM_HSCROLL) && BehaviorService != null)
+                else if ((m.Msg == (int)User32.WM.VSCROLL || m.Msg == (int)User32.WM.HSCROLL) && BehaviorService != null)
                 {
                     BehaviorService.SyncSelection();
                 }
-                else if ((m.Msg == WindowMessages.WM_MOUSEWHEEL))
+                else if ((m.Msg == (int)User32.WM.MOUSEWHEEL))
                 {
                     _messageMouseWheelProcessed = false;
                     if (BehaviorService != null)

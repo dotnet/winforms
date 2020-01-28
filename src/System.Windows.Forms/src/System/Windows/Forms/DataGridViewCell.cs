@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -109,7 +111,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets or sets the Index of a column in the <see cref='DataGrid'/> control.
+        ///  Gets or sets the Index of a column in the <see cref='DataGridView'/> control.
         /// </summary>
         public int ColumnIndex => OwningColumn?.Index ?? -1;
 
@@ -663,7 +665,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets or sets the index of a row in the <see cref='DataGrid'/> control.
+        ///  Gets or sets the index of a row in the <see cref='DataGridView'/> control.
         /// </summary>
         [Browsable(false)]
         public int RowIndex => OwningRow?.Index ?? -1;

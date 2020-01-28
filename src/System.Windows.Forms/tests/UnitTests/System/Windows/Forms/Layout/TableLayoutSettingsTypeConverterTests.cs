@@ -11,7 +11,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Layout.Tests
 {
-    public class TableLayoutSettingsTypeConverterTests
+    public class TableLayoutSettingsTypeConverterTests : IClassFixture<ThreadExceptionFixture>
     {
         public static TheoryData<Type, bool> CanConvertFromData =>
             CommonTestHelper.GetConvertFromTheoryData();
@@ -233,15 +233,15 @@ namespace System.Windows.Forms.Layout.Tests
         }
 
         [Fact]
-        public void TableLayoutSettingsTypeConverter_ConvertTo_HasControlChildWithoutNameProperty_ThrowsNullReferenceException()
+        public void TableLayoutSettingsTypeConverter_ConvertTo_HasControlChildWithoutNameProperty_ThrowsInvalidOperationException()
         {
-            var panel = new TableLayoutPanel();
-            var control = new ScrollableControl();
-            TableLayoutSettings settings = Assert.IsType<TableLayoutSettings>(panel.LayoutSettings);
-            panel.Controls.Add(new ControlWithoutName());
+            using var control = new TableLayoutPanel();
+            var settings = Assert.IsType<TableLayoutSettings>(control.LayoutSettings);
 
+            using var child = new ControlWithNullName();
+            control.Controls.Add(child);
             var converter = new TableLayoutSettingsTypeConverter();
-            Assert.Throws<NullReferenceException>(() => converter.ConvertTo(settings, typeof(string)));
+            Assert.Throws<InvalidOperationException>(() => converter.ConvertTo(settings, typeof(string)));
         }
 
         [Fact]
@@ -302,7 +302,7 @@ namespace System.Windows.Forms.Layout.Tests
         }
 
         [TypeDescriptionProvider(typeof(CustomTypeDescriptionProvider))]
-        private class ControlWithoutName : Control
+        private class ControlWithNullName : Control
         {
         }
 

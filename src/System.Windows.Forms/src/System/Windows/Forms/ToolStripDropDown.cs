@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Collections;
 using System.Collections.Specialized;
 using System.ComponentModel;
@@ -14,9 +16,6 @@ using static Interop;
 
 namespace System.Windows.Forms
 {
-    /// <summary>
-    ///  Summary of ToolStripDropDown.
-    /// </summary>
     [Designer("System.Windows.Forms.Design.ToolStripDropDownDesigner, " + AssemblyRef.SystemDesign)]
     [ComVisible(true)]
     [ClassInterface(ClassInterfaceType.AutoDispatch)]
@@ -273,7 +272,7 @@ namespace System.Windows.Forms
                     cp.ClassStyle |= (int)User32.CS.DROPSHADOW;
                 }
                 // we're a borderless menuless control with no min/max boxes
-                // we dont want to show in the taskbar either
+                // we don't want to show in the taskbar either
 
                 //HOWTO: Prevent a Window from Appearing on the Taskbar
                 //Give the window the WS_EX_TOOLWINDOW extended style, and remove the WS_EX_APPWINDOW style. As a side effect, the window will have a smaller caption than a normal window.
@@ -319,7 +318,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary> We want this to default to true... This way tooltips on overflows and custom dropdowns will show.
-        ///  Since menu items don't show tooltips by default we can savely leave it on </summary>
+        ///  Since menu items don't show tooltips by default we can safely leave it on </summary>
         protected override bool DefaultShowItemToolTips
         {
             get
@@ -748,9 +747,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <summary>
-        ///  Summary of OwnerItem.
-        /// </summary>
         [DefaultValue(null), Browsable(false)]
         public ToolStripItem OwnerItem
         {
@@ -1051,7 +1047,7 @@ namespace System.Windows.Forms
             }
         }
 
-        // internally we use not so we dont have to initialize it.
+        // internally we use not so we don't have to initialize it.
         internal bool WorkingAreaConstrained
         {
             get => true;
@@ -1107,7 +1103,7 @@ namespace System.Windows.Forms
 
         internal override bool CanProcessMnemonic()
         {
-            // Dont let mnemonics act as keyboard input in IE in the internet.
+            // Don't let mnemonics act as keyboard input in IE in the internet.
             if (!Application.MessageLoop)
             {
                 return false;
@@ -1180,10 +1176,6 @@ namespace System.Windows.Forms
             Visible = false;
         }
 
-        /// <summary>
-        ///  Summary of GetBaseDropDownBounds.
-        /// </summary>
-        // called by ToolStripDropDownMenu,
         internal Rectangle GetDropDownBounds(Rectangle suggestedBounds)
         {
             Rectangle dropDownBounds;
@@ -1234,8 +1226,8 @@ namespace System.Windows.Forms
             if (!IsHandleCreated)
             {
                 // PERF:
-                // if the handle isnt created yet, then we likely havent performed layout
-                // yet.  force a layout here so that we get the correct size.
+                // if the handle isn't created yet, then we likely haven't performed layout
+                // yet. force a layout here so that we get the correct size.
                 LayoutTransaction.DoLayout(this, this, PropertyNames.PreferredSize);
             }
             Rectangle dropDownBounds = new Rectangle(Point.Empty, GetSuggestedSize());
@@ -1383,10 +1375,6 @@ namespace System.Windows.Forms
             ((CancelEventHandler)Events[EventOpening])?.Invoke(this, e);
         }
 
-        /// <summary>
-        ///  Summary of OnLayout.
-        /// </summary>
-        /// <param name=e></param>
         protected virtual void OnOpened(EventArgs e)
         {
             if (IsHandleCreated)
@@ -1455,7 +1443,7 @@ namespace System.Windows.Forms
                 {
                     if (OwnerItem.Bounds.Contains(WindowsFormsUtils.TranslatePoint(mea.Location, this, OwnerToolStrip)))
                     {
-                        dismiss = false;  // dont dismiss if we clicked on our owner item
+                        dismiss = false;  // don't dismiss if we clicked on our owner item
                     }
                 }
                 if (dismiss)
@@ -1704,9 +1692,9 @@ namespace System.Windows.Forms
             scaledDefaultPadding = DpiHelper.LogicalToDeviceUnits(defaultPadding, newDpi);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     VERY similar to Form.ScaleCore
-        /// </devdoc>
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         protected override void ScaleCore(float dx, float dy)
         {
@@ -1944,9 +1932,9 @@ namespace System.Windows.Forms
                                 }
 
                                 // if this came through via a click event we should actually
-                                // dismiss everyone in the chain. Other windows will recieve a
+                                // dismiss everyone in the chain. Other windows will receive a
                                 // close, closing event with reason AppFocusChange. This is by
-                                // design since the item wasnt clicked on that window.
+                                // design since the item wasn't clicked on that window.
                                 if (reason == ToolStripDropDownCloseReason.ItemClicked)
                                 {
                                     // Preserve the SourceControl value up the chain.
@@ -2152,16 +2140,16 @@ namespace System.Windows.Forms
 
         protected override void WndProc(ref Message m)
         {
-            switch (m.Msg)
+            switch ((User32.WM)m.Msg)
             {
-                case WindowMessages.WM_NCACTIVATE:
+                case User32.WM.NCACTIVATE:
                     // if someone clicks on a child control of the toolstrip dropdown, we want
                     // the title bar to continue appearing active.  Normally we just show without
                     // taking window activation (ShowWindow(SHOWNOACTIVATE)) but we cant stop
                     // child controls from taking focus.
                     WmNCActivate(ref m);
                     return;
-                case WindowMessages.WM_ACTIVATE:
+                case User32.WM.ACTIVATE:
                     // This is the Chrome Panel collection editor scenario
                     // we had focus, then the Chrome panel was activated and we never went away
                     // when we get focus again, we should reactivate our message filter.
@@ -2254,7 +2242,7 @@ namespace System.Windows.Forms
                         // we're activating - notify the previous guy that we're activating.
                         HandleRef activeHwndHandleRef = ToolStripManager.ModalMenuFilter.ActiveHwnd;
 
-                        UnsafeNativeMethods.SendMessage(activeHwndHandleRef, WindowMessages.WM_NCACTIVATE, (IntPtr)1, NativeMethods.InvalidIntPtr);
+                        User32.SendMessageW(activeHwndHandleRef, User32.WM.NCACTIVATE, (IntPtr)1, (IntPtr)(-1));
                         User32.RedrawWindow(
                             activeHwndHandleRef,
                             null,
@@ -2385,4 +2373,3 @@ namespace System.Windows.Forms
         }
     }
 }
-

@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Collections;
 using System.Collections.Specialized;
 using System.ComponentModel;
@@ -515,7 +517,8 @@ namespace System.Windows.Forms
             finally
             {
                 if ((original.options & OriginalOptions.OwnsImage) != 0)
-                { ///  this is to handle the case were we clone the icon (see WHY WHY WHY below)
+                {
+                    // This is to handle the case were we clone the icon (see why below)
                     icon.Dispose();
                 }
             }
@@ -1760,4 +1763,3 @@ namespace System.Windows.Forms
         }
     }
 }
-

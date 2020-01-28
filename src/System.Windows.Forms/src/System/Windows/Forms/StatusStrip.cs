@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Drawing;
@@ -314,7 +316,7 @@ namespace System.Windows.Forms
                 RTLGrip.Bounds = SizeGripBounds;
                 if (!Controls.Contains(RTLGrip))
                 {
-                    if (Controls is WindowsFormsUtils.ReadOnlyControlCollection controlCollection)
+                    if (Controls is ReadOnlyControlCollection controlCollection)
                     {
                         controlCollection.AddInternal(RTLGrip);
                     }
@@ -324,7 +326,7 @@ namespace System.Windows.Forms
             {
                 if (Controls.Contains(rtlLayoutGrip))
                 {
-                    if (Controls is WindowsFormsUtils.ReadOnlyControlCollection controlCollection)
+                    if (Controls is ReadOnlyControlCollection controlCollection)
                     {
                         controlCollection.RemoveInternal(rtlLayoutGrip);
                     }
@@ -603,7 +605,7 @@ namespace System.Windows.Forms
 
         protected override void WndProc(ref Message m)
         {
-            if ((m.Msg == WindowMessages.WM_NCHITTEST) && SizingGrip)
+            if ((m.Msg == (int)User32.WM.NCHITTEST) && SizingGrip)
             {
                 // if we're within the grip bounds tell windows
                 // that we're the bottom right of the window.
@@ -672,7 +674,7 @@ namespace System.Windows.Forms
             }
             protected override void WndProc(ref Message m)
             {
-                if (m.Msg == WindowMessages.WM_NCHITTEST)
+                if (m.Msg == (int)User32.WM.NCHITTEST)
                 {
                     int x = PARAM.LOWORD(m.LParam);
                     int y = PARAM.HIWORD(m.LParam);

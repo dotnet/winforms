@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.InteropServices;
@@ -308,7 +310,7 @@ namespace System.Windows.Forms
                 {
                     if (suspendRedraw && IsHandleCreated)
                     {
-                        SendMessage(WindowMessages.WM_SETREDRAW, 0, 0);
+                        User32.SendMessageW(this, User32.WM.SETREDRAW, PARAM.FromBool(false));
                     }
                     base.Text = value;
                 }
@@ -316,7 +318,7 @@ namespace System.Windows.Forms
                 {
                     if (suspendRedraw && IsHandleCreated)
                     {
-                        SendMessage(WindowMessages.WM_SETREDRAW, 1, 0);
+                        User32.SendMessageW(this, User32.WM.SETREDRAW, PARAM.FromBool(true));
                     }
                 }
                 Invalidate(true);
@@ -742,13 +744,13 @@ namespace System.Windows.Forms
                 return;
             }
 
-            switch (m.Msg)
+            switch ((User32.WM)m.Msg)
             {
-                case WindowMessages.WM_ERASEBKGND:
-                case WindowMessages.WM_PRINTCLIENT:
+                case User32.WM.ERASEBKGND:
+                case User32.WM.PRINTCLIENT:
                     WmEraseBkgnd(ref m);
                     break;
-                case WindowMessages.WM_GETOBJECT:
+                case User32.WM.GETOBJECT:
                     base.WndProc(ref m);
 
                     // Force MSAA to always treat a group box as a custom window. This ensures its child controls

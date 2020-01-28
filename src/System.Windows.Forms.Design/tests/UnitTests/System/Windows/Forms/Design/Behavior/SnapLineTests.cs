@@ -8,7 +8,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Design.Behavior.Tests
 {
-    public class SnapLineTests
+    public class SnapLineTests : IClassFixture<ThreadExceptionFixture>
     {
         private static string[] s_Margins = new[] { SnapLine.MarginLeft, SnapLine.MarginTop, SnapLine.MarginRight, SnapLine.MarginBottom };
         private static string[] s_Paddings = new[] { SnapLine.PaddingLeft, SnapLine.PaddingTop, SnapLine.PaddingRight, SnapLine.PaddingBottom };

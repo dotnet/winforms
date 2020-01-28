@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
@@ -71,7 +73,6 @@ namespace System.Windows.Forms
                        DpiHelper.LogicalToDeviceUnits(new Padding(2, 2, 0, 2), DeviceDpi) :
                        new Padding(2, 2, 0, 2);
 
-        /// <include file='doc\MenuStrip.uex' path='docs/doc[@for="MenuStrip.DefaultSize"]/*' />
         protected override Size DefaultSize
             => DpiHelper.IsPerMonitorV2Awareness ?
                DpiHelper.LogicalToDeviceUnits(new Size(200, 24), DeviceDpi) :
@@ -235,20 +236,17 @@ namespace System.Windows.Forms
                         ToolStripManager.ModalMenuFilter.ExitMenuMode();
                         // send a WM_SYSCOMMAND SC_KEYMENU + Space to activate the system menu.
                         IntPtr ancestor = User32.GetAncestor(this, User32.GA.ROOT);
-                        User32.PostMessageW(ancestor, User32.WindowMessage.WM_SYSCOMMAND, (IntPtr)User32.SC.KEYMENU, (IntPtr)Keys.Space);
+                        User32.PostMessageW(ancestor, User32.WM.SYSCOMMAND, (IntPtr)User32.SC.KEYMENU, (IntPtr)Keys.Space);
                         return true;
                     }
                 }
             }
             return base.ProcessCmdKey(ref m, keyData);
         }
-        /// <summary>
-        ///  Summary of WndProc.
-        /// </summary>
-        /// <param name=m></param>
+
         protected override void WndProc(ref Message m)
         {
-            if (m.Msg == WindowMessages.WM_MOUSEACTIVATE && (ActiveDropDowns.Count == 0))
+            if (m.Msg == (int)User32.WM.MOUSEACTIVATE && (ActiveDropDowns.Count == 0))
             {
                 // call menu activate before we actually take focus.
                 Point pt = PointToClient(WindowsFormsUtils.LastCursorPoint);

@@ -11,7 +11,7 @@ using System.Drawing.Design;
 namespace System.Windows.Forms.Design
 {
     /// <summary>
-    ///  Internal class to provide 'Embed in ToolStripContainer" verb for ToolStrips & MenuStrips.
+    ///  Internal class to provide 'Embed in ToolStripContainer" verb for ToolStrips and MenuStrips.
     /// </summary>
     internal class ChangeToolStripParentVerb
     {

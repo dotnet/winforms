@@ -9,7 +9,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ApplicationTests
+    public class ApplicationTests : IClassFixture<ThreadExceptionFixture>
     {
         [WinFormsFact]
         public void Application_EnableVisualStyles_InvokeBeforeGettingRenderWithVisualStyles_Success()
@@ -18,6 +18,22 @@ namespace System.Windows.Forms.Tests
             {
                 Application.EnableVisualStyles();
                 Assert.True(Application.UseVisualStyles);
+                Assert.True(Application.RenderWithVisualStyles);
+            }).Dispose();
+        }
+
+        [WinFormsFact]
+        public void Application_EnableVisualStyles_InvokeAfterGettingRenderWithVisualStyles_Success()
+        {
+            // This is not a recommended scenario per https://docs.microsoft.com/en-us/dotnet/api/system.windows.forms.application.enablevisualstyles
+            // EnableVisualStyles should be executed before any control-related code is.
+            RemoteExecutor.Invoke(() =>
+            {
+                Assert.False(Application.UseVisualStyles);
+                Assert.False(Application.RenderWithVisualStyles);
+
+                Application.EnableVisualStyles();
+                Assert.True(Application.UseVisualStyles, "New Visual Styles will not be applied on Winforms app. This is a high priority bug and must be looked into");
                 Assert.True(Application.RenderWithVisualStyles);
             }).Dispose();
         }

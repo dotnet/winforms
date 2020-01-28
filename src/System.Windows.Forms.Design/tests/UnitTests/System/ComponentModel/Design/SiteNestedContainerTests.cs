@@ -10,7 +10,7 @@ using Xunit;
 
 namespace System.ComponentModel.Design.Tests
 {
-    public class SiteNestedContainerTests
+    public class SiteNestedContainerTests : IClassFixture<ThreadExceptionFixture>
     {
         public static IEnumerable<object[]> CreateNestedContainer_TestData()
         {

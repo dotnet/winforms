@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Collections;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -392,6 +394,8 @@ namespace System.Windows.Forms
 
         // Last Mouse Click Info
         private MouseClickInfo lastMouseClickInfo;
+
+        private ToolTipBuffer _toolTipBuffer;
 
 #if DEBUG
         // set to false when the grid is not in sync with the underlying data store

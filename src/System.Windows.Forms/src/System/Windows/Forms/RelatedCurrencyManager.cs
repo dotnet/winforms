@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -102,9 +104,9 @@ namespace System.Windows.Forms
             return GetItemProperties(null);
         }
 
-        // <summary>
-        //    Gets the name of the list.
-        // </summary>
+        /// <summary>
+        ///    Gets the name of the list.
+        /// </summary>
         internal override string GetListName()
         {
             string name = GetListName(new ArrayList());
