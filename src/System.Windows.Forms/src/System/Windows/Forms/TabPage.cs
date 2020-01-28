@@ -11,6 +11,7 @@ using System.Drawing.Design;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
 using static Interop;
+using static Interop.User32;
 
 namespace System.Windows.Forms
 {
@@ -366,8 +367,11 @@ namespace System.Windows.Forms
                     value = string.Empty;
                 }
 
-                ToolTip.SetToolTip(this, value);
-                SetToolTipNative(ToolTip);
+                if (IsHandleCreated)
+                {
+                    ToolTip.SetToolTip(this, value);
+                    KeyboardToolTipStateMachine.Instance.Hook(this, ToolTip);
+                }
 
                 if (value == _toolTipText)
                 {
@@ -376,8 +380,6 @@ namespace System.Windows.Forms
 
                 _toolTipText = value;
                 UpdateParent();
-
-                KeyboardToolTipStateMachine.Instance.Hook(this, ToolTip);
             }
         }
 
@@ -385,7 +387,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (Parent is TabControl tabControl)
+                if (ParentInternal is TabControl tabControl)
                 {
                     for (int i = 0; i < tabControl.TabCount; i++)
                     {
@@ -508,45 +510,29 @@ namespace System.Windows.Forms
             }
 
             RECT rectangle = new RECT();
-            UnsafeNativeMethods.SendMessage(new HandleRef(Parent, Parent.Handle), (int)ComCtl32.TCM.GETITEMRECT, index, ref rectangle);
-            return ParentInternal.RectangleToScreen(rectangle);
-        }
+            SendMessageW(Parent, (WindowMessage)ComCtl32.TCM.GETITEMRECT, (IntPtr)index, ref rectangle);
 
-        /// <summary>
-        ///  Called by ToolTip to poke in that Tooltip into this ComCtl so that the Native ChildToolTip is not exposed.
-        /// </summary>
-        internal void SetToolTipNative(ToolTip toolTip)
-        {
-            UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)ComCtl32.TCM.SETTOOLTIPS, new HandleRef(toolTip, toolTip.Handle), 0);
+            return ParentInternal.RectangleToScreen(rectangle);
         }
 
         internal void SetToolTip(ToolTip tooltip, string text)
         {
-            if (ToolTip != tooltip)
+            if (ToolTip == tooltip)
             {
-                ToolTip.SetToolTip(this, null);
-                ToolTip = tooltip;
-                ToolTipText = text;
+                return;
             }
+
+            ToolTip.SetToolTip(this, null);
+            ToolTip = tooltip;
+            ToolTipText = text;
         }
 
         ToolTip _toolTip;
 
         internal ToolTip ToolTip
         {
-            get
-            {
-                if (_toolTip == null)
-                {
-                    _toolTip = new ToolTip();
-                }
-
-                return _toolTip;
-            }
-            set
-            {
-                _toolTip = value;
-            }
+            get => _toolTip ??= new ToolTip();
+            set => _toolTip = value;
         }
 
         /// <summary>
