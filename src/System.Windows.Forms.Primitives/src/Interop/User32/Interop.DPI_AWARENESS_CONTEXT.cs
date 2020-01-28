@@ -8,6 +8,8 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
+        public static IntPtr UNSPECIFIED_DPI_AWARENESS_CONTEXT = IntPtr.Zero;
+
         public static class DPI_AWARENESS_CONTEXT
         {
             public static readonly IntPtr UNAWARE = (IntPtr)(-1);

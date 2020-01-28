@@ -1065,11 +1065,13 @@ namespace System.Windows.Forms
             }
         }
 
+        internal static void ParkHandle(HandleRef handle) => ParkHandle(handle, User32.UNSPECIFIED_DPI_AWARENESS_CONTEXT);
+
         /// <summary>
         ///  "Parks" the given HWND to a temporary HWND.  This allows WS_CHILD windows to
         ///  be parked.
         /// </summary>
-        internal static void ParkHandle(HandleRef handle, DpiAwarenessContext dpiAwarenessContext = DpiAwarenessContext.DPI_AWARENESS_CONTEXT_UNSPECIFIED)
+        internal static void ParkHandle(HandleRef handle, IntPtr dpiAwarenessContext)
         {
             Debug.Assert(User32.IsWindow(handle).IsTrue(), "Handle being parked is not a valid window handle");
             Debug.Assert(((int)User32.GetWindowLong(handle, User32.GWL.STYLE) & (int)User32.WS.CHILD) != 0, "Only WS_CHILD windows should be parked.");
@@ -1081,12 +1083,14 @@ namespace System.Windows.Forms
             }
         }
 
+        internal static void ParkHandle(CreateParams cp) => ParkHandle(cp, User32.UNSPECIFIED_DPI_AWARENESS_CONTEXT);
+
         /// <summary>
         ///  Park control handle on a parkingwindow that has matching DpiAwareness.
         /// </summary>
         /// <param name="cp"> create params for control handle</param>
         /// <param name="dpiAwarenessContext"> dpi awareness</param>
-        internal static void ParkHandle(CreateParams cp, DpiAwarenessContext dpiAwarenessContext = DpiAwarenessContext.DPI_AWARENESS_CONTEXT_UNSPECIFIED)
+        internal static void ParkHandle(CreateParams cp, IntPtr dpiAwarenessContext)
         {
             ThreadContext cxt = ThreadContext.FromCurrent();
             if (cxt != null)
@@ -1111,7 +1115,7 @@ namespace System.Windows.Forms
         ///  "Unparks" the given HWND to a temporary HWND.  This allows WS_CHILD windows to
         ///  be parked.
         /// </summary>
-        internal static void UnparkHandle(HandleRef handle, DpiAwarenessContext context)
+        internal static void UnparkHandle(HandleRef handle, IntPtr context)
         {
             ThreadContext cxt = GetContextForHandle(handle);
             if (cxt != null)
