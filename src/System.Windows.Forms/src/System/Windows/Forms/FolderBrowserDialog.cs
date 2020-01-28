@@ -228,7 +228,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            dialog.SetOptions(FileDialogNative.FOS.FOS_PICKFOLDERS | FileDialogNative.FOS.FOS_FORCEFILESYSTEM | FileDialogNative.FOS.FOS_FILEMUSTEXIST);
+            dialog.SetOptions(FOS.PICKFOLDERS | FOS.FORCEFILESYSTEM | FOS.FILEMUSTEXIST);
 
             if (!string.IsNullOrEmpty(_selectedPath))
             {
