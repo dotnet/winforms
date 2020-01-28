@@ -367,11 +367,8 @@ namespace System.Windows.Forms
                     value = string.Empty;
                 }
 
-                if (IsHandleCreated)
-                {
-                    ToolTip.SetToolTip(this, value);
-                    KeyboardToolTipStateMachine.Instance.Hook(this, ToolTip);
-                }
+                ToolTip.SetToolTip(this, value);
+                KeyboardToolTipStateMachine.Instance.Hook(this, ToolTip);
 
                 if (value == _toolTipText)
                 {
@@ -517,14 +514,15 @@ namespace System.Windows.Forms
 
         internal void SetToolTip(ToolTip tooltip, string text)
         {
-            if (ToolTip == tooltip)
+            _toolTipText = text;
+
+            if (_toolTip == tooltip)
             {
                 return;
             }
 
             ToolTip.SetToolTip(this, null);
-            ToolTip = tooltip;
-            ToolTipText = text;
+            _toolTip = tooltip;
         }
 
         ToolTip _toolTip;
