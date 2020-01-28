@@ -52,9 +52,6 @@ namespace System.Windows.Forms
         public static extern bool MessageBeep(int type);
 
         [DllImport(ExternDll.User32, ExactSpelling = true)]
-        public static extern bool ScrollWindow(HandleRef hWnd, int nXAmount, int nYAmount, ref RECT rectScrollRegion, ref RECT rectClip);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true)]
         public static extern bool DrawEdge(HandleRef hDC, ref RECT rect, int edge, int flags);
 
         // Theming/Visual Styles

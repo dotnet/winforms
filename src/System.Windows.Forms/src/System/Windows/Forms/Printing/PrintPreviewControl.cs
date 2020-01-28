@@ -774,11 +774,12 @@ namespace System.Windows.Forms
             }
 
             RECT scroll = ClientRectangle;
-            SafeNativeMethods.ScrollWindow(new HandleRef(this, Handle),
-                                 current.X - position.X,
-                                 current.Y - position.Y,
-                                 ref scroll,
-                                 ref scroll);
+            User32.ScrollWindow(
+                this,
+                current.X - position.X,
+                current.Y - position.Y,
+                ref scroll,
+                ref scroll);
 
             User32.SetScrollPos(this, User32.SB.HORZ, position.X, BOOL.TRUE);
             User32.SetScrollPos(this, User32.SB.VERT, position.Y, BOOL.TRUE);
