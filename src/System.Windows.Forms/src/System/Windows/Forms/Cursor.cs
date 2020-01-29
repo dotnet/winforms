@@ -71,7 +71,7 @@ namespace System.Windows.Forms
         ///  Initializes a new instance of the <see cref='Cursor'/> class from the specified resource.
         /// </summary>
         public Cursor(Type type, string resource)
-            : this((type?? throw new ArgumentNullException(nameof(type))).Module.Assembly.GetManifestResourceStream(type, resource)!)
+            : this((type ?? throw new ArgumentNullException(nameof(type))).Module.Assembly.GetManifestResourceStream(type, resource)!)
         {
         }
 
@@ -503,10 +503,12 @@ namespace System.Windows.Forms
             {
                 return left is null;
             }
+
             if (left is null)
             {
                 return false;
             }
+
             return left._handle == right._handle;
         }
 
