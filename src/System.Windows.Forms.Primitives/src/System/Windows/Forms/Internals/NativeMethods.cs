@@ -716,13 +716,6 @@ namespace System.Windows.Forms
             public byte bRevAuthor = 0;
         }
 
-        [StructLayout(LayoutKind.Sequential)]
-        public class GETTEXTLENGTHEX
-        {                               // Taken from richedit.h:
-            public uint flags;          // Flags (see GTL_XXX defines)
-            public uint codepage;       // Code page for translation (CP_ACP for default, 1200 for Unicode)
-        }
-
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
         public class FINDTEXT
         {

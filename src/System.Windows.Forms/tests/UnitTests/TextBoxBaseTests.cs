@@ -2990,13 +2990,80 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void TextBoxBase_TextLength_GetWithSurrogate_Success()
+        public void TextBoxBase_TextLength_GetDefaultWithoutHandle_Success()
+        {
+            using var control = new SubTextBox();
+            Assert.Equal(0, control.TextLength);
+            Assert.False(control.IsHandleCreated);
+
+            // Call again.
+            Assert.Equal(0, control.TextLength);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void TextBoxBase_TextLength_GetDefaultWithHandle_ReturnsExpected()
         {
             using var control = new SubTextBox();
             Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
 
-            control.Text = "\ud83c\udf09";
-            Assert.Equal(2, control.TextLength);
+            Assert.Equal(0, control.TextLength);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Call again.
+            Assert.Equal(0, control.TextLength);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsTheory]
+        [InlineData("", 0)]
+        [InlineData("a\0b", 3)]
+        [InlineData("a", 1)]
+        [InlineData("\ud83c\udf09", 2)]
+        public void TextBoxBase_TextLength_GetSetWithHandle_Success(string text, int expected)
+        {
+            using var control = new SubTextBox
+            {
+                Text = text
+            };
+            Assert.Equal(expected, control.TextLength);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData("", 0)]
+        [InlineData("a\0b", 1)]
+        [InlineData("a", 1)]
+        [InlineData("\ud83c\udf09", 2)]
+        public void TextBoxBase_TextLength_GetWithHandle_ReturnsExpected(string text, int expected)
+        {
+            using var control = new SubTextBox();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            control.Text = text;
+            Assert.Equal(expected, control.TextLength);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
         }
 
         [WinFormsTheory]
