@@ -507,7 +507,7 @@ namespace System.Windows.Forms
                 return Rectangle.Empty;
             }
 
-            Rectangle rectangle = new Rectangle();
+            RECT rectangle = new RECT();
             User32.SendMessageW(Parent, (User32.WindowMessage)ComCtl32.TCM.GETITEMRECT, (IntPtr)index, ref rectangle);
 
             return ParentInternal.RectangleToScreen(rectangle);
