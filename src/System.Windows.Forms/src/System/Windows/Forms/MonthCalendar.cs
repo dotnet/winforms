@@ -1949,13 +1949,6 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Sends a Win32 message to this control.  If the control does not yet
-        ///  have a handle, it will be created.
-        /// </summary>
-        private IntPtr SendMessage(int msg, int wparam, ref ComCtl32.MCGRIDINFO lparam) =>
-            ComCtl32.SendMessage(new HandleRef(this, Handle), msg, wparam, ref lparam);
-
-        /// <summary>
         ///  Overrides Control.SetBoundsCore to enforce auto-sizing.
         /// </summary>
         protected override void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified)
