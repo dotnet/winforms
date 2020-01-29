@@ -184,31 +184,7 @@ namespace System.Windows.Forms
         TB_THUMBTRACK = 5,
         TB_TOP = 6,
         TB_BOTTOM = 7,
-        TB_ENDTRACK = 8,
-        TVI_ROOT = (unchecked((int)0xFFFF0000)),
-        TVI_FIRST = (unchecked((int)0xFFFF0001)),
-        TVE_COLLAPSE = 0x0001,
-        TVE_EXPAND = 0x0002,
-        TVGN_NEXT = 0x0001,
-        TVGN_PREVIOUS = 0x0002,
-        TVGN_FIRSTVISIBLE = 0x0005,
-        TVGN_NEXTVISIBLE = 0x0006,
-        TVGN_PREVIOUSVISIBLE = 0x0007,
-        TVGN_DROPHILITE = 0x0008,
-        TVGN_CARET = 0x0009,
-        TVN_SELCHANGING = ((0 - 400) - 50),
-        TVN_GETINFOTIP = ((0 - 400) - 14),
-        TVN_SELCHANGED = ((0 - 400) - 51);
-        public const int TVN_GETDISPINFO = ((0 - 400) - 52),
-        TVN_SETDISPINFO = ((0 - 400) - 53),
-        TVN_ITEMEXPANDING = ((0 - 400) - 54),
-        TVN_ITEMEXPANDED = ((0 - 400) - 55),
-        TVN_BEGINDRAG = ((0 - 400) - 56),
-        TVN_BEGINRDRAG = ((0 - 400) - 57),
-        TVN_BEGINLABELEDIT = ((0 - 400) - 59),
-        TVN_ENDLABELEDIT = ((0 - 400) - 60),
-        TYMED_NULL = 0,
-        TVSIL_STATE = 2;
+        TB_ENDTRACK = 8;
 
         public const int UOI_FLAGS = 1;
 
