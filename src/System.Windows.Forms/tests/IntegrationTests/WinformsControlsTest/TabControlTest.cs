@@ -14,36 +14,7 @@ namespace WinformsControlsTest
             InitializeComponent();
         }
 
-        int i = -2;
-
         private void ButtonClick(object sender, EventArgs e)
-        {
-            switch (i)
-            {
-                case -2:
-                    tabPage1.ToolTipText = "TTT 1 set {}";
-                    break;
-                case -1:
-                    tabPage2.ToolTipText = "TTT 2 set {}";
-                    break;
-                case 0:
-                    toolTip.SetToolTip(tabPage1, "tabpage1");
-                    break;
-                case 1:
-                    toolTip.SetToolTip(tabPage2, "tabpage2");
-                    break;
-                case 2:
-                    tabPage1.ToolTipText = "page 1 - new text";
-                    break;
-                case 3:
-                    tabPage2.ToolTipText = "new text for page 2";
-                    break;
-                case 4:
-                    toolTip.SetToolTip(tabControl1, "TabControl tooltip");
-                    break;
-            }
-
-            i++;
-        }
+        { }
     }
 }

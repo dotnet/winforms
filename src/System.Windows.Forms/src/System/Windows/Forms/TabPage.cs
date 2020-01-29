@@ -11,7 +11,6 @@ using System.Drawing.Design;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
 using static Interop;
-using static Interop.User32;
 
 namespace System.Windows.Forms
 {
@@ -29,6 +28,7 @@ namespace System.Windows.Forms
     public class TabPage : Panel
     {
         private ImageList.Indexer _imageIndexer;
+        private ToolTip _toolTip;
         private string _toolTipText = string.Empty;
         private bool _enterFired = false;
         private bool _leaveFired = false;
@@ -491,6 +491,7 @@ namespace System.Windows.Forms
 
         internal override Rectangle GetToolNativeScreenRectangle()
         {
+            // A tooltip will be shown near a selected tab
             if (ParentInternal is TabControl tabControl)
             {
                 return GetItemRectangle(tabControl.SelectedIndex);
@@ -506,8 +507,8 @@ namespace System.Windows.Forms
                 return Rectangle.Empty;
             }
 
-            RECT rectangle = new RECT();
-            SendMessageW(Parent, (WindowMessage)ComCtl32.TCM.GETITEMRECT, (IntPtr)index, ref rectangle);
+            Rectangle rectangle = new Rectangle();
+            User32.SendMessageW(Parent, (User32.WindowMessage)ComCtl32.TCM.GETITEMRECT, (IntPtr)index, ref rectangle);
 
             return ParentInternal.RectangleToScreen(rectangle);
         }
@@ -521,11 +522,12 @@ namespace System.Windows.Forms
                 return;
             }
 
+            // Remove an old tooltip
             ToolTip.SetToolTip(this, null);
+
+            // Change a tooltip instance
             _toolTip = tooltip;
         }
-
-        ToolTip _toolTip;
 
         internal ToolTip ToolTip
         {

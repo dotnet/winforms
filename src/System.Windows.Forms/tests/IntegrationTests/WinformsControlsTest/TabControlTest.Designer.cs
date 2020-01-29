@@ -36,7 +36,6 @@ namespace WinformsControlsTest
             tabControl1 = new TabControl();
             tabPage1 = new TabPage();
             tabPage2 = new TabPage();
-            toolTip = new ToolTip();
             button1 = new Button();
             tabControl1.SuspendLayout();
             SuspendLayout();
@@ -57,11 +56,6 @@ namespace WinformsControlsTest
             tabControl1.Size = new Size(200, 100);
             tabControl1.TabIndex = 0;
             tabControl1.ShowToolTips = true;
-            //
-            //tooltip
-            //
-            toolTip.AutoPopDelay = 1000;
-            toolTip.InitialDelay = 374;
             // 
             // tabPage1
             // 
@@ -91,8 +85,8 @@ namespace WinformsControlsTest
             AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             ClientSize = new System.Drawing.Size(343, 183);
-            Controls.Add(this.tabControl1);
-            Controls.Add(this.button1);
+            Controls.Add(tabControl1);
+            Controls.Add(button1);
             Name = "Form1";
             Text = "Form1";
             tabControl1.ResumeLayout(false);
@@ -103,6 +97,5 @@ namespace WinformsControlsTest
         private TabPage tabPage1;
         private TabPage tabPage2;
         private Button button1;
-        private ToolTip toolTip;
     }
 }
