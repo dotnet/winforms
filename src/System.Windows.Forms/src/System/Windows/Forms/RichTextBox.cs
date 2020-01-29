@@ -3521,11 +3521,11 @@ namespace System.Windows.Forms
                         EnLinkMsgHandler(ref m);
                         break;
                     case RichTextBoxConstants.EN_DROPFILES:
-                        NativeMethods.ENDROPFILES endropfiles = (NativeMethods.ENDROPFILES)m.GetLParam(typeof(NativeMethods.ENDROPFILES));
+                        ENDROPFILES* endropfiles = (ENDROPFILES*)m.LParam;
 
                         // Only look at the first file.
-                        StringBuilder path = new StringBuilder(Kernel32.MAX_PATH);
-                        if (UnsafeNativeMethods.DragQueryFileLongPath(new HandleRef(endropfiles, endropfiles.hDrop), 0, path) != 0)
+                        var path = new StringBuilder(Kernel32.MAX_PATH);
+                        if (Shell32.DragQueryFileW(endropfiles->hDrop, 0, path) != 0)
                         {
                             // Try to load the file as an RTF
                             try
