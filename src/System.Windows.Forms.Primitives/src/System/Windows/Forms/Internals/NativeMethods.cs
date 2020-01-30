@@ -182,10 +182,6 @@ namespace System.Windows.Forms
         TB_BOTTOM = 7,
         TB_ENDTRACK = 8;
 
-        public const int UOI_FLAGS = 1;
-
-        public const int WSF_VISIBLE = 0x0001;
-
         public const int WHEEL_DELTA = 120;
 
         public static int START_PAGE_GENERAL = unchecked((int)0xffffffff);
@@ -201,13 +197,6 @@ namespace System.Windows.Forms
         public const string uuid_IAccessible = "{618736E0-3C3D-11CF-810C-00AA00389B71}";
 
         public const string WinFormFrameworkId = "WinForm";
-
-        public struct USEROBJECTFLAGS
-        {
-            public int fInherit;
-            public int fReserved;
-            public int dwFlags;
-        }
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
         public class HH_AKLINK
