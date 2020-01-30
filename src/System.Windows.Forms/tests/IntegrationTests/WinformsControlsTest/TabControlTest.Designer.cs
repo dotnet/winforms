@@ -36,11 +36,16 @@ namespace WinformsControlsTest
             tabControl1 = new TabControl();
             tabPage1 = new TabPage();
             tabPage2 = new TabPage();
+            toolTip = new ToolTip();
             button1 = new Button();
             tabControl1.SuspendLayout();
             SuspendLayout();
             //
-            // setToolTipButton
+            // Set tooltip
+            //
+            toolTip.SetToolTip(tabPage1, "Ultra super tabpage");
+            //
+            // button1
             //
             button1.Location = new System.Drawing.Point(15, 140);
             button1.Text = "Button";
@@ -65,9 +70,8 @@ namespace WinformsControlsTest
             tabPage1.Size = new System.Drawing.Size(20, 20);
             tabPage1.TabIndex = 0;
             tabPage1.Text = "tabPage1";
-            tabPage1.ToolTipText = "1_item";
+            //tabPage1.ToolTipText = "1_item";
             tabPage1.BackColor = Color.Red;
-            //tabPage1.UseVisualStyleBackColor = true;
             // 
             // tabPage2
             // 
@@ -97,5 +101,6 @@ namespace WinformsControlsTest
         private TabPage tabPage1;
         private TabPage tabPage2;
         private Button button1;
+        private ToolTip toolTip;
     }
 }

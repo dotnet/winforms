@@ -367,9 +367,6 @@ namespace System.Windows.Forms
                     value = string.Empty;
                 }
 
-                ToolTip.SetToolTip(this, value);
-                KeyboardToolTipStateMachine.Instance.Hook(this, ToolTip);
-
                 if (value == _toolTipText)
                 {
                     return;
@@ -377,6 +374,9 @@ namespace System.Windows.Forms
 
                 _toolTipText = value;
                 UpdateParent();
+
+                ToolTip.SetToolTip(this, value);
+                KeyboardToolTipStateMachine.Instance.Hook(this, ToolTip);
             }
         }
 
@@ -511,22 +511,6 @@ namespace System.Windows.Forms
             User32.SendMessageW(Parent, (User32.WM)ComCtl32.TCM.GETITEMRECT, (IntPtr)index, ref rectangle);
 
             return ParentInternal.RectangleToScreen(rectangle);
-        }
-
-        internal void SetToolTip(ToolTip tooltip, string text)
-        {
-            _toolTipText = text;
-
-            if (_toolTip == tooltip)
-            {
-                return;
-            }
-
-            // Remove an old tooltip
-            ToolTip.SetToolTip(this, null);
-
-            // Change a tooltip instance
-            _toolTip = tooltip;
         }
 
         internal ToolTip ToolTip

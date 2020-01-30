@@ -14,7 +14,28 @@ namespace WinformsControlsTest
             InitializeComponent();
         }
 
+        int i = 0;
+
         private void ButtonClick(object sender, EventArgs e)
-        { }
+        {
+            // It will be removed after testing
+            switch (i)
+            {
+                case 0:
+                    toolTip.SetToolTip(tabPage2, "This is page 1");
+                    break;
+                case 1:
+                    toolTip.SetToolTip(tabPage2, "This is page 1");
+                    break;
+                case 2:
+                    tabPage2.ToolTipText = "1) Some tt text";
+                    break;
+                case 3:
+                    tabPage2.ToolTipText = "1) Some tt text";
+                    break;
+            }
+
+            i++;
+        }
     }
 }

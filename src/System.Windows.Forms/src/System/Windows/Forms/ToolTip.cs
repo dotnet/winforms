@@ -686,7 +686,16 @@ namespace System.Windows.Forms
         {
             if (associatedControl is TabPage tabPage)
             {
-                tabPage.SetToolTip(this, GetCaptionForTool(tabPage));
+                if (tabPage.ToolTip != this)
+                {
+                    tabPage.ToolTip.SetToolTip(tabPage, null); // Remove an old tooltip for the current page
+                    tabPage.ToolTip = this; // Set a new tooltip instance
+                }
+
+                if (tabPage.ToolTipText != text && text != null)
+                {
+                    tabPage.ToolTipText = text; // Don't forget to change ToolTipText property
+                }
             }
         }
 
@@ -1242,6 +1251,7 @@ namespace System.Windows.Forms
 
             bool exists = _tools.ContainsKey(control);
             bool empty = info == null || string.IsNullOrEmpty(info.Caption);
+
             if (exists && empty)
             {
                 _tools.Remove(control);
@@ -1250,6 +1260,8 @@ namespace System.Windows.Forms
             {
                 _tools[control] = info;
             }
+
+            CheckNativeCompositeControls(control, info.Caption);
 
             if (!empty && !exists)
             {
@@ -1260,8 +1272,6 @@ namespace System.Windows.Forms
                 {
                     HandleCreated(control, EventArgs.Empty);
                 }
-
-                CheckNativeCompositeControls(control, info.Caption);
             }
             else
             {
@@ -1275,7 +1285,6 @@ namespace System.Windows.Forms
                     toolInfo.SendMessage(this, (User32.WM)TTM.SETTOOLINFOW);
                     CheckNativeToolTip(control);
                     CheckCompositeControls(control);
-                    CheckNativeCompositeControls(control, toolInfo.Text);
                 }
                 else if (empty && exists && !DesignMode)
                 {
