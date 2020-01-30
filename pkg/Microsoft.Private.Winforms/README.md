@@ -15,7 +15,7 @@ If the content of these files differ - the build will fail.
 
 :warning: The process is purposefully made manual to ensure changes in the manifest are made consciously.
 
-## How to update the maniest
+## How to update the manifest
 
 * Build the solution as normal:
     ```
