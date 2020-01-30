@@ -2,11 +2,13 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms.Design;
 using Xunit;
 using static Interop;
+using static Interop.Richedit;
 
 namespace System.Windows.Forms.Tests
 {
@@ -728,7 +730,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void RichTextBox_TextLength_GetWithoutHandle_ReturnsExpected()
+        public void RichTextBox_TextLength_GetDefaultWithoutHandle_Success()
         {
             using var control = new RichTextBox();
             Assert.Equal(0, control.TextLength);
@@ -740,7 +742,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void RichTextBox_TextLength_GetWithHandle_ReturnsExpected()
+        public void RichTextBox_TextLength_GetDefaultWithHandle_ReturnsExpected()
         {
             using var control = new RichTextBox();
             Assert.NotEqual(IntPtr.Zero, control.Handle);
@@ -763,6 +765,83 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsTheory]
+        [InlineData("", 0)]
+        [InlineData("a\0b", 1)]
+        [InlineData("a", 1)]
+        [InlineData("\ud83c\udf09", 2)]
+        public void RichTextBox_TextLength_GetSetWithHandle_Success(string text, int expected)
+        {
+            using var control = new RichTextBox
+            {
+                Text = text
+            };
+            Assert.Equal(expected, control.TextLength);
+            Assert.True(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData("", 0)]
+        [InlineData("a\0b", 1)]
+        [InlineData("a", 1)]
+        [InlineData("\ud83c\udf09", 2)]
+        public void RichTextBox_TextLength_GetWithHandle_ReturnsExpected(string text, int expected)
+        {
+            using var control = new RichTextBox();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            control.Text = text;
+            Assert.Equal(expected, control.TextLength);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        public static IEnumerable<object[]> TextLength_GetCustomGetTextLengthEx_TestData()
+        {
+            yield return new object[] { IntPtr.Zero, 0 };
+            yield return new object[] { (IntPtr)(-1), -1 };
+            yield return new object[] { (IntPtr)1, 1 };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(TextLength_GetCustomGetTextLengthEx_TestData))]
+        public void RichTextBox_TextLength_GetCustomGetTextLengthEx_Success(IntPtr result, int expected)
+        {
+            using var control = new CustomGetTextLengthExRichTextBox
+            {
+                GetTextLengthExResult = result
+            };
+            Assert.Equal(expected, control.TextLength);
+        }
+
+        private class CustomGetTextLengthExRichTextBox : RichTextBox
+        {
+            public IntPtr GetTextLengthExResult { get; set; }
+
+            protected unsafe override void WndProc(ref Message m)
+            {
+                if (m.Msg == RichEditMessages.EM_GETTEXTLENGTHEX)
+                {
+                    GETTEXTLENGTHEX* gtl = (GETTEXTLENGTHEX*)m.WParam;
+                    Assert.Equal(GTL.NUMCHARS, gtl->flags);
+                    Assert.Equal(1200u, gtl->codepage);
+                    Assert.Equal(IntPtr.Zero, m.LParam);
+                    m.Result = GetTextLengthExResult;
+                    return;
+                }
+
+                base.WndProc(ref m);
+            }
         }
 
         [WinFormsFact]

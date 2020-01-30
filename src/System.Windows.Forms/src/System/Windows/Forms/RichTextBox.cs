@@ -1610,17 +1610,17 @@ namespace System.Windows.Forms
         }
 
         [Browsable(false)]
-        public override int TextLength
+        public unsafe override int TextLength
         {
             get
             {
-                NativeMethods.GETTEXTLENGTHEX gtl = new NativeMethods.GETTEXTLENGTHEX
+                var gtl = new GETTEXTLENGTHEX
                 {
-                    flags = RichTextBoxConstants.GTL_NUMCHARS,
-                    codepage = 1200 /* CP_UNICODE */
+                    flags = GTL.NUMCHARS,
+                    codepage = 1200u /* CP_UNICODE */
                 };
 
-                return unchecked((int)(long)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), RichEditMessages.EM_GETTEXTLENGTHEX, gtl, 0 /*ignored*/));
+                return unchecked((int)(long)User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_GETTEXTLENGTHEX, (IntPtr)(&gtl)));
             }
         }
 

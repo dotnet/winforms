@@ -358,14 +358,6 @@ namespace System.Windows.Forms
         internal const int GT_DEFAULT = 0;
         internal const int GT_USECRLF = 1;
 
-        /* flags for the GETTEXTLENGTHEX data structure */
-        internal const int GTL_DEFAULT = 0;        /* do the default (return # of chars)           */
-        internal const int GTL_USECRLF = 1;        /* compute answer using CRLFs for paragraphs*/
-        internal const int GTL_PRECISE = 2;        /* compute a precise answer                                     */
-        internal const int GTL_CLOSE = 4;        /* fast computation of a "close" answer         */
-        internal const int GTL_NUMCHARS = 8;        /* return the number of characters                      */
-        internal const int GTL_NUMBYTES = 16;       /* return the number of _bytes_                         */
-
         /* UNICODE embedding character */
         // disable csharp compiler warning #0414: field assigned unused value
 #pragma warning disable 0414
