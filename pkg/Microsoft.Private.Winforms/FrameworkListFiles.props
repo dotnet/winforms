@@ -1,4 +1,4 @@
-﻿<Project>
+<Project>
   <ItemGroup Condition="'$(PackageTargetRuntime)' == ''">
     <FrameworkListFileClass Include="Microsoft.VisualBasic.dll" Profile="WindowsForms" />
     <FrameworkListFileClass Include="Microsoft.VisualBasic.Forms.dll" Profile="WindowsForms" />
