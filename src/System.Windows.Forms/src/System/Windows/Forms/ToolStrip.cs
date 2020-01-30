@@ -855,11 +855,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-            ///  Retreives the current display rectangle. The display rectangle
+        ///  Retreives the current display rectangle. The display rectangle
         ///  is the virtual display area that is used to layout components.
         ///  The position and dimensions of the Form's display rectangle
         ///  change during autoScroll.
-            /// </summary>
+        /// </summary>
         public override Rectangle DisplayRectangle
         {
             get
@@ -3534,6 +3534,7 @@ namespace System.Windows.Forms
         }
 
 #if DEBUG
+#pragma warning disable RS0016 // Add public types and members to the declared API
         protected override void OnInvalidated(InvalidateEventArgs e)
         {
             base.OnInvalidated(e);
@@ -3561,6 +3562,7 @@ namespace System.Windows.Forms
                 Debug.WriteLineIf(!(ParentInternal is PropertyGrid), "Invalidate called on: " + name + new StackTrace().ToString());
             }
         }
+#pragma warning restore RS0016 // Add public types and members to the declared API
 #endif
 
         protected override void OnHandleCreated(EventArgs e)
