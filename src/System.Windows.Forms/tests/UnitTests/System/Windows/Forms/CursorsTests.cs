@@ -4,6 +4,7 @@
 
 using System.Collections.Generic;
 using System.Drawing;
+using System.Reflection;
 using Xunit;
 
 namespace System.Windows.Forms.Tests
@@ -58,6 +59,16 @@ namespace System.Windows.Forms.Tests
             Assert.True(cursor.Size == new Size(32, 32) || cursor.Size == new Size(64, 64));
             Assert.Null(cursor.Tag);
             Assert.Same(cursor, getCursor());
+        }
+
+        [Fact]
+        public void Cursors_Properties_Get_NotNull()
+        {
+            foreach (var property in typeof(Cursors).GetProperties(BindingFlags.Static | BindingFlags.Public))
+            {
+                object[] tempIndex = null;
+                Assert.NotNull((Cursor)property.GetValue(null, tempIndex));
+            }
         }
     }
 }
