@@ -276,10 +276,5 @@ namespace System.Windows.Forms
 #pragma warning disable 0414
         internal static readonly char WCH_EMBEDDING = (char)0xFFFC;
 #pragma warning restore 0414
-
-        /* flags for the find text options */
-        internal const int FR_DOWN = 0x00000001;
-        internal const int FR_WHOLEWORD = 0x00000002;
-        internal const int FR_MATCHCASE = 0x00000004;
     }
 }

@@ -2913,6 +2913,627 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<NullReferenceException>(() => control.CanPaste(null));
         }
 
+        public static IEnumerable<object[]> Find_String_TestData()
+        {
+            yield return new object[] { string.Empty, string.Empty, -1 };
+            yield return new object[] { string.Empty, "abc", -1 };
+
+            yield return new object[] { "abc", string.Empty, -1 };
+            yield return new object[] { "abc", "a", 0 };
+            yield return new object[] { "abc", "ab", 0 };
+            yield return new object[] { "abc", "abc", 0 };
+            yield return new object[] { "abc", "abcd", -1 };
+            yield return new object[] { "abc", "b", 1 };
+            yield return new object[] { "abc", "d", -1 };
+            yield return new object[] { "abc", "ABC", 0 };
+
+            yield return new object[] { "aa", "a", 0 };
+            yield return new object[] { "abc def", "ef", 5 };
+            yield return new object[] { "abc def", "def", 4 };
+            yield return new object[] { "abc def", " ", 3 };
+
+            yield return new object[] { "ab\u0640cd", "abcd", 0 };
+            yield return new object[] { "ab\u0640cd", "\u0640", 2 };
+            yield return new object[] { "ab\u0640cd", "bc", 1 };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(Find_String_TestData))]
+        public void RichTextBox_Find_String_ReturnsExpected(string text, string str, int expected)
+        {
+            using var control = new RichTextBox
+            {
+                Text = text
+            };
+            Assert.Equal(expected, control.Find(str));
+            Assert.True(control.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> Find_String_RichTextBoxFinds_TestData()
+        {
+            yield return new object[] { string.Empty, string.Empty, RichTextBoxFinds.None, -1 };
+            yield return new object[] { string.Empty, "abc", RichTextBoxFinds.None, -1 };
+            yield return new object[] { string.Empty, string.Empty, RichTextBoxFinds.Reverse, -1 };
+            yield return new object[] { string.Empty, "abc", RichTextBoxFinds.Reverse, -1 };
+
+            yield return new object[] { "abc", string.Empty, RichTextBoxFinds.None, -1 };
+            yield return new object[] { "abc", "a", RichTextBoxFinds.None, 0 };
+            yield return new object[] { "abc", "a", RichTextBoxFinds.Reverse, 0 };
+            yield return new object[] { "abc", "ab", RichTextBoxFinds.None, 0 };
+            yield return new object[] { "abc", "abc", RichTextBoxFinds.None, 0 };
+            yield return new object[] { "abc", "abcd", RichTextBoxFinds.None, -1 };
+            yield return new object[] { "abc", "b", RichTextBoxFinds.None, 1 };
+            yield return new object[] { "abc", "d", RichTextBoxFinds.None, -1 };
+
+            yield return new object[] { "abc", "ABC", RichTextBoxFinds.None, 0 };
+            yield return new object[] { "abc", "abc", RichTextBoxFinds.MatchCase, 0 };
+            yield return new object[] { "abc", "ABC", RichTextBoxFinds.MatchCase, -1 };
+
+            yield return new object[] { "aa", "a", RichTextBoxFinds.None, 0 };
+            yield return new object[] { "aa", "a", RichTextBoxFinds.Reverse, 1 };
+            yield return new object[] { "aa", string.Empty, RichTextBoxFinds.Reverse, -1 };
+            yield return new object[] { "abc def", "ef", RichTextBoxFinds.None, 5 };
+            yield return new object[] { "abc def", "def", RichTextBoxFinds.None, 4 };
+            yield return new object[] { "abc def", " ", RichTextBoxFinds.None, 3 };
+            yield return new object[] { "abc def", "ef", RichTextBoxFinds.WholeWord, -1 };
+            yield return new object[] { "abc def", "def", RichTextBoxFinds.WholeWord, 4 };
+            yield return new object[] { "abc def", " ", RichTextBoxFinds.WholeWord, -1 };
+
+            yield return new object[] { "ab\u0640cd", "abcd", RichTextBoxFinds.None, 0 };
+            yield return new object[] { "ab\u0640cd", "\u0640", RichTextBoxFinds.None, 2 };
+            yield return new object[] { "ab\u0640cd", "bc", RichTextBoxFinds.None, 1 };
+            yield return new object[] { "ab\u0640cd", "abcd", RichTextBoxFinds.NoHighlight, 0 };
+            yield return new object[] { "ab\u0640cd", "\u0640", RichTextBoxFinds.NoHighlight, 2 };
+            yield return new object[] { "ab\u0640cd", "bc", RichTextBoxFinds.NoHighlight, 1 };
+            yield return new object[] { "abcd", "abcd", RichTextBoxFinds.NoHighlight, 0 };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(Find_String_RichTextBoxFinds_TestData))]
+        public void RichTextBox_Find_StringRichTextBoxFinds_ReturnsExpected(string text, string str, RichTextBoxFinds options, int expected)
+        {
+            using var control = new RichTextBox
+            {
+                Text = text
+            };
+            Assert.Equal(expected, control.Find(str, options));
+            Assert.True(control.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> Find_String_Int_RichTextBoxFinds_TestData()
+        {
+            yield return new object[] { string.Empty, string.Empty, 0, RichTextBoxFinds.None, -1 };
+            yield return new object[] { string.Empty, "abc", 0, RichTextBoxFinds.None, -1 };
+            yield return new object[] { string.Empty, string.Empty, 0, RichTextBoxFinds.Reverse, -1 };
+            yield return new object[] { string.Empty, "abc", 0, RichTextBoxFinds.Reverse, -1 };
+
+            yield return new object[] { "abc", string.Empty, 0, RichTextBoxFinds.None, -1 };
+            yield return new object[] { "abc", "a", 0, RichTextBoxFinds.None, 0 };
+            yield return new object[] { "abc", "a", 0, RichTextBoxFinds.Reverse, 0 };
+            yield return new object[] { "abc", "ab", 0, RichTextBoxFinds.None, 0 };
+            yield return new object[] { "abc", "abc", 0, RichTextBoxFinds.None, 0 };
+            yield return new object[] { "abc", "abcd", 0, RichTextBoxFinds.None, -1 };
+            yield return new object[] { "abc", "b", 0, RichTextBoxFinds.None, 1 };
+            yield return new object[] { "abc", "d", 0, RichTextBoxFinds.None, -1 };
+
+            yield return new object[] { "abc", "ABC", 0, RichTextBoxFinds.None, 0 };
+            yield return new object[] { "abc", "abc", 0, RichTextBoxFinds.MatchCase, 0 };
+            yield return new object[] { "abc", "ABC", 0, RichTextBoxFinds.MatchCase, -1 };
+
+            yield return new object[] { "aa", "a", 0, RichTextBoxFinds.None, 0 };
+            yield return new object[] { "aa", "a", 0, RichTextBoxFinds.Reverse, 1 };
+            yield return new object[] { "aa", string.Empty, 0, RichTextBoxFinds.Reverse, -1 };
+            yield return new object[] { "abc def", "ef", 0, RichTextBoxFinds.None, 5 };
+            yield return new object[] { "abc def", "def", 0, RichTextBoxFinds.None, 4 };
+            yield return new object[] { "abc def", " ", 0, RichTextBoxFinds.None, 3 };
+            yield return new object[] { "abc def", "ef", 0, RichTextBoxFinds.WholeWord, -1 };
+            yield return new object[] { "abc def", "def", 0, RichTextBoxFinds.WholeWord, 4 };
+            yield return new object[] { "abc def", " ", 0, RichTextBoxFinds.WholeWord, -1 };
+
+            yield return new object[] { "abc", "a", 1, RichTextBoxFinds.None, -1 };
+            yield return new object[] { "abc", "a", 2, RichTextBoxFinds.None, -1 };
+            yield return new object[] { "abc", "c", 2, RichTextBoxFinds.None, 2 };
+            yield return new object[] { "abc", "a", 1, RichTextBoxFinds.Reverse, -1 };
+            yield return new object[] { "abc", "a", 2, RichTextBoxFinds.Reverse, -1 };
+            yield return new object[] { "abc", "c", 2, RichTextBoxFinds.Reverse, 2 };
+
+            yield return new object[] { "ab\u0640cd", "abcd", 0, RichTextBoxFinds.None, 0 };
+            yield return new object[] { "ab\u0640cd", "\u0640", 0, RichTextBoxFinds.None, 2 };
+            yield return new object[] { "ab\u0640cd", "bc", 0, RichTextBoxFinds.None, 1 };
+            yield return new object[] { "ab\u0640cd", "abcd", 0, RichTextBoxFinds.NoHighlight, 0 };
+            yield return new object[] { "ab\u0640cd", "\u0640", 0, RichTextBoxFinds.NoHighlight, 2 };
+            yield return new object[] { "ab\u0640cd", "bc", 0, RichTextBoxFinds.NoHighlight, 1 };
+            yield return new object[] { "abcd", "abcd", 0, RichTextBoxFinds.NoHighlight, 0 };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(Find_String_Int_RichTextBoxFinds_TestData))]
+        public void RichTextBox_Find_StringIntRichTextBoxFinds_ReturnsExpected(string text, string str, int start, RichTextBoxFinds options, int expected)
+        {
+            using var control = new RichTextBox
+            {
+                Text = text
+            };
+            Assert.Equal(expected, control.Find(str, start, options));
+            Assert.True(control.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> Find_String_Int_Int_RichTextBoxFinds_TestData()
+        {
+            foreach (int end in new int[] { -1, 0 })
+            {
+                yield return new object[] { string.Empty, string.Empty, 0, end, RichTextBoxFinds.None, -1 };
+                yield return new object[] { string.Empty, "abc", 0, end, RichTextBoxFinds.None, -1 };
+                yield return new object[] { string.Empty, string.Empty, 0, end, RichTextBoxFinds.Reverse, -1 };
+                yield return new object[] { string.Empty, "abc", 0, end, RichTextBoxFinds.Reverse, -1 };
+
+                yield return new object[] { "abc", string.Empty, 0, end, RichTextBoxFinds.None, -1 };
+                yield return new object[] { "abc", "a", 0, end, RichTextBoxFinds.None, 0 };
+                yield return new object[] { "abc", "a", 0, end, RichTextBoxFinds.Reverse, 0 };
+                yield return new object[] { "abc", "ab", 0, end, RichTextBoxFinds.None, 0 };
+                yield return new object[] { "abc", "abc", 0, end, RichTextBoxFinds.None, 0 };
+                yield return new object[] { "abc", "abcd", 0, end, RichTextBoxFinds.None, -1 };
+                yield return new object[] { "abc", "b", 0, end, RichTextBoxFinds.None, 1 };
+                yield return new object[] { "abc", "d", 0, end, RichTextBoxFinds.None, -1 };
+
+                yield return new object[] { "abc", "ABC", 0, end, RichTextBoxFinds.None, 0 };
+                yield return new object[] { "abc", "abc", 0, end, RichTextBoxFinds.MatchCase, 0 };
+                yield return new object[] { "abc", "ABC", 0, end, RichTextBoxFinds.MatchCase, -1 };
+
+                yield return new object[] { "aa", "a", 0, end, RichTextBoxFinds.None, 0 };
+                yield return new object[] { "aa", "a", 0, end, RichTextBoxFinds.Reverse, 1 };
+                yield return new object[] { "abc", string.Empty, 0, end, RichTextBoxFinds.Reverse, -1 };
+                yield return new object[] { "abc def", "ef", 0, end, RichTextBoxFinds.None, 5 };
+                yield return new object[] { "abc def", "def", 0, end, RichTextBoxFinds.None, 4 };
+                yield return new object[] { "abc def", " ", 0, end, RichTextBoxFinds.None, 3 };
+                yield return new object[] { "abc def", "ef", 0, end, RichTextBoxFinds.WholeWord, -1 };
+                yield return new object[] { "abc def", "def", 0, end, RichTextBoxFinds.WholeWord, 4 };
+                yield return new object[] { "abc def", " ", 0, end, RichTextBoxFinds.WholeWord, -1 };
+
+                yield return new object[] { "ab\u0640cd", "abcd", 0, end, RichTextBoxFinds.None, 0 };
+                yield return new object[] { "ab\u0640cd", "\u0640", 0, end, RichTextBoxFinds.None, 2 };
+                yield return new object[] { "ab\u0640cd", "bc", 0, end, RichTextBoxFinds.None, 1 };
+                yield return new object[] { "ab\u0640cd", "abcd", 0, end, RichTextBoxFinds.NoHighlight, 0 };
+                yield return new object[] { "ab\u0640cd", "\u0640", 0, end, RichTextBoxFinds.NoHighlight, 2 };
+                yield return new object[] { "ab\u0640cd", "bc", 0, end, RichTextBoxFinds.NoHighlight, 1 };
+                yield return new object[] { "abcd", "abcd", 0, end, RichTextBoxFinds.NoHighlight, 0 };
+            }
+
+            yield return new object[] { "abc", "a", 1, 3, RichTextBoxFinds.None, -1 };
+            yield return new object[] { "abc", "a", 2, 3, RichTextBoxFinds.None, -1 };
+            yield return new object[] { "abc", "c", 2, 3, RichTextBoxFinds.None, 2 };
+            yield return new object[] { "abc", "a", 1, 3, RichTextBoxFinds.Reverse, -1 };
+            yield return new object[] { "abc", "a", 2, 3, RichTextBoxFinds.Reverse, -1 };
+            yield return new object[] { "abc", "c", 2, 3, RichTextBoxFinds.Reverse, 2 };
+
+            yield return new object[] { "abc", "c", 0, 5, RichTextBoxFinds.None, 2 };
+            yield return new object[] { "abc", "c", 0, 2, RichTextBoxFinds.None, -1 };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(Find_String_Int_Int_RichTextBoxFinds_TestData))]
+        public void RichTextBox_Find_StringIntIntRichTextBoxFinds_ReturnsExpected(string text, string str, int start, int end, RichTextBoxFinds options, int expected)
+        {
+            using var control = new RichTextBox
+            {
+                Text = text
+            };
+            Assert.Equal(expected, control.Find(str, start, end, options));
+            Assert.True(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(Find_String_TestData))]
+        public void RichTextBox_Find_StringWithHandle_ReturnsExpectedd(string text, string str, int expected)
+        {
+            using var control = new RichTextBox
+            {
+                Text = text
+            };
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            Assert.Equal(expected, control.Find(str));
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(Find_String_RichTextBoxFinds_TestData))]
+        public void RichTextBox_Find_StringRichTextBoxFindsWithHandle_ReturnsExpectedd(string text, string str, RichTextBoxFinds options, int expected)
+        {
+            using var control = new RichTextBox
+            {
+                Text = text
+            };
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            Assert.Equal(expected, control.Find(str, options));
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(Find_String_Int_RichTextBoxFinds_TestData))]
+        public void RichTextBox_Find_StringIntRichTextBoxFindsWithHandle_ReturnsExpectedd(string text, string str, int start, RichTextBoxFinds options, int expected)
+        {
+            using var control = new RichTextBox
+            {
+                Text = text
+            };
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            Assert.Equal(expected, control.Find(str, start, options));
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(Find_String_Int_Int_RichTextBoxFinds_TestData))]
+        public void RichTextBox_Find_StringIntIntRichTextBoxFindsWithHandle_ReturnsExpectedd(string text, string str, int start, int end, RichTextBoxFinds options, int expected)
+        {
+            using var control = new RichTextBox
+            {
+                Text = text
+            };
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            Assert.Equal(expected, control.Find(str, start, end, options));
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        public static IEnumerable<object[]> Find_CharArray_TestData()
+        {
+            yield return new object[] { string.Empty, new char[0], -1 };
+            yield return new object[] { string.Empty, new char[] { 'a', 'b', 'c' }, -1 };
+
+            yield return new object[] { "abc", new char[0], -1 };
+            yield return new object[] { "abc", new char[] { 'a' }, 0 };
+            yield return new object[] { "abc", new char[] { 'a', 'b' }, 0 };
+            yield return new object[] { "abc", new char[] { 'a', 'b', 'c' }, 0 };
+            yield return new object[] { "abc", new char[] { 'a', 'b', 'c', 'd' }, 0 };
+            yield return new object[] { "abc", new char[] { 'c', 'b', 'a' }, 0 };
+            yield return new object[] { "abc", new char[] { 'c', 'b' }, 1 };
+            yield return new object[] { "abc", new char[] { 'b' }, 1 };
+            yield return new object[] { "abc", new char[] { 'd' }, -1 };
+            yield return new object[] { "abc", new char[] { 'A', 'B', 'C' }, -1 };
+
+            yield return new object[] { "aa", new char[] { 'a' }, 0 };
+            yield return new object[] { "abc def", new char[] { 'e', 'f' }, 5 };
+            yield return new object[] { "abc def", new char[] { 'd', 'e', 'f' }, 4 };
+            yield return new object[] { "abc def", new char[] { ' ' }, 3 };
+
+            yield return new object[] { "ab\u0640cd", new char[] { 'a', 'b', 'c', 'd' }, 0 };
+            yield return new object[] { "ab\u0640cd", new char[] { '\u0640' }, 2 };
+            yield return new object[] { "ab\u0640cd", new char[] { 'b', 'c' }, 1 };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(Find_CharArray_TestData))]
+        public void RichTextBox_Find_CharArray_ReturnsExpected(string text, char[] characterSet, int expected)
+        {
+            using var control = new RichTextBox
+            {
+                Text = text
+            };
+            Assert.Equal(expected, control.Find(characterSet));
+            Assert.True(control.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> Find_CharArray_Int_TestData()
+        {
+            yield return new object[] { string.Empty, new char[0], 0, -1 };
+            yield return new object[] { string.Empty, new char[] { 'a', 'b', 'c' }, 0, -1 };
+
+            yield return new object[] { "abc", new char[0], 0, -1 };
+            yield return new object[] { "abc", new char[] { 'a' },0,  0 };
+            yield return new object[] { "abc", new char[] { 'a', 'b' },0,  0 };
+            yield return new object[] { "abc", new char[] { 'a', 'b', 'c' },0,  0 };
+            yield return new object[] { "abc", new char[] { 'a', 'b', 'c', 'd' },0,  0 };
+            yield return new object[] { "abc", new char[] { 'c', 'b', 'a' },0,  0 };
+            yield return new object[] { "abc", new char[] { 'c', 'b' },0,  1 };
+            yield return new object[] { "abc", new char[] { 'b' },0,  1 };
+            yield return new object[] { "abc", new char[] { 'd' }, 0, -1 };
+            yield return new object[] { "abc", new char[] { 'A', 'B', 'C' }, 0, -1 };
+
+            yield return new object[] { "aa", new char[] { 'a' }, 0, 0 };
+            yield return new object[] { "abc def", new char[] { 'e', 'f' }, 0, 5 };
+            yield return new object[] { "abc def", new char[] { 'd', 'e', 'f' }, 0, 4 };
+            yield return new object[] { "abc def", new char[] { ' ' }, 0, 3 };
+
+            yield return new object[] { "ab\u0640cd", new char[] { 'a', 'b', 'c', 'd' }, 0, 0 };
+            yield return new object[] { "ab\u0640cd", new char[] { '\u0640' }, 0, 2 };
+            yield return new object[] { "ab\u0640cd", new char[] { 'b', 'c' }, 0, 1 };
+
+            yield return new object[] { "abc", new char[] { 'a' }, 1, -1 };
+            yield return new object[] { "abc", new char[] { 'a' }, 2, -1 };
+            yield return new object[] { "abc", new char[] { 'c' }, 2, 2 };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(Find_CharArray_Int_TestData))]
+        public void RichTextBox_Find_CharArrayInt_ReturnsExpected(string text, char[] characterSet, int start, int expected)
+        {
+            using var control = new RichTextBox
+            {
+                Text = text
+            };
+            Assert.Equal(expected, control.Find(characterSet, start));
+            Assert.True(control.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> Find_CharArray_Int_Int_TestData()
+        {
+            foreach (int end in new int[] { -1, 0 })
+            {
+                yield return new object[] { string.Empty, new char[0], 0, end, -1 };
+                yield return new object[] { string.Empty, new char[] { 'a', 'b', 'c' }, 0, end, -1 };
+
+                yield return new object[] { "abc", new char[0], 0, end, -1 };
+                yield return new object[] { "abc", new char[] { 'a' },0, end,  0 };
+                yield return new object[] { "abc", new char[] { 'a', 'b' },0, end,  0 };
+                yield return new object[] { "abc", new char[] { 'a', 'b', 'c' },0, end,  0 };
+                yield return new object[] { "abc", new char[] { 'a', 'b', 'c', 'd' },0, end,  0 };
+                yield return new object[] { "abc", new char[] { 'c', 'b', 'a' },0, end,  0 };
+                yield return new object[] { "abc", new char[] { 'c', 'b' },0, end,  1 };
+                yield return new object[] { "abc", new char[] { 'b' },0, end,  1 };
+                yield return new object[] { "abc", new char[] { 'd' }, 0, end, -1 };
+                yield return new object[] { "abc", new char[] { 'A', 'B', 'C' }, 0, end, -1 };
+
+                yield return new object[] { "aa", new char[] { 'a' }, 0, end, 0 };
+                yield return new object[] { "abc def", new char[] { 'e', 'f' }, 0, end, 5 };
+                yield return new object[] { "abc def", new char[] { 'd', 'e', 'f' }, 0, end, 4 };
+                yield return new object[] { "abc def", new char[] { ' ' }, 0, end, 3 };
+
+                yield return new object[] { "ab\u0640cd", new char[] { 'a', 'b', 'c', 'd' }, 0, end, 0 };
+                yield return new object[] { "ab\u0640cd", new char[] { '\u0640' }, 0, end, 2 };
+                yield return new object[] { "ab\u0640cd", new char[] { 'b', 'c' }, 0, end, 1 };
+            }
+
+            yield return new object[] { "abc", new char[] { 'a' }, 1, 3, -1 };
+            yield return new object[] { "abc", new char[] { 'a' }, 2, 3, -1 };
+            yield return new object[] { "abc", new char[] { 'c' }, 2, 3, 2 };
+
+            yield return new object[] { "abc", new char[] { 'c' }, 0, 5, 2 };
+            yield return new object[] { "abc", new char[] { 'c' }, 0, 2, -1 };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(Find_CharArray_Int_Int_TestData))]
+        public void RichTextBox_Find_CharArrayIntInt_ReturnsExpected(string text, char[] characterSet, int start, int end, int expected)
+        {
+            using var control = new RichTextBox
+            {
+                Text = text
+            };
+            Assert.Equal(expected, control.Find(characterSet, start, end));
+            Assert.True(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(Find_CharArray_TestData))]
+        public void RichTextBox_Find_CharArrayWithHandle_ReturnsExpected(string text, char[] characterSet, int expected)
+        {
+            using var control = new RichTextBox
+            {
+                Text = text
+            };
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            Assert.Equal(expected, control.Find(characterSet));
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(Find_CharArray_Int_TestData))]
+        public void RichTextBox_Find_CharArrayIntWithHandle_ReturnsExpected(string text, char[] characterSet, int start, int expected)
+        {
+            using var control = new RichTextBox
+            {
+                Text = text
+            };
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            Assert.Equal(expected, control.Find(characterSet, start));
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(Find_CharArray_Int_Int_TestData))]
+        public void RichTextBox_Find_CharArrayIntIntWithHandle_ReturnsExpected(string text, char[] characterSet, int start, int end, int expected)
+        {
+            using var control = new RichTextBox
+            {
+                Text = text
+            };
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            Assert.Equal(expected, control.Find(characterSet, start, end));
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsFact]
+        public void RichTextBox_Find_NullStrEmpty_ThrowsArgumentNullException()
+        {
+            using var control = new RichTextBox();
+            Assert.Throws<ArgumentNullException>("str", () => control.Find((string)null));
+            Assert.Throws<ArgumentNullException>("str", () => control.Find(null, RichTextBoxFinds.None));
+            Assert.Throws<ArgumentNullException>("str", () => control.Find(null, 0, RichTextBoxFinds.None));
+            Assert.Throws<ArgumentNullException>("str", () => control.Find(null, -1, RichTextBoxFinds.None));
+            Assert.Throws<ArgumentNullException>("str", () => control.Find(null, 1, RichTextBoxFinds.None));
+            Assert.Throws<ArgumentNullException>("str", () => control.Find(null, 0, 0, RichTextBoxFinds.None));
+            Assert.Throws<ArgumentNullException>("str", () => control.Find(null, -1, 0, RichTextBoxFinds.None));
+            Assert.Throws<ArgumentNullException>("str", () => control.Find(null, 1, 0, RichTextBoxFinds.None));
+            Assert.Throws<ArgumentNullException>("str", () => control.Find(null, 0, -2, RichTextBoxFinds.None));
+        }
+
+        [WinFormsFact]
+        public void RichTextBox_Find_NullStrNotEmpty_ThrowsArgumentNullException()
+        {
+            using var control = new RichTextBox
+            {
+                Text = "t"
+            };
+            Assert.Throws<ArgumentNullException>("str", () => control.Find((string)null));
+            Assert.Throws<ArgumentNullException>("str", () => control.Find(null, RichTextBoxFinds.None));
+            Assert.Throws<ArgumentNullException>("str", () => control.Find(null, 0, RichTextBoxFinds.None));
+            Assert.Throws<ArgumentNullException>("str", () => control.Find(null, -1, RichTextBoxFinds.None));
+            Assert.Throws<ArgumentNullException>("str", () => control.Find(null, 2, RichTextBoxFinds.None));
+            Assert.Throws<ArgumentNullException>("str", () => control.Find(null, 0, 0, RichTextBoxFinds.None));
+            Assert.Throws<ArgumentNullException>("str", () => control.Find(null, -1, 0, RichTextBoxFinds.None));
+            Assert.Throws<ArgumentNullException>("str", () => control.Find(null, 2, 0, RichTextBoxFinds.None));
+            Assert.Throws<ArgumentNullException>("str", () => control.Find(null, 0, -2, RichTextBoxFinds.None));
+        }
+
+        [WinFormsFact]
+        public void RichTextBox_Find_NullCharacterSetEmpty_ThrowsArgumentNullException()
+        {
+            using var control = new RichTextBox();
+            Assert.Throws<ArgumentNullException>("characterSet", () => control.Find((char[])null));
+            Assert.Throws<ArgumentNullException>("characterSet", () => control.Find(null, 0));
+            Assert.Throws<ArgumentNullException>("characterSet", () => control.Find(null, -1));
+            Assert.Throws<ArgumentNullException>("characterSet", () => control.Find(null, 1));
+            Assert.Throws<ArgumentNullException>("characterSet", () => control.Find(null, 0, 0));
+            Assert.Throws<ArgumentNullException>("characterSet", () => control.Find(null, -1, 0));
+            Assert.Throws<ArgumentNullException>("characterSet", () => control.Find(null, 1, 0));
+            Assert.Throws<ArgumentNullException>("characterSet", () => control.Find(null, 0, -2));
+        }
+
+        [WinFormsFact]
+        public void RichTextBox_Find_NullCharacterSetNotEmpty_ThrowsArgumentNullException()
+        {
+            using var control = new RichTextBox
+            {
+                Text = "t"
+            };
+            Assert.Throws<ArgumentNullException>("characterSet", () => control.Find((char[])null));
+            Assert.Throws<ArgumentNullException>("characterSet", () => control.Find(null, 0));
+            Assert.Throws<ArgumentNullException>("characterSet", () => control.Find(null, -1));
+            Assert.Throws<ArgumentNullException>("characterSet", () => control.Find(null, 2));
+            Assert.Throws<ArgumentNullException>("characterSet", () => control.Find(null, 0, 0));
+            Assert.Throws<ArgumentNullException>("characterSet", () => control.Find(null, -1, 0));
+            Assert.Throws<ArgumentNullException>("characterSet", () => control.Find(null, 2, 0));
+            Assert.Throws<ArgumentNullException>("characterSet", () => control.Find(null, 0, -2));
+        }
+
+        [WinFormsTheory]
+        [InlineData(-1)]
+        [InlineData(1)]
+        public void RichTextBox_Find_InvalidStartEmpty_ThrowsArgumentOutOfRangeException(int start)
+        {
+            using var control = new RichTextBox();
+            Assert.Throws<ArgumentOutOfRangeException>("start", () => control.Find("s", start, RichTextBoxFinds.NoHighlight));
+            Assert.Throws<ArgumentOutOfRangeException>("start", () => control.Find("s", start, 0, RichTextBoxFinds.NoHighlight));
+            Assert.Throws<ArgumentOutOfRangeException>("start", () => control.Find(new char[] { 's' }, start));
+            Assert.Throws<ArgumentOutOfRangeException>("start", () => control.Find(new char[] { 's' }, start, 0));
+        }
+
+        [WinFormsTheory]
+        [InlineData(-1)]
+        [InlineData(2)]
+        public void RichTextBox_Find_InvalidStartNotEmpty_ThrowsArgumentOutOfRangeException(int start)
+        {
+            using var control = new RichTextBox
+            {
+                Text = "t"
+            };
+            Assert.Throws<ArgumentOutOfRangeException>("start", () => control.Find("s", start, RichTextBoxFinds.NoHighlight));
+            Assert.Throws<ArgumentOutOfRangeException>("start", () => control.Find("s", start, 0, RichTextBoxFinds.NoHighlight));
+            Assert.Throws<ArgumentOutOfRangeException>("start", () => control.Find(new char[] { 's' }, start));
+            Assert.Throws<ArgumentOutOfRangeException>("start", () => control.Find(new char[] { 's' }, start, 0));
+        }
+
+        [WinFormsFact]
+        public void RichTextBox_Find_InvalidEndEmpty_ThrowsArgumentOutOfRangeException()
+        {
+            using var control = new RichTextBox();
+            Assert.Throws<ArgumentOutOfRangeException>("end", () => control.Find("s", 0, -2, RichTextBoxFinds.NoHighlight));
+            Assert.Throws<ArgumentOutOfRangeException>("end", () => control.Find(new char[] { 's' }, 0, -2));
+        }
+
+        [WinFormsFact]
+        public void RichTextBox_Find_InvalidEndNotEmpty_ThrowsArgumentOutOfRangeException()
+        {
+            using var control = new RichTextBox
+            {
+                Text = "t"
+            };
+            Assert.Throws<ArgumentOutOfRangeException>("end", () => control.Find("s", 0, -2, RichTextBoxFinds.NoHighlight));
+            Assert.Throws<ArgumentOutOfRangeException>("end", () => control.Find(new char[] { 's' }, 0, -2));
+        }
+
+        [WinFormsFact]
+        public void RichTextBox_Find_StartGreaterThanEnd_ThrowsArgumentOutOfRangeException()
+        {
+            using var control = new RichTextBox
+            {
+                Text = "t"
+            };
+            Assert.Throws<ArgumentException>(null, () => control.Find("s", 1, 0, RichTextBoxFinds.None));
+            Assert.Throws<ArgumentException>(null, () => control.Find("s", 1, 0, RichTextBoxFinds.Reverse));
+            Assert.Throws<ArgumentOutOfRangeException>("end", () => control.Find(new char[] { 's' }, 1, 0));
+            Assert.Throws<ArgumentOutOfRangeException>("end", () => control.Find(new char[] { 's' }, 1, 0));
+        }
+
         [WinFormsFact]
         public void RichTextBox_GetAutoSizeMode_Invoke_ReturnsExpected()
         {
