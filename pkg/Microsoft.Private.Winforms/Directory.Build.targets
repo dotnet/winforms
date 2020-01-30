@@ -19,7 +19,7 @@
       <_NuspecFile Include="@(NuGetPackOutput)" Condition="'%(Extension)' == '.nuspec'" />
     </ItemGroup>
 
-    <Exec 
+    <Exec
         Command="$(_PowerShellExe) -NonInteractive -ExecutionPolicy Unrestricted -Command &quot;&amp; { &amp;&apos;$(_ScriptLocation)&apos; &apos;@(_NuspecFile)&apos; &apos;$(_ManifestFile)&apos; $(GenerateManifest) } &quot;"
         ContinueOnError="False" />
  
