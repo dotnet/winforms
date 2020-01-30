@@ -1221,7 +1221,7 @@ namespace System.Windows.Forms
             {
                 if (IsHandleCreated)
                 {
-                    IntPtr hItem = User32.SendMessageW(this, (User32.WM)TVM.GETNEXTITEM, (IntPtr)NativeMethods.TVGN_CARET);
+                    IntPtr hItem = User32.SendMessageW(this, (User32.WM)TVM.GETNEXTITEM, (IntPtr)TVGN.CARET);
                     if (hItem == IntPtr.Zero)
                     {
                         return null;
@@ -1248,7 +1248,7 @@ namespace System.Windows.Forms
                     Debug.Assert(selectedNode == null || selectedNode.TreeView != this, "handle is created, but we're still caching selectedNode");
 
                     IntPtr hnode = (value == null ? IntPtr.Zero : value.Handle);
-                    User32.SendMessageW(this, (User32.WM)TVM.SELECTITEM, (IntPtr)NativeMethods.TVGN_CARET, hnode);
+                    User32.SendMessageW(this, (User32.WM)TVM.SELECTITEM, (IntPtr)TVGN.CARET, hnode);
                     selectedNode = null;
                 }
                 else
@@ -1459,7 +1459,7 @@ namespace System.Windows.Forms
             {
                 if (IsHandleCreated)
                 {
-                    IntPtr hitem = User32.SendMessageW(this, (User32.WM)TVM.GETNEXTITEM, (IntPtr)NativeMethods.TVGN_FIRSTVISIBLE);
+                    IntPtr hitem = User32.SendMessageW(this, (User32.WM)TVM.GETNEXTITEM, (IntPtr)TVGN.FIRSTVISIBLE);
                     return (hitem == IntPtr.Zero ? null : NodeFromHandle(hitem));
                 }
                 return topNode;
@@ -1474,7 +1474,7 @@ namespace System.Windows.Forms
                     Debug.Assert(topNode == null || topNode.TreeView != this, "handle is created, but we're still caching selectedNode");
 
                     IntPtr hnode = (value == null ? IntPtr.Zero : value.Handle);
-                    User32.SendMessageW(this, (User32.WM)TVM.SELECTITEM, (IntPtr)NativeMethods.TVGN_FIRSTVISIBLE, hnode);
+                    User32.SendMessageW(this, (User32.WM)TVM.SELECTITEM, (IntPtr)TVGN.FIRSTVISIBLE, hnode);
                     topNode = null;
                 }
                 else
@@ -2113,7 +2113,7 @@ namespace System.Windows.Forms
                     images[i] = stateImageList.Images[i - 1];
                 }
                 newImageList.Images.AddRange(images);
-                User32.SendMessageW(this, (User32.WM)TVM.SETIMAGELIST, (IntPtr)NativeMethods.TVSIL_STATE, newImageList.Handle);
+                User32.SendMessageW(this, (User32.WM)TVM.SETIMAGELIST, (IntPtr)TVSIL.STATE, newImageList.Handle);
 
                 if (internalStateImageList != null)
                 {
@@ -2127,7 +2127,7 @@ namespace System.Windows.Forms
         {
             // In certain cases (TREEVIEWSTATE_checkBoxes) e.g., the Native TreeView leaks the imagelist
             // even if set by us. To prevent any leaks, we always destroy what was there after setting a new list.
-            IntPtr handleOld = User32.SendMessageW(this, (User32.WM)TVM.SETIMAGELIST, (IntPtr)NativeMethods.TVSIL_STATE, handle);
+            IntPtr handleOld = User32.SendMessageW(this, (User32.WM)TVM.SETIMAGELIST, (IntPtr)TVSIL.STATE, handle);
             if ((handleOld != IntPtr.Zero) && (handleOld != handle))
             {
                 ComCtl32.ImageList.Destroy(new HandleRef(this, handleOld));
@@ -2138,13 +2138,13 @@ namespace System.Windows.Forms
         // We must destroy it explicitly.
         private void DestroyNativeStateImageList(bool reset)
         {
-            IntPtr handle = User32.SendMessageW(this, (User32.WM)TVM.GETIMAGELIST, (IntPtr)NativeMethods.TVSIL_STATE);
+            IntPtr handle = User32.SendMessageW(this, (User32.WM)TVM.GETIMAGELIST, (IntPtr)TVSIL.STATE);
             if (handle != IntPtr.Zero)
             {
                 ComCtl32.ImageList.Destroy(new HandleRef(this, handle));
                 if (reset)
                 {
-                    User32.SendMessageW(this, (User32.WM)TVM.SETIMAGELIST, (IntPtr)NativeMethods.TVSIL_STATE);
+                    User32.SendMessageW(this, (User32.WM)TVM.SETIMAGELIST, (IntPtr)TVSIL.STATE);
                 }
             }
         }
@@ -2719,7 +2719,7 @@ namespace System.Windows.Forms
             // If the user shows the ContextMenu bu overiding the WndProc( ), then the treeview
             // goes into the weird state where the high-light gets locked to the node on which the ContextMenu was shown.
             // So we need to get the native TREEIVEW out of this weird state.
-            User32.SendMessageW(this, (User32.WM)TVM.SELECTITEM, (IntPtr)NativeMethods.TVGN_DROPHILITE);
+            User32.SendMessageW(this, (User32.WM)TVM.SELECTITEM, (IntPtr)TVGN.DROPHILITE);
 
             // Windows TreeView pushes its own message loop in WM_xBUTTONDOWN, so fire the
             // event before calling defWndProc or else it won't get fired until the button
@@ -3041,28 +3041,28 @@ namespace System.Windows.Forms
 
                 switch (nmtv->nmhdr.code)
                 {
-                    case NativeMethods.TVN_ITEMEXPANDING:
+                    case (int)TVN.ITEMEXPANDINGW:
                         m.Result = TvnExpanding(nmtv);
                         break;
-                    case NativeMethods.TVN_ITEMEXPANDED:
+                    case (int)TVN.ITEMEXPANDEDW:
                         TvnExpanded(nmtv);
                         break;
-                    case NativeMethods.TVN_SELCHANGING:
+                    case (int)TVN.SELCHANGINGW:
                         m.Result = TvnSelecting(nmtv);
                         break;
-                    case NativeMethods.TVN_SELCHANGED:
+                    case (int)TVN.SELCHANGEDW:
                         TvnSelected(nmtv);
                         break;
-                    case NativeMethods.TVN_BEGINDRAG:
+                    case (int)TVN.BEGINDRAGW:
                         TvnBeginDrag(MouseButtons.Left, nmtv);
                         break;
-                    case NativeMethods.TVN_BEGINRDRAG:
+                    case (int)TVN.BEGINRDRAGW:
                         TvnBeginDrag(MouseButtons.Right, nmtv);
                         break;
-                    case NativeMethods.TVN_BEGINLABELEDIT:
+                    case (int)TVN.BEGINLABELEDITW:
                         m.Result = TvnBeginLabelEdit(*(NMTVDISPINFOW*)m.LParam);
                         break;
-                    case NativeMethods.TVN_ENDLABELEDIT:
+                    case (int)TVN.ENDLABELEDITW:
                         m.Result = TvnEndLabelEdit(*(NMTVDISPINFOW*)m.LParam);
                         break;
                     case (int)NM.CLICK:
@@ -3136,7 +3136,7 @@ namespace System.Windows.Forms
                 ContextMenuStrip menu = treeNode.ContextMenuStrip;
 
                 // Need to send TVM_SELECTITEM to highlight the node while the contextMenuStrip is being shown.
-                User32.PostMessageW(this, (User32.WM)TVM.SELECTITEM, (IntPtr)NativeMethods.TVGN_DROPHILITE, treeNode.Handle);
+                User32.PostMessageW(this, (User32.WM)TVM.SELECTITEM, (IntPtr)TVGN.DROPHILITE, treeNode.Handle);
                 menu.ShowInternal(this, PointToClient(MousePosition),/*keyboardActivated*/false);
                 menu.Closing += new ToolStripDropDownClosingEventHandler(ContextMenuStripClosing);
             }
@@ -3148,7 +3148,7 @@ namespace System.Windows.Forms
             ContextMenuStrip strip = sender as ContextMenuStrip;
             // Unhook the Event.
             strip.Closing -= new ToolStripDropDownClosingEventHandler(ContextMenuStripClosing);
-            User32.SendMessageW(this, (User32.WM)TVM.SELECTITEM, (IntPtr)NativeMethods.TVGN_DROPHILITE);
+            User32.SendMessageW(this, (User32.WM)TVM.SELECTITEM, (IntPtr)TVGN.DROPHILITE);
         }
 
         private void WmPrint(ref Message m)
