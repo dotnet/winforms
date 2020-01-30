@@ -1352,18 +1352,18 @@ System.Windows.Forms.CurrencyManager.MetaDataChanged -> System.EventHandler
 System.Windows.Forms.CurrencyManager.Refresh() -> void
 System.Windows.Forms.Cursor
 System.Windows.Forms.Cursor.CopyHandle() -> System.IntPtr
-~System.Windows.Forms.Cursor.Cursor(System.IO.Stream stream) -> void
+System.Windows.Forms.Cursor.Cursor(System.IO.Stream! stream) -> void
 System.Windows.Forms.Cursor.Cursor(System.IntPtr handle) -> void
-~System.Windows.Forms.Cursor.Cursor(System.Type type, string resource) -> void
-~System.Windows.Forms.Cursor.Cursor(string fileName) -> void
+System.Windows.Forms.Cursor.Cursor(System.Type! type, string! resource) -> void
+System.Windows.Forms.Cursor.Cursor(string! fileName) -> void
 System.Windows.Forms.Cursor.Dispose() -> void
-~System.Windows.Forms.Cursor.Draw(System.Drawing.Graphics g, System.Drawing.Rectangle targetRect) -> void
-~System.Windows.Forms.Cursor.DrawStretched(System.Drawing.Graphics g, System.Drawing.Rectangle targetRect) -> void
+System.Windows.Forms.Cursor.Draw(System.Drawing.Graphics! g, System.Drawing.Rectangle targetRect) -> void
+System.Windows.Forms.Cursor.DrawStretched(System.Drawing.Graphics! g, System.Drawing.Rectangle targetRect) -> void
 System.Windows.Forms.Cursor.Handle.get -> System.IntPtr
 System.Windows.Forms.Cursor.HotSpot.get -> System.Drawing.Point
 System.Windows.Forms.Cursor.Size.get -> System.Drawing.Size
-~System.Windows.Forms.Cursor.Tag.get -> object
-~System.Windows.Forms.Cursor.Tag.set -> void
+System.Windows.Forms.Cursor.Tag.get -> object?
+System.Windows.Forms.Cursor.Tag.set -> void
 System.Windows.Forms.CursorConverter
 System.Windows.Forms.CursorConverter.CursorConverter() -> void
 System.Windows.Forms.Cursors
@@ -8994,15 +8994,15 @@ override System.Windows.Forms.CurrencyManager.Position.set -> void
 override System.Windows.Forms.CurrencyManager.RemoveAt(int index) -> void
 override System.Windows.Forms.CurrencyManager.ResumeBinding() -> void
 override System.Windows.Forms.CurrencyManager.SuspendBinding() -> void
-~override System.Windows.Forms.Cursor.Equals(object obj) -> bool
+override System.Windows.Forms.Cursor.Equals(object? obj) -> bool
 override System.Windows.Forms.Cursor.GetHashCode() -> int
-~override System.Windows.Forms.Cursor.ToString() -> string
-~override System.Windows.Forms.CursorConverter.CanConvertFrom(System.ComponentModel.ITypeDescriptorContext context, System.Type sourceType) -> bool
-~override System.Windows.Forms.CursorConverter.CanConvertTo(System.ComponentModel.ITypeDescriptorContext context, System.Type destinationType) -> bool
-~override System.Windows.Forms.CursorConverter.ConvertFrom(System.ComponentModel.ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value) -> object
-~override System.Windows.Forms.CursorConverter.ConvertTo(System.ComponentModel.ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value, System.Type destinationType) -> object
-~override System.Windows.Forms.CursorConverter.GetStandardValues(System.ComponentModel.ITypeDescriptorContext context) -> System.ComponentModel.TypeConverter.StandardValuesCollection
-~override System.Windows.Forms.CursorConverter.GetStandardValuesSupported(System.ComponentModel.ITypeDescriptorContext context) -> bool
+override System.Windows.Forms.Cursor.ToString() -> string!
+override System.Windows.Forms.CursorConverter.CanConvertFrom(System.ComponentModel.ITypeDescriptorContext! context, System.Type! sourceType) -> bool
+override System.Windows.Forms.CursorConverter.CanConvertTo(System.ComponentModel.ITypeDescriptorContext! context, System.Type! destinationType) -> bool
+override System.Windows.Forms.CursorConverter.ConvertFrom(System.ComponentModel.ITypeDescriptorContext! context, System.Globalization.CultureInfo! culture, object! value) -> object!
+override System.Windows.Forms.CursorConverter.ConvertTo(System.ComponentModel.ITypeDescriptorContext! context, System.Globalization.CultureInfo! culture, object! value, System.Type! destinationType) -> object!
+override System.Windows.Forms.CursorConverter.GetStandardValues(System.ComponentModel.ITypeDescriptorContext! context) -> System.ComponentModel.TypeConverter.StandardValuesCollection!
+override System.Windows.Forms.CursorConverter.GetStandardValuesSupported(System.ComponentModel.ITypeDescriptorContext! context) -> bool
 override System.Windows.Forms.DataGridView.AutoSize.get -> bool
 override System.Windows.Forms.DataGridView.AutoSize.set -> void
 override System.Windows.Forms.DataGridView.BackColor.get -> System.Drawing.Color
@@ -11033,49 +11033,49 @@ static System.Windows.Forms.ControlPaint.Light(System.Drawing.Color baseColor, f
 static System.Windows.Forms.ControlPaint.LightLight(System.Drawing.Color baseColor) -> System.Drawing.Color
 static System.Windows.Forms.Cursor.Clip.get -> System.Drawing.Rectangle
 static System.Windows.Forms.Cursor.Clip.set -> void
-~static System.Windows.Forms.Cursor.Current.get -> System.Windows.Forms.Cursor
-~static System.Windows.Forms.Cursor.Current.set -> void
+static System.Windows.Forms.Cursor.Current.get -> System.Windows.Forms.Cursor?
+static System.Windows.Forms.Cursor.Current.set -> void
 static System.Windows.Forms.Cursor.Hide() -> void
 static System.Windows.Forms.Cursor.Position.get -> System.Drawing.Point
 static System.Windows.Forms.Cursor.Position.set -> void
 static System.Windows.Forms.Cursor.Show() -> void
-~static System.Windows.Forms.Cursor.operator !=(System.Windows.Forms.Cursor left, System.Windows.Forms.Cursor right) -> bool
-~static System.Windows.Forms.Cursor.operator ==(System.Windows.Forms.Cursor left, System.Windows.Forms.Cursor right) -> bool
-~static System.Windows.Forms.Cursors.AppStarting.get -> System.Windows.Forms.Cursor
-~static System.Windows.Forms.Cursors.Arrow.get -> System.Windows.Forms.Cursor
-~static System.Windows.Forms.Cursors.Cross.get -> System.Windows.Forms.Cursor
-~static System.Windows.Forms.Cursors.Default.get -> System.Windows.Forms.Cursor
-~static System.Windows.Forms.Cursors.HSplit.get -> System.Windows.Forms.Cursor
-~static System.Windows.Forms.Cursors.Hand.get -> System.Windows.Forms.Cursor
-~static System.Windows.Forms.Cursors.Help.get -> System.Windows.Forms.Cursor
-~static System.Windows.Forms.Cursors.IBeam.get -> System.Windows.Forms.Cursor
-~static System.Windows.Forms.Cursors.No.get -> System.Windows.Forms.Cursor
-~static System.Windows.Forms.Cursors.NoMove2D.get -> System.Windows.Forms.Cursor
-~static System.Windows.Forms.Cursors.NoMoveHoriz.get -> System.Windows.Forms.Cursor
-~static System.Windows.Forms.Cursors.NoMoveVert.get -> System.Windows.Forms.Cursor
-~static System.Windows.Forms.Cursors.PanEast.get -> System.Windows.Forms.Cursor
-~static System.Windows.Forms.Cursors.PanNE.get -> System.Windows.Forms.Cursor
-~static System.Windows.Forms.Cursors.PanNW.get -> System.Windows.Forms.Cursor
-~static System.Windows.Forms.Cursors.PanNorth.get -> System.Windows.Forms.Cursor
-~static System.Windows.Forms.Cursors.PanSE.get -> System.Windows.Forms.Cursor
-~static System.Windows.Forms.Cursors.PanSW.get -> System.Windows.Forms.Cursor
-~static System.Windows.Forms.Cursors.PanSouth.get -> System.Windows.Forms.Cursor
-~static System.Windows.Forms.Cursors.PanWest.get -> System.Windows.Forms.Cursor
-~static System.Windows.Forms.Cursors.SizeAll.get -> System.Windows.Forms.Cursor
-~static System.Windows.Forms.Cursors.SizeNESW.get -> System.Windows.Forms.Cursor
-~static System.Windows.Forms.Cursors.SizeNS.get -> System.Windows.Forms.Cursor
-~static System.Windows.Forms.Cursors.SizeNWSE.get -> System.Windows.Forms.Cursor
-~static System.Windows.Forms.Cursors.SizeWE.get -> System.Windows.Forms.Cursor
-~static System.Windows.Forms.Cursors.UpArrow.get -> System.Windows.Forms.Cursor
-~static System.Windows.Forms.Cursors.VSplit.get -> System.Windows.Forms.Cursor
-~static System.Windows.Forms.Cursors.WaitCursor.get -> System.Windows.Forms.Cursor
-~static System.Windows.Forms.DataFormats.GetFormat(int id) -> System.Windows.Forms.DataFormats.Format
-~static System.Windows.Forms.DataFormats.GetFormat(string format) -> System.Windows.Forms.DataFormats.Format
-~static System.Windows.Forms.DataGridViewCell.MeasureTextHeight(System.Drawing.Graphics graphics, string text, System.Drawing.Font font, int maxWidth, System.Windows.Forms.TextFormatFlags flags) -> int
-~static System.Windows.Forms.DataGridViewCell.MeasureTextHeight(System.Drawing.Graphics graphics, string text, System.Drawing.Font font, int maxWidth, System.Windows.Forms.TextFormatFlags flags, out bool widthTruncated) -> int
-~static System.Windows.Forms.DataGridViewCell.MeasureTextPreferredSize(System.Drawing.Graphics graphics, string text, System.Drawing.Font font, float maxRatio, System.Windows.Forms.TextFormatFlags flags) -> System.Drawing.Size
-~static System.Windows.Forms.DataGridViewCell.MeasureTextSize(System.Drawing.Graphics graphics, string text, System.Drawing.Font font, System.Windows.Forms.TextFormatFlags flags) -> System.Drawing.Size
-~static System.Windows.Forms.DataGridViewCell.MeasureTextWidth(System.Drawing.Graphics graphics, string text, System.Drawing.Font font, int maxHeight, System.Windows.Forms.TextFormatFlags flags) -> int
+static System.Windows.Forms.Cursor.operator !=(System.Windows.Forms.Cursor! left, System.Windows.Forms.Cursor! right) -> bool
+static System.Windows.Forms.Cursor.operator ==(System.Windows.Forms.Cursor! left, System.Windows.Forms.Cursor! right) -> bool
+static System.Windows.Forms.Cursors.AppStarting.get -> System.Windows.Forms.Cursor!
+static System.Windows.Forms.Cursors.Arrow.get -> System.Windows.Forms.Cursor!
+static System.Windows.Forms.Cursors.Cross.get -> System.Windows.Forms.Cursor!
+static System.Windows.Forms.Cursors.Default.get -> System.Windows.Forms.Cursor!
+static System.Windows.Forms.Cursors.HSplit.get -> System.Windows.Forms.Cursor!
+static System.Windows.Forms.Cursors.Hand.get -> System.Windows.Forms.Cursor!
+static System.Windows.Forms.Cursors.Help.get -> System.Windows.Forms.Cursor!
+static System.Windows.Forms.Cursors.IBeam.get -> System.Windows.Forms.Cursor!
+static System.Windows.Forms.Cursors.No.get -> System.Windows.Forms.Cursor!
+static System.Windows.Forms.Cursors.NoMove2D.get -> System.Windows.Forms.Cursor!
+static System.Windows.Forms.Cursors.NoMoveHoriz.get -> System.Windows.Forms.Cursor!
+static System.Windows.Forms.Cursors.NoMoveVert.get -> System.Windows.Forms.Cursor!
+static System.Windows.Forms.Cursors.PanEast.get -> System.Windows.Forms.Cursor!
+static System.Windows.Forms.Cursors.PanNE.get -> System.Windows.Forms.Cursor!
+static System.Windows.Forms.Cursors.PanNW.get -> System.Windows.Forms.Cursor!
+static System.Windows.Forms.Cursors.PanNorth.get -> System.Windows.Forms.Cursor!
+static System.Windows.Forms.Cursors.PanSE.get -> System.Windows.Forms.Cursor!
+static System.Windows.Forms.Cursors.PanSW.get -> System.Windows.Forms.Cursor!
+static System.Windows.Forms.Cursors.PanSouth.get -> System.Windows.Forms.Cursor!
+static System.Windows.Forms.Cursors.PanWest.get -> System.Windows.Forms.Cursor!
+static System.Windows.Forms.Cursors.SizeAll.get -> System.Windows.Forms.Cursor!
+static System.Windows.Forms.Cursors.SizeNESW.get -> System.Windows.Forms.Cursor!
+static System.Windows.Forms.Cursors.SizeNS.get -> System.Windows.Forms.Cursor!
+static System.Windows.Forms.Cursors.SizeNWSE.get -> System.Windows.Forms.Cursor!
+static System.Windows.Forms.Cursors.SizeWE.get -> System.Windows.Forms.Cursor!
+static System.Windows.Forms.Cursors.UpArrow.get -> System.Windows.Forms.Cursor!
+static System.Windows.Forms.Cursors.VSplit.get -> System.Windows.Forms.Cursor!
+static System.Windows.Forms.Cursors.WaitCursor.get -> System.Windows.Forms.Cursor!
+static System.Windows.Forms.DataFormats.GetFormat(int id) -> System.Windows.Forms.DataFormats.Format
+static System.Windows.Forms.DataFormats.GetFormat(string format) -> System.Windows.Forms.DataFormats.Format
+static System.Windows.Forms.DataGridViewCell.MeasureTextHeight(System.Drawing.Graphics graphics, string text, System.Drawing.Font font, int maxWidth, System.Windows.Forms.TextFormatFlags flags) -> int
+static System.Windows.Forms.DataGridViewCell.MeasureTextHeight(System.Drawing.Graphics graphics, string text, System.Drawing.Font font, int maxWidth, System.Windows.Forms.TextFormatFlags flags, out bool widthTruncated) -> int
+static System.Windows.Forms.DataGridViewCell.MeasureTextPreferredSize(System.Drawing.Graphics graphics, string text, System.Drawing.Font font, float maxRatio, System.Windows.Forms.TextFormatFlags flags) -> System.Drawing.Size
+static System.Windows.Forms.DataGridViewCell.MeasureTextSize(System.Drawing.Graphics graphics, string text, System.Drawing.Font font, System.Windows.Forms.TextFormatFlags flags) -> System.Drawing.Size
+static System.Windows.Forms.DataGridViewCell.MeasureTextWidth(System.Drawing.Graphics graphics, string text, System.Drawing.Font font, int maxHeight, System.Windows.Forms.TextFormatFlags flags) -> int
 static System.Windows.Forms.DateTimePicker.MaximumDateTime.get -> System.DateTime
 static System.Windows.Forms.DateTimePicker.MinimumDateTime.get -> System.DateTime
 ~static System.Windows.Forms.FeatureSupport.GetVersionPresent(string featureClassName, string featureConstName) -> System.Version

@@ -1,3 +1,4 @@
+#nullable enable
 System.ComponentModel.Design.ComponentDesigner
 System.ComponentModel.Design.ComponentDesigner.Component.get -> System.ComponentModel.IComponent
 System.ComponentModel.Design.ComponentDesigner.ComponentDesigner() -> void
