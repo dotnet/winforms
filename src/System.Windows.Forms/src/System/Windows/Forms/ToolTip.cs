@@ -684,18 +684,22 @@ namespace System.Windows.Forms
 
         private void CheckNativeCompositeControls(Control associatedControl, string text)
         {
-            if (associatedControl is TabPage tabPage)
+            if (!(associatedControl is TabPage))
             {
-                if (tabPage.ToolTip != this)
-                {
-                    tabPage.ToolTip.SetToolTip(tabPage, null); // Remove an old tooltip for the current page
-                    tabPage.ToolTip = this; // Set a new tooltip instance
-                }
+                return;
+            }
 
-                if (tabPage.ToolTipText != text && text != null)
-                {
-                    tabPage.ToolTipText = text; // Don't forget to change ToolTipText property
-                }
+            TabPage tabPage = associatedControl as TabPage;
+
+            if (tabPage.ToolTip != this)
+            {
+                tabPage.ToolTip.SetToolTip(tabPage, null); // Remove an old tooltip for the current page
+                tabPage.ToolTip = this; // Set a new tooltip instance
+            }
+
+            if (tabPage.ToolTipText != text && text != null)
+            {
+                tabPage.ToolTipText = text; // Don't forget to change ToolTipText property
             }
         }
 

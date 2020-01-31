@@ -502,7 +502,9 @@ namespace System.Windows.Forms
 
         private Rectangle GetItemRectangle(int index)
         {
-            if (index < 0)
+            int pagesCount = (ParentInternal as TabControl)?.TabCount ?? 0;
+
+            if (index < 0 || index >= pagesCount)
             {
                 return Rectangle.Empty;
             }
