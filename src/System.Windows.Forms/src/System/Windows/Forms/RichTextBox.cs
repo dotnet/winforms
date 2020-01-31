@@ -203,9 +203,11 @@ namespace System.Windows.Forms
                 richTextBoxFlags[autoWordSelectionSection] = value ? 1 : 0;
                 if (IsHandleCreated)
                 {
-                    SendMessage(RichEditMessages.EM_SETOPTIONS,
-                                value ? RichTextBoxConstants.ECOOP_OR : RichTextBoxConstants.ECOOP_XOR,
-                                RichTextBoxConstants.ECO_AUTOWORDSELECTION);
+                    User32.SendMessageW(
+                        this,
+                        (User32.WM)RichEditMessages.EM_SETOPTIONS,
+                        value ? (IntPtr)RichTextBoxConstants.ECOOP_OR : (IntPtr)RichTextBoxConstants.ECOOP_XOR,
+                        (IntPtr)RichTextBoxConstants.ECO_AUTOWORDSELECTION);
                 }
             }
         }
@@ -312,10 +314,7 @@ namespace System.Windows.Forms
             {
                 if (IsHandleCreated)
                 {
-                    bool b;
-                    b = unchecked((int)(long)SendMessage(RichEditMessages.EM_CANREDO, 0, 0)) != 0;
-
-                    return b;
+                    return unchecked((int)(long)User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_CANREDO)) != 0;
                 }
                 return false;
             }
@@ -419,7 +418,7 @@ namespace System.Windows.Forms
                     richTextBoxFlags[autoUrlDetectSection] = value ? 1 : 0;
                     if (IsHandleCreated)
                     {
-                        SendMessage(RichEditMessages.EM_AUTOURLDETECT, value ? 1 : 0, 0);
+                        User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_AUTOURLDETECT, PARAM.FromBool(value));
                         RecreateHandle();
                     }
                 }
@@ -654,8 +653,7 @@ namespace System.Windows.Forms
                     return "";
                 }
 
-                int n;
-                n = unchecked((int)(long)SendMessage(RichEditMessages.EM_GETREDONAME, 0, 0));
+                int n = unchecked((int)(long)User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_GETREDONAME));
                 return GetEditorActionName(n);
             }
         }
@@ -716,7 +714,7 @@ namespace System.Windows.Forms
                         IntPtr hDC = UnsafeNativeMethods.CreateIC("DISPLAY", null, null, new HandleRef(null, IntPtr.Zero));
                         try
                         {
-                            SendMessage(RichEditMessages.EM_SETTARGETDEVICE, hDC, (IntPtr)Pixel2Twip(hDC, value, true));
+                            User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_SETTARGETDEVICE, hDC, (IntPtr)Pixel2Twip(hDC, value, true));
                         }
                         finally
                         {
@@ -1490,8 +1488,7 @@ namespace System.Windows.Forms
                 ForceHandleCreate();
                 if (SelectionLength > 0)
                 {
-                    int n;
-                    n = unchecked((int)(long)SendMessage(RichEditMessages.EM_SELECTIONTYPE, 0, 0));
+                    int n = unchecked((int)(long)User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_SELECTIONTYPE));
                     return (RichTextBoxSelectionTypes)n;
                 }
                 else
@@ -1520,10 +1517,11 @@ namespace System.Windows.Forms
                     richTextBoxFlags[showSelBarSection] = value ? 1 : 0;
                     if (IsHandleCreated)
                     {
-                        SendMessage(RichEditMessages.EM_SETOPTIONS,
-                            value ? RichTextBoxConstants.ECOOP_OR :
-                            RichTextBoxConstants.ECOOP_XOR,
-                            RichTextBoxConstants.ECO_SELECTIONBAR);
+                        User32.SendMessageW(
+                            this,
+                            (User32.WM)RichEditMessages.EM_SETOPTIONS,
+                            value ? (IntPtr)RichTextBoxConstants.ECOOP_OR : (IntPtr)RichTextBoxConstants.ECOOP_XOR,
+                            (IntPtr)RichTextBoxConstants.ECO_SELECTIONBAR);
                     }
                 }
             }
@@ -1646,8 +1644,7 @@ namespace System.Windows.Forms
                     return "";
                 }
 
-                int n;
-                n = unchecked((int)(long)SendMessage(RichEditMessages.EM_GETUNDONAME, 0, 0));
+                int n = unchecked((int)(long)User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_GETUNDONAME));
                 return GetEditorActionName(n);
             }
         }
@@ -1685,7 +1682,7 @@ namespace System.Windows.Forms
         Localizable(true),
         SRDescription(nameof(SR.RichTextBoxZoomFactor))
         ]
-        public float ZoomFactor
+        public unsafe float ZoomFactor
         {
             get
             {
@@ -1693,7 +1690,7 @@ namespace System.Windows.Forms
                 {
                     int numerator = 0;
                     int denominator = 0;
-                    SendMessage(RichEditMessages.EM_GETZOOM, ref numerator, ref denominator);
+                    User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_GETZOOM, (IntPtr)(&numerator), ref denominator);
                     if ((numerator != 0) && (denominator != 0))
                     {
                         zoomMultiplier = ((float)numerator) / ((float)denominator);
@@ -1829,10 +1826,7 @@ namespace System.Windows.Forms
         /// </summary>
         public bool CanPaste(DataFormats.Format clipFormat)
         {
-            bool b = false;
-            b = unchecked((int)(long)SendMessage(RichEditMessages.EM_CANPASTE, clipFormat.Id, 0)) != 0;
-
-            return b;
+            return unchecked((int)(long)User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_CANPASTE, (IntPtr)clipFormat.Id)) != 0;
         }
 
         //DrawToBitmap doesn't work for this control, so we should hide it.  We'll
@@ -2493,7 +2487,7 @@ namespace System.Windows.Forms
         /// </summary>
         public override int GetLineFromCharIndex(int index)
         {
-            return unchecked((int)(long)SendMessage(RichEditMessages.EM_EXLINEFROMCHAR, 0, index));
+            return unchecked((int)(long)User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_EXLINEFROMCHAR, IntPtr.Zero, (IntPtr)index));
         }
 
         /// <summary>
@@ -2592,8 +2586,9 @@ namespace System.Windows.Forms
         {
             if (IsHandleCreated)
             {
-                SendMessage(RichEditMessages.EM_SETBKGNDCOLOR, 0, ColorTranslator.ToWin32(BackColor));
+                User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_SETBKGNDCOLOR, IntPtr.Zero, PARAM.FromColor(BackColor));
             }
+
             base.OnBackColorChanged(e);
         }
 
@@ -2656,23 +2651,22 @@ namespace System.Windows.Forms
 
             // This is needed so that the control will fire change and update events
             // even if it is hidden
-            //
-            SendMessage(RichEditMessages.EM_SETEVENTMASK,
-                        0,
-                        RichTextBoxConstants.ENM_PROTECTED | RichTextBoxConstants.ENM_SELCHANGE |
+            User32.SendMessageW(
+                this,
+                (User32.WM)RichEditMessages.EM_SETEVENTMASK,
+                IntPtr.Zero,
+                (IntPtr)(RichTextBoxConstants.ENM_PROTECTED | RichTextBoxConstants.ENM_SELCHANGE |
                         RichTextBoxConstants.ENM_DROPFILES | RichTextBoxConstants.ENM_REQUESTRESIZE |
                         RichTextBoxConstants.ENM_IMECHANGE | RichTextBoxConstants.ENM_CHANGE |
                         RichTextBoxConstants.ENM_UPDATE | RichTextBoxConstants.ENM_SCROLL |
                         RichTextBoxConstants.ENM_KEYEVENTS | RichTextBoxConstants.ENM_MOUSEEVENTS |
-                        RichTextBoxConstants.ENM_SCROLLEVENTS | RichTextBoxConstants.ENM_LINK);
+                        RichTextBoxConstants.ENM_SCROLLEVENTS | RichTextBoxConstants.ENM_LINK));
 
             int rm = rightMargin;
             rightMargin = 0;
             RightMargin = rm;
 
-            //
-
-            SendMessage(RichEditMessages.EM_AUTOURLDETECT, DetectUrls ? 1 : 0, 0);
+            User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_AUTOURLDETECT, DetectUrls ? (IntPtr)1 : IntPtr.Zero, IntPtr.Zero);
             if (selectionBackColorToSetOnHandleCreated != Color.Empty)
             {
                 SelectionBackColor = selectionBackColorToSetOnHandleCreated;
@@ -2681,7 +2675,7 @@ namespace System.Windows.Forms
             // Initialize colors before initializing RTF, otherwise CFE_AUTOCOLOR will be in effect
             // and our text will all be Color.WindowText.
             AutoWordSelection = AutoWordSelection;
-            SendMessage(RichEditMessages.EM_SETBKGNDCOLOR, 0, ColorTranslator.ToWin32(BackColor));
+            User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_SETBKGNDCOLOR, IntPtr.Zero, PARAM.FromColor(BackColor));
             InternalSetForeColor(ForeColor);
 
             // base sets the Text property.  It's important to do this *after* setting EM_AUTOUrlDETECT.
@@ -2838,10 +2832,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Redoes the last undone editing operation.
         /// </summary>
-        public void Redo()
-        {
-            SendMessage(RichEditMessages.EM_REDO, 0, 0);
-        }
+        public void Redo() => User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_REDO);
 
         //NOTE: Undo is implemented on TextBox
 
@@ -2931,16 +2922,7 @@ namespace System.Windows.Forms
 
             if (IsHandleCreated)
             {
-                SendMessage(RichEditMessages.EM_SETZOOM, numerator, denominator);
-
-#if DEBUG
-
-                // DEBUG CODE: Verify that EM_SETZOOM actually set the zoom
-                int n = 0, d = 0;
-                SendMessage(RichEditMessages.EM_GETZOOM, ref n, ref d);
-                Debug.Assert(n == numerator && d == denominator, "EM_SETZOOM failed");
-                // END DEBUG CODE
-#endif
+                User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_SETZOOM, (IntPtr)numerator, (IntPtr)denominator);
             }
 
             if (numerator != 0)
@@ -3153,8 +3135,7 @@ namespace System.Windows.Forms
 
                 // gives us TextBox compatible behavior, programatic text change shouldn't
                 // be limited...
-                //
-                SendMessage(RichEditMessages.EM_EXLIMITTEXT, 0, int.MaxValue);
+                User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_EXLIMITTEXT, IntPtr.Zero, (IntPtr)int.MaxValue);
 
                 // go get the text for the control
                 // Needed for 64-bit
@@ -3378,7 +3359,7 @@ namespace System.Windows.Forms
             {
                 if (BackColor.IsSystemColor)
                 {
-                    SendMessage(RichEditMessages.EM_SETBKGNDCOLOR, 0, ColorTranslator.ToWin32(BackColor));
+                    User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_SETBKGNDCOLOR, IntPtr.Zero, PARAM.FromColor(BackColor));
                 }
                 if (ForeColor.IsSystemColor)
                 {
@@ -3480,7 +3461,7 @@ namespace System.Windows.Forms
         {
             if (IsHandleCreated)
             {
-                SendMessage(RichEditMessages.EM_EXLIMITTEXT, 0, MaxLength);
+                User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_EXLIMITTEXT, IntPtr.Zero, (IntPtr)MaxLength);
             }
         }
 
@@ -3709,7 +3690,7 @@ namespace System.Windows.Forms
             if (ImeMode == ImeMode.Hangul || ImeMode == ImeMode.HangulFull)
             {
                 // Is the IME CompositionWindow open?
-                int compMode = unchecked((int)(long)SendMessage(RichEditMessages.EM_GETIMECOMPMODE, 0, 0));
+                int compMode = unchecked((int)(long)User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_GETIMECOMPMODE));
                 if (RichTextBoxConstants.ICM_NOTOPEN != compMode)
                 {
                     int textLength = User32.GetWindowTextLengthW(new HandleRef(this, Handle));

@@ -1919,7 +1919,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 Control ctl = dropDownHolder.Component;
                 if (ctl != null)
                 {
-                    m.Result = ctl.SendMessage(m.Msg, m.WParam, m.LParam);
+                    m.Result = User32.SendMessageW(ctl, (User32.WM)m.Msg, m.WParam, m.LParam);
                     return true;
                 }
             }

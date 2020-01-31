@@ -1988,10 +1988,10 @@ namespace System.Windows.Forms
 
             base.OnHandleCreated(e);
 
-            int version = unchecked((int)(long)SendMessage((int)CCM.GETVERSION, 0, 0));
+            int version = unchecked((int)(long)User32.SendMessageW(this, (User32.WM)CCM.GETVERSION));
             if (version < 5)
             {
-                SendMessage((int)CCM.SETVERSION, 5, 0);
+                User32.SendMessageW(this, (User32.WM)CCM.SETVERSION, (IntPtr)5);
             }
 
             // Workaround for problem in TreeView where it doesn't recognize the TVS_CHECKBOXES

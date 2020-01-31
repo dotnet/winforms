@@ -5180,7 +5180,7 @@ namespace System.Windows.Forms
                     break;
                 case AutomationMessages.PGM_GETSELECTEDROW:
                 case AutomationMessages.PGM_GETVISIBLEROWCOUNT:
-                    m.Result = gridView.SendMessage(m.Msg, m.WParam, m.LParam);
+                    m.Result = User32.SendMessageW(gridView, (User32.WM)m.Msg, m.WParam, m.LParam);
                     return;
                 case AutomationMessages.PGM_SETSELECTEDTAB:
                     if (m.LParam != IntPtr.Zero)

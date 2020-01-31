@@ -10594,46 +10594,6 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Sends a Win32 message to this control.  If the control does not yet
-        ///  have a handle, it will be created.
-        /// </summary>
-        internal IntPtr SendMessage(int msg, int wparam, int lparam)
-        {
-            return UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), msg, wparam, lparam);
-        }
-
-        /// <summary>
-        ///  Sends a Win32 message to this control.  If the control does not yet
-        ///  have a handle, it will be created.
-        /// </summary>
-        internal IntPtr SendMessage(int msg, ref int wparam, ref int lparam)
-        {
-            Debug.Assert(IsHandleCreated, "Performance alert!  Calling Control::SendMessage and forcing handle creation.  Re-work control so handle creation is not required to set properties.  If there is no work around, wrap the call in an IsHandleCreated check.");
-            return UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), msg, ref wparam, ref lparam);
-        }
-
-        internal IntPtr SendMessage(int msg, int wparam, IntPtr lparam)
-        {
-            return UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), msg, (IntPtr)wparam, lparam);
-        }
-
-        internal IntPtr SendMessage(int msg, IntPtr wparam, IntPtr lparam)
-        {
-            Debug.Assert(IsHandleCreated, "Performance alert!  Calling Control::SendMessage and forcing handle creation.  Re-work control so handle creation is not required to set properties.  If there is no work around, wrap the call in an IsHandleCreated check.");
-            return UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), msg, wparam, lparam);
-        }
-
-        /// <summary>
-        ///  Sends a Win32 message to this control.  If the control does not yet
-        ///  have a handle, it will be created.
-        /// </summary>
-        internal IntPtr SendMessage(int msg, int wparam, string lparam)
-        {
-            Debug.Assert(IsHandleCreated, "Performance alert!  Calling Control::SendMessage and forcing handle creation.  Re-work control so handle creation is not required to set properties.  If there is no work around, wrap the call in an IsHandleCreated check.");
-            return UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), msg, wparam, lparam);
-        }
-
-        /// <summary>
         ///  sends this control to the back of the z-order
         /// </summary>
         public void SendToBack()
