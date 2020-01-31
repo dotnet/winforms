@@ -86,18 +86,9 @@ namespace System.ComponentModel.Design
             treeView.ShowLines = false;
 
             IntPtr hwnd = treeView.Handle;
-            ComCtl32.TVS_EX exstyle = TreeView_GetExtendedStyle(hwnd);
+            ComCtl32.TVS_EX exstyle = (ComCtl32.TVS_EX)User32.SendMessageW(hwnd, (User32.WM)ComCtl32.TVM.GETEXTENDEDSTYLE);
             exstyle |= ComCtl32.TVS_EX.DOUBLEBUFFER | ComCtl32.TVS_EX.FADEINOUTEXPANDOS;
-            TreeView_SetExtendedStyle(hwnd, exstyle, 0);
-        }
-        private static ComCtl32.TVS_EX TreeView_GetExtendedStyle(IntPtr handle)
-        {
-            return (ComCtl32.TVS_EX)User32.SendMessageW(handle, (User32.WM)ComCtl32.TVM.GETEXTENDEDSTYLE);
-        }
-
-        private static void TreeView_SetExtendedStyle(IntPtr handle, ComCtl32.TVS_EX extendedStyle, int mask)
-        {
-            User32.SendMessageW(handle, (User32.WM)ComCtl32.TVM.SETEXTENDEDSTYLE, (IntPtr)mask, (IntPtr)extendedStyle);
+            User32.SendMessageW(hwnd, (User32.WM)ComCtl32.TVM.SETEXTENDEDSTYLE, IntPtr.Zero, (IntPtr)exstyle);
         }
 
         public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
