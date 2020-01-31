@@ -139,11 +139,7 @@ namespace System.Windows.Forms
         NFR_ANSI = 1,
         NFR_UNICODE = 2;
 
-        public const int PRF_CHECKVISIBLE = 0x00000001,
-        PRF_NONCLIENT = 0x00000002,
-        PRF_CLIENT = 0x00000004,
-        PRF_ERASEBKGND = 0x00000008,
-        PRF_CHILDREN = 0x00000010,
+        public const int
         PATCOPY = 0x00F00021,
         PATINVERT = 0x005A0049;
 
