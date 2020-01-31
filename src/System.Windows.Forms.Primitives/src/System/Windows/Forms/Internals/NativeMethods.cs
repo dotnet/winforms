@@ -594,8 +594,8 @@ namespace System.Windows.Forms
             private const int LF_FACESIZE = 32;
 
             public int cbSize;
-            public int dwMask;
-            public int dwEffects;
+            public Richedit.CFM dwMask;
+            public Richedit.CFE dwEffects;
             public int yHeight;
             public int yOffset;
             public int crTextColor;
@@ -619,8 +619,8 @@ namespace System.Windows.Forms
         public class CHARFORMATA
         {
             public int cbSize = Marshal.SizeOf<CHARFORMATA>();
-            public int dwMask;
-            public int dwEffects;
+            public Richedit.CFM dwMask;
+            public Richedit.CFE dwEffects;
             public int yHeight;
             public int yOffset;
             public int crTextColor;
@@ -634,8 +634,8 @@ namespace System.Windows.Forms
         public class CHARFORMAT2A
         {
             public int cbSize = Marshal.SizeOf<CHARFORMAT2A>();
-            public int dwMask = 0;
-            public int dwEffects = 0;
+            public Richedit.CFM dwMask;
+            public Richedit.CFE dwEffects;
             public int yHeight = 0;
             public int yOffset = 0;
             public int crTextColor = 0;

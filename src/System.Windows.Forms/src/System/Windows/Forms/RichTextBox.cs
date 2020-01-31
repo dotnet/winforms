@@ -986,7 +986,7 @@ namespace System.Windows.Forms
                 ForceHandleCreate();
                 NativeMethods.CHARFORMATA cf = GetCharFormat(true);
                 // if the effects member contains valid info
-                if ((cf.dwMask & RichTextBoxConstants.CFM_OFFSET) != 0)
+                if ((cf.dwMask & CFM.OFFSET) != 0)
                 {
                     selCharOffset = cf.yOffset;
                 }
@@ -1009,7 +1009,7 @@ namespace System.Windows.Forms
                 ForceHandleCreate();
                 NativeMethods.CHARFORMATA cf = new NativeMethods.CHARFORMATA
                 {
-                    dwMask = RichTextBoxConstants.CFM_OFFSET,
+                    dwMask = CFM.OFFSET,
                     yOffset = Pixel2Twip(IntPtr.Zero, value, false)
                 };
 
@@ -1018,7 +1018,7 @@ namespace System.Windows.Forms
                 // we would cache property values until the handle is created - but for this property,
                 // it's far more simple to just create the handle.
                 //
-                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), RichEditMessages.EM_SETCHARFORMAT, RichTextBoxConstants.SCF_SELECTION, cf);
+                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (User32.WM)RichEditMessages.EM_SETCHARFORMAT, (IntPtr)SCF.SELECTION, cf);
             }
         }
 
@@ -1041,7 +1041,7 @@ namespace System.Windows.Forms
                 ForceHandleCreate();
                 NativeMethods.CHARFORMATA cf = GetCharFormat(true);
                 // if the effects member contains valid info
-                if ((cf.dwMask & RichTextBoxConstants.CFM_COLOR) != 0)
+                if ((cf.dwMask & CFM.COLOR) != 0)
                 {
                     selColor = ColorTranslator.FromOle(cf.crTextColor);
                 }
@@ -1052,12 +1052,12 @@ namespace System.Windows.Forms
             {
                 ForceHandleCreate();
                 NativeMethods.CHARFORMATA cf = GetCharFormat(true);
-                cf.dwMask = RichTextBoxConstants.CFM_COLOR;
+                cf.dwMask = CFM.COLOR;
                 cf.dwEffects = 0;
                 cf.crTextColor = ColorTranslator.ToWin32(value);
 
                 // set the format information
-                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), RichEditMessages.EM_SETCHARFORMAT, RichTextBoxConstants.SCF_SELECTION, cf);
+                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (User32.WM)RichEditMessages.EM_SETCHARFORMAT, (IntPtr)SCF.SELECTION, cf);
             }
         }
 
@@ -1080,11 +1080,11 @@ namespace System.Windows.Forms
                 {
                     NativeMethods.CHARFORMAT2A cf2 = GetCharFormat2(true);
                     // If the effects member contains valid info
-                    if ((cf2.dwEffects & RichTextBoxConstants.CFE_AUTOBACKCOLOR) != 0)
+                    if ((cf2.dwEffects & CFE.AUTOBACKCOLOR) != 0)
                     {
                         selColor = BackColor;
                     }
-                    else if ((cf2.dwMask & RichTextBoxConstants.CFM_BACKCOLOR) != 0)
+                    else if ((cf2.dwMask & CFM.BACKCOLOR) != 0)
                     {
                         selColor = ColorTranslator.FromOle(cf2.crBackColor);
                     }
@@ -1105,15 +1105,15 @@ namespace System.Windows.Forms
                     NativeMethods.CHARFORMAT2A cf2 = new NativeMethods.CHARFORMAT2A();
                     if (value == Color.Empty)
                     {
-                        cf2.dwEffects = RichTextBoxConstants.CFE_AUTOBACKCOLOR;
+                        cf2.dwEffects = CFE.AUTOBACKCOLOR;
                     }
                     else
                     {
-                        cf2.dwMask = RichTextBoxConstants.CFM_BACKCOLOR;
+                        cf2.dwMask = CFM.BACKCOLOR;
                         cf2.crBackColor = ColorTranslator.ToWin32(value);
                     }
 
-                    UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), RichEditMessages.EM_SETCHARFORMAT, RichTextBoxConstants.SCF_SELECTION, cf2);
+                    UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (User32.WM)RichEditMessages.EM_SETCHARFORMAT, (IntPtr)SCF.SELECTION, cf2);
                 }
             }
         }
@@ -1287,12 +1287,12 @@ namespace System.Windows.Forms
             get
             {
                 ForceHandleCreate();
-                return GetCharFormat(RichTextBoxConstants.CFM_PROTECTED, RichTextBoxConstants.CFM_PROTECTED) == RichTextBoxSelectionAttribute.All;
+                return GetCharFormat(CFM.PROTECTED, CFE.PROTECTED) == RichTextBoxSelectionAttribute.All;
             }
             set
             {
                 ForceHandleCreate();
-                SetCharFormat(RichTextBoxConstants.CFM_PROTECTED, value ? RichTextBoxConstants.CFE_PROTECTED : 0, RichTextBoxSelectionAttribute.All);
+                SetCharFormat(CFM.PROTECTED, value ? CFE.PROTECTED : 0, RichTextBoxSelectionAttribute.All);
             }
         }
 
@@ -2337,33 +2337,33 @@ namespace System.Windows.Forms
         private bool InternalSetForeColor(Color value)
         {
             NativeMethods.CHARFORMATA cf = GetCharFormat(false);
-            if ((cf.dwMask & RichTextBoxConstants.CFM_COLOR) != 0
+            if ((cf.dwMask & CFM.COLOR) != 0
                 && ColorTranslator.ToWin32(value) == cf.crTextColor)
             {
                 return true;
             }
 
-            cf.dwMask = RichTextBoxConstants.CFM_COLOR;
+            cf.dwMask = CFM.COLOR;
             cf.dwEffects = 0;
             cf.crTextColor = ColorTranslator.ToWin32(value);
-            return SetCharFormat(RichTextBoxConstants.SCF_ALL, cf);
+            return SetCharFormat(SCF.ALL, cf);
         }
 
         private NativeMethods.CHARFORMATA GetCharFormat(bool fSelection)
         {
             NativeMethods.CHARFORMATA cf = new NativeMethods.CHARFORMATA();
-            UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), RichEditMessages.EM_GETCHARFORMAT, fSelection ? RichTextBoxConstants.SCF_SELECTION : RichTextBoxConstants.SCF_DEFAULT, cf);
+            UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (User32.WM)RichEditMessages.EM_GETCHARFORMAT, fSelection ? (IntPtr)SCF.SELECTION : (IntPtr)SCF.DEFAULT, cf);
             return cf;
         }
 
         private NativeMethods.CHARFORMAT2A GetCharFormat2(bool fSelection)
         {
             NativeMethods.CHARFORMAT2A cf2 = new NativeMethods.CHARFORMAT2A();
-            UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), RichEditMessages.EM_GETCHARFORMAT, fSelection ? RichTextBoxConstants.SCF_SELECTION : RichTextBoxConstants.SCF_DEFAULT, cf2);
+            UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (User32.WM)RichEditMessages.EM_GETCHARFORMAT, fSelection ? (IntPtr)SCF.SELECTION : (IntPtr)SCF.DEFAULT, cf2);
             return cf2;
         }
 
-        private RichTextBoxSelectionAttribute GetCharFormat(int mask, int effect)
+        private RichTextBoxSelectionAttribute GetCharFormat(CFM mask, CFE effect)
         {
             RichTextBoxSelectionAttribute charFormat = RichTextBoxSelectionAttribute.None;
 
@@ -2390,7 +2390,7 @@ namespace System.Windows.Forms
             ForceHandleCreate();
 
             NativeMethods.CHARFORMATA cf = GetCharFormat(selectionOnly);
-            if ((cf.dwMask & RichTextBoxConstants.CFM_FACE) == 0)
+            if ((cf.dwMask & CFM.FACE) == 0)
             {
                 return null;
             }
@@ -2403,7 +2403,7 @@ namespace System.Windows.Forms
             }
 
             float fontSize = 13;
-            if ((cf.dwMask & RichTextBoxConstants.CFM_SIZE) != 0)
+            if ((cf.dwMask & CFM.SIZE) != 0)
             {
                 fontSize = (float)cf.yHeight / (float)20.0;
                 if (fontSize == 0 && cf.yHeight > 0)
@@ -2413,22 +2413,22 @@ namespace System.Windows.Forms
             }
 
             FontStyle style = FontStyle.Regular;
-            if ((cf.dwMask & RichTextBoxConstants.CFM_BOLD) != 0 && (cf.dwEffects & RichTextBoxConstants.CFE_BOLD) != 0)
+            if ((cf.dwMask & CFM.BOLD) != 0 && (cf.dwEffects & CFE.BOLD) != 0)
             {
                 style |= FontStyle.Bold;
             }
 
-            if ((cf.dwMask & RichTextBoxConstants.CFM_ITALIC) != 0 && (cf.dwEffects & RichTextBoxConstants.CFE_ITALIC) != 0)
+            if ((cf.dwMask & CFM.ITALIC) != 0 && (cf.dwEffects & CFE.ITALIC) != 0)
             {
                 style |= FontStyle.Italic;
             }
 
-            if ((cf.dwMask & RichTextBoxConstants.CFM_STRIKEOUT) != 0 && (cf.dwEffects & RichTextBoxConstants.CFE_STRIKEOUT) != 0)
+            if ((cf.dwMask & CFM.STRIKEOUT) != 0 && (cf.dwEffects & CFE.STRIKEOUT) != 0)
             {
                 style |= FontStyle.Strikeout;
             }
 
-            if ((cf.dwMask & RichTextBoxConstants.CFM_UNDERLINE) != 0 && (cf.dwEffects & RichTextBoxConstants.CFE_UNDERLINE) != 0)
+            if ((cf.dwMask & CFM.UNDERLINE) != 0 && (cf.dwEffects & CFE.UNDERLINE) != 0)
             {
                 style |= FontStyle.Underline;
             }
@@ -2935,7 +2935,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private bool SetCharFormat(int mask, int effect, RichTextBoxSelectionAttribute charFormat)
+        private bool SetCharFormat(CFM mask, CFE effect, RichTextBoxSelectionAttribute charFormat)
         {
             // check to see if the control has been created
             if (IsHandleCreated)
@@ -2958,43 +2958,43 @@ namespace System.Windows.Forms
                 }
 
                 // set the format information
-                return IntPtr.Zero != UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), RichEditMessages.EM_SETCHARFORMAT, RichTextBoxConstants.SCF_SELECTION, cf);
+                return IntPtr.Zero != UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (User32.WM)RichEditMessages.EM_SETCHARFORMAT, (IntPtr)SCF.SELECTION, cf);
             }
             return false;
         }
 
-        private bool SetCharFormat(int charRange, NativeMethods.CHARFORMATA cf)
+        private bool SetCharFormat(SCF charRange, NativeMethods.CHARFORMATA cf)
         {
-            return IntPtr.Zero != UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), RichEditMessages.EM_SETCHARFORMAT, charRange, cf);
+            return IntPtr.Zero != UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (User32.WM)RichEditMessages.EM_SETCHARFORMAT, (IntPtr)charRange, cf);
         }
 
         private unsafe void SetCharFormatFont(bool selectionOnly, Font value)
         {
             ForceHandleCreate();
 
-            int dwMask = RichTextBoxConstants.CFM_FACE | RichTextBoxConstants.CFM_SIZE | RichTextBoxConstants.CFM_BOLD |
-                RichTextBoxConstants.CFM_ITALIC | RichTextBoxConstants.CFM_STRIKEOUT | RichTextBoxConstants.CFM_UNDERLINE |
-                RichTextBoxConstants.CFM_CHARSET;
+            CFM dwMask = CFM.FACE | CFM.SIZE | CFM.BOLD |
+                CFM.ITALIC | CFM.STRIKEOUT | CFM.UNDERLINE |
+                CFM.CHARSET;
 
-            int dwEffects = 0;
+            CFE dwEffects = 0;
             if (value.Bold)
             {
-                dwEffects |= RichTextBoxConstants.CFE_BOLD;
+                dwEffects |= CFE.BOLD;
             }
 
             if (value.Italic)
             {
-                dwEffects |= RichTextBoxConstants.CFE_ITALIC;
+                dwEffects |= CFE.ITALIC;
             }
 
             if (value.Strikeout)
             {
-                dwEffects |= RichTextBoxConstants.CFE_STRIKEOUT;
+                dwEffects |= CFE.STRIKEOUT;
             }
 
             if (value.Underline)
             {
-                dwEffects |= RichTextBoxConstants.CFE_UNDERLINE;
+                dwEffects |= CFE.UNDERLINE;
             }
 
             User32.LOGFONTW logFont = User32.LOGFONTW.FromFont(value);
@@ -3012,7 +3012,7 @@ namespace System.Windows.Forms
             UnsafeNativeMethods.SendMessage(
                 new HandleRef(this, Handle),
                 RichEditMessages.EM_SETCHARFORMAT,
-                selectionOnly ? RichTextBoxConstants.SCF_SELECTION : RichTextBoxConstants.SCF_ALL,
+                selectionOnly ? (int)SCF.SELECTION : (int)SCF.ALL,
                 ref charFormat);
         }
 
@@ -3567,7 +3567,7 @@ namespace System.Windows.Forms
                                     // Allow change of protected style
                                     //
                                     NativeMethods.CHARFORMATA charFormat = Marshal.PtrToStructure<NativeMethods.CHARFORMATA>(enprotected.lParam);
-                                    if ((charFormat.dwMask & RichTextBoxConstants.CFM_PROTECTED) != 0)
+                                    if ((charFormat.dwMask & CFM.PROTECTED) != 0)
                                     {
                                         m.Result = IntPtr.Zero;
                                         return;
