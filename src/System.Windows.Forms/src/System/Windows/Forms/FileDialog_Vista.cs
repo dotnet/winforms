@@ -219,18 +219,18 @@ namespace System.Windows.Forms
             {
             }
 
-            public void OnShareViolation(FileDialogNative.IFileDialog pfd, FileDialogNative.IShellItem psi, out FileDialogNative.FDE_SHAREVIOLATION_RESPONSE pResponse)
+            public void OnShareViolation(FileDialogNative.IFileDialog pfd, FileDialogNative.IShellItem psi, out FDESVR pResponse)
             {
-                pResponse = FileDialogNative.FDE_SHAREVIOLATION_RESPONSE.FDESVR_DEFAULT;
+                pResponse = FDESVR.DEFAULT;
             }
 
             public void OnTypeChange(FileDialogNative.IFileDialog pfd)
             {
             }
 
-            public void OnOverwrite(FileDialogNative.IFileDialog pfd, FileDialogNative.IShellItem psi, out FileDialogNative.FDE_OVERWRITE_RESPONSE pResponse)
+            public void OnOverwrite(FileDialogNative.IFileDialog pfd, FileDialogNative.IShellItem psi, out FDEOR pResponse)
             {
-                pResponse = FileDialogNative.FDE_OVERWRITE_RESPONSE.FDEOR_DEFAULT;
+                pResponse = FDEOR.DEFAULT;
             }
         }
 
@@ -273,7 +273,7 @@ namespace System.Windows.Forms
 
         private protected static string GetFilePathFromShellItem(FileDialogNative.IShellItem item)
         {
-            item.GetDisplayName(FileDialogNative.SIGDN.SIGDN_DESKTOPABSOLUTEPARSING, out string filename);
+            item.GetDisplayName(SIGDN.DESKTOPABSOLUTEPARSING, out string filename);
             return filename;
         }
 

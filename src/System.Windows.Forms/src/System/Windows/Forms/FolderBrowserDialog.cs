@@ -249,15 +249,15 @@ namespace System.Windows.Forms
         private void GetResult(FileDialogNative.IFileDialog dialog)
         {
             dialog.GetResult(out FileDialogNative.IShellItem item);
-            item.GetDisplayName(FileDialogNative.SIGDN.SIGDN_FILESYSPATH, out _selectedPath);
+            item.GetDisplayName(SIGDN.FILESYSPATH, out _selectedPath);
         }
 
         private unsafe bool RunDialogOld(IntPtr hWndOwner)
         {
-            Shell32.SHGetSpecialFolderLocation(hWndOwner, (int)_rootFolder, out CoTaskMemSafeHandle listHandle);
+            SHGetSpecialFolderLocation(hWndOwner, (int)_rootFolder, out CoTaskMemSafeHandle listHandle);
             if (listHandle.IsInvalid)
             {
-                Shell32.SHGetSpecialFolderLocation(hWndOwner, (int)Environment.SpecialFolder.Desktop, out listHandle);
+                SHGetSpecialFolderLocation(hWndOwner, (int)Environment.SpecialFolder.Desktop, out listHandle);
                 if (listHandle.IsInvalid)
                 {
                     throw new InvalidOperationException(SR.FolderBrowserDialogNoRootFolder);
@@ -266,10 +266,10 @@ namespace System.Windows.Forms
 
             using (listHandle)
             {
-                uint mergedOptions = Shell32.BrowseInfoFlags.BIF_NEWDIALOGSTYLE;
+                uint mergedOptions = BrowseInfoFlags.BIF_NEWDIALOGSTYLE;
                 if (!ShowNewFolderButton)
                 {
-                    mergedOptions |= Shell32.BrowseInfoFlags.BIF_NONEWFOLDERBUTTON;
+                    mergedOptions |= BrowseInfoFlags.BIF_NONEWFOLDERBUTTON;
                 }
 
                 // The SHBrowserForFolder dialog is OLE/COM based, and documented as only being safe to use under the STA
@@ -281,13 +281,13 @@ namespace System.Windows.Forms
                     throw new Threading.ThreadStateException(string.Format(SR.DebuggingExceptionOnly, SR.ThreadMustBeSTA));
                 }
 
-                var callback = new Shell32.BrowseCallbackProc(FolderBrowserDialog_BrowseCallbackProc);
+                var callback = new BrowseCallbackProc(FolderBrowserDialog_BrowseCallbackProc);
                 char[] displayName = ArrayPool<char>.Shared.Rent(Kernel32.MAX_PATH + 1);
                 try
                 {
                     fixed (char* pDisplayName = displayName)
                     {
-                        var bi = new Shell32.BROWSEINFO
+                        var bi = new BROWSEINFO
                         {
                             pidlRoot = listHandle,
                             hwndOwner = hWndOwner,
@@ -300,7 +300,7 @@ namespace System.Windows.Forms
                         };
 
                         // Show the dialog
-                        using (CoTaskMemSafeHandle browseHandle = Shell32.SHBrowseForFolderW(ref bi))
+                        using (CoTaskMemSafeHandle browseHandle = SHBrowseForFolderW(ref bi))
                         {
                             if (browseHandle.IsInvalid)
                             {
@@ -308,7 +308,7 @@ namespace System.Windows.Forms
                             }
 
                             // Retrieve the path from the IDList.
-                            Shell32.SHGetPathFromIDListLongPath(browseHandle.DangerousGetHandle(), out _selectedPath);
+                            SHGetPathFromIDListLongPath(browseHandle.DangerousGetHandle(), out _selectedPath);
                             GC.KeepAlive(callback);
                             return true;
                         }
@@ -343,7 +343,7 @@ namespace System.Windows.Forms
                     if (selectedPidl != IntPtr.Zero)
                     {
                         // Try to retrieve the path from the IDList
-                        bool isFileSystemFolder = Shell32.SHGetPathFromIDListLongPath(selectedPidl, out _);
+                        bool isFileSystemFolder = SHGetPathFromIDListLongPath(selectedPidl, out _);
                         User32.SendMessageW(hwnd, (User32.WM)BFFM.ENABLEOK, IntPtr.Zero, PARAM.FromBool(isFileSystemFolder));
                     }
                     break;
