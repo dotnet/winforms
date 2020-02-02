@@ -1602,26 +1602,25 @@ namespace System.Windows.Forms
             /// </summary>
             private string[] ReadFileListFromHandle(IntPtr hdrop)
             {
-                string[] files = null;
-                StringBuilder sb = new StringBuilder(Kernel32.MAX_PATH);
-
-                int count = UnsafeNativeMethods.DragQueryFile(new HandleRef(null, hdrop), unchecked((int)0xFFFFFFFF), null, 0);
-                if (count > 0)
+                uint count = Shell32.DragQueryFileW(hdrop, 0xFFFFFFFF, null);
+                if (count == 0)
                 {
-                    files = new string[count];
+                    return null;
+                }
 
-                    for (int i = 0; i < count; i++)
+                var sb = new StringBuilder(Kernel32.MAX_PATH);
+                var files = new string[count];
+                for (uint i = 0; i < count; i++)
+                {
+                    uint charlen = Shell32.DragQueryFileW(hdrop, i, sb);
+                    if (charlen == 0)
                     {
-                        int charlen = UnsafeNativeMethods.DragQueryFileLongPath(new HandleRef(null, hdrop), i, sb);
-                        if (0 == charlen)
-                        {
-                            continue;
-                        }
-
-                        string s = sb.ToString(0, charlen);
-                        string fullPath = Path.GetFullPath(s);
-                        files[i] = s;
+                        continue;
                     }
+
+                    string s = sb.ToString(0, (int)charlen);
+                    string fullPath = Path.GetFullPath(s);
+                    files[i] = s;
                 }
 
                 return files;

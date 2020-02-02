@@ -694,15 +694,6 @@ namespace System.Windows.Forms
             // public RECT rcBound; // Note that we don't define this field as part of the marshaling
         }
 
-        [StructLayout(LayoutKind.Sequential)]
-        public class ENDROPFILES
-        {
-            public User32.NMHDR nmhdr;
-            public IntPtr hDrop = IntPtr.Zero;
-            public int cp = 0;
-            public bool fProtected = false;
-        }
-
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
         public class ENPROTECTED
         {

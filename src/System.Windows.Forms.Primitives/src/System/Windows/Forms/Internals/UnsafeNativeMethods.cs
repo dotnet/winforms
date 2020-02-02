@@ -50,42 +50,6 @@ namespace System.Windows.Forms
         public static extern HRESULT PrintDlgEx([In, Out] NativeMethods.PRINTDLGEX lppdex);
 
         [DllImport(ExternDll.Shell32, CharSet = CharSet.Auto)]
-        public static extern int DragQueryFile(HandleRef hDrop, int iFile, StringBuilder lpszFile, int cch);
-
-        public static int DragQueryFileLongPath(HandleRef hDrop, int iFile, StringBuilder lpszFile)
-        {
-            if (null != lpszFile && 0 != lpszFile.Capacity && iFile != unchecked((int)0xFFFFFFFF))
-            {
-                int resultValue = 0;
-
-                // iterating by allocating chunk of memory each time we find the length is not sufficient.
-                // Performance should not be an issue for current MAX_PATH length due to this
-                if ((resultValue = DragQueryFile(hDrop, iFile, lpszFile, lpszFile.Capacity)) == lpszFile.Capacity)
-                {
-                    // passing null for buffer will return actual number of charectors in the file name.
-                    // So, one extra call would be suffice to avoid while loop in case of long path.
-                    int capacity = DragQueryFile(hDrop, iFile, null, 0);
-                    if (capacity < Kernel32.MAX_UNICODESTRING_LEN)
-                    {
-                        lpszFile.EnsureCapacity(capacity);
-                        resultValue = DragQueryFile(hDrop, iFile, lpszFile, capacity);
-                    }
-                    else
-                    {
-                        resultValue = 0;
-                    }
-                }
-
-                lpszFile.Length = resultValue;
-                return resultValue;  // what ever the result.
-            }
-            else
-            {
-                return DragQueryFile(hDrop, iFile, lpszFile, lpszFile.Capacity);
-            }
-        }
-
-        [DllImport(ExternDll.Shell32, CharSet = CharSet.Auto)]
         public static extern int Shell_NotifyIcon(int message, NativeMethods.NOTIFYICONDATA pnid);
 
         [DllImport(ExternDll.Comdlg32, SetLastError = true, CharSet = CharSet.Auto)]
