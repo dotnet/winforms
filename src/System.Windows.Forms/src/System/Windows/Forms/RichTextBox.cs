@@ -977,14 +977,14 @@ namespace System.Windows.Forms
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
         SRDescription(nameof(SR.RichTextBoxSelCharOffset))
         ]
-        public int SelectionCharOffset
+        public unsafe int SelectionCharOffset
         {
             get
             {
                 int selCharOffset = 0;
 
                 ForceHandleCreate();
-                NativeMethods.CHARFORMATA cf = GetCharFormat(true);
+                CHARFORMATW cf = GetCharFormat(true);
                 // if the effects member contains valid info
                 if ((cf.dwMask & CFM.OFFSET) != 0)
                 {
@@ -1007,8 +1007,9 @@ namespace System.Windows.Forms
                 }
 
                 ForceHandleCreate();
-                NativeMethods.CHARFORMATA cf = new NativeMethods.CHARFORMATA
+                var cf = new CHARFORMATW
                 {
+                    cbSize = (uint)sizeof(CHARFORMATW),
                     dwMask = CFM.OFFSET,
                     yOffset = Pixel2Twip(IntPtr.Zero, value, false)
                 };
@@ -1017,8 +1018,7 @@ namespace System.Windows.Forms
                 // SendMessage will force the handle to be created if it hasn't already. Normally,
                 // we would cache property values until the handle is created - but for this property,
                 // it's far more simple to just create the handle.
-                //
-                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (User32.WM)RichEditMessages.EM_SETCHARFORMAT, (IntPtr)SCF.SELECTION, cf);
+                User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_SETCHARFORMAT, (IntPtr)SCF.SELECTION, ref cf);
             }
         }
 
@@ -1039,7 +1039,7 @@ namespace System.Windows.Forms
                 Color selColor = Color.Empty;
 
                 ForceHandleCreate();
-                NativeMethods.CHARFORMATA cf = GetCharFormat(true);
+                CHARFORMATW cf = GetCharFormat(true);
                 // if the effects member contains valid info
                 if ((cf.dwMask & CFM.COLOR) != 0)
                 {
@@ -1051,13 +1051,13 @@ namespace System.Windows.Forms
             set
             {
                 ForceHandleCreate();
-                NativeMethods.CHARFORMATA cf = GetCharFormat(true);
+                CHARFORMATW cf = GetCharFormat(true);
                 cf.dwMask = CFM.COLOR;
                 cf.dwEffects = 0;
                 cf.crTextColor = ColorTranslator.ToWin32(value);
 
                 // set the format information
-                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (User32.WM)RichEditMessages.EM_SETCHARFORMAT, (IntPtr)SCF.SELECTION, cf);
+                User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_SETCHARFORMAT, (IntPtr)SCF.SELECTION, ref cf);
             }
         }
 
@@ -2336,7 +2336,7 @@ namespace System.Windows.Forms
         // Sends set color message to HWND; doesn't call Control.SetForeColor
         private bool InternalSetForeColor(Color value)
         {
-            NativeMethods.CHARFORMATA cf = GetCharFormat(false);
+            CHARFORMATW cf = GetCharFormat(false);
             if ((cf.dwMask & CFM.COLOR) != 0
                 && ColorTranslator.ToWin32(value) == cf.crTextColor)
             {
@@ -2349,17 +2349,20 @@ namespace System.Windows.Forms
             return SetCharFormat(SCF.ALL, cf);
         }
 
-        private NativeMethods.CHARFORMATA GetCharFormat(bool fSelection)
+        private unsafe CHARFORMATW GetCharFormat(bool fSelection)
         {
-            NativeMethods.CHARFORMATA cf = new NativeMethods.CHARFORMATA();
-            UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (User32.WM)RichEditMessages.EM_GETCHARFORMAT, fSelection ? (IntPtr)SCF.SELECTION : (IntPtr)SCF.DEFAULT, cf);
+            var cf = new CHARFORMATW
+            {
+                cbSize = (uint)sizeof(CHARFORMATW)
+            };
+            User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_GETCHARFORMAT, (IntPtr)(fSelection ? SCF.SELECTION : SCF.DEFAULT), ref cf);
             return cf;
         }
 
         private NativeMethods.CHARFORMAT2A GetCharFormat2(bool fSelection)
         {
             NativeMethods.CHARFORMAT2A cf2 = new NativeMethods.CHARFORMAT2A();
-            UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (User32.WM)RichEditMessages.EM_GETCHARFORMAT, fSelection ? (IntPtr)SCF.SELECTION : (IntPtr)SCF.DEFAULT, cf2);
+            UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (User32.WM)RichEditMessages.EM_GETCHARFORMAT, (IntPtr)(fSelection ? SCF.SELECTION : SCF.DEFAULT), cf2);
             return cf2;
         }
 
@@ -2370,7 +2373,7 @@ namespace System.Windows.Forms
             // check to see if the control has been created
             if (IsHandleCreated)
             {
-                NativeMethods.CHARFORMATA cf = GetCharFormat(true);
+                CHARFORMATW cf = GetCharFormat(true);
                 // if the effects member contains valid info
                 if ((cf.dwMask & mask) != 0)
                 {
@@ -2389,17 +2392,10 @@ namespace System.Windows.Forms
         {
             ForceHandleCreate();
 
-            NativeMethods.CHARFORMATA cf = GetCharFormat(selectionOnly);
+            CHARFORMATW cf = GetCharFormat(selectionOnly);
             if ((cf.dwMask & CFM.FACE) == 0)
             {
                 return null;
-            }
-
-            string fontName = Encoding.Default.GetString(cf.szFaceName);
-            int index = fontName.IndexOf('\0');
-            if (index != -1)
-            {
-                fontName = fontName.Substring(0, index);
             }
 
             float fontSize = 13;
@@ -2435,7 +2431,7 @@ namespace System.Windows.Forms
 
             try
             {
-                return new Font(fontName, fontSize, style, GraphicsUnit.Point, cf.bCharSet);
+                return new Font(cf.FaceName.ToString(), fontSize, style, GraphicsUnit.Point, cf.bCharSet);
             }
             catch
             {
@@ -2935,13 +2931,14 @@ namespace System.Windows.Forms
             }
         }
 
-        private bool SetCharFormat(CFM mask, CFE effect, RichTextBoxSelectionAttribute charFormat)
+        private unsafe bool SetCharFormat(CFM mask, CFE effect, RichTextBoxSelectionAttribute charFormat)
         {
             // check to see if the control has been created
             if (IsHandleCreated)
             {
-                NativeMethods.CHARFORMATA cf = new NativeMethods.CHARFORMATA
+                var cf = new CHARFORMATW
                 {
+                    cbSize = (uint)sizeof(CHARFORMATW),
                     dwMask = mask
                 };
 
@@ -2958,14 +2955,15 @@ namespace System.Windows.Forms
                 }
 
                 // set the format information
-                return IntPtr.Zero != UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (User32.WM)RichEditMessages.EM_SETCHARFORMAT, (IntPtr)SCF.SELECTION, cf);
+                return User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_SETCHARFORMAT, (IntPtr)SCF.SELECTION, ref cf) != IntPtr.Zero;
             }
+
             return false;
         }
 
-        private bool SetCharFormat(SCF charRange, NativeMethods.CHARFORMATA cf)
+        private bool SetCharFormat(SCF charRange, CHARFORMATW cf)
         {
-            return IntPtr.Zero != UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (User32.WM)RichEditMessages.EM_SETCHARFORMAT, (IntPtr)charRange, cf);
+            return User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_SETCHARFORMAT, (IntPtr)charRange, ref cf) != IntPtr.Zero;
         }
 
         private unsafe void SetCharFormatFont(bool selectionOnly, Font value)
@@ -2998,9 +2996,9 @@ namespace System.Windows.Forms
             }
 
             User32.LOGFONTW logFont = User32.LOGFONTW.FromFont(value);
-            NativeMethods.CHARFORMATW charFormat = new NativeMethods.CHARFORMATW
+            var charFormat = new CHARFORMATW
             {
-                cbSize = sizeof(NativeMethods.CHARFORMATW),
+                cbSize = (uint)sizeof(CHARFORMATW),
                 dwMask = dwMask,
                 dwEffects = dwEffects,
                 yHeight = (int)(value.SizeInPoints * 20),
@@ -3009,10 +3007,10 @@ namespace System.Windows.Forms
                 FaceName = logFont.FaceName
             };
 
-            UnsafeNativeMethods.SendMessage(
-                new HandleRef(this, Handle),
-                RichEditMessages.EM_SETCHARFORMAT,
-                selectionOnly ? (int)SCF.SELECTION : (int)SCF.ALL,
+            User32.SendMessageW(
+                this,
+                (User32.WM)RichEditMessages.EM_SETCHARFORMAT,
+                (IntPtr)(selectionOnly ? SCF.SELECTION : SCF.ALL),
                 ref charFormat);
         }
 
@@ -3566,7 +3564,7 @@ namespace System.Windows.Forms
                                 case RichEditMessages.EM_SETCHARFORMAT:
                                     // Allow change of protected style
                                     //
-                                    NativeMethods.CHARFORMATA charFormat = Marshal.PtrToStructure<NativeMethods.CHARFORMATA>(enprotected.lParam);
+                                    CHARFORMATW charFormat = Marshal.PtrToStructure<CHARFORMATW>(enprotected.lParam);
                                     if ((charFormat.dwMask & CFM.PROTECTED) != 0)
                                     {
                                         m.Result = IntPtr.Zero;

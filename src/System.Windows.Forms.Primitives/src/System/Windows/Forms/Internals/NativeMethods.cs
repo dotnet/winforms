@@ -588,48 +588,6 @@ namespace System.Windows.Forms
             public IntPtr lpData = IntPtr.Zero;
         }
 
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
-        public unsafe struct CHARFORMATW
-        {
-            private const int LF_FACESIZE = 32;
-
-            public int cbSize;
-            public Richedit.CFM dwMask;
-            public Richedit.CFE dwEffects;
-            public int yHeight;
-            public int yOffset;
-            public int crTextColor;
-            public byte bCharSet;
-            public byte bPitchAndFamily;
-
-            private fixed char _szFaceName[LF_FACESIZE];
-            private Span<char> szFaceName
-            {
-                get { fixed (char* c = _szFaceName) { return new Span<char>(c, LF_FACESIZE); } }
-            }
-
-            public ReadOnlySpan<char> FaceName
-            {
-                get => szFaceName.SliceAtFirstNull();
-                set => SpanHelpers.CopyAndTerminate(value, szFaceName);
-            }
-        }
-
-        [StructLayout(LayoutKind.Sequential, Pack = 4)]
-        public class CHARFORMATA
-        {
-            public int cbSize = Marshal.SizeOf<CHARFORMATA>();
-            public Richedit.CFM dwMask;
-            public Richedit.CFE dwEffects;
-            public int yHeight;
-            public int yOffset;
-            public int crTextColor;
-            public byte bCharSet;
-            public byte bPitchAndFamily;
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 32)]
-            public byte[] szFaceName = new byte[32];
-        }
-
         [StructLayout(LayoutKind.Sequential, Pack = 4)]
         public class CHARFORMAT2A
         {

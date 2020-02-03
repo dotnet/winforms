@@ -3,21 +3,22 @@
 // See the LICENSE file in the project root for more information.
 
 using Xunit;
+using static Interop.Richedit;
 
-namespace System.Windows.Forms.Tests.InteropTests
+namespace System.Windows.Forms.Tests.Interop.Richedit
 {
     public class CHARFORMATWTests : IClassFixture<ThreadExceptionFixture>
     {
         [Fact]
         public unsafe void CharFormat_Size()
         {
-            Assert.Equal(92, sizeof(NativeMethods.CHARFORMATW));
+            Assert.Equal(92, sizeof(CHARFORMATW));
         }
 
         [Fact]
         public unsafe void CharFormat_FaceName()
         {
-            NativeMethods.CHARFORMATW charFormat = default;
+            CHARFORMATW charFormat = default;
             charFormat.FaceName = "TwoFace";
             Assert.Equal("TwoFace", charFormat.FaceName.ToString());
 
