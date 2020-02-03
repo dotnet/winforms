@@ -3017,7 +3017,7 @@ namespace System.Windows.Forms
                         this,
                         User32.WM.PRINT,
                         (IntPtr)imageHdc,
-                        (IntPtr)(NativeMethods.PRF_CHILDREN | NativeMethods.PRF_CLIENT | NativeMethods.PRF_ERASEBKGND | NativeMethods.PRF_NONCLIENT));
+                        (IntPtr)(User32.PRF.CHILDREN | User32.PRF.CLIENT | User32.PRF.ERASEBKGND | User32.PRF.NONCLIENT));
 
                     // Now BLT the result to the destination bitmap.
                     Gdi32.BitBlt(

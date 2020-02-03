@@ -5335,7 +5335,7 @@ namespace System.Windows.Forms
                         this,
                         User32.WM.PRINT,
                         (IntPtr)hDc,
-                        (IntPtr)(NativeMethods.PRF_CHILDREN | NativeMethods.PRF_CLIENT | NativeMethods.PRF_ERASEBKGND | NativeMethods.PRF_NONCLIENT));
+                        (IntPtr)(User32.PRF.CHILDREN | User32.PRF.CLIENT | User32.PRF.ERASEBKGND | User32.PRF.NONCLIENT));
 
                     //now BLT the result to the destination bitmap.
                     using (Graphics destGraphics = Graphics.FromImage(bitmap))
@@ -7587,7 +7587,7 @@ namespace System.Windows.Forms
 
                 if (!(e is PrintPaintEventArgs ppev))
                 {
-                    IntPtr flags = (IntPtr)(NativeMethods.PRF_CHILDREN | NativeMethods.PRF_CLIENT | NativeMethods.PRF_ERASEBKGND | NativeMethods.PRF_NONCLIENT);
+                    IntPtr flags = (IntPtr)(User32.PRF.CHILDREN | User32.PRF.CLIENT | User32.PRF.ERASEBKGND | User32.PRF.NONCLIENT);
                     hdc = e.HDC;
 
                     if (hdc == IntPtr.Zero)
@@ -9241,11 +9241,11 @@ namespace System.Windows.Forms
         {
             Debug.Assert(Gdi32.GetObjectType(hDC) == Gdi32.ObjectType.OBJ_ENHMETADC,
                 "PrintToMetaFile() called with a non-Enhanced MetaFile DC.");
-            Debug.Assert(((long)lParam & NativeMethods.PRF_CHILDREN) != 0,
+            Debug.Assert(((long)lParam & (long)User32.PRF.CHILDREN) != 0,
                 "PrintToMetaFile() called without PRF_CHILDREN.");
 
             // Strip the PRF_CHILDREN flag.  We will manually walk our children and print them.
-            lParam = (IntPtr)((long)lParam & ~NativeMethods.PRF_CHILDREN);
+            lParam = (IntPtr)((long)lParam & (long)~User32.PRF.CHILDREN);
 
             // We're the root control, so we need to set up our clipping region.  Retrieve the
             // x-coordinates and y-coordinates of the viewport origin for the specified device context.
@@ -9279,7 +9279,7 @@ namespace System.Windows.Forms
             using (DCMapping mapping = new DCMapping(hDC, bounds))
             {
                 // print the non-client area
-                PrintToMetaFile_SendPrintMessage(hDC, (IntPtr)((long)lParam & ~NativeMethods.PRF_CLIENT));
+                PrintToMetaFile_SendPrintMessage(hDC, (IntPtr)((long)lParam & (long)~User32.PRF.CLIENT));
 
                 // figure out mapping for the client area
                 RECT windowRect = new RECT();
@@ -9292,7 +9292,7 @@ namespace System.Windows.Forms
                 using (DCMapping clientMapping = new DCMapping(hDC, clientBounds))
                 {
                     // print the client area
-                    PrintToMetaFile_SendPrintMessage(hDC, (IntPtr)((long)lParam & ~NativeMethods.PRF_NONCLIENT));
+                    PrintToMetaFile_SendPrintMessage(hDC, (IntPtr)((long)lParam & (long)~User32.PRF.NONCLIENT));
 
                     // Paint children in reverse Z-Order
                     int count = Controls.Count;
@@ -9323,7 +9323,7 @@ namespace System.Windows.Forms
                 // good example.
                 if (Controls.Count == 0)
                 {
-                    lParam = (IntPtr)((long)lParam | NativeMethods.PRF_CHILDREN);
+                    lParam = (IntPtr)((long)lParam | (long)User32.PRF.CHILDREN);
                 }
 
                 // System controls must be painted into a temporary bitmap
