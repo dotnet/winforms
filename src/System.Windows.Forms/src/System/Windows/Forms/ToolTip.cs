@@ -672,11 +672,6 @@ namespace System.Windows.Forms
                 listView.SetToolTip(this, GetToolTip(associatedControl));
             }
 
-            if (associatedControl is StatusBar statusBar)
-            {
-                statusBar.SetToolTip(this);
-            }
-
             // Label now has its own Tooltip for AutoEllipsis.
             // So this control too falls in special casing.
             // We need to disable the LABEL AutoEllipsis tooltip and show
