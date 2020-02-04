@@ -146,7 +146,7 @@ namespace System.Windows.Forms
                                                     //public const int RECO_CUT   = 0x00000003; // cut to the clipboard
                                                     //public const int RECO_DRAG  = 0x00000004;    // drag
 
-        public const int STARTF_USESHOWWINDOW = 0x00000001,
+        public const int
         SIZE_RESTORED = 0,
         SIZE_MAXIMIZED = 2,
         SORT_DEFAULT = 0x0,
@@ -260,29 +260,6 @@ namespace System.Windows.Forms
         public delegate int ListViewCompareCallback(IntPtr lParam1, IntPtr lParam2, IntPtr lParamSort);
 
         public delegate int TreeViewCompareCallback(IntPtr lParam1, IntPtr lParam2, IntPtr lParamSort);
-
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-        public class STARTUPINFO_I
-        {
-            public int cb = 0;
-            public IntPtr lpReserved = IntPtr.Zero;
-            public IntPtr lpDesktop = IntPtr.Zero;
-            public IntPtr lpTitle = IntPtr.Zero;
-            public int dwX = 0;
-            public int dwY = 0;
-            public int dwXSize = 0;
-            public int dwYSize = 0;
-            public int dwXCountChars = 0;
-            public int dwYCountChars = 0;
-            public int dwFillAttribute = 0;
-            public int dwFlags = 0;
-            public short wShowWindow = 0;
-            public short cbReserved2 = 0;
-            public IntPtr lpReserved2 = IntPtr.Zero;
-            public IntPtr hStdInput = IntPtr.Zero;
-            public IntPtr hStdOutput = IntPtr.Zero;
-            public IntPtr hStdError = IntPtr.Zero;
-        }
 
         // Any change in PRINTDLG, should also be in PRINTDLG_32 and PRINTDLG_64
         public interface PRINTDLG
