@@ -4978,18 +4978,17 @@ namespace System.Windows.Forms
         private string propName;
         private int dwMsg;
 
-        private void GetDataFromCopyData(IntPtr lparam)
+        private unsafe void GetDataFromCopyData(IntPtr lparam)
         {
-            NativeMethods.COPYDATASTRUCT cds = Marshal.PtrToStructure<NativeMethods.COPYDATASTRUCT>(lparam);
+            User32.COPYDATASTRUCT* cds = (User32.COPYDATASTRUCT*)lparam;
 
-            if (cds != null && cds.lpData != IntPtr.Zero)
+            if (cds != null && cds->lpData != IntPtr.Zero)
             {
-                propName = Marshal.PtrToStringAuto(cds.lpData);
-                dwMsg = cds.dwData;
+                propName = Marshal.PtrToStringAuto(cds->lpData);
+                dwMsg = (int)cds->dwData;
             }
         }
 
-        //
         protected override void OnSystemColorsChanged(EventArgs e)
         {
             // refresh the toolbar buttons
