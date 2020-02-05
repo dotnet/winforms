@@ -5,7 +5,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Windows.Forms.Design;
 using WinForms.Common.Tests;
 using Xunit;
 using static Interop;
@@ -495,6 +494,144 @@ namespace System.Windows.Forms.Tests
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             control.DetectUrls = value;
             Assert.Equal((IntPtr)expected, User32.SendMessageW(control.Handle, (User32.WM)RichEditMessages.EM_GETAUTOURLDETECT));
+        }
+
+        public static IEnumerable<object[]> ForeColor_Set_TestData()
+        {
+            yield return new object[] { Color.Empty, SystemColors.WindowText };
+            yield return new object[] { Color.FromArgb(254, 1, 2, 3), Color.FromArgb(254, 1, 2, 3) };
+            yield return new object[] { Color.White, Color.White };
+            yield return new object[] { Color.Black, Color.Black };
+            yield return new object[] { Color.Red, Color.Red };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(ForeColor_Set_TestData))]
+        public void RichTextBox_ForeColor_Set_GetReturnsExpected(Color value, Color expected)
+        {
+            using var control = new RichTextBox
+            {
+                ForeColor = value
+            };
+            Assert.Equal(expected, control.ForeColor);
+            Assert.False(control.IsHandleCreated);
+
+            // Set same.
+            control.ForeColor = value;
+            Assert.Equal(expected, control.ForeColor);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> ForeColor_SetWithHandle_TestData()
+        {
+            yield return new object[] { Color.Empty, SystemColors.WindowText, 0 };
+            yield return new object[] { Color.FromArgb(254, 1, 2, 3), Color.FromArgb(254, 1, 2, 3), 1 };
+            yield return new object[] { Color.White, Color.White, 1 };
+            yield return new object[] { Color.Black, Color.Black, 1 };
+            yield return new object[] { Color.Red, Color.Red, 1 };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(ForeColor_SetWithHandle_TestData))]
+        public void RichTextBox_ForeColor_SetWithHandle_GetReturnsExpected(Color value, Color expected, int expectedInvalidatedCallCount)
+        {
+            using var control = new RichTextBox();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            control.ForeColor = value;
+            Assert.Equal(expected, control.ForeColor);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set same.
+            control.ForeColor = value;
+            Assert.Equal(expected, control.ForeColor);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsFact]
+        public unsafe void RichTextBox_ForeColor_GetCharFormat_Success()
+        {
+            using var control = new RichTextBox();
+
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            control.ForeColor = Color.FromArgb(0x12, 0x34, 0x56, 0x78);
+            var format = new CHARFORMATW
+            {
+                cbSize = (uint)sizeof(CHARFORMATW)
+            };
+            Assert.NotEqual(IntPtr.Zero, User32.SendMessageW(control.Handle, (User32.WM)RichEditMessages.EM_GETCHARFORMAT, (IntPtr)SCF.ALL, ref format));
+            Assert.Equal(0x785634, format.crTextColor);
+        }
+
+        [WinFormsFact]
+        public unsafe void RichTextBox_ForeColor_GetCharFormatWithTextColor_Success()
+        {
+            using var control = new RichTextBox();
+
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            control.ForeColor = Color.FromArgb(0x12, 0x34, 0x56, 0x78);
+            var format = new CHARFORMATW
+            {
+                cbSize = (uint)sizeof(CHARFORMATW)
+            };
+            Assert.NotEqual(IntPtr.Zero, User32.SendMessageW(control.Handle, (User32.WM)RichEditMessages.EM_GETCHARFORMAT, (IntPtr)SCF.ALL, ref format));
+            Assert.Equal(0x785634, format.crTextColor);
+
+            // Set different.
+            control.ForeColor = Color.FromArgb(0x34, 0x56, 0x78, 0x90);
+            format = new CHARFORMATW
+            {
+                cbSize = (uint)sizeof(CHARFORMATW)
+            };
+            Assert.NotEqual(IntPtr.Zero, User32.SendMessageW(control.Handle, (User32.WM)RichEditMessages.EM_GETCHARFORMAT, (IntPtr)SCF.ALL, ref format));
+            Assert.Equal(0x907856, format.crTextColor);
+        }
+
+        [WinFormsFact]
+        public void RichTextBox_ForeColor_SetWithHandler_CallsForeColorChanged()
+        {
+            using var control = new RichTextBox();
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                callCount++;
+            };
+            control.ForeColorChanged += handler;
+
+            // Set different.
+            control.ForeColor = Color.Red;
+            Assert.Equal(Color.Red, control.ForeColor);
+            Assert.Equal(1, callCount);
+
+            // Set same.
+            control.ForeColor = Color.Red;
+            Assert.Equal(Color.Red, control.ForeColor);
+            Assert.Equal(1, callCount);
+
+            // Set different.
+            control.ForeColor = Color.Empty;
+            Assert.Equal(SystemColors.WindowText, control.ForeColor);
+            Assert.Equal(2, callCount);
+
+            // Remove handler.
+            control.ForeColorChanged -= handler;
+            control.ForeColor = Color.Red;
+            Assert.Equal(Color.Red, control.ForeColor);
+            Assert.Equal(2, callCount);
         }
 
         [WinFormsFact]
@@ -1039,6 +1176,118 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createdCallCount);
         }
 
+        public static IEnumerable<object[]> SelectionCharOffset_CustomGetCharFormat_TestData()
+        {
+            yield return new object[] { CFM.OFFSET, 0, 0 };
+            yield return new object[] { CFM.OFFSET, 900, 60 };
+            yield return new object[] { CFM.OFFSET, 30000, 2000 };
+            yield return new object[] { CFM.OFFSET, 60000, 4000 };
+            yield return new object[] { CFM.OFFSET, -900, -60 };
+
+            yield return new object[] { 0, 0, 0 };
+            yield return new object[] { 0, 900, 60 };
+            yield return new object[] { 0, 30000, 2000 };
+            yield return new object[] { 0, 60000, 4000 };
+            yield return new object[] { 0, -900, -60 };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(SelectionCharOffset_CustomGetCharFormat_TestData))]
+        public void RichTextBox_SelectionCharOffset_CustomGetCharFormat_Success(uint mask, int yOffset, int expected)
+        {
+            using var control = new CustomGetCharFormatRichTextBox
+            {
+                ExpectedWParam = (IntPtr)SCF.SELECTION,
+                GetCharFormatResult = new CHARFORMATW
+                {
+                    dwMask = (CFM)mask,
+                    yOffset = yOffset
+                }
+            };
+
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            control.MakeCustom = true;
+            Assert.Equal(expected, control.SelectionCharOffset);
+        }
+
+        [WinFormsTheory]
+        [InlineData(2000)]
+        [InlineData(10)]
+        [InlineData(0)]
+        [InlineData(-10)]
+        [InlineData(-2000)]
+        public void RichTextBox_SelectionCharOffset_Set_GetReturnsExpected(int value)
+        {
+            using var control = new RichTextBox
+            {
+                SelectionCharOffset = value
+            };
+            Assert.Equal(value, control.SelectionCharOffset);
+            Assert.True(control.IsHandleCreated);
+
+            // Set same.
+            control.SelectionCharOffset = value;
+            Assert.Equal(value, control.SelectionCharOffset);
+            Assert.True(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(2000)]
+        [InlineData(10)]
+        [InlineData(0)]
+        [InlineData(-10)]
+        [InlineData(-2000)]
+        public void RichTextBox_SelectionCharOffset_SetWithHandle_GetReturnsExpected(int value)
+        {
+            using var control = new RichTextBox();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            control.SelectionCharOffset = value;
+            Assert.Equal(value, control.SelectionCharOffset);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set same.
+            control.SelectionCharOffset = value;
+            Assert.Equal(value, control.SelectionCharOffset);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsFact]
+        public unsafe void RichTextBox_SelectionCharOffset_GetCharFormat_Success()
+        {
+            using var control = new RichTextBox();
+
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            control.SelectionCharOffset = 60;
+            var format = new CHARFORMATW
+            {
+                cbSize = (uint)sizeof(CHARFORMATW)
+            };
+            Assert.NotEqual(IntPtr.Zero, User32.SendMessageW(control.Handle, (User32.WM)RichEditMessages.EM_GETCHARFORMAT, (IntPtr)SCF.SELECTION, ref format));
+            Assert.Equal(900, format.yOffset);
+        }
+
+        [WinFormsTheory]
+        [InlineData(2001)]
+        [InlineData(-20001)]
+        public void RichTextBox_SelectionCharOffset_SetInvalidValue_ThrowsArgumentOutOfRangeException(int value)
+        {
+            using var control = new RichTextBox();
+            Assert.Throws<ArgumentOutOfRangeException>("value", () => control.SelectionCharOffset = value);
+        }
+
         [WinFormsFact]
         public void RichTextBox_SelectionColor_GetWithoutHandle_ReturnsExpected()
         {
@@ -1075,6 +1324,104 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
+        }
+
+        public static IEnumerable<object[]> SelectionColor_CustomGetCharFormat_TestData()
+        {
+            yield return new object[] { CFM.COLOR, 0x785634, Color.FromArgb(0xFF, 0x34, 0x56, 0x78) };
+            yield return new object[] { CFM.COLOR, 0x78563412, Color.FromArgb(0xFF, 0x12, 0x34, 0x56) };
+            yield return new object[] { CFM.COLOR, 0, Color.Black };
+
+            yield return new object[] { 0, 0x785634, Color.Empty };
+            yield return new object[] { 0, 0x78563412, Color.Empty };
+            yield return new object[] { 0, 0, Color.Empty };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(SelectionColor_CustomGetCharFormat_TestData))]
+        public void RichTextBox_SelectionColor_CustomGetCharFormat_Success(uint mask, int textColor, Color expected)
+        {
+            using var control = new CustomGetCharFormatRichTextBox
+            {
+                ExpectedWParam = (IntPtr)SCF.SELECTION,
+                GetCharFormatResult = new CHARFORMATW
+                {
+                    dwMask = (CFM)mask,
+                    crTextColor = textColor
+                }
+            };
+
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            control.MakeCustom = true;
+            Assert.Equal(expected, control.SelectionColor);
+        }
+
+        public static IEnumerable<object[]> SelectionColor_Set_TestData()
+        {
+            yield return new object[] { Color.Empty, Color.Black };
+            yield return new object[] { Color.Red, Color.Red };
+            yield return new object[] { Color.FromArgb(0x12, 0x34, 0x56, 0x78), Color.FromArgb(0xFF, 0x34, 0x56, 0x78) };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(SelectionColor_Set_TestData))]
+        public void RichTextBox_SelectionColor_Set_GetReturnsExpected(Color value, Color expected)
+        {
+            using var control = new RichTextBox
+            {
+                SelectionColor = value
+            };
+            Assert.Equal(expected, control.SelectionColor);
+            Assert.True(control.IsHandleCreated);
+
+            // Set same.
+            control.SelectionColor = value;
+            Assert.Equal(expected, control.SelectionColor);
+            Assert.True(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(SelectionColor_Set_TestData))]
+        public void RichTextBox_SelectionColor_SetWithHandle_GetReturnsExpected(Color value, Color expected)
+        {
+            using var control = new RichTextBox();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            control.SelectionColor = value;
+            Assert.Equal(expected, control.SelectionColor);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set same.
+            control.SelectionColor = value;
+            Assert.Equal(expected, control.SelectionColor);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsFact]
+        public unsafe void RichTextBox_SelectionColor_GetCharFormat_Success()
+        {
+            using var control = new RichTextBox();
+
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            control.SelectionColor = Color.FromArgb(0x12, 0x34, 0x56, 0x78);
+            var format = new CHARFORMATW
+            {
+                cbSize = (uint)sizeof(CHARFORMATW)
+            };
+            Assert.NotEqual(IntPtr.Zero, User32.SendMessageW(control.Handle, (User32.WM)RichEditMessages.EM_GETCHARFORMAT, (IntPtr)SCF.SELECTION, ref format));
+            Assert.Equal(0x785634, format.crTextColor);
         }
 
         [WinFormsFact]
@@ -1119,6 +1466,83 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
+        }
+
+        public static IEnumerable<object[]> SelectionFont_Set_TestData()
+        {
+            yield return new object[] { new Font("Arial", 8.25f), 1 };
+            yield return new object[] { new Font("Arial", 8.25f, FontStyle.Bold | FontStyle.Italic | FontStyle.Regular | FontStyle.Strikeout | FontStyle.Underline, GraphicsUnit.Point, 10), 1 };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(SelectionFont_Set_TestData))]
+        public void RichTextBox_SelectionFont_Set_GetReturnsExpected(Font value, byte expectedGdiCharset)
+        {
+            using var control = new RichTextBox
+            {
+                SelectionFont = value
+            };
+            Font result1 = control.SelectionFont;
+            Assert.NotSame(result1, value);
+            Assert.Equal(value?.Name, result1.Name);
+            Assert.Equal(value?.Size, result1.Size);
+            Assert.Equal(value?.Style, result1.Style);
+            Assert.Equal(expectedGdiCharset, result1.GdiCharSet);
+            Assert.True(control.IsHandleCreated);
+
+            // Set same.
+            control.SelectionFont = value;
+            Font result2 = control.SelectionFont;
+            Assert.Equal(value?.Name, result2.Name);
+            Assert.Equal(value?.Size, result2.Size);
+            Assert.Equal(value?.Style, result2.Style);
+            Assert.Equal(expectedGdiCharset, result2.GdiCharSet);
+            Assert.True(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(SelectionFont_Set_TestData))]
+        public void RichTextBox_SelectionFont_SetWithHandle_GetReturnsExpected(Font value, byte expectedGdiCharset)
+        {
+            using var control = new RichTextBox();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            control.SelectionFont = value;
+            Font result1 = control.SelectionFont;
+            Assert.NotSame(result1, value);
+            Assert.Equal(value?.Name, result1.Name);
+            Assert.Equal(value?.Size, result1.Size);
+            Assert.Equal(value?.Style, result1.Style);
+            Assert.Equal(expectedGdiCharset, result1.GdiCharSet);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set same.
+            control.SelectionFont = value;
+            Font result2 = control.SelectionFont;
+            Assert.Equal(value?.Name, result2.Name);
+            Assert.Equal(value?.Size, result2.Size);
+            Assert.Equal(value?.Style, result2.Style);
+            Assert.Equal(expectedGdiCharset, result2.GdiCharSet);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsFact]
+        public void RichTextBox_SelectionFont_SetNull_ThrowsNullReferenceException()
+        {
+            using var control = new RichTextBox();
+            Assert.Throws<NullReferenceException>(() => control.SelectionFont = null);
         }
 
         [WinFormsFact]
@@ -1636,6 +2060,580 @@ namespace System.Windows.Forms.Tests
 
                 base.WndProc(ref m);
             }
+        }
+
+        public static IEnumerable<object[]> Text_Set_TestData()
+        {
+            foreach (bool autoSize in new bool[] { true, false })
+            {
+                yield return new object[] { autoSize, null, string.Empty };
+                yield return new object[] { autoSize, string.Empty, string.Empty };
+                yield return new object[] { autoSize, "text", "text" };
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(Text_Set_TestData))]
+        public void RichTextBox_Text_Set_GetReturnsExpected(bool autoSize, string value, string expected)
+        {
+            using var control = new RichTextBox
+            {
+                AutoSize = autoSize
+            };
+            int layoutCallCount = 0;
+            control.Layout += (control, e) => layoutCallCount++;
+
+            control.Text = value;
+            Assert.Equal(expected, control.Text);
+            Assert.False(control.Modified);
+            Assert.False(control.CanUndo);
+            Assert.Equal(0, layoutCallCount);
+            Assert.False(control.IsHandleCreated);
+
+            // Set same.
+            control.Text = value;
+            Assert.Equal(expected, control.Text);
+            Assert.False(control.Modified);
+            Assert.False(control.CanUndo);
+            Assert.Equal(0, layoutCallCount);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        public void RichTextBox_Text_SetWithRtfText_GetReturnsExpected(string value, string expected)
+        {
+            using var control = new RichTextBox
+            {
+                Rtf = "{\\rtf Hello World}",
+                Text = value
+            };
+            Assert.Equal(expected, control.Text);
+            Assert.Contains(expected, control.Rtf);
+            Assert.DoesNotContain("Hello World", control.Rtf);
+            Assert.Equal(expected.Length, control.TextLength);
+            Assert.Equal(0, control.SelectionStart);
+            Assert.Equal(0, control.SelectionLength);
+            Assert.Empty(control.SelectedText);
+            Assert.False(control.Modified);
+            Assert.False(control.CanUndo);
+            Assert.True(control.IsHandleCreated);
+
+            // Set same.
+            control.Text = value;
+            Assert.Equal(expected, control.Text);
+            Assert.Contains(expected, control.Rtf);
+            Assert.DoesNotContain("Hello World", control.Rtf);
+            Assert.Equal(expected.Length, control.TextLength);
+            Assert.Equal(0, control.SelectionStart);
+            Assert.Equal(0, control.SelectionLength);
+            Assert.Empty(control.SelectedText);
+            Assert.False(control.Modified);
+            Assert.False(control.CanUndo);
+            Assert.True(control.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> Text_SetWithParent_TestData()
+        {
+            yield return new object[] { true, null, string.Empty, 1 };
+            yield return new object[] { true, string.Empty, string.Empty, 1 };
+            yield return new object[] { true, "text", "text", 1 };
+
+            yield return new object[] { false, null, string.Empty, 0 };
+            yield return new object[] { false, string.Empty, string.Empty, 0 };
+            yield return new object[] { false, "text", "text", 0 };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(Text_SetWithParent_TestData))]
+        public void RichTextBox_Text_SetWithParent_GetReturnsExpected(bool autoSize, string value, string expected, int expectedParentLayoutCallCount)
+        {
+            using var parent = new Control();
+            using var control = new RichTextBox
+            {
+                Parent = parent,
+                AutoSize = autoSize
+            };
+            int layoutCallCount = 0;
+            control.Layout += (control, e) => layoutCallCount++;
+            int parentLayoutCallCount = 0;
+            void parentHandler(object sender, LayoutEventArgs e)
+            {
+                Assert.Same(parent, sender);
+                Assert.Same(control, e.AffectedControl);
+                Assert.Equal("Text", e.AffectedProperty);
+                parentLayoutCallCount++;
+            };
+            parent.Layout += parentHandler;
+
+            try
+            {
+                control.Text = value;
+                Assert.Equal(expected, control.Text);
+                Assert.False(control.Modified);
+                Assert.False(control.CanUndo);
+                Assert.Equal(0, layoutCallCount);
+                Assert.Equal(expectedParentLayoutCallCount, parentLayoutCallCount);
+                Assert.False(control.IsHandleCreated);
+
+                // Set same.
+                control.Text = value;
+                Assert.Equal(expected, control.Text);
+                Assert.False(control.Modified);
+                Assert.False(control.CanUndo);
+                Assert.Equal(0, layoutCallCount);
+                Assert.Equal(expectedParentLayoutCallCount * 2, parentLayoutCallCount);
+                Assert.False(control.IsHandleCreated);
+            }
+            finally
+            {
+                parent.Layout -= parentHandler;
+            }
+        }
+
+        public static IEnumerable<object[]> Text_SetWithSelection_TestData()
+        {
+            yield return new object[] { string.Empty, 0, 2, null, string.Empty };
+            yield return new object[] { string.Empty, 0, 2, "t", "t" };
+            yield return new object[] { string.Empty, 0, 2, "text", "text" };
+
+            yield return new object[] { string.Empty, 1, 2, null, string.Empty };
+            yield return new object[] { string.Empty, 1, 2, "t", "t" };
+            yield return new object[] { string.Empty, 1, 2, "text", "text" };
+
+            yield return new object[] { "text", 0, 2, null, string.Empty };
+            yield return new object[] { "text", 0, 2, "t", "t" };
+            yield return new object[] { "text", 0, 2, "te", "te" };
+            yield return new object[] { "text", 0, 2, "tex", "tex" };
+
+            yield return new object[] { "text", 1, 2, null, string.Empty };
+            yield return new object[] { "text", 1, 2, "t", "t" };
+            yield return new object[] { "text", 1, 2, "te", "te" };
+            yield return new object[] { "text", 1, 2, "tex", "tex" };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(Text_SetWithSelection_TestData))]
+        public void RichTextBox_Text_SetWithSelection_GetReturnsExpected(string oldValue, int selectionStart, int selectionLength, string value, string expected)
+        {
+            using var control = new RichTextBox
+            {
+                Text = oldValue,
+                SelectionStart = selectionStart,
+                SelectionLength = selectionLength,
+            };
+
+            control.Text = value;
+            Assert.Equal(expected, control.Text);
+            Assert.Equal(expected.Length, control.TextLength);
+            Assert.Equal(0, control.SelectionStart);
+            Assert.Equal(0, control.SelectionLength);
+            Assert.Empty(control.SelectedText);
+            Assert.False(control.Modified);
+            Assert.False(control.CanUndo);
+            Assert.True(control.IsHandleCreated);
+
+            // Set same.
+            control.Text = value;
+            Assert.Equal(expected, control.Text);
+            Assert.Equal(expected.Length, control.TextLength);
+            Assert.Equal(0, control.SelectionStart);
+            Assert.Equal(0, control.SelectionLength);
+            Assert.Empty(control.SelectedText);
+            Assert.False(control.Modified);
+            Assert.False(control.CanUndo);
+            Assert.True(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(null, "", true)]
+        [InlineData("", "", false)]
+        [InlineData("text", "text", false)]
+        public void RichTextBox_Text_SetModified_GetReturnsExpected(string value, string expected, bool expectedModified)
+        {
+            using var control = new RichTextBox
+            {
+                Modified = true,
+                Text = value
+            };
+            Assert.Equal(expected, control.Text);
+            Assert.Equal(expected.Length, control.TextLength);
+            Assert.Equal(0, control.SelectionStart);
+            Assert.Equal(0, control.SelectionLength);
+            Assert.Empty(control.SelectedText);
+            Assert.Equal(expectedModified, control.Modified);
+            Assert.False(control.CanUndo);
+            Assert.True(control.IsHandleCreated);
+
+            // Set same.
+            control.Text = value;
+            Assert.Equal(expected, control.Text);
+            Assert.Equal(expected.Length, control.TextLength);
+            Assert.Equal(0, control.SelectionStart);
+            Assert.Equal(0, control.SelectionLength);
+            Assert.Empty(control.SelectedText);
+            Assert.False(control.Modified);
+            Assert.False(control.CanUndo);
+            Assert.True(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(Text_Set_TestData))]
+        public void RichTextBox_Text_SetWithHandle_GetReturnsExpected(bool autoSize, string value, string expected)
+        {
+            using var control = new RichTextBox
+            {
+                AutoSize = autoSize
+            };
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+            int layoutCallCount = 0;
+            control.Layout += (control, e) => layoutCallCount++;
+
+            control.Text = value;
+            Assert.Equal(expected, control.Text);
+            Assert.Equal(expected.Length, control.TextLength);
+            Assert.Equal(0, control.SelectionStart);
+            Assert.Equal(0, control.SelectionLength);
+            Assert.Empty(control.SelectedText);
+            Assert.False(control.Modified);
+            Assert.Equal(0, layoutCallCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set same.
+            control.Text = value;
+            Assert.Equal(expected, control.Text);
+            Assert.Equal(expected.Length, control.TextLength);
+            Assert.Equal(0, control.SelectionStart);
+            Assert.Equal(0, control.SelectionLength);
+            Assert.Empty(control.SelectedText);
+            Assert.False(control.Modified);
+            Assert.Equal(0, layoutCallCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        public void RichTextBox_Text_SetWithRtfTextWithHandle_GetReturnsExpected(string value, string expected)
+        {
+            using var control = new RichTextBox
+            {
+                Rtf = "{\\rtf Hello World}"
+            };
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            control.Text = value;
+            Assert.Equal(expected, control.Text);
+            Assert.Contains(expected, control.Rtf);
+            Assert.DoesNotContain("Hello World", control.Rtf);
+            Assert.Equal(expected.Length, control.TextLength);
+            Assert.Equal(0, control.SelectionStart);
+            Assert.Equal(0, control.SelectionLength);
+            Assert.Empty(control.SelectedText);
+            Assert.False(control.Modified);
+            Assert.False(control.CanUndo);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set same.
+            control.Text = value;
+            Assert.Equal(expected, control.Text);
+            Assert.Contains(expected, control.Rtf);
+            Assert.DoesNotContain("Hello World", control.Rtf);
+            Assert.Equal(expected.Length, control.TextLength);
+            Assert.Equal(0, control.SelectionStart);
+            Assert.Equal(0, control.SelectionLength);
+            Assert.Empty(control.SelectedText);
+            Assert.False(control.Modified);
+            Assert.False(control.CanUndo);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(Text_SetWithParent_TestData))]
+        public void RichTextBox_Text_SetWithParentWithHandle_GetReturnsExpected(bool autoSize, string value, string expected, int expectedParentLayoutCallCount)
+        {
+            using var parent = new Control();
+            using var control = new RichTextBox
+            {
+                Parent = parent,
+                AutoSize = autoSize
+            };
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+            int layoutCallCount = 0;
+            control.Layout += (control, e) => layoutCallCount++;
+            int parentLayoutCallCount = 0;
+            void parentHandler(object sender, LayoutEventArgs e)
+            {
+                Assert.Same(parent, sender);
+                Assert.Same(control, e.AffectedControl);
+                Assert.Equal("Text", e.AffectedProperty);
+                parentLayoutCallCount++;
+            };
+            parent.Layout += parentHandler;
+
+            try
+            {
+                control.Text = value;
+                Assert.Equal(expected, control.Text);
+                Assert.False(control.Modified);
+                Assert.False(control.CanUndo);
+                Assert.Equal(0, layoutCallCount);
+                Assert.Equal(expectedParentLayoutCallCount, parentLayoutCallCount);
+                Assert.True(control.IsHandleCreated);
+                Assert.Equal(0, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+
+                // Set same.
+                control.Text = value;
+                Assert.Equal(expected, control.Text);
+                Assert.False(control.Modified);
+                Assert.False(control.CanUndo);
+                Assert.Equal(0, layoutCallCount);
+                Assert.Equal(expectedParentLayoutCallCount * 2, parentLayoutCallCount);
+                Assert.True(control.IsHandleCreated);
+                Assert.Equal(0, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+            }
+            finally
+            {
+                parent.Layout -= parentHandler;
+            }
+        }
+
+        [WinFormsTheory]
+        [InlineData(null, "")]
+        [InlineData("", "")]
+        [InlineData("text", "text")]
+        public void RichTextBox_Text_SetModifiedWithHandle_GetReturnsExpected(string value, string expected)
+        {
+            using var control = new RichTextBox
+            {
+                Modified = true
+            };
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            control.Text = value;
+            Assert.Equal(expected, control.Text);
+            Assert.Equal(expected.Length, control.TextLength);
+            Assert.Equal(0, control.SelectionStart);
+            Assert.Equal(0, control.SelectionLength);
+            Assert.Empty(control.SelectedText);
+            Assert.False(control.Modified);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set same.
+            control.Text = value;
+            Assert.Equal(expected, control.Text);
+            Assert.Equal(expected.Length, control.TextLength);
+            Assert.Equal(0, control.SelectionStart);
+            Assert.Equal(0, control.SelectionLength);
+            Assert.Empty(control.SelectedText);
+            Assert.False(control.Modified);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        public static IEnumerable<object[]> Text_SetWithSelectionWithHandle_TestData()
+        {
+            yield return new object[] { string.Empty, 0, 2, null, string.Empty };
+            yield return new object[] { string.Empty, 0, 2, "t", "t" };
+            yield return new object[] { string.Empty, 0, 2, "text", "text" };
+
+            yield return new object[] { string.Empty, 1, 2, null, string.Empty };
+            yield return new object[] { string.Empty, 1, 2, "t", "t" };
+            yield return new object[] { string.Empty, 1, 2, "text", "text" };
+
+            yield return new object[] { "text", 0, 2, null, string.Empty };
+            yield return new object[] { "text", 0, 2, "t", "t" };
+            yield return new object[] { "text", 0, 2, "te", "te" };
+            yield return new object[] { "text", 0, 2, "tex", "tex" };
+
+            yield return new object[] { "text", 1, 2, null, string.Empty };
+            yield return new object[] { "text", 1, 2, "t", "t" };
+            yield return new object[] { "text", 1, 2, "te", "te" };
+            yield return new object[] { "text", 1, 2, "tex", "tex" };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(Text_SetWithSelectionWithHandle_TestData))]
+        public void RichTextBox_Text_SetWithSelectionWith_GetReturnsExpected(string oldValue, int selectionStart, int selectionLength, string value, string expected)
+        {
+            using var control = new RichTextBox
+            {
+                Text = oldValue,
+                SelectionStart = selectionStart,
+                SelectionLength = selectionLength,
+            };
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            control.Text = value;
+            Assert.Equal(expected, control.Text);
+            Assert.Equal(expected.Length, control.TextLength);
+            Assert.Equal(0, control.SelectionStart);
+            Assert.Equal(0, control.SelectionLength);
+            Assert.Empty(control.SelectedText);
+            Assert.False(control.Modified);
+            Assert.False(control.CanUndo);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set same.
+            control.Text = value;
+            Assert.Equal(expected, control.Text);
+            Assert.Equal(expected.Length, control.TextLength);
+            Assert.Equal(0, control.SelectionStart);
+            Assert.Equal(0, control.SelectionLength);
+            Assert.Empty(control.SelectedText);
+            Assert.False(control.Modified);
+            Assert.False(control.CanUndo);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsFact]
+        public void RichTextBox_Text_SetWithHandler_CallsTextChanged()
+        {
+            using var control = new RichTextBox();
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Equal(EventArgs.Empty, e);
+                callCount++;
+            };
+            control.TextChanged += handler;
+
+            // Set different.
+            control.Text = "text";
+            Assert.Equal("text", control.Text);
+            Assert.Equal(0, callCount);
+
+            // Set same.
+            control.Text = "text";
+            Assert.Equal("text", control.Text);
+            Assert.Equal(0, callCount);
+
+            // Set different.
+            control.Text = null;
+            Assert.Empty(control.Text);
+            Assert.Equal(0, callCount);
+
+            // Remove handler.
+            control.TextChanged -= handler;
+            control.Text = "text";
+            Assert.Equal("text", control.Text);
+            Assert.Equal(0, callCount);
+        }
+
+        [WinFormsFact]
+        public void RichTextBox_Text_SetWithHandlerWithHandle_CallsTextChanged()
+        {
+            using var control = new RichTextBox();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Equal(EventArgs.Empty, e);
+                callCount++;
+            };
+            control.TextChanged += handler;
+
+            // Set different.
+            control.Text = "text";
+            Assert.Equal("text", control.Text);
+            Assert.Equal(1, callCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set same.
+            control.Text = "text";
+            Assert.Equal("text", control.Text);
+            Assert.Equal(2, callCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set different.
+            control.Text = null;
+            Assert.Empty(control.Text);
+            Assert.Equal(3, callCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Remove handler.
+            control.TextChanged -= handler;
+            control.Text = "text";
+            Assert.Equal("text", control.Text);
+            Assert.Equal(3, callCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
         }
 
         [WinFormsFact]
@@ -2210,6 +3208,27 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
+        }
+
+        private class CustomGetCharFormatRichTextBox : RichTextBox
+        {
+            public bool MakeCustom { get; set; }
+            public IntPtr ExpectedWParam { get; set; }
+            public CHARFORMATW GetCharFormatResult { get; set; }
+
+            protected unsafe override void WndProc(ref Message m)
+            {
+                if (MakeCustom && m.Msg == RichEditMessages.EM_GETCHARFORMAT)
+                {
+                    CHARFORMATW* format = (CHARFORMATW*)m.LParam;
+                    Assert.Equal(ExpectedWParam, m.WParam);
+                    Assert.NotEqual(IntPtr.Zero, m.LParam);
+                    *format = GetCharFormatResult;
+                    return;
+                }
+
+                base.WndProc(ref m);
+            }
         }
 
         public class SubRichTextBox : RichTextBox
