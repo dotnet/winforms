@@ -568,16 +568,12 @@ namespace System.Windows.Forms
         {
             get
             {
-                RichTextBoxLanguageOptions opt;
                 if (IsHandleCreated)
                 {
-                    opt = (RichTextBoxLanguageOptions)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), RichEditMessages.EM_GETLANGOPTIONS, 0, 0);
+                    return (RichTextBoxLanguageOptions)User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_GETLANGOPTIONS);
                 }
-                else
-                {
-                    opt = languageOption;
-                }
-                return opt;
+
+                return languageOption;
             }
             set
             {
@@ -586,7 +582,7 @@ namespace System.Windows.Forms
                     languageOption = value;
                     if (IsHandleCreated)
                     {
-                        UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), RichEditMessages.EM_SETLANGOPTIONS, 0, (int)value);
+                        User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_SETLANGOPTIONS, IntPtr.Zero, (IntPtr)value);
                     }
                 }
             }
@@ -2133,7 +2129,7 @@ namespace System.Windows.Forms
                     chrg.cpMax = foundCursor;
                 }
 
-                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), RichEditMessages.EM_EXSETSEL, 0, ref chrg);
+                User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_EXSETSEL, IntPtr.Zero, ref chrg);
                 User32.SendMessageW(this, (User32.WM)User32.EM.SCROLLCARET);
             }
 
@@ -2807,7 +2803,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void Paste(DataFormats.Format clipFormat)
         {
-            UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), RichEditMessages.EM_PASTESPECIAL, clipFormat.Id, 0);
+            User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_PASTESPECIAL, (IntPtr)clipFormat.Id);
         }
 
         protected override bool ProcessCmdKey(ref Message m, Keys keyData)
@@ -3079,11 +3075,10 @@ namespace System.Windows.Forms
         private void StreamIn(Stream data, int flags)
         {
             // clear out the selection only if we are replacing all the text
-            //
             if ((flags & RichTextBoxConstants.SFF_SELECTION) == 0)
             {
                 var cr = new Richedit.CHARRANGE();
-                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), RichEditMessages.EM_EXSETSEL, 0, ref cr);
+                User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_EXSETSEL, IntPtr.Zero, ref cr);
             }
 
             try
