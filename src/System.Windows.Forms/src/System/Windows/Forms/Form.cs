@@ -6118,20 +6118,20 @@ namespace System.Windows.Forms
         private void WmCreate(ref Message m)
         {
             base.WndProc(ref m);
-            NativeMethods.STARTUPINFO_I si = new NativeMethods.STARTUPINFO_I();
-            UnsafeNativeMethods.GetStartupInfo(si);
+            var si = new Kernel32.STARTUPINFOW();
+            Kernel32.GetStartupInfoW(ref si);
 
             // If we've been created from explorer, it may
             // force us to show up normal.  Force our current window state to
             // the specified state, unless it's _specified_ max or min
-            if (TopLevel && (si.dwFlags & NativeMethods.STARTF_USESHOWWINDOW) != 0)
+            if (TopLevel && (si.dwFlags & Kernel32.STARTF.USESHOWWINDOW) != 0)
             {
-                switch (si.wShowWindow)
+                switch ((User32.SW)si.wShowWindow)
                 {
-                    case (short)User32.SW.MAXIMIZE:
+                    case User32.SW.MAXIMIZE:
                         WindowState = FormWindowState.Maximized;
                         break;
-                    case (short)User32.SW.MINIMIZE:
+                    case User32.SW.MINIMIZE:
                         WindowState = FormWindowState.Minimized;
                         break;
                 }

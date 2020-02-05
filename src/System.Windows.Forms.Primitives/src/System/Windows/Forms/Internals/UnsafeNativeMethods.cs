@@ -147,9 +147,6 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.User32, EntryPoint = "SendMessage", CharSet = CharSet.Auto)]
         public extern static IntPtr SendCallbackMessage(HandleRef hWnd, int Msg, IntPtr wParam, IntPtr lParam);
 
-        [DllImport(ExternDll.Kernel32, CharSet = CharSet.Auto)]
-        public static extern void GetStartupInfo([In, Out] NativeMethods.STARTUPINFO_I startupinfo_i);
-
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern IntPtr SetActiveWindow(HandleRef hWnd);
 
