@@ -557,14 +557,6 @@ namespace System.Windows.Forms
             }
         }
 
-        [StructLayout(LayoutKind.Sequential)]
-        public class COPYDATASTRUCT
-        {
-            public int dwData = 0;
-            public int cbData = 0;
-            public IntPtr lpData = IntPtr.Zero;
-        }
-
         [StructLayout(LayoutKind.Sequential, Pack = 4)]
         public class CHARFORMAT2A
         {
