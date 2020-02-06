@@ -1257,7 +1257,7 @@ namespace System.Windows.Forms
                             RestoreMirrorDC();
                         }
 
-                        if (UnsafeNativeMethods.SetWindowRgn(new HandleRef(this, Handle), new HandleRef(windowRegion, windowRegionHandle), true) != 0)
+                        if (User32.SetWindowRgn(this, new HandleRef(windowRegion, windowRegionHandle), BOOL.TRUE) != 0)
                         {
                             // The HWnd owns the region.
                             windowRegionHandle = IntPtr.Zero;
