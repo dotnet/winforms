@@ -5285,57 +5285,6 @@ Stack trace where the illegal operation occurred was:
   <data name="SplitterSplitterMovingDescr" xml:space="preserve">
     <value>Occurs when the splitter is being moved.</value>
   </data>
-  <data name="StatusBarAddFailed" xml:space="preserve">
-    <value>Adding the panel to the native status bar control has not succeeded.</value>
-  </data>
-  <data name="StatusBarBadStatusBarPanel" xml:space="preserve">
-    <value>Parameter must be of type StatusBarPanel.</value>
-  </data>
-  <data name="StatusBarDrawItem" xml:space="preserve">
-    <value>Occurs whenever a panel in the StatusBar needs to be painted.</value>
-  </data>
-  <data name="StatusBarOnPanelClickDescr" xml:space="preserve">
-    <value>Occurs when a panel within the status bar is clicked.</value>
-  </data>
-  <data name="StatusBarPanelAlignmentDescr" xml:space="preserve">
-    <value>The alignment of the panel's text.</value>
-  </data>
-  <data name="StatusBarPanelAutoSizeDescr" xml:space="preserve">
-    <value>Determines how a panel will resize when the parent changes size.</value>
-  </data>
-  <data name="StatusBarPanelBorderStyleDescr" xml:space="preserve">
-    <value>Determines what type of border a panel has.</value>
-  </data>
-  <data name="StatusBarPanelIconDescr" xml:space="preserve">
-    <value>Determines what icon is displayed in the panel.</value>
-  </data>
-  <data name="StatusBarPanelMinWidthDescr" xml:space="preserve">
-    <value>The minimum width of the panel.</value>
-  </data>
-  <data name="StatusBarPanelNameDescr" xml:space="preserve">
-    <value>The name of the panel.</value>
-  </data>
-  <data name="StatusBarPanelsDescr" xml:space="preserve">
-    <value>The panels in the status bar.</value>
-  </data>
-  <data name="StatusBarPanelStyleDescr" xml:space="preserve">
-    <value>The style of the panel.</value>
-  </data>
-  <data name="StatusBarPanelTextDescr" xml:space="preserve">
-    <value>The text displayed in the panel.</value>
-  </data>
-  <data name="StatusBarPanelToolTipTextDescr" xml:space="preserve">
-    <value>The panel's ToolTip text.</value>
-  </data>
-  <data name="StatusBarPanelWidthDescr" xml:space="preserve">
-    <value>The width of the panel.</value>
-  </data>
-  <data name="StatusBarShowPanelsDescr" xml:space="preserve">
-    <value>Determines if a status bar displays panels, or if it displays a single line of text.</value>
-  </data>
-  <data name="StatusBarSizingGripDescr" xml:space="preserve">
-    <value>Determines whether a status bar has a sizing grip.</value>
-  </data>
   <data name="StatusStripPanelBorderSidesDescr" xml:space="preserve">
     <value>Specifies the sides of the panel that should display borders.</value>
   </data>
