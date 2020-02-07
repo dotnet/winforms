@@ -2668,7 +2668,7 @@ namespace System.Windows.Forms.Tests
         public void MonthCalendar_TitleBackColor_SetEmpty_ThrowsArgumentException()
         {
             using var calendar = new MonthCalendar();
-            Assert.Throws<ArgumentException>(null, () => calendar.TitleBackColor = Color.Empty);
+            Assert.Throws<ArgumentException>("value", () => calendar.TitleBackColor = Color.Empty);
         }
 
         public static IEnumerable<object[]> TitleForeColor_Set_TestData()
@@ -2727,7 +2727,7 @@ namespace System.Windows.Forms.Tests
         public void MonthCalendar_TitleForeColor_SetEmpty_ThrowsArgumentException()
         {
             using var calendar = new MonthCalendar();
-            Assert.Throws<ArgumentException>(null, () => calendar.TitleForeColor = Color.Empty);
+            Assert.Throws<ArgumentException>("value", () => calendar.TitleForeColor = Color.Empty);
         }
 
         [Fact]
@@ -2881,7 +2881,7 @@ namespace System.Windows.Forms.Tests
         public void MonthCalendar_TrailingForeColor_SetEmpty_ThrowsArgumentException()
         {
             using var calendar = new MonthCalendar();
-            Assert.Throws<ArgumentException>(null, () => calendar.TrailingForeColor = Color.Empty);
+            Assert.Throws<ArgumentException>("value", () => calendar.TrailingForeColor = Color.Empty);
         }
 
         [Fact]
