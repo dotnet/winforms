@@ -18,20 +18,20 @@ namespace System.Windows.Forms.Tests
 {
     public class ControlControlCollectionTests : IClassFixture<ThreadExceptionFixture>
     {
-        public static IEnumerable<object[]> Ctor_Control_TestData()
+        [WinFormsFact]
+        public void ControlCollection_Ctor_Control()
         {
-            yield return new object[] { null };
-            yield return new object[] { new Control() };
-        }
-
-        [WinFormsTheory]
-        [MemberData(nameof(Ctor_Control_TestData))]
-        public void Ctor_Control(Control owner)
-        {
+            using var owner = new Control();
             var collection = new Control.ControlCollection(owner);
             Assert.Empty(collection);
             Assert.False(collection.IsReadOnly);
             Assert.Same(owner, collection.Owner);
+        }
+
+        [WinFormsFact]
+        public void ControlCollection_Ctor_NullOwner_ThrowsArgumentNullException()
+        {
+            Assert.Throws<ArgumentNullException>("owner", () => new Control.ControlCollection(null));
         }
 
         [WinFormsFact]
@@ -1103,14 +1103,6 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void ControlCollection_Add_NullOwner_ThrowsNullReferenceException()
-        {
-            var collection = new Control.ControlCollection(null);
-            using var control = new Control();
-            Assert.Throws<NullReferenceException>(() => collection.Add(control));
-        }
-
-        [WinFormsFact]
         public void ControlCollection_Add_TopLevelValue_ThrowsArgumentException()
         {
             using var owner = new Control();
@@ -1270,14 +1262,6 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void ControlCollection_AddRange_NullOwner_ThrowsNullReferenceException()
-        {
-            using var control = new Control();
-            var collection = new Control.ControlCollection(null);
-            Assert.Throws<NullReferenceException>(() => collection.AddRange(new Control[] { control }));
-        }
-
-        [WinFormsFact]
         public void ControlCollection_Clear_Invoke_Success()
         {
             using var owner = new Control();
@@ -1326,13 +1310,6 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void ControlCollection_Clear_NullOwner_ThrowsNullReferenceException()
-        {
-            var collection = new Control.ControlCollection(null);
-            Assert.Throws<NullReferenceException>(() => collection.Clear());
-        }
-
-        [WinFormsFact]
         public void ControlCollection_Clone_Invoke_Success()
         {
             using var owner = new Control();
@@ -1372,13 +1349,6 @@ namespace System.Windows.Forms.Tests
             {
                 owner.Layout -= parentHandler;
             }
-        }
-
-        [WinFormsFact]
-        public void ControlCollection_Clone_NullOwner_ThrowsNullReferenceException()
-        {
-            ICloneable collection = new Control.ControlCollection(null);
-            Assert.Throws<NullReferenceException>(() => collection.Clone());
         }
 
         [WinFormsFact]
@@ -2803,14 +2773,6 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(2, parentChangedCallCount);
             Assert.Equal(2, parentLayoutCallCount);
             Assert.Equal(1, callCount);
-        }
-
-        [WinFormsFact]
-        public void ControlCollection_Remove_InvokeNullOwner_ThrowsNullReferenceException()
-        {
-            var collection = new Control.ControlCollection(null);
-            using var value = new Control();
-            Assert.Throws<NullReferenceException>(() => collection.Remove(value));
         }
 
         [WinFormsFact]
