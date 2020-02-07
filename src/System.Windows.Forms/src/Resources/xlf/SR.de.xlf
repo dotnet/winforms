@@ -7911,6 +7911,11 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
         <target state="translated">Die im ToolStripPanel verwendete Endfarbe des Farbverlaufs.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ProgressBarDefaultAccessibleName">
+        <source>ProgressBar</source>
+        <target state="new">ProgressBar</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ProgressBarIncrementMarqueeException">
         <source>Increment should not be called if the style is Marquee.</source>
         <target state="translated">"Increment" darf nicht aufgerufen werden, wenn "Marquee" als Stil verwendet wird.</target>

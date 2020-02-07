@@ -7911,6 +7911,11 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
         <target state="translated">Końcowy kolor gradientu używany w elemencie ToolStripPanel.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ProgressBarDefaultAccessibleName">
+        <source>ProgressBar</source>
+        <target state="new">ProgressBar</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ProgressBarIncrementMarqueeException">
         <source>Increment should not be called if the style is Marquee.</source>
         <target state="translated">Element Increment nie powinien zostać wywołany, jeżeli styl jest ustawiony na Marquee.</target>

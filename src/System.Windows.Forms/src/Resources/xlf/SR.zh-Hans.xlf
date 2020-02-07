@@ -7911,6 +7911,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">在 ToolStripPanel 中使用的渐变的结束颜色。</target>
         <note />
       </trans-unit>
+      <trans-unit id="ProgressBarDefaultAccessibleName">
+        <source>ProgressBar</source>
+        <target state="new">ProgressBar</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ProgressBarIncrementMarqueeException">
         <source>Increment should not be called if the style is Marquee.</source>
         <target state="translated">如果样式为“Marquee”，则不应调用 Increment。</target>

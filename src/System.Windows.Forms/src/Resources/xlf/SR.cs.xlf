@@ -7911,6 +7911,11 @@ Trasování zásobníku, kde došlo k neplatné operaci:
         <target state="translated">Koncová barva přechodu použitá v ovládacím prvku ToolStripPanel</target>
         <note />
       </trans-unit>
+      <trans-unit id="ProgressBarDefaultAccessibleName">
+        <source>ProgressBar</source>
+        <target state="new">ProgressBar</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ProgressBarIncrementMarqueeException">
         <source>Increment should not be called if the style is Marquee.</source>
         <target state="translated">Pokud je nastaven styl Marquee, neměla by být volána metoda Increment.</target>

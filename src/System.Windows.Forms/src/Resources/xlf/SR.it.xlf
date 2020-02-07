@@ -7911,6 +7911,11 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
         <target state="translated">Colore finale della sfumatura da utilizzare in ToolStripPanel.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ProgressBarDefaultAccessibleName">
+        <source>ProgressBar</source>
+        <target state="new">ProgressBar</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ProgressBarIncrementMarqueeException">
         <source>Increment should not be called if the style is Marquee.</source>
         <target state="translated">Non chiamare Increment se lo stile è Marquee.</target>

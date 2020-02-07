@@ -7911,6 +7911,11 @@ Rastreamento de pilha em que a operação ilegal ocorreu:
         <target state="translated">A cor final do gradiente usada em ToolStripPanel.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ProgressBarDefaultAccessibleName">
+        <source>ProgressBar</source>
+        <target state="new">ProgressBar</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ProgressBarIncrementMarqueeException">
         <source>Increment should not be called if the style is Marquee.</source>
         <target state="translated">Increment não deverá ser chamado se o estilo for Marquee.</target>
