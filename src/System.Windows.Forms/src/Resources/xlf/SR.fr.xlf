@@ -8861,6 +8861,11 @@ Cette opération non conforme s'est produite sur la trace de la pile :
         <target state="translated">Fonctionnalité non prise en charge par ce système d'exploitation.</target>
         <note />
       </trans-unit>
+      <trans-unit id="TabControlBadControl">
+        <source>Parameter must be of type TabPage.</source>
+        <target state="new">Parameter must be of type TabPage.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="TabControlTabPageNotOnTabControl">
         <source>TabPage cannot be added to a '{0}'.  TabPages can only be added to TabControls.</source>
         <target state="translated">Un TabPage ne peut pas être ajouté à un '{0}'. Les TabPages ne peuvent être ajoutés qu'aux TabControls.</target>

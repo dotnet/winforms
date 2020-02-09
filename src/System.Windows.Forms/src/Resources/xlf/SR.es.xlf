@@ -8861,6 +8861,11 @@ El seguimiento de la pila donde tuvo lugar la operación no válida fue:
         <target state="translated">Este sistema operativo no admite esta característica.</target>
         <note />
       </trans-unit>
+      <trans-unit id="TabControlBadControl">
+        <source>Parameter must be of type TabPage.</source>
+        <target state="new">Parameter must be of type TabPage.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="TabControlTabPageNotOnTabControl">
         <source>TabPage cannot be added to a '{0}'.  TabPages can only be added to TabControls.</source>
         <target state="translated">No se puede agregar TabPage a '{0}'. Sólo se pueden agregar TabPages a TabControls.</target>

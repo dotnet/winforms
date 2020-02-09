@@ -8861,6 +8861,11 @@ Rastreamento de pilha em que a operação ilegal ocorreu:
         <target state="translated">Não há suporte para o recurso com este sistema operacional.</target>
         <note />
       </trans-unit>
+      <trans-unit id="TabControlBadControl">
+        <source>Parameter must be of type TabPage.</source>
+        <target state="new">Parameter must be of type TabPage.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="TabControlTabPageNotOnTabControl">
         <source>TabPage cannot be added to a '{0}'.  TabPages can only be added to TabControls.</source>
         <target state="translated">TabPage não pode ser adicionado a '{0}'. TabPages só podem ser adicionados a TabControls.</target>

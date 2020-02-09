@@ -8861,6 +8861,11 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
         <target state="translated">Funzionalità non supportata in questo sistema operativo.</target>
         <note />
       </trans-unit>
+      <trans-unit id="TabControlBadControl">
+        <source>Parameter must be of type TabPage.</source>
+        <target state="new">Parameter must be of type TabPage.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="TabControlTabPageNotOnTabControl">
         <source>TabPage cannot be added to a '{0}'.  TabPages can only be added to TabControls.</source>
         <target state="translated">Impossibile aggiungere un oggetto TabPage a '{0}'. Gli oggetti TabPage possono essere aggiunti solo a una classe TabControl.</target>

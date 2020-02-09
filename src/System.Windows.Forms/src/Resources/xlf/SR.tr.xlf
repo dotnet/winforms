@@ -8861,6 +8861,11 @@ Geçersiz işlemin gerçekleştiği yığın izi:
         <target state="translated">Özellik bu işletim sistemiyle desteklenmiyor.</target>
         <note />
       </trans-unit>
+      <trans-unit id="TabControlBadControl">
+        <source>Parameter must be of type TabPage.</source>
+        <target state="new">Parameter must be of type TabPage.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="TabControlTabPageNotOnTabControl">
         <source>TabPage cannot be added to a '{0}'.  TabPages can only be added to TabControls.</source>
         <target state="translated">'{0}' öğesine TabPage eklenemez. TabPage'ler yalnızca TabControl'lere eklenebilir.</target>

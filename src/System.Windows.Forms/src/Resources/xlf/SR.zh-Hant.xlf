@@ -8861,6 +8861,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">此作業系統不支援這項功能。</target>
         <note />
       </trans-unit>
+      <trans-unit id="TabControlBadControl">
+        <source>Parameter must be of type TabPage.</source>
+        <target state="new">Parameter must be of type TabPage.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="TabControlTabPageNotOnTabControl">
         <source>TabPage cannot be added to a '{0}'.  TabPages can only be added to TabControls.</source>
         <target state="translated">無法將 TabPage 加入 '{0}'。TabPages 只能加入 TabControls。</target>

@@ -2527,16 +2527,16 @@ namespace System.Windows.Forms.Tests
         [InlineData(0)]
         [InlineData(1)]
         [InlineData(2)]
-        public void TabControl_SelectedTab_GetWithInvalidIndexNotGotPages_ThrowsNullReferenceException(int value)
+        public void TabControl_SelectedTab_GetWithInvalidIndexNotGotPages_ReturnsNull(int value)
         {
             using var control = new TabControl
             {
                 SelectedIndex = value
             };
-            Assert.Throws<NullReferenceException>(() => control.SelectedTab);
+            Assert.Null(control.SelectedTab);
 
             Assert.Empty(control.TabPages);
-            Assert.Throws<NullReferenceException>(() => control.SelectedTab);
+            Assert.Null(control.SelectedTab);
         }
 
         public static IEnumerable<object[]> SelectedTab_Set_TestData()
@@ -3951,17 +3951,17 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void TabControl_GetToolTipText_NullItem_ThrowsNullReferenceException()
+        public void TabControl_GetToolTipText_NullItem_ThrowsArgumentNullException()
         {
             using var control = new SubTabControl();
-            Assert.Throws<NullReferenceException>(() => control.GetToolTipText(null));
+            Assert.Throws<ArgumentNullException>("item", () => control.GetToolTipText(null));
         }
 
         [WinFormsFact]
-        public void TabControl_GetToolTipText_ItemNotTabPage_ThrowsInvalidCastException()
+        public void TabControl_GetToolTipText_ItemNotTabPage_ThrowsArgumentException()
         {
             using var control = new SubTabControl();
-            Assert.Throws<InvalidCastException>(() => control.GetToolTipText(new object()));
+            Assert.Throws<ArgumentException>("item", () => control.GetToolTipText(new object()));
         }
 
         public static IEnumerable<object[]> IsInputKey_TestData()
