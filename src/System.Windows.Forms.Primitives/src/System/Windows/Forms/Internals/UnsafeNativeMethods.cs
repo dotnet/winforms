@@ -3,11 +3,10 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Diagnostics;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using System.Runtime.InteropServices.ComTypes;
 using System.Text;
 using static Interop;
+using static Interop.Shell32;
 
 namespace System.Windows.Forms
 {
@@ -16,7 +15,7 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.User32)]
         public static extern int GetClassName(HandleRef hwnd, StringBuilder lpClassName, int nMaxCount);
 
-        [DllImport(ExternDll.Kernel32, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
+        [DllImport(ExternDll.Kernel32, CharSet = CharSet.Auto)]
         public static extern int GetLocaleInfo(uint Locale, int LCType, StringBuilder lpLCData, int cchData);
 
         [DllImport(ExternDll.Comdlg32, EntryPoint = "PrintDlg", SetLastError = true, CharSet = CharSet.Auto)]
@@ -49,7 +48,7 @@ namespace System.Windows.Forms
         public static extern HRESULT PrintDlgEx([In, Out] NativeMethods.PRINTDLGEX lppdex);
 
         [DllImport(ExternDll.Shell32, CharSet = CharSet.Auto)]
-        public static extern int Shell_NotifyIcon(int message, NativeMethods.NOTIFYICONDATA pnid);
+        public static extern int Shell_NotifyIcon(NIM dwMessage, NativeMethods.NOTIFYICONDATA lpData);
 
         [DllImport(ExternDll.Comdlg32, SetLastError = true, CharSet = CharSet.Auto)]
         public static extern bool GetOpenFileName([In, Out] NativeMethods.OPENFILENAME_I ofn);
@@ -125,7 +124,7 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.Oleacc, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern IntPtr LresultFromObject(ref Guid refiid, IntPtr wParam, IntPtr pAcc);
 
-        [DllImport(ExternDll.Oleacc, ExactSpelling = true, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
+        [DllImport(ExternDll.Oleacc, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern int CreateStdAccessibleObject(HandleRef hWnd, int objID, ref Guid refiid, [In, Out, MarshalAs(UnmanagedType.Interface)] ref object pAcc);
 
         [DllImport(ExternDll.User32, ExactSpelling = true)]
@@ -135,7 +134,7 @@ namespace System.Windows.Forms
         public static extern IntPtr CreateIC(string lpszDriverName, string lpszDeviceName, string lpszOutput, HandleRef /*DEVMODE*/ lpInitData);
 
         //for RegionData
-        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
+        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern int GetRegionData(HandleRef hRgn, int size, IntPtr lpRgnData);
 
         public unsafe static RECT[] GetRectsFromRegion(IntPtr hRgn)

@@ -9,6 +9,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using static Interop;
+using static Interop.Shell32;
 
 namespace System.Windows.Forms
 {
@@ -615,7 +616,7 @@ namespace System.Windows.Forms
                         data.dwInfoFlags = NativeMethods.NIIF_NONE;
                         break;
                 }
-                UnsafeNativeMethods.Shell_NotifyIcon(NativeMethods.NIM_MODIFY, data);
+                UnsafeNativeMethods.Shell_NotifyIcon(NIM.MODIFY, data);
             }
         }
 
@@ -683,17 +684,17 @@ namespace System.Windows.Forms
                 {
                     if (!added)
                     {
-                        UnsafeNativeMethods.Shell_NotifyIcon(NativeMethods.NIM_ADD, data);
+                        UnsafeNativeMethods.Shell_NotifyIcon(NIM.ADD, data);
                         added = true;
                     }
                     else
                     {
-                        UnsafeNativeMethods.Shell_NotifyIcon(NativeMethods.NIM_MODIFY, data);
+                        UnsafeNativeMethods.Shell_NotifyIcon(NIM.MODIFY, data);
                     }
                 }
                 else if (added)
                 {
-                    UnsafeNativeMethods.Shell_NotifyIcon(NativeMethods.NIM_DELETE, data);
+                    UnsafeNativeMethods.Shell_NotifyIcon(NIM.DELETE, data);
                     added = false;
                 }
             }
