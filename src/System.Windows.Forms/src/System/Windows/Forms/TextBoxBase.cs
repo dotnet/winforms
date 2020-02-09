@@ -1375,28 +1375,30 @@ namespace System.Windows.Forms
         /// </summary>
         public void AppendText(string text)
         {
-            if (text.Length > 0)
+            if (string.IsNullOrEmpty(text))
             {
-                GetSelectionStartAndLength(out int selStart, out int selLength);
+                return;
+            }
 
-                try
-                {
-                    // This enables you to use SelectionColor to AppendText in color.
-                    int endOfText = GetEndPosition();
+            GetSelectionStartAndLength(out int selStart, out int selLength);
 
-                    SelectInternal(endOfText, endOfText, endOfText);
-                    SelectedText = text;
-                }
-                finally
+            try
+            {
+                // This enables you to use SelectionColor to AppendText in color.
+                int endOfText = GetEndPosition();
+
+                SelectInternal(endOfText, endOfText, endOfText);
+                SelectedText = text;
+            }
+            finally
+            {
+                // If AppendText is called when the control is docked and the form is minimized,
+                // all the text will scroll to the top and the control will look empty when the
+                // form is restored. We work around this by selecting back whatever was originally
+                // selected when AppendText was called.
+                if (Width == 0 || Height == 0)
                 {
-                    // If AppendText is called when the control is docked and the form is minimized,
-                    // all the text will scroll to the top and the control will look empty when the
-                    // form is restored. We work around this by selecting back whatever was originally
-                    // selected when AppendText was called.
-                    if (Width == 0 || Height == 0)
-                    {
-                        Select(selStart, selLength);
-                    }
+                    Select(selStart, selLength);
                 }
             }
         }
@@ -1603,26 +1605,31 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void OnMouseUp(MouseEventArgs mevent)
         {
-            Point pt = PointToScreen(mevent.Location);
-
-            if (mevent.Button == MouseButtons.Left)
+            if (mevent != null)
             {
-                if (!ValidationCancelled && WindowFromPoint(pt) == Handle)
+                Point pt = PointToScreen(mevent.Location);
+
+                if (mevent.Button == MouseButtons.Left)
                 {
-                    if (!doubleClickFired)
+                    if (!ValidationCancelled && WindowFromPoint(pt) == Handle)
                     {
-                        OnClick(mevent);
-                        OnMouseClick(mevent);
+                        if (!doubleClickFired)
+                        {
+                            OnClick(mevent);
+                            OnMouseClick(mevent);
+                        }
+                        else
+                        {
+                            doubleClickFired = false;
+                            OnDoubleClick(mevent);
+                            OnMouseDoubleClick(mevent);
+                        }
                     }
-                    else
-                    {
-                        doubleClickFired = false;
-                        OnDoubleClick(mevent);
-                        OnMouseDoubleClick(mevent);
-                    }
+
+                    doubleClickFired = false;
                 }
-                doubleClickFired = false;
             }
+
             base.OnMouseUp(mevent);
         }
 
