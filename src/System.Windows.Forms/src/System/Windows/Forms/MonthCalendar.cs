@@ -1364,7 +1364,6 @@ namespace System.Windows.Forms
 
         // Return a localized string representation of the given DateTime value.
         // Used for throwing exceptions, etc.
-        //
         private static string FormatDate(DateTime value)
         {
             return value.ToString("d", CultureInfo.CurrentCulture);
@@ -1378,20 +1377,18 @@ namespace System.Windows.Forms
         {
             if (visible)
             {
-                return GetMonthRange(NativeMethods.GMR_VISIBLE);
+                return GetMonthRange(GMR.VISIBLE);
             }
-            else
-            {
-                return GetMonthRange(NativeMethods.GMR_DAYSTATE);
-            }
+
+            return GetMonthRange(GMR.DAYSTATE);
         }
 
         /// <summary>
         ///  Retrieves the enumeration value corresponding to the hit area.
         /// </summary>
-        private HitArea GetHitArea(int hit)
+        private HitArea GetHitArea(MCHT hit)
         {
-            switch ((MCHT)hit)
+            switch (hit)
             {
                 case MCHT.TITLEBK:
                     return HitArea.TitleBackground;
@@ -1507,7 +1504,7 @@ namespace System.Windows.Forms
             return minSize;
         }
 
-        private SelectionRange GetMonthRange(int flag)
+        private SelectionRange GetMonthRange(GMR flag)
         {
             Span<Kernel32.SYSTEMTIME> sa = stackalloc Kernel32.SYSTEMTIME[2];
             User32.SendMessageW(this, (User32.WM)MCM.GETMONTHRANGE, (IntPtr)flag, ref sa[0]);
