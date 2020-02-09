@@ -596,12 +596,19 @@ namespace System.Windows.Forms
             offset4Y = DpiHelper.LogicalToDeviceUnits(OFFSET_4PIXELS, dpi);
         }
 
-        protected virtual void OnRenderArrow(ToolStripArrowRenderEventArgs e){
+        protected virtual void OnRenderArrow(ToolStripArrowRenderEventArgs e)
+        {
+            if (e == null)
+            {
+                throw new ArgumentNullException(nameof(e));
+            }
+
             if (RendererOverride != null)
             {
                 RendererOverride.OnRenderArrow(e);
                 return;
             }
+
             Graphics g = e.Graphics;
             Rectangle dropDownRect = e.ArrowRectangle;
             using (Brush brush = new SolidBrush(e.ArrowColor))
@@ -762,6 +769,11 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnRenderItemImage(ToolStripItemImageRenderEventArgs e)
         {
+            if (e == null)
+            {
+                throw new ArgumentNullException(nameof(e));
+            }
+
             if (RendererOverride != null)
             {
                 RendererOverride.OnRenderItemImage(e);
@@ -801,6 +813,11 @@ namespace System.Windows.Forms
 
         protected virtual void OnRenderItemCheck(ToolStripItemImageRenderEventArgs e)
         {
+            if (e == null)
+            {
+                throw new ArgumentNullException(nameof(e));
+            }
+
             if (RendererOverride != null)
             {
                 RendererOverride.OnRenderItemCheck(e);
@@ -828,6 +845,11 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnRenderItemText(ToolStripItemTextRenderEventArgs e)
         {
+            if (e == null)
+            {
+                throw new ArgumentNullException(nameof(e));
+            }
+
             if (RendererOverride != null)
             {
                 RendererOverride.OnRenderItemText(e);
@@ -931,6 +953,11 @@ namespace System.Windows.Forms
 
         protected virtual void OnRenderStatusStripSizingGrip(ToolStripRenderEventArgs e)
         {
+            if (e == null)
+            {
+                throw new ArgumentNullException(nameof(e));
+            }
+
             if (RendererOverride != null)
             {
                 RendererOverride.OnRenderStatusStripSizingGrip(e);
@@ -996,6 +1023,11 @@ namespace System.Windows.Forms
 
         private static Image CreateDisabledImage(Image normalImage, ImageAttributes imgAttrib)
         {
+            if (normalImage == null)
+            {
+                throw new ArgumentNullException(nameof(normalImage));
+            }
+
             if (imgAttrib == null)
             {
                 imgAttrib = new ImageAttributes();
