@@ -98,8 +98,6 @@ System.Windows.Forms.TaskDialogFooter.TaskDialogFooter() -> void
 System.Windows.Forms.TaskDialogFooter.TaskDialogFooter(string text) -> void
 System.Windows.Forms.TaskDialogFooter.Text.get -> string
 System.Windows.Forms.TaskDialogFooter.Text.set -> void
-System.Windows.Forms.TaskDialogHyperlinkClickedEventArgs
-System.Windows.Forms.TaskDialogHyperlinkClickedEventArgs.Hyperlink.get -> string
 System.Windows.Forms.TaskDialogIcon
 System.Windows.Forms.TaskDialogIcon.IconHandle.get -> System.IntPtr
 System.Windows.Forms.TaskDialogIcon.TaskDialogIcon(System.Drawing.Icon icon) -> void
@@ -120,14 +118,11 @@ System.Windows.Forms.TaskDialogPage.CustomButtonStyle.set -> void
 System.Windows.Forms.TaskDialogPage.CustomButtons.get -> System.Windows.Forms.TaskDialogCustomButtonCollection
 System.Windows.Forms.TaskDialogPage.CustomButtons.set -> void
 System.Windows.Forms.TaskDialogPage.Destroyed -> System.EventHandler
-System.Windows.Forms.TaskDialogPage.EnableHyperlinks.get -> bool
-System.Windows.Forms.TaskDialogPage.EnableHyperlinks.set -> void
 System.Windows.Forms.TaskDialogPage.Expander.get -> System.Windows.Forms.TaskDialogExpander
 System.Windows.Forms.TaskDialogPage.Expander.set -> void
 System.Windows.Forms.TaskDialogPage.Footer.get -> System.Windows.Forms.TaskDialogFooter
 System.Windows.Forms.TaskDialogPage.Footer.set -> void
 System.Windows.Forms.TaskDialogPage.HelpRequest -> System.EventHandler
-System.Windows.Forms.TaskDialogPage.HyperlinkClicked -> System.EventHandler<System.Windows.Forms.TaskDialogHyperlinkClickedEventArgs>
 System.Windows.Forms.TaskDialogPage.Icon.get -> System.Windows.Forms.TaskDialogIcon
 System.Windows.Forms.TaskDialogPage.Icon.set -> void
 System.Windows.Forms.TaskDialogPage.MainInstruction.get -> string
@@ -135,7 +130,6 @@ System.Windows.Forms.TaskDialogPage.MainInstruction.set -> void
 System.Windows.Forms.TaskDialogPage.OnCreated(System.EventArgs e) -> void
 System.Windows.Forms.TaskDialogPage.OnDestroyed(System.EventArgs e) -> void
 System.Windows.Forms.TaskDialogPage.OnHelpRequest(System.EventArgs e) -> void
-System.Windows.Forms.TaskDialogPage.OnHyperlinkClicked(System.Windows.Forms.TaskDialogHyperlinkClickedEventArgs e) -> void
 System.Windows.Forms.TaskDialogPage.ProgressBar.get -> System.Windows.Forms.TaskDialogProgressBar
 System.Windows.Forms.TaskDialogPage.ProgressBar.set -> void
 System.Windows.Forms.TaskDialogPage.RadioButtons.get -> System.Windows.Forms.TaskDialogRadioButtonCollection
