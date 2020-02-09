@@ -45,14 +45,6 @@ namespace System.Windows.Forms
         GDTR_MAX = 0x0002;
 
         public const int
-        HTTRANSPARENT = (-1),
-        HTNOWHERE = 0,
-        HTCLIENT = 1,
-        HTLEFT = 10,
-        HTBOTTOM = 15,
-        HTBOTTOMLEFT = 16,
-        HTBOTTOMRIGHT = 17,
-        HTBORDER = 18,
         HCF_HIGHCONTRASTON = 0x00000001,
         HDN_ITEMCHANGING = ((0 - 300) - 20),
         HDN_ITEMCHANGED = ((0 - 300) - 21),
