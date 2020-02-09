@@ -83,7 +83,7 @@ namespace System.Windows.Forms
             // Iterating by allocating chunk of memory each time we find the length is not sufficient.
             // Performance should not be an issue for current MAX_PATH length due to this change.
             while (((length = GetModuleFileName(hModule, buffer, buffer.Capacity)) == buffer.Capacity)
-                && Marshal.GetLastWin32Error() == NativeMethods.ERROR_INSUFFICIENT_BUFFER
+                && Marshal.GetLastWin32Error() == ERROR.INSUFFICIENT_BUFFER
                 && buffer.Capacity < Kernel32.MAX_UNICODESTRING_LEN)
             {
                 noOfTimes += 2; // Increasing buffer size by 520 in each iteration.
