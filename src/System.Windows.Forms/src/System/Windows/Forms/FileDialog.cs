@@ -10,7 +10,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading;
-using static System.Windows.Forms.UnsafeNativeMethods;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -553,7 +552,7 @@ namespace System.Windows.Forms
                 {
                     if (_dialogHWnd != IntPtr.Zero)
                     {
-                        UnsafeNativeMethods.EndDialog(new HandleRef(this, _dialogHWnd), IntPtr.Zero);
+                        User32.EndDialog(new HandleRef(this, _dialogHWnd), IntPtr.Zero);
                     }
 
                     throw;
