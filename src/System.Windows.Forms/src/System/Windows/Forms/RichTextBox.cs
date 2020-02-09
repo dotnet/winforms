@@ -707,7 +707,7 @@ namespace System.Windows.Forms
                     }
                     else if (IsHandleCreated)
                     {
-                        IntPtr hDC = UnsafeNativeMethods.CreateIC("DISPLAY", null, null, new HandleRef(null, IntPtr.Zero));
+                        IntPtr hDC = Gdi32.CreateICW("DISPLAY", null, null, IntPtr.Zero);
                         try
                         {
                             User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_SETTARGETDEVICE, hDC, (IntPtr)Pixel2Twip(hDC, value, true));
