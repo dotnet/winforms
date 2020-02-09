@@ -102,16 +102,6 @@ namespace System.Windows.Forms
         public event EventHandler? HelpRequest;
 
         /// <summary>
-        ///   Occurs when the user has clicked on a hyperlink.
-        /// </summary>
-        /// <remarks>
-        /// <para>
-        ///   This event will only be raised if <see cref="EnableHyperlinks"/> is set to <see langword="true"/>.
-        /// </para>
-        /// </remarks>
-        public event EventHandler<TaskDialogHyperlinkClickedEventArgs>? HyperlinkClicked;
-
-        /// <summary>
         ///   Initializes a new instance of the <see cref="TaskDialogPage"/> class.
         /// </summary>
         public TaskDialogPage()
@@ -474,47 +464,6 @@ namespace System.Windows.Forms
 
                 _customButtonStyle = value;
             }
-        }
-
-        /// <summary>
-        /// <para>
-        ///   Gets or sets a value that specifies whether the task dialog should
-        ///   interpret strings in the form <c>&lt;a href="link"&gt;Hyperlink Text&lt;/a&gt;</c>
-        ///   as hyperlink when specified in the <see cref="Text"/>,
-        ///   <see cref="TaskDialogFooter.Text"/>
-        ///   or <see cref="TaskDialogExpander.Text"/> properties.
-        ///   When the user clicks on such a link, the <see cref="HyperlinkClicked"/>
-        ///   event is raised, containing the value of the <c>href</c> attribute.
-        /// </para>
-        /// <para>
-        ///   <b>Warning:</b> Enabling hyperlinks when using content from an unsafe source
-        ///   may cause security vulnerabilities.
-        /// </para>
-        /// </summary>
-        /// <value>
-        ///   <see langword="true"/> to enable hyperlinks; otherwise, <see langword="false"/>.
-        ///   The default value is <see langword="false"/>.
-        /// </value>
-        /// <remarks>
-        /// <para>
-        ///   The Task Dialog will not actually execute any hyperlinks.
-        ///   Hyperlink execution must be handled in the <see cref="HyperlinkClicked"/> event.
-        /// </para>
-        /// <para>
-        ///   Note: Enabling this setting causes the <c>"&amp;"</c> character to be
-        ///   interpreted as prefix for an access key character (mnemonic) if at least
-        ///   one link is used.
-        /// </para>
-        /// <para>
-        ///   When you enable this setting and you want to display a text
-        ///   without interpreting links, you must replace the strings <c>"&lt;a"</c>
-        ///   and <c>"&lt;A"</c> with something like <c>"&lt;\u200Ba"</c>.
-        /// </para>
-        /// </remarks>
-        public bool EnableHyperlinks
-        {
-            get => GetFlag(ComCtl32.TDF.ENABLE_HYPERLINKS);
-            set => SetFlag(ComCtl32.TDF.ENABLE_HYPERLINKS, value);
         }
 
         /// <summary>
@@ -1028,12 +977,6 @@ namespace System.Windows.Forms
         /// </summary>
         /// <param name="e">An <see cref="EventArgs"/> that contains the event data.</param>
         internal protected void OnHelpRequest(EventArgs e) => HelpRequest?.Invoke(this, e);
-
-        /// <summary>
-        ///   Raises the <see cref="HyperlinkClicked"/> event.
-        /// </summary>
-        /// <param name="e">An <see cref="TaskDialogHyperlinkClickedEventArgs"/> that contains the event data.</param>
-        internal protected void OnHyperlinkClicked(TaskDialogHyperlinkClickedEventArgs e) => HyperlinkClicked?.Invoke(this, e);
 
         private bool GetFlag(ComCtl32.TDF flag) => (_flags & flag) == flag;
 

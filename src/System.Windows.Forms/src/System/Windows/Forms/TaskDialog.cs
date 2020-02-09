@@ -1205,16 +1205,6 @@ namespace System.Windows.Forms
                         }
                         break;
 
-                    case ComCtl32.TDN.HYPERLINK_CLICKED:
-                        string? link = Marshal.PtrToStringUni(lParam);
-
-                        // The link parameter should never be null.
-                        Debug.Assert(link != null);
-
-                        var eventArgs = new TaskDialogHyperlinkClickedEventArgs(link);
-                        _boundPage.OnHyperlinkClicked(eventArgs);
-                        break;
-
                     case ComCtl32.TDN.BUTTON_CLICKED:
                         // Check if we should ignore this notification. If we process
                         // it, we set a flag to ignore further TDN_BUTTON_CLICKED
