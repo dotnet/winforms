@@ -170,10 +170,10 @@ namespace System.Windows.Forms
                     User32.SendMessageW(this, User32.WM.MDICASCADE);
                     break;
                 case MdiLayout.TileVertical:
-                    User32.SendMessageW(this, User32.WM.MDITILE, (IntPtr)NativeMethods.MDITILE_VERTICAL);
+                    User32.SendMessageW(this, User32.WM.MDITILE, (IntPtr)User32.MDITILE.VERTICAL);
                     break;
                 case MdiLayout.TileHorizontal:
-                    User32.SendMessageW(this, User32.WM.MDITILE, (IntPtr)NativeMethods.MDITILE_HORIZONTAL);
+                    User32.SendMessageW(this, User32.WM.MDITILE, (IntPtr)User32.MDITILE.HORIZONTAL);
                     break;
                 case MdiLayout.ArrangeIcons:
                     User32.SendMessageW(this, User32.WM.MDIICONARRANGE);

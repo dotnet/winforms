@@ -97,9 +97,6 @@ namespace System.Windows.Forms
         public const int MEMBERID_NIL = (-1),
         ERROR_INSUFFICIENT_BUFFER = 122, //https://msdn.microsoft.com/en-us/library/windows/desktop/ms681382(v=vs.85).aspx
         MDIS_ALLCHILDSTYLES = 0x0001,
-        MDITILE_VERTICAL = 0x0000,
-        MDITILE_HORIZONTAL = 0x0001,
-        MDITILE_SKIPDISABLED = 0x0002,
         MCN_VIEWCHANGE = (0 - 750), // MCN_SELECT -4  - give state of calendar view
         MCN_SELCHANGE = ((0 - 750) + 1),
         MCN_GETDAYSTATE = ((0 - 750) + 3),
