@@ -42,12 +42,12 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The border has a with a raised inner edge and no outer edge.
         /// </summary>
-        RaisedInner = (int)User32.BDR.RAISEDINNER,
+        RaisedInner = (int)User32.EDGE.RAISEDINNER,
 
         /// <summary>
         ///  The border has a with a raised outer edge and no inner edge.
         /// </summary>
-        RaisedOuter = (int)User32.BDR.RAISEDOUTER,
+        RaisedOuter = (int)User32.EDGE.RAISEDOUTER,
 
         /// <summary>
         ///  The border has a with sunken inner and outer edges.
@@ -57,11 +57,11 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The border has a with a sunken inner edge and no outer edge.
         /// </summary>
-        SunkenInner = (int)User32.BDR.SUNKENINNER,
+        SunkenInner = (int)User32.EDGE.SUNKENINNER,
 
         /// <summary>
         ///  The border has a with a sunken outer edge and no inner edge.
         /// </summary>
-        SunkenOuter = (int)User32.BDR.SUNKENOUTER,
+        SunkenOuter = (int)User32.EDGE.SUNKENOUTER,
     }
 }
