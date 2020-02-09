@@ -10,6 +10,6 @@ internal static partial class Interop
     internal static partial class Gdi32
     {
         [DllImport(Libraries.Gdi32, ExactSpelling = false, CharSet = CharSet.Unicode)]
-        public unsafe static extern bool ExtTextOutW(IntPtr hdc, int x, int y, ETO options, ref RECT lprect, string lpString, int c, int* lpDx);
+        public unsafe static extern BOOL ExtTextOutW(IntPtr hdc, int x, int y, ETO options, ref RECT lprect, string lpString, int c, int* lpDx);
     }
 }

@@ -10,7 +10,7 @@ internal static partial class Interop
     internal static partial class Shell32
     {
         [DllImport(Libraries.Shell32, ExactSpelling = true)]
-        private static extern bool SHGetPathFromIDListEx(IntPtr pidl, IntPtr pszPath, int cchPath, int flags);
+        private static extern BOOL SHGetPathFromIDListEx(IntPtr pidl, IntPtr pszPath, int cchPath, int flags);
 
         public static bool SHGetPathFromIDListLongPath(IntPtr pidl, out string path)
         {
@@ -54,7 +54,7 @@ internal static partial class Interop
             // this is much less overhead then looping and copying to intermediate buffers before creating a string.
             // Additionally, implementing this would allow us to short circuit the one caller (FolderBrowserDialog)
             // who doesn't care about the path, but just wants to know that we have an IShellFolder.
-            while (SHGetPathFromIDListEx(pidl, pszPath, length, 0) == false)
+            while (SHGetPathFromIDListEx(pidl, pszPath, length, 0).IsFalse())
             {
                 if (length >= Kernel32.MAX_UNICODESTRING_LEN
                     || *(char*)pszPath.ToPointer() == '\0')
