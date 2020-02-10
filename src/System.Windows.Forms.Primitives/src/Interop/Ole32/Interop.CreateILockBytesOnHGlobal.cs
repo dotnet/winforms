@@ -10,6 +10,6 @@ internal partial class Interop
     internal static partial class Ole32
     {
         [DllImport(Libraries.Ole32, PreserveSig = false)]
-        public static extern ILockBytes CreateILockBytesOnHGlobal(IntPtr hGlobal, bool fDeleteOnRelease);
+        public static extern ILockBytes CreateILockBytesOnHGlobal(IntPtr hGlobal, BOOL fDeleteOnRelease);
     }
 }

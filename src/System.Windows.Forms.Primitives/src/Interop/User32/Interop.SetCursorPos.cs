@@ -10,6 +10,6 @@ internal static partial class Interop
     internal static partial class User32
     {
         [DllImport(Libraries.User32, ExactSpelling = true)]
-        public static extern bool SetCursorPos(int x, int y);
+        public static extern BOOL SetCursorPos(int x, int y);
     }
 }

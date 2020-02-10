@@ -150,9 +150,8 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    // A system defined Window class was specified, get its info
-
-                    if (!User32.GetClassInfoW(NativeMethods.NullHandleRef, _className, ref windowClass))
+                    // A system defined Window class was specified, get its info.
+                    if (User32.GetClassInfoW(NativeMethods.NullHandleRef, _className, ref windowClass).IsFalse())
                     {
                         throw new Win32Exception(Marshal.GetLastWin32Error(), SR.InvalidWndClsName);
                     }
