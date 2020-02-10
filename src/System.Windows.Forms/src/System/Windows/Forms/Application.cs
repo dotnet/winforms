@@ -288,26 +288,8 @@ namespace System.Windows.Forms
             {
                 if (s_executablePath == null)
                 {
-                    Assembly asm = Assembly.GetEntryAssembly();
-                    if (asm == null)
-                    {
-                        StringBuilder sb = UnsafeNativeMethods.GetModuleFileNameLongPath(NativeMethods.NullHandleRef);
-                        s_executablePath = Path.GetFullPath(sb.ToString());
-                    }
-                    else
-                    {
-                        string cb = asm.CodeBase;
-                        Uri codeBase = new Uri(cb);
-                        if (codeBase.IsFile)
-                        {
-                            s_executablePath = codeBase.LocalPath + Uri.UnescapeDataString(codeBase.Fragment);
-                            ;
-                        }
-                        else
-                        {
-                            s_executablePath = codeBase.ToString();
-                        }
-                    }
+                    StringBuilder sb = UnsafeNativeMethods.GetModuleFileNameLongPath(NativeMethods.NullHandleRef);
+                    s_executablePath = Path.GetFullPath(sb.ToString());
                 }
 
                 return s_executablePath;
