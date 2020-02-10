@@ -191,7 +191,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     // thru to controls underneath. This is due to a combination of old app-specific code in comctl32,
                     // functional changes between v5 and v6, and the specfic way the property grid drives its tooltip.
                     // Workaround is to just force HTTRANSPARENT all the time.
-                    msg.Result = (IntPtr)NativeMethods.HTTRANSPARENT;
+                    msg.Result = (IntPtr)User32.HT.TRANSPARENT;
                     return;
             }
             base.WndProc(ref msg);

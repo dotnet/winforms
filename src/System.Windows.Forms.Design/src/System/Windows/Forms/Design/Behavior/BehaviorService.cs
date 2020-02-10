@@ -935,11 +935,11 @@ namespace System.Windows.Forms.Design.Behavior
                         pt.Offset(pt1.X, pt1.Y);
                         if (_behaviorService.PropagateHitTest(pt) && !ProcessingDrag)
                         {
-                            m.Result = (IntPtr)(NativeMethods.HTTRANSPARENT);
+                            m.Result = (IntPtr)User32.HT.TRANSPARENT;
                         }
                         else
                         {
-                            m.Result = (IntPtr)(NativeMethods.HTCLIENT);
+                            m.Result = (IntPtr)User32.HT.CLIENT;
                         }
                         break;
 

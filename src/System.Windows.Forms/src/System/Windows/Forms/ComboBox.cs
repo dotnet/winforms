@@ -2002,7 +2002,7 @@ namespace System.Windows.Forms
                     break;
 
                 case WM.SETCURSOR:
-                    if (Cursor != DefaultCursor && childEdit != null && m.HWnd == childEdit.Handle && PARAM.LOWORD(m.LParam) == NativeMethods.HTCLIENT)
+                    if (Cursor != DefaultCursor && childEdit != null && m.HWnd == childEdit.Handle && PARAM.LOWORD(m.LParam) == (int)HT.CLIENT)
                     {
                         Cursor.Current = Cursor;
                     }

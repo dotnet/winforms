@@ -6479,7 +6479,7 @@ namespace System.Windows.Forms
                     pt.Y >= (clientSize.Height - SizeGripSize) &&
                     clientSize.Height >= SizeGripSize)
                 {
-                    m.Result = IsMirrored ? (IntPtr)NativeMethods.HTBOTTOMLEFT : (IntPtr)NativeMethods.HTBOTTOMRIGHT;
+                    m.Result = (IntPtr)(IsMirrored ? User32.HT.BOTTOMLEFT : User32.HT.BOTTOMRIGHT);
                     return;
                 }
             }
@@ -6492,10 +6492,10 @@ namespace System.Windows.Forms
             if (AutoSizeMode == AutoSizeMode.GrowAndShrink)
             {
                 int result = unchecked((int)(long)m.Result);
-                if (result >= NativeMethods.HTLEFT &&
-                    result <= NativeMethods.HTBOTTOMRIGHT)
+                if (result >= (int)User32.HT.LEFT &&
+                    result <= (int)User32.HT.BOTTOMRIGHT)
                 {
-                    m.Result = (IntPtr)NativeMethods.HTBORDER;
+                    m.Result = (IntPtr)User32.HT.BORDER;
                 }
             }
         }
