@@ -566,13 +566,6 @@ namespace System.Windows.Forms
             public byte bRevAuthor = 0;
         }
 
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-        public class FINDTEXT
-        {
-            public Richedit.CHARRANGE chrg;
-            public string lpstrText;
-        }
-
         [StructLayout(LayoutKind.Sequential)]
         public class ENLINK
         {

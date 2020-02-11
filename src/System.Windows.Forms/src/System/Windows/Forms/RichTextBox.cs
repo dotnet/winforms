@@ -2001,28 +2001,23 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Searches the text in a RichTextBox control for a given string.
         /// </summary>
-        public int Find(string str, int start, int end, RichTextBoxFinds options)
+        public unsafe int Find(string str, int start, int end, RichTextBoxFinds options)
         {
+            if (str == null)
+            {
+                throw new ArgumentNullException(nameof(str));
+            }
+
             int textLen = TextLength;
             if (start < 0 || start > textLen)
             {
                 throw new ArgumentOutOfRangeException(nameof(start), start, string.Format(SR.InvalidBoundArgument, nameof(start), start, 0, textLen));
             }
-
             if (end < -1)
             {
                 throw new ArgumentOutOfRangeException(nameof(end), end, string.Format(SR.RichTextFindEndInvalid, end));
             }
 
-            bool selectWord = true;
-            NativeMethods.FINDTEXT ft = new NativeMethods.FINDTEXT
-            {
-                chrg = new Richedit.CHARRANGE(),
-
-                // set up the default values for the FINDTEXT structure, that is
-                // the given string and the whole range of the text stream
-                lpstrText = str ?? throw new ArgumentNullException(nameof(str))
-            };
             if (end == -1)
             {
                 end = textLen;
@@ -2033,17 +2028,16 @@ namespace System.Windows.Forms
                 throw new ArgumentException(string.Format(SR.RichTextFindEndInvalid, end));
             }
 
+            var ft = new FINDTEXTW();
             if ((options & RichTextBoxFinds.Reverse) != RichTextBoxFinds.Reverse)
             {
                 // normal
-                //
                 ft.chrg.cpMin = start;
                 ft.chrg.cpMax = end;
             }
             else
             {
                 // reverse
-                //
                 ft.chrg.cpMin = end;
                 ft.chrg.cpMax = start;
             }
@@ -2064,39 +2058,38 @@ namespace System.Windows.Forms
             }
 
             // set up the options for the search
-            int findOptions = 0;
+            Comdlg32.FR findOptions = 0;
             if ((options & RichTextBoxFinds.WholeWord) == RichTextBoxFinds.WholeWord)
             {
-                findOptions |= RichTextBoxConstants.FR_WHOLEWORD;
+                findOptions |= Comdlg32.FR.WHOLEWORD;
             }
 
             if ((options & RichTextBoxFinds.MatchCase) == RichTextBoxFinds.MatchCase)
             {
-                findOptions |= RichTextBoxConstants.FR_MATCHCASE;
-            }
-
-            if ((options & RichTextBoxFinds.NoHighlight) == RichTextBoxFinds.NoHighlight)
-            {
-                selectWord = false;
+                findOptions |= Comdlg32.FR.MATCHCASE;
             }
 
             if ((options & RichTextBoxFinds.Reverse) != RichTextBoxFinds.Reverse)
             {
                 // The default for RichEdit 2.0 is to search in reverse
-                findOptions |= RichTextBoxConstants.FR_DOWN;
+                findOptions |= Comdlg32.FR.DOWN;
             }
 
             // Perform the find, will return ubyte position
             int position;
-
-            position = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), RichEditMessages.EM_FINDTEXT, findOptions, ft);
+            fixed (char* pText = str)
+            {
+                ft.lpstrText = pText;
+                position = (int)User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_FINDTEXT, (IntPtr)findOptions, ref ft);
+            }
 
             // if we didn't find anything, or we don't have to select what was found,
             // we're done
+            bool selectWord = (options & RichTextBoxFinds.NoHighlight) != RichTextBoxFinds.NoHighlight;
             if (position != -1 && selectWord)
             {
                 // Select the string found, this is done in ubyte units
-                var chrg = new Richedit.CHARRANGE
+                var chrg = new CHARRANGE
                 {
                     cpMin = position
                 };
