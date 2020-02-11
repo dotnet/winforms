@@ -6617,4 +6617,7 @@ Stack trace where the illegal operation occurred was:
   <data name="ErrorProviderDefaultAccessibleName" xml:space="preserve">
     <value>Error provider</value>
   </data>
+  <data name="PropertyGridEntryValuesListDefaultAccessibleName" xml:space="preserve">
+    <value>Available values</value>
+  </data>
 </root>
