@@ -542,14 +542,13 @@ namespace System.ComponentModel.Design
                 return HRESULT.S_OK;
             }
 
-            public HRESULT QueryAcceptData(IComDataObject lpdataobj, IntPtr lpcfFormat, uint reco, BOOL fReally, IntPtr hMetaPict)
+            public HRESULT QueryAcceptData(IComDataObject lpdataobj, IntPtr lpcfFormat, Richedit.RECO reco, BOOL fReally, IntPtr hMetaPict)
             {
                 Debug.WriteLineIf(RichTextDbg.TraceVerbose, "IRichTextBoxOleCallback::QueryAcceptData(reco=" + reco + ")");
-                if (reco == NativeMethods.RECO_PASTE)
+                if (reco == Richedit.RECO.PASTE)
                 {
                     DataObject dataObj = new DataObject(lpdataobj);
-                    if (dataObj != null &&
-                        (dataObj.GetDataPresent(DataFormats.Text) || dataObj.GetDataPresent(DataFormats.UnicodeText)))
+                    if (dataObj.GetDataPresent(DataFormats.Text) || dataObj.GetDataPresent(DataFormats.UnicodeText))
                     {
                         return HRESULT.S_OK;
                     }
@@ -566,7 +565,7 @@ namespace System.ComponentModel.Design
                 return HRESULT.E_NOTIMPL;
             }
 
-            public HRESULT GetClipboardData(ref Richedit.CHARRANGE lpchrg, uint reco, IntPtr lplpdataobj)
+            public HRESULT GetClipboardData(ref Richedit.CHARRANGE lpchrg, Richedit.RECO reco, IntPtr lplpdataobj)
             {
                 Debug.WriteLineIf(RichTextDbg.TraceVerbose, "IRichTextBoxOleCallback::GetClipboardData");
                 return HRESULT.E_NOTIMPL;

@@ -31,13 +31,13 @@ internal partial class Interop
             HRESULT DeleteObject(IntPtr lpoleobj);
 
             [PreserveSig]
-            HRESULT QueryAcceptData(IDataObject lpdataobj, /* CLIPFORMAT* */ IntPtr lpcfFormat, uint reco, BOOL fReally, IntPtr hMetaPict);
+            HRESULT QueryAcceptData(IDataObject lpdataobj, /* CLIPFORMAT* */ IntPtr lpcfFormat, RECO reco, BOOL fReally, IntPtr hMetaPict);
 
             [PreserveSig]
             HRESULT ContextSensitiveHelp(BOOL fEnterMode);
 
             [PreserveSig]
-            HRESULT GetClipboardData(ref CHARRANGE lpchrg, uint reco, IntPtr lplpdataobj);
+            HRESULT GetClipboardData(ref CHARRANGE lpchrg, RECO reco, IntPtr lplpdataobj);
 
             [PreserveSig]
             HRESULT GetDragDropEffect(
