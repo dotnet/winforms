@@ -290,7 +290,7 @@ namespace System.Windows.Forms.Design
                 switch ((User32.WM)m.Msg)
                 {
                     case User32.WM.NCHITTEST:
-                        m.Result = (IntPtr)(NativeMethods.HTTRANSPARENT);
+                        m.Result = (IntPtr)User32.HT.TRANSPARENT;
                         break;
                     default:
                         base.WndProc(ref m);

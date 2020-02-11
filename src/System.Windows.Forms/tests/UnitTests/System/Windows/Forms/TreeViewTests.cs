@@ -9,6 +9,8 @@ using System.Drawing;
 using Moq;
 using WinForms.Common.Tests;
 using Xunit;
+using static Interop;
+using static Interop.ComCtl32;
 
 namespace System.Windows.Forms.Tests
 {
@@ -1644,6 +1646,60 @@ namespace System.Windows.Forms.Tests
             Assert.True(treeView.FullRowSelect);
             Assert.Equal(2, styleChangedCallCount);
             Assert.Equal(2, invalidatedCallCount);
+        }
+
+        [WinFormsFact]
+        public void TreeView_Handle_GetVersion_ReturnsExpected()
+        {
+            using var control = new TreeView();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            Assert.Equal((IntPtr)5, User32.SendMessageW(control.Handle, (User32.WM)CCM.GETVERSION));
+        }
+
+        public static IEnumerable<object[]> Handle_CustomGetVersion_TestData()
+        {
+            yield return new object[] { IntPtr.Zero, 1 };
+            yield return new object[] { (IntPtr)4, 1 };
+            yield return new object[] { (IntPtr)5, 0 };
+            yield return new object[] { (IntPtr)6, 0 };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(Handle_CustomGetVersion_TestData))]
+        public void TreeView_Handle_CustomGetVersion_Success(IntPtr getVersionResult, int expectedSetVersionCallCount)
+        {
+            using var control = new CustomGetVersionTreeView
+            {
+                GetVersionResult = getVersionResult
+            };
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            Assert.Equal(expectedSetVersionCallCount, control.SetVersionCallCount);
+        }
+
+        private class CustomGetVersionTreeView : TreeView
+        {
+            public IntPtr GetVersionResult { get; set; }
+            public int SetVersionCallCount { get; set; }
+
+            protected override void WndProc(ref Message m)
+            {
+                if (m.Msg == (int)CCM.GETVERSION)
+                {
+                    Assert.Equal(IntPtr.Zero, m.WParam);
+                    Assert.Equal(IntPtr.Zero, m.LParam);
+                    m.Result = GetVersionResult;
+                    return;
+                }
+                else if (m.Msg == (int)CCM.SETVERSION)
+                {
+                    Assert.Equal((IntPtr)5, m.WParam);
+                    Assert.Equal(IntPtr.Zero, m.LParam);
+                    SetVersionCallCount++;
+                    return;
+                }
+
+                base.WndProc(ref m);
+            }
         }
 
         [Theory]

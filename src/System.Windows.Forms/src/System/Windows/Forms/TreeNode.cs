@@ -786,7 +786,7 @@ namespace System.Windows.Forms
 
                 if (node != null)
                 {
-                    IntPtr next = User32.SendMessageW(tv, (User32.WM)TVM.GETNEXTITEM, (IntPtr)NativeMethods.TVGN_NEXTVISIBLE, node.Handle);
+                    IntPtr next = User32.SendMessageW(tv, (User32.WM)TVM.GETNEXTITEM, (IntPtr)TVGN.NEXTVISIBLE, node.Handle);
                     if (next != IntPtr.Zero)
                     {
                         return tv.NodeFromHandle(next);
@@ -946,7 +946,7 @@ namespace System.Windows.Forms
                     {
                         return null;
                     }
-                    IntPtr prev = User32.SendMessageW(tv, (User32.WM)TVM.GETNEXTITEM, (IntPtr)NativeMethods.TVGN_PREVIOUSVISIBLE, node.Handle);
+                    IntPtr prev = User32.SendMessageW(tv, (User32.WM)TVM.GETNEXTITEM, (IntPtr)TVGN.PREVIOUSVISIBLE, node.Handle);
                     if (prev != IntPtr.Zero)
                     {
                         return tv.NodeFromHandle(prev);
@@ -1552,7 +1552,7 @@ namespace System.Windows.Forms
                 tv.OnBeforeCollapse(e);
                 if (!e.Cancel)
                 {
-                    User32.SendMessageW(tv, (User32.WM)TVM.EXPAND, (IntPtr)NativeMethods.TVE_COLLAPSE, (IntPtr)Handle);
+                    User32.SendMessageW(tv, (User32.WM)TVM.EXPAND, (IntPtr)TVE.COLLAPSE, (IntPtr)Handle);
                     tv.OnAfterCollapse(new TreeViewEventArgs(this));
                 }
             }
@@ -1754,7 +1754,7 @@ namespace System.Windows.Forms
             ResetExpandedState(tv);
             if (!IsExpanded)
             {
-                User32.SendMessageW(tv, (User32.WM)TVM.EXPAND, (IntPtr)NativeMethods.TVE_EXPAND, Handle);
+                User32.SendMessageW(tv, (User32.WM)TVM.EXPAND, (IntPtr)TVE.EXPAND, Handle);
             }
             expandOnRealization = false;
         }
@@ -1894,7 +1894,7 @@ namespace System.Windows.Forms
                 TreeNode prev = PrevNode;
                 if (insertFirst || prev == null)
                 {
-                    tvis.hInsertAfter = (IntPtr)NativeMethods.TVI_FIRST;
+                    tvis.hInsertAfter = (IntPtr)TVI.FIRST;
                 }
                 else
                 {

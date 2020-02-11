@@ -837,7 +837,7 @@ namespace System.Windows.Forms
         private void WmPrint(ref Message m)
         {
             base.WndProc(ref m);
-            if ((NativeMethods.PRF_NONCLIENT & (int)m.LParam) != 0 && Application.RenderWithVisualStyles && BorderStyle == BorderStyle.Fixed3D)
+            if (((PRF)m.LParam & PRF.NONCLIENT) != 0 && Application.RenderWithVisualStyles && BorderStyle == BorderStyle.Fixed3D)
             {
                 using (Graphics g = Graphics.FromHdc(m.WParam))
                 {

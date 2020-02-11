@@ -493,7 +493,7 @@ namespace System.Windows.Forms
                         case -602: /* CDN_SELCHANGE */
                             NativeMethods.OPENFILENAME_I ofn = Marshal.PtrToStructure<NativeMethods.OPENFILENAME_I>(notify->lpOFN);
                             // Get the buffer size required to store the selected file names.
-                            int sizeNeeded = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, _dialogHWnd), 1124 /*CDM_GETSPEC*/, System.IntPtr.Zero, System.IntPtr.Zero);
+                            int sizeNeeded = (int)User32.SendMessageW(new HandleRef(this, _dialogHWnd), (User32.WM)1124 /*CDM_GETSPEC*/, IntPtr.Zero, IntPtr.Zero);
                             if (sizeNeeded > ofn.nMaxFile)
                             {
                                 // A bigger buffer is required.

@@ -4978,18 +4978,17 @@ namespace System.Windows.Forms
         private string propName;
         private int dwMsg;
 
-        private void GetDataFromCopyData(IntPtr lparam)
+        private unsafe void GetDataFromCopyData(IntPtr lparam)
         {
-            NativeMethods.COPYDATASTRUCT cds = Marshal.PtrToStructure<NativeMethods.COPYDATASTRUCT>(lparam);
+            User32.COPYDATASTRUCT* cds = (User32.COPYDATASTRUCT*)lparam;
 
-            if (cds != null && cds.lpData != IntPtr.Zero)
+            if (cds != null && cds->lpData != IntPtr.Zero)
             {
-                propName = Marshal.PtrToStringAuto(cds.lpData);
-                dwMsg = cds.dwData;
+                propName = Marshal.PtrToStringAuto(cds->lpData);
+                dwMsg = (int)cds->dwData;
             }
         }
 
-        //
         protected override void OnSystemColorsChanged(EventArgs e)
         {
             // refresh the toolbar buttons
@@ -5180,7 +5179,7 @@ namespace System.Windows.Forms
                     break;
                 case AutomationMessages.PGM_GETSELECTEDROW:
                 case AutomationMessages.PGM_GETVISIBLEROWCOUNT:
-                    m.Result = gridView.SendMessage(m.Msg, m.WParam, m.LParam);
+                    m.Result = User32.SendMessageW(gridView, (User32.WM)m.Msg, m.WParam, m.LParam);
                     return;
                 case AutomationMessages.PGM_SETSELECTEDTAB:
                     if (m.LParam != IntPtr.Zero)

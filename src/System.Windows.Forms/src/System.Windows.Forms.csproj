@@ -344,9 +344,6 @@
     <EmbeddedResource Include="Resources\System\Windows\Forms\ErrorControl.ico">
       <LogicalName>System.Windows.Forms.ErrorControl</LogicalName>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\System\Windows\Forms\StatusBar.ico">
-      <LogicalName>System.Windows.Forms.StatusBar</LogicalName>
-    </EmbeddedResource>
     <EmbeddedResource Include="Resources\System\Windows\Forms\TabControl.ico">
       <LogicalName>System.Windows.Forms.TabControl</LogicalName>
     </EmbeddedResource>

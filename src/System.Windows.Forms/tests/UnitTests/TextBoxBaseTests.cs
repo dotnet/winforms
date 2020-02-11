@@ -692,9 +692,9 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void TextBoxBase_CanUndo_InvokeWithHandle_ReturnsExpected()
+        public void RichTextBox_CanUndo_GetWithHandle_ReturnsExpected()
         {
-            using var control = new TextBox();
+            using var control = new RichTextBox();
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             int invalidatedCallCount = 0;
             control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -708,6 +708,40 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
+        }
+
+        public static IEnumerable<object[]> CanUndo_CustomCanUndo_TestData()
+        {
+            yield return new object[] { IntPtr.Zero, false };
+            yield return new object[] { (IntPtr)1, true };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(CanUndo_CustomCanUndo_TestData))]
+        public void RichTextBox_CanUndo_CustomCanUndo_ReturnsExpected(IntPtr result, bool expected)
+        {
+            using var control = new CustomCanUndoRichTextBox
+            {
+                Result = result
+            };
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            Assert.Equal(expected, control.CanUndo);
+        }
+
+        private class CustomCanUndoRichTextBox : RichTextBox
+        {
+            public IntPtr Result { get; set; }
+
+            protected unsafe override void WndProc(ref Message m)
+            {
+                if (m.Msg == (int)User32.EM.CANUNDO)
+                {
+                    m.Result = Result;
+                    return;
+                }
+
+                base.WndProc(ref m);
+            }
         }
 
         [WinFormsTheory]
@@ -1326,8 +1360,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
 
-            // Call EM_SETMODIFY.
-            User32.SendMessageW(control.Handle, (User32.WM)User32.EM.LIMITTEXT, (IntPtr)1, IntPtr.Zero);
+            // Call EM_LIMITTEXT.
+            User32.SendMessageW(control.Handle, (User32.WM)User32.EM.LIMITTEXT, IntPtr.Zero, (IntPtr)1);
             Assert.Equal(0x7FFF, control.MaxLength);
             Assert.True(control.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
@@ -1974,7 +2008,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
 
-            // Call EM_SETMODIFY.
+            // Call EM_SETREADONLY.
             User32.SendMessageW(control.Handle, (User32.WM)User32.EM.SETREADONLY, (IntPtr)1, IntPtr.Zero);
             Assert.Equal(0, readOnlyChangedCallCount);
 
@@ -2990,13 +3024,80 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void TextBoxBase_TextLength_GetWithSurrogate_Success()
+        public void TextBoxBase_TextLength_GetDefaultWithoutHandle_Success()
+        {
+            using var control = new SubTextBox();
+            Assert.Equal(0, control.TextLength);
+            Assert.False(control.IsHandleCreated);
+
+            // Call again.
+            Assert.Equal(0, control.TextLength);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void TextBoxBase_TextLength_GetDefaultWithHandle_ReturnsExpected()
         {
             using var control = new SubTextBox();
             Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
 
-            control.Text = "\ud83c\udf09";
-            Assert.Equal(2, control.TextLength);
+            Assert.Equal(0, control.TextLength);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Call again.
+            Assert.Equal(0, control.TextLength);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsTheory]
+        [InlineData("", 0)]
+        [InlineData("a\0b", 3)]
+        [InlineData("a", 1)]
+        [InlineData("\ud83c\udf09", 2)]
+        public void TextBoxBase_TextLength_GetSetWithHandle_Success(string text, int expected)
+        {
+            using var control = new SubTextBox
+            {
+                Text = text
+            };
+            Assert.Equal(expected, control.TextLength);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData("", 0)]
+        [InlineData("a\0b", 1)]
+        [InlineData("a", 1)]
+        [InlineData("\ud83c\udf09", 2)]
+        public void TextBoxBase_TextLength_GetWithHandle_ReturnsExpected(string text, int expected)
+        {
+            using var control = new SubTextBox();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            control.Text = text;
+            Assert.Equal(expected, control.TextLength);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
         }
 
         [WinFormsTheory]

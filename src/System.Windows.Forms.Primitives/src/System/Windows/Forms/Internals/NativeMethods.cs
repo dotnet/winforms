@@ -16,10 +16,7 @@ namespace System.Windows.Forms
 
         public const int STATUS_PENDING = 0x103; //259 = STILL_ALIVE
 
-        public const int cmb4 = 0x0473;
-
-        public const int CW_USEDEFAULT = (unchecked((int)0x80000000)),
-        COLOR_WINDOW = 5;
+        public const int CW_USEDEFAULT = (unchecked((int)0x80000000));
 
         public const int
         DI_NORMAL = 0x0003,
@@ -43,21 +40,11 @@ namespace System.Windows.Forms
         public const int FADF_VARIANT = (unchecked((int)0x800));
 
         public const int
-        GMR_VISIBLE = 0,
-        GMR_DAYSTATE = 1,
         GDI_ERROR = (unchecked((int)0xFFFFFFFF)),
         GDTR_MIN = 0x0001,
         GDTR_MAX = 0x0002;
 
         public const int
-        HTTRANSPARENT = (-1),
-        HTNOWHERE = 0,
-        HTCLIENT = 1,
-        HTLEFT = 10,
-        HTBOTTOM = 15,
-        HTBOTTOMLEFT = 16,
-        HTBOTTOMRIGHT = 17,
-        HTBORDER = 18,
         HCF_HIGHCONTRASTON = 0x00000001,
         HDN_ITEMCHANGING = ((0 - 300) - 20),
         HDN_ITEMCHANGED = ((0 - 300) - 21),
@@ -77,24 +64,6 @@ namespace System.Windows.Forms
         public const int
         ICON_SMALL = 0,
         ICON_BIG = 1;
-
-        public const int
-        LV_VIEW_TILE = 0x0004,
-        LVN_ITEMCHANGING = ((0 - 100) - 0),
-        LVN_ITEMCHANGED = ((0 - 100) - 1),
-        LVN_BEGINLABELEDIT = ((0 - 100) - 75),
-        LVN_ENDLABELEDIT = ((0 - 100) - 76),
-        LVN_COLUMNCLICK = ((0 - 100) - 8),
-        LVN_BEGINDRAG = ((0 - 100) - 9),
-        LVN_BEGINRDRAG = ((0 - 100) - 11),
-        LVN_ODFINDITEM = ((0 - 100) - 79),
-        LVN_ITEMACTIVATE = ((0 - 100) - 14),
-        LVN_GETDISPINFO = ((0 - 100) - 77),
-        LVN_ODCACHEHINT = ((0 - 100) - 13),
-        LVN_ODSTATECHANGED = ((0 - 100) - 15),
-        LVN_SETDISPINFO = ((0 - 100) - 78),
-        LVN_GETINFOTIP = ((0 - 100) - 58),
-        LVN_KEYDOWN = ((0 - 100) - 55);
 
         public const int LANG_NEUTRAL = 0x00,
                          LOCALE_IFIRSTDAYOFWEEK = 0x0000100C;   /* first day of week specifier */
@@ -157,22 +126,11 @@ namespace System.Windows.Forms
         NFR_ANSI = 1,
         NFR_UNICODE = 2;
 
-        public const int PRF_CHECKVISIBLE = 0x00000001,
-        PRF_NONCLIENT = 0x00000002,
-        PRF_CLIENT = 0x00000004,
-        PRF_ERASEBKGND = 0x00000008,
-        PRF_CHILDREN = 0x00000010,
+        public const int
         PATCOPY = 0x00F00021,
         PATINVERT = 0x005A0049;
 
-        public const int RECO_PASTE = 0x00000000;   // paste from clipboard
-        public const int RECO_DROP = 0x00000001;    // drop
-                                                    //public const int RECO_COPY  = 0x00000002;    // copy to the clipboard
-                                                    //public const int RECO_CUT   = 0x00000003; // cut to the clipboard
-                                                    //public const int RECO_DRAG  = 0x00000004;    // drag
-
-        public const int stc4 = 0x0443,
-        STARTF_USESHOWWINDOW = 0x00000001,
+        public const int
         SIZE_RESTORED = 0,
         SIZE_MAXIMIZED = 2,
         SORT_DEFAULT = 0x0,
@@ -202,35 +160,7 @@ namespace System.Windows.Forms
         TB_THUMBTRACK = 5,
         TB_TOP = 6,
         TB_BOTTOM = 7,
-        TB_ENDTRACK = 8,
-        TVI_ROOT = (unchecked((int)0xFFFF0000)),
-        TVI_FIRST = (unchecked((int)0xFFFF0001)),
-        TVE_COLLAPSE = 0x0001,
-        TVE_EXPAND = 0x0002,
-        TVGN_NEXT = 0x0001,
-        TVGN_PREVIOUS = 0x0002,
-        TVGN_FIRSTVISIBLE = 0x0005,
-        TVGN_NEXTVISIBLE = 0x0006,
-        TVGN_PREVIOUSVISIBLE = 0x0007,
-        TVGN_DROPHILITE = 0x0008,
-        TVGN_CARET = 0x0009,
-        TVN_SELCHANGING = ((0 - 400) - 50),
-        TVN_GETINFOTIP = ((0 - 400) - 14),
-        TVN_SELCHANGED = ((0 - 400) - 51);
-        public const int TVN_GETDISPINFO = ((0 - 400) - 52),
-        TVN_SETDISPINFO = ((0 - 400) - 53),
-        TVN_ITEMEXPANDING = ((0 - 400) - 54),
-        TVN_ITEMEXPANDED = ((0 - 400) - 55),
-        TVN_BEGINDRAG = ((0 - 400) - 56),
-        TVN_BEGINRDRAG = ((0 - 400) - 57),
-        TVN_BEGINLABELEDIT = ((0 - 400) - 59),
-        TVN_ENDLABELEDIT = ((0 - 400) - 60),
-        TYMED_NULL = 0,
-        TVSIL_STATE = 2;
-
-        public const int UOI_FLAGS = 1;
-
-        public const int WSF_VISIBLE = 0x0001;
+        TB_ENDTRACK = 8;
 
         public const int WHEEL_DELTA = 120;
 
@@ -247,13 +177,6 @@ namespace System.Windows.Forms
         public const string uuid_IAccessible = "{618736E0-3C3D-11CF-810C-00AA00389B71}";
 
         public const string WinFormFrameworkId = "WinForm";
-
-        public struct USEROBJECTFLAGS
-        {
-            public int fInherit;
-            public int fReserved;
-            public int dwFlags;
-        }
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
         public class HH_AKLINK
@@ -321,29 +244,6 @@ namespace System.Windows.Forms
         public delegate int ListViewCompareCallback(IntPtr lParam1, IntPtr lParam2, IntPtr lParamSort);
 
         public delegate int TreeViewCompareCallback(IntPtr lParam1, IntPtr lParam2, IntPtr lParamSort);
-
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-        public class STARTUPINFO_I
-        {
-            public int cb = 0;
-            public IntPtr lpReserved = IntPtr.Zero;
-            public IntPtr lpDesktop = IntPtr.Zero;
-            public IntPtr lpTitle = IntPtr.Zero;
-            public int dwX = 0;
-            public int dwY = 0;
-            public int dwXSize = 0;
-            public int dwYSize = 0;
-            public int dwXCountChars = 0;
-            public int dwYCountChars = 0;
-            public int dwFillAttribute = 0;
-            public int dwFlags = 0;
-            public short wShowWindow = 0;
-            public short cbReserved2 = 0;
-            public IntPtr lpReserved2 = IntPtr.Zero;
-            public IntPtr hStdInput = IntPtr.Zero;
-            public IntPtr hStdOutput = IntPtr.Zero;
-            public IntPtr hStdError = IntPtr.Zero;
-        }
 
         // Any change in PRINTDLG, should also be in PRINTDLG_32 and PRINTDLG_64
         public interface PRINTDLG
@@ -641,62 +541,12 @@ namespace System.Windows.Forms
             }
         }
 
-        [StructLayout(LayoutKind.Sequential)]
-        public class COPYDATASTRUCT
-        {
-            public int dwData = 0;
-            public int cbData = 0;
-            public IntPtr lpData = IntPtr.Zero;
-        }
-
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
-        public unsafe struct CHARFORMATW
-        {
-            private const int LF_FACESIZE = 32;
-
-            public int cbSize;
-            public int dwMask;
-            public int dwEffects;
-            public int yHeight;
-            public int yOffset;
-            public int crTextColor;
-            public byte bCharSet;
-            public byte bPitchAndFamily;
-
-            private fixed char _szFaceName[LF_FACESIZE];
-            private Span<char> szFaceName
-            {
-                get { fixed (char* c = _szFaceName) { return new Span<char>(c, LF_FACESIZE); } }
-            }
-
-            public ReadOnlySpan<char> FaceName
-            {
-                get => szFaceName.SliceAtFirstNull();
-                set => SpanHelpers.CopyAndTerminate(value, szFaceName);
-            }
-        }
-
-        [StructLayout(LayoutKind.Sequential, Pack = 4)]
-        public class CHARFORMATA
-        {
-            public int cbSize = Marshal.SizeOf<CHARFORMATA>();
-            public int dwMask;
-            public int dwEffects;
-            public int yHeight;
-            public int yOffset;
-            public int crTextColor;
-            public byte bCharSet;
-            public byte bPitchAndFamily;
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 32)]
-            public byte[] szFaceName = new byte[32];
-        }
-
         [StructLayout(LayoutKind.Sequential, Pack = 4)]
         public class CHARFORMAT2A
         {
             public int cbSize = Marshal.SizeOf<CHARFORMAT2A>();
-            public int dwMask = 0;
-            public int dwEffects = 0;
+            public Richedit.CFM dwMask;
+            public Richedit.CFE dwEffects;
             public int yHeight = 0;
             public int yOffset = 0;
             public int crTextColor = 0;
@@ -714,20 +564,6 @@ namespace System.Windows.Forms
             public byte bUnderlineType = 0;
             public byte bAnimation = 0;
             public byte bRevAuthor = 0;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public class GETTEXTLENGTHEX
-        {                               // Taken from richedit.h:
-            public uint flags;          // Flags (see GTL_XXX defines)
-            public uint codepage;       // Code page for translation (CP_ACP for default, 1200 for Unicode)
-        }
-
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-        public class FINDTEXT
-        {
-            public Richedit.CHARRANGE chrg;
-            public string? lpstrText;
         }
 
         [StructLayout(LayoutKind.Sequential)]
@@ -756,15 +592,6 @@ namespace System.Windows.Forms
             public int nCount;
             public int nRgnSize;
             // public RECT rcBound; // Note that we don't define this field as part of the marshaling
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public class ENDROPFILES
-        {
-            public User32.NMHDR nmhdr;
-            public IntPtr hDrop = IntPtr.Zero;
-            public int cp = 0;
-            public bool fProtected = false;
         }
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]

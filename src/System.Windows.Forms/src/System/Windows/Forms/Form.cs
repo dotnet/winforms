@@ -3341,22 +3341,19 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Calls the default window proc for the form. If
-        ///  a
-        ///  subclass overrides this function,
+        ///  a subclass overrides this function,
         ///  it must call the base implementation.
         /// </summary>
-        [
-            EditorBrowsable(EditorBrowsableState.Advanced)
-        ]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void DefWndProc(ref Message m)
         {
             if (ctlClient != null && ctlClient.IsHandleCreated && ctlClient.ParentInternal == this)
             {
-                m.Result = UnsafeNativeMethods.DefFrameProc(m.HWnd, ctlClient.Handle, m.Msg, m.WParam, m.LParam);
+                m.Result = User32.DefFrameProcW(m.HWnd, ctlClient.Handle, (User32.WM)m.Msg, m.WParam, m.LParam);
             }
             else if (0 != formStateEx[FormStateExUseMdiChildProc])
             {
-                m.Result = UnsafeNativeMethods.DefMDIChildProc(m.HWnd, (User32.WM)m.Msg, m.WParam, m.LParam);
+                m.Result = User32.DefMDIChildProcW(m.HWnd, (User32.WM)m.Msg, m.WParam, m.LParam);
             }
             else
             {
@@ -6121,20 +6118,20 @@ namespace System.Windows.Forms
         private void WmCreate(ref Message m)
         {
             base.WndProc(ref m);
-            NativeMethods.STARTUPINFO_I si = new NativeMethods.STARTUPINFO_I();
-            UnsafeNativeMethods.GetStartupInfo(si);
+            var si = new Kernel32.STARTUPINFOW();
+            Kernel32.GetStartupInfoW(ref si);
 
             // If we've been created from explorer, it may
             // force us to show up normal.  Force our current window state to
             // the specified state, unless it's _specified_ max or min
-            if (TopLevel && (si.dwFlags & NativeMethods.STARTF_USESHOWWINDOW) != 0)
+            if (TopLevel && (si.dwFlags & Kernel32.STARTF.USESHOWWINDOW) != 0)
             {
-                switch (si.wShowWindow)
+                switch ((User32.SW)si.wShowWindow)
                 {
-                    case (short)User32.SW.MAXIMIZE:
+                    case User32.SW.MAXIMIZE:
                         WindowState = FormWindowState.Maximized;
                         break;
-                    case (short)User32.SW.MINIMIZE:
+                    case User32.SW.MINIMIZE:
                         WindowState = FormWindowState.Minimized;
                         break;
                 }
@@ -6482,7 +6479,7 @@ namespace System.Windows.Forms
                     pt.Y >= (clientSize.Height - SizeGripSize) &&
                     clientSize.Height >= SizeGripSize)
                 {
-                    m.Result = IsMirrored ? (IntPtr)NativeMethods.HTBOTTOMLEFT : (IntPtr)NativeMethods.HTBOTTOMRIGHT;
+                    m.Result = (IntPtr)(IsMirrored ? User32.HT.BOTTOMLEFT : User32.HT.BOTTOMRIGHT);
                     return;
                 }
             }
@@ -6495,10 +6492,10 @@ namespace System.Windows.Forms
             if (AutoSizeMode == AutoSizeMode.GrowAndShrink)
             {
                 int result = unchecked((int)(long)m.Result);
-                if (result >= NativeMethods.HTLEFT &&
-                    result <= NativeMethods.HTBOTTOMRIGHT)
+                if (result >= (int)User32.HT.LEFT &&
+                    result <= (int)User32.HT.BOTTOMRIGHT)
                 {
-                    m.Result = (IntPtr)NativeMethods.HTBORDER;
+                    m.Result = (IntPtr)User32.HT.BORDER;
                 }
             }
         }

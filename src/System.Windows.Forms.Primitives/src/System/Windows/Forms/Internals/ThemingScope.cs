@@ -35,7 +35,7 @@ namespace System.Windows.Forms
         /// </summary>
         public static IntPtr Activate(bool useVisualStyles)
         {
-            if (IsContextActiveButNotCreated(useVisualStyles) && Kernel32.ActivateActCtx(s_hActCtx, out IntPtr userCookie))
+            if (IsContextActiveButNotCreated(useVisualStyles) && Kernel32.ActivateActCtx(s_hActCtx, out IntPtr userCookie).IsTrue())
             {
                 return userCookie;
             }

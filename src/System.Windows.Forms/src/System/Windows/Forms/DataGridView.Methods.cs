@@ -21688,7 +21688,7 @@ namespace System.Windows.Forms
                                     // Forward the key message to the editing control if any
                                     if (editingControl != null)
                                     {
-                                        editingControl.SendMessage(m.Msg, m.WParam, m.LParam);
+                                        User32.SendMessageW(editingControl, (User32.WM)m.Msg, m.WParam, m.LParam);
                                         dataGridViewState1[DATAGRIDVIEWSTATE1_forwardCharMessage] = true;
                                         return true;
                                     }
@@ -21704,7 +21704,7 @@ namespace System.Windows.Forms
                 dataGridViewState1[DATAGRIDVIEWSTATE1_forwardCharMessage] = false;
                 if (editingControl != null)
                 {
-                    editingControl.SendMessage(m.Msg, m.WParam, m.LParam);
+                    User32.SendMessageW(editingControl, (User32.WM)m.Msg, m.WParam, m.LParam);
                     return true;
                 }
             }
@@ -29161,7 +29161,7 @@ namespace System.Windows.Forms
                     if (editingControl != null)
                     {
                         // Make sure that the first character is forwarded to the editing control.
-                        editingControl.SendMessage(m.Msg, m.WParam, m.LParam);
+                        User32.SendMessageW(editingControl, (User32.WM)m.Msg, m.WParam, m.LParam);
                     }
                     break;
             }

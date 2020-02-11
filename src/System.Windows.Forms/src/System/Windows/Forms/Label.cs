@@ -1686,7 +1686,7 @@ namespace System.Windows.Forms
                     //
                     Rectangle rectInScreen = RectangleToScreen(new Rectangle(0, 0, Width, Height));
                     Point pt = new Point(unchecked((int)(long)m.LParam));
-                    m.Result = (IntPtr)((rectInScreen.Contains(pt) ? NativeMethods.HTCLIENT : NativeMethods.HTNOWHERE));
+                    m.Result = (IntPtr)(rectInScreen.Contains(pt) ? User32.HT.CLIENT : User32.HT.NOWHERE);
                     break;
 
                 default:

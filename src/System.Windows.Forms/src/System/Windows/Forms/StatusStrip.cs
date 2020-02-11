@@ -645,7 +645,7 @@ namespace System.Windows.Forms
                         {
                             if ((deltaRightEdge + deltaBottomEdge) < 2)
                             {
-                                m.Result = (IntPtr)NativeMethods.HTBOTTOMRIGHT;
+                                m.Result = (IntPtr)User32.HT.BOTTOMRIGHT;
                                 return;
                             }
                         }
@@ -681,7 +681,7 @@ namespace System.Windows.Forms
 
                     if (ClientRectangle.Contains(PointToClient(new Point(x, y))))
                     {
-                        m.Result = (IntPtr)NativeMethods.HTBOTTOMLEFT;
+                        m.Result = (IntPtr)User32.HT.BOTTOMLEFT;
                         return;
                     }
                 }

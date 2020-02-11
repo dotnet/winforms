@@ -582,7 +582,7 @@ namespace System.Windows.Forms
                         User32.GetWindowRect(this, ref r);
                         if ((r.left <= p.X && p.X < r.right && r.top <= p.Y && p.Y < r.bottom) || User32.GetCapture() == Handle)
                         {
-                            User32.SendMessageW(this, User32.WM.SETCURSOR, Handle, (IntPtr)NativeMethods.HTCLIENT);
+                            User32.SendMessageW(this, User32.WM.SETCURSOR, Handle, (IntPtr)User32.HT.CLIENT);
                         }
                     }
                 }
@@ -2416,17 +2416,9 @@ namespace System.Windows.Forms
         {
             // Accessing through the Handle property has side effects that break this
             // logic. You must use InternalHandle.
-            //
-            if (m.WParam == InternalHandle && ((int)m.LParam & 0x0000FFFF) == NativeMethods.HTCLIENT)
+            if (m.WParam == InternalHandle && ((int)m.LParam & 0x0000FFFF) == (int)User32.HT.CLIENT)
             {
-                if (OverrideCursor != null)
-                {
-                    Cursor.Current = OverrideCursor;
-                }
-                else
-                {
-                    Cursor.Current = Cursor;
-                }
+                Cursor.Current = OverrideCursor ?? Cursor;
             }
             else
             {

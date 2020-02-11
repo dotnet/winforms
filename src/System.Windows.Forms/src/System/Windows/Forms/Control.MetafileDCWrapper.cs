@@ -72,7 +72,7 @@ namespace System.Windows.Forms
                     Gdi32.SelectObject(HDC, _hOriginalBmp);
                     success = Gdi32.DeleteObject(_hBitmap).IsTrue();
                     Debug.Assert(success, "DeleteObject() failed.");
-                    success = Gdi32.DeleteDC(HDC);
+                    success = Gdi32.DeleteDC(HDC).IsTrue();
                     Debug.Assert(success, "DeleteObject() failed.");
                 }
                 finally

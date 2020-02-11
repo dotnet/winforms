@@ -50,42 +50,6 @@ namespace System.Windows.Forms
         public static extern HRESULT PrintDlgEx([In, Out] NativeMethods.PRINTDLGEX lppdex);
 
         [DllImport(ExternDll.Shell32, CharSet = CharSet.Auto)]
-        public static extern int DragQueryFile(HandleRef hDrop, int iFile, StringBuilder? lpszFile, int cch);
-
-        public static int DragQueryFileLongPath(HandleRef hDrop, int iFile, StringBuilder lpszFile)
-        {
-            if (null != lpszFile && 0 != lpszFile.Capacity && iFile != unchecked((int)0xFFFFFFFF))
-            {
-                int resultValue = 0;
-
-                // iterating by allocating chunk of memory each time we find the length is not sufficient.
-                // Performance should not be an issue for current MAX_PATH length due to this
-                if ((resultValue = DragQueryFile(hDrop, iFile, lpszFile, lpszFile.Capacity)) == lpszFile.Capacity)
-                {
-                    // passing null for buffer will return actual number of charectors in the file name.
-                    // So, one extra call would be suffice to avoid while loop in case of long path.
-                    int capacity = DragQueryFile(hDrop, iFile, null, 0);
-                    if (capacity < Kernel32.MAX_UNICODESTRING_LEN)
-                    {
-                        lpszFile.EnsureCapacity(capacity);
-                        resultValue = DragQueryFile(hDrop, iFile, lpszFile, capacity);
-                    }
-                    else
-                    {
-                        resultValue = 0;
-                    }
-                }
-
-                lpszFile.Length = resultValue;
-                return resultValue;  // what ever the result.
-            }
-            else
-            {
-                return DragQueryFile(hDrop, iFile, lpszFile, lpszFile?.Capacity ?? 0);
-            }
-        }
-
-        [DllImport(ExternDll.Shell32, CharSet = CharSet.Auto)]
         public static extern int Shell_NotifyIcon(int message, NativeMethods.NOTIFYICONDATA pnid);
 
         [DllImport(ExternDll.Comdlg32, SetLastError = true, CharSet = CharSet.Auto)]
@@ -131,12 +95,6 @@ namespace System.Windows.Forms
             return buffer;
         }
 
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public extern static IntPtr SendDlgItemMessage(IntPtr hDlg, int nIDDlgItem, int Msg, IntPtr wParam, IntPtr lParam);
-
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public extern static IntPtr SendDlgItemMessage(HandleRef hDlg, int nIDDlgItem, int Msg, IntPtr wParam, IntPtr lParam);
-
         [DllImport(ExternDll.Comdlg32, SetLastError = true, CharSet = CharSet.Auto)]
         public static extern bool GetSaveFileName([In, Out] NativeMethods.OPENFILENAME_I ofn);
 
@@ -153,61 +111,14 @@ namespace System.Windows.Forms
         public static extern IntPtr FindWindow(string className, string windowName);
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern IntPtr SendMessage(HandleRef hWnd, int msg, bool wParam, int lParam);
-
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, int[] lParam);
-
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int[] wParam, int[] lParam);
-
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern IntPtr SendMessage(HandleRef hWnd, int msg, ref int wParam, ref int lParam);
-
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, string lParam);
-
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern IntPtr SendMessage(HandleRef hWnd, int msg, IntPtr wParam, string lParam);
-
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, StringBuilder lParam);
-
-        [DllImport(ExternDll.User32, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
-        public static extern IntPtr SendMessage(IntPtr hwnd, int msg, bool wparam, int lparam);
-
-        //for Tooltips
-        //
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern IntPtr SendMessage(HandleRef hWnd, int msg, HandleRef wParam, int lParam);
-
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, HandleRef lParam);
 
         // For RichTextBox
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, [In, Out, MarshalAs(UnmanagedType.LPStruct)] NativeMethods.CHARFORMATA lParam);
-
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, [In, Out, MarshalAs(UnmanagedType.LPStruct)] NativeMethods.CHARFORMAT2A lParam);
-
-        [DllImport(ExternDll.User32, CharSet = CharSet.Unicode)]
-        public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, ref NativeMethods.CHARFORMATW lParam);
+        public static extern IntPtr SendMessage(HandleRef hWnd, User32.WM msg, IntPtr wParam, [In, Out, MarshalAs(UnmanagedType.LPStruct)] NativeMethods.CHARFORMAT2A lParam);
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public static extern int SendMessage(HandleRef hWnd, int msg, int wParam, [Out, MarshalAs(UnmanagedType.IUnknown)]out object editOle);
-
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, ref Richedit.CHARRANGE lParam);
-
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, NativeMethods.FINDTEXT lParam);
-
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, ref Point lParam);
-
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern IntPtr SendMessage(HandleRef hWnd, int msg, ref Point wParam, int lParam);
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, NativeMethods.EDITSTREAM lParam);
@@ -215,51 +126,8 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, NativeMethods.EDITSTREAM64 lParam);
 
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern IntPtr SendMessage(HandleRef hWnd, int msg, NativeMethods.GETTEXTLENGTHEX wParam, int lParam);
-
-        // For Button
-
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, ref Size lParam);
-
-        // For MonthCalendar
-        //
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, ref ComCtl32.MCHITTESTINFO lParam);
-
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, int lParam);
-
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern IntPtr SendMessage(HandleRef hWnd, int msg, IntPtr wParam, IntPtr lParam);
-
-        [DllImport(ExternDll.User32, CharSet = CharSet.Unicode)]
-        public extern static IntPtr SendMessage(HandleRef hWnd, int Msg, IntPtr wParam, ref RECT lParam);
-
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public extern static IntPtr SendMessage(HandleRef hWnd, int Msg, ref short wParam, ref short lParam);
-
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public extern static IntPtr SendMessage(HandleRef hWnd, int Msg, [In, Out, MarshalAs(UnmanagedType.Bool)] ref bool wParam, IntPtr lParam);
-
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public extern static IntPtr SendMessage(HandleRef hWnd, int Msg, int wParam, IntPtr lParam);
-
-        [DllImport(ExternDll.User32, CharSet = CharSet.Unicode)]
-        public extern static IntPtr SendMessage(HandleRef hWnd, int Msg, int wParam, ref RECT lParam);
-
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public extern static IntPtr SendMessage(HandleRef hWnd, int Msg, IntPtr wParam, NativeMethods.ListViewCompareCallback pfnCompare);
-
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern int GetDlgItemInt(IntPtr hWnd, int nIDDlgItem, bool[] err, bool signed);
-
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern IntPtr DefMDIChildProc(IntPtr hWnd, User32.WM msg, IntPtr wParam, IntPtr lParam);
-
-        [DllImport(ExternDll.User32, SetLastError = true)]
-        public static extern bool GetUserObjectInformation(HandleRef hObj, int nIndex, ref NativeMethods.USEROBJECTFLAGS pvBuffer, int nLength, ref int lpnLengthNeeded);
 
         [DllImport(ExternDll.Oleacc, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern IntPtr LresultFromObject(ref Guid refiid, IntPtr wParam, HandleRef pAcc);
@@ -275,12 +143,6 @@ namespace System.Windows.Forms
 
         [DllImport(ExternDll.User32, EntryPoint = "SendMessage", CharSet = CharSet.Auto)]
         public extern static IntPtr SendCallbackMessage(HandleRef hWnd, int Msg, IntPtr wParam, IntPtr lParam);
-
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern IntPtr DefFrameProc(IntPtr hWnd, IntPtr hWndClient, int msg, IntPtr wParam, IntPtr lParam);
-
-        [DllImport(ExternDll.Kernel32, CharSet = CharSet.Auto)]
-        public static extern void GetStartupInfo([In, Out] NativeMethods.STARTUPINFO_I startupinfo_i);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern IntPtr SetActiveWindow(HandleRef hWnd);

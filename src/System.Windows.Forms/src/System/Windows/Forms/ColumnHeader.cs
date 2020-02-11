@@ -510,11 +510,14 @@ namespace System.Windows.Forms
         }
 
         // Set the display indices of the listview columns
-        private void SetDisplayIndices(int[] cols)
+        private unsafe void SetDisplayIndices(int[] cols)
         {
             if (listview.IsHandleCreated && !listview.Disposing)
             {
-                UnsafeNativeMethods.SendMessage(new HandleRef(listview, listview.Handle), (int)LVM.SETCOLUMNORDERARRAY, cols.Length, cols);
+                fixed (int* pCols = cols)
+                {
+                    User32.SendMessageW(listview, (User32.WM)LVM.SETCOLUMNORDERARRAY, (IntPtr)cols.Length, (IntPtr)pCols);
+                }
             }
         }
 

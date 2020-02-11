@@ -945,8 +945,9 @@ namespace System.Windows.Forms
                 {
                     if (m.Msg == (int)User32.WM.NCHITTEST)
                     {
-                        m.Result = (IntPtr)NativeMethods.HTTRANSPARENT;
+                        m.Result = (IntPtr)User32.HT.TRANSPARENT;
                     }
+
                     base.WndProc(ref m);
                 }
             }

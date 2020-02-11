@@ -2002,7 +2002,7 @@ namespace System.Windows.Forms
                     break;
 
                 case WM.SETCURSOR:
-                    if (Cursor != DefaultCursor && childEdit != null && m.HWnd == childEdit.Handle && PARAM.LOWORD(m.LParam) == NativeMethods.HTCLIENT)
+                    if (Cursor != DefaultCursor && childEdit != null && m.HWnd == childEdit.Handle && PARAM.LOWORD(m.LParam) == (int)HT.CLIENT)
                     {
                         Cursor.Current = Cursor;
                     }
@@ -3953,7 +3953,7 @@ namespace System.Windows.Forms
                     {
                         DefWndProc(ref m);
 
-                        if ((unchecked((int)(long)m.LParam) & NativeMethods.PRF_CLIENT) == NativeMethods.PRF_CLIENT)
+                        if ((unchecked((PRF)(long)m.LParam) & PRF.CLIENT) == PRF.CLIENT)
                         {
                             if (!GetStyle(ControlStyles.UserPaint) && (FlatStyle == FlatStyle.Flat || FlatStyle == FlatStyle.Popup))
                             {
