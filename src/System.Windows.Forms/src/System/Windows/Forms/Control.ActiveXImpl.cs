@@ -2239,7 +2239,7 @@ namespace System.Windows.Forms
                         finalClipRegion = MergeRegion(rgn);
                     }
 
-                    UnsafeNativeMethods.SetWindowRgn(new HandleRef(_control, _control.Handle), new HandleRef(this, finalClipRegion), User32.IsWindowVisible(_control).IsTrue());
+                    User32.SetWindowRgn(_control, new HandleRef(this, finalClipRegion), User32.IsWindowVisible(_control));
                 }
 
                 // Yuck.  Forms^3 uses transparent overlay windows that appear to cause

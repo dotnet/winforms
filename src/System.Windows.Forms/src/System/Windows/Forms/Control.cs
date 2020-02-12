@@ -3171,7 +3171,7 @@ namespace System.Windows.Forms
                                 regionHandle = ActiveXMergeRegion(regionHandle);
                             }
 
-                            if (UnsafeNativeMethods.SetWindowRgn(new HandleRef(this, Handle), new HandleRef(this, regionHandle), User32.IsWindowVisible(this).IsTrue()) != 0)
+                            if (User32.SetWindowRgn(this, new HandleRef(this, regionHandle), User32.IsWindowVisible(this)) != 0)
                             {
                                 //The Hwnd owns the region.
                                 regionHandle = IntPtr.Zero;
@@ -7814,7 +7814,7 @@ namespace System.Windows.Forms
                             regionHandle = ActiveXMergeRegion(regionHandle);
                         }
 
-                        if (UnsafeNativeMethods.SetWindowRgn(new HandleRef(this, Handle), new HandleRef(this, regionHandle), User32.IsWindowVisible(this).IsTrue()) != 0)
+                        if (User32.SetWindowRgn(this, new HandleRef(this, regionHandle), User32.IsWindowVisible(this)) != 0)
                         {
                             //The HWnd owns the region.
                             regionHandle = IntPtr.Zero;
