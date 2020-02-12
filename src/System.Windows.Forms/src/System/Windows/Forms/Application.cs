@@ -1167,7 +1167,7 @@ namespace System.Windows.Forms
                     sb.Append(arguments[arguments.Length - 1]);
                     sb.Append('"');
                 }
-                ProcessStartInfo currentStartInfo = Process.GetCurrentProcess().StartInfo;
+                ProcessStartInfo currentStartInfo = Process.GetCurrentProcess();
                 currentStartInfo.FileName = ExecutablePath;
                 if (sb.Length > 0)
                 {
