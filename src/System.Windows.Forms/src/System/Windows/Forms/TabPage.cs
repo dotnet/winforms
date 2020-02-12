@@ -466,6 +466,13 @@ namespace System.Windows.Forms
             OnEnter(e);
         }
 
+        protected override void OnGotFocus(EventArgs e)
+        {
+            KeyboardToolTipStateMachine.Instance.NotifyAboutGotFocus(this);
+
+            base.OnGotFocus(e);
+        }
+
         /// <summary>
         ///  Actually goes and fires the OnEnter event. Inheriting controls should use this to know
         ///  when the event is fired [this is preferable to adding an event handler on yourself for
@@ -485,7 +492,6 @@ namespace System.Windows.Forms
                 }
 
                 _enterFired = false;
-                KeyboardToolTipStateMachine.Instance.NotifyAboutGotFocus(this);
             }
         }
 

@@ -1360,6 +1360,20 @@ namespace System.Windows.Forms
             _onDrawItem?.Invoke(this, e);
         }
 
+        protected override void OnGotFocus(EventArgs e)
+        {
+            if (TabCount > 0 && SelectedTab != null)
+            {
+                KeyboardToolTipStateMachine.Instance.NotifyAboutGotFocus(SelectedTab);
+            }
+            else
+            {
+                KeyboardToolTipStateMachine.Instance.NotifyAboutGotFocus(this);
+            }
+
+            base.OnGotFocus(e);
+        }
+
         /// <summary>
         ///  Actually goes and fires the OnLeave event.  Inheriting controls
         ///  should use this to know when the event is fired [this is preferable to
@@ -1409,8 +1423,21 @@ namespace System.Windows.Forms
                 SelectedTab.FireLeave(e);
             }
 
-            KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(this);
             base.OnLeave(e);
+        }
+
+        protected override void OnLostFocus(EventArgs e)
+        {
+            if (TabCount > 0 && SelectedTab != null)
+            {
+                KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(SelectedTab);
+            }
+            else
+            {
+                KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(this);
+            }
+
+            base.OnLostFocus(e);
         }
 
         /// <summary>
@@ -1491,6 +1518,11 @@ namespace System.Windows.Forms
             UpdateTabSelection(GetState(State.UISelection));
             SetState(State.UISelection, false);
             _onSelectedIndexChanged?.Invoke(this, e);
+
+            if (TabCount > 0 && SelectedTab != null)
+            {
+                KeyboardToolTipStateMachine.Instance.NotifyAboutGotFocus(SelectedTab);
+            }
         }
 
         /// <summary>
