@@ -18,14 +18,14 @@ internal static partial class Interop
             public IntPtr lpstrSchema;
             public uint cbSizeInstance;
             public TYPEKIND typekind;
-            public short cFuncs;
-            public short cVars;
-            public short cImplTypes;
-            public short cbSizeVft;
-            public short cbAlignment;
-            public short wTypeFlags;
-            public short wMajorVerNum;
-            public short wMinorVerNum;
+            public ushort cFuncs;
+            public ushort cVars;
+            public ushort cImplTypes;
+            public ushort cbSizeVft;
+            public ushort cbAlignment;
+            public ushort wTypeFlags;
+            public ushort wMajorVerNum;
+            public ushort wMinorVerNum;
             public TYPEDESC tdescAlias;
             public IDLDESC idldescType;
         }

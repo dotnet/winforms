@@ -57,9 +57,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// <summary>
         ///  Given an Object, this attempts to locate its type ifo
         /// </summary>
-        public static UnsafeNativeMethods.ITypeInfo FindTypeInfo(object obj, bool wantCoClass)
+        public static Oleaut32.ITypeInfo FindTypeInfo(object obj, bool wantCoClass)
         {
-            UnsafeNativeMethods.ITypeInfo pTypeInfo = null;
+            Oleaut32.ITypeInfo pTypeInfo = null;
 
             // This is kind of odd.  What's going on here is that if we want the CoClass (e.g. for
             // the interface name), we need to look for IProvideClassInfo first, then look for the
@@ -78,7 +78,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 }
                 else
                 {
-                    if (obj is UnsafeNativeMethods.IDispatch iDispatch)
+                    if (obj is Oleaut32.IDispatch iDispatch)
                     {
                         iDispatch.GetTypeInfo(0, Kernel32.GetThreadLocale(), out pTypeInfo);
                     }
@@ -92,11 +92,11 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         ///  Given an Object, this attempts to locate its type info. If it implementes IProvideMultipleClassInfo
         ///  all available type infos will be returned, otherwise the primary one will be alled.
         /// </summary>
-        public static UnsafeNativeMethods.ITypeInfo[] FindTypeInfos(object obj, bool wantCoClass)
+        public static Oleaut32.ITypeInfo[] FindTypeInfos(object obj, bool wantCoClass)
         {
-            UnsafeNativeMethods.ITypeInfo[] typeInfos = null;
+            Oleaut32.ITypeInfo[] typeInfos = null;
             int n = 0;
-            UnsafeNativeMethods.ITypeInfo temp = null;
+            Oleaut32.ITypeInfo temp = null;
 
             if (obj is NativeMethods.IProvideMultipleClassInfo pCI)
             {
@@ -107,7 +107,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
                 if (n > 0)
                 {
-                    typeInfos = new UnsafeNativeMethods.ITypeInfo[n];
+                    typeInfos = new Oleaut32.ITypeInfo[n];
 
                     for (int i = 0; i < n; i++)
                     {
@@ -126,7 +126,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 temp = FindTypeInfo(obj, wantCoClass);
                 if (temp != null)
                 {
-                    typeInfos = new UnsafeNativeMethods.ITypeInfo[] { temp };
+                    typeInfos = new Oleaut32.ITypeInfo[] { temp };
                 }
             }
 
@@ -137,7 +137,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         ///  Retrieve the dispid of the property that we are to use as the name
         ///  member.  In this case, the grid will put parens around the name.
         /// </summary>
-        public unsafe static Ole32.DispatchID GetNameDispId(UnsafeNativeMethods.IDispatch obj)
+        public unsafe static Ole32.DispatchID GetNameDispId(Oleaut32.IDispatch obj)
         {
             Ole32.DispatchID dispid = Ole32.DispatchID.UNKNOWN;
             string[] names = null;
@@ -198,7 +198,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 return null;
             }
 
-            UnsafeNativeMethods.ITypeInfo[] typeInfos = FindTypeInfos(obj, false);
+            Oleaut32.ITypeInfo[] typeInfos = FindTypeInfos(obj, false);
 
             // oops, looks like this guy doesn't surface any type info
             // this is okay, so we just say it has no props
@@ -215,14 +215,14 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
             for (int i = 0; i < typeInfos.Length; i++)
             {
-                UnsafeNativeMethods.ITypeInfo ti = typeInfos[i];
+                Oleaut32.ITypeInfo ti = typeInfos[i];
 
                 if (ti == null)
                 {
                     continue;
                 }
 
-                int[] versions = new int[2];
+                uint[] versions = new uint[2];
                 Guid typeGuid = GetGuidForTypeInfo(ti, versions);
                 PropertyDescriptor[] props = null;
                 bool dontProcess = typeGuid != Guid.Empty && processedLibraries != null && processedLibraries.Contains(typeGuid);
@@ -281,10 +281,10 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             return new Com2Properties(obj, temp2, defaultProp);
         }
 
-        private static Guid GetGuidForTypeInfo(UnsafeNativeMethods.ITypeInfo typeInfo, int[] versions)
+        private unsafe static Guid GetGuidForTypeInfo(Oleaut32.ITypeInfo typeInfo, uint[] versions)
         {
-            IntPtr pTypeAttr = IntPtr.Zero;
-            HRESULT hr = typeInfo.GetTypeAttr(ref pTypeAttr);
+            Ole32.TYPEATTR* pTypeAttr = null;
+            HRESULT hr = typeInfo.GetTypeAttr(&pTypeAttr);
             if (!hr.Succeeded())
             {
                 throw new ExternalException(string.Format(SR.TYPEINFOPROCESSORGetTypeAttrFailed, hr), (int)hr);
@@ -292,14 +292,13 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
             try
             {
-                ref readonly Ole32.TYPEATTR typeAttr = ref UnsafeNativeMethods.PtrToRef<Ole32.TYPEATTR>(pTypeAttr);
                 if (versions != null)
                 {
-                    versions[0] = typeAttr.wMajorVerNum;
-                    versions[1] = typeAttr.wMinorVerNum;
+                    versions[0] = pTypeAttr->wMajorVerNum;
+                    versions[1] = pTypeAttr->wMinorVerNum;
                 }
 
-                return typeAttr.guid;
+                return pTypeAttr->guid;
             }
             finally
             {
@@ -312,9 +311,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         ///  user defined, which and may be aliased into other type infos.  This function
         ///  will recusively walk the ITypeInfos to resolve the type to a clr Type.
         /// </summary>
-        private static Type GetValueTypeFromTypeDesc(in Ole32.TYPEDESC typeDesc, UnsafeNativeMethods.ITypeInfo typeInfo, object[] typeData)
+        private unsafe static Type GetValueTypeFromTypeDesc(in Ole32.TYPEDESC typeDesc, Oleaut32.ITypeInfo typeInfo, object[] typeData)
         {
-            IntPtr hreftype;
+            uint hreftype;
             HRESULT hr = HRESULT.S_OK;
 
             switch (typeDesc.vt)
@@ -332,28 +331,24 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
                 case Ole32.VARENUM.USERDEFINED:
                     // we'll need to recurse into a user defined reference typeinfo
-                    Debug.Assert(typeDesc.unionMember != IntPtr.Zero, "typeDesc doesn't contain an hreftype!");
-                    hreftype = typeDesc.unionMember;
+                    Debug.Assert(typeDesc.union.hreftype != 0u, "typeDesc doesn't contain an hreftype!");
+                    hreftype = typeDesc.union.hreftype;
                     break;
 
                 case Ole32.VARENUM.PTR:
                     // we'll need to recurse into a user defined reference typeinfo
-                    Debug.Assert(typeDesc.unionMember != IntPtr.Zero, "typeDesc doesn't contain an refTypeDesc!");
-                    ref readonly Ole32.TYPEDESC refTypeDesc = ref UnsafeNativeMethods.PtrToRef<Ole32.TYPEDESC>(typeDesc.unionMember);
-
-                    if (refTypeDesc.vt == Ole32.VARENUM.VARIANT)
+                    Debug.Assert(typeDesc.union.lptdesc != null, "typeDesc doesn't contain an refTypeDesc!");
+                    if (typeDesc.union.lptdesc->vt == Ole32.VARENUM.VARIANT)
                     {
-                        return VTToType(refTypeDesc.vt);
+                        return VTToType(typeDesc.union.lptdesc->vt);
                     }
 
-                    hreftype = refTypeDesc.unionMember;
+                    hreftype = typeDesc.union.lptdesc->union.hreftype;
                     break;
             }
 
             // get the reference type info
-            UnsafeNativeMethods.ITypeInfo refTypeInfo = null;
-
-            hr = typeInfo.GetRefTypeInfo(hreftype, ref refTypeInfo);
+            hr = typeInfo.GetRefTypeInfo(hreftype, out Oleaut32.ITypeInfo refTypeInfo);
             if (!hr.Succeeded())
             {
                 throw new ExternalException(string.Format(SR.TYPEINFOPROCESSORGetRefTypeInfoFailed, hr), (int)hr);
@@ -364,11 +359,10 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 // here is where we look at the next level type info.
                 // if we get an enum, process it, otherwise we will recurse
                 // or get a dispatch.
-                //
                 if (refTypeInfo != null)
                 {
-                    IntPtr pRefTypeAttr = IntPtr.Zero;
-                    hr = refTypeInfo.GetTypeAttr(ref pRefTypeAttr);
+                    Ole32.TYPEATTR* pTypeAttr = null;
+                    hr = refTypeInfo.GetTypeAttr(&pTypeAttr);
                     if (!hr.Succeeded())
                     {
                         throw new ExternalException(string.Format(SR.TYPEINFOPROCESSORGetTypeAttrFailed, hr), (int)hr);
@@ -376,8 +370,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
                     try
                     {
-                        ref readonly Ole32.TYPEATTR refTypeAttr = ref UnsafeNativeMethods.PtrToRef<Ole32.TYPEATTR>(pRefTypeAttr);
-                        Guid g = refTypeAttr.guid;
+                        Guid g = pTypeAttr->guid;
 
                         // save the guid if we've got one here
                         if (!Guid.Empty.Equals(g))
@@ -385,13 +378,13 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                             typeData[0] = g;
                         }
 
-                        switch (refTypeAttr.typekind)
+                        switch (pTypeAttr->typekind)
                         {
                             case Ole32.TYPEKIND.ENUM:
                                 return ProcessTypeInfoEnum(refTypeInfo);
                             case Ole32.TYPEKIND.ALIAS:
                                 // recurse here
-                                return GetValueTypeFromTypeDesc(refTypeAttr.tdescAlias, refTypeInfo, typeData);
+                                return GetValueTypeFromTypeDesc(pTypeAttr->tdescAlias, refTypeInfo, typeData);
                             case Ole32.TYPEKIND.DISPATCH:
                                 return VTToType(Ole32.VARENUM.DISPATCH);
                             case Ole32.TYPEKIND.INTERFACE:
@@ -403,7 +396,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     }
                     finally
                     {
-                        refTypeInfo.ReleaseTypeAttr(pRefTypeAttr);
+                        refTypeInfo.ReleaseTypeAttr(pTypeAttr);
                     }
                 }
             }
@@ -414,7 +407,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             return null;
         }
 
-        private static PropertyDescriptor[] InternalGetProperties(object obj, UnsafeNativeMethods.ITypeInfo typeInfo, Ole32.DispatchID dispidToGet, ref int defaultIndex)
+        private static PropertyDescriptor[] InternalGetProperties(object obj, Oleaut32.ITypeInfo typeInfo, Ole32.DispatchID dispidToGet, ref int defaultIndex)
         {
             if (typeInfo == null)
             {
@@ -423,7 +416,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
             Hashtable propInfos = new Hashtable();
 
-            Ole32.DispatchID nameDispID = GetNameDispId((UnsafeNativeMethods.IDispatch)obj);
+            Ole32.DispatchID nameDispID = GetNameDispId((Oleaut32.IDispatch)obj);
             bool addAboutBox = false;
 
             // properties can live as functions with get_ and put_ or
@@ -512,27 +505,27 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             return props;
         }
 
-        private static PropInfo ProcessDataCore(UnsafeNativeMethods.ITypeInfo typeInfo, IDictionary propInfoList, Ole32.DispatchID dispid, Ole32.DispatchID nameDispID, in Ole32.TYPEDESC typeDesc, Ole32.VARFLAGS flags)
+        private unsafe static PropInfo ProcessDataCore(Oleaut32.ITypeInfo typeInfo, IDictionary propInfoList, Ole32.DispatchID dispid, Ole32.DispatchID nameDispID, in Ole32.TYPEDESC typeDesc, Ole32.VARFLAGS flags)
         {
-            string pPropName = null;
-            string pPropDesc = null;
-
             // get the name and the helpstring
-            HRESULT hr = typeInfo.GetDocumentation(dispid, ref pPropName, ref pPropDesc, null, null);
+            using var nameBstr = new BSTR();
+            using var helpStringBstr = new BSTR();
+            HRESULT hr = typeInfo.GetDocumentation(dispid, &nameBstr, &helpStringBstr, null, null);
             ComNativeDescriptor cnd = ComNativeDescriptor.Instance;
             if (!hr.Succeeded())
             {
                 throw new COMException(string.Format(SR.TYPEINFOPROCESSORGetDocumentationFailed, dispid, hr, cnd.GetClassName(typeInfo)), (int)hr);
             }
 
-            if (pPropName == null)
+            string name = nameBstr.String.ToString();
+            if (string.IsNullOrEmpty(name))
             {
                 Debug.Fail(string.Format(CultureInfo.CurrentCulture, "ITypeInfo::GetDocumentation didn't return a name for DISPID 0x{0:X} but returned SUCEEDED(hr),  Component=" + cnd.GetClassName(typeInfo), dispid));
                 return null;
             }
 
             // now we can create our struct... make sure we don't already have one
-            PropInfo pi = (PropInfo)propInfoList[pPropName];
+            PropInfo pi = (PropInfo)propInfoList[name];
 
             if (pi == null)
             {
@@ -540,15 +533,16 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 {
                     Index = propInfoList.Count
                 };
-                propInfoList[pPropName] = pi;
-                pi.Name = pPropName;
+                propInfoList[name] = pi;
+                pi.Name = name;
                 pi.DispId = dispid;
                 pi.Attributes.Add(new DispIdAttribute((int)pi.DispId));
             }
 
-            if (pPropDesc != null)
+            string helpString = helpStringBstr.String.ToString();
+            if (!string.IsNullOrEmpty(helpString))
             {
-                pi.Attributes.Add(new DescriptionAttribute(pPropDesc));
+                pi.Attributes.Add(new DescriptionAttribute(helpString));
             }
 
             // figure out the value type
@@ -621,27 +615,25 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             return pi;
         }
 
-        private unsafe static void ProcessFunctions(UnsafeNativeMethods.ITypeInfo typeInfo, IDictionary propInfoList, Ole32.DispatchID dispidToGet, Ole32.DispatchID nameDispID, ref bool addAboutBox)
+        private unsafe static void ProcessFunctions(Oleaut32.ITypeInfo typeInfo, IDictionary propInfoList, Ole32.DispatchID dispidToGet, Ole32.DispatchID nameDispID, ref bool addAboutBox)
         {
-            IntPtr pTypeAttr = IntPtr.Zero;
-            HRESULT hr = typeInfo.GetTypeAttr(ref pTypeAttr);
-            if (!hr.Succeeded() || pTypeAttr == IntPtr.Zero)
+            Ole32.TYPEATTR* pTypeAttr = null;
+            HRESULT hr = typeInfo.GetTypeAttr(&pTypeAttr);
+            if (!hr.Succeeded() || pTypeAttr == null)
             {
                 throw new ExternalException(string.Format(SR.TYPEINFOPROCESSORGetTypeAttrFailed, hr), (int)hr);
             }
 
             try
             {
-                ref readonly Ole32.TYPEATTR typeAttr = ref UnsafeNativeMethods.PtrToRef<Ole32.TYPEATTR>(pTypeAttr);
-
                 bool isPropGet;
                 PropInfo pi;
 
-                for (int i = 0; i < typeAttr.cFuncs; i++)
+                for (uint i = 0; i < pTypeAttr->cFuncs; i++)
                 {
-                    IntPtr pFuncDesc = IntPtr.Zero;
-                    hr = typeInfo.GetFuncDesc(i, ref pFuncDesc);
-                    if (!hr.Succeeded() || pFuncDesc == IntPtr.Zero)
+                    Ole32.FUNCDESC* pFuncDesc = null;
+                    hr = typeInfo.GetFuncDesc(i, &pFuncDesc);
+                    if (!hr.Succeeded() || pFuncDesc == null)
                     {
                         Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "ProcessTypeInfoEnum: ignoring function item 0x{0:X} because ITypeInfo::GetFuncDesc returned hr=0x{1:X} or NULL", i, hr));
                         continue;
@@ -649,11 +641,10 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
                     try
                     {
-                        ref readonly Ole32.FUNCDESC funcDesc = ref UnsafeNativeMethods.PtrToRef<Ole32.FUNCDESC>(pFuncDesc);
-                        if (funcDesc.invkind == Ole32.INVOKEKIND.FUNC ||
-                            (dispidToGet != Ole32.DispatchID.MEMBERID_NIL && funcDesc.memid != dispidToGet))
+                        if (pFuncDesc->invkind == Ole32.INVOKEKIND.FUNC ||
+                            (dispidToGet != Ole32.DispatchID.MEMBERID_NIL && pFuncDesc->memid != dispidToGet))
                         {
-                            if (funcDesc.memid == Ole32.DispatchID.ABOUTBOX)
+                            if (pFuncDesc->memid == Ole32.DispatchID.ABOUTBOX)
                             {
                                 addAboutBox = true;
                             }
@@ -663,34 +654,34 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                         Ole32.TYPEDESC typeDesc;
 
                         // is this a get or a put?
-                        isPropGet = (funcDesc.invkind == Ole32.INVOKEKIND.PROPERTYGET);
+                        isPropGet = (pFuncDesc->invkind == Ole32.INVOKEKIND.PROPERTYGET);
 
                         if (isPropGet)
                         {
-                            if (funcDesc.cParams != 0)
+                            if (pFuncDesc->cParams != 0)
                             {
                                 continue;
                             }
 
                             unsafe
                             {
-                                typeDesc = funcDesc.elemdescFunc.tdesc;
+                                typeDesc = pFuncDesc->elemdescFunc.tdesc;
                             }
                         }
                         else
                         {
-                            Debug.Assert(funcDesc.lprgelemdescParam != null, "ELEMDESC param is null!");
-                            if (funcDesc.lprgelemdescParam == null || funcDesc.cParams != 1)
+                            Debug.Assert(pFuncDesc->lprgelemdescParam != null, "ELEMDESC param is null!");
+                            if (pFuncDesc->lprgelemdescParam == null || pFuncDesc->cParams != 1)
                             {
                                 continue;
                             }
 
                             unsafe
                             {
-                                typeDesc = funcDesc.lprgelemdescParam->tdesc;
+                                typeDesc = pFuncDesc->lprgelemdescParam->tdesc;
                             }
                         }
-                        pi = ProcessDataCore(typeInfo, propInfoList, funcDesc.memid, nameDispID, in typeDesc, (Ole32.VARFLAGS)funcDesc.wFuncFlags);
+                        pi = ProcessDataCore(typeInfo, propInfoList, pFuncDesc->memid, nameDispID, in typeDesc, (Ole32.VARFLAGS)pFuncDesc->wFuncFlags);
 
                         // if we got a setmethod, it's not readonly
                         if (pi != null && !isPropGet)
@@ -714,7 +705,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         ///  This converts a type info that describes a IDL defined enum
         ///  into one we can use
         /// </summary>
-        private static Type ProcessTypeInfoEnum(UnsafeNativeMethods.ITypeInfo enumTypeInfo)
+        private unsafe static Type ProcessTypeInfoEnum(Oleaut32.ITypeInfo enumTypeInfo)
         {
             Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, "ProcessTypeInfoEnum entered");
 
@@ -726,18 +717,16 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
             try
             {
-                IntPtr pTypeAttr = IntPtr.Zero;
-                HRESULT hr = enumTypeInfo.GetTypeAttr(ref pTypeAttr);
-                if (!hr.Succeeded() || pTypeAttr == IntPtr.Zero)
+                Ole32.TYPEATTR* pTypeAttr = null;
+                HRESULT hr = enumTypeInfo.GetTypeAttr(&pTypeAttr);
+                if (!hr.Succeeded() || pTypeAttr == null)
                 {
                     throw new ExternalException(string.Format(SR.TYPEINFOPROCESSORGetTypeAttrFailed, hr), (int)hr);
                 }
 
                 try
                 {
-                    ref readonly Ole32.TYPEATTR typeAttr = ref UnsafeNativeMethods.PtrToRef<Ole32.TYPEATTR>(pTypeAttr);
-
-                    int nItems = typeAttr.cVars;
+                    uint nItems = pTypeAttr->cVars;
 
                     Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, "ProcessTypeInfoEnum: processing " + nItems.ToString(CultureInfo.InvariantCulture) + " variables");
 
@@ -745,20 +734,18 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     ArrayList vars = new ArrayList();
 
                     object varValue = null;
-                    string enumName = null;
-                    string name = null;
-                    string helpstr = null;
 
-                    enumTypeInfo.GetDocumentation(Ole32.DispatchID.MEMBERID_NIL, ref enumName, ref helpstr, null, null);
+                    using var enumNameBstr = new BSTR();
+                    using var enumHelpStringBstr = new BSTR();
+                    enumTypeInfo.GetDocumentation(Ole32.DispatchID.MEMBERID_NIL, &enumNameBstr, &enumHelpStringBstr, null, null);
 
-                    // For each item in the enum type info,
-                    // we just need it's name and value, and helpstring if it's there.
-                    //
-                    for (int i = 0; i < nItems; i++)
+                    // For each item in the enum type info, we just need it's name and value and
+                    // helpstring if it's there.
+                    for (uint i = 0; i < nItems; i++)
                     {
-                        IntPtr pVarDesc = IntPtr.Zero;
-                        hr = enumTypeInfo.GetVarDesc(i, ref pVarDesc);
-                        if (!hr.Succeeded() || pVarDesc == IntPtr.Zero)
+                        Ole32.VARDESC* pVarDesc = null;
+                        hr = enumTypeInfo.GetVarDesc(i, &pVarDesc);
+                        if (!hr.Succeeded() || pVarDesc == null)
                         {
                             Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "ProcessTypeInfoEnum: ignoring item 0x{0:X} because ITypeInfo::GetVarDesc returned hr=0x{1:X} or NULL", i, hr));
                             continue;
@@ -766,29 +753,31 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
                         try
                         {
-                            ref readonly Ole32.VARDESC varDesc = ref UnsafeNativeMethods.PtrToRef<Ole32.VARDESC>(pVarDesc);
-                            if (varDesc.varkind != Ole32.VARKIND.CONST || varDesc.unionMember == IntPtr.Zero)
+                            if (pVarDesc->varkind != Ole32.VARKIND.CONST || pVarDesc->unionMember == IntPtr.Zero)
                             {
                                 continue;
                             }
 
-                            name = helpstr = null;
                             varValue = null;
 
                             // get the name and the helpstring
-                            hr = enumTypeInfo.GetDocumentation(varDesc.memid, ref name, ref helpstr, null, null);
+                            using var nameBstr = new BSTR();
+                            using var helpBstr = new BSTR();
+                            hr = enumTypeInfo.GetDocumentation(pVarDesc->memid, &nameBstr, &helpBstr, null, null);
                             if (!hr.Succeeded())
                             {
                                 Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "ProcessTypeInfoEnum: ignoring item 0x{0:X} because ITypeInfo::GetDocumentation returned hr=0x{1:X} or NULL", i, hr));
                                 continue;
                             }
 
-                            Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, "ProcessTypeInfoEnum got name=" + (name ?? "(null)") + ", helpstring=" + (helpstr ?? "(null)"));
+                            string name = nameBstr.String.ToString();
+                            string helpString = helpBstr.String.ToString();
+                            Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, "ProcessTypeInfoEnum got name=" + (name ?? "(null)") + ", helpstring=" + (helpString ?? "(null)"));
 
                             // get the value
                             try
                             {
-                                varValue = Marshal.GetObjectForNativeVariant(varDesc.unionMember);
+                                varValue = Marshal.GetObjectForNativeVariant(pVarDesc->unionMember);
                             }
                             catch (Exception ex)
                             {
@@ -800,9 +789,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
                             // if we have a helpstring, use it, otherwise use name
                             string nameString;
-                            if (helpstr != null)
+                            if (!string.IsNullOrEmpty(helpString))
                             {
-                                nameString = helpstr;
+                                nameString = helpString;
                             }
                             else
                             {
@@ -814,10 +803,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                         }
                         finally
                         {
-                            if (pVarDesc != IntPtr.Zero)
-                            {
-                                enumTypeInfo.ReleaseVarDesc(pVarDesc);
-                            }
+                            enumTypeInfo.ReleaseVarDesc(pVarDesc);
                         }
                     }
 
@@ -831,7 +817,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
                         try
                         {
-                            enumName = pTypeInfoUnk.ToString() + "_" + enumName;
+                            string enumName = pTypeInfoUnk.ToString() + "_" + enumNameBstr.String.ToString();
 
                             if (builtEnums == null)
                             {
@@ -878,23 +864,22 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             return null;
         }
 
-        private static void ProcessVariables(UnsafeNativeMethods.ITypeInfo typeInfo, IDictionary propInfoList, Ole32.DispatchID dispidToGet, Ole32.DispatchID nameDispID)
+        private unsafe static void ProcessVariables(Oleaut32.ITypeInfo typeInfo, IDictionary propInfoList, Ole32.DispatchID dispidToGet, Ole32.DispatchID nameDispID)
         {
-            IntPtr pTypeAttr = IntPtr.Zero;
-            HRESULT hr = typeInfo.GetTypeAttr(ref pTypeAttr);
-            if (!hr.Succeeded() || pTypeAttr == IntPtr.Zero)
+            Ole32.TYPEATTR* pTypeAttr = null;
+            HRESULT hr = typeInfo.GetTypeAttr(&pTypeAttr);
+            if (!hr.Succeeded() || pTypeAttr == null)
             {
                 throw new ExternalException(string.Format(SR.TYPEINFOPROCESSORGetTypeAttrFailed, hr), (int)hr);
             }
 
             try
             {
-                ref readonly Ole32.TYPEATTR typeAttr = ref UnsafeNativeMethods.PtrToRef<Ole32.TYPEATTR>(pTypeAttr);
-                for (int i = 0; i < typeAttr.cVars; i++)
+                for (uint i = 0; i < pTypeAttr->cVars; i++)
                 {
-                    IntPtr pVarDesc = IntPtr.Zero;
-                    hr = typeInfo.GetVarDesc(i, ref pVarDesc);
-                    if (!hr.Succeeded() || pVarDesc == IntPtr.Zero)
+                    Ole32.VARDESC* pVarDesc = null;
+                    hr = typeInfo.GetVarDesc(i, &pVarDesc);
+                    if (!hr.Succeeded() || pVarDesc == null)
                     {
                         Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "ProcessTypeInfoEnum: ignoring variable item 0x{0:X} because ITypeInfo::GetFuncDesc returned hr=0x{1:X} or NULL", i, hr));
                         continue;
@@ -902,17 +887,15 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
                     try
                     {
-                        ref readonly Ole32.VARDESC varDesc = ref UnsafeNativeMethods.PtrToRef<Ole32.VARDESC>(pVarDesc);
-
-                        if (varDesc.varkind == Ole32.VARKIND.CONST ||
-                            (dispidToGet != Ole32.DispatchID.MEMBERID_NIL && varDesc.memid != dispidToGet))
+                        if (pVarDesc->varkind == Ole32.VARKIND.CONST ||
+                            (dispidToGet != Ole32.DispatchID.MEMBERID_NIL && pVarDesc->memid != dispidToGet))
                         {
                             continue;
                         }
 
                         unsafe
                         {
-                            PropInfo pi = ProcessDataCore(typeInfo, propInfoList, varDesc.memid, nameDispID, in varDesc.elemdescVar.tdesc, varDesc.wVarFlags);
+                            PropInfo pi = ProcessDataCore(typeInfo, propInfoList, pVarDesc->memid, nameDispID, in pVarDesc->elemdescVar.tdesc, pVarDesc->wVarFlags);
                             if (pi.ReadOnly != PropInfo.ReadOnlyTrue)
                             {
                                 pi.ReadOnly = PropInfo.ReadOnlyFalse;
@@ -921,10 +904,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     }
                     finally
                     {
-                        if (pVarDesc != IntPtr.Zero)
-                        {
-                            typeInfo.ReleaseVarDesc(pVarDesc);
-                        }
+                        typeInfo.ReleaseVarDesc(pVarDesc);
                     }
                 }
             }
@@ -972,7 +952,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 case Ole32.VARENUM.LPWSTR:
                     return typeof(string);
                 case Ole32.VARENUM.DISPATCH:
-                    return typeof(UnsafeNativeMethods.IDispatch);
+                    return typeof(Oleaut32.IDispatch);
                 case Ole32.VARENUM.UNKNOWN:
                     return typeof(object);
                 case Ole32.VARENUM.ERROR:
@@ -1014,11 +994,11 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         {
             private readonly PropertyDescriptor[] props;
 
-            public readonly int MajorVersion;
-            public readonly int MinorVersion;
+            public readonly uint MajorVersion;
+            public readonly uint MinorVersion;
             private readonly int defaultIndex;
 
-            internal CachedProperties(PropertyDescriptor[] props, int defIndex, int majVersion, int minVersion)
+            internal CachedProperties(PropertyDescriptor[] props, int defIndex, uint majVersion, uint minVersion)
             {
                 this.props = ClonePropertyDescriptors(props);
                 MajorVersion = majVersion;

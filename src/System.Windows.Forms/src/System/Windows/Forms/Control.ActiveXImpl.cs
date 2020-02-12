@@ -618,11 +618,10 @@ namespace System.Windows.Forms
                 Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetAmbientProperty");
                 Debug.Indent();
 
-                if (_clientSite is UnsafeNativeMethods.IDispatch)
+                if (_clientSite is Oleaut32.IDispatch disp)
                 {
                     Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "clientSite implements IDispatch");
 
-                    UnsafeNativeMethods.IDispatch disp = (UnsafeNativeMethods.IDispatch)_clientSite;
                     var dispParams = new Ole32.DISPPARAMS();
                     object[] pvt = new object[1];
                     Guid g = Guid.Empty;
