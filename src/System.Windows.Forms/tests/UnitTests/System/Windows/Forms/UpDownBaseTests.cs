@@ -98,6 +98,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(Size.Empty, control.MinimumSize);
             Assert.Equal(Padding.Empty, control.Padding);
             Assert.Null(control.Parent);
+            Assert.Equal(Control.DefaultFont.Height + 7, control.PreferredHeight);
             Assert.Equal(new Size(123, control.PreferredHeight), control.PreferredSize);
             Assert.Equal("Microsoft\u00AE .NET", control.ProductName);
             Assert.False(control.ReadOnly);
