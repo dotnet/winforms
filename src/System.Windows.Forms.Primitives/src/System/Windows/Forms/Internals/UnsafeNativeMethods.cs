@@ -18,32 +18,6 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.Kernel32, CharSet = CharSet.Auto)]
         public static extern int GetLocaleInfo(uint Locale, int LCType, StringBuilder lpLCData, int cchData);
 
-        [DllImport(ExternDll.Comdlg32, EntryPoint = "PrintDlg", SetLastError = true, CharSet = CharSet.Auto)]
-        public static extern bool PrintDlg_32([In, Out] NativeMethods.PRINTDLG_32 lppd);
-
-        [DllImport(ExternDll.Comdlg32, EntryPoint = "PrintDlg", SetLastError = true, CharSet = CharSet.Auto)]
-        public static extern bool PrintDlg_64([In, Out] NativeMethods.PRINTDLG_64 lppd);
-
-        public static bool PrintDlg([In, Out] NativeMethods.PRINTDLG lppd)
-        {
-            if (IntPtr.Size == 4)
-            {
-                if (!(lppd is NativeMethods.PRINTDLG_32 lppd_32))
-                {
-                    throw new NullReferenceException("PRINTDLG data is null");
-                }
-                return PrintDlg_32(lppd_32);
-            }
-            else
-            {
-                if (!(lppd is NativeMethods.PRINTDLG_64 lppd_64))
-                {
-                    throw new NullReferenceException("PRINTDLG data is null");
-                }
-                return PrintDlg_64(lppd_64);
-            }
-        }
-
         [DllImport(ExternDll.Comdlg32, SetLastError = true, CharSet = CharSet.Auto)]
         public static extern HRESULT PrintDlgEx([In, Out] NativeMethods.PRINTDLGEX lppdex);
 
