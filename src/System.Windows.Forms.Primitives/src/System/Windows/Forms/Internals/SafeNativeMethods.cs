@@ -51,9 +51,6 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern bool MessageBeep(int type);
 
-        [DllImport(ExternDll.User32, ExactSpelling = true)]
-        public static extern bool DrawEdge(HandleRef hDC, ref RECT rect, int edge, int flags);
-
         // Theming/Visual Styles
         [DllImport(Libraries.UxTheme, CharSet = CharSet.Auto)]
         public static extern HRESULT GetThemeBackgroundContentRect(HandleRef hTheme, HandleRef hdc, int iPartId, int iStateId, [In] NativeMethods.COMRECT pBoundingRect, [Out] NativeMethods.COMRECT pContentRect);

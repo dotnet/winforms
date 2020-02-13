@@ -1084,8 +1084,8 @@ namespace System.Windows.Forms
                 throw new ArgumentNullException(nameof(graphics));
             }
 
-            int edge = ((int)style) & 0x0F;
-            int flags = ((int)sides) | (((int)style) & ~0x0F);
+            User32.EDGE edge = (User32.EDGE)((uint)style & 0x0F);
+            User32.BF flags = (User32.BF)sides | (User32.BF)((uint)style & ~0x0F);
 
             RECT rc = new Rectangle(x, y, width, height);
 
@@ -1095,20 +1095,20 @@ namespace System.Windows.Forms
             // the opposite: We precalculate the size of the border
             // and enlarge the rectangle so the client size is
             // preserved.
-            if ((flags & (int)Border3DStyle.Adjust) == (int)Border3DStyle.Adjust)
+            if ((flags & (User32.BF)Border3DStyle.Adjust) == (User32.BF)Border3DStyle.Adjust)
             {
                 Size sz = SystemInformation.Border3DSize;
                 rc.left -= sz.Width;
                 rc.right += sz.Width;
                 rc.top -= sz.Height;
                 rc.bottom += sz.Height;
-                flags &= ~((int)Border3DStyle.Adjust);
+                flags &= ~(User32.BF)Border3DStyle.Adjust;
             }
 
             using (WindowsGraphics wg = WindowsGraphics.FromGraphics(graphics))
             {
                 // Get Win32 dc with Graphics properties applied to it.
-                SafeNativeMethods.DrawEdge(new HandleRef(wg, wg.DeviceContext.Hdc), ref rc, edge, flags);
+                User32.DrawEdge(new HandleRef(wg, wg.DeviceContext.Hdc), ref rc, edge, flags);
             }
         }
 
