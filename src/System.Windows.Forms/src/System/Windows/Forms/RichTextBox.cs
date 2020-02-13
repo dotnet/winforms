@@ -3316,11 +3316,11 @@ namespace System.Windows.Forms
                     IntPtr punk = Marshal.GetIUnknownForObject(oleCallback);
                     try
                     {
-                        Guid iidRichEditOleCallback = typeof(Richedit.IRichEditOleCallback).GUID;
+                        Guid iidRichEditOleCallback = typeof(IRichEditOleCallback).GUID;
                         Marshal.QueryInterface(punk, ref iidRichEditOleCallback, out IntPtr pRichEditOleCallback);
                         try
                         {
-                            UnsafeNativeMethods.SendCallbackMessage(new HandleRef(this, Handle), RichEditMessages.EM_SETOLECALLBACK, IntPtr.Zero, pRichEditOleCallback);
+                            User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_SETOLECALLBACK, IntPtr.Zero, pRichEditOleCallback);
                         }
                         finally
                         {
