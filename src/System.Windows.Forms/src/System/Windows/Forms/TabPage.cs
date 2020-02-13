@@ -551,6 +551,13 @@ namespace System.Windows.Forms
             }
         }
 
+        protected override void OnLostFocus(EventArgs e)
+        {
+            KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(this);
+
+            base.OnLostFocus(e);
+        }
+
         protected override void OnPaintBackground(PaintEventArgs e)
         {
             // Utilize the TabRenderer new to Whidbey to draw the tab pages so that the panels are

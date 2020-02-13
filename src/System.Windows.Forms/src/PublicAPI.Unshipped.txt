@@ -2,6 +2,7 @@ System.Windows.Forms.DomainUpDown.DomainUpDownAccessibleObject.DomainUpDownAcces
 System.Windows.Forms.VisualStyles.EdgeEffects.Flat = 16384 -> System.Windows.Forms.VisualStyles.EdgeEffects
 System.Windows.Forms.VisualStyles.EdgeEffects.Soft = 4096 -> System.Windows.Forms.VisualStyles.EdgeEffects
 const System.Windows.Forms.TabControl.TabBaseReLayoutMessageName = "_TabBaseReLayout" -> string
-override System.Windows.Forms.TabPage.OnGotFocus(System.EventArgs e) -> void
 override System.Windows.Forms.TabControl.OnGotFocus(System.EventArgs e) -> void
 override System.Windows.Forms.TabControl.OnLostFocus(System.EventArgs e) -> void
+override System.Windows.Forms.TabPage.OnGotFocus(System.EventArgs e) -> void
+override System.Windows.Forms.TabPage.OnLostFocus(System.EventArgs e) -> void

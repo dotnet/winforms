@@ -1241,6 +1241,7 @@ namespace System.Windows.Forms
         {
             TipInfo info = new TipInfo(caption, TipInfo.Type.Auto);
             SetToolTipInternal(control, info);
+            control.LostFocus += (object sender, EventArgs e) => Hide(control);
         }
 
         /// <summary>
