@@ -7911,6 +7911,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">ToolStripPanel에 사용하는 그라데이션의 끝 색입니다.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ProgressBarDefaultAccessibleName">
+        <source>ProgressBar</source>
+        <target state="new">ProgressBar</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ProgressBarIncrementMarqueeException">
         <source>Increment should not be called if the style is Marquee.</source>
         <target state="translated">스타일이 움직이는 텍스트인 경우 Increment를 호출하면 안 됩니다.</target>

@@ -7911,6 +7911,11 @@ Cette opération non conforme s'est produite sur la trace de la pile :
         <target state="translated">Couleur de fin du dégradé utilisé dans le ToolStripPanel.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ProgressBarDefaultAccessibleName">
+        <source>ProgressBar</source>
+        <target state="new">ProgressBar</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ProgressBarIncrementMarqueeException">
         <source>Increment should not be called if the style is Marquee.</source>
         <target state="translated">L'incrément ne doit pas être appelé si le style est Texte défilant.</target>

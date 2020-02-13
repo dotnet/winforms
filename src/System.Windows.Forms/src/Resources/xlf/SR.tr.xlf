@@ -7911,6 +7911,11 @@ Geçersiz işlemin gerçekleştiği yığın izi:
         <target state="translated">ToolStripPanel'de kullanılan geçişin bitiş rengi.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ProgressBarDefaultAccessibleName">
+        <source>ProgressBar</source>
+        <target state="new">ProgressBar</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ProgressBarIncrementMarqueeException">
         <source>Increment should not be called if the style is Marquee.</source>
         <target state="translated">Stil Marquee ise Increment çağrılmamalıdır.</target>
