@@ -94,8 +94,7 @@ namespace System.Windows.Forms
             return ((0xFFFF & lgid) | (((0x000f) & sort) << 16));
         }
 
-        public const int MEMBERID_NIL = (-1),
-        ERROR_INSUFFICIENT_BUFFER = 122, //https://msdn.microsoft.com/en-us/library/windows/desktop/ms681382(v=vs.85).aspx
+        public const int
         MDIS_ALLCHILDSTYLES = 0x0001,
         MCN_VIEWCHANGE = (0 - 750), // MCN_SELECT -4  - give state of calendar view
         MCN_SELCHANGE = ((0 - 750) + 1),
