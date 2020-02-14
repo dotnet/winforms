@@ -16,20 +16,20 @@ namespace System.Windows.Forms.Tests
 
     public class TabControlControlCollectionTests : IClassFixture<ThreadExceptionFixture>
     {
-        public static IEnumerable<object[]> Ctor_TabControl_TestData()
+        [WinFormsFact]
+        public void TabControlControlCollection_Ctor_TabControl()
         {
-            yield return new object[] { null };
-            yield return new object[] { new TabControl() };
-        }
-
-        [WinFormsTheory]
-        [MemberData(nameof(Ctor_TabControl_TestData))]
-        public void TabControlControlCollection_Ctor_TabControl(TabControl owner)
-        {
+            using var owner = new TabControl();
             var collection = new TabControl.ControlCollection(owner);
             Assert.Empty(collection);
             Assert.False(collection.IsReadOnly);
             Assert.Same(owner, collection.Owner);
+        }
+
+        [WinFormsFact]
+        public void TabControlControlCollection_Ctor_NullOwner_ThrowsArgumentNullException()
+        {
+            Assert.Throws<ArgumentNullException>("owner", () => new TabControl.ControlCollection(null));
         }
 
         public static IEnumerable<object[]> Add_TestData()
@@ -887,14 +887,6 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void TabControlControlCollection_Add_NullOwner_ThrowsNullReferenceException()
-        {
-            var collection = new TabControl.ControlCollection(null);
-            using var value = new TabPage();
-            Assert.Throws<NullReferenceException>(() => collection.Add(value));
-        }
-
-        [WinFormsFact]
         public void TabControlControlCollection_Remove_InvokeValueWithoutHandleOwnerWithoutHandle_Success()
         {
             using var owner = new TabControl
@@ -1561,14 +1553,6 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(int.MaxValue, item.cchTextMax);
             Assert.Empty(new string(item.pszText));
             Assert.Equal(-1, item.iImage);
-        }
-
-        [WinFormsFact]
-        public void TabControlControlCollection_Remove_NullOwner_ThrowsNullReferenceException()
-        {
-            var collection = new TabControl.ControlCollection(null);
-            using var value = new Control();
-            Assert.Throws<NullReferenceException>(() => collection.Remove(value));
         }
 
         private class NullTextTabPage : TabPage
