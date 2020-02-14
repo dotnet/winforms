@@ -8866,6 +8866,11 @@ Trasování zásobníku, kde došlo k neplatné operaci:
         <target state="translated">Funkce není v tomto operačním systému podporována.</target>
         <note />
       </trans-unit>
+      <trans-unit id="TabControlBadControl">
+        <source>Parameter must be of type TabPage.</source>
+        <target state="new">Parameter must be of type TabPage.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="TabControlTabPageNotOnTabControl">
         <source>TabPage cannot be added to a '{0}'.  TabPages can only be added to TabControls.</source>
         <target state="translated">Objekt TabPage nelze přidat k objektu {0}. Objekt TabPages lze přidat pouze k ovládacímu prvku TabControls.</target>

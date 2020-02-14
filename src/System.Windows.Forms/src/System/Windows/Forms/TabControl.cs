@@ -789,28 +789,14 @@ namespace System.Windows.Forms
         {
             get
             {
-                return SelectedTabInternal;
-            }
-            set
-            {
-                SelectedTabInternal = value;
-            }
-        }
-
-        internal TabPage SelectedTabInternal
-        {
-            get
-            {
                 int index = SelectedIndex;
-                if (index == -1)
+                if (index == -1 || _tabPages == null)
                 {
                     return null;
                 }
-                else
-                {
-                    Debug.Assert(0 <= index && index < _tabPages.Length, "SelectedIndex returned an invalid index");
-                    return _tabPages[index];
-                }
+
+                Debug.Assert(0 <= index && index < _tabPages.Length, "SelectedIndex returned an invalid index");
+                return _tabPages[index];
             }
             set
             {
@@ -1228,7 +1214,16 @@ namespace System.Windows.Forms
 
         protected string GetToolTipText(object item)
         {
-            return ((TabPage)item).ToolTipText;
+            if (item == null)
+            {
+                throw new ArgumentNullException(nameof(item));
+            }
+            if (!(item is TabPage tabPage))
+            {
+                throw new ArgumentException(SR.TabControlBadControl, nameof(item));
+            }
+
+            return tabPage.ToolTipText;
         }
 
         private void ImageListRecreateHandle(object sender, EventArgs e)
