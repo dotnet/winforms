@@ -88,6 +88,23 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
+        /// <para>
+        /// Gets or sets the GUID to associate with this dialog state. Typically, state such
+        /// as the last visited folder and the position and size of the dialog is persisted
+        /// based on the name of the executable file. By specifying a GUID, an application can
+        /// have different persisted states for different versions of the dialog within the
+        /// same application (for example, an import dialog and an open dialog).
+        /// </para>
+        /// <para>
+        /// This functionality is not available if the old-style dialog is used.
+        /// </para>
+        /// </summary>
+        [Localizable(false)]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public Guid? ClientGuid { get; set; }
+
+        /// <summary>
         ///  Gets or sets the default file extension.
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
@@ -719,6 +736,7 @@ namespace System.Windows.Forms
             FilterIndex = 1;
             SupportMultiDottedExtensions = false;
             _customPlaces.Clear();
+            ClientGuid = null;
         }
 
         /// <summary>

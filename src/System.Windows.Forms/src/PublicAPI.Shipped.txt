@@ -2867,6 +2867,8 @@ System.Windows.Forms.FileDialog.AutoUpgradeEnabled.get -> bool
 System.Windows.Forms.FileDialog.AutoUpgradeEnabled.set -> void
 System.Windows.Forms.FileDialog.CheckPathExists.get -> bool
 System.Windows.Forms.FileDialog.CheckPathExists.set -> void
+System.Windows.Forms.FileDialog.ClientGuid.get -> System.Guid?
+System.Windows.Forms.FileDialog.ClientGuid.set -> void
 System.Windows.Forms.FileDialog.CustomPlaces.get -> System.Windows.Forms.FileDialogCustomPlacesCollection
 System.Windows.Forms.FileDialog.DefaultExt.get -> string
 System.Windows.Forms.FileDialog.DefaultExt.set -> void
