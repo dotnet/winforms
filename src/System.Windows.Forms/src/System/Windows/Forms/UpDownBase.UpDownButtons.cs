@@ -15,9 +15,6 @@ namespace System.Windows.Forms
     public abstract partial class UpDownBase
     {
         /// <summary>
-        ///
-        ///  Nested class UpDownButtons
-        ///
         ///  A control representing the pair of buttons on the end of the upDownEdit control.
         ///  This class handles drawing the updown buttons, and detecting mouse actions
         ///  on these buttons. Acceleration on the buttons is handled. The control
@@ -33,7 +30,6 @@ namespace System.Windows.Forms
             private ButtonID _captured = ButtonID.None;
             private ButtonID _mouseOver = ButtonID.None;
 
-            // UpDown event handler
             private UpDownEventHandler _upDownEventHandler;
 
             private Timer _timer; // generates UpDown events
@@ -41,28 +37,15 @@ namespace System.Windows.Forms
 
             private bool _doubleClickFired;
 
-            /////////////////////////////////////////////////////////////////////
-            // Constructors
-            //
-            /////////////////////////////////////////////////////////////////////
-            internal UpDownButtons(UpDownBase parent)
-
-            : base()
+            internal UpDownButtons(UpDownBase parent) : base()
             {
-                SetStyle(ControlStyles.Opaque | ControlStyles.FixedHeight |
-                         ControlStyles.FixedWidth, true);
-
+                SetStyle(ControlStyles.Opaque | ControlStyles.FixedHeight | ControlStyles.FixedWidth, true);
                 SetStyle(ControlStyles.Selectable, false);
 
-                this._parent = parent;
+                _parent = parent;
             }
 
-            /////////////////////////////////////////////////////////////////////
-            // Methods
-            //
-            /////////////////////////////////////////////////////////////////////
             /// <summary>
-            ///
             ///  Adds a handler for the updown button event.
             /// </summary>
             public event UpDownEventHandler UpDown
@@ -71,8 +54,10 @@ namespace System.Windows.Forms
                 remove => _upDownEventHandler -= value;
             }
 
-            // Called when the mouse button is pressed - we need to start
-            // spinning the value of the updown.
+            /// <remarks>
+            ///  Called when the mouse button is pressed - we need to start
+            ///  spinning the value of the updown.
+            /// </remarks>
             private void BeginButtonPress(MouseEventArgs e)
             {
                 int half_height = Size.Height / 2;
@@ -101,12 +86,12 @@ namespace System.Windows.Forms
             }
 
             protected override AccessibleObject CreateAccessibilityInstance()
-            {
-                return new UpDownButtonsAccessibleObject(this);
-            }
+                => new UpDownButtonsAccessibleObject(this);
 
-            // Called when the mouse button is released - we need to stop
-            // spinning the value of the updown.
+            /// <remarks>
+            ///  Called when the mouse button is released - we need to stop
+            ///  spinning the value of the updown.
+            /// </remarks>
             private void EndButtonPress()
             {
                 _pushed = ButtonID.None;
@@ -123,20 +108,14 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///
-            ///  Handles detecting mouse hits on the buttons. This method
-            ///  detects which button was hit (up or down), fires a
-            ///  updown event, captures the mouse, and starts a timer
-            ///  for repeated updown events.
-            ///
+            ///  Handles detecting mouse hits on the buttons. This method detects
+            ///  which button was hit (up or down), fires a updown event, captures
+            ///  the mouse, and starts a timer for repeated updown events.
             /// </summary>
             protected override void OnMouseDown(MouseEventArgs e)
             {
                 // Begin spinning the value
-                //
-
                 // Focus the parent
-                //
                 _parent.Focus();
 
                 if (!_parent.ValidationCancelled && e.Button == MouseButtons.Left)
@@ -147,20 +126,15 @@ namespace System.Windows.Forms
                 {
                     _doubleClickFired = true;
                 }
+
                 // At no stage should a button be pushed, and the mouse
                 // not captured.
-                //
                 Debug.Assert(!(_pushed != ButtonID.None && _captured == ButtonID.None),
                              "Invalid button pushed/captured combination");
 
                 _parent.OnMouseDown(_parent.TranslateMouseEvent(this, e));
             }
 
-            /// <summary>
-            ///
-            ///  Handles detecting mouse movement.
-            ///
-            /// </summary>
             protected override void OnMouseMove(MouseEventArgs e)
             {
                 // If the mouse is captured by the buttons (i.e. an updown button
@@ -171,7 +145,6 @@ namespace System.Windows.Forms
                 if (Capture)
                 {
                     // Determine button area
-
                     Rectangle rect = ClientRectangle;
                     rect.Height /= 2;
 
@@ -181,7 +154,6 @@ namespace System.Windows.Forms
                     }
 
                     // Test if the mouse has moved outside the button area
-
                     if (rect.Contains(e.X, e.Y))
                     {
                         // Inside button
@@ -199,10 +171,8 @@ namespace System.Windows.Forms
                     else
                     {
                         // Outside button
-                        // Retain the capture, but pop the button up whilst
-                        // the mouse remains outside the button and the
-                        // mouse button remains pressed.
-
+                        // Retain the capture, but pop the button up whilst the mouse
+                        // remains outside the button and the mouse button remains pressed.
                         if (_pushed != ButtonID.None)
                         {
                             // Stop the timer for updown events
@@ -214,12 +184,12 @@ namespace System.Windows.Forms
                     }
                 }
 
-                //Logic for seeing which button is Hot if any
+                // Logic for seeing which button is Hot if any
                 Rectangle rectUp = ClientRectangle, rectDown = ClientRectangle;
                 rectUp.Height /= 2;
                 rectDown.Y += rectDown.Height / 2;
 
-                //Check if the mouse is on the upper or lower button. Note that it could be in neither.
+                // Check if the mouse is on the upper or lower button. Note that it could be in neither.
                 if (rectUp.Contains(e.X, e.Y))
                 {
                     _mouseOver = ButtonID.Up;
@@ -231,8 +201,7 @@ namespace System.Windows.Forms
                     Invalidate();
                 }
 
-                // At no stage should a button be pushed, and the mouse
-                // not captured.
+                // At no stage should a button be pushed, and the mouse not captured.
                 Debug.Assert(!(_pushed != ButtonID.None && _captured == ButtonID.None),
                              "Invalid button pushed/captured combination");
 
@@ -240,9 +209,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///
             ///  Handles detecting when the mouse button is released.
-            ///
             /// </summary>
             protected override void OnMouseUp(MouseEventArgs e)
             {
@@ -251,8 +218,7 @@ namespace System.Windows.Forms
                     EndButtonPress();
                 }
 
-                // At no stage should a button be pushed, and the mouse
-                // not captured.
+                // At no stage should a button be pushed, and the mouse not captured.
                 Debug.Assert(!(_pushed != ButtonID.None && _captured == ButtonID.None),
                              "Invalid button pushed/captured combination");
 
@@ -275,17 +241,13 @@ namespace System.Windows.Forms
                             _parent.OnMouseDoubleClick(me);
                         }
                     }
+
                     _doubleClickFired = false;
                 }
 
                 _parent.OnMouseUp(me);
             }
 
-            /// <summary>
-            ///
-            ///  Handles detecting when the mouse leaves.
-            ///
-            /// </summary>
             protected override void OnMouseLeave(EventArgs e)
             {
                 _mouseOver = ButtonID.None;
@@ -296,18 +258,15 @@ namespace System.Windows.Forms
 
             /// <summary>
             ///  Handles painting the buttons on the control.
-            ///
             /// </summary>
             protected override void OnPaint(PaintEventArgs e)
             {
                 int half_height = ClientSize.Height / 2;
 
-                /* Draw the up and down buttons */
-
+                // Draw the up and down buttons
                 if (Application.RenderWithVisualStyles)
                 {
-                    VisualStyleRenderer vsr = new VisualStyleRenderer(_mouseOver == ButtonID.Up ? VisualStyleElement.Spin.Up.Hot : VisualStyleElement.Spin.Up.Normal);
-
+                    var vsr = new VisualStyleRenderer(_mouseOver == ButtonID.Up ? VisualStyleElement.Spin.Up.Hot : VisualStyleElement.Spin.Up.Normal);
                     if (!Enabled)
                     {
                         vsr.SetParameters(VisualStyleElement.Spin.Up.Disabled);
@@ -357,16 +316,15 @@ namespace System.Windows.Forms
                     }
                 }
 
-                base.OnPaint(e); // raise paint event, just in case this inner class goes public some day
+                // Raise the paint event, just in case this inner class goes public some day
+                base.OnPaint(e);
             }
 
             /// <summary>
             ///  Occurs when the UpDown buttons are pressed and when the acceleration timer tick event is raised.
             /// </summary>
             protected virtual void OnUpDown(UpDownEventArgs upevent)
-            {
-                _upDownEventHandler?.Invoke(this, upevent);
-            }
+                => _upDownEventHandler?.Invoke(this, upevent);
 
             /// <summary>
             ///  Starts the timer for generating updown events
@@ -376,7 +334,8 @@ namespace System.Windows.Forms
                 _parent.OnStartTimer();
                 if (_timer == null)
                 {
-                    _timer = new Timer();      // generates UpDown events
+                    // Generates UpDown events
+                    _timer = new Timer();
                     // Add the timer handler
                     _timer.Tick += new EventHandler(TimerHandler);
                 }
@@ -398,6 +357,7 @@ namespace System.Windows.Forms
                     _timer.Dispose();
                     _timer = null;
                 }
+
                 _parent.OnStopTimer();
             }
 
@@ -449,7 +409,6 @@ namespace System.Windows.Forms
                 internal override UiaCore.IRawElementProviderFragment ElementProviderFromPoint(double x, double y)
                 {
                     AccessibleObject element = HitTest((int)x, (int)y);
-
                     if (element != null)
                     {
                         return element;
@@ -474,30 +433,10 @@ namespace System.Windows.Forms
                 internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot => this;
 
                 private DirectionButtonAccessibleObject UpButton
-                {
-                    get
-                    {
-                        if (upButton == null)
-                        {
-                            upButton = new DirectionButtonAccessibleObject(this, true);
-                        }
-
-                        return upButton;
-                    }
-                }
+                    => upButton ??= new DirectionButtonAccessibleObject(this, true);
 
                 private DirectionButtonAccessibleObject DownButton
-                {
-                    get
-                    {
-                        if (downButton == null)
-                        {
-                            downButton = new DirectionButtonAccessibleObject(this, false);
-                        }
-
-                        return downButton;
-                    }
-                }
+                    => downButton ??= new DirectionButtonAccessibleObject(this, false);
 
                 public override AccessibleObject GetChild(int index)
                 {
@@ -516,10 +455,7 @@ namespace System.Windows.Forms
                     return null;
                 }
 
-                public override int GetChildCount()
-                {
-                    return 2;
-                }
+                public override int GetChildCount() => 2;
 
                 internal override object GetPropertyValue(UiaCore.UIA propertyID)
                 {
@@ -571,18 +507,14 @@ namespace System.Windows.Forms
                     get
                     {
                         string baseName = base.Name;
-
-                        if (baseName == null || baseName.Length == 0)
+                        if (string.IsNullOrEmpty(baseName))
                         {
                             return SR.DefaultUpDownButtonsAccessibleName;
                         }
 
                         return baseName;
                     }
-                    set
-                    {
-                        base.Name = value;
-                    }
+                    set => base.Name = value;
                 }
 
                 public override AccessibleObject Parent => _owner.AccessibilityObject;
@@ -592,11 +524,11 @@ namespace System.Windows.Forms
                     get
                     {
                         AccessibleRole role = Owner.AccessibleRole;
-
                         if (role != AccessibleRole.Default)
                         {
                             return role;
                         }
+
                         return AccessibleRole.SpinButton;
                     }
                 }
@@ -723,27 +655,14 @@ namespace System.Windows.Forms
 
                             return SR.UpDownBaseDownButtonAccName;
                         }
-                        set
-                        {
-                        }
+                        set { }
                     }
 
-                    public override AccessibleObject Parent
-                    {
-                        get
-                        {
-                            return _parent;
-                        }
-                    }
+                    public override AccessibleObject Parent => _parent;
 
-                    public override AccessibleRole Role
-                    {
-                        get
-                        {
-                            return AccessibleRole.PushButton;
-                        }
-                    }
+                    public override AccessibleRole Role => AccessibleRole.PushButton;
                 }
             }
-        } // end class UpDownButtons
-    }}
+        }
+    }
+}

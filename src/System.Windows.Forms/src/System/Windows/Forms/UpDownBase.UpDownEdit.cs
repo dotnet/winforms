@@ -16,27 +16,17 @@ namespace System.Windows.Forms
             private readonly UpDownBase _parent;
             private bool _doubleClickFired;
 
-            /////////////////////////////////////////////////////////////////////
-            // Constructors
-            //
-            /////////////////////////////////////////////////////////////////////
-            internal UpDownEdit(UpDownBase parent)
-            : base()
+            internal UpDownEdit(UpDownBase parent) : base()
             {
-                SetStyle(ControlStyles.FixedHeight |
-                         ControlStyles.FixedWidth, true);
-
+                SetStyle(ControlStyles.FixedHeight | ControlStyles.FixedWidth, true);
                 SetStyle(ControlStyles.Selectable, false);
 
-                this._parent = parent;
+                _parent = parent;
             }
 
             public override string Text
             {
-                get
-                {
-                    return base.Text;
-                }
+                get => base.Text;
                 set
                 {
                     bool valueChanged = (value != base.Text);
@@ -49,9 +39,7 @@ namespace System.Windows.Forms
             }
 
             protected override AccessibleObject CreateAccessibilityInstance()
-            {
-                return new UpDownEditAccessibleObject(this, _parent);
-            }
+                => new UpDownEditAccessibleObject(this, _parent);
 
             protected override void OnMouseDown(MouseEventArgs e)
             {
@@ -59,14 +47,10 @@ namespace System.Windows.Forms
                 {
                     _doubleClickFired = true;
                 }
+
                 _parent.OnMouseDown(_parent.TranslateMouseEvent(this, e));
             }
 
-            /// <summary>
-            ///
-            ///  Handles detecting when the mouse button is released.
-            ///
-            /// </summary>
             protected override void OnMouseUp(MouseEventArgs e)
             {
                 Point pt = new Point(e.X, e.Y);
@@ -109,8 +93,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///  Raises the <see cref='Control.KeyUp'/>
-            ///  event.
+            ///  Raises the <see cref='Control.KeyUp'/> event.
             /// </summary>
             protected override void OnKeyUp(KeyEventArgs e)
             {
@@ -124,19 +107,8 @@ namespace System.Windows.Forms
             }
 
             protected override void OnLostFocus(EventArgs e)
-            {
-                _parent.InvokeLostFocus(_parent, e);
-            }
+                => _parent.InvokeLostFocus(_parent, e);
 
-            // Microsoft: Focus fixes. The XXXUpDown control will
-            //         also fire a Leave event. We don't want
-            //         to fire two of them.
-            // protected override void OnLeave(EventArgs e) {
-            //     parent.OnLeave(e);
-            // }
-
-            // Create our own accessibility object to map the accessible name
-            // back to our parent.  They should track.
             internal class UpDownEditAccessibleObject : ControlAccessibleObject
             {
                 readonly UpDownBase _parent;
@@ -148,23 +120,12 @@ namespace System.Windows.Forms
 
                 public override string Name
                 {
-                    get
-                    {
-                        return _parent.AccessibilityObject.Name;
-                    }
-                    set
-                    {
-                        _parent.AccessibilityObject.Name = value;
-                    }
+                    get => _parent.AccessibilityObject.Name;
+                    set => _parent.AccessibilityObject.Name = value;
                 }
 
-                public override string KeyboardShortcut
-                {
-                    get
-                    {
-                        return _parent.AccessibilityObject.KeyboardShortcut;
-                    }
-                }
+                public override string KeyboardShortcut => _parent.AccessibilityObject.KeyboardShortcut;
             }
         }
-    }}
+    }
+}
