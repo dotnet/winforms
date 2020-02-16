@@ -886,7 +886,7 @@ namespace System.Windows.Forms
             }
 
             // Call AdjuctWindowRect to add space for the borders
-            int width = SizeFromClientSize(textWidth, height).Width + upDownButtons.Width;
+            int width = SizeFromClientSize(textWidth, height).Width + _upDownButtons.Width;
             return new Size(width, height) + Padding.Size;
         }
 
