@@ -665,8 +665,7 @@ namespace System.Windows.Forms
 
                 return lines;
             }
-
-            set { }
+            set{ }
         }
 
         /// <summary>
@@ -854,7 +853,7 @@ namespace System.Windows.Forms
         ]
         public override int MaxLength
         {
-            get { return base.MaxLength; }
+            get => base.MaxLength;
             set { }
         }
 
@@ -1011,10 +1010,7 @@ namespace System.Windows.Forms
         /// </summary>
         public new bool ReadOnly
         {
-            get
-            {
-                return base.ReadOnly;
-            }
+            get => base.ReadOnly;
 
             set
             {

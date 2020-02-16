@@ -426,14 +426,8 @@ namespace System.Windows.Forms
         ]
         public override ContentAlignment TextAlign
         {
-            get
-            {
-                return base.TextAlign;
-            }
-            set
-            {
-                base.TextAlign = value;
-            }
+            get => base.TextAlign;
+            set => base.TextAlign = value;
         }
 
         /// <summary>

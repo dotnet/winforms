@@ -345,11 +345,7 @@ namespace System.Windows.Forms
                     return SR.DataGridView_AccEditingControlAccName;
                 }
             }
-
-            set
-            {
-                base.Name = value;
-            }
+            set => base.Name = value;
         }
 
         internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)

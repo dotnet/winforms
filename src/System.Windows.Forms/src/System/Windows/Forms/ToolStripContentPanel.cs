@@ -61,14 +61,8 @@ namespace System.Windows.Forms
         ]
         public override AnchorStyles Anchor
         {
-            get
-            {
-                return base.Anchor;
-            }
-            set
-            {
-                base.Anchor = value;
-            }
+            get => base.Anchor;
+            set => base.Anchor = value;
         }
 
         [
@@ -77,8 +71,8 @@ namespace System.Windows.Forms
        ]
         public override bool AutoScroll
         {
-            get { return base.AutoScroll; }
-            set { base.AutoScroll = value; }
+            get => base.AutoScroll;
+            set => base.AutoScroll = value;
         }
 
         [
@@ -87,8 +81,8 @@ namespace System.Windows.Forms
         ]
         public new Size AutoScrollMargin
         {
-            get { return base.AutoScrollMargin; }
-            set { base.AutoScrollMargin = value; }
+            get => base.AutoScrollMargin;
+            set => base.AutoScrollMargin = value;
         }
 
         [
@@ -97,8 +91,8 @@ namespace System.Windows.Forms
         ]
         public new Size AutoScrollMinSize
         {
-            get { return base.AutoScrollMinSize; }
-            set { base.AutoScrollMinSize = value; }
+            get => base.AutoScrollMinSize;
+            set => base.AutoScrollMinSize = value;
         }
 
         [
@@ -107,16 +101,13 @@ namespace System.Windows.Forms
         ]
         public override bool AutoSize
         {
-            get { return base.AutoSize; }
-            set { base.AutoSize = value; }
+            get => base.AutoSize;
+            set => base.AutoSize = value;
         }
 
         public override Color BackColor
         {
-            get
-            {
-                return base.BackColor;
-            }
+            get => base.BackColor;
 
             set
             {
@@ -147,8 +138,8 @@ namespace System.Windows.Forms
         ]
         public new bool CausesValidation
         {
-            get { return base.CausesValidation; }
-            set { base.CausesValidation = value; }
+            get => base.CausesValidation;
+            set => base.CausesValidation = value;
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -164,14 +155,8 @@ namespace System.Windows.Forms
         ]
         public override DockStyle Dock
         {
-            get
-            {
-                return base.Dock;
-            }
-            set
-            {
-                base.Dock = value;
-            }
+            get => base.Dock;
+            set => base.Dock = value;
         }
         [
         Browsable(false),
@@ -196,8 +181,8 @@ namespace System.Windows.Forms
         ]
         public new Point Location
         {
-            get { return base.Location; }
-            set { base.Location = value; }
+            get => base.Location;
+            set => base.Location = value;
         }
 
         [
@@ -216,8 +201,8 @@ namespace System.Windows.Forms
         ]
         public override Size MinimumSize
         {
-            get { return base.MinimumSize; }
-            set { base.MinimumSize = value; }
+            get => base.MinimumSize;
+            set => base.MinimumSize = value;
         }
 
         [
@@ -226,8 +211,8 @@ namespace System.Windows.Forms
         ]
         public override Size MaximumSize
         {
-            get { return base.MaximumSize; }
-            set { base.MaximumSize = value; }
+            get => base.MaximumSize;
+            set => base.MaximumSize = value;
         }
 
         [
@@ -237,14 +222,8 @@ namespace System.Windows.Forms
         ]
         public new string Name
         {
-            get
-            {
-                return base.Name;
-            }
-            set
-            {
-                base.Name = value;
-            }
+            get => base.Name;
+            set => base.Name = value;
         }
 
         [
@@ -254,14 +233,8 @@ namespace System.Windows.Forms
         ]
         public new int TabIndex
         {
-            get
-            {
-                return base.TabIndex;
-            }
-            set
-            {
-                base.TabIndex = value;
-            }
+            get => base.TabIndex;
+            set => base.TabIndex = value;
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -278,14 +251,8 @@ namespace System.Windows.Forms
         ]
         public new bool TabStop
         {
-            get
-            {
-                return base.TabStop;
-            }
-            set
-            {
-                base.TabStop = value;
-            }
+            get => base.TabStop;
+            set => base.TabStop = value;
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]

@@ -508,7 +508,7 @@ namespace System.Windows.Forms
         ]
         public override bool AutoScroll
         {
-            get { return base.AutoScroll; }
+            get => base.AutoScroll;
 
             set
             {
@@ -605,14 +605,8 @@ namespace System.Windows.Forms
         ]
         public override AutoValidate AutoValidate
         {
-            get
-            {
-                return base.AutoValidate;
-            }
-            set
-            {
-                base.AutoValidate = value;
-            }
+            get => base.AutoValidate;
+            set => base.AutoValidate = value;
         }
 
         [
@@ -643,11 +637,7 @@ namespace System.Windows.Forms
 
                 return DefaultBackColor;
             }
-
-            set
-            {
-                base.BackColor = value;
-            }
+            set => base.BackColor = value;
         }
 
         private bool CalledClosing
@@ -791,14 +781,8 @@ namespace System.Windows.Forms
         ]
         new public Size ClientSize
         {
-            get
-            {
-                return base.ClientSize;
-            }
-            set
-            {
-                base.ClientSize = value;
-            }
+            get => base.ClientSize;
+            set => base.ClientSize = value;
         }
 
         /// <summary>
@@ -1288,14 +1272,8 @@ namespace System.Windows.Forms
         [SettingsBindable(true)]
         public new Point Location
         {
-            get
-            {
-                return base.Location;
-            }
-            set
-            {
-                base.Location = value;
-            }
+            get => base.Location;
+            set => base.Location = value;
         }
 
         /// <summary>
@@ -1423,11 +1401,8 @@ namespace System.Windows.Forms
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new Padding Margin
         {
-            get { return base.Margin; }
-            set
-            {
-                base.Margin = value;
-            }
+            get => base.Margin;
+            set => base.Margin = value;
         }
 
         /// <summary>
@@ -1955,10 +1930,7 @@ namespace System.Windows.Forms
 
         internal override Control ParentInternal
         {
-            get
-            {
-                return base.ParentInternal;
-            }
+            get => base.ParentInternal;
             set
             {
                 if (value != null)
@@ -2064,14 +2036,8 @@ namespace System.Windows.Forms
         ]
         new public Size Size
         {
-            get
-            {
-                return base.Size;
-            }
-            set
-            {
-                base.Size = value;
-            }
+            get => base.Size;
+            set => base.Size = value;
         }
 
         /// <summary>
@@ -2140,14 +2106,8 @@ namespace System.Windows.Forms
         ]
         new public int TabIndex
         {
-            get
-            {
-                return base.TabIndex;
-            }
-            set
-            {
-                base.TabIndex = value;
-            }
+            get => base.TabIndex;
+            set => base.TabIndex = value;
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -2208,14 +2168,8 @@ namespace System.Windows.Forms
         [SettingsBindable(true)]
         public override string Text
         {
-            get
-            {
-                return base.Text;
-            }
-            set
-            {
-                base.Text = value;
-            }
+            get => base.Text;
+            set => base.Text = value;
         }
 
         /// <summary>

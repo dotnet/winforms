@@ -175,14 +175,8 @@ namespace System.Windows.Forms
         ]
         public override ContextMenuStrip ContextMenuStrip
         {
-            get
-            {
-                return base.ContextMenuStrip;
-            }
-            set
-            {
-                base.ContextMenuStrip = value;
-            }
+            get => base.ContextMenuStrip;
+            set => base.ContextMenuStrip = value;
         }
 
         [
@@ -223,14 +217,8 @@ namespace System.Windows.Forms
         ]
         public override DataGridViewCellStyle DefaultCellStyle
         {
-            get
-            {
-                return base.DefaultCellStyle;
-            }
-            set
-            {
-                base.DefaultCellStyle = value;
-            }
+            get => base.DefaultCellStyle;
+            set => base.DefaultCellStyle = value;
         }
 
         private bool ShouldSerializeDefaultCellStyle()
@@ -425,14 +413,8 @@ namespace System.Windows.Forms
         ]
         public override bool Frozen
         {
-            get
-            {
-                return base.Frozen;
-            }
-            set
-            {
-                base.Frozen = value;
-            }
+            get => base.Frozen;
+            set => base.Frozen = value;
         }
 
         [
@@ -445,10 +427,7 @@ namespace System.Windows.Forms
             {
                 return (DataGridViewColumnHeaderCell)base.HeaderCellCore;
             }
-            set
-            {
-                base.HeaderCellCore = value;
-            }
+            set => base.HeaderCellCore = value;
         }
 
         [
@@ -778,10 +757,7 @@ namespace System.Windows.Forms
         ]
         public override bool ReadOnly
         {
-            get
-            {
-                return base.ReadOnly;
-            }
+            get => base.ReadOnly;
             set
             {
                 if (IsDataBound &&
@@ -803,14 +779,8 @@ namespace System.Windows.Forms
         ]
         public override DataGridViewTriState Resizable
         {
-            get
-            {
-                return base.Resizable;
-            }
-            set
-            {
-                base.Resizable = value;
-            }
+            get => base.Resizable;
+            set => base.Resizable = value;
         }
 
         [Browsable(false)]
@@ -942,14 +912,8 @@ namespace System.Windows.Forms
         ]
         public override bool Visible
         {
-            get
-            {
-                return base.Visible;
-            }
-            set
-            {
-                base.Visible = value;
-            }
+            get => base.Visible;
+            set => base.Visible = value;
         }
 
         [

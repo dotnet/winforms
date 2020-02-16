@@ -99,10 +99,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         // we don't want this guy participating in property depth.
         public override int PropertyDepth
         {
-            get
-            {
-                return base.PropertyDepth - 1;
-            }
+            get => base.PropertyDepth - 1;
         }
 
         /// <summary>

@@ -1139,14 +1139,8 @@ namespace System.Windows.Forms
         ]
         public override Color BackColor
         {
-            get
-            {
-                return base.BackColor;
-            }
-            set
-            {
-                base.BackColor = value;
-            }
+            get => base.BackColor;
+            set => base.BackColor = value;
         }
 
         [
@@ -1214,14 +1208,8 @@ namespace System.Windows.Forms
         ]
         public override Image BackgroundImage
         {
-            get
-            {
-                return base.BackgroundImage;
-            }
-            set
-            {
-                base.BackgroundImage = value;
-            }
+            get => base.BackgroundImage;
+            set => base.BackgroundImage = value;
         }
 
         [
@@ -1230,14 +1218,8 @@ namespace System.Windows.Forms
         ]
         public override ImageLayout BackgroundImageLayout
         {
-            get
-            {
-                return base.BackgroundImageLayout;
-            }
-            set
-            {
-                base.BackgroundImageLayout = value;
-            }
+            get => base.BackgroundImageLayout;
+            set => base.BackgroundImageLayout = value;
         }
 
         [
@@ -3008,14 +2990,8 @@ namespace System.Windows.Forms
         ]
         public override Color ForeColor
         {
-            get
-            {
-                return base.ForeColor;
-            }
-            set
-            {
-                base.ForeColor = value;
-            }
+            get => base.ForeColor;
+            set => base.ForeColor = value;
         }
 
         [
@@ -3034,14 +3010,8 @@ namespace System.Windows.Forms
         ]
         public override Font Font
         {
-            get
-            {
-                return base.Font;
-            }
-            set
-            {
-                base.Font = value;
-            }
+            get => base.Font;
+            set => base.Font = value;
         }
 
         [
@@ -3595,14 +3565,8 @@ namespace System.Windows.Forms
         ]
         public new Padding Padding
         {
-            get
-            {
-                return base.Padding;
-            }
-            set
-            {
-                base.Padding = value;
-            }
+            get => base.Padding;
+            set => base.Padding = value;
         }
 
         [
@@ -4687,14 +4651,8 @@ namespace System.Windows.Forms
         ]
         public override string Text
         {
-            get
-            {
-                return base.Text;
-            }
-            set
-            {
-                base.Text = value;
-            }
+            get => base.Text;
+            set => base.Text = value;
         }
 
         [

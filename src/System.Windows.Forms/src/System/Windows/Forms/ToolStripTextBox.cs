@@ -61,14 +61,8 @@ namespace System.Windows.Forms
         ]
         public override Image BackgroundImage
         {
-            get
-            {
-                return base.BackgroundImage;
-            }
-            set
-            {
-                base.BackgroundImage = value;
-            }
+            get => base.BackgroundImage;
+            set => base.BackgroundImage = value;
         }
 
         [
@@ -78,14 +72,8 @@ namespace System.Windows.Forms
         ]
         public override ImageLayout BackgroundImageLayout
         {
-            get
-            {
-                return base.BackgroundImageLayout;
-            }
-            set
-            {
-                base.BackgroundImageLayout = value;
-            }
+            get => base.BackgroundImageLayout;
+            set => base.BackgroundImageLayout = value;
         }
 
         /// <summary>
@@ -630,7 +618,7 @@ namespace System.Windows.Forms
 
             public override Font Font
             {
-                get { return base.Font; }
+                get => base.Font;
                 set
                 {
                     base.Font = value;

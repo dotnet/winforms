@@ -69,7 +69,6 @@ namespace System.Windows.Forms.Design
         protected virtual bool DrawGrid
         {
             get => throw new NotImplementedException(SR.NotImplementedByDesign);
-
             set => throw new NotImplementedException(SR.NotImplementedByDesign);
         }
 

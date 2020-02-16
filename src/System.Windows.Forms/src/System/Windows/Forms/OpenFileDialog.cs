@@ -28,14 +28,8 @@ namespace System.Windows.Forms
         ]
         public override bool CheckFileExists
         {
-            get
-            {
-                return base.CheckFileExists;
-            }
-            set
-            {
-                base.CheckFileExists = value;
-            }
+            get => base.CheckFileExists;
+            set => base.CheckFileExists = value;
         }
 
         /// <summary>

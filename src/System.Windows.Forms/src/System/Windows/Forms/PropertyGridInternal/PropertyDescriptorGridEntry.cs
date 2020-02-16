@@ -194,10 +194,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         internal override bool Enumerable
         {
-            get
-            {
-                return base.Enumerable && !IsPropertyReadOnly;
-            }
+            get => base.Enumerable && !IsPropertyReadOnly;
         }
 
         internal virtual bool IsPropertyReadOnly
@@ -218,10 +215,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         public override bool NeedsDropDownButton
         {
-            get
-            {
-                return base.NeedsDropDownButton && !IsPropertyReadOnly;
-            }
+            get => base.NeedsDropDownButton && !IsPropertyReadOnly;
         }
 
         internal bool ParensAroundName

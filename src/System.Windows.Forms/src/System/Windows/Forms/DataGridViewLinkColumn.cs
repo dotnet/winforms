@@ -75,10 +75,7 @@ namespace System.Windows.Forms
         ]
         public override DataGridViewCell CellTemplate
         {
-            get
-            {
-                return base.CellTemplate;
-            }
+            get => base.CellTemplate;
             set
             {
                 if (value != null && !(value is DataGridViewLinkCell))

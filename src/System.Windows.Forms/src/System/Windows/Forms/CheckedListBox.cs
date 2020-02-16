@@ -180,14 +180,8 @@ namespace System.Windows.Forms
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new object DataSource
         {
-            get
-            {
-                return base.DataSource;
-            }
-            set
-            {
-                base.DataSource = value;
-            }
+            get => base.DataSource;
+            set => base.DataSource = value;
         }
 
         /// <summary>
@@ -197,14 +191,8 @@ namespace System.Windows.Forms
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new string DisplayMember
         {
-            get
-            {
-                return base.DisplayMember;
-            }
-            set
-            {
-                base.DisplayMember = value;
-            }
+            get => base.DisplayMember;
+            set => base.DisplayMember = value;
         }
 
         [
@@ -275,10 +263,7 @@ namespace System.Windows.Forms
         /// </summary>
         public override SelectionMode SelectionMode
         {
-            get
-            {
-                return base.SelectionMode;
-            }
+            get => base.SelectionMode;
             set
             {
                 //valid values are 0x0 to 0x3
@@ -342,14 +327,8 @@ namespace System.Windows.Forms
         ]
         public bool UseCompatibleTextRendering
         {
-            get
-            {
-                return base.UseCompatibleTextRenderingInt;
-            }
-            set
-            {
-                base.UseCompatibleTextRenderingInt = value;
-            }
+            get => base.UseCompatibleTextRenderingInt;
+            set => base.UseCompatibleTextRenderingInt = value;
         }
 
         /// <summary>
@@ -372,14 +351,8 @@ namespace System.Windows.Forms
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new string ValueMember
         {
-            get
-            {
-                return base.ValueMember;
-            }
-            set
-            {
-                base.ValueMember = value;
-            }
+            get => base.ValueMember;
+            set => base.ValueMember = value;
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -442,8 +415,8 @@ namespace System.Windows.Forms
         ]
         public new Padding Padding
         {
-            get { return base.Padding; }
-            set { base.Padding = value; }
+            get => base.Padding;
+            set => base.Padding = value;
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]

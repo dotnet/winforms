@@ -78,7 +78,7 @@ namespace System.Windows.Forms
         ]
         public new BorderStyle BorderStyle
         {
-            get { return base.BorderStyle; }
+            get => base.BorderStyle;
             set
             {
                 base.BorderStyle = value;

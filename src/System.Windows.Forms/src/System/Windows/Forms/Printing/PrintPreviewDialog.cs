@@ -78,14 +78,8 @@ namespace System.Windows.Forms
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public IButtonControl AcceptButton
         {
-            get
-            {
-                return base.AcceptButton;
-            }
-            set
-            {
-                base.AcceptButton = value;
-            }
+            get => base.AcceptButton;
+            set => base.AcceptButton = value;
         }
         /// <summary>
         ///  Gets or sets a value indicating whether the form will adjust its size
@@ -116,14 +110,8 @@ namespace System.Windows.Forms
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override bool AutoScroll
         {
-            get
-            {
-                return base.AutoScroll;
-            }
-            set
-            {
-                base.AutoScroll = value;
-            }
+            get => base.AutoScroll;
+            set => base.AutoScroll = value;
         }
 
         /// <summary>
@@ -132,14 +120,8 @@ namespace System.Windows.Forms
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override bool AutoSize
         {
-            get
-            {
-                return base.AutoSize;
-            }
-            set
-            {
-                base.AutoSize = value;
-            }
+            get => base.AutoSize;
+            set => base.AutoSize = value;
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -155,14 +137,8 @@ namespace System.Windows.Forms
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override AutoValidate AutoValidate
         {
-            get
-            {
-                return base.AutoValidate;
-            }
-            set
-            {
-                base.AutoValidate = value;
-            }
+            get => base.AutoValidate;
+            set => base.AutoValidate = value;
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -179,14 +155,8 @@ namespace System.Windows.Forms
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Color BackColor
         {
-            get
-            {
-                return base.BackColor;
-            }
-            set
-            {
-                base.BackColor = value;
-            }
+            get => base.BackColor;
+            set => base.BackColor = value;
         }
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackColorChanged
@@ -203,14 +173,8 @@ namespace System.Windows.Forms
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public IButtonControl CancelButton
         {
-            get
-            {
-                return base.CancelButton;
-            }
-            set
-            {
-                base.CancelButton = value;
-            }
+            get => base.CancelButton;
+            set => base.CancelButton = value;
         }
         /// <summary>
         ///  Gets or sets a value indicating whether a control box is displayed in the
@@ -219,14 +183,8 @@ namespace System.Windows.Forms
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public bool ControlBox
         {
-            get
-            {
-                return base.ControlBox;
-            }
-            set
-            {
-                base.ControlBox = value;
-            }
+            get => base.ControlBox;
+            set => base.ControlBox = value;
         }
 
         /// <summary>
@@ -235,14 +193,8 @@ namespace System.Windows.Forms
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override ContextMenuStrip ContextMenuStrip
         {
-            get
-            {
-                return base.ContextMenuStrip;
-            }
-            set
-            {
-                base.ContextMenuStrip = value;
-            }
+            get => base.ContextMenuStrip;
+            set => base.ContextMenuStrip = value;
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -258,14 +210,8 @@ namespace System.Windows.Forms
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public FormBorderStyle FormBorderStyle
         {
-            get
-            {
-                return base.FormBorderStyle;
-            }
-            set
-            {
-                base.FormBorderStyle = value;
-            }
+            get => base.FormBorderStyle;
+            set => base.FormBorderStyle = value;
         }
         /// <summary>
         ///  Gets or sets a value indicating whether a
@@ -274,14 +220,8 @@ namespace System.Windows.Forms
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public bool HelpButton
         {
-            get
-            {
-                return base.HelpButton;
-            }
-            set
-            {
-                base.HelpButton = value;
-            }
+            get => base.HelpButton;
+            set => base.HelpButton = value;
         }
         /// <summary>
         ///  Gets or sets the icon for the form.
@@ -289,14 +229,8 @@ namespace System.Windows.Forms
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public Icon Icon
         {
-            get
-            {
-                return base.Icon;
-            }
-            set
-            {
-                base.Icon = value;
-            }
+            get => base.Icon;
+            set => base.Icon = value;
         }
         /// <summary>
         ///  Gets or sets a value indicating whether the form is a container for multiple document interface
@@ -305,14 +239,8 @@ namespace System.Windows.Forms
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public bool IsMdiContainer
         {
-            get
-            {
-                return base.IsMdiContainer;
-            }
-            set
-            {
-                base.IsMdiContainer = value;
-            }
+            get => base.IsMdiContainer;
+            set => base.IsMdiContainer = value;
         }
         /// <summary>
         ///  Gets or sets a value
@@ -322,14 +250,8 @@ namespace System.Windows.Forms
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public bool KeyPreview
         {
-            get
-            {
-                return base.KeyPreview;
-            }
-            set
-            {
-                base.KeyPreview = value;
-            }
+            get => base.KeyPreview;
+            set => base.KeyPreview = value;
         }
         /// <summary>
         ///  Gets or Sets the maximum size the dialog can be resized to.
@@ -337,14 +259,8 @@ namespace System.Windows.Forms
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public Size MaximumSize
         {
-            get
-            {
-                return base.MaximumSize;
-            }
-            set
-            {
-                base.MaximumSize = value;
-            }
+            get => base.MaximumSize;
+            set => base.MaximumSize = value;
         }
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler MaximumSizeChanged
@@ -359,14 +275,8 @@ namespace System.Windows.Forms
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public bool MaximizeBox
         {
-            get
-            {
-                return base.MaximizeBox;
-            }
-            set
-            {
-                base.MaximizeBox = value;
-            }
+            get => base.MaximizeBox;
+            set => base.MaximizeBox = value;
         }
 
         /// <summary>
@@ -375,14 +285,8 @@ namespace System.Windows.Forms
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public Padding Margin
         {
-            get
-            {
-                return base.Margin;
-            }
-            set
-            {
-                base.Margin = value;
-            }
+            get => base.Margin;
+            set => base.Margin = value;
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -398,14 +302,8 @@ namespace System.Windows.Forms
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden), EditorBrowsable(EditorBrowsableState.Never)]
         new public Size MinimumSize
         {
-            get
-            {
-                return base.MinimumSize;
-            }
-            set
-            {
-                base.MinimumSize = value;
-            }
+            get => base.MinimumSize;
+            set => base.MinimumSize = value;
         }
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler MinimumSizeChanged
@@ -420,14 +318,8 @@ namespace System.Windows.Forms
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public Padding Padding
         {
-            get
-            {
-                return base.Padding;
-            }
-            set
-            {
-                base.Padding = value;
-            }
+            get => base.Padding;
+            set => base.Padding = value;
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -443,14 +335,8 @@ namespace System.Windows.Forms
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public Size Size
         {
-            get
-            {
-                return base.Size;
-            }
-            set
-            {
-                base.Size = value;
-            }
+            get => base.Size;
+            set => base.Size = value;
         }
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler SizeChanged
@@ -465,14 +351,8 @@ namespace System.Windows.Forms
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public FormStartPosition StartPosition
         {
-            get
-            {
-                return base.StartPosition;
-            }
-            set
-            {
-                base.StartPosition = value;
-            }
+            get => base.StartPosition;
+            set => base.StartPosition = value;
         }
         /// <summary>
         ///  Gets or sets a value indicating whether the form should be displayed as the top-most
@@ -481,14 +361,8 @@ namespace System.Windows.Forms
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public bool TopMost
         {
-            get
-            {
-                return base.TopMost;
-            }
-            set
-            {
-                base.TopMost = value;
-            }
+            get => base.TopMost;
+            set => base.TopMost = value;
         }
 
         /// <summary>
@@ -497,14 +371,8 @@ namespace System.Windows.Forms
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public Color TransparencyKey
         {
-            get
-            {
-                return base.TransparencyKey;
-            }
-            set
-            {
-                base.TransparencyKey = value;
-            }
+            get => base.TransparencyKey;
+            set => base.TransparencyKey = value;
         }
 
         /// <summary>
@@ -513,14 +381,8 @@ namespace System.Windows.Forms
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public bool UseWaitCursor
         {
-            get
-            {
-                return base.UseWaitCursor;
-            }
-            set
-            {
-                base.UseWaitCursor = value;
-            }
+            get => base.UseWaitCursor;
+            set => base.UseWaitCursor = value;
         }
 
         /// <summary>
@@ -529,14 +391,8 @@ namespace System.Windows.Forms
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public FormWindowState WindowState
         {
-            get
-            {
-                return base.WindowState;
-            }
-            set
-            {
-                base.WindowState = value;
-            }
+            get => base.WindowState;
+            set => base.WindowState = value;
         }
         /// <summary>
         ///  The accessible role of the control
@@ -544,14 +400,8 @@ namespace System.Windows.Forms
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public AccessibleRole AccessibleRole
         {
-            get
-            {
-                return base.AccessibleRole;
-            }
-            set
-            {
-                base.AccessibleRole = value;
-            }
+            get => base.AccessibleRole;
+            set => base.AccessibleRole = value;
         }
         /// <summary>
         ///  The accessible description of the control
@@ -559,14 +409,8 @@ namespace System.Windows.Forms
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public string AccessibleDescription
         {
-            get
-            {
-                return base.AccessibleDescription;
-            }
-            set
-            {
-                base.AccessibleDescription = value;
-            }
+            get => base.AccessibleDescription;
+            set => base.AccessibleDescription = value;
         }
         /// <summary>
         ///  The accessible name of the control
@@ -574,14 +418,8 @@ namespace System.Windows.Forms
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public string AccessibleName
         {
-            get
-            {
-                return base.AccessibleName;
-            }
-            set
-            {
-                base.AccessibleName = value;
-            }
+            get => base.AccessibleName;
+            set => base.AccessibleName = value;
         }
         /// <summary>
         ///
@@ -590,14 +428,8 @@ namespace System.Windows.Forms
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public bool CausesValidation
         {
-            get
-            {
-                return base.CausesValidation;
-            }
-            set
-            {
-                base.CausesValidation = value;
-            }
+            get => base.CausesValidation;
+            set => base.CausesValidation = value;
         }
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler CausesValidationChanged
@@ -611,10 +443,7 @@ namespace System.Windows.Forms
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public ControlBindingsCollection DataBindings
         {
-            get
-            {
-                return base.DataBindings;
-            }
+            get => base.DataBindings;
         }
 
         protected override Size DefaultMinimumSize
@@ -628,14 +457,8 @@ namespace System.Windows.Forms
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public bool Enabled
         {
-            get
-            {
-                return base.Enabled;
-            }
-            set
-            {
-                base.Enabled = value;
-            }
+            get => base.Enabled;
+            set => base.Enabled = value;
         }
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler EnabledChanged
@@ -651,14 +474,8 @@ namespace System.Windows.Forms
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         new public Point Location
         {
-            get
-            {
-                return base.Location;
-            }
-            set
-            {
-                base.Location = value;
-            }
+            get => base.Location;
+            set => base.Location = value;
         }
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler LocationChanged
@@ -669,14 +486,8 @@ namespace System.Windows.Forms
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public object Tag
         {
-            get
-            {
-                return base.Tag;
-            }
-            set
-            {
-                base.Tag = value;
-            }
+            get => base.Tag;
+            set => base.Tag = value;
         }
         /// <summary>
         ///  The AllowDrop property. If AllowDrop is set to true then
@@ -685,14 +496,8 @@ namespace System.Windows.Forms
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override bool AllowDrop
         {
-            get
-            {
-                return base.AllowDrop;
-            }
-            set
-            {
-                base.AllowDrop = value;
-            }
+            get => base.AllowDrop;
+            set => base.AllowDrop = value;
         }
         /// <summary>
         ///  Retrieves the cursor that will be displayed when the mouse is over this
@@ -701,14 +506,8 @@ namespace System.Windows.Forms
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Cursor Cursor
         {
-            get
-            {
-                return base.Cursor;
-            }
-            set
-            {
-                base.Cursor = value;
-            }
+            get => base.Cursor;
+            set => base.Cursor = value;
         }
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler CursorChanged
@@ -723,14 +522,8 @@ namespace System.Windows.Forms
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Image BackgroundImage
         {
-            get
-            {
-                return base.BackgroundImage;
-            }
-            set
-            {
-                base.BackgroundImage = value;
-            }
+            get => base.BackgroundImage;
+            set => base.BackgroundImage = value;
         }
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageChanged
@@ -745,14 +538,8 @@ namespace System.Windows.Forms
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override ImageLayout BackgroundImageLayout
         {
-            get
-            {
-                return base.BackgroundImageLayout;
-            }
-            set
-            {
-                base.BackgroundImageLayout = value;
-            }
+            get => base.BackgroundImageLayout;
+            set => base.BackgroundImageLayout = value;
         }
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageLayoutChanged
@@ -767,14 +554,8 @@ namespace System.Windows.Forms
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public ImeMode ImeMode
         {
-            get
-            {
-                return base.ImeMode;
-            }
-            set
-            {
-                base.ImeMode = value;
-            }
+            get => base.ImeMode;
+            set => base.ImeMode = value;
         }
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler ImeModeChanged
@@ -791,14 +572,8 @@ namespace System.Windows.Forms
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public Size AutoScrollMargin
         {
-            get
-            {
-                return base.AutoScrollMargin;
-            }
-            set
-            {
-                base.AutoScrollMargin = value;
-            }
+            get => base.AutoScrollMargin;
+            set => base.AutoScrollMargin = value;
         }
         /// <summary>
         ///  Gets or sets the mimimum size of the auto-scroll.
@@ -806,14 +581,8 @@ namespace System.Windows.Forms
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public Size AutoScrollMinSize
         {
-            get
-            {
-                return base.AutoScrollMinSize;
-            }
-            set
-            {
-                base.AutoScrollMinSize = value;
-            }
+            get => base.AutoScrollMinSize;
+            set => base.AutoScrollMinSize = value;
         }
         /// <summary>
         ///  The current value of the anchor property. The anchor property
@@ -823,14 +592,8 @@ namespace System.Windows.Forms
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override AnchorStyles Anchor
         {
-            get
-            {
-                return base.Anchor;
-            }
-            set
-            {
-                base.Anchor = value;
-            }
+            get => base.Anchor;
+            set => base.Anchor = value;
         }
         /// <summary>
         ///  Indicates whether the control is visible.
@@ -838,14 +601,8 @@ namespace System.Windows.Forms
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public bool Visible
         {
-            get
-            {
-                return base.Visible;
-            }
-            set
-            {
-                base.Visible = value;
-            }
+            get => base.Visible;
+            set => base.Visible = value;
         }
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler VisibleChanged
@@ -859,14 +616,8 @@ namespace System.Windows.Forms
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Color ForeColor
         {
-            get
-            {
-                return base.ForeColor;
-            }
-            set
-            {
-                base.ForeColor = value;
-            }
+            get => base.ForeColor;
+            set => base.ForeColor = value;
         }
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler ForeColorChanged
@@ -883,14 +634,8 @@ namespace System.Windows.Forms
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override RightToLeft RightToLeft
         {
-            get
-            {
-                return base.RightToLeft;
-            }
-            set
-            {
-                base.RightToLeft = value;
-            }
+            get => base.RightToLeft;
+            set => base.RightToLeft = value;
         }
 
         /// <summary>
@@ -901,15 +646,8 @@ namespace System.Windows.Forms
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override bool RightToLeftLayout
         {
-            get
-            {
-                return base.RightToLeftLayout;
-            }
-
-            set
-            {
-                base.RightToLeftLayout = value;
-            }
+            get => base.RightToLeftLayout;
+            set => base.RightToLeftLayout = value;
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -933,14 +671,8 @@ namespace System.Windows.Forms
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public bool TabStop
         {
-            get
-            {
-                return base.TabStop;
-            }
-            set
-            {
-                base.TabStop = value;
-            }
+            get => base.TabStop;
+            set => base.TabStop = value;
         }
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler TabStopChanged
@@ -955,14 +687,8 @@ namespace System.Windows.Forms
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override string Text
         {
-            get
-            {
-                return base.Text;
-            }
-            set
-            {
-                base.Text = value;
-            }
+            get => base.Text;
+            set => base.Text = value;
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -981,14 +707,8 @@ namespace System.Windows.Forms
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override DockStyle Dock
         {
-            get
-            {
-                return base.Dock;
-            }
-            set
-            {
-                base.Dock = value;
-            }
+            get => base.Dock;
+            set => base.Dock = value;
         }
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler DockChanged
@@ -1004,14 +724,8 @@ namespace System.Windows.Forms
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Font Font
         {
-            get
-            {
-                return base.Font;
-            }
-            set
-            {
-                base.Font = value;
-            }
+            get => base.Font;
+            set => base.Font = value;
         }
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler FontChanged
@@ -1024,10 +738,7 @@ namespace System.Windows.Forms
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public DockPaddingEdges DockPadding
         {
-            get
-            {
-                return base.DockPadding;
-            }
+            get => base.DockPadding;
         }
         //-------------------------------------------------------------------------------------------------------------
         //end addition
@@ -1060,10 +771,7 @@ namespace System.Windows.Forms
         [Obsolete("This property has been deprecated. Use the AutoScaleDimensions property instead.  http://go.microsoft.com/fwlink/?linkid=14202")]
         public override Size AutoScaleBaseSize
         {
-            get
-            {
-                return base.AutoScaleBaseSize;
-            }
+            get => base.AutoScaleBaseSize;
 
             set
             {
@@ -1096,14 +804,8 @@ namespace System.Windows.Forms
         [Browsable(false), DefaultValue(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new bool MinimizeBox
         {
-            get
-            {
-                return base.MinimizeBox;
-            }
-            set
-            {
-                base.MinimizeBox = value;
-            }
+            get => base.MinimizeBox;
+            set => base.MinimizeBox = value;
         }
 
         /// <summary>
@@ -1126,40 +828,22 @@ namespace System.Windows.Forms
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new double Opacity
         {
-            get
-            {
-                return base.Opacity;
-            }
-            set
-            {
-                base.Opacity = value;
-            }
+            get => base.Opacity;
+            set => base.Opacity = value;
         }
 
         [Browsable(false), DefaultValue(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new bool ShowInTaskbar
         {
-            get
-            {
-                return base.ShowInTaskbar;
-            }
-            set
-            {
-                base.ShowInTaskbar = value;
-            }
+            get => base.ShowInTaskbar;
+            set => base.ShowInTaskbar = value;
         }
 
         [Browsable(false), DefaultValue(SizeGripStyle.Hide), EditorBrowsable(EditorBrowsableState.Never)]
         public new SizeGripStyle SizeGripStyle
         {
-            get
-            {
-                return base.SizeGripStyle;
-            }
-            set
-            {
-                base.SizeGripStyle = value;
-            }
+            get => base.SizeGripStyle;
+            set => base.SizeGripStyle = value;
         }
 
         void InitForm()

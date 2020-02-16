@@ -88,14 +88,8 @@ namespace System.Windows.Forms
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new bool AllowItemReorder
         {
-            get
-            {
-                return base.AllowItemReorder;
-            }
-            set
-            {
-                base.AllowItemReorder = value;
-            }
+            get => base.AllowItemReorder;
+            set => base.AllowItemReorder = value;
         }
 
         /// <summary>
@@ -140,14 +134,8 @@ namespace System.Windows.Forms
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override AnchorStyles Anchor
         {
-            get
-            {
-                return base.Anchor;
-            }
-            set
-            {
-                base.Anchor = value;
-            }
+            get => base.Anchor;
+            set => base.Anchor = value;
         }
 
         [DefaultValue(true)]
@@ -221,14 +209,8 @@ namespace System.Windows.Forms
          EditorBrowsable(EditorBrowsableState.Never)]
         public new bool CanOverflow
         {
-            get
-            {
-                return base.CanOverflow;
-            }
-            set
-            {
-                base.CanOverflow = value;
-            }
+            get => base.CanOverflow;
+            set => base.CanOverflow = value;
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Always)]
@@ -242,8 +224,8 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Never)]
         public new ContextMenuStrip ContextMenuStrip
         {
-            get { return base.ContextMenuStrip; }
-            set { base.ContextMenuStrip = value; }
+            get => base.ContextMenuStrip;
+            set => base.ContextMenuStrip = value;
         }
 
         [Browsable(false)]
@@ -358,14 +340,8 @@ namespace System.Windows.Forms
         EditorBrowsable(EditorBrowsableState.Always)]
         public override DockStyle Dock
         {
-            get
-            {
-                return base.Dock;
-            }
-            set
-            {
-                base.Dock = value;
-            }
+            get => base.Dock;
+            set => base.Dock = value;
         }
 
         ///  changed the browsable attribute
@@ -455,10 +431,7 @@ namespace System.Windows.Forms
 
                 return base.Font;
             }
-            set
-            {
-                base.Font = value;
-            }
+            set => base.Font = value;
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Always)]
@@ -485,32 +458,20 @@ namespace System.Windows.Forms
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new ToolStripGripDisplayStyle GripDisplayStyle
         {
-            get
-            {
-                return base.GripDisplayStyle;
-            }
+            get => base.GripDisplayStyle;
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new Rectangle GripRectangle
         {
-            get
-            {
-                return base.GripRectangle;
-            }
+            get => base.GripRectangle;
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public new Padding GripMargin
         {
-            get
-            {
-                return base.GripMargin;
-            }
-            set
-            {
-                base.GripMargin = value;
-            }
+            get => base.GripMargin;
+            set => base.GripMargin = value;
         }
 
         [DefaultValue(ToolStripGripStyle.Hidden),
@@ -518,14 +479,8 @@ namespace System.Windows.Forms
          EditorBrowsable(EditorBrowsableState.Never)]
         public new ToolStripGripStyle GripStyle
         {
-            get
-            {
-                return base.GripStyle;
-            }
-            set
-            {
-                base.GripStyle = value;
-            }
+            get => base.GripStyle;
+            set => base.GripStyle = value;
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Always)]
@@ -572,10 +527,7 @@ namespace System.Windows.Forms
                 }
                 return base.ImageScalingSizeInternal;
             }
-            set
-            {
-                base.ImageScalingSizeInternal = value;
-            }
+            set => base.ImageScalingSizeInternal = value;
         }
 
         internal override bool KeyboardActive
@@ -641,14 +593,8 @@ namespace System.Windows.Forms
         ]
         public new Point Location
         {
-            get
-            {
-                return base.Location;
-            }
-            set
-            {
-                base.Location = value;
-            }
+            get => base.Location;
+            set => base.Location = value;
         }
 
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.ToolStripDropDownOpeningDescr))]
@@ -741,10 +687,7 @@ namespace System.Windows.Forms
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new ToolStripOverflowButton OverflowButton
         {
-            get
-            {
-                return base.OverflowButton;
-            }
+            get => base.OverflowButton;
         }
 
         [DefaultValue(null), Browsable(false)]
@@ -811,14 +754,8 @@ namespace System.Windows.Forms
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Always)]
         new public Region Region
         {
-            get
-            {
-                return base.Region;
-            }
-            set
-            {
-                base.Region = value;
-            }
+            get => base.Region;
+            set => base.Region = value;
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Always)]
@@ -864,10 +801,7 @@ namespace System.Windows.Forms
                 }
                 return base.RightToLeft;
             }
-            set
-            {
-                base.RightToLeft = value;
-            }
+            set => base.RightToLeft = value;
         }
 
         private bool RightToLeftInherited
@@ -889,14 +823,8 @@ namespace System.Windows.Forms
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new bool Stretch
         {
-            get
-            {
-                return base.Stretch;
-            }
-            set
-            {
-                base.Stretch = value;
-            }
+            get => base.Stretch;
+            set => base.Stretch = value;
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Always)]
@@ -942,14 +870,8 @@ namespace System.Windows.Forms
         ]
         public override ToolStripTextDirection TextDirection
         {
-            get
-            {
-                return base.TextDirection;
-            }
-            set
-            {
-                base.TextDirection = value;
-            }
+            get => base.TextDirection;
+            set => base.TextDirection = value;
         }
 
         //Consistency: match casing of Form.TopMost, which shipped in Everett, even though it's wrong
@@ -990,14 +912,8 @@ namespace System.Windows.Forms
         ]
         public new int TabIndex
         {
-            get
-            {
-                return base.TabIndex;
-            }
-            set
-            {
-                base.TabIndex = value;
-            }
+            get => base.TabIndex;
+            set => base.TabIndex = value;
         }
 
         [
@@ -1037,14 +953,8 @@ namespace System.Windows.Forms
         ]
         public new bool Visible
         {
-            get
-            {
-                return base.Visible;
-            }
-            set
-            {
-                base.Visible = value;
-            }
+            get => base.Visible;
+            set => base.Visible = value;
         }
 
         // internally we use not so we don't have to initialize it.

@@ -349,22 +349,13 @@ namespace System.Windows.Forms
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override bool AutoScroll
         {
-            get
-            {
-                return base.AutoScroll;
-            }
-            set
-            {
-                base.AutoScroll = value;
-            }
+            get => base.AutoScroll;
+            set => base.AutoScroll = value;
         }
 
         public override Color BackColor
         {
-            get
-            {
-                return base.BackColor;
-            }
+            get => base.BackColor;
             set
             {
                 base.BackColor = value;
@@ -376,14 +367,8 @@ namespace System.Windows.Forms
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Image BackgroundImage
         {
-            get
-            {
-                return base.BackgroundImage;
-            }
-            set
-            {
-                base.BackgroundImage = value;
-            }
+            get => base.BackgroundImage;
+            set => base.BackgroundImage = value;
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -396,14 +381,8 @@ namespace System.Windows.Forms
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override ImageLayout BackgroundImageLayout
         {
-            get
-            {
-                return base.BackgroundImageLayout;
-            }
-            set
-            {
-                base.BackgroundImageLayout = value;
-            }
+            get => base.BackgroundImageLayout;
+            set => base.BackgroundImageLayout = value;
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -705,10 +684,7 @@ namespace System.Windows.Forms
         ]
         public new ControlCollection Controls
         {
-            get
-            {
-                return base.Controls;
-            }
+            get => base.Controls;
         }
 
         protected override Size DefaultSize
@@ -752,14 +728,8 @@ namespace System.Windows.Forms
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Color ForeColor
         {
-            get
-            {
-                return base.ForeColor;
-            }
-            set
-            {
-                base.ForeColor = value;
-            }
+            get => base.ForeColor;
+            set => base.ForeColor = value;
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -1089,8 +1059,8 @@ namespace System.Windows.Forms
         ]
         public new Padding Padding
         {
-            get { return base.Padding; }
-            set { base.Padding = value; }
+            get => base.Padding;
+            set => base.Padding = value;
         }
 
         [
@@ -1520,10 +1490,7 @@ namespace System.Windows.Forms
 
         public override ISite Site
         {
-            get
-            {
-                return base.Site;
-            }
+            get => base.Site;
             set
             {
                 // Perf - the base class is possibly going to change the font via ambient properties service
@@ -1560,14 +1527,8 @@ namespace System.Windows.Forms
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override string Text
         {
-            get
-            {
-                return base.Text;
-            }
-            set
-            {
-                base.Text = value;
-            }
+            get => base.Text;
+            set => base.Text = value;
         }
 
         [Browsable(false)]
@@ -4925,10 +4886,7 @@ namespace System.Windows.Forms
         ]
         public bool UseCompatibleTextRendering
         {
-            get
-            {
-                return base.UseCompatibleTextRenderingInt;
-            }
+            get => base.UseCompatibleTextRenderingInt;
             set
             {
                 base.UseCompatibleTextRenderingInt = value;
@@ -5224,10 +5182,7 @@ namespace System.Windows.Forms
                 {
                     return Cursors.Default;
                 }
-                set
-                {
-                    base.Cursor = value;
-                }
+                set => base.Cursor = value;
             }
 
             protected override void OnControlAdded(ControlEventArgs ce)

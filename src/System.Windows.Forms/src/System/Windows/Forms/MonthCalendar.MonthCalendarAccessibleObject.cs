@@ -176,10 +176,7 @@ namespace System.Windows.Forms
 
                     return value;
                 }
-                set
-                {
-                    base.Value = value;
-                }
+                set => base.Value = value;
             }
 
             internal override int ColumnCount

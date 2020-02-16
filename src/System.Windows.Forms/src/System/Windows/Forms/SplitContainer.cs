@@ -172,11 +172,7 @@ namespace System.Windows.Forms
                 //Always return false ... as Splitcontainer doesnt support AutoScroll
                 return false;
             }
-
-            set
-            {
-                base.AutoScroll = value;
-            }
+            set => base.AutoScroll = value;
         }
 
         [
@@ -186,14 +182,8 @@ namespace System.Windows.Forms
         ]
         public override Point AutoScrollOffset
         {
-            get
-            {
-                return base.AutoScrollOffset;
-            }
-            set
-            {
-                base.AutoScrollOffset = value;
-            }
+            get => base.AutoScrollOffset;
+            set => base.AutoScrollOffset = value;
         }
 
         /// <summary>
@@ -206,14 +196,8 @@ namespace System.Windows.Forms
         ]
         public new Size AutoScrollMinSize
         {
-            get
-            {
-                return base.AutoScrollMinSize;
-            }
-            set
-            {
-                base.AutoScrollMinSize = value;
-            }
+            get => base.AutoScrollMinSize;
+            set => base.AutoScrollMinSize = value;
         }
 
         /// <summary>
@@ -226,14 +210,8 @@ namespace System.Windows.Forms
         ]
         public new Size AutoScrollMargin
         {
-            get
-            {
-                return base.AutoScrollMargin;
-            }
-            set
-            {
-                base.AutoScrollMargin = value;
-            }
+            get => base.AutoScrollMargin;
+            set => base.AutoScrollMargin = value;
         }
 
         [
@@ -244,15 +222,8 @@ namespace System.Windows.Forms
         ]
         public new Point AutoScrollPosition
         {
-            get
-            {
-                return base.AutoScrollPosition;
-            }
-
-            set
-            {
-                base.AutoScrollPosition = value;
-            }
+            get => base.AutoScrollPosition;
+            set => base.AutoScrollPosition = value;
         }
 
         /// <summary>
@@ -262,14 +233,8 @@ namespace System.Windows.Forms
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override bool AutoSize
         {
-            get
-            {
-                return base.AutoSize;
-            }
-            set
-            {
-                base.AutoSize = value;
-            }
+            get => base.AutoSize;
+            set => base.AutoSize = value;
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -282,27 +247,15 @@ namespace System.Windows.Forms
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
         public override Image BackgroundImage
         {
-            get
-            {
-                return base.BackgroundImage;
-            }
-            set
-            {
-                base.BackgroundImage = value;
-            }
+            get => base.BackgroundImage;
+            set => base.BackgroundImage = value;
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override ImageLayout BackgroundImageLayout
         {
-            get
-            {
-                return base.BackgroundImageLayout;
-            }
-            set
-            {
-                base.BackgroundImageLayout = value;
-            }
+            get => base.BackgroundImageLayout;
+            set => base.BackgroundImageLayout = value;
         }
 
         /// <summary>
@@ -380,10 +333,7 @@ namespace System.Windows.Forms
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public new ControlCollection Controls
         {
-            get
-            {
-                return base.Controls;
-            }
+            get => base.Controls;
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -406,10 +356,7 @@ namespace System.Windows.Forms
         /// </summary>
         public new DockStyle Dock
         {
-            get
-            {
-                return base.Dock;
-            }
+            get => base.Dock;
             set
             {
                 base.Dock = value;
@@ -642,8 +589,8 @@ namespace System.Windows.Forms
         ]
         public new Padding Padding
         {
-            get { return base.Padding; }
-            set { base.Padding = value; }
+            get => base.Padding;
+            set => base.Padding = value;
         }
 
         [
@@ -992,14 +939,8 @@ namespace System.Windows.Forms
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), Bindable(false)]
         public override string Text
         {
-            get
-            {
-                return base.Text;
-            }
-            set
-            {
-                base.Text = value;
-            }
+            get => base.Text;
+            set => base.Text = value;
         }
 
         /////////////////////////////////////////////////////////////////////////////////////////////

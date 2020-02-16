@@ -81,14 +81,8 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public new ToolStripItemAlignment Alignment
         {
-            get
-            {
-                return base.Alignment;
-            }
-            set
-            {
-                base.Alignment = value;
-            }
+            get => base.Alignment;
+            set => base.Alignment = value;
         }
 
         [

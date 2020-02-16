@@ -113,10 +113,7 @@ namespace System.Windows.Forms
                 {
                     return _itemEntry.item.ToString();
                 }
-                set
-                {
-                    base.Name = value;
-                }
+                set => base.Name = value;
             }
 
             /// <summary>

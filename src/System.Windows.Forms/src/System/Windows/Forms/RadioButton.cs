@@ -356,14 +356,8 @@ namespace System.Windows.Forms
         [DefaultValue(false)]
         new public bool TabStop
         {
-            get
-            {
-                return base.TabStop;
-            }
-            set
-            {
-                base.TabStop = value;
-            }
+            get => base.TabStop;
+            set => base.TabStop = value;
         }
 
         /// <summary>
@@ -376,14 +370,8 @@ namespace System.Windows.Forms
         ]
         public override ContentAlignment TextAlign
         {
-            get
-            {
-                return base.TextAlign;
-            }
-            set
-            {
-                base.TextAlign = value;
-            }
+            get => base.TextAlign;
+            set => base.TextAlign = value;
         }
 
         /// <summary>

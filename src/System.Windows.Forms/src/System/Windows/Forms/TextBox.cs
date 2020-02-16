@@ -261,10 +261,7 @@ namespace System.Windows.Forms
 
         public override bool Multiline
         {
-            get
-            {
-                return base.Multiline;
-            }
+            get => base.Multiline;
             set
             {
                 if (Multiline != value)
@@ -456,10 +453,7 @@ namespace System.Windows.Forms
         /// </summary>
         public override string Text
         {
-            get
-            {
-                return base.Text;
-            }
+            get => base.Text;
             set
             {
                 base.Text = value;

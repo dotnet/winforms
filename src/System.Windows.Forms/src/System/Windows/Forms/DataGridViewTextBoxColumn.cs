@@ -27,10 +27,7 @@ namespace System.Windows.Forms
         ]
         public override DataGridViewCell CellTemplate
         {
-            get
-            {
-                return base.CellTemplate;
-            }
+            get => base.CellTemplate;
             set
             {
                 if (value != null && !(value is DataGridViewTextBoxCell))
@@ -83,14 +80,8 @@ namespace System.Windows.Forms
         ]
         public new DataGridViewColumnSortMode SortMode
         {
-            get
-            {
-                return base.SortMode;
-            }
-            set
-            {
-                base.SortMode = value;
-            }
+            get => base.SortMode;
+            set => base.SortMode = value;
         }
 
         private DataGridViewTextBoxCell TextBoxCellTemplate
