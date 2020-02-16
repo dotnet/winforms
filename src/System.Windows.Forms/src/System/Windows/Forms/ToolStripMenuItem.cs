@@ -1059,7 +1059,7 @@ namespace System.Windows.Forms
             // If we are in a submenu pop down the submenu.
             if (ParentInternal != null && ParentInternal.MenuAutoExpand && Selected)
             {
-                Debug.WriteLineIf(ToolStripItem.MouseDebugging.TraceVerbose, "received mouse enter - calling drop down");
+                Debug.WriteLineIf(ToolStripItem.s_mouseDebugging.TraceVerbose, "received mouse enter - calling drop down");
 
                 Debug.WriteLineIf(ToolStrip.MenuAutoExpandDebug.TraceVerbose, "[ToolStripMenuItem.OnMouseEnter] MenuTimer.Cancel / MenuTimer.Start called");
 

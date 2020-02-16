@@ -300,7 +300,7 @@ namespace System.Windows.Forms
         protected override void OnFontChanged(EventArgs e)
         {
             // Perf: dont call base, we dont care if the font changes
-            RaiseEvent(EventFontChanged, e);
+            RaiseEvent(s_fontChangedEvent, e);
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]

@@ -170,8 +170,8 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler DisplayStyleChanged
         {
-            add => Events.AddHandler(EventDisplayStyleChanged, value);
-            remove => Events.RemoveHandler(EventDisplayStyleChanged, value);
+            add => Events.AddHandler(s_displayStyleChangedEvent, value);
+            remove => Events.RemoveHandler(s_displayStyleChangedEvent, value);
         }
 
         /// <summary>
@@ -529,48 +529,48 @@ namespace System.Windows.Forms
         private void HandleMouseDown(object sender, MouseEventArgs e)
         {
             OnMouseDown(e);
-            RaiseMouseEvent(ToolStripItem.EventMouseDown, e);
+            RaiseMouseEvent(ToolStripItem.s_mouseDownEvent, e);
         }
 
         private void HandleMouseEnter(object sender, EventArgs e)
         {
             OnMouseEnter(e);
-            RaiseEvent(ToolStripItem.EventMouseEnter, e);
+            RaiseEvent(ToolStripItem.s_mouseEnterEvent, e);
         }
 
         private void HandleMouseLeave(object sender, EventArgs e)
         {
             OnMouseLeave(e);
-            RaiseEvent(ToolStripItem.EventMouseLeave, e);
+            RaiseEvent(ToolStripItem.s_mouseLeaveEvent, e);
         }
 
         private void HandleMouseHover(object sender, EventArgs e)
         {
             OnMouseHover(e);
-            RaiseEvent(ToolStripItem.EventMouseHover, e);
+            RaiseEvent(ToolStripItem.s_mouseHoverEvent, e);
         }
 
         private void HandleMouseMove(object sender, MouseEventArgs e)
         {
             OnMouseMove(e);
-            RaiseMouseEvent(ToolStripItem.EventMouseMove, e);
+            RaiseMouseEvent(ToolStripItem.s_mouseMoveEvent, e);
         }
 
         private void HandleMouseUp(object sender, MouseEventArgs e)
         {
             OnMouseUp(e);
-            RaiseMouseEvent(ToolStripItem.EventMouseUp, e);
+            RaiseMouseEvent(ToolStripItem.s_mouseUpEvent, e);
         }
 
         private void HandlePaint(object sender, PaintEventArgs e)
         {
             OnPaint(e);
-            RaisePaintEvent(ToolStripItem.EventPaint, e);
+            RaisePaintEvent(ToolStripItem.s_paintEvent, e);
         }
 
         private void HandleQueryAccessibilityHelp(object sender, QueryAccessibilityHelpEventArgs e)
         {
-            ((QueryAccessibilityHelpEventHandler)Events[ToolStripItem.EventQueryAccessibilityHelp])?.Invoke(this, e);
+            ((QueryAccessibilityHelpEventHandler)Events[ToolStripItem.s_queryAccessibilityHelpEvent])?.Invoke(this, e);
         }
 
         private void HandleQueryContinueDrag(object sender, QueryContinueDragEventArgs e) => OnQueryContinueDrag(e);

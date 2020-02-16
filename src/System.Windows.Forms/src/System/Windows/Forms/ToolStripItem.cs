@@ -31,149 +31,138 @@ namespace System.Windows.Forms
                               IKeyboardToolTip
     {
 #if DEBUG
-        internal static readonly TraceSwitch MouseDebugging = new TraceSwitch("MouseDebugging", "Debug ToolStripItem mouse debugging code");
+        internal static readonly TraceSwitch s_mouseDebugging = new TraceSwitch("MouseDebugging", "Debug ToolStripItem mouse debugging code");
 #else
-        internal static readonly TraceSwitch MouseDebugging;
+        internal static readonly TraceSwitch s_mouseDebugging;
 #endif
 
-        private Rectangle bounds = Rectangle.Empty;
-        private PropertyStore propertyStore;
-        private ToolStripItemAlignment alignment = ToolStripItemAlignment.Left;
-        private ToolStrip parent = null;
-        private ToolStrip owner = null;
-        private ToolStripItemOverflow overflow = ToolStripItemOverflow.AsNeeded;
-        private ToolStripItemPlacement placement = ToolStripItemPlacement.None;
-        private ContentAlignment imageAlign = ContentAlignment.MiddleCenter;
-        private ContentAlignment textAlign = ContentAlignment.MiddleCenter;
-        private TextImageRelation textImageRelation = TextImageRelation.ImageBeforeText;
-        private ToolStripItemImageIndexer imageIndexer = null;
-        private ToolStripItemInternalLayout toolStripItemInternalLayout = null;
-        private BitVector32 state = new BitVector32();
-        private string toolTipText = null;
-        private Color imageTransparentColor = Color.Empty;
-        private ToolStripItemImageScaling imageScaling = ToolStripItemImageScaling.SizeToFit;
-        private Size cachedTextSize = Size.Empty;
+        private Rectangle _bounds = Rectangle.Empty;
+        private PropertyStore _propertyStore;
+        private ToolStripItemAlignment _alignment = ToolStripItemAlignment.Left;
+        private ToolStrip _parent;
+        private ToolStrip _owner;
+        private ToolStripItemOverflow _overflow = ToolStripItemOverflow.AsNeeded;
+        private ToolStripItemPlacement _placement = ToolStripItemPlacement.None;
+        private ContentAlignment _imageAlign = ContentAlignment.MiddleCenter;
+        private ContentAlignment _textAlign = ContentAlignment.MiddleCenter;
+        private TextImageRelation _textImageRelation = TextImageRelation.ImageBeforeText;
+        private ToolStripItemImageIndexer _imageIndexer;
+        private ToolStripItemInternalLayout _toolStripItemInternalLayout;
+        private BitVector32 _state = new BitVector32();
+        private string _toolTipText;
+        private Color _imageTransparentColor = Color.Empty;
+        private ToolStripItemImageScaling _imageScaling = ToolStripItemImageScaling.SizeToFit;
+        private Size _cachedTextSize;
 
-        private static readonly Padding defaultMargin = new Padding(0, 1, 0, 2);
-        private static readonly Padding defaultStatusStripMargin = new Padding(0, 2, 0, 0);
-        private Padding scaledDefaultMargin = defaultMargin;
-        private Padding scaledDefaultStatusStripMargin = defaultStatusStripMargin;
+        private static readonly Padding s_defaultMargin = new Padding(0, 1, 0, 2);
+        private static readonly Padding s_defaultStatusStripMargin = new Padding(0, 2, 0, 0);
+        private Padding _scaledDefaultMargin = s_defaultMargin;
+        private Padding _scaledDefaultStatusStripMargin = s_defaultStatusStripMargin;
 
-        private ToolStripItemDisplayStyle displayStyle = ToolStripItemDisplayStyle.ImageAndText;
+        private ToolStripItemDisplayStyle _displayStyle = ToolStripItemDisplayStyle.ImageAndText;
 
-        private static readonly ArrangedElementCollection EmptyChildCollection = new ArrangedElementCollection();
+        private static readonly ArrangedElementCollection s_emptyChildCollection = new ArrangedElementCollection();
 
-        ///
-        ///  Adding a new event??  Make sure you dont need to add to ToolStripControlHost.cs
-        ///
-        internal static readonly object EventMouseDown = new object();
-        internal static readonly object EventMouseEnter = new object();
-        internal static readonly object EventMouseLeave = new object();
-        internal static readonly object EventMouseHover = new object();
-        internal static readonly object EventMouseMove = new object();
-        internal static readonly object EventMouseUp = new object();
-        internal static readonly object EventMouseWheel = new object();
-        internal static readonly object EventClick = new object();
-        internal static readonly object EventDoubleClick = new object();
-        internal static readonly object EventDragDrop = new object();
-        internal static readonly object EventDragEnter = new object();
-        internal static readonly object EventDragLeave = new object();
-        internal static readonly object EventDragOver = new object();
-        internal static readonly object EventDisplayStyleChanged = new object();
-        internal static readonly object EventEnabledChanged = new object();
-        internal static readonly object EventInternalEnabledChanged = new object();
-        internal static readonly object EventFontChanged = new object();
-        internal static readonly object EventForeColorChanged = new object();
-        internal static readonly object EventBackColorChanged = new object();
-        internal static readonly object EventGiveFeedback = new object();
-        internal static readonly object EventQueryContinueDrag = new object();
-        internal static readonly object EventQueryAccessibilityHelp = new object();
-        internal static readonly object EventMove = new object();
-        internal static readonly object EventResize = new object();
-        internal static readonly object EventLayout = new object();
-        internal static readonly object EventLocationChanged = new object();
-        internal static readonly object EventRightToLeft = new object();
-        internal static readonly object EventVisibleChanged = new object();
-        internal static readonly object EventAvailableChanged = new object();
-        internal static readonly object EventOwnerChanged = new object();
-        internal static readonly object EventPaint = new object();
-        internal static readonly object EventText = new object();
-        internal static readonly object EventSelectedChanged = new object();
+        internal static readonly object s_mouseDownEvent = new object();
+        internal static readonly object s_mouseEnterEvent = new object();
+        internal static readonly object s_mouseLeaveEvent = new object();
+        internal static readonly object s_mouseHoverEvent = new object();
+        internal static readonly object s_mouseMoveEvent = new object();
+        internal static readonly object s_mouseUpEvent = new object();
+        internal static readonly object s_clickEvent = new object();
+        internal static readonly object s_doubleClickEvent = new object();
+        internal static readonly object s_dragDropEvent = new object();
+        internal static readonly object s_dragEnterEvent = new object();
+        internal static readonly object s_dragLeaveEvent = new object();
+        internal static readonly object s_dragOverEvent = new object();
+        internal static readonly object s_displayStyleChangedEvent = new object();
+        internal static readonly object s_enabledChangedEvent = new object();
+        internal static readonly object s_internalEnabledChangedEvent = new object();
+        internal static readonly object s_fontChangedEvent = new object();
+        internal static readonly object s_foreColorChangedEvent = new object();
+        internal static readonly object s_backColorChangedEvent = new object();
+        internal static readonly object s_giveFeedbackEvent = new object();
+        internal static readonly object s_queryContinueDragEvent = new object();
+        internal static readonly object s_queryAccessibilityHelpEvent = new object();
+        internal static readonly object s_locationChangedEvent = new object();
+        internal static readonly object s_rightToLeftChangedEvent = new object();
+        internal static readonly object s_visibleChangedEvent = new object();
+        internal static readonly object s_availableChangedEvent = new object();
+        internal static readonly object s_ownerChangedEvent = new object();
+        internal static readonly object s_paintEvent = new object();
+        internal static readonly object s_textChangedEvent = new object();
 
-        ///
-        ///  Adding a new event??  Make sure you dont need to add to ToolStripControlHost.cs
-        ///
         // Property store keys for properties.  The property store allocates most efficiently
         // in groups of four, so we try to lump properties in groups of four based on how
         // likely they are going to be used in a group.
 
-        private static readonly int PropName = PropertyStore.CreateKey();
-        private static readonly int PropText = PropertyStore.CreateKey();
-        private static readonly int PropBackColor = PropertyStore.CreateKey();
-        private static readonly int PropForeColor = PropertyStore.CreateKey();
+        private static readonly int s_nameProperty = PropertyStore.CreateKey();
+        private static readonly int s_textProperty = PropertyStore.CreateKey();
+        private static readonly int s_backColorProperty = PropertyStore.CreateKey();
+        private static readonly int s_foreColorProperty = PropertyStore.CreateKey();
 
-        private static readonly int PropImage = PropertyStore.CreateKey();
-        private static readonly int PropFont = PropertyStore.CreateKey();
-        private static readonly int PropRightToLeft = PropertyStore.CreateKey();
-        private static readonly int PropTag = PropertyStore.CreateKey();
+        private static readonly int s_imageProperty = PropertyStore.CreateKey();
+        private static readonly int s_fontProperty = PropertyStore.CreateKey();
+        private static readonly int s_rightToLeftProperty = PropertyStore.CreateKey();
+        private static readonly int s_tagProperty = PropertyStore.CreateKey();
 
-        private static readonly int PropAccessibility = PropertyStore.CreateKey();
-        private static readonly int PropAccessibleName = PropertyStore.CreateKey();
-        private static readonly int PropAccessibleRole = PropertyStore.CreateKey();
-        private static readonly int PropAccessibleHelpProvider = PropertyStore.CreateKey();
+        private static readonly int s_accessibilityProperty = PropertyStore.CreateKey();
+        private static readonly int s_accessibleNameProperty = PropertyStore.CreateKey();
+        private static readonly int s_accessibleRoleProperty = PropertyStore.CreateKey();
+        private static readonly int s_accessibleHelpProviderProperty = PropertyStore.CreateKey();
 
-        private static readonly int PropAccessibleDefaultActionDescription = PropertyStore.CreateKey();
-        private static readonly int PropAccessibleDescription = PropertyStore.CreateKey();
-        private static readonly int PropTextDirection = PropertyStore.CreateKey();
-        private static readonly int PropMirroredImage = PropertyStore.CreateKey();
+        private static readonly int s_accessibleDefaultActionDescriptionProperty = PropertyStore.CreateKey();
+        private static readonly int s_accessibleDescriptionProperty = PropertyStore.CreateKey();
+        private static readonly int s_textDirectionProperty = PropertyStore.CreateKey();
+        private static readonly int s_mirroredImageProperty = PropertyStore.CreateKey();
 
-        private static readonly int PropBackgroundImage = PropertyStore.CreateKey();
-        private static readonly int PropBackgroundImageLayout = PropertyStore.CreateKey();
+        private static readonly int s_backgroundImageProperty = PropertyStore.CreateKey();
+        private static readonly int s_backgroundImageLayoutProperty = PropertyStore.CreateKey();
 
-        private static readonly int PropMergeAction = PropertyStore.CreateKey();
-        private static readonly int PropMergeIndex = PropertyStore.CreateKey();
+        private static readonly int s_mergeActionProperty = PropertyStore.CreateKey();
+        private static readonly int s_mergeIndexProperty = PropertyStore.CreateKey();
 
-        private static readonly int stateAllowDrop = BitVector32.CreateMask();
-        private static readonly int stateVisible = BitVector32.CreateMask(stateAllowDrop);
-        private static readonly int stateEnabled = BitVector32.CreateMask(stateVisible);
-        private static readonly int stateMouseDownAndNoDrag = BitVector32.CreateMask(stateEnabled);
-        private static readonly int stateAutoSize = BitVector32.CreateMask(stateMouseDownAndNoDrag);
-        private static readonly int statePressed = BitVector32.CreateMask(stateAutoSize);
-        private static readonly int stateSelected = BitVector32.CreateMask(statePressed);
-        private static readonly int stateContstructing = BitVector32.CreateMask(stateSelected);
-        private static readonly int stateDisposed = BitVector32.CreateMask(stateContstructing);
-        private static readonly int stateCurrentlyAnimatingImage = BitVector32.CreateMask(stateDisposed);
-        private static readonly int stateDoubleClickEnabled = BitVector32.CreateMask(stateCurrentlyAnimatingImage);
-        private static readonly int stateAutoToolTip = BitVector32.CreateMask(stateDoubleClickEnabled);
-        private static readonly int stateSupportsRightClick = BitVector32.CreateMask(stateAutoToolTip);
-        private static readonly int stateSupportsItemClick = BitVector32.CreateMask(stateSupportsRightClick);
-        private static readonly int stateRightToLeftAutoMirrorImage = BitVector32.CreateMask(stateSupportsItemClick);
-        private static readonly int stateInvalidMirroredImage = BitVector32.CreateMask(stateRightToLeftAutoMirrorImage);
-        private static readonly int stateSupportsSpaceKey = BitVector32.CreateMask(stateInvalidMirroredImage);
-        private static readonly int stateMouseDownAndUpMustBeInSameItem = BitVector32.CreateMask(stateSupportsSpaceKey);
-        private static readonly int stateSupportsDisabledHotTracking = BitVector32.CreateMask(stateMouseDownAndUpMustBeInSameItem);
-        private static readonly int stateUseAmbientMargin = BitVector32.CreateMask(stateSupportsDisabledHotTracking);
-        private static readonly int stateDisposing = BitVector32.CreateMask(stateUseAmbientMargin);
+        private static readonly int s_stateAllowDrop = BitVector32.CreateMask();
+        private static readonly int s_stateVisible = BitVector32.CreateMask(s_stateAllowDrop);
+        private static readonly int s_stateEnabled = BitVector32.CreateMask(s_stateVisible);
+        private static readonly int s_stateMouseDownAndNoDrag = BitVector32.CreateMask(s_stateEnabled);
+        private static readonly int s_stateAutoSize = BitVector32.CreateMask(s_stateMouseDownAndNoDrag);
+        private static readonly int s_statePressed = BitVector32.CreateMask(s_stateAutoSize);
+        private static readonly int s_stateSelected = BitVector32.CreateMask(s_statePressed);
+        private static readonly int s_stateContstructing = BitVector32.CreateMask(s_stateSelected);
+        private static readonly int s_stateDisposed = BitVector32.CreateMask(s_stateContstructing);
+        private static readonly int s_stateCurrentlyAnimatingImage = BitVector32.CreateMask(s_stateDisposed);
+        private static readonly int s_stateDoubleClickEnabled = BitVector32.CreateMask(s_stateCurrentlyAnimatingImage);
+        private static readonly int s_stateAutoToolTip = BitVector32.CreateMask(s_stateDoubleClickEnabled);
+        private static readonly int s_stateSupportsRightClick = BitVector32.CreateMask(s_stateAutoToolTip);
+        private static readonly int s_stateSupportsItemClick = BitVector32.CreateMask(s_stateSupportsRightClick);
+        private static readonly int s_stateRightToLeftAutoMirrorImage = BitVector32.CreateMask(s_stateSupportsItemClick);
+        private static readonly int s_stateInvalidMirroredImage = BitVector32.CreateMask(s_stateRightToLeftAutoMirrorImage);
+        private static readonly int s_stateSupportsSpaceKey = BitVector32.CreateMask(s_stateInvalidMirroredImage);
+        private static readonly int s_stateMouseDownAndUpMustBeInSameItem = BitVector32.CreateMask(s_stateSupportsSpaceKey);
+        private static readonly int s_stateSupportsDisabledHotTracking = BitVector32.CreateMask(s_stateMouseDownAndUpMustBeInSameItem);
+        private static readonly int s_stateUseAmbientMargin = BitVector32.CreateMask(s_stateSupportsDisabledHotTracking);
+        private static readonly int s_stateDisposing = BitVector32.CreateMask(s_stateUseAmbientMargin);
 
-        private long lastClickTime = 0;
-        private int deviceDpi = DpiHelper.DeviceDpi;
-        internal Font defaultFont = ToolStripManager.DefaultFont;
+        private long _lastClickTime;
+        private int _deviceDpi = DpiHelper.DeviceDpi;
+        internal Font _defaultFont = ToolStripManager.DefaultFont;
 
         protected ToolStripItem()
         {
             if (DpiHelper.IsScalingRequirementMet)
             {
-                scaledDefaultMargin = DpiHelper.LogicalToDeviceUnits(defaultMargin);
-                scaledDefaultStatusStripMargin = DpiHelper.LogicalToDeviceUnits(defaultStatusStripMargin);
+                _scaledDefaultMargin = DpiHelper.LogicalToDeviceUnits(s_defaultMargin);
+                _scaledDefaultStatusStripMargin = DpiHelper.LogicalToDeviceUnits(s_defaultStatusStripMargin);
             }
 
-            state[stateEnabled | stateAutoSize | stateVisible | stateContstructing | stateSupportsItemClick | stateInvalidMirroredImage | stateMouseDownAndUpMustBeInSameItem | stateUseAmbientMargin] = true;
-            state[stateAllowDrop | stateMouseDownAndNoDrag | stateSupportsRightClick | statePressed | stateSelected | stateDisposed | stateDoubleClickEnabled | stateRightToLeftAutoMirrorImage | stateSupportsSpaceKey] = false;
+            _state[s_stateEnabled | s_stateAutoSize | s_stateVisible | s_stateContstructing | s_stateSupportsItemClick | s_stateInvalidMirroredImage | s_stateMouseDownAndUpMustBeInSameItem | s_stateUseAmbientMargin] = true;
+            _state[s_stateAllowDrop | s_stateMouseDownAndNoDrag | s_stateSupportsRightClick | s_statePressed | s_stateSelected | s_stateDisposed | s_stateDoubleClickEnabled | s_stateRightToLeftAutoMirrorImage | s_stateSupportsSpaceKey] = false;
             SetAmbientMargin();
             Size = DefaultSize;
             DisplayStyle = DefaultDisplayStyle;
             CommonProperties.SetAutoSize(this, true);
-            state[stateContstructing] = false;
+            _state[s_stateContstructing] = false;
             AutoToolTip = DefaultAutoToolTip;
         }
 
@@ -203,11 +192,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                AccessibleObject accessibleObject = (AccessibleObject)Properties.GetObject(PropAccessibility);
+                AccessibleObject accessibleObject = (AccessibleObject)Properties.GetObject(s_accessibilityProperty);
                 if (accessibleObject == null)
                 {
                     accessibleObject = CreateAccessibilityInstance();
-                    Properties.SetObject(PropAccessibility, accessibleObject);
+                    Properties.SetObject(s_accessibilityProperty, accessibleObject);
                 }
 
                 return accessibleObject;
@@ -227,11 +216,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                return (string)Properties.GetObject(PropAccessibleDefaultActionDescription);
+                return (string)Properties.GetObject(s_accessibleDefaultActionDescriptionProperty);
             }
             set
             {
-                Properties.SetObject(PropAccessibleDefaultActionDescription, value);
+                Properties.SetObject(s_accessibleDefaultActionDescriptionProperty, value);
                 OnAccessibleDefaultActionDescriptionChanged(EventArgs.Empty);
             }
         }
@@ -248,11 +237,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                return (string)Properties.GetObject(PropAccessibleDescription);
+                return (string)Properties.GetObject(s_accessibleDescriptionProperty);
             }
             set
             {
-                Properties.SetObject(PropAccessibleDescription, value);
+                Properties.SetObject(s_accessibleDescriptionProperty, value);
                 OnAccessibleDescriptionChanged(EventArgs.Empty);
             }
         }
@@ -270,12 +259,12 @@ namespace System.Windows.Forms
         {
             get
             {
-                return (string)Properties.GetObject(PropAccessibleName);
+                return (string)Properties.GetObject(s_accessibleNameProperty);
             }
 
             set
             {
-                Properties.SetObject(PropAccessibleName, value);
+                Properties.SetObject(s_accessibleNameProperty, value);
                 OnAccessibleNameChanged(EventArgs.Empty);
             }
         }
@@ -292,7 +281,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                int role = Properties.GetInteger(PropAccessibleRole, out bool found);
+                int role = Properties.GetInteger(s_accessibleRoleProperty, out bool found);
                 if (found)
                 {
                     return (AccessibleRole)role;
@@ -310,7 +299,7 @@ namespace System.Windows.Forms
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(AccessibleRole));
                 }
-                Properties.SetInteger(PropAccessibleRole, (int)value);
+                Properties.SetInteger(s_accessibleRoleProperty, (int)value);
                 OnAccessibleRoleChanged(EventArgs.Empty);
             }
         }
@@ -327,7 +316,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return alignment;
+                return _alignment;
             }
             set
             {
@@ -336,9 +325,9 @@ namespace System.Windows.Forms
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ToolStripItemAlignment));
                 }
-                if (alignment != value)
+                if (_alignment != value)
                 {
-                    alignment = value;
+                    _alignment = value;
 
                     if ((ParentInternal != null) && ParentInternal.IsHandleCreated)
                     {
@@ -366,14 +355,14 @@ namespace System.Windows.Forms
         {
             get
             {
-                return state[stateAllowDrop];
+                return _state[s_stateAllowDrop];
             }
             set
             {
-                if (value != state[stateAllowDrop])
+                if (value != _state[s_stateAllowDrop])
                 {
                     EnsureParentDropTargetRegistered();
-                    state[stateAllowDrop] = value;
+                    _state[s_stateAllowDrop] = value;
                 }
             }
         }
@@ -391,13 +380,13 @@ namespace System.Windows.Forms
         {
             get
             {
-                return state[stateAutoSize];
+                return _state[s_stateAutoSize];
             }
             set
             {
-                if (state[stateAutoSize] != value)
+                if (_state[s_stateAutoSize] != value)
                 {
-                    state[stateAutoSize] = value;
+                    _state[s_stateAutoSize] = value;
                     CommonProperties.SetAutoSize(this, value);
                     InvalidateItemLayout(PropertyNames.AutoSize);
                 }
@@ -415,11 +404,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                return state[stateAutoToolTip];
+                return _state[s_stateAutoToolTip];
             }
             set
             {
-                state[stateAutoToolTip] = value;
+                _state[s_stateAutoToolTip] = value;
             }
         }
 
@@ -440,7 +429,7 @@ namespace System.Windows.Forms
                 // the only real diff is the getter - this returns what the item really thinks,
                 // as opposed to whether or not the parent is also Visible.  Visible behavior is the same
                 // so that it matches Control behavior (we dont have to do special things for control hosts, etc etc).
-                return state[stateVisible];
+                return _state[s_stateVisible];
             }
             set
             {
@@ -455,8 +444,8 @@ namespace System.Windows.Forms
         ]
         public event EventHandler AvailableChanged
         {
-            add => Events.AddHandler(EventAvailableChanged, value);
-            remove => Events.RemoveHandler(EventAvailableChanged, value);
+            add => Events.AddHandler(s_availableChangedEvent, value);
+            remove => Events.RemoveHandler(s_availableChangedEvent, value);
         }
 
         /// <summary>
@@ -472,13 +461,13 @@ namespace System.Windows.Forms
         {
             get
             {
-                return Properties.GetObject(PropBackgroundImage) as Image;
+                return Properties.GetObject(s_backgroundImageProperty) as Image;
             }
             set
             {
                 if (BackgroundImage != value)
                 {
-                    Properties.SetObject(PropBackgroundImage, value);
+                    Properties.SetObject(s_backgroundImageProperty, value);
                     Invalidate();
                 }
             }
@@ -490,11 +479,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                return deviceDpi;
+                return _deviceDpi;
             }
             set
             {
-                deviceDpi = value;
+                _deviceDpi = value;
             }
         }
 
@@ -508,14 +497,14 @@ namespace System.Windows.Forms
         {
             get
             {
-                bool found = Properties.ContainsObject(PropBackgroundImageLayout);
+                bool found = Properties.ContainsObject(s_backgroundImageLayoutProperty);
                 if (!found)
                 {
                     return ImageLayout.Tile;
                 }
                 else
                 {
-                    return ((ImageLayout)Properties.GetObject(PropBackgroundImageLayout));
+                    return ((ImageLayout)Properties.GetObject(s_backgroundImageLayoutProperty));
                 }
             }
             set
@@ -527,7 +516,7 @@ namespace System.Windows.Forms
                     {
                         throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ImageLayout));
                     }
-                    Properties.SetObject(PropBackgroundImageLayout, value);
+                    Properties.SetObject(s_backgroundImageLayoutProperty, value);
                     Invalidate();
                 }
             }
@@ -560,9 +549,9 @@ namespace System.Windows.Forms
             set
             {
                 Color c = BackColor;
-                if (!value.IsEmpty || Properties.ContainsObject(PropBackColor))
+                if (!value.IsEmpty || Properties.ContainsObject(s_backColorProperty))
                 {
-                    Properties.SetColor(PropBackColor, value);
+                    Properties.SetColor(s_backColorProperty, value);
                 }
 
                 if (!c.Equals(BackColor))
@@ -575,8 +564,8 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ToolStripItemOnBackColorChangedDescr))]
         public event EventHandler BackColorChanged
         {
-            add => Events.AddHandler(EventBackColorChanged, value);
-            remove => Events.RemoveHandler(EventBackColorChanged, value);
+            add => Events.AddHandler(s_backColorChangedEvent, value);
+            remove => Events.RemoveHandler(s_backColorChangedEvent, value);
         }
 
         /// <summary>
@@ -587,7 +576,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return bounds;
+                return _bounds;
             }
         }
 
@@ -596,7 +585,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                Rectangle client = bounds;
+                Rectangle client = _bounds;
                 client.Location = Point.Empty;
                 return client;
             }
@@ -642,8 +631,8 @@ namespace System.Windows.Forms
         ]
         public event EventHandler Click
         {
-            add => Events.AddHandler(EventClick, value);
-            remove => Events.RemoveHandler(EventClick, value);
+            add => Events.AddHandler(s_clickEvent, value);
+            remove => Events.RemoveHandler(s_clickEvent, value);
         }
 
         [
@@ -724,11 +713,11 @@ namespace System.Windows.Forms
             {
                 if (Owner != null && Owner is StatusStrip)
                 {
-                    return scaledDefaultStatusStripMargin;
+                    return _scaledDefaultStatusStripMargin;
                 }
                 else
                 {
-                    return scaledDefaultMargin;
+                    return _scaledDefaultMargin;
                 }
             }
         }
@@ -790,19 +779,19 @@ namespace System.Windows.Forms
         {
             get
             {
-                return displayStyle;
+                return _displayStyle;
             }
             set
             {
-                if (displayStyle != value)
+                if (_displayStyle != value)
                 {
                     //valid values are 0x0 to 0x3
                     if (!ClientUtils.IsEnumValid(value, (int)value, (int)ToolStripItemDisplayStyle.None, (int)ToolStripItemDisplayStyle.ImageAndText))
                     {
                         throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ToolStripItemDisplayStyle));
                     }
-                    displayStyle = value;
-                    if (!state[stateContstructing])
+                    _displayStyle = value;
+                    if (!_state[s_stateContstructing])
                     {
                         InvalidateItemLayout(PropertyNames.DisplayStyle);
                         OnDisplayStyleChanged(EventArgs.Empty);
@@ -816,8 +805,8 @@ namespace System.Windows.Forms
         /// </summary>
         public event EventHandler DisplayStyleChanged
         {
-            add => Events.AddHandler(EventDisplayStyleChanged, value);
-            remove => Events.RemoveHandler(EventDisplayStyleChanged, value);
+            add => Events.AddHandler(s_displayStyleChangedEvent, value);
+            remove => Events.RemoveHandler(s_displayStyleChangedEvent, value);
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -835,8 +824,8 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.ControlOnDoubleClickDescr))]
         public event EventHandler DoubleClick
         {
-            add => Events.AddHandler(EventDoubleClick, value);
-            remove => Events.RemoveHandler(EventDoubleClick, value);
+            add => Events.AddHandler(s_doubleClickEvent, value);
+            remove => Events.RemoveHandler(s_doubleClickEvent, value);
         }
 
         [
@@ -848,11 +837,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                return state[stateDoubleClickEnabled];
+                return _state[s_stateDoubleClickEnabled];
             }
             set
             {
-                state[stateDoubleClickEnabled] = value;
+                _state[s_stateDoubleClickEnabled] = value;
             }
         }
 
@@ -864,8 +853,8 @@ namespace System.Windows.Forms
         ]
         public event DragEventHandler DragDrop
         {
-            add => Events.AddHandler(EventDragDrop, value);
-            remove => Events.RemoveHandler(EventDragDrop, value);
+            add => Events.AddHandler(s_dragDropEvent, value);
+            remove => Events.RemoveHandler(s_dragDropEvent, value);
         }
 
         [
@@ -876,8 +865,8 @@ namespace System.Windows.Forms
         ]
         public event DragEventHandler DragEnter
         {
-            add => Events.AddHandler(EventDragEnter, value);
-            remove => Events.RemoveHandler(EventDragEnter, value);
+            add => Events.AddHandler(s_dragEnterEvent, value);
+            remove => Events.RemoveHandler(s_dragEnterEvent, value);
         }
 
         [
@@ -888,8 +877,8 @@ namespace System.Windows.Forms
         ]
         public event DragEventHandler DragOver
         {
-            add => Events.AddHandler(EventDragOver, value);
-            remove => Events.RemoveHandler(EventDragOver, value);
+            add => Events.AddHandler(s_dragOverEvent, value);
+            remove => Events.RemoveHandler(s_dragOverEvent, value);
         }
 
         [
@@ -900,8 +889,8 @@ namespace System.Windows.Forms
         ]
         public event EventHandler DragLeave
         {
-            add => Events.AddHandler(EventDragLeave, value);
-            remove => Events.RemoveHandler(EventDragLeave, value);
+            add => Events.AddHandler(s_dragLeaveEvent, value);
+            remove => Events.RemoveHandler(s_dragLeaveEvent, value);
         }
 
         /// <summary>
@@ -946,19 +935,19 @@ namespace System.Windows.Forms
                     parentEnabled = Owner.Enabled;
                 }
 
-                return state[stateEnabled] && parentEnabled;
+                return _state[s_stateEnabled] && parentEnabled;
             }
             set
             {
                 // flip disabled bit.
-                if (state[stateEnabled] != value)
+                if (_state[s_stateEnabled] != value)
                 {
-                    state[stateEnabled] = value;
-                    if (!state[stateEnabled])
+                    _state[s_stateEnabled] = value;
+                    if (!_state[s_stateEnabled])
                     {
-                        bool wasSelected = state[stateSelected];
+                        bool wasSelected = _state[s_stateSelected];
                         // clear all the other states.
-                        state[stateSelected | statePressed] = false;
+                        _state[s_stateSelected | s_statePressed] = false;
 
                         if (wasSelected)
                         {
@@ -977,14 +966,14 @@ namespace System.Windows.Forms
         ]
         public event EventHandler EnabledChanged
         {
-            add => Events.AddHandler(EventEnabledChanged, value);
-            remove => Events.RemoveHandler(EventEnabledChanged, value);
+            add => Events.AddHandler(s_enabledChangedEvent, value);
+            remove => Events.RemoveHandler(s_enabledChangedEvent, value);
         }
 
         internal event EventHandler InternalEnabledChanged
         {
-            add => Events.AddHandler(EventInternalEnabledChanged, value);
-            remove => Events.RemoveHandler(EventInternalEnabledChanged, value);
+            add => Events.AddHandler(s_internalEnabledChangedEvent, value);
+            remove => Events.RemoveHandler(s_internalEnabledChangedEvent, value);
         }
 
         private void EnsureParentDropTargetRegistered()
@@ -1007,7 +996,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                Color foreColor = Properties.GetColor(PropForeColor);
+                Color foreColor = Properties.GetColor(s_foreColorProperty);
                 if (!foreColor.IsEmpty)
                 {
                     return foreColor;
@@ -1024,9 +1013,9 @@ namespace System.Windows.Forms
             set
             {
                 Color c = ForeColor;
-                if (!value.IsEmpty || Properties.ContainsObject(PropForeColor))
+                if (!value.IsEmpty || Properties.ContainsObject(s_foreColorProperty))
                 {
-                    Properties.SetColor(PropForeColor, value);
+                    Properties.SetColor(s_foreColorProperty, value);
                 }
                 if (!c.Equals(ForeColor))
                 {
@@ -1038,8 +1027,8 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ToolStripItemOnForeColorChangedDescr))]
         public event EventHandler ForeColorChanged
         {
-            add => Events.AddHandler(EventForeColorChanged, value);
-            remove => Events.RemoveHandler(EventForeColorChanged, value);
+            add => Events.AddHandler(s_foreColorChangedEvent, value);
+            remove => Events.RemoveHandler(s_foreColorChangedEvent, value);
         }
 
         /// <summary>
@@ -1055,7 +1044,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                Font font = (Font)Properties.GetObject(PropFont);
+                Font font = (Font)Properties.GetObject(s_fontProperty);
                 if (font != null)
                 {
                     return font;
@@ -1068,15 +1057,15 @@ namespace System.Windows.Forms
                 }
 
                 return DpiHelper.IsPerMonitorV2Awareness ?
-                       defaultFont :
+                       _defaultFont :
                        ToolStripManager.DefaultFont;
             }
             set
             {
-                Font local = (Font)Properties.GetObject(PropFont);
+                Font local = (Font)Properties.GetObject(s_fontProperty);
                 if ((local != value))
                 {
-                    Properties.SetObject(PropFont, value);
+                    Properties.SetObject(s_fontProperty, value);
                     OnFontChanged(EventArgs.Empty);
                 }
             }
@@ -1089,8 +1078,8 @@ namespace System.Windows.Forms
         ]
         public event GiveFeedbackEventHandler GiveFeedback
         {
-            add => Events.AddHandler(EventGiveFeedback, value);
-            remove => Events.RemoveHandler(EventGiveFeedback, value);
+            add => Events.AddHandler(s_giveFeedbackEvent, value);
+            remove => Events.RemoveHandler(s_giveFeedbackEvent, value);
         }
 
         /// <summary>
@@ -1122,7 +1111,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return ToolStripItem.EmptyChildCollection;
+                return ToolStripItem.s_emptyChildCollection;
             }
         }
         /// <summary>
@@ -1154,7 +1143,7 @@ namespace System.Windows.Forms
             {
                 // this can be different than "Visible" property as "Visible" takes into account whether or not you
                 // are parented and your parent is visible.
-                return state[stateVisible];
+                return _state[s_stateVisible];
             }
         }
 
@@ -1192,7 +1181,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return imageAlign;
+                return _imageAlign;
             }
             set
             {
@@ -1200,9 +1189,9 @@ namespace System.Windows.Forms
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ContentAlignment));
                 }
-                if (imageAlign != value)
+                if (_imageAlign != value)
                 {
-                    imageAlign = value;
+                    _imageAlign = value;
                     InvalidateItemLayout(PropertyNames.ImageAlign);
                 }
             }
@@ -1220,7 +1209,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                Image image = (Image)Properties.GetObject(PropImage);
+                Image image = (Image)Properties.GetObject(s_imageProperty);
 
                 if (image == null && (Owner != null) && (Owner.ImageList != null) && ImageIndexer.ActualIndex >= 0)
                 {
@@ -1228,8 +1217,8 @@ namespace System.Windows.Forms
                     {
                         // CACHE (by design).  If we fetched out of the image list every time it would dramatically hit perf.
                         image = Owner.ImageList.Images[ImageIndexer.ActualIndex];
-                        state[stateInvalidMirroredImage] = true;
-                        Properties.SetObject(PropImage, image);
+                        _state[s_stateInvalidMirroredImage] = true;
+                        Properties.SetObject(s_imageProperty, image);
                         return image;
                     }
                 }
@@ -1256,8 +1245,8 @@ namespace System.Windows.Forms
                     {
                         ImageIndex = -1;
                     }
-                    Properties.SetObject(PropImage, value);
-                    state[stateInvalidMirroredImage] = true;
+                    Properties.SetObject(s_imageProperty, value);
+                    _state[s_stateInvalidMirroredImage] = true;
                     Animate();
                     InvalidateItemLayout(PropertyNames.Image);
                 }
@@ -1273,18 +1262,18 @@ namespace System.Windows.Forms
         {
             get
             {
-                return imageTransparentColor;
+                return _imageTransparentColor;
             }
             set
             {
-                if (imageTransparentColor != value)
+                if (_imageTransparentColor != value)
                 {
-                    imageTransparentColor = value;
+                    _imageTransparentColor = value;
                     if (Image is Bitmap currentImage && value != Color.Empty)
                     {
                         if (currentImage.RawFormat.Guid != ImageFormat.Icon.Guid && !ImageAnimator.CanAnimate(currentImage))
                         {
-                            currentImage.MakeTransparent(imageTransparentColor);
+                            currentImage.MakeTransparent(_imageTransparentColor);
                         }
                     }
                     Invalidate();
@@ -1324,9 +1313,9 @@ namespace System.Windows.Forms
                 }
 
                 ImageIndexer.Index = value;
-                state[stateInvalidMirroredImage] = true;
+                _state[s_stateInvalidMirroredImage] = true;
                 // Set the Image Property to null
-                Properties.SetObject(PropImage, null);
+                Properties.SetObject(s_imageProperty, null);
 
                 InvalidateItemLayout(PropertyNames.ImageIndex);
             }
@@ -1336,11 +1325,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (imageIndexer == null)
+                if (_imageIndexer == null)
                 {
-                    imageIndexer = new ToolStripItemImageIndexer(this);
+                    _imageIndexer = new ToolStripItemImageIndexer(this);
                 }
-                return imageIndexer;
+                return _imageIndexer;
             }
         }
 
@@ -1367,8 +1356,8 @@ namespace System.Windows.Forms
             set
             {
                 ImageIndexer.Key = value;
-                state[stateInvalidMirroredImage] = true;
-                Properties.SetObject(PropImage, null);
+                _state[s_stateInvalidMirroredImage] = true;
+                Properties.SetObject(s_imageProperty, null);
 
                 InvalidateItemLayout(PropertyNames.ImageKey);
             }
@@ -1384,7 +1373,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return imageScaling;
+                return _imageScaling;
             }
             set
             {
@@ -1393,9 +1382,9 @@ namespace System.Windows.Forms
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ToolStripItemImageScaling));
                 }
-                if (imageScaling != value)
+                if (_imageScaling != value)
                 {
-                    imageScaling = value;
+                    _imageScaling = value;
 
                     InvalidateItemLayout(PropertyNames.ImageScaling);
                 }
@@ -1409,11 +1398,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (toolStripItemInternalLayout == null)
+                if (_toolStripItemInternalLayout == null)
                 {
-                    toolStripItemInternalLayout = CreateInternalLayout();
+                    _toolStripItemInternalLayout = CreateInternalLayout();
                 }
-                return toolStripItemInternalLayout;
+                return _toolStripItemInternalLayout;
             }
         }
 
@@ -1421,7 +1410,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                Color color = Properties.GetColor(PropForeColor);
+                Color color = Properties.GetColor(s_foreColorProperty);
                 if (!color.IsEmpty)
                 {
                     return true;
@@ -1454,7 +1443,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return state[stateDisposed];
+                return _state[s_stateDisposed];
             }
         }
 
@@ -1504,8 +1493,8 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatLayout)), SRDescription(nameof(SR.ToolStripItemOnLocationChangedDescr))]
         public event EventHandler LocationChanged
         {
-            add => Events.AddHandler(EventLocationChanged, value);
-            remove => Events.RemoveHandler(EventLocationChanged, value);
+            add => Events.AddHandler(s_locationChangedEvent, value);
+            remove => Events.RemoveHandler(s_locationChangedEvent, value);
         }
 
         /// <summary>
@@ -1522,7 +1511,7 @@ namespace System.Windows.Forms
             {
                 if (Margin != value)
                 {
-                    state[stateUseAmbientMargin] = false;
+                    _state[s_stateUseAmbientMargin] = false;
                     CommonProperties.SetMargin(this, value);
                 }
             }
@@ -1540,7 +1529,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                int action = Properties.GetInteger(PropMergeAction, out bool found);
+                int action = Properties.GetInteger(s_mergeActionProperty, out bool found);
                 if (found)
                 {
                     return (MergeAction)action;
@@ -1559,7 +1548,7 @@ namespace System.Windows.Forms
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(MergeAction));
                 }
-                Properties.SetInteger(PropMergeAction, (int)value);
+                Properties.SetInteger(s_mergeActionProperty, (int)value);
             }
         }
 
@@ -1575,7 +1564,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                int index = Properties.GetInteger(PropMergeIndex, out bool found);
+                int index = Properties.GetInteger(s_mergeIndexProperty, out bool found);
                 if (found)
                 {
                     return index;
@@ -1589,15 +1578,15 @@ namespace System.Windows.Forms
 
             set
             {
-                Properties.SetInteger(PropMergeIndex, value);
+                Properties.SetInteger(s_mergeIndexProperty, value);
             }
         }
 
         // required for menus
         internal bool MouseDownAndUpMustBeInSameItem
         {
-            get { return state[stateMouseDownAndUpMustBeInSameItem]; }
-            set { state[stateMouseDownAndUpMustBeInSameItem] = value; }
+            get { return _state[s_stateMouseDownAndUpMustBeInSameItem]; }
+            set { _state[s_stateMouseDownAndUpMustBeInSameItem] = value; }
         }
 
         /// <summary>
@@ -1610,8 +1599,8 @@ namespace System.Windows.Forms
         ]
         public event MouseEventHandler MouseDown
         {
-            add => Events.AddHandler(EventMouseDown, value);
-            remove => Events.RemoveHandler(EventMouseDown, value);
+            add => Events.AddHandler(s_mouseDownEvent, value);
+            remove => Events.RemoveHandler(s_mouseDownEvent, value);
         }
 
         /// <summary>
@@ -1623,8 +1612,8 @@ namespace System.Windows.Forms
         ]
         public event EventHandler MouseEnter
         {
-            add => Events.AddHandler(EventMouseEnter, value);
-            remove => Events.RemoveHandler(EventMouseEnter, value);
+            add => Events.AddHandler(s_mouseEnterEvent, value);
+            remove => Events.RemoveHandler(s_mouseEnterEvent, value);
         }
 
         /// <summary>
@@ -1636,8 +1625,8 @@ namespace System.Windows.Forms
         ]
         public event EventHandler MouseLeave
         {
-            add => Events.AddHandler(EventMouseLeave, value);
-            remove => Events.RemoveHandler(EventMouseLeave, value);
+            add => Events.AddHandler(s_mouseLeaveEvent, value);
+            remove => Events.RemoveHandler(s_mouseLeaveEvent, value);
         }
 
         /// <summary>
@@ -1649,8 +1638,8 @@ namespace System.Windows.Forms
         ]
         public event EventHandler MouseHover
         {
-            add => Events.AddHandler(EventMouseHover, value);
-            remove => Events.RemoveHandler(EventMouseHover, value);
+            add => Events.AddHandler(s_mouseHoverEvent, value);
+            remove => Events.RemoveHandler(s_mouseHoverEvent, value);
         }
 
         /// <summary>
@@ -1662,8 +1651,8 @@ namespace System.Windows.Forms
         ]
         public event MouseEventHandler MouseMove
         {
-            add => Events.AddHandler(EventMouseMove, value);
-            remove => Events.RemoveHandler(EventMouseMove, value);
+            add => Events.AddHandler(s_mouseMoveEvent, value);
+            remove => Events.RemoveHandler(s_mouseMoveEvent, value);
         }
 
         /// <summary>
@@ -1675,8 +1664,8 @@ namespace System.Windows.Forms
         ]
         public event MouseEventHandler MouseUp
         {
-            add => Events.AddHandler(EventMouseUp, value);
-            remove => Events.RemoveHandler(EventMouseUp, value);
+            add => Events.AddHandler(s_mouseUpEvent, value);
+            remove => Events.RemoveHandler(s_mouseUpEvent, value);
         }
 
         /// <summary>
@@ -1692,7 +1681,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return WindowsFormsUtils.GetComponentName(this, (string)Properties.GetObject(ToolStripItem.PropName));
+                return WindowsFormsUtils.GetComponentName(this, (string)Properties.GetObject(ToolStripItem.s_nameProperty));
             }
             set
             {
@@ -1700,7 +1689,7 @@ namespace System.Windows.Forms
                 {
                     return;
                 }
-                Properties.SetObject(ToolStripItem.PropName, value);
+                Properties.SetObject(ToolStripItem.s_nameProperty, value);
             }
         }
 
@@ -1717,15 +1706,15 @@ namespace System.Windows.Forms
         {
             get
             {
-                return owner;
+                return _owner;
             }
             set
             {
-                if (owner != value)
+                if (_owner != value)
                 {
-                    if (owner != null)
+                    if (_owner != null)
                     {
-                        owner.Items.Remove(this);
+                        _owner.Items.Remove(this);
                     }
                     if (value != null)
                     {
@@ -1771,8 +1760,8 @@ namespace System.Windows.Forms
         ]
         public event EventHandler OwnerChanged
         {
-            add => Events.AddHandler(EventOwnerChanged, value);
-            remove => Events.RemoveHandler(EventOwnerChanged, value);
+            add => Events.AddHandler(s_ownerChangedEvent, value);
+            remove => Events.RemoveHandler(s_ownerChangedEvent, value);
         }
 
         [
@@ -1781,8 +1770,8 @@ namespace System.Windows.Forms
         ]
         public event PaintEventHandler Paint
         {
-            add => Events.AddHandler(EventPaint, value);
-            remove => Events.RemoveHandler(EventPaint, value);
+            add => Events.AddHandler(s_paintEvent, value);
+            remove => Events.RemoveHandler(s_paintEvent, value);
         }
 
         /// <summary>
@@ -1824,7 +1813,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return overflow;
+                return _overflow;
             }
             set
             {
@@ -1833,9 +1822,9 @@ namespace System.Windows.Forms
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ToolStripGripStyle));
                 }
-                if (overflow != value)
+                if (_overflow != value)
                 {
-                    overflow = value;
+                    _overflow = value;
                     if (Owner != null)
                     {
                         LayoutTransaction.DoLayout(Owner, Owner, "Overflow");
@@ -1871,14 +1860,14 @@ namespace System.Windows.Forms
         {
             get
             {
-                return parent;
+                return _parent;
             }
             set
             {
-                if (parent != value)
+                if (_parent != value)
                 {
-                    ToolStrip oldParent = parent;
-                    parent = value;
+                    ToolStrip oldParent = _parent;
+                    _parent = value;
                     OnParentChanged(oldParent, value);
                 }
             }
@@ -1892,7 +1881,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return placement;
+                return _placement;
             }
         }
 
@@ -1905,7 +1894,7 @@ namespace System.Windows.Forms
                     return Size.Empty;
                 }
 
-                Image image = (Image)Properties.GetObject(PropImage);
+                Image image = (Image)Properties.GetObject(s_imageProperty);
                 bool usingImageList = ((Owner != null) && (Owner.ImageList != null) && (ImageIndexer.ActualIndex >= 0));
 
                 if (ImageScaling == ToolStripItemImageScaling.SizeToFit)
@@ -1940,11 +1929,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (propertyStore == null)
+                if (_propertyStore == null)
                 {
-                    propertyStore = new PropertyStore();
+                    _propertyStore = new PropertyStore();
                 }
-                return propertyStore;
+                return _propertyStore;
             }
         }
 
@@ -1956,7 +1945,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return CanSelect && state[statePressed];
+                return CanSelect && _state[s_statePressed];
             }
         }
 
@@ -1968,15 +1957,15 @@ namespace System.Windows.Forms
         ]
         public event QueryContinueDragEventHandler QueryContinueDrag
         {
-            add => Events.AddHandler(EventQueryContinueDrag, value);
-            remove => Events.RemoveHandler(EventQueryContinueDrag, value);
+            add => Events.AddHandler(s_queryContinueDragEvent, value);
+            remove => Events.RemoveHandler(s_queryContinueDragEvent, value);
         }
 
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ToolStripItemOnQueryAccessibilityHelpDescr))]
         public event QueryAccessibilityHelpEventHandler QueryAccessibilityHelp
         {
-            add => Events.AddHandler(EventQueryAccessibilityHelp, value);
-            remove => Events.RemoveHandler(EventQueryAccessibilityHelp, value);
+            add => Events.AddHandler(s_queryAccessibilityHelpEvent, value);
+            remove => Events.RemoveHandler(s_queryAccessibilityHelpEvent, value);
         }
 
         // Returns the value of the backColor field -- no asking the parent with its color is, etc.
@@ -1984,7 +1973,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return Properties.GetColor(PropBackColor);
+                return Properties.GetColor(s_backColorProperty);
             }
         }
 
@@ -2014,7 +2003,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                int rightToLeft = Properties.GetInteger(PropRightToLeft, out bool found);
+                int rightToLeft = Properties.GetInteger(s_rightToLeftProperty, out bool found);
                 if (!found)
                 {
                     rightToLeft = (int)RightToLeft.Inherit;
@@ -2049,9 +2038,9 @@ namespace System.Windows.Forms
 
                 RightToLeft oldValue = RightToLeft;
 
-                if (Properties.ContainsInteger(PropRightToLeft) || value != RightToLeft.Inherit)
+                if (Properties.ContainsInteger(s_rightToLeftProperty) || value != RightToLeft.Inherit)
                 {
-                    Properties.SetInteger(PropRightToLeft, (int)value);
+                    Properties.SetInteger(s_rightToLeftProperty, (int)value);
                 }
 
                 if (oldValue != RightToLeft)
@@ -2077,13 +2066,13 @@ namespace System.Windows.Forms
         {
             get
             {
-                return state[stateRightToLeftAutoMirrorImage];
+                return _state[s_stateRightToLeftAutoMirrorImage];
             }
             set
             {
-                if (state[stateRightToLeftAutoMirrorImage] != value)
+                if (_state[s_stateRightToLeftAutoMirrorImage] != value)
                 {
-                    state[stateRightToLeftAutoMirrorImage] = value;
+                    _state[s_stateRightToLeftAutoMirrorImage] = value;
                     Invalidate();
                 }
             }
@@ -2093,7 +2082,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (state[stateInvalidMirroredImage])
+                if (_state[s_stateInvalidMirroredImage])
                 {
                     Image image = Image;
                     if (image != null)
@@ -2101,8 +2090,8 @@ namespace System.Windows.Forms
                         Image mirroredImage = image.Clone() as Image;
                         mirroredImage.RotateFlip(RotateFlipType.RotateNoneFlipX);
 
-                        Properties.SetObject(PropMirroredImage, mirroredImage);
-                        state[stateInvalidMirroredImage] = false;
+                        Properties.SetObject(s_mirroredImageProperty, mirroredImage);
+                        _state[s_stateInvalidMirroredImage] = false;
                         return mirroredImage;
                     }
                     else
@@ -2110,15 +2099,15 @@ namespace System.Windows.Forms
                         return null;
                     }
                 }
-                return Properties.GetObject(PropMirroredImage) as Image;
+                return Properties.GetObject(s_mirroredImageProperty) as Image;
             }
         }
 
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ToolStripItemOnRightToLeftChangedDescr))]
         public event EventHandler RightToLeftChanged
         {
-            add => Events.AddHandler(EventRightToLeft, value);
-            remove => Events.RemoveHandler(EventRightToLeft, value);
+            add => Events.AddHandler(s_rightToLeftChangedEvent, value);
+            remove => Events.RemoveHandler(s_rightToLeftChangedEvent, value);
         }
 
         /// <summary>
@@ -2143,7 +2132,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return CanSelect && !DesignMode && (state[stateSelected] ||
+                return CanSelect && !DesignMode && (_state[s_stateSelected] ||
                     (ParentInternal != null && ParentInternal.IsSelectionSuspended &&
                      ParentInternal.LastMouseDownedItem == this));
             }
@@ -2186,11 +2175,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                return state[stateSupportsRightClick];
+                return _state[s_stateSupportsRightClick];
             }
             set
             {
-                state[stateSupportsRightClick] = value;
+                _state[s_stateSupportsRightClick] = value;
             }
         }
 
@@ -2198,11 +2187,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                return state[stateSupportsItemClick];
+                return _state[s_stateSupportsItemClick];
             }
             set
             {
-                state[stateSupportsItemClick] = value;
+                _state[s_stateSupportsItemClick] = value;
             }
         }
 
@@ -2210,11 +2199,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                return state[stateSupportsSpaceKey];
+                return _state[s_stateSupportsSpaceKey];
             }
             set
             {
-                state[stateSupportsSpaceKey] = value;
+                _state[s_stateSupportsSpaceKey] = value;
             }
         }
 
@@ -2222,11 +2211,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                return state[stateSupportsDisabledHotTracking];
+                return _state[s_stateSupportsDisabledHotTracking];
             }
             set
             {
-                state[stateSupportsDisabledHotTracking] = value;
+                _state[s_stateSupportsDisabledHotTracking] = value;
             }
         }
 
@@ -2242,15 +2231,15 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (Properties.ContainsObject(ToolStripItem.PropTag))
+                if (Properties.ContainsObject(ToolStripItem.s_tagProperty))
                 {
-                    return propertyStore.GetObject(ToolStripItem.PropTag);
+                    return _propertyStore.GetObject(ToolStripItem.s_tagProperty);
                 }
                 return null;
             }
             set
             {
-                Properties.SetObject(ToolStripItem.PropTag, value);
+                Properties.SetObject(ToolStripItem.s_tagProperty, value);
             }
         }
 
@@ -2265,9 +2254,9 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (Properties.ContainsObject(ToolStripItem.PropText))
+                if (Properties.ContainsObject(ToolStripItem.s_textProperty))
                 {
-                    return (string)Properties.GetObject(ToolStripItem.PropText);
+                    return (string)Properties.GetObject(ToolStripItem.s_textProperty);
                 }
                 return "";
             }
@@ -2275,7 +2264,7 @@ namespace System.Windows.Forms
             {
                 if (value != Text)
                 {
-                    Properties.SetObject(ToolStripItem.PropText, value);
+                    Properties.SetObject(ToolStripItem.s_textProperty, value);
                     OnTextChanged(EventArgs.Empty);
                 }
             }
@@ -2294,7 +2283,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return textAlign;
+                return _textAlign;
             }
             set
             {
@@ -2302,9 +2291,9 @@ namespace System.Windows.Forms
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ContentAlignment));
                 }
-                if (textAlign != value)
+                if (_textAlign != value)
                 {
-                    textAlign = value;
+                    _textAlign = value;
                     InvalidateItemLayout(PropertyNames.TextAlign);
                 }
             }
@@ -2313,8 +2302,8 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ToolStripItemOnTextChangedDescr))]
         public event EventHandler TextChanged
         {
-            add => Events.AddHandler(EventText, value);
-            remove => Events.RemoveHandler(EventText, value);
+            add => Events.AddHandler(s_textChangedEvent, value);
+            remove => Events.RemoveHandler(s_textChangedEvent, value);
         }
 
         [
@@ -2326,9 +2315,9 @@ namespace System.Windows.Forms
             get
             {
                 ToolStripTextDirection textDirection = ToolStripTextDirection.Inherit;
-                if (Properties.ContainsObject(ToolStripItem.PropTextDirection))
+                if (Properties.ContainsObject(ToolStripItem.s_textDirectionProperty))
                 {
-                    textDirection = (ToolStripTextDirection)Properties.GetObject(ToolStripItem.PropTextDirection);
+                    textDirection = (ToolStripTextDirection)Properties.GetObject(ToolStripItem.s_textDirectionProperty);
                 }
 
                 if (textDirection == ToolStripTextDirection.Inherit)
@@ -2353,7 +2342,7 @@ namespace System.Windows.Forms
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ToolStripTextDirection));
                 }
-                Properties.SetObject(ToolStripItem.PropTextDirection, value);
+                Properties.SetObject(ToolStripItem.s_textDirectionProperty, value);
                 InvalidateItemLayout("TextDirection");
             }
         }
@@ -2364,7 +2353,7 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatAppearance))]
         public TextImageRelation TextImageRelation
         {
-            get => textImageRelation;
+            get => _textImageRelation;
             set
             {
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)TextImageRelation.Overlay, (int)TextImageRelation.TextBeforeImage, 1))
@@ -2374,7 +2363,7 @@ namespace System.Windows.Forms
 
                 if (value != TextImageRelation)
                 {
-                    textImageRelation = value;
+                    _textImageRelation = value;
                     InvalidateItemLayout(PropertyNames.TextImageRelation);
                 }
             }
@@ -2392,7 +2381,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (AutoToolTip && string.IsNullOrEmpty(toolTipText))
+                if (AutoToolTip && string.IsNullOrEmpty(_toolTipText))
                 {
                     string toolText = Text;
                     if (WindowsFormsUtils.ContainsMnemonic(toolText))
@@ -2402,11 +2391,11 @@ namespace System.Windows.Forms
                     }
                     return toolText;
                 }
-                return toolTipText;
+                return _toolTipText;
             }
             set
             {
-                toolTipText = value;
+                _toolTipText = value;
             }
         }
 
@@ -2431,8 +2420,8 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ToolStripItemOnVisibleChangedDescr))]
         public event EventHandler VisibleChanged
         {
-            add => Events.AddHandler(EventVisibleChanged, value);
-            remove => Events.RemoveHandler(EventVisibleChanged, value);
+            add => Events.AddHandler(s_visibleChangedEvent, value);
+            remove => Events.RemoveHandler(s_visibleChangedEvent, value);
         }
 
         /// <summary>
@@ -2481,14 +2470,14 @@ namespace System.Windows.Forms
 
         private void Animate(bool animate)
         {
-            if (animate != state[stateCurrentlyAnimatingImage])
+            if (animate != _state[s_stateCurrentlyAnimatingImage])
             {
                 if (animate)
                 {
                     if (Image != null)
                     {
                         ImageAnimator.Animate(Image, new EventHandler(OnAnimationFrameChanged));
-                        state[stateCurrentlyAnimatingImage] = animate;
+                        _state[s_stateCurrentlyAnimatingImage] = animate;
                     }
                 }
                 else
@@ -2496,7 +2485,7 @@ namespace System.Windows.Forms
                     if (Image != null)
                     {
                         ImageAnimator.StopAnimate(Image, new EventHandler(OnAnimationFrameChanged));
-                        state[stateCurrentlyAnimatingImage] = animate;
+                        _state[s_stateCurrentlyAnimatingImage] = animate;
                     }
                 }
             }
@@ -2542,15 +2531,15 @@ namespace System.Windows.Forms
         {
             if (disposing)
             {
-                state[stateDisposing] = true;
+                _state[s_stateDisposing] = true;
 
                 if (Owner != null)
                 {
                     StopAnimate();
                     Debug.Assert(Owner.Items.Contains(this), "How can there be a owner and not be in the collection?");
                     Owner.Items.Remove(this);
-                    toolStripItemInternalLayout = null;
-                    state[stateDisposed] = true;
+                    _toolStripItemInternalLayout = null;
+                    _state[s_stateDisposed] = true;
                 }
             }
             base.Dispose(disposing);
@@ -2559,9 +2548,9 @@ namespace System.Windows.Forms
             {
                 // need to call base() first since the Component.Dispose(_) is listened to by the ComponentChangeService
                 // which Serializes the object in Undo-Redo transactions.
-                Properties.SetObject(PropMirroredImage, null);
-                Properties.SetObject(PropImage, null);
-                state[stateDisposing] = false;
+                Properties.SetObject(s_mirroredImageProperty, null);
+                Properties.SetObject(s_imageProperty, null);
+                _state[s_stateDisposing] = false;
             }
         }
 
@@ -2752,11 +2741,11 @@ namespace System.Windows.Forms
             {
                 return Size.Empty;
             }
-            else if (cachedTextSize == Size.Empty)
+            else if (_cachedTextSize == Size.Empty)
             {
-                cachedTextSize = TextRenderer.MeasureText(Text, Font);
+                _cachedTextSize = TextRenderer.MeasureText(Text, Font);
             }
-            return cachedTextSize;
+            return _cachedTextSize;
         }
 
         /// <summary>
@@ -2788,7 +2777,7 @@ namespace System.Windows.Forms
 
         internal void InvalidateItemLayout(string affectedProperty, bool invalidatePainting)
         {
-            toolStripItemInternalLayout = null;
+            _toolStripItemInternalLayout = null;
 
             if (Owner != null)
             {
@@ -2810,7 +2799,7 @@ namespace System.Windows.Forms
             // invalidate the cache.
             if (ImageIndexer.ActualIndex >= 0)
             {
-                Properties.SetObject(PropImage, null);
+                Properties.SetObject(s_imageProperty, null);
                 InvalidateItemLayout(PropertyNames.Image);
             }
         }
@@ -2839,13 +2828,13 @@ namespace System.Windows.Forms
 
         private void HandleClick(EventArgs e)
         {
-            Debug.WriteLineIf(MouseDebugging.TraceVerbose, "[" + Text + "] HandleClick");
+            Debug.WriteLineIf(s_mouseDebugging.TraceVerbose, "[" + Text + "] HandleClick");
 
             try
             {
                 if (!DesignMode)
                 {
-                    state[statePressed] = true;
+                    _state[s_statePressed] = true;
                 }
                 // force painting w/o using message loop here because it may be quite a long
                 // time before it gets pumped again.
@@ -2853,7 +2842,7 @@ namespace System.Windows.Forms
 
                 if (SupportsItemClick && Owner != null)
                 {
-                    Debug.WriteLineIf(MouseDebugging.TraceVerbose, "[" + Text + "] HandleItemClick");
+                    Debug.WriteLineIf(s_mouseDebugging.TraceVerbose, "[" + Text + "] HandleItemClick");
                     Owner.HandleItemClick(this);
                 }
 
@@ -2861,13 +2850,13 @@ namespace System.Windows.Forms
 
                 if (SupportsItemClick && Owner != null)
                 {
-                    Debug.WriteLineIf(MouseDebugging.TraceVerbose, "[" + Text + "] HandleItemClicked");
+                    Debug.WriteLineIf(s_mouseDebugging.TraceVerbose, "[" + Text + "] HandleItemClicked");
                     Owner.HandleItemClicked(this);
                 }
             }
             finally
             {
-                state[statePressed] = false;
+                _state[s_statePressed] = false;
             }
             // when we get around to it, paint unpressed.
             Invalidate();
@@ -2883,7 +2872,7 @@ namespace System.Windows.Forms
             ImageAnimator.UpdateFrames(Image);
 
             OnPaint(e);
-            RaisePaintEvent(EventPaint, e);
+            RaisePaintEvent(s_paintEvent, e);
         }
 
         private void HandleMouseEnter(EventArgs e)
@@ -2924,14 +2913,14 @@ namespace System.Windows.Forms
             if (Enabled)
             {
                 OnMouseEnter(e);
-                Debug.WriteLineIf(MouseDebugging.TraceVerbose, "[" + Text + "] MouseEnter");
-                RaiseEvent(EventMouseEnter, e);
+                Debug.WriteLineIf(s_mouseDebugging.TraceVerbose, "[" + Text + "] MouseEnter");
+                RaiseEvent(s_mouseEnterEvent, e);
             }
         }
 
         private void HandleMouseMove(MouseEventArgs mea)
         {
-            Debug.WriteLineIf(MouseDebugging.TraceVerbose, "[" + Text + "] MouseMove");
+            Debug.WriteLineIf(s_mouseDebugging.TraceVerbose, "[" + Text + "] MouseMove");
 
             if (Enabled && CanSelect && !Selected)
             {
@@ -2947,21 +2936,21 @@ namespace System.Windows.Forms
                 }
             }
             OnMouseMove(mea);
-            RaiseMouseEvent(EventMouseMove, mea);
+            RaiseMouseEvent(s_mouseMoveEvent, mea);
         }
 
         private void HandleMouseHover(EventArgs e)
         {
-            Debug.WriteLineIf(MouseDebugging.TraceVerbose, "[" + Text + "] MouseHover");
+            Debug.WriteLineIf(s_mouseDebugging.TraceVerbose, "[" + Text + "] MouseHover");
             OnMouseHover(e);
-            RaiseEvent(EventMouseHover, e);
+            RaiseEvent(s_mouseHoverEvent, e);
         }
 
         private void HandleLeave()
         {
-            if (state[stateMouseDownAndNoDrag] || state[statePressed] || state[stateSelected])
+            if (_state[s_stateMouseDownAndNoDrag] || _state[s_statePressed] || _state[s_stateSelected])
             {
-                state[stateMouseDownAndNoDrag | statePressed | stateSelected] = false;
+                _state[s_stateMouseDownAndNoDrag | s_statePressed | s_stateSelected] = false;
 
                 KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(this);
 
@@ -2971,20 +2960,20 @@ namespace System.Windows.Forms
 
         private void HandleMouseLeave(EventArgs e)
         {
-            Debug.WriteLineIf(MouseDebugging.TraceVerbose, "[" + Text + "] MouseLeave");
+            Debug.WriteLineIf(s_mouseDebugging.TraceVerbose, "[" + Text + "] MouseLeave");
             HandleLeave();
             if (Enabled)
             {
                 OnMouseLeave(e);
-                RaiseEvent(EventMouseLeave, e);
+                RaiseEvent(s_mouseLeaveEvent, e);
             }
         }
         private void HandleMouseDown(MouseEventArgs e)
         {
-            Debug.WriteLineIf(MouseDebugging.TraceVerbose, "[" + Text + "] MouseDown");
+            Debug.WriteLineIf(s_mouseDebugging.TraceVerbose, "[" + Text + "] MouseDown");
 
-            state[stateMouseDownAndNoDrag] = !BeginDragForItemReorder();
-            if (state[stateMouseDownAndNoDrag])
+            _state[s_stateMouseDownAndNoDrag] = !BeginDragForItemReorder();
+            if (_state[s_stateMouseDownAndNoDrag])
             {
                 if (e.Button == MouseButtons.Left)
                 {
@@ -2992,12 +2981,12 @@ namespace System.Windows.Forms
                 }
                 //
                 OnMouseDown(e);
-                RaiseMouseEvent(EventMouseDown, e);
+                RaiseMouseEvent(s_mouseDownEvent, e);
             }
         }
         private void HandleMouseUp(MouseEventArgs e)
         {
-            Debug.WriteLineIf(MouseDebugging.TraceVerbose, "[" + Text + "] MouseUp");
+            Debug.WriteLineIf(s_mouseDebugging.TraceVerbose, "[" + Text + "] MouseUp");
 
             bool fireMouseUp = (ParentInternal.LastMouseDownedItem == this);
 
@@ -3011,18 +3000,18 @@ namespace System.Windows.Forms
                 fireMouseUp = ParentInternal.ShouldSelectItem();
             }
 
-            if (state[stateMouseDownAndNoDrag] || fireMouseUp)
+            if (_state[s_stateMouseDownAndNoDrag] || fireMouseUp)
             {
                 Push(false);
 
-                if (e.Button == MouseButtons.Left || (e.Button == MouseButtons.Right && state[stateSupportsRightClick]))
+                if (e.Button == MouseButtons.Left || (e.Button == MouseButtons.Right && _state[s_stateSupportsRightClick]))
                 {
                     bool shouldFireDoubleClick = false;
                     if (DoubleClickEnabled)
                     {
                         long newTime = DateTime.Now.Ticks;
-                        long deltaTicks = newTime - lastClickTime;
-                        lastClickTime = newTime;
+                        long deltaTicks = newTime - _lastClickTime;
+                        _lastClickTime = newTime;
                         // use >= for cases where the delta is so fast DateTime cannot pick up the delta.
                         Debug.Assert(deltaTicks >= 0, "why are deltaticks less than zero? thats some mighty fast clicking");
                         // if we've seen a mouse up less than the double click time ago, we should fire.
@@ -3035,7 +3024,7 @@ namespace System.Windows.Forms
                     {
                         HandleDoubleClick(EventArgs.Empty);
                         // If we actually fired DoubleClick - reset the lastClickTime.
-                        lastClickTime = 0;
+                        _lastClickTime = 0;
                     }
                     else
                     {
@@ -3044,7 +3033,7 @@ namespace System.Windows.Forms
                 }
 
                 OnMouseUp(e);
-                RaiseMouseEvent(EventMouseUp, e);
+                RaiseMouseEvent(s_mouseUpEvent, e);
             }
         }
 
@@ -3065,7 +3054,7 @@ namespace System.Windows.Forms
         protected virtual void OnBackColorChanged(EventArgs e)
         {
             Invalidate();
-            RaiseEvent(EventBackColorChanged, e);
+            RaiseEvent(s_backColorChangedEvent, e);
         }
 
         protected virtual void OnBoundsChanged()
@@ -3076,7 +3065,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnClick(EventArgs e)
         {
-            RaiseEvent(EventClick, e);
+            RaiseEvent(s_clickEvent, e);
         }
 
         protected internal virtual void OnLayout(LayoutEventArgs e)
@@ -3136,7 +3125,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnAvailableChanged(EventArgs e)
         {
-            RaiseEvent(EventAvailableChanged, e);
+            RaiseEvent(s_availableChangedEvent, e);
         }
 
         /// <summary>
@@ -3151,7 +3140,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnDragEnter(DragEventArgs dragEvent)
         {
-            RaiseDragEvent(EventDragEnter, dragEvent);
+            RaiseDragEvent(s_dragEnterEvent, dragEvent);
         }
 
         /// <summary>
@@ -3161,7 +3150,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnDragOver(DragEventArgs dragEvent)
         {
-            RaiseDragEvent(EventDragOver, dragEvent);
+            RaiseDragEvent(s_dragOverEvent, dragEvent);
         }
 
         /// <summary>
@@ -3171,7 +3160,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnDragLeave(EventArgs e)
         {
-            RaiseEvent(EventDragLeave, e);
+            RaiseEvent(s_dragLeaveEvent, e);
         }
 
         /// <summary>
@@ -3181,7 +3170,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnDragDrop(DragEventArgs dragEvent)
         {
-            RaiseDragEvent(EventDragDrop, dragEvent);
+            RaiseDragEvent(s_dragDropEvent, dragEvent);
         }
 
         /// <summary>
@@ -3190,7 +3179,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnDisplayStyleChanged(EventArgs e)
         {
-            RaiseEvent(EventDisplayStyleChanged, e);
+            RaiseEvent(s_displayStyleChangedEvent, e);
         }
 
         /// <summary>
@@ -3201,7 +3190,7 @@ namespace System.Windows.Forms
 // PM review done
         protected virtual void OnGiveFeedback(GiveFeedbackEventArgs giveFeedbackEvent)
         {
-            ((GiveFeedbackEventHandler)Events[EventGiveFeedback])?.Invoke(this, giveFeedbackEvent);
+            ((GiveFeedbackEventHandler)Events[s_giveFeedbackEvent])?.Invoke(this, giveFeedbackEvent);
         }
 
         internal virtual void OnImageScalingSizeChanged(EventArgs e)
@@ -3215,7 +3204,7 @@ namespace System.Windows.Forms
 // PM review done
         protected virtual void OnQueryContinueDrag(QueryContinueDragEventArgs queryContinueDragEvent)
         {
-            RaiseQueryContinueDragEvent(EventQueryContinueDrag, queryContinueDragEvent);
+            RaiseQueryContinueDragEvent(s_queryContinueDragEvent, queryContinueDragEvent);
         }
 
         /// <summary>
@@ -3223,7 +3212,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnDoubleClick(EventArgs e)
         {
-            RaiseEvent(EventDoubleClick, e);
+            RaiseEvent(s_doubleClickEvent, e);
         }
 
         /// <summary>
@@ -3231,26 +3220,26 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnEnabledChanged(EventArgs e)
         {
-            RaiseEvent(EventEnabledChanged, e);
+            RaiseEvent(s_enabledChangedEvent, e);
             Animate();
         }
 
         internal void OnInternalEnabledChanged(EventArgs e)
         {
-            RaiseEvent(EventInternalEnabledChanged, e);
+            RaiseEvent(s_internalEnabledChangedEvent, e);
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnForeColorChanged(EventArgs e)
         {
             Invalidate();
-            RaiseEvent(EventForeColorChanged, e);
+            RaiseEvent(s_foreColorChangedEvent, e);
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnFontChanged(EventArgs e)
         {
-            cachedTextSize = Size.Empty;
+            _cachedTextSize = Size.Empty;
             // PERF - only invalidate if we actually care about the font
             if ((DisplayStyle & ToolStripItemDisplayStyle.Text) == ToolStripItemDisplayStyle.Text)
             {
@@ -3258,14 +3247,14 @@ namespace System.Windows.Forms
             }
             else
             {
-                toolStripItemInternalLayout = null;
+                _toolStripItemInternalLayout = null;
             }
-            RaiseEvent(EventFontChanged, e);
+            RaiseEvent(s_fontChangedEvent, e);
         }
 
         protected virtual void OnLocationChanged(EventArgs e)
         {
-            RaiseEvent(EventLocationChanged, e);
+            RaiseEvent(s_locationChangedEvent, e);
         }
 
         /// <summary>
@@ -3328,7 +3317,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnParentBackColorChanged(EventArgs e)
         {
-            Color backColor = Properties.GetColor(PropBackColor);
+            Color backColor = Properties.GetColor(s_backColorProperty);
             if (backColor.IsEmpty)
             {
                 OnBackColorChanged(e);
@@ -3366,7 +3355,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         internal protected virtual void OnOwnerFontChanged(EventArgs e)
         {
-            if (Properties.GetObject(PropFont) == null)
+            if (Properties.GetObject(s_fontProperty) == null)
             {
                 OnFontChanged(e);
             }
@@ -3375,7 +3364,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnParentForeColorChanged(EventArgs e)
         {
-            Color foreColor = Properties.GetColor(PropForeColor);
+            Color foreColor = Properties.GetColor(s_foreColorProperty);
             if (foreColor.IsEmpty)
             {
                 OnForeColorChanged(e);
@@ -3385,7 +3374,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected internal virtual void OnParentRightToLeftChanged(EventArgs e)
         {
-            if (!Properties.ContainsInteger(PropRightToLeft) || ((RightToLeft)Properties.GetInteger(PropRightToLeft)) == RightToLeft.Inherit)
+            if (!Properties.ContainsInteger(s_rightToLeftProperty) || ((RightToLeft)Properties.GetInteger(s_rightToLeftProperty)) == RightToLeft.Inherit)
             {
                 OnRightToLeftChanged(e);
             }
@@ -3396,12 +3385,12 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnOwnerChanged(EventArgs e)
         {
-            RaiseEvent(EventOwnerChanged, e);
+            RaiseEvent(s_ownerChangedEvent, e);
             SetAmbientMargin();
             if (Owner != null)
             {
                 // check if we need to fire OnRightToLeftChanged
-                int rightToLeft = Properties.GetInteger(PropRightToLeft, out bool found);
+                int rightToLeft = Properties.GetInteger(s_rightToLeftProperty, out bool found);
                 if (!found)
                 {
                     rightToLeft = (int)RightToLeft.Inherit;
@@ -3417,9 +3406,9 @@ namespace System.Windows.Forms
         internal void OnOwnerTextDirectionChanged()
         {
             ToolStripTextDirection textDirection = ToolStripTextDirection.Inherit;
-            if (Properties.ContainsObject(ToolStripItem.PropTextDirection))
+            if (Properties.ContainsObject(ToolStripItem.s_textDirectionProperty))
             {
-                textDirection = (ToolStripTextDirection)Properties.GetObject(ToolStripItem.PropTextDirection);
+                textDirection = (ToolStripTextDirection)Properties.GetObject(ToolStripItem.s_textDirectionProperty);
             }
 
             if (textDirection == ToolStripTextDirection.Inherit)
@@ -3434,16 +3423,16 @@ namespace System.Windows.Forms
         protected virtual void OnRightToLeftChanged(EventArgs e)
         {
             InvalidateItemLayout(PropertyNames.RightToLeft);
-            RaiseEvent(EventRightToLeft, e);
+            RaiseEvent(s_rightToLeftChangedEvent, e);
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnTextChanged(EventArgs e)
         {
-            cachedTextSize = Size.Empty;
+            _cachedTextSize = Size.Empty;
             // Make sure we clear the cache before we perform the layout.
             InvalidateItemLayout(PropertyNames.Text);
-            RaiseEvent(EventText, e);
+            RaiseEvent(s_textChangedEvent, e);
         }
 
         /// <summary>
@@ -3455,7 +3444,7 @@ namespace System.Windows.Forms
             {
                 Owner.OnItemVisibleChanged(new ToolStripItemEventArgs(this), /*performLayout*/true);
             }
-            RaiseEvent(EventVisibleChanged, e);
+            RaiseEvent(s_visibleChangedEvent, e);
             Animate();
         }
 
@@ -3477,9 +3466,9 @@ namespace System.Windows.Forms
                 return;
             }
 
-            if (state[statePressed] != push)
+            if (_state[s_statePressed] != push)
             {
-                state[statePressed] = push;
+                _state[s_statePressed] = push;
                 if (Available)
                 {
                     Invalidate();
@@ -3493,7 +3482,7 @@ namespace System.Windows.Forms
         protected internal virtual bool ProcessDialogKey(Keys keyData)
         {
             //
-            if (keyData == Keys.Enter || (state[stateSupportsSpaceKey] && keyData == Keys.Space))
+            if (keyData == Keys.Enter || (_state[s_stateSupportsSpaceKey] && keyData == Keys.Space))
             {
                 FireEvent(ToolStripItemEventType.Click);
                 if (ParentInternal != null && !ParentInternal.IsDropDown && Enabled)
@@ -3557,7 +3546,7 @@ namespace System.Windows.Forms
 
         private void ResetToolTipText()
         {
-            toolTipText = null;
+            _toolTipText = null;
         }
 
         // This will only be called in PerMonitorV2 scenarios.
@@ -3571,9 +3560,9 @@ namespace System.Windows.Forms
         internal void RescaleConstantsInternal(int newDpi)
         {
             ToolStripManager.CurrentDpi = newDpi;
-            defaultFont = ToolStripManager.DefaultFont;
-            scaledDefaultMargin = DpiHelper.LogicalToDeviceUnits(defaultMargin, deviceDpi);
-            scaledDefaultStatusStripMargin = DpiHelper.LogicalToDeviceUnits(defaultStatusStripMargin, deviceDpi);
+            _defaultFont = ToolStripManager.DefaultFont;
+            _scaledDefaultMargin = DpiHelper.LogicalToDeviceUnits(s_defaultMargin, _deviceDpi);
+            _scaledDefaultStatusStripMargin = DpiHelper.LogicalToDeviceUnits(s_defaultStatusStripMargin, _deviceDpi);
         }
 
         public void Select()
@@ -3603,11 +3592,11 @@ namespace System.Windows.Forms
 
             if (!Selected)
             {
-                state[stateSelected] = true;
+                _state[s_stateSelected] = true;
                 if (ParentInternal != null)
                 {
                     ParentInternal.NotifySelectionChange(this);
-                    Debug.Assert(state[stateSelected], "calling notify selection change changed the selection state of this item");
+                    Debug.Assert(_state[s_stateSelected], "calling notify selection change changed the selection state of this item");
                 }
                 if (IsOnDropDown)
                 {
@@ -3629,19 +3618,19 @@ namespace System.Windows.Forms
 
         internal void SetOwner(ToolStrip newOwner)
         {
-            if (owner != newOwner)
+            if (_owner != newOwner)
             {
                 Font f = this.Font;
 
-                if (owner != null)
+                if (_owner != null)
                 {
-                    owner.rescaleConstsCallbackDelegate -= ToolStrip_RescaleConstants;
+                    _owner.rescaleConstsCallbackDelegate -= ToolStrip_RescaleConstants;
                 }
-                owner = newOwner;
+                _owner = newOwner;
 
-                if (owner != null)
+                if (_owner != null)
                 {
-                    owner.rescaleConstsCallbackDelegate += ToolStrip_RescaleConstants;
+                    _owner.rescaleConstsCallbackDelegate += ToolStrip_RescaleConstants;
                 }
 
                 // clear the parent if the owner is null...
@@ -3650,7 +3639,7 @@ namespace System.Windows.Forms
                 {
                     this.ParentInternal = null;
                 }
-                if (!state[stateDisposing] && !IsDisposed)
+                if (!_state[s_stateDisposing] && !IsDisposed)
                 {
                     OnOwnerChanged(EventArgs.Empty);
                     if (f != Font)
@@ -3663,9 +3652,9 @@ namespace System.Windows.Forms
 
         protected virtual void SetVisibleCore(bool visible)
         {
-            if (state[stateVisible] != visible)
+            if (_state[s_stateVisible] != visible)
             {
-                state[stateVisible] = visible;
+                _state[s_stateVisible] = visible;
                 Unselect();
                 Push(false);
 
@@ -3679,20 +3668,20 @@ namespace System.Windows.Forms
         /// </summary>
         internal protected virtual void SetBounds(Rectangle bounds)
         {
-            Rectangle oldBounds = this.bounds;
-            this.bounds = bounds;
+            Rectangle oldBounds = _bounds;
+            _bounds = bounds;
 
-            if (!state[stateContstructing])
+            if (!_state[s_stateContstructing])
             {
                 // Dont fire while we're in the base constructor as the inherited
                 // class may not have had a chance to initialize yet.
 
-                if (this.bounds != oldBounds)
+                if (_bounds != oldBounds)
                 {
                     OnBoundsChanged();
                 }
 
-                if (this.bounds.Location != oldBounds.Location)
+                if (_bounds.Location != oldBounds.Location)
                 {
                     OnLocationChanged(EventArgs.Empty);
                 }
@@ -3712,7 +3701,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal void SetPlacement(ToolStripItemPlacement placement)
         {
-            this.placement = placement;
+            _placement = placement;
         }
 
         // Some implementations of DefaultMargin check which container they
@@ -3720,7 +3709,7 @@ namespace System.Windows.Forms
         // DefaultMargin will stop being honored the moment someone sets the Margin property.
         internal void SetAmbientMargin()
         {
-            if (state[stateUseAmbientMargin] && Margin != DefaultMargin)
+            if (_state[s_stateUseAmbientMargin] && Margin != DefaultMargin)
             {
                 CommonProperties.SetMargin(this, DefaultMargin);
             }
@@ -3738,7 +3727,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Never)]
         internal virtual bool ShouldSerializeBackColor()
         {
-            Color backColor = Properties.GetColor(PropBackColor);
+            Color backColor = Properties.GetColor(s_backColorProperty);
             return !backColor.IsEmpty;
         }
 
@@ -3749,7 +3738,7 @@ namespace System.Windows.Forms
 
         private bool ShouldSerializeToolTipText()
         {
-            return !string.IsNullOrEmpty(toolTipText);
+            return !string.IsNullOrEmpty(_toolTipText);
         }
 
         /// <summary>
@@ -3758,7 +3747,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Never)]
         internal virtual bool ShouldSerializeForeColor()
         {
-            Color foreColor = Properties.GetColor(PropForeColor);
+            Color foreColor = Properties.GetColor(s_foreColorProperty);
             return !foreColor.IsEmpty;
         }
 
@@ -3768,7 +3757,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Never)]
         internal virtual bool ShouldSerializeFont()
         {
-            object font = Properties.GetObject(PropFont, out bool found);
+            object font = Properties.GetObject(s_fontProperty, out bool found);
             return (found && font != null);
         }
 
@@ -3796,7 +3785,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Never)]
         private bool ShouldSerializeVisible()
         {
-            return !state[stateVisible]; // only serialize if someone turned off visiblilty
+            return !_state[s_stateVisible]; // only serialize if someone turned off visiblilty
         }
 
         /// <summary>
@@ -3832,7 +3821,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Never)]
         internal virtual bool ShouldSerializeRightToLeft()
         {
-            int rightToLeft = Properties.GetInteger(PropRightToLeft, out bool found);
+            int rightToLeft = Properties.GetInteger(s_rightToLeftProperty, out bool found);
             if (!found)
             {
                 return false;
@@ -3843,9 +3832,9 @@ namespace System.Windows.Forms
         private bool ShouldSerializeTextDirection()
         {
             ToolStripTextDirection textDirection = ToolStripTextDirection.Inherit;
-            if (Properties.ContainsObject(ToolStripItem.PropTextDirection))
+            if (Properties.ContainsObject(ToolStripItem.s_textDirectionProperty))
             {
-                textDirection = (ToolStripTextDirection)Properties.GetObject(ToolStripItem.PropTextDirection);
+                textDirection = (ToolStripTextDirection)Properties.GetObject(ToolStripItem.s_textDirectionProperty);
             }
             return textDirection != ToolStripTextDirection.Inherit;
         }
@@ -3901,7 +3890,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Never)]
         public void ResetMargin()
         {
-            state[stateUseAmbientMargin] = true;
+            _state[s_stateUseAmbientMargin] = true;
             SetAmbientMargin();
         }
 
@@ -4033,9 +4022,9 @@ namespace System.Windows.Forms
         internal void Unselect()
         {
             Debug.WriteLineIf(ToolStrip.SelectionDebug.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "[Selection DBG] WBI.Unselect: {0}", ToString()));
-            if (state[stateSelected])
+            if (_state[s_stateSelected])
             {
-                state[stateSelected] = false;
+                _state[s_stateSelected] = false;
                 if (Available)
                 {
                     Invalidate();
@@ -4053,7 +4042,7 @@ namespace System.Windows.Forms
 
         bool IKeyboardToolTip.CanShowToolTipsNow()
         {
-            return Visible && parent != null && ((IKeyboardToolTip)parent).AllowsChildrenToShowToolTips();
+            return Visible && _parent != null && ((IKeyboardToolTip)_parent).AllowsChildrenToShowToolTips();
         }
 
         Rectangle IKeyboardToolTip.GetNativeScreenRectangle()
@@ -4064,9 +4053,9 @@ namespace System.Windows.Forms
         IList<Rectangle> IKeyboardToolTip.GetNeighboringToolsRectangles()
         {
             List<Rectangle> neighbors = new List<Rectangle>(3);
-            if (parent != null)
+            if (_parent != null)
             {
-                ToolStripItemCollection items = parent.DisplayedItems;
+                ToolStripItemCollection items = _parent.DisplayedItems;
                 int i = 0, count = items.Count;
                 bool found = false;
                 while (!found && i < count)
@@ -4094,7 +4083,7 @@ namespace System.Windows.Forms
                 Debug.Assert(i < count, "Item has a parent set but the parent doesn't own the item");
             }
 
-            if (parent is ToolStripDropDown dropDown && dropDown.OwnerItem != null)
+            if (_parent is ToolStripDropDown dropDown && dropDown.OwnerItem != null)
             {
                 neighbors.Add(((IKeyboardToolTip)dropDown.OwnerItem).GetNativeScreenRectangle());
             }
@@ -4109,7 +4098,7 @@ namespace System.Windows.Forms
 
         bool IKeyboardToolTip.HasRtlModeEnabled()
         {
-            return parent != null && ((IKeyboardToolTip)parent).HasRtlModeEnabled();
+            return _parent != null && ((IKeyboardToolTip)_parent).HasRtlModeEnabled();
         }
 
         bool IKeyboardToolTip.AllowsToolTip()
@@ -4174,25 +4163,22 @@ namespace System.Windows.Forms
         [Runtime.InteropServices.ComVisible(true)]
         public class ToolStripItemAccessibleObject : AccessibleObject
         {
-            // Member variables
+            private readonly ToolStripItem _ownerItem; // The associated ToolStripItem for this AccessibleChild (if any)
 
-            private readonly ToolStripItem ownerItem = null; // The associated ToolStripItem for this AccessibleChild (if any)
+            private AccessibleStates _additionalState = AccessibleStates.None; // Test hook for the designer
 
-            private AccessibleStates additionalState = AccessibleStates.None;  // Test hook for the designer
-
-            private int[] runtimeId = null; // Used by UIAutomation
-            // constructors
+            private int[] _runtimeId;
 
             public ToolStripItemAccessibleObject(ToolStripItem ownerItem)
             {
-                this.ownerItem = ownerItem ?? throw new ArgumentNullException(nameof(ownerItem));
+                _ownerItem = ownerItem ?? throw new ArgumentNullException(nameof(ownerItem));
             }
 
             public override string DefaultAction
             {
                 get
                 {
-                    string defaultAction = ownerItem.AccessibleDefaultActionDescription;
+                    string defaultAction = _ownerItem.AccessibleDefaultActionDescription;
                     if (defaultAction != null)
                     {
                         return defaultAction;
@@ -4208,7 +4194,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    string description = ownerItem.AccessibleDescription;
+                    string description = _ownerItem.AccessibleDescription;
                     if (description != null)
                     {
                         return description;
@@ -4224,7 +4210,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    QueryAccessibilityHelpEventHandler handler = (QueryAccessibilityHelpEventHandler)Owner.Events[ToolStripItem.EventQueryAccessibilityHelp];
+                    QueryAccessibilityHelpEventHandler handler = (QueryAccessibilityHelpEventHandler)Owner.Events[ToolStripItem.s_queryAccessibilityHelpEvent];
 
                     if (handler != null)
                     {
@@ -4245,8 +4231,8 @@ namespace System.Windows.Forms
                 {
                     // This really is the Mnemonic - NOT the shortcut.  E.g. in notepad Edit->Replace is Control+H
                     // but the KeyboardShortcut comes up as the mnemonic 'r'.
-                    char mnemonic = WindowsFormsUtils.GetMnemonic(ownerItem.Text, false);
-                    if (ownerItem.IsOnDropDown)
+                    char mnemonic = WindowsFormsUtils.GetMnemonic(_ownerItem.Text, false);
+                    if (_ownerItem.IsOnDropDown)
                     {
                         // no ALT on dropdown
                         return (mnemonic == (char)0) ? string.Empty : mnemonic.ToString();
@@ -4259,19 +4245,19 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (runtimeId == null)
+                    if (_runtimeId == null)
                     {
                         // we need to provide a unique ID
                         // others are implementing this in the same manner
                         // first item should be UiaAppendRuntimeId since this is not a top-level element of the fragment.
                         // second item can be anything, but here it is a hash. For toolstrip hash is unique even with child controls. Hwnd  is not.
 
-                        runtimeId = new int[2];
-                        runtimeId[0] = NativeMethods.UiaAppendRuntimeId;
-                        runtimeId[1] = ownerItem.GetHashCode();
+                        _runtimeId = new int[2];
+                        _runtimeId[0] = NativeMethods.UiaAppendRuntimeId;
+                        _runtimeId[1] = _ownerItem.GetHashCode();
                     }
 
-                    return runtimeId;
+                    return _runtimeId;
                 }
             }
 
@@ -4289,13 +4275,13 @@ namespace System.Windows.Forms
                     case UiaCore.UIA.IsExpandCollapsePatternAvailablePropertyId:
                         return (object)IsPatternSupported(UiaCore.UIA.ExpandCollapsePatternId);
                     case UiaCore.UIA.IsEnabledPropertyId:
-                        return ownerItem.Enabled;
+                        return _ownerItem.Enabled;
                     case UiaCore.UIA.IsOffscreenPropertyId:
-                        return ownerItem.Placement != ToolStripItemPlacement.Main;
+                        return _ownerItem.Placement != ToolStripItemPlacement.Main;
                     case UiaCore.UIA.IsKeyboardFocusablePropertyId:
-                        return ownerItem.CanSelect;
+                        return _ownerItem.CanSelect;
                     case UiaCore.UIA.HasKeyboardFocusPropertyId:
-                        return ownerItem.Selected;
+                        return _ownerItem.Selected;
                     case UiaCore.UIA.AccessKeyPropertyId:
                         return KeyboardShortcut;
                     case UiaCore.UIA.IsPasswordPropertyId:
@@ -4311,7 +4297,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    string name = ownerItem.AccessibleName;
+                    string name = _ownerItem.AccessibleName;
                     if (name != null)
                     {
                         return name;
@@ -4321,14 +4307,14 @@ namespace System.Windows.Forms
 
                     if (baseName == null || baseName.Length == 0)
                     {
-                        return WindowsFormsUtils.TextWithoutMnemonics(ownerItem.Text);
+                        return WindowsFormsUtils.TextWithoutMnemonics(_ownerItem.Text);
                     }
 
                     return baseName;
                 }
                 set
                 {
-                    ownerItem.AccessibleName = value;
+                    _ownerItem.AccessibleName = value;
                 }
             }
 
@@ -4336,7 +4322,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    return ownerItem;
+                    return _ownerItem;
                 }
             }
 
@@ -4344,7 +4330,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    AccessibleRole role = ownerItem.AccessibleRole;
+                    AccessibleRole role = _ownerItem.AccessibleRole;
                     if (role != AccessibleRole.Default)
                     {
                         return role;
@@ -4360,34 +4346,34 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (!ownerItem.CanSelect)
+                    if (!_ownerItem.CanSelect)
                     {
-                        return base.State | additionalState;
+                        return base.State | _additionalState;
                     }
 
-                    if (!ownerItem.Enabled)
+                    if (!_ownerItem.Enabled)
                     {
-                        if (ownerItem.Selected && ownerItem is ToolStripMenuItem)
+                        if (_ownerItem.Selected && _ownerItem is ToolStripMenuItem)
                         {
-                            return AccessibleStates.Unavailable | additionalState | AccessibleStates.Focused;
+                            return AccessibleStates.Unavailable | _additionalState | AccessibleStates.Focused;
                         }
 
                         // Disabled menu items that are selected must have focus
                         // state so that Narrator can announce them.
-                        if (ownerItem.Selected && ownerItem is ToolStripMenuItem)
+                        if (_ownerItem.Selected && _ownerItem is ToolStripMenuItem)
                         {
                             return AccessibleStates.Focused;
                         }
 
-                        return AccessibleStates.Unavailable | additionalState;
+                        return AccessibleStates.Unavailable | _additionalState;
                     }
 
-                    AccessibleStates accState = AccessibleStates.Focusable | additionalState;
-                    if (ownerItem.Selected || ownerItem.Pressed)
+                    AccessibleStates accState = AccessibleStates.Focusable | _additionalState;
+                    if (_ownerItem.Selected || _ownerItem.Pressed)
                     {
                         accState |= AccessibleStates.Focused | AccessibleStates.HotTracked;
                     }
-                    if (ownerItem.Pressed)
+                    if (_ownerItem.Pressed)
                     {
                         accState |= AccessibleStates.Pressed;
                     }
@@ -4406,7 +4392,7 @@ namespace System.Windows.Forms
             {
                 int topic = 0;
 
-                QueryAccessibilityHelpEventHandler handler = (QueryAccessibilityHelpEventHandler)Owner.Events[ToolStripItem.EventQueryAccessibilityHelp];
+                QueryAccessibilityHelpEventHandler handler = (QueryAccessibilityHelpEventHandler)Owner.Events[ToolStripItem.s_queryAccessibilityHelpEvent];
 
                 if (handler != null)
                 {
@@ -4481,11 +4467,11 @@ namespace System.Windows.Forms
             {
                 if (state == AccessibleStates.None)
                 {
-                    additionalState = state;
+                    _additionalState = state;
                 }
                 else
                 {
-                    additionalState |= state;
+                    _additionalState |= state;
                 }
             }
 
@@ -4542,7 +4528,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    return ownerItem.RootToolStrip?.AccessibilityObject;
+                    return _ownerItem.RootToolStrip?.AccessibilityObject;
                 }
             }
 
@@ -4661,7 +4647,7 @@ namespace System.Windows.Forms
 
             internal void RaiseFocusChanged()
             {
-                ToolStrip root = ownerItem.RootToolStrip;
+                ToolStrip root = _ownerItem.RootToolStrip;
                 if (root != null && root.SupportsUiaProviders)
                 {
                     RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
@@ -4674,20 +4660,20 @@ namespace System.Windows.Forms
     // list for indexing purposes.
     internal class ToolStripItemImageIndexer : ImageList.Indexer
     {
-        private readonly ToolStripItem item;
+        private readonly ToolStripItem _item;
 
         public ToolStripItemImageIndexer(ToolStripItem item)
         {
-            this.item = item;
+            _item = item;
         }
 
         public override ImageList ImageList
         {
             get
             {
-                if ((item != null) && (item.Owner != null))
+                if ((_item != null) && (_item.Owner != null))
                 {
-                    return item.Owner.ImageList;
+                    return _item.Owner.ImageList;
                 }
                 return null;
             }
@@ -4700,25 +4686,25 @@ namespace System.Windows.Forms
     /// </summary>
     internal class ToolStripItemInternalLayout
     {
-        private ToolStripItemLayoutOptions currentLayoutOptions;
-        private readonly ToolStripItem ownerItem;
-        private ButtonBaseAdapter.LayoutData layoutData;
-        private const int BORDER_WIDTH = 2;
-        private const int BORDER_HEIGHT = 3;
-        private readonly static Size INVALID_SIZE = new Size(int.MinValue, int.MinValue);
+        private ToolStripItemLayoutOptions _currentLayoutOptions;
+        private readonly ToolStripItem _ownerItem;
+        private ButtonBaseAdapter.LayoutData _layoutData;
+        private const int BorderWidth = 2;
+        private const int BorderHeight = 3;
+        private readonly static Size s_invalidSize = new Size(int.MinValue, int.MinValue);
 
-        private Size lastPreferredSize = INVALID_SIZE;
-        private ToolStripLayoutData parentLayoutData = null;
+        private Size _lastPreferredSize = s_invalidSize;
+        private ToolStripLayoutData _parentLayoutData;
 
         public ToolStripItemInternalLayout(ToolStripItem ownerItem)
         {
-            this.ownerItem = ownerItem ?? throw new ArgumentNullException(nameof(ownerItem));
+            this._ownerItem = ownerItem ?? throw new ArgumentNullException(nameof(ownerItem));
         }
 
         // the thing that we fetch properties off of -- this can be different than ownerItem - e.g. case of split button.
         protected virtual ToolStripItem Owner
         {
-            get { return ownerItem; }
+            get { return _ownerItem; }
         }
 
         public virtual Rectangle ImageRectangle
@@ -4726,7 +4712,7 @@ namespace System.Windows.Forms
             get
             {
                 Rectangle imageRect = LayoutData.imageBounds;
-                imageRect.Intersect(layoutData.field);
+                imageRect.Intersect(_layoutData.field);
                 return imageRect;
             }
         }
@@ -4736,7 +4722,7 @@ namespace System.Windows.Forms
             get
             {
                 EnsureLayout();
-                return layoutData;
+                return _layoutData;
             }
         }
 
@@ -4752,7 +4738,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return ownerItem?.ParentInternal;
+                return _ownerItem?.ParentInternal;
             }
         }
 
@@ -4761,7 +4747,7 @@ namespace System.Windows.Forms
             get
             {
                 Rectangle textRect = LayoutData.textBounds;
-                textRect.Intersect(layoutData.field);
+                textRect.Intersect(_layoutData.field);
                 return textRect;
             }
         }
@@ -4778,9 +4764,9 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (currentLayoutOptions != null)
+                if (_currentLayoutOptions != null)
                 {
-                    return currentLayoutOptions.gdiTextFormatFlags;
+                    return _currentLayoutOptions.gdiTextFormatFlags;
                 }
                 return CommonLayoutOptions().gdiTextFormatFlags;
             }
@@ -4804,17 +4790,17 @@ namespace System.Windows.Forms
         protected virtual ToolStripItemLayoutOptions CommonLayoutOptions()
         {
             ToolStripItemLayoutOptions layoutOptions = new ToolStripItemLayoutOptions();
-            Rectangle bounds = new Rectangle(Point.Empty, ownerItem.Size);
+            Rectangle bounds = new Rectangle(Point.Empty, _ownerItem.Size);
 
             layoutOptions.client = bounds;
 
             layoutOptions.growBorderBy1PxWhenDefault = false;
 
-            layoutOptions.borderSize = BORDER_WIDTH;
+            layoutOptions.borderSize = BorderWidth;
             layoutOptions.paddingSize = 0;
             layoutOptions.maxFocus = true;
             layoutOptions.focusOddEvenFixup = false;
-            layoutOptions.font = ownerItem.Font;
+            layoutOptions.font = _ownerItem.Font;
             layoutOptions.text = ((Owner.DisplayStyle & ToolStripItemDisplayStyle.Text) == ToolStripItemDisplayStyle.Text) ? Owner.Text : string.Empty;
             layoutOptions.imageSize = PreferredImageSize;
             layoutOptions.checkSize = 0;
@@ -4823,7 +4809,7 @@ namespace System.Windows.Forms
             layoutOptions.imageAlign = Owner.ImageAlign;
             layoutOptions.textAlign = Owner.TextAlign;
             layoutOptions.hintTextUp = false;
-            layoutOptions.shadowedText = !ownerItem.Enabled;
+            layoutOptions.shadowedText = !_ownerItem.Enabled;
             layoutOptions.layoutRTL = RightToLeft.Yes == Owner.RightToLeft;
             layoutOptions.textImageRelation = Owner.TextImageRelation;
             //set textImageInset to 0 since we don't draw 3D border for ToolStripItems.
@@ -4841,7 +4827,7 @@ namespace System.Windows.Forms
 
         private bool EnsureLayout()
         {
-            if (layoutData == null || parentLayoutData == null || !parentLayoutData.IsCurrent(ParentInternal))
+            if (_layoutData == null || _parentLayoutData == null || !_parentLayoutData.IsCurrent(ParentInternal))
             {
                 PerformLayout();
                 return true;
@@ -4851,14 +4837,14 @@ namespace System.Windows.Forms
 
         private ButtonBaseAdapter.LayoutData GetLayoutData()
         {
-            currentLayoutOptions = CommonLayoutOptions();
+            _currentLayoutOptions = CommonLayoutOptions();
 
             if (Owner.TextDirection != ToolStripTextDirection.Horizontal)
             {
-                currentLayoutOptions.verticalText = true;
+                _currentLayoutOptions.verticalText = true;
             }
 
-            ButtonBaseAdapter.LayoutData data = currentLayoutOptions.Layout();
+            ButtonBaseAdapter.LayoutData data = _currentLayoutOptions.Layout();
             return data;
         }
         public virtual Size GetPreferredSize(Size constrainingSize)
@@ -4871,25 +4857,25 @@ namespace System.Windows.Forms
             // bigger than the ToolStrip itself.  Note this is "Parent" not
             // "Owner" because we care in this instance what we're currently displayed on.
 
-            if (ownerItem != null)
+            if (_ownerItem != null)
             {
-                lastPreferredSize = currentLayoutOptions.GetPreferredSizeCore(constrainingSize);
-                return lastPreferredSize;
+                _lastPreferredSize = _currentLayoutOptions.GetPreferredSizeCore(constrainingSize);
+                return _lastPreferredSize;
             }
             return Size.Empty;
         }
 
         internal void PerformLayout()
         {
-            layoutData = GetLayoutData();
+            _layoutData = GetLayoutData();
             ToolStrip parent = ParentInternal;
             if (parent != null)
             {
-                parentLayoutData = new ToolStripLayoutData(parent);
+                _parentLayoutData = new ToolStripLayoutData(parent);
             }
             else
             {
-                parentLayoutData = null;
+                _parentLayoutData = null;
             }
         }
 
