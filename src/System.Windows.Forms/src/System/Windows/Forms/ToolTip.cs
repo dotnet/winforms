@@ -10,6 +10,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using static Interop;
 using static Interop.ComCtl32;
@@ -1276,7 +1277,6 @@ namespace System.Windows.Forms
             else if (!empty)
             {
                 _tools[control] = info;
-                control.LostFocus += OnControlLostFocus;
             }
 
             CheckNativeCompositeControls(control, info.Caption);
@@ -1290,6 +1290,10 @@ namespace System.Windows.Forms
                 {
                     HandleCreated(control, EventArgs.Empty);
                 }
+
+                // !exists condition guarantees a single execution even when changing the text
+                // It isn't guarded by IsHandleCreated because often a tooltip is set when Handle isn't yet created.
+                control.LostFocus += OnControlLostFocus; // control have already added to _tools above
             }
             else
             {
@@ -1315,7 +1319,6 @@ namespace System.Windows.Forms
                     }
 
                     _created.Remove(control);
-                    control.LostFocus -= OnControlLostFocus;
                 }
             }
         }
