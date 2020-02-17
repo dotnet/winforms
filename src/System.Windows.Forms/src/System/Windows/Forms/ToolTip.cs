@@ -685,12 +685,10 @@ namespace System.Windows.Forms
 
         private void CheckNativeCompositeControls(Control associatedControl, string text)
         {
-            if (!(associatedControl is TabPage))
+            if (!(associatedControl is TabPage tabPage))
             {
                 return;
             }
-
-            TabPage tabPage = associatedControl as TabPage;
 
             if (tabPage.ToolTip != this)
             {
