@@ -720,6 +720,17 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
+        ///  Handles LostFocus event of a set control
+        /// </summary>
+        private void OnControlLostFocus(object sender, EventArgs e)
+        {
+            if (sender is IWin32Window window)
+            {
+                Hide(window);
+            }
+        }
+
+        /// <summary>
         ///  Fires the Draw event.
         /// </summary>
         private void OnDraw(DrawToolTipEventArgs e) => _onDraw?.Invoke(this, e);
@@ -1194,6 +1205,7 @@ namespace System.Windows.Forms
 
                 regions[i].HandleCreated -= new EventHandler(HandleCreated);
                 regions[i].HandleDestroyed -= new EventHandler(HandleDestroyed);
+                regions[i].LostFocus -= OnControlLostFocus;
 
                 KeyboardToolTipStateMachine.Instance.Unhook(regions[i], this);
             }
@@ -1241,7 +1253,6 @@ namespace System.Windows.Forms
         {
             TipInfo info = new TipInfo(caption, TipInfo.Type.Auto);
             SetToolTipInternal(control, info);
-            control.LostFocus += (object sender, EventArgs e) => Hide(control);
         }
 
         /// <summary>
@@ -1260,10 +1271,12 @@ namespace System.Windows.Forms
             if (exists && empty)
             {
                 _tools.Remove(control);
+                control.LostFocus -= OnControlLostFocus;
             }
             else if (!empty)
             {
                 _tools[control] = info;
+                control.LostFocus += OnControlLostFocus;
             }
 
             CheckNativeCompositeControls(control, info.Caption);
@@ -1302,6 +1315,7 @@ namespace System.Windows.Forms
                     }
 
                     _created.Remove(control);
+                    control.LostFocus -= OnControlLostFocus;
                 }
             }
         }
