@@ -103,11 +103,8 @@ namespace System.Windows.Forms
 
         MSAA_MENU_SIG = (unchecked((int)0xAA0DF00D));
 
-        public const int NIM_ADD = 0x00000000,
-        NIM_MODIFY = 0x00000001,
-        NIM_DELETE = 0x00000002,
+        public const int
         NIF_MESSAGE = 0x00000001,
-        NIM_SETVERSION = 0x00000004,
         NIF_ICON = 0x00000002,
         NIF_INFO = 0x00000010,
         NIF_TIP = 0x00000004,
