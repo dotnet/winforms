@@ -506,7 +506,7 @@ namespace System.Windows.Forms
 
         private bool ShouldSerializeName()
         {
-            return !string.IsNullOrEmpty(name);
+            return !string.IsNullOrEmpty(Name);
         }
 
         private bool ShouldSerializeDisplayIndex()
