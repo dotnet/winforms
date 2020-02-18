@@ -27,6 +27,8 @@ namespace System.Windows.Forms
                 this.owner = owner;
             }
 
+            internal override bool IsReadOnly => owner.ReadOnly;
+
             public override string Name
             {
                 get
