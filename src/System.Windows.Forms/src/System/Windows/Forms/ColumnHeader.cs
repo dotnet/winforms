@@ -16,12 +16,10 @@ namespace System.Windows.Forms
     /// <summary>
     ///  Displays a single column header in a <see cref='Forms.ListView'/> control.
     /// </summary>
-    [
-    ToolboxItem(false),
-    DesignTimeVisible(false),
-    DefaultProperty(nameof(Text)),
-    TypeConverter(typeof(ColumnHeaderConverter))
-    ]
+    [ToolboxItem(false)]
+    [DesignTimeVisible(false)]
+    [DefaultProperty(nameof(Text))]
+    [TypeConverter(typeof(ColumnHeaderConverter))]
     public class ColumnHeader : Component, ICloneable
     {
         // disable csharp compiler warning #0414: field assigned unused value
@@ -99,12 +97,10 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            Localizable(true),
-            RefreshProperties(RefreshProperties.Repaint),
-        SRCategory(nameof(SR.CatBehavior)),
-        SRDescription(nameof(SR.ColumnHeaderDisplayIndexDescr))
-        ]
+        [Localizable(true)]
+        [RefreshProperties(RefreshProperties.Repaint)]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [SRDescription(nameof(SR.ColumnHeaderDisplayIndexDescr))]
         public int DisplayIndex
         {
             get
@@ -190,13 +186,11 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-        DefaultValue(-1),
-        TypeConverter(typeof(ImageIndexConverter)),
-        Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
-        RefreshProperties(RefreshProperties.Repaint),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [DefaultValue(-1)]
+        [TypeConverter(typeof(ImageIndexConverter))]
+        [Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
+        [RefreshProperties(RefreshProperties.Repaint)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public int ImageIndex
         {
             get
@@ -236,13 +230,11 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-        DefaultValue(""),
-        TypeConverter(typeof(ImageKeyConverter)),
-        Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
-        RefreshProperties(RefreshProperties.Repaint),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [DefaultValue("")]
+        [TypeConverter(typeof(ImageKeyConverter))]
+        [Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
+        [RefreshProperties(RefreshProperties.Repaint)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public string ImageKey
         {
             get
@@ -278,10 +270,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The Name of the column header
         /// </summary>
-        [
-        Browsable(false),
-        SRDescription(nameof(SR.ColumnHeaderNameDescr))
-        ]
+        [Browsable(false)]
+        [SRDescription(nameof(SR.ColumnHeaderNameDescr))]
         public string Name
         {
             get
@@ -308,15 +298,13 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The text displayed in the column header
         /// </summary>
-        [
-        Localizable(true),
-        SRDescription(nameof(SR.ColumnCaption))
-        ]
+        [Localizable(true)]
+        [SRDescription(nameof(SR.ColumnCaption))]
         public string Text
         {
             get
             {
-                return (text ?? "ColumnHeader");
+                return text ?? nameof(ColumnHeader);
             }
             set
             {
@@ -338,11 +326,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The horizontal alignment of the text contained in this column
         /// </summary>
-        [
-        SRDescription(nameof(SR.ColumnAlignment)),
-        Localizable(true),
-        DefaultValue(HorizontalAlignment.Left)
-        ]
+        [SRDescription(nameof(SR.ColumnAlignment))]
+        [Localizable(true)]
+        [DefaultValue(HorizontalAlignment.Left)]
         public HorizontalAlignment TextAlign
         {
             get
@@ -351,7 +337,7 @@ namespace System.Windows.Forms
                 {
                     textAlignInitialized = true;
                     // See below for an explanation of (Index != 0)
-                    //Added !IsMirrored
+                    // Added !IsMirrored
                     if ((Index != 0) && (listview.RightToLeft == RightToLeft.Yes) && !listview.IsMirrored)
                     {
                         textAlign = HorizontalAlignment.Right;
@@ -361,7 +347,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                //valid values are 0x0 to 0x2.
+                // valid values are 0x0 to 0x2.
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)HorizontalAlignment.Left, (int)HorizontalAlignment.Center))
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(HorizontalAlignment));
@@ -383,14 +369,12 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-        SRCategory(nameof(SR.CatData)),
-        Localizable(false),
-        Bindable(true),
-        SRDescription(nameof(SR.ControlTagDescr)),
-        DefaultValue(null),
-        TypeConverter(typeof(StringConverter)),
-        ]
+        [SRCategory(nameof(SR.CatData))]
+        [Localizable(false)]
+        [Bindable(true)]
+        [SRDescription(nameof(SR.ControlTagDescr))]
+        [DefaultValue(null)]
+        [TypeConverter(typeof(StringConverter))]
         public object Tag
         {
             get
@@ -410,14 +394,13 @@ namespace System.Windows.Forms
                 return width;
             }
         }
+
         /// <summary>
         ///  The width of the column in pixels.
         /// </summary>
-        [
-        SRDescription(nameof(SR.ColumnWidth)),
-        Localizable(true),
-        DefaultValue(60)
-        ]
+        [SRDescription(nameof(SR.ColumnWidth))]
+        [Localizable(true)]
+        [DefaultValue(60)]
         public int Width
         {
             get
@@ -533,7 +516,7 @@ namespace System.Windows.Forms
 
         internal bool ShouldSerializeText()
         {
-            return (text != null);
+            return text != null;
         }
 
         /// <summary>
@@ -541,7 +524,7 @@ namespace System.Windows.Forms
         /// </summary>
         public override string ToString()
         {
-            return "ColumnHeader: Text: " + Text;
+            return $"{nameof(ColumnHeader)}: Text: {Text}";
         }
 
         internal class ColumnHeaderImageListIndexer : ImageList.Indexer
