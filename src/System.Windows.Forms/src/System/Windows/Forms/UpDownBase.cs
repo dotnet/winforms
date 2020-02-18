@@ -15,163 +15,116 @@ using static Interop;
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///  Implements the basic
-    ///  functionality required by an up-down control.
+    ///  Implements the basic functionality required by an up-down control.
     /// </summary>
-    [
-    ComVisible(true),
-    ClassInterface(ClassInterfaceType.AutoDispatch),
-    Designer("System.Windows.Forms.Design.UpDownBaseDesigner, " + AssemblyRef.SystemDesign),
-    ]
-    public abstract class UpDownBase : ContainerControl
+    [ComVisible(true)]
+    [ClassInterface(ClassInterfaceType.AutoDispatch)]
+    [Designer("System.Windows.Forms.Design.UpDownBaseDesigner, " + AssemblyRef.SystemDesign)]
+    public abstract partial class UpDownBase : ContainerControl
     {
         private const int DefaultWheelScrollLinesPerPage = 1;
         private const int DefaultButtonsWidth = 16;
         private const int DefaultControlWidth = 120;
         private const int ThemedBorderWidth = 1; // width of custom border we draw when themed
         private const BorderStyle DefaultBorderStyle = BorderStyle.Fixed3D;
-        private static readonly bool DefaultInterceptArrowKeys = true;
         private const LeftRightAlignment DefaultUpDownAlign = LeftRightAlignment.Right;
         private const int DefaultTimerInterval = 500;
 
-        ////////////////////////////////////////////////////////////////////////
-        // Member variables
-        //
-        ////////////////////////////////////////////////////////////////////////
         // Child controls
-        internal UpDownEdit upDownEdit; // See nested class at end of this file
-        internal UpDownButtons upDownButtons; // See nested class at end of this file
+        internal UpDownEdit _upDownEdit;
+        internal UpDownButtons _upDownButtons;
 
-        // Intercept arrow keys?
-        private bool interceptArrowKeys = DefaultInterceptArrowKeys;
-
-        // If true, the updown buttons will be drawn on the left-hand side of the control.
-        private LeftRightAlignment upDownAlign = DefaultUpDownAlign;
-
-        // userEdit is true when the text of the control has been changed,
-        // and the internal value of the control has not yet been updated.
-        // We do not always want to keep the internal value up-to-date,
-        // hence this variable.
-        private bool userEdit = false;
+        private LeftRightAlignment _upDownAlign = DefaultUpDownAlign;
 
         /// <summary>
         ///  The current border for this edit control.
         /// </summary>
-        private BorderStyle borderStyle = DefaultBorderStyle;
+        private BorderStyle _borderStyle = DefaultBorderStyle;
 
         // Mouse wheel movement
-        private int wheelDelta = 0;
-
-        // Indicates if the edit text is being changed
-        private bool changingText = false;
-
-        // Indicates whether we have doubleClicked
-        private bool doubleClickFired = false;
-
-        internal int defaultButtonsWidth = DefaultButtonsWidth;
+        private int wheelDelta;
+        private bool _doubleClickFired;
+        internal int _defaultButtonsWidth = DefaultButtonsWidth;
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref='UpDownBase'/>
-        ///  class.
+        ///  Initializes a new instance of the <see cref='UpDownBase'/> class.
         /// </summary>
         public UpDownBase()
         {
             if (DpiHelper.IsScalingRequired)
             {
-                defaultButtonsWidth = LogicalToDeviceUnits(DefaultButtonsWidth);
+                _defaultButtonsWidth = LogicalToDeviceUnits(DefaultButtonsWidth);
             }
 
-            upDownButtons = new UpDownButtons(this);
-            upDownEdit = new UpDownEdit(this)
+            _upDownButtons = new UpDownButtons(this);
+            _upDownEdit = new UpDownEdit(this)
             {
                 BorderStyle = BorderStyle.None,
                 AutoSize = false
             };
-            upDownEdit.KeyDown += new KeyEventHandler(OnTextBoxKeyDown);
-            upDownEdit.KeyPress += new KeyPressEventHandler(OnTextBoxKeyPress);
-            upDownEdit.TextChanged += new EventHandler(OnTextBoxTextChanged);
-            upDownEdit.LostFocus += new EventHandler(OnTextBoxLostFocus);
-            upDownEdit.Resize += new EventHandler(OnTextBoxResize);
-            upDownButtons.TabStop = false;
-            upDownButtons.Size = new Size(defaultButtonsWidth, PreferredHeight);
-            upDownButtons.UpDown += new UpDownEventHandler(OnUpDown);
+            _upDownEdit.KeyDown += new KeyEventHandler(OnTextBoxKeyDown);
+            _upDownEdit.KeyPress += new KeyPressEventHandler(OnTextBoxKeyPress);
+            _upDownEdit.TextChanged += new EventHandler(OnTextBoxTextChanged);
+            _upDownEdit.LostFocus += new EventHandler(OnTextBoxLostFocus);
+            _upDownEdit.Resize += new EventHandler(OnTextBoxResize);
+            _upDownButtons.TabStop = false;
+            _upDownButtons.Size = new Size(_defaultButtonsWidth, PreferredHeight);
+            _upDownButtons.UpDown += new UpDownEventHandler(OnUpDown);
 
-            Controls.AddRange(new Control[] { upDownButtons, upDownEdit });
+            Controls.AddRange(new Control[] { _upDownButtons, _upDownEdit });
 
             SetStyle(ControlStyles.Opaque | ControlStyles.FixedHeight | ControlStyles.ResizeRedraw, true);
             SetStyle(ControlStyles.StandardClick, false);
             SetStyle(ControlStyles.UseTextForAccessibility, false);
         }
 
-        ////////////////////////////////////////////////////////////////////////
-        // Properties
-        //
-        ////////////////////////////////////////////////////////////////////////
-        // AutoScroll is not relevant to an UpDownBase
-        /// <hideinheritance/>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override bool AutoScroll
         {
-            get
-            {
-                return false;
-            }
+            get => false;
             set
             {
                 // Don't allow AutoScroll to be set to anything
             }
         }
 
-        // AutoScrollMargin is not relevant to an UpDownBase
-        /// <hideinheritance/>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        new public Size AutoScrollMargin
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public new Size AutoScrollMargin
         {
-            get
-            {
-                return base.AutoScrollMargin;
-            }
-            set
-            {
-                base.AutoScrollMargin = value;
-            }
+            get => base.AutoScrollMargin;
+            set => base.AutoScrollMargin = value;
         }
 
-        // AutoScrollMinSize is not relevant to an UpDownBase
-        /// <hideinheritance/>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        new public Size AutoScrollMinSize
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public new Size AutoScrollMinSize
         {
-            get
-            {
-                return base.AutoScrollMinSize;
-            }
-            set
-            {
-                base.AutoScrollMinSize = value;
-            }
+            get => base.AutoScrollMinSize;
+            set => base.AutoScrollMinSize = value;
         }
 
         /// <summary>
         ///  Override to re-expose AutoSize.
         /// </summary>
-        [Browsable(true), EditorBrowsable(EditorBrowsableState.Always),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
+        [Browsable(true)]
+        [EditorBrowsable(EditorBrowsableState.Always)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
         public override bool AutoSize
         {
-            get
-            {
-                return base.AutoSize;
-            }
-            set
-            {
-                base.AutoSize = value;
-            }
+            get => base.AutoSize;
+            set => base.AutoSize = value;
         }
 
-        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnAutoSizeChangedDescr))]
-        [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
-        new public event EventHandler AutoSizeChanged
+        [SRCategory(nameof(SR.CatPropertyChanged))]
+        [SRDescription(nameof(SR.ControlOnAutoSizeChangedDescr))]
+        [Browsable(true)]
+        [EditorBrowsable(EditorBrowsableState.Always)]
+        public new event EventHandler AutoSizeChanged
         {
             add => base.AutoSizeChanged += value;
             remove => base.AutoSizeChanged -= value;
@@ -183,53 +136,44 @@ namespace System.Windows.Forms
         /// </summary>
         public override Color BackColor
         {
-            get
-            {
-                return upDownEdit.BackColor;
-            }
+            get => _upDownEdit.BackColor;
             set
             {
                 base.BackColor = value; // Don't remove this or you will break serialization.
-                upDownEdit.BackColor = value;
+                _upDownEdit.BackColor = value;
                 Invalidate();
             }
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override Image BackgroundImage
         {
-            get
-            {
-                return base.BackgroundImage;
-            }
-            set
-            {
-                base.BackgroundImage = value;
-            }
+            get => base.BackgroundImage;
+            set => base.BackgroundImage = value;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler BackgroundImageChanged
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public new event EventHandler BackgroundImageChanged
         {
             add => base.BackgroundImageChanged += value;
             remove => base.BackgroundImageChanged -= value;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override ImageLayout BackgroundImageLayout
         {
-            get
-            {
-                return base.BackgroundImageLayout;
-            }
-            set
-            {
-                base.BackgroundImageLayout = value;
-            }
+            get => base.BackgroundImageLayout;
+            set => base.BackgroundImageLayout = value;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler BackgroundImageLayoutChanged
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public new event EventHandler BackgroundImageLayoutChanged
         {
             add => base.BackgroundImageLayoutChanged += value;
             remove => base.BackgroundImageLayoutChanged -= value;
@@ -244,7 +188,7 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.UpDownBaseBorderStyleDescr))]
         public BorderStyle BorderStyle
         {
-            get => borderStyle;
+            get => _borderStyle;
             set
             {
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)BorderStyle.None, (int)BorderStyle.Fixed3D))
@@ -252,50 +196,30 @@ namespace System.Windows.Forms
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(BorderStyle));
                 }
 
-                if (borderStyle != value)
+                if (_borderStyle != value)
                 {
-                    borderStyle = value;
+                    _borderStyle = value;
                     RecreateHandle();
                 }
             }
         }
 
         /// <summary>
-        ///  Gets or sets a value indicating whether the text
-        ///  property is being changed internally by its parent class.
+        ///  Gets or sets a value indicating whether the text property is being
+        ///  changed internally by its parent class.
         /// </summary>
-        protected bool ChangingText
-        {
-            get
-            {
-                return changingText;
-            }
-
-            set
-            {
-                changingText = value;
-            }
-        }
+        protected bool ChangingText { get; set; }
 
         public override ContextMenuStrip ContextMenuStrip
         {
-            get
-            {
-                return base.ContextMenuStrip;
-            }
+            get => base.ContextMenuStrip;
             set
             {
                 base.ContextMenuStrip = value;
-                upDownEdit.ContextMenuStrip = value;
+                _upDownEdit.ContextMenuStrip = value;
             }
         }
 
-        /// <summary>
-        ///  Returns the parameters needed to create the handle. Inheriting classes
-        ///  can override this to provide extra functionality. They should not,
-        ///  however, forget to call base.getCreateParams() first to get the struct
-        ///  filled up with the basic info.
-        /// </summary>
         protected override CreateParams CreateParams
         {
             get
@@ -305,7 +229,7 @@ namespace System.Windows.Forms
                 cp.Style &= ~(int)User32.WS.BORDER;
                 if (!Application.RenderWithVisualStyles)
                 {
-                    switch (borderStyle)
+                    switch (_borderStyle)
                     {
                         case BorderStyle.Fixed3D:
                             cp.ExStyle |= (int)User32.WS_EX.CLIENTEDGE;
@@ -323,123 +247,81 @@ namespace System.Windows.Forms
         ///  Deriving classes can override this to configure a default size for their control.
         ///  This is more efficient than setting the size in the control's constructor.
         /// </summary>
-        protected override Size DefaultSize
-        {
-            get
-            {
-                return new Size(DefaultControlWidth, PreferredHeight);
-            }
-        }
+        protected override Size DefaultSize => new Size(DefaultControlWidth, PreferredHeight);
 
-        // DockPadding is not relevant to UpDownBase
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        new public DockPaddingEdges DockPadding
-        {
-            get
-            {
-                return base.DockPadding;
-            }
-        }
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public new DockPaddingEdges DockPadding => base.DockPadding;
 
         /// <summary>
         ///  Returns true if this control has focus.
         /// </summary>
-        [
-        Browsable(false),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.ControlFocusedDescr))
-        ]
-        public override bool Focused
-        {
-            get
-            {
-                return upDownEdit.Focused;
-            }
-        }
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRDescription(nameof(SR.ControlFocusedDescr))]
+        public override bool Focused => _upDownEdit.Focused;
 
         /// <summary>
         ///  Indicates the foreground color for the control.
         /// </summary>
         public override Color ForeColor
         {
-            get
-            {
-                return upDownEdit.ForeColor;
-            }
+            get => _upDownEdit.ForeColor;
             set
             {
                 base.ForeColor = value;
-                upDownEdit.ForeColor = value;
+                _upDownEdit.ForeColor = value;
             }
         }
 
         /// <summary>
-        ///  Gets or sets a value indicating whether
-        ///  the user can use the UP
-        ///  ARROW and DOWN ARROW keys to select values.
+        ///  Gets or sets a value indicating whether the user can use the UP ARROW and
+        ///  DOWN ARROW keys to select values.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        DefaultValue(true),
-        SRDescription(nameof(SR.UpDownBaseInterceptArrowKeysDescr))
-        ]
-        public bool InterceptArrowKeys
-        {
-            get
-            {
-                return interceptArrowKeys;
-            }
-
-            set
-            {
-                interceptArrowKeys = value;
-            }
-        }
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(true)]
+        [SRDescription(nameof(SR.UpDownBaseInterceptArrowKeysDescr))]
+        public bool InterceptArrowKeys { get; set; } = true;
 
         public override Size MaximumSize
         {
-            get { return base.MaximumSize; }
-            set
-            {
-                base.MaximumSize = new Size(value.Width, 0);
-            }
+            get => base.MaximumSize;
+            set => base.MaximumSize = new Size(value.Width, 0);
         }
 
         public override Size MinimumSize
         {
-            get { return base.MinimumSize; }
-            set
-            {
-                base.MinimumSize = new Size(value.Width, 0);
-            }
+            get => base.MinimumSize;
+            set => base.MinimumSize = new Size(value.Width, 0);
         }
 
-        /// <hideinheritance/>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler MouseEnter
         {
             add => base.MouseEnter += value;
             remove => base.MouseEnter -= value;
         }
 
-        /// <hideinheritance/>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler MouseLeave
         {
             add => base.MouseLeave += value;
             remove => base.MouseLeave -= value;
         }
 
-        /// <hideinheritance/>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler MouseHover
         {
             add => base.MouseHover += value;
             remove => base.MouseHover -= value;
         }
 
-        /// <hideinheritance/>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public new event MouseEventHandler MouseMove
         {
             add => base.MouseMove += value;
@@ -447,15 +329,13 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets the height of
-        ///  the up-down control.
+        ///  Gets the height of the up-down control.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatLayout)),
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.UpDownBasePreferredHeightDescr))
-        ]
+        [SRCategory(nameof(SR.CatLayout))]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRDescription(nameof(SR.UpDownBasePreferredHeightDescr))]
         public int PreferredHeight
         {
             get
@@ -463,7 +343,7 @@ namespace System.Windows.Forms
                 int height = FontHeight;
 
                 // Adjust for the border style
-                if (borderStyle != BorderStyle.None)
+                if (_borderStyle != BorderStyle.None)
                 {
                     height += SystemInformation.BorderSize.Height * 4 + 3;
                 }
@@ -477,48 +357,28 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets or sets
-        ///  a
-        ///  value
-        ///  indicating whether the text may only be changed by the
-        ///  use
-        ///  of the up or down buttons.
+        ///  Gets or sets a value indicating whether the text may only be changed by
+        ///  the use of the up or down buttons.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        DefaultValue(false),
-        SRDescription(nameof(SR.UpDownBaseReadOnlyDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(false)]
+        [SRDescription(nameof(SR.UpDownBaseReadOnlyDescr))]
         public bool ReadOnly
         {
-            get
-            {
-                return upDownEdit.ReadOnly;
-            }
-
-            set
-            {
-                upDownEdit.ReadOnly = value;
-            }
+            get => _upDownEdit.ReadOnly;
+            set => _upDownEdit.ReadOnly = value;
         }
 
         /// <summary>
-        ///  Gets or sets the text
-        ///  displayed in the up-down control.
+        ///  Gets or sets the text displayed in the up-down control.
         /// </summary>
-        [
-        Localizable(true)
-        ]
+        [Localizable(true)]
         public override string Text
         {
-            get
-            {
-                return upDownEdit.Text;
-            }
-
+            get => _upDownEdit.Text;
             set
             {
-                upDownEdit.Text = value;
+                _upDownEdit.Text = value;
                 // The text changed event will at this point be triggered.
                 // After returning, the value of UserEdit will reflect
                 // whether or not the current upDownEditbox text is in sync
@@ -540,115 +400,67 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets or
-        ///  sets the alignment of the text in the up-down
-        ///  control.
+        ///  Gets or sets the alignment of the text in the up-down control.
         /// </summary>
-        [
-        Localizable(true),
-        SRCategory(nameof(SR.CatAppearance)),
-        DefaultValue(HorizontalAlignment.Left),
-        SRDescription(nameof(SR.UpDownBaseTextAlignDescr))
-        ]
+        [Localizable(true)]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [DefaultValue(HorizontalAlignment.Left)]
+        [SRDescription(nameof(SR.UpDownBaseTextAlignDescr))]
         public HorizontalAlignment TextAlign
         {
-            get
-            {
-                return upDownEdit.TextAlign;
-            }
+            get => _upDownEdit.TextAlign;
             set
             {
-                //valid values are 0x0 to 0x2
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)HorizontalAlignment.Left, (int)HorizontalAlignment.Center))
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(HorizontalAlignment));
                 }
-                upDownEdit.TextAlign = value;
+
+                _upDownEdit.TextAlign = value;
             }
         }
 
-        internal TextBox TextBox
-        {
-            get
-            {
-                return upDownEdit;
-            }
-        }
+        internal TextBox TextBox => _upDownEdit;
 
         /// <summary>
-        ///  Gets
-        ///  or sets the
-        ///  alignment
-        ///  of the up and down buttons on the up-down control.
+        ///  Gets or sets the alignment of the up and down buttons on the up-down control.
         /// </summary>
-        [
-        Localizable(true),
-        SRCategory(nameof(SR.CatAppearance)),
-        DefaultValue(LeftRightAlignment.Right),
-        SRDescription(nameof(SR.UpDownBaseAlignmentDescr))
-        ]
+        [Localizable(true)]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [DefaultValue(LeftRightAlignment.Right)]
+        [SRDescription(nameof(SR.UpDownBaseAlignmentDescr))]
         public LeftRightAlignment UpDownAlign
         {
-            get
-            {
-                return upDownAlign;
-            }
-
+            get => _upDownAlign;
             set
             {
-                //valid values are 0x0 to 0x1
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)LeftRightAlignment.Left, (int)LeftRightAlignment.Right))
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(LeftRightAlignment));
                 }
 
-                if (upDownAlign != value)
+                if (_upDownAlign != value)
                 {
-                    upDownAlign = value;
+                    _upDownAlign = value;
                     PositionControls();
                     Invalidate();
                 }
             }
         }
 
-        internal UpDownButtons UpDownButtonsInternal
-        {
-            get
-            {
-                return upDownButtons;
-            }
-        }
+        internal UpDownButtons UpDownButtonsInternal => _upDownButtons;
 
         /// <summary>
-        ///  Gets
-        ///  or sets a value indicating whether a value has been entered by the
-        ///  user.
+        ///  Gets or sets a value indicating whether a value has been entered by the user.
         /// </summary>
-        protected bool UserEdit
-        {
-            get
-            {
-                return userEdit;
-            }
+        protected bool UserEdit { get; set; }
 
-            set
-            {
-                userEdit = value;
-            }
-        }
-
-        ////////////////////////////////////////////////////////////////////////
-        // Methods
-        //
-        ////////////////////////////////////////////////////////////////////////
         /// <summary>
         ///  When overridden in a derived class, handles the pressing of the down button
         ///  on the up-down control.
         /// </summary>
         public abstract void DownButton();
 
-        // GetPreferredSize and SetBoundsCore call this method to allow controls to self impose
-        // constraints on their size.
         internal override Rectangle ApplyBoundsConstraints(int suggestedX, int suggestedY, int proposedWidth, int proposedHeight)
         {
             return base.ApplyBoundsConstraints(suggestedX, suggestedY, proposedWidth, PreferredHeight);
@@ -679,13 +491,12 @@ namespace System.Windows.Forms
         protected override void RescaleConstantsForDpi(int deviceDpiOld, int deviceDpiNew)
         {
             base.RescaleConstantsForDpi(deviceDpiOld, deviceDpiNew);
-            defaultButtonsWidth = LogicalToDeviceUnits(DefaultButtonsWidth);
-            upDownButtons.Width = defaultButtonsWidth;
+            _defaultButtonsWidth = LogicalToDeviceUnits(DefaultButtonsWidth);
+            _upDownButtons.Width = _defaultButtonsWidth;
         }
 
         /// <summary>
         ///  When overridden in a derived class, raises the Changed event.
-        ///  event.
         /// </summary>
         protected virtual void OnChanged(object source, EventArgs e)
         {
@@ -717,15 +528,15 @@ namespace System.Windows.Forms
         {
             base.OnPaint(e);
 
-            Rectangle editBounds = upDownEdit.Bounds;
+            Rectangle editBounds = _upDownEdit.Bounds;
             if (Application.RenderWithVisualStyles)
             {
-                if (borderStyle != BorderStyle.None)
+                if (_borderStyle != BorderStyle.None)
                 {
                     Rectangle bounds = ClientRectangle;
                     Rectangle clipBounds = e.ClipRectangle;
 
-                    //Draw a themed textbox-like border, which is what the spin control does
+                    // Draw a themed textbox-like border, which is what the spin control does
                     VisualStyleRenderer vsr = new VisualStyleRenderer(VisualStyleElement.TextBox.TextEdit.Normal);
                     int border = ThemedBorderWidth;
                     Rectangle clipLeft = new Rectangle(bounds.Left, bounds.Top, border, bounds.Height);
@@ -769,25 +580,24 @@ namespace System.Windows.Forms
                     e.Graphics.DrawRectangle(pen, backRect);
                 }
             }
-            if (!Enabled && BorderStyle != BorderStyle.None && !upDownEdit.ShouldSerializeBackColor())
+            if (!Enabled && BorderStyle != BorderStyle.None && !_upDownEdit.ShouldSerializeBackColor())
             {
-                //draws a grayed rectangled around the upDownEdit, since otherwise we will have a white
-                //border around the upDownEdit, which is inconsistent with Windows' behavior
-                //we only want to do this when BackColor is not serialized, since otherwise
-                //we should display the backcolor instead of the usual grayed textbox.
+                // Draws a grayed rectangled around the upDownEdit, since otherwise we will have a white
+                // border around the upDownEdit, which is inconsistent with Windows' behavior
+                // we only want to do this when BackColor is not serialized, since otherwise
+                // we should display the backcolor instead of the usual grayed textbox.
                 editBounds.Inflate(1, 1);
                 ControlPaint.DrawBorder(e.Graphics, editBounds, SystemColors.Control, ButtonBorderStyle.Solid);
             }
         }
 
         /// <summary>
-        ///  Raises the <see cref='Control.KeyDown'/>
-        ///  event.
+        ///  Raises the <see cref='Control.KeyDown'/> event.
         /// </summary>
         protected virtual void OnTextBoxKeyDown(object source, KeyEventArgs e)
         {
             OnKeyDown(e);
-            if (interceptArrowKeys)
+            if (InterceptArrowKeys)
             {
                 // Intercept up arrow
                 if (e.KeyData == Keys.Up)
@@ -805,7 +615,6 @@ namespace System.Windows.Forms
             }
 
             // Perform text validation if ENTER is pressed
-            //
             if (e.KeyCode == Keys.Return && UserEdit)
             {
                 ValidateEditText();
@@ -813,13 +622,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='Control.KeyPress'/>
-        ///  event.
+        ///  Raises the <see cref='Control.KeyPress'/> event.
         /// </summary>
         protected virtual void OnTextBoxKeyPress(object source, KeyPressEventArgs e)
-        {
-            OnKeyPress(e);
-        }
+            => OnKeyPress(e);
 
         /// <summary>
         ///  Raises the <see cref='Control.LostFocus'/> event.
@@ -847,7 +653,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnTextBoxTextChanged(object source, EventArgs e)
         {
-            if (changingText)
+            if (ChangingText)
             {
                 Debug.Assert(UserEdit == false, "OnTextBoxTextChanged() - UserEdit == true");
                 ChangingText = false;
@@ -879,7 +685,7 @@ namespace System.Windows.Forms
         {
             if (e.Clicks == 2 && e.Button == MouseButtons.Left)
             {
-                doubleClickFired = true;
+                _doubleClickFired = true;
             }
 
             base.OnMouseDown(e);
@@ -895,20 +701,22 @@ namespace System.Windows.Forms
                 Point pt = PointToScreen(new Point(mevent.X, mevent.Y));
                 if (User32.WindowFromPoint(pt) == Handle && !ValidationCancelled)
                 {
-                    if (!doubleClickFired)
+                    if (!_doubleClickFired)
                     {
                         OnClick(mevent);
                         OnMouseClick(mevent);
                     }
                     else
                     {
-                        doubleClickFired = false;
+                        _doubleClickFired = false;
                         OnDoubleClick(mevent);
                         OnMouseDoubleClick(mevent);
                     }
                 }
-                doubleClickFired = false;
+
+                _doubleClickFired = false;
             }
+
             base.OnMouseUp(mevent);
         }
 
@@ -924,18 +732,21 @@ namespace System.Windows.Forms
                 {
                     return;
                 }
+
                 hme.Handled = true;
             }
 
             if ((ModifierKeys & (Keys.Shift | Keys.Alt)) != 0 || MouseButtons != MouseButtons.None)
             {
-                return; // Do not scroll when Shift or Alt key is down, or when a mouse button is down.
+                // Do not scroll when Shift or Alt key is down, or when a mouse button is down.
+                return;
             }
 
             int wheelScrollLines = SystemInformation.MouseWheelScrollLines;
             if (wheelScrollLines == 0)
             {
-                return; // Do not scroll when the user system setting is 0 lines per notch
+                // Do not scroll when the user system setting is 0 lines per notch
+                return;
             }
 
             Debug.Assert(wheelDelta > -NativeMethods.WHEEL_DELTA, "wheelDelta is too smal");
@@ -963,6 +774,7 @@ namespace System.Windows.Forms
                         UpButton();
                         absScrollBands--;
                     }
+
                     wheelDelta -= (int)((float)scrollBands * ((float)NativeMethods.WHEEL_DELTA / (float)wheelScrollLines));
                 }
                 else
@@ -973,6 +785,7 @@ namespace System.Windows.Forms
                         DownButton();
                         absScrollBands--;
                     }
+
                     wheelDelta -= (int)((float)scrollBands * ((float)NativeMethods.WHEEL_DELTA / (float)wheelScrollLines));
                 }
             }
@@ -1003,9 +816,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///
-        ///  Handles UpDown events, which are generated by clicking on
-        ///  the updown buttons in the child updown control.
+        ///  Handles UpDown events, which are generated by clicking on the updown
+        ///  buttons in the child updown control.
         /// </summary>
         private void OnUpDown(object source, UpDownEventArgs e)
         {
@@ -1021,78 +833,73 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Calculates the size and position of the upDownEdit control and
-        ///  the updown buttons.
+        ///  Calculates the size and position of the upDownEdit control and the updown buttons.
         /// </summary>
         private void PositionControls()
         {
-            Rectangle upDownEditBounds = Rectangle.Empty,
-                      upDownButtonsBounds = Rectangle.Empty;
+            Rectangle upDownEditBounds = Rectangle.Empty;
+            Rectangle upDownButtonsBounds = Rectangle.Empty;
 
             Rectangle clientArea = new Rectangle(Point.Empty, ClientSize);
             int totalClientWidth = clientArea.Width;
             bool themed = Application.RenderWithVisualStyles;
             BorderStyle borderStyle = BorderStyle;
 
-            // determine how much to squish in - Fixed3d and FixedSingle have 2PX border
+            // Determine how much to squish in - Fixed3D and FixedSingle have 2PX border
             int borderWidth = (borderStyle == BorderStyle.None) ? 0 : 2;
             clientArea.Inflate(-borderWidth, -borderWidth);
 
             // Reposition and resize the upDownEdit control
-            //
-            if (upDownEdit != null)
+            if (_upDownEdit != null)
             {
                 upDownEditBounds = clientArea;
-                upDownEditBounds.Size = new Size(clientArea.Width - defaultButtonsWidth, clientArea.Height);
+                upDownEditBounds.Size = new Size(clientArea.Width - _defaultButtonsWidth, clientArea.Height);
             }
 
             // Reposition and resize the updown buttons
-            //
-            if (upDownButtons != null)
+            if (_upDownButtons != null)
             {
                 int borderFixup = (themed) ? 1 : 2;
                 if (borderStyle == BorderStyle.None)
                 {
                     borderFixup = 0;
                 }
-                upDownButtonsBounds = new Rectangle(/*x*/clientArea.Right - defaultButtonsWidth + borderFixup,
-                                                    /*y*/clientArea.Top - borderFixup,
-                                                    /*w*/defaultButtonsWidth,
-                                                    /*h*/clientArea.Height + (borderFixup * 2));
+
+                upDownButtonsBounds = new Rectangle(
+                    clientArea.Right - _defaultButtonsWidth + borderFixup,
+                    clientArea.Top - borderFixup,
+                    _defaultButtonsWidth,
+                    clientArea.Height + (borderFixup * 2));
             }
 
             // Right to left translation
             LeftRightAlignment updownAlign = UpDownAlign;
             updownAlign = RtlTranslateLeftRight(updownAlign);
 
-            // left/right updown align translation
+            // Left/right updown align translation
             if (updownAlign == LeftRightAlignment.Left)
             {
-                // if the buttons are aligned to the left, swap position of text box/buttons
+                // If the buttons are aligned to the left, swap position of text box/buttons
                 upDownButtonsBounds.X = totalClientWidth - upDownButtonsBounds.Right;
                 upDownEditBounds.X = totalClientWidth - upDownEditBounds.Right;
             }
 
-            // apply locations
-            if (upDownEdit != null)
+            // Apply locations
+            if (_upDownEdit != null)
             {
-                upDownEdit.Bounds = upDownEditBounds;
+                _upDownEdit.Bounds = upDownEditBounds;
             }
-            if (upDownButtons != null)
+            if (_upDownButtons != null)
             {
-                upDownButtons.Bounds = upDownButtonsBounds;
-                upDownButtons.Invalidate();
+                _upDownButtons.Bounds = upDownButtonsBounds;
+                _upDownButtons.Invalidate();
             }
         }
 
         /// <summary>
-        ///  Selects a range of
-        ///  text in the up-down control.
+        ///  Selects a range of text in the up-down control.
         /// </summary>
-        public void Select(int start, int length)
-        {
-            upDownEdit.Select(start, length);
-        }
+        public void Select(int start, int length) => _upDownEdit.Select(start, length);
 
         /// <summary>
         ///  Child controls run their
@@ -1101,12 +908,13 @@ namespace System.Windows.Forms
         {
             if (child != null && IsHandleCreated)
             {
-                // same control as PointToClient or PointToScreen, just
+                // Same control as PointToClient or PointToScreen, just
                 // with two specific controls in mind.
                 var point = new Point(e.X, e.Y);
                 User32.MapWindowPoints(new HandleRef(child, child.Handle), new HandleRef(this, Handle), ref point, 1);
                 return new MouseEventArgs(e.Button, e.Clicks, point.X, point.Y, e.Delta);
             }
+
             return e;
         }
 
@@ -1116,8 +924,7 @@ namespace System.Windows.Forms
         public abstract void UpButton();
 
         /// <summary>
-        ///  When overridden
-        ///  in a derived class, updates the text displayed in the up-down control.
+        ///  When overridden in a derived class, updates the text displayed in the up-down control.
         /// </summary>
         protected abstract void UpdateEditText();
 
@@ -1130,8 +937,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  When overridden in a
-        ///  derived class, validates the text displayed in the up-down control.
+        ///  When overridden in a derived class, validates the text displayed in the up-down control.
         /// </summary>
         protected virtual void ValidateEditText()
         {
@@ -1172,919 +978,10 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <summary>
-        ///  This Function sets the ToolTip for this composite control.
-        /// </summary>
         internal void SetToolTip(ToolTip toolTip, string caption)
         {
-            toolTip.SetToolTip(upDownEdit, caption);
-            toolTip.SetToolTip(upDownButtons, caption);
+            toolTip.SetToolTip(_upDownEdit, caption);
+            toolTip.SetToolTip(_upDownButtons, caption);
         }
-
-        internal class UpDownEdit : TextBox
-        {
-            /////////////////////////////////////////////////////////////////////
-            // Member variables
-            //
-            /////////////////////////////////////////////////////////////////////
-            // Parent control
-            private readonly UpDownBase parent;
-            private bool doubleClickFired = false;
-            /////////////////////////////////////////////////////////////////////
-            // Constructors
-            //
-            /////////////////////////////////////////////////////////////////////
-            internal UpDownEdit(UpDownBase parent)
-            : base()
-            {
-                SetStyle(ControlStyles.FixedHeight |
-                         ControlStyles.FixedWidth, true);
-
-                SetStyle(ControlStyles.Selectable, false);
-
-                this.parent = parent;
-            }
-
-            public override string Text
-            {
-                get
-                {
-                    return base.Text;
-                }
-                set
-                {
-                    bool valueChanged = (value != base.Text);
-                    base.Text = value;
-                    if (valueChanged)
-                    {
-                        AccessibilityNotifyClients(AccessibleEvents.NameChange, -1);
-                    }
-                }
-            }
-
-            protected override AccessibleObject CreateAccessibilityInstance()
-            {
-                return new UpDownEditAccessibleObject(this, parent);
-            }
-
-            protected override void OnMouseDown(MouseEventArgs e)
-            {
-                if (e.Clicks == 2 && e.Button == MouseButtons.Left)
-                {
-                    doubleClickFired = true;
-                }
-                parent.OnMouseDown(parent.TranslateMouseEvent(this, e));
-            }
-
-            /// <summary>
-            ///
-            ///  Handles detecting when the mouse button is released.
-            ///
-            /// </summary>
-            protected override void OnMouseUp(MouseEventArgs e)
-            {
-                Point pt = new Point(e.X, e.Y);
-                pt = PointToScreen(pt);
-
-                MouseEventArgs me = parent.TranslateMouseEvent(this, e);
-                if (e.Button == MouseButtons.Left)
-                {
-                    if (!parent.ValidationCancelled && User32.WindowFromPoint(pt) == Handle)
-                    {
-                        if (!doubleClickFired)
-                        {
-                            parent.OnClick(me);
-                            parent.OnMouseClick(me);
-                        }
-                        else
-                        {
-                            doubleClickFired = false;
-                            parent.OnDoubleClick(me);
-                            parent.OnMouseDoubleClick(me);
-                        }
-                    }
-                    doubleClickFired = false;
-                }
-
-                parent.OnMouseUp(me);
-            }
-
-            internal override void WmContextMenu(ref Message m)
-            {
-                // Want to make the SourceControl to be the UpDownBase, not the Edit.
-                if (ContextMenuStrip != null)
-                {
-                    WmContextMenu(ref m, parent);
-                }
-                else
-                {
-                    WmContextMenu(ref m, this);
-                }
-            }
-
-            /// <summary>
-            ///  Raises the <see cref='Control.KeyUp'/>
-            ///  event.
-            /// </summary>
-            protected override void OnKeyUp(KeyEventArgs e)
-            {
-                parent.OnKeyUp(e);
-            }
-
-            protected override void OnGotFocus(EventArgs e)
-            {
-                parent.SetActiveControl(this);
-                parent.InvokeGotFocus(parent, e);
-            }
-
-            protected override void OnLostFocus(EventArgs e)
-            {
-                parent.InvokeLostFocus(parent, e);
-            }
-
-            // Microsoft: Focus fixes. The XXXUpDown control will
-            //         also fire a Leave event. We don't want
-            //         to fire two of them.
-            // protected override void OnLeave(EventArgs e) {
-            //     parent.OnLeave(e);
-            // }
-
-            // Create our own accessibility object to map the accessible name
-            // back to our parent.  They should track.
-            internal class UpDownEditAccessibleObject : ControlAccessibleObject
-            {
-                readonly UpDownBase _parent;
-
-                public UpDownEditAccessibleObject(UpDownEdit owner, UpDownBase parent) : base(owner)
-                {
-                    _parent = parent;
-                }
-
-                public override string Name
-                {
-                    get
-                    {
-                        return _parent.AccessibilityObject.Name;
-                    }
-                    set
-                    {
-                        _parent.AccessibilityObject.Name = value;
-                    }
-                }
-
-                public override string KeyboardShortcut
-                {
-                    get
-                    {
-                        return _parent.AccessibilityObject.KeyboardShortcut;
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        ///
-        ///  Nested class UpDownButtons
-        ///
-        ///  A control representing the pair of buttons on the end of the upDownEdit control.
-        ///  This class handles drawing the updown buttons, and detecting mouse actions
-        ///  on these buttons. Acceleration on the buttons is handled. The control
-        ///  sends UpDownEventArgss to the parent UpDownBase class when a button is pressed,
-        ///  or when the acceleration determines that another event should be generated.
-        /// </summary>
-        internal class UpDownButtons : Control
-        {
-            /////////////////////////////////////////////////////////////////////
-            // Parent control
-            private readonly UpDownBase parent;
-
-            // Button state
-            private ButtonID pushed = ButtonID.None;
-            private ButtonID captured = ButtonID.None;
-            private ButtonID mouseOver = ButtonID.None;
-
-            // UpDown event handler
-            private UpDownEventHandler upDownEventHandler;
-
-            // Timer
-            private Timer timer;                    // generates UpDown events
-            private int timerInterval;              // milliseconds between events
-
-            private bool doubleClickFired = false;
-
-            /////////////////////////////////////////////////////////////////////
-            // Constructors
-            //
-            /////////////////////////////////////////////////////////////////////
-            internal UpDownButtons(UpDownBase parent)
-
-            : base()
-            {
-                SetStyle(ControlStyles.Opaque | ControlStyles.FixedHeight |
-                         ControlStyles.FixedWidth, true);
-
-                SetStyle(ControlStyles.Selectable, false);
-
-                this.parent = parent;
-            }
-
-            /////////////////////////////////////////////////////////////////////
-            // Methods
-            //
-            /////////////////////////////////////////////////////////////////////
-            /// <summary>
-            ///
-            ///  Adds a handler for the updown button event.
-            /// </summary>
-            public event UpDownEventHandler UpDown
-            {
-                add => upDownEventHandler += value;
-                remove => upDownEventHandler -= value;
-            }
-
-            // Called when the mouse button is pressed - we need to start
-            // spinning the value of the updown.
-            private void BeginButtonPress(MouseEventArgs e)
-            {
-                int half_height = Size.Height / 2;
-
-                if (e.Y < half_height)
-                {
-                    // Up button
-                    pushed = captured = ButtonID.Up;
-                    Invalidate();
-                }
-                else
-                {
-                    // Down button
-                    pushed = captured = ButtonID.Down;
-                    Invalidate();
-                }
-
-                // Capture the mouse
-                Capture = true;
-
-                // Generate UpDown event
-                OnUpDown(new UpDownEventArgs((int)pushed));
-
-                // Start the timer for new updown events
-                StartTimer();
-            }
-
-            protected override AccessibleObject CreateAccessibilityInstance()
-            {
-                return new UpDownButtonsAccessibleObject(this);
-            }
-
-            // Called when the mouse button is released - we need to stop
-            // spinning the value of the updown.
-            private void EndButtonPress()
-            {
-                pushed = ButtonID.None;
-                captured = ButtonID.None;
-
-                // Stop the timer
-                StopTimer();
-
-                // Release the mouse
-                Capture = false;
-
-                // Redraw the buttons
-                Invalidate();
-            }
-
-            /// <summary>
-            ///
-            ///  Handles detecting mouse hits on the buttons. This method
-            ///  detects which button was hit (up or down), fires a
-            ///  updown event, captures the mouse, and starts a timer
-            ///  for repeated updown events.
-            ///
-            /// </summary>
-            protected override void OnMouseDown(MouseEventArgs e)
-            {
-                // Begin spinning the value
-                //
-
-                // Focus the parent
-                //
-                parent.Focus();
-
-                if (!parent.ValidationCancelled && e.Button == MouseButtons.Left)
-                {
-                    BeginButtonPress(e);
-                }
-                if (e.Clicks == 2 && e.Button == MouseButtons.Left)
-                {
-                    doubleClickFired = true;
-                }
-                // At no stage should a button be pushed, and the mouse
-                // not captured.
-                //
-                Debug.Assert(!(pushed != ButtonID.None && captured == ButtonID.None),
-                             "Invalid button pushed/captured combination");
-
-                parent.OnMouseDown(parent.TranslateMouseEvent(this, e));
-            }
-
-            /// <summary>
-            ///
-            ///  Handles detecting mouse movement.
-            ///
-            /// </summary>
-            protected override void OnMouseMove(MouseEventArgs e)
-            {
-                // If the mouse is captured by the buttons (i.e. an updown button
-                // was pushed, and the mouse button has not yet been released),
-                // determine the new state of the buttons depending on where
-                // the mouse pointer has moved.
-
-                if (Capture)
-                {
-                    // Determine button area
-
-                    Rectangle rect = ClientRectangle;
-                    rect.Height /= 2;
-
-                    if (captured == ButtonID.Down)
-                    {
-                        rect.Y += rect.Height;
-                    }
-
-                    // Test if the mouse has moved outside the button area
-
-                    if (rect.Contains(e.X, e.Y))
-                    {
-                        // Inside button
-                        // Repush the button if necessary
-
-                        if (pushed != captured)
-                        {
-                            // Restart the timer
-                            StartTimer();
-
-                            pushed = captured;
-                            Invalidate();
-                        }
-                    }
-                    else
-                    {
-                        // Outside button
-                        // Retain the capture, but pop the button up whilst
-                        // the mouse remains outside the button and the
-                        // mouse button remains pressed.
-
-                        if (pushed != ButtonID.None)
-                        {
-                            // Stop the timer for updown events
-                            StopTimer();
-
-                            pushed = ButtonID.None;
-                            Invalidate();
-                        }
-                    }
-                }
-
-                //Logic for seeing which button is Hot if any
-                Rectangle rectUp = ClientRectangle, rectDown = ClientRectangle;
-                rectUp.Height /= 2;
-                rectDown.Y += rectDown.Height / 2;
-
-                //Check if the mouse is on the upper or lower button. Note that it could be in neither.
-                if (rectUp.Contains(e.X, e.Y))
-                {
-                    mouseOver = ButtonID.Up;
-                    Invalidate();
-                }
-                else if (rectDown.Contains(e.X, e.Y))
-                {
-                    mouseOver = ButtonID.Down;
-                    Invalidate();
-                }
-
-                // At no stage should a button be pushed, and the mouse
-                // not captured.
-                Debug.Assert(!(pushed != ButtonID.None && captured == ButtonID.None),
-                             "Invalid button pushed/captured combination");
-
-                parent.OnMouseMove(parent.TranslateMouseEvent(this, e));
-            }
-
-            /// <summary>
-            ///
-            ///  Handles detecting when the mouse button is released.
-            ///
-            /// </summary>
-            protected override void OnMouseUp(MouseEventArgs e)
-            {
-                if (!parent.ValidationCancelled && e.Button == MouseButtons.Left)
-                {
-                    EndButtonPress();
-                }
-
-                // At no stage should a button be pushed, and the mouse
-                // not captured.
-                Debug.Assert(!(pushed != ButtonID.None && captured == ButtonID.None),
-                             "Invalid button pushed/captured combination");
-
-                Point pt = new Point(e.X, e.Y);
-                pt = PointToScreen(pt);
-
-                MouseEventArgs me = parent.TranslateMouseEvent(this, e);
-                if (e.Button == MouseButtons.Left)
-                {
-                    if (!parent.ValidationCancelled && User32.WindowFromPoint(pt) == Handle)
-                    {
-                        if (!doubleClickFired)
-                        {
-                            parent.OnClick(me);
-                        }
-                        else
-                        {
-                            doubleClickFired = false;
-                            parent.OnDoubleClick(me);
-                            parent.OnMouseDoubleClick(me);
-                        }
-                    }
-                    doubleClickFired = false;
-                }
-
-                parent.OnMouseUp(me);
-            }
-
-            /// <summary>
-            ///
-            ///  Handles detecting when the mouse leaves.
-            ///
-            /// </summary>
-            protected override void OnMouseLeave(EventArgs e)
-            {
-                mouseOver = ButtonID.None;
-                Invalidate();
-
-                parent.OnMouseLeave(e);
-            }
-
-            /// <summary>
-            ///  Handles painting the buttons on the control.
-            ///
-            /// </summary>
-            protected override void OnPaint(PaintEventArgs e)
-            {
-                int half_height = ClientSize.Height / 2;
-
-                /* Draw the up and down buttons */
-
-                if (Application.RenderWithVisualStyles)
-                {
-                    VisualStyleRenderer vsr = new VisualStyleRenderer(mouseOver == ButtonID.Up ? VisualStyleElement.Spin.Up.Hot : VisualStyleElement.Spin.Up.Normal);
-
-                    if (!Enabled)
-                    {
-                        vsr.SetParameters(VisualStyleElement.Spin.Up.Disabled);
-                    }
-                    else if (pushed == ButtonID.Up)
-                    {
-                        vsr.SetParameters(VisualStyleElement.Spin.Up.Pressed);
-                    }
-
-                    vsr.DrawBackground(e.Graphics, new Rectangle(0, 0, parent.defaultButtonsWidth, half_height), HandleInternal);
-
-                    if (!Enabled)
-                    {
-                        vsr.SetParameters(VisualStyleElement.Spin.Down.Disabled);
-                    }
-                    else if (pushed == ButtonID.Down)
-                    {
-                        vsr.SetParameters(VisualStyleElement.Spin.Down.Pressed);
-                    }
-                    else
-                    {
-                        vsr.SetParameters(mouseOver == ButtonID.Down ? VisualStyleElement.Spin.Down.Hot : VisualStyleElement.Spin.Down.Normal);
-                    }
-
-                    vsr.DrawBackground(e.Graphics, new Rectangle(0, half_height, parent.defaultButtonsWidth, half_height), HandleInternal);
-                }
-                else
-                {
-                    ControlPaint.DrawScrollButton(e.Graphics,
-                                                  new Rectangle(0, 0, parent.defaultButtonsWidth, half_height),
-                                                  ScrollButton.Up,
-                                                  pushed == ButtonID.Up ? ButtonState.Pushed : (Enabled ? ButtonState.Normal : ButtonState.Inactive));
-
-                    ControlPaint.DrawScrollButton(e.Graphics,
-                                                  new Rectangle(0, half_height, parent.defaultButtonsWidth, half_height),
-                                                  ScrollButton.Down,
-                                                  pushed == ButtonID.Down ? ButtonState.Pushed : (Enabled ? ButtonState.Normal : ButtonState.Inactive));
-                }
-
-                if (half_height != (ClientSize.Height + 1) / 2)
-                {
-                    // When control has odd height, a line needs to be drawn below the buttons with the backcolor.
-                    using (Pen pen = new Pen(parent.BackColor))
-                    {
-                        Rectangle clientRect = ClientRectangle;
-                        e.Graphics.DrawLine(pen, clientRect.Left, clientRect.Bottom - 1, clientRect.Right - 1, clientRect.Bottom - 1);
-                    }
-                }
-
-                base.OnPaint(e); // raise paint event, just in case this inner class goes public some day
-            }
-
-            /// <summary>
-            ///  Occurs when the UpDown buttons are pressed and when the acceleration timer tick event is raised.
-            /// </summary>
-            protected virtual void OnUpDown(UpDownEventArgs upevent)
-            {
-                upDownEventHandler?.Invoke(this, upevent);
-            }
-
-            /// <summary>
-            ///  Starts the timer for generating updown events
-            /// </summary>
-            protected void StartTimer()
-            {
-                parent.OnStartTimer();
-                if (timer == null)
-                {
-                    timer = new Timer();      // generates UpDown events
-                    // Add the timer handler
-                    timer.Tick += new EventHandler(TimerHandler);
-                }
-
-                timerInterval = DefaultTimerInterval;
-
-                timer.Interval = timerInterval;
-                timer.Start();
-            }
-
-            /// <summary>
-            ///  Stops the timer for generating updown events
-            /// </summary>
-            protected void StopTimer()
-            {
-                if (timer != null)
-                {
-                    timer.Stop();
-                    timer.Dispose();
-                    timer = null;
-                }
-                parent.OnStopTimer();
-            }
-
-            internal override bool SupportsUiaProviders => true;
-
-            /// <summary>
-            ///  Generates updown events when the timer calls this function.
-            /// </summary>
-            private void TimerHandler(object source, EventArgs args)
-            {
-                // Make sure we've got mouse capture
-                if (!Capture)
-                {
-                    EndButtonPress();
-                    return;
-                }
-
-                // onUpDown method calls customer's ValueCHanged event handler which might enter the message loop and
-                // process the mouse button up event, which results in timer being disposed
-                OnUpDown(new UpDownEventArgs((int)pushed));
-
-                if (timer != null)
-                {
-                    // Accelerate timer.
-                    timerInterval *= 7;
-                    timerInterval /= 10;
-
-                    if (timerInterval < 1)
-                    {
-                        timerInterval = 1;
-                    }
-
-                    timer.Interval = timerInterval;
-                }
-            }
-
-            internal class UpDownButtonsAccessibleObject : ControlAccessibleObject
-            {
-                private DirectionButtonAccessibleObject upButton;
-                private DirectionButtonAccessibleObject downButton;
-
-                private UpDownButtons _owner;
-
-                public UpDownButtonsAccessibleObject(UpDownButtons owner) : base(owner)
-                {
-                    _owner = owner;
-                }
-
-                internal override UiaCore.IRawElementProviderFragment ElementProviderFromPoint(double x, double y)
-                {
-                    AccessibleObject element = HitTest((int)x, (int)y);
-
-                    if (element != null)
-                    {
-                        return element;
-                    }
-
-                    return base.ElementProviderFromPoint(x, y);
-                }
-
-                internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
-                {
-                    switch (direction)
-                    {
-                        case UiaCore.NavigateDirection.FirstChild:
-                            return GetChild(0);
-                        case UiaCore.NavigateDirection.LastChild:
-                            return GetChild(1);
-                        default:
-                            return base.FragmentNavigate(direction);
-                    }
-                }
-
-                internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot => this;
-
-                private DirectionButtonAccessibleObject UpButton
-                {
-                    get
-                    {
-                        if (upButton == null)
-                        {
-                            upButton = new DirectionButtonAccessibleObject(this, true);
-                        }
-
-                        return upButton;
-                    }
-                }
-
-                private DirectionButtonAccessibleObject DownButton
-                {
-                    get
-                    {
-                        if (downButton == null)
-                        {
-                            downButton = new DirectionButtonAccessibleObject(this, false);
-                        }
-
-                        return downButton;
-                    }
-                }
-
-                public override AccessibleObject GetChild(int index)
-                {
-                    // Up button
-                    if (index == 0)
-                    {
-                        return UpButton;
-                    }
-
-                    // Down button
-                    if (index == 1)
-                    {
-                        return DownButton;
-                    }
-
-                    return null;
-                }
-
-                public override int GetChildCount()
-                {
-                    return 2;
-                }
-
-                internal override object GetPropertyValue(UiaCore.UIA propertyID)
-                {
-                    switch (propertyID)
-                    {
-                        case UiaCore.UIA.NamePropertyId:
-                            return Name;
-                        case UiaCore.UIA.RuntimeIdPropertyId:
-                            return RuntimeId;
-                        case UiaCore.UIA.ControlTypePropertyId:
-                            return UiaCore.UIA.SpinnerControlTypeId;
-                        case UiaCore.UIA.BoundingRectanglePropertyId:
-                            return Bounds;
-                        case UiaCore.UIA.LegacyIAccessibleStatePropertyId:
-                            return State;
-                        case UiaCore.UIA.LegacyIAccessibleRolePropertyId:
-                            return Role;
-                        default:
-                            return base.GetPropertyValue(propertyID);
-                    }
-                }
-
-                public override AccessibleObject HitTest(int x, int y)
-                {
-                    if (UpButton.Bounds.Contains(x, y))
-                    {
-                        return UpButton;
-                    }
-
-                    if (DownButton.Bounds.Contains(x, y))
-                    {
-                        return DownButton;
-                    }
-
-                    return null;
-                }
-
-                internal override UiaCore.IRawElementProviderSimple HostRawElementProvider
-                {
-                    get
-                    {
-                        UiaCore.UiaHostProviderFromHwnd(new HandleRef(this, Handle), out UiaCore.IRawElementProviderSimple provider);
-                        return provider;
-                    }
-                }
-
-                public override string Name
-                {
-                    get
-                    {
-                        string baseName = base.Name;
-
-                        if (baseName == null || baseName.Length == 0)
-                        {
-                            return SR.DefaultUpDownButtonsAccessibleName;
-                        }
-
-                        return baseName;
-                    }
-                    set
-                    {
-                        base.Name = value;
-                    }
-                }
-
-                public override AccessibleObject Parent => _owner.AccessibilityObject;
-
-                public override AccessibleRole Role
-                {
-                    get
-                    {
-                        AccessibleRole role = Owner.AccessibleRole;
-
-                        if (role != AccessibleRole.Default)
-                        {
-                            return role;
-                        }
-                        return AccessibleRole.SpinButton;
-                    }
-                }
-
-                /// <summary>
-                ///  Gets the runtime ID.
-                /// </summary>
-                internal override int[] RuntimeId
-                {
-                    get
-                    {
-                        if (_owner == null)
-                        {
-                            return base.RuntimeId;
-                        }
-
-                        // we need to provide a unique ID
-                        // others are implementing this in the same manner
-                        // first item is static - 0x2a (RuntimeIDFirstItem)
-                        // second item can be anything, but here it is a hash
-
-                        var runtimeId = new int[3];
-                        runtimeId[0] = RuntimeIDFirstItem;
-                        runtimeId[1] = (int)(long)_owner.Handle;
-                        runtimeId[2] = _owner.GetHashCode();
-
-                        return runtimeId;
-                    }
-                }
-
-                internal class DirectionButtonAccessibleObject : AccessibleObject
-                {
-                    private readonly bool _up;
-                    private readonly UpDownButtonsAccessibleObject _parent;
-
-                    public DirectionButtonAccessibleObject(UpDownButtonsAccessibleObject parent, bool up)
-                    {
-                        _parent = parent;
-                        _up = up;
-                    }
-
-                    /// <summary>
-                    ///  Gets the runtime ID.
-                    /// </summary>
-                    internal override int[] RuntimeId
-                    {
-                        get
-                        {
-                            var runtimeId = new int[4];
-
-                            runtimeId[0] = _parent.RuntimeId[0];
-                            runtimeId[1] = _parent.RuntimeId[1];
-                            runtimeId[2] = _parent.RuntimeId[2];
-                            runtimeId[3] = _up ? 1 : 0;
-
-                            return runtimeId;
-                        }
-                    }
-
-                    internal override object GetPropertyValue(UiaCore.UIA propertyID)
-                    {
-                        switch (propertyID)
-                        {
-                            case UiaCore.UIA.NamePropertyId:
-                                return Name;
-                            case UiaCore.UIA.RuntimeIdPropertyId:
-                                return RuntimeId;
-                            case UiaCore.UIA.ControlTypePropertyId:
-                                return UiaCore.UIA.ButtonControlTypeId;
-                            case UiaCore.UIA.BoundingRectanglePropertyId:
-                                return Bounds;
-                            case UiaCore.UIA.LegacyIAccessibleStatePropertyId:
-                                return State;
-                            case UiaCore.UIA.LegacyIAccessibleRolePropertyId:
-                                return Role;
-                            default:
-                                return base.GetPropertyValue(propertyID);
-                        }
-                    }
-
-                    internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
-                    {
-                        switch (direction)
-                        {
-                            case UiaCore.NavigateDirection.Parent:
-                                return Parent;
-                            case UiaCore.NavigateDirection.NextSibling:
-                                return _up ? Parent.GetChild(1) : null;
-                            case UiaCore.NavigateDirection.PreviousSibling:
-                                return _up ? null : Parent.GetChild(0);
-                            default:
-                                return base.FragmentNavigate(direction);
-                        }
-                    }
-
-                    internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot => Parent;
-
-                    public override Rectangle Bounds
-                    {
-                        get
-                        {
-                            // Get button bounds
-                            Rectangle bounds = ((UpDownButtons)_parent.Owner).Bounds;
-                            bounds.Height /= 2;
-
-                            if (!_up)
-                            {
-                                bounds.Y += bounds.Height;
-                            }
-
-                            // Convert to screen co-ords
-                            return (((UpDownButtons)_parent.Owner).ParentInternal).RectangleToScreen(bounds);
-                        }
-                    }
-
-                    public override string Name
-                    {
-                        get
-                        {
-                            if (_up)
-                            {
-                                return SR.UpDownBaseUpButtonAccName;
-                            }
-
-                            return SR.UpDownBaseDownButtonAccName;
-                        }
-                        set
-                        {
-                        }
-                    }
-
-                    public override AccessibleObject Parent
-                    {
-                        get
-                        {
-                            return _parent;
-                        }
-                    }
-
-                    public override AccessibleRole Role
-                    {
-                        get
-                        {
-                            return AccessibleRole.PushButton;
-                        }
-                    }
-                }
-            }
-        } // end class UpDownButtons
-
-        // Button identifiers
-
-        internal enum ButtonID
-        {
-            None = 0,
-            Up = 1,
-            Down = 2,
-        }
-    } // end class UpDownBase
+    }
 }
