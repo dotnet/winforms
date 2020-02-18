@@ -40,10 +40,8 @@ namespace System.Windows.Forms
                     {
                         return defaultAction;
                     }
-                    else
-                    {
-                        return SR.AccessibleActionPress;
-                    }
+
+                    return SR.AccessibleActionPress;
                 }
             }
 
@@ -56,10 +54,8 @@ namespace System.Windows.Forms
                     {
                         return description;
                     }
-                    else
-                    {
-                        return base.Description;
-                    }
+
+                    return base.Description;
                 }
             }
 
@@ -68,17 +64,14 @@ namespace System.Windows.Forms
                 get
                 {
                     QueryAccessibilityHelpEventHandler handler = (QueryAccessibilityHelpEventHandler)Owner.Events[ToolStripItem.s_queryAccessibilityHelpEvent];
-
                     if (handler != null)
                     {
                         QueryAccessibilityHelpEventArgs args = new QueryAccessibilityHelpEventArgs();
                         handler(Owner, args);
                         return args.HelpString;
                     }
-                    else
-                    {
-                        return base.Help;
-                    }
+
+                    return base.Help;
                 }
             }
 
@@ -92,9 +85,10 @@ namespace System.Windows.Forms
                     if (_ownerItem.IsOnDropDown)
                     {
                         // no ALT on dropdown
-                        return (mnemonic == (char)0) ? string.Empty : mnemonic.ToString();
+                        return mnemonic == '\0' ? string.Empty : mnemonic.ToString();
                     }
-                    return (mnemonic == (char)0) ? string.Empty : ("Alt+" + mnemonic);
+
+                    return mnemonic == '\0' ? string.Empty : ("Alt+" + mnemonic);
                 }
             }
 
@@ -109,9 +103,11 @@ namespace System.Windows.Forms
                         // first item should be UiaAppendRuntimeId since this is not a top-level element of the fragment.
                         // second item can be anything, but here it is a hash. For toolstrip hash is unique even with child controls. Hwnd  is not.
 
-                        _runtimeId = new int[2];
-                        _runtimeId[0] = NativeMethods.UiaAppendRuntimeId;
-                        _runtimeId[1] = _ownerItem.GetHashCode();
+                        _runtimeId = new int[]
+                        {
+                            NativeMethods.UiaAppendRuntimeId,
+                            _ownerItem.GetHashCode()
+                        };
                     }
 
                     return _runtimeId;
@@ -161,27 +157,17 @@ namespace System.Windows.Forms
                     }
 
                     string baseName = base.Name;
-
-                    if (baseName == null || baseName.Length == 0)
+                    if (string.IsNullOrEmpty(baseName))
                     {
                         return WindowsFormsUtils.TextWithoutMnemonics(_ownerItem.Text);
                     }
 
                     return baseName;
                 }
-                set
-                {
-                    _ownerItem.AccessibleName = value;
-                }
+                set => _ownerItem.AccessibleName = value;
             }
 
-            internal ToolStripItem Owner
-            {
-                get
-                {
-                    return _ownerItem;
-                }
-            }
+            internal ToolStripItem Owner => _ownerItem;
 
             public override AccessibleRole Role
             {
@@ -192,10 +178,8 @@ namespace System.Windows.Forms
                     {
                         return role;
                     }
-                    else
-                    {
-                        return AccessibleRole.PushButton;
-                    }
+
+                    return AccessibleRole.PushButton;
                 }
             }
 
@@ -234,6 +218,7 @@ namespace System.Windows.Forms
                     {
                         accState |= AccessibleStates.Pressed;
                     }
+
                     return accState;
                 }
             }
@@ -268,10 +253,8 @@ namespace System.Windows.Forms
 
                     return topic;
                 }
-                else
-                {
-                    return base.GetHelpTopic(out fileName);
-                }
+
+                return base.GetHelpTopic(out fileName);
             }
 
             public override AccessibleObject Navigate(AccessibleNavigation navigationDirection)
@@ -313,11 +296,8 @@ namespace System.Windows.Forms
                             break;
                     }
                 }
-                if (nextItem != null)
-                {
-                    return nextItem.AccessibilityObject;
-                }
-                return null;
+
+                return nextItem?.AccessibilityObject;
             }
 
             public void AddState(AccessibleStates state)
@@ -338,10 +318,8 @@ namespace System.Windows.Forms
                 {
                     return "ToolStripItemAccessibleObject: Owner = " + Owner.ToString();
                 }
-                else
-                {
-                    return "ToolStripItemAccessibleObject: Owner = null";
-                }
+
+                return "ToolStripItemAccessibleObject: Owner = null";
             }
 
             /// <summary>
@@ -352,11 +330,11 @@ namespace System.Windows.Forms
                 get
                 {
                     Rectangle bounds = Owner.Bounds;
-                    if (Owner.ParentInternal != null &&
-                        Owner.ParentInternal.Visible)
+                    if (Owner.ParentInternal != null && Owner.ParentInternal.Visible)
                     {
                         return new Rectangle(Owner.ParentInternal.PointToScreen(bounds.Location), bounds.Size);
                     }
+
                     return Rectangle.Empty;
                 }
             }
@@ -374,6 +352,7 @@ namespace System.Windows.Forms
                         ToolStripDropDown dropDown = Owner.GetCurrentParentDropDown();
                         return dropDown.AccessibilityObject;
                     }
+
                     return (Owner.Parent != null) ? Owner.Parent.AccessibilityObject : base.Parent;
                 }
             }
@@ -382,12 +361,7 @@ namespace System.Windows.Forms
             ///  Gets the top level element.
             /// </summary>
             internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
-            {
-                get
-                {
-                    return _ownerItem.RootToolStrip?.AccessibilityObject;
-                }
-            }
+                => _ownerItem.RootToolStrip?.AccessibilityObject;
 
             /// <summary>
             ///  Returns the element in the specified direction.
@@ -497,10 +471,7 @@ namespace System.Windows.Forms
                 return -1;
             }
 
-            internal override void SetFocus()
-            {
-                Owner.Select();
-            }
+            internal override void SetFocus() => Owner.Select();
 
             internal void RaiseFocusChanged()
             {

@@ -21,15 +21,8 @@ namespace System.Windows.Forms
 
             public override ImageList ImageList
             {
-                get
-                {
-                    if ((_item != null) && (_item.Owner != null))
-                    {
-                        return _item.Owner.ImageList;
-                    }
-                    return null;
-                }
-                set { Debug.Assert(false, "We should never set the image list"); }
+                get => _item?.Owner?.ImageList;
+                set => Debug.Assert(false, "We should never set the image list");
             }
         }
     }

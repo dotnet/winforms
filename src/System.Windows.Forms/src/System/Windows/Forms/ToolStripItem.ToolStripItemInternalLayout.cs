@@ -29,14 +29,10 @@ namespace System.Windows.Forms
 
             public ToolStripItemInternalLayout(ToolStripItem ownerItem)
             {
-                this._ownerItem = ownerItem ?? throw new ArgumentNullException(nameof(ownerItem));
+                _ownerItem = ownerItem ?? throw new ArgumentNullException(nameof(ownerItem));
             }
 
-            // the thing that we fetch properties off of -- this can be different than ownerItem - e.g. case of split button.
-            protected virtual ToolStripItem Owner
-            {
-                get { return _ownerItem; }
-            }
+            protected virtual ToolStripItem Owner => _ownerItem;
 
             public virtual Rectangle ImageRectangle
             {
@@ -57,21 +53,9 @@ namespace System.Windows.Forms
                 }
             }
 
-            public Size PreferredImageSize
-            {
-                get
-                {
-                    return Owner.PreferredImageSize;
-                }
-            }
+            public Size PreferredImageSize => Owner.PreferredImageSize;
 
-            protected virtual ToolStrip ParentInternal
-            {
-                get
-                {
-                    return _ownerItem?.ParentInternal;
-                }
-            }
+            protected virtual ToolStrip ParentInternal => _ownerItem?.ParentInternal;
 
             public virtual Rectangle TextRectangle
             {
@@ -83,13 +67,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            public virtual Rectangle ContentRectangle
-            {
-                get
-                {
-                    return LayoutData.field;
-                }
-            }
+            public virtual Rectangle ContentRectangle => LayoutData.field;
 
             public virtual TextFormatFlags TextFormat
             {
@@ -99,6 +77,7 @@ namespace System.Windows.Forms
                     {
                         return _currentLayoutOptions.gdiTextFormatFlags;
                     }
+
                     return CommonLayoutOptions().gdiTextFormatFlags;
                 }
             }
@@ -108,7 +87,7 @@ namespace System.Windows.Forms
                 TextFormatFlags textFormat = TextFormatFlags.Default;
                 if (rightToLeft)
                 {
-                    //We specifically do not want to turn on TextFormatFlags.Right.
+                    // We specifically do not want to turn on TextFormatFlags.Right.
                     textFormat |= TextFormatFlags.RightToLeft;
                 }
 
@@ -143,7 +122,7 @@ namespace System.Windows.Forms
                 layoutOptions.shadowedText = !_ownerItem.Enabled;
                 layoutOptions.layoutRTL = RightToLeft.Yes == Owner.RightToLeft;
                 layoutOptions.textImageRelation = Owner.TextImageRelation;
-                //set textImageInset to 0 since we don't draw 3D border for ToolStripItems.
+                // Set textImageInset to 0 since we don't draw 3D border for ToolStripItems.
                 layoutOptions.textImageInset = 0;
                 layoutOptions.everettButtonCompat = false;
 
@@ -163,6 +142,7 @@ namespace System.Windows.Forms
                     PerformLayout();
                     return true;
                 }
+
                 return false;
             }
 
@@ -212,47 +192,40 @@ namespace System.Windows.Forms
 
             internal class ToolStripItemLayoutOptions : ButtonBaseAdapter.LayoutOptions
             {
-                Size cachedSize = LayoutUtils.InvalidSize;
-                Size cachedProposedConstraints = LayoutUtils.InvalidSize;
+                private Size _cachedSize = LayoutUtils.InvalidSize;
+                private Size _cachedProposedConstraints = LayoutUtils.InvalidSize;
 
                 // override GetTextSize to provide simple text caching.
                 protected override Size GetTextSize(Size proposedConstraints)
                 {
-                    if (cachedSize != LayoutUtils.InvalidSize
-                        && (cachedProposedConstraints == proposedConstraints
-                        || cachedSize.Width <= proposedConstraints.Width))
+                    if (_cachedSize != LayoutUtils.InvalidSize
+                        && (_cachedProposedConstraints == proposedConstraints
+                        || _cachedSize.Width <= proposedConstraints.Width))
                     {
-                        return cachedSize;
+                        return _cachedSize;
                     }
-                    else
-                    {
-                        cachedSize = base.GetTextSize(proposedConstraints);
-                        cachedProposedConstraints = proposedConstraints;
-                    }
-                    return cachedSize;
+
+                    _cachedSize = base.GetTextSize(proposedConstraints);
+                    _cachedProposedConstraints = proposedConstraints;
+                    return _cachedSize;
                 }
             }
+
             private class ToolStripLayoutData
             {
-                private readonly ToolStripLayoutStyle layoutStyle;
-                private readonly bool autoSize;
-                private Size size;
+                private readonly ToolStripLayoutStyle _layoutStyle;
+                private readonly bool _autoSize;
+                private Size _size;
 
                 public ToolStripLayoutData(ToolStrip toolStrip)
                 {
-                    layoutStyle = toolStrip.LayoutStyle;
-                    autoSize = toolStrip.AutoSize;
-                    size = toolStrip.Size;
+                    _layoutStyle = toolStrip.LayoutStyle;
+                    _autoSize = toolStrip.AutoSize;
+                    _size = toolStrip.Size;
                 }
                 public bool IsCurrent(ToolStrip toolStrip)
-                {
-                    if (toolStrip == null)
-                    {
-                        return false;
-                    }
-                    return (toolStrip.Size == size && toolStrip.LayoutStyle == layoutStyle && toolStrip.AutoSize == autoSize);
-                }
+                    => toolStrip != null && toolStrip.Size == _size && toolStrip.LayoutStyle == _layoutStyle && toolStrip.AutoSize == _autoSize;
             }
-            }
+        }
     }
 }
