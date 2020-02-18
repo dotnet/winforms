@@ -175,7 +175,7 @@ namespace System.Windows.Forms
                     //
                     for (int i = 0; i < Items.Count; i++)
                     {
-                        if (value != null && value.Equals(Items[i]))
+                        if (value.Equals(Items[i]))
                         {
                             SelectedIndex = i;
                             break;
@@ -479,11 +479,7 @@ namespace System.Windows.Forms
             try
             {
                 // Sanity check
-                Debug.Assert(sorted == true, "Sorted == false");
-                if (!sorted)
-                {
-                    return;
-                }
+                Debug.Assert(sorted, "Sorted == false");
 
                 if (domainItems != null)
                 {
@@ -568,13 +564,11 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void UpdateEditText()
         {
-            Debug.Assert(!UserEdit, "UserEdit should be false");
-            // Defensive programming
             UserEdit = false;
-
             ChangingText = true;
             Text = stringValue;
         }
+
         // This is not a breaking change -- Even though this control previously autosized to hieght,
         // it didn't actually have an AutoSize property.  The new AutoSize property enables the
         // smarter behavior.
