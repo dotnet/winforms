@@ -1433,7 +1433,7 @@ namespace System.Windows.Forms
                 Span<Kernel32.SYSTEMTIME> sa = stackalloc Kernel32.SYSTEMTIME[2];
                 sa[0] = DateTimeToSysTime(min);
                 sa[1] = DateTimeToSysTime(max);
-                int flags = NativeMethods.GDTR_MIN | NativeMethods.GDTR_MAX;
+                GDTR flags = GDTR.MIN | GDTR.MAX;
                 User32.SendMessageW(this, (User32.WM)DTM.SETRANGE, (IntPtr)flags, ref sa[0]);
             }
         }
