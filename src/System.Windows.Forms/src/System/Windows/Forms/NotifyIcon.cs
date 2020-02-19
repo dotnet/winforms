@@ -597,23 +597,23 @@ namespace System.Windows.Forms
                 }
                 data.hWnd = window.Handle;
                 data.uID = id;
-                data.uFlags = NativeMethods.NIF_INFO;
+                data.uFlags = NIF.INFO;
                 data.uTimeoutOrVersion = timeout;
                 data.szInfoTitle = tipTitle;
                 data.szInfo = tipText;
                 switch (tipIcon)
                 {
                     case ToolTipIcon.Info:
-                        data.dwInfoFlags = NativeMethods.NIIF_INFO;
+                        data.dwInfoFlags = NIIF.INFO;
                         break;
                     case ToolTipIcon.Warning:
-                        data.dwInfoFlags = NativeMethods.NIIF_WARNING;
+                        data.dwInfoFlags = NIIF.WARNING;
                         break;
                     case ToolTipIcon.Error:
-                        data.dwInfoFlags = NativeMethods.NIIF_ERROR;
+                        data.dwInfoFlags = NIIF.ERROR;
                         break;
                     case ToolTipIcon.None:
-                        data.dwInfoFlags = NativeMethods.NIIF_NONE;
+                        data.dwInfoFlags = NIIF.NONE;
                         break;
                 }
                 UnsafeNativeMethods.Shell_NotifyIcon(NIM.MODIFY, data);
@@ -659,7 +659,7 @@ namespace System.Windows.Forms
                 NativeMethods.NOTIFYICONDATA data = new NativeMethods.NOTIFYICONDATA
                 {
                     uCallbackMessage = WM_TRAYMOUSEMESSAGE,
-                    uFlags = NativeMethods.NIF_MESSAGE
+                    uFlags = NIF.MESSAGE
                 };
                 if (showIconInTray)
                 {
@@ -674,10 +674,10 @@ namespace System.Windows.Forms
                 data.szTip = null;
                 if (icon != null)
                 {
-                    data.uFlags |= NativeMethods.NIF_ICON;
+                    data.uFlags |= NIF.ICON;
                     data.hIcon = icon.Handle;
                 }
-                data.uFlags |= NativeMethods.NIF_TIP;
+                data.uFlags |= NIF.TIP;
                 data.szTip = text;
 
                 if (showIconInTray && icon != null)
