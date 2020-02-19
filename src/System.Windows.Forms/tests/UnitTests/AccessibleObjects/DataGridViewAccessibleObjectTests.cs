@@ -40,36 +40,60 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
         }
 
         [WinFormsFact]
-        public void DataGridViewAccessibleObject_GetChildCount_ReturnsCorrectValue()
+        public void DataGridViewAccessibleObject_EmptyGrid_GetChildCount_ReturnsCorrectValue()
         {
             using DataGridView dataGridView = new DataGridView();
             AccessibleObject accessibleObject = dataGridView.AccessibilityObject;
-
-            Assert.Equal(0, accessibleObject.GetChildCount()); // dataGridView doesn't have an item
-
-            dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
-            Assert.Equal(2, accessibleObject.GetChildCount()); // ColumnHeaders and First Row
-
-            dataGridView.ColumnHeadersVisible = false;
-            Assert.Equal(1, accessibleObject.GetChildCount()); // First Row only
+            Assert.Equal(0, accessibleObject.GetChildCount()); // dataGridView doesn't have items
         }
 
         [WinFormsFact]
-        public void DataGridViewAccessibleObject_GetChild_ReturnsCorrectValue()
+        public void DataGridViewAccessibleObject_GridWithFirstRowOnly_GetChildCount_ReturnsCorrectValue()
         {
             using DataGridView dataGridView = new DataGridView();
             AccessibleObject accessibleObject = dataGridView.AccessibilityObject;
+            dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
+            dataGridView.ColumnHeadersVisible = false;
+            Assert.Equal(1, accessibleObject.GetChildCount()); // A first row only
+        }
 
+        [WinFormsFact]
+        public void DataGridViewAccessibleObject_GridWithColumnHeadersAndFirstRow_GetChildCount_ReturnsCorrectValue()
+        {
+            using DataGridView dataGridView = new DataGridView();
+            AccessibleObject accessibleObject = dataGridView.AccessibilityObject;
+            dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
+            Assert.Equal(2, accessibleObject.GetChildCount()); // Column headers and a first Row
+        }
+
+        [WinFormsFact]
+        public void DataGridViewAccessibleObject_EmptyGrid_GetChild_ReturnsCorrectValue()
+        {
+            using DataGridView dataGridView = new DataGridView();
+            AccessibleObject accessibleObject = dataGridView.AccessibilityObject;
             Assert.Equal(0, accessibleObject.GetChildCount()); // dataGridView doesn't have an item
             Assert.Null(accessibleObject.GetChild(0)); // GetChild method should not throw an exception
+        }
 
+        [WinFormsFact]
+        public void DataGridViewAccessibleObject_GridWithFirstRowOnly_GetChild_ReturnsCorrectValue()
+        {
+            using DataGridView dataGridView = new DataGridView();
+            AccessibleObject accessibleObject = dataGridView.AccessibilityObject;
             dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
-            Assert.NotNull(accessibleObject.GetChild(0)); // dataGridView ColumnHeaders
-            Assert.NotNull(accessibleObject.GetChild(1)); // dataGridView a new empty row
-
             dataGridView.ColumnHeadersVisible = false;
-            Assert.NotNull(accessibleObject.GetChild(0)); // dataGridView a new empty row.
+            Assert.NotNull(accessibleObject.GetChild(0)); // dataGridView a first empty row.
             Assert.Null(accessibleObject.GetChild(1)); // GetChild method should not throw an exception
+        }
+
+        [WinFormsFact]
+        public void DataGridViewAccessibleObject_GridWithColumnHeadersAndFirstRow_GetChild_ReturnsCorrectValue()
+        {
+            using DataGridView dataGridView = new DataGridView();
+            AccessibleObject accessibleObject = dataGridView.AccessibilityObject;
+            dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
+            Assert.NotNull(accessibleObject.GetChild(0)); // dataGridView column headers
+            Assert.NotNull(accessibleObject.GetChild(1)); // dataGridView a first empty row
         }
 
         [WinFormsFact]
@@ -234,23 +258,59 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
         [Theory]
         [InlineData(true)]
         [InlineData(false)]
-        public void DataGridViewAccessibleObject_IsReadOnly_ReturnsCorrectValue(bool isReadOnly)
+        public void DataGridViewAccessibleObject_Cell_IsReadOnly_ReturnsCorrectValue(bool isReadOnly)
         {
             using DataGridView dataGridView = new DataGridView();
             dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
 
             dataGridView.Rows[0].Cells[0].ReadOnly = isReadOnly;
-            TestIsReadonly(dataGridView);
 
-            dataGridView.Rows[0].ReadOnly = isReadOnly;
-            TestIsReadonly(dataGridView);
+            Assert.Equal(dataGridView.ReadOnly, dataGridView.AccessibilityObject.IsReadOnly);
 
-            dataGridView.ReadOnly = isReadOnly;
-            TestIsReadonly(dataGridView);
+            foreach (DataGridViewRow row in dataGridView.Rows)
+            {
+                Assert.Equal(row.ReadOnly, row.AccessibilityObject.IsReadOnly);
+
+                foreach (DataGridViewCell cell in row.Cells)
+                {
+                    Assert.Equal(cell.ReadOnly, cell.AccessibilityObject.IsReadOnly);
+                }
+            }
         }
 
-        private void TestIsReadonly(DataGridView dataGridView)
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void DataGridViewAccessibleObject_Row_IsReadOnly_ReturnsCorrectValue(bool isReadOnly)
         {
+            using DataGridView dataGridView = new DataGridView();
+            dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
+
+            dataGridView.Rows[0].ReadOnly = isReadOnly;
+
+            Assert.Equal(dataGridView.ReadOnly, dataGridView.AccessibilityObject.IsReadOnly);
+
+            foreach (DataGridViewRow row in dataGridView.Rows)
+            {
+                Assert.Equal(row.ReadOnly, row.AccessibilityObject.IsReadOnly);
+
+                foreach (DataGridViewCell cell in row.Cells)
+                {
+                    Assert.Equal(cell.ReadOnly, cell.AccessibilityObject.IsReadOnly);
+                }
+            }
+        }
+
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void DataGridViewAccessibleObject_Grid_IsReadOnly_ReturnsCorrectValue(bool isReadOnly)
+        {
+            using DataGridView dataGridView = new DataGridView();
+            dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
+
+            dataGridView.ReadOnly = isReadOnly;
+
             Assert.Equal(dataGridView.ReadOnly, dataGridView.AccessibilityObject.IsReadOnly);
 
             foreach (DataGridViewRow row in dataGridView.Rows)
