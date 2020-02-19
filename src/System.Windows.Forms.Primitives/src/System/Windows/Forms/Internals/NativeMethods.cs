@@ -40,9 +40,7 @@ namespace System.Windows.Forms
         public const int FADF_VARIANT = (unchecked((int)0x800));
 
         public const int
-        GDI_ERROR = (unchecked((int)0xFFFFFFFF)),
-        GDTR_MIN = 0x0001,
-        GDTR_MAX = 0x0002;
+        GDI_ERROR = (unchecked((int)0xFFFFFFFF));
 
         public const int
         HCF_HIGHCONTRASTON = 0x00000001,

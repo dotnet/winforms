@@ -1798,8 +1798,8 @@ namespace System.Windows.Forms
                 Span<Kernel32.SYSTEMTIME> sa = stackalloc Kernel32.SYSTEMTIME[2];
                 sa[0] = DateTimePicker.DateTimeToSysTime(minDate);
                 sa[1] = DateTimePicker.DateTimeToSysTime(maxDate);
-                int flag = NativeMethods.GDTR_MIN | NativeMethods.GDTR_MAX;
-                if ((int)User32.SendMessageW(this, (User32.WM)MCM.SETRANGE, (IntPtr)flag, ref sa[0]) == 0)
+                GDTR flags = GDTR.MIN | GDTR.MAX;
+                if ((int)User32.SendMessageW(this, (User32.WM)MCM.SETRANGE, (IntPtr)flags, ref sa[0]) == 0)
                 {
                     throw new InvalidOperationException(string.Format(SR.MonthCalendarRange, minDate.ToShortDateString(), maxDate.ToShortDateString()));
                 }
