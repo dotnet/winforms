@@ -690,10 +690,12 @@ namespace System.Windows.Forms
                 return;
             }
 
+            // Replace an old tooltip to a new tooltip if another tooltip was set.
+            // Need it to avoid showing several tooltips (old and new) in one moment.
             if (tabPage.ToolTip != this)
             {
-                tabPage.ToolTip.SetToolTip(tabPage, null); // Remove an old tooltip for the current page
-                tabPage.ToolTip = this; // Set a new tooltip instance
+                tabPage.ToolTip.SetToolTip(tabPage, null); // Reset the old tabPage tooltip before setting a new tooltip instance.
+                tabPage.ToolTip = this;
             }
 
             if (tabPage.ToolTipText != text && text != null)

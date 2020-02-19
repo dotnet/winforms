@@ -1106,6 +1106,19 @@ namespace System.Windows.Forms
             return _tabPages[index];
         }
 
+        internal Rectangle GetItemRectangle(int index)
+        {
+            if (index < 0 || index >= TabCount)
+            {
+                return Rectangle.Empty;
+            }
+
+            RECT rectangle = new RECT();
+            User32.SendMessageW(this, (User32.WM)ComCtl32.TCM.GETITEMRECT, (IntPtr)index, ref rectangle);
+
+            return RectangleToScreen(rectangle);
+        }
+
         /// <summary>
         ///  This has package scope so that TabStrip and TabControl can call it.
         /// </summary>
@@ -1396,7 +1409,7 @@ namespace System.Windows.Forms
                 SelectedTab.FireEnter(e);
             }
 
-            if (TabPages.Count == 0 && Enabled)
+            if (TabCount == 0 && Enabled)
             {
                 KeyboardToolTipStateMachine.Instance.NotifyAboutGotFocus(this);
             }

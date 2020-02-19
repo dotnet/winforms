@@ -8,6 +8,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Design;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
 using static Interop;
@@ -362,7 +363,7 @@ namespace System.Windows.Forms
             get => _toolTipText;
             set
             {
-                if (value == null)
+                if (value == null || !value.Any(c => !char.IsControl(c) && c != ' '))
                 {
                     value = string.Empty;
                 }
@@ -388,7 +389,7 @@ namespace System.Windows.Forms
                 {
                     for (int i = 0; i < tabControl.TabCount; i++)
                     {
-                        if (GetItemRectangle(i).Contains(MousePosition))
+                        if (tabControl.GetItemRectangle(i).Contains(MousePosition))
                         {
                             return true;
                         }
@@ -500,25 +501,10 @@ namespace System.Windows.Forms
             // A tooltip will be shown near a selected tab
             if (ParentInternal is TabControl tabControl)
             {
-                return GetItemRectangle(tabControl.SelectedIndex);
+                return tabControl.GetItemRectangle(tabControl.SelectedIndex);
             }
 
             return Rectangle.Empty;
-        }
-
-        private Rectangle GetItemRectangle(int index)
-        {
-            int pagesCount = (ParentInternal as TabControl)?.TabCount ?? 0;
-
-            if (index < 0 || index >= pagesCount)
-            {
-                return Rectangle.Empty;
-            }
-
-            RECT rectangle = new RECT();
-            User32.SendMessageW(Parent, (User32.WM)ComCtl32.TCM.GETITEMRECT, (IntPtr)index, ref rectangle);
-
-            return ParentInternal.RectangleToScreen(rectangle);
         }
 
         internal ToolTip ToolTip
