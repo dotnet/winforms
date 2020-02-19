@@ -34,10 +34,6 @@ namespace System.Windows.Forms
         DTN_CLOSEUP = ((0 - 760) + 7);
 
         public const int FRERR_BUFFERLENGTHZERO = 0x4001;
-        public const int FADF_BSTR = (0x100);
-        public const int FADF_UNKNOWN = (0x200);
-        public const int FADF_DISPATCH = (0x400);
-        public const int FADF_VARIANT = (unchecked((int)0x800));
 
         public const int
         GDI_ERROR = (unchecked((int)0xFFFFFFFF));
