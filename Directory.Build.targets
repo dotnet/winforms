@@ -16,6 +16,10 @@
     <CoverletOutput>$(TargetDir)coverage\$(MSBuildProjectName).coverage</CoverletOutput>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(IsTestProject)' == 'true'">
+    <TestArchitectures>x64;x86</TestArchitectures>
+  </PropertyGroup>
+
   <Target Name="InstrumentModulesNoBuild" BeforeTargets="RunTests" Condition="'$(IsUnitTestProject)' == 'true'">
     <Coverlet.MSbuild.Tasks.InstrumentationTask
       Condition="'$(CollectCoverage)' == 'true'"
