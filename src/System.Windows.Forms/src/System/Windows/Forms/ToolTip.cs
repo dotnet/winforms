@@ -1235,6 +1235,7 @@ namespace System.Windows.Forms
                 {
                     ToolInfoWrapper<Control> toolInfo = GetTOOLINFO(control, info.Caption);
                     toolInfo.SendMessage(this, (User32.WM)TTM.SETTOOLINFOW);
+                    control?.SetToolTipInternal(this, GetToolTip(control));
                 }
                 else if (empty && exists && !DesignMode)
                 {

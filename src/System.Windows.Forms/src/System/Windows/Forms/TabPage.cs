@@ -367,7 +367,7 @@ namespace System.Windows.Forms
             get => _toolTipText;
             set
             {
-                if (value == null || !value.Any(c => !char.IsControl(c) && c != ' '))
+                if (string.IsNullOrWhiteSpace(value))
                 {
                     value = string.Empty;
                 }

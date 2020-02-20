@@ -16,28 +16,29 @@ namespace WinformsControlsTest
             //toolTip.SetToolTip(tabControl1, "TabControl");
         }
 
-        int i = 0;
+        int i = -1;
 
         private void ButtonClick(object sender, EventArgs e)
         {
             // It will be removed after testing
             switch (i)
             {
+                case -1:
+                    toolTip.SetToolTip(tabPage1, " \t  \r\n   ");
+                    break;
                 case 0:
-                    toolTip.SetToolTip(tabPage2, "This is page 1");
+                    toolTip.SetToolTip(tabPage2, "This is page 2");
                     break;
                 case 1:
-                    toolTip.SetToolTip(tabPage2, "This is page 1");
+                    toolTip.SetToolTip(tabPage1, "This is page 1");
                     break;
                 case 2:
-                    tabPage2.ToolTipText = "1) Some tt text";
+                    tabPage2.ToolTipText = "2) Some tt text";
                     break;
                 case 3:
-                    tabPage2.ToolTipText = "1) Some tt text";
+                    tabPage1.ToolTipText = "1) Some tt text";
                     break;
             }
-
-            toolTip.SetToolTip(tabPage1, " \t  \r\n   ");
 
             i++;
         }
