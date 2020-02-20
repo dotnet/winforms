@@ -50,8 +50,6 @@ namespace WinformsControlsTest
             j++;
 
             new ToolTip().SetToolTip(_label, "");
-
-
         }
 
         private void Button3Click(object sender, EventArgs e)
