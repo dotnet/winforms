@@ -51,7 +51,7 @@ namespace System.Windows.Forms
 
         private static readonly string DateTimePickerLocalizedControlTypeString = SR.DateTimePickerLocalizedControlType;
 
-        private const int TIMEFORMAT_NOUPDOWN = NativeMethods.DTS_TIMEFORMAT & (~NativeMethods.DTS_UPDOWN);
+        private const DTS TIMEFORMAT_NOUPDOWN = DTS.TIMEFORMAT & (~DTS.UPDOWN);
         private EventHandler onCloseUp;
         private EventHandler onDropDown;
         private EventHandler onValueChanged;
@@ -72,7 +72,7 @@ namespace System.Windows.Forms
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public static readonly DateTime MaxDateTime = new DateTime(9998, 12, 31);
 
-        private int style;
+        private DTS _style;
         private short prefHeightCache = -1;
 
         /// <summary>
@@ -450,17 +450,17 @@ namespace System.Windows.Forms
                 CreateParams cp = base.CreateParams;
                 cp.ClassName = WindowClasses.WC_DATETIMEPICK;
 
-                cp.Style |= style;
+                cp.Style |= (int)_style;
 
                 switch (format)
                 {
                     case DateTimePickerFormat.Long:
-                        cp.Style |= NativeMethods.DTS_LONGDATEFORMAT;
+                        cp.Style |= (int)DTS.LONGDATEFORMAT;
                         break;
                     case DateTimePickerFormat.Short:
                         break;
                     case DateTimePickerFormat.Time:
-                        cp.Style |= TIMEFORMAT_NOUPDOWN;
+                        cp.Style |= (int)TIMEFORMAT_NOUPDOWN;
                         break;
                     case DateTimePickerFormat.Custom:
                         break;
@@ -562,9 +562,9 @@ namespace System.Windows.Forms
         {
             get
             {
-                return ((style & NativeMethods.DTS_RIGHTALIGN) != 0)
-                ? LeftRightAlignment.Right
-                : LeftRightAlignment.Left;
+                return (_style & DTS.RIGHTALIGN) != 0
+                    ? LeftRightAlignment.Right
+                    : LeftRightAlignment.Left;
             }
 
             set
@@ -575,7 +575,7 @@ namespace System.Windows.Forms
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(LeftRightAlignment));
                 }
 
-                SetStyleBit((value == LeftRightAlignment.Right), NativeMethods.DTS_RIGHTALIGN);
+                SetStyleBit(value == LeftRightAlignment.Right, DTS.RIGHTALIGN);
             }
         }
 
@@ -909,14 +909,8 @@ namespace System.Windows.Forms
         ]
         public bool ShowCheckBox
         {
-            get
-            {
-                return (style & NativeMethods.DTS_SHOWNONE) != 0;
-            }
-            set
-            {
-                SetStyleBit(value, NativeMethods.DTS_SHOWNONE);
-            }
+            get => (_style & DTS.SHOWNONE) != 0;
+            set => SetStyleBit(value, DTS.SHOWNONE);
         }
 
         /// <summary>
@@ -930,15 +924,12 @@ namespace System.Windows.Forms
         ]
         public bool ShowUpDown
         {
-            get
-            {
-                return (style & NativeMethods.DTS_UPDOWN) != 0;
-            }
+            get => (_style & DTS.UPDOWN) != 0;
             set
             {
                 if (ShowUpDown != value)
                 {
-                    SetStyleBit(value, NativeMethods.DTS_UPDOWN);
+                    SetStyleBit(value, DTS.UPDOWN);
                 }
             }
         }
@@ -1414,20 +1405,20 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Turns on or off a given style bit
         /// </summary>
-        private void SetStyleBit(bool flag, int bit)
+        private void SetStyleBit(bool flag, DTS bit)
         {
-            if (((style & bit) != 0) == flag)
+            if (((_style & bit) != 0) == flag)
             {
                 return;
             }
 
             if (flag)
             {
-                style |= bit;
+                _style |= bit;
             }
             else
             {
-                style &= ~bit;
+                _style &= ~bit;
             }
 
             if (IsHandleCreated)
