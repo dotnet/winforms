@@ -16,8 +16,8 @@ namespace System.Windows.Forms
     ///  file. This class cannot be inherited.
     /// </summary>
     [
-    Designer("System.Windows.Forms.Design.SaveFileDialogDesigner, " + AssemblyRef.SystemDesign),
-    SRDescription(nameof(SR.DescriptionSaveFileDialog))
+    Designer("System.Windows.Forms.Design.SaveFileDialogDesigner, " + AssemblyRef.SystemDesign)]
+    [SRDescription(nameof(SR.DescriptionSaveFileDialog))
     ]
     public sealed class SaveFileDialog : FileDialog
     {
@@ -25,11 +25,9 @@ namespace System.Windows.Forms
         ///  Gets or sets a value indicating whether the dialog box prompts the user for
         ///  permission to create a file if the user specifies a file that does not exist.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        DefaultValue(false),
-        SRDescription(nameof(SR.SaveFileDialogCreatePrompt))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(false)]
+        [SRDescription(nameof(SR.SaveFileDialogCreatePrompt))]
         public bool CreatePrompt
         {
             get => GetOption((int)Comdlg32.OFN.CREATEPROMPT);
@@ -40,11 +38,9 @@ namespace System.Windows.Forms
         ///  Gets or sets a value indicating whether the Save As dialog box displays a warning if the user specifies
         ///  a file name that already exists.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        DefaultValue(true),
-        SRDescription(nameof(SR.SaveFileDialogOverWritePrompt))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(true)]
+        [SRDescription(nameof(SR.SaveFileDialogOverWritePrompt))]
         public bool OverwritePrompt
         {
             get => GetOption((int)Comdlg32.OFN.OVERWRITEPROMPT);

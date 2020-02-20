@@ -128,7 +128,9 @@ namespace System.Windows.Forms
         /// <remarks>
         ///  This method is obsolete and unused.
         /// </remarks>
-        [SRDescription(nameof(SR.collectionChangedEventDescr)), EditorBrowsable(EditorBrowsableState.Never), Browsable(false)]
+        [SRDescription(nameof(SR.collectionChangedEventDescr))]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
         public event CollectionChangeEventHandler CollectionChanged
         {
             add

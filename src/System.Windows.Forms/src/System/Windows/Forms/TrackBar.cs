@@ -571,8 +571,8 @@ namespace System.Windows.Forms
         ///  the lower and upper limits of the TrackBar range.
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
-        [DefaultValue(0),
-        Bindable(true)]
+        [DefaultValue(0)]
+        [Bindable(true)]
         [SRDescription(nameof(SR.TrackBarValueDescr))]
         public int Value
         {

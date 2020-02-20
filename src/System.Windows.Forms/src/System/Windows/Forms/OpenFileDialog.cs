@@ -22,10 +22,8 @@ namespace System.Windows.Forms
         ///  Gets or sets a value indicating whether the dialog box displays a
         ///  warning if the user specifies a file name that does not exist.
         /// </summary>
-        [
-        DefaultValue(true),
-        SRDescription(nameof(SR.OFDcheckFileExistsDescr))
-        ]
+        [DefaultValue(true)]
+        [SRDescription(nameof(SR.OFDcheckFileExistsDescr))]
         public override bool CheckFileExists
         {
             get => base.CheckFileExists;
@@ -36,11 +34,9 @@ namespace System.Windows.Forms
         ///  Gets or sets a value
         ///  indicating whether the dialog box allows multiple files to be selected.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        DefaultValue(false),
-        SRDescription(nameof(SR.OFDmultiSelectDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(false)]
+        [SRDescription(nameof(SR.OFDmultiSelectDescr))]
         public bool Multiselect
         {
             get => GetOption((int)Comdlg32.OFN.ALLOWMULTISELECT);
@@ -51,11 +47,9 @@ namespace System.Windows.Forms
         ///  Gets or sets a value indicating whether
         ///  the read-only check box is selected.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        DefaultValue(false),
-        SRDescription(nameof(SR.OFDreadOnlyCheckedDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(false)]
+        [SRDescription(nameof(SR.OFDreadOnlyCheckedDescr))]
         public bool ReadOnlyChecked
         {
             get => GetOption((int)Comdlg32.OFN.READONLY);
@@ -65,11 +59,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets or sets a value indicating whether the dialog contains a read-only check box.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        DefaultValue(false),
-        SRDescription(nameof(SR.OFDshowReadOnlyDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(false)]
+        [SRDescription(nameof(SR.OFDshowReadOnlyDescr))]
         public bool ShowReadOnly
         {
             get => !GetOption((int)Comdlg32.OFN.HIDEREADONLY);

@@ -18,14 +18,12 @@ namespace System.Windows.Forms
     ///  edge. The splitter will then resize the control that is previous in the docking
     ///  order.
     /// </summary>
-    [
-    ComVisible(true),
-    ClassInterface(ClassInterfaceType.AutoDispatch),
-    DefaultEvent(nameof(SplitterMoved)),
-    DefaultProperty(nameof(Dock)),
-    SRDescription(nameof(SR.DescriptionSplitter)),
-    Designer("System.Windows.Forms.Design.SplitterDesigner, " + AssemblyRef.SystemDesign)
-    ]
+    [ComVisible(true)]
+    [ClassInterface(ClassInterfaceType.AutoDispatch)]
+    [DefaultEvent(nameof(SplitterMoved))]
+    [DefaultProperty(nameof(Dock))]
+    [SRDescription(nameof(SR.DescriptionSplitter))]
+    [Designer("System.Windows.Forms.Design.SplitterDesigner, " + AssemblyRef.SystemDesign)]
     public class Splitter : Control
     {
         private const int DRAW_START = 1;
@@ -69,8 +67,9 @@ namespace System.Windows.Forms
         ///  determines which edges of the control are anchored to the container's
         ///  edges.
         /// </summary>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never),
-        DefaultValue(AnchorStyles.None)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DefaultValue(AnchorStyles.None)]
         public override AnchorStyles Anchor
         {
             get
@@ -83,7 +82,8 @@ namespace System.Windows.Forms
             }
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public override bool AllowDrop
         {
             get => base.AllowDrop;
@@ -119,56 +119,64 @@ namespace System.Windows.Forms
             }
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public override Color ForeColor
         {
             get => base.ForeColor;
             set => base.ForeColor = value;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler ForeColorChanged
         {
             add => base.ForeColorChanged += value;
             remove => base.ForeColorChanged -= value;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public override Image BackgroundImage
         {
             get => base.BackgroundImage;
             set => base.BackgroundImage = value;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageChanged
         {
             add => base.BackgroundImageChanged += value;
             remove => base.BackgroundImageChanged -= value;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public override ImageLayout BackgroundImageLayout
         {
             get => base.BackgroundImageLayout;
             set => base.BackgroundImageLayout = value;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageLayoutChanged
         {
             add => base.BackgroundImageLayoutChanged += value;
             remove => base.BackgroundImageLayoutChanged -= value;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public override Font Font
         {
             get => base.Font;
             set => base.Font = value;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler FontChanged
         {
             add => base.FontChanged += value;
@@ -236,10 +244,8 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-        Localizable(true),
-        DefaultValue(DockStyle.Left)
-        ]
+        [Localizable(true)]
+        [DefaultValue(DockStyle.Left)]
         public override DockStyle Dock
         {
             get => base.Dock;
@@ -286,14 +292,16 @@ namespace System.Windows.Forms
             }
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         new public ImeMode ImeMode
         {
             get => base.ImeMode;
             set => base.ImeMode = value;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler ImeModeChanged
         {
             add => base.ImeModeChanged += value;
@@ -306,12 +314,10 @@ namespace System.Windows.Forms
         ///  is not occupied by edge docked controls, this is the are that
         ///  would be used for any fill docked control.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        Localizable(true),
-        DefaultValue(25),
-        SRDescription(nameof(SR.SplitterMinExtraDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [Localizable(true)]
+        [DefaultValue(25)]
+        [SRDescription(nameof(SR.SplitterMinExtraDescr))]
         public int MinExtra
         {
             get
@@ -334,12 +340,10 @@ namespace System.Windows.Forms
         ///  splitter. The target of a splitter is always the control adjacent
         ///  to the splitter, just prior in the dock order.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        Localizable(true),
-        DefaultValue(25),
-        SRDescription(nameof(SR.SplitterMinSizeDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [Localizable(true)]
+        [DefaultValue(25)]
+        [SRDescription(nameof(SR.SplitterMinSizeDescr))]
         public int MinSize
         {
             get
@@ -361,12 +365,10 @@ namespace System.Windows.Forms
         ///  The position of the splitter. If the splitter is not bound
         ///  to a control, SplitPosition will be -1.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatLayout)),
-        Browsable(false),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.SplitterSplitPositionDescr))
-        ]
+        [SRCategory(nameof(SR.CatLayout))]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRDescription(nameof(SR.SplitterSplitPositionDescr))]
         public int SplitPosition
         {
             get
@@ -428,81 +430,90 @@ namespace System.Windows.Forms
             }
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         new public bool TabStop
         {
             get => base.TabStop;
             set => base.TabStop = value;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler TabStopChanged
         {
             add => base.TabStopChanged += value;
             remove => base.TabStopChanged -= value;
         }
 
-        [
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Never),
-        Bindable(false),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [Bindable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override string Text
         {
             get => base.Text;
             set => base.Text = value;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler TextChanged
         {
             add => base.TextChanged += value;
             remove => base.TextChanged -= value;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler Enter
         {
             add => base.Enter += value;
             remove => base.Enter -= value;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public new event KeyEventHandler KeyUp
         {
             add => base.KeyUp += value;
             remove => base.KeyUp -= value;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public new event KeyEventHandler KeyDown
         {
             add => base.KeyDown += value;
             remove => base.KeyDown -= value;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public new event KeyPressEventHandler KeyPress
         {
             add => base.KeyPress += value;
             remove => base.KeyPress -= value;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler Leave
         {
             add => base.Leave += value;
             remove => base.Leave -= value;
         }
 
-        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.SplitterSplitterMovingDescr))]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [SRDescription(nameof(SR.SplitterSplitterMovingDescr))]
         public event SplitterEventHandler SplitterMoving
         {
             add => Events.AddHandler(EVENT_MOVING, value);
             remove => Events.RemoveHandler(EVENT_MOVING, value);
         }
 
-        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.SplitterSplitterMovedDescr))]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [SRDescription(nameof(SR.SplitterSplitterMovedDescr))]
         public event SplitterEventHandler SplitterMoved
         {
             add => Events.AddHandler(EVENT_MOVED, value);

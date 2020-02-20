@@ -74,11 +74,9 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-        DefaultValue(true),
-        SRDescription(nameof(SR.ToolStripDropDownButtonShowDropDownArrowDescr)),
-        SRCategory(nameof(SR.CatAppearance))
-        ]
+        [DefaultValue(true)]
+        [SRDescription(nameof(SR.ToolStripDropDownButtonShowDropDownArrowDescr))]
+        [SRCategory(nameof(SR.CatAppearance))]
         public bool ShowDropDownArrow
         {
             get

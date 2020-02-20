@@ -60,9 +60,7 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            DefaultValue("")
-        ]
+        [DefaultValue("")]
         public string Description
         {
             get
@@ -132,9 +130,7 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            DefaultValue(DataGridViewImageCellLayout.NotSet)
-        ]
+        [DefaultValue(DataGridViewImageCellLayout.NotSet)]
         public DataGridViewImageCellLayout ImageLayout
         {
             get
@@ -173,9 +169,7 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            DefaultValue(false)
-        ]
+        [DefaultValue(false)]
         public bool ValueIsIcon
         {
             get

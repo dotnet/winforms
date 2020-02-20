@@ -14,12 +14,10 @@ namespace System.Windows.Forms
     /// <summary>
     ///  Base class for the columns in a data grid view.
     /// </summary>
-    [
-        Designer("System.Windows.Forms.Design.DataGridViewColumnDesigner, " + AssemblyRef.SystemDesign),
-        TypeConverter(typeof(DataGridViewColumnConverter)),
-        ToolboxItem(false),
-        DesignTimeVisible(false)
-    ]
+    [Designer("System.Windows.Forms.Design.DataGridViewColumnDesigner, " + AssemblyRef.SystemDesign)]
+    [TypeConverter(typeof(DataGridViewColumnConverter))]
+    [ToolboxItem(false)]
+    [DesignTimeVisible(false)]
     public class DataGridViewColumn : DataGridViewBand, IComponent
     {
         private const float DATAGRIDVIEWCOLUMN_defaultFillWeight = 100F;
@@ -73,12 +71,10 @@ namespace System.Windows.Forms
             return DpiHelper.IsScalingRequirementMet ? DpiHelper.LogicalToDeviceUnits(value) : value;
         }
 
-        [
-            SRCategory(nameof(SR.CatLayout)),
-            DefaultValue(DataGridViewAutoSizeColumnMode.NotSet),
-            SRDescription(nameof(SR.DataGridViewColumn_AutoSizeModeDescr)),
-            RefreshProperties(RefreshProperties.Repaint)
-        ]
+        [SRCategory(nameof(SR.CatLayout))]
+        [DefaultValue(DataGridViewAutoSizeColumnMode.NotSet)]
+        [SRDescription(nameof(SR.DataGridViewColumn_AutoSizeModeDescr))]
+        [RefreshProperties(RefreshProperties.Repaint)]
         public DataGridViewAutoSizeColumnMode AutoSizeMode
         {
             get
@@ -168,25 +164,21 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public Type CellType => CellTemplate?.GetType();
 
-        [
-            DefaultValue(null),
-            SRCategory(nameof(SR.CatBehavior)),
-            SRDescription(nameof(SR.DataGridView_ColumnContextMenuStripDescr))
-        ]
+        [DefaultValue(null)]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [SRDescription(nameof(SR.DataGridView_ColumnContextMenuStripDescr))]
         public override ContextMenuStrip ContextMenuStrip
         {
             get => base.ContextMenuStrip;
             set => base.ContextMenuStrip = value;
         }
 
-        [
-            Browsable(true),
-            DefaultValue(""),
-            TypeConverter("System.Windows.Forms.Design.DataMemberFieldConverter, " + AssemblyRef.SystemDesign),
-            Editor("System.Windows.Forms.Design.DataGridViewColumnDataPropertyNameEditor, " + AssemblyRef.SystemDesign, typeof(Drawing.Design.UITypeEditor)),
-            SRDescription(nameof(SR.DataGridView_ColumnDataPropertyNameDescr)),
-            SRCategory(nameof(SR.CatData))
-        ]
+        [Browsable(true)]
+        [DefaultValue("")]
+        [TypeConverter("System.Windows.Forms.Design.DataMemberFieldConverter, " + AssemblyRef.SystemDesign)]
+        [Editor("System.Windows.Forms.Design.DataGridViewColumnDataPropertyNameEditor, " + AssemblyRef.SystemDesign, typeof(Drawing.Design.UITypeEditor))]
+        [SRDescription(nameof(SR.DataGridView_ColumnDataPropertyNameDescr))]
+        [SRCategory(nameof(SR.CatData))]
         public string DataPropertyName
         {
             get
@@ -210,11 +202,9 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            Browsable(true),
-            SRCategory(nameof(SR.CatAppearance)),
-            SRDescription(nameof(SR.DataGridView_ColumnDefaultCellStyleDescr))
-        ]
+        [Browsable(true)]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.DataGridView_ColumnDefaultCellStyleDescr))]
         public override DataGridViewCellStyle DefaultCellStyle
         {
             get => base.DefaultCellStyle;
@@ -249,10 +239,8 @@ namespace System.Windows.Forms
 
         internal int DesiredMinimumWidth { get; set; }
 
-        [
-            Browsable(false),
-            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public int DisplayIndex
         {
             get
@@ -335,21 +323,17 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            Browsable(false),
-            EditorBrowsable(EditorBrowsableState.Advanced)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         public event EventHandler Disposed
         {
             add => disposed += value;
             remove => disposed -= value;
         }
 
-        [
-            DefaultValue(0),
-            SRCategory(nameof(SR.CatLayout)),
-            SRDescription(nameof(SR.DataGridView_ColumnDividerWidthDescr))
-        ]
+        [DefaultValue(0)]
+        [SRCategory(nameof(SR.CatLayout))]
+        [SRDescription(nameof(SR.DataGridView_ColumnDividerWidthDescr))]
         public int DividerWidth
         {
             get
@@ -362,11 +346,9 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            SRCategory(nameof(SR.CatLayout)),
-            DefaultValue(DATAGRIDVIEWCOLUMN_defaultFillWeight),
-            SRDescription(nameof(SR.DataGridViewColumn_FillWeightDescr)),
-        ]
+        [SRCategory(nameof(SR.CatLayout))]
+        [DefaultValue(DATAGRIDVIEWCOLUMN_defaultFillWeight)]
+        [SRDescription(nameof(SR.DataGridViewColumn_FillWeightDescr))]
         public float FillWeight
         {
             get
@@ -405,22 +387,18 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            DefaultValue(false),
-            RefreshProperties(RefreshProperties.All),
-            SRCategory(nameof(SR.CatLayout)),
-            SRDescription(nameof(SR.DataGridView_ColumnFrozenDescr))
-        ]
+        [DefaultValue(false)]
+        [RefreshProperties(RefreshProperties.All)]
+        [SRCategory(nameof(SR.CatLayout))]
+        [SRDescription(nameof(SR.DataGridView_ColumnFrozenDescr))]
         public override bool Frozen
         {
             get => base.Frozen;
             set => base.Frozen = value;
         }
 
-        [
-            Browsable(false),
-            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public DataGridViewColumnHeaderCell HeaderCell
         {
             get
@@ -430,11 +408,9 @@ namespace System.Windows.Forms
             set => base.HeaderCellCore = value;
         }
 
-        [
-            SRCategory(nameof(SR.CatAppearance)),
-            SRDescription(nameof(SR.DataGridView_ColumnHeaderTextDescr)),
-            Localizable(true)
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.DataGridView_ColumnHeaderTextDescr))]
+        [Localizable(true)]
         public string HeaderText
         {
             get
@@ -471,11 +447,9 @@ namespace System.Windows.Forms
             return HasHeaderCell && ((DataGridViewColumnHeaderCell)HeaderCell).ContainsLocalValue;
         }
 
-        [
-            Browsable(false),
-            EditorBrowsable(EditorBrowsableState.Advanced),
-            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public DataGridViewAutoSizeColumnMode InheritedAutoSizeMode
         {
             get
@@ -484,9 +458,7 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            Browsable(false)
-        ]
+        [Browsable(false)]
         public override DataGridViewCellStyle InheritedStyle
         {
             get
@@ -649,10 +621,8 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            Browsable(false),
-            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public bool IsDataBound
         {
             get
@@ -680,13 +650,11 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            DefaultValue(DATAGRIDVIEWCOLUMN_defaultMinColumnThickness),
-            Localizable(true),
-            SRCategory(nameof(SR.CatLayout)),
-            SRDescription(nameof(SR.DataGridView_ColumnMinimumWidthDescr)),
-            RefreshProperties(RefreshProperties.Repaint)
-        ]
+        [DefaultValue(DATAGRIDVIEWCOLUMN_defaultMinColumnThickness)]
+        [Localizable(true)]
+        [SRCategory(nameof(SR.CatLayout))]
+        [SRDescription(nameof(SR.DataGridView_ColumnMinimumWidthDescr))]
+        [RefreshProperties(RefreshProperties.Repaint)]
         public int MinimumWidth
         {
             get
@@ -699,9 +667,7 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            Browsable(false)
-        ]
+        [Browsable(false)]
         public string Name
         {
             get
@@ -750,10 +716,8 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            SRCategory(nameof(SR.CatBehavior)),
-            SRDescription(nameof(SR.DataGridView_ColumnReadOnlyDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [SRDescription(nameof(SR.DataGridView_ColumnReadOnlyDescr))]
         public override bool ReadOnly
         {
             get => base.ReadOnly;
@@ -772,10 +736,8 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            SRCategory(nameof(SR.CatBehavior)),
-            SRDescription(nameof(SR.DataGridView_ColumnResizableDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [SRDescription(nameof(SR.DataGridView_ColumnResizableDescr))]
         public override DataGridViewTriState Resizable
         {
             get => base.Resizable;
@@ -786,11 +748,9 @@ namespace System.Windows.Forms
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public ISite Site { get; set; }
 
-        [
-            DefaultValue(DataGridViewColumnSortMode.NotSortable),
-            SRCategory(nameof(SR.CatBehavior)),
-            SRDescription(nameof(SR.DataGridView_ColumnSortModeDescr))
-        ]
+        [DefaultValue(DataGridViewColumnSortMode.NotSortable)]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [SRDescription(nameof(SR.DataGridView_ColumnSortModeDescr))]
         public DataGridViewColumnSortMode SortMode
         {
             get
@@ -846,12 +806,10 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            DefaultValue(""),
-            Localizable(true),
-            SRCategory(nameof(SR.CatAppearance)),
-            SRDescription(nameof(SR.DataGridView_ColumnToolTipTextDescr))
-        ]
+        [DefaultValue("")]
+        [Localizable(true)]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.DataGridView_ColumnToolTipTextDescr))]
         public string ToolTipText
         {
             get
@@ -885,11 +843,9 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            Browsable(false),
-            DefaultValue(null),
-            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [Browsable(false)]
+        [DefaultValue(null)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public Type ValueType
         {
             get
@@ -903,24 +859,20 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            DefaultValue(true),
-            Localizable(true),
-            SRCategory(nameof(SR.CatAppearance)),
-            SRDescription(nameof(SR.DataGridView_ColumnVisibleDescr))
-        ]
+        [DefaultValue(true)]
+        [Localizable(true)]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.DataGridView_ColumnVisibleDescr))]
         public override bool Visible
         {
             get => base.Visible;
             set => base.Visible = value;
         }
 
-        [
-            SRCategory(nameof(SR.CatLayout)),
-            Localizable(true),
-            SRDescription(nameof(SR.DataGridView_ColumnWidthDescr)),
-            RefreshProperties(RefreshProperties.Repaint)
-        ]
+        [SRCategory(nameof(SR.CatLayout))]
+        [Localizable(true)]
+        [SRDescription(nameof(SR.DataGridView_ColumnWidthDescr))]
+        [RefreshProperties(RefreshProperties.Repaint)]
         public int Width
         {
             get

@@ -106,10 +106,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Occurs when the button portion of a split button is clicked.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatAction)),
-        SRDescription(nameof(SR.ToolStripSplitButtonOnButtonClickDescr))
-        ]
+        [SRCategory(nameof(SR.CatAction))]
+        [SRDescription(nameof(SR.ToolStripSplitButtonOnButtonClickDescr))]
         public event EventHandler ButtonClick
         {
             add => Events.AddHandler(EventButtonClick, value);
@@ -118,10 +116,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Occurs when the utton portion of a split button  is double clicked.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatAction)),
-        SRDescription(nameof(SR.ToolStripSplitButtonOnButtonDoubleClickDescr))
-        ]
+        [SRCategory(nameof(SR.CatAction))]
+        [SRDescription(nameof(SR.ToolStripSplitButtonOnButtonDoubleClickDescr))]
         public event EventHandler ButtonDoubleClick
         {
             add => Events.AddHandler(EventButtonDoubleClick, value);
@@ -136,7 +132,8 @@ namespace System.Windows.Forms
             }
         }
 
-        [DefaultValue(null), Browsable(false)]
+        [DefaultValue(null)]
+        [Browsable(false)]
         public ToolStripItem DefaultItem
         {
             get
@@ -156,10 +153,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Occurs when the default item has changed
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatAction)),
-        SRDescription(nameof(SR.ToolStripSplitButtonOnDefaultItemChangedDescr))
-        ]
+        [SRCategory(nameof(SR.CatAction))]
+        [SRDescription(nameof(SR.ToolStripSplitButtonOnDefaultItemChangedDescr))]
         public event EventHandler DefaultItemChanged
         {
             add => Events.AddHandler(EventDefaultItemChanged, value);
@@ -213,10 +208,8 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-        SRCategory(nameof(SR.CatLayout)),
-        SRDescription(nameof(SR.ToolStripSplitButtonDropDownButtonWidthDescr))
-        ]
+        [SRCategory(nameof(SR.CatLayout))]
+        [SRDescription(nameof(SR.ToolStripSplitButtonDropDownButtonWidthDescr))]
         public int DropDownButtonWidth
         {
             get
@@ -303,12 +296,10 @@ namespace System.Windows.Forms
         /// <summary>
         ///  the width of the separator between the default and drop down button
         /// </summary>
-        [
-        SRDescription(nameof(SR.ToolStripSplitButtonSplitterWidthDescr)),
-        SRCategory(nameof(SR.CatLayout)),
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Advanced)
-        ]
+        [SRDescription(nameof(SR.ToolStripSplitButtonSplitterWidthDescr))]
+        [SRCategory(nameof(SR.CatLayout))]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         internal int SplitterWidth
         {
             get

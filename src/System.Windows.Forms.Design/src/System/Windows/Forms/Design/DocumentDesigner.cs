@@ -15,9 +15,7 @@ namespace System.Windows.Forms.Design
     ///  Provides a designer that extends the ScrollableControlDesigner and implements
     ///  IRootDesigner.
     /// </summary>
-    [
-        ToolboxItemFilter("System.Windows.Forms")
-    ]
+    [ToolboxItemFilter("System.Windows.Forms")]
     public class DocumentDesigner : ScrollableControlDesigner, IRootDesigner, IToolboxUser, IOleDragClient
     {
         static internal IDesignerSerializationManager manager;

@@ -17,13 +17,11 @@ namespace System.Windows.Forms
     ///  Specifies a component that creates
     ///  an icon in the Windows System Tray. This class cannot be inherited.
     /// </summary>
-    [
-    DefaultProperty(nameof(Text)),
-    DefaultEvent(nameof(MouseDoubleClick)),
-    Designer("System.Windows.Forms.Design.NotifyIconDesigner, " + AssemblyRef.SystemDesign),
-    ToolboxItemFilter("System.Windows.Forms"),
-    SRDescription(nameof(SR.DescriptionNotifyIcon))
-    ]
+    [DefaultProperty(nameof(Text))]
+    [DefaultEvent(nameof(MouseDoubleClick))]
+    [Designer("System.Windows.Forms.Design.NotifyIconDesigner, " + AssemblyRef.SystemDesign)]
+    [ToolboxItemFilter("System.Windows.Forms")]
+    [SRDescription(nameof(SR.DescriptionNotifyIcon))]
     public sealed class NotifyIcon : Component
     {
         private static readonly object EVENT_MOUSEDOWN = new object();
@@ -87,13 +85,11 @@ namespace System.Windows.Forms
         ///  Gets or sets the BalloonTip text displayed when
         ///  the mouse hovers over a system tray icon.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        Localizable(true),
-        DefaultValue(""),
-        SRDescription(nameof(SR.NotifyIconBalloonTipTextDescr)),
-        Editor("System.ComponentModel.Design.MultilineStringEditor, " + AssemblyRef.SystemDesign, typeof(Drawing.Design.UITypeEditor))
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [Localizable(true)]
+        [DefaultValue("")]
+        [SRDescription(nameof(SR.NotifyIconBalloonTipTextDescr))]
+        [Editor("System.ComponentModel.Design.MultilineStringEditor, " + AssemblyRef.SystemDesign, typeof(Drawing.Design.UITypeEditor))]
         public string BalloonTipText
         {
             get
@@ -113,11 +109,9 @@ namespace System.Windows.Forms
         ///  Gets or sets the BalloonTip icon displayed when
         ///  the mouse hovers over a system tray icon.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        DefaultValue(ToolTipIcon.None),
-        SRDescription(nameof(SR.NotifyIconBalloonTipIconDescr))
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [DefaultValue(ToolTipIcon.None)]
+        [SRDescription(nameof(SR.NotifyIconBalloonTipIconDescr))]
         public ToolTipIcon BalloonTipIcon
         {
             get
@@ -142,12 +136,10 @@ namespace System.Windows.Forms
         ///  Gets or sets the BalloonTip title displayed when
         ///  the mouse hovers over a system tray icon.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        Localizable(true),
-        DefaultValue(""),
-        SRDescription(nameof(SR.NotifyIconBalloonTipTitleDescr))
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [Localizable(true)]
+        [DefaultValue("")]
+        [SRDescription(nameof(SR.NotifyIconBalloonTipTitleDescr))]
         public string BalloonTipTitle
         {
             get
@@ -166,7 +158,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  [This event is raised on the NIN_BALLOONUSERCLICK message.]
         /// </summary>
-        [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.NotifyIconOnBalloonTipClickedDescr))]
+        [SRCategory(nameof(SR.CatAction))]
+        [SRDescription(nameof(SR.NotifyIconOnBalloonTipClickedDescr))]
         public event EventHandler BalloonTipClicked
         {
             add => Events.AddHandler(EVENT_BALLOONTIPCLICKED, value);
@@ -177,7 +170,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  [This event is raised on the NIN_BALLOONTIMEOUT message.]
         /// </summary>
-        [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.NotifyIconOnBalloonTipClosedDescr))]
+        [SRCategory(nameof(SR.CatAction))]
+        [SRDescription(nameof(SR.NotifyIconOnBalloonTipClosedDescr))]
         public event EventHandler BalloonTipClosed
         {
             add => Events.AddHandler(EVENT_BALLOONTIPCLOSED, value);
@@ -188,18 +182,17 @@ namespace System.Windows.Forms
         /// <summary>
         ///  [This event is raised on the NIN_BALLOONSHOW or NIN_BALLOONHIDE message.]
         /// </summary>
-        [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.NotifyIconOnBalloonTipShownDescr))]
+        [SRCategory(nameof(SR.CatAction))]
+        [SRDescription(nameof(SR.NotifyIconOnBalloonTipShownDescr))]
         public event EventHandler BalloonTipShown
         {
             add => Events.AddHandler(EVENT_BALLOONTIPSHOWN, value);
             remove => Events.RemoveHandler(EVENT_BALLOONTIPSHOWN, value);
         }
 
-        [
-        DefaultValue(null),
-        SRCategory(nameof(SR.CatBehavior)),
-        SRDescription(nameof(SR.NotifyIconMenuDescr))
-        ]
+        [DefaultValue(null)]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [SRDescription(nameof(SR.NotifyIconMenuDescr))]
         public ContextMenuStrip ContextMenuStrip
         {
             get
@@ -217,12 +210,10 @@ namespace System.Windows.Forms
         ///  Gets or sets the current
         ///  icon.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        Localizable(true),
-        DefaultValue(null),
-        SRDescription(nameof(SR.NotifyIconIconDescr))
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [Localizable(true)]
+        [DefaultValue(null)]
+        [SRDescription(nameof(SR.NotifyIconIconDescr))]
         public Icon Icon
         {
             get
@@ -243,13 +234,11 @@ namespace System.Windows.Forms
         ///  Gets or sets the ToolTip text displayed when
         ///  the mouse hovers over a system tray icon.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        Localizable(true),
-        DefaultValue(""),
-        SRDescription(nameof(SR.NotifyIconTextDescr)),
-        Editor("System.ComponentModel.Design.MultilineStringEditor, " + AssemblyRef.SystemDesign, typeof(Drawing.Design.UITypeEditor))
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [Localizable(true)]
+        [DefaultValue("")]
+        [SRDescription(nameof(SR.NotifyIconTextDescr))]
+        [Editor("System.ComponentModel.Design.MultilineStringEditor, " + AssemblyRef.SystemDesign, typeof(Drawing.Design.UITypeEditor))]
         public string Text
         {
             get
@@ -281,12 +270,10 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets or sets a value indicating whether the icon is visible in the Windows System Tray.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        Localizable(true),
-        DefaultValue(false),
-        SRDescription(nameof(SR.NotifyIconVisDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [Localizable(true)]
+        [DefaultValue(false)]
+        [SRDescription(nameof(SR.NotifyIconVisDescr))]
         public bool Visible
         {
             get
@@ -303,14 +290,12 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-        SRCategory(nameof(SR.CatData)),
-        Localizable(false),
-        Bindable(true),
-        SRDescription(nameof(SR.ControlTagDescr)),
-        DefaultValue(null),
-        TypeConverter(typeof(StringConverter)),
-        ]
+        [SRCategory(nameof(SR.CatData))]
+        [Localizable(false)]
+        [Bindable(true)]
+        [SRDescription(nameof(SR.ControlTagDescr))]
+        [DefaultValue(null)]
+        [TypeConverter(typeof(StringConverter))]
         public object Tag
         {
             get
@@ -326,7 +311,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Occurs when the user clicks the icon in the system tray.
         /// </summary>
-        [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.ControlOnClickDescr))]
+        [SRCategory(nameof(SR.CatAction))]
+        [SRDescription(nameof(SR.ControlOnClickDescr))]
         public event EventHandler Click
         {
             add => Events.AddHandler(EVENT_CLICK, value);
@@ -336,7 +322,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Occurs when the user double-clicks the icon in the system tray.
         /// </summary>
-        [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.ControlOnDoubleClickDescr))]
+        [SRCategory(nameof(SR.CatAction))]
+        [SRDescription(nameof(SR.ControlOnDoubleClickDescr))]
         public event EventHandler DoubleClick
         {
             add => Events.AddHandler(EVENT_DOUBLECLICK, value);
@@ -346,7 +333,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Occurs when the user clicks the icon in the system tray.
         /// </summary>
-        [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.NotifyIconMouseClickDescr))]
+        [SRCategory(nameof(SR.CatAction))]
+        [SRDescription(nameof(SR.NotifyIconMouseClickDescr))]
         public event MouseEventHandler MouseClick
         {
             add => Events.AddHandler(EVENT_MOUSECLICK, value);
@@ -356,7 +344,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Occurs when the user mouse double clicks the icon in the system tray.
         /// </summary>
-        [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.NotifyIconMouseDoubleClickDescr))]
+        [SRCategory(nameof(SR.CatAction))]
+        [SRDescription(nameof(SR.NotifyIconMouseDoubleClickDescr))]
         public event MouseEventHandler MouseDoubleClick
         {
             add => Events.AddHandler(EVENT_MOUSEDOUBLECLICK, value);
@@ -367,7 +356,8 @@ namespace System.Windows.Forms
         ///  Occurs when the
         ///  user presses a mouse button while the pointer is over the icon in the system tray.
         /// </summary>
-        [SRCategory(nameof(SR.CatMouse)), SRDescription(nameof(SR.ControlOnMouseDownDescr))]
+        [SRCategory(nameof(SR.CatMouse))]
+        [SRDescription(nameof(SR.ControlOnMouseDownDescr))]
         public event MouseEventHandler MouseDown
         {
             add => Events.AddHandler(EVENT_MOUSEDOWN, value);
@@ -378,7 +368,8 @@ namespace System.Windows.Forms
         ///  Occurs
         ///  when the user moves the mouse pointer over the icon in the system tray.
         /// </summary>
-        [SRCategory(nameof(SR.CatMouse)), SRDescription(nameof(SR.ControlOnMouseMoveDescr))]
+        [SRCategory(nameof(SR.CatMouse))]
+        [SRDescription(nameof(SR.ControlOnMouseMoveDescr))]
         public event MouseEventHandler MouseMove
         {
             add => Events.AddHandler(EVENT_MOUSEMOVE, value);
@@ -390,7 +381,8 @@ namespace System.Windows.Forms
         ///  user releases the mouse button while the pointer
         ///  is over the icon in the system tray.
         /// </summary>
-        [SRCategory(nameof(SR.CatMouse)), SRDescription(nameof(SR.ControlOnMouseUpDescr))]
+        [SRCategory(nameof(SR.CatMouse))]
+        [SRDescription(nameof(SR.ControlOnMouseUpDescr))]
         public event MouseEventHandler MouseUp
         {
             add => Events.AddHandler(EVENT_MOUSEUP, value);

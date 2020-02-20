@@ -66,7 +66,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary> internal as this is a TableLayoutPanel feature only </summary>
-        [DefaultValue(TableLayoutPanelCellBorderStyle.None), SRCategory(nameof(SR.CatAppearance)), SRDescription(nameof(SR.TableLayoutPanelCellBorderStyleDescr))]
+        [DefaultValue(TableLayoutPanelCellBorderStyle.None)]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.TableLayoutPanelCellBorderStyleDescr))]
         internal TableLayoutPanelCellBorderStyle CellBorderStyle
         {
             get { return _borderStyle; }

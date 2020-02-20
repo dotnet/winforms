@@ -13,12 +13,10 @@ namespace System.Windows.Forms
     /// <summary>
     ///  This class is just a conceptual wrapper around ToolStripDropDownMenu.
     /// </summary>
-    [
-    ComVisible(true),
-    ClassInterface(ClassInterfaceType.AutoDispatch),
-    DefaultEvent(nameof(Opening)),
-    SRDescription(nameof(SR.DescriptionContextMenuStrip))
-    ]
+    [ComVisible(true)]
+    [ClassInterface(ClassInterfaceType.AutoDispatch)]
+    [DefaultEvent(nameof(Opening))]
+    [SRDescription(nameof(SR.DescriptionContextMenuStrip))]
     public class ContextMenuStrip : ToolStripDropDownMenu
     {
         public ContextMenuStrip(IContainer container) : base()
@@ -40,11 +38,9 @@ namespace System.Windows.Forms
             base.Dispose(disposing);
         }
 
-        [
-        Browsable(false),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.ContextMenuStripSourceControlDescr))
-        ]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRDescription(nameof(SR.ContextMenuStripSourceControlDescr))]
         public Control SourceControl
         {
             get

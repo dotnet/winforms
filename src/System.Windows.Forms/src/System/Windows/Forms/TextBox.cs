@@ -17,12 +17,10 @@ namespace System.Windows.Forms
     /// <summary>
     ///  Represents a Windows text box control.
     /// </summary>
-    [
-      ClassInterface(ClassInterfaceType.AutoDispatch),
-      ComVisible(true),
-      Designer("System.Windows.Forms.Design.TextBoxDesigner, " + AssemblyRef.SystemDesign),
-      SRDescription(nameof(SR.DescriptionTextBox))
-    ]
+    [ClassInterface(ClassInterfaceType.AutoDispatch)]
+    [ComVisible(true)]
+    [Designer("System.Windows.Forms.Design.TextBoxDesigner, " + AssemblyRef.SystemDesign)]
+    [SRDescription(nameof(SR.DescriptionTextBox))]
     public class TextBox : TextBoxBase
     {
         private static readonly object EVENT_TEXTALIGNCHANGED = new object();
@@ -95,11 +93,9 @@ namespace System.Windows.Forms
         ///  control creates a new line of text in the control or activates the default button
         ///  for the form.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        DefaultValue(false),
-        SRDescription(nameof(SR.TextBoxAcceptsReturnDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(false)]
+        [SRDescription(nameof(SR.TextBoxAcceptsReturnDescr))]
         public bool AcceptsReturn
         {
             get
@@ -118,11 +114,10 @@ namespace System.Windows.Forms
         ///  None, AutoSuggest, AutoAppend or AutoSuggestAppend.
         ///  This property in conjunction with AutoCompleteSource enables the AutoComplete feature for TextBox.
         /// </summary>
-        [
-        DefaultValue(AutoCompleteMode.None),
-        SRDescription(nameof(SR.TextBoxAutoCompleteModeDescr)),
-        Browsable(true), EditorBrowsable(EditorBrowsableState.Always)
-        ]
+        [DefaultValue(AutoCompleteMode.None)]
+        [SRDescription(nameof(SR.TextBoxAutoCompleteModeDescr))]
+        [Browsable(true)]
+        [EditorBrowsable(EditorBrowsableState.Always)]
         public AutoCompleteMode AutoCompleteMode
         {
             get
@@ -150,12 +145,11 @@ namespace System.Windows.Forms
         ///  values from AutoCompleteSource enumeration.
         ///  This property in conjunction with AutoCompleteMode enables the AutoComplete feature for TextBox.
         /// </summary>
-        [
-        DefaultValue(AutoCompleteSource.None),
-        SRDescription(nameof(SR.TextBoxAutoCompleteSourceDescr)),
-        TypeConverter(typeof(TextBoxAutoCompleteSourceConverter)),
-        Browsable(true), EditorBrowsable(EditorBrowsableState.Always)
-        ]
+        [DefaultValue(AutoCompleteSource.None)]
+        [SRDescription(nameof(SR.TextBoxAutoCompleteSourceDescr))]
+        [TypeConverter(typeof(TextBoxAutoCompleteSourceConverter))]
+        [Browsable(true)]
+        [EditorBrowsable(EditorBrowsableState.Always)]
         public AutoCompleteSource AutoCompleteSource
         {
             get
@@ -189,13 +183,12 @@ namespace System.Windows.Forms
         ///  This is the AutoCompleteCustomSource which is custom StringCollection used when the
         ///  AutoCompleteSource is CustomSource.
         /// </summary>
-        [
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Content),
-        Localizable(true),
-        SRDescription(nameof(SR.TextBoxAutoCompleteCustomSourceDescr)),
-        Editor("System.Windows.Forms.Design.ListControlStringCollectionEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
-        Browsable(true), EditorBrowsable(EditorBrowsableState.Always)
-        ]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
+        [Localizable(true)]
+        [SRDescription(nameof(SR.TextBoxAutoCompleteCustomSourceDescr))]
+        [Editor("System.Windows.Forms.Design.ListControlStringCollectionEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
+        [Browsable(true)]
+        [EditorBrowsable(EditorBrowsableState.Always)]
         public AutoCompleteStringCollection AutoCompleteCustomSource
         {
             get
@@ -231,11 +224,9 @@ namespace System.Windows.Forms
         ///  Gets or sets whether the TextBox control
         ///  modifies the case of characters as they are typed.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        DefaultValue(CharacterCasing.Normal),
-        SRDescription(nameof(SR.TextBoxCharacterCasingDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(CharacterCasing.Normal)]
+        [SRDescription(nameof(SR.TextBoxCharacterCasingDescr))]
         public CharacterCasing CharacterCasing
         {
             get
@@ -352,13 +343,11 @@ namespace System.Windows.Forms
         ///  Gets or sets the character used to mask characters in a single-line text box
         ///  control used to enter passwords.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        DefaultValue((char)0),
-        Localizable(true),
-        SRDescription(nameof(SR.TextBoxPasswordCharDescr)),
-        RefreshProperties(RefreshProperties.Repaint)
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue((char)0)]
+        [Localizable(true)]
+        [SRDescription(nameof(SR.TextBoxPasswordCharDescr))]
+        [RefreshProperties(RefreshProperties.Repaint)]
         public char PasswordChar
         {
             get
@@ -398,12 +387,10 @@ namespace System.Windows.Forms
         ///  appear in a multiline <see cref='TextBox'/>
         ///  control.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        Localizable(true),
-        DefaultValue(ScrollBars.None),
-        SRDescription(nameof(SR.TextBoxScrollBarsDescr))
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [Localizable(true)]
+        [DefaultValue(ScrollBars.None)]
+        [SRDescription(nameof(SR.TextBoxScrollBarsDescr))]
         public ScrollBars ScrollBars
         {
             get
@@ -467,12 +454,10 @@ namespace System.Windows.Forms
         ///  control.
         ///  Note: This code is duplicated in MaskedTextBox for simplicity.
         /// </summary>
-        [
-        Localizable(true),
-        SRCategory(nameof(SR.CatAppearance)),
-        DefaultValue(HorizontalAlignment.Left),
-        SRDescription(nameof(SR.TextBoxTextAlignDescr))
-        ]
+        [Localizable(true)]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [DefaultValue(HorizontalAlignment.Left)]
+        [SRDescription(nameof(SR.TextBoxTextAlignDescr))]
         public HorizontalAlignment TextAlign
         {
             get
@@ -505,12 +490,10 @@ namespace System.Windows.Forms
         ///  is set to true, the default system password character is used,
         ///  any character set into PasswordChar is ignored.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        DefaultValue(false),
-        SRDescription(nameof(SR.TextBoxUseSystemPasswordCharDescr)),
-        RefreshProperties(RefreshProperties.Repaint)
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(false)]
+        [SRDescription(nameof(SR.TextBoxUseSystemPasswordCharDescr))]
+        [RefreshProperties(RefreshProperties.Repaint)]
         public bool UseSystemPasswordChar
         {
             get
@@ -534,7 +517,8 @@ namespace System.Windows.Forms
             }
         }
 
-        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.RadioButtonOnTextAlignChangedDescr))]
+        [SRCategory(nameof(SR.CatPropertyChanged))]
+        [SRDescription(nameof(SR.RadioButtonOnTextAlignChangedDescr))]
         public event EventHandler TextAlignChanged
         {
             add => Events.AddHandler(EVENT_TEXTALIGNCHANGED, value);
@@ -850,11 +834,9 @@ namespace System.Windows.Forms
         ///  Gets or sets the text that is displayed when the control has no text and does not have the focus.
         /// </summary>
         /// <value>The text that is displayed when the control has no text and does not have the focus.</value>
-        [
-        Localizable(true),
-        DefaultValue(""),
-        SRDescription(nameof(SR.TextBoxPlaceholderTextDescr))
-        ]
+        [Localizable(true)]
+        [DefaultValue("")]
+        [SRDescription(nameof(SR.TextBoxPlaceholderTextDescr))]
         public virtual string PlaceholderText
         {
             get

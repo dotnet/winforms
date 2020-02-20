@@ -12,9 +12,9 @@ using static Interop;
 
 namespace System.Windows.Forms
 {
-    [ComVisible(true),
-     ClassInterface(ClassInterfaceType.AutoDispatch),
-     SRDescription(nameof(SR.DescriptionMenuStrip))
+    [ComVisible(true)]
+     [ClassInterface(ClassInterfaceType.AutoDispatch)]
+     [SRDescription(nameof(SR.DescriptionMenuStrip))
     ]
     public class MenuStrip : ToolStrip
     {
@@ -51,17 +51,16 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-        DefaultValue(false),
-        SRDescription(nameof(SR.ToolStripCanOverflowDescr)),
-        SRCategory(nameof(SR.CatLayout)),
-        Browsable(false)
-        ]
+        [DefaultValue(false)]
+        [SRDescription(nameof(SR.ToolStripCanOverflowDescr))]
+        [SRCategory(nameof(SR.CatLayout))]
+        [Browsable(false)]
         public new bool CanOverflow
         {
             get => base.CanOverflow;
             set => base.CanOverflow = value;
         }
+
         protected override bool DefaultShowItemToolTips
             => false;
 
@@ -103,14 +102,16 @@ namespace System.Windows.Forms
             set => base.GripStyle = value;
         }
 
-        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.MenuStripMenuActivateDescr))]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [SRDescription(nameof(SR.MenuStripMenuActivateDescr))]
         public event EventHandler MenuActivate
         {
             add => Events.AddHandler(EventMenuActivate, value);
             remove => Events.RemoveHandler(EventMenuActivate, value);
         }
 
-        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.MenuStripMenuDeactivateDescr))]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [SRDescription(nameof(SR.MenuStripMenuDeactivateDescr))]
         public event EventHandler MenuDeactivate
         {
             add => Events.AddHandler(EventMenuDeactivate, value);

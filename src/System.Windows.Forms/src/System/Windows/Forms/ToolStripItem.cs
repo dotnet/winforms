@@ -1139,8 +1139,7 @@ namespace System.Windows.Forms
         [RefreshProperties(RefreshProperties.Repaint)]
         [Editor("System.Windows.Forms.Design.ToolStripImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
         [Browsable(false)]
-        [RelatedImageList("Owner.ImageList")
-       ]
+        [RelatedImageList("Owner.ImageList")]
         public string ImageKey
         {
             get => ImageIndexer.Key;

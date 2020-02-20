@@ -201,9 +201,9 @@ namespace System.Windows.Forms
             }
         }
 
-        [DefaultValue(true),
-        SRDescription(nameof(SR.ToolStripDropDownMenuShowImageMarginDescr)),
-        SRCategory(nameof(SR.CatAppearance))]
+        [DefaultValue(true)]
+        [SRDescription(nameof(SR.ToolStripDropDownMenuShowImageMarginDescr))]
+        [SRCategory(nameof(SR.CatAppearance))]
         public bool ShowImageMargin
         {
             get => state[stateShowImageMargin];
@@ -218,9 +218,9 @@ namespace System.Windows.Forms
             }
         }
 
-        [DefaultValue(false),
-        SRDescription(nameof(SR.ToolStripDropDownMenuShowCheckMarginDescr)),
-        SRCategory(nameof(SR.CatAppearance))]
+        [DefaultValue(false)]
+        [SRDescription(nameof(SR.ToolStripDropDownMenuShowCheckMarginDescr))]
+        [SRCategory(nameof(SR.CatAppearance))]
         public bool ShowCheckMargin
         {
             get => state[stateShowCheckMargin];

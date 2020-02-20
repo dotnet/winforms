@@ -42,7 +42,8 @@ namespace System.Windows.Forms
         ///  Occurs when the value of the <see cref="AutoSize" /> property has changed.
         ///  This event is not relevant to this class.
         /// </summary>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler AutoSizeChanged
         {
             add => base.AutoSizeChanged += value;
@@ -121,7 +122,8 @@ namespace System.Windows.Forms
         ///  The height of this SplitterPanel
         /// </summary>
         [SRCategory(nameof(SR.CatLayout))]
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Always)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Always)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [SRDescription(nameof(SR.ControlHeightDescr))]
         public new int Height
@@ -270,7 +272,8 @@ namespace System.Windows.Forms
         ///  The width of this control.
         /// </summary>
         [SRCategory(nameof(SR.CatLayout))]
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Always)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Always)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [SRDescription(nameof(SR.ControlWidthDescr))]
         public new int Width

@@ -78,11 +78,10 @@ namespace System.Windows.Forms
         {
             get { return parentToolStrip; }
         }
-        [
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Never),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public new bool RightToLeftAutoMirrorImage
         {
             get => base.RightToLeftAutoMirrorImage;

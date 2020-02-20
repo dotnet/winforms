@@ -256,13 +256,11 @@ namespace System.Windows.Forms
         /// <summary>
             ///  Gets or sets a value indicating whether the item is checked.
             /// </summary>
-        [
-        Bindable(true),
-        DefaultValue(false),
-        SRCategory(nameof(SR.CatAppearance)),
-        RefreshProperties(RefreshProperties.All),
-        SRDescription(nameof(SR.CheckBoxCheckedDescr))
-        ]
+        [Bindable(true)]
+        [DefaultValue(false)]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [RefreshProperties(RefreshProperties.All)]
+        [SRDescription(nameof(SR.CheckBoxCheckedDescr))]
         public bool Checked
         {
             get
@@ -378,11 +376,9 @@ namespace System.Windows.Forms
             return b;
         }
 
-        [
-        DefaultValue(false),
-        SRCategory(nameof(SR.CatBehavior)),
-        SRDescription(nameof(SR.ToolStripButtonCheckOnClickDescr))
-        ]
+        [DefaultValue(false)]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [SRDescription(nameof(SR.ToolStripButtonCheckOnClickDescr))]
         public bool CheckOnClick
         {
             get
@@ -399,13 +395,11 @@ namespace System.Windows.Forms
         ///  Gets
         ///  or sets a value indicating whether the check box is checked.
         /// </summary>
-        [
-        Bindable(true),
-        SRCategory(nameof(SR.CatAppearance)),
-        DefaultValue(CheckState.Unchecked),
-        RefreshProperties(RefreshProperties.All),
-        SRDescription(nameof(SR.CheckBoxCheckStateDescr))
-        ]
+        [Bindable(true)]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [DefaultValue(CheckState.Unchecked)]
+        [RefreshProperties(RefreshProperties.All)]
+        [SRDescription(nameof(SR.CheckBoxCheckStateDescr))]
         public CheckState CheckState
         {
             get
@@ -458,10 +452,9 @@ namespace System.Windows.Forms
         ///  Specifies whether or not the item is glued to the ToolStrip or overflow or
         ///  can float between the two.
         /// </summary>
-        [
-        DefaultValue(ToolStripItemOverflow.Never),
-        SRDescription(nameof(SR.ToolStripItemOverflowDescr)),
-        SRCategory(nameof(SR.CatLayout))
+        [DefaultValue(ToolStripItemOverflow.Never)]
+        [SRDescription(nameof(SR.ToolStripItemOverflowDescr))]
+        [SRCategory(nameof(SR.CatLayout))
          ]
         public new ToolStripItemOverflow Overflow
         {
@@ -470,14 +463,12 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-            ///  Gets or sets the shortcut keys associated with the menu
+        ///  Gets or sets the shortcut keys associated with the menu
         ///  item.
-            /// </summary>
-        [
-        Localizable(true),
-        DefaultValue(Keys.None),
-        SRDescription(nameof(SR.MenuItemShortCutDescr))
-        ]
+        /// </summary>
+        [Localizable(true)]
+        [DefaultValue(Keys.None)]
+        [SRDescription(nameof(SR.MenuItemShortCutDescr))]
         public Keys ShortcutKeys
         {
             get
@@ -528,12 +519,10 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-        SRDescription(nameof(SR.ToolStripMenuItemShortcutKeyDisplayStringDescr)),
-        SRCategory(nameof(SR.CatAppearance)),
-        DefaultValue(null),
-        Localizable(true)
-        ]
+        [SRDescription(nameof(SR.ToolStripMenuItemShortcutKeyDisplayStringDescr))]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [DefaultValue(null)]
+        [Localizable(true)]
         public string ShortcutKeyDisplayString
         {
             get
@@ -564,11 +553,9 @@ namespace System.Windows.Forms
         ///  with the menu item are displayed next to the menu item
         ///  caption.
             /// </summary>
-        [
-        DefaultValue(true),
-        Localizable(true),
-        SRDescription(nameof(SR.MenuItemShowShortCutDescr))
-        ]
+        [DefaultValue(true)]
+        [Localizable(true)]
+        [SRDescription(nameof(SR.MenuItemShowShortCutDescr))]
         public bool ShowShortcutKeys
         {
             get

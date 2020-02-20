@@ -419,8 +419,8 @@ namespace System.Windows.Forms
         [Localizable(false)]
         [Bindable(true)]
         [Description(nameof(SR.ControlTagDescr))]
-        [DefaultValue(null),
-        TypeConverter(typeof(StringConverter))]
+        [DefaultValue(null)]
+        [TypeConverter(typeof(StringConverter))]
         public object Tag { get; set; }
 
         /// <summary>
@@ -1029,10 +1029,10 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Retrieves the <see cref="ToolTip"/> text associated with the specified control.
         /// </summary>
-        [DefaultValue(""),
-        Localizable(true)]
-        [Description(nameof(SR.ToolTipToolTipDescr)),
-        Editor("System.ComponentModel.Design.MultilineStringEditor, " + AssemblyRef.SystemDesign, typeof(Drawing.Design.UITypeEditor))]
+        [DefaultValue("")]
+        [Localizable(true)]
+        [Description(nameof(SR.ToolTipToolTipDescr))]
+        [Editor("System.ComponentModel.Design.MultilineStringEditor, " + AssemblyRef.SystemDesign, typeof(Drawing.Design.UITypeEditor))]
         public string GetToolTip(Control control)
         {
             if (control == null)

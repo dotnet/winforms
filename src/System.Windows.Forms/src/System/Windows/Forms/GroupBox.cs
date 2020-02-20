@@ -19,14 +19,12 @@ namespace System.Windows.Forms
     ///  a standard Windows(r) group
     ///  box.
     /// </summary>
-    [
-    ComVisible(true),
-    ClassInterface(ClassInterfaceType.AutoDispatch),
-    DefaultEvent(nameof(Enter)),
-    DefaultProperty(nameof(Text)),
-    Designer("System.Windows.Forms.Design.GroupBoxDesigner, " + AssemblyRef.SystemDesign),
-    SRDescription(nameof(SR.DescriptionGroupBox))
-    ]
+    [ComVisible(true)]
+    [ClassInterface(ClassInterfaceType.AutoDispatch)]
+    [DefaultEvent(nameof(Enter))]
+    [DefaultProperty(nameof(Text))]
+    [Designer("System.Windows.Forms.Design.GroupBoxDesigner, " + AssemblyRef.SystemDesign)]
+    [SRDescription(nameof(SR.DescriptionGroupBox))]
     public class GroupBox : Control
     {
         int fontHeight = -1;
@@ -54,7 +52,8 @@ namespace System.Windows.Forms
         ///  Gets or sets a value indicating whether the control will allow drag and
         ///  drop operations and events to be used.
         /// </summary>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         public override bool AllowDrop
         {
             get => base.AllowDrop;
@@ -64,16 +63,19 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Override to re-expose AutoSize.
         /// </summary>
-        [Browsable(true), EditorBrowsable(EditorBrowsableState.Always),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
+        [Browsable(true)]
+        [EditorBrowsable(EditorBrowsableState.Always)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
         public override bool AutoSize
         {
             get => base.AutoSize;
             set => base.AutoSize = value;
         }
 
-        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnAutoSizeChangedDescr))]
-        [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
+        [SRCategory(nameof(SR.CatPropertyChanged))]
+        [SRDescription(nameof(SR.ControlOnAutoSizeChangedDescr))]
+        [Browsable(true)]
+        [EditorBrowsable(EditorBrowsableState.Always)]
         new public event EventHandler AutoSizeChanged
         {
             add => base.AutoSizeChanged += value;
@@ -83,13 +85,11 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Allows the control to optionally shrink when AutoSize is true.
         /// </summary>
-        [
-        SRDescription(nameof(SR.ControlAutoSizeModeDescr)),
-        SRCategory(nameof(SR.CatLayout)),
-        Browsable(true),
-        DefaultValue(AutoSizeMode.GrowOnly),
-        Localizable(true)
-        ]
+        [SRDescription(nameof(SR.ControlAutoSizeModeDescr))]
+        [SRCategory(nameof(SR.CatLayout))]
+        [Browsable(true)]
+        [DefaultValue(AutoSizeMode.GrowOnly)]
+        [Localizable(true)]
         public AutoSizeMode AutoSizeMode
         {
             get
@@ -199,11 +199,9 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            SRCategory(nameof(SR.CatAppearance)),
-            DefaultValue(FlatStyle.Standard),
-            SRDescription(nameof(SR.ButtonFlatStyleDescr))
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [DefaultValue(FlatStyle.Standard)]
+        [SRDescription(nameof(SR.ButtonFlatStyleDescr))]
         public FlatStyle FlatStyle
         {
             get
@@ -259,23 +257,23 @@ namespace System.Windows.Forms
         ///  press the TAB key to give the focus to the <see cref='GroupBox'/>
         ///  .
         /// </summary>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         new public bool TabStop
         {
             get => base.TabStop;
             set => base.TabStop = value;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         new public event EventHandler TabStopChanged
         {
             add => base.TabStopChanged += value;
             remove => base.TabStopChanged -= value;
         }
 
-        [
-        Localizable(true)
-        ]
+        [Localizable(true)]
         public override string Text
         {
             get => base.Text;
@@ -307,11 +305,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Determines whether to use compatible text rendering engine (GDI+) or not (GDI).
         /// </summary>
-        [
-        DefaultValue(false),
-        SRCategory(nameof(SR.CatBehavior)),
-        SRDescription(nameof(SR.UseCompatibleTextRenderingDescr))
-        ]
+        [DefaultValue(false)]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [SRDescription(nameof(SR.UseCompatibleTextRenderingDescr))]
         public bool UseCompatibleTextRendering
         {
             get => base.UseCompatibleTextRenderingInt;
@@ -332,7 +328,8 @@ namespace System.Windows.Forms
         }
 
         /// <hideinheritance/>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event EventHandler Click
         {
             add => base.Click += value;
@@ -340,7 +337,8 @@ namespace System.Windows.Forms
         }
 
         /// <hideinheritance/>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event MouseEventHandler MouseClick
         {
             add => base.MouseClick += value;
@@ -348,7 +346,8 @@ namespace System.Windows.Forms
         }
 
         /// <hideinheritance/>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event EventHandler DoubleClick
         {
             add => base.DoubleClick += value;
@@ -356,7 +355,8 @@ namespace System.Windows.Forms
         }
 
         /// <hideinheritance/>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event MouseEventHandler MouseDoubleClick
         {
             add => base.MouseDoubleClick += value;
@@ -364,7 +364,8 @@ namespace System.Windows.Forms
         }
 
         /// <hideinheritance/>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event KeyEventHandler KeyUp
         {
             add => base.KeyUp += value;
@@ -372,7 +373,8 @@ namespace System.Windows.Forms
         }
 
         /// <hideinheritance/>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event KeyEventHandler KeyDown
         {
             add => base.KeyDown += value;
@@ -380,7 +382,8 @@ namespace System.Windows.Forms
         }
 
         /// <hideinheritance/>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event KeyPressEventHandler KeyPress
         {
             add => base.KeyPress += value;
@@ -388,7 +391,8 @@ namespace System.Windows.Forms
         }
 
         /// <hideinheritance/>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event MouseEventHandler MouseDown
         {
             add => base.MouseDown += value;
@@ -396,7 +400,8 @@ namespace System.Windows.Forms
         }
 
         /// <hideinheritance/>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event MouseEventHandler MouseUp
         {
             add => base.MouseUp += value;
@@ -404,7 +409,8 @@ namespace System.Windows.Forms
         }
 
         /// <hideinheritance/>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event MouseEventHandler MouseMove
         {
             add => base.MouseMove += value;
@@ -412,7 +418,8 @@ namespace System.Windows.Forms
         }
 
         /// <hideinheritance/>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event EventHandler MouseEnter
         {
             add => base.MouseEnter += value;
@@ -420,7 +427,8 @@ namespace System.Windows.Forms
         }
 
         /// <hideinheritance/>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event EventHandler MouseLeave
         {
             add => base.MouseLeave += value;

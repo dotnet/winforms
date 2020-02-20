@@ -18,9 +18,8 @@ namespace System.Windows.Forms
     ///  Implements a dialog box that is displayed when an unhandled exception occurs in
     ///  a thread.
     /// </summary>
-    [
-        ComVisible(true),
-        ClassInterface(ClassInterfaceType.AutoDispatch)]
+    [ComVisible(true)]
+    [ClassInterface(ClassInterfaceType.AutoDispatch)]
     public class ThreadExceptionDialog : Form
     {
         private const string DownBitmapName = "down";
@@ -391,7 +390,8 @@ namespace System.Windows.Forms
             set => base.AutoSize = value;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler AutoSizeChanged
         {
             add => base.AutoSizeChanged += value;

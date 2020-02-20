@@ -11,15 +11,13 @@ using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms
 {
-    [
-    ComVisible(true),
-    ClassInterface(ClassInterfaceType.AutoDispatch),
-    Designer("System.Windows.Forms.Design.ToolStripContentPanelDesigner, " + AssemblyRef.SystemDesign),
-    DefaultEvent(nameof(Load)),
-    Docking(DockingBehavior.Never),
-    InitializationEvent(nameof(Load)),
-    ToolboxItem(false)
-    ]
+    [ComVisible(true)]
+    [ClassInterface(ClassInterfaceType.AutoDispatch)]
+    [Designer("System.Windows.Forms.Design.ToolStripContentPanelDesigner, " + AssemblyRef.SystemDesign)]
+    [DefaultEvent(nameof(Load))]
+    [Docking(DockingBehavior.Never)]
+    [InitializationEvent(nameof(Load))]
+    [ToolboxItem(false)]
     public class ToolStripContentPanel : Panel
     {
         private ToolStripRendererSwitcher rendererSwitcher = null;
@@ -38,12 +36,10 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Allows the control to optionally shrink when AutoSize is true.
         /// </summary>
-        [
-        EditorBrowsable(EditorBrowsableState.Never),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        Browsable(false),
-        Localizable(false)
-        ]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [Browsable(false)]
+        [Localizable(false)]
         public override AutoSizeMode AutoSizeMode
         {
             get
@@ -55,50 +51,44 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override AnchorStyles Anchor
         {
             get => base.Anchor;
             set => base.Anchor = value;
         }
 
-        [
-       Browsable(false),
-       EditorBrowsable(EditorBrowsableState.Never)
-       ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public override bool AutoScroll
         {
             get => base.AutoScroll;
             set => base.AutoScroll = value;
         }
 
-        [
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public new Size AutoScrollMargin
         {
             get => base.AutoScrollMargin;
             set => base.AutoScrollMargin = value;
         }
 
-        [
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public new Size AutoScrollMinSize
         {
             get => base.AutoScrollMinSize;
             set => base.AutoScrollMinSize = value;
         }
 
-        [
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override bool AutoSize
         {
             get => base.AutoSize;
@@ -122,140 +112,130 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public new event EventHandler AutoSizeChanged
         {
             add => base.AutoSizeChanged += value;
             remove => base.AutoSizeChanged -= value;
         }
 
-        [
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public new bool CausesValidation
         {
             get => base.CausesValidation;
             set => base.CausesValidation = value;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler CausesValidationChanged
         {
             add => base.CausesValidationChanged += value;
             remove => base.CausesValidationChanged -= value;
         }
 
-        [
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override DockStyle Dock
         {
             get => base.Dock;
             set => base.Dock = value;
         }
-        [
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public new event EventHandler DockChanged
         {
             add => base.DockChanged += value;
             remove => base.DockChanged -= value;
         }
 
-        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ToolStripContentPanelOnLoadDescr))]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [SRDescription(nameof(SR.ToolStripContentPanelOnLoadDescr))]
         public event EventHandler Load
         {
             add => Events.AddHandler(EventLoad, value);
             remove => Events.RemoveHandler(EventLoad, value);
         }
 
-        [
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public new Point Location
         {
             get => base.Location;
             set => base.Location = value;
         }
 
-        [
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public new event EventHandler LocationChanged
         {
             add => base.LocationChanged += value;
             remove => base.LocationChanged -= value;
         }
 
-        [
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override Size MinimumSize
         {
             get => base.MinimumSize;
             set => base.MinimumSize = value;
         }
 
-        [
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override Size MaximumSize
         {
             get => base.MaximumSize;
             set => base.MaximumSize = value;
         }
 
-        [
-        EditorBrowsable(EditorBrowsableState.Never),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        Browsable(false)
-        ]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [Browsable(false)]
         public new string Name
         {
             get => base.Name;
             set => base.Name = value;
         }
 
-        [
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Never),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public new int TabIndex
         {
             get => base.TabIndex;
             set => base.TabIndex = value;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler TabIndexChanged
         {
             add => base.TabIndexChanged += value;
             remove => base.TabIndexChanged -= value;
         }
 
-        [
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Never)
-        ]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public new bool TabStop
         {
             get => base.TabStop;
             set => base.TabStop = value;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler TabStopChanged
         {
             add => base.TabStopChanged += value;
@@ -290,10 +270,8 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-        SRDescription(nameof(SR.ToolStripRenderModeDescr)),
-        SRCategory(nameof(SR.CatAppearance)),
-        ]
+        [SRDescription(nameof(SR.ToolStripRenderModeDescr))]
+        [SRCategory(nameof(SR.CatAppearance))]
         public ToolStripRenderMode RenderMode
         {
             get
@@ -306,7 +284,8 @@ namespace System.Windows.Forms
             }
         }
 
-        [SRCategory(nameof(SR.CatAppearance)), SRDescription(nameof(SR.ToolStripRendererChanged))]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.ToolStripRendererChanged))]
         public event EventHandler RendererChanged
         {
             add => Events.AddHandler(EventRendererChanged, value);
