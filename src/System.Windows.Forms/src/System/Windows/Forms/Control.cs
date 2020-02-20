@@ -10918,6 +10918,19 @@ namespace System.Windows.Forms
             return result;
         }
 
+        protected virtual void SetToolTip(ToolTip toolTip, string toolTipText)
+        { }
+
+        internal void SetToolTipInternal(ToolTip toolTip, string toolTipText)
+        {
+            if (!IsHandleCreated || toolTip == null)
+            {
+                return;
+            }
+
+            SetToolTip(toolTip, toolTipText);
+        }
+
         protected void SetTopLevel(bool value)
         {
             if (value && IsActiveX)

@@ -644,72 +644,8 @@ namespace System.Windows.Forms
 
             Control control = (Control)sender;
             CreateRegion(control);
-            CheckNativeToolTip(control);
-            CheckCompositeControls(control);
-
+            control?.SetToolTipInternal(this, GetToolTip(control));
             KeyboardToolTipStateMachine.Instance.Hook(control, this);
-        }
-
-        private void CheckNativeToolTip(Control associatedControl)
-        {
-            // Wait for the Handle Creation.
-            if (!GetHandleCreated())
-            {
-                return;
-            }
-
-            if (associatedControl is TreeView treeView && treeView.ShowNodeToolTips)
-            {
-                treeView.SetToolTip(this, GetToolTip(associatedControl));
-            }
-
-            if (associatedControl is TabControl tabControl && tabControl.ShowToolTips)
-            {
-                tabControl.SetToolTip(this, GetToolTip(associatedControl));
-            }
-
-            if (associatedControl is ListView listView)
-            {
-                listView.SetToolTip(this, GetToolTip(associatedControl));
-            }
-
-            // Label now has its own Tooltip for AutoEllipsis.
-            // So this control too falls in special casing.
-            // We need to disable the LABEL AutoEllipsis tooltip and show
-            // this tooltip always.
-            if (associatedControl is Label label)
-            {
-                label.SetToolTip(this);
-            }
-        }
-
-        private void CheckNativeCompositeControls(Control associatedControl, string text)
-        {
-            if (!(associatedControl is TabPage tabPage))
-            {
-                return;
-            }
-
-            // Replace an old tooltip to a new tooltip if another tooltip was set.
-            // Need it to avoid showing several tooltips (old and new) in one moment.
-            if (tabPage.ToolTip != this)
-            {
-                tabPage.ToolTip.SetToolTip(tabPage, null); // Reset the old tabPage tooltip before setting a new tooltip instance.
-                tabPage.ToolTip = this;
-            }
-
-            if (tabPage.ToolTipText != text && text != null)
-            {
-                tabPage.ToolTipText = text; // Don't forget to change ToolTipText property
-            }
-        }
-
-        private void CheckCompositeControls(Control associatedControl)
-        {
-            if (associatedControl is UpDownBase upDownBase)
-            {
-                upDownBase.SetToolTip(this, GetToolTip(associatedControl));
-            }
         }
 
         private void HandleDestroyed(object sender, EventArgs eventargs)
@@ -1272,28 +1208,22 @@ namespace System.Windows.Forms
             if (exists && empty)
             {
                 _tools.Remove(control);
-                control.LostFocus -= OnControlLostFocus;
             }
             else if (!empty)
             {
                 _tools[control] = info;
             }
 
-            CheckNativeCompositeControls(control, info.Caption);
-
             if (!empty && !exists)
             {
                 control.HandleCreated += new EventHandler(HandleCreated);
                 control.HandleDestroyed += new EventHandler(HandleDestroyed);
+                control.LostFocus += OnControlLostFocus;
 
                 if (control.IsHandleCreated)
                 {
                     HandleCreated(control, EventArgs.Empty);
                 }
-
-                // !exists condition guarantees a single execution even when changing the text
-                // It isn't guarded by IsHandleCreated because often a tooltip is set when Handle isn't yet created.
-                control.LostFocus += OnControlLostFocus; // control have already added to _tools above
             }
             else
             {
@@ -1305,13 +1235,12 @@ namespace System.Windows.Forms
                 {
                     ToolInfoWrapper<Control> toolInfo = GetTOOLINFO(control, info.Caption);
                     toolInfo.SendMessage(this, (User32.WM)TTM.SETTOOLINFOW);
-                    CheckNativeToolTip(control);
-                    CheckCompositeControls(control);
                 }
                 else if (empty && exists && !DesignMode)
                 {
                     control.HandleCreated -= new EventHandler(HandleCreated);
                     control.HandleDestroyed -= new EventHandler(HandleDestroyed);
+                    control.LostFocus -= OnControlLostFocus;
 
                     if (control.IsHandleCreated)
                     {

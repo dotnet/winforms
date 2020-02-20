@@ -978,10 +978,18 @@ namespace System.Windows.Forms
             }
         }
 
-        internal void SetToolTip(ToolTip toolTip, string caption)
+        /// <summary>
+        ///  This Function sets the ToolTip for this composite control.
+        /// </summary>
+        protected override void SetToolTip(ToolTip toolTip, string toolTipText)
         {
-            toolTip.SetToolTip(_upDownEdit, caption);
-            toolTip.SetToolTip(_upDownButtons, caption);
+            if (toolTip == null)
+            {
+                return;
+            }
+
+            toolTip.SetToolTip(upDownEdit, toolTipText);
+            toolTip.SetToolTip(upDownButtons, toolTipText);
         }
     }
 }

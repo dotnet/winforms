@@ -28,8 +28,12 @@ namespace System.Windows.Forms
     [DefaultProperty("Text")]
     public class TabPage : Panel
     {
-        private ImageList.Indexer _imageIndexer;
+        /// <summary>
+        ///  Internal property that has the default <see cref='ToolTip'/> instance if <see cref='ToolTipText'/> is set.
+        ///  This instance is replaced if an external ToolTip instance will be set.
+        /// </summary>
         private ToolTip _toolTip;
+        private ImageList.Indexer _imageIndexer;
         private string _toolTipText = string.Empty;
         private bool _enterFired = false;
         private bool _leaveFired = false;
@@ -596,6 +600,28 @@ namespace System.Windows.Forms
             else
             {
                 base.SetBoundsCore(x, y, width, height, specified);
+            }
+        }
+
+        protected override void SetToolTip(ToolTip toolTip, string toolTipText)
+        {
+            if (toolTip == null)
+            {
+                return;
+            }
+
+            // Check if there is an existing ToolTip object that is showing tooltips,
+            // if so - reset it to avoid showing several tooltips (old and new) at the same time.
+            if (ToolTip != toolTip)
+            {
+                ToolTip.SetToolTip(this, null);
+                ToolTip = toolTip;
+            }
+
+            // Show the same tooltip for the page's tab.
+            if (toolTipText != null && ToolTipText != toolTipText)
+            {
+                ToolTipText = toolTipText;
             }
         }
 

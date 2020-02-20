@@ -1601,7 +1601,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Called by ToolTip to poke in that Tooltip into this ComCtl so that the Native ChildToolTip is not exposed.
         /// </summary>
-        internal void SetToolTip(ToolTip toolTip)
+        protected override void SetToolTip(ToolTip toolTip, string toolTipText)
         {
             if (toolTip != null && !controlToolTip)
             {

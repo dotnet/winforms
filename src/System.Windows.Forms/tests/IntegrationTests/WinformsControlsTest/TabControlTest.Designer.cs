@@ -38,18 +38,54 @@ namespace WinformsControlsTest
             tabPage2 = new TabPage();
             toolTip = new ToolTip();
             button1 = new Button();
+            button2 = new Button();
+            button3 = new Button();
+            internalButton = new Button();
+            _label = new Label();
             tabControl1.SuspendLayout();
             SuspendLayout();
             //
             // Set tooltip
             //
-            toolTip.SetToolTip(tabPage1, "Ultra super tabpage");
+            //toolTip.SetToolTip(tabPage1, "Ultra super tabpage");
+
+            //
+            // Label
+            //
+            _label.Location = new Point(15, 180);
+            _label.MaximumSize = new Size(150, 18);
+            _label.AutoSize = true;
+            _label.Text = "Some label as.dkgfhas.dfkgjs/dakfgj/sdfkgj/alsdkfjg asdlfmas/dlkmf/asdkmf/askldf/sakdfaskgn";
+            _label.AutoEllipsis = true;
+
             //
             // button1
             //
             button1.Location = new System.Drawing.Point(15, 140);
-            button1.Text = "Button";
+            button1.Text = "Button1";
             button1.Click += ButtonClick;
+            toolTip.SetToolTip(button1, "Button1");
+            // button2
+            //
+            button2.Location = new System.Drawing.Point(100, 140);
+            button2.Text = "Button2";
+            button2.Click += Button2Click;
+            toolTip.SetToolTip(button2, "Button2");
+            // button3
+            //
+            button3.Location = new System.Drawing.Point(185, 140);
+            button3.Text = "Button3";
+            toolTip.SetToolTip(button3, "Button3");
+            button3.Click += Button3Click;
+            //
+            // internalButton
+            //
+            tabPage1.Controls.Add(internalButton);
+            internalButton.Location = new System.Drawing.Point(15, 15);
+            internalButton.Size = new Size(100, 20);
+            internalButton.BackColor = Color.White;
+            internalButton.Text = "Internal button";
+            toolTip.SetToolTip(internalButton, "Internal button");
             // 
             // tabControl1
             // 
@@ -71,6 +107,8 @@ namespace WinformsControlsTest
             tabPage1.TabIndex = 0;
             tabPage1.Text = "tabPage1";
             //tabPage1.ToolTipText = "1_item";
+            toolTip.SetToolTip(tabPage1, "1_item");
+
             tabPage1.BackColor = Color.Red;
             // 
             // tabPage2
@@ -81,16 +119,21 @@ namespace WinformsControlsTest
             tabPage2.Size = new System.Drawing.Size(20, 20);
             tabPage2.TabIndex = 0;
             tabPage2.Text = "tabPage2";
-            tabPage2.ToolTipText = "2_item";
+            //tabPage2.ToolTipText = "2_item";
+            toolTip.SetToolTip(tabPage2, "2_item");
+
             tabPage2.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            ClientSize = new System.Drawing.Size(343, 183);
+            ClientSize = new System.Drawing.Size(343, 200);
             Controls.Add(tabControl1);
             Controls.Add(button1);
+            Controls.Add(button2);
+            Controls.Add(button3);
+            Controls.Add(_label);
             Name = "Form1";
             Text = "Form1";
             tabControl1.ResumeLayout(false);
@@ -101,6 +144,10 @@ namespace WinformsControlsTest
         private TabPage tabPage1;
         private TabPage tabPage2;
         private Button button1;
+        private Button button2;
+        private Button button3;
+        private Button internalButton;
         private ToolTip toolTip;
+        private Label _label;
     }
 }

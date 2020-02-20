@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Globalization;
 using System.Windows.Forms;
 
 namespace WinformsControlsTest
@@ -12,6 +13,7 @@ namespace WinformsControlsTest
         public TabControlTest()
         {
             InitializeComponent();
+            //toolTip.SetToolTip(tabControl1, "TabControl");
         }
 
         int i = 0;
@@ -35,7 +37,35 @@ namespace WinformsControlsTest
                     break;
             }
 
+            toolTip.SetToolTip(tabPage1, " \t  \r\n   ");
+
             i++;
+        }
+
+        int j = 0;
+
+        private void Button2Click(object sender, EventArgs e)
+        {
+            new ToolTip().SetToolTip(internalButton, j.ToString());
+            j++;
+
+            new ToolTip().SetToolTip(_label, "");
+
+
+        }
+
+        private void Button3Click(object sender, EventArgs e)
+        {
+            new ToolTip().SetToolTip(_label, "New tooltip text");
+        }
+    }
+
+    public class MyLabel : Label
+    {
+        public MyLabel()
+        {
+            this.SetToolTip(new ToolTip(), "balas");
+            //new ToolTip().SetToolTip(this, "");
         }
     }
 }

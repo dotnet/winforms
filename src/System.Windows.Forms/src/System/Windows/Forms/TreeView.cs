@@ -1701,14 +1701,16 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Called by ToolTip to poke in that Tooltip into this ComCtl so that the Native ChildToolTip is not exposed.
         /// </summary>
-        internal void SetToolTip(ToolTip toolTip, string toolTipText)
+        protected override void SetToolTip(ToolTip toolTip, string toolTipText)
         {
-            if (toolTip != null)
+            if (toolTip == null || !ShowNodeToolTips)
             {
-                User32.SendMessageW(toolTip, (User32.WM)TTM.SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
-                User32.SendMessageW(this, (User32.WM)TVM.SETTOOLTIPS, toolTip.Handle);
-                controlToolTipText = toolTipText;
+                return;
             }
+
+            User32.SendMessageW(toolTip, (User32.WM)TTM.SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
+            User32.SendMessageW(this, (User32.WM)TVM.SETTOOLTIPS, toolTip.Handle);
+            controlToolTipText = toolTipText;
         }
 
         /// <summary>

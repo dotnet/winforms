@@ -5072,8 +5072,13 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Called by ToolTip to poke in that Tooltip into this ComCtl so that the Native ChildToolTip is not exposed.
         /// </summary>
-        internal void SetToolTip(ToolTip toolTip, string toolTipCaption)
+        protected override void SetToolTip(ToolTip toolTip, string toolTipCaption)
         {
+            if (toolTip == null)
+            {
+                return;
+            }
+
             this.toolTipCaption = toolTipCaption;
 
             // native ListView expects tooltip HWND as a wParam and ignores lParam
