@@ -101,9 +101,7 @@ namespace System.Windows.Forms
         NIN_BALLOONSHOW = ((int)User32.WM.USER + 2),
         NIN_BALLOONHIDE = ((int)User32.WM.USER + 3),
         NIN_BALLOONTIMEOUT = ((int)User32.WM.USER + 4),
-        NIN_BALLOONUSERCLICK = ((int)User32.WM.USER + 5),
-        NFR_ANSI = 1,
-        NFR_UNICODE = 2;
+        NIN_BALLOONUSERCLICK = ((int)User32.WM.USER + 5);
 
         public const int
         PATCOPY = 0x00F00021,
