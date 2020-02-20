@@ -206,17 +206,13 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>MaskDesignerDialog.resx</DependentUpon>
     </Compile>
-    <Compile Update="System\Windows\Forms\Design\MaskedTextBoxTextEditorDropDown.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Update="System\Windows\Forms\Design\MaskedTextBoxTextEditorDropDown.cs" />
     <Compile Update="Resources\LinkAreaEditor.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>LinkAreaEditor.resx</DependentUpon>
     </Compile>
-    <Compile Update="System\Windows\Forms\Design\FormatControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Update="System\Windows\Forms\Design\FormatControl.cs" />
     <Compile Update="System\Windows\Forms\Design\FormatStringDialog.cs" />
   </ItemGroup>
 </Project>
