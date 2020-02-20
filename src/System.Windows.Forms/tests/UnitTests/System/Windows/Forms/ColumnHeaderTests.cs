@@ -913,6 +913,32 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
+        [InlineData("name", "name", true)]
+        [InlineData(null, "", false)]
+        public void ColumnHeader_Name_WithSite_ShouldSerializeValue_Success(string name, string resultingName, bool result)
+        {
+            PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ColumnHeader))[nameof(ColumnHeader.Name)];
+
+            // Get name from the Site
+            using ColumnHeader header = new ColumnHeader();
+            var mockSite = new Mock<ISite>(MockBehavior.Strict);
+            mockSite
+                .Setup(s => s.Name)
+                .Returns(name);
+            mockSite
+                .Setup(s => s.Component)
+                .Returns(header);
+            // Container is accessed when disposing the ColumnHeader component.
+            mockSite
+                .Setup(s => s.Container)
+                .Returns((IContainer)null);
+            header.Site = mockSite.Object;
+
+            Assert.Equal(resultingName, header.Name);
+            Assert.Equal(result, property.ShouldSerializeValue(header));
+        }
+
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void ColumnHeader_Tag_Set_GetReturnsExpected(object value)
         {

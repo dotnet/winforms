@@ -217,8 +217,6 @@
     <Compile Update="System\Windows\Forms\Design\FormatControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Update="System\Windows\Forms\Design\FormatStringDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Update="System\Windows\Forms\Design\FormatStringDialog.cs" />
   </ItemGroup>
 </Project>
