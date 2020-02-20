@@ -21,7 +21,6 @@ namespace System.Windows.Forms.Design
     [ComVisible(true)]
     [ClassInterface(ClassInterfaceType.AutoDispatch)]
     [ToolboxItem(false)]
-    [DesignerCategory("code")]
     public class ComponentEditorForm : Form
     {
         private readonly IComponent component;

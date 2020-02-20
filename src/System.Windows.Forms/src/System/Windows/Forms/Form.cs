@@ -30,7 +30,7 @@ namespace System.Windows.Forms
     [Designer("System.Windows.Forms.Design.FormDocumentDesigner, " + AssemblyRef.SystemDesign, typeof(IRootDesigner))]
     [DefaultEvent(nameof(Load))]
     [InitializationEvent(nameof(Load))]
-    [DesignerCategory("code")]
+    [DesignerCategory("Form")]
     public partial class Form : ContainerControl
     {
 #if DEBUG
