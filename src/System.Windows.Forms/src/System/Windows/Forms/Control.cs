@@ -13171,7 +13171,7 @@ namespace System.Windows.Forms
                     break;
 
                 case User32.WM.REFLECT | User32.WM.NOTIFYFORMAT:
-                    m.Result = (IntPtr)(NativeMethods.NFR_UNICODE);
+                    m.Result = (IntPtr)User32.NFR.UNICODE;
                     break;
 
                 case User32.WM.SHOWWINDOW:
