@@ -1723,7 +1723,7 @@ namespace System.Windows.Forms
 
             User32.SendMessageW(this, (User32.WM)ComCtl32.TCM.SETTOOLTIPS, toolTip.Handle);
             GC.KeepAlive(toolTip);
-            _controlTipText = controlToolTipText;
+            _controlTipText = toolTipText;
         }
 
         private void SetTabPage(int index, TabPage value)

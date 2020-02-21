@@ -6,3 +6,10 @@ override System.Windows.Forms.TabControl.OnGotFocus(System.EventArgs e) -> void
 override System.Windows.Forms.TabControl.OnLostFocus(System.EventArgs e) -> void
 override System.Windows.Forms.TabPage.OnGotFocus(System.EventArgs e) -> void
 override System.Windows.Forms.TabPage.OnLostFocus(System.EventArgs e) -> void
+virtual System.Windows.Forms.Control.SetToolTip(System.Windows.Forms.ToolTip toolTip, string toolTipText) -> void
+override System.Windows.Forms.UpDownBase.SetToolTip(System.Windows.Forms.ToolTip toolTip, string toolTipText) -> void
+override System.Windows.Forms.TabControl.SetToolTip(System.Windows.Forms.ToolTip toolTip, string toolTipText) -> void
+override System.Windows.Forms.Label.SetToolTip(System.Windows.Forms.ToolTip toolTip, string toolTipText) -> void
+override System.Windows.Forms.ListView.SetToolTip(System.Windows.Forms.ToolTip toolTip, string toolTipText) -> void
+override System.Windows.Forms.TabPage.SetToolTip(System.Windows.Forms.ToolTip toolTip, string toolTipText) -> void
+override System.Windows.Forms.TreeView.SetToolTip(System.Windows.Forms.ToolTip toolTip, string toolTipText) -> void

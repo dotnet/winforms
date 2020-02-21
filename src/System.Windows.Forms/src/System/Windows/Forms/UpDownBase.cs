@@ -988,8 +988,8 @@ namespace System.Windows.Forms
                 return;
             }
 
-            toolTip.SetToolTip(upDownEdit, toolTipText);
-            toolTip.SetToolTip(upDownButtons, toolTipText);
+            toolTip.SetToolTip(_upDownEdit, toolTipText);
+            toolTip.SetToolTip(_upDownButtons, toolTipText);
         }
     }
 }
