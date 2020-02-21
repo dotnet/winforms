@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Drawing;
 using System.Windows.Forms.Internal;
 using static Interop;
@@ -11,13 +13,8 @@ namespace System.Windows.Forms
     /// <summary>
     ///  This class provides API for drawing GDI text.
     /// </summary>
-    public sealed class TextRenderer
+    public static class TextRenderer
     {
-        //cannot instantiate
-        private TextRenderer()
-        {
-        }
-
         public static void DrawText(IDeviceContext dc, string text, Font font, Point pt, Color foreColor)
         {
             if (dc == null)
@@ -353,4 +350,3 @@ namespace System.Windows.Forms
         }
     }
 }
-

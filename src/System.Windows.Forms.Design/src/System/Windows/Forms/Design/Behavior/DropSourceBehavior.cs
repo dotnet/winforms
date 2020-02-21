@@ -196,7 +196,6 @@ namespace System.Windows.Forms.Design.Behavior
         {
             if (dragImageRect != Rectangle.Empty)
             {
-
                 Rectangle rect = dragImageRect;
                 rect.Location = MapPointFromSourceToTarget(rect.Location);
 
@@ -488,7 +487,6 @@ namespace System.Windows.Forms.Design.Behavior
                             {
                                 selSvc.SetSelectedComponents(new object[] { dragComponents[i].dragComponent }, SelectionTypes.Add);
                             }
-
                         }
 
                         if ((!localDrag || performCopy) && componentChangeSvcSource != null && componentChangeSvcTarget != null)
@@ -912,7 +910,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        ///  Called when the ContolDesigner starts a drag operation. Here, all adorners are disabled, screen shots of all related controls are taken, and the DragAssistanceManager  (for SnapLines) is created.
+        ///  Called when the ControlDesigner starts a drag operation. Here, all adorners are disabled, screen shots of all related controls are taken, and the DragAssistanceManager  (for SnapLines) is created.
         /// </summary>
         private void InitiateDrag(Point initialMouseLocation, ICollection dragComps)
         {
@@ -1024,7 +1022,6 @@ namespace System.Windows.Forms.Design.Behavior
                                     GraphicsUnit.Pixel);
                     }
                 }
-
             }
 
             originalDragImageLocation = new Point(dragImageRect.X, dragImageRect.Y);

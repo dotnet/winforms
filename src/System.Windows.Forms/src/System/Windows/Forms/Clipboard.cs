@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -35,7 +37,6 @@ namespace System.Windows.Forms
                             break;
                         default:
                             return false;
-
                     }
                 }
                 return true;
@@ -185,7 +186,7 @@ namespace System.Windows.Forms
                 {
                     throw new ThreadStateException(SR.ThreadMustBeSTA);
                 }
-                
+
                 return null;
             }
 
@@ -223,7 +224,7 @@ namespace System.Windows.Forms
                 {
                     return ido;
                 }
-                
+
                 return new DataObject(dataObject);
             }
 

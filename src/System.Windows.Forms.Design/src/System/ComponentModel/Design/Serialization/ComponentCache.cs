@@ -240,7 +240,6 @@ namespace System.ComponentModel.Design.Serialization
                         RemoveEntry(parent);
                     }
                 }
-
             }
         }
 

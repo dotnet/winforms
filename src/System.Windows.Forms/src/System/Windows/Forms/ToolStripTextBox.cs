@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Design;
@@ -203,7 +205,6 @@ namespace System.Windows.Forms
                 textBox.MultilineChanged += new EventHandler(HandleMultilineChanged);
                 textBox.ReadOnlyChanged += new EventHandler(HandleReadOnlyChanged);
                 textBox.TextAlignChanged += new EventHandler(HandleTextBoxTextAlignChanged);
-
             }
 
             base.OnSubscribeControlEvents(control);
@@ -224,7 +225,6 @@ namespace System.Windows.Forms
                 textBox.TextAlignChanged -= new EventHandler(HandleTextBoxTextAlignChanged);
             }
             base.OnUnsubscribeControlEvents(control);
-
         }
 
         internal override bool ShouldSerializeFont()
@@ -562,7 +562,7 @@ namespace System.Windows.Forms
                     RECT rect = new RECT();
                     CreateParams cp = CreateParams;
 
-                    AdjustWindowRectEx(ref rect, cp.Style, HasMenu, cp.ExStyle);
+                    AdjustWindowRectEx(ref rect, cp.Style, false, cp.ExStyle);
 
                     // the coordinates we get back are negative, we need to translate this back to positive.
                     int offsetX = -rect.left; // one to get back to 0,0, another to translate
@@ -690,14 +690,12 @@ namespace System.Windows.Forms
             {
                 base.OnLostFocus(e);
                 InvalidateNonClient();
-
             }
 
             protected override void OnMouseEnter(EventArgs e)
             {
                 base.OnMouseEnter(e);
                 MouseIsOver = true;
-
             }
 
             protected override void OnMouseLeave(EventArgs e)
@@ -733,7 +731,6 @@ namespace System.Windows.Forms
                         alreadyHooked = false;
                     }
                 }
-
             }
 
             private void OnUserPreferenceChanged(object sender, UserPreferenceChangedEventArgs e)
@@ -772,7 +769,6 @@ namespace System.Windows.Forms
 
             private void WmNCPaint(ref Message m)
             {
-
                 if (!IsPopupTextBox)
                 {
                     base.WndProc(ref m);
@@ -803,7 +799,6 @@ namespace System.Windows.Forms
                     }
                     using (Graphics g = Graphics.FromHdcInternal(hdc))
                     {
-
                         Rectangle clientRect = AbsoluteClientRectangle;
 
                         // could have set up a clip and fill-rectangled, thought this would be faster.
@@ -820,7 +815,6 @@ namespace System.Windows.Forms
                         {
                             g.DrawRectangle(p, 0, 0, Width - 1, Height - 1);
                         }
-
                     }
                 }
                 finally
@@ -829,11 +823,10 @@ namespace System.Windows.Forms
                 }
                 // we've handled WM_NCPAINT.
                 m.Result = IntPtr.Zero;
-
             }
             protected override void WndProc(ref Message m)
             {
-                if (m.Msg == WindowMessages.WM_NCPAINT)
+                if (m.Msg == (int)User32.WM.NCPAINT)
                 {
                     WmNCPaint(ref m);
                     return;
@@ -872,5 +865,4 @@ namespace System.Windows.Forms
             }
         }
     }
-
 }

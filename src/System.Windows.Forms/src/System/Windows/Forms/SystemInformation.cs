@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.InteropServices;
@@ -88,7 +90,7 @@ namespace System.Windows.Forms
             {
                 return GetCurrentSystemMetrics(SystemMetric.SM_CXVSCROLL, (uint)dpi);
             }
-            
+
             return GetSystemMetrics(SystemMetric.SM_CXVSCROLL);
         }
 
@@ -106,7 +108,7 @@ namespace System.Windows.Forms
             {
                 return GetCurrentSystemMetrics(SystemMetric.SM_CYHSCROLL, (uint)dpi);
             }
-            
+
             return GetSystemMetrics(SystemMetric.SM_CYHSCROLL);
         }
 
@@ -137,7 +139,7 @@ namespace System.Windows.Forms
                 return new Size(GetCurrentSystemMetrics(SystemMetric.SM_CXBORDER, (uint)dpi),
                                 GetCurrentSystemMetrics(SystemMetric.SM_CYBORDER, (uint)dpi));
             }
-            
+
             return BorderSize;
         }
 
@@ -281,7 +283,7 @@ namespace System.Windows.Forms
             {
                 return GetCurrentSystemMetrics(SystemMetric.SM_CXHSCROLL, (uint)dpi);
             }
-            
+
             return GetSystemMetrics(SystemMetric.SM_CXHSCROLL);
         }
 
@@ -634,17 +636,17 @@ namespace System.Windows.Forms
         {
             get
             {
-                IntPtr hwinsta = UnsafeNativeMethods.GetProcessWindowStation();
+                IntPtr hwinsta = User32.GetProcessWindowStation();
                 if (hwinsta != IntPtr.Zero && s_processWinStation != hwinsta)
                 {
                     s_isUserInteractive = true;
 
                     int lengthNeeded = 0;
 
-                    NativeMethods.USEROBJECTFLAGS flags = new NativeMethods.USEROBJECTFLAGS();
-                    if (UnsafeNativeMethods.GetUserObjectInformation(new HandleRef(null, hwinsta), NativeMethods.UOI_FLAGS, ref flags, sizeof(NativeMethods.USEROBJECTFLAGS), ref lengthNeeded))
+                    USEROBJECTFLAGS flags = default;
+                    if (GetUserObjectInformationW(hwinsta, UOI.FLAGS, ref flags, sizeof(USEROBJECTFLAGS), ref lengthNeeded).IsTrue())
                     {
-                        if ((flags.dwFlags & NativeMethods.WSF_VISIBLE) == 0)
+                        if ((flags.dwFlags & (int)WSF.VISIBLE) == 0)
                         {
                             s_isUserInteractive = false;
                         }

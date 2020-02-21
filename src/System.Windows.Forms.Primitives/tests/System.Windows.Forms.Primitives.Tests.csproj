@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AssemblyName>System.Windows.Forms.Primitives.Tests</AssemblyName>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Moq" Version="$(MoqPackageVersion)" />
+    <PackageReference Include="xunit.stafact" Version="$(XUnitStaFactPackageVersion)" />
+    <PackageReference Include="coverlet.msbuild" Version="$(CoverletMSBuildPackageVersion)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Common\tests\InternalUtilitiesForTests\InternalUtilitiesForTests.csproj" />
+    <ProjectReference Include="..\src\System.Windows.Forms.Primitives.csproj" />
+    <Compile Include="..\..\Common\tests\ThreadExceptionFixture.cs" Link="Common\ThreadExceptionFixture.cs" />
+  </ItemGroup>
+
+</Project>

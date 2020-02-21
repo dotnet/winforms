@@ -43,6 +43,5 @@ namespace WinformsControlsTest
         {
             checkedListBox1.Items.Add("Pennsylvania", CheckState.Checked);
         }
-
     }
 }

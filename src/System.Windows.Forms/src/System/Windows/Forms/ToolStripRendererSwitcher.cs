@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Collections.Specialized;
 using System.ComponentModel;
 
@@ -36,7 +38,6 @@ namespace System.Windows.Forms
             {
                 OnControlVisibleChanged(owner, EventArgs.Empty);
             }
-
         }
 
         public ToolStripRenderer Renderer
@@ -56,7 +57,6 @@ namespace System.Windows.Forms
                     Renderer = ToolStripManager.CreateRenderer(RenderMode);
                 }
                 return renderer;
-
             }
             set
             {
@@ -96,7 +96,6 @@ namespace System.Windows.Forms
                     return ToolStripRenderMode.System;
                 }
                 return ToolStripRenderMode.Custom;
-
             }
             set
             {
@@ -181,6 +180,5 @@ namespace System.Windows.Forms
         {
             RenderMode = defaultRenderMode;
         }
-
     }
 }

@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.ComponentModel;
 
 namespace System.Windows.Forms.Design
@@ -29,7 +31,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ////  Activates the advanced UI used to edit the component.
+        ///  Activates the advanced UI used to edit the component.
         /// </summary>
         public virtual bool EditComponent(ITypeDescriptorContext context, object component, IWin32Window owner)
         {

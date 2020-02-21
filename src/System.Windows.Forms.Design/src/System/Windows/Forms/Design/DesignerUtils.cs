@@ -102,7 +102,6 @@ namespace System.Windows.Forms.Design
 
         //use these value to signify ANY of the right, top, left, center, or bottom alignments with the ContentAlignment enum.
         public static readonly ContentAlignment anyTopAlignment = ContentAlignment.TopLeft | ContentAlignment.TopCenter | ContentAlignment.TopRight;
-        /* UNUSED: private static readonly ContentAlignment anyBottom = ContentAlignment.BottomLeft | ContentAlignment.BottomCenter | ContentAlignment.BottomRight;*/
         public static readonly ContentAlignment anyMiddleAlignment = ContentAlignment.MiddleLeft | ContentAlignment.MiddleCenter | ContentAlignment.MiddleRight;
 
         /// <summary>
@@ -189,7 +188,7 @@ namespace System.Windows.Forms.Design
             get
             {
                 int lastXY = (int)User32.GetMessagePos();
-                return new Point(NativeMethods.Util.SignedLOWORD(lastXY), NativeMethods.Util.SignedHIWORD(lastXY));
+                return new Point(PARAM.SignedLOWORD(lastXY), PARAM.SignedHIWORD(lastXY));
             }
         }
 
@@ -515,7 +514,7 @@ namespace System.Windows.Forms.Design
             {
                 IntPtr hDc = g.GetHdc();
                 //send the actual wm_print message
-                NativeMethods.SendMessage(hWnd, WindowMessages.WM_PRINT, hDc, (IntPtr)(NativeMethods.PRF_CHILDREN | NativeMethods.PRF_CLIENT | NativeMethods.PRF_ERASEBKGND | NativeMethods.PRF_NONCLIENT));
+                User32.SendMessageW(hWnd, User32.WM.PRINT, hDc, (IntPtr)(User32.PRF.CHILDREN | User32.PRF.CLIENT | User32.PRF.ERASEBKGND | User32.PRF.NONCLIENT));
                 g.ReleaseHdc(hDc);
             }
 
@@ -652,14 +651,10 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  Called by the ParentControlDesigner when creating a new
-        ///  control - this will update the new control's bounds with the
-        ///  proper toolbox/snapline information that has been stored
-        ///  off
-        //
-        ///  isMirrored - Is the ParentControlDesigner mirrored? If so, we need
-        ///  to offset for that. This is because all snapline stuff is done
-        ///  using a LTR coordinate system
+        ///  Called by the ParentControlDesigner when creating a new control - this will update the
+        ///  new control's bounds with the proper toolbox/snapline information that has been stored
+        ///  off. If the ParentControlDesigner is so, we need to offset for that. This is because
+        ///  all snapline stuff is done using a LTR coordinate system
         /// </summary>
         public static Rectangle GetBoundsFromToolboxSnapDragDropInfo(ToolboxSnapDragDropEventArgs e, Rectangle originalBounds, bool isMirrored)
         {
@@ -930,12 +925,7 @@ namespace System.Windows.Forms.Design
 
         private static ComCtl32.TVS_EX TreeView_GetExtendedStyle(IntPtr handle)
         {
-            return (ComCtl32.TVS_EX)NativeMethods.SendMessage(handle, NativeMethods.TVM_GETEXTENDEDSTYLE, IntPtr.Zero, IntPtr.Zero);
-        }
-
-        private static void TreeView_SetExtendedStyle(IntPtr handle, ComCtl32.TVS_EX extendedStyle, int mask)
-        {
-            NativeMethods.SendMessage(handle, NativeMethods.TVM_SETEXTENDEDSTYLE, (IntPtr)mask, (IntPtr)extendedStyle);
+            return (ComCtl32.TVS_EX)User32.SendMessageW(handle, (User32.WM)ComCtl32.TVM.GETEXTENDEDSTYLE);
         }
 
         /// <summary>
@@ -951,15 +941,10 @@ namespace System.Windows.Forms.Design
             treeView.HotTracking = true;
             treeView.ShowLines = false;
             IntPtr hwnd = treeView.Handle;
-            SafeNativeMethods.SetWindowTheme(hwnd, "Explorer", null);
+            UxTheme.SetWindowTheme(hwnd, "Explorer", null);
             ComCtl32.TVS_EX exstyle = TreeView_GetExtendedStyle(hwnd);
             exstyle |= ComCtl32.TVS_EX.DOUBLEBUFFER | ComCtl32.TVS_EX.FADEINOUTEXPANDOS;
-            TreeView_SetExtendedStyle(hwnd, exstyle, 0);
-        }
-
-        private static void ListView_SetExtendedListViewStyleEx(IntPtr handle, int mask, int extendedStyle)
-        {
-            NativeMethods.SendMessage(handle, (int)LVM.SETEXTENDEDLISTVIEWSTYLE, new IntPtr(mask), new IntPtr(extendedStyle));
+            User32.SendMessageW(hwnd, (User32.WM)ComCtl32.TVM.SETEXTENDEDSTYLE, IntPtr.Zero, (IntPtr)exstyle);
         }
 
         /// <summary>
@@ -973,8 +958,8 @@ namespace System.Windows.Forms.Design
                 throw new ArgumentNullException(nameof(listView));
             }
             IntPtr hwnd = listView.Handle;
-            SafeNativeMethods.SetWindowTheme(hwnd, "Explorer", null);
-            ListView_SetExtendedListViewStyleEx(hwnd, NativeMethods.LVS_EX_DOUBLEBUFFER, NativeMethods.LVS_EX_DOUBLEBUFFER);
+            UxTheme.SetWindowTheme(hwnd, "Explorer", null);
+            User32.SendMessageW(hwnd, (User32.WM)ComCtl32.LVM.SETEXTENDEDLISTVIEWSTYLE, (IntPtr)ComCtl32.LVS_EX.DOUBLEBUFFER, (IntPtr)ComCtl32.LVS_EX.DOUBLEBUFFER);
         }
     }
 }

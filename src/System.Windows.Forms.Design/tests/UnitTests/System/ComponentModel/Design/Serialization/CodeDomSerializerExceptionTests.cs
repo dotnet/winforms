@@ -13,7 +13,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Design.Serialization.Tests
 {
-    public class CodeDomSerializerExceptionTests
+    public class CodeDomSerializerExceptionTests : IClassFixture<ThreadExceptionFixture>
     {
         public static IEnumerable<object[]> Ctor_String_CodeLinePragma_TestData()
         {

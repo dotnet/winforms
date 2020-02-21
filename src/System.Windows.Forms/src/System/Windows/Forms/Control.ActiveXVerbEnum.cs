@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.ComponentModel;
 using System.Diagnostics;
 using static Interop;
@@ -13,7 +15,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Simple verb enumerator.
         /// </summary>
-        private class ActiveXVerbEnum : UnsafeNativeMethods.IEnumOLEVERB
+        private class ActiveXVerbEnum : Ole32.IEnumOLEVERB
         {
             private readonly Ole32.OLEVERB[] _verbs;
             private uint _current;
@@ -83,7 +85,7 @@ namespace System.Windows.Forms
                 return HRESULT.S_OK;
             }
 
-            public HRESULT Clone(out UnsafeNativeMethods.IEnumOLEVERB ppenum)
+            public HRESULT Clone(out Ole32.IEnumOLEVERB ppenum)
             {
                 ppenum = new ActiveXVerbEnum(_verbs);
                 return HRESULT.S_OK;

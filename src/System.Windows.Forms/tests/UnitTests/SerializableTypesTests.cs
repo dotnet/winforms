@@ -15,7 +15,7 @@ using static Interop;
 
 namespace System.Windows.Forms.Tests.Serialization
 {
-    public class SerializableTypesTests
+    public class SerializableTypesTests : IClassFixture<ThreadExceptionFixture>
     {
         [Fact]
         public void AxHostState_RoundTripAndExchangeWithNet()
@@ -220,7 +220,6 @@ namespace System.Windows.Forms.Tests.Serialization
 
                 netBlob = BinarySerialization.ToBase64String(listViewSubItem);
             }
-
 
             // ensure we can deserialise NET serialised data and continue to match the payload
             ValidateResult(netBlob);

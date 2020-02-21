@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Drawing;
 using Microsoft.Win32;
 using System.Globalization;
@@ -31,7 +33,6 @@ namespace System.Windows.Forms
 
             if (key != null)
             {
-
                 // Since this comes from the registry, be very careful about its contents.
                 //
                 string s = (string)key.GetValue(name);
@@ -70,7 +71,6 @@ namespace System.Windows.Forms
             {
                 return Color.Red;
             }
-
         }
 
         public static Color IELinkColor

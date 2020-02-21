@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Drawing;
 using System.Windows.Forms.VisualStyles;
 
@@ -11,18 +13,13 @@ namespace System.Windows.Forms
     ///  This is a rendering class for the RadioButton control. It works downlevel too (obviously
     ///  without visual styles applied.)
     /// </summary>
-    public sealed class RadioButtonRenderer
+    public static class RadioButtonRenderer
     {
         //Make this per-thread, so that different threads can safely use these methods.
         [ThreadStatic]
         private static VisualStyleRenderer visualStyleRenderer = null;
         private static readonly VisualStyleElement RadioElement = VisualStyleElement.Button.RadioButton.UncheckedNormal;
         private static bool renderMatchingApplicationState = true;
-
-        //cannot instantiate
-        private RadioButtonRenderer()
-        {
-        }
 
         /// <summary>
         ///  If this property is true, then the renderer will use the setting from Application.RenderWithVisualStyles to

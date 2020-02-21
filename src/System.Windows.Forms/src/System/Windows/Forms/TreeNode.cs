@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Collections;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -12,6 +14,7 @@ using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using System.Text;
 using static Interop;
+using static Interop.ComCtl32;
 
 namespace System.Windows.Forms
 {
@@ -24,8 +27,8 @@ namespace System.Windows.Forms
     public class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     {
         internal const int SHIFTVAL = 12;
-        private const ComCtl32.TVIS CHECKED = (ComCtl32.TVIS)(2 << SHIFTVAL);
-        private const ComCtl32.TVIS UNCHECKED = (ComCtl32.TVIS)(1 << SHIFTVAL);
+        private const TVIS CHECKED = (TVIS)(2 << SHIFTVAL);
+        private const TVIS UNCHECKED = (TVIS)(1 << SHIFTVAL);
         private const int ALLOWEDIMAGES = 14;
 
         //the threshold value used to optimize AddRange and Clear operations for a big number of nodes
@@ -96,7 +99,6 @@ namespace System.Windows.Forms
                 }
                 set { Debug.Assert(false, "We should never set the image list"); }
             }
-
         }
 
         internal TreeNodeImageIndexer ImageIndexer
@@ -123,7 +125,6 @@ namespace System.Windows.Forms
                 }
 
                 return selectedImageIndexer;
-
             }
         }
 
@@ -150,10 +151,10 @@ namespace System.Windows.Forms
         private TreeNodeCollection nodes = null;
         object userData;
 
-        private readonly static ComCtl32.TVIF insertMask =
-            ComCtl32.TVIF.TEXT
-            | ComCtl32.TVIF.IMAGE
-            | ComCtl32.TVIF.SELECTEDIMAGE;
+        private readonly static TVIF insertMask =
+            TVIF.TEXT
+            | TVIF.IMAGE
+            | TVIF.SELECTEDIMAGE;
 
         /// <summary>
         ///  Creates a TreeNode object.
@@ -288,7 +289,7 @@ namespace System.Windows.Forms
                 unsafe
                 { *((IntPtr*)&rc.left) = Handle; }
                 // wparam: 1=include only text, 0=include entire line
-                if ((int)UnsafeNativeMethods.SendMessage(new HandleRef(tv, tv.Handle), NativeMethods.TVM_GETITEMRECT, 1, ref rc) == 0)
+                if ((int)User32.SendMessageW(tv, (User32.WM)TVM.GETITEMRECT, (IntPtr)1, ref rc) == 0)
                 {
                     // This means the node is not visible
                     //
@@ -315,7 +316,7 @@ namespace System.Windows.Forms
                 {
                     return Rectangle.Empty;
                 }
-                if ((int)UnsafeNativeMethods.SendMessage(new HandleRef(tv, tv.Handle), NativeMethods.TVM_GETITEMRECT, 0, ref rc) == 0)
+                if ((int)User32.SendMessageW(tv, (User32.WM)TVM.GETITEMRECT, IntPtr.Zero, ref rc) == 0)
                 {
                     // This means the node is not visible
                     //
@@ -359,18 +360,18 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                var item = new ComCtl32.TVITEMW
+                var item = new TVITEMW
                 {
-                    mask = ComCtl32.TVIF.HANDLE | ComCtl32.TVIF.STATE,
+                    mask = TVIF.HANDLE | TVIF.STATE,
                     hItem = handle,
-                    stateMask = ComCtl32.TVIS.STATEIMAGEMASK
+                    stateMask = TVIS.STATEIMAGEMASK
                 };
                 item.state |= value ? CHECKED : UNCHECKED;
-                User32.SendMessageW(tv, User32.WindowMessage.TVM_SETITEMW, IntPtr.Zero, ref item);
+                User32.SendMessageW(tv, (User32.WM)TVM.SETITEMW, IntPtr.Zero, ref item);
             }
         }
 
-        /// <summary>	
+        /// <summary>
         ///  Indicates whether the node's checkbox is checked.
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
@@ -384,13 +385,13 @@ namespace System.Windows.Forms
                 if (handle != IntPtr.Zero && !treeView.IsDisposed)
                 {
                     TreeView tv = TreeView;
-                    var item = new ComCtl32.TVITEMW
+                    var item = new TVITEMW
                     {
-                        mask = ComCtl32.TVIF.HANDLE | ComCtl32.TVIF.STATE,
+                        mask = TVIF.HANDLE | TVIF.STATE,
                         hItem = handle,
-                        stateMask = ComCtl32.TVIS.STATEIMAGEMASK
+                        stateMask = TVIS.STATEIMAGEMASK
                     };
-                    User32.SendMessageW(tv, User32.WindowMessage.TVM_GETITEMW, IntPtr.Zero, ref item);
+                    User32.SendMessageW(tv, (User32.WM)TVM.GETITEMW, IntPtr.Zero, ref item);
                     Debug.Assert(!tv.CheckBoxes || (((int)item.state >> SHIFTVAL) > 1) == CheckedInternal,
                         "isChecked on node '" + Name + "' did not match the state in TVM_GETITEM.");
                 }
@@ -583,7 +584,7 @@ namespace System.Windows.Forms
             set
             {
                 ImageIndexer.Index = value;
-                UpdateNode(ComCtl32.TVIF.IMAGE);
+                UpdateNode(TVIF.IMAGE);
             }
         }
 
@@ -607,7 +608,7 @@ namespace System.Windows.Forms
             set
             {
                 ImageIndexer.Key = value;
-                UpdateNode(ComCtl32.TVIF.IMAGE);
+                UpdateNode(TVIF.IMAGE);
             }
         }
 
@@ -654,7 +655,7 @@ namespace System.Windows.Forms
                 {
                     return expandOnRealization;
                 }
-                return (State & ComCtl32.TVIS.EXPANDED) != 0;
+                return (State & TVIS.EXPANDED) != 0;
             }
         }
 
@@ -671,7 +672,7 @@ namespace System.Windows.Forms
                     return false;
                 }
 
-                return (State & ComCtl32.TVIS.SELECTED) != 0;
+                return (State & TVIS.SELECTED) != 0;
             }
         }
 
@@ -698,7 +699,7 @@ namespace System.Windows.Forms
                 unsafe
                 { *((IntPtr*)&rc.left) = Handle; }
 
-                bool visible = ((int)UnsafeNativeMethods.SendMessage(new HandleRef(tv, tv.Handle), NativeMethods.TVM_GETITEMRECT, 1, ref rc) != 0);
+                bool visible = ((int)User32.SendMessageW(tv, (User32.WM)TVM.GETITEMRECT, (IntPtr)1, ref rc) != 0);
                 if (visible)
                 {
                     Size size = tv.ClientSize;
@@ -785,8 +786,7 @@ namespace System.Windows.Forms
 
                 if (node != null)
                 {
-                    IntPtr next = UnsafeNativeMethods.SendMessage(new HandleRef(tv, tv.Handle),
-                                               NativeMethods.TVM_GETNEXTITEM, NativeMethods.TVGN_NEXTVISIBLE, node.Handle);
+                    IntPtr next = User32.SendMessageW(tv, (User32.WM)TVM.GETNEXTITEM, (IntPtr)TVGN.NEXTVISIBLE, node.Handle);
                     if (next != IntPtr.Zero)
                     {
                         return tv.NodeFromHandle(next);
@@ -946,9 +946,7 @@ namespace System.Windows.Forms
                     {
                         return null;
                     }
-                    IntPtr prev = UnsafeNativeMethods.SendMessage(new HandleRef(tv, tv.Handle),
-                                               NativeMethods.TVM_GETNEXTITEM,
-                                               NativeMethods.TVGN_PREVIOUSVISIBLE, node.Handle);
+                    IntPtr prev = User32.SendMessageW(tv, (User32.WM)TVM.GETNEXTITEM, (IntPtr)TVGN.PREVIOUSVISIBLE, node.Handle);
                     if (prev != IntPtr.Zero)
                     {
                         return tv.NodeFromHandle(prev);
@@ -982,7 +980,7 @@ namespace System.Windows.Forms
             set
             {
                 SelectedImageIndexer.Index = value;
-                UpdateNode(ComCtl32.TVIF.SELECTEDIMAGE);
+                UpdateNode(TVIF.SELECTEDIMAGE);
             }
         }
 
@@ -1009,14 +1007,14 @@ namespace System.Windows.Forms
             set
             {
                 SelectedImageIndexer.Key = value;
-                UpdateNode(ComCtl32.TVIF.SELECTEDIMAGE);
+                UpdateNode(TVIF.SELECTEDIMAGE);
             }
         }
 
         /// <summary>
         ///  Retrieve state bits for this node
         /// </summary>
-        internal ComCtl32.TVIS State
+        internal TVIS State
         {
             get
             {
@@ -1031,13 +1029,13 @@ namespace System.Windows.Forms
                     return 0;
                 }
 
-                var item = new ComCtl32.TVITEMW
+                var item = new TVITEMW
                 {
                     hItem = Handle,
-                    mask = ComCtl32.TVIF.HANDLE | ComCtl32.TVIF.STATE,
-                    stateMask = ComCtl32.TVIS.SELECTED | ComCtl32.TVIS.EXPANDED
+                    mask = TVIF.HANDLE | TVIF.STATE,
+                    stateMask = TVIS.SELECTED | TVIS.EXPANDED
                 };
-                User32.SendMessageW(tv, User32.WindowMessage.TVM_GETITEMW, IntPtr.Zero, ref item);
+                User32.SendMessageW(tv, (User32.WM)TVM.GETITEMW, IntPtr.Zero, ref item);
                 return item.state;
             }
         }
@@ -1068,7 +1066,7 @@ namespace System.Windows.Forms
                     StateImageIndexer.Key = value;
                     if (treeView != null && !treeView.CheckBoxes)
                     {
-                        UpdateNode(ComCtl32.TVIF.STATE);
+                        UpdateNode(TVIF.STATE);
                     }
                 }
             }
@@ -1099,7 +1097,7 @@ namespace System.Windows.Forms
                 StateImageIndexer.Index = value;
                 if (treeView != null && !treeView.CheckBoxes)
                 {
-                    UpdateNode(ComCtl32.TVIF.STATE);
+                    UpdateNode(TVIF.STATE);
                 }
             }
         }
@@ -1141,7 +1139,7 @@ namespace System.Windows.Forms
             set
             {
                 text = value;
-                UpdateNode(ComCtl32.TVIF.TEXT);
+                UpdateNode(TVIF.TEXT);
             }
         }
 
@@ -1343,7 +1341,6 @@ namespace System.Windows.Forms
                         newOrder[i].SortChildren(parentTreeView);
                     }
                     children = newOrder;
-
                 }
             }
         }
@@ -1367,7 +1364,7 @@ namespace System.Windows.Forms
                     tv.Focus();
                 }
 
-                UnsafeNativeMethods.SendMessage(new HandleRef(tv, tv.Handle), NativeMethods.TVM_EDITLABEL, 0, handle);
+                User32.SendMessageW(tv, (User32.WM)TVM.EDITLABELW, (IntPtr)0, handle);
             }
         }
 
@@ -1385,7 +1382,6 @@ namespace System.Windows.Forms
 
             try
             {
-
                 if (tv != null)
                 {
                     tv.nodesCollectionClear = true;
@@ -1527,7 +1523,6 @@ namespace System.Windows.Forms
 
             tv.Invalidate();
             collapseOnRealization = false;
-
         }
 
         /// <summary>
@@ -1551,13 +1546,13 @@ namespace System.Windows.Forms
         /// </summary>
         private void DoCollapse(TreeView tv)
         {
-            if ((State & ComCtl32.TVIS.EXPANDED) != 0)
+            if ((State & TVIS.EXPANDED) != 0)
             {
                 TreeViewCancelEventArgs e = new TreeViewCancelEventArgs(this, false, TreeViewAction.Collapse);
                 tv.OnBeforeCollapse(e);
                 if (!e.Cancel)
                 {
-                    UnsafeNativeMethods.SendMessage(new HandleRef(tv, tv.Handle), NativeMethods.TVM_EXPAND, NativeMethods.TVE_COLLAPSE, Handle);
+                    User32.SendMessageW(tv, (User32.WM)TVM.EXPAND, (IntPtr)TVE.COLLAPSE, (IntPtr)Handle);
                     tv.OnAfterCollapse(new TreeViewEventArgs(this));
                 }
             }
@@ -1674,7 +1669,7 @@ namespace System.Windows.Forms
             {
                 return;
             }
-            UnsafeNativeMethods.SendMessage(new HandleRef(tv, tv.Handle), NativeMethods.TVM_ENDEDITLABELNOW, cancel ? 1 : 0, 0);
+            User32.SendMessageW(tv, (User32.WM)TVM.ENDEDITLABELNOW, PARAM.FromBool(cancel));
         }
 
         /// <summary>
@@ -1717,7 +1712,6 @@ namespace System.Windows.Forms
 
             if (treeView.CheckBoxes && treeView.StateImageList != null)
             {
-
                 if (!string.IsNullOrEmpty(StateImageKey))
                 {
                     StateImageIndex = (Checked) ? 1 : 0;
@@ -1741,7 +1735,8 @@ namespace System.Windows.Forms
             {
                 return;
             }
-            UnsafeNativeMethods.SendMessage(new HandleRef(tv, tv.Handle), NativeMethods.TVM_ENSUREVISIBLE, 0, Handle);
+
+            User32.SendMessageW(tv, (User32.WM)TVM.ENSUREVISIBLE, IntPtr.Zero, Handle);
         }
 
         /// <summary>
@@ -1759,7 +1754,7 @@ namespace System.Windows.Forms
             ResetExpandedState(tv);
             if (!IsExpanded)
             {
-                UnsafeNativeMethods.SendMessage(new HandleRef(tv, tv.Handle), NativeMethods.TVM_EXPAND, NativeMethods.TVE_EXPAND, Handle);
+                User32.SendMessageW(tv, (User32.WM)TVM.EXPAND, (IntPtr)TVE.EXPAND, Handle);
             }
             expandOnRealization = false;
         }
@@ -1774,7 +1769,6 @@ namespace System.Windows.Forms
             {
                 children[i].ExpandAll();
             }
-
         }
         /// <summary>
         ///  Locate this tree node's containing tree view control by scanning
@@ -1891,7 +1885,7 @@ namespace System.Windows.Forms
                     throw new InvalidOperationException(SR.InvalidCrossThreadControlCall);
                 }
 
-                var tvis = new ComCtl32.TVINSERTSTRUCTW
+                var tvis = new TVINSERTSTRUCTW
                 {
                     hParent = parent.handle
                 };
@@ -1900,7 +1894,7 @@ namespace System.Windows.Forms
                 TreeNode prev = PrevNode;
                 if (insertFirst || prev == null)
                 {
-                    tvis.hInsertAfter = (IntPtr)NativeMethods.TVI_FIRST;
+                    tvis.hInsertAfter = (IntPtr)TVI.FIRST;
                 }
                 else
                 {
@@ -1910,32 +1904,32 @@ namespace System.Windows.Forms
                 tvis.item.pszText = Marshal.StringToHGlobalAuto(text);
                 tvis.item.iImage = (ImageIndexer.ActualIndex == -1) ? tv.ImageIndexer.ActualIndex : ImageIndexer.ActualIndex;
                 tvis.item.iSelectedImage = (SelectedImageIndexer.ActualIndex == -1) ? tv.SelectedImageIndexer.ActualIndex : SelectedImageIndexer.ActualIndex;
-                tvis.item.mask = ComCtl32.TVIF.TEXT;
+                tvis.item.mask = TVIF.TEXT;
 
                 tvis.item.stateMask = 0;
                 tvis.item.state = 0;
 
                 if (tv.CheckBoxes)
                 {
-                    tvis.item.mask |= ComCtl32.TVIF.STATE;
-                    tvis.item.stateMask |= ComCtl32.TVIS.STATEIMAGEMASK;
+                    tvis.item.mask |= TVIF.STATE;
+                    tvis.item.stateMask |= TVIS.STATEIMAGEMASK;
                     tvis.item.state |= CheckedInternal ? CHECKED : UNCHECKED;
                 }
                 else if (tv.StateImageList != null && StateImageIndexer.ActualIndex >= 0)
                 {
-                    tvis.item.mask |= ComCtl32.TVIF.STATE;
-                    tvis.item.stateMask = ComCtl32.TVIS.STATEIMAGEMASK;
-                    tvis.item.state = (ComCtl32.TVIS)((StateImageIndexer.ActualIndex + 1) << SHIFTVAL);
+                    tvis.item.mask |= TVIF.STATE;
+                    tvis.item.stateMask = TVIS.STATEIMAGEMASK;
+                    tvis.item.state = (TVIS)((StateImageIndexer.ActualIndex + 1) << SHIFTVAL);
                 }
 
                 if (tvis.item.iImage >= 0)
                 {
-                    tvis.item.mask |= ComCtl32.TVIF.IMAGE;
+                    tvis.item.mask |= TVIF.IMAGE;
                 }
 
                 if (tvis.item.iSelectedImage >= 0)
                 {
-                    tvis.item.mask |= ComCtl32.TVIF.SELECTEDIMAGE;
+                    tvis.item.mask |= TVIF.SELECTEDIMAGE;
                 }
 
                 // If you are editing when you add a new node, then the edit control
@@ -1944,26 +1938,26 @@ namespace System.Windows.Forms
                 // to get the expected behavior.
                 //
                 bool editing = false;
-                IntPtr editHandle = UnsafeNativeMethods.SendMessage(new HandleRef(tv, tv.Handle), NativeMethods.TVM_GETEDITCONTROL, 0, 0);
+                IntPtr editHandle = User32.SendMessageW(tv, (User32.WM)TVM.GETEDITCONTROL);
                 if (editHandle != IntPtr.Zero)
                 {
                     // currently editing...
                     //
                     editing = true;
-                    UnsafeNativeMethods.SendMessage(new HandleRef(tv, tv.Handle), NativeMethods.TVM_ENDEDITLABELNOW, 0 /* fCancel==FALSE */, 0);
+                    User32.SendMessageW(tv, (User32.WM)TVM.ENDEDITLABELNOW, PARAM.FromBool(false));
                 }
 
-                handle = User32.SendMessageW(tv, User32.WindowMessage.TVM_INSERTITEMW, IntPtr.Zero, ref tvis);
+                handle = User32.SendMessageW(tv, (User32.WM)TVM.INSERTITEMW, IntPtr.Zero, ref tvis);
                 tv.nodeTable[handle] = this;
 
                 // Lets update the Lparam to the Handle ....
-                UpdateNode(ComCtl32.TVIF.PARAM);
+                UpdateNode(TVIF.PARAM);
 
                 Marshal.FreeHGlobal(tvis.item.pszText);
 
                 if (editing)
                 {
-                    UnsafeNativeMethods.PostMessage(new HandleRef(tv, tv.Handle), NativeMethods.TVM_EDITLABEL, IntPtr.Zero, handle);
+                    User32.PostMessageW(tv, (User32.WM)TVM.EDITLABELW, IntPtr.Zero, handle);
                 }
 
                 User32.InvalidateRect(new HandleRef(tv, tv.Handle), null, BOOL.FALSE);
@@ -1975,10 +1969,9 @@ namespace System.Windows.Forms
                     // and this is the FIRST NODE to get added..
                     // This is Comctl quirk where it just doesn't draw
                     // the first node after a Clear( ) if Scrollable == false.
-                    UnsafeNativeMethods.SendMessage(new HandleRef(tv, tv.Handle), WindowMessages.WM_SETREDRAW, 1, 0);
+                    User32.SendMessageW(tv, User32.WM.SETREDRAW, PARAM.FromBool(true));
                     nodesCleared = false;
                 }
-
             }
 
             for (int i = childCount - 1; i >= 0; i--)
@@ -2048,7 +2041,7 @@ namespace System.Windows.Forms
             {
                 if (notify && tv.IsHandleCreated)
                 {
-                    UnsafeNativeMethods.SendMessage(new HandleRef(tv, tv.Handle), NativeMethods.TVM_DELETEITEM, 0, handle);
+                    User32.SendMessageW(tv, (User32.WM)TVM.DELETEITEM, IntPtr.Zero, handle);
                 }
 
                 treeView.nodeTable.Remove(handle);
@@ -2079,14 +2072,14 @@ namespace System.Windows.Forms
         {
             Debug.Assert(tv.IsHandleCreated, "nonexistent handle");
 
-            var item = new ComCtl32.TVITEMW
+            var item = new TVITEMW
             {
-                mask = ComCtl32.TVIF.HANDLE | ComCtl32.TVIF.STATE,
+                mask = TVIF.HANDLE | TVIF.STATE,
                 hItem = handle,
-                stateMask = ComCtl32.TVIS.EXPANDEDONCE,
+                stateMask = TVIS.EXPANDEDONCE,
                 state = 0
             };
-            User32.SendMessageW(tv, User32.WindowMessage.TVM_SETITEMW, IntPtr.Zero, ref item);
+            User32.SendMessageW(tv, (User32.WM)TVM.SETITEMW, IntPtr.Zero, ref item);
         }
 
         private bool ShouldSerializeBackColor()
@@ -2176,7 +2169,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Tell the TreeView to refresh this node
         /// </summary>
-        private void UpdateNode(ComCtl32.TVIF mask)
+        private void UpdateNode(TVIF mask)
         {
             if (handle == IntPtr.Zero)
             {
@@ -2186,44 +2179,44 @@ namespace System.Windows.Forms
             TreeView tv = TreeView;
             Debug.Assert(tv != null, "TreeNode has handle but no TreeView");
 
-            var item = new ComCtl32.TVITEMW
+            var item = new TVITEMW
             {
-                mask = ComCtl32.TVIF.HANDLE | mask,
+                mask = TVIF.HANDLE | mask,
                 hItem = handle
             };
-            if ((mask & ComCtl32.TVIF.TEXT) != 0)
+            if ((mask & TVIF.TEXT) != 0)
             {
                 item.pszText = Marshal.StringToHGlobalAuto(text);
             }
 
-            if ((mask & ComCtl32.TVIF.IMAGE) != 0)
+            if ((mask & TVIF.IMAGE) != 0)
             {
                 item.iImage = (ImageIndexer.ActualIndex == -1) ? tv.ImageIndexer.ActualIndex : ImageIndexer.ActualIndex;
             }
 
-            if ((mask & ComCtl32.TVIF.SELECTEDIMAGE) != 0)
+            if ((mask & TVIF.SELECTEDIMAGE) != 0)
             {
                 item.iSelectedImage = (SelectedImageIndexer.ActualIndex == -1) ? tv.SelectedImageIndexer.ActualIndex : SelectedImageIndexer.ActualIndex;
             }
 
-            if ((mask & ComCtl32.TVIF.STATE) != 0)
+            if ((mask & TVIF.STATE) != 0)
             {
-                item.stateMask = ComCtl32.TVIS.STATEIMAGEMASK;
+                item.stateMask = TVIS.STATEIMAGEMASK;
                 if (StateImageIndexer.ActualIndex != -1)
                 {
-                    item.state = (ComCtl32.TVIS)((StateImageIndexer.ActualIndex + 1) << SHIFTVAL);
+                    item.state = (TVIS)((StateImageIndexer.ActualIndex + 1) << SHIFTVAL);
                 }
                 // ActualIndex == -1 means "don't use custom image list"
                 // so just leave item.state set to zero, that tells the unmanaged control
                 // to use no state image for this node.
             }
-            if ((mask & ComCtl32.TVIF.PARAM) != 0)
+            if ((mask & TVIF.PARAM) != 0)
             {
                 item.lParam = handle;
             }
 
-            User32.SendMessageW(tv, User32.WindowMessage.TVM_SETITEMW, IntPtr.Zero, ref item);
-            if ((mask & ComCtl32.TVIF.TEXT) != 0)
+            User32.SendMessageW(tv, (User32.WM)TVM.SETITEMW, IntPtr.Zero, ref item);
+            if ((mask & TVIF.TEXT) != 0)
             {
                 Marshal.FreeHGlobal(item.pszText);
                 if (tv.Scrollable)
@@ -2241,13 +2234,13 @@ namespace System.Windows.Forms
                 return;
             }
 
-            var item = new ComCtl32.TVITEMW
+            var item = new TVITEMW
             {
-                mask = ComCtl32.TVIF.HANDLE | ComCtl32.TVIF.IMAGE,
+                mask = TVIF.HANDLE | TVIF.IMAGE,
                 hItem = Handle,
                 iImage = Math.Max(0, ((ImageIndexer.ActualIndex >= tv.ImageList.Images.Count) ? tv.ImageList.Images.Count - 1 : ImageIndexer.ActualIndex))
             };
-            User32.SendMessageW(tv, User32.WindowMessage.TVM_SETITEMW, IntPtr.Zero, ref item);
+            User32.SendMessageW(tv, (User32.WM)TVM.SETITEMW, IntPtr.Zero, ref item);
         }
 
         /// <summary>
@@ -2259,4 +2252,3 @@ namespace System.Windows.Forms
         }
     }
 }
-

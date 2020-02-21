@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.InteropServices;
@@ -41,7 +43,7 @@ namespace System.Windows.Forms
 
             TabStop = false;
 
-            if ((CreateParams.Style & NativeMethods.SBS_VERT) != 0)
+            if ((CreateParams.Style & (int)User32.SBS.VERT) != 0)
             {
                 _scrollOrientation = ScrollOrientation.VerticalScroll;
             }
@@ -130,7 +132,7 @@ namespace System.Windows.Forms
             get
             {
                 CreateParams cp = base.CreateParams;
-                cp.ClassName = "SCROLLBAR";
+                cp.ClassName = ComCtl32.WindowClasses.WC_SCROLLBAR;
                 cp.Style &= ~(int)User32.WS.BORDER;
                 return cp;
             }
@@ -219,7 +221,6 @@ namespace System.Windows.Forms
             {
                 if (_largeChange != value)
                 {
-
                     if (value < 0)
                     {
                         throw new ArgumentOutOfRangeException(nameof(value), string.Format(SR.InvalidLowBoundArgumentEx, nameof(LargeChange), value, 0));
@@ -631,7 +632,7 @@ namespace System.Windows.Forms
 
         private void WmReflectScroll(ref Message m)
         {
-            ScrollEventType type = (ScrollEventType)NativeMethods.Util.LOWORD(m.WParam);
+            ScrollEventType type = (ScrollEventType)PARAM.LOWORD(m.WParam);
             DoScroll(type);
         }
 
@@ -728,23 +729,23 @@ namespace System.Windows.Forms
 
         protected override void WndProc(ref Message m)
         {
-            switch (m.Msg)
+            switch ((User32.WM)m.Msg)
             {
-                case WindowMessages.WM_REFLECT + WindowMessages.WM_HSCROLL:
-                case WindowMessages.WM_REFLECT + WindowMessages.WM_VSCROLL:
+                case User32.WM.REFLECT | User32.WM.HSCROLL:
+                case User32.WM.REFLECT | User32.WM.VSCROLL:
                     WmReflectScroll(ref m);
                     break;
 
-                case WindowMessages.WM_ERASEBKGND:
+                case User32.WM.ERASEBKGND:
                     break;
 
-                case WindowMessages.WM_SIZE:
+                case User32.WM.SIZE:
                     // Fixes the scrollbar focus rect
                     if (User32.GetFocus() == Handle)
                     {
                         DefWndProc(ref m);
-                        SendMessage(WindowMessages.WM_KILLFOCUS, 0, 0);
-                        SendMessage(WindowMessages.WM_SETFOCUS, 0, 0);
+                        User32.SendMessageW(this, User32.WM.KILLFOCUS);
+                        User32.SendMessageW(this, User32.WM.SETFOCUS);
                     }
                     break;
 

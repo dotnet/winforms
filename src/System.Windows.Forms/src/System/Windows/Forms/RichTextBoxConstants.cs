@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 namespace System.Windows.Forms
 {
     internal static class RichTextBoxConstants
@@ -11,9 +13,6 @@ namespace System.Windows.Forms
         internal const int RTB_HORIZ = 0x0001;
         internal const int RTB_VERT = 0x0002;
         internal const int RTB_FORCE = 0x0010;
-
-        /* Richedit4.1 Window Class */
-        internal const string WC_RICHEDITW_41 = "RICHEDIT50W";
 
         /* RichTextBox messages */
 
@@ -209,41 +208,6 @@ namespace System.Windows.Forms
 
         internal const int cchTextLimitDefault = 32767;
 
-        /* CHARFORMAT masks */
-        internal const int CFM_BOLD = 0x00000001;
-        internal const int CFM_ITALIC = 0x00000002;
-        internal const int CFM_UNDERLINE = 0x00000004;
-        internal const int CFM_STRIKEOUT = 0x00000008;
-        internal const int CFM_PROTECTED = 0x00000010;
-        internal const int CFM_LINK = 0x00000020;   /* Exchange hyperlink extension */
-        internal const int CFM_SIZE = unchecked((int)0x80000000);
-        internal const int CFM_COLOR = 0x40000000;
-        internal const int CFM_FACE = 0x20000000;
-        internal const int CFM_OFFSET = 0x10000000;
-        internal const int CFM_CHARSET = 0x08000000;
-
-        /* CHARFORMAT effects */
-        internal const int CFE_BOLD = 0x0001;
-        internal const int CFE_ITALIC = 0x0002;
-        internal const int CFE_UNDERLINE = 0x0004;
-        internal const int CFE_STRIKEOUT = 0x0008;
-        internal const int CFE_PROTECTED = 0x0010;
-        internal const int CFE_LINK = 0x0020;
-        internal const int CFE_AUTOCOLOR = 0x40000000;   /* NOTE: this corresponds to */
-                                                         /* CFM_COLOR, which controls it */
-        internal const int yHeightCharPtsMost = 1638;
-
-        /* EM_SETCHARFORMAT wparam masks */
-        internal const int SCF_SELECTION = 0x0001;
-        internal const int SCF_WORD = 0x0002;
-        internal const int SCF_DEFAULT = 0x0000;   // set the default charformat or paraformat
-        internal const int SCF_ALL = 0x0004;   // not valid with SCF_SELECTION or SCF_WORD
-        internal const int SCF_USEUIRULES = 0x0008;   // modifier for SCF_SELECTION; says that
-                                                      // the format came from a toolbar, etc. and
-                                                      // therefore UI formatting rules should be
-                                                      // used instead of strictly formatting the
-                                                      // selection.
-
         /* stream formats */
         internal const int SF_TEXT = 0x0001;
         internal const int SF_RTF = 0x0002;
@@ -262,157 +226,7 @@ namespace System.Windows.Forms
         internal const int SFF_PLAINRTF = 0x4000;
 
         /* all paragraph measurements are in twips */
-
-        internal const int MAX_TAB_STOPS = 32;
         internal const int lDefaultTab = 720;
-
-        /* PARAFORMAT mask values */
-        internal const int PFM_STARTINDENT = 0x00000001;
-        internal const int PFM_RIGHTINDENT = 0x00000002;
-        internal const int PFM_OFFSET = 0x00000004;
-        internal const int PFM_ALIGNMENT = 0x00000008;
-        internal const int PFM_TABSTOPS = 0x00000010;
-        internal const int PFM_NUMBERING = 0x00000020;
-        internal const int PFM_OFFSETINDENT = unchecked((int)0x80000000);
-
-        /* PARAFORMAT numbering options */
-        internal const int PFN_BULLET = 0x0001;
-
-        /* PARAFORMAT alignment options */
-        internal const int PFA_LEFT = 0x0001;
-        internal const int PFA_RIGHT = 0x0002;
-        internal const int PFA_CENTER = 0x0003;
-
-        /* CHARFORMAT and PARAFORMAT "ALL" masks
-           CFM_COLOR mirrors CFE_AUTOCOLOR, a little
-           code to easily deal with autocolor */
-        internal const int CFM_EFFECTS = (CFM_BOLD | CFM_ITALIC |
-                                                           CFM_UNDERLINE | CFM_COLOR |
-                                                           CFM_STRIKEOUT | CFE_PROTECTED |
-                                                           CFM_LINK);
-        internal const int CFM_ALL = (CFM_EFFECTS | CFM_SIZE |
-                                                           CFM_FACE | CFM_OFFSET | CFM_CHARSET);
-        internal const int PFM_ALL = (PFM_STARTINDENT | PFM_RIGHTINDENT |
-                                                           PFM_OFFSET | PFM_ALIGNMENT |
-                                                           PFM_TABSTOPS | PFM_NUMBERING |
-                                                           PFM_OFFSETINDENT);
-
-        /* New masks and effects -- a parenthesized asterisk indicates that
-           the data is stored by RichEdit2.0, but not displayed */
-
-        internal const int CFM_SMALLCAPS = 0x0040;                   /* (*)  */
-        internal const int CFM_ALLCAPS = 0x0080;                   /* (*)  */
-        internal const int CFM_HIDDEN = 0x0100;                   /* (*)  */
-        internal const int CFM_OUTLINE = 0x0200;                   /* (*)  */
-        internal const int CFM_SHADOW = 0x0400;                   /* (*)  */
-        internal const int CFM_EMBOSS = 0x0800;                   /* (*)  */
-        internal const int CFM_IMPRINT = 0x1000;                   /* (*)  */
-        internal const int CFM_DISABLED = 0x2000;
-        internal const int CFM_REVISED = 0x4000;
-
-        internal const int CFM_BACKCOLOR = 0x04000000;
-        internal const int CFM_LCID = 0x02000000;
-        internal const int CFM_UNDERLINETYPE = 0x00800000;               /* (*)  */
-        internal const int CFM_WEIGHT = 0x00400000;
-        internal const int CFM_SPACING = 0x00200000;               /* (*)  */
-        internal const int CFM_KERNING = 0x00100000;               /* (*)  */
-        internal const int CFM_STYLE = 0x00080000;               /* (*)  */
-        internal const int CFM_ANIMATION = 0x00040000;               /* (*)  */
-        internal const int CFM_REVAUTHOR = 0x00008000;
-
-        internal const int CFE_SUBSCRIPT = 0x00010000;               /* Superscript and subscript are */
-        internal const int CFE_SUPERSCRIPT = 0x00020000;               /*  mutually exclusive                   */
-
-        internal const int CFM_SUBSCRIPT = (CFE_SUBSCRIPT | CFE_SUPERSCRIPT);
-        internal const int CFM_SUPERSCRIPT = CFM_SUBSCRIPT;
-
-        internal const int CFM_EFFECTS2 = (CFM_EFFECTS | CFM_DISABLED |
-                                                           CFM_SMALLCAPS | CFM_ALLCAPS |
-                                                           CFM_HIDDEN | CFM_OUTLINE |
-                                                           CFM_SHADOW | CFM_EMBOSS |
-                                                           CFM_IMPRINT | CFM_DISABLED |
-                                                           CFM_REVISED | CFM_SUBSCRIPT |
-                                                           CFM_SUPERSCRIPT | CFM_BACKCOLOR);
-
-        internal const int CFM_ALL2 = (CFM_ALL | CFM_EFFECTS2 |
-                                                           CFM_BACKCOLOR | CFM_LCID |
-                                                           CFM_UNDERLINETYPE | CFM_WEIGHT |
-                                                           CFM_REVAUTHOR | CFM_SPACING |
-                                                           CFM_KERNING | CFM_STYLE |
-                                                           CFM_ANIMATION);
-
-        internal const int CFE_SMALLCAPS = CFM_SMALLCAPS;
-        internal const int CFE_ALLCAPS = CFM_ALLCAPS;
-        internal const int CFE_HIDDEN = CFM_HIDDEN;
-        internal const int CFE_OUTLINE = CFM_OUTLINE;
-        internal const int CFE_SHADOW = CFM_SHADOW;
-        internal const int CFE_EMBOSS = CFM_EMBOSS;
-        internal const int CFE_IMPRINT = CFM_IMPRINT;
-        internal const int CFE_DISABLED = CFM_DISABLED;
-        internal const int CFE_REVISED = CFM_REVISED;
-
-        /* NOTE: CFE_AUTOCOLOR and CFE_AUTOBACKCOLOR correspond to CFM_COLOR and
-           CFM_BACKCOLOR, respectively, which control them */
-        internal const int CFE_AUTOBACKCOLOR = CFM_BACKCOLOR;
-
-        /* Underline types */
-        internal const int CFU_CF1UNDERLINE = 0xFF; /* map charformat's bit underline to CF2.*/
-        internal const int CFU_INVERT = 0xFE; /* For IME composition fake a selection.*/
-        internal const int CFU_UNDERLINEDOTTED = 0x4;  /* (*) displayed as ordinary underline      */
-        internal const int CFU_UNDERLINEDOUBLE = 0x3;  /* (*) displayed as ordinary underline      */
-        internal const int CFU_UNDERLINEWORD = 0x2;  /* (*) displayed as ordinary underline      */
-        internal const int CFU_UNDERLINE = 0x1;
-        internal const int CFU_UNDERLINENONE = 0;
-
-        /* PARAFORMAT 2.0 masks and effects */
-
-        internal const int PFM_SPACEBEFORE = 0x00000040;
-        internal const int PFM_SPACEAFTER = 0x00000080;
-        internal const int PFM_LINESPACING = 0x00000100;
-        internal const int PFM_STYLE = 0x00000400;
-        internal const int PFM_BORDER = 0x00000800;       /* (*)  */
-        internal const int PFM_SHADING = 0x00001000;       /* (*)  */
-        internal const int PFM_NUMBERINGSTYLE = 0x00002000;       /* (*)  */
-        internal const int PFM_NUMBERINGTAB = 0x00004000;       /* (*)  */
-        internal const int PFM_NUMBERINGSTART = 0x00008000;       /* (*)  */
-
-        internal const int PFM_RTLPARA = 0x00010000;
-        internal const int PFM_KEEP = 0x00020000;       /* (*)  */
-        internal const int PFM_KEEPNEXT = 0x00040000;       /* (*)  */
-        internal const int PFM_PAGEBREAKBEFORE = 0x00080000;       /* (*)  */
-        internal const int PFM_NOLINENUMBER = 0x00100000;       /* (*)  */
-        internal const int PFM_NOWIDOWCONTROL = 0x00200000;       /* (*)  */
-        internal const int PFM_DONOTHYPHEN = 0x00400000;       /* (*)  */
-        internal const int PFM_SIDEBYSIDE = 0x00800000;       /* (*)  */
-
-        internal const int PFM_TABLE = unchecked((int)0xc0000000);       /* (*)  */
-
-        /* Note: PARAFORMAT has no effects */
-        internal const int PFM_EFFECTS = (PFM_RTLPARA | PFM_KEEP |
-                                                           PFM_KEEPNEXT | PFM_TABLE |
-                                                           PFM_PAGEBREAKBEFORE | PFM_NOLINENUMBER |
-                                                           PFM_NOWIDOWCONTROL | PFM_DONOTHYPHEN |
-                                                           PFM_SIDEBYSIDE | PFM_TABLE);
-
-        internal const int PFM_ALL2 = (PFM_ALL | PFM_EFFECTS |
-                                                           PFM_SPACEBEFORE | PFM_SPACEAFTER |
-                                                           PFM_LINESPACING | PFM_STYLE |
-                                                           PFM_SHADING | PFM_BORDER |
-                                                           PFM_NUMBERINGTAB | PFM_NUMBERINGSTART |
-                                                           PFM_NUMBERINGSTYLE);
-
-        internal const int PFE_RTLPARA = (PFM_RTLPARA >> 16);
-        internal const int PFE_KEEP = (PFM_KEEP >> 16);        /* (*)  */
-        internal const int PFE_KEEPNEXT = (PFM_KEEPNEXT >> 16);        /* (*)  */
-        internal const int PFE_PAGEBREAKBEFORE = (PFM_PAGEBREAKBEFORE >> 16);      /* (*)  */
-        internal const int PFE_NOLINENUMBER = (PFM_NOLINENUMBER >> 16);        /* (*)  */
-        internal const int PFE_NOWIDOWCONTROL = (PFM_NOWIDOWCONTROL >> 16);       /* (*)  */
-        internal const int PFE_DONOTHYPHEN = (PFM_DONOTHYPHEN >> 16);        /* (*)  */
-        internal const int PFE_SIDEBYSIDE = (PFM_SIDEBYSIDE >> 16);        /* (*)  */
-
-        internal const int PFE_TABLEROW = 0xc000;           /* These 3 options are mutually */
-        internal const int PFE_TABLECELLEND = 0x8000;           /*  exclusive and each imply    */
-        internal const int PFE_TABLECELL = 0x4000;           /*  that para is part of a table*/
 
         /*
          *  PARAFORMAT numbering options (values for wNumbering):
@@ -429,7 +243,6 @@ namespace System.Windows.Forms
          *
          *  Other valid Unicode chars are Unicodes for bullets.
          */
-        internal const int PFA_JUSTIFY = 4;        /* New paragraph-alignment option 2.0 (*) */
 
         internal const int tomTrue = -1,
                             tomFalse = 0,
@@ -458,23 +271,10 @@ namespace System.Windows.Forms
         internal const int GT_DEFAULT = 0;
         internal const int GT_USECRLF = 1;
 
-        /* flags for the GETTEXTLENGTHEX data structure */
-        internal const int GTL_DEFAULT = 0;        /* do the default (return # of chars)           */
-        internal const int GTL_USECRLF = 1;        /* compute answer using CRLFs for paragraphs*/
-        internal const int GTL_PRECISE = 2;        /* compute a precise answer                                     */
-        internal const int GTL_CLOSE = 4;        /* fast computation of a "close" answer         */
-        internal const int GTL_NUMCHARS = 8;        /* return the number of characters                      */
-        internal const int GTL_NUMBYTES = 16;       /* return the number of _bytes_                         */
-
         /* UNICODE embedding character */
         // disable csharp compiler warning #0414: field assigned unused value
 #pragma warning disable 0414
         internal static readonly char WCH_EMBEDDING = (char)0xFFFC;
 #pragma warning restore 0414
-
-        /* flags for the find text options */
-        internal const int FR_DOWN = 0x00000001;
-        internal const int FR_WHOLEWORD = 0x00000002;
-        internal const int FR_MATCHCASE = 0x00000004;
     }
 }

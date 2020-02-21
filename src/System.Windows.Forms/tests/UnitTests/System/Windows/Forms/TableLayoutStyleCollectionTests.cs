@@ -7,7 +7,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class TableLayoutStyleCollectionTests
+    public class TableLayoutStyleCollectionTests : IClassFixture<ThreadExceptionFixture>
     {
         [Fact]
         public void TableLayoutStyleCollection_Properties_GetDefault_ReturnsExpected()

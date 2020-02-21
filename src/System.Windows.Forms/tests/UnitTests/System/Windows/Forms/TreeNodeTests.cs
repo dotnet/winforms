@@ -9,7 +9,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class TreeNodeTests
+    public class TreeNodeTests : IClassFixture<ThreadExceptionFixture>
     {
         [Fact]
         public void TreeNode_Ctor_Default()

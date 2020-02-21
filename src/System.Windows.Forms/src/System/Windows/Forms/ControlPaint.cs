@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 #define GRAYSCALE_DISABLED
 
 using System.ComponentModel;
@@ -20,7 +22,7 @@ namespace System.Windows.Forms
     ///  paint common Windows UI pieces. Many windows forms controls use this class to paint
     ///  their UI elements.
     /// </summary>
-    public sealed class ControlPaint
+    public static class ControlPaint
     {
         [ThreadStatic]
         private static Bitmap checkImage;         // image used to render checkmarks
@@ -54,12 +56,6 @@ namespace System.Windows.Forms
         private static readonly ContentAlignment anyBottom = ContentAlignment.BottomLeft | ContentAlignment.BottomCenter | ContentAlignment.BottomRight;
         private static readonly ContentAlignment anyCenter = ContentAlignment.TopCenter | ContentAlignment.MiddleCenter | ContentAlignment.BottomCenter;
         private static readonly ContentAlignment anyMiddle = ContentAlignment.MiddleLeft | ContentAlignment.MiddleCenter | ContentAlignment.MiddleRight;
-
-        // not creatable...
-        //
-        private ControlPaint()
-        {
-        }
 
         internal static Rectangle CalculateBackgroundImageRectangle(Rectangle bounds, Image backgroundImage, ImageLayout imageLayout)
         {
@@ -138,19 +134,21 @@ namespace System.Windows.Forms
 
         // Returns address of a BITMAPINFO for use by CreateHBITMAP16Bit.
         // The caller is resposible for freeing the memory returned by this method.
-        private static IntPtr CreateBitmapInfo(Bitmap bitmap, IntPtr hdcS)
+        private unsafe static IntPtr CreateBitmapInfo(Bitmap bitmap, IntPtr hdcS)
         {
-            NativeMethods.BITMAPINFOHEADER header = new NativeMethods.BITMAPINFOHEADER();
-            header.biSize = Marshal.SizeOf(header);
-            header.biWidth = bitmap.Width;
-            header.biHeight = bitmap.Height;
-            header.biPlanes = 1;
-            header.biBitCount = 16;
-            header.biCompression = NativeMethods.BI_RGB;
+            var header = new Gdi32.BITMAPINFOHEADER
+            {
+                biSize = (uint)sizeof(Gdi32.BITMAPINFOHEADER),
+                biWidth = bitmap.Width,
+                biHeight = bitmap.Height,
+                biPlanes = 1,
+                biBitCount = 16,
+                biCompression = Gdi32.BI.RGB
+            };
             // leave everything else 0
 
             // Set up color table --
-            IntPtr palette = SafeNativeMethods.CreateHalftonePalette(new HandleRef(null, hdcS));
+            IntPtr palette = Gdi32.CreateHalftonePalette(hdcS);
             Gdi32.GetObjectW(palette, out uint entryCount);
             var entries = new Gdi32.PALETTEENTRY[entryCount];
             Gdi32.GetPaletteEntries(palette, entries);
@@ -189,8 +187,13 @@ namespace System.Windows.Forms
 
                     byte[] enoughBits = new byte[bitmap.Width * bitmap.Height];
                     IntPtr bitmapInfo = CreateBitmapInfo(bitmap, hdcS);
-                    hBitmap = SafeNativeMethods.CreateDIBSection(new HandleRef(null, hdcS), new HandleRef(null, bitmapInfo), NativeMethods.DIB_RGB_COLORS,
-                                                                        enoughBits, IntPtr.Zero, 0);
+                    hBitmap = Gdi32.CreateDIBSection(
+                        hdcS,
+                        bitmapInfo,
+                        Gdi32.DIB.RGB_COLORS,
+                        enoughBits,
+                        IntPtr.Zero,
+                        0);
 
                     Marshal.FreeCoTaskMem(bitmapInfo);
 
@@ -560,7 +563,6 @@ namespace System.Windows.Forms
                     imageAttrib.SetWrapMode(WrapMode.TileFlipXY);
                     g.DrawImage(backgroundImage, imageRectangle, 0, 0, backgroundImage.Width, backgroundImage.Height, GraphicsUnit.Pixel, imageAttrib);
                     imageAttrib.Dispose();
-
                 }
             }
         }
@@ -1082,8 +1084,8 @@ namespace System.Windows.Forms
                 throw new ArgumentNullException(nameof(graphics));
             }
 
-            int edge = ((int)style) & 0x0F;
-            int flags = ((int)sides) | (((int)style) & ~0x0F);
+            User32.EDGE edge = (User32.EDGE)((uint)style & 0x0F);
+            User32.BF flags = (User32.BF)sides | (User32.BF)((uint)style & ~0x0F);
 
             RECT rc = new Rectangle(x, y, width, height);
 
@@ -1093,20 +1095,20 @@ namespace System.Windows.Forms
             // the opposite: We precalculate the size of the border
             // and enlarge the rectangle so the client size is
             // preserved.
-            if ((flags & (int)Border3DStyle.Adjust) == (int)Border3DStyle.Adjust)
+            if ((flags & (User32.BF)Border3DStyle.Adjust) == (User32.BF)Border3DStyle.Adjust)
             {
                 Size sz = SystemInformation.Border3DSize;
                 rc.left -= sz.Width;
                 rc.right += sz.Width;
                 rc.top -= sz.Height;
                 rc.bottom += sz.Height;
-                flags &= ~((int)Border3DStyle.Adjust);
+                flags &= ~(User32.BF)Border3DStyle.Adjust;
             }
 
             using (WindowsGraphics wg = WindowsGraphics.FromGraphics(graphics))
             {
                 // Get Win32 dc with Graphics properties applied to it.
-                SafeNativeMethods.DrawEdge(new HandleRef(wg, wg.DeviceContext.Hdc), ref rc, edge, flags);
+                User32.DrawEdge(new HandleRef(wg, wg.DeviceContext.Hdc), ref rc, edge, flags);
             }
         }
 
@@ -1424,7 +1426,6 @@ namespace System.Windows.Forms
             {
                 if (checkImage == null || checkImage.Width != rectangle.Width || checkImage.Height != rectangle.Height)
                 {
-
                     if (checkImage != null)
                     {
                         checkImage.Dispose();
@@ -1538,7 +1539,7 @@ namespace System.Windows.Forms
                     g2.Clear(Color.Transparent);
 
                     using (WindowsGraphics wg = WindowsGraphics.FromGraphics(g2))
-                    { 
+                    {
                         // Get Win32 dc with Graphics properties applied to it.
                         User32.DrawFrameControl(new HandleRef(wg, wg.DeviceContext.Hdc), ref rcFrame, kind, state);
                     }
@@ -1653,7 +1654,6 @@ namespace System.Windows.Forms
             if (gridBrush == null || gridSize.Width != pixelsBetweenDots.Width
                 || gridSize.Height != pixelsBetweenDots.Height || invert != gridInvert)
             {
-
                 if (gridBrush != null)
                 {
                     gridBrush.Dispose();
@@ -1686,15 +1686,6 @@ namespace System.Windows.Forms
 
             graphics.FillRectangle(gridBrush, area);
         }
-
-        /* Unused
-        // Takes a black and white image, and paints it in color
-        internal static void DrawImageColorized(Graphics graphics, Image image, Rectangle destination,
-                                                Color replaceBlack, Color replaceWhite) {
-            DrawImageColorized(graphics, image, destination,
-                               RemapBlackAndWhiteAndTransparentMatrix(replaceBlack, replaceWhite));
-        }
-        */
 
         // Takes a black and transparent image, turns black pixels into some other color, and leaves transparent pixels alone
         internal static void DrawImageColorized(Graphics graphics, Image image, Rectangle destination,
@@ -1991,7 +1982,7 @@ namespace System.Windows.Forms
                 graphicsColor = Color.Black;
             }
 
-            IntPtr dc = User32.GetDCEx(UnsafeNativeMethods.GetDesktopWindow(), IntPtr.Zero, User32.DCX.WINDOW | User32.DCX.LOCKWINDOWUPDATE | User32.DCX.CACHE);
+            IntPtr dc = User32.GetDCEx(User32.GetDesktopWindow(), IntPtr.Zero, User32.DCX.WINDOW | User32.DCX.LOCKWINDOWUPDATE | User32.DCX.CACHE);
             IntPtr pen;
 
             switch (style)
@@ -2032,7 +2023,7 @@ namespace System.Windows.Forms
         {
             Gdi32.R2 rop2 = (Gdi32.R2)GetColorRop(backColor, (int)Gdi32.R2.NOTXORPEN, (int)Gdi32.R2.XORPEN);
 
-            IntPtr dc = User32.GetDCEx(UnsafeNativeMethods.GetDesktopWindow(), IntPtr.Zero, User32.DCX.WINDOW | User32.DCX.LOCKWINDOWUPDATE | User32.DCX.CACHE);
+            IntPtr dc = User32.GetDCEx(User32.GetDesktopWindow(), IntPtr.Zero, User32.DCX.WINDOW | User32.DCX.LOCKWINDOWUPDATE | User32.DCX.CACHE);
             IntPtr pen = Gdi32.CreatePen(Gdi32.PS.SOLID, 1, ColorTranslator.ToWin32(backColor));
 
             Gdi32.R2 prevRop2 = Gdi32.SetROP2(dc, rop2);
@@ -2118,7 +2109,6 @@ namespace System.Windows.Forms
             {
                 using (Pen dark = new Pen(Dark(backColor)))
                 {
-
                     int minDim = Math.Min(width, height);
                     int right = x + width - 1;
                     int bottom = y + height - 2;
@@ -2217,19 +2207,19 @@ namespace System.Windows.Forms
         /// </summary>
         public static void FillReversibleRectangle(Rectangle rectangle, Color backColor)
         {
-            int rop3 = GetColorRop(backColor,
+            Gdi32.ROP rop3 = (Gdi32.ROP)GetColorRop(backColor,
                                    0xa50065, // RasterOp.BRUSH.Invert().XorWith(RasterOp.TARGET),
                                    0x5a0049); // RasterOp.BRUSH.XorWith(RasterOp.TARGET));
             Gdi32.R2 rop2 = Gdi32.R2.NOT;
 
-            IntPtr dc = User32.GetDCEx(UnsafeNativeMethods.GetDesktopWindow(), IntPtr.Zero, User32.DCX.WINDOW | User32.DCX.LOCKWINDOWUPDATE | User32.DCX.CACHE);
+            IntPtr dc = User32.GetDCEx(User32.GetDesktopWindow(), IntPtr.Zero, User32.DCX.WINDOW | User32.DCX.LOCKWINDOWUPDATE | User32.DCX.CACHE);
             IntPtr brush = Gdi32.CreateSolidBrush(ColorTranslator.ToWin32(backColor));
 
             Gdi32.R2 prevRop2 = Gdi32.SetROP2(dc, rop2);
             IntPtr oldBrush = Gdi32.SelectObject(dc, brush);
 
             // PatBlt must be the only Win32 function that wants height in width rather than x2,y2.
-            SafeNativeMethods.PatBlt(new HandleRef(null, dc), rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height, rop3);
+            Gdi32.PatBlt(dc, rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height, rop3);
 
             Gdi32.SetROP2(dc, prevRop2);
             Gdi32.SelectObject(dc, oldBrush);
@@ -2368,7 +2358,6 @@ namespace System.Windows.Forms
             if (frameBrushActive == null ||
                 !frameColorActive.Equals(brushColor))
             {
-
                 if (frameBrushActive != null)
                 {
                     frameBrushActive.Dispose();
@@ -2420,7 +2409,6 @@ namespace System.Windows.Forms
                 focusPenColor.ToArgb() != baseColor.ToArgb() ||
                 hcFocusPen != highContrast)
             {
-
                 if (focusPen != null)
                 {
                     focusPen.Dispose();
@@ -2499,7 +2487,6 @@ namespace System.Windows.Forms
             if (frameBrushSelected == null ||
                 !frameColorSelected.Equals(brushColor))
             {
-
                 if (frameBrushSelected != null)
                 {
                     frameBrushSelected.Dispose();
@@ -2653,7 +2640,6 @@ namespace System.Windows.Forms
             }
 
             return new ColorMatrix(result);
-
         }
         //paint the border of the table
         internal static void PaintTableControlBorder(TableLayoutPanelCellBorderStyle borderStyle, Graphics g, Rectangle bound)
@@ -2762,63 +2748,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /* Unused
-        // Takes a black and white image, and replaces those colors with the colors of your choice.
-        // The Alpha channel of the source bitmap will be ignored, meaning pixels with Color.Transparent
-        // (really transparent black) will be mapped to the replaceBlack color.
-        private static ColorMatrix RemapBlackAndWhiteAndTransparentMatrix(Color replaceBlack, Color replaceWhite) {
-            // Normalize the colors to 1.0.
-
-            float normBlackRed   = ((float)replaceBlack.R)/(float)255.0;
-            float normBlackGreen = ((float)replaceBlack.G)/(float)255.0;
-            float normBlackBlue  = ((float)replaceBlack.B)/(float)255.0;
-            float normBlackAlpha = ((float)replaceBlack.A)/(float)255.0;
-
-            float normWhiteRed   = ((float)replaceWhite.R)/(float)255.0;
-            float normWhiteGreen = ((float)replaceWhite.G)/(float)255.0;
-            float normWhiteBlue  = ((float)replaceWhite.B)/(float)255.0;
-            float normWhiteAlpha = ((float)replaceWhite.A)/(float)255.0;
-
-            // Set up a matrix that will map white to replaceWhite and
-            // black and transparent black to replaceBlack.
-            //
-            //                | -B  -B  -B  -B   0 |
-            //                |   r   g   b   a    |
-            //                |                    |
-            //                |  W   W   W   W   0 |
-            //                |   r   g   b   a    |
-            //                |                    |
-            //  [ R G B A ] * |  0   0   0   0   0 | = [ R' G' B' A' ]
-            //                |                    |
-            //                |                    |
-            //                |  0   0   0   0   0 |
-            //                |                    |
-            //                |                    |
-            //                |  B   B   B   B   1 |
-            //                |   r   g   b   a    |
-
-            ColorMatrix matrix = new ColorMatrix();
-
-            matrix.Matrix00 = -normBlackRed;
-            matrix.Matrix01 = -normBlackGreen;
-            matrix.Matrix02 = -normBlackBlue;
-            matrix.Matrix03 = -normBlackAlpha;
-
-            matrix.Matrix10 =  normWhiteRed;
-            matrix.Matrix11 =  normWhiteGreen;
-            matrix.Matrix12 =  normWhiteBlue;
-            matrix.Matrix13 =  normWhiteAlpha;
-
-            matrix.Matrix40 =  normBlackRed;
-            matrix.Matrix41 =  normBlackGreen;
-            matrix.Matrix42 =  normBlackBlue;
-            matrix.Matrix43 =  normBlackAlpha;
-            matrix.Matrix44 =  1.0f;
-
-            return matrix;
-        }
-        */
-
         // Takes a black and white image, and replaces those colors with the colors of your choice.
         // The replaceBlack and replaceWhite colors must have alpha = 255, because the alpha value
         // of the bitmap is preserved.
@@ -2877,26 +2806,6 @@ namespace System.Windows.Forms
 
             return matrix;
         }
-
-        /* Unused
-        internal static StringAlignment TranslateAlignment(HorizontalAlignment align) {
-            StringAlignment result;
-            switch (align) {
-                case HorizontalAlignment.Right:
-                    result = StringAlignment.Far;
-                    break;
-                case HorizontalAlignment.Center:
-                    result = StringAlignment.Center;
-                    break;
-                case HorizontalAlignment.Left:
-                default:
-                    result = StringAlignment.Near;
-                    break;
-            }
-
-            return result;
-        }
-        */
 
         internal static TextFormatFlags TextFormatFlagsForAlignmentGDI(ContentAlignment align)
         {
@@ -2990,14 +2899,6 @@ namespace System.Windows.Forms
             };
             return output;
         }
-
-        /* Unused
-        internal static StringFormat StringFormatForAlignment(HorizontalAlignment align) {
-            StringFormat output = new StringFormat();
-            output.Alignment = TranslateAlignment(align);
-            return output;
-        }
-        */
 
         /// <summary>
         ///  Get StringFormat object for rendering text using GDI+ (Graphics).
@@ -3167,16 +3068,6 @@ namespace System.Windows.Forms
                 }
             }
 
-            /* Unused
-            /// <summary>
-            /// </summary>
-            public int Hue {
-                get {
-                    return hue;
-                }
-            }
-            */
-
             /// <summary>
             /// </summary>
             public int Luminosity
@@ -3186,16 +3077,6 @@ namespace System.Windows.Forms
                     return luminosity;
                 }
             }
-
-            /* Unused
-            /// <summary>
-            /// </summary>
-            public int Saturation {
-                get {
-                    return saturation;
-                }
-            }
-            */
 
             /// <summary>
             /// </summary>
@@ -3229,19 +3110,8 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    int oneLum = 0;
                     int zeroLum = NewLuma(ShadowAdj, true);
-
-                    /*
-                    if (luminosity < 40) {
-                        zeroLum = NewLuma(120, ShadowAdj, true);
-                    }
-                    else {
-                        zeroLum = NewLuma(ShadowAdj, true);
-                    }
-                    */
-
-                    return ColorFromHLS(hue, zeroLum - (int)((zeroLum - oneLum) * percDarker), saturation);
+                    return ColorFromHLS(hue, zeroLum - (int)(zeroLum * percDarker), saturation);
                 }
             }
 
@@ -3305,18 +3175,6 @@ namespace System.Windows.Forms
                 {
                     int zeroLum = luminosity;
                     int oneLum = NewLuma(HilightAdj, true);
-
-                    /*
-                    if (luminosity < 40) {
-                        zeroLum = 120;
-                        oneLum = NewLuma(120, HilightAdj, true);
-                    }
-                    else {
-                        zeroLum = luminosity;
-                        oneLum = NewLuma(HilightAdj, true);
-                    }
-                    */
-
                     return ColorFromHLS(hue, zeroLum + (int)((oneLum - zeroLum) * percLighter), saturation);
                 }
             }

@@ -11,13 +11,8 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class NotifyIconTests
+    public class NotifyIconTests : IClassFixture<ThreadExceptionFixture>
     {
-        public NotifyIconTests()
-        {
-            Application.ThreadException += (sender, e) => throw new Exception(e.Exception.StackTrace.ToString());
-        }
-
         [WinFormsFact]
         public void NotifyIcon_Ctor_Default()
         {
@@ -66,7 +61,7 @@ namespace System.Windows.Forms.Tests
                 BalloonTipIcon = value
             };
             Assert.Equal(value, notifyIcon.BalloonTipIcon);
-            
+
             // Set same.
             notifyIcon.BalloonTipIcon = value;
             Assert.Equal(value, notifyIcon.BalloonTipIcon);
@@ -173,7 +168,7 @@ namespace System.Windows.Forms.Tests
             {
                 ContextMenuStrip = menu
             };
-            
+
             notifyIcon.ContextMenuStrip = value;
             Assert.Equal(value, notifyIcon.ContextMenuStrip);
 
@@ -212,7 +207,7 @@ namespace System.Windows.Forms.Tests
                 Icon = value
             };
             Assert.Same(value, notifyIcon.Icon);
-            
+
             // Set same.
             notifyIcon.Icon = value;
             Assert.Same(value, notifyIcon.Icon);
@@ -230,7 +225,7 @@ namespace System.Windows.Forms.Tests
 
             notifyIcon.Icon = value;
             Assert.Same(value, notifyIcon.Icon);
-            
+
             // Set same.
             notifyIcon.Icon = value;
             Assert.Same(value, notifyIcon.Icon);
@@ -246,7 +241,7 @@ namespace System.Windows.Forms.Tests
                 Icon = value
             };
             Assert.Same(value, notifyIcon.Icon);
-            
+
             // Set same.
             notifyIcon.Icon = value;
             Assert.Same(value, notifyIcon.Icon);
@@ -466,11 +461,11 @@ namespace System.Windows.Forms.Tests
                 Visible = value
             };
             Assert.Equal(value, notifyIcon.Visible);
-            
+
             // Set same.
             notifyIcon.Visible = value;
             Assert.Equal(value, notifyIcon.Visible);
-            
+
             // Set different.
             notifyIcon.Visible = !value;
             Assert.Equal(!value, notifyIcon.Visible);
@@ -487,11 +482,11 @@ namespace System.Windows.Forms.Tests
                 Visible = value
             };
             Assert.Equal(value, notifyIcon.Visible);
-            
+
             // Set same.
             notifyIcon.Visible = value;
             Assert.Equal(value, notifyIcon.Visible);
-            
+
             // Set different.
             notifyIcon.Visible = !value;
             Assert.Equal(!value, notifyIcon.Visible);
@@ -516,12 +511,12 @@ namespace System.Windows.Forms.Tests
             };
             Assert.Equal(value, notifyIcon.Visible);
             mockSite.Verify(s => s.DesignMode, Times.Exactly(expectedDesignModeCallCount));
-            
+
             // Set same.
             notifyIcon.Visible = value;
             Assert.Equal(value, notifyIcon.Visible);
             mockSite.Verify(s => s.DesignMode, Times.Exactly(expectedDesignModeCallCount));
-            
+
             // Set different.
             notifyIcon.Visible = !value;
             Assert.Equal(!value, notifyIcon.Visible);
@@ -734,7 +729,7 @@ namespace System.Windows.Forms.Tests
             Assert.Empty(notifyIcon.Text);
             Assert.False(notifyIcon.Visible);
             Assert.Equal(1, callCount);
-            
+
             notifyIcon.Dispose();
 
             Assert.Equal(ToolTipIcon.None, notifyIcon.BalloonTipIcon);
@@ -749,7 +744,7 @@ namespace System.Windows.Forms.Tests
             Assert.False(notifyIcon.Visible);
             Assert.Equal(2, callCount);
         }
-        
+
         public static IEnumerable<object[]> Dispose_WithProperties_TestData()
         {
             foreach (bool visible in new bool[] { true, false })
@@ -792,7 +787,7 @@ namespace System.Windows.Forms.Tests
             Assert.Empty(notifyIcon.Text);
             Assert.Equal(visible, notifyIcon.Visible);
             Assert.Equal(1, callCount);
-            
+
             notifyIcon.Dispose();
             Assert.Equal(ToolTipIcon.Error, notifyIcon.BalloonTipIcon);
             Assert.Equal("BalloonTipText", notifyIcon.BalloonTipText);

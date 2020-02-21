@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using static Interop.User32;
+
 namespace System.Windows.Forms
 {
     public enum MessageBoxButtons
@@ -10,38 +12,38 @@ namespace System.Windows.Forms
         ///  Specifies that the message box contains an OK button. This field is
         ///  constant.
         /// </summary>
-        OK = 0x00000000,
+        OK = (int)MB.OK,
 
         /// <summary>
         ///  Specifies that the message box contains OK and Cancel buttons. This
         ///  field is constant.
         /// </summary>
-        OKCancel = 0x00000001,
+        OKCancel = (int)MB.OKCANCEL,
 
         /// <summary>
         ///  Specifies that the message box contains Abort, Retry, and Ignore
         ///  buttons.
         ///  This field is constant.
         /// </summary>
-        AbortRetryIgnore = 0x00000002,
+        AbortRetryIgnore = (int)MB.ABORTRETRYIGNORE,
 
         /// <summary>
         ///  Specifies that the message box contains Yes, No, and Cancel buttons.
         ///  This field is constant.
         /// </summary>
-        YesNoCancel = 0x00000003,
+        YesNoCancel = (int)MB.YESNOCANCEL,
 
         /// <summary>
         ///  Specifies that the
         ///  message box contains Yes and No buttons. This field is
         ///  constant.
         /// </summary>
-        YesNo = 0x00000004,
+        YesNo = (int)MB.YESNO,
 
         /// <summary>
         ///  Specifies that the message box contains Retry and Cancel buttons.
         ///  This field is constant.
         /// </summary>
-        RetryCancel = 0x00000005
+        RetryCancel = (int)MB.RETRYCANCEL
     }
 }

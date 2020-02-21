@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
@@ -16,9 +18,8 @@ namespace System.Windows.Forms.Design
     /// <summary>
     ///  Provides a user interface for <see cref='WindowsFormsComponentEditor'/>.
     /// </summary>
-    [ComVisible(true),
-     ClassInterface(ClassInterfaceType.AutoDispatch)
-    ]
+    [ComVisible(true)]
+    [ClassInterface(ClassInterfaceType.AutoDispatch)]
     [ToolboxItem(false)]
     public class ComponentEditorForm : Form
     {
@@ -154,13 +155,6 @@ namespace System.Windows.Forms.Design
             add => base.AutoSizeChanged += value;
             remove => base.AutoSizeChanged -= value;
         }
-
-        /*
-        private void CreateNewTransaction() {
-            IDesignerHost host = component.Site.GetService(typeof(IDesignerHost)) as IDesignerHost;
-            transaction = host.CreateTransaction(string.Format(SR.ComponentEditorFormEditTransaction, component.Site.Name));
-        }
-        */
 
         /// <summary>
         ///  Handles ok/cancel/apply/help button click events
@@ -488,25 +482,7 @@ namespace System.Windows.Forms.Design
         public virtual DialogResult ShowForm(IWin32Window owner, int page)
         {
             initialActivePage = page;
-
-            // CreateNewTransaction();
-            try
-            {
-                ShowDialog(owner);
-            }
-            finally
-            {
-                /*
-                if (DialogResult == DialogResult.OK) {
-                    transaction.Commit();
-                }
-                else
-                {
-                    transaction.Cancel();
-                }
-                */
-            }
-
+            ShowDialog(owner);
             return DialogResult;
         }
 
@@ -795,11 +771,9 @@ namespace System.Windows.Forms.Design
             {
                 base.OnHandleCreated(e);
 
-                int itemHeight;
-
-                itemHeight = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TVM_GETITEMHEIGHT, 0, 0);
+                int itemHeight = (int)User32.SendMessageW(this, (User32.WM)ComCtl32.TVM.GETITEMHEIGHT);
                 itemHeight += 2 * PADDING_VERT;
-                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TVM_SETITEMHEIGHT, itemHeight, 0);
+                User32.SendMessageW(this, (User32.WM)ComCtl32.TVM.SETITEMHEIGHT, (IntPtr)itemHeight);
 
                 if (_hbrushDither == IntPtr.Zero)
                 {
@@ -837,7 +811,6 @@ namespace System.Windows.Forms.Design
                                          state, ColorTranslator.ToWin32(SystemColors.Control), ColorTranslator.ToWin32(SystemColors.ControlText));
                             }
                             m.Result = (IntPtr)ComCtl32.CDRF.SKIPDEFAULT;
-
                         }
                         break;
                     case ComCtl32.CDDS.POSTPAINT:
@@ -869,18 +842,18 @@ namespace System.Windows.Forms.Design
                     int oldTextColor = Gdi32.SetTextColor(dc, ColorTranslator.ToWin32(SystemColors.ControlLightLight));
                     int oldBackColor = Gdi32.SetBkColor(dc, ColorTranslator.ToWin32(SystemColors.Control));
 
-                    SafeNativeMethods.PatBlt(new HandleRef(null, dc), rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top, NativeMethods.PATCOPY);
+                    Gdi32.PatBlt(dc, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top, Gdi32.ROP.PATCOPY);
                     Gdi32.SetTextColor(dc, oldTextColor);
                     Gdi32.SetBkColor(dc, oldBackColor);
                 }
             }
 
-            protected override void WndProc(ref Message m)
+            protected unsafe override void WndProc(ref Message m)
             {
-                if (m.Msg == WindowMessages.WM_REFLECT + WindowMessages.WM_NOTIFY)
+                if (m.Msg == (int)(User32.WM.REFLECT | User32.WM.NOTIFY))
                 {
-                    User32.NMHDR nmh = (User32.NMHDR)m.GetLParam(typeof(User32.NMHDR));
-                    if (nmh.code == NativeMethods.NM_CUSTOMDRAW)
+                    User32.NMHDR* nmhdr = (User32.NMHDR*)m.LParam;
+                    if (nmhdr->code == (int)ComCtl32.NM.CUSTOMDRAW)
                     {
                         OnCustomDraw(ref m);
                         return;

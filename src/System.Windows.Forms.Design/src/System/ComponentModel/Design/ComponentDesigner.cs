@@ -648,7 +648,6 @@ namespace System.ComponentModel.Design
                 PropertyDescriptor pd = TypeDescriptor.GetDefaultProperty(component);
                 if (pd != null && pd.PropertyType.Equals(typeof(string)))
                 {
-
                     string current = (string)pd.GetValue(component);
                     if (current == null || current.Length == 0)
                     {
@@ -880,7 +879,6 @@ namespace System.ComponentModel.Design
             /// </summary>
             private PropertyDescriptor GetShadowedPropertyDescriptor(string propertyName)
             {
-
                 if (_descriptors == null)
                 {
                     _descriptors = new Hashtable();

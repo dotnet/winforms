@@ -8,7 +8,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ToolStripItemImageRenderEventArgsTests
+    public class ToolStripItemImageRenderEventArgsTests : IClassFixture<ThreadExceptionFixture>
     {
         public static IEnumerable<object[]> Ctor_Graphics_ToolStripItem_Rectangle_TestData()
         {
@@ -86,7 +86,6 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { null, null, null, Rectangle.Empty };
             yield return new object[] { graphics, new ToolStripButton(), otherImage, new Rectangle(1, 2, 3, 4) };
             yield return new object[] { graphics, new ToolStripButton() { Image = image }, otherImage, new Rectangle(1, 2, 3, 4) };
-
         }
 
         [Theory]

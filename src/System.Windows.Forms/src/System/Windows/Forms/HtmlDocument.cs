@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
@@ -34,7 +36,6 @@ namespace System.Windows.Forms
             Debug.Assert(NativeHtmlDocument2 != null, "The document should implement IHtmlDocument2");
 
             this.shimManager = shimManager;
-
         }
 
         internal IHTMLDocument2 NativeHtmlDocument2
@@ -424,7 +425,7 @@ namespace System.Windows.Forms
             };
             try
             {
-                if (NativeHtmlDocument2.GetScript() is UnsafeNativeMethods.IDispatch scriptObject)
+                if (NativeHtmlDocument2.GetScript() is Oleaut32.IDispatch scriptObject)
                 {
                     Guid g = Guid.Empty;
                     string[] names = new string[] { scriptName };
@@ -449,7 +450,7 @@ namespace System.Windows.Forms
                             dispid,
                             &g,
                             Kernel32.GetThreadLocale(),
-                            NativeMethods.DISPATCH_METHOD,
+                            Oleaut32.DISPATCH.METHOD,
                             &dispParams,
                             retVals,
                             &pExcepInfo,
@@ -547,7 +548,6 @@ namespace System.Windows.Forms
         {
             add => DocumentShim.AddHandler(EventMouseOver, value);
             remove => DocumentShim.RemoveHandler(EventMouseOver, value);
-
         }
 
         public event HtmlElementEventHandler MouseUp
@@ -573,7 +573,7 @@ namespace System.Windows.Forms
             public byte b;
         }
         private static readonly int VariantSize = (int)Marshal.OffsetOf(typeof(FindSizeOfVariant), "b");
-        
+
         /// <summary>
         ///  Convert a object[] into an array of VARIANT, allocated with CoTask allocators.
         /// </summary>
@@ -588,7 +588,7 @@ namespace System.Windows.Forms
             }
             return mem;
         }
-        
+
         /// <summary>
         ///  Free a Variant array created with the above function
         /// </summary>
@@ -640,7 +640,7 @@ namespace System.Windows.Forms
             return Color.Empty;
         }
 
-        ///<summary>
+        /// <summary>
         ///  HtmlDocumentShim - this is the glue between the DOM eventing mechanisms
         ///          and our CLR callbacks.
         ///
@@ -652,7 +652,7 @@ namespace System.Windows.Forms
         ///                       for a method named DISPID=0.  For each event that's subscribed, we create
         ///                       a new HtmlToClrEventProxy, detect the callback and fire the corresponding
         ///                       CLR event.
-        ///</summary>
+        /// </summary>
         internal class HtmlDocumentShim : HtmlShim
         {
             private AxHost.ConnectionPointCookie cookie;
@@ -691,7 +691,6 @@ namespace System.Windows.Forms
             ///  Support IHtmlDocument3.AttachHandler
             public override void AttachEventHandler(string eventName, EventHandler eventHandler)
             {
-
                 // IE likes to call back on an IDispatch of DISPID=0 when it has an event,
                 // the HtmlToClrEventProxy helps us fake out the CLR so that we can call back on
                 // our EventHandler properly.
@@ -709,7 +708,6 @@ namespace System.Windows.Forms
                 {
                     ((IHTMLDocument3)NativeHtmlDocument2).DetachEvent(eventName, proxy);
                 }
-
             }
 
             //
@@ -753,7 +751,6 @@ namespace System.Windows.Forms
                     }
                     htmlDocument = null;
                 }
-
             }
 
             protected override object GetEventSender()
@@ -1006,4 +1003,3 @@ namespace System.Windows.Forms
 
     }
 }
-

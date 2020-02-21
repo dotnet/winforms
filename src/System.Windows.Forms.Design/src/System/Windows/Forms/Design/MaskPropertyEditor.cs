@@ -9,13 +9,13 @@ using System.Drawing.Design;
 namespace System.Windows.Forms.Design
 {
     /// <summary>
-    /// Design time editing class for the Mask property of the MaskedTextBox control.   
+    /// Design time editing class for the Mask property of the MaskedTextBox control.
     /// </summary>
     internal class MaskPropertyEditor : UITypeEditor
     {
         /// <summary>
-        /// Gets the mask property value fromt the MaskDesignerDialog.  
-        /// The IUIService is used to show the mask designer dialog within VS so it doesn't get blocked if focus 
+        /// Gets the mask property value fromt the MaskDesignerDialog.
+        /// The IUIService is used to show the mask designer dialog within VS so it doesn't get blocked if focus
         /// is moved to anoter app.
         /// </summary>
         internal static string EditMask(ITypeDiscoveryService discoverySvc, IUIService uiSvc, MaskedTextBox instance, IHelpService helpService)
@@ -30,7 +30,6 @@ namespace System.Windows.Forms.Design
                 dlg.DiscoverMaskDescriptors(discoverySvc);  // fine if service is null.
 
                 // Show dialog from VS.
-                // Debug.Assert( uiSvc != null, "Expected IUIService, defaulting to an intrusive way to show the dialog..." );
                 DialogResult dlgResult = uiSvc != null ? uiSvc.ShowDialog(dlg) : dlg.ShowDialog();
                 if (dlgResult == DialogResult.OK)
                 {
@@ -86,6 +85,5 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public override UITypeEditorEditStyle GetEditStyle(System.ComponentModel.ITypeDescriptorContext context)
             => UITypeEditorEditStyle.Modal;
-
     }
 }

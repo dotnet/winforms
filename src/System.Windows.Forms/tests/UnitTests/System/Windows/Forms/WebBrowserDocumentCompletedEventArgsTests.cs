@@ -6,7 +6,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class WebBrowserDocumentCompletedEventArgsTests
+    public class WebBrowserDocumentCompletedEventArgsTests : IClassFixture<ThreadExceptionFixture>
     {
         [Fact]
         public void Ctor_Uri()

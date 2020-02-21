@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Drawing;
 
 namespace System.Windows.Forms
@@ -87,7 +89,6 @@ namespace System.Windows.Forms
                 {
                     // bottom left
                     g.FillRectangle(SystemBrushes.ButtonShadow, new Rectangle(1, bounds.Height - 2, 1, 1));
-
                 }
 
                 // top and bottom right conntecting pixel - drawn only if height and width are odd
@@ -96,7 +97,6 @@ namespace System.Windows.Forms
                     // bottom right
                     g.FillRectangle(SystemBrushes.ButtonShadow, new Rectangle(bounds.Width - 2, bounds.Height - 2, 1, 1));
                 }
-
             }
         }
     }

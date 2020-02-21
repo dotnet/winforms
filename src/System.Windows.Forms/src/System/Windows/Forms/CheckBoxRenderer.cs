@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Drawing;
 using System.Windows.Forms.VisualStyles;
 
@@ -11,18 +13,13 @@ namespace System.Windows.Forms
     ///  This is a rendering class for the CheckBox control. It works downlevel too (obviously
     ///  without visual styles applied.)
     /// </summary>
-    public sealed class CheckBoxRenderer
+    public static class CheckBoxRenderer
     {
         //Make this per-thread, so that different threads can safely use these methods.
         [ThreadStatic]
         private static VisualStyleRenderer visualStyleRenderer = null;
         private static readonly VisualStyleElement CheckBoxElement = VisualStyleElement.Button.CheckBox.UncheckedNormal;
         private static bool renderMatchingApplicationState = true;
-
-        //cannot instantiate
-        private CheckBoxRenderer()
-        {
-        }
 
         /// <summary>
         ///  If this property is true, then the renderer will use the setting from Application.RenderWithVisualStyles to
@@ -109,7 +106,6 @@ namespace System.Windows.Forms
                     ControlPaint.DrawCheckBox(g, glyphBounds, ConvertToButtonState(state));
                 }
             }
-
         }
 
         /// <summary>
@@ -238,7 +234,6 @@ namespace System.Windows.Forms
         {
             switch (state)
             {
-
                 case CheckBoxState.CheckedNormal:
                 case CheckBoxState.CheckedHot:
                     return ButtonState.Checked;
@@ -325,7 +320,6 @@ namespace System.Windows.Forms
         {
             switch (state)
             {
-
                 case CheckBoxState.MixedNormal:
                 case CheckBoxState.MixedHot:
                 case CheckBoxState.MixedPressed:

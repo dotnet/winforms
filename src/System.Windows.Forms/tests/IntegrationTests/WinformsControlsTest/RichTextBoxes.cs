@@ -26,7 +26,7 @@ namespace WinformsControlsTest
 \pard\sa200\sl276\slmult1\f0\fs22\lang9  for more information.\par
 }";
         }
-      
+
         private void richTextBox1_LinkClicked(object sender, LinkClickedEventArgs e)
         {
             MessageBox.Show(this, e.LinkText, "link clicked");

@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.ComponentModel;
 using System.Globalization;
 using System.Runtime.Serialization;
@@ -63,7 +65,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Creates a ListViewGroup.
         /// </summary>
-    	public ListViewGroup(string header, HorizontalAlignment headerAlignment) : this(header)
+        public ListViewGroup(string header, HorizontalAlignment headerAlignment) : this(header)
         {
             _headerAlignment = headerAlignment;
         }
@@ -80,7 +82,7 @@ namespace System.Windows.Forms
                 if (_header != value)
                 {
                     _header = value;
-                    ListView?.RecreateHandleInternal();
+                    UpdateListView();
                 }
             }
         }

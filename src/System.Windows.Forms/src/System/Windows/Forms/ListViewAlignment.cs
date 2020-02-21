@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using static Interop.ComCtl32;
+
 namespace System.Windows.Forms
 {
     /// <summary>
@@ -12,22 +14,22 @@ namespace System.Windows.Forms
         /// <summary>
         ///  When the user moves an item, it remains where it is dropped.
         /// </summary>
-        Default = NativeMethods.LVA_DEFAULT,
+        Default = (int)LVA.DEFAULT,
 
         /// <summary>
         ///  Items are aligned to the top of the <see cref='ListView'/> control.
         /// </summary>
-        Top = NativeMethods.LVA_ALIGNTOP,
+        Top = (int)LVA.ALIGNTOP,
 
         /// <summary>
         ///  Items are aligned to the left of the <see cref='ListView'/> control.
         /// </summary>
-        Left = NativeMethods.LVA_ALIGNLEFT,
+        Left = (int)LVA.ALIGNLEFT,
 
         /// <summary>
         ///  Items are aligned to an invisible grid in the control. When the user
         ///  moves an item, it moves to the closest juncture in the grid.
         /// </summary>
-        SnapToGrid = NativeMethods.LVA_SNAPTOGRID,
+        SnapToGrid = (int)LVA.SNAPTOGRID,
     }
 }

@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
@@ -67,7 +69,6 @@ namespace System.Windows.Forms
             }
             set
             {
-
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)AutoSizeMode.GrowAndShrink, (int)AutoSizeMode.GrowOnly))
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(AutoSizeMode));
@@ -144,17 +145,17 @@ namespace System.Windows.Forms
             get
             {
                 CreateParams cp = base.CreateParams;
-                cp.ClassName = "BUTTON";
+                cp.ClassName = ComCtl32.WindowClasses.WC_BUTTON;
                 if (GetStyle(ControlStyles.UserPaint))
                 {
-                    cp.Style |= NativeMethods.BS_OWNERDRAW;
+                    cp.Style |= (int)User32.BS.OWNERDRAW;
                 }
                 else
                 {
-                    cp.Style |= NativeMethods.BS_PUSHBUTTON;
+                    cp.Style |= (int)User32.BS.PUSHBUTTON;
                     if (IsDefault)
                     {
-                        cp.Style |= NativeMethods.BS_DEFPUSHBUTTON;
+                        cp.Style |= (int)User32.BS.DEFPUSHBUTTON;
                     }
                 }
                 return cp;
@@ -279,7 +280,7 @@ namespace System.Windows.Forms
                 if (isMouseDown)
                 {
                     Point pt = PointToScreen(new Point(mevent.X, mevent.Y));
-                    if (UnsafeNativeMethods.WindowFromPoint(pt) == Handle && !ValidationCancelled)
+                    if (User32.WindowFromPoint(pt) == Handle && !ValidationCancelled)
                     {
                         if (GetStyle(ControlStyles.UserPaint))
                         {
@@ -369,10 +370,10 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void WndProc(ref Message m)
         {
-            switch (m.Msg)
+            switch ((User32.WM)m.Msg)
             {
-                case WindowMessages.WM_REFLECT + WindowMessages.WM_COMMAND:
-                    if (NativeMethods.Util.HIWORD(m.WParam) == NativeMethods.BN_CLICKED)
+                case User32.WM.REFLECT | User32.WM.COMMAND:
+                    if (PARAM.HIWORD(m.WParam) == (int)User32.BN.CLICKED)
                     {
                         Debug.Assert(!GetStyle(ControlStyles.UserPaint), "Shouldn't get BN_CLICKED when UserPaint");
                         if (!ValidationCancelled)
@@ -381,7 +382,7 @@ namespace System.Windows.Forms
                         }
                     }
                     break;
-                case WindowMessages.WM_ERASEBKGND:
+                case User32.WM.ERASEBKGND:
                     DefWndProc(ref m);
                     break;
                 default:
@@ -391,5 +392,3 @@ namespace System.Windows.Forms
         }
     }
 }
-
-

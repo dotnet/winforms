@@ -501,7 +501,6 @@ namespace System.Windows.Forms.Design
                     }
                     _contextMenu = null;
                     ShowDropDownMenu();
-
                 }
                 else
                 {
@@ -889,9 +888,9 @@ namespace System.Windows.Forms.Design
                     if (_designerHost != null)
                     {
                         baseComponent = (Control)_designerHost.RootComponent;
-                        NativeMethods.SendMessage(baseComponent.Handle, WindowMessages.WM_SETREDRAW, 0, 0);
+                        User32.SendMessageW(baseComponent.Handle, User32.WM.SETREDRAW, IntPtr.Zero, IntPtr.Zero);
                         tb.Focus();
-                        NativeMethods.SendMessage(baseComponent.Handle, WindowMessages.WM_SETREDRAW, 1, 0);
+                        User32.SendMessageW(baseComponent.Handle, User32.WM.SETREDRAW, (IntPtr)1, IntPtr.Zero);
                     }
                 }
                 finally
@@ -973,9 +972,9 @@ namespace System.Windows.Forms.Design
                 if (_designerHost != null)
                 {
                     Control baseComponent = (Control)_designerHost.RootComponent;
-                    NativeMethods.SendMessage(baseComponent.Handle, WindowMessages.WM_SETREDRAW, 0, 0);
+                    User32.SendMessageW(baseComponent.Handle, User32.WM.SETREDRAW, IntPtr.Zero, IntPtr.Zero);
                     designerFrame.Focus();
-                    NativeMethods.SendMessage(baseComponent.Handle, WindowMessages.WM_SETREDRAW, 1, 0);
+                    User32.SendMessageW(baseComponent.Handle, User32.WM.SETREDRAW, (IntPtr)1, IntPtr.Zero);
                 }
             }
         }
@@ -1051,7 +1050,6 @@ namespace System.Windows.Forms.Design
             }
             switch (e.KeyCode)
             {
-
                 case Keys.Up:
                     Commit(false, true);
                     if (KeyboardService != null)
@@ -1535,9 +1533,9 @@ namespace System.Windows.Forms.Design
             /// </summary>
             protected override void WndProc(ref Message m)
             {
-                switch (m.Msg)
+                switch ((User32.WM)m.Msg)
                 {
-                    case WindowMessages.WM_KILLFOCUS:
+                    case User32.WM.KILLFOCUS:
                         base.WndProc(ref m);
                         IntPtr focussedWindow = (IntPtr)m.WParam;
                         if (!IsParentWindow(focussedWindow))
@@ -1549,7 +1547,7 @@ namespace System.Windows.Forms.Design
                     // 1.Slowly click on a menu strip item twice to make it editable, while the item's dropdown menu is visible
                     // 2.Select the text of the item and right click on it
                     // 3.Left click 'Copy' or 'Cut' in the context menu IDE crashed because left click in step3 invoked glyph  behavior, which commited and destroyed the insitu edit box and thus  the 'copy' or 'cut' action has no text to work with.  Thus need to block glyph behaviors while the context menu is displayed.
-                    case WindowMessages.WM_CONTEXTMENU:
+                    case User32.WM.CONTEXTMENU:
                         owner.IsSystemContextMenuDisplayed = true;
                         base.WndProc(ref m);
                         owner.IsSystemContextMenuDisplayed = false;
@@ -1638,7 +1636,6 @@ namespace System.Windows.Forms.Design
                 ToolStripItem item = GetSelectedItem();
                 if (item is ToolStripControlHost)
                 {
-
                     CommitAndSelectNext(forward);
                     return true;
                 }
@@ -1696,9 +1693,9 @@ namespace System.Windows.Forms.Design
 
             protected override void WndProc(ref Message m)
             {
-                switch (m.Msg)
+                switch ((User32.WM)m.Msg)
                 {
-                    case WindowMessages.WM_GETOBJECT:
+                    case User32.WM.GETOBJECT:
                         if (owner._addItemButton == null)
                         {
                             // only adding patterns to _miniToolStrip associated with MenuStrip or ContextMenu

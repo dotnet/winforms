@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
@@ -206,7 +208,6 @@ namespace System.Windows.Forms
         {
             get { return ComboBox.DropDownHeight; }
             set { ComboBox.DropDownHeight = value; }
-
         }
 
         [
@@ -565,7 +566,6 @@ namespace System.Windows.Forms
 
             internal class ToolStripComboBoxFlatComboAdapter : FlatComboAdapter
             {
-
                 public ToolStripComboBoxFlatComboAdapter(ComboBox comboBox) : base(comboBox, /*smallButton=*/true)
                 {
                 }
@@ -688,7 +688,6 @@ namespace System.Windows.Forms
                         new Point(middle.X + FlatComboAdapter.Offset2Pixels + 1, middle.Y - 1),
                         new Point(middle.X, middle.Y + FlatComboAdapter.Offset2Pixels)
                     });
-
                 }
             }
 
@@ -715,7 +714,6 @@ namespace System.Windows.Forms
 
             internal class ToolStripComboBoxControlAccessibleObject : ComboBoxAccessibleObject
             {
-
                 private readonly ChildAccessibleObject childAccessibleObject;
 
                 public ToolStripComboBoxControlAccessibleObject(ToolStripComboBoxControl toolStripComboBoxControl) : base(toolStripComboBoxControl)
@@ -776,11 +774,7 @@ namespace System.Windows.Forms
 
                     return base.IsPatternSupported(patternId);
                 }
-
             }
-
         }
-
     }
-
 }

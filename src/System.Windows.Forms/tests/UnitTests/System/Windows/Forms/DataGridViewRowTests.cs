@@ -12,7 +12,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class DataGridViewRowTests
+    public class DataGridViewRowTests : IClassFixture<ThreadExceptionFixture>
     {
         [Fact]
         public void DataGridViewRow_Ctor_Default()
@@ -3471,7 +3471,6 @@ namespace System.Windows.Forms.Tests
             row.Cells.Add(new CantSetDataGridViewCell());
             Assert.False(row.SetValues(new object[] { 1 }));
             Assert.Null(Assert.Single(row.Cells.Cast<DataGridViewCell>()).Value);
-
         }
 
         private class CantSetDataGridViewCell : DataGridViewCell

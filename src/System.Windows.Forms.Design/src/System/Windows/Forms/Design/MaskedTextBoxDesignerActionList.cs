@@ -9,7 +9,7 @@ using System.Diagnostics;
 namespace System.Windows.Forms.Design
 {
     /// <summary>
-    /// Describes the list of actions that can be performed in the MaskedTextBox control from the 
+    /// Describes the list of actions that can be performed in the MaskedTextBox control from the
     /// Chrome pannel.
     /// </summary>
     internal class MaskedTextBoxDesignerActionList : DesignerActionList

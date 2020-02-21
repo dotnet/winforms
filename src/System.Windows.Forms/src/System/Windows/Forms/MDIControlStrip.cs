@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Drawing;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
@@ -75,28 +77,10 @@ namespace System.Windows.Forms
             ResumeLayout(false);
         }
 
-        #region Buttons
-        /* Unused
-        public ToolStripMenuItem System {
-            get { return system; }
-        }
-        */
-
         public ToolStripMenuItem Close
         {
             get { return close; }
         }
-
-        /* Unused
-        public ToolStripMenuItem Minimize {
-            get { return minimize; }
-        }
-
-        public ToolStripMenuItem Restore {
-            get { return restore; }
-        }
-        */
-        #endregion
 
         internal MenuStrip MergedMenu
         {
@@ -110,22 +94,10 @@ namespace System.Windows.Forms
             }
         }
 
-        /* PERF: consider shutting off layout
-        #region ShutOffLayout
-                    protected override void OnLayout(LayoutEventArgs e) {
-                        return;  // if someone attempts
-                    }
-
-                    protected override Size GetPreferredSize(Size proposedSize) {
-                        return Size.Empty;
-                    }
-        #endregion
-        */
-
         private Image GetTargetWindowIcon()
         {
             Image systemIcon = null;
-            IntPtr hIcon = UnsafeNativeMethods.SendMessage(new HandleRef(this, Control.GetSafeHandle(target)), WindowMessages.WM_GETICON, NativeMethods.ICON_SMALL, 0);
+            IntPtr hIcon = User32.SendMessageW(new HandleRef(this, Control.GetSafeHandle(target)), User32.WM.GETICON, (IntPtr)NativeMethods.ICON_SMALL, IntPtr.Zero);
             Icon icon = (hIcon != IntPtr.Zero) ? Icon.FromHandle(hIcon) : Form.DefaultIcon;
             Icon smallIcon = new Icon(icon, SystemInformation.SmallIconSize);
 
@@ -212,7 +184,6 @@ namespace System.Windows.Forms
                 }
                 target = null;
             }
-
         }
 
         // when the system menu item shortcut is evaluated - pop the dropdown
@@ -251,7 +222,6 @@ namespace System.Windows.Forms
                 }
                 base.OnOwnerChanged(e);
             }
-
         }
     }
 }

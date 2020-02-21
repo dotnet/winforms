@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
@@ -156,7 +158,6 @@ namespace System.Windows.Forms.PropertyGridInternal
                         break;
                     }
                 }
-
             }
             return (canReset == TriState.Yes);
         }
@@ -307,7 +308,6 @@ namespace System.Windows.Forms.PropertyGridInternal
                 else if ((obj == null && objCur == null) ||
                          (obj != null && obj.Equals(objCur)))
                 {
-
                     continue;
                 }
                 else
@@ -387,7 +387,6 @@ namespace System.Windows.Forms.PropertyGridInternal
                     collection.Locked = false;
                 }
             }
-
         }
 
         /// <summary>
@@ -518,7 +517,6 @@ namespace System.Windows.Forms.PropertyGridInternal
             /// </summary>
             public bool MergeCollection(ICollection newCollection)
             {
-
                 if (locked)
                 {
                     return true;
@@ -540,7 +538,6 @@ namespace System.Windows.Forms.PropertyGridInternal
                         items = Array.Empty<object>();
                         return false;
                     }
-
                 }
                 return true;
             }
@@ -554,7 +551,6 @@ namespace System.Windows.Forms.PropertyGridInternal
                 items = new object[collection.Count];
                 collection.CopyTo(items, 0);
             }
-
         }
 
         private class MergedAttributeCollection : AttributeCollection

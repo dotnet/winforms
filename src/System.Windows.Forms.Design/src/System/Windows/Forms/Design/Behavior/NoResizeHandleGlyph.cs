@@ -14,7 +14,8 @@ namespace System.Windows.Forms.Design.Behavior
         private readonly bool _isPrimary = false;
 
         /// <summary>
-        ///  NoResizeHandleGlyph's constructor takes additional parameters: 'type' and 'primary selection'. Also, we create/cache our pen & brush here to avoid this action with every paint message.
+        ///  NoResizeHandleGlyph's constructor takes additional parameters: 'type' and 'primary selection'.
+        ///  Also, we create/cache our pen and brush here to avoid this action with every paint message.
         /// </summary>
         internal NoResizeHandleGlyph(Rectangle controlBounds, SelectionRules selRules, bool primarySelection, Behavior behavior) : base(behavior)
         {
@@ -29,7 +30,6 @@ namespace System.Windows.Forms.Design.Behavior
             // The handle is always upperleft
             bounds = new Rectangle(controlBounds.X - DesignerUtils.NORESIZEHANDLESIZE, controlBounds.Y - DesignerUtils.NORESIZEHANDLESIZE, DesignerUtils.NORESIZEHANDLESIZE, DesignerUtils.NORESIZEHANDLESIZE);
             hitBounds = bounds;
-
         }
 
         /// <summary>
@@ -39,6 +39,5 @@ namespace System.Windows.Forms.Design.Behavior
         {
             DesignerUtils.DrawNoResizeHandle(pe.Graphics, bounds, _isPrimary, this);
         }
-
     }
 }

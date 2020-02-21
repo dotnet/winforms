@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Drawing;
 using System.Runtime.InteropServices;
 using Accessibility;
@@ -247,15 +249,14 @@ namespace System.Windows.Forms
 
                 if (_owningListBox.SelectedIndex == -1) //no item selected
                 {
-                    _owningListBox.SendMessage(NativeMethods.LB_SETCARETINDEX, currentIndex, 0);
+                    User32.SendMessageW(_owningListBox, (User32.WM)User32.LB.SETCARETINDEX, (IntPtr)currentIndex);
                     return;
                 }
 
-                int firstVisibleIndex = _owningListBox.SendMessage(NativeMethods.LB_GETTOPINDEX, 0, 0).ToInt32();
-
+                int firstVisibleIndex = User32.SendMessageW(_owningListBox, (User32.WM)User32.LB.GETTOPINDEX).ToInt32();
                 if (currentIndex < firstVisibleIndex)
                 {
-                    _owningListBox.SendMessage(NativeMethods.LB_SETTOPINDEX, currentIndex, 0);
+                    User32.SendMessageW(_owningListBox, (User32.WM)User32.LB.SETTOPINDEX, (IntPtr)currentIndex);
                     return;
                 }
 
@@ -266,7 +267,7 @@ namespace System.Windows.Forms
 
                 for (int i = firstVisibleIndex; i < itemsCount; i++)
                 {
-                    int itemHeight = _owningListBox.SendMessage(NativeMethods.LB_GETITEMHEIGHT, i, 0).ToInt32();
+                    int itemHeight = User32.SendMessageW(_owningListBox, (User32.WM)User32.LB.GETITEMHEIGHT, (IntPtr)i).ToInt32();
 
                     if ((itemsHeightSum += itemHeight) <= listBoxHeight)
                     {
@@ -278,7 +279,7 @@ namespace System.Windows.Forms
 
                     if (currentIndex > lastVisibleIndex)
                     {
-                        _owningListBox.SendMessage(NativeMethods.LB_SETTOPINDEX, currentIndex - visibleItemsCount + 1, 0);
+                        User32.SendMessageW(_owningListBox, (User32.WM)User32.LB.SETTOPINDEX, (IntPtr)(currentIndex - visibleItemsCount + 1));
                     }
 
                     break;

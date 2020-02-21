@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using static Interop.ComCtl32;
+
 namespace System.Windows.Forms
 {
     /// <summary>
@@ -12,7 +14,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Each item appears as a full-sized icon with a label below it.
         /// </summary>
-        LargeIcon = NativeMethods.LVS_ICON,
+        LargeIcon = (int)LV_VIEW.ICON,
 
         /// <summary>
         ///  Each item appears on a seperate line with further
@@ -23,23 +25,23 @@ namespace System.Windows.Forms
         ///  column displays a header which can display a caption for the
         ///  column. The user can resize each column at runtime.
         /// </summary>
-        Details = NativeMethods.LVS_REPORT,
+        Details = (int)LV_VIEW.DETAILS,
 
         /// <summary>
         ///  Each item appears as a small icon with a label to its right.
         /// </summary>
-        SmallIcon = NativeMethods.LVS_SMALLICON,
+        SmallIcon = (int)LV_VIEW.SMALLICON,
 
         /// <summary>
         ///  Each item
         ///  appears as a small icon with a label to its right.
         ///  Items are arranged in columns with no column headers.
         /// </summary>
-        List = NativeMethods.LVS_LIST,
+        List = (int)LV_VIEW.LIST,
 
         /// <summary>
         ///  Tile view.
         /// </summary>
-        Tile = NativeMethods.LV_VIEW_TILE,
+        Tile = (int)LV_VIEW.TILE,
     }
 }

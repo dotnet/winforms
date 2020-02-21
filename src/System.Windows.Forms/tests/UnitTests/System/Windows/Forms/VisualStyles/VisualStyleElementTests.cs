@@ -8,7 +8,7 @@ using Xunit;
 
 namespace System.Windows.Forms.VisualStyles.Tests
 {
-    public class VisualStyleElementTests
+    public class VisualStyleElementTests : IClassFixture<ThreadExceptionFixture>
     {
         public static IEnumerable<object[]> CreateElement_TestData()
         {

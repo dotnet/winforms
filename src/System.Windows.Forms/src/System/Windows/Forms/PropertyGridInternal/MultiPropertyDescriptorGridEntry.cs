@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
@@ -113,7 +115,6 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             try
             {
-
                 if (mergedPd.PropertyType.IsValueType || (Flags & GridEntry.FLAG_IMMUTABLE) != 0)
                 {
                     return base.CreateChildren(diffOldChildren);
@@ -213,7 +214,6 @@ namespace System.Windows.Forms.PropertyGridInternal
                    ge is PropertyDescriptorGridEntry &&
                    ((PropertyDescriptorGridEntry)ge).propertyInfo.Attributes.Contains(NotifyParentPropertyAttribute.Yes))
             {
-
                 // find the next parent property with a differnet value owner
                 object owner = ge.GetValueOwner();
 
@@ -280,7 +280,6 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                     if (objects != null && objects.Length > 0)
                     {
-
                         IDesignerHost host = DesignerHost;
                         DesignerTransaction trans = null;
 
@@ -290,7 +289,6 @@ namespace System.Windows.Forms.PropertyGridInternal
                         }
                         try
                         {
-
                             bool needChangeNotify = !(objects[0] is IComponent) || ((IComponent)objects[0]).Site == null;
                             if (needChangeNotify)
                             {
@@ -414,6 +412,5 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
             }
         }
-
     }
 }

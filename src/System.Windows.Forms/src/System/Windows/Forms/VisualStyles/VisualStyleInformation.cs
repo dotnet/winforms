@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Drawing;
 using System.Runtime.InteropServices;
 using static Interop;
@@ -10,9 +12,9 @@ namespace System.Windows.Forms.VisualStyles
 {
     /// <summary>
     ///  Provides information about the current visual style.
-    ///  
+    ///
     ///  NOTE:
-    ///  
+    ///
     ///  1) These properties (except SupportByOS, which is always meaningful) are meaningful only
     ///  if visual styles are supported and have currently been applied by the user.
     ///  2) A subset of these use VisualStyleRenderer objects, so they are
@@ -301,7 +303,6 @@ namespace System.Windows.Forms.VisualStyles
                     if (visualStyleRenderer == null)
                     {
                         visualStyleRenderer = new VisualStyleRenderer(VisualStyleElement.Button.PushButton.Normal);
-
                     }
                     else
                     {

@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.ComponentModel;
 
 namespace System.Windows.Forms
@@ -53,7 +55,6 @@ namespace System.Windows.Forms
             }
             set
             {
-
                 // Sequential enum.  Valid values are 0x0 to 0x7
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)DataGridViewAdvancedCellBorderStyle.NotSet, (int)DataGridViewAdvancedCellBorderStyle.OutsetPartial))
                 {
@@ -107,8 +108,6 @@ namespace System.Windows.Forms
         {
             set
             {
-                //Debug.Assert(Enum.IsDefined(typeof(DataGridViewAdvancedCellBorderStyle), value));
-                //Debug.Assert(value != DataGridViewAdvancedCellBorderStyle.NotSet);
                 if ((all && top != value) || (!all && bottom != value))
                 {
                     if (all)
@@ -157,8 +156,6 @@ namespace System.Windows.Forms
         {
             set
             {
-                //Debug.Assert(Enum.IsDefined(typeof(DataGridViewAdvancedCellBorderStyle), value));
-                //Debug.Assert(value != DataGridViewAdvancedCellBorderStyle.NotSet);
                 if ((all && top != value) || (!all && left != value))
                 {
                     if ((owner != null && owner.RightToLeftInternal) &&
@@ -199,7 +196,6 @@ namespace System.Windows.Forms
             }
             set
             {
-
                 // Sequential enum.  Valid values are 0x0 to 0x7
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)DataGridViewAdvancedCellBorderStyle.NotSet, (int)DataGridViewAdvancedCellBorderStyle.OutsetPartial))
                 {
@@ -217,8 +213,6 @@ namespace System.Windows.Forms
         {
             set
             {
-                //Debug.Assert(Enum.IsDefined(typeof(DataGridViewAdvancedCellBorderStyle), value));
-                //Debug.Assert(value != DataGridViewAdvancedCellBorderStyle.NotSet);
                 if ((all && top != value) || (!all && right != value))
                 {
                     if ((owner != null && !owner.RightToLeftInternal) &&
@@ -268,8 +262,6 @@ namespace System.Windows.Forms
         {
             set
             {
-                //Debug.Assert(Enum.IsDefined(typeof(DataGridViewAdvancedCellBorderStyle), value));
-                //Debug.Assert(value != DataGridViewAdvancedCellBorderStyle.NotSet);
                 if ((all && top != value) || (!all && top != value))
                 {
                     if (all)

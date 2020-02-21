@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+  <Import Project="..\..\Directory.Build.targets" />
+
+  <PropertyGroup>
+    <_PowerShellExe Condition="'$(_PowerShellExe)' == ''">C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe</_PowerShellExe>
+    <_ScriptLocation Condition="'$(_ScriptLocation)' == ''">$(MSBuildProjectDirectory)\ProcessFrameworkListFiles.ps1</_ScriptLocation>
+    <_ManifestFile>$(MSBuildProjectDirectory)\FrameworkListFiles.props</_ManifestFile>
+    <GenerateManifest>false</GenerateManifest>
+  </PropertyGroup>
+
+  <!-- 
+    (Re)generate the list of transport assemblies by inspecting Microsoft.Private.Winforms nuspec.
+    -->
+  <Target Name="UpdateTransportPackage" 
+          AfterTargets="GenerateNuspec"
+          DependsOnTargets="GenerateNuspec">
+    <ItemGroup>
+      <_NuspecFile Include="@(NuGetPackOutput)" Condition="'%(Extension)' == '.nuspec'" />
+    </ItemGroup>
+
+    <Exec
+        Command="$(_PowerShellExe) -NonInteractive -ExecutionPolicy Unrestricted -Command &quot;&amp; { &amp;&apos;$(_ScriptLocation)&apos; &apos;@(_NuspecFile)&apos; &apos;$(_ManifestFile)&apos; $(GenerateManifest) } &quot;"
+        ContinueOnError="False" />
+ 
+  </Target>
+
+</Project>

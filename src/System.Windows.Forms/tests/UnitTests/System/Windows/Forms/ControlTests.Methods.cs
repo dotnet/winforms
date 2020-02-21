@@ -3,9 +3,12 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
+using System.Reflection;
+using System.Threading.Tasks;
 using System.Windows.Forms.Layout;
 using Moq;
 using WinForms.Common.Tests;
@@ -392,9 +395,12 @@ namespace System.Windows.Forms.Tests
         public void Control_CreateAccessibilityInstance_Invoke_ReturnsExpected()
         {
             using var control = new SubControl();
-            Control.ControlAccessibleObject accessibleObject = Assert.IsType<Control.ControlAccessibleObject>(control.CreateAccessibilityInstance());
-            Assert.Same(control, accessibleObject.Owner);
-            Assert.NotSame(accessibleObject, control.CreateAccessibilityInstance());
+            Control.ControlAccessibleObject instance = Assert.IsAssignableFrom<Control.ControlAccessibleObject>(control.CreateAccessibilityInstance());
+            Assert.NotNull(instance);
+            Assert.Same(control, instance.Owner);
+            Assert.Equal(AccessibleRole.Client, instance.Role);
+            Assert.NotSame(control.CreateAccessibilityInstance(), instance);
+            Assert.NotSame(control.AccessibilityObject, instance);
         }
 
         [Fact]
@@ -545,6 +551,17 @@ namespace System.Windows.Forms.Tests
             Assert.NotEqual(IntPtr.Zero, control.Handle);
         }
 
+        [WinFormsFact]
+        public void Control_CreateControl_InvokeNotVisible_Nop()
+        {
+            using var control = new Control
+            {
+                Visible = false
+            };
+            control.CreateControl();
+            Assert.False(control.IsHandleCreated);
+        }
+
         [Fact]
         public void Control_CreateControl_InvokeWithHandler_CallsHandleCreated()
         {
@@ -563,6 +580,13 @@ namespace System.Windows.Forms.Tests
             Assert.True(control.Created);
             Assert.True(control.IsHandleCreated);
             Assert.NotEqual(IntPtr.Zero, control.Handle);
+        }
+
+        [WinFormsFact]
+        public void Control_CreateControl_InvokeCantCreate_ThrowsWin32Exception()
+        {
+            using var control = new NoCreateControl();
+            Assert.Throws<Win32Exception>(() => control.CreateControl());
         }
 
         [Fact]
@@ -687,6 +711,18 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
+        public void Control_CreateHandle_InvokeNotVisible_Nop()
+        {
+            using var control = new SubControl
+            {
+                Visible = false
+            };
+            control.CreateHandle();
+            Assert.True(control.IsHandleCreated);
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+        }
+
+        [WinFormsFact]
         public void Control_CreateHandle_InvokeWithHandler_CallsHandleCreated()
         {
             using var control = new SubControl();
@@ -704,6 +740,13 @@ namespace System.Windows.Forms.Tests
             Assert.True(control.Created);
             Assert.True(control.IsHandleCreated);
             Assert.NotEqual(IntPtr.Zero, control.Handle);
+        }
+
+        [WinFormsFact]
+        public void Control_CreateHandle_InvokeCantCreate_ThrowsWin32Exception()
+        {
+            using var control = new NoCreateControl();
+            Assert.Throws<Win32Exception>(() => control.CreateHandle());
         }
 
         [WinFormsFact]
@@ -915,6 +958,837 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
             Assert.False(control.Created);
             Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void Control_Dispose_Invoke_Success()
+        {
+            using var control = new Control();
+            int callCount = 0;
+            void handler(object sender, EventArgs e)
+            {
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.False(control.IsHandleCreated);
+                Assert.True(control.Disposing);
+                Assert.Equal(callCount > 0, control.IsDisposed);
+                callCount++;
+            };
+            control.Disposed += handler;
+
+            try
+            {
+                control.Dispose();
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.True(control.IsDisposed);
+                Assert.False(control.Disposing);
+                Assert.Equal(1, callCount);
+                Assert.False(control.IsHandleCreated);
+
+                // Dispose multiple times.
+                control.Dispose();
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.True(control.IsDisposed);
+                Assert.False(control.Disposing);
+                Assert.Equal(2, callCount);
+                Assert.False(control.IsHandleCreated);
+            }
+            finally
+            {
+                control.Disposed -= handler;
+            }
+        }
+
+        [WinFormsFact]
+        public void Control_Dispose_InvokeWithParent_Success()
+        {
+            using var parent = new Control();
+            int controlRemovedCallCount = 0;
+            parent.ControlRemoved += (sender, e) => controlRemovedCallCount++;
+            using var control = new Control
+            {
+                Parent = parent
+            };
+            int callCount = 0;
+            void handler(object sender, EventArgs e)
+            {
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.False(control.IsHandleCreated);
+                Assert.True(control.Disposing);
+                Assert.Equal(callCount > 0, control.IsDisposed);
+                callCount++;
+            };
+            control.Disposed += handler;
+
+            try
+            {
+                control.Dispose();
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.Equal(1, controlRemovedCallCount);
+                Assert.False(control.Disposing);
+                Assert.True(control.IsDisposed);
+                Assert.Equal(1, callCount);
+                Assert.False(control.IsHandleCreated);
+
+                // Dispose multiple times.
+                control.Dispose();
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.Equal(1, controlRemovedCallCount);
+                Assert.False(control.Disposing);
+                Assert.True(control.IsDisposed);
+                Assert.Equal(2, callCount);
+                Assert.False(control.IsHandleCreated);
+            }
+            finally
+            {
+                control.Disposed -= handler;
+            }
+        }
+
+        [WinFormsFact]
+        public void Control_Dispose_InvokeWithChildren_Success()
+        {
+            using var control = new Control();
+            using var child1 = new Control();
+            using var child2 = new Control();
+            control.Controls.Add(child1);
+            control.Controls.Add(child2);
+            int controlRemovedCallCount = 0;
+            control.ControlRemoved += (sender, e) => controlRemovedCallCount++;
+
+            int callCount = 0;
+            void handler(object sender, EventArgs e)
+            {
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.False(control.IsHandleCreated);
+                Assert.True(control.Disposing);
+                Assert.Equal(callCount > 0, control.IsDisposed);
+                callCount++;
+            };
+            control.Disposed += handler;
+            int child1CallCount = 0;
+            child1.Disposed += (sender, e) => child1CallCount++;
+            int child2CallCount = 0;
+            child2.Disposed += (sender, e) => child2CallCount++;
+
+            try
+            {
+                control.Dispose();
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.Null(child1.Parent);
+                Assert.Null(child2.Parent);
+                Assert.Equal(0, controlRemovedCallCount);
+                Assert.False(control.Disposing);
+                Assert.True(control.IsDisposed);
+                Assert.False(child1.Disposing);
+                Assert.True(child1.IsDisposed);
+                Assert.False(child2.Disposing);
+                Assert.True(child2.IsDisposed);
+                Assert.Equal(1, callCount);
+                Assert.Equal(1, child1CallCount);
+                Assert.Equal(1, child2CallCount);
+                Assert.False(control.IsHandleCreated);
+                Assert.False(child1.IsHandleCreated);
+                Assert.False(child2.IsHandleCreated);
+
+                // Dispose multiple times.
+                control.Dispose();
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.Null(child1.Parent);
+                Assert.Null(child2.Parent);
+                Assert.Equal(0, controlRemovedCallCount);
+                Assert.False(control.Disposing);
+                Assert.True(control.IsDisposed);
+                Assert.False(child1.Disposing);
+                Assert.True(child1.IsDisposed);
+                Assert.False(child2.Disposing);
+                Assert.True(child2.IsDisposed);
+                Assert.Equal(2, callCount);
+                Assert.Equal(1, child1CallCount);
+                Assert.Equal(1, child2CallCount);
+                Assert.False(control.IsHandleCreated);
+                Assert.False(child1.IsHandleCreated);
+                Assert.False(child2.IsHandleCreated);
+            }
+            finally
+            {
+                control.Disposed -= handler;
+            }
+        }
+
+        [WinFormsFact]
+        public void Control_Dispose_InvokeWithBindings_Success()
+        {
+            using var control = new Control();
+            control.DataBindings.Add(new Binding("Text", new object(), "member"));
+
+            int callCount = 0;
+            void handler(object sender, EventArgs e)
+            {
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.False(control.IsHandleCreated);
+                Assert.True(control.Disposing);
+                Assert.Equal(callCount > 0, control.IsDisposed);
+                callCount++;
+            };
+            control.Disposed += handler;
+
+            try
+            {
+                control.Dispose();
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.True(control.IsDisposed);
+                Assert.False(control.Disposing);
+                Assert.Equal(1, callCount);
+                Assert.False(control.IsHandleCreated);
+
+                // Dispose multiple times.
+                control.Dispose();
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.True(control.IsDisposed);
+                Assert.False(control.Disposing);
+                Assert.Equal(2, callCount);
+                Assert.False(control.IsHandleCreated);
+            }
+            finally
+            {
+                control.Disposed -= handler;
+            }
+        }
+
+        [WinFormsFact]
+        public void Control_Dispose_InvokeWithHandle_Success()
+        {
+            using var control = new Control();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+            int destroyedCallCount = 0;
+            control.HandleDestroyed += (sender, e) => destroyedCallCount++;
+
+            int callCount = 0;
+            void handler(object sender, EventArgs e)
+            {
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.False(control.IsHandleCreated);
+                Assert.True(control.Disposing);
+                Assert.Equal(callCount > 0, control.IsDisposed);
+                callCount++;
+            };
+            control.Disposed += handler;
+
+            try
+            {
+                control.Dispose();
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.True(control.IsDisposed);
+                Assert.False(control.Disposing);
+                Assert.Equal(1, callCount);
+                Assert.False(control.IsHandleCreated);
+                Assert.Equal(0, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+                Assert.Equal(1, destroyedCallCount);
+
+                // Dispose multiple times.
+                control.Dispose();
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.True(control.IsDisposed);
+                Assert.False(control.Disposing);
+                Assert.Equal(2, callCount);
+                Assert.False(control.IsHandleCreated);
+                Assert.Equal(0, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+                Assert.Equal(1, destroyedCallCount);
+            }
+            finally
+            {
+                control.Disposed -= handler;
+            }
+        }
+
+        [WinFormsFact]
+        public void Control_Dispose_InvokeInDisposing_Nop()
+        {
+            using var control = new SubControl();
+
+            int disposedCallCount = 0;
+            control.Disposed += (sender, e) =>
+            {
+                control.Dispose();
+                disposedCallCount++;
+            };
+
+            control.Dispose();
+            Assert.Equal(1, disposedCallCount);
+        }
+
+        [WinFormsFact]
+        public void Control_Dispose_InvokeDisposing_Success()
+        {
+            using var control = new SubControl();
+            int callCount = 0;
+            void handler(object sender, EventArgs e)
+            {
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.False(control.IsHandleCreated);
+                Assert.True(control.Disposing);
+                Assert.Equal(callCount > 0, control.IsDisposed);
+                callCount++;
+            };
+            control.Disposed += handler;
+
+            try
+            {
+                control.Dispose(true);
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.True(control.IsDisposed);
+                Assert.False(control.Disposing);
+                Assert.Equal(1, callCount);
+                Assert.False(control.IsHandleCreated);
+
+                // Dispose multiple times.
+                control.Dispose(true);
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.True(control.IsDisposed);
+                Assert.False(control.Disposing);
+                Assert.Equal(2, callCount);
+                Assert.False(control.IsHandleCreated);
+            }
+            finally
+            {
+                control.Disposed -= handler;
+            }
+        }
+
+        [WinFormsFact]
+        public void Control_Dispose_InvokeNotDisposing_Success()
+        {
+            using var control = new SubControl();
+            int callCount = 0;
+            void handler(object sender, EventArgs e) => callCount++;
+            control.Disposed += handler;
+
+            try
+            {
+                control.Dispose(false);
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.False(control.IsDisposed);
+                Assert.False(control.Disposing);
+                Assert.Equal(0, callCount);
+                Assert.False(control.IsHandleCreated);
+
+                // Dispose multiple times.
+                control.Dispose(false);
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.False(control.IsDisposed);
+                Assert.False(control.Disposing);
+                Assert.Equal(0, callCount);
+                Assert.False(control.IsHandleCreated);
+            }
+            finally
+            {
+                control.Disposed -= handler;
+            }
+        }
+
+        [WinFormsFact]
+        public void Control_Dispose_InvokeDisposingWithParent_Success()
+        {
+            using var parent = new SubControl();
+            int controlRemovedCallCount = 0;
+            parent.ControlRemoved += (sender, e) => controlRemovedCallCount++;
+            using var control = new SubControl
+            {
+                Parent = parent
+            };
+            int callCount = 0;
+            void handler(object sender, EventArgs e)
+            {
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.False(control.IsHandleCreated);
+                Assert.True(control.Disposing);
+                Assert.Equal(callCount > 0, control.IsDisposed);
+                callCount++;
+            };
+            control.Disposed += handler;
+
+            try
+            {
+                control.Dispose(true);
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.Equal(1, controlRemovedCallCount);
+                Assert.False(control.Disposing);
+                Assert.True(control.IsDisposed);
+                Assert.Equal(1, callCount);
+                Assert.False(control.IsHandleCreated);
+
+                // Dispose multiple times.
+                control.Dispose(true);
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.Equal(1, controlRemovedCallCount);
+                Assert.False(control.Disposing);
+                Assert.True(control.IsDisposed);
+                Assert.Equal(2, callCount);
+                Assert.False(control.IsHandleCreated);
+            }
+            finally
+            {
+                control.Disposed -= handler;
+            }
+        }
+
+        [WinFormsFact]
+        public void Control_Dispose_InvokeNotDisposingWithParent_Success()
+        {
+            using var parent = new SubControl();
+            int controlRemovedCallCount = 0;
+            parent.ControlRemoved += (sender, e) => controlRemovedCallCount++;
+            using var control = new SubControl
+            {
+                Parent = parent
+            };
+            int callCount = 0;
+            void handler(object sender, EventArgs e) => callCount++;
+            control.Disposed += handler;
+
+            try
+            {
+                control.Dispose(false);
+                Assert.Same(parent, control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.Equal(0, controlRemovedCallCount);
+                Assert.False(control.Disposing);
+                Assert.False(control.IsDisposed);
+                Assert.Equal(0, callCount);
+                Assert.False(control.IsHandleCreated);
+
+                // Dispose multiple times.
+                control.Dispose(false);
+                Assert.Same(parent, control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.Equal(0, controlRemovedCallCount);
+                Assert.False(control.Disposing);
+                Assert.False(control.IsDisposed);
+                Assert.Equal(0, callCount);
+                Assert.False(control.IsHandleCreated);
+            }
+            finally
+            {
+                control.Disposed -= handler;
+            }
+        }
+
+        [WinFormsFact]
+        public void Control_Dispose_InvokeDisposingWithChildren_Success()
+        {
+            using var control = new SubControl();
+            using var child1 = new SubControl();
+            using var child2 = new SubControl();
+            control.Controls.Add(child1);
+            control.Controls.Add(child2);
+            int controlRemovedCallCount = 0;
+            control.ControlRemoved += (sender, e) => controlRemovedCallCount++;
+
+            int callCount = 0;
+            void handler(object sender, EventArgs e)
+            {
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.False(control.IsHandleCreated);
+                Assert.True(control.Disposing);
+                Assert.Equal(callCount > 0, control.IsDisposed);
+                callCount++;
+            };
+            control.Disposed += handler;
+            int child1CallCount = 0;
+            child1.Disposed += (sender, e) => child1CallCount++;
+            int child2CallCount = 0;
+            child2.Disposed += (sender, e) => child2CallCount++;
+
+            try
+            {
+                control.Dispose(true);
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.Null(child1.Parent);
+                Assert.Null(child2.Parent);
+                Assert.Equal(0, controlRemovedCallCount);
+                Assert.False(control.Disposing);
+                Assert.True(control.IsDisposed);
+                Assert.False(child1.Disposing);
+                Assert.True(child1.IsDisposed);
+                Assert.False(child2.Disposing);
+                Assert.True(child2.IsDisposed);
+                Assert.Equal(1, callCount);
+                Assert.Equal(1, child1CallCount);
+                Assert.Equal(1, child2CallCount);
+                Assert.False(control.IsHandleCreated);
+                Assert.False(child1.IsHandleCreated);
+                Assert.False(child2.IsHandleCreated);
+
+                // Dispose multiple times.
+                control.Dispose(true);
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.Null(child1.Parent);
+                Assert.Null(child2.Parent);
+                Assert.Equal(0, controlRemovedCallCount);
+                Assert.False(control.Disposing);
+                Assert.True(control.IsDisposed);
+                Assert.False(child1.Disposing);
+                Assert.True(child1.IsDisposed);
+                Assert.False(child2.Disposing);
+                Assert.True(child2.IsDisposed);
+                Assert.Equal(2, callCount);
+                Assert.Equal(1, child1CallCount);
+                Assert.Equal(1, child2CallCount);
+                Assert.False(control.IsHandleCreated);
+                Assert.False(child1.IsHandleCreated);
+                Assert.False(child2.IsHandleCreated);
+            }
+            finally
+            {
+                control.Disposed -= handler;
+            }
+        }
+
+        [WinFormsFact]
+        public void Control_Dispose_InvokeNotDisposingWithChildren_Success()
+        {
+            using var control = new SubControl();
+            using var child1 = new SubControl();
+            using var child2 = new SubControl();
+            control.Controls.Add(child1);
+            control.Controls.Add(child2);
+            int controlRemovedCallCount = 0;
+            control.ControlRemoved += (sender, e) => controlRemovedCallCount++;
+
+            int callCount = 0;
+            void handler(object sender, EventArgs e) => callCount++;
+            control.Disposed += handler;
+            int child1CallCount = 0;
+            child1.Disposed += (sender, e) => child1CallCount++;
+            int child2CallCount = 0;
+            child2.Disposed += (sender, e) => child2CallCount++;
+
+            try
+            {
+                control.Dispose(false);
+                Assert.Null(control.Parent);
+                Assert.Equal(new Control[] { child1, child2 }, control.Controls.Cast<Control>());
+                Assert.Empty(control.DataBindings);
+                Assert.Same(control, child1.Parent);
+                Assert.Same(control, child2.Parent);
+                Assert.Equal(0, controlRemovedCallCount);
+                Assert.False(control.Disposing);
+                Assert.False(control.IsDisposed);
+                Assert.False(child1.Disposing);
+                Assert.False(child1.IsDisposed);
+                Assert.False(child2.Disposing);
+                Assert.False(child2.IsDisposed);
+                Assert.Equal(0, callCount);
+                Assert.Equal(0, child1CallCount);
+                Assert.Equal(0, child2CallCount);
+                Assert.False(control.IsHandleCreated);
+                Assert.False(child1.IsHandleCreated);
+                Assert.False(child2.IsHandleCreated);
+
+                // Dispose multiple times.
+                control.Dispose(false);
+                Assert.Null(control.Parent);
+                Assert.Equal(new Control[] { child1, child2 }, control.Controls.Cast<Control>());
+                Assert.Empty(control.DataBindings);
+                Assert.Same(control, child1.Parent);
+                Assert.Same(control, child2.Parent);
+                Assert.Equal(0, controlRemovedCallCount);
+                Assert.False(control.Disposing);
+                Assert.False(control.IsDisposed);
+                Assert.False(child1.Disposing);
+                Assert.False(child1.IsDisposed);
+                Assert.False(child2.Disposing);
+                Assert.False(child2.IsDisposed);
+                Assert.Equal(0, callCount);
+                Assert.Equal(0, child1CallCount);
+                Assert.Equal(0, child2CallCount);
+                Assert.False(control.IsHandleCreated);
+                Assert.False(child1.IsHandleCreated);
+                Assert.False(child2.IsHandleCreated);
+            }
+            finally
+            {
+                control.Disposed -= handler;
+            }
+        }
+
+        [WinFormsFact]
+        public void Control_Dispose_InvokeDisposingWithBindings_Success()
+        {
+            using var control = new SubControl();
+            control.DataBindings.Add(new Binding("Text", new object(), "member"));
+
+            int callCount = 0;
+            void handler(object sender, EventArgs e)
+            {
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.False(control.IsHandleCreated);
+                Assert.True(control.Disposing);
+                Assert.Equal(callCount > 0, control.IsDisposed);
+                callCount++;
+            };
+            control.Disposed += handler;
+
+            try
+            {
+                control.Dispose(true);
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.True(control.IsDisposed);
+                Assert.False(control.Disposing);
+                Assert.Equal(1, callCount);
+                Assert.False(control.IsHandleCreated);
+
+                // Dispose multiple times.
+                control.Dispose(true);
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.True(control.IsDisposed);
+                Assert.False(control.Disposing);
+                Assert.Equal(2, callCount);
+                Assert.False(control.IsHandleCreated);
+            }
+            finally
+            {
+                control.Disposed -= handler;
+            }
+        }
+
+        [WinFormsFact]
+        public void Control_Dispose_InvokeNotDisposingWithBindings_Success()
+        {
+            using var control = new SubControl();
+            var binding = new Binding("Text", new object(), "member");
+            control.DataBindings.Add(binding);
+
+            int callCount = 0;
+            void handler(object sender, EventArgs e) => callCount++;
+            control.Disposed += handler;
+
+            try
+            {
+                control.Dispose(false);
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Same(binding, Assert.Single(control.DataBindings));
+                Assert.False(control.IsDisposed);
+                Assert.False(control.Disposing);
+                Assert.Equal(0, callCount);
+                Assert.False(control.IsHandleCreated);
+
+                // Dispose multiple times.
+                control.Dispose(false);
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Same(binding, Assert.Single(control.DataBindings));
+                Assert.False(control.IsDisposed);
+                Assert.False(control.Disposing);
+                Assert.Equal(0, callCount);
+                Assert.False(control.IsHandleCreated);
+            }
+            finally
+            {
+                control.Disposed -= handler;
+            }
+        }
+
+        [WinFormsFact]
+        public void Control_Dispose_InvokeDisposingWithHandle_Success()
+        {
+            using var control = new SubControl();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+            int destroyedCallCount = 0;
+            control.HandleDestroyed += (sender, e) => destroyedCallCount++;
+
+            int callCount = 0;
+            void handler(object sender, EventArgs e)
+            {
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.False(control.IsHandleCreated);
+                Assert.True(control.Disposing);
+                Assert.Equal(callCount > 0, control.IsDisposed);
+                callCount++;
+            };
+            control.Disposed += handler;
+
+            try
+            {
+                control.Dispose(true);
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.True(control.IsDisposed);
+                Assert.False(control.Disposing);
+                Assert.Equal(1, callCount);
+                Assert.False(control.IsHandleCreated);
+                Assert.Equal(0, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+                Assert.Equal(1, destroyedCallCount);
+
+                // Dispose multiple times.
+                control.Dispose(true);
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.True(control.IsDisposed);
+                Assert.False(control.Disposing);
+                Assert.Equal(2, callCount);
+                Assert.False(control.IsHandleCreated);
+                Assert.Equal(0, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+                Assert.Equal(1, destroyedCallCount);
+            }
+            finally
+            {
+                control.Disposed -= handler;
+            }
+        }
+
+        [WinFormsFact]
+        public void Control_Dispose_InvokeNotDisposingWithHandle_Success()
+        {
+            using var control = new SubControl();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+            int destroyedCallCount = 0;
+            control.HandleDestroyed += (sender, e) => destroyedCallCount++;
+
+            int callCount = 0;
+            void handler(object sender, EventArgs e) => callCount++;
+            control.Disposed += handler;
+
+            try
+            {
+                control.Dispose(false);
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.False(control.IsDisposed);
+                Assert.False(control.Disposing);
+                Assert.Equal(0, callCount);
+                Assert.False(control.IsHandleCreated);
+                Assert.Equal(0, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+                Assert.Equal(0, destroyedCallCount);
+
+                // Dispose multiple times.
+                control.Dispose(false);
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.DataBindings);
+                Assert.False(control.IsDisposed);
+                Assert.False(control.Disposing);
+                Assert.Equal(0, callCount);
+                Assert.False(control.IsHandleCreated);
+                Assert.Equal(0, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+                Assert.Equal(0, destroyedCallCount);
+            }
+            finally
+            {
+                control.Disposed -= handler;
+            }
+        }
+
+        [WinFormsFact]
+        public void Control_Dispose_InvokeDisposingInDisposing_Nop()
+        {
+            using var control = new SubControl();
+
+            int disposedCallCount = 0;
+            control.Disposed += (sender, e) =>
+            {
+                control.Dispose(true);
+                disposedCallCount++;
+            };
+
+            control.Dispose(true);
+            Assert.Equal(1, disposedCallCount);
         }
 
         /// <summary>
@@ -1163,14 +2037,13 @@ namespace System.Windows.Forms.Tests
         }
 
         // TODO: create a focus test that returns true when a handle has been created
-        [Fact]
-        public void Control_FocusHandleNotCreated()
+        [WinFormsFact]
+        public void Control_Focus_InvokeWithoutHandle_Nop()
         {
-            var cont = new Control();
-
-            var ret = cont.Focus();
-
-            Assert.False(ret);
+            using var control = new Control();
+            Assert.False(control.Focus());
+            Assert.False(control.Focused);
+            Assert.False(control.IsHandleCreated);
         }
 
         [WinFormsFact]
@@ -1431,6 +2304,513 @@ namespace System.Windows.Forms.Tests
 
             // act and assert
             Assert.Null(cont.GetNextControl(first, false));
+        }
+
+        public static IEnumerable<object[]> GetPreferredSize_TestData()
+        {
+            yield return new object[] { Size.Empty };
+            yield return new object[] { new Size(-1, -2) };
+            yield return new object[] { new Size(10, 20) };
+            yield return new object[] { new Size(30, 40) };
+            yield return new object[] { new Size(int.MaxValue, int.MaxValue) };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(GetPreferredSize_TestData))]
+        public void Control_GetPreferredSize_Invoke_ReturnsExpected(Size proposedSize)
+        {
+            using var control = new Control();
+            Assert.Equal(Size.Empty, control.GetPreferredSize(proposedSize));
+            Assert.False(control.IsHandleCreated);
+
+            // Call again.
+            Assert.Equal(Size.Empty, control.GetPreferredSize(proposedSize));
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(GetPreferredSize_TestData))]
+        public void Control_GetPreferredSize_InvokeWithBounds_ReturnsExpected(Size proposedSize)
+        {
+            using var control = new Control
+            {
+                Bounds = new Rectangle(1, 2, 30, 40)
+            };
+            Assert.Equal(new Size(30, 40), control.GetPreferredSize(proposedSize));
+            Assert.False(control.IsHandleCreated);
+
+            // Call again.
+            Assert.Equal(new Size(30, 40), control.GetPreferredSize(proposedSize));
+            Assert.False(control.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> GetPreferredSize_WithConstrainedSize_TestData()
+        {
+            yield return new object[] { Size.Empty, Size.Empty, new Size(30, 40), Size.Empty };
+            yield return new object[] { new Size(10, 20), Size.Empty, new Size(30, 40), new Size(10, 20) };
+            yield return new object[] { new Size(30, 40), Size.Empty, new Size(30, 40), new Size(30, 40) };
+            yield return new object[] { new Size(31, 40), Size.Empty, new Size(30, 40), new Size(31, 40) };
+            yield return new object[] { new Size(30, 41), Size.Empty, new Size(30, 40), new Size(30, 41) };
+            yield return new object[] { new Size(40, 50), Size.Empty, new Size(30, 40), new Size(40, 50) };
+            yield return new object[] { Size.Empty, new Size(20, 10), new Size(30, 40), Size.Empty };
+            yield return new object[] { Size.Empty, new Size(30, 40), new Size(30, 40), Size.Empty };
+            yield return new object[] { Size.Empty, new Size(31, 40), new Size(30, 40), Size.Empty };
+            yield return new object[] { Size.Empty, new Size(30, 41), new Size(30, 40), Size.Empty };
+            yield return new object[] { Size.Empty, new Size(40, 50), new Size(30, 40), Size.Empty };
+            yield return new object[] { new Size(10, 20), new Size(40, 50), new Size(30, 40), new Size(10, 20) };
+            yield return new object[] { new Size(10, 20), new Size(40, 50), new Size(int.MaxValue, int.MaxValue), new Size(10, 20) };
+            yield return new object[] { new Size(10, 20), new Size(20, 30), new Size(30, 40), new Size(10, 20) };
+            yield return new object[] { new Size(10, 20), new Size(20, 30), new Size(30, 40), new Size(10, 20) };
+            yield return new object[] { new Size(30, 40), new Size(20, 30), new Size(30, 40), new Size(30, 40) };
+            yield return new object[] { new Size(30, 40), new Size(40, 50), new Size(30, 40), new Size(30, 40) };
+            yield return new object[] { new Size(40, 50), new Size(20, 30), new Size(30, 40), new Size(40, 50) };
+            yield return new object[] { new Size(40, 50), new Size(40, 50), new Size(30, 40), new Size(40, 50) };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(GetPreferredSize_WithConstrainedSize_TestData))]
+        public void Control_GetPreferredSize_InvokeWithConstrainedSize_ReturnsExpected(Size minimumSize, Size maximumSize, Size proposedSize, Size expected)
+        {
+            using var control = new Control
+            {
+                MinimumSize = minimumSize,
+                MaximumSize = maximumSize,
+            };
+            Assert.Equal(expected, control.GetPreferredSize(proposedSize));
+            Assert.False(control.IsHandleCreated);
+
+            // Call again.
+            Assert.Equal(expected, control.GetPreferredSize(proposedSize));
+            Assert.False(control.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> GetScaledBounds_TestData()
+        {
+            foreach (BoundsSpecified specified in Enum.GetValues(typeof(BoundsSpecified)))
+            {
+                yield return new object[] { Rectangle.Empty, new Size(0, 0), specified, Rectangle.Empty };
+                yield return new object[] { Rectangle.Empty, new Size(1, 1), specified, Rectangle.Empty };
+                yield return new object[] { Rectangle.Empty, new Size(2, 3), specified, Rectangle.Empty };
+                yield return new object[] { Rectangle.Empty, new Size(-2, -3), specified, Rectangle.Empty };
+            }
+
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.All, Rectangle.Empty };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.X, new Rectangle(0, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.Y, new Rectangle(1, 0, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.Width, new Rectangle(1, 2, 0, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.Height, new Rectangle(1, 2, 3, 0) };
+
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.All, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.X, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.Y, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.Width, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.Height, new Rectangle(1, 2, 3, 4) };
+
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.All, new Rectangle(2, 6, 6, 12) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.X, new Rectangle(2, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.Y, new Rectangle(1, 6, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.Width, new Rectangle(1, 2, 6, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.Height, new Rectangle(1, 2, 3, 12) };
+
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.All, new Rectangle(-2, -6, -6, -12) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.X, new Rectangle(-2, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.Y, new Rectangle(1, -6, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.Width, new Rectangle(1, 2, -6, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.Height, new Rectangle(1, 2, 3, -12) };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(GetScaledBounds_TestData))]
+        public void Control_GetScaledBounds_Invoke_ReturnsExpected(Rectangle bounds, SizeF factor, BoundsSpecified specified, Rectangle expected)
+        {
+            using var control = new SubControl();
+            Assert.Equal(expected, control.GetScaledBounds(bounds, factor, specified));
+            Assert.False(control.IsHandleCreated);
+
+            // Call again.
+            Assert.Equal(expected, control.GetScaledBounds(bounds, factor, specified));
+            Assert.False(control.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> GetScaledBounds_WithStyles_TestData()
+        {
+            yield return new object[] { Rectangle.Empty, new Size(0, 0), BoundsSpecified.All, new Rectangle(0, 0, 4, 4) };
+            yield return new object[] { Rectangle.Empty, new Size(0, 0), BoundsSpecified.X, Rectangle.Empty };
+            yield return new object[] { Rectangle.Empty, new Size(0, 0), BoundsSpecified.Y, Rectangle.Empty };
+            yield return new object[] { Rectangle.Empty, new Size(0, 0), BoundsSpecified.Width, new Rectangle(0, 0, 4, 0) };
+            yield return new object[] { Rectangle.Empty, new Size(0, 0), BoundsSpecified.Height, new Rectangle(0, 0, 0, 4) };
+
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.All, new Rectangle(0, 0, 4, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.X, new Rectangle(0, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.Y, new Rectangle(1, 0, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.Width, new Rectangle(1, 2, 4, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.Height, new Rectangle(1, 2, 3, 4) };
+
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.All, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.X, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.Y, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.Width, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.Height, new Rectangle(1, 2, 3, 4) };
+
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.All, new Rectangle(2, 6, 2, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.X, new Rectangle(2, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.Y, new Rectangle(1, 6, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.Width, new Rectangle(1, 2, 2, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.Height, new Rectangle(1, 2, 3, 4) };
+
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.All, new Rectangle(-2, -6, 6, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.X, new Rectangle(-2, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.Y, new Rectangle(1, -6, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.Width, new Rectangle(1, 2, 6, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.Height, new Rectangle(1, 2, 3, 4) };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(GetScaledBounds_WithStyles_TestData))]
+        public void Control_GetScaledBounds_InvokeWithStyles_ReturnsExpected(Rectangle bounds, SizeF factor, BoundsSpecified specified, Rectangle expected)
+        {
+            using var control = new BorderedControl();
+            Assert.Equal(expected, control.GetScaledBounds(bounds, factor, specified));
+            Assert.False(control.IsHandleCreated);
+
+            // Call again.
+            Assert.Equal(expected, control.GetScaledBounds(bounds, factor, specified));
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(GetScaledBounds_TestData))]
+        public void Control_GetScaledBounds_InvokeWithSite_ReturnsExpected(Rectangle bounds, SizeF factor, BoundsSpecified specified, Rectangle expected)
+        {
+            var mockSite = new Mock<ISite>(MockBehavior.Strict);
+            mockSite
+                .Setup(s => s.GetService(typeof(AmbientProperties)))
+                .Returns(new AmbientProperties());
+            mockSite
+                .Setup(s => s.DesignMode)
+                .Returns(false);
+            mockSite
+                .Setup(s => s.Container)
+                .Returns((IContainer)null);
+            using var control = new SubControl
+            {
+                Site = mockSite.Object
+            };
+            Assert.Equal(expected, control.GetScaledBounds(bounds, factor, specified));
+            Assert.False(control.IsHandleCreated);
+
+            // Call again.
+            Assert.Equal(expected, control.GetScaledBounds(bounds, factor, specified));
+            Assert.False(control.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> GetScaledBounds_InvalidDesignModeSite_TestData()
+        {
+            foreach (object[] testData in GetScaledBounds_TestData())
+            {
+                yield return new object[] { testData[0], testData[1], testData[2], testData[3], null };
+                yield return new object[] { testData[0], testData[1], testData[2], testData[3], new object() };
+
+                var mockNullDesignerHost = new Mock<IDesignerHost>(MockBehavior.Strict);
+                mockNullDesignerHost
+                    .Setup(s => s.RootComponent)
+                    .Returns((IComponent)null);
+                yield return new object[] { testData[0], testData[1], testData[2], testData[3], mockNullDesignerHost.Object };
+
+                var mockUnknownDesignerHost = new Mock<IDesignerHost>(MockBehavior.Strict);
+                mockUnknownDesignerHost
+                    .Setup(s => s.RootComponent)
+                    .Returns(new Control());
+                yield return new object[] { testData[0], testData[1], testData[2], testData[3], mockUnknownDesignerHost.Object };
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(GetScaledBounds_InvalidDesignModeSite_TestData))]
+        public void Control_GetScaledBounds_InvokeWithInvalidDesignModeSite_ReturnsExpected(Rectangle bounds, SizeF factor, BoundsSpecified specified, Rectangle expected, object designerHost)
+        {
+            var mockSite = new Mock<ISite>(MockBehavior.Strict);
+            mockSite
+                .Setup(s => s.GetService(typeof(AmbientProperties)))
+                .Returns(new AmbientProperties());
+            mockSite
+                .Setup(s => s.GetService(typeof(IDesignerHost)))
+                .Returns(designerHost)
+                .Verifiable();
+            mockSite
+                .Setup(s => s.DesignMode)
+                .Returns(true);
+            mockSite
+                .Setup(s => s.Container)
+                .Returns((IContainer)null);
+            using var control = new SubControl
+            {
+                Site = mockSite.Object
+            };
+            Assert.Equal(expected, control.GetScaledBounds(bounds, factor, specified));
+            mockSite.Verify(s => s.GetService(typeof(IDesignerHost)), Times.Once());
+            Assert.False(control.IsHandleCreated);
+
+            // Call again.
+            Assert.Equal(expected, control.GetScaledBounds(bounds, factor, specified));
+            mockSite.Verify(s => s.GetService(typeof(IDesignerHost)), Times.Exactly(2));
+            Assert.False(control.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> GetScaledBounds_NoScaleLocation_TestData()
+        {
+            foreach (BoundsSpecified specified in Enum.GetValues(typeof(BoundsSpecified)))
+            {
+                yield return new object[] { Rectangle.Empty, new Size(0, 0), specified, Rectangle.Empty };
+                yield return new object[] { Rectangle.Empty, new Size(1, 1), specified, Rectangle.Empty };
+                yield return new object[] { Rectangle.Empty, new Size(2, 3), specified, Rectangle.Empty };
+                yield return new object[] { Rectangle.Empty, new Size(-2, -3), specified, Rectangle.Empty };
+            }
+
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.All, new Rectangle(1, 2, 0, 0) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.X, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.Y, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.Width, new Rectangle(1, 2, 0, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.Height, new Rectangle(1, 2, 3, 0) };
+
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.All, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.X, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.Y, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.Width, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.Height, new Rectangle(1, 2, 3, 4) };
+
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.All, new Rectangle(1, 2, 6, 12) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.X, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.Y, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.Width, new Rectangle(1, 2, 6, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.Height, new Rectangle(1, 2, 3, 12) };
+
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.All, new Rectangle(1, 2, -6, -12) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.X, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.Y, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.Width, new Rectangle(1, 2, -6, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.Height, new Rectangle(1, 2, 3, -12) };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(GetScaledBounds_NoScaleLocation_TestData))]
+        public void Control_GetScaledBounds_InvokeWithValidDesignModeSite_ReturnsExpected(Rectangle bounds, SizeF factor, BoundsSpecified specified, Rectangle expected)
+        {
+            var mockDesignerHost = new Mock<IDesignerHost>(MockBehavior.Strict);
+            var mockSite = new Mock<ISite>(MockBehavior.Strict);
+            mockSite
+                .Setup(s => s.GetService(typeof(AmbientProperties)))
+                .Returns(new AmbientProperties());
+            mockSite
+                .Setup(s => s.GetService(typeof(IDesignerHost)))
+                .Returns(mockDesignerHost.Object)
+                .Verifiable();
+            mockSite
+                .Setup(s => s.DesignMode)
+                .Returns(true);
+            mockSite
+                .Setup(s => s.Container)
+                .Returns((IContainer)null);
+            using var control = new SubControl
+            {
+                Site = mockSite.Object
+            };
+            mockDesignerHost
+                .Setup(h => h.RootComponent)
+                .Returns(control)
+                .Verifiable();
+            Assert.Equal(expected, control.GetScaledBounds(bounds, factor, specified));
+            mockSite.Verify(s => s.GetService(typeof(IDesignerHost)), Times.Once());
+            mockDesignerHost.Verify(h => h.RootComponent, Times.Once());
+            Assert.False(control.IsHandleCreated);
+
+            // Call again.
+            Assert.Equal(expected, control.GetScaledBounds(bounds, factor, specified));
+            mockSite.Verify(s => s.GetService(typeof(IDesignerHost)), Times.Exactly(2));
+            mockDesignerHost.Verify(h => h.RootComponent, Times.Exactly(2));
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(GetScaledBounds_NoScaleLocation_TestData))]
+        public void Control_GetScaledBounds_InvokeTopLevel_ReturnsExpected(Rectangle bounds, SizeF factor, BoundsSpecified specified, Rectangle expected)
+        {
+            using var control = new SubControl();
+            control.SetTopLevel(true);
+
+            Assert.Equal(expected, control.GetScaledBounds(bounds, factor, specified));
+            Assert.True(control.IsHandleCreated);
+
+            // Call again.
+            Assert.Equal(expected, control.GetScaledBounds(bounds, factor, specified));
+            Assert.True(control.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> GetScaledBounds_FixedWidth_TestData()
+        {
+            foreach (BoundsSpecified specified in Enum.GetValues(typeof(BoundsSpecified)))
+            {
+                yield return new object[] { Rectangle.Empty, new Size(0, 0), specified, Rectangle.Empty };
+                yield return new object[] { Rectangle.Empty, new Size(1, 1), specified, Rectangle.Empty };
+                yield return new object[] { Rectangle.Empty, new Size(2, 3), specified, Rectangle.Empty };
+                yield return new object[] { Rectangle.Empty, new Size(-2, -3), specified, Rectangle.Empty };
+            }
+
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.All, new Rectangle(0, 0, 3, 0) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.X, new Rectangle(0, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.Y, new Rectangle(1, 0, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.Width, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.Height, new Rectangle(1, 2, 3, 0) };
+
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.All, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.X, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.Y, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.Width, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.Height, new Rectangle(1, 2, 3, 4) };
+
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.All, new Rectangle(2, 6, 3, 12) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.X, new Rectangle(2, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.Y, new Rectangle(1, 6, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.Width, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.Height, new Rectangle(1, 2, 3, 12) };
+
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.All, new Rectangle(-2, -6, 3, -12) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.X, new Rectangle(-2, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.Y, new Rectangle(1, -6, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.Width, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.Height, new Rectangle(1, 2, 3, -12) };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(GetScaledBounds_FixedWidth_TestData))]
+        public void Control_GetScaledBounds_InvokeFixedWidth_ReturnsExpected(Rectangle bounds, SizeF factor, BoundsSpecified specified, Rectangle expected)
+        {
+            using var control = new SubControl();
+            control.SetStyle(ControlStyles.FixedWidth, true);
+
+            Assert.Equal(expected, control.GetScaledBounds(bounds, factor, specified));
+            Assert.False(control.IsHandleCreated);
+
+            // Call again.
+            Assert.Equal(expected, control.GetScaledBounds(bounds, factor, specified));
+            Assert.False(control.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> GetScaledBounds_FixedHeight_TestData()
+        {
+            foreach (BoundsSpecified specified in Enum.GetValues(typeof(BoundsSpecified)))
+            {
+                yield return new object[] { Rectangle.Empty, new Size(0, 0), specified, Rectangle.Empty };
+                yield return new object[] { Rectangle.Empty, new Size(1, 1), specified, Rectangle.Empty };
+                yield return new object[] { Rectangle.Empty, new Size(2, 3), specified, Rectangle.Empty };
+                yield return new object[] { Rectangle.Empty, new Size(-2, -3), specified, Rectangle.Empty };
+            }
+
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.All, new Rectangle(0, 0, 0, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.X, new Rectangle(0, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.Y, new Rectangle(1, 0, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.Width, new Rectangle(1, 2, 0, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.Height, new Rectangle(1, 2, 3, 4) };
+
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.All, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.X, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.Y, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.Width, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.Height, new Rectangle(1, 2, 3, 4) };
+
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.All, new Rectangle(2, 6, 6, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.X, new Rectangle(2, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.Y, new Rectangle(1, 6, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.Width, new Rectangle(1, 2, 6, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.Height, new Rectangle(1, 2, 3, 4) };
+
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.All, new Rectangle(-2, -6, -6, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.X, new Rectangle(-2, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.Y, new Rectangle(1, -6, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.Width, new Rectangle(1, 2, -6, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.Height, new Rectangle(1, 2, 3, 4) };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(GetScaledBounds_FixedHeight_TestData))]
+        public void Control_GetScaledBounds_InvokeFixedHeight_ReturnsExpected(Rectangle bounds, SizeF factor, BoundsSpecified specified, Rectangle expected)
+        {
+            using var control = new SubControl();
+            control.SetStyle(ControlStyles.FixedHeight, true);
+
+            Assert.Equal(expected, control.GetScaledBounds(bounds, factor, specified));
+            Assert.False(control.IsHandleCreated);
+
+            // Call again.
+            Assert.Equal(expected, control.GetScaledBounds(bounds, factor, specified));
+            Assert.False(control.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> GetScaledBounds_FixedWidthAndHeight_TestData()
+        {
+            foreach (BoundsSpecified specified in Enum.GetValues(typeof(BoundsSpecified)))
+            {
+                yield return new object[] { Rectangle.Empty, new Size(0, 0), specified, Rectangle.Empty };
+                yield return new object[] { Rectangle.Empty, new Size(1, 1), specified, Rectangle.Empty };
+                yield return new object[] { Rectangle.Empty, new Size(2, 3), specified, Rectangle.Empty };
+                yield return new object[] { Rectangle.Empty, new Size(-2, -3), specified, Rectangle.Empty };
+            }
+
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.All, new Rectangle(0, 0, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.X, new Rectangle(0, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.Y, new Rectangle(1, 0, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.Width, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.Height, new Rectangle(1, 2, 3, 4) };
+
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.All, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.X, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.Y, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.Width, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.Height, new Rectangle(1, 2, 3, 4) };
+
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.All, new Rectangle(2, 6, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.X, new Rectangle(2, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.Y, new Rectangle(1, 6, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.Width, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.Height, new Rectangle(1, 2, 3, 4) };
+
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.All, new Rectangle(-2, -6, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.X, new Rectangle(-2, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.Y, new Rectangle(1, -6, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.Width, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.Height, new Rectangle(1, 2, 3, 4) };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(GetScaledBounds_FixedWidthAndHeight_TestData))]
+        public void Control_GetScaledBounds_InvokeFixedWidthAndHeight_ReturnsExpected(Rectangle bounds, SizeF factor, BoundsSpecified specified, Rectangle expected)
+        {
+            using var control = new SubControl();
+            control.SetStyle(ControlStyles.FixedWidth, true);
+            control.SetStyle(ControlStyles.FixedHeight, true);
+
+            Assert.Equal(expected, control.GetScaledBounds(bounds, factor, specified));
+            Assert.False(control.IsHandleCreated);
+
+            // Call again.
+            Assert.Equal(expected, control.GetScaledBounds(bounds, factor, specified));
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(GetScaledBounds_FixedWidthAndHeight_TestData))]
+        public void Control_GetScaledBounds_InvokeFixedWidthAndHeightWithStyles_ReturnsExpected(Rectangle bounds, SizeF factor, BoundsSpecified specified, Rectangle expected)
+        {
+            using var control = new BorderedControl();
+            control.SetStyle(ControlStyles.FixedWidth, true);
+            control.SetStyle(ControlStyles.FixedHeight, true);
+
+            Assert.Equal(expected, control.GetScaledBounds(bounds, factor, specified));
+            Assert.False(control.IsHandleCreated);
+
+            // Call again.
+            Assert.Equal(expected, control.GetScaledBounds(bounds, factor, specified));
+            Assert.False(control.IsHandleCreated);
         }
 
         [WinFormsTheory]
@@ -2362,10 +3742,192 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, childStyleChangedCallCount);
             Assert.Equal(0, childCreatedCallCount);
         }
+        [WinFormsFact]
+        public void Control_InvokeDelegateSameThread_Success()
+        {
+            using var control = new Control();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            int callCount = 0;
+            Action method = () =>
+            {
+                callCount++;
+            };
+            control.Invoke(method);
+            Assert.Equal(1, callCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsFact]
+        public void Control_InvokeDelegateThrowsExceptionSameThread_Success()
+        {
+            using var control = new Control();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            int callCount = 0;
+            Action method = () =>
+            {
+                callCount++;
+                throw new DivideByZeroException();
+            };
+            Assert.Throws<DivideByZeroException>(() => control.Invoke(method));
+            Assert.Equal(1, callCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsFact]
+        public async Task Control_InvokeDelegateThrowsExceptionDifferentThread_Success()
+        {
+            using var control = new Control();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            int callCount = 0;
+            Action method = () =>
+            {
+                callCount++;
+                throw new DivideByZeroException();
+            };
+            await Task.Run(() =>
+            {
+                Assert.Throws<DivideByZeroException>(() => control.Invoke(method));
+            });
+            Assert.Equal(1, callCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsFact]
+        public void Control_InvokeDelegateObjectSameThread_Success()
+        {
+            using var control = new Control();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            int callCount = 0;
+            Action<int> method = (i) =>
+            {
+                Assert.Equal(1, i);
+                callCount++;
+            };
+            control.Invoke(method, new object[] { 1 });
+            Assert.Equal(1, callCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsFact]
+        public void Control_InvokeDelegateObjectThrowsExceptionSameThread_Success()
+        {
+            using var control = new Control();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            int callCount = 0;
+            Action<int> method = (i) =>
+            {
+                Assert.Equal(1, i);
+                callCount++;
+                throw new DivideByZeroException();
+            };
+            Assert.Throws<DivideByZeroException>(() => control.Invoke(method, new object[] { 1 }));
+            Assert.Equal(1, callCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsFact]
+        public async Task Control_InvokeDelegateObjectThrowsExceptionDifferentThread_Success()
+        {
+            using var control = new Control();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            int callCount = 0;
+            Action<int> method = (param) =>
+            {
+                Assert.Equal(1, param);
+                callCount++;
+                throw new DivideByZeroException();
+            };
+            await Task.Run(() =>
+            {
+                Assert.Throws<DivideByZeroException>(() => control.Invoke(method, new object[] { 1 }));
+            });
+            Assert.Equal(1, callCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsFact]
+        public void Control_Invoke_InvokeWithoutHandle_ThrowsInvalidOperationException()
+        {
+            using var control = new Control();
+            Action method = () => { };
+            Assert.Throws<InvalidOperationException>(() => control.Invoke(method));
+            Assert.Throws<InvalidOperationException>(() => control.Invoke(method, new object[0]));
+        }
+
+        [WinFormsFact]
+        public void Control_Invoke_InvokeInvalidParameters_ThrowsargetParameterCountException()
+        {
+            using var control = new Control();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            Action<int> method = (i) => { };
+            Assert.Throws<TargetParameterCountException>(() => control.Invoke(method));
+            Assert.Throws<TargetParameterCountException>(() => control.Invoke(method, null));
+            Assert.Throws<TargetParameterCountException>(() => control.Invoke(method, new object[0]));
+        }
 
         [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
-        public void Control_InvokeGotFocus_Invoke_CallsLostFocus(EventArgs eventArgs)
+        public void Control_InvokeGotFocus_Invoke_CallsGotFocus(EventArgs eventArgs)
         {
             using var otherControl = new Control();
             using var control = new SubControl();
@@ -2677,6 +4239,35 @@ namespace System.Windows.Forms.Tests
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             Assert.Equal(expected, control.IsInputKey(keyData));
             Assert.True(control.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> IsMnemonic_TestData()
+        {
+            yield return new object[] { '&', null, false };
+            yield return new object[] { '&', "", false };
+            yield return new object[] { '&', "text", false };
+            yield return new object[] { '&', "&", false };
+            yield return new object[] { 'a', null, false };
+            yield return new object[] { 'a', "", false };
+            yield return new object[] { 'a', "text", false };
+            yield return new object[] { 'a', "a", false };
+            yield return new object[] { 'a', "&", false };
+            yield return new object[] { 'a', "&a", true };
+            yield return new object[] { 'A', "&a", true };
+            yield return new object[] { 'a', "&A", true };
+            yield return new object[] { 'A', "&A", true };
+            yield return new object[] { 'a', "&&a", false };
+            yield return new object[] { 'a', "a&a", true };
+            yield return new object[] { 'a', "a&ab", true };
+            yield return new object[] { 'a', "a&b", false };
+            yield return new object[] { 'a', "a&ba", false };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(IsMnemonic_TestData))]
+        public void Control_IsMnemonic_Invoke_ReturnsExpected(char charCode, string text, bool expected)
+        {
+            Assert.Equal(expected, Control.IsMnemonic(charCode, text));
         }
 
         public static IEnumerable<object[]> NotifyInvalidated_TestData()
@@ -3448,53 +5039,53 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { 0, Keys.Menu, false };
             yield return new object[] { 0, Keys.F10, false };
 
-            yield return new object[] { (int)User32.WindowMessage.WM_KEYDOWN, Keys.None, false };
-            yield return new object[] { (int)User32.WindowMessage.WM_KEYDOWN, Keys.A, false };
-            yield return new object[] { (int)User32.WindowMessage.WM_KEYDOWN, Keys.Tab, true };
-            yield return new object[] { (int)User32.WindowMessage.WM_KEYDOWN, Keys.Menu, true };
-            yield return new object[] { (int)User32.WindowMessage.WM_KEYDOWN, Keys.F10, true };
+            yield return new object[] { (int)User32.WM.KEYDOWN, Keys.None, false };
+            yield return new object[] { (int)User32.WM.KEYDOWN, Keys.A, false };
+            yield return new object[] { (int)User32.WM.KEYDOWN, Keys.Tab, true };
+            yield return new object[] { (int)User32.WM.KEYDOWN, Keys.Menu, true };
+            yield return new object[] { (int)User32.WM.KEYDOWN, Keys.F10, true };
 
-            yield return new object[] { (int)User32.WindowMessage.WM_SYSKEYDOWN, Keys.None, false };
-            yield return new object[] { (int)User32.WindowMessage.WM_SYSKEYDOWN, Keys.A, false };
-            yield return new object[] { (int)User32.WindowMessage.WM_SYSKEYDOWN, Keys.Tab, true };
-            yield return new object[] { (int)User32.WindowMessage.WM_SYSKEYDOWN, Keys.Menu, true };
-            yield return new object[] { (int)User32.WindowMessage.WM_SYSKEYDOWN, Keys.F10, true };
+            yield return new object[] { (int)User32.WM.SYSKEYDOWN, Keys.None, false };
+            yield return new object[] { (int)User32.WM.SYSKEYDOWN, Keys.A, false };
+            yield return new object[] { (int)User32.WM.SYSKEYDOWN, Keys.Tab, true };
+            yield return new object[] { (int)User32.WM.SYSKEYDOWN, Keys.Menu, true };
+            yield return new object[] { (int)User32.WM.SYSKEYDOWN, Keys.F10, true };
 
-            yield return new object[] { (int)User32.WindowMessage.WM_KEYUP, Keys.None, false };
-            yield return new object[] { (int)User32.WindowMessage.WM_KEYUP, Keys.A, false };
-            yield return new object[] { (int)User32.WindowMessage.WM_KEYUP, Keys.Tab, false };
-            yield return new object[] { (int)User32.WindowMessage.WM_KEYUP, Keys.Menu, false };
-            yield return new object[] { (int)User32.WindowMessage.WM_KEYUP, Keys.F10, false };
+            yield return new object[] { (int)User32.WM.KEYUP, Keys.None, false };
+            yield return new object[] { (int)User32.WM.KEYUP, Keys.A, false };
+            yield return new object[] { (int)User32.WM.KEYUP, Keys.Tab, false };
+            yield return new object[] { (int)User32.WM.KEYUP, Keys.Menu, false };
+            yield return new object[] { (int)User32.WM.KEYUP, Keys.F10, false };
 
-            yield return new object[] { (int)User32.WindowMessage.WM_SYSKEYUP, Keys.None, false };
-            yield return new object[] { (int)User32.WindowMessage.WM_SYSKEYUP, Keys.A, false };
-            yield return new object[] { (int)User32.WindowMessage.WM_SYSKEYUP, Keys.Tab, false };
-            yield return new object[] { (int)User32.WindowMessage.WM_SYSKEYUP, Keys.Menu, false };
-            yield return new object[] { (int)User32.WindowMessage.WM_SYSKEYUP, Keys.F10, false };
+            yield return new object[] { (int)User32.WM.SYSKEYUP, Keys.None, false };
+            yield return new object[] { (int)User32.WM.SYSKEYUP, Keys.A, false };
+            yield return new object[] { (int)User32.WM.SYSKEYUP, Keys.Tab, false };
+            yield return new object[] { (int)User32.WM.SYSKEYUP, Keys.Menu, false };
+            yield return new object[] { (int)User32.WM.SYSKEYUP, Keys.F10, false };
 
-            yield return new object[] { (int)User32.WindowMessage.WM_CHAR, Keys.None, true };
-            yield return new object[] { (int)User32.WindowMessage.WM_CHAR, Keys.A, true };
-            yield return new object[] { (int)User32.WindowMessage.WM_CHAR, Keys.Tab, true };
-            yield return new object[] { (int)User32.WindowMessage.WM_CHAR, Keys.Menu, true };
-            yield return new object[] { (int)User32.WindowMessage.WM_CHAR, Keys.F10, true };
+            yield return new object[] { (int)User32.WM.CHAR, Keys.None, true };
+            yield return new object[] { (int)User32.WM.CHAR, Keys.A, true };
+            yield return new object[] { (int)User32.WM.CHAR, Keys.Tab, true };
+            yield return new object[] { (int)User32.WM.CHAR, Keys.Menu, true };
+            yield return new object[] { (int)User32.WM.CHAR, Keys.F10, true };
 
-            yield return new object[] { (int)User32.WindowMessage.WM_SYSCHAR, Keys.None, false };
-            yield return new object[] { (int)User32.WindowMessage.WM_SYSCHAR, Keys.A, false };
-            yield return new object[] { (int)User32.WindowMessage.WM_SYSCHAR, Keys.Tab, false };
-            yield return new object[] { (int)User32.WindowMessage.WM_SYSCHAR, Keys.Menu, false };
-            yield return new object[] { (int)User32.WindowMessage.WM_SYSCHAR, Keys.F10, false };
+            yield return new object[] { (int)User32.WM.SYSCHAR, Keys.None, false };
+            yield return new object[] { (int)User32.WM.SYSCHAR, Keys.A, false };
+            yield return new object[] { (int)User32.WM.SYSCHAR, Keys.Tab, false };
+            yield return new object[] { (int)User32.WM.SYSCHAR, Keys.Menu, false };
+            yield return new object[] { (int)User32.WM.SYSCHAR, Keys.F10, false };
 
-            yield return new object[] { (int)User32.WindowMessage.WM_KEYUP, Keys.None, false };
-            yield return new object[] { (int)User32.WindowMessage.WM_KEYUP, Keys.A, false };
-            yield return new object[] { (int)User32.WindowMessage.WM_KEYUP, Keys.Tab, false };
-            yield return new object[] { (int)User32.WindowMessage.WM_KEYUP, Keys.Menu, false };
-            yield return new object[] { (int)User32.WindowMessage.WM_KEYUP, Keys.F10, false };
+            yield return new object[] { (int)User32.WM.KEYUP, Keys.None, false };
+            yield return new object[] { (int)User32.WM.KEYUP, Keys.A, false };
+            yield return new object[] { (int)User32.WM.KEYUP, Keys.Tab, false };
+            yield return new object[] { (int)User32.WM.KEYUP, Keys.Menu, false };
+            yield return new object[] { (int)User32.WM.KEYUP, Keys.F10, false };
 
-            yield return new object[] { (int)User32.WindowMessage.WM_SYSKEYUP, Keys.None, false };
-            yield return new object[] { (int)User32.WindowMessage.WM_SYSKEYUP, Keys.A, false };
-            yield return new object[] { (int)User32.WindowMessage.WM_SYSKEYUP, Keys.Tab, false };
-            yield return new object[] { (int)User32.WindowMessage.WM_SYSKEYUP, Keys.Menu, false };
-            yield return new object[] { (int)User32.WindowMessage.WM_SYSKEYUP, Keys.F10, false };
+            yield return new object[] { (int)User32.WM.SYSKEYUP, Keys.None, false };
+            yield return new object[] { (int)User32.WM.SYSKEYUP, Keys.A, false };
+            yield return new object[] { (int)User32.WM.SYSKEYUP, Keys.Tab, false };
+            yield return new object[] { (int)User32.WM.SYSKEYUP, Keys.Menu, false };
+            yield return new object[] { (int)User32.WM.SYSKEYUP, Keys.F10, false };
         }
 
         [WinFormsTheory]
@@ -3534,47 +5125,47 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { 0, Keys.None, false, false, false, false, false, false, 0, 0, 0, 0, 0 };
             yield return new object[] { 0, Keys.A, false, false, false, false, false, false, 0, 0, 0, 0, 0 };
 
-            yield return new object[] { (int)User32.WindowMessage.WM_KEYDOWN, Keys.None, true, false, false, false, false, true, 1, 0, 0, 0, 0 };
-            yield return new object[] { (int)User32.WindowMessage.WM_KEYDOWN, Keys.None, false, true, false, false, false, false, 1, 1, 0, 0, 0 };
-            yield return new object[] { (int)User32.WindowMessage.WM_KEYDOWN, Keys.None, false, false, true, false, false, true, 1, 1, 1, 0, 0 };
-            yield return new object[] { (int)User32.WindowMessage.WM_KEYDOWN, Keys.None, false, false, false, false, false, false, 1, 1, 1, 0, 0 };
-            yield return new object[] { (int)User32.WindowMessage.WM_KEYDOWN, Keys.A, true, false, false, false, false, true, 1, 0, 0, 0, 0 };
-            yield return new object[] { (int)User32.WindowMessage.WM_KEYDOWN, Keys.A, false, true, false, false, false, false, 1, 1, 0, 0, 0 };
-            yield return new object[] { (int)User32.WindowMessage.WM_KEYDOWN, Keys.A, false, false, true, false, false, true, 1, 1, 1, 0, 0 };
-            yield return new object[] { (int)User32.WindowMessage.WM_KEYDOWN, Keys.A, false, false, false, false, false, false, 1, 1, 1, 0, 0 };
+            yield return new object[] { (int)User32.WM.KEYDOWN, Keys.None, true, false, false, false, false, true, 1, 0, 0, 0, 0 };
+            yield return new object[] { (int)User32.WM.KEYDOWN, Keys.None, false, true, false, false, false, false, 1, 1, 0, 0, 0 };
+            yield return new object[] { (int)User32.WM.KEYDOWN, Keys.None, false, false, true, false, false, true, 1, 1, 1, 0, 0 };
+            yield return new object[] { (int)User32.WM.KEYDOWN, Keys.None, false, false, false, false, false, false, 1, 1, 1, 0, 0 };
+            yield return new object[] { (int)User32.WM.KEYDOWN, Keys.A, true, false, false, false, false, true, 1, 0, 0, 0, 0 };
+            yield return new object[] { (int)User32.WM.KEYDOWN, Keys.A, false, true, false, false, false, false, 1, 1, 0, 0, 0 };
+            yield return new object[] { (int)User32.WM.KEYDOWN, Keys.A, false, false, true, false, false, true, 1, 1, 1, 0, 0 };
+            yield return new object[] { (int)User32.WM.KEYDOWN, Keys.A, false, false, false, false, false, false, 1, 1, 1, 0, 0 };
 
-            yield return new object[] { (int)User32.WindowMessage.WM_SYSKEYDOWN, Keys.None, true, false, false, false, false, true, 1, 0, 0, 0, 0 };
-            yield return new object[] { (int)User32.WindowMessage.WM_SYSKEYDOWN, Keys.None, false, true, false, false, false, false, 1, 1, 0, 0, 0 };
-            yield return new object[] { (int)User32.WindowMessage.WM_SYSKEYDOWN, Keys.None, false, false, true, false, false, true, 1, 1, 1, 0, 0 };
-            yield return new object[] { (int)User32.WindowMessage.WM_SYSKEYDOWN, Keys.None, false, false, false, false, false, false, 1, 1, 1, 0, 0 };
-            yield return new object[] { (int)User32.WindowMessage.WM_SYSKEYDOWN, Keys.A, true, false, false, false, false, true, 1, 0, 0, 0, 0 };
-            yield return new object[] { (int)User32.WindowMessage.WM_SYSKEYDOWN, Keys.A, false, true, false, false, false, false, 1, 1, 0, 0, 0 };
-            yield return new object[] { (int)User32.WindowMessage.WM_SYSKEYDOWN, Keys.A, false, false, true, false, false, true, 1, 1, 1, 0, 0 };
-            yield return new object[] { (int)User32.WindowMessage.WM_SYSKEYDOWN, Keys.A, false, false, false, false, false, false, 1, 1, 1, 0, 0 };
+            yield return new object[] { (int)User32.WM.SYSKEYDOWN, Keys.None, true, false, false, false, false, true, 1, 0, 0, 0, 0 };
+            yield return new object[] { (int)User32.WM.SYSKEYDOWN, Keys.None, false, true, false, false, false, false, 1, 1, 0, 0, 0 };
+            yield return new object[] { (int)User32.WM.SYSKEYDOWN, Keys.None, false, false, true, false, false, true, 1, 1, 1, 0, 0 };
+            yield return new object[] { (int)User32.WM.SYSKEYDOWN, Keys.None, false, false, false, false, false, false, 1, 1, 1, 0, 0 };
+            yield return new object[] { (int)User32.WM.SYSKEYDOWN, Keys.A, true, false, false, false, false, true, 1, 0, 0, 0, 0 };
+            yield return new object[] { (int)User32.WM.SYSKEYDOWN, Keys.A, false, true, false, false, false, false, 1, 1, 0, 0, 0 };
+            yield return new object[] { (int)User32.WM.SYSKEYDOWN, Keys.A, false, false, true, false, false, true, 1, 1, 1, 0, 0 };
+            yield return new object[] { (int)User32.WM.SYSKEYDOWN, Keys.A, false, false, false, false, false, false, 1, 1, 1, 0, 0 };
 
-            yield return new object[] { (int)User32.WindowMessage.WM_CHAR, Keys.None, false, false, false, true, false, false, 0, 0, 0, 1, 0 };
-            yield return new object[] { (int)User32.WindowMessage.WM_CHAR, Keys.None, false, false, false, true, true, false, 0, 0, 0, 1, 0 };
-            yield return new object[] { (int)User32.WindowMessage.WM_CHAR, Keys.None, false, false, false, false, true, true, 0, 0, 0, 1, 1 };
-            yield return new object[] { (int)User32.WindowMessage.WM_CHAR, Keys.None, false, false, false, false, false, false, 0, 0, 0, 1, 1 };
-            yield return new object[] { (int)User32.WindowMessage.WM_CHAR, Keys.A, false, false, false, true, false, false, 0, 0, 0, 1, 0 };
-            yield return new object[] { (int)User32.WindowMessage.WM_CHAR, Keys.A, false, false, false, true, true, false, 0, 0, 0, 1, 0 };
-            yield return new object[] { (int)User32.WindowMessage.WM_CHAR, Keys.A, false, false, false, false, true, true, 0, 0, 0, 1, 1 };
-            yield return new object[] { (int)User32.WindowMessage.WM_CHAR, Keys.A, false, false, false, false, false, false, 0, 0, 0, 1, 1 };
+            yield return new object[] { (int)User32.WM.CHAR, Keys.None, false, false, false, true, false, false, 0, 0, 0, 1, 0 };
+            yield return new object[] { (int)User32.WM.CHAR, Keys.None, false, false, false, true, true, false, 0, 0, 0, 1, 0 };
+            yield return new object[] { (int)User32.WM.CHAR, Keys.None, false, false, false, false, true, true, 0, 0, 0, 1, 1 };
+            yield return new object[] { (int)User32.WM.CHAR, Keys.None, false, false, false, false, false, false, 0, 0, 0, 1, 1 };
+            yield return new object[] { (int)User32.WM.CHAR, Keys.A, false, false, false, true, false, false, 0, 0, 0, 1, 0 };
+            yield return new object[] { (int)User32.WM.CHAR, Keys.A, false, false, false, true, true, false, 0, 0, 0, 1, 0 };
+            yield return new object[] { (int)User32.WM.CHAR, Keys.A, false, false, false, false, true, true, 0, 0, 0, 1, 1 };
+            yield return new object[] { (int)User32.WM.CHAR, Keys.A, false, false, false, false, false, false, 0, 0, 0, 1, 1 };
 
-            yield return new object[] { (int)User32.WindowMessage.WM_SYSCHAR, Keys.None, false, false, false, true, false, false, 0, 0, 0, 0, 1 };
-            yield return new object[] { (int)User32.WindowMessage.WM_SYSCHAR, Keys.None, false, false, false, true, true, true, 0, 0, 0, 0, 1 };
-            yield return new object[] { (int)User32.WindowMessage.WM_SYSCHAR, Keys.None, false, false, false, false, true, true, 0, 0, 0, 0, 1 };
-            yield return new object[] { (int)User32.WindowMessage.WM_SYSCHAR, Keys.None, false, false, false, false, false, false, 0, 0, 0, 0, 1 };
-            yield return new object[] { (int)User32.WindowMessage.WM_SYSCHAR, Keys.A, false, false, false, true, false, false, 0, 0, 0, 0, 1 };
-            yield return new object[] { (int)User32.WindowMessage.WM_SYSCHAR, Keys.A, false, false, false, true, true, true, 0, 0, 0, 0, 1 };
-            yield return new object[] { (int)User32.WindowMessage.WM_SYSCHAR, Keys.A, false, false, false, false, true, true, 0, 0, 0, 0, 1 };
-            yield return new object[] { (int)User32.WindowMessage.WM_SYSCHAR, Keys.A, false, false, false, false, false, false, 0, 0, 0, 0, 1 };
+            yield return new object[] { (int)User32.WM.SYSCHAR, Keys.None, false, false, false, true, false, false, 0, 0, 0, 0, 1 };
+            yield return new object[] { (int)User32.WM.SYSCHAR, Keys.None, false, false, false, true, true, true, 0, 0, 0, 0, 1 };
+            yield return new object[] { (int)User32.WM.SYSCHAR, Keys.None, false, false, false, false, true, true, 0, 0, 0, 0, 1 };
+            yield return new object[] { (int)User32.WM.SYSCHAR, Keys.None, false, false, false, false, false, false, 0, 0, 0, 0, 1 };
+            yield return new object[] { (int)User32.WM.SYSCHAR, Keys.A, false, false, false, true, false, false, 0, 0, 0, 0, 1 };
+            yield return new object[] { (int)User32.WM.SYSCHAR, Keys.A, false, false, false, true, true, true, 0, 0, 0, 0, 1 };
+            yield return new object[] { (int)User32.WM.SYSCHAR, Keys.A, false, false, false, false, true, true, 0, 0, 0, 0, 1 };
+            yield return new object[] { (int)User32.WM.SYSCHAR, Keys.A, false, false, false, false, false, false, 0, 0, 0, 0, 1 };
 
-            yield return new object[] { (int)User32.WindowMessage.WM_KEYUP, Keys.None, false, false, false, false, false, false, 0, 0, 0, 0, 0 };
-            yield return new object[] { (int)User32.WindowMessage.WM_KEYUP, Keys.A, false, false, false, false, false, false, 0, 0, 0, 0, 0 };
+            yield return new object[] { (int)User32.WM.KEYUP, Keys.None, false, false, false, false, false, false, 0, 0, 0, 0, 0 };
+            yield return new object[] { (int)User32.WM.KEYUP, Keys.A, false, false, false, false, false, false, 0, 0, 0, 0, 0 };
 
-            yield return new object[] { (int)User32.WindowMessage.WM_SYSKEYUP, Keys.None, false, false, false, false, false, false, 0, 0, 0, 0, 0 };
-            yield return new object[] { (int)User32.WindowMessage.WM_SYSKEYUP, Keys.A, false, false, false, false, false, false, 0, 0, 0, 0, 0 };
+            yield return new object[] { (int)User32.WM.SYSKEYUP, Keys.None, false, false, false, false, false, false, 0, 0, 0, 0, 0 };
+            yield return new object[] { (int)User32.WM.SYSKEYUP, Keys.A, false, false, false, false, false, false, 0, 0, 0, 0, 0 };
         }
 
         [WinFormsTheory]
@@ -3653,7 +5244,6 @@ namespace System.Windows.Forms.Tests
 
             protected override bool IsInputKey(Keys keyData) => IsInputKeyAction(keyData);
         }
-
 
         private class CustomProcessControl : Control
         {
@@ -3825,16 +5415,16 @@ namespace System.Windows.Forms.Tests
         {
             foreach (bool handled in new bool[] { true })
             {
-                yield return new object[] { (int)User32.WindowMessage.WM_CHAR, '2', handled, 1, 0, 0, (IntPtr)50 };
-                yield return new object[] { (int)User32.WindowMessage.WM_CHAR, '1', handled, 1, 0, 0, (IntPtr)49 };
-                yield return new object[] { (int)User32.WindowMessage.WM_SYSCHAR, '2', handled, 1, 0, 0, (IntPtr)50 };
-                yield return new object[] { (int)User32.WindowMessage.WM_SYSCHAR, '1', handled, 1, 0, 0, (IntPtr)49 };
-                yield return new object[] { (int)User32.WindowMessage.WM_IME_CHAR, '2', handled, 1, 0, 0, (IntPtr)50 };
-                yield return new object[] { (int)User32.WindowMessage.WM_IME_CHAR, '1', handled, 1, 0, 0, (IntPtr)49 };
-                yield return new object[] { (int)User32.WindowMessage.WM_KEYDOWN, '2', handled, 0, 1, 0, (IntPtr)2 };
-                yield return new object[] { (int)User32.WindowMessage.WM_SYSKEYDOWN, '2', handled, 0, 1, 0, (IntPtr)2 };
-                yield return new object[] { (int)User32.WindowMessage.WM_KEYUP, '2', handled, 0, 0, 1, (IntPtr)2 };
-                yield return new object[] { (int)User32.WindowMessage.WM_SYSKEYUP, '2', handled, 0, 0, 1, (IntPtr)2 };
+                yield return new object[] { (int)User32.WM.CHAR, '2', handled, 1, 0, 0, (IntPtr)50 };
+                yield return new object[] { (int)User32.WM.CHAR, '1', handled, 1, 0, 0, (IntPtr)49 };
+                yield return new object[] { (int)User32.WM.SYSCHAR, '2', handled, 1, 0, 0, (IntPtr)50 };
+                yield return new object[] { (int)User32.WM.SYSCHAR, '1', handled, 1, 0, 0, (IntPtr)49 };
+                yield return new object[] { (int)User32.WM.IME_CHAR, '2', handled, 1, 0, 0, (IntPtr)50 };
+                yield return new object[] { (int)User32.WM.IME_CHAR, '1', handled, 1, 0, 0, (IntPtr)49 };
+                yield return new object[] { (int)User32.WM.KEYDOWN, '2', handled, 0, 1, 0, (IntPtr)2 };
+                yield return new object[] { (int)User32.WM.SYSKEYDOWN, '2', handled, 0, 1, 0, (IntPtr)2 };
+                yield return new object[] { (int)User32.WM.KEYUP, '2', handled, 0, 0, 1, (IntPtr)2 };
+                yield return new object[] { (int)User32.WM.SYSKEYUP, '2', handled, 0, 0, 1, (IntPtr)2 };
                 yield return new object[] { 0, '2', handled, 0, 0, 1, (IntPtr)2 };
             }
         }
@@ -3987,8 +5577,8 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [InlineData((int)User32.WindowMessage.WM_CHAR)]
-        [InlineData((int)User32.WindowMessage.WM_SYSCHAR)]
+        [InlineData((int)User32.WM.CHAR)]
+        [InlineData((int)User32.WM.SYSCHAR)]
         public void Control_ProcessKeyEventArgs_InvokeCharAfterImeChar_Success(int msg)
         {
             using var control = new SubControl();
@@ -4006,7 +5596,7 @@ namespace System.Windows.Forms.Tests
             };
             var imeM = new Message
             {
-                Msg = (int)User32.WindowMessage.WM_IME_CHAR
+                Msg = (int)User32.WM.IME_CHAR
             };
 
             // Char.
@@ -4044,10 +5634,10 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [InlineData((int)User32.WindowMessage.WM_KEYDOWN)]
-        [InlineData((int)User32.WindowMessage.WM_SYSKEYDOWN)]
-        [InlineData((int)User32.WindowMessage.WM_KEYUP)]
-        [InlineData((int)User32.WindowMessage.WM_SYSKEYUP)]
+        [InlineData((int)User32.WM.KEYDOWN)]
+        [InlineData((int)User32.WM.SYSKEYDOWN)]
+        [InlineData((int)User32.WM.KEYUP)]
+        [InlineData((int)User32.WM.SYSKEYUP)]
         public void Control_ProcessKeyEventArgs_InvokeNonCharAfterImeChar_Success(int msg)
         {
             using var control = new SubControl();
@@ -4074,7 +5664,7 @@ namespace System.Windows.Forms.Tests
             };
             var imeM = new Message
             {
-                Msg = (int)User32.WindowMessage.WM_IME_CHAR
+                Msg = (int)User32.WM.IME_CHAR
             };
 
             // Non-Char.
@@ -4461,14 +6051,57 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.IsHandleCreated);
         }
 
-        [Theory]
+        [WinFormsFact]
+        public void Control_Refresh_InvokeWithoutHandle_Nop()
+        {
+            using var control = new Control();
+            control.Refresh();
+            Assert.False(control.IsHandleCreated);
+
+            // Call again.
+            control.Refresh();
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void Control_Refresh_InvokeWithHandle_Success()
+        {
+            using var control = new Control();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            control.Refresh();
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(1, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Call again.
+            control.Refresh();
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(2, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsTheory]
         [InlineData(1, 2)]
         [InlineData(0, 0)]
         [InlineData(-1, -2)]
         public void Control_RescaleConstantsForDpi_Invoke_Nop(int deviceDpiOld, int deviceDpiNew)
         {
-            var control = new SubControl();
+            using var control = new SubControl();
             control.RescaleConstantsForDpi(deviceDpiOld, deviceDpiNew);
+            Assert.False(control.IsHandleCreated);
+
+            // Call again.
+            control.RescaleConstantsForDpi(deviceDpiOld, deviceDpiNew);
+            Assert.False(control.IsHandleCreated);
         }
 
         [WinFormsFact]
@@ -4950,6 +6583,146 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(RtlTranslateContent_TestData))]
+        public void Control_RtlTranslateAlignment_InvokeContentAlignment_ReturnsExpected(RightToLeft rightToLeft, ContentAlignment align, ContentAlignment expected)
+        {
+            using var control = new SubControl
+            {
+                RightToLeft = rightToLeft
+            };
+            Assert.Equal(expected, control.RtlTranslateAlignment(align));
+            Assert.False(control.IsHandleCreated);
+
+            // Call again.
+            Assert.Equal(expected, control.RtlTranslateAlignment(align));
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(RtlTranslateLeftRight_TestData))]
+        public void Control_RtlTranslateAlignment_InvokeLeftRightAlignment_ReturnsExpected(RightToLeft rightToLeft, LeftRightAlignment align, LeftRightAlignment expected)
+        {
+            using var control = new SubControl
+            {
+                RightToLeft = rightToLeft
+            };
+            Assert.Equal(expected, control.RtlTranslateAlignment(align));
+            Assert.False(control.IsHandleCreated);
+
+            // Call again.
+            Assert.Equal(expected, control.RtlTranslateAlignment(align));
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(RtlTranslateHorizontal_TestData))]
+        public void Control_RtlTranslateAlignment_InvokeHorizontalAlignment_ReturnsExpected(RightToLeft rightToLeft, HorizontalAlignment align, HorizontalAlignment expected)
+        {
+            using var control = new SubControl
+            {
+                RightToLeft = rightToLeft
+            };
+            Assert.Equal(expected, control.RtlTranslateAlignment(align));
+            Assert.False(control.IsHandleCreated);
+
+            // Call again.
+            Assert.Equal(expected, control.RtlTranslateAlignment(align));
+            Assert.False(control.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> RtlTranslateContent_TestData()
+        {
+            foreach (ContentAlignment align in Enum.GetValues(typeof(ContentAlignment)))
+            {
+                yield return new object[] { RightToLeft.No, align, align };
+                yield return new object[] { RightToLeft.Inherit, align, align };
+            }
+
+            yield return new object[] { RightToLeft.Yes, ContentAlignment.BottomCenter, ContentAlignment.BottomCenter };
+            yield return new object[] { RightToLeft.Yes, ContentAlignment.BottomLeft, ContentAlignment.BottomRight };
+            yield return new object[] { RightToLeft.Yes, ContentAlignment.BottomRight, ContentAlignment.BottomLeft };
+            yield return new object[] { RightToLeft.Yes, ContentAlignment.MiddleCenter, ContentAlignment.MiddleCenter };
+            yield return new object[] { RightToLeft.Yes, ContentAlignment.MiddleLeft, ContentAlignment.MiddleRight };
+            yield return new object[] { RightToLeft.Yes, ContentAlignment.MiddleRight, ContentAlignment.MiddleLeft };
+            yield return new object[] { RightToLeft.Yes, ContentAlignment.TopCenter, ContentAlignment.TopCenter };
+            yield return new object[] { RightToLeft.Yes, ContentAlignment.TopLeft, ContentAlignment.TopRight };
+            yield return new object[] { RightToLeft.Yes, ContentAlignment.TopRight, ContentAlignment.TopLeft };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(RtlTranslateContent_TestData))]
+        public void Control_RtlTranslateContent_Invoke_ReturnsExpected(RightToLeft rightToLeft, ContentAlignment align, ContentAlignment expected)
+        {
+            using var control = new SubControl
+            {
+                RightToLeft = rightToLeft
+            };
+            Assert.Equal(expected, control.RtlTranslateContent(align));
+            Assert.False(control.IsHandleCreated);
+
+            // Call again.
+            Assert.Equal(expected, control.RtlTranslateContent(align));
+            Assert.False(control.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> RtlTranslateLeftRight_TestData()
+        {
+            foreach (LeftRightAlignment align in Enum.GetValues(typeof(LeftRightAlignment)))
+            {
+                yield return new object[] { RightToLeft.No, align, align };
+                yield return new object[] { RightToLeft.Inherit, align, align };
+            }
+
+            yield return new object[] { RightToLeft.Yes, LeftRightAlignment.Left, LeftRightAlignment.Right };
+            yield return new object[] { RightToLeft.Yes, LeftRightAlignment.Right, LeftRightAlignment.Left };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(RtlTranslateLeftRight_TestData))]
+        public void Control_RtlTranslateLeftRight_Invoke_ReturnsExpected(RightToLeft rightToLeft, LeftRightAlignment align, LeftRightAlignment expected)
+        {
+            using var control = new SubControl
+            {
+                RightToLeft = rightToLeft
+            };
+            Assert.Equal(expected, control.RtlTranslateLeftRight(align));
+            Assert.False(control.IsHandleCreated);
+
+            // Call again.
+            Assert.Equal(expected, control.RtlTranslateLeftRight(align));
+            Assert.False(control.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> RtlTranslateHorizontal_TestData()
+        {
+            foreach (HorizontalAlignment align in Enum.GetValues(typeof(HorizontalAlignment)))
+            {
+                yield return new object[] { RightToLeft.No, align, align };
+                yield return new object[] { RightToLeft.Inherit, align, align };
+            }
+
+            yield return new object[] { RightToLeft.Yes, HorizontalAlignment.Center, HorizontalAlignment.Center };
+            yield return new object[] { RightToLeft.Yes, HorizontalAlignment.Left, HorizontalAlignment.Right };
+            yield return new object[] { RightToLeft.Yes, HorizontalAlignment.Right, HorizontalAlignment.Left };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(RtlTranslateHorizontal_TestData))]
+        public void Control_RtlTranslateHorizontal_Invoke_ReturnsExpected(RightToLeft rightToLeft, HorizontalAlignment align, HorizontalAlignment expected)
+        {
+            using var control = new SubControl
+            {
+                RightToLeft = rightToLeft
+            };
+            Assert.Equal(expected, control.RtlTranslateHorizontal(align));
+            Assert.False(control.IsHandleCreated);
+
+            // Call again.
+            Assert.Equal(expected, control.RtlTranslateHorizontal(align));
+            Assert.False(control.IsHandleCreated);
         }
 
         [WinFormsTheory]
@@ -8119,7 +9892,11 @@ namespace System.Windows.Forms.Tests
                 }
             }
 
+            public new Rectangle GetScaledBounds(Rectangle bounds, SizeF factor, BoundsSpecified specified) => base.GetScaledBounds(bounds, factor, specified);
+
             public new void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified) => base.SetBoundsCore(x, y, width, height, specified);            public new void SetClientSizeCore(int width, int height) => base.SetClientSizeCore(width, height);
+
+            public new void SetStyle(ControlStyles flag, bool value) => base.SetStyle(flag, value);
 
             public new Size SizeFromClientSize(Size clientSize) => base.SizeFromClientSize(clientSize);
 
@@ -8156,6 +9933,57 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
         }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        public void Control_Show_Invoke_Success(bool visible)
+        {
+            using var control = new Control
+            {
+                Visible = visible
+            };
+            control.Show();
+            Assert.True(control.Visible);
+            Assert.False(control.IsHandleCreated);
+
+            // Call again.
+            control.Show();
+            Assert.True(control.Visible);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        public void Control_Show_InvokeWithHandle_Success(bool visible)
+        {
+            using var control = new Control
+            {
+                Visible = visible
+            };
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            control.Show();
+            Assert.True(control.Visible);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Call again.
+            control.Show();
+            Assert.True(control.Visible);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
         [WinFormsFact]
         public void Control_SuspendLayout_Invoke_Success()
         {
@@ -8208,6 +10036,44 @@ namespace System.Windows.Forms.Tests
         {
             var control = new Control();
             Assert.Equal("System.Windows.Forms.Control", control.ToString());
+        }
+
+        [WinFormsFact]
+        public void Control_Update_InvokeWithoutHandle_Nop()
+        {
+            using var control = new Control();
+            control.Update();
+            Assert.False(control.IsHandleCreated);
+
+            // Call again.
+            control.Update();
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void Control_Update_InvokeWithHandle_Success()
+        {
+            using var control = new Control();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            control.Update();
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Call again.
+            control.Update();
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
         }
 
         [WinFormsFact]
@@ -10247,6 +12113,1315 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, parentInvalidatedCallCount);
             Assert.Equal(0, parentStyleChangedCallCount);
             Assert.Equal(0, parentCreatedCallCount);
+        }
+
+        [WinFormsFact]
+        public void Control_WndProc_InvokeDpiChangedAfterParentWithoutHandle_Success()
+        {
+            using (new NoAssertContext())
+            {
+                using var control = new SubControl();
+                int callCount = 0;
+                control.DpiChangedAfterParent += (sender, e) =>
+                {
+                    Assert.Same(control, sender);
+                    Assert.Same(EventArgs.Empty, e);
+                    callCount++;
+                };
+                var m = new Message
+                {
+                    Msg = (int)User32.WM.DPICHANGED_AFTERPARENT,
+                    Result = (IntPtr)250
+                };
+                control.WndProc(ref m);
+                Assert.Equal(IntPtr.Zero, m.Result);
+                Assert.Equal(1, callCount);
+                Assert.False(control.IsHandleCreated);
+            }
+        }
+
+        [WinFormsFact]
+        public void Control_WndProc_InvokeDpiChangedAfterParentWithHandle_Success()
+        {
+            using var control = new SubControl();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            int callCount = 0;
+            control.DpiChangedAfterParent += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                callCount++;
+            };
+            var m = new Message
+            {
+                Msg = (int)User32.WM.DPICHANGED_AFTERPARENT,
+                Result = (IntPtr)250
+            };
+            control.WndProc(ref m);
+            Assert.Equal(IntPtr.Zero, m.Result);
+            Assert.Equal(1, callCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsFact]
+        public void Control_WndProc_InvokeDpiChangedBeforeParentWithoutHandle_Success()
+        {
+            using (new NoAssertContext())
+            {
+                using var control = new SubControl();
+                int callCount = 0;
+                control.DpiChangedBeforeParent += (sender, e) =>
+                {
+                    Assert.Same(control, sender);
+                    Assert.Same(EventArgs.Empty, e);
+                    callCount++;
+                };
+                var m = new Message
+                {
+                    Msg = (int)User32.WM.DPICHANGED_BEFOREPARENT,
+                    Result = (IntPtr)250
+                };
+                control.WndProc(ref m);
+                Assert.Equal(IntPtr.Zero, m.Result);
+                Assert.Equal(1, callCount);
+                Assert.False(control.IsHandleCreated);
+            }
+        }
+
+        [WinFormsFact]
+        public void Control_WndProc_InvokeDpiChangedBeforeParentWithHandle_Success()
+        {
+            using var control = new SubControl();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            int callCount = 0;
+            control.DpiChangedBeforeParent += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                callCount++;
+            };
+            var m = new Message
+            {
+                Msg = (int)User32.WM.DPICHANGED_BEFOREPARENT,
+                Result = (IntPtr)250
+            };
+            control.WndProc(ref m);
+            Assert.Equal(IntPtr.Zero, m.Result);
+            Assert.Equal(1, callCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        public static IEnumerable<object[]> WndProc_EraseBkgndWithoutHandleWithoutWParam_TestData()
+        {
+            foreach (bool opaque in new bool[] { true, false })
+            {
+                yield return new object[] { true, true, opaque, (IntPtr)1, false };
+                yield return new object[] { true, false, opaque, IntPtr.Zero, false };
+                yield return new object[] { false, true, opaque, IntPtr.Zero, false };
+                yield return new object[] { false, false, opaque, IntPtr.Zero, false };
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(WndProc_EraseBkgndWithoutHandleWithoutWParam_TestData))]
+        public void Control_WndProc_InvokeEraseBkgndWithoutHandleWithoutWParam_Success(bool userPaint, bool allPaintingInWmPaint, bool opaque, IntPtr expectedResult, bool expectedIsHandleCreated)
+        {
+            using (new NoAssertContext())
+            {
+                using var control = new SubControl();
+                control.SetStyle(ControlStyles.UserPaint, userPaint);
+                control.SetStyle(ControlStyles.AllPaintingInWmPaint, allPaintingInWmPaint);
+                control.SetStyle(ControlStyles.Opaque, opaque);
+                int paintCallCount = 0;
+                control.Paint += (sender, e) => paintCallCount++;
+
+                var m = new Message
+                {
+                    Msg = (int)User32.WM.ERASEBKGND,
+                    Result = (IntPtr)250
+                };
+                control.WndProc(ref m);
+                Assert.Equal(expectedResult, m.Result);
+                Assert.Equal(expectedIsHandleCreated, control.IsHandleCreated);
+                Assert.Equal(0, paintCallCount);
+            }
+        }
+
+        public static IEnumerable<object[]> WndProc_EraseBkgndWithoutHandleWithWParam_TestData()
+        {
+            foreach (bool opaque in new bool[] { true, false })
+            {
+                yield return new object[] { true, true, opaque, (IntPtr)1, false };
+                yield return new object[] { true, false, opaque, (IntPtr)1, true };
+                yield return new object[] { false, true, opaque, IntPtr.Zero, false };
+                yield return new object[] { false, false, opaque, IntPtr.Zero, false };
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(WndProc_EraseBkgndWithoutHandleWithWParam_TestData))]
+        public void Control_WndProc_InvokeEraseBkgndWithoutHandleWithWParam_Success(bool userPaint, bool allPaintingInWmPaint, bool opaque, IntPtr expectedResult, bool expectedIsHandleCreated)
+        {
+            using (new NoAssertContext())
+            {
+                using var control = new SubControl();
+                control.SetStyle(ControlStyles.UserPaint, userPaint);
+                control.SetStyle(ControlStyles.AllPaintingInWmPaint, allPaintingInWmPaint);
+                control.SetStyle(ControlStyles.Opaque, opaque);
+                int paintCallCount = 0;
+                control.Paint += (sender, e) => paintCallCount++;
+
+                using var image = new Bitmap(10, 10);
+                using Graphics graphics = Graphics.FromImage(image);
+                IntPtr hdc = graphics.GetHdc();
+                try
+                {
+                    var m = new Message
+                    {
+                        Msg = (int)User32.WM.ERASEBKGND,
+                        WParam = hdc,
+                        Result = (IntPtr)250
+                    };
+                    control.WndProc(ref m);
+                    Assert.Equal(expectedResult, m.Result);
+                    Assert.Equal(expectedIsHandleCreated, control.IsHandleCreated);
+                    Assert.Equal(0, paintCallCount);
+                }
+                finally
+                {
+                    graphics.ReleaseHdc();
+                }
+            }
+        }
+
+        public static IEnumerable<object[]> WndProc_EraseBkgndWithHandleWithoutWParam_TestData()
+        {
+            foreach (bool opaque in new bool[] { true, false })
+            {
+                yield return new object[] { true, true, opaque, (IntPtr)1 };
+                yield return new object[] { true, false, opaque, IntPtr.Zero };
+                yield return new object[] { false, true, opaque, IntPtr.Zero };
+                yield return new object[] { false, false, opaque, IntPtr.Zero };
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(WndProc_EraseBkgndWithHandleWithoutWParam_TestData))]
+        public void Control_WndProc_InvokeEraseBkgndWithHandleWithoutWParam_Success(bool userPaint, bool allPaintingInWmPaint, bool opaque, IntPtr expectedResult)
+        {
+            using var control = new SubControl();
+            control.SetStyle(ControlStyles.UserPaint, userPaint);
+            control.SetStyle(ControlStyles.AllPaintingInWmPaint, allPaintingInWmPaint);
+            control.SetStyle(ControlStyles.Opaque, opaque);
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+            int paintCallCount = 0;
+            control.Paint += (sender, e) => paintCallCount++;
+
+            var m = new Message
+            {
+                Msg = (int)User32.WM.ERASEBKGND,
+                Result = (IntPtr)250
+            };
+            control.WndProc(ref m);
+            Assert.Equal(expectedResult, m.Result);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+            Assert.Equal(0, paintCallCount);
+        }
+
+        public static IEnumerable<object[]> WndProc_EraseBkgndWithHandleWithWParam_TestData()
+        {
+            foreach (bool opaque in new bool[] { true, false })
+            {
+                yield return new object[] { true, true, opaque, (IntPtr)1 };
+                yield return new object[] { true, false, opaque, (IntPtr)1 };
+                yield return new object[] { false, true, opaque, IntPtr.Zero };
+                yield return new object[] { false, false, opaque, IntPtr.Zero };
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(WndProc_EraseBkgndWithHandleWithWParam_TestData))]
+        public void Control_WndProc_InvokeEraseBkgndWithHandleWithWParam_Success(bool userPaint, bool allPaintingInWmPaint, bool opaque, IntPtr expectedResult)
+        {
+            using var control = new SubControl();
+            control.SetStyle(ControlStyles.UserPaint, userPaint);
+            control.SetStyle(ControlStyles.AllPaintingInWmPaint, allPaintingInWmPaint);
+            control.SetStyle(ControlStyles.Opaque, opaque);
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+            int paintCallCount = 0;
+            control.Paint += (sender, e) => paintCallCount++;
+
+            using var image = new Bitmap(10, 10);
+            using Graphics graphics = Graphics.FromImage(image);
+            IntPtr hdc = graphics.GetHdc();
+            try
+            {
+                var m = new Message
+                {
+                    Msg = (int)User32.WM.ERASEBKGND,
+                    WParam = hdc,
+                    Result = (IntPtr)250
+                };
+                control.WndProc(ref m);
+                Assert.Equal(expectedResult, m.Result);
+                Assert.True(control.IsHandleCreated);
+                Assert.Equal(0, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+                Assert.Equal(0, paintCallCount);
+            }
+            finally
+            {
+                graphics.ReleaseHdc();
+            }
+        }
+
+        [WinFormsFact]
+        public void Control_WndProc_InvokeKillFocusWithoutHandle_Success()
+        {
+            using (new NoAssertContext())
+            {
+                using var control = new SubControl();
+                int callCount = 0;
+                control.LostFocus += (sender, e) =>
+                {
+                    Assert.Same(control, sender);
+                    Assert.Same(EventArgs.Empty, e);
+                    callCount++;
+                };
+                var m = new Message
+                {
+                    Msg = (int)User32.WM.KILLFOCUS,
+                    Result = (IntPtr)250
+                };
+                control.WndProc(ref m);
+                Assert.Equal(IntPtr.Zero, m.Result);
+                Assert.Equal(1, callCount);
+                Assert.False(control.IsHandleCreated);
+            }
+        }
+
+        [WinFormsFact]
+        public void Control_WndProc_InvokeKillFocusWithHandle_Success()
+        {
+            using var control = new SubControl();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            int callCount = 0;
+            control.LostFocus += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                callCount++;
+            };
+            var m = new Message
+            {
+                Msg = (int)User32.WM.KILLFOCUS,
+                Result = (IntPtr)250
+            };
+            control.WndProc(ref m);
+            Assert.Equal(IntPtr.Zero, m.Result);
+            Assert.Equal(1, callCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        public static IEnumerable<object[]> WndProc_PrintClientWithoutHandleWithoutWParam_TestData()
+        {
+            yield return new object[] { true, true, (IntPtr)250, 1 };
+            yield return new object[] { false, true, IntPtr.Zero, 0 };
+            yield return new object[] { false, false, IntPtr.Zero, 0 };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(WndProc_PrintClientWithoutHandleWithoutWParam_TestData))]
+        public void Control_WndProc_InvokePrintClientWithoutHandleWithoutWParam_Success(bool userPaint, bool opaque, IntPtr expectedResult, int expectedPaintCallCount)
+        {
+            using (new NoAssertContext())
+            {
+                using var control = new SubControl();
+                control.SetStyle(ControlStyles.UserPaint, userPaint);
+                control.SetStyle(ControlStyles.Opaque, opaque);
+                int paintCallCount = 0;
+                control.Paint += (sender, e) => paintCallCount++;
+
+                var m = new Message
+                {
+                    Msg = (int)User32.WM.PRINTCLIENT,
+                    Result = (IntPtr)250
+                };
+                control.WndProc(ref m);
+                Assert.Equal(expectedResult, m.Result);
+                Assert.False(control.IsHandleCreated);
+                Assert.Equal(expectedPaintCallCount, paintCallCount);
+            }
+        }
+
+        [WinFormsFact]
+        public void Control_WndProc_InvokePrintClientWithoutHandleWithoutWParamUserPaint_ThrowsNullReferenceException()
+        {
+            using (new NoAssertContext())
+            {
+                using var control = new SubControl();
+                control.SetStyle(ControlStyles.UserPaint, true);
+                control.SetStyle(ControlStyles.Opaque, false);
+                int paintCallCount = 0;
+                control.Paint += (sender, e) => paintCallCount++;
+
+                var m = new Message
+                {
+                    Msg = (int)User32.WM.PRINTCLIENT,
+                    Result = (IntPtr)250
+                };
+                Assert.Throws<NullReferenceException>(() => control.WndProc(ref m));
+                Assert.Equal((IntPtr)250, m.Result);
+                Assert.False(control.IsHandleCreated);
+                Assert.Equal(0, paintCallCount);
+            }
+        }
+
+        public static IEnumerable<object[]> WndProc_PrintClientWithoutHandleWithWParam_TestData()
+        {
+            yield return new object[] { true, true, (IntPtr)250, 1 };
+            yield return new object[] { true, false, (IntPtr)250, 1 };
+            yield return new object[] { false, true, IntPtr.Zero, 0 };
+            yield return new object[] { false, false, IntPtr.Zero, 0 };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(WndProc_PrintClientWithoutHandleWithWParam_TestData))]
+        public void Control_WndProc_InvokePrintClientWithoutHandleWithWParam_Success(bool userPaint, bool opaque, IntPtr expectedResult, int expectedPaintCallCount)
+        {
+            using (new NoAssertContext())
+            {
+                using var control = new SubControl();
+                control.SetStyle(ControlStyles.UserPaint, userPaint);
+                control.SetStyle(ControlStyles.Opaque, opaque);
+                int paintCallCount = 0;
+                control.Paint += (sender, e) => paintCallCount++;
+
+                using var image = new Bitmap(10, 10);
+                using Graphics graphics = Graphics.FromImage(image);
+                IntPtr hdc = graphics.GetHdc();
+                try
+                {
+                    var m = new Message
+                    {
+                        Msg = (int)User32.WM.PRINTCLIENT,
+                        WParam = hdc,
+                        Result = (IntPtr)250
+                    };
+                    control.WndProc(ref m);
+                    Assert.Equal(expectedResult, m.Result);
+                    Assert.False(control.IsHandleCreated);
+                    Assert.Equal(expectedPaintCallCount, paintCallCount);
+                }
+                finally
+                {
+                    graphics.ReleaseHdc();
+                }
+            }
+        }
+
+        public static IEnumerable<object[]> WndProc_PrintClientWithHandleWithoutWParam_TestData()
+        {
+            yield return new object[] { true, true, (IntPtr)250, 1 };
+            yield return new object[] { false, true, IntPtr.Zero, 0 };
+            yield return new object[] { false, false, IntPtr.Zero, 0 };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(WndProc_PrintClientWithHandleWithoutWParam_TestData))]
+        public void Control_WndProc_InvokePrintClientWithHandleWithoutWParam_Success(bool userPaint, bool opaque, IntPtr expectedResult, int expectedPaintCallCount)
+        {
+            using var control = new SubControl();
+            control.SetStyle(ControlStyles.UserPaint, userPaint);
+            control.SetStyle(ControlStyles.Opaque, opaque);
+            int paintCallCount = 0;
+            control.Paint += (sender, e) => paintCallCount++;
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            var m = new Message
+            {
+                Msg = (int)User32.WM.PRINTCLIENT,
+                Result = (IntPtr)250
+            };
+            control.WndProc(ref m);
+            Assert.Equal(expectedResult, m.Result);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+            Assert.Equal(expectedPaintCallCount, paintCallCount);
+        }
+
+        [WinFormsFact]
+        public void Control_WndProc_InvokePrintClientWithHandleWithoutWParamUserPaint_ThrowsNullReferenceException()
+        {
+            using var control = new SubControl();
+            control.SetStyle(ControlStyles.UserPaint, true);
+            control.SetStyle(ControlStyles.Opaque, false);
+            int paintCallCount = 0;
+            control.Paint += (sender, e) => paintCallCount++;
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            var m = new Message
+            {
+                Msg = (int)User32.WM.PRINTCLIENT,
+                Result = (IntPtr)250
+            };
+            Assert.Throws<NullReferenceException>(() => control.WndProc(ref m));
+            Assert.Equal((IntPtr)250, m.Result);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(1, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+            Assert.Equal(0, paintCallCount);
+        }
+
+        public static IEnumerable<object[]> WndProc_PrintClientWithHandleWithWParam_TestData()
+        {
+            yield return new object[] { true, true, (IntPtr)250, 1 };
+            yield return new object[] { true, false, (IntPtr)250, 1 };
+            yield return new object[] { false, true, IntPtr.Zero, 0 };
+            yield return new object[] { false, false, IntPtr.Zero, 0 };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(WndProc_PrintClientWithHandleWithWParam_TestData))]
+        public void Control_WndProc_InvokePrintClientWithHandleWithWParam_Success(bool userPaint, bool opaque, IntPtr expectedResult, int expectedPaintCallCount)
+        {
+            using var control = new SubControl();
+            control.SetStyle(ControlStyles.UserPaint, userPaint);
+            control.SetStyle(ControlStyles.Opaque, opaque);
+            int paintCallCount = 0;
+            control.Paint += (sender, e) => paintCallCount++;
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            using var image = new Bitmap(10, 10);
+            using Graphics graphics = Graphics.FromImage(image);
+            IntPtr hdc = graphics.GetHdc();
+            try
+            {
+                var m = new Message
+                {
+                    Msg = (int)User32.WM.PRINTCLIENT,
+                    WParam = hdc,
+                    Result = (IntPtr)250
+                };
+                control.WndProc(ref m);
+                Assert.Equal(expectedResult, m.Result);
+                Assert.True(control.IsHandleCreated);
+                Assert.Equal(0, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+                Assert.Equal(expectedPaintCallCount, paintCallCount);
+            }
+            finally
+            {
+                graphics.ReleaseHdc();
+            }
+        }
+
+        public static IEnumerable<object[]> WndProc_MouseDown_TestData()
+        {
+            yield return new object[] { true, (int)User32.WM.LBUTTONDOWN, IntPtr.Zero, IntPtr.Zero, (IntPtr)250, MouseButtons.Left, 1, 0, 0 };
+            yield return new object[] { true, (int)User32.WM.LBUTTONDOWN, PARAM.FromLowHigh(1, 2), IntPtr.Zero, (IntPtr)250, MouseButtons.Left, 1, 1, 2 };
+            yield return new object[] { true, (int)User32.WM.LBUTTONDOWN, PARAM.FromLowHigh(-1, -2), IntPtr.Zero, (IntPtr)250, MouseButtons.Left, 1, -1, -2 };
+            yield return new object[] { false, (int)User32.WM.LBUTTONDOWN, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, MouseButtons.Left, 1, 0, 0 };
+            yield return new object[] { false, (int)User32.WM.LBUTTONDOWN, PARAM.FromLowHigh(1, 2), IntPtr.Zero, IntPtr.Zero, MouseButtons.Left, 1, 1, 2 };
+            yield return new object[] { false, (int)User32.WM.LBUTTONDOWN, PARAM.FromLowHigh(-1, -2), IntPtr.Zero, IntPtr.Zero, MouseButtons.Left, 1, -1, -2 };
+
+            yield return new object[] { true, (int)User32.WM.LBUTTONDBLCLK, IntPtr.Zero, IntPtr.Zero, (IntPtr)250, MouseButtons.Left, 2, 0, 0 };
+            yield return new object[] { true, (int)User32.WM.LBUTTONDBLCLK, PARAM.FromLowHigh(1, 2), IntPtr.Zero, (IntPtr)250, MouseButtons.Left, 2, 1, 2 };
+            yield return new object[] { true, (int)User32.WM.LBUTTONDBLCLK, PARAM.FromLowHigh(-1, -2), IntPtr.Zero, (IntPtr)250, MouseButtons.Left, 2, -1, -2 };
+            yield return new object[] { false, (int)User32.WM.LBUTTONDBLCLK, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, MouseButtons.Left, 2, 0, 0 };
+            yield return new object[] { false, (int)User32.WM.LBUTTONDBLCLK, PARAM.FromLowHigh(1, 2), IntPtr.Zero, IntPtr.Zero, MouseButtons.Left, 2, 1, 2 };
+            yield return new object[] { false, (int)User32.WM.LBUTTONDBLCLK, PARAM.FromLowHigh(-1, -2), IntPtr.Zero, IntPtr.Zero, MouseButtons.Left, 2, -1, -2 };
+
+            yield return new object[] { true, (int)User32.WM.MBUTTONDOWN, IntPtr.Zero, IntPtr.Zero, (IntPtr)250, MouseButtons.Middle, 1, 0, 0 };
+            yield return new object[] { true, (int)User32.WM.MBUTTONDOWN, PARAM.FromLowHigh(1, 2), IntPtr.Zero, (IntPtr)250, MouseButtons.Middle, 1, 1, 2 };
+            yield return new object[] { true, (int)User32.WM.MBUTTONDOWN, PARAM.FromLowHigh(-1, -2), IntPtr.Zero, (IntPtr)250, MouseButtons.Middle, 1, -1, -2 };
+            yield return new object[] { false, (int)User32.WM.MBUTTONDOWN, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, MouseButtons.Middle, 1, 0, 0 };
+            yield return new object[] { false, (int)User32.WM.MBUTTONDOWN, PARAM.FromLowHigh(1, 2), IntPtr.Zero, IntPtr.Zero, MouseButtons.Middle, 1, 1, 2 };
+            yield return new object[] { false, (int)User32.WM.MBUTTONDOWN, PARAM.FromLowHigh(-1, -2), IntPtr.Zero, IntPtr.Zero, MouseButtons.Middle, 1, -1, -2 };
+
+            yield return new object[] { true, (int)User32.WM.MBUTTONDBLCLK, IntPtr.Zero, IntPtr.Zero, (IntPtr)250, MouseButtons.Middle, 2, 0, 0 };
+            yield return new object[] { true, (int)User32.WM.MBUTTONDBLCLK, PARAM.FromLowHigh(1, 2), IntPtr.Zero, (IntPtr)250, MouseButtons.Middle, 2, 1, 2 };
+            yield return new object[] { true, (int)User32.WM.MBUTTONDBLCLK, PARAM.FromLowHigh(-1, -2), IntPtr.Zero, (IntPtr)250, MouseButtons.Middle, 2, -1, -2 };
+            yield return new object[] { false, (int)User32.WM.MBUTTONDBLCLK, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, MouseButtons.Middle, 2, 0, 0 };
+            yield return new object[] { false, (int)User32.WM.MBUTTONDBLCLK, PARAM.FromLowHigh(1, 2), IntPtr.Zero, IntPtr.Zero, MouseButtons.Middle, 2, 1, 2 };
+            yield return new object[] { false, (int)User32.WM.MBUTTONDBLCLK, PARAM.FromLowHigh(-1, -2), IntPtr.Zero, IntPtr.Zero, MouseButtons.Middle, 2, -1, -2 };
+
+            yield return new object[] { true, (int)User32.WM.RBUTTONDOWN, IntPtr.Zero, IntPtr.Zero, (IntPtr)250, MouseButtons.Right, 1, 0, 0 };
+            yield return new object[] { true, (int)User32.WM.RBUTTONDOWN, PARAM.FromLowHigh(1, 2), IntPtr.Zero, (IntPtr)250, MouseButtons.Right, 1, 1, 2 };
+            yield return new object[] { true, (int)User32.WM.RBUTTONDOWN, PARAM.FromLowHigh(-1, -2), IntPtr.Zero, (IntPtr)250, MouseButtons.Right, 1, -1, -2 };
+            yield return new object[] { false, (int)User32.WM.RBUTTONDOWN, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, MouseButtons.Right, 1, 0, 0 };
+            yield return new object[] { false, (int)User32.WM.RBUTTONDOWN, PARAM.FromLowHigh(1, 2), IntPtr.Zero, IntPtr.Zero, MouseButtons.Right, 1, 1, 2 };
+            yield return new object[] { false, (int)User32.WM.RBUTTONDOWN, PARAM.FromLowHigh(-1, -2), IntPtr.Zero, IntPtr.Zero, MouseButtons.Right, 1, -1, -2 };
+
+            yield return new object[] { true, (int)User32.WM.RBUTTONDBLCLK, IntPtr.Zero, IntPtr.Zero, (IntPtr)250, MouseButtons.Right, 2, 0, 0 };
+            yield return new object[] { true, (int)User32.WM.RBUTTONDBLCLK, PARAM.FromLowHigh(1, 2), IntPtr.Zero, (IntPtr)250, MouseButtons.Right, 2, 1, 2 };
+            yield return new object[] { true, (int)User32.WM.RBUTTONDBLCLK, PARAM.FromLowHigh(-1, -2), IntPtr.Zero, (IntPtr)250, MouseButtons.Right, 2, -1, -2 };
+            yield return new object[] { false, (int)User32.WM.RBUTTONDBLCLK, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, MouseButtons.Right, 2, 0, 0 };
+            yield return new object[] { false, (int)User32.WM.RBUTTONDBLCLK, PARAM.FromLowHigh(1, 2), IntPtr.Zero, IntPtr.Zero, MouseButtons.Right, 2, 1, 2 };
+            yield return new object[] { false, (int)User32.WM.RBUTTONDBLCLK, PARAM.FromLowHigh(-1, -2), IntPtr.Zero, IntPtr.Zero, MouseButtons.Right, 2, -1, -2 };
+
+            yield return new object[] { true, (int)User32.WM.XBUTTONDOWN, IntPtr.Zero, IntPtr.Zero, (IntPtr)250, MouseButtons.None, 1, 0, 0 };
+            yield return new object[] { true, (int)User32.WM.XBUTTONDOWN, PARAM.FromLowHigh(1, 2), IntPtr.Zero, (IntPtr)250, MouseButtons.None, 1, 1, 2 };
+            yield return new object[] { true, (int)User32.WM.XBUTTONDOWN, PARAM.FromLowHigh(-1, -2), IntPtr.Zero, (IntPtr)250, MouseButtons.None, 1, -1, -2 };
+            yield return new object[] { false, (int)User32.WM.XBUTTONDOWN, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, MouseButtons.None, 1, 0, 0 };
+            yield return new object[] { false, (int)User32.WM.XBUTTONDOWN, PARAM.FromLowHigh(1, 2), IntPtr.Zero, IntPtr.Zero, MouseButtons.None, 1, 1, 2 };
+            yield return new object[] { false, (int)User32.WM.XBUTTONDOWN, PARAM.FromLowHigh(-1, -2), IntPtr.Zero, IntPtr.Zero, MouseButtons.None, 1, -1, -2 };
+
+            yield return new object[] { true, (int)User32.WM.XBUTTONDOWN, IntPtr.Zero, PARAM.FromLowHigh(2, 1), (IntPtr)250, MouseButtons.XButton1, 1, 0, 0 };
+            yield return new object[] { true, (int)User32.WM.XBUTTONDOWN, PARAM.FromLowHigh(1, 2), PARAM.FromLowHigh(2, 1), (IntPtr)250, MouseButtons.XButton1, 1, 1, 2 };
+            yield return new object[] { true, (int)User32.WM.XBUTTONDOWN, PARAM.FromLowHigh(-1, -2), PARAM.FromLowHigh(2, 1), (IntPtr)250, MouseButtons.XButton1, 1, -1, -2 };
+            yield return new object[] { false, (int)User32.WM.XBUTTONDOWN, IntPtr.Zero, PARAM.FromLowHigh(2, 1), IntPtr.Zero, MouseButtons.XButton1, 1, 0, 0 };
+            yield return new object[] { false, (int)User32.WM.XBUTTONDOWN, PARAM.FromLowHigh(1, 2), PARAM.FromLowHigh(2, 1), IntPtr.Zero, MouseButtons.XButton1, 1, 1, 2 };
+            yield return new object[] { false, (int)User32.WM.XBUTTONDOWN, PARAM.FromLowHigh(-1, -2), PARAM.FromLowHigh(2, 1), IntPtr.Zero, MouseButtons.XButton1, 1, -1, -2 };
+
+            yield return new object[] { true, (int)User32.WM.XBUTTONDOWN, IntPtr.Zero, PARAM.FromLowHigh(1, 2), (IntPtr)250, MouseButtons.XButton2, 1, 0, 0 };
+            yield return new object[] { true, (int)User32.WM.XBUTTONDOWN, PARAM.FromLowHigh(1, 2), PARAM.FromLowHigh(1, 2), (IntPtr)250, MouseButtons.XButton2, 1, 1, 2 };
+            yield return new object[] { true, (int)User32.WM.XBUTTONDOWN, PARAM.FromLowHigh(-1, -2), PARAM.FromLowHigh(1, 2), (IntPtr)250, MouseButtons.XButton2, 1, -1, -2 };
+            yield return new object[] { false, (int)User32.WM.XBUTTONDOWN, IntPtr.Zero, PARAM.FromLowHigh(1, 2), IntPtr.Zero, MouseButtons.XButton2, 1, 0, 0 };
+            yield return new object[] { false, (int)User32.WM.XBUTTONDOWN, PARAM.FromLowHigh(1, 2), PARAM.FromLowHigh(1, 2), IntPtr.Zero, MouseButtons.XButton2, 1, 1, 2 };
+            yield return new object[] { false, (int)User32.WM.XBUTTONDOWN, PARAM.FromLowHigh(-1, -2), PARAM.FromLowHigh(1, 2), IntPtr.Zero, MouseButtons.XButton2, 1, -1, -2 };
+
+            yield return new object[] { true, (int)User32.WM.XBUTTONDBLCLK, IntPtr.Zero, IntPtr.Zero, (IntPtr)250, MouseButtons.None, 2, 0, 0 };
+            yield return new object[] { true, (int)User32.WM.XBUTTONDBLCLK, PARAM.FromLowHigh(1, 2), IntPtr.Zero, (IntPtr)250, MouseButtons.None, 2, 1, 2 };
+            yield return new object[] { true, (int)User32.WM.XBUTTONDBLCLK, PARAM.FromLowHigh(-1, -2), IntPtr.Zero, (IntPtr)250, MouseButtons.None, 2, -1, -2 };
+            yield return new object[] { false, (int)User32.WM.XBUTTONDBLCLK, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, MouseButtons.None, 2, 0, 0 };
+            yield return new object[] { false, (int)User32.WM.XBUTTONDBLCLK, PARAM.FromLowHigh(1, 2), IntPtr.Zero, IntPtr.Zero, MouseButtons.None, 2, 1, 2 };
+            yield return new object[] { false, (int)User32.WM.XBUTTONDBLCLK, PARAM.FromLowHigh(-1, -2), IntPtr.Zero, IntPtr.Zero, MouseButtons.None, 2, -1, -2 };
+
+            yield return new object[] { true, (int)User32.WM.XBUTTONDBLCLK, IntPtr.Zero, PARAM.FromLowHigh(2, 1), (IntPtr)250, MouseButtons.XButton1, 2, 0, 0 };
+            yield return new object[] { true, (int)User32.WM.XBUTTONDBLCLK, PARAM.FromLowHigh(1, 2), PARAM.FromLowHigh(2, 1), (IntPtr)250, MouseButtons.XButton1, 2, 1, 2 };
+            yield return new object[] { true, (int)User32.WM.XBUTTONDBLCLK, PARAM.FromLowHigh(-1, -2), PARAM.FromLowHigh(2, 1), (IntPtr)250, MouseButtons.XButton1, 2, -1, -2 };
+            yield return new object[] { false, (int)User32.WM.XBUTTONDBLCLK, IntPtr.Zero, PARAM.FromLowHigh(2, 1), IntPtr.Zero, MouseButtons.XButton1, 2, 0, 0 };
+            yield return new object[] { false, (int)User32.WM.XBUTTONDBLCLK, PARAM.FromLowHigh(1, 2), PARAM.FromLowHigh(2, 1), IntPtr.Zero, MouseButtons.XButton1, 2, 1, 2 };
+            yield return new object[] { false, (int)User32.WM.XBUTTONDBLCLK, PARAM.FromLowHigh(-1, -2), PARAM.FromLowHigh(2, 1), IntPtr.Zero, MouseButtons.XButton1, 2, -1, -2 };
+
+            yield return new object[] { true, (int)User32.WM.XBUTTONDBLCLK, IntPtr.Zero, PARAM.FromLowHigh(1, 2), (IntPtr)250, MouseButtons.XButton2, 2, 0, 0 };
+            yield return new object[] { true, (int)User32.WM.XBUTTONDBLCLK, PARAM.FromLowHigh(1, 2), PARAM.FromLowHigh(1, 2), (IntPtr)250, MouseButtons.XButton2, 2, 1, 2 };
+            yield return new object[] { true, (int)User32.WM.XBUTTONDBLCLK, PARAM.FromLowHigh(-1, -2), PARAM.FromLowHigh(1, 2), (IntPtr)250, MouseButtons.XButton2, 2, -1, -2 };
+            yield return new object[] { false, (int)User32.WM.XBUTTONDBLCLK, IntPtr.Zero, PARAM.FromLowHigh(1, 2), IntPtr.Zero, MouseButtons.XButton2, 2, 0, 0 };
+            yield return new object[] { false, (int)User32.WM.XBUTTONDBLCLK, PARAM.FromLowHigh(1, 2), PARAM.FromLowHigh(1, 2), IntPtr.Zero, MouseButtons.XButton2, 2, 1, 2 };
+            yield return new object[] { false, (int)User32.WM.XBUTTONDBLCLK, PARAM.FromLowHigh(-1, -2), PARAM.FromLowHigh(1, 2), IntPtr.Zero, MouseButtons.XButton2, 2, -1, -2 };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(WndProc_MouseDown_TestData))]
+        public void Control_WndProc_InvokeMouseDownWithoutHandle_Success(bool userMouse, int msg, IntPtr lParam, IntPtr wParam, IntPtr expectedResult, MouseButtons expectedButton, int expectedClicks, int expectedX, int expectedY)
+        {
+            using (new NoAssertContext())
+            {
+                using var control = new SubControl();
+                control.SetStyle(ControlStyles.UserMouse, userMouse);
+                int callCount = 0;
+                control.MouseDown += (sender, e) =>
+                {
+                    Assert.Same(control, sender);
+                    Assert.Equal(expectedButton, e.Button);
+                    Assert.Equal(expectedClicks, e.Clicks);
+                    Assert.Equal(expectedX, e.X);
+                    Assert.Equal(expectedY, e.Y);
+                    Assert.Equal(0, e.Delta);
+                    callCount++;
+                };
+                var m = new Message
+                {
+                    Msg = msg,
+                    LParam = lParam,
+                    WParam = wParam,
+                    Result = (IntPtr)250
+                };
+                control.WndProc(ref m);
+                Assert.Equal(expectedResult, m.Result);
+                Assert.Equal(1, callCount);
+                Assert.True(control.Capture);
+                Assert.False(control.Focused);
+                Assert.True(control.IsHandleCreated);
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(WndProc_MouseDown_TestData))]
+        public void Control_WndProc_InvokeMouseDownWithoutHandleNotSelectable_Success(bool userMouse, int msg, IntPtr lParam, IntPtr wParam, IntPtr expectedResult, MouseButtons expectedButton, int expectedClicks, int expectedX, int expectedY)
+        {
+            using (new NoAssertContext())
+            {
+                using var control = new SubControl();
+                control.SetStyle(ControlStyles.UserMouse, userMouse);
+                control.SetStyle(ControlStyles.Selectable, false);
+                int callCount = 0;
+                control.MouseDown += (sender, e) =>
+                {
+                    Assert.Same(control, sender);
+                    Assert.Equal(expectedButton, e.Button);
+                    Assert.Equal(expectedClicks, e.Clicks);
+                    Assert.Equal(expectedX, e.X);
+                    Assert.Equal(expectedY, e.Y);
+                    Assert.Equal(0, e.Delta);
+                    callCount++;
+                };
+                var m = new Message
+                {
+                    Msg = msg,
+                    LParam = lParam,
+                    WParam = wParam,
+                    Result = (IntPtr)250
+                };
+                control.WndProc(ref m);
+                Assert.Equal(expectedResult, m.Result);
+                Assert.Equal(1, callCount);
+                Assert.True(control.Capture);
+                Assert.False(control.Focused);
+                Assert.True(control.IsHandleCreated);
+            }
+        }
+
+        [WinFormsTheory]
+        [InlineData((int)User32.WM.LBUTTONDOWN)]
+        [InlineData((int)User32.WM.LBUTTONDBLCLK)]
+        [InlineData((int)User32.WM.MBUTTONDOWN)]
+        [InlineData((int)User32.WM.MBUTTONDBLCLK)]
+        [InlineData((int)User32.WM.RBUTTONDOWN)]
+        [InlineData((int)User32.WM.RBUTTONDBLCLK)]
+        [InlineData((int)User32.WM.XBUTTONDOWN)]
+        [InlineData((int)User32.WM.XBUTTONDBLCLK)]
+        public void Control_WndProc_InvokeMouseDownWithoutHandleNotEnabled_DoesNotCallMouseDown(int msg)
+        {
+            using (new NoAssertContext())
+            {
+                using var control = new SubControl
+                {
+                    Enabled = false
+                };
+                int callCount = 0;
+                control.MouseDown += (sender, e) => callCount++;
+                var m = new Message
+                {
+                    Msg = msg,
+                    Result = (IntPtr)250
+                };
+                control.WndProc(ref m);
+                Assert.Equal(IntPtr.Zero, m.Result);
+                Assert.Equal(0, callCount);
+                Assert.True(control.Capture);
+                Assert.False(control.Focused);
+                Assert.True(control.IsHandleCreated);
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(WndProc_MouseDown_TestData))]
+        public void Control_WndProc_InvokeMouseDownWithHandle_Success(bool userMouse, int msg, IntPtr lParam, IntPtr wParam, IntPtr expectedResult, MouseButtons expectedButton, int expectedClicks, int expectedX, int expectedY)
+        {
+            using var control = new SubControl();
+            control.SetStyle(ControlStyles.UserMouse, userMouse);
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            int callCount = 0;
+            control.MouseDown += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Equal(expectedButton, e.Button);
+                Assert.Equal(expectedClicks, e.Clicks);
+                Assert.Equal(expectedX, e.X);
+                Assert.Equal(expectedY, e.Y);
+                Assert.Equal(0, e.Delta);
+                callCount++;
+            };
+            var m = new Message
+            {
+                Msg = msg,
+                LParam = lParam,
+                WParam = wParam,
+                Result = (IntPtr)250
+            };
+            control.WndProc(ref m);
+            Assert.Equal(expectedResult, m.Result);
+            Assert.Equal(1, callCount);
+            Assert.True(control.Capture);
+            Assert.False(control.Focused);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(WndProc_MouseDown_TestData))]
+        public void Control_WndProc_InvokeMouseDownWithHandleNotSelectable_DoesNotCallMouseDown(bool userMouse, int msg, IntPtr lParam, IntPtr wParam, IntPtr expectedResult, MouseButtons expectedButton, int expectedClicks, int expectedX, int expectedY)
+        {
+            using var control = new SubControl();
+            control.SetStyle(ControlStyles.UserMouse, userMouse);
+            control.SetStyle(ControlStyles.Selectable, false);
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            int callCount = 0;
+            control.MouseDown += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Equal(expectedButton, e.Button);
+                Assert.Equal(expectedClicks, e.Clicks);
+                Assert.Equal(expectedX, e.X);
+                Assert.Equal(expectedY, e.Y);
+                Assert.Equal(0, e.Delta);
+                callCount++;
+            };
+            var m = new Message
+            {
+                Msg = msg,
+                LParam = lParam,
+                WParam = wParam,
+                Result = (IntPtr)250
+            };
+            control.WndProc(ref m);
+            Assert.Equal(expectedResult, m.Result);
+            Assert.Equal(1, callCount);
+            Assert.True(control.Capture);
+            Assert.False(control.Focused);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsTheory]
+        [InlineData((int)User32.WM.LBUTTONDOWN)]
+        [InlineData((int)User32.WM.LBUTTONDBLCLK)]
+        [InlineData((int)User32.WM.MBUTTONDOWN)]
+        [InlineData((int)User32.WM.MBUTTONDBLCLK)]
+        [InlineData((int)User32.WM.RBUTTONDOWN)]
+        [InlineData((int)User32.WM.RBUTTONDBLCLK)]
+        [InlineData((int)User32.WM.XBUTTONDOWN)]
+        [InlineData((int)User32.WM.XBUTTONDBLCLK)]
+        public void Control_WndProc_InvokeMouseDownWithHandleNotEnabled_DoesNotCallMouseDown(int msg)
+        {
+            using var control = new SubControl
+            {
+                Enabled = false
+            };
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            int callCount = 0;
+            control.MouseDown += (sender, e) => callCount++;
+            var m = new Message
+            {
+                Msg = msg,
+                Result = (IntPtr)250
+            };
+            control.WndProc(ref m);
+            Assert.Equal(IntPtr.Zero, m.Result);
+            Assert.Equal(0, callCount);
+            Assert.True(control.Capture);
+            Assert.False(control.Focused);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsFact]
+        public void Control_WndProc_InvokeMouseHoverWithoutHandle_Success()
+        {
+            using (new NoAssertContext())
+            {
+                using var control = new SubControl();
+                int callCount = 0;
+                control.MouseHover += (sender, e) =>
+                {
+                    Assert.Same(control, sender);
+                    Assert.Same(EventArgs.Empty, e);
+                    callCount++;
+                };
+                var m = new Message
+                {
+                    Msg = (int)User32.WM.MOUSEHOVER,
+                    Result = (IntPtr)250
+                };
+                control.WndProc(ref m);
+                Assert.Equal(IntPtr.Zero, m.Result);
+                Assert.Equal(1, callCount);
+                Assert.False(control.IsHandleCreated);
+            }
+        }
+
+        [WinFormsFact]
+        public void Control_WndProc_InvokeMouseHoverWithHandle_Success()
+        {
+            using var control = new SubControl();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            int callCount = 0;
+            control.MouseHover += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                callCount++;
+            };
+            var m = new Message
+            {
+                Msg = (int)User32.WM.MOUSEHOVER,
+                Result = (IntPtr)250
+            };
+            control.WndProc(ref m);
+            Assert.Equal(IntPtr.Zero, m.Result);
+            Assert.Equal(1, callCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsFact]
+        public void Control_WndProc_InvokeSetFocusWithoutHandle_Success()
+        {
+            using (new NoAssertContext())
+            {
+                using var control = new SubControl();
+                int callCount = 0;
+                control.GotFocus += (sender, e) =>
+                {
+                    Assert.Same(control, sender);
+                    Assert.Same(EventArgs.Empty, e);
+                    callCount++;
+                };
+                var m = new Message
+                {
+                    Msg = (int)User32.WM.SETFOCUS,
+                    Result = (IntPtr)250
+                };
+                control.WndProc(ref m);
+                Assert.Equal(IntPtr.Zero, m.Result);
+                Assert.Equal(1, callCount);
+                Assert.True(control.IsHandleCreated);
+            }
+        }
+
+        [WinFormsFact]
+        public void Control_WndProc_InvokeSetFocusWithHandle_Success()
+        {
+            using var control = new SubControl();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            int callCount = 0;
+            control.GotFocus += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                callCount++;
+            };
+            var m = new Message
+            {
+                Msg = (int)User32.WM.SETFOCUS,
+                Result = (IntPtr)250
+            };
+            control.WndProc(ref m);
+            Assert.Equal(IntPtr.Zero, m.Result);
+            Assert.Equal(1, callCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsFact]
+        public void Control_WndProc_InvokeSetFocusWithParentContainerControlWithHandle_Success()
+        {
+            using var parent = new ContainerControl();
+            using var control = new SubControl
+            {
+                Parent = parent
+            };
+            Assert.Null(parent.ActiveControl);
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            int callCount = 0;
+            control.GotFocus += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                callCount++;
+            };
+            var m = new Message
+            {
+                Msg = (int)User32.WM.SETFOCUS,
+                Result = (IntPtr)250
+            };
+            control.WndProc(ref m);
+            Assert.Equal(IntPtr.Zero, m.Result);
+            Assert.Equal(1, callCount);
+            Assert.Same(control, parent.ActiveControl);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        public static IEnumerable<object[]> WndProc_SetFocusWithParentIContainer_TestData()
+        {
+            yield return new object[] { true, true, IntPtr.Zero, 1, 1 };
+            yield return new object[] { true, false, (IntPtr)250, 1, 0 };
+            yield return new object[] { false, true, IntPtr.Zero, 0, 1 };
+            yield return new object[] { false, false, IntPtr.Zero, 0, 1 };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(WndProc_SetFocusWithParentIContainer_TestData))]
+        public void Control_WndProc_InvokeSetFocusWithParentIContainerControlWithHandle_Success(bool containerControl, bool enabled, IntPtr expectedResult, int expectedActivateControlCallCount, int expectedCallCount)
+        {
+            using var parent = new CustomContainerControl();
+            parent.SetStyle(ControlStyles.ContainerControl, containerControl);
+            using var control = new SubControl
+            {
+                Parent = parent
+            };
+            Assert.Null(parent.ActiveControl);
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+            int activateControlCallCount = 0;
+            parent.ActivateControlAction = (active) =>
+            {
+                Assert.Same(control, active);
+                activateControlCallCount++;
+                return enabled;
+            };
+
+            int callCount = 0;
+            control.GotFocus += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                callCount++;
+            };
+            var m = new Message
+            {
+                Msg = (int)User32.WM.SETFOCUS,
+                Result = (IntPtr)250
+            };
+            control.WndProc(ref m);
+            Assert.Equal(expectedResult, m.Result);
+            Assert.Equal(expectedCallCount, callCount);
+            Assert.Equal(expectedActivateControlCallCount, activateControlCallCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        private class CustomContainerControl : Control, IContainerControl
+        {
+            public CustomContainerControl()
+            {
+                SetStyle(ControlStyles.ContainerControl, true);
+            }
+
+            public Control ActiveControl { get; set; }
+
+            public Func<Control, bool> ActivateControlAction { get; set; }
+
+            public bool ActivateControl(Control active) => ActivateControlAction(active);
+
+            public new void SetStyle(ControlStyles flag, bool value) => base.SetStyle(flag, value);
+        }
+
+        [WinFormsFact]
+        public void Control_WndProc_InvokeSetFocusWithParentContainerControlWithParentContainerControlWithHandle_Success()
+        {
+            using var grandparent = new ContainerControl();
+            using var parent = new ContainerControl
+            {
+                Parent = grandparent
+            };
+            using var control = new SubControl
+            {
+                Parent = parent
+            };
+            Assert.Null(parent.ActiveControl);
+            Assert.Null(grandparent.ActiveControl);
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            int callCount = 0;
+            control.GotFocus += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                callCount++;
+            };
+            var m = new Message
+            {
+                Msg = (int)User32.WM.SETFOCUS,
+                Result = (IntPtr)250
+            };
+            control.WndProc(ref m);
+            Assert.Equal(IntPtr.Zero, m.Result);
+            Assert.Equal(1, callCount);
+            Assert.Same(control, parent.ActiveControl);
+            Assert.Same(parent, grandparent.ActiveControl);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsFact]
+        public void Control_WndProc_InvokeSetFocusWithParentContainerControlWithParentControlWithHandle_Success()
+        {
+            using var grandparent = new Control();
+            using var parent = new ContainerControl
+            {
+                Parent = grandparent
+            };
+            using var control = new SubControl
+            {
+                Parent = parent
+            };
+            Assert.Null(parent.ActiveControl);
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            int callCount = 0;
+            control.GotFocus += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                callCount++;
+            };
+            var m = new Message
+            {
+                Msg = (int)User32.WM.SETFOCUS,
+                Result = (IntPtr)250
+            };
+            control.WndProc(ref m);
+            Assert.Equal(IntPtr.Zero, m.Result);
+            Assert.Equal(1, callCount);
+            Assert.Same(control, parent.ActiveControl);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsFact]
+        public void Control_WndProc_InvokeSetFocusWithParentContainerControlWithParentContainerControlAlreadyActiveWithHandle_Success()
+        {
+            using var grandparent = new ContainerControl();
+            using var parent = new ContainerControl
+            {
+                Parent = grandparent
+            };
+            using var control = new SubControl
+            {
+                Parent = parent
+            };
+            parent.ActiveControl = control;
+            grandparent.ActiveControl = parent;
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            int callCount = 0;
+            control.GotFocus += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                callCount++;
+            };
+            var m = new Message
+            {
+                Msg = (int)User32.WM.SETFOCUS,
+                Result = (IntPtr)250
+            };
+            control.WndProc(ref m);
+            Assert.Equal(IntPtr.Zero, m.Result);
+            Assert.Equal(1, callCount);
+            Assert.Same(control, parent.ActiveControl);
+            Assert.Same(parent, grandparent.ActiveControl);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsFact]
+        public void Control_WndProc_InvokeSetFocusWithParentContainerControlWithParentWithHandle_Success()
+        {
+            using var grandparent = new Control();
+            using var parent = new ContainerControl
+            {
+                Parent = grandparent
+            };
+            using var control = new SubControl
+            {
+                Parent = parent
+            };
+            Assert.Null(parent.ActiveControl);
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            int callCount = 0;
+            control.GotFocus += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                callCount++;
+            };
+            var m = new Message
+            {
+                Msg = (int)User32.WM.SETFOCUS,
+                Result = (IntPtr)250
+            };
+            control.WndProc(ref m);
+            Assert.Equal(IntPtr.Zero, m.Result);
+            Assert.Equal(1, callCount);
+            Assert.Same(control, parent.ActiveControl);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        private class NoCreateControl : Control
+        {
+            protected override void WndProc(ref Message m)
+            {
+                if (m.Msg == (int)User32.WM.NCCREATE)
+                {
+                    m.Result = IntPtr.Zero;
+                    return;
+                }
+                else
+                {
+                    base.WndProc(ref m);
+                }
+            }
+
+            public new void CreateHandle() => base.CreateHandle();
         }
     }
 }

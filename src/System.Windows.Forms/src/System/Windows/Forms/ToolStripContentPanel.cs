@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Drawing;
@@ -118,7 +120,6 @@ namespace System.Windows.Forms
 
             set
             {
-
                 // To support transparency on ToolStripContainer, we need this check
                 // to ensure that background color of the container reflects the
                 // ContentPanel
@@ -378,7 +379,6 @@ namespace System.Windows.Forms
             {
                 base.OnPaintBackground(e);
             }
-
         }
 
         protected virtual void OnRendererChanged(EventArgs e)
@@ -414,4 +414,3 @@ namespace System.Windows.Forms
         }
     }
 }
-

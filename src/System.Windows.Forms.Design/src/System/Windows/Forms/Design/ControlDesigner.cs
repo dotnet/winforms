@@ -394,7 +394,7 @@ namespace System.Windows.Forms.Design
         /// <summary>
         ///  Default processing for messages.  This method causes the message to get processed by windows, skipping the control.  This is useful if you want to block this message from getting to the control, but you do not want to block it from getting to Windows itself because it causes other messages to be generated.
         /// </summary>
-        protected void BaseWndProc(ref Message m) => m.Result = User32.DefWindowProcW(m.HWnd, m.WindowMessage(), m.WParam, m.LParam);
+        protected void BaseWndProc(ref Message m) => m.Result = User32.DefWindowProcW(m.HWnd, (User32.WM)m.Msg, m.WParam, m.LParam);
 
         /// <summary>
         ///  Determines if the this designer can be parented to the specified desinger -- generally this means if the control for this designer can be parented into the given ParentControlDesigner's designer.
@@ -1199,7 +1199,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  Called to cleanup a D&D operation
+        ///  Called to cleanup a drag and drop operation.
         /// </summary>
         protected virtual void OnDragComplete(DragEventArgs de)
         {
@@ -1625,16 +1625,16 @@ namespace System.Windows.Forms.Design
         /// <summary>
         ///  This method should be called by the extending designer for each message the control would normally receive.  This allows the designer to pre-process messages before allowing them to be routed to the control.
         /// </summary>
-        protected virtual void WndProc(ref Message m)
+        protected unsafe virtual void WndProc(ref Message m)
         {
             IMouseHandler mouseHandler = null;
             // We look at WM_NCHITTEST to determine if the mouse is in a live region of the control
-            if (m.Msg == WindowMessages.WM_NCHITTEST)
+            if (m.Msg == (int)User32.WM.NCHITTEST)
             {
                 if (!_inHitTest)
                 {
                     _inHitTest = true;
-                    Point pt = new Point((short)NativeMethods.Util.LOWORD(unchecked((int)(long)m.LParam)), (short)NativeMethods.Util.HIWORD(unchecked((int)(long)m.LParam)));
+                    Point pt = new Point((short)PARAM.LOWORD(m.LParam), (short)PARAM.HIWORD(m.LParam));
                     try
                     {
                         _liveRegion = GetHitTest(pt);
@@ -1652,12 +1652,12 @@ namespace System.Windows.Forms.Design
             }
 
             // Check to see if the mouse is in a live region of the control and that the context key is not being fired
-            bool isContextKey = (m.Msg == WindowMessages.WM_CONTEXTMENU);
+            bool isContextKey = (m.Msg == (int)User32.WM.CONTEXTMENU);
             if (_liveRegion && (IsMouseMessage(m.Msg) || isContextKey))
             {
                 // The ActiveX DataGrid control brings up a context menu on right mouse down when it is in edit mode.
                 // And, when we generate a WM_CONTEXTMENU message later, it calls DefWndProc() which by default calls the parent (formdesigner). The FormDesigner then brings up the AxHost context menu. This code causes recursive WM_CONTEXTMENU messages to be ignored till we return from the live region message.
-                if (m.Msg == WindowMessages.WM_CONTEXTMENU)
+                if (m.Msg == (int)User32.WM.CONTEXTMENU)
                 {
                     Debug.Assert(!s_inContextMenu, "Recursively hitting live region for context menu!!!");
                     s_inContextMenu = true;
@@ -1669,16 +1669,15 @@ namespace System.Windows.Forms.Design
                 }
                 finally
                 {
-                    if (m.Msg == WindowMessages.WM_CONTEXTMENU)
+                    if (m.Msg == (int)User32.WM.CONTEXTMENU)
                     {
                         s_inContextMenu = false;
                     }
-                    if (m.Msg == WindowMessages.WM_LBUTTONUP)
+                    if (m.Msg == (int)User32.WM.LBUTTONUP)
                     {
                         // terminate the drag. TabControl loses shortcut menu options after adding ActiveX control.
                         OnMouseDragEnd(true);
                     }
-
                 }
                 return;
             }
@@ -1690,9 +1689,9 @@ namespace System.Windows.Forms.Design
             // CONSIDER - I really don't like this one bit. We need a
             //          : centralized handler so we can do a global override for the tab order
             //          : UI, but the designer is a natural fit for an object oriented UI.
-            if ((m.Msg >= WindowMessages.WM_MOUSEFIRST && m.Msg <= WindowMessages.WM_MOUSELAST)
-                || (m.Msg >= WindowMessages.WM_NCMOUSEMOVE && m.Msg <= WindowMessages.WM_NCMBUTTONDBLCLK)
-                || m.Msg == WindowMessages.WM_SETCURSOR)
+            if ((m.Msg >= (int)User32.WM.MOUSEFIRST && m.Msg <= (int)User32.WM.MOUSELAST)
+                || (m.Msg >= (int)User32.WM.NCMOUSEMOVE && m.Msg <= (int)User32.WM.NCMBUTTONDBLCLK)
+                || m.Msg == (int)User32.WM.SETCURSOR)
             {
                 if (_eventSvc == null)
                 {
@@ -1704,28 +1703,28 @@ namespace System.Windows.Forms.Design
                 }
             }
 
-            if (m.Msg >= WindowMessages.WM_MOUSEFIRST && m.Msg <= WindowMessages.WM_MOUSELAST)
+            if (m.Msg >= (int)User32.WM.MOUSEFIRST && m.Msg <= (int)User32.WM.MOUSELAST)
             {
                 var pt = new Point
                 {
-                    X = NativeMethods.Util.SignedLOWORD(unchecked((int)(long)m.LParam)),
-                    Y = NativeMethods.Util.SignedHIWORD(unchecked((int)(long)m.LParam))
+                    X = PARAM.SignedLOWORD(m.LParam),
+                    Y = PARAM.SignedHIWORD(m.LParam)
                 };
                 User32.MapWindowPoints(m.HWnd, IntPtr.Zero, ref pt, 1);
                 x = pt.X;
                 y = pt.Y;
             }
-            else if (m.Msg >= WindowMessages.WM_NCMOUSEMOVE && m.Msg <= WindowMessages.WM_NCMBUTTONDBLCLK)
+            else if (m.Msg >= (int)User32.WM.NCMOUSEMOVE && m.Msg <= (int)User32.WM.NCMBUTTONDBLCLK)
             {
-                x = NativeMethods.Util.SignedLOWORD(unchecked((int)(long)m.LParam));
-                y = NativeMethods.Util.SignedHIWORD(unchecked((int)(long)m.LParam));
+                x = PARAM.SignedLOWORD(m.LParam);
+                y = PARAM.SignedHIWORD(m.LParam);
             }
 
             // This is implemented on the base designer for UI activation support.  We call it so that we can support UI activation.
             MouseButtons button = MouseButtons.None;
-            switch (m.Msg)
+            switch ((User32.WM)m.Msg)
             {
-                case WindowMessages.WM_CREATE:
+                case User32.WM.CREATE:
                     DefWndProc(ref m);
                     // Only call OnCreateHandle if this is our OWN window handle -- the designer window procs are re-entered for child controls.
                     if (m.HWnd == Control.Handle)
@@ -1734,7 +1733,7 @@ namespace System.Windows.Forms.Design
                     }
                     break;
 
-                case WindowMessages.WM_GETOBJECT:
+                case User32.WM.GETOBJECT:
                     // See "How to Handle WM_GETOBJECT" in MSDN
                     if (unchecked((int)(long)m.LParam) == User32.OBJID.CLIENT)
                     {
@@ -1774,18 +1773,18 @@ namespace System.Windows.Forms.Design
                     }
                     break;
 
-                case WindowMessages.WM_MBUTTONDOWN:
-                case WindowMessages.WM_MBUTTONUP:
-                case WindowMessages.WM_MBUTTONDBLCLK:
-                case WindowMessages.WM_NCMOUSEHOVER:
-                case WindowMessages.WM_NCMOUSELEAVE:
-                case WindowMessages.WM_MOUSEWHEEL:
-                case WindowMessages.WM_NCMBUTTONDOWN:
-                case WindowMessages.WM_NCMBUTTONUP:
-                case WindowMessages.WM_NCMBUTTONDBLCLK:
+                case User32.WM.MBUTTONDOWN:
+                case User32.WM.MBUTTONUP:
+                case User32.WM.MBUTTONDBLCLK:
+                case User32.WM.NCMOUSEHOVER:
+                case User32.WM.NCMOUSELEAVE:
+                case User32.WM.MOUSEWHEEL:
+                case User32.WM.NCMBUTTONDOWN:
+                case User32.WM.NCMBUTTONUP:
+                case User32.WM.NCMBUTTONDBLCLK:
                     // We intentionally eat these messages.
                     break;
-                case WindowMessages.WM_MOUSEHOVER:
+                case User32.WM.MOUSEHOVER:
                     if (mouseHandler != null)
                     {
                         mouseHandler.OnMouseHover(Component);
@@ -1795,15 +1794,15 @@ namespace System.Windows.Forms.Design
                         OnMouseHover();
                     }
                     break;
-                case WindowMessages.WM_MOUSELEAVE:
+                case User32.WM.MOUSELEAVE:
                     OnMouseLeave();
                     BaseWndProc(ref m);
                     break;
-                case WindowMessages.WM_NCLBUTTONDBLCLK:
-                case WindowMessages.WM_LBUTTONDBLCLK:
-                case WindowMessages.WM_NCRBUTTONDBLCLK:
-                case WindowMessages.WM_RBUTTONDBLCLK:
-                    if ((m.Msg == WindowMessages.WM_NCRBUTTONDBLCLK || m.Msg == WindowMessages.WM_RBUTTONDBLCLK))
+                case User32.WM.NCLBUTTONDBLCLK:
+                case User32.WM.LBUTTONDBLCLK:
+                case User32.WM.NCRBUTTONDBLCLK:
+                case User32.WM.RBUTTONDBLCLK:
+                    if ((m.Msg == (int)User32.WM.NCRBUTTONDBLCLK || m.Msg == (int)User32.WM.RBUTTONDBLCLK))
                     {
                         button = MouseButtons.Right;
                     }
@@ -1824,11 +1823,11 @@ namespace System.Windows.Forms.Design
                         }
                     }
                     break;
-                case WindowMessages.WM_NCLBUTTONDOWN:
-                case WindowMessages.WM_LBUTTONDOWN:
-                case WindowMessages.WM_NCRBUTTONDOWN:
-                case WindowMessages.WM_RBUTTONDOWN:
-                    if ((m.Msg == WindowMessages.WM_NCRBUTTONDOWN || m.Msg == WindowMessages.WM_RBUTTONDOWN))
+                case User32.WM.NCLBUTTONDOWN:
+                case User32.WM.LBUTTONDOWN:
+                case User32.WM.NCRBUTTONDOWN:
+                case User32.WM.RBUTTONDOWN:
+                    if ((m.Msg == (int)User32.WM.NCRBUTTONDOWN || m.Msg == (int)User32.WM.RBUTTONDOWN))
                     {
                         button = MouseButtons.Right;
                     }
@@ -1837,7 +1836,7 @@ namespace System.Windows.Forms.Design
                         button = MouseButtons.Left;
                     }
                     // We don't really want the focus, but we want to focus the designer. Below we handle WM_SETFOCUS and do the right thing.
-                    NativeMethods.SendMessage(Control.Handle, WindowMessages.WM_SETFOCUS, 0, 0);
+                    User32.SendMessageW(Control.Handle, User32.WM.SETFOCUS, IntPtr.Zero, IntPtr.Zero);
                     // We simulate doubleclick for things that don't...
                     if (button == MouseButtons.Left && IsDoubleClick(x, y))
                     {
@@ -1873,7 +1872,7 @@ namespace System.Windows.Forms.Design
 
                         if (_toolPassThrough)
                         {
-                            NativeMethods.SendMessage(Control.Parent.Handle, m.Msg, m.WParam, (IntPtr)GetParentPointFromLparam(m.LParam));
+                            User32.SendMessageW(Control.Parent.Handle, (User32.WM)m.Msg, m.WParam, (IntPtr)GetParentPointFromLparam(m.LParam));
                             return;
                         }
 
@@ -1884,7 +1883,6 @@ namespace System.Windows.Forms.Design
                         else if (button == MouseButtons.Left)
                         {
                             OnMouseDragBegin(x, y);
-
                         }
                         else if (button == MouseButtons.Right)
                         {
@@ -1899,8 +1897,8 @@ namespace System.Windows.Forms.Design
                     }
                     break;
 
-                case WindowMessages.WM_NCMOUSEMOVE:
-                case WindowMessages.WM_MOUSEMOVE:
+                case User32.WM.NCMOUSEMOVE:
+                case User32.WM.MOUSEMOVE:
                     if ((unchecked((User32.MK)(long)m.WParam) & User32.MK.LBUTTON) != 0)
                     {
                         button = MouseButtons.Left;
@@ -1919,7 +1917,7 @@ namespace System.Windows.Forms.Design
                     {
                         if (_toolPassThrough)
                         {
-                            NativeMethods.SendMessage(Control.Parent.Handle, m.Msg, m.WParam, (IntPtr)GetParentPointFromLparam(m.LParam));
+                            User32.SendMessageW(Control.Parent.Handle, (User32.WM)m.Msg, m.WParam, (IntPtr)GetParentPointFromLparam(m.LParam));
                             return;
                         }
 
@@ -1936,17 +1934,17 @@ namespace System.Windows.Forms.Design
                     _lastMoveScreenY = y;
 
                     // We eat WM_NCMOUSEMOVE messages, since we don't want the non-client area/ of design time controls to repaint on mouse move.
-                    if (m.Msg == WindowMessages.WM_MOUSEMOVE)
+                    if (m.Msg == (int)User32.WM.MOUSEMOVE)
                     {
                         BaseWndProc(ref m);
                     }
                     break;
-                case WindowMessages.WM_NCLBUTTONUP:
-                case WindowMessages.WM_LBUTTONUP:
-                case WindowMessages.WM_NCRBUTTONUP:
-                case WindowMessages.WM_RBUTTONUP:
+                case User32.WM.NCLBUTTONUP:
+                case User32.WM.LBUTTONUP:
+                case User32.WM.NCRBUTTONUP:
+                case User32.WM.RBUTTONUP:
                     // This is implemented on the base designer for UI activation support.
-                    if ((m.Msg == WindowMessages.WM_NCRBUTTONUP || m.Msg == WindowMessages.WM_RBUTTONUP))
+                    if ((m.Msg == (int)User32.WM.NCRBUTTONUP || m.Msg == (int)User32.WM.RBUTTONUP))
                     {
                         button = MouseButtons.Right;
                     }
@@ -1964,7 +1962,7 @@ namespace System.Windows.Forms.Design
                     {
                         if (_toolPassThrough)
                         {
-                            NativeMethods.SendMessage(Control.Parent.Handle, m.Msg, m.WParam, (IntPtr)GetParentPointFromLparam(m.LParam));
+                            User32.SendMessageW(Control.Parent.Handle, (User32.WM)m.Msg, m.WParam, (IntPtr)GetParentPointFromLparam(m.LParam));
                             _toolPassThrough = false;
                             return;
                         }
@@ -1978,7 +1976,7 @@ namespace System.Windows.Forms.Design
                     _toolPassThrough = false;
                     BaseWndProc(ref m);
                     break;
-                case WindowMessages.WM_PRINTCLIENT:
+                case User32.WM.PRINTCLIENT:
                     {
                         using (Graphics g = Graphics.FromHdc(m.WParam))
                         {
@@ -1990,11 +1988,11 @@ namespace System.Windows.Forms.Design
                         }
                     }
                     break;
-                case WindowMessages.WM_PAINT:
+                case User32.WM.PAINT:
                     // First, save off the update region and call our base class.
                     if (OleDragDropHandler.FreezePainting)
                     {
-                        SafeNativeMethods.ValidateRect(m.HWnd, IntPtr.Zero);
+                        User32.ValidateRect(m.HWnd, null);
                         break;
                     }
                     if (Control == null)
@@ -2004,7 +2002,7 @@ namespace System.Windows.Forms.Design
                     RECT clip = new RECT();
                     IntPtr hrgn = Gdi32.CreateRectRgn(0, 0, 0, 0);
                     User32.GetUpdateRgn(m.HWnd, hrgn, BOOL.FALSE);
-                    NativeMethods.GetUpdateRect(m.HWnd, ref clip, false);
+                    User32.GetUpdateRect(m.HWnd, ref clip, BOOL.FALSE);
                     Region r = Region.FromHrgn(hrgn);
                     Rectangle paintRect = Rectangle.Empty;
                     try
@@ -2068,9 +2066,9 @@ namespace System.Windows.Forms.Design
                         OverlayService.InvalidateOverlays(paintRect);
                     }
                     break;
-                case WindowMessages.WM_NCPAINT:
-                case WindowMessages.WM_NCACTIVATE:
-                    if (m.Msg == WindowMessages.WM_NCACTIVATE)
+                case User32.WM.NCPAINT:
+                case User32.WM.NCACTIVATE:
+                    if (m.Msg == (int)User32.WM.NCACTIVATE)
                     {
                         DefWndProc(ref m);
                     }
@@ -2097,7 +2095,7 @@ namespace System.Windows.Forms.Design
                     }
                     break;
 
-                case WindowMessages.WM_SETCURSOR:
+                case User32.WM.SETCURSOR:
                     // We always handle setting the cursor ourselves.
                     //
 
@@ -2116,19 +2114,19 @@ namespace System.Windows.Forms.Design
                         OnSetCursor();
                     }
                     break;
-                case WindowMessages.WM_SIZE:
+                case User32.WM.SIZE:
                     if (_thrownException != null)
                     {
                         Control.Invalidate();
                     }
                     DefWndProc(ref m);
                     break;
-                case WindowMessages.WM_CANCELMODE:
+                case User32.WM.CANCELMODE:
                     // When we get cancelmode (i.e. you tabbed away to another window) then we want to cancel any pending drag operation!
                     OnMouseDragEnd(true);
                     DefWndProc(ref m);
                     break;
-                case WindowMessages.WM_SETFOCUS:
+                case User32.WM.SETFOCUS:
                     // We eat the focus unless the target is a ToolStrip edit node (TransparentToolStrip). If we eat the focus in that case, the Windows Narrator won't follow navigation via the keyboard.
                     // NB:  "ToolStrip" is a bit of a misnomer here, because the ToolStripTemplateNode is also used for MenuStrip, StatusStrip, etc...
                     //if (Control.FromHandle(m.HWnd) is ToolStripTemplateNode.TransparentToolStrip)
@@ -2151,15 +2149,15 @@ namespace System.Windows.Forms.Design
                         }
                     }
                     break;
-                case WindowMessages.WM_CONTEXTMENU:
+                case User32.WM.CONTEXTMENU:
                     if (s_inContextMenu)
                     {
                         break;
                     }
 
                     // We handle this in addition to a right mouse button. Why?  Because we often eat the right mouse button, so it may never generate a WM_CONTEXTMENU.  However, the system may generate one in response to an F-10.
-                    x = NativeMethods.Util.SignedLOWORD(unchecked((int)(long)m.LParam));
-                    y = NativeMethods.Util.SignedHIWORD(unchecked((int)(long)m.LParam));
+                    x = PARAM.SignedLOWORD(m.LParam);
+                    y = PARAM.SignedHIWORD(m.LParam);
 
                     ToolStripKeyboardHandlingService keySvc = (ToolStripKeyboardHandlingService)GetService(typeof(ToolStripKeyboardHandlingService));
                     bool handled = false;
@@ -2181,13 +2179,13 @@ namespace System.Windows.Forms.Design
                     }
                     break;
                 default:
-                    if (m.Msg == (int)NativeMethods.WM_MOUSEENTER)
+                    if (m.Msg == (int)User32.RegisteredMessage.WM_MOUSEENTER)
                     {
                         OnMouseEnter();
                         BaseWndProc(ref m);
                     }
                     // We eat all key handling to the control.  Controls generally should not be getting focus anyway, so this shouldn't happen. However, we want to prevent this as much as possible.
-                    else if (m.Msg < WindowMessages.WM_KEYFIRST || m.Msg > WindowMessages.WM_KEYLAST)
+                    else if (m.Msg < (int)User32.WM.KEYFIRST || m.Msg > (int)User32.WM.KEYLAST)
                     {
                         DefWndProc(ref m);
                     }
@@ -2280,32 +2278,32 @@ namespace System.Windows.Forms.Design
 
         private bool IsMouseMessage(int msg)
         {
-            if (msg >= WindowMessages.WM_MOUSEFIRST && msg <= WindowMessages.WM_MOUSELAST)
+            if (msg >= (int)User32.WM.MOUSEFIRST && msg <= (int)User32.WM.MOUSELAST)
             {
                 return true;
             }
 
-            switch (msg)
+            switch ((User32.WM)msg)
             {
                 // WM messages not covered by the above block
-                case WindowMessages.WM_MOUSEHOVER:
-                case WindowMessages.WM_MOUSELEAVE:
+                case User32.WM.MOUSEHOVER:
+                case User32.WM.MOUSELEAVE:
                 // WM_NC messages
-                case WindowMessages.WM_NCMOUSEMOVE:
-                case WindowMessages.WM_NCLBUTTONDOWN:
-                case WindowMessages.WM_NCLBUTTONUP:
-                case WindowMessages.WM_NCLBUTTONDBLCLK:
-                case WindowMessages.WM_NCRBUTTONDOWN:
-                case WindowMessages.WM_NCRBUTTONUP:
-                case WindowMessages.WM_NCRBUTTONDBLCLK:
-                case WindowMessages.WM_NCMBUTTONDOWN:
-                case WindowMessages.WM_NCMBUTTONUP:
-                case WindowMessages.WM_NCMBUTTONDBLCLK:
-                case WindowMessages.WM_NCMOUSEHOVER:
-                case WindowMessages.WM_NCMOUSELEAVE:
-                case WindowMessages.WM_NCXBUTTONDOWN:
-                case WindowMessages.WM_NCXBUTTONUP:
-                case WindowMessages.WM_NCXBUTTONDBLCLK:
+                case User32.WM.NCMOUSEMOVE:
+                case User32.WM.NCLBUTTONDOWN:
+                case User32.WM.NCLBUTTONUP:
+                case User32.WM.NCLBUTTONDBLCLK:
+                case User32.WM.NCRBUTTONDOWN:
+                case User32.WM.NCRBUTTONUP:
+                case User32.WM.NCRBUTTONDBLCLK:
+                case User32.WM.NCMBUTTONDOWN:
+                case User32.WM.NCMBUTTONUP:
+                case User32.WM.NCMBUTTONDBLCLK:
+                case User32.WM.NCMOUSEHOVER:
+                case User32.WM.NCMOUSELEAVE:
+                case User32.WM.NCXBUTTONDOWN:
+                case User32.WM.NCXBUTTONUP:
+                case User32.WM.NCXBUTTONDBLCLK:
                     return true;
                 default:
                     return false;
@@ -2361,10 +2359,10 @@ namespace System.Windows.Forms.Design
 
         private int GetParentPointFromLparam(IntPtr lParam)
         {
-            Point pt = new Point(NativeMethods.Util.SignedLOWORD(unchecked((int)(long)lParam)), NativeMethods.Util.SignedHIWORD(unchecked((int)(long)lParam)));
+            Point pt = new Point(PARAM.SignedLOWORD(lParam), PARAM.SignedHIWORD(lParam));
             pt = Control.PointToScreen(pt);
             pt = Control.Parent.PointToClient(pt);
-            return NativeMethods.Util.MAKELONG(pt.X, pt.Y);
+            return PARAM.ToInt(pt.X, pt.Y);
         }
 
         [ComVisible(true)]
@@ -2683,11 +2681,11 @@ namespace System.Windows.Forms.Design
                     return;
                 }
 
-                if (m.Msg == WindowMessages.WM_DESTROY)
+                if (m.Msg == (int)User32.WM.DESTROY)
                 {
                     _designer.RemoveSubclassedWindow(m.HWnd);
                 }
-                if (m.Msg == WindowMessages.WM_PARENTNOTIFY && NativeMethods.Util.LOWORD(unchecked((int)(long)m.WParam)) == (short)WindowMessages.WM_CREATE)
+                if (m.Msg == (int)User32.WM.PARENTNOTIFY && PARAM.LOWORD(m.WParam) == (short)User32.WM.CREATE)
                 {
                     _designer.HookChildHandles(m.LParam); // they will get removed from the collection just above
                 }
@@ -2853,7 +2851,7 @@ namespace System.Windows.Forms.Design
                     }
 
                     // Controls (primarily RichEdit) will register themselves as drag-drop source/targets when they are instantiated. Normally, when they are being designed, we will RevokeDragDrop() in their designers. The problem occurs when these controls are inside a UserControl. At that time, we do not have a designer for these controls, and they prevent the ParentControlDesigner's drag-drop from working. What we do is to loop through all child controls that do not have a designer (in HookChildControls()), and RevokeDragDrop() after their handles have been created.
-                    if (m.Msg == WindowMessages.WM_CREATE)
+                    if (m.Msg == (int)User32.WM.CREATE)
                     {
                         Debug.Assert(_handle != IntPtr.Zero, "Handle for control not created");
                         Ole32.RevokeDragDrop(_handle);

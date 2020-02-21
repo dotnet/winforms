@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using static Interop;
 
 namespace System.Windows.Forms
@@ -17,7 +19,7 @@ namespace System.Windows.Forms
 
             /// <summary>
             ///  Creates a new, empty ambient property.
-            ///</summary>
+            /// </summary>
             internal AmbientProperty(string name, Ole32.DispatchID dispID)
             {
                 Name = name;

@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design;
@@ -70,7 +72,6 @@ namespace System.Windows.Forms.PropertyGridInternal
                 bool fExpandable = Children.Count > 0;
                 if (!fExpandable)
                 {
-                    //Debug.WriteLine("Object " + rgobjs[0].GetType().FullName + " is not expandable because it has no children");
                     SetFlag(GridEntry.FL_EXPANDABLE_FAILED, true);
                 }
                 CategorizePropEntries();
@@ -86,7 +87,6 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             public static MultiPropertyDescriptorGridEntry[] GetMergedProperties(object[] rgobjs, GridEntry parentEntry, PropertySort sort, PropertyTab tab)
             {
-
                 MultiPropertyDescriptorGridEntry[] result = null;
                 try
                 {
@@ -138,7 +138,6 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
 
                 return result;
-
             }
 
             // this returns an array list of the propertydescriptor arrays, one for each
@@ -176,7 +175,6 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                     for (int j = 1; match && j < propCollections.Length; j++)
                     {
-
                         if (posArray[j] >= propCollections[j].Count)
                         {
                             match = false;
@@ -208,11 +206,9 @@ namespace System.Windows.Forms.PropertyGridInternal
                         // where the matching item would be
                         while (PropertyComparer.Compare(jProp, pivotDesc) <= 0)
                         {
-
                             // got a match!
                             if (pivotDesc.Equals(jProp))
                             {
-
                                 if (!jProp.Attributes[typeof(MergablePropertyAttribute)].IsDefaultAttribute())
                                 {
                                     match = false;
@@ -260,7 +256,6 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             private static MultiPropertyDescriptorGridEntry[] SortParenEntries(MultiPropertyDescriptorGridEntry[] entries)
             {
-
                 MultiPropertyDescriptorGridEntry[] newEntries = null;
                 int newPos = 0;
 
@@ -300,13 +295,11 @@ namespace System.Windows.Forms.PropertyGridInternal
             /// </summary>
             private static ArrayList UnsortedMerge(PropertyDescriptor[] baseEntries, ArrayList sortedMergedEntries)
             {
-
                 ArrayList mergedEntries = new ArrayList();
                 PropertyDescriptor[] mergeArray = new PropertyDescriptor[((PropertyDescriptor[])sortedMergedEntries[0]).Length + 1];
 
                 for (int i = 0; i < baseEntries.Length; i++)
                 {
-
                     PropertyDescriptor basePd = baseEntries[i];
 
                     // first, do a binary search for a matching item
@@ -351,7 +344,6 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
                 return mergedEntries;
             }
-
         }
 
         private class PDComparer : IComparer

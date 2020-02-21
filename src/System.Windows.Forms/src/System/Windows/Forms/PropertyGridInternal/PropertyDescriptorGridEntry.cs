@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
@@ -89,7 +91,6 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 if (helpKeyword == null)
                 {
-
                     object owner = GetValueOwner();
                     if (owner == null)
                     {
@@ -110,7 +111,6 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                         while (ge.ParentGridEntry != null)
                         {
-
                             ge = ge.ParentGridEntry;
 
                             // for value classes, the equality will never work, so
@@ -124,7 +124,6 @@ namespace System.Windows.Forms.PropertyGridInternal
                     }
                     else
                     {
-
                         string typeName = string.Empty;
 
                         Type componentType = propertyInfo.ComponentType;
@@ -135,7 +134,6 @@ namespace System.Windows.Forms.PropertyGridInternal
                         }
                         else
                         {
-
                             // make sure this property is declared on a class that
                             // is related to the component we're looking at.
                             // if it's not, it could be a shadow property so we need
@@ -161,7 +159,6 @@ namespace System.Windows.Forms.PropertyGridInternal
                             }
                             else
                             {
-
                                 //
 
                                 //if (helpAttribute != null && !helpAttribute.IsDefaultAttribute()) {
@@ -525,7 +522,6 @@ namespace System.Windows.Forms.PropertyGridInternal
                    ge is PropertyDescriptorGridEntry &&
                    ((PropertyDescriptorGridEntry)ge).propertyInfo.Attributes.Contains(NotifyParentPropertyAttribute.Yes))
             {
-
                 // find the next parent property with a differnet value owner
                 object owner = ge.GetValueOwner();
 
@@ -595,7 +591,6 @@ namespace System.Windows.Forms.PropertyGridInternal
                     }
                     catch
                     {
-
                         if (exceptionConverter == null)
                         {
                             // clear the flags
@@ -612,7 +607,6 @@ namespace System.Windows.Forms.PropertyGridInternal
                     }
                     catch
                     {
-
                         if (exceptionConverter == null)
                         {
                             // clear the flags
@@ -710,7 +704,6 @@ namespace System.Windows.Forms.PropertyGridInternal
             DesignerTransaction trans = null;
             try
             {
-
                 object oldValue = GetPropertyValueCore(obj);
 
                 if (objVal != null && objVal.Equals(oldValue))
@@ -752,7 +745,6 @@ namespace System.Windows.Forms.PropertyGridInternal
                         }
                         throw coEx;
                     }
-
                 }
 
                 bool wasExpanded = InternalExpanded;
@@ -779,7 +771,6 @@ namespace System.Windows.Forms.PropertyGridInternal
                 //
                 if (obj != null && objVal is string)
                 {
-
                     if (eventBindings == null)
                     {
                         eventBindings = (IEventBindingService)GetService(typeof(IEventBindingService));
@@ -922,7 +913,6 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 if (target != null)
                 {
-
                     propertyInfo.SetValue(target, value);
 
                     // Microsoft, okay, since the value that we modified may not
@@ -1041,7 +1031,6 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 if (newHandler != null)
                 {
-
                     // now walk through all the matching methods to see if this one exists.
                     // if it doesn't we'll wanna show code.
                     //
@@ -1370,11 +1359,6 @@ namespace System.Windows.Forms.PropertyGridInternal
         /// </summary>
         private class ExceptionEditor : UITypeEditor
         {
-            /// <summary>
-            ///  Edits the given object value using the editor style provided by
-            ///  GetEditorStyle.  A service provider is provided so that any
-            ///  required editing services can be obtained.
-            /// </summary>
             public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
             {
                 if (value is Exception except)
@@ -1416,4 +1400,3 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
     }
 }
-

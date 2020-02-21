@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 namespace System.Windows.Forms
 {
     using System.ComponentModel;
@@ -28,7 +30,6 @@ namespace System.Windows.Forms
         {
             if (value is string strValue)
             {
-
                 if (string.Compare(strValue, SR.toStringDefault, true, culture) == 0)
                 {
                     return -1;
@@ -146,4 +147,3 @@ namespace System.Windows.Forms
         }
     }
 } // Namespace system.windows.forms
-

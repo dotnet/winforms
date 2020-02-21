@@ -11,7 +11,10 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class PictureBoxTests
+    using Point = System.Drawing.Point;
+    using Size = System.Drawing.Size;
+
+    public class PictureBoxTests : IClassFixture<ThreadExceptionFixture>
     {
         private const string PathImageLocation = "bitmaps/nature24bits.jpg";
         private const string UrlImageLocation = "https://github.com/dotnet/corefx-testdata/raw/master/System.Drawing.Common.TestData/bitmaps/nature24bits.jpg";
@@ -20,6 +23,10 @@ namespace System.Windows.Forms.Tests
         public void PictureBox_Ctor_Default()
         {
             using var control = new SubPictureBox();
+            Assert.Null(control.AccessibleDefaultActionDescription);
+            Assert.Null(control.AccessibleDescription);
+            Assert.Null(control.AccessibleName);
+            Assert.Equal(AccessibleRole.Default, control.AccessibleRole);
             Assert.False(control.AllowDrop);
             Assert.Equal(AnchorStyles.Top | AnchorStyles.Left, control.Anchor);
             Assert.False(control.AutoSize);
@@ -31,15 +38,19 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(50, control.Bottom);
             Assert.Equal(new Rectangle(0, 0, 100, 50), control.Bounds);
             Assert.False(control.CanEnableIme);
+            Assert.False(control.CanFocus);
             Assert.True(control.CanRaiseEvents);
+            Assert.False(control.CanSelect);
+            Assert.False(control.Capture);
             Assert.True(control.CausesValidation);
             Assert.Equal(new Size(100, 50), control.ClientSize);
             Assert.Equal(new Rectangle(0, 0, 100, 50), control.ClientRectangle);
             Assert.Null(control.Container);
+            Assert.False(control.ContainsFocus);
             Assert.Null(control.ContextMenuStrip);
             Assert.Empty(control.Controls);
             Assert.Same(control.Controls, control.Controls);
-            Assert.False(control.Created);
+            Assert.False(control.IsHandleCreated);
             Assert.Same(Cursors.Default, control.Cursor);
             Assert.Same(Cursors.Default, control.DefaultCursor);
             Assert.Equal(ImeMode.Disable, control.DefaultImeMode);
@@ -57,6 +68,7 @@ namespace System.Windows.Forms.Tests
             Assert.Same(control.ErrorImage, control.ErrorImage);
             Assert.NotNull(control.Events);
             Assert.Same(control.Events, control.Events);
+            Assert.False(control.Focused);
             Assert.Equal(Control.DefaultFont, control.Font);
             Assert.Equal(control.FontHeight, control.FontHeight);
             Assert.Equal(Control.DefaultForeColor, control.ForeColor);
@@ -67,6 +79,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(ImeMode.Disable, control.ImeModeBase);
             Assert.NotNull(control.InitialImage);
             Assert.Same(control.InitialImage, control.InitialImage);
+            Assert.False(control.IsAccessible);
+            Assert.False(control.IsMirrored);
             Assert.NotNull(control.LayoutEngine);
             Assert.Same(control.LayoutEngine, control.LayoutEngine);
             Assert.Equal(0, control.Left);
@@ -93,6 +107,7 @@ namespace System.Windows.Forms.Tests
             Assert.Empty(control.Text);
             Assert.Equal(0, control.Top);
             Assert.Null(control.TopLevelControl);
+            Assert.False(control.UseWaitCursor);
             Assert.True(control.Visible);
             Assert.False(control.WaitOnLoad);
             Assert.Equal(100, control.Width);
@@ -453,27 +468,29 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(2, callCount);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetFontTheoryData))]
         public void PictureBox_Font_Set_GetReturnsExpected(Font value)
         {
-            var control = new SubPictureBox
+            using var control = new SubPictureBox
             {
                 Font = value
             };
             Assert.Equal(value ?? Control.DefaultFont, control.Font);
             Assert.Equal(control.Font.Height, control.FontHeight);
+            Assert.False(control.IsHandleCreated);
 
             // Set same.
             control.Font = value;
             Assert.Equal(value ?? Control.DefaultFont, control.Font);
             Assert.Equal(control.Font.Height, control.FontHeight);
+            Assert.False(control.IsHandleCreated);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void PictureBox_Font_SetWithHandler_CallsFontChanged()
         {
-            var control = new PictureBox();
+            using var control = new PictureBox();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -484,7 +501,7 @@ namespace System.Windows.Forms.Tests
             control.FontChanged += handler;
 
             // Set different.
-            Font font1 = new Font("Arial", 8.25f);
+            using var font1 = new Font("Arial", 8.25f);
             control.Font = font1;
             Assert.Same(font1, control.Font);
             Assert.Equal(1, callCount);
@@ -495,7 +512,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
 
             // Set different.
-            Font font2 = SystemFonts.DialogFont;
+            using var font2 = SystemFonts.DialogFont;
             control.Font = font2;
             Assert.Same(font2, control.Font);
             Assert.Equal(2, callCount);
@@ -1088,13 +1105,14 @@ namespace System.Windows.Forms.Tests
         {
             yield return new object[] { null };
             yield return new object[] { new Control() };
+            yield return new object[] { new Form() };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(Parent_Set_TestData))]
         public void PictureBox_Parent_Set_GetReturnsExpected(Control value)
         {
-            var control = new PictureBox
+            using var control = new PictureBox
             {
                 Parent = value
             };
@@ -1105,12 +1123,12 @@ namespace System.Windows.Forms.Tests
             Assert.Same(value, control.Parent);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(Parent_Set_TestData))]
         public void PictureBox_Parent_SetWithNonNullOldParent_GetReturnsExpected(Control value)
         {
-            var oldParent = new Control();
-            var control = new PictureBox
+            using var oldParent = new Control();
+            using var control = new PictureBox
             {
                 Parent = oldParent
             };
@@ -1125,11 +1143,11 @@ namespace System.Windows.Forms.Tests
             Assert.Empty(oldParent.Controls);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void PictureBox_Parent_SetNonNull_AddsToControls()
         {
-            var parent = new Control();
-            var control = new PictureBox
+            using var parent = new Control();
+            using var control = new PictureBox
             {
                 Parent = parent
             };
@@ -1142,11 +1160,11 @@ namespace System.Windows.Forms.Tests
             Assert.Same(control, Assert.Single(parent.Controls));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void PictureBox_Parent_SetWithHandler_CallsParentChanged()
         {
-            var parent = new Control();
-            var control = new PictureBox();
+            using var parent = new Control();
+            using var control = new PictureBox();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -1178,10 +1196,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(2, callCount);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void PictureBox_Parent_SetSame_ThrowsArgumentException()
         {
-            var control = new PictureBox();
+            using var control = new PictureBox();
             Assert.Throws<ArgumentException>(null, () => control.Parent = control);
             Assert.Null(control.Parent);
         }
@@ -1537,40 +1555,56 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(2, callCount);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void PictureBox_Text_Set_GetReturnsExpected(string value, string expected)
         {
-            var control = new PictureBox
+            using var control = new PictureBox
             {
                 Text = value
             };
             Assert.Equal(expected, control.Text);
+            Assert.False(control.IsHandleCreated);
 
             // Set same.
             control.Text = value;
             Assert.Equal(expected, control.Text);
+            Assert.False(control.IsHandleCreated);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void PictureBox_Text_SetWithHandle_GetReturnsExpected(string value, string expected)
         {
-            var control = new PictureBox();
+            using var control = new PictureBox();
             Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
 
             control.Text = value;
             Assert.Equal(expected, control.Text);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
 
             // Set same.
             control.Text = value;
             Assert.Equal(expected, control.Text);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void PictureBox_Text_SetWithHandler_CallsTextChanged()
         {
-            var control = new PictureBox();
+            using var control = new PictureBox();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -1828,6 +1862,43 @@ namespace System.Windows.Forms.Tests
             var pictureBox = new PictureBox();
             pictureBox.Dispose();
             pictureBox.Dispose();
+        }
+
+        [WinFormsFact]
+        public void PictureBox_GetAutoSizeMode_Invoke_ReturnsExpected()
+        {
+            using var control = new SubPictureBox();
+            Assert.Equal(AutoSizeMode.GrowOnly, control.GetAutoSizeMode());
+        }
+
+        [WinFormsTheory]
+        [InlineData(ControlStyles.ContainerControl, false)]
+        [InlineData(ControlStyles.UserPaint, true)]
+        [InlineData(ControlStyles.Opaque, false)]
+        [InlineData(ControlStyles.ResizeRedraw, false)]
+        [InlineData(ControlStyles.FixedWidth, false)]
+        [InlineData(ControlStyles.FixedHeight, false)]
+        [InlineData(ControlStyles.StandardClick, true)]
+        [InlineData(ControlStyles.Selectable, false)]
+        [InlineData(ControlStyles.UserMouse, false)]
+        [InlineData(ControlStyles.SupportsTransparentBackColor, true)]
+        [InlineData(ControlStyles.StandardDoubleClick, true)]
+        [InlineData(ControlStyles.AllPaintingInWmPaint, true)]
+        [InlineData(ControlStyles.CacheText, false)]
+        [InlineData(ControlStyles.EnableNotifyMessage, false)]
+        [InlineData(ControlStyles.DoubleBuffer, false)]
+        [InlineData(ControlStyles.OptimizedDoubleBuffer, true)]
+        [InlineData(ControlStyles.UseTextForAccessibility, true)]
+        [InlineData((ControlStyles)0, true)]
+        [InlineData((ControlStyles)int.MaxValue, false)]
+        [InlineData((ControlStyles)(-1), false)]
+        public void PictureBox_GetStyle_Invoke_ReturnsExpected(ControlStyles flag, bool expected)
+        {
+            using var control = new SubPictureBox();
+            Assert.Equal(expected, control.GetStyle(flag));
+
+            // Call again to test caching.
+            Assert.Equal(expected, control.GetStyle(flag));
         }
 
         [Theory]
@@ -2112,14 +2183,14 @@ namespace System.Windows.Forms.Tests
             control.HandleCreated += handler;
             control.OnHandleCreated(eventArgs);
             Assert.Equal(1, callCount);
-            Assert.False(control.Created);
+            Assert.False(control.IsHandleCreated);
             Assert.False(control.IsHandleCreated);
 
             // Remove handler.
             control.HandleCreated -= handler;
             control.OnHandleCreated(eventArgs);
             Assert.Equal(1, callCount);
-            Assert.False(control.Created);
+            Assert.False(control.IsHandleCreated);
             Assert.False(control.IsHandleCreated);
         }
 
@@ -2143,14 +2214,14 @@ namespace System.Windows.Forms.Tests
             control.HandleCreated += handler;
             control.OnHandleCreated(eventArgs);
             Assert.Equal(1, callCount);
-            Assert.True(control.Created);
+            Assert.True(control.IsHandleCreated);
             Assert.True(control.IsHandleCreated);
 
             // Remove handler.
             control.HandleCreated -= handler;
             control.OnHandleCreated(eventArgs);
             Assert.Equal(1, callCount);
-            Assert.True(control.Created);
+            Assert.True(control.IsHandleCreated);
             Assert.True(control.IsHandleCreated);
         }
 
@@ -2171,14 +2242,14 @@ namespace System.Windows.Forms.Tests
             control.HandleDestroyed += handler;
             control.OnHandleDestroyed(eventArgs);
             Assert.Equal(1, callCount);
-            Assert.False(control.Created);
+            Assert.False(control.IsHandleCreated);
             Assert.False(control.IsHandleCreated);
 
             // Remove handler.
             control.HandleDestroyed -= handler;
             control.OnHandleDestroyed(eventArgs);
             Assert.Equal(1, callCount);
-            Assert.False(control.Created);
+            Assert.False(control.IsHandleCreated);
             Assert.False(control.IsHandleCreated);
         }
 
@@ -2201,14 +2272,14 @@ namespace System.Windows.Forms.Tests
             control.HandleDestroyed += handler;
             control.OnHandleDestroyed(eventArgs);
             Assert.Equal(1, callCount);
-            Assert.True(control.Created);
+            Assert.True(control.IsHandleCreated);
             Assert.True(control.IsHandleCreated);
 
             // Remove handler.
             control.HandleDestroyed -= handler;
             control.OnHandleDestroyed(eventArgs);
             Assert.Equal(1, callCount);
-            Assert.True(control.Created);
+            Assert.True(control.IsHandleCreated);
             Assert.True(control.IsHandleCreated);
         }
 
@@ -2790,6 +2861,8 @@ namespace System.Windows.Forms.Tests
             public new bool ShowFocusCues => base.ShowFocusCues;
 
             public new bool ShowKeyboardCues => base.ShowKeyboardCues;
+
+            public new AutoSizeMode GetAutoSizeMode() => base.GetAutoSizeMode();
 
             public new bool GetStyle(ControlStyles flag) => base.GetStyle(flag);
 

@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -49,15 +51,10 @@ namespace System.Resources
         // 2. once the object is constructed the delegate should not be changed to avoid getting inconsistent results.
         private Func<Type, string> typeNameConverter;
 
-        // constructors
-
         private ResXDataNode()
         {
         }
 
-        // <summary>
-        // this is a deep clone
-        //</summary>
         internal ResXDataNode DeepClone()
         {
             return new ResXDataNode
@@ -362,7 +359,6 @@ namespace System.Resources
                     nodeInfo.MimeType = ResXResourceWriter.DefaultSerializedObjectMimeType;
                 }
             }
-
         }
 
         private object GenerateObjectFromDataNodeInfo(DataNodeInfo dataNodeInfo, ITypeResolutionService typeResolver)
@@ -518,7 +514,6 @@ namespace System.Resources
                     // serialize to string inside the nodeInfo
                     FillDataNodeInfoFromObject(nodeInfo, value);
                 }
-
             }
             return nodeInfo;
         }
@@ -556,7 +551,6 @@ namespace System.Resources
             }
             else if (nodeInfo != null)
             {
-
                 // we dont have a fileref, try to resolve the type of the datanode
                 result = nodeInfo.TypeName;
                 // if typename is null, the default is just a string
@@ -705,7 +699,6 @@ namespace System.Resources
             Type resolvedType = null;
             if (typeResolver != null)
             {
-
                 // If we cannot find the strong-named type, then try to see
                 // if the TypeResolver can bind to partial names. For this,
                 // we will strip out the partial names and keep the rest of the
@@ -714,7 +707,6 @@ namespace System.Resources
                 resolvedType = typeResolver.GetType(typeName, false);
                 if (resolvedType == null)
                 {
-
                     string[] typeParts = typeName.Split(',');
 
                     // Break up the type name from the rest of the assembly strong name.

@@ -8,9 +8,9 @@ using System.Drawing.Design;
 namespace System.Windows.Forms.Design
 {
     /// <summary>
-	///  Associates Type with ToolStripMenuItem.
-	/// </summary>
-	internal class ItemTypeToolStripMenuItem : ToolStripMenuItem
+    ///  Associates Type with ToolStripMenuItem.
+    /// </summary>
+    internal class ItemTypeToolStripMenuItem : ToolStripMenuItem
     {
         private static readonly string s_systemWindowsFormsNamespace = typeof(ToolStripItem).Namespace;
         private static readonly ToolboxItem s_invalidToolboxItem = new ToolboxItem();
@@ -67,6 +67,5 @@ namespace System.Windows.Forms.Design
             }
             base.Dispose(disposing);
         }
-
     }
 }

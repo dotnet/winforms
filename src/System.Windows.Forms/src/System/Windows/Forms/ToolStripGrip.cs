@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Drawing;
 using System.Windows.Forms.Layout;
 using static Interop;
@@ -123,9 +125,7 @@ namespace System.Windows.Forms
                 else
                 {
                     preferredSize = new Size(gripThickness, ParentInternal.Height);
-
                 }
-
             }
             // Constrain ourselves
             if (preferredSize.Width > constrainingSize.Width)
@@ -169,7 +169,6 @@ namespace System.Windows.Forms
             bool leftMouseButtonDown = LeftMouseButtonIsDown();
             if (!MovingToolStrip && leftMouseButtonDown)
             {
-
                 // determine if we've moved far enough such that the toolstrip
                 // can be considered as moving.
                 Point currentLocation = TranslatePoint(mea.Location, ToolStripPointType.ToolStripItemCoords, ToolStripPointType.ScreenCoords);
@@ -195,7 +194,6 @@ namespace System.Windows.Forms
                         MovingToolStrip = true;
                     }
                 }
-
             }
             if (MovingToolStrip)
             {
@@ -235,7 +233,6 @@ namespace System.Windows.Forms
                 oldCursor = null;
             }
             base.OnMouseEnter(e);
-
         }
 
         /// <summary>
@@ -340,5 +337,3 @@ namespace System.Windows.Forms
         }
     }
 }
-
-

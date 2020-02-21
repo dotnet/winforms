@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing.Design;
@@ -76,7 +78,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
                 if (sender.CanShow && validPropPage)
                 {
-                    if (typeof(UnsafeNativeMethods.IDispatch).IsAssignableFrom(sender.PropertyType))
+                    if (typeof(Oleaut32.IDispatch).IsAssignableFrom(sender.PropertyType))
                     {
                         attrEvent.Add(BrowsableAttribute.Yes);
                     }
@@ -90,7 +92,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             {
                 if (sender.TargetObject is Ole32.IPerPropertyBrowsing)
                 {
-
                     // if we are using the dropdown, don't convert the value
                     // or the values will change when we select them and call back
                     // for the display value.
@@ -171,7 +172,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 //
                 if (!hasStrings)
                 {
-
                     // this is a _bit_ of a backwards-compat work around...
                     // many older ActiveX controls will show a property page
                     // for all properties since the old grid would only put up the
@@ -204,7 +204,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
             public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destType)
             {
-
                 if (destType == typeof(string) && !itemsEnum.arraysFetched)
                 {
                     object curValue = itemsEnum.target.GetValue(itemsEnum.target.TargetObject);
@@ -298,7 +297,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
                     if (nameItems.Length > 0)
                     {
-
                         object[] valueItems = new object[cookieItems.Length];
                         var var = new Ole32.VARIANT();
                         int cookie;
@@ -342,12 +340,13 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                             }
 
                             var.Clear();
-                            if (hr == NativeMethods.S_OK)
+                            if (hr == HRESULT.S_OK)
                             {
                                 itemCount++;
                                 continue;
                             }
-                            else if (itemCount > 0)
+
+                            if (itemCount > 0)
                             {
                                 // shorten the arrays to ignore the failed ones.  this isn't terribly
                                 // efficient but shouldn't happen very often.  It's rare for these to fail.
@@ -355,14 +354,12 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                                 Array.Copy(nameItems, i, nameItems, i + 1, itemCount);
                                 Array.Copy(valueItems, i, valueItems, i + 1, itemCount);
                             }
-
                         }
 
                         // pass this data down to the base Com2Enum object...
                         string[] strings = new string[itemCount];
                         Array.Copy(nameItems, 0, strings, 0, itemCount);
                         base.PopulateArrays(strings, valueItems);
-
                     }
                 }
                 catch (Exception ex)
@@ -385,7 +382,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
             public override string ToString(object v)
             {
-
                 // If the value is the object's current value, then
                 // ask GetDisplay string first.  This is a perf improvement
                 // because this way we don't populate the arrays when an object is selected, only
@@ -393,7 +389,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 //
                 if (target.IsCurrentValue(v))
                 {
-
                     bool success = false;
 
                     string displayString = Com2IPerPropertyBrowsingHandler.GetDisplayString((Ole32.IPerPropertyBrowsing)target.TargetObject, target.DISPID, ref success);
@@ -410,6 +405,5 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 return base.ToString(v);
             }
         }
-
     }
 }

@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
@@ -203,7 +205,7 @@ namespace System.Windows.Forms
                         }
                     }
                 }
-                else if (Host.AXInPlaceObject is UnsafeNativeMethods.IOleInPlaceObjectWindowless)
+                else if (Host.AXInPlaceObject is Ole32.IOleInPlaceObjectWindowless)
                 {
                     throw new InvalidOperationException(SR.AXWindowlessControl);
                 }
@@ -436,4 +438,3 @@ namespace System.Windows.Forms
         }
     }
 }
-

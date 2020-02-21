@@ -2,23 +2,24 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing.Design;
 using System.Runtime.InteropServices;
 using static Interop;
+using static Interop.ComCtl32;
 
 namespace System.Windows.Forms
 {
     /// <summary>
     ///  Displays a single column header in a <see cref='Forms.ListView'/> control.
     /// </summary>
-    [
-    ToolboxItem(false),
-    DesignTimeVisible(false),
-    DefaultProperty(nameof(Text)),
-    TypeConverter(typeof(ColumnHeaderConverter))
-    ]
+    [ToolboxItem(false)]
+    [DesignTimeVisible(false)]
+    [DefaultProperty(nameof(Text))]
+    [TypeConverter(typeof(ColumnHeaderConverter))]
     public class ColumnHeader : Component, ICloneable
     {
         // disable csharp compiler warning #0414: field assigned unused value
@@ -96,12 +97,10 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            Localizable(true),
-            RefreshProperties(RefreshProperties.Repaint),
-        SRCategory(nameof(SR.CatBehavior)),
-        SRDescription(nameof(SR.ColumnHeaderDisplayIndexDescr))
-        ]
+        [Localizable(true)]
+        [RefreshProperties(RefreshProperties.Repaint)]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [SRDescription(nameof(SR.ColumnHeaderDisplayIndexDescr))]
         public int DisplayIndex
         {
             get
@@ -111,7 +110,6 @@ namespace System.Windows.Forms
 
             set
             {
-
                 // When the list is being deserialized we need
                 // to take the display index as is. ListView
                 // does correctly synchronize the indices.
@@ -136,7 +134,6 @@ namespace System.Windows.Forms
                 ColumnHeader movedHdr = null;
                 for (int i = 0; i < listview.Columns.Count; i++)
                 {
-
                     ColumnHeader hdr = listview.Columns[i];
                     if (hdr.DisplayIndex == DisplayIndexInternal)
                     {
@@ -189,13 +186,11 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-        DefaultValue(-1),
-        TypeConverter(typeof(ImageIndexConverter)),
-        Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
-        RefreshProperties(RefreshProperties.Repaint),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [DefaultValue(-1)]
+        [TypeConverter(typeof(ImageIndexConverter))]
+        [Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
+        [RefreshProperties(RefreshProperties.Repaint)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public int ImageIndex
         {
             get
@@ -219,7 +214,7 @@ namespace System.Windows.Forms
 
                     if (ListView != null && ListView.IsHandleCreated)
                     {
-                        ListView.SetColumnInfo(NativeMethods.LVCF_IMAGE, this);
+                        ListView.SetColumnInfo(LVCF.IMAGE, this);
                     }
                 }
             }
@@ -235,13 +230,11 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-        DefaultValue(""),
-        TypeConverter(typeof(ImageKeyConverter)),
-        Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
-        RefreshProperties(RefreshProperties.Repaint),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [DefaultValue("")]
+        [TypeConverter(typeof(ImageKeyConverter))]
+        [Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
+        [RefreshProperties(RefreshProperties.Repaint)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public string ImageKey
         {
             get
@@ -256,7 +249,7 @@ namespace System.Windows.Forms
 
                     if (ListView != null && ListView.IsHandleCreated)
                     {
-                        ListView.SetColumnInfo(NativeMethods.LVCF_IMAGE, this);
+                        ListView.SetColumnInfo(LVCF.IMAGE, this);
                     }
                 }
             }
@@ -277,10 +270,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The Name of the column header
         /// </summary>
-        [
-        Browsable(false),
-        SRDescription(nameof(SR.ColumnHeaderNameDescr))
-        ]
+        [Browsable(false)]
+        [SRDescription(nameof(SR.ColumnHeaderNameDescr))]
         public string Name
         {
             get
@@ -302,21 +293,18 @@ namespace System.Windows.Forms
                     Site.Name = value;
                 }
             }
-
         }
 
         /// <summary>
         ///  The text displayed in the column header
         /// </summary>
-        [
-        Localizable(true),
-        SRDescription(nameof(SR.ColumnCaption))
-        ]
+        [Localizable(true)]
+        [SRDescription(nameof(SR.ColumnCaption))]
         public string Text
         {
             get
             {
-                return (text ?? "ColumnHeader");
+                return text ?? nameof(ColumnHeader);
             }
             set
             {
@@ -330,20 +318,17 @@ namespace System.Windows.Forms
                 }
                 if (listview != null)
                 {
-                    listview.SetColumnInfo(NativeMethods.LVCF_TEXT, this);
+                    listview.SetColumnInfo(LVCF.TEXT, this);
                 }
             }
-
         }
 
         /// <summary>
         ///  The horizontal alignment of the text contained in this column
         /// </summary>
-        [
-        SRDescription(nameof(SR.ColumnAlignment)),
-        Localizable(true),
-        DefaultValue(HorizontalAlignment.Left)
-        ]
+        [SRDescription(nameof(SR.ColumnAlignment))]
+        [Localizable(true)]
+        [DefaultValue(HorizontalAlignment.Left)]
         public HorizontalAlignment TextAlign
         {
             get
@@ -352,7 +337,7 @@ namespace System.Windows.Forms
                 {
                     textAlignInitialized = true;
                     // See below for an explanation of (Index != 0)
-                    //Added !IsMirrored
+                    // Added !IsMirrored
                     if ((Index != 0) && (listview.RightToLeft == RightToLeft.Yes) && !listview.IsMirrored)
                     {
                         textAlign = HorizontalAlignment.Right;
@@ -362,7 +347,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                //valid values are 0x0 to 0x2.
+                // valid values are 0x0 to 0x2.
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)HorizontalAlignment.Left, (int)HorizontalAlignment.Center))
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(HorizontalAlignment));
@@ -378,20 +363,18 @@ namespace System.Windows.Forms
 
                 if (listview != null)
                 {
-                    listview.SetColumnInfo(NativeMethods.LVCF_FMT, this);
+                    listview.SetColumnInfo(LVCF.FMT, this);
                     listview.Invalidate();
                 }
             }
         }
 
-        [
-        SRCategory(nameof(SR.CatData)),
-        Localizable(false),
-        Bindable(true),
-        SRDescription(nameof(SR.ControlTagDescr)),
-        DefaultValue(null),
-        TypeConverter(typeof(StringConverter)),
-        ]
+        [SRCategory(nameof(SR.CatData))]
+        [Localizable(false)]
+        [Bindable(true)]
+        [SRDescription(nameof(SR.ControlTagDescr))]
+        [DefaultValue(null)]
+        [TypeConverter(typeof(StringConverter))]
         public object Tag
         {
             get
@@ -411,14 +394,13 @@ namespace System.Windows.Forms
                 return width;
             }
         }
+
         /// <summary>
         ///  The width of the column in pixels.
         /// </summary>
-        [
-        SRDescription(nameof(SR.ColumnWidth)),
-        Localizable(true),
-        DefaultValue(60)
-        ]
+        [SRDescription(nameof(SR.ColumnWidth))]
+        [Localizable(true)]
+        [DefaultValue(60)]
         public int Width
         {
             get
@@ -429,16 +411,14 @@ namespace System.Windows.Forms
                 // The underlying control will only report the correct width if it's in Report view
                 if (listview != null && listview.IsHandleCreated && !listview.Disposing && listview.View == View.Details)
                 {
-
                     // Make sure this column has already been added to the ListView, else just return width
-                    //
-                    IntPtr hwndHdr = UnsafeNativeMethods.SendMessage(new HandleRef(listview, listview.Handle), (int)LVM.GETHEADER, 0, 0);
+                    IntPtr hwndHdr = User32.SendMessageW(listview, (User32.WM)LVM.GETHEADER);
                     if (hwndHdr != IntPtr.Zero)
                     {
-                        int nativeColumnCount = (int)UnsafeNativeMethods.SendMessage(new HandleRef(listview, hwndHdr), NativeMethods.HDM_GETITEMCOUNT, 0, 0);
+                        int nativeColumnCount = (int)User32.SendMessageW(hwndHdr, (User32.WM)HDM.GETITEMCOUNT);
                         if (Index < nativeColumnCount)
                         {
-                            width = (int)UnsafeNativeMethods.SendMessage(new HandleRef(listview, listview.Handle), (int)LVM.GETCOLUMNWIDTH, Index, 0);
+                            width = (int)User32.SendMessageW(listview, (User32.WM)LVM.GETCOLUMNWIDTH, (IntPtr)Index);
                         }
                     }
                 }
@@ -513,17 +493,20 @@ namespace System.Windows.Forms
         }
 
         // Set the display indices of the listview columns
-        private void SetDisplayIndices(int[] cols)
+        private unsafe void SetDisplayIndices(int[] cols)
         {
             if (listview.IsHandleCreated && !listview.Disposing)
             {
-                UnsafeNativeMethods.SendMessage(new HandleRef(listview, listview.Handle), (int)LVM.SETCOLUMNORDERARRAY, cols.Length, cols);
+                fixed (int* pCols = cols)
+                {
+                    User32.SendMessageW(listview, (User32.WM)LVM.SETCOLUMNORDERARRAY, (IntPtr)cols.Length, (IntPtr)pCols);
+                }
             }
         }
 
         private bool ShouldSerializeName()
         {
-            return !string.IsNullOrEmpty(name);
+            return !string.IsNullOrEmpty(Name);
         }
 
         private bool ShouldSerializeDisplayIndex()
@@ -533,7 +516,7 @@ namespace System.Windows.Forms
 
         internal bool ShouldSerializeText()
         {
-            return (text != null);
+            return text != null;
         }
 
         /// <summary>
@@ -541,7 +524,7 @@ namespace System.Windows.Forms
         /// </summary>
         public override string ToString()
         {
-            return "ColumnHeader: Text: " + Text;
+            return $"{nameof(ColumnHeader)}: Text: {Text}";
         }
 
         internal class ColumnHeaderImageListIndexer : ImageList.Indexer

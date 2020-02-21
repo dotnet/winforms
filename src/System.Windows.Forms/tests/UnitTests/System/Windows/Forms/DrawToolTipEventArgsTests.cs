@@ -9,7 +9,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class DrawToolTipEventArgsTests
+    public class DrawToolTipEventArgsTests : IClassFixture<ThreadExceptionFixture>
     {
         public static IEnumerable<object[]> Ctor_Graphics_IWin32Window_Control_Rectangle_String_Color_Color_Font_TestData()
         {

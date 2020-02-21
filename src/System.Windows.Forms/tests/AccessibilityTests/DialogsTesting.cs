@@ -35,7 +35,6 @@ namespace AccessibilityTests
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.ShowDialog();
-
         }
 
         private void SaveFileDialog_Click(object sender, EventArgs e)

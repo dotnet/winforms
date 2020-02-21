@@ -2,7 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-//#define SELECTEDCHANGED
+#nullable disable
 
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -159,10 +159,6 @@ namespace System.Windows.Forms
         private int deviceDpi = DpiHelper.DeviceDpi;
         internal Font defaultFont = ToolStripManager.DefaultFont;
 
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.ToolStripItem"]/*' />
-        /// <devdoc>
-        ///  Constructor
-        /// </summary>
         protected ToolStripItem()
         {
             if (DpiHelper.IsScalingRequirementMet)
@@ -179,7 +175,6 @@ namespace System.Windows.Forms
             CommonProperties.SetAutoSize(this, true);
             state[stateContstructing] = false;
             AutoToolTip = DefaultAutoToolTip;
-
         }
 
         protected ToolStripItem(string text, Image image, EventHandler onClick) : this(text, image, onClick, null)
@@ -318,7 +313,6 @@ namespace System.Windows.Forms
                 Properties.SetInteger(PropAccessibleRole, (int)value);
                 OnAccessibleRoleChanged(EventArgs.Empty);
             }
-
         }
 
         /// <summary>
@@ -413,7 +407,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  !!!!This property ONLY works when toolStrip.ShowItemToolTips = true!!!!
         ///  if AutoToolTip is set to true we use the Text, if false, we use ToolTipText.
-        ///</summary>
+        /// </summary>
         [DefaultValue(false)]
         [SRDescription(nameof(SR.ToolStripItemAutoToolTipDescr))]
         [SRCategory(nameof(SR.CatBehavior))]
@@ -432,7 +426,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  as opposed to Visible, which returns whether or not the item and its parent are Visible
         ///  Available returns whether or not the item will be shown.  Setting Available sets Visible and Vice/Versa
-        ///</summary>
+        /// </summary>
         [
         Browsable(false),
         SRDescription(nameof(SR.ToolStripItemAvailableDescr)),
@@ -479,7 +473,6 @@ namespace System.Windows.Forms
             get
             {
                 return Properties.GetObject(PropBackgroundImage) as Image;
-
             }
             set
             {
@@ -690,7 +683,6 @@ namespace System.Windows.Forms
         {
             get
             {
-
                 // since we dont support DefaultLayout go directly against the CommonProperties
                 return CommonProperties.xGetDock(this);
             }
@@ -756,7 +748,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Deriving classes can override this to configure a default size for their control.
         ///  This is more efficient than setting the size in the control's constructor.
-        /// </devdoc>
+        /// </summary>
         protected virtual Size DefaultSize
         {
             get
@@ -816,7 +808,6 @@ namespace System.Windows.Forms
                         OnDisplayStyleChanged(EventArgs.Empty);
                     }
                 }
-
             }
         }
 
@@ -973,7 +964,6 @@ namespace System.Windows.Forms
                         {
                             KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(this);
                         }
-
                     }
                     OnEnabledChanged(EventArgs.Empty);
                     Invalidate();
@@ -1083,7 +1073,6 @@ namespace System.Windows.Forms
             }
             set
             {
-
                 Font local = (Font)Properties.GetObject(PropFont);
                 if ((local != value))
                 {
@@ -1207,7 +1196,6 @@ namespace System.Windows.Forms
             }
             set
             {
-
                 if (!WindowsFormsUtils.EnumValidator.IsValidContentAlignment(value))
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ContentAlignment));
@@ -1301,7 +1289,6 @@ namespace System.Windows.Forms
                     }
                     Invalidate();
                 }
-
             }
         }
 
@@ -1384,7 +1371,6 @@ namespace System.Windows.Forms
                 Properties.SetObject(PropImage, null);
 
                 InvalidateItemLayout(PropertyNames.ImageKey);
-
             }
         }
 
@@ -1470,7 +1456,6 @@ namespace System.Windows.Forms
             {
                 return state[stateDisposed];
             }
-
         }
 
         [Browsable(false)]
@@ -1478,7 +1463,6 @@ namespace System.Windows.Forms
         {
             get
             {
-
                 if (ParentInternal != null)
                 {
                     return ParentInternal.IsDropDown;
@@ -1916,7 +1900,6 @@ namespace System.Windows.Forms
         {
             get
             {
-
                 if ((DisplayStyle & ToolStripItemDisplayStyle.Image) != ToolStripItemDisplayStyle.Image)
                 {
                     return Size.Empty;
@@ -1945,7 +1928,6 @@ namespace System.Windows.Forms
                 }
 
                 return imageSize;
-
             }
         }
 
@@ -1975,7 +1957,6 @@ namespace System.Windows.Forms
             get
             {
                 return CanSelect && state[statePressed];
-
             }
         }
 
@@ -2016,7 +1997,6 @@ namespace System.Windows.Forms
                     return Owner.Renderer;
                 }
                 return ParentInternal?.Renderer;
-
             }
         }
 
@@ -2081,12 +2061,12 @@ namespace System.Windows.Forms
             }
         }
 
-        ///<summary>
+        /// <summary>
         ///  Mirrors the image when RTL.Yes.
         ///  Note we do not change what is returned back from the Image property as this would cause problems with serialization.
         ///  Instead we only change what is painted - there's an internal MirroredImage property which fills in as
         ///  e.Image in the ToolStripItemImageRenderEventArgs if the item is RTL.Yes and AutoMirrorImage is turned on.
-        ///</summary>
+        /// </summary>
         [
         DefaultValue(false),
         SRCategory(nameof(SR.CatAppearance)),
@@ -2169,14 +2149,6 @@ namespace System.Windows.Forms
             }
         }
 
-#if SELECTEDCHANGED
-        public event EventHandler SelectedChanged {
-            add => Events.AddHandler(EventSelectedChanged, value);
-            remove => Events.RemoveHandler(EventSelectedChanged, value);
-        }
-#endif
-
-        /// <devdoc/>
         internal protected virtual bool ShowKeyboardCues
         {
             get
@@ -2275,7 +2247,6 @@ namespace System.Windows.Forms
                     return propertyStore.GetObject(ToolStripItem.PropTag);
                 }
                 return null;
-
             }
             set
             {
@@ -2299,7 +2270,6 @@ namespace System.Windows.Forms
                     return (string)Properties.GetObject(ToolStripItem.PropText);
                 }
                 return "";
-
             }
             set
             {
@@ -2307,10 +2277,8 @@ namespace System.Windows.Forms
                 {
                     Properties.SetObject(ToolStripItem.PropText, value);
                     OnTextChanged(EventArgs.Empty);
-
                 }
             }
-
         }
 
         /// <summary>
@@ -2458,7 +2426,6 @@ namespace System.Windows.Forms
             {
                 SetVisibleCore(value);
             }
-
         }
 
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ToolStripItemOnVisibleChangedDescr))]
@@ -2539,7 +2506,6 @@ namespace System.Windows.Forms
         {
             if (Control.ModifierKeys == Keys.Alt)
             {
-
                 if (ParentInternal.Items.Contains(this) && ParentInternal.AllowItemReorder)
                 {
                     // we only drag
@@ -2547,7 +2513,6 @@ namespace System.Windows.Forms
                     DoDragDrop(item, DragDropEffects.Move);
                     return true;
                 }
-
             }
             return false;
         }
@@ -2631,7 +2596,6 @@ namespace System.Windows.Forms
                 }
                 else if (data is ToolStripItem)
                 {
-
                     // it seems that the DataObject does string comparison
                     // on the type, so you can't ask for GetDataPresent of
                     // a base type (e.g. ToolStripItem) when you are really
@@ -2930,7 +2894,6 @@ namespace System.Windows.Forms
                      && ParentInternal.CanHotTrack
                      && ParentInternal.ShouldSelectItem())
                 {
-
                     if (Enabled)
                     {
                         // calling select can dismiss a child dropdown which would break auto-expansion.
@@ -3177,7 +3140,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='ToolStripItem.Enter'/> event.
+        ///  Raises the <see cref='ToolStripItem.DragEnter'/> event.
         ///  Inheriting classes should override this method to handle this event.
         ///  Call base.onEnter to send this event to any registered event listeners.
         /// </summary>
@@ -3472,13 +3435,8 @@ namespace System.Windows.Forms
         {
             InvalidateItemLayout(PropertyNames.RightToLeft);
             RaiseEvent(EventRightToLeft, e);
+        }
 
-        }
-#if SELECTEDCHANGED
-        protected virtual void OnSelectedChanged(EventArgs e) {
-            RaiseEvent(EventSelectedChanged, e);
-        }
-#endif
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnTextChanged(EventArgs e)
         {
@@ -3618,10 +3576,6 @@ namespace System.Windows.Forms
             scaledDefaultStatusStripMargin = DpiHelper.LogicalToDeviceUnits(defaultStatusStripMargin, deviceDpi);
         }
 
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.Select"]/*' />
-        /// <devdoc>
-        ///  Selects the item
-        /// </summary>
         public void Select()
         {
 #if DEBUG
@@ -3670,10 +3624,6 @@ namespace System.Windows.Forms
                 {
                     ((ToolStripItemAccessibleObject)AccessibilityObject).RaiseFocusChanged();
                 }
-
-#if SELECTEDCHANGED
-                OnSelectedChanged(EventArgs.Empty);
-#endif
             }
         }
 
@@ -3993,7 +3943,6 @@ namespace System.Windows.Forms
             if (parent == null)
             {
                 // should not throw here as it's an internal function call.
-                Debug.Fail("could not determine current parent");
                 return fromPoint;
             }
 
@@ -4049,7 +3998,6 @@ namespace System.Windows.Forms
                     Debug.Assert((toPointType == ToolStripPointType.ToolStripCoords), "why are we here! - investigate");
                     toPoint = fromPoint;
                 }
-
             }
             return toPoint;
         }
@@ -4097,9 +4045,6 @@ namespace System.Windows.Forms
                     }
 
                     KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(this);
-#if SELECTEDCHANGED
-                    OnSelectedChanged(EventArgs.Empty);
-#endif
                 }
             }
         }
@@ -4307,7 +4252,6 @@ namespace System.Windows.Forms
                         return (mnemonic == (char)0) ? string.Empty : mnemonic.ToString();
                     }
                     return (mnemonic == (char)0) ? string.Empty : ("Alt+" + mnemonic);
-
                 }
             }
 
@@ -4409,7 +4353,6 @@ namespace System.Windows.Forms
                     {
                         return AccessibleRole.PushButton;
                     }
-
                 }
             }
 
@@ -4440,12 +4383,6 @@ namespace System.Windows.Forms
                     }
 
                     AccessibleStates accState = AccessibleStates.Focusable | additionalState;
-
-                    //
-                    /*if (HasDropDownItems) {
-                        accState |= AccessibleState.HasPopup;
-                    }*/
-
                     if (ownerItem.Selected || ownerItem.Pressed)
                     {
                         accState |= AccessibleStates.Focused | AccessibleStates.HotTracked;
@@ -4531,9 +4468,7 @@ namespace System.Windows.Forms
                             nextItem = (Owner.IsOnDropDown) ? parent.GetNextItem(Owner, ArrowDirection.Down) :
                                                                parent.GetNextItem(Owner, ArrowDirection.Right, /*RTLAware=*/true);
                             break;
-
                     }
-
                 }
                 if (nextItem != null)
                 {
@@ -4564,7 +4499,6 @@ namespace System.Windows.Forms
                 {
                     return "ToolStripItemAccessibleObject: Owner = null";
                 }
-
             }
 
             /// <summary>
@@ -4598,7 +4532,6 @@ namespace System.Windows.Forms
                         return dropDown.AccessibilityObject;
                     }
                     return (Owner.Parent != null) ? Owner.Parent.AccessibilityObject : base.Parent;
-
                 }
             }
 
@@ -4735,7 +4668,6 @@ namespace System.Windows.Forms
                 }
             }
         }
-
     }
 
     // We need a special way to defer to the ToolStripItem's image
@@ -4867,7 +4799,6 @@ namespace System.Windows.Forms
             textFormat |= ControlPaint.TranslateAlignmentForGDI(alignment);
             textFormat |= ControlPaint.TranslateLineAlignmentForGDI(alignment);
             return textFormat;
-
         }
 
         protected virtual ToolStripItemLayoutOptions CommonLayoutOptions()
@@ -4929,7 +4860,6 @@ namespace System.Windows.Forms
 
             ButtonBaseAdapter.LayoutData data = currentLayoutOptions.Layout();
             return data;
-
         }
         public virtual Size GetPreferredSize(Size constrainingSize)
         {
@@ -4946,7 +4876,6 @@ namespace System.Windows.Forms
                 lastPreferredSize = currentLayoutOptions.GetPreferredSizeCore(constrainingSize);
                 return lastPreferredSize;
             }
-            Debug.Fail("Why are we here without an owner?");
             return Size.Empty;
         }
 
@@ -4984,9 +4913,7 @@ namespace System.Windows.Forms
                     cachedProposedConstraints = proposedConstraints;
                 }
                 return cachedSize;
-
             }
-
         }
         private class ToolStripLayoutData
         {

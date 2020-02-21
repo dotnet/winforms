@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 namespace System.Windows.Forms
 {
     using System.Drawing;
@@ -56,7 +58,6 @@ namespace System.Windows.Forms
             CommonProperties.SetAutoSize(this, true);
             _wrappedToolStrip.LocationChanging += new ToolStripLocationCancelEventHandler(OnToolStripLocationChanging);
             _wrappedToolStrip.VisibleChanged += new EventHandler(OnToolStripVisibleChanged);
-
         }
 
         public Rectangle CachedBounds
@@ -105,9 +106,7 @@ namespace System.Windows.Forms
                     }
                     parent = value;
                     Margin = Padding.Empty;
-
                 }
-
             }
         }
 
@@ -152,7 +151,6 @@ namespace System.Windows.Forms
             {
                 return GrowHorizontal(growBy);
             }
-
         }
 
         private int GrowVertical(int growBy)
@@ -185,7 +183,6 @@ namespace System.Windows.Forms
                 return growBy;
             }
             return 0;
-
         }
 
         private int GrowHorizontal(int growBy)
@@ -218,7 +215,6 @@ namespace System.Windows.Forms
                 return growBy;
             }
             return 0;
-
         }
         protected override void Dispose(bool disposing)
         {
@@ -328,11 +324,8 @@ namespace System.Windows.Forms
                         Debug.WriteLineIf(ToolStripPanelRow.ToolStripPanelMouseDebug.TraceVerbose, "[CELL] NOT DRAGGING calling SetBounds " + bounds.ToString());
                         base.SetBoundsCore(bounds, specified);
                         InnerElement.SetBounds(bounds, specified);
-
                     }
-
                 }
-
             }
             finally
             {
@@ -407,7 +400,6 @@ namespace System.Windows.Forms
                 && !_wrappedToolStrip.IsDisposed      // ensure we have a live-runtime only toolstrip.
                 && !_wrappedToolStrip.Disposing)
             {
-
                 // Rejoin the row when visibility is toggled.
                 // we dont want to do this logic at DT, as the DropSourceBehavior
                 // will set the toolstrip visible = false.
@@ -435,4 +427,3 @@ namespace System.Windows.Forms
         }
     }
 }
-

@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Collections;
 using System.Collections.Specialized;
 using System.ComponentModel;
@@ -295,10 +297,10 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Implements IOleObject::Advise
             /// </summary>
-            internal int Advise(IAdviseSink pAdvSink)
+            internal uint Advise(IAdviseSink pAdvSink)
             {
                 _adviseList.Add(pAdvSink);
-                return _adviseList.Count;
+                return (uint)_adviseList.Count;
             }
 
             /// <summary>
@@ -315,7 +317,6 @@ namespace System.Windows.Forms
                      dwSaveOption == Ole32.OLECLOSE.PROMPTSAVE) &&
                     _activeXState[s_isDirty])
                 {
-
                     if (_clientSite != null)
                     {
                         _clientSite.SaveObject();
@@ -357,8 +358,8 @@ namespace System.Windows.Forms
                                 IntPtr hwndMap = lpmsg->hwnd == IntPtr.Zero ? hwndParent : lpmsg->hwnd;
                                 var pt = new Point
                                 {
-                                    X = NativeMethods.Util.LOWORD(lpmsg->lParam),
-                                    Y = NativeMethods.Util.HIWORD(lpmsg->lParam)
+                                    X = PARAM.LOWORD(lpmsg->lParam),
+                                    Y = PARAM.HIWORD(lpmsg->lParam)
                                 };
                                 User32.MapWindowPoints(hwndMap, new HandleRef(_control, _control.Handle), ref pt, 1);
 
@@ -372,7 +373,7 @@ namespace System.Windows.Forms
                                     target = realTarget;
                                 }
 
-                                lpmsg->lParam = NativeMethods.Util.MAKELPARAM(pt.X, pt.Y);
+                                lpmsg->lParam = PARAM.FromLowHigh(pt.X, pt.Y);
                             }
 
 #if DEBUG
@@ -383,13 +384,13 @@ namespace System.Windows.Forms
                             }
 #endif
 
-                            if (lpmsg->message == User32.WindowMessage.WM_KEYDOWN && lpmsg->wParam == (IntPtr)User32.VK.TAB)
+                            if (lpmsg->message == User32.WM.KEYDOWN && lpmsg->wParam == (IntPtr)User32.VK.TAB)
                             {
                                 target.SelectNextControl(null, Control.ModifierKeys != Keys.Shift, true, true, true);
                             }
                             else
                             {
-                                target.SendMessage((int)lpmsg->message, lpmsg->wParam, lpmsg->lParam);
+                                User32.SendMessageW(target, (User32.WM)lpmsg->message, lpmsg->wParam, lpmsg->lParam);
                             }
                         }
                         break;
@@ -484,14 +485,10 @@ namespace System.Windows.Forms
                 // Now do the actual drawing.  We must ask all of our children to draw as well.
                 try
                 {
-                    IntPtr flags = (IntPtr)(NativeMethods.PRF_CHILDREN
-                                    | NativeMethods.PRF_CLIENT
-                                    | NativeMethods.PRF_ERASEBKGND
-                                    | NativeMethods.PRF_NONCLIENT);
-
+                    IntPtr flags = (IntPtr)(User32.PRF.CHILDREN | User32.PRF.CLIENT | User32.PRF.ERASEBKGND | User32.PRF.NONCLIENT);
                     if (hdcType != Gdi32.ObjectType.OBJ_ENHMETADC)
                     {
-                        _control.SendMessage(WindowMessages.WM_PRINT, hdcDraw, flags);
+                        User32.SendMessageW(_control, User32.WM.PRINT, hdcDraw, flags);
                     }
                     else
                     {
@@ -517,7 +514,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Returns a new verb enumerator.
             /// </summary>
-            internal static HRESULT EnumVerbs(out UnsafeNativeMethods.IEnumOLEVERB e)
+            internal static HRESULT EnumVerbs(out Ole32.IEnumOLEVERB ppEnumOleVerb)
             {
                 if (s_axVerbs == null)
                 {
@@ -547,7 +544,7 @@ namespace System.Windows.Forms
                     };
                 }
 
-                e = new ActiveXVerbEnum(s_axVerbs);
+                ppEnumOleVerb = new ActiveXVerbEnum(s_axVerbs);
                 return HRESULT.S_OK;
             }
 
@@ -621,11 +618,10 @@ namespace System.Windows.Forms
                 Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetAmbientProperty");
                 Debug.Indent();
 
-                if (_clientSite is UnsafeNativeMethods.IDispatch)
+                if (_clientSite is Oleaut32.IDispatch disp)
                 {
                     Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "clientSite implements IDispatch");
 
-                    UnsafeNativeMethods.IDispatch disp = (UnsafeNativeMethods.IDispatch)_clientSite;
                     var dispParams = new Ole32.DISPPARAMS();
                     object[] pvt = new object[1];
                     Guid g = Guid.Empty;
@@ -633,7 +629,7 @@ namespace System.Windows.Forms
                         dispid,
                         &g,
                         NativeMethods.LOCALE_USER_DEFAULT,
-                        NativeMethods.DISPATCH_PROPERTYGET,
+                        Oleaut32.DISPATCH.PROPERTYGET,
                         &dispParams,
                         pvt,
                         null,
@@ -645,7 +641,7 @@ namespace System.Windows.Forms
                         Debug.Unindent();
                         return true;
                     }
-                    
+
                     Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "IDispatch::Invoke failed. HR: 0x" + string.Format(CultureInfo.CurrentCulture, "{0:X}", hr));
                 }
 
@@ -918,7 +914,10 @@ namespace System.Windows.Forms
                     // If it doesn't, that means that the host
                     // won't reflect messages back to us.
                     HWNDParent = hwndParent;
-                    User32.SetParent(new HandleRef(_control, _control.Handle), hwndParent);
+                    if (User32.SetParent(new HandleRef(_control, _control.Handle), hwndParent) == IntPtr.Zero)
+                    {
+                        throw new Win32Exception(Marshal.GetLastWin32Error(), SR.Win32SetParentFailed);
+                    }
 
                     // Now create our handle if it hasn't already been done.
                     _control.CreateControl();
@@ -1039,7 +1038,7 @@ namespace System.Windows.Forms
                 {
                     return HRESULT.S_OK;
                 }
-                
+
                 return HRESULT.S_FALSE;
             }
 
@@ -1460,7 +1459,7 @@ namespace System.Windows.Forms
                 }
 
                 Ole32.OLEMISC status = 0;
-                ((UnsafeNativeMethods.IOleObject)_control).GetMiscStatus(Ole32.DVASPECT.CONTENT, &status);
+                ((Ole32.IOleObject)_control).GetMiscStatus(Ole32.DVASPECT.CONTENT, &status);
                 pQaControl->dwMiscStatus = status;
 
                 // Advise the event sink so VB6 can catch events raised from UserControls.
@@ -1554,7 +1553,6 @@ namespace System.Windows.Forms
 
                 /// <summary>
                 ///  Wraps a native IUnknown in a SafeHandle.
-                ///  See similar implementaton in the <see cref='Transactions.SafeIUnknown'/> class.
                 /// </summary>
                 internal class SafeIUnknown : SafeHandle
                 {
@@ -1766,7 +1764,6 @@ namespace System.Windows.Forms
                     [UnmanagedFunctionPointer(CallingConvention.StdCall)]
                     private delegate int AdviseD(IntPtr This, IntPtr punkEventSink, out uint pdwCookie);
                 }
-
             }
 
             /// <summary>
@@ -2241,7 +2238,7 @@ namespace System.Windows.Forms
                         finalClipRegion = MergeRegion(rgn);
                     }
 
-                    UnsafeNativeMethods.SetWindowRgn(new HandleRef(_control, _control.Handle), new HandleRef(this, finalClipRegion), User32.IsWindowVisible(_control).IsTrue());
+                    User32.SetWindowRgn(_control, new HandleRef(this, finalClipRegion), User32.IsWindowVisible(_control));
                 }
 
                 // Yuck.  Forms^3 uses transparent overlay windows that appear to cause
@@ -2287,10 +2284,10 @@ namespace System.Windows.Forms
                 bool needPreProcess = false;
                 switch (lpmsg->message)
                 {
-                    case User32.WindowMessage.WM_KEYDOWN:
-                    case User32.WindowMessage.WM_SYSKEYDOWN:
-                    case User32.WindowMessage.WM_CHAR:
-                    case User32.WindowMessage.WM_SYSCHAR:
+                    case User32.WM.KEYDOWN:
+                    case User32.WM.SYSKEYDOWN:
+                    case User32.WM.CHAR:
+                    case User32.WM.SYSCHAR:
                         needPreProcess = true;
                         break;
                 }
@@ -2307,10 +2304,10 @@ namespace System.Windows.Forms
                             case PreProcessControlState.MessageProcessed:
                                 // someone returned true from PreProcessMessage
                                 // no need to dispatch the message, its already been coped with.
-                                lpmsg->message = (User32.WindowMessage)msg.Msg;
+                                lpmsg->message = (User32.WM)msg.Msg;
                                 lpmsg->wParam = msg.WParam;
                                 lpmsg->lParam = msg.LParam;
-                                return NativeMethods.S_OK;
+                                return HRESULT.S_OK;
                             case PreProcessControlState.MessageNeeded:
                                 // Here we need to dispatch the message ourselves
                                 // otherwise the host may never send the key to our wndproc.
@@ -2390,19 +2387,21 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Implements IOleObject::Unadvise
             /// </summary>
-            internal void Unadvise(int dwConnection)
+            internal HRESULT Unadvise(uint dwConnection)
             {
-                if (dwConnection > _adviseList.Count || _adviseList[dwConnection - 1] == null)
+                if (dwConnection > _adviseList.Count || _adviseList[(int)dwConnection - 1] == null)
                 {
-                    ThrowHr(HRESULT.OLE_E_NOCONNECTION);
+                    return HRESULT.OLE_E_NOCONNECTION;
                 }
 
-                IAdviseSink sink = (IAdviseSink)_adviseList[dwConnection - 1];
-                _adviseList.RemoveAt(dwConnection - 1);
+                IAdviseSink sink = (IAdviseSink)_adviseList[(int)dwConnection - 1];
+                _adviseList.RemoveAt((int)dwConnection - 1);
                 if (sink != null && Marshal.IsComObject(sink))
                 {
                     Marshal.ReleaseComObject(sink);
                 }
+
+                return HRESULT.S_OK;
             }
 
             /// <summary>
@@ -2531,7 +2530,7 @@ namespace System.Windows.Forms
                     {
                         return;
                     }
-                    if (m.Msg >= WindowMessages.WM_NCLBUTTONDOWN && m.Msg <= WindowMessages.WM_NCMBUTTONDBLCLK)
+                    if (m.Msg >= (int)User32.WM.NCLBUTTONDOWN && m.Msg <= (int)User32.WM.NCMBUTTONDBLCLK)
                     {
                         return;
                     }

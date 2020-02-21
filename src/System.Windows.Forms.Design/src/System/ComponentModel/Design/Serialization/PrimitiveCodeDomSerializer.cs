@@ -49,19 +49,19 @@ namespace System.ComponentModel.Design.Serialization
 
             if (value == null)
             {
-				return expression;
-			}
-			
+                return expression;
+            }
+
             if (value is string stringValue)
             {
                 if (stringValue.Length > 200)
                 {
                     expression = SerializeToResourceExpression(manager, stringValue);
                 }
-				return expression;
+                return expression;
             }
 
-		    if (!(value is bool || value is char || value is int || value is float || value is double))
+            if (!(value is bool || value is char || value is int || value is float || value is double))
             {
                 // Generate a cast for all other types because we won't parse them properly otherwise
                 // because we won't know to convert them to the narrow form.

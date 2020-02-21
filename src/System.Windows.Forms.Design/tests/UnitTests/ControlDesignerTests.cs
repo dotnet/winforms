@@ -2,15 +2,13 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Net.Mail;
-using System.Windows.Forms;
 using WinForms.Common.Tests;
 using Xunit;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using static Interop;
 
 namespace System.Windows.Forms.Design.Tests
 {
-    public class ControlDesignerTests
+    public class ControlDesignerTests : IClassFixture<ThreadExceptionFixture>
     {
         [Fact]
         public void AccessibleObjectField()
@@ -134,7 +132,6 @@ namespace System.Windows.Forms.Design.Tests
             controlDesigner.Initialize(new Button());
             try
             {
-
                 controlDesigner.HookChildControlsMethod(new Control());
             }
             catch (Exception ex)
@@ -221,29 +218,20 @@ namespace System.Windows.Forms.Design.Tests
             }
         }
 
-        [WinFormsFact]
-        public void SelectionRulesTest()
+        [WinFormsFact(Skip = "OleDragDropHandler.FrezePainting is not implemented. See https://github.com/dotnet/winforms/issues/2400")]
+        public void ControlDesigner_WndProc_InvokePaint_Success()
         {
-            TestControlDesigner controlDesigner = new TestControlDesigner();
-            Assert.NotNull(controlDesigner);
-
-            SelectionRules testRules = SelectionRules.Visible;
-            testRules |= SelectionRules.AllSizeable;
-            testRules |= SelectionRules.Moveable;
-
-            controlDesigner.Initialize(new Button());
-
-            try
+            var designer = new SubControlDesigner();
+            var m = new Message
             {
-                SelectionRules selectionRules = controlDesigner.SelectionRules;
-                Assert.Equal(selectionRules, testRules);
-            }
-            catch (Exception ex)
-            {
-                Assert.True(false, "Expected no exception, but got: " + ex.Message);
-            }
+                Msg = (int)User32.WM.PAINT
+            };
+            designer.WndProc(ref m);
+        }
 
-            controlDesigner.Dispose();
+        private class SubControlDesigner : ControlDesigner
+        {
+            public new void WndProc(ref Message m) => base.WndProc(ref m);
         }
     }
 }

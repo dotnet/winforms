@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
@@ -15,7 +17,7 @@ namespace System.Windows.Forms
     /// <summary>
     ///  Represents the HTML 1.0 Help engine.
     /// </summary>
-    public class Help
+    public static class Help
     {
 #if DEBUG
         internal static readonly TraceSwitch WindowsFormsHelpTrace = new TraceSwitch("WindowsFormsHelpTrace", "Debug help system");
@@ -54,12 +56,6 @@ namespace System.Windows.Forms
 
         private const int HTML10HELP = 2;
         private const int HTMLFILE = 3;
-
-        // not creatable
-        //
-        private Help()
-        {
-        }
 
         /// <summary>
         ///  Displays
@@ -156,7 +152,6 @@ namespace System.Windows.Forms
             {
                 Marshal.FreeCoTaskMem(pszText);
             }
-
         }
 
         /// <summary>

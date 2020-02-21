@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing.Design;
@@ -15,10 +17,10 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
     internal class Com2PropertyBuilderUITypeEditor : Com2ExtendedUITypeEditor
     {
         private readonly Com2PropertyDescriptor propDesc;
-        readonly string guidString;
-        readonly int bldrType;
+        private readonly string guidString;
+        private readonly VSSDK.CTLBLDTYPE bldrType;
 
-        public Com2PropertyBuilderUITypeEditor(Com2PropertyDescriptor pd, string guidString, int type, UITypeEditor baseEditor) : base(baseEditor)
+        public Com2PropertyBuilderUITypeEditor(Com2PropertyDescriptor pd, string guidString, VSSDK.CTLBLDTYPE type, UITypeEditor baseEditor) : base(baseEditor)
         {
             propDesc = pd;
             this.guidString = guidString;
@@ -57,8 +59,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     obj = ((ICustomTypeDescriptor)obj).GetPropertyOwner(propDesc);
                 }
 
-                Debug.Assert(obj is NativeMethods.IProvidePropertyBuilder, "object is not IProvidePropertyBuilder");
-                NativeMethods.IProvidePropertyBuilder propBuilder = (NativeMethods.IProvidePropertyBuilder)obj;
+                Debug.Assert(obj is VSSDK.IProvidePropertyBuilder, "object is not IProvidePropertyBuilder");
+                VSSDK.IProvidePropertyBuilder propBuilder = (VSSDK.IProvidePropertyBuilder)obj;
 
                 if (!propBuilder.ExecuteBuilder(
                     propDesc.DISPID,
@@ -76,7 +78,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 Debug.Fail("Failed to show property frame: " + ex.ErrorCode.ToString(CultureInfo.InvariantCulture));
             }
 
-            if (useValue.IsTrue() && (bldrType & _CTLBLDTYPE.CTLBLDTYPE_FEDITSOBJIDRECTLY) == 0)
+            if (useValue.IsTrue() && (bldrType & VSSDK.CTLBLDTYPE.FEDITSOBJIDRECTLY) == 0)
             {
                 return pValue;
             }
@@ -92,7 +94,5 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         {
             return UITypeEditorEditStyle.Modal;
         }
-
     }
-
 }

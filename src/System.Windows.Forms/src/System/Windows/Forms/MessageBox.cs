@@ -2,10 +2,13 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using static Interop;
+using static Interop.User32;
 
 namespace System.Windows.Forms
 {
@@ -17,16 +20,6 @@ namespace System.Windows.Forms
     /// </summary>
     public class MessageBox
     {
-        private const int IDOK = 1;
-        private const int IDCANCEL = 2;
-        private const int IDABORT = 3;
-        private const int IDRETRY = 4;
-        private const int IDIGNORE = 5;
-        private const int IDYES = 6;
-        private const int IDNO = 7;
-
-        private const int HELP_BUTTON = 0x00004000;
-
         [ThreadStatic]
         private static HelpInfo[] helpInfoTable;
 
@@ -39,23 +32,23 @@ namespace System.Windows.Forms
         {
         }
 
-        private static DialogResult Win32ToDialogResult(int value)
+        private static DialogResult Win32ToDialogResult(ID value)
         {
             switch (value)
             {
-                case IDOK:
+                case ID.OK:
                     return DialogResult.OK;
-                case IDCANCEL:
+                case ID.CANCEL:
                     return DialogResult.Cancel;
-                case IDABORT:
+                case ID.ABORT:
                     return DialogResult.Abort;
-                case IDRETRY:
+                case ID.RETRY:
                     return DialogResult.Retry;
-                case IDIGNORE:
+                case ID.IGNORE:
                     return DialogResult.Ignore;
-                case IDYES:
+                case ID.YES:
                     return DialogResult.Yes;
-                case IDNO:
+                case ID.NO:
                     return DialogResult.No;
                 default:
                     return DialogResult.No;
@@ -88,7 +81,6 @@ namespace System.Windows.Forms
             if (helpInfoTable == null)
             {
                 Debug.Fail("Why are we being called when there's nothing to pop?");
-
             }
             else
             {
@@ -102,10 +94,8 @@ namespace System.Windows.Forms
                     HelpInfo[] newTable = new HelpInfo[newCount];
                     Array.Copy(helpInfoTable, newTable, newCount);
                     helpInfoTable = newTable;
-
                 }
             }
-
         }
         private static void PushHelpInfo(HelpInfo hpi)
         {
@@ -130,7 +120,6 @@ namespace System.Windows.Forms
             }
             newTable[lastCount] = hpi;
             helpInfoTable = newTable;
-
         }
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -345,7 +334,6 @@ namespace System.Windows.Forms
                 PopHelpInfo();
             }
             return result;
-
         }
 
         private static DialogResult ShowCore(IWin32Window owner, string text, string caption,
@@ -383,15 +371,15 @@ namespace System.Windows.Forms
                 throw new ArgumentException(SR.CantShowMBServiceWithHelp, "options");
             }
 
-            int style = (showHelp) ? HELP_BUTTON : 0;
-            style |= (int)buttons | (int)icon | (int)defaultButton | (int)options;
+            MB style = (showHelp) ? MB.HELP : 0;
+            style |= (MB)buttons | (MB)icon | (MB)defaultButton | (MB)options;
 
             IntPtr handle = IntPtr.Zero;
             if (showHelp || ((options & (MessageBoxOptions.ServiceNotification | MessageBoxOptions.DefaultDesktopOnly)) == 0))
             {
                 if (owner == null)
                 {
-                    handle = User32.GetActiveWindow();
+                    handle = GetActiveWindow();
                 }
                 else
                 {
@@ -415,14 +403,14 @@ namespace System.Windows.Forms
 
                 // Activate theming scope to get theming for controls at design time and when hosted in browser.
                 // NOTE: If a theming context is already active, this call is very fast, so shouldn't be a perf issue.
-                userCookie = ThemingScope.Activate();
+                userCookie = ThemingScope.Activate(Application.UseVisualStyles);
             }
 
             Application.BeginModalMessageLoop();
             DialogResult result;
             try
             {
-                result = Win32ToDialogResult(SafeNativeMethods.MessageBox(new HandleRef(owner, handle), text, caption, style));
+                result = Win32ToDialogResult(MessageBoxW(new HandleRef(owner, handle), text, caption, style));
             }
             finally
             {
@@ -433,11 +421,8 @@ namespace System.Windows.Forms
             // Right after the dialog box is closed, Windows sends WM_SETFOCUS back to the previously active control
             // but since we have disabled this thread main window the message is lost. So we have to send it again after
             // we enable the main window.
-            //
-            UnsafeNativeMethods.SendMessage(new HandleRef(owner, handle), WindowMessages.WM_SETFOCUS, 0, 0);
+            User32.SendMessageW(new HandleRef(owner, handle), User32.WM.SETFOCUS);
             return result;
         }
-
     }
 }
-

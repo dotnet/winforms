@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
@@ -1200,9 +1202,6 @@ namespace System.Windows.Forms
 
         internal bool GetDisplayed(int rowIndex)
         {
-            // You would think that only attached and visible rows can be displayed.
-            // Actually this assertion is wrong when the row is being deleted.
-            // Debug.Assert(!displayed || (DataGridView != null && DataGridView.Visible && GetVisible(rowIndex)));
             return (GetState(rowIndex) & DataGridViewElementStates.Displayed) != 0;
         }
 

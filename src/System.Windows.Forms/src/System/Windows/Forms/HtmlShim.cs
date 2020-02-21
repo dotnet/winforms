@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Collections.Generic;
 using System.ComponentModel;
 using static Interop.Mshtml;
@@ -90,7 +92,6 @@ namespace System.Windows.Forms
                     DetachEventHandler(proxy.EventName, eh);
                 }
             }
-
         }
 
         ///  return the sender for events, usually the HtmlWindow, HtmlElement, HtmlDocument
@@ -177,7 +178,4 @@ namespace System.Windows.Forms
             return null;
         }
     }
-
 }
-
-

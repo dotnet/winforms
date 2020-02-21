@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Drawing;
 using System.Windows.Forms.Layout;
 using System.Collections.Specialized;
@@ -79,12 +81,10 @@ namespace System.Windows.Forms
             get { return CommonProperties.GetMargin(this); }
             set
             {
-
                 Debug.Assert((value.Right >= 0 && value.Left >= 0 && value.Top >= 0 && value.Bottom >= 0), "who's setting margin negative?");
                 value = LayoutUtils.ClampNegativePaddingToZero(value);
                 if (Margin != value)
                 { CommonProperties.SetMargin(this, value); }
-
             }
         }
 
@@ -201,9 +201,5 @@ namespace System.Windows.Forms
                 OnBoundsChanged(oldBounds, bounds);
             }
         }
-
     }
-
 }
-
-

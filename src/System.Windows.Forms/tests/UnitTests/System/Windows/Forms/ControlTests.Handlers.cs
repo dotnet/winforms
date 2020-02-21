@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Imaging;
 using Moq;
@@ -69,6 +70,12 @@ namespace System.Windows.Forms.Tests
         {
             using var control = new SubControl();
             Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
 
             int callCount = 0;
             EventHandler handler = (sender, e) =>
@@ -77,38 +84,27 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-            int invalidatedCallCount = 0;
-            InvalidateEventHandler invalidatedHandler = (sender, e) => invalidatedCallCount++;
-            int styleChangedCallCount = 0;
-            EventHandler styleChangedHandler = (sender, e) => styleChangedCallCount++;
-            int createdCallCount = 0;
-            EventHandler createdHandler = (sender, e) => createdCallCount++;
 
             // Call with handler.
             control.BackColorChanged += handler;
-            control.Invalidated += invalidatedHandler;
-            control.StyleChanged += styleChangedHandler;
-            control.HandleCreated += createdHandler;
             control.OnBackColorChanged(eventArgs);
             Assert.Equal(1, callCount);
+            Assert.True(control.IsHandleCreated);
             Assert.Equal(1, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.True(control.IsHandleCreated);
 
             // Remove handler.
             control.BackColorChanged -= handler;
-            control.Invalidated -= invalidatedHandler;
-            control.StyleChanged -= styleChangedHandler;
-            control.HandleCreated -= createdHandler;
             control.OnBackColorChanged(eventArgs);
-            Assert.Equal(1, invalidatedCallCount);
+            Assert.Equal(1, callCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(2, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.True(control.IsHandleCreated);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void Control_OnBackColorChanged_InvokeInDisposing_DoesNotCallBackColorChanged()
         {
             using var control = new SubControl();
@@ -136,8 +132,8 @@ namespace System.Windows.Forms.Tests
         [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnBackColorChanged_InvokeWithChildren_CallsBackColorChanged(EventArgs eventArgs)
         {
-            var child1 = new Control();
-            var child2 = new Control();
+            using var child1 = new Control();
+            using var child2 = new Control();
             using var control = new SubControl();
             control.Controls.Add(child1);
             control.Controls.Add(child2);
@@ -151,13 +147,13 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-            EventHandler childHandler1 = (sender, e) =>
+            child1.BackColorChanged += (sender, e) =>
             {
                 Assert.Same(child1, sender);
                 Assert.Same(eventArgs, e);
                 child1CallCount++;
             };
-            EventHandler childHandler2 = (sender, e) =>
+            child2.BackColorChanged += (sender, e) =>
             {
                 Assert.Same(child2, sender);
                 Assert.Same(eventArgs, e);
@@ -166,8 +162,6 @@ namespace System.Windows.Forms.Tests
 
             // Call with handler.
             control.BackColorChanged += handler;
-            child1.BackColorChanged += childHandler1;
-            child2.BackColorChanged += childHandler2;
             control.OnBackColorChanged(eventArgs);
             Assert.Equal(1, callCount);
             Assert.Equal(1, child1CallCount);
@@ -175,23 +169,21 @@ namespace System.Windows.Forms.Tests
 
             // Remove handler.
             control.BackColorChanged -= handler;
-            child1.BackColorChanged -= childHandler1;
-            child2.BackColorChanged -= childHandler2;
             control.OnBackColorChanged(eventArgs);
             Assert.Equal(1, callCount);
-            Assert.Equal(1, child1CallCount);
-            Assert.Equal(1, child2CallCount);
+            Assert.Equal(2, child1CallCount);
+            Assert.Equal(2, child2CallCount);
         }
 
         [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnBackColorChanged_InvokeWithChildrenWithBackColor_CallsBackColorChanged(EventArgs eventArgs)
         {
-            var child1 = new Control
+            using var child1 = new Control
             {
                 BackColor = Color.Yellow
             };
-            var child2 = new Control
+            using var child2 = new Control
             {
                 BackColor = Color.YellowGreen
             };
@@ -208,13 +200,13 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-            EventHandler childHandler1 = (sender, e) =>
+            child1.BackColorChanged += (sender, e) =>
             {
                 Assert.Same(child1, sender);
                 Assert.Same(eventArgs, e);
                 child1CallCount++;
             };
-            EventHandler childHandler2 = (sender, e) =>
+            child2.BackColorChanged += (sender, e) =>
             {
                 Assert.Same(child2, sender);
                 Assert.Same(eventArgs, e);
@@ -223,8 +215,6 @@ namespace System.Windows.Forms.Tests
 
             // Call with handler.
             control.BackColorChanged += handler;
-            child1.BackColorChanged += childHandler1;
-            child2.BackColorChanged += childHandler2;
             control.OnBackColorChanged(eventArgs);
             Assert.Equal(1, callCount);
             Assert.Equal(0, child1CallCount);
@@ -232,8 +222,6 @@ namespace System.Windows.Forms.Tests
 
             // Remove handler.
             control.BackColorChanged -= handler;
-            child1.BackColorChanged -= childHandler1;
-            child2.BackColorChanged -= childHandler2;
             control.OnBackColorChanged(eventArgs);
             Assert.Equal(1, callCount);
             Assert.Equal(0, child1CallCount);
@@ -311,7 +299,7 @@ namespace System.Windows.Forms.Tests
             Assert.True(control.IsHandleCreated);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void Control_OnBackgroundImageChanged_InvokeInDisposing_DoesNotCallBackgroundImageChanged()
         {
             using var control = new SubControl();
@@ -339,8 +327,8 @@ namespace System.Windows.Forms.Tests
         [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnBackgroundImageChanged_InvokeWithChildren_CallsBackgroundImageChanged(EventArgs eventArgs)
         {
-            var child1 = new Control();
-            var child2 = new Control();
+            using var child1 = new Control();
+            using var child2 = new Control();
             using var control = new SubControl();
             control.Controls.Add(child1);
             control.Controls.Add(child2);
@@ -390,11 +378,11 @@ namespace System.Windows.Forms.Tests
         [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnBackgroundImageChanged_InvokeWithChildrenWithBackgroundImage_CallsBackgroundImageChanged(EventArgs eventArgs)
         {
-            var child1 = new Control
+            using var child1 = new Control
             {
                 BackgroundImage = new Bitmap(10, 10)
             };
-            var child2 = new Control
+            using var child2 = new Control
             {
                 BackgroundImage = new Bitmap(10, 10)
             };
@@ -519,8 +507,8 @@ namespace System.Windows.Forms.Tests
         [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnBackgroundImageLayoutChanged_InvokeWithChildren_CallsBackgroundImageLayoutChanged(EventArgs eventArgs)
         {
-            var child1 = new Control();
-            var child2 = new Control();
+            using var child1 = new Control();
+            using var child2 = new Control();
             using var control = new SubControl();
             control.Controls.Add(child1);
             control.Controls.Add(child2);
@@ -534,13 +522,13 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-            EventHandler childHandler1 = (sender, e) =>
+            child1.BackgroundImageLayoutChanged += (sender, e) =>
             {
                 Assert.Same(child1, sender);
                 Assert.Same(eventArgs, e);
                 child1CallCount++;
             };
-            EventHandler childHandler2 = (sender, e) =>
+            child2.BackgroundImageLayoutChanged += (sender, e) =>
             {
                 Assert.Same(child2, sender);
                 Assert.Same(eventArgs, e);
@@ -549,8 +537,6 @@ namespace System.Windows.Forms.Tests
 
             // Call with handler.
             control.BackgroundImageLayoutChanged += handler;
-            child1.BackgroundImageLayoutChanged += childHandler1;
-            child2.BackgroundImageLayoutChanged += childHandler2;
             control.OnBackgroundImageLayoutChanged(eventArgs);
             Assert.Equal(1, callCount);
             Assert.Equal(0, child1CallCount);
@@ -558,8 +544,6 @@ namespace System.Windows.Forms.Tests
 
             // Remove handler.
             control.BackgroundImageLayoutChanged -= handler;
-            child1.BackgroundImageLayoutChanged -= childHandler1;
-            child2.BackgroundImageLayoutChanged -= childHandler2;
             control.OnBackgroundImageLayoutChanged(eventArgs);
             Assert.Equal(1, callCount);
             Assert.Equal(0, child1CallCount);
@@ -570,11 +554,11 @@ namespace System.Windows.Forms.Tests
         [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnBackgroundImageLayoutChanged_InvokeWithChildrenWithBackgroundImageLayout_CallsBackgroundImageLayoutChanged(EventArgs eventArgs)
         {
-            var child1 = new Control
+            using var child1 = new Control
             {
                 BackgroundImageLayout = ImageLayout.Center
             };
-            var child2 = new Control
+            using var child2 = new Control
             {
                 BackgroundImageLayout = ImageLayout.Center
             };
@@ -591,13 +575,13 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-            EventHandler childHandler1 = (sender, e) =>
+            child1.BackgroundImageLayoutChanged += (sender, e) =>
             {
                 Assert.Same(child1, sender);
                 Assert.Same(eventArgs, e);
                 child1CallCount++;
             };
-            EventHandler childHandler2 = (sender, e) =>
+            child2.BackgroundImageLayoutChanged += (sender, e) =>
             {
                 Assert.Same(child2, sender);
                 Assert.Same(eventArgs, e);
@@ -606,8 +590,6 @@ namespace System.Windows.Forms.Tests
 
             // Call with handler.
             control.BackgroundImageLayoutChanged += handler;
-            child1.BackgroundImageLayoutChanged += childHandler1;
-            child2.BackgroundImageLayoutChanged += childHandler2;
             control.OnBackgroundImageLayoutChanged(eventArgs);
             Assert.Equal(1, callCount);
             Assert.Equal(0, child1CallCount);
@@ -615,15 +597,13 @@ namespace System.Windows.Forms.Tests
 
             // Remove handler.
             control.BackgroundImageLayoutChanged -= handler;
-            child1.BackgroundImageLayoutChanged -= childHandler1;
-            child2.BackgroundImageLayoutChanged -= childHandler2;
             control.OnBackgroundImageLayoutChanged(eventArgs);
             Assert.Equal(1, callCount);
             Assert.Equal(0, child1CallCount);
             Assert.Equal(0, child2CallCount);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void Control_OnBackgroundImageLayoutChanged_InvokeInDisposing_DoesNotCallBackgroundImageLayoutChanged()
         {
             using var control = new SubControl();
@@ -675,8 +655,8 @@ namespace System.Windows.Forms.Tests
         [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnBindingContextChanged_InvokeWithChildren_CallsBindingContextChanged(EventArgs eventArgs)
         {
-            var child1 = new Control();
-            var child2 = new Control();
+            using var child1 = new Control();
+            using var child2 = new Control();
             using var control = new SubControl();
             control.Controls.Add(child1);
             control.Controls.Add(child2);
@@ -690,13 +670,13 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-            EventHandler childHandler1 = (sender, e) =>
+            child1.BindingContextChanged += (sender, e) =>
             {
                 Assert.Same(child1, sender);
                 Assert.Same(eventArgs, e);
                 child1CallCount++;
             };
-            EventHandler childHandler2 = (sender, e) =>
+            child2.BindingContextChanged += (sender, e) =>
             {
                 Assert.Same(child2, sender);
                 Assert.Same(eventArgs, e);
@@ -705,8 +685,6 @@ namespace System.Windows.Forms.Tests
 
             // Call with handler.
             control.BindingContextChanged += handler;
-            child1.BindingContextChanged += childHandler1;
-            child2.BindingContextChanged += childHandler2;
             control.OnBindingContextChanged(eventArgs);
             Assert.Equal(1, callCount);
             Assert.Equal(1, child1CallCount);
@@ -714,12 +692,10 @@ namespace System.Windows.Forms.Tests
 
             // Remove handler.
             control.BindingContextChanged -= handler;
-            child1.BindingContextChanged -= childHandler1;
-            child2.BindingContextChanged -= childHandler2;
             control.OnBindingContextChanged(eventArgs);
             Assert.Equal(1, callCount);
-            Assert.Equal(1, child1CallCount);
-            Assert.Equal(1, child2CallCount);
+            Assert.Equal(2, child1CallCount);
+            Assert.Equal(2, child2CallCount);
         }
 
         [WinFormsTheory]
@@ -728,11 +704,11 @@ namespace System.Windows.Forms.Tests
         {
             var childContext1 = new BindingContext();
             var childContext2 = new BindingContext();
-            var child1 = new Control
+            using var child1 = new Control
             {
                 BindingContext = childContext1
             };
-            var child2 = new Control
+            using var child2 = new Control
             {
                 BindingContext = childContext2
             };
@@ -749,13 +725,13 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-            EventHandler childHandler1 = (sender, e) =>
+            child1.BindingContextChanged += (sender, e) =>
             {
                 Assert.Same(child1, sender);
                 Assert.Same(eventArgs, e);
                 child1CallCount++;
             };
-            EventHandler childHandler2 = (sender, e) =>
+            child2.BindingContextChanged += (sender, e) =>
             {
                 Assert.Same(child2, sender);
                 Assert.Same(eventArgs, e);
@@ -764,8 +740,6 @@ namespace System.Windows.Forms.Tests
 
             // Call with handler.
             control.BindingContextChanged += handler;
-            child1.BindingContextChanged += childHandler1;
-            child2.BindingContextChanged += childHandler2;
             control.OnBindingContextChanged(eventArgs);
             Assert.Equal(1, callCount);
             Assert.Equal(0, child1CallCount);
@@ -773,8 +747,6 @@ namespace System.Windows.Forms.Tests
 
             // Remove handler.
             control.BindingContextChanged -= handler;
-            child1.BindingContextChanged -= childHandler1;
-            child2.BindingContextChanged -= childHandler2;
             control.OnBindingContextChanged(eventArgs);
             Assert.Equal(1, callCount);
             Assert.Equal(0, child1CallCount);
@@ -824,12 +796,12 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-        
+
             // Call with handler.
             control.ChangeUICues += handler;
             control.OnChangeUICues(eventArgs);
             Assert.Equal(1, callCount);
-        
+
            // Remove handler.
            control.ChangeUICues -= handler;
            control.OnChangeUICues(eventArgs);
@@ -1092,7 +1064,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void Control_OnCreateControl_Invoke_Nop()
         {
             using var control = new SubControl();
@@ -1133,8 +1105,8 @@ namespace System.Windows.Forms.Tests
         [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnCursorChanged_InvokeWithChildren_CallsCursorChanged(EventArgs eventArgs)
         {
-            var child1 = new Control();
-            var child2 = new Control();
+            using var child1 = new Control();
+            using var child2 = new Control();
             using var control = new SubControl();
             control.Controls.Add(child1);
             control.Controls.Add(child2);
@@ -1148,13 +1120,13 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-            EventHandler childHandler1 = (sender, e) =>
+            child1.CursorChanged += (sender, e) =>
             {
                 Assert.Same(child1, sender);
                 Assert.Same(eventArgs, e);
                 child1CallCount++;
             };
-            EventHandler childHandler2 = (sender, e) =>
+            child2.CursorChanged += (sender, e) =>
             {
                 Assert.Same(child2, sender);
                 Assert.Same(eventArgs, e);
@@ -1163,8 +1135,6 @@ namespace System.Windows.Forms.Tests
 
             // Call with handler.
             control.CursorChanged += handler;
-            child1.CursorChanged += childHandler1;
-            child2.CursorChanged += childHandler2;
             control.OnCursorChanged(eventArgs);
             Assert.Equal(1, callCount);
             Assert.Equal(1, child1CallCount);
@@ -1172,12 +1142,10 @@ namespace System.Windows.Forms.Tests
 
             // Remove handler.
             control.CursorChanged -= handler;
-            child1.CursorChanged -= childHandler1;
-            child2.CursorChanged -= childHandler2;
             control.OnCursorChanged(eventArgs);
             Assert.Equal(1, callCount);
-            Assert.Equal(1, child1CallCount);
-            Assert.Equal(1, child2CallCount);
+            Assert.Equal(2, child1CallCount);
+            Assert.Equal(2, child2CallCount);
         }
 
         [WinFormsTheory]
@@ -1186,11 +1154,11 @@ namespace System.Windows.Forms.Tests
         {
             var childCursor1 = new Cursor((IntPtr)1);
             var childCursor2 = new Cursor((IntPtr)1);
-            var child1 = new Control
+            using var child1 = new Control
             {
                 Cursor = childCursor1
             };
-            var child2 = new Control
+            using var child2 = new Control
             {
                 Cursor = childCursor2
             };
@@ -1207,13 +1175,13 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-            EventHandler childHandler1 = (sender, e) =>
+            child1.CursorChanged += (sender, e) =>
             {
                 Assert.Same(child1, sender);
                 Assert.Same(eventArgs, e);
                 child1CallCount++;
             };
-            EventHandler childHandler2 = (sender, e) =>
+            child1.CursorChanged += (sender, e) =>
             {
                 Assert.Same(child2, sender);
                 Assert.Same(eventArgs, e);
@@ -1222,8 +1190,6 @@ namespace System.Windows.Forms.Tests
 
             // Call with handler.
             control.CursorChanged += handler;
-            child1.CursorChanged += childHandler1;
-            child2.CursorChanged += childHandler2;
             control.OnCursorChanged(eventArgs);
             Assert.Equal(1, callCount);
             Assert.Equal(0, child1CallCount);
@@ -1231,12 +1197,34 @@ namespace System.Windows.Forms.Tests
 
             // Remove handler.
             control.CursorChanged -= handler;
-            child1.CursorChanged -= childHandler1;
-            child2.CursorChanged -= childHandler2;
             control.OnCursorChanged(eventArgs);
             Assert.Equal(1, callCount);
             Assert.Equal(0, child1CallCount);
             Assert.Equal(0, child2CallCount);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void Control_OnDockChanged_Invoke_CallsDockChanged(EventArgs eventArgs)
+        {
+            using var control = new SubControl();
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.DockChanged += handler;
+            control.OnDockChanged(eventArgs);
+            Assert.Equal(1, callCount);
+
+            // Remove handler.
+            control.DockChanged -= handler;
+            control.OnDockChanged(eventArgs);
+            Assert.Equal(1, callCount);
         }
 
         [WinFormsTheory]
@@ -1275,18 +1263,18 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-        
+
             // Call with handler.
             control.DpiChangedAfterParent += handler;
             control.OnDpiChangedAfterParent(eventArgs);
             Assert.Equal(1, callCount);
-        
+
            // Remove handler.
            control.DpiChangedAfterParent -= handler;
            control.OnDpiChangedAfterParent(eventArgs);
            Assert.Equal(1, callCount);
         }
-        
+
         [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnDpiChangedBeforeParent_Invoke_CallsDpiChangedBeforeParent(EventArgs eventArgs)
@@ -1299,12 +1287,12 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-        
+
             // Call with handler.
             control.DpiChangedBeforeParent += handler;
             control.OnDpiChangedBeforeParent(eventArgs);
             Assert.Equal(1, callCount);
-        
+
            // Remove handler.
            control.DpiChangedBeforeParent -= handler;
            control.OnDpiChangedBeforeParent(eventArgs);
@@ -1514,8 +1502,8 @@ namespace System.Windows.Forms.Tests
         [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnEnabledChanged_InvokeWithChildren_CallsEnabledChanged(EventArgs eventArgs)
         {
-            var child1 = new Control();
-            var child2 = new Control();
+            using var child1 = new Control();
+            using var child2 = new Control();
             using var control = new SubControl();
             control.Controls.Add(child1);
             control.Controls.Add(child2);
@@ -1529,13 +1517,13 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-            EventHandler childHandler1 = (sender, e) =>
+            child1.EnabledChanged += (sender, e) =>
             {
                 Assert.Same(child1, sender);
                 Assert.Same(eventArgs, e);
                 childCallCount1++;
             };
-            EventHandler childHandler2 = (sender, e) =>
+            child2.EnabledChanged += (sender, e) =>
             {
                 Assert.Same(child2, sender);
                 Assert.Same(eventArgs, e);
@@ -1544,8 +1532,6 @@ namespace System.Windows.Forms.Tests
 
             // Call with handler.
             control.EnabledChanged += handler;
-            child1.EnabledChanged += childHandler1;
-            child2.EnabledChanged += childHandler2;
             control.OnEnabledChanged(eventArgs);
             Assert.Equal(1, callCount);
             Assert.Equal(1, childCallCount1);
@@ -1553,23 +1539,21 @@ namespace System.Windows.Forms.Tests
 
             // Remove handler.
             control.EnabledChanged -= handler;
-            child1.EnabledChanged -= childHandler1;
-            child2.EnabledChanged -= childHandler2;
             control.OnEnabledChanged(eventArgs);
             Assert.Equal(1, callCount);
-            Assert.Equal(1, childCallCount1);
-            Assert.Equal(1, childCallCount2);
+            Assert.Equal(2, childCallCount1);
+            Assert.Equal(2, childCallCount2);
         }
 
         [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnEnabledChanged_InvokeWithChildrenDisabled_CallsEnabledChanged(EventArgs eventArgs)
         {
-            var child1 = new Control
+            using var child1 = new Control
             {
                 Enabled = false
             };
-            var child2 = new Control
+            using var child2 = new Control
             {
                 Enabled = false
             };
@@ -1586,13 +1570,13 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-            EventHandler childHandler1 = (sender, e) =>
+            child1.EnabledChanged += (sender, e) =>
             {
                 Assert.Same(child1, sender);
                 Assert.Same(eventArgs, e);
                 childCallCount1++;
             };
-            EventHandler childHandler2 = (sender, e) =>
+            child2.EnabledChanged += (sender, e) =>
             {
                 Assert.Same(child2, sender);
                 Assert.Same(eventArgs, e);
@@ -1601,8 +1585,6 @@ namespace System.Windows.Forms.Tests
 
             // Call with handler.
             control.EnabledChanged += handler;
-            child1.EnabledChanged += childHandler1;
-            child2.EnabledChanged += childHandler2;
             control.OnEnabledChanged(eventArgs);
             Assert.Equal(1, callCount);
             Assert.Equal(0, childCallCount1);
@@ -1610,8 +1592,6 @@ namespace System.Windows.Forms.Tests
 
             // Remove handler.
             control.EnabledChanged -= handler;
-            child1.EnabledChanged -= childHandler1;
-            child2.EnabledChanged -= childHandler2;
             control.OnEnabledChanged(eventArgs);
             Assert.Equal(1, callCount);
             Assert.Equal(0, childCallCount1);
@@ -1701,61 +1681,28 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.IsHandleCreated);
         }
 
-        [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
-        public void Control_OnFontChanged_InvokeWithHandle_CallsFontChangedAndInvalidated(EventArgs eventArgs)
+        public static IEnumerable<object[]> OnFontChanged_WithHandle_TestData()
         {
-            using var control = new SubControl();
-            Assert.NotEqual(IntPtr.Zero, control.Handle);
-            Assert.True(control.GetStyle(ControlStyles.UserPaint));
-
-            int callCount = 0;
-            EventHandler handler = (sender, e) =>
+            foreach (bool userPaint in new bool[] { true, false })
             {
-                Assert.Same(control, sender);
-                Assert.Same(eventArgs, e);
-                callCount++;
-            };
-            int invalidatedCallCount = 0;
-            InvalidateEventHandler invalidatedHandler = (sender, e) => invalidatedCallCount++;
-            int styleChangedCallCount = 0;
-            EventHandler styleChangedHandler = (sender, e) => styleChangedCallCount++;
-            int createdCallCount = 0;
-            EventHandler createdHandler = (sender, e) => createdCallCount++;
-
-            // Call with handler.
-            control.FontChanged += handler;
-            control.Invalidated += invalidatedHandler;
-            control.StyleChanged += styleChangedHandler;
-            control.HandleCreated += createdHandler;
-            control.OnFontChanged(eventArgs);
-            Assert.Equal(1, callCount);
-            Assert.Equal(1, invalidatedCallCount);
-            Assert.Equal(0, styleChangedCallCount);
-            Assert.Equal(0, createdCallCount);
-            Assert.True(control.IsHandleCreated);
-
-            // Remove handler.
-            control.FontChanged -= handler;
-            control.Invalidated -= invalidatedHandler;
-            control.StyleChanged -= styleChangedHandler;
-            control.HandleCreated -= createdHandler;
-            control.OnFontChanged(eventArgs);
-            Assert.Equal(1, callCount);
-            Assert.Equal(1, invalidatedCallCount);
-            Assert.Equal(0, styleChangedCallCount);
-            Assert.Equal(0, createdCallCount);
-            Assert.True(control.IsHandleCreated);
+                yield return new object[] { userPaint, null };
+                yield return new object[] { userPaint, new EventArgs() };
+            }
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
-        public void Control_OnFontChanged_InvokeWithHandleNoUserPaint_CallsFontChangedAndInvalidated(EventArgs eventArgs)
+        [MemberData(nameof(OnFontChanged_WithHandle_TestData))]
+        public void Control_OnFontChanged_InvokeWithHandle_CallsFontChangedAndInvalidated(bool userPaint, EventArgs eventArgs)
         {
             using var control = new SubControl();
-            control.SetStyle(ControlStyles.UserPaint, false);
+            control.SetStyle(ControlStyles.UserPaint, userPaint);
             Assert.NotEqual(IntPtr.Zero, control.Handle);
-            Assert.False(control.GetStyle(ControlStyles.UserPaint));
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
 
             int callCount = 0;
             EventHandler handler = (sender, e) =>
@@ -1764,40 +1711,34 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-            int invalidatedCallCount = 0;
-            InvalidateEventHandler invalidatedHandler = (sender, e) => invalidatedCallCount++;
-            int styleChangedCallCount = 0;
-            EventHandler styleChangedHandler = (sender, e) => styleChangedCallCount++;
-            int createdCallCount = 0;
-            EventHandler createdHandler = (sender, e) => createdCallCount++;
 
             // Call with handler.
             control.FontChanged += handler;
-            control.Invalidated += invalidatedHandler;
             control.OnFontChanged(eventArgs);
             Assert.Equal(1, callCount);
+            Assert.Equal(Control.DefaultFont.Height, control.FontHeight);
+            Assert.True(control.IsHandleCreated);
             Assert.Equal(1, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.True(control.IsHandleCreated);
 
             // Remove handler.
             control.FontChanged -= handler;
-            control.Invalidated -= invalidatedHandler;
             control.OnFontChanged(eventArgs);
             Assert.Equal(1, callCount);
-            Assert.Equal(1, invalidatedCallCount);
+            Assert.Equal(Control.DefaultFont.Height, control.FontHeight);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(2, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.True(control.IsHandleCreated);
         }
 
         [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnFontChanged_InvokeWithChildren_CallsFontChanged(EventArgs eventArgs)
         {
-            var child1 = new Control();
-            var child2 = new Control();
+            using var child1 = new Control();
+            using var child2 = new Control();
             using var control = new SubControl();
             control.Controls.Add(child1);
             control.Controls.Add(child2);
@@ -1811,13 +1752,13 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-            EventHandler childHandler1 = (sender, e) =>
+            child1.FontChanged += (sender, e) =>
             {
                 Assert.Same(child1, sender);
                 Assert.Same(eventArgs, e);
                 child1CallCount++;
             };
-            EventHandler childHandler2 = (sender, e) =>
+            child2.FontChanged += (sender, e) =>
             {
                 Assert.Same(child2, sender);
                 Assert.Same(eventArgs, e);
@@ -1826,8 +1767,6 @@ namespace System.Windows.Forms.Tests
 
             // Call with handler.
             control.FontChanged += handler;
-            child1.FontChanged += childHandler1;
-            child2.FontChanged += childHandler2;
             control.OnFontChanged(eventArgs);
             Assert.Equal(1, callCount);
             Assert.Equal(1, child1CallCount);
@@ -1835,25 +1774,23 @@ namespace System.Windows.Forms.Tests
 
             // Remove handler.
             control.FontChanged -= handler;
-            child1.FontChanged -= childHandler1;
-            child2.FontChanged -= childHandler2;
             control.OnFontChanged(eventArgs);
             Assert.Equal(1, callCount);
-            Assert.Equal(1, child1CallCount);
-            Assert.Equal(1, child2CallCount);
+            Assert.Equal(2, child1CallCount);
+            Assert.Equal(2, child2CallCount);
         }
 
         [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnFontChanged_InvokeWithChildrenWithFont_CallsFontChanged(EventArgs eventArgs)
         {
-            var childFont1 = new Font("Arial", 1);
-            var childFont2 = new Font("Arial", 2);
-            var child1 = new Control
+            using var childFont1 = new Font("Arial", 1);
+            using var childFont2 = new Font("Arial", 2);
+            using var child1 = new Control
             {
                 Font = childFont1
             };
-            var child2 = new Control
+            using var child2 = new Control
             {
                 Font = childFont2
             };
@@ -1870,13 +1807,13 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-            EventHandler childHandler1 = (sender, e) =>
+            child1.FontChanged += (sender, e) =>
             {
                 Assert.Same(child1, sender);
                 Assert.Same(eventArgs, e);
                 child1CallCount++;
             };
-            EventHandler childHandler2 = (sender, e) =>
+            child2.FontChanged += (sender, e) =>
             {
                 Assert.Same(child2, sender);
                 Assert.Same(eventArgs, e);
@@ -1885,8 +1822,6 @@ namespace System.Windows.Forms.Tests
 
             // Call with handler.
             control.FontChanged += handler;
-            child1.FontChanged += childHandler1;
-            child2.FontChanged += childHandler2;
             control.OnFontChanged(eventArgs);
             Assert.Equal(1, callCount);
             Assert.Equal(0, child1CallCount);
@@ -1894,12 +1829,34 @@ namespace System.Windows.Forms.Tests
 
             // Remove handler.
             control.FontChanged -= handler;
-            child1.FontChanged -= childHandler1;
-            child2.FontChanged -= childHandler2;
             control.OnFontChanged(eventArgs);
             Assert.Equal(1, callCount);
             Assert.Equal(0, child1CallCount);
             Assert.Equal(0, child2CallCount);
+        }
+
+        [WinFormsFact]
+        public void Control_OnFontChanged_InvokeInDisposing_DoesNotCallFontChanged()
+        {
+            using var control = new SubControl();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+
+            int callCount = 0;
+            control.FontChanged += (sender, e) => callCount++;
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+
+            int disposedCallCount = 0;
+            control.Disposed += (sender, e) =>
+            {
+                control.OnFontChanged(EventArgs.Empty);
+                Assert.Equal(0, callCount);
+                Assert.Equal(0, invalidatedCallCount);
+                disposedCallCount++;
+            };
+
+            control.Dispose();
+            Assert.Equal(1, disposedCallCount);
         }
 
         [WinFormsTheory]
@@ -1973,7 +1930,7 @@ namespace System.Windows.Forms.Tests
             Assert.True(control.IsHandleCreated);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void Control_OnForeColorChanged_InvokeInDisposing_DoesNotCallForeColorChanged()
         {
             using var control = new SubControl();
@@ -2001,8 +1958,8 @@ namespace System.Windows.Forms.Tests
         [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnForeColorChanged_InvokeWithChildren_CallsForeColorChanged(EventArgs eventArgs)
         {
-            var child1 = new Control();
-            var child2 = new Control();
+            using var child1 = new Control();
+            using var child2 = new Control();
             using var control = new SubControl();
             control.Controls.Add(child1);
             control.Controls.Add(child2);
@@ -2016,13 +1973,13 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-            EventHandler childHandler1 = (sender, e) =>
+            child1.ForeColorChanged += (sender, e) =>
             {
                 Assert.Same(child1, sender);
                 Assert.Same(eventArgs, e);
                 child1CallCount++;
             };
-            EventHandler childHandler2 = (sender, e) =>
+            child2.ForeColorChanged += (sender, e) =>
             {
                 Assert.Same(child2, sender);
                 Assert.Same(eventArgs, e);
@@ -2031,8 +1988,6 @@ namespace System.Windows.Forms.Tests
 
             // Call with handler.
             control.ForeColorChanged += handler;
-            child1.ForeColorChanged += childHandler1;
-            child2.ForeColorChanged += childHandler2;
             control.OnForeColorChanged(eventArgs);
             Assert.Equal(1, callCount);
             Assert.Equal(1, child1CallCount);
@@ -2040,23 +1995,21 @@ namespace System.Windows.Forms.Tests
 
             // Remove handler.
             control.ForeColorChanged -= handler;
-            child1.ForeColorChanged -= childHandler1;
-            child2.ForeColorChanged -= childHandler2;
             control.OnForeColorChanged(eventArgs);
             Assert.Equal(1, callCount);
-            Assert.Equal(1, child1CallCount);
-            Assert.Equal(1, child2CallCount);
+            Assert.Equal(2, child1CallCount);
+            Assert.Equal(2, child2CallCount);
         }
 
         [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnForeColorChanged_InvokeWithChildrenWithForeColor_CallsForeColorChanged(EventArgs eventArgs)
         {
-            var child1 = new Control
+            using var child1 = new Control
             {
                 ForeColor = Color.Yellow
             };
-            var child2 = new Control
+            using var child2 = new Control
             {
                 ForeColor = Color.YellowGreen
             };
@@ -2073,13 +2026,13 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-            EventHandler childHandler1 = (sender, e) =>
+            child1.ForeColorChanged += (sender, e) =>
             {
                 Assert.Same(child1, sender);
                 Assert.Same(eventArgs, e);
                 child1CallCount++;
             };
-            EventHandler childHandler2 = (sender, e) =>
+            child2.ForeColorChanged += (sender, e) =>
             {
                 Assert.Same(child2, sender);
                 Assert.Same(eventArgs, e);
@@ -2088,8 +2041,6 @@ namespace System.Windows.Forms.Tests
 
             // Call with handler.
             control.ForeColorChanged += handler;
-            child1.ForeColorChanged += childHandler1;
-            child2.ForeColorChanged += childHandler2;
             control.OnForeColorChanged(eventArgs);
             Assert.Equal(1, callCount);
             Assert.Equal(0, child1CallCount);
@@ -2097,8 +2048,6 @@ namespace System.Windows.Forms.Tests
 
             // Remove handler.
             control.ForeColorChanged -= handler;
-            child1.ForeColorChanged -= childHandler1;
-            child2.ForeColorChanged -= childHandler2;
             control.OnForeColorChanged(eventArgs);
             Assert.Equal(1, callCount);
             Assert.Equal(0, child1CallCount);
@@ -2147,12 +2096,12 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-        
+
             // Call with handler.
             control.GotFocus += handler;
             control.OnGotFocus(eventArgs);
             Assert.Equal(1, callCount);
-        
+
            // Remove handler.
            control.GotFocus -= handler;
            control.OnGotFocus(eventArgs);
@@ -2187,45 +2136,22 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.IsHandleCreated);
         }
 
-        [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
-        public void Control_OnHandleCreated_InvokeWithHandle_CallsHandleCreated(EventArgs eventArgs)
+        public static IEnumerable<object[]> OnHandleCreated_WithHandle_TestData()
         {
-            using var control = new SubControl();
-            Assert.NotEqual(IntPtr.Zero, control.Handle);
-            Assert.True(control.GetStyle(ControlStyles.UserPaint));
-
-            int callCount = 0;
-            EventHandler handler = (sender, e) =>
+            foreach (bool userPaint in new bool[] { true, false })
             {
-                Assert.Same(control, sender);
-                Assert.Same(eventArgs, e);
-                callCount++;
-            };
-
-            // Call with handler.
-            control.HandleCreated += handler;
-            control.OnHandleCreated(eventArgs);
-            Assert.Equal(1, callCount);
-            Assert.True(control.Created);
-            Assert.True(control.IsHandleCreated);
-
-            // Remove handler.
-            control.HandleCreated -= handler;
-            control.OnHandleCreated(eventArgs);
-            Assert.Equal(1, callCount);
-            Assert.True(control.Created);
-            Assert.True(control.IsHandleCreated);
+                yield return new object[] { userPaint, null };
+                yield return new object[] { userPaint, new EventArgs() };
+            }
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
-        public void Control_OnHandleCreated_InvokeWithHandleNoUserPaint_CallsHandleCreated(EventArgs eventArgs)
+        [MemberData(nameof(OnHandleCreated_WithHandle_TestData))]
+        public void Control_OnHandleCreated_InvokeWithHandle_CallsHandleCreated(bool userPaint, EventArgs eventArgs)
         {
             using var control = new SubControl();
-            control.SetStyle(ControlStyles.UserPaint, false);
+            control.SetStyle(ControlStyles.UserPaint, userPaint);
             Assert.NotEqual(IntPtr.Zero, control.Handle);
-            Assert.False(control.GetStyle(ControlStyles.UserPaint));
 
             int callCount = 0;
             EventHandler handler = (sender, e) =>
@@ -2719,7 +2645,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, parentCallCount);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void Control_OnHelpRequested_InvokeWithHandler_SetsHandled()
         {
             var eventArgs = new HelpEventArgs(new Point(1, 2));
@@ -2746,7 +2672,7 @@ namespace System.Windows.Forms.Tests
             Assert.False(eventArgs.Handled);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void Control_OnHelpRequested_InvokeWithParentHandler_SetsHandled()
         {
             var parent = new Control();
@@ -2773,7 +2699,7 @@ namespace System.Windows.Forms.Tests
             Assert.False(eventArgs.Handled);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void Control_OnHelpRequested_InvokeWithoutHandler_DoesNotSetHandled()
         {
             var eventArgs = new HelpEventArgs(new Point(1, 2));
@@ -2824,20 +2750,20 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-        
+
             // Call with handler.
             control.Invalidated += handler;
             control.OnInvalidated(eventArgs);
             Assert.Equal(1, callCount);
             Assert.False(control.IsHandleCreated);
-        
+
             // Remove handler.
             control.Invalidated -= handler;
             control.OnInvalidated(eventArgs);
             Assert.Equal(1, callCount);
             Assert.False(control.IsHandleCreated);
         }
-        
+
         public static IEnumerable<object[]> OnInvalidated_WithChildren_TestData()
         {
             yield return new object[] { true, Color.Empty, null };
@@ -2890,7 +2816,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-        
+
             // Call with handler.
             control.Invalidated += handler;
             control.OnInvalidated(eventArgs);
@@ -2898,7 +2824,7 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.IsHandleCreated);
             Assert.False(child1.IsHandleCreated);
             Assert.False(child2.IsHandleCreated);
-        
+
             // Remove handler.
             control.Invalidated -= handler;
             control.OnInvalidated(eventArgs);
@@ -2925,7 +2851,7 @@ namespace System.Windows.Forms.Tests
             control.StyleChanged += (sender, e) => styleChangedCallCount++;
             int createdCallCount = 0;
             control.HandleCreated += (sender, e) => createdCallCount++;
-        
+
             // Call with handler.
             control.Invalidated += handler;
             control.OnInvalidated(eventArgs);
@@ -2933,7 +2859,7 @@ namespace System.Windows.Forms.Tests
             Assert.True(control.IsHandleCreated);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-        
+
             // Remove handler.
             control.Invalidated -= handler;
             control.OnInvalidated(eventArgs);
@@ -2942,7 +2868,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
         }
-        
+
         public static IEnumerable<object[]> OnInvalidated_WithChildrenWithHandle_TestData()
         {
             yield return new object[] { true, Color.Empty, new InvalidateEventArgs(Rectangle.Empty), 0 };
@@ -3007,7 +2933,7 @@ namespace System.Windows.Forms.Tests
             child2.StyleChanged += (sender, e) => styleChangedCallCount2++;
             int createdCallCount2 = 0;
             child2.HandleCreated += (sender, e) => createdCallCount2++;
-        
+
             // Call with handler.
             control.Invalidated += handler;
             control.OnInvalidated(eventArgs);
@@ -3023,7 +2949,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expectedChildInvalidatedCallCount, invalidatedCallCount2);
             Assert.Equal(0, styleChangedCallCount2);
             Assert.Equal(0, createdCallCount2);
-        
+
             // Remove handler.
             control.Invalidated -= handler;
             control.OnInvalidated(eventArgs);
@@ -3381,7 +3307,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, moveCallCount);
             Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
         }
-        
+
         [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnLostFocus_Invoke_CallsLostFocus(EventArgs eventArgs)
@@ -3394,12 +3320,12 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-        
+
             // Call with handler.
             control.LostFocus += handler;
             control.OnLostFocus(eventArgs);
             Assert.Equal(1, callCount);
-        
+
            // Remove handler.
            control.LostFocus -= handler;
            control.OnLostFocus(eventArgs);
@@ -3418,18 +3344,18 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-        
+
             // Call with handler.
             control.MarginChanged += handler;
             control.OnMarginChanged(eventArgs);
             Assert.Equal(1, callCount);
-        
+
            // Remove handler.
            control.MarginChanged -= handler;
            control.OnMarginChanged(eventArgs);
            Assert.Equal(1, callCount);
         }
-        
+
         [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnMouseCaptureChanged_Invoke_CallsMouseCaptureChanged(EventArgs eventArgs)
@@ -3442,12 +3368,12 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-        
+
             // Call with handler.
             control.MouseCaptureChanged += handler;
             control.OnMouseCaptureChanged(eventArgs);
             Assert.Equal(1, callCount);
-        
+
            // Remove handler.
            control.MouseCaptureChanged -= handler;
            control.OnMouseCaptureChanged(eventArgs);
@@ -3670,7 +3596,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void Control_OnMouseWheel_InvokeHandledMouseEventArgs_DoesNotSetHandled()
         {
             using var control = new SubControl();
@@ -3893,7 +3819,7 @@ namespace System.Windows.Forms.Tests
                 }
             }
         }
-        
+
         [WinFormsTheory]
         [MemberData(nameof(OnPaintBackground_TestData))]
         public void Control_OnPaintBackground_Invoke_Success(bool supportsTransparentBackColor, Color backColor, Image backgroundImage, ImageLayout backgroundImageLayout)
@@ -3968,7 +3894,7 @@ namespace System.Windows.Forms.Tests
                 yield return new object[] { parent, false, Color.Red, new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, 1 };
             }
         }
-        
+
         [WinFormsTheory]
         [MemberData(nameof(OnPaintBackground_WithParent_TestData))]
         public void Control_OnPaintBackground_InvokeWithParent_CallsPaint(Control parent, bool supportsTransparentBackColor, Color backColor, Image backgroundImage, ImageLayout backgroundImageLayout, int expectedPaintCallCount)
@@ -4018,7 +3944,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expectedPaintCallCount, parentCallCount);
             Assert.False(control.IsHandleCreated);
         }
-        
+
         [WinFormsTheory]
         [MemberData(nameof(OnPaintBackground_TestData))]
         public void Control_OnPaintBackground_InvokeWithHandle_Success(bool supportsTransparentBackColor, Color backColor, Image backgroundImage, ImageLayout backgroundImageLayout)
@@ -4095,7 +4021,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { false, Color.Empty, new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, 1 };
             yield return new object[] { false, Color.Red, new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, 1 };
         }
-        
+
         [WinFormsTheory]
         [MemberData(nameof(OnPaintBackground_WithParentWithHandle_TestData))]
         public void Control_OnPaintBackground_InvokeWithParentWithHandle_CallsPaint(bool supportsTransparentBackColor, Color backColor, Image backgroundImage, ImageLayout backgroundImageLayout, int expectedPaintCallCount)
@@ -4164,7 +4090,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void OnPaintBackground_NullEventArgs_ThrowsNullReferenceException()
+        public void Control_OnPaintBackground_NullEventArgs_ThrowsNullReferenceException()
         {
             using var control = new SubControl();
             Assert.Throws<NullReferenceException>(() => control.OnPaintBackground(null));
@@ -4614,6 +4540,162 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, callCount);
         }
 
+        public static IEnumerable<object[]> OnPrint_WithoutHandle_TestData()
+        {
+            foreach (bool opaque in new bool[] { true, false })
+            {
+                yield return new object[] { true, opaque, 1, false };
+                yield return new object[] { false, opaque, 0, true };
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(OnPrint_WithoutHandle_TestData))]
+        public void Control_OnPrint_InvokeWithoutHandle_Success(bool userPaint, bool opaque, int expectedPaintCallCount, bool expectedIsHandleCreated)
+        {
+            using var control = new SubControl();
+            control.SetStyle(ControlStyles.UserPaint, userPaint);
+            control.SetStyle(ControlStyles.Opaque, opaque);
+            int paintCallCount = 0;
+            control.Paint += (sender, e) => paintCallCount++;
+
+            using var image = new Bitmap(10, 10);
+            using Graphics graphics = Graphics.FromImage(image);
+            var eventArgs = new PaintEventArgs(graphics, Rectangle.Empty);
+            control.OnPrint(eventArgs);
+            Assert.Equal(expectedPaintCallCount, paintCallCount);
+            Assert.Equal(expectedIsHandleCreated, control.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void Control_OnPrint_InvokeExceptionThrownInOnPaintWithoutHandle_Success()
+        {
+            using var control = new SubControl();
+            int paintCallCount = 0;
+            control.Paint += (sender, e) =>
+            {
+                paintCallCount++;
+                throw new DivideByZeroException();
+            };
+
+            using var image = new Bitmap(10, 10);
+            using Graphics graphics = Graphics.FromImage(image);
+            var eventArgs = new PaintEventArgs(graphics, Rectangle.Empty);
+            Assert.Throws<DivideByZeroException>(() => control.OnPrint(eventArgs));
+            Assert.Equal(1, paintCallCount);
+            Assert.False(control.IsHandleCreated);
+
+            // Print again.
+            control.OnPrint(eventArgs);
+            Assert.Equal(1, paintCallCount);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> OnPrint_WithHandle_TestData()
+        {
+            foreach (bool opaque in new bool[] { true, false })
+            {
+                yield return new object[] { true, opaque, 1 };
+                yield return new object[] { false, opaque, 0 };
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(OnPrint_WithHandle_TestData))]
+        public void Control_OnPrint_InvokeWithHandle_Success(bool userPaint, bool opaque, int expectedPaintCallCount)
+        {
+            using var control = new SubControl();
+            control.SetStyle(ControlStyles.UserPaint, userPaint);
+            control.SetStyle(ControlStyles.Opaque, opaque);
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+            int paintCallCount = 0;
+            control.Paint += (sender, e) => paintCallCount++;
+
+            using var image = new Bitmap(10, 10);
+            using Graphics graphics = Graphics.FromImage(image);
+            var eventArgs = new PaintEventArgs(graphics, Rectangle.Empty);
+            control.OnPrint(eventArgs);
+            Assert.Equal(expectedPaintCallCount, paintCallCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsFact]
+        public void Control_OnPrint_InvokeExceptionThrownInOnPaintWithHandle_Success()
+        {
+            using var control = new SubControl();
+            int paintCallCount = 0;
+            control.Paint += (sender, e) =>
+            {
+                paintCallCount++;
+                throw new DivideByZeroException();
+            };
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            using var image = new Bitmap(10, 10);
+            using Graphics graphics = Graphics.FromImage(image);
+            var eventArgs = new PaintEventArgs(graphics, Rectangle.Empty);
+            Assert.Throws<DivideByZeroException>(() => control.OnPrint(eventArgs));
+            Assert.Equal(1, paintCallCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(1, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Print again.
+            control.OnPrint(eventArgs);
+            Assert.Equal(1, paintCallCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(1, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsFact]
+        public void Control_OnPrint_InvokeSetTextInPrint_CachesText()
+        {
+            using var control = new SubControl();
+
+            int printCallCount = 0;
+            control.Paint += (sender, e) =>
+            {
+                string longString = new string('a', 65536);
+                control.Text = longString;
+                Assert.Equal(longString, control.Text);
+                printCallCount++;
+            };
+
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            Assert.Empty(control.Text);
+
+            using var image = new Bitmap(10, 10);
+            using Graphics graphics = Graphics.FromImage(image);
+            var eventArgs = new PaintEventArgs(graphics, Rectangle.Empty);
+            control.OnPrint(eventArgs);
+            Assert.Equal(1, printCallCount);
+            Assert.Empty(control.Text);
+        }
+
+        [WinFormsFact]
+        public void Control_OnPrint_InvokeNullE_ThrowsArgumentNullException()
+        {
+            using var control = new SubControl();
+            Assert.Throws<ArgumentNullException>("e", () => control.OnPrint(null));
+        }
 
         public static IEnumerable<object[]> QueryContinueDragEventArgs_TestData()
         {
@@ -4916,6 +4998,124 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void Control_OnSystemColorsChanged_Invoke_CallsSystemColorsChanged(EventArgs eventArgs)
+        {
+            using var control = new SubControl();
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.SystemColorsChanged += handler;
+            control.OnSystemColorsChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.False(control.IsHandleCreated);
+
+            // Remove handler.
+            control.SystemColorsChanged -= handler;
+            control.OnSystemColorsChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void Control_OnSystemColorsChanged_InvokeWithHandle_CallsSystemColorsChanged(EventArgs eventArgs)
+        {
+            using var control = new SubControl();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.SystemColorsChanged += handler;
+            control.OnSystemColorsChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(1, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Remove handler.
+            control.SystemColorsChanged -= handler;
+            control.OnSystemColorsChanged(eventArgs);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(2, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void Control_OnSystemColorsChanged_InvokeWithChildren_CallsSystemColorsChanged(EventArgs eventArgs)
+        {
+            using var child1 = new Control();
+            using var child2 = new Control();
+            using var control = new SubControl();
+            control.Controls.Add(child1);
+            control.Controls.Add(child2);
+
+            int callCount = 0;
+            int child1CallCount = 0;
+            int child2CallCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+            child1.SystemColorsChanged += (sender, e) =>
+            {
+                Assert.Same(child1, sender);
+                Assert.Same(EventArgs.Empty, e);
+                child1CallCount++;
+            };
+            child2.SystemColorsChanged += (sender, e) =>
+            {
+                Assert.Same(child2, sender);
+                Assert.Same(EventArgs.Empty, e);
+                child2CallCount++;
+            };
+
+            // Call with handler.
+            control.SystemColorsChanged += handler;
+            control.OnSystemColorsChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(1, child1CallCount);
+            Assert.Equal(1, child2CallCount);
+            Assert.False(control.IsHandleCreated);
+            Assert.False(child1.IsHandleCreated);
+            Assert.False(child2.IsHandleCreated);
+
+            // Remove handler.
+            control.SystemColorsChanged -= handler;
+            control.OnSystemColorsChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(2, child1CallCount);
+            Assert.Equal(2, child2CallCount);
+            Assert.False(control.IsHandleCreated);
+            Assert.False(child1.IsHandleCreated);
+            Assert.False(child2.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnTabIndexChanged_Invoke_CallsTabIndexChanged(EventArgs eventArgs)
         {
             using var control = new SubControl();
@@ -4983,6 +5183,61 @@ namespace System.Windows.Forms.Tests
             // Remove handler.
             control.TextChanged -= handler;
             control.OnTextChanged(eventArgs);
+            Assert.Equal(1, callCount);
+        }
+
+        public static IEnumerable<object[]> OnValidating_TestData()
+        {
+            yield return new object[] { null };
+            yield return new object[] { new CancelEventArgs() };
+            yield return new object[] { new CancelEventArgs(true) };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(OnValidating_TestData))]
+        public void Control_OnValidating_Invoke_CallsValidating(CancelEventArgs eventArgs)
+        {
+            using var control = new SubControl();
+            int callCount = 0;
+            CancelEventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.Validating += handler;
+            control.OnValidating(eventArgs);
+            Assert.Equal(1, callCount);
+
+            // Remove handler.
+            control.Validating -= handler;
+            control.OnValidating(eventArgs);
+            Assert.Equal(1, callCount);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void Control_OnValidated_Invoke_CallsValidated(EventArgs eventArgs)
+        {
+            using var control = new SubControl();
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.Validated += handler;
+            control.OnValidated(eventArgs);
+            Assert.Equal(1, callCount);
+
+            // Remove handler.
+            control.Validated -= handler;
+            control.OnValidated(eventArgs);
             Assert.Equal(1, callCount);
         }
 
@@ -5190,46 +5445,52 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-            EventHandler grandchildHandler1 = (sender, e) =>
+            void grandchildHandler1(object sender, EventArgs e)
             {
                 Assert.Same(grandchild1, sender);
                 Assert.Same(eventArgs, e);
                 grandchildCallCount1++;
             };
-            EventHandler childHandler1 = (sender, e) =>
+            grandchild1.VisibleChanged += grandchildHandler1;
+            void childHandler1(object sender, EventArgs e)
             {
                 Assert.Same(child1, sender);
                 Assert.Same(eventArgs, e);
                 childCallCount1++;
             };
-            EventHandler childHandler2 = (sender, e) =>
+            child1.VisibleChanged += childHandler1;
+            void childHandler2(object sender, EventArgs e)
             {
                 Assert.Same(child2, sender);
                 Assert.Same(eventArgs, e);
                 childCallCount2++;
             };
-
-            // Call with handler.
-            control.VisibleChanged += handler;
-            child1.VisibleChanged += childHandler1;
             child2.VisibleChanged += childHandler2;
-            grandchild1.VisibleChanged += grandchildHandler1;
-            control.OnVisibleChanged(eventArgs);
-            Assert.Equal(1, callCount);
-            Assert.Equal(expectedChildCallCount, childCallCount1);
-            Assert.Equal(expectedChildCallCount, childCallCount2);
-            Assert.Equal(expectedChildCallCount, grandchildCallCount1);
 
-            // Remove handler.
-            control.VisibleChanged -= handler;
-            child1.VisibleChanged -= childHandler1;
-            child2.VisibleChanged -= childHandler2;
-            grandchild1.VisibleChanged -= grandchildHandler1;
-            control.OnVisibleChanged(eventArgs);
-            Assert.Equal(1, callCount);
-            Assert.Equal(expectedChildCallCount, childCallCount1);
-            Assert.Equal(expectedChildCallCount, childCallCount2);
-            Assert.Equal(expectedChildCallCount, grandchildCallCount1);
+            try
+            {
+                // Call with handler.
+                control.VisibleChanged += handler;
+                control.OnVisibleChanged(eventArgs);
+                Assert.Equal(1, callCount);
+                Assert.Equal(expectedChildCallCount, childCallCount1);
+                Assert.Equal(expectedChildCallCount, childCallCount2);
+                Assert.Equal(expectedChildCallCount, grandchildCallCount1);
+
+                // Remove handler.
+                control.VisibleChanged -= handler;
+                control.OnVisibleChanged(eventArgs);
+                Assert.Equal(1, callCount);
+                Assert.Equal(expectedChildCallCount * 2, childCallCount1);
+                Assert.Equal(expectedChildCallCount * 2, childCallCount2);
+                Assert.Equal(expectedChildCallCount * 2, grandchildCallCount1);
+            }
+            finally
+            {
+                grandchild1.VisibleChanged -= grandchildHandler1;
+                child1.VisibleChanged -= childHandler1;
+                child2.VisibleChanged -= childHandler2;
+            }
         }
 
         [WinFormsTheory]
@@ -5263,15 +5524,12 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-            EventHandler grandchildHandler1 = (sender, e) => grandchildCallCount1++;
-            EventHandler childHandler1 = (sender, e) => childCallCount1++;
-            EventHandler childHandler2 = (sender, e) => childCallCount2++;
+            grandchild1.VisibleChanged += (sender, e) => grandchildCallCount1++;
+            child1.VisibleChanged += (sender, e) => childCallCount1++;
+            child2.VisibleChanged += (sender, e) => childCallCount2++;
 
             // Call with handler.
             control.VisibleChanged += handler;
-            child1.VisibleChanged += childHandler1;
-            child2.VisibleChanged += childHandler2;
-            grandchild1.VisibleChanged += grandchildHandler1;
             control.OnVisibleChanged(eventArgs);
             Assert.Equal(1, callCount);
             Assert.Equal(0, childCallCount1);
@@ -5280,9 +5538,6 @@ namespace System.Windows.Forms.Tests
 
             // Remove handler.
             control.VisibleChanged -= handler;
-            child1.VisibleChanged -= childHandler1;
-            child2.VisibleChanged -= childHandler2;
-            grandchild1.VisibleChanged -= grandchildHandler1;
             control.OnVisibleChanged(eventArgs);
             Assert.Equal(1, callCount);
             Assert.Equal(0, childCallCount1);

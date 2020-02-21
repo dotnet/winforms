@@ -9,20 +9,21 @@ using System.Drawing;
 using Moq;
 using WinForms.Common.Tests;
 using Xunit;
+using static Interop;
+using static Interop.ComCtl32;
 
 namespace System.Windows.Forms.Tests
 {
-    public class TreeViewTests
+    public class TreeViewTests : IClassFixture<ThreadExceptionFixture>
     {
-        public TreeViewTests()
-        {
-            Application.ThreadException += (sender, e) => throw new Exception(e.Exception.StackTrace.ToString());
-        }
-
         [WinFormsFact]
         public void TreeView_Ctor_Default()
         {
             using var control = new SubTreeView();
+            Assert.Null(control.AccessibleDefaultActionDescription);
+            Assert.Null(control.AccessibleDescription);
+            Assert.Null(control.AccessibleName);
+            Assert.Equal(AccessibleRole.Default, control.AccessibleRole);
             Assert.False(control.AllowDrop);
             Assert.Equal(AnchorStyles.Top | AnchorStyles.Left, control.Anchor);
             Assert.False(control.AutoSize);
@@ -34,13 +35,17 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(97, control.Bottom);
             Assert.Equal(new Rectangle(0, 0, 121, 97), control.Bounds);
             Assert.True(control.CanEnableIme);
+            Assert.False(control.CanFocus);
             Assert.True(control.CanRaiseEvents);
+            Assert.True(control.CanSelect);
+            Assert.False(control.Capture);
             Assert.True(control.CausesValidation);
             Assert.False(control.CheckBoxes);
             Assert.Equal(117, control.ClientSize.Width);
             Assert.Equal(93, control.ClientSize.Height);
             Assert.Equal(new Rectangle(0, 0, 117, 93), control.ClientRectangle);
             Assert.Null(control.Container);
+            Assert.False(control.ContainsFocus);
             Assert.Null(control.ContextMenuStrip);
             Assert.Empty(control.Controls);
             Assert.Same(control.Controls, control.Controls);
@@ -61,6 +66,7 @@ namespace System.Windows.Forms.Tests
             Assert.True(control.Enabled);
             Assert.NotNull(control.Events);
             Assert.Same(control.Events, control.Events);
+            Assert.False(control.Focused);
             Assert.Equal(Control.DefaultFont, control.Font);
             Assert.Equal(control.Font.Height, control.FontHeight);
             Assert.Equal(SystemColors.WindowText, control.ForeColor);
@@ -75,6 +81,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(ImeMode.NoControl, control.ImeMode);
             Assert.Equal(ImeMode.NoControl, control.ImeModeBase);
             Assert.Equal(19, control.Indent);
+            Assert.False(control.IsAccessible);
+            Assert.False(control.IsMirrored);
             Assert.Equal(Control.DefaultFont.Height + 3, control.ItemHeight);
             Assert.False(control.LabelEdit);
             Assert.NotNull(control.LayoutEngine);
@@ -119,6 +127,7 @@ namespace System.Windows.Forms.Tests
             Assert.Null(control.TopLevelControl);
             Assert.Null(control.TopNode);
             Assert.Null(control.TreeViewNodeSorter);
+            Assert.False(control.UseWaitCursor);
             Assert.True(control.Visible);
             Assert.Equal(0, control.VisibleCount);
             Assert.Equal(121, control.Width);
@@ -1639,6 +1648,60 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(2, invalidatedCallCount);
         }
 
+        [WinFormsFact]
+        public void TreeView_Handle_GetVersion_ReturnsExpected()
+        {
+            using var control = new TreeView();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            Assert.Equal((IntPtr)5, User32.SendMessageW(control.Handle, (User32.WM)CCM.GETVERSION));
+        }
+
+        public static IEnumerable<object[]> Handle_CustomGetVersion_TestData()
+        {
+            yield return new object[] { IntPtr.Zero, 1 };
+            yield return new object[] { (IntPtr)4, 1 };
+            yield return new object[] { (IntPtr)5, 0 };
+            yield return new object[] { (IntPtr)6, 0 };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(Handle_CustomGetVersion_TestData))]
+        public void TreeView_Handle_CustomGetVersion_Success(IntPtr getVersionResult, int expectedSetVersionCallCount)
+        {
+            using var control = new CustomGetVersionTreeView
+            {
+                GetVersionResult = getVersionResult
+            };
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            Assert.Equal(expectedSetVersionCallCount, control.SetVersionCallCount);
+        }
+
+        private class CustomGetVersionTreeView : TreeView
+        {
+            public IntPtr GetVersionResult { get; set; }
+            public int SetVersionCallCount { get; set; }
+
+            protected override void WndProc(ref Message m)
+            {
+                if (m.Msg == (int)CCM.GETVERSION)
+                {
+                    Assert.Equal(IntPtr.Zero, m.WParam);
+                    Assert.Equal(IntPtr.Zero, m.LParam);
+                    m.Result = GetVersionResult;
+                    return;
+                }
+                else if (m.Msg == (int)CCM.SETVERSION)
+                {
+                    Assert.Equal((IntPtr)5, m.WParam);
+                    Assert.Equal(IntPtr.Zero, m.LParam);
+                    SetVersionCallCount++;
+                    return;
+                }
+
+                base.WndProc(ref m);
+            }
+        }
+
         [Theory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void HideSelection_Set_GetReturnsExpected(bool value)
@@ -2892,7 +2955,7 @@ namespace System.Windows.Forms.Tests
             Assert.Same(value, treeView.PathSeparator);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetPaddingNormalizedTheoryData))]
         public void TreeView_Padding_Set_GetReturnsExpected(Padding value, Padding expected)
         {
@@ -2909,7 +2972,7 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.IsHandleCreated);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetPaddingNormalizedTheoryData))]
         public void TreeView_Padding_SetWithHandle_GetReturnsExpected(Padding value, Padding expected)
         {
@@ -2938,7 +3001,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createdCallCount);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void TreeView_Padding_SetWithHandler_CallsPaddingChanged()
         {
             using var control = new TreeView();
@@ -2975,183 +3038,166 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(2, callCount);
         }
 
-        [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
-        public void RightToLeftLayout_Set_GetReturnsExpected(bool value)
+        [WinFormsTheory]
+        [InlineData(RightToLeft.Yes, true, 1)]
+        [InlineData(RightToLeft.Yes, false, 0)]
+        [InlineData(RightToLeft.No, true, 1)]
+        [InlineData(RightToLeft.No, false, 0)]
+        [InlineData(RightToLeft.Inherit, true, 1)]
+        [InlineData(RightToLeft.Inherit, false, 0)]
+        public void TrackBar_RightToLeftLayout_Set_GetReturnsExpected(RightToLeft rightToLeft, bool value, int expectedLayoutCallCount)
         {
-            var treeView = new TreeView
+            using var control = new TreeView
             {
-                RightToLeftLayout = value
+                RightToLeft = rightToLeft
             };
-            Assert.Equal(value, treeView.RightToLeftLayout);
-
-            // Set same.
-            treeView.RightToLeftLayout = value;
-            Assert.Equal(value, treeView.RightToLeftLayout);
-
-            // Set different.
-            treeView.RightToLeftLayout = !value;
-            Assert.Equal(!value, treeView.RightToLeftLayout);
-        }
-
-        [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
-        public void RightToLeftLayout_SetWithHandle_GetReturnsExpected(bool value)
-        {
-            var treeView = new TreeView();
-            Assert.NotEqual(IntPtr.Zero, treeView.Handle);
-
-            treeView.RightToLeftLayout = value;
-            Assert.Equal(value, treeView.RightToLeftLayout);
-
-            // Set same.
-            treeView.RightToLeftLayout = value;
-            Assert.Equal(value, treeView.RightToLeftLayout);
-
-            // Set different.
-            treeView.RightToLeftLayout = !value;
-            Assert.Equal(!value, treeView.RightToLeftLayout);
-        }
-
-        [Fact]
-        public void RightToLeftLayout_SetWithHandler_CallsRightToLeftLayoutChanged()
-        {
-            var treeView = new TreeView
+            int layoutCallCount = 0;
+            control.Layout += (sender, e) =>
             {
-                RightToLeftLayout = false
+                Assert.Same(control, sender);
+                Assert.Same(control, e.AffectedControl);
+                Assert.Equal("RightToLeftLayout", e.AffectedProperty);
+                layoutCallCount++;
+            };
+
+            control.RightToLeftLayout = value;
+            Assert.Equal(value, control.RightToLeftLayout);
+            Assert.Equal(expectedLayoutCallCount, layoutCallCount);
+            Assert.False(control.IsHandleCreated);
+
+            // Set same.
+            control.RightToLeftLayout = value;
+            Assert.Equal(value, control.RightToLeftLayout);
+            Assert.Equal(expectedLayoutCallCount, layoutCallCount);
+            Assert.False(control.IsHandleCreated);
+
+            // Set different.
+            control.RightToLeftLayout = !value;
+            Assert.Equal(!value, control.RightToLeftLayout);
+            Assert.Equal(expectedLayoutCallCount + 1, layoutCallCount);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(RightToLeft.Yes, true, 1, 1, 2)]
+        [InlineData(RightToLeft.Yes, false, 0, 0, 1)]
+        [InlineData(RightToLeft.No, true, 1, 0, 0)]
+        [InlineData(RightToLeft.No, false, 0, 0, 0)]
+        [InlineData(RightToLeft.Inherit, true, 1, 0, 0)]
+        [InlineData(RightToLeft.Inherit, false, 0, 0, 0)]
+        public void TrackBar_RightToLeftLayout_SetWithHandle_GetReturnsExpected(RightToLeft rightToLeft, bool value, int expectedLayoutCallCount, int expectedCreatedCallCount1, int expectedCreatedCallCount2)
+        {
+            using var control = new TrackBar
+            {
+                RightToLeft = rightToLeft
+            };
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+            int layoutCallCount = 0;
+            control.Layout += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(control, e.AffectedControl);
+                Assert.Equal("RightToLeftLayout", e.AffectedProperty);
+                layoutCallCount++;
+            };
+
+            control.RightToLeftLayout = value;
+            Assert.Equal(value, control.RightToLeftLayout);
+            Assert.Equal(expectedLayoutCallCount, layoutCallCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(expectedCreatedCallCount1, createdCallCount);
+
+            // Set same.
+            control.RightToLeftLayout = value;
+            Assert.Equal(value, control.RightToLeftLayout);
+            Assert.Equal(expectedLayoutCallCount, layoutCallCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(expectedCreatedCallCount1, createdCallCount);
+
+            // Set different.
+            control.RightToLeftLayout = !value;
+            Assert.Equal(!value, control.RightToLeftLayout);
+            Assert.Equal(expectedLayoutCallCount + 1, layoutCallCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(expectedCreatedCallCount2, createdCallCount);
+        }
+
+        [WinFormsFact]
+        public void TrackBar_RightToLeftLayout_SetWithHandler_CallsRightToLeftLayoutChanged()
+        {
+            using var control = new TrackBar
+            {
+                RightToLeftLayout = true
             };
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
-                Assert.Same(treeView, sender);
+                Assert.Same(control, sender);
                 Assert.Same(EventArgs.Empty, e);
                 callCount++;
             };
-            treeView.RightToLeftLayoutChanged += handler;
+            control.RightToLeftLayoutChanged += handler;
 
             // Set different.
-            treeView.RightToLeftLayout = true;
-            Assert.True(treeView.RightToLeftLayout);
+            control.RightToLeftLayout = false;
+            Assert.False(control.RightToLeftLayout);
             Assert.Equal(1, callCount);
 
             // Set same.
-            treeView.RightToLeftLayout = true;
-            Assert.True(treeView.RightToLeftLayout);
+            control.RightToLeftLayout = false;
+            Assert.False(control.RightToLeftLayout);
             Assert.Equal(1, callCount);
 
             // Set different.
-            treeView.RightToLeftLayout = false;
-            Assert.False(treeView.RightToLeftLayout);
+            control.RightToLeftLayout = true;
+            Assert.True(control.RightToLeftLayout);
             Assert.Equal(2, callCount);
 
             // Remove handler.
-            treeView.RightToLeftLayoutChanged -= handler;
-            treeView.RightToLeftLayout = true;
-            Assert.True(treeView.RightToLeftLayout);
+            control.RightToLeftLayoutChanged -= handler;
+            control.RightToLeftLayout = false;
+            Assert.False(control.RightToLeftLayout);
             Assert.Equal(2, callCount);
         }
 
-        [Fact]
-        public void RightToLeftLayout_SetWithUpdateStylesHandler_DoesNotCallStyleChangedDoesNotCallInvalidated()
+        [WinFormsFact]
+        public void TrackBar_RightToLeftLayout_SetWithHandlerInDisposing_DoesNotRightToLeftLayoutChanged()
         {
-            var treeView = new TreeView
+            using var control = new TrackBar
             {
-                RightToLeftLayout = false
+                RightToLeft = RightToLeft.Yes
             };
-            int styleChangedCallCount = 0;
-            int invalidatedCallCount = 0;
-            EventHandler styleChangedHandler = (sender, e) =>
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+
+            int callCount = 0;
+            control.RightToLeftLayoutChanged += (sender, e) => callCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            int disposedCallCount = 0;
+            control.Disposed += (sender, e) =>
             {
-                Assert.Same(treeView, sender);
-                Assert.Same(EventArgs.Empty, e);
-                styleChangedCallCount++;
+                control.RightToLeftLayout = true;
+                Assert.True(control.RightToLeftLayout);
+                Assert.Equal(0, callCount);
+                Assert.Equal(0, createdCallCount);
+                disposedCallCount++;
             };
-            InvalidateEventHandler invalidatedHandler = (sender, e) =>
-            {
-                Assert.Same(treeView, sender);
-                Assert.NotNull(e);
-                invalidatedCallCount++;
-            };
-            treeView.StyleChanged += styleChangedHandler;
-            treeView.Invalidated += invalidatedHandler;
 
-            // Set different.
-            treeView.RightToLeftLayout = true;
-            Assert.True(treeView.RightToLeftLayout);
-            Assert.Equal(0, styleChangedCallCount);
-            Assert.Equal(0, invalidatedCallCount);
-
-            // Set same.
-            treeView.RightToLeftLayout = true;
-            Assert.True(treeView.RightToLeftLayout);
-            Assert.Equal(0, styleChangedCallCount);
-            Assert.Equal(0, invalidatedCallCount);
-
-            // Set different.
-            treeView.RightToLeftLayout = false;
-            Assert.False(treeView.RightToLeftLayout);
-            Assert.Equal(0, styleChangedCallCount);
-            Assert.Equal(0, invalidatedCallCount);
-
-            // Remove handler.
-            treeView.StyleChanged -= styleChangedHandler;
-            treeView.Invalidated -= invalidatedHandler;
-            treeView.RightToLeftLayout = true;
-            Assert.True(treeView.RightToLeftLayout);
-            Assert.Equal(0, styleChangedCallCount);
-            Assert.Equal(0, invalidatedCallCount);
-        }
-
-        [Fact]
-        public void RightToLeftLayout_SetWithUpdateStylesHandlerWithHandle_DoesNotCallStyleChangedDoesNotCallInvalidated()
-        {
-            var treeView = new TreeView
-            {
-                RightToLeftLayout = false
-            };
-            int styleChangedCallCount = 0;
-            int invalidatedCallCount = 0;
-            EventHandler styleChangedHandler = (sender, e) =>
-            {
-                Assert.Same(treeView, sender);
-                Assert.Same(EventArgs.Empty, e);
-                styleChangedCallCount++;
-            };
-            InvalidateEventHandler invalidatedHandler = (sender, e) =>
-            {
-                Assert.Same(treeView, sender);
-                Assert.NotNull(e);
-                invalidatedCallCount++;
-            };
-            treeView.StyleChanged += styleChangedHandler;
-            treeView.Invalidated += invalidatedHandler;
-            Assert.NotEqual(IntPtr.Zero, treeView.Handle);
-
-            // Set different.
-            treeView.RightToLeftLayout = true;
-            Assert.True(treeView.RightToLeftLayout);
-            Assert.Equal(0, styleChangedCallCount);
-            Assert.Equal(0, invalidatedCallCount);
-
-            // Set same.
-            treeView.RightToLeftLayout = true;
-            Assert.True(treeView.RightToLeftLayout);
-            Assert.Equal(0, styleChangedCallCount);
-            Assert.Equal(0, invalidatedCallCount);
-
-            // Set different.
-            treeView.RightToLeftLayout = false;
-            Assert.False(treeView.RightToLeftLayout);
-            Assert.Equal(0, styleChangedCallCount);
-            Assert.Equal(0, invalidatedCallCount);
-
-            // Remove handler.
-            treeView.StyleChanged -= styleChangedHandler;
-            treeView.Invalidated -= invalidatedHandler;
-            treeView.RightToLeftLayout = true;
-            Assert.True(treeView.RightToLeftLayout);
-            Assert.Equal(0, styleChangedCallCount);
-            Assert.Equal(0, invalidatedCallCount);
+            control.Dispose();
+            Assert.Equal(1, disposedCallCount);
         }
 
         [Theory]
@@ -4536,25 +4582,56 @@ namespace System.Windows.Forms.Tests
             Assert.NotEqual(IntPtr.Zero, imageList.Handle);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void Text_Set_GetReturnsExpected(string value, string expected)
         {
-            var treeView = new TreeView
+            var control = new TreeView
             {
                 Text = value
             };
-            Assert.Equal(expected, treeView.Text);
+            Assert.Equal(expected, control.Text);
+            Assert.False(control.IsHandleCreated);
 
             // Set same.
-            treeView.Text = value;
-            Assert.Equal(expected, treeView.Text);
+            control.Text = value;
+            Assert.Equal(expected, control.Text);
+            Assert.False(control.IsHandleCreated);
         }
 
-        [Fact]
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        public void TreeView_Text_SetWithHandle_GetReturnsExpected(string value, string expected)
+        {
+            using var control = new TreeView();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            control.Text = value;
+            Assert.Equal(expected, control.Text);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set same.
+            control.Text = value;
+            Assert.Equal(expected, control.Text);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsFact]
         public void Text_SetWithHandler_CallsTextChanged()
         {
-            var control = new TreeView();
+            using var control = new TreeView();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -6362,39 +6439,23 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
         }
 
-        [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
-        public void TreeView_OnRightToLeftLayoutChanged_Invoke_CallsRightToLeftLayoutChanged(EventArgs eventArgs)
+        public static IEnumerable<object[]> OnRightToLeftLayoutChanged_TestData()
         {
-            using var control = new SubTreeView();
-            int callCount = 0;
-            EventHandler handler = (sender, e) =>
-            {
-                Assert.Same(control, sender);
-                Assert.Same(eventArgs, e);
-                callCount++;
-            };
-
-            // Call with handler.
-            control.RightToLeftLayoutChanged += handler;
-            control.OnRightToLeftLayoutChanged(eventArgs);
-            Assert.Equal(1, callCount);
-            Assert.False(control.IsHandleCreated);
-
-            // Remove handler.
-            control.RightToLeftLayoutChanged -= handler;
-            control.OnRightToLeftLayoutChanged(eventArgs);
-            Assert.Equal(1, callCount);
-            Assert.False(control.IsHandleCreated);
+            yield return new object[] { RightToLeft.Yes, null };
+            yield return new object[] { RightToLeft.Yes, new EventArgs() };
+            yield return new object[] { RightToLeft.No, null };
+            yield return new object[] { RightToLeft.No, new EventArgs() };
+            yield return new object[] { RightToLeft.Inherit, null };
+            yield return new object[] { RightToLeft.Inherit, new EventArgs() };
         }
 
-        [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
-        public void TreeView_OnRightToLeftLayoutChanged_InvokeWithRightToLeftYes_CallsRightToLeftLayoutChanged(EventArgs eventArgs)
+        [WinFormsTheory]
+        [MemberData(nameof(OnRightToLeftLayoutChanged_TestData))]
+        public void TreeView_OnRightToLeftLayoutChanged_Invoke_CallsRightToLeftLayoutChanged(RightToLeft rightToLeft, EventArgs eventArgs)
         {
             using var control = new SubTreeView
             {
-                RightToLeft = RightToLeft.Yes
+                RightToLeft = rightToLeft
             };
             int callCount = 0;
             EventHandler handler = (sender, e) =>
@@ -6417,60 +6478,31 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.IsHandleCreated);
         }
 
-        [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
-        public void TreeView_OnRightToLeftLayoutChanged_InvokeWithHandle_CallsRightToLeftLayoutChanged(EventArgs eventArgs)
+        public static IEnumerable<object[]> OnRightToLeftLayoutChanged_WithHandle_TestData()
         {
-            using var control = new SubTreeView();
-            Assert.NotEqual(IntPtr.Zero, control.Handle);
-
-            int callCount = 0;
-            EventHandler handler = (sender, e) =>
-            {
-                Assert.Same(control, sender);
-                Assert.Same(eventArgs, e);
-                callCount++;
-            };
-            int invalidatedCallCount = 0;
-            InvalidateEventHandler invalidatedHandler = (sender, e) => invalidatedCallCount++;
-            int styleChangedCallCount = 0;
-            EventHandler styleChangedHandler = (sender, e) => styleChangedCallCount++;
-            int createdCallCount = 0;
-            EventHandler createdHandler = (sender, e) => createdCallCount++;
-
-            // Call with handler.
-            control.RightToLeftLayoutChanged += handler;
-            control.Invalidated += invalidatedHandler;
-            control.StyleChanged += styleChangedHandler;
-            control.HandleCreated += createdHandler;
-            control.OnRightToLeftLayoutChanged(eventArgs);
-            Assert.Equal(1, callCount);
-            Assert.True(control.IsHandleCreated);
-            Assert.Equal(0, invalidatedCallCount);
-            Assert.Equal(0, styleChangedCallCount);
-            Assert.Equal(0, createdCallCount);
-
-            // Remove handler.
-            control.RightToLeftLayoutChanged -= handler;
-            control.Invalidated -= invalidatedHandler;
-            control.StyleChanged -= styleChangedHandler;
-            control.HandleCreated -= createdHandler;
-            control.OnRightToLeftLayoutChanged(eventArgs);
-            Assert.True(control.IsHandleCreated);
-            Assert.Equal(0, invalidatedCallCount);
-            Assert.Equal(0, styleChangedCallCount);
-            Assert.Equal(0, createdCallCount);
+            yield return new object[] { RightToLeft.Yes, null, 1 };
+            yield return new object[] { RightToLeft.Yes, new EventArgs(), 1 };
+            yield return new object[] { RightToLeft.No, null, 0 };
+            yield return new object[] { RightToLeft.No, new EventArgs(), 0 };
+            yield return new object[] { RightToLeft.Inherit, null, 0 };
+            yield return new object[] { RightToLeft.Inherit, new EventArgs(), 0 };
         }
 
-        [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
-        public void TreeView_OnRightToLeftLayoutChanged_InvokeWithHandleWithRightToLeftYes_CallsRightToLeftLayoutChanged(EventArgs eventArgs)
+        [WinFormsTheory]
+        [MemberData(nameof(OnRightToLeftLayoutChanged_WithHandle_TestData))]
+        public void TreeView_OnRightToLeftLayoutChanged_InvokeWithHandle_CallsRightToLeftLayoutChanged(RightToLeft rightToLeft, EventArgs eventArgs, int expectedCreatedCallCount)
         {
             using var control = new SubTreeView
             {
-                RightToLeft = RightToLeft.Yes
+                RightToLeft = rightToLeft
             };
             Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
 
             int callCount = 0;
             EventHandler handler = (sender, e) =>
@@ -6479,35 +6511,23 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-            int invalidatedCallCount = 0;
-            InvalidateEventHandler invalidatedHandler = (sender, e) => invalidatedCallCount++;
-            int styleChangedCallCount = 0;
-            EventHandler styleChangedHandler = (sender, e) => styleChangedCallCount++;
-            int createdCallCount = 0;
-            EventHandler createdHandler = (sender, e) => createdCallCount++;
 
             // Call with handler.
             control.RightToLeftLayoutChanged += handler;
-            control.Invalidated += invalidatedHandler;
-            control.StyleChanged += styleChangedHandler;
-            control.HandleCreated += createdHandler;
             control.OnRightToLeftLayoutChanged(eventArgs);
             Assert.Equal(1, callCount);
             Assert.True(control.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
-            Assert.Equal(1, createdCallCount);
+            Assert.Equal(expectedCreatedCallCount, createdCallCount);
 
             // Remove handler.
             control.RightToLeftLayoutChanged -= handler;
-            control.Invalidated -= invalidatedHandler;
-            control.StyleChanged -= styleChangedHandler;
-            control.HandleCreated -= createdHandler;
             control.OnRightToLeftLayoutChanged(eventArgs);
             Assert.True(control.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
-            Assert.Equal(1, createdCallCount);
+            Assert.Equal(expectedCreatedCallCount * 2, createdCallCount);
         }
 
         [WinFormsFact]

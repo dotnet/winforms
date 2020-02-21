@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 #region Using directives
 
 using System.Drawing;
@@ -80,7 +82,6 @@ namespace System.Windows.Forms
                     }
 
                     g.FillRectangles(SystemBrushes.ControlLight, shadowRects);
-
                 }
             }
             else
@@ -103,7 +104,6 @@ namespace System.Windows.Forms
                     e.Graphics.DrawRectangle(SystemPens.ButtonHighlight, new Rectangle(0, 0, e.Item.Width - 1, e.Item.Height - 1));
                 }
             }
-
         }
 
         protected override void OnRenderItemCheck(ToolStripItemImageRenderEventArgs e)
@@ -155,7 +155,6 @@ namespace System.Windows.Forms
                 if (item.Pressed)
                 {
                     g.DrawRectangle(SystemPens.ButtonHighlight, bounds.X, bounds.Y, bounds.Width - 1, bounds.Height - 1);
-
                 }
                 else if (item.Selected)
                 {
@@ -197,13 +196,11 @@ namespace System.Windows.Forms
         {
             if (FillWhenSelected)
             {
-
                 RenderItemInternalFilled(e, /*pressFill = */false);
                 ToolStripItem item = e.Item;
                 Graphics g = e.Graphics;
                 Color arrowColor = item.Enabled ? SystemColors.ControlText : SystemColors.ControlDark;
                 DrawArrow(new ToolStripArrowRenderEventArgs(g, item, new Rectangle(Point.Empty, item.Size), arrowColor, ArrowDirection.Down));
-
             }
             else
             {
@@ -254,14 +251,12 @@ namespace System.Windows.Forms
 
             if (e.ToolStrip is ToolStripDropDown)
             {
-
                 g.DrawRectangle(SystemPens.ButtonHighlight, bounds.X, bounds.Y, bounds.Width - 1, bounds.Height - 1);
 
                 if (!(e.ToolStrip is ToolStripOverflow))
                 {
                     // make the neck connected.
                     g.FillRectangle(SystemBrushes.Control, e.ConnectedArea);
-
                 }
             }
             else if (e.ToolStrip is MenuStrip)
@@ -271,7 +266,6 @@ namespace System.Windows.Forms
             else if (e.ToolStrip is StatusStrip)
             {
                 g.DrawRectangle(SystemPens.ButtonShadow, bounds.X, bounds.Y, bounds.Width - 1, bounds.Height - 1);
-
             }
             else
             {
@@ -286,7 +280,6 @@ namespace System.Windows.Forms
 
             if (DottedBorder)
             {
-
                 using (Pen p = new Pen(SystemColors.ButtonShadow))
                 {
                     p.DashStyle = System.Drawing.Drawing2D.DashStyle.Dot;
@@ -320,7 +313,6 @@ namespace System.Windows.Forms
                     {
                         // bottom left
                         g.FillRectangle(SystemBrushes.ButtonShadow, new Rectangle(1, bounds.Height - 2, 1, 1));
-
                     }
 
                     // top and bottom right conntecting pixel - drawn only if height and width are odd
@@ -329,7 +321,6 @@ namespace System.Windows.Forms
                         // bottom right
                         g.FillRectangle(SystemBrushes.ButtonShadow, new Rectangle(bounds.Width - 2, bounds.Height - 2, 1, 1));
                     }
-
                 }
             }
             else
@@ -339,7 +330,6 @@ namespace System.Windows.Forms
                 bounds.Height -= 1;
                 g.DrawRectangle(SystemPens.ButtonShadow, bounds);
             }
-
         }
         protected override void OnRenderSeparator(ToolStripSeparatorRenderEventArgs e)
         {
@@ -358,7 +348,6 @@ namespace System.Windows.Forms
                 int startX = bounds.Width / 2;
 
                 g.DrawLine(foreColorPen, startX, bounds.Top, startX, bounds.Bottom - 1);
-
             }
             else
             {
@@ -373,9 +362,7 @@ namespace System.Windows.Forms
                 int startY = bounds.Height / 2;
 
                 g.DrawLine(foreColorPen, bounds.Left, startY, bounds.Right - 1, startY);
-
             }
-
         }
 
         // Indicates whether system is currently set to high contrast 'white on black' mode
@@ -489,9 +476,6 @@ namespace System.Windows.Forms
                 g.FillRectangle(SystemBrushes.Highlight, bounds);
                 g.DrawRectangle(SystemPens.ControlLight, bounds.X, bounds.Y, bounds.Width - 1, bounds.Height - 1);
             }
-
         }
-
     }
 }
-

@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.InteropServices;
@@ -209,7 +211,7 @@ namespace System.Windows.Forms
 
                     if (IsHandleCreated)
                     {
-                        SendMessage(NativeMethods.BM_SETCHECK, value ? 1 : 0, 0);
+                        User32.SendMessageW(this, (User32.WM)User32.BM.SETCHECK, PARAM.FromBool(value));
                     }
 
                     Invalidate();
@@ -241,17 +243,17 @@ namespace System.Windows.Forms
             get
             {
                 CreateParams cp = base.CreateParams;
-                cp.ClassName = "BUTTON";
+                cp.ClassName = ComCtl32.WindowClasses.WC_BUTTON;
                 if (OwnerDraw)
                 {
-                    cp.Style |= NativeMethods.BS_OWNERDRAW;
+                    cp.Style |= (int)User32.BS.OWNERDRAW;
                 }
                 else
                 {
-                    cp.Style |= NativeMethods.BS_RADIOBUTTON;
+                    cp.Style |= (int)User32.BS.RADIOBUTTON;
                     if (Appearance == Appearance.Button)
                     {
-                        cp.Style |= NativeMethods.BS_PUSHLIKE;
+                        cp.Style |= (int)User32.BS.PUSHLIKE;
                     }
 
                     // Determine the alignment of the radio button
@@ -259,7 +261,7 @@ namespace System.Windows.Forms
                     ContentAlignment align = RtlTranslateContent(CheckAlign);
                     if ((int)(align & anyRight) != 0)
                     {
-                        cp.Style |= NativeMethods.BS_RIGHTBUTTON;
+                        cp.Style |= (int)User32.BS.RIGHTBUTTON;
                     }
                 }
                 return cp;
@@ -408,12 +410,10 @@ namespace System.Windows.Forms
         protected override void OnHandleCreated(EventArgs e)
         {
             base.OnHandleCreated(e);
-            //Since this is protected override, this can be called directly in a overriden class
-            //and the handle doesn't need to be created.
-            //So check for the handle to improve performance
+
             if (IsHandleCreated)
             {
-                SendMessage(NativeMethods.BM_SETCHECK, isChecked ? 1 : 0, 0);
+                User32.SendMessageW(this, (User32.WM)User32.BM.SETCHECK, PARAM.FromBool(isChecked));
             }
         }
 
@@ -564,7 +564,7 @@ namespace System.Windows.Forms
                 if (base.MouseIsDown)
                 {
                     Point pt = PointToScreen(new Point(mevent.X, mevent.Y));
-                    if (UnsafeNativeMethods.WindowFromPoint(pt) == Handle)
+                    if (User32.WindowFromPoint(pt) == Handle)
                     {
                         //Paint in raised state...
                         //
@@ -574,7 +574,6 @@ namespace System.Windows.Forms
                             OnClick(mevent);
                             OnMouseClick(mevent);
                         }
-
                     }
                 }
             }
@@ -597,7 +596,6 @@ namespace System.Windows.Forms
                     OnClick(EventArgs.Empty);
                 }
             }
-
         }
 
         protected internal override bool ProcessMnemonic(char charCode)
@@ -677,6 +675,5 @@ namespace System.Windows.Forms
                 ((RadioButton)Owner).PerformClick();
             }
         }
-
     }
 }

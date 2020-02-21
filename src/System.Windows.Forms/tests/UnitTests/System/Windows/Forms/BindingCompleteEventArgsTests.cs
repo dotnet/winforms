@@ -7,7 +7,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class BindingCompleteEventArgsTests
+    public class BindingCompleteEventArgsTests : IClassFixture<ThreadExceptionFixture>
     {
         public static IEnumerable<object[]> Ctor_Binding_BindingCompleteState_BindingCompleteContext_TestData()
         {

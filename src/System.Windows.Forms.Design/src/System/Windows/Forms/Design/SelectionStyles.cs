@@ -22,6 +22,5 @@ namespace System.Windows.Forms.Design
         ///  An alternative selection border, indicating that a component is in active editing mode and that clicking and dragging on the component affects the component itself, not its position in the designer.
         /// </summary>
         Active = 0x02,
-
     }
 }

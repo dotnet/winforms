@@ -4,6 +4,8 @@
   <Import Project="Sdk.targets" Sdk="Microsoft.DotNet.Arcade.Sdk" />
   <Import Project="$(RepositoryEngineeringDir)packageContent.targets" />
   <Import Project="$(RepositoryEngineeringDir)versioning.targets" />
+  <Import Project="$(RepositoryEngineeringDir)ApiCompatibility\PublicApiAnalyzer.targets" />
+
   <!-- to prevent using MS.NC.Platforms from SDK, which is lagging behind the version that WinForms gets from the CoreFx packages -->
   <ItemGroup>
     <PackageReference Include="Microsoft.NETCore.Platforms" Version="$(MicrosoftNETCorePlatformsPackageVersion)" />
@@ -14,12 +16,36 @@
     <CoverletOutput>$(TargetDir)coverage\$(MSBuildProjectName).coverage</CoverletOutput>
   </PropertyGroup>
 
-  <Target Name="InstrumentModulesNoBuildBeforeTest" Condition="'$(CollectCoverage)' == 'true'" BeforeTargets="RunTests">
-    <CallTarget Targets="InstrumentModulesAfterBuild" />
+  <PropertyGroup Condition="'$(IsTestProject)' == 'true'">
+    <TestArchitectures>x64;x86</TestArchitectures>
+  </PropertyGroup>
+
+  <Target Name="InstrumentModulesNoBuild" BeforeTargets="RunTests" Condition="'$(IsUnitTestProject)' == 'true'">
+    <Coverlet.MSbuild.Tasks.InstrumentationTask
+      Condition="'$(CollectCoverage)' == 'true'"
+      Path="$(TargetPath)"
+      Include="$(Include)"
+      IncludeDirectory="$(IncludeDirectory)"
+      Exclude="$(Exclude)"
+      ExcludeByFile="$(ExcludeByFile)"
+      ExcludeByAttribute="$(ExcludeByAttribute)"
+      IncludeTestAssembly="$(IncludeTestAssembly)"
+      SingleHit="$(SingleHit)"
+      MergeWith="$(MergeWith)"
+      UseSourceLink="$(UseSourceLink)" >
+      <Output TaskParameter="InstrumenterState" PropertyName="InstrumenterState"/>
+    </Coverlet.MSbuild.Tasks.InstrumentationTask>
   </Target>
 
-  <Target Name="GenerateCoverageResultAfterTest" Condition="'$(CollectCoverage)' == 'true'" AfterTargets="RunTests">
-    <CallTarget Targets="GenerateCoverageResult" />
+  <Target Name="GenerateCoverageResult" AfterTargets="RunTests" Condition="'$(IsUnitTestProject)' == 'true'">
+    <Coverlet.MSbuild.Tasks.CoverageResultTask
+      Condition="'$(CollectCoverage)' == 'true'"
+      Output="$(CoverletOutput)"
+      OutputFormat="$(CoverletOutputFormat)"
+      Threshold="$(Threshold)"
+      ThresholdType="$(ThresholdType)"
+      ThresholdStat="$(ThresholdStat)"
+      InstrumenterState="$(InstrumenterState)"/>
   </Target>
 
   <ItemGroup>

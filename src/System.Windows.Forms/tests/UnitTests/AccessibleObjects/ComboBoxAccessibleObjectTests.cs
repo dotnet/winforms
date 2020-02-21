@@ -8,7 +8,7 @@ using static Interop;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects
 {
-    public class ComboBoxAccessibleObjectTests
+    public class ComboBoxAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
     {
         public static IEnumerable<object[]> Ctor_ComboBox_TestData()
         {

@@ -17,9 +17,9 @@ namespace System.Windows.Forms.Design
             ((System.ComponentModel.ISupportInitialize)(_errorProvider)).BeginInit();
 
             SuspendLayout();
-            // 
+            //
             // maskedTextBox
-            // 
+            //
             _cloneMtb.Dock = DockStyle.Fill;
 
             // Include prompt and literals always so editor can process the text value in a consistent way.
@@ -35,15 +35,15 @@ namespace System.Windows.Forms.Design
             _cloneMtb.MaskInputRejected += new MaskInputRejectedEventHandler(maskedTextBox_MaskInputRejected);
             _cloneMtb.KeyDown += new KeyEventHandler(maskedTextBox_KeyDown);
 
-            // 
+            //
             // errorProvider
-            // 
+            //
             _errorProvider.BlinkStyle = ErrorBlinkStyle.NeverBlink;
             _errorProvider.ContainerControl = this;
 
-            // 
+            //
             // MaskedTextBoxTextEditorDropDown
-            // 
+            //
             Controls.Add(_cloneMtb);
 
             BackColor = System.Drawing.SystemColors.Control;

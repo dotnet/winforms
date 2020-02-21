@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms.Layout;
@@ -103,7 +105,6 @@ namespace System.Windows.Forms.ButtonInternal
                        highlight = new Pen(colors.highlight),
                        buttonShadow = new Pen(colors.buttonShadow))
                 {
-
                     // top, left white
                     g.DrawLine(windowFrame, r.Left + 1, r.Top + 1, r.Right - 2, r.Top + 1);
                     g.DrawLine(windowFrame, r.Left + 1, r.Top + 1, r.Left + 1, r.Bottom - 2);

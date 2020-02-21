@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms.Internal;
@@ -43,7 +45,6 @@ namespace System.Windows.Forms.ButtonInternal
                        light = new Pen(colors.buttonFace),
                        lightlight = new Pen(colors.highlight))
                 {
-
                     bounds.Width--;
                     bounds.Height--;
                     // fall a little short of SW, NW, NE, SE because corners come out nasty
@@ -100,7 +101,7 @@ namespace System.Windows.Forms.ButtonInternal
             }
         }
 
-        // Helper method to overcome the poor GDI ellipse drawing routine		
+        // Helper method to overcome the poor GDI ellipse drawing routine
         private static void DrawAndFillEllipse(WindowsGraphics wg, WindowsPen borderPen, WindowsBrush fieldBrush, Rectangle bounds)
         {
             Debug.Assert(wg != null, "Calling DrawAndFillEllipse with null wg");
@@ -188,7 +189,6 @@ namespace System.Windows.Forms.ButtonInternal
             }
 
             return style;
-
         }
 
         protected void DrawCheckBox(PaintEventArgs e, LayoutData layout)
@@ -234,6 +234,5 @@ namespace System.Windows.Forms.ButtonInternal
 
             return layout;
         }
-
     }
 }

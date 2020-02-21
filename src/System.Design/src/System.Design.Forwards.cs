@@ -3,6 +3,8 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Runtime.CompilerServices;
+
+// internal UITypeEditors
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.ColumnHeaderCollectionEditor))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.DataMemberFieldConverter))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.DataGridViewCellStyleEditor))]
@@ -21,3 +23,20 @@ using System.Runtime.CompilerServices;
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.StringArrayEditor))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.StringCollectionEditor))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.TabPageCollectionEditor))]
+
+// internal serializers
+[assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.ControlCodeDomSerializer))]
+[assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.DataGridViewRowCollectionCodeDomSerializer))]
+[assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.TableLayoutControlCollectionCodeDomSerializer))]
+[assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.TableLayoutPanelCodeDomSerializer))]
+[assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.ToolStripCodeDomSerializer))]
+[assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.ToolStripMenuItemCodeDomSerializer))]
+
+// internal designers
+[assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.FormDocumentDesigner))]
+[assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.MaskedTextBoxDesigner))]
+[assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.TextBoxBaseDesigner))]
+[assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.ToolStripDesigner))]
+[assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.ToolStripDropDownDesigner))]
+[assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.ToolStripItemDesigner))]
+[assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.ToolStripMenuItemDesigner))]

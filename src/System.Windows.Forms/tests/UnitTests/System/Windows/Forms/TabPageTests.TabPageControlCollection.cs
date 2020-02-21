@@ -8,29 +8,23 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class TabPageTabPageControlCollectionTests
+    public class TabPageTabPageControlCollectionTests : IClassFixture<ThreadExceptionFixture>
     {
-        public TabPageTabPageControlCollectionTests()
+        [WinFormsFact]
+        public void TabPageControlCollection_Ctor_TabPage()
         {
-            Application.ThreadException += (sender, e) => throw new Exception(e.Exception.StackTrace.ToString());
-        }
-
-        public static IEnumerable<object[]> Ctor_TabPage_TestData()
-        {
-            yield return new object[] { null };
-            yield return new object[] { new TabPage() };
-        }
-
-        [WinFormsTheory]
-        [MemberData(nameof(Ctor_TabPage_TestData))]
-        public void TabPageControlCollection_Ctor_TabPage(TabPage owner)
-        {
+            using var owner = new TabPage();
             var collection = new TabPage.TabPageControlCollection(owner);
             Assert.Empty(collection);
             Assert.False(collection.IsReadOnly);
             Assert.Same(owner, collection.Owner);
         }
 
+        [WinFormsFact]
+        public void TabPageControlCollection_NullOwner_ThrowsArgumentNullException()
+        {
+            Assert.Throws<ArgumentNullException>("owner", () => new TabPage.TabPageControlCollection(null));
+        }
 
         [WinFormsFact]
         public void TabPageControlCollection_Add_ControlExistingCollection_Success()

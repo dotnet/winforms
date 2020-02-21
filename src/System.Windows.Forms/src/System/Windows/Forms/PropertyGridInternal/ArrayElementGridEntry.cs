@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Diagnostics;
 using System.Globalization;
 
@@ -73,32 +75,5 @@ namespace System.Windows.Forms.PropertyGridInternal
                 return ParentGridEntry.ShouldRenderReadOnly;
             }
         }
-
-        /*
-        /// <summary>
-        ///  Checks if the value of the current item can be modified by the user.
-        /// </summary>
-        /// <returns>
-        ///  True if the value can be modified
-        /// </returns>
-        public override bool CanSetPropertyValue() {
-           return this.ParentGridEntry.CanSetPropertyValue();
-        }
-        */
-
-        /*
-        /// <summary>
-        ///  Returns if it's an editable item.  An example of a readonly
-        ///  editable item is a collection property -- the property itself
-        ///  can not be modified, but it's value (e.g. it's children) can, so
-        ///  we don't want to draw it as readonly.
-        /// </summary>
-        /// <returns>
-        ///  True if the value associated with this property (e.g. it's children) can be modified even if it's readonly.
-        /// </returns>
-        public override bool CanSetReadOnlyPropertyValue() {
-           return this.ParentGridEntry.CanSetReadOnlyPropertyValue();
-        }*/
-
     }
 }

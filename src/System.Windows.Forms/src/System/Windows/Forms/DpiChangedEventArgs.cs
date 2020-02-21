@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
@@ -15,14 +17,14 @@ namespace System.Windows.Forms
     /// </summary>
     public sealed class DpiChangedEventArgs : CancelEventArgs
     {
-        /// <devdov>
+        /// <summary>
         ///  Parameter units are pixels(dots) per inch.
         /// </summary>
         internal DpiChangedEventArgs(int old, Message m)
         {
             DeviceDpiOld = old;
-            DeviceDpiNew = NativeMethods.Util.SignedLOWORD(m.WParam);
-            Debug.Assert(NativeMethods.Util.SignedHIWORD(m.WParam) == DeviceDpiNew, "Non-square pixels!");
+            DeviceDpiNew = PARAM.SignedLOWORD(m.WParam);
+            Debug.Assert(PARAM.SignedHIWORD(m.WParam) == DeviceDpiNew, "Non-square pixels!");
             RECT suggestedRect = Marshal.PtrToStructure<RECT>(m.LParam);
             SuggestedRectangle = Rectangle.FromLTRB(suggestedRect.left, suggestedRect.top, suggestedRect.right, suggestedRect.bottom);
         }

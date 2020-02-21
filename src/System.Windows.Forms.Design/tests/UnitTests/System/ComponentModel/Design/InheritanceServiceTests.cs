@@ -7,7 +7,7 @@ using Xunit;
 
 namespace System.ComponentModel.Design.Tests
 {
-    public class InheritanceServicerTests
+    public class InheritanceServicerTests : IClassFixture<ThreadExceptionFixture>
     {
         [Fact]
         public void InheritanceService_Constructor()

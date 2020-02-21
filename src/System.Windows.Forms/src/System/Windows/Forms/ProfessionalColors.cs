@@ -2,13 +2,15 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Drawing;
 using System.Windows.Forms.VisualStyles;
 using Microsoft.Win32;
 
 namespace System.Windows.Forms
 {
-    public sealed class ProfessionalColors
+    public static class ProfessionalColors
     {
         [ThreadStatic]
         private static ProfessionalColorTable professionalColorTable = null;
@@ -35,10 +37,6 @@ namespace System.Windows.Forms
         {
             SystemEvents.UserPreferenceChanged += new UserPreferenceChangedEventHandler(OnUserPreferenceChanged);
             SetScheme();
-        }
-
-        private ProfessionalColors()
-        {
         }
 
         internal static string ColorScheme
@@ -415,8 +413,5 @@ namespace System.Windows.Forms
                 colorScheme = null;
             }
         }
-
     }
-
 }
-

@@ -2,7 +2,8 @@
 <Project>
   <Import Project="Sdk.props" Sdk="Microsoft.DotNet.Arcade.Sdk" />
   <Import Project="$(RepositoryEngineeringDir)CodeStyle.props" />  
-  <Import Project="eng\FacadeAssemblies.props" />
+  <Import Project="$(RepositoryEngineeringDir)FacadeAssemblies.props" />
+  <Import Project="$(RepositoryEngineeringDir)ApiCompatibility\PublicApiAnalyzer.props" />
 
   <PropertyGroup>
     <TargetFrameworkName>netcoreapp</TargetFrameworkName>
@@ -22,16 +23,17 @@
 
   <!-- For the purposes of generating code coverage as part of the build -->
   <PropertyGroup Condition="'$(Coverage)' == 'true'">
-    <!-- Coverlet assumes PDB files exist on disk https://github.com/tonerdo/coverlet/issues/362 -->
-    <DebugType Condition="'$(DebugType)' == 'embedded'">portable</DebugType>
     <!-- Coverlet's PDB check cannot handle deterministic source paths https://github.com/tonerdo/coverlet/issues/363 -->
     <DeterministicSourcePaths>false</DeterministicSourcePaths>
 
     <!-- Note: CoverletOutput references $(TargetDir) so it is set in Directory.Build.targets -->
 
+    <!-- https://github.com/tonerdo/coverlet/issues/618 -->
+    <IncludeTestAssembly>true</IncludeTestAssembly>
+
     <CollectCoverage>true</CollectCoverage>
-    <SingleHit>true</SingleHit> <!--see https://github.com/dotnet/machinelearning/pull/2843/files#r262544802-->
-    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies> <!-- required due to https://github.com/tonerdo/coverlet/issues/72 -->
+    <SingleHit>true</SingleHit>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <CoverletOutputFormat>opencover</CoverletOutputFormat>
     <Include>[System.Windows.*]*</Include>
     <!-- Exclude dependencies that embed their symbol information -->
@@ -40,10 +42,6 @@
     <ExcludeByAttribute>Obsolete,ExcludeFromCodeCoverage</ExcludeByAttribute>
     <ExcludeByFile />
   </PropertyGroup>
-
-  <!-- Make sure coverage targets are defined even in projects where coverlet is not installed -->
-  <Target Name="InstrumentModulesAfterBuild" />
-  <Target Name="GenerateCoverageResult" />
 
   <!-- workaround for package downgrade in Microsoft.NetCore.Platforms -->
   <PropertyGroup>

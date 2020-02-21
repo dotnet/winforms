@@ -2,11 +2,14 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.Runtime.InteropServices;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -360,7 +363,6 @@ namespace System.Windows.Forms
             {
                 if (value != currentValue)
                 {
-
                     if (!initializing && ((value < minimum) || (value > maximum)))
                     {
                         throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidBoundArgument, nameof(Value), value, $"'{nameof(Minimum)}'", $"'{nameof(Maximum)}'"));
@@ -703,6 +705,8 @@ namespace System.Windows.Forms
             buttonPressedStartTime = InvalidValue;
         }
 
+        internal override bool SupportsUiaProviders => true;
+
         /// <summary>
         ///  Provides some interesting info about this control in String form.
         /// </summary>
@@ -790,7 +794,6 @@ namespace System.Windows.Forms
             if (currentValueChanged || (!string.IsNullOrEmpty(Text) &&
                 !(Text.Length == 1 && Text == "-")))
             {
-
                 currentValueChanged = false;
                 ChangingText = true;
 
@@ -883,7 +886,7 @@ namespace System.Windows.Forms
             }
 
             // Call AdjuctWindowRect to add space for the borders
-            int width = SizeFromClientSize(textWidth, height).Width + upDownButtons.Width;
+            int width = SizeFromClientSize(textWidth, height).Width + _upDownButtons.Width;
             return new Size(width, height) + Padding.Size;
         }
 
@@ -919,60 +922,25 @@ namespace System.Windows.Forms
         [ComVisible(true)]
         internal class NumericUpDownAccessibleObject : ControlAccessibleObject
         {
+            private readonly UpDownBase _owner;
+
             public NumericUpDownAccessibleObject(NumericUpDown owner) : base(owner)
             {
-            }
-
-            /// <summary>
-            ///  Gets or sets the accessible name.
-            /// </summary>
-            public override string Name
-            {
-                get
-                {
-                    string baseName = base.Name;
-                    return ((NumericUpDown)Owner).GetAccessibleName(baseName);
-                }
-                set
-                {
-                    base.Name = value;
-                }
-            }
-
-            public override AccessibleRole Role
-            {
-                get
-                {
-                    AccessibleRole role = Owner.AccessibleRole;
-                    if (role != AccessibleRole.Default)
-                    {
-                        return role;
-                    }
-                    else
-                    {
-                        return AccessibleRole.SpinButton;
-                    }
-                }
+                _owner = owner;
             }
 
             public override AccessibleObject GetChild(int index)
             {
-                if (index >= 0 && index < GetChildCount())
+                // TextBox child
+                if (index == 0)
                 {
+                    return _owner.TextBox.AccessibilityObject.Parent;
+                }
 
-                    // TextBox child
-                    //
-                    if (index == 0)
-                    {
-                        return ((UpDownBase)Owner).TextBox.AccessibilityObject.Parent;
-                    }
-
-                    // Up/down buttons
-                    //
-                    if (index == 1)
-                    {
-                        return ((UpDownBase)Owner).UpDownButtonsInternal.AccessibilityObject.Parent;
-                    }
+                // Up/down buttons
+                if (index == 1)
+                {
+                    return _owner.UpDownButtonsInternal.AccessibilityObject.Parent;
                 }
 
                 return null;
@@ -982,7 +950,76 @@ namespace System.Windows.Forms
             {
                 return 2;
             }
+
+            internal override object GetPropertyValue(UiaCore.UIA propertyID)
+            {
+                switch (propertyID)
+                {
+                    case UiaCore.UIA.RuntimeIdPropertyId:
+                        return RuntimeId;
+                    case UiaCore.UIA.NamePropertyId:
+                        return Name;
+                    case UiaCore.UIA.ControlTypePropertyId:
+                        return UiaCore.UIA.SpinnerControlTypeId;
+                    case UiaCore.UIA.BoundingRectanglePropertyId:
+                        return Bounds;
+                    case UiaCore.UIA.LegacyIAccessibleStatePropertyId:
+                        return State;
+                    case UiaCore.UIA.LegacyIAccessibleRolePropertyId:
+                        return Role;
+                    case UiaCore.UIA.IsKeyboardFocusablePropertyId:
+                        return false;
+                    default:
+                        return base.GetPropertyValue(propertyID);
+                }
+            }
+
+            /// <summary>
+            ///  Gets or sets the accessible name.
+            /// </summary>
+            public override string Name
+            {
+                get => base.Name ?? SR.DefaultNumericUpDownAccessibleName;
+                set => base.Name = value;
+            }
+
+            public override AccessibleRole Role
+            {
+                get
+                {
+                    AccessibleRole role = Owner.AccessibleRole;
+
+                    if (role != AccessibleRole.Default)
+                    {
+                        return role;
+                    }
+
+                    return AccessibleRole.SpinButton;
+                }
+            }
+
+            internal override int[] RuntimeId
+            {
+                get
+                {
+                    if (_owner == null)
+                    {
+                        return base.RuntimeId;
+                    }
+
+                    // we need to provide a unique ID
+                    // others are implementing this in the same manner
+                    // first item is static - 0x2a (RuntimeIDFirstItem)
+                    // second item can be anything, but here it is a hash
+
+                    var runtimeId = new int[3];
+                    runtimeId[0] = RuntimeIDFirstItem;
+                    runtimeId[1] = (int)(long)_owner.Handle;
+                    runtimeId[2] = _owner.GetHashCode();
+
+                    return runtimeId;
+                }
+            }
         }
     }
-
 }

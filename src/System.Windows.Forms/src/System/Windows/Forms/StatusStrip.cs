@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Drawing;
@@ -42,7 +44,6 @@ namespace System.Windows.Forms
             Stretch = true;
             state[stateSizingGrip] = true;
             ResumeLayout(true);
-
         }
 
         [
@@ -101,7 +102,6 @@ namespace System.Windows.Forms
                     // was before, so the DisplayRectangle needs to shrink up by its height.
                     return new Padding(1, 3, 1, DefaultSize.Height);
                 }
-
             }
         }
 
@@ -206,18 +206,18 @@ namespace System.Windows.Forms
                     {
                         return true;  // we dont care about the state of VS.
                     }
-                    else
+
+                    IntPtr rootHwnd = User32.GetAncestor(this, User32.GA.ROOT);
+                    if (rootHwnd != IntPtr.Zero)
                     {
-                        HandleRef rootHwnd = WindowsFormsUtils.GetRootHWnd(this);
-                        if (rootHwnd.Handle != IntPtr.Zero)
-                        {
-                            return !UnsafeNativeMethods.IsZoomed(rootHwnd);
-                        }
+                        return !User32.IsZoomed(rootHwnd).IsTrue();
                     }
                 }
+
                 return false;
             }
         }
+
         [
         SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(true),
@@ -316,7 +316,7 @@ namespace System.Windows.Forms
                 RTLGrip.Bounds = SizeGripBounds;
                 if (!Controls.Contains(RTLGrip))
                 {
-                    if (Controls is WindowsFormsUtils.ReadOnlyControlCollection controlCollection)
+                    if (Controls is ReadOnlyControlCollection controlCollection)
                     {
                         controlCollection.AddInternal(RTLGrip);
                     }
@@ -326,23 +326,20 @@ namespace System.Windows.Forms
             {
                 if (Controls.Contains(rtlLayoutGrip))
                 {
-                    if (Controls is WindowsFormsUtils.ReadOnlyControlCollection controlCollection)
+                    if (Controls is ReadOnlyControlCollection controlCollection)
                     {
                         controlCollection.RemoveInternal(rtlLayoutGrip);
                     }
                     rtlLayoutGrip.Dispose();
                     rtlLayoutGrip = null;
                 }
-
             }
-
         }
 
         internal override Size GetPreferredSizeCore(Size proposedSize)
         {
             if (LayoutStyle == ToolStripLayoutStyle.Table)
             {
-
                 if (proposedSize.Width == 1)
                 {
                     proposedSize.Width = int.MaxValue;
@@ -401,11 +398,9 @@ namespace System.Windows.Forms
                     OnSpringTableLayoutCore();
                     base.OnLayout(levent);
                 }
-
             }
 
             EnsureRightToLeftGrip();
-
         }
 
         internal override bool SupportsUiaProviders => true;
@@ -433,7 +428,6 @@ namespace System.Windows.Forms
                     // visible.
                     if (overflow || ((IArrangedElement)item).ParticipatesInLayout)
                     {
-
                         if (overflow || (SizingGrip && item.Bounds.IntersectsWith(SizeGripBounds)))
                         {
                             // if the item collides with the size grip, set the location to nomansland.
@@ -513,7 +507,6 @@ namespace System.Windows.Forms
 
                 if (Orientation == Orientation.Horizontal)
                 {
-
                     //
                     // Horizontal layout
                     //
@@ -604,7 +597,6 @@ namespace System.Windows.Forms
                     {
                         TableLayoutSettings.RowStyles[i].SizeType = SizeType.AutoSize;
                     }
-
                 }
 
                 ResumeLayout(false);
@@ -613,21 +605,21 @@ namespace System.Windows.Forms
 
         protected override void WndProc(ref Message m)
         {
-            if ((m.Msg == WindowMessages.WM_NCHITTEST) && SizingGrip)
+            if ((m.Msg == (int)User32.WM.NCHITTEST) && SizingGrip)
             {
                 // if we're within the grip bounds tell windows
                 // that we're the bottom right of the window.
                 Rectangle sizeGripBounds = SizeGripBounds;
-                int x = NativeMethods.Util.LOWORD(m.LParam);
-                int y = NativeMethods.Util.HIWORD(m.LParam);
+                int x = PARAM.LOWORD(m.LParam);
+                int y = PARAM.HIWORD(m.LParam);
 
                 if (sizeGripBounds.Contains(PointToClient(new Point(x, y))))
                 {
-                    HandleRef rootHwnd = WindowsFormsUtils.GetRootHWnd(this);
+                    IntPtr rootHwnd = User32.GetAncestor(this, User32.GA.ROOT);
 
                     // if the main window isnt maximized - we should paint a resize grip.
                     // double check that we're at the bottom right hand corner of the window.
-                    if (rootHwnd.Handle != IntPtr.Zero && !UnsafeNativeMethods.IsZoomed(rootHwnd))
+                    if (rootHwnd != IntPtr.Zero && !User32.IsZoomed(rootHwnd).IsTrue())
                     {
                         // get the client area of the topmost window.  If we're next to the edge then
                         // the sizing grip is valid.
@@ -653,13 +645,11 @@ namespace System.Windows.Forms
                         {
                             if ((deltaRightEdge + deltaBottomEdge) < 2)
                             {
-                                m.Result = (IntPtr)NativeMethods.HTBOTTOMRIGHT;
+                                m.Result = (IntPtr)User32.HT.BOTTOMRIGHT;
                                 return;
                             }
                         }
-
                     }
-
                 }
             }
             base.WndProc(ref m);
@@ -684,17 +674,16 @@ namespace System.Windows.Forms
             }
             protected override void WndProc(ref Message m)
             {
-                if (m.Msg == WindowMessages.WM_NCHITTEST)
+                if (m.Msg == (int)User32.WM.NCHITTEST)
                 {
-                    int x = NativeMethods.Util.LOWORD(m.LParam);
-                    int y = NativeMethods.Util.HIWORD(m.LParam);
+                    int x = PARAM.LOWORD(m.LParam);
+                    int y = PARAM.HIWORD(m.LParam);
 
                     if (ClientRectangle.Contains(PointToClient(new Point(x, y))))
                     {
-                        m.Result = (IntPtr)NativeMethods.HTBOTTOMLEFT;
+                        m.Result = (IntPtr)User32.HT.BOTTOMLEFT;
                         return;
                     }
-
                 }
                 base.WndProc(ref m);
             }
@@ -777,6 +766,5 @@ namespace System.Windows.Forms
                 return GetFocused();
             }
         }
-
     }
 }

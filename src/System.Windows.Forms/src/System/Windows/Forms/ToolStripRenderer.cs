@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -94,7 +96,6 @@ namespace System.Windows.Forms
                     transparency[4] = new float[5] { 0, 0, 0, 0, 0 };
 
                     disabledImageColorMatrix = ControlPaint.MultiplyColorMatrix(transparency, greyscale);
-
                 }
 
                 return disabledImageColorMatrix;
@@ -354,7 +355,6 @@ namespace System.Windows.Forms
             {
                 eh(this, e);
             }
-
         }
 
         /// <summary>
@@ -494,7 +494,6 @@ namespace System.Windows.Forms
             {
                 eh(this, e);
             }
-
         }
 
         /// <summary>
@@ -508,7 +507,6 @@ namespace System.Windows.Forms
             {
                 eh(this, e);
             }
-
         }
 
         //
@@ -588,7 +586,6 @@ namespace System.Windows.Forms
                 offset4Y = DpiHelper.LogicalToDeviceUnitsY(OFFSET_4PIXELS);
             }
             isScalingInitialized = true;
-
         }
 
         protected static void ScaleArrowOffsetsIfNeeded(int dpi)
@@ -599,19 +596,23 @@ namespace System.Windows.Forms
             offset4Y = DpiHelper.LogicalToDeviceUnits(OFFSET_4PIXELS, dpi);
         }
 
-        /// <include file='doc\WinBarRenderer.uex' path='docs/doc[@for="ToolStripRenderer.OnRenderArrow"]/*' />
-        protected virtual void OnRenderArrow(ToolStripArrowRenderEventArgs e){
+        protected virtual void OnRenderArrow(ToolStripArrowRenderEventArgs e)
+        {
+            if (e == null)
+            {
+                throw new ArgumentNullException(nameof(e));
+            }
 
             if (RendererOverride != null)
             {
                 RendererOverride.OnRenderArrow(e);
                 return;
             }
+
             Graphics g = e.Graphics;
             Rectangle dropDownRect = e.ArrowRectangle;
             using (Brush brush = new SolidBrush(e.ArrowColor))
             {
-
                 Point middle = new Point(dropDownRect.Left + dropDownRect.Width / 2, dropDownRect.Top + dropDownRect.Height / 2);
                 // if the width is odd - favor pushing it over one pixel right.
                 //middle.X += (dropDownRect.Width % 2);
@@ -714,7 +715,6 @@ namespace System.Windows.Forms
                 RendererOverride.OnRenderItemBackground(e);
                 return;
             }
-
         }
 
         /// <summary>
@@ -727,7 +727,6 @@ namespace System.Windows.Forms
                 RendererOverride.OnRenderImageMargin(e);
                 return;
             }
-
         }
         /// <summary>
         ///  Draw the button background
@@ -739,7 +738,6 @@ namespace System.Windows.Forms
                 RendererOverride.OnRenderButtonBackground(e);
                 return;
             }
-
         }
 
         /// <summary>
@@ -752,7 +750,6 @@ namespace System.Windows.Forms
                 RendererOverride.OnRenderDropDownButtonBackground(e);
                 return;
             }
-
         }
 
         /// <summary>
@@ -772,6 +769,11 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnRenderItemImage(ToolStripItemImageRenderEventArgs e)
         {
+            if (e == null)
+            {
+                throw new ArgumentNullException(nameof(e));
+            }
+
             if (RendererOverride != null)
             {
                 RendererOverride.OnRenderItemImage(e);
@@ -796,7 +798,6 @@ namespace System.Windows.Forms
                 if (e.Item.ImageScaling == ToolStripItemImageScaling.None)
                 {
                     e.Graphics.DrawImage(image, imageRect, new Rectangle(Point.Empty, imageRect.Size), GraphicsUnit.Pixel);
-
                 }
                 else
                 {
@@ -812,6 +813,11 @@ namespace System.Windows.Forms
 
         protected virtual void OnRenderItemCheck(ToolStripItemImageRenderEventArgs e)
         {
+            if (e == null)
+            {
+                throw new ArgumentNullException(nameof(e));
+            }
+
             if (RendererOverride != null)
             {
                 RendererOverride.OnRenderItemCheck(e);
@@ -839,6 +845,11 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnRenderItemText(ToolStripItemTextRenderEventArgs e)
         {
+            if (e == null)
+            {
+                throw new ArgumentNullException(nameof(e));
+            }
+
             if (RendererOverride != null)
             {
                 RendererOverride.OnRenderItemText(e);
@@ -861,7 +872,6 @@ namespace System.Windows.Forms
                 Size textSize = LayoutUtils.FlipSize(textRect.Size);
                 using (Bitmap textBmp = new Bitmap(textSize.Width, textSize.Height, PixelFormat.Format32bppPArgb))
                 {
-
                     using (Graphics textGraphics = Graphics.FromImage(textBmp))
                     {
                         // now draw the text..
@@ -888,7 +898,6 @@ namespace System.Windows.Forms
                 RendererOverride.OnRenderLabelBackground(e);
                 return;
             }
-
         }
         /// <summary>
         ///  Draw the items background
@@ -913,7 +922,6 @@ namespace System.Windows.Forms
                 RendererOverride.OnRenderSeparator(e);
                 return;
             }
-
         }
 
         protected virtual void OnRenderToolStripPanelBackground(ToolStripPanelRenderEventArgs e)
@@ -945,6 +953,11 @@ namespace System.Windows.Forms
 
         protected virtual void OnRenderStatusStripSizingGrip(ToolStripRenderEventArgs e)
         {
+            if (e == null)
+            {
+                throw new ArgumentNullException(nameof(e));
+            }
+
             if (RendererOverride != null)
             {
                 RendererOverride.OnRenderStatusStripSizingGrip(e);
@@ -983,14 +996,12 @@ namespace System.Windows.Forms
                             baseRect.Offset(-1, -1);
                         }
                         greyRectangles[i] = baseRect;
-
                     }
 
                     g.FillRectangles(SystemBrushes.ButtonHighlight, whiteRectangles);
                     g.FillRectangles(SystemBrushes.ButtonShadow, greyRectangles);
                 }
             }
-
         }
         /// <summary>
         ///  Draw the item's background.
@@ -1012,6 +1023,11 @@ namespace System.Windows.Forms
 
         private static Image CreateDisabledImage(Image normalImage, ImageAttributes imgAttrib)
         {
+            if (normalImage == null)
+            {
+                throw new ArgumentNullException(nameof(normalImage));
+            }
+
             if (imgAttrib == null)
             {
                 imgAttrib = new ImageAttributes();
@@ -1024,7 +1040,6 @@ namespace System.Windows.Forms
             Bitmap disabledBitmap = new Bitmap(size.Width, size.Height);
             using (Graphics graphics = Graphics.FromImage(disabledBitmap))
             {
-
                 graphics.DrawImage(normalImage,
                                    new Rectangle(0, 0, size.Width, size.Height),
                                    0, 0, size.Width, size.Height,
@@ -1034,6 +1049,5 @@ namespace System.Windows.Forms
 
             return disabledBitmap;
         }
-
     }
 }

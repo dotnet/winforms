@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
@@ -41,7 +43,6 @@ namespace System.Windows.Forms
             Debug.Assert(NativeHtmlElement != null, "The element object should implement IHTMLElement");
 
             this.shimManager = shimManager;
-
         }
 
         public HtmlElementCollection All
@@ -437,7 +438,7 @@ namespace System.Windows.Forms
             var dispParams = new Ole32.DISPPARAMS();
             try
             {
-                if (NativeHtmlElement is UnsafeNativeMethods.IDispatch scriptObject)
+                if (NativeHtmlElement is Oleaut32.IDispatch scriptObject)
                 {
                     Guid g = Guid.Empty;
                     string[] names = new string[] { methodName };
@@ -462,7 +463,7 @@ namespace System.Windows.Forms
                             dispid,
                             &g,
                             Kernel32.GetThreadLocale(),
-                            NativeMethods.DISPATCH_METHOD,
+                            Oleaut32.DISPATCH.METHOD,
                             &dispParams,
                             retVals,
                             &pExcepInfo,
@@ -527,7 +528,6 @@ namespace System.Windows.Forms
         {
             add => ElementShim.AddHandler(EventClick, value);
             remove => ElementShim.RemoveHandler(EventClick, value);
-
         }
 
         public event HtmlElementEventHandler DoubleClick
@@ -552,7 +552,6 @@ namespace System.Windows.Forms
         {
             add => ElementShim.AddHandler(EventDragLeave, value);
             remove => ElementShim.RemoveHandler(EventDragLeave, value);
-
         }
 
         public event HtmlElementEventHandler DragOver
@@ -571,7 +570,6 @@ namespace System.Windows.Forms
         {
             add => ElementShim.AddHandler(EventGotFocus, value);
             remove => ElementShim.RemoveHandler(EventGotFocus, value);
-
         }
 
         public event HtmlElementEventHandler LosingFocus
@@ -595,7 +593,6 @@ namespace System.Windows.Forms
         {
             add => ElementShim.AddHandler(EventKeyPress, value);
             remove => ElementShim.RemoveHandler(EventKeyPress, value);
-
         }
         public event HtmlElementEventHandler KeyUp
         {
@@ -1008,14 +1005,14 @@ namespace System.Windows.Forms
             public void onstart(IHTMLEventObj evtObj) { }
         }
 
-        ///<summary>
+        /// <summary>
         ///  HtmlElementShim - this is the glue between the DOM eventing mechanisms
         ///          and our CLR callbacks.
         ///
         ///  HTMLElementEvents2: we create an IConnectionPoint (via ConnectionPointCookie) between us and MSHTML and it calls back
         ///              on our an instance of HTMLElementEvents2.  The HTMLElementEvents2 class then fires the event.
         ///
-        ///</summary>
+        /// </summary>
         internal class HtmlElementShim : HtmlShim
         {
             private static readonly Type[] dispInterfaceTypes = {typeof(DHTMLElementEvents2),
@@ -1081,7 +1078,6 @@ namespace System.Windows.Forms
             ///  Support IHTMLElement2.AttachEventHandler
             public override void AttachEventHandler(string eventName, EventHandler eventHandler)
             {
-
                 // IE likes to call back on an IDispatch of DISPID=0 when it has an event,
                 // the HtmlToClrEventProxy helps us fake out the CLR so that we can call back on
                 // our EventHandler properly.
@@ -1126,7 +1122,6 @@ namespace System.Windows.Forms
                     cookie.Disconnect();
                     cookie = null;
                 }
-
             }
             protected override void Dispose(bool disposing)
             {
@@ -1142,7 +1137,6 @@ namespace System.Windows.Forms
             {
                 return htmlElement;
             }
-
         }
 
         #region operators
@@ -1199,4 +1193,3 @@ namespace System.Windows.Forms
 
     }
 }
-

@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Collections;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -121,28 +123,6 @@ namespace System.Windows.Forms
             Debug.Assert(!Contains(dataGridViewCell));
             return items.Add(dataGridViewCell);
         }
-
-        /* Not used for now
-        internal void AddRange(DataGridViewCell[] dataGridViewCells)
-        {
-            Debug.Assert(dataGridViewCells != null);
-            foreach(DataGridViewCell dataGridViewCell in dataGridViewCells)
-            {
-                Debug.Assert(!Contains(dataGridViewCell));
-                this.items.Add(dataGridViewCell);
-            }
-        }
-
-        internal void AddCellCollection(DataGridViewSelectedCellCollection dataGridViewCells)
-        {
-            Debug.Assert(dataGridViewCells != null);
-            foreach(DataGridViewCell dataGridViewCell in dataGridViewCells)
-            {
-                Debug.Assert(!Contains(dataGridViewCell));
-                this.items.Add(dataGridViewCell);
-            }
-        }
-        */
 
         /// <summary>
         ///  Adds all the <see cref='DataGridViewCell'/> objects from the provided linked list to this collection.

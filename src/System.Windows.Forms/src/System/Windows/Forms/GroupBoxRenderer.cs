@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms.VisualStyles;
@@ -11,7 +13,7 @@ namespace System.Windows.Forms
     /// <summary>
     ///  This is a rendering class for the GroupBox control.
     /// </summary>
-    public sealed class GroupBoxRenderer
+    public static class GroupBoxRenderer
     {
         //Make this per-thread, so that different threads can safely use these methods.
         [ThreadStatic]
@@ -20,10 +22,6 @@ namespace System.Windows.Forms
         private const int textOffset = 8;        //MAGIC NUMBER - WHERE DID IT COME FROM?
         private const int boxHeaderWidth = 7;    // The groupbox frame shows 7 pixels before the caption.
         private static bool renderMatchingApplicationState = true;
-        //cannot instantiate
-        private GroupBoxRenderer()
-        {
-        }
 
         /// <summary>
         ///  If this property is true, then the renderer will use the setting from Application.RenderWithVisualStyles to

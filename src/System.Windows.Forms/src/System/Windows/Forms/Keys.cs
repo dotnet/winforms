@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.ComponentModel;
 using System.Drawing.Design;
 using System.Runtime.InteropServices;
@@ -77,6 +79,7 @@ namespace System.Windows.Forms
         /// </summary>
         LineFeed = 0x0A,
 
+        /// <summary>
         ///  The CLEAR key.
         /// </summary>
         Clear = 0x0C,

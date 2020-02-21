@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
@@ -26,20 +28,14 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         ///  The interface that this handler managers
         ///  such as IPerPropertyBrowsing, IProvidePropertyBuilder, etc.
         /// </summary>
-        public override Type Interface
-        {
-            get
-            {
-                return typeof(NativeMethods.IVsPerPropertyBrowsing);
-            }
-        }
+        public override Type Interface => typeof(VSSDK.IVsPerPropertyBrowsing);
 
         public unsafe static bool AllowChildProperties(Com2PropertyDescriptor propDesc)
         {
-            if (propDesc.TargetObject is NativeMethods.IVsPerPropertyBrowsing)
+            if (propDesc.TargetObject is VSSDK.IVsPerPropertyBrowsing)
             {
                 BOOL pfHide = BOOL.FALSE;
-                HRESULT hr = ((NativeMethods.IVsPerPropertyBrowsing)propDesc.TargetObject).DisplayChildProperties(propDesc.DISPID, &pfHide);
+                HRESULT hr = ((VSSDK.IVsPerPropertyBrowsing)propDesc.TargetObject).DisplayChildProperties(propDesc.DISPID, &pfHide);
                 if (hr == HRESULT.S_OK)
                 {
                     return pfHide.IsTrue();
@@ -72,13 +68,12 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 propDesc[i].QueryResetValue += new Com2EventHandler(OnResetPropertyValue);
 
                 propDesc[i].QueryGetTypeConverterAndTypeEditor += new GetTypeConverterAndTypeEditorEventHandler(OnGetTypeConverterAndTypeEditor);
-
             }
         }
 
         private void OnGetBaseAttributes(Com2PropertyDescriptor sender, GetAttributesEvent attrEvent)
         {
-            if (!(sender.TargetObject is NativeMethods.IVsPerPropertyBrowsing vsObj))
+            if (!(sender.TargetObject is VSSDK.IVsPerPropertyBrowsing vsObj))
             {
                 return;
             }
@@ -98,7 +93,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// </summary>
         private unsafe void OnGetDynamicAttributes(Com2PropertyDescriptor sender, GetAttributesEvent attrEvent)
         {
-            if (sender.TargetObject is NativeMethods.IVsPerPropertyBrowsing vsObj)
+            if (sender.TargetObject is VSSDK.IVsPerPropertyBrowsing vsObj)
             {
                 HRESULT hr = HRESULT.S_OK;
 
@@ -118,7 +113,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 }
 
                 // should we show this
-                if (typeof(UnsafeNativeMethods.IDispatch).IsAssignableFrom(sender.PropertyType) && sender.CanShow)
+                if (typeof(Oleaut32.IDispatch).IsAssignableFrom(sender.PropertyType) && sender.CanShow)
                 {
                     BOOL pfDisplay = BOOL.FALSE;
                     hr = vsObj.DisplayChildProperties(sender.DISPID, &pfDisplay);
@@ -128,12 +123,12 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     }
                 }
             }
-            Debug.Assert(sender.TargetObject == null || sender.TargetObject is NativeMethods.IVsPerPropertyBrowsing, "Object is not " + Interface.Name + "!");
+            Debug.Assert(sender.TargetObject == null || sender.TargetObject is VSSDK.IVsPerPropertyBrowsing, "Object is not " + Interface.Name + "!");
         }
 
         private unsafe void OnCanResetPropertyValue(Com2PropertyDescriptor sender, GetBoolValueEvent boolEvent)
         {
-            if (sender.TargetObject is NativeMethods.IVsPerPropertyBrowsing target)
+            if (sender.TargetObject is VSSDK.IVsPerPropertyBrowsing target)
             {
                 BOOL canReset = boolEvent.Value ? BOOL.TRUE : BOOL.FALSE;
                 HRESULT hr = target.CanResetPropertyValue(sender.DISPID, &canReset);
@@ -143,7 +138,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 }
             }
 
-            Debug.Assert(sender.TargetObject == null || sender.TargetObject is NativeMethods.IVsPerPropertyBrowsing, "Object is not " + Interface.Name + "!");
+            Debug.Assert(sender.TargetObject == null || sender.TargetObject is VSSDK.IVsPerPropertyBrowsing, "Object is not " + Interface.Name + "!");
         }
 
         /// <summary>
@@ -151,9 +146,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// </summary>
         private void OnGetDisplayName(Com2PropertyDescriptor sender, GetNameItemEvent nameItem)
         {
-            if (sender.TargetObject is NativeMethods.IVsPerPropertyBrowsing vsObj)
+            if (sender.TargetObject is VSSDK.IVsPerPropertyBrowsing vsObj)
             {
-
                 // get the localized name, if applicable
                 string[] pNameString = new string[1];
                 HRESULT hr = vsObj.GetLocalizedPropertyInfo(sender.DISPID, CultureInfo.CurrentCulture.LCID, pNameString, null);
@@ -163,7 +157,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 }
             }
 
-            Debug.Assert(sender.TargetObject == null || sender.TargetObject is NativeMethods.IVsPerPropertyBrowsing, "Object is not " + Interface.Name + "!");
+            Debug.Assert(sender.TargetObject == null || sender.TargetObject is VSSDK.IVsPerPropertyBrowsing, "Object is not " + Interface.Name + "!");
         }
 
         /// <summary>
@@ -171,7 +165,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// </summary>
         private unsafe void OnGetIsReadOnly(Com2PropertyDescriptor sender, GetBoolValueEvent gbvevent)
         {
-            if (sender.TargetObject is NativeMethods.IVsPerPropertyBrowsing vsObj)
+            if (sender.TargetObject is VSSDK.IVsPerPropertyBrowsing vsObj)
             {
                 // should we make this read only?
                 BOOL pfResult = BOOL.FALSE;
@@ -188,12 +182,12 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// </summary>
         private unsafe void OnGetTypeConverterAndTypeEditor(Com2PropertyDescriptor sender, GetTypeConverterAndTypeEditorEvent gveevent)
         {
-            if (sender.TargetObject is NativeMethods.IVsPerPropertyBrowsing)
+            if (sender.TargetObject is VSSDK.IVsPerPropertyBrowsing)
             {
                 // we only do this for IDispatch types
-                if (sender.CanShow && typeof(UnsafeNativeMethods.IDispatch).IsAssignableFrom(sender.PropertyType))
+                if (sender.CanShow && typeof(Oleaut32.IDispatch).IsAssignableFrom(sender.PropertyType))
                 {
-                    NativeMethods.IVsPerPropertyBrowsing vsObj = (NativeMethods.IVsPerPropertyBrowsing)sender.TargetObject;
+                    VSSDK.IVsPerPropertyBrowsing vsObj = (VSSDK.IVsPerPropertyBrowsing)sender.TargetObject;
 
                     // should we make this read only?
                     BOOL pfResult = BOOL.FALSE;
@@ -208,12 +202,12 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     }
                 }
             }
-            Debug.Assert(sender.TargetObject == null || sender.TargetObject is NativeMethods.IVsPerPropertyBrowsing, "Object is not " + Interface.Name + "!");
+            Debug.Assert(sender.TargetObject == null || sender.TargetObject is VSSDK.IVsPerPropertyBrowsing, "Object is not " + Interface.Name + "!");
         }
 
         private unsafe void OnResetPropertyValue(Com2PropertyDescriptor sender, EventArgs e)
         {
-            if (sender.TargetObject is NativeMethods.IVsPerPropertyBrowsing target)
+            if (sender.TargetObject is VSSDK.IVsPerPropertyBrowsing target)
             {
                 Ole32.DispatchID dispid = sender.DISPID;
                 BOOL canReset = BOOL.FALSE;
@@ -224,12 +218,12 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 }
             }
 
-            Debug.Assert(sender.TargetObject == null || sender.TargetObject is NativeMethods.IVsPerPropertyBrowsing, "Object is not " + Interface.Name + "!");
+            Debug.Assert(sender.TargetObject == null || sender.TargetObject is VSSDK.IVsPerPropertyBrowsing, "Object is not " + Interface.Name + "!");
         }
 
         private unsafe void OnShouldSerializeValue(Com2PropertyDescriptor sender, GetBoolValueEvent gbvevent)
         {
-            if (sender.TargetObject is NativeMethods.IVsPerPropertyBrowsing vsObj)
+            if (sender.TargetObject is VSSDK.IVsPerPropertyBrowsing vsObj)
             {
                 // by default we say it's default
                 BOOL pfResult = BOOL.TRUE;
@@ -241,7 +235,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 }
             }
 
-            Debug.Assert(sender.TargetObject == null || sender.TargetObject is NativeMethods.IVsPerPropertyBrowsing, "Object is not " + Interface.Name + "!");
+            Debug.Assert(sender.TargetObject == null || sender.TargetObject is VSSDK.IVsPerPropertyBrowsing, "Object is not " + Interface.Name + "!");
         }
     }
 }

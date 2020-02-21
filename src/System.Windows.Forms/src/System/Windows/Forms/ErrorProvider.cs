@@ -1,8 +1,11 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
@@ -26,7 +29,7 @@ namespace System.Windows.Forms
     [ToolboxItemFilter("System.Windows.Forms")]
     [ComplexBindingProperties(nameof(DataSource), nameof(DataMember))]
     [SRDescription(nameof(SR.DescriptionErrorProvider))]
-    public class ErrorProvider : Component, IExtenderProvider, ISupportInitialize
+    public partial class ErrorProvider : Component, IExtenderProvider, ISupportInitialize
     {
         private readonly Hashtable _items = new Hashtable();
         private readonly Hashtable _windows = new Hashtable();
@@ -816,7 +819,9 @@ namespace System.Windows.Forms
         /// </summary>
         internal class ErrorWindow : NativeWindow
         {
-            private readonly ArrayList items = new ArrayList();
+            private static readonly int s_accessibilityProperty = PropertyStore.CreateKey();
+
+            private readonly List<ControlItem> _items = new List<ControlItem>();
             private readonly Control _parent;
             private readonly ErrorProvider _provider;
             private Rectangle _windowBounds;
@@ -835,6 +840,26 @@ namespace System.Windows.Forms
             {
                 _provider = provider;
                 _parent = parent;
+                Properties = new PropertyStore();
+            }
+
+            /// <summary>
+            ///  The Accessibility Object for this ErrorProvider
+            /// </summary>
+            internal AccessibleObject AccessibilityObject
+            {
+                get
+                {
+                    AccessibleObject accessibleObject = (AccessibleObject)Properties.GetObject(s_accessibilityProperty);
+
+                    if (accessibleObject == null)
+                    {
+                        accessibleObject = CreateAccessibilityInstance();
+                        Properties.SetObject(s_accessibilityProperty, accessibleObject);
+                    }
+
+                    return accessibleObject;
+                }
             }
 
             /// <summary>
@@ -842,16 +867,27 @@ namespace System.Windows.Forms
             /// </summary>
             public void Add(ControlItem item)
             {
-                items.Add(item);
+                _items.Add(item);
                 if (!EnsureCreated())
                 {
                     return;
                 }
 
-                var toolInfo = new ComCtl32.ToolInfoWrapper(this, item.Id, ComCtl32.TTF.SUBCLASS, item.Error);
-                toolInfo.SendMessage(_tipWindow, User32.WindowMessage.TTM_ADDTOOLW);
+                var toolInfo = new ComCtl32.ToolInfoWrapper<ErrorWindow>(this, item.Id, ComCtl32.TTF.SUBCLASS, item.Error);
+                toolInfo.SendMessage(_tipWindow, (User32.WM)ComCtl32.TTM.ADDTOOLW);
 
                 Update(timerCaused: false);
+            }
+
+            internal List<ControlItem> ControlItems => _items;
+
+            /// <summary>
+            ///  Constructs the new instance of the accessibility object for this ErrorProvider. Subclasses
+            ///  should not call base.CreateAccessibilityObject.
+            /// </summary>
+            private AccessibleObject CreateAccessibilityInstance()
+            {
+                return new ErrorWindowAccessibleObject(this);
             }
 
             /// <summary>
@@ -893,18 +929,18 @@ namespace System.Windows.Forms
                     cparams = new CreateParams
                     {
                         Parent = Handle,
-                        ClassName = NativeMethods.TOOLTIPS_CLASS,
+                        ClassName = ComCtl32.WindowClasses.TOOLTIPS_CLASS,
                         Style = NativeMethods.TTS_ALWAYSTIP
                     };
                     _tipWindow = new NativeWindow();
                     _tipWindow.CreateHandle(cparams);
 
-                    User32.SendMessageW(_tipWindow, User32.WindowMessage.TTM_SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
+                    User32.SendMessageW(_tipWindow, (User32.WM)ComCtl32.TTM.SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
                     User32.SetWindowPos(
                         new HandleRef(_tipWindow, _tipWindow.Handle),
                         User32.HWND_TOP,
                         flags: User32.SWP.NOSIZE | User32.SWP.NOMOVE | User32.SWP.NOACTIVATE);
-                    User32.SendMessageW(_tipWindow, User32.WindowMessage.TTM_SETDELAYTIME, (IntPtr)ComCtl32.TTDT.INITIAL, (IntPtr)0);
+                    User32.SendMessageW(_tipWindow, (User32.WM)ComCtl32.TTM.SETDELAYTIME, (IntPtr)ComCtl32.TTDT.INITIAL, (IntPtr)0);
                 }
 
                 return true;
@@ -1000,9 +1036,9 @@ namespace System.Windows.Forms
 
                     try
                     {
-                        for (int i = 0; i < items.Count; i++)
+                        for (int i = 0; i < _items.Count; i++)
                         {
-                            ControlItem item = (ControlItem)items[i];
+                            ControlItem item = _items[i];
                             Rectangle bounds = item.GetIconBounds(_provider.Region.Size);
                             User32.DrawIconEx(
                                 _mirrordc,
@@ -1034,9 +1070,9 @@ namespace System.Windows.Forms
             private void OnTimer(object sender, EventArgs e)
             {
                 int blinkPhase = 0;
-                for (int i = 0; i < items.Count; i++)
+                for (int i = 0; i < _items.Count; i++)
                 {
-                    blinkPhase += ((ControlItem)items[i]).BlinkPhase;
+                    blinkPhase += _items[i].BlinkPhase;
                 }
                 if (blinkPhase == 0 && _provider.BlinkStyle != ErrorBlinkStyle.AlwaysBlink)
                 {
@@ -1048,18 +1084,18 @@ namespace System.Windows.Forms
 
             private void OnToolTipVisibilityChanging(IntPtr id, bool toolTipShown)
             {
-                for (int i = 0; i < items.Count; i++)
+                for (int i = 0; i < _items.Count; i++)
                 {
-                    if (((ControlItem)items[i]).Id == id)
+                    if (_items[i].Id == id)
                     {
-                        ((ControlItem)items[i]).ToolTipShown = toolTipShown;
+                        _items[i].ToolTipShown = toolTipShown;
                     }
                 }
 #if DEBUG
                 int shownTooltips = 0;
-                for (int j = 0; j < items.Count; j++)
+                for (int j = 0; j < _items.Count; j++)
                 {
-                    if (((ControlItem)items[j]).ToolTipShown)
+                    if (_items[j].ToolTipShown)
                     {
                         shownTooltips++;
                     }
@@ -1069,19 +1105,26 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
+            ///  Retrieves our internal property storage object. If you have a property
+            ///  whose value is not always set, you should store it in here to save
+            ///  space.
+            /// </summary>
+            internal PropertyStore Properties { get; }
+
+            /// <summary>
             ///  This is called when a control no longer needs to display an error icon.
             /// </summary>
             public void Remove(ControlItem item)
             {
-                items.Remove(item);
+                _items.Remove(item);
 
                 if (_tipWindow != null)
                 {
-                    var info = new ComCtl32.ToolInfoWrapper(this, item.Id);
-                    info.SendMessage(_tipWindow, User32.WindowMessage.TTM_DELTOOLW);
+                    var info = new ComCtl32.ToolInfoWrapper<ErrorWindow>(this, item.Id);
+                    info.SendMessage(_tipWindow, (User32.WM)ComCtl32.TTM.DELTOOLW);
                 }
 
-                if (items.Count == 0)
+                if (_items.Count == 0)
                 {
                     EnsureDestroyed();
                 }
@@ -1124,9 +1167,9 @@ namespace System.Windows.Forms
                 IconRegion iconRegion = _provider.Region;
                 Size size = iconRegion.Size;
                 _windowBounds = Rectangle.Empty;
-                for (int i = 0; i < items.Count; i++)
+                for (int i = 0; i < _items.Count; i++)
                 {
-                    ControlItem item = (ControlItem)items[i];
+                    ControlItem item = _items[i];
                     Rectangle iconBounds = item.GetIconBounds(size);
                     if (_windowBounds.IsEmpty)
                     {
@@ -1142,9 +1185,9 @@ namespace System.Windows.Forms
                 IntPtr windowRegionHandle = IntPtr.Zero;
                 try
                 {
-                    for (int i = 0; i < items.Count; i++)
+                    for (int i = 0; i < _items.Count; i++)
                     {
-                        ControlItem item = (ControlItem)items[i];
+                        ControlItem item = _items[i];
                         Rectangle iconBounds = item.GetIconBounds(size);
                         iconBounds.X -= _windowBounds.X;
                         iconBounds.Y -= _windowBounds.Y;
@@ -1183,8 +1226,8 @@ namespace System.Windows.Forms
                                 flags |= ComCtl32.TTF.RTLREADING;
                             }
 
-                            var toolInfo = new ComCtl32.ToolInfoWrapper(this, item.Id, flags, item.Error, iconBounds);
-                            toolInfo.SendMessage(_tipWindow, User32.WindowMessage.TTM_SETTOOLINFOW);
+                            var toolInfo = new ComCtl32.ToolInfoWrapper<ErrorWindow>(this, item.Id, flags, item.Error, iconBounds);
+                            toolInfo.SendMessage(_tipWindow, (User32.WM)ComCtl32.TTM.SETTOOLINFOW);
                         }
 
                         if (timerCaused && item.BlinkPhase > 0)
@@ -1214,7 +1257,7 @@ namespace System.Windows.Forms
                             RestoreMirrorDC();
                         }
 
-                        if (UnsafeNativeMethods.SetWindowRgn(new HandleRef(this, Handle), new HandleRef(windowRegion, windowRegionHandle), true) != 0)
+                        if (User32.SetWindowRgn(this, new HandleRef(windowRegion, windowRegionHandle), BOOL.TRUE) != 0)
                         {
                             // The HWnd owns the region.
                             windowRegionHandle = IntPtr.Zero;
@@ -1228,7 +1271,6 @@ namespace System.Windows.Forms
                             dc.Dispose();
                         }
                     }
-
                 }
                 finally
                 {
@@ -1251,22 +1293,50 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
+            ///  Handles the WM_GETOBJECT message. Used for accessibility.
+            /// </summary>
+            private void WmGetObject(ref Message m)
+            {
+                Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, "In WmGetObject, this = " + GetType().FullName + ", lParam = " + m.LParam.ToString());
+
+                if (m.Msg == (int)User32.WM.GETOBJECT && m.LParam == (IntPtr)NativeMethods.UiaRootObjectId)
+                {
+                    // If the requested object identifier is UiaRootObjectId,
+                    // we should return an UI Automation provider using the UiaReturnRawElementProvider function.
+                    InternalAccessibleObject intAccessibleObject = new InternalAccessibleObject(AccessibilityObject);
+                    m.Result = UiaCore.UiaReturnRawElementProvider(
+                        new HandleRef(this, Handle),
+                        m.WParam,
+                        m.LParam,
+                        intAccessibleObject);
+
+                    return;
+                }
+
+                // some accessible object requested that we don't care about, so do default message processing
+                DefWndProc(ref m);
+            }
+
+            /// <summary>
             ///  Called when the error window gets a windows message.
             /// </summary>
             protected unsafe override void WndProc(ref Message m)
             {
-                switch (m.Msg)
+                switch ((User32.WM)m.Msg)
                 {
-                    case WindowMessages.WM_NOTIFY:
+                    case User32.WM.GETOBJECT:
+                        WmGetObject(ref m);
+                        break;
+                    case User32.WM.NOTIFY:
                         User32.NMHDR* nmhdr = (User32.NMHDR*)m.LParam;
-                        if (nmhdr->code == NativeMethods.TTN_SHOW || nmhdr->code == NativeMethods.TTN_POP)
+                        if (nmhdr->code == (int)ComCtl32.TTN.SHOW || nmhdr->code == (int)ComCtl32.TTN.POP)
                         {
-                            OnToolTipVisibilityChanging(nmhdr->idFrom, nmhdr->code == NativeMethods.TTN_SHOW);
+                            OnToolTipVisibilityChanging(nmhdr->idFrom, nmhdr->code == (int)ComCtl32.TTN.SHOW);
                         }
                         break;
-                    case WindowMessages.WM_ERASEBKGND:
+                    case User32.WM.ERASEBKGND:
                         break;
-                    case WindowMessages.WM_PAINT:
+                    case User32.WM.PAINT:
                         OnPaint(ref m);
                         break;
                     default:
@@ -1282,6 +1352,8 @@ namespace System.Windows.Forms
         /// </summary>
         internal class ControlItem
         {
+            private static readonly int s_accessibilityProperty = PropertyStore.CreateKey();
+
             private string _error;
             private readonly Control _control;
             private ErrorWindow _window;
@@ -1307,6 +1379,35 @@ namespace System.Windows.Forms
                 _control.SizeChanged += new EventHandler(OnBoundsChanged);
                 _control.VisibleChanged += new EventHandler(OnParentVisibleChanged);
                 _control.ParentChanged += new EventHandler(OnParentVisibleChanged);
+                Properties = new PropertyStore();
+            }
+
+            /// <summary>
+            ///  The Accessibility Object for this ErrorProvider
+            /// </summary>
+            internal AccessibleObject AccessibilityObject
+            {
+                get
+                {
+                    AccessibleObject accessibleObject = (AccessibleObject)Properties.GetObject(s_accessibilityProperty);
+
+                    if (accessibleObject == null)
+                    {
+                        accessibleObject = CreateAccessibilityInstance();
+                        Properties.SetObject(s_accessibilityProperty, accessibleObject);
+                    }
+
+                    return accessibleObject;
+                }
+            }
+
+            /// <summary>
+            ///  Constructs the new instance of the accessibility object for this ErrorProvider. Subclasses
+            ///  should not call base.CreateAccessibilityObject.
+            /// </summary>
+            private AccessibleObject CreateAccessibilityInstance()
+            {
+                return new ControlItemAccessibleObject(this, _window, _control.ParentInternal, _provider);
             }
 
             public void Dispose()
@@ -1568,6 +1669,13 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
+            ///  Retrieves our internal property storage object. If you have a property
+            ///  whose value is not always set, you should store it in here to save
+            ///  space.
+            /// </summary>
+            private PropertyStore Properties { get; }
+
+            /// <summary>
             ///  This is called when the control's handle is created.
             /// </summary>
             private void OnCreateHandle(object sender, EventArgs e) => AddToWindow();
@@ -1631,7 +1739,6 @@ namespace System.Windows.Forms
                             {
                                 for (int x = 0; x < size.Width; x++)
                                 {
-
                                     // see if bit is set in mask. bits in byte are reversed. 0 is black (set).
                                     if ((bits[y * widthInBytes + x / 8] & (1 << (7 - (x % 8)))) == 0)
                                     {

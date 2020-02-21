@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Collections;
 using System.Collections.Specialized;
 using System.ComponentModel;
@@ -159,7 +161,7 @@ namespace System.Windows.Forms.Layout
             return element.Bounds;
         }
 
-        ///  ResetPadding	
+        ///  ResetPadding
         ///  clears out the padding from the property store
         internal static void ResetPadding(IArrangedElement element)
         {
@@ -199,7 +201,6 @@ namespace System.Windows.Forms.Layout
             Debug.Assert(GetMargin(element) == value, "Error detected setting Margin.");
 
             LayoutTransaction.DoLayout(element.Container, element, PropertyNames.Margin);
-
         }
 
         ///  SetMaximumSize
@@ -310,7 +311,6 @@ namespace System.Windows.Forms.Layout
                 }
 
                 element.Properties.SetRectangle(_specifiedBoundsProperty, originalBounds);
-
             }
             else
             {
@@ -453,12 +453,13 @@ namespace System.Windows.Forms.Layout
             return result;
         }
 
-        ///  GetSelfAutoSize
+        /// <summary>
         ///  Compat flag for controls that previously sized themselves.
-        ///  Some controls rolled their own implementation of AutoSize in V1 for Dock & Anchor
+        ///  Some controls rolled their own implementation of AutoSize in V1 for Dock and Anchor
         ///  In V2, the LayoutEngine is the one responsible for sizing the child items when
         ///  they're AutoSized.  For new layout engines, the controls will let the layout engine
         ///  size them, but for DefaultLayout, they're left to size themselves.
+        /// </summary>
         internal static bool GetSelfAutoSizeInDefaultLayout(IArrangedElement element)
         {
             BitVector32 state = GetLayoutState(element);
@@ -608,12 +609,13 @@ namespace System.Windows.Forms.Layout
                 == (value != DockStyle.None), "xSetDock set DockMode incorrectly.");
         }
 
-        ///  xTranslateAnchorValue -
+        /// <summary>
         ///  Helper method for xGetAnchor / xSetAnchor.
         ///  We store anchor DefualtAnchor as None and vice versa.
-        ///  We either had to do this or map Dock.None to DefaultAnchor (Dock & Anchor share the same section
+        ///  We either had to do this or map Dock.None to DefaultAnchor (Dock and Anchor share the same section
         ///  in LayoutState.) Mapping DefaultAnchor to 0 is nicer because we do not need to allocate anything in
         ///  the PropertyStore to get a 0 back from PropertyStore.GetInteger().
+        /// </summary>
         private static AnchorStyles xTranslateAnchorValue(AnchorStyles anchor)
         {
             switch (anchor)
@@ -738,7 +740,6 @@ namespace System.Windows.Forms.Layout
                 diff = "For more info, try enabling PreferredSize trace switch";
             }
             return diff;
-
         }
 
         internal static void Debug_SnapProperties(IArrangedElement element)
@@ -757,7 +758,6 @@ namespace System.Windows.Forms.Layout
             Hashtable propertyHash = new Hashtable();
             if (PreferredSize.TraceVerbose)
             {
-
                 foreach (PropertyDescriptor pd in TypeDescriptor.GetProperties(obj))
                 {
                     if (pd.Name == "PreferredSize")
@@ -777,7 +777,6 @@ namespace System.Windows.Forms.Layout
                 }
             }
             return propertyHash;
-
         }
 
 #endif

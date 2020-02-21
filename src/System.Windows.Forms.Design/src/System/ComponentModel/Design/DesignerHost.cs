@@ -1159,7 +1159,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///  Gets the type instance for the specified fully qualified type name <paramref name="TypeName"/>.
+        ///  Gets the type instance for the specified fully qualified type name <paramref name="typeName"/>.
         /// </summary>
         Type IDesignerHost.GetType(string typeName)
         {
@@ -1744,8 +1744,8 @@ namespace System.ComponentModel.Design
                     if (_nestedContainer == null)
                     {
                         _nestedContainer = new SiteNestedContainer(_component, null, _host);
-                        
-                        // Initialize IServiceContainer in the nested container as soon as INestedContainer is created, 
+
+                        // Initialize IServiceContainer in the nested container as soon as INestedContainer is created,
                         // otherwise site has no access to the DesignerHost's services.
                         _ = _nestedContainer.GetServiceInternal(typeof(IServiceContainer));
                     }

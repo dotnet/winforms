@@ -7,7 +7,7 @@ using System.Drawing;
 namespace System.Windows.Forms.Design.Behavior
 {
     /// <summary>
-    ///  The LockedBorderGlyph draws one side (depending on type) of a SelectionBorder in the 'Locked' mode.  The constructor will initialize and cache the pen and brush objects to avoid uneccessary recreations.
+    ///  The LockedBorderGlyph draws one side (depending on type) of a SelectionBorder in the 'Locked' mode.  The constructor will initialize and cache the pen and brush objects to avoid unnecessary recreations.
     /// </summary>
     internal class MiniLockedBorderGlyph : SelectionGlyphBase
     {
@@ -44,6 +44,5 @@ namespace System.Windows.Forms.Design.Behavior
         {
             pe.Graphics.FillRectangle(new SolidBrush(SystemColors.ControlText), bounds);
         }
-
     }
 }

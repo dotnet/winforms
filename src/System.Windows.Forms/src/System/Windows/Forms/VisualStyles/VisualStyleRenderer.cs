@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Collections;
 using System.ComponentModel;
 using System.Drawing;
@@ -22,7 +24,7 @@ namespace System.Windows.Forms.VisualStyles
         private string _class;
         private int part;
         private int state;
-        private int lastHResult = 0;
+        private HRESULT lastHResult = 0;
         private static readonly int numberOfPossibleClasses = VisualStyleElement.Count; //used as size for themeHandles
 
         [ThreadStatic]
@@ -71,7 +73,6 @@ namespace System.Windows.Forms.VisualStyles
                 }
 
                 return supported;
-
             }
         }
 
@@ -291,13 +292,13 @@ namespace System.Windows.Forms.VisualStyles
                     using (ThemeHandle hTheme = ThemeHandle.Create(_class, true, hWnd))
                     {
                         RECT rect  = bounds;
-                        lastHResult = (int)UxTheme.DrawThemeBackground(hTheme, hdc, part, state, ref rect, null);
+                        lastHResult = UxTheme.DrawThemeBackground(hTheme, hdc, part, state, ref rect, null);
                     }
                 }
                 else
                 {
                     RECT rect  = bounds;
-                    lastHResult = (int)UxTheme.DrawThemeBackground(this, hdc, part, state, ref rect, null);
+                    lastHResult = UxTheme.DrawThemeBackground(this, hdc, part, state, ref rect, null);
                 }
             }
         }
@@ -334,14 +335,14 @@ namespace System.Windows.Forms.VisualStyles
                     {
                         RECT rect = bounds;
                         RECT clipRect = clipRectangle;
-                        lastHResult = (int)UxTheme.DrawThemeBackground(hTheme, hdc, part, state, ref rect, &clipRect);
+                        lastHResult = UxTheme.DrawThemeBackground(hTheme, hdc, part, state, ref rect, &clipRect);
                     }
                 }
                 else
                 {
                     RECT rect = bounds;
                     RECT clipRect = clipRectangle;
-                    lastHResult = (int)UxTheme.DrawThemeBackground(this, hdc, part, state, ref rect, &clipRect);
+                    lastHResult = UxTheme.DrawThemeBackground(this, hdc, part, state, ref rect, &clipRect);
                 }
             }
         }
@@ -375,7 +376,7 @@ namespace System.Windows.Forms.VisualStyles
             var hdc = new HandleRef(wgr, wgr.WindowsGraphics.DeviceContext.Hdc);
             RECT destRect = bounds;
             var contentRect = new RECT();
-            lastHResult = (int)UxTheme.DrawThemeEdge(this, hdc, part, state, ref destRect, (User32.EDGE)style, (User32.BF)edges | (User32.BF)effects | User32.BF.ADJUST, ref contentRect);
+            lastHResult = UxTheme.DrawThemeEdge(this, hdc, part, state, ref destRect, (User32.EDGE)style, (User32.BF)edges | (User32.BF)effects | User32.BF.ADJUST, ref contentRect);
             return contentRect;
         }
 
@@ -431,21 +432,12 @@ namespace System.Windows.Forms.VisualStyles
 
             // DrawThemeIcon currently seems to do nothing, but still return S_OK. As a workaround,
             // we call DrawImage on the graphics object itself for now.
-
-            //int returnVal = NativeMethods.S_FALSE;
-            //using( WindowsGraphicsWrapper wgr = new WindowsGraphicsWrapper( dc, AllGraphicsProperties ) ) {
-            //    HandleRef hdc = new HandleRef( wgr, wgr.WindowsGraphics.DeviceContext.Hdc );
-            //    returnVal = SafeNativeMethods.DrawThemeIcon( new HandleRef( this, Handle ), hdc, part, state, new NativeMethods.COMRECT( bounds ), new HandleRef( this, imageList.Handle ), imageIndex );
-            //}
-
-            //if (returnVal != NativeMethods.S_OK) {
             g.DrawImage(imageList.Images[imageIndex], bounds);
-            //}
         }
 
         /// <summary>
         ///  Given a graphics object and bounds to draw in, this method effectively asks the passed in
-        ///  control's parent to draw itself in there (it sends WM_ERASEBKGND & WM_PRINTCLIENT messages
+        ///  control's parent to draw itself in there (it sends WM_ERASEBKGND &amp; WM_PRINTCLIENT messages
         ///  to the parent).
         /// </summary>
         public void DrawParentBackground(IDeviceContext dc, Rectangle bounds, Control childControl)
@@ -464,12 +456,12 @@ namespace System.Windows.Forms.VisualStyles
                 return;
             }
 
-            if (childControl.Handle != IntPtr.Zero)
+            if (childControl.IsHandleCreated)
             {
                 using var wgr = new WindowsGraphicsWrapper(dc, AllGraphicsProperties);
                 var hdc = new HandleRef(wgr, wgr.WindowsGraphics.DeviceContext.Hdc);
                 RECT rc = bounds;
-                lastHResult = (int)UxTheme.DrawThemeParentBackground(childControl, hdc, ref rc);
+                lastHResult = UxTheme.DrawThemeParentBackground(childControl, hdc, ref rc);
             }
         }
 
@@ -510,7 +502,7 @@ namespace System.Windows.Forms.VisualStyles
                 var hdc = new HandleRef(wgr, wgr.WindowsGraphics.DeviceContext.Hdc);
                 uint disableFlag = drawDisabled ? 0x1u : 0u;
                 RECT rect = bounds;
-                lastHResult = (int)UxTheme.DrawThemeText(this, hdc, part, state, textToDraw, textToDraw.Length, (User32.DT)flags, disableFlag, ref rect);
+                lastHResult = UxTheme.DrawThemeText(this, hdc, part, state, textToDraw, textToDraw.Length, (User32.DT)flags, disableFlag, ref rect);
             }
         }
 
@@ -601,7 +593,6 @@ namespace System.Windows.Forms.VisualStyles
             Region region = Region.FromHrgn(hRegion);
             Gdi32.DeleteObject(hRegion);
             return region;
-
         }
 
         /// <summary>
@@ -614,9 +605,9 @@ namespace System.Windows.Forms.VisualStyles
                 throw new InvalidEnumArgumentException(nameof(prop), (int)prop, typeof(BooleanProperty));
             }
 
-            bool val = false;
-            lastHResult = SafeNativeMethods.GetThemeBool(new HandleRef(this, Handle), part, state, (int)prop, ref val);
-            return val;
+            BOOL val = BOOL.FALSE;
+            lastHResult = UxTheme.GetThemeBool(this, part, state, (int)prop, ref val);
+            return val.IsTrue();
         }
 
         /// <summary>
@@ -631,7 +622,7 @@ namespace System.Windows.Forms.VisualStyles
             }
 
             int color = 0;
-            lastHResult = SafeNativeMethods.GetThemeColor(new HandleRef(this, Handle), part, state, (int)prop, ref color);
+            lastHResult = UxTheme.GetThemeColor(this, part, state, (int)prop, ref color);
             return ColorTranslator.FromWin32(color);
         }
 
@@ -647,7 +638,7 @@ namespace System.Windows.Forms.VisualStyles
             }
 
             int val = 0;
-            lastHResult = SafeNativeMethods.GetThemeEnumValue(new HandleRef(this, Handle), part, state, (int)prop, ref val);
+            lastHResult = UxTheme.GetThemeEnumValue(this, part, state, (int)prop, ref val);
             return val;
         }
 
@@ -689,13 +680,13 @@ namespace System.Windows.Forms.VisualStyles
             using (WindowsGraphicsWrapper wgr = new WindowsGraphicsWrapper(dc, AllGraphicsProperties))
             {
                 HandleRef hdc = new HandleRef(wgr, wgr.WindowsGraphics.DeviceContext.Hdc);
-                lastHResult = (int)UxTheme.GetThemeFont(new HandleRef(this, Handle), hdc, part, state, (int)prop, ref logfont);
+                lastHResult = UxTheme.GetThemeFont(new HandleRef(this, Handle), hdc, part, state, (int)prop, ref logfont);
             }
 
             Font font = null;
 
             //check for a failed HR.
-            if (NativeMethods.Succeeded(lastHResult))
+            if (lastHResult.Succeeded())
             {
                 try
                 {
@@ -728,7 +719,7 @@ namespace System.Windows.Forms.VisualStyles
             }
 
             int val = 0;
-            lastHResult = SafeNativeMethods.GetThemeInt(new HandleRef(this, Handle), part, state, (int)prop, ref val);
+            lastHResult = UxTheme.GetThemeInt(this, part, state, (int)prop, ref val);
             return val;
         }
 
@@ -987,7 +978,7 @@ namespace System.Windows.Forms.VisualStyles
         /// </summary>
         public bool IsBackgroundPartiallyTransparent()
         {
-            return (SafeNativeMethods.IsThemeBackgroundPartiallyTransparent(new HandleRef(this, Handle), part, state));
+            return UxTheme.IsThemeBackgroundPartiallyTransparent(this, part, state).IsTrue();
         }
 
         /// <summary>
@@ -998,7 +989,7 @@ namespace System.Windows.Forms.VisualStyles
         {
             get
             {
-                return lastHResult;
+                return (int)lastHResult;
             }
         }
 
@@ -1132,7 +1123,7 @@ namespace System.Windows.Forms.VisualStyles
                     {
                         throw new InvalidOperationException(SR.VisualStyleHandleCreationFailed, e);
                     }
-                    
+
                     return null;
                 }
 
@@ -1142,7 +1133,7 @@ namespace System.Windows.Forms.VisualStyles
                     {
                         throw new InvalidOperationException(SR.VisualStyleHandleCreationFailed);
                     }
-                    
+
                     return null;
                 }
 

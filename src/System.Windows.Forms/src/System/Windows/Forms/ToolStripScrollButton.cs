@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Drawing;
 using static Interop;
 
@@ -198,11 +200,8 @@ namespace System.Windows.Forms
 
             protected override void WndProc(ref Message m)
             {
-
-                if (m.Msg >= WindowMessages.WM_KEYFIRST && m.Msg <= WindowMessages.WM_KEYLAST)
+                if (m.Msg >= (int)User32.WM.KEYFIRST && m.Msg <= (int)User32.WM.KEYLAST)
                 {
-                    //
-
                     DefWndProc(ref m);
                     return;
                 }
@@ -212,5 +211,3 @@ namespace System.Windows.Forms
         }
     }
 }
-
-

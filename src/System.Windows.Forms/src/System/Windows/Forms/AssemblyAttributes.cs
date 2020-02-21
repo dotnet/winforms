@@ -16,4 +16,3 @@ using System.Runtime.CompilerServices;
 
 // Opts into the VS loading icons from the Icon Satellite assembly: System.Windows.Forms.VisualStudio.<version>.0.dll
 [assembly: System.Drawing.BitmapSuffixInSatelliteAssembly()]
-

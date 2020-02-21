@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Collections;
 using System.Collections.Specialized;
 using System.ComponentModel;
@@ -134,7 +136,6 @@ namespace System.Windows.Forms
                     index = value;
                     useIntegerIndex = true;
                 }
-
             }
 
             public virtual int ActualIndex
@@ -498,7 +499,6 @@ namespace System.Windows.Forms
                 ownsBitmap = true;
             }
             return bitmap;
-
         }
 
         private int AddIconToHandle(Original original, Icon icon)
@@ -517,7 +517,8 @@ namespace System.Windows.Forms
             finally
             {
                 if ((original.options & OriginalOptions.OwnsImage) != 0)
-                { ///  this is to handle the case were we clone the icon (see WHY WHY WHY below)
+                {
+                    // This is to handle the case were we clone the icon (see why below)
                     icon.Dispose();
                 }
             }
@@ -583,7 +584,7 @@ namespace System.Windows.Forms
             }
 
             // We enclose the imagelist handle create in a theming scope.
-            IntPtr userCookie = ThemingScope.Activate();
+            IntPtr userCookie = ThemingScope.Activate(Application.UseVisualStyles);
 
             try
             {
@@ -857,7 +858,6 @@ namespace System.Windows.Forms
                             ComCtl32.CLR.NONE,
                             ComCtl32.CLR.NONE,
                             ComCtl32.ILD.TRANSPARENT);
-
                     }
                     finally
                     {
@@ -1018,7 +1018,6 @@ namespace System.Windows.Forms
             {
                 Dispose(false);
             }
-
         }
 
         // An image before we add it to the image list, along with a few details about how to add it.
@@ -1043,7 +1042,6 @@ namespace System.Windows.Forms
 
             internal Original(object image, OriginalOptions options, Color customTransparentColor)
             {
-                Debug.Assert(image != null, "image is null");
                 if (!(image is Icon) && !(image is Image))
                 {
                     throw new InvalidOperationException(SR.ImageListEntryType);
@@ -1135,7 +1133,6 @@ namespace System.Windows.Forms
             [Browsable(false)]
             public int Count
             {
-
                 get
                 {
                     Debug.Assert(owner != null, "ImageCollection has no owner (ImageList)");
@@ -1205,7 +1202,6 @@ namespace System.Windows.Forms
             [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
             public Image this[int index]
             {
-
                 get
                 {
                     if (index < 0 || index >= Count)
@@ -1278,7 +1274,6 @@ namespace System.Windows.Forms
 
             object IList.this[int index]
             {
-
                 get
                 {
                     return this[index];
@@ -1301,7 +1296,6 @@ namespace System.Windows.Forms
             /// </summary>
             public Image this[string key]
             {
-
                 get
                 {
                     // We do not support null and empty string as valid keys.
@@ -1320,7 +1314,6 @@ namespace System.Windows.Forms
                     {
                         return null;
                     }
-
                 }
             }
 
@@ -1340,7 +1333,6 @@ namespace System.Windows.Forms
                 // Add the image to the IList
                 Original original = new Original(image, OriginalOptions.Default);
                 Add(original, imageInfo);
-
             }
 
             /// <summary>
@@ -1359,7 +1351,6 @@ namespace System.Windows.Forms
                 // Add the image to the IList
                 Original original = new Original(icon, OriginalOptions.Default);
                 Add(original, imageInfo);
-
             }
 
             int IList.Add(object value)
@@ -1508,7 +1499,6 @@ namespace System.Windows.Forms
             /// </summary>
             public int AddStrip(Image value)
             {
-
                 if (value == null)
                 {
                     throw new ArgumentNullException(nameof(value));
@@ -1753,7 +1743,6 @@ namespace System.Windows.Forms
                     set { name = value; }
                 }
             }
-
         } // end class ImageCollection
     }
 
@@ -1774,4 +1763,3 @@ namespace System.Windows.Forms
         }
     }
 }
-

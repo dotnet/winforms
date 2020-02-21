@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.ComponentModel;
 using System.Text;
 using System.Runtime.InteropServices;
@@ -287,7 +289,7 @@ namespace System.Windows.Forms
         public class Format
         {
             /// <summary>
-            ///  Initializes a new instance of the <see cref='Format'/> class and 
+            ///  Initializes a new instance of the <see cref='Format'/> class and
             ///  specifies whether a Win32 handle is expected with this format.
             /// </summary>
             public Format(string name, int id)

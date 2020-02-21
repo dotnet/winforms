@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Drawing;
 using System.Windows.Forms.VisualStyles;
 
@@ -10,7 +12,7 @@ namespace System.Windows.Forms
     /// <summary>
     ///  This is a rendering class for the ComboBox control.
     /// </summary>
-    public sealed class ComboBoxRenderer
+    public static class ComboBoxRenderer
     {
         //Make this per-thread, so that different threads can safely use these methods.
         [ThreadStatic]
@@ -18,22 +20,11 @@ namespace System.Windows.Forms
         private static readonly VisualStyleElement ComboBoxElement = VisualStyleElement.ComboBox.DropDownButton.Normal;
         private static readonly VisualStyleElement TextBoxElement = VisualStyleElement.TextBox.TextEdit.Normal;
 
-        //cannot instantiate
-        private ComboBoxRenderer()
-        {
-        }
-
         /// <summary>
         ///  Returns true if this class is supported for the current OS and user/application settings,
         ///  otherwise returns false.
         /// </summary>
-        public static bool IsSupported
-        {
-            get
-            {
-                return VisualStyleRenderer.IsSupported; // no downlevel support
-            }
-        }
+        public static bool IsSupported => VisualStyleRenderer.IsSupported; // no downlevel support
 
         private static void DrawBackground(Graphics g, Rectangle bounds, ComboBoxState state)
         {

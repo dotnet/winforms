@@ -11,16 +11,16 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class TableLayoutStyleTests
+    public class TableLayoutStyleTests : IClassFixture<ThreadExceptionFixture>
     {
-        [Fact]
+        [WinFormsFact]
         public void TableLayoutStyle_Ctor_Default()
         {
             var style = new SubTableLayoutStyle();
             Assert.Equal(SizeType.AutoSize, style.SizeType);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(SizeType))]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(SizeType))]
         public void TableLayoutStyle_SizeType_Set_GetReturnsExpected(SizeType value)
@@ -30,22 +30,90 @@ namespace System.Windows.Forms.Tests
                 SizeType = value
             };
             Assert.Equal(value, style.SizeType);
-        }
 
-        [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(SizeType))]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(SizeType))]
-        public void TableLayoutStyle_SizeType_SetOwned_GetReturnsExpected(SizeType value)
-        {
-            var panel = new TableLayoutPanel();
-            var style = new ColumnStyle();
-            panel.LayoutSettings.RowStyles.Add(style);
-
+            // Set same.
             style.SizeType = value;
             Assert.Equal(value, style.SizeType);
         }
 
-        [Theory]
+        [WinFormsTheory]
+        [InlineData(SizeType.Absolute, 1)]
+        [InlineData(SizeType.AutoSize, 0)]
+        [InlineData(SizeType.Percent, 1)]
+        [InlineData((SizeType.AutoSize - 1), 1)]
+        [InlineData((SizeType.Percent + 1), 1)]
+        public void TableLayoutStyle_SizeType_SetWithOwner_GetReturnsExpected(SizeType value, int expectedLayoutCallCount)
+        {
+            using var control = new TableLayoutPanel();
+            var style = new ColumnStyle();
+            control.LayoutSettings.RowStyles.Add(style);
+            int layoutCallCount = 0;
+            control.Layout += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(control, e.AffectedControl);
+                Assert.Equal("Style", e.AffectedProperty);
+                layoutCallCount++;
+            };
+
+            style.SizeType = value;
+            Assert.Equal(value, style.SizeType);
+            Assert.Equal(expectedLayoutCallCount, layoutCallCount);
+            Assert.False(control.IsHandleCreated);
+
+            // Set same.
+            style.SizeType = value;
+            Assert.Equal(value, style.SizeType);
+            Assert.Equal(expectedLayoutCallCount, layoutCallCount);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(SizeType.Absolute, 1)]
+        [InlineData(SizeType.AutoSize, 0)]
+        [InlineData(SizeType.Percent, 1)]
+        [InlineData((SizeType.AutoSize - 1), 1)]
+        [InlineData((SizeType.Percent + 1), 1)]
+        public void TableLayoutStyle_SizeType_SetWithOwnerWithHandle_GetReturnsExpected(SizeType value, int expectedLayoutCallCount)
+        {
+            using var control = new TableLayoutPanel();
+            var style = new ColumnStyle();
+            control.LayoutSettings.RowStyles.Add(style);
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+            int layoutCallCount = 0;
+            control.Layout += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(control, e.AffectedControl);
+                Assert.Equal("Style", e.AffectedProperty);
+                layoutCallCount++;
+            };
+
+            style.SizeType = value;
+            Assert.Equal(value, style.SizeType);
+            Assert.Equal(expectedLayoutCallCount, layoutCallCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(expectedLayoutCallCount * 2, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set same.
+            style.SizeType = value;
+            Assert.Equal(value, style.SizeType);
+            Assert.Equal(expectedLayoutCallCount, layoutCallCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(expectedLayoutCallCount * 2, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsTheory]
         [InlineData(typeof(string), true)]
         [InlineData(typeof(InstanceDescriptor), true)]
         [InlineData(typeof(TableLayoutStyle), false)]
@@ -67,7 +135,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { new ColumnStyle(SizeType.Percent, 1), typeof(ColumnStyle).GetConstructor(new Type[] { typeof(SizeType), typeof(int) }), new object[] { SizeType.Percent, 1f } };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(ConvertTo_TestData))]
         public void TableLayoutStyle_ConverterConvertTo_InstanceDescriptorRowAbsolutePercent_ReturnsExpected(object value, ConstructorInfo expectedConstructor, object[] expectedArguments)
         {
@@ -77,7 +145,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expectedArguments, descriptor.Arguments);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(SizeType))]
         public void TableLayoutStyle_ConverterConvertTo_InvalidSizeType_ThrowsNotSupportedException(SizeType sizeType)
         {
@@ -85,21 +153,21 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<NotSupportedException>(() => converter.ConvertTo(new SubTableLayoutStyle { SizeType = sizeType }, typeof(InstanceDescriptor)));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void TableLayoutStyle_ConverterConvertTo_NullDestinationType_ThrowsArgumentNullException()
         {
             TypeConverter converter = TypeDescriptor.GetConverter(typeof(TableLayoutStyle));
             Assert.Throws<ArgumentNullException>("destinationType", () => converter.ConvertTo(new object(), null));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void TableLayoutStyle_ConverterConvertTo_ValueNotTableLayoutStyle_ThrowsNotSupportedException()
         {
             TypeConverter converter = TypeDescriptor.GetConverter(typeof(TableLayoutStyle));
             Assert.Throws<NotSupportedException>(() => converter.ConvertTo(1, typeof(InstanceDescriptor)));
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(typeof(TableLayoutPanelCellPosition))]
         [InlineData(typeof(int))]
         public void TableLayoutStyle_ConverterConvertTo_InvalidDestinationType_ThrowsNotSupportedException(Type destinationType)

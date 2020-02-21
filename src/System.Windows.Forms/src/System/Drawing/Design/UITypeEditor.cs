@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Collections;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -55,14 +57,14 @@ namespace System.Drawing.Design
         public virtual bool IsDropDownResizable => false;
 
         /// <summary>
-        ///  Edits the specified value using the editor style provided by <see cref='UITypeEditor.GetEditStyle'/>.
+        ///  Edits the specified value using the editor style provided by <see cref='UITypeEditor.GetEditStyle()'/>.
         /// </summary>
         /// <param name="provider">An <see cref="IServiceProvider" /> that this editor can use to obtain services.</param>
         /// <param name="value">The object to edit.</param>
         public object EditValue(IServiceProvider provider, object value) => EditValue(null, provider, value);
 
         /// <summary>
-        ///  Edits the specified value using the editor style provided by <see cref='UITypeEditor.GetEditStyle'/>.
+        ///  Edits the specified value using the editor style provided by <see cref='UITypeEditor.GetEditStyle()'/>.
         /// </summary>
         /// <param name="context">The <see cref="ITypeDescriptorContext" /> that can be used to gain additional context information.</param>
         /// <param name="provider">The <see cref="IServiceProvider" /> that this editor can use to obtain services.</param>

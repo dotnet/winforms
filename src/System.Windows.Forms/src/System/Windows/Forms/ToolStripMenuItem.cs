@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
 using System.Diagnostics;
@@ -198,7 +200,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Deriving classes can override this to configure a default size for their control.
         ///  This is more efficient than setting the size in the control's constructor.
-        /// </devdoc>
+        /// </summary>
         protected override Size DefaultSize {
             get {
                 return DpiHelper.IsPerMonitorV2Awareness ?
@@ -338,7 +340,6 @@ namespace System.Windows.Forms
                     return checkedImage;
                 }
                 return null;
-
             }
         }
 
@@ -534,7 +535,6 @@ namespace System.Windows.Forms
                     }
                 }
             }
-
         }
 
         [
@@ -594,7 +594,6 @@ namespace System.Windows.Forms
                     {
                         LayoutTransaction.DoLayout(parent, this, "ShortcutKeys");
                         parent.AdjustSize();
-
                     }
                 }
             }
@@ -639,7 +638,6 @@ namespace System.Windows.Forms
                     return Properties.GetObject(PropMdiForm) as Form;
                 }
                 return null;
-
             }
         }
 
@@ -735,33 +733,31 @@ namespace System.Windows.Forms
                     {
                         Properties.SetObject(PropMdiForm, null);
                     }
-
                 }
             }
             base.Dispose(disposing);
         }
 
-        private bool GetNativeMenuItemEnabled()
+        private unsafe bool GetNativeMenuItemEnabled()
         {
             if (nativeMenuCommandID == -1 || nativeMenuHandle == IntPtr.Zero)
             {
                 Debug.Fail("why were we called to fetch native menu item info with nothing assigned?");
                 return false;
             }
-            NativeMethods.MENUITEMINFO_T_RW info = new NativeMethods.MENUITEMINFO_T_RW
+
+            var info = new User32.MENUITEMINFOW
             {
-                cbSize = Marshal.SizeOf<NativeMethods.MENUITEMINFO_T_RW>(),
-                fMask = NativeMethods.MIIM_STATE,
-                fType = NativeMethods.MIIM_STATE,
+                cbSize = (uint)sizeof(User32.MENUITEMINFOW),
+                fMask = User32.MIIM.STATE,
                 wID = nativeMenuCommandID
             };
-            UnsafeNativeMethods.GetMenuItemInfo(new HandleRef(this, nativeMenuHandle), nativeMenuCommandID, /*fByPosition instead of ID=*/ false, info);
-
-            return ((info.fState & NativeMethods.MFS_DISABLED) == 0);
+            User32.GetMenuItemInfoW(new HandleRef(this, nativeMenuHandle), nativeMenuCommandID, /*fByPosition instead of ID=*/ BOOL.FALSE, ref info);
+            return (info.fState & User32.MFS.DISABLED) == 0;
         }
 
         // returns text and shortcut separated by tab.
-        private string GetNativeMenuItemTextAndShortcut()
+        private unsafe string GetNativeMenuItemTextAndShortcut()
         {
             if (nativeMenuCommandID == -1 || nativeMenuHandle == IntPtr.Zero)
             {
@@ -771,14 +767,13 @@ namespace System.Windows.Forms
             string text = null;
 
             // fetch the string length
-            NativeMethods.MENUITEMINFO_T_RW info = new NativeMethods.MENUITEMINFO_T_RW
+            var info = new User32.MENUITEMINFOW
             {
-                fMask = NativeMethods.MIIM_STRING,
-                fType = NativeMethods.MIIM_STRING,
-                wID = nativeMenuCommandID,
-                dwTypeData = IntPtr.Zero
+                cbSize = (uint)sizeof(User32.MENUITEMINFOW),
+                fMask = User32.MIIM.STRING,
+                wID = nativeMenuCommandID
             };
-            UnsafeNativeMethods.GetMenuItemInfo(new HandleRef(this, nativeMenuHandle), nativeMenuCommandID, /*fByPosition instead of ID=*/  false, info);
+            User32.GetMenuItemInfoW(new HandleRef(this, nativeMenuHandle), nativeMenuCommandID, /*fByPosition instead of ID=*/  BOOL.FALSE, ref info);
 
             if (info.cch > 0)
             {
@@ -786,18 +781,16 @@ namespace System.Windows.Forms
                 info.cch += 1;  // according to MSDN we need to increment the count we receive by 1.
                 info.wID = nativeMenuCommandID;
                 IntPtr allocatedStringBuffer = Marshal.AllocCoTaskMem(info.cch * sizeof(char));
-                info.dwTypeData = allocatedStringBuffer;
+                info.dwTypeData = (char*)allocatedStringBuffer;
 
                 try
                 {
-                    UnsafeNativeMethods.GetMenuItemInfo(new HandleRef(this, nativeMenuHandle), nativeMenuCommandID, /*fByPosition instead of ID=*/  false, info);
+                    User32.GetMenuItemInfoW(new HandleRef(this, nativeMenuHandle), nativeMenuCommandID, /*fByPosition instead of ID=*/  BOOL.FALSE, ref info);
 
                     // convert the string into managed data.
-                    if (info.dwTypeData != IntPtr.Zero)
+                    if (info.dwTypeData != null)
                     {
-                        // we have to use PtrToStringAuto as we can't use Marshal.SizeOf to determine
-                        // the size of the struct with a StringBuilder member.
-                        text = Marshal.PtrToStringAuto(info.dwTypeData, info.cch);
+                        text = new string(info.dwTypeData, 0, info.cch);
                     }
                 }
                 finally
@@ -821,69 +814,63 @@ namespace System.Windows.Forms
                 return null;
             }
 
-            NativeMethods.MENUITEMINFO_T_RW info = new NativeMethods.MENUITEMINFO_T_RW
+            var info = new User32.MENUITEMINFOW
             {
-                fMask = NativeMethods.MIIM_BITMAP,
-                fType = NativeMethods.MIIM_BITMAP,
+                fMask = User32.MIIM.BITMAP,
                 wID = nativeMenuCommandID
             };
-            UnsafeNativeMethods.GetMenuItemInfo(new HandleRef(this, nativeMenuHandle), nativeMenuCommandID, /*fByPosition instead of ID=*/ false, info);
+            User32.GetMenuItemInfoW(new HandleRef(this, nativeMenuHandle), nativeMenuCommandID, /*fByPosition instead of ID=*/ BOOL.FALSE, ref info);
 
-            if (info.hbmpItem != IntPtr.Zero && info.hbmpItem.ToInt32() > NativeMethods.HBMMENU_POPUP_MINIMIZE)
+            if (info.hbmpItem != IntPtr.Zero && info.hbmpItem.ToInt32() > (int)User32.HBMMENU.POPUP_MINIMIZE)
             {
                 return Bitmap.FromHbitmap(info.hbmpItem);
             }
-            else
+
+            // its a system defined bitmap
+            int buttonToUse = -1;
+
+            switch (info.hbmpItem.ToInt32())
             {
-                // its a system defined bitmap
-                int buttonToUse = -1;
-
-                switch (info.hbmpItem.ToInt32())
-                {
-                    case NativeMethods.HBMMENU_MBAR_CLOSE:
-                    case NativeMethods.HBMMENU_MBAR_CLOSE_D:
-                    case NativeMethods.HBMMENU_POPUP_CLOSE:
-                        buttonToUse = (int)CaptionButton.Close;
-                        break;
-
-                    case NativeMethods.HBMMENU_MBAR_MINIMIZE:
-                    case NativeMethods.HBMMENU_MBAR_MINIMIZE_D:
-                    case NativeMethods.HBMMENU_POPUP_MINIMIZE:
-                        buttonToUse = (int)CaptionButton.Minimize;
-                        break;
-
-                    case NativeMethods.HBMMENU_MBAR_RESTORE:
-                    case NativeMethods.HBMMENU_POPUP_RESTORE:
-                        buttonToUse = (int)CaptionButton.Restore;
-                        break;
-
-                    case NativeMethods.HBMMENU_POPUP_MAXIMIZE:
-                        buttonToUse = (int)CaptionButton.Maximize;
-                        break;
-
-                    case NativeMethods.HBMMENU_SYSTEM:
-                    //
-                    case NativeMethods.HBMMENU_CALLBACK:
-                    // owner draw not supported
-                    default:
-                        break;
-                }
-                if (buttonToUse > -1)
-                {
-
-                    // we've mapped to a system defined bitmap we know how to draw
-                    Bitmap image = new Bitmap(16, 16);
-
-                    using (Graphics g = Graphics.FromImage(image))
-                    {
-                        ControlPaint.DrawCaptionButton(g, new Rectangle(Point.Empty, image.Size), (CaptionButton)buttonToUse, ButtonState.Flat);
-                        g.DrawRectangle(SystemPens.Control, 0, 0, image.Width - 1, image.Height - 1);
-                    }
-
-                    image.MakeTransparent(SystemColors.Control);
-                    return image;
-                }
+                case (int)User32.HBMMENU.MBAR_CLOSE:
+                case (int)User32.HBMMENU.MBAR_CLOSE_D:
+                case (int)User32.HBMMENU.POPUP_CLOSE:
+                    buttonToUse = (int)CaptionButton.Close;
+                    break;
+                case (int)User32.HBMMENU.MBAR_MINIMIZE:
+                case (int)User32.HBMMENU.MBAR_MINIMIZE_D:
+                case (int)User32.HBMMENU.POPUP_MINIMIZE:
+                    buttonToUse = (int)CaptionButton.Minimize;
+                    break;
+                case (int)User32.HBMMENU.MBAR_RESTORE:
+                case (int)User32.HBMMENU.POPUP_RESTORE:
+                    buttonToUse = (int)CaptionButton.Restore;
+                    break;
+                case (int)User32.HBMMENU.POPUP_MAXIMIZE:
+                    buttonToUse = (int)CaptionButton.Maximize;
+                    break;
+                case (int)User32.HBMMENU.SYSTEM:
+                //
+                case (int)User32.HBMMENU.CALLBACK:
+                // owner draw not supported
+                default:
+                    break;
             }
+
+            if (buttonToUse > -1)
+            {
+                // we've mapped to a system defined bitmap we know how to draw
+                Bitmap image = new Bitmap(16, 16);
+
+                using (Graphics g = Graphics.FromImage(image))
+                {
+                    ControlPaint.DrawCaptionButton(g, new Rectangle(Point.Empty, image.Size), (CaptionButton)buttonToUse, ButtonState.Flat);
+                    g.DrawRectangle(SystemPens.Control, 0, 0, image.Width - 1, image.Height - 1);
+                }
+
+                image.MakeTransparent(SystemColors.Control);
+                return image;
+            }
+
             return null;
         }
 
@@ -943,18 +930,17 @@ namespace System.Windows.Forms
                     // use PostMessage instead of SendMessage so that the DefWndProc can appropriately handle
                     // the system message... if we use SendMessage the dismissal of our window
                     // breaks things like the modal sizing loop.
-                    UnsafeNativeMethods.PostMessage(new HandleRef(this, targetWindowHandle), WindowMessages.WM_SYSCOMMAND, nativeMenuCommandID, 0);
+                    User32.PostMessageW(new HandleRef(this, targetWindowHandle), User32.WM.SYSCOMMAND, (IntPtr)nativeMenuCommandID);
                 }
                 else
                 {
                     // These are user added items like ".Net Window..."
 
                     // be consistent with sending a WM_SYSCOMMAND, use POST not SEND.
-                    UnsafeNativeMethods.PostMessage(new HandleRef(this, targetWindowHandle), WindowMessages.WM_COMMAND, nativeMenuCommandID, 0);
+                    User32.PostMessageW(new HandleRef(this, targetWindowHandle), User32.WM.COMMAND, (IntPtr)nativeMenuCommandID);
                 }
                 Invalidate();
             }
-
         }
 
         /// <summary>
@@ -1000,13 +986,12 @@ namespace System.Windows.Forms
             ClearShortcutCache();
             base.OnFontChanged(e);
         }
-        /// <devdoc/>
+
         internal void OnMenuAutoExpand()
         {
             ShowDropDown();
         }
 
-        /// <devdoc/>
         protected override void OnMouseDown(MouseEventArgs e)
         {
             // Opening should happen on mouse down
@@ -1015,7 +1000,6 @@ namespace System.Windows.Forms
             Debug.WriteLineIf(ToolStrip.MenuAutoExpandDebug.TraceVerbose, "[ToolStripMenuItem.OnMouseDown] MenuTimer.Cancel called");
             MenuTimer.Cancel(this);
             OnMouseButtonStateChange(e, /*isMouseDown=*/true);
-
         }
 
         protected override void OnMouseUp(MouseEventArgs e)
@@ -1044,14 +1028,12 @@ namespace System.Windows.Forms
             if (e.Button == MouseButtons.Left ||
               (e.Button == MouseButtons.Right && SupportsRightClick))
             {
-
                 if (isMouseDown && showDropDown)
                 {
                     // opening should happen on mouse down.
                     Debug.Assert(ParentInternal != null, "Parent is null here, not going to get accurate ID");
                     openMouseId = (ParentInternal == null) ? (byte)0 : ParentInternal.GetMouseId();
                     ShowDropDown(/*mousePush =*/true);
-
                 }
                 else if (!isMouseDown && !showDropDown)
                 {
@@ -1066,18 +1048,15 @@ namespace System.Windows.Forms
                         ToolStripManager.ModalMenuFilter.CloseActiveDropDown(DropDown, ToolStripDropDownCloseReason.AppClicked);
                         Select();
                     }
-
                 }
-
             }
         }
 
-        /// <devdoc/>
         protected override void OnMouseEnter(EventArgs e)
         {
             Debug.Assert(ParentInternal != null, "Why is parent null");
 
-            // If we are in a submenu pop down the submenu.		
+            // If we are in a submenu pop down the submenu.
             if (ParentInternal != null && ParentInternal.MenuAutoExpand && Selected)
             {
                 Debug.WriteLineIf(ToolStripItem.MouseDebugging.TraceVerbose, "received mouse enter - calling drop down");
@@ -1086,12 +1065,10 @@ namespace System.Windows.Forms
 
                 MenuTimer.Cancel(this);
                 MenuTimer.Start(this);
-
             }
             base.OnMouseEnter(e);
         }
 
-        /// <devdoc/>
         protected override void OnMouseLeave(EventArgs e)
         {
             Debug.WriteLineIf(ToolStrip.MenuAutoExpandDebug.TraceVerbose, "[ToolStripMenuItem.OnMouseLeave] MenuTimer.Cancel called");
@@ -1127,7 +1104,6 @@ namespace System.Windows.Forms
             base.OnOwnerChanged(e);
         }
 
-        /// <devdoc/>
         protected override void OnPaint(PaintEventArgs e)
         {
             if (Owner != null)
@@ -1157,7 +1133,6 @@ namespace System.Windows.Forms
 
                 if (InternalLayout is ToolStripMenuItemInternalLayout menuItemInternalLayout && menuItemInternalLayout.UseMenuLayout)
                 {
-
                     // Support for special DropDownMenu layout
 #if DEBUG_PAINT
                         g.DrawRectangle(Pens.Green, menuItemInternalLayout.TextRectangle);
@@ -1181,7 +1156,6 @@ namespace System.Windows.Forms
 
                     if ((DisplayStyle & ToolStripItemDisplayStyle.Text) == ToolStripItemDisplayStyle.Text)
                     {
-
                         // render text AND shortcut
                         renderer.DrawItemText(new ToolStripItemTextRenderEventArgs(g, this, Text, InternalLayout.TextRectangle, textColor, Font, (rightToLeft) ? ContentAlignment.MiddleRight : ContentAlignment.MiddleLeft));
                         bool showShortCut = ShowShortcutKeys;
@@ -1198,7 +1172,6 @@ namespace System.Windows.Forms
 
                     if (HasDropDownItems)
                     {
-
                         ArrowDirection arrowDir = (rightToLeft) ? ArrowDirection.Left : ArrowDirection.Right;
                         Color arrowColor = (Selected || Pressed) ? SystemColors.HighlightText : SystemColors.MenuText;
                         arrowColor = (Enabled) ? arrowColor : SystemColors.ControlDark;
@@ -1209,11 +1182,9 @@ namespace System.Windows.Forms
                     {
                         renderer.DrawItemImage(new ToolStripItemImageRenderEventArgs(g, this, InternalLayout.ImageRectangle));
                     }
-
                 }
                 else
                 {
-
                     // Toplevel item support, menu items hosted on a plain ToolStrip dropdown
                     if ((DisplayStyle & ToolStripItemDisplayStyle.Text) == ToolStripItemDisplayStyle.Text)
                     {
@@ -1225,9 +1196,7 @@ namespace System.Windows.Forms
                         renderer.DrawItemImage(new ToolStripItemImageRenderEventArgs(g, this, InternalLayout.ImageRectangle));
                     }
                 }
-
             }
-
         }
 
         /// <summary>
@@ -1398,7 +1367,6 @@ namespace System.Windows.Forms
             // since MenuShowDelay is registry tweakable we've gotta make sure we've got some sort
             // of interval
             slowShow = Math.Max(quickShow, SystemInformation.MenuShowDelay);
-
         }
         // the current item to autoexpand.
         private ToolStripMenuItem CurrentItem
@@ -1465,7 +1433,6 @@ namespace System.Windows.Forms
             // set up the current item to be the toItem so it will be auto expanded when complete.
             CurrentItem = toItem;
             InTransition = true;
-
         }
 
         public void Cancel()
@@ -1475,11 +1442,10 @@ namespace System.Windows.Forms
                 return;
             }
             CancelCore();
-
         }
-        ///<summary> cancels if and only if this item was the one that
+        /// <summary> cancels if and only if this item was the one that
         ///  requested the timer
-        ///</summary>
+        /// </summary>
         public void Cancel(ToolStripMenuItem item)
         {
             if (InTransition)
@@ -1511,9 +1477,7 @@ namespace System.Windows.Forms
                 {
                     lastSelected.HideDropDown();
                 }
-
             }
-
         }
         internal void HandleToolStripMouseLeave(ToolStrip toolStrip)
         {
@@ -1530,7 +1494,6 @@ namespace System.Windows.Forms
             }
             else
             {
-
                 // because we've split up selected/pressed, we need to make sure
                 // that onmouseleave we make sure there's a selected menu item.
                 if (toolStrip.IsDropDown && toolStrip.ActiveDropDowns.Count > 0)
@@ -1559,7 +1522,6 @@ namespace System.Windows.Forms
                 CurrentItem.OnMenuAutoExpand();
             }
         }
-
     }
 
     internal class ToolStripMenuItemInternalLayout : ToolStripItemInternalLayout
@@ -1657,7 +1619,6 @@ namespace System.Windows.Forms
                 {
                     if (ownerItem.Owner is ToolStripDropDownMenu menu)
                     {
-
                         // since menuItem.Padding isnt taken into consideration, we've got to recalc the centering of
                         // the image rect per item
                         Rectangle imageRect = menu.ImageRectangle;
@@ -1714,5 +1675,4 @@ namespace System.Windows.Forms
             return base.GetPreferredSize(constrainingSize);
         }
     }
-
 }

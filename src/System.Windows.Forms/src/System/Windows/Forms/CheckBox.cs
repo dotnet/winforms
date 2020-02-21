@@ -2,12 +2,15 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.ComponentModel;
 using System.Drawing;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.ButtonInternal;
 using System.Windows.Forms.Layout;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -65,7 +68,6 @@ namespace System.Windows.Forms
 
             autoCheck = true;
             TextAlign = ContentAlignment.MiddleLeft;
-
         }
 
         private bool AccObjDoDefaultAction
@@ -254,14 +256,13 @@ namespace System.Windows.Forms
 
                 if (checkState != value)
                 {
-
                     bool oldChecked = Checked;
 
                     checkState = value;
 
                     if (IsHandleCreated)
                     {
-                        SendMessage(NativeMethods.BM_SETCHECK, (int)checkState, 0);
+                        User32.SendMessageW(this, (User32.WM)User32.BM.SETCHECK, (IntPtr)checkState);
                     }
 
                     if (oldChecked != Checked)
@@ -299,17 +300,17 @@ namespace System.Windows.Forms
             get
             {
                 CreateParams cp = base.CreateParams;
-                cp.ClassName = "BUTTON";
+                cp.ClassName = ComCtl32.WindowClasses.WC_BUTTON;
                 if (OwnerDraw)
                 {
-                    cp.Style |= NativeMethods.BS_OWNERDRAW;
+                    cp.Style |= (int)User32.BS.OWNERDRAW;
                 }
                 else
                 {
-                    cp.Style |= NativeMethods.BS_3STATE;
+                    cp.Style |= (int)User32.BS.THREE_STATE;
                     if (Appearance == Appearance.Button)
                     {
-                        cp.Style |= NativeMethods.BS_PUSHLIKE;
+                        cp.Style |= (int)User32.BS.PUSHLIKE;
                     }
 
                     // Determine the alignment of the check box
@@ -317,9 +318,8 @@ namespace System.Windows.Forms
                     ContentAlignment align = RtlTranslateContent(CheckAlign);
                     if ((int)(align & anyRight) != 0)
                     {
-                        cp.Style |= NativeMethods.BS_RIGHTBUTTON;
+                        cp.Style |= (int)User32.BS.RIGHTBUTTON;
                     }
-
                 }
 
                 return cp;
@@ -517,7 +517,7 @@ namespace System.Windows.Forms
             {
                 AccessibilityNotifyClients(AccessibleEvents.SystemCaptureEnd, -1);
             }
-            
+
             ((EventHandler)Events[EVENT_CHECKEDCHANGED])?.Invoke(this, e);
         }
 
@@ -530,7 +530,7 @@ namespace System.Windows.Forms
             {
                 Refresh();
             }
-            
+
             ((EventHandler)Events[EVENT_CHECKSTATECHANGED])?.Invoke(this, e);
         }
 
@@ -583,33 +583,10 @@ namespace System.Windows.Forms
         {
             base.OnHandleCreated(e);
 
-            // Since this is a protected override...
-            // this can be directly called in by a overriden class..
-            // and the Handle need not be created...
-            // So Check for the handle
             if (IsHandleCreated)
             {
-                SendMessage(NativeMethods.BM_SETCHECK, (int)checkState, 0);
+                User32.SendMessageW(this, (User32.WM)User32.BM.SETCHECK, (IntPtr)checkState);
             }
-        }
-
-        /// <summary>
-        ///  We override this to ensure that press '+' or '=' checks the box,
-        ///  while pressing '-' unchecks the box
-        /// </summary>
-        protected override void OnKeyDown(KeyEventArgs e)
-        {
-            /*
-            if (Enabled) {
-                if (e.KeyCode == Keys.Oemplus || e.KeyCode == Keys.Add) {
-                    CheckState = CheckState.Checked;
-                }
-                if (e.KeyCode == Keys.OemMinus || e.KeyCode == Keys.Subtract) {
-                    CheckState = CheckState.Unchecked;
-                }
-            }
-            */
-            base.OnKeyDown(e);
         }
 
         /// <summary>
@@ -623,7 +600,7 @@ namespace System.Windows.Forms
                 if (base.MouseIsDown)
                 {
                     Point pt = PointToScreen(new Point(mevent.X, mevent.Y));
-                    if (UnsafeNativeMethods.WindowFromPoint(pt) == Handle)
+                    if (User32.WindowFromPoint(pt) == Handle)
                     {
                         //Paint in raised state...
                         ResetFlagsandPaint();
@@ -672,7 +649,6 @@ namespace System.Windows.Forms
                     {
                         OnClick(EventArgs.Empty);
                     }
-
                 }
                 return true;
             }
@@ -768,9 +744,7 @@ namespace System.Windows.Forms
                         cb.AccObjDoDefaultAction = false;
                     }
                 }
-
             }
         }
     }
 }
-

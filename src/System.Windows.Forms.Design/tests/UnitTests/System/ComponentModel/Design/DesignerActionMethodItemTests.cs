@@ -11,7 +11,7 @@ using Xunit;
 
 namespace System.ComponentModel.Design.Tests
 {
-    public class DesignerActionMethodItemTests
+    public class DesignerActionMethodItemTests : IClassFixture<ThreadExceptionFixture>
     {
         public static IEnumerable<object[]> Ctor_DesignerActionList_String_String_String_String_Bool_TestData()
         {

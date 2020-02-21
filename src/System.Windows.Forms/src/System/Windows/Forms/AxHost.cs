@@ -1,6 +1,8 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
+
+#nullable disable
 
 using System.Collections;
 using System.Collections.Generic;
@@ -89,7 +91,7 @@ namespace System.Windows.Forms
         private const int STG_STREAMINIT = 1;
         private const int STG_STORAGE = 2;
 
-        private readonly User32.WindowMessage REGMSG_MSG = User32.RegisterWindowMessageW(Application.WindowMessagesVersion + "_subclassCheck");
+        private readonly User32.WM REGMSG_MSG = User32.RegisterWindowMessageW(Application.WindowMessagesVersion + "_subclassCheck");
         private const int REGMSG_RETVAL = 123;
 
         private static int logPixelsX = -1;
@@ -101,7 +103,7 @@ namespace System.Windows.Forms
         private static Guid ipicture_Guid = typeof(Ole32.IPicture).GUID;
         private static Guid ipictureDisp_Guid = typeof(Ole32.IPictureDisp).GUID;
         private static Guid ivbformat_Guid = typeof(Ole32.IVBFormat).GUID;
-        private static Guid ioleobject_Guid = typeof(UnsafeNativeMethods.IOleObject).GUID;
+        private static Guid ioleobject_Guid = typeof(Ole32.IOleObject).GUID;
         private static Guid dataSource_Guid = new Guid("{7C0FFAB3-CD84-11D0-949A-00A0C91110ED}");
         private static Guid windowsMediaPlayer_Clsid = new Guid("{22d6f312-b0f6-11d0-94ab-0080c74c7e95}");
         private static Guid comctlImageCombo_Clsid = new Guid("{a98a24c0-b06f-3684-8c12-c52ae341e0bc}");
@@ -180,13 +182,13 @@ namespace System.Windows.Forms
         //
         private object instance;
         private Ole32.IOleInPlaceObject iOleInPlaceObject;
-        private UnsafeNativeMethods.IOleObject iOleObject;
+        private Ole32.IOleObject iOleObject;
         private Ole32.IOleControl iOleControl;
         private Ole32.IOleInPlaceActiveObject iOleInPlaceActiveObject;
         private Ole32.IOleInPlaceActiveObject iOleInPlaceActiveObjectExternal;
         private Ole32.IPerPropertyBrowsing iPerPropertyBrowsing;
         private VSSDK.ICategorizeProperties iCategorizeProperties;
-        private UnsafeNativeMethods.IPersistPropertyBag iPersistPropBag;
+        private Ole32.IPersistPropertyBag iPersistPropBag;
         private Ole32.IPersistStream iPersistStream;
         private Ole32.IPersistStreamInit iPersistStreamInit;
         private Ole32.IPersistStorage iPersistStorage;
@@ -1416,13 +1418,13 @@ namespace System.Windows.Forms
             }
 
             IntPtr handle = Handle;
-            IntPtr currentWndproc = UnsafeNativeMethods.GetWindowLong(new HandleRef(this, handle), NativeMethods.GWL_WNDPROC);
+            IntPtr currentWndproc = User32.GetWindowLong(new HandleRef(this, handle), User32.GWL.WNDPROC);
             if (currentWndproc == wndprocAddr)
             {
                 return true;
             }
 
-            if (unchecked((int)(long)SendMessage((int)REGMSG_MSG, 0, 0)) == (int)REGMSG_RETVAL)
+            if (unchecked((int)(long)User32.SendMessageW(this, (User32.WM)REGMSG_MSG)) == (int)REGMSG_RETVAL)
             {
                 wndprocAddr = currentWndproc;
                 return true;
@@ -1432,7 +1434,7 @@ namespace System.Windows.Forms
             // we need to resubclass outselves now...
             Debug.Assert(!OwnWindow(), "why are we here if we own our window?");
             WindowReleaseHandle();
-            UnsafeNativeMethods.SetWindowLong(new HandleRef(this, handle), NativeMethods.GWL_WNDPROC, new HandleRef(this, currentWndproc));
+            User32.SetWindowLong(new HandleRef(this, handle), User32.GWL.WNDPROC, new HandleRef(this, currentWndproc));
             WindowAssignHandle(handle, axState[assignUniqueID]);
             InformOfNewHandle();
             axState[manualUpdate] = true;
@@ -1597,7 +1599,6 @@ namespace System.Windows.Forms
                                 }
                             }
 
-                            //Debug.Assert(GetOcState() == OC_INPLACE, " failed transition");
                             if (GetOcState() < OC_INPLACE)
                             {
                                 SetOcState(OC_INPLACE);
@@ -1963,7 +1964,7 @@ namespace System.Windows.Forms
                         // A bit of ugliness here (a bit?  more like a bucket...)
                         // The message we are faking is a WM_SYSKEYDOWN w/ the right alt key setting...
                         hwnd = (ContainingControl == null) ? IntPtr.Zero : ContainingControl.Handle,
-                        message = User32.WindowMessage.WM_SYSKEYDOWN,
+                        message = User32.WM.SYSKEYDOWN,
                         wParam = (IntPtr)char.ToUpper(charCode, CultureInfo.CurrentCulture),
                         lParam = (IntPtr)0x20180001,
                         time = Kernel32.GetTickCount()
@@ -2510,9 +2511,6 @@ namespace System.Windows.Forms
         private void CreateInstance()
         {
             Debug.Assert(instance == null, "instance must be null");
-            //Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "before created "+Windows.GetCurrentThreadId());
-            //Debug.WriteStackTraceIf("AxHTrace");
-            //checkThreadingModel();
             try
             {
                 instance = CreateInstanceCore(clsid);
@@ -3057,10 +3055,10 @@ namespace System.Windows.Forms
                     }
                     return;
                 }
-                if (instance is UnsafeNativeMethods.IPersistPropertyBag)
+                if (instance is Ole32.IPersistPropertyBag)
                 {
                     Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, this + " supports IPersistPropertyBag.");
-                    iPersistPropBag = (UnsafeNativeMethods.IPersistPropertyBag)instance;
+                    iPersistPropBag = (Ole32.IPersistPropertyBag)instance;
                     try
                     {
                         iPersistPropBag.InitNew();
@@ -3130,7 +3128,7 @@ namespace System.Windows.Forms
             {
                 try
                 {
-                    iPersistPropBag = (UnsafeNativeMethods.IPersistPropertyBag)instance;
+                    iPersistPropBag = (Ole32.IPersistPropertyBag)instance;
                     DepersistFromIPropertyBag(ocxState.GetPropBag());
                 }
                 catch (Exception e)
@@ -3408,34 +3406,34 @@ namespace System.Windows.Forms
             }
 #pragma warning restore 162, 429
 
-            switch (m.Msg)
+            switch ((User32.WM)m.Msg)
             {
                 // Things we explicitly ignore and pass to the ocx's windproc
-                case WindowMessages.WM_ERASEBKGND:
+                case User32.WM.ERASEBKGND:
 
-                case WindowMessages.WM_REFLECT + WindowMessages.WM_NOTIFYFORMAT:
+                case User32.WM.REFLECT | User32.WM.NOTIFYFORMAT:
 
-                case WindowMessages.WM_SETCURSOR:
-                case WindowMessages.WM_SYSCOLORCHANGE:
+                case User32.WM.SETCURSOR:
+                case User32.WM.SYSCOLORCHANGE:
 
                 // Some of the MSComCtl controls respond to this message
                 // to do some custom painting. So, we should just pass this message
                 // through.
                 //
-                case WindowMessages.WM_DRAWITEM:
+                case User32.WM.DRAWITEM:
 
-                case WindowMessages.WM_LBUTTONDBLCLK:
-                case WindowMessages.WM_LBUTTONUP:
-                case WindowMessages.WM_MBUTTONDBLCLK:
-                case WindowMessages.WM_MBUTTONUP:
-                case WindowMessages.WM_RBUTTONDBLCLK:
-                case WindowMessages.WM_RBUTTONUP:
+                case User32.WM.LBUTTONDBLCLK:
+                case User32.WM.LBUTTONUP:
+                case User32.WM.MBUTTONDBLCLK:
+                case User32.WM.MBUTTONUP:
+                case User32.WM.RBUTTONDBLCLK:
+                case User32.WM.RBUTTONUP:
                     DefWndProc(ref m);
                     break;
 
-                case WindowMessages.WM_LBUTTONDOWN:
-                case WindowMessages.WM_MBUTTONDOWN:
-                case WindowMessages.WM_RBUTTONDOWN:
+                case User32.WM.LBUTTONDOWN:
+                case User32.WM.MBUTTONDOWN:
+                case User32.WM.RBUTTONDOWN:
                     if (IsUserMode())
                     {
                         Focus();
@@ -3443,7 +3441,7 @@ namespace System.Windows.Forms
                     DefWndProc(ref m);
                     break;
 
-                case WindowMessages.WM_KILLFOCUS:
+                case User32.WM.KILLFOCUS:
                     {
                         hwndFocus = m.WParam;
                         try
@@ -3457,18 +3455,18 @@ namespace System.Windows.Forms
                         break;
                     }
 
-                case WindowMessages.WM_COMMAND:
+                case User32.WM.COMMAND:
                     if (!ReflectMessage(m.LParam, ref m))
                     {
                         DefWndProc(ref m);
                     }
                     break;
 
-                case WindowMessages.WM_CONTEXTMENU:
+                case User32.WM.CONTEXTMENU:
                     DefWndProc(ref m);
                     break;
 
-                case WindowMessages.WM_DESTROY:
+                case User32.WM.DESTROY:
 #if DEBUG
                     if (!OwnWindow())
                     {
@@ -3503,13 +3501,13 @@ namespace System.Windows.Forms
                     }
 
                     break;
-                case WindowMessages.WM_HELP:
+                case User32.WM.HELP:
                     // We want to both fire the event, and let the ocx have the message...
                     base.WndProc(ref m);
                     DefWndProc(ref m);
                     break;
 
-                case WindowMessages.WM_KEYUP:
+                case User32.WM.KEYUP:
                     if (axState[processingKeyUp])
                     {
                         break;
@@ -3530,7 +3528,7 @@ namespace System.Windows.Forms
 
                     break;
 
-                case WindowMessages.WM_NCDESTROY:
+                case User32.WM.NCDESTROY:
 #if DEBUG
                     if (!OwnWindow())
                     {
@@ -3559,8 +3557,8 @@ namespace System.Windows.Forms
             DetachWindow();
             if (handle != IntPtr.Zero)
             {
-                IntPtr wndProc = UnsafeNativeMethods.GetWindowLong(new HandleRef(this, handle), NativeMethods.GWL_WNDPROC);
-                m.Result = User32.CallWindowProcW(wndProc, handle, m.WindowMessage(), m.WParam, m.LParam);
+                IntPtr wndProc = User32.GetWindowLong(new HandleRef(this, handle), User32.GWL.WNDPROC);
+                m.Result = User32.CallWindowProcW(wndProc, handle, (User32.WM)m.Msg, m.WParam, m.LParam);
             }
         }
 
@@ -3576,7 +3574,7 @@ namespace System.Windows.Forms
         private void InformOfNewHandle()
         {
             Debug.Assert(IsHandleCreated, "we got to have a handle to be here...");
-            wndprocAddr = UnsafeNativeMethods.GetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_WNDPROC);
+            wndprocAddr = User32.GetWindowLong(this, User32.GWL.WNDPROC);
         }
 
         private void AttachWindow(IntPtr hwnd)
@@ -3688,7 +3686,7 @@ namespace System.Windows.Forms
             qaContainer.dwAmbientFlags = Ole32.QACONTAINERFLAGS.AUTOCLIP | Ole32.QACONTAINERFLAGS.MESSAGEREFLECT | Ole32.QACONTAINERFLAGS.SUPPORTSMNEMONICS;
             if (IsUserMode())
             {
-                // In design mode we'd ideally set QACONTAINER_UIDEAD on dwAmbientFlags 
+                // In design mode we'd ideally set QACONTAINER_UIDEAD on dwAmbientFlags
                 // so controls don't take keyboard input, but MFC controls return NOWHERE on
                 // NCHITTEST, which messes up the designer.
                 qaContainer.dwAmbientFlags |= Ole32.QACONTAINERFLAGS.USERMODE;
@@ -3914,7 +3912,7 @@ namespace System.Windows.Forms
             return iOleInPlaceActiveObject;
         }
 
-        private UnsafeNativeMethods.IOleObject GetOleObject() => iOleObject ??= (UnsafeNativeMethods.IOleObject)instance;
+        private Ole32.IOleObject GetOleObject() => iOleObject ??= (Ole32.IOleObject)instance;
 
         private Ole32.IOleInPlaceObject GetInPlaceObject()
         {
@@ -3924,7 +3922,7 @@ namespace System.Windows.Forms
                 iOleInPlaceObject = (Ole32.IOleInPlaceObject)instance;
 
 #if DEBUG
-                if (iOleInPlaceObject is UnsafeNativeMethods.IOleInPlaceObjectWindowless)
+                if (iOleInPlaceObject is Ole32.IOleInPlaceObjectWindowless)
                 {
                     Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, GetType().FullName + " Can also be a Windowless control.");
                 }
@@ -4031,7 +4029,7 @@ namespace System.Windows.Forms
                 return null;
             }
 
-            uint hPal = default;
+            int hPal = default;
             Ole32.IPicture pict = (Ole32.IPicture)picture;
             Ole32.PICTYPE type = (Ole32.PICTYPE)pict.Type;
             if (type == Ole32.PICTYPE.BITMAP)
@@ -4059,7 +4057,7 @@ namespace System.Windows.Forms
                 return null;
             }
 
-            uint hPal = default;
+            int hPal = default;
             Ole32.IPictureDisp pict = (Ole32.IPictureDisp)picture;
             Ole32.PICTYPE type = (Ole32.PICTYPE)pict.Type;
             if (type == Ole32.PICTYPE.BITMAP)
@@ -4079,9 +4077,9 @@ namespace System.Windows.Forms
         }
 
         private static Image GetPictureFromParams(
-            uint handle,
+            int handle,
             Ole32.PICTYPE type,
-            uint paletteHandle,
+            int paletteHandle,
             int width,
             int height)
         {

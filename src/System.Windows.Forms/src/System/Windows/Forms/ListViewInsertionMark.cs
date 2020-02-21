@@ -2,10 +2,13 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
+using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
-using System.Diagnostics;
 using static Interop;
+using static Interop.ComCtl32;
 
 namespace System.Windows.Forms
 {
@@ -27,11 +30,10 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Specifies whether the insertion mark appears
-    	///  after the item - otherwise it appears
-    	///  before the item (the default).
+        ///  after the item - otherwise it appears
+        ///  before the item (the default).
         /// </summary>
-        ///
-    	public bool AppearsAfterItem
+        public bool AppearsAfterItem
         {
             get
             {
@@ -54,13 +56,12 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Returns bounds of the insertion-mark.
         /// </summary>
-        ///
         public Rectangle Bounds
         {
             get
             {
-                RECT rect = new RECT();
-                listView.SendMessage((int)LVM.GETINSERTMARKRECT, 0, ref rect);
+                var rect = new RECT();
+                User32.SendMessageW(listView, (User32.WM)LVM.GETINSERTMARKRECT, IntPtr.Zero, ref rect);
                 return Rectangle.FromLTRB(rect.left, rect.top, rect.right, rect.bottom);
             }
         }
@@ -68,14 +69,13 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The color of the insertion-mark.
         /// </summary>
-        ///
         public Color Color
         {
             get
             {
                 if (color.IsEmpty)
                 {
-                    color = COLORREF.COLORREFToColor((int)listView.SendMessage((int)LVM.GETINSERTMARKCOLOR, 0, 0));
+                    color = COLORREF.COLORREFToColor((int)User32.SendMessageW(listView, (User32.WM)LVM.GETINSERTMARKCOLOR));
                 }
                 return color;
             }
@@ -86,7 +86,7 @@ namespace System.Windows.Forms
                     color = value;
                     if (listView.IsHandleCreated)
                     {
-                        listView.SendMessage((int)LVM.SETINSERTMARKCOLOR, 0, COLORREF.ColorToCOLORREF(color));
+                        User32.SendMessageW(listView, (User32.WM)LVM.SETINSERTMARKCOLOR, IntPtr.Zero, PARAM.FromColor(color));
                     }
                 }
             }
@@ -95,7 +95,6 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Item next to which the insertion-mark appears.
         /// </summary>
-        ///
         public int Index
         {
             get
@@ -119,27 +118,31 @@ namespace System.Windows.Forms
         ///  Performs a hit-test at the specified insertion point
         ///  and returns the closest item.
         /// </summary>
-        ///
-        public int NearestIndex(Point pt)
+        public unsafe int NearestIndex(Point pt)
         {
-            NativeMethods.LVINSERTMARK lvInsertMark = new NativeMethods.LVINSERTMARK();
-            UnsafeNativeMethods.SendMessage(new HandleRef(listView, listView.Handle), (int)LVM.INSERTMARKHITTEST, ref pt, lvInsertMark);
+            var lvInsertMark = new LVINSERTMARK
+            {
+                cbSize = (uint)sizeof(LVINSERTMARK)
+            };
+            User32.SendMessageW(listView, (User32.WM)LVM.INSERTMARKHITTEST, (IntPtr)(&pt), ref lvInsertMark);
+
             return lvInsertMark.iItem;
         }
 
-        internal void UpdateListView()
+        internal unsafe void UpdateListView()
         {
             Debug.Assert(listView.IsHandleCreated, "ApplySavedState Precondition: List-view handle must be created");
-            NativeMethods.LVINSERTMARK lvInsertMark = new NativeMethods.LVINSERTMARK
+            var lvInsertMark = new LVINSERTMARK
             {
-                dwFlags = appearsAfterItem ? NativeMethods.LVIM_AFTER : 0,
+                cbSize = (uint)sizeof(LVINSERTMARK),
+                dwFlags = appearsAfterItem ? LVIM.AFTER : LVIM.BEFORE,
                 iItem = index
             };
-            UnsafeNativeMethods.SendMessage(new HandleRef(listView, listView.Handle), (int)LVM.SETINSERTMARK, 0, lvInsertMark);
+            User32.SendMessageW(listView, (User32.WM)LVM.SETINSERTMARK, IntPtr.Zero, ref lvInsertMark);
 
             if (!color.IsEmpty)
             {
-                listView.SendMessage((int)LVM.SETINSERTMARKCOLOR, 0, COLORREF.ColorToCOLORREF(color));
+                User32.SendMessageW(listView, (User32.WM)LVM.SETINSERTMARKCOLOR, IntPtr.Zero, PARAM.FromColor(color));
             }
         }
     }

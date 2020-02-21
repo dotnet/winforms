@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.ComponentModel;
 using System.Drawing;
 using System.Globalization;
@@ -274,7 +276,6 @@ namespace System.Windows.Forms
 
             set
             {
-
                 if (!(value == DockStyle.Top || value == DockStyle.Bottom || value == DockStyle.Left || value == DockStyle.Right))
                 {
                     throw new ArgumentException(SR.SplitterInvalidDockEnum);
@@ -430,8 +431,6 @@ namespace System.Windows.Forms
                     value = minSize;
                 }
 
-                // if (value == splitSize) return;  -- do we need this check?
-
                 splitSize = value;
                 DrawSplitBar(DRAW_END);
 
@@ -462,7 +461,6 @@ namespace System.Windows.Forms
                 spd.target.Bounds = bounds;
                 Application.DoEvents();
                 OnSplitterMoved(new SplitterEventArgs(Left, Top, (Left + bounds.Width / 2), (Top + bounds.Height / 2)));
-
             }
         }
 
@@ -736,7 +734,7 @@ namespace System.Windows.Forms
             IntPtr dc = User32.GetDCEx(ParentInternal, IntPtr.Zero, User32.DCX.CACHE | User32.DCX.LOCKWINDOWUPDATE);
             IntPtr halftone = ControlPaint.CreateHalftoneHBRUSH();
             IntPtr saveBrush = Gdi32.SelectObject(dc, halftone);
-            SafeNativeMethods.PatBlt(new HandleRef(ParentInternal, dc), r.X, r.Y, r.Width, r.Height, NativeMethods.PATINVERT);
+            Gdi32.PatBlt(new HandleRef(ParentInternal, dc), r.X, r.Y, r.Width, r.Height, Gdi32.ROP.PATINVERT);
             Gdi32.SelectObject(dc, saveBrush);
             Gdi32.DeleteObject(halftone);
             User32.ReleaseDC(new HandleRef(ParentInternal, ParentInternal.Handle), dc);
@@ -1033,9 +1031,9 @@ namespace System.Windows.Forms
             /// </summary>
             public bool PreFilterMessage(ref Message m)
             {
-                if (m.Msg >= WindowMessages.WM_KEYFIRST && m.Msg <= WindowMessages.WM_KEYLAST)
+                if (m.Msg >= (int)User32.WM.KEYFIRST && m.Msg <= (int)User32.WM.KEYLAST)
                 {
-                    if (m.Msg == WindowMessages.WM_KEYDOWN && unchecked((int)(long)m.WParam) == (int)Keys.Escape)
+                    if (m.Msg == (int)User32.WM.KEYDOWN && unchecked((int)(long)m.WParam) == (int)Keys.Escape)
                     {
                         owner.SplitEnd(false);
                     }
@@ -1046,4 +1044,3 @@ namespace System.Windows.Forms
         }
     }
 }
-

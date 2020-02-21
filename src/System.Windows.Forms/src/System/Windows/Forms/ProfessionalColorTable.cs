@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms.VisualStyles;
@@ -549,15 +551,13 @@ namespace System.Windows.Forms
             {
                 return graphics.GetNearestColor(Color.FromArgb(r, g, b));
             }
-
         }
 
         private void InitCommonColors(ref Dictionary<KnownColors, Color> rgbTable)
         {
-            ///  we need to calculate our own alpha blended color based on the Higlight and Window
-            ///  colors on the system.  Since terminalserver + alphablending doesnt work we cant just do a
-            ///  FromARGB here.  So we have a simple function which calculates the blending for us.
-
+            // We need to calculate our own alpha blended color based on the Highlight and Window
+            // colors on the system. Since terminalserver + alphablending doesnt work we cant just do a
+            // FromARGB here. So we have a simple function which calculates the blending for us.
             if (!DisplayInformation.LowResolution)
             {
                 using (Graphics g = WindowsFormsUtils.CreateMeasurementGraphics())
@@ -573,7 +573,6 @@ namespace System.Windows.Forms
                 rgbTable[ProfessionalColorTable.KnownColors.ButtonCheckedHighlight] = SystemColors.ControlLight;
                 rgbTable[ProfessionalColorTable.KnownColors.ButtonSelectedHighlight] = SystemColors.ControlLight;
             }
-
         }
         internal void InitSystemColors(ref Dictionary<KnownColors, Color> rgbTable)
         {
@@ -615,7 +614,6 @@ namespace System.Windows.Forms
 
                 msocbvcrCBCtlBkgdMouseOver = GetAlphaBlendedColorHighRes(null, highlight, window, 30);
                 msocbvcrCBCtlBkgdMouseDown = GetAlphaBlendedColorHighRes(null, highlight, window, 50);
-
             }
 
             if (lowResolution || highContrast)
@@ -647,7 +645,6 @@ namespace System.Windows.Forms
                 rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBMenuBdrOuter] = GetAlphaBlendedColorHighRes(null, controlText, buttonShadow, 20);
                 rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBMenuBkgd] = GetAlphaBlendedColorHighRes(null, buttonFace, window, 143);
                 rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBSplitterLine] = GetAlphaBlendedColorHighRes(null, buttonShadow, window, 70);
-
             }
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBCtlBkgdSelected] = (lowResolution) ? SystemColors.ControlLight : highlight;
 
@@ -879,7 +876,6 @@ namespace System.Windows.Forms
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrWPTitleTextActive] = highlightText;
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrWPTitleTextInactive] = controlText;
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrXLFormulaBarBkgd] = buttonFace;
-
         }
 
         internal void InitOliveLunaColors(ref Dictionary<KnownColors, Color> rgbTable)
@@ -1582,7 +1578,6 @@ namespace System.Windows.Forms
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrPlacesBarBkgd] = Color.FromArgb(224, 223, 227); // msocbvcrPlacesBarBkgd
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrPubPrintDocScratchPageBkgd] = Color.FromArgb(152, 181, 226); // msocbvcrPubPrintDocScratchPageBkgd
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrPubWebDocScratchPageBkgd] = Color.FromArgb(193, 210, 238); // msocbvcrPubWebDocScratchPageBkgd
-
         }
 
         internal void InitThemedColors(ref Dictionary<KnownColors, Color> rgbTable)
@@ -1614,7 +1609,6 @@ namespace System.Windows.Forms
                     usingSystemColors = false;
                     initializedTable = true;
                 }
-
             }
             else if (string.Equals(aeroFileName, themeFileName, StringComparison.OrdinalIgnoreCase))
             {
@@ -1634,7 +1628,6 @@ namespace System.Windows.Forms
             }
             else if (string.Equals(royaleFileName, themeFileName, StringComparison.OrdinalIgnoreCase))
             {
-
                 // once we know it's royale (TabletPC/MCE) we know about two color scheme names
                 // which should do exactly the same thing
                 if (colorScheme == normalColorScheme || colorScheme == royaleColorScheme)
@@ -1643,7 +1636,6 @@ namespace System.Windows.Forms
                     usingSystemColors = false;
                     initializedTable = true;
                 }
-
             }
 
             if (!initializedTable)
@@ -1655,7 +1647,6 @@ namespace System.Windows.Forms
             }
 
             InitCommonColors(ref rgbTable);
-
         }
 
         internal void InitBlueLunaColors(ref Dictionary<KnownColors, Color> rgbTable)
@@ -2121,8 +2112,5 @@ namespace System.Windows.Forms
             ButtonCheckedHighlight,// not actually from MSO tables
             lastKnownColor = ButtonCheckedHighlight
         }
-
     }
-
 }
-

@@ -9,8 +9,8 @@ namespace System.Windows.Forms.VisualStyles
         None = 0,
         Size = 1,
         Dpi = 2,
-        //		TM_ENUM(0, GFST, NONE)
-        //		TM_ENUM(1, GFST, SIZE)
-        //		TM_ENUM(2, GFST, DPI)
+        //      TM_ENUM(0, GFST, NONE)
+        //      TM_ENUM(1, GFST, SIZE)
+        //      TM_ENUM(2, GFST, DPI)
     }
 }

@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
@@ -121,9 +123,9 @@ namespace System.Windows.Forms
             return !(component is Control control) || control.Created;
         }
 
-        // <summary>
+        /// <summary>
         ///  Instance-specific property equivalent to the static method above
-        // </summary>
+        /// </summary>
         internal bool ComponentCreated => IsComponentCreated(_control);
 
         private void FormLoaded(object sender, EventArgs e)
@@ -852,7 +854,7 @@ namespace System.Windows.Forms
             if (FormattingEnabled)
             {
                 // Raise the BindingComplete event, giving listeners a chance to process any
-                // errors that occured and decide whether the operation should be cancelled.
+                // errors that occurred and decide whether the operation should be cancelled.
                 BindingCompleteEventArgs args = CreateBindingCompleteEventArgs(BindingCompleteContext.DataSourceUpdate, lastException);
                 OnBindingComplete(args);
 
@@ -928,7 +930,7 @@ namespace System.Windows.Forms
 
             if (FormattingEnabled)
             {
-                // Raise the BindingComplete event, giving listeners a chance to process any errors that occured, and decide
+                // Raise the BindingComplete event, giving listeners a chance to process any errors that occurred, and decide
                 // whether the operation should be cancelled. But don't emit the event if we didn't actually update the control.
                 BindingCompleteEventArgs args = CreateBindingCompleteEventArgs(BindingCompleteContext.ControlUpdate, lastException);
                 OnBindingComplete(args);
@@ -1285,7 +1287,6 @@ namespace System.Windows.Forms
                     _bindingManager.IsBinding &&
                     !(_bindingManager is CurrencyManager))
                 {
-
                     _fieldInfo.RemoveValueChanged(_bindingManager.Current, new EventHandler(PropValueChanged));
                 }
 
@@ -1311,7 +1312,6 @@ namespace System.Windows.Forms
                     if (_fieldInfo != null && _bindingManager.IsBinding &&
                         !(_bindingManager is CurrencyManager))
                     {
-
                         _fieldInfo.AddValueChanged(_bindingManager.Current, new EventHandler(PropValueChanged));
                     }
                 }

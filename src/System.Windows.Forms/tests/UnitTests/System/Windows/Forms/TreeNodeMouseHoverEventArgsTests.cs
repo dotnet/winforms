@@ -7,7 +7,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class TreeNodeMouseHoverEventArgsTests
+    public class TreeNodeMouseHoverEventArgsTests : IClassFixture<ThreadExceptionFixture>
     {
         public static IEnumerable<object[]> Ctor_TreeNode_TestData()
         {

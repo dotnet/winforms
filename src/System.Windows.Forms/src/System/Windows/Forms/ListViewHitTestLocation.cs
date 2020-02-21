@@ -2,18 +2,20 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using static Interop.ComCtl32;
+
 namespace System.Windows.Forms
 {
     [Flags]
     public enum ListViewHitTestLocations
     {
-        None = NativeMethods.LVHT_NOWHERE,
+        None = (int)LVHT.NOWHERE,
         AboveClientArea = 0x0100,
-        BelowClientArea = NativeMethods.LVHT_BELOW,
-        LeftOfClientArea = NativeMethods.LVHT_LEFT,
-        RightOfClientArea = NativeMethods.LVHT_RIGHT,
-        Image = NativeMethods.LVHT_ONITEMICON,
+        BelowClientArea = (int)LVHT.BELOW,
+        LeftOfClientArea = (int)LVHT.TOLEFT,
+        RightOfClientArea = (int)LVHT.TORIGHT,
+        Image = (int)LVHT.ONITEMICON,
         StateImage = 0x0200,
-        Label = NativeMethods.LVHT_ONITEMLABEL
+        Label = (int)LVHT.ONITEMLABEL
     }
 }

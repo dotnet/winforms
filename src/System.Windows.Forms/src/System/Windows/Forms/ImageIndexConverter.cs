@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.ComponentModel;
 using System.Globalization;
 
@@ -13,7 +15,6 @@ namespace System.Windows.Forms
     /// </summary>
     public class ImageIndexConverter : Int32Converter
     {
-
         /// <summary>
         ///  Gets a value that indicates whether a <see langword="null" /> value is valid in
         ///  the <see cref="TypeConverter.StandardValuesCollection" /> collection.
@@ -82,12 +83,12 @@ namespace System.Windows.Forms
         /// </summary>
         /// <param name="context">
         ///  An <see cref="ITypeDescriptorContext" /> that provides a format context, which can be used to extract
-        ///  additional information about the environment this type converter is being invoked from. 
+        ///  additional information about the environment this type converter is being invoked from.
         ///  This parameter or properties of this parameter can be <see langword="null" />.
         /// </param>
         /// <returns>
-        ///  A collection that holds a standard set of valid index values. 
-        ///  If no image list is found, this collection will contain a single object with a value of -1. 
+        ///  A collection that holds a standard set of valid index values.
+        ///  If no image list is found, this collection will contain a single object with a value of -1.
         ///  This returns <see langword="null" /> if the data type doesn't support a standard set of values.
         /// </returns>
         public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext context)
@@ -113,7 +114,6 @@ namespace System.Windows.Forms
 
                     if (imageListProp == null)
                     {
-
                         // We didn't find the image list in this component.  See if the
                         // component has a "parent" property.  If so, walk the tree...
                         //
@@ -137,7 +137,6 @@ namespace System.Windows.Forms
 
                     if (imageList != null)
                     {
-
                         // Create array to contain standard values
                         //
                         object[] values;
@@ -197,4 +196,3 @@ namespace System.Windows.Forms
         }
     }
 }
-

@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Collections;
 using System.Collections.Specialized;
 using System.ComponentModel;
@@ -12,6 +14,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms.Layout;
 using static Interop;
+using static Interop.User32;
 
 namespace System.Windows.Forms
 {
@@ -438,7 +441,7 @@ namespace System.Windows.Forms
                 if (IsHandleCreated)
                 {
                     bool b;
-                    b = unchecked((int)(long)SendMessage(EditMessages.EM_CANUNDO, 0, 0)) != 0;
+                    b = unchecked((int)(long)SendMessageW(this, (WM)EM.CANUNDO)) != 0;
 
                     return b;
                 }
@@ -457,36 +460,36 @@ namespace System.Windows.Forms
             get
             {
                 CreateParams cp = base.CreateParams;
-                cp.ClassName = "EDIT";
-                cp.Style |= NativeMethods.ES_AUTOHSCROLL | NativeMethods.ES_AUTOVSCROLL;
+                cp.ClassName = ComCtl32.WindowClasses.WC_EDIT;
+                cp.Style |= (int)(ES.AUTOHSCROLL | ES.AUTOVSCROLL);
                 if (!textBoxFlags[hideSelection])
                 {
-                    cp.Style |= NativeMethods.ES_NOHIDESEL;
+                    cp.Style |= (int)ES.NOHIDESEL;
                 }
 
                 if (textBoxFlags[readOnly])
                 {
-                    cp.Style |= NativeMethods.ES_READONLY;
+                    cp.Style |= (int)ES.READONLY;
                 }
 
-                cp.Style &= ~(int)User32.WS.BORDER;
-                cp.ExStyle &= ~(int)User32.WS_EX.CLIENTEDGE;
+                cp.Style &= ~(int)WS.BORDER;
+                cp.ExStyle &= ~(int)WS_EX.CLIENTEDGE;
 
                 switch (borderStyle)
                 {
                     case BorderStyle.Fixed3D:
-                        cp.ExStyle |= (int)User32.WS_EX.CLIENTEDGE;
+                        cp.ExStyle |= (int)WS_EX.CLIENTEDGE;
                         break;
                     case BorderStyle.FixedSingle:
-                        cp.Style |= (int)User32.WS.BORDER;
+                        cp.Style |= (int)WS.BORDER;
                         break;
                 }
                 if (textBoxFlags[multiline])
                 {
-                    cp.Style |= NativeMethods.ES_MULTILINE;
+                    cp.Style |= (int)ES.MULTILINE;
                     if (textBoxFlags[wordWrap])
                     {
-                        cp.Style &= ~NativeMethods.ES_AUTOHSCROLL;
+                        cp.Style &= ~(int)ES.AUTOHSCROLL;
                     }
                 }
 
@@ -696,7 +699,6 @@ namespace System.Windows.Forms
                 //unparse this string list...
                 if (value != null && value.Length > 0)
                 {
-
                     // Using a StringBuilder instead of a String
                     // speeds things up approx 150 times
                     StringBuilder text = new StringBuilder(value[0]);
@@ -761,7 +763,7 @@ namespace System.Windows.Forms
             {
                 if (IsHandleCreated)
                 {
-                    bool curState = (0 != unchecked((int)(long)SendMessage(EditMessages.EM_GETMODIFY, 0, 0)));
+                    bool curState = (0 != unchecked((int)(long)SendMessageW(this, (WM)EM.GETMODIFY)));
                     if (textBoxFlags[modified] != curState)
                     {
                         // Raise ModifiedChanged event.  See WmReflectCommand for more info.
@@ -774,7 +776,6 @@ namespace System.Windows.Forms
                 {
                     return textBoxFlags[modified];
                 }
-
             }
 
             set
@@ -783,7 +784,7 @@ namespace System.Windows.Forms
                 {
                     if (IsHandleCreated)
                     {
-                        SendMessage(EditMessages.EM_SETMODIFY, value ? 1 : 0, 0);
+                        SendMessageW(this, (WM)EM.SETMODIFY, PARAM.FromBool(value));
                         // Must maintain this state always in order for the
                         // test in the Get method to work properly.
                     }
@@ -967,7 +968,7 @@ namespace System.Windows.Forms
         ///  to avoid calling SelectionStart + SelectionLength each of which does essentially the
         ///  same (save one message round trip).
         /// </summary>
-        internal void GetSelectionStartAndLength(out int start, out int length)
+        internal unsafe void GetSelectionStartAndLength(out int start, out int length)
         {
             int end = 0;
 
@@ -983,7 +984,9 @@ namespace System.Windows.Forms
             else
             {
                 start = 0;
-                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), EditMessages.EM_GETSEL, ref start, ref end);
+                int startResult = 0;
+                User32.SendMessageW(this, (WM)EM.GETSEL, (IntPtr)(&startResult), ref end);
+                start = startResult;
 
                 //Here, we return the max of either 0 or the # returned by
                 //the windows call.  This eliminates a problem on nt4 where
@@ -1040,7 +1043,7 @@ namespace System.Windows.Forms
                     textBoxFlags[readOnly] = value;
                     if (IsHandleCreated)
                     {
-                        SendMessage(EditMessages.EM_SETREADONLY, value ? -1 : 0, 0);
+                        SendMessageW(this, (WM)EM.SETREADONLY, PARAM.FromBool(value));
                     }
 
                     OnReadOnlyChanged(EventArgs.Empty);
@@ -1097,22 +1100,22 @@ namespace System.Windows.Forms
             // The EM_LIMITTEXT message limits only the text the user can enter. It does not affect any text
             // already in the edit control when the message is sent, nor does it affect the length of the text
             // copied to the edit control by the WM_SETTEXT message.
-            SendMessage(EditMessages.EM_LIMITTEXT, 0, 0);
+            SendMessageW(this, (WM)EM.LIMITTEXT);
 
             if (clearUndo)
             {
-                SendMessage(EditMessages.EM_REPLACESEL, 0, text);
+                SendMessageW(this, (WM)EM.REPLACESEL, IntPtr.Zero, text);
                 // For consistency with Text, we clear the modified flag
-                SendMessage(EditMessages.EM_SETMODIFY, 0, 0);
+                SendMessageW(this, (WM)EM.SETMODIFY);
                 ClearUndo();
             }
             else
             {
-                SendMessage(EditMessages.EM_REPLACESEL, /*undoable*/ -1, text);
+                SendMessageW(this, (WM)EM.REPLACESEL, /*undoable*/ (IntPtr)(-1), text);
             }
 
             // Re-enable user input.
-            SendMessage(EditMessages.EM_LIMITTEXT, maxLength, 0);
+            SendMessageW(this, (WM)EM.LIMITTEXT, (IntPtr)maxLength);
         }
 
         /// <summary>
@@ -1129,7 +1132,6 @@ namespace System.Windows.Forms
         {
             get
             {
-
                 GetSelectionStartAndLength(out int start, out int length);
 
                 return length;
@@ -1166,7 +1168,6 @@ namespace System.Windows.Forms
         {
             get
             {
-
                 GetSelectionStartAndLength(out int selStart, out int selLength);
 
                 return selStart;
@@ -1178,15 +1179,6 @@ namespace System.Windows.Forms
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(SelectionStart), value));
                 }
                 Select(value, SelectionLength);
-            }
-        }
-
-        // Call SetSelectionOnHandle inside CreateHandle()
-        internal virtual bool SetSelectionInCreateHandle
-        {
-            get
-            {
-                return true;
             }
         }
 
@@ -1212,7 +1204,7 @@ namespace System.Windows.Forms
                     if (IsHandleCreated)
                     {
                         // clear the modified flag
-                        SendMessage(EditMessages.EM_SETMODIFY, 0, 0);
+                        SendMessageW(this, (WM)EM.SETMODIFY);
                     }
                 }
             }
@@ -1223,7 +1215,7 @@ namespace System.Windows.Forms
             // Note: Currently Winforms does not fully support surrogates.  If
             // the text contains surrogate characters this property may return incorrect values.
 
-            => IsHandleCreated ? User32.GetWindowTextLengthW(new HandleRef(this, Handle)) : Text.Length;
+            => IsHandleCreated ? GetWindowTextLengthW(new HandleRef(this, Handle)) : Text.Length;
 
         // Since setting the WindowText while the handle is created
         // generates a WM_COMMAND message, we must trap that case
@@ -1277,7 +1269,7 @@ namespace System.Windows.Forms
             {
                 if (IsHandleCreated)
                 {
-                    User32.SetWindowTextW(new HandleRef(this, Handle), value);
+                    SetWindowTextW(new HandleRef(this, Handle), value);
                 }
                 else
                 {
@@ -1350,7 +1342,6 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-
                     int curHeight = Height;
 
                     // Changing the font of a multi-line textbox can sometimes cause a painting problem
@@ -1384,29 +1375,30 @@ namespace System.Windows.Forms
         /// </summary>
         public void AppendText(string text)
         {
-            if (text.Length > 0)
+            if (string.IsNullOrEmpty(text))
             {
+                return;
+            }
 
-                GetSelectionStartAndLength(out int selStart, out int selLength);
+            GetSelectionStartAndLength(out int selStart, out int selLength);
 
-                try
+            try
+            {
+                // This enables you to use SelectionColor to AppendText in color.
+                int endOfText = GetEndPosition();
+
+                SelectInternal(endOfText, endOfText, endOfText);
+                SelectedText = text;
+            }
+            finally
+            {
+                // If AppendText is called when the control is docked and the form is minimized,
+                // all the text will scroll to the top and the control will look empty when the
+                // form is restored. We work around this by selecting back whatever was originally
+                // selected when AppendText was called.
+                if (Width == 0 || Height == 0)
                 {
-                    // This enables you to use SelectionColor to AppendText in color.
-                    int endOfText = GetEndPosition();
-
-                    SelectInternal(endOfText, endOfText, endOfText);
-                    SelectedText = text;
-                }
-                finally
-                {
-                    // If AppendText is called when the control is docked and the form is minimized,
-                    // all the text will scroll to the top and the control will look empty when the
-                    // form is restored. We work around this by selecting back whatever was originally
-                    // selected when AppendText was called.
-                    if (Width == 0 || Height == 0)
-                    {
-                        Select(selStart, selLength);
-                    }
+                    Select(selStart, selLength);
                 }
             }
         }
@@ -1427,17 +1419,14 @@ namespace System.Windows.Forms
         {
             if (IsHandleCreated)
             {
-                SendMessage(EditMessages.EM_EMPTYUNDOBUFFER, 0, 0);
+                SendMessageW(this, (WM)EM.EMPTYUNDOBUFFER);
             }
         }
 
         /// <summary>
         ///  Copies the current selection in the text box to the Clipboard.
         /// </summary>
-        public void Copy()
-        {
-            SendMessage(WindowMessages.WM_COPY, 0, 0);
-        }
+        public void Copy() => SendMessageW(this, WM.COPY);
 
         protected override void CreateHandle()
         {
@@ -1448,12 +1437,8 @@ namespace System.Windows.Forms
             {
                 base.CreateHandle();
 
-                if (SetSelectionInCreateHandle)
-                {
-                    // send EM_SETSEL message
-                    SetSelectionOnHandle();
-                }
-
+                // send EM_SETSEL message
+                SetSelectionOnHandle();
             }
             finally
             {
@@ -1464,10 +1449,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Moves the current selection in the text box to the Clipboard.
         /// </summary>
-        public void Cut()
-        {
-            SendMessage(WindowMessages.WM_CUT, 0, 0);
-        }
+        public void Cut() => SendMessageW(this, WM.CUT);
 
         /// <summary>
         ///  Returns the text end position (one past the last input character).  This property is virtual to allow MaskedTextBox
@@ -1532,7 +1514,7 @@ namespace System.Windows.Forms
             UpdateMaxLength();
             if (textBoxFlags[modified])
             {
-                SendMessage(EditMessages.EM_SETMODIFY, 1, 0);
+                SendMessageW(this, (WM)EM.SETMODIFY, PARAM.FromBool(true));
             }
             if (textBoxFlags[scrollToCaretOnHandleCreated])
             {
@@ -1553,10 +1535,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Replaces the current selection in the text box with the contents of the Clipboard.
         /// </summary>
-        public void Paste()
-        {
-            SendMessage(WindowMessages.WM_PASTE, 0, 0);
-        }
+        public void Paste() => SendMessageW(this, WM.PASTE);
 
         protected override bool ProcessDialogKey(Keys keyData)
         {
@@ -1626,26 +1605,31 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void OnMouseUp(MouseEventArgs mevent)
         {
-            Point pt = PointToScreen(mevent.Location);
-
-            if (mevent.Button == MouseButtons.Left)
+            if (mevent != null)
             {
-                if (!ValidationCancelled && UnsafeNativeMethods.WindowFromPoint(pt) == Handle)
+                Point pt = PointToScreen(mevent.Location);
+
+                if (mevent.Button == MouseButtons.Left)
                 {
-                    if (!doubleClickFired)
+                    if (!ValidationCancelled && WindowFromPoint(pt) == Handle)
                     {
-                        OnClick(mevent);
-                        OnMouseClick(mevent);
+                        if (!doubleClickFired)
+                        {
+                            OnClick(mevent);
+                            OnMouseClick(mevent);
+                        }
+                        else
+                        {
+                            doubleClickFired = false;
+                            OnDoubleClick(mevent);
+                            OnMouseDoubleClick(mevent);
+                        }
                     }
-                    else
-                    {
-                        doubleClickFired = false;
-                        OnDoubleClick(mevent);
-                        OnMouseDoubleClick(mevent);
-                    }
+
+                    doubleClickFired = false;
                 }
-                doubleClickFired = false;
             }
+
             base.OnMouseUp(mevent);
         }
 
@@ -1696,9 +1680,8 @@ namespace System.Windows.Forms
         /// </summary>
         public virtual int GetCharIndexFromPosition(Point pt)
         {
-            int longPoint = NativeMethods.Util.MAKELONG(pt.X, pt.Y);
-            int index = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), EditMessages.EM_CHARFROMPOS, 0, longPoint);
-            index = NativeMethods.Util.LOWORD(index);
+            int index = (int)User32.SendMessageW(this, (WM)EM.CHARFROMPOS, IntPtr.Zero, PARAM.FromLowHigh(pt.X, pt.Y));
+            index = PARAM.LOWORD(index);
 
             if (index < 0)
             {
@@ -1728,7 +1711,7 @@ namespace System.Windows.Forms
         /// </summary>
         public virtual int GetLineFromCharIndex(int index)
         {
-            return unchecked((int)(long)SendMessage(EditMessages.EM_LINEFROMCHAR, index, 0));
+            return unchecked((int)(long)SendMessageW(this, (WM)EM.LINEFROMCHAR, (IntPtr)index));
         }
 
         /// <summary>
@@ -1741,8 +1724,8 @@ namespace System.Windows.Forms
                 return Point.Empty;
             }
 
-            int i = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), EditMessages.EM_POSFROMCHAR, index, 0);
-            return new Point(NativeMethods.Util.SignedLOWORD(i), NativeMethods.Util.SignedHIWORD(i));
+            int i = (int)User32.SendMessageW(this, (WM)EM.POSFROMCHAR, (IntPtr)index);
+            return new Point(PARAM.SignedLOWORD(i), PARAM.SignedHIWORD(i));
         }
 
         /// <summary>
@@ -1754,7 +1737,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException(nameof(lineNumber), lineNumber, string.Format(SR.InvalidArgument, nameof(lineNumber), lineNumber));
             }
-            return unchecked((int)(long)SendMessage(EditMessages.EM_LINEINDEX, lineNumber, 0));
+            return unchecked((int)(long)SendMessageW(this, (WM)EM.LINEINDEX, (IntPtr)lineNumber));
         }
 
         /// <summary>
@@ -1762,7 +1745,7 @@ namespace System.Windows.Forms
         /// </summary>
         public int GetFirstCharIndexOfCurrentLine()
         {
-            return unchecked((int)(long)SendMessage(EditMessages.EM_LINEINDEX, -1, 0));
+            return unchecked((int)(long)SendMessageW(this, (WM)EM.LINEINDEX, (IntPtr)(-1)));
         }
 
         /// <summary>
@@ -1786,7 +1769,6 @@ namespace System.Windows.Forms
                 {
                     if (UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), RichEditMessages.EM_GETOLEINTERFACE, 0, out editOle) != 0)
                     {
-
                         editOlePtr = Marshal.GetIUnknownForObject(editOle);
 
                         if (editOlePtr != IntPtr.Zero)
@@ -1800,7 +1782,6 @@ namespace System.Windows.Forms
 
                                 if (Marshal.GetObjectForIUnknown(iTextDocument) is Richedit.ITextDocument textDocument)
                                 {
-
                                     // When the user calls RichTextBox::ScrollToCaret we want the RichTextBox to show as
                                     // much text as possible.
                                     // Here is how we do that:
@@ -1817,7 +1798,7 @@ namespace System.Windows.Forms
                                     textRange.ScrollIntoView(0);   // 0 ==> tomEnd
 
                                     // 2. Get the first visible line.
-                                    int firstVisibleLine = unchecked((int)(long)SendMessage(EditMessages.EM_GETFIRSTVISIBLELINE, 0, 0));
+                                    int firstVisibleLine = unchecked((int)(long)SendMessageW(this, (WM)EM.GETFIRSTVISIBLELINE));
 
                                     // 3. If the first visible line is smaller than the start of the selection, we are done;
                                     if (firstVisibleLine <= selStartLine)
@@ -1854,7 +1835,7 @@ namespace System.Windows.Forms
 
                 if (!scrolled)
                 {
-                    SendMessage(EditMessages.EM_SCROLLCARET, 0, 0);
+                    SendMessageW(this, (WM)EM.SCROLLCARET);
                 }
             }
             else
@@ -1917,9 +1898,7 @@ namespace System.Windows.Forms
             {
                 AdjustSelectionStartAndEnd(start, length, out int s, out int e, textLen);
 
-                SendMessage(EditMessages.EM_SETSEL, s, e);
-                //
-
+                SendMessageW(this, (WM)EM.SETSEL, (IntPtr)s, (IntPtr)e);
             }
             else
             {
@@ -2031,7 +2010,7 @@ namespace System.Windows.Forms
             {
                 textBoxFlags[setSelectionOnHandleCreated] = false;
                 AdjustSelectionStartAndEnd(selectionStart, selectionLength, out int start, out int end, -1);
-                SendMessage(EditMessages.EM_SETSEL, start, end);
+                SendMessageW(this, (WM)EM.SETSEL, (IntPtr)start, (IntPtr)end);
             }
         }
 
@@ -2149,22 +2128,19 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Undoes the last edit operation in the text box.
         /// </summary>
-        public void Undo()
-        {
-            SendMessage(EditMessages.EM_UNDO, 0, 0);
-        }
+        public void Undo() => SendMessageW(this, (WM)EM.UNDO);
 
         internal virtual void UpdateMaxLength()
         {
             if (IsHandleCreated)
             {
-                SendMessage(EditMessages.EM_LIMITTEXT, maxLength, 0);
+                SendMessageW(this, (WM)EM.LIMITTEXT, (IntPtr)maxLength);
             }
         }
 
         internal override IntPtr InitializeDCForWmCtlColor(IntPtr dc, int msg)
         {
-            if ((msg == WindowMessages.WM_CTLCOLORSTATIC) && !ShouldSerializeBackColor())
+            if ((msg == (int)WM.CTLCOLORSTATIC) && !ShouldSerializeBackColor())
             {
                 // Let the Win32 Edit control handle background colors itself.
                 // This is necessary because a disabled edit control will display a different
@@ -2181,11 +2157,12 @@ namespace System.Windows.Forms
         {
             if (!textBoxFlags[codeUpdateText] && !textBoxFlags[creatingHandle])
             {
-                if (NativeMethods.Util.HIWORD(m.WParam) == NativeMethods.EN_CHANGE && CanRaiseTextChangedEvent)
+                EN wParamAsEN = (EN)PARAM.HIWORD(m.WParam);
+                if (wParamAsEN == EN.CHANGE && CanRaiseTextChangedEvent)
                 {
                     OnTextChanged(EventArgs.Empty);
                 }
-                else if (NativeMethods.Util.HIWORD(m.WParam) == NativeMethods.EN_UPDATE)
+                else if (wParamAsEN == EN.UPDATE)
                 {
                     // Force update to the Modified property, which will trigger
                     // ModifiedChanged event handlers
@@ -2199,7 +2176,7 @@ namespace System.Windows.Forms
             base.WndProc(ref m);
             if (!textBoxFlags[multiline])
             {
-                SendMessage(EditMessages.EM_SETMARGINS, NativeMethods.EC_LEFTMARGIN | NativeMethods.EC_RIGHTMARGIN, 0);
+                SendMessageW(this, (WM)EM.SETMARGINS, (IntPtr)(EC.LEFTMARGIN | EC.RIGHTMARGIN));
             }
         }
 
@@ -2209,12 +2186,12 @@ namespace System.Windows.Forms
             if (AcceptsTab)
             {
                 Debug.WriteLineIf(Control.s_controlKeyboardRouting.TraceVerbose, "TextBox wants tabs");
-                m.Result = (IntPtr)(unchecked((int)(long)m.Result) | NativeMethods.DLGC_WANTTAB);
+                m.Result = (IntPtr)(unchecked((int)(long)m.Result) | (int)DLGC.WANTTAB);
             }
             else
             {
                 Debug.WriteLineIf(Control.s_controlKeyboardRouting.TraceVerbose, "TextBox doesn't want tabs");
-                m.Result = (IntPtr)(unchecked((int)(long)m.Result) & ~(NativeMethods.DLGC_WANTTAB | NativeMethods.DLGC_WANTALLKEYS));
+                m.Result = (IntPtr)(unchecked((int)(long)m.Result) & ~(int)(DLGC.WANTTAB | DLGC.WANTALLKEYS));
             }
         }
 
@@ -2229,8 +2206,8 @@ namespace System.Windows.Forms
         {
             if (ContextMenuStrip != null)
             {
-                int x = NativeMethods.Util.SignedLOWORD(m.LParam);
-                int y = NativeMethods.Util.SignedHIWORD(m.LParam);
+                int x = PARAM.SignedLOWORD(m.LParam);
+                int y = PARAM.SignedHIWORD(m.LParam);
                 Point client;
                 bool keyboardActivated = false;
                 // lparam will be exactly -1 when the user invokes the context menu
@@ -2271,22 +2248,22 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void WndProc(ref Message m)
         {
-            switch (m.Msg)
+            switch ((WM)m.Msg)
             {
-                case WindowMessages.WM_LBUTTONDBLCLK:
+                case WM.LBUTTONDBLCLK:
                     doubleClickFired = true;
                     base.WndProc(ref m);
                     break;
-                case WindowMessages.WM_REFLECT + WindowMessages.WM_COMMAND:
+                case WM.REFLECT | WM.COMMAND:
                     WmReflectCommand(ref m);
                     break;
-                case WindowMessages.WM_GETDLGCODE:
+                case WM.GETDLGCODE:
                     WmGetDlgCode(ref m);
                     break;
-                case WindowMessages.WM_SETFONT:
+                case WM.SETFONT:
                     WmSetFont(ref m);
                     break;
-                case WindowMessages.WM_CONTEXTMENU:
+                case WM.CONTEXTMENU:
                     if (ShortcutsEnabled)
                     {
                         //calling base will find ContextMenus in this order:

@@ -5,7 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\System.Windows.Forms.Design.Editors\src\System.Windows.Forms.Design.Editors.csproj" />
     <ProjectReference Include="..\..\System.Windows.Forms.Design\src\System.Windows.Forms.Design.csproj" />
   </ItemGroup>
   

@@ -7,7 +7,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class BindingManagerDataErrorEventArgsTests
+    public class BindingManagerDataErrorEventArgsTests : IClassFixture<ThreadExceptionFixture>
     {
         public static IEnumerable<object[]> Ctor_Exception_TestData()
         {

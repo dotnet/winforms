@@ -2,7 +2,10 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Runtime.InteropServices;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -28,7 +31,7 @@ namespace System.Windows.Forms
                 if (MainForm != null && MainForm.IsHandleCreated)
                 {
                     // Get ahold of the parenting control
-                    IntPtr parentHandle = UnsafeNativeMethods.GetWindowLong(new HandleRef(this, MainForm.Handle), NativeMethods.GWL_HWNDPARENT);
+                    IntPtr parentHandle = Interop.User32.GetWindowLong(new HandleRef(this, MainForm.Handle), User32.GWL.HWNDPARENT);
 
                     parentControl = Control.FromHandle(parentHandle);
 

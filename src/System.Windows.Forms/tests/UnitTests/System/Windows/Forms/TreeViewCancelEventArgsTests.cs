@@ -7,7 +7,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class TreeViewCancelEventArgsTests
+    public class TreeViewCancelEventArgsTests : IClassFixture<ThreadExceptionFixture>
     {
         public static IEnumerable<object[]> Ctor_TreeNode_Bool_TreeViewAction_TestData()
         {

@@ -2,8 +2,11 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.ComponentModel;
 using System.IO;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -46,14 +49,8 @@ namespace System.Windows.Forms
         ]
         public bool Multiselect
         {
-            get
-            {
-                return GetOption(NativeMethods.OFN_ALLOWMULTISELECT);
-            }
-            set
-            {
-                SetOption(NativeMethods.OFN_ALLOWMULTISELECT, value);
-            }
+            get => GetOption((int)Comdlg32.OFN.ALLOWMULTISELECT);
+            set => SetOption((int)Comdlg32.OFN.ALLOWMULTISELECT, value);
         }
 
         /// <summary>
@@ -67,14 +64,8 @@ namespace System.Windows.Forms
         ]
         public bool ReadOnlyChecked
         {
-            get
-            {
-                return GetOption(NativeMethods.OFN_READONLY);
-            }
-            set
-            {
-                SetOption(NativeMethods.OFN_READONLY, value);
-            }
+            get => GetOption((int)Comdlg32.OFN.READONLY);
+            set => SetOption((int)Comdlg32.OFN.READONLY, value);
         }
 
         /// <summary>
@@ -87,14 +78,8 @@ namespace System.Windows.Forms
         ]
         public bool ShowReadOnly
         {
-            get
-            {
-                return !GetOption(NativeMethods.OFN_HIDEREADONLY);
-            }
-            set
-            {
-                SetOption(NativeMethods.OFN_HIDEREADONLY, !value);
-            }
+            get => !GetOption((int)Comdlg32.OFN.HIDEREADONLY);
+            set => SetOption((int)Comdlg32.OFN.HIDEREADONLY, !value);
         }
 
         /// <summary>
@@ -118,7 +103,7 @@ namespace System.Windows.Forms
         public override void Reset()
         {
             base.Reset();
-            SetOption(NativeMethods.OFN_FILEMUSTEXIST, true);
+            SetOption((int)Comdlg32.OFN.FILEMUSTEXIST, true);
         }
 
         /// <summary>
@@ -130,17 +115,13 @@ namespace System.Windows.Forms
             if (!result)
             {
                 // Something may have gone wrong - check for error condition
-                //
-                int errorCode = SafeNativeMethods.CommDlgExtendedError();
-                switch (errorCode)
+                switch (Comdlg32.CommDlgExtendedError())
                 {
-                    case NativeMethods.FNERR_INVALIDFILENAME:
+                    case Comdlg32.FNERR.INVALIDFILENAME:
                         throw new InvalidOperationException(string.Format(SR.FileDialogInvalidFileName, FileName));
-
-                    case NativeMethods.FNERR_SUBCLASSFAILURE:
+                    case Comdlg32.FNERR.SUBCLASSFAILURE:
                         throw new InvalidOperationException(SR.FileDialogSubLassFailure);
-
-                    case NativeMethods.FNERR_BUFFERTOOSMALL:
+                    case Comdlg32.FNERR.BUFFERTOOSMALL:
                         throw new InvalidOperationException(SR.FileDialogBufferTooSmall);
                 }
             }

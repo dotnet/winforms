@@ -665,7 +665,7 @@ namespace System.ComponentModel.Design.Serialization
             using (TraceScope("CodeDomSerializerBase::" + nameof(DeserializeAssignStatement)))
             {
                 // Since we're doing an assignment into something, we need to know what that something is.  It can be a property, a variable, or a member. Anything else is invalid.
-                //Perf: is -> as changes, change ordering based on possibility of occurence
+                //Perf: is -> as changes, change ordering based on possibility of occurrence
                 CodeExpression expression = statement.Left;
 
                 Trace("Processing LHS");
@@ -721,7 +721,7 @@ namespace System.ComponentModel.Design.Serialization
                                 if (rhs is IConvertible ic)
                                 {
                                     // f.FieldType is a type from the reflection (or project target) universe, while rhs is a runtime type (exists in the Visual Studio framework)
-                                    // they need to be converted to the same universe for comparison to work. 
+                                    // they need to be converted to the same universe for comparison to work.
                                     // If TargetFrameworkProvider is not available, then we are working with runtime types.
                                     Type fieldType = f.FieldType;
                                     TypeDescriptionProvider tdp = GetTargetFrameworkProviderForType(manager, fieldType);
@@ -2029,7 +2029,7 @@ namespace System.ComponentModel.Design.Serialization
 
         /// <summary>
         ///  This method returns an expression representing the given object.  It may return null, indicating that
-        ///  no expression has been set that describes the object.  Expressions are aquired in one of three ways:
+        ///  no expression has been set that describes the object.  Expressions are acquired in one of three ways:
         ///  1.   The expression could be the result of a prior SetExpression call.
         ///  2.   The expression could have been found in the RootContext.
         ///  3.   The expression could be derived through IReferenceService.
@@ -2080,7 +2080,6 @@ namespace System.ComponentModel.Design.Serialization
             // Now check IReferenceService.
             if (expression == null)
             {
-
                 // perf: first try to retrieve objectName from DesignerSerializationManager
                 // only then involve reference service if needed
                 // this is done to avoid unnecessary ensuring\creating references
@@ -2291,7 +2290,6 @@ namespace System.ComponentModel.Design.Serialization
             }
             Trace("IsSerialized called for object {0} : {1}", value, hasExpression);
             return hasExpression;
-
         }
 
         /// <summary>

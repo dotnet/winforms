@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -11,6 +13,7 @@ using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.VisualStyles;
 using static Interop;
+using static Interop.User32;
 
 namespace System.Windows.Forms
 {
@@ -338,17 +341,17 @@ namespace System.Windows.Forms
                 // Translate for Rtl if necessary
                 //
                 HorizontalAlignment align = RtlTranslateHorizontal(textAlign);
-                cp.ExStyle &= ~(int)User32.WS_EX.RIGHT;   // WS_EX_RIGHT overrides the ES_XXXX alignment styles
+                cp.ExStyle &= ~(int)WS_EX.RIGHT;   // WS_EX_RIGHT overrides the ES_XXXX alignment styles
                 switch (align)
                 {
                     case HorizontalAlignment.Left:
-                        cp.Style |= NativeMethods.ES_LEFT;
+                        cp.Style |= (int)ES.LEFT;
                         break;
                     case HorizontalAlignment.Center:
-                        cp.Style |= NativeMethods.ES_CENTER;
+                        cp.Style |= (int)ES.CENTER;
                         break;
                     case HorizontalAlignment.Right:
-                        cp.Style |= NativeMethods.ES_RIGHT;
+                        cp.Style |= (int)ES.RIGHT;
                         break;
                 }
 
@@ -842,7 +845,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Unsupported method/property.
-        ///  WndProc ignores EM_LIMITTEXT & this is a virtual method.
+        ///  WndProc ignores EM_LIMITTEXT &amp; this is a virtual method.
         /// </summary>
         [
         Browsable(false),
@@ -1051,16 +1054,6 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Designe time support for resetting the Culture property.
-        /// </summary>
-        /* No longer needed since Culture has been removed from the property browser - Left here for documentation.
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        private void ResetCulture()
-        {
-            this.Culture = CultureInfo.CurrentCulture;
-        }*/
-
-        /// <summary>
         ///  Specifies whether to reset and skip the current position if editable, when the input character
         ///  has the same value as the prompt.  This property takes precedence over AllowPromptAsInput.
         /// </summary>
@@ -1196,7 +1189,7 @@ namespace System.Windows.Forms
             if (IsHandleCreated)
             {
                 // This message does not return a value.
-                SendMessage(EditMessages.EM_SETPASSWORDCHAR, pwdChar, 0);
+                User32.SendMessageW(this, (User32.WM)EM.SETPASSWORDCHAR, (IntPtr)pwdChar);
                 Invalidate();
             }
         }
@@ -1272,7 +1265,6 @@ namespace System.Windows.Forms
                         string oldText = TextOutput;
                         if (maskedTextProvider.Set(value, out caretTestPos, out MaskedTextResultHint hint))
                         {
-                            //if( hint == MaskedTextResultHint.Success || hint == MaskedTextResultHint.SideEffect )
                             if (TextOutput != oldText)
                             {
                                 SetText();
@@ -1657,7 +1649,6 @@ namespace System.Windows.Forms
             string oldText = TextOutput;
             if (maskedTextProvider.RemoveAt(startPosition, endPos, out int tempPos, out MaskedTextResultHint hint))
             {
-                //if( hint == MaskedTextResultHint.Success || hint == MaskedTextResultHint.SideEffect) // Text was changed.
                 if (TextOutput != oldText)
                 {
                     SetText();
@@ -1920,11 +1911,11 @@ namespace System.Windows.Forms
             // Force repainting of the entire window frame
             if (Application.RenderWithVisualStyles && IsHandleCreated && BorderStyle == BorderStyle.Fixed3D)
             {
-                User32.RedrawWindow(
+                RedrawWindow(
                     new HandleRef(this, Handle),
                     null,
                     IntPtr.Zero,
-                    User32.RDW.INVALIDATE | User32.RDW.FRAME);
+                    RDW.INVALIDATE | RDW.FRAME);
             }
         }
 
@@ -2019,7 +2010,6 @@ namespace System.Windows.Forms
             {
                 if (!ReadOnly)
                 {
-
                     base.GetSelectionStartAndLength(out int startPosition, out int selectionLen);
 
                     switch (e.Modifiers)
@@ -2103,7 +2093,6 @@ namespace System.Windows.Forms
                 string oldText = TextOutput;
                 if (PlaceChar(e.KeyChar, selectionStart, selectionLen, IsOverwriteMode, out MaskedTextResultHint hint))
                 {
-                    //if( hint == MaskedTextResultHint.Success || hint == MaskedTextResultHint.SideEffect )
                     if (TextOutput != oldText)
                     {
                         SetText(); // Now set the text in the display.
@@ -2534,27 +2523,6 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  <From Control.cs>:
-        ///  Processes a command key. This method is called during message
-        ///  pre-processing to handle command keys. Command keys are keys that always
-        ///  take precedence over regular input keys. Examples of command keys
-        ///  include accelerators and menu shortcuts. The method must return true to
-        ///  indicate that it has processed the command key, or false to indicate
-        ///  that the key is not a command key.
-        ///
-        ///  processCmdKey() first checks if the control has a context menu, and if
-        ///  so calls the menu's processCmdKey() to check for menu shortcuts. If the
-        ///  command key isn't a menu shortcut, and if the control has a parent, the
-        ///  key is passed to the parent's processCmdKey() method. The net effect is
-        ///  that command keys are "bubbled" up the control hierarchy.
-        ///
-        ///  When overriding processCmdKey(), a control should return true to
-        ///  indicate that it has processed the key. For keys that aren't processed by
-        ///  the control, the result of "base.processCmdKey()" should be returned.
-        ///
-        ///  Controls will seldom, if ever, need to override this method.
-        ///  </From Control.cs>
-        ///
         ///  Implements the handling of Ctrl+A (select all). Note: Code copied from TextBox.
         /// </summary>
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
@@ -2596,8 +2564,7 @@ namespace System.Windows.Forms
 
             // If this WM_CHAR message is sent after WM_IME_CHAR, we ignore it since we already processed
             // the corresponding WM_IME_CHAR message.
-
-            if (m.Msg == WindowMessages.WM_CHAR && base.ImeWmCharsToIgnore > 0)
+            if (m.Msg == (int)WM.CHAR && base.ImeWmCharsToIgnore > 0)
             {
                 return true;    // meaning, we handled the message so it is not passed to the default WndProc.
             }
@@ -3042,7 +3009,7 @@ namespace System.Windows.Forms
         private void WmPrint(ref Message m)
         {
             base.WndProc(ref m);
-            if ((NativeMethods.PRF_NONCLIENT & unchecked((int)(long)m.LParam)) != 0 && Application.RenderWithVisualStyles && BorderStyle == BorderStyle.Fixed3D)
+            if ((unchecked((User32.PRF)(long)m.LParam) & User32.PRF.NONCLIENT) != 0 && Application.RenderWithVisualStyles && BorderStyle == BorderStyle.Fixed3D)
             {
                 using (Graphics g = Graphics.FromHdc(m.WParam))
                 {
@@ -3066,19 +3033,19 @@ namespace System.Windows.Forms
             // Handle messages for special cases (unsupported operations or cases where mask doesn not matter).
             switch (m.Msg)
             {
-                case WindowMessages.WM_PRINT:
+                case (int)WM.PRINT:
                     WmPrint(ref m);
                     return;
-                case WindowMessages.WM_CONTEXTMENU:
-                case EditMessages.EM_CANUNDO:
+                case (int)WM.CONTEXTMENU:
+                case (int)EM.CANUNDO:
                     base.ClearUndo(); // resets undo buffer.
                     base.WndProc(ref m);
                     return;
 
-                case EditMessages.EM_SCROLLCARET:  // No scroll for single-line control.
-                case EditMessages.EM_LIMITTEXT:    // Max/Min text is defined by the mask.
-                case EditMessages.EM_UNDO:
-                case WindowMessages.WM_UNDO:
+                case (int)EM.SCROLLCARET:  // No scroll for single-line control.
+                case (int)EM.LIMITTEXT:    // Max/Min text is defined by the mask.
+                case (int)EM.UNDO:
+                case (int)WM.UNDO:
                     return;
 
                 default:
@@ -3093,49 +3060,49 @@ namespace System.Windows.Forms
 
             switch (m.Msg)
             {
-                case WindowMessages.WM_IME_STARTCOMPOSITION:
+                case (int)WM.IME_STARTCOMPOSITION:
                     if (WmImeStartComposition())
                     {
                         break;
                     }
                     goto default;
 
-                case WindowMessages.WM_IME_ENDCOMPOSITION:
+                case (int)WM.IME_ENDCOMPOSITION:
                     flagState[IME_ENDING_COMPOSITION] = true;
                     goto default;
 
-                case WindowMessages.WM_IME_COMPOSITION:
+                case (int)WM.IME_COMPOSITION:
                     if (WmImeComposition(ref m))
                     {
                         break;
                     }
                     goto default;
 
-                case WindowMessages.WM_CUT:
+                case (int)WM.CUT:
                     if (!ReadOnly && WmCopy())
                     {
                         WmClear();
                     }
                     break;
 
-                case WindowMessages.WM_COPY:
+                case (int)WM.COPY:
                     WmCopy();
                     break;
 
-                case WindowMessages.WM_PASTE:
+                case (int)WM.PASTE:
                     WmPaste();
                     break;
 
-                case WindowMessages.WM_CLEAR:
+                case (int)WM.CLEAR:
                     WmClear();
                     break;
 
-                case WindowMessages.WM_KILLFOCUS:
+                case (int)WM.KILLFOCUS:
                     base.WndProc(ref m);
                     WmKillFocus();
                     break;
 
-                case WindowMessages.WM_SETFOCUS:
+                case (int)WM.SETFOCUS:
                     WmSetFocus();
                     base.WndProc(ref m);
                     break;
@@ -3183,4 +3150,3 @@ namespace System.Windows.Forms
         }
     }
 }
-

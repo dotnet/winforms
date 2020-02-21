@@ -834,16 +834,16 @@ namespace System.Windows.Forms.Design
         /// </summary>
         protected override void WndProc(ref Message m)
         {
-            switch (m.Msg)
+            switch ((User32.WM)m.Msg)
             {
-                case WindowMessages.WM_LBUTTONUP:
-                case WindowMessages.WM_RBUTTONUP:
+                case User32.WM.LBUTTONUP:
+                case User32.WM.RBUTTONUP:
                     if (_mouseDragAnchor != s_invalidPoint)
                     {
                         _ignoreCaptureChanged = true;
                     }
                     break;
-                case WindowMessages.WM_CAPTURECHANGED:
+                case User32.WM.CAPTURECHANGED:
                     if (!_ignoreCaptureChanged && _mouseDragAnchor != s_invalidPoint)
                     {
                         EndMouseDrag(MousePosition);
@@ -1011,7 +1011,6 @@ namespace System.Windows.Forms.Design
             }
             finally
             {
-
                 if (!dragging)
                 {
                     _dragComponents = null;

@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
@@ -124,9 +126,9 @@ namespace System.Windows.Forms.Internal
         /// <summary>
         ///  Draws the text in the given bounds, using the given Font, foreColor and backColor, and according to the specified
         ///  TextFormatFlags flags.
-        ///  
+        ///
         ///  If font is null, the font currently selected in the hdc is used.
-        ///  
+        ///
         ///  If foreColor and/or backColor are Color.Empty, the hdc current text and/or background color are used.
         /// </summary>
         public void DrawText(string text, WindowsFont font, Rectangle bounds, Color foreColor, Color backColor, User32.DT flags)
@@ -252,7 +254,6 @@ namespace System.Windows.Forms.Internal
                 case TextPaddingOptions.NoPadding:
                 default:
                     break;
-
             }
 
             return new User32.DRAWTEXTPARAMS

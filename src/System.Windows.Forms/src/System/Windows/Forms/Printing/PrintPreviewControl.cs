@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
@@ -58,7 +60,6 @@ namespace System.Windows.Forms
             Size = new Size(100, 100);
             SetStyle(ControlStyles.ResizeRedraw, false);
             SetStyle(ControlStyles.Opaque | ControlStyles.OptimizedDoubleBuffer, true);
-
         }
 
         [
@@ -189,7 +190,6 @@ namespace System.Windows.Forms
             get { return rows; }
             set
             {
-
                 if (value < 1)
                 {
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(Rows), value, 1));
@@ -339,7 +339,7 @@ namespace System.Windows.Forms
 
         private int AdjustScroll(Message m, int pos, int maxPos, bool horizontal)
         {
-            switch ((User32.SBH)NativeMethods.Util.LOWORD(m.WParam))
+            switch ((User32.SBH)PARAM.LOWORD(m.WParam))
             {
                 case User32.SBH.THUMBPOSITION:
                 case User32.SBH.THUMBTRACK:
@@ -355,7 +355,7 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        pos = NativeMethods.Util.HIWORD(m.WParam);
+                        pos = PARAM.HIWORD(m.WParam);
                     }
                     break;
                 case User32.SBH.LINELEFT:
@@ -447,7 +447,6 @@ namespace System.Windows.Forms
             }
             else
             {
-
                 PrintController oldController = document.PrintController;
                 PreviewPrintController previewController = new PreviewPrintController
                 {
@@ -614,7 +613,6 @@ namespace System.Windows.Forms
                                 int imageIndex = StartPage + column + row * columns;
                                 if (imageIndex < pageInfo.Length)
                                 {
-
                                     Size pageSize = pageInfo[imageIndex].PhysicalSize;
                                     if (autoZoom)
                                     {
@@ -776,11 +774,12 @@ namespace System.Windows.Forms
             }
 
             RECT scroll = ClientRectangle;
-            SafeNativeMethods.ScrollWindow(new HandleRef(this, Handle),
-                                 current.X - position.X,
-                                 current.Y - position.Y,
-                                 ref scroll,
-                                 ref scroll);
+            User32.ScrollWindow(
+                this,
+                current.X - position.X,
+                current.Y - position.Y,
+                ref scroll,
+                ref scroll);
 
             User32.SetScrollPos(this, User32.SB.HORZ, position.X, BOOL.TRUE);
             User32.SetScrollPos(this, User32.SB.VERT, position.Y, BOOL.TRUE);
@@ -962,17 +961,17 @@ namespace System.Windows.Forms
 
         protected override void WndProc(ref Message m)
         {
-            switch (m.Msg)
+            switch ((User32.WM)m.Msg)
             {
-                case WindowMessages.WM_VSCROLL:
+                case User32.WM.VSCROLL:
                     WmVScroll(ref m);
                     break;
-                case WindowMessages.WM_HSCROLL:
+                case User32.WM.HSCROLL:
                     WmHScroll(ref m);
                     break;
                 //added case to handle keyboard events
                 //
-                case WindowMessages.WM_KEYDOWN:
+                case User32.WM.KEYDOWN:
                     WmKeyDown(ref m);
                     break;
                 default:
@@ -1029,4 +1028,3 @@ namespace System.Windows.Forms
         }
     }
 }
-

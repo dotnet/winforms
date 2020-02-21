@@ -49,7 +49,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// <c>EVENT_SYSTEM_MENUPOPUPSTART</c>
-        ///  Sent when a menu popup comes up. 
+        ///  Sent when a menu popup comes up.
         /// </summary>
         /// <remarks>
         ///  Note that for a call to TrackPopupMenu(), a client will see <c>EVENT_SYSTEM_MENUSTART</c>
@@ -60,7 +60,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// <c>EVENT_SYSTEM_MENUPOPUPEND</c>
-        ///  Sent when a menu popup just before it is taken down. 
+        ///  Sent when a menu popup just before it is taken down.
         /// </summary>
         /// <remarks>
         ///  Note that for a call to TrackPopupMenu(), a client will see <c>EVENT_SYSTEM_MENUSTART</c>
@@ -116,7 +116,7 @@ namespace System.Windows.Forms
         ///  Sent when a window enters drag drop mode.
         /// </summary>
         /// <seealso cref="SystemDragDropEnd"/>.
-        //  Note that it is up to apps and OLE to generate this, since the system doesn't know. 
+        //  Note that it is up to apps and OLE to generate this, since the system doesn't know.
         //  Like <c>EVENT_SYSTEM_SOUND</c>, it will be a while before this is prevalent.
         SystemDragDropStart = 0x000E,
 
@@ -125,7 +125,7 @@ namespace System.Windows.Forms
         ///  Sent when a window leaves drag drop mode.
         /// </summary>
         /// <seealso cref="SystemDragDropStart"/>.
-        //  Note that it is up to apps and OLE to generate this, since the system doesn't know. 
+        //  Note that it is up to apps and OLE to generate this, since the system doesn't know.
         //  Like <c>EVENT_SYSTEM_SOUND</c>, it will be a while before this is prevalent.
         SystemDragDropEnd = 0x000F,
 
@@ -211,36 +211,36 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  <c>EVENT_OBJECT_CREATE</c>
-        ///  Sent when an object has been created. 
+        ///  Sent when an object has been created.
         ///  The system sends this event for the following user interface elements:
-        ///  caret, header control, list-view control, tab control, toolbar control, tree view control, 
+        ///  caret, header control, list-view control, tab control, toolbar control, tree view control,
         ///  and window object. Server applications send this event for their accessible objects.
         /// </summary>
         Create = 0x8000,                // hwnd + ID + idChild is created item
 
         /// <summary>
         ///  <c>EVENT_OBJECT_DESTROY</c>
-        ///  Sent when an object has been destroyed. 
+        ///  Sent when an object has been destroyed.
         ///  The system sends this event for the following user interface elements:
-        ///  caret, header control, list-view control, tab control, toolbar control, tree view control, 
+        ///  caret, header control, list-view control, tab control, toolbar control, tree view control,
         ///  and window object. Server applications send this event for their accessible objects.
         /// </summary>
         Destroy = 0x8001,               // hwnd + ID + idChild is destroyed item
 
         /// <summary>
         /// <c>EVENT_OBJECT_SHOW</c>
-        ///  Sent when a hidden object is shown. 
+        ///  Sent when a hidden object is shown.
         ///  The system sends this event for the following user interface elements:
         ///  caret, cursor, and window object. Server applications send this event for their accessible objects.
-        ///  Clients assume that when this event is sent by a parent object, all child objects are already displayed. 
+        ///  Clients assume that when this event is sent by a parent object, all child objects are already displayed.
         ///  Therefore, server applications do not send this event for the child objects.
         /// </summary>
         Show = 0x8002,                  // hwnd + ID + idChild is shown item
 
         /// <summary>
         /// <c>EVENT_OBJECT_HIDE</c>
-        ///  Sent when an object is hidden. 
-        ///  The system sends this event for the following user interface elements: caret and cursor. 
+        ///  Sent when an object is hidden.
+        ///  The system sends this event for the following user interface elements: caret and cursor.
         ///  Server applications send this event for their accessible objects.
         ///  When this event is generated for a parent object, all child objects are already hidden.
         ///  Server applications do not send this event for the child objects.
@@ -250,7 +250,7 @@ namespace System.Windows.Forms
         /// <summary>
         /// <c>EVENT_OBJECT_REORDER</c>
         ///  Sent when a container object has added, removed, or reordered its children.
-        ///  The system sends this event for the following user interface elements: 
+        ///  The system sends this event for the following user interface elements:
         ///  header control, list-view control, toolbar control, and window object.
         ///  Server applications send this event as appropriate for their accessible objects.
         /// </summary>

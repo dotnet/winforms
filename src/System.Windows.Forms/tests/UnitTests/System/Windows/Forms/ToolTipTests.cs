@@ -8,15 +8,16 @@ using System.Drawing;
 using WinForms.Common.Tests;
 using Moq;
 using Xunit;
+using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ToolTipTests
+    public class ToolTipTests : IClassFixture<ThreadExceptionFixture>
     {
-        [Fact]
+        [WinFormsFact]
         public void ToolTip_Ctor_Default()
         {
-            var toolTip = new SubToolTip();
+            using var toolTip = new SubToolTip();
             Assert.True(toolTip.Active);
             Assert.Equal(500, toolTip.AutomaticDelay);
             Assert.Equal(5000, toolTip.AutoPopDelay);
@@ -41,11 +42,11 @@ namespace System.Windows.Forms.Tests
             Assert.True(toolTip.UseFading);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void Ctor_IContainer_TestData()
         {
             var container = new Container();
-            var toolTip = new SubToolTip(container);
+            using var toolTip = new SubToolTip(container);
             Assert.True(toolTip.Active);
             Assert.Equal(500, toolTip.AutomaticDelay);
             Assert.Equal(5000, toolTip.AutoPopDelay);
@@ -70,16 +71,16 @@ namespace System.Windows.Forms.Tests
             Assert.True(toolTip.UseFading);
         }
 
-        [Fact]
-        public void Ctor_NullCont_ThrowsArgumentNullException()
+        [WinFormsFact]
+        public void ToolTip_Ctor_NullCont_ThrowsArgumentNullException()
         {
             Assert.Throws<ArgumentNullException>("cont", () => new ToolTip(null));
         }
 
-        [Fact]
-        public void CreateParams_GetDefault_ReturnsExpected()
+        [WinFormsFact]
+        public void ToolTip_CreateParams_GetDefault_ReturnsExpected()
         {
-            var toolTip = new SubToolTip();
+            using var toolTip = new SubToolTip();
             CreateParams createParams = toolTip.CreateParams;
             Assert.Null(createParams.Caption);
             Assert.Equal("tooltips_class32", createParams.ClassName);
@@ -104,11 +105,11 @@ namespace System.Windows.Forms.Tests
                 Active = value
             };
             Assert.Equal(value, toolTip.Active);
-            
+
             // Set same
             toolTip.Active = value;
             Assert.Equal(value, toolTip.Active);
-            
+
             // Set different
             toolTip.Active = !value;
             Assert.Equal(!value, toolTip.Active);
@@ -128,11 +129,11 @@ namespace System.Windows.Forms.Tests
                 Active = value
             };
             Assert.Equal(value, toolTip.Active);
-            
+
             // Set same
             toolTip.Active = value;
             Assert.Equal(value, toolTip.Active);
-            
+
             // Set different
             toolTip.Active = !value;
             Assert.Equal(!value, toolTip.Active);
@@ -155,7 +156,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expectedAutoPopDelay, toolTip.AutoPopDelay);
             Assert.Equal(value, toolTip.InitialDelay);
             Assert.Equal(expectedReshowDelay, toolTip.ReshowDelay);
-            
+
             // Set same
             toolTip.AutomaticDelay = value;
             Assert.Equal(value, toolTip.AutomaticDelay);
@@ -202,7 +203,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, toolTip.AutoPopDelay);
             Assert.Equal(500, toolTip.InitialDelay);
             Assert.Equal(100, toolTip.ReshowDelay);
-            
+
             // Set same
             toolTip.AutoPopDelay = value;
             Assert.Equal(500, toolTip.AutomaticDelay);
@@ -261,7 +262,7 @@ namespace System.Windows.Forms.Tests
             toolTip.ForeColor = value;
             Assert.Equal(value, toolTip.ForeColor);
         }
-        
+
         [Fact]
         public void ToolTip_ForeColor_SetEmpty_ThrowsArgumentException()
         {
@@ -286,7 +287,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(5000, toolTip.AutoPopDelay);
             Assert.Equal(value, toolTip.InitialDelay);
             Assert.Equal(100, toolTip.ReshowDelay);
-            
+
             // Set same
             toolTip.InitialDelay = value;
             Assert.Equal(500, toolTip.AutomaticDelay);
@@ -325,11 +326,11 @@ namespace System.Windows.Forms.Tests
                 IsBalloon = value
             };
             Assert.Equal(value, toolTip.IsBalloon);
-            
+
             // Set same
             toolTip.IsBalloon = value;
             Assert.Equal(value, toolTip.IsBalloon);
-            
+
             // Set different
             toolTip.IsBalloon = !value;
             Assert.Equal(!value, toolTip.IsBalloon);
@@ -344,11 +345,11 @@ namespace System.Windows.Forms.Tests
                 OwnerDraw = value
             };
             Assert.Equal(value, toolTip.OwnerDraw);
-            
+
             // Set same
             toolTip.OwnerDraw = value;
             Assert.Equal(value, toolTip.OwnerDraw);
-            
+
             // Set different
             toolTip.OwnerDraw = !value;
             Assert.Equal(!value, toolTip.OwnerDraw);
@@ -371,7 +372,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(5000, toolTip.AutoPopDelay);
             Assert.Equal(500, toolTip.InitialDelay);
             Assert.Equal(value, toolTip.ReshowDelay);
-            
+
             // Set same
             toolTip.ReshowDelay = value;
             Assert.Equal(500, toolTip.AutomaticDelay);
@@ -410,11 +411,11 @@ namespace System.Windows.Forms.Tests
                 ShowAlways = value
             };
             Assert.Equal(value, toolTip.ShowAlways);
-            
+
             // Set same
             toolTip.ShowAlways = value;
             Assert.Equal(value, toolTip.ShowAlways);
-            
+
             // Set different
             toolTip.ShowAlways = !value;
             Assert.Equal(!value, toolTip.ShowAlways);
@@ -429,11 +430,11 @@ namespace System.Windows.Forms.Tests
                 StripAmpersands = value
             };
             Assert.Equal(value, toolTip.StripAmpersands);
-            
+
             // Set same
             toolTip.StripAmpersands = value;
             Assert.Equal(value, toolTip.StripAmpersands);
-            
+
             // Set different
             toolTip.StripAmpersands = !value;
             Assert.Equal(!value, toolTip.StripAmpersands);
@@ -448,7 +449,7 @@ namespace System.Windows.Forms.Tests
                 Tag = value
             };
             Assert.Same(value, toolTip.Tag);
-            
+
             // Set same
             toolTip.Tag = value;
             Assert.Same(value, toolTip.Tag);
@@ -463,7 +464,7 @@ namespace System.Windows.Forms.Tests
                 ToolTipIcon = value
             };
             Assert.Equal(value, toolTip.ToolTipIcon);
-            
+
             // Set same
             toolTip.ToolTipIcon = value;
             Assert.Equal(value, toolTip.ToolTipIcon);
@@ -476,7 +477,7 @@ namespace System.Windows.Forms.Tests
             var toolTip = new ToolTip();
             Assert.Throws<InvalidEnumArgumentException>("value", () => toolTip.ToolTipIcon = value);
         }
-        
+
         [Theory]
         [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void ToolTip_ToolTipTitle_Set_GetReturnsExpected(string value, string expected)
@@ -486,7 +487,7 @@ namespace System.Windows.Forms.Tests
                 ToolTipTitle = value
             };
             Assert.Equal(expected, toolTip.ToolTipTitle);
-            
+
             // Set same
             toolTip.ToolTipTitle = value;
             Assert.Equal(expected, toolTip.ToolTipTitle);
@@ -501,11 +502,11 @@ namespace System.Windows.Forms.Tests
                 UseAnimation = value
             };
             Assert.Equal(value, toolTip.UseAnimation);
-            
+
             // Set same
             toolTip.UseAnimation = value;
             Assert.Equal(value, toolTip.UseAnimation);
-            
+
             // Set different
             toolTip.UseAnimation = !value;
             Assert.Equal(!value, toolTip.UseAnimation);
@@ -520,11 +521,11 @@ namespace System.Windows.Forms.Tests
                 UseFading = value
             };
             Assert.Equal(value, toolTip.UseFading);
-            
+
             // Set same
             toolTip.UseFading = value;
             Assert.Equal(value, toolTip.UseFading);
-            
+
             // Set different
             toolTip.UseFading = !value;
             Assert.Equal(!value, toolTip.UseFading);

@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Runtime.InteropServices;
 using static Interop;
 
@@ -86,19 +88,19 @@ namespace System.Windows.Forms
                 // regardless of what window target we are using.  These
                 // messages cause other messages or state transitions
                 // to occur within control.
-                switch (m.Msg)
+                switch ((User32.WM)m.Msg)
                 {
-                    case WindowMessages.WM_MOUSELEAVE:
+                    case User32.WM.MOUSELEAVE:
                         _control.UnhookMouseEvent();
                         break;
 
-                    case WindowMessages.WM_MOUSEMOVE:
+                    case User32.WM.MOUSEMOVE:
                         if (!_control.GetState(States.TrackingMouseEvent))
                         {
                             _control.HookMouseEvent();
                             if (!_control.GetState(States.MouseEnterPending))
                             {
-                                _control.SendMessage((int)NativeMethods.WM_MOUSEENTER, 0, 0);
+                                User32.SendMessageW(_control, User32.RegisteredMessage.WM_MOUSEENTER);
                             }
                             else
                             {
@@ -107,7 +109,7 @@ namespace System.Windows.Forms
                         }
                         break;
 
-                    case WindowMessages.WM_MOUSEWHEEL:
+                    case User32.WM.MOUSEWHEEL:
                         // TrackMouseEvent's mousehover implementation doesn't watch the wheel
                         // correctly...
                         _control.ResetMouseEventArgs();

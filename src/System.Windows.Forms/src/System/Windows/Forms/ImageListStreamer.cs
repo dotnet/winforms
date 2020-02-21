@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -48,7 +50,7 @@ namespace System.Windows.Forms
                         if (dat != null)
                         {
                             // We enclose this imagelist handle create in a theming scope.
-                            IntPtr userCookie = ThemingScope.Activate();
+                            IntPtr userCookie = ThemingScope.Activate(Application.UseVisualStyles);
 
                             try
                             {
@@ -93,7 +95,6 @@ namespace System.Windows.Forms
 
             while (idx < input.Length)
             {
-
                 byte current = input[idx++];
                 byte runLength = 1;
 
@@ -114,7 +115,6 @@ namespace System.Windows.Forms
 
             while (idx < input.Length)
             {
-
                 byte current = input[idx++];
                 byte runLength = 1;
 
@@ -271,6 +271,5 @@ namespace System.Windows.Forms
                 }
             }
         }
-
     }
 }

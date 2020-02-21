@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Globalization;
@@ -124,7 +126,6 @@ namespace System.Windows.Forms
 
                     if (imageListProp == null)
                     {
-
                         // We didn't find the image list in this component.  See if the
                         // component has a "parent" property.  If so, walk the tree...
                         //
@@ -148,7 +149,6 @@ namespace System.Windows.Forms
 
                     if (imageList != null)
                     {
-
                         // Create array to contain standard values
                         //
                         object[] values;
@@ -212,4 +212,3 @@ namespace System.Windows.Forms
         }
     }
 }
-

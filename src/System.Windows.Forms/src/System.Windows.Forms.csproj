@@ -1,21 +1,24 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <AssemblyName>System.Windows.Forms</AssemblyName>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <CLSCompliant>true</CLSCompliant>
-    <!--the obsolete usage in public surface can't be removed-->
+    <Nullable>enable</Nullable>
+
     <NoWarn>$(NoWarn);618</NoWarn>
-    <DefineConstants>$(DefineConstants);DRAWING_DESIGN_NAMESPACE;OPTIMIZED_MEASUREMENTDC;</DefineConstants>
+    <DefineConstants>$(DefineConstants);OPTIMIZED_MEASUREMENTDC;</DefineConstants>
     <Win32Manifest>Resources\System\Windows\Forms\XPThemes.manifest</Win32Manifest>
     <Deterministic>true</Deterministic>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
+    <UsePublicApiAnalyzers>true</UsePublicApiAnalyzers>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\Accessibility\src\Accessibility.ilproj" />
+    <ProjectReference Include="..\..\System.Windows.Forms.Primitives\src\System.Windows.Forms.Primitives.csproj" />
   </ItemGroup>
- 
+
   <ItemGroup>
     <PackageReference Include="Microsoft.Win32.Registry" Version="$(MicrosoftWin32RegistryPackageVersion)" />
     <PackageReference Include="Microsoft.Win32.SystemEvents" Version="$(MicrosoftWin32SystemEventsPackageVersion)" />
@@ -27,25 +30,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="..\..\Common\src\ClientUtils.cs" Link="Common\ClientUtils.cs" />
-    <Compile Include="..\..\Common\src\CommonUnsafeNativeMethods.cs" Link="misc\CommonUnsafeNativeMethods.cs" />
-    <Compile Include="..\..\Common\src\CompModSwitches.cs" Link="misc\CompModSwitches.cs" />
-    <Compile Include="..\..\Common\src\DpiHelper.cs" Link="misc\DpiHelper.cs" />
-    <Compile Include="..\..\Common\src\DpiHelper.DpiAwarenessContext.cs" Link="Common\DpiHelper.DpiAwarenessContext.cs" />
-    <Compile Include="..\..\Common\src\ExternDll.cs" Link="misc\ExternDll.cs" />
-    <Compile Include="..\..\Common\src\FileDialog_Vista_Interop.cs" Link="System\Windows\Forms\FileDialog_Vista_Interop.cs" />
-    <Compile Include="..\..\Common\src\NativeMethods.cs" Link="System\Windows\Forms\NativeMethods.cs" />
-    <Compile Include="..\..\Common\src\OsVersion.cs" Link="Common\OsVersion.cs" />
     <Compile Include="..\..\Common\src\RTLAwareMessageBox.cs" Link="Common\RTLAwareMessageBox.cs" />
-    <Compile Include="..\..\Common\src\SafeNativeMethods.cs" Link="System\Windows\Forms\SafeNativeMethods.cs" />
-    <Compile Include="..\..\Common\src\ScreenDC.cs" Link="Common\ScreenDC.cs" />
-    <Compile Include="..\..\Common\src\SpanHelpers.cs" Link="Common\SpanHelpers.cs" />
-    <Compile Include="..\..\Common\src\ThemingScope.cs" Link="Common\ThemingScope.cs" />
-    <Compile Include="..\..\Common\src\UnsafeNativeMethods.cs" Link="System\Windows\Forms\UnsafeNativeMethods.cs" />
-    <Compile Include="..\..\Common\src\Interop\**\*.cs">
-      <Link>Interop\%(RecursiveDir)\%(Filename)%(Extension)</Link>
-    </Compile>
-    <Compile Include="..\..\Common\src\Microsoft\Win32\SafeHandles\CoTaskMemSafeHandle.cs" Link="Microsoft\Win32\SafeHandles\CoTaskMemSafeHandle.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -359,9 +344,6 @@
     <EmbeddedResource Include="Resources\System\Windows\Forms\ErrorControl.ico">
       <LogicalName>System.Windows.Forms.ErrorControl</LogicalName>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\System\Windows\Forms\StatusBar.ico">
-      <LogicalName>System.Windows.Forms.StatusBar</LogicalName>
-    </EmbeddedResource>
     <EmbeddedResource Include="Resources\System\Windows\Forms\TabControl.ico">
       <LogicalName>System.Windows.Forms.TabControl</LogicalName>
     </EmbeddedResource>
@@ -410,7 +392,7 @@
     <EmbeddedResource Include="Resources\System\Windows\Forms\Printing\PrintDialog.ico">
       <LogicalName>System.Windows.Forms.PrintDialog</LogicalName>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\System\Windows\Forms\PropertyGrid\Arrow.ico">
+    <EmbeddedResource Include="Resources\System\Windows\Forms\PropertyGrid\arrow.ico">
       <LogicalName>System.Windows.Forms.Arrow</LogicalName>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\System\Windows\Forms\PropertyGrid\dotdotdot.ico">
@@ -491,13 +473,13 @@
     <EmbeddedResource Include="Resources\System\Windows\Forms\west.cur">
       <LogicalName>System.Windows.Forms.west.cur</LogicalName>
     </EmbeddedResource>
-    <EmbeddedResource Include="resources\System\Windows\Forms\up.ico">
+    <EmbeddedResource Include="Resources\System\Windows\Forms\up.ico">
       <LogicalName>System.Windows.Forms.up</LogicalName>
     </EmbeddedResource>
-    <EmbeddedResource Include="resources\System\Windows\Forms\down.ico">
+    <EmbeddedResource Include="Resources\System\Windows\Forms\down.ico">
       <LogicalName>System.Windows.Forms.down</LogicalName>
     </EmbeddedResource>
-    <EmbeddedResource Include="resources\System\Windows\Forms\design\componenteditorpage.ico">
+    <EmbeddedResource Include="Resources\System\Windows\Forms\Design\ComponentEditorPage.ico">
       <LogicalName>System.Windows.Forms.Design.ComponentEditorPage</LogicalName>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\System\Windows\Forms\ToolStrip\ScrollButtonUp.ico">
@@ -602,31 +584,31 @@
     <EmbeddedResource Include="Resources\System\Windows\Forms\ToolStrip\deleteToolStripMenuItem.ico">
       <LogicalName>System.Windows.Forms.delete</LogicalName>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\System\Windows\Forms\ToolStrip\viewcodeToolStripMenuItem.ico">
+    <EmbeddedResource Include="Resources\System\Windows\Forms\ToolStrip\viewcodetoolstripmenuitem.ico">
       <LogicalName>System.Windows.Forms.viewcode</LogicalName>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\System\Windows\Forms\ToolStrip\propertiesToolStripMenuItem.ico">
+    <EmbeddedResource Include="Resources\System\Windows\Forms\ToolStrip\propertiestoolstripmenuitem.ico">
       <LogicalName>System.Windows.Forms.properties</LogicalName>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\System\Windows\Forms\ToolStrip\imageToolStripMenuItem.ico">
+    <EmbeddedResource Include="Resources\System\Windows\Forms\ToolStrip\imagetoolstripmenuitem.ico">
       <LogicalName>System.Windows.Forms.image</LogicalName>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\System\Windows\Forms\ToolStrip\alignmentToolStripMenuItem.ico">
+    <EmbeddedResource Include="Resources\System\Windows\Forms\ToolStrip\alignmenttoolstripmenuitem.ico">
       <LogicalName>System.Windows.Forms.alignment</LogicalName>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\System\Windows\Forms\ToolStrip\displaystyleToolStripMenuItem.ico">
+    <EmbeddedResource Include="Resources\System\Windows\Forms\ToolStrip\displaystyletoolstripmenuitem.ico">
       <LogicalName>System.Windows.Forms.displaystyle</LogicalName>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\System\Windows\Forms\ToolStrip\editdropdownlistToolStripMenuItem.ico">
+    <EmbeddedResource Include="Resources\System\Windows\Forms\ToolStrip\editdropdownlisttoolstripmenuitem.ico">
       <LogicalName>System.Windows.Forms.editdropdownlist</LogicalName>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\System\Windows\Forms\ToolStrip\printToolStripMenuItem.ico">
+    <EmbeddedResource Include="Resources\System\Windows\Forms\ToolStrip\printToolstripMenuItem.ico">
       <LogicalName>System.Windows.Forms.print</LogicalName>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\System\Windows\Forms\ToolStrip\printPreviewToolStripMenuItem.ico">
       <LogicalName>System.Windows.Forms.printPreview</LogicalName>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\System\Windows\Forms\ToolStrip\saveToolStripMenuItem.ico">
+    <EmbeddedResource Include="Resources\System\Windows\Forms\ToolStrip\saveToolstripMenuItem.ico">
       <LogicalName>System.Windows.Forms.save</LogicalName>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\System\Windows\Forms\ToolStrip\lockControls.ico">
@@ -641,7 +623,7 @@
     <EmbeddedResource Include="Resources\System\Windows\Forms\ToolStrip\SendToBackHS.ico">
       <LogicalName>System.Windows.Forms.sendToBack</LogicalName>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\System\Windows\Forms\ToolStrip\blanktoolStrip.ico">
+    <EmbeddedResource Include="Resources\System\Windows\Forms\ToolStrip\BlankToolstrip.ico">
       <LogicalName>System.Windows.Forms.blank</LogicalName>
     </EmbeddedResource>
   </ItemGroup>

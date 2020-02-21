@@ -8,7 +8,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Design.Behavior.Tests
 {
-    public class BehaviorDragDropEventArgsTests
+    public class BehaviorDragDropEventArgsTests : IClassFixture<ThreadExceptionFixture>
     {
         public static IEnumerable<object[]> Ctor_ICollection_TestData()
         {

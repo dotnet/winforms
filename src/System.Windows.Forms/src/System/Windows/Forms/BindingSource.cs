@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -526,7 +528,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Creates an instance of BindingList<T> where T is only known at run time,
+        ///  Creates an instance of <see cref="BindingList{T}"/> where T is only known at run time,
         ///  not compile time
         /// </summary>
         private static IList CreateBindingList(Type type)
@@ -1252,6 +1254,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Hooks property changed events for the NEW current item, if nececssary
+        /// </summary>
         private void HookItemChangedEventsForNewCurrent()
         {
             Debug.Assert(_currentItemHookedForItemChange == null, "BindingSource trying to hook new current item before unhooking old current item!");

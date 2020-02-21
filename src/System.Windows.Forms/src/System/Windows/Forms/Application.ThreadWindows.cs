@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
@@ -30,15 +32,12 @@ namespace System.Windows.Forms
             {
                 _windows = new IntPtr[16];
                 _onlyWinForms = onlyWinForms;
-                var callback = new User32.EnumThreadWindowsCallback(Callback);
                 User32.EnumThreadWindows(
                     Kernel32.GetCurrentThreadId(),
-                    callback,
-                    IntPtr.Zero);
-                GC.KeepAlive(callback);
+                    Callback);
             }
 
-            private bool Callback(IntPtr hWnd, IntPtr lparam)
+            private BOOL Callback(IntPtr hWnd)
             {
                 // We only do visible and enabled windows.  Also, we only do top level windows.
                 // Finally, we only include windows that are DNA windows, since other MSO components
@@ -68,7 +67,7 @@ namespace System.Windows.Forms
                     }
                 }
 
-                return true;
+                return BOOL.TRUE;
             }
 
             // Disposes all top-level Controls on this thread
@@ -77,7 +76,7 @@ namespace System.Windows.Forms
                 for (int i = 0; i < _windowCount; i++)
                 {
                     IntPtr hWnd = _windows[i];
-                    if (UnsafeNativeMethods.IsWindow(new HandleRef(null, hWnd)))
+                    if (User32.IsWindow(hWnd).IsTrue())
                     {
                         Control c = Control.FromHandle(hWnd);
                         if (c != null)
@@ -109,7 +108,7 @@ namespace System.Windows.Forms
                 {
                     IntPtr hWnd = _windows[i];
                     Debug.WriteLineIf(CompModSwitches.MSOComponentManager.TraceInfo, "ComponentManager : Changing enabled on window: " + hWnd.ToString() + " : " + state.ToString());
-                    if (UnsafeNativeMethods.IsWindow(new HandleRef(null, hWnd)))
+                    if (User32.IsWindow(hWnd).IsTrue())
                     {
                         User32.EnableWindow(hWnd, state.ToBOOL());
                     }
@@ -125,12 +124,12 @@ namespace System.Windows.Forms
                 // we are created with a TRUE for onlyWinForms.
                 if (!_onlyWinForms && state)
                 {
-                    if (_activeHwnd != IntPtr.Zero && UnsafeNativeMethods.IsWindow(new HandleRef(null, _activeHwnd)))
+                    if (_activeHwnd != IntPtr.Zero && User32.IsWindow(_activeHwnd).IsTrue())
                     {
                         User32.SetActiveWindow(_activeHwnd);
                     }
 
-                    if (_focusedHwnd != IntPtr.Zero && UnsafeNativeMethods.IsWindow(new HandleRef(null, _focusedHwnd)))
+                    if (_focusedHwnd != IntPtr.Zero && User32.IsWindow(_focusedHwnd).IsTrue())
                     {
                         User32.SetFocus(_focusedHwnd);
                     }

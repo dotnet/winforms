@@ -6,7 +6,7 @@ using Xunit;
 
 namespace System.ComponentModel.Design.Serialization.Tests
 {
-    public class StatementContextTests
+    public class StatementContextTests : IClassFixture<ThreadExceptionFixture>
     {
         [Fact]
         public void StatementContext_Ctor_Default()

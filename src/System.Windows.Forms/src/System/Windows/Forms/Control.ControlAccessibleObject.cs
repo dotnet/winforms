@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
@@ -26,8 +28,6 @@ namespace System.Windows.Forms
 
             public ControlAccessibleObject(Control ownerControl)
             {
-                Debug.Assert(ownerControl != null, "Cannot construct a ControlAccessibleObject with a null ownerControl");
-
                 Owner = ownerControl ?? throw new ArgumentNullException(nameof(ownerControl));
                 IntPtr handle = ownerControl.Handle;
                 Handle = handle;
@@ -341,7 +341,6 @@ namespace System.Windows.Forms
                          previous != null;
                          previous = container.GetNextControl(previous, false))
                     {
-
                         // Stop when we hit a Label (whether visible or invisible)
                         if (previous is Label label)
                         {

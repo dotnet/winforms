@@ -17,9 +17,8 @@ namespace System.Windows.Forms
         Normal = 0,
 
         /// <summary>
-        ///  The image within the <see cref='PictureBox'/> is
-        ///  stretched or shrunk to fit the current size of the
-        // <see cref='System.Windows.Forms.PictureBox'/>.
+        ///  The image within the <see cref='PictureBox'/> is stretched or shrunk to fit the
+        ///  current size of the <see cref='System.Windows.Forms.PictureBox'/>.
         /// </summary>
         StretchImage = 1,
 

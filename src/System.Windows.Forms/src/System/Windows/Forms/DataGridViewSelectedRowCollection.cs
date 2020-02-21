@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Collections;
 using System.ComponentModel;
 
@@ -119,26 +121,6 @@ namespace System.Windows.Forms
         {
             return items.Add(dataGridViewRow);
         }
-
-        /* Unused at this point
-        internal void AddRange(DataGridViewRow[] dataGridViewRows)
-        {
-            Debug.Assert(dataGridViewRows != null);
-            foreach(DataGridViewRow dataGridViewRow in dataGridViewRows)
-            {
-                this.items.Add(dataGridViewRow);
-            }
-        }
-
-        internal void AddRowCollection(DataGridViewRowCollection dataGridViewRows)
-        {
-            Debug.Assert(dataGridViewRows != null);
-            foreach(DataGridViewRow dataGridViewRow in dataGridViewRows)
-            {
-                this.items.Add(dataGridViewRow);
-            }
-        }
-        */
 
         [
             EditorBrowsable(EditorBrowsableState.Never)

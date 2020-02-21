@@ -66,7 +66,6 @@ namespace System.ComponentModel.Design
             // If the references are null, create them for the first time and connect up our events to listen to changes to the container. Otherwise, check to see if the added or removed lists contain anything for us to sync up.
             if (_references == null)
             {
-
                 if (_provider == null)
                 {
                     throw new ObjectDisposedException("IReferenceService");
@@ -360,7 +359,7 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            ///  Resets the name of this reference holder.  It will be re-aquired on demand
+            ///  Resets the name of this reference holder.  It will be re-acquired on demand
             /// </summary>
             internal void ResetName()
             {

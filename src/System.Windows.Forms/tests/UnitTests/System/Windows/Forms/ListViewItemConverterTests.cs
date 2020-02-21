@@ -12,7 +12,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ListViewItemConverterTests
+    public class ListViewItemConverterTests : IClassFixture<ThreadExceptionFixture>
     {
         public static TheoryData<Type, bool> CanConvertFromData =>
             CommonTestHelper.GetConvertFromTheoryData();

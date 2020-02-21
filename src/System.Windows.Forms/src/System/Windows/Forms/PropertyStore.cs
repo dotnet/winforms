@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Diagnostics;
 using System.Drawing;
 
@@ -614,7 +616,6 @@ namespace System.Windows.Forms
                     Debug.Assert(storedObject == null, "object should either be null or ColorWrapper"); // could someone have SetObject to this key behind our backs?
                     SetObject(key, new ColorWrapper(value));
                 }
-
             }
         }
 
@@ -637,7 +638,6 @@ namespace System.Windows.Forms
                     Debug.Assert(storedObject == null, "object should either be null or PaddingWrapper"); // could someone have SetObject to this key behind our backs?
                     SetObject(key, new PaddingWrapper(value));
                 }
-
             }
         }
 
@@ -682,7 +682,6 @@ namespace System.Windows.Forms
                     Debug.Assert(storedObject == null, "object should either be null or SizeWrapper"); // could someone have SetObject to this key behind our backs?
                     SetObject(key, new SizeWrapper(value));
                 }
-
             }
         }
 

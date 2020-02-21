@@ -75,8 +75,8 @@ namespace System.ComponentModel.Design.Serialization
             }
 
             /// <summary>
-            ///  <para>Gets a value indicating whether changing a value on this object requires a 
-            ///  call to <see cref='System.ComponentModel.TypeConverter.CreateInstance'/> to create a new value,
+            ///  <para>Gets a value indicating whether changing a value on this object requires a
+            ///  call to <see cref='System.ComponentModel.TypeConverter.CreateInstance(IDictionary)'/> to create a new value,
             ///  using the specified context.</para>
             /// </summary>
             public override bool GetCreateInstanceSupported(ITypeDescriptorContext context)
@@ -141,7 +141,7 @@ namespace System.ComponentModel.Design.Serialization
 
             /// <summary>
             ///  <para>Gets a value indicating whether the collection of standard values returned from
-            ///  <see cref='System.ComponentModel.TypeConverter.GetStandardValues'/> is an exclusive 
+            ///  <see cref='System.ComponentModel.TypeConverter.GetStandardValues()'/> is an exclusive
             ///  list of possible values, using the specified context.</para>
             /// </summary>
             public override bool GetStandardValuesExclusive(ITypeDescriptorContext context)

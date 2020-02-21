@@ -1,6 +1,8 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
+
+#nullable disable
 
 using System.ComponentModel;
 using System.Diagnostics;
@@ -457,7 +459,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Indicates whether to use the WebBrowser context menu.
-        ///  It's technically possible to have both the WebBrowser & Windows Forms context
+        ///  It's technically possible to have both the WebBrowser &amp; Windows Forms context
         ///  menu enabled, but making this property effect the behavior of the Windows Form
         ///  context menu does not lead to a clean OM.  Maps to sinking the
         ///  IDocHostUIHandler:ShowContextMenu
@@ -571,7 +573,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The url of the HtmlDocument for page hosted in the html page.
         ///  Get Maps to IWebBrowser2:LocationUrl.  Set is the equivalent of calling Navigate(Url).
-        ///  Note this means that setting the Url property & then reading it immediately may not
+        ///  Note this means that setting the Url property &amp; then reading it immediately may not
         ///  return the result that you just set (since the get always returns the url you are currently at).
         /// </summary>
         [
@@ -777,7 +779,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Prints the html document to the default printer w/ no print dialog.
-        ///  Maps to IWebBrowser2:ExecWB w/ IDM_PRINT flag & LECMDEXECOPT_DONTPROMPTUSER.
+        ///  Maps to IWebBrowser2:ExecWB w/ IDM_PRINT flag &amp; LECMDEXECOPT_DONTPROMPTUSER.
         /// </summary>
         public void Print()
         {
@@ -864,7 +866,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Opens the IE page setup dialog for the current page.
-        ///  Maps to IWebBrowser2:ExecWebBrowser w/ IDM_PAGESETUP flag & LECMDEXECOPT_PROMPTUSER.
+        ///  Maps to IWebBrowser2:ExecWebBrowser w/ IDM_PAGESETUP flag &amp; LECMDEXECOPT_PROMPTUSER.
         /// </summary>
         public void ShowPageSetupDialog()
         {
@@ -873,7 +875,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Opens the IE print dialog.
-        ///  Maps to IWebBrowser2:ExecWebBrowser w/ IDM_PRINT flag & OLECMDEXECOPT_PROMPTUSER.
+        ///  Maps to IWebBrowser2:ExecWebBrowser w/ IDM_PRINT flag &amp; OLECMDEXECOPT_PROMPTUSER.
         /// </summary>
         public void ShowPrintDialog()
         {
@@ -890,7 +892,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Opens the properties dialog for the current html page.
-        ///  Maps to IWebBrowser2:ExecWebBrowser w/ IDM_PROPERTIES flag & LECMDEXECOPT_PROMPTUSER.
+        ///  Maps to IWebBrowser2:ExecWebBrowser w/ IDM_PROPERTIES flag &amp; LECMDEXECOPT_PROMPTUSER.
         /// </summary>
         public void ShowPropertiesDialog()
         {
@@ -899,7 +901,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Opens the IE File-Save dialog.
-        ///  Maps to IWebBrowser2:ExecWebBrowser w/ IDM_SAVEAS flag & LECMDEXECOPT_PROMPTUSER.
+        ///  Maps to IWebBrowser2:ExecWebBrowser w/ IDM_SAVEAS flag &amp; LECMDEXECOPT_PROMPTUSER.
         /// </summary>
         public void ShowSaveAsDialog()
         {
@@ -988,7 +990,7 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatAction))]
         [SRDescription(nameof(SR.WebBrowserNavigatedDescr))]
         public event WebBrowserNavigatedEventHandler Navigated;
-        
+
         /// <summary>
         ///  Occurs before browser control navigation occurs.
         ///  Fires before browser navigation occurs. Allows navigation to be canceled if
@@ -997,7 +999,7 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatAction))]
         [SRDescription(nameof(SR.WebBrowserNavigatingDescr))]
         public event WebBrowserNavigatingEventHandler Navigating;
-        
+
         /// <summary>
         ///  Occurs when a new browser window is created.
         ///  Can be used to cancel the creation of the new browser window. Maps to DWebBrowserEvents2:NewWindow2.
@@ -1005,7 +1007,7 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatAction))]
         [SRDescription(nameof(SR.WebBrowserNewWindowDescr))]
         public event CancelEventHandler NewWindow;
-        
+
         /// <summary>
         ///  Occurs when an update to the progress of a download occurs.
         ///  Fires whenever the browser control has updated info on the download. Can be
@@ -1015,7 +1017,7 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatAction))]
         [SRDescription(nameof(SR.WebBrowserProgressChangedDescr))]
         public event WebBrowserProgressChangedEventHandler ProgressChanged;
-        
+
         /// <summary>
         ///  Occurs whenever the status text changes.
         ///  Can be used to keep a status bar populated with uptodate text.
@@ -1404,11 +1406,11 @@ namespace System.Windows.Forms
 
         protected override void WndProc(ref Message m)
         {
-            switch (m.Msg)
+            switch ((User32.WM)m.Msg)
             {
-                case WindowMessages.WM_CONTEXTMENU:
-                    int x = NativeMethods.Util.SignedLOWORD(m.LParam);
-                    int y = NativeMethods.Util.SignedHIWORD(m.LParam);
+                case User32.WM.CONTEXTMENU:
+                    int x = PARAM.SignedLOWORD(m.LParam);
+                    int y = PARAM.SignedHIWORD(m.LParam);
 
                     if (!ShowContextMenu(x, y))
                     {
@@ -1454,7 +1456,7 @@ namespace System.Windows.Forms
         ///  method in the WebBrowser class.
         /// </summary>
         [ComVisible(false)]
-        protected class WebBrowserSite : WebBrowserSiteBase, UnsafeNativeMethods.IDocHostUIHandler
+        protected class WebBrowserSite : WebBrowserSiteBase, IDocHostUIHandler
         {
             /// <summary>
         ///  Creates an instance of the <see cref='WebBrowserSite'/> class.
@@ -1463,68 +1465,74 @@ namespace System.Windows.Forms
             {
             }
 
-            //
             // IDocHostUIHandler Implementation
-            //
-            int UnsafeNativeMethods.IDocHostUIHandler.ShowContextMenu(uint dwID, ref Point pt, object pcmdtReserved, object pdispReserved)
+            unsafe HRESULT IDocHostUIHandler.ShowContextMenu(uint dwID, Point* pt, object pcmdtReserved, object pdispReserved)
             {
                 WebBrowser wb = (WebBrowser)Host;
 
                 if (wb.IsWebBrowserContextMenuEnabled)
                 {
                     // let MSHTML display its UI
-                    return NativeMethods.S_FALSE;
+                    return HRESULT.S_FALSE;
                 }
-                else
+
+                if (pt == null)
                 {
-                    if (pt.X == 0 && pt.Y == 0)
-                    {
-                        // IDocHostUIHandler::ShowContextMenu sends (0,0) when the context menu is invoked via the keyboard
-                        // make it (-1, -1) for the WebBrowser::ShowContextMenu method
-                        pt.X = -1;
-                        pt.Y = -1;
-                    }
-                    wb.ShowContextMenu(pt.X, pt.Y);
-                    // MSHTML should not display its context menu because we displayed ours
-                    return NativeMethods.S_OK;
+                    return HRESULT.E_INVALIDARG;
                 }
+
+                if (pt->X == 0 && pt->Y == 0)
+                {
+                    // IDocHostUIHandler::ShowContextMenu sends (0,0) when the context menu is invoked via the keyboard
+                    // make it (-1, -1) for the WebBrowser::ShowContextMenu method
+                    pt->X = -1;
+                    pt->Y = -1;
+                }
+                wb.ShowContextMenu(pt->X, pt->Y);
+                // MSHTML should not display its context menu because we displayed ours
+                return HRESULT.S_OK;
             }
 
-            int UnsafeNativeMethods.IDocHostUIHandler.GetHostInfo(NativeMethods.DOCHOSTUIINFO info)
+            unsafe HRESULT IDocHostUIHandler.GetHostInfo(DOCHOSTUIINFO* pInfo)
             {
+                if (pInfo == null)
+                {
+                    return HRESULT.E_POINTER;
+                }
+
                 WebBrowser wb = (WebBrowser)Host;
 
-                info.dwDoubleClick = DOCHOSTUIDBLCLK.DEFAULT;
-                info.dwFlags = DOCHOSTUIFLAG.NO3DOUTERBORDER |
+                pInfo->dwDoubleClick = DOCHOSTUIDBLCLK.DEFAULT;
+                pInfo->dwFlags = DOCHOSTUIFLAG.NO3DOUTERBORDER |
                                DOCHOSTUIFLAG.DISABLE_SCRIPT_INACTIVE;
 
                 if (wb.ScrollBarsEnabled)
                 {
-                    info.dwFlags |= DOCHOSTUIFLAG.FLAT_SCROLLBAR;
+                    pInfo->dwFlags |= DOCHOSTUIFLAG.FLAT_SCROLLBAR;
                 }
                 else
                 {
-                    info.dwFlags |= DOCHOSTUIFLAG.SCROLL_NO;
+                    pInfo->dwFlags |= DOCHOSTUIFLAG.SCROLL_NO;
                 }
 
                 if (Application.RenderWithVisualStyles)
                 {
-                    info.dwFlags |= DOCHOSTUIFLAG.THEME;
+                    pInfo->dwFlags |= DOCHOSTUIFLAG.THEME;
                 }
                 else
                 {
-                    info.dwFlags |= DOCHOSTUIFLAG.NOTHEME;
+                    pInfo->dwFlags |= DOCHOSTUIFLAG.NOTHEME;
                 }
 
-                return NativeMethods.S_OK;
+                return HRESULT.S_OK;
             }
 
-            int UnsafeNativeMethods.IDocHostUIHandler.EnableModeless(bool fEnable)
+            HRESULT IDocHostUIHandler.EnableModeless(BOOL fEnable)
             {
-                return NativeMethods.E_NOTIMPL;
+                return HRESULT.E_NOTIMPL;
             }
 
-            HRESULT UnsafeNativeMethods.IDocHostUIHandler.ShowUI(
+            HRESULT IDocHostUIHandler.ShowUI(
                 uint dwID,
                 Ole32.IOleInPlaceActiveObject activeObject,
                 Ole32.IOleCommandTarget commandTarget,
@@ -1534,37 +1542,37 @@ namespace System.Windows.Forms
                 return HRESULT.S_FALSE;
             }
 
-            int UnsafeNativeMethods.IDocHostUIHandler.HideUI()
-            {
-                return NativeMethods.E_NOTIMPL;
-            }
-
-            int UnsafeNativeMethods.IDocHostUIHandler.UpdateUI()
-            {
-                return NativeMethods.E_NOTIMPL;
-            }
-
-            HRESULT UnsafeNativeMethods.IDocHostUIHandler.OnDocWindowActivate(BOOL fActivate)
+            HRESULT IDocHostUIHandler.HideUI()
             {
                 return HRESULT.E_NOTIMPL;
             }
 
-            int UnsafeNativeMethods.IDocHostUIHandler.OnFrameWindowActivate(bool fActivate)
-            {
-                return NativeMethods.E_NOTIMPL;
-            }
-
-            unsafe HRESULT UnsafeNativeMethods.IDocHostUIHandler.ResizeBorder(RECT* rect, Ole32.IOleInPlaceUIWindow doc, BOOL fFrameWindow)
+            HRESULT IDocHostUIHandler.UpdateUI()
             {
                 return HRESULT.E_NOTIMPL;
             }
 
-            int UnsafeNativeMethods.IDocHostUIHandler.GetOptionKeyPath(string[] pbstrKey, int dw)
+            HRESULT IDocHostUIHandler.OnDocWindowActivate(BOOL fActivate)
             {
-                return NativeMethods.E_NOTIMPL;
+                return HRESULT.E_NOTIMPL;
             }
 
-            HRESULT UnsafeNativeMethods.IDocHostUIHandler.GetDropTarget(Ole32.IDropTarget pDropTarget, out Ole32.IDropTarget ppDropTarget)
+            HRESULT IDocHostUIHandler.OnFrameWindowActivate(BOOL fActivate)
+            {
+                return HRESULT.E_NOTIMPL;
+            }
+
+            unsafe HRESULT IDocHostUIHandler.ResizeBorder(RECT* rect, Ole32.IOleInPlaceUIWindow doc, BOOL fFrameWindow)
+            {
+                return HRESULT.E_NOTIMPL;
+            }
+
+            HRESULT IDocHostUIHandler.GetOptionKeyPath(string[] pbstrKey, uint dw)
+            {
+                return HRESULT.E_NOTIMPL;
+            }
+
+            HRESULT IDocHostUIHandler.GetDropTarget(Ole32.IDropTarget pDropTarget, out Ole32.IDropTarget ppDropTarget)
             {
                 // Set to null no matter what we return, to prevent the marshaller
                 // from having issues if the pointer points to random stuff.
@@ -1572,14 +1580,14 @@ namespace System.Windows.Forms
                 return HRESULT.E_NOTIMPL;
             }
 
-            int UnsafeNativeMethods.IDocHostUIHandler.GetExternal(out object ppDispatch)
+            HRESULT IDocHostUIHandler.GetExternal(out object ppDispatch)
             {
                 WebBrowser wb = (WebBrowser)Host;
                 ppDispatch = wb.ObjectForScripting;
-                return NativeMethods.S_OK;
+                return HRESULT.S_OK;
             }
 
-            unsafe HRESULT UnsafeNativeMethods.IDocHostUIHandler.TranslateAccelerator(User32.MSG* lpMsg, Guid* pguidCmdGroup, uint nCmdID)
+            unsafe HRESULT IDocHostUIHandler.TranslateAccelerator(User32.MSG* lpMsg, Guid* pguidCmdGroup, uint nCmdID)
             {
                 if (lpMsg == null || pguidCmdGroup == null)
                 {
@@ -1592,7 +1600,7 @@ namespace System.Windows.Forms
                 if (!wb.WebBrowserShortcutsEnabled)
                 {
                     int keyCode = (int)lpMsg->wParam | (int)Control.ModifierKeys;
-                    if (lpMsg->message != User32.WindowMessage.WM_CHAR && Enum.IsDefined(typeof(Shortcut), (Shortcut)keyCode))
+                    if (lpMsg->message != User32.WM.CHAR && Enum.IsDefined(typeof(Shortcut), (Shortcut)keyCode))
                     {
                         return HRESULT.S_OK;
                     }
@@ -1601,22 +1609,20 @@ namespace System.Windows.Forms
                 return HRESULT.S_FALSE;
             }
 
-            int UnsafeNativeMethods.IDocHostUIHandler.TranslateUrl(int dwTranslate, string strUrlIn, out string pstrUrlOut)
+            HRESULT IDocHostUIHandler.TranslateUrl(uint dwTranslate, string strUrlIn, out string pstrUrlOut)
             {
-                //
                 // Set to null no matter what we return, to prevent the marshaller
                 // from having issues if the pointer points to random stuff.
                 pstrUrlOut = null;
-                return NativeMethods.S_FALSE;
+                return HRESULT.S_FALSE;
             }
 
-            int UnsafeNativeMethods.IDocHostUIHandler.FilterDataObject(IComDataObject pDO, out IComDataObject ppDORet)
+            HRESULT IDocHostUIHandler.FilterDataObject(IComDataObject pDO, out IComDataObject ppDORet)
             {
-                //
                 // Set to null no matter what we return, to prevent the marshaller
                 // from having issues if the pointer points to random stuff.
                 ppDORet = null;
-                return NativeMethods.S_FALSE;
+                return HRESULT.S_FALSE;
             }
 
             //

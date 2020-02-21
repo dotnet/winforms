@@ -2,8 +2,11 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.ComponentModel;
 using System.IO;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -29,14 +32,8 @@ namespace System.Windows.Forms
         ]
         public bool CreatePrompt
         {
-            get
-            {
-                return GetOption(NativeMethods.OFN_CREATEPROMPT);
-            }
-            set
-            {
-                SetOption(NativeMethods.OFN_CREATEPROMPT, value);
-            }
+            get => GetOption((int)Comdlg32.OFN.CREATEPROMPT);
+            set => SetOption((int)Comdlg32.OFN.CREATEPROMPT, value);
         }
 
         /// <summary>
@@ -50,14 +47,8 @@ namespace System.Windows.Forms
         ]
         public bool OverwritePrompt
         {
-            get
-            {
-                return GetOption(NativeMethods.OFN_OVERWRITEPROMPT);
-            }
-            set
-            {
-                SetOption(NativeMethods.OFN_OVERWRITEPROMPT, value);
-            }
+            get => GetOption((int)Comdlg32.OFN.OVERWRITEPROMPT);
+            set => SetOption((int)Comdlg32.OFN.OVERWRITEPROMPT, value);
         }
 
         /// <summary>
@@ -110,7 +101,7 @@ namespace System.Windows.Forms
             }
 
             //Note: When we are using the Vista dialog mode we get two prompts (one from us and one from the OS) if we do this
-            if ((_options & NativeMethods.OFN_OVERWRITEPROMPT) != 0 && FileExists(fileName) && !UseVistaDialogInternal)
+            if ((_options & (int)Comdlg32.OFN.OVERWRITEPROMPT) != 0 && FileExists(fileName) && !UseVistaDialogInternal)
             {
                 if (!PromptFileOverwrite(fileName))
                 {
@@ -118,7 +109,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            if ((_options & NativeMethods.OFN_CREATEPROMPT) != 0 && !FileExists(fileName))
+            if ((_options & (int)Comdlg32.OFN.CREATEPROMPT) != 0 && !FileExists(fileName))
             {
                 if (!PromptFileCreate(fileName))
                 {
@@ -136,7 +127,7 @@ namespace System.Windows.Forms
         public override void Reset()
         {
             base.Reset();
-            SetOption(NativeMethods.OFN_OVERWRITEPROMPT, true);
+            SetOption((int)Comdlg32.OFN.OVERWRITEPROMPT, true);
         }
 
         private protected override bool RunFileDialog(NativeMethods.OPENFILENAME_I ofn)
@@ -146,11 +137,9 @@ namespace System.Windows.Forms
             if (!result)
             {
                 // Something may have gone wrong - check for error condition
-                //
-                int errorCode = SafeNativeMethods.CommDlgExtendedError();
-                switch (errorCode)
+                switch (Comdlg32.CommDlgExtendedError())
                 {
-                    case NativeMethods.FNERR_INVALIDFILENAME:
+                    case Comdlg32.FNERR.INVALIDFILENAME:
                         throw new InvalidOperationException(string.Format(SR.FileDialogInvalidFileName, FileName));
                 }
             }

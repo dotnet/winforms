@@ -1282,7 +1282,6 @@ namespace System.Windows.Forms.Design
                             throw;
                         }
                     }
-
                 }
             }
         }
@@ -1601,17 +1600,17 @@ namespace System.Windows.Forms.Design
         /// </summary>
         protected override void WndProc(ref Message m)
         {
-            switch (m.Msg)
+            switch ((User32.WM)m.Msg)
             {
-                case WindowMessages.WM_CANCELMODE:
+                case User32.WM.CANCELMODE:
                     // When we get cancelmode (i.e. you tabbed away to another window) then we want to cancel any pending drag operation!
                     OnLostCapture();
                     break;
-                case WindowMessages.WM_SETCURSOR:
+                case User32.WM.SETCURSOR:
                     OnSetCursor();
                     return;
-                case WindowMessages.WM_HSCROLL:
-                case WindowMessages.WM_VSCROLL:
+                case User32.WM.HSCROLL:
+                case User32.WM.VSCROLL:
                     // When we scroll, we reposition a control without causing a property change event.  Therefore, we must tell the selection UI service to sync itself.
                     base.WndProc(ref m);
                     if (selectionUISvc != null)
@@ -1619,14 +1618,14 @@ namespace System.Windows.Forms.Design
                         selectionUISvc.SyncSelection();
                     }
                     return;
-                case WindowMessages.WM_STYLECHANGED:
+                case User32.WM.STYLECHANGED:
                     // When the scroll bars first appear, we need to invalidate so we properly paint our grid.
                     Invalidate();
                     break;
-                case WindowMessages.WM_CONTEXTMENU:
+                case User32.WM.CONTEXTMENU:
                     // Pop a context menu for the composition designer.
-                    int x = NativeMethods.Util.SignedLOWORD(unchecked((int)(long)m.LParam));
-                    int y = NativeMethods.Util.SignedHIWORD(unchecked((int)(long)m.LParam));
+                    int x = PARAM.SignedLOWORD(m.LParam);
+                    int y = PARAM.SignedHIWORD(m.LParam);
                     if (x == -1 && y == -1)
                     {
                         // for shift-F10
@@ -1636,11 +1635,11 @@ namespace System.Windows.Forms.Design
                     }
                     OnContextMenu(x, y, true);
                     break;
-                case WindowMessages.WM_NCHITTEST:
+                case User32.WM.NCHITTEST:
                     if (glyphManager != null)
                     {
-                        // Get a hit test on any glyhs that we are managing this way - we know where to route appropriate  messages
-                        Point pt = new Point((short)NativeMethods.Util.LOWORD(unchecked((int)(long)m.LParam)), (short)NativeMethods.Util.HIWORD(unchecked((int)(long)m.LParam)));
+                        // Get a hit test on any glyphs that we are managing this way - we know where to route appropriate  messages
+                        Point pt = new Point((short)PARAM.LOWORD(m.LParam), (short)PARAM.HIWORD(m.LParam));
                         var pt1 = new Point();
                         User32.MapWindowPoints(IntPtr.Zero, Handle, ref pt1, 1);
                         pt.Offset(pt1.X, pt1.Y);
@@ -1960,7 +1959,6 @@ namespace System.Windows.Forms.Design
                 Text = name;
                 _inheritanceAttribute = (InheritanceAttribute)TypeDescriptor.GetAttributes(component)[typeof(InheritanceAttribute)];
                 TabStop = false;
-
             }
 
             /// <summary>
@@ -2438,7 +2436,6 @@ namespace System.Windows.Forms.Design
                     (specified & BoundsSpecified.Width) == BoundsSpecified.Width ||
                     (specified & BoundsSpecified.Height) == BoundsSpecified.Height)
                 {
-
                     base.SetBoundsCore(x, y, width, height, specified);
                 }
                 Rectangle bounds = Bounds;
@@ -2447,7 +2444,6 @@ namespace System.Windows.Forms.Design
                 {
                     base.SetBoundsCore(x, y, width, height, specified);
                 }
-
             }
 
             protected override void SetVisibleCore(bool value)
@@ -2548,16 +2544,16 @@ namespace System.Windows.Forms.Design
             /// </summary>
             protected override void WndProc(ref Message m)
             {
-                switch (m.Msg)
+                switch ((User32.WM)m.Msg)
                 {
-                    case WindowMessages.WM_SETCURSOR:
+                    case User32.WM.SETCURSOR:
                         // We always handle setting the cursor ourselves.
                         OnSetCursor();
                         break;
-                    case WindowMessages.WM_CONTEXTMENU:
+                    case User32.WM.CONTEXTMENU:
                         // We must handle this ourselves.  Control only allows regular Windows Forms context menus, which doesn't do us much good.  Also, control's button up processing calls DefwndProc first, which causes a right mouse up to be routed as a WM_CONTEXTMENU.  If we don't respond to it here, this message will be bubbled up to our parent, which would pop up a container context menu instead of our own.
-                        int x = NativeMethods.Util.SignedLOWORD(unchecked((int)(long)m.LParam));
-                        int y = NativeMethods.Util.SignedHIWORD(unchecked((int)(long)m.LParam));
+                        int x = PARAM.SignedLOWORD(m.LParam);
+                        int y = PARAM.SignedHIWORD(m.LParam);
                         if (x == -1 && y == -1)
                         {
                             // for shift-F10
@@ -2567,11 +2563,11 @@ namespace System.Windows.Forms.Design
                         }
                         OnContextMenu(x, y);
                         break;
-                    case WindowMessages.WM_NCHITTEST:
+                    case User32.WM.NCHITTEST:
                         if (_tray.glyphManager != null)
                         {
                             // Make sure tha we send our glyphs hit test messages over the TrayControls too
-                            Point pt = new Point((short)NativeMethods.Util.LOWORD(unchecked((int)(long)m.LParam)), (short)NativeMethods.Util.HIWORD(unchecked((int)(long)m.LParam)));
+                            Point pt = new Point((short)PARAM.LOWORD(m.LParam), (short)PARAM.HIWORD(m.LParam));
                             var pt1 = new Point();
                             User32.MapWindowPoints(IntPtr.Zero, Handle, ref pt1, 1);
                             pt.Offset(pt1.X, pt1.Y);

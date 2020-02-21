@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Collections;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -10,6 +12,7 @@ using System.Drawing.Design;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -160,7 +163,6 @@ namespace System.Windows.Forms
             }
             set
             {
-
                 // Treat null as selecting no item
                 //
                 if (value == null)
@@ -173,7 +175,7 @@ namespace System.Windows.Forms
                     //
                     for (int i = 0; i < Items.Count; i++)
                     {
-                        if (value != null && value.Equals(Items[i]))
+                        if (value.Equals(Items[i]))
                         {
                             SelectedIndex = i;
                             break;
@@ -207,6 +209,8 @@ namespace System.Windows.Forms
                 }
             }
         }
+
+        internal override bool SupportsUiaProviders => true;
 
         /// <summary>
         ///  Gets or sets a value indicating whether the collection of items continues to
@@ -296,7 +300,6 @@ namespace System.Windows.Forms
                     SelectIndex(0);
                 }
             }
-
         }
 
         /// <summary>
@@ -372,7 +375,6 @@ namespace System.Windows.Forms
                 {
                     index = 0;
                 }
-
             } while (!found && index != startPosition);
 
             return matchIndex;
@@ -408,12 +410,10 @@ namespace System.Windows.Forms
                     || uc == UnicodeCategory.OtherNumber
                     || uc == UnicodeCategory.UppercaseLetter)
                 {
-
                     // Attempt to match the character to a domain item
                     int matchIndex = MatchIndex(new string(character), false, domainIndex + 1);
                     if (matchIndex != -1)
                     {
-
                         // Select the matching domain item
                         SelectIndex(matchIndex);
                     }
@@ -479,15 +479,10 @@ namespace System.Windows.Forms
             try
             {
                 // Sanity check
-                Debug.Assert(sorted == true, "Sorted == false");
-                if (!sorted)
-                {
-                    return;
-                }
+                Debug.Assert(sorted, "Sorted == false");
 
                 if (domainItems != null)
                 {
-
                     // Sort the domain values
                     ArrayList.Adapter(domainItems).Sort(new DomainUpDownItemCompare());
 
@@ -569,13 +564,11 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void UpdateEditText()
         {
-            Debug.Assert(!UserEdit, "UserEdit should be false");
-            // Defensive programming
             UserEdit = false;
-
             ChangingText = true;
             Text = stringValue;
         }
+
         // This is not a breaking change -- Even though this control previously autosized to hieght,
         // it didn't actually have an AutoSize property.  The new AutoSize property enables the
         // smarter behavior.
@@ -585,7 +578,7 @@ namespace System.Windows.Forms
             int width = LayoutUtils.OldGetLargestStringSizeInCollection(Font, Items).Width;
 
             // AdjuctWindowRect with our border, since textbox is borderless.
-            width = SizeFromClientSize(width, height).Width + upDownButtons.Width;
+            width = SizeFromClientSize(width, height).Width + _upDownButtons.Width;
             return new Size(width, height) + Padding.Size;
         }
 
@@ -665,7 +658,7 @@ namespace System.Windows.Forms
             /// </summary>
             public override void RemoveAt(int item)
             {
-                // Overridden to update the domain index if neccessary
+                // Overridden to update the domain index if necessary
                 base.RemoveAt(item);
 
                 if (item < owner.domainIndex)
@@ -715,11 +708,36 @@ namespace System.Windows.Forms
         public class DomainUpDownAccessibleObject : ControlAccessibleObject
         {
             private DomainItemListAccessibleObject itemList;
+            private readonly UpDownBase _owner;
 
             /// <summary>
             /// </summary>
-            public DomainUpDownAccessibleObject(Control owner) : base(owner)
+            public DomainUpDownAccessibleObject(DomainUpDown owner) : base(owner)
             {
+                _owner = owner;
+            }
+
+            internal override object GetPropertyValue(UiaCore.UIA propertyID)
+            {
+                switch (propertyID)
+                {
+                    case UiaCore.UIA.RuntimeIdPropertyId:
+                        return RuntimeId;
+                    case UiaCore.UIA.NamePropertyId:
+                        return Name;
+                    case UiaCore.UIA.ControlTypePropertyId:
+                        return UiaCore.UIA.SpinnerControlTypeId;
+                    case UiaCore.UIA.BoundingRectanglePropertyId:
+                        return Bounds;
+                    case UiaCore.UIA.LegacyIAccessibleStatePropertyId:
+                        return State;
+                    case UiaCore.UIA.LegacyIAccessibleRolePropertyId:
+                        return Role;
+                    case UiaCore.UIA.IsKeyboardFocusablePropertyId:
+                        return false;
+                    default:
+                        return base.GetPropertyValue(propertyID);
+                }
             }
 
             /// <summary>
@@ -727,15 +745,8 @@ namespace System.Windows.Forms
             /// </summary>
             public override string Name
             {
-                get
-                {
-                    string baseName = base.Name;
-                    return ((DomainUpDown)Owner).GetAccessibleName(baseName);
-                }
-                set
-                {
-                    base.Name = value;
-                }
+                get => base.Name ?? SR.DefaultDomainUpDownAccessibleName;
+                set => base.Name = value;
             }
 
             private DomainItemListAccessibleObject ItemList
@@ -746,6 +757,7 @@ namespace System.Windows.Forms
                     {
                         itemList = new DomainItemListAccessibleObject(this);
                     }
+
                     return itemList;
                 }
             }
@@ -755,14 +767,13 @@ namespace System.Windows.Forms
                 get
                 {
                     AccessibleRole role = Owner.AccessibleRole;
+
                     if (role != AccessibleRole.Default)
                     {
                         return role;
                     }
-                    else
-                    {
-                        return AccessibleRole.SpinButton;
-                    }
+
+                    return AccessibleRole.SpinButton;
                 }
             }
 
@@ -773,27 +784,44 @@ namespace System.Windows.Forms
                 switch (index)
                 {
                     // TextBox child
-                    //
                     case 0:
-                        return ((UpDownBase)Owner).TextBox.AccessibilityObject.Parent;
-
+                        return _owner.TextBox.AccessibilityObject.Parent;
                     // Up/down buttons
-                    //
                     case 1:
-                        return ((UpDownBase)Owner).UpDownButtonsInternal.AccessibilityObject.Parent;
-
+                        return _owner.UpDownButtonsInternal.AccessibilityObject.Parent;
                     case 2:
                         return ItemList;
+                    default:
+                        return null;
                 }
-
-                return null;
             }
 
-            /// <summary>
-            /// </summary>
             public override int GetChildCount()
             {
                 return 3;
+            }
+
+            internal override int[] RuntimeId
+            {
+                get
+                {
+                    if (_owner == null)
+                    {
+                        return base.RuntimeId;
+                    }
+
+                    // we need to provide a unique ID
+                    // others are implementing this in the same manner
+                    // first item is static - 0x2a (RuntimeIDFirstItem)
+                    // second item can be anything, but here it is a hash
+
+                    var runtimeId = new int[3];
+                    runtimeId[0] = RuntimeIDFirstItem;
+                    runtimeId[1] = (int)(long)_owner.Handle;
+                    runtimeId[2] = _owner.GetHashCode();
+
+                    return runtimeId;
+                }
             }
         }
 
@@ -849,7 +877,6 @@ namespace System.Windows.Forms
 
             public override AccessibleObject GetChild(int index)
             {
-
                 if (index >= 0 && index < GetChildCount())
                 {
                     return new DomainItemAccessibleObject(((DomainUpDown)parent.Owner).Items[index].ToString(), this);
@@ -862,7 +889,6 @@ namespace System.Windows.Forms
             {
                 return ((DomainUpDown)parent.Owner).Items.Count;
             }
-
         }
 
         [ComVisible(true)]
@@ -921,6 +947,5 @@ namespace System.Windows.Forms
                 }
             }
         }
-
     }
 }

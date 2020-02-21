@@ -10,10 +10,13 @@ using System.Linq;
 using Moq;
 using WinForms.Common.Tests;
 using Xunit;
+using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
-    public class TabControlTabPageCollectionTests
+    using Size = System.Drawing.Size;
+
+    public class TabControlTabPageCollectionTests : IClassFixture<ThreadExceptionFixture>
     {
         public static IEnumerable<object[]> Add_TestData()
         {
@@ -98,7 +101,7 @@ namespace System.Windows.Forms.Tests
                 Assert.False(value1.IsHandleCreated);
                 Assert.False(value2.IsHandleCreated);
                 Assert.False(owner.IsHandleCreated);
-                
+
                 // Add again.
                 collection.Add(value1);
                 Assert.Equal(new TabPage[] { value1, value2, value1 }, collection.Cast<TabPage>());
@@ -137,18 +140,18 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> Add_WithHandle_TestData()
         {
-            yield return new object[] { TabAppearance.Buttons, Size.Empty, new Rectangle(4, 27, 392, 269), 0 };
-            yield return new object[] { TabAppearance.FlatButtons, Size.Empty, new Rectangle(4, 27, 392, 269), 1 };
-            yield return new object[] { TabAppearance.Normal, Size.Empty, new Rectangle(4, 24, 392, 272), 0 };
-            
-            yield return new object[] { TabAppearance.Buttons, new Size(100, 120), new Rectangle(4, 124, 392, 172), 0 };
-            yield return new object[] { TabAppearance.FlatButtons, new Size(100, 120), new Rectangle(4, 124, 392, 172), 1 };
-            yield return new object[] { TabAppearance.Normal, new Size(100, 120), new Rectangle(4, 124, 392, 172), 0 };
+            yield return new object[] { TabAppearance.Buttons, Size.Empty, 0 };
+            yield return new object[] { TabAppearance.FlatButtons, Size.Empty, 1 };
+            yield return new object[] { TabAppearance.Normal, Size.Empty, 0 };
+
+            yield return new object[] { TabAppearance.Buttons, new Size(100, 120), 0 };
+            yield return new object[] { TabAppearance.FlatButtons, new Size(100, 120), 1 };
+            yield return new object[] { TabAppearance.Normal, new Size(100, 120), 0 };
         }
 
         [WinFormsTheory]
         [MemberData(nameof(Add_WithHandle_TestData))]
-        public void TabPageCollection_Add_InvokeValueWithoutHandleOwnerWithHandle_Success(TabAppearance appearance, Size itemSize, Rectangle expectedBounds1, int expectedParentInvalidatedCallCount)
+        public void TabPageCollection_Add_InvokeValueWithoutHandleOwnerWithHandle_Success(TabAppearance appearance, Size itemSize, int expectedParentInvalidatedCallCount)
         {
             using var owner = new TabControl
             {
@@ -190,7 +193,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(value1, Assert.Single(owner.Controls));
                 Assert.Same(owner, value1.Parent);
                 Assert.True(value1.Visible);
-                Assert.Equal(expectedBounds1, value1.Bounds);
+                Assert.Equal(owner.DisplayRectangle, value1.Bounds);
                 Assert.Null(value1.Site);
                 Assert.Equal(0, owner.SelectedIndex);
                 Assert.Equal(2, layoutCallCount1);
@@ -218,11 +221,11 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(new Control[] { value1, value2 }, owner.Controls.Cast<Control>());
                 Assert.Same(owner, value1.Parent);
                 Assert.True(value1.Visible);
-                Assert.Equal(expectedBounds1, value1.Bounds);
+                Assert.Equal(owner.DisplayRectangle, value1.Bounds);
                 Assert.Null(value1.Site);
                 Assert.Same(owner, value2.Parent);
                 Assert.False(value2.Visible);
-                Assert.Equal(expectedBounds1, value2.Bounds);
+                Assert.Equal(owner.DisplayRectangle, value2.Bounds);
                 Assert.Null(value2.Site);
                 Assert.Equal(0, owner.SelectedIndex);
                 Assert.Equal(2, layoutCallCount1);
@@ -252,7 +255,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(expectedParentInvalidatedCallCount * 2, parentInvalidatedCallCount);
                 Assert.Equal(0, parentStyleChangedCallCount);
                 Assert.Equal(0, parentCreatedCallCount);
-                
+
                 // Add again.
                 collection.Add(value1);
                 Assert.Equal(new TabPage[] { value1, value2, value1 }, collection.Cast<TabPage>());
@@ -260,11 +263,11 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(new Control[] { value2, value1 }, owner.Controls.Cast<Control>());
                 Assert.Same(owner, value1.Parent);
                 Assert.False(value1.Visible);
-                Assert.Equal(expectedBounds1, value1.Bounds);
+                Assert.Equal(owner.DisplayRectangle, value1.Bounds);
                 Assert.Null(value1.Site);
                 Assert.Same(owner, value2.Parent);
                 Assert.False(value2.Visible);
-                Assert.Equal(expectedBounds1, value2.Bounds);
+                Assert.Equal(owner.DisplayRectangle, value2.Bounds);
                 Assert.Null(value2.Site);
                 Assert.Equal(0, owner.SelectedIndex);
                 Assert.Equal(3, layoutCallCount1);
@@ -408,7 +411,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(0, styleChangedCallCount2);
                 Assert.Equal(0, createdCallCount2);
                 Assert.False(owner.IsHandleCreated);
-                
+
                 // Add again.
                 collection.Add(value1);
                 Assert.Equal(new TabPage[] { value1, value2, value1, }, collection.Cast<TabPage>());
@@ -453,7 +456,7 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [MemberData(nameof(Add_WithHandle_TestData))]
-        public void TabPageCollection_Add_InvokeValueWithHandleOwnerWithHandle_Success(TabAppearance appearance, Size itemSize, Rectangle expectedBounds1, int expectedParentInvalidatedCallCount)
+        public void TabPageCollection_Add_InvokeValueWithHandleOwnerWithHandle_Success(TabAppearance appearance, Size itemSize, int expectedParentInvalidatedCallCount)
         {
             using var owner = new TabControl
             {
@@ -509,7 +512,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(value1, Assert.Single(owner.Controls));
                 Assert.Same(owner, value1.Parent);
                 Assert.True(value1.Visible);
-                Assert.Equal(expectedBounds1, value1.Bounds);
+                Assert.Equal(owner.DisplayRectangle, value1.Bounds);
                 Assert.Null(value1.Site);
                 Assert.Equal(0, owner.SelectedIndex);
                 Assert.Equal(2, layoutCallCount1);
@@ -540,11 +543,11 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(new Control[] { value1, value2 }, owner.Controls.Cast<Control>());
                 Assert.Same(owner, value1.Parent);
                 Assert.True(value1.Visible);
-                Assert.Equal(expectedBounds1, value1.Bounds);
+                Assert.Equal(owner.DisplayRectangle, value1.Bounds);
                 Assert.Null(value1.Site);
                 Assert.Same(owner, value2.Parent);
                 Assert.False(value2.Visible);
-                Assert.Equal(expectedBounds1, value2.Bounds);
+                Assert.Equal(owner.DisplayRectangle, value2.Bounds);
                 Assert.Null(value2.Site);
                 Assert.Equal(0, owner.SelectedIndex);
                 Assert.Equal(2, layoutCallCount1);
@@ -580,7 +583,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(expectedParentInvalidatedCallCount * 2, parentInvalidatedCallCount);
                 Assert.Equal(0, parentStyleChangedCallCount);
                 Assert.Equal(0, parentCreatedCallCount);
-                
+
                 // Add again.
                 collection.Add(value1);
                 Assert.Equal(new TabPage[] { value1, value2, value1 }, collection.Cast<TabPage>());
@@ -588,11 +591,11 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(new Control[] { value2, value1 }, owner.Controls.Cast<Control>());
                 Assert.Same(owner, value1.Parent);
                 Assert.False(value1.Visible);
-                Assert.Equal(expectedBounds1, value1.Bounds);
+                Assert.Equal(owner.DisplayRectangle, value1.Bounds);
                 Assert.Null(value1.Site);
                 Assert.Same(owner, value2.Parent);
                 Assert.False(value2.Visible);
-                Assert.Equal(expectedBounds1, value2.Bounds);
+                Assert.Equal(owner.DisplayRectangle, value2.Bounds);
                 Assert.Null(value2.Site);
                 Assert.Equal(0, owner.SelectedIndex);
                 Assert.Equal(3, layoutCallCount1);
@@ -728,7 +731,7 @@ namespace System.Windows.Forms.Tests
         {
             using var owner = new TabControl();
             var collection = new TabControl.TabPageCollection(owner);
-            
+
             var items = new List<TabPage>();
             for (int i = 0; i < 24; i++)
             {
@@ -740,6 +743,129 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(items, owner.Controls.Cast<Control>());
                 Assert.Same(owner, value.Parent);
             }
+        }
+
+        [WinFormsTheory]
+        [InlineData("Text", "Text")]
+        [InlineData("&&Text", "&&Text")]
+        [InlineData("&", "&&")]
+        [InlineData("&Text", "&&Text")]
+        public unsafe void TabPageCollection_Add_GetItemsWithHandle_Success(string text, string expectedText)
+        {
+            using var owner = new TabControl();
+            Assert.NotEqual(IntPtr.Zero, owner.Handle);
+
+            using var page1 = new TabPage();
+            using var page2 = new TabPage
+            {
+                Text = text,
+                ImageIndex = 1
+            };
+            using var page3 = new NullTextTabPage();
+            var collection = new TabControl.TabPageCollection(owner);
+            collection.Add(page1);
+            collection.Add(page2);
+            collection.Add(page3);
+            Assert.Equal((IntPtr)3, User32.SendMessageW(owner.Handle, (User32.WM)ComCtl32.TCM.GETITEMCOUNT, IntPtr.Zero, IntPtr.Zero));
+
+            char* buffer = stackalloc char[256];
+            ComCtl32.TCITEMW item = default;
+            item.cchTextMax = int.MaxValue;
+            item.pszText = buffer;
+            item.dwStateMask = (ComCtl32.TCIS)uint.MaxValue;
+            item.mask = (ComCtl32.TCIF)uint.MaxValue;
+
+            // Get item 0.
+            Assert.Equal((IntPtr)1, User32.SendMessageW(owner.Handle, (User32.WM)ComCtl32.TCM.GETITEMW, (IntPtr)0, ref item));
+            Assert.Equal(ComCtl32.TCIS.BUTTONPRESSED, item.dwState);
+            Assert.Equal(IntPtr.Zero, item.lParam);
+            Assert.Equal(int.MaxValue, item.cchTextMax);
+            Assert.Empty(new string(item.pszText));
+            Assert.Equal(-1, item.iImage);
+
+            // Get item 1.
+            Assert.Equal((IntPtr)1, User32.SendMessageW(owner.Handle, (User32.WM)ComCtl32.TCM.GETITEMW, (IntPtr)1, ref item));
+            Assert.Equal((ComCtl32.TCIS)0, item.dwState);
+            Assert.Equal(IntPtr.Zero, item.lParam);
+            Assert.Equal(int.MaxValue, item.cchTextMax);
+            Assert.Equal(expectedText, new string(item.pszText));
+            Assert.Equal(1, item.iImage);
+
+            // Get item 2.
+            Assert.Equal((IntPtr)1, User32.SendMessageW(owner.Handle, (User32.WM)ComCtl32.TCM.GETITEMW, (IntPtr)2, ref item));
+            Assert.Equal((ComCtl32.TCIS)0, item.dwState);
+            Assert.Equal(IntPtr.Zero, item.lParam);
+            Assert.Equal(int.MaxValue, item.cchTextMax);
+            Assert.Empty(new string(item.pszText));
+            Assert.Equal(-1, item.iImage);
+        }
+
+        [WinFormsTheory]
+        [InlineData("Text", "Text")]
+        [InlineData("&&Text", "&&Text")]
+        [InlineData("&", "&&")]
+        [InlineData("&Text", "&&Text")]
+        public unsafe void TabPageCollection_Add_GetItemsDesignModeWithHandle_Success(string text, string expectedText)
+        {
+            var mockSite = new Mock<ISite>(MockBehavior.Strict);
+            mockSite
+                .Setup(s => s.GetService(typeof(AmbientProperties)))
+                .Returns(null);
+            mockSite
+                .Setup(s => s.DesignMode)
+                .Returns(true);
+            mockSite
+                .Setup(s => s.Container)
+                .Returns((IContainer)null);
+            using var owner = new TabControl
+            {
+                Site = mockSite.Object
+            };
+            Assert.NotEqual(IntPtr.Zero, owner.Handle);
+
+            using var page1 = new TabPage();
+            using var page2 = new TabPage
+            {
+                Text = text,
+                ImageIndex = 1
+            };
+            using var page3 = new NullTextTabPage();
+            var collection = new TabControl.TabPageCollection(owner);
+            collection.Add(page1);
+            collection.Add(page2);
+            collection.Add(page3);
+            Assert.Equal((IntPtr)3, User32.SendMessageW(owner.Handle, (User32.WM)ComCtl32.TCM.GETITEMCOUNT, IntPtr.Zero, IntPtr.Zero));
+
+            char* buffer = stackalloc char[256];
+            ComCtl32.TCITEMW item = default;
+            item.cchTextMax = int.MaxValue;
+            item.pszText = buffer;
+            item.dwStateMask = (ComCtl32.TCIS)uint.MaxValue;
+            item.mask = (ComCtl32.TCIF)uint.MaxValue;
+
+            // Get item 0.
+            Assert.Equal((IntPtr)1, User32.SendMessageW(owner.Handle, (User32.WM)ComCtl32.TCM.GETITEMW, (IntPtr)0, ref item));
+            Assert.Equal(ComCtl32.TCIS.BUTTONPRESSED, item.dwState);
+            Assert.Equal(IntPtr.Zero, item.lParam);
+            Assert.Equal(int.MaxValue, item.cchTextMax);
+            Assert.Empty(new string(item.pszText));
+            Assert.Equal(-1, item.iImage);
+
+            // Get item 1.
+            Assert.Equal((IntPtr)1, User32.SendMessageW(owner.Handle, (User32.WM)ComCtl32.TCM.GETITEMW, (IntPtr)1, ref item));
+            Assert.Equal((ComCtl32.TCIS)0, item.dwState);
+            Assert.Equal(IntPtr.Zero, item.lParam);
+            Assert.Equal(int.MaxValue, item.cchTextMax);
+            Assert.Equal(expectedText, new string(item.pszText));
+            Assert.Equal(1, item.iImage);
+
+            // Get item 2.
+            Assert.Equal((IntPtr)1, User32.SendMessageW(owner.Handle, (User32.WM)ComCtl32.TCM.GETITEMW, (IntPtr)2, ref item));
+            Assert.Equal((ComCtl32.TCIS)0, item.dwState);
+            Assert.Equal(IntPtr.Zero, item.lParam);
+            Assert.Equal(int.MaxValue, item.cchTextMax);
+            Assert.Empty(new string(item.pszText));
+            Assert.Equal(-1, item.iImage);
         }
 
         [WinFormsFact]
@@ -899,7 +1025,7 @@ namespace System.Windows.Forms.Tests
                 Assert.False(value1.IsHandleCreated);
                 Assert.False(value2.IsHandleCreated);
                 Assert.False(owner.IsHandleCreated);
-                
+
                 // Add again.
                 iList.Add(value1);
                 Assert.Equal(new TabPage[] { value1, value2, value1 }, collection.Cast<TabPage>());
@@ -961,10 +1087,7 @@ namespace System.Windows.Forms.Tests
             using var child3 = new TabPage();
             var collection = new TabControl.TabPageCollection(owner);
             int parentLayoutCallCount = 0;
-            void parentHandler(object sender, LayoutEventArgs e)
-            {
-                parentLayoutCallCount++;
-            }
+            void parentHandler(object sender, LayoutEventArgs e) => parentLayoutCallCount++;
             owner.Layout += parentHandler;
             int controlAddedCallCount = 0;
             owner.ControlAdded += (sender, e) => controlAddedCallCount++;
@@ -982,7 +1105,7 @@ namespace System.Windows.Forms.Tests
                 Assert.False(child1.IsHandleCreated);
                 Assert.False(child2.IsHandleCreated);
                 Assert.False(child3.IsHandleCreated);
-                
+
                 collection.AddRange(new TabPage[] { child1, child2, child3 });
                 Assert.Equal(new TabPage[] { child1, child2, child3, child1, child2, child3 }, collection.Cast<TabPage>());
                 Assert.Same(owner, child1.Parent);
@@ -1035,7 +1158,7 @@ namespace System.Windows.Forms.Tests
             Assert.False(iList.IsSynchronized);
             Assert.Same(collection, iList.SyncRoot);
         }
-        
+
         [WinFormsFact]
         public void TabPageCollection_Ctor_NullOwner_ThrowsArgumentNullException()
         {
@@ -1097,7 +1220,43 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void TabPageCollection_Clear_Invoke_Success()
+        public void TabPageCollection_Clear_InvokeEmpty_Success()
+        {
+            using var owner = new TabControl();
+            var collection = new TabControl.TabPageCollection(owner);
+            int parentLayoutCallCount = 0;
+            void parentHandler(object sender, LayoutEventArgs e) => parentLayoutCallCount++;
+            owner.Layout += parentHandler;
+            int controlRemovedCallCount = 0;
+            owner.ControlRemoved += (sender, e) => controlRemovedCallCount++;
+
+            try
+            {
+                collection.Clear();
+                Assert.Empty(collection);
+                Assert.Empty(owner.TabPages);
+                Assert.Empty(owner.Controls);
+                Assert.Equal(0, parentLayoutCallCount);
+                Assert.Equal(0, controlRemovedCallCount);
+                Assert.False(owner.IsHandleCreated);
+
+                // Clear again.
+                collection.Clear();
+                Assert.Empty(collection);
+                Assert.Empty(owner.TabPages);
+                Assert.Empty(owner.Controls);
+                Assert.Equal(0, parentLayoutCallCount);
+                Assert.Equal(0, controlRemovedCallCount);
+                Assert.False(owner.IsHandleCreated);
+            }
+            finally
+            {
+                owner.Layout -= parentHandler;
+            }
+        }
+
+        [WinFormsFact]
+        public void TabPageCollection_Clear_InvokeNotEmpty_Success()
         {
             using var owner = new TabControl();
             using var child1 = new TabPage();
@@ -1130,11 +1289,11 @@ namespace System.Windows.Forms.Tests
                 Assert.Null(child3.Parent);
                 Assert.Equal(1, parentLayoutCallCount);
                 Assert.Equal(3, controlRemovedCallCount);
-                Assert.True(owner.IsHandleCreated);
+                Assert.False(owner.IsHandleCreated);
                 Assert.False(child1.IsHandleCreated);
                 Assert.False(child2.IsHandleCreated);
                 Assert.False(child3.IsHandleCreated);
-                
+
                 // Clear again.
                 collection.Clear();
                 Assert.Empty(collection);
@@ -1145,7 +1304,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Null(child3.Parent);
                 Assert.Equal(1, parentLayoutCallCount);
                 Assert.Equal(3, controlRemovedCallCount);
-                Assert.True(owner.IsHandleCreated);
+                Assert.False(owner.IsHandleCreated);
                 Assert.False(child1.IsHandleCreated);
                 Assert.False(child2.IsHandleCreated);
                 Assert.False(child3.IsHandleCreated);
@@ -1157,7 +1316,57 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void TabPageCollection_Clear_InvokeWithHandle_Success()
+        public void TabPageCollection_Clear_InvokeEmptyWithHandle_Success()
+        {
+            using var owner = new TabControl();
+            var collection = new TabControl.TabPageCollection(owner);
+
+            int controlRemovedCallCount = 0;
+            owner.ControlRemoved += (sender, e) => controlRemovedCallCount++;
+            Assert.NotEqual(IntPtr.Zero, owner.Handle);
+            int parentInvalidatedCallCount = 0;
+            owner.Invalidated += (sender, e) => parentInvalidatedCallCount++;
+            int parentStyleChangedCallCount = 0;
+            owner.StyleChanged += (sender, e) => parentStyleChangedCallCount++;
+            int parentCreatedCallCount = 0;
+            owner.HandleCreated += (sender, e) => parentCreatedCallCount++;
+            int parentLayoutCallCount = 0;
+            void parentHandler(object sender, LayoutEventArgs e) => parentLayoutCallCount++;
+            owner.Layout += parentHandler;
+
+            try
+            {
+                collection.Clear();
+                Assert.Empty(collection);
+                Assert.Empty(owner.TabPages);
+                Assert.Empty(owner.Controls);
+                Assert.Equal(0, parentLayoutCallCount);
+                Assert.Equal(0, controlRemovedCallCount);
+                Assert.True(owner.IsHandleCreated);
+                Assert.Equal(0, parentInvalidatedCallCount);
+                Assert.Equal(0, parentStyleChangedCallCount);
+                Assert.Equal(0, parentCreatedCallCount);
+
+                // Clear again.
+                collection.Clear();
+                Assert.Empty(collection);
+                Assert.Empty(owner.TabPages);
+                Assert.Empty(owner.Controls);
+                Assert.Equal(0, parentLayoutCallCount);
+                Assert.Equal(0, controlRemovedCallCount);
+                Assert.True(owner.IsHandleCreated);
+                Assert.Equal(0, parentInvalidatedCallCount);
+                Assert.Equal(0, parentStyleChangedCallCount);
+                Assert.Equal(0, parentCreatedCallCount);
+            }
+            finally
+            {
+                owner.Layout -= parentHandler;
+            }
+        }
+
+        [WinFormsFact]
+        public void TabPageCollection_Clear_InvokeNotEmptyWithHandle_Success()
         {
             using var owner = new TabControl();
             using var child1 = new TabPage();
@@ -1205,7 +1414,7 @@ namespace System.Windows.Forms.Tests
                 Assert.True(child1.IsHandleCreated);
                 Assert.False(child2.IsHandleCreated);
                 Assert.False(child3.IsHandleCreated);
-                
+
                 // Clear again.
                 collection.Clear();
                 Assert.Empty(collection);
@@ -1228,6 +1437,23 @@ namespace System.Windows.Forms.Tests
             {
                 owner.Layout -= parentHandler;
             }
+        }
+
+        [WinFormsFact]
+        public void TabPageCollection_Clear_GetItemsWithHandle_Success()
+        {
+            using var owner = new TabControl();
+            using var child1 = new TabPage();
+            using var child2 = new TabPage();
+            using var child3 = new TabPage();
+            var collection = new TabControl.TabPageCollection(owner);
+            collection.Add(child1);
+            collection.Add(child2);
+            collection.Add(child3);
+
+            Assert.NotEqual(IntPtr.Zero, owner.Handle);
+            collection.Clear();
+            Assert.Equal((IntPtr)0, User32.SendMessageW(owner.Handle, (User32.WM)ComCtl32.TCM.GETITEMCOUNT, IntPtr.Zero, IntPtr.Zero));
         }
 
         [WinFormsFact]
@@ -1323,7 +1549,7 @@ namespace System.Windows.Forms.Tests
             collection.Add(child3);
 
             Assert.Equal(expected, collection.ContainsKey(key));
-            
+
             // Call again.
             Assert.Equal(expected, collection.ContainsKey(key));
             Assert.False(collection.ContainsKey("NoSuchKey"));
@@ -1337,7 +1563,7 @@ namespace System.Windows.Forms.Tests
             var collection = new TabControl.TabPageCollection(owner);
 
             Assert.False(collection.ContainsKey(key));
-            
+
             // Call again.
             Assert.False(collection.ContainsKey(key));
             Assert.False(collection.ContainsKey("NoSuchKey"));
@@ -1355,11 +1581,11 @@ namespace System.Windows.Forms.Tests
 
                 Assert.False(enumerator.MoveNext());
                 Assert.Throws<InvalidOperationException>(() => enumerator.Current);
-                
+
                 // Call again.
                 Assert.False(enumerator.MoveNext());
                 Assert.Throws<InvalidOperationException>(() => enumerator.Current);
-            
+
                 enumerator.Reset();
             }
         }
@@ -1383,13 +1609,13 @@ namespace System.Windows.Forms.Tests
 
                 Assert.True(enumerator.MoveNext());
                 Assert.Same(child1, enumerator.Current);
-                
+
                 Assert.True(enumerator.MoveNext());
                 Assert.Same(child2, enumerator.Current);
-                
+
                 Assert.True(enumerator.MoveNext());
                 Assert.Same(child3, enumerator.Current);
-                
+
                 Assert.False(enumerator.MoveNext());
                 Assert.Throws<InvalidOperationException>(() => enumerator.Current);
 
@@ -1415,11 +1641,11 @@ namespace System.Windows.Forms.Tests
 
                 Assert.False(enumerator.MoveNext());
                 Assert.Throws<InvalidOperationException>(() => enumerator.Current);
-                
+
                 // Call again.
                 Assert.False(enumerator.MoveNext());
                 Assert.Throws<InvalidOperationException>(() => enumerator.Current);
-            
+
                 enumerator.Reset();
             }
         }
@@ -1443,13 +1669,13 @@ namespace System.Windows.Forms.Tests
 
             Assert.True(enumerator.MoveNext());
             Assert.Same(child1, enumerator.Current);
-            
+
             Assert.True(enumerator.MoveNext());
             Assert.Same(child2, enumerator.Current);
 
             Assert.True(enumerator.MoveNext());
             Assert.Same(child3, enumerator.Current);
-            
+
             Assert.False(enumerator.MoveNext());
             Assert.Throws<InvalidOperationException>(() => enumerator.Current);
 
@@ -1475,13 +1701,13 @@ namespace System.Windows.Forms.Tests
 
             Assert.True(enumerator.MoveNext());
             Assert.Same(child1, enumerator.Current);
-            
+
             Assert.True(enumerator.MoveNext());
             Assert.Same(child2, enumerator.Current);
-            
+
             Assert.True(enumerator.MoveNext());
             Assert.Same(child3, enumerator.Current);
-            
+
             collection.Remove(child1);
             Assert.Same(child3, enumerator.Current);
 
@@ -1589,7 +1815,7 @@ namespace System.Windows.Forms.Tests
             collection.Add(child3);
 
             Assert.Equal(expected, collection.IndexOfKey(key));
-            
+
             // Call again.
             Assert.Equal(expected, collection.IndexOfKey(key));
             Assert.Equal(-1, collection.IndexOfKey("NoSuchKey"));
@@ -1603,7 +1829,7 @@ namespace System.Windows.Forms.Tests
             var collection = new TabControl.TabPageCollection(owner);
 
             Assert.Equal(-1, collection.IndexOfKey(key));
-            
+
             // Call again.
             Assert.Equal(-1, collection.IndexOfKey(key));
             Assert.Equal(-1, collection.IndexOfKey("NoSuchKey"));
@@ -1687,7 +1913,7 @@ namespace System.Windows.Forms.Tests
                 Assert.False(value1.IsHandleCreated);
                 Assert.False(value2.IsHandleCreated);
                 Assert.False(owner.IsHandleCreated);
-                
+
                 // Add again.
                 collection.Insert(2, value1);
                 Assert.Empty(collection);
@@ -1730,7 +1956,7 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [MemberData(nameof(Add_WithHandle_TestData))]
-        public void TabPageCollection_Insert_InvokeValueWithoutHandleOwnerWithHandle_Success(TabAppearance appearance, Size itemSize, Rectangle expectedBounds1, int expectedParentInvalidatedCallCount)
+        public void TabPageCollection_Insert_InvokeValueWithoutHandleOwnerWithHandle_Success(TabAppearance appearance, Size itemSize, int expectedParentInvalidatedCallCount)
         {
             using var owner = new TabControl
             {
@@ -1772,7 +1998,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(value1, Assert.Single(owner.Controls));
                 Assert.Same(owner, value1.Parent);
                 Assert.True(value1.Visible);
-                Assert.Equal(expectedBounds1, value1.Bounds);
+                Assert.Equal(owner.DisplayRectangle, value1.Bounds);
                 Assert.Null(value1.Site);
                 Assert.Equal(0, owner.SelectedIndex);
                 Assert.Equal(2, layoutCallCount1);
@@ -1800,11 +2026,11 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(new Control[] { value2, value1 }, owner.Controls.Cast<Control>());
                 Assert.Same(owner, value1.Parent);
                 Assert.True(value1.Visible);
-                Assert.Equal(expectedBounds1, value1.Bounds);
+                Assert.Equal(owner.DisplayRectangle, value1.Bounds);
                 Assert.Null(value1.Site);
                 Assert.Same(owner, value2.Parent);
                 Assert.False(value2.Visible);
-                Assert.Equal(expectedBounds1, value2.Bounds);
+                Assert.Equal(owner.DisplayRectangle, value2.Bounds);
                 Assert.Null(value2.Site);
                 Assert.Equal(1, owner.SelectedIndex);
                 Assert.Equal(2, layoutCallCount1);
@@ -1836,7 +2062,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(expectedParentInvalidatedCallCount * 2, parentInvalidatedCallCount);
                 Assert.Equal(0, parentStyleChangedCallCount);
                 Assert.Equal(0, parentCreatedCallCount);
-                
+
                 // Add again.
                 collection.Insert(2, value1);
                 Assert.Equal(new TabPage[] { value2, value1, value1 }, collection.Cast<TabPage>());
@@ -1844,11 +2070,11 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(new Control[] { value2, value1 }, owner.Controls.Cast<Control>());
                 Assert.Same(owner, value1.Parent);
                 Assert.False(value1.Visible);
-                Assert.Equal(expectedBounds1, value1.Bounds);
+                Assert.Equal(owner.DisplayRectangle, value1.Bounds);
                 Assert.Null(value1.Site);
                 Assert.Same(owner, value2.Parent);
                 Assert.False(value2.Visible);
-                Assert.Equal(expectedBounds1, value2.Bounds);
+                Assert.Equal(owner.DisplayRectangle, value2.Bounds);
                 Assert.Null(value2.Site);
                 Assert.Equal(1, owner.SelectedIndex);
                 Assert.Equal(3, layoutCallCount1);
@@ -1998,7 +2224,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(0, styleChangedCallCount2);
                 Assert.Equal(0, createdCallCount2);
                 Assert.False(owner.IsHandleCreated);
-                
+
                 // Add again.
                 collection.Insert(2, value1);
                 Assert.Empty(collection);
@@ -2047,7 +2273,7 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [MemberData(nameof(Add_WithHandle_TestData))]
-        public void TabPageCollection_Insert_InvokeValueWithHandleOwnerWithHandle_Success(TabAppearance appearance, Size itemSize, Rectangle expectedBounds1, int expectedParentInvalidatedCallCount)
+        public void TabPageCollection_Insert_InvokeValueWithHandleOwnerWithHandle_Success(TabAppearance appearance, Size itemSize, int expectedParentInvalidatedCallCount)
         {
             using var owner = new TabControl
             {
@@ -2103,7 +2329,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(value1, Assert.Single(owner.Controls));
                 Assert.Same(owner, value1.Parent);
                 Assert.True(value1.Visible);
-                Assert.Equal(expectedBounds1, value1.Bounds);
+                Assert.Equal(owner.DisplayRectangle, value1.Bounds);
                 Assert.Null(value1.Site);
                 Assert.Equal(0, owner.SelectedIndex);
                 Assert.Equal(2, layoutCallCount1);
@@ -2134,11 +2360,11 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(new Control[] { value2, value1 }, owner.Controls.Cast<Control>());
                 Assert.Same(owner, value1.Parent);
                 Assert.True(value1.Visible);
-                Assert.Equal(expectedBounds1, value1.Bounds);
+                Assert.Equal(owner.DisplayRectangle, value1.Bounds);
                 Assert.Null(value1.Site);
                 Assert.Same(owner, value2.Parent);
                 Assert.False(value2.Visible);
-                Assert.Equal(expectedBounds1, value2.Bounds);
+                Assert.Equal(owner.DisplayRectangle, value2.Bounds);
                 Assert.Null(value2.Site);
                 Assert.Equal(1, owner.SelectedIndex);
                 Assert.Equal(2, layoutCallCount1);
@@ -2176,7 +2402,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(expectedParentInvalidatedCallCount * 2, parentInvalidatedCallCount);
                 Assert.Equal(0, parentStyleChangedCallCount);
                 Assert.Equal(0, parentCreatedCallCount);
-                
+
                 // Add again.
                 collection.Insert(2, value1);
                 Assert.Equal(new TabPage[] { value2, value1, value1 }, collection.Cast<TabPage>());
@@ -2184,11 +2410,11 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(new Control[] { value2, value1 }, owner.Controls.Cast<Control>());
                 Assert.Same(owner, value1.Parent);
                 Assert.False(value1.Visible);
-                Assert.Equal(expectedBounds1, value1.Bounds);
+                Assert.Equal(owner.DisplayRectangle, value1.Bounds);
                 Assert.Null(value1.Site);
                 Assert.Same(owner, value2.Parent);
                 Assert.False(value2.Visible);
-                Assert.Equal(expectedBounds1, value2.Bounds);
+                Assert.Equal(owner.DisplayRectangle, value2.Bounds);
                 Assert.Null(value2.Site);
                 Assert.Equal(1, owner.SelectedIndex);
                 Assert.Equal(3, layoutCallCount1);
@@ -2329,7 +2555,7 @@ namespace System.Windows.Forms.Tests
             using var owner = new TabControl();
             var collection = new TabControl.TabPageCollection(owner);
             Assert.NotEqual(IntPtr.Zero, owner.Handle);
-            
+
             var items = new List<TabPage>();
             for (int i = 0; i < 24; i++)
             {
@@ -2419,6 +2645,129 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expectedImageKey, page.ImageKey);
             Assert.Same(owner, page.Parent);
             Assert.True(page.Visible);
+        }
+
+        [WinFormsTheory]
+        [InlineData("Text", "Text")]
+        [InlineData("&&Text", "&&Text")]
+        [InlineData("&", "&&")]
+        [InlineData("&Text", "&&Text")]
+        public unsafe void TabPageCollection_Insert_GetItemsWithHandle_Success(string text, string expectedText)
+        {
+            using var owner = new TabControl();
+            Assert.NotEqual(IntPtr.Zero, owner.Handle);
+
+            using var page1 = new TabPage();
+            using var page2 = new TabPage
+            {
+                Text = text,
+                ImageIndex = 1
+            };
+            using var page3 = new NullTextTabPage();
+            var collection = new TabControl.TabPageCollection(owner);
+            collection.Insert(0, page3);
+            collection.Insert(0, page2);
+            collection.Insert(0, page1);
+            Assert.Equal((IntPtr)3, User32.SendMessageW(owner.Handle, (User32.WM)ComCtl32.TCM.GETITEMCOUNT, IntPtr.Zero, IntPtr.Zero));
+
+            char* buffer = stackalloc char[256];
+            ComCtl32.TCITEMW item = default;
+            item.cchTextMax = int.MaxValue;
+            item.pszText = buffer;
+            item.dwStateMask = (ComCtl32.TCIS)uint.MaxValue;
+            item.mask = (ComCtl32.TCIF)uint.MaxValue;
+
+            // Get item 0.
+            Assert.Equal((IntPtr)1, User32.SendMessageW(owner.Handle, (User32.WM)ComCtl32.TCM.GETITEMW, (IntPtr)0, ref item));
+            Assert.Equal((ComCtl32.TCIS)0, item.dwState);
+            Assert.Equal(IntPtr.Zero, item.lParam);
+            Assert.Equal(int.MaxValue, item.cchTextMax);
+            Assert.Empty(new string(item.pszText));
+            Assert.Equal(-1, item.iImage);
+
+            // Get item 1.
+            Assert.Equal((IntPtr)1, User32.SendMessageW(owner.Handle, (User32.WM)ComCtl32.TCM.GETITEMW, (IntPtr)1, ref item));
+            Assert.Equal((ComCtl32.TCIS)0, item.dwState);
+            Assert.Equal(IntPtr.Zero, item.lParam);
+            Assert.Equal(int.MaxValue, item.cchTextMax);
+            Assert.Equal(expectedText, new string(item.pszText));
+            Assert.Equal(1, item.iImage);
+
+            // Get item 2.
+            Assert.Equal((IntPtr)1, User32.SendMessageW(owner.Handle, (User32.WM)ComCtl32.TCM.GETITEMW, (IntPtr)2, ref item));
+            Assert.Equal(ComCtl32.TCIS.BUTTONPRESSED, item.dwState);
+            Assert.Equal(IntPtr.Zero, item.lParam);
+            Assert.Equal(int.MaxValue, item.cchTextMax);
+            Assert.Empty(new string(item.pszText));
+            Assert.Equal(-1, item.iImage);
+        }
+
+        [WinFormsTheory]
+        [InlineData("Text", "Text")]
+        [InlineData("&&Text", "&&Text")]
+        [InlineData("&", "&&")]
+        [InlineData("&Text", "&&Text")]
+        public unsafe void TabPageCollection_Insert_GetItemsDesignModeWithHandle_Success(string text, string expectedText)
+        {
+            var mockSite = new Mock<ISite>(MockBehavior.Strict);
+            mockSite
+                .Setup(s => s.GetService(typeof(AmbientProperties)))
+                .Returns(null);
+            mockSite
+                .Setup(s => s.DesignMode)
+                .Returns(true);
+            mockSite
+                .Setup(s => s.Container)
+                .Returns((IContainer)null);
+            using var owner = new TabControl
+            {
+                Site = mockSite.Object
+            };
+            Assert.NotEqual(IntPtr.Zero, owner.Handle);
+
+            using var page1 = new TabPage();
+            using var page2 = new TabPage
+            {
+                Text = text,
+                ImageIndex = 1
+            };
+            using var page3 = new NullTextTabPage();
+            var collection = new TabControl.TabPageCollection(owner);
+            collection.Insert(0, page3);
+            collection.Insert(0, page2);
+            collection.Insert(0, page1);
+            Assert.Equal((IntPtr)3, User32.SendMessageW(owner.Handle, (User32.WM)ComCtl32.TCM.GETITEMCOUNT, IntPtr.Zero, IntPtr.Zero));
+
+            char* buffer = stackalloc char[256];
+            ComCtl32.TCITEMW item = default;
+            item.cchTextMax = int.MaxValue;
+            item.pszText = buffer;
+            item.dwStateMask = (ComCtl32.TCIS)uint.MaxValue;
+            item.mask = (ComCtl32.TCIF)uint.MaxValue;
+
+            // Get item 0.
+            Assert.Equal((IntPtr)1, User32.SendMessageW(owner.Handle, (User32.WM)ComCtl32.TCM.GETITEMW, (IntPtr)0, ref item));
+            Assert.Equal((ComCtl32.TCIS)0, item.dwState);
+            Assert.Equal(IntPtr.Zero, item.lParam);
+            Assert.Equal(int.MaxValue, item.cchTextMax);
+            Assert.Empty(new string(item.pszText));
+            Assert.Equal(-1, item.iImage);
+
+            // Get item 1.
+            Assert.Equal((IntPtr)1, User32.SendMessageW(owner.Handle, (User32.WM)ComCtl32.TCM.GETITEMW, (IntPtr)1, ref item));
+            Assert.Equal((ComCtl32.TCIS)0, item.dwState);
+            Assert.Equal(IntPtr.Zero, item.lParam);
+            Assert.Equal(int.MaxValue, item.cchTextMax);
+            Assert.Equal(expectedText, new string(item.pszText));
+            Assert.Equal(1, item.iImage);
+
+            // Get item 2.
+            Assert.Equal((IntPtr)1, User32.SendMessageW(owner.Handle, (User32.WM)ComCtl32.TCM.GETITEMW, (IntPtr)2, ref item));
+            Assert.Equal(ComCtl32.TCIS.BUTTONPRESSED, item.dwState);
+            Assert.Equal(IntPtr.Zero, item.lParam);
+            Assert.Equal(int.MaxValue, item.cchTextMax);
+            Assert.Empty(new string(item.pszText));
+            Assert.Equal(-1, item.iImage);
         }
 
         [WinFormsFact]
@@ -2550,7 +2899,7 @@ namespace System.Windows.Forms.Tests
             collection.Add(child3);
 
             Assert.Equal(collection[expectedIndex], collection[key]);
-            
+
             // Call again.
             Assert.Equal(collection[expectedIndex], collection[key]);
             Assert.Null(collection["NoSuchKey"]);
@@ -2584,7 +2933,7 @@ namespace System.Windows.Forms.Tests
             collection.Add(child3);
 
             Assert.Null(collection[key]);
-            
+
             // Call again.
             Assert.Null(collection[key]);
             Assert.Null(collection["NoSuchKey"]);
@@ -2598,7 +2947,7 @@ namespace System.Windows.Forms.Tests
             var collection = new TabControl.TabPageCollection(owner);
 
             Assert.Null(collection[key]);
-            
+
             // Call again.
             Assert.Null(collection[key]);
             Assert.Null(collection["NoSuchKey"]);
@@ -2616,7 +2965,7 @@ namespace System.Windows.Forms.Tests
             Assert.Same(page1, collection[0]);
             Assert.Same(page2, collection[1]);
         }
-        
+
         [WinFormsTheory]
         [InlineData(-1)]
         [InlineData(0)]
@@ -2627,7 +2976,7 @@ namespace System.Windows.Forms.Tests
             var collection = new TabControl.TabPageCollection(owner);
             Assert.Throws<ArgumentOutOfRangeException>("index", () => collection[index]);
         }
-        
+
         [WinFormsTheory]
         [InlineData(-1)]
         [InlineData(1)]
@@ -2655,7 +3004,7 @@ namespace System.Windows.Forms.Tests
             collection.Add(page1);
             collection.Add(page2);
             collection.Add(page3);
-            
+
             using var newPage = new TabPage();
             collection[index] = newPage;
             Assert.Same(newPage, collection[index]);
@@ -2698,7 +3047,7 @@ namespace System.Windows.Forms.Tests
             collection.Add(page1);
             collection.Add(page2);
             collection.Add(page3);
-            
+
             using var newPage = new TabPage();
             collection[index] = newPage;
             Assert.Same(newPage, collection[index]);
@@ -2736,7 +3085,7 @@ namespace System.Windows.Forms.Tests
             owner.StyleChanged += (sender, e) => parentStyleChangedCallCount++;
             int parentCreatedCallCount = 0;
             owner.HandleCreated += (sender, e) => parentCreatedCallCount++;
-            
+
             using var newPage = new TabPage();
             collection[index] = newPage;
             Assert.Same(newPage, collection[index]);
@@ -2790,7 +3139,7 @@ namespace System.Windows.Forms.Tests
             owner.StyleChanged += (sender, e) => parentStyleChangedCallCount++;
             int parentCreatedCallCount = 0;
             owner.HandleCreated += (sender, e) => parentCreatedCallCount++;
-            
+
             using var newPage = new TabPage();
             collection[index] = newPage;
             Assert.Same(newPage, collection[index]);
@@ -2807,6 +3156,133 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, parentInvalidatedCallCount);
             Assert.Equal(0, parentStyleChangedCallCount);
             Assert.Equal(0, parentCreatedCallCount);
+        }
+
+        [WinFormsTheory]
+        [InlineData("Text", "Text")]
+        [InlineData("&&Text", "&&Text")]
+        [InlineData("&", "&&")]
+        [InlineData("&Text", "&&Text")]
+        public unsafe void TabPageCollection_Item_SetGetItemsWithHandle_Success(string text, string expectedText)
+        {
+            using var owner = new TabControl();
+            using var page1 = new TabPage();
+            using var page2 = new TabPage();
+            using var page3 = new NullTextTabPage();
+            var collection = new TabControl.TabPageCollection(owner);
+            collection.Add(page1);
+            collection.Add(page2);
+            collection.Add(page3);
+            Assert.NotEqual(IntPtr.Zero, owner.Handle);
+
+            using var value = new TabPage
+            {
+                Text = text,
+                ImageIndex = 1
+            };
+            collection[1] = value;
+            Assert.Equal((IntPtr)3, User32.SendMessageW(owner.Handle, (User32.WM)ComCtl32.TCM.GETITEMCOUNT, IntPtr.Zero, IntPtr.Zero));
+
+            char* buffer = stackalloc char[256];
+            ComCtl32.TCITEMW item = default;
+            item.cchTextMax = int.MaxValue;
+            item.pszText = buffer;
+            item.dwStateMask = (ComCtl32.TCIS)uint.MaxValue;
+            item.mask = (ComCtl32.TCIF)uint.MaxValue;
+
+            // Get item 0.
+            Assert.Equal((IntPtr)1, User32.SendMessageW(owner.Handle, (User32.WM)ComCtl32.TCM.GETITEMW, (IntPtr)0, ref item));
+            Assert.Equal(ComCtl32.TCIS.BUTTONPRESSED, item.dwState);
+            Assert.Equal(IntPtr.Zero, item.lParam);
+            Assert.Equal(int.MaxValue, item.cchTextMax);
+            Assert.Empty(new string(item.pszText));
+            Assert.Equal(-1, item.iImage);
+
+            // Get item 1.
+            Assert.Equal((IntPtr)1, User32.SendMessageW(owner.Handle, (User32.WM)ComCtl32.TCM.GETITEMW, (IntPtr)1, ref item));
+            Assert.Equal((ComCtl32.TCIS)0, item.dwState);
+            Assert.Equal(IntPtr.Zero, item.lParam);
+            Assert.Equal(int.MaxValue, item.cchTextMax);
+            Assert.Equal(expectedText, new string(item.pszText));
+            Assert.Equal(1, item.iImage);
+
+            // Get item 2.
+            Assert.Equal((IntPtr)1, User32.SendMessageW(owner.Handle, (User32.WM)ComCtl32.TCM.GETITEMW, (IntPtr)2, ref item));
+            Assert.Equal((ComCtl32.TCIS)0, item.dwState);
+            Assert.Equal(IntPtr.Zero, item.lParam);
+            Assert.Equal(int.MaxValue, item.cchTextMax);
+            Assert.Empty(new string(item.pszText));
+            Assert.Equal(-1, item.iImage);
+        }
+
+        [WinFormsTheory]
+        [InlineData("Text", "Text")]
+        [InlineData("&&Text", "&&Text")]
+        [InlineData("&", "&&")]
+        [InlineData("&Text", "&&Text")]
+        public unsafe void TabPageCollection_Item_SetGetItemsDesignModeWithHandle_Success(string text, string expectedText)
+        {
+            var mockSite = new Mock<ISite>(MockBehavior.Strict);
+            mockSite
+                .Setup(s => s.GetService(typeof(AmbientProperties)))
+                .Returns(null);
+            mockSite
+                .Setup(s => s.DesignMode)
+                .Returns(true);
+            mockSite
+                .Setup(s => s.Container)
+                .Returns((IContainer)null);
+            using var owner = new TabControl
+            {
+                Site = mockSite.Object
+            };
+            using var page1 = new TabPage();
+            using var page2 = new TabPage();
+            using var page3 = new NullTextTabPage();
+            var collection = new TabControl.TabPageCollection(owner);
+            collection.Add(page1);
+            collection.Add(page2);
+            collection.Add(page3);
+            Assert.NotEqual(IntPtr.Zero, owner.Handle);
+
+            using var value = new TabPage
+            {
+                Text = text,
+                ImageIndex = 1
+            };
+            collection[1] = value;
+            Assert.Equal((IntPtr)3, User32.SendMessageW(owner.Handle, (User32.WM)ComCtl32.TCM.GETITEMCOUNT, IntPtr.Zero, IntPtr.Zero));
+
+            char* buffer = stackalloc char[256];
+            ComCtl32.TCITEMW item = default;
+            item.cchTextMax = int.MaxValue;
+            item.pszText = buffer;
+            item.dwStateMask = (ComCtl32.TCIS)uint.MaxValue;
+            item.mask = (ComCtl32.TCIF)uint.MaxValue;
+
+            // Get item 0.
+            Assert.Equal((IntPtr)1, User32.SendMessageW(owner.Handle, (User32.WM)ComCtl32.TCM.GETITEMW, (IntPtr)0, ref item));
+            Assert.Equal((ComCtl32.TCIS)0, item.dwState);
+            Assert.Equal(IntPtr.Zero, item.lParam);
+            Assert.Equal(int.MaxValue, item.cchTextMax);
+            Assert.Empty(new string(item.pszText));
+            Assert.Equal(-1, item.iImage);
+
+            // Get item 1.
+            Assert.Equal((IntPtr)1, User32.SendMessageW(owner.Handle, (User32.WM)ComCtl32.TCM.GETITEMW, (IntPtr)1, ref item));
+            Assert.Equal(ComCtl32.TCIS.BUTTONPRESSED, item.dwState);
+            Assert.Equal(IntPtr.Zero, item.lParam);
+            Assert.Equal(int.MaxValue, item.cchTextMax);
+            Assert.Equal(expectedText, new string(item.pszText));
+            Assert.Equal(1, item.iImage);
+
+            // Get item 2.
+            Assert.Equal((IntPtr)1, User32.SendMessageW(owner.Handle, (User32.WM)ComCtl32.TCM.GETITEMW, (IntPtr)2, ref item));
+            Assert.Equal((ComCtl32.TCIS)0, item.dwState);
+            Assert.Equal(IntPtr.Zero, item.lParam);
+            Assert.Equal(int.MaxValue, item.cchTextMax);
+            Assert.Empty(new string(item.pszText));
+            Assert.Equal(-1, item.iImage);
         }
 
         [WinFormsFact]
@@ -2831,7 +3307,7 @@ namespace System.Windows.Forms.Tests
 
             Assert.Throws<ArgumentNullException>("value", () => collection[0] = null);
         }
-        
+
         [WinFormsTheory]
         [InlineData(-1)]
         [InlineData(0)]
@@ -2843,7 +3319,7 @@ namespace System.Windows.Forms.Tests
             var collection = new TabControl.TabPageCollection(owner);
             Assert.Throws<ArgumentOutOfRangeException>("index", () => collection[index] = page);
         }
-        
+
         [WinFormsTheory]
         [InlineData(-1)]
         [InlineData(1)]
@@ -2857,7 +3333,7 @@ namespace System.Windows.Forms.Tests
             collection.Add(page1);
             Assert.Throws<ArgumentOutOfRangeException>("index", () => collection[index] = page2);
         }
-        
+
         [WinFormsFact]
         public void TabPageCollection_IListItem_GetValidIndex_ReturnsExpected()
         {
@@ -2871,7 +3347,7 @@ namespace System.Windows.Forms.Tests
             Assert.Same(page1, iList[0]);
             Assert.Same(page2, iList[1]);
         }
-        
+
         [WinFormsTheory]
         [InlineData(-1)]
         [InlineData(0)]
@@ -2883,7 +3359,7 @@ namespace System.Windows.Forms.Tests
             IList iList = collection;
             Assert.Throws<ArgumentOutOfRangeException>("index", () => iList[index]);
         }
-        
+
         [WinFormsTheory]
         [InlineData(-1)]
         [InlineData(1)]
@@ -2913,7 +3389,7 @@ namespace System.Windows.Forms.Tests
             iList.Add(page1);
             iList.Add(page2);
             iList.Add(page3);
-            
+
             using var newPage = new TabPage();
             iList[index] = newPage;
             Assert.Same(newPage, iList[index]);
@@ -2957,7 +3433,7 @@ namespace System.Windows.Forms.Tests
             iList.Add(page1);
             iList.Add(page2);
             iList.Add(page3);
-            
+
             using var newPage = new TabPage();
             iList[index] = newPage;
             Assert.Same(newPage, iList[index]);
@@ -2996,7 +3472,7 @@ namespace System.Windows.Forms.Tests
             owner.StyleChanged += (sender, e) => parentStyleChangedCallCount++;
             int parentCreatedCallCount = 0;
             owner.HandleCreated += (sender, e) => parentCreatedCallCount++;
-            
+
             using var newPage = new TabPage();
             iList[index] = newPage;
             Assert.Same(newPage, iList[index]);
@@ -3051,7 +3527,7 @@ namespace System.Windows.Forms.Tests
             owner.StyleChanged += (sender, e) => parentStyleChangedCallCount++;
             int parentCreatedCallCount = 0;
             owner.HandleCreated += (sender, e) => parentCreatedCallCount++;
-            
+
             using var newPage = new TabPage();
             iList[index] = newPage;
             Assert.Same(newPage, iList[index]);
@@ -3088,7 +3564,7 @@ namespace System.Windows.Forms.Tests
             iList.Add(page);
             Assert.Throws<ArgumentException>(null, () => iList[0] = value);
         }
-        
+
         [WinFormsTheory]
         [InlineData(-1)]
         [InlineData(0)]
@@ -3101,7 +3577,7 @@ namespace System.Windows.Forms.Tests
             IList iList = collection;
             Assert.Throws<ArgumentOutOfRangeException>("index", () => iList[index] = page);
         }
-        
+
         [WinFormsTheory]
         [InlineData(-1)]
         [InlineData(1)]
@@ -3129,7 +3605,7 @@ namespace System.Windows.Forms.Tests
             var collection = new TabControl.TabPageCollection(owner);
             collection.Add(value1);
             collection.Add(value2);
-            
+
             int layoutCallCount1 = 0;
             value1.Layout += (sender, e) => layoutCallCount1++;
             int layoutCallCount2 = 0;
@@ -3166,7 +3642,7 @@ namespace System.Windows.Forms.Tests
                 Assert.False(value1.IsHandleCreated);
                 Assert.False(value2.IsHandleCreated);
                 Assert.False(owner.IsHandleCreated);
-                
+
                 // Remove again.
                 collection.Remove(value2);
                 Assert.Same(value1, Assert.Single(collection));
@@ -3187,7 +3663,7 @@ namespace System.Windows.Forms.Tests
                 Assert.False(value1.IsHandleCreated);
                 Assert.False(value2.IsHandleCreated);
                 Assert.False(owner.IsHandleCreated);
-                
+
                 // Remove first.
                 collection.Remove(value1);
                 Assert.Empty(collection);
@@ -3227,7 +3703,7 @@ namespace System.Windows.Forms.Tests
             var collection = new TabControl.TabPageCollection(owner);
             collection.Add(value1);
             collection.Add(value2);
-            
+
             int layoutCallCount1 = 0;
             value1.Layout += (sender, e) => layoutCallCount1++;
             int layoutCallCount2 = 0;
@@ -3281,7 +3757,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(0, createdCallCount1);
                 Assert.True(value2.IsHandleCreated);
                 Assert.False(owner.IsHandleCreated);
-                
+
                 // Remove again.
                 collection.Remove(value2);
                 Assert.Same(value1, Assert.Single(collection));
@@ -3308,7 +3784,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(0, styleChangedCallCount2);
                 Assert.Equal(0, createdCallCount2);
                 Assert.False(owner.IsHandleCreated);
-                
+
                 // Remove first.
                 collection.Remove(value1);
                 Assert.Empty(collection);
@@ -3354,7 +3830,7 @@ namespace System.Windows.Forms.Tests
             var collection = new TabControl.TabPageCollection(owner);
             collection.Add(value1);
             collection.Add(value2);
-            
+
             int layoutCallCount1 = 0;
             value1.Layout += (sender, e) => layoutCallCount1++;
             int layoutCallCount2 = 0;
@@ -3401,7 +3877,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(0, parentInvalidatedCallCount);
                 Assert.Equal(0, parentStyleChangedCallCount);
                 Assert.Equal(0, parentCreatedCallCount);
-                
+
                 // Remove again.
                 collection.Remove(value2);
                 Assert.Same(value1, Assert.Single(collection));
@@ -3425,7 +3901,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(0, parentInvalidatedCallCount);
                 Assert.Equal(0, parentStyleChangedCallCount);
                 Assert.Equal(0, parentCreatedCallCount);
-                
+
                 // Remove first.
                 collection.Remove(value1);
                 Assert.Empty(collection);
@@ -3468,7 +3944,7 @@ namespace System.Windows.Forms.Tests
             var collection = new TabControl.TabPageCollection(owner);
             collection.Add(value1);
             collection.Add(value2);
-            
+
             int layoutCallCount1 = 0;
             value1.Layout += (sender, e) => layoutCallCount1++;
             int layoutCallCount2 = 0;
@@ -3522,7 +3998,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(0, createdCallCount1);
                 Assert.True(value2.IsHandleCreated);
                 Assert.False(owner.IsHandleCreated);
-                
+
                 // Remove again.
                 collection.Remove(value2);
                 Assert.Same(value1, Assert.Single(collection));
@@ -3549,7 +4025,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(0, styleChangedCallCount2);
                 Assert.Equal(0, createdCallCount2);
                 Assert.False(owner.IsHandleCreated);
-                
+
                 // Remove first.
                 collection.Remove(value1);
                 Assert.Empty(collection);
@@ -3603,17 +4079,17 @@ namespace System.Windows.Forms.Tests
             collection.Remove(value2);
             Assert.Equal(new Control[] { value1, value3, value4 }, collection.Cast<TabPage>());
             Assert.Null(owner.SelectedTab);
-            
+
             // Remove selected.
             collection.Remove(value4);
             Assert.Equal(new Control[] { value1, value3 }, collection.Cast<TabPage>());
             Assert.Null(owner.SelectedTab);
-            
+
             // Remove selected again.
             collection.Remove(value1);
             Assert.Equal(new Control[] { value3 }, collection.Cast<TabPage>());
             Assert.Null(owner.SelectedTab);
-            
+
             // Remove selected again.
             collection.Remove(value3);
             Assert.Empty(collection);
@@ -3641,17 +4117,17 @@ namespace System.Windows.Forms.Tests
             collection.Remove(value2);
             Assert.Equal(new Control[] { value1, value3, value4 }, collection.Cast<TabPage>());
             Assert.Same(value4, owner.SelectedTab);
-            
+
             // Remove selected.
             collection.Remove(value4);
             Assert.Equal(new Control[] { value1, value3 }, collection.Cast<TabPage>());
             Assert.Same(value1, owner.SelectedTab);
-            
+
             // Remove selected again.
             collection.Remove(value1);
             Assert.Equal(new Control[] { value3 }, collection.Cast<TabPage>());
             Assert.Same(value3, owner.SelectedTab);
-            
+
             // Remove selected again.
             collection.Remove(value3);
             Assert.Empty(collection);
@@ -3663,7 +4139,7 @@ namespace System.Windows.Forms.Tests
         {
             using var owner = new TabControl();
             var collection = new TabControl.TabPageCollection(owner);
-            
+
             var items = new List<TabPage>();
             for (int i = 0; i < 24; i++)
             {
@@ -3674,7 +4150,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(items, owner.TabPages.Cast<TabPage>());
                 Assert.Same(owner, value.Parent);
             }
-            
+
             for (int i = 0; i < 24; i++)
             {
                 items.RemoveAt(0);
@@ -3707,6 +4183,108 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
+        public unsafe void TabControlControlCollection_Remove_GetItemsWithHandle_Success()
+        {
+            using var owner = new TabControl();
+            using var page1 = new TabPage();
+            using var page2 = new TabPage
+            {
+                Text = "Text",
+                ImageIndex = 1
+            };
+            using var page3 = new NullTextTabPage();
+            var collection = new TabControl.TabPageCollection(owner);
+            collection.Add(page1);
+            collection.Add(page2);
+            collection.Add(page3);
+
+            Assert.NotEqual(IntPtr.Zero, owner.Handle);
+            collection.Remove(page2);
+            Assert.Equal((IntPtr)2, User32.SendMessageW(owner.Handle, (User32.WM)ComCtl32.TCM.GETITEMCOUNT, IntPtr.Zero, IntPtr.Zero));
+
+            char* buffer = stackalloc char[256];
+            ComCtl32.TCITEMW item = default;
+            item.cchTextMax = int.MaxValue;
+            item.pszText = buffer;
+            item.dwStateMask = (ComCtl32.TCIS)uint.MaxValue;
+            item.mask = (ComCtl32.TCIF)uint.MaxValue;
+
+            // Get item 0.
+            Assert.Equal((IntPtr)1, User32.SendMessageW(owner.Handle, (User32.WM)ComCtl32.TCM.GETITEMW, (IntPtr)0, ref item));
+            Assert.Equal(ComCtl32.TCIS.BUTTONPRESSED, item.dwState);
+            Assert.Equal(IntPtr.Zero, item.lParam);
+            Assert.Equal(int.MaxValue, item.cchTextMax);
+            Assert.Empty(new string(item.pszText));
+            Assert.Equal(-1, item.iImage);
+
+            // Get item 2.
+            Assert.Equal((IntPtr)1, User32.SendMessageW(owner.Handle, (User32.WM)ComCtl32.TCM.GETITEMW, (IntPtr)1, ref item));
+            Assert.Equal((ComCtl32.TCIS)0, item.dwState);
+            Assert.Equal(IntPtr.Zero, item.lParam);
+            Assert.Equal(int.MaxValue, item.cchTextMax);
+            Assert.Empty(new string(item.pszText));
+            Assert.Equal(-1, item.iImage);
+        }
+
+        [WinFormsFact]
+        public unsafe void TabControlControlCollection_Remove_GetItemsDesignModeWithHandle_Success()
+        {
+            var mockSite = new Mock<ISite>(MockBehavior.Strict);
+            mockSite
+                .Setup(s => s.GetService(typeof(AmbientProperties)))
+                .Returns(null);
+            mockSite
+                .Setup(s => s.DesignMode)
+                .Returns(true);
+            mockSite
+                .Setup(s => s.Container)
+                .Returns((IContainer)null);
+            using var owner = new TabControl
+            {
+                Site = mockSite.Object
+            };
+
+            using var page1 = new TabPage();
+            using var page2 = new TabPage
+            {
+                Text = "Text",
+                ImageIndex = 1
+            };
+            using var page3 = new NullTextTabPage();
+            var collection = new TabControl.TabPageCollection(owner);
+            collection.Add(page1);
+            collection.Add(page2);
+            collection.Add(page3);
+
+            Assert.NotEqual(IntPtr.Zero, owner.Handle);
+            collection.Remove(page2);
+            Assert.Equal((IntPtr)2, User32.SendMessageW(owner.Handle, (User32.WM)ComCtl32.TCM.GETITEMCOUNT, IntPtr.Zero, IntPtr.Zero));
+
+            char* buffer = stackalloc char[256];
+            ComCtl32.TCITEMW item = default;
+            item.cchTextMax = int.MaxValue;
+            item.pszText = buffer;
+            item.dwStateMask = (ComCtl32.TCIS)uint.MaxValue;
+            item.mask = (ComCtl32.TCIF)uint.MaxValue;
+
+            // Get item 0.
+            Assert.Equal((IntPtr)1, User32.SendMessageW(owner.Handle, (User32.WM)ComCtl32.TCM.GETITEMW, (IntPtr)0, ref item));
+            Assert.Equal(ComCtl32.TCIS.BUTTONPRESSED, item.dwState);
+            Assert.Equal(IntPtr.Zero, item.lParam);
+            Assert.Equal(int.MaxValue, item.cchTextMax);
+            Assert.Empty(new string(item.pszText));
+            Assert.Equal(-1, item.iImage);
+
+            // Get item 1.
+            Assert.Equal((IntPtr)1, User32.SendMessageW(owner.Handle, (User32.WM)ComCtl32.TCM.GETITEMW, (IntPtr)1, ref item));
+            Assert.Equal((ComCtl32.TCIS)0, item.dwState);
+            Assert.Equal(IntPtr.Zero, item.lParam);
+            Assert.Equal(int.MaxValue, item.cchTextMax);
+            Assert.Empty(new string(item.pszText));
+            Assert.Equal(-1, item.iImage);
+        }
+
+        [WinFormsFact]
         public void TabPageCollection_Remove_NullValue_ThrowsArgumentNullException()
         {
             using var owner = new TabControl();
@@ -3727,7 +4305,7 @@ namespace System.Windows.Forms.Tests
             IList iList = collection;
             iList.Add(value1);
             iList.Add(value2);
-            
+
             int layoutCallCount1 = 0;
             value1.Layout += (sender, e) => layoutCallCount1++;
             int layoutCallCount2 = 0;
@@ -3763,7 +4341,7 @@ namespace System.Windows.Forms.Tests
                 Assert.False(value1.IsHandleCreated);
                 Assert.False(value2.IsHandleCreated);
                 Assert.False(owner.IsHandleCreated);
-                
+
                 // Remove again.
                 iList.Remove(value2);
                 Assert.Same(value1, Assert.Single(collection));
@@ -3783,7 +4361,7 @@ namespace System.Windows.Forms.Tests
                 Assert.False(value1.IsHandleCreated);
                 Assert.False(value2.IsHandleCreated);
                 Assert.False(owner.IsHandleCreated);
-                
+
                 // Remove first.
                 iList.Remove(value1);
                 Assert.Empty(collection);
@@ -3836,7 +4414,7 @@ namespace System.Windows.Forms.Tests
             var collection = new TabControl.TabPageCollection(owner);
             collection.Add(child1);
             collection.Add(child2);
-            
+
             int layoutCallCount = 0;
             child1.Layout += (sender, e) => layoutCallCount++;
             int parentLayoutCallCount = 0;
@@ -3861,7 +4439,7 @@ namespace System.Windows.Forms.Tests
                 Assert.False(owner.IsHandleCreated);
                 Assert.False(child1.IsHandleCreated);
                 Assert.False(child2.IsHandleCreated);
-                
+
                 // Remove again.
                 affectedControl = child1;
                 collection.RemoveAt(0);
@@ -3925,7 +4503,7 @@ namespace System.Windows.Forms.Tests
             collection.Add(child1);
             collection.Add(child2);
             collection.Add(child3);
-            
+
             int layoutCallCount = 0;
             child2.Layout += (sender, e) => layoutCallCount++;
             int parentLayoutCallCount = 0;
@@ -3952,7 +4530,7 @@ namespace System.Windows.Forms.Tests
                 Assert.False(child1.IsHandleCreated);
                 Assert.False(child2.IsHandleCreated);
                 Assert.False(child3.IsHandleCreated);
-                
+
                 // Remove again.
                 affectedControl = child3;
                 collection.RemoveByKey(key);
@@ -4001,10 +4579,19 @@ namespace System.Windows.Forms.Tests
 
             collection.RemoveByKey(key);
             Assert.Equal(new TabPage[] { child1, child2, child3 }, collection.Cast<TabPage>());
-            
+
             // Call again.
             collection.RemoveByKey(key);
             Assert.Equal(new TabPage[] { child1, child2, child3 }, collection.Cast<TabPage>());
+        }
+
+        private class NullTextTabPage : TabPage
+        {
+            public override string Text
+            {
+                get => null;
+                set { }
+            }
         }
     }
 }

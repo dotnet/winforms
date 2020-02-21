@@ -7,14 +7,7 @@ TypesMustExist : Type 'System.ComponentModel.Design.ByteViewer' does not exist i
 TypesMustExist : Type 'System.ComponentModel.Design.ComponentActionsType' does not exist in the implementation but it does exist in the contract.
 TypesMustExist : Type 'System.ComponentModel.Design.DateTimeEditor' does not exist in the implementation but it does exist in the contract.
 TypesMustExist : Type 'System.ComponentModel.Design.DesignerActionListsChangedEventArgs' does not exist in the implementation but it does exist in the contract.
-TypesMustExist : Type 'System.ComponentModel.Design.DesignerActionListsChangedEventHandler' does not exist in the implementation but it does exist in the contract.
 TypesMustExist : Type 'System.ComponentModel.Design.DesignerActionListsChangedType' does not exist in the implementation but it does exist in the contract.
-TypesMustExist : Type 'System.ComponentModel.Design.DesignerActionService' does not exist in the implementation but it does exist in the contract.
-TypesMustExist : Type 'System.ComponentModel.Design.DesignerActionUIService' does not exist in the implementation but it does exist in the contract.
-TypesMustExist : Type 'System.ComponentModel.Design.DesignerActionUIStateChangeEventArgs' does not exist in the implementation but it does exist in the contract.
-TypesMustExist : Type 'System.ComponentModel.Design.DesignerActionUIStateChangeEventHandler' does not exist in the implementation but it does exist in the contract.
-TypesMustExist : Type 'System.ComponentModel.Design.DesignerActionUIStateChangeType' does not exist in the implementation but it does exist in the contract.
-TypesMustExist : Type 'System.ComponentModel.Design.DesignerCommandSet' does not exist in the implementation but it does exist in the contract.
 TypesMustExist : Type 'System.ComponentModel.Design.DesignSurface' does not exist in the implementation but it does exist in the contract.
 TypesMustExist : Type 'System.ComponentModel.Design.DesignSurfaceCollection' does not exist in the implementation but it does exist in the contract.
 TypesMustExist : Type 'System.ComponentModel.Design.DesignSurfaceEventArgs' does not exist in the implementation but it does exist in the contract.
@@ -31,10 +24,6 @@ TypesMustExist : Type 'System.ComponentModel.Design.InheritanceService' does not
 TypesMustExist : Type 'System.ComponentModel.Design.LoadedEventArgs' does not exist in the implementation but it does exist in the contract.
 TypesMustExist : Type 'System.ComponentModel.Design.LoadedEventHandler' does not exist in the implementation but it does exist in the contract.
 TypesMustExist : Type 'System.ComponentModel.Design.LocalizationExtenderProvider' does not exist in the implementation but it does exist in the contract.
-TypesMustExist : Type 'System.ComponentModel.Design.MenuCommandsChangedEventArgs' does not exist in the implementation but it does exist in the contract.
-TypesMustExist : Type 'System.ComponentModel.Design.MenuCommandsChangedEventHandler' does not exist in the implementation but it does exist in the contract.
-TypesMustExist : Type 'System.ComponentModel.Design.MenuCommandsChangedType' does not exist in the implementation but it does exist in the contract.
-TypesMustExist : Type 'System.ComponentModel.Design.MenuCommandService' does not exist in the implementation but it does exist in the contract.
 TypesMustExist : Type 'System.ComponentModel.Design.MultilineStringEditor' does not exist in the implementation but it does exist in the contract.
 TypesMustExist : Type 'System.ComponentModel.Design.ProjectTargetFrameworkAttribute' does not exist in the implementation but it does exist in the contract.
 TypesMustExist : Type 'System.ComponentModel.Design.UndoEngine' does not exist in the implementation but it does exist in the contract.

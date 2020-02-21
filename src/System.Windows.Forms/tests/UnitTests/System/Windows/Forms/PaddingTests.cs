@@ -10,7 +10,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class PaddingTests
+    public class PaddingTests : IClassFixture<ThreadExceptionFixture>
     {
         [Fact]
         public void Padding_Ctor_Default()

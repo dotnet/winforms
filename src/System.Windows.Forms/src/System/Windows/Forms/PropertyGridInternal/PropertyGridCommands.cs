@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.ComponentModel.Design;
 
 namespace System.Windows.Forms.PropertyGridInternal
@@ -29,5 +31,4 @@ namespace System.Windows.Forms.PropertyGridInternal
         public static readonly CommandID Hide = new CommandID(wfcMenuCommand, 0x3002);
         public static readonly CommandID Commands = new CommandID(wfcMenuCommand, 0x3010);
     }
-
 }

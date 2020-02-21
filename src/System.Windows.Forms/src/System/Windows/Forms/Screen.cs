@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Collections;
 using System.Drawing;
 using System.Runtime.InteropServices;
@@ -52,7 +54,6 @@ namespace System.Windows.Forms
         private const int MONITOR_DEFAULTTONULL = 0x00000000;
         private const int MONITOR_DEFAULTTOPRIMARY = 0x00000001;
         private const int MONITOR_DEFAULTTONEAREST = 0x00000002;
-        private const int MONITORINFOF_PRIMARY = 0x00000001;
 
         private static readonly bool multiMonitorSupport = (User32.GetSystemMetrics(User32.SystemMetric.SM_CMONITORS) != 0);
         private static Screen[] screens;
@@ -61,7 +62,7 @@ namespace System.Windows.Forms
         {
         }
 
-        internal Screen(IntPtr monitor, IntPtr hdc)
+        internal unsafe Screen(IntPtr monitor, IntPtr hdc)
         {
             IntPtr screenDC = hdc;
 
@@ -76,13 +77,15 @@ namespace System.Windows.Forms
             else
             {
                 // Multiple monitor system
-                var info = new NativeMethods.MONITORINFOEX();
-                SafeNativeMethods.GetMonitorInfo(new HandleRef(null, monitor), info);
-                bounds = Rectangle.FromLTRB(info.rcMonitor.left, info.rcMonitor.top, info.rcMonitor.right, info.rcMonitor.bottom);
-                primary = ((info.dwFlags & MONITORINFOF_PRIMARY) != 0);
+                var info = new User32.MONITORINFOEXW
+                {
+                    cbSize = (uint)sizeof(User32.MONITORINFOEXW)
+                };
+                User32.GetMonitorInfoW(monitor, ref info);
+                bounds = info.rcMonitor;
+                primary = ((info.dwFlags & User32.MONITORINFOF.PRIMARY) != 0);
 
                 deviceName = new string(info.szDevice);
-                deviceName = deviceName.TrimEnd((char)0);
 
                 if (hdc == IntPtr.Zero)
                 {
@@ -216,16 +219,14 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets the working area of the screen.
         /// </summary>
-        public Rectangle WorkingArea
+        public unsafe Rectangle WorkingArea
         {
             get
             {
-
                 //if the static Screen class has a different desktop change count
                 //than this instance then update the count and recalculate our working area
                 if (currentDesktopChangedCount != Screen.DesktopChangedCount)
                 {
-
                     Interlocked.Exchange(ref currentDesktopChangedCount, Screen.DesktopChangedCount);
 
                     if (!multiMonitorSupport || hmonitor == (IntPtr)PRIMARY_MONITOR)
@@ -237,9 +238,12 @@ namespace System.Windows.Forms
                     else
                     {
                         // Multiple monitor System
-                        var info = new NativeMethods.MONITORINFOEX();
-                        SafeNativeMethods.GetMonitorInfo(new HandleRef(null, hmonitor), info);
-                        workingArea = Rectangle.FromLTRB(info.rcWork.left, info.rcWork.top, info.rcWork.right, info.rcWork.bottom);
+                        var info = new User32.MONITORINFOEXW
+                        {
+                            cbSize = (uint)sizeof(User32.MONITORINFOEXW)
+                        };
+                        User32.GetMonitorInfoW(hmonitor, ref info);
+                        workingArea = info.rcWork;
                     }
                 }
 
@@ -257,10 +261,8 @@ namespace System.Windows.Forms
             {
                 if (desktopChangedCount == -1)
                 {
-
                     lock (syncLock)
                     {
-
                         //now that we have a lock, verify (again) our changecount...
                         if (desktopChangedCount == -1)
                         {

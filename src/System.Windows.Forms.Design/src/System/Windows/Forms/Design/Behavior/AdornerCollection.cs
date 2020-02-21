@@ -67,7 +67,7 @@ namespace System.Windows.Forms.Design.Behavior
         /// <returns>
         ///  The index at which the new element was inserted.
         /// </returns>
-        /// <seealso cref='BehaviorServiceAdornerCollection.AddRange' />
+        /// <seealso cref='BehaviorServiceAdornerCollection.AddRange(Adorner[])' />
         public int Add(Adorner value)
         {
             throw new NotImplementedException(SR.NotImplementedByDesign);
@@ -147,7 +147,7 @@ namespace System.Windows.Forms.Design.Behavior
         /// </exception>
         /// <exception cref='ArgumentNullException'><paramref name='array' /> is <see langword='null' />. </exception>
         /// <exception cref='ArgumentOutOfRangeException'>
-        ///  <paramref name='arrayIndex' /> is less than
+        ///  <paramref name='index' /> is less than
         ///  <paramref name='array' />'s lowbound.
         /// </exception>
         /// <seealso cref='Array' />

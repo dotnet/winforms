@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms.Design;
@@ -126,7 +128,6 @@ namespace System.Windows.Forms
         {
             if (ParentInternal != null && ParentInternal.LayoutEngine is ToolStripSplitStackLayout)
             {
-
                 if (ParentInternal.Orientation == Orientation.Horizontal)
                 {
                     bounds.Height = ParentInternal.Height;
@@ -188,8 +189,6 @@ namespace System.Windows.Forms
 
                 return base.GetPropertyValue(propertyID);
             }
-
         }
-
     }
 }

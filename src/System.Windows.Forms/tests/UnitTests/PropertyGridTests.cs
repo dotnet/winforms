@@ -8,7 +8,7 @@ namespace System.Windows.Forms.Tests
 {
     using System.Drawing;
 
-    public class PropertyGridTests
+    public class PropertyGridTests : IClassFixture<ThreadExceptionFixture>
     {
         [Fact]
         public void PropertyGrid_Constructor()

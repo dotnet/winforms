@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 namespace System.ComponentModel.Design
 {
     /// <summary>
-    ///  This event is raised by the <see cref="DesignerActionListservice"/> when a shortcut is either added or removed to/from the related object.
+    ///  This event is raised by the <see cref="DesignerActionService"/> when a shortcut is either added or removed to/from the related object.
     /// </summary>
     [ComVisible(true)]
     public delegate void DesignerActionListsChangedEventHandler(object sender, DesignerActionListsChangedEventArgs e);

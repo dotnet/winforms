@@ -9,13 +9,8 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ProfessionalColorTableTests
+    public class ProfessionalColorTableTests : IClassFixture<ThreadExceptionFixture>
     {
-        public ProfessionalColorTableTests()
-        {
-            Application.ThreadException += (sender, e) => throw new Exception(e.Exception.StackTrace.ToString());
-        }
-
         [WinFormsFact]
         public void ProfessionalColorTable_Ctor_Default()
         {
@@ -145,11 +140,11 @@ namespace System.Windows.Forms.Tests
                 UseSystemColors = value
             };
             Assert.Equal(value, table.UseSystemColors);
-            
+
             // Set same.
             table.UseSystemColors = value;
             Assert.Equal(value, table.UseSystemColors);
-            
+
             // Set different.
             table.UseSystemColors = !value;
             Assert.Equal(!value, table.UseSystemColors);
@@ -168,11 +163,11 @@ namespace System.Windows.Forms.Tests
 
             table.UseSystemColors = value;
             Assert.Equal(value, table.UseSystemColors);
-            
+
             // Set same.
             table.UseSystemColors = value;
             Assert.Equal(value, table.UseSystemColors);
-            
+
             // Set different.
             table.UseSystemColors = !value;
             Assert.Equal(!value, table.UseSystemColors);

@@ -6,25 +6,28 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.InteropServices;
+using Microsoft.DotNet.RemoteExecutor;
 using WinForms.Common.Tests;
 using Xunit;
+using static Interop;
+using static Interop.ComCtl32;
 
 namespace System.Windows.Forms.Tests
 {
     using Point = System.Drawing.Point;
     using Size = System.Drawing.Size;
 
-    public class ListViewTests
+    public class ListViewTests : IClassFixture<ThreadExceptionFixture>
     {
-        public ListViewTests()
-        {
-            Application.ThreadException += (sender, e) => throw new Exception(e.Exception.StackTrace.ToString());
-        }
-
         [WinFormsFact]
         public void ListView_Ctor_Default()
         {
             using var control = new SubListView();
+            Assert.Null(control.AccessibleDefaultActionDescription);
+            Assert.Null(control.AccessibleDescription);
+            Assert.Null(control.AccessibleName);
+            Assert.Equal(AccessibleRole.Default, control.AccessibleRole);
             Assert.Equal(ItemActivation.Standard, control.Activation);
             Assert.Equal(ListViewAlignment.Top, control.Alignment);
             Assert.False(control.AllowColumnReorder);
@@ -41,7 +44,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(97, control.Bottom);
             Assert.Equal(new Rectangle(0, 0, 121, 97), control.Bounds);
             Assert.True(control.CanEnableIme);
+            Assert.False(control.CanFocus);
             Assert.True(control.CanRaiseEvents);
+            Assert.True(control.CanSelect);
+            Assert.False(control.Capture);
             Assert.True(control.CausesValidation);
             Assert.False(control.CheckBoxes);
             Assert.Empty(control.CheckedIndices);
@@ -53,6 +59,7 @@ namespace System.Windows.Forms.Tests
             Assert.Empty(control.Columns);
             Assert.Same(control.Columns, control.Columns);
             Assert.Null(control.Container);
+            Assert.False(control.ContainsFocus);
             Assert.Null(control.ContextMenuStrip);
             Assert.Empty(control.Controls);
             Assert.Same(control.Controls, control.Controls);
@@ -72,6 +79,7 @@ namespace System.Windows.Forms.Tests
             Assert.True(control.Enabled);
             Assert.NotNull(control.Events);
             Assert.Same(control.Events, control.Events);
+            Assert.False(control.Focused);
             Assert.Null(control.FocusedItem);
             Assert.Equal(Control.DefaultFont, control.Font);
             Assert.Equal(control.Font.Height, control.FontHeight);
@@ -90,6 +98,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(ImeMode.NoControl, control.ImeModeBase);
             Assert.NotNull(control.InsertionMark);
             Assert.Same(control.InsertionMark, control.InsertionMark);
+            Assert.False(control.IsAccessible);
+            Assert.False(control.IsMirrored);
             Assert.Empty(control.Items);
             Assert.Same(control.Items, control.Items);
             Assert.False(control.LabelEdit);
@@ -137,6 +147,7 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<InvalidOperationException>(() => control.TopItem);
             Assert.Null(control.TopLevelControl);
             Assert.True(control.UseCompatibleStateImageBehavior);
+            Assert.False(control.UseWaitCursor);
             Assert.Equal(View.LargeIcon, control.View);
             Assert.Equal(0, control.VirtualListSize);
             Assert.False(control.VirtualMode);
@@ -496,6 +507,16 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsFact]
+        public void ListView_BackColor_GetBkColor_Success()
+        {
+            using var control = new ListView();
+
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            control.BackColor = Color.FromArgb(0xFF, 0x12, 0x34, 0x56);
+            Assert.Equal((IntPtr)0x563412, User32.SendMessageW(control.Handle, (User32.WM)LVM.GETBKCOLOR));
         }
 
         [WinFormsFact]
@@ -1301,6 +1322,16 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
+        public void ListView_ForeColor_GetTxtColor_Success()
+        {
+            using var control = new ListView();
+
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            control.ForeColor = Color.FromArgb(0x12, 0x34, 0x56, 0x78);
+            Assert.Equal((IntPtr)0x785634, User32.SendMessageW(control.Handle, (User32.WM)LVM.GETTEXTCOLOR));
+        }
+
+        [WinFormsFact]
         public void ListView_ForeColor_SetWithHandler_CallsForeColorChanged()
         {
             var control = new ListView();
@@ -1453,6 +1484,182 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expectedInvalidatedCallCount + 1, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsFact]
+        public void ListView_Handle_GetWithBackColor_Success()
+        {
+            using var control = new ListView
+            {
+                BackColor = Color.FromArgb(0xFF, 0x12, 0x34, 0x56)
+            };
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            Assert.Equal((IntPtr)0x563412, User32.SendMessageW(control.Handle, (User32.WM)LVM.GETBKCOLOR));
+        }
+
+        [WinFormsFact]
+        public void ListView_Handle_GetWithForeColor_Success()
+        {
+            using var control = new ListView
+            {
+                ForeColor = Color.FromArgb(0x12, 0x34, 0x56, 0x78)
+            };
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            Assert.Equal((IntPtr)0x785634, User32.SendMessageW(control.Handle, (User32.WM)LVM.GETTEXTCOLOR));
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        public void ListView_Handle_GetWithoutGroups_Success(bool showGroups)
+        {
+            using var listView = new ListView
+            {
+                ShowGroups = showGroups
+            };
+            Assert.Equal((IntPtr)0, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPCOUNT, IntPtr.Zero, IntPtr.Zero));
+        }
+
+        public static IEnumerable<object[]> Handle_GetWithGroups_TestData()
+        {
+            foreach (bool showGroups in new bool[] { true, false })
+            {
+                yield return new object[] { showGroups, null, HorizontalAlignment.Left, string.Empty, 0x00000001 };
+                yield return new object[] { showGroups, null, HorizontalAlignment.Center, string.Empty, 0x00000002 };
+                yield return new object[] { showGroups, null, HorizontalAlignment.Right, string.Empty, 0x00000004 };
+
+                yield return new object[] { showGroups, string.Empty, HorizontalAlignment.Left, string.Empty, 0x00000001 };
+                yield return new object[] { showGroups, string.Empty, HorizontalAlignment.Center, string.Empty, 0x00000002 };
+                yield return new object[] { showGroups, string.Empty, HorizontalAlignment.Right, string.Empty, 0x00000004 };
+
+                yield return new object[] { showGroups, "text", HorizontalAlignment.Left, "text", 0x00000001 };
+                yield return new object[] { showGroups, "text", HorizontalAlignment.Center, "text", 0x00000002 };
+                yield return new object[] { showGroups, "text", HorizontalAlignment.Right, "text", 0x00000004 };
+
+                yield return new object[] { showGroups, "te\0xt", HorizontalAlignment.Left, "te", 0x00000001 };
+                yield return new object[] { showGroups, "te\0xt", HorizontalAlignment.Center, "te", 0x00000002 };
+                yield return new object[] { showGroups, "te\0xt", HorizontalAlignment.Right, "te", 0x00000004 };
+            }
+        }
+
+        [WinFormsFact]
+        public unsafe void ListView_Handle_GetWithGroups_Success()
+        {
+            // Run this from another thread as we call Application.EnableVisualStyles.
+            RemoteExecutor.Invoke(() =>
+            {
+                foreach (object[] data in Handle_GetWithGroups_TestData())
+                {
+                    bool showGroups = (bool)data[0];
+                    string header = (string)data[1];
+                    HorizontalAlignment headerAlignment = (HorizontalAlignment)data[2];
+                    string expectedHeaderText = (string)data[3];
+                    int expectedAlign = (int)data[4];
+
+                    Application.EnableVisualStyles();
+
+                    using var listView = new ListView
+                    {
+                        ShowGroups = showGroups
+                    };
+                    var group1 = new ListViewGroup();
+                    var group2 = new ListViewGroup
+                    {
+                        Header = header,
+                        HeaderAlignment = headerAlignment
+                    };
+                    listView.Groups.Add(group1);
+                    listView.Groups.Add(group2);
+
+                    Assert.Equal((IntPtr)2, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPCOUNT, IntPtr.Zero, IntPtr.Zero));
+                    char* buffer = stackalloc char[256];
+                    var lvgroup1 = new ComCtl32.LVGROUPW
+                    {
+                        cbSize = (uint)Marshal.SizeOf<ComCtl32.LVGROUPW>(),
+                        mask = ComCtl32.LVGF.HEADER | ComCtl32.LVGF.GROUPID | ComCtl32.LVGF.ALIGN,
+                        pszHeader = buffer,
+                        cchHeader = 256
+                    };
+                    Assert.Equal((IntPtr)1, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPINFOBYINDEX, (IntPtr)0, ref lvgroup1));
+                    Assert.Equal("ListViewGroup", new string(lvgroup1.pszHeader));
+                    Assert.True(lvgroup1.iGroupId >= 0);
+                    Assert.Equal(0x00000001, (int)lvgroup1.uAlign);
+
+                    var lvgroup2 = new ComCtl32.LVGROUPW
+                    {
+                        cbSize = (uint)Marshal.SizeOf<ComCtl32.LVGROUPW>(),
+                        mask = ComCtl32.LVGF.HEADER | ComCtl32.LVGF.GROUPID | ComCtl32.LVGF.ALIGN,
+                        pszHeader = buffer,
+                        cchHeader = 256
+                    };
+                    Assert.Equal((IntPtr)1, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPINFOBYINDEX, (IntPtr)1, ref lvgroup2));
+                    Assert.Equal(expectedHeaderText, new string(lvgroup2.pszHeader));
+                    Assert.True(lvgroup2.iGroupId > 0);
+                    Assert.Equal(expectedAlign, (int)lvgroup2.uAlign);
+                    Assert.True(lvgroup2.iGroupId > lvgroup1.iGroupId);
+                }
+            }).Dispose();
+        }
+
+        [WinFormsFact]
+        public void ListView_Handle_GetTextBackColor_Success()
+        {
+            using var control = new ListView();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            Assert.Equal((IntPtr)0xFFFFFFFF, User32.SendMessageW(control.Handle, (User32.WM)LVM.GETTEXTBKCOLOR));
+        }
+
+        [WinFormsFact]
+        public void ListView_Handle_GetVersion_ReturnsExpected()
+        {
+            using var control = new ListView();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            Assert.Equal((IntPtr)5, User32.SendMessageW(control.Handle, (User32.WM)CCM.GETVERSION));
+        }
+
+        public static IEnumerable<object[]> Handle_CustomGetVersion_TestData()
+        {
+            yield return new object[] { IntPtr.Zero, 1 };
+            yield return new object[] { (IntPtr)4, 1 };
+            yield return new object[] { (IntPtr)5, 0 };
+            yield return new object[] { (IntPtr)6, 0 };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(Handle_CustomGetVersion_TestData))]
+        public void ListView_Handle_CustomGetVersion_Success(IntPtr getVersionResult, int expectedSetVersionCallCount)
+        {
+            using var control = new CustomGetVersionListView
+            {
+                GetVersionResult = getVersionResult
+            };
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            Assert.Equal(expectedSetVersionCallCount, control.SetVersionCallCount);
+        }
+
+        private class CustomGetVersionListView : ListView
+        {
+            public IntPtr GetVersionResult { get; set; }
+            public int SetVersionCallCount { get; set; }
+
+            protected override void WndProc(ref Message m)
+            {
+                if (m.Msg == (int)CCM.GETVERSION)
+                {
+                    Assert.Equal(IntPtr.Zero, m.WParam);
+                    Assert.Equal(IntPtr.Zero, m.LParam);
+                    m.Result = GetVersionResult;
+                    return;
+                }
+                else if (m.Msg == (int)CCM.SETVERSION)
+                {
+                    Assert.Equal((IntPtr)5, m.WParam);
+                    Assert.Equal(IntPtr.Zero, m.LParam);
+                    SetVersionCallCount++;
+                    return;
+                }
+
+                base.WndProc(ref m);
+            }
         }
 
         [WinFormsTheory]
@@ -1985,7 +2192,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { true, false, View.Tile, null, 0 };
             yield return new object[] { true, false, View.Tile, new ImageList(), 0 };
             yield return new object[] { true, false, View.Tile, nonEmptyImageList, 0 };
-            
+
             foreach (bool autoArrange in new bool[] { true, false })
             {
                 yield return new object[] { autoArrange, true, View.Details, null, 0 };
@@ -2001,7 +2208,7 @@ namespace System.Windows.Forms.Tests
                 yield return new object[] { autoArrange, true, View.SmallIcon, new ImageList(), 0 };
                 yield return new object[] { autoArrange, true, View.SmallIcon, nonEmptyImageList, 0 };
             }
-            
+
             yield return new object[] { false, false, View.Details, null, 0 };
             yield return new object[] { false, false, View.Details, new ImageList(), 0 };
             yield return new object[] { false, false, View.Details, nonEmptyImageList, 0 };
@@ -2073,7 +2280,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { true, false, View.Tile, null, 0 };
             yield return new object[] { true, false, View.Tile, new ImageList(), 0 };
             yield return new object[] { true, false, View.Tile, nonEmptyImageList, 0 };
-            
+
             foreach (bool autoArrange in new bool[] { true, false })
             {
                 yield return new object[] { autoArrange, true, View.Details, null, 0 };
@@ -2089,7 +2296,7 @@ namespace System.Windows.Forms.Tests
                 yield return new object[] { autoArrange, true, View.SmallIcon, new ImageList(), 0 };
                 yield return new object[] { autoArrange, true, View.SmallIcon, nonEmptyImageList, 0 };
             }
-            
+
             yield return new object[] { false, false, View.Details, null, 0 };
             yield return new object[] { false, false, View.Details, new ImageList(), 0 };
             yield return new object[] { false, false, View.Details, nonEmptyImageList, 0 };
@@ -2592,7 +2799,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { true, false, View.Tile, null, 0, 0 };
             yield return new object[] { true, false, View.Tile, new ImageList(), 0, 0 };
             yield return new object[] { true, false, View.Tile, nonEmptyImageList, 0, 0 };
-            
+
             foreach (bool autoArrange in new bool[] { true, false })
             {
                 yield return new object[] { autoArrange, true, View.Details, null, 0, 0 };
@@ -2608,7 +2815,7 @@ namespace System.Windows.Forms.Tests
                 yield return new object[] { autoArrange, true, View.SmallIcon, new ImageList(), 2, 2 };
                 yield return new object[] { autoArrange, true, View.SmallIcon, nonEmptyImageList, 2, 2 };
             }
-            
+
             yield return new object[] { false, false, View.Details, null, 0, 0 };
             yield return new object[] { false, false, View.Details, new ImageList(), 1, 0 };
             yield return new object[] { false, false, View.Details, nonEmptyImageList, 1, 0 };
@@ -2680,7 +2887,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { true, false, View.Tile, null, 0, 0 };
             yield return new object[] { true, false, View.Tile, new ImageList(), 0, 0 };
             yield return new object[] { true, false, View.Tile, nonEmptyImageList, 0, 0 };
-            
+
             foreach (bool autoArrange in new bool[] { true, false })
             {
                 yield return new object[] { autoArrange, true, View.Details, null, 1, 0 };
@@ -2696,7 +2903,7 @@ namespace System.Windows.Forms.Tests
                 yield return new object[] { autoArrange, true, View.SmallIcon, new ImageList(), 2, 2 };
                 yield return new object[] { autoArrange, true, View.SmallIcon, nonEmptyImageList, 2, 2 };
             }
-            
+
             yield return new object[] { false, false, View.Details, null, 1, 0 };
             yield return new object[] { false, false, View.Details, new ImageList(), 1, 0 };
             yield return new object[] { false, false, View.Details, nonEmptyImageList, 1, 0 };
@@ -2930,7 +3137,7 @@ namespace System.Windows.Forms.Tests
                     yield return new object[] { true, checkBoxes, autoArrange, true, View.SmallIcon, new ImageList(), 0, 0 };
                     yield return new object[] { true, checkBoxes, autoArrange, true, View.SmallIcon, nonEmptyImageList, 0, 0 };
                 }
-                
+
                 yield return new object[] { true, checkBoxes, false, false, View.Details, null, 0, 0 };
                 yield return new object[] { true, checkBoxes, false, false, View.Details, new ImageList(), 0, 0 };
                 yield return new object[] { true, checkBoxes, false, false, View.Details, nonEmptyImageList, 0, 0 };
@@ -2948,7 +3155,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { true, false, true, false, View.Tile, null, 0, 0 };
             yield return new object[] { true, false, true, false, View.Tile, new ImageList(), 0, 0 };
             yield return new object[] { true, false, true, false, View.Tile, nonEmptyImageList, 0, 0 };
-            
+
             yield return new object[] { true, false, false, false, View.Tile, null, 0, 0 };
             yield return new object[] { true, false, false, false, View.Tile, new ImageList(), 0, 0 };
             yield return new object[] { true, false, false, false, View.Tile, nonEmptyImageList, 0, 0 };
@@ -2982,7 +3189,7 @@ namespace System.Windows.Forms.Tests
                 yield return new object[] { false, true, autoArrange, true, View.SmallIcon, new ImageList(), 1, 1 };
                 yield return new object[] { false, true, autoArrange, true, View.SmallIcon, nonEmptyImageList, 1, 1 };
             }
-            
+
             yield return new object[] { false, true, false, false, View.Details, null, 0, 0 };
             yield return new object[] { false, true, false, false, View.Details, new ImageList(), 1, 1 };
             yield return new object[] { false, true, false, false, View.Details, nonEmptyImageList, 1, 1 };
@@ -3012,7 +3219,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { false, false, true, false, View.Tile, null, 0, 0 };
             yield return new object[] { false, false, true, false, View.Tile, new ImageList(), 0, 0 };
             yield return new object[] { false, false, true, false, View.Tile, nonEmptyImageList, 0, 0 };
-            
+
             foreach (bool autoArrange in new bool[] { true, false })
             {
                 yield return new object[] { false, false, autoArrange, true, View.Details, null, 0, 0 };
@@ -3028,7 +3235,7 @@ namespace System.Windows.Forms.Tests
                 yield return new object[] { false, false, autoArrange, true, View.SmallIcon, new ImageList(), 0, 0 };
                 yield return new object[] { false, false, autoArrange, true, View.SmallIcon, nonEmptyImageList, 0, 0 };
             }
-            
+
             yield return new object[] { false, false, false, false, View.Details, null, 0, 0 };
             yield return new object[] { false, false, false, false, View.Details, new ImageList(), 0, 0 };
             yield return new object[] { false, false, false, false, View.Details, nonEmptyImageList, 0, 0 };
@@ -3118,7 +3325,7 @@ namespace System.Windows.Forms.Tests
                     yield return new object[] { true, checkBoxes, autoArrange, true, View.SmallIcon, new ImageList(), 0, 0 };
                     yield return new object[] { true, checkBoxes, autoArrange, true, View.SmallIcon, nonEmptyImageList, 0, 0 };
                 }
-                
+
                 yield return new object[] { true, checkBoxes, false, false, View.Details, null, 0, 0 };
                 yield return new object[] { true, checkBoxes, false, false, View.Details, new ImageList(), 0, 0 };
                 yield return new object[] { true, checkBoxes, false, false, View.Details, nonEmptyImageList, 0, 0 };
@@ -3136,7 +3343,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { true, false, true, false, View.Tile, null, 0, 0 };
             yield return new object[] { true, false, true, false, View.Tile, new ImageList(), 0, 0 };
             yield return new object[] { true, false, true, false, View.Tile, nonEmptyImageList, 0, 0 };
-            
+
             yield return new object[] { true, false, false, false, View.Tile, null, 0, 0 };
             yield return new object[] { true, false, false, false, View.Tile, new ImageList(), 0, 0 };
             yield return new object[] { true, false, false, false, View.Tile, nonEmptyImageList, 0, 0 };
@@ -3170,7 +3377,7 @@ namespace System.Windows.Forms.Tests
                 yield return new object[] { false, true, autoArrange, true, View.SmallIcon, new ImageList(), 1, 1 };
                 yield return new object[] { false, true, autoArrange, true, View.SmallIcon, nonEmptyImageList, 1, 1 };
             }
-            
+
             yield return new object[] { false, true, false, false, View.Details, null, 1, 1 };
             yield return new object[] { false, true, false, false, View.Details, new ImageList(), 1, 1 };
             yield return new object[] { false, true, false, false, View.Details, nonEmptyImageList, 1, 1 };
@@ -3200,7 +3407,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { false, false, true, false, View.Tile, null, 0, 0 };
             yield return new object[] { false, false, true, false, View.Tile, new ImageList(), 0, 0 };
             yield return new object[] { false, false, true, false, View.Tile, nonEmptyImageList, 0, 0 };
-            
+
             foreach (bool autoArrange in new bool[] { true, false })
             {
                 yield return new object[] { false, false, autoArrange, true, View.Details, null, 0, 0 };
@@ -3216,7 +3423,7 @@ namespace System.Windows.Forms.Tests
                 yield return new object[] { false, false, autoArrange, true, View.SmallIcon, new ImageList(), 0, 0 };
                 yield return new object[] { false, false, autoArrange, true, View.SmallIcon, nonEmptyImageList, 0, 0 };
             }
-            
+
             yield return new object[] { false, false, false, false, View.Details, null, 0, 0 };
             yield return new object[] { false, false, false, false, View.Details, new ImageList(), 0, 0 };
             yield return new object[] { false, false, false, false, View.Details, nonEmptyImageList, 0, 0 };
@@ -3395,6 +3602,218 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createdCallCount);
         }
 
+        [WinFormsFact]
+        public void ListView_GetAutoSizeMode_Invoke_ReturnsExpected()
+        {
+            using var control = new SubListView();
+            Assert.Equal(AutoSizeMode.GrowOnly, control.GetAutoSizeMode());
+        }
+
+        [WinFormsFact]
+        public void ListView_GetItemRect_InvokeWithoutHandle_ReturnsExpectedAndCreatedHandle()
+        {
+            using var control = new ListView();
+            var item1 = new ListViewItem();
+            var item2 = new ListViewItem();
+            control.Items.Add(item1);
+            control.Items.Add(item2);
+
+            Rectangle rect1 = control.GetItemRect(0);
+            Assert.True(rect1.X >= 0);
+            Assert.True(rect1.Y >= 0);
+            Assert.True(rect1.Width > 0);
+            Assert.True(rect1.Height > 0);
+            Assert.Equal(rect1, control.GetItemRect(0));
+            Assert.True(control.IsHandleCreated);
+
+            Rectangle rect2 = control.GetItemRect(1);
+            Assert.True(rect2.X >= rect1.X + rect1.Width);
+            Assert.Equal(rect2.Y, rect1.Y);
+            Assert.True(rect2.Width > 0);
+            Assert.True(rect2.Height > 0);
+            Assert.True(control.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void ListView_GetItemRect_InvokeWithHandle_ReturnsExpected()
+        {
+            using var control = new ListView();
+            var item1 = new ListViewItem();
+            var item2 = new ListViewItem();
+            control.Items.Add(item1);
+            control.Items.Add(item2);
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            Rectangle rect1 = control.GetItemRect(0);
+            Assert.True(rect1.X >= 0);
+            Assert.True(rect1.Y >= 0);
+            Assert.True(rect1.Width > 0);
+            Assert.True(rect1.Height > 0);
+            Assert.Equal(rect1, control.GetItemRect(0));
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            Rectangle rect2 = control.GetItemRect(1);
+            Assert.True(rect2.X >= rect1.X + rect1.Width);
+            Assert.Equal(rect2.Y, rect1.Y);
+            Assert.True(rect2.Width > 0);
+            Assert.True(rect2.Height > 0);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        public static IEnumerable<object[]> GetItemRect_InvokeCustomGetItemRect_TestData()
+        {
+            yield return new object[] { new RECT(), Rectangle.Empty };
+            yield return new object[] { new RECT(1, 2, 3, 4), new Rectangle(1, 2, 2, 2) };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(GetItemRect_InvokeCustomGetItemRect_TestData))]
+        public void ListView_GetItemRect_InvokeCustomGetItemRect_ReturnsExpected(object getItemRectResult, Rectangle expected)
+        {
+            using var control = new CustomGetItemRectListView
+            {
+                GetItemRectResult = (RECT)getItemRectResult
+            };
+            var item = new ListViewItem();
+            control.Items.Add(item);
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+
+            Assert.Equal(expected, control.GetItemRect(0));
+        }
+
+        private class CustomGetItemRectListView : ListView
+        {
+            public RECT GetItemRectResult { get; set; }
+
+            protected unsafe override void WndProc(ref Message m)
+            {
+                if (m.Msg == (int)LVM.GETITEMRECT)
+                {
+                    RECT* pRect = (RECT*)m.LParam;
+                    *pRect = GetItemRectResult;
+                    m.Result = (IntPtr)1;
+                    return;
+                }
+
+                base.WndProc(ref m);
+            }
+        }
+
+        [WinFormsFact]
+        public void ListView_GetItemRect_InvokeInvalidGetItemRect_ThrowsArgumentOutOfRangeException()
+        {
+            using var control = new InvalidGetItemRectListView();
+            var item = new ListViewItem();
+            control.Items.Add(item);
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+
+            control.MakeInvalid = true;
+            Assert.Throws<ArgumentOutOfRangeException>("index", () => control.GetItemRect(0));
+        }
+
+        private class InvalidGetItemRectListView : ListView
+        {
+            public bool MakeInvalid { get; set; }
+
+            protected unsafe override void WndProc(ref Message m)
+            {
+                if (MakeInvalid && m.Msg == (int)LVM.GETITEMRECT)
+                {
+                    RECT* pRect = (RECT*)m.LParam;
+                    *pRect = new RECT(1, 2, 3, 4);
+                    m.Result = IntPtr.Zero;
+                    return;
+                }
+
+                base.WndProc(ref m);
+            }
+        }
+
+        [WinFormsFact]
+        public void ListView_GetItemRect_InvalidIndexEmpty_ThrowsArgumentOutOfRangeException()
+        {
+            using var control = new ListView();
+            Assert.Throws<ArgumentOutOfRangeException>("index", () => control.GetItemRect(-1));
+            Assert.Throws<ArgumentOutOfRangeException>("index", () => control.GetItemRect(0));
+            Assert.Throws<ArgumentOutOfRangeException>("index", () => control.GetItemRect(1));
+        }
+
+        [WinFormsFact]
+        public void ListView_GetItemRect_InvalidIndexNotEmpty_ThrowsArgumentOutOfRangeException()
+        {
+            using var control = new ListView();
+            var item1 = new ListViewItem();
+            control.Items.Add(item1);
+
+            Assert.Throws<ArgumentOutOfRangeException>("index", () => control.GetItemRect(-1));
+            Assert.Throws<ArgumentOutOfRangeException>("index", () => control.GetItemRect(1));
+            Assert.Throws<ArgumentOutOfRangeException>("index", () => control.GetItemRect(2));
+        }
+
+        [WinFormsFact]
+        public void ListView_GetItemRect_InvalidIndexWithHandleEmpty_ThrowsArgumentOutOfRangeException()
+        {
+            using var control = new ListView();
+            Assert.Throws<ArgumentOutOfRangeException>("index", () => control.GetItemRect(-1));
+            Assert.Throws<ArgumentOutOfRangeException>("index", () => control.GetItemRect(0));
+            Assert.Throws<ArgumentOutOfRangeException>("index", () => control.GetItemRect(1));
+        }
+
+        [WinFormsFact]
+        public void ListView_GetItemRect_InvalidIndexWithHandleNotEmpty_ThrowsArgumentOutOfRangeException()
+        {
+            using var control = new ListView();
+            var item1 = new ListViewItem();
+            control.Items.Add(item1);
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+
+            Assert.Throws<ArgumentOutOfRangeException>("index", () => control.GetItemRect(-1));
+            Assert.Throws<ArgumentOutOfRangeException>("index", () => control.GetItemRect(1));
+            Assert.Throws<ArgumentOutOfRangeException>("index", () => control.GetItemRect(2));
+        }
+
+        [WinFormsTheory]
+        [InlineData(ControlStyles.ContainerControl, false)]
+        [InlineData(ControlStyles.UserPaint, false)]
+        [InlineData(ControlStyles.Opaque, false)]
+        [InlineData(ControlStyles.ResizeRedraw, false)]
+        [InlineData(ControlStyles.FixedWidth, false)]
+        [InlineData(ControlStyles.FixedHeight, false)]
+        [InlineData(ControlStyles.StandardClick, false)]
+        [InlineData(ControlStyles.Selectable, true)]
+        [InlineData(ControlStyles.UserMouse, false)]
+        [InlineData(ControlStyles.SupportsTransparentBackColor, false)]
+        [InlineData(ControlStyles.StandardDoubleClick, true)]
+        [InlineData(ControlStyles.AllPaintingInWmPaint, true)]
+        [InlineData(ControlStyles.CacheText, false)]
+        [InlineData(ControlStyles.EnableNotifyMessage, false)]
+        [InlineData(ControlStyles.DoubleBuffer, false)]
+        [InlineData(ControlStyles.OptimizedDoubleBuffer, false)]
+        [InlineData(ControlStyles.UseTextForAccessibility, false)]
+        [InlineData((ControlStyles)0, true)]
+        [InlineData((ControlStyles)int.MaxValue, false)]
+        [InlineData((ControlStyles)(-1), false)]
+        public void ListView_GetStyle_Invoke_ReturnsExpected(ControlStyles flag, bool expected)
+        {
+            using var control = new SubListView();
+            Assert.Equal(expected, control.GetStyle(flag));
+
+            // Call again to test caching.
+            Assert.Equal(expected, control.GetStyle(flag));
+        }
+
         private class SubListView : ListView
         {
             public new bool CanEnableIme => base.CanEnableIme;
@@ -3448,6 +3867,8 @@ namespace System.Windows.Forms.Tests
             public new bool ShowFocusCues => base.ShowFocusCues;
 
             public new bool ShowKeyboardCues => base.ShowKeyboardCues;
+
+            public new AutoSizeMode GetAutoSizeMode() => base.GetAutoSizeMode();
 
             public new bool GetStyle(ControlStyles flag) => base.GetStyle(flag);
 

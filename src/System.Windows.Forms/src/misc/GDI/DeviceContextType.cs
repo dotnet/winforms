@@ -31,4 +31,3 @@ namespace System.Windows.Forms.Internal
         Metafile = 0x06 // currently not supported.
     }
 }
-

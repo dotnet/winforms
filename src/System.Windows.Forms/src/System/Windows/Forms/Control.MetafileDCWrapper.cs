@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
@@ -70,7 +72,7 @@ namespace System.Windows.Forms
                     Gdi32.SelectObject(HDC, _hOriginalBmp);
                     success = Gdi32.DeleteObject(_hBitmap).IsTrue();
                     Debug.Assert(success, "DeleteObject() failed.");
-                    success = Gdi32.DeleteDC(HDC);
+                    success = Gdi32.DeleteDC(HDC).IsTrue();
                     Debug.Assert(success, "DeleteObject() failed.");
                 }
                 finally
@@ -114,20 +116,18 @@ namespace System.Windows.Forms
                         return false;
                     }
 
-                    NativeMethods.BITMAPINFO_FLAT lpbmi = new NativeMethods.BITMAPINFO_FLAT
+                    var lpbmi = new Gdi32.BITMAPINFO
                     {
-                        bmiHeader_biSize = Marshal.SizeOf<NativeMethods.BITMAPINFOHEADER>(),
-                        bmiHeader_biWidth = bmp.bmWidth,
-                        bmiHeader_biHeight = bmp.bmHeight,
-                        bmiHeader_biPlanes = 1,
-                        bmiHeader_biBitCount = (short)bmp.bmBitsPixel,
-                        bmiHeader_biCompression = NativeMethods.BI_RGB,
-                        bmiHeader_biSizeImage = 0,               //Not needed since using BI_RGB
-                        bmiHeader_biXPelsPerMeter = 0,
-                        bmiHeader_biYPelsPerMeter = 0,
-                        bmiHeader_biClrUsed = 0,
-                        bmiHeader_biClrImportant = 0,
-                        bmiColors = new byte[NativeMethods.BITMAPINFO_MAX_COLORSIZE * 4]
+                        bmiHeader = new Gdi32.BITMAPINFOHEADER
+                        {
+                            biSize = (uint)sizeof(Gdi32.BITMAPINFOHEADER),
+                            biWidth = bmp.bmWidth,
+                            biHeight = bmp.bmHeight,
+                            biPlanes = 1,
+                            biBitCount = bmp.bmBitsPixel,
+                            biCompression = Gdi32.BI.RGB
+                        },
+                        bmiColors = new byte[Gdi32.BITMAPINFO.MaxColorSize * 4]
                     };
 
                     // Include the palette for 256 color bitmaps
@@ -162,8 +162,14 @@ namespace System.Windows.Forms
                     byte[] lpBits = new byte[totalBytesReqd];
 
                     // Get the bitmap bits
-                    int diRet = SafeNativeMethods.GetDIBits(hdcSrc, hBitmap, 0, bmp.bmHeight, lpBits,
-                            ref lpbmi, NativeMethods.DIB_RGB_COLORS);
+                    int diRet = Gdi32.GetDIBits(
+                        hdcSrc,
+                        hBitmap,
+                        0,
+                        (uint)bmp.bmHeight,
+                        lpBits,
+                        ref lpbmi,
+                        Gdi32.DIB.RGB_COLORS);
                     if (diRet == 0)
                     {
                         return false;
@@ -187,10 +193,20 @@ namespace System.Windows.Forms
                     }
 
                     // Paint the bitmap
-                    int iRet = SafeNativeMethods.StretchDIBits(hdcDest,
-                            xDest, yDest, cxDest, cyDest, 0, 0, bmp.bmWidth, bmp.bmHeight,
-                            lpBits, ref lpbmi, NativeMethods.DIB_RGB_COLORS, NativeMethods.SRCCOPY);
-
+                    int iRet = Gdi32.StretchDIBits(
+                        hdcDest,
+                        xDest,
+                        yDest,
+                        cxDest,
+                        cyDest,
+                        0,
+                        0,
+                        bmp.bmWidth,
+                        bmp.bmHeight,
+                        lpBits,
+                        ref lpbmi,
+                        Gdi32.DIB.RGB_COLORS,
+                        Gdi32.ROP.SRCCOPY);
                     if (iRet == NativeMethods.GDI_ERROR)
                     {
                         return false;

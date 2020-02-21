@@ -1,6 +1,6 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.	
-// The .NET Foundation licenses this file to you under the MIT license.	
-// See the LICENSE file in the project root for more information.	
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
 
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -15,7 +15,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class DataObjectTests
+    public class DataObjectTests : IClassFixture<ThreadExceptionFixture>
     {
         private static readonly string[] s_clipboardFormats =
         {
@@ -191,7 +191,7 @@ namespace System.Windows.Forms.Tests
             var dataObject = new DataObject();
             Assert.Null(dataObject.GetAudioStream());
         }
-        
+
         public static IEnumerable<object[]> GetAudioStream_TestData()
         {
             yield return new object[] { null, null };
@@ -523,7 +523,6 @@ namespace System.Windows.Forms.Tests
             mockDataObject.Verify(o => o.GetDataPresent(format, autoConvert), Times.Once());
         }
 
-
         [Theory]
         [InlineData(typeof(int))]
         [InlineData(null)]
@@ -564,7 +563,7 @@ namespace System.Windows.Forms.Tests
             var dataObject = new DataObject();
             Assert.Empty(dataObject.GetFileDropList());
         }
-        
+
         public static IEnumerable<object[]> GetFileDropList_TestData()
         {
             yield return new object[] { null, Array.Empty<string>() };
@@ -689,7 +688,7 @@ namespace System.Windows.Forms.Tests
             var dataObject = new DataObject();
             Assert.Null(dataObject.GetImage());
         }
-        
+
         public static IEnumerable<object[]> GetImage_TestData()
         {
             yield return new object[] { null, null };
@@ -771,7 +770,7 @@ namespace System.Windows.Forms.Tests
             var dataObject = new DataObject();
             Assert.Empty(dataObject.GetText(format));
         }
-        
+
         public static IEnumerable<object[]> GetText_TextDataFormat_TestData()
         {
             yield return new object[] { TextDataFormat.Text, DataFormats.UnicodeText, null, string.Empty };

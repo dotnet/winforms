@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
@@ -694,37 +696,6 @@ namespace System.Windows.Forms
             {
                 dataGridView.OnCellStyleContentChanged(this, property);
             }
-
-            /*
-            if ((this.scope & DataGridViewCellStyleScopeInternal.Cell) == DataGridViewCellStyleScopeInternal.Cell)
-            {
-                this.dataGridView.OnDataGridViewCellsStyleChanged(EventArgs.Empty);
-            }
-
-            if ((this.scope & DataGridViewCellStyleScopeInternal.ColumnDefault) == DataGridViewCellStyleScopeInternal.ColumnDefault)
-            {
-                this.dataGridView.OnDataGridViewColumnsDefaultCellStyleChanged(EventArgs.Empty);
-            }
-
-            if ((this.scope & DataGridViewCellStyleScopeInternal.RowDefault) == DataGridViewCellStyleScopeInternal.RowDefault)
-            {
-                this.dataGridView.OnDataGridViewRowsDefaultCellStyleChanged(EventArgs.Empty);
-            }
-
-            if ((this.scope & DataGridViewCellStyleScopeInternal.DataGridViewDefault) == DataGridViewCellStyleScopeInternal.DataGridViewDefault)
-            {
-                this.dataGridView.OnDefaultCellStyleChanged(EventArgs.Empty);
-            }
-
-            if ((this.scope & DataGridViewCellStyleScopeInternal.DataGridViewColumnHeadersDefault) == DataGridViewCellStyleScopeInternal.DataGridViewColumnHeadersDefault)
-            {
-                this.dataGridView.OnColumnHeadersDefaultCellStyleChanged(EventArgs.Empty);
-            }
-
-            if ((this.scope & DataGridViewCellStyleScopeInternal.DataGridViewRowHeadersDefault) == DataGridViewCellStyleScopeInternal.DataGridViewRowHeadersDefault)
-            {
-                this.dataGridView.OnRowHeadersDefaultCellStyleChanged(EventArgs.Empty);
-            }*/
         }
 
         internal void RemoveScope(DataGridViewCellStyleScopes scope)

@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
@@ -131,7 +133,6 @@ namespace System.Windows.Forms
 
             for (; lastItem >= 0; lastItem--)
             {
-
                 // null means no prop is available, we quit here.
                 //
                 if (ConstructorParameterProperties[lastItem] == null)

@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using static Interop;
 
 namespace System.Windows.Forms.ComponentModel.Com2Interop
@@ -42,5 +44,4 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             return addr.ToInt32();
         }
     }
-
 }

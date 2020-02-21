@@ -297,44 +297,6 @@ namespace System.Windows.Forms.Tests
             Assert.True(cont.CanProcessMnemonic());
         }
 
-        [Fact]
-        public void Control_CanSelectCore()
-        {
-            var cont = new Control();
-
-            // act and assert
-            Assert.True(cont.CanSelectCore());
-        }
-
-        [Fact]
-        public void Control_CanSelectCoreNotEnabled()
-        {
-            var cont = new Control
-            {
-                Enabled = false
-            };
-
-            // act and assert
-            Assert.False(cont.CanSelectCore());
-        }
-
-        [Fact]
-        public void Control_CanSelectCoreParentNotEnabled()
-        {
-            var cont = new Control
-            {
-                Enabled = true
-            };
-            var parent = new Control
-            {
-                Enabled = false
-            };
-            cont.AssignParent(parent);
-
-            // act and assert
-            Assert.False(cont.CanSelectCore());
-        }
-
         /// <summary>
         ///  Data for the CreateControlInternal test
         /// </summary>
@@ -470,28 +432,6 @@ namespace System.Windows.Forms.Tests
 
             // act and assert
             Assert.Equal(third, cont.GetFirstChildControlInTabOrder(false));
-        }
-
-        [Fact]
-        public void Control_GetVisibleCore_NoParent_ReturnsExpected()
-        {
-            var control = new Control();
-            Assert.Null(control.Parent);
-            Assert.True(control.GetVisibleCore());
-        }
-
-        [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
-        public void Control_GetVisibleCoreVisible_Parent_ReturnsExpected(bool value)
-        {
-            var control = new Control();
-            var parent = new Control
-            {
-                Visible = value
-            };
-            control.Parent = parent;
-
-            Assert.Equal(value, control.GetVisibleCore());
         }
 
         [Fact]

@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
@@ -270,7 +272,6 @@ namespace System.Windows.Forms
 
             public override Size GetPreferredSize(Size constrainingSize)
             {
-
                 Size preferredSize = base.GetPreferredSize(constrainingSize);
                 if (ownerItem.ShowDropDownArrow)
                 {
@@ -292,10 +293,8 @@ namespace System.Windows.Forms
 
                 if (ownerItem.ShowDropDownArrow)
                 {
-
                     if (ownerItem.TextDirection == ToolStripTextDirection.Horizontal)
                     {
-
                         // We're rendering horizontal....  make sure to take care of RTL issues.
 
                         int widthOfDropDown = dropDownArrowSize.Width + scaledDropDownArrowPadding.Horizontal;
@@ -303,7 +302,6 @@ namespace System.Windows.Forms
 
                         if (ownerItem.RightToLeft == RightToLeft.Yes)
                         {
-
                             // if RightToLeft.Yes: [ v | rest of drop down button ]
                             options.client.Offset(widthOfDropDown, 0);
                             dropDownArrowRect = new Rectangle(scaledDropDownArrowPadding.Left, 0, dropDownArrowSize.Width, ownerItem.Bounds.Height);
@@ -312,7 +310,6 @@ namespace System.Windows.Forms
                         {
                             // if RightToLeft.No [ rest of drop down button | v ]
                             dropDownArrowRect = new Rectangle(options.client.Right, 0, dropDownArrowSize.Width, ownerItem.Bounds.Height);
-
                         }
                     }
                     else
@@ -324,9 +321,7 @@ namespace System.Windows.Forms
 
                         //  [ rest of button / v]
                         dropDownArrowRect = new Rectangle(0, options.client.Bottom + scaledDropDownArrowPadding.Top, ownerItem.Bounds.Width - 1, dropDownArrowSize.Height);
-
                     }
-
                 }
                 return options;
             }
@@ -338,10 +333,6 @@ namespace System.Windows.Forms
                     return dropDownArrowRect;
                 }
             }
-
         }
-
     }
 }
-
-
