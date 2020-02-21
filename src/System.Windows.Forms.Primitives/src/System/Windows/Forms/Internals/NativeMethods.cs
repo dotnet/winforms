@@ -93,9 +93,7 @@ namespace System.Windows.Forms
         MCN_VIEWCHANGE = (0 - 750), // MCN_SELECT -4  - give state of calendar view
         MCN_SELCHANGE = ((0 - 750) + 1),
         MCN_GETDAYSTATE = ((0 - 750) + 3),
-        MCN_SELECT = ((0 - 750) + 4),
-
-        MSAA_MENU_SIG = (unchecked((int)0xAA0DF00D));
+        MCN_SELECT = ((0 - 750) + 4);
 
         public const int
         NIN_BALLOONSHOW = ((int)User32.WM.USER + 2),
@@ -434,21 +432,6 @@ namespace System.Windows.Forms
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
             public string szInfoTitle;
             public Shell32.NIIF dwInfoFlags;
-        }
-
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
-        public struct MSAAMENUINFO
-        {
-            public int dwMSAASignature;
-            public int cchWText;
-            public string pszWText;
-
-            public MSAAMENUINFO(string text)
-            {
-                dwMSAASignature = unchecked((int)MSAA_MENU_SIG);
-                cchWText = text.Length;
-                pszWText = text;
-            }
         }
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
