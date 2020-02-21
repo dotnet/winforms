@@ -979,7 +979,7 @@ namespace System.Windows.Forms
                 IntPtr userCookie = IntPtr.Zero;
                 if (UseVisualStyles)
                 {
-                    userCookie = UnsafeNativeMethods.ThemingScope.Activate();
+                    userCookie = ThemingScope.Activate();
                 }
 
                 try
@@ -988,7 +988,7 @@ namespace System.Windows.Forms
                 }
                 finally
                 {
-                    UnsafeNativeMethods.ThemingScope.Deactivate(userCookie);
+                    ThemingScope.Deactivate(userCookie);
                 }
             }
 
@@ -1047,7 +1047,7 @@ namespace System.Windows.Forms
 
                 bool fullModal = false;
                 bool localModal = false;
-                HandleRef hwndOwner = new HandleRef(null, IntPtr.Zero);
+                IntPtr hwndOwner = IntPtr.Zero;
 
                 if (reason == msoloop.DoEventsModal)
                 {
@@ -1075,29 +1075,25 @@ namespace System.Windows.Forms
                     // If the owner window of the dialog is still enabled, disable it now.
                     // This can happen if the owner window is from a different thread or
                     // process.
-                    hwndOwner = new HandleRef(null, UnsafeNativeMethods.GetWindowLong(new HandleRef(_currentForm, _currentForm.Handle), NativeMethods.GWL_HWNDPARENT));
-                    if (hwndOwner.Handle != IntPtr.Zero)
+                    hwndOwner = UnsafeNativeMethods.GetWindowLong(new HandleRef(_currentForm, _currentForm.Handle), NativeMethods.GWL_HWNDPARENT);
+                    if (hwndOwner != IntPtr.Zero)
                     {
-                        if (SafeNativeMethods.IsWindowEnabled(hwndOwner))
+                        if (User32.IsWindowEnabled(hwndOwner).IsTrue())
                         {
-                            SafeNativeMethods.EnableWindow(hwndOwner, false);
+                            User32.EnableWindow(hwndOwner, BOOL.FALSE);
                         }
                         else
                         {
-                            // reset hwndOwner so we are not tempted to
-                            // fiddle with it
-                            hwndOwner = new HandleRef(null, IntPtr.Zero);
+                            // Reset hwndOwner so we are not tempted to fiddle with it
+                            hwndOwner = IntPtr.Zero;
                         }
                     }
 
                     // The second half of the the modalEnabled flag above.  Here, if we were previously
                     // enabled, make sure that's still the case.
-
-                    if (_currentForm != null &&
-                        _currentForm.IsHandleCreated &&
-                        SafeNativeMethods.IsWindowEnabled(new HandleRef(_currentForm, _currentForm.Handle)) != modalEnabled)
+                    if (_currentForm != null && _currentForm.IsHandleCreated && User32.IsWindowEnabled(_currentForm).IsTrue() != modalEnabled)
                     {
-                        SafeNativeMethods.EnableWindow(new HandleRef(_currentForm, _currentForm.Handle), modalEnabled);
+                        User32.EnableWindow(new HandleRef(_currentForm, _currentForm.Handle), modalEnabled.ToBOOL());
                     }
                 }
 
@@ -1152,9 +1148,9 @@ namespace System.Windows.Forms
                         EndModalMessageLoop(context);
 
                         // Again, if the hwndOwner was valid and disabled above, re-enable it.
-                        if (hwndOwner.Handle != IntPtr.Zero)
+                        if (hwndOwner != IntPtr.Zero)
                         {
-                            SafeNativeMethods.EnableWindow(hwndOwner, true);
+                            User32.EnableWindow(hwndOwner, BOOL.TRUE);
                         }
                     }
 
@@ -1201,7 +1197,7 @@ namespace System.Windows.Forms
                             // If the component wants us to process the message, do it.
                             // The component manager hosts windows from many places.  We must be sensitive
                             // to ansi / Unicode windows here.
-                            if (msg.hwnd != IntPtr.Zero && SafeNativeMethods.IsWindowUnicode(new HandleRef(null, msg.hwnd)))
+                            if (msg.hwnd != IntPtr.Zero && User32.IsWindowUnicode(msg.hwnd).IsTrue())
                             {
                                 unicodeWindow = true;
                                 if (User32.GetMessageW(ref msg).IsFalse())

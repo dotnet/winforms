@@ -7,7 +7,6 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Design;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Windows.Forms.Layout;
 
 namespace System.Windows.Forms
@@ -25,11 +24,11 @@ namespace System.Windows.Forms
     [DefaultProperty("Text")]
     public class TabPage : Panel
     {
-        private ImageList.Indexer imageIndexer;
-        private string toolTipText = string.Empty;
-        private bool enterFired = false;
-        private bool leaveFired = false;
-        private bool useVisualStyleBackColor = false;
+        private ImageList.Indexer _imageIndexer;
+        private string _toolTipText = string.Empty;
+        private bool _enterFired = false;
+        private bool _leaveFired = false;
+        private bool _useVisualStyleBackColor = false;
 
         /// <summary>
         ///  Constructs an empty TabPage.
@@ -113,12 +112,8 @@ namespace System.Windows.Forms
                 {
                     if (value != Color.Empty)
                     {
-                        PropertyDescriptor pd = TypeDescriptor.GetProperties(this)["UseVisualStyleBackColor"];
-                        Debug.Assert(pd != null);
-                        if (pd != null)
-                        {
-                            pd.SetValue(this, false);
-                        }
+                        PropertyDescriptor pd = TypeDescriptor.GetProperties(this)[nameof(UseVisualStyleBackColor)];
+                        pd?.SetValue(this, false);
                     }
                 }
                 else
@@ -135,7 +130,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected override ControlCollection CreateControlsInstance() => new TabPageControlCollection(this);
 
-        internal ImageList.Indexer ImageIndexer => imageIndexer ??= new ImageList.Indexer();
+        internal ImageList.Indexer ImageIndexer => _imageIndexer ??= new ImageList.Indexer();
 
         /// <summary>
         ///  Returns the imageIndex for the TabPage. This should point to an image
@@ -238,15 +233,15 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.TabItemUseVisualStyleBackColorDescr))]
         public bool UseVisualStyleBackColor
         {
-            get => useVisualStyleBackColor;
+            get => _useVisualStyleBackColor;
             set
             {
-                if (useVisualStyleBackColor == value)
+                if (_useVisualStyleBackColor == value)
                 {
                     return;
                 }
 
-                useVisualStyleBackColor = value;
+                _useVisualStyleBackColor = value;
                 Invalidate(true);
             }
         }
@@ -276,7 +271,6 @@ namespace System.Windows.Forms
         public override Size MaximumSize
         {
             get => base.MaximumSize;
-
             set => base.MaximumSize = value;
         }
 
@@ -285,7 +279,6 @@ namespace System.Windows.Forms
         public override Size MinimumSize
         {
             get => base.MinimumSize;
-
             set => base.MinimumSize = value;
         }
 
@@ -362,7 +355,7 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.TabItemToolTipTextDescr))]
         public string ToolTipText
         {
-            get => toolTipText;
+            get => _toolTipText;
             set
             {
                 if (value == null)
@@ -370,12 +363,12 @@ namespace System.Windows.Forms
                     value = string.Empty;
                 }
 
-                if (value == toolTipText)
+                if (value == _toolTipText)
                 {
                     return;
                 }
 
-                toolTipText = value;
+                _toolTipText = value;
                 UpdateParent();
             }
         }
@@ -429,79 +422,12 @@ namespace System.Windows.Forms
             return (TabPage)c;
         }
 
-        internal NativeMethods.TCITEM_T GetTCITEM()
-        {
-            NativeMethods.TCITEM_T tcitem = new NativeMethods.TCITEM_T
-            {
-                mask = 0,
-                pszText = null,
-                cchTextMax = 0,
-                lParam = IntPtr.Zero
-            };
-
-            string text = Text;
-
-            PrefixAmpersands(ref text);
-            if (text != null)
-            {
-                tcitem.mask |= NativeMethods.TCIF_TEXT;
-                tcitem.pszText = text;
-                tcitem.cchTextMax = text.Length;
-            }
-
-            int imageIndex = ImageIndex;
-
-            tcitem.mask |= NativeMethods.TCIF_IMAGE;
-            tcitem.iImage = ImageIndexer.ActualIndex;
-            return tcitem;
-        }
-
-        private void PrefixAmpersands(ref string value)
-        {
-            // Due to a comctl32 problem, ampersands underline the next letter in the
-            // text string, but the accelerators don't work.
-            // So in this function, we prefix ampersands with another ampersand
-            // so that they actually appear as ampersands.
-            if (string.IsNullOrEmpty(value))
-            {
-                return;
-            }
-
-            // If there are no ampersands, we don't need to do anything here
-            if (value.IndexOf('&') < 0)
-            {
-                return;
-            }
-
-            // Insert extra ampersands
-            var newString = new StringBuilder();
-            for (int i = 0; i < value.Length; ++i)
-            {
-                if (value[i] == '&')
-                {
-                    if (i < value.Length - 1 && value[i + 1] == '&')
-                    {
-                        // Skip the second ampersand
-                        ++i;
-                    }
-
-                    newString.Append("&&");
-                }
-                else
-                {
-                    newString.Append(value[i]);
-                }
-            }
-
-            value = newString.ToString();
-        }
-
         /// <summary>
         ///  This is an internal method called by the TabControl to fire the Leave event when TabControl leave occurs.
         /// </summary>
         internal void FireLeave(EventArgs e)
         {
-            leaveFired = true;
+            _leaveFired = true;
             OnLeave(e);
         }
 
@@ -510,7 +436,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal void FireEnter(EventArgs e)
         {
-            enterFired = true;
+            _enterFired = true;
             OnEnter(e);
         }
 
@@ -527,12 +453,12 @@ namespace System.Windows.Forms
         {
             if (ParentInternal is TabControl parent)
             {
-                if (enterFired)
+                if (_enterFired)
                 {
                     base.OnEnter(e);
                 }
 
-                enterFired = false;
+                _enterFired = false;
             }
         }
 
@@ -550,12 +476,12 @@ namespace System.Windows.Forms
         {
             if (ParentInternal is TabControl parent)
             {
-                if (leaveFired)
+                if (_leaveFired)
                 {
                     base.OnLeave(e);
                 }
 
-                leaveFired = false;
+                _leaveFired = false;
             }
         }
 

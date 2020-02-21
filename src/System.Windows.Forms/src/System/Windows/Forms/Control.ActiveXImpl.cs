@@ -43,7 +43,7 @@ namespace System.Windows.Forms
             private static readonly int s_adjustingRect = BitVector32.CreateMask(s_uiDead);
 
             private static Point s_logPixels = Point.Empty;
-            private static NativeMethods.tagOLEVERB[] s_axVerbs;
+            private static Ole32.OLEVERB[] s_axVerbs;
 
             private static int s_globalActiveXCount = 0;
             private static bool s_checkedIE;
@@ -360,7 +360,7 @@ namespace System.Windows.Forms
                                     X = NativeMethods.Util.LOWORD(lpmsg->lParam),
                                     Y = NativeMethods.Util.HIWORD(lpmsg->lParam)
                                 };
-                                UnsafeNativeMethods.MapWindowPoints(new HandleRef(null, hwndMap), new HandleRef(_control, _control.Handle), ref pt, 1);
+                                User32.MapWindowPoints(hwndMap, new HandleRef(_control, _control.Handle), ref pt, 1);
 
                                 // check to see if this message should really go to a child
                                 //  control, and if so, map the point into that child's window
@@ -368,7 +368,7 @@ namespace System.Windows.Forms
                                 Control realTarget = target.GetChildAtPoint(pt);
                                 if (realTarget != null && realTarget != target)
                                 {
-                                    UnsafeNativeMethods.MapWindowPoints(new HandleRef(target, target.Handle), new HandleRef(realTarget, realTarget.Handle), ref pt, 1);
+                                    User32.MapWindowPoints(new HandleRef(target, target.Handle), new HandleRef(realTarget, realTarget.Handle), ref pt, 1);
                                     target = realTarget;
                                 }
 
@@ -418,21 +418,19 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Implements IViewObject2::Draw.
             /// </summary>
-            internal void Draw(
+            internal unsafe HRESULT Draw(
                 Ole32.DVASPECT dwDrawAspect,
                 int lindex,
                 IntPtr pvAspect,
-                NativeMethods.tagDVTARGETDEVICE ptd,
+                Ole32.DVTARGETDEVICE* ptd,
                 IntPtr hdcTargetDev,
                 IntPtr hdcDraw,
-                NativeMethods.COMRECT prcBounds,
-                NativeMethods.COMRECT lprcWBounds,
+                RECT* prcBounds,
+                RECT* lprcWBounds,
                 IntPtr pfnContinue,
-                int dwContinue)
+                uint dwContinue)
             {
-
                 // support the aspects required for multi-pass drawing
-                //
                 switch (dwDrawAspect)
                 {
                     case Ole32.DVASPECT.CONTENT:
@@ -440,8 +438,7 @@ namespace System.Windows.Forms
                     case Ole32.DVASPECT.TRANSPARENT:
                         break;
                     default:
-                        ThrowHr(HRESULT.DV_E_DVASPECT);
-                        break;
+                        return HRESULT.DV_E_DVASPECT;
                 }
 
                 // We can paint to an enhanced metafile, but not all GDI / GDI+ is
@@ -451,10 +448,9 @@ namespace System.Windows.Forms
                 Gdi32.ObjectType hdcType = Gdi32.GetObjectType(hdcDraw);
                 if (hdcType == Gdi32.ObjectType.OBJ_METADC)
                 {
-                    ThrowHr(HRESULT.VIEW_E_DRAW);
+                    return HRESULT.VIEW_E_DRAW;
                 }
 
-                RECT rc;
                 var pVp = new Point();
                 var pW = new Point();
                 var sWindowExt = new Size();
@@ -469,7 +465,7 @@ namespace System.Windows.Forms
                 // if they didn't give us a rectangle, just copy over ours
                 if (prcBounds != null)
                 {
-                    rc = new RECT(prcBounds.left, prcBounds.top, prcBounds.right, prcBounds.bottom);
+                    RECT rc = *prcBounds;
 
                     // To draw to a given rect, we scale the DC in such a way as to
                     // make the values it takes match our own happy MM_TEXT.  Then,
@@ -514,21 +510,23 @@ namespace System.Windows.Forms
                         Gdi32.SetMapMode(hdcDraw, iMode);
                     }
                 }
+
+                return HRESULT.S_OK;
             }
 
             /// <summary>
             ///  Returns a new verb enumerator.
             /// </summary>
-            internal static int EnumVerbs(out UnsafeNativeMethods.IEnumOLEVERB e)
+            internal static HRESULT EnumVerbs(out UnsafeNativeMethods.IEnumOLEVERB e)
             {
                 if (s_axVerbs == null)
                 {
-                    NativeMethods.tagOLEVERB verbShow = new NativeMethods.tagOLEVERB();
-                    NativeMethods.tagOLEVERB verbInplaceActivate = new NativeMethods.tagOLEVERB();
-                    NativeMethods.tagOLEVERB verbUIActivate = new NativeMethods.tagOLEVERB();
-                    NativeMethods.tagOLEVERB verbHide = new NativeMethods.tagOLEVERB();
-                    NativeMethods.tagOLEVERB verbPrimary = new NativeMethods.tagOLEVERB();
-                    NativeMethods.tagOLEVERB verbProperties = new NativeMethods.tagOLEVERB();
+                    var verbShow = new Ole32.OLEVERB();
+                    var verbInplaceActivate = new Ole32.OLEVERB();
+                    var verbUIActivate = new Ole32.OLEVERB();
+                    var verbHide = new Ole32.OLEVERB();
+                    var verbPrimary = new Ole32.OLEVERB();
+                    var verbProperties = new Ole32.OLEVERB();
 
                     verbShow.lVerb = Ole32.OLEIVERB.SHOW;
                     verbInplaceActivate.lVerb = Ole32.OLEIVERB.INPLACEACTIVATE;
@@ -537,9 +535,10 @@ namespace System.Windows.Forms
                     verbPrimary.lVerb = Ole32.OLEIVERB.PRIMARY;
                     verbProperties.lVerb = Ole32.OLEIVERB.PROPERTIES;
                     verbProperties.lpszVerbName = SR.AXProperties;
-                    verbProperties.grfAttribs = NativeMethods.ActiveX.OLEVERBATTRIB_ONCONTAINERMENU;
+                    verbProperties.grfAttribs = Ole32.OLEVERBATTRIB.ONCONTAINERMENU;
 
-                    s_axVerbs = new NativeMethods.tagOLEVERB[] {
+                    s_axVerbs = new Ole32.OLEVERB[]
+                    {
                         verbShow,
                         verbInplaceActivate,
                         verbUIActivate,
@@ -549,7 +548,7 @@ namespace System.Windows.Forms
                 }
 
                 e = new ActiveXVerbEnum(s_axVerbs);
-                return NativeMethods.S_OK;
+                return HRESULT.S_OK;
             }
 
             /// <summary>
@@ -659,7 +658,7 @@ namespace System.Windows.Forms
             /// </summary>
             internal Ole32.IOleClientSite GetClientSite() => _clientSite;
 
-            internal unsafe HRESULT GetControlInfo(NativeMethods.tagCONTROLINFO pCI)
+            internal unsafe HRESULT GetControlInfo(Ole32.CONTROLINFO* pCI)
             {
                 if (_accelCount == -1)
                 {
@@ -738,8 +737,8 @@ namespace System.Windows.Forms
                     }
                 }
 
-                pCI.cAccel = _accelCount;
-                pCI.hAccel = _accelTable;
+                pCI->cAccel = (ushort)_accelCount;
+                pCI->hAccel = _accelTable;
                 return HRESULT.S_OK;
             }
 
@@ -1120,7 +1119,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Implements IPersistPropertyBag::Load
             /// </summary>
-            internal void Load(UnsafeNativeMethods.IPropertyBag pPropBag, UnsafeNativeMethods.IErrorLog pErrorLog)
+            internal unsafe void Load(Ole32.IPropertyBag pPropBag, Ole32.IErrorLog pErrorLog)
             {
                 PropertyDescriptorCollection props = TypeDescriptor.GetProperties(_control,
                     new Attribute[] { DesignerSerializationVisibilityAttribute.Visible });
@@ -1132,15 +1131,14 @@ namespace System.Windows.Forms
                     try
                     {
                         object obj = null;
-                        int hr = pPropBag.Read(props[i].Name, ref obj, pErrorLog);
-
-                        if (NativeMethods.Succeeded(hr) && obj != null)
+                        HRESULT hr = pPropBag.Read(props[i].Name, ref obj, pErrorLog);
+                        if (hr.Succeeded() && obj != null)
                         {
                             Debug.Indent();
                             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "Property was in bag");
 
                             string errorString = null;
-                            int errorCode = 0;
+                            HRESULT errorCode = HRESULT.S_OK;
 
                             try
                             {
@@ -1194,13 +1192,13 @@ namespace System.Windows.Forms
                             catch (Exception e)
                             {
                                 errorString = e.ToString();
-                                if (e is ExternalException)
+                                if (e is ExternalException ee)
                                 {
-                                    errorCode = ((ExternalException)e).ErrorCode;
+                                    errorCode = (HRESULT)ee.ErrorCode;
                                 }
                                 else
                                 {
-                                    errorCode = NativeMethods.E_FAIL;
+                                    errorCode = HRESULT.E_FAIL;
                                 }
                             }
                             if (errorString != null)
@@ -1208,13 +1206,23 @@ namespace System.Windows.Forms
                                 Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "Exception converting property: " + errorString);
                                 if (pErrorLog != null)
                                 {
-                                    NativeMethods.tagEXCEPINFO err = new NativeMethods.tagEXCEPINFO
+                                    IntPtr bstrSource = Marshal.StringToBSTR(_control.GetType().FullName);
+                                    IntPtr bstrDescription = Marshal.StringToBSTR(errorString);
+                                    try
                                     {
-                                        bstrSource = _control.GetType().FullName,
-                                        bstrDescription = errorString,
-                                        scode = errorCode
-                                    };
-                                    pErrorLog.AddError(props[i].Name, err);
+                                        var err = new Ole32.EXCEPINFO
+                                        {
+                                            bstrSource = bstrSource,
+                                            bstrDescription = bstrDescription,
+                                            scode = errorCode
+                                        };
+                                        pErrorLog.AddError(props[i].Name, &err);
+                                    }
+                                    finally
+                                    {
+                                        Marshal.FreeBSTR(bstrSource);
+                                        Marshal.FreeBSTR(bstrDescription);
+                                    }
                                 }
                             }
                             Debug.Unindent();
@@ -1411,8 +1419,13 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Our implementation of IQuickActivate::QuickActivate
             /// </summary>
-            internal void QuickActivate(UnsafeNativeMethods.tagQACONTAINER pQaContainer, UnsafeNativeMethods.tagQACONTROL pQaControl)
+            internal unsafe HRESULT QuickActivate(Ole32.QACONTAINER pQaContainer, Ole32.QACONTROL* pQaControl)
             {
+                if (pQaControl == null)
+                {
+                    return HRESULT.E_FAIL;
+                }
+
                 // Hookup our ambient colors
                 AmbientProperty prop = LookupAmbient(Ole32.DispatchID.AMBIENT_BACKCOLOR);
                 prop.Value = ColorTranslator.FromOle(unchecked((int)pQaContainer.colorBack));
@@ -1427,9 +1440,7 @@ namespace System.Windows.Forms
 
                     try
                     {
-                        Ole32.IFont ifont = (Ole32.IFont)pQaContainer.pFont;
-                        IntPtr hfont = ifont.hFont;
-                        prop.Value = Font.FromHfont(hfont);
+                        prop.Value = Font.FromHfont(pQaContainer.pFont.hFont);
                     }
                     catch (Exception e) when (!ClientUtils.IsSecurityOrCriticalException(e))
                     {
@@ -1439,18 +1450,18 @@ namespace System.Windows.Forms
                 }
 
                 // Now use the rest of the goo that we got passed in.
-                pQaControl.cbSize = Marshal.SizeOf<UnsafeNativeMethods.tagQACONTROL>();
+                pQaControl->cbSize = (uint)Marshal.SizeOf<Ole32.QACONTROL>();
 
                 SetClientSite(pQaContainer.pClientSite);
 
                 if (pQaContainer.pAdviseSink != null)
                 {
-                    SetAdvise(Ole32.DVASPECT.CONTENT, 0, (IAdviseSink)pQaContainer.pAdviseSink);
+                    SetAdvise(Ole32.DVASPECT.CONTENT, 0, pQaContainer.pAdviseSink);
                 }
 
                 Ole32.OLEMISC status = 0;
                 ((UnsafeNativeMethods.IOleObject)_control).GetMiscStatus(Ole32.DVASPECT.CONTENT, &status);
-                pQaControl.dwMiscStatus = status;
+                pQaControl->dwMiscStatus = status;
 
                 // Advise the event sink so VB6 can catch events raised from UserControls.
                 // VB6 expects the control to do this during IQuickActivate, otherwise it will not hook events at runtime.
@@ -1472,14 +1483,10 @@ namespace System.Windows.Forms
                         {
                             // For the default source interface, call IConnectionPoint.Advise with the supplied event sink.
                             // This is easier said than done. See notes in AdviseHelper.AdviseConnectionPoint.
-                            AdviseHelper.AdviseConnectionPoint(_control, pQaContainer.pUnkEventSink, eventInterface, out pQaControl.dwEventCookie);
+                            AdviseHelper.AdviseConnectionPoint(_control, pQaContainer.pUnkEventSink, eventInterface, out pQaControl->dwEventCookie);
                         }
-                        catch (Exception e)
+                        catch (Exception e) when (!ClientUtils.IsSecurityOrCriticalException(e))
                         {
-                            if (ClientUtils.IsSecurityOrCriticalException(e))
-                            {
-                                throw;
-                            }
                         }
                     }
                 }
@@ -1493,6 +1500,8 @@ namespace System.Windows.Forms
                 {
                     Marshal.ReleaseComObject(pQaContainer.pUnkEventSink);
                 }
+
+                return HRESULT.S_OK;
             }
 
             /// <summary>
@@ -1820,7 +1829,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Implements IPersistPropertyBag::Save
             /// </summary>
-            internal void Save(UnsafeNativeMethods.IPropertyBag pPropBag, BOOL fClearDirty, BOOL fSaveAllProperties)
+            internal void Save(Ole32.IPropertyBag pPropBag, BOOL fClearDirty, BOOL fSaveAllProperties)
             {
                 PropertyDescriptorCollection props = TypeDescriptor.GetProperties(_control,
                     new Attribute[] { DesignerSerializationVisibilityAttribute.Visible });
@@ -2201,12 +2210,12 @@ namespace System.Windows.Forms
                     {
                         // Offset the rectangle back to client coordinates
                         RECT rcIntersect = intersect;
-                        IntPtr hWndParent = UnsafeNativeMethods.GetParent(new HandleRef(_control, _control.Handle));
+                        IntPtr hWndParent = User32.GetParent(_control);
 
                         Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "Old Intersect: " + new Rectangle(rcIntersect.left, rcIntersect.top, rcIntersect.right - rcIntersect.left, rcIntersect.bottom - rcIntersect.top));
                         Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "New Control Bounds: " + posRect);
 
-                        UnsafeNativeMethods.MapWindowPoints(new HandleRef(null, hWndParent), new HandleRef(_control, _control.Handle), ref rcIntersect, 2);
+                        User32.MapWindowPoints(hWndParent, new HandleRef(_control, _control.Handle), ref rcIntersect, 2);
 
                         Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "New Intersect: " + new Rectangle(rcIntersect.left, rcIntersect.top, rcIntersect.right - rcIntersect.left, rcIntersect.bottom - rcIntersect.top));
 
@@ -2232,7 +2241,7 @@ namespace System.Windows.Forms
                         finalClipRegion = MergeRegion(rgn);
                     }
 
-                    UnsafeNativeMethods.SetWindowRgn(new HandleRef(_control, _control.Handle), new HandleRef(this, finalClipRegion), SafeNativeMethods.IsWindowVisible(new HandleRef(_control, _control.Handle)));
+                    UnsafeNativeMethods.SetWindowRgn(new HandleRef(_control, _control.Handle), new HandleRef(this, finalClipRegion), User32.IsWindowVisible(_control).IsTrue());
                 }
 
                 // Yuck.  Forms^3 uses transparent overlay windows that appear to cause
@@ -2308,7 +2317,7 @@ namespace System.Windows.Forms
 
                                 // Someone returned true from IsInputKey or IsInputChar
                                 User32.TranslateMessage(ref *lpmsg);
-                                if (SafeNativeMethods.IsWindowUnicode(new HandleRef(null, lpmsg->hwnd)))
+                                if (User32.IsWindowUnicode(lpmsg->hwnd).IsTrue())
                                 {
                                     User32.DispatchMessageW(ref *lpmsg);
                                 }
@@ -2539,7 +2548,7 @@ namespace System.Windows.Forms
             ///  This is a property bag implementation that sits on a stream.  It can
             ///  read and write the bag to the stream.
             /// </summary>
-            private class PropertyBagStream : UnsafeNativeMethods.IPropertyBag
+            private class PropertyBagStream : Ole32.IPropertyBag
             {
                 private Hashtable _bag = new Hashtable();
 
@@ -2586,21 +2595,21 @@ namespace System.Windows.Forms
                     }
                 }
 
-                int UnsafeNativeMethods.IPropertyBag.Read(string pszPropName, ref object pVar, UnsafeNativeMethods.IErrorLog pErrorLog)
+                HRESULT Ole32.IPropertyBag.Read(string pszPropName, ref object pVar, Ole32.IErrorLog pErrorLog)
                 {
                     if (!_bag.Contains(pszPropName))
                     {
-                        return NativeMethods.E_INVALIDARG;
+                        return HRESULT.E_INVALIDARG;
                     }
 
                     pVar = _bag[pszPropName];
-                    return NativeMethods.S_OK;
+                    return HRESULT.S_OK;
                 }
 
-                int UnsafeNativeMethods.IPropertyBag.Write(string pszPropName, ref object pVar)
+                HRESULT Ole32.IPropertyBag.Write(string pszPropName, ref object pVar)
                 {
                     _bag[pszPropName] = pVar;
-                    return NativeMethods.S_OK;
+                    return HRESULT.S_OK;
                 }
 
                 internal void Write(Ole32.IStream istream)

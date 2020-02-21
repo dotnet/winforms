@@ -9,6 +9,7 @@ using System.Drawing;
 using System.Drawing.Design;
 using System.Globalization;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Windows.Forms.Layout;
 using static Interop;
 
@@ -125,7 +126,7 @@ namespace System.Windows.Forms
                     _alignment = value;
                     if (_alignment == TabAlignment.Left || _alignment == TabAlignment.Right)
                     {
-                        Multiline = true;
+                        SetState(State.Multiline, true);
                     }
 
                     RecreateHandle();
@@ -306,59 +307,59 @@ namespace System.Windows.Forms
                 //
                 if (Multiline == true)
                 {
-                    cp.Style |= NativeMethods.TCS_MULTILINE;
+                    cp.Style |= (int)ComCtl32.TCS.MULTILINE;
                 }
 
                 if (_drawMode == TabDrawMode.OwnerDrawFixed)
                 {
-                    cp.Style |= NativeMethods.TCS_OWNERDRAWFIXED;
+                    cp.Style |= (int)ComCtl32.TCS.OWNERDRAWFIXED;
                 }
 
                 if (ShowToolTips && !DesignMode)
                 {
-                    cp.Style |= NativeMethods.TCS_TOOLTIPS;
+                    cp.Style |= (int)ComCtl32.TCS.TOOLTIPS;
                 }
 
                 if (_alignment == TabAlignment.Bottom ||
                     _alignment == TabAlignment.Right)
                 {
-                    cp.Style |= NativeMethods.TCS_BOTTOM;
+                    cp.Style |= (int)ComCtl32.TCS.BOTTOM;
                 }
 
                 if (_alignment == TabAlignment.Left ||
                     _alignment == TabAlignment.Right)
                 {
-                    cp.Style |= NativeMethods.TCS_VERTICAL | NativeMethods.TCS_MULTILINE;
+                    cp.Style |= (int)ComCtl32.TCS.VERTICAL | (int)ComCtl32.TCS.MULTILINE;
                 }
 
                 if (GetState(State.HotTrack))
                 {
-                    cp.Style |= NativeMethods.TCS_HOTTRACK;
+                    cp.Style |= (int)ComCtl32.TCS.HOTTRACK;
                 }
 
                 if (_appearance == TabAppearance.Normal)
                 {
-                    cp.Style |= NativeMethods.TCS_TABS;
+                    cp.Style |= (int)ComCtl32.TCS.TABS;
                 }
                 else
                 {
-                    cp.Style |= NativeMethods.TCS_BUTTONS;
+                    cp.Style |= (int)ComCtl32.TCS.BUTTONS;
                     if (_appearance == TabAppearance.FlatButtons && _alignment == TabAlignment.Top)
                     {
-                        cp.Style |= NativeMethods.TCS_FLATBUTTONS;
+                        cp.Style |= (int)ComCtl32.TCS.FLATBUTTONS;
                     }
                 }
 
                 switch (_sizeMode)
                 {
                     case TabSizeMode.Normal:
-                        cp.Style |= NativeMethods.TCS_RAGGEDRIGHT;
+                        cp.Style |= (int)ComCtl32.TCS.RAGGEDRIGHT;
                         break;
                     case TabSizeMode.FillToRight:
-                        cp.Style |= NativeMethods.TCS_RIGHTJUSTIFY;
+                        cp.Style |= (int)ComCtl32.TCS.RIGHTJUSTIFY;
                         break;
                     case TabSizeMode.Fixed:
-                        cp.Style |= NativeMethods.TCS_FIXEDWIDTH;
+                        cp.Style |= (int)ComCtl32.TCS.FIXEDWIDTH;
                         break;
                 }
 
@@ -406,7 +407,7 @@ namespace System.Windows.Forms
                     }
                     if (IsHandleCreated)
                     {
-                        SendMessage(NativeMethods.TCM_ADJUSTRECT, 0, ref rect);
+                        SendMessage((int)ComCtl32.TCM.ADJUSTRECT, 0, ref rect);
                     }
                 }
 
@@ -509,7 +510,7 @@ namespace System.Windows.Forms
                     IntPtr handle = (value != null) ? value.Handle : IntPtr.Zero;
                     if (IsHandleCreated)
                     {
-                        SendMessage(NativeMethods.TCM_SETIMAGELIST, IntPtr.Zero, handle);
+                        SendMessage((int)ComCtl32.TCM.SETIMAGELIST, IntPtr.Zero, handle);
                     }
 
                     // Update the image list in the tab pages.
@@ -693,7 +694,7 @@ namespace System.Windows.Forms
             get
             {
                 int n;
-                n = unchecked((int)(long)SendMessage(NativeMethods.TCM_GETROWCOUNT, 0, 0));
+                n = unchecked((int)(long)SendMessage((int)ComCtl32.TCM.GETROWCOUNT, 0, 0));
                 return n;
             }
         }
@@ -717,7 +718,7 @@ namespace System.Windows.Forms
                 if (IsHandleCreated)
                 {
                     int n;
-                    n = unchecked((int)(long)SendMessage(NativeMethods.TCM_GETCURSEL, 0, 0));
+                    n = unchecked((int)(long)SendMessage((int)ComCtl32.TCM.GETCURSEL, 0, 0));
                     return n;
                 }
                 else
@@ -754,7 +755,7 @@ namespace System.Windows.Forms
                             }
                         }
 
-                        SendMessage(NativeMethods.TCM_SETCURSEL, value, 0);
+                        SendMessage((int)ComCtl32.TCM.SETCURSEL, value, 0);
 
                         if (!GetState(State.FromCreateHandles) && !GetState(State.SelectFirstControl))
                         {
@@ -1013,9 +1014,9 @@ namespace System.Windows.Forms
             remove => base.Paint -= value;
         }
 
-        internal int AddTabPage(TabPage tabPage, NativeMethods.TCITEM_T tcitem)
+        internal int AddTabPage(TabPage tabPage)
         {
-            int index = AddNativeTabPage(tcitem);
+            int index = AddNativeTabPage(tabPage);
             if (index >= 0)
             {
                 Insert(index, tabPage);
@@ -1024,9 +1025,9 @@ namespace System.Windows.Forms
             return index;
         }
 
-        internal int AddNativeTabPage(NativeMethods.TCITEM_T tcitem)
+        internal int AddNativeTabPage(TabPage tabPage)
         {
-            int index = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TCM_INSERTITEM, _tabPageCount + 1, tcitem);
+            int index = (int)SendMessage(ComCtl32.TCM.INSERTITEMW, (IntPtr)(_tabPageCount + 1), tabPage);
             User32.PostMessageW(this, _tabBaseReLayoutMessage);
             return index;
         }
@@ -1035,7 +1036,7 @@ namespace System.Windows.Forms
         {
             if (IsHandleCreated && ShouldSerializeItemSize())
             {
-                SendMessage(NativeMethods.TCM_SETITEMSIZE, 0, (int)NativeMethods.Util.MAKELPARAM(_itemSize.Width, _itemSize.Height));
+                SendMessage((int)ComCtl32.TCM.SETITEMSIZE, 0, (int)NativeMethods.Util.MAKELPARAM(_itemSize.Width, _itemSize.Height));
             }
             _cachedDisplayRect = Rectangle.Empty;
         }
@@ -1054,7 +1055,7 @@ namespace System.Windows.Forms
         {
             if (!RecreatingHandle)
             {
-                IntPtr userCookie = UnsafeNativeMethods.ThemingScope.Activate();
+                IntPtr userCookie = ThemingScope.Activate();
                 try
                 {
                     var icc = new ComCtl32.INITCOMMONCONTROLSEX
@@ -1065,7 +1066,7 @@ namespace System.Windows.Forms
                 }
                 finally
                 {
-                    UnsafeNativeMethods.ThemingScope.Deactivate(userCookie);
+                    ThemingScope.Deactivate(userCookie);
                 }
             }
             base.CreateHandle();
@@ -1227,7 +1228,7 @@ namespace System.Windows.Forms
                 CreateHandle();
             }
 
-            SendMessage(NativeMethods.TCM_GETITEMRECT, index, ref rect);
+            SendMessage((int)ComCtl32.TCM.GETITEMRECT, index, ref rect);
             return Rectangle.FromLTRB(rect.left, rect.top, rect.right, rect.bottom);
         }
 
@@ -1240,7 +1241,7 @@ namespace System.Windows.Forms
         {
             if (IsHandleCreated)
             {
-                SendMessage(NativeMethods.TCM_SETIMAGELIST, 0, ImageList.Handle);
+                SendMessage((int)ComCtl32.TCM.SETIMAGELIST, 0, ImageList.Handle);
             }
         }
 
@@ -1285,17 +1286,14 @@ namespace System.Windows.Forms
                 throw new ArgumentNullException(nameof(tabPage));
             }
 
-            int retIndex;
             if (IsHandleCreated)
             {
-                NativeMethods.TCITEM_T tcitem = tabPage.GetTCITEM();
-                retIndex = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TCM_INSERTITEM, index, tcitem);
+                int retIndex = (int)SendMessage(ComCtl32.TCM.INSERTITEMW, (IntPtr)index, tabPage);
                 if (retIndex >= 0)
                 {
                     Insert(retIndex, tabPage);
                 }
             }
-
         }
 
         /// <summary>
@@ -1335,7 +1333,7 @@ namespace System.Windows.Forms
             // horizontal and vertical dimensions of the padding rectangle.
             if (!_padding.IsEmpty)
             {
-                SendMessage(NativeMethods.TCM_SETPADDING, 0, NativeMethods.Util.MAKELPARAM(_padding.X, _padding.Y));
+                SendMessage((int)ComCtl32.TCM.SETPADDING, 0, NativeMethods.Util.MAKELPARAM(_padding.X, _padding.Y));
             }
 
             base.OnHandleCreated(e);
@@ -1343,13 +1341,13 @@ namespace System.Windows.Forms
             ApplyItemSize();
             if (_imageList != null)
             {
-                SendMessage(NativeMethods.TCM_SETIMAGELIST, 0, _imageList.Handle);
+                SendMessage((int)ComCtl32.TCM.SETIMAGELIST, 0, _imageList.Handle);
             }
 
             if (ShowToolTips)
             {
                 IntPtr tooltipHwnd;
-                tooltipHwnd = SendMessage(NativeMethods.TCM_GETTOOLTIPS, 0, 0);
+                tooltipHwnd = SendMessage((int)ComCtl32.TCM.GETTOOLTIPS, 0, 0);
                 if (tooltipHwnd != IntPtr.Zero)
                 {
                     User32.SetWindowPos(
@@ -1363,7 +1361,7 @@ namespace System.Windows.Forms
             //
             foreach (TabPage page in TabPages)
             {
-                AddNativeTabPage(page.GetTCITEM());
+                AddNativeTabPage(page);
             }
 
             // Resize the pages
@@ -1637,7 +1635,7 @@ namespace System.Windows.Forms
             // So, no RemoveAll()
             if (IsHandleCreated)
             {
-                SendMessage(NativeMethods.TCM_DELETEALLITEMS, 0, 0);
+                SendMessage((int)ComCtl32.TCM.DELETEALLITEMS, 0, 0);
             }
             this._tabPages = null;
             _tabPageCount = 0;
@@ -1668,7 +1666,7 @@ namespace System.Windows.Forms
         {
             Controls.Clear();
 
-            SendMessage(NativeMethods.TCM_DELETEALLITEMS, 0, 0);
+            SendMessage((int)ComCtl32.TCM.DELETEALLITEMS, 0, 0);
             _tabPages = null;
             _tabPageCount = 0;
         }
@@ -1688,7 +1686,7 @@ namespace System.Windows.Forms
             _tabPages[_tabPageCount] = null;
             if (IsHandleCreated)
             {
-                SendMessage(NativeMethods.TCM_DELETEITEM, index, 0);
+                SendMessage((int)ComCtl32.TCM.DELETEITEM, index, 0);
             }
             _cachedDisplayRect = Rectangle.Empty;
         }
@@ -1719,28 +1717,33 @@ namespace System.Windows.Forms
         /// </summary>
         internal void SetToolTip(ToolTip toolTip, string controlToolTipText)
         {
-            UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TCM_SETTOOLTIPS, new HandleRef(toolTip, toolTip.Handle), 0);
+            UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)ComCtl32.TCM.SETTOOLTIPS, new HandleRef(toolTip, toolTip.Handle), 0);
             _controlTipText = controlToolTipText;
 
         }
 
-        internal void SetTabPage(int index, TabPage tabPage, NativeMethods.TCITEM_T tcitem)
+        internal void SetTabPage(int index, TabPage value)
         {
             if (index < 0 || index >= _tabPageCount)
             {
                 throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
             }
+            if (value == null)
+            {
+                throw new ArgumentNullException(nameof(value));
+            }
 
             if (IsHandleCreated)
             {
-                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TCM_SETITEM, index, tcitem);
+                SendMessage(ComCtl32.TCM.SETITEMW, (IntPtr)index, value);
             }
+
             // Make the Updated tab page the currently selected tab page
             if (DesignMode && IsHandleCreated)
             {
-                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TCM_SETCURSEL, (IntPtr)index, IntPtr.Zero);
+                User32.SendMessageW(this, (User32.WindowMessage)ComCtl32.TCM.SETCURSEL, (IntPtr)index, IntPtr.Zero);
             }
-            _tabPages[index] = tabPage;
+            _tabPages[index] = value;
         }
 
         /// <summary>
@@ -1992,7 +1995,7 @@ namespace System.Windows.Forms
         internal void UpdateTab(TabPage tabPage)
         {
             int index = FindTabPage(tabPage);
-            SetTabPage(index, tabPage, tabPage.GetTCITEM());
+            SetTabPage(index, tabPage);
 
             // It's possible that changes to this TabPage will change the DisplayRectangle of the
             // TabControl, so invalidate and resize the size of this page.
@@ -2061,7 +2064,7 @@ namespace System.Windows.Forms
             else
             {
                 // user Cancelled the Selection of the new Tab.
-                SendMessage(NativeMethods.TCM_SETCURSEL, _lastSelection, 0);
+                SendMessage((int)ComCtl32.TCM.SETCURSEL, _lastSelection, 0);
                 UpdateTabSelection(true);
             }
             return tcc.Cancel;
@@ -2191,5 +2194,66 @@ namespace System.Windows.Forms
         private bool GetState(State state) => _tabControlState[(int)state];
 
         private void SetState(State state, bool value) => _tabControlState[(int)state] = value;
+
+        private unsafe IntPtr SendMessage(ComCtl32.TCM msg, IntPtr wParam, TabPage tabPage)
+        {
+            var tcitem = new ComCtl32.TCITEMW();
+            string text = tabPage.Text;
+            PrefixAmpersands(ref text);
+            if (text != null)
+            {
+                tcitem.mask |= ComCtl32.TCIF.TEXT;
+                tcitem.cchTextMax = text.Length;
+            }
+
+            int imageIndex = tabPage.ImageIndex;
+            tcitem.mask |= ComCtl32.TCIF.IMAGE;
+            tcitem.iImage = tabPage.ImageIndexer.ActualIndex;
+
+            fixed (char* pText = text)
+            {
+                return User32.SendMessageW(this, (User32.WindowMessage)msg, wParam, ref tcitem);
+            }
+        }
+
+        private static void PrefixAmpersands(ref string value)
+        {
+            // Due to a comctl32 problem, ampersands underline the next letter in the
+            // text string, but the accelerators don't work.
+            // So in this function, we prefix ampersands with another ampersand
+            // so that they actually appear as ampersands.
+            if (string.IsNullOrEmpty(value))
+            {
+                return;
+            }
+
+            // If there are no ampersands, we don't need to do anything here
+            if (value.IndexOf('&') < 0)
+            {
+                return;
+            }
+
+            // Insert extra ampersands
+            var newString = new StringBuilder();
+            for (int i = 0; i < value.Length; ++i)
+            {
+                if (value[i] == '&')
+                {
+                    if (i < value.Length - 1 && value[i + 1] == '&')
+                    {
+                        // Skip the second ampersand
+                        ++i;
+                    }
+
+                    newString.Append("&&");
+                }
+                else
+                {
+                    newString.Append(value[i]);
+                }
+            }
+
+            value = newString.ToString();
+        }
     }
 }

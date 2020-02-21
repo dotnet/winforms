@@ -50,7 +50,7 @@ namespace System.Windows.Forms
         private UnsafeNativeMethods.IOleObject axOleObject;
         private Ole32.IOleInPlaceObject axOleInPlaceObject;
         private Ole32.IOleInPlaceActiveObject axOleInPlaceActiveObject;
-        private UnsafeNativeMethods.IOleControl axOleControl;
+        private Ole32.IOleControl axOleControl;
         private WebBrowserBaseNativeWindow axWindow;
         // We need to change the size of the inner ActiveX control before the
         //WebBrowserBase control's size is changed (i.e., before WebBrowserBase.Bounds
@@ -326,8 +326,11 @@ namespace System.Windows.Forms
             {
                 try
                 {
-                    var ctlInfo = new NativeMethods.tagCONTROLINFO();
-                    HRESULT hr = axOleControl.GetControlInfo(ctlInfo);
+                    var ctlInfo = new Ole32.CONTROLINFO
+                    {
+                        cb = (uint)Marshal.SizeOf<Ole32.CONTROLINFO>()
+                    };
+                    HRESULT hr = axOleControl.GetControlInfo(&ctlInfo);
                     if (hr.Succeeded())
                     {
                         //
@@ -347,7 +350,7 @@ namespace System.Windows.Forms
                         msg.pt = p;
                         if (Ole32.IsAccelerator(new HandleRef(ctlInfo, ctlInfo.hAccel), ctlInfo.cAccel, ref msg, null).IsFalse())
                         {
-                            axOleControl.OnMnemonic(ref msg);
+                            axOleControl.OnMnemonic(&msg);
                             Focus();
                             processed = true;
                         }
@@ -1112,10 +1115,10 @@ namespace System.Windows.Forms
             axOleObject = (UnsafeNativeMethods.IOleObject)activeXInstance;
             axOleInPlaceObject = (Ole32.IOleInPlaceObject)activeXInstance;
             axOleInPlaceActiveObject = (Ole32.IOleInPlaceActiveObject)activeXInstance;
-            axOleControl = (UnsafeNativeMethods.IOleControl)activeXInstance;
-            //
-            // Lets give the inheriting classes a chance to cast
-            // the ActiveX object to the appropriate interfaces.
+            axOleControl = (Ole32.IOleControl)activeXInstance;
+
+            // Give the inheriting classes a chance to cast the ActiveX object to the
+            // appropriate interfaces.
             AttachInterfaces(activeXInstance);
         }
 
@@ -1266,7 +1269,7 @@ namespace System.Windows.Forms
 
             if (cc == null)
             {
-                cc = Control.FromHandle(UnsafeNativeMethods.GetParent(new HandleRef(this, Handle))) as ContainerControl;
+                cc = Control.FromHandle(User32.GetParent(this)) as ContainerControl;
             }
 
             // Never use the parking window for this: its hwnd can be destroyed at any time.

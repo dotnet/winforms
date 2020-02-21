@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -121,8 +121,6 @@ namespace System.Windows.Forms
         CB_FINDSTRINGEXACT = 0x0158,
         CB_GETDROPPEDWIDTH = 0x015F,
         CB_SETDROPPEDWIDTH = 0x0160,
-        CCM_SETVERSION = (0x2000 + 0x7),
-        CCM_GETVERSION = (0x2000 + 0x8),
         CCS_NORESIZE = 0x00000004,
         CCS_NOPARENTALIGN = 0x00000008,
         CCS_NODIVIDER = 0x00000040,
@@ -131,9 +129,7 @@ namespace System.Windows.Forms
         CBEM_GETITEM = (0x0400 + 13),
         CBEN_ENDEDIT = ((0 - 800) - 6),
         CONNECT_E_NOCONNECTION = unchecked((int)0x80040200),
-        CONNECT_E_CANNOTCONNECT = unchecked((int)0x80040202),
-        CTRLINFO_EATS_RETURN = 1,
-        CTRLINFO_EATS_ESCAPE = 2;
+        CONNECT_E_CANNOTCONNECT = unchecked((int)0x80040202);
 
         public const uint DISPATCH_METHOD = 0x1;
         public const uint DISPATCH_PROPERTYGET = 0x2;
@@ -142,10 +138,6 @@ namespace System.Windows.Forms
         DISP_E_MEMBERNOTFOUND = unchecked((int)0x80020003),
         DISP_E_PARAMNOTFOUND = unchecked((int)0x80020004),
         DIB_RGB_COLORS = 0,
-        DCX_WINDOW = 0x00000001,
-        DCX_CACHE = 0x00000002,
-        DCX_LOCKWINDOWUPDATE = 0x00000400,
-        DCX_INTERSECTRGN = 0x00000080,
         DI_NORMAL = 0x0003,
         DLGC_WANTARROWS = 0x0001,
         DLGC_WANTTAB = 0x0002,
@@ -219,11 +211,6 @@ namespace System.Windows.Forms
         GWL_STYLE = (-16),
         GWL_EXSTYLE = (-20),
         GWL_ID = (-12),
-        GW_HWNDFIRST = 0,
-        GW_HWNDLAST = 1,
-        GW_HWNDNEXT = 2,
-        GW_HWNDPREV = 3,
-        GW_CHILD = 5,
         GMR_VISIBLE = 0,
         GMR_DAYSTATE = 1,
         GDI_ERROR = (unchecked((int)0xFFFFFFFF)),
@@ -239,14 +226,7 @@ namespace System.Windows.Forms
         ATTR_CONVERTED = 0x02,
         ATTR_TARGET_NOTCONVERTED = 0x03,
         ATTR_INPUT_ERROR = 0x04,
-        ATTR_FIXEDCONVERTED = 0x05,
-
-        // dwAction for ImmNotifyIME
-        NI_COMPOSITIONSTR = 0x0015,
-
-        // dwIndex for ImmNotifyIME/NI_COMPOSITIONSTR
-        CPS_COMPLETE = 0x01,
-        CPS_CANCEL = 0x04;
+        ATTR_FIXEDCONVERTED = 0x05;
 
         public const int
         HTTRANSPARENT = (-1),
@@ -292,9 +272,7 @@ namespace System.Windows.Forms
         HBMMENU_POPUP_MAXIMIZE = 10,
         HBMMENU_POPUP_MINIMIZE = 11;
 
-        public const int IME_CMODE_NATIVE = 0x0001,
-        IME_CMODE_KATAKANA = 0x0002,
-        IME_CMODE_FULLSHAPE = 0x0008,
+        public const int
         ICON_SMALL = 0,
         ICON_BIG = 1,
         IMAGE_ICON = 1,
@@ -354,10 +332,6 @@ namespace System.Windows.Forms
         LOCK_EXCLUSIVE = 0x2,
         LOCK_ONLYONCE = 0x4,
         LV_VIEW_TILE = 0x0004,
-        LVBKIF_SOURCE_NONE = 0x0000,
-        LVBKIF_SOURCE_URL = 0x0002,
-        LVBKIF_STYLE_NORMAL = 0x0000,
-        LVBKIF_STYLE_TILE = 0x0010,
         LVS_ICON = 0x0000,
         LVS_REPORT = 0x0001,
         LVS_SMALLICON = 0x0002,
@@ -383,13 +357,6 @@ namespace System.Windows.Forms
         LVSIL_NORMAL = 0,
         LVSIL_SMALL = 1,
         LVSIL_STATE = 2,
-        LVIF_TEXT = 0x0001,
-        LVIF_IMAGE = 0x0002,
-        LVIF_INDENT = 0x0010,
-        LVIF_PARAM = 0x0004,
-        LVIF_STATE = 0x0008,
-        LVIF_GROUPID = 0x0100,
-        LVIF_COLUMNS = 0x0200,
         LVNI_FOCUSED = 0x0001,
         LVNI_SELECTED = 0x0002,
         LVIR_BOUNDS = 0,
@@ -457,9 +424,6 @@ namespace System.Windows.Forms
         public const int TVM_SETEXTENDEDSTYLE = TV_FIRST + 44;
         public const int TVM_GETEXTENDEDSTYLE = TV_FIRST + 45;
 
-        public const int TVS_EX_FADEINOUTEXPANDOS = 0x0040;
-        public const int TVS_EX_DOUBLEBUFFER = 0x0004;
-
         public static readonly uint LOCALE_USER_DEFAULT = MAKELCID(LANG_USER_DEFAULT);
         public static readonly uint LANG_USER_DEFAULT = MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT);
 
@@ -490,8 +454,6 @@ namespace System.Windows.Forms
         MA_ACTIVATEANDEAT = 0x0002,
         MA_NOACTIVATE = 0x0003,
         MA_NOACTIVATEANDEAT = 0x0004,
-        MNC_EXECUTE = 2,
-        MNC_SELECT = 3,
         MIIM_STATE = 0x00000001,
         MIIM_ID = 0x00000002,
         MIIM_SUBMENU = 0x00000004,
@@ -543,12 +505,9 @@ namespace System.Windows.Forms
         MCN_SELCHANGE = ((0 - 750) + 1),
         MCN_GETDAYSTATE = ((0 - 750) + 3),
         MCN_SELECT = ((0 - 750) + 4),
-        MCS_DAYSTATE = 0x0001,
-        MCS_MULTISELECT = 0x0002,
-        MCS_WEEKNUMBERS = 0x0004,
-        MCS_NOTODAYCIRCLE = 0x0008,
-        MCS_NOTODAY = 0x0010,
+
         MSAA_MENU_SIG = (unchecked((int)0xAA0DF00D));
+
 
         public const int NIM_ADD = 0x00000000,
         NIM_MODIFY = 0x00000001,
@@ -636,22 +595,12 @@ namespace System.Windows.Forms
         PRF_CLIENT = 0x00000004,
         PRF_ERASEBKGND = 0x00000008,
         PRF_CHILDREN = 0x00000010,
-        PBM_SETRANGE = (0x0400 + 1),
-        PBM_SETPOS = (0x0400 + 2),
-        PBM_SETSTEP = (0x0400 + 4),
-        PBM_SETRANGE32 = (0x0400 + 6),
-        PBM_SETBARCOLOR = (0x0400 + 9),
-        PBM_SETMARQUEE = (0x0400 + 10),
-        PBM_SETBKCOLOR = (0x2000 + 1),
         PSM_SETTITLEA = (0x0400 + 111),
         PSM_SETTITLEW = (0x0400 + 120),
         PSM_SETFINISHTEXTA = (0x0400 + 115),
         PSM_SETFINISHTEXTW = (0x0400 + 121),
         PATCOPY = 0x00F00021,
         PATINVERT = 0x005A0049;
-
-        public const int PBS_SMOOTH = 0x01,
-        PBS_MARQUEE = 0x08;
 
         //public const int RECO_PASTE = 0x00000000;   // paste from clipboard
         public const int RECO_DROP = 0x00000001;    // drop
@@ -710,11 +659,6 @@ namespace System.Windows.Forms
         }
 
         public const int
-        TPM_LEFTBUTTON = 0x0000,
-        TPM_RIGHTBUTTON = 0x0002,
-        TPM_LEFTALIGN = 0x0000,
-        TPM_RIGHTALIGN = 0x0008,
-        TPM_VERTICAL = 0x0040,
         TV_FIRST = 0x1100,
         TB_ENABLEBUTTON = (0x0400 + 1),
         TB_ISBUTTONCHECKED = (0x0400 + 10),
@@ -779,18 +723,6 @@ namespace System.Windows.Forms
         TB_TOP = 6,
         TB_BOTTOM = 7,
         TB_ENDTRACK = 8,
-        TVS_HASBUTTONS = 0x0001,
-        TVS_HASLINES = 0x0002,
-        TVS_LINESATROOT = 0x0004,
-        TVS_EDITLABELS = 0x0008,
-        TVS_SHOWSELALWAYS = 0x0020,
-        TVS_RTLREADING = 0x0040,
-        TVS_CHECKBOXES = 0x0100,
-        TVS_TRACKSELECT = 0x0200,
-        TVS_FULLROWSELECT = 0x1000,
-        TVS_NONEVENHEIGHT = 0x4000,
-        TVS_INFOTIP = 0x0800,
-        TVS_NOTOOLTIPS = 0x0080,
         TVI_ROOT = (unchecked((int)0xFFFF0000)),
         TVI_FIRST = (unchecked((int)0xFFFF0001)),
         TVM_INSERTITEM = (0x1100 + 50),
@@ -832,36 +764,6 @@ namespace System.Windows.Forms
         TVN_BEGINRDRAG = ((0 - 400) - 57),
         TVN_BEGINLABELEDIT = ((0 - 400) - 59),
         TVN_ENDLABELEDIT = ((0 - 400) - 60),
-        TCS_BOTTOM = 0x0002,
-        TCS_RIGHT = 0x0002,
-        TCS_FLATBUTTONS = 0x0008,
-        TCS_HOTTRACK = 0x0040,
-        TCS_VERTICAL = 0x0080,
-        TCS_TABS = 0x0000,
-        TCS_BUTTONS = 0x0100,
-        TCS_MULTILINE = 0x0200,
-        TCS_RIGHTJUSTIFY = 0x0000,
-        TCS_FIXEDWIDTH = 0x0400,
-        TCS_RAGGEDRIGHT = 0x0800,
-        TCS_OWNERDRAWFIXED = 0x2000,
-        TCS_TOOLTIPS = 0x4000,
-        TCM_SETIMAGELIST = (0x1300 + 3),
-        TCIF_TEXT = 0x0001,
-        TCIF_IMAGE = 0x0002,
-        TCM_GETITEM = (0x1300 + 60),
-        TCM_SETITEM = (0x1300 + 61),
-        TCM_INSERTITEM = (0x1300 + 62),
-        TCM_DELETEITEM = (0x1300 + 8),
-        TCM_DELETEALLITEMS = (0x1300 + 9),
-        TCM_GETITEMRECT = (0x1300 + 10),
-        TCM_GETCURSEL = (0x1300 + 11),
-        TCM_SETCURSEL = (0x1300 + 12),
-        TCM_ADJUSTRECT = (0x1300 + 40),
-        TCM_SETITEMSIZE = (0x1300 + 41),
-        TCM_SETPADDING = (0x1300 + 43),
-        TCM_GETROWCOUNT = (0x1300 + 44),
-        TCM_GETTOOLTIPS = (0x1300 + 45),
-        TCM_SETTOOLTIPS = (0x1300 + 46),
         TCN_SELCHANGE = ((0 - 550) - 1),
         TCN_SELCHANGING = ((0 - 550) - 2),
         TVM_SETBKCOLOR = (TV_FIRST + 29),
@@ -873,24 +775,7 @@ namespace System.Windows.Forms
         TVSIL_STATE = 2,
         TVM_SORTCHILDRENCB = (TV_FIRST + 21);
 
-        public const int TVHT_NOWHERE = 0x0001,
-        TVHT_ONITEMICON = 0x0002,
-        TVHT_ONITEMLABEL = 0x0004,
-        TVHT_ONITEM = (TVHT_ONITEMICON | TVHT_ONITEMLABEL | TVHT_ONITEMSTATEICON),
-        TVHT_ONITEMINDENT = 0x0008,
-        TVHT_ONITEMBUTTON = 0x0010,
-        TVHT_ONITEMRIGHT = 0x0020,
-        TVHT_ONITEMSTATEICON = 0x0040,
-        TVHT_ABOVE = 0x0100,
-        TVHT_BELOW = 0x0200,
-        TVHT_TORIGHT = 0x0400,
-        TVHT_TOLEFT = 0x0800;
-
-        public const int UIS_SET = 1,
-        UIS_CLEAR = 2,
-        UIS_INITIALIZE = 3,
-        UISF_HIDEFOCUS = 0x1,
-        UISF_HIDEACCEL = 0x2,
+        public const int
         USERCLASSTYPE_FULL = 1,
         USERCLASSTYPE_SHORT = 2,
         USERCLASSTYPE_APPNAME = 3,
@@ -988,27 +873,6 @@ namespace System.Windows.Forms
             public int fInherit;
             public int fReserved;
             public int dwFlags;
-        }
-
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-        internal class SYSTEMTIMEARRAY
-        {
-            public short wYear1;
-            public short wMonth1;
-            public short wDayOfWeek1;
-            public short wDay1;
-            public short wHour1;
-            public short wMinute1;
-            public short wSecond1;
-            public short wMilliseconds1;
-            public short wYear2;
-            public short wMonth2;
-            public short wDayOfWeek2;
-            public short wDay2;
-            public short wHour2;
-            public short wMinute2;
-            public short wSecond2;
-            public short wMilliseconds2;
         }
 
         public delegate bool EnumChildrenCallback(IntPtr hwnd, IntPtr lParam);
@@ -1234,17 +1098,6 @@ namespace System.Windows.Forms
         public delegate int ListViewCompareCallback(IntPtr lParam1, IntPtr lParam2, IntPtr lParamSort);
 
         public delegate int TreeViewCompareCallback(IntPtr lParam1, IntPtr lParam2, IntPtr lParamSort);
-
-        [StructLayout(LayoutKind.Sequential)]
-        public class TPMPARAMS
-        {
-            public int cbSize = Marshal.SizeOf<TPMPARAMS>();
-            // rcExclude was a by-value RECT structure
-            public int rcExclude_left;
-            public int rcExclude_top;
-            public int rcExclude_right;
-            public int rcExclude_bottom;
-        }
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
         public class STARTUPINFO_I
@@ -1630,86 +1483,6 @@ namespace System.Windows.Forms
             }
         }
 
-        [StructLayout(LayoutKind.Sequential)/*leftover(noAutoOffset)*/]
-        public sealed class tagOLEVERB
-        {
-            public Ole32.OLEIVERB lVerb;
-
-            [MarshalAs(UnmanagedType.LPWStr)/*leftover(offset=4, customMarshal="UniStringMarshaller", lpszVerbName)*/]
-            public string lpszVerbName;
-
-            [MarshalAs(UnmanagedType.U4)/*leftover(offset=8, fuFlags)*/]
-            public int fuFlags;
-
-            [MarshalAs(UnmanagedType.U4)/*leftover(offset=12, grfAttribs)*/]
-            public int grfAttribs;
-        }
-
-        [StructLayout(LayoutKind.Sequential)/*leftover(noAutoOffset)*/]
-        public sealed class tagCONTROLINFO
-        {
-            [MarshalAs(UnmanagedType.U4)/*leftover(offset=0, cb)*/]
-            public int cb = Marshal.SizeOf<tagCONTROLINFO>();
-
-            public IntPtr hAccel;
-
-            [MarshalAs(UnmanagedType.U2)/*leftover(offset=8, cAccel)*/]
-            public short cAccel;
-
-            [MarshalAs(UnmanagedType.U4)/*leftover(offset=10, dwFlags)*/]
-            public int dwFlags;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public sealed class tagDVTARGETDEVICE
-        {
-            [MarshalAs(UnmanagedType.U4)]
-            public int tdSize = 0;
-            [MarshalAs(UnmanagedType.U2)]
-            public short tdDriverNameOffset = 0;
-            [MarshalAs(UnmanagedType.U2)]
-            public short tdDeviceNameOffset = 0;
-            [MarshalAs(UnmanagedType.U2)]
-            public short tdPortNameOffset = 0;
-            [MarshalAs(UnmanagedType.U2)]
-            public short tdExtDevmodeOffset = 0;
-        }
-
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-        public class TCITEM_T
-        {
-            public int mask;
-            public int dwState = 0;
-            public int dwStateMask = 0;
-            public string pszText;
-            public int cchTextMax;
-            public int iImage;
-            public IntPtr lParam;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public class tagEXCEPINFO
-        {
-            [MarshalAs(UnmanagedType.U2)]
-            public short wCode = 0;
-            [MarshalAs(UnmanagedType.U2)]
-            public short wReserved = 0;
-            [MarshalAs(UnmanagedType.BStr)]
-            public string bstrSource = null;
-            [MarshalAs(UnmanagedType.BStr)]
-            public string bstrDescription = null;
-            [MarshalAs(UnmanagedType.BStr)]
-            public string bstrHelpFile = null;
-            [MarshalAs(UnmanagedType.U4)]
-            public int dwHelpContext = 0;
-
-            public IntPtr pvReserved = IntPtr.Zero;
-
-            public IntPtr pfnDeferredFillIn = IntPtr.Zero;
-            [MarshalAs(UnmanagedType.U4)]
-            public int scode = 0;
-        }
-
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
         public class TOOLTIPTEXT
         {
@@ -1743,32 +1516,6 @@ namespace System.Windows.Forms
         }
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-        public class TV_HITTESTINFO
-        {
-            public int pt_x;
-            public int pt_y;
-            public int flags = 0;
-            public IntPtr hItem = IntPtr.Zero;
-        }
-
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-        public class MCHITTESTINFO
-        {
-            public int cbSize = Marshal.SizeOf<MCHITTESTINFO>();
-            public int pt_x = 0;
-            public int pt_y = 0;
-            public int uHit = 0;
-            public short st_wYear = 0;
-            public short st_wMonth = 0;
-            public short st_wDayOfWeek = 0;
-            public short st_wDay = 0;
-            public short st_wHour = 0;
-            public short st_wMinute = 0;
-            public short st_wSecond = 0;
-            public short st_wMilliseconds = 0;
-        }
-
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
         public class LVHITTESTINFO
         {
             public int pt_x;
@@ -1776,17 +1523,6 @@ namespace System.Windows.Forms
             public int flags = 0;
             public int iItem = 0;
             public int iSubItem = 0;
-        }
-
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-        public class LVBKIMAGE
-        {
-            public int ulFlags;
-            public IntPtr hBmp = IntPtr.Zero; // not used
-            public string pszImage;
-            public int cchImageMax;
-            public int xOffset;
-            public int yOffset;
         }
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
@@ -1805,7 +1541,7 @@ namespace System.Windows.Forms
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
         public struct LVITEM
         {
-            public int mask;
+            public ComCtl32.LVIF mask;
             public int iItem;
             public int iSubItem;
             public ComCtl32.LVIS state;
@@ -1818,23 +1554,6 @@ namespace System.Windows.Forms
             public int iGroupId;
             public int cColumns; // tile view columns
             public IntPtr puColumns;
-
-            public unsafe void Reset()
-            {
-                pszText = null;
-                mask = 0;
-                iItem = 0;
-                iSubItem = 0;
-                stateMask = 0;
-                state = 0;
-                cchTextMax = 0;
-                iImage = 0;
-                lParam = IntPtr.Zero;
-                iIndent = 0;
-                iGroupId = 0;
-                cColumns = 0;
-                puColumns = IntPtr.Zero;
-            }
 
             public override string ToString()
             {
@@ -1850,7 +1569,7 @@ namespace System.Windows.Forms
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
         public struct LVITEM_NOTEXT
         {
-            public int mask;
+            public ComCtl32.LVIF mask;
             public int iItem;
             public int iSubItem;
             public ComCtl32.LVIS state;
@@ -2118,14 +1837,6 @@ namespace System.Windows.Forms
         public class ActiveX
         {
             public const int OCM__BASE = 0x2000;
-            public const int QACONTAINER_SHOWHATCHING = 0x1;
-            public const int QACONTAINER_SHOWGRABHANDLES = 0x2;
-            public const int QACONTAINER_USERMODE = 0x4;
-            public const int QACONTAINER_DISPLAYASDEFAULT = 0x8;
-            public const int QACONTAINER_UIDEAD = 0x10;
-            public const int QACONTAINER_AUTOCLIP = 0x20;
-            public const int QACONTAINER_MESSAGEREFLECT = 0x40;
-            public const int QACONTAINER_SUPPORTSMNEMONICS = 0x80;
             public const int ALIGN_MIN = 0x0;
             public const int ALIGN_NO_CHANGE = 0x0;
             public const int ALIGN_TOP = 0x1;
@@ -2133,8 +1844,6 @@ namespace System.Windows.Forms
             public const int ALIGN_LEFT = 0x3;
             public const int ALIGN_RIGHT = 0x4;
             public const int ALIGN_MAX = 0x4;
-            public const int OLEVERBATTRIB_NEVERDIRTIES = 0x1;
-            public const int OLEVERBATTRIB_ONCONTAINERMENU = 0x2;
 
             public static Guid IID_IUnknown = new Guid("{00000000-0000-0000-C000-000000000046}");
 
@@ -2291,12 +2000,6 @@ namespace System.Windows.Forms
         // Threading stuff
         public const uint STILL_ACTIVE = 259;
 
-        [DllImport(ExternDll.User32, ExactSpelling = true)]
-        public static extern int MapWindowPoints(IntPtr hWndFrom, IntPtr hWndTo, ref RECT rect, int cPoints);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern int MapWindowPoints(IntPtr hWndFrom, IntPtr hWndTo, ref Point pt, uint cPoints);
-
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern IntPtr WindowFromPoint(int x, int y);
 
@@ -2308,9 +2011,6 @@ namespace System.Windows.Forms
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public static extern IntPtr SendMessage(IntPtr hWnd, int msg, int wParam, string lParam);
-
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public extern static IntPtr SendMessage(IntPtr hWnd, int Msg, int wParam, [In, Out] TV_HITTESTINFO lParam);
 
         [DllImport(ExternDll.User32, ExactSpelling = true)]
         public static extern bool GetUpdateRect(IntPtr hwnd, ref RECT rc, bool fErase);

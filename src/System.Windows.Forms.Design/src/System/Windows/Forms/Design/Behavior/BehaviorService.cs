@@ -323,7 +323,7 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         public Point AdornerWindowPointToScreen(Point p)
         {
-            NativeMethods.MapWindowPoints(_adornerWindow.Handle, IntPtr.Zero, ref p, 1);
+            User32.MapWindowPoints(_adornerWindow.Handle, IntPtr.Zero, ref p, 1);
             return p;
         }
 
@@ -347,7 +347,7 @@ namespace System.Windows.Forms.Design.Behavior
             }
 
             var pt = new Point(c.Left, c.Top);
-            NativeMethods.MapWindowPoints(c.Parent.Handle, _adornerWindow.Handle, ref pt, 1);
+            User32.MapWindowPoints(c.Parent.Handle, _adornerWindow.Handle, ref pt, 1);
             if (c.Parent.IsMirrored)
             {
                 pt.X -= c.Width;
@@ -360,7 +360,7 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         public Point MapAdornerWindowPoint(IntPtr handle, Point pt)
         {
-            NativeMethods.MapWindowPoints(handle, _adornerWindow.Handle, ref pt, 1);
+            User32.MapWindowPoints(handle, _adornerWindow.Handle, ref pt, 1);
             return pt;
         }
 
@@ -555,7 +555,7 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         public Point ScreenToAdornerWindow(Point p)
         {
-            NativeMethods.MapWindowPoints(IntPtr.Zero, _adornerWindow.Handle, ref p, 1);
+            User32.MapWindowPoints(IntPtr.Zero, _adornerWindow.Handle, ref p, 1);
             return p;
         }
 
@@ -817,7 +817,7 @@ namespace System.Windows.Forms.Design.Behavior
                 {
                     _behaviorService._validDragArgs = e;
                     User32.GetCursorPos(out Point pt);
-                    NativeMethods.MapWindowPoints(IntPtr.Zero, Handle, ref pt, 1);
+                    User32.MapWindowPoints(IntPtr.Zero, Handle, ref pt, 1);
                     _behaviorService.PropagateHitTest(pt);
 
                 }
@@ -851,7 +851,7 @@ namespace System.Windows.Forms.Design.Behavior
                 {
                     _behaviorService._validDragArgs = e;
                     User32.GetCursorPos(out Point pt);
-                    NativeMethods.MapWindowPoints(IntPtr.Zero, Handle, ref pt, 1);
+                    User32.MapWindowPoints(IntPtr.Zero, Handle, ref pt, 1);
                     _behaviorService.PropagateHitTest(pt);
                 }
 
@@ -935,7 +935,7 @@ namespace System.Windows.Forms.Design.Behavior
                         Point pt = new Point((short)NativeMethods.Util.LOWORD(unchecked((int)(long)m.LParam)),
                                              (short)NativeMethods.Util.HIWORD(unchecked((int)(long)m.LParam)));
                         var pt1 = new Point();
-                        NativeMethods.MapWindowPoints(IntPtr.Zero, Handle, ref pt1, 1);
+                        User32.MapWindowPoints(IntPtr.Zero, Handle, ref pt1, 1);
                         pt.Offset(pt1.X, pt1.Y);
                         if (_behaviorService.PropagateHitTest(pt) && !ProcessingDrag)
                         {
@@ -1179,7 +1179,7 @@ namespace System.Windows.Forms.Design.Behavior
                             {
                                 _processingMessage = true;
                                 var pt = new Point(x, y);
-                                NativeMethods.MapWindowPoints(IntPtr.Zero, adornerWindow.Handle, ref pt, 1);
+                                User32.MapWindowPoints(IntPtr.Zero, adornerWindow.Handle, ref pt, 1);
                                 Message m = Message.Create(hWnd, msg, (IntPtr)0, (IntPtr)MAKELONG(pt.Y, pt.X));
                                 // No one knows why we get an extra click here from VS. As a workaround, we check the TimeStamp and discard it.
                                 if (m.Msg == WindowMessages.WM_LBUTTONDOWN)

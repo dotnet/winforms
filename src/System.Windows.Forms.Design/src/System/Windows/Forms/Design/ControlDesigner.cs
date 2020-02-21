@@ -285,7 +285,7 @@ namespace System.Windows.Forms.Design
         internal Point GetOffsetToClientArea()
         {
             var nativeOffset = new Point();
-            NativeMethods.MapWindowPoints(Control.Handle, Control.Parent.Handle, ref nativeOffset, 1);
+            User32.MapWindowPoints(Control.Handle, Control.Parent.Handle, ref nativeOffset, 1);
             Point offset = Control.Location;
             // If the 2 controls do not have the same orientation, then force one to make sure we calculate the correct offset
             if (Control.IsMirrored != Control.Parent.IsMirrored)
@@ -462,11 +462,6 @@ namespace System.Windows.Forms.Design
                     UnhookChildControls(Control);
                 }
 
-                if (ContextMenu != null)
-                {
-                    ContextMenu.Disposed -= new EventHandler(DetachContextMenu);
-                }
-
                 if (_designerTarget != null)
                 {
                     _designerTarget.Dispose();
@@ -512,38 +507,6 @@ namespace System.Windows.Forms.Design
         private interface IDesignerTarget : IDisposable
         {
             void DefWndProc(ref Message m);
-        }
-
-        private void DetachContextMenu(object sender, EventArgs e)
-        {
-            ContextMenu = null;
-        }
-
-        private ContextMenu ContextMenu
-        {
-            get => (ContextMenu)ShadowProperties["ContextMenu"];
-            set
-            {
-                ContextMenu oldValue = (ContextMenu)ShadowProperties["ContextMenu"];
-
-                if (oldValue != value)
-                {
-                    EventHandler disposedHandler = new EventHandler(DetachContextMenu);
-
-                    if (oldValue != null)
-                    {
-                        oldValue.Disposed -= disposedHandler;
-                    }
-
-                    ShadowProperties["ContextMenu"] = value;
-
-                    if (value != null)
-                    {
-                        value.Disposed += disposedHandler;
-                    }
-                }
-
-            }
         }
 
         private void DataSource_ComponentRemoved(object sender, ComponentEventArgs e)
@@ -1598,7 +1561,7 @@ namespace System.Windows.Forms.Design
             base.PreFilterProperties(properties);
             PropertyDescriptor prop;
             // Handle shadowed properties
-            string[] shadowProps = new string[] { "Visible", "Enabled", "ContextMenu", "AllowDrop", "Location", "Name" };
+            string[] shadowProps = new string[] { "Visible", "Enabled", "AllowDrop", "Location", "Name" };
 
             Attribute[] empty = Array.Empty<Attribute>();
             for (int i = 0; i < shadowProps.Length; i++)
@@ -1748,7 +1711,7 @@ namespace System.Windows.Forms.Design
                     X = NativeMethods.Util.SignedLOWORD(unchecked((int)(long)m.LParam)),
                     Y = NativeMethods.Util.SignedHIWORD(unchecked((int)(long)m.LParam))
                 };
-                NativeMethods.MapWindowPoints(m.HWnd, IntPtr.Zero, ref pt, 1);
+                User32.MapWindowPoints(m.HWnd, IntPtr.Zero, ref pt, 1);
                 x = pt.X;
                 y = pt.Y;
             }
@@ -2060,9 +2023,9 @@ namespace System.Windows.Forms.Design
                             {
                                 // Re-map the clip rect we pass to the paint event args to our child coordinates.
                                 var pt = new Point();
-                                NativeMethods.MapWindowPoints(m.HWnd, Control.Handle, ref pt, 1);
+                                User32.MapWindowPoints(m.HWnd, Control.Handle, ref pt, 1);
                                 gr.TranslateTransform(-pt.X, -pt.Y);
-                                NativeMethods.MapWindowPoints(m.HWnd, Control.Handle, ref clip, 2);
+                                User32.MapWindowPoints(m.HWnd, Control.Handle, ref clip, 2);
                             }
                             paintRect = new Rectangle(clip.left, clip.top, clip.right - clip.left, clip.bottom - clip.top);
                             PaintEventArgs pevent = new PaintEventArgs(gr, paintRect);
@@ -2656,9 +2619,9 @@ namespace System.Windows.Forms.Design
                 if (child == null || Control is UserControl)
                 {
                     // Now do the children of this window.
-                    HookChildHandles(UnsafeNativeMethods.GetWindow(hwndChild, NativeMethods.GW_CHILD));
+                    HookChildHandles(User32.GetWindow(hwndChild, User32.GW.CHILD));
                 }
-                hwndChild = UnsafeNativeMethods.GetWindow(hwndChild, NativeMethods.GW_HWNDNEXT);
+                hwndChild = User32.GetWindow(hwndChild, User32.GW.HWNDNEXT);
             }
         }
 
@@ -2687,7 +2650,7 @@ namespace System.Windows.Forms.Design
             // 1.  Child handles that do not have a Control associated  with them.  We must subclass these and prevent them from getting design-time events.
             // 2.   Child handles that do have a Control associated with them, but the control does not have a designer. We must hook the WindowTarget on these controls and prevent them from getting design-time events.
             // 3.   Child handles that do have a Control associated with them, and the control has a designer.  We ignore these and let the designer handle their messages.
-            HookChildHandles(UnsafeNativeMethods.GetWindow(Control.Handle, NativeMethods.GW_CHILD));
+            HookChildHandles(User32.GetWindow(Control.Handle, User32.GW.CHILD));
             HookChildControls(Control);
         }
 

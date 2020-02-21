@@ -35,7 +35,6 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(new Rectangle(0, 0, 200, 100), control.ClientRectangle);
             Assert.Equal(new Size(200, 100), control.ClientSize);
             Assert.Null(control.Container);
-            Assert.Null(control.ContextMenu);
             Assert.Null(control.ContextMenuStrip);
             Assert.Empty(control.Controls);
             Assert.Same(control.Controls, control.Controls);
@@ -65,6 +64,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(ImeMode.NoControl, control.ImeMode);
             Assert.Equal(ImeMode.NoControl, control.ImeModeBase);
             Assert.Equal(Size.Empty, control.ItemSize);
+            Assert.NotNull(control.LayoutEngine);
+            Assert.Same(control.LayoutEngine, control.LayoutEngine);
             Assert.Equal(0, control.Left);
             Assert.Equal(Point.Empty, control.Location);
             Assert.Equal(new Padding(3), control.Margin);
@@ -83,6 +84,8 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.RightToLeftLayout);
             Assert.Equal(-1, control.SelectedIndex);
             Assert.Null(control.SelectedTab);
+            Assert.True(control.ShowFocusCues);
+            Assert.True(control.ShowKeyboardCues);
             Assert.False(control.ShowToolTips);
             Assert.Null(control.Site);
             Assert.Equal(new Size(200, 100), control.Size);
@@ -94,6 +97,7 @@ namespace System.Windows.Forms.Tests
             Assert.True(control.TabStop);
             Assert.Empty(control.Text);
             Assert.Equal(0, control.Top);
+            Assert.Null(control.TopLevelControl);
             Assert.True(control.Visible);
             Assert.Equal(200, control.Width);
 
@@ -344,15 +348,26 @@ namespace System.Windows.Forms.Tests
             Assert.Same(createParams, control.CreateParams);
         }
 
+        public static IEnumerable<object[]> Alignment_Set_TestData()
+        {
+            yield return new object[] { true, TabAlignment.Top, true };
+            yield return new object[] { true, TabAlignment.Bottom, true };
+            yield return new object[] { true, TabAlignment.Left, true };
+            yield return new object[] { true, TabAlignment.Right, true };
+
+            yield return new object[] { false, TabAlignment.Top, false };
+            yield return new object[] { false, TabAlignment.Bottom, false };
+            yield return new object[] { false, TabAlignment.Left, true };
+            yield return new object[] { false, TabAlignment.Right, true };
+        }
+
         [WinFormsTheory]
-        [InlineData(TabAlignment.Top, false)]
-        [InlineData(TabAlignment.Bottom, false)]
-        [InlineData(TabAlignment.Left, true)]
-        [InlineData(TabAlignment.Right, true)]
-        public void TabControl_Alignment_Set_GetReturnsExpected(TabAlignment value, bool expectedMultiline)
+        [MemberData(nameof(Alignment_Set_TestData))]
+        public void TabControl_Alignment_Set_GetReturnsExpected(bool multiline, TabAlignment value, bool expectedMultiline)
         {
             using var control = new TabControl
             {
+                Multiline = multiline,
                 Alignment = value
             };
             Assert.Equal(value, control.Alignment);
@@ -366,14 +381,27 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.IsHandleCreated);
         }
 
-        [WinFormsTheory]
-        [InlineData(TabAlignment.Top, false, 0)]
-        [InlineData(TabAlignment.Bottom, false, 1)]
-        [InlineData(TabAlignment.Left, true, 2)]
-        [InlineData(TabAlignment.Right, true, 2)]
-        public void TabControl_Alignment_SetWithHandle_GetReturnsExpected(TabAlignment value, bool expectedMultiline, int expectedCreatedCallCount)
+        public static IEnumerable<object[]> Alignment_SetWithHandle_TestData()
         {
-            using var control = new TabControl();
+            yield return new object[] { true, TabAlignment.Top, true, 0 };
+            yield return new object[] { true, TabAlignment.Bottom, true, 1 };
+            yield return new object[] { true, TabAlignment.Left, true, 1 };
+            yield return new object[] { true, TabAlignment.Right, true, 1 };
+
+            yield return new object[] { false, TabAlignment.Top, false, 0 };
+            yield return new object[] { false, TabAlignment.Bottom, false, 1 };
+            yield return new object[] { false, TabAlignment.Left, true, 1 };
+            yield return new object[] { false, TabAlignment.Right, true, 1 };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(Alignment_SetWithHandle_TestData))]
+        public void TabControl_Alignment_SetWithHandle_GetReturnsExpected(bool multiline, TabAlignment value, bool expectedMultiline, int expectedCreatedCallCount)
+        {
+            using var control = new TabControl
+            {
+                Multiline = multiline
+            };
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             int invalidatedCallCount = 0;
             control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -1493,46 +1521,67 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<ArgumentOutOfRangeException>("value", () => control.Padding = new Point(1, -1));
         }
 
+
         [WinFormsTheory]
-        [InlineData(RightToLeft.Yes, true)]
-        [InlineData(RightToLeft.Yes, false)]
-        [InlineData(RightToLeft.No, true)]
-        [InlineData(RightToLeft.No, false)]
-        [InlineData(RightToLeft.Inherit, true)]
-        [InlineData(RightToLeft.Inherit, false)]
-        public void TabControl_RightToLeftLayout_Set_GetReturnsExpected(RightToLeft rightToLeft, bool value)
+        [InlineData(RightToLeft.Yes, true, 1)]
+        [InlineData(RightToLeft.Yes, false, 0)]
+        [InlineData(RightToLeft.No, true, 1)]
+        [InlineData(RightToLeft.No, false, 0)]
+        [InlineData(RightToLeft.Inherit, true, 1)]
+        [InlineData(RightToLeft.Inherit, false, 0)]
+        public void TabControl_RightToLeftLayout_Set_GetReturnsExpected(RightToLeft rightToLeft, bool value, int expectedLayoutCallCount)
         {
-            using var control = new SubTabControl
+            using var control = new TabControl
             {
-                RightToLeft = rightToLeft,
-                RightToLeftLayout = value
+                RightToLeft = rightToLeft
             };
+            int layoutCallCount = 0;
+            control.Layout += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(control, e.AffectedControl);
+                Assert.Same("RightToLeftLayout", e.AffectedProperty);
+                layoutCallCount++;
+            };
+
+            control.RightToLeftLayout = value;
             Assert.Equal(value, control.RightToLeftLayout);
+            Assert.Equal(expectedLayoutCallCount, layoutCallCount);
             Assert.False(control.IsHandleCreated);
 
             // Set same.
             control.RightToLeftLayout = value;
             Assert.Equal(value, control.RightToLeftLayout);
+            Assert.Equal(expectedLayoutCallCount, layoutCallCount);
             Assert.False(control.IsHandleCreated);
 
             // Set different.
             control.RightToLeftLayout = !value;
             Assert.Equal(!value, control.RightToLeftLayout);
+            Assert.Equal(expectedLayoutCallCount + 1, layoutCallCount);
             Assert.False(control.IsHandleCreated);
         }
 
         [WinFormsTheory]
-        [InlineData(RightToLeft.Yes, true, 1, 2)]
-        [InlineData(RightToLeft.Yes, false, 0, 1)]
-        [InlineData(RightToLeft.No, true, 0, 0)]
-        [InlineData(RightToLeft.No, false, 0, 0)]
-        [InlineData(RightToLeft.Inherit, true, 0, 0)]
-        [InlineData(RightToLeft.Inherit, false, 0, 0)]
-        public void TabControl_RightToLeftLayout_SetWithHandle_GetReturnsExpected(RightToLeft rightToLeft, bool value, int expectedCreatedCallCount1, int expectedCreatedCallCount2)
+        [InlineData(RightToLeft.Yes, true, 1, 1, 2)]
+        [InlineData(RightToLeft.Yes, false, 0, 0, 1)]
+        [InlineData(RightToLeft.No, true, 1, 0, 0)]
+        [InlineData(RightToLeft.No, false, 0, 0, 0)]
+        [InlineData(RightToLeft.Inherit, true, 1, 0, 0)]
+        [InlineData(RightToLeft.Inherit, false, 0, 0, 0)]
+        public void TabControl_RightToLeftLayout_SetWithHandle_GetReturnsExpected(RightToLeft rightToLeft, bool value, int expectedLayoutCallCount, int expectedCreatedCallCount1, int expectedCreatedCallCount2)
         {
-            using var control = new SubTabControl
+            using var control = new TabControl
             {
                 RightToLeft = rightToLeft
+            };
+            int layoutCallCount = 0;
+            control.Layout += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(control, e.AffectedControl);
+                Assert.Same("RightToLeftLayout", e.AffectedProperty);
+                layoutCallCount++;
             };
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             int invalidatedCallCount = 0;
@@ -1544,6 +1593,7 @@ namespace System.Windows.Forms.Tests
 
             control.RightToLeftLayout = value;
             Assert.Equal(value, control.RightToLeftLayout);
+            Assert.Equal(expectedLayoutCallCount, layoutCallCount);
             Assert.True(control.IsHandleCreated);
             Assert.Equal(expectedCreatedCallCount1, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
@@ -1552,6 +1602,7 @@ namespace System.Windows.Forms.Tests
             // Set same.
             control.RightToLeftLayout = value;
             Assert.Equal(value, control.RightToLeftLayout);
+            Assert.Equal(expectedLayoutCallCount, layoutCallCount);
             Assert.True(control.IsHandleCreated);
             Assert.Equal(expectedCreatedCallCount1, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
@@ -1560,6 +1611,7 @@ namespace System.Windows.Forms.Tests
             // Set different.
             control.RightToLeftLayout = !value;
             Assert.Equal(!value, control.RightToLeftLayout);
+            Assert.Equal(expectedLayoutCallCount + 1, layoutCallCount);
             Assert.True(control.IsHandleCreated);
             Assert.Equal(expectedCreatedCallCount2, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
@@ -1581,22 +1633,22 @@ namespace System.Windows.Forms.Tests
                 callCount++;
             };
             control.RightToLeftLayoutChanged += handler;
-        
+
             // Set different.
             control.RightToLeftLayout = false;
             Assert.False(control.RightToLeftLayout);
             Assert.Equal(1, callCount);
-        
+
             // Set same.
             control.RightToLeftLayout = false;
             Assert.False(control.RightToLeftLayout);
             Assert.Equal(1, callCount);
-        
+
             // Set different.
             control.RightToLeftLayout = true;
             Assert.True(control.RightToLeftLayout);
             Assert.Equal(2, callCount);
-        
+
             // Remove handler.
             control.RightToLeftLayoutChanged -= handler;
             control.RightToLeftLayout = false;
@@ -3432,7 +3484,8 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { Keys.Insert, false };
             yield return new object[] { Keys.Space, false };
             yield return new object[] { Keys.Home, true };
-            yield return new object[] { Keys.End, true }; ;
+            yield return new object[] { Keys.End, true };
+            ;
             yield return new object[] { Keys.Back, false };
             yield return new object[] { Keys.Next, true };
             yield return new object[] { Keys.Prior, true };
@@ -3456,7 +3509,8 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { Keys.Control | Keys.Insert, false };
             yield return new object[] { Keys.Control | Keys.Space, false };
             yield return new object[] { Keys.Control | Keys.Home, true };
-            yield return new object[] { Keys.Control | Keys.End, true }; ;
+            yield return new object[] { Keys.Control | Keys.End, true };
+            ;
             yield return new object[] { Keys.Control | Keys.Back, false };
             yield return new object[] { Keys.Control | Keys.Next, true };
             yield return new object[] { Keys.Control | Keys.Prior, true };
@@ -3484,7 +3538,8 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { Keys.Alt | Keys.Insert, false };
             yield return new object[] { Keys.Alt | Keys.Space, false };
             yield return new object[] { Keys.Alt | Keys.Home, false };
-            yield return new object[] { Keys.Alt | Keys.End, false }; ;
+            yield return new object[] { Keys.Alt | Keys.End, false };
+            ;
             yield return new object[] { Keys.Alt | Keys.Back, false };
             yield return new object[] { Keys.Alt | Keys.Next, false };
             yield return new object[] { Keys.Alt | Keys.Prior, false };
@@ -4636,6 +4691,10 @@ namespace System.Windows.Forms.Tests
                 get => base.ResizeRedraw;
                 set => base.ResizeRedraw = value;
             }
+
+            public new bool ShowFocusCues => base.ShowFocusCues;
+
+            public new bool ShowKeyboardCues => base.ShowKeyboardCues;
 
             public new Control.ControlCollection CreateControlsInstance() => base.CreateControlsInstance();
 

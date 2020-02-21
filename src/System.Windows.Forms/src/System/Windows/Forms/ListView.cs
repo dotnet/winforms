@@ -403,7 +403,7 @@ namespace System.Windows.Forms
         DefaultValue(false),
         SRDescription(nameof(SR.ListViewBackgroundImageTiledDescr))
         ]
-        public bool BackgroundImageTiled
+        public unsafe bool BackgroundImageTiled
         {
             get
             {
@@ -418,26 +418,24 @@ namespace System.Windows.Forms
                     {
                         // Don't call SetBackgroundImage because SetBackgroundImage deletes the existing image
                         // We don't need to delete it and this causes BAD problems w/ the Win32 list view control.
-                        NativeMethods.LVBKIMAGE lvbkImage = new NativeMethods.LVBKIMAGE
+                        fixed (char* pBackgroundImageFileName = backgroundImageFileName)
                         {
-                            xOffset = 0,
-                            yOffset = 0
-                        };
+                            var lvbkImage = new ComCtl32.LVBKIMAGEW();
+                            if (BackgroundImageTiled)
+                            {
+                                lvbkImage.ulFlags = ComCtl32.LVBKIF.STYLE_TILE;
+                            }
+                            else
+                            {
+                                lvbkImage.ulFlags = ComCtl32.LVBKIF.STYLE_NORMAL;
+                            }
 
-                        if (BackgroundImageTiled)
-                        {
-                            lvbkImage.ulFlags = NativeMethods.LVBKIF_STYLE_TILE;
+                            lvbkImage.ulFlags |= ComCtl32.LVBKIF.SOURCE_URL;
+                            lvbkImage.pszImage = pBackgroundImageFileName;
+                            lvbkImage.cchImageMax = (uint)(backgroundImageFileName.Length + 1);
+
+                            User32.SendMessageW(this, (User32.WindowMessage)LVM.SETBKIMAGE, IntPtr.Zero, ref lvbkImage);
                         }
-                        else
-                        {
-                            lvbkImage.ulFlags = NativeMethods.LVBKIF_STYLE_NORMAL;
-                        }
-
-                        lvbkImage.ulFlags |= NativeMethods.LVBKIF_SOURCE_URL;
-                        lvbkImage.pszImage = backgroundImageFileName;
-                        lvbkImage.cchImageMax = backgroundImageFileName.Length + 1;
-
-                        UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)LVM.SETBKIMAGE, 0, lvbkImage);
                     }
                 }
             }
@@ -2550,7 +2548,7 @@ namespace System.Windows.Forms
         {
             if (!RecreatingHandle)
             {
-                IntPtr userCookie = UnsafeNativeMethods.ThemingScope.Activate();
+                IntPtr userCookie = ThemingScope.Activate();
 
                 try
                 {
@@ -2562,7 +2560,7 @@ namespace System.Windows.Forms
                 }
                 finally
                 {
-                    UnsafeNativeMethods.ThemingScope.Deactivate(userCookie);
+                    ThemingScope.Deactivate(userCookie);
                 }
             }
             base.CreateHandle();
@@ -3959,7 +3957,7 @@ namespace System.Windows.Forms
                     NativeMethods.LVITEM lvItem = new NativeMethods.LVITEM
                     {
                         iItem = item.Index,
-                        mask = NativeMethods.LVIF_GROUPID
+                        mask = ComCtl32.LVIF.GROUPID
                     };
                     UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)LVM.GETITEM, 0, ref lvItem);
                     Debug.Assert(lvItem.iGroupId != -1, "there is a list view item which is not parented");
@@ -4113,7 +4111,6 @@ namespace System.Windows.Forms
             }
 
             // Create and add the LVITEM
-            NativeMethods.LVITEM lvItem = new NativeMethods.LVITEM();
             int actualIndex = -1;
             IntPtr hGlobalColumns = IntPtr.Zero;
             int maxColumns = 0;
@@ -4133,8 +4130,8 @@ namespace System.Windows.Forms
 
                     Debug.Assert(Items.Contains(li), "Make sure ListView.Items contains this item before adding the native LVITEM. Otherwise, custom-drawing may break.");
 
-                    lvItem.Reset();
-                    lvItem.mask = NativeMethods.LVIF_TEXT | NativeMethods.LVIF_IMAGE | NativeMethods.LVIF_PARAM | NativeMethods.LVIF_INDENT;
+                    var lvItem = new NativeMethods.LVITEM();
+                    lvItem.mask = ComCtl32.LVIF.TEXT | ComCtl32.LVIF.IMAGE | ComCtl32.LVIF.PARAM | ComCtl32.LVIF.INDENT;
                     lvItem.iItem = index + i;
                     lvItem.pszText = li.Text;
                     lvItem.iImage = li.ImageIndexer.ActualIndex;
@@ -4143,7 +4140,7 @@ namespace System.Windows.Forms
 
                     if (GroupsEnabled)
                     {
-                        lvItem.mask |= NativeMethods.LVIF_GROUPID;
+                        lvItem.mask |= ComCtl32.LVIF.GROUPID;
                         lvItem.iGroupId = GetNativeGroupId(li);
 
 #if DEBUG
@@ -4152,7 +4149,7 @@ namespace System.Windows.Forms
 #endif
                     }
 
-                    lvItem.mask |= NativeMethods.LVIF_COLUMNS;
+                    lvItem.mask |= ComCtl32.LVIF.COLUMNS;
                     lvItem.cColumns = columnHeaders != null ? Math.Min(MAXTILECOLUMNS, columnHeaders.Length) : 0;
 
                     // make sure that our columns memory is big enough.
@@ -4506,10 +4503,10 @@ namespace System.Windows.Forms
 
             base.OnHandleCreated(e);
 
-            int version = unchecked((int)(long)SendMessage(NativeMethods.CCM_GETVERSION, 0, 0));
+            int version = unchecked((int)(long)SendMessage((int)ComCtl32.CCM.GETVERSION, 0, 0));
             if (version < 5)
             {
-                SendMessage(NativeMethods.CCM_SETVERSION, 5, 0);
+                SendMessage((int)ComCtl32.CCM.SETVERSION, 5, 0);
             }
             UpdateExtendedStyles();
             RealizeProperties();
@@ -4815,7 +4812,7 @@ namespace System.Windows.Forms
 
         private unsafe void PositionHeader()
         {
-            IntPtr hdrHWND = UnsafeNativeMethods.GetWindow(new HandleRef(this, Handle), NativeMethods.GW_CHILD);
+            IntPtr hdrHWND = User32.GetWindow(new HandleRef(this, Handle), User32.GW.CHILD);
             if (hdrHWND != IntPtr.Zero)
             {
                 var rc = new RECT();
@@ -5002,16 +4999,12 @@ namespace System.Windows.Forms
             UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)LVM.SCROLL, 0, scrollY);
         }
 
-        private void SetBackgroundImage()
+        private unsafe void SetBackgroundImage()
         {
             // needed for OleInitialize
             Application.OleRequired();
 
-            NativeMethods.LVBKIMAGE lvbkImage = new NativeMethods.LVBKIMAGE
-            {
-                xOffset = 0,
-                yOffset = 0
-            };
+            var lvbkImage = new ComCtl32.LVBKIMAGEW();
 
             // first, is there an existing temporary file to delete, remember its name
             // so that we can delete it if the list control doesn't...
@@ -5019,7 +5012,6 @@ namespace System.Windows.Forms
 
             if (BackgroundImage != null)
             {
-
                 // save the image to a temporary file name
                 string tempDirName = System.IO.Path.GetTempPath();
                 Text.StringBuilder sb = new Text.StringBuilder(1024);
@@ -5029,25 +5021,28 @@ namespace System.Windows.Forms
 
                 BackgroundImage.Save(backgroundImageFileName, System.Drawing.Imaging.ImageFormat.Bmp);
 
-                lvbkImage.pszImage = backgroundImageFileName;
-                lvbkImage.cchImageMax = backgroundImageFileName.Length + 1;
-                lvbkImage.ulFlags = NativeMethods.LVBKIF_SOURCE_URL;
+                lvbkImage.cchImageMax = (uint)(backgroundImageFileName.Length + 1);
+                lvbkImage.ulFlags = ComCtl32.LVBKIF.SOURCE_URL;
                 if (BackgroundImageTiled)
                 {
-                    lvbkImage.ulFlags |= NativeMethods.LVBKIF_STYLE_TILE;
+                    lvbkImage.ulFlags |= ComCtl32.LVBKIF.STYLE_TILE;
                 }
                 else
                 {
-                    lvbkImage.ulFlags |= NativeMethods.LVBKIF_STYLE_NORMAL;
+                    lvbkImage.ulFlags |= ComCtl32.LVBKIF.STYLE_NORMAL;
                 }
             }
             else
             {
-                lvbkImage.ulFlags = NativeMethods.LVBKIF_SOURCE_NONE;
+                lvbkImage.ulFlags = ComCtl32.LVBKIF.SOURCE_NONE;
                 backgroundImageFileName = string.Empty;
             }
 
-            UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)LVM.SETBKIMAGE, 0, lvbkImage);
+            fixed (char* pBackgroundImageFileName = backgroundImageFileName)
+            {
+                lvbkImage.pszImage = pBackgroundImageFileName;
+                User32.SendMessageW(this, (User32.WindowMessage)LVM.SETBKIMAGE, IntPtr.Zero, ref lvbkImage);
+            }
 
             if (string.IsNullOrEmpty(fileNameToDelete))
             {
@@ -5273,7 +5268,7 @@ namespace System.Windows.Forms
             {
                 NativeMethods.LVITEM lvItem = new NativeMethods.LVITEM
                 {
-                    mask = NativeMethods.LVIF_IMAGE,
+                    mask = ComCtl32.LVIF.IMAGE,
                     iItem = index,
                     iImage = image
                 };
@@ -5291,7 +5286,7 @@ namespace System.Windows.Forms
             {
                 NativeMethods.LVITEM lvItem = new NativeMethods.LVITEM
                 {
-                    mask = NativeMethods.LVIF_INDENT,
+                    mask = ComCtl32.LVIF.INDENT,
                     iItem = index,
                     iIndent = indentCount
                 };
@@ -5329,7 +5324,7 @@ namespace System.Windows.Forms
             {
                 NativeMethods.LVITEM lvItem = new NativeMethods.LVITEM
                 {
-                    mask = NativeMethods.LVIF_STATE,
+                    mask = ComCtl32.LVIF.STATE,
                     state = state,
                     stateMask = mask
                 };
@@ -5374,7 +5369,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            lvItem.mask = NativeMethods.LVIF_TEXT;
+            lvItem.mask = ComCtl32.LVIF.TEXT;
             lvItem.iItem = itemIndex;
             lvItem.iSubItem = subItemIndex;
             lvItem.pszText = text;
@@ -6204,7 +6199,7 @@ namespace System.Windows.Forms
                 case NativeMethods.LVN_ITEMCHANGING:
                     {
                         ComCtl32.NMLISTVIEW* nmlv = (ComCtl32.NMLISTVIEW*)m.LParam;
-                        if ((nmlv->uChanged & NativeMethods.LVIF_STATE) != 0)
+                        if ((nmlv->uChanged & ComCtl32.LVIF.STATE) != 0)
                         {
                             // Because the state image mask is 1-based, a value of 1 means unchecked,
                             // anything else means checked.  We convert this to the more standard 0 or 1
@@ -6225,7 +6220,7 @@ namespace System.Windows.Forms
                     {
                         ComCtl32.NMLISTVIEW* nmlv = (ComCtl32.NMLISTVIEW*)m.LParam;
                         // Check for state changes to the selected state...
-                        if ((nmlv->uChanged & NativeMethods.LVIF_STATE) != 0)
+                        if ((nmlv->uChanged & ComCtl32.LVIF.STATE) != 0)
                         {
                             // Because the state image mask is 1-based, a value of 1 means unchecked,
                             // anything else means checked.  We convert this to the more standard 0 or 1
@@ -6385,7 +6380,7 @@ namespace System.Windows.Forms
                             }
 
                             lvItem.SetItemIndex(this, dispInfo.item.iItem);
-                            if ((dispInfo.item.mask & NativeMethods.LVIF_TEXT) != 0)
+                            if ((dispInfo.item.mask & ComCtl32.LVIF.TEXT) != 0)
                             {
                                 string text;
                                 if (dispInfo.item.iSubItem == 0)
@@ -6414,12 +6409,12 @@ namespace System.Windows.Forms
                                 Marshal.Copy(buff, 0, dispInfo.item.pszText, text.Length + 1);
                             }
 
-                            if ((dispInfo.item.mask & NativeMethods.LVIF_IMAGE) != 0 && lvItem.ImageIndex != -1)
+                            if ((dispInfo.item.mask & ComCtl32.LVIF.IMAGE) != 0 && lvItem.ImageIndex != -1)
                             {
                                 dispInfo.item.iImage = lvItem.ImageIndex;
                             }
 
-                            if ((dispInfo.item.mask & NativeMethods.LVIF_INDENT) != 0)
+                            if ((dispInfo.item.mask & ComCtl32.LVIF.INDENT) != 0)
                             {
                                 dispInfo.item.iIndent = lvItem.IndentCount;
                             }
@@ -9380,7 +9375,7 @@ namespace System.Windows.Forms
                     // Obtain internal index of the item
                     NativeMethods.LVITEM lvItem = new NativeMethods.LVITEM
                     {
-                        mask = NativeMethods.LVIF_PARAM,
+                        mask = ComCtl32.LVIF.PARAM,
                         iItem = displayIndex
                     };
                     UnsafeNativeMethods.SendMessage(new HandleRef(owner, owner.Handle), (int)LVM.GETITEM, 0, ref lvItem);

@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -31,7 +31,7 @@ namespace System.Windows.Forms
     DefaultEvent(nameof(Load)),
     InitializationEvent(nameof(Load)),
     ]
-    public class Form : ContainerControl
+    public partial class Form : ContainerControl
     {
 #if DEBUG
         static readonly BooleanSwitch AlwaysRestrictWindows = new BooleanSwitch("AlwaysRestrictWindows", "Always make Form classes behave as though they are restricted");
@@ -120,11 +120,6 @@ namespace System.Windows.Forms
         private static readonly int PropCancelButton = PropertyStore.CreateKey();
         private static readonly int PropDefaultButton = PropertyStore.CreateKey();
         private static readonly int PropDialogOwner = PropertyStore.CreateKey();
-
-        private static readonly int PropMainMenu = PropertyStore.CreateKey();
-        private static readonly int PropDummyMenu = PropertyStore.CreateKey();
-        private static readonly int PropCurMenu = PropertyStore.CreateKey();
-        private static readonly int PropMergedMenu = PropertyStore.CreateKey();
 
         private static readonly int PropOwner = PropertyStore.CreateKey();
         private static readonly int PropOwnedForms = PropertyStore.CreateKey();
@@ -1072,21 +1067,7 @@ namespace System.Windows.Forms
 
         internal override bool HasMenu
         {
-            get
-            {
-                bool hasMenu = false;
-
-                // Verify that the menu actually contains items so that any
-                // size calculations will only include a menu height if the menu actually exists.
-                // Note that Windows will not draw a menu bar for a menu that does not contain
-                // any items.
-                Menu menu = Menu;
-                if (TopLevel && menu != null && menu.ItemCount > 0)
-                {
-                    hasMenu = true;
-                }
-                return hasMenu;
-            }
+            get => false;
         }
 
         /// <summary>
@@ -1447,7 +1428,7 @@ namespace System.Windows.Forms
             set
             {
                 Properties.SetObject(PropMainMenuStrip, value);
-                if (IsHandleCreated && Menu == null)
+                if (IsHandleCreated)
                 {
                     UpdateMenuHandles();
                 }
@@ -1475,55 +1456,6 @@ namespace System.Windows.Forms
         {
             add => base.MarginChanged += value;
             remove => base.MarginChanged -= value;
-        }
-
-        /// <summary>
-        ///  Gets or sets the <see cref='MainMenu'/>
-        ///  that is displayed in the form.
-        /// </summary>
-        [
-        SRCategory(nameof(SR.CatWindowStyle)),
-        DefaultValue(null),
-        SRDescription(nameof(SR.FormMenuDescr)),
-        TypeConverter(typeof(ReferenceConverter)),
-        Browsable(false),
-        ]
-        public MainMenu Menu
-        {
-            get
-            {
-                return (MainMenu)Properties.GetObject(PropMainMenu);
-            }
-            set
-            {
-                MainMenu mainMenu = Menu;
-
-                if (mainMenu != value)
-                {
-                    if (mainMenu != null)
-                    {
-                        mainMenu._form = null;
-                    }
-
-                    Properties.SetObject(PropMainMenu, value);
-
-                    if (value != null)
-                    {
-                        if (value._form != null)
-                        {
-                            value._form.Menu = null;
-                        }
-                        value._form = this;
-                    }
-
-                    if (formState[FormStateSetClientSize] == 1 && !IsHandleCreated)
-                    {
-                        ClientSize = ClientSize;
-                    }
-
-                    MenuChanged(Windows.Forms.Menu.CHANGE_ITEMS, value);
-                }
-            }
         }
 
         /// <summary>
@@ -1664,10 +1596,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-            ///  Gets the MDIClient that the MDI container form is using to contain Multiple Document Interface (MDI) child forms,
+        ///  Gets the MDIClient that the MDI container form is using to contain Multiple Document Interface (MDI) child forms,
         ///  if this is an MDI container form.
         ///  Represents the client area of a Multiple Document Interface (MDI) Form window, also known as the MDI child window.
-            /// </summary>
+        /// </summary>
         internal MdiClient MdiClient
         {
             get
@@ -1758,7 +1690,6 @@ namespace System.Windows.Forms
                         }
                     }
 
-                    InvalidateMergedMenu();
                     UpdateMenuHandles();
                 }
                 finally
@@ -1779,65 +1710,6 @@ namespace System.Windows.Forms
         {
             get { return Properties.GetObject(PropMdiControlStrip) as MdiControlStrip; }
             set { Properties.SetObject(PropMdiControlStrip, value); }
-        }
-
-        /// <summary>
-        ///  Gets the merged menu for the
-        ///  form.
-        /// </summary>
-        [
-        SRCategory(nameof(SR.CatWindowStyle)),
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.FormMergedMenuDescr)),
-        ]
-        public MainMenu MergedMenu
-        {
-            get
-            {
-                return MergedMenuPrivate;
-            }
-        }
-
-        private MainMenu MergedMenuPrivate
-        {
-            get
-            {
-                Form formMdiParent = (Form)Properties.GetObject(PropFormMdiParent);
-                if (formMdiParent == null)
-                {
-                    return null;
-                }
-
-                MainMenu mergedMenu = (MainMenu)Properties.GetObject(PropMergedMenu);
-                if (mergedMenu != null)
-                {
-                    return mergedMenu;
-                }
-
-                MainMenu parentMenu = formMdiParent.Menu;
-                MainMenu mainMenu = Menu;
-
-                if (mainMenu == null)
-                {
-                    return parentMenu;
-                }
-
-                if (parentMenu == null)
-                {
-                    return mainMenu;
-                }
-
-                // Create a menu that merges the two and save it for next time.
-                mergedMenu = new MainMenu
-                {
-                    ownerForm = this
-                };
-                mergedMenu.MergeMenu(parentMenu);
-                mergedMenu.MergeMenu(mainMenu);
-                Properties.SetObject(PropMergedMenu, mergedMenu);
-                return mergedMenu;
-            }
         }
 
         /// <summary>
@@ -2527,7 +2399,6 @@ namespace System.Windows.Forms
 
                 if (!value)
                 {
-                    InvalidateMergedMenu();
                     SetState(States.Visible, false);
                 }
                 else
@@ -3300,6 +3171,11 @@ namespace System.Windows.Forms
             return new Size(result.right - result.left, result.bottom - result.top);
         }
 
+        protected override AccessibleObject CreateAccessibilityInstance()
+        {
+            return new FormAccessibleObject(this);
+        }
+
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override Control.ControlCollection CreateControlsInstance()
         {
@@ -3398,7 +3274,7 @@ namespace System.Windows.Forms
                 }
 
                 // avoid extra SetMenu calls for perf
-                if (Menu != null || !TopLevel || IsMdiContainer)
+                if (!TopLevel || IsMdiContainer)
                 {
                     UpdateMenuHandles();
                 }
@@ -3491,7 +3367,7 @@ namespace System.Windows.Forms
         ///  a
         ///  subclass overrides this function,
         ///  it must call the base implementation.
-            /// </summary>
+        /// </summary>
         [
             EditorBrowsable(EditorBrowsableState.Advanced)
         ]
@@ -3588,41 +3464,6 @@ namespace System.Windows.Forms
 
                 base.Dispose(disposing);
                 ctlClient = null;
-
-                MainMenu mainMenu = Menu;
-
-                // We should only dispose this form's menus!
-                if (mainMenu != null && mainMenu.ownerForm == this)
-                {
-                    mainMenu.Dispose();
-                    Properties.SetObject(PropMainMenu, null);
-                }
-
-                if (Properties.GetObject(PropCurMenu) != null)
-                {
-                    Properties.SetObject(PropCurMenu, null);
-                }
-
-                MenuChanged(Windows.Forms.Menu.CHANGE_ITEMS, null);
-
-                MainMenu dummyMenu = (MainMenu)Properties.GetObject(PropDummyMenu);
-
-                if (dummyMenu != null)
-                {
-                    dummyMenu.Dispose();
-                    Properties.SetObject(PropDummyMenu, null);
-                }
-
-                MainMenu mergedMenu = (MainMenu)Properties.GetObject(PropMergedMenu);
-
-                if (mergedMenu != null)
-                {
-                    if (mergedMenu.ownerForm == this || mergedMenu._form == null)
-                    {
-                        mergedMenu.Dispose();
-                    }
-                    Properties.SetObject(PropMergedMenu, null);
-                }
             }
             else
             {
@@ -4080,97 +3921,12 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Invalidates the merged menu, forcing the menu to be recreated if
-        ///  needed again.
-        /// </summary>
-        private void InvalidateMergedMenu()
-        {
-            // here, we just set the merged menu to null (indicating that the menu structure
-            // needs to be rebuilt).  Then, we signal the parent to updated its menus.
-            if (Properties.ContainsObject(PropMergedMenu))
-            {
-                if (Properties.GetObject(PropMergedMenu) is MainMenu menu && menu.ownerForm == this)
-                {
-                    menu.Dispose();
-                }
-                Properties.SetObject(PropMergedMenu, null);
-            }
-
-            Form parForm = ParentForm;
-            if (parForm != null)
-            {
-                parForm.MenuChanged(0, parForm.Menu);
-            }
-        }
-
-        /// <summary>
         ///  Arranges the Multiple Document Interface
         ///  (MDI) child forms according to value.
         /// </summary>
         public void LayoutMdi(MdiLayout value)
         {
             ctlClient?.LayoutMdi(value);
-        }
-
-        // Package scope for menu interop
-        internal void MenuChanged(int change, Menu menu)
-        {
-            Form parForm = ParentForm;
-            if (parForm != null && this == parForm.ActiveMdiChildInternal)
-            {
-                parForm.MenuChanged(change, menu);
-                return;
-            }
-
-            switch (change)
-            {
-                case Windows.Forms.Menu.CHANGE_ITEMS:
-                case Windows.Forms.Menu.CHANGE_MERGE:
-                    if (ctlClient == null || !ctlClient.IsHandleCreated)
-                    {
-                        if (menu == Menu && change == Windows.Forms.Menu.CHANGE_ITEMS)
-                        {
-                            UpdateMenuHandles();
-                        }
-
-                        break;
-                    }
-
-                    // Tell the children to toss their mergedMenu.
-                    if (IsHandleCreated)
-                    {
-                        UpdateMenuHandles(null, false);
-                    }
-
-                    Control.ControlCollection children = ctlClient.Controls;
-                    for (int i = children.Count; i-- > 0;)
-                    {
-                        Control ctl = children[i];
-                        if (ctl is Form && ctl.Properties.ContainsObject(PropMergedMenu))
-                        {
-                            if (ctl.Properties.GetObject(PropMergedMenu) is MainMenu mainMenu && mainMenu.ownerForm == ctl)
-                            {
-                                mainMenu.Dispose();
-                            }
-                            ctl.Properties.SetObject(PropMergedMenu, null);
-                        }
-                    }
-
-                    UpdateMenuHandles();
-                    break;
-                case Windows.Forms.Menu.CHANGE_VISIBLE:
-                    if (menu == Menu || (ActiveMdiChildInternal != null && menu == ActiveMdiChildInternal.Menu))
-                    {
-                        UpdateMenuHandles();
-                    }
-                    break;
-                case Windows.Forms.Menu.CHANGE_MDI:
-                    if (ctlClient != null && ctlClient.IsHandleCreated)
-                    {
-                        UpdateMenuHandles();
-                    }
-                    break;
-            }
         }
 
         /// <summary>
@@ -4191,7 +3947,7 @@ namespace System.Windows.Forms
             base.OnAutoScaleModeChanged();
             if (formStateEx[FormStateExSettingAutoScale] != 1)
             {
-            // Obsolete code required here for backwards compat
+                // Obsolete code required here for backwards compat
 #pragma warning disable 618
                 AutoScale = false;
 #pragma warning restore 618
@@ -4807,12 +4563,6 @@ namespace System.Windows.Forms
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
             if (base.ProcessCmdKey(ref msg, keyData))
-            {
-                return true;
-            }
-
-            MainMenu curMenu = (MainMenu)Properties.GetObject(PropCurMenu);
-            if (curMenu != null && curMenu.ProcessCmdKey(ref msg, keyData))
             {
                 return true;
             }
@@ -5723,11 +5473,11 @@ namespace System.Windows.Forms
                         hWndActive = hWndOwner;
                     }
 
-                    if (UnsafeNativeMethods.IsWindow(new HandleRef(null, hWndActive)) && SafeNativeMethods.IsWindowVisible(new HandleRef(null, hWndActive)))
+                    if (UnsafeNativeMethods.IsWindow(new HandleRef(null, hWndActive)) && User32.IsWindowVisible(hWndActive).IsTrue())
                     {
                         User32.SetActiveWindow(hWndActive);
                     }
-                    else if (UnsafeNativeMethods.IsWindow(new HandleRef(null, hWndOwner)) && SafeNativeMethods.IsWindowVisible(new HandleRef(null, hWndOwner)))
+                    else if (UnsafeNativeMethods.IsWindow(new HandleRef(null, hWndOwner)) && User32.IsWindowVisible(hWndOwner).IsTrue())
                     {
                         User32.SetActiveWindow(hWndOwner);
                     }
@@ -5809,6 +5559,8 @@ namespace System.Windows.Forms
         {
             return !TransparencyKey.Equals(Color.Empty);
         }
+
+        internal override bool SupportsUiaProviders => true;
 
         /// <summary>
         ///  This is called when we are about to become minimized.  Laying out
@@ -5990,67 +5742,34 @@ namespace System.Windows.Forms
 
         private void UpdateMenuHandles()
         {
-            Form form;
-
-            // Forget the current menu.
-            if (Properties.GetObject(PropCurMenu) != null)
-            {
-                Properties.SetObject(PropCurMenu, null);
-            }
-
             if (IsHandleCreated)
             {
                 if (!TopLevel)
                 {
-                    UpdateMenuHandles(null, true);
+                    UpdateMenuHandles(true);
                 }
                 else
                 {
-                    form = ActiveMdiChildInternal;
+                    Form form = ActiveMdiChildInternal;
                     if (form != null)
                     {
-                        UpdateMenuHandles(form.MergedMenuPrivate, true);
+                        UpdateMenuHandles(true);
                     }
                     else
                     {
-                        UpdateMenuHandles(Menu, true);
+                        UpdateMenuHandles(true);
                     }
                 }
             }
         }
 
-        private void UpdateMenuHandles(MainMenu menu, bool forceRedraw)
+        private void UpdateMenuHandles(bool forceRedraw)
         {
             Debug.Assert(IsHandleCreated, "shouldn't call when handle == 0");
 
-            int suspendCount = formStateEx[FormStateExUpdateMenuHandlesSuspendCount];
-            if (suspendCount > 0 && menu != null)
-            {
-                formStateEx[FormStateExUpdateMenuHandlesDeferred] = 1;
-                return;
-            }
-
-            MainMenu curMenu = menu;
-            if (curMenu != null)
-            {
-                curMenu._form = this;
-            }
-
-            if (curMenu != null || Properties.ContainsObject(PropCurMenu))
-            {
-                Properties.SetObject(PropCurMenu, curMenu);
-            }
-
             if (ctlClient == null || !ctlClient.IsHandleCreated)
             {
-                if (menu != null)
-                {
-                    User32.SetMenu(this, new HandleRef(menu, menu.Handle));
-                }
-                else
-                {
-                    User32.SetMenu(this, NativeMethods.NullHandleRef);
-                }
+                User32.SetMenu(this, NativeMethods.NullHandleRef);
             }
             else
             {
@@ -6059,43 +5778,13 @@ namespace System.Windows.Forms
                 // the MainMenuStrip as the place to store the system menu controls for the maximized MDI child.
 
                 MenuStrip mainMenuStrip = MainMenuStrip;
-                if (mainMenuStrip == null || menu != null)
-                {  // We are dealing with a Win32 Menu; MenuStrip doesn't have control buttons.
-
-                    // We have a MainMenu and we're going to use it
-
-                    // We need to set the "dummy" menu even when a menu is being removed
-                    // (set to null) so that duplicate control buttons are not placed on the menu bar when
-                    // an ole menu is being removed.
-                    // Make MDI forget the mdi item position.
-                    MainMenu dummyMenu = (MainMenu)Properties.GetObject(PropDummyMenu);
-
-                    if (dummyMenu == null)
-                    {
-                        dummyMenu = new MainMenu
-                        {
-                            ownerForm = this
-                        };
-                        Properties.SetObject(PropDummyMenu, dummyMenu);
-                    }
-                    UnsafeNativeMethods.SendMessage(new HandleRef(ctlClient, ctlClient.Handle), WindowMessages.WM_MDISETMENU, dummyMenu.Handle, IntPtr.Zero);
-
-                    if (menu != null)
-                    {
-
-                        // Microsoft, 5/2/1998 - don't use Win32 native Mdi lists...
-                        //
-                        UnsafeNativeMethods.SendMessage(new HandleRef(ctlClient, ctlClient.Handle), WindowMessages.WM_MDISETMENU, menu.Handle, IntPtr.Zero);
-                    }
-                }
-
                 // (New fix: Only destroy Win32 Menu if using a MenuStrip)
-                if (menu == null && mainMenuStrip != null)
-                { // If MainMenuStrip, we need to remove any Win32 Menu to make room for it.
+                if (mainMenuStrip != null)
+                {
+                    // If MainMenuStrip, we need to remove any Win32 Menu to make room for it.
                     IntPtr hMenu = User32.GetMenu(this);
                     if (hMenu != IntPtr.Zero)
                     {
-
                         // We had a MainMenu and now we're switching over to MainMenuStrip
 
                         // Remove the current menu.
@@ -6116,6 +5805,7 @@ namespace System.Windows.Forms
                     }
                 }
             }
+
             if (forceRedraw)
             {
                 SafeNativeMethods.DrawMenuBar(new HandleRef(this, Handle));
@@ -6139,7 +5829,7 @@ namespace System.Windows.Forms
         private static Type FindClosestStockType(Type type)
         {
             Type[] stockTypes = new Type[] { typeof(MenuStrip) }; // as opposed to what we had before...
-            // simply add other types here from most specific to most generic if we want to merge other types of toolstrips...
+                                                                  // simply add other types here from most specific to most generic if we want to merge other types of toolstrips...
             foreach (Type t in stockTypes)
             {
                 if (t.IsAssignableFrom(type))
@@ -6249,25 +5939,21 @@ namespace System.Windows.Forms
                     if (ActiveMdiChildInternal.ControlBox)
                     {
                         Debug.WriteLineIf(ToolStrip.MDIMergeDebug.TraceVerbose, "UpdateMdiControlStrip: Detected ControlBox on ActiveMDI child, adding in MDIControlStrip.");
-                        Debug.WriteLineIf(ToolStrip.MDIMergeDebug.TraceVerbose && Menu != null, "UpdateMdiControlStrip: Bailing as we detect there's already an HMenu to do this for us.");
 
                         // determine if we need to add control gadgets into the MenuStrip
-                        if (Menu == null)
+                        // double check GetMenu incase someone is using interop
+                        IntPtr hMenu = UnsafeNativeMethods.GetMenu(new HandleRef(this, Handle));
+                        if (hMenu == IntPtr.Zero)
                         {
-                            // double check GetMenu incase someone is using interop
-                            IntPtr hMenu = User32.GetMenu(this);
-                            if (hMenu == IntPtr.Zero)
+                            MenuStrip sourceMenuStrip = ToolStripManager.GetMainMenuStrip(this);
+                            if (sourceMenuStrip != null)
                             {
-                                MenuStrip sourceMenuStrip = ToolStripManager.GetMainMenuStrip(this);
-                                if (sourceMenuStrip != null)
-                                {
-                                    MdiControlStrip = new MdiControlStrip(ActiveMdiChildInternal);
-                                    Debug.WriteLineIf(ToolStrip.MDIMergeDebug.TraceVerbose, "UpdateMdiControlStrip: built up an MDI control strip for " + ActiveMdiChildInternal.Text + " with " + MdiControlStrip.Items.Count.ToString(CultureInfo.InvariantCulture) + " items.");
-                                    Debug.WriteLineIf(ToolStrip.MDIMergeDebug.TraceVerbose, "UpdateMdiControlStrip: merging MDI control strip into source menustrip - items before: " + sourceMenuStrip.Items.Count.ToString(CultureInfo.InvariantCulture));
-                                    ToolStripManager.Merge(MdiControlStrip, sourceMenuStrip);
-                                    Debug.WriteLineIf(ToolStrip.MDIMergeDebug.TraceVerbose, "UpdateMdiControlStrip: merging MDI control strip into source menustrip - items after: " + sourceMenuStrip.Items.Count.ToString(CultureInfo.InvariantCulture));
-                                    MdiControlStrip.MergedMenu = sourceMenuStrip;
-                                }
+                                MdiControlStrip = new MdiControlStrip(ActiveMdiChildInternal);
+                                Debug.WriteLineIf(ToolStrip.MDIMergeDebug.TraceVerbose, "UpdateMdiControlStrip: built up an MDI control strip for " + ActiveMdiChildInternal.Text + " with " + MdiControlStrip.Items.Count.ToString(CultureInfo.InvariantCulture) + " items.");
+                                Debug.WriteLineIf(ToolStrip.MDIMergeDebug.TraceVerbose, "UpdateMdiControlStrip: merging MDI control strip into source menustrip - items before: " + sourceMenuStrip.Items.Count.ToString(CultureInfo.InvariantCulture));
+                                ToolStripManager.Merge(MdiControlStrip, sourceMenuStrip);
+                                Debug.WriteLineIf(ToolStrip.MDIMergeDebug.TraceVerbose, "UpdateMdiControlStrip: merging MDI control strip into source menustrip - items after: " + sourceMenuStrip.Items.Count.ToString(CultureInfo.InvariantCulture));
+                                MdiControlStrip.MergedMenu = sourceMenuStrip;
                             }
                         }
                     }
@@ -6821,55 +6507,6 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  WM_INITMENUPOPUP handler
-        /// </summary>
-        private void WmInitMenuPopup(ref Message m)
-        {
-            MainMenu curMenu = (MainMenu)Properties.GetObject(PropCurMenu);
-            if (curMenu != null)
-            {
-
-                //curMenu.UpdateRtl((RightToLeft == RightToLeft.Yes));
-
-                if (curMenu.ProcessInitMenuPopup(m.WParam))
-                {
-                    return;
-                }
-            }
-            base.WndProc(ref m);
-        }
-
-        /// <summary>
-        ///  Handles the WM_MENUCHAR message
-        /// </summary>
-        private void WmMenuChar(ref Message m)
-        {
-            MainMenu curMenu = (MainMenu)Properties.GetObject(PropCurMenu);
-            if (curMenu == null)
-            {
-
-                Form formMdiParent = (Form)Properties.GetObject(PropFormMdiParent);
-                if (formMdiParent != null && formMdiParent.Menu != null)
-                {
-                    UnsafeNativeMethods.PostMessage(new HandleRef(formMdiParent, formMdiParent.Handle), WindowMessages.WM_SYSCOMMAND, (IntPtr)User32.SC.KEYMENU, m.WParam);
-                    m.Result = (IntPtr)NativeMethods.Util.MAKELONG(0, 1);
-                    return;
-                }
-            }
-            if (curMenu != null)
-            {
-                curMenu.WmMenuChar(ref m);
-                if (m.Result != IntPtr.Zero)
-                {
-                    // This char is a mnemonic on our menu.
-                    return;
-                }
-            }
-
-            base.WndProc(ref m);
-        }
-
-        /// <summary>
         ///  WM_MDIACTIVATE handler
         /// </summary>
         private void WmMdiActivate(ref Message m)
@@ -6916,28 +6553,6 @@ namespace System.Windows.Forms
         /// </summary>
         private void WmNCDestroy(ref Message m)
         {
-            MainMenu mainMenu = Menu;
-            MainMenu dummyMenu = (MainMenu)Properties.GetObject(PropDummyMenu);
-            MainMenu curMenu = (MainMenu)Properties.GetObject(PropCurMenu);
-            MainMenu mergedMenu = (MainMenu)Properties.GetObject(PropMergedMenu);
-
-            if (mainMenu != null)
-            {
-                mainMenu.ClearHandles();
-            }
-            if (curMenu != null)
-            {
-                curMenu.ClearHandles();
-            }
-            if (mergedMenu != null)
-            {
-                mergedMenu.ClearHandles();
-            }
-            if (dummyMenu != null)
-            {
-                dummyMenu.ClearHandles();
-            }
-
             base.WndProc(ref m);
 
             // Destroy the owner window, if we created one.  We
@@ -7082,18 +6697,6 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  WM_UNINITMENUPOPUP handler
-        /// </summary>
-        private void WmUnInitMenuPopup(ref Message m)
-        {
-            if (Menu != null)
-            {
-                //Whidbey addition - also raise the MainMenu.Collapse event for the current menu
-                Menu.OnCollapse(EventArgs.Empty);
-            }
-        }
-
-        /// <summary>
         ///  WM_WINDOWPOSCHANGED handler
         /// </summary>
         private void WmWindowPosChanged(ref Message m)
@@ -7157,15 +6760,6 @@ namespace System.Windows.Forms
                     WmEraseBkgnd(ref m);
                     break;
 
-                case WindowMessages.WM_INITMENUPOPUP:
-                    WmInitMenuPopup(ref m);
-                    break;
-                case WindowMessages.WM_UNINITMENUPOPUP:
-                    WmUnInitMenuPopup(ref m);
-                    break;
-                case WindowMessages.WM_MENUCHAR:
-                    WmMenuChar(ref m);
-                    break;
                 case WindowMessages.WM_NCDESTROY:
                     WmNCDestroy(ref m);
                     break;
@@ -7276,7 +6870,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-                ///  Removes a control from the form.
+            ///  Removes a control from the form.
             /// </summary>
             public override void Remove(Control value)
             {

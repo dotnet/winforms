@@ -121,7 +121,11 @@ namespace System.Windows.Forms
 
         internal void HideToolTip(IKeyboardToolTip currentTool)
         {
-            Hide(currentTool.GetOwnerWindow());
+            IWin32Window ownerWindow = currentTool.GetOwnerWindow();
+            if (ownerWindow != null)
+            {
+                Hide(ownerWindow);
+            }
         }
 
         /// <summary>
@@ -264,6 +268,11 @@ namespace System.Windows.Forms
                 return _window.Handle;
             }
         }
+
+        /// <summary>
+        ///  Shows if the keyboard tooltip is currently active.
+        /// </summary>
+        internal bool IsActivatedByKeyboard { get; set; }
 
         /// <summary>
         ///  Gets or sets the IsBalloon for the <see cref="ToolTip"/> control.
@@ -612,6 +621,17 @@ namespace System.Windows.Forms
             _delayTimes[(int)ComCtl32.TTDT.INITIAL] = _delayTimes[(int)ComCtl32.TTDT.AUTOMATIC];
         }
 
+        /// <summary>
+        ///  ScreenReader announces ToolTip text for an element
+        /// </summary>
+        private void AnnounceText(Control tool, string text)
+        {
+            tool?.AccessibilityObject?.RaiseAutomationNotification(
+                Automation.AutomationNotificationKind.ActionCompleted,
+                Automation.AutomationNotificationProcessing.All,
+                ToolTipTitle + " " + text);
+        }
+
         private void HandleCreated(object sender, EventArgs eventargs)
         {
             // Reset the toplevel control when the owner's handle is recreated.
@@ -637,11 +657,6 @@ namespace System.Windows.Forms
             if (associatedControl is TreeView treeView && treeView.ShowNodeToolTips)
             {
                 treeView.SetToolTip(this, GetToolTip(associatedControl));
-            }
-
-            if (associatedControl is ToolBar toolBar)
-            {
-                toolBar.SetToolTip(this);
             }
 
             if (associatedControl is TabControl tabControl && tabControl.ShowToolTips)
@@ -732,7 +747,7 @@ namespace System.Windows.Forms
                 return;
             }
 
-            IntPtr userCookie = UnsafeNativeMethods.ThemingScope.Activate();
+            IntPtr userCookie = ThemingScope.Activate();
             try
             {
 
@@ -757,7 +772,7 @@ namespace System.Windows.Forms
             }
             finally
             {
-                UnsafeNativeMethods.ThemingScope.Deactivate(userCookie);
+                ThemingScope.Deactivate(userCookie);
             }
 
             // If in OwnerDraw mode, we don't want the default border.
@@ -814,12 +829,6 @@ namespace System.Windows.Forms
             _tools.Keys.CopyTo(ctls, 0);
             for (int i = 0; i < ctls.Length; i++)
             {
-                // DataGridView manages its own tool tip.
-                if (ctls[i] is DataGridView)
-                {
-                    return;
-                }
-
                 CreateRegion(ctls[i]);
             }
         }
@@ -1528,14 +1537,18 @@ namespace System.Windows.Forms
                 pointY = optimalPoint.Y;
 
                 // Update TipInfo for the tool with optimal position
-                TipInfo tipInfo = (TipInfo)(_tools[tool] ?? _tools[tool.GetOwnerWindow()]);
-                tipInfo.Position = new Point(pointX, pointY);
+                TipInfo tipInfo = (_tools[tool] ?? _tools[tool.GetOwnerWindow()]) as TipInfo;
+                if (tipInfo != null)
+                {
+                    tipInfo.Position = new Point(pointX, pointY);
+                }
 
                 // Ensure that the tooltip bubble is moved to the optimal position even when a mouse tooltip is being replaced with a keyboard tooltip
                 Reposition(optimalPoint, bubbleSize);
             }
 
             SetTrackPosition(pointX, pointY);
+            IsActivatedByKeyboard = true;
             StartTimer(tool.GetOwnerWindow(), duration);
         }
 
@@ -1773,6 +1786,7 @@ namespace System.Windows.Forms
             // Clear off the toplevel control.
             ClearTopLevelControlEvents();
             _topLevelControl = null;
+            IsActivatedByKeyboard = false;
         }
 
         private void BaseFormDeactivate(object sender, EventArgs e)
@@ -2062,6 +2076,11 @@ namespace System.Windows.Forms
             {
                 // The dataGridView cancelled the tooltip.
                 e.Cancel = true;
+            }
+
+            if (!e.Cancel)
+            {
+                AnnounceText(toolControl, GetCaptionForTool(toolControl));
             }
 
             // We need to re-get the rectangle of the tooltip here because

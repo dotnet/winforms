@@ -16,7 +16,7 @@ internal static partial class Interop
             public int iSubItem;
             public LVIS uNewState;
             public LVIS uOldState;
-            public uint uChanged;
+            public LVIF uChanged;
             public Point ptAction;
             public IntPtr lParam;
         }

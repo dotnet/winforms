@@ -313,7 +313,7 @@ namespace System.Windows.Forms
         /// </summary>
         public static Point TranslatePoint(Point point, Control fromControl, Control toControl)
         {
-            UnsafeNativeMethods.MapWindowPoints(new HandleRef(fromControl, fromControl.Handle), new HandleRef(toControl, toControl.Handle), ref point, 1);
+            User32.MapWindowPoints(new HandleRef(fromControl, fromControl.Handle), new HandleRef(toControl, toControl.Handle), ref point, 1);
             return point;
         }
 

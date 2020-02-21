@@ -1041,14 +1041,14 @@ namespace System.Windows.Forms
                 stateMask |= ComCtl32.LVIS.STATEIMAGEMASK;
             }
 
-            lvItem.mask |= NativeMethods.LVIF_STATE;
+            lvItem.mask |= ComCtl32.LVIF.STATE;
             lvItem.iItem = index;
             lvItem.stateMask |= stateMask;
             lvItem.state |= itemState;
 
             if (listView.GroupsEnabled)
             {
-                lvItem.mask |= NativeMethods.LVIF_GROUPID;
+                lvItem.mask |= ComCtl32.LVIF.GROUPID;
                 lvItem.iGroupId = listView.GetNativeGroupId(this);
 
                 Debug.Assert(!updateOwner || listView.SendMessage((int)LVM.ISGROUPVIEWENABLED, 0, 0) != IntPtr.Zero, "Groups not enabled");
@@ -1068,7 +1068,7 @@ namespace System.Windows.Forms
                 // Get information from comctl control
                 var lvItem = new NativeMethods.LVITEM
                 {
-                    mask = NativeMethods.LVIF_PARAM | NativeMethods.LVIF_STATE | NativeMethods.LVIF_GROUPID
+                    mask = ComCtl32.LVIF.PARAM | ComCtl32.LVIF.STATE | ComCtl32.LVIF.GROUPID
                 };
 
                 if (checkSelection)

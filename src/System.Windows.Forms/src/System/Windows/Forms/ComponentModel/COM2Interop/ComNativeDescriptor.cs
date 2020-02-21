@@ -207,7 +207,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             try
             {
                 Guid g = Guid.Empty;
-                NativeMethods.tagEXCEPINFO pExcepInfo = new NativeMethods.tagEXCEPINFO();
+                var pExcepInfo = new Ole32.EXCEPINFO();
                 var dispParams = new Ole32.DISPPARAMS();
                 try
                 {
@@ -218,11 +218,11 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                         NativeMethods.DISPATCH_PROPERTYGET,
                         &dispParams,
                         retval,
-                        pExcepInfo,
+                        &pExcepInfo,
                         null);
                     if (hr == HRESULT.DISP_E_EXCEPTION)
                     {
-                        return (HRESULT)pExcepInfo.scode;
+                        return pExcepInfo.scode;
                     }
 
                     return hr;

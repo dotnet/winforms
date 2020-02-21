@@ -37,7 +37,6 @@ namespace System.Windows.Forms.Tests
             Assert.True(control.ClientSize.Width > 0);
             Assert.True(control.ClientSize.Height > 0);
             Assert.Null(control.Container);
-            Assert.Null(control.ContextMenu);
             Assert.Null(control.ContextMenuStrip);
             Assert.Empty(control.Controls);
             Assert.Same(control.Controls, control.Controls);
@@ -69,6 +68,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(ImeMode.Disable, control.ImeMode);
             Assert.Equal(ImeMode.Disable, control.ImeModeBase);
             Assert.Equal(10, control.LargeChange);
+            Assert.NotNull(control.LayoutEngine);
+            Assert.Same(control.LayoutEngine, control.LayoutEngine);
             Assert.Equal(0, control.Left);
             Assert.Equal(Point.Empty, control.Location);
             Assert.Equal(Padding.Empty, control.Margin);
@@ -87,6 +88,8 @@ namespace System.Windows.Forms.Tests
             Assert.True(control.Right > 0);
             Assert.Equal(RightToLeft.No, control.RightToLeft);
             Assert.True(control.ScaleScrollBarForDpiChange);
+            Assert.True(control.ShowFocusCues);
+            Assert.True(control.ShowKeyboardCues);
             Assert.Null(control.Site);
             Assert.True(control.Size.Width > 0);
             Assert.True(control.Size.Height > 0);
@@ -95,6 +98,7 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.TabStop);
             Assert.Empty(control.Text);
             Assert.Equal(0, control.Top);
+            Assert.Null(control.TopLevelControl);
             Assert.Equal(0, control.Value);
             Assert.True(control.Visible);
             Assert.True(control.Width > 0);
@@ -222,6 +226,10 @@ namespace System.Windows.Forms.Tests
                 get => base.ResizeRedraw;
                 set => base.ResizeRedraw = value;
             }
+
+            public new bool ShowFocusCues => base.ShowFocusCues;
+
+            public new bool ShowKeyboardCues => base.ShowKeyboardCues;
         }
     }
 }

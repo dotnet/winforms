@@ -1120,13 +1120,13 @@ namespace System.Drawing.Design
                         NativeMethods.SendDlgItemMessage(hwnd, COLOR_GREEN, EditMessages.EM_SETMARGINS, (IntPtr)(NativeMethods.EC_LEFTMARGIN | NativeMethods.EC_RIGHTMARGIN), IntPtr.Zero);
                         NativeMethods.SendDlgItemMessage(hwnd, COLOR_BLUE, EditMessages.EM_SETMARGINS, (IntPtr)(NativeMethods.EC_LEFTMARGIN | NativeMethods.EC_RIGHTMARGIN), IntPtr.Zero);
                         IntPtr hwndCtl = NativeMethods.GetDlgItem(hwnd, COLOR_MIX);
-                        NativeMethods.EnableWindow(hwndCtl, false);
+                        User32.EnableWindow(hwndCtl, BOOL.FALSE);
                         User32.SetWindowPos(
                             hwndCtl,
                             User32.HWND_TOP,
                             flags: User32.SWP.HIDEWINDOW);
                         hwndCtl = NativeMethods.GetDlgItem(hwnd, NativeMethods.IDOK);
-                        NativeMethods.EnableWindow(hwndCtl, false);
+                        User32.EnableWindow(hwndCtl, BOOL.FALSE);
                         User32.SetWindowPos(
                             hwndCtl,
                             User32.HWND_TOP,

@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Runtime.InteropServices;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -16,56 +17,56 @@ namespace System.Windows.Forms
         /// <summary>
         ///  No Information.
         /// </summary>
-        None = NativeMethods.TVHT_NOWHERE,
+        None = (int)ComCtl32.TVHT.NOWHERE,
 
         /// <summary>
         ///  On Image.
         /// </summary>
-        Image = NativeMethods.TVHT_ONITEMICON,
+        Image = (int)ComCtl32.TVHT.ONITEMICON,
 
         /// <summary>
         ///  On Label.
         /// </summary>
-        Label = NativeMethods.TVHT_ONITEMLABEL,
+        Label = (int)ComCtl32.TVHT.ONITEMLABEL,
 
         /// <summary>
         ///  Indent.
         /// </summary>
-        Indent = NativeMethods.TVHT_ONITEMINDENT,
+        Indent = (int)ComCtl32.TVHT.ONITEMINDENT,
 
         /// <summary>
         ///  AboveClientArea.
         /// </summary>
-        AboveClientArea = NativeMethods.TVHT_ABOVE,
+        AboveClientArea = (int)ComCtl32.TVHT.ABOVE,
 
         /// <summary>
         ///  BelowClientArea.
         /// </summary>
-        BelowClientArea = NativeMethods.TVHT_BELOW,
+        BelowClientArea = (int)ComCtl32.TVHT.BELOW,
 
         /// <summary>
         ///  LeftOfClientArea.
         /// </summary>
-        LeftOfClientArea = NativeMethods.TVHT_TOLEFT,
+        LeftOfClientArea = (int)ComCtl32.TVHT.TOLEFT,
 
         /// <summary>
         ///  RightOfClientArea.
         /// </summary>
-        RightOfClientArea = NativeMethods.TVHT_TORIGHT,
+        RightOfClientArea = (int)ComCtl32.TVHT.TORIGHT,
 
         /// <summary>
         ///  RightOfNode.
         /// </summary>
-        RightOfLabel = NativeMethods.TVHT_ONITEMRIGHT,
+        RightOfLabel = (int)ComCtl32.TVHT.ONITEMRIGHT,
 
         /// <summary>
         ///  StateImage.
         /// </summary>
-        StateImage = NativeMethods.TVHT_ONITEMSTATEICON,
+        StateImage = (int)ComCtl32.TVHT.ONITEMSTATEICON,
 
         /// <summary>
         ///  PlusMinus.
         /// </summary>
-        PlusMinus = NativeMethods.TVHT_ONITEMBUTTON,
+        PlusMinus = (int)ComCtl32.TVHT.ONITEMBUTTON,
     }
 }

@@ -18,7 +18,6 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(Color.Empty, treeNode.BackColor);
             Assert.Equal(Rectangle.Empty, treeNode.Bounds);
             Assert.False(treeNode.Checked);
-            Assert.Null(treeNode.ContextMenu);
             Assert.Null(treeNode.ContextMenuStrip);
             Assert.Null(treeNode.FirstNode);
             Assert.Equal(Color.Empty, treeNode.ForeColor);
@@ -59,7 +58,6 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(Color.Empty, treeNode.BackColor);
             Assert.Equal(Rectangle.Empty, treeNode.Bounds);
             Assert.False(treeNode.Checked);
-            Assert.Null(treeNode.ContextMenu);
             Assert.Null(treeNode.ContextMenuStrip);
             Assert.Null(treeNode.FirstNode);
             Assert.Equal(Color.Empty, treeNode.ForeColor);

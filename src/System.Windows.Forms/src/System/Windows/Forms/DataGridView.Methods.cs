@@ -3252,7 +3252,7 @@ namespace System.Windows.Forms
 
         internal bool CancelToolTipPopup(ToolTip toolTip)
         {
-            if (toolTipControl.ToolTip == toolTip)
+            if (toolTipControl.ToolTip == toolTip || KeyboardToolTip == toolTip)
             {
                 // Our own tool tip wants to show its text.
                 return false;
@@ -5679,8 +5679,7 @@ namespace System.Windows.Forms
         {
             const byte DATAGRIDVIEW_shadowEdgeThickness = 3;
 
-            IntPtr parentHandle = Handle;
-            IntPtr dc = UnsafeNativeMethods.GetDCEx(new HandleRef(this, parentHandle), NativeMethods.NullHandleRef, NativeMethods.DCX_CACHE | NativeMethods.DCX_LOCKWINDOWUPDATE);
+            IntPtr dc = User32.GetDCEx(this, IntPtr.Zero, User32.DCX.CACHE | User32.DCX.LOCKWINDOWUPDATE);
             IntPtr halftone = ControlPaint.CreateHalftoneHBRUSH();
             IntPtr saveBrush = Gdi32.SelectObject(dc, halftone);
 
@@ -5691,7 +5690,7 @@ namespace System.Windows.Forms
 
             Gdi32.SelectObject(dc, saveBrush);
             Gdi32.DeleteObject(halftone);
-            User32.ReleaseDC(new HandleRef(this, parentHandle), dc);
+            User32.ReleaseDC(new HandleRef(this, Handle), dc);
         }
 
         /// <summary>
@@ -5700,14 +5699,13 @@ namespace System.Windows.Forms
         /// </summary>
         private void DrawSplitBar(Rectangle r)
         {
-            IntPtr parentHandle = Handle;
-            IntPtr dc = UnsafeNativeMethods.GetDCEx(new HandleRef(this, parentHandle), NativeMethods.NullHandleRef, NativeMethods.DCX_CACHE | NativeMethods.DCX_LOCKWINDOWUPDATE);
+            IntPtr dc = User32.GetDCEx(this, IntPtr.Zero, User32.DCX.CACHE | User32.DCX.LOCKWINDOWUPDATE);
             IntPtr halftone = ControlPaint.CreateHalftoneHBRUSH();
             IntPtr saveBrush = Gdi32.SelectObject(dc, halftone);
             SafeNativeMethods.PatBlt(new HandleRef(this, dc), r.X, r.Y, r.Width, r.Height, NativeMethods.PATINVERT);
             Gdi32.SelectObject(dc, saveBrush);
             Gdi32.DeleteObject(halftone);
-            User32.ReleaseDC(new HandleRef(this, parentHandle), dc);
+            User32.ReleaseDC(new HandleRef(this, Handle), dc);
         }
 
         private void EditingControls_CommonMouseEventHandler(object sender, MouseEventArgs e, DataGridViewMouseEvent dgvme)
@@ -10848,6 +10846,8 @@ namespace System.Windows.Forms
                             dataGridViewCellNew.DataGridView = this;
                             dataGridViewCellNew.OwningRow = dataGridViewRow;
                             dataGridViewCellNew.OwningColumn = dataGridViewColumn;
+
+                            KeyboardToolTipStateMachine.Instance.Hook(dataGridViewCellNew, KeyboardToolTip);
                         }
                     }
                 }
@@ -11040,6 +11040,8 @@ namespace System.Windows.Forms
                     // Clear superfluous flag since the whole dataGridView or column is ReadOnly
                     dataGridViewCell.ReadOnlyInternal = false;
                 }
+
+                KeyboardToolTipStateMachine.Instance.Hook(dataGridViewCell, KeyboardToolTip);
                 columnIndex++;
             }
         }
@@ -14724,6 +14726,12 @@ namespace System.Windows.Forms
             {
                 eh(this, e);
             }
+
+            if (CurrentCell != null && (ShowCellToolTips || (ShowCellErrors && !string.IsNullOrEmpty(CurrentCell?.ErrorText))))
+            {
+                ActivateToolTip(false /*activate*/, String.Empty, CurrentCell.ColumnIndex, CurrentCell.RowIndex);
+                KeyboardToolTipStateMachine.Instance.NotifyAboutGotFocus(CurrentCell);
+            }
         }
 
         protected virtual void OnCurrentCellDirtyStateChanged(EventArgs e)
@@ -15359,6 +15367,11 @@ namespace System.Windows.Forms
                 // However, AccessibilityNotifyCurrentCellChanged is now a public method so we can't change its name
                 // to better reflect its purpose.
                 AccessibilityNotifyCurrentCellChanged(ptCurrentCell);
+                if (CurrentCell != null && (ShowCellToolTips || (ShowCellErrors && !string.IsNullOrEmpty(CurrentCell.ErrorText))))
+                {
+                    ActivateToolTip(false /*activate*/, String.Empty, CurrentCell.ColumnIndex, CurrentCell.RowIndex);
+                    KeyboardToolTipStateMachine.Instance.NotifyAboutGotFocus(CurrentCell);
+                }
             }
         }
 
@@ -15817,6 +15830,7 @@ namespace System.Windows.Forms
                     case Keys.Down:
                     case Keys.F2:
                     case Keys.F3:
+                    case Keys.F10:
                     case Keys.End:
                     case Keys.Enter:
                     case Keys.Escape:
@@ -15952,6 +15966,11 @@ namespace System.Windows.Forms
             if (ptCurrentCell.X != -1)
             {
                 InvalidateCell(ptCurrentCell.X, ptCurrentCell.Y);
+            }
+
+            if (CurrentCell != null)
+            {
+                KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(CurrentCell);
             }
         }
 
@@ -17182,6 +17201,7 @@ namespace System.Windows.Forms
                 DataGridViewRow dataGridViewRow = Rows.SharedRow(rowIndex);
                 if (dataGridViewRow.Cells.Count > newColumnCount)
                 {
+                    KeyboardToolTipStateMachine.Instance.Unhook(dataGridViewRow.Cells[columnIndex], KeyboardToolTip);
                     dataGridViewRow.Cells.RemoveAtInternal(columnIndex);
                 }
             }
@@ -17304,6 +17324,14 @@ namespace System.Windows.Forms
             // if force is true, the row needs to be deleted no matter what. The underlying data row was already deleted.
 
             Debug.Assert(rowIndexDeleted >= 0 && rowIndexDeleted < Rows.Count);
+
+            if (rowIndexDeleted >= 0 && rowIndexDeleted < Rows.Count)
+            {
+                foreach (DataGridViewCell cell in Rows[rowIndexDeleted].Cells)
+                {
+                    KeyboardToolTipStateMachine.Instance.Unhook(cell, KeyboardToolTip);
+                }
+            }
 
             dataGridViewState1[DATAGRIDVIEWSTATE1_temporarilyResetCurrentCell] = false;
             newCurrentCell = new Point(-1, -1);
@@ -21941,6 +21969,31 @@ namespace System.Windows.Forms
             return null;
         }
 
+        /// <summary>
+        ///  Activates keyboard tooltip.
+        /// </summary>
+        protected bool ProcessControlShiftF10Keys(Keys keyData)
+        {
+            if (CurrentCell == null || ptCurrentCell.X == -1 || ptCurrentCell.Y == -1)
+            {
+                return false;
+            }
+
+            DataGridViewCell dataGridViewCell = CurrentCell;
+
+            ActivateToolTip(false /*activate*/, String.Empty, dataGridViewCell.ColumnIndex, dataGridViewCell.RowIndex);
+            if (KeyboardToolTip.IsActivatedByKeyboard)
+            {
+                KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(dataGridViewCell);
+            }
+            else
+            {
+                KeyboardToolTipStateMachine.Instance.NotifyAboutGotFocus(dataGridViewCell);
+            }
+
+            return true;
+        }
+
         protected bool ProcessLeftKey(Keys keyData)
         {
             if (RightToLeftInternal)
@@ -24119,6 +24172,14 @@ namespace System.Windows.Forms
                 case Keys.F3:
                     {
                         return ProcessF3Key(e.KeyData);
+                    }
+                case Keys.F10:
+                    {
+                        if (e.Control && e.Shift)
+                        {
+                            return ProcessControlShiftF10Keys(e.KeyData);
+                        }
+                        break;
                     }
                 case Keys.Home:
                     {
@@ -27076,6 +27137,7 @@ namespace System.Windows.Forms
                     {
                         Debug.Assert(individualSelectedCells.Contains(dataGridViewCell));
                         individualSelectedCells.Remove(dataGridViewCell);
+                        KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(dataGridViewCell);
                     }
                     else
                     {
@@ -27152,6 +27214,7 @@ namespace System.Windows.Forms
                     if (dataGridViewCell.Selected)
                     {
                         dataGridViewCell.SelectedInternal = false;
+                        KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(dataGridViewCell);
                     }
                 }
             }
@@ -27647,6 +27710,11 @@ namespace System.Windows.Forms
             dataGridViewOper[DATAGRIDVIEWOPER_inSort] = true;
             try
             {
+                if (CurrentCell != null)
+                {
+                    KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(CurrentCell);
+                }
+
                 if (!SetCurrentCellAddressCore(-1, -1, true, true, false))
                 {
                     // Just cancel operation silently instead of throwing InvalidOperationException

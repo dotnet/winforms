@@ -4,10 +4,8 @@
 
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.ComponentModel.Design;
 using System.Drawing;
 using Moq;
-using Moq.Protected;
 using WinForms.Common.Tests;
 using Xunit;
 
@@ -42,7 +40,6 @@ namespace System.Windows.Forms.Design.Tests
             Assert.False(control.CommitOnDeactivate);
             Assert.Null(control.Component);
             Assert.Null(control.Container);
-            Assert.Null(control.ContextMenu);
             Assert.Null(control.ContextMenuStrip);
             Assert.Empty(control.Controls);
             Assert.Same(control.Controls, control.Controls);
@@ -81,6 +78,8 @@ namespace System.Windows.Forms.Design.Tests
             Assert.Same(control.Icon, control.Icon);
             Assert.Equal(ImeMode.NoControl, control.ImeMode);
             Assert.Equal(ImeMode.NoControl, control.ImeModeBase);
+            Assert.NotNull(control.LayoutEngine);
+            Assert.Same(control.LayoutEngine, control.LayoutEngine);
             Assert.Equal(0, control.Left);
             Assert.Equal(0, control.Loading);
             Assert.False(control.LoadRequired);
@@ -98,12 +97,16 @@ namespace System.Windows.Forms.Design.Tests
             Assert.False(control.ResizeRedraw);
             Assert.Equal(200, control.Right);
             Assert.Equal(RightToLeft.No, control.RightToLeft);
+            Assert.True(control.ShowFocusCues);
+            Assert.True(control.ShowKeyboardCues);
             Assert.Equal(new Size(200, 100), control.Size);
+            Assert.Null(control.Site);
             Assert.Equal(0, control.TabIndex);
             Assert.False(control.TabStop);
             Assert.Empty(control.Text);
             Assert.Empty(control.Title);
             Assert.Equal(0, control.Top);
+            Assert.Null(control.TopLevelControl);
             Assert.False(control.Visible);
             Assert.NotNull(control.VerticalScroll);
             Assert.Same(control.VerticalScroll, control.VerticalScroll);
@@ -799,6 +802,10 @@ namespace System.Windows.Forms.Design.Tests
                 get => base.ResizeRedraw;
                 set => base.ResizeRedraw = value;
             }
+
+            public new bool ShowFocusCues => base.ShowFocusCues;
+
+            public new bool ShowKeyboardCues => base.ShowKeyboardCues;
 
             public new bool HScroll
             {

@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -181,7 +181,7 @@ namespace System.Windows.Forms
         private object instance;
         private Ole32.IOleInPlaceObject iOleInPlaceObject;
         private UnsafeNativeMethods.IOleObject iOleObject;
-        private UnsafeNativeMethods.IOleControl iOleControl;
+        private Ole32.IOleControl iOleControl;
         private Ole32.IOleInPlaceActiveObject iOleInPlaceActiveObject;
         private Ole32.IOleInPlaceActiveObject iOleInPlaceActiveObjectExternal;
         private Ole32.IPerPropertyBrowsing iPerPropertyBrowsing;
@@ -415,20 +415,6 @@ namespace System.Windows.Forms
             }
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        public override ContextMenu ContextMenu
-        {
-            get
-            {
-                return base.ContextMenu;
-            }
-
-            set
-            {
-                base.ContextMenu = value;
-            }
-        }
-
         /// <summary>
         ///  Deriving classes can override this to configure a default size for their control.
         ///  This is more efficient than setting the size in the control's constructor.
@@ -658,13 +644,6 @@ namespace System.Windows.Forms
         new public event EventHandler BindingContextChanged
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "BindingContextChanged"));
-            remove { }
-        }
-
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler ContextMenuChanged
-        {
-            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "ContextMenuChanged"));
             remove { }
         }
 
@@ -1016,8 +995,7 @@ namespace System.Windows.Forms
             {
                 // if it is, call DISPID_AMBIENT_DISPLAYNAME directly on the
                 // control itself.
-                //
-                if (GetOcx() is UnsafeNativeMethods.IOleControl oleCtl)
+                if (GetOcx() is Ole32.IOleControl oleCtl)
                 {
                     oleCtl.OnAmbientPropertyChange(Ole32.DispatchID.AMBIENT_DISPLAYNAME);
                 }
@@ -1969,12 +1947,16 @@ namespace System.Windows.Forms
             {
                 try
                 {
-                    var ctlInfo = new NativeMethods.tagCONTROLINFO();
-                    HRESULT hr = GetOleControl().GetControlInfo(ctlInfo);
+                    var ctlInfo = new Ole32.CONTROLINFO
+                    {
+                        cb = (uint)Marshal.SizeOf<Ole32.CONTROLINFO>()
+                    };
+                    HRESULT hr = GetOleControl().GetControlInfo(&ctlInfo);
                     if (!hr.Succeeded())
                     {
                         return false;
                     }
+
                     var msg = new User32.MSG
                     {
                         // Sadly, we don't have a message so we must fake one ourselves...
@@ -1990,7 +1972,7 @@ namespace System.Windows.Forms
                     msg.pt = p;
                     if (Ole32.IsAccelerator(new HandleRef(ctlInfo, ctlInfo.hAccel), ctlInfo.cAccel, ref msg, null).IsTrue())
                     {
-                        GetOleControl().OnMnemonic(ref msg);
+                        GetOleControl().OnMnemonic(&msg);
                         Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "\t Processed mnemonic " + msg);
                         Focus();
                         return true;
@@ -2402,26 +2384,12 @@ namespace System.Windows.Forms
             Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "freezing " + v.ToString());
             if (v)
             {
-                try
-                {
-                    GetOleControl().FreezeEvents(-1);
-                }
-                catch (COMException t)
-                {
-                    Debug.Fail(t.ToString());
-                }
+                GetOleControl().FreezeEvents(BOOL.TRUE);
                 freezeCount++;
             }
             else
             {
-                try
-                {
-                    GetOleControl().FreezeEvents(0);
-                }
-                catch (COMException t)
-                {
-                    Debug.Fail(t.ToString());
-                }
+                GetOleControl().FreezeEvents(BOOL.FALSE);
                 freezeCount--;
             }
             Debug.Assert(freezeCount >= 0, "invalid freeze count!");
@@ -2666,16 +2634,6 @@ namespace System.Windows.Forms
             {
                 Debug.Fail(t.ToString());
             }
-            // It so happens that some controls don't get focus in this case, so
-            // we have got to force it onto them...
-            //         int hwndFocusNow = NativeMethods.GetFocus();
-            //         Windows.SetFocus(getHandle());
-            //         while (hwndFocusNow != getHandle()) {
-            //             if (hwndFocusNow == 0) {
-            //                 break;
-            //             }
-            //             hwndFocusNow = Windows.GetParent(hwndFocusNow);
-            //         }
         }
 
         //
@@ -3020,7 +2978,7 @@ namespace System.Windows.Forms
             SetOcState(OC_RUNNING);
         }
 
-        private void DepersistFromIPropertyBag(UnsafeNativeMethods.IPropertyBag propBag)
+        private void DepersistFromIPropertyBag(Ole32.IPropertyBag propBag)
         {
             iPersistPropBag.Load(propBag, null);
         }
@@ -3048,7 +3006,7 @@ namespace System.Windows.Forms
             //
             if (storage != null)
             {
-                HRESULT hr =  iPersistStorage.Load(storage);
+                HRESULT hr = iPersistStorage.Load(storage);
                 if (hr != HRESULT.S_OK)
                 {
                     Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "Error trying load depersist from IStorage: " + hr);
@@ -3691,28 +3649,27 @@ namespace System.Windows.Forms
             return (logP * hm + HMperInch / 2) / HMperInch;
         }
 
-        private bool QuickActivate()
+        private unsafe bool QuickActivate()
         {
-            if (!(instance is UnsafeNativeMethods.IQuickActivate))
+            if (!(instance is Ole32.IQuickActivate))
             {
                 return false;
             }
 
-            UnsafeNativeMethods.IQuickActivate iqa = (UnsafeNativeMethods.IQuickActivate)instance;
+            Ole32.IQuickActivate iqa = (Ole32.IQuickActivate)instance;
 
-            UnsafeNativeMethods.tagQACONTAINER qaContainer = new UnsafeNativeMethods.tagQACONTAINER();
-            UnsafeNativeMethods.tagQACONTROL qaControl = new UnsafeNativeMethods.tagQACONTROL();
+            var qaContainer = new Ole32.QACONTAINER
+            {
+                cbSize = (uint)Marshal.SizeOf<Ole32.QACONTAINER>()
+            };
+            var qaControl = new Ole32.QACONTROL
+            {
+                cbSize = (uint)Marshal.SizeOf<Ole32.QACONTROL>()
+            };
 
             qaContainer.pClientSite = oleSite;
             qaContainer.pPropertyNotifySink = oleSite;
-            //         qaContainer.pControlSite = oleSite;
-            //         qaContainer.pAdviseSink = null;
-            //         qaContainer.pUnkEventSink = null;
-            //         qaContainer.pUndoMgr = null;
-            //         qaContainer.pBindHost = null;
-            //         qaContainer.pServiveProvider = null;
-            //         qaContainer.hpal = 0;
-            qaContainer.pFont = GetIFontFromFont(GetParentContainer().parent.Font);
+            qaContainer.pFont = (Ole32.IFont)GetIFontFromFont(GetParentContainer().parent.Font);
             qaContainer.dwAppearance = 0;
             qaContainer.lcid = Application.CurrentCulture.LCID;
 
@@ -3728,32 +3685,23 @@ namespace System.Windows.Forms
                 qaContainer.colorFore = GetOleColorFromColor(SystemColors.WindowText);
                 qaContainer.colorBack = GetOleColorFromColor(SystemColors.Window);
             }
-            qaContainer.dwAmbientFlags = NativeMethods.ActiveX.QACONTAINER_AUTOCLIP | NativeMethods.ActiveX.QACONTAINER_MESSAGEREFLECT |
-                                         NativeMethods.ActiveX.QACONTAINER_SUPPORTSMNEMONICS;
+            qaContainer.dwAmbientFlags = Ole32.QACONTAINERFLAGS.AUTOCLIP | Ole32.QACONTAINERFLAGS.MESSAGEREFLECT | Ole32.QACONTAINERFLAGS.SUPPORTSMNEMONICS;
             if (IsUserMode())
             {
-                qaContainer.dwAmbientFlags |= NativeMethods.ActiveX.QACONTAINER_USERMODE;
-            }
-            else
-            {
-                // Can't set ui dead becuase MFC controls return NOWHERE on NCHITTEST which
-                // messes up the designer...
-                // But, without this the FarPoint SpreadSheet and the Office SpreadSheet
-                // controls take keyboard input at design time.
-                //qaContainer.dwAmbientFlags |= NativeMethods.ActiveX.QACONTAINER_UIDEAD;
-                // qaContainer.dwAmbientFlags |= ActiveX.QACONTAINER_SHOWHATCHING;
+                // In design mode we'd ideally set QACONTAINER_UIDEAD on dwAmbientFlags 
+                // so controls don't take keyboard input, but MFC controls return NOWHERE on
+                // NCHITTEST, which messes up the designer.
+                qaContainer.dwAmbientFlags |= Ole32.QACONTAINERFLAGS.USERMODE;
             }
 
-            try
+            HRESULT hr = iqa.QuickActivate(qaContainer, &qaControl);
+            if (!hr.Succeeded())
             {
-                iqa.QuickActivate(qaContainer, qaControl);
-            }
-            catch (Exception t)
-            {
-                Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "Failed to QuickActivate: " + t.ToString());
+                Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "Failed to QuickActivate: " + hr.ToString());
                 DisposeAxControl();
                 return false;
             }
+
             _miscStatusBits = qaControl.dwMiscStatus;
             ParseMiscBits(_miscStatusBits);
             return true;
@@ -3940,7 +3888,7 @@ namespace System.Windows.Forms
             return container;
         }
 
-        private UnsafeNativeMethods.IOleControl GetOleControl() => iOleControl ??= (UnsafeNativeMethods.IOleControl)instance;
+        private Ole32.IOleControl GetOleControl() => iOleControl ??= (Ole32.IOleControl)instance;
 
         private Ole32.IOleInPlaceActiveObject GetInPlaceActiveObject()
         {

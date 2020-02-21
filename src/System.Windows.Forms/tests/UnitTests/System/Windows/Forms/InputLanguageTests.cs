@@ -5,6 +5,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
 using Xunit;
 
 namespace System.Windows.Forms.Tests
@@ -60,6 +61,13 @@ namespace System.Windows.Forms.Tests
             }
         }
 
+        [Fact]
+        public void InputLanguage_CurrentInputLanguage_SetInvalidValue_ThrowsArgumentException()
+        {
+            InputLanguage language = Assert.IsType<InputLanguage>(Activator.CreateInstance(typeof(InputLanguage), BindingFlags.Instance | BindingFlags.NonPublic, null, new object[] { (IntPtr)250 }, null));
+            Assert.Throws<ArgumentException>("value", () => InputLanguage.CurrentInputLanguage = language);
+        }
+
         public static IEnumerable<object[]> Equals_TestData()
         {
             yield return new object[] { InputLanguage.DefaultInputLanguage, InputLanguage.DefaultInputLanguage, true };
@@ -95,6 +103,13 @@ namespace System.Windows.Forms.Tests
         public void InputLanguage_FromCulture_NullCulture_ThrowsArgumentNullException()
         {
             Assert.Throws<ArgumentNullException>("culture", () => InputLanguage.FromCulture(null));
+        }
+
+        [Fact]
+        public void InputLanguage_GetHashCode_Invoke_RemainsSameAcrossCalls()
+        {
+            InputLanguage language = InputLanguage.CurrentInputLanguage;
+            Assert.Equal(language.GetHashCode(), language.GetHashCode());
         }
 
         private static void VerifyInputLanguage(InputLanguage language)

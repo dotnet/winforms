@@ -224,7 +224,7 @@ namespace System.Windows.Forms
                 return HRESULT.E_POINTER;
             }
 
-            *phwnd = UnsafeNativeMethods.GetParent(new HandleRef(Host, Host.Handle));
+            *phwnd = User32.GetParent(Host);
             return HRESULT.S_OK;
         }
 

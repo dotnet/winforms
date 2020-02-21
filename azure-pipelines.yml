@@ -27,6 +27,7 @@ trigger:
 pr:
 - master
 - release/*
+- internal/release/*
 
 # Call the ci.yml template, which does the real work
 stages:
