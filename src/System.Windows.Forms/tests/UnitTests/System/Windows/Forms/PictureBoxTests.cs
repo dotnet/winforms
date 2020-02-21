@@ -2641,12 +2641,14 @@ namespace System.Windows.Forms.Tests
             control.OnResize(eventArgs);
             Assert.Equal(1, callCount);
             Assert.Equal(1, layoutCallCount);
+            Assert.False(control.IsHandleCreated);
 
             // Remove handler.
             control.Resize -= handler;
             control.OnResize(eventArgs);
             Assert.Equal(1, callCount);
             Assert.Equal(2, layoutCallCount);
+            Assert.False(control.IsHandleCreated);
         }
 
         public static IEnumerable<object[]> OnResize_WithHandle_TestData()
@@ -2726,6 +2728,14 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(EventArgs.Empty, e);
                 callCount++;
             };
+            int layoutCallCount = 0;
+            control.Layout += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(control, e.AffectedControl);
+                Assert.Equal("Bounds", e.AffectedProperty);
+                layoutCallCount++;
+            };
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             int invalidatedCallCount = 0;
             control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -2738,6 +2748,7 @@ namespace System.Windows.Forms.Tests
             control.Resize += handler;
             control.OnResize(EventArgs.Empty);
             Assert.Equal(1, callCount);
+            Assert.Equal(1, layoutCallCount);
             Assert.True(control.IsHandleCreated);
             Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
@@ -2747,6 +2758,7 @@ namespace System.Windows.Forms.Tests
             control.Resize -= handler;
             control.OnResize(EventArgs.Empty);
             Assert.Equal(1, callCount);
+            Assert.Equal(2, layoutCallCount);
             Assert.True(control.IsHandleCreated);
             Assert.Equal(expectedInvalidatedCallCount * 2, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
