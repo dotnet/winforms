@@ -5544,8 +5544,8 @@ namespace System.Windows.Forms
                 pt = (POINT)pos
             };
 
-            int displayIndex = (int)User32.SendMessageW(this, (User32.WM)LVM.HITTEST, IntPtr.Zero, ref lvhi);
-            if (displayIndex == -1 || (lvhi.flags & LVHT.ONITEMSTATEICON) == 0)
+            int displayIndex = (int)User32.SendMessageW(this, (User32.WM)LVM.SUBITEMHITTEST, IntPtr.Zero, ref lvhi);
+            if (displayIndex == -1 || lvhi.iSubItem != 0 || (lvhi.flags & LVHT.ONITEMSTATEICON) == 0)
             {
                 return;
             }
