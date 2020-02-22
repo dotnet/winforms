@@ -117,16 +117,6 @@ namespace System.Windows.Forms
         HLP_OBJECT = 4;
 
         public const int
-        TV_FIRST = 0x1100,
-        TTS_ALWAYSTIP = 0x01,
-        TTS_NOPREFIX = 0x02,
-        TTS_NOANIMATE = 0x10,
-        TTS_NOFADE = 0x20,
-        TTS_BALLOON = 0x40,
-        //TTI_NONE                =0,
-        //TTI_INFO                =1,
-        TTI_WARNING = 2,
-        //TTI_ERROR               =3,
         TB_LINEUP = 0,
         TB_LINEDOWN = 1,
         TB_PAGEUP = 2,

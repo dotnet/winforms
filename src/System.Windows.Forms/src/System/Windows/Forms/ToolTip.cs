@@ -209,23 +209,23 @@ namespace System.Windows.Forms
                 cp.ClassName = WindowClasses.TOOLTIPS_CLASS;
                 if (_showAlways)
                 {
-                    cp.Style = NativeMethods.TTS_ALWAYSTIP;
+                    cp.Style = (int)TTS.ALWAYSTIP;
                 }
                 if (_isBalloon)
                 {
-                    cp.Style |= NativeMethods.TTS_BALLOON;
+                    cp.Style |= (int)TTS.BALLOON;
                 }
                 if (!_stripAmpersands)
                 {
-                    cp.Style |= NativeMethods.TTS_NOPREFIX;
+                    cp.Style |= (int)TTS.NOPREFIX;
                 }
                 if (!_useAnimation)
                 {
-                    cp.Style |= NativeMethods.TTS_NOANIMATE;
+                    cp.Style |= (int)TTS.NOANIMATE;
                 }
                 if (!_useFading)
                 {
-                    cp.Style |= NativeMethods.TTS_NOFADE;
+                    cp.Style |= (int)TTS.NOFADE;
                 }
                 cp.ExStyle = 0;
                 cp.Caption = null;

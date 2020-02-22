@@ -101,7 +101,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     Parent = IntPtr.Zero,
                     ClassName = ComCtl32.WindowClasses.TOOLTIPS_CLASS
                 };
-                cp.Style |= (NativeMethods.TTS_ALWAYSTIP | NativeMethods.TTS_NOPREFIX);
+                cp.Style |= (int)(ComCtl32.TTS.ALWAYSTIP | ComCtl32.TTS.NOPREFIX);
                 cp.ExStyle = 0;
                 cp.Caption = ToolTip;
                 return cp;
