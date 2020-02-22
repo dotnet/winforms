@@ -66,12 +66,11 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             // typeinfo from the IDispatch. In the case of many OleAut32 operations, the CoClass
             // doesn't have the interface members on it, although in the shell it usually does, so
             // we need to re-order the lookup if we *actually* want the CoClass if it's available.
-
             for (int i = 0; pTypeInfo == null && i < 2; i++)
             {
                 if (wantCoClass == (i == 0))
                 {
-                    if (obj is NativeMethods.IProvideClassInfo pProvideClassInfo)
+                    if (obj is Oleaut32.IProvideClassInfo pProvideClassInfo)
                     {
                         pProvideClassInfo.GetClassInfo(out pTypeInfo);
                     }
