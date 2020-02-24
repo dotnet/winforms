@@ -608,15 +608,6 @@ namespace System.Windows.Forms
                                 IntPtr piidSource);
         }
 
-        [ComImport]
-        [Guid("B196B283-BAB4-101A-B69C-00AA00341D07")]
-        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IProvideClassInfo
-        {
-            [PreserveSig]
-            HRESULT GetClassInfo(out Oleaut32.ITypeInfo ppTI);
-        }
-
         /// <summary>
         ///  This method takes a file URL and converts it to a local path.  The trick here is that
         ///  if there is a '#' in the path, everything after this is treated as a fragment.  So
