@@ -2501,7 +2501,10 @@ namespace System.Windows.Forms
         /// </summary>
         public void LoadFile(Stream data, RichTextBoxStreamType fileType)
         {
-            //valid values are 0x0 to 0x4
+            if (data == null)
+            {
+                throw new ArgumentNullException(nameof(data));
+            }
             if (!ClientUtils.IsEnumValid(fileType, (int)fileType, (int)RichTextBoxStreamType.RichText, (int)RichTextBoxStreamType.UnicodePlainText))
             {
                 throw new InvalidEnumArgumentException(nameof(fileType), (int)fileType, typeof(RichTextBoxStreamType));
@@ -3161,7 +3164,6 @@ namespace System.Windows.Forms
         private void StreamOut(Stream data, int flags, bool includeCrLfs)
         {
             // set up the EDITSTREAM structure for the callback.
-            Debug.Assert(data != null, "StreamOut passed a null stream");
             editStream = data;
 
             try
