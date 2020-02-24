@@ -130,9 +130,6 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.User32, ExactSpelling = true)]
         public static extern IntPtr GetWindowDC(HandleRef hWnd);
 
-        [DllImport(ExternDll.Gdi32, SetLastError = true, CharSet = CharSet.Unicode)]
-        public static extern IntPtr CreateIC(string lpszDriverName, string lpszDeviceName, string lpszOutput, HandleRef /*DEVMODE*/ lpInitData);
-
         //for RegionData
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern int GetRegionData(HandleRef hRgn, int size, IntPtr lpRgnData);

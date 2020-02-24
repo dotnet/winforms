@@ -848,7 +848,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void RichTextBox_RightMargin_GetWithHandle_ReturnsExpecte()
+        public void RichTextBox_RightMargin_GetWithHandle_ReturnsExpected()
         {
             using var control = new RichTextBox();
             Assert.NotEqual(IntPtr.Zero, control.Handle);
