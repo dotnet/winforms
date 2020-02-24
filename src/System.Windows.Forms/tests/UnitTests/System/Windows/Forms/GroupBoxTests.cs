@@ -243,19 +243,22 @@ namespace System.Windows.Forms.Tests
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(AutoSizeMode))]
         public void GroupBox_AutoSizeMode_Set_GetReturnsExpected(AutoSizeMode value)
         {
-            using var control = new SubGroupBox
-            {
-                AutoSizeMode = value
-            };
+            using var control = new SubGroupBox();
+            int layoutCallCount = 0;
+            control.Layout += (sender, e) => layoutCallCount++;
+
+            control.AutoSizeMode = value;
             Assert.Equal(value, control.AutoSizeMode);
             Assert.Equal(value, control.GetAutoSizeMode());
             Assert.False(control.IsHandleCreated);
+            Assert.Equal(0, layoutCallCount);
 
             // Set same.
             control.AutoSizeMode = value;
             Assert.Equal(value, control.AutoSizeMode);
             Assert.Equal(value, control.GetAutoSizeMode());
             Assert.False(control.IsHandleCreated);
+            Assert.Equal(0, layoutCallCount);
         }
 
         [WinFormsTheory]

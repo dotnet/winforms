@@ -232,19 +232,22 @@ namespace System.Windows.Forms.Tests
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(AutoSizeMode))]
         public void Panel_AutoSizeMode_Set_GetReturnsExpected(AutoSizeMode value)
         {
-            using var control = new SubPanel
-            {
-                AutoSizeMode = value
-            };
+            using var control = new SubPanel();
+            int layoutCallCount = 0;
+            control.Layout += (sender, e) => layoutCallCount++;
+
+            control.AutoSizeMode = value;
             Assert.Equal(value, control.AutoSizeMode);
             Assert.Equal(value, control.GetAutoSizeMode());
             Assert.False(control.IsHandleCreated);
+            Assert.Equal(0, layoutCallCount);
 
             // Set same.
             control.AutoSizeMode = value;
             Assert.Equal(value, control.AutoSizeMode);
             Assert.Equal(value, control.GetAutoSizeMode());
             Assert.False(control.IsHandleCreated);
+            Assert.Equal(0, layoutCallCount);
         }
 
         [WinFormsTheory]
@@ -972,12 +975,14 @@ namespace System.Windows.Forms.Tests
             control.OnResize(eventArgs);
             Assert.Equal(1, callCount);
             Assert.Equal(1, layoutCallCount);
+            Assert.False(control.IsHandleCreated);
 
             // Remove handler.
             control.Resize -= handler;
             control.OnResize(eventArgs);
             Assert.Equal(1, callCount);
             Assert.Equal(2, layoutCallCount);
+            Assert.False(control.IsHandleCreated);
         }
 
         public static IEnumerable<object[]> OnResize_WithHandle_TestData()
@@ -1083,6 +1088,14 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
+            int layoutCallCount = 0;
+            control.Layout += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(control, e.AffectedControl);
+                Assert.Equal("Bounds", e.AffectedProperty);
+                layoutCallCount++;
+            };
             int invalidatedCallCount = 0;
             control.Invalidated += (sender, e) => invalidatedCallCount++;
             int styleChangedCallCount = 0;
@@ -1094,6 +1107,7 @@ namespace System.Windows.Forms.Tests
             control.Resize += handler;
             control.OnResize(eventArgs);
             Assert.Equal(1, callCount);
+            Assert.Equal(1, layoutCallCount);
             Assert.True(control.IsHandleCreated);
             Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
@@ -1103,6 +1117,7 @@ namespace System.Windows.Forms.Tests
             control.Resize -= handler;
             control.OnResize(eventArgs);
             Assert.Equal(1, callCount);
+            Assert.Equal(2, layoutCallCount);
             Assert.True(control.IsHandleCreated);
             Assert.Equal(expectedInvalidatedCallCount * 2, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);

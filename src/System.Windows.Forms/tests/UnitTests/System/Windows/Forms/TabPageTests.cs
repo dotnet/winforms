@@ -383,19 +383,22 @@ namespace System.Windows.Forms.Tests
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(AutoSizeMode))]
         public void TabPage_AutoSizeMode_Set_GetReturnsExpected(AutoSizeMode value)
         {
-            using var control = new SubTabPage
-            {
-                AutoSizeMode = value
-            };
+            using var control = new SubTabPage();
+            int layoutCallCount = 0;
+            control.Layout += (sender, e) => layoutCallCount++;
+
+            control.AutoSizeMode = value;
             Assert.Equal(AutoSizeMode.GrowOnly, control.AutoSizeMode);
             Assert.Equal(AutoSizeMode.GrowOnly, control.GetAutoSizeMode());
             Assert.False(control.IsHandleCreated);
+            Assert.Equal(0, layoutCallCount);
 
             // Set same.
             control.AutoSizeMode = value;
             Assert.Equal(AutoSizeMode.GrowOnly, control.AutoSizeMode);
             Assert.Equal(AutoSizeMode.GrowOnly, control.GetAutoSizeMode());
             Assert.False(control.IsHandleCreated);
+            Assert.Equal(0, layoutCallCount);
         }
 
         [WinFormsTheory]
