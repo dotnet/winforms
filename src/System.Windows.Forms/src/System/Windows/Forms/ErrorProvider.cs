@@ -930,7 +930,7 @@ namespace System.Windows.Forms
                     {
                         Parent = Handle,
                         ClassName = ComCtl32.WindowClasses.TOOLTIPS_CLASS,
-                        Style = NativeMethods.TTS_ALWAYSTIP
+                        Style = (int)ComCtl32.TTS.ALWAYSTIP
                     };
                     _tipWindow = new NativeWindow();
                     _tipWindow.CreateHandle(cparams);
