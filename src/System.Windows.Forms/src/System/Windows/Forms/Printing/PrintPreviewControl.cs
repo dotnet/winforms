@@ -213,10 +213,7 @@ namespace System.Windows.Forms
         ]
         public override RightToLeft RightToLeft
         {
-            get
-            {
-                return base.RightToLeft;
-            }
+            get => base.RightToLeft;
             set
             {
                 base.RightToLeft = value;
@@ -231,14 +228,8 @@ namespace System.Windows.Forms
         ]
         public override string Text
         {
-            get
-            {
-                return base.Text;
-            }
-            set
-            {
-                base.Text = value;
-            }
+            get => base.Text;
+            set => base.Text = value;
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]

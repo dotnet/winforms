@@ -98,8 +98,8 @@ namespace System.Windows.Forms
         ]
         public override bool AllowDrop
         {
-            get { return base.AllowDrop; }
-            set { base.AllowDrop = value; }
+            get => base.AllowDrop;
+            set => base.AllowDrop = value;
         }
 
         [
@@ -108,8 +108,8 @@ namespace System.Windows.Forms
         ]
         public override bool AutoScroll
         {
-            get { return base.AutoScroll; }
-            set { base.AutoScroll = value; }
+            get => base.AutoScroll;
+            set => base.AutoScroll = value;
         }
 
         [
@@ -118,8 +118,8 @@ namespace System.Windows.Forms
         ]
         public new Size AutoScrollMargin
         {
-            get { return base.AutoScrollMargin; }
-            set { base.AutoScrollMargin = value; }
+            get => base.AutoScrollMargin;
+            set => base.AutoScrollMargin = value;
         }
 
         [
@@ -128,8 +128,8 @@ namespace System.Windows.Forms
         ]
         public new Size AutoScrollMinSize
         {
-            get { return base.AutoScrollMinSize; }
-            set { base.AutoScrollMinSize = value; }
+            get => base.AutoScrollMinSize;
+            set => base.AutoScrollMinSize = value;
         }
 
         [
@@ -138,14 +138,8 @@ namespace System.Windows.Forms
         ]
         public override bool AutoSize
         {
-            get
-            {
-                return base.AutoSize;
-            }
-            set
-            {
-                base.AutoSize = value;
-            }
+            get => base.AutoSize;
+            set => base.AutoSize = value;
         }
 
         ///  Override base AutoSizeChanged to we can change visibility/browsability attributes
@@ -180,10 +174,7 @@ namespace System.Windows.Forms
 
         public override DockStyle Dock
         {
-            get
-            {
-                return base.Dock;
-            }
+            get => base.Dock;
             set
             {
                 base.Dock = value;
@@ -357,14 +348,8 @@ namespace System.Windows.Forms
         ]
         public new int TabIndex
         {
-            get
-            {
-                return base.TabIndex;
-            }
-            set
-            {
-                base.TabIndex = value;
-            }
+            get => base.TabIndex;
+            set => base.TabIndex = value;
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -381,10 +366,7 @@ namespace System.Windows.Forms
         ]
         public new bool TabStop
         {
-            get
-            {
-                return base.TabStop;
-            }
+            get => base.TabStop;
             set
             {
                 SetStyle(ControlStyles.Selectable, value);
@@ -407,14 +389,8 @@ namespace System.Windows.Forms
         ]
         public override string Text
         {
-            get
-            {
-                return base.Text;
-            }
-            set
-            {
-                base.Text = value;
-            }
+            get => base.Text;
+            set => base.Text = value;
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]

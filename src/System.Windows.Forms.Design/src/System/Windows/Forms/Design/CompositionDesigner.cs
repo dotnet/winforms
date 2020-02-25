@@ -27,7 +27,6 @@ namespace System.Windows.Forms.Design
         public bool TrayAutoArrange
         {
             get => throw new NotImplementedException(SR.NotImplementedByDesign);
-
             set => throw new NotImplementedException(SR.NotImplementedByDesign);
         }
 
@@ -37,7 +36,6 @@ namespace System.Windows.Forms.Design
         public bool TrayLargeIcon
         {
             get => throw new NotImplementedException(SR.NotImplementedByDesign);
-
             set => throw new NotImplementedException(SR.NotImplementedByDesign);
         }
 

@@ -244,10 +244,7 @@ namespace System.Windows.Forms
         ]
         public override bool AutoSize
         {
-            get
-            {
-                return base.AutoSize;
-            }
+            get => base.AutoSize;
             set
             {
                 if (IsInToolStripPanel && base.AutoSize && !value)
@@ -278,10 +275,7 @@ namespace System.Windows.Forms
         ]
         public override bool AutoScroll
         {
-            get
-            {
-                return base.AutoScroll;
-            }
+            get => base.AutoScroll;
             set
             {
                 throw new NotSupportedException(SR.ToolStripDoesntSupportAutoScroll);
@@ -295,14 +289,8 @@ namespace System.Windows.Forms
         ]
         public new Size AutoScrollMargin
         {
-            get
-            {
-                return base.AutoScrollMargin;
-            }
-            set
-            {
-                base.AutoScrollMargin = value;
-            }
+            get => base.AutoScrollMargin;
+            set => base.AutoScrollMargin = value;
         }
 
         [
@@ -312,14 +300,8 @@ namespace System.Windows.Forms
         ]
         public new Size AutoScrollMinSize
         {
-            get
-            {
-                return base.AutoScrollMinSize;
-            }
-            set
-            {
-                base.AutoScrollMinSize = value;
-            }
+            get => base.AutoScrollMinSize;
+            set => base.AutoScrollMinSize = value;
         }
 
         [
@@ -329,22 +311,13 @@ namespace System.Windows.Forms
         ]
         public new Point AutoScrollPosition
         {
-            get
-            {
-                return base.AutoScrollPosition;
-            }
-            set
-            {
-                base.AutoScrollPosition = value;
-            }
+            get => base.AutoScrollPosition;
+            set => base.AutoScrollPosition = value;
         }
 
         public override bool AllowDrop
         {
-            get
-            {
-                return base.AllowDrop;
-            }
+            get => base.AllowDrop;
             set
             {
                 if (value && AllowItemReorder)
@@ -425,10 +398,7 @@ namespace System.Windows.Forms
 
         public override AnchorStyles Anchor
         {
-            get
-            {
-                return base.Anchor;
-            }
+            get => base.Anchor;
             set
             {
                 // the base calls SetDock, which causes an OnDockChanged to be called
@@ -449,14 +419,8 @@ namespace System.Windows.Forms
         ]
         public new Color BackColor
         {
-            get
-            {
-                return base.BackColor;
-            }
-            set
-            {
-                base.BackColor = value;
-            }
+            get => base.BackColor;
+            set => base.BackColor = value;
         }
 
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ToolStripOnBeginDrag))]
@@ -555,10 +519,7 @@ namespace System.Windows.Forms
                 // their controls.
                 return base.CausesValidation;
             }
-            set
-            {
-                base.CausesValidation = value;
-            }
+            set => base.CausesValidation = value;
         }
 
         [Browsable(false)]
@@ -572,7 +533,7 @@ namespace System.Windows.Forms
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public new ControlCollection Controls
         {
-            get { return base.Controls; }
+            get => base.Controls;
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -585,8 +546,8 @@ namespace System.Windows.Forms
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override Cursor Cursor
         {
-            get { return base.Cursor; }
-            set { base.Cursor = value; }
+            get => base.Cursor;
+            set => base.Cursor = value;
         }
 
         /// <summary>
@@ -630,10 +591,7 @@ namespace System.Windows.Forms
                 }
                 return defaultFont;
             }
-            set
-            {
-                base.Font = value;
-            }
+            set => base.Font = value;
         }
 
         /// <summary>
@@ -769,10 +727,7 @@ namespace System.Windows.Forms
         [DefaultValue(DockStyle.Top)]
         public override DockStyle Dock
         {
-            get
-            {
-                return base.Dock;
-            }
+            get => base.Dock;
             set
             {
                 if (value != Dock)
@@ -892,14 +847,8 @@ namespace System.Windows.Forms
         [Browsable(false)]
         public new Color ForeColor
         {
-            get
-            {
-                return base.ForeColor;
-            }
-            set
-            {
-                base.ForeColor = value;
-            }
+            get => base.ForeColor;
+            set => base.ForeColor = value;
         }
 
         /// <summary>
@@ -1019,10 +968,7 @@ namespace System.Windows.Forms
         ]
         public new bool HasChildren
         {
-            get
-            {
-                return base.HasChildren;
-            }
+            get => base.HasChildren;
         }
 
         internal bool HasVisibleItems
@@ -1060,10 +1006,7 @@ namespace System.Windows.Forms
         ]
         new public HScrollProperties HorizontalScroll
         {
-            get
-            {
-                return base.HorizontalScroll;
-            }
+            get => base.HorizontalScroll;
         }
 
         [
@@ -1983,10 +1926,7 @@ namespace System.Windows.Forms
         ]
         new public VScrollProperties VerticalScroll
         {
-            get
-            {
-                return base.VerticalScroll;
-            }
+            get => base.VerticalScroll;
         }
 
         void ISupportToolStripPanel.BeginDrag()

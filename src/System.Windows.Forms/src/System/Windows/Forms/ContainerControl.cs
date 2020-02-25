@@ -286,7 +286,7 @@ namespace System.Windows.Forms
         public Control ActiveControl
         {
             get => _activeControl;
-            set=> SetActiveControl(value);
+            set => SetActiveControl(value);
         }
 
         protected override CreateParams CreateParams

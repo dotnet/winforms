@@ -147,10 +147,7 @@ namespace System.Windows.Forms
                     return SystemColors.Window;
                 }
             }
-            set
-            {
-                base.BackColor = value;
-            }
+            set => base.BackColor = value;
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -163,14 +160,8 @@ namespace System.Windows.Forms
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Image BackgroundImage
         {
-            get
-            {
-                return base.BackgroundImage;
-            }
-            set
-            {
-                base.BackgroundImage = value;
-            }
+            get => base.BackgroundImage;
+            set => base.BackgroundImage = value;
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -183,14 +174,8 @@ namespace System.Windows.Forms
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override ImageLayout BackgroundImageLayout
         {
-            get
-            {
-                return base.BackgroundImageLayout;
-            }
-            set
-            {
-                base.BackgroundImageLayout = value;
-            }
+            get => base.BackgroundImageLayout;
+            set => base.BackgroundImageLayout = value;
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -549,14 +534,8 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Never)]
         protected override bool DoubleBuffered
         {
-            get
-            {
-                return base.DoubleBuffered;
-            }
-            set
-            {
-                base.DoubleBuffered = value;
-            }
+            get => base.DoubleBuffered;
+            set => base.DoubleBuffered = value;
         }
 
         [
@@ -614,10 +593,7 @@ namespace System.Windows.Forms
                     return SystemColors.WindowText;
                 }
             }
-            set
-            {
-                base.ForeColor = value;
-            }
+            set => base.ForeColor = value;
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -850,8 +826,8 @@ namespace System.Windows.Forms
         ]
         public new Padding Padding
         {
-            get { return base.Padding; }
-            set { base.Padding = value; }
+            get => base.Padding;
+            set => base.Padding = value;
         }
 
         [
@@ -975,10 +951,7 @@ namespace System.Windows.Forms
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override string Text
         {
-            get
-            {
-                return base.Text;
-            }
+            get => base.Text;
             set
             {
                 // Clause to check length

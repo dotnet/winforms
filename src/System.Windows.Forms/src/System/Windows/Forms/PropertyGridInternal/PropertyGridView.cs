@@ -194,10 +194,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         public override Color BackColor
         {
-            get
-            {
-                return base.BackColor;
-            }
+            get => base.BackColor;
             set
             {
                 backgroundBrush = new SolidBrush(value);
@@ -7096,11 +7093,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                     return base.Name;
                 }
-
-                set
-                {
-                    base.Name = value;
-                }
+                set => base.Name = value;
             }
 
             /// <summary>
@@ -7347,10 +7340,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             public override string Text
             {
-                get
-                {
-                    return base.Text;
-                }
+                get => base.Text;
                 set
                 {
                     fInSetText = true;
@@ -7863,11 +7853,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                         return base.Name;
                     }
-
-                    set
-                    {
-                        base.Name = value;
-                    }
+                    set => base.Name = value;
                 }
 
                 internal override int[] RuntimeId

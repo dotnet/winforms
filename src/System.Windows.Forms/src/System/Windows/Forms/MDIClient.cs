@@ -62,11 +62,7 @@ namespace System.Windows.Forms
 
                 return result;
             }
-
-            set
-            {
-                base.BackgroundImage = value;
-            }
+            set => base.BackgroundImage = value;
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -86,10 +82,7 @@ namespace System.Windows.Forms
                 }
                 return base.BackgroundImageLayout;
             }
-            set
-            {
-                base.BackgroundImageLayout = value;
-            }
+            set => base.BackgroundImageLayout = value;
         }
 
         /// <summary>

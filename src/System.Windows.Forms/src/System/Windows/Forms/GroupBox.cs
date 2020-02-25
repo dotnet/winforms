@@ -57,14 +57,8 @@ namespace System.Windows.Forms
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public override bool AllowDrop
         {
-            get
-            {
-                return base.AllowDrop;
-            }
-            set
-            {
-                base.AllowDrop = value;
-            }
+            get => base.AllowDrop;
+            set => base.AllowDrop = value;
         }
 
         /// <summary>
@@ -74,14 +68,8 @@ namespace System.Windows.Forms
         DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
         public override bool AutoSize
         {
-            get
-            {
-                return base.AutoSize;
-            }
-            set
-            {
-                base.AutoSize = value;
-            }
+            get => base.AutoSize;
+            set => base.AutoSize = value;
         }
 
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnAutoSizeChangedDescr))]
@@ -274,14 +262,8 @@ namespace System.Windows.Forms
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         new public bool TabStop
         {
-            get
-            {
-                return base.TabStop;
-            }
-            set
-            {
-                base.TabStop = value;
-            }
+            get => base.TabStop;
+            set => base.TabStop = value;
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -296,10 +278,7 @@ namespace System.Windows.Forms
         ]
         public override string Text
         {
-            get
-            {
-                return base.Text;
-            }
+            get => base.Text;
             set
             {
                 // the GroupBox controls immediately draws when teh WM_SETTEXT comes through, but
@@ -335,14 +314,8 @@ namespace System.Windows.Forms
         ]
         public bool UseCompatibleTextRendering
         {
-            get
-            {
-                return base.UseCompatibleTextRenderingInt;
-            }
-            set
-            {
-                base.UseCompatibleTextRenderingInt = value;
-            }
+            get => base.UseCompatibleTextRenderingInt;
+            set => base.UseCompatibleTextRenderingInt = value;
         }
 
         /// <summary>

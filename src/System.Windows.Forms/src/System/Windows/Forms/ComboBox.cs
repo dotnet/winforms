@@ -305,36 +305,21 @@ namespace System.Windows.Forms
                     return SystemColors.Window;
                 }
             }
-            set
-            {
-                base.BackColor = value;
-            }
+            set => base.BackColor = value;
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Image BackgroundImage
         {
-            get
-            {
-                return base.BackgroundImage;
-            }
-            set
-            {
-                base.BackgroundImage = value;
-            }
+            get => base.BackgroundImage;
+            set => base.BackgroundImage = value;
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override ImageLayout BackgroundImageLayout
         {
-            get
-            {
-                return base.BackgroundImageLayout;
-            }
-            set
-            {
-                base.BackgroundImageLayout = value;
-            }
+            get => base.BackgroundImageLayout;
+            set => base.BackgroundImageLayout = value;
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -465,14 +450,8 @@ namespace System.Windows.Forms
         ]
         public new object DataSource
         {
-            get
-            {
-                return base.DataSource;
-            }
-            set
-            {
-                base.DataSource = value;
-            }
+            get => base.DataSource;
+            set => base.DataSource = value;
         }
 
         /// <summary>
@@ -685,10 +664,7 @@ namespace System.Windows.Forms
                     return SystemColors.WindowText;
                 }
             }
-            set
-            {
-                base.ForeColor = value;
-            }
+            set => base.ForeColor = value;
         }
 
         /// <summary>
@@ -852,20 +828,14 @@ namespace System.Windows.Forms
 
         public override Size MaximumSize
         {
-            get { return base.MaximumSize; }
-            set
-            {
-                base.MaximumSize = new Size(value.Width, 0);
-            }
+            get => base.MaximumSize;
+            set => base.MaximumSize = new Size(value.Width, 0);
         }
 
         public override Size MinimumSize
         {
-            get { return base.MinimumSize; }
-            set
-            {
-                base.MinimumSize = new Size(value.Width, 0);
-            }
+            get => base.MinimumSize;
+            set => base.MinimumSize = new Size(value.Width, 0);
         }
 
         /// <summary>
@@ -932,8 +902,8 @@ namespace System.Windows.Forms
         ]
         public new Padding Padding
         {
-            get { return base.Padding; }
-            set { base.Padding = value; }
+            get => base.Padding;
+            set => base.Padding = value;
         }
 
         [
@@ -4811,11 +4781,7 @@ namespace System.Windows.Forms
 
                     return base.Name;
                 }
-
-                set
-                {
-                    base.Name = value;
-                }
+                set => base.Name = value;
             }
 
             /// <summary>

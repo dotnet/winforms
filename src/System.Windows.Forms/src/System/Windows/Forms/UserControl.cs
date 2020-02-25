@@ -51,14 +51,8 @@ namespace System.Windows.Forms
         DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
         public override bool AutoSize
         {
-            get
-            {
-                return base.AutoSize;
-            }
-            set
-            {
-                base.AutoSize = value;
-            }
+            get => base.AutoSize;
+            set => base.AutoSize = value;
         }
 
         /// <summary>
@@ -123,14 +117,8 @@ namespace System.Windows.Forms
         ]
         public override AutoValidate AutoValidate
         {
-            get
-            {
-                return base.AutoValidate;
-            }
-            set
-            {
-                base.AutoValidate = value;
-            }
+            get => base.AutoValidate;
+            set => base.AutoValidate = value;
         }
 
         [
@@ -233,14 +221,8 @@ namespace System.Windows.Forms
         ]
         public override string Text
         {
-            get
-            {
-                return base.Text;
-            }
-            set
-            {
-                base.Text = value;
-            }
+            get => base.Text;
+            set => base.Text = value;
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]

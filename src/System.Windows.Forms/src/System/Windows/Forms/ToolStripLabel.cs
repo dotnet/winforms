@@ -463,10 +463,7 @@ namespace System.Windows.Forms
 
             public override AccessibleStates State
             {
-                get
-                {
-                    return base.State | AccessibleStates.ReadOnly;
-                }
+                get => base.State | AccessibleStates.ReadOnly;
             }
         }
         /// <summary>

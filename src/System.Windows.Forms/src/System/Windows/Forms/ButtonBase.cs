@@ -118,10 +118,7 @@ namespace System.Windows.Forms
         DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
         public override bool AutoSize
         {
-            get
-            {
-                return base.AutoSize;
-            }
+            get => base.AutoSize;
             set
             {
                 base.AutoSize = value;
@@ -151,10 +148,7 @@ namespace System.Windows.Forms
         ]
         public override Color BackColor
         {
-            get
-            {
-                return base.BackColor;
-            }
+            get => base.BackColor;
             set
             {
                 if (DesignMode)
@@ -541,14 +535,8 @@ namespace System.Windows.Forms
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public ImeMode ImeMode
         {
-            get
-            {
-                return base.ImeMode;
-            }
-            set
-            {
-                base.ImeMode = value;
-            }
+            get => base.ImeMode;
+            set => base.ImeMode = value;
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -665,14 +653,8 @@ namespace System.Windows.Forms
         ]
         public override string Text
         {
-            get
-            {
-                return base.Text;
-            }
-            set
-            {
-                base.Text = value;
-            }
+            get => base.Text;
+            set => base.Text = value;
         }
 
         /// <summary>
@@ -1238,14 +1220,8 @@ namespace System.Windows.Forms
         ]
         public bool UseCompatibleTextRendering
         {
-            get
-            {
-                return base.UseCompatibleTextRenderingInt;
-            }
-            set
-            {
-                base.UseCompatibleTextRenderingInt = value;
-            }
+            get => base.UseCompatibleTextRenderingInt;
+            set => base.UseCompatibleTextRenderingInt = value;
         }
 
         /// <summary>

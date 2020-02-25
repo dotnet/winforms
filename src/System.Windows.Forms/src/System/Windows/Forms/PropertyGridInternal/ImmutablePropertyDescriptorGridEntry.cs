@@ -31,10 +31,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         public override object PropertyValue
         {
-            get
-            {
-                return base.PropertyValue;
-            }
+            get => base.PropertyValue;
             set
             {
                 // Create a new instance of the value and set it into the parent grid entry.

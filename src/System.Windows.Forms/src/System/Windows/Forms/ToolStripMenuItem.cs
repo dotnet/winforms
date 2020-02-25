@@ -250,10 +250,7 @@ namespace System.Windows.Forms
                     return base.Enabled;
                 }
             }
-            set
-            {
-                base.Enabled = value;
-            }
+            set => base.Enabled = value;
         }
 
         /// <summary>
@@ -468,14 +465,8 @@ namespace System.Windows.Forms
          ]
         public new ToolStripItemOverflow Overflow
         {
-            get
-            {
-                return base.Overflow;
-            }
-            set
-            {
-                base.Overflow = value;
-            }
+            get => base.Overflow;
+            set => base.Overflow = value;
         }
 
         /// <summary>
@@ -705,10 +696,7 @@ namespace System.Windows.Forms
 
         internal override int DeviceDpi
         {
-            get
-            {
-                return base.DeviceDpi;
-            }
+            get => base.DeviceDpi;
 
             // This gets called via ToolStripItem.RescaleConstantsForDpi.
             // It's practically calling Initialize on DpiChanging with the new Dpi value.

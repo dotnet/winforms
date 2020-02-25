@@ -207,14 +207,8 @@ namespace System.Windows.Forms
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new FlatStyle FlatStyle
         {
-            get
-            {
-                return base.FlatStyle;
-            }
-            set
-            {
-                base.FlatStyle = value;
-            }
+            get => base.FlatStyle;
+            set => base.FlatStyle = value;
         }
 
         /// <summary>
@@ -443,34 +437,22 @@ namespace System.Windows.Forms
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
         new public bool TabStop
         {
-            get
-            {
-                return base.TabStop;
-            }
-            set
-            {
-                base.TabStop = value;
-            }
+            get => base.TabStop;
+            set => base.TabStop = value;
         }
 
         [RefreshProperties(RefreshProperties.Repaint)]
         public override string Text
         {
-            get
-            {
-                return base.Text;
-            }
-            set
-            {
-                base.Text = value;
-            }
+            get => base.Text;
+            set => base.Text = value;
         }
 
         [RefreshProperties(RefreshProperties.Repaint)]
         public new Padding Padding
         {
-            get { return base.Padding; }
-            set { base.Padding = value; }
+            get => base.Padding;
+            set => base.Padding = value;
         }
 
         /// <summary>
@@ -2820,10 +2802,7 @@ namespace System.Windows.Forms
 
                     return name;
                 }
-                set
-                {
-                    base.Name = value;
-                }
+                set => base.Name = value;
             }
 
             public override AccessibleObject Parent

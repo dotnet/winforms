@@ -67,8 +67,8 @@ namespace System.Windows.Forms
         ]
         public override bool AutoScroll
         {
-            get { return base.AutoScroll; }
-            set { base.AutoScroll = value; }
+            get => base.AutoScroll;
+            set => base.AutoScroll = value;
         }
 
         [
@@ -78,8 +78,8 @@ namespace System.Windows.Forms
         ]
         public new Size AutoScrollMargin
         {
-            get { return base.AutoScrollMargin; }
-            set { base.AutoScrollMargin = value; }
+            get => base.AutoScrollMargin;
+            set => base.AutoScrollMargin = value;
         }
 
         [
@@ -89,8 +89,8 @@ namespace System.Windows.Forms
         ]
         public new Size AutoScrollMinSize
         {
-            get { return base.AutoScrollMinSize; }
-            set { base.AutoScrollMinSize = value; }
+            get => base.AutoScrollMinSize;
+            set => base.AutoScrollMinSize = value;
         }
         [
         Browsable(false),
@@ -99,8 +99,8 @@ namespace System.Windows.Forms
         ]
         public new Color BackColor
         {
-            get { return base.BackColor; }
-            set { base.BackColor = value; }
+            get => base.BackColor;
+            set => base.BackColor = value;
         }
 
         [
@@ -121,8 +121,8 @@ namespace System.Windows.Forms
         ]
         public new Image BackgroundImage
         {
-            get { return base.BackgroundImage; }
-            set { base.BackgroundImage = value; }
+            get => base.BackgroundImage;
+            set => base.BackgroundImage = value;
         }
 
         [
@@ -143,8 +143,8 @@ namespace System.Windows.Forms
         ]
         public override ImageLayout BackgroundImageLayout
         {
-            get { return base.BackgroundImageLayout; }
-            set { base.BackgroundImageLayout = value; }
+            get => base.BackgroundImageLayout;
+            set => base.BackgroundImageLayout = value;
         }
 
         [
@@ -210,8 +210,8 @@ namespace System.Windows.Forms
         ]
         public new bool CausesValidation
         {
-            get { return base.CausesValidation; }
-            set { base.CausesValidation = value; }
+            get => base.CausesValidation;
+            set => base.CausesValidation = value;
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -228,8 +228,8 @@ namespace System.Windows.Forms
         ]
         public new ContextMenuStrip ContextMenuStrip
         {
-            get { return base.ContextMenuStrip; }
-            set { base.ContextMenuStrip = value; }
+            get => base.ContextMenuStrip;
+            set => base.ContextMenuStrip = value;
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -246,8 +246,8 @@ namespace System.Windows.Forms
         ]
         public override Cursor Cursor
         {
-            get { return base.Cursor; }
-            set { base.Cursor = value; }
+            get => base.Cursor;
+            set => base.Cursor = value;
         }
 
         [
@@ -276,8 +276,8 @@ namespace System.Windows.Forms
         ]
         public new Color ForeColor
         {
-            get { return base.ForeColor; }
-            set { base.ForeColor = value; }
+            get => base.ForeColor;
+            set => base.ForeColor = value;
         }
 
         [
@@ -392,10 +392,7 @@ namespace System.Windows.Forms
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public new ControlCollection Controls
         {
-            get
-            {
-                return base.Controls;
-            }
+            get => base.Controls;
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]

@@ -378,10 +378,7 @@ namespace System.ComponentModel.Design
                         return "";
                     }
                 }
-                set
-                {
-                    base.Text = value;
-                }
+                set => base.Text = value;
             }
 
             #region Watermark

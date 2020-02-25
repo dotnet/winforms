@@ -85,14 +85,8 @@ namespace System.Windows.Forms
         ]
         public new bool RightToLeftAutoMirrorImage
         {
-            get
-            {
-                return base.RightToLeftAutoMirrorImage;
-            }
-            set
-            {
-                base.RightToLeftAutoMirrorImage = value;
-            }
+            get => base.RightToLeftAutoMirrorImage;
+            set => base.RightToLeftAutoMirrorImage = value;
         }
 
         protected override AccessibleObject CreateAccessibilityInstance()
@@ -174,10 +168,7 @@ namespace System.Windows.Forms
                     }
                     return stockName;
                 }
-                set
-                {
-                    base.Name = value;
-                }
+                set => base.Name = value;
             }
 
             internal override object GetPropertyValue(UiaCore.UIA propertyID)

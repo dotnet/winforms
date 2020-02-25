@@ -34,10 +34,7 @@ namespace System.Windows.Forms
         ]
         public override DataGridViewCell CellTemplate
         {
-            get
-            {
-                return base.CellTemplate;
-            }
+            get => base.CellTemplate;
             set
             {
                 if (value != null && !(value is DataGridViewButtonCell))
@@ -55,14 +52,8 @@ namespace System.Windows.Forms
         ]
         public override DataGridViewCellStyle DefaultCellStyle
         {
-            get
-            {
-                return base.DefaultCellStyle;
-            }
-            set
-            {
-                base.DefaultCellStyle = value;
-            }
+            get => base.DefaultCellStyle;
+            set => base.DefaultCellStyle = value;
         }
 
         [

@@ -177,14 +177,8 @@ namespace System.Windows.Forms
         ]
         public override bool AutoSize
         {
-            get
-            {
-                return base.AutoSize;
-            }
-            set
-            {
-                base.AutoSize = value;
-            }
+            get => base.AutoSize;
+            set => base.AutoSize = value;
         }
 
         /// <summary>
@@ -215,14 +209,8 @@ namespace System.Windows.Forms
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Image BackgroundImage
         {
-            get
-            {
-                return base.BackgroundImage;
-            }
-            set
-            {
-                base.BackgroundImage = value;
-            }
+            get => base.BackgroundImage;
+            set => base.BackgroundImage = value;
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -235,14 +223,8 @@ namespace System.Windows.Forms
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override ImageLayout BackgroundImageLayout
         {
-            get
-            {
-                return base.BackgroundImageLayout;
-            }
-            set
-            {
-                base.BackgroundImageLayout = value;
-            }
+            get => base.BackgroundImageLayout;
+            set => base.BackgroundImageLayout = value;
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -457,10 +439,7 @@ namespace System.Windows.Forms
 
         public override Color ForeColor
         {
-            get
-            {
-                return base.ForeColor;
-            }
+            get => base.ForeColor;
             set
             {
                 if (IsHandleCreated)
@@ -479,10 +458,7 @@ namespace System.Windows.Forms
 
         public override Font Font
         {
-            get
-            {
-                return base.Font;
-            }
+            get => base.Font;
             set
             {
                 if (IsHandleCreated)
@@ -599,26 +575,14 @@ namespace System.Windows.Forms
         ]
         public override int MaxLength
         {
-            get
-            {
-                return base.MaxLength;
-            }
-            set
-            {
-                base.MaxLength = value;
-            }
+            get => base.MaxLength;
+            set => base.MaxLength = value;
         }
         [DefaultValue(true)]
         public override bool Multiline
         {
-            get
-            {
-                return base.Multiline;
-            }
-            set
-            {
-                base.Multiline = value;
-            }
+            get => base.Multiline;
+            set => base.Multiline = value;
         }
 
         private bool ProtectedError
@@ -1262,11 +1226,7 @@ namespace System.Windows.Forms
                 //
                 return SelectedText.Length;
             }
-
-            set
-            {
-                base.SelectionLength = value;
-            }
+            set => base.SelectionLength = value;
         }
 
         /// <summary>

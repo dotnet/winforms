@@ -62,14 +62,8 @@ namespace System.Windows.Forms
         [DefaultValue(true)]
         public new bool AutoToolTip
         {
-            get
-            {
-                return base.AutoToolTip;
-            }
-            set
-            {
-                base.AutoToolTip = value;
-            }
+            get => base.AutoToolTip;
+            set => base.AutoToolTip = value;
         }
 
         protected override bool DefaultAutoToolTip

@@ -983,10 +983,7 @@ namespace System.Windows.Forms
 
             public override string Value
             {
-                get
-                {
-                    return base.Value;
-                }
+                get => base.Value;
 
                 set
                 {

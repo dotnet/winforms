@@ -119,10 +119,7 @@ namespace System.Windows.Forms
         ]
         public override bool AutoSize
         {
-            get
-            {
-                return base.AutoSize;
-            }
+            get => base.AutoSize;
             set
             {
                 if (AutoSize != value)
@@ -196,14 +193,8 @@ namespace System.Windows.Forms
         ]
         public override Image BackgroundImage
         {
-            get
-            {
-                return base.BackgroundImage;
-            }
-            set
-            {
-                base.BackgroundImage = value;
-            }
+            get => base.BackgroundImage;
+            set => base.BackgroundImage = value;
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -221,14 +212,8 @@ namespace System.Windows.Forms
         ]
         public override ImageLayout BackgroundImageLayout
         {
-            get
-            {
-                return base.BackgroundImageLayout;
-            }
-            set
-            {
-                base.BackgroundImageLayout = value;
-            }
+            get => base.BackgroundImageLayout;
+            set => base.BackgroundImageLayout = value;
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -692,14 +677,8 @@ namespace System.Windows.Forms
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public ImeMode ImeMode
         {
-            get
-            {
-                return base.ImeMode;
-            }
-            set
-            {
-                base.ImeMode = value;
-            }
+            get => base.ImeMode;
+            set => base.ImeMode = value;
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -814,14 +793,8 @@ namespace System.Windows.Forms
         [DefaultValue(false), Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public bool TabStop
         {
-            get
-            {
-                return base.TabStop;
-            }
-            set
-            {
-                base.TabStop = value;
-            }
+            get => base.TabStop;
+            set => base.TabStop = value;
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -884,14 +857,8 @@ namespace System.Windows.Forms
         ]
         public override string Text
         {
-            get
-            {
-                return base.Text;
-            }
-            set
-            {
-                base.Text = value;
-            }
+            get => base.Text;
+            set => base.Text = value;
         }
 
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.LabelOnTextAlignChangedDescr))]
@@ -1745,13 +1712,12 @@ namespace System.Windows.Forms
         public override ImageList ImageList
         {
             get { return owner?.ImageList; }
-
-            set { Debug.Assert(false, "Setting the image list in this class is not supported"); }
+            set{ Debug.Assert(false, "Setting the image list in this class is not supported"); }
         }
 
         public override string Key
         {
-            get { return base.Key; }
+            get => base.Key;
             set
             {
                 base.Key = value;
@@ -1761,7 +1727,7 @@ namespace System.Windows.Forms
 
         public override int Index
         {
-            get { return base.Index; }
+            get => base.Index;
             set
             {
                 base.Index = value;
