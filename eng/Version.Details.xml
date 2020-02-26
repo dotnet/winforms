@@ -10,7 +10,7 @@ Note: if the Uri is a new place, you will need to add a subscription from that p
   </ProductDependencies>
   <ToolsetDependencies>
     <!-- Core Setup for coherency -->
-    <Dependency Name="Microsoft.NETCore.App" Version="3.1.3-servicing.20120.1">
+    <Dependency Name="Microsoft.NETCore.App.Internal" Version="3.1.3-servicing.20120.1">
       <Uri>https://github.com/dotnet/core-setup</Uri>
       <Sha>2d163b87b605fd23ceebfb04484e5ec5f2bffc32</Sha>
     </Dependency>
@@ -82,6 +82,11 @@ Note: if the Uri is a new place, you will need to add a subscription from that p
     <Dependency Name="Microsoft.DotNet.XUnitExtensions" Version="2.4.1-beta.20113.5">
       <Uri>https://github.com/dotnet/arcade</Uri>
       <Sha>15f00efd583eab4372b2e9ca25bd80ace5b119ad</Sha>
+    </Dependency>
+    <!-- Keep these dependencies at the bottom of ToolsetDependencies, else they will be picked as the parent for CoherentParentDependencies -->
+    <Dependency Name="Microsoft.NETCore.App.Ref" Version="3.1.0" Pinned="true">
+      <Uri>https://github.com/dotnet/core-setup</Uri>
+      <Sha>65f04fb6db7a5e198d05dbebd5c4ad21eb018f89</Sha>
     </Dependency>
   </ToolsetDependencies>
 </Dependencies>

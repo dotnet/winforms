@@ -7,7 +7,7 @@
     "xcopy-msbuild": "16.0.0-rc1-alpha",
     "runtimes": {
       "dotnet": [
-        "$(MicrosoftNETCoreAppPackageVersion)"
+        "$(MicrosoftNETCoreAppInternalPackageVersion)"
       ]
     }
   },
