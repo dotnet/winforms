@@ -877,9 +877,9 @@ namespace System.Windows.Forms
         {
             get
             {
-                // COMPAT we must return the same busted height we did in Everett, even
-                // if it doesnt take multiline and word wrap into account.  For better accuracy and/or wrapping use
-                // GetPreferredSize instead.
+                // For compatability, we must return the same busted height we did in
+                // legacy versions, even if it doesnt take multiline and word wrap
+                // into account. For better accuracy and/or wrapping use GetPreferredSize instead.
                 int height = FontHeight;
                 if (borderStyle != BorderStyle.None)
                 {
@@ -897,9 +897,9 @@ namespace System.Windows.Forms
         {
             // 3px vertical space is required between the text and the border to keep the last
             // line from being clipped.
-            // This 3 pixel size was added in everett and we do this to maintain compat.
-            // old everett behavior was FontHeight + [SystemInformation.BorderSize.Height * 4 + 3]
-            // however the [ ] was only added if borderstyle was not none.
+            // This 3 pixel size was added in legacy versions and we do this to maintain compat.
+            // Legacy behavior was FontHeight + [SystemInformation.BorderSize.Height * 4 + 3]
+            // however the [ ] was only added if BorderStyle was not None.
             Size bordersAndPadding = SizeFromClientSize(Size.Empty) + Padding.Size;
 
             if (BorderStyle != BorderStyle.None)
@@ -1624,9 +1624,9 @@ namespace System.Windows.Forms
 
         protected override void OnTextChanged(EventArgs e)
         {
-            // since AutoSize existed in Everett, (and is the default) we can't
+            // Since AutoSize existed in legacy versions, (and is the default) we can't
             // relayout the parent when the "preferredsize" of the control changes.
-            // this means a multiline = true textbox wont natrually grow in height when
+            // this means a multiline = true textbox won't naturally grow in height when
             // the text changes.
             CommonProperties.xClearPreferredSizeCache(this);
             base.OnTextChanged(e);

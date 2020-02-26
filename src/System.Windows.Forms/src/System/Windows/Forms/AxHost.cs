@@ -3806,8 +3806,8 @@ namespace System.Windows.Forms
                 if (f == null)
                 {
                     // ContainingCointrol can be null if the AxHost is still not parented to a containerControl
-                    // In everett we used to return a parking window.
-                    // now we just set the containingControl to a dummyValue.
+                    // In legacy versions we used to return a parking window.
+                    // Now we just set the containingControl to a dummy value.
                     if (newParent == null)
                     {
                         newParent = new ContainerControl();

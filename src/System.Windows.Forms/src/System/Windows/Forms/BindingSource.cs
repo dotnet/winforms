@@ -383,7 +383,7 @@ namespace System.Windows.Forms
                 {
                     // Setting the position on the currency manager causes EndCurrentEdit
                     // even if the position inside the currency manager does not change.
-                    // This is the RTM/Everett behavior and we have to live w/ it.
+                    // Preserve backwards compatible behavior.
                     _currencyManager.Position = value;
                 }
             }

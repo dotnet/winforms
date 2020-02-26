@@ -859,8 +859,6 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  The GDI brush for our background color.
-        ///  Whidbey Note: Made this internal, since we need to use this in ButtonStandardAdapter. Also, renamed
-        ///         from BackBrush to BackColorBrush due to a naming conflict with DataGrid's BackBrush.
         /// </summary>
         internal IntPtr BackColorBrush
         {
@@ -2745,9 +2743,9 @@ namespace System.Windows.Forms
         /// </summary>
         internal bool IsActiveX => GetExtendedState(ExtendedStates.IsActiveX);
 
-        // If the control on which GetContainerControl( ) is called is a ContainerControl, then we dont return the parent
-        // but return the same control. This is Everett behavior so we cannot change this since this would be a breaking change.
-        // Hence we have a new internal property IsContainerControl which returns false for all Everett control, but
+        // If the control on which GetContainerControl() is called is a ContainerControl, then we dont return the parent
+        // but return the same control. This is legacy behavior so we cannot change this since this would be a breaking change.
+        // Hence we have a new internal property IsContainerControl which returns false for all legacy controls, but
         // this property is overidden in SplitContainer to return true so that we skip the SplitContainer
         // and the correct Parent ContainerControl is returned by GetContainerControl().
         internal virtual bool IsContainerControl => false;
@@ -5623,9 +5621,7 @@ namespace System.Windows.Forms
 
         internal virtual Rectangle ApplyBoundsConstraints(int suggestedX, int suggestedY, int proposedWidth, int proposedHeight)
         {
-            // COMPAT: in Everett we would allow you to set negative values in pre-handle mode
-            // in Whidbey, if you've set Min/Max size we will constrain you to 0,0.  Everett apps didnt
-            // have min/max size on control, which is why this works.
+            // For compatability, if you've set Min/Max size we will constrain you to 0,0.
             if (MaximumSize != Size.Empty || MinimumSize != Size.Empty)
             {
                 Size maximumSize = LayoutUtils.ConvertZeroToUnbounded(MaximumSize);
@@ -10023,15 +10019,10 @@ namespace System.Windows.Forms
                 SetExtendedState(ExtendedStates.ClearLayoutArgs, true);
             }
 
-            /*
-
-            We've had this since Everett,but it seems wrong, redundant and a performance hit.  The
-            correct layout calls are already made when bounds or parenting changes, which is all
-            we care about. We may want to call this at layout suspend count == 0, but certainaly
-            not for all resumes.  I  tried removing it, and doing it only when suspendCount == 0,
-            but we break things at every step.
-
-            */
+            // Possibly redundant and a performance hit. The correct layout calls
+            // are already made when bounds or parenting changes, which is all we
+            // care about. We may want to call this at layout suspend count == 0,
+            // but certainaly not for all resumes. Removing this breaks things.
             if (!performLayout)
             {
                 CommonProperties.xClearPreferredSizeCache(this);
@@ -11315,8 +11306,8 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Never)]
         internal virtual bool ShouldSerializeSize()
         {
-            // In Whidbey the ControlDesigner class will always serialize size as it replaces the Size
-            // property descriptor with its own.  This is here for compat.
+            // For backwards compatability always serialize size as ControlDesigner
+            // replaces the Size property descriptor with its own.
             Size s = DefaultSize;
             return _width != s.Width || _height != s.Height;
         }
@@ -12277,7 +12268,7 @@ namespace System.Windows.Forms
                 {
                     if (!GetState(States.DoubleClickFired))
                     {
-                        //In Whidbey .. if the click in by MOUSE then pass the MouseEventArgs...
+                        // If the click in by mouse then pass the MouseEventArgs.
                         OnClick(new MouseEventArgs(button, clicks, PARAM.SignedLOWORD(m.LParam), PARAM.SignedHIWORD(m.LParam), 0));
                         OnMouseClick(new MouseEventArgs(button, clicks, PARAM.SignedLOWORD(m.LParam), PARAM.SignedHIWORD(m.LParam), 0));
                     }

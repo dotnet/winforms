@@ -268,8 +268,6 @@ namespace System.Windows.Forms
             return GetFormats(true);
         }
 
-        // <-- WHIDBEY ADDITIONS
-
         public virtual bool ContainsAudio()
         {
             return GetDataPresent(DataFormats.WaveAudio, false);
@@ -420,8 +418,6 @@ namespace System.Windows.Forms
 
             return DataFormats.UnicodeText;
         }
-
-        // END - WHIDBEY ADDITIONS -->
 
         /// <summary>
         ///  Retrieves a list of distinct strings from the array.

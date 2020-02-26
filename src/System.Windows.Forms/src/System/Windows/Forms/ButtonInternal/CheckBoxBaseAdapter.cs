@@ -41,11 +41,11 @@ namespace System.Windows.Forms.ButtonInternal
         protected void DrawCheckFlat(PaintEventArgs e, LayoutData layout, Color checkColor, Color checkBackground, Color checkBorder, ColorData colors)
         {
             Rectangle bounds = layout.checkBounds;
-            // Removed subtracting one for Width and Height. In Everett we needed to do this,
+            // Removed subtracting one for Width and Height. In legacy versions we needed to do this,
             // since we were using GDI+ to draw the border. Now that we are using GDI,
             // we should not do before drawing the border.
 
-            if (!layout.options.everettButtonCompat)
+            if (!layout.options._legacyButtonCompat)
             {
                 bounds.Width--;
                 bounds.Height--;
@@ -57,8 +57,8 @@ namespace System.Windows.Forms.ButtonInternal
                     wg.DrawRectangle(pen, bounds);
                 }
 
-                // Now subtract, since the rest of the code is like Everett.
-                if (layout.options.everettButtonCompat)
+                // Now subtract, since the rest of the code is like legacy versions.
+                if (layout.options._legacyButtonCompat)
                 {
                     bounds.Width--;
                     bounds.Height--;
@@ -77,7 +77,7 @@ namespace System.Windows.Forms.ButtonInternal
                 {
                     using (WindowsBrush brush = new WindowsSolidBrush(wg.DeviceContext, checkBackground))
                     {
-                        // Even though we are using GDI here as opposed to GDI+ in Everett, we still need to add 1.
+                        // Even though we are using GDI here as opposed to GDI+ in legacy versions, we still need to add 1.
                         bounds.Width++;
                         bounds.Height++;
                         wg.FillRectangle(brush, bounds);
@@ -183,7 +183,7 @@ namespace System.Windows.Forms.ButtonInternal
                     checkImage = GetCheckBoxImage(checkColor, fullSize, ref checkImageIndeterminateBackColor, ref checkImageIndeterminate);
                 }
 
-                if (layout.options.everettButtonCompat)
+                if (layout.options._legacyButtonCompat)
                 {
                     fullSize.Y -= 1;
                 }

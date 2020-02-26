@@ -180,15 +180,14 @@ namespace System.ComponentModel.Design.Serialization
                         generateField = false;
                         generateObject = false;
 
-                        // if we have an existing expression and this is not
-                        // a sited component, do not serialize it.  We need this for Everett / 1.0
-                        // backwards compat (even though it's wrong).
+                        // If we have an existing expression and this is not a sited component,
+                        // do not serialize it. We need this for backwards compatability, even
+                        // though it's wrong.
                         if (value is IComponent comp && comp.Site == null)
                         {
-                            // We were in a serialize content
-                            // property and would still serialize it.  This code reverses what the
-                            // outer if block does for this specific case.  We also need this
-                            // for Everett / 1.0 backwards compat.
+                            // We were in a serialize content property and would still serialize it.
+                            // This code reverses what the outer if block does for this specific case.
+                            // We also need this for backwards compatability.
                             if (!(manager.Context[typeof(ExpressionContext)] is ExpressionContext expCxt) || expCxt.PresetValue != value)
                             {
                                 isComplete = true;
@@ -443,7 +442,7 @@ namespace System.ComponentModel.Design.Serialization
 
                                 // This entry will only be used if the valid bit is set.
                                 // This is useful because we still need to setup depedency relationships
-                                // between components even if they are not cached.  See VSWhidbey 263053.
+                                // between components even if they are not cached.
                                 bool correctManager = manager == mainManager;
                                 entry.Valid = correctManager && CanCacheComponent(manager, value, props);
 

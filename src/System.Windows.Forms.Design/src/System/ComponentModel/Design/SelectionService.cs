@@ -137,7 +137,7 @@ namespace System.ComponentModel.Design
                     }
                     catch
                     {
-                        // eat exceptions - required for compatibility with Everett.
+                        // Eat exceptions - required for backwards compatibility.
                     }
                 }
             }

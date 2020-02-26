@@ -560,7 +560,7 @@ namespace System.Windows.Forms.Design
                 return false;
             }
 
-            // Only add the child if it doesn't already exist. VSWhidbey #408041.
+            // Only add the child if it doesn't already exist.
             for (int i = 0; i < nc.Components.Count; i++)
             {
                 if (nc.Components[i].Equals(child))
@@ -2613,7 +2613,6 @@ namespace System.Windows.Forms.Design
 
                 // UserControl is a special ContainerControl which should "hook to all the WindowHandles"
                 // Since it doesnt allow the Mouse to pass through any of its contained controls.
-                // Please refer to VsWhidbey : 293117
                 if (child == null || Control is UserControl)
                 {
                     // Now do the children of this window.

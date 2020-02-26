@@ -874,7 +874,6 @@ namespace System.Windows.Forms
             set => base.TextDirection = value;
         }
 
-        //Consistency: match casing of Form.TopMost, which shipped in Everett, even though it's wrong
         protected virtual bool TopMost
         {
             get { return true; }

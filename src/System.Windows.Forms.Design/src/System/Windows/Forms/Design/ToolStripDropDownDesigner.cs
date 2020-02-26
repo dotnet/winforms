@@ -370,7 +370,7 @@ namespace System.Windows.Forms.Design
             selSvc = (ISelectionService)GetService(typeof(ISelectionService));
             if (selSvc != null)
             {
-                // first select the rootComponent and then hook on the events... but not if we are loading - VSWhidbey #484576
+                // First select the rootComponent and then hook on the events, but not if we are loading
                 if (host != null && !host.Loading)
                 {
                     selSvc.SetSelectedComponents(new IComponent[] { host.RootComponent }, SelectionTypes.Replace);
@@ -683,7 +683,7 @@ namespace System.Windows.Forms.Design
             BehaviorService behaviorService = (BehaviorService)GetService(typeof(BehaviorService));
             if (behaviorService != null)
             {
-                // Show the contextMenu only if the dummy menuStrip is contained in the Form. Refer to VsWhidbey 484317 for more details.
+                // Show the contextMenu only if the dummy menuStrip is contained in the Form.
                 if (itemDesigner != null && parent != null)
                 {
                     Rectangle parentBounds = behaviorService.ControlRectInAdornerWindow(parent);

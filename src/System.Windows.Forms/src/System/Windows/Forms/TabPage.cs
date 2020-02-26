@@ -489,7 +489,7 @@ namespace System.Windows.Forms
 
         protected override void OnPaintBackground(PaintEventArgs e)
         {
-            // Utilize the TabRenderer new to Whidbey to draw the tab pages so that the panels are
+            // Utilize the TabRenderer to draw the tab pages so that the panels are
             // drawn using the correct visual styles when the application supports using visual
             // styles.
 

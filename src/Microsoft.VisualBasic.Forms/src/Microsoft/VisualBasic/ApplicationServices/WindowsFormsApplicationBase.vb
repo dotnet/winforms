@@ -495,7 +495,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                 System.Windows.Forms.Application.Run(m_AppContext)
             Finally
                 'When Run() returns, the context we pushed in our ctor (which was a WindowsFormsSynchronizationContext) is restored.  But we are going to dispose it
-                'so we need to disconnect the network listener so that it can't fire any events in response to changing network availability conditions through a dead context.  VSWHIDBEY #343374
+                'so we need to disconnect the network listener so that it can't fire any events in response to changing network availability conditions through a dead context.
                 If m_NetworkObject IsNot Nothing Then m_NetworkObject.DisconnectListener()
 
                 AsyncOperationManager.SynchronizationContext = m_AppSyncronizationContext 'Restore the prior sync context

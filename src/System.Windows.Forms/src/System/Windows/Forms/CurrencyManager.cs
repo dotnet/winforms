@@ -838,8 +838,8 @@ namespace System.Windows.Forms
                         // reset lastGoodKnownRow because it was computed against property descriptors which changed
                         lastGoodKnownRow = -1;
 
-                        // In Everett, metadata changes did not alter current list position. In Whidbey, this behavior
-                        // preserved - except that we will now force the position to stay in valid range if necessary.
+                        // For back compat, make sure metadata changes do not alter current list position.
+                        // However, force the position to stay in valid range if necessary.
                         if (listposition == -1 && list.Count > 0)
                         {
                             ChangeRecordState(0, true, false, true, false);
@@ -958,7 +958,6 @@ namespace System.Windows.Forms
             onListChanged?.Invoke(this, e);
         }
 
-//Exists in Everett
         internal protected void OnMetaDataChanged(EventArgs e)
         {
             onMetaDataChangedHandler?.Invoke(this, e);

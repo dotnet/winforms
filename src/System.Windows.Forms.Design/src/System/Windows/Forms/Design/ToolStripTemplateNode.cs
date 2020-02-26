@@ -716,7 +716,6 @@ namespace System.Windows.Forms.Design
                 _miniToolStrip.MouseLeave -= new EventHandler(OnMouseLeave);
                 _miniToolStrip.Dispose();
                 _miniToolStrip = null;
-                // Surface can be null. VS Whidbey #572862
                 if (_designSurface != null)
                 {
                     _designSurface.Flushed -= new EventHandler(OnLoaderFlushed);

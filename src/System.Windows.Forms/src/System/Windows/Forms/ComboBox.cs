@@ -931,23 +931,17 @@ namespace System.Windows.Forms
             {
                 if (!FormattingEnabled)
                 {
-                    //do preferred height the old broken way for everett apps
-                    //we need this for compat reasons because (get this)
-                    //  (a) everett preferredheight was always wrong.
-                    //  (b) so, when combobox1.Size = actualdefaultsize was called, it would enter setboundscore
+                    // Do preferred height the old broken way for compat reasons because:
+                    //  (a) old PreferredHeight was always wrong.
+                    //  (b) so, when combobox1.Size = actualdefaultsize was called, it would enter SetBoundsCore
                     //  (c) this updated requestedheight
                     //  (d) if the user then changed the combo to simple style, the height did not change.
-                    // We simply cannot match this behavior if preferredheight is corrected so that (b) never
+                    // We simply cannot match this behavior if PreferredHeight is corrected so that (b) never
                     // occurs.  We simply do not know when Size was set.
 
-                    // So in whidbey, the behavior will be:
+                    // So in new versions, the behavior will be:
                     //  (1) user uses default size = setting dropdownstyle=simple will revert to simple height
                     //  (2) user uses nondefault size = setting dropdownstyle=simple will not change height from this value
-
-                    //In everett
-                    //  if the user manually sets Size = (121, 20) in code (usually height gets forced to 21), then he will see Whidey.(1) above
-                    //  user usually uses nondefault size and will experience whidbey.(2) above
-
                     Size textSize = TextRenderer.MeasureText(LayoutUtils.TestString, Font, new Size(short.MaxValue, (int)(FontHeight * 1.25)), TextFormatFlags.SingleLine);
                     prefHeightCache = (short)(textSize.Height + SystemInformation.BorderSize.Height * 8 + Padding.Size.Height);
 
@@ -1318,7 +1312,7 @@ namespace System.Windows.Forms
             {
                 if (SelectedItem != null && !BindingFieldEmpty)
                 {
-                    //preserve everett behavior if "formatting enabled == false" -- just return selecteditem text.
+                    // Preserve legacy behavior if !FormattingEnabled by just return SelectedItem text.
                     if (FormattingEnabled)
                     {
                         string candidate = GetItemText(SelectedItem);
@@ -1326,13 +1320,14 @@ namespace System.Windows.Forms
                         {
                             if (string.Compare(candidate, base.Text, true, CultureInfo.CurrentCulture) == 0)
                             {
-                                return candidate;   //for whidbey, if we only differ by case -- return the candidate;
+                                // In newer versions, return the candidate if we only differ by case
+                                return candidate;
                             }
                         }
                     }
                     else
                     {
-                        return FilterItemOnProperty(SelectedItem).ToString();       //heinous.
+                        return FilterItemOnProperty(SelectedItem).ToString();
                     }
                 }
                 return base.Text;
@@ -2339,7 +2334,6 @@ namespace System.Windows.Forms
             {
                 if (DroppedDown || autoCompleteDroppedDown)
                 {
-                    //old behavior
                     return true;
                 }
                 else if (SystemAutoCompleteEnabled && ACNativeWindow.AutoCompleteActive)
@@ -2774,7 +2768,6 @@ namespace System.Windows.Forms
             // don't change the position if SelectedIndex is -1 because this indicates a selection not from the list.
             if (DataManager != null && DataManager.Position != SelectedIndex)
             {
-                //read this as "if everett or   (whidbey and selindex is valid)"
                 if (!FormattingEnabled || SelectedIndex != -1)
                 {
                     DataManager.Position = SelectedIndex;

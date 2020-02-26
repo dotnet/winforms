@@ -1401,7 +1401,7 @@ namespace System.Windows.Forms
                                                                                                                         DataGridView.Enabled,
                                                                                                                         DataGridViewUtilities.ComputeDrawingContentAlignmentForCellStyleAlignment(cellStyle.Alignment),
                                                                                                                         DataGridView.RightToLeft);
-                            options.everettButtonCompat = false;
+                            options._legacyButtonCompat = false;
                             ButtonBaseAdapter.LayoutData layout = options.Layout();
 
                             if (paint && DataGridViewCell.PaintContentForeground(paintParts))
@@ -1448,7 +1448,7 @@ namespace System.Windows.Forms
                                                                                                                         DataGridView.Enabled,
                                                                                                                         DataGridViewUtilities.ComputeDrawingContentAlignmentForCellStyleAlignment(cellStyle.Alignment),
                                                                                                                         DataGridView.RightToLeft);
-                            options.everettButtonCompat = false;
+                            options._legacyButtonCompat = false;
                             ButtonBaseAdapter.LayoutData layout = options.Layout();
 
                             if (paint && DataGridViewCell.PaintContentForeground(paintParts))
@@ -1493,7 +1493,7 @@ namespace System.Windows.Forms
                                                                                                                        DataGridViewUtilities.ComputeDrawingContentAlignmentForCellStyleAlignment(cellStyle.Alignment),
                                                                                                                        DataGridView.RightToLeft);
 
-                            options.everettButtonCompat = false;
+                            options._legacyButtonCompat = false;
                             ButtonBaseAdapter.LayoutData layout = options.Layout();
 
                             if (paint && DataGridViewCell.PaintContentForeground(paintParts))

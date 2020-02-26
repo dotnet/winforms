@@ -226,9 +226,9 @@ namespace System.Windows.Forms
         [DefaultValue(false)]
         public bool FormattingEnabled
         {
-            // A note about FormattingEnabled: This flag was introduced in Whidbey, to enable new
-            // formatting features. However, it is also used to trigger other new Whidbey binding
-            // behavior not related to formatting (such as error handling). This preserves Everett
+            // A note about FormattingEnabled: This flag was introduced to enable new
+            // formatting features. However, it is also used to trigger other new binding
+            // behavior not related to formatting (such as error handling). This preserves
             // legacy behavior for old bindings (where FormattingEnabled = false).
             get => _formattingEnabled;
             set
@@ -542,7 +542,7 @@ namespace System.Windows.Forms
                 // If data error info on data source for this binding, report that
                 errorText = _bindToObject.DataErrorText;
 
-                // We should not cancel with an IDataErrorInfo error - we didn't in Everett
+                // We should not cancel with an IDataErrorInfo error for backwards compatability.
                 if (!string.IsNullOrEmpty(errorText))
                 {
                     state = BindingCompleteState.DataError;
@@ -785,7 +785,8 @@ namespace System.Windows.Forms
                 }
             }
 
-            // Re-entrancy check between push and pull (new for Whidbey - requires FormattingEnabled)
+            // Re-entrancy check between push and pull. Guard this with FormattingEnabled
+            // for backwards compatability.
             if (_inPushOrPull && _formattingEnabled)
             {
                 return false;

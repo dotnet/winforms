@@ -74,7 +74,7 @@ namespace System.Windows.Forms.ButtonInternal
         {
             LayoutOptions layout = CommonLayout();
             layout.hintTextUp = false;
-            layout.everettButtonCompat = !Application.RenderWithVisualStyles;
+            layout._legacyButtonCompat = !Application.RenderWithVisualStyles;
 
             if (Application.RenderWithVisualStyles)
             {

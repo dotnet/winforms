@@ -2831,7 +2831,17 @@ namespace System.ComponentModel.Design.Serialization
                         CodeStatementCollection saveStatements = null;
                         if (value != null)
                         {
-                            // The Whidbey model for serializing a complex object is to call SetExpression with the object's reference expression and then  call on the various Serialize Property / Event methods.  This is incompatible with legacy code, and if not handled legacy code may serialize incorrectly or even stack fault.  To handle this, we keep a private "Legacy Expression Table".  This is a table that we fill in here.  We don't fill in the actual legacy expression here.  Rather,  we fill it with a marker value and obtain the legacy expression  above in GetLegacyExpression.  If we hit this case, we then save the expression in GetExpression so that future calls to IsSerialized will succeed.
+                            // The new model for serializing a complex object is to
+                            // call SetExpression with the object's reference expression
+                            // and then  call on the various Serialize Property / Event
+                            // methods. This is incompatible with legacy code, and if not
+                            // handled legacy code may serialize incorrectly or even stack
+                            // fault. To handle this, we keep a private "Legacy Expression Table".
+                            // This is a table that we fill in here. We don't fill in the actual
+                            // legacy expression here. Rather, we fill it with a marker value
+                            // and obtain the legacy expression  above in GetLegacyExpression.
+                            // If we hit this case, we then save the expression in
+                            // GetExpression so that future calls to IsSerialized will succeed.
                             SetLegacyExpression(manager, value);
                             if (manager.Context[typeof(StatementContext)] is StatementContext statementCxt)
                             {

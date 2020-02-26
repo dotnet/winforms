@@ -661,7 +661,7 @@ namespace System.Windows.Forms.Design
                                 {
                                     Control primaryControl = comp as Control; //this can be null (when we are moving a component in the ComponenTray)
                                     bool useSnapLines = BehaviorService.UseSnapLines;
-                                    // If we have previous snaplines, we always want to erase them, no matter what. VS Whidbey #397709
+                                    // If we have previous snaplines, we always want to erase them, no matter what.
                                     if (dragManager != null)
                                     {
                                         EndDragManager();
@@ -2855,7 +2855,7 @@ namespace System.Windows.Forms.Design
                         ICollection selectedComponents = selSvc.GetSelectedComponents();
                         foreach (object obj in selectedComponents)
                         {
-                            // if the object is not sited to the same thing as the host container then don't allow delete. VSWhidbey# 275790
+                            // if the object is not sited to the same thing as the host container then don't allow delete.
                             if (obj is IComponent comp && (comp.Site == null || (comp.Site != null && comp.Site.Container != host.Container)))
                             {
                                 cmd.Enabled = false;

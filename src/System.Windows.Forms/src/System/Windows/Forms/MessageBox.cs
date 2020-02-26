@@ -122,9 +122,6 @@ namespace System.Windows.Forms
             helpInfoTable = newTable;
         }
 
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        //START WHIDBEY ADDS                                                                                           //
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         /// <summary>
         ///  Displays a message box with specified text, caption, and style with Help Button.
         /// </summary>

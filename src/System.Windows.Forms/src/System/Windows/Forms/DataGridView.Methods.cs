@@ -16222,9 +16222,6 @@ namespace System.Windows.Forms
                 CursorInternal = Cursors.SizeNS;
                 return;
             }
-            /* Whidbey
-
-*/
             else if (dataGridViewState1[DATAGRIDVIEWSTATE1_customCursorSet])
             {
                 dataGridViewState1[DATAGRIDVIEWSTATE1_customCursorSet] = false;
@@ -16356,7 +16353,6 @@ namespace System.Windows.Forms
                     }
                     else if (hti.Type == DataGridViewHitTestType.None)
                     {
-                        // VS Whidbey
                         CorrectFocus(true /*onlyIfGridHasFocus*/);
                     }
                 }
@@ -16387,7 +16383,6 @@ namespace System.Windows.Forms
                         EndRowHeadersResize(e);
                     }
 
-                    // VS Whidbey
                     CorrectFocus(true /*onlyIfGridHasFocus*/);
 
                     // Updating the hit test info since the EndXXX operation above may have invalidated the previously
@@ -27652,10 +27647,6 @@ namespace System.Windows.Forms
                 return;
             }
 
-            /* VS Whidbey
-
-*/
-
             if (se.Type == ScrollEventType.SmallIncrement ||
                 se.Type == ScrollEventType.SmallDecrement)
             {
@@ -27675,10 +27666,6 @@ namespace System.Windows.Forms
             {
                 return;
             }
-
-            /* VS Whidbey
-
-*/
 
             int totalVisibleFrozenHeight = Rows.GetRowsHeight(DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen);
             switch (se.Type)

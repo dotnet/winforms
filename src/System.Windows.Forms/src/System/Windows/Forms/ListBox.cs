@@ -1989,7 +1989,6 @@ namespace System.Windows.Forms
             //
             if (DataManager != null && DataManager.Position != SelectedIndex)
             {
-                //read this as "if everett or   (whidbey and selindex is valid)"
                 if (!FormattingEnabled || SelectedIndex != -1)
                 {
                     // Don't change dataManager position if we simply unselected everything.

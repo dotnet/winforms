@@ -301,9 +301,10 @@ namespace System.Windows.Forms
                         {
                             // Going from true to false requires recreation
 
-                            // Reset the Checked state after setting the checkboxes (this was Everett behavior)
-                            // The implementation of the TreeNode.Checked property has changed in Whidbey
-                            // So we need to explicit set the Checked state to false to keep the everett behavior.
+                            // Reset the Checked state after setting the checkboxes for backwards
+                            // compatability. The implementation of the TreeNode.Checked property
+                            // has been updated, so we need to explicit set the Checked state to
+                            // false to keep the legacy behavior.
                             UpdateCheckedState(root, false);
                             RecreateHandle();
                         }

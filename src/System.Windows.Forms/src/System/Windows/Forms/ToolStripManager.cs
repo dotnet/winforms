@@ -594,9 +594,10 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <summary> an additional layering of control.  this lets you pick whether your toolbars
+        /// <summary>
+        ///  An additional layering of control. This lets you pick whether your toolbars
         ///  should use visual style information (theming) to render itself.
-        ///  potentially you could want a themed app but an unthemed toolstrip. (e.g. Whidbey VS).
+        ///  Potentially you could want a themed app but an unthemed toolstrip.
         /// </summary>
         public static bool VisualStylesEnabled
         {

@@ -833,7 +833,7 @@ namespace System.Windows.Forms.Layout
         {
             if (CommonProperties.GetAutoSize(container))
             {
-                // Avoiding calling DisplayRectangle before checking AutoSize for Everett compat
+                // Avoiding calling DisplayRectangle before checking AutoSize for backwards compatability.
                 Rectangle displayRectangle = container.DisplayRectangle;
                 if ((displayRectangle.Width == 0) || (displayRectangle.Height == 0))
                 {

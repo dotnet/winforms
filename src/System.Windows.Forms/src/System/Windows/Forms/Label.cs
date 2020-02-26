@@ -1161,25 +1161,23 @@ namespace System.Windows.Forms
         {
             Size bordersAndPadding = Padding.Size;
 
-            // COMPAT: Everett added random numbers to the height of the label
+            // For backwards compatability, add random numbers to the height of the label
             if (UseCompatibleTextRendering)
             {
-                //Always return the Fontheight + some buffer else the Text gets clipped for Autosize = true..
-                //(
+                // Always return the Fontheight + some buffer else the Text gets clipped for Autosize = true..
                 if (BorderStyle != BorderStyle.None)
                 {
-                    bordersAndPadding.Height += 6; // taken from Everett.PreferredHeight
-                    bordersAndPadding.Width += 2; // taken from Everett.PreferredWidth
+                    bordersAndPadding.Height += 6;
+                    bordersAndPadding.Width += 2;
                 }
                 else
                 {
-                    bordersAndPadding.Height += 3; // taken from Everett.PreferredHeight
+                    bordersAndPadding.Height += 3;
                 }
             }
             else
             {
-                // in Whidbey we'll actually ask the control the border size.
-
+                // In new versions, actually ask the control the border size.
                 bordersAndPadding += SizeFromClientSize(Size.Empty);
                 if (BorderStyle == BorderStyle.Fixed3D)
                 {

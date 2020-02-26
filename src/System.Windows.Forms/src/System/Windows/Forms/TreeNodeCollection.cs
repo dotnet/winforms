@@ -165,8 +165,6 @@ namespace System.Windows.Forms
             return tn;
         }
 
-        // <-- NEW ADD OVERLOADS IN WHIDBEY
-
         /// <summary>
         ///  Creates a new child node under this node.  Child node is positioned after siblings.
         /// </summary>
@@ -235,8 +233,6 @@ namespace System.Windows.Forms
             Add(tn);
             return tn;
         }
-
-        // END - NEW ADD OVERLOADS IN WHIDBEY -->
 
         public virtual void AddRange(TreeNode[] nodes)
         {
@@ -525,8 +521,6 @@ namespace System.Windows.Forms
             }
         }
 
-        // <-- NEW INSERT OVERLOADS IN WHIDBEY
-
         /// <summary>
         ///  Inserts a new child node on this node.  Child node is positioned as specified by index.
         /// </summary>
@@ -605,8 +599,6 @@ namespace System.Windows.Forms
             Insert(index, tn);
             return tn;
         }
-
-        // END - NEW INSERT OVERLOADS IN WHIDBEY -->
 
         /// <summary>
         ///  Determines if the index is valid for the collection.

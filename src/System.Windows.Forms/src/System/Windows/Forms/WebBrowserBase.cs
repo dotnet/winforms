@@ -1650,7 +1650,6 @@ namespace System.Windows.Forms
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-//Everett
         new public event HelpEventHandler HelpRequested
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "HelpRequested"));

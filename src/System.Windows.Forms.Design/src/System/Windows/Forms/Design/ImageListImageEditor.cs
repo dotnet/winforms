@@ -18,13 +18,11 @@ namespace System.Windows.Forms.Design
     [CLSCompliant(false)]
     public class ImageListImageEditor : ImageEditor
     {
-        // VSWhidbey 95227: Metafile types are not supported in the ImageListImageEditor and should
+        // Metafile types are not supported in the ImageListImageEditor and should
         // not be displayed as an option.
         internal static Type[] s_imageExtenders = new Type[] { typeof(BitmapEditor)/*, gpr typeof(Icon), typeof(MetafileEditor)*/};
         private OpenFileDialog _fileDialog = null;
 
-        // VSWhidbey 95227: accessor needed into the static field so that derived classes
-        // can implement a different list of supported image types.
         protected override Type[] GetImageExtenders() => s_imageExtenders;
 
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)

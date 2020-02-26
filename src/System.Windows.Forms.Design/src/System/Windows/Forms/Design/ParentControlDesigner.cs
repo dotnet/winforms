@@ -238,7 +238,15 @@ namespace System.Windows.Forms.Design
                         prop.SetValue(newChild, new Size(bounds.Width, bounds.Height));
                     }
 
-                    // ControlDesigner shadows the Location property. If the control is parented and the parent is a scrollable control, then it expects the Location to be in displayrectangle coordinates. At this point bounds are in clientrectangle coordinates, so we need to check if we need to adjust the coordinates. The reason this worked in Everett was that the AddChildControl was done AFTER this. The AddChildControl was moved above a while back. Not sure what will break if AddChildControl is moved down below, so let's just fix up things here.
+                    // ControlDesigner shadows the Location property. If the control is
+                    // parented and the parent is a scrollable control, then it expects
+                    // the Location to be in displayrectangle coordinates. At this point
+                    // bounds are in clientrectangle coordinates, so we need to check if
+                    // we need to adjust the coordinates. The reason this worked in old
+                    // versions was that the AddChildControl was done AFTER this.
+                    // The AddChildControl was moved above a while back. Not sure what
+                    // will break if AddChildControl is moved down below, so let's just
+                    // fix up things here.
                     Point pt = new Point(bounds.X, bounds.Y);
                     if (newChild.Parent is ScrollableControl p)
                     {
@@ -289,7 +297,7 @@ namespace System.Windows.Forms.Design
 
         private Size GetDefaultSize(IComponent component)
         {
-            //Check to see if the control is AutoSized. VSWhidbey #416721
+            // Check to see if the control is AutoSized.
             PropertyDescriptor prop = TypeDescriptor.GetProperties(component)["AutoSize"];
             Size size;
             if (prop != null &&

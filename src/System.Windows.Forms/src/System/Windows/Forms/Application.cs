@@ -44,9 +44,9 @@ namespace System.Windows.Forms
         private static readonly object s_internalSyncObject = new object();
         private static bool s_useWaitCursor = false;
 
-        private static bool s_useEverettThreadAffinity = false;
+        private static bool s_useLegacyThreadAffinity = false;
         private static bool s_checkedThreadAffinity = false;
-        private const string EverettThreadAffinityValue = "EnableSystemEventsThreadAffinityCompatibility";
+        private const string LegacyThreadAffinityValue = "EnableSystemEventsThreadAffinityCompatibility";
 
         /// <summary>
         ///  In case Application.exit gets called recursively
@@ -144,7 +144,7 @@ namespace System.Windows.Forms
         internal static string CommonAppDataRegistryKeyName
             => $"Software\\{CompanyName}\\{ProductName}\\{ProductVersion}";
 
-        internal static bool UseEverettThreadAffinity
+        internal static bool UseLegacyThreadAffinity
         {
             get
             {
@@ -158,12 +158,12 @@ namespace System.Windows.Forms
                         RegistryKey key = Registry.LocalMachine.OpenSubKey(CommonAppDataRegistryKeyName);
                         if (key != null)
                         {
-                            object value = key.GetValue(EverettThreadAffinityValue);
+                            object value = key.GetValue(LegacyThreadAffinityValue);
                             key.Close();
 
                             if (value != null && (int)value != 0)
                             {
-                                s_useEverettThreadAffinity = true;
+                                s_useLegacyThreadAffinity = true;
                             }
                         }
                     }
@@ -176,7 +176,7 @@ namespace System.Windows.Forms
                         // Key is of wrong type: use default value (false)
                     }
                 }
-                return s_useEverettThreadAffinity;
+                return s_useLegacyThreadAffinity;
             }
         }
 

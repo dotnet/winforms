@@ -65,7 +65,6 @@ namespace System.Windows.Forms
             AddKey(SR.toStringPageUp, Keys.Prior);
             AddKey(SR.toStringBack, Keys.Back);
 
-            //new whidbey keys follow here...
             // Add string mappings for these values (numbers 0-9) so that the keyboard shortcuts
             // will be displayed properly in menus.
             AddKey("0", Keys.D0);

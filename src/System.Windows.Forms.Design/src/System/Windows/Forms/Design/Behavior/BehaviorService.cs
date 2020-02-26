@@ -263,7 +263,7 @@ namespace System.Windows.Forms.Design.Behavior
                     OnBeginDrag(eventArgs);
                     _dragging = true;
                     _cancelDrag = false;
-                    // This is normally cleared on OnMouseUp, but we might not get an OnMouseUp to clear it. VSWhidbey #474259
+                    // This is normally cleared on OnMouseUp, but we might not get an OnMouseUp to clear it.
                     // So let's make sure it is really cleared when we start the drag.
                     _dragEnterReplies.Clear();
                     res = DropSource.DoDragDrop(dropSourceBehavior.DataObject, dropSourceBehavior.AllowedEffects);
@@ -272,8 +272,8 @@ namespace System.Windows.Forms.Design.Behavior
                 {
                     DropSource.QueryContinueDrag -= new QueryContinueDragEventHandler(dropSourceBehavior.QueryContinueDrag);
                     DropSource.GiveFeedback -= new GiveFeedbackEventHandler(dropSourceBehavior.GiveFeedback);
-                    //If the drop gets cancelled, we won't get a OnDragDrop, so let's make sure that we stop
-                    //processing drag notifications. Also VSWhidbey #354552 and 133339.
+                    // If the drop gets cancelled, we won't get a OnDragDrop, so let's make sure that we stop
+                    // processing drag notifications.
                     EndDragNotification();
                     _validDragArgs = null;
                     _dragging = false;
@@ -538,7 +538,10 @@ namespace System.Windows.Forms.Design.Behavior
             _captureBehavior = behavior;
             _adornerWindow.Capture = true;
 
-            //VSWhidbey #373836. Since we are now capturing all mouse messages, we might miss some WM_MOUSEACTIVATE which would have activated the app. So if the DialogOwnerWindow (e.g. VS) is not the active window, let's activate it here.
+            // Since we are now capturing all mouse messages, we might miss some
+            // WM_MOUSEACTIVATE which would have activated the app. So if the
+            // DialogOwnerWindow (e.g. VS) is not the active window, let's activate
+            // it here.
             IUIService uiService = (IUIService)_serviceProvider.GetService(typeof(IUIService));
             if (uiService != null)
             {
@@ -1035,7 +1038,7 @@ namespace System.Windows.Forms.Design.Behavior
                 private IntPtr _mouseHookHandle = IntPtr.Zero;
                 private bool _processingMessage;
 
-                private bool _isHooked = false; //VSWHIDBEY # 474112
+                private bool _isHooked = false;
                 private int _lastLButtonDownTimeStamp;
 
                 public MouseHook()
@@ -1224,7 +1227,9 @@ namespace System.Windows.Forms.Design.Behavior
                     Cursor hitTestCursor = _adorners[i].Glyphs[j].GetHitTest(pt);
                     if (hitTestCursor != null)
                     {
-                        // InvokeMouseEnterGlyph will cause the selection to change, which might change the number of glyphs, so we need to remember the new glyph before calling InvokeMouseEnterLeave. VSWhidbey #396611
+                        // InvokeMouseEnterGlyph will cause the selection to change,
+                        // which might change the number of glyphs, so we need to
+                        // remember the new glyph before calling InvokeMouseEnterLeave.
                         Glyph newGlyph = _adorners[i].Glyphs[j];
 
                         //with a valid hit test, fire enter/leave events
@@ -1463,8 +1468,8 @@ namespace System.Windows.Forms.Design.Behavior
         private void OnDragLeave(Glyph g, EventArgs e)
         {
             Debug.WriteLineIf(s_dragDropSwitch.TraceVerbose, "BS::DragLeave");
-            // This is normally cleared on OnMouseUp, but we might not get an OnMouseUp to clear it. VSWhidbey #474259
-            // So let's make sure it is really cleared when we start the drag.
+            // This is normally cleared on OnMouseUp, but we might not get an OnMouseUp
+            // to clear it. So let's make sure it is really cleared when we start the drag.
             _dragEnterReplies.Clear();
 
             // if the AdornerWindow receives a drag message, this fn() will be called w/o a glyph - so we'll assign the last hit tested one

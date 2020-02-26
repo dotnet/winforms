@@ -306,12 +306,11 @@ namespace System.Windows.Forms
                 }
                 catch (ArgumentException)
                 {
-                    // In Everett, the ListBox accessible children did not have any selection capability.
-                    // In Whidbey, they delegate the selection capability to OLEACC.
+                    // In legacy versions, the ListBox accessible children did not have any selection capability.
+                    // Now they delegate the selection capability to OLEACC.
                     // However, OLEACC does not deal w/ several Selection flags: ExtendSelection, AddSelection, RemoveSelection.
                     // OLEACC instead throws an ArgumentException.
-                    // Since Whidbey API's should not throw an exception in places where Everett API's did not, we catch
-                    // the ArgumentException and fail silently.
+                    // For backwards compatability, we catch ArgumentException and fail silently.
                 }
             }
         }

@@ -1320,8 +1320,8 @@ namespace System.Windows.Forms
 
                         if (UseCompatibleTextRendering)
                         {
-                            // APPCOMPAT: Use DisabledColor because Everett used DisabledColor.
-                            // (ie, dont use Graphics.GetNearestColor(DisabledColor.)
+                            // Use DisabledColor because legacy versions used DisabledColor.
+                            // (ie, dont use Graphics.GetNearestColor(DisabledColor).
                             StringFormat stringFormat = CreateStringFormat();
                             ControlPaint.DrawStringDisabled(e.Graphics, Text, Font, DisabledColor, ClientRectWithPadding, stringFormat);
                         }

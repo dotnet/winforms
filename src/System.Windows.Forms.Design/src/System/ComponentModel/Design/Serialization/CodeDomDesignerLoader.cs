@@ -1161,7 +1161,7 @@ namespace System.ComponentModel.Design.Serialization
                 }
             }
 
-            // VSWhidbey 95065: Only attempt to build a unique name here if we have a valid container
+            // Only attempt to build a unique name here if we have a valid container
             // against which to check the result. Otherwise, the name build here might be appended to
             // with yet another iterator elsewhere. FWIW, this check is identical to the check used in
             // BaseDesignerLoader's implementation of INameCreationService.CreateName().

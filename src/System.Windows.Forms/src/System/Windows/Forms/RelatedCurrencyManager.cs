@@ -162,7 +162,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    // APPCOMPAT: bring back the Everett behavior where the currency manager adds an item and
+                    // For backwards compatability, if currency manager adds an item and
                     // then it cancels the addition.
                     //
                     // really, really hocky.

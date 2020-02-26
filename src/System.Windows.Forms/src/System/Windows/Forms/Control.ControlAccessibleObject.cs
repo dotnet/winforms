@@ -275,12 +275,14 @@ namespace System.Windows.Forms
 
             public override AccessibleObject Parent => base.Parent;
 
-            // Determine the text that should be used to 'label' this control for accessibility purposes.
-            //
-            // Prior to Whidbey, we just called 'base.Name' to determine the accessible name. This would end up calling
-            // OLEACC.DLL to determine the name. The rules used by OLEACC.DLL are the same as what we now have below,
-            // except that OLEACC searches for preceding labels using z-order, and we want to search for labels using
-            // TabIndex order.
+            /// <summary>
+            ///  Gets the text that should be used to 'label' this control for accessibility purposes.
+            /// </summary>
+            /// <remarks>
+            ///  The rules used by OLEACC.DLL are the same as what we now have below, except
+            ///  that OLEACC searches for preceding labels using z-order, and we want to
+            ///  search for labels using TabIndex order.
+            /// </remarks>
             internal string TextLabel
             {
                 get

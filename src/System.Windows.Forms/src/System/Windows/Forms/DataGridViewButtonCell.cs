@@ -938,7 +938,7 @@ namespace System.Windows.Forms
                                                                                                                    DataGridView.Enabled,
                                                                                                                    DataGridViewUtilities.ComputeDrawingContentAlignmentForCellStyleAlignment(cellStyle.Alignment),
                                                                                                                    DataGridView.RightToLeft);
-                            options.everettButtonCompat = false;
+                            options._legacyButtonCompat = false;
                             ButtonBaseAdapter.LayoutData layout = options.Layout();
 
                             ButtonInternal.ButtonBaseAdapter.DrawFlatFocus(g,
@@ -967,7 +967,7 @@ namespace System.Windows.Forms
                                                                                                                    DataGridView.Enabled,
                                                                                                                    DataGridViewUtilities.ComputeDrawingContentAlignmentForCellStyleAlignment(cellStyle.Alignment),
                                                                                                                    DataGridView.RightToLeft);
-                            options.everettButtonCompat = false;
+                            options._legacyButtonCompat = false;
                             ButtonBaseAdapter.LayoutData layout = options.Layout();
 
                             ControlPaint.DrawFocusRectangle(g,

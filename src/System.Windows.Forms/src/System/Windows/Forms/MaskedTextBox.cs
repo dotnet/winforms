@@ -20,7 +20,6 @@ namespace System.Windows.Forms
     /// <summary>
     ///  MaskedTextBox control definition class.
     ///  Uses the services from the System.ComponentModel.MaskedTextBoxProvider class.
-    ///  See spec at http://dotnetclient/whidbey/Specs/MaskEdit.doc
     /// </summary>
     [
     ComVisible(true),

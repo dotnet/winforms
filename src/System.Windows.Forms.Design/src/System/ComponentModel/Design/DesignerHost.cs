@@ -675,7 +675,14 @@ namespace System.ComponentModel.Design
 
         internal void RemoveFromContainerPostProcess(IComponent component, IContainer container)
         {
-            // At one point during Whidbey, the component used to be unsited earlier in this process and it would be temporarily resited here before raising OnComponentRemoved. The problem with resiting it is that some 3rd party controls take action when a component is sited (such as displaying  a dialog a control is dropped on the form) and resiting here caused them to think they were being initialized for the first time.  To preserve compat, we shouldn't resite the component  during Remove.
+            // The component used to be unsited earlier in this process and it would
+            // be temporarily resited here before raising OnComponentRemoved. The
+            // problem with resiting it is that some 3rd party controls take action
+            // when a component is sited (such as displaying  a dialog a control is
+            // dropped on the form) and resiting here caused them to think they were
+            // being initialized for the first time.
+            // To preserve backards compatability, we shouldn't resite the component
+            // during Remove.
             try
             {
                 ComponentEventHandler eh = _events[s_eventComponentRemoved] as ComponentEventHandler;

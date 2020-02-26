@@ -3252,12 +3252,9 @@ namespace System.Windows.Forms
                             for (int j = 0; j < lvi.SubItems.Count; j++)
                             {
                                 ListViewItem.ListViewSubItem lvsi = lvi.SubItems[j];
-                                // the win32 list view search for items w/ text is case insensitive
-                                // do the same for sub items
-                                // because we are comparing user defined strings we have to do the slower String search
-                                // ie, use String.Compare(string, string, case sensitive, CultureInfo)
-                                // instead of new Whidbey String.Equals overload
-                                // String.Equals(string, string, StringComparison.OrdinalIgnoreCase
+                                // The win32 list view search for items w/ text is case insensitive
+                                // do the same for sub items because we are comparing user defined
+                                // strings we have to do the slower String search
                                 if (string.Equals(text, lvsi.Text, StringComparison.OrdinalIgnoreCase))
                                 {
                                     return lvi;
@@ -8082,8 +8079,6 @@ namespace System.Windows.Forms
                 return owner.InsertColumn(Count, columnHeader);
             }
 
-            // <-- NEW ADD OVERLOADS IN WHIDBEY
-
             public virtual ColumnHeader Add(string text, int width)
             {
                 ColumnHeader columnHeader = new ColumnHeader
@@ -8138,8 +8133,6 @@ namespace System.Windows.Forms
                 };
                 return owner.InsertColumn(Count, columnHeader);
             }
-
-            // END - NEW ADD OVERLOADS IN WHIDBEY  -->
 
             public virtual void AddRange(ColumnHeader[] values)
             {
@@ -8307,8 +8300,6 @@ namespace System.Windows.Forms
                 Insert(index, columnHeader);
             }
 
-            // <-- NEW INSERT OVERLOADS IN WHIDBEY
-
             public void Insert(int index, string text)
             {
                 ColumnHeader columnHeader = new ColumnHeader
@@ -8372,8 +8363,6 @@ namespace System.Windows.Forms
                 };
                 Insert(index, columnHeader);
             }
-
-            // END - NEW INSERT OVERLOADS IN WHIDBEY -->
 
             /// <summary>
             ///  removes a column from the ListView
@@ -8511,10 +8500,7 @@ namespace System.Windows.Forms
 
             public ListViewItemCollection(ListView owner)
             {
-                // Kept for APPCOMPAT reasons.
-                // In Whidbey this constructor is a no-op.
-
-                // initialize the inner list w/ a dummy list.
+                // Initialize the inner list w/ a dummy list.
                 innerList = new ListViewNativeItemCollection(owner);
             }
 
@@ -8692,8 +8678,6 @@ namespace System.Windows.Forms
                 return value;
             }
 
-            // <-- NEW ADD OVERLOADS IN WHIDBEY
-
             /// <summary>
             ///  Add an item to the ListView.  The item will be inserted either in
             ///  the correct sorted position, or, if no sorting is set, at the end
@@ -8735,8 +8719,6 @@ namespace System.Windows.Forms
                 Add(li);
                 return li;
             }
-
-            // END - NEW ADD OVERLOADS IN WHIDBEY  -->
 
             public void AddRange(ListViewItem[] items)
             {
@@ -8957,8 +8939,6 @@ namespace System.Windows.Forms
                 }
             }
 
-            // <-- NEW INSERT OVERLOADS IN WHIDBEY
-
             public ListViewItem Insert(int index, string text, string imageKey)
             {
                 return Insert(index, new ListViewItem(text, imageKey));
@@ -8981,8 +8961,6 @@ namespace System.Windows.Forms
                 };
                 return Insert(index, li);
             }
-
-            // END - NEW INSERT OVERLOADS IN WHIDBEY -->
 
             /// <summary>
             ///  Removes an item from the ListView

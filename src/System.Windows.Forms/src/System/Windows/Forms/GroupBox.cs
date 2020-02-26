@@ -145,7 +145,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Set the default Padding to 3 so that it is consistent with Everett
+        ///  Set the default Padding to 3 so that it is consistent with legacy versions.
         /// </summary>
         protected override Padding DefaultPadding
         {
@@ -429,11 +429,11 @@ namespace System.Windows.Forms
 
         protected override void OnPaint(PaintEventArgs e)
         {
-            // BACKCOMPAT requirement:
-            // Why the Height/Width >= 10 check? This is because uxtheme doesn't seem to handle those cases
-            // similar to what we do for the non-themed case, so if someone is using the groupbox as a
-            // separator, their app will look weird in Whidbey. We render the old way in these cases.
-
+            // For backwards compatability, make sure Height/Width >= 10. This is
+            // because uxtheme doesn't seem to handle those cases similar to what we
+            // do for the non-themed case, so if someone is using the groupbox as a
+            // separator, their app will look weird in legacy versions. We render the
+            // legacy way in these cases.
             if (Application.RenderWithVisualStyles && Width >= 10 && Height >= 10)
             {
                 GroupBoxState gbState = Enabled ? GroupBoxState.Normal : GroupBoxState.Disabled;

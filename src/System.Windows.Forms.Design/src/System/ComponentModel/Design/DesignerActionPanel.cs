@@ -45,7 +45,7 @@ namespace System.ComponentModel.Design
         private const int PanelHeaderVerticalPadding = 3; // Vertical padding within the header of the panel
         private const int PanelHeaderHorizontalPadding = 5; // Horizontal padding within the header of the panel
 
-        private const int TextBoxHeightFixup = 2; // Countereffects the fix for VSWhidbey 359726 - we relied on the broken behavior before
+        private const int TextBoxHeightFixup = 2;
         private CommandID[] _filteredCommandIDs;
         private readonly ToolTip _toolTip;
         private readonly List<Line> _lines;

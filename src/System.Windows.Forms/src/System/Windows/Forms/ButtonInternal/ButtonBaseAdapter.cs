@@ -630,8 +630,9 @@ namespace System.Windows.Forms.ButtonInternal
         {
             Region oldClip = graphics.Clip;
 
-            if (!layout.options.everettButtonCompat)
-            { // FOR EVERETT COMPATIBILITY - DO NOT CHANGE
+            if (!layout.options._legacyButtonCompat)
+            {
+                // For legacy compatability - do not change
                 Rectangle bounds = new Rectangle(buttonBorderSize, buttonBorderSize, Control.Width - (2 * buttonBorderSize), Control.Height - (2 * buttonBorderSize));
 
                 Region newClip = oldClip.Clone();
@@ -665,8 +666,9 @@ namespace System.Windows.Forms.ButtonInternal
 
             finally
             {
-                if (!layout.options.everettButtonCompat)
-                {// FOR EVERETT COMPATIBILITY - DO NOT CHANGE
+                if (!layout.options._legacyButtonCompat)
+                {
+                    // For backwards compatability - do not change.
                     graphics.Clip = oldClip;
                 }
             }
@@ -704,7 +706,8 @@ namespace System.Windows.Forms.ButtonInternal
             bool disabledText3D = layout.options.shadowedText;
 
             if (Control.UseCompatibleTextRendering)
-            { // Draw text using GDI+
+            {
+                // Draw text using GDI+
                 using (StringFormat stringFormat = CreateStringFormat())
                 {
                     // DrawString doesn't seem to draw where it says it does
@@ -747,7 +750,8 @@ namespace System.Windows.Forms.ButtonInternal
                 }
             }
             else
-            { // Draw text using GDI (Whidbey+ feature).
+            {
+                // Draw text using GDI
                 TextFormatFlags formatFlags = CreateTextFormatFlags();
                 if (disabledText3D && !Control.Enabled && !colors.options.highContrast)
                 {
@@ -1015,7 +1019,7 @@ namespace System.Windows.Forms.ButtonInternal
             internal bool layoutRTL;
             internal bool verticalText = false;
             internal bool useCompatibleTextRendering = false;
-            internal bool everettButtonCompat = true;
+            internal bool _legacyButtonCompat = true;
             internal TextFormatFlags gdiTextFormatFlags = TextFormatFlags.WordBreak | TextFormatFlags.TextBoxControl;
             internal StringFormatFlags gdipFormatFlags;
             internal StringTrimming gdipTrimming;
@@ -1492,9 +1496,9 @@ namespace System.Windows.Forms.ButtonInternal
                     // Do not worry about text/image overlaying
                     Size textSize = GetTextSize(maxBounds.Size);
 
-                    // FOR EVERETT COMPATIBILITY - DO NOT CHANGE
+                    // For backwards compatability - do not change.
                     Size size = imageSize;
-                    if (layout.options.everettButtonCompat && imageSize != Size.Empty)
+                    if (layout.options._legacyButtonCompat && imageSize != Size.Empty)
                     {
                         size = new Size(size.Width + 1, size.Height + 1);
                     }
@@ -1589,8 +1593,8 @@ namespace System.Windows.Forms.ButtonInternal
                     layout.textBounds.Offset(1, 1);
                 }
 
-                // FOR EVERETT COMPATIBILITY - DO NOT CHANGE
-                if (layout.options.everettButtonCompat)
+                // For backwards compatability - do not change.
+                if (layout.options._legacyButtonCompat)
                 {
                     layout.imageStart = layout.imageBounds.Location;
                     layout.imageBounds = Rectangle.Intersect(layout.imageBounds, layout.field);
@@ -1615,17 +1619,12 @@ namespace System.Windows.Forms.ButtonInternal
                 }
                 else
                 {
-                    // If we are using GDI+ (like Everett), then use the old Everett code
+                    // If we are using GDI+, then use the old legacy code
                     // This ensures that we have pixel-level rendering compatibility
                     bottom = Math.Min(layout.textBounds.Bottom, layout.field.Bottom);
                     layout.textBounds.Y = Math.Max(layout.textBounds.Y, layout.field.Y);
                 }
                 layout.textBounds.Height = bottom - layout.textBounds.Y;
-
-                //This causes a breaking change because images get shrunk to the new clipped size instead of clipped.
-                //********** bottom = Math.Min(layout.imageBounds.Bottom, maxBounds.Bottom);
-                //********** layout.imageBounds.Y = Math.Max(layout.imageBounds.Y, maxBounds.Y);
-                //********** layout.imageBounds.Height = bottom - layout.imageBounds.Y;
             }
 
             protected virtual Size GetTextSize(Size proposedSize)
@@ -1635,7 +1634,8 @@ namespace System.Windows.Forms.ButtonInternal
                 Size textSize = Size.Empty;
 
                 if (useCompatibleTextRendering)
-                { // GDI+ text rendering.
+                {
+                    // GDI+ text rendering.
                     using (Graphics g = WindowsFormsUtils.CreateMeasurementGraphics())
                     {
                         using (StringFormat gdipStringFormat = StringFormat)
@@ -1645,7 +1645,8 @@ namespace System.Windows.Forms.ButtonInternal
                     }
                 }
                 else if (!string.IsNullOrEmpty(text))
-                { // GDI text rendering (Whidbey feature).
+                {
+                    // GDI text rendering
                     textSize = TextRenderer.MeasureText(text, font, proposedSize, TextFormatFlags);
                 }
                 //else skip calling MeasureText, it should return 0,0
@@ -1688,7 +1689,7 @@ namespace System.Windows.Forms.ButtonInternal
             internal Rectangle field;
             internal Rectangle focus;
             internal Rectangle imageBounds;
-            internal Point imageStart; // FOR EVERETT COMPATIBILITY - DO NOT CHANGE
+            internal Point imageStart; // For legacy compatability - do not change
             internal LayoutOptions options;
 
             internal LayoutData(LayoutOptions options)

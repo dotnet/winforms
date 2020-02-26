@@ -260,7 +260,7 @@ namespace System.Windows.Forms.ButtonInternal
         {
             LayoutOptions layout = CommonLayout();
             layout.textOffset = !up;
-            layout.everettButtonCompat = !Application.RenderWithVisualStyles;
+            layout._legacyButtonCompat = !Application.RenderWithVisualStyles;
 
             return layout;
         }

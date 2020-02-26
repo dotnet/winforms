@@ -532,7 +532,8 @@ namespace System.ComponentModel.Design
                 }
                 _componentToGlyph.Remove(relatedObject);
 
-                // we only do this when we're in a transaction, see bug VSWHIDBEY 418709. This is for compat reason - infragistic. if we're not in a transaction, too bad, we don't update the screen
+                // For backwards compatability, only do this when we're in a transaction.
+                // If we're not in a transaction, too bad, we don't update the screen
                 if (_serviceProvider.GetService(typeof(IDesignerHost)) is IDesignerHost host && host.InTransaction)
                 {
                     host.TransactionClosed += new DesignerTransactionCloseEventHandler(InvalidateGlyphOnLastTransaction);

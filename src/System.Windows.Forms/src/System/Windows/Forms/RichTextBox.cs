@@ -1888,13 +1888,8 @@ namespace System.Windows.Forms
 
                     case RichTextBox.INPUT:
                         {
-                            // Several customers complained that they were getting Random NullReference exceptions inside EditStreamProc.
-                            // We had a case of  acustomer using Everett bits and another case of a customer using Whidbey Beta1 bits.
-                            // We don't have a repro in house which makes it problematic to determine the cause for this behavior.
-                            // Looking at the code it seems that the only posibility for editStream to be null is when the user
-                            // calls RichTextBox::LoadFile(Stream, RichTextBoxStreamType) with a null Stream.
-                            // However, the user said that his app is not using LoadFile method.
-                            // The only possibility left open is that the native Edit control sends random calls into EditStreamProc.
+                            // It is possible that the user passes a null stream to LoadFile.
+                            // The native Edit control also send sends random calls into EditStreamProc.
                             // We have to guard against this.
                             if (editStream != null)
                             {
@@ -2556,10 +2551,10 @@ namespace System.Windows.Forms
             // 5.   But... since the original RTF had no reading-order info, the reading-order
             //      will default to LTR.
 
-            // That's why in Everett we set the text back since that clears the RTF, thus restoring
+            // That's why in legacy versions we set the text back since that clears the RTF, thus restoring
             // the reading order to that of the window style. The problem here is that when there's
             // no initial text (the empty string), then WindowText would not actually set the text,
-            // and we were left with the LTR reading order. There's no longer any initial text (as in Everett,
+            // and we were left with the LTR reading order. There's no longer any initial text (as in legacy versions,
             // e.g richTextBox1), since we changed the designers to not set text. Sigh...
 
             // So the fix is to force windowtext, whether or not that window text is equal to what's already there.

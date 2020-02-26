@@ -1186,10 +1186,6 @@ namespace System.Windows.Forms
             return base.ProcessDialogKey(keyData);
         }
 
-        /// <summary>
-        ///  In Everett we used to TAB around the PrintPreviewDialog. Now since the PageCounter is added into the ToolStrip we dont
-        ///  This is breaking from Everett.
-        /// </summary>
         protected override bool ProcessTabKey(bool forward)
         {
             if (ActiveControl == previewControl)
