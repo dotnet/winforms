@@ -19,12 +19,6 @@ namespace System.Windows.Forms
         public const int CW_USEDEFAULT = (unchecked((int)0x80000000));
 
         public const int
-        DI_NORMAL = 0x0003,
-        DTS_UPDOWN = 0x0001,
-        DTS_SHOWNONE = 0x0002,
-        DTS_LONGDATEFORMAT = 0x0004,
-        DTS_TIMEFORMAT = 0x0009,
-        DTS_RIGHTALIGN = 0x0020,
         DTN_DATETIMECHANGE = ((0 - 760) + 1),
         DTN_USERSTRING = ((0 - 760) + 15),
         DTN_WMKEYDOWN = ((0 - 760) + 16),
