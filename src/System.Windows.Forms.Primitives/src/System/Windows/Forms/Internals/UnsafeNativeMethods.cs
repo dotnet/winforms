@@ -83,12 +83,6 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public static extern int SendMessage(HandleRef hWnd, int msg, int wParam, [Out, MarshalAs(UnmanagedType.IUnknown)]out object editOle);
 
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, NativeMethods.EDITSTREAM lParam);
-
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, NativeMethods.EDITSTREAM64 lParam);
-
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern int GetDlgItemInt(IntPtr hWnd, int nIDDlgItem, bool[] err, bool signed);
 

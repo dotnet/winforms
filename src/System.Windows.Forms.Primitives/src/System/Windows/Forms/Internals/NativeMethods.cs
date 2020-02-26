@@ -181,23 +181,6 @@ namespace System.Windows.Forms
             internal string pszWindow = null;
         }
 
-        public delegate int EditStreamCallback(IntPtr dwCookie, IntPtr buf, int cb, out int transferred);
-
-        [StructLayout(LayoutKind.Sequential)]
-        public class EDITSTREAM
-        {
-            public IntPtr dwCookie = IntPtr.Zero;
-            public int dwError = 0;
-            public EditStreamCallback pfnCallback = null;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public class EDITSTREAM64
-        {
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 20)]
-            public byte[] contents = new byte[20];
-        }
-
         public delegate IntPtr WndProc(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam);
 
         public delegate int ListViewCompareCallback(IntPtr lParam1, IntPtr lParam2, IntPtr lParamSort);
