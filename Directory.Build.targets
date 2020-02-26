@@ -33,7 +33,7 @@
   </ItemGroup>
 
   <PropertyGroup>
-    <!-- Set RuntimeFrameworkVersion to MicrosoftNETCoreAppInternalPackageVersion from Core Setup to prevent large SDK cycle -->
+    <!-- Set RuntimeFrameworkVersion to MicrosoftNETCoreAppRuntimewinx64PackageVersion from Core Setup to prevent large SDK cycle -->
     <RuntimeFrameworkVersion Condition="'$(MicrosoftNETCoreAppRuntimewinx64PackageVersion)'!='' And $(TargetFramework.StartsWith('netcoreapp3.')) ">$(MicrosoftNETCoreAppRuntimewinx64PackageVersion)</RuntimeFrameworkVersion>
 
     <!-- If TargetFramework is not netcoreapp3.x, then reset RuntimeFrameworkVersion -->
