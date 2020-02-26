@@ -10,16 +10,13 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Comdlg32
 {
     public class PRINTDLGWTests : IClassFixture<ThreadExceptionFixture>
     {
-        public static bool Is32bit => IntPtr.Size == 4;
-        public static bool Is64bit => IntPtr.Size == 8;
-
-        [ConditionalFact(nameof(Is32bit))]
+        [ConditionalFact(typeof(ArchitectureDetection), nameof(ArchitectureDetection.Is32bit))]
         public unsafe void PRINTDLGW_32_Size()
         {
             Assert.Equal(66, sizeof(PRINTDLGW_32));
         }
 
-        [ConditionalFact(nameof(Is32bit))]
+        [ConditionalFact(typeof(ArchitectureDetection), nameof(ArchitectureDetection.Is32bit))]
         public unsafe void PRINTDLGW_32_ensure_layout()
         {
             PRINTDLGW_32 sut = new PRINTDLGW_32();
@@ -46,13 +43,13 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Comdlg32
             Assert.Equal(62, (byte*)&sut._hSetupTemplate - addr);       // 4, HGLOBAL
         }
 
-        [ConditionalFact(nameof(Is64bit))]
+        [ConditionalFact(typeof(ArchitectureDetection), nameof(ArchitectureDetection.Is64bit))]
         public unsafe void PRINTDLGW_64_Size()
         {
             Assert.Equal(120, sizeof(PRINTDLGW_64));
         }
 
-        [ConditionalFact(nameof(Is64bit))]
+        [ConditionalFact(typeof(ArchitectureDetection), nameof(ArchitectureDetection.Is64bit))]
         public unsafe void PRINTDLGW_64_ensure_layout()
         {
             PRINTDLGW_64 sut = new PRINTDLGW_64();

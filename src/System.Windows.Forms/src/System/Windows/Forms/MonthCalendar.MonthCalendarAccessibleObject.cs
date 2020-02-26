@@ -520,7 +520,7 @@ namespace System.Windows.Forms
                         iCol = column,
                         iRow = row,
                         pszName = pName,
-                        cchName = (uint)name.Length - 1
+                        cchName = (UIntPtr)name.Length - 1
                     };
 
                     result = User32.SendMessageW(_owner, (User32.WM)MCM.GETCALENDARGRIDINFO, IntPtr.Zero, ref gridInfo) != IntPtr.Zero;
