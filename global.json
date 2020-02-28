@@ -7,7 +7,7 @@
     "xcopy-msbuild": "16.0.0-rc1-alpha",
     "runtimes": {
       "dotnet": [
-        "$(MicrosoftNETCoreAppPackageVersion)"
+        "$(MicrosoftNETCoreAppInternalPackageVersion)"
       ]
     }
   },
@@ -17,7 +17,7 @@
   "msbuild-sdks": {
     "Microsoft.DotNet.Arcade.Sdk": "1.0.0-beta.20113.5",
     "Microsoft.DotNet.Helix.Sdk": "2.0.0-beta.20113.5",
-    "Microsoft.NET.Sdk.IL": "3.1.0-preview3.19531.2"
+    "Microsoft.NET.Sdk.IL": "3.1.3-servicing.20118.3"
   },
   "native-tools": {
     "dotnet-api-docs_netcoreapp3.0": "0.0.0.1"

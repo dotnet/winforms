@@ -44,7 +44,7 @@ There are two ways to get around this problem:
     * If you’re interested in seeing what this version is, look at `<yourRepoRoot>\.dotnet\sdk\<yourSdkVersion>\dotnet.runtimeconfig.json`
 * The winforms (runtime) repo DOES specify an explicit NetCore.App version, and we use the one published by the core-setup repo.
     * If you look at [Directory.Build.Targets](https://github.com/dotnet/winforms/blob/ac0426561b158522eb8564de2bedd28f28148f8d/Directory.Build.targets#L35), you can see where this is set 
-* `$(MicrosoftNETCoreAppPackageVersion)` is set in [Versions.props](https://github.com/dotnet/winforms/blob/ac0426561b158522eb8564de2bedd28f28148f8d/eng/Versions.props#L19), and gets automatically updated when we ingest dependencies from core-setup. (These PR's are automatically merged in if the build passes)
+* `$(MicrosoftNETCoreAppRuntimewinx64PackageVersion)` is set in [Versions.props](https://github.com/dotnet/winforms/blob/ac0426561b158522eb8564de2bedd28f28148f8d/eng/Versions.props#L19), and gets automatically updated when we ingest dependencies from core-setup. (These PR's are automatically merged in if the build passes)
     * You can see where the dependency comes from by looking at [Version.Details.xml](https://github.com/dotnet/winforms/blob/ac0426561b158522eb8564de2bedd28f28148f8d/eng/Version.Details.xml#L13)
     * The reason we use the version from core-setup instead of the version built-in to the SDK is we don’t want to wait for the runtime to come all the way through the SDK repo to consume it
 * Running tests from the command line (.\build -test) works because the build scripts automatically download both the sdk AND the NetCore.App that you need AND add the .dotnet folder to your PATH when running.
