@@ -90,12 +90,6 @@ namespace System.Windows.Forms
         MCN_SELECT = ((0 - 750) + 4);
 
         public const int
-        NIN_BALLOONSHOW = ((int)User32.WM.USER + 2),
-        NIN_BALLOONHIDE = ((int)User32.WM.USER + 3),
-        NIN_BALLOONTIMEOUT = ((int)User32.WM.USER + 4),
-        NIN_BALLOONUSERCLICK = ((int)User32.WM.USER + 5);
-
-        public const int
         PATCOPY = 0x00F00021,
         PATINVERT = 0x005A0049;
 
