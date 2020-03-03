@@ -10,88 +10,24 @@ namespace System.Windows.Forms
 {
     internal class MergeHistoryItem
     {
-        private readonly MergeAction mergeAction;
-        private ToolStripItem targetItem;
-        private int index = -1;
-        private int previousIndex = -1;
-        private ToolStripItemCollection previousIndexCollection;
-        private ToolStripItemCollection indexCollection;
-
         public MergeHistoryItem(MergeAction mergeAction)
         {
-            this.mergeAction = mergeAction;
-        }
-        public MergeAction MergeAction
-        {
-            get
-            {
-                return mergeAction;
-            }
+            MergeAction = mergeAction;
         }
 
-        public ToolStripItem TargetItem
-        {
-            get
-            {
-                return targetItem;
-            }
-            set
-            {
-                targetItem = value;
-            }
-        }
+        public MergeAction MergeAction { get; }
 
-        public int Index
-        {
-            get
-            {
-                return index;
-            }
-            set
-            {
-                index = value;
-            }
-        }
+        public ToolStripItem TargetItem { get; set; }
 
-        public int PreviousIndex
-        {
-            get
-            {
-                return previousIndex;
-            }
-            set
-            {
-                previousIndex = value;
-            }
-        }
+        public int Index { get; set; } = -1;
 
-        public ToolStripItemCollection PreviousIndexCollection
-        {
-            get
-            {
-                return previousIndexCollection;
-            }
-            set
-            {
-                previousIndexCollection = value;
-            }
-        }
+        public int PreviousIndex { get; set; } = -1;
 
-        public ToolStripItemCollection IndexCollection
-        {
-            get
-            {
-                return indexCollection;
-            }
-            set
-            {
-                indexCollection = value;
-            }
-        }
+        public ToolStripItemCollection PreviousIndexCollection { get; set; }
+
+        public ToolStripItemCollection IndexCollection { get; set; }
 
         public override string ToString()
-        {
-            return "MergeAction: " + mergeAction.ToString() + " | TargetItem: " + (TargetItem == null ? "null" : TargetItem.Text) + " Index: " + index.ToString(CultureInfo.CurrentCulture);
-        }
+            => $"MergeAction: {MergeAction} | TargetItem: {(TargetItem == null ? "null" : TargetItem.Text)} Index: {Index}";
     }
 }

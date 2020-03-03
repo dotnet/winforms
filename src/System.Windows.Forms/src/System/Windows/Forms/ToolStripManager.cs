@@ -21,31 +21,33 @@ namespace System.Windows.Forms
         // WARNING: ThreadStatic initialization happens only on the first thread at class CTOR time.
         // use InitializeThread mechanism to initialize ThreadStatic members
         [ThreadStatic]
-        private static ClientUtils.WeakRefCollection toolStripWeakArrayList;
-        [ThreadStatic]
-        private static ClientUtils.WeakRefCollection toolStripPanelWeakArrayList;
-        [ThreadStatic]
-        private static bool initialized;
+        private static ClientUtils.WeakRefCollection t_toolStripWeakArrayList;
 
-        private static Font defaultFont;
-        private static ConcurrentDictionary<int, Font> defaultFontCache = new ConcurrentDictionary<int, Font>();
+        [ThreadStatic]
+        private static ClientUtils.WeakRefCollection t_toolStripPanelWeakArrayList;
+
+        [ThreadStatic]
+        private static bool t_initialized;
+
+        private static Font s_defaultFont;
+        private static ConcurrentDictionary<int, Font> s_defaultFontCache = new ConcurrentDictionary<int, Font>();
 
         // WARNING: When subscribing to static event handlers - make sure you unhook from them
         // otherwise you can leak USER objects on process shutdown.
         // Consider: use WeakRefCollection
         [ThreadStatic]
-        private static Delegate[] staticEventHandlers;
-        private const int staticEventDefaultRendererChanged = 0;
-        private const int staticEventCount = 1;
+        private static Delegate[] t_staticEventHandlers;
+        private const int StaticEventDefaultRendererChanged = 0;
+        private const int StaticEventCount = 1;
 
-        private static readonly object internalSyncObject = new object();
+        private static readonly object s_internalSyncObject = new object();
 
-        private static int currentDpi = DpiHelper.DeviceDpi;
-
-        private static void InitializeThread() {
-            if (!initialized) {
-                initialized = true;
-                currentRendererType = ProfessionalRendererType;
+        private static void InitializeThread()
+        {
+            if (!t_initialized)
+            {
+                t_initialized = true;
+                t_currentRendererType = s_professionalRendererType;
             }
         }
 
@@ -66,7 +68,7 @@ namespace System.Windows.Forms
                     int dpi = CurrentDpi;
 
                     Font retFont = null;
-                    if (defaultFontCache.TryGetValue(dpi, out retFont) == false || retFont == null)
+                    if (s_defaultFontCache.TryGetValue(dpi, out retFont) == false || retFont == null)
                     {
                         // default to menu font
                         sysFont = SystemInformation.GetMenuFontForDpi(dpi);
@@ -82,21 +84,21 @@ namespace System.Windows.Forms
                             {
                                 retFont = sysFont;
                             }
-                            defaultFontCache[dpi] = retFont;
+                            s_defaultFontCache[dpi] = retFont;
                         }
                     }
                     return retFont;
                 }
                 else
                 {
-                    Font retFont = defaultFont;  // threadsafe local reference
+                    Font retFont = s_defaultFont;  // threadsafe local reference
 
                     if (retFont == null)
                     {
-                        lock (internalSyncObject)
+                        lock (s_internalSyncObject)
                         {
                             // double check the defaultFont after the lock.
-                            retFont = defaultFont;
+                            retFont = s_defaultFont;
 
                             if (retFont == null)
                             {
@@ -112,14 +114,14 @@ namespace System.Windows.Forms
                                     // ensure font is in pixels so it displays properly in the property grid at design time.
                                     if (sysFont.Unit != GraphicsUnit.Point)
                                     {
-                                        defaultFont = ControlPaint.FontInPoints(sysFont);
-                                        retFont = defaultFont;
+                                        s_defaultFont = ControlPaint.FontInPoints(sysFont);
+                                        retFont = s_defaultFont;
                                         sysFont.Dispose();
                                     }
                                     else
                                     {
-                                        defaultFont = sysFont;
-                                        retFont = defaultFont;
+                                        s_defaultFont = sysFont;
+                                        retFont = s_defaultFont;
                                     }
                                 }
                                 return retFont;
@@ -131,40 +133,30 @@ namespace System.Windows.Forms
             }
         }
 
-        internal static int CurrentDpi
-        {
-            get
-            {
-                return currentDpi;
-            }
-            set
-            {
-                currentDpi = value;
-            }
-        }
+        internal static int CurrentDpi { get; set; } = DpiHelper.DeviceDpi;
 
         internal static ClientUtils.WeakRefCollection ToolStrips
         {
             get
             {
-                if (toolStripWeakArrayList == null)
+                if (t_toolStripWeakArrayList == null)
                 {
-                    toolStripWeakArrayList = new ClientUtils.WeakRefCollection();
+                    t_toolStripWeakArrayList = new ClientUtils.WeakRefCollection();
                 }
-                return toolStripWeakArrayList;
+                return t_toolStripWeakArrayList;
             }
         }
 
         /// <summary>Static events only!!!</summary>
         private static void AddEventHandler(int key, Delegate value)
         {
-            lock (internalSyncObject)
+            lock (s_internalSyncObject)
             {
-                if (staticEventHandlers == null)
+                if (t_staticEventHandlers == null)
                 {
-                    staticEventHandlers = new Delegate[staticEventCount];
+                    t_staticEventHandlers = new Delegate[StaticEventCount];
                 }
-                staticEventHandlers[key] = Delegate.Combine(staticEventHandlers[key], value);
+                t_staticEventHandlers[key] = Delegate.Combine(t_staticEventHandlers[key], value);
             }
         }
 
@@ -269,15 +261,15 @@ namespace System.Windows.Forms
 
         private static Delegate GetEventHandler(int key)
         {
-            lock (internalSyncObject)
+            lock (s_internalSyncObject)
             {
-                if (staticEventHandlers == null)
+                if (t_staticEventHandlers == null)
                 {
                     return null;
                 }
                 else
                 {
-                    return (Delegate)staticEventHandlers[key];
+                    return (Delegate)t_staticEventHandlers[key];
                 }
             }
         }
@@ -289,7 +281,7 @@ namespace System.Windows.Forms
 
         internal static bool IsThreadUsingToolStrips()
         {
-            return (toolStripWeakArrayList != null && (toolStripWeakArrayList.Count > 0));
+            return (t_toolStripWeakArrayList != null && (t_toolStripWeakArrayList.Count > 0));
         }
 
         private static void OnUserPreferenceChanging(object sender, UserPreferenceChangingEventArgs e)
@@ -301,11 +293,11 @@ namespace System.Windows.Forms
             // this corresponds to UserPreferenceCategory.Window.
             if (e.Category == UserPreferenceCategory.Window) {
                 if (DpiHelper.IsPerMonitorV2Awareness) {
-                    defaultFontCache.Clear();
+                    s_defaultFontCache.Clear();
                 }
                 else {
-                    lock (internalSyncObject) {
-                        defaultFont = null;
+                    lock (s_internalSyncObject) {
+                        s_defaultFont = null;
                     }
                 }
             }
@@ -341,15 +333,15 @@ namespace System.Windows.Forms
         /// <summary> removes dead entries from the toolstrip weak reference collection. </summary>
         internal static void PruneToolStripList()
         {
-            if (toolStripWeakArrayList != null)
+            if (t_toolStripWeakArrayList != null)
             {
-                if (toolStripWeakArrayList.Count > 0)
+                if (t_toolStripWeakArrayList.Count > 0)
                 {
-                    for (int i = toolStripWeakArrayList.Count - 1; i >= 0; i--)
+                    for (int i = t_toolStripWeakArrayList.Count - 1; i >= 0; i--)
                     {
-                        if (toolStripWeakArrayList[i] == null)
+                        if (t_toolStripWeakArrayList[i] == null)
                         {
-                            toolStripWeakArrayList.RemoveAt(i);
+                            t_toolStripWeakArrayList.RemoveAt(i);
                         }
                     }
                 }
@@ -359,11 +351,11 @@ namespace System.Windows.Forms
         /// <summary> static events only!!!</summary>
         private static void RemoveEventHandler(int key, Delegate value)
         {
-            lock (internalSyncObject)
+            lock (s_internalSyncObject)
             {
-                if (staticEventHandlers != null)
+                if (t_staticEventHandlers != null)
                 {
-                    staticEventHandlers[key] = Delegate.Remove(staticEventHandlers[key], value);
+                    t_staticEventHandlers[key] = Delegate.Remove(t_staticEventHandlers[key], value);
                 }
             }
         }
@@ -483,36 +475,27 @@ namespace System.Windows.Forms
         ///  locks in painting code.
         /// </remarks>
         [ThreadStatic]
-        private static ToolStripRenderer defaultRenderer;
+        private static ToolStripRenderer t_defaultRenderer;
 
         // types cached for perf.
-        internal static Type SystemRendererType = typeof(ToolStripSystemRenderer);
-        internal static Type ProfessionalRendererType = typeof(ToolStripProfessionalRenderer);
-        private static bool visualStylesEnabledIfPossible = true;
+        internal static Type s_systemRendererType = typeof(ToolStripSystemRenderer);
+        internal static Type s_professionalRendererType = typeof(ToolStripProfessionalRenderer);
+        private static bool s_visualStylesEnabledIfPossible = true;
 
         [ThreadStatic]
-        private static Type currentRendererType;
+        private static Type t_currentRendererType;
 
         private static Type CurrentRendererType
         {
             get
             {
                 InitializeThread();
-                return currentRendererType;
+                return t_currentRendererType;
             }
-            set
-            {
-                currentRendererType = value;
-            }
+            set => t_currentRendererType = value;
         }
 
-        private static Type DefaultRendererType
-        {
-            get
-            {
-                return ProfessionalRendererType;
-            }
-        }
+        private static Type DefaultRendererType => s_professionalRendererType;
 
         /// <summary>
         ///  The default renderer for the thread. When ToolStrip.RenderMode is set
@@ -522,20 +505,20 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (defaultRenderer == null)
+                if (t_defaultRenderer == null)
                 {
-                    defaultRenderer = CreateRenderer(RenderMode);
+                    t_defaultRenderer = CreateRenderer(RenderMode);
                 }
-                return defaultRenderer;
+                return t_defaultRenderer;
             }
             set
             {
-                if (defaultRenderer != value)
+                if (t_defaultRenderer != value)
                 {
                     CurrentRendererType = (value == null) ? DefaultRendererType : value.GetType();
-                    defaultRenderer = value;
+                    t_defaultRenderer = value;
 
-                    ((EventHandler)GetEventHandler(staticEventDefaultRendererChanged))?.Invoke(null, EventArgs.Empty);
+                    ((EventHandler)GetEventHandler(StaticEventDefaultRendererChanged))?.Invoke(null, EventArgs.Empty);
                 }
             }
         }
@@ -547,8 +530,8 @@ namespace System.Windows.Forms
         /// </summary>
         public static event EventHandler RendererChanged
         {
-            add => AddEventHandler(staticEventDefaultRendererChanged, value);
-            remove => RemoveEventHandler(staticEventDefaultRendererChanged, value);
+            add => AddEventHandler(StaticEventDefaultRendererChanged, value);
+            remove => RemoveEventHandler(StaticEventDefaultRendererChanged, value);
         }
 
         /// <summary> returns the default toolstrip RenderMode for the thread </summary>
@@ -558,17 +541,17 @@ namespace System.Windows.Forms
             {
                 Type currentType = CurrentRendererType;
 
-                if (defaultRenderer != null && !defaultRenderer.IsAutoGenerated)
+                if (t_defaultRenderer != null && !t_defaultRenderer.IsAutoGenerated)
                 {
                     return ToolStripManagerRenderMode.Custom;
                 }
                 // check the type of the currently set renderer.
                 // types are cached as this may be called frequently.
-                if (currentType == ProfessionalRendererType)
+                if (currentType == s_professionalRendererType)
                 {
                     return ToolStripManagerRenderMode.Professional;
                 }
-                if (currentType == SystemRendererType)
+                if (currentType == s_systemRendererType)
                 {
                     return ToolStripManagerRenderMode.System;
                 }
@@ -599,18 +582,15 @@ namespace System.Windows.Forms
         /// </summary>
         public static bool VisualStylesEnabled
         {
-            get
-            {
-                return visualStylesEnabledIfPossible && Application.RenderWithVisualStyles;
-            }
+            get => s_visualStylesEnabledIfPossible && Application.RenderWithVisualStyles;
             set
             {
                 bool oldVis = VisualStylesEnabled;
-                visualStylesEnabledIfPossible = value;
+                s_visualStylesEnabledIfPossible = value;
 
                 if (oldVis != VisualStylesEnabled)
                 {
-                    ((EventHandler)GetEventHandler(staticEventDefaultRendererChanged))?.Invoke(null, EventArgs.Empty);
+                    ((EventHandler)GetEventHandler(StaticEventDefaultRendererChanged))?.Invoke(null, EventArgs.Empty);
                 }
             }
         }
@@ -646,24 +626,24 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (toolStripPanelWeakArrayList == null)
+                if (t_toolStripPanelWeakArrayList == null)
                 {
-                    toolStripPanelWeakArrayList = new ClientUtils.WeakRefCollection();
+                    t_toolStripPanelWeakArrayList = new ClientUtils.WeakRefCollection();
                 }
-                return toolStripPanelWeakArrayList;
+                return t_toolStripPanelWeakArrayList;
             }
         }
 
         internal static ToolStripPanel ToolStripPanelFromPoint(Control draggedControl, Point screenLocation)
         {
-            if (toolStripPanelWeakArrayList != null)
+            if (t_toolStripPanelWeakArrayList != null)
             {
                 ISupportToolStripPanel draggedItem = draggedControl as ISupportToolStripPanel;
                 bool rootWindowCheck = draggedItem.IsCurrentlyDragging;
 
-                for (int i = 0; i < toolStripPanelWeakArrayList.Count; i++)
+                for (int i = 0; i < t_toolStripPanelWeakArrayList.Count; i++)
                 {
-                    if (toolStripPanelWeakArrayList[i] is ToolStripPanel toolStripPanel && toolStripPanel.IsHandleCreated && toolStripPanel.Visible &&
+                    if (t_toolStripPanelWeakArrayList[i] is ToolStripPanel toolStripPanel && toolStripPanel.IsHandleCreated && toolStripPanel.Visible &&
                         toolStripPanel.DragBounds.Contains(toolStripPanel.PointToClient(screenLocation)))
                     {
                         // Ensure that we cant drag off one window to another.

@@ -32,39 +32,32 @@ namespace System.Windows.Forms
         ///  </remarks>
         internal partial class ModalMenuFilter : IMessageModifyAndFilter
         {
-            private HandleRef _activeHwnd = NativeMethods.NullHandleRef; // the window that was active when we showed the dropdown
-            private HandleRef _lastActiveWindow = NativeMethods.NullHandleRef;         // the window that was last known to be active
+            // The window that was active when we showed the dropdown
+            private HandleRef _activeHwnd = NativeMethods.NullHandleRef;
+            // The window that was last known to be active
+            private HandleRef _lastActiveWindow = NativeMethods.NullHandleRef;
             private List<ToolStrip> _inputFilterQueue;
-            private bool _inMenuMode = false;
-            private bool _caretHidden = false;
-            private bool _showUnderlines = false;
-            private bool menuKeyToggle = false;
-            private bool _suspendMenuMode = false;
-            private HostedWindowsFormsMessageHook messageHook;
-            private Timer _ensureMessageProcessingTimer = null;
-            private const int MESSAGE_PROCESSING_INTERVAL = 500;
+            private bool _inMenuMode;
+            private bool _caretHidden;
+            private bool _showUnderlines;
+            private bool _menuKeyToggle;
+            private bool _suspendMenuMode;
+            private HostedWindowsFormsMessageHook _messageHook;
+            private Timer _ensureMessageProcessingTimer;
+            private const int MessageProcessingInterval = 500;
 
-            private ToolStrip _toplevelToolStrip = null;
+            private ToolStrip _toplevelToolStrip;
 
-            private readonly WeakReference<IKeyboardToolTip> lastFocusedTool = new WeakReference<IKeyboardToolTip>(null);
+            private readonly WeakReference<IKeyboardToolTip> _lastFocusedTool = new WeakReference<IKeyboardToolTip>(null);
 
 #if DEBUG
-            bool _justEnteredMenuMode = false;
+            private bool _justEnteredMenuMode;
 #endif
-            [ThreadStatic]
-            private static ModalMenuFilter _instance;
 
-            internal static ModalMenuFilter Instance
-            {
-                get
-                {
-                    if (_instance == null)
-                    {
-                        _instance = new ModalMenuFilter();
-                    }
-                    return _instance;
-                }
-            }
+            [ThreadStatic]
+            private static ModalMenuFilter t_instance;
+
+            internal static ModalMenuFilter Instance => t_instance ??= new ModalMenuFilter();
 
             private ModalMenuFilter()
             {
@@ -79,10 +72,7 @@ namespace System.Windows.Forms
             // returns whether or not we should show focus cues for mnemonics.
             public bool ShowUnderlines
             {
-                get
-                {
-                    return _showUnderlines;
-                }
+                get => _showUnderlines;
                 set
                 {
                     if (_showUnderlines != value)
@@ -95,10 +85,7 @@ namespace System.Windows.Forms
 
             private HandleRef ActiveHwndInternal
             {
-                get
-                {
-                    return _activeHwnd;
-                }
+                get => _activeHwnd;
                 set
                 {
                     if (_activeHwnd.Handle != value.Handle)
@@ -127,41 +114,29 @@ namespace System.Windows.Forms
                 }
             }
 
-            // returns whether or not someone has called EnterMenuMode.
-            internal static bool InMenuMode
-            {
-                get { return Instance._inMenuMode; }
-            }
+            /// <summary>
+            ///  Returns whether or not someone has called EnterMenuMode.
+            /// </summary>
+            internal static bool InMenuMode => Instance._inMenuMode;
 
             internal static bool MenuKeyToggle
             {
-                get
-                {
-                    return Instance.menuKeyToggle;
-                }
+                get => Instance._menuKeyToggle;
                 set
                 {
-                    if (Instance.menuKeyToggle != value)
+                    if (Instance._menuKeyToggle != value)
                     {
-                        Instance.menuKeyToggle = value;
+                        Instance._menuKeyToggle = value;
                     }
                 }
             }
 
-            ///  This is used in scenarios where windows forms
-            ///  does not own the message pump, but needs access
-            ///  to the message queue.
+            /// <summary>
+            ///  Used in scenarios where windows forms does not own the message pump,
+            ///  but needs access to the message queue.
+            /// </summary>
             private HostedWindowsFormsMessageHook MessageHook
-            {
-                get
-                {
-                    if (messageHook == null)
-                    {
-                        messageHook = new HostedWindowsFormsMessageHook();
-                    }
-                    return messageHook;
-                }
-            }
+                => _messageHook ??= new HostedWindowsFormsMessageHook();
 
             // ToolStrip analog to WM_ENTERMENULOOP
             private void EnterMenuModeCore()
@@ -205,7 +180,7 @@ namespace System.Windows.Forms
                 IKeyboardToolTip lastFocusedTool = KeyboardToolTipStateMachine.Instance.LastFocusedTool;
                 if (lastFocusedTool != null)
                 {
-                    this.lastFocusedTool.SetTarget(lastFocusedTool);
+                    this._lastFocusedTool.SetTarget(lastFocusedTool);
                     KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(lastFocusedTool);
                 }
             }
@@ -227,11 +202,11 @@ namespace System.Windows.Forms
                     {
                         Debug.WriteLineIf(ToolStrip.SnapFocusDebug.TraceVerbose, "___________Exiting MenuMode....");
 
-                        if (messageHook != null)
+                        if (_messageHook != null)
                         {
                             // message filter isn't going to help as we dont own the message pump
                             // switch over to a MessageHook
-                            messageHook.HookMessages = false;
+                            _messageHook.HookMessages = false;
                         }
                         // PERF,
 
@@ -261,7 +236,7 @@ namespace System.Windows.Forms
                             User32.ShowCaret(IntPtr.Zero);
                         }
 
-                        if (lastFocusedTool.TryGetTarget(out IKeyboardToolTip tool) && tool != null)
+                        if (_lastFocusedTool.TryGetTarget(out IKeyboardToolTip tool) && tool != null)
                         {
                             KeyboardToolTipStateMachine.Instance.NotifyAboutGotFocus(tool);
                         }
@@ -365,7 +340,7 @@ namespace System.Windows.Forms
                     {
                         _ensureMessageProcessingTimer = new Timer();
                     }
-                    _ensureMessageProcessingTimer.Interval = MESSAGE_PROCESSING_INTERVAL;
+                    _ensureMessageProcessingTimer.Interval = MessageProcessingInterval;
                     _ensureMessageProcessingTimer.Enabled = true;
                 }
                 else if (_ensureMessageProcessingTimer != null)

@@ -16,8 +16,8 @@ namespace System.Windows.Forms
         {
             private class HostedWindowsFormsMessageHook
             {
-                private IntPtr messageHookHandle = IntPtr.Zero;
-                private bool isHooked = false;
+                private IntPtr _messageHookHandle;
+                private bool _isHooked;
                 private User32.HOOKPROC _hookProc;
 
                 public HostedWindowsFormsMessageHook()
@@ -25,7 +25,7 @@ namespace System.Windows.Forms
 #if DEBUG
                     try
                     {
-                        callingStack = Environment.StackTrace;
+                        _callingStack = Environment.StackTrace;
                     }
                     catch (Security.SecurityException)
                     {
@@ -34,19 +34,17 @@ namespace System.Windows.Forms
                 }
 
 #if DEBUG
-                readonly string callingStack;
+                private readonly string _callingStack;
+
                 ~HostedWindowsFormsMessageHook()
                 {
-                    Debug.Assert(messageHookHandle == IntPtr.Zero, "Finalizing an active mouse hook.  This will crash the process.  Calling stack: " + callingStack);
+                    Debug.Assert(_messageHookHandle == IntPtr.Zero, "Finalizing an active mouse hook.  This will crash the process.  Calling stack: " + _callingStack);
                 }
 #endif
 
                 public bool HookMessages
                 {
-                    get
-                    {
-                        return messageHookHandle != IntPtr.Zero;
-                    }
+                    get => _messageHookHandle != IntPtr.Zero;
                     set
                     {
                         if (value)
@@ -64,23 +62,24 @@ namespace System.Windows.Forms
                 {
                     lock (this)
                     {
-                        if (messageHookHandle != IntPtr.Zero)
+                        if (_messageHookHandle != IntPtr.Zero)
                         {
                             return;
                         }
 
                         _hookProc = new User32.HOOKPROC(MessageHookProc);
-                        messageHookHandle = User32.SetWindowsHookExW(
+                        _messageHookHandle = User32.SetWindowsHookExW(
                             User32.WH.GETMESSAGE,
                             _hookProc,
                             IntPtr.Zero,
                             Kernel32.GetCurrentThreadId());
 
-                        if (messageHookHandle != IntPtr.Zero)
+                        if (_messageHookHandle != IntPtr.Zero)
                         {
-                            isHooked = true;
+                            _isHooked = true;
                         }
-                        Debug.Assert(messageHookHandle != IntPtr.Zero, "Failed to install mouse hook");
+
+                        Debug.Assert(_messageHookHandle != IntPtr.Zero, "Failed to install mouse hook");
                     }
                 }
 
@@ -88,7 +87,7 @@ namespace System.Windows.Forms
                 {
                     if (nCode == User32.HC.ACTION)
                     {
-                        if (isHooked && (User32.PM)wparam == User32.PM.REMOVE)
+                        if (_isHooked && (User32.PM)wparam == User32.PM.REMOVE)
                         {
                             // only process messages we've pulled off the queue
                             User32.MSG* msg = (User32.MSG*)lparam;
@@ -104,19 +103,19 @@ namespace System.Windows.Forms
                         }
                     }
 
-                    return User32.CallNextHookEx(new HandleRef(this, messageHookHandle), nCode, wparam, lparam);
+                    return User32.CallNextHookEx(new HandleRef(this, _messageHookHandle), nCode, wparam, lparam);
                 }
 
                 private void UninstallMessageHook()
                 {
                     lock (this)
                     {
-                        if (messageHookHandle != IntPtr.Zero)
+                        if (_messageHookHandle != IntPtr.Zero)
                         {
-                            User32.UnhookWindowsHookEx(new HandleRef(this, messageHookHandle));
+                            User32.UnhookWindowsHookEx(new HandleRef(this, _messageHookHandle));
                             _hookProc = null;
-                            messageHookHandle = IntPtr.Zero;
-                            isHooked = false;
+                            _messageHookHandle = IntPtr.Zero;
+                            _isHooked = false;
                         }
                     }
                 }

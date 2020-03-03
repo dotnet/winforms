@@ -10,30 +10,16 @@ namespace System.Windows.Forms
 {
     internal class MergeHistory
     {
-        private Stack<MergeHistoryItem> mergeHistoryItemsStack;
-        private readonly ToolStrip mergedToolStrip;
+        private Stack<MergeHistoryItem> _mergeHistoryItemsStack;
 
         public MergeHistory(ToolStrip mergedToolStrip)
         {
-            this.mergedToolStrip = mergedToolStrip;
+            MergedToolStrip = mergedToolStrip;
         }
+
         public Stack<MergeHistoryItem> MergeHistoryItemsStack
-        {
-            get
-            {
-                if (mergeHistoryItemsStack == null)
-                {
-                    mergeHistoryItemsStack = new Stack<MergeHistoryItem>();
-                }
-                return mergeHistoryItemsStack;
-            }
-        }
-        public ToolStrip MergedToolStrip
-        {
-            get
-            {
-                return mergedToolStrip;
-            }
-        }
+            => _mergeHistoryItemsStack ??= new Stack<MergeHistoryItem>();
+
+        public ToolStrip MergedToolStrip { get; }
     }
 }

@@ -1736,11 +1736,11 @@ namespace System.Windows.Forms
                 }
                 // check the type of the currently set renderer.
                 // types are cached as this may be called frequently.
-                if (currentRendererType == ToolStripManager.ProfessionalRendererType)
+                if (currentRendererType == ToolStripManager.s_professionalRendererType)
                 {
                     return ToolStripRenderMode.Professional;
                 }
-                if (currentRendererType == ToolStripManager.SystemRendererType)
+                if (currentRendererType == ToolStripManager.s_systemRendererType)
                 {
                     return ToolStripRenderMode.System;
                 }
