@@ -2,10 +2,17 @@
 <Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   
   <PropertyGroup>
-    <IsFacadeAssembly Condition="'$(IsFacadeAssembly)'=='' AND ($(MSBuildProjectName.EndsWith('.Facade')))">true</IsFacadeAssembly>
+    <!-- Facades for .NET Framework assemblies -->
+    <_IsFacadeAssemblyNetFx Condition="$(MSBuildProjectName.EndsWith('.Facade'))">true</_IsFacadeAssemblyNetFx>
+    <!-- Facades for .NET Core 3.x assemblies -->
+    <_IsFacadeAssemblyNetCore3x Condition="$(MSBuildProjectName.EndsWith('.Facade3x'))">true</_IsFacadeAssemblyNetCore3x>
+
+    <IsFacadeAssembly Condition="'$(IsFacadeAssembly)' == '' AND ('$(_IsFacadeAssemblyNetFx)' == 'true' OR '$(_IsFacadeAssemblyNetCore3x)' == 'true')">true</IsFacadeAssembly>
+    <IsFacadeAssemblyNetFx Condition="'$(IsFacadeAssembly)' == 'true' AND '$(_IsFacadeAssemblyNetFx)' == 'true'">true</IsFacadeAssemblyNetFx>
+    <IsFacadeAssemblyNetCore3x Condition="'$(IsFacadeAssembly)' == 'true' AND '$(_IsFacadeAssemblyNetCore3x)' == 'true'">true</IsFacadeAssemblyNetCore3x>
   </PropertyGroup>
   
-  <PropertyGroup Condition="'$(IsFacadeAssembly)'=='true'"> 
+  <PropertyGroup Condition="'$(IsFacadeAssembly)' == 'true'"> 
     <IsPartialFacadeAssembly>true</IsPartialFacadeAssembly>
     <GenFacadesIgnoreMissingTypes>true</GenFacadesIgnoreMissingTypes>
 
@@ -15,16 +22,27 @@
     <MicrosoftTargetingPackNETFrameworkv472Package></MicrosoftTargetingPackNETFrameworkv472Package>
   </PropertyGroup>
 
-  <ItemGroup Condition="'$(IsFacadeAssembly)'=='true'">  
+  <ItemGroup Condition="'$(IsFacadeAssemblyNetFx)' == 'true'">  
     <!-- PrivateAssets="All": don't flow package references to callers -->
     <PackageReference Include="Microsoft.TargetingPack.NETFramework.v4.7.2" Version="$(MicrosoftTargetingPackNETFrameworkv472PackageVersion)" PrivateAssets="All" GeneratePathProperty="true" ExcludeAssets="All" NoWarn="NU1701" />
     <PackageReference Include="Microsoft.DotNet.GenFacades" Version="$(MicrosoftDotNetGenFacadesPackageVersion)" PrivateAssets="All" />
   </ItemGroup>
-  
-  <Target Condition="'$(IsFacadeAssembly)'=='true'" Name="ResolveMatchingContract" BeforeTargets="ResolveAssemblyReferences">
-    <ItemGroup>
-      <ResolvedMatchingContract Include="$(PkgMicrosoft_TargetingPack_NETFramework_v4_7_2)\lib\*\$(AssemblyName).dll" />
 
+  <ItemGroup Condition="'$(IsFacadeAssemblyNetCore3x)' == 'true'">  
+    <!-- PrivateAssets="All": don't flow package references to callers -->
+    <PackageReference Include="Microsoft.WindowsDesktop.App.Ref" Version="$(MicrosoftWindowsDesktopAppRefv30PackageVersion)" PrivateAssets="All" GeneratePathProperty="true" ExcludeAssets="All" NoWarn="NU1701" />
+    <PackageReference Include="Microsoft.DotNet.GenFacades" Version="$(MicrosoftDotNetGenFacadesPackageVersion)" PrivateAssets="All" />
+  </ItemGroup>
+
+  <Target Name="ResolveMatchingContract" BeforeTargets="ResolveAssemblyReferences">
+    <ItemGroup Condition="'$(IsFacadeAssemblyNetFx)' == 'true'">
+      <ResolvedMatchingContract Include="$(PkgMicrosoft_TargetingPack_NETFramework_v4_7_2)\lib\*\$(AssemblyName).dll" />
+      <!-- in case we're regenerating a facade that is already referenced -->
+      <Reference Remove="@(Reference)"  Condition="'%(FileName)%(Extension)' == '$(AssemblyName).dll'" />
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(IsFacadeAssemblyNetCore3x)' == 'true'">
+      <ResolvedMatchingContract Include="$(PkgMicrosoft_WindowsDesktop_App_Ref)\ref\*\$(AssemblyName).dll" />
       <!-- in case we're regenerating a facade that is already referenced -->
       <Reference Remove="@(Reference)"  Condition="'%(FileName)%(Extension)' == '$(AssemblyName).dll'" />
     </ItemGroup>
