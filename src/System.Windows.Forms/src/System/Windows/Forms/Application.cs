@@ -49,11 +49,6 @@ namespace System.Windows.Forms
         private const string EverettThreadAffinityValue = "EnableSystemEventsThreadAffinityCompatibility";
 
         /// <summary>
-        ///  In case Application.exit gets called recursively
-        /// </summary>
-        private static bool s_exiting;
-
-        /// <summary>
         ///  Events the user can hook into
         /// </summary>
         private static readonly object EVENT_APPLICATIONEXIT = new object();
@@ -65,6 +60,9 @@ namespace System.Windows.Forms
         // Defines a new callback delegate type
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public delegate bool MessageLoopCallback();
+
+        // Used to avoid recursive exit
+        private static bool s_exiting;
 
         /// <summary>
         ///  This class is static, there is no need to ever create it.
@@ -841,36 +839,24 @@ namespace System.Windows.Forms
             => ThreadContext.FromCurrent().EndModalMessageLoop(null);
 
         /// <summary>
-        ///  Overload of Exit that does not care about e.Cancel.
+        ///  Overload of <see cref="Exit(CancelEventArgs)"/> that does not care about e.Cancel.
         /// </summary>
         public static void Exit() => Exit(null);
 
         /// <summary>
-        ///  Informs all message pumps that they are to terminate and
-        ///  then closes all application windows after the messages have been processed.
-        ///  e.Cancel indicates whether any of the open forms cancelled the exit call.
+        ///  Informs all message pumps that they are to terminate and then closes all
+        ///  application windows after the messages have been processed. e.Cancel indicates
+        ///  whether any of the open forms cancelled the exit call.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public static void Exit(CancelEventArgs e)
         {
-            bool cancelExit = ExitInternal();
-            if (e != null)
-            {
-                e.Cancel = cancelExit;
-            }
-        }
-
-        /// <summary>
-        ///  Private version of Exit which does not do any security checks.
-        /// </summary>
-        private static bool ExitInternal()
-        {
-            bool cancelExit = false;
             lock (s_internalSyncObject)
             {
                 if (s_exiting)
                 {
-                    return false;
+                    // Recursive call to Exit
+                    return;
                 }
                 s_exiting = true;
 
@@ -879,25 +865,30 @@ namespace System.Windows.Forms
                     // Raise the FormClosing and FormClosed events for each open form
                     if (s_forms != null)
                     {
-                        foreach (Form f in OpenForms)
+                        foreach (Form f in s_forms)
                         {
                             if (f.RaiseFormClosingOnAppExit())
                             {
-                                cancelExit = true;
-                                break; // quit the loop as soon as one form refuses to close
+                                // A form refused to close
+                                if (e != null)
+                                {
+                                    e.Cancel = true;
+                                    return;
+                                }
                             }
+                        }
+
+                        while (s_forms.Count > 0)
+                        {
+                            // OnFormClosed removes the form from the FormCollection
+                            s_forms[0].RaiseFormClosedOnAppExit();
                         }
                     }
-                    if (!cancelExit)
+
+                    ThreadContext.ExitApplication();
+                    if (e != null)
                     {
-                        if (s_forms != null)
-                        {
-                            while (OpenForms.Count > 0)
-                            {
-                                OpenForms[0].RaiseFormClosedOnAppExit(); // OnFormClosed removes the form from the FormCollection
-                            }
-                        }
-                        ThreadContext.ExitApplication();
+                        e.Cancel = false;
                     }
                 }
                 finally
@@ -905,12 +896,10 @@ namespace System.Windows.Forms
                     s_exiting = false;
                 }
             }
-            return cancelExit;
         }
 
         /// <summary>
-        ///  Exits the message loop on the
-        ///  current thread and closes all windows on the thread.
+        ///  Exits the message loop on the current thread and closes all windows on the thread.
         /// </summary>
         public static void ExitThread()
         {
@@ -1141,7 +1130,7 @@ namespace System.Windows.Forms
                 {
                     // HRef exe case
                     hrefExeCase = true;
-                    ExitInternal();
+                    Exit();
                     if (AppDomain.CurrentDomain.GetData("APP_LAUNCH_URL") is string launchUrl)
                     {
                         Process.Start(process.MainModule.FileName, launchUrl);
@@ -1173,7 +1162,7 @@ namespace System.Windows.Forms
                 {
                     currentStartInfo.Arguments = sb.ToString();
                 }
-                ExitInternal();
+                Exit();
                 Process.Start(currentStartInfo);
             }
         }
