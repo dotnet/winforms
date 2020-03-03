@@ -1832,7 +1832,6 @@ namespace System.Windows.Forms
                 autoSizeColumnCriteriaInternal == (DataGridViewAutoSizeColumnCriteriaInternal.Header | DataGridViewAutoSizeColumnCriteriaInternal.AllRows) ||
                 autoSizeColumnCriteriaInternal == (DataGridViewAutoSizeColumnCriteriaInternal.Header | DataGridViewAutoSizeColumnCriteriaInternal.DisplayedRows));
             Debug.Assert(columnIndex >= 0 && columnIndex < Columns.Count);
-            Debug.Assert(autoSizeColumnCriteriaInternal != DataGridViewAutoSizeColumnCriteriaInternal.Header || ColumnHeadersVisible);
 
             if (!IsHandleCreated)
             {
