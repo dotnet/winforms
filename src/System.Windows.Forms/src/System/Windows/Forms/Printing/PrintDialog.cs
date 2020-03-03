@@ -353,7 +353,9 @@ namespace System.Windows.Forms
             data.Flags = GetFlags();
             data.nCopies = (ushort)PrinterSettings.Copies;
             data.hwndOwner = hwndOwner;
-            data.lpfnPrintHook = Marshal.GetFunctionPointerForDelegate(new User32.WNDPROCINT(HookProc));
+
+            User32.WNDPROCINT wndproc = new User32.WNDPROCINT(HookProc);
+            data.lpfnPrintHook = Marshal.GetFunctionPointerForDelegate(wndproc);
 
             try
             {
@@ -434,6 +436,7 @@ namespace System.Windows.Forms
             }
             finally
             {
+                GC.KeepAlive(wndproc);
                 Kernel32.GlobalFree(data.hDevMode);
                 Kernel32.GlobalFree(data.hDevNames);
             }
