@@ -554,6 +554,9 @@
     <EmbeddedResource Include="Resources\System\Windows\Forms\ToolStrip\ToolStripMenuItem.ico">
       <LogicalName>System.Windows.Forms.ToolStripMenuItem</LogicalName>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\ToolStrip\ToolStripDropDownMenu.ico">
+      <LogicalName>System.Windows.Forms.ToolStripDropDownMenu</LogicalName>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\System\Windows\Forms\ToolStrip\ToolStripDropDownButton.ico">
       <LogicalName>System.Windows.Forms.ToolStripDropDownButton</LogicalName>
     </EmbeddedResource>
