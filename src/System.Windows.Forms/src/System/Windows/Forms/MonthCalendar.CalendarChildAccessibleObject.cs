@@ -69,7 +69,7 @@ namespace System.Windows.Forms
                 int x = rectangle.left + ((rectangle.right - rectangle.left) / 2);
                 int y = rectangle.top + ((rectangle.bottom - rectangle.top) / 2);
 
-                MouseHelper.RaiseMouseClick(x, y);
+                _calendarAccessibleObject.RaiseMouseClick(x, y);
             }
         }
     }
