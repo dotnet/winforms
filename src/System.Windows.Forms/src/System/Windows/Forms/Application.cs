@@ -856,6 +856,10 @@ namespace System.Windows.Forms
                 if (s_exiting)
                 {
                     // Recursive call to Exit
+                    if (e != null)
+                    {
+                        e.Cancel = false;
+                    }
                     return;
                 }
                 s_exiting = true;
@@ -873,8 +877,8 @@ namespace System.Windows.Forms
                                 if (e != null)
                                 {
                                     e.Cancel = true;
-                                    return;
                                 }
+                                return;
                             }
                         }
 
