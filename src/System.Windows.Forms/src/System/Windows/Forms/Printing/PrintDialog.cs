@@ -291,40 +291,6 @@ namespace System.Windows.Forms
             showNetwork = true;
         }
 
-        // Create a PRINTDLG with a few useful defaults.
-        internal static NativeMethods.PRINTDLG CreatePRINTDLG()
-        {
-            NativeMethods.PRINTDLG data = null;
-            if (IntPtr.Size == 4)
-            {
-                data = new NativeMethods.PRINTDLG_32();
-            }
-            else
-            {
-                data = new NativeMethods.PRINTDLG_64();
-            }
-            data.lStructSize = Marshal.SizeOf(data);
-            data.hwndOwner = IntPtr.Zero;
-            data.hDevMode = IntPtr.Zero;
-            data.hDevNames = IntPtr.Zero;
-            data.Flags = 0;
-            data.hDC = IntPtr.Zero;
-            data.nFromPage = 1;
-            data.nToPage = 1;
-            data.nMinPage = 0;
-            data.nMaxPage = 9999;
-            data.nCopies = 1;
-            data.hInstance = IntPtr.Zero;
-            data.lCustData = IntPtr.Zero;
-            data.lpfnPrintHook = null;
-            data.lpfnSetupHook = null;
-            data.lpPrintTemplateName = null;
-            data.lpSetupTemplateName = null;
-            data.hPrintTemplate = IntPtr.Zero;
-            data.hSetupTemplate = IntPtr.Zero;
-            return data;
-        }
-
         internal static NativeMethods.PRINTDLGEX CreatePRINTDLGEX()
         {
             NativeMethods.PRINTDLGEX data = new NativeMethods.PRINTDLGEX();
@@ -353,26 +319,43 @@ namespace System.Windows.Forms
 
         protected override bool RunDialog(IntPtr hwndOwner)
         {
-            var hookProcPtr = new NativeMethods.WndProc(HookProc);
-
             if (!UseEXDialog)
             {
-                NativeMethods.PRINTDLG data = CreatePRINTDLG();
-                return ShowPrintDialog(hwndOwner, hookProcPtr, data);
+                return ShowPrintDialog(hwndOwner);
+            }
+
+            NativeMethods.PRINTDLGEX data = CreatePRINTDLGEX();
+            return ShowPrintDialog(hwndOwner, data);
+        }
+
+        private unsafe bool ShowPrintDialog(IntPtr hwndOwner)
+        {
+            PRINTDLGW data;
+            if (IntPtr.Size == 4)
+            {
+                data = new PRINTDLGW_32
+                {
+                    lStructSize = (uint)sizeof(PRINTDLGW_32)
+                };
             }
             else
             {
-                NativeMethods.PRINTDLGEX data = CreatePRINTDLGEX();
-                return ShowPrintDialog(hwndOwner, data);
+                data = new PRINTDLGW_64
+                {
+                    lStructSize = (uint)sizeof(PRINTDLGW_64)
+                };
             }
-        }
 
-        private bool ShowPrintDialog(IntPtr hwndOwner, NativeMethods.WndProc hookProcPtr, NativeMethods.PRINTDLG data)
-        {
+            data.nFromPage = 1;
+            data.nToPage = 1;
+            data.nMinPage = 0;
+            data.nMaxPage = 9999;
             data.Flags = GetFlags();
-            data.nCopies = (short)PrinterSettings.Copies;
+            data.nCopies = (ushort)PrinterSettings.Copies;
             data.hwndOwner = hwndOwner;
-            data.lpfnPrintHook = hookProcPtr;
+
+            User32.WNDPROCINT wndproc = new User32.WNDPROCINT(HookProc);
+            data.lpfnPrintHook = Marshal.GetFunctionPointerForDelegate(wndproc);
 
             try
             {
@@ -389,9 +372,9 @@ namespace System.Windows.Forms
             }
             catch (InvalidPrinterException)
             {
+                // Leave those fields null; Windows will fill them in
                 data.hDevMode = IntPtr.Zero;
                 data.hDevNames = IntPtr.Zero;
-                // Leave those fields null; Windows will fill them in
             }
 
             try
@@ -416,18 +399,19 @@ namespace System.Windows.Forms
                         throw new ArgumentException(string.Format(SR.PDpageOutOfRange, "FromPage"));
                     }
 
-                    data.nFromPage = (short)PrinterSettings.FromPage;
-                    data.nToPage = (short)PrinterSettings.ToPage;
-                    data.nMinPage = (short)PrinterSettings.MinimumPage;
-                    data.nMaxPage = (short)PrinterSettings.MaximumPage;
+                    data.nFromPage = (ushort)PrinterSettings.FromPage;
+                    data.nToPage = (ushort)PrinterSettings.ToPage;
+                    data.nMinPage = (ushort)PrinterSettings.MinimumPage;
+                    data.nMaxPage = (ushort)PrinterSettings.MaximumPage;
                 }
 
-                if (!UnsafeNativeMethods.PrintDlg(data))
+                if (PrintDlg(ref data).IsFalse())
                 {
+                    var result = CommDlgExtendedError();
                     return false;
                 }
 
-                UpdatePrinterSettings(data.hDevMode, data.hDevNames, data.nCopies, data.Flags, settings, PageSettings);
+                UpdatePrinterSettings(data.hDevMode, data.hDevNames, (short)data.nCopies, data.Flags, settings, PageSettings);
 
                 PrintToFile = (data.Flags & PD.PRINTTOFILE) != 0;
                 PrinterSettings.PrintToFile = PrintToFile;
@@ -444,7 +428,7 @@ namespace System.Windows.Forms
                 // whether the user wants to print them collated.
                 if ((data.Flags & PD.USEDEVMODECOPIESANDCOLLATE) == 0)
                 {
-                    PrinterSettings.Copies = data.nCopies;
+                    PrinterSettings.Copies = (short)data.nCopies;
                     PrinterSettings.Collate = (data.Flags & PD.COLLATE) == PD.COLLATE;
                 }
 
@@ -452,6 +436,7 @@ namespace System.Windows.Forms
             }
             finally
             {
+                GC.KeepAlive(wndproc);
                 Kernel32.GlobalFree(data.hDevMode);
                 Kernel32.GlobalFree(data.hDevNames);
             }

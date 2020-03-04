@@ -48,6 +48,7 @@ namespace WinformsControlsTest
             this.DateTimePickerButton = new System.Windows.Forms.Button();
             this.FolderBrowserDialogButton = new System.Windows.Forms.Button();
             this.ShowExceptionDialogButton = new System.Windows.Forms.Button();
+            this.ShowPrintDialogButton = new System.Windows.Forms.Button();
             this.flowLayoutPanelUITypeEditors = new System.Windows.Forms.FlowLayoutPanel();
             this.fontNameEditor = new System.Windows.Forms.Button();
             this.collectionEditors = new System.Windows.Forms.Button();
@@ -217,6 +218,16 @@ namespace WinformsControlsTest
             this.ShowExceptionDialogButton.UseVisualStyleBackColor = true;
             this.ShowExceptionDialogButton.Click += new System.EventHandler(this.ShowExceptionDialogButton_Click);
             // 
+            // ShowPrintDialogButton
+            // 
+            this.ShowPrintDialogButton.Location = new System.Drawing.Point(3, 177);
+            this.ShowPrintDialogButton.Name = "ShowPrintDialogButton";
+            this.ShowPrintDialogButton.Size = new System.Drawing.Size(259, 23);
+            this.ShowPrintDialogButton.TabIndex = 6;
+            this.ShowPrintDialogButton.Text = "Print dialog";
+            this.ShowPrintDialogButton.UseVisualStyleBackColor = true;
+            this.ShowPrintDialogButton.Click += new System.EventHandler(this.ShowPrintDialogButton_Click);
+            // 
             // flowLayoutPanelUITypeEditors
             // 
             this.flowLayoutPanelUITypeEditors.Controls.Add(this.buttonsButton);
@@ -226,6 +237,7 @@ namespace WinformsControlsTest
             this.flowLayoutPanelUITypeEditors.Controls.Add(this.DateTimePickerButton);
             this.flowLayoutPanelUITypeEditors.Controls.Add(this.FolderBrowserDialogButton);
             this.flowLayoutPanelUITypeEditors.Controls.Add(this.ShowExceptionDialogButton);
+            this.flowLayoutPanelUITypeEditors.Controls.Add(this.ShowPrintDialogButton);
             this.flowLayoutPanelUITypeEditors.Controls.Add(this.dataGridViewButton);
             this.flowLayoutPanelUITypeEditors.Controls.Add(this.treeViewButton);
             this.flowLayoutPanelUITypeEditors.Controls.Add(this.button4);
@@ -331,6 +343,7 @@ namespace WinformsControlsTest
         private System.Windows.Forms.Button DateTimePickerButton;
         private System.Windows.Forms.Button FolderBrowserDialogButton;
         private System.Windows.Forms.Button ShowExceptionDialogButton;
+        private System.Windows.Forms.Button ShowPrintDialogButton;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanelUITypeEditors;
         private System.Windows.Forms.Button fontNameEditor;
         private System.Windows.Forms.Button collectionEditors;
