@@ -902,17 +902,7 @@ namespace System.Windows.Forms
         }
 
         private static ISelectionService GetSelectionService(Control ctl)
-        {
-            ISite site = ctl.Site;
-            if (site != null)
-            {
-                object o = site.GetService(typeof(ISelectionService));
-                Debug.Assert(o == null || o is ISelectionService, "service must implement ISelectionService");
-                //Note: if o is null, we want to return null anyway.  Happy day.
-                return o as ISelectionService;
-            }
-            return null;
-        }
+            => ctl.Site?.GetService(typeof(ISelectionService)) as ISelectionService;
 
         private void AddSelectionHandler()
         {
@@ -1600,7 +1590,6 @@ namespace System.Windows.Forms
         private void UiActivate()
         {
             Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "calling uiActivate for " + ToString());
-            Debug.Assert(GetOcState() >= OC_INPLACE, "we have to be in place in order to ui activate...");
             Debug.Assert(CanUIActivate, "we have to be able to uiactivate");
             if (CanUIActivate)
             {
@@ -2569,9 +2558,8 @@ namespace System.Windows.Forms
             {
                 UiActivate();
             }
-            catch (Exception t)
+            catch (Exception)
             {
-                Debug.Fail(t.ToString());
             }
         }
 
