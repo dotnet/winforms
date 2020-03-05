@@ -492,7 +492,6 @@ namespace System.Windows.Forms
             get
             {
                 DataGridViewCellStyle columnStyle = null;
-                Debug.Assert(Index > -1);
                 if (HasDefaultCellStyle)
                 {
                     columnStyle = DefaultCellStyle;
