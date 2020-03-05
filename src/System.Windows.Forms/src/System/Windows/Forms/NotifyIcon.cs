@@ -784,16 +784,16 @@ namespace System.Windows.Forms
                             }
                             WmMouseUp(ref msg, MouseButtons.Right);
                             break;
-                        case NativeMethods.NIN_BALLOONSHOW:
+                        case (int)NIN.BALLOONSHOW:
                             OnBalloonTipShown();
                             break;
-                        case NativeMethods.NIN_BALLOONHIDE:
+                        case (int)NIN.BALLOONHIDE:
                             OnBalloonTipClosed();
                             break;
-                        case NativeMethods.NIN_BALLOONTIMEOUT:
+                        case (int)NIN.BALLOONTIMEOUT:
                             OnBalloonTipClosed();
                             break;
-                        case NativeMethods.NIN_BALLOONUSERCLICK:
+                        case (int)NIN.BALLOONUSERCLICK:
                             OnBalloonTipClicked();
                             break;
                     }
