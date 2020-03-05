@@ -970,6 +970,8 @@ namespace System.Windows.Forms.Tests
 
             public new void OnResize(EventArgs e) => base.OnResize(e);
 
+            public new void OnRightToLeftChanged(EventArgs e) => base.OnRightToLeftChanged(e);
+
             public new void OnSizeChanged(EventArgs e) => base.OnSizeChanged(e);
 
             public new void OnStyleChanged(EventArgs e) => base.OnStyleChanged(e);

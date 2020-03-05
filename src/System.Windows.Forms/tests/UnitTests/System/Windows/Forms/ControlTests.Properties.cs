@@ -9989,44 +9989,165 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(!value, control.GetStyle(ControlStyles.ResizeRedraw));
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetRightToLeftTheoryData))]
         public void Control_RightToLeft_Set_GetReturnsExpected(RightToLeft value, RightToLeft expected)
         {
-            var control = new Control
+            using var control = new Control
             {
                 RightToLeft = value
             };
             Assert.Equal(expected, control.RightToLeft);
+            Assert.False(control.IsHandleCreated);
 
             // Set same.
             control.RightToLeft = value;
             Assert.Equal(expected, control.RightToLeft);
+            Assert.False(control.IsHandleCreated);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetRightToLeftTheoryData))]
-        public void Control_RightToLeft_SetAsParent_GetReturnsExpected(RightToLeft value, RightToLeft expected)
+        public void Control_RightToLeft_SetWithOldValue_GetReturnsExpected(RightToLeft value, RightToLeft expected)
         {
-            var parent = new Control
+            using var control = new Control
             {
-                RightToLeft = value
+                RightToLeft = RightToLeft.Yes
             };
-            var control = new Control
-            {
-                Parent = parent
-            };
+
+            control.RightToLeft = value;
             Assert.Equal(expected, control.RightToLeft);
+            Assert.False(control.IsHandleCreated);
 
             // Set same.
             control.RightToLeft = value;
             Assert.Equal(expected, control.RightToLeft);
+            Assert.False(control.IsHandleCreated);
         }
 
-        [Fact]
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetRightToLeftTheoryData))]
+        public void Control_RightToLeft_SetWithChildren_GetReturnsExpected(RightToLeft value, RightToLeft expected)
+        {
+            using var child1 = new Control();
+            using var child2 = new Control();
+            using var control = new Control();
+            control.Controls.Add(child1);
+            control.Controls.Add(child2);
+
+            control.RightToLeft = value;
+            Assert.Equal(expected, control.RightToLeft);
+            Assert.Equal(expected, child1.RightToLeft);
+            Assert.Equal(expected, child2.RightToLeft);
+            Assert.False(control.IsHandleCreated);
+
+            // Set same.
+            control.RightToLeft = value;
+            Assert.Equal(expected, control.RightToLeft);
+            Assert.Equal(expected, child1.RightToLeft);
+            Assert.Equal(expected, child2.RightToLeft);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetRightToLeftTheoryData))]
+        public void Control_RightToLeft_SetWithChildrenWithRightToLeft_GetReturnsExpected(RightToLeft value, RightToLeft expected)
+        {
+            using var child1 = new Control
+            {
+                RightToLeft = RightToLeft.Yes
+            };
+            using var child2 = new Control
+            {
+                RightToLeft = RightToLeft.No
+            };
+            using var control = new Control();
+            control.Controls.Add(child1);
+            control.Controls.Add(child2);
+
+            control.RightToLeft = value;
+            Assert.Equal(expected, control.RightToLeft);
+            Assert.Equal(RightToLeft.Yes, child1.RightToLeft);
+            Assert.Equal(RightToLeft.No, child2.RightToLeft);
+            Assert.False(control.IsHandleCreated);
+
+            // Set same.
+            control.RightToLeft = value;
+            Assert.Equal(expected, control.RightToLeft);
+            Assert.Equal(RightToLeft.Yes, child1.RightToLeft);
+            Assert.Equal(RightToLeft.No, child2.RightToLeft);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(RightToLeft.Yes, RightToLeft.Yes, 1)]
+        [InlineData(RightToLeft.No, RightToLeft.No, 0)]
+        [InlineData(RightToLeft.Inherit, RightToLeft.No, 0)]
+        public void Control_RightToLeft_SetWithHandle_GetReturnsExpected(RightToLeft value, RightToLeft expected, int expectedCreatedCallCount)
+        {
+            using var control = new Control();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            control.RightToLeft = value;
+            Assert.Equal(expected, control.RightToLeft);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(expectedCreatedCallCount, createdCallCount);
+
+            // Set same.
+            control.RightToLeft = value;
+            Assert.Equal(expected, control.RightToLeft);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(expectedCreatedCallCount, createdCallCount);
+        }
+
+        [WinFormsTheory]
+        [InlineData(RightToLeft.Yes, RightToLeft.Yes, 0)]
+        [InlineData(RightToLeft.No, RightToLeft.No, 1)]
+        [InlineData(RightToLeft.Inherit, RightToLeft.No, 1)]
+        public void Control_RightToLeft_SetWithOldValueWithHandle_GetReturnsExpected(RightToLeft value, RightToLeft expected, int expectedCreatedCallCount)
+        {
+            using var control = new Control
+            {
+                RightToLeft = RightToLeft.Yes
+            };
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            control.RightToLeft = value;
+            Assert.Equal(expected, control.RightToLeft);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(expectedCreatedCallCount, createdCallCount);
+
+            // Set same.
+            control.RightToLeft = value;
+            Assert.Equal(expected, control.RightToLeft);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(expectedCreatedCallCount, createdCallCount);
+        }
+
+        [WinFormsFact]
         public void Control_RightToLeft_SetWithHandler_CallsRightToLeftChanged()
         {
-            var control = new Control();
+            using var control = new Control();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -10058,11 +10179,199 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(2, callCount);
         }
 
-        [Theory]
+        [WinFormsFact]
+        public void Control_RightToLeft_SetWithHandlerInDisposing_DoesNotCallRightToLeftChanged()
+        {
+            using var control = new Control();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+
+            int callCount = 0;
+            control.RightToLeftChanged += (sender, e) => callCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            int disposedCallCount = 0;
+            control.Disposed += (sender, e) =>
+            {
+                control.RightToLeft = RightToLeft.Yes;
+                Assert.Equal(RightToLeft.Yes, control.RightToLeft);
+                Assert.Equal(0, callCount);
+                Assert.Equal(0, createdCallCount);
+                disposedCallCount++;
+            };
+
+            control.Dispose();
+            Assert.Equal(1, disposedCallCount);
+        }
+
+        [WinFormsFact]
+        public void Control_RightToLeft_SetWithChildrenWithHandler_CallsRightToLeftChanged()
+        {
+            using var child1 = new Control();
+            using var child2 = new Control
+            {
+                RightToLeft = RightToLeft.Inherit
+            };
+            using var control = new Control();
+            control.Controls.Add(child1);
+            control.Controls.Add(child2);
+
+            int callCount = 0;
+            int childCallCount1 = 0;
+            int childCallCount2 = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                Assert.Equal(callCount, childCallCount1);
+                Assert.Equal(childCallCount1, childCallCount2);
+                callCount++;
+            };
+            EventHandler childHandler1 = (sender, e) =>
+            {
+                Assert.Same(child1, sender);
+                Assert.Same(EventArgs.Empty, e);
+                Assert.Equal(callCount - 1, childCallCount1);
+                Assert.Equal(childCallCount1, childCallCount2);
+                childCallCount1++;
+            };
+            EventHandler childHandler2 = (sender, e) =>
+            {
+                Assert.Same(child2, sender);
+                Assert.Same(EventArgs.Empty, e);
+                Assert.Equal(callCount, childCallCount1);
+                Assert.Equal(childCallCount1 - 1, childCallCount2);
+                childCallCount2++;
+            };
+            control.RightToLeftChanged += handler;
+            child1.RightToLeftChanged += childHandler1;
+            child2.RightToLeftChanged += childHandler2;
+
+            // Set different.
+            control.RightToLeft = RightToLeft.Yes;
+            Assert.Equal(RightToLeft.Yes, control.RightToLeft);
+            Assert.Equal(RightToLeft.Yes, child1.RightToLeft);
+            Assert.Equal(RightToLeft.Yes, child2.RightToLeft);
+            Assert.Equal(1, callCount);
+            Assert.Equal(1, childCallCount1);
+            Assert.Equal(1, childCallCount2);
+
+            // Set same.
+            control.RightToLeft = RightToLeft.Yes;
+            Assert.Equal(RightToLeft.Yes, control.RightToLeft);
+            Assert.Equal(RightToLeft.Yes, child1.RightToLeft);
+            Assert.Equal(RightToLeft.Yes, child2.RightToLeft);
+            Assert.Equal(1, callCount);
+            Assert.Equal(1, childCallCount1);
+            Assert.Equal(1, childCallCount2);
+
+            // Set different.
+            control.RightToLeft = RightToLeft.Inherit;
+            Assert.Equal(RightToLeft.No, control.RightToLeft);
+            Assert.Equal(RightToLeft.No, child1.RightToLeft);
+            Assert.Equal(RightToLeft.No, child2.RightToLeft);
+            Assert.Equal(2, callCount);
+            Assert.Equal(2, childCallCount1);
+            Assert.Equal(2, childCallCount2);
+
+            // Remove handler.
+            control.RightToLeftChanged -= handler;
+            child1.RightToLeftChanged -= childHandler1;
+            child2.RightToLeftChanged -= childHandler2;
+            control.RightToLeft = RightToLeft.Yes;
+            Assert.Equal(RightToLeft.Yes, control.RightToLeft);
+            Assert.Equal(RightToLeft.Yes, child1.RightToLeft);
+            Assert.Equal(RightToLeft.Yes, child2.RightToLeft);
+            Assert.Equal(2, callCount);
+            Assert.Equal(2, childCallCount1);
+            Assert.Equal(2, childCallCount2);
+        }
+
+        [WinFormsFact]
+        public void Control_RightToLeft_SetWithChildrenWithRightToLeftWithHandler_CallsRightToLeftChanged()
+        {
+            using var child1 = new Control
+            {
+                RightToLeft = RightToLeft.Yes
+            };
+            using var child2 = new Control
+            {
+                RightToLeft = RightToLeft.No
+            };
+            using var control = new Control();
+            control.Controls.Add(child1);
+            control.Controls.Add(child2);
+
+            int callCount = 0;
+            int childCallCount1 = 0;
+            int childCallCount2 = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                callCount++;
+            };
+            EventHandler childHandler1 = (sender, e) =>
+            {
+                Assert.Same(child1, sender);
+                Assert.Same(EventArgs.Empty, e);
+                childCallCount1++;
+            };
+            EventHandler childHandler2 = (sender, e) =>
+            {
+                Assert.Same(child2, sender);
+                Assert.Same(EventArgs.Empty, e);
+                childCallCount2++;
+            };
+            control.RightToLeftChanged += handler;
+            child1.RightToLeftChanged += childHandler1;
+            child2.RightToLeftChanged += childHandler2;
+
+            // Set different.
+            control.RightToLeft = RightToLeft.Yes;
+            Assert.Equal(RightToLeft.Yes, control.RightToLeft);
+            Assert.Equal(RightToLeft.Yes, child1.RightToLeft);
+            Assert.Equal(RightToLeft.No, child2.RightToLeft);
+            Assert.Equal(1, callCount);
+            Assert.Equal(0, childCallCount1);
+            Assert.Equal(0, childCallCount2);
+
+            // Set same.
+            control.RightToLeft = RightToLeft.Yes;
+            Assert.Equal(RightToLeft.Yes, control.RightToLeft);
+            Assert.Equal(RightToLeft.Yes, child1.RightToLeft);
+            Assert.Equal(RightToLeft.No, child2.RightToLeft);
+            Assert.Equal(1, callCount);
+            Assert.Equal(0, childCallCount1);
+            Assert.Equal(0, childCallCount2);
+
+            // Set different.
+            control.RightToLeft = RightToLeft.Inherit;
+            Assert.Equal(RightToLeft.No, control.RightToLeft);
+            Assert.Equal(RightToLeft.Yes, child1.RightToLeft);
+            Assert.Equal(RightToLeft.No, child2.RightToLeft);
+            Assert.Equal(2, callCount);
+            Assert.Equal(0, childCallCount1);
+            Assert.Equal(0, childCallCount2);
+
+            // Remove handler.
+            control.RightToLeftChanged -= handler;
+            child1.RightToLeftChanged -= childHandler1;
+            child2.RightToLeftChanged -= childHandler2;
+            control.RightToLeft = RightToLeft.Yes;
+            Assert.Equal(RightToLeft.Yes, control.RightToLeft);
+            Assert.Equal(RightToLeft.Yes, child1.RightToLeft);
+            Assert.Equal(RightToLeft.No, child2.RightToLeft);
+            Assert.Equal(2, callCount);
+            Assert.Equal(0, childCallCount1);
+            Assert.Equal(0, childCallCount2);
+        }
+
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(RightToLeft))]
         public void Control_RightToLeft_SetInvalid_ThrowsInvalidEnumArgumentException(RightToLeft value)
         {
-            var control = new Control();
+            using var control = new Control();
             Assert.Throws<InvalidEnumArgumentException>("value", () => control.RightToLeft = value);
         }
 

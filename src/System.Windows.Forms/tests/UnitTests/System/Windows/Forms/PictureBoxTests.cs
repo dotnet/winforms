@@ -1204,44 +1204,27 @@ namespace System.Windows.Forms.Tests
             Assert.Null(control.Parent);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetRightToLeftTheoryData))]
         public void PictureBox_RightToLeft_Set_GetReturnsExpected(RightToLeft value, RightToLeft expected)
         {
-            var control = new PictureBox
+            using var control = new PictureBox
             {
                 RightToLeft = value
             };
             Assert.Equal(expected, control.RightToLeft);
+            Assert.False(control.IsHandleCreated);
 
             // Set same.
             control.RightToLeft = value;
             Assert.Equal(expected, control.RightToLeft);
+            Assert.False(control.IsHandleCreated);
         }
 
-        [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetRightToLeftTheoryData))]
-        public void PictureBox_RightToLeft_SetAsParent_GetReturnsExpected(RightToLeft value, RightToLeft expected)
-        {
-            var parent = new Control
-            {
-                RightToLeft = value
-            };
-            var control = new PictureBox
-            {
-                Parent = parent
-            };
-            Assert.Equal(expected, control.RightToLeft);
-
-            // Set same.
-            control.RightToLeft = value;
-            Assert.Equal(expected, control.RightToLeft);
-        }
-
-        [Fact]
+        [WinFormsFact]
         public void PictureBox_RightToLeft_SetWithHandler_CallsRightToLeftChanged()
         {
-            var control = new PictureBox();
+            using var control = new PictureBox();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -1273,11 +1256,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(2, callCount);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(RightToLeft))]
         public void PictureBox_RightToLeft_SetInvalid_ThrowsInvalidEnumArgumentException(RightToLeft value)
         {
-            var control = new PictureBox();
+            using var control = new PictureBox();
             Assert.Throws<InvalidEnumArgumentException>("value", () => control.RightToLeft = value);
         }
 
