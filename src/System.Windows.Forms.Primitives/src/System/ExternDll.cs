@@ -10,7 +10,6 @@ namespace System
         public const string Gdi32 = "gdi32.dll";
         public const string Hhctrl = "hhctrl.ocx";
         public const string Kernel32 = "kernel32.dll";
-        public const string Oleacc = "oleacc.dll";
         public const string Shell32 = "shell32.dll";
         public const string User32 = "user32.dll";
     }

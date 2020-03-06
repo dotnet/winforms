@@ -4096,7 +4096,7 @@ namespace System.Windows.Forms
 
                         try
                         {
-                            m.Result = UnsafeNativeMethods.LresultFromObject(ref IID_IAccessible, m.WParam, new HandleRef(this, punkAcc));
+                            m.Result = Oleacc.LresultFromObject(ref IID_IAccessible, m.WParam, new HandleRef(this, punkAcc));
                         }
                         finally
                         {
