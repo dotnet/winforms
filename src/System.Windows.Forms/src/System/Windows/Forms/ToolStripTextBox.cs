@@ -768,7 +768,7 @@ namespace System.Windows.Forms
                 // Using GetWindowDC instead of GetDCEx as GetDCEx seems to return a null handle and a last error of
                 // the operation succeeded.  We're not going to use the clipping rect anyways - so it's not
                 // that bigga deal.
-                IntPtr hdc = UnsafeNativeMethods.GetWindowDC(new HandleRef(this, m.HWnd));
+                IntPtr hdc = User32.GetWindowDC(new HandleRef(this, m.HWnd));
                 if (hdc == IntPtr.Zero)
                 {
                     throw new Win32Exception();
