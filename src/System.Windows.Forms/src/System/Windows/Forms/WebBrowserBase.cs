@@ -1269,7 +1269,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            if (cc == null)
+            if (cc == null && IsHandleCreated)
             {
                 cc = Control.FromHandle(User32.GetParent(this)) as ContainerControl;
             }
