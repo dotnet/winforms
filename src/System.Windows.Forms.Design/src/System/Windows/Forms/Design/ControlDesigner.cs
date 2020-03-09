@@ -1754,7 +1754,7 @@ namespace System.Windows.Forms.Design
                                 punkAcc = Marshal.GetIUnknownForObject(iacc);
                                 try
                                 {
-                                    m.Result = UnsafeNativeMethods.LresultFromObject(ref IID_IAccessible, m.WParam, punkAcc);
+                                    m.Result = Oleacc.LresultFromObject(ref IID_IAccessible, m.WParam, punkAcc);
                                 }
                                 finally
                                 {
