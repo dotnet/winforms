@@ -704,6 +704,12 @@ namespace System.Windows.Forms
             {
                 throw new InvalidOperationException(SR.TaskDialogRadioButtonTextMustNotBeNull);
             }
+
+            // Ensure the default button is part of the button collection.
+            if (DefaultButton != null && !_buttons.Contains(DefaultButton))
+            {
+                throw new InvalidOperationException(SR.TaskDialogDefaultButtonMustExistInCollection);
+            }
         }
 
         internal void Bind(
@@ -771,16 +777,9 @@ namespace System.Windows.Forms
 
             if (DefaultButton != null)
             {
-                // Ensure the default button is part of the button collection.
-                int defaultButtonIndex = buttons.IndexOf(DefaultButton);
-                if (defaultButtonIndex < 0)
-                {
-                    throw new InvalidOperationException(SR.TaskDialogDefaultButtonMustExistInCollection);
-                }
-
                 // Retrieve the button from the collection, to handle the case for standard buttons
                 // when the user set an equal (but not same) instance as default button.
-                var defaultButton = buttons[defaultButtonIndex];
+                var defaultButton = buttons[buttons.IndexOf(DefaultButton)];
                 if (defaultButton.IsCreated)
                 {
                     defaultButtonID = defaultButton.ButtonID;
