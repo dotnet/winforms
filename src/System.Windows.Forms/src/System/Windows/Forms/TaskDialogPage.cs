@@ -771,15 +771,19 @@ namespace System.Windows.Forms
 
             if (DefaultButton != null)
             {
-                // ensure the default button is part of the button collection
-                if (!buttons.Contains(DefaultButton))
+                // Ensure the default button is part of the button collection.
+                int defaultButtonIndex = buttons.IndexOf(DefaultButton);
+                if (defaultButtonIndex < 0)
                 {
                     throw new InvalidOperationException(SR.TaskDialogDefaultButtonMustExistInCollection);
                 }
 
-                if (DefaultButton.IsCreated)
+                // Retrieve the button from the collection, to handle the case for standard buttons
+                // when the user set an equal (but not same) instance as default button.
+                var defaultButton = buttons[defaultButtonIndex];
+                if (defaultButton.IsCreated)
                 {
-                    defaultButtonID = DefaultButton.ButtonID;
+                    defaultButtonID = defaultButton.ButtonID;
                 }
             }
 
