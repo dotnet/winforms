@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using static Interop;
@@ -43,8 +44,7 @@ namespace System.Windows.Forms
         /// </remarks>
         private const int RadioButtonStartID = 1;
 
-        private TaskDialogStandardButtonCollection _standardButtons;
-        private TaskDialogCustomButtonCollection _customButtons;
+        private TaskDialogButtonCollection _buttons;
         private TaskDialogRadioButtonCollection _radioButtons;
         private TaskDialogCheckBox? _checkBox;
         private TaskDialogExpander? _expander;
@@ -52,13 +52,15 @@ namespace System.Windows.Forms
         private TaskDialogProgressBar? _progressBar;
 
         private ComCtl32.TDF _flags;
-        private TaskDialogCustomButtonStyle _customButtonStyle;
         private TaskDialogIcon? _icon;
         private string? _caption;
         private string? _mainInstruction;
         private string? _text;
         private int _width;
         private bool _boundIconIsFromHandle;
+
+        private TaskDialogButton[]? _boundCustomButtons;
+        private Dictionary<int, TaskDialogButton>? _boundStandardButtonsByID;
 
         private bool _appliedInitialization;
         private bool _updateMainInstructionOnInitialization;
@@ -97,7 +99,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///   Occurs when the user presses F1 while the task dialog has focus, or when the
-        ///   user clicks the <see cref="TaskDialogResult.Help"/> button.
+        ///   user clicks the <see cref="TaskDialogButton.Help"/> button.
         /// </summary>
         public event EventHandler? HelpRequest;
 
@@ -106,8 +108,7 @@ namespace System.Windows.Forms
         /// </summary>
         public TaskDialogPage()
         {
-            _customButtons = new TaskDialogCustomButtonCollection();
-            _standardButtons = new TaskDialogStandardButtonCollection();
+            _buttons = new TaskDialogButtonCollection();
             _radioButtons = new TaskDialogRadioButtonCollection();
 
             // Create empty (hidden) controls.
@@ -118,36 +119,15 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///   Gets or sets the collection of standard buttons
-        ///   to be shown in this page.
-        /// </summary>
-        /// <value>
-        ///   The collection of standard buttons to be shown in this page.
-        /// </value>
-        public TaskDialogStandardButtonCollection StandardButtons
-        {
-            get => _standardButtons;
-
-            set
-            {
-                // We must deny this if we are bound because we need to be able to
-                // access the controls from the task dialog's callback.
-                DenyIfBound();
-
-                _standardButtons = value ?? throw new ArgumentNullException(nameof(value));
-            }
-        }
-
-        /// <summary>
-        ///   Gets or sets the collection of custom buttons
+        ///   Gets or sets the collection of push buttons
         ///   to be shown in this page.
         /// </summary>
         /// <value>
         ///   The collection of custom buttons to be shown in this page.
         /// </value>
-        public TaskDialogCustomButtonCollection CustomButtons
+        public TaskDialogButtonCollection Buttons
         {
-            get => _customButtons;
+            get => _buttons;
 
             set
             {
@@ -155,9 +135,17 @@ namespace System.Windows.Forms
                 // access the controls from the task dialog's callback.
                 DenyIfBound();
 
-                _customButtons = value ?? throw new ArgumentNullException(nameof(value));
+                _buttons = value ?? throw new ArgumentNullException(nameof(value));
             }
         }
+
+        /// <summary>
+        ///   Gets or sets the default button in the task dialog.
+        /// </summary>
+        /// <value>
+        ///   The default button in the task dialog.
+        /// </value>
+        public TaskDialogButton? DefaultButton { get; set; }
 
         /// <summary>
         ///   Gets or sets the collection of radio buttons
@@ -435,42 +423,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///   Gets or sets the <see cref="TaskDialogCustomButtonStyle"/> that specifies how to
-        ///   display custom buttons.
-        /// </summary>
-        /// <value>
-        ///   The <see cref="TaskDialogCustomButtonStyle"/> that specifies how to display custom
-        ///   buttons. The default value is <see cref="TaskDialogCustomButtonStyle.Default"/>.
-        /// </value>
-        public TaskDialogCustomButtonStyle CustomButtonStyle
-        {
-            get => _customButtonStyle;
-
-            set
-            {
-                if (!ClientUtils.IsEnumValid(
-                    value,
-                    (int)value,
-                    (int)TaskDialogCustomButtonStyle.Default,
-                    (int)TaskDialogCustomButtonStyle.CommandLinksNoIcon))
-                {
-                    throw new InvalidEnumArgumentException(
-                        nameof(value),
-                        (int)value,
-                        typeof(TaskDialogCustomButtonStyle));
-                }
-
-                DenyIfBound();
-
-                _customButtonStyle = value;
-            }
-        }
-
-        /// <summary>
-        ///   Gets or sets a value that indicates whether the task dialog can be closed with a
-        ///   <see cref="TaskDialogResult.Cancel"/> result by pressing ESC or Alt+F4 or by clicking
-        ///   the title bar's close button even if no button with a <see cref="TaskDialogResult.Cancel"/>
-        ///   result is added to the <see cref="StandardButtons"/> collection.
+        ///   Gets or sets a value that indicates whether the task dialog can be closed with
+        ///   <see cref="TaskDialogButton.Cancel"/> as resulting button by pressing ESC or Alt+F4
+        ///   or by clicking the title bar's close button, even if a <see cref="TaskDialogButton.Cancel"/>
+        ///   button isn't added to the <see cref="Buttons"/> collection.
         /// </summary>
         /// <value>
         ///   <see langword="true"/> to allow to close the dialog by pressing ESC or Alt+F4 or by clicking
@@ -479,9 +435,8 @@ namespace System.Windows.Forms
         /// <remarks>
         /// <para>
         ///   You can intercept cancellation of the dialog without displaying a "Cancel"
-        ///   button by adding a <see cref="TaskDialogStandardButton"/> with its
-        ///   <see cref="TaskDialogStandardButton.Visible"/> set to <see langword="false"/> and specifying
-        ///   a <see cref="TaskDialogResult.Cancel"/> result.
+        ///   button by adding the <see cref="TaskDialogButton.Cancel"/> button that has its
+        ///   <see cref="TaskDialogButton.Visible"/> property set to <see langword="false"/>.
         /// </para>
         /// </remarks>
         public bool AllowCancel
@@ -643,24 +598,18 @@ namespace System.Windows.Forms
             }
 
             // Check if the button is part of the custom buttons.
-            var button = null as TaskDialogButton;
             if (buttonID >= CustomButtonStartID)
             {
-                button = _customButtons[buttonID - CustomButtonStartID];
+                return _boundCustomButtons![buttonID - CustomButtonStartID];
             }
             else
             {
                 // Note: We deliberately return null instead of throwing when
                 // the common button ID is not part of the collection, because
                 // the caller might not know if such a button exists.
-                var result = (TaskDialogResult)buttonID;
-                if (_standardButtons.Contains(result))
-                {
-                    button = _standardButtons[result];
-                }
+                _boundStandardButtonsByID!.TryGetValue(buttonID, out TaskDialogButton? button);
+                return button;
             }
-
-            return button;
         }
 
         internal TaskDialogRadioButton? GetBoundRadioButtonByID(int buttonID)
@@ -686,8 +635,7 @@ namespace System.Windows.Forms
 
             // We also need to check the controls (and collections) since they could also be
             // bound to a TaskDialogPage at the same time.
-            if (_standardButtons.BoundPage != null ||
-                _customButtons.BoundPage != null ||
+            if (_buttons.BoundPage != null ||
                 _radioButtons.BoundPage != null)
             {
                 throw new InvalidOperationException(string.Format(
@@ -696,7 +644,7 @@ namespace System.Windows.Forms
                     nameof(TaskDialog)));
             }
 
-            if (StandardButtons.Concat<TaskDialogControl>(_customButtons).Concat(_radioButtons)
+            if (_buttons.Concat<TaskDialogControl>(_radioButtons)
                 .Append(_checkBox)
                 .Append(_expander)
                 .Append(_footer)
@@ -709,15 +657,14 @@ namespace System.Windows.Forms
                     nameof(TaskDialog)));
             }
 
-            if (_customButtons.Count > int.MaxValue - CustomButtonStartID + 1 ||
+            // Note: Theoretically we would need to exclude the standard buttons from the
+            // "_buttons" collection when retrieving the Count (because they already have
+            // a fixed button ID), but since not excluding them won't allow more buttons
+            // than possible, we don't need to do it.
+            if (_buttons.Count > int.MaxValue - CustomButtonStartID + 1 ||
                 _radioButtons.Count > int.MaxValue - RadioButtonStartID + 1)
             {
                 throw new InvalidOperationException(SR.TaskDialogTooManyButtonsAdded);
-            }
-
-            if (_standardButtons.Concat<TaskDialogButton>(_customButtons).Count(e => e.DefaultButton) > 1)
-            {
-                throw new InvalidOperationException(SR.TaskDialogOnlySingleButtonCanBeDefault);
             }
 
             if (_radioButtons.Count(e => e.Checked) > 1)
@@ -725,14 +672,35 @@ namespace System.Windows.Forms
                 throw new InvalidOperationException(SR.TaskDialogOnlySingleRadioButtonCanBeChecked);
             }
 
-            // For custom and radio buttons, we need to ensure the strings are not null or empty,
-            // as otherwise an error would occur when showing/navigating the dialog.
-            if (_customButtons.Any(e => !e.IsCreatable))
+            // Check that we don't have custom buttons and command links at the same time.
+            bool foundCustomButton = false;
+            bool foundCommandLink = false;
+            foreach (TaskDialogButton button in _buttons)
+            {
+                if (button is TaskDialogCommandLinkButton commandLink)
+                {
+                    foundCommandLink = true;
+                }
+                else if (!button.IsStandardButton)
+                {
+                    foundCustomButton = true;
+                }
+            }
+
+            if (foundCustomButton && foundCommandLink)
+            {
+                throw new InvalidOperationException(/* TODO */ "Cannot show both custom buttons and command links at the same time.");
+            }
+
+            // For custom and radio buttons, we need to ensure the strings are not null or empty
+            // (except for invisible buttons), as otherwise an error would occur when
+            // showing/navigating the dialog.
+            if (_buttons.Any(e => e.IsCreatable && !e.IsStandardButton && IsNativeStringNullOrEmpty(e.Text)))
             {
                 throw new InvalidOperationException(SR.TaskDialogButtonTextMustNotBeNull);
             }
 
-            if (_radioButtons.Any(e => !e.IsCreatable))
+            if (_radioButtons.Any(e => e.IsCreatable && IsNativeStringNullOrEmpty(e.Text)))
             {
                 throw new InvalidOperationException(SR.TaskDialogRadioButtonTextMustNotBeNull);
             }
@@ -741,7 +709,9 @@ namespace System.Windows.Forms
         internal void Bind(
             TaskDialog owner,
             out ComCtl32.TDF flags,
-            out TaskDialogButtons buttonFlags,
+            out ComCtl32.TDCBF buttonFlags,
+            out IEnumerable<(int buttonID, string text)> customButtonElements,
+            out IEnumerable<(int buttonID, string text)> radioButtonElements,
             out ComCtl32.TASKDIALOGCONFIG.IconUnion mainIcon,
             out ComCtl32.TASKDIALOGCONFIG.IconUnion footerIcon,
             out int defaultButtonID,
@@ -768,59 +738,48 @@ namespace System.Windows.Forms
                 flags |= ComCtl32.TDF.USE_HICON_MAIN;
             }
 
-            // Only specify the command link flags if there actually are custom buttons;
-            // otherwise the dialog will not work.
-            if (_customButtons.Count > 0)
-            {
-                if (_customButtonStyle == TaskDialogCustomButtonStyle.CommandLinks)
-                {
-                    flags |= ComCtl32.TDF.USE_COMMAND_LINKS;
-                }
-                else if (_customButtonStyle == TaskDialogCustomButtonStyle.CommandLinksNoIcon)
-                {
-                    flags |= ComCtl32.TDF.USE_COMMAND_LINKS_NO_ICON;
-                }
-            }
-
-            TaskDialogStandardButtonCollection standardButtons = _standardButtons;
-            TaskDialogCustomButtonCollection customButtons = _customButtons;
+            TaskDialogButtonCollection buttons = _buttons;
             TaskDialogRadioButtonCollection radioButtons = _radioButtons;
 
-            standardButtons.BoundPage = this;
-            customButtons.BoundPage = this;
+            buttons.BoundPage = this;
             radioButtons.BoundPage = this;
 
+            // Sort the buttons.
+            _boundCustomButtons = buttons.Where(e => !e.IsStandardButton).ToArray();
+            _boundStandardButtonsByID = new Dictionary<int, TaskDialogButton>(
+                buttons.Where(e => e.IsStandardButton)
+                .Select(e => new KeyValuePair<int, TaskDialogButton>(e.ButtonID, e)));
+
             // Assign IDs to the buttons based on their index.
-            // Note: The collections will be locked while this page is bound, so we
-            // don't need to copy them here.
             defaultButtonID = 0;
             buttonFlags = default;
-            foreach (TaskDialogStandardButton standardButton in standardButtons)
+            foreach (TaskDialogButton standardButton in _boundStandardButtonsByID.Values)
             {
                 flags |= standardButton.Bind(this);
 
                 if (standardButton.IsCreated)
                 {
-                    buttonFlags |= standardButton.GetButtonFlag();
-
-                    if (standardButton.DefaultButton && defaultButtonID == 0)
-                    {
-                        defaultButtonID = standardButton.ButtonID;
-                    }
+                    buttonFlags |= standardButton.GetStandardButtonFlag();
                 }
             }
 
-            for (int i = 0; i < customButtons.Count; i++)
+            for (int i = 0; i < _boundCustomButtons.Length; i++)
             {
-                TaskDialogCustomButton customButton = customButtons[i];
+                TaskDialogButton customButton = _boundCustomButtons[i];
                 flags |= customButton.Bind(this, CustomButtonStartID + i);
+            }
 
-                if (customButton.IsCreated)
+            if (DefaultButton != null)
+            {
+                // ensure the default button is part of the button collection
+                if (!buttons.Contains(DefaultButton))
                 {
-                    if (customButton.DefaultButton && defaultButtonID == 0)
-                    {
-                        defaultButtonID = customButton.ButtonID;
-                    }
+                    throw new InvalidOperationException(SR.TaskDialogDefaultButtonMustExistInCollection);
+                }
+
+                if (DefaultButton.IsCreated)
+                {
+                    defaultButtonID = DefaultButton.ButtonID;
                 }
             }
 
@@ -847,6 +806,14 @@ namespace System.Windows.Forms
             {
                 flags |= ComCtl32.TDF.NO_DEFAULT_RADIO_BUTTON;
             }
+
+            customButtonElements = _boundCustomButtons.Where(e => e.IsCreated).Select(e => (e.ButtonID, e.GetResultingText()!));
+            radioButtonElements = radioButtons.Where(e => e.IsCreated).Select(e => (e.RadioButtonID, e.Text!));
+
+            // If we have command links, specify the TDF_USE_COMMAND_LINKS flag.
+            // Note: The USE_COMMAND_LINKS_NO_ICON is currently not used.
+            if (_boundCustomButtons.Any(e => e.IsCreated && e is TaskDialogCommandLinkButton))
+                flags |= ComCtl32.TDF.USE_COMMAND_LINKS;
 
             if (_checkBox != null)
             {
@@ -880,18 +847,15 @@ namespace System.Windows.Forms
                 throw new InvalidOperationException();
             }
 
-            TaskDialogStandardButtonCollection standardButtons = _standardButtons;
-            TaskDialogCustomButtonCollection customButtons = _customButtons;
+            _boundCustomButtons = null;
+            _boundStandardButtonsByID = null;
+
+            TaskDialogButtonCollection buttons = _buttons;
             TaskDialogRadioButtonCollection radioButtons = _radioButtons;
 
-            foreach (TaskDialogStandardButton standardButton in standardButtons)
+            foreach (TaskDialogButton button in buttons)
             {
-                standardButton.Unbind();
-            }
-
-            foreach (TaskDialogCustomButton customButton in customButtons)
-            {
-                customButton.Unbind();
+                button.Unbind();
             }
 
             foreach (TaskDialogRadioButton radioButton in radioButtons)
@@ -899,8 +863,7 @@ namespace System.Windows.Forms
                 radioButton.Unbind();
             }
 
-            standardButtons.BoundPage = null;
-            customButtons.BoundPage = null;
+            buttons.BoundPage = null;
             radioButtons.BoundPage = null;
 
             _checkBox?.Unbind();
@@ -935,16 +898,10 @@ namespace System.Windows.Forms
                 _updateTextOnInitialization = false;
             }
 
-            TaskDialogStandardButtonCollection standardButtons = _standardButtons;
-            TaskDialogCustomButtonCollection customButtons = _customButtons;
+            TaskDialogButtonCollection buttons = _buttons;
             TaskDialogRadioButtonCollection radioButtons = _radioButtons;
 
-            foreach (TaskDialogStandardButton button in standardButtons)
-            {
-                button.ApplyInitialization();
-            }
-
-            foreach (TaskDialogCustomButton button in customButtons)
+            foreach (TaskDialogButton button in buttons)
             {
                 button.ApplyInitialization();
             }

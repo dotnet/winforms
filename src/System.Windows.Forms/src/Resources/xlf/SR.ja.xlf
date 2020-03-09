@@ -9186,6 +9186,11 @@ Stack trace where the illegal operation occurred was:
         <target state="new">Cannot set the {0} property from within the {1} event of one of the radio buttons of the current task dialog.</target>
         <note />
       </trans-unit>
+      <trans-unit id="TaskDialogCannotSetTextForStandardButton">
+        <source>Cannot set the text for a standard button.</source>
+        <target state="new">Cannot set the text for a standard button.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="TaskDialogCannotUncheckRadioButtonWhileBound">
         <source>Cannot uncheck a radio button while it is bound to a task dialog.</source>
         <target state="new">Cannot uncheck a radio button while it is bound to a task dialog.</target>
@@ -9231,6 +9236,11 @@ Stack trace where the illegal operation occurred was:
         <target state="new">The control has not been created.</target>
         <note />
       </trans-unit>
+      <trans-unit id="TaskDialogDefaultButtonMustExistInCollection">
+        <source>The default button must exist in the buttons collection.</source>
+        <target state="new">The default button must exist in the buttons collection.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="TaskDialogInstanceAlreadyShown">
         <source>This {0} instance is already being shown.</source>
         <target state="new">This {0} instance is already being shown.</target>
@@ -9239,11 +9249,6 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="TaskDialogNavigationNotCompleted">
         <source>Navigation of the task dialog did not complete yet. Please wait for the {0} event to occur.</source>
         <target state="new">Navigation of the task dialog did not complete yet. Please wait for the {0} event to occur.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TaskDialogOnlySingleButtonCanBeDefault">
-        <source>Only a single button can be set as default button.</source>
-        <target state="new">Only a single button can be set as default button.</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogOnlySingleRadioButtonCanBeChecked">

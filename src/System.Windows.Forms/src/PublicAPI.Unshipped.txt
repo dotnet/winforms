@@ -25,26 +25,20 @@ System.Windows.Forms.TaskDialogButton
 System.Windows.Forms.TaskDialogButton.AllowCloseDialog.get -> bool
 System.Windows.Forms.TaskDialogButton.AllowCloseDialog.set -> void
 System.Windows.Forms.TaskDialogButton.Click -> System.EventHandler
-System.Windows.Forms.TaskDialogButton.DefaultButton.get -> bool
-System.Windows.Forms.TaskDialogButton.DefaultButton.set -> void
 System.Windows.Forms.TaskDialogButton.ElevationRequired.get -> bool
 System.Windows.Forms.TaskDialogButton.ElevationRequired.set -> void
 System.Windows.Forms.TaskDialogButton.Enabled.get -> bool
 System.Windows.Forms.TaskDialogButton.Enabled.set -> void
 System.Windows.Forms.TaskDialogButton.PerformClick() -> void
-System.Windows.Forms.TaskDialogButtons
-System.Windows.Forms.TaskDialogButtons.Abort = 65536 -> System.Windows.Forms.TaskDialogButtons
-System.Windows.Forms.TaskDialogButtons.Cancel = 8 -> System.Windows.Forms.TaskDialogButtons
-System.Windows.Forms.TaskDialogButtons.Close = 32 -> System.Windows.Forms.TaskDialogButtons
-System.Windows.Forms.TaskDialogButtons.Continue = 524288 -> System.Windows.Forms.TaskDialogButtons
-System.Windows.Forms.TaskDialogButtons.Help = 1048576 -> System.Windows.Forms.TaskDialogButtons
-System.Windows.Forms.TaskDialogButtons.Ignore = 131072 -> System.Windows.Forms.TaskDialogButtons
-System.Windows.Forms.TaskDialogButtons.No = 4 -> System.Windows.Forms.TaskDialogButtons
-System.Windows.Forms.TaskDialogButtons.None = 0 -> System.Windows.Forms.TaskDialogButtons
-System.Windows.Forms.TaskDialogButtons.OK = 1 -> System.Windows.Forms.TaskDialogButtons
-System.Windows.Forms.TaskDialogButtons.Retry = 16 -> System.Windows.Forms.TaskDialogButtons
-System.Windows.Forms.TaskDialogButtons.TryAgain = 262144 -> System.Windows.Forms.TaskDialogButtons
-System.Windows.Forms.TaskDialogButtons.Yes = 2 -> System.Windows.Forms.TaskDialogButtons
+System.Windows.Forms.TaskDialogButton.TaskDialogButton() -> void
+System.Windows.Forms.TaskDialogButton.TaskDialogButton(string text, bool enabled = true, bool allowCloseDialog = true) -> void
+System.Windows.Forms.TaskDialogButton.Text.get -> string
+System.Windows.Forms.TaskDialogButton.Text.set -> void
+System.Windows.Forms.TaskDialogButton.Visible.get -> bool
+System.Windows.Forms.TaskDialogButton.Visible.set -> void
+System.Windows.Forms.TaskDialogButtonCollection
+System.Windows.Forms.TaskDialogButtonCollection.Add(string text, bool enabled = true, bool allowCloseDialog = true) -> System.Windows.Forms.TaskDialogButton
+System.Windows.Forms.TaskDialogButtonCollection.TaskDialogButtonCollection() -> void
 System.Windows.Forms.TaskDialogCheckBox
 System.Windows.Forms.TaskDialogCheckBox.Checked.get -> bool
 System.Windows.Forms.TaskDialogCheckBox.Checked.set -> void
@@ -56,24 +50,15 @@ System.Windows.Forms.TaskDialogCheckBox.Text.get -> string
 System.Windows.Forms.TaskDialogCheckBox.Text.set -> void
 System.Windows.Forms.TaskDialogClosingEventArgs
 System.Windows.Forms.TaskDialogClosingEventArgs.CloseButton.get -> System.Windows.Forms.TaskDialogButton
+System.Windows.Forms.TaskDialogCommandLinkButton
+System.Windows.Forms.TaskDialogCommandLinkButton.DescriptionText.get -> string
+System.Windows.Forms.TaskDialogCommandLinkButton.DescriptionText.set -> void
+System.Windows.Forms.TaskDialogCommandLinkButton.TaskDialogCommandLinkButton() -> void
+System.Windows.Forms.TaskDialogCommandLinkButton.TaskDialogCommandLinkButton(string text, string descriptionText = null, bool enabled = true, bool allowCloseDialog = true) -> void
 System.Windows.Forms.TaskDialogControl
 System.Windows.Forms.TaskDialogControl.BoundPage.get -> System.Windows.Forms.TaskDialogPage
 System.Windows.Forms.TaskDialogControl.Tag.get -> object
 System.Windows.Forms.TaskDialogControl.Tag.set -> void
-System.Windows.Forms.TaskDialogCustomButton
-System.Windows.Forms.TaskDialogCustomButton.DescriptionText.get -> string
-System.Windows.Forms.TaskDialogCustomButton.DescriptionText.set -> void
-System.Windows.Forms.TaskDialogCustomButton.TaskDialogCustomButton() -> void
-System.Windows.Forms.TaskDialogCustomButton.TaskDialogCustomButton(string text, string descriptionText = null, bool enabled = true, bool defaultButton = false, bool allowCloseDialog = true) -> void
-System.Windows.Forms.TaskDialogCustomButton.Text.get -> string
-System.Windows.Forms.TaskDialogCustomButton.Text.set -> void
-System.Windows.Forms.TaskDialogCustomButtonCollection
-System.Windows.Forms.TaskDialogCustomButtonCollection.Add(string text, string descriptionText = null, bool enabled = true, bool defaultButton = false, bool allowCloseDialog = true) -> System.Windows.Forms.TaskDialogCustomButton
-System.Windows.Forms.TaskDialogCustomButtonCollection.TaskDialogCustomButtonCollection() -> void
-System.Windows.Forms.TaskDialogCustomButtonStyle
-System.Windows.Forms.TaskDialogCustomButtonStyle.CommandLinks = 1 -> System.Windows.Forms.TaskDialogCustomButtonStyle
-System.Windows.Forms.TaskDialogCustomButtonStyle.CommandLinksNoIcon = 2 -> System.Windows.Forms.TaskDialogCustomButtonStyle
-System.Windows.Forms.TaskDialogCustomButtonStyle.Default = 0 -> System.Windows.Forms.TaskDialogCustomButtonStyle
 System.Windows.Forms.TaskDialogExpander
 System.Windows.Forms.TaskDialogExpander.CollapsedButtonText.get -> string
 System.Windows.Forms.TaskDialogExpander.CollapsedButtonText.set -> void
@@ -108,15 +93,15 @@ System.Windows.Forms.TaskDialogPage.AllowCancel.set -> void
 System.Windows.Forms.TaskDialogPage.AllowMinimize.get -> bool
 System.Windows.Forms.TaskDialogPage.AllowMinimize.set -> void
 System.Windows.Forms.TaskDialogPage.BoundDialog.get -> System.Windows.Forms.TaskDialog
+System.Windows.Forms.TaskDialogPage.Buttons.get -> System.Windows.Forms.TaskDialogButtonCollection
+System.Windows.Forms.TaskDialogPage.Buttons.set -> void
 System.Windows.Forms.TaskDialogPage.Caption.get -> string
 System.Windows.Forms.TaskDialogPage.Caption.set -> void
 System.Windows.Forms.TaskDialogPage.CheckBox.get -> System.Windows.Forms.TaskDialogCheckBox
 System.Windows.Forms.TaskDialogPage.CheckBox.set -> void
 System.Windows.Forms.TaskDialogPage.Created -> System.EventHandler
-System.Windows.Forms.TaskDialogPage.CustomButtonStyle.get -> System.Windows.Forms.TaskDialogCustomButtonStyle
-System.Windows.Forms.TaskDialogPage.CustomButtonStyle.set -> void
-System.Windows.Forms.TaskDialogPage.CustomButtons.get -> System.Windows.Forms.TaskDialogCustomButtonCollection
-System.Windows.Forms.TaskDialogPage.CustomButtons.set -> void
+System.Windows.Forms.TaskDialogPage.DefaultButton.get -> System.Windows.Forms.TaskDialogButton
+System.Windows.Forms.TaskDialogPage.DefaultButton.set -> void
 System.Windows.Forms.TaskDialogPage.Destroyed -> System.EventHandler
 System.Windows.Forms.TaskDialogPage.Expander.get -> System.Windows.Forms.TaskDialogExpander
 System.Windows.Forms.TaskDialogPage.Expander.set -> void
@@ -138,8 +123,6 @@ System.Windows.Forms.TaskDialogPage.RightToLeftLayout.get -> bool
 System.Windows.Forms.TaskDialogPage.RightToLeftLayout.set -> void
 System.Windows.Forms.TaskDialogPage.SizeToContent.get -> bool
 System.Windows.Forms.TaskDialogPage.SizeToContent.set -> void
-System.Windows.Forms.TaskDialogPage.StandardButtons.get -> System.Windows.Forms.TaskDialogStandardButtonCollection
-System.Windows.Forms.TaskDialogPage.StandardButtons.set -> void
 System.Windows.Forms.TaskDialogPage.TaskDialogPage() -> void
 System.Windows.Forms.TaskDialogPage.Text.get -> string
 System.Windows.Forms.TaskDialogPage.Text.set -> void
@@ -178,43 +161,20 @@ System.Windows.Forms.TaskDialogRadioButton.Text.set -> void
 System.Windows.Forms.TaskDialogRadioButtonCollection
 System.Windows.Forms.TaskDialogRadioButtonCollection.Add(string text) -> System.Windows.Forms.TaskDialogRadioButton
 System.Windows.Forms.TaskDialogRadioButtonCollection.TaskDialogRadioButtonCollection() -> void
-System.Windows.Forms.TaskDialogResult
-System.Windows.Forms.TaskDialogResult.Abort = 3 -> System.Windows.Forms.TaskDialogResult
-System.Windows.Forms.TaskDialogResult.Cancel = 2 -> System.Windows.Forms.TaskDialogResult
-System.Windows.Forms.TaskDialogResult.Close = 8 -> System.Windows.Forms.TaskDialogResult
-System.Windows.Forms.TaskDialogResult.Continue = 11 -> System.Windows.Forms.TaskDialogResult
-System.Windows.Forms.TaskDialogResult.Help = 9 -> System.Windows.Forms.TaskDialogResult
-System.Windows.Forms.TaskDialogResult.Ignore = 5 -> System.Windows.Forms.TaskDialogResult
-System.Windows.Forms.TaskDialogResult.No = 7 -> System.Windows.Forms.TaskDialogResult
-System.Windows.Forms.TaskDialogResult.None = 0 -> System.Windows.Forms.TaskDialogResult
-System.Windows.Forms.TaskDialogResult.OK = 1 -> System.Windows.Forms.TaskDialogResult
-System.Windows.Forms.TaskDialogResult.Retry = 4 -> System.Windows.Forms.TaskDialogResult
-System.Windows.Forms.TaskDialogResult.TryAgain = 10 -> System.Windows.Forms.TaskDialogResult
-System.Windows.Forms.TaskDialogResult.Yes = 6 -> System.Windows.Forms.TaskDialogResult
-System.Windows.Forms.TaskDialogStandardButton
-System.Windows.Forms.TaskDialogStandardButton.Result.get -> System.Windows.Forms.TaskDialogResult
-System.Windows.Forms.TaskDialogStandardButton.Result.set -> void
-System.Windows.Forms.TaskDialogStandardButton.TaskDialogStandardButton() -> void
-System.Windows.Forms.TaskDialogStandardButton.TaskDialogStandardButton(System.Windows.Forms.TaskDialogResult result, bool enabled = true, bool defaultButton = false, bool allowCloseDialog = true) -> void
-System.Windows.Forms.TaskDialogStandardButton.Visible.get -> bool
-System.Windows.Forms.TaskDialogStandardButton.Visible.set -> void
-System.Windows.Forms.TaskDialogStandardButtonCollection
-System.Windows.Forms.TaskDialogStandardButtonCollection.Add(System.Windows.Forms.TaskDialogResult result, bool enabled = true, bool defaultButton = false, bool allowCloseDialog = true) -> System.Windows.Forms.TaskDialogStandardButton
-System.Windows.Forms.TaskDialogStandardButtonCollection.TaskDialogStandardButtonCollection() -> void
-System.Windows.Forms.TaskDialogStandardButtonCollection.this[int index].get -> System.Windows.Forms.TaskDialogStandardButton
-System.Windows.Forms.TaskDialogStandardButtonCollection.this[int index].set -> void
 System.Windows.Forms.TaskDialogStartupLocation
 System.Windows.Forms.TaskDialogStartupLocation.CenterParent = 1 -> System.Windows.Forms.TaskDialogStartupLocation
 System.Windows.Forms.TaskDialogStartupLocation.CenterScreen = 0 -> System.Windows.Forms.TaskDialogStartupLocation
 System.Windows.Forms.VisualStyles.EdgeEffects.Flat = 16384 -> System.Windows.Forms.VisualStyles.EdgeEffects
 System.Windows.Forms.VisualStyles.EdgeEffects.Soft = 4096 -> System.Windows.Forms.VisualStyles.EdgeEffects
 const System.Windows.Forms.TabControl.TabBaseReLayoutMessageName = "_TabBaseReLayout" -> string
+override System.Windows.Forms.TaskDialogButton.Equals(object obj) -> bool
+override System.Windows.Forms.TaskDialogButton.GetHashCode() -> int
+override System.Windows.Forms.TaskDialogButton.ToString() -> string
+override System.Windows.Forms.TaskDialogButtonCollection.ClearItems() -> void
+override System.Windows.Forms.TaskDialogButtonCollection.InsertItem(int index, System.Windows.Forms.TaskDialogButton item) -> void
+override System.Windows.Forms.TaskDialogButtonCollection.RemoveItem(int index) -> void
+override System.Windows.Forms.TaskDialogButtonCollection.SetItem(int index, System.Windows.Forms.TaskDialogButton item) -> void
 override System.Windows.Forms.TaskDialogCheckBox.ToString() -> string
-override System.Windows.Forms.TaskDialogCustomButton.ToString() -> string
-override System.Windows.Forms.TaskDialogCustomButtonCollection.ClearItems() -> void
-override System.Windows.Forms.TaskDialogCustomButtonCollection.InsertItem(int index, System.Windows.Forms.TaskDialogCustomButton item) -> void
-override System.Windows.Forms.TaskDialogCustomButtonCollection.RemoveItem(int index) -> void
-override System.Windows.Forms.TaskDialogCustomButtonCollection.SetItem(int index, System.Windows.Forms.TaskDialogCustomButton item) -> void
 override System.Windows.Forms.TaskDialogExpander.ToString() -> string
 override System.Windows.Forms.TaskDialogFooter.ToString() -> string
 override System.Windows.Forms.TaskDialogRadioButton.ToString() -> string
@@ -222,17 +182,23 @@ override System.Windows.Forms.TaskDialogRadioButtonCollection.ClearItems() -> vo
 override System.Windows.Forms.TaskDialogRadioButtonCollection.InsertItem(int index, System.Windows.Forms.TaskDialogRadioButton item) -> void
 override System.Windows.Forms.TaskDialogRadioButtonCollection.RemoveItem(int index) -> void
 override System.Windows.Forms.TaskDialogRadioButtonCollection.SetItem(int index, System.Windows.Forms.TaskDialogRadioButton item) -> void
-override System.Windows.Forms.TaskDialogStandardButton.ToString() -> string
-override System.Windows.Forms.TaskDialogStandardButtonCollection.ClearItems() -> void
-override System.Windows.Forms.TaskDialogStandardButtonCollection.GetKeyForItem(System.Windows.Forms.TaskDialogStandardButton item) -> System.Windows.Forms.TaskDialogResult
-override System.Windows.Forms.TaskDialogStandardButtonCollection.InsertItem(int index, System.Windows.Forms.TaskDialogStandardButton item) -> void
-override System.Windows.Forms.TaskDialogStandardButtonCollection.RemoveItem(int index) -> void
-override System.Windows.Forms.TaskDialogStandardButtonCollection.SetItem(int index, System.Windows.Forms.TaskDialogStandardButton item) -> void
-static System.Windows.Forms.TaskDialog.ShowDialog(System.IntPtr hwndOwner, string text, string mainInstruction = null, string caption = null, System.Windows.Forms.TaskDialogButtons buttons = System.Windows.Forms.TaskDialogButtons.OK, System.Windows.Forms.TaskDialogIcon icon = null) -> System.Windows.Forms.TaskDialogResult
-static System.Windows.Forms.TaskDialog.ShowDialog(System.Windows.Forms.IWin32Window owner, string text, string mainInstruction = null, string caption = null, System.Windows.Forms.TaskDialogButtons buttons = System.Windows.Forms.TaskDialogButtons.OK, System.Windows.Forms.TaskDialogIcon icon = null) -> System.Windows.Forms.TaskDialogResult
-static System.Windows.Forms.TaskDialog.ShowDialog(string text, string mainInstruction = null, string caption = null, System.Windows.Forms.TaskDialogButtons buttons = System.Windows.Forms.TaskDialogButtons.OK, System.Windows.Forms.TaskDialogIcon icon = null) -> System.Windows.Forms.TaskDialogResult
+static System.Windows.Forms.TaskDialog.ShowDialog(System.IntPtr hwndOwner, string text, string mainInstruction = null, string caption = null, System.Collections.Generic.IEnumerable<System.Windows.Forms.TaskDialogButton> buttons = null, System.Windows.Forms.TaskDialogIcon icon = null, System.Windows.Forms.TaskDialogButton defaultButton = null) -> System.Windows.Forms.TaskDialogButton
+static System.Windows.Forms.TaskDialog.ShowDialog(System.Windows.Forms.IWin32Window owner, string text, string mainInstruction = null, string caption = null, System.Collections.Generic.IEnumerable<System.Windows.Forms.TaskDialogButton> buttons = null, System.Windows.Forms.TaskDialogIcon icon = null, System.Windows.Forms.TaskDialogButton defaultButton = null) -> System.Windows.Forms.TaskDialogButton
+static System.Windows.Forms.TaskDialog.ShowDialog(string text, string mainInstruction = null, string caption = null, System.Collections.Generic.IEnumerable<System.Windows.Forms.TaskDialogButton> buttons = null, System.Windows.Forms.TaskDialogIcon icon = null, System.Windows.Forms.TaskDialogButton defaultButton = null) -> System.Windows.Forms.TaskDialogButton
+static System.Windows.Forms.TaskDialogButton.Abort.get -> System.Windows.Forms.TaskDialogButton
+static System.Windows.Forms.TaskDialogButton.Cancel.get -> System.Windows.Forms.TaskDialogButton
+static System.Windows.Forms.TaskDialogButton.Close.get -> System.Windows.Forms.TaskDialogButton
+static System.Windows.Forms.TaskDialogButton.Continue.get -> System.Windows.Forms.TaskDialogButton
+static System.Windows.Forms.TaskDialogButton.Help.get -> System.Windows.Forms.TaskDialogButton
+static System.Windows.Forms.TaskDialogButton.Ignore.get -> System.Windows.Forms.TaskDialogButton
+static System.Windows.Forms.TaskDialogButton.No.get -> System.Windows.Forms.TaskDialogButton
+static System.Windows.Forms.TaskDialogButton.OK.get -> System.Windows.Forms.TaskDialogButton
+static System.Windows.Forms.TaskDialogButton.Retry.get -> System.Windows.Forms.TaskDialogButton
+static System.Windows.Forms.TaskDialogButton.TryAgain.get -> System.Windows.Forms.TaskDialogButton
+static System.Windows.Forms.TaskDialogButton.Yes.get -> System.Windows.Forms.TaskDialogButton
+static System.Windows.Forms.TaskDialogButton.operator !=(System.Windows.Forms.TaskDialogButton b1, System.Windows.Forms.TaskDialogButton b2) -> bool
+static System.Windows.Forms.TaskDialogButton.operator ==(System.Windows.Forms.TaskDialogButton b1, System.Windows.Forms.TaskDialogButton b2) -> bool
 static System.Windows.Forms.TaskDialogFooter.implicit operator System.Windows.Forms.TaskDialogFooter(string footerText) -> System.Windows.Forms.TaskDialogFooter
-static System.Windows.Forms.TaskDialogStandardButtonCollection.implicit operator System.Windows.Forms.TaskDialogStandardButtonCollection(System.Windows.Forms.TaskDialogButtons buttons) -> System.Windows.Forms.TaskDialogStandardButtonCollection
 static readonly System.Windows.Forms.TaskDialogIcon.Error -> System.Windows.Forms.TaskDialogIcon
 static readonly System.Windows.Forms.TaskDialogIcon.Information -> System.Windows.Forms.TaskDialogIcon
 static readonly System.Windows.Forms.TaskDialogIcon.None -> System.Windows.Forms.TaskDialogIcon

@@ -254,8 +254,6 @@ namespace System.Windows.Forms
             set => _collection = value;
         }
 
-        internal override bool IsCreatable => base.IsCreatable && !TaskDialogPage.IsNativeStringNullOrEmpty(_text);
-
         /// <summary>
         ///   Returns a string that represents the current <see cref="TaskDialogRadioButton"/> control.
         /// </summary>

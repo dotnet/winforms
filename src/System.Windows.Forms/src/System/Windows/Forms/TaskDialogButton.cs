@@ -2,18 +2,43 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
+using static Interop;
 
 namespace System.Windows.Forms
 {
     /// <summary>
     ///   Represents a button control of a task dialog.
     /// </summary>
-    public abstract class TaskDialogButton : TaskDialogControl
+    /// <remarks>
+    /// <para>
+    ///   A button can either be a standard button (whose text is provided by the OS), or
+    ///   a custom button (or command link) where you can provide your own text.
+    /// </para>
+    /// <para>
+    ///   <see cref="TaskDialogButton"/> instances retrieved by static getters like <see cref="OK"/> are
+    ///   standard buttons. Their <see cref="Text"/> property cannot be set as the OS will provide the
+    ///   localized text for the buttons when showing them in the dialog.
+    /// </para>
+    /// <para>
+    ///   Button instances created with one of the constructors are custom buttons, which allow you to provide
+    ///   your own text as button label.
+    /// </para>
+    /// <para>
+    ///   Note: It's not possible to show both custom buttons and command links (<see cref="TaskDialogCommandLinkButton"/> instances)
+    ///   at the same time - it's only one or the other. In either case, you can combine them with
+    ///   standard buttons.
+    /// </para>
+    /// </remarks>
+    public class TaskDialogButton : TaskDialogControl
     {
         private bool _enabled = true;
-        private bool _defaultButton;
         private bool _elevationRequired;
+        private bool _visible = true;
+
+        private readonly TaskDialogResult? _standardButtonResult;
+
+        private string? _text;
+        private int _customButtonID;
 
         /// <summary>
         ///   Occurs when the button is clicked.
@@ -21,8 +46,10 @@ namespace System.Windows.Forms
         /// <remarks>
         /// <para>
         ///   By default, the dialog will be closed after the event handler returns
-        ///   (except for the <see cref="TaskDialogResult.Help"/> button, which instead
-        ///   will raise the <see cref="TaskDialogPage.HelpRequest"/> event afterwards).
+        ///   (except for the <see cref="Help"/> button, which instead will raise the
+        ///   <see cref="TaskDialogPage.HelpRequest"/> event afterwards).
+        /// </para>
+        /// <para>
         ///   To prevent the dialog from closing when this button is clicked, set the
         ///   <see cref="AllowCloseDialog"/> property to <see langword="false"/>.
         /// </para>
@@ -34,15 +61,116 @@ namespace System.Windows.Forms
         /// </remarks>
         public event EventHandler? Click;
 
-        // Disallow inheritance by specifying a private protected constructor.
-        private protected TaskDialogButton()
+        /// <summary>
+        ///   Initializes a new instance of the <see cref="TaskDialogButton"/> class.
+        /// </summary>
+        // TODO: Find a way to avoid making the class inheritable
+#pragma warning disable RS0022 // Constructor make noninheritable base class inheritable
+        public TaskDialogButton()
+#pragma warning restore RS0022 // Constructor make noninheritable base class inheritable
         {
         }
 
         /// <summary>
+        ///   Initializes a new instance of the <see cref="TaskDialogButton"/> class
+        ///   using the given text and, optionally, a description text.
+        /// </summary>
+        /// <param name="text">The text of the control.</param>
+        /// <param name="allowCloseDialog">A value that indicates whether the task dialog should close
+        ///   when this button is clicked.
+        /// </param>
+        // TODO
+#pragma warning disable RS0022 // Constructor make noninheritable base class inheritable
+        public TaskDialogButton(string? text, bool enabled = true, bool allowCloseDialog = true)
+#pragma warning restore RS0022 // Constructor make noninheritable base class inheritable
+            : this()
+        {
+            _text = text;
+            Enabled = enabled;
+            AllowCloseDialog = allowCloseDialog;
+        }
+
+        internal TaskDialogButton(TaskDialogResult standardButtonResult)
+        {
+            _standardButtonResult = standardButtonResult;
+            _text = standardButtonResult.ToString();
+        }
+
+        // Static factory properties that return a new instance of the button.
+
+        /// <summary>
+        ///
+        /// </summary>
+        public static TaskDialogButton OK => new TaskDialogButton(TaskDialogResult.OK);
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        ///   Note: Adding a Cancel button will automatically add a close button
+        ///   to the task dialog's title bar and will allow to close the dialog by
+        ///   pressing ESC or Alt+F4 (just as if you enabled
+        ///   <see cref="TaskDialogPage.AllowCancel"/>).
+        /// </para>
+        /// </remarks>
+        public static TaskDialogButton Cancel => new TaskDialogButton(TaskDialogResult.Cancel);
+
+        /// <summary>
+        ///
+        /// </summary>
+        public static TaskDialogButton Abort => new TaskDialogButton(TaskDialogResult.Abort);
+
+        /// <summary>
+        ///
+        /// </summary>
+        public static TaskDialogButton Retry => new TaskDialogButton(TaskDialogResult.Retry);
+
+        /// <summary>
+        ///
+        /// </summary>
+        public static TaskDialogButton Ignore => new TaskDialogButton(TaskDialogResult.Ignore);
+
+        /// <summary>
+        ///
+        /// </summary>
+        public static TaskDialogButton Yes => new TaskDialogButton(TaskDialogResult.Yes);
+
+        /// <summary>
+        ///
+        /// </summary>
+        public static TaskDialogButton No => new TaskDialogButton(TaskDialogResult.No);
+
+        /// <summary>
+        ///
+        /// </summary>
+        public static TaskDialogButton Close => new TaskDialogButton(TaskDialogResult.Close);
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        ///   Note: Clicking this button will not close the dialog, but will raise the
+        ///   <see cref="TaskDialogPage.HelpRequest"/> event.
+        /// </para>
+        /// </remarks>
+        public static TaskDialogButton Help => new TaskDialogButton(TaskDialogResult.Help);
+
+        /// <summary>
+        ///
+        /// </summary>
+        public static TaskDialogButton TryAgain => new TaskDialogButton(TaskDialogResult.TryAgain);
+
+        /// <summary>
+        ///
+        /// </summary>
+        public static TaskDialogButton Continue => new TaskDialogButton(TaskDialogResult.Continue);
+
+        /// <summary>
         ///   Gets or sets a value that indicates whether the task dialog should close
-        ///   when this button is clicked. Or, if this button represents the
-        ///   <see cref="TaskDialogResult.Help"/> result, indicates whether the
+        ///   when this button is clicked. Or, if this button is the
+        ///   <see cref="TaskDialogButton.Help"/> button, indicates whether the
         ///   <see cref="TaskDialogPage.HelpRequest"/> should be raised.
         /// </summary>
         /// <value>
@@ -53,7 +181,7 @@ namespace System.Windows.Forms
         /// <para>
         ///   If this property is set to <see langword="true"/> after the <see cref="Click"/>
         ///   event handler returns, the <see cref="TaskDialog.Closing"/> event will occur
-        ///   (except if this button represents the <see cref="TaskDialogResult.Help"/> result),
+        ///   (except if this button is the <see cref="TaskDialogButton.Help"/> button),
         ///   which allows you to cancel the close. If it isn't canceled, the dialog closes and
         ///   sets the clicked button as result value.
         /// </para>
@@ -122,51 +250,101 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///   Gets or sets a value that indicates whether this button is the default button
-        ///   in the task dialog.
+        ///   Gets or sets a value that indicates if this
+        ///   <see cref="TaskDialogButton"/> should be shown when displaying
+        ///   the task dialog.
         /// </summary>
-        /// <value>
-        ///   <see langword="true"/> if this button is the default button in the task dialog;
-        ///   otherwise, <see langword="false"/>. The default value is <see langword="false"/>.
-        /// </value>
         /// <remarks>
         /// <para>
-        ///   Only a single button in a task dialog can be set as the default button.
+        ///   Setting this property to <see langword="false"/> allows you to still receive the
+        ///   <see cref="Click"/> event (e.g. for the
+        ///   <see cref="Cancel"/> button when
+        ///   <see cref="TaskDialogPage.AllowCancel"/> is set), or to call the
+        ///   <see cref="PerformClick"/> method even if the button
+        ///   is not shown.
         /// </para>
         /// </remarks>
-        public bool DefaultButton
+        public bool Visible
         {
-            get => _defaultButton;
+            get => _visible;
 
             set
             {
-                _defaultButton = value;
+                DenyIfBound();
 
-                // If we are part of a collection, set the defaultButton value of
-                // all other buttons to false.
-                // Note that this does not handle buttons that are added later to
-                // the collection.
-                if (Collection == null || !value)
-                {
-                    return;
-                }
-
-                foreach (TaskDialogButton button in Collection)
-                {
-                    button._defaultButton = button == this;
-                }
+                _visible = value;
             }
         }
 
-        internal abstract int ButtonID { get; }
+        /// <summary>
+        ///   Gets or sets the text associated with this control.
+        /// </summary>
+        /// <value>
+        ///   The text associated with this control. The default value is <see langword="null"/>.
+        /// </value>
+        /// <remarks>
+        /// <para>
+        ///   You cannot set this property if this button is a standard button, as its text will be provided by the OS.
+        /// </para>
+        /// <para>
+        ///   This property must not be <see langword="null"/> or an empty string when showing or navigating
+        ///   the dialog; otherwise, the operation will fail.
+        /// </para>
+        /// </remarks>
+        /// <exception cref="InvalidOperationException">This button is a standard button, for which the text is provided by the OS.</exception>
+        /// <exception cref="InvalidOperationException">This control is currently bound to a task dialog.</exception>
+        public string? Text
+        {
+            get => _text;
 
-        // Note: Instead of declaring an abstract Collection getter, we implement
-        // the field and the property here so that the subclass doesn't have to
-        // do the implementation, in order to avoid duplicating the logic
-        // (e.g. if we ever need to add actions in the setter, it normally would
-        // be the same for all subclasses). Instead, the subclass can declare
-        // a new (internal) Collection property which has a more specific type.
-        private protected IReadOnlyList<TaskDialogButton>? Collection { get; set; }
+            set
+            {
+                // For standard buttons, the text is set by the constructor (but it's only
+                // the enum value name, the actual text is provided by the OS).
+                if (IsStandardButton)
+                    throw new InvalidOperationException(SR.TaskDialogCannotSetTextForStandardButton);
+
+                DenyIfBound();
+
+                _text = value;
+            }
+        }
+
+        internal override bool IsCreatable => base.IsCreatable && _visible;
+
+        internal bool IsStandardButton => _standardButtonResult != null;
+
+        internal TaskDialogResult StandardButtonResult => _standardButtonResult ?? throw new InvalidOperationException();
+
+        internal int ButtonID => IsStandardButton ? (int)StandardButtonResult: _customButtonID;
+
+        internal TaskDialogButtonCollection? Collection { get; set; }
+
+        public static bool operator ==(TaskDialogButton? b1, TaskDialogButton? b2)
+        {
+            return Equals(b1, b2);
+        }
+
+        public static bool operator !=(TaskDialogButton? b1, TaskDialogButton? b2)
+        {
+            return !(b1 == b2);
+        }
+
+        private static ComCtl32.TDCBF GetStandardButtonFlagForResult(TaskDialogResult result) => result switch
+        {
+            TaskDialogResult.OK => ComCtl32.TDCBF.OK_BUTTON,
+            TaskDialogResult.Cancel => ComCtl32.TDCBF.CANCEL_BUTTON,
+            TaskDialogResult.Abort => ComCtl32.TDCBF.ABORT_BUTTON,
+            TaskDialogResult.Retry => ComCtl32.TDCBF.RETRY_BUTTON,
+            TaskDialogResult.Ignore => ComCtl32.TDCBF.IGNORE_BUTTON,
+            TaskDialogResult.Yes => ComCtl32.TDCBF.YES_BUTTON,
+            TaskDialogResult.No => ComCtl32.TDCBF.NO_BUTTON,
+            TaskDialogResult.Close => ComCtl32.TDCBF.CLOSE_BUTTON,
+            TaskDialogResult.Help => ComCtl32.TDCBF.HELP_BUTTON,
+            TaskDialogResult.TryAgain => ComCtl32.TDCBF.TRYAGAIN_BUTTON,
+            TaskDialogResult.Continue => ComCtl32.TDCBF.CONTINUE_BUTTON,
+            _ => default
+        };
 
         /// <summary>
         ///   Simulates a click on this button.
@@ -179,11 +357,70 @@ namespace System.Windows.Forms
             BoundPage!.BoundDialog!.ClickButton(ButtonID);
         }
 
+        public override bool Equals(object? obj)
+        {
+            // For standard buttons, we consider them to be equal if they have the same
+            // dialog result. This will allow for checking the return value of
+            // TaskDialog.ShowDialog with code like "if (result == TaskDialogButton.Yes)".
+            if (IsStandardButton && obj is TaskDialogButton otherButton && otherButton.IsStandardButton)
+                return _standardButtonResult!.Value == otherButton._standardButtonResult!.Value;
+
+            // Otherwise, check for reference equality.
+            return base.Equals(obj);
+        }
+
+        public override int GetHashCode()
+        {
+            if (IsStandardButton)
+                return (int)_standardButtonResult!.Value;
+
+            return base.GetHashCode();
+        }
+
+        /// <summary>
+        ///   Returns a string that represents the current <see cref="TaskDialogButton"/> control.
+        /// </summary>
+        /// <returns>A string that contains the control text.</returns>
+        public override string ToString() => _text ?? base.ToString() ?? string.Empty;
+
+        internal ComCtl32.TDF Bind(TaskDialogPage page, int customButtonID)
+        {
+            if (_standardButtonResult != null)
+                throw new InvalidOperationException();
+
+            ComCtl32.TDF result = Bind(page);
+            _customButtonID = customButtonID;
+
+            return result;
+        }
+
         internal bool HandleButtonClicked()
         {
             OnClick(EventArgs.Empty);
 
             return AllowCloseDialog;
+        }
+
+        internal virtual string? GetResultingText()
+        {
+            // Remove LFs from the text. Otherwise, the dialog would display the
+            // part of the text after the LF in the command link note, but for
+            // this we have the "DescriptionText" property, so we should ensure that
+            // there is not an discrepancy here and that the contents of the "Text"
+            // property are not displayed in the command link note.
+            // Therefore, we replace a combined CR+LF with CR, and then also single
+            // LFs with CR, because CR is treated as a line break.
+            string? text = _text?.Replace("\r\n", "\r").Replace("\n", "\r");
+
+            return text;
+        }
+
+        internal ComCtl32.TDCBF GetStandardButtonFlag()
+        {
+            if (!IsStandardButton)
+                throw new InvalidOperationException();
+
+            return GetStandardButtonFlagForResult(_standardButtonResult!.Value);
         }
 
         private protected override void ApplyInitializationCore()
@@ -197,6 +434,13 @@ namespace System.Windows.Forms
             {
                 ElevationRequired = _elevationRequired;
             }
+        }
+
+        private protected override void UnbindCore()
+        {
+            _customButtonID = 0;
+
+            base.UnbindCore();
         }
 
         private protected void OnClick(EventArgs e) => Click?.Invoke(this, e);

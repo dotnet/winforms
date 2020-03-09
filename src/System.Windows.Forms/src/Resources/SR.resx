@@ -6725,8 +6725,8 @@ Stack trace where the illegal operation occurred was:
   <data name="TaskDialogVisualStylesNotEnabled" xml:space="preserve">
     <value>Visual styles are not enabled. Please call {0} before showing the task dialog.</value>
   </data>
-  <data name="TaskDialogOnlySingleButtonCanBeDefault" xml:space="preserve">
-    <value>Only a single button can be set as default button.</value>
+  <data name="TaskDialogDefaultButtonMustExistInCollection" xml:space="preserve">
+    <value>The default button must exist in the buttons collection.</value>
   </data>
   <data name="TaskDialogOnlySingleRadioButtonCanBeChecked" xml:space="preserve">
     <value>Only a single radio button can be set as checked.</value>
@@ -6739,5 +6739,8 @@ Stack trace where the illegal operation occurred was:
   </data>
   <data name="TaskDialogTooManyButtonsAdded" xml:space="preserve">
     <value>Too many custom buttons or radio buttons have been added.</value>
+  </data>
+  <data name="TaskDialogCannotSetTextForStandardButton" xml:space="preserve">
+    <value>Cannot set the text for a standard button.</value>
   </data>
 </root>
