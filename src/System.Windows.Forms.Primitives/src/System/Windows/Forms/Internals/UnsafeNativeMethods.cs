@@ -101,9 +101,6 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.Oleacc, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern int CreateStdAccessibleObject(HandleRef hWnd, int objID, ref Guid refiid, [In, Out, MarshalAs(UnmanagedType.Interface)] ref object pAcc);
 
-        [DllImport(ExternDll.User32, ExactSpelling = true)]
-        public static extern IntPtr GetWindowDC(HandleRef hWnd);
-
         //for RegionData
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern int GetRegionData(HandleRef hRgn, int size, IntPtr lpRgnData);
