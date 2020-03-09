@@ -703,12 +703,12 @@ namespace System.Windows.Forms
             {
                 if (IsHandleCreated)
                 {
-                    return StreamOut(RichTextBoxConstants.SF_RTF);
+                    return StreamOut(SF.RTF);
                 }
                 else if (textPlain != null)
                 {
                     ForceHandleCreate();
-                    return StreamOut(RichTextBoxConstants.SF_RTF);
+                    return StreamOut(SF.RTF);
                 }
                 else
                 {
@@ -729,7 +729,7 @@ namespace System.Windows.Forms
 
                 ForceHandleCreate();
                 textRtf = value;
-                StreamIn(value, RichTextBoxConstants.SF_RTF);
+                StreamIn(value, SF.RTF);
                 if (CanRaiseTextChangedEvent)
                 {
                     OnTextChanged(EventArgs.Empty);
@@ -1267,7 +1267,7 @@ namespace System.Windows.Forms
             get
             {
                 ForceHandleCreate();
-                return StreamOut(RichTextBoxConstants.SFF_SELECTION | RichTextBoxConstants.SF_RTF);
+                return StreamOut(SF.F_SELECTION | SF.RTF);
             }
             set
             {
@@ -1277,7 +1277,7 @@ namespace System.Windows.Forms
                     value = string.Empty;
                 }
 
-                StreamIn(value, RichTextBoxConstants.SFF_SELECTION | RichTextBoxConstants.SF_RTF);
+                StreamIn(value, SF.F_SELECTION | SF.RTF);
             }
         }
 
@@ -1417,13 +1417,13 @@ namespace System.Windows.Forms
             {
                 ForceHandleCreate();
 
-                string text = StreamOut(RichTextBoxConstants.SFF_SELECTION | RichTextBoxConstants.SF_TEXT | RichTextBoxConstants.SF_UNICODE);
+                string text = StreamOut(SF.F_SELECTION | SF.TEXT | SF.UNICODE);
                 return text;
             }
             set
             {
                 ForceHandleCreate();
-                StreamIn(value, RichTextBoxConstants.SFF_SELECTION | RichTextBoxConstants.SF_TEXT | RichTextBoxConstants.SF_UNICODE);
+                StreamIn(value, SF.F_SELECTION | SF.TEXT | SF.UNICODE);
             }
         }
 
@@ -1522,7 +1522,7 @@ namespace System.Windows.Forms
                     //
                     ForceHandleCreate();
 
-                    return StreamOut(RichTextBoxConstants.SF_TEXT | RichTextBoxConstants.SF_UNICODE);
+                    return StreamOut(SF.TEXT | SF.UNICODE);
                 }
             }
             set
@@ -1541,7 +1541,7 @@ namespace System.Windows.Forms
                         {
                             value = string.Empty;
                         }
-                        StreamIn(value, RichTextBoxConstants.SF_TEXT | RichTextBoxConstants.SF_UNICODE);
+                        StreamIn(value, SF.TEXT | SF.UNICODE);
                         // reset Modified
                         User32.SendMessageW(this, (User32.WM)User32.EM.SETMODIFY);
                     }
@@ -2501,24 +2501,27 @@ namespace System.Windows.Forms
         /// </summary>
         public void LoadFile(Stream data, RichTextBoxStreamType fileType)
         {
-            //valid values are 0x0 to 0x4
+            if (data == null)
+            {
+                throw new ArgumentNullException(nameof(data));
+            }
             if (!ClientUtils.IsEnumValid(fileType, (int)fileType, (int)RichTextBoxStreamType.RichText, (int)RichTextBoxStreamType.UnicodePlainText))
             {
                 throw new InvalidEnumArgumentException(nameof(fileType), (int)fileType, typeof(RichTextBoxStreamType));
             }
 
-            int flags;
+            SF flags;
             switch (fileType)
             {
                 case RichTextBoxStreamType.RichText:
-                    flags = RichTextBoxConstants.SF_RTF;
+                    flags = SF.RTF;
                     break;
                 case RichTextBoxStreamType.PlainText:
                     Rtf = string.Empty;
-                    flags = RichTextBoxConstants.SF_TEXT;
+                    flags = SF.TEXT;
                     break;
                 case RichTextBoxStreamType.UnicodePlainText:
-                    flags = RichTextBoxConstants.SF_UNICODE | RichTextBoxConstants.SF_TEXT;
+                    flags = SF.UNICODE | SF.TEXT;
                     break;
                 default:
                     throw new ArgumentException(SR.InvalidFileType);
@@ -2816,23 +2819,23 @@ namespace System.Windows.Forms
         /// </summary>
         public void SaveFile(Stream data, RichTextBoxStreamType fileType)
         {
-            int flags;
+            SF flags;
             switch (fileType)
             {
                 case RichTextBoxStreamType.RichText:
-                    flags = RichTextBoxConstants.SF_RTF;
+                    flags = SF.RTF;
                     break;
                 case RichTextBoxStreamType.PlainText:
-                    flags = RichTextBoxConstants.SF_TEXT;
+                    flags = SF.TEXT;
                     break;
                 case RichTextBoxStreamType.UnicodePlainText:
-                    flags = RichTextBoxConstants.SF_UNICODE | RichTextBoxConstants.SF_TEXT;
+                    flags = SF.UNICODE | SF.TEXT;
                     break;
                 case RichTextBoxStreamType.RichNoOleObjs:
-                    flags = RichTextBoxConstants.SF_RTFNOOBJS;
+                    flags = SF.RTFNOOBJS;
                     break;
                 case RichTextBoxStreamType.TextTextOleObjs:
-                    flags = RichTextBoxConstants.SF_TEXTIZED;
+                    flags = SF.TEXTIZED;
                     break;
                 default:
                     throw new InvalidEnumArgumentException(nameof(fileType), (int)fileType, typeof(RichTextBoxStreamType));
@@ -2984,12 +2987,12 @@ namespace System.Windows.Forms
             return (int)(((((double)v) / 20.0) / 72.0) * logP);
         }
 
-        private void StreamIn(string str, int flags)
+        private void StreamIn(string str, SF flags)
         {
             if (str.Length == 0)
             {
                 // Destroy the selection if callers was setting selection text
-                if ((RichTextBoxConstants.SFF_SELECTION & flags) != 0)
+                if ((SF.F_SELECTION & flags) != 0)
                 {
                     User32.SendMessageW(this, User32.WM.CLEAR);
                     ProtectedError = false;
@@ -3011,7 +3014,7 @@ namespace System.Windows.Forms
 
             // get the string into a byte array
             byte[] encodedBytes;
-            if ((flags & RichTextBoxConstants.SF_UNICODE) != 0)
+            if ((flags & SF.UNICODE) != 0)
             {
                 encodedBytes = Encoding.Unicode.GetBytes(str);
             }
@@ -3025,10 +3028,10 @@ namespace System.Windows.Forms
             StreamIn(editStream, flags);
         }
 
-        private void StreamIn(Stream data, int flags)
+        private void StreamIn(Stream data, SF flags)
         {
             // clear out the selection only if we are replacing all the text
-            if ((flags & RichTextBoxConstants.SFF_SELECTION) == 0)
+            if ((flags & SF.F_SELECTION) == 0)
             {
                 var cr = new Richedit.CHARRANGE();
                 User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_EXSETSEL, IntPtr.Zero, ref cr);
@@ -3042,7 +3045,7 @@ namespace System.Windows.Forms
                 // If SF_RTF is requested then check for the RTF tag at the start
                 // of the file.  We don't load if the tag is not there
                 //
-                if ((flags & RichTextBoxConstants.SF_RTF) != 0)
+                if ((flags & SF.RTF) != 0)
                 {
                     long streamStart = editStream.Position;
                     byte[] bytes = new byte[SZ_RTF_TAG.Length];
@@ -3059,8 +3062,8 @@ namespace System.Windows.Forms
 
                 int cookieVal = 0;
                 // set up structure to do stream operation
-                NativeMethods.EDITSTREAM es = new NativeMethods.EDITSTREAM();
-                if ((flags & RichTextBoxConstants.SF_UNICODE) != 0)
+                var es = new EDITSTREAM();
+                if ((flags & SF.UNICODE) != 0)
                 {
                     cookieVal = INPUT | UNICODE;
                 }
@@ -3068,7 +3071,7 @@ namespace System.Windows.Forms
                 {
                     cookieVal = INPUT | ANSI;
                 }
-                if ((flags & RichTextBoxConstants.SF_RTF) != 0)
+                if ((flags & SF.RTF) != 0)
                 {
                     cookieVal |= RTF;
                 }
@@ -3076,27 +3079,17 @@ namespace System.Windows.Forms
                 {
                     cookieVal |= TEXTLF;
                 }
-                es.dwCookie = (IntPtr)cookieVal;
-                es.pfnCallback = new NativeMethods.EditStreamCallback(EditStreamProc);
+                es.dwCookie = (UIntPtr)cookieVal;
+                var callback = new EDITSTREAMCALLBACK(EditStreamProc);
+                es.pfnCallback = Marshal.GetFunctionPointerForDelegate(callback);
 
                 // gives us TextBox compatible behavior, programatic text change shouldn't
                 // be limited...
                 User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_EXLIMITTEXT, IntPtr.Zero, (IntPtr)int.MaxValue);
 
                 // go get the text for the control
-                // Needed for 64-bit
-                if (IntPtr.Size == 8)
-                {
-                    NativeMethods.EDITSTREAM64 es64 = ConvertToEDITSTREAM64(es);
-                    UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), RichEditMessages.EM_STREAMIN, flags, es64);
-
-                    //Assign back dwError value
-                    es.dwError = GetErrorValue64(es64);
-                }
-                else
-                {
-                    UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), RichEditMessages.EM_STREAMIN, flags, es);
-                }
+                User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_STREAMIN, (IntPtr)flags, ref es);
+                GC.KeepAlive(callback);
 
                 UpdateMaxLength();
 
@@ -3126,7 +3119,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private string StreamOut(int flags)
+        private string StreamOut(SF flags)
         {
             Stream stream = new MemoryStream();
             StreamOut(stream, flags, false);
@@ -3139,7 +3132,7 @@ namespace System.Windows.Forms
                 byte[] bytes = new byte[streamLength];
                 stream.Read(bytes, 0, streamLength);
 
-                if ((flags & RichTextBoxConstants.SF_UNICODE) != 0)
+                if ((flags & SF.UNICODE) != 0)
                 {
                     result = Encoding.Unicode.GetString(bytes, 0, bytes.Length);
                 }
@@ -3158,17 +3151,16 @@ namespace System.Windows.Forms
             return result;
         }
 
-        private void StreamOut(Stream data, int flags, bool includeCrLfs)
+        private void StreamOut(Stream data, SF flags, bool includeCrLfs)
         {
             // set up the EDITSTREAM structure for the callback.
-            Debug.Assert(data != null, "StreamOut passed a null stream");
             editStream = data;
 
             try
             {
                 int cookieVal = 0;
-                NativeMethods.EDITSTREAM es = new NativeMethods.EDITSTREAM();
-                if ((flags & RichTextBoxConstants.SF_UNICODE) != 0)
+                var es = new EDITSTREAM();
+                if ((flags & SF.UNICODE) != 0)
                 {
                     cookieVal = OUTPUT | UNICODE;
                 }
@@ -3176,7 +3168,7 @@ namespace System.Windows.Forms
                 {
                     cookieVal = OUTPUT | ANSI;
                 }
-                if ((flags & RichTextBoxConstants.SF_RTF) != 0)
+                if ((flags & SF.RTF) != 0)
                 {
                     cookieVal |= RTF;
                 }
@@ -3191,23 +3183,13 @@ namespace System.Windows.Forms
                         cookieVal |= TEXTLF;
                     }
                 }
-                es.dwCookie = (IntPtr)cookieVal;
-                es.pfnCallback = new NativeMethods.EditStreamCallback(EditStreamProc);
+                es.dwCookie = (UIntPtr)cookieVal;
+                var callback = new EDITSTREAMCALLBACK(EditStreamProc);
+                es.pfnCallback = Marshal.GetFunctionPointerForDelegate(callback);
 
                 // Get Text
-                // Needed for 64-bit
-                if (IntPtr.Size == 8)
-                {
-                    NativeMethods.EDITSTREAM64 es64 = ConvertToEDITSTREAM64(es);
-                    UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), RichEditMessages.EM_STREAMOUT, flags, es64);
-
-                    //Assign back dwError value
-                    es.dwError = GetErrorValue64(es64);
-                }
-                else
-                {
-                    UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), RichEditMessages.EM_STREAMOUT, flags, es);
-                }
+                User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_STREAMOUT, (IntPtr)flags, ref es);
+                GC.KeepAlive(callback);
 
                 // check to make sure things went well
                 if (es.dwError != 0)
@@ -3220,41 +3202,6 @@ namespace System.Windows.Forms
                 // release any storage space held.
                 editStream = null;
             }
-        }
-
-        private unsafe NativeMethods.EDITSTREAM64 ConvertToEDITSTREAM64(NativeMethods.EDITSTREAM es)
-        {
-            NativeMethods.EDITSTREAM64 es64 = new NativeMethods.EDITSTREAM64();
-
-            fixed (byte* es64p = &es64.contents[0])
-            {
-                byte* bp;
-                long l;
-
-                *((long*)es64p) = (long)es.dwCookie;
-                *((int*)(es64p + 8)) = es.dwError;
-
-                l = (long)Marshal.GetFunctionPointerForDelegate(es.pfnCallback);
-                bp = (byte*)&l;
-                for (int i = 0; i < sizeof(long); i++)
-                {
-                    es64.contents[i + 12] = bp[i];
-                }
-            }
-
-            return es64;
-        }
-
-        private unsafe int GetErrorValue64(NativeMethods.EDITSTREAM64 es64)
-        {
-            int errorVal;
-
-            fixed (byte* es64p = &es64.contents[0])
-            {
-                errorVal = *((int*)(es64p + 8));
-            }
-
-            return errorVal;
         }
 
         private void UpdateOleCallback()
@@ -3528,8 +3475,7 @@ namespace System.Windows.Forms
 
                                 case RichEditMessages.EM_STREAMIN:
                                     // Don't allow STREAMIN to replace protected selection
-                                    //
-                                    if ((unchecked((int)(long)enprotected.wParam) & RichTextBoxConstants.SFF_SELECTION) != 0)
+                                    if ((unchecked((SF)(long)enprotected.wParam) & SF.F_SELECTION) != 0)
                                     {
                                         break;
                                     }

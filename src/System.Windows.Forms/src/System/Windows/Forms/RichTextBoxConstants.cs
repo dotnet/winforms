@@ -208,23 +208,6 @@ namespace System.Windows.Forms
 
         internal const int cchTextLimitDefault = 32767;
 
-        /* stream formats */
-        internal const int SF_TEXT = 0x0001;
-        internal const int SF_RTF = 0x0002;
-        internal const int SF_RTFNOOBJS = 0x0003; /* outbound only */
-        internal const int SF_TEXTIZED = 0x0004;  /* outbound only */
-        internal const int SF_UNICODE = 0x0010;   /* Unicode file of some kind */
-
-        /* Flag telling stream operations to operate on the selection only */
-        /* EM_STREAMIN will replace the current selection */
-        /* EM_STREAMOUT will stream out the current selection */
-        internal const int SFF_SELECTION = 0x8000;
-
-        /* Flag telling stream operations to operate on the common RTF keyword only */
-        /* EM_STREAMIN will accept the only common RTF keyword */
-        /* EM_STREAMOUT will stream out the only common RTF keyword */
-        internal const int SFF_PLAINRTF = 0x4000;
-
         /* all paragraph measurements are in twips */
         internal const int lDefaultTab = 720;
 
