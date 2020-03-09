@@ -2129,7 +2129,7 @@ namespace System.Windows.Forms
                                 SetState(State.UISelection, true);
                             }
                             break;
-                        case (int)ComCtl32.TTN.GETDISPINFOW:
+                        case (int)TTN.GETDISPINFOW:
                             // Setting the max width has the added benefit of enabling Multiline tool tips
                             User32.SendMessageW(nmhdr->hwndFrom, (User32.WM)TTM.SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
                             WmNeedText(ref m);

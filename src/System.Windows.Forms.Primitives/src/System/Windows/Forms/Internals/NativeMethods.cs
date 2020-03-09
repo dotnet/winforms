@@ -11,23 +11,9 @@ namespace System.Windows.Forms
     internal static class NativeMethods
     {
         public static IntPtr InvalidIntPtr = (IntPtr)(-1);
-        public static IntPtr LPSTR_TEXTCALLBACK = (IntPtr)(-1);
         public static HandleRef NullHandleRef = new HandleRef(null, IntPtr.Zero);
 
-        public const int STATUS_PENDING = 0x103; //259 = STILL_ALIVE
-
         public const int CW_USEDEFAULT = (unchecked((int)0x80000000));
-
-        public const int
-        DTN_DATETIMECHANGE = ((0 - 760) + 1),
-        DTN_USERSTRING = ((0 - 760) + 15),
-        DTN_WMKEYDOWN = ((0 - 760) + 16),
-        DTN_FORMAT = ((0 - 760) + 17),
-        DTN_FORMATQUERY = ((0 - 760) + 18),
-        DTN_DROPDOWN = ((0 - 760) + 6),
-        DTN_CLOSEUP = ((0 - 760) + 7);
-
-        public const int FRERR_BUFFERLENGTHZERO = 0x4001;
 
         public const int
         GDI_ERROR = (unchecked((int)0xFFFFFFFF));
@@ -46,8 +32,6 @@ namespace System.Windows.Forms
         HDN_TRACK = ((0 - 300) - 28),
         HDN_GETDISPINFO = ((0 - 300) - 29);
         // HOVER_DEFAULT = Do not use this value ever! It crashes entire servers.
-
-        public const int HDS_FULLDRAG = 0x0080;
 
         public const int
         ICON_SMALL = 0,

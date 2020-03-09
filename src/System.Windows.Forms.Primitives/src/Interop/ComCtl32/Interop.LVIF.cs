@@ -37,7 +37,7 @@ internal static partial class Interop
             INDENT = 0x00000010,
 
             /// <summary>
-            /// The control will not generate <see cref="LVN.GETDISPINFO"/>
+            /// The control will not generate <see cref="LVN.GETDISPINFOW"/>
             /// to retrieve text information if it receives an <see cref="LVM.GETITEMW"/> message.
             /// Instead, the <c>pszText</c> member will contain <c>LPSTR_TEXTCALLBACK</c>.
             /// </summary>
@@ -58,7 +58,7 @@ internal static partial class Interop
             /// <summary>
             /// The operating system should store the requested list item information
             /// and not ask for it again. This flag is used only with the
-            /// <see cref="LVN.GETDISPINFO"/> notification code.
+            /// <see cref="LVN.GETDISPINFOW"/> notification code.
             /// </summary>
             DI_SETITEM = 0x00001000,
 

@@ -6016,7 +6016,7 @@ namespace System.Windows.Forms
                     CustomDraw(ref m);
                     break;
 
-                case (int)LVN.BEGINLABELEDIT:
+                case (int)LVN.BEGINLABELEDITW:
                     {
                         NMLVDISPINFO* dispInfo = (NMLVDISPINFO*)m.LParam;
                         LabelEditEventArgs e = new LabelEditEventArgs(dispInfo->item.iItem);
@@ -6034,7 +6034,7 @@ namespace System.Windows.Forms
                         break;
                     }
 
-                case (int)LVN.ENDLABELEDIT:
+                case (int)LVN.ENDLABELEDITW:
                     {
                         listViewState[LISTVIEWSTATE_inLabelEdit] = false;
                         NMLVDISPINFO* dispInfo = (NMLVDISPINFO*)m.LParam;
@@ -6252,7 +6252,7 @@ namespace System.Windows.Forms
                     break;
 
                 default:
-                    if (nmhdr->code == (int)LVN.GETDISPINFO)
+                    if (nmhdr->code == (int)LVN.GETDISPINFOW)
                     {
                         // we use the LVN_GETDISPINFO message only in virtual mode
                         if (VirtualMode && m.LParam != IntPtr.Zero)
@@ -6321,7 +6321,7 @@ namespace System.Windows.Forms
                             }
                         }
                     }
-                    else if (nmhdr->code == (int)LVN.GETINFOTIP)
+                    else if (nmhdr->code == (int)LVN.GETINFOTIPW)
                     {
                         if (ShowItemToolTips && m.LParam != IntPtr.Zero)
                         {
@@ -6339,7 +6339,7 @@ namespace System.Windows.Forms
                             }
                         }
                     }
-                    else if (nmhdr->code == (int)LVN.ODFINDITEM)
+                    else if (nmhdr->code == (int)LVN.ODFINDITEMW)
                     {
                         if (VirtualMode)
                         {

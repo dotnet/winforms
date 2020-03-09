@@ -1627,15 +1627,15 @@ namespace System.Windows.Forms
             if (m.HWnd == Handle)
             {
                 User32.NMHDR* nmhdr = (User32.NMHDR*)m.LParam;
-                switch (nmhdr->code)
+                switch ((DTN)nmhdr->code)
                 {
-                    case NativeMethods.DTN_CLOSEUP:
+                    case DTN.CLOSEUP:
                         WmCloseUp(ref m);
                         break;
-                    case NativeMethods.DTN_DATETIMECHANGE:
+                    case DTN.DATETIMECHANGE:
                         WmDateTimeChange(ref m);
                         break;
-                    case NativeMethods.DTN_DROPDOWN:
+                    case DTN.DROPDOWN:
                         WmDropDown(ref m);
                         break;
                 }

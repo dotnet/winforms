@@ -3195,15 +3195,15 @@ namespace System.Windows.Forms
                     break;
                 case (int)User32.WM.NOTIFY:
                     User32.NMHDR* nmhdr = (User32.NMHDR*)m.LParam;
-                    switch (nmhdr->code)
+                    switch ((TTN)nmhdr->code)
                     {
-                        case (int)TTN.GETDISPINFOW:
+                        case TTN.GETDISPINFOW:
                             // Setting the max width has the added benefit of enabling multiline tool tips
                             User32.SendMessageW(nmhdr->hwndFrom, (User32.WM)TTM.SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
                             WmNeedText(ref m);
                             m.Result = (IntPtr)1;
                             return;
-                        case (int)TTN.SHOW:
+                        case TTN.SHOW:
                             if (WmShowToolTip(ref m))
                             {
                                 m.Result = (IntPtr)1;
