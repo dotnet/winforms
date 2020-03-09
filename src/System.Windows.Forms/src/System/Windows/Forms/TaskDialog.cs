@@ -888,7 +888,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///   While the dialog is being shown, enables or disables progress bar marquee when
-        ///   an marquee progress bar is displayed.
+        ///   a marquee progress bar is displayed.
         /// </summary>
         /// <param name="enableMarquee"></param>
         /// <param name="animationSpeed">
