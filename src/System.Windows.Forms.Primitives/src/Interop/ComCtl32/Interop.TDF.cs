@@ -11,7 +11,7 @@ internal static partial class Interop
     internal static partial class ComCtl32
     {
         [Flags]
-        public enum TDF : int
+        public enum TDF : uint
         {
             ENABLE_HYPERLINKS = 0x00000001,
             USE_HICON_MAIN = 0x00000002,

@@ -11,7 +11,7 @@ internal static partial class Interop
     internal static partial class ComCtl32
     {
         [Flags]
-        public enum TDCBF : int
+        public enum TDCBF : uint
         {
             /// <summary>
             ///   "selected control return value IDOK"
