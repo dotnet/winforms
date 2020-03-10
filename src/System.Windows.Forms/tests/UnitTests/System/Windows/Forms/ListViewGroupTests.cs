@@ -22,6 +22,8 @@ namespace System.Windows.Forms.Tests
         public void ListViewGroup_Ctor_Default()
         {
             var group = new ListViewGroup();
+            Assert.Empty(group.Footer);
+            Assert.Equal(HorizontalAlignment.Left, group.FooterAlignment);
             Assert.Equal("ListViewGroup", group.Header);
             Assert.Equal(HorizontalAlignment.Left, group.HeaderAlignment);
             Assert.Empty(group.Items);
@@ -36,6 +38,8 @@ namespace System.Windows.Forms.Tests
         public void ListViewGroup_Ctor_String(string header, string expectedHeader)
         {
             var group = new ListViewGroup(header);
+            Assert.Empty(group.Footer);
+            Assert.Equal(HorizontalAlignment.Left, group.FooterAlignment);
             Assert.Equal(expectedHeader, group.Header);
             Assert.Equal(HorizontalAlignment.Left, group.HeaderAlignment);
             Assert.Empty(group.Items);
@@ -59,6 +63,8 @@ namespace System.Windows.Forms.Tests
         public void ListViewGroup_Ctor_String_HorizontalAlignment(string header, HorizontalAlignment headerAlignment, string expectedHeader)
         {
             var group = new ListViewGroup(header, headerAlignment);
+            Assert.Empty(group.Footer);
+            Assert.Equal(HorizontalAlignment.Left, group.FooterAlignment);
             Assert.Equal(expectedHeader, group.Header);
             Assert.Equal(headerAlignment, group.HeaderAlignment);
             Assert.Empty(group.Items);
@@ -80,6 +86,8 @@ namespace System.Windows.Forms.Tests
         public void ListViewGroup_Ctor_String_String(string key, string header, string expectedHeader)
         {
             var group = new ListViewGroup(key, header);
+            Assert.Empty(group.Footer);
+            Assert.Equal(HorizontalAlignment.Left, group.FooterAlignment);
             Assert.Equal(expectedHeader, group.Header);
             Assert.Equal(HorizontalAlignment.Left, group.HeaderAlignment);
             Assert.Empty(group.Items);
@@ -92,7 +100,265 @@ namespace System.Windows.Forms.Tests
         [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         [InlineData("te\0xt", "te\0xt")]
-        public void ListViewGroup_Header_SetWithoutListViewGroup_GetReturnsExpected(string value, string expected)
+        public void ListViewGroup_Footer_SetWithoutListView_GetReturnsExpected(string value, string expected)
+        {
+            var group = new ListViewGroup
+            {
+                Footer = value
+            };
+            Assert.Equal(expected, group.Footer);
+
+            // Set same.
+            group.Footer = value;
+            Assert.Equal(expected, group.Footer);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [InlineData("te\0xt", "te\0xt")]
+        public void ListViewGroup_Footer_SetWithListView_GetReturnsExpected(string value, string expected)
+        {
+            using var listView = new ListView();
+            var group = new ListViewGroup();
+            listView.Groups.Add(group);
+
+            group.Footer = value;
+            Assert.Equal(expected, group.Footer);
+            Assert.False(listView.IsHandleCreated);
+
+            // Set same.
+            group.Footer = value;
+            Assert.Equal(expected, group.Footer);
+            Assert.False(listView.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(null, "")]
+        [InlineData("", "")]
+        [InlineData("header", "header")]
+        [InlineData("te\0xt", "te\0xt")]
+        [InlineData("ListViewGroup", "ListViewGroup")]
+        public void ListViewGroup_Footer_SetWithListViewWithHandle_GetReturnsExpected(string value, string expected)
+        {
+            using var listView = new ListView();
+            var group = new ListViewGroup();
+            listView.Groups.Add(group);
+            Assert.NotEqual(IntPtr.Zero, listView.Handle);
+            int invalidatedCallCount = 0;
+            listView.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            listView.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            listView.HandleCreated += (sender, e) => createdCallCount++;
+
+            group.Footer = value;
+            Assert.Equal(expected, group.Footer);
+            Assert.True(listView.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set same.
+            group.Footer = value;
+            Assert.Equal(expected, group.Footer);
+            Assert.True(listView.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        public static IEnumerable<object[]> Footer_GetGroupInfo_TestData()
+        {
+            yield return new object[] { null, string.Empty };
+            yield return new object[] { string.Empty, string.Empty };
+            yield return new object[] { "text", "text" };
+            yield return new object[] { "te\0t", "te" };
+        }
+
+        [WinFormsFact]
+        public unsafe void ListViewGroup_Footer_GetGroupInfo_Success()
+        {
+            // Run this from another thread as we call Application.EnableVisualStyles.
+            RemoteExecutor.Invoke(() =>
+            {
+                foreach (object[] data in Footer_GetGroupInfo_TestData())
+                {
+                    string value = (string)data[0];
+                    string expected = (string)data[1];
+
+                    Application.EnableVisualStyles();
+
+                    using var listView = new ListView();
+                    var group = new ListViewGroup();
+                    listView.Groups.Add(group);
+
+                    Assert.NotEqual(IntPtr.Zero, listView.Handle);
+                    group.Footer = value;
+
+                    Assert.Equal((IntPtr)1, User32.SendMessageW(listView.Handle, (User32.WM)ComCtl32.LVM.GETGROUPCOUNT, IntPtr.Zero, IntPtr.Zero));
+                    char* buffer = stackalloc char[256];
+                    var lvgroup = new ComCtl32.LVGROUPW
+                    {
+                        cbSize = (uint)sizeof(ComCtl32.LVGROUPW),
+                        mask = ComCtl32.LVGF.FOOTER | ComCtl32.LVGF.GROUPID | ComCtl32.LVGF.ALIGN,
+                        pszFooter = buffer,
+                        cchFooter = 256
+                    };
+                    Assert.Equal((IntPtr)1, User32.SendMessageW(listView.Handle, (User32.WM)ComCtl32.LVM.GETGROUPINFOBYINDEX, (IntPtr)0, ref lvgroup));
+                    Assert.Equal(expected, new string(lvgroup.pszFooter));
+                    Assert.True(lvgroup.iGroupId >= 0);
+                    Assert.Equal(ComCtl32.LVGA.HEADER_LEFT | ComCtl32.LVGA.FOOTER_LEFT, lvgroup.uAlign);
+                }
+            }).Dispose();
+        }
+
+        public static IEnumerable<object[]> Alignment_Set_TestData()
+        {
+            foreach (HorizontalAlignment value in Enum.GetValues(typeof(HorizontalAlignment)))
+            {
+                yield return new object[] { null, value, string.Empty };
+                yield return new object[] { string.Empty, value, string.Empty };
+                yield return new object[] { "text", value, "text" };
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(Alignment_Set_TestData))]
+        public void ListViewGroup_FooterAlignment_SetWithoutListView_GetReturnsExpected(string footer, HorizontalAlignment value, string expectedFooter)
+        {
+            var group = new ListViewGroup
+            {
+                Footer = footer,
+                FooterAlignment = value
+            };
+            Assert.Equal(value, group.FooterAlignment);
+            Assert.Equal(expectedFooter, group.Footer);
+
+            // Set same.
+            group.FooterAlignment = value;
+            Assert.Equal(value, group.FooterAlignment);
+            Assert.Equal(expectedFooter, group.Footer);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(Alignment_Set_TestData))]
+        public void ListViewGroup_FooterAlignment_SetWithListView_GetReturnsExpected(string footer, HorizontalAlignment value, string expectedFooter)
+        {
+            using var listView = new ListView();
+            var group = new ListViewGroup
+            {
+                Footer = footer
+            };
+            listView.Groups.Add(group);
+
+            group.FooterAlignment = value;
+            Assert.Equal(value, group.FooterAlignment);
+            Assert.Equal(expectedFooter, group.Footer);
+            Assert.False(listView.IsHandleCreated);
+
+            // Set same.
+            group.FooterAlignment = value;
+            Assert.Equal(value, group.FooterAlignment);
+            Assert.Equal(expectedFooter, group.Footer);
+            Assert.False(listView.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(Alignment_Set_TestData))]
+        public void ListViewGroup_FooterAlignment_SetWithListViewWithHandle_GetReturnsExpected(string footer, HorizontalAlignment value, string expectedFooter)
+        {
+            using var listView = new ListView();
+            var group = new ListViewGroup
+            {
+                Footer = footer
+            };
+            listView.Groups.Add(group);
+            Assert.NotEqual(IntPtr.Zero, listView.Handle);
+            int invalidatedCallCount = 0;
+            listView.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            listView.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            listView.HandleCreated += (sender, e) => createdCallCount++;
+
+            group.FooterAlignment = value;
+            Assert.Equal(value, group.FooterAlignment);
+            Assert.Equal(expectedFooter, group.Footer);
+            Assert.True(listView.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set same.
+            group.FooterAlignment = value;
+            Assert.Equal(value, group.FooterAlignment);
+            Assert.Equal(expectedFooter, group.Footer);
+            Assert.True(listView.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        public static IEnumerable<object[]> FooterAlignment_GetGroupInfo_TestData()
+        {
+            yield return new object[] { string.Empty, HorizontalAlignment.Left, 0x00000001 };
+            yield return new object[] { string.Empty, HorizontalAlignment.Center, 0x00000001 };
+            yield return new object[] { string.Empty, HorizontalAlignment.Right, 0x00000001 };
+
+            yield return new object[] { "footer", HorizontalAlignment.Left, 0x00000009 };
+            yield return new object[] { "footer", HorizontalAlignment.Center, 0x00000011 };
+            yield return new object[] { "footer", HorizontalAlignment.Right, 0x00000021 };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(FooterAlignment_GetGroupInfo_TestData))]
+        public unsafe void ListView_FooterAlignment_GetGroupInfo_Success(string footerParam, HorizontalAlignment valueParam, int expectedAlignParam)
+        {
+            // Run this from another thread as we call Application.EnableVisualStyles.
+            RemoteExecutor.Invoke((footer, valueString, expectedAlignString) =>
+            {
+                HorizontalAlignment value = (HorizontalAlignment)Enum.Parse(typeof(HorizontalAlignment), valueString);
+                int expectedAlign = int.Parse(expectedAlignString);
+
+                Application.EnableVisualStyles();
+                using var listView = new ListView();
+                var group1 = new ListViewGroup
+                {
+                    Footer = footer
+                };
+                listView.Groups.Add(group1);
+
+                Assert.NotEqual(IntPtr.Zero, listView.Handle);
+                group1.FooterAlignment = value;
+
+                Assert.Equal((IntPtr)1, User32.SendMessageW(listView.Handle, (User32.WM)ComCtl32.LVM.GETGROUPCOUNT, IntPtr.Zero, IntPtr.Zero));
+                char* buffer = stackalloc char[256];
+                var lvgroup = new ComCtl32.LVGROUPW
+                {
+                    cbSize = (uint)sizeof(ComCtl32.LVGROUPW),
+                    mask = ComCtl32.LVGF.FOOTER | ComCtl32.LVGF.GROUPID | ComCtl32.LVGF.ALIGN,
+                    pszFooter = buffer,
+                    cchFooter = 256
+                };
+                Assert.Equal((IntPtr)1, User32.SendMessageW(listView.Handle, (User32.WM)ComCtl32.LVM.GETGROUPINFOBYINDEX, (IntPtr)0, ref lvgroup));
+                Assert.Equal(footer, new string(lvgroup.pszFooter));
+                Assert.True(lvgroup.iGroupId >= 0);
+                Assert.Equal(expectedAlign, (int)lvgroup.uAlign);
+            }, footerParam, valueParam.ToString(), expectedAlignParam.ToString()).Dispose();
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(HorizontalAlignment))]
+        public void ListViewGroup_FooterAlignment_SetInvalid_ThrowsInvalidEnumArgumentException(HorizontalAlignment value)
+        {
+            var group = new ListViewGroup();
+            Assert.Throws<InvalidEnumArgumentException>("value", () => group.FooterAlignment = value);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [InlineData("te\0xt", "te\0xt")]
+        public void ListViewGroup_Header_SetWithoutListView_GetReturnsExpected(string value, string expected)
         {
             var group = new ListViewGroup
             {
@@ -108,7 +374,7 @@ namespace System.Windows.Forms.Tests
         [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         [InlineData("te\0xt", "te\0xt")]
-        public void ListViewGroup_Header_SetWithListViewGroup_GetReturnsExpected(string value, string expected)
+        public void ListViewGroup_Header_SetWithListView_GetReturnsExpected(string value, string expected)
         {
             using var listView = new ListView();
             var group = new ListViewGroup();
@@ -205,44 +471,55 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(HorizontalAlignment))]
-        public void ListViewGroup_HeaderAlignment_SetWithoutListViewGroup_GetReturnsExpected(HorizontalAlignment value)
+        [MemberData(nameof(Alignment_Set_TestData))]
+        public void ListViewGroup_HeaderAlignment_SetWithoutListView_GetReturnsExpected(string header, HorizontalAlignment value, string expectedHeader)
         {
             var group = new ListViewGroup
             {
+                Header = header,
                 HeaderAlignment = value
             };
             Assert.Equal(value, group.HeaderAlignment);
+            Assert.Equal(expectedHeader, group.Header);
 
             // Set same.
             group.HeaderAlignment = value;
             Assert.Equal(value, group.HeaderAlignment);
+            Assert.Equal(expectedHeader, group.Header);
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(HorizontalAlignment))]
-        public void ListViewGroup_HeaderAlignment_SetWithListViewGroup_GetReturnsExpected(HorizontalAlignment value)
+        [MemberData(nameof(Alignment_Set_TestData))]
+        public void ListViewGroup_HeaderAlignment_SetWithListView_GetReturnsExpected(string header, HorizontalAlignment value, string expectedHeader)
         {
             using var listView = new ListView();
-            var group = new ListViewGroup();
+            var group = new ListViewGroup
+            {
+                Header = header
+            };
             listView.Groups.Add(group);
 
             group.HeaderAlignment = value;
             Assert.Equal(value, group.HeaderAlignment);
+            Assert.Equal(expectedHeader, group.Header);
             Assert.False(listView.IsHandleCreated);
 
             // Set same.
             group.HeaderAlignment = value;
             Assert.Equal(value, group.HeaderAlignment);
+            Assert.Equal(expectedHeader, group.Header);
             Assert.False(listView.IsHandleCreated);
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(HorizontalAlignment))]
-        public void ListViewGroup_HeaderAlignment_SetWithListViewWithHandle_GetReturnsExpected(HorizontalAlignment value)
+        [MemberData(nameof(Alignment_Set_TestData))]
+        public void ListViewGroup_HeaderAlignment_SetWithListViewWithHandle_GetReturnsExpected(string header, HorizontalAlignment value, string expectedHeader)
         {
             using var listView = new ListView();
-            var group = new ListViewGroup();
+            var group = new ListViewGroup
+            {
+                Header = header
+            };
             listView.Groups.Add(group);
             Assert.NotEqual(IntPtr.Zero, listView.Handle);
             int invalidatedCallCount = 0;
@@ -254,6 +531,7 @@ namespace System.Windows.Forms.Tests
 
             group.HeaderAlignment = value;
             Assert.Equal(value, group.HeaderAlignment);
+            Assert.Equal(expectedHeader, group.Header);
             Assert.True(listView.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
@@ -262,27 +540,40 @@ namespace System.Windows.Forms.Tests
             // Set same.
             group.HeaderAlignment = value;
             Assert.Equal(value, group.HeaderAlignment);
+            Assert.Equal(expectedHeader, group.Header);
             Assert.True(listView.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
         }
 
+        public static IEnumerable<object[]> HeaderAlignment_GetGroupInfo_TestData()
+        {
+            yield return new object[] { string.Empty, HorizontalAlignment.Left, 0x00000001 };
+            yield return new object[] { string.Empty, HorizontalAlignment.Center, 0x00000002 };
+            yield return new object[] { string.Empty, HorizontalAlignment.Right, 0x00000004 };
+
+            yield return new object[] { "header", HorizontalAlignment.Left, 0x00000001 };
+            yield return new object[] { "header", HorizontalAlignment.Center, 0x00000002 };
+            yield return new object[] { "header", HorizontalAlignment.Right, 0x00000004 };
+        }
+
         [WinFormsTheory]
-        [InlineData(HorizontalAlignment.Left, 0x00000001)]
-        [InlineData(HorizontalAlignment.Center, 0x00000002)]
-        [InlineData(HorizontalAlignment.Right, 0x00000004)]
-        public unsafe void ListView_HeaderAlignment_GetGroupInfo_Success(HorizontalAlignment valueParam, int expectedAlignParam)
+        [MemberData(nameof(HeaderAlignment_GetGroupInfo_TestData))]
+        public unsafe void ListView_HeaderAlignment_GetGroupInfo_Success(string headerParam, HorizontalAlignment valueParam, int expectedAlignParam)
         {
             // Run this from another thread as we call Application.EnableVisualStyles.
-            RemoteExecutor.Invoke((valueString, expectedAlignString) =>
+            RemoteExecutor.Invoke((header, valueString, expectedAlignString) =>
             {
                 HorizontalAlignment value = (HorizontalAlignment)Enum.Parse(typeof(HorizontalAlignment), valueString);
                 int expectedAlign = int.Parse(expectedAlignString);
 
                 Application.EnableVisualStyles();
                 using var listView = new ListView();
-                var group1 = new ListViewGroup();
+                var group1 = new ListViewGroup
+                {
+                    Header = header
+                };
                 listView.Groups.Add(group1);
 
                 Assert.NotEqual(IntPtr.Zero, listView.Handle);
@@ -298,10 +589,10 @@ namespace System.Windows.Forms.Tests
                     cchHeader = 256
                 };
                 Assert.Equal((IntPtr)1, User32.SendMessageW(listView.Handle, (User32.WM)ComCtl32.LVM.GETGROUPINFOBYINDEX, (IntPtr)0, ref lvgroup));
-                Assert.Equal("ListViewGroup", new string(lvgroup.pszHeader));
+                Assert.Equal(header, new string(lvgroup.pszHeader));
                 Assert.True(lvgroup.iGroupId >= 0);
                 Assert.Equal(expectedAlign, (int)lvgroup.uAlign);
-            }, valueParam.ToString(), expectedAlignParam.ToString()).Dispose();
+            }, headerParam, valueParam.ToString(), expectedAlignParam.ToString()).Dispose();
         }
 
         [WinFormsTheory]

@@ -5453,10 +5453,11 @@ namespace System.Windows.Forms
         private unsafe IntPtr SendGroupMessage(ListViewGroup group, LVM msg, IntPtr lParam, LVGF additionalMask)
         {
             string header = group.Header;
+            string footer = group.Footer;
             var lvgroup = new LVGROUPW
             {
                 cbSize = (uint)sizeof(LVGROUPW),
-                mask = LVGF.HEADER | LVGF.ALIGN | additionalMask,
+                mask = LVGF.HEADER | LVGF.FOOTER | LVGF.ALIGN | additionalMask,
                 cchHeader = header.Length,
                 iGroupId = group.ID
             };
@@ -5475,7 +5476,26 @@ namespace System.Windows.Forms
             }
 
             fixed (char* pHeader = header)
+            fixed (char* pFooter = footer)
             {
+                if (!string.IsNullOrEmpty(footer))
+                {
+                    lvgroup.cchFooter = footer.Length;
+                    lvgroup.pszFooter = pFooter;
+                    switch (group.FooterAlignment)
+                    {
+                        case HorizontalAlignment.Left:
+                            lvgroup.uAlign |= LVGA.FOOTER_LEFT;
+                            break;
+                        case HorizontalAlignment.Right:
+                            lvgroup.uAlign |= LVGA.FOOTER_RIGHT;
+                            break;
+                        case HorizontalAlignment.Center:
+                            lvgroup.uAlign |= LVGA.FOOTER_CENTER;
+                            break;
+                    }
+                }
+
                 lvgroup.pszHeader = pHeader;
                 return User32.SendMessageW(this, (User32.WM)msg, lParam, ref lvgroup);
             }

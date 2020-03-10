@@ -1,3 +1,7 @@
+System.Windows.Forms.ListViewGroup.Footer.get -> string
+System.Windows.Forms.ListViewGroup.Footer.set -> void
+System.Windows.Forms.ListViewGroup.FooterAlignment.get -> System.Windows.Forms.HorizontalAlignment
+System.Windows.Forms.ListViewGroup.FooterAlignment.set -> void
 System.Windows.Forms.DomainUpDown.DomainUpDownAccessibleObject.DomainUpDownAccessibleObject(System.Windows.Forms.DomainUpDown owner) -> void
 System.Windows.Forms.VisualStyles.EdgeEffects.Flat = 16384 -> System.Windows.Forms.VisualStyles.EdgeEffects
 System.Windows.Forms.VisualStyles.EdgeEffects.Soft = 4096 -> System.Windows.Forms.VisualStyles.EdgeEffects

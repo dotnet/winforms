@@ -1523,21 +1523,21 @@ namespace System.Windows.Forms.Tests
         {
             foreach (bool showGroups in new bool[] { true, false })
             {
-                yield return new object[] { showGroups, null, HorizontalAlignment.Left, string.Empty, 0x00000001 };
-                yield return new object[] { showGroups, null, HorizontalAlignment.Center, string.Empty, 0x00000002 };
-                yield return new object[] { showGroups, null, HorizontalAlignment.Right, string.Empty, 0x00000004 };
+                yield return new object[] { showGroups, null, HorizontalAlignment.Left, null, HorizontalAlignment.Right, string.Empty, string.Empty, 0x00000001 };
+                yield return new object[] { showGroups, null, HorizontalAlignment.Center, null, HorizontalAlignment.Center, string.Empty, string.Empty, 0x00000002 };
+                yield return new object[] { showGroups, null, HorizontalAlignment.Right, null, HorizontalAlignment.Left, string.Empty, string.Empty, 0x00000004 };
 
-                yield return new object[] { showGroups, string.Empty, HorizontalAlignment.Left, string.Empty, 0x00000001 };
-                yield return new object[] { showGroups, string.Empty, HorizontalAlignment.Center, string.Empty, 0x00000002 };
-                yield return new object[] { showGroups, string.Empty, HorizontalAlignment.Right, string.Empty, 0x00000004 };
+                yield return new object[] { showGroups, string.Empty, HorizontalAlignment.Left, string.Empty, HorizontalAlignment.Right, string.Empty, 0x00000001 };
+                yield return new object[] { showGroups, string.Empty, HorizontalAlignment.Center, string.Empty, HorizontalAlignment.Center, string.Empty, 0x00000002 };
+                yield return new object[] { showGroups, string.Empty, HorizontalAlignment.Right, string.Empty, HorizontalAlignment.Left, string.Empty, 0x00000004 };
 
-                yield return new object[] { showGroups, "text", HorizontalAlignment.Left, "text", 0x00000001 };
-                yield return new object[] { showGroups, "text", HorizontalAlignment.Center, "text", 0x00000002 };
-                yield return new object[] { showGroups, "text", HorizontalAlignment.Right, "text", 0x00000004 };
+                yield return new object[] { showGroups, "header", HorizontalAlignment.Left, "footer", HorizontalAlignment.Right, "header", "footer", 00000021 };
+                yield return new object[] { showGroups, "header", HorizontalAlignment.Center, "footer", HorizontalAlignment.Center, "header", "footer", 0x00000012 };
+                yield return new object[] { showGroups, "header", HorizontalAlignment.Right, "footer", HorizontalAlignment.Left, "header", "footer", 0x00000012 };
 
-                yield return new object[] { showGroups, "te\0xt", HorizontalAlignment.Left, "te", 0x00000001 };
-                yield return new object[] { showGroups, "te\0xt", HorizontalAlignment.Center, "te", 0x00000002 };
-                yield return new object[] { showGroups, "te\0xt", HorizontalAlignment.Right, "te", 0x00000004 };
+                yield return new object[] { showGroups, "he\0der", HorizontalAlignment.Left, "fo\0oter", HorizontalAlignment.Right, "he", "fo", 00000021 };
+                yield return new object[] { showGroups, "he\0der", HorizontalAlignment.Center, "fo\0oter", HorizontalAlignment.Center, "he", "fo", 0x00000012 };
+                yield return new object[] { showGroups, "he\0der", HorizontalAlignment.Right, "fo\0oter", HorizontalAlignment.Left, "he", "fo", 0x00000012 };
             }
         }
 
@@ -1552,8 +1552,11 @@ namespace System.Windows.Forms.Tests
                     bool showGroups = (bool)data[0];
                     string header = (string)data[1];
                     HorizontalAlignment headerAlignment = (HorizontalAlignment)data[2];
-                    string expectedHeaderText = (string)data[3];
-                    int expectedAlign = (int)data[4];
+                    string footer = (string)data[3];
+                    HorizontalAlignment footerAlignment = (HorizontalAlignment)data[4];
+                    string expectedHeaderText = (string)data[5];
+                    string expectedFooterText = (string)data[6];
+                    int expectedAlign = (int)data[7];
 
                     Application.EnableVisualStyles();
 
@@ -1565,34 +1568,43 @@ namespace System.Windows.Forms.Tests
                     var group2 = new ListViewGroup
                     {
                         Header = header,
-                        HeaderAlignment = headerAlignment
+                        HeaderAlignment = headerAlignment,
+                        Footer = footer,
+                        FooterAlignment = footerAlignment
                     };
                     listView.Groups.Add(group1);
                     listView.Groups.Add(group2);
 
                     Assert.Equal((IntPtr)2, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPCOUNT, IntPtr.Zero, IntPtr.Zero));
-                    char* buffer = stackalloc char[256];
+                    char* headerBuffer = stackalloc char[256];
+                    char* footerBuffer = stackalloc char[256];
                     var lvgroup1 = new ComCtl32.LVGROUPW
                     {
-                        cbSize = (uint)Marshal.SizeOf<ComCtl32.LVGROUPW>(),
-                        mask = ComCtl32.LVGF.HEADER | ComCtl32.LVGF.GROUPID | ComCtl32.LVGF.ALIGN,
-                        pszHeader = buffer,
-                        cchHeader = 256
+                        cbSize = (uint)sizeof(ComCtl32.LVGROUPW),
+                        mask = ComCtl32.LVGF.HEADER | ComCtl32.LVGF.FOOTER | ComCtl32.LVGF.GROUPID | ComCtl32.LVGF.ALIGN,
+                        pszHeader = headerBuffer,
+                        cchHeader = 256,
+                        pszFooter = footerBuffer,
+                        cchFooter = 256,
                     };
                     Assert.Equal((IntPtr)1, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPINFOBYINDEX, (IntPtr)0, ref lvgroup1));
                     Assert.Equal("ListViewGroup", new string(lvgroup1.pszHeader));
+                    Assert.Empty(new string(lvgroup1.pszFooter));
                     Assert.True(lvgroup1.iGroupId >= 0);
                     Assert.Equal(0x00000001, (int)lvgroup1.uAlign);
 
                     var lvgroup2 = new ComCtl32.LVGROUPW
                     {
-                        cbSize = (uint)Marshal.SizeOf<ComCtl32.LVGROUPW>(),
-                        mask = ComCtl32.LVGF.HEADER | ComCtl32.LVGF.GROUPID | ComCtl32.LVGF.ALIGN,
-                        pszHeader = buffer,
-                        cchHeader = 256
+                        cbSize = (uint)sizeof(ComCtl32.LVGROUPW),
+                        mask = ComCtl32.LVGF.HEADER | ComCtl32.LVGF.FOOTER | ComCtl32.LVGF.GROUPID | ComCtl32.LVGF.ALIGN,
+                        pszHeader = headerBuffer,
+                        cchHeader = 256,
+                        pszFooter = footerBuffer,
+                        cchFooter = 256,
                     };
                     Assert.Equal((IntPtr)1, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPINFOBYINDEX, (IntPtr)1, ref lvgroup2));
                     Assert.Equal(expectedHeaderText, new string(lvgroup2.pszHeader));
+                    Assert.Equal(expectedFooterText, new string(lvgroup2.pszFooter));
                     Assert.True(lvgroup2.iGroupId > 0);
                     Assert.Equal(expectedAlign, (int)lvgroup2.uAlign);
                     Assert.True(lvgroup2.iGroupId > lvgroup1.iGroupId);
