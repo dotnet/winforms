@@ -4,47 +4,47 @@
     <body>
       <trans-unit id="AnchorEditorAccName">
         <source>Anchor Editor</source>
-        <target state="new">Anchor Editor</target>
+        <target state="translated">定位点编辑器</target>
         <note />
       </trans-unit>
       <trans-unit id="AnchorEditorBottomAccName">
         <source>Bottom</source>
-        <target state="new">Bottom</target>
+        <target state="translated">下</target>
         <note />
       </trans-unit>
       <trans-unit id="AnchorEditorLeftAccName">
         <source>Left</source>
-        <target state="new">Left</target>
+        <target state="translated">左</target>
         <note />
       </trans-unit>
       <trans-unit id="AnchorEditorRightAccName">
         <source>Right</source>
-        <target state="new">Right</target>
+        <target state="translated">右</target>
         <note />
       </trans-unit>
       <trans-unit id="AnchorEditorTopAccName">
         <source>Top</source>
-        <target state="new">Top</target>
+        <target state="translated">上</target>
         <note />
       </trans-unit>
       <trans-unit id="BasicDesignerLoaderAlreadyLoaded">
         <source>The designer is already loaded.</source>
-        <target state="new">The designer is already loaded.</target>
+        <target state="translated">已加载设计器。</target>
         <note />
       </trans-unit>
       <trans-unit id="BasicDesignerLoaderDifferentHost">
         <source>The designer loader has already been loaded from another host.  You can only have one designer loader for each host.</source>
-        <target state="new">The designer loader has already been loaded from another host.  You can only have one designer loader for each host.</target>
+        <target state="translated">已从另一台主机加载设计器加载程序。每台主机只能有一个设计器加载程序。</target>
         <note />
       </trans-unit>
       <trans-unit id="BasicDesignerLoaderMissingService">
         <source>The service {0} is required but could not be found.  If you have removed this service ensure that you provide a replacement.</source>
-        <target state="new">The service {0} is required but could not be found.  If you have removed this service ensure that you provide a replacement.</target>
+        <target state="translated">未能找到所需服务 {0}。如果您移除了此服务，请确保提供替代服务。</target>
         <note />
       </trans-unit>
       <trans-unit id="BasicDesignerLoaderNotInitialized">
         <source>The designer loader has not been initialized yet.  You may only call this method after initialization.</source>
-        <target state="new">The designer loader has not been initialized yet.  You may only call this method after initialization.</target>
+        <target state="translated">尚未初始化设计器加载程序。只有在初始化之后才能调用此方法。</target>
         <note />
       </trans-unit>
       <trans-unit id="BehaviorServiceCopyControl">
@@ -79,127 +79,127 @@
       </trans-unit>
       <trans-unit id="BinaryEditorAllFiles">
         <source>All Files</source>
-        <target state="new">All Files</target>
+        <target state="translated">所有文件</target>
         <note />
       </trans-unit>
       <trans-unit id="BinaryEditorFileError">
         <source>Error writing to file: {0}</source>
-        <target state="new">Error writing to file: {0}</target>
+        <target state="translated">写入文件时出错: {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="BinaryEditorFileName">
         <source>ByteArray</source>
-        <target state="new">ByteArray</target>
+        <target state="translated">ByteArray</target>
         <note />
       </trans-unit>
       <trans-unit id="BinaryEditorSaveFile">
         <source>Save File As</source>
-        <target state="new">Save File As</target>
+        <target state="translated">文件另存为</target>
         <note />
       </trans-unit>
       <trans-unit id="BinaryEditorTitle">
         <source>Byte Array Property Editor</source>
-        <target state="new">Byte Array Property Editor</target>
+        <target state="translated">字节数组属性编辑器</target>
         <note />
       </trans-unit>
       <trans-unit id="BindingFormattingDialogCustomFormat">
         <source>Custo&amp;m format</source>
-        <target state="new">Custo&amp;m format</target>
+        <target state="translated">自定义格式(&amp;M)</target>
         <note />
       </trans-unit>
       <trans-unit id="BindingFormattingDialogCustomFormatAccessibleDescription">
         <source>Custom format</source>
-        <target state="new">Custom format</target>
+        <target state="translated">自定义格式</target>
         <note />
       </trans-unit>
       <trans-unit id="BindingFormattingDialogDecimalPlaces">
         <source>&amp;Decimal places</source>
-        <target state="new">&amp;Decimal places</target>
+        <target state="translated">小数位数(&amp;D)</target>
         <note />
       </trans-unit>
       <trans-unit id="BindingFormattingDialogFormatTypeCurrency">
         <source>Currency</source>
-        <target state="new">Currency</target>
+        <target state="translated">货币</target>
         <note />
       </trans-unit>
       <trans-unit id="BindingFormattingDialogFormatTypeCurrencyExplanation">
         <source>Specify the format for monetary values.</source>
-        <target state="new">Specify the format for monetary values.</target>
+        <target state="translated">指定货币值的格式。</target>
         <note />
       </trans-unit>
       <trans-unit id="BindingFormattingDialogFormatTypeCustom">
         <source>Custom</source>
-        <target state="new">Custom</target>
+        <target state="translated">自定义</target>
         <note />
       </trans-unit>
       <trans-unit id="BindingFormattingDialogFormatTypeCustomExplanation">
         <source>Type a custom format string. A custom string may require extra handling unless it is a read-only value.</source>
-        <target state="new">Type a custom format string. A custom string may require extra handling unless it is a read-only value.</target>
+        <target state="translated">请键入一个自定义格式字符串。除非自定义字符串为只读值，否则可能需要对其进行额外处理。</target>
         <note />
       </trans-unit>
       <trans-unit id="BindingFormattingDialogFormatTypeCustomInvalidFormat">
         <source>Invalid format</source>
-        <target state="new">Invalid format</target>
+        <target state="translated">无效格式</target>
         <note />
       </trans-unit>
       <trans-unit id="BindingFormattingDialogFormatTypeDateTime">
         <source>Date Time</source>
-        <target state="new">Date Time</target>
+        <target state="translated">日期时间</target>
         <note />
       </trans-unit>
       <trans-unit id="BindingFormattingDialogFormatTypeDateTimeExplanation">
         <source>Specify the format for date and time values.</source>
-        <target state="new">Specify the format for date and time values.</target>
+        <target state="translated">指定日期和时间值的格式。</target>
         <note />
       </trans-unit>
       <trans-unit id="BindingFormattingDialogFormatTypeNoFormatting">
         <source>No Formatting</source>
-        <target state="new">No Formatting</target>
+        <target state="translated">无格式设置</target>
         <note />
       </trans-unit>
       <trans-unit id="BindingFormattingDialogFormatTypeNoFormattingExplanation">
         <source>Use no formatting to display the value from the source without adornment.</source>
-        <target state="new">Use no formatting to display the value from the source without adornment.</target>
+        <target state="translated">显示无修饰的源中的值时不使用任何格式设置。</target>
         <note />
       </trans-unit>
       <trans-unit id="BindingFormattingDialogFormatTypeNumeric">
         <source>Numeric</source>
-        <target state="new">Numeric</target>
+        <target state="translated">数字</target>
         <note />
       </trans-unit>
       <trans-unit id="BindingFormattingDialogFormatTypeNumericExplanation">
         <source>Specify the format for numbers. Note that the Currency format type offers specialized formatting for monetary values.</source>
-        <target state="new">Specify the format for numbers. Note that the Currency format type offers specialized formatting for monetary values.</target>
+        <target state="translated">指定数字的格式。请注意，“货币”格式类型为货币值提供专用的格式设置。</target>
         <note />
       </trans-unit>
       <trans-unit id="BindingFormattingDialogFormatTypeScientific">
         <source>Scientific</source>
-        <target state="new">Scientific</target>
+        <target state="translated">科学型</target>
         <note />
       </trans-unit>
       <trans-unit id="BindingFormattingDialogFormatTypeScientificExplanation">
         <source>Specify the format for values that use scientific notation.</source>
-        <target state="new">Specify the format for values that use scientific notation.</target>
+        <target state="translated">指定使用科学记数法的值的格式。</target>
         <note />
       </trans-unit>
       <trans-unit id="BindingFormattingDialogNullValue">
         <source>&amp;Null value:</source>
-        <target state="new">&amp;Null value:</target>
+        <target state="translated">null 值(&amp;N):</target>
         <note />
       </trans-unit>
       <trans-unit id="BindingFormattingDialogType">
         <source>&amp;Type</source>
-        <target state="new">&amp;Type</target>
+        <target state="translated">类型(&amp;T)</target>
         <note />
       </trans-unit>
       <trans-unit id="CellStyleBuilderNormalPreviewAccName">
         <source>Normal Preview</source>
-        <target state="new">Normal Preview</target>
+        <target state="translated">标准预览</target>
         <note />
       </trans-unit>
       <trans-unit id="CellStyleBuilderSelectedPreviewAccName">
         <source>Selected Preview</source>
-        <target state="new">Selected Preview</target>
+        <target state="translated">所选预览</target>
         <note />
       </trans-unit>
       <trans-unit id="CodeDomComponentSerializationServiceClosedStore">
@@ -219,129 +219,129 @@
       </trans-unit>
       <trans-unit id="CodeDomDesignerLoaderBadSerializationObject">
         <source>The serialization data object is not of the proper type.</source>
-        <target state="new">The serialization data object is not of the proper type.</target>
+        <target state="translated">序列化数据对象的类型不正确。</target>
         <note />
       </trans-unit>
       <trans-unit id="CodeDomDesignerLoaderDocumentFailureTypeDesignerNotInstalled">
         <source>	{0} --- The designer for base class '{1}' is not installed.</source>
-        <target state="new">	{0} --- The designer for base class '{1}' is not installed.</target>
+        <target state="translated">	{0} --- 未安装基类“{1}”的设计器。</target>
         <note />
       </trans-unit>
       <trans-unit id="CodeDomDesignerLoaderDocumentFailureTypeNotDesignable">
         <source>	{0} --- The base class '{1}' cannot be designed.</source>
-        <target state="new">	{0} --- The base class '{1}' cannot be designed.</target>
+        <target state="translated">	{0} --- 无法设计基类“{1}”。</target>
         <note />
       </trans-unit>
       <trans-unit id="CodeDomDesignerLoaderDocumentFailureTypeNotFound">
         <source>	{0} --- The base class '{1}' could not be loaded.  Ensure the assembly has been referenced and that all projects have been built.</source>
-        <target state="new">	{0} --- The base class '{1}' could not be loaded.  Ensure the assembly has been referenced and that all projects have been built.</target>
+        <target state="translated">	{0} --- 未能加载基类“{1}”。请确保已引用该程序集并已生成所有项目。</target>
         <note />
       </trans-unit>
       <trans-unit id="CodeDomDesignerLoaderDupComponentName">
         <source>There is already a component named '{0}'.  Components must have unique names, and names must be case-insensitive.  A name also cannot conflict with the name of any component in an inherited class.</source>
-        <target state="new">There is already a component named '{0}'.  Components must have unique names, and names must be case-insensitive.  A name also cannot conflict with the name of any component in an inherited class.</target>
+        <target state="translated">已有一个名为“{0}”的组件。组件的名称必须是唯一的，而且名称必须不区分大小写。名称也不能与继承的类中的任何组件名称冲突。</target>
         <note />
       </trans-unit>
       <trans-unit id="CodeDomDesignerLoaderInvalidBlankIdentifier">
         <source>Empty identifiers are not valid.</source>
-        <target state="new">Empty identifiers are not valid.</target>
+        <target state="translated">空标识符无效。</target>
         <note />
       </trans-unit>
       <trans-unit id="CodeDomDesignerLoaderInvalidIdentifier">
         <source>'{0}' is not a valid identifier.</source>
-        <target state="new">'{0}' is not a valid identifier.</target>
+        <target state="translated">“{0}”不是有效的标识符。</target>
         <note />
       </trans-unit>
       <trans-unit id="CodeDomDesignerLoaderNoLanguageSupport">
         <source>The language did not provide a code parser for this file.  Please make sure that this file type supports a designer.</source>
-        <target state="new">The language did not provide a code parser for this file.  Please make sure that this file type supports a designer.</target>
+        <target state="translated">该语言没有为此文件提供代码分析器。请确保此文件类型支持某种设计器。</target>
         <note />
       </trans-unit>
       <trans-unit id="CodeDomDesignerLoaderNoRootSerializer">
         <source>The designer could not be shown for this file because none of the classes within it can be designed.</source>
-        <target state="new">The designer could not be shown for this file because none of the classes within it can be designed.</target>
+        <target state="translated">文件中的类都不能进行设计，因此未能为该文件显示设计器。</target>
         <note />
       </trans-unit>
       <trans-unit id="CodeDomDesignerLoaderNoRootSerializerWithFailures">
         <source>The designer could not be shown for this file because none of the classes within it can be designed.  The designer inspected the following classes in the file: 
 {0}</source>
-        <target state="new">The designer could not be shown for this file because none of the classes within it can be designed.  The designer inspected the following classes in the file: 
+        <target state="translated">文件中的类都不能进行设计，因此未能为该文件显示设计器。设计器检查出文件中有以下类: 
 {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="CodeDomDesignerLoaderNoTypeResolution">
         <source>The designer loader did not supply a type resolution service, which is a requirement for CodeDom serialization.</source>
-        <target state="new">The designer loader did not supply a type resolution service, which is a requirement for CodeDom serialization.</target>
+        <target state="translated">设计器加载程序未提供类型解析服务，此服务是进行 CodeDom 序列化所必需的。</target>
         <note />
       </trans-unit>
       <trans-unit id="CodeDomDesignerLoaderPropGenerateMember">
         <source>Indicates if a member variable will be generated for this component.</source>
-        <target state="new">Indicates if a member variable will be generated for this component.</target>
+        <target state="translated">指示是否将为此组件生成成员变量。</target>
         <note />
       </trans-unit>
       <trans-unit id="CodeDomDesignerLoaderPropModifiers">
         <source>Indicates the visibility level of the object.</source>
-        <target state="new">Indicates the visibility level of the object.</target>
+        <target state="translated">指示对象的可见性级别。</target>
         <note />
       </trans-unit>
       <trans-unit id="CodeDomDesignerLoaderSerializerTypeNotFirstType">
         <source>The class {0} can be designed, but is not the first class in the file.  Visual Studio requires that designers use the first class in the file.  Move the class code so that it is the first class in the file and try loading the designer again.</source>
-        <target state="new">The class {0} can be designed, but is not the first class in the file.  Visual Studio requires that designers use the first class in the file.  Move the class code so that it is the first class in the file and try loading the designer again.</target>
+        <target state="translated">类 {0} 可以进行设计，但不是文件中的第一个类。Visual Studio 要求设计器使用文件中的第一个类。移动类代码使之成为文件中的第一个类，然后尝试重新加载设计器。</target>
         <note />
       </trans-unit>
       <trans-unit id="CollectionEditorCantRemoveItem">
         <source>The item '{0}' cannot be removed.</source>
-        <target state="new">The item '{0}' cannot be removed.</target>
+        <target state="translated">无法移除项“{0}”。</target>
         <note />
       </trans-unit>
       <trans-unit id="CollectionEditorCaption">
         <source>{0} Collection Editor</source>
-        <target state="new">{0} Collection Editor</target>
+        <target state="translated">{0} 集合编辑器</target>
         <note />
       </trans-unit>
       <trans-unit id="CollectionEditorInheritedReadOnlySelection">
         <source>Read-only component(s) selected.</source>
-        <target state="new">Read-only component(s) selected.</target>
+        <target state="translated">选定只读组件。</target>
         <note />
       </trans-unit>
       <trans-unit id="CollectionEditorProperties">
         <source>{0} &amp;properties:</source>
-        <target state="new">{0} &amp;properties:</target>
+        <target state="translated">{0} 属性(&amp;P):</target>
         <note />
       </trans-unit>
       <trans-unit id="CollectionEditorPropertiesMultiSelect">
         <source>Multi-Select &amp;Properties:</source>
-        <target state="new">Multi-Select &amp;Properties:</target>
+        <target state="translated">多选属性(&amp;P):</target>
         <note />
       </trans-unit>
       <trans-unit id="CollectionEditorPropertiesNone">
         <source>&amp;Properties:</source>
-        <target state="new">&amp;Properties:</target>
+        <target state="translated">属性(&amp;P):</target>
         <note />
       </trans-unit>
       <trans-unit id="CollectionEditorUndoBatchDesc">
         <source>Add or remove {0} objects</source>
-        <target state="new">Add or remove {0} objects</target>
+        <target state="translated">添加或移除 {0} 个对象</target>
         <note />
       </trans-unit>
       <trans-unit id="ColorEditorAccName">
         <source>Color Picker</source>
-        <target state="new">Color Picker</target>
+        <target state="translated">颜色选取器</target>
         <note />
       </trans-unit>
       <trans-unit id="ColorEditorPaletteTab">
         <source>Custom</source>
-        <target state="new">Custom</target>
+        <target state="translated">自定义</target>
         <note />
       </trans-unit>
       <trans-unit id="ColorEditorStandardTab">
         <source>Web</source>
-        <target state="new">Web</target>
+        <target state="translated">Web</target>
         <note>{Locked="Web"}</note>
       </trans-unit>
       <trans-unit id="ColorEditorSystemTab">
         <source>System</source>
-        <target state="new">System</target>
+        <target state="translated">系统</target>
         <note />
       </trans-unit>
       <trans-unit id="CommandSetAlignByPrimary">
@@ -418,52 +418,52 @@
       </trans-unit>
       <trans-unit id="ContentAlignmentEditorAccName">
         <source>Alignment Picker</source>
-        <target state="new">Alignment Picker</target>
+        <target state="translated">对齐方式选择器</target>
         <note />
       </trans-unit>
       <trans-unit id="ContentAlignmentEditorBottomCenterAccName">
         <source>Bottom Middle</source>
-        <target state="new">Bottom Middle</target>
+        <target state="translated">底部居中</target>
         <note />
       </trans-unit>
       <trans-unit id="ContentAlignmentEditorBottomLeftAccName">
         <source>Bottom Left</source>
-        <target state="new">Bottom Left</target>
+        <target state="translated">底部左对齐</target>
         <note />
       </trans-unit>
       <trans-unit id="ContentAlignmentEditorBottomRightAccName">
         <source>Bottom Right</source>
-        <target state="new">Bottom Right</target>
+        <target state="translated">底部右对齐</target>
         <note />
       </trans-unit>
       <trans-unit id="ContentAlignmentEditorMiddleCenterAccName">
         <source>Middle Center</source>
-        <target state="new">Middle Center</target>
+        <target state="translated">中部居中</target>
         <note />
       </trans-unit>
       <trans-unit id="ContentAlignmentEditorMiddleLeftAccName">
         <source>Middle Left</source>
-        <target state="new">Middle Left</target>
+        <target state="translated">中部左对齐</target>
         <note />
       </trans-unit>
       <trans-unit id="ContentAlignmentEditorMiddleRightAccName">
         <source>Middle Right</source>
-        <target state="new">Middle Right</target>
+        <target state="translated">中部右对齐</target>
         <note />
       </trans-unit>
       <trans-unit id="ContentAlignmentEditorTopCenterAccName">
         <source>Top Center</source>
-        <target state="new">Top Center</target>
+        <target state="translated">顶部居中</target>
         <note />
       </trans-unit>
       <trans-unit id="ContentAlignmentEditorTopLeftAccName">
         <source>Top Left</source>
-        <target state="new">Top Left</target>
+        <target state="translated">顶部左对齐</target>
         <note />
       </trans-unit>
       <trans-unit id="ContentAlignmentEditorTopRightAccName">
         <source>Top Right</source>
-        <target state="new">Top Right</target>
+        <target state="translated">顶部右对齐</target>
         <note />
       </trans-unit>
       <trans-unit id="ContextMenuAlignToGrid">
@@ -563,17 +563,17 @@
       </trans-unit>
       <trans-unit id="DataGridView_Cancel">
         <source>Cancel</source>
-        <target state="new">Cancel</target>
+        <target state="translated">取消</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_OK">
         <source>OK</source>
-        <target state="new">OK</target>
+        <target state="translated">确定</target>
         <note />
       </trans-unit>
       <trans-unit id="DataSourceLocksItems">
         <source>Items collection cannot be modified when the DataSource property is set.</source>
-        <target state="new">Items collection cannot be modified when the DataSource property is set.</target>
+        <target state="translated">设置 DataSource 属性后无法修改项集合。</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerActionPanel_CouldNotConvertValue">
@@ -822,37 +822,37 @@
       </trans-unit>
       <trans-unit id="DockEditorAccName">
         <source>Dock Picker</source>
-        <target state="new">Dock Picker</target>
+        <target state="translated">Dock 选取器</target>
         <note />
       </trans-unit>
       <trans-unit id="DockEditorBottomAccName">
         <source>Bottom</source>
-        <target state="new">Bottom</target>
+        <target state="translated">下</target>
         <note />
       </trans-unit>
       <trans-unit id="DockEditorFillAccName">
         <source>Fill</source>
-        <target state="new">Fill</target>
+        <target state="translated">填充</target>
         <note />
       </trans-unit>
       <trans-unit id="DockEditorLeftAccName">
         <source>Left</source>
-        <target state="new">Left</target>
+        <target state="translated">左</target>
         <note />
       </trans-unit>
       <trans-unit id="DockEditorNoneAccName">
         <source>None</source>
-        <target state="new">None</target>
+        <target state="translated">无</target>
         <note />
       </trans-unit>
       <trans-unit id="DockEditorRightAccName">
         <source>Right</source>
-        <target state="new">Right</target>
+        <target state="translated">右</target>
         <note />
       </trans-unit>
       <trans-unit id="DockEditorTopAccName">
         <source>Top</source>
-        <target state="new">Top</target>
+        <target state="translated">上</target>
         <note />
       </trans-unit>
       <trans-unit id="DotNET_ComponentType">
@@ -892,27 +892,27 @@
       </trans-unit>
       <trans-unit id="EventBindingServiceBadArgType">
         <source>The event {0} expects an argument type of {1}.</source>
-        <target state="new">The event {0} expects an argument type of {1}.</target>
+        <target state="translated">事件 {0} 要求参数类型为 {1}。</target>
         <note />
       </trans-unit>
       <trans-unit id="EventBindingServiceEventReadOnly">
         <source>The event {0} is read-only and cannot be changed.</source>
-        <target state="new">The event {0} is read-only and cannot be changed.</target>
+        <target state="translated">事件 {0} 为只读，因此无法更改。</target>
         <note />
       </trans-unit>
       <trans-unit id="EventBindingServiceMissingService">
         <source>The service {0} is required but could not be found.  If you have removed this service ensure that you provide a replacement.</source>
-        <target state="new">The service {0} is required but could not be found.  If you have removed this service ensure that you provide a replacement.</target>
+        <target state="translated">未能找到所需服务 {0}。如果您移除了此服务，请确保提供替代服务。</target>
         <note />
       </trans-unit>
       <trans-unit id="EventBindingServiceNoSite">
         <source>Events cannot be set on the object passed to the event binding service because a site associated with the object could not be located.</source>
-        <target state="new">Events cannot be set on the object passed to the event binding service because a site associated with the object could not be located.</target>
+        <target state="translated">未能找到与传递给事件绑定服务的对象关联的网站，因此无法在该对象上设置事件。</target>
         <note />
       </trans-unit>
       <trans-unit id="EventBindingServiceSetValue">
         <source>Set {0}.{1} event</source>
-        <target state="new">Set {0}.{1} event</target>
+        <target state="translated">设置 {0}.{1} 事件</target>
         <note />
       </trans-unit>
       <trans-unit id="ExtenderProviderServiceDuplicateProvider">
@@ -922,32 +922,32 @@
       </trans-unit>
       <trans-unit id="FormatStringDialogTitle">
         <source>Format String Dialog</source>
-        <target state="new">Format String Dialog</target>
+        <target state="translated">格式字符串对话框</target>
         <note />
       </trans-unit>
       <trans-unit id="GenericFileFilter">
         <source>All Files(*.*)|*.*</source>
-        <target state="new">All Files(*.*)|*.*</target>
+        <target state="translated">所有文件(*.*)|*.*</target>
         <note />
       </trans-unit>
       <trans-unit id="GenericOpenFile">
         <source>Open File</source>
-        <target state="new">Open File</target>
+        <target state="translated">打开文件</target>
         <note />
       </trans-unit>
       <trans-unit id="HelpProviderEditorFilter">
         <source>All Help Files(*.chm,*.col,*.htm,*.html)|*.chm;*.col;*.htm;*.html|Compressed HTML Files(*.chm)|*.chm|Help Collection Files(*.col)|*.col|HTML Files(*.htm,*.html)|*.htm;*.html|All Files(*.*)|*.*</source>
-        <target state="new">All Help Files(*.chm,*.col,*.htm,*.html)|*.chm;*.col;*.htm;*.html|Compressed HTML Files(*.chm)|*.chm|Help Collection Files(*.col)|*.col|HTML Files(*.htm,*.html)|*.htm;*.html|All Files(*.*)|*.*</target>
+        <target state="translated">所有帮助文件(*.chm,*.col,*.htm,*.html)|*.chm;*.col;*.htm;*.html|压缩的 HTML 文件(*.chm)|*.chm|帮助集合文件(*.col)|*.col|HTML 文件(*.htm,*.html)|*.htm;*.html|所有文件(*.*)|*.*</target>
         <note />
       </trans-unit>
       <trans-unit id="HelpProviderEditorTitle">
         <source>Open Help File</source>
-        <target state="new">Open Help File</target>
+        <target state="translated">打开帮助文件</target>
         <note />
       </trans-unit>
       <trans-unit id="ImageCollectionEditorFormText">
         <source>Images Collection Editor</source>
-        <target state="new">Images Collection Editor</target>
+        <target state="translated">图像集合编辑器</target>
         <note />
       </trans-unit>
       <trans-unit id="InheritanceServiceReadOnlyCollection">
@@ -967,154 +967,154 @@
       </trans-unit>
       <trans-unit id="LinkAreaEditorCancel">
         <source>Cancel</source>
-        <target state="new">Cancel</target>
+        <target state="translated">取消</target>
         <note />
       </trans-unit>
       <trans-unit id="LinkAreaEditorCaption">
         <source>LinkArea Editor</source>
-        <target state="new">LinkArea Editor</target>
+        <target state="translated">LinkArea 编辑器</target>
         <note />
       </trans-unit>
       <trans-unit id="LinkAreaEditorDescription">
         <source>Select a &amp;range of text to make your link:</source>
-        <target state="new">Select a &amp;range of text to make your link:</target>
+        <target state="translated">选择进行链接的文本范围(&amp;R):</target>
         <note />
       </trans-unit>
       <trans-unit id="LinkAreaEditorOK">
         <source>OK</source>
-        <target state="new">OK</target>
+        <target state="translated">确定</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewSubItemBaseName">
         <source>ListViewSubItem</source>
-        <target state="new">ListViewSubItem</target>
+        <target state="translated">ListViewSubItem</target>
         <note />
       </trans-unit>
       <trans-unit id="LocalizationProviderManualReload">
         <source>You must close and re-open the designer for this change to take effect.</source>
-        <target state="new">You must close and re-open the designer for this change to take effect.</target>
+        <target state="translated">要使此更改生效，必须关闭并重新打开设计器。</target>
         <note />
       </trans-unit>
       <trans-unit id="LocalizationProviderMissingService">
         <source>The service {0} is required but could not be found.  If you have removed this service ensure that you provide a replacement.</source>
-        <target state="new">The service {0} is required but could not be found.  If you have removed this service ensure that you provide a replacement.</target>
+        <target state="translated">未能找到所需服务 {0}。如果您移除了此服务，请确保提供替代服务。</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskDescriptorNotMaskFullErrorMsg">
         <source>Mask is not full.</source>
-        <target state="new">Mask is not full.</target>
+        <target state="translated">掩码未满。</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskDescriptorNull">
         <source>The provided MaskDescriptor is null.</source>
-        <target state="new">The provided MaskDescriptor is null.</target>
+        <target state="translated">提供的 MaskDescriptor 为空。</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskDescriptorNullOrEmptyRequiredProperty">
         <source>One or more required properties are null or empty.</source>
-        <target state="new">One or more required properties are null or empty.</target>
+        <target state="translated">一个或多个所需属性为 null 或为空。</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskDescriptorValidatingTypeNone">
         <source>(none)</source>
-        <target state="new">(none)</target>
+        <target state="translated">(无)</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskDesignerDialogCustomEntry">
         <source>&lt;Custom&gt;</source>
-        <target state="new">&lt;Custom&gt;</target>
+        <target state="translated">&lt;自定义&gt;</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskDesignerDialogDataFormat">
         <source>Data Format</source>
-        <target state="new">Data Format</target>
+        <target state="translated">数据格式</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskDesignerDialogDlgCaption">
         <source>Input Mask</source>
-        <target state="new">Input Mask</target>
+        <target state="translated">输入掩码</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskDesignerDialogMaskDescription">
         <source>Mask Description</source>
-        <target state="new">Mask Description</target>
+        <target state="translated">掩码说明</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskDesignerDialogValidatingType">
         <source>Validating Type</source>
-        <target state="new">Validating Type</target>
+        <target state="translated">验证类型</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskedTextBoxDesignerVerbsSetMaskDesc">
         <source>Set Mask...</source>
-        <target state="new">Set Mask...</target>
+        <target state="translated">设置掩码...</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskedTextBoxHintAlphanumericCharacterExpected">
         <source>Alphanumeric character expected</source>
-        <target state="new">Alphanumeric character expected</target>
+        <target state="translated">应为字母数字字符</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskedTextBoxHintAsciiCharacterExpected">
         <source>ASCII character expected</source>
-        <target state="new">ASCII character expected</target>
+        <target state="translated">应为 ASCII 字符</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskedTextBoxHintDigitExpected">
         <source>Digit expected</source>
-        <target state="new">Digit expected</target>
+        <target state="translated">应输入数字</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskedTextBoxHintInvalidInput">
         <source>Invalid input character</source>
-        <target state="new">Invalid input character</target>
+        <target state="translated">无效的输入字符</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskedTextBoxHintLetterExpected">
         <source>Letter expected</source>
-        <target state="new">Letter expected</target>
+        <target state="translated">应为字母</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskedTextBoxHintNonEditPosition">
         <source>Non edit position</source>
-        <target state="new">Non edit position</target>
+        <target state="translated">非编辑位置</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskedTextBoxHintPositionOutOfRange">
         <source>Position out of range</source>
-        <target state="new">Position out of range</target>
+        <target state="translated">位置超出范围</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskedTextBoxHintPromptCharNotAllowed">
         <source>Prompt character disallowed as input</source>
-        <target state="new">Prompt character disallowed as input</target>
+        <target state="translated">禁止将提示字符作为输入</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskedTextBoxHintSignedDigitExpected">
         <source>Signed digit expected</source>
-        <target state="new">Signed digit expected</target>
+        <target state="translated">应为有符号的数字</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskedTextBoxHintUnavailableEditPosition">
         <source>Unavailable edit position</source>
-        <target state="new">Unavailable edit position</target>
+        <target state="translated">不可用的编辑位置</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskedTextBoxTextEditorErrorFormatString">
         <source>Error at position {0}: {1}.</source>
-        <target state="new">Error at position {0}: {1}.</target>
+        <target state="translated">位置 {0} 出错: {1}。</target>
         <note />
       </trans-unit>
       <trans-unit id="MenuCommandService_DuplicateCommand">
         <source>There is already a command handler for the menu command '{0}'.</source>
-        <target state="new">There is already a command handler for the menu command '{0}'.</target>
+        <target state="translated">菜单命令“{0}”已经有一个命令处理程序。</target>
         <note />
       </trans-unit>
       <trans-unit id="MultilineStringEditorWatermark">
         <source>Press Enter to begin a new line.
 Press Ctrl+Enter to accept Text.</source>
-        <target state="new">Press Enter to begin a new line.
-Press Ctrl+Enter to accept Text.</target>
+        <target state="translated">按 Enter 键开始一个新行。
+按 Ctrl+Enter 以接受文本。</target>
         <note />
       </trans-unit>
       <trans-unit id="None">
@@ -1144,7 +1144,7 @@ Press Ctrl+Enter to accept Text.</target>
       </trans-unit>
       <trans-unit id="SelectedPathEditorLabel">
         <source>Select the path to the folder that will initially be selected in the FolderBrowserDialog.</source>
-        <target state="new">Select the path to the folder that will initially be selected in the FolderBrowserDialog.</target>
+        <target state="translated">选择最初会在 FolderBrowserDialog 中被选中的文件夹的路径。</target>
         <note />
       </trans-unit>
       <trans-unit id="SerializationManagerAreadyInSession">
@@ -1269,7 +1269,7 @@ Press Ctrl+Enter to accept Text.</target>
       </trans-unit>
       <trans-unit id="ShortcutKeys_InvalidKey">
         <source>(Unknown)</source>
-        <target state="new">(Unknown)</target>
+        <target state="translated">(未知)</target>
         <note />
       </trans-unit>
       <trans-unit id="StandardMenuAbout">
@@ -1674,17 +1674,17 @@ Press Ctrl+Enter to accept Text.</target>
       </trans-unit>
       <trans-unit id="bitmapFileDescription">
         <source>Bitmap files</source>
-        <target state="new">Bitmap files</target>
+        <target state="translated">位图文件</target>
         <note />
       </trans-unit>
       <trans-unit id="iconFileDescription">
         <source>Icon files</source>
-        <target state="new">Icon files</target>
+        <target state="translated">图标文件</target>
         <note />
       </trans-unit>
       <trans-unit id="imageFileDescription">
         <source>All image files</source>
-        <target state="new">All image files</target>
+        <target state="translated">所有图像文件</target>
         <note />
       </trans-unit>
       <trans-unit id="lockedDescr">
@@ -1694,7 +1694,7 @@ Press Ctrl+Enter to accept Text.</target>
       </trans-unit>
       <trans-unit id="metafileFileDescription">
         <source>Metafiles</source>
-        <target state="new">Metafiles</target>
+        <target state="translated">图元文件</target>
         <note />
       </trans-unit>
     </body>

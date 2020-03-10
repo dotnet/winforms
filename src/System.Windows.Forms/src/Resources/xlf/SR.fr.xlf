@@ -1219,7 +1219,7 @@
       </trans-unit>
       <trans-unit id="ContextMenuStripSourceControlDescr">
         <source>The last control that caused this context menu strip to be displayed.</source>
-        <target state="new">The last control that caused this context menu strip to be displayed.</target>
+        <target state="translated">Dernier contrôle ayant provoqué l'affichage de cette bande de menus contextuels.</target>
         <note />
       </trans-unit>
       <trans-unit id="ControlAccessibileObjectInvalid">
@@ -4226,17 +4226,17 @@ Pour remplacer cette boîte de dialogue par défaut, traitez l'événement DataE
       </trans-unit>
       <trans-unit id="DefaultDomainUpDownAccessibleName">
         <source>DomainUpDown</source>
-        <target state="new">DomainUpDown</target>
+        <target state="translated">DomainUpDown</target>
         <note />
       </trans-unit>
       <trans-unit id="DefaultNumericUpDownAccessibleName">
         <source>NumericUpDown</source>
-        <target state="new">NumericUpDown</target>
+        <target state="translated">NumericUpDown</target>
         <note />
       </trans-unit>
       <trans-unit id="DefaultUpDownButtonsAccessibleName">
         <source>UpDown</source>
-        <target state="new">UpDown</target>
+        <target state="translated">Incrément (UpDown)</target>
         <note />
       </trans-unit>
       <trans-unit id="DescriptionBindingNavigator">
@@ -4536,7 +4536,7 @@ Pour remplacer cette boîte de dialogue par défaut, traitez l'événement DataE
       </trans-unit>
       <trans-unit id="DomainUpDownWrapDescr">
         <source>Indicates whether values wrap around at either end of the item list.</source>
-        <target state="translated">Indique si les valeurs sont renvoyées à la ligne aux extrémités de la liste d'éléments.</target>
+        <target state="translated">Indique si les valeurs sont enveloppées aux extrémités de la liste d'éléments.</target>
         <note />
       </trans-unit>
       <trans-unit id="DragDropRegFailed">
@@ -4596,7 +4596,7 @@ Pour remplacer cette boîte de dialogue par défaut, traitez l'événement DataE
       </trans-unit>
       <trans-unit id="ErrorProviderDefaultAccessibleName">
         <source>Error provider</source>
-        <target state="new">Error provider</target>
+        <target state="translated">Fournisseur d'erreurs</target>
         <note />
       </trans-unit>
       <trans-unit id="ErrorProviderErrorDescr">
@@ -4954,7 +4954,7 @@ Voulez-vous le remplacer ?</target>
       </trans-unit>
       <trans-unit id="FlowPanelWrapContentsDescr">
         <source>Indicates whether contents are wrapped or clipped at the control boundary.</source>
-        <target state="translated">Indique si le contenu est inclus dans un wrapper ou attaché à la limite du contrôle.</target>
+        <target state="translated">Indique si le contenu est enveloppé ou attaché à la limite du contrôle.</target>
         <note />
       </trans-unit>
       <trans-unit id="FnDallowScriptChangeDescr">
@@ -5803,7 +5803,7 @@ Cette opération non conforme s'est produite sur la trace de la pile :
       </trans-unit>
       <trans-unit id="LabelAutoSizeDescr">
         <source>Enables automatic resizing based on font size. Note that this is only valid for label controls that do not wrap text.</source>
-        <target state="translated">Active le redimensionnement automatique en fonction de la taille de police. Cela n'est valide que pour les contrôles label qui ne renvoient pas le texte à la ligne.</target>
+        <target state="translated">Active le redimensionnement automatique en fonction de la taille de police. Cela n'est valide que pour les contrôles label qui n'enveloppent pas le texte.</target>
         <note />
       </trans-unit>
       <trans-unit id="LabelBackgroundImageDescr">
@@ -6488,7 +6488,7 @@ Cette opération non conforme s'est produite sur la trace de la pile :
       </trans-unit>
       <trans-unit id="ListViewLabelWrapDescr">
         <source>Determines whether label text can wrap to a new line.</source>
-        <target state="translated">Détermine si le texte de l'étiquette peut être renvoyé sur une nouvelle ligne.</target>
+        <target state="translated">Détermine si le texte de l'étiquette peut être enveloppé sur une nouvelle ligne.</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewLargeImageListDescr">
@@ -6828,12 +6828,12 @@ Cette opération non conforme s'est produite sur la trace de la pile :
       </trans-unit>
       <trans-unit id="MenuItemShortCutDescr">
         <source>The shortcut key associated with the menu item. </source>
-        <target state="new">The shortcut key associated with the menu item. </target>
+        <target state="translated">La touche de raccourci associée à l'élément de menu. </target>
         <note />
       </trans-unit>
       <trans-unit id="MenuItemShowShortCutDescr">
         <source>Indicates whether the shorcut key for the menu item is displayed on the item. </source>
-        <target state="new">Indicates whether the shorcut key for the menu item is displayed on the item. </target>
+        <target state="translated">Indique si la touche de raccourci pour l'élément de menu est affichée sur l'élément. </target>
         <note />
       </trans-unit>
       <trans-unit id="MenuStripMdiWindowListItem">
@@ -6858,7 +6858,7 @@ Cette opération non conforme s'est produite sur la trace de la pile :
       </trans-unit>
       <trans-unit id="MonthCalendarBodyAccessibleName">
         <source>Calendar body</source>
-        <target state="new">Calendar body</target>
+        <target state="translated">Corps du calendrier</target>
         <note />
       </trans-unit>
       <trans-unit id="MonthCalendarDimensionsDescr">
@@ -6913,7 +6913,7 @@ Cette opération non conforme s'est produite sur la trace de la pile :
       </trans-unit>
       <trans-unit id="MonthCalendarNextButtonAccessibleName">
         <source>Next</source>
-        <target state="new">Next</target>
+        <target state="translated">Suivant</target>
         <note />
       </trans-unit>
       <trans-unit id="MonthCalendarOnDateChangedDescr">
@@ -6928,7 +6928,7 @@ Cette opération non conforme s'est produite sur la trace de la pile :
       </trans-unit>
       <trans-unit id="MonthCalendarPreviousButtonAccessibleName">
         <source>Previous</source>
-        <target state="new">Previous</target>
+        <target state="translated">Précédent</target>
         <note />
       </trans-unit>
       <trans-unit id="MonthCalendarRange">
@@ -7008,7 +7008,7 @@ Cette opération non conforme s'est produite sur la trace de la pile :
       </trans-unit>
       <trans-unit id="MonthCalendarTodayButtonAccessibleName">
         <source>Today: {0}</source>
-        <target state="new">Today: {0}</target>
+        <target state="translated">Aujourd'hui : {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="MonthCalendarTodayDateDescr">
@@ -7913,7 +7913,7 @@ Cette opération non conforme s'est produite sur la trace de la pile :
       </trans-unit>
       <trans-unit id="ProgressBarDefaultAccessibleName">
         <source>ProgressBar</source>
-        <target state="new">ProgressBar</target>
+        <target state="translated">ProgressBar</target>
         <note />
       </trans-unit>
       <trans-unit id="ProgressBarIncrementMarqueeException">
@@ -8868,7 +8868,7 @@ Cette opération non conforme s'est produite sur la trace de la pile :
       </trans-unit>
       <trans-unit id="TabControlBadControl">
         <source>Parameter must be of type TabPage.</source>
-        <target state="new">Parameter must be of type TabPage.</target>
+        <target state="translated">Le paramètre doit être de type TabPage.</target>
         <note />
       </trans-unit>
       <trans-unit id="TabControlTabPageNotOnTabControl">
@@ -9048,7 +9048,7 @@ Cette opération non conforme s'est produite sur la trace de la pile :
       </trans-unit>
       <trans-unit id="TableLayoutSettingsConverterNoName">
         <source>Cannot convert TableLayoutSettings to string: could not find a 'Name' string property on a control.</source>
-        <target state="new">Cannot convert TableLayoutSettings to string: could not find a 'Name' string property on a control.</target>
+        <target state="translated">Impossible de convertir TableLayoutSettings en chaîne : la propriété de type chaîne 'Name' est introuvable sur un contrôle.</target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutSettingsGetCellPositionDescr">
@@ -9233,7 +9233,7 @@ Cette opération non conforme s'est produite sur la trace de la pile :
       </trans-unit>
       <trans-unit id="TextBoxWordWrapDescr">
         <source>Indicates if lines are automatically word-wrapped for multiline edit controls.</source>
-        <target state="translated">Indique si les lignes sont automatiquement renvoyées à la ligne pour les contrôles d'édition multiligne.</target>
+        <target state="translated">Indique si les lignes sont automatiquement enveloppées pour les contrôles d'édition multiligne.</target>
         <note />
       </trans-unit>
       <trans-unit id="TextParseFailedFormat">
@@ -10818,7 +10818,7 @@ Cette opération non conforme s'est produite sur la trace de la pile :
       </trans-unit>
       <trans-unit id="Win32SetParentFailed">
         <source>Failed to set Win32 parent window of the Control.</source>
-        <target state="new">Failed to set Win32 parent window of the Control.</target>
+        <target state="translated">Échec de la définition de la fenêtre parente Win32 du contrôle.</target>
         <note />
       </trans-unit>
       <trans-unit id="Win32WindowAlreadyCreated">

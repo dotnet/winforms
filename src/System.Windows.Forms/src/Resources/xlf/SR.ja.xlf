@@ -1219,7 +1219,7 @@
       </trans-unit>
       <trans-unit id="ContextMenuStripSourceControlDescr">
         <source>The last control that caused this context menu strip to be displayed.</source>
-        <target state="new">The last control that caused this context menu strip to be displayed.</target>
+        <target state="translated">このコンテキスト メニュー ストリップを最後に表示させたコントロールです。</target>
         <note />
       </trans-unit>
       <trans-unit id="ControlAccessibileObjectInvalid">
@@ -1904,7 +1904,7 @@
       </trans-unit>
       <trans-unit id="ControlOnVisibleChangedDescr">
         <source>Occurs when the control's visibility changes.</source>
-        <target state="translated">コントロールの表示状態が変わったときに発生します。</target>
+        <target state="translated">コントロールの表示が変わったときに発生します。</target>
         <note />
       </trans-unit>
       <trans-unit id="ControlPaddingDescr">
@@ -4226,17 +4226,17 @@ To replace this default dialog please handle the DataError event.</source>
       </trans-unit>
       <trans-unit id="DefaultDomainUpDownAccessibleName">
         <source>DomainUpDown</source>
-        <target state="new">DomainUpDown</target>
+        <target state="translated">DomainUpDown</target>
         <note />
       </trans-unit>
       <trans-unit id="DefaultNumericUpDownAccessibleName">
         <source>NumericUpDown</source>
-        <target state="new">NumericUpDown</target>
+        <target state="translated">NumericUpDown</target>
         <note />
       </trans-unit>
       <trans-unit id="DefaultUpDownButtonsAccessibleName">
         <source>UpDown</source>
-        <target state="new">UpDown</target>
+        <target state="translated">アップダウン</target>
         <note />
       </trans-unit>
       <trans-unit id="DescriptionBindingNavigator">
@@ -4596,7 +4596,7 @@ To replace this default dialog please handle the DataError event.</source>
       </trans-unit>
       <trans-unit id="ErrorProviderDefaultAccessibleName">
         <source>Error provider</source>
-        <target state="new">Error provider</target>
+        <target state="translated">エラー プロバイダー</target>
         <note />
       </trans-unit>
       <trans-unit id="ErrorProviderErrorDescr">
@@ -6828,12 +6828,12 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="MenuItemShortCutDescr">
         <source>The shortcut key associated with the menu item. </source>
-        <target state="new">The shortcut key associated with the menu item. </target>
+        <target state="translated">メニュー項目に関連付けられたショートカット キーです。</target>
         <note />
       </trans-unit>
       <trans-unit id="MenuItemShowShortCutDescr">
         <source>Indicates whether the shorcut key for the menu item is displayed on the item. </source>
-        <target state="new">Indicates whether the shorcut key for the menu item is displayed on the item. </target>
+        <target state="translated">メニュー項目のショートカット キーをアイテムに表示するかどうかを示します。</target>
         <note />
       </trans-unit>
       <trans-unit id="MenuStripMdiWindowListItem">
@@ -6858,7 +6858,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="MonthCalendarBodyAccessibleName">
         <source>Calendar body</source>
-        <target state="new">Calendar body</target>
+        <target state="translated">カレンダー本体</target>
         <note />
       </trans-unit>
       <trans-unit id="MonthCalendarDimensionsDescr">
@@ -6913,7 +6913,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="MonthCalendarNextButtonAccessibleName">
         <source>Next</source>
-        <target state="new">Next</target>
+        <target state="translated">次へ</target>
         <note />
       </trans-unit>
       <trans-unit id="MonthCalendarOnDateChangedDescr">
@@ -6928,7 +6928,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="MonthCalendarPreviousButtonAccessibleName">
         <source>Previous</source>
-        <target state="new">Previous</target>
+        <target state="translated">前へ</target>
         <note />
       </trans-unit>
       <trans-unit id="MonthCalendarRange">
@@ -7008,7 +7008,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="MonthCalendarTodayButtonAccessibleName">
         <source>Today: {0}</source>
-        <target state="new">Today: {0}</target>
+        <target state="translated">今日: {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="MonthCalendarTodayDateDescr">
@@ -7913,7 +7913,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="ProgressBarDefaultAccessibleName">
         <source>ProgressBar</source>
-        <target state="new">ProgressBar</target>
+        <target state="translated">ProgressBar</target>
         <note />
       </trans-unit>
       <trans-unit id="ProgressBarIncrementMarqueeException">
@@ -8868,7 +8868,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="TabControlBadControl">
         <source>Parameter must be of type TabPage.</source>
-        <target state="new">Parameter must be of type TabPage.</target>
+        <target state="translated">パラメーターは型 TabPage でなければなりません。</target>
         <note />
       </trans-unit>
       <trans-unit id="TabControlTabPageNotOnTabControl">
@@ -9048,7 +9048,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="TableLayoutSettingsConverterNoName">
         <source>Cannot convert TableLayoutSettings to string: could not find a 'Name' string property on a control.</source>
-        <target state="new">Cannot convert TableLayoutSettings to string: could not find a 'Name' string property on a control.</target>
+        <target state="translated">TableLayoutSettings を文字列に変換できません: コントロールに 'Name' 文字列プロパティが見つかりませんでした。</target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutSettingsGetCellPositionDescr">
@@ -9333,7 +9333,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="ToolStripContainerBottomToolStripPanelVisibleDescr">
         <source>Specifies the visibility of the bottom panel of the ToolStripContainer.</source>
-        <target state="translated">ToolStripContainer の下のパネルの表示状態を指定します。</target>
+        <target state="translated">ToolStripContainer の下のパネルの表示を指定します。</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripContainerContentPanelDescr">
@@ -9353,7 +9353,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="ToolStripContainerLeftToolStripPanelVisibleDescr">
         <source>Specifies the visibility of the left panel of the ToolStripContainer.</source>
-        <target state="translated">ToolStripContainer の左のパネルの表示状態を指定します。</target>
+        <target state="translated">ToolStripContainer の左のパネルの表示を指定します。</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripContainerRightToolStripPanelDescr">
@@ -9363,7 +9363,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="ToolStripContainerRightToolStripPanelVisibleDescr">
         <source>Specifies the visibility of the right panel of the ToolStripContainer.</source>
-        <target state="translated">ToolStripContainer の右のパネルの表示状態を指定します。</target>
+        <target state="translated">ToolStripContainer の右のパネルの表示を指定します。</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripContainerTopToolStripPanelDescr">
@@ -9373,7 +9373,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="ToolStripContainerTopToolStripPanelVisibleDescr">
         <source>Specifies the visibility of the top panel of the ToolStripContainer.</source>
-        <target state="translated">ToolStripContainer の上のパネルの表示状態を指定します。</target>
+        <target state="translated">ToolStripContainer の上のパネルの表示を指定します。</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripContainerUseContentPanel">
@@ -9478,7 +9478,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="ToolStripGripStyleDescr">
         <source>Specifies visibility of the grip on the ToolStrip.</source>
-        <target state="translated">ToolStrip のハンドルの可視性を指定します。</target>
+        <target state="translated">ToolStrip のハンドルの表示を指定します。</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripImageListDescr">
@@ -9758,7 +9758,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="ToolStripItemOnVisibleChangedDescr">
         <source>Occurs when the visibility of an item has changed.</source>
-        <target state="translated">アイテムの表示状態が変更したときに発生します。</target>
+        <target state="translated">アイテムの表示が変更したときに発生します。</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripItemOverflow">
@@ -10818,7 +10818,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="Win32SetParentFailed">
         <source>Failed to set Win32 parent window of the Control.</source>
-        <target state="new">Failed to set Win32 parent window of the Control.</target>
+        <target state="translated">コントロールの Win32 親ウィンドウを設定できませんでした。</target>
         <note />
       </trans-unit>
       <trans-unit id="Win32WindowAlreadyCreated">

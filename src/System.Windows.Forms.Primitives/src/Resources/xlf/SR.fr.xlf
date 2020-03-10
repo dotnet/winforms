@@ -4,27 +4,27 @@
     <body>
       <trans-unit id="COM2UnhandledVT">
         <source>Unhandled VT: {0}.</source>
-        <target state="new">Unhandled VT: {0}.</target>
+        <target state="translated">VT non géré : {0}.</target>
         <note />
       </trans-unit>
       <trans-unit id="CannotConvertDoubleToDate">
         <source>Double cannot be converted to a date.</source>
-        <target state="new">Double cannot be converted to a date.</target>
+        <target state="translated">Impossible de convertir une valeur double en date.</target>
         <note />
       </trans-unit>
       <trans-unit id="CannotConvertIntToFloat">
         <source>Integer cannot be converted to a float.</source>
-        <target state="new">Integer cannot be converted to a float.</target>
+        <target state="translated">Impossible de convertir une valeur integer en float.</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyValueInvalidEntry">
         <source>One or more entries are not valid in the IDictionary parameter. Verify that all values match up to the object's properties.</source>
-        <target state="new">One or more entries are not valid in the IDictionary parameter. Verify that all values match up to the object's properties.</target>
+        <target state="translated">Le paramètre IDictionary contient au moins une entrée non valide. Vérifiez que toutes les valeurs correspondent aux propriétés de l'objet.</target>
         <note />
       </trans-unit>
       <trans-unit id="TextParseFailedFormat">
         <source>Parse of Text("{0}") expected text in the format "{1}" did not succeed.</source>
-        <target state="new">Parse of Text("{0}") expected text in the format "{1}" did not succeed.</target>
+        <target state="translated">L'analyse de Text("{0}") qui attendait du texte au format "{1}" n'a pas réussi.</target>
         <note />
       </trans-unit>
     </body>

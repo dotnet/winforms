@@ -4,27 +4,27 @@
     <body>
       <trans-unit id="COM2UnhandledVT">
         <source>Unhandled VT: {0}.</source>
-        <target state="new">Unhandled VT: {0}.</target>
+        <target state="translated">처리되지 않은 VT입니다. {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="CannotConvertDoubleToDate">
         <source>Double cannot be converted to a date.</source>
-        <target state="new">Double cannot be converted to a date.</target>
+        <target state="translated">double 형식을 date 형식으로 변환할 수 없습니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="CannotConvertIntToFloat">
         <source>Integer cannot be converted to a float.</source>
-        <target state="new">Integer cannot be converted to a float.</target>
+        <target state="translated">integer 형식을 float 형식으로 변환할 수 없습니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyValueInvalidEntry">
         <source>One or more entries are not valid in the IDictionary parameter. Verify that all values match up to the object's properties.</source>
-        <target state="new">One or more entries are not valid in the IDictionary parameter. Verify that all values match up to the object's properties.</target>
+        <target state="translated">IDictionary 매개 변수에 잘못된 항목이 하나 이상 있습니다. 모든 값이 개체의 속성과 일치하는지 확인하십시오.</target>
         <note />
       </trans-unit>
       <trans-unit id="TextParseFailedFormat">
         <source>Parse of Text("{0}") expected text in the format "{1}" did not succeed.</source>
-        <target state="new">Parse of Text("{0}") expected text in the format "{1}" did not succeed.</target>
+        <target state="translated">텍스트("{0}")를 구문 분석하지 못했습니다. "{1}" 서식의 텍스트가 필요합니다.</target>
         <note />
       </trans-unit>
     </body>

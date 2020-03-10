@@ -1,25 +1,25 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
-  <file datatype="xml" source-language="en" target-language="zh-Hant" original="../VBInputBox.resx">
+  <file datatype="xml" source-language="en" target-language="zh-HANT" original="../VBInputBox.resx">
     <body>
       <trans-unit id="$this.Text">
         <source>#</source>
-        <target state="new">#</target>
+        <target state="translated">#</target>
         <note />
       </trans-unit>
       <trans-unit id="Label.Text">
         <source>#</source>
-        <target state="new">#</target>
+        <target state="translated">#</target>
         <note />
       </trans-unit>
       <trans-unit id="MyCancelButton.Text">
         <source>Cancel</source>
-        <target state="new">Cancel</target>
+        <target state="translated">取消</target>
         <note />
       </trans-unit>
       <trans-unit id="OKButton.Text">
         <source>OK</source>
-        <target state="new">OK</target>
+        <target state="translated">確定</target>
         <note />
       </trans-unit>
     </body>

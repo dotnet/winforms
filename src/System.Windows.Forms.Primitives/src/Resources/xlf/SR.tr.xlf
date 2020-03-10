@@ -4,27 +4,27 @@
     <body>
       <trans-unit id="COM2UnhandledVT">
         <source>Unhandled VT: {0}.</source>
-        <target state="new">Unhandled VT: {0}.</target>
+        <target state="translated">İşlenmemiş VT: {0}.</target>
         <note />
       </trans-unit>
       <trans-unit id="CannotConvertDoubleToDate">
         <source>Double cannot be converted to a date.</source>
-        <target state="new">Double cannot be converted to a date.</target>
+        <target state="translated">Double tarihe dönüştürülemez.</target>
         <note />
       </trans-unit>
       <trans-unit id="CannotConvertIntToFloat">
         <source>Integer cannot be converted to a float.</source>
-        <target state="new">Integer cannot be converted to a float.</target>
+        <target state="translated">Tam sayı kayan noktalıya dönüştürülemez.</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyValueInvalidEntry">
         <source>One or more entries are not valid in the IDictionary parameter. Verify that all values match up to the object's properties.</source>
-        <target state="new">One or more entries are not valid in the IDictionary parameter. Verify that all values match up to the object's properties.</target>
+        <target state="translated">IDictionary parametresindeki bir veya daha fazla girdi geçerli değil. Tüm değerlerin nesnenin özellikleriyle eşleştiğini doğrulayın.</target>
         <note />
       </trans-unit>
       <trans-unit id="TextParseFailedFormat">
         <source>Parse of Text("{0}") expected text in the format "{1}" did not succeed.</source>
-        <target state="new">Parse of Text("{0}") expected text in the format "{1}" did not succeed.</target>
+        <target state="translated">"{1}" biçiminde olması beklenen Metin Ayrıştırma ("{0}") başarısız oldu.</target>
         <note />
       </trans-unit>
     </body>

@@ -4,47 +4,47 @@
     <body>
       <trans-unit id="AnchorEditorAccName">
         <source>Anchor Editor</source>
-        <target state="new">Anchor Editor</target>
+        <target state="translated">Редактор привязки</target>
         <note />
       </trans-unit>
       <trans-unit id="AnchorEditorBottomAccName">
         <source>Bottom</source>
-        <target state="new">Bottom</target>
+        <target state="translated">Снизу</target>
         <note />
       </trans-unit>
       <trans-unit id="AnchorEditorLeftAccName">
         <source>Left</source>
-        <target state="new">Left</target>
+        <target state="translated">Слева</target>
         <note />
       </trans-unit>
       <trans-unit id="AnchorEditorRightAccName">
         <source>Right</source>
-        <target state="new">Right</target>
+        <target state="translated">Справа</target>
         <note />
       </trans-unit>
       <trans-unit id="AnchorEditorTopAccName">
         <source>Top</source>
-        <target state="new">Top</target>
+        <target state="translated">Сверху</target>
         <note />
       </trans-unit>
       <trans-unit id="BasicDesignerLoaderAlreadyLoaded">
         <source>The designer is already loaded.</source>
-        <target state="new">The designer is already loaded.</target>
+        <target state="translated">Конструктор уже загружен.</target>
         <note />
       </trans-unit>
       <trans-unit id="BasicDesignerLoaderDifferentHost">
         <source>The designer loader has already been loaded from another host.  You can only have one designer loader for each host.</source>
-        <target state="new">The designer loader has already been loaded from another host.  You can only have one designer loader for each host.</target>
+        <target state="translated">Загрузчик конструктора уже был загружен с другого узла. Для каждого приложения может существовать только один загрузчик конструктора.</target>
         <note />
       </trans-unit>
       <trans-unit id="BasicDesignerLoaderMissingService">
         <source>The service {0} is required but could not be found.  If you have removed this service ensure that you provide a replacement.</source>
-        <target state="new">The service {0} is required but could not be found.  If you have removed this service ensure that you provide a replacement.</target>
+        <target state="translated">Требуется служба {0}, но она не найдена.  Если вы перенесли эту службу, убедитесь в том, что обеспечили замену.</target>
         <note />
       </trans-unit>
       <trans-unit id="BasicDesignerLoaderNotInitialized">
         <source>The designer loader has not been initialized yet.  You may only call this method after initialization.</source>
-        <target state="new">The designer loader has not been initialized yet.  You may only call this method after initialization.</target>
+        <target state="translated">Загрузчик конструктора еще не инициализирован.  Этот метод можно вызвать только после инициализации.</target>
         <note />
       </trans-unit>
       <trans-unit id="BehaviorServiceCopyControl">
@@ -79,127 +79,127 @@
       </trans-unit>
       <trans-unit id="BinaryEditorAllFiles">
         <source>All Files</source>
-        <target state="new">All Files</target>
+        <target state="translated">Все файлы</target>
         <note />
       </trans-unit>
       <trans-unit id="BinaryEditorFileError">
         <source>Error writing to file: {0}</source>
-        <target state="new">Error writing to file: {0}</target>
+        <target state="translated">Ошибка записи в файл: {0}.</target>
         <note />
       </trans-unit>
       <trans-unit id="BinaryEditorFileName">
         <source>ByteArray</source>
-        <target state="new">ByteArray</target>
+        <target state="translated">ByteArray</target>
         <note />
       </trans-unit>
       <trans-unit id="BinaryEditorSaveFile">
         <source>Save File As</source>
-        <target state="new">Save File As</target>
+        <target state="translated">Сохранить файл как</target>
         <note />
       </trans-unit>
       <trans-unit id="BinaryEditorTitle">
         <source>Byte Array Property Editor</source>
-        <target state="new">Byte Array Property Editor</target>
+        <target state="translated">Редактор свойств байтового массива</target>
         <note />
       </trans-unit>
       <trans-unit id="BindingFormattingDialogCustomFormat">
         <source>Custo&amp;m format</source>
-        <target state="new">Custo&amp;m format</target>
+        <target state="translated">Спец&amp;иальный формат</target>
         <note />
       </trans-unit>
       <trans-unit id="BindingFormattingDialogCustomFormatAccessibleDescription">
         <source>Custom format</source>
-        <target state="new">Custom format</target>
+        <target state="translated">Специальный формат</target>
         <note />
       </trans-unit>
       <trans-unit id="BindingFormattingDialogDecimalPlaces">
         <source>&amp;Decimal places</source>
-        <target state="new">&amp;Decimal places</target>
+        <target state="translated">&amp;Десятичные разряды</target>
         <note />
       </trans-unit>
       <trans-unit id="BindingFormattingDialogFormatTypeCurrency">
         <source>Currency</source>
-        <target state="new">Currency</target>
+        <target state="translated">Валюта</target>
         <note />
       </trans-unit>
       <trans-unit id="BindingFormattingDialogFormatTypeCurrencyExplanation">
         <source>Specify the format for monetary values.</source>
-        <target state="new">Specify the format for monetary values.</target>
+        <target state="translated">Укажите формат денежных значений.</target>
         <note />
       </trans-unit>
       <trans-unit id="BindingFormattingDialogFormatTypeCustom">
         <source>Custom</source>
-        <target state="new">Custom</target>
+        <target state="translated">Настраиваемое</target>
         <note />
       </trans-unit>
       <trans-unit id="BindingFormattingDialogFormatTypeCustomExplanation">
         <source>Type a custom format string. A custom string may require extra handling unless it is a read-only value.</source>
-        <target state="new">Type a custom format string. A custom string may require extra handling unless it is a read-only value.</target>
+        <target state="translated">Введите строку специального формата. Специальная строка может потребовать дополнительной обработки, если не предназначена только для чтения.</target>
         <note />
       </trans-unit>
       <trans-unit id="BindingFormattingDialogFormatTypeCustomInvalidFormat">
         <source>Invalid format</source>
-        <target state="new">Invalid format</target>
+        <target state="translated">Недопустимый формат</target>
         <note />
       </trans-unit>
       <trans-unit id="BindingFormattingDialogFormatTypeDateTime">
         <source>Date Time</source>
-        <target state="new">Date Time</target>
+        <target state="translated">Дата и время</target>
         <note />
       </trans-unit>
       <trans-unit id="BindingFormattingDialogFormatTypeDateTimeExplanation">
         <source>Specify the format for date and time values.</source>
-        <target state="new">Specify the format for date and time values.</target>
+        <target state="translated">Укажите формат даты и времени.</target>
         <note />
       </trans-unit>
       <trans-unit id="BindingFormattingDialogFormatTypeNoFormatting">
         <source>No Formatting</source>
-        <target state="new">No Formatting</target>
+        <target state="translated">Без форматирования</target>
         <note />
       </trans-unit>
       <trans-unit id="BindingFormattingDialogFormatTypeNoFormattingExplanation">
         <source>Use no formatting to display the value from the source without adornment.</source>
-        <target state="new">Use no formatting to display the value from the source without adornment.</target>
+        <target state="translated">Не использовать форматирование, если значения  из источника отображаются без оформления.</target>
         <note />
       </trans-unit>
       <trans-unit id="BindingFormattingDialogFormatTypeNumeric">
         <source>Numeric</source>
-        <target state="new">Numeric</target>
+        <target state="translated">Числовой</target>
         <note />
       </trans-unit>
       <trans-unit id="BindingFormattingDialogFormatTypeNumericExplanation">
         <source>Specify the format for numbers. Note that the Currency format type offers specialized formatting for monetary values.</source>
-        <target state="new">Specify the format for numbers. Note that the Currency format type offers specialized formatting for monetary values.</target>
+        <target state="translated">Задайте формат чисел. Помните, что формат "Денежный" обеспечивает специальное форматирование денежных значений.</target>
         <note />
       </trans-unit>
       <trans-unit id="BindingFormattingDialogFormatTypeScientific">
         <source>Scientific</source>
-        <target state="new">Scientific</target>
+        <target state="translated">Научный</target>
         <note />
       </trans-unit>
       <trans-unit id="BindingFormattingDialogFormatTypeScientificExplanation">
         <source>Specify the format for values that use scientific notation.</source>
-        <target state="new">Specify the format for values that use scientific notation.</target>
+        <target state="translated">Задайте формат для значений, использующих экспоненциальное представление чисел.</target>
         <note />
       </trans-unit>
       <trans-unit id="BindingFormattingDialogNullValue">
         <source>&amp;Null value:</source>
-        <target state="new">&amp;Null value:</target>
+        <target state="translated">&amp;Значение Null:</target>
         <note />
       </trans-unit>
       <trans-unit id="BindingFormattingDialogType">
         <source>&amp;Type</source>
-        <target state="new">&amp;Type</target>
+        <target state="translated">&amp;Тип</target>
         <note />
       </trans-unit>
       <trans-unit id="CellStyleBuilderNormalPreviewAccName">
         <source>Normal Preview</source>
-        <target state="new">Normal Preview</target>
+        <target state="translated">Обычный предварительный просмотр</target>
         <note />
       </trans-unit>
       <trans-unit id="CellStyleBuilderSelectedPreviewAccName">
         <source>Selected Preview</source>
-        <target state="new">Selected Preview</target>
+        <target state="translated">Выборочный предварительный просмотр</target>
         <note />
       </trans-unit>
       <trans-unit id="CodeDomComponentSerializationServiceClosedStore">
@@ -219,129 +219,129 @@
       </trans-unit>
       <trans-unit id="CodeDomDesignerLoaderBadSerializationObject">
         <source>The serialization data object is not of the proper type.</source>
-        <target state="new">The serialization data object is not of the proper type.</target>
+        <target state="translated">Неправильный тип объекта данных сериализации.</target>
         <note />
       </trans-unit>
       <trans-unit id="CodeDomDesignerLoaderDocumentFailureTypeDesignerNotInstalled">
         <source>	{0} --- The designer for base class '{1}' is not installed.</source>
-        <target state="new">	{0} --- The designer for base class '{1}' is not installed.</target>
+        <target state="translated">	{0} --- Конструктор для базового класса '{1}' не установлен.</target>
         <note />
       </trans-unit>
       <trans-unit id="CodeDomDesignerLoaderDocumentFailureTypeNotDesignable">
         <source>	{0} --- The base class '{1}' cannot be designed.</source>
-        <target state="new">	{0} --- The base class '{1}' cannot be designed.</target>
+        <target state="translated">	{0} --- Невозможно создать базовый класс '{1}'.</target>
         <note />
       </trans-unit>
       <trans-unit id="CodeDomDesignerLoaderDocumentFailureTypeNotFound">
         <source>	{0} --- The base class '{1}' could not be loaded.  Ensure the assembly has been referenced and that all projects have been built.</source>
-        <target state="new">	{0} --- The base class '{1}' could not be loaded.  Ensure the assembly has been referenced and that all projects have been built.</target>
+        <target state="translated">	{0} --- Невозможно загрузить базовый класс '{1}'.  Проверьте, что есть ссылка на сборку и все проекты созданы.</target>
         <note />
       </trans-unit>
       <trans-unit id="CodeDomDesignerLoaderDupComponentName">
         <source>There is already a component named '{0}'.  Components must have unique names, and names must be case-insensitive.  A name also cannot conflict with the name of any component in an inherited class.</source>
-        <target state="new">There is already a component named '{0}'.  Components must have unique names, and names must be case-insensitive.  A name also cannot conflict with the name of any component in an inherited class.</target>
+        <target state="translated">Компонент с именем "{0}" уже существует. Компоненты должны иметь уникальные имена, независимые от регистра. Кроме того, имя не может конфликтовать с именем какого-либо компонента в унаследованном классе.</target>
         <note />
       </trans-unit>
       <trans-unit id="CodeDomDesignerLoaderInvalidBlankIdentifier">
         <source>Empty identifiers are not valid.</source>
-        <target state="new">Empty identifiers are not valid.</target>
+        <target state="translated">Пустые идентификаторы недопустимы.</target>
         <note />
       </trans-unit>
       <trans-unit id="CodeDomDesignerLoaderInvalidIdentifier">
         <source>'{0}' is not a valid identifier.</source>
-        <target state="new">'{0}' is not a valid identifier.</target>
+        <target state="translated">{0} не является допустимым идентификатором.</target>
         <note />
       </trans-unit>
       <trans-unit id="CodeDomDesignerLoaderNoLanguageSupport">
         <source>The language did not provide a code parser for this file.  Please make sure that this file type supports a designer.</source>
-        <target state="new">The language did not provide a code parser for this file.  Please make sure that this file type supports a designer.</target>
+        <target state="translated">Язык не предоставил анализатор кода для этого файла.  Убедитесь, что для этого типа файлов поддерживается использование конструктора.</target>
         <note />
       </trans-unit>
       <trans-unit id="CodeDomDesignerLoaderNoRootSerializer">
         <source>The designer could not be shown for this file because none of the classes within it can be designed.</source>
-        <target state="new">The designer could not be shown for this file because none of the classes within it can be designed.</target>
+        <target state="translated">Показать конструктор для этого файла невозможно, так как невозможно сконструировать  ни один из входящих в него классов.</target>
         <note />
       </trans-unit>
       <trans-unit id="CodeDomDesignerLoaderNoRootSerializerWithFailures">
         <source>The designer could not be shown for this file because none of the classes within it can be designed.  The designer inspected the following classes in the file: 
 {0}</source>
-        <target state="new">The designer could not be shown for this file because none of the classes within it can be designed.  The designer inspected the following classes in the file: 
+        <target state="translated">Показать конструктор для этого файла невозможно, так как невозможно сконструировать  ни один из входящих в него классов.  Конструктор проверил следующие классы в этом файле: 
 {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="CodeDomDesignerLoaderNoTypeResolution">
         <source>The designer loader did not supply a type resolution service, which is a requirement for CodeDom serialization.</source>
-        <target state="new">The designer loader did not supply a type resolution service, which is a requirement for CodeDom serialization.</target>
+        <target state="translated">Загрузчик конструктора не предоставил службу определения типа, необходимую для сериализации CodeDom.</target>
         <note />
       </trans-unit>
       <trans-unit id="CodeDomDesignerLoaderPropGenerateMember">
         <source>Indicates if a member variable will be generated for this component.</source>
-        <target state="new">Indicates if a member variable will be generated for this component.</target>
+        <target state="translated">Указывает, будет ли создана переменная члена для этого компонента.</target>
         <note />
       </trans-unit>
       <trans-unit id="CodeDomDesignerLoaderPropModifiers">
         <source>Indicates the visibility level of the object.</source>
-        <target state="new">Indicates the visibility level of the object.</target>
+        <target state="translated">Указывает уровень видимости объекта.</target>
         <note />
       </trans-unit>
       <trans-unit id="CodeDomDesignerLoaderSerializerTypeNotFirstType">
         <source>The class {0} can be designed, but is not the first class in the file.  Visual Studio requires that designers use the first class in the file.  Move the class code so that it is the first class in the file and try loading the designer again.</source>
-        <target state="new">The class {0} can be designed, but is not the first class in the file.  Visual Studio requires that designers use the first class in the file.  Move the class code so that it is the first class in the file and try loading the designer again.</target>
+        <target state="translated">Класс {0} можно сконструировать, но это не первый класс в файле.  В Visual Studio конструктор должен использовать первый класс в файле.  Переместите код класса, чтобы он был первым в файле, и еще раз попробуйте загрузить конструктор.</target>
         <note />
       </trans-unit>
       <trans-unit id="CollectionEditorCantRemoveItem">
         <source>The item '{0}' cannot be removed.</source>
-        <target state="new">The item '{0}' cannot be removed.</target>
+        <target state="translated">Невозможно удалить элемент '{0}'.</target>
         <note />
       </trans-unit>
       <trans-unit id="CollectionEditorCaption">
         <source>{0} Collection Editor</source>
-        <target state="new">{0} Collection Editor</target>
+        <target state="translated">Редактор коллекции {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="CollectionEditorInheritedReadOnlySelection">
         <source>Read-only component(s) selected.</source>
-        <target state="new">Read-only component(s) selected.</target>
+        <target state="translated">Выбран компонент(-ы) с доступом только для чтения.</target>
         <note />
       </trans-unit>
       <trans-unit id="CollectionEditorProperties">
         <source>{0} &amp;properties:</source>
-        <target state="new">{0} &amp;properties:</target>
+        <target state="translated">Свойства {0}:</target>
         <note />
       </trans-unit>
       <trans-unit id="CollectionEditorPropertiesMultiSelect">
         <source>Multi-Select &amp;Properties:</source>
-        <target state="new">Multi-Select &amp;Properties:</target>
+        <target state="translated">&amp;Свойства множественного выбора:</target>
         <note />
       </trans-unit>
       <trans-unit id="CollectionEditorPropertiesNone">
         <source>&amp;Properties:</source>
-        <target state="new">&amp;Properties:</target>
+        <target state="translated">&amp;Свойства:</target>
         <note />
       </trans-unit>
       <trans-unit id="CollectionEditorUndoBatchDesc">
         <source>Add or remove {0} objects</source>
-        <target state="new">Add or remove {0} objects</target>
+        <target state="translated">Добавить или удалить {0} объектов</target>
         <note />
       </trans-unit>
       <trans-unit id="ColorEditorAccName">
         <source>Color Picker</source>
-        <target state="new">Color Picker</target>
+        <target state="translated">Палитра</target>
         <note />
       </trans-unit>
       <trans-unit id="ColorEditorPaletteTab">
         <source>Custom</source>
-        <target state="new">Custom</target>
+        <target state="translated">Настраиваемое</target>
         <note />
       </trans-unit>
       <trans-unit id="ColorEditorStandardTab">
         <source>Web</source>
-        <target state="new">Web</target>
+        <target state="translated">Web</target>
         <note>{Locked="Web"}</note>
       </trans-unit>
       <trans-unit id="ColorEditorSystemTab">
         <source>System</source>
-        <target state="new">System</target>
+        <target state="translated">Система</target>
         <note />
       </trans-unit>
       <trans-unit id="CommandSetAlignByPrimary">
@@ -418,52 +418,52 @@
       </trans-unit>
       <trans-unit id="ContentAlignmentEditorAccName">
         <source>Alignment Picker</source>
-        <target state="new">Alignment Picker</target>
+        <target state="translated">Выбор выравнивания</target>
         <note />
       </trans-unit>
       <trans-unit id="ContentAlignmentEditorBottomCenterAccName">
         <source>Bottom Middle</source>
-        <target state="new">Bottom Middle</target>
+        <target state="translated">Снизу в середине</target>
         <note />
       </trans-unit>
       <trans-unit id="ContentAlignmentEditorBottomLeftAccName">
         <source>Bottom Left</source>
-        <target state="new">Bottom Left</target>
+        <target state="translated">Внизу слева</target>
         <note />
       </trans-unit>
       <trans-unit id="ContentAlignmentEditorBottomRightAccName">
         <source>Bottom Right</source>
-        <target state="new">Bottom Right</target>
+        <target state="translated">Снизу справа</target>
         <note />
       </trans-unit>
       <trans-unit id="ContentAlignmentEditorMiddleCenterAccName">
         <source>Middle Center</source>
-        <target state="new">Middle Center</target>
+        <target state="translated">Посередине по центру</target>
         <note />
       </trans-unit>
       <trans-unit id="ContentAlignmentEditorMiddleLeftAccName">
         <source>Middle Left</source>
-        <target state="new">Middle Left</target>
+        <target state="translated">Посередине слева</target>
         <note />
       </trans-unit>
       <trans-unit id="ContentAlignmentEditorMiddleRightAccName">
         <source>Middle Right</source>
-        <target state="new">Middle Right</target>
+        <target state="translated">Посередине справа</target>
         <note />
       </trans-unit>
       <trans-unit id="ContentAlignmentEditorTopCenterAccName">
         <source>Top Center</source>
-        <target state="new">Top Center</target>
+        <target state="translated">Сверху по центру</target>
         <note />
       </trans-unit>
       <trans-unit id="ContentAlignmentEditorTopLeftAccName">
         <source>Top Left</source>
-        <target state="new">Top Left</target>
+        <target state="translated">Вверху слева</target>
         <note />
       </trans-unit>
       <trans-unit id="ContentAlignmentEditorTopRightAccName">
         <source>Top Right</source>
-        <target state="new">Top Right</target>
+        <target state="translated">Вверху справа</target>
         <note />
       </trans-unit>
       <trans-unit id="ContextMenuAlignToGrid">
@@ -563,17 +563,17 @@
       </trans-unit>
       <trans-unit id="DataGridView_Cancel">
         <source>Cancel</source>
-        <target state="new">Cancel</target>
+        <target state="translated">Отмена</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_OK">
         <source>OK</source>
-        <target state="new">OK</target>
+        <target state="translated">ОК</target>
         <note />
       </trans-unit>
       <trans-unit id="DataSourceLocksItems">
         <source>Items collection cannot be modified when the DataSource property is set.</source>
-        <target state="new">Items collection cannot be modified when the DataSource property is set.</target>
+        <target state="translated">Изменение коллекции элементов невозможно, если задано свойство DataSource.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerActionPanel_CouldNotConvertValue">
@@ -822,37 +822,37 @@
       </trans-unit>
       <trans-unit id="DockEditorAccName">
         <source>Dock Picker</source>
-        <target state="new">Dock Picker</target>
+        <target state="translated">Выбор дока</target>
         <note />
       </trans-unit>
       <trans-unit id="DockEditorBottomAccName">
         <source>Bottom</source>
-        <target state="new">Bottom</target>
+        <target state="translated">Снизу</target>
         <note />
       </trans-unit>
       <trans-unit id="DockEditorFillAccName">
         <source>Fill</source>
-        <target state="new">Fill</target>
+        <target state="translated">Заполнение</target>
         <note />
       </trans-unit>
       <trans-unit id="DockEditorLeftAccName">
         <source>Left</source>
-        <target state="new">Left</target>
+        <target state="translated">Слева</target>
         <note />
       </trans-unit>
       <trans-unit id="DockEditorNoneAccName">
         <source>None</source>
-        <target state="new">None</target>
+        <target state="translated">Отсутствует</target>
         <note />
       </trans-unit>
       <trans-unit id="DockEditorRightAccName">
         <source>Right</source>
-        <target state="new">Right</target>
+        <target state="translated">Справа</target>
         <note />
       </trans-unit>
       <trans-unit id="DockEditorTopAccName">
         <source>Top</source>
-        <target state="new">Top</target>
+        <target state="translated">Сверху</target>
         <note />
       </trans-unit>
       <trans-unit id="DotNET_ComponentType">
@@ -892,27 +892,27 @@
       </trans-unit>
       <trans-unit id="EventBindingServiceBadArgType">
         <source>The event {0} expects an argument type of {1}.</source>
-        <target state="new">The event {0} expects an argument type of {1}.</target>
+        <target state="translated">Событие {0} ожидает тип аргумента {1}.</target>
         <note />
       </trans-unit>
       <trans-unit id="EventBindingServiceEventReadOnly">
         <source>The event {0} is read-only and cannot be changed.</source>
-        <target state="new">The event {0} is read-only and cannot be changed.</target>
+        <target state="translated">Событие {0} доступно только для чтения и не может быть изменено.</target>
         <note />
       </trans-unit>
       <trans-unit id="EventBindingServiceMissingService">
         <source>The service {0} is required but could not be found.  If you have removed this service ensure that you provide a replacement.</source>
-        <target state="new">The service {0} is required but could not be found.  If you have removed this service ensure that you provide a replacement.</target>
+        <target state="translated">Требуется служба {0}, но она не найдена.  Если вы перенесли эту службу, убедитесь в том, что обеспечили замену.</target>
         <note />
       </trans-unit>
       <trans-unit id="EventBindingServiceNoSite">
         <source>Events cannot be set on the object passed to the event binding service because a site associated with the object could not be located.</source>
-        <target state="new">Events cannot be set on the object passed to the event binding service because a site associated with the object could not be located.</target>
+        <target state="translated">Невозможно установить события для объекта, переданного в службу привязки событий, так как сайт, связанный с объектом, не найден.</target>
         <note />
       </trans-unit>
       <trans-unit id="EventBindingServiceSetValue">
         <source>Set {0}.{1} event</source>
-        <target state="new">Set {0}.{1} event</target>
+        <target state="translated">Задать {0}.{1} событие</target>
         <note />
       </trans-unit>
       <trans-unit id="ExtenderProviderServiceDuplicateProvider">
@@ -922,32 +922,32 @@
       </trans-unit>
       <trans-unit id="FormatStringDialogTitle">
         <source>Format String Dialog</source>
-        <target state="new">Format String Dialog</target>
+        <target state="translated">Диалог формата строки</target>
         <note />
       </trans-unit>
       <trans-unit id="GenericFileFilter">
         <source>All Files(*.*)|*.*</source>
-        <target state="new">All Files(*.*)|*.*</target>
+        <target state="translated">Все файлы(*.*)|*.*</target>
         <note />
       </trans-unit>
       <trans-unit id="GenericOpenFile">
         <source>Open File</source>
-        <target state="new">Open File</target>
+        <target state="translated">Открыть файл</target>
         <note />
       </trans-unit>
       <trans-unit id="HelpProviderEditorFilter">
         <source>All Help Files(*.chm,*.col,*.htm,*.html)|*.chm;*.col;*.htm;*.html|Compressed HTML Files(*.chm)|*.chm|Help Collection Files(*.col)|*.col|HTML Files(*.htm,*.html)|*.htm;*.html|All Files(*.*)|*.*</source>
-        <target state="new">All Help Files(*.chm,*.col,*.htm,*.html)|*.chm;*.col;*.htm;*.html|Compressed HTML Files(*.chm)|*.chm|Help Collection Files(*.col)|*.col|HTML Files(*.htm,*.html)|*.htm;*.html|All Files(*.*)|*.*</target>
+        <target state="translated">Все файлы справки(*.chm,*.col,*.htm,*.html)|*.chm;*.col;*.htm;*.html|Сжатые файлы HTML(*.chm)|*.chm|Файлы коллекции справки(*.col)|*.col|Файлы HTML(*.htm,*.html)|*.htm;*.html|Все файлы(*.*)|*.*</target>
         <note />
       </trans-unit>
       <trans-unit id="HelpProviderEditorTitle">
         <source>Open Help File</source>
-        <target state="new">Open Help File</target>
+        <target state="translated">Открыть файл справки</target>
         <note />
       </trans-unit>
       <trans-unit id="ImageCollectionEditorFormText">
         <source>Images Collection Editor</source>
-        <target state="new">Images Collection Editor</target>
+        <target state="translated">Редактор коллекции изображений</target>
         <note />
       </trans-unit>
       <trans-unit id="InheritanceServiceReadOnlyCollection">
@@ -967,154 +967,154 @@
       </trans-unit>
       <trans-unit id="LinkAreaEditorCancel">
         <source>Cancel</source>
-        <target state="new">Cancel</target>
+        <target state="translated">Отмена</target>
         <note />
       </trans-unit>
       <trans-unit id="LinkAreaEditorCaption">
         <source>LinkArea Editor</source>
-        <target state="new">LinkArea Editor</target>
+        <target state="translated">Редактор LinkArea</target>
         <note />
       </trans-unit>
       <trans-unit id="LinkAreaEditorDescription">
         <source>Select a &amp;range of text to make your link:</source>
-        <target state="new">Select a &amp;range of text to make your link:</target>
+        <target state="translated">&amp;Выберите часть текста для преобразов. в ссылку:</target>
         <note />
       </trans-unit>
       <trans-unit id="LinkAreaEditorOK">
         <source>OK</source>
-        <target state="new">OK</target>
+        <target state="translated">ОК</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewSubItemBaseName">
         <source>ListViewSubItem</source>
-        <target state="new">ListViewSubItem</target>
+        <target state="translated">ListViewSubItem</target>
         <note />
       </trans-unit>
       <trans-unit id="LocalizationProviderManualReload">
         <source>You must close and re-open the designer for this change to take effect.</source>
-        <target state="new">You must close and re-open the designer for this change to take effect.</target>
+        <target state="translated">Чтобы изменения начали действовать, необходимо закрыть и вновь открыть конструктор.</target>
         <note />
       </trans-unit>
       <trans-unit id="LocalizationProviderMissingService">
         <source>The service {0} is required but could not be found.  If you have removed this service ensure that you provide a replacement.</source>
-        <target state="new">The service {0} is required but could not be found.  If you have removed this service ensure that you provide a replacement.</target>
+        <target state="translated">Требуется служба {0}, но она не найдена.  Если вы перенесли эту службу, убедитесь в том, что обеспечили замену.</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskDescriptorNotMaskFullErrorMsg">
         <source>Mask is not full.</source>
-        <target state="new">Mask is not full.</target>
+        <target state="translated">Маска не полная.</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskDescriptorNull">
         <source>The provided MaskDescriptor is null.</source>
-        <target state="new">The provided MaskDescriptor is null.</target>
+        <target state="translated">Предоставленный MaskDescriptor равен null.</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskDescriptorNullOrEmptyRequiredProperty">
         <source>One or more required properties are null or empty.</source>
-        <target state="new">One or more required properties are null or empty.</target>
+        <target state="translated">Одно или несколько обязательных свойств пусты или равны null.</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskDescriptorValidatingTypeNone">
         <source>(none)</source>
-        <target state="new">(none)</target>
+        <target state="translated">(нет)</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskDesignerDialogCustomEntry">
         <source>&lt;Custom&gt;</source>
-        <target state="new">&lt;Custom&gt;</target>
+        <target state="translated">&lt;Специальный&gt;</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskDesignerDialogDataFormat">
         <source>Data Format</source>
-        <target state="new">Data Format</target>
+        <target state="translated">Формат данных</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskDesignerDialogDlgCaption">
         <source>Input Mask</source>
-        <target state="new">Input Mask</target>
+        <target state="translated">Маска ввода</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskDesignerDialogMaskDescription">
         <source>Mask Description</source>
-        <target state="new">Mask Description</target>
+        <target state="translated">Описание маски</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskDesignerDialogValidatingType">
         <source>Validating Type</source>
-        <target state="new">Validating Type</target>
+        <target state="translated">Проверка типа</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskedTextBoxDesignerVerbsSetMaskDesc">
         <source>Set Mask...</source>
-        <target state="new">Set Mask...</target>
+        <target state="translated">Установка маски...</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskedTextBoxHintAlphanumericCharacterExpected">
         <source>Alphanumeric character expected</source>
-        <target state="new">Alphanumeric character expected</target>
+        <target state="translated">Ожидается алфавитно-цифровой символ</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskedTextBoxHintAsciiCharacterExpected">
         <source>ASCII character expected</source>
-        <target state="new">ASCII character expected</target>
+        <target state="translated">Ожидается символ ASCII</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskedTextBoxHintDigitExpected">
         <source>Digit expected</source>
-        <target state="new">Digit expected</target>
+        <target state="translated">Ожидается цифра</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskedTextBoxHintInvalidInput">
         <source>Invalid input character</source>
-        <target state="new">Invalid input character</target>
+        <target state="translated">Недействительный входной символ</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskedTextBoxHintLetterExpected">
         <source>Letter expected</source>
-        <target state="new">Letter expected</target>
+        <target state="translated">Ожидается буква</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskedTextBoxHintNonEditPosition">
         <source>Non edit position</source>
-        <target state="new">Non edit position</target>
+        <target state="translated">Неизменяемое положение</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskedTextBoxHintPositionOutOfRange">
         <source>Position out of range</source>
-        <target state="new">Position out of range</target>
+        <target state="translated">Положение вне диапазона</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskedTextBoxHintPromptCharNotAllowed">
         <source>Prompt character disallowed as input</source>
-        <target state="new">Prompt character disallowed as input</target>
+        <target state="translated">Нельзя использовать на входе символ приглашения к вводу</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskedTextBoxHintSignedDigitExpected">
         <source>Signed digit expected</source>
-        <target state="new">Signed digit expected</target>
+        <target state="translated">Ожидается десятичное число</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskedTextBoxHintUnavailableEditPosition">
         <source>Unavailable edit position</source>
-        <target state="new">Unavailable edit position</target>
+        <target state="translated">Недоступное положение правки</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskedTextBoxTextEditorErrorFormatString">
         <source>Error at position {0}: {1}.</source>
-        <target state="new">Error at position {0}: {1}.</target>
+        <target state="translated">Ошибка в положении {0}: {1}.</target>
         <note />
       </trans-unit>
       <trans-unit id="MenuCommandService_DuplicateCommand">
         <source>There is already a command handler for the menu command '{0}'.</source>
-        <target state="new">There is already a command handler for the menu command '{0}'.</target>
+        <target state="translated">Уже существует дескриптор команд для команды меню '{0}'.</target>
         <note />
       </trans-unit>
       <trans-unit id="MultilineStringEditorWatermark">
         <source>Press Enter to begin a new line.
 Press Ctrl+Enter to accept Text.</source>
-        <target state="new">Press Enter to begin a new line.
-Press Ctrl+Enter to accept Text.</target>
+        <target state="translated">Нажмите клавишу ВВОД, чтобы начать новую строку.
+Нажмите клавиши Ctrl+ВВОД, чтобы принять текст.</target>
         <note />
       </trans-unit>
       <trans-unit id="None">
@@ -1144,7 +1144,7 @@ Press Ctrl+Enter to accept Text.</target>
       </trans-unit>
       <trans-unit id="SelectedPathEditorLabel">
         <source>Select the path to the folder that will initially be selected in the FolderBrowserDialog.</source>
-        <target state="new">Select the path to the folder that will initially be selected in the FolderBrowserDialog.</target>
+        <target state="translated">Выберите путь к папке, которая изначально будет выбираться в FolderBrowserDialog.</target>
         <note />
       </trans-unit>
       <trans-unit id="SerializationManagerAreadyInSession">
@@ -1269,7 +1269,7 @@ Press Ctrl+Enter to accept Text.</target>
       </trans-unit>
       <trans-unit id="ShortcutKeys_InvalidKey">
         <source>(Unknown)</source>
-        <target state="new">(Unknown)</target>
+        <target state="translated">(Неизвестный)</target>
         <note />
       </trans-unit>
       <trans-unit id="StandardMenuAbout">
@@ -1674,17 +1674,17 @@ Press Ctrl+Enter to accept Text.</target>
       </trans-unit>
       <trans-unit id="bitmapFileDescription">
         <source>Bitmap files</source>
-        <target state="new">Bitmap files</target>
+        <target state="translated">Файлы точечных рисунков</target>
         <note />
       </trans-unit>
       <trans-unit id="iconFileDescription">
         <source>Icon files</source>
-        <target state="new">Icon files</target>
+        <target state="translated">Файлы значков</target>
         <note />
       </trans-unit>
       <trans-unit id="imageFileDescription">
         <source>All image files</source>
-        <target state="new">All image files</target>
+        <target state="translated">Все файлы изображений</target>
         <note />
       </trans-unit>
       <trans-unit id="lockedDescr">
@@ -1694,7 +1694,7 @@ Press Ctrl+Enter to accept Text.</target>
       </trans-unit>
       <trans-unit id="metafileFileDescription">
         <source>Metafiles</source>
-        <target state="new">Metafiles</target>
+        <target state="translated">Метафайлы</target>
         <note />
       </trans-unit>
     </body>
