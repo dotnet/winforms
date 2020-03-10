@@ -96,7 +96,8 @@ namespace System.Windows.Forms
         /// same application (for example, an import dialog and an open dialog).
         /// </para>
         /// <para>
-        /// This functionality is not available if the old-style dialog is used.
+        /// This functionality is not available if an application is not using visual styles
+        /// or if <see cref="FileDialog.AutoUpgradeEnabled"/> is set to <see langword="false"/>.
         /// </para>
         /// </summary>
         [Localizable(false)]
