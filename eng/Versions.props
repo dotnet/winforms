@@ -66,6 +66,7 @@
   </PropertyGroup>
   <!-- Additional unchanging dependencies -->
   <PropertyGroup>
+    <ApprovalTestsPackageVersion>4.5.0</ApprovalTestsPackageVersion>
     <MoqPackageVersion>4.10.0</MoqPackageVersion>
     <MicrosoftTargetingPackNETFrameworkv472PackageVersion>1.0.0</MicrosoftTargetingPackNETFrameworkv472PackageVersion>
     <MicrosoftWindowsDesktopAppRefv30PackageVersion>3.0.0</MicrosoftWindowsDesktopAppRefv30PackageVersion>
