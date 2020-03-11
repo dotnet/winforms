@@ -1219,7 +1219,7 @@
       </trans-unit>
       <trans-unit id="ContextMenuStripSourceControlDescr">
         <source>The last control that caused this context menu strip to be displayed.</source>
-        <target state="new">The last control that caused this context menu strip to be displayed.</target>
+        <target state="translated">使该上下文菜单条显示的最后一个控件。</target>
         <note />
       </trans-unit>
       <trans-unit id="ControlAccessibileObjectInvalid">
@@ -4226,17 +4226,17 @@ To replace this default dialog please handle the DataError event.</source>
       </trans-unit>
       <trans-unit id="DefaultDomainUpDownAccessibleName">
         <source>DomainUpDown</source>
-        <target state="new">DomainUpDown</target>
+        <target state="translated">DomainUpDown</target>
         <note />
       </trans-unit>
       <trans-unit id="DefaultNumericUpDownAccessibleName">
         <source>NumericUpDown</source>
-        <target state="new">NumericUpDown</target>
+        <target state="translated">NumericUpDown</target>
         <note />
       </trans-unit>
       <trans-unit id="DefaultUpDownButtonsAccessibleName">
         <source>UpDown</source>
-        <target state="new">UpDown</target>
+        <target state="translated">上下箭头</target>
         <note />
       </trans-unit>
       <trans-unit id="DescriptionBindingNavigator">
@@ -4596,7 +4596,7 @@ To replace this default dialog please handle the DataError event.</source>
       </trans-unit>
       <trans-unit id="ErrorProviderDefaultAccessibleName">
         <source>Error provider</source>
-        <target state="new">Error provider</target>
+        <target state="translated">错误提供程序</target>
         <note />
       </trans-unit>
       <trans-unit id="ErrorProviderErrorDescr">
@@ -6828,12 +6828,12 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="MenuItemShortCutDescr">
         <source>The shortcut key associated with the menu item. </source>
-        <target state="new">The shortcut key associated with the menu item. </target>
+        <target state="translated">与菜单项关联的快捷键。</target>
         <note />
       </trans-unit>
       <trans-unit id="MenuItemShowShortCutDescr">
         <source>Indicates whether the shorcut key for the menu item is displayed on the item. </source>
-        <target state="new">Indicates whether the shorcut key for the menu item is displayed on the item. </target>
+        <target state="translated">指示是否在该项上显示菜单项的快捷键。</target>
         <note />
       </trans-unit>
       <trans-unit id="MenuStripMdiWindowListItem">
@@ -6858,7 +6858,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="MonthCalendarBodyAccessibleName">
         <source>Calendar body</source>
-        <target state="new">Calendar body</target>
+        <target state="translated">日历正文</target>
         <note />
       </trans-unit>
       <trans-unit id="MonthCalendarDimensionsDescr">
@@ -6913,7 +6913,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="MonthCalendarNextButtonAccessibleName">
         <source>Next</source>
-        <target state="new">Next</target>
+        <target state="translated">下一页</target>
         <note />
       </trans-unit>
       <trans-unit id="MonthCalendarOnDateChangedDescr">
@@ -6928,7 +6928,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="MonthCalendarPreviousButtonAccessibleName">
         <source>Previous</source>
-        <target state="new">Previous</target>
+        <target state="translated">上一页</target>
         <note />
       </trans-unit>
       <trans-unit id="MonthCalendarRange">
@@ -7008,7 +7008,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="MonthCalendarTodayButtonAccessibleName">
         <source>Today: {0}</source>
-        <target state="new">Today: {0}</target>
+        <target state="translated">今天: {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="MonthCalendarTodayDateDescr">
@@ -7913,7 +7913,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="ProgressBarDefaultAccessibleName">
         <source>ProgressBar</source>
-        <target state="new">ProgressBar</target>
+        <target state="translated">进度条</target>
         <note />
       </trans-unit>
       <trans-unit id="ProgressBarIncrementMarqueeException">
@@ -8868,7 +8868,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="TabControlBadControl">
         <source>Parameter must be of type TabPage.</source>
-        <target state="new">Parameter must be of type TabPage.</target>
+        <target state="translated">参数必须是 TabPage 类型。</target>
         <note />
       </trans-unit>
       <trans-unit id="TabControlTabPageNotOnTabControl">
@@ -9048,7 +9048,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="TableLayoutSettingsConverterNoName">
         <source>Cannot convert TableLayoutSettings to string: could not find a 'Name' string property on a control.</source>
-        <target state="new">Cannot convert TableLayoutSettings to string: could not find a 'Name' string property on a control.</target>
+        <target state="translated">无法将 TableLayoutSettings 转换为 string: 在控件上找不到 "Name" 字符串属性。</target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutSettingsGetCellPositionDescr">
@@ -10818,7 +10818,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="Win32SetParentFailed">
         <source>Failed to set Win32 parent window of the Control.</source>
-        <target state="new">Failed to set Win32 parent window of the Control.</target>
+        <target state="translated">未能设置控件的 Win32 父窗口。</target>
         <note />
       </trans-unit>
       <trans-unit id="Win32WindowAlreadyCreated">

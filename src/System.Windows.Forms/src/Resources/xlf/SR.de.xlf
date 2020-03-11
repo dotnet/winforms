@@ -1219,7 +1219,7 @@
       </trans-unit>
       <trans-unit id="ContextMenuStripSourceControlDescr">
         <source>The last control that caused this context menu strip to be displayed.</source>
-        <target state="new">The last control that caused this context menu strip to be displayed.</target>
+        <target state="translated">Das letzte Steuerelement, das die Anzeige dieser Kontextmenüleiste verursacht hat.</target>
         <note />
       </trans-unit>
       <trans-unit id="ControlAccessibileObjectInvalid">
@@ -4226,17 +4226,17 @@ Behandeln Sie das DataError-Ereignis, um dieses Standarddialogfeld zu ersetzen.<
       </trans-unit>
       <trans-unit id="DefaultDomainUpDownAccessibleName">
         <source>DomainUpDown</source>
-        <target state="new">DomainUpDown</target>
+        <target state="translated">DomainUpDown</target>
         <note />
       </trans-unit>
       <trans-unit id="DefaultNumericUpDownAccessibleName">
         <source>NumericUpDown</source>
-        <target state="new">NumericUpDown</target>
+        <target state="translated">NumericUpDown</target>
         <note />
       </trans-unit>
       <trans-unit id="DefaultUpDownButtonsAccessibleName">
         <source>UpDown</source>
-        <target state="new">UpDown</target>
+        <target state="translated">AufAb</target>
         <note />
       </trans-unit>
       <trans-unit id="DescriptionBindingNavigator">
@@ -4536,7 +4536,7 @@ Behandeln Sie das DataError-Ereignis, um dieses Standarddialogfeld zu ersetzen.<
       </trans-unit>
       <trans-unit id="DomainUpDownWrapDescr">
         <source>Indicates whether values wrap around at either end of the item list.</source>
-        <target state="translated">Zeigt an, ob die Werte an einem Ende der Elementenliste umgebrochen werden.</target>
+        <target state="translated">Zeigt an, ob die Werte an einem Ende der Elementenliste umbrochen werden.</target>
         <note />
       </trans-unit>
       <trans-unit id="DragDropRegFailed">
@@ -4596,7 +4596,7 @@ Behandeln Sie das DataError-Ereignis, um dieses Standarddialogfeld zu ersetzen.<
       </trans-unit>
       <trans-unit id="ErrorProviderDefaultAccessibleName">
         <source>Error provider</source>
-        <target state="new">Error provider</target>
+        <target state="translated">Anbieterfehler</target>
         <note />
       </trans-unit>
       <trans-unit id="ErrorProviderErrorDescr">
@@ -4954,7 +4954,7 @@ Möchten Sie sie ersetzen?</target>
       </trans-unit>
       <trans-unit id="FlowPanelWrapContentsDescr">
         <source>Indicates whether contents are wrapped or clipped at the control boundary.</source>
-        <target state="translated">Gibt an, ob der Inhalt an der Steuerelementgrenze umgebrochen oder abgeschnitten wird.</target>
+        <target state="translated">Gibt an, ob der Inhalt an der Steuerelementgrenze umbrochen oder abgeschnitten wird.</target>
         <note />
       </trans-unit>
       <trans-unit id="FnDallowScriptChangeDescr">
@@ -6828,12 +6828,12 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       </trans-unit>
       <trans-unit id="MenuItemShortCutDescr">
         <source>The shortcut key associated with the menu item. </source>
-        <target state="new">The shortcut key associated with the menu item. </target>
+        <target state="translated">Die dem Menüelement zugeordnete Tastenkombination. </target>
         <note />
       </trans-unit>
       <trans-unit id="MenuItemShowShortCutDescr">
         <source>Indicates whether the shorcut key for the menu item is displayed on the item. </source>
-        <target state="new">Indicates whether the shorcut key for the menu item is displayed on the item. </target>
+        <target state="translated">Gibt an, ob die Tastenkombination für das Menüelement in dem Element angezeigt wird. </target>
         <note />
       </trans-unit>
       <trans-unit id="MenuStripMdiWindowListItem">
@@ -6858,7 +6858,7 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       </trans-unit>
       <trans-unit id="MonthCalendarBodyAccessibleName">
         <source>Calendar body</source>
-        <target state="new">Calendar body</target>
+        <target state="translated">Kalendertext</target>
         <note />
       </trans-unit>
       <trans-unit id="MonthCalendarDimensionsDescr">
@@ -6913,7 +6913,7 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       </trans-unit>
       <trans-unit id="MonthCalendarNextButtonAccessibleName">
         <source>Next</source>
-        <target state="new">Next</target>
+        <target state="translated">Weiter</target>
         <note />
       </trans-unit>
       <trans-unit id="MonthCalendarOnDateChangedDescr">
@@ -6928,7 +6928,7 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       </trans-unit>
       <trans-unit id="MonthCalendarPreviousButtonAccessibleName">
         <source>Previous</source>
-        <target state="new">Previous</target>
+        <target state="translated">Zurück</target>
         <note />
       </trans-unit>
       <trans-unit id="MonthCalendarRange">
@@ -7008,7 +7008,7 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       </trans-unit>
       <trans-unit id="MonthCalendarTodayButtonAccessibleName">
         <source>Today: {0}</source>
-        <target state="new">Today: {0}</target>
+        <target state="translated">Heute: {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="MonthCalendarTodayDateDescr">
@@ -7913,7 +7913,7 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       </trans-unit>
       <trans-unit id="ProgressBarDefaultAccessibleName">
         <source>ProgressBar</source>
-        <target state="new">ProgressBar</target>
+        <target state="translated">ProgressBar</target>
         <note />
       </trans-unit>
       <trans-unit id="ProgressBarIncrementMarqueeException">
@@ -8868,7 +8868,7 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       </trans-unit>
       <trans-unit id="TabControlBadControl">
         <source>Parameter must be of type TabPage.</source>
-        <target state="new">Parameter must be of type TabPage.</target>
+        <target state="translated">Der Parameter muss den Typ "TabPage" aufweisen.</target>
         <note />
       </trans-unit>
       <trans-unit id="TabControlTabPageNotOnTabControl">
@@ -9048,7 +9048,7 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       </trans-unit>
       <trans-unit id="TableLayoutSettingsConverterNoName">
         <source>Cannot convert TableLayoutSettings to string: could not find a 'Name' string property on a control.</source>
-        <target state="new">Cannot convert TableLayoutSettings to string: could not find a 'Name' string property on a control.</target>
+        <target state="translated">TableLayoutSettings kann nicht in eine Zeichenfolge konvertiert werden: Es wurde keine Zeichenfolgeneigenschaft "Name" für ein Steuerelement gefunden.</target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutSettingsGetCellPositionDescr">
@@ -9233,7 +9233,7 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       </trans-unit>
       <trans-unit id="TextBoxWordWrapDescr">
         <source>Indicates if lines are automatically word-wrapped for multiline edit controls.</source>
-        <target state="translated">Zeigt an, ob Zeilen automatisch für mehrzeilige Bearbeitungssteuerelemente umgebrochen werden.</target>
+        <target state="translated">Zeigt an, ob Zeilen automatisch für mehrzeilige Bearbeitungssteuerelemente umbrochen werden.</target>
         <note />
       </trans-unit>
       <trans-unit id="TextParseFailedFormat">
@@ -10818,7 +10818,7 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       </trans-unit>
       <trans-unit id="Win32SetParentFailed">
         <source>Failed to set Win32 parent window of the Control.</source>
-        <target state="new">Failed to set Win32 parent window of the Control.</target>
+        <target state="translated">Fehler beim Festlegen des übergeordneten Win32-Fensters des Steuerelements.</target>
         <note />
       </trans-unit>
       <trans-unit id="Win32WindowAlreadyCreated">

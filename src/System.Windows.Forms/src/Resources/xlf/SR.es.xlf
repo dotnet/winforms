@@ -1219,7 +1219,7 @@
       </trans-unit>
       <trans-unit id="ContextMenuStripSourceControlDescr">
         <source>The last control that caused this context menu strip to be displayed.</source>
-        <target state="new">The last control that caused this context menu strip to be displayed.</target>
+        <target state="translated">Último control que hizo que se mostrara la franja de menús contextuales.</target>
         <note />
       </trans-unit>
       <trans-unit id="ControlAccessibileObjectInvalid">
@@ -4226,17 +4226,17 @@ Para reemplazar este cuadro de diálogo predeterminado controle el evento DataEr
       </trans-unit>
       <trans-unit id="DefaultDomainUpDownAccessibleName">
         <source>DomainUpDown</source>
-        <target state="new">DomainUpDown</target>
+        <target state="translated">DomainUpDown</target>
         <note />
       </trans-unit>
       <trans-unit id="DefaultNumericUpDownAccessibleName">
         <source>NumericUpDown</source>
-        <target state="new">NumericUpDown</target>
+        <target state="translated">NumericUpDown</target>
         <note />
       </trans-unit>
       <trans-unit id="DefaultUpDownButtonsAccessibleName">
         <source>UpDown</source>
-        <target state="new">UpDown</target>
+        <target state="translated">Subir/bajar</target>
         <note />
       </trans-unit>
       <trans-unit id="DescriptionBindingNavigator">
@@ -4596,7 +4596,7 @@ Para reemplazar este cuadro de diálogo predeterminado controle el evento DataEr
       </trans-unit>
       <trans-unit id="ErrorProviderDefaultAccessibleName">
         <source>Error provider</source>
-        <target state="new">Error provider</target>
+        <target state="translated">Proveedor de errores</target>
         <note />
       </trans-unit>
       <trans-unit id="ErrorProviderErrorDescr">
@@ -6828,12 +6828,12 @@ El seguimiento de la pila donde tuvo lugar la operación no válida fue:
       </trans-unit>
       <trans-unit id="MenuItemShortCutDescr">
         <source>The shortcut key associated with the menu item. </source>
-        <target state="new">The shortcut key associated with the menu item. </target>
+        <target state="translated">Tecla de método abreviado asociada al elemento de menú. </target>
         <note />
       </trans-unit>
       <trans-unit id="MenuItemShowShortCutDescr">
         <source>Indicates whether the shorcut key for the menu item is displayed on the item. </source>
-        <target state="new">Indicates whether the shorcut key for the menu item is displayed on the item. </target>
+        <target state="translated">Indica si la tecla de método abreviado del elemento de menú se muestra en el elemento. </target>
         <note />
       </trans-unit>
       <trans-unit id="MenuStripMdiWindowListItem">
@@ -6858,7 +6858,7 @@ El seguimiento de la pila donde tuvo lugar la operación no válida fue:
       </trans-unit>
       <trans-unit id="MonthCalendarBodyAccessibleName">
         <source>Calendar body</source>
-        <target state="new">Calendar body</target>
+        <target state="translated">Cuerpo del calendario</target>
         <note />
       </trans-unit>
       <trans-unit id="MonthCalendarDimensionsDescr">
@@ -6913,7 +6913,7 @@ El seguimiento de la pila donde tuvo lugar la operación no válida fue:
       </trans-unit>
       <trans-unit id="MonthCalendarNextButtonAccessibleName">
         <source>Next</source>
-        <target state="new">Next</target>
+        <target state="translated">Siguiente</target>
         <note />
       </trans-unit>
       <trans-unit id="MonthCalendarOnDateChangedDescr">
@@ -6928,7 +6928,7 @@ El seguimiento de la pila donde tuvo lugar la operación no válida fue:
       </trans-unit>
       <trans-unit id="MonthCalendarPreviousButtonAccessibleName">
         <source>Previous</source>
-        <target state="new">Previous</target>
+        <target state="translated">Anterior</target>
         <note />
       </trans-unit>
       <trans-unit id="MonthCalendarRange">
@@ -7008,7 +7008,7 @@ El seguimiento de la pila donde tuvo lugar la operación no válida fue:
       </trans-unit>
       <trans-unit id="MonthCalendarTodayButtonAccessibleName">
         <source>Today: {0}</source>
-        <target state="new">Today: {0}</target>
+        <target state="translated">Hoy: {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="MonthCalendarTodayDateDescr">
@@ -7913,7 +7913,7 @@ El seguimiento de la pila donde tuvo lugar la operación no válida fue:
       </trans-unit>
       <trans-unit id="ProgressBarDefaultAccessibleName">
         <source>ProgressBar</source>
-        <target state="new">ProgressBar</target>
+        <target state="translated">ProgressBar</target>
         <note />
       </trans-unit>
       <trans-unit id="ProgressBarIncrementMarqueeException">
@@ -8868,7 +8868,7 @@ El seguimiento de la pila donde tuvo lugar la operación no válida fue:
       </trans-unit>
       <trans-unit id="TabControlBadControl">
         <source>Parameter must be of type TabPage.</source>
-        <target state="new">Parameter must be of type TabPage.</target>
+        <target state="translated">El parámetro debe ser de tipo TabPage.</target>
         <note />
       </trans-unit>
       <trans-unit id="TabControlTabPageNotOnTabControl">
@@ -9048,7 +9048,7 @@ El seguimiento de la pila donde tuvo lugar la operación no válida fue:
       </trans-unit>
       <trans-unit id="TableLayoutSettingsConverterNoName">
         <source>Cannot convert TableLayoutSettings to string: could not find a 'Name' string property on a control.</source>
-        <target state="new">Cannot convert TableLayoutSettings to string: could not find a 'Name' string property on a control.</target>
+        <target state="translated">TableLayoutSettings no se puede convertir en cadena porque no se encuentra ninguna propiedad de cadena "Name" en ningún control.</target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutSettingsGetCellPositionDescr">
@@ -10818,7 +10818,7 @@ El seguimiento de la pila donde tuvo lugar la operación no válida fue:
       </trans-unit>
       <trans-unit id="Win32SetParentFailed">
         <source>Failed to set Win32 parent window of the Control.</source>
-        <target state="new">Failed to set Win32 parent window of the Control.</target>
+        <target state="translated">No se pudo establecer la ventana primaria de Win32 del control.</target>
         <note />
       </trans-unit>
       <trans-unit id="Win32WindowAlreadyCreated">
