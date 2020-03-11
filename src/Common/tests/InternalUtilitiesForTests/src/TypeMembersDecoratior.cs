@@ -2,11 +2,13 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.CodeDom.Compiler;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text;
-using Xunit.Abstractions;
 
 namespace System
 {
@@ -21,7 +23,7 @@ namespace System
                 var typeName = FormatType(type);
 
                 // get all type's attributes
-                var attributes = Attribute.GetCustomAttributes(type);
+                var attributes = Attribute.GetCustomAttributes(type).Where(IsUserAttribute).ToArray();
                 if (attributes.Length > 0)
                 {
                     dic.Add(typeName, string.Join(", ", attributes.Select(a => a.GetType().FullName).OrderBy(a => a)));
@@ -37,7 +39,7 @@ namespace System
                         continue;
                     }
 
-                    attributes = Attribute.GetCustomAttributes(mi);
+                    attributes = Attribute.GetCustomAttributes(mi).Where(IsUserAttribute).ToArray();
                     if (attributes.Length > 0)
                     {
                         string memberSignature = FormatMethod(mi as ConstructorInfo) ?? FormatMethod(mi as MethodInfo) ?? mi.Name;
@@ -48,6 +50,12 @@ namespace System
 
             return dic;
         }
+
+        private static bool IsUserAttribute(Attribute attribute)
+        {
+            return !(attribute is CompilerGeneratedAttribute || attribute is GeneratedCodeAttribute || attribute is DebuggerNonUserCodeAttribute);
+        }
+
         private static string FormatMethod(ConstructorInfo mi)
         {
             if (mi == null)

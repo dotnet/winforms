@@ -10,11 +10,13 @@ namespace System.Windows.Forms.Tests.Serialization
 {
     public class TypeMembersAttributeDecorationTests : IClassFixture<ThreadExceptionFixture>
     {
+#if !DEBUG
         [Fact]
         public void VerifyAttributes()
         {
             Dictionary<string, string> dic = TypeMembersDecoratior.EnumerateAttributes(typeof(ListViewItem).Assembly);
             Approvals.VerifyAll(dic);
         }
+#endif
     }
 }

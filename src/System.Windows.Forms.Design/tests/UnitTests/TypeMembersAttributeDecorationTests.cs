@@ -10,11 +10,13 @@ namespace System.Windows.Forms.Design.Tests
 {
     public class TypeMembersAttributeDecorationTests : IClassFixture<ThreadExceptionFixture>
     {
-        [Fact]
+#if !DEBUG
+       [Fact]
         public void VerifyAttributes()
         {
             Dictionary<string, string> dic = TypeMembersDecoratior.EnumerateAttributes(typeof(AnchorEditor).Assembly);
             Approvals.VerifyAll(dic);
         }
+#endif
     }
 }
