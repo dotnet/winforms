@@ -12115,6 +12115,167 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, parentCreatedCallCount);
         }
 
+        public static IEnumerable<object[]> WndProc_ContextMenuWithoutContextMenuStrip_TestData()
+        {
+            yield return new object[] { new Size(10, 20), (IntPtr)(-1) };
+            yield return new object[] { new Size(10, 20), PARAM.FromLowHigh(0, 0) };
+            yield return new object[] { new Size(10, 20), PARAM.FromLowHigh(1, 2) };
+            yield return new object[] { new Size(10, 20), PARAM.FromLowHigh(-1, -2) };
+
+            yield return new object[] { Size.Empty, (IntPtr)(-1) };
+            yield return new object[] { Size.Empty, PARAM.FromLowHigh(0, 0) };
+            yield return new object[] { Size.Empty, PARAM.FromLowHigh(1, 2) };
+            yield return new object[] { Size.Empty, PARAM.FromLowHigh(-1, -2) };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(WndProc_ContextMenuWithoutContextMenuStrip_TestData))]
+        public void Control_WndProc_InvokeContextMenuWithoutContextMenuStripWithoutHandle_Success(Size size, IntPtr lParam)
+        {
+            using (new NoAssertContext())
+            {
+                using var control = new SubControl
+                {
+                    Size = size
+                };
+                var m = new Message
+                {
+                    Msg = (int)User32.WM.CONTEXTMENU,
+                    LParam = lParam,
+                    Result = (IntPtr)250
+                };
+                control.WndProc(ref m);
+                Assert.Equal(IntPtr.Zero, m.Result);
+                Assert.False(control.IsHandleCreated);
+            }
+        }
+
+        public static IEnumerable<object[]> WndProc_ContextMenuWithContextMenuStripWithoutHandle_TestData()
+        {
+            using var control = new Control();
+            Point p = control.PointToScreen(new Point(5, 5));
+
+            yield return new object[] { new Size(10, 20), (IntPtr)(-1), (IntPtr)250, true };
+            yield return new object[] { new Size(10, 20), PARAM.FromLowHigh(0, 0), IntPtr.Zero, true };
+            yield return new object[] { new Size(10, 20), PARAM.FromLowHigh(1, 2), IntPtr.Zero, true };
+            yield return new object[] { new Size(10, 20), PARAM.FromLowHigh(p.X, p.Y), (IntPtr)250, true };
+            yield return new object[] { new Size(10, 20), PARAM.FromLowHigh(-1, -2), IntPtr.Zero, true };
+
+            yield return new object[] { Size.Empty, (IntPtr)(-1), IntPtr.Zero, false };
+            yield return new object[] { Size.Empty, PARAM.FromLowHigh(0, 0), IntPtr.Zero, true };
+            yield return new object[] { Size.Empty, PARAM.FromLowHigh(1, 2), IntPtr.Zero, true };
+            yield return new object[] { Size.Empty, PARAM.FromLowHigh(p.X, p.Y), IntPtr.Zero, true };
+            yield return new object[] { Size.Empty, PARAM.FromLowHigh(-1, -2), IntPtr.Zero, true };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(WndProc_ContextMenuWithContextMenuStripWithoutHandle_TestData))]
+        public void Control_WndProc_InvokeContextMenuWithContextMenuStripWithoutHandle_Success(Size size, IntPtr lParam, IntPtr expectedResult, bool expectedHandleCreated)
+        {
+            using (new NoAssertContext())
+            {
+                using var menu = new ContextMenuStrip();
+                using var control = new SubControl
+                {
+                    ContextMenuStrip = menu,
+                    Size = size
+                };
+                var m = new Message
+                {
+                    Msg = (int)User32.WM.CONTEXTMENU,
+                    LParam = lParam,
+                    Result = (IntPtr)250
+                };
+                control.WndProc(ref m);
+                Assert.Equal(expectedResult, m.Result);
+                Assert.False(menu.Visible);
+                Assert.Equal(expectedResult == (IntPtr)250, menu.SourceControl == control);
+                Assert.Equal(expectedHandleCreated, control.IsHandleCreated);
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(WndProc_ContextMenuWithoutContextMenuStrip_TestData))]
+        public void Control_WndProc_InvokeContextMenuWithoutContextMenuStripWithHandle_Success(Size size, IntPtr lParam)
+        {
+            using var control = new SubControl
+            {
+                Size = size
+            };
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            var m = new Message
+            {
+                Msg = (int)User32.WM.CONTEXTMENU,
+                LParam = lParam,
+                Result = (IntPtr)250
+            };
+            control.WndProc(ref m);
+            Assert.Equal(IntPtr.Zero, m.Result);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        public static IEnumerable<object[]> WndProc_ContextMenuWithContextMenuStripWithHandle_TestData()
+        {
+            using var control = new Control();
+            Point p = control.PointToScreen(new Point(5, 5));
+
+            yield return new object[] { new Size(10, 20), (IntPtr)(-1), (IntPtr)250 };
+            yield return new object[] { new Size(10, 20), PARAM.FromLowHigh(0, 0), IntPtr.Zero };
+            yield return new object[] { new Size(10, 20), PARAM.FromLowHigh(1, 2), IntPtr.Zero };
+            yield return new object[] { new Size(10, 20), PARAM.FromLowHigh(p.X, p.Y), (IntPtr)250 };
+            yield return new object[] { new Size(10, 20), PARAM.FromLowHigh(-1, -2), IntPtr.Zero };
+
+            yield return new object[] { Size.Empty, (IntPtr)(-1), IntPtr.Zero };
+            yield return new object[] { Size.Empty, PARAM.FromLowHigh(0, 0), IntPtr.Zero };
+            yield return new object[] { Size.Empty, PARAM.FromLowHigh(1, 2), IntPtr.Zero };
+            yield return new object[] { Size.Empty, PARAM.FromLowHigh(p.X, p.Y), IntPtr.Zero };
+            yield return new object[] { Size.Empty, PARAM.FromLowHigh(-1, -2), IntPtr.Zero };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(WndProc_ContextMenuWithContextMenuStripWithHandle_TestData))]
+        public void Control_WndProc_InvokeContextMenuWithContextMenuStripWithHandle_Success(Size size, IntPtr lParam, IntPtr expectedResult)
+        {
+            using var menu = new ContextMenuStrip();
+            using var control = new SubControl
+            {
+                ContextMenuStrip = menu,
+                Size = size
+            };
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            var m = new Message
+            {
+                Msg = (int)User32.WM.CONTEXTMENU,
+                LParam = lParam,
+                Result = (IntPtr)250
+            };
+            control.WndProc(ref m);
+            Assert.Equal(expectedResult, m.Result);
+            Assert.False(menu.Visible);
+            Assert.Equal(expectedResult == (IntPtr)250, menu.SourceControl == control);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
         [WinFormsFact]
         public void Control_WndProc_InvokeDpiChangedAfterParentWithoutHandle_Success()
         {
@@ -12409,6 +12570,48 @@ namespace System.Windows.Forms.Tests
             {
                 graphics.ReleaseHdc();
             }
+        }
+
+        [WinFormsFact]
+        public void Control_WndProc_InvokeGetDlgCodeWithoutHandle_ReturnsExpected()
+        {
+            using (new NoAssertContext())
+            {
+                using var control = new SubControl();
+                var m = new Message
+                {
+                    Msg = (int)User32.WM.GETDLGCODE,
+                    Result = (IntPtr)250
+                };
+                control.WndProc(ref m);
+                Assert.Equal(IntPtr.Zero, m.Result);
+                Assert.False(control.IsHandleCreated);
+            }
+        }
+
+        [WinFormsFact]
+        public void Control_WndProc_InvokeGetDlgCodeWithHandle_ReturnsExpected()
+        {
+            using var control = new SubControl();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            var m = new Message
+            {
+                Msg = (int)User32.WM.GETDLGCODE,
+                Result = (IntPtr)250
+            };
+            control.WndProc(ref m);
+            Assert.Equal(IntPtr.Zero, m.Result);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
         }
 
         [WinFormsFact]
@@ -13400,6 +13603,48 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(IntPtr.Zero, m.Result);
             Assert.Equal(1, callCount);
             Assert.Same(control, parent.ActiveControl);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsFact]
+        public void Control_WndProc_InvokeSetFontWithoutHandle_ReturnsExpected()
+        {
+            using (new NoAssertContext())
+            {
+                using var control = new SubControl();
+                var m = new Message
+                {
+                    Msg = (int)User32.WM.SETFONT,
+                    Result = (IntPtr)250
+                };
+                control.WndProc(ref m);
+                Assert.Equal(IntPtr.Zero, m.Result);
+                Assert.False(control.IsHandleCreated);
+            }
+        }
+
+        [WinFormsFact]
+        public void Control_WndProc_InvokeSetFontWithHandle_ReturnsExpected()
+        {
+            using var control = new SubControl();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            var m = new Message
+            {
+                Msg = (int)User32.WM.SETFONT,
+                Result = (IntPtr)250
+            };
+            control.WndProc(ref m);
+            Assert.Equal(IntPtr.Zero, m.Result);
             Assert.True(control.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);

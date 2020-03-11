@@ -2163,48 +2163,36 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Handles the WM_CONTEXTMENU message based on this
-        ///  table:
-        ///  ShortcutsEnabled    #1      #2      #3
-        ///  Yes                 strip   context system
-        ///  No                  strip   context N/A
+        ///  Handles the WM_CONTEXTMENU message. Show the ContextMenuStrip if present.
         /// </summary>
         private void WmTextBoxContextMenu(ref Message m)
         {
-            if (ContextMenuStrip != null)
+            if (ContextMenuStrip == null)
             {
-                int x = PARAM.SignedLOWORD(m.LParam);
-                int y = PARAM.SignedHIWORD(m.LParam);
-                Point client;
-                bool keyboardActivated = false;
-                // lparam will be exactly -1 when the user invokes the context menu
-                // with the keyboard.
-                //
-                if (unchecked((int)(long)m.LParam) == -1)
-                {
-                    keyboardActivated = true;
-                    client = new Point(Width / 2, Height / 2);
-                }
-                else
-                {
-                    client = PointToClient(new Point(x, y));
-                }
+                return;
+            }
 
-                //
+            int x = PARAM.SignedLOWORD(m.LParam);
+            int y = PARAM.SignedHIWORD(m.LParam);
+            Point client;
+            bool keyboardActivated = false;
 
-                // VisualStudio7 # 156, only show the context menu when clicked in the client area
-                if (ClientRectangle.Contains(client))
-                {
-                    if (ContextMenuStrip != null)
-                    {
-                        ContextMenuStrip.ShowInternal(this, client, keyboardActivated);
-                    }
-                    else
-                    {
-                        Debug.Fail("contextmenu and contextmenustrip are both null... hmm how did we get here?");
-                        DefWndProc(ref m);
-                    }
-                }
+            // Lparam will be exactly -1 when the user invokes the context menu
+            // with the keyboard.
+            if (unchecked((int)(long)m.LParam) == -1)
+            {
+                keyboardActivated = true;
+                client = new Point(Width / 2, Height / 2);
+            }
+            else
+            {
+                client = PointToClient(new Point(x, y));
+            }
+
+            // Only show the context menu when clicked in the client area (VisualStudio7 #156)
+            if (ClientRectangle.Contains(client))
+            {
+                ContextMenuStrip.ShowInternal(this, client, keyboardActivated);
             }
         }
 
@@ -2233,14 +2221,14 @@ namespace System.Windows.Forms
                 case WM.CONTEXTMENU:
                     if (ShortcutsEnabled)
                     {
-                        //calling base will find ContextMenus in this order:
-                        // 1) ContextMenu 2) ContextMenuStrip 3) SystemMenu
+                        // Calling base will find ContextMenus in this order:
+                        // 1) ContextMenuStrip 2) SystemMenu
                         base.WndProc(ref m);
                     }
                     else
                     {
-                        // we'll handle this message so we can hide the
-                        // SystemMenu if Context and Strip menus are null
+                        // We'll handle this message so we can hide the
+                        // SystemMenu if ContextMenuStrip menus are null
                         WmTextBoxContextMenu(ref m);
                     }
                     break;
