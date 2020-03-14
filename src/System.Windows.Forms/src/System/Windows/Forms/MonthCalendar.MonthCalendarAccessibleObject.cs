@@ -367,7 +367,8 @@ namespace System.Windows.Forms
             {
                 if (columnIndex < 0 ||
                     columnIndex >= MAX_DAYS ||
-                    columnIndex >= ColumnCount)
+                    columnIndex >= ColumnCount ||
+                    parentAccessibleObject == null)
                 {
                     return null;
                 }
