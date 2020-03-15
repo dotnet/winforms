@@ -2148,18 +2148,18 @@ namespace System.Windows.Forms
             if (m.HWnd == Handle)
             {
                 User32.NMHDR* nmhdr = (User32.NMHDR*)m.LParam;
-                switch (nmhdr->code)
+                switch ((MCN)nmhdr->code)
                 {
-                    case NativeMethods.MCN_SELECT:
+                    case MCN.SELECT:
                         WmDateSelected(ref m);
                         break;
-                    case NativeMethods.MCN_SELCHANGE:
+                    case MCN.SELCHANGE:
                         WmDateChanged(ref m);
                         break;
-                    case NativeMethods.MCN_GETDAYSTATE:
+                    case MCN.GETDAYSTATE:
                         WmDateBold(ref m);
                         break;
-                    case NativeMethods.MCN_VIEWCHANGE:
+                    case MCN.VIEWCHANGE:
                         WmCalViewChanged(ref m);
                         break;
                 }
