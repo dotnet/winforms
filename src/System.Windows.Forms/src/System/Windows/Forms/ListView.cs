@@ -5715,7 +5715,7 @@ namespace System.Windows.Forms
                 OnColumnClick(new ColumnClickEventArgs(columnIndex));
             }
 
-            if (nmhdr->code == NativeMethods.HDN_BEGINTRACK)
+            if (nmhdr->code == (int)HDN.BEGINTRACKW)
             {
                 listViewState[LISTVIEWSTATE_headerControlTracking] = true;
 
@@ -5737,7 +5737,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            if (nmhdr->code == NativeMethods.HDN_ITEMCHANGING)
+            if (nmhdr->code == (int)HDN.ITEMCHANGINGW)
             {
                 NMHEADERW* nmheader = (NMHEADERW*)m.LParam;
 
@@ -5772,7 +5772,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            if ((nmhdr->code == NativeMethods.HDN_ITEMCHANGED) &&
+            if ((nmhdr->code == (int)HDN.ITEMCHANGEDW) &&
                 !listViewState[LISTVIEWSTATE_headerControlTracking])
             {
                 NMHEADERW* nmheader = (NMHEADERW*)m.LParam;
@@ -5829,7 +5829,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            if (nmhdr->code == NativeMethods.HDN_ENDTRACK)
+            if (nmhdr->code == (int)HDN.ENDTRACKW)
             {
                 Debug.Assert(listViewState[LISTVIEWSTATE_headerControlTracking], "HDN_ENDTRACK and HDN_BEGINTRACK are out of sync...");
                 listViewState[LISTVIEWSTATE_headerControlTracking] = false;
@@ -5857,7 +5857,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            if (nmhdr->code == NativeMethods.HDN_ENDDRAG)
+            if (nmhdr->code == (int)HDN.ENDDRAG)
             {
                 NMHEADERW* header = (NMHEADERW*)m.LParam;
                 if (header->pitem != null)
@@ -5922,7 +5922,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            if (nmhdr->code == NativeMethods.HDN_DIVIDERDBLCLICK)
+            if (nmhdr->code == (int)HDN.DIVIDERDBLCLICKW)
             {
                 // We need to keep track that the user double clicked the column header divider
                 // so we know that the column header width is changing.
