@@ -913,7 +913,7 @@ namespace System.Windows.Forms
                             switch (result)
                             {
                                 case DialogResult.Abort:
-                                    ExitInternal();
+                                    Exit();
                                     Environment.Exit(0);
                                     break;
                                 case DialogResult.Yes:
